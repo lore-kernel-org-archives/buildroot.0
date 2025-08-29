@@ -1,73 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A9F4C8303F
-	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 05:49:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51444CA0FFD
+	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 06:52:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A76A981D0B;
-	Fri, 29 Aug 2025 05:49:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD56D614B1;
+	Fri, 29 Aug 2025 06:52:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BmLpEd0zYlEr; Fri, 29 Aug 2025 05:49:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iYq1LttxDiKh; Fri, 29 Aug 2025 06:52:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE1E681D5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 248C8614AF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BE1E681D5F;
-	Fri, 29 Aug 2025 05:49:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 53C9269
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 05:49:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 248C8614AF;
+	Fri, 29 Aug 2025 06:52:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 399ED69
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 06:52:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 45D11415FD
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 05:49:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2B045614A3
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 06:52:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RkmZLR__BfJ3 for <buildroot@buildroot.org>;
- Fri, 29 Aug 2025 05:49:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qLiD-ZdJj915 for <buildroot@buildroot.org>;
+ Fri, 29 Aug 2025 06:52:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 76A93415FC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76A93415FC
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 76A93415FC
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 05:49:41 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 2130680941; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Fri, 29 Aug 2025 05:49:39 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1urrzW-00AeyI-0t;
- Fri, 29 Aug 2025 07:49:38 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5F62A614A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F62A614A6
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5F62A614A6
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 06:52:31 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 5847E1A0A08
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 06:52:29 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 2AA38606B9
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 06:52:29 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 01AA21C22D894; 
+ Fri, 29 Aug 2025 08:52:20 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Fri, 29 Aug 2025 07:49:36 +0200
-Message-Id: <20250829054937.2540763-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 29 Aug 2025 08:52:09 +0200
+Message-ID: <20250829065210.570613-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=WCplCz5kdGJFk5OtqmX79TLSLuanlE1uyCMhSrknHImxjvf14oAC7D/xi+REbZSKodCN7+ybPlE4uMDPXpCWcMBXJEX1+m+eDRlJ/8WHlGCTzfuvwq8vizo14VA3poX9XYg/HjIg64xJSluE1mThnacK/fKmeuIMHbsa5Se+SCexoShFJYWTNP9qKIpaJs47hPFm/n7YbGIYyN8XHlJ9UZkoKOGEhZNZ7fFdCVOj5v3bpmkbB4Q+9jb90K9T8FdyI0nKTQau89yfMs16Fi18Rk9g8IdKIrnNejE1UQFcHxLUKQJUBVzMEFNzEpP74ygB3fNLhXRmTBG3kqwaymwKmA==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=ZDJi0x4tOhZuMf3HKjA8b+7HcGZBoq5hdE42Jl9tqog=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1756450348; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=Fj0rC1fpgmAv4BqOsW2rO2kPvLTSPXBh4i6wqGD2BpE=;
+ b=r2dtQDB4y+GyvtMAjKw1m/F+gRgIMEPpY/PMCKim9TaGawubxWltl6ThgMx8dmOFup85al
+ j8wt2ZNsjOUL09ZPMI0YXlyK/AfrxvXe8QsqnQGb41oGK7+gEHKTgCaXbEWLbEHpOwz1gQ
+ Wryrpkf62N7FnFn+abc0BNq3bGWd+tSRED18MmHtFcJJxyd9FApfzgCGVv9/k+b4WbR6lp
+ WlRbZzHEXHMqQriFq6fU61JvI1fH110Lqk0re/pj0DbOBy9PUjr/RdGjUpTIr74h6Uvpzr
+ XLOM/WQAzaVyVJKuSNCC+VBS3s0R2nFWtevA72DZDNzZUOFUl1UoQVgCbLLCEg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=WCplCz5k
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH] package/python-h2: security bump to version
- 4.3.0
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=r2dtQDB4
+Subject: [Buildroot] [PATCH] package/webrtc-audio-processing: fix build with
+ GCC 15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,54 +82,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security vulnerability:
+A missing include causes a build failure with GCC 15.x. There are no
+known autobuilder failures for this issue, but the following defconfig
+allows to reproduce the issue:
 
-- CVE-2025-57804: HTTP/2 request splitting via CRLF injection
+ BR2_arm=y
+ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_INIT_NONE=y
+ BR2_SYSTEM_BIN_SH_NONE=y
+ # BR2_PACKAGE_BUSYBOX is not set
+ BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING=y
+ # BR2_TARGET_ROOTFS_TAR is not set
 
-  https://github.com/python-hyper/h2/security/advisories/GHSA-847f-9342-265h
+The affected code has completely changed in newer versions of
+webrtc-audio-processing, so we add a non-upstream patch, which can be
+dropped once we upgrade to a newer release.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-h2/python-h2.hash | 4 ++--
- package/python-h2/python-h2.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...queue-task_queue_base.h-include-cstd.patch | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/webrtc-audio-processing/0001-webrtc-api-task_queue-task_queue_base.h-include-cstd.patch
 
-diff --git a/package/python-h2/python-h2.hash b/package/python-h2/python-h2.hash
-index 2f9c8f647f..5adfc86f52 100644
---- a/package/python-h2/python-h2.hash
-+++ b/package/python-h2/python-h2.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/h2/json
--md5  4274f9619c0a43bb4ae01b6b02bf0c99  h2-4.1.0.tar.gz
--sha256  a83aca08fbe7aacb79fec788c9c0bac936343560ed9ec18b82a13a12c28d2abb  h2-4.1.0.tar.gz
-+md5  b4781bbaaae609aa759565585718e0d7  h2-4.3.0.tar.gz
-+sha256  6c59efe4323fa18b47a632221a1888bd7fde6249819beda254aeca909f221bf1  h2-4.3.0.tar.gz
- # Locally computed sha256 checksums
- sha256  7a65a5af0cbabf1c16251c7c6b2b7cb46d16a7222e79975b9b61fcd66a2e3f28  LICENSE
-diff --git a/package/python-h2/python-h2.mk b/package/python-h2/python-h2.mk
-index 699e8baece..d9cfbdbf92 100644
---- a/package/python-h2/python-h2.mk
-+++ b/package/python-h2/python-h2.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_H2_VERSION = 4.1.0
-+PYTHON_H2_VERSION = 4.3.0
- PYTHON_H2_SOURCE = h2-$(PYTHON_H2_VERSION).tar.gz
--PYTHON_H2_SITE = https://files.pythonhosted.org/packages/2a/32/fec683ddd10629ea4ea46d206752a95a2d8a48c22521edd70b142488efe1
-+PYTHON_H2_SITE = https://files.pythonhosted.org/packages/1d/17/afa56379f94ad0fe8defd37d6eb3f89a25404ffc71d4d848893d270325fc
- PYTHON_H2_SETUP_TYPE = setuptools
- PYTHON_H2_LICENSE = MIT
- PYTHON_H2_LICENSE_FILES = LICENSE
+diff --git a/package/webrtc-audio-processing/0001-webrtc-api-task_queue-task_queue_base.h-include-cstd.patch b/package/webrtc-audio-processing/0001-webrtc-api-task_queue-task_queue_base.h-include-cstd.patch
+new file mode 100644
+index 0000000000..db253d1dd8
+--- /dev/null
++++ b/package/webrtc-audio-processing/0001-webrtc-api-task_queue-task_queue_base.h-include-cstd.patch
+@@ -0,0 +1,29 @@
++From 9b59846b4f9a723743532f26c344d84084b7af96 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Fri, 29 Aug 2025 07:31:50 +0200
++Subject: [PATCH] webrtc/api/task_queue/task_queue_base.h: include <cstdint>
++ for uint32_t
++
++This is needed since GCC 15.x.
++
++Upstream: not applicable, code has completely changed in latest versions
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ webrtc/api/task_queue/task_queue_base.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/webrtc/api/task_queue/task_queue_base.h b/webrtc/api/task_queue/task_queue_base.h
++index 90b1efd..7403ee9 100644
++--- a/webrtc/api/task_queue/task_queue_base.h
+++++ b/webrtc/api/task_queue/task_queue_base.h
++@@ -11,6 +11,7 @@
++ #define API_TASK_QUEUE_TASK_QUEUE_BASE_H_
++ 
++ #include <memory>
+++#include <cstdint>
++ 
++ #include "api/task_queue/queued_task.h"
++ #include "rtc_base/system/rtc_export.h"
++-- 
++2.50.1
++
 -- 
-2.39.5
+2.50.1
 
 _______________________________________________
 buildroot mailing list
