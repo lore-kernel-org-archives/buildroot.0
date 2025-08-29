@@ -1,78 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDF3ACA0FF0
-	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 16:27:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 492C0CA0FF0
+	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 16:45:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9B6D741844;
-	Fri, 29 Aug 2025 16:27:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0305461695;
+	Fri, 29 Aug 2025 16:45:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pF5eQysNYV78; Fri, 29 Aug 2025 16:27:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YpdTapPlWFMs; Fri, 29 Aug 2025 16:45:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC9DA41824
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B392F6164F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BC9DA41824;
-	Fri, 29 Aug 2025 16:27:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6B172D2
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 16:27:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B392F6164F;
+	Fri, 29 Aug 2025 16:45:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id EBD0869
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 16:45:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5D4E340735
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 16:27:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CA34B4063D
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 16:45:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NMVqVsszyZQh for <buildroot@buildroot.org>;
- Fri, 29 Aug 2025 16:27:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id BdA_kRR8Y76o for <buildroot@buildroot.org>;
+ Fri, 29 Aug 2025 16:45:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 399204003D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 399204003D
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 399204003D
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 16:27:17 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 0A95E4E40C8A
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 16:27:16 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id BA32C605F1;
- Fri, 29 Aug 2025 16:27:15 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 241BF1C228022; 
- Fri, 29 Aug 2025 18:27:06 +0200 (CEST)
-Date: Fri, 29 Aug 2025 18:27:04 +0200
-To: Alexey Brodkin <alexey.brodkin@synopsys.com>
-Cc: ARC Maintainers <arc-buildroot@synopsys.com>, Yuriy Kolerov
- <yuriy.kolerov@synopsys.com>, "buildroot@buildroot.org"
- <buildroot@buildroot.org>
-Message-ID: <20250829182704.226c2560@windsurf>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1756484835; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding; bh=2iiMTf93IpON7OV3/m+TsR/Xh3j6q9TiC3HTHwiLnRw=;
- b=pgXZqgTsT6IBdbuLIlkT/dKX2PgoWsp2OmtKhju4WDnSrFIqCJJhFksKNmlSolVtAq94kl
- olDNqtzpcub3JYLO5/vzPwX6apn7P74uWg+RSwk7sm702gY6qTg1Zt2YErnpzaNyvn0MMo
- WHG9Lko0Rbv/wEHX5E08nGewPBgBap4PC8c50FzuXuGJFI0xUbBtlNnXRC40TK6Q4O54vX
- /Ib0Rh6Jlj5mNi/I9whqkO/C2Whm8z4FUy2zz+QU2DlOiElbeWvIkCjC+SYHdLg7OQiobq
- qdcDpYYnlEyfyApiq89F0JdjrYxjZ6dZcOlmKjLe/fly48nCyxoaFqcnU7uz7Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=pgXZqgTs
-Subject: [Buildroot] Issue with libatomic in recent ARC GCC versions
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E75174003D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E75174003D
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 16:45:20 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E21BB87DDB; Fri, 29 Aug 2025 16:45:20 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 29 Aug 2025 18:44:41 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c7721b0174d9e978e58bdffba26ff2151b47af9c
+X-Git-Newrev: a87b1800b959f5cd2ca871f89668a7c42802448f
+X-Patchwork-Hint: ignore
+Message-Id: <20250829164520.E21BB87DDB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/bump-stable-kernel-versions: new tool
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,54 +57,146 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============4335684097089137368=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Alexey,
+--===============4335684097089137368==
+Content-Type: text/plain
 
-I hope this message finds you well.
+commit: https://git.buildroot.net/buildroot/commit/?id=a87b1800b959f5cd2ca871f89668a7c42802448f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We are seeing a number of build failures due to libatomic on ARC 750d.
-Indeed, it seems like libatomic.so needs __atomic_test_and_set (the
-symbol is undefined in the library), but nothing provides it.
+This tool helps to update Linux stable releases.
 
-Example 1 with libcap:
+The script uses the versions found in linux/linux.hash. For each of the
+versions it downloads the related hash list and tries to find an updated
+stable release. If found it updates all related files and hashes.
 
-  http://autobuild.buildroot.net/results/297/2975043dd2c9d537e7a5b5634e7ad047a7a08afc/build-end.log
+Signed-off-by: Gero Schwäricke <gero.schwaericke@grandcentrix.net>
+[Arnout: commonalize the sed expression for linux and linux-headers]
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+---
+ utils/bump-stable-kernel-versions | 98 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 98 insertions(+)
 
-Example 2 with android-tools:
+diff --git a/utils/bump-stable-kernel-versions b/utils/bump-stable-kernel-versions
+new file mode 100755
+index 0000000000..577a6841c8
+--- /dev/null
++++ b/utils/bump-stable-kernel-versions
+@@ -0,0 +1,98 @@
++#!/usr/bin/env bash
++# SPDX-License-Identifier: MIT-0
++# Copyright (C) 2024 by Gero Schwäricke <gero.schwaericke@grandcentrix.net>
++#
++# Permission is hereby granted, free of charge, to any person obtaining a copy of this
++# software and associated documentation files (the "Software"), to deal in the Software
++# without restriction, including without limitation the rights to use, copy, modify,
++# merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
++# permit persons to whom the Software is furnished to do so.
++#
++# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
++# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
++# PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
++# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
++# OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
++# OTHER DEALINGS IN THE SOFTWARE.
++
++# Check for updates to Linux stable releases. The script uses the versions found in
++# linux/linux.hash. For each of the versions it downloads the related hash list and tries
++# to find an updated stable release. If found it updates all related files and hashes.
++
++set -euo pipefail
++
++latest_version=$(sed -rn 's|^\tdefault "(.+)" if BR2_LINUX_KERNEL_LATEST_VERSION$|\1|p' linux/Config.in)
++latest_release_version=$(echo "${latest_version}" | cut -f 1-2 -d .)
++echo "${latest_version} -> ${latest_release_version}"
++
++updated_releases_list=''
++
++hash_list=
++while read -r line; do
++    # e.g.: # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
++    url=$(echo "${line}" | sed -n 's|^# From \(https://www\.kernel\.org/pub/linux/kernel/.*/sha256sums.asc\)|\1|p')
++    # e.g.: sha256  f905f1238ea7a8e85314bacf283302e8097006010d25fcea726d0de0ea5bc9b6  linux-6.8.9.tar.xz
++    old_hash=$(echo "${line}" | sed -rn 's|^sha256 +([0-9a-f]+) +linux-.*$|\1|p')
++    old_version=$(echo "${line}" | sed -rn 's|^sha256 +[0-9a-f]+ +linux-(.+)\.tar\.xz$|\1|p')
++    if [ -n "${url}" ]; then
++        # Line contained a URL: Download hash list and use it.
++        if [ -a "${hash_list}" ]; then
++            rm "${hash_list}"
++        fi
++
++        hash_list=$(basename "${url}")
++        echo ">>> Downloading hash list from ${url}"
++        wget --no-verbose "${url}"
++        gpg --verify "${hash_list}"
++
++        echo "${line}" >> linux/linux.hash.new
++    elif [ -n "${old_version}" ]; then
++        # Line contained a hash entry: Search for newer versions.
++        release_version=$(echo "${old_version}" | cut -f 1-2 -d .) # e.g.: 6.8 instead of 6.8.9
++        # e.g.: 19b31956d229b5b9ca5671fa1c74320179682a3d8d00fc86794114b21da86039  linux-6.8.12.tar.xz
++        new_hash_entry=$(grep "^[0-9a-f]\+ \+linux-${release_version//./\\.}\.[0-9]\+\.tar\.xz$" "${hash_list}" | sort -V --key '2' | tail -1)
++        new_hash=$(echo "${new_hash_entry}" | cut -f 1 -d ' ')
++        new_version=$(echo "${new_hash_entry}" | cut -f 3 -d ' ' | sed -rn 's|linux-(.+)\.tar\.xz|\1|p')
++
++        if [ "$new_version" == "$old_version" ]; then
++            # Same version as before
++            echo ">>> Release ${release_version}.x already on newest version ${new_version}."
++            echo "${line}" >> linux/linux.hash.new
++
++            if [ "${old_hash}" != "${new_hash}" ]; then
++                # Hash changed! This should never happen!
++                echo ">>> Version hash changed for ${release_version}.x!"
++                echo ">>> It was: ${old_hash}"
++                echo ">>> It is:  ${new_hash}"
++                exit 1
++            fi
++        else
++            # Different version: update hash list, default headers, and possibly latest
++            # version.
++            echo ">>> Updating hash for ${release_version}.x in linux/linux.hash"
++            echo "sha256  ${new_hash}  linux-${new_version}.tar.xz" >> linux/linux.hash.new
++
++            echo ">>> Updating version from ${old_version} to ${new_version} in Config.in files"
++            sed -Ei "s/\tdefault \"${old_version}\"([\t ]+)if /\tdefault \"${new_version}\"\1if /" \
++                package/linux-headers/Config.in.host linux/Config.in
++
++            updated_releases_list="${updated_releases_list} ${release_version}.x"
++        fi
++    else
++        # Different line: Reset hash list and just copy this line over as is.
++        if [ -a "${hash_list}" ]; then
++            rm "${hash_list}"
++            hash_list=
++        fi
++        echo "${line}" >> linux/linux.hash.new
++    fi
++done < linux/linux.hash
++
++# We were iterating over this file so we could not edit in-place.
++mv linux/linux.hash.new linux/linux.hash
++
++if [ -n "${updated_releases_list}" ]; then
++    echo ">>> Suggested subject: {linux, linux-headers}: bump${updated_releases_list//.x /.x, } series"
++else
++    echo '>>> Nothing happened.'
++fi
 
-  http://autobuild.buildroot.net/results/c02/c02ab71087eb70fc6bd5d40ecc509cfe0df36233/build-end.log
+--===============4335684097089137368==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-And indeed, looking at libatomic.so:
-
-    15: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __atomic_test_and_set
-
-This issue happens with both GCC arc-2024.12-release and the upstream
-GCC 15.x.
-
-Aside from this specific issue, we're seeing less and less
-contributions from Synopsys to the ARC support (not to say zero
-contributions). I was the one doing recently an update of ARC toolchain
-components. But there are ARC related build failures, we get
-essentially no feedback, even though a daily e-mail is sent with build
-failure reports.
-
-Should we drop support for the ARC CPU architecture in Buildroot?
-Without more active support from Synopsys, it's likely what will happen.
-
-Thanks a lot for your feedback!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4335684097089137368==--
