@@ -1,71 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B751ACA0FF9
-	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 16:54:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDC99CA0FF9
+	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 17:05:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 74A4441835;
-	Fri, 29 Aug 2025 16:54:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8BDB83C9A;
+	Fri, 29 Aug 2025 17:05:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H1i7pzz30nMH; Fri, 29 Aug 2025 16:54:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FzR_fDtKmKiu; Fri, 29 Aug 2025 17:05:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 861944192F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99BA583CA8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 861944192F;
-	Fri, 29 Aug 2025 16:54:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 99BA583CA8;
+	Fri, 29 Aug 2025 17:05:41 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7CA9869
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 16:54:39 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E54569
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 17:05:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E4196167D
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 16:54:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F3FF461641
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 17:05:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GnjNMdtQjTV7 for <buildroot@buildroot.org>;
- Fri, 29 Aug 2025 16:54:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7A3C5615D2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A3C5615D2
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7A3C5615D2
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 16:54:38 +0000 (UTC)
+ id 7LBwVdLuovml for <buildroot@buildroot.org>;
+ Fri, 29 Aug 2025 17:05:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D4A3D61624
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4A3D61624
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D4A3D61624
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 17:05:38 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-04.galae.net (Postfix) with ESMTPS id A1A26C8F473
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 17:05:20 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 291D3605F1;
+ Fri, 29 Aug 2025 17:05:35 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 80C01B9782D8; Fri, 29 Aug 2025 18:54:34 +0200 (CEST)
-Message-ID: <6d9a4dd3-3b6d-4912-9a20-b2dd8552b832@rnout.be>
-Date: Fri, 29 Aug 2025 18:54:33 +0200
+ with ESMTPSA id EE84C1C22C719; 
+ Fri, 29 Aug 2025 19:05:32 +0200 (CEST)
+To: buildroot@buildroot.org
+Date: Fri, 29 Aug 2025 19:05:21 +0200
+Message-ID: <20250829170522.2436314-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: James Knight <git@jdknight.me>, buildroot@buildroot.org
-References: <20241108231236.2838-1-git@jdknight.me>
- <20241108231236.2838-2-git@jdknight.me>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <20241108231236.2838-2-git@jdknight.me>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1756486475; h=from:subject:date:message-id:to:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=yrJ6c3H+3/0PYMHDk+MdZbcp2XIjrQJYV7v2Ps6iIC4=;
- b=nvhTiUupzLjLhQsvPslHQV3Tgn6utW9+eUdnA7e5WBtKFxVbPb0N+uizWkp0fONIBPlSlo
- qpvurCGb6J4sVlhHE6RfIj0QOsqsO4Ve3yaVUf0MzQzjRtEAPDcsHDQfF3ekLfbjTMXbEh
- 3bXkNNGmyToLclW5R8rqbvMHTZZM9mvMIpWrbftlGE1zMv6Cd9vE8bGbLxzHkCdoqGRakA
- Z24lOWfRs6zEMh+7ITruzjx3PJdPOOKuRrEQ+DgYZW+jjQw968N+/w8qcMglt2Ak+MTCcA
- Zat+UCQUEOBM5L1WZYzkmbPG93/PoyPeeSVvkT87JW8dZjP+0N3N3ffhhTsMdg==
+ d=bootlin.com; s=dkim; 
+ t=1756487134; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=nuw32d1f35xnGArxabTXChaFXIvLvhh4/nzV0CLzx/o=;
+ b=BDP/itzZqibrryZaZHGCWJOm+2oTknllOPbYF0/q3E2kSDyMgd6RTcUT+xAw8Kvcr8QTRU
+ c7eEaUvLv1RzUv/gAoM2HxtY6HdCna/zPq2vcV3UTG8ZiHvLridBwyZ5BPwrG8EwJN8665
+ RsZv4hm6jJlz+DIgwaKLMZWZGSbTZ85UIyJC4GwiG68sh1FTQMk1/3HwHy1Ue8lUScq5mP
+ +jXJSo8EoXQI10T84+QsirTr+yDssayCiynk67ECm0J80UmMWw9r/nJu6pzgGau6FD9g+0
+ wy5H1dxk3t9S5Bu0A5vVE2QHTAOxSS8/659wb5WgVoMAaR1A3VVJ3pfNcDbQzw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=rnout.be
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=nvhTiUup
-Subject: Re: [Buildroot] [PATCH v2 2/2] support: add a kernel version
- configuration helper script
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=BDP/itzZ
+Subject: [Buildroot] [PATCH] package/asterisk: fix build caused by libjwt
+ bump
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,191 +80,117 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+In commit 770f9154978c40ce5b7718174108b37c5310869d, libjwt was bumped
+from 1.17.2 to 3.2.0, which is a big bump. And the libjwt website
+states "Version 3 of LibJWT is a complete overhaul of the code. Please
+see documentation for usage."
 
+And indeed, this version bump breaks the build of Asterisk:
 
-On 09/11/2024 00:12, James Knight wrote:
-> Provides a helper script which can be used to quickly synchronize the
-> kernel versions defined in the Linux's `Config.in` file based on the
-> contents populated inside `linux.hash`.
-> 
-> The goal of this script is to help the maintenance effort required when
-> possibly supporting all active Linux LTS versions in the tree at a
-> given time.
-> 
-> Signed-off-by: James Knight <git@jdknight.me>
+res_stir_shaken/attestation.c: In function 'pack_payload':
+res_stir_shaken/attestation.c:357:9: error: implicit declaration of function 'jwt_add_grants_json' [-Wimplicit-function-declaration]
+  357 |         jwt_add_grants_json(jwt, payload_str);
+      |         ^~~~~~~~~~~~~~~~~~~
+In file included from /home/autobuild/autobuild/instance-11/output-1/build/asterisk-22.3.0/include/asterisk/module.h:39,
+                 from res_stir_shaken/attestation.c:24:
+res_stir_shaken/attestation.c: In function '_dtor_jwt':
+res_stir_shaken/attestation.c:367:38: error: implicit declaration of function 'jwt_free'; did you mean 'jwks_free'? [-Wimplicit-function-declaration]
+  367 |         RAII_VAR(jwt_t *, jwt, NULL, jwt_free);
+      |                                      ^~~~~~~~
 
-  I just merged a script that does it much better, because it downloads the sha 
-file from kernel.org and updates the hash file from that. See
-utils/bump-stable-kernel-versions
+To fix this, let's use the bundled version of libjwt in Asterisk,
+since even Asterisk master hasn't been fixed to be compatible with
+libjwt 3.x.
 
-  Regards,
-  Arnout
+Of course, this raises the question of whether the separate libjwt
+package should be removed, as it is anyway only used by Asterisk.
 
-> ---
-> Changes v1 -> v2:
->    - Introduced in the v2 of this series.
-> 
-> This is optional. No worries if not desired.
-> ---
->   support/scripts/sync-kernel-versions.py | 142 ++++++++++++++++++++++++
->   1 file changed, 142 insertions(+)
->   create mode 100755 support/scripts/sync-kernel-versions.py
-> 
-> diff --git a/support/scripts/sync-kernel-versions.py b/support/scripts/sync-kernel-versions.py
-> new file mode 100755
-> index 0000000000000000000000000000000000000000..2684b052657b0b98ac0265cd1b74a514d03ba9ca
-> --- /dev/null
-> +++ b/support/scripts/sync-kernel-versions.py
-> @@ -0,0 +1,142 @@
-> +#!/usr/bin/env python3
-> +#
-> +# Provides a script to allow the automatic updating of a Linux
-> +# package's `Config.in` file based on the version information detailed
-> +# in a `linux.hash` file.
-> +
-> +from pathlib import Path
-> +import argparse
-> +import re
-> +
-> +
-> +# searching for a version pattern inside a `linux.hash` file
-> +LINUX_VERSION_PATTERN = r'.*-([1-9]+.*)\.t.*'
-> +
-> +
-> +def main():
-> +    # argument parsing
-> +    parser = argparse.ArgumentParser()
-> +    parser.add_argument('--dry-run', action='store_true',
-> +                        help='Do not change any files')
-> +    parser.add_argument('--verbose', action='store_true',
-> +                        help='Output additional information')
-> +    args = parser.parse_args()
-> +
-> +    # helpers
-> +    def verbose(msg):
-> +        if args.verbose:
-> +            print(f'(verbose) {msg}')
-> +
-> +    # find the linux package folder
-> +    br_dir = Path(__file__).parent.parent.parent
-> +
-> +    linux_pkg_dir = br_dir / 'linux'
-> +    if not linux_pkg_dir.is_dir():
-> +        print('unable to find the linux package folder')
-> +        return 1
-> +
-> +    linux_conf = linux_pkg_dir / 'Config.in'
-> +    if not linux_conf.is_file():
-> +        print('unable to find the linux configuration file')
-> +        return 1
-> +
-> +    linux_hash = linux_pkg_dir / 'linux.hash'
-> +    if not linux_hash.is_file():
-> +        print('unable to find the linux hash file')
-> +        return 1
-> +
-> +    # extract expected linux entries from the hash file
-> +    try:
-> +        with linux_hash.open(encoding='utf-8') as f:
-> +            raw_hash_output = f.readlines()
-> +    except OSError as e:
-> +        print(f'error reading file {linux_hash}: {e}')
-> +        return 1
-> +
-> +    entries = {}
-> +    for hash_entry in raw_hash_output:
-> +        if hash_entry.startswith('sha'):
-> +            _, _, fname = hash_entry.strip().split(maxsplit=2)
-> +            if fname.startswith('linux-'):
-> +                verbose(f'detected linux entry: {fname}')
-> +
-> +                match = re.search(LINUX_VERSION_PATTERN, fname)
-> +                if match:
-> +                    vnum = match.group(1)
-> +                    ventry = extract_ventry(vnum)
-> +                    entries[ventry] = vnum
-> +                    verbose(f'detected linux version ({fname}): {vnum}')
-> +                else:
-> +                    verbose(f'unable to detect linux version: {fname}')
-> +
-> +    # read the existing Linux configuration file
-> +    conf_contents = []
-> +    has_updated = False
-> +    process_cfg = None
-> +    try:
-> +        with linux_conf.open(encoding='utf-8') as f:
-> +            lines = f.read().splitlines()
-> +            for line in lines:
-> +                # wait until we are processing the kernel version section
-> +                if process_cfg is None:
-> +                    if 'config BR2_LINUX_KERNEL_VERSION' in line:
-> +                        process_cfg = True
-> +
-> +                # if we are processing, check each version entry for any
-> +                # updates that are required
-> +                elif process_cfg:
-> +                    # stop if the section is done
-> +                    if not line:
-> +                        process_cfg = False
-> +                    # check if this is a linux configuration entry that
-> +                    # might need to be updated
-> +                    elif 'default "' in line:
-> +                        front, raw_version, tail = line.split(maxsplit=2)
-> +                        vnum = raw_version.replace('"', '')
-> +                        if '.' in vnum:
-> +                            ventry = extract_ventry(vnum)
-> +                            if ventry in entries:
-> +                                new_vnum = entries[ventry]
-> +                                # if the version is outdated, replace the line
-> +                                if vnum != new_vnum:
-> +                                    print(f'Sync: {vnum} -> {new_vnum}')
-> +                                    line = f'\t{front} "{new_vnum}" {tail}'
-> +                                    has_updated = True
-> +
-> +                conf_contents.append(line)
-> +
-> +    except OSError as e:
-> +        print(f'error reading file {linux_conf}: {e}')
-> +        return 1
-> +
-> +    # update the linux configuration file if we have new changes
-> +    if has_updated and not args.dry_run:
-> +        print(f'Updating: {linux_conf}')
-> +        try:
-> +            with linux_conf.open('w', encoding='utf-8', newline='') as f:
-> +                for line in conf_contents:
-> +                    f.write(f'{line}\n')
-> +
-> +        except OSError as e:
-> +            print(f'error writing file {linux_conf}: {e}')
-> +            return 1
-> +
-> +    if not has_updated:
-> +        print('No outdated versions.')
-> +
-> +    return 0
-> +
-> +
-> +def extract_ventry(vnum):
-> +    vmaj, vmin, _ = vnum.split('.', maxsplit=2)
-> +
-> +    ventry = f'{vmaj}.{vmin}'
-> +    if '-' in vnum:
-> +        _, postfix = vnum.split('-', maxsplit=1)
-> +        ventry += f'-{postfix}'
-> +
-> +    return ventry
-> +
-> +
-> +if __name__ == "__main__":
-> +    raise SystemExit(main())
+Fixes:
+
+  http://autobuild.buildroot.net/results/2d39791c65c5b71b0533d4b2bce5f073f5919552/
+
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+Waldemar: you did the bump of libjwt. Are you using this library?
+Independently of Asterisk?
+---
+ package/asterisk/Config.in     | 1 -
+ package/asterisk/asterisk.hash | 2 ++
+ package/asterisk/asterisk.mk   | 7 ++++---
+ 3 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/asterisk/Config.in b/package/asterisk/Config.in
+index 71c741acfd..c7101d70f4 100644
+--- a/package/asterisk/Config.in
++++ b/package/asterisk/Config.in
+@@ -10,7 +10,6 @@ config BR2_PACKAGE_ASTERISK
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_LIBEDIT
+ 	select BR2_PACKAGE_LIBILBC
+-	select BR2_PACKAGE_LIBJWT
+ 	select BR2_PACKAGE_LIBPJSIP
+ 	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_LIBXML2
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index 7b28624921..f11ed08ef4 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
+@@ -3,6 +3,8 @@ sha256  4cc403c8885d4aed3956dfb75d315d3e5bcc129eb9cd47c156d3b12ecceed1ba  asteri
+ 
+ # Locally computed
+ sha256  58bb83cec4d431f48d006e455d821668450f8cf6b6c95f090def47062fa3a60c  pjproject-2.15.1.tar.bz2
++sha256  6775095bcd417d375faddc1f17cdd7706ad8aa9b9b02404990c4b0ee218ee379  libjwt-1.15.3.tar.gz
++
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+ # sha256 locally computed
+ sha1  721c512feaea102700d5bdce952fdc0bb29dc640  asterisk-core-sounds-en-gsm-1.6.1.tar.gz
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index 6d682f161d..ce8e5823ce 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -13,11 +13,13 @@ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+ # segfaults. The reason behind this is unclear.
+ # https://github.com/asterisk/asterisk/issues/671
+ ASTERISK_PJSIP_URL = https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.15.1/
++ASTERISK_LIBJWT_URL = https://raw.githubusercontent.com/asterisk/third-party/master/libjwt/1.15.3/
+ ASTERISK_SOUNDS_BASE_URL = http://downloads.asterisk.org/pub/telephony/sounds/releases
+ ASTERISK_EXTRA_DOWNLOADS = \
+ 	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-core-sounds-en-gsm-1.6.1.tar.gz \
+ 	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-moh-opsound-wav-2.03.tar.gz \
+-	$(ASTERISK_PJSIP_URL)/pjproject-2.15.1.tar.bz2
++	$(ASTERISK_PJSIP_URL)/pjproject-2.15.1.tar.bz2 \
++	$(ASTERISK_LIBJWT_URL)/libjwt-1.15.3.tar.gz
+ 
+ ASTERISK_LICENSE = GPL-2.0, BSD-3-Clause (SHA1, resample), BSD-4-Clause (db1-ast)
+ ASTERISK_LICENSE_FILES = \
+@@ -40,7 +42,6 @@ ASTERISK_DEPENDENCIES = \
+ 	jansson \
+ 	libcurl \
+ 	libedit \
+-	libjwt \
+ 	libpjsip \
+ 	libxml2 \
+ 	sqlite \
+@@ -95,7 +96,7 @@ ASTERISK_CONF_OPTS = \
+ 	--with-jansson \
+ 	--with-libcurl \
+ 	--with-ilbc \
+-	--with-libjwt="$(STAGING_DIR)/usr" \
++	--with-libjwt-bundled \
+ 	--with-libxml2 \
+ 	--with-libedit="$(STAGING_DIR)/usr" \
+ 	--with-pjproject-bundled \
+-- 
+2.50.1
 
 _______________________________________________
 buildroot mailing list
