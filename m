@@ -1,74 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3372CA0FF9
-	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 10:07:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FDA7CA0FF7
+	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 10:08:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AFDB1842BC;
-	Fri, 29 Aug 2025 10:07:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 443EA6148C;
+	Fri, 29 Aug 2025 10:08:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t_TWRNUwW-E2; Fri, 29 Aug 2025 10:07:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oEV45yPJisqB; Fri, 29 Aug 2025 10:08:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D91BE842B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 530BF61567
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D91BE842B3;
-	Fri, 29 Aug 2025 10:07:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 067856C
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:07:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 530BF61567;
+	Fri, 29 Aug 2025 10:08:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 27769D2
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:08:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D994F4183D
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:07:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 198FB6156D
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:08:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6KZyjjTyxIiR for <buildroot@buildroot.org>;
- Fri, 29 Aug 2025 10:07:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 028804182E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 028804182E
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 028804182E
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:07:53 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 6AA6BB9782D8; Fri, 29 Aug 2025 12:07:51 +0200 (CEST)
-Message-ID: <cbe45d00-ef5f-4133-bfe0-04cb517dd1a8@rnout.be>
-Date: Fri, 29 Aug 2025 12:07:49 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Julien Olivain via buildroot <buildroot@buildroot.org>
-Cc: Julien Olivain <ju.o@free.fr>, Damien Le Moal <dlemoal@kernel.org>,
- Michel Stempin <michel.stempin@wanadoo.fr>
-References: <20250823211802.2213734-1-ju.o@free.fr>
- <20250824113525.7f0d0261@windsurf>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <20250824113525.7f0d0261@windsurf>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1756462071; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=DXP1xIe2+cnbd1oKyW2UaRg7Gm2KGyn1Y4xBQbLch6I=;
- b=bgpc1pfiWaa6au7sfrP6aUWBjMC3on7b0wUPAdXIOL0CtVPMPh/c5Nob9xyITFHM6424Hq
- wGuzUZg65ERIuLNgFZqN9MKQwrOTVB2YVS39VOhzchF7VShPOvtFFFE7kqEyAbyCIS1G6Y
- n8K2MrZcKUI43Ng36VABJ7UJqjWnt0sR30Vgc3K/DRdjaCEjIwHzhJAL+Q4Wg2JoHxfk7P
- Y0rRwn5qnlLEXxz/UkeD2wryesTen4g/VK/LLEWQnmsNTclNs/lZQP1l6kQWKAvBVV0N3K
- LE5+D3uVCqyy8wJtsaMktpHlLHgP/2KrhL6zgWjGQaUROkWy+LOPn++htRZ7Iw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=bgpc1pfi
-Subject: Re: [Buildroot] [PATCH 1/1] configs/sipeed_licheepi_zero: update
- Linux, U-Boot to fix build
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id n6XtEFr430sm for <buildroot@buildroot.org>;
+ Fri, 29 Aug 2025 10:08:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48EA16148C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 48EA16148C
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:08:50 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 413DA842CA; Fri, 29 Aug 2025 10:08:50 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 29 Aug 2025 12:07:57 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5a63bbb85e1410cf37534ebcc33ec33a7e7aef15
+X-Git-Newrev: db951a4c712930c2fde893d2d56ee5e3f9318911
+X-Patchwork-Hint: ignore
+Message-Id: <20250829100850.413DA842CA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/sipeed_licheepi_zero: update Linux,
+ U-Boot to fix build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,75 +60,130 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=db951a4c712930c2fde893d2d56ee5e3f9318911
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Since Buildroot commit [1] dc0f7215c6 "package/gcc: switch to 13.x as
+default", sipeed_licheepi_zero_defconfig fails when building the Linux
+kernel with the error message:
 
-On 24/08/2025 11:35, Thomas Petazzoni via buildroot wrote:
-> Hello Julien,
-> 
-> On Sat, 23 Aug 2025 23:18:02 +0200
-> Julien Olivain via buildroot <buildroot@buildroot.org> wrote:
-> 
->> Since Buildroot commit [1] dc0f7215c6 "package/gcc: switch to 13.x as
->> default", sipeed_licheepi_zero_defconfig fails when building the Linux
->> kernel with the error message:
->>
->>      drivers/ata/libahci.c: In function 'ahci_led_store':
->>      ./include/linux/compiler.h:350:45: error: call to '__compiletime_assert_1138' declared with attribute error: BUILD_BUG_ON failed: sizeof(_s) > sizeof(long)
->>        350 |         _compiletime_assert(condition, msg, __compiletime_assert_, __LINE__)
->>
->> This issue is fixed by upstream Kernel commit [2].
->>
->> This commit fixes this issue by updating the Linux Kernel from v5.3.5
->> (which is not a LTS series) to v6.12.43 (which is a LTS series
->> including the fixes). With this update,
->> BR2_LINUX_KERNEL_INTREE_DTS_NAME is updated accordingly to follow the
->> new DTS organization.
->>
->> This commit also updates U-Boot from 2022.01 to 2025.07. This new
->> version now requires BR2_TARGET_UBOOT_NEEDS_GNUTLS=y.
->>
->> While at it, this commit also switches to a stable glibc Bootlin
->> external toolchain, to follow the new guidelines from [3].
->>
->> Finally, this commit adds BR2_DOWNLOAD_FORCE_CHECK_HASHES=y and the
->> corresponding hash files. The .checkpackageignore is also updated to
->> reflect that change.
->>
->> Fixes:
->> https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771001
->>
->> [1] https://gitlab.com/buildroot.org/buildroot/-/commit/dc0f7215c604e845009e03784a221332867bf35a
->> [2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=f07788079f515ca4a681c5f595bdad19cfbd7b1d
->> [3] https://elinux.org/Buildroot:DeveloperDaysELCE2024#Rules_for_defconfigs
->>
->> Cc: Michel Stempin <michel.stempin@wanadoo.fr>
->> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> 
-> Thanks for the patch!
-> 
-> However, for defconfig, don't we normally require that changes are
-> runtime tested on the HW? That's a bit the whole point of our defconfig
-> I believe. Jumping from 5.3 to 6.12 is a big jump that deserves testing
-> on HW. If HW is no longer available because the defconfig maintainer is
-> not responsive and nobody else has the HW to test, the defconfig should
-> be dropped I'd say.
+    drivers/ata/libahci.c: In function 'ahci_led_store':
+    ./include/linux/compiler.h:350:45: error: call to '__compiletime_assert_1138' declared with attribute error: BUILD_BUG_ON failed: sizeof(_s) > sizeof(long)
+      350 |         _compiletime_assert(condition, msg, __compiletime_assert_, __LINE__)
 
-  Julien mentioned on IRC that it was actually boot tested on hardware.
+This issue is fixed by upstream Kernel commit [2].
 
+This commit fixes this issue by updating the Linux Kernel from v5.3.5
+(which is not a LTS series) to v6.12.43 (which is a LTS series
+including the fixes). With this update,
+BR2_LINUX_KERNEL_INTREE_DTS_NAME is updated accordingly to follow the
+new DTS organization.
 
-  Applied to master, thanks.
+This commit also updates U-Boot from 2022.01 to 2025.07. This new
+version now requires BR2_TARGET_UBOOT_NEEDS_GNUTLS=y.
 
-  Regards,
-  Arnout
+While at it, this commit also switches to a stable glibc Bootlin
+external toolchain, to follow the new guidelines from [3].
 
-> 
-> Thomas
+Finally, this commit adds BR2_DOWNLOAD_FORCE_CHECK_HASHES=y and the
+corresponding hash files. The .checkpackageignore is also updated to
+reflect that change.
 
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771001
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/dc0f7215c604e845009e03784a221332867bf35a
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=f07788079f515ca4a681c5f595bdad19cfbd7b1d
+[3] https://elinux.org/Buildroot:DeveloperDaysELCE2024#Rules_for_defconfigs
+
+Cc: Michel Stempin <michel.stempin@wanadoo.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+---
+ .checkpackageignore                                 |  1 -
+ board/sipeed/licheepi_zero/patches/linux/linux.hash |  2 ++
+ board/sipeed/licheepi_zero/patches/uboot/uboot.hash |  2 ++
+ configs/sipeed_licheepi_zero_defconfig              | 13 +++++++++----
+ 4 files changed, 13 insertions(+), 5 deletions(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 11c8a23763..f1c1527e31 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -178,7 +178,6 @@ configs/s6lx9_microboard_defconfig lib_defconfig.ForceCheckHash
+ configs/sipeed_lichee_rv_defconfig lib_defconfig.ForceCheckHash
+ configs/sipeed_lichee_rv_dock_defconfig lib_defconfig.ForceCheckHash
+ configs/sipeed_licheepi_nano_defconfig lib_defconfig.ForceCheckHash
+-configs/sipeed_licheepi_zero_defconfig lib_defconfig.ForceCheckHash
+ configs/sipeed_maix_bit_defconfig lib_defconfig.ForceCheckHash
+ configs/sipeed_maix_bit_sdcard_defconfig lib_defconfig.ForceCheckHash
+ configs/sipeed_maix_dock_defconfig lib_defconfig.ForceCheckHash
+diff --git a/board/sipeed/licheepi_zero/patches/linux/linux.hash b/board/sipeed/licheepi_zero/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..216d9b9d39
+--- /dev/null
++++ b/board/sipeed/licheepi_zero/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
++sha256  0fcbbbbcd456e87bbbfc8bf37af541fda62ccfcce76903503424fd101ef7bdee  linux-6.12.43.tar.xz
+diff --git a/board/sipeed/licheepi_zero/patches/uboot/uboot.hash b/board/sipeed/licheepi_zero/patches/uboot/uboot.hash
+new file mode 100644
+index 0000000000..440526977b
+--- /dev/null
++++ b/board/sipeed/licheepi_zero/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  0f933f6c5a426895bf306e93e6ac53c60870e4b54cda56d95211bec99e63bec7  u-boot-2025.07.tar.bz2
+diff --git a/configs/sipeed_licheepi_zero_defconfig b/configs/sipeed_licheepi_zero_defconfig
+index e92c1d854e..0c60a5c763 100644
+--- a/configs/sipeed_licheepi_zero_defconfig
++++ b/configs/sipeed_licheepi_zero_defconfig
+@@ -1,7 +1,11 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_VFPV4=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
++BR2_GLOBAL_PATCH_DIR="board/sipeed/licheepi_zero/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_HOSTNAME="licheepi-zero"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the LicheePi Zero"
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+@@ -10,10 +14,10 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/sipeed/licheepi_zero/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.43"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-v3s-licheepi-zero sun8i-v3s-licheepi-zero-dock"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun8i-v3s-licheepi-zero allwinner/sun8i-v3s-licheepi-zero-dock"
+ BR2_PACKAGE_LINUX_FIRMWARE=y
+ BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX=y
+ BR2_PACKAGE_WPA_SUPPLICANT=y
+@@ -23,11 +27,12 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="LicheePi_Zero"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
