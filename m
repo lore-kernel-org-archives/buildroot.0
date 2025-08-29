@@ -1,75 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA68ECA0FF0
-	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 08:51:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56405C8303F
+	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 08:51:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 92D8284023;
-	Fri, 29 Aug 2025 08:51:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 265494149E;
+	Fri, 29 Aug 2025 08:51:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QWC6fjNFE_sX; Fri, 29 Aug 2025 08:51:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Q5QOXjXITXMi; Fri, 29 Aug 2025 08:51:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C822684025
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 255C64145A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C822684025;
-	Fri, 29 Aug 2025 08:51:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id C779769
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 08:51:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 255C64145A;
+	Fri, 29 Aug 2025 08:51:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1D6F0D2
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 08:51:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C45AD84023
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 08:51:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 042044150B
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 08:51:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zZyMG3IGkoBp for <buildroot@buildroot.org>;
- Fri, 29 Aug 2025 08:51:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GWFWScFH1ayX for <buildroot@buildroot.org>;
+ Fri, 29 Aug 2025 08:51:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9B80D8401B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B80D8401B
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9B80D8401B
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 08:51:03 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1218309036; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Fri, 29 Aug 2025 08:50:59 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1urup1-00BBJF-0P;
- Fri, 29 Aug 2025 10:50:59 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20250828080814.65891-1-thomas.petazzoni@bootlin.com>
-Date: Fri, 29 Aug 2025 10:50:59 +0200
-In-Reply-To: <20250828080814.65891-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni via buildroot's message of "Thu, 28 Aug 2025 10:08:13
- +0200")
-Message-ID: <87frdajyto.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=JQyv92+vAIKKDHeses0qwtIv95n7fZn4xU+T3k34ITp6uToGAwYbBQb3xr/sInRf+KrBsVc5qYPhD0g7Um2xwccZj2c3tpOkYrIk9rlZjU7erJmeAufY+jmImqX5EgPtgg5NlDqDDUT9mcDUIV82eph/T+ZFSF2z1N4qnML2ihTcWLYvai6osuWk+sqXuzKHS8pbL/xaMEOrqZ6QI2Ays1TDOdyTdFDUXtHjfM2qyoTem3lV4Lu8QIxpRSS2OG6SpLoEiSibh/NRiQ2x+f4cqlZ7bT+X6BxJbhXQELrUZ/k68oNl4dJaraqizgDWtmgyHntzIVQzVtSgh3h9zSmKDQ==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=wcudXvF5/uqIfbDwikv4Y6tr7wjgee3qFOAWlzYsRZk=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=JQyv92+v
-Subject: Re: [Buildroot] [PATCH] package/b43-firmware: fix upstream URL
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 336AB4151B
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 336AB4151B
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 08:51:22 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2BDB387D07; Fri, 29 Aug 2025 08:51:22 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 29 Aug 2025 10:47:55 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ba24015307567f9d899861ee12b84e63cd49483c
+X-Git-Newrev: ffd00280315e60908d0d317b1dfb4c714590a03e
+X-Patchwork-Hint: ignore
+Message-Id: <20250829085122.2BDB387D07@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python3: drop !uclibc || headers
+ 5.1 dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,34 +58,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ffd00280315e60908d0d317b1dfb4c714590a03e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Unfortunately Larry Finger passed away in June 2024 [1], and
- > lwfinger.com is now squatted, and no longer has the same content as
- > before, causing a breakage when trying to download the 5.100.138
- > version of b43-firmware.
+The following dependency:
 
- > Since the exact same file is available from the OpenWrt mirror, and we
- > already use this mirror for the other b43-firmware version, let's use
- > the OpenWrt mirror for both.
+  depends on !BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
 
- > Fixes:
+was added by commit d63e207eb869063f82c867658676c2903beb08cb, which
+bumped python3 from 3.12.9 to 3.13.2.
 
- >   https://autobuild.buildroot.org/results/daf0aefbb10299f150c2c6a93df759ad07974752/
+The commit message doesn't state it, but this dependency was introduced
+because uClibc without time64 support (i.e. with kernel headers < 5.1)
+causes a runtime assertion in Python [1]:
 
- > [1] https://lore.kernel.org/linux-wireless/77997185-86a6-41c5-af7a-74e4e9064437@lwfinger.net/
+OverflowError: timestamp too large to convert to C PyTime_t
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+The problem is that this dependency has not been propagated to reverse
+dependencies, causing this kind of kconfig warnings:
 
-Committed, thanks.
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_PYTHON3
+  Depends on [n]: BR2_USE_WCHAR [=y] && BR2_USE_MMU [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && !BR2_STATIC_LIBS [=n] && (!BR2_TOOLCHAIN_USES_UCLIBC [=y] || BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1 [=n])
+  Selected by [y]:
+  - BR2_PACKAGE_AVOCADO [=y] && BR2_USE_WCHAR [=y] && BR2_USE_MMU [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && !BR2_STATIC_LIBS [=n]
+  - BR2_PACKAGE_LIBSIGROKDECODE [=y] && BR2_USE_WCHAR [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && BR2_USE_MMU [=y] && !BR2_STATIC_LIBS [=n]
+  - BR2_PACKAGE_OPKG_UTILS [=y] && BR2_PACKAGE_BUSYBOX [=y] && BR2_USE_MMU [=y] && BR2_USE_WCHAR [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && !BR2_STATIC_LIBS [=n]
 
--- 
-Bye, Peter Korsgaard
+However, propagating this dependency to all reverse dependencies of
+python3 would be pretty annoying, especially as the dependency is kind
+of "clunky". A configuration with uClibc and kernel headers < 5.1 is
+such a corner case that it does not merit such complexity.
+
+A later commit will check for this corner case at build time (while
+allowing it in the .config). For now, already drop the dependency in
+Config.in.
+
+Cc: Vincent Fazio <vfazio@xes-inc.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/issues/95#note_2348479811
+---
+ package/python3/Config.in | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/package/python3/Config.in b/package/python3/Config.in
+index 7491067140..cfc08bad86 100644
+--- a/package/python3/Config.in
++++ b/package/python3/Config.in
+@@ -1,6 +1,6 @@
+-comment "python3 needs a toolchain w/ wchar, threads, dynamic library, time64 support"
++comment "python3 needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || (!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1 && BR2_TOOLCHAIN_USES_UCLIBC)
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_PYTHON3
+ 	bool "python3"
+@@ -9,7 +9,6 @@ config BR2_PACKAGE_PYTHON3
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libffi
+ 	depends on !BR2_STATIC_LIBS
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1  # need time64 support in uclibc
+ 	select BR2_PACKAGE_LIBFFI
+ 	select BR2_PACKAGE_BLUEZ5_UTILS_HEADERS if BR2_PACKAGE_BLUEZ5_UTILS
+ 	select BR2_PACKAGE_HOST_PYTHON3
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
