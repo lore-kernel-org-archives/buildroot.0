@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13D4ACA0FF0
-	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 12:59:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8ACACA0FF9
+	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 13:01:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 575AE8046D;
-	Fri, 29 Aug 2025 12:59:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9BE6C8446A;
+	Fri, 29 Aug 2025 13:01:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u26ndRlBxtIo; Fri, 29 Aug 2025 12:59:20 +0000 (UTC)
+ id WhE6tXuL6pXh; Fri, 29 Aug 2025 13:01:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 582F584451
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4A0084437
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 582F584451;
-	Fri, 29 Aug 2025 12:59:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D4A0084437;
+	Fri, 29 Aug 2025 13:01:44 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6EEACD2
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 12:59:19 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4E4966C
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 13:01:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4C2D66153D
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 12:59:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 405D261638
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 13:01:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LoDgPfW1vBcv for <buildroot@buildroot.org>;
- Fri, 29 Aug 2025 12:59:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id qR1Wpf_mHCyh for <buildroot@buildroot.org>;
+ Fri, 29 Aug 2025 13:01:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98FDD614DC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 98FDD614DC
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 12:59:18 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 93CB487D66; Fri, 29 Aug 2025 12:59:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 201726161A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 201726161A
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 201726161A
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 13:01:41 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1072161407; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Fri, 29 Aug 2025 13:01:35 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1uryjW-00CShR-28;
+ Fri, 29 Aug 2025 15:01:34 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 29 Aug 2025 14:58:07 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f3be464f7ad6f1376e929010bce55950b6710632
-X-Git-Newrev: 0f80622f1cc33dc9f845d0fe1272a38788a789e9
-X-Patchwork-Hint: ignore
-Message-Id: <20250829125918.93CB487D66@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tcpreplay: bump to version 4.5.2
+To: yegorslists@googlemail.com
+Cc: buildroot@buildroot.org
+References: <20250829112640.2631731-1-yegorslists@googlemail.com>
+Date: Fri, 29 Aug 2025 15:01:34 +0200
+In-Reply-To: <20250829112640.2631731-1-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Fri, 29 Aug 2025 13:26:40
+ +0200")
+Message-ID: <877bymjn81.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=HT5pIryi2qzWEsf1HeLT04ICtl+G8DBFEm/i9rlrgfO3lNb7OI30ZW47qv8SQw81cnUSux9CNt5UE9v3eiZEbIt22tpJ+0/nI1l4hcZ3PXssO4nSKhxtK7CCls9qpnrs1JRM4/knxOrZOxgRQH4ZB7avaDTfVnVJhJ4gB/mf0ptprTCfs84auKrV2RONPBMpUusRshSRA1EnO9WOWoVNTwXFVSElzFBGwx6bW1+oGQd9txW69eW8pvbiqThcWdED2vdcE4GIW8GlkTqWCXUdaGMo8Nku1aBR/vDQX+KuSK5SH1AtlFc2YIA+S5bhorLSFIzlcR2jrbDQ3xapyeOiOQ==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=UXpF/laz/pTyxd7vNP6XXFKKvPW4Xbts/fSEGetMg7Y=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=HT5pIryi
+Subject: Re: [Buildroot] [PATCH] package/tcpreplay: bump to version 4.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,53 +81,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f80622f1cc33dc9f845d0fe1272a38788a789e9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
-Bugfix release, fixing compatibility w/ gcc-15.
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > For change log, see:
+ > https://github.com/appneta/tcpreplay/releases/tag/v4.5.2
 
-For change log, see:
-https://github.com/appneta/tcpreplay/releases/tag/v4.5.2
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-[Peter: mention gcc+15 fix]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/tcpreplay/tcpreplay.hash | 4 ++--
- package/tcpreplay/tcpreplay.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+I see this fixes gcc-15 build issues, so committed to master after
+extending the commit message, thanks.
 
-diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
-index 6dc6e48f9a..4307fa60fc 100644
---- a/package/tcpreplay/tcpreplay.hash
-+++ b/package/tcpreplay/tcpreplay.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://github.com/appneta/tcpreplay/releases/download/v4.5.1/tcpreplay-4.5.1.tar.xz.asc
-+# https://github.com/appneta/tcpreplay/releases/download/v4.5.2/tcpreplay-4.5.2.tar.xz.asc
- # using key 84E4FA215C934A7D97DC76D5E9E2149793BDE17E
--sha256  5126613f783062b43f514b05ad981376050a8fee35b03c8de4445ddeefd95049  tcpreplay-4.5.1.tar.xz
-+sha256  2df15bc6d49f96a77617d137049f998193bbae95c1a31b04ca02856a24cbf384  tcpreplay-4.5.2.tar.xz
- sha256  07cf5e92d475287a7d1663b33097f40cae5adf03ed8920fcd4374e3dfb48c8ad  docs/LICENSE
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index 17766707e6..32bcf8d278 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TCPREPLAY_VERSION = 4.5.1
-+TCPREPLAY_VERSION = 4.5.2
- TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
- TCPREPLAY_SOURCE = tcpreplay-$(TCPREPLAY_VERSION).tar.xz
- TCPREPLAY_LICENSE = GPL-3.0
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
