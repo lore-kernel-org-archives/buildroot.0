@@ -4,67 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43590CA0FF9
-	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 10:28:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F288CA0FF7
+	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 10:33:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EC15381CDC;
-	Fri, 29 Aug 2025 10:28:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0B77A840F5;
+	Fri, 29 Aug 2025 10:33:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U3FQM_gR9Pvx; Fri, 29 Aug 2025 10:28:14 +0000 (UTC)
+ id 1m9wsC-SNRyS; Fri, 29 Aug 2025 10:33:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4FE9181DF7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 130F68412C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4FE9181DF7;
-	Fri, 29 Aug 2025 10:28:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A4B6CD2
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:28:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 130F68412C;
+	Fri, 29 Aug 2025 10:33:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C7E886C
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:33:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8B9076159D
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:28:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B124C8412D
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:33:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pt3oAtlGOs6e for <buildroot@buildroot.org>;
- Fri, 29 Aug 2025 10:28:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E236D613AD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E236D613AD
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E236D613AD
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:28:12 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id D102FB9782E8; Fri, 29 Aug 2025 12:28:10 +0200 (CEST)
-Message-ID: <ec3aae34-2019-44cf-b202-78e3a53bcf89@rnout.be>
-Date: Fri, 29 Aug 2025 12:28:08 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7NxH6kpWOcpO for <buildroot@buildroot.org>;
+ Fri, 29 Aug 2025 10:33:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::62c; helo=mail-ej1-x62c.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AE158840F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE158840F5
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
+ [IPv6:2a00:1450:4864:20::62c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AE158840F5
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:33:44 +0000 (UTC)
+Received: by mail-ej1-x62c.google.com with SMTP id
+ a640c23a62f3a-afcb7a3b3a9so284738966b.2
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 03:33:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1756463622; x=1757068422;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=6xS/MSYXMUs4P+DIv+w4XFzCs01ZFEKG6xV6/+UN2K4=;
+ b=NH20H3JYX+ZSXmZBYG9bEMv7zEZzpaomG3bVs49NGSqTPWDOtQtzi9ct+KOZYdwF6T
+ JGsMMBP7eKbIEQ1Xbi7yoDfAu9Iy2k4BcJtrm+Fni3sRjVoC2V4Y0cZK7vEOFLE2kdf5
+ OacaKTP0lajgN1Zr0THMyvPt7mTc0Eh7RfOwUklKTQW/iavpcUIdO/N4FZSv5oSDo/JU
+ 02GvsQQOfDxh0DFu5eJaIxo3eacs89adN77+kjbXd5UGyxAoBgzIkJAGWHhK+jHOhbgj
+ SmM8HMM5rXAYFxYIDUEvO2/kN+9kl5w+xOHv4hrH6v8+G5fbNJBg7/MCaf3RWciy6BY5
+ tXIw==
+X-Gm-Message-State: AOJu0Yx/DMjQTbJ5D/hg1xsk1TbeunrWGB9xvLZ6wlwAHFNWGys8NIJS
+ jG5JvXMvSmy2Z9Iubj+M6qy6fB/ef5WvhPwak8cziQ+1aq0ud99rXXmguqvLcc5/nmymwfrOs+z
+ t1CLN7fQ=
+X-Gm-Gg: ASbGnct2/o2AhWd8gBXecPwRHSLB53RhsNSPyKl9g5zcr6nQh2VFflKDJ5RYo8D1jiR
+ 7uikDF+0FxZDqr0tT7/HWXvv1ooupsr/JziM6+7+V0Ecas8DyQrhPsU6VG8dc/ibObaesDst0GP
+ H9BojfTzXkXdSnoZYoYXdPAeR9ZNf4gqhHEvPuJ2L/OJAlHeamBNLcly5mmiHxuttSMDZkvwRtW
+ eGUtgNZ3E9mNshe4vUsS9NO1Lq/zOwwOswObtnBD6pCWxqMKQ3yK3Wi8fLCQJMscLvE5xBP4HD+
+ tMOI+6lArjbdQwn4amuYHTQBuPW2dl8Rpch/2Dpi/6I00csB2fX9HNmXEwRB6wqvUSDNVLULn34
+ OcSuul4V+DRdBj83ONtq3LVNYBYQW24xn8Up1fCyoXfBznBLWrnc=
+X-Google-Smtp-Source: AGHT+IGux/aFqDEGnq5OV77QQPudUldHXeLiQZjV+qx66sVfRVY7It2D6cbpleLKILzcXr4g0lru0w==
+X-Received: by 2002:a17:907:9808:b0:afe:ceee:87fa with SMTP id
+ a640c23a62f3a-afeceee8d52mr822070766b.52.1756463621455; 
+ Fri, 29 Aug 2025 03:33:41 -0700 (PDT)
+Received: from mindpad (31-207-9-44.static.ef-service.nl. [31.207.9.44])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-afefcbd86ccsm166392366b.58.2025.08.29.03.33.40
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 29 Aug 2025 03:33:40 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Fri, 29 Aug 2025 12:33:26 +0200
+Message-ID: <20250829103340.158873-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Titouan Christophe <titouan.christophe@mind.be>, buildroot@buildroot.org
-References: <20250508142356.91867-1-titouan.christophe@mind.be>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <20250508142356.91867-1-titouan.christophe@mind.be>
-X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1756463291; h=from:subject:date:message-id:to:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=Et5YB+XRFSgpgPC3ps0iPFuiumNIxQ9Gd9Ugx/H+tuE=;
- b=l5AfoTWdxhoS8zx4Ajyuepv7LB9qmU/4QQGWzmLCBfhE/T/KQ3BoqLwSaAMg9GXRWrPU6q
- a3PZ5CA3UtIdzDJ1UJnWMp18YYCIRzpjImi+QUtUmuIf6UvgdTVkf0nHJzJcHHJu0GiO1c
- NojG9FgFOrC7GH+sbg/19tePsBW2CXcK2KmFWJ49X1gyF/rN+91u9q0vG/Kp8JYffI+NZN
- Z6QjOeJYYUX600FN+C/Bkihchj1hvM8AJ6njDOZ9eQXRwJ8DAXavIDcaymz1vcyRDIpzkC
- a4vgtSo5bi689L85ng83BOec5SL09Qsmcu2/EE6l4+OAvpEvCC9tzHaK9VrSUg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=l5AfoTWd
-Subject: Re: [Buildroot] [PATCH] utils/test-pkg: add new option
- -T/--toolchain-name
+ d=mind.be; s=google; t=1756463622; x=1757068422; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=6xS/MSYXMUs4P+DIv+w4XFzCs01ZFEKG6xV6/+UN2K4=;
+ b=IutLI8QyvS6X3aaNnSvNiFOIi/rjhmlJdpGUyuo2JsJo7/7ki617YJ0QvS3FXpxn48
+ aPThTqQKAUqB1rcDmOH2thkLa7fZ1QrKZwGXnKV5nYit8OvDvcXkhclYGD/KCQ9rOZe9
+ OOd1OY4p5cmQVES5Ihql375OD3Ffy2LgYTpvctgxO/XzO9A8WT8PFgGa3LGn8l8AydqA
+ N5ksMXDjfZtQF0r88FlGmC7WwkeRd7ZWdJ/jhOUSdwL5TcvGPvSVHzpgSiPMveV4eogH
+ bwTDVM7qBauA54VcziYsGVNy6nkY7YtxJkziZEQEH5NpIJYzsl8Nmf04nxIKLcbRJ0Ew
+ Cjlw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=IutLI8Qy
+Subject: [Buildroot] [PATCH 01/15] docs/migrating.adoc: document static JS
+ library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,83 +106,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
+Cc: Thomas Claveirole <thomas.claveirole@green-communications.fr>,
+ Simon Dawson <spdawson@gmail.com>, Johan Oudinet <johan.oudinet@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+This patch adds information on how to provides static JS libraries in
+Buildroot with the release of the 2025.08.x version.
 
+Because the way JavaScript project development is working the chances that your
+project is using the same version of the buildroot package, and you provide
+this library from `/var/www` to your users is actually really low ...
 
-On 08/05/2025 16:23, Titouan Christophe via buildroot wrote:
-> Recently when trying to reproduce a build error with test-pkg on the toolchain
-> br-arm-basic, I had to create a new CSV file with that toolchain only to be
-> able to run the test in that single case.
-> 
-> I believe having a command-line option right away in test-pkg would make this
-> much easier, as I can now run: `./utils/test-pkg -T br-arm-basic -p redis`
-> 
-> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+If you want to bundle JavaScript libraries in your project you should probably
+either use a cdn, handle the package version and location of your choice in
+your external or overlay, or just bundle it in your assets from a NPM workflow
+to benefit from some minifications from your bundler.
 
-  Applied to master, thanks.
+Historically many of those JavaScript libraries were added in the 2010 eras
+where it could make sense for them to be part of Buildroot.
 
-  Regards,
-  Arnout
+Most of them are also way outdated/not maintained.
 
-> ---
->   utils/test-pkg | 17 ++++++++++++++---
->   1 file changed, 14 insertions(+), 3 deletions(-)
-> 
-> diff --git a/utils/test-pkg b/utils/test-pkg
-> index 19d8713d6a..6f1b33a45d 100755
-> --- a/utils/test-pkg
-> +++ b/utils/test-pkg
-> @@ -17,8 +17,8 @@ main() {
->       local -a toolchains
->       local pkg_br_name
->   
-> -    o='hakc:d:n:p:r:t:'
-> -    O='help,all,keep,prepare-only,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
-> +    o='hakc:d:n:p:r:t:T:'
-> +    O='help,all,keep,prepare-only,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:,toolchain-name:'
->       opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
->       eval set -- "${opts}"
->   
-> @@ -61,6 +61,9 @@ main() {
->           (-t|--toolchains-csv)
->               toolchains_csv="${2}"; shift 2
->               ;;
-> +        (-T|--toolchain-name)
-> +            toolchain_name="${2}"; shift 2
-> +            ;;
->           (--)
->               shift; break
->               ;;
-> @@ -107,7 +110,9 @@ main() {
->       # E.g.: http://server/path/to/name.config,arch,libc
->       #  -->  http://server/path/to/name.config
->       mapfile -t toolchains < <(sed -r -e 's/,.*//; /internal/d; /^#/d; /^$/d;' "${toolchains_csv}" \
-> -                                | if [ "${random}" -gt 0 ]; then \
-> +                                | if [ -n "${toolchain_name}" ]; then \
-> +                                    grep -E "[/^]${toolchain_name}.config"
-> +                                elif [ "${random}" -gt 0 ]; then \
->                                       sort -R | head -n "${random}"
->                                   elif [ "${number}" -gt 0 ]; then \
->                                       head -n "${number}"
-> @@ -278,6 +283,12 @@ Options:
->           try. If not specified, the toolchains in ${TOOLCHAINS_CSV} will be
->           used.
->   
-> +    -T NAME, --toolchain-name NAME
-> +        Name of the single toolchain to use. It must be defined in the CSV
-> +        list of toolchains (see also -t / --toolchains-csv). If this option
-> +        is specified, then a single build will be performed on that
-> +        specific toolchain only.
-> +
->       -k, --keep
->           Keep the build directories even if the build succeeds.
->           Note: the logfile and configuration is always retained, even without
+For more informations see https://elinux.org/Buildroot:DeveloperDaysELCE2025
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ docs/manual/migrating.adoc | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/docs/manual/migrating.adoc b/docs/manual/migrating.adoc
+index 4e6225a987..862fee28df 100644
+--- a/docs/manual/migrating.adoc
++++ b/docs/manual/migrating.adoc
+@@ -222,3 +222,14 @@ from +-cargo2+ to +-cargo4+.
+ In 2025.08, starting with systemd version 257, systemd-networkd requires kernel
+ 5.4 or later. If you are still using a kernel older than 5.4, please update
+ your kernel or use an alternative network manager.
++
++Starting 2025.08, JavaScript libraries that were just copied to `/var/www` on
++the target filesystem are not part of the Buildroot packages.
++If you want to provide such libraries either:
++
++- Use a CDN to target the library version of your choice.
++- Serve it by adding the package to your external and installing the content to
++  the destination of your choice
++- Serve it by adding the library to your overlay.
++- Install the libraries from your project with NPM and bundle with a JavaScript
++  bundler.
+-- 
+2.50.1
 
 _______________________________________________
 buildroot mailing list
