@@ -4,50 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44F22CA0FF0
-	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 18:32:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3089ACA0FF9
+	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 18:36:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 033258466D;
-	Fri, 29 Aug 2025 18:32:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F37B2843E3;
+	Fri, 29 Aug 2025 18:36:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nqkvXAlXZrjS; Fri, 29 Aug 2025 18:32:49 +0000 (UTC)
+ id zYQOwlr6L85y; Fri, 29 Aug 2025 18:36:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0BB35842E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1700843F1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0BB35842E7;
-	Fri, 29 Aug 2025 18:32:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6BFB7D2
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 18:32:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F1700843F1;
+	Fri, 29 Aug 2025 18:36:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3F3BAD2
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 18:36:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5CA03842E7
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 18:32:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 25A3E40793
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 18:36:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4DAkqYKZ-GiW for <buildroot@buildroot.org>;
- Fri, 29 Aug 2025 18:32:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wyVL4ZD4bMdv for <buildroot@buildroot.org>;
+ Fri, 29 Aug 2025 18:35:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D9FB842D7
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9D9FB842D7
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 18:32:46 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9876787E40; Fri, 29 Aug 2025 18:32:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 02503407AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02503407AB
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 02503407AB
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 18:35:58 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1657589675; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Fri, 29 Aug 2025 18:35:54 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1us3x3-00Cyjs-1B;
+ Fri, 29 Aug 2025 20:35:53 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 29 Aug 2025 20:31:21 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 31342fb5ff9adf1afd016ae56a07b830b5b24088
-X-Git-Newrev: 7ed636069fbdc9942bcd637f6f902c13415a9910
-X-Patchwork-Hint: ignore
-Message-Id: <20250829183246.9876787E40@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgsm: fix build failure with GCC
- 15.x
+To: Arnout Vandecappelle <arnout@rnout.be>
+Cc: buildroot@buildroot.org,  Floris Bos <bos@je-eigen-domein.nl>,  Heiko
+ Thiery <heiko.thiery@gmail.com>
+References: <20250828215927.2281857-1-peter@korsgaard.com>
+ <7fd3dee0-3950-4dfd-81a5-3d9d6f5d6fb4@rnout.be>
+Date: Fri, 29 Aug 2025 20:35:53 +0200
+In-Reply-To: <7fd3dee0-3950-4dfd-81a5-3d9d6f5d6fb4@rnout.be> (Arnout
+ Vandecappelle's message of "Fri, 29 Aug 2025 19:53:10 +0200")
+Message-ID: <87ecsugely.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=cPS/E+L9vvDKr5rRi8TEKeH75w5TpIL1WSCsmCwDdL3uXiCCVyGc847fFO/TRcGnO/A1FXG5jlpH4V3cnykgUJqFN+3mg2KzmDXqH3T3WF9qfJdZMUe2gTl63X5pyBDCzHZxEt3nEmcZ35SqaF628QrMQpb0numHGe2zp3LL17ST96qEU3PFg53CpOxrXvH5Dc2LgkZ743rVmU8B9DtmQyRlwpHwMTYKM6o0rb7oqGtA9VzTEQNEAdSYegPA4s1u1OiSIfqYu3+tZM2aYcTxKDpRRJX8BVjYWhNXncIHdzY+1f7lfhWxZEdV2O460BrSbGNVhBln6wppzxTwu4s9Ag==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=Qr4GxKfj7R8Bgem6lRM/fIXAsn3mnr4qmLZQ7R8isSI=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=cPS/E+L9
+Subject: Re: [Buildroot] [PATCH] package/ipmitool: move to codeberg
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,107 +82,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3680009426961998598=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3680009426961998598==
-Content-Type: text/plain
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@rnout.be> writes:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ed636069fbdc9942bcd637f6f902c13415a9910
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > On 28/08/2025 23:59, Peter Korsgaard wrote:
+ >> The github repo was deleted and moved to codeberg, so use that instead:
+ >> https://lwn.net/Articles/926101/
+ >> It is unclear if the auto generated tarballs from codeberg are
+ >> reproducible,
+ >> so instead fetch through git.
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ >> ---
+ >> package/ipmitool/Config.in     | 2 +-
+ >> package/ipmitool/ipmitool.hash | 2 +-
+ >> package/ipmitool/ipmitool.mk   | 5 +++--
+ >> 3 files changed, 5 insertions(+), 4 deletions(-)
+ >> diff --git a/package/ipmitool/Config.in b/package/ipmitool/Config.in
+ >> index dd2b0e6b6d..f759caa08f 100644
+ >> --- a/package/ipmitool/Config.in
+ >> +++ b/package/ipmitool/Config.in
+ >> @@ -10,7 +10,7 @@ config BR2_PACKAGE_IPMITOOL
+ >> it can be provided by the iana-assignment package or by a
+ >> rootfs overlay.
+ >> -	  https://github.com/ipmitool/ipmitool/
+ >> +	  https://codeberg.org/IPMITool/ipmitool/
+ >> if BR2_PACKAGE_IPMITOOL
+ >> diff --git a/package/ipmitool/ipmitool.hash
+ >> b/package/ipmitool/ipmitool.hash
+ >> index c3b298e3ba..c65fdb0342 100644
+ >> --- a/package/ipmitool/ipmitool.hash
+ >> +++ b/package/ipmitool/ipmitool.hash
+ >> @@ -1,3 +1,3 @@
+ >> # Locally computed:
+ >> -sha256  48b010e7bcdf93e4e4b6e43c53c7f60aa6873d574cbd45a8d86fa7aaeebaff9c  ipmitool-1_8_19.tar.gz
+ >> +sha256  78bc6fdbb0487652a3d0220072b9428d4ab6dfc198de2f28e8493932e6b893af  ipmitool-IPMITOOL_1_8_19-git4.tar.gz
+ >> sha256  b7e2382a8be43b5f6cb092f2d2bda163bf1a1938be9300f821a845cbcd535f56  COPYING
+ >> diff --git a/package/ipmitool/ipmitool.mk b/package/ipmitool/ipmitool.mk
+ >> index 159bb7c8b6..04c77bcae3 100644
+ >> --- a/package/ipmitool/ipmitool.mk
+ >> +++ b/package/ipmitool/ipmitool.mk
+ >> @@ -4,8 +4,9 @@
+ >> #
+ >> ################################################################################
+ >> -IPMITOOL_VERSION = 1_8_19
+ >> -IPMITOOL_SITE = $(call github,ipmitool,ipmitool,IPMITOOL_$(IPMITOOL_VERSION))
+ >> +IPMITOOL_VERSION = IPMITOOL_1_8_19
 
-Fixes:
+ >  Meh, this breaks release monitoring and CPE. So either we have to
+ >  remove CPE_ID_IS_VALID, or we have to set the CPE version.
 
-  http://autobuild.buildroot.net/results/95f0ff842e4fddcf9d2ffaeb7ddbb9abeb821319/
+ >  We really should fix that VERSION/DL_VERSION mess.
 
-There is no proper upstream project with a Git repo or mailing list,
-so we just sent the patch by e-mail to the project maintainer.
+ >  Marked as Changes Requested.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../libgsm/0002-Fix-signal-handler-prototype.patch | 61 ++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
+I guess the most sensible short term solution is to to just drop
+_CPE_ID_VALID then. Do you want me to resend a version doing that?
 
-diff --git a/package/libgsm/0002-Fix-signal-handler-prototype.patch b/package/libgsm/0002-Fix-signal-handler-prototype.patch
-new file mode 100644
-index 0000000000..c28cf584a1
---- /dev/null
-+++ b/package/libgsm/0002-Fix-signal-handler-prototype.patch
-@@ -0,0 +1,61 @@
-+From 7ffab0a5028f0bfcb864c2387f41b8d4eb33fb8e Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Fri, 29 Aug 2025 17:27:55 +0200
-+Subject: [PATCH] Fix signal handler prototype
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Recent versions of gcc, starting from gcc 15.x, are more picky about
-+function prototypes, and that cause the following issue:
-+
-+usr/include/signal.h:93:23: note: expected ‘__sighandler_t’ {aka ‘void (*)(int)’} but argument is of type ‘void (*)(void)’
-+
-+ultimately causing a build failure.
-+
-+This patch fixes that by ensuring the signal handler has the right
-+prototype. The onintr() function is not only used as a signal handler,
-+but also on memory allocation failure, in which case a dummy value of
-+0 is passed as argument, since anyway this value isn't used by
-+onintr().
-+
-+Upstream: sent by e-mail to Jutta Degener <jutta@pobox.com>
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ src/toast.c | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/toast.c b/src/toast.c
-+index 05cd0b3..70a14ba 100644
-+--- a/src/toast.c
-++++ b/src/toast.c
-+@@ -211,7 +211,7 @@ static char * suffix P2((name, suf), char *name, char * suf)
-+ }
-+ 
-+ 
-+-static void catch_signals P1((fun), SIGHANDLER_T (*fun) ())
-++static void catch_signals P1((fun), SIGHANDLER_T (*fun) (int))
-+ {
-+ #ifdef	SIGHUP
-+ 	signal( SIGHUP,   fun );
-+@@ -230,7 +230,7 @@ static void catch_signals P1((fun), SIGHANDLER_T (*fun) ())
-+ #endif
-+ }
-+ 
-+-static SIGHANDLER_T onintr P0()
-++static SIGHANDLER_T onintr P1((signo), int signo)
-+ {
-+ 	char * tmp = outname;
-+ 
-+@@ -253,7 +253,7 @@ static char * emalloc P1((len), size_t len)
-+ 	if (!(s = malloc(len))) {
-+ 		fprintf(stderr, "%s: failed to malloc %d bytes -- abort\n",
-+ 			progname, (int)len);
-+-		onintr();
-++		onintr(0);
-+ 		exit(1);
-+ 	}
-+ 	return s;
-+-- 
-+2.50.1
-+
-
---===============3680009426961998598==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3680009426961998598==--
