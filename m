@@ -4,72 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8ACACA0FF9
-	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 13:01:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDF8ECA0FF9
+	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 13:12:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9BE6C8446A;
-	Fri, 29 Aug 2025 13:01:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8BA1684218;
+	Fri, 29 Aug 2025 13:12:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WhE6tXuL6pXh; Fri, 29 Aug 2025 13:01:45 +0000 (UTC)
+ id 6_1kCl83gFcg; Fri, 29 Aug 2025 13:12:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4A0084437
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF7C88270B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D4A0084437;
-	Fri, 29 Aug 2025 13:01:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4E4966C
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 13:01:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AF7C88270B;
+	Fri, 29 Aug 2025 13:12:07 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 45D476C
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 13:12:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 405D261638
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 13:01:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3757A841FB
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 13:12:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qR1Wpf_mHCyh for <buildroot@buildroot.org>;
- Fri, 29 Aug 2025 13:01:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P7tMhasatS0u for <buildroot@buildroot.org>;
+ Fri, 29 Aug 2025 13:12:05 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
  helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 201726161A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 201726161A
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7C920841FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C920841FF
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 201726161A
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 13:01:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7C920841FF
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 13:12:05 +0000 (UTC)
 Feedback-ID: 21632:4007:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1072161407; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1632349864; 
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Fri, 29 Aug 2025 13:01:35 +0000 (UTC)
+ Fri, 29 Aug 2025 13:12:02 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1uryjW-00CShR-28;
- Fri, 29 Aug 2025 15:01:34 +0200
+ (envelope-from <peter@korsgaard.com>) id 1urytd-00CTZ9-39;
+ Fri, 29 Aug 2025 15:12:01 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: yegorslists@googlemail.com
-Cc: buildroot@buildroot.org
-References: <20250829112640.2631731-1-yegorslists@googlemail.com>
-Date: Fri, 29 Aug 2025 15:01:34 +0200
-In-Reply-To: <20250829112640.2631731-1-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Fri, 29 Aug 2025 13:26:40
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20250829111125.1668963-1-thomas.petazzoni@bootlin.com>
+Date: Fri, 29 Aug 2025 15:12:01 +0200
+In-Reply-To: <20250829111125.1668963-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni via buildroot's message of "Fri, 29 Aug 2025 13:11:24
  +0200")
-Message-ID: <877bymjn81.fsf@dell.be.48ers.dk>
+Message-ID: <87349ajmqm.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=HT5pIryi2qzWEsf1HeLT04ICtl+G8DBFEm/i9rlrgfO3lNb7OI30ZW47qv8SQw81cnUSux9CNt5UE9v3eiZEbIt22tpJ+0/nI1l4hcZ3PXssO4nSKhxtK7CCls9qpnrs1JRM4/knxOrZOxgRQH4ZB7avaDTfVnVJhJ4gB/mf0ptprTCfs84auKrV2RONPBMpUusRshSRA1EnO9WOWoVNTwXFVSElzFBGwx6bW1+oGQd9txW69eW8pvbiqThcWdED2vdcE4GIW8GlkTqWCXUdaGMo8Nku1aBR/vDQX+KuSK5SH1AtlFc2YIA+S5bhorLSFIzlcR2jrbDQ3xapyeOiOQ==;
+ b=CrOQVoE6BhWForat/I+RwF3Bke9DccFdZTBXNvtNipY/m5q6PPQKd/q75xoq73zbQkcriCpaBYxtd2QPni3Z4//IXgASySS61r46p7qSck786hknrbrh6Ov4+El5ay9I4mQxCeQXe+FqhT78Mz5xg16sGPTHRSXe9e2ygdDtbwhJz4Z8Fe3zQDTjyojBQejD+Z9v9cZhOo5oIBrV/56dB7f4e79GoS8AdGDlscye7DJba4KoQnxhPsxFhhGs46uKVD4kjT6k8V4HOOhdBY9FaIrQZO1qeQZTxnYjzJK8aumTSVsEXROltRCMPUgEC2Q59p/qBRZHNr8CAG7nA3vCVA==;
  s=purelymail1; d=purelymail.com; v=1;
- bh=UXpF/laz/pTyxd7vNP6XXFKKvPW4Xbts/fSEGetMg7Y=;
+ bh=Qj74UCnm9j0nc/+PJlg0uRwt+AFx557nRwSPkufbqJI=;
  h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=HT5pIryi
-Subject: Re: [Buildroot] [PATCH] package/tcpreplay: bump to version 4.5.2
+ header.a=rsa-sha256 header.s=purelymail1 header.b=CrOQVoE6
+Subject: Re: [Buildroot] [PATCH v2] package/mariadb: fix sub-option
+ indentation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,16 +87,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
- > From: Yegor Yefremov <yegorslists@googlemail.com>
- > For change log, see:
- > https://github.com/appneta/tcpreplay/releases/tag/v4.5.2
+ > The Config.in comment is between the main BR2_PACKAGE_MARIADB option
+ > and its sub-options, causing the sub-options to not appear as nicely
+ > indented in menuconfig.
 
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > Before:
 
-I see this fixes gcc-15 build issues, so committed to master after
-extending the commit message, thanks.
+ > [ ] mariadb
+ > [ ] mariadb server
+ >   [ ] mariadb embedded server
+
+ > After:
+
+ > [ ] mariadb
+ >   [ ] mariadb server
+ >     [ ] mariadb embedded server
+
+ > which is what we want.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > ---
+ > v1 -> v2: my v1 was messed up and contained unrelated changes.
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
