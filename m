@@ -1,102 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8616CA0FF7
-	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 10:33:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31C4CCA0FF9
+	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 10:33:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8D54661594;
-	Fri, 29 Aug 2025 10:33:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 014EC842D3;
+	Fri, 29 Aug 2025 10:33:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CsuuKdgigMdf; Fri, 29 Aug 2025 10:33:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gj0InLvAWBjc; Fri, 29 Aug 2025 10:33:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 82D1F615B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B10AF841D9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 82D1F615B9;
-	Fri, 29 Aug 2025 10:33:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id BD75BD2
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:33:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A40ED6159D
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:33:48 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2jU-xIBu9Nyu for <buildroot@buildroot.org>;
- Fri, 29 Aug 2025 10:33:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::632; helo=mail-ej1-x632.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org ACC6061545
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACC6061545
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp3.osuosl.org (Postfix) with ESMTPS id ACC6061545
+	by smtp1.osuosl.org (Postfix) with ESMTP id B10AF841D9;
+	Fri, 29 Aug 2025 10:33:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id DF6D36C
  for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:33:47 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id
- a640c23a62f3a-afcb731caaaso286259466b.0
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 03:33:47 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C560141559
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:33:47 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w3Apm7FhZWcI for <buildroot@buildroot.org>;
+ Fri, 29 Aug 2025 10:33:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::633; helo=mail-ej1-x633.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8E56041261
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E56041261
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
+ [IPv6:2a00:1450:4864:20::633])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8E56041261
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:33:46 +0000 (UTC)
+Received: by mail-ej1-x633.google.com with SMTP id
+ a640c23a62f3a-afee6037847so280990566b.1
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 03:33:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1756463625; x=1757068425;
+ d=1e100.net; s=20230601; t=1756463624; x=1757068424;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=PttWZ9a7eAVsJzqD00V0UJTLJHztQ5FUbB397j7IxTU=;
- b=WWdUqZuBIlY0bbeofYu4f6qJiA9s34boEGFr5kCTybTplxTYOMKdyeZD9vYjb36BmB
- xIpGXUUoJ3HqmTThq6Ny5xlJ5bsOv0461uQC0pluv98JFVUhqwU1+HTD6W/+3pcE94zV
- 8JKsdQorTvIvWJjRCrbqRW1+Py4lYNWQRthEYSL7pnwV51QeXVsSFZbwnlY7Vu/FW8eY
- qCA6JoxnZg8NOrsxwI2TGhwVPLQMlRjdU0/nH9D/EsRh3djlNXXveAg5hWl+mwH2/wR/
- 9+Yz0gWUcwnYzXM0s58hAsNfrTqa/vav4BX2kMpljap15z7n6IQvbMSoAoa1PkvFgRYL
- 3Sbw==
-X-Gm-Message-State: AOJu0YyTiy+6fP0lu5olTYhNIcs8m+eLau15R9vilQTvjXQuQnfGHm6J
- RlqNcLaODvAsAr2gE5nNYbcEG80h7hDDTaKwzuxrp4p7Q7F4CenzX00qLj88+UaIU0yjKjg6n0U
- kFZ4uKXY=
-X-Gm-Gg: ASbGncstk78pegQmozp2hWgxcvaXq4v4hSwpqh/3TmhogQNIx3g3H5m7pPJFEEQZXVn
- SrgqStiVzsgQC//GFkEZZQWN8DVeIJQmL2ZIMqvTbdm/Mur8Zh1aHGe4aq3qpNHiE2U2cbWTRb9
- vB37nov0u3y1868q4xYNNvoM/TYPCb8bx/kvV6kNKnMoXOUIt42g2RAGzF9k0id9sZJgKO9vNdT
- 7Ijj4odMu1pNfyG/L52PD2ADB8rG8YWW8KDh/u8+bqcBSopBnjUCGK+WsxUZiGSHbCNreHdif7A
- d31WXK4nKs4/l/MXtzjNNZQMgpHdqqtofxfuWk3dkH/zTG9+u8/9ZcIz9fTQ1qrzSbJsxVCdqm3
- aiZu8af2W/3kX8ULDm0Skr2+AB9NRVzCHvUv/VvT7kUGjJZMHaOyIvLEWWccDOQ==
-X-Google-Smtp-Source: AGHT+IFhneDZVAMBFym03kuGP18yYSssd/IdrzSVvzsNXJ7dq09cw8h9Wki2TYyjYGRC1t7ObDXJZg==
-X-Received: by 2002:a17:907:3ccc:b0:afe:f651:118e with SMTP id
- a640c23a62f3a-afef6511206mr364651066b.49.1756463625299; 
- Fri, 29 Aug 2025 03:33:45 -0700 (PDT)
+ bh=nip1KlWUZN/ahcKZlUZzjbzx40b0l3P2UOmJHU4XJDY=;
+ b=U0yIYVpShqw8UKd/dj2BiBR0TN0WmBDBOZQod/mflwWnk1uyP/AK8++FQPOmbffCFo
+ dA+QHMMasnbDiz59kI0FYn0G2tMyjfwnCBFzUiG/0x/qp8uLLFJ0DLRRIlUG8Z1etudc
+ niasuWQEVZD31WzlQCX6GMdj3jDsHN/R1PzMi28O1xxOzWqbIrsPgxxhteoxMrlzLFVq
+ 66yy+05olQuvElTEjSPABrC40kk9DJsL0OOCGU5elHHO0EKv0wYRH3oIbKyvZ2uVA4s4
+ 2B6xBLRxd1rEjnsFzkVkJ2sy3QnhyShJ9vpWoEhbYDKUTphoR6FPxXZAxhlzt6as3Yko
+ VWVw==
+X-Gm-Message-State: AOJu0YwNq+aqDV7gKr+xnGo1jpc/TSCj85buARGrVXVxjL+s3KjfFQOg
+ Lf8ptL0JNlZST04e03Bl1JbwycOe5iTBpMVAq6gU4fwIThA7sYbVqFbxA8JkSwj0zM6jmSrwCE9
+ y9cnYq5o=
+X-Gm-Gg: ASbGncvU0KJi6+hguX3M4T/lOm9FLoXe4KxUVGOPNqzm3YKf9ZWK949Wx3c/Q19g3k+
+ C5HU3CWLzgFo1DWnTrsGChRbksnO4lYvysrdahIvoqiH727VpS7laMwZ9qk7a2ZCqvpEub3wRo8
+ BG+6KggtEC+AoGnWO37SIWGevBpJhhICrU88mFul/8e4C7hQyS6tyrIUNu042MnrI8MP7Yg1CTk
+ J89YlT/tZVCAsUYhrvtMUWodWFZLCEYNnu/qalkwenyAaXkdsV786ahhV2hLrqt0dQsbJ9JrzPI
+ MOPYzyw/gO1wsXt/RKJ+CbULlNrwMeJJlfGpuKZP2L6LMjN2KisQbMekCmUd7bLD/sPveymW11r
+ 63aj1GxI51xWAoZnb9AY6HRdYOev3+Y+hTSJfZDaTlSIPwTJ0uroaNf0sxGtzng==
+X-Google-Smtp-Source: AGHT+IEh5zksuF1Q9tnb6UMopPcmscZ2uBLB6Bn0b3ECFJbJD+Py9ySAuIkoscHFb/pe27fFNue3nA==
+X-Received: by 2002:a17:906:6a16:b0:afe:9172:b8bd with SMTP id
+ a640c23a62f3a-afe9172bc98mr1361400766b.50.1756463624210; 
+ Fri, 29 Aug 2025 03:33:44 -0700 (PDT)
 Received: from mindpad (31-207-9-44.static.ef-service.nl. [31.207.9.44])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-afefcbd86ccsm166392366b.58.2025.08.29.03.33.44
+ a640c23a62f3a-afefcbd86ccsm166392366b.58.2025.08.29.03.33.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 29 Aug 2025 03:33:44 -0700 (PDT)
+ Fri, 29 Aug 2025 03:33:43 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Fri, 29 Aug 2025 12:33:30 +0200
-Message-ID: <20250829103340.158873-5-thomas.perale@mind.be>
+Date: Fri, 29 Aug 2025 12:33:29 +0200
+Message-ID: <20250829103340.158873-4-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250829103340.158873-1-thomas.perale@mind.be>
 References: <20250829103340.158873-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1756463625; x=1757068425; darn=buildroot.org;
+ d=mind.be; s=google; t=1756463624; x=1757068424; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=PttWZ9a7eAVsJzqD00V0UJTLJHztQ5FUbB397j7IxTU=;
- b=IgHmP70tH/4B7pjLG5P6BE11ESAtVBhtDZouz2SchuDW6dVpYcp0Tqej6cMq9xNIG0
- 1dIjHlHX9LH7sKr17ghsjX6oh5TWh8F3Kv3NWTkwgFcnjcS27O/075Yfkh6a9cyAyCX0
- dn+enJjRBn5oCAkdmbWxQTgI9OaZFU1WchDuuRpfFekLM3SB2UhdMYNj/1iG8dMRj0jj
- 09lBuWsERBZC3UwhSXKo789MSUlgEd5vBwFYdUG0jrugzDRvihpRgUZLw/0qvQmX2DWY
- Ans2gInYTL1c6gpEW+8LgcIuTOPk2ZFMavLGhZ3Mior0KK/i6RbWfk/geA72i0jvvTMu
- MdCg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=nip1KlWUZN/ahcKZlUZzjbzx40b0l3P2UOmJHU4XJDY=;
+ b=ev9RhJzAAPPLRhn5ivvvlM4Vg/Gco9OsgegacFhZhVur9wo8hZHZE89I5NCDCFWATl
+ a6ka/KsXzWI10nqryOEcXwGxEzIaN0tGZYKsrVdk976OJZr4zwSucOV+P1/w2wEH+M28
+ eaycoAartgIO8qmFzPYRkaa03ZAfJEAnUo/X8wV39XmlnqgUkKGY7DMRejV9hvCfRwfg
+ pMsDfoJPtdEGVZtsN9jHti3m9xbN6bOrpdQfNP18+Pcf6mnBVkgk6EJ0lTVh/t3UbKmF
+ AW5wK1gIjgy3JvB71svD4S/CvpNrcv++Z1v9EGIKPwPaW2cAUJhgRI5IgjplCFmLA6Eg
+ 1Ddw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=IgHmP70t
-Subject: [Buildroot] [PATCH 05/15] package/explorercanvas: remove package
+ header.a=rsa-sha256 header.s=google header.b=ev9RhJzA
+Subject: [Buildroot] [PATCH 04/15]  package/datatables{, -buttons,
+ -fixedcolumns, -responsive}: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -135,89 +136,306 @@ For more informations see https://elinux.org/Buildroot:DeveloperDaysELCE2025
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- Config.in.legacy                           |  6 ++++++
- package/Config.in                          |  1 -
- package/explorercanvas/Config.in           | 10 ----------
- package/explorercanvas/explorercanvas.hash |  3 ---
- package/explorercanvas/explorercanvas.mk   | 16 ----------------
- 5 files changed, 6 insertions(+), 30 deletions(-)
- delete mode 100644 package/explorercanvas/Config.in
- delete mode 100644 package/explorercanvas/explorercanvas.hash
- delete mode 100644 package/explorercanvas/explorercanvas.mk
+ Config.in.legacy                              | 24 ++++++++++++++++++
+ package/Config.in                             |  4 ---
+ package/datatables-buttons/Config.in          | 12 ---------
+ .../datatables-buttons.hash                   |  3 ---
+ .../datatables-buttons/datatables-buttons.mk  | 25 -------------------
+ package/datatables-fixedcolumns/Config.in     | 10 --------
+ .../datatables-fixedcolumns.hash              |  3 ---
+ .../datatables-fixedcolumns.mk                | 25 -------------------
+ package/datatables-responsive/Config.in       | 12 ---------
+ .../datatables-responsive.hash                |  3 ---
+ .../datatables-responsive.mk                  | 25 -------------------
+ package/datatables/Config.in                  |  7 ------
+ package/datatables/datatables.hash            |  3 ---
+ package/datatables/datatables.mk              | 25 -------------------
+ 14 files changed, 24 insertions(+), 157 deletions(-)
+ delete mode 100644 package/datatables-buttons/Config.in
+ delete mode 100644 package/datatables-buttons/datatables-buttons.hash
+ delete mode 100644 package/datatables-buttons/datatables-buttons.mk
+ delete mode 100644 package/datatables-fixedcolumns/Config.in
+ delete mode 100644 package/datatables-fixedcolumns/datatables-fixedcolumns.hash
+ delete mode 100644 package/datatables-fixedcolumns/datatables-fixedcolumns.mk
+ delete mode 100644 package/datatables-responsive/Config.in
+ delete mode 100644 package/datatables-responsive/datatables-responsive.hash
+ delete mode 100644 package/datatables-responsive/datatables-responsive.mk
+ delete mode 100644 package/datatables/Config.in
+ delete mode 100644 package/datatables/datatables.hash
+ delete mode 100644 package/datatables/datatables.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index c64b986a15..c55961facb 100644
+index 4ef14019ca..c64b986a15 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
+@@ -146,6 +146,30 @@ endif
  
  comment "Legacy options removed in 2025.08"
  
-+config BR2_PACKAGE_EXPLORERCANVAS
-+	bool "explorercanvas has been removed"
++config BR2_PACKAGE_DATATABLES_RESPONSIVE
++	bool "datatables-responsive has been removed"
 +	select BR2_LEGACY
 +	help
 +	  JS libraries are no longer part of Buildroot packages.
 +
- config BR2_PACKAGE_DATATABLES_RESPONSIVE
- 	bool "datatables-responsive has been removed"
++config BR2_PACKAGE_DATATABLES_FIXEDCOLUMNS
++	bool "datatables-fixedcolumns has been removed"
++	select BR2_LEGACY
++	help
++	  JS libraries are no longer part of Buildroot packages.
++
++config BR2_PACKAGE_DATATABLES_BUTTONS
++	bool "datatables-buttons has been removed"
++	select BR2_LEGACY
++	help
++	  JS libraries are no longer part of Buildroot packages.
++
++config BR2_PACKAGE_DATATABLES
++	bool "datatables has been removed"
++	select BR2_LEGACY
++	help
++	  JS libraries are no longer part of Buildroot packages.
++
+ config BR2_PACKAGE_CHARTJS
+ 	bool "chartjs has been removed"
  	select BR2_LEGACY
 diff --git a/package/Config.in b/package/Config.in
-index f0b11d2f18..3211776e08 100644
+index 0fb7d5c24c..f0b11d2f18 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1892,7 +1892,6 @@ endmenu
+@@ -1891,10 +1891,6 @@ menu "Hardware handling"
+ endmenu
  
  menu "Javascript"
+-	source "package/datatables/Config.in"
+-	source "package/datatables-buttons/Config.in"
+-	source "package/datatables-fixedcolumns/Config.in"
+-	source "package/datatables-responsive/Config.in"
  	source "package/duktape/Config.in"
--	source "package/explorercanvas/Config.in"
+ 	source "package/explorercanvas/Config.in"
  	source "package/flot/Config.in"
- 	source "package/forge/Config.in"
- 	source "package/jquery/Config.in"
-diff --git a/package/explorercanvas/Config.in b/package/explorercanvas/Config.in
+diff --git a/package/datatables-buttons/Config.in b/package/datatables-buttons/Config.in
 deleted file mode 100644
-index 9714a580ce..0000000000
---- a/package/explorercanvas/Config.in
+index 515038ebe5..0000000000
+--- a/package/datatables-buttons/Config.in
 +++ /dev/null
-@@ -1,10 +0,0 @@
--config BR2_PACKAGE_EXPLORERCANVAS
--	bool "explorercanvas"
+@@ -1,12 +0,0 @@
+-config BR2_PACKAGE_DATATABLES_BUTTONS
+-	bool "datatables-buttons"
+-	depends on BR2_PACKAGE_DATATABLES
+-	select BR2_PACKAGE_JSZIP
 -	help
--	  Modern browsers like Firefox, Safari, Chrome and Opera
--	  support the HTML5 canvas tag to allow 2D command-based
--	  drawing. ExplorerCanvas brings the same functionality to
--	  Internet Explorer (<v9). To use, web developers only need to
--	  include a single script tag in their existing web pages.
+-	  The Buttons library for DataTables provides a framework with
+-	  common options and API that can be used with DataTables, but
+-	  is also very extensible, recognising that you will likely want
+-	  to use buttons which perform an action unique to your
+-	  applications.
 -
--	  http://excanvas.sf.net/
-diff --git a/package/explorercanvas/explorercanvas.hash b/package/explorercanvas/explorercanvas.hash
+-	  https://datatables.net/extensions/buttons
+diff --git a/package/datatables-buttons/datatables-buttons.hash b/package/datatables-buttons/datatables-buttons.hash
 deleted file mode 100644
-index e47367a21a..0000000000
---- a/package/explorercanvas/explorercanvas.hash
+index fdbbe5faf0..0000000000
+--- a/package/datatables-buttons/datatables-buttons.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
--# Locally calculated
--sha256  7b8f597b5d3a2f71e87aac413e12e03d852df3dd3ac39f70e1615c9c850217ec  explorercanvas-aa989ea9d9bac748638f7c66b0fc88e619715da6.tar.gz
--sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-diff --git a/package/explorercanvas/explorercanvas.mk b/package/explorercanvas/explorercanvas.mk
+-# Locally computed:
+-sha256  427632c0245f488328edab83b53294545744c8de621a5eaa9dd3d257d7ed7775  Buttons-1.6.1.zip
+-sha256  21fa7cbc3c00bcad1e0f3417d465e702bd470d7dc446a6deff80c8fc5eda9148  License.txt
+diff --git a/package/datatables-buttons/datatables-buttons.mk b/package/datatables-buttons/datatables-buttons.mk
 deleted file mode 100644
-index 57ebfcf13c..0000000000
---- a/package/explorercanvas/explorercanvas.mk
+index a08be05869..0000000000
+--- a/package/datatables-buttons/datatables-buttons.mk
 +++ /dev/null
-@@ -1,16 +0,0 @@
+@@ -1,25 +0,0 @@
 -################################################################################
 -#
--# explorercanvas
+-# datatables-buttons
 -#
 -################################################################################
 -
--EXPLORERCANVAS_VERSION = aa989ea9d9bac748638f7c66b0fc88e619715da6
--EXPLORERCANVAS_SITE = $(call github,arv,ExplorerCanvas,$(EXPLORERCANVAS_VERSION))
--EXPLORERCANVAS_LICENSE = Apache-2.0
--EXPLORERCANVAS_LICENSE_FILES = COPYING
+-DATATABLES_BUTTONS_VERSION = 1.6.1
+-DATATABLES_BUTTONS_SITE = https://datatables.net/releases
+-DATATABLES_BUTTONS_SOURCE = Buttons-$(DATATABLES_BUTTONS_VERSION).zip
+-DATATABLES_BUTTONS_LICENSE = MIT
+-DATATABLES_BUTTONS_LICENSE_FILES = License.txt
 -
--define EXPLORERCANVAS_INSTALL_TARGET_CMDS
--	$(INSTALL) -D $(@D)/excanvas.js $(TARGET_DIR)/var/www/excanvas.js
+-define DATATABLES_BUTTONS_EXTRACT_CMDS
+-	$(UNZIP) $(DATATABLES_BUTTONS_DL_DIR)/$(DATATABLES_BUTTONS_SOURCE) -d $(@D)
+-	mv $(@D)/Buttons-$(DATATABLES_BUTTONS_VERSION)/* $(@D)
+-	rmdir $(@D)/Buttons-$(DATATABLES_BUTTONS_VERSION)
+-endef
+-
+-define DATATABLES_BUTTONS_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0755 -d $(TARGET_DIR)/var/www/datatables-buttons/css $(TARGET_DIR)/var/www/datatables-buttons/js
+-	$(INSTALL) -m 0644 -t $(TARGET_DIR)/var/www/datatables-buttons/css $(@D)/css/*.min.css
+-	$(INSTALL) -m 0644 -t $(TARGET_DIR)/var/www/datatables-buttons/js $(@D)/js/*.min.js
+-endef
+-
+-$(eval $(generic-package))
+diff --git a/package/datatables-fixedcolumns/Config.in b/package/datatables-fixedcolumns/Config.in
+deleted file mode 100644
+index 4d2e5ea06f..0000000000
+--- a/package/datatables-fixedcolumns/Config.in
++++ /dev/null
+@@ -1,10 +0,0 @@
+-config BR2_PACKAGE_DATATABLES_FIXEDCOLUMNS
+-	bool "datatables-fixedcolumns"
+-	depends on BR2_PACKAGE_DATATABLES
+-	help
+-	  When making use of DataTables' x-axis scrolling feature
+-	  (scrollX), you may wish to fix the left or right most columns
+-	  in place. This extension for DataTables provides exactly this
+-	  option.
+-
+-	  https://datatables.net/extensions/fixedcolumns
+diff --git a/package/datatables-fixedcolumns/datatables-fixedcolumns.hash b/package/datatables-fixedcolumns/datatables-fixedcolumns.hash
+deleted file mode 100644
+index 7bd5697dbe..0000000000
+--- a/package/datatables-fixedcolumns/datatables-fixedcolumns.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed:
+-sha256  53a7b20ea9dbb6498137cb7260bde8605989ec578e4b71787f5ebc4ef9910bd9  FixedColumns-3.3.0.zip
+-sha256  e8e92f97216f9ea00cb2735b933a91ec8e3869bed37b6d63a90f76f41508f2de  License.txt
+diff --git a/package/datatables-fixedcolumns/datatables-fixedcolumns.mk b/package/datatables-fixedcolumns/datatables-fixedcolumns.mk
+deleted file mode 100644
+index 33174e106f..0000000000
+--- a/package/datatables-fixedcolumns/datatables-fixedcolumns.mk
++++ /dev/null
+@@ -1,25 +0,0 @@
+-################################################################################
+-#
+-# datatables-fixedcolumns
+-#
+-################################################################################
+-
+-DATATABLES_FIXEDCOLUMNS_VERSION = 3.3.0
+-DATATABLES_FIXEDCOLUMNS_SITE = https://datatables.net/releases
+-DATATABLES_FIXEDCOLUMNS_SOURCE = FixedColumns-$(DATATABLES_FIXEDCOLUMNS_VERSION).zip
+-DATATABLES_FIXEDCOLUMNS_LICENSE = MIT
+-DATATABLES_FIXEDCOLUMNS_LICENSE_FILES = License.txt
+-
+-define DATATABLES_FIXEDCOLUMNS_EXTRACT_CMDS
+-	$(UNZIP) $(DATATABLES_FIXEDCOLUMNS_DL_DIR)/$(DATATABLES_FIXEDCOLUMNS_SOURCE) -d $(@D)
+-	mv $(@D)/FixedColumns-$(DATATABLES_FIXEDCOLUMNS_VERSION)/* $(@D)
+-	rmdir $(@D)/FixedColumns-$(DATATABLES_FIXEDCOLUMNS_VERSION)
+-endef
+-
+-define DATATABLES_FIXEDCOLUMNS_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0755 -d $(TARGET_DIR)/var/www/datatables-fixedcolumns/css $(TARGET_DIR)/var/www/datatables-fixedcolumns/js
+-	$(INSTALL) -m 0644 -t $(TARGET_DIR)/var/www/datatables-fixedcolumns/css $(@D)/css/*.min.css
+-	$(INSTALL) -m 0644 -t $(TARGET_DIR)/var/www/datatables-fixedcolumns/js $(@D)/js/*.min.js
+-endef
+-
+-$(eval $(generic-package))
+diff --git a/package/datatables-responsive/Config.in b/package/datatables-responsive/Config.in
+deleted file mode 100644
+index 085824af40..0000000000
+--- a/package/datatables-responsive/Config.in
++++ /dev/null
+@@ -1,12 +0,0 @@
+-config BR2_PACKAGE_DATATABLES_RESPONSIVE
+-	bool "datatables-responsive"
+-	depends on BR2_PACKAGE_DATATABLES
+-	help
+-	  In the modern world of responsive web design tables can often
+-	  cause a particular problem for designers due to their row
+-	  based layout.  Responsive is an extension for DataTables that
+-	  resolves that problem by optimising the table's layout for
+-	  different screen sizes through the dynamic insertion and
+-	  removal of columns from the table.
+-
+-	  https://datatables.net/extensions/responsive
+diff --git a/package/datatables-responsive/datatables-responsive.hash b/package/datatables-responsive/datatables-responsive.hash
+deleted file mode 100644
+index df133f040c..0000000000
+--- a/package/datatables-responsive/datatables-responsive.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed:
+-sha256  47caf3b753dd2c537b8834816eaf38c4df214cb4e6a97144e0de4cf82ad24d02  Responsive-2.2.3.zip
+-sha256  da4e1020ae97c095a14d7830c1a8a793e080c062e22d749ecd3fc3c075673dbf  License.txt
+diff --git a/package/datatables-responsive/datatables-responsive.mk b/package/datatables-responsive/datatables-responsive.mk
+deleted file mode 100644
+index 2809a52280..0000000000
+--- a/package/datatables-responsive/datatables-responsive.mk
++++ /dev/null
+@@ -1,25 +0,0 @@
+-################################################################################
+-#
+-# datatables-responsive
+-#
+-################################################################################
+-
+-DATATABLES_RESPONSIVE_VERSION = 2.2.3
+-DATATABLES_RESPONSIVE_SITE = https://datatables.net/releases
+-DATATABLES_RESPONSIVE_SOURCE = Responsive-$(DATATABLES_RESPONSIVE_VERSION).zip
+-DATATABLES_RESPONSIVE_LICENSE = MIT
+-DATATABLES_RESPONSIVE_LICENSE_FILES = License.txt
+-
+-define DATATABLES_RESPONSIVE_EXTRACT_CMDS
+-	$(UNZIP) $(DATATABLES_RESPONSIVE_DL_DIR)/$(DATATABLES_RESPONSIVE_SOURCE) -d $(@D)
+-	mv $(@D)/Responsive-$(DATATABLES_RESPONSIVE_VERSION)/* $(@D)
+-	rmdir $(@D)/Responsive-$(DATATABLES_RESPONSIVE_VERSION)
+-endef
+-
+-define DATATABLES_RESPONSIVE_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0755 -d $(TARGET_DIR)/var/www/datatables-responsive/css $(TARGET_DIR)/var/www/datatables-responsive/js
+-	$(INSTALL) -m 0644 -t $(TARGET_DIR)/var/www/datatables-responsive/css $(@D)/css/*.min.css
+-	$(INSTALL) -m 0644 -t $(TARGET_DIR)/var/www/datatables-responsive/js $(@D)/js/*.min.js
+-endef
+-
+-$(eval $(generic-package))
+diff --git a/package/datatables/Config.in b/package/datatables/Config.in
+deleted file mode 100644
+index 89009712d8..0000000000
+--- a/package/datatables/Config.in
++++ /dev/null
+@@ -1,7 +0,0 @@
+-config BR2_PACKAGE_DATATABLES
+-	bool "datatables"
+-	help
+-	  Javascript library providing advanced interaction controls
+-	  for your HTML tables.
+-
+-	  https://datatables.net
+diff --git a/package/datatables/datatables.hash b/package/datatables/datatables.hash
+deleted file mode 100644
+index bb31fcac3d..0000000000
+--- a/package/datatables/datatables.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed:
+-sha256  e2c79dd9d02caa04130ce888061bc922e18561e72e842ba0cb657d1812d9f1bf  DataTables-1.10.20.zip
+-sha256  c6a873f21550ed804f76013c36e14225704c1aa551fdb870e0c626eb91c19247  license.txt
+diff --git a/package/datatables/datatables.mk b/package/datatables/datatables.mk
+deleted file mode 100644
+index c20cdf1254..0000000000
+--- a/package/datatables/datatables.mk
++++ /dev/null
+@@ -1,25 +0,0 @@
+-################################################################################
+-#
+-# datatables
+-#
+-################################################################################
+-
+-DATATABLES_VERSION = 1.10.20
+-DATATABLES_SITE = https://datatables.net/releases
+-DATATABLES_SOURCE = DataTables-$(DATATABLES_VERSION).zip
+-DATATABLES_LICENSE = MIT
+-DATATABLES_LICENSE_FILES = license.txt
+-
+-define DATATABLES_EXTRACT_CMDS
+-	$(UNZIP) $(DATATABLES_DL_DIR)/$(DATATABLES_SOURCE) -d $(@D)
+-	mv $(@D)/DataTables-$(DATATABLES_VERSION)/* $(@D)
+-	rmdir $(@D)/DataTables-$(DATATABLES_VERSION)
+-endef
+-
+-define DATATABLES_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0755 -d $(TARGET_DIR)/var/www/datatables/css $(TARGET_DIR)/var/www/datatables/js
+-	$(INSTALL) -m 0644 -t $(TARGET_DIR)/var/www/datatables/css $(@D)/media/css/*.min.css
+-	$(INSTALL) -m 0644 -t $(TARGET_DIR)/var/www/datatables/js $(@D)/media/js/*.min.js
 -endef
 -
 -$(eval $(generic-package))
