@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F363ECA0FF9
-	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 10:06:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3372CA0FF9
+	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 10:07:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CCF5E8267C;
-	Fri, 29 Aug 2025 10:06:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AFDB1842BC;
+	Fri, 29 Aug 2025 10:07:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 00v5EyrD_4-3; Fri, 29 Aug 2025 10:06:55 +0000 (UTC)
+ id t_TWRNUwW-E2; Fri, 29 Aug 2025 10:07:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9CAC583B5E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D91BE842B3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9CAC583B5E;
-	Fri, 29 Aug 2025 10:06:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D73BD2
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:06:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D91BE842B3;
+	Fri, 29 Aug 2025 10:07:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 067856C
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:07:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F3CBF61567
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:06:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D994F4183D
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:07:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NOG0pBcBOhRV for <buildroot@buildroot.org>;
- Fri, 29 Aug 2025 10:06:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20250614D1
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 20250614D1
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:06:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0C53584993; Fri, 29 Aug 2025 10:06:53 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 29 Aug 2025 12:06:26 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c84762675c760c471f09244cca87067ef43e545f
-X-Git-Newrev: 5a63bbb85e1410cf37534ebcc33ec33a7e7aef15
-X-Patchwork-Hint: ignore
-Message-Id: <20250829100653.0C53584993@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/download: rework download section
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6KZyjjTyxIiR for <buildroot@buildroot.org>;
+ Fri, 29 Aug 2025 10:07:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 028804182E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 028804182E
+Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 028804182E
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:07:53 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 6AA6BB9782D8; Fri, 29 Aug 2025 12:07:51 +0200 (CEST)
+Message-ID: <cbe45d00-ef5f-4133-bfe0-04cb517dd1a8@rnout.be>
+Date: Fri, 29 Aug 2025 12:07:49 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Julien Olivain via buildroot <buildroot@buildroot.org>
+Cc: Julien Olivain <ju.o@free.fr>, Damien Le Moal <dlemoal@kernel.org>,
+ Michel Stempin <michel.stempin@wanadoo.fr>
+References: <20250823211802.2213734-1-ju.o@free.fr>
+ <20250824113525.7f0d0261@windsurf>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20250824113525.7f0d0261@windsurf>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rnout.be; s=dkim; 
+ t=1756462071; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=DXP1xIe2+cnbd1oKyW2UaRg7Gm2KGyn1Y4xBQbLch6I=;
+ b=bgpc1pfiWaa6au7sfrP6aUWBjMC3on7b0wUPAdXIOL0CtVPMPh/c5Nob9xyITFHM6424Hq
+ wGuzUZg65ERIuLNgFZqN9MKQwrOTVB2YVS39VOhzchF7VShPOvtFFFE7kqEyAbyCIS1G6Y
+ n8K2MrZcKUI43Ng36VABJ7UJqjWnt0sR30Vgc3K/DRdjaCEjIwHzhJAL+Q4Wg2JoHxfk7P
+ Y0rRwn5qnlLEXxz/UkeD2wryesTen4g/VK/LLEWQnmsNTclNs/lZQP1l6kQWKAvBVV0N3K
+ LE5+D3uVCqyy8wJtsaMktpHlLHgP/2KrhL6zgWjGQaUROkWy+LOPn++htRZ7Iw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
+ header.a=rsa-sha256 header.s=dkim header.b=bgpc1pfi
+Subject: Re: [Buildroot] [PATCH 1/1] configs/sipeed_licheepi_zero: update
+ Linux, U-Boot to fix build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,231 +80,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a63bbb85e1410cf37534ebcc33ec33a7e7aef15
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Display active Buildroot versions as a table, similarly to kernel.org
-- Add latest release date for all version
-- Add expected End of Life dates for all versions
-- Add link to the changelog
 
-This makes the section much more compact, which makes it easier for
-users to compare the versions and know what to expect from them
+On 24/08/2025 11:35, Thomas Petazzoni via buildroot wrote:
+> Hello Julien,
+> 
+> On Sat, 23 Aug 2025 23:18:02 +0200
+> Julien Olivain via buildroot <buildroot@buildroot.org> wrote:
+> 
+>> Since Buildroot commit [1] dc0f7215c6 "package/gcc: switch to 13.x as
+>> default", sipeed_licheepi_zero_defconfig fails when building the Linux
+>> kernel with the error message:
+>>
+>>      drivers/ata/libahci.c: In function 'ahci_led_store':
+>>      ./include/linux/compiler.h:350:45: error: call to '__compiletime_assert_1138' declared with attribute error: BUILD_BUG_ON failed: sizeof(_s) > sizeof(long)
+>>        350 |         _compiletime_assert(condition, msg, __compiletime_assert_, __LINE__)
+>>
+>> This issue is fixed by upstream Kernel commit [2].
+>>
+>> This commit fixes this issue by updating the Linux Kernel from v5.3.5
+>> (which is not a LTS series) to v6.12.43 (which is a LTS series
+>> including the fixes). With this update,
+>> BR2_LINUX_KERNEL_INTREE_DTS_NAME is updated accordingly to follow the
+>> new DTS organization.
+>>
+>> This commit also updates U-Boot from 2022.01 to 2025.07. This new
+>> version now requires BR2_TARGET_UBOOT_NEEDS_GNUTLS=y.
+>>
+>> While at it, this commit also switches to a stable glibc Bootlin
+>> external toolchain, to follow the new guidelines from [3].
+>>
+>> Finally, this commit adds BR2_DOWNLOAD_FORCE_CHECK_HASHES=y and the
+>> corresponding hash files. The .checkpackageignore is also updated to
+>> reflect that change.
+>>
+>> Fixes:
+>> https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771001
+>>
+>> [1] https://gitlab.com/buildroot.org/buildroot/-/commit/dc0f7215c604e845009e03784a221332867bf35a
+>> [2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=f07788079f515ca4a681c5f595bdad19cfbd7b1d
+>> [3] https://elinux.org/Buildroot:DeveloperDaysELCE2024#Rules_for_defconfigs
+>>
+>> Cc: Michel Stempin <michel.stempin@wanadoo.fr>
+>> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> 
+> Thanks for the patch!
+> 
+> However, for defconfig, don't we normally require that changes are
+> runtime tested on the HW? That's a bit the whole point of our defconfig
+> I believe. Jumping from 5.3 to 6.12 is a big jump that deserves testing
+> on HW. If HW is no longer available because the defconfig maintainer is
+> not responsive and nobody else has the HW to test, the defconfig should
+> be dropped I'd say.
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/website/download.html | 190 +++++++++++++++++++++------------------------
- 1 file changed, 88 insertions(+), 102 deletions(-)
+  Julien mentioned on IRC that it was actually boot tested on hardware.
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index ee466e3d85..46887a0511 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -7,108 +7,94 @@
-   <div class="panel panel-primary">
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
--
--      <h3 style="text-align: center;">Latest long term support release: <b>2025.02.5</b></h3>
--
--      <div class="row mt centered">
--	<div class="col-sm-6">
--	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
--	    <div class="flipper">
--	      <div class="front">
--		<a href="/downloads/buildroot-2025.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
--	      </div>
--	      <div class="back">
--		<a href="/downloads/buildroot-2025.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
--	      </div>
--	    </div>
--	  </div>
--	  <h3><a href="/downloads/buildroot-2025.02.5.tar.gz">buildroot-2025.02.5.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2025.02.5.tar.gz.sign">PGP signature</a></p>
--	</div>
--	<div class="col-sm-6">
--	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
--	    <div class="flipper">
--	      <div class="front">
--		<a href="/downloads/buildroot-2025.02.5.tar.xz"><img src="images/package.png" width="180" alt=""></a>
--	      </div>
--	      <div class="back">
--		<a href="/downloads/buildroot-2025.02.5.tar.xz"><img src="images/package.png" width="180" alt=""></a>
--	      </div>
--	    </div>
--	  </div>
--
--	  <h3><a href="/downloads/buildroot-2025.02.5.tar.xz">buildroot-2025.02.5.tar.xz</a></h3>
--	  <p><a href="/downloads/buildroot-2025.02.5.tar.xz.sign">PGP signature</a></p>
--	</div>
--      </div>
--
--      <h3 style="text-align: center;">Latest stable release: <b>2025.05.1</b></h3>
--
--      <div class="row mt centered">
--	<div class="col-sm-6">
--	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
--	    <div class="flipper">
--	      <div class="front">
--		<a href="/downloads/buildroot-2025.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
--	      </div>
--	      <div class="back">
--		<a href="/downloads/buildroot-2025.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
--	      </div>
--	    </div>
--	  </div>
--	  <h3><a href="/downloads/buildroot-2025.05.1.tar.gz">buildroot-2025.05.1.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2025.05.1.tar.gz.sign">PGP signature</a></p>
--	</div>
--	<div class="col-sm-6">
--	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
--	    <div class="flipper">
--	      <div class="front">
--		<a href="/downloads/buildroot-2025.05.1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
--	      </div>
--	      <div class="back">
--		<a href="/downloads/buildroot-2025.05.1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
--	      </div>
--	    </div>
--	  </div>
--
--	  <h3><a href="/downloads/buildroot-2025.05.1.tar.xz">buildroot-2025.05.1.tar.xz</a></h3>
--	  <p><a href="/downloads/buildroot-2025.05.1.tar.xz.sign">PGP signature</a></p>
--	</div>
--      </div>
--
--      <h3 style="text-align: center;">Latest release candidate: <b>2025.08-rc3</b></h3>
--      <div class="row mt centered">
--	<div class="col-sm-6">
--	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
--	    <div class="flipper">
--	      <div class="front">
--		<a href="/downloads/buildroot-2025.08-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
--	      </div>
--	      <div class="back">
--		<a href="/downloads/buildroot-2025.08-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
--	      </div>
--	    </div>
--	  </div>
--
--	  <h3><a href="/downloads/buildroot-2025.08-rc3.tar.gz">buildroot-2025.08-rc3.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2025.08-rc3.tar.gz.sign">PGP signature</a></p>
--	</div>
--	<div class="col-sm-6">
--	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
--	    <div class="flipper">
--	      <div class="front">
--		<a href="/downloads/buildroot-2025.08-rc3.tar.xz"><img src="images/package.png" width="180" alt=""></a>
--	      </div>
--	      <div class="back">
--		<a href="/downloads/buildroot-2025.08-rc3.tar.xz"><img src="images/package.png" width="180" alt=""></a>
--	      </div>
--	    </div>
--	  </div>
--
--	  <h3><a href="/downloads/buildroot-2025.08-rc3.tar.xz">buildroot-2025.08-rc3.tar.xz</a></h3>
--	  <p><a href="/downloads/buildroot-2025.08-rc3.tar.xz.sign">PGP signature</a></p>
--	</div>
--      </div>
-+      <table class="table">
-+        <tr>
-+          <td></td>
-+          <th>Series</th>
-+          <th>End of Life</th>
-+          <th>Latest release</th>
-+          <th>Latest release date</th>
-+          <th colspan="2">Downloads</td>
-+        </tr>
-+        <tr>
-+          <th>Candidate</th>
-+          <th>2025.08.x</th>
-+          <td>December 2025</td>
-+          <td>
-+            2025.08-rc3<br/>
-+            <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.08-rc3/CHANGES">
-+              Changelog
-+            </a>
-+          </td>
-+          <td>2025-08-28</td>
-+          <td>
-+            <a href="/downloads/buildroot-2025.08-rc3.tar.gz">
-+              <img src="images/zip.png" width="24" alt="">
-+              .tar.gz
-+            </a><br/>
-+            <a href="/downloads/buildroot-2025.08-rc3.tar.gz.sign">[PGP sig]</a>
-+          </td>
-+          <td>
-+            <a href="/downloads/buildroot-2025.08-rc3.tar.xz">
-+              <img src="images/package.png" width="24" alt="">
-+              .tar.xz
-+            </a><br/>
-+            <a href="/downloads/buildroot-2025.08-rc3.tar.xz.sign">[PGP sig]</a>
-+          </td>
-+        </tr>
-+        <tr>
-+          <th>Stable</th>
-+          <th>2025.05.x</th>
-+          <td>September 2025</td>
-+          <td>
-+            2025.05.1<br/>
-+            <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.05.1/CHANGES">
-+              Changelog
-+            </a>
-+          </td>
-+          <td>2025-08-11</td>
-+          <td>
-+            <a href="/downloads/buildroot-2025.05.1.tar.gz">
-+              <img src="images/zip.png" width="24" alt="">
-+              .tar.gz
-+            </a><br/>
-+            <a href="/downloads/buildroot-2025.05.1.tar.gz.sign">[PGP sig]</a>
-+          </td>
-+          <td>
-+            <a href="/downloads/buildroot-2025.05.1.tar.xz">
-+              <img src="images/package.png" width="24" alt="">
-+              .tar.xz
-+            </a><br/>
-+            <a href="/downloads/buildroot-2025.05.1.tar.xz.sign">[PGP sig]</a>
-+          </td>
-+        </tr>
-+        <tr>
-+          <th>Long-term support</th>
-+          <th>2025.02.x</th>
-+          <td>March 2028</td>
-+          <td>
-+            2025.02.5<br/>
-+            <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.02.5/CHANGES">
-+              Changelog
-+            </a>
-+          </td>
-+          <td>2025-08-11</td>
-+          <td>
-+            <a href="/downloads/buildroot-2025.02.5.tar.gz">
-+              <img src="images/zip.png" width="24" alt="">
-+              .tar.gz
-+            </a><br/>
-+            <a href="/downloads/buildroot-2025.02.5.tar.gz.sign">[PGP sig]</a>
-+          </td>
-+          <td>
-+            <a href="/downloads/buildroot-2025.02.5.tar.xz">
-+              <img src="images/package.png" width="24" alt="">
-+              .tar.xz
-+            </a><br/>
-+            <a href="/downloads/buildroot-2025.02.5.tar.xz.sign">[PGP sig]</a>
-+          </td>
-+        </tr>
-+      </table>
- 
-       This and earlier releases (and their PGP signatures) can always be downloaded from
-       <a href="/downloads/">http://buildroot.net/downloads/</a>.
+
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> 
+> Thomas
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
