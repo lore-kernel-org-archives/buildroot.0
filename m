@@ -1,75 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8172CA0FF9
-	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 11:11:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01062CA0FF9
+	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 11:12:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 859EA41568;
-	Fri, 29 Aug 2025 11:11:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BA6A8842B0;
+	Fri, 29 Aug 2025 11:12:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fzQm75uEktGx; Fri, 29 Aug 2025 11:11:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id r7gYSdig3j5o; Fri, 29 Aug 2025 11:12:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B07B41544
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D52C9842A2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B07B41544;
-	Fri, 29 Aug 2025 11:11:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id F0DA0D2
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:11:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D52C9842A2;
+	Fri, 29 Aug 2025 11:12:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 24F6A69
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:12:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D6BA641559
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:11:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 173CC61557
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:12:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GVW0BWJyWE9G for <buildroot@buildroot.org>;
- Fri, 29 Aug 2025 11:11:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CMzQPuL89gId for <buildroot@buildroot.org>;
+ Fri, 29 Aug 2025 11:12:14 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
  helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8E47B40497
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E47B40497
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5ECC7614C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5ECC7614C6
 Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8E47B40497
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:11:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5ECC7614C6
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:12:14 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id 77DC3C8F1C5
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:11:29 +0000 (UTC)
+ by smtpout-04.galae.net (Postfix) with ESMTPS id 468E2C8F1C5
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:11:58 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id DED05606B9
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:11:43 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id C3574606B9
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:12:12 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id ED7E61C22DAEE; 
- Fri, 29 Aug 2025 13:11:34 +0200 (CEST)
+ with ESMTPSA id 49C321C228B17; 
+ Fri, 29 Aug 2025 13:12:12 +0200 (CEST)
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 29 Aug 2025 13:11:24 +0200
-Message-ID: <20250829111125.1668963-1-thomas.petazzoni@bootlin.com>
+Date: Fri, 29 Aug 2025 13:12:10 +0200
+Message-ID: <20250829111210.1669283-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1756465903; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=ptuHlE6XlXEbWgF91uaFRkNhs8vzkGF0lSD0mLU5DJ4=;
- b=0IZegIjJDmngGoeLlsDj2bb0Ppck0Sh80FSsa+mJBiKZBN8e2leKv+mKcf3fT3bW3DtxVe
- bYy+eFuXy4r0GuPISBMLhyWbfPn+LZbQIStkvOQ1Zl5uTYEFidsuAtMEl1ZVeSFk6YQaF2
- M1IlzVQniYT1i4yqBJEpj+w58X+NtqxAviviEGQjt7bfMpllaxrmfATkLWjRSJP7hyt8Po
- U/p1QN3ialqro/Kdo4Xg9hbdICR9bWyiKvn1On4Ln80E4Gthkko6ySsMkI5l0oOqC9imGM
- 28bhDwRSbaIlNkAAlgusjZXo9poCwdcgjrz4NI1rkUaefCDYTomla+BlOTUHmg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ t=1756465932; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=YH527zBHZjpGH5L/18vUm2yKzBxA5Q19ix6kBr1E9eI=;
+ b=C1OFdhCw7asvSc3goXIyEXj3VdGAPc0+vddLiQh0bajyc8qhY7QAlnpQbF53VmYWOXFoZo
+ PiEM5y8FLfKGzOL5sPBWpRwmNVo9URl7zSVH4EzMmoE+VYxzGotGRp4qhiwh0P/iYO/+Cj
+ GtnA5wZNCFi1hgXwO0h2cbjnAHMlj2kS3NKrh0jVQlgLP53/1s/LmebntnVb/AX9ipBOlu
+ 0REwF61molXtEP3tt5dyDGNh1JjEKtj04SbvsQr+z7qfcyS8+kHDMM2JmwOhxKNjY0NIN3
+ 6RV+ymeGpt/uwz+pBT3Abjt6kX8Cods+Hmc4dumBh/kEW47xKyd2BEmDn/WYRw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=0IZegIjJ
-Subject: [Buildroot] [PATCH v2] package/mariadb: fix sub-option indentation
+ header.s=dkim header.b=C1OFdhCw
+Subject: [Buildroot] [PATCH] package/mariadb: explicitly disable the column
+ store plugin
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,56 +89,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The Config.in comment is between the main BR2_PACKAGE_MARIADB option
-and its sub-options, causing the sub-options to not appear as nicely
-indented in menuconfig.
+Building the column store plugin (which gets automatically enabled
+when Boost with a bunch of submodules is found) currently fails as it
+requires a number of runtime checks that obviously cannot work when
+cross-compiling.
 
-Before:
+OpenEmbedded has defined them as such:
 
-[ ] mariadb
-[ ] mariadb server
-  [ ] mariadb embedded server
+  -DLSTAT_FOLLOWS_SLASHED_SYMLINK_EXITCODE=0 \
+  -DSTAT_EMPTY_STRING_BUG_EXITCODE=0 \
+  -DMASK_LONGDOUBLE_EXITCODE=0 \
 
-After:
+but it really isn't clear whether those values are completely correct
+for all CPU architectures, especially the last one.
 
-[ ] mariadb
-  [ ] mariadb server
-    [ ] mariadb embedded server
+So instead, let's disable the column store plugin until someone
+actually needs it and figures out how to set those variables properly.
 
-which is what we want.
+The issue fixed by this commit can be reproduced using the following
+defconfig:
+
+BR2_aarch64=y
+BR2_ARM_FPU_VFPV3D16=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_PACKAGE_MARIADB=y
+BR2_PACKAGE_MARIADB_SERVER=y
+BR2_PACKAGE_BOOST=y
+BR2_PACKAGE_BOOST_DATE_TIME=y
+BR2_PACKAGE_BOOST_FILESYSTEM=y
+BR2_PACKAGE_BOOST_REGEX=y
+BR2_PACKAGE_BOOST_THREAD=y
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-v1 -> v2: my v1 was messed up and contained unrelated changes.
+ package/mariadb/mariadb.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- package/mariadb/Config.in | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/mariadb/Config.in b/package/mariadb/Config.in
-index acedd1da9d..693b7ce925 100644
---- a/package/mariadb/Config.in
-+++ b/package/mariadb/Config.in
-@@ -20,11 +20,6 @@ config BR2_PACKAGE_MARIADB
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 0d872442f2..53395afc91 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -112,7 +112,8 @@ MARIADB_CONF_OPTS += \
+ 	-DINSTALL_SQLBENCHDIR=share/mysql/bench \
+ 	-DINSTALL_SUPPORTFILESDIR=share/mysql \
+ 	-DMYSQL_DATADIR=/var/lib/mysql \
+-	-DMYSQL_UNIX_ADDR=$(MYSQL_SOCKET)
++	-DMYSQL_UNIX_ADDR=$(MYSQL_SOCKET) \
++	-DPLUGIN_COLUMNSTORE=NO
  
- 	  http://www.mariadb.org/
- 
--comment "mariadb needs a toolchain w/ dynamic library, C++, threads, wchar"
--	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
--		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
--	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
--
- if BR2_PACKAGE_MARIADB
- 
- config BR2_PACKAGE_MARIADB_SERVER
-@@ -39,3 +34,8 @@ config BR2_PACKAGE_MARIADB_SERVER_EMBEDDED
- 	  Install the mariadb embedded server on the target.
- 
- endif
-+
-+comment "mariadb needs a toolchain w/ dynamic library, C++, threads, wchar"
-+	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
+ HOST_MARIADB_DEPENDENCIES = host-openssl
+ HOST_MARIADB_CONF_OPTS += -DWITH_SSL=system
 -- 
 2.50.1
 
