@@ -1,104 +1,147 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC8C4CA1000
-	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 11:28:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4AB6CA0FF0
+	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 11:31:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8DE1261600;
-	Fri, 29 Aug 2025 11:28:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 79E208438E;
+	Fri, 29 Aug 2025 11:31:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TysCemZj6LO3; Fri, 29 Aug 2025 11:28:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id avXMQNHXNETV; Fri, 29 Aug 2025 11:31:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC93F61603
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8EEAD842C9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CC93F61603;
-	Fri, 29 Aug 2025 11:28:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1134869
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:28:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8EEAD842C9;
+	Fri, 29 Aug 2025 11:31:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 624C369
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:31:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 34262418ED
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:28:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 50D07842C8
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:31:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uzqxbG_KHBDE for <buildroot@buildroot.org>;
- Fri, 29 Aug 2025 11:28:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::344; helo=mail-wm1-x344.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E50FC418EE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E50FC418EE
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com
- [IPv6:2a00:1450:4864:20::344])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E50FC418EE
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:28:44 +0000 (UTC)
-Received: by mail-wm1-x344.google.com with SMTP id
- 5b1f17b1804b1-45b804ed966so2308675e9.2
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 04:28:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1756466923; x=1757071723;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=R42Z/6WC+EP77sp7bw2CQ/7HuwEy3m+yQ6Z4GO7Dp7c=;
- b=JYZ9iXfwQ7LUfMEvCJZCXV7hD7i5Tyq/dgY3YYTZujAXgFl0HIkdNEqhmw5sh5I4z9
- rfYcwStQKwMaCh9FoMZVJwbW7HO7AOaHqIjGA0iw+f/bHJdOYPd4Pdr/05bhCom/bR02
- k05tKbu/1h+ilVur6kzMSSHdDQYDIwxggPVJTZTQc0xKH6zFr0wHg+oIQVh2qeXbAiTi
- WYgxJMKaCw5vLSLw/mXVtizDswn60Ii+9iCt4ihN4N2+X0hPDQTTKNUY/z7YjLyKcqV+
- J7dfPhZ7BusD/m40V+K1dce5i6ud97fBWhn6gtW3szBLrQXoInDSj3NvV9pf6AcXGw1g
- aZ6Q==
-X-Gm-Message-State: AOJu0Yyc9GjvTSEepmv0shvDgzl16K+b0sA8YkC8/llH83EJIFipnppZ
- n2z6qWK91H4mDjM6pb6AicXDDQ/J8UDoWlfehXhGG8/G6IWa55iQdiwwSi8eECPk1Z9U5JAFeyt
- ZvTfEGwKfNGn37TQ=
-X-Gm-Gg: ASbGncufo7slCbcuPDB8jHmjVaeoRjht9iKiturIM16mFYHgpAHPeooJ9wm039/oRjQ
- y97uQG5mWz4bX0vu6mlRc/fwqh/pJiB9IsFEoQMIrN5qXiekcJigPdtilqK7+TPbFasMSShI/Lp
- FxX5NCqvWNRRm7KwwZZO+5PEU7MhWtKve0aD4iLliT5hyLrRiLaypdXoMyRNKI12l73fJAFgkqv
- tPChg/h0xOdPwI3jp0JzIHZ4DD8XaIlwf4HhF1sKnY/cL7WAqqZPwUKXjyXUG875lphO+EjNOPb
- 7W/p0JKW5ZxTdIVutlbQwIq50/7ZMX7SDJ3brS5aOSxkR9Gt9UXTHleLpB0a5hCcklQq48OIaVO
- HZJ8WC57Z/Ua9Gqc1JRzYv4pnWCeM58pTEm4kE5qYelfpJUdPlbkKTo+V4Vcm96M2brIGa1H+vq
- H1kQs8r9tghWODc/CI
-X-Google-Smtp-Source: AGHT+IEcc/Ll5v2IVi0GNAYHnqu5nL5U1RxcC8rKb3mGA4u6ulS+cQ0d7IqIb5dWX0v8Fiq6YGILAg==
-X-Received: by 2002:a05:600c:3044:b0:45b:7d77:b592 with SMTP id
- 5b1f17b1804b1-45b7d77b91dmr25146125e9.12.1756466922942; 
- Fri, 29 Aug 2025 04:28:42 -0700 (PDT)
-Received: from dragon.local.ess-mail.com (31-207-9-44.static.ef-service.nl.
- [31.207.9.44]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-45b7e887fdcsm34794685e9.13.2025.08.29.04.28.42
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 29 Aug 2025 04:28:42 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id W_CbkLtOllN5 for <buildroot@buildroot.org>;
+ Fri, 29 Aug 2025 11:31:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 19B85842BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19B85842BD
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 19B85842BD
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:31:38 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from haruka.home.arpa ([85.22.112.26]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M2wGi-1uvF7L3c6O-00AS6N; Fri, 29
+ Aug 2025 13:31:36 +0200
 To: buildroot@buildroot.org
-Date: Fri, 29 Aug 2025 13:28:17 +0200
-Message-ID: <20250829112818.129101-5-titouan.christophe@mind.be>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250829112818.129101-1-titouan.christophe@mind.be>
-References: <20250829112818.129101-1-titouan.christophe@mind.be>
+Date: Fri, 29 Aug 2025 13:31:18 +0200
+Message-ID: <20250829113119.2892270-1-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
+X-Provags-ID: V03:K1:iFE8qIj/L1a8108P1t4HTAJB8zkH2byLiPku7/tZgCLazV9JXUv
+ p78KWNCIEIMLehHL1UpKXbcaDI7Y9it9uUoadzVi/ebMjn3Lx5daCsCHRtVmAaMhF0/bcYV
+ AEZ0/lJn65RFANhku01cjXfV4oJNHpleC/yJOtpeoe9RDJAhtX1onby0gZQugUj8pZmbCL8
+ vB8HnjSaAc3tcKr5DU8Zw==
+UI-OutboundReport: notjunk:1;M01:P0:tQII/hmIt3Y=;F+eBaKiiHjH2Cy7Tym04QJb93/R
+ an/HHXO7gnF1A6nWH+QQ0cAUHec+6qTGU6yP9UUhMFtEq4IhpC2nI979BdIjbmMu+JMAmg5bo
+ h8wqdGyG0mWQfSn+/vwyut/QxDH+U16yo8akSyp7j6POGbHZBAS8AvgbD8W9lJEhM7P1UPAVW
+ j6HCzfU+9tjEckDgpGam4K3S4BcJ8RUxMs9UoHpXG9ZNwgvI3qdPBs7Bjj2y0HdA8e3wUptm0
+ 2F35L/DcocOCxx63rWOMXpA/NC66AoP3QXH0j3MYTL/MjQ0VJxFUXmpppifS0h5e7ECBCjTi3
+ +xb0GnHVVHjbIuwKdxHRECJbu2+9fFus3QOIMamWXxIuq1UdM1QuD+lhWPC88Xb7WMX7DNy4I
+ 1q4/UKSulM3xFFTPowJc69sT+0RioKGV80p5XMGnQ7WGOBeKPFKc/a2EcvEbu9ElGmaO8hUWk
+ lhXwy/2myz/1Gv/0HXIty3nAukqxayUBu9LK6LbqXWFjXLygS8bEXjGb60kFmPKc/ybaBrYHT
+ JiODCK9cogZziMSMKpQ7HFElcD5z2/zkuKgCUoRu4fE9TpXUoNrst0n+9qQ68/nIESTtZW+6m
+ 4XY73Ew1wqcivX5eu69CbkchdZ7IJnN3il8Qq0oKIyIQHqn45NB9cviAuuJ7Z139AeKr01Cpg
+ T8OX4mPqLQ3pUIvb0p3XHMHR1jQ7bGXKpltRx0hXCZ7uur/8Q2cfK8kA+sx1EAMTxVgv7MXlb
+ G6jZjSkE2aN8eI5eYVjog6sc53HhY+LAF9n3GGJjifGxOjHSmHaKC2HnZDcqIq2GrMaxd2kf+
+ Zjjph2lAqkxRLcAdO6IwTrI277n2jaYFB7BHYkIPpZs8+beV9+g2K4YDZ55WdmSLwd0imw46J
+ 8X5HGPVCx1RmSuGF+wHR6mEftfyeT9RzCNrpZJvgoLX8g7pU9DpR1unY9LOa6aUqHj5SeZzKh
+ 4F4ssfnPqSJHkokvh6GsDHmVpmG0XBDInmJwOZ1JuPzBnJ8tewNl5jBj9TrxXBinpjgn04ZTj
+ q9ovSFmeGNO8ZwC30OmrG+UbWuayVfOQDEfMqAVBbEjHPrJR5qhUCMyIIwT/B774Ix4w3JQ6H
+ 1prudvYURanCxN9Rsyrady2TKJkJNGPJPdkR1hyauupmeX5FuFS+i0zHMAs5fuC7ZXJCyMExC
+ cxDs/fmUeNjXs+74Iawjb6poTp3OEUVzbWCxr6xC4k+3FXSyUiv+webrDSHdCaSC0f9l44pEo
+ FwpL87MzIxDvBWHtYmKu6WIHA8My7OsjVgkON1fkWXKp11KeMSFhsbxxgnWAgT2KHaCwcknwh
+ FRFd6lcusPE2jKWiZrxgvowEPdmNo/TnX3eiOEeI7FHrkPiw+XGzAfDLPcJe8XHyWM9ik3OlY
+ gR1K1vq4Fk8yJIRqoXef3IUYCtZOjIz3igTkZzZSPz+cFQB6oLvcgakhaqRkGukU4Orh1RHRf
+ 7tV4TqnPqdSlpqPMZqqdIRXlSjVpAQO7sZ/cdgiD4LbGyekTqyeO4TPXulzynvbqHmPTMHT/U
+ YgbwT2Ula0CpPijaWV9hjyCekpRGq9CvjZ7liuK+SCahF81t4XSw9B5gtL6PryjoKwlg9rZ6R
+ kA70dK+FfuJTOnuyY6yEgAswLjsROCQX5nzqyGEObL2Vr6k1ETHp1r00mtHSfWth8yHhLcJLO
+ nf4Ix6I3MiPa+Pcq5MoxXW2Fbgi91/nBtAFkm+pIhgbt83dgZo7vPcwuuVtz6HfHtriDwHRtN
+ iHYgVHgw8dpbdqZR4Yh5EcpUZYyoLQcKykazuYLzgjtwc1Z2a7WGevUMFlIyBomwu/CuFRFgX
+ VeLZkdr9N8kMjUYBP6xP/X33of+RypARVzCfWpFwbhPeTFnnvw6M0yBP5EGPEZxcOYVko6DAC
+ L1KOG8w3hRXr5F+v7SEU9fpz2Z1OTUT2WFFNYjScnrXEMxE86IAPZvTX5ZgnYs0l/Hg0yeO4n
+ Xa989HlB3gkjCFte400+KqmJRQ3XC6yBGQwWV+ZDknsRQlxSNpJo/wahkCbh41kv2gAjdNRO/
+ En9/DK7/viktLd/T4RemGUbooQP5QiyZDw86A3z6Yl5f8MDU9Xhq8DgidqbFSDWrCMHy8DyKd
+ 1dmizkttydeJBuS4RhArdrp1iLXPupDmg02idkrkFXmNJ1EAYgx3+TVbI2vkqshK3pQcIQntN
+ xY4X0UUwEqfdmb39YqxKO2YtSS7IR7OApRsYQF4P2joJkL9tzm0RZlDMx/zgQI4SipfM5z3bR
+ Ae2ZpBfh5iOB+f2eqDSAkr/vBd6a18CI9E9BQsH4Piz/ao+0rwRaR56BH59eqPxbCHABRLDPT
+ 87inMak59XRqV+HUmKpeljaJFFotTlbvX+gUcejwiOPmCxsug+wP3I1jx9bqaATr9dKeUgHYf
+ BxyDq/2T1x5GYviGltOjXh+LpRe5il7T+djgvZwzuQefGPvMzi4GpQ+8ztqis4DMhnpo6uijM
+ DK7UfKZFYGzas5DtkOm0zSIvbfPwR93KuNH9pOtXvUCxiBGZcoZmpfey1Erp3YsHhQs8y+H9L
+ 7jXBEgYDd5ToHciExr85kl4cfkVf1oV0eR61H5TCwitzVE7jDF12IyoIJeV49wqMl/FXCXjxW
+ msyix4r4GFNX4y65OWtoxztwZ9hLH7mT1kivw6GXbyiSuy4mTSkR67mc3rhr1fyv7u3aP8cR5
+ JVgzNqXBUKj6uItkQd8622ZjcVT1SDmnEaE98wLiySsWSWpFpiRG/91woGxFflukEM2QyD/WJ
+ 2XUmoyIx9D4JpNweg0B0UXnY6HhZJE4tTdYeCFjMya9XG11WS7Tw0WRQwcieGsfC5h147uIVA
+ 8X+RtVLNUvqtFedM8vZXtQEGFWEjgZ/HaXARdfA24VF1EOs+2NEqUf8uA9mc9Gj9fJpS1JFxA
+ gd1qv0o5lhkYK001fCB6uIGIsSqcJnwWNZeIgKXPCW2GtjXbcCVac4nUsg0RP0a+PAAnv3Nz8
+ HMDXz0BRvxTN3qeV7xMfZWOnrrgghOKW/H52flnS3YE4r+fs4hL4d+tl/qToS5rzMOo4KIpUa
+ OYq04ndEk3gqP2fjnqNxK6UuXKDhvF6kjWDg9KNnPJcfyA21FXuV5n1BieoRltgEyRw2qx99s
+ EQJvuXuLCje5czblNzy+UqVtiydhgTJG5xHmOOj0x0ghkVjbMiyTrAW8R+dCKTS7Opi4rbrzO
+ 5/RoP5IhZxVb9mG8vcAUkfbVvrwQ9Mvp2RBdmDOeLe9FRbFzQ4eGzN+kMUMKKebYqMwTkMos9
+ dg6bKbgKton1WTb2baznYVs+34bplgsDGYQZGand0vCD7qK6o8L4NT3ekjlSOXocNCBWQ8jqd
+ L2rt4KH1r+Prtl+zJDeRTL0mWWe4jA5+KIxA0h0EnC1JK/ZrHlQTjjKImuXQ6xSGfOEE2RdO0
+ NwqIVF5O7Yx68RjKf8bwIF+E0/UImePBCHrnv+6YcmAJsGRneUGZyRsTqSZJTmMMap6DvvbHx
+ tO8IwBpCp4vQozN0C0k+6dmvSvTYM/CF6mUnEb+OVRvxrLLNgUjA70m0mR5rqVmdp4VZxuelS
+ 4x2N21hK2KlfS+WYnz/DzKsYzwUOM4brzNh9b+oVVhos45qXRCN6LE8SZTobZoEHQfm4Ny8rr
+ fzpmK2Upj3dmwIpTJaujoqCUXkA/yyqKTIUjIcKQviufVMAHVrsC2p3y0Em/gRlUz3FLlsErJ
+ gLzIoTzLwHB+597wJjiPrLuKKCzzz/QQ+rkTzMD0PXWMf0NNs7Xr9Ldu5D4L2qSFzW96K/OD3
+ iwCHSDWXtyeipTdIloPzvoS4DdPMlhq+EUO8lTCOGzwql0s56wYJfoU2IoKBoBGpy68JvJrbt
+ DJ6JkI3iUATl/iIrxDPdA37MzrOv584fWz4O0XDTfKKFgor460emCQgQ6BViCwQuclUJCpk43
+ SQxEkac5OYULw5sagCvQ1r0+kCM226SoKXKdg3KVQcQjzaulh2K+t0ecDB4i+mOoudr8/sFZL
+ 2t+/4he1vw4UBCKTZRHlptp2kUZfjaWxPG7GAp7mW+meqXh7g7YHJ+fh1kCSYTOnBtIAR2EY2
+ UNdLJbkqP7byq6PHrb8powFRCXtVwqaKUopIEb7vx8EAoiXhEgB+dzAj6hSagg8/f0HHNmpYC
+ as1ak5e1w7hcRI69rpQ9FcoTb2UevKBS6t88B2eT+r1ZUCn+RNbmFPt6fAVKT0SR5YiIfz/l1
+ 56LwQf/CuiUufHw0VYGyso9MUZ5tNkXljv0clPZzcTcfRxVOqSjWvarQtcjMjYvsfBGGDKS0m
+ gieUdk+CL1pMAI6B+0833VVjAGw8a/f4hkzlF38PuBxT2oCxlehfNGuqjxLy8MD8yKyCHp7e5
+ rXP2PHRSdU9ymvTB1HYIlE+eqW1HzC/XOCZW/tGxauX/DBwkUtGm52twmyHIhZr+ppzqLfOXL
+ RwcXVlbPp1Y44db8Kjf8riiQnh0Yj1J3SBW5w+0gE7R/vTxZcjD47pInSzUxUxtgIytIwEPuI
+ KnUYJ3d/Ixiw9fpSxg5VQtCV20S05oBWB23DIx0/pVeqa+kF8l2/talruGhQZLPMxGZbk6uCm
+ iT6hsXeFrHvyafjqgIwtjeUzuvle7oZmHLyk9Raba4mBEirFZ76gI1xY6uS3d57xSo1qG9xSM
+ kmRumItNoUqURCEmuMucN0omynLgVD8LcnnFWtGuUkf6Exc+DMsOEo182udbXb8IhMotjAQ3b
+ dwkzVuMmIXHgnd+SxA05l2AcuAK5DTEJyvICJA3GykyiHKO1T5bZ+gelLpkxt42lAiCGc7pdu
+ W1tendn9zUu77fJMVpnNyrolcwQVmKXeQxuZcheFBqMR8Iy+820hNSS9EbFLUkeXwlvRnx1q5
+ 04eGwGz640KwbjSCLY+EqDuw+O8BKOfjMe2Rj/PDNiaEU2ow52TMjS1yve4R8cOUmarQsJ4gW
+ rnlEb3IZ5jty6RwTAstIxAGFQnho+Dev381udRXJxRkg=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1756466923; x=1757071723; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=R42Z/6WC+EP77sp7bw2CQ/7HuwEy3m+yQ6Z4GO7Dp7c=;
- b=NP0D9Y0RBH87DXoGVOnstokw/i6oBMLI4j9NyuQp0xxBcGEwJk+yWPhQFHwrC58bXa
- 6DdAo9kZpndMbFkRkmogD6Og6xg3vM8DlxEdEjmZsA73btqWY+Th18b0Rn2iA01v8KCe
- fFqlvPwqI3fgg7sd8wxCFVse7V6iCginxC8f8OcrG12hh1UNFggVTQOghXwFOQo5d02n
- LDmV1BoosS1RebDRgylYka1Px321evnOv58TWTwD5Ue+wcYf2eUEd3isSGu1dsAr36nu
- h6UJqp9MnWkvj2Oo41qC8KJLg7UAggq8OfUKjSPAWCcujMiFhG9fyZ4emo23ZE6FW8Lj
- ysig==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmx.de; 
+ s=s31663417; t=1756467096; x=1757071896; i=fiona.klute@gmx.de;
+ bh=xiLWwy9X0M4VLjv/r0XOzOVDR3ru6r+fYvjdXHqa9fo=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=P75Rtt3+ZKEKfdWbTXATHHzdWlBtCbjyDv0B9v/klAKzmZRyRcFgmJsmNmpBB9Jl
+ ITeUro7buh+p9TilcQfxOJAha52AeUM803H024gsW3pZFB2Bb7gI3yLUFQLSyxiqA
+ +HvqSHBXWajtmP7BcGFnKJG/BidnAh8LZx8rCJrrbmTPBVJuySxim0AStedj6iNzz
+ spxV/z8Wp1FOQOd4usbWWLB1mNhzKU3vUsQxy/RpJOEXG12PH+NRzPst7R26HHh1H
+ WfwCJ+xJ59a50a61C/1Cau8Uz+m33szxOL3XWhePcWPOLvkxL/4jEHKM29/kfoOtd
+ zFnpmZ0pSyNvXtwZlg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=NP0D9Y0R
-Subject: [Buildroot] [PATCH 4/5] toolchain/external: remove Linaro arm
- toolchain
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=P75Rtt3+
+Subject: [Buildroot] [PATCH v3 1/2]
+ support/testing/tests/package/test_docker_compose.py: update kernel & VM
+ CPU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,204 +153,177 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Julien Olivain <ju.o@free.fr>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>, romain.naour@smile.fr,
+ Christian Stewart <christian@aperture.us>,
+ "Fiona Klute \(WIWA\)" <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This toolchain is more than 7 years old now, and not maintained anymore.
-Let's therefore remove it from Buildroot. There are still some
-alternatives in-tree, such as ARM and Bootlin toolchains
+From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Since commit 947dbc92a20c5acea7882166cae7893e6ea661e1 the Bootlin
+stable toolchain uses headers 5.4, which can lead to build outputs
+incompatible with older kernels. Update to the latest 5.4 kernel to
+avoid this. The kernel config is updated according to the requirements
+of current Docker, runc, and crun.
+
+Additionally switch the CPU of the test VM to Haswell, to avoid
+dockerd failing to start with a "This program can only be run on AMD64
+processors with v3 microarchitecture support" error.
+
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
- Config.in.legacy                              |  7 +++++
- .../autobuild/linaro-arm.config               |  5 ----
- .../autobuild/toolchain-configs.csv           |  1 -
- .../testing/tests/package/test_gst1_python.py |  2 +-
- .../testing/tests/toolchain/test_external.py  |  2 +-
- toolchain/toolchain-external/Config.in        |  2 --
- .../toolchain-external-linaro-arm/Config.in   | 27 -------------------
- .../Config.in.options                         |  9 -------
- .../toolchain-external-linaro-arm.hash        |  3 ---
- .../toolchain-external-linaro-arm.mk          | 16 -----------
- 10 files changed, 9 insertions(+), 65 deletions(-)
- delete mode 100644 support/config-fragments/autobuild/linaro-arm.config
- delete mode 100644 toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
- delete mode 100644 toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in.options
- delete mode 100644 toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
- delete mode 100644 toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
+Changes v1 -> v2:
+* Add this patch to avoid test failures observed with what's now patch
+  2 alone, though not necessarily caused by it
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 29650de84e..1c98a0a7e4 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2025.08"
- 
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
-+	bool "Linaro ARM 2018.05 external toolchain is deprecated"
-+	select BR2_LEGACY
-+	help
-+	  Linaro ARM 2018.05 is no longer maintained and has been
-+	  removed from Buildroot.
-+
- config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE
- 	bool "Linaro AArch64 BE 2018.05 external toolchain is deprecated"
- 	select BR2_LEGACY
-diff --git a/support/config-fragments/autobuild/linaro-arm.config b/support/config-fragments/autobuild/linaro-arm.config
-deleted file mode 100644
-index d72e19b3ad..0000000000
---- a/support/config-fragments/autobuild/linaro-arm.config
-+++ /dev/null
-@@ -1,5 +0,0 @@
--BR2_arm=y
--BR2_cortex_a8=y
--BR2_ARM_EABIHF=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
-diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-index 87c58946bc..a559221b99 100644
---- a/support/config-fragments/autobuild/toolchain-configs.csv
-+++ b/support/config-fragments/autobuild/toolchain-configs.csv
-@@ -61,4 +61,3 @@ support/config-fragments/autobuild/br-powerpc-internal-full.config,any
- support/config-fragments/autobuild/br-riscv64-full-internal.config,any
- support/config-fragments/autobuild/br-s390x-z13-internal-glibc.config,any
- support/config-fragments/autobuild/br-xtensa-full-internal.config,any
--support/config-fragments/autobuild/linaro-arm.config,x86
-diff --git a/support/testing/tests/package/test_gst1_python.py b/support/testing/tests/package/test_gst1_python.py
-index caae3e6b2d..501d00ce73 100644
---- a/support/testing/tests/package/test_gst1_python.py
-+++ b/support/testing/tests/package/test_gst1_python.py
-@@ -10,7 +10,7 @@ class TestGst1Python(TestPythonPackageBase):
-         BR2_cortex_a9=y
-         BR2_ARM_ENABLE_VFP=y
-         BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
-+        BR2_TOOLCHAIN_EXTERNAL_ARM_ARM=y
-         BR2_PACKAGE_GSTREAMER1=y
-         BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC=y
-         BR2_PACKAGE_GST1_PLUGINS_BAD=y
-diff --git a/support/testing/tests/toolchain/test_external.py b/support/testing/tests/toolchain/test_external.py
-index 27dfd68500..78ae09303f 100644
---- a/support/testing/tests/toolchain/test_external.py
-+++ b/support/testing/tests/toolchain/test_external.py
-@@ -43,7 +43,7 @@ class TestExternalToolchainLinaroArm(TestExternalToolchain):
-         BR2_arm=y
-         BR2_cortex_a8=y
-         BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
-+        BR2_TOOLCHAIN_EXTERNAL_ARM_ARM=y
-         """
-     toolchain_prefix = "arm-linux-gnueabihf"
- 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 007d91d451..2599015d4b 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -19,7 +19,6 @@ source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in"
- 
- # ARM (use ARM toolchain by default)
- source "toolchain/toolchain-external/toolchain-external-arm-arm/Config.in"
--source "toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in"
- 
- # ARM big-endian
- source "toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in"
-@@ -111,7 +110,6 @@ source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.o
- 
- # ARM
- source "toolchain/toolchain-external/toolchain-external-arm-arm/Config.in.options"
--source "toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in.options"
- 
- # ARM big-endian
- source "toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in.options"
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
-deleted file mode 100644
-index 8b3b4c844e..0000000000
---- a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
-+++ /dev/null
-@@ -1,27 +0,0 @@
--comment "Linaro toolchains available for Cortex-A + EABIhf"
--	depends on BR2_arm
--	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF
--
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
--	bool "Linaro ARM 2018.05"
--	depends on BR2_arm
--	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	depends on BR2_ARM_EABIHF
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
--	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
--	select BR2_TOOLCHAIN_HAS_SSP
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	select BR2_INSTALL_LIBSTDCPP
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
--	select BR2_TOOLCHAIN_HAS_FORTRAN
--	select BR2_TOOLCHAIN_HAS_OPENMP
--	help
--	  Linaro toolchain for the ARM architecture. It uses Linaro
--	  GCC 2018.05 (based on gcc 7.3.1), Linaro GDB 2018.05 (based on
--	  GDB 8.1), glibc 2.25, Binutils 2018.05 (based on 2.28). It
--	  generates code that runs on all Cortex-A profile devices,
--	  but tuned for the Cortex-A9. The code generated is Thumb 2,
--	  with the hard floating point calling convention, and uses
--	  the VFPv3-D16 FPU instructions.
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in.options b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in.options
-deleted file mode 100644
-index dcbc6599d9..0000000000
---- a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in.options
-+++ /dev/null
-@@ -1,9 +0,0 @@
--if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
--
--config BR2_TOOLCHAIN_EXTERNAL_PREFIX
--	default "arm-linux-gnueabihf"
--
--config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
--	default "toolchain-external-linaro-arm"
--
--endif
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
-deleted file mode 100644
-index 7169e0b936..0000000000
---- a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256  0613b5be14eb7d50a772bbd72069c428558e6e53fa5fce7201d75a13a475ffff  gcc-linaro-7.3.1-2018.05-i686_arm-linux-gnueabihf.tar.xz
--sha256  7248bf105d0d468887a9b8a7120bb281ac8ad0223d9cb3d00dc7c2d498485d91  gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf.tar.xz
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
-deleted file mode 100644
-index fda356bcea..0000000000
---- a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
-+++ /dev/null
-@@ -1,16 +0,0 @@
--################################################################################
--#
--# toolchain-external-linaro-arm
--#
--################################################################################
--
--TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION = 2018.05
--TOOLCHAIN_EXTERNAL_LINARO_ARM_SITE = https://releases.linaro.org/components/toolchain/binaries/7.3-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)/arm-linux-gnueabihf
--
--ifeq ($(HOSTARCH),x86)
--TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-7.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-i686_arm-linux-gnueabihf.tar.xz
--else
--TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-7.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-x86_64_arm-linux-gnueabihf.tar.xz
--endif
--
--$(eval $(toolchain-external-package))
+ .../testing/conf/docker-compose-kernel.config | 57 +++++++++++++------
+ .../tests/package/test_docker_compose.py      |  4 +-
+ 2 files changed, 41 insertions(+), 20 deletions(-)
+
+diff --git a/support/testing/conf/docker-compose-kernel.config b/support/testing/conf/docker-compose-kernel.config
+index 4d30a578ec..fd28da7a4a 100644
+--- a/support/testing/conf/docker-compose-kernel.config
++++ b/support/testing/conf/docker-compose-kernel.config
+@@ -1,10 +1,22 @@
+ # CONFIG_SWAP is not set
+ CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
+ # CONFIG_CROSS_MEMORY_ATTACH is not set
+ CONFIG_HIGH_RES_TIMERS=y
++CONFIG_CGROUPS=y
++CONFIG_MEMCG=y
++CONFIG_BLK_CGROUP=y
++CONFIG_CGROUP_SCHED=y
++CONFIG_CGROUP_PIDS=y
++CONFIG_CGROUP_FREEZER=y
++CONFIG_CPUSETS=y
++CONFIG_CGROUP_DEVICE=y
++CONFIG_CGROUP_CPUACCT=y
++CONFIG_CGROUP_BPF=y
++CONFIG_BPF_SYSCALL=y
+ # CONFIG_COMPAT_BRK is not set
++CONFIG_SMP=y
+ # CONFIG_X86_EXTENDED_PLATFORM is not set
+-CONFIG_IOSF_MBI=y
+ CONFIG_MCORE2=y
+ # CONFIG_X86_MCE is not set
+ # CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS is not set
+@@ -12,9 +24,8 @@ CONFIG_LEGACY_VSYSCALL_NONE=y
+ # CONFIG_SUSPEND is not set
+ # CONFIG_ACPI is not set
+ CONFIG_CPU_IDLE=y
+-CONFIG_PCI_MSI=y
+ # CONFIG_VIRTUALIZATION is not set
+-# CONFIG_IOSCHED_CFQ is not set
++CONFIG_BLK_DEV_THROTTLING=y
+ # CONFIG_MQ_IOSCHED_DEADLINE is not set
+ # CONFIG_MQ_IOSCHED_KYBER is not set
+ # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
+@@ -25,23 +36,36 @@ CONFIG_UNIX=y
+ CONFIG_INET=y
+ CONFIG_IP_MULTICAST=y
+ CONFIG_IP_ADVANCED_ROUTER=y
+-# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
+-# CONFIG_INET_XFRM_MODE_TUNNEL is not set
+-# CONFIG_INET_XFRM_MODE_BEET is not set
+-# CONFIG_IPV6 is not set
+-# CONFIG_NF_CONNTRACK_PROCFS is not set
+-# CONFIG_NF_CT_PROTO_DCCP is not set
+-# CONFIG_NF_CT_PROTO_SCTP is not set
+-# CONFIG_NF_CT_PROTO_UDPLITE is not set
++# CONFIG_IPV6_SIT is not set
++CONFIG_NETFILTER=y
++CONFIG_NF_CONNTRACK=y
++CONFIG_NETFILTER_XT_MARK=y
++CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=y
++CONFIG_NETFILTER_XT_MATCH_CONNTRACK=y
++CONFIG_NETFILTER_XT_MATCH_IPVS=y
+ CONFIG_IP_VS=y
+ CONFIG_IP_VS_RR=y
+ CONFIG_IP_VS_NFCT=y
+-# CONFIG_BRIDGE_IGMP_SNOOPING is not set
++CONFIG_IP_NF_IPTABLES=y
++CONFIG_IP_NF_FILTER=y
++CONFIG_IP_NF_NAT=y
++CONFIG_IP_NF_TARGET_MASQUERADE=y
++CONFIG_IP_NF_MANGLE=y
++CONFIG_IP_NF_RAW=y
++CONFIG_IP6_NF_IPTABLES=y
++CONFIG_IP6_NF_FILTER=y
++CONFIG_IP6_NF_MANGLE=y
++CONFIG_IP6_NF_RAW=y
++CONFIG_IP6_NF_NAT=y
++CONFIG_IP6_NF_TARGET_MASQUERADE=y
++CONFIG_BRIDGE=y
+ # CONFIG_WIRELESS is not set
++CONFIG_PCI=y
+ CONFIG_DEVTMPFS=y
+ CONFIG_DEVTMPFS_MOUNT=y
+ CONFIG_VIRTIO_BLK=y
+ CONFIG_NETDEVICES=y
++CONFIG_VETH=y
+ CONFIG_VIRTIO_NET=y
+ # CONFIG_ETHERNET is not set
+ # CONFIG_WLAN is not set
+@@ -52,26 +76,23 @@ CONFIG_VT_HW_CONSOLE_BINDING=y
+ # CONFIG_DEVMEM is not set
+ CONFIG_SERIAL_8250=y
+ CONFIG_SERIAL_8250_CONSOLE=y
+-# CONFIG_SERIAL_8250_LPSS is not set
+-# CONFIG_SERIAL_8250_MID is not set
+ # CONFIG_HW_RANDOM_INTEL is not set
+ # CONFIG_HW_RANDOM_AMD is not set
+ # CONFIG_HW_RANDOM_VIA is not set
+ CONFIG_HW_RANDOM_VIRTIO=y
+-# CONFIG_DEVPORT is not set
+ # CONFIG_HWMON is not set
+ # CONFIG_USB_SUPPORT is not set
+ CONFIG_RTC_CLASS=y
+ CONFIG_VIRTIO_PCI=y
+-# CONFIG_VIRTIO_PCI_LEGACY is not set
++CONFIG_VIRTIO_MMIO=y
+ # CONFIG_X86_PLATFORM_DEVICES is not set
+ # CONFIG_IOMMU_SUPPORT is not set
+ CONFIG_EXT4_FS=y
++CONFIG_OVERLAY_FS=y
+ CONFIG_TMPFS=y
+ # CONFIG_MISC_FILESYSTEMS is not set
+ # CONFIG_NETWORK_FILESYSTEMS is not set
++CONFIG_KEYS=y
+ CONFIG_SECURITYFS=y
+-# CONFIG_CRYPTO_ECHAINIV is not set
+ # CONFIG_CRYPTO_HW is not set
+-# CONFIG_UNUSED_SYMBOLS is not set
+ CONFIG_UNWINDER_FRAME_POINTER=y
+diff --git a/support/testing/tests/package/test_docker_compose.py b/support/testing/tests/package/test_docker_compose.py
+index 6a8f6f4010..a96c9d1481 100644
+--- a/support/testing/tests/package/test_docker_compose.py
++++ b/support/testing/tests/package/test_docker_compose.py
+@@ -17,7 +17,7 @@ class BaseTestDockerCompose(infra.basetest.BRTest):
+         BR2_ROOTFS_POST_SCRIPT_ARGS="{}"
+         BR2_LINUX_KERNEL=y
+         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.262"
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.296"
+         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="{}"
+         BR2_PACKAGE_PYTHON3=y
+@@ -59,7 +59,7 @@ class BaseTestDockerCompose(infra.basetest.BRTest):
+         self.emulator.boot(arch="x86_64",
+                            kernel=kernel,
+                            kernel_cmdline=["root=/dev/vda", "console=ttyS0"],
+-                           options=["-cpu", "Nehalem",
++                           options=["-cpu", "Haswell",
+                                     "-m", "512M",
+                                     "-device", "virtio-rng-pci",
+                                     "-drive", "file={},format=raw,if=virtio".format(rootfs),
 -- 
-2.50.1
+2.51.0
 
 _______________________________________________
 buildroot mailing list
