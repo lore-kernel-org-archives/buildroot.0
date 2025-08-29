@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83C33CA0FF7
-	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 10:52:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06B99CA0FF9
+	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 10:52:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4BDAC614F7;
-	Fri, 29 Aug 2025 10:52:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CF78484359;
+	Fri, 29 Aug 2025 10:52:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XJVQqnjhxuVQ; Fri, 29 Aug 2025 10:52:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u-UzdCwZ2s9v; Fri, 29 Aug 2025 10:52:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C2B5613DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A930A84354
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7C2B5613DD;
-	Fri, 29 Aug 2025 10:52:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id C90AA6C
+	by smtp1.osuosl.org (Postfix) with ESMTP id A930A84354;
+	Fri, 29 Aug 2025 10:52:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id DD81FD2
  for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:52:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AF6264187E
+ by smtp2.osuosl.org (Postfix) with ESMTP id CFCDC41261
  for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:52:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FerCvTkDHNHi for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4FyAXoJzm31G for <buildroot@buildroot.org>;
  Fri, 29 Aug 2025 10:52:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B16A41878
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2230440497
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1B16A41878
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2230440497
  for <buildroot@buildroot.org>; Fri, 29 Aug 2025 10:52:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0908A87D37; Fri, 29 Aug 2025 10:52:11 +0000 (UTC)
+ id 1266687D3F; Fri, 29 Aug 2025 10:52:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 29 Aug 2025 12:49:30 +0200
+Date: Fri, 29 Aug 2025 12:49:41 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4dc68655682388c34339abcd76192718cf0786da
-X-Git-Newrev: 90533b689941cfd92da9e1a2a1ed6c1b7246b25e
+X-Git-Oldrev: 90533b689941cfd92da9e1a2a1ed6c1b7246b25e
+X-Git-Newrev: 035f496978eafd822115a176f4aeb7e281c91717
 X-Patchwork-Hint: ignore
-Message-Id: <20250829105211.0908A87D37@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] utils/check-package: allow
- exception for global checks
+Message-Id: <20250829105211.1266687D3F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/initscripts: add
+ service to load kernel modules at boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,37 +66,95 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90533b689941cfd92da9e1a2a1ed6c1b7246b25e
+commit: https://git.buildroot.net/buildroot/commit/?id=035f496978eafd822115a176f4aeb7e281c91717
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-check-package has a mechanism for a specific file to make an exception
-to a specific checker, by preceding the offending line with
-"check-package ... <checker class>". However, this is not possible for
-the global checks that are done in the checker's after() function.
+In cases where no hotplug is available (by choice or by the lack of a
+proper hotplug method for a device), this service can be used to load
+kernel module drivers by reading the /etc/modules-load.d/*.conf files.
+The modules files matches the one used by systemd, which in turn has
+a builtin mechanism to load a module at boot, therefore making systemv
+init on par with systemd features.
 
-Allow exceptions for the global checks by writing the same
-"check-package ... <checker class>" comment on the last line of the
-file.
-
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+[Arnout:
+ - add exception for missing DAEMON variable;
+ - fix shellcheck warnings
+]
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- utils/check-package | 2 ++
- 1 file changed, 2 insertions(+)
+ package/initscripts/init.d/S11modules | 62 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
 
-diff --git a/utils/check-package b/utils/check-package
-index 8781d21d8f..aa10280f4d 100755
---- a/utils/check-package
-+++ b/utils/check-package
-@@ -276,6 +276,8 @@ def check_file_using_lib(fname):
-         return nwarnings, nlines
- 
-     for name, cf in objects:
-+        if cf.disable.search(lastline):
-+            continue
-         warn, fail = print_warnings(cf.after(), name in xfail)
-         if fail > 0:
-             failed.add(name)
+diff --git a/package/initscripts/init.d/S11modules b/package/initscripts/init.d/S11modules
+new file mode 100644
+index 0000000000..ab9b93dae3
+--- /dev/null
++++ b/package/initscripts/init.d/S11modules
+@@ -0,0 +1,62 @@
++#!/bin/sh
++
++MODULES_DIR="/etc/modules-load.d/"
++
++[ -z "$(ls -A ${MODULES_DIR} 2> /dev/null)" ] && exit 0
++
++load_unload() {
++	for module_file in "${MODULES_DIR}"/*.conf; do
++		while read -r module args; do
++
++			case "$module" in
++				""|"#"*) continue ;;
++			esac
++
++			if [ "$1" = "load" ]; then
++				# shellcheck disable=SC2086  # We need word splitting for args
++				modprobe -q "${module}" ${args} >/dev/null && \
++					printf '%s ' "$module" || RET='FAIL'
++			else
++				rmmod "${module}" >/dev/null
++			fi
++
++		done < "${module_file}"
++	done
++
++	RET='OK'
++}
++
++start() {
++	printf 'Starting modules: '
++
++	load_unload load
++
++	echo $RET
++}
++
++stop() {
++	printf 'Stopping modules: '
++
++	load_unload unload
++
++	echo $RET
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
++
++case "$1" in
++	start|stop|restart)
++		"$1";;
++	reload)
++		# Restart, since there is no true "reload" feature.
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
++
++# check-package Ignore missing DAEMON Variables
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
