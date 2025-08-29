@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C02CCAC586
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:17:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1D87CAC581
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:17:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 91BB680715;
-	Mon,  8 Sep 2025 14:17:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8A6B28065A;
+	Mon,  8 Sep 2025 14:17:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8Iyzxd5RmZfk; Mon,  8 Sep 2025 14:17:39 +0000 (UTC)
+ id IshwAdkyz7SU; Mon,  8 Sep 2025 14:17:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 621C2806A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B1E5806E9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 621C2806A5;
-	Mon,  8 Sep 2025 14:17:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E43B234
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1B1E5806E9;
+	Mon,  8 Sep 2025 14:17:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1354A279
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5BBA9605AA
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 68CD64004F
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E5ssnwb_yujb for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Otlte8kLE8cs for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 14:16:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4830605C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B253340054
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A4830605C1
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B253340054
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A0FD5818B3; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
+ id A340680DA7; Mon,  8 Sep 2025 14:16:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 3 Sep 2025 23:59:21 +0200
+Date: Fri, 29 Aug 2025 12:49:30 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 10a831794bbb276fca2666b77fac8692654c3752
-X-Git-Newrev: 597d5d10ec77f7655e2608c2c45a257a9be50352
+X-Git-Oldrev: 4dc68655682388c34339abcd76192718cf0786da
+X-Git-Newrev: 90533b689941cfd92da9e1a2a1ed6c1b7246b25e
 X-Patchwork-Hint: ignore
-Message-Id: <20250908141630.A0FD5818B3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/armadillo: bump to version 15.0.1
+Message-Id: <20250908141629.A340680DA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/check-package: allow exception for
+ global checks
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -57,50 +58,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=597d5d10ec77f7655e2608c2c45a257a9be50352
+commit: https://git.buildroot.net/buildroot/commit/?id=90533b689941cfd92da9e1a2a1ed6c1b7246b25e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://arma.sourceforge.net/docs.html#changelog
+check-package has a mechanism for a specific file to make an exception
+to a specific checker, by preceding the offending line with
+"check-package ... <checker class>". However, this is not possible for
+the global checks that are done in the checker's after() function.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Allow exceptions for the global checks by writing the same
+"check-package ... <checker class>" comment on the last line of the
+file.
+
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/armadillo/armadillo.hash | 2 +-
- package/armadillo/armadillo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ utils/check-package | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
-index 75f7837cbb..5408244759 100644
---- a/package/armadillo/armadillo.hash
-+++ b/package/armadillo/armadillo.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  ad1e2aa5b90a389ab714e2d00972ce64da42582b17dd89c18935358551e6e205  armadillo-14.6.3.tar.xz
-+sha256  f520a0d50bbafccd7b9e793321cd7ffed374695c2e38bbdfd428841745e04c37  armadillo-15.0.1.tar.xz
- # License files, locally calculated
- sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
-diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
-index d706013651..5a125b99b3 100644
---- a/package/armadillo/armadillo.mk
-+++ b/package/armadillo/armadillo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/utils/check-package b/utils/check-package
+index 8781d21d8f..aa10280f4d 100755
+--- a/utils/check-package
++++ b/utils/check-package
+@@ -276,6 +276,8 @@ def check_file_using_lib(fname):
+         return nwarnings, nlines
  
--ARMADILLO_VERSION = 14.6.3
-+ARMADILLO_VERSION = 15.0.1
- ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
- ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
- ARMADILLO_INSTALL_STAGING = YES
+     for name, cf in objects:
++        if cf.disable.search(lastline):
++            continue
+         warn, fail = print_warnings(cf.after(), name in xfail)
+         if fail > 0:
+             failed.add(name)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
