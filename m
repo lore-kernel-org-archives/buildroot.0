@@ -1,75 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE21DCA0FF0
-	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 15:58:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A496CA0FF0
+	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 16:14:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 738AA61669;
-	Fri, 29 Aug 2025 15:58:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 051AE842F2;
+	Fri, 29 Aug 2025 16:14:02 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sUDzac8qNy2n; Fri, 29 Aug 2025 16:14:00 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA75D841AD
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id EA75D841AD;
+	Fri, 29 Aug 2025 16:13:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id CA77AD2
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 16:13:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B0B866167B
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 16:13:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xJk9ZKGrfxIv; Fri, 29 Aug 2025 15:58:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 807B561534
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 807B561534;
-	Fri, 29 Aug 2025 15:58:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B16F7D2
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 15:58:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9A5D440725
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 15:58:04 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iqqsRJSYnxGb for <buildroot@buildroot.org>;
- Fri, 29 Aug 2025 15:58:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 41E2340319
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41E2340319
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 41E2340319
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 15:58:03 +0000 (UTC)
+ id jO8FtS9Cs8mj for <buildroot@buildroot.org>;
+ Fri, 29 Aug 2025 16:13:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CB003615E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB003615E8
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CB003615E8
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 16:13:56 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id B7A4A1A0E4C;
+ Fri, 29 Aug 2025 16:13:54 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 8F2F5605F1;
+ Fri, 29 Aug 2025 16:13:54 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 3FE4CB97846F; Fri, 29 Aug 2025 17:58:00 +0200 (CEST)
-Message-ID: <0411b634-285e-4a30-b9c0-2d247b51349e@rnout.be>
-Date: Fri, 29 Aug 2025 17:57:58 +0200
+ with ESMTPSA id 8F26A1C22D71B; 
+ Fri, 29 Aug 2025 18:13:49 +0200 (CEST)
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Bernd Kuhls <bernd@kuhls.net>
+Date: Fri, 29 Aug 2025 18:13:44 +0200
+Message-ID: <20250829161345.2218058-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>,
- James Autry <jautry@tekvox.com>, Matthew Maron <matthewm@tekvox.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Jim Reinhart <jimr@tekvox.com>
-References: <20230920202452.655292-1-giulio.benetti@benettiengineering.com>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <20230920202452.655292-1-giulio.benetti@benettiengineering.com>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1756483080; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=20IV+2H9lzVFuNkL/Ag17NBmTy/0o0GZEX3SpgjvZqY=;
- b=icW/CeyMRDYtwMiwhy7SxN7oO9ZqoirKr53sjGU3xI9eTaSpzvEpBMmKqxA8CTtdij0GkI
- Et4T2oFXUx7MCUSd4WNvDtNJOZ5eIJIlyTQPsoKVaDsBwFxLFoRiW0jgiU6rytB4rTPzRQ
- PRGh52Vi+wOJWGApS+Fpsab0A/la2qU2O3VewqohXOJR/g8We7cIo2PIYPaLG5BXhils/Q
- 0GZzuGO47eijpWeDQeQP0aiSdmkl/WzNytQ9Fuanm/Q+qZjDo3WhiXvpGYVuLvkHthXYeC
- rsXQBv44/IbIyDsZZUuBsOlV1mfxAKtdE7keTCp3hO9iSYBwBU2HMVY/9DhS+g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=bootlin.com; s=dkim; 
+ t=1756484034; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding; bh=X38qu/c5t43cfg+ui5Gd4qJaGbdbRJWg5akTEx59qDk=;
+ b=PPR20UxZyiodxrqIZ/uBMfhj5dFRgTLq0fpHnyGEXbVS83y7qiaMvCBD/RKLVOSJvVGlXd
+ Xu36H6ICF8uXmWsKYYjoxD/0QN2V1sZdySAgpwC5S7VxH6E73aCjRN+Rkc6cn134Q92eG/
+ bSK3OqQpaIFF77MOc3r2yr4s2GIqDv6wbbzmA9LlJqkl9JFPL0v9ExOEtsuPDgYr7QthKa
+ CqGvBi8aiIGP+NejbuIN3pPEFSoXYp4Od+Edk4ZgTDZIeD8ZCT9+uI+rQ1sZU18yW33YrM
+ OQXWtkFVCPUMylZflT9fXzuiFZqVJEG9hJOBfr++kfWfy/eGOIrBk27jwdA6OQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=icW/CeyM
-Subject: Re: [Buildroot] [RFC PATCH 1/1] package/dotnet6-runtime: new package
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=PPR20UxZ
+Subject: [Buildroot] [PATCH] package/libfreeglut: fix build with GCC 15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,216 +81,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Guilio,
-
-  Some additional comments I made on top of the ones for -prebuilt.
-
-On 20/09/2023 22:24, Giulio Benetti wrote:
-> From: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
-> 
-> Add .NET 6 runtime to enable C# console applications to run on embedded
-> Linux. At the moment the package can only be built for arm and aarch64.
-> 
-> https://dotnet.microsoft.com/en-us/download/dotnet/6.0
-
-  Is it useful to have 6 and 8 parallel installed? Is it useful to have version 
-selection at all?
-
-[snip]
-> diff --git a/package/dotnet6-runtime/Config.in b/package/dotnet6-runtime/Config.in
-> new file mode 100644
-> index 0000000000..71e22da422
-> --- /dev/null
-> +++ b/package/dotnet6-runtime/Config.in
-> @@ -0,0 +1,31 @@
-> +config BR2_PACKAGE_DOTNET6_RUNTIME_ARCH_SUPPORTS
-> +	bool
-> +	default y if BR2_aarch64
-> +	# On ARM CoreCLR JIT requires 16 64-bit or 32 32-bit FPU registers
-> +	default y if BR2_arm && (BR2_ARM_FPU_VFPV3 || BR2_ARM_FPU_VFPV3D16 || \
-> +				 BR2_ARM_FPU_VFPV4 || BR2_ARM_FPU_VFPV4D16)
-
-  So... shouldn't this condition exist for the prebuilt version as well?
-
-  Also, not supported on x86?
-
-> +	depends on BR2_USE_MMU # fork()
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # aarch64 fpu assembly registers build failure
-> +
-> +config BR2_PACKAGE_DOTNET6_RUNTIME
-> +	bool "dotnet6-runtime"
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-
-  This condition is actually redundant with the other one, both musl and glibc 
-always have threads.
-
-> +	depends on !BR2_STATIC_LIBS
-
-  Doesn't the build try to statically link with its dependent libraries? I.e. 
-doesn't it required BR2_SHARED_STATIC_LIBS (shared because it generates only 
-shared libraries, and static because it only statically links with libraries)?
-
-> +	depends on BR2_PACKAGE_DOTNET6_RUNTIME_ARCH_SUPPORTS
-> +	select BR2_PACKAGE_HOST_CMAKE
-
-  Normally there shouldn't be select statements for host packages.
-
-> +	select BR2_PACKAGE_ICU
-> +	select BR2_PACKAGE_LIBCURL
-> +	select BR2_PACKAGE_LIBKRB5
-> +	select BR2_PACKAGE_LIBZLIB
-> +	select BR2_PACKAGE_LTTNG_LIBUST
-> +	select BR2_PACKAGE_OPENSSL
-
-  Have you tested that it works (builds) with libressl?
-
-> +	help
-> +	  .NET Core 6 Runtime
-> +
-> +	  https://dotnet.microsoft.com/download/dotnet-core/6.0
-> +
-> +comment "dotnet-runtime needs a toolchain w/ glibc or musl and threads"
-> +	depends on BR2_PACKAGE_DOTNET6_RUNTIME_ARCH_SUPPORTS
-> +	depends on !BR2_TOOLCHAIN_USES_GLIBC && !BR2_TOOLCHAIN_USES_MUSL
-> +	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/dotnet6-runtime/dotnet6-runtime.hash b/package/dotnet6-runtime/dotnet6-runtime.hash
-> new file mode 100644
-> index 0000000000..9adddfd138
-> --- /dev/null
-> +++ b/package/dotnet6-runtime/dotnet6-runtime.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +sha256  a674c44736bf4f4dfafa800899577ef92cb626b9118b5fbdd0182f8c05b5c2e1  dotnet6-runtime-6.0.22.tar.gz
-> +sha256  cfc21f5e8bd655ae997eec916138b707b1d290b83272c02a95c9f821b8c87310  LICENSE.TXT
-> diff --git a/package/dotnet6-runtime/dotnet6-runtime.mk b/package/dotnet6-runtime/dotnet6-runtime.mk
-> new file mode 100644
-> index 0000000000..ac1cb3815c
-> --- /dev/null
-> +++ b/package/dotnet6-runtime/dotnet6-runtime.mk
-> @@ -0,0 +1,77 @@
-> +################################################################################
-> +#
-> +# dotnet6-runtime
-> +#
-> +################################################################################
-> +
-> +DOTNET6_RUNTIME_VERSION = 6.0.22
-> +DOTNET6_RUNTIME_SITE = $(call github,dotnet,runtime,v$(DOTNET6_RUNTIME_VERSION))
-> +DOTNET6_RUNTIME_LICENSE = MIT
-> +DOTNET6_RUNTIME_LICENSE_FILES = LICENSE.TXT
-> +DOTNET6_RUNTIME_DEPENDENCIES = host-cmake libzlib openssl libcurl icu libkrb5 lttng-libust
-
-  For such a long list, please do one dependency per line.
-
-DOTNET6_RUNTIME_SRC_DEPENDENCIES = \
-	...
-
-  Also, don't depend on host-cmake instead use $(BR2_CMAKE_HOST_DEPENDENCY)
-like cmake-package.
-
-> +
-> +ifeq ($(BR2_aarch64),y)
-> +DOTNET6_RUNTIME_ARCH = arm64
-> +else ifeq ($(BR2_arm),y)
-> +DOTNET6_RUNTIME_ARCH = arm
-> +# Set FPU type
-> +DOTNET6_RUNTIME_ARM_FPU_TYPE = $(BR2_GCC_TARGET_FPU)
-> +ifeq ($(BR2_ARM_FPU_VFPV3)$(BR2_ARM_FPU_VFPV4),y)
-> +# Set 0x07 if 32 fpu registers are used
-> +DOTNET6_RUNTIME_ARM_FPU_CAPABILITY = 0x07
-> +else ifeq ($(BR2_ARM_FPU_VFPV3D16)$(BR2_ARM_FPU_VFPV4D16),y)
-> +# Set 0x03 if 32 fpu registers are used
-> +DOTNET6_RUNTIME_ARM_FPU_CAPABILITY = 0x03
-> +endif
-> +endif
-> +
-> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
-> +DOTNET6_RUNTIME_TOOLCHAIN_PREFIX = $(GNU_TARGET_NAME)
-> +else
-> +DOTNET6_RUNTIME_TOOLCHAIN_PREFIX = $(TOOLCHAIN_EXTERNAL_PREFIX)
-> +endif
-
-  Hm, maybe it's more future-safe to use $(notdir $(TARGET_CROSS))? Of perhaps 
-TARGET_CROSS with the full path just works as well?
-
-> +
-> +ifeq ($(BR2_ENABLE_DEBUG),y)
-
-  We changed this into BR2_ENABLE_RUNTIME_DEBUG in cmake-package, should do the 
-same here.
-
-> +DOTNET6_RUNTIME_BUILD_CONFIGURATION = Debug
-> +else
-> +DOTNET6_RUNTIME_BUILD_CONFIGURATION = Release
-> +endif
-> +
-> +DOTNET6_RUNTIME_CMAKEARGS = --cmakeargs "-DCMAKE_TOOLCHAIN_FILE="$(HOST_DIR)/share/buildroot/toolchainfile.cmake"" \
-> +		--cmakeargs "-DCMAKE_INSTALL_RUNSTATEDIR="/run"" \
-> +		--cmakeargs "-DCMAKE_CXX_COMPILER_TARGET=$(DOTNET6_RUNTIME_TOOLCHAIN_PREFIX)" \
-> +		--cmakeargs "-DTOOLCHAIN=$(DOTNET6_RUNTIME_TOOLCHAIN_PREFIX)"
-> +
-> +# Append FPU specific defines
-> +ifeq ($(BR2_arm),y)
-> +		DOTNET6_RUNTIME_CMAKEARGS += \
-> +		--cmakeargs "-DCLR_ARM_FPU_TYPE=$(DOTNET6_RUNTIME_ARM_FPU_TYPE)" \
-> +		--cmakeargs "-DCLR_ARM_FPU_CAPABILITY=$(DOTNET6_RUNTIME_ARM_FPU_CAPABILITY)"
-> +endif
-> +
-> +define DOTNET6_RUNTIME_BUILD_CMDS
-> +	cd $(@D) && PATH=$(BR_PATH) ROOTFS_DIR=$(HOST_DIR) \
-
-  ROOTFS_DIR=$(HOST_DIR) sounds suspicious... Are you sure that that is correct? 
-Not STAGING_DIR or TARGET_DIR?
-
-> +		$(SHELL) ./build.sh --subset clr.jit+clr.runtime+libs --verbosity diag \
-> +		--arch $(DOTNET6_RUNTIME_ARCH) --gcc --cross --skipcrossarchnative \
-> +		--configuration $(DOTNET6_RUNTIME_BUILD_CONFIGURATION) \
-> +		$(DOTNET6_RUNTIME_CMAKEARGS)
-> +endef
-> +
-> +define DOTNET6_RUNTIME_INSTALL_TARGET_CMDS
-> +	# Copy all .dll libraries to target directory
-> +	cp -Rf $(@D)/artifacts/bin/testhost/net6.0-Linux-$(DOTNET6_RUNTIME_BUILD_CONFIGURATION)-$(DOTNET6_RUNTIME_ARCH)/. \
-> +		$(TARGET_DIR)/usr/share/dotnet
-> +	# Remove all .dbg, .pdb, .h, .a, .xml files from target
-> +	find $(TARGET_DIR)/usr/share/dotnet/ \
-> +		-type f \( -name "*.dbg" -o -name "*.pdb" -o -name "*.h" \
-> +		-o -name "*.a" -o -name "*.xml" \) -delete
-> +
-> +	# Create /etc/dotnet/install_location file to point to dotnet
-> +	mkdir -p $(TARGET_DIR)/etc/dotnet
-> +	echo /usr/share/dotnet > $(TARGET_DIR)/etc/dotnet/install_location
-> +	# Export dotnet to PATH and libraries to LD_LIBRARY_PATH
-> +	$(INSTALL) -m 0755 -D $(DOTNET6_RUNTIME_PKGDIR)/dotnet6-runtime.sh \
-> +		$(TARGET_DIR)/etc/profile.d/dotnet6-runtime.sh
-> +endef
-> +
-> +$(eval $(generic-package))
-
-  I expect that you can't simply bypass the build.sh script and use 
-cmake-package directly?
-
-  Regards,
-  Arnout
-
-> diff --git a/package/dotnet6-runtime/dotnet6-runtime.sh b/package/dotnet6-runtime/dotnet6-runtime.sh
-> new file mode 100644
-> index 0000000000..31dbe9a410
-> --- /dev/null
-> +++ b/package/dotnet6-runtime/dotnet6-runtime.sh
-> @@ -0,0 +1,2 @@
-> +export PATH=$PATH:/usr/share/dotnet
-> +export LD_LIBRARY_PATH=/usr/share/dotnet/shared/Microsoft.NETCore.App/6.0.16
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Rml4ZXM6CgovaG9tZS90aG9tYXMvYnVpbGRyb290L2J1aWxkcm9vdC9vdXRwdXRzL2FsbC9idWls
+ZC9saWJmcmVlZ2x1dC0zLjQuMC9zcmMveDExL2ZnX2luaXRfeDExLmM6Mjk3OjY6IGVycm9yOiBj
+b25mbGljdGluZyB0eXBlcyBmb3Ig4oCYZmdQbGF0Zm9ybURlc3Ryb3lDb250ZXh04oCZOyBoYXZl
+IOKAmHZvaWQoU0ZHX1BsYXRmb3JtRGlzcGxheSwgIHN0cnVjdCBfX0dMWGNvbnRleHRSZWMgKini
+gJkge2FrYSDigJh2b2lkKHN0cnVjdCB0YWdTRkdfUGxhdGZvcm1EaXNwbGF5LCAgc3RydWN0IF9f
+R0xYY29udGV4dFJlYyAqKeKAmX0KICAyOTcgfCB2b2lkIGZnUGxhdGZvcm1EZXN0cm95Q29udGV4
+dCAoIFNGR19QbGF0Zm9ybURpc3BsYXkgcERpc3BsYXksIFNGR19XaW5kb3dDb250ZXh0VHlwZSBN
+Q29udGV4dCApCgpObyBhdXRvYnVpbGRlciBmYWlsdXJlcyBmb3IgdGhpcyBpc3N1ZS4KClNpZ25l
+ZC1vZmYtYnk6IFRob21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+
+Ci0tLQogLi4uZm9ybURlc3Ryb3lDb250ZXh0LXByb3RvdHlwZS1mb3ItQzIzLnBhdGNoIHwgMzEg
+KysrKysrKysrKysrKysrKysrKwogMSBmaWxlIGNoYW5nZWQsIDMxIGluc2VydGlvbnMoKykKIGNy
+ZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2xpYmZyZWVnbHV0LzAwMDItZWdsLWZpeC1mZ1BsYXRm
+b3JtRGVzdHJveUNvbnRleHQtcHJvdG90eXBlLWZvci1DMjMucGF0Y2gKCmRpZmYgLS1naXQgYS9w
+YWNrYWdlL2xpYmZyZWVnbHV0LzAwMDItZWdsLWZpeC1mZ1BsYXRmb3JtRGVzdHJveUNvbnRleHQt
+cHJvdG90eXBlLWZvci1DMjMucGF0Y2ggYi9wYWNrYWdlL2xpYmZyZWVnbHV0LzAwMDItZWdsLWZp
+eC1mZ1BsYXRmb3JtRGVzdHJveUNvbnRleHQtcHJvdG90eXBlLWZvci1DMjMucGF0Y2gKbmV3IGZp
+bGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uYzNhYWRiODdkZQotLS0gL2Rldi9udWxs
+CisrKyBiL3BhY2thZ2UvbGliZnJlZWdsdXQvMDAwMi1lZ2wtZml4LWZnUGxhdGZvcm1EZXN0cm95
+Q29udGV4dC1wcm90b3R5cGUtZm9yLUMyMy5wYXRjaApAQCAtMCwwICsxLDMxIEBACitGcm9tIDZk
+MDE3OGExYzQzZjk0YjA0NmU0ZDVmM2RmYTcxODVhMzk4NzA2YWUgTW9uIFNlcCAxNyAwMDowMDow
+MCAyMDAxCitGcm9tOiBTYW0gSmFtZXMgPHNhbUBnZW50b28ub3JnPgorRGF0ZTogU3VuLCAxNyBO
+b3YgMjAyNCAwMToxNDoyNiArMDAwMAorU3ViamVjdDogW1BBVENIXSBlZ2w6IGZpeCBmZ1BsYXRm
+b3JtRGVzdHJveUNvbnRleHQgcHJvdG90eXBlIGZvciBDMjMKKworQzIzIHJlbW92ZXMgdW5wcm90
+b3R5cGVkIGZ1bmN0aW9ucywgc28gdGhpcyBjb25mbGljdGVkIHdpdGggdGhlIGRlZmluaXRpb24K
+K2luIGZnX2luaXRfeDExLmMuCisKK0J1ZzogaHR0cHM6Ly9naXRodWIuY29tL2ZyZWVnbHV0L2Zy
+ZWVnbHV0L2lzc3Vlcy8xODYKKworVXBzdHJlYW06IDgwMDc3MmU5OTNhM2NlZmZhMDFjY2YzZmNh
+NDQ5ZDMyNzljZGUzMzgKK1NpZ25lZC1vZmYtYnk6IFRob21hcyBQZXRhenpvbmkgPHRob21hcy5w
+ZXRhenpvbmlAYm9vdGxpbi5jb20+CistLS0KKyBzcmMvZWdsL2ZnX2luaXRfZWdsLmggfCAyICst
+CisgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCisKK2RpZmYg
+LS1naXQgYS9zcmMvZWdsL2ZnX2luaXRfZWdsLmggYi9zcmMvZWdsL2ZnX2luaXRfZWdsLmgKK2lu
+ZGV4IDU5MmM1MjIxLi44NzUzZGMwYiAxMDA2NDQKKy0tLSBhL3NyYy9lZ2wvZmdfaW5pdF9lZ2wu
+aAorKysrIGIvc3JjL2VnbC9mZ19pbml0X2VnbC5oCitAQCAtMjgsNiArMjgsNiBAQAorIAorIGV4
+dGVybiB2b2lkIGZnaFBsYXRmb3JtSW5pdGlhbGl6ZUVHTCgpOworIGV4dGVybiB2b2lkIGZnaFBs
+YXRmb3JtQ2xvc2VEaXNwbGF5RUdMKCk7CistZXh0ZXJuIHZvaWQgZmdQbGF0Zm9ybURlc3Ryb3lD
+b250ZXh0KCk7CisrZXh0ZXJuIHZvaWQgZmdQbGF0Zm9ybURlc3Ryb3lDb250ZXh0ICggU0ZHX1Bs
+YXRmb3JtRGlzcGxheSBwRGlzcGxheSwgU0ZHX1dpbmRvd0NvbnRleHRUeXBlIE1Db250ZXh0ICk7
+CisgCisgI2VuZGlmCistLSAKKzIuNTAuMQorCi0tIAoyLjUwLjEKCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
+bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
+bGlzdGluZm8vYnVpbGRyb290Cg==
