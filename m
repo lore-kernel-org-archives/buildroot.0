@@ -1,80 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14E94C8303F
-	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 09:18:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CF44CA0FF0
+	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 09:18:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0F1441817;
-	Fri, 29 Aug 2025 09:18:35 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TdBtkei-n-Hl; Fri, 29 Aug 2025 09:18:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F31EC417DF
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F31EC417DF;
-	Fri, 29 Aug 2025 09:18:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 73587D2
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 09:18:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 644A68420C
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 09:18:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 32F0584210;
+	Fri, 29 Aug 2025 09:18:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8doDNj0MNQX3 for <buildroot@buildroot.org>;
- Fri, 29 Aug 2025 09:18:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=luca.ceresoli@bootlin.com;
+ id vK_78T_TxYjj; Fri, 29 Aug 2025 09:18:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3926984209
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3926984209;
+	Fri, 29 Aug 2025 09:18:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9E22C69
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 09:18:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8FBC484207
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 09:18:37 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wzIvEZQN_nRR for <buildroot@buildroot.org>;
+ Fri, 29 Aug 2025 09:18:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=luca.ceresoli@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7873D841B5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7873D841B5
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7873D841B5
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 09:18:32 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8890B43163;
- Fri, 29 Aug 2025 09:18:28 +0000 (UTC)
-Date: Fri, 29 Aug 2025 11:18:27 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4983E84209
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4983E84209
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4983E84209
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 09:18:36 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4BCE04338B;
+ Fri, 29 Aug 2025 09:18:33 +0000 (UTC)
+Date: Fri, 29 Aug 2025 11:18:32 +0200
 To: Neal Frager <neal.frager@amd.com>
-Message-ID: <20250829111827.1c5ec0dd@booty>
-In-Reply-To: <20250826060943.1394934-4-neal.frager@amd.com>
+Message-ID: <20250829111832.2b5d7b75@booty>
+In-Reply-To: <20250826060943.1394934-5-neal.frager@amd.com>
 References: <20250826060943.1394934-1-neal.frager@amd.com>
- <20250826060943.1394934-4-neal.frager@amd.com>
+ <20250826060943.1394934-5-neal.frager@amd.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddukeefhedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeelffefgfehhfdtvdefueefieevkefggfelkeeiudetkeektedvhedukefgvddvnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgdphhgvlhhopegsohhothihpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepudefpdhrtghpthhtohepnhgvrghlrdhfrhgrghgvrhesrghmugdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtoheprghrnhhouhhtsehrnhhouhhtrdgsvgdprhgtp
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddukeefhedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeelffefgfehhfdtvdefueefieevkefggfelkeeiudetkeektedvhedukefgvddvnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvnecuvehluhhsthgvrhfuihiivgepvdenucfrrghrrghmpehinhgvthepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgdphhgvlhhopegsohhothihpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepudefpdhrtghpthhtohepnhgvrghlrdhfrhgrghgvrhesrghmugdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtoheprghrnhhouhhtsehrnhhouhhtrdgsvgdprhgtp
  hhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhrtghpthhtohepmhhitghhrghlrdhsihhmvghksegrmhgurdgtohhmpdhrtghpthhtohepjhhurdhosehfrhgvvgdrfhhrpdhrtghpthhtohepsghrrghnughonhdrmhgrihgvrhestgholhhlihhnshdrtghomh
 X-GND-Sasl: luca.ceresoli@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1756459109;
+ d=bootlin.com; s=gm1; t=1756459114;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=rlxt2pI/xD7tTSWC25+nK7HUbOz3mGWhFYQJ4CsnBZE=;
- b=dAAAZeVcEMz1GpLnyQie4YjSbIx09egb9RFzWa2PLWOihR7ZL74Rz4NfFoyv4T5uS7KLLB
- 2f187+0/+oeR5R2qPmIP38FgMnbj4Aiq79cVe1KiZYD71JJnzG9+KAs/sTwANJuB7PzDXl
- cDooI7XY7xrM562WUdIs+ssMNQRN+QspK6V7yHJB53vrkQsxWuchj3kLyKl/2U8S0Re7UO
- iPmtHAXSJ05iFi+uiYXjpohu6TfBk6uRhqyKodIb8MFKyez/jZPN9wTgiqYKiPlkx5buAz
- kJp5lUQNM8U6uY2f+hIFjCM6FNDziJJ9ZqQoA6P48E7u5ctlTJFsBwjsN0EQzw==
+ bh=4DH2pu5DU2RO+A4M9UVIkvdXbr8fmAchHStWlWT+Tp0=;
+ b=O6okblI1xNEXqAq6i4iNoeR6YrKFAYx546ZNb3C3GC33kZ7XWZzExT0Hl6MFukFJY42K0E
+ xcQ0mjdaeGNuOXqecfSyB6pjNp+/S/Zgf78GvpEcXGMXvS8kQjgG+k62iHbPDwSTmf+5ET
+ 8fqygnOv7KEXdBj7x8jeWNyfpc7HxUSXOmvBT047wLqocRWEkIBrgQ85J+y5jgCPmaxt/Z
+ bT9YSB+srbsBkpMwm8K5dQj/EWfiiJy8ENtYlvSAjdXTkwpK3fVSjoPqcni8S1xxflkK/V
+ tQb5wW21GHxq/+Kdk4ORdfsfyxuSUsBMQRVmz+o3XwGcCUfcj4/AaZ+BjKo3zA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=dAAAZeVc
-Subject: Re: [Buildroot] [PATCH v2 4/5] configs/versal_*: bump
- xilinx-prebuilt to xilinx_v2025.1_update1
+ header.s=gm1 header.b=O6okblI1
+Subject: Re: [Buildroot] [PATCH v2 5/5] boot/xilinx-prebuilt: bump default
+ version to xilinx_v2025.1_update1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,11 +97,11 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 26 Aug 2025 07:09:42 +0100
+On Tue, 26 Aug 2025 07:09:43 +0100
 Neal Frager <neal.frager@amd.com> wrote:
 
-> This patch bumps the other versal defconfigs xilinx-prebuilt package to
-> version xilinx_v2025.1_update1.
+> This patch bumps the xilinx-prebuilt default version to
+> xilinx_v2025.1_update1.
 > 
 > Signed-off-by: Neal Frager <neal.frager@amd.com>
 
