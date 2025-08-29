@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 942C0CAC588
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:18:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21BF8CAC586
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:18:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6B30B607B5;
-	Mon,  8 Sep 2025 14:18:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E6EB48097F;
+	Mon,  8 Sep 2025 14:18:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BwBzGkyoeXMn; Mon,  8 Sep 2025 14:18:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id e4hW9TLo__uK; Mon,  8 Sep 2025 14:18:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BF796069F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CAF3A80983
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9BF796069F;
-	Mon,  8 Sep 2025 14:18:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 50A8D186
+	by smtp1.osuosl.org (Postfix) with ESMTP id CAF3A80983;
+	Mon,  8 Sep 2025 14:18:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B3961186
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8926A40216
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2B29340054
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LUcAsIRXcrnA for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 14:16:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UYiHP0mV99zL for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78BC54021C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DEE5040055
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 78BC54021C
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DEE5040055
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 76037818B3; Mon,  8 Sep 2025 14:16:25 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id DB65080DA7; Mon,  8 Sep 2025 14:16:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 27 Aug 2025 11:54:34 +0200
+Date: Fri, 29 Aug 2025 19:49:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4b987677e145fdb212debf708f40faaa18c4f29c
-X-Git-Newrev: fdc002ee38e58ef4abfbd1615217a5977f9a0077
+X-Git-Oldrev: 2680209ad58e3e170215ddd1f57d1509b4255604
+X-Git-Newrev: dca62a6365b4172cd8e37e83f87ac8f8c8899eb0
 X-Patchwork-Hint: ignore
-Message-Id: <20250908141625.76037818B3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/imxrt1050-evk: Check hashes,
- use bootlin toolchain
+Message-Id: <20250908141629.DB65080DA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ev3dev-linux-drivers: remove
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,90 +58,162 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fdc002ee38e58ef4abfbd1615217a5977f9a0077
+commit: https://git.buildroot.net/buildroot/commit/?id=dca62a6365b4172cd8e37e83f87ac8f8c8899eb0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit adds BR2_DOWNLOAD_FORCE_CHECK_HASHES=y and
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y in the
-defconfig, bumps kernel to 6.12.43, and adds custom hash files.
-The exception entry in .checkpackageignore is also removed.
+These external linux drivers haven't seen any activity in Buildroot
+for a while, and are anyway aimed at an old kernel version (4.19).
 
-Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-[Peter: correct linux-headers.patch symlink]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Acked-by: David Lechner <david@lechnology.com>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- .checkpackageignore                                               | 1 -
- .../imxrt1050evk/patches/linux-headers/linuux-headers.hash        | 1 +
- board/freescale/imxrt1050evk/patches/linux/linux.hash             | 2 ++
- board/freescale/imxrt1050evk/patches/uboot/uboot.hash             | 2 ++
- configs/imxrt1050-evk_defconfig                                   | 8 ++++++--
- 5 files changed, 11 insertions(+), 3 deletions(-)
+ Config.in.legacy                                     |  9 +++++++++
+ DEVELOPERS                                           |  2 --
+ linux/Config.ext.in                                  | 10 ----------
+ linux/linux-ext-ev3dev-linux-drivers.mk              | 12 ------------
+ package/Config.in                                    |  1 -
+ package/ev3dev-linux-drivers/Config.in               | 12 ------------
+ package/ev3dev-linux-drivers/ev3dev-linux-drivers.mk | 11 -----------
+ package/ev3dev-linux-drivers/lego-linux-drivers.hash |  2 --
+ 8 files changed, 9 insertions(+), 50 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index ca7fec588a..4cf1c9f449 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -156,7 +156,6 @@ configs/imx6ullevk_defconfig lib_defconfig.ForceCheckHash
- configs/imx6ulpico_defconfig lib_defconfig.ForceCheckHash
- configs/imx7dpico_defconfig lib_defconfig.ForceCheckHash
- configs/imx8mqevk_defconfig lib_defconfig.ForceCheckHash
--configs/imxrt1050-evk_defconfig lib_defconfig.ForceCheckHash
- configs/khadas_vim3_defconfig lib_defconfig.ForceCheckHash
- configs/kontron_bl_imx8mm_defconfig lib_defconfig.ForceCheckHash
- configs/kontron_pitx_imx8m_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/freescale/imxrt1050evk/patches/linux-headers/linuux-headers.hash b/board/freescale/imxrt1050evk/patches/linux-headers/linuux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/freescale/imxrt1050evk/patches/linux-headers/linuux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/freescale/imxrt1050evk/patches/linux/linux.hash b/board/freescale/imxrt1050evk/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..216d9b9d39
---- /dev/null
-+++ b/board/freescale/imxrt1050evk/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  0fcbbbbcd456e87bbbfc8bf37af541fda62ccfcce76903503424fd101ef7bdee  linux-6.12.43.tar.xz
-diff --git a/board/freescale/imxrt1050evk/patches/uboot/uboot.hash b/board/freescale/imxrt1050evk/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..440526977b
---- /dev/null
-+++ b/board/freescale/imxrt1050evk/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  0f933f6c5a426895bf306e93e6ac53c60870e4b54cda56d95211bec99e63bec7  u-boot-2025.07.tar.bz2
-diff --git a/configs/imxrt1050-evk_defconfig b/configs/imxrt1050-evk_defconfig
-index fce2b831f3..0574eae981 100644
---- a/configs/imxrt1050-evk_defconfig
-+++ b/configs/imxrt1050-evk_defconfig
-@@ -1,12 +1,16 @@
- BR2_arm=y
- BR2_cortex_m7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_7=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-+BR2_GLOBAL_PATCH_DIR="board/freescale/imxrt1050evk/patches"
- BR2_ROOTFS_OVERLAY="board/freescale/imxrt1050evk/rootfs_overlay"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/imxrt1050evk/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.43"
- BR2_LINUX_KERNEL_DEFCONFIG="imxrt"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imxrt1050-evk"
+diff --git a/Config.in.legacy b/Config.in.legacy
+index efb59dc535..21cada8c9d 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -144,6 +144,15 @@ endif
+ 
+ ###############################################################################
+ 
++comment "Legacy options removed in 2025.11"
++
++config BR2_LINUX_KERNEL_EXT_EV3DEV_LINUX_DRIVERS
++	bool "ev3dev Linux drivers have been removed"
++	select BR2_LEGACY
++	help
++	  Linux drivers for LEGO MINDSTORMS EV3 from the ev3dev project
++	  are targeting an outdated kernel which is no longer supported.
++
+ comment "Legacy options removed in 2025.08"
+ 
+ config BR2_PACKAGE_LIBCURL_BEARSSL
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0276f2f2cf..87a26b4388 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -839,9 +839,7 @@ F:	package/libtalloc/
+ N:	David Lechner <david@lechnology.com>
+ F:	board/lego/ev3/
+ F:	configs/lego_ev3_defconfig
+-F:	linux/linux-ext-ev3dev-linux-drivers.mk
+ F:	package/brickd/
+-F:	package/ev3dev-linux-drivers/
+ 
+ N:	David Pierret <david.pierret@smile.fr>
+ F:	package/bat/
+diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+index 3cbf42d344..229d6b8c76 100644
+--- a/linux/Config.ext.in
++++ b/linux/Config.ext.in
+@@ -55,16 +55,6 @@ config BR2_LINUX_KERNEL_EXT_RTAI
+ 	help
+ 	  RTAI Kernel part.
+ 
+-#-------------------------------------------------------------------------------
+-# ev3dev Linux drivers
+-config BR2_LINUX_KERNEL_EXT_EV3DEV_LINUX_DRIVERS
+-	bool "ev3dev Linux drivers"
+-	select BR2_PACKAGE_EV3DEV_LINUX_DRIVERS
+-	help
+-	  Linux drivers for LEGO MINDSTORMS EV3 from the ev3dev project.
+-
+-	  https://github.com/ev3dev/lego-linux-drivers
+-
+ #-------------------------------------------------------------------------------
+ # fbtft
+ config BR2_LINUX_KERNEL_EXT_FBTFT
+diff --git a/linux/linux-ext-ev3dev-linux-drivers.mk b/linux/linux-ext-ev3dev-linux-drivers.mk
+deleted file mode 100644
+index 3bb12db38d..0000000000
+--- a/linux/linux-ext-ev3dev-linux-drivers.mk
++++ /dev/null
+@@ -1,12 +0,0 @@
+-################################################################################
+-#
+-# Patch the linux kernel with ev3dev extension
+-#
+-################################################################################
+-
+-LINUX_EXTENSIONS += ev3dev-linux-drivers
+-
+-define EV3DEV_LINUX_DRIVERS_PREPARE_KERNEL
+-	mkdir -p $(LINUX_DIR)/drivers/lego
+-	cp -dpfr $(EV3DEV_LINUX_DRIVERS_DIR)/* $(LINUX_DIR)/drivers/lego/
+-endef
+diff --git a/package/Config.in b/package/Config.in
+index b4eac5cf91..1c4dcf2c75 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -512,7 +512,6 @@ endmenu
+ 	source "package/esp-hosted/Config.in"
+ 	source "package/espflash/Config.in"
+ 	source "package/eudev/Config.in"
+-	source "package/ev3dev-linux-drivers/Config.in"
+ 	source "package/evemu/Config.in"
+ 	source "package/evtest/Config.in"
+ 	source "package/fbtft/Config.in"
+diff --git a/package/ev3dev-linux-drivers/Config.in b/package/ev3dev-linux-drivers/Config.in
+deleted file mode 100644
+index 9be2f282e9..0000000000
+--- a/package/ev3dev-linux-drivers/Config.in
++++ /dev/null
+@@ -1,12 +0,0 @@
+-# Prompt-less option, because this package is not doing anything except
+-# downloading the ev3dev driver sources. The real work is done by a Linux
+-# extension.
+-config BR2_PACKAGE_EV3DEV_LINUX_DRIVERS
+-	bool
+-	depends on BR2_LINUX_KERNEL
+-	help
+-	  Linux drivers for LEGO MINDSTORMS EV3
+-
+-	  This is only the download helper for the kernel patch.
+-
+-	  https://github.com/ev3dev/lego-linux-drivers
+diff --git a/package/ev3dev-linux-drivers/ev3dev-linux-drivers.mk b/package/ev3dev-linux-drivers/ev3dev-linux-drivers.mk
+deleted file mode 100644
+index 92e8927817..0000000000
+--- a/package/ev3dev-linux-drivers/ev3dev-linux-drivers.mk
++++ /dev/null
+@@ -1,11 +0,0 @@
+-################################################################################
+-#
+-# ev3dev Linux drivers
+-#
+-################################################################################
+-
+-EV3DEV_LINUX_DRIVERS_VERSION = 0e551eb25ae8600c1f178814781bfb42dc835496
+-EV3DEV_LINUX_DRIVERS_SITE = $(call github,ev3dev,lego-linux-drivers,$(EV3DEV_LINUX_DRIVERS_VERSION))
+-EV3DEV_LINUX_DRIVERS_LICENSE = GPL-2.0
+-
+-$(eval $(generic-package))
+diff --git a/package/ev3dev-linux-drivers/lego-linux-drivers.hash b/package/ev3dev-linux-drivers/lego-linux-drivers.hash
+deleted file mode 100644
+index cc48f65395..0000000000
+--- a/package/ev3dev-linux-drivers/lego-linux-drivers.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# locally computed
+-sha256  9d2740b348c8d43e7e15fedc4cec99bf351a3a2ba8691f2a07c439a9c034bc04  lego-linux-drivers-0e551eb25ae8600c1f178814781bfb42dc835496.tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
