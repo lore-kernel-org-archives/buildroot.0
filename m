@@ -1,53 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77D8BCA0FF0
-	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 18:43:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EAE8CA0FF0
+	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 18:46:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E286846A2;
-	Fri, 29 Aug 2025 18:43:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 206F76171C;
+	Fri, 29 Aug 2025 18:46:27 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id x5axYiw8GEvy; Fri, 29 Aug 2025 18:46:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E4D561716
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5E4D561716;
+	Fri, 29 Aug 2025 18:46:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DA386D2
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 18:46:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CAC3F846A2
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 18:46:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7zhltxhcfYnr; Fri, 29 Aug 2025 18:43:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70950846A3
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 70950846A3;
-	Fri, 29 Aug 2025 18:43:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6DC9B1F4
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 18:43:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 54690416A7
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 18:43:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3Eqz-6rR-9rL for <buildroot@buildroot.org>;
- Fri, 29 Aug 2025 18:43:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id 1MLqS8ic8eJx for <buildroot@buildroot.org>;
+ Fri, 29 Aug 2025 18:46:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99FD4407AB
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 99FD4407AB
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 18:43:23 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 915F387E4C; Fri, 29 Aug 2025 18:43:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2F47283D5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F47283D5F
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2F47283D5F
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 18:46:23 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1213114271; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Fri, 29 Aug 2025 18:46:22 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1us47B-00D05H-1S;
+ Fri, 29 Aug 2025 20:46:21 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 29 Aug 2025 20:41:14 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7ed636069fbdc9942bcd637f6f902c13415a9910
-X-Git-Newrev: f7a5614c5da9284456db270c2a658b8be0928589
-X-Patchwork-Hint: ignore
-Message-Id: <20250829184323.915F387E4C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libfreeglut: fix build with GCC
- 15.x
+To: Thomas Perale via buildroot <buildroot@buildroot.org>
+Cc: Thomas Perale <thomas.perale@mind.be>,  Christian Stewart
+ <christian@aperture.us>
+References: <20250829144900.234015-1-thomas.perale@mind.be>
+Date: Fri, 29 Aug 2025 20:46:21 +0200
+In-Reply-To: <20250829144900.234015-1-thomas.perale@mind.be> (Thomas Perale
+ via buildroot's message of "Fri, 29 Aug 2025 16:49:00 +0200")
+Message-ID: <875xe6ge4i.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=PEnk9tSbjVbqaY8ti/npfYWjGz5D7mGz/Ab7sTfW3AHZmytWHlGA5evRb5PQX+7503Pat3ENTAoJS+pIM5gMyxBXppva5c1yAAuOwTnE2FfY1DKv4arB4MqVraphzWWujOmKkYlEyVWYeL9dIW9wt0QfLAGwx2x1fZNa7w+nsG8It4D3jWOrXXQOVAHeFOcu+08oVjRsac3ZLcZhP+HC9rETGABEHIa9hEuRJdf5rUfK+C3l2Axdvf9fq45AD9ir2MKIr+IKPvIz1rwQ9czrxsWN89XSs+i7K5FaPDeHaTizfoM9JmPDt8gjvRhd7kikcPw8GcGrvW35o7vEirVVWA==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=B1NR0gxz/CR7VxDCGzs/89KXPw3EsGw85Ofl9+gsv2I=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=PEnk9tSb
+Subject: Re: [Buildroot] [PATCH 1/1] package/go: fix CPE id
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,77 +81,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4162356573184814633=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4162356573184814633==
-Content-Type: text/plain
+>>>>> "Thomas" == Thomas Perale via buildroot <buildroot@buildroot.org> writes:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7a5614c5da9284456db270c2a658b8be0928589
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > This patch fixes the CPE ID for both go-bin and go-src packages.
+ > The go-src package did had a CPE ID because GO_SRC_CPE_ID_VENDOR is
+ > defined but the generated CPE ID would be the following:
 
-Fixes:
+ > cpe:2.3:a:golang:go-src:*:*:*:*:*:*:*:*
 
-/home/thomas/buildroot/buildroot/outputs/all/build/libfreeglut-3.4.0/src/x11/fg_init_x11.c:297:6: error: conflicting types for ‘fgPlatformDestroyContext’; have ‘void(SFG_PlatformDisplay,  struct __GLXcontextRec *)’ {aka ‘void(struct tagSFG_PlatformDisplay,  struct __GLXcontextRec *)’}
-  297 | void fgPlatformDestroyContext ( SFG_PlatformDisplay pDisplay, SFG_WindowContextType MContext )
+ > The CPE product go-src doesn't match to anything and should be 'go'
+ > instead.
 
-No autobuilder failures for this issue.
+ > For go-bin no CPE_ID variable were defined so no CPE ID would be
+ > generated if using a pre-build toolchain.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...gPlatformDestroyContext-prototype-for-C23.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ > This patch duplicate the definition of the CPE_ID variables, I didn't
+ > put the definition in the 'package/go/go.mk' file to avoid generate a
+ > CPE for the go virtual package.
 
-diff --git a/package/libfreeglut/0002-egl-fix-fgPlatformDestroyContext-prototype-for-C23.patch b/package/libfreeglut/0002-egl-fix-fgPlatformDestroyContext-prototype-for-C23.patch
-new file mode 100644
-index 0000000000..c3aadb87de
---- /dev/null
-+++ b/package/libfreeglut/0002-egl-fix-fgPlatformDestroyContext-prototype-for-C23.patch
-@@ -0,0 +1,31 @@
-+From 6d0178a1c43f94b046e4d5f3dfa7185a398706ae Mon Sep 17 00:00:00 2001
-+From: Sam James <sam@gentoo.org>
-+Date: Sun, 17 Nov 2024 01:14:26 +0000
-+Subject: [PATCH] egl: fix fgPlatformDestroyContext prototype for C23
-+
-+C23 removes unprototyped functions, so this conflicted with the definition
-+in fg_init_x11.c.
-+
-+Bug: https://github.com/freeglut/freeglut/issues/186
-+
-+Upstream: 800772e993a3ceffa01ccf3fca449d3279cde338
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ src/egl/fg_init_egl.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/egl/fg_init_egl.h b/src/egl/fg_init_egl.h
-+index 592c5221..8753dc0b 100644
-+--- a/src/egl/fg_init_egl.h
-++++ b/src/egl/fg_init_egl.h
-+@@ -28,6 +28,6 @@
-+ 
-+ extern void fghPlatformInitializeEGL();
-+ extern void fghPlatformCloseDisplayEGL();
-+-extern void fgPlatformDestroyContext();
-++extern void fgPlatformDestroyContext ( SFG_PlatformDisplay pDisplay, SFG_WindowContextType MContext );
-+ 
-+ #endif
-+-- 
-+2.50.1
-+
+ > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
---===============4162356573184814633==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Committed, thanks.
 
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4162356573184814633==--
