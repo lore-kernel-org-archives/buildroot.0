@@ -1,80 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6C00CA0FF9
-	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 21:52:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F8DDCA0FF0
+	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 21:53:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A449541241;
-	Fri, 29 Aug 2025 21:52:03 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g_Mcm1Ik7Nku; Fri, 29 Aug 2025 21:52:03 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E28CB412CE
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E28CB412CE;
-	Fri, 29 Aug 2025 21:52:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 302F2D2
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 21:52:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 15B7361ACF
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 21:52:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EAD81616A1;
+	Fri, 29 Aug 2025 21:53:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g3qI3F7_GZk1 for <buildroot@buildroot.org>;
- Fri, 29 Aug 2025 21:52:01 +0000 (UTC)
+ id U059SbD5bRl8; Fri, 29 Aug 2025 21:53:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AA456178B
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3AA456178B;
+	Fri, 29 Aug 2025 21:53:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B3700D2
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 21:53:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A536A4177E
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 21:53:21 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UhwKTLiss58P for <buildroot@buildroot.org>;
+ Fri, 29 Aug 2025 21:53:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
  helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3CCE961ACD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CCE961ACD
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B508441770
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B508441770
 Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3CCE961ACD
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 21:52:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B508441770
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 21:53:20 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 2145B4E40C2C
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 21:51:59 +0000 (UTC)
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 1F58C4E40C2C
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 21:53:19 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id D1854605F1;
- Fri, 29 Aug 2025 21:51:58 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id EBC74605F1;
+ Fri, 29 Aug 2025 21:53:18 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 223F01C228AF3; 
- Fri, 29 Aug 2025 23:51:56 +0200 (CEST)
-Date: Fri, 29 Aug 2025 23:51:55 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Cc: buildroot@buildroot.org
-Message-ID: <20250829235155.721a4774@windsurf>
-In-Reply-To: <aLIR6yJyANhTHgfj@waldemar-brodkorb.de>
-References: <20250829170522.2436314-1-thomas.petazzoni@bootlin.com>
- <aLIR6yJyANhTHgfj@waldemar-brodkorb.de>
+ with ESMTPSA id 355531C22CDFF; 
+ Fri, 29 Aug 2025 23:53:09 +0200 (CEST)
+Date: Fri, 29 Aug 2025 23:53:08 +0200
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: buildroot@buildroot.org, Christian Stewart <christian@aperture.us>
+Message-ID: <20250829235308.18037377@windsurf>
+In-Reply-To: <20250829165238.3082564-1-peter@korsgaard.com>
+References: <20250829165238.3082564-1-peter@korsgaard.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1756504318; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1756504397; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=LCEKmlCmP3lRkoVEJ49b1ENWRL8epidN06RwE6jeNrM=;
- b=lGiqrc3yHkgcE/NOcmLrkXLx3RScwD09w4zdgX/35CpySQK8OtvmFc/FpswGSgeW6Nh7PM
- nQ9sTonA5S458Jj86f9S/tgWAGwz+gMTzKpw4T0T5izl/j5J6abkEvaNLEqCyj3T/BuMa+
- QAIBURqnuM5ccJBDKB4JyzttF8vqmGWtgXNINFDRUnC8qbI6Ta1Kz6+Mn4FxlS8sgq6/mx
- uEg5n8ewxUOG7xQ22M96zJ/5o8g/JVev7vUtz5lDzwzaJwG7qZ7OuzW2/UaPYYW2k0LaDv
- Cj0/xmAJYzw14sl8vYQvW2tHBLsoRMG5TXCdKbTrHMO+5IuypqW1mIuuXxb2vA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=yn9itmEezMEwJhEACupjXGUxjbEZzTFYgm4fVONqG+M=;
+ b=JTWxR0bgxg23drHNL4kO5kVqHj7mSsMw0wLr1MPZmwsRLyeKCWHjPI3FcNKHg34x++qBN8
+ IRk/8tuI+KBkBZhmZnZ58JLhtb7GGfGWUnUZP6y6v9sydcwvq+/IswcIZdDLfy4NmY7B1N
+ tCgVFGZXpMOj26+Qch8a4IhHTJvaVgLX7devTqBGp7kp2Jxnv1LQ5iAViyBbmOOBbmTaY2
+ Fe5dc0yRmaeUCzoSapQLeuD8vaJmVmjNZPGvu0JT8RT7IH/9q34PH4vPKAvhoEutLmX919
+ O96daOuKmDnkHrxy8zWvHN+n2TrU+fvYUE0E234WyFEvCCDjVeOvBKstMQ0rJw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=lGiqrc3y
-Subject: Re: [Buildroot] [PATCH] package/asterisk: fix build caused by
- libjwt bump
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=JTWxR0bg
+Subject: Re: [Buildroot] [PATCH] package/mbpfan: fix build on musl /
+ uclibc-ng
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,21 +93,16 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 29 Aug 2025 22:47:39 +0200
-Waldemar Brodkorb <wbx@openadk.org> wrote:
+On Fri, 29 Aug 2025 18:52:38 +0200
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-> > Waldemar: you did the bump of libjwt. Are you using this library?
-> > Independently of Asterisk?  
-> 
-> No, I am fine with that change.
+>  define MBPFAN_BUILD_CMDS
+> -	$(TARGET_MAKE_ENV) CFLAGS="$(TARGET_CFLAGS)" \
+> +	$(TARGET_MAKE_ENV) CFLAGS="$(TARGET_CFLAGS) -D_DEFAULT_SOURCE" \
 
-Sorry, but that doesn't really answer my question. You are both the
-maintainer of package/libjwt and package/asterisk, and you bumped
-package/libjwt, which is only used by package/asterisk, without testing
-that it doesn't break asterisk.
-
-Now that asterisk uses a bundled libjwt, do we need to keep the
-separate libjwt package?
+Upstream seems to still be active, so what about doing the "right"
+thing, which is adding #define _DEFAULT_SOURCE in the source file, and
+submitting an upstream patch?
 
 Thomas
 -- 
