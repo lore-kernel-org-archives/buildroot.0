@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86065CA0FFF
-	for <buildroot@archiver.kernel.org>; Sat, 30 Aug 2025 15:16:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE764CA0FFF
+	for <buildroot@archiver.kernel.org>; Sat, 30 Aug 2025 15:19:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3CC49806A2;
-	Sat, 30 Aug 2025 15:16:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6D504806B3;
+	Sat, 30 Aug 2025 15:19:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y0-ARims788w; Sat, 30 Aug 2025 15:16:30 +0000 (UTC)
+ id nD6UCROGMjDw; Sat, 30 Aug 2025 15:19:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C8C48069E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A79CD8136F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3C8C48069E;
-	Sat, 30 Aug 2025 15:16:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8580AD2
- for <buildroot@buildroot.org>; Sat, 30 Aug 2025 15:16:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A79CD8136F;
+	Sat, 30 Aug 2025 15:19:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D282DFA
+ for <buildroot@buildroot.org>; Sat, 30 Aug 2025 15:19:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6C46E401D8
- for <buildroot@buildroot.org>; Sat, 30 Aug 2025 15:16:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C415D408B6
+ for <buildroot@buildroot.org>; Sat, 30 Aug 2025 15:19:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z0X84SL4IlfH for <buildroot@buildroot.org>;
- Sat, 30 Aug 2025 15:16:27 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 706EB401CC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 706EB401CC
- for <buildroot@buildroot.org>; Sat, 30 Aug 2025 15:16:27 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5F47B87CF4; Sat, 30 Aug 2025 15:16:27 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 30 Aug 2025 17:09:36 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7d0456d510090ee90634486702a73c75102e99f1
-X-Git-Newrev: 6001601544eceb263187aa446622cfebdc668ee3
-X-Patchwork-Hint: ignore
-Message-Id: <20250830151627.5F47B87CF4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/qemu_{arm, aarch64}_{ebbr,
- sbsa}*: linux needs host python3
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MuSTN4iyFlhV for <buildroot@buildroot.org>;
+ Sat, 30 Aug 2025 15:19:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7D2A040815
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D2A040815
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7D2A040815
+ for <buildroot@buildroot.org>; Sat, 30 Aug 2025 15:19:13 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 0E2C7780520;
+ Sat, 30 Aug 2025 17:19:08 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 30 Aug 2025 17:19:08 +0200
+MIME-Version: 1.0
+Date: Sat, 30 Aug 2025 17:19:08 +0200
+To: =?UTF-8?Q?Vincent_Stehl=C3=A9?= <vincent.stehle@arm.com>
+Cc: buildroot@buildroot.org, Romain Naour <romain.naour@gmail.com>
+In-Reply-To: <20250828122306.2223870-1-vincent.stehle@arm.com>
+References: <20250828122306.2223870-1-vincent.stehle@arm.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <694087008024af3425f49b3c4f2d1208@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1756567151;
+ bh=IoYdV8Uwi+mgdscVTZyUC7MUvvab6hetWT9mlTGpFTs=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=vEqPG4mumEGVgJ8z0Cv8tJ2sxcMo620WLUh6n/yWGlEKxKlRlwh4T9KQHCvvkYfHf
+ 9kiae0R2zunGPjuai1kgR7DP+5ONp9vM3iu2qEDCL/GAq99Fz8dmq/dt2Uc6CWbYjD
+ K2FO4L9x48mgp2ED0mOXjVprln1bFViNVre9tDEs6p7IxYaK+ortyK4hNVJw7XTjzi
+ KKSRhW1e314avEXP5bPBJjFyFTp3LzzzSdsJUPbzb6nTgoJbTfxLcdcHdtSGczKZiu
+ d9DU2MuwwD0LRfUbNjevfqJtaLc8Sabnn+YMrnEobtXMatsv7cXS1jZfTfFkeoGDwW
+ I+V63reX/jsug==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=vEqPG4mu
+Subject: Re: [Buildroot] [PATCH] configs/qemu_{arm,
+ aarch64}_ebbr: linux needs host python3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,96 +84,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0121363641425473759=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0121363641425473759==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=6001601544eceb263187aa446622cfebdc668ee3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Since Buildroot commit [1] updating qemu defconfigs from Kernel 6.6.32
-to 6.12.9, qemu_aarch64_ebbr_defconfig, qemu_aarch64_sbsa_defconfig
-and qemu_arm_ebbr_defconfig can fail to build with error:
-
-    /bin/sh: 1: python3: not found
-    make[7]: *** [drivers/gpu/drm/msm/Makefile:182: drivers/gpu/drm/msm/generated/a2xx.xml.h] Error 127
-
-The issue can happen on build hosts without Python, and if the Linux
-kernel is built before any package having host-python3 in its
-dependencies (e.g. host-qemu, optee-os, ...).
-
-Starting with Linux 6.10, the arm and arm64 architecture defconfigs need
-python3 to build. [2]
-
-This commit fixes this issue by adding
-BR2_LINUX_KERNEL_NEEDS_HOST_PYTHON3=y in those defconfigs.
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/44075c19555df409ea7c2859729abb02d341df29
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=0fddd045f88e34d6160785a3a5e506d374566454
-
-Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
-Cc: Romain Naour <romain.naour@gmail.com>
-[Julien:
- - reword commit log to add the commit introducing the issue
- - fix qemu_aarch64_sbsa_defconfig which has the same issue
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- configs/qemu_aarch64_ebbr_defconfig | 1 +
- configs/qemu_aarch64_sbsa_defconfig | 1 +
- configs/qemu_arm_ebbr_defconfig     | 1 +
- 3 files changed, 3 insertions(+)
-
-diff --git a/configs/qemu_aarch64_ebbr_defconfig b/configs/qemu_aarch64_ebbr_defconfig
-index 80e7c101ee..0299c2855a 100644
---- a/configs/qemu_aarch64_ebbr_defconfig
-+++ b/configs/qemu_aarch64_ebbr_defconfig
-@@ -9,6 +9,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_PYTHON3=y
- BR2_PACKAGE_OPTEE_CLIENT=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
-diff --git a/configs/qemu_aarch64_sbsa_defconfig b/configs/qemu_aarch64_sbsa_defconfig
-index 49511f87af..92e27573f2 100644
---- a/configs/qemu_aarch64_sbsa_defconfig
-+++ b/configs/qemu_aarch64_sbsa_defconfig
-@@ -12,6 +12,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_PYTHON3=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
-diff --git a/configs/qemu_arm_ebbr_defconfig b/configs/qemu_arm_ebbr_defconfig
-index dc1b917ef1..a3adb4c381 100644
---- a/configs/qemu_arm_ebbr_defconfig
-+++ b/configs/qemu_arm_ebbr_defconfig
-@@ -11,6 +11,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/arm-ebbr/linux.fragment"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_PYTHON3=y
- BR2_PACKAGE_OPTEE_CLIENT=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
-
---===============0121363641425473759==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0121363641425473759==--
+T24gMjgvMDgvMjAyNSAxNDoyMywgVmluY2VudCBTdGVobMOpIHdyb3RlOgo+IFN0YXJ0aW5nIHdp
+dGggTGludXggNi4xMCwgdGhlIGFybSBhbmQgYXJtNjQgYXJjaGl0ZWN0dXJlIGRlZmNvbmZpZ3Mg
+Cj4gbmVlZAo+IHB5dGhvbjMgdG8gYnVpbGQuIFsxXQo+IAo+IEFkZCB0aGUgbWlzc2luZyBkZXBl
+bmRlbmNpZXMgdG8gZml4IHRoZSBmb2xsb3dpbmcgYnVpbGQgZXJyb3I6Cj4gCj4gICAvYmluL3No
+OiAxOiBweXRob24zOiBub3QgZm91bmQKPiAgIG1ha2VbN106ICoqKiBbZHJpdmVycy9ncHUvZHJt
+L21zbS9NYWtlZmlsZToxODI6IAo+IGRyaXZlcnMvZ3B1L2RybS9tc20vZ2VuZXJhdGVkL2EyeHgu
+eG1sLmhdIEVycm9yIDEyNwo+IAo+IFsxXSAKPiBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9z
+Y20vbGludXgva2VybmVsL2dpdC90b3J2YWxkcy9saW51eC5naXQvY29tbWl0Lz9oPTBmZGRkMDQ1
+Zjg4ZTM0ZDYxNjA3ODVhM2E1ZTUwNmQzNzQ1NjY0NTQKPiAKPiBTaWduZWQtb2ZmLWJ5OiBWaW5j
+ZW50IFN0ZWhsw6kgPHZpbmNlbnQuc3RlaGxlQGFybS5jb20+Cj4gQ2M6IFJvbWFpbiBOYW91ciA8
+cm9tYWluLm5hb3VyQGdtYWlsLmNvbT4KCkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgpJIHJl
+d29yZGVkIHRoZSBjb21taXQgbG9nIHRvIGluY2x1ZGUgdGhlIGNvbW1pdCBpbnRyb2R1Y2luZwp0
+aGUgaXNzdWUuIEkgYWxzbyBhcHBsaWVkIHRoZSBzYW1lIGZpeCB0bwpxZW11X2FhcmNoNjRfc2Jz
+YV9kZWZjb25maWcgd2hpY2ggd2FzIHN1YmplY3QgdG8gdGhlIHNhbWUgaXNzdWUuClNlZToKaHR0
+cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vY29tbWl0LzYwMDE2MDE1
+NDRlY2ViMjYzMTg3YWE0NDY2MjJjZmViZGM2NjhlZTMKCkJlc3QgcmVnYXJkcywKCkp1bGllbi4K
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
+IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
+cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
