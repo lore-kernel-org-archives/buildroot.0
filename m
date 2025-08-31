@@ -4,75 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86CA5CA0FF2
-	for <buildroot@archiver.kernel.org>; Sun, 31 Aug 2025 19:18:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FA39CA0FE8
+	for <buildroot@archiver.kernel.org>; Sun, 31 Aug 2025 19:18:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F376040EBB;
-	Sun, 31 Aug 2025 19:18:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD04940EE9;
+	Sun, 31 Aug 2025 19:18:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Eqz0OSvPsx5R; Sun, 31 Aug 2025 19:18:35 +0000 (UTC)
+ id LayqkKuodu_L; Sun, 31 Aug 2025 19:18:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4395E40EDF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D32BE40EE5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4395E40EDF;
-	Sun, 31 Aug 2025 19:18:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id B491CD2
- for <buildroot@buildroot.org>; Sun, 31 Aug 2025 19:18:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D32BE40EE5;
+	Sun, 31 Aug 2025 19:18:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8E7CBD2
+ for <buildroot@buildroot.org>; Sun, 31 Aug 2025 19:18:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A699140EDF
- for <buildroot@buildroot.org>; Sun, 31 Aug 2025 19:18:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 736C283276
+ for <buildroot@buildroot.org>; Sun, 31 Aug 2025 19:18:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ppoy0-z5WO3S for <buildroot@buildroot.org>;
- Sun, 31 Aug 2025 19:18:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p_P693LpborX for <buildroot@buildroot.org>;
+ Sun, 31 Aug 2025 19:18:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 669B640EBB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 669B640EBB
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 669B640EBB
- for <buildroot@buildroot.org>; Sun, 31 Aug 2025 19:18:32 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 168970236; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sun, 31 Aug 2025 19:18:20 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1usnZD-000CSK-1K;
- Sun, 31 Aug 2025 21:18:19 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB49183265
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BB49183265
+ for <buildroot@buildroot.org>; Sun, 31 Aug 2025 19:18:51 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B2AC587DA4; Sun, 31 Aug 2025 19:18:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Arnout Vandecappelle <arnout@rnout.be>
-Cc: buildroot@buildroot.org,  Floris Bos <bos@je-eigen-domein.nl>,  Heiko
- Thiery <heiko.thiery@gmail.com>
-References: <20250828215927.2281857-1-peter@korsgaard.com>
- <7fd3dee0-3950-4dfd-81a5-3d9d6f5d6fb4@rnout.be>
- <87ecsugely.fsf@dell.be.48ers.dk>
- <0a982244-5af3-4c8d-a472-0bda9c8e880b@rnout.be>
-Date: Sun, 31 Aug 2025 21:18:19 +0200
-In-Reply-To: <0a982244-5af3-4c8d-a472-0bda9c8e880b@rnout.be> (Arnout
- Vandecappelle's message of "Sun, 31 Aug 2025 16:58:46 +0200")
-Message-ID: <87bjnvfgg4.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=i2JudDdw5rxBL4z6Bsv2qn7Se2qSqIPnwNgfbzSwAYBmeL25otJ6NcxDbUekR8//UmaIbc8DXFrhBWxErsgVNEnatChT4rUBkpyAjT4sDyfHusMR0fnOJD/b9jp5cWzi/jF3y5ZAGb7vrLs+8gnv6mGcDoplf1mqdlyHYdKv/oNIo5X763H22OKtDxzb3nPjyJvWdJJUW9P1y3gtnWRAE86TOr7pMHfC1EGQAFapn9RTIHlEzdL+MVrazY4nrFlbK+F5Z5b9sETO6rkjIh4S0XRbXML2aZXhz27bxxsWkMd1GAzp4/4nnJZnc7rkGDAzPm7Uj0gYn/fUb+14bLmCFQ==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=rOsaoERtwA4FY5oHIN2clr8Fo9O58Qfbvp4JSAzBxSs=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=i2JudDdw
-Subject: Re: [Buildroot] [PATCH] package/ipmitool: move to codeberg
+To: buildroot@buildroot.org
+Date: Sun, 31 Aug 2025 21:17:34 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 98e28829ae3dbee88786e96fe9a6206b509a9ddd
+X-Git-Newrev: c7af01f47a8aea701d4c8a755d07fb97f1e793af
+X-Patchwork-Hint: ignore
+Message-Id: <20250831191851.B2AC587DA4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ipmitool: move to codeberg
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,29 +58,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@rnout.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c7af01f47a8aea701d4c8a755d07fb97f1e793af
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+The github repo was deleted and moved to codeberg, so use that instead:
 
- >> >  remove CPE_ID_IS_VALID, or we have to set the CPE version.
- >> >  We really should fix that VERSION/DL_VERSION mess.
- >> >  Marked as Changes Requested.
- >> I guess the most sensible short term solution is to to just drop
- >> _CPE_ID_VALID then. Do you want me to resend a version doing that?
+https://lwn.net/Articles/926101/
 
- >  Actually, it's as simple as setting IPMITOOL_CPE_ID_VERSION. Stupid of me.
+It is unclear if the auto generated tarballs from codeberg are reproducible,
+so instead fetch through git.
 
- >  Feel free to apply directly after fixing that.
+[Peter: set _CPE_ID_VERSION to the correct value]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ipmitool/Config.in     | 2 +-
+ package/ipmitool/ipmitool.hash | 2 +-
+ package/ipmitool/ipmitool.mk   | 8 +++++---
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-Committed after fixing that, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ipmitool/Config.in b/package/ipmitool/Config.in
+index dd2b0e6b6d..f759caa08f 100644
+--- a/package/ipmitool/Config.in
++++ b/package/ipmitool/Config.in
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_IPMITOOL
+ 	  it can be provided by the iana-assignment package or by a
+ 	  rootfs overlay.
+ 
+-	  https://github.com/ipmitool/ipmitool/
++	  https://codeberg.org/IPMITool/ipmitool/
+ 
+ if BR2_PACKAGE_IPMITOOL
+ 
+diff --git a/package/ipmitool/ipmitool.hash b/package/ipmitool/ipmitool.hash
+index c3b298e3ba..c65fdb0342 100644
+--- a/package/ipmitool/ipmitool.hash
++++ b/package/ipmitool/ipmitool.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  48b010e7bcdf93e4e4b6e43c53c7f60aa6873d574cbd45a8d86fa7aaeebaff9c  ipmitool-1_8_19.tar.gz
++sha256  78bc6fdbb0487652a3d0220072b9428d4ab6dfc198de2f28e8493932e6b893af  ipmitool-IPMITOOL_1_8_19-git4.tar.gz
+ sha256  b7e2382a8be43b5f6cb092f2d2bda163bf1a1938be9300f821a845cbcd535f56  COPYING
+diff --git a/package/ipmitool/ipmitool.mk b/package/ipmitool/ipmitool.mk
+index 159bb7c8b6..15765ed63f 100644
+--- a/package/ipmitool/ipmitool.mk
++++ b/package/ipmitool/ipmitool.mk
+@@ -4,11 +4,13 @@
+ #
+ ################################################################################
+ 
+-IPMITOOL_VERSION = 1_8_19
+-IPMITOOL_SITE = $(call github,ipmitool,ipmitool,IPMITOOL_$(IPMITOOL_VERSION))
++IPMITOOL_VERSION_UPSTREAM = 1.8.19
++IPMITOOL_VERSION = IPMITOOL_$(subst .,_,$(IPMITOOL_VERSION_UPSTREAM))
++IPMITOOL_SITE = https://codeberg.org/IPMITool/ipmitool.git
++IPMITOOL_SITE_METHOD = git
+ IPMITOOL_LICENSE = BSD-3-Clause
+ IPMITOOL_LICENSE_FILES = COPYING
+-IPMITOOL_CPE_ID_VALID = YES
++IPMITOOL_CPE_ID_VERSION = $(IPMITOOL_VERSION_UPSTREAM)
+ # From git
+ IPMITOOL_AUTORECONF = YES
+ IPMITOOL_DEPENDENCIES = host-pkgconf
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
