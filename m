@@ -1,52 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 019B6CA1000
-	for <buildroot@archiver.kernel.org>; Sun, 31 Aug 2025 15:01:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28B65CA0FF2
+	for <buildroot@archiver.kernel.org>; Sun, 31 Aug 2025 15:52:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CF0F580B4F;
-	Sun, 31 Aug 2025 15:01:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D6E8C61071;
+	Sun, 31 Aug 2025 15:52:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J5tEpfFhOFoS; Sun, 31 Aug 2025 15:01:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Nd_kPv_qHKeA; Sun, 31 Aug 2025 15:52:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53824826BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F20E6102E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 53824826BB;
-	Sun, 31 Aug 2025 15:01:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id C023D278
- for <buildroot@buildroot.org>; Sun, 31 Aug 2025 15:01:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0F20E6102E;
+	Sun, 31 Aug 2025 15:52:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E1F4510E
+ for <buildroot@buildroot.org>; Sun, 31 Aug 2025 15:52:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A69714090E
- for <buildroot@buildroot.org>; Sun, 31 Aug 2025 15:01:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D368640854
+ for <buildroot@buildroot.org>; Sun, 31 Aug 2025 15:52:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hfmYPCp97GWm for <buildroot@buildroot.org>;
- Sun, 31 Aug 2025 15:01:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id 3qrV0SaYUqQa for <buildroot@buildroot.org>;
+ Sun, 31 Aug 2025 15:52:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04C1C408AE
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 04C1C408AE
- for <buildroot@buildroot.org>; Sun, 31 Aug 2025 15:01:48 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F198987D65; Sun, 31 Aug 2025 15:01:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1E93140856
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E93140856
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1E93140856
+ for <buildroot@buildroot.org>; Sun, 31 Aug 2025 15:52:11 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 335597614; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Sun, 31 Aug 2025 15:52:10 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1uskLh-00HSRx-0b;
+ Sun, 31 Aug 2025 17:52:09 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 31 Aug 2025 16:58:49 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2389965eaf8ba396f74e35d4558be79bf1e8c8a6
-X-Git-Newrev: 7c47e8b1b2c1870c4281e30756fe2d44aa5c7e3a
-X-Patchwork-Hint: ignore
-Message-Id: <20250831150147.F198987D65@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/squid: bump to version 6.14
+Date: Sun, 31 Aug 2025 17:52:07 +0200
+Message-Id: <20250831155208.4160920-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.5
+MIME-Version: 1.0
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=Kahnn5keG8YNTx7nnGus/cdSiI+Jtqs5fjW1G6mdm8BB0Z+JuS8l24uaisVHALvFEOItbubeBYicDSKze3xjGOeG3lJX9QjgFbd4BjMlzCmmknDM5XDH32ukTyEA0q2c3Iaew/aoJuPj4p+JVT2zdeAzFvndwZk7U1y+Nl+TmwYg5vIUfe3cj3SF2AqjgsukX5o08CF3kqkXDiL7zMz/8DiRUwbwS+QmPXguc2bhjxmuHN/kM83aSxj8ai4c5VIRQhMvEvtyEo+5ou1KnSEAl6QDvZdpjFjWcXeFtJqM0IN9PJxUGvchSQELYnrjbenfbA+SSae5PrRPRPxncCQOKA==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=8NWG2PpW5ibN/l4U544qKBxubGTxJkoZ5suXwEBPoHM=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=Kahnn5ke
+X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
+Subject: [Buildroot] [PATCH] utils/genrandconfig: update bare metal logic
+ after change to buildroot vendor name
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,54 +79,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c47e8b1b2c1870c4281e30756fe2d44aa5c7e3a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes https://autobuild.buildroot.net/results/c961d9edae0f1f3d17b5a6f078519bc7bad03a26/
 
-Bufix release fixing a number of issues:
-
-- Bug 5352: Do not get stuck in RESPMOD after pausing peer read(2)
-- Bug 5489: Fix "make check" linking on Solaris
-- Fix SNMP cacheNumObjCount -- number of cached objects
-- Do not duplicate received Surrogate-Capability in sent requests
-- Fix Mem::Segment::open() stub to fix build without shm_open()
-- ... and CI and documentation updates
-
-https://github.com/squid-cache/squid/releases/tag/SQUID_6_14
+Commit 053b0c9f66d8 ("boot/xilinx-embeddedsw: remove support for xilinx
+vendor name" dropped support for microblazeel-xilinx-elf, so adjust the
+genrandconfig logic to match.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squid/squid.hash | 2 +-
- package/squid/squid.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ utils/genrandconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index df52a3be16..329d61ca93 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  232e0567946ccc0115653c3c18f01e83f2d9cc49c43d9dead8b319af0b35ad52  squid-6.13.tar.xz
-+sha256  9eafe06f58a199b918e79d33d8aa03afb9ae0c11d18974dca0b44c2669cab6dd  squid-6.14.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 4519a7d36e..b021170d9b 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 67f0ea9f73..0ec478e6ca 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -147,7 +147,7 @@ async def fixup_config(sysinfo, configfile):
  
--SQUID_VERSION = 6.13
-+SQUID_VERSION = 6.14
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = https://github.com/squid-cache/squid/releases/download/SQUID_$(subst .,_,$(SQUID_VERSION))
- SQUID_LICENSE = GPL-2.0+
+     if 'BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y\n' in configlines:
+         configlines.remove('BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH=""\n')
+-        configlines.append('BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"\n')
++        configlines.append('BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"\n')
+ 
+     if 'BR2_PACKAGE_AUFS_UTIL=y\n' in configlines and \
+        'BR2_PACKAGE_AUFS_UTIL_VERSION=""\n' in configlines:
+-- 
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
