@@ -4,152 +4,152 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22198CA0FF0
-	for <buildroot@archiver.kernel.org>; Mon,  1 Sep 2025 08:37:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F589CA0FFD
+	for <buildroot@archiver.kernel.org>; Mon,  1 Sep 2025 08:37:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C94DE40B76;
-	Mon,  1 Sep 2025 08:37:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4AC040ADA;
+	Mon,  1 Sep 2025 08:37:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6HLHb2Lx_w6g; Mon,  1 Sep 2025 08:37:01 +0000 (UTC)
+ id 3wjGNatKZFg3; Mon,  1 Sep 2025 08:37:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB7B240A70
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 009D140B86
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB7B240A70;
-	Mon,  1 Sep 2025 08:37:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 06D8C169
+	by smtp4.osuosl.org (Postfix) with ESMTP id 009D140B86;
+	Mon,  1 Sep 2025 08:37:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A0CF510E
  for <buildroot@buildroot.org>; Mon,  1 Sep 2025 08:37:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 03E4E40A70
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8749F4044B
  for <buildroot@buildroot.org>; Mon,  1 Sep 2025 08:37:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KKkij0sSakN8 for <buildroot@buildroot.org>;
- Mon,  1 Sep 2025 08:36:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zh-nURr0NCUr for <buildroot@buildroot.org>;
+ Mon,  1 Sep 2025 08:37:00 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2417::614;
- helo=nam12-dm6-obe.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:2414::612;
+ helo=nam11-bn8-obe.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3CED940918
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3CED940918
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam12on20614.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2417::614])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3CED940918
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B624440450
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B624440450
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com
+ (mail-bn8nam11on20612.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2414::612])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B624440450
  for <buildroot@buildroot.org>; Mon,  1 Sep 2025 08:36:59 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=NZAm7/1JhYG96dLFjd/5UeTbSRQdvTTo53TBaQbzt5hic8klgRI2rBL1gyKqU2CzFLB2eXnVi+LglnwD5vXXJpvBHPIGX67WLgQmJU/hhqfqefQNOdhXyfkWJIzW9z8bjLxv1R7wzLFLWbM4nYM0zZHk+rrfQhBOWh0pB+nhd+n8UdwqRfwc6j+t5IIlKIQvXvak48rKZuyc55TwiEi/lJ1AIqDqfRNdUnjdA5ae8CQCsTg88Nht7LMiWqLly9GIMdPq+oSRquwGDcLCeWOhcRCeXIKOzfgQylPsSXZKPFH6r+kaejIMyBXLs5AiRhrtBEAOegztJH050TAhExM1Og==
+ b=DobIX1Mr3PJPUhU5xbdoWtlZDyVAefvxjeMtVcaVdmrtRuqGDMIy+sZuKRgG/btaNhkr4tihPNdbpnCPIIqjdoxsFWBzmurGXKLglyLh4Qugp4HPvjT37TQLAhK/ZxGm79DLR8AKaEkIIegMi6es+2zBsOxifsUUtmjIgs5u5v1dZVqB+CWWX+6VmDq3VEUg8Xr2OYNN85/byNCaZ0hQsZ3T1/9/nAU/wHobha7ZxITCtL/+B7KDRwSiJlnGzaB0Gek/Y4YOT6BUIzUag/yW7W7D00UYMlhkNhhkZyzasTMJlKk/Pvq5uJXNN23DEgMNyDRe5vt0MNaBQZ8Yqiw6OA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UumpDqKvfktVU2lOfRTPSinM2jrAmH8FasZKAfniNKw=;
- b=hQgbaAlLDbPPIBMwRifsMUgE+U1KnKWD8xLGYQ92VoLlbh5B7RhpOBjBhpG9kofKY8BrcUOM88rxpTVJC+x6zi0Huzn8HJl4M/WFDf6Dlhw92HZDVIov4uwArikXda0WvjIsJD8YvuejVLyBeXBxWe01my+zir4iwxV0UYiFdMCjHY+k6ZePc7yIojWw6ydzqy46haCF3iB+yFM6DZMPaS31sgPmxcunHcXCnQUZhIBdfB4vtHexK0hiLrmSXWRfTjYjLNOhLejGQMulPSrkQcSsvks5rILzO01BiGZtNSwrsCjx4Be6P0+JNOfjYuanZxkuA6R/dGEwoNbG73TELw==
+ bh=6dFSmmXsFpJ1cfe3i6oURwGjme5f9m0EKrOR4H7yxaM=;
+ b=XayAxqvdXDD3LaanAiwTIpCyoyYaVNRHiHVzI40MwwGzenbIHm4/DD+4RtvniXaM9ZSmCx4VGjyVKE5lYrezVVi8OfVHKk57PzEMBJJGmahMa7/yIRqkOAs0jFo6AeWHYkZ2L3mka9O8lUxMvTblKYo8byIjz5F7nfD7PrOEGutLo3JrR7sCWiNcCmEy+mXOOsAFJhRRZc8//r3XImC+xLfDnICrZ7ot3Lbz+MDqt+GlbGxu/R4TKCdQlfJDE0+6jJiyiESgpA8SNG6OpXQUB9p325n3Lp3YA5lt1fd0/ygys5igxf6zNsOabgNqeU6IJn2rMiVMHVQeiRYCIVJuVw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from BN0PR02CA0057.namprd02.prod.outlook.com (2603:10b6:408:e5::32)
- by LV2PR12MB5774.namprd12.prod.outlook.com (2603:10b6:408:17a::14)
+Received: from MN2PR12CA0021.namprd12.prod.outlook.com (2603:10b6:208:a8::34)
+ by IA1PR12MB9522.namprd12.prod.outlook.com (2603:10b6:208:594::11)
  with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9073.26; Mon, 1 Sep
- 2025 08:36:53 +0000
-Received: from BL6PEPF0001AB53.namprd02.prod.outlook.com
- (2603:10b6:408:e5:cafe::c7) by BN0PR02CA0057.outlook.office365.com
- (2603:10b6:408:e5::32) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9052.28 via Frontend Transport; Mon,
- 1 Sep 2025 08:36:53 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9073.21; Mon, 1 Sep
+ 2025 08:36:56 +0000
+Received: from BN2PEPF000044AC.namprd04.prod.outlook.com
+ (2603:10b6:208:a8:cafe::1b) by MN2PR12CA0021.outlook.office365.com
+ (2603:10b6:208:a8::34) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9073.27 via Frontend Transport; Mon,
+ 1 Sep 2025 08:36:56 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
 Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BL6PEPF0001AB53.mail.protection.outlook.com (10.167.241.5) with Microsoft
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN2PEPF000044AC.mail.protection.outlook.com (10.167.243.107) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.9094.14 via Frontend Transport; Mon, 1 Sep 2025 08:36:52 +0000
-Received: from satlexmb10.amd.com (10.181.42.219) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.9073.11 via Frontend Transport; Mon, 1 Sep 2025 08:36:54 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 1 Sep
- 2025 03:36:52 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by satlexmb10.amd.com
- (10.181.42.219) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1748.10; Mon, 1 Sep
- 2025 01:36:51 -0700
+ 2025 03:36:54 -0500
 Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Mon, 1 Sep 2025 03:36:50 -0500
+ Transport; Mon, 1 Sep 2025 03:36:52 -0500
 To: <buildroot@buildroot.org>
-Date: Mon, 1 Sep 2025 09:36:45 +0100
-Message-ID: <20250901083648.458639-1-neal.frager@amd.com>
+Date: Mon, 1 Sep 2025 09:36:46 +0100
+Message-ID: <20250901083648.458639-2-neal.frager@amd.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250901083648.458639-1-neal.frager@amd.com>
+References: <20250901083648.458639-1-neal.frager@amd.com>
 MIME-Version: 1.0
+Received-SPF: None (SATLEXMB04.amd.com: neal.frager@amd.com does not designate
+ permitted sender hosts)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB53:EE_|LV2PR12MB5774:EE_
-X-MS-Office365-Filtering-Correlation-Id: 43ae6ab1-622c-42c7-7586-08dde932b38c
+X-MS-TrafficTypeDiagnostic: BN2PEPF000044AC:EE_|IA1PR12MB9522:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2fb9037c-f938-4ab9-1150-08dde932b4f7
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
- ARA:13230040|36860700013|376014|7416014|1800799024|82310400026|41080700001; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?1L8mJ3gOiN2fYpXNet083YBW+ckdwny6liRGrGZZVMKy3CulWFAw882KEMLB?=
- =?us-ascii?Q?P3wfAUK7l1Sx/p2gtDj2yuJv6N7cup7ADJ3p7afDIVHkOslSWPqxt9KIQFLk?=
- =?us-ascii?Q?hY45MgOSkPngbshSUp8rircG1Qj+dWhwAWl8BANOIHOFe8YHv0n+XLzwF0m0?=
- =?us-ascii?Q?H1uuyfJBveHhuu58sYuMD72kWaliobJeFb7b6xoqXvKDlPuUYx3ZK3f7HJFh?=
- =?us-ascii?Q?SoW/OQlz4doHjcAxIUrEiiSTvsCziRFSpPGyADyqor2AFM0ypmSGWEJdWssg?=
- =?us-ascii?Q?inRDP+7yVq9TCip97h+QBCUfAADqm7KTB9/F+fxYAqhYNuvej3Wikt5acg0t?=
- =?us-ascii?Q?5Xe9mTOcIPTTPZsuU5F+G/33/lyG75Vchv+3mob/98F2VcQHqoT7U8ch4f2b?=
- =?us-ascii?Q?mqNPq91c6U6y3bWhPwVMpGTNHPfeSWIT7rYvsCUvY3A6ti97oYl9hITt2Xuw?=
- =?us-ascii?Q?mwztzT1UHIAmzHn9JNUVbcjRPcY/jQNxh8ljtGRSwL16mLIH32uphBlQ3BvW?=
- =?us-ascii?Q?wZaPhrfN9RWpSczSPRU9PuFO87xX2MU55jyRZSuDJGm9Y2dINulzA8/Hf51f?=
- =?us-ascii?Q?dMFzFyIP1GgmABXpVxHUtePz94Y4SDfj6loaqOKxDcqWUVo1vf+I7bHo/UQr?=
- =?us-ascii?Q?JOCGi7sGeYRdkDq7dIKN0cHS2vX7dGMNKNXhLtuJIQLdXDdjIcwPWqGTneql?=
- =?us-ascii?Q?35PfF5KJKlAJavIWk/W3shvnsYfFJ5Ggu1qgIJnq7axf5mwWMrxdnxttga02?=
- =?us-ascii?Q?vWCs3WPPu1G5eQtGwwMAaNad0uZxGOE0PhTklxY5XX0RD6u+Fn59jGwFbCUm?=
- =?us-ascii?Q?GCZ3fKo3lXwYAeZw9pzBeJQWGob0fJSqbN6HxVbOxnsHuQpic90pj3mar/QP?=
- =?us-ascii?Q?bmG4TYd4HDLhWzQSmB7f+2rKACjM35+uTu4REDaunMpz+f5uOcttknAup1Ul?=
- =?us-ascii?Q?jg6V1x+akAOCokXmzip1lyhKc9VbA1Cn1WP6u0vkTYaES1jBcvUI2X88/YFa?=
- =?us-ascii?Q?uMinn8NH/cn9ubFq/ck9ooVd6rBTqLz9D8XXiuG+cqOGdbWFXWp+cHmSwOHu?=
- =?us-ascii?Q?GJsepAuNovmQXjj1wHQ6YV3eB8ADO6nLJMZEEeWvcwIAB6PXflpXOYSAVFmw?=
- =?us-ascii?Q?rU6i4eP1ncPLXkoy4fOn6IB/mmPM4ovCJR2bh4nSeoDT0+hlVfHv/CRBfuig?=
- =?us-ascii?Q?2nZmh8aj3zyLNw69OHM8oOknN9wkfYDQz7lQKztfM7jIs3Lj7Ho07p9pvmd1?=
- =?us-ascii?Q?qy57BxyFWLtrG/fD+3faPfW38NiebHylrfFO3Ic6jj1dOD+9uZ80EU9OQP+P?=
- =?us-ascii?Q?oKp1sn1Q2NODBsK1rVbduSvpyNLbK5/pVhNaUoLw3UMDOi4l+UtnFfM7OKfL?=
- =?us-ascii?Q?hQ61WP8p9xPLwmbiXtteXxR8BTzzvTxs1Ajn9UHLdncWrKAYR5oTqtna0P3Z?=
- =?us-ascii?Q?VpvZWqSqKjMyS2vYAm/XyU0joT/ovLAyw1hBfjOrLSFz2duT0RqVDIajbO+R?=
- =?us-ascii?Q?3N6q88mDdvWBd2AXt2/E7GQ1+m8ofeEpvXt7kGDEBIHxajBbHL8LNnDQMkMK?=
- =?us-ascii?Q?MZlwdf0eqolZ4sT5SIk=3D?=
+ ARA:13230040|36860700013|82310400026|1800799024|376014|7416014|41080700001; 
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?v2+5CJDVZg6FAW8qdIqBVhLdarf5RLc20R7k72X6MOsRoQV4/SEjcudysASz?=
+ =?us-ascii?Q?G979iyS7dPVwbAZY7UV3Z9VR7fa6Ep0Q9EQ/dLXXqJw/fd89eXxESvzhcMWw?=
+ =?us-ascii?Q?6jcCQHJxN5RyqV3umHXpgLIzxOSikcFKVE0KAEsE0s9w13MQBTns92fijXMS?=
+ =?us-ascii?Q?4CKPlMhcA2qtLLmYa+6JBdPZbR3YSuKJADLHBLZCgxQTYkGKLW62Su8ISyYn?=
+ =?us-ascii?Q?QySIAJjNkf0l5Ml3AfB1ViNf77uuErVrzoQP2JgB7WsJMi2laqLoQe0nD6+2?=
+ =?us-ascii?Q?rfVEwFRvrRItxrDFJsJec6Upl4P1nVXEwLAP5Ex9/rRm0CuoZgwldTzC+OCZ?=
+ =?us-ascii?Q?1RoaN46SfaTacTy+NPVJ5E2sqUUwlc9XoEzTQo60zraR6VeXDLKUCWvJuyJ7?=
+ =?us-ascii?Q?ylNEwv9k9xJVKgVxlh5fWBTAM6vjCmS1+bW+Hv1HhwLYh7/2IuravPL3yTLI?=
+ =?us-ascii?Q?LPEMo/hGpv/pQ7TaEsYBYfXAzNILbHs8arxkvQ1uBjNTtW4K09NZqb872dG/?=
+ =?us-ascii?Q?0B28DjuEcL3+bKeul+uFQ/lHv4js5jkl0yB+3uVnN+aQrqzynF29Mnr/L3Vl?=
+ =?us-ascii?Q?xNfj+H0bUYqPUqaf0deGvYepPIXHcYkNMEHon1eOcA1byC+9BMpcm2pMjCkc?=
+ =?us-ascii?Q?RhYd1QiqemR7Y5/QBLkG0J5DSwS+JD+QrL6rdDVNBTNzWNlrbkctaSVKr0qX?=
+ =?us-ascii?Q?xI3YOTySJj6PoAKoq33YUMZSc6tfhY/2IowPK4g1BTZlFAnNqvSeQS0v5y62?=
+ =?us-ascii?Q?K5YRD/zF0vkXFBG/CQyrMsh/5sC9QfSKSZE1eAKsMrw8BmcQMjvZ4PHwqhOb?=
+ =?us-ascii?Q?ipF4KCJw8LA6P9kDEJuvCB0FpyYJFcxQMSeyIYQGwNctNmaPS3tKCcoYW8Q4?=
+ =?us-ascii?Q?tedM7V5LMJULaGQ52dLUs6fdfO5zV8iMGFE4nkFFgJRStqGEIAB5MQxz3aQd?=
+ =?us-ascii?Q?IeKBoWdgWHnkujgpQM05hbMVcI/9gz3kYHfY1B3w4/bZJz9grRPIsiuT78bO?=
+ =?us-ascii?Q?/CAc8DQf1n9I3jBkAafXaXM5MOPUFrty9lzBwCWov8ktYoAavzmamHjdctId?=
+ =?us-ascii?Q?NvHAXXSwFXHSQ4KCCL034GCf+XWKdWSCRmtUHg6AABGUlmu3RBYxj2xG39qE?=
+ =?us-ascii?Q?0UO0OQ4UqC7bUn/X5q3upss7JaVRqsd6bhxDdj07dQVXDjT4ekJXM/oTRtdf?=
+ =?us-ascii?Q?ct3Rj+Z+a3bMkwxffC3yK1EJRV/0NvU4AOwtPG6E9ysG+Be++cvdApGkgF/5?=
+ =?us-ascii?Q?4nvh9tXWYsO9+ieFdRI8H/QtJ6Mwkj4GZnzGKOzrP46Pw8WmlGzBSdZ2ZIQX?=
+ =?us-ascii?Q?OsZqm4zP+sVe8G5i8koI6knIsE9HZGthCQYoX0FQukHxaMwq7zqXU4cUIpVT?=
+ =?us-ascii?Q?s9PYCfG+FqZATmlNROWbsP6AtiW6YnaXxocJ24Qum37YCoUZrM0gHrRYbcn+?=
+ =?us-ascii?Q?uQ0EJorD+XgT+4KEwHWv4LzyMb6AuwFh5nwGd9mmMlz+bmaJp6Y3dpoL4hEl?=
+ =?us-ascii?Q?lC4m3EmUX6fSmQm1OhvPcVpmSq/OVuS1/AqPfICjjknqqXqfoMCWYiSO8Wn/?=
+ =?us-ascii?Q?TC0GfEjxLJ22Xd08mLA=3D?=
 X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(36860700013)(376014)(7416014)(1800799024)(82310400026)(41080700001);
+ IPV:CAL; SFV:NSPM; H:SATLEXMB04.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230040)(36860700013)(82310400026)(1800799024)(376014)(7416014)(41080700001);
  DIR:OUT; SFP:1101; 
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2025 08:36:52.6003 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 43ae6ab1-622c-42c7-7586-08dde932b38c
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2025 08:36:54.9790 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2fb9037c-f938-4ab9-1150-08dde932b4f7
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL6PEPF0001AB53.namprd02.prod.outlook.com
+ Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN2PEPF000044AC.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5774
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB9522
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UumpDqKvfktVU2lOfRTPSinM2jrAmH8FasZKAfniNKw=;
- b=wONeVG18k6LV4bqk9kpm5tgA0DHH8gxiDsnCsl9q6LkkLuRzLtSQo2KCmqvvBFDCGomvSTREFM6HpswMC7fG699GH1OKWTQ+WTgd5Id2Tbu3n6ywEiiBDsxvr/OFpnJ2aiyB8dfwYfMRf2lOn/YNo0qr8KdSzC2dJh9yV6fKs+Q=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=6dFSmmXsFpJ1cfe3i6oURwGjme5f9m0EKrOR4H7yxaM=;
+ b=vfj74XApGvXy0rCPb4UEcOlgmQDHXNHM2sHRQUO0CTdHE6iWWP8scqwM5OZlN85ekwTFMJK0bG++gBxwXapHmzcHNa+3kUnI1Qfw/P6JsY5boSqbzIycV6NZres8kMSE5jfrp0brkOsiofE+WqcOEgVn+2iNoemQOs5voW/Bd6U=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=wONeVG18
-Subject: [Buildroot] [PATCH v3 1/4] boot/xilinx-prebuilt: add support for
- plmfw.elf filename
+ header.s=selector1 header.b=vfj74XAp
+Subject: [Buildroot] [PATCH v3 2/4] boot/xilinx-prebuilt: add hash for
+ xilinx_v2025.1_update1 tag
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -172,46 +172,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-AMD / Xilinx has made the decision to change the name of plm.elf to plmfw.elf
-in the prebuilt binaries repo starting with the next update.
-
-This patch updates the xilinx-prebuilt package to support either the old
-plm.elf filename or the new plmfw.elf filename.
+Add the xilinx_v2025.1_update1 release tag hash to the xilinx-prebuilt
+package, so that Xilinx boards can use this new release tag.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
 V1->V2:
-- no changes
+- new to patch series
 V2->V3:
-- removed unnecessary comment about Ubuntu and Yocto from commit message
+- improved commit message
 ---
- boot/xilinx-prebuilt/xilinx-prebuilt.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ boot/xilinx-prebuilt/xilinx-prebuilt.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/boot/xilinx-prebuilt/xilinx-prebuilt.mk b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-index 62b60b88fa..5d984c4f82 100644
---- a/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-+++ b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-@@ -28,7 +28,8 @@ XILINX_PREBUILT_BOARD_DIR = $(@D)/$(XILINX_PREBUILT_BOARD)-$(XILINX_PREBUILT_FAM
+diff --git a/boot/xilinx-prebuilt/xilinx-prebuilt.hash b/boot/xilinx-prebuilt/xilinx-prebuilt.hash
+index 9f12e88e7a..a8dee8f129 100644
+--- a/boot/xilinx-prebuilt/xilinx-prebuilt.hash
++++ b/boot/xilinx-prebuilt/xilinx-prebuilt.hash
+@@ -1,5 +1,6 @@
+ # Locally calculated
+ sha256  b9e2572885ad12243e10d48d9fccb24771a528b9f27aae1b29b45f0806ce9f1f  xilinx-prebuilt-xilinx_v2025.1.tar.gz
++sha256  48fd698a16f79b9a828c35ca5b2b50fe832149d1a2938c94c0bb6a2e249b0bed  xilinx-prebuilt-xilinx_v2025.1_update1.tar.gz
  
- ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL),y)
- ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA),y)
--XILINX_PREBUILT_PLM = $(@D)/pdi_files/gen_files/plm.elf
-+# Supports either plm.elf or plmfw.elf filenames
-+XILINX_PREBUILT_PLM = $(@D)/pdi_files/gen_files/plm*.elf
- # Unlike the psmfw.elf file for Xilinx development boards,
- # AMD Vivado Design Suite currently generates a file named psm_fw.elf.
- # Future versions of AMD Vivado will generate a file named psmfw.elf,
-@@ -60,7 +61,8 @@ define XILINX_PREBUILT_INSTALL_VERSAL_XSA_PLD_PDI
- endef
- endif # BR2_TARGET_XILINX_PREBUILT_VERSAL_PLD_PDI
- else # BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA
--XILINX_PREBUILT_PLM = $(XILINX_PREBUILT_BOARD_DIR)/plm.elf
-+# Supports either plm.elf or plmfw.elf filenames
-+XILINX_PREBUILT_PLM = $(XILINX_PREBUILT_BOARD_DIR)/plm*.elf
- XILINX_PREBUILT_PSMFW = $(XILINX_PREBUILT_BOARD_DIR)/psmfw.elf
- # We need the *.pdi glob, because the file has different names for the
- # different boards, and it has to be named boot.pdi when installed.
+ # Locally calculated
+ sha256  7b2074b607264a07347e1a7ef0323229585942793469f34b2cf9628f7623e05f  LICENSE
 -- 
 2.25.1
 
