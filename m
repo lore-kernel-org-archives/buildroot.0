@@ -1,73 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA799CA0FF0
-	for <buildroot@archiver.kernel.org>; Mon,  1 Sep 2025 09:14:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B74CCA0FF0
+	for <buildroot@archiver.kernel.org>; Mon,  1 Sep 2025 09:16:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA27A41414;
-	Mon,  1 Sep 2025 09:14:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 09B33610F9;
+	Mon,  1 Sep 2025 09:16:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bjjqQZMB9Yv6; Mon,  1 Sep 2025 09:14:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id alWJ0DYhgfK1; Mon,  1 Sep 2025 09:16:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8C4E4141F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30A2C60DF8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C8C4E4141F;
-	Mon,  1 Sep 2025 09:14:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id EA29CD2
- for <buildroot@buildroot.org>; Mon,  1 Sep 2025 09:14:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 30A2C60DF8;
+	Mon,  1 Sep 2025 09:16:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E1E93169
+ for <buildroot@buildroot.org>; Mon,  1 Sep 2025 09:16:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CFAB940488
- for <buildroot@buildroot.org>; Mon,  1 Sep 2025 09:14:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D1C7F83CF8
+ for <buildroot@buildroot.org>; Mon,  1 Sep 2025 09:16:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fG1YrIpynQiA for <buildroot@buildroot.org>;
- Mon,  1 Sep 2025 09:14:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D17DE4044B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D17DE4044B
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D17DE4044B
- for <buildroot@buildroot.org>; Mon,  1 Sep 2025 09:14:34 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id D5AB1B97847B; Mon,  1 Sep 2025 08:07:48 +0200 (CEST)
-Message-ID: <8a8a20c2-c68a-48c5-afe9-48bfec0102b8@rnout.be>
-Date: Mon, 1 Sep 2025 08:07:46 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H9thOvVJx4-6 for <buildroot@buildroot.org>;
+ Mon,  1 Sep 2025 09:16:40 +0000 (UTC)
+X-Greylist: delayed 1810 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 01 Sep 2025 09:16:38 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6623883C9D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6623883C9D
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=117.135.210.2;
+ helo=m16.mail.163.com; envelope-from=andyshrk@163.com; receiver=<UNKNOWN> 
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6623883C9D
+ for <buildroot@buildroot.org>; Mon,  1 Sep 2025 09:16:38 +0000 (UTC)
+Received: from ProDesk.. (unknown [])
+ by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id
+ _____wAXEKXQWbVoTeP3Fg--.7684S2; 
+ Mon, 01 Sep 2025 16:31:17 +0800 (CST)
+From: Andy Yan <andyshrk@163.com>
+To: buildroot@buildroot.org
+Cc: Andy Yan <andyshrk@163.com>
+Date: Mon,  1 Sep 2025 16:31:09 +0800
+Message-ID: <20250901083109.284281-1-andyshrk@163.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Christian Hitz <christian@klarinett.li>, buildroot@buildroot.org
-Cc: Christian Hitz <christian.hitz@bbv.ch>,
- Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@hastings.org>
-References: <20250818064235.258181-1-christian@klarinett.li>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <20250818064235.258181-1-christian@klarinett.li>
-X-Last-TLS-Session-Version: TLSv1.3
+X-CM-TRANSID: _____wAXEKXQWbVoTeP3Fg--.7684S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7trWUZryfGr48CF1fJF1DKFg_yoW8WryDpF
+ 1UWF4UJ3yjgw1fJayUKasxCr15Zrs5ArWjk3sFka4rKF17urWkX3yDWFs5Jrn7Cr18Aay7
+ Ca17GrWkuFyDJ3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+ 9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRZYFXUUUUU=
+X-Originating-IP: [103.29.142.67]
+X-CM-SenderInfo: 5dqg52xkunqiywtou0bp/xtbBEgW7Xmi1U-TbOwAAso
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1756706869; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=A+p8TwVZ72vS7GCacywilAbrZ7Yb1QTGAM7nTr/Cb4Y=;
- b=CHiIcCu1zxr+Ozl7NxmCGM0Z3+Mc5Nn6SA+XRvjIeZ2Cw6iNFvizMU5WdJA0Qi8nwlHlJ2
- PQ5zlO4HZfcb6LY5YlBTeCPAzLgrRs32QnS6A8T9/pn/1uBVCeTcwf1rzSfR79okORfQYr
- SzJAludx4RTUxsvcr43sO9HgllGp9X7y+8r9EDLmoacDi5z7RLjzsTC2wc3g9WBfAco3TL
- 2NdZGCU9sexDAMBTNUDMYHfP5qcnlxsZu0lZtl9sZa6PbK/jBV1c4+NmM61EkBQ6jePwxa
- cw/vIQ1VGrnWJoy3AaJjAl/7B6Avuz/a0vmFJUB5sajk7CiWqrtgPOAkQANj7g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=CHiIcCu1
-Subject: Re: [Buildroot] [PATCH 2020.02.x] package/systemd: bump required
- toolchain headers for systemd-networkd
+ d=163.com; 
+ s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Ql
+ A4Lga/dGKvW/hiyPNnmOwB3uec3SRX5BaiHteBCSk=; b=BGqXpyypbHjQdgfOLt
+ 2qOBsUQT6e0eTbo+neKhjfQbyDEP7+LijznPZrcIem5lQxRFHhU6k/kKUZI0+bNw
+ NDUeJ8cClDOvYl/A1MzsamMs22cwMZ5cO5r9fGCk12TyoWgsUqr3A5OasM0KZdTy
+ 8PseWVwFYoKHw3lQwFj0E9yw8=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=163.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256
+ header.s=s110527 header.b=BGqXpyyp
+Subject: [Buildroot] [PATCH] package/linux-firmware: Add option to install
+ cadence MHDP8546 DPI/DP bridge firmware
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,73 +83,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Cadence MHDP8546 DPTX IP used in TI J721E SoC needs the firmware to
+work.
 
+Signed-off-by: Andy Yan <andyshrk@163.com>
+---
+ package/linux-firmware/Config.in         | 5 +++++
+ package/linux-firmware/linux-firmware.mk | 5 +++++
+ 2 files changed, 10 insertions(+)
 
-On 18/08/2025 08:42, Christian Hitz via buildroot wrote:
-> From: Christian Hitz <christian.hitz@bbv.ch>
-> 
-> Since 256.12 systemd-networkd requires kernel >=5.4 due to the inclusion of
-> the sockios.h header, which uses the SIOCGSTAMP_OLD macro.
-> 
-> The same change has already been applied to master/2025.08 in
-> 7d8d48cd2ba1396ea146e94020939f4dfe08c5cb
-> 
-> Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
-
-  Applied to 2025.02.x and 2025.05.x, thanks.
-
-  Regards,
-  Arnout
-
-> ---
->   package/systemd/Config.in | 12 +++++++++---
->   1 file changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index 851b91aeba..320d416203 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -52,9 +52,11 @@ menuconfig BR2_PACKAGE_SYSTEMD
->   	  an elaborate transactional dependency-based service control
->   	  logic.  It can work as a drop-in replacement for sysvinit.
->   
-> -	  Kernel versions below 4.15 ("recommended baseline") have
-> +	  Kernel versions below 5.4 ("recommended baseline") have
->   	  significant gaps in functionality and are not recommended
-> -	  for use with this version of systemd.
-> +	  for use with this version of systemd. (e.g. lack race-free
-> +	  process tracking by pidfd, systemd-networkd, and new mount
-> +	  API support).
->   
->   	  Systemd requires a Linux kernel >= 3.15 with the following
->   	  options enabled:
-> @@ -354,7 +356,8 @@ config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
->   
->   config BR2_PACKAGE_SYSTEMD_NETWORKD
->   	bool "enable network manager"
-> -	default y
-> +	default y if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
->   	help
->   	  systemd-networkd is a system service that manages networks.
->   	  It detects and configures network devices as they appear, as
-> @@ -365,6 +368,9 @@ config BR2_PACKAGE_SYSTEMD_NETWORKD
->   
->   	  https://www.freedesktop.org/software/systemd/man/systemd-networkd.html
->   
-> +comment "systemd-networkd needs a toolchain with kernel headers >= 5.4"
-> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-> +
->   config BR2_PACKAGE_SYSTEMD_OOMD
->   	bool "enable out-of-memory killer"
->   	help
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 778dfef8a0..21dff9768e 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -205,6 +205,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM4366C0
+ 	help
+ 	  Firmware file for the Broadcom 4366c0 FullMAC chip.
+ 
++config BR2_PACKAGE_LINUX_FIRMWARE_CDNS_MHDP8546
++	bool "Cadence MHDP8546"
++	help
++	  Firmware file for the Cadence MHDP8546 DPI/DP bridge
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_CYPRESS_CYW43XX
+ 	bool "Cypress CY cyw43xx"
+ 	help
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 40758054e5..869e2d668f 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -913,6 +913,11 @@ LINUX_FIRMWARE_FILES += ti_3410.fw ti_5052.fw \
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.moxa
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_CDNS_MHDP8546),y)
++LINUX_FIRMWARE_FILES += cadence/mhdp8546.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.cadence
++endif
++
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_CX231XX),y)
+ LINUX_FIRMWARE_FILES += v4l-cx231xx-avcore-01.fw
+ # No license file; the license is in the file WHENCE
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
