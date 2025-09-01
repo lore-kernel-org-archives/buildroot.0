@@ -1,75 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B895CA0FFD
-	for <buildroot@archiver.kernel.org>; Mon,  1 Sep 2025 12:13:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1424CCA0FFD
+	for <buildroot@archiver.kernel.org>; Mon,  1 Sep 2025 12:13:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 579D241402;
-	Mon,  1 Sep 2025 12:13:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C033D6078B;
+	Mon,  1 Sep 2025 12:13:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AZ3J_n3-r2KH; Mon,  1 Sep 2025 12:13:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id r0Ok1VRAG1My; Mon,  1 Sep 2025 12:13:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A96B412B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D506860B2E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A96B412B1;
-	Mon,  1 Sep 2025 12:13:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5036810E
- for <buildroot@buildroot.org>; Mon,  1 Sep 2025 12:13:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D506860B2E;
+	Mon,  1 Sep 2025 12:13:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 460C1169
+ for <buildroot@buildroot.org>; Mon,  1 Sep 2025 12:13:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3405383E81
- for <buildroot@buildroot.org>; Mon,  1 Sep 2025 12:13:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2C79B404B6
+ for <buildroot@buildroot.org>; Mon,  1 Sep 2025 12:13:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id peaOQjs1Uu55 for <buildroot@buildroot.org>;
- Mon,  1 Sep 2025 12:13:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ktpiKQWT-SrP for <buildroot@buildroot.org>;
+ Mon,  1 Sep 2025 12:13:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D3AB983E69
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3AB983E69
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D3AB983E69
- for <buildroot@buildroot.org>; Mon,  1 Sep 2025 12:13:32 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 725891554; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 01 Sep 2025 12:13:27 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1ut3Pa-0022n4-23;
- Mon, 01 Sep 2025 14:13:26 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5CFDC403FA
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5CFDC403FA
+ for <buildroot@buildroot.org>; Mon,  1 Sep 2025 12:13:45 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4A27887A7F; Mon,  1 Sep 2025 12:13:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Titouan Christophe <titouan.christophe@mind.be>
-Cc: buildroot@buildroot.org,  thomas.petazzoni@bootlin.com
-References: <20250829201835.795429-1-titouan.christophe@mind.be>
-Date: Mon, 01 Sep 2025 14:13:26 +0200
-In-Reply-To: <20250829201835.795429-1-titouan.christophe@mind.be> (Titouan
- Christophe's message of "Fri, 29 Aug 2025 22:18:35 +0200")
-Message-ID: <87y0qye5g9.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=TSML/18m1kvXPV/qW7qfH5u/EkKnPQ/tGLUIr2CgMGE9LAxIfz1x7FV5NIU9mHWdkZPYLizxtk1Wcacd50wc+gBvBP531x37g6gzY0DMrsBKpBE27nt7yQQ748TkbnRWedTuKUPTnritTg4BOdk/ggNrdIXbjPHSNzW5QfkkcN4uXyybW3LNVozg9r03HgzJTF4nBm6BlibI0LOa8Uw7R75LCNIvzZ8qkhnxrHeHA48f2Yy3TSPylnnpEvIV3veH4mafsu/UZ6bWsWdTWlqNrT3/fJvm2sblNJJmg99b66/Om7XtoX3QsEEjJLFfw7KrqsqLW7/VXGVoWcuxkygH3w==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=2Bfn5qqkYeU7FJj78SMAAdKBl7VU/U4Acb7CZjckawU=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=TSML/18m
-Subject: Re: [Buildroot] [PATCH] package/mosquitto: fix build failure with
- recent glibc
+To: buildroot@buildroot.org
+Date: Mon, 1 Sep 2025 12:33:56 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 17259a22353e7f46837a073805fd8fd4fc9b9831
+X-Git-Newrev: 759a08633ea80e90cb91984b5f87d82304e711b9
+X-Patchwork-Hint: ignore
+Message-Id: <20250901121345.4A27887A7F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mbpfan: fix build on musl /
+ uclibc-ng
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,26 +59,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Titouan" == Titouan Christophe <titouan.christophe@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=759a08633ea80e90cb91984b5f87d82304e711b9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fix link-time build failures because glibc>=2.34 no longer ships libanl.so
- > as it has been consolidated into libc.
+Fixes https://autobuild.buildroot.net/results/9526503fe8e756bd4444f1fb1e9cf1391c461901/
 
- > See the inner patch message for more details.
+mbpfan uses vsyslog(), which is not in POSIX so only exposed by <syslog.h>
+on musl and uclibc-ng if we define _DEFAULT_SOURCE:
 
- > Fixes: https://autobuild.buildroot.org/results/16223cd838876abc9b6f941f7dc20d23afa32c3b/
+https://git.musl-libc.org/cgit/musl/tree/include/syslog.h#n64
+https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/tree/include/sys/syslog.h#n200
 
- > Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Add a patch submitted upstream to do this.
 
-Committed, thanks.
+[Peter: add patch rather than passing _DEFAULT_SOURCE in mbpfan.mk]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...kefile-util.c-fix-build-on-musl-uClibc-ng.patch | 62 ++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mbpfan/0001-Makefile-util.c-fix-build-on-musl-uClibc-ng.patch b/package/mbpfan/0001-Makefile-util.c-fix-build-on-musl-uClibc-ng.patch
+new file mode 100644
+index 0000000000..ac15143e2e
+--- /dev/null
++++ b/package/mbpfan/0001-Makefile-util.c-fix-build-on-musl-uClibc-ng.patch
+@@ -0,0 +1,62 @@
++From 924e38f159e4f5906f88cd8ddbe27f273c601cb0 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Mon, 1 Sep 2025 12:08:53 +0200
++Subject: [PATCH] {Makefile,util.c}: fix build on musl / uClibc-ng
++
++vsyslog() is not in POSIX, so only exposed by <syslog.h> on musl and
++uclibc-ng if we define _DEFAULT_SOURCE.
++
++https://git.musl-libc.org/cgit/musl/tree/include/syslog.h#n64
++https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/tree/include/sys/syslog.h#n200
++
++While we are at it, drop the glibc-implementation-specific __USE_MISC define
++in src/util.c to get rid of a double definition:
++
++src/util.c:3: warning: "__USE_MISC" redefined
++    3 | #define __USE_MISC
++      |
++In file included from /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:33,
++                 from /usr/include/stdio.h:27,
++                 from src/util.c:2:
++/usr/include/features.h:395: note: this is the location of the previous definition
++  395 | # define __USE_MISC     1
++
++On glibc (and uClibc-ng) the internal __USE_MISC symbol gets defined if
++_DEFAULT_SOURCE is:
++
++https://github.com/bminor/glibc/blob/master/include/features.h#L417-L419
++
++Upstream: https://github.com/linux-on-mac/mbpfan/pull/271
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Makefile   | 2 +-
++ src/util.c | 1 -
++ 2 files changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 94d72ee..ff1b7e6 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -19,7 +19,7 @@ BINFLAG = -o
++ INCLUDES =
++ LIBS = -lm
++ LIBPATH =
++-CFLAGS += $(COPT) -g $(INCLUDES) -Wall -Wextra -Wno-unused-function -Wno-unused-parameter -std=c99 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=500
+++CFLAGS += $(COPT) -g $(INCLUDES) -Wall -Wextra -Wno-unused-function -Wno-unused-parameter -std=c99 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=500 -D_DEFAULT_SOURCE
++ LDFLAGS += $(LIBPATH) -g
++ 
++ OBJS := $(patsubst %.$(C),%.$(OBJ),$(wildcard $(SOURCE_PATH)*.$(C)))
++diff --git a/src/util.c b/src/util.c
++index df5b03f..25415b9 100644
++--- a/src/util.c
+++++ b/src/util.c
++@@ -1,6 +1,5 @@
++ #include <stdarg.h>
++ #include <stdio.h>
++-#define __USE_MISC
++ #define _GNU_SOURCE
++ #include <syslog.h>
++ 
++-- 
++2.39.5
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
