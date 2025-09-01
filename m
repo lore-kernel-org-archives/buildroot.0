@@ -4,99 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F459CA1006
-	for <buildroot@archiver.kernel.org>; Mon,  1 Sep 2025 09:01:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00172CA0FFD
+	for <buildroot@archiver.kernel.org>; Mon,  1 Sep 2025 09:01:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 457DD415AB;
-	Mon,  1 Sep 2025 09:01:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CBFF341494;
+	Mon,  1 Sep 2025 09:01:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6Lfn10hUivTJ; Mon,  1 Sep 2025 09:01:55 +0000 (UTC)
+ id 42Zbe2_mH75Y; Mon,  1 Sep 2025 09:01:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC9F441596
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E74EE41596
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DC9F441596;
-	Mon,  1 Sep 2025 09:01:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D9BE1169
- for <buildroot@buildroot.org>; Mon,  1 Sep 2025 09:01:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E74EE41596;
+	Mon,  1 Sep 2025 09:01:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 43A14D2
+ for <buildroot@buildroot.org>; Mon,  1 Sep 2025 09:01:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BC96861309;
+ by smtp1.osuosl.org (Postfix) with ESMTP id 143DA83C4E;
  Mon,  1 Sep 2025 09:01:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O65jDNS10GCP; Mon,  1 Sep 2025 09:01:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 53zqC6Aaqx8x; Mon,  1 Sep 2025 09:01:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
+ client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org ECDC960DF8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECDC960DF8
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp3.osuosl.org (Postfix) with ESMTPS id ECDC960DF8
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6640183C53
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6640183C53
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6640183C53
  for <buildroot@buildroot.org>; Mon,  1 Sep 2025 09:01:38 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-3d19699240dso1314805f8f.1
+Received: by mail-wr1-x42f.google.com with SMTP id
+ ffacd0b85a97d-3ce4ed7a73fso2004461f8f.1
  for <buildroot@buildroot.org>; Mon, 01 Sep 2025 02:01:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1756717297; x=1757322097;
+ d=1e100.net; s=20230601; t=1756717296; x=1757322096;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=ngPawNH/UkZC71LaNo+shypriZF8SYYEYWcyMC+HP38=;
- b=VV9CKSLgcSExQtblq0dgD1MUiuj7v8Xojmcz7tZVCCN/bsEd2yVq6pOWVcjhDA9PCh
- cSj+4oTzn7V5xwoi76mt3ZkJuCc6ISJuD2XR+0PN7oOluk3K4Azwk0yXO/gVSTHtN5Wu
- vqTzGNYyBcw8q1kBI8eCaJGfnJeiaMuNC4qI4SGXJzckzATa7nFPkGcHCJapqR9We8yj
- w6UdXNTM8EZ+RMm4MXHOzaNJGeNf21+zQ7VNRivAA/Kkp1oy/4Ozoawg16baEPbLQmY2
- oLf/wo6kPhP/xANZ45DqjIYVr69sMaqzT1wBE2FKEaVRCONXCBYTw6bCZgfYNUCELpKz
- yqmg==
-X-Gm-Message-State: AOJu0YzHZe7isVVD9eW7FRPrhDYUAuohHp89lowOzDXhd+eAJe3s7cJR
- hLRsINQgu/3rpgxjh1wOi59B4eXY+slFD4NypXkYnfFnU4SwVm9XBEYFh4CRHQ==
-X-Gm-Gg: ASbGnctRk6Bknf6lxxIWhnoM1co2mCxd52gy/kbU55DNGikkRdYcRuVBYDUp6e3xXvl
- SFNtQTGDs15H42SPSdBV5cIvUd2BzdQI1V6uH3HqCiXAUGwnyXzHs2/HWE3StC0vrCRD6A5Mg86
- evFTEam3TI4YuilEIIkpISNEkR4FUqD8Yt9gQ0x9OQn2NLHvazxrU/rMZeP8/gkuGbJKtuqjpZ1
- 9MkuhU63PWXwazPu19PygRXu3trYi+49cBkc/9RzQgiJqxvkou3x/8aR+9MAyOYwiXJh1bRqy1U
- wMH4/YiWBHpprdv6byYwe9n//IHstb3c7yBnRUX/wOiyY1aB+LTbRKxKDDyP5ilRAzFRFLsUXB4
- 50YcjIJubY8yVXBQ+24Ity9lXDzc2H9Pf
-X-Google-Smtp-Source: AGHT+IFC7xtKQkvIFn+1yjkYTvxlxi6fEL8fs3VvL8A9ySk9CnEcefElcrkgFrElqAI71//p+jn6hw==
-X-Received: by 2002:a05:6000:40dd:b0:3d4:13c4:af73 with SMTP id
- ffacd0b85a97d-3d413c4b319mr4684694f8f.12.1756717296862; 
+ bh=R3kFA/2mc/DJpNgvCVcjeiahRxlK15DaoEUMi2duuKU=;
+ b=TvyFrZ7rmf7FrmtLTdFthEe8YP/ITYgIr8+vCOQX/KEdbAJ/kOQnNOWpjZYfx939OU
+ lDFQW5ZxCdrSJlv9aWPG4GmPXprbuM0g/kxSfm4HJKeucYFuvebkXssian4ecETQ8DQD
+ x+gng+qBuILwSWHDfvmy1hWBDEu+3xHi+epKNEc48QxHxFOJhgUAknkpvrlLio9TiMDa
+ KigPf+jELMS8YHAIJxAGkRzspa0Bt7LwpOQtSyfRf/kHaxpH8+tGrNf7LzQ5iPd2u4cS
+ w4kPHBIYHRYmYi6JdvSEjXwMv+1QJSh6jv3SyZWPkchtyrd3LGeu1eAuwD3YN+jBL7Lo
+ CdqQ==
+X-Gm-Message-State: AOJu0YygXFSaBR931yxfREbUNh/gDv+qIr6v6umCGi/LCZ/c3hQPuGKh
+ 6RcbD7k8P/rxz+nfw4sYwfhT+qVDy95nHATlebpvogjn/22+jQjA087xEBzUDw==
+X-Gm-Gg: ASbGncuZB4+4+L+8BTJ3yjsedqUxOYDcIk5R7pTi9iHhBQYDkUKtbdcS87pnFMylDTV
+ oWq2JhorhEe+hGEJDYASZiIawLiO94T0DC/GH/75yiZvLQiO4zDcgjenm9gocyEhc/SmeDf+Yz9
+ wXy8RfEWTYy7R18mToMSPWO/gmIZFbxpTpMNqFoXgeJRGyaX2J037yXQYNv+Ijmy8qp83My3wiL
+ hhCeScZqewjS1pLeQXqjfosx3PFCKAVvMGcTlbLWSttSR4rdXullmpe47cVJeq22pHNSDJmfnz7
+ +mlXagE/f/uu2Yk8KHRP19PzSDvS7b/aNMCu6vpPbSnNbosRKrvky4BkIwjtDczjhNBZFGpBK4v
+ ANIMD272JdQ7XuTJmA8Gc7Nn7PyYvps6K
+X-Google-Smtp-Source: AGHT+IGyd43Oo9/RRMWGwiJGFS38OUiWvz/ybBtyiNvqPgSXkchLCEkeFpycvFKTHYyHdC9tEDOCWg==
+X-Received: by 2002:a05:6000:2288:b0:3cd:cf31:d77a with SMTP id
+ ffacd0b85a97d-3d1dddf0b51mr4351097f8f.18.1756717296363; 
  Mon, 01 Sep 2025 02:01:36 -0700 (PDT)
 Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-45b8525a94bsm98171055e9.15.2025.09.01.02.01.36
+ 5b1f17b1804b1-45b8525a94bsm98171055e9.15.2025.09.01.02.01.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Mon, 01 Sep 2025 02:01:36 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Date: Mon,  1 Sep 2025 11:01:25 +0200
-Message-ID: <9008287f0fbfe1e24704cfbec471bfa97d3f7fdd.1756717276.git.yann.morin.1998@free.fr>
+Date: Mon,  1 Sep 2025 11:01:24 +0200
+Message-ID: <fffd7a239510254f91ec430da4c8b355595e1aea.1756717276.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <cover.1756717276.git.yann.morin.1998@free.fr>
 References: <cover.1756717276.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1756717297; x=1757322097; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1756717296; x=1757322096; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=ngPawNH/UkZC71LaNo+shypriZF8SYYEYWcyMC+HP38=;
- b=irCbX3bZo4UwKsgQwcL+vYh05AVgMGwpUCOyBjwxLx09gj/IhDHVgylGSzOYWoez6k
- xGI1uHTp4RNFet7h3eY576/Y39jerSy9TK+PNqUSHmCGqNdGKb1J4wRXEuked6NSxqr0
- UcZYknCLrTzFxPzuRgDRq6eNmqgqEJ5jXQqVVfA63+2J9aZ3UAf4I0BbePXOJED1Sqjf
- G3jbKFKMAOyGKAGHX1Ihzc/l8c5kfR6gnCZKHeNlzJ/6puvQGH4Af0BWcfV49A8BwQgP
- yDajlH/IFCp+qpeocywLOukHx2e/PvRsdwcTVZPlNBfF1Z1hH/N00ioN4GUSNen6N9b1
- Hfag==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=R3kFA/2mc/DJpNgvCVcjeiahRxlK15DaoEUMi2duuKU=;
+ b=MHe/dJ2wcRroVoMePpN2FtWWv7WA1eCsx0VlqOcPI14qLCqO+ASrO+Jd1YhO54kXJW
+ eUQ7MJ6oOkJKCZHK9mMvKSPqn7n5xce36HNccdsmu9j3rcNkc0qzrRWdt0HEGjASRxN3
+ F1EwNU9T6B8T0R3mV1T66O4rEWOD+md65X2tD7jAEhtbjjHP7YnEjQcvOGR3IvMK4663
+ pwGy8+WYb6NinCgTspCYWOnMQtnjvYL2sk/6E+GGHXEm0UdBM0ytAT1qtGWkZbTU8s35
+ DNJxmFKhxR2+6z+6BMrJjjhpynU0cUwLcRoaTumt1rWhQag8SVpgfr/Kkrg1kRzAQ3S1
+ VKBA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=fail (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=irCbX3bZ
-Subject: [Buildroot] [PATCH 16/18 v3] package/net-tools: no need for
- ifconfig+route workarounds with merged-bin
+ header.a=rsa-sha256 header.s=20230601 header.b=MHe/dJ2w
+Subject: [Buildroot] [PATCH 15/18 v3] package/util-linux: adjust paths for
+ merged-bin
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,37 +115,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-With a merged-bin setup, there is no need to move ifconfig and route, as
-they would already be in the proper place.
-
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/net-tools/net-tools.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ package/util-linux/util-linux.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/net-tools/net-tools.mk b/package/net-tools/net-tools.mk
-index 0468a00bf0..344abee8b3 100644
---- a/package/net-tools/net-tools.mk
-+++ b/package/net-tools/net-tools.mk
-@@ -42,10 +42,16 @@ endef
- 
- # ifconfig & route reside in /sbin for busybox, so ensure we don't end
- # up with two versions of those.
--define NET_TOOLS_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+ifeq ($(BR2_ROOTFS_MERGED_BIN),)
-+define NET_TOOLS_INSTALL_MV_BINS
- 	mv -f $(TARGET_DIR)/bin/ifconfig $(TARGET_DIR)/sbin/ifconfig
- 	mv -f $(TARGET_DIR)/bin/route $(TARGET_DIR)/sbin/route
- endef
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 3098a81a72..d1abdbdc9e 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -75,7 +75,13 @@ endif
+ # ${usrlib_execdir} (/usr/lib) to ${libdir} (/lib), since both paths are
+ # the same when merged usr is in use.
+ ifeq ($(BR2_ROOTFS_MERGED_USR),y)
+-UTIL_LINUX_CONF_OPTS += --bindir=/usr/bin --sbindir=/usr/sbin --libdir=/usr/lib
++UTIL_LINUX_CONF_OPTS += --bindir=/usr/bin --libdir=/usr/lib
++# Ditto for /usr/sbin and /usr/bin when merge sbin is in use
++ifeq ($(BR2_ROOTFS_MERGED_BIN),y)
++UTIL_LINUX_CONF_OPTS += --sbindir=/usr/bin
++else
++UTIL_LINUX_CONF_OPTS += --sbindir=/usr/sbin
 +endif
-+
-+define NET_TOOLS_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+	$(NET_TOOLS_INSTALL_MV_BINS)
-+endef
+ endif
  
- $(eval $(generic-package))
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
 -- 
 2.51.0
 
