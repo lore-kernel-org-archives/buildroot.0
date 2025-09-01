@@ -1,104 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 754C6CA1002
-	for <buildroot@archiver.kernel.org>; Mon,  1 Sep 2025 09:01:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E111CA0FF0
+	for <buildroot@archiver.kernel.org>; Mon,  1 Sep 2025 09:01:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4841F613A9;
-	Mon,  1 Sep 2025 09:01:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C8DF9414BF;
+	Mon,  1 Sep 2025 09:01:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U5UFoXofrqvp; Mon,  1 Sep 2025 09:01:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Po2yl2amnRfP; Mon,  1 Sep 2025 09:01:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C643613AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 823C9414C7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C643613AB;
-	Mon,  1 Sep 2025 09:01:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B63E2186
- for <buildroot@buildroot.org>; Mon,  1 Sep 2025 09:01:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 823C9414C7;
+	Mon,  1 Sep 2025 09:01:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 10CF2D2
+ for <buildroot@buildroot.org>; Mon,  1 Sep 2025 09:01:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AFDA960E04;
+ by smtp4.osuosl.org (Postfix) with ESMTP id 58C1F413F9;
  Mon,  1 Sep 2025 09:01:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VgeQa9impHyJ; Mon,  1 Sep 2025 09:01:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id L6Ae0NktCovg; Mon,  1 Sep 2025 09:01:34 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 94332611F8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94332611F8
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 94332611F8
- for <buildroot@buildroot.org>; Mon,  1 Sep 2025 09:01:36 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-45b88bff3ebso6594215e9.3
- for <buildroot@buildroot.org>; Mon, 01 Sep 2025 02:01:36 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1359940D07
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1359940D07
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1359940D07
+ for <buildroot@buildroot.org>; Mon,  1 Sep 2025 09:01:33 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-45b627ea685so34736955e9.1
+ for <buildroot@buildroot.org>; Mon, 01 Sep 2025 02:01:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1756717295; x=1757322095;
+ d=1e100.net; s=20230601; t=1756717292; x=1757322092;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=2pzarnZI4xT1gl1FhpoComYHSJrnVnqClv1TuEEKwSs=;
- b=ebwW48u5YhI1aahykIiOQTO9F7KkCY0ruaaywPLEYLRBEDvY8drjdsPrkZk9FXrgdN
- Dl/5ajo2SrN9XwKDnhK/5SF/NlMnaoIJjASxhYKHZAPUmNogGZliRRAiM4pfodBIfuD5
- ke7uk851tFvQkXF5W6Ldh2hz2BSivSTwB+Wlw0UmxNMZlU0Tmhb+52KMMoz0tRcCveHE
- tNLE6h3trcTmTbN3KAZ6QVlXi/ZjW+vPUrS1kmXz2Q2S07J6F8urmXVFeqSgsReSJz6K
- lEV7M0449Wi4jjVmNCQpz+OjLCn04bOmhEYbunGcdZ5DqKkTA7ccqYc+LdEBteJ+U+8B
- GJdg==
-X-Gm-Message-State: AOJu0YyXIB06Q/OFV6O0XY/m8r6n3nhF02PwfcS+BYcpJIhk+cpLp0X5
- mngFAfT5VGkxORdSrPDA5vAEOci6sFBOn46Pz/XV9UIGkT3wscwuhDZBOWFtcQ==
-X-Gm-Gg: ASbGncu8hvzJim3ekAYPp1f6RIEz7OvwHfhhHCU2V50vV8FXh+pfY9DaEyrHwGyISfJ
- ZX6T0MKozaxTSvnLpi2A7745xTeI/4DoZIJHr7BxETFdIrm9rxvoF9CoxwzSGYukH+1i2uAl+y5
- XMgJrJqEoRs5AJxjnxyHs9Rjud3YY4Bjt5p3SLwegi6bIevKNTLE80vTRFc27BvBdkSvhLjsvKn
- OXsi8dEmY4KwxgZJlhKC81vTUVyabZEqbjLK4PfxA3NEQ3DLUSXFiSTVuiwm15WQFUD5WbYsy9Y
- LRhwJ+H+1wOedC5mdbf7lBZFzptLDnz3GacT6wDVC+X7DO3tiu6KTOwH+rExRImbiZWOlTep86K
- ZWiS7/8oyaI7Lx44V+DxjuJRiyE6z0fF/EZMXZPa8yQfO9uULatWANA==
-X-Google-Smtp-Source: AGHT+IG1I66RgACgd8bFObwq2HNNmkKKJ1PuMpmVKN2r39iXsXEFcEo+0SmJ+/lk0tJPvghToIwE+A==
-X-Received: by 2002:a05:600c:484a:b0:45b:85d0:9a0c with SMTP id
- 5b1f17b1804b1-45b85d09ccdmr43870265e9.15.1756717294143; 
- Mon, 01 Sep 2025 02:01:34 -0700 (PDT)
+ bh=RUudtlr6KnonZOIb+ntS/qpcUx+5p51QAmkXIOhGqJI=;
+ b=RhmByiOK+pwMv1XeD4Oz1CzLEmqluq2XnQLns+ywMQldU1qJRveg7XkfyzapYXcDpK
+ 2IEVa+0grvMdc5UjiwNVOkFS/R8WSzG6DOpqIgm/KPw+UeTUGYIvv/CPbqnVs2dp4irR
+ ZdU2ozLZB7yGmemQab+eKmx2WNd8aNgAaGnhBtYl8ryqEyMIop5eK+wUj0jrtT75zYXL
+ DjZOY/4eR72GQNle2zXax65zrvBEYe9aibeI0a4l/vDZogSHzd7PGVdBNuR4pvXBwQnK
+ Zhy9MQGxMlJiVgpPs41myo1PcrB0pjAhLfysGBSuMqNH/58/havd17lXKCA68p++PGna
+ aoUA==
+X-Gm-Message-State: AOJu0YxDpflGOJVqlcykIPs7HgTpnVkVtELgFjwWkZg/IH8Kgyf2PCkv
+ /zy97p6QHFr6Jx8M5AnpZJ8v1nYiJNmFSN5ZGFsQ8bcdoH+42lznZpT2GGYOxg==
+X-Gm-Gg: ASbGncsJezk2UcCPjGBjSw7qGqfAtAiZQ6s5jlUpU/Cq5Przwxht+f6ZJULZ64645i8
+ tje87yh2mU1FpXwKlf0plXx3hpZg8Jl/lkUMe7c4E2Vs7FaEDpNA7Zgm30bf8hCW6QDHyLkiCOs
+ CMNTn+pLruSI6VAmYJblGq+rw0NFO0GDzLHENy8wndAksu44e6KcbirXsNu4CFOwQAv0faWCKt4
+ lO3UC644kEtmHVit0ulyj8G8AsnxRV98AwRsh42Q6GZJsSmMCuubERagFiuy234mhz4kO0HQZpk
+ T52wi3FZbuoFJ+nDsTULq08gupczSBaG0BlwaXCInR+hxmoJSg/Y0+SPNnU9mlzHNL6pc93rhxu
+ s0Kj2o43MnnUJorcInjYNqPvfOjNop7+SljIERHtaCIncnBEyPDLqqg==
+X-Google-Smtp-Source: AGHT+IErPZsiQSY6JyBxZBl9kFG2HQ4hdNOw+ItjJRq69/24y/TgknttycU7nujzZBCGrQ4Rf5iHjQ==
+X-Received: by 2002:a05:600c:1e89:b0:45b:88ed:9558 with SMTP id
+ 5b1f17b1804b1-45b88ed9bc3mr45103825e9.30.1756717291731; 
+ Mon, 01 Sep 2025 02:01:31 -0700 (PDT)
 Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-45b8525a94bsm98171055e9.15.2025.09.01.02.01.33
+ 5b1f17b1804b1-45b8525a94bsm98171055e9.15.2025.09.01.02.01.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 01 Sep 2025 02:01:33 -0700 (PDT)
+ Mon, 01 Sep 2025 02:01:31 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Arnout Vandecappelle <arnout@mind.be>, TIAN Yuanhao <tianyuanhao3@163.com>,
- Edgar Bonet <bonet@grenoble.cnrs.fr>
-Date: Mon,  1 Sep 2025 11:01:20 +0200
-Message-ID: <8c193a85cb4d084bd4213106be3e9f1f4f851702.1756717276.git.yann.morin.1998@free.fr>
+ "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+Date: Mon,  1 Sep 2025 11:01:16 +0200
+Message-ID: <34f309044544536e35eb8632020e9ddff0a53553.1756717276.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <cover.1756717276.git.yann.morin.1998@free.fr>
 References: <cover.1756717276.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1756717295; x=1757322095; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1756717292; x=1757322092; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=2pzarnZI4xT1gl1FhpoComYHSJrnVnqClv1TuEEKwSs=;
- b=U4yqNVc6BDV2v9xSphGXEegaTDKKXCUJHsUCcoqnYQnzhpUY415il6S+ZkEj9Va/12
- m9rYwO57Ffmfn9wAVNSPS8ZS4VmMbl7Be5YPruXCKVKNXDXyfB6pGEMAPuyjltqfwurn
- nxUYgJNLgOyukcOuCsRaaMj+efc9h3tU7pjy/+rcwciA9xe7uiDrHBd9wOi6oHt7jCPV
- KJVhef/rSb7y2mGZZkg+ERUZh14RFfjZFqtKeIXZhPl5dGjnvJBWzA71Ja4zL7i51MI4
- jLik7NVTRvj0r3Ggs5Tz4jPvycTxhQgohdUSlZGLQzX+1eUFvUj+NgUHtYytVjXaxviY
- 4IMw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=RUudtlr6KnonZOIb+ntS/qpcUx+5p51QAmkXIOhGqJI=;
+ b=IDZynsYY/j9DJpfuJPiZvVdSFjPCxqeZU/1metbUut+Oe3yqRHgOiGgrji3idoC9JY
+ trVz+RTpHIb7E5AFU3pqmRe7lXzXKm3MnuMt9MdhAQ3DGi/R9ofw38YWMwYYcjBr9qv4
+ 3y9ama3isuLx2bK3WAVin5RdHWGS8J3NVzmJCgRq5qAWICPTaiIGzFbbdKMyGLiIWbGY
+ HeDwBJjiea4lRl+CzMHEvwNHLJyCDDqumI69Rm+Qv/ST3aZ72rWkskcCRkwuuucaO17g
+ dd9oTqY5ZSxsVWDhUp4UpWkVB+42iUXiXr77EL5c0vX2wegjriCjl/X7IPXEJKtyBiBX
+ qbtQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=fail (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=U4yqNVc6
-Subject: [Buildroot] [PATCH 11/18 v3] system: add support for merged
- /usr/sbin (aka merged-bin)
+ header.a=rsa-sha256 header.s=20230601 header.b=IDZynsYY
+Subject: [Buildroot] [PATCH 07/18 v3] support/scripts: move merged-usr
+ errors message into check-merged-usr.sh
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,198 +116,186 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Starting with version 256 [0], systemd warns when /usr/bin and
-/usr/sbin are different directories; in the future, it may even
-refuse to boot in such a situation.
+By moving the loop over the overlays into the script, we can generate
+better error messages about how and why a skeleton or a specific overlay
+is improperly setup for merged-usr.
 
-Add support for merged-bin, not unlike the support we have for
-merged-usr; we also make merged-bin a sub-case of merged-usr
-(i.e. it is not possible to do merged-bin without merged-usr).
+We can also now rely on its exit code to decicde whether the skeleton or
+the overlays are properly setup, rather than stash the stdout/stderr to
+a Makefile variable and test the emptiness thereof.
 
-[0] https://github.com/systemd/systemd/blob/v256/NEWS#L265
+Introduce a --type option to pass the type of root to verify, for better
+error reporting. This will incidentally be usefull in a future commit,
+when we need to take different actions based on whether the root is a
+skeleton or an overlay.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Acked-by: Arnout Vandecappelle <arnout@mind.be>
-Acked-by: TIAN Yuanhao <tianyuanhao3@163.com>
-Cc: Edgar Bonet <bonet@grenoble.cnrs.fr>
-
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-Changes v1 -> v2:
-  - fix typo  (Edgar)
----
- Makefile                                   |  1 +
- package/skeleton-custom/skeleton-custom.mk |  1 +
- support/scripts/check-merged               | 22 +++++++++++++++++++---
- system/Config.in                           | 11 +++++++++++
- system/skeleton/usr/sbin/.empty            |  0
- system/system.mk                           | 14 +++++++++++++-
- 6 files changed, 45 insertions(+), 4 deletions(-)
- delete mode 100644 system/skeleton/usr/sbin/.empty
+ Makefile                                   | 15 ++---
+ package/skeleton-custom/skeleton-custom.mk | 21 +++----
+ support/scripts/check-merged-usr.sh        | 65 +++++++++++++++++-----
+ 3 files changed, 64 insertions(+), 37 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 2ff944f6f1..5fd49c3e9b 100644
+index d4ad4629c0..a74fcc7324 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -785,6 +785,7 @@ endif
- 	support/scripts/check-merged \
- 		--type overlay \
- 		$(if $(BR2_ROOTFS_MERGED_USR),--merged-usr) \
-+		$(if $(BR2_ROOTFS_MERGED_BIN),--merged-bin) \
- 		$(call qstrip,$(BR2_ROOTFS_OVERLAY))
+@@ -782,17 +782,10 @@ endif
+ # For a merged /usr, ensure that /lib, /bin and /sbin and their /usr
+ # counterparts are appropriately setup as symlinks ones to the others.
+ ifeq ($(BR2_ROOTFS_MERGED_USR),y)
+-
+-	$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
+-		@$(call MESSAGE,"Sanity check in overlay $(d)")$(sep) \
+-		$(Q)not_merged_dirs="$$(support/scripts/check-merged-usr.sh $(d))"; \
+-		test -n "$$not_merged_dirs" && { \
+-			echo "ERROR: The overlay in $(d) is not" \
+-				"using a merged /usr for the following directories:" \
+-				$$not_merged_dirs; \
+-			exit 1; \
+-		} || true$(sep))
+-
++	@$(call MESSAGE,"Sanity check in overlays $(call qstrip,$(BR2_ROOTFS_OVERLAY))")
++	support/scripts/check-merged-usr.sh \
++		--type overlay \
++		$(call qstrip,$(BR2_ROOTFS_OVERLAY))
+ endif # merged /usr
  
  	$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
 diff --git a/package/skeleton-custom/skeleton-custom.mk b/package/skeleton-custom/skeleton-custom.mk
-index 5d65b95ecf..7c79500046 100644
+index b05c834b94..c194108307 100644
 --- a/package/skeleton-custom/skeleton-custom.mk
 +++ b/package/skeleton-custom/skeleton-custom.mk
-@@ -27,6 +27,7 @@ define SKELETON_CUSTOM_CONFIGURE_CMDS
- 	support/scripts/check-merged \
- 		--type skeleton \
- 		$(if $(BR2_ROOTFS_MERGED_USR),--merged-usr) \
-+		$(if $(BR2_ROOTFS_MERGED_BIN),--merged-bin) \
- 		$(SKELETON_CUSTOM_PATH)
- endef
- 
-diff --git a/support/scripts/check-merged b/support/scripts/check-merged
-index 3cccd68dd7..fbda49f1c0 100755
---- a/support/scripts/check-merged
-+++ b/support/scripts/check-merged
-@@ -1,7 +1,9 @@
- #!/usr/bin/env bash
- #
--# Check if a given custom skeleton or overlay complies to the merged /usr
-+# Check if a given custom skeleton or overlay complies to the merged
- # requirements:
-+#
-+# - for merged-usr:
- #   /bin            missing, or a relative symlink to usr/bin
- #   /lib            missing, or a relative symlink to usr/lib
- #   /sbin           missing, or a relative symlink to usr/sbin
-@@ -11,9 +13,14 @@
- #
- # *: must be present for skeletons, can be missing for overlays
- #
-+# - for merged-bin: all of the above, except:
-+#   /usr/sbin       missing, or a relative symlink to bin (thus points
-+#                   to /usr/bin)
-+#
- # Input:
- #   --type TYPE     the type of root to check: 'skeleton' or 'overlay'
- #   --merged-usr    check for merged /usr
-+#   --merged-bin    check for merged /usr/bin
- #   $*:             the root directories (skeleton, overlays) to check
- # Output:
- #   stdout:         the list of non-compliant paths (empty if compliant).
-@@ -22,12 +29,13 @@
- #   !0:             if any directory to check is improperly merged
- #
- 
--opts="type:,merged-usr"
-+opts="type:,merged-usr,merged-bin"
- ARGS="$(getopt -n check-merged -o "" -l "${opts}" -- "${@}")" || exit 1
- eval set -- "${ARGS}"
- 
- type=
- merged_usr=false
-+merged_bin=false
- while :; do
- 	case "${1}" in
- 	(--type)
-@@ -38,6 +46,10 @@ while :; do
- 		merged_usr=true
- 		shift
- 		;;
-+	(--merged-bin)
-+		merged_bin=true
-+		shift
-+		;;
- 	(--)
- 		shift
- 		break
-@@ -110,10 +122,14 @@ for root; do
- 	if ${merged_usr}; then
- 		test_dir "${type}" "${root}" "/" "usr/bin"
- 		test_dir "${type}" "${root}" "/" "usr/lib"
--		test_dir "${type}" "${root}" "/" "usr/sbin"
- 		test_merged "${type}" "${root}" "/" "bin" "usr/bin"
- 		test_merged "${type}" "${root}" "/" "lib" "usr/lib"
- 		test_merged "${type}" "${root}" "/" "sbin" "usr/sbin"
-+		if ${merged_bin}; then
-+			test_merged "${type}" "${root}" "/usr/" "sbin" "bin"
-+		else
-+			test_dir "${type}" "${root}" "/" "usr/sbin"
-+		fi
- 	fi
- done
- 
-diff --git a/system/Config.in b/system/Config.in
-index 32462241a5..0652b94a3b 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -343,6 +343,16 @@ config BR2_ROOTFS_MERGED_USR
- 	  symlinks to their counterparts in /usr. In this case, /usr can
- 	  not be a separate filesystem.
- 
-+config BR2_ROOTFS_MERGED_BIN
-+	bool "Merged /usr/bin"
-+	depends on BR2_ROOTFS_MERGED_USR
-+	help
-+	  If you say 'n' here, then /usr/bin and /usr/sbin will be
-+	  separate directories; this is the historical UNIX way.
-+
-+	  If you say 'y' here, then /usr/sbin will be a relative
-+	  symlink to /usr/bin.
-+
- if BR2_ROOTFS_SKELETON_DEFAULT
- 
- config BR2_TARGET_ENABLE_ROOT_LOGIN
-@@ -529,6 +539,7 @@ endif # BR2_ROOTFS_SKELETON_DEFAULT
- 
- config BR2_SYSTEM_DEFAULT_PATH
- 	string "Set the system's default PATH"
-+	default "/usr/bin" if BR2_ROOTFS_MERGED_BIN
- 	default "/usr/bin:/usr/sbin" if BR2_ROOTFS_MERGED_USR
- 	default "/bin:/sbin:/usr/bin:/usr/sbin"
- 	help
-diff --git a/system/skeleton/usr/sbin/.empty b/system/skeleton/usr/sbin/.empty
-deleted file mode 100644
-index e69de29bb2..0000000000
-diff --git a/system/system.mk b/system/system.mk
-index 8fe2c138b0..52e810868a 100644
---- a/system/system.mk
-+++ b/system/system.mk
-@@ -32,18 +32,30 @@
- #   set inittab to remount root read-write or read-only
- #
- 
--# This function handles the merged or non-merged /usr cases
-+# This function handles the merged or non-merged /usr, and merged or
-+# non-merged /usr/bin cases
+@@ -26,17 +26,16 @@ endif
+ # For a merged /usr, ensure that /lib, /bin and /sbin and their /usr
+ # counterparts are appropriately setup as symlinks ones to the others.
  ifeq ($(BR2_ROOTFS_MERGED_USR),y)
-+ifeq ($(BR2_ROOTFS_MERGED_BIN),y)
-+define SYSTEM_SBIN_SYMLINKS_OR_DIRS
-+	ln -snf bin $(1)/usr/sbin
+-SKELETON_CUSTOM_NOT_MERGED_USR_DIRS = \
+-	$(shell support/scripts/check-merged-usr.sh $(SKELETON_CUSTOM_PATH))
++define SKELETON_CUSTOM_NOT_MERGED_USR_DIRS
++	support/scripts/check-merged-usr.sh \
++		--type skeleton \
++		$(SKELETON_CUSTOM_PATH)
 +endef
-+else
-+define SYSTEM_SBIN_SYMLINKS_OR_DIRS
-+	$(INSTALL) -d -m 0755 $(1)/usr/sbin
-+endef
-+endif
- define SYSTEM_USR_SYMLINKS_OR_DIRS
- 	ln -snf usr/bin $(1)/bin
- 	ln -snf usr/sbin $(1)/sbin
- 	ln -snf usr/lib $(1)/lib
-+	$(SYSTEM_SBIN_SYMLINKS_OR_DIRS)
- endef
- else
- define SYSTEM_USR_SYMLINKS_OR_DIRS
- 	$(INSTALL) -d -m 0755 $(1)/bin
- 	$(INSTALL) -d -m 0755 $(1)/sbin
- 	$(INSTALL) -d -m 0755 $(1)/lib
-+	$(INSTALL) -d -m 0755 $(1)/usr/sbin
- endef
- endif
+ endif # merged /usr
  
+-ifeq ($(BR2_PACKAGE_SKELETON_CUSTOM)$(BR_BUILDING),yy)
+-ifneq ($(SKELETON_CUSTOM_NOT_MERGED_USR_DIRS),)
+-$(error The custom skeleton in $(SKELETON_CUSTOM_PATH) is not \
+-	using a merged /usr for the following directories: \
+-	$(SKELETON_CUSTOM_NOT_MERGED_USR_DIRS))
+-endif
+-endif
++define SKELETON_CUSTOM_CONFIGURE_CMDS
++	$(SKELETON_CUSTOM_NOT_MERGED_USR_DIRS)
++endef
+ 
+ # The target-dir-warning file and the lib{32,64} symlinks are the only
+ # things we customise in the custom skeleton.
+@@ -49,9 +48,7 @@ define SKELETON_CUSTOM_INSTALL_TARGET_CMDS
+ endef
+ 
+ # For the staging dir, we don't really care what we install, but we
+-# need the /lib and /usr/lib appropriately setup. Since we ensure,
+-# above, that they are correct in the skeleton, we can simply copy the
+-# skeleton to staging.
++# need the /lib and /usr/lib appropriately setup.
+ define SKELETON_CUSTOM_INSTALL_STAGING_CMDS
+ 	$(call SYSTEM_RSYNC,$(SKELETON_CUSTOM_PATH),$(STAGING_DIR))
+ 	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(STAGING_DIR))
+diff --git a/support/scripts/check-merged-usr.sh b/support/scripts/check-merged-usr.sh
+index 6d31c81c21..c3b5c6419a 100755
+--- a/support/scripts/check-merged-usr.sh
++++ b/support/scripts/check-merged-usr.sh
+@@ -11,16 +11,48 @@
+ # /usr/sbin/
+ #
+ # Input:
+-#   $1:     the root directory (skeleton, overlay) to check
++#   --type TYPE     the type of root to check: 'skeleton' or 'overlay'
++#   $*:             the root directories (skeleton, overlays) to check
+ # Output:
+-#   stdout: the list of non-compliant paths (empty if compliant).
++#   stdout:         the list of non-compliant paths (empty if compliant).
+ # Exit code:
+-#   0:      in case of success (stdout will be empty)
+-#   !0:     if any path is improperly merged
++#   0:              in case of success (stdout will be empty)
++#   !0:             if any path is improperly merged
+ #
+ 
+-# The directory to check for merged-usr
+-root="${1}"
++opts="type:"
++ARGS="$(getopt -n check-merged -o "" -l "${opts}" -- "${@}")" || exit 1
++eval set -- "${ARGS}"
++
++type=
++while :; do
++	case "${1}" in
++	(--type)
++		type="${2}"
++		shift 2
++		;;
++	(--)
++		shift
++		break
++		;;
++	esac
++done
++
++report_error() {
++	local type="${1}"
++	local root="${2}"
++	local fmt="${3}"
++	shift 3
++
++	if ${first}; then
++		printf "The %s in %s is not properly setup:\n" \
++			"${type}" "${root}"
++	fi
++	first=false
++	# shellcheck disable=SC2059  # fmt *is* a format string
++	printf "  - ${fmt}" "${@}"
++	is_success=false
++}
+ 
+ # Extract the inode numbers for all of those directories. In case any is
+ # a symlink, we want to get the inode of the pointed-to directory, so we
+@@ -42,19 +74,24 @@ is_valid_merged() {
+ }
+ 
+ test_merged() {
+-	local root="${1}"
+-	local dir1="${2}"
+-	local dir2="${3}"
++	local type="${1}"
++	local root="${2}"
++	local dir1="${3}"
++	local dir2="${4}"
+ 
+ 	if ! is_valid_merged "${root}" "${dir1}" "${dir2}"; then
+-		printf '%s\n' "${dir1}"
+-		is_success=false
++		report_error "${type}" "${root}" \
++			'%s should be missing, or be a relative symlink to %s\n' \
++			"${dir1}" "${dir2}"
+ 	fi
+ }
+ 
+ is_success=true
+-test_merged "${root}" "/lib" "/usr/lib"
+-test_merged "${root}" "/bin" "/usr/bin"
+-test_merged "${root}" "/sbin" "/usr/sbin"
++for root; do
++	first=true
++	test_merged "${type}" "${root}" "/lib" "/usr/lib"
++	test_merged "${type}" "${root}" "/bin" "/usr/bin"
++	test_merged "${type}" "${root}" "/sbin" "/usr/sbin"
++done
+ 
+ ${is_success}
 -- 
 2.51.0
 
