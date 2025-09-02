@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7ED17CAC581
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:18:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79A3ACAC589
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:18:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 545CE809A8;
-	Mon,  8 Sep 2025 14:18:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 549C5606C1;
+	Mon,  8 Sep 2025 14:18:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PmVt1BnFHo4l; Mon,  8 Sep 2025 14:18:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5J31hmLVzN7F; Mon,  8 Sep 2025 14:18:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0594809B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5867C60726
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C0594809B1;
-	Mon,  8 Sep 2025 14:18:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5867C60726;
+	Mon,  8 Sep 2025 14:18:41 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id ED062186
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:43 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 693F4CA
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E39A84020A
+ by smtp4.osuosl.org (Postfix) with ESMTP id E880B40211
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5iEOWexFZECS for <buildroot@buildroot.org>;
+ id WUCHFBCABERW for <buildroot@buildroot.org>;
  Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4357A40212
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FB214020B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4357A40212
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2FB214020B
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4036B818B3; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
+ id 21C4B80DA7; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 3 Sep 2025 19:10:51 +0200
+Date: Tue, 2 Sep 2025 21:49:50 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 98399d11ff6afe053a052f867bb0610eaacd52a0
-X-Git-Newrev: 5c618d65ff749832801f9c5f5114c9b944d408d2
+X-Git-Oldrev: 498b5f3846831e4e9407eed2069bb33e1f5442f8
+X-Git-Newrev: 98399d11ff6afe053a052f867bb0610eaacd52a0
 X-Patchwork-Hint: ignore
-Message-Id: <20250908141630.4036B818B3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/re2: bump to version 2025-08-12
+Message-Id: <20250908141630.21C4B80DA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zfs: bump version to 2.3.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,62 +60,154 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2108642455882261189=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c618d65ff749832801f9c5f5114c9b944d408d2
+--===============2108642455882261189==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=98399d11ff6afe053a052f867bb0610eaacd52a0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- re2 now needs C++17
+Added backported patch:
+- 0001-use-sys_stath-instead-of-linux_stath.patch
+  https://github.com/openzfs/zfs/commit/ccf5a8a6fcfdfbdaa2f0fdca5d787958224bf06d
 
-changelog: https://github.com/google/re2/compare/2024-07-02...2025-08-12
+For release note, see:
+https://github.com/openzfs/zfs/releases/tag/zfs-2.3.4
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/re2/Config.in | 2 +-
- package/re2/re2.hash  | 2 +-
- package/re2/re2.mk    | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ ...0001-use-sys_stath-instead-of-linux_stath.patch | 82 ++++++++++++++++++++++
+ package/zfs/zfs.hash                               |  4 +-
+ package/zfs/zfs.mk                                 |  2 +-
+ 3 files changed, 85 insertions(+), 3 deletions(-)
 
-diff --git a/package/re2/Config.in b/package/re2/Config.in
-index b79e711ad3..acc4bdbe46 100644
---- a/package/re2/Config.in
-+++ b/package/re2/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_RE2
- 	bool "re2"
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++14
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS # libabseil-cpp
- 	select BR2_PACKAGE_LIBABSEIL_CPP
-diff --git a/package/re2/re2.hash b/package/re2/re2.hash
-index baa3a927c5..25ca9b4896 100644
---- a/package/re2/re2.hash
-+++ b/package/re2/re2.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256  eb2df807c781601c14a260a507a5bb4509be1ee626024cb45acbd57cb9d4032b  re2-2024-07-02.tar.gz
-+sha256  2f3bec634c3e51ea1faf0d441e0a8718b73ef758d7020175ed7e352df3f6ae12  re2-2025-08-12.tar.gz
- sha256  6040cda75d90b1738292a631d89934c411ef7ffd543c4d6a1b7edfc8edf29449  LICENSE
-diff --git a/package/re2/re2.mk b/package/re2/re2.mk
-index 80db4db650..1068e7cc54 100644
---- a/package/re2/re2.mk
-+++ b/package/re2/re2.mk
+diff --git a/package/zfs/0001-use-sys_stath-instead-of-linux_stath.patch b/package/zfs/0001-use-sys_stath-instead-of-linux_stath.patch
+new file mode 100644
+index 0000000000..5e5d21ec52
+--- /dev/null
++++ b/package/zfs/0001-use-sys_stath-instead-of-linux_stath.patch
+@@ -0,0 +1,82 @@
++From ccf5a8a6fcfdfbdaa2f0fdca5d787958224bf06d Mon Sep 17 00:00:00 2001
++From: classabbyamp <5366828+classabbyamp@users.noreply.github.com>
++Date: Wed, 27 Aug 2025 17:42:32 -0400
++Subject: [PATCH] linux: use sys/stat.h instead of linux/stat.h
++
++glibc includes linux/stat.h for statx, but musl defines its own statx
++struct and associated constants, which does not include STATX_MNT_ID
++yet. Thus, including linux/stat.h directly should be avoided for
++maximum libc compatibility.
++
++Tested on:
++  - glibc: x86_64, i686, aarch64, armv7l, armv6l
++  - musl: x86_64, aarch64, armv7l, armv6l
++
++Reviewed-by: Brian Behlendorf <behlendorf1@llnl.gov>
++Tested-By: Achill Gilgenast <achill@achill.org>
++Signed-off-by: classabbyamp <dev@placeviolette.net>
++Closes #17675
++
++Upstream: https://github.com/openzfs/zfs/commit/ccf5a8a6fcfdfbdaa2f0fdca5d787958224bf06d
++Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
++---
++ config/user-statx.m4                   | 6 +++---
++ include/os/linux/spl/sys/stat.h        | 2 +-
++ lib/libspl/include/os/linux/sys/stat.h | 2 +-
++ 3 files changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/config/user-statx.m4 b/config/user-statx.m4
++index 0315f93e0c20..1ba74a40e9b8 100644
++--- a/config/user-statx.m4
+++++ b/config/user-statx.m4
++@@ -2,7 +2,7 @@ dnl #
++ dnl # Check for statx() function and STATX_MNT_ID availability
++ dnl #
++ AC_DEFUN([ZFS_AC_CONFIG_USER_STATX], [
++-	AC_CHECK_HEADERS([linux/stat.h],
+++	AC_CHECK_HEADERS([sys/stat.h],
++ 		[have_stat_headers=yes],
++ 		[have_stat_headers=no])
++ 
++@@ -14,7 +14,7 @@ AC_DEFUN([ZFS_AC_CONFIG_USER_STATX], [
++ 			AC_MSG_CHECKING([for STATX_MNT_ID])
++ 			AC_COMPILE_IFELSE([
++ 				AC_LANG_PROGRAM([[
++-					#include <linux/stat.h>
+++					#include <sys/stat.h>
++ 				]], [[
++ 					struct statx stx;
++ 					int mask = STATX_MNT_ID;
++@@ -29,6 +29,6 @@ AC_DEFUN([ZFS_AC_CONFIG_USER_STATX], [
++ 			])
++ 		])
++ 	], [
++-		AC_MSG_WARN([linux/stat.h not found; skipping statx support])
+++		AC_MSG_WARN([sys/stat.h not found; skipping statx support])
++ 	])
++ ])  dnl end AC_DEFUN
++diff --git a/include/os/linux/spl/sys/stat.h b/include/os/linux/spl/sys/stat.h
++index 087389b57b34..ad2815e46394 100644
++--- a/include/os/linux/spl/sys/stat.h
+++++ b/include/os/linux/spl/sys/stat.h
++@@ -25,6 +25,6 @@
++ #ifndef _SPL_STAT_H
++ #define	_SPL_STAT_H
++ 
++-#include <linux/stat.h>
+++#include <sys/stat.h>
++ 
++ #endif /* SPL_STAT_H */
++diff --git a/lib/libspl/include/os/linux/sys/stat.h b/lib/libspl/include/os/linux/sys/stat.h
++index a605af962a6d..13cc0b46ac93 100644
++--- a/lib/libspl/include/os/linux/sys/stat.h
+++++ b/lib/libspl/include/os/linux/sys/stat.h
++@@ -33,7 +33,7 @@
++ 
++ #ifdef HAVE_STATX
++ #include <fcntl.h>
++-#include <linux/stat.h>
+++#include <sys/stat.h>
++ #endif
++ 
++ /*
+diff --git a/package/zfs/zfs.hash b/package/zfs/zfs.hash
+index 87ee513aed..0f309155ae 100644
+--- a/package/zfs/zfs.hash
++++ b/package/zfs/zfs.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/openzfs/zfs/releases/download/zfs-2.3.3/zfs-2.3.3.sha256.asc
+-sha256  844122118f0ea81205a01753bbcb1315330f8967c1f866dcd10155273131f071  zfs-2.3.3.tar.gz
++# From https://github.com/openzfs/zfs/releases/download/zfs-2.3.4/zfs-2.3.4.sha256.asc
++sha256  9ec397cf360133161a1180035f3e7d6962186ed2b3457953a28d45aa883fa495  zfs-2.3.4.tar.gz
+ 
+ # Hash for license files:
+ sha256  1ffb70c33c4f79f04e947facc5c7851f289609256aacb47fc115f700427d9520  LICENSE
+diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
+index ad4f3f232d..a48f89922b 100644
+--- a/package/zfs/zfs.mk
++++ b/package/zfs/zfs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RE2_VERSION = 2024-07-02
-+RE2_VERSION = 2025-08-12
- RE2_SITE = $(call github,google,re2,$(RE2_VERSION))
- RE2_LICENSE = BSD-3-Clause
- RE2_LICENSE_FILES = LICENSE
+-ZFS_VERSION = 2.3.3
++ZFS_VERSION = 2.3.4
+ ZFS_SITE = https://github.com/openzfs/zfs/releases/download/zfs-$(ZFS_VERSION)
+ ZFS_SELINUX_MODULES = zfs
+ ZFS_LICENSE = CDDL
+
+--===============2108642455882261189==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2108642455882261189==--
