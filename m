@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 158E2CAC589
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:17:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED8C3CAC581
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:17:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D95DF806F8;
-	Mon,  8 Sep 2025 14:17:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C183D60745;
+	Mon,  8 Sep 2025 14:17:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aHu1-VNOK16f; Mon,  8 Sep 2025 14:17:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zhDveFxqlUyD; Mon,  8 Sep 2025 14:17:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEE83806FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEC84606E5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AEE83806FA;
-	Mon,  8 Sep 2025 14:17:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2E828186
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EEC84606E5;
+	Mon,  8 Sep 2025 14:17:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 68142186
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D44E340210
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B66584007A
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kmeGIdV17tnt for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 14:16:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VhLizlQDjSzu for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3129040201
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D36940058
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3129040201
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D36940058
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2E58783CB2; Mon,  8 Sep 2025 14:16:24 +0000 (UTC)
+ id 0A71F80DA7; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 24 Aug 2025 17:19:39 +0200
+Date: Tue, 2 Sep 2025 21:47:13 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 519d03657c6a247f739003a3590c93948e6a48d8
-X-Git-Newrev: 44606af8a6b593d49942de0dcba50e0fd9492829
+X-Git-Oldrev: 4c2cf885d89872bb99e2f6945205b152c194abc5
+X-Git-Newrev: 498b5f3846831e4e9407eed2069bb33e1f5442f8
 X-Patchwork-Hint: ignore
-Message-Id: <20250908141624.2E58783CB2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/harfbuzz: bump to version 11.4.3
+Message-Id: <20250908141630.0A71F80DA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/catch2: bump to version 3.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,41 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44606af8a6b593d49942de0dcba50e0fd9492829
+commit: https://git.buildroot.net/buildroot/commit/?id=498b5f3846831e4e9407eed2069bb33e1f5442f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release Notes:
-https://github.com/harfbuzz/harfbuzz/releases/tag/11.4.3
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+v3.10.0: https://github.com/catchorg/Catch2/releases/tag/v3.10.0
+v3.9.1: https://github.com/catchorg/Catch2/releases/tag/v3.9.1
+v3.9.0: https://github.com/catchorg/Catch2/releases/tag/v3.9.0
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/harfbuzz/harfbuzz.hash | 2 +-
- package/harfbuzz/harfbuzz.mk   | 2 +-
+ package/catch2/catch2.hash | 2 +-
+ package/catch2/catch2.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 3085b8aded..463a37d22b 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
+diff --git a/package/catch2/catch2.hash b/package/catch2/catch2.hash
+index 30ff1f43b3..8776009945 100644
+--- a/package/catch2/catch2.hash
++++ b/package/catch2/catch2.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  7aafab93115eb56cdc9a931ab7d19ff60d7f2937b599d140f17236f374e32698  harfbuzz-11.4.1.tar.xz
-+sha256  6660415ad48fa1a46e4fa75fcdb70ff819c452153f08677d34ffb29eda66415d  harfbuzz-11.4.3.tar.xz
- sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 50ce2b6ada..103ab7a6f5 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
+ # Locally computed:
+-sha256  18b3f70ac80fccc340d8c6ff0f339b2ae64944782f8d2fca2bd705cf47cadb79  catch2-3.8.1.tar.gz
++sha256  fc4303a5c2738beaa727066e126b5a28837a812230a3c5826caa38e7ab99ca48  catch2-3.10.0.tar.gz
+ sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE.txt
+diff --git a/package/catch2/catch2.mk b/package/catch2/catch2.mk
+index 00d6e5bfdc..76fb852464 100644
+--- a/package/catch2/catch2.mk
++++ b/package/catch2/catch2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HARFBUZZ_VERSION = 11.4.1
-+HARFBUZZ_VERSION = 11.4.3
- HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+-CATCH2_VERSION = 3.8.1
++CATCH2_VERSION = 3.10.0
+ CATCH2_SITE = $(call github,catchorg,Catch2,v$(CATCH2_VERSION))
+ CATCH2_INSTALL_STAGING = YES
+ CATCH2_INSTALL_TARGET = NO
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
