@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2425CCA1005
-	for <buildroot@archiver.kernel.org>; Tue,  2 Sep 2025 19:28:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02FEFCA1007
+	for <buildroot@archiver.kernel.org>; Tue,  2 Sep 2025 19:49:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC1E384248;
-	Tue,  2 Sep 2025 19:28:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B0C4082278;
+	Tue,  2 Sep 2025 19:49:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HPXTZ_lKprO5; Tue,  2 Sep 2025 19:28:05 +0000 (UTC)
+ id 0ftAfwnBWcy6; Tue,  2 Sep 2025 19:49:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 188E082978
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0222782A0B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 188E082978;
-	Tue,  2 Sep 2025 19:28:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 94643439
- for <buildroot@buildroot.org>; Tue,  2 Sep 2025 19:28:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0222782A0B;
+	Tue,  2 Sep 2025 19:49:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B5631D2
+ for <buildroot@buildroot.org>; Tue,  2 Sep 2025 19:49:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7ABB382978
- for <buildroot@buildroot.org>; Tue,  2 Sep 2025 19:28:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9C14940DE5
+ for <buildroot@buildroot.org>; Tue,  2 Sep 2025 19:49:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Tlp-mLm2OKBP for <buildroot@buildroot.org>;
- Tue,  2 Sep 2025 19:28:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F283F80FE8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F283F80FE8
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F283F80FE8
- for <buildroot@buildroot.org>; Tue,  2 Sep 2025 19:28:02 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 758A8B00572;
- Tue,  2 Sep 2025 21:27:59 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 02 Sep 2025 21:27:59 +0200
-MIME-Version: 1.0
-Date: Tue, 02 Sep 2025 21:27:59 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250901194904.390419-1-giulio.benetti@benettiengineering.com>
-References: <20250901194904.390419-1-giulio.benetti@benettiengineering.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <d3d259c08d2a6d6201790de3a062c5b4@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1756841280;
- bh=PVBnp/a6XeJvG7KTvM+xQ4oc4jdEg7Lph8UlYH0/rCI=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=H8JriWDykJmlB128RY7CZty34xaODxEjF8XymUeaT47MJx6Z1TxVe8qnZEZdh7G7Y
- e6qC6jUu4laMcCrtCtuf03GYWZxPP/9v720peNBebgJ0xajPXeKDSNxc7asYlx1eAw
- kpiieuhGYI2WI3j5k2eJcYgO2Y+hWmi/8MEjAtkcedNx5yUqGcfj+6J/zZ7Fm2KrB9
- +/X9+kdjjq99lbxtIHFmFETvGaqX7gc/6ZqAqPXj5wpLKv4yeih7S+0as6CBnyViP2
- boGhGRSfwakGAIONl8HORGySPP3+7itBvK+1+nBqdJKBTIAPpqwSHmM0MKC1UYnJ/7
- is11uiDhgZ7EQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=H8JriWDy
-Subject: Re: [Buildroot] [for-next] package/harfbuzz: bump to version 11.4.5
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3ZpNUVhDJxAR for <buildroot@buildroot.org>;
+ Tue,  2 Sep 2025 19:49:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECDB740DF5
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id ECDB740DF5
+ for <buildroot@buildroot.org>; Tue,  2 Sep 2025 19:49:06 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CBF7887C86; Tue,  2 Sep 2025 19:49:06 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 2 Sep 2025 21:47:13 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 4c2cf885d89872bb99e2f6945205b152c194abc5
+X-Git-Newrev: 498b5f3846831e4e9407eed2069bb33e1f5442f8
+X-Patchwork-Hint: ignore
+Message-Id: <20250902194906.CBF7887C86@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/catch2: bump to
+ version 3.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,18 +60,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 01/09/2025 21:49, Giulio Benetti wrote:
-> Release Notes:
-> https://github.com/harfbuzz/harfbuzz/releases/tag/11.4.5
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=498b5f3846831e4e9407eed2069bb33e1f5442f8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Applied to next, thanks.
+Release Notes:
+
+v3.10.0: https://github.com/catchorg/Catch2/releases/tag/v3.10.0
+v3.9.1: https://github.com/catchorg/Catch2/releases/tag/v3.9.1
+v3.9.0: https://github.com/catchorg/Catch2/releases/tag/v3.9.0
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/catch2/catch2.hash | 2 +-
+ package/catch2/catch2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/catch2/catch2.hash b/package/catch2/catch2.hash
+index 30ff1f43b3..8776009945 100644
+--- a/package/catch2/catch2.hash
++++ b/package/catch2/catch2.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  18b3f70ac80fccc340d8c6ff0f339b2ae64944782f8d2fca2bd705cf47cadb79  catch2-3.8.1.tar.gz
++sha256  fc4303a5c2738beaa727066e126b5a28837a812230a3c5826caa38e7ab99ca48  catch2-3.10.0.tar.gz
+ sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE.txt
+diff --git a/package/catch2/catch2.mk b/package/catch2/catch2.mk
+index 00d6e5bfdc..76fb852464 100644
+--- a/package/catch2/catch2.mk
++++ b/package/catch2/catch2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CATCH2_VERSION = 3.8.1
++CATCH2_VERSION = 3.10.0
+ CATCH2_SITE = $(call github,catchorg,Catch2,v$(CATCH2_VERSION))
+ CATCH2_INSTALL_STAGING = YES
+ CATCH2_INSTALL_TARGET = NO
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
