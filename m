@@ -1,104 +1,107 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D352CA1005
-	for <buildroot@archiver.kernel.org>; Tue,  2 Sep 2025 09:22:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60681CA1005
+	for <buildroot@archiver.kernel.org>; Tue,  2 Sep 2025 11:41:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0639C60AEE;
-	Tue,  2 Sep 2025 09:22:23 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ITR3yUDNUBj4; Tue,  2 Sep 2025 09:22:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4347460BBA
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4347460BBA;
-	Tue,  2 Sep 2025 09:22:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id EC199439
- for <buildroot@buildroot.org>; Tue,  2 Sep 2025 09:22:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D243240CC3
- for <buildroot@buildroot.org>; Tue,  2 Sep 2025 09:22:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D9D9640B5E;
+	Tue,  2 Sep 2025 11:41:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W1KJhnRBr1ym for <buildroot@buildroot.org>;
- Tue,  2 Sep 2025 09:22:20 +0000 (UTC)
+ id Y8sZngH496cF; Tue,  2 Sep 2025 11:41:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D97DF40A83
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id D97DF40A83;
+	Tue,  2 Sep 2025 11:41:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 93F8A10E
+ for <buildroot@buildroot.org>; Tue,  2 Sep 2025 11:41:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 85E4C83BD4
+ for <buildroot@buildroot.org>; Tue,  2 Sep 2025 11:41:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ikgFVKQSU70J for <buildroot@buildroot.org>;
+ Tue,  2 Sep 2025 11:41:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62c; helo=mail-ej1-x62c.google.com;
- envelope-from=andrea.ricchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 06AD040CCC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06AD040CCC
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
- [IPv6:2a00:1450:4864:20::62c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 06AD040CCC
- for <buildroot@buildroot.org>; Tue,  2 Sep 2025 09:22:19 +0000 (UTC)
-Received: by mail-ej1-x62c.google.com with SMTP id
- a640c23a62f3a-b0411b83aafso366567766b.1
- for <buildroot@buildroot.org>; Tue, 02 Sep 2025 02:22:19 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ envelope-from=elmehdi.younes@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CF84D83BCC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF84D83BCC
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CF84D83BCC
+ for <buildroot@buildroot.org>; Tue,  2 Sep 2025 11:41:49 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-45b9814efbcso4710565e9.0
+ for <buildroot@buildroot.org>; Tue, 02 Sep 2025 04:41:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1756804938; x=1757409738;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=o2w0FeKWU7YKhfBV82odWK3SCvZ0eR9fJ6LrXFLcjuQ=;
- b=aLTXZAxZP2Zt0gLYPkvNe2bFDXUm/tJxe3/cwnlhzj1otamT3R+zEx2o56/CRFn2ts
- W8WkHspf03kV597gu9hidb5Po9C15u/Ubf7bVBIb1Q9AsRtvAb4QpnW6D81XYazb3na7
- eOswy+9RR1lxgXTyohEekv+rUH79hzO6m6iDheOPf6Wa8kVkixswnYPgLGZUGuYUF5DW
- 92r28xM0hK0kk6NSmHt2oj2wViyhut06vsvWS/Nhzxo4h9HQvMLJYvxsBgr1rgiqMZK3
- bNTpOVhIQA1aOOxtUpspEMIXTXMWkyG8emSn7iX8paiK+9vgC8C6KB1PHgTcg9DVom9o
- jmbQ==
-X-Gm-Message-State: AOJu0YwEnlWrUQwCm7Mab19x0PPn/24FDH0YQJMQyJuzW8f8ytOdbEIS
- zQRW+GIyCWb8GePc557BdSYjKmOx+SAe+V2uQqThR+Gq71ZXqIyKWTQ7wY6rFO+O34z/esbG064
- et1AU4XQ=
-X-Gm-Gg: ASbGncvbjxEB4ouC4XD70SEGuJp9VOS9KCIkYUkcFZyXkECk2mNGYKkHv2R1dpl7kOk
- mW1orQKbYdL1cuUGwRlh6jaBrYkkBI7vXnz/GSyuyopuSmTaaY+9uVYj7HnznVTm948DVaDeLYV
- BDH5mwg+kilPAu8A5jpK6bFR9vIaVt7yViOfktEicOe4TTMa8V+AvEfSvvjl2BxFQ/OCyD8Qcf1
- dQfH0rW0m+kiW90pm0zMJSJSBzJlfN3vgoCmCoJ717bsEPaoq05QEna46UIo1PoPHUF5eTqeWw4
- 3aalRvfc57zwiI/yglIKgSz773fvxz3T2+xQTWyh/LqaRX57W8WW3RZGw8dJwYs0Fe8yzq+xVlj
- JkhPdfoOjN4JYgQ2Obb9QZne+V4O6xnf6wF/64KqwPpy6Yg+CqdRrj0qBK4tjbImLJATfwy0v9e
- K+dFzZElEEpTQ7DaHhenhR+tJx9TwoQ5jt7MpH+KNVxzGzkkaOTeKx/VyUqUOgh15WyUIa9vIBl
- Q==
-X-Google-Smtp-Source: AGHT+IHf7JkUqT8z7DVTbcNlwqhQVR0VIt2lRSasAPxG5G2N1DxuyXqVbkff2o1fboTNlg1TtOSGQg==
-X-Received: by 2002:a17:907:1ca0:b0:b04:286a:2fb8 with SMTP id
- a640c23a62f3a-b04286a4b87mr717470266b.56.1756804937622; 
- Tue, 02 Sep 2025 02:22:17 -0700 (PDT)
-Received: from rcc-ThinkPad-P14s-Gen-5.amarulasolutions.com
- (93-47-52-235.ip111.fastwebnet.it. [93.47.52.235])
+ d=1e100.net; s=20230601; t=1756813308; x=1757418108;
+ h=in-reply-to:from:content-language:references:cc:to:subject
+ :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+ :cc:subject:date:message-id:reply-to;
+ bh=I4uwRhQNrrgRB9O+4GkpxjLHQHQW6FFxE4W+gSMy0+Q=;
+ b=bw+4pKhHN4/YTTxdWzEboMeeU1mZq10lMVB3mjL5IDLeCWSwcGdnJF/5PTg5O5mJPZ
+ K9TkgxWTpzrIO2Y+YcxDxMFw5bs9OwwwM+7Gq5yea5pLt92pxYwQCZdQ/XifNYLKlE4V
+ Ht9G0ct0aZSUxxTTsLCszlMjgsjRnte8W8YKnheayQInOY59+uxSSFl1NKT3o95MyXK2
+ I1BG6PBybX8hXizCTHncipGjav+DyOG2E9cySIME/gPAA7U4X1uZ1QWFDEMgyH70woag
+ noyhLxZDPxEYxbi6LGGgwox+TPi+4/Nhn/mWH/RX7VgNkKt28jK4JHQk6T/D2hS4D/sq
+ 6/8A==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCWgx8ht7yvKp9aLcwk/XdTrBdqWXIETtZIzzhCpD6kNWlIHzwEiEAULbRmxILV2HCyJ2w+tJZtIzp8=@buildroot.org
+X-Gm-Message-State: AOJu0YzJSfs0G7uznxbuDTJwhp6/BlOdP2wD1obDQpWttXCTAzJpt5wW
+ Le6n8cO9tst1nhArBPwjAVlA5kPqdt+5qvRrao4/e+t7HS3JZgObMZumuYpSvEhwqew=
+X-Gm-Gg: ASbGncsbLE4qdBRbmhrPH6S93/ycKag/GwqptFiplxaV1OdpMoHlFITXHD/thLKT5B3
+ MB9CDGuFXJz1AHNdTPJWxNvGlsfpT69FImXz4rxKx6XCZXt6Cn4FMsFmOIlPhB3IDD+++9qwTFf
+ hQKSU82sVSt2hOyG1BCw0uqeASxpjMNLTjzpn9vL0bamo/zGUN5MfhtW+tXkUHL+//jnD4ned7a
+ JutAWrSEFa60jjdEXhIKo7a4IjboERx49RhtZiUFQcMzhCVMuW9Z0jvYI0W4KbNqY1XAkBs86P1
+ y9RQVdHse7POa+QidXmloQCxJEOVL3PP++NMeWlndM6fd/rlLXZNn2bBFibzoitvGV9TPlM7/0H
+ rQs3ARg8+zm+VirlBKFBOjQQQRWoYXV3FU7nn/lIRtujgPInk3fsQX+5bqjrE+ronqpwPvAbVdm
+ g6eRATGAgdE+eX/RqHrVq51wE=
+X-Google-Smtp-Source: AGHT+IEYlWEwwDHSDt1X+Q8abZdgs/U0YIYehMiRsSI/TQediKigDggz7usdhJg3ImcVCe5cIOrKFA==
+X-Received: by 2002:a05:6000:1447:b0:3da:6fd3:bc56 with SMTP id
+ ffacd0b85a97d-3da6fd3c202mr1338681f8f.4.1756813307605; 
+ Tue, 02 Sep 2025 04:41:47 -0700 (PDT)
+Received: from [10.5.90.83]
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b0411bf1b09sm686172666b.79.2025.09.02.02.22.16
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 02 Sep 2025 02:22:17 -0700 (PDT)
-From: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Cc: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue,  2 Sep 2025 11:22:07 +0200
-Message-ID: <20250902092208.28317-1-andrea.ricchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+ ffacd0b85a97d-3da9a6470f4sm2248027f8f.36.2025.09.02.04.41.46
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 02 Sep 2025 04:41:47 -0700 (PDT)
+Message-ID: <4e6e5e34-a0ff-4d89-9d79-56d1c756425e@smile.fr>
+Date: Tue, 2 Sep 2025 13:41:46 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ David Pierret <david.pierret@smile.fr>
+Cc: Romain Naour <romain.naour@smile.fr>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+References: <20250829234459.01a60586@windsurf>
+Content-Language: en-US
+In-Reply-To: <20250829234459.01a60586@windsurf>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1756804938; x=1757409738;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=o2w0FeKWU7YKhfBV82odWK3SCvZ0eR9fJ6LrXFLcjuQ=;
- b=XhVUeNQ3SckxgoI7+VC5zD41IY8H0rfrXhohrlNT1naFoEv3IbpPQXy7365WwCtZjc
- 747guX+n3aUZae5toY3kD5OgGjsb8tLDhY6aZRI0NtDW0FzAgUS8w9jeMdAm7KFzhAxr
- SLQtwwgZI/7fe5h/eR+xFCAFzwW0c/fK+7kIg=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=smile.fr; s=google; t=1756813308; x=1757418108; darn=buildroot.org;
+ h=in-reply-to:from:content-language:references:cc:to:subject
+ :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=I4uwRhQNrrgRB9O+4GkpxjLHQHQW6FFxE4W+gSMy0+Q=;
+ b=a8KbVgWshj8hVwcVXTJUaSFGnbQLxKa5mg6hUn7NnkgUo8hkJM9OvLty4/MdKDsaxp
+ SYIvtoZYkwLx/FXePSPKqe2G9PwqMR2ZiAZvvj43NBLIHGP8l0lInxtYfOEkFbnOy3je
+ 7yW6O8mSzYw7OFOWcCLtrTtQcB2mn0m4MnvTw=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=XhVUeNQ3
-Subject: [Buildroot] [PATCH 1/1] package/cutekeyboard: bump version to 1.4.0
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=a8KbVgWs
+Subject: Re: [Buildroot] Fixing the Buildroot 'bat' package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,43 +113,132 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: El Mehdi YOUNES via buildroot <buildroot@buildroot.org>
+Reply-To: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+Content-Type: multipart/mixed; boundary="===============8625712249557033392=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
----
- package/cutekeyboard/cutekeyboard.hash | 2 +-
- package/cutekeyboard/cutekeyboard.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This is a multi-part message in MIME format.
+--===============8625712249557033392==
+Content-Type: multipart/alternative;
+ boundary="------------v8tZDPqB9ktx5Y4eIxej9vcy"
+Content-Language: en-US
 
-diff --git a/package/cutekeyboard/cutekeyboard.hash b/package/cutekeyboard/cutekeyboard.hash
-index 53b438cc1f..e4093dc4ef 100644
---- a/package/cutekeyboard/cutekeyboard.hash
-+++ b/package/cutekeyboard/cutekeyboard.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  0f0af01ec99ad07607d2e58c2feee1fba37c9cb7118e8af309fa021f599aec86  cutekeyboard-v1.3.0.tar.gz
-+sha256  7bb9094dc8792c897dcf81caca5dfbb509ed8a851b01542a84d631adf6c62b62  cutekeyboard-v1.4.0.tar.gz
- sha256  bdde6ec2ae2686623c0bb414bfb8bd731b314beff2264c602116ea60dd65964d  LICENSE
-diff --git a/package/cutekeyboard/cutekeyboard.mk b/package/cutekeyboard/cutekeyboard.mk
-index 775bed0fe9..e97eb9db2c 100644
---- a/package/cutekeyboard/cutekeyboard.mk
-+++ b/package/cutekeyboard/cutekeyboard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CUTEKEYBOARD_VERSION = v1.3.0
-+CUTEKEYBOARD_VERSION = v1.4.0
- CUTEKEYBOARD_SITE = $(call github,amarula,cutekeyboard,$(CUTEKEYBOARD_VERSION))
- CUTEKEYBOARD_DEPENDENCIES = qt5declarative qt5quickcontrols2
- CUTEKEYBOARD_INSTALL_STAGING = YES
--- 
-2.34.1
+This is a multi-part message in MIME format.
+--------------v8tZDPqB9ktx5Y4eIxej9vcy
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+Hello Thomas,
+
+Le 29/08/2025 à 23:44, Thomas Petazzoni via buildroot a écrit :
+> Hello David,
+>
+> You are listed as the maintainer of the 'bat' package in Buildroot. It
+> turns out that this package no longer builds with GCC 15.x, and you
+> probably are receiving on a regular basis e-mails telling you that
+> there are build failures.
+>
+> See:
+>
+>    https://autobuild.buildroot.net/?reason=bat-%
+>
+> Basically, when building bat, it uses the 'onig' crate in version
+> 6.4.0, which itself contains the oniguruma regex library implemented in
+> C. However, this version does not build with GCC 15. My understanding
+> is that the onig crate has been updated to fix this issue, but bat has
+> not been updated to use a recent enough version of onig that fixes the
+> issue.
+>
+This problem sounds familiar to me. Thanks for the report!
+
+> Could you have a look at solving this issue?
+I'll have a look at it and try to fix in the next few days.
+>
+> Thanks a lot!
+>
+> Thomas
+
+Best regards,
+
+Mehdi
+
+--------------v8tZDPqB9ktx5Y4eIxej9vcy
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  </head>
+  <body>
+    <p>Hello Thomas,<br>
+    </p>
+    <div class="moz-cite-prefix">Le 29/08/2025 à 23:44, Thomas Petazzoni
+      via buildroot a écrit :<br>
+    </div>
+    <blockquote type="cite" cite="mid:20250829234459.01a60586@windsurf">
+      <pre wrap="" class="moz-quote-pre">Hello David,
+
+You are listed as the maintainer of the 'bat' package in Buildroot. It
+turns out that this package no longer builds with GCC 15.x, and you
+probably are receiving on a regular basis e-mails telling you that
+there are build failures.
+
+See:
+
+  <a class="moz-txt-link-freetext" href="https://autobuild.buildroot.net/?reason=bat-%">https://autobuild.buildroot.net/?reason=bat-%</a>
+
+Basically, when building bat, it uses the 'onig' crate in version
+6.4.0, which itself contains the oniguruma regex library implemented in
+C. However, this version does not build with GCC 15. My understanding
+is that the onig crate has been updated to fix this issue, but bat has
+not been updated to use a recent enough version of onig that fixes the
+issue.
+
+</pre>
+    </blockquote>
+    <div _ngcontent-ng-c3352479451=""
+class="markdown markdown-main-panel stronger enable-updated-hr-color"
+style="--animation-duration: 400ms; --fade-animation-function: linear; font-family: Google Sans Text, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important;"
+      id="model-response-message-contentr_0f36e6074dfd084f" dir="ltr">
+      <p
+style="font-family: Google Sans Text, sans-serif !important; line-height: 1.15 !important; margin-top: 0px !important;">This
+        problem sounds familiar to me. Thanks for the report!</p>
+    </div>
+    <blockquote type="cite" cite="mid:20250829234459.01a60586@windsurf">
+      <pre wrap="" class="moz-quote-pre">
+Could you have a look at solving this issue?</pre>
+    </blockquote>
+    I'll have a look at it and try to fix in the next few days.<br>
+    <blockquote type="cite" cite="mid:20250829234459.01a60586@windsurf">
+      <pre wrap="" class="moz-quote-pre">
+
+Thanks a lot!
+
+Thomas
+</pre>
+    </blockquote>
+    <p>Best regards, <br>
+    </p>
+    <p>Mehdi<br>
+    </p>
+  </body>
+</html>
+
+--------------v8tZDPqB9ktx5Y4eIxej9vcy--
+
+--===============8625712249557033392==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8625712249557033392==--
