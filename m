@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF609CAC588
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:17:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 420B0CAC589
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:17:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 98314806F2;
-	Mon,  8 Sep 2025 14:17:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1B94780754;
+	Mon,  8 Sep 2025 14:17:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q4JYwxRaDS2f; Mon,  8 Sep 2025 14:17:50 +0000 (UTC)
+ id LtaocbRpZxUd; Mon,  8 Sep 2025 14:17:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B08D8052D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB33D80772
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7B08D8052D;
-	Mon,  8 Sep 2025 14:17:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 11E71234
+	by smtp1.osuosl.org (Postfix) with ESMTP id CB33D80772;
+	Mon,  8 Sep 2025 14:17:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 875ED234
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3098480531
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0FCCD4007E
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZxzkCez-fDx2 for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 14:16:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bCEsCUiOGsrr for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A556780523
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54D4340065
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A556780523
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 54D4340065
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A295383916; Mon,  8 Sep 2025 14:16:23 +0000 (UTC)
+ id 515FF80DA7; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 23 Aug 2025 19:58:23 +0200
+Date: Wed, 3 Sep 2025 23:19:18 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4ad582298c7cef72fd72c73575971f461fe50624
-X-Git-Newrev: 67422b9d9cd02d29393081d83af4dd16093c43b1
+X-Git-Oldrev: 5c618d65ff749832801f9c5f5114c9b944d408d2
+X-Git-Newrev: 27794637f54daf31d44fae5054e48cbc1f2bd915
 X-Patchwork-Hint: ignore
-Message-Id: <20250908141623.A295383916@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/scripts/cve.py: handle CVEs with
- 'configurations' but no 'nodes' inside
+Message-Id: <20250908141630.515FF80DA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fmt: bump to version 11.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,69 +57,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67422b9d9cd02d29393081d83af4dd16093c43b1
+commit: https://git.buildroot.net/buildroot/commit/?id=27794637f54daf31d44fae5054e48cbc1f2bd915
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The each_cpe() method is careful that some CVEs have no
-"configurations", but some CVEs such as
-https://nvd.nist.gov/vuln/detail/CVE-2025-32915 apparently have a
-"configurations" node, but no "nodes" inside the "configurations",
-causing an exception:
+Release notes of major releases since 11.0.2:
 
-Traceback (most recent call last):
-  File "/home/buildroot/buildroot-stats/./support/scripts/pkg-stats", line 1382, in <module>
-    __main__()
-  File "/home/buildroot/buildroot-stats/./support/scripts/pkg-stats", line 1371, in __main__
-    check_package_cves(args.nvd_path, packages)
-  File "/home/buildroot/buildroot-stats/./support/scripts/pkg-stats", line 679, in check_package_cves
-    check_package_cve_affects(cve, cpe_product_pkgs)
-  File "/home/buildroot/buildroot-stats/./support/scripts/pkg-stats", line 638, in check_package_cve_affects
-    for product in cve.affected_products:
-                   ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/buildroot/buildroot-stats/support/scripts/cve.py", line 185, in affected_products
-    return set(cpe_product(p['id']) for p in self.each_cpe())
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/buildroot/buildroot-stats/support/scripts/cve.py", line 185, in <genexpr>
-    return set(cpe_product(p['id']) for p in self.each_cpe())
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/buildroot/buildroot-stats/support/scripts/cve.py", line 173, in each_cpe
-    for node in nodes['nodes']:
-                ~~~~~^^^^^^^^^
-KeyError: 'nodes'
+https://github.com/fmtlib/fmt/releases/tag/11.1.0
+https://github.com/fmtlib/fmt/releases/tag/11.2.0
 
-Fixes:
-  54f8d97c91 ("support/scripts/pkg-stats: adapt to NVD v2 json format")
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[Romain:
-  - add reference to buildroot commit introducing the issue
-  - a similar patch was sent by Daniel Lang (thanks!)]
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- support/scripts/cve.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/fmt/fmt.hash | 2 +-
+ package/fmt/fmt.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/cve.py b/support/scripts/cve.py
-index 1cbe24c02d..ba41762fa0 100755
---- a/support/scripts/cve.py
-+++ b/support/scripts/cve.py
-@@ -170,7 +170,7 @@ class CVE:
+diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
+index aff52ccb6e..29b2b13c66 100644
+--- a/package/fmt/fmt.hash
++++ b/package/fmt/fmt.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  40fc58bebcf38c759e11a7bd8fdc163507d2423ef5058bba7f26280c5b9c5465  fmt-11.0.2.zip
++sha256  203eb4e8aa0d746c62d8f903df58e0419e3751591bb53ff971096eaa0ebd4ec3  fmt-11.2.0.zip
+ sha256  07580f2a3b35709ce703d523f447b242f6dfec7582a8c0df102c7fa2849375f8  LICENSE
+diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
+index 113652e911..dfb6fd3942 100644
+--- a/package/fmt/fmt.mk
++++ b/package/fmt/fmt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-     def each_cpe(self):
-         for nodes in self.nvd_cve.get('configurations', []):
--            for node in nodes['nodes']:
-+            for node in nodes.get('nodes', []):
-                 for cpe in self.parse_node(node):
-                     yield cpe
- 
+-FMT_VERSION = 11.0.2
++FMT_VERSION = 11.2.0
+ FMT_SITE = https://github.com/fmtlib/fmt/releases/download/$(FMT_VERSION)
+ FMT_SOURCE = fmt-$(FMT_VERSION).zip
+ FMT_LICENSE = MIT with exception
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
