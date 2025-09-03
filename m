@@ -1,104 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA4A5CA1009
-	for <buildroot@archiver.kernel.org>; Wed,  3 Sep 2025 11:01:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4B91CA1009
+	for <buildroot@archiver.kernel.org>; Wed,  3 Sep 2025 11:33:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE4FF41F6A;
-	Wed,  3 Sep 2025 11:01:10 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EsDrrUkFdjmv; Wed,  3 Sep 2025 11:01:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7641B4182B
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7641B4182B;
-	Wed,  3 Sep 2025 11:01:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id F2F6D10E
- for <buildroot@buildroot.org>; Wed,  3 Sep 2025 11:01:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F078261507
- for <buildroot@buildroot.org>; Wed,  3 Sep 2025 11:01:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 50E6A61516;
+	Wed,  3 Sep 2025 11:33:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pd8vzbP2yWZt for <buildroot@buildroot.org>;
- Wed,  3 Sep 2025 11:01:03 +0000 (UTC)
+ id X1dKS6V6i0I8; Wed,  3 Sep 2025 11:33:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64AE76154B
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 64AE76154B;
+	Wed,  3 Sep 2025 11:33:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 50F7B2BA8
+ for <buildroot@buildroot.org>; Wed,  3 Sep 2025 11:33:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 36B9461567
+ for <buildroot@buildroot.org>; Wed,  3 Sep 2025 11:33:40 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7kxChJOSZWCI for <buildroot@buildroot.org>;
+ Wed,  3 Sep 2025 11:33:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::543; helo=mail-ed1-x543.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C8C7A61497
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C8C7A61497
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com
- [IPv6:2a00:1450:4864:20::543])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C8C7A61497
- for <buildroot@buildroot.org>; Wed,  3 Sep 2025 11:01:02 +0000 (UTC)
-Received: by mail-ed1-x543.google.com with SMTP id
- 4fb4d7f45d1cf-6188b5ae1e8so6966827a12.0
- for <buildroot@buildroot.org>; Wed, 03 Sep 2025 04:01:02 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ envelope-from=josephzik@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 33FF161516
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33FF161516
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 33FF161516
+ for <buildroot@buildroot.org>; Wed,  3 Sep 2025 11:33:39 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-45b76f3b24eso8516105e9.2
+ for <buildroot@buildroot.org>; Wed, 03 Sep 2025 04:33:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1756897261; x=1757502061;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=4JuRwVI0Uxodaor6ViIbHKdW0GVn5FNOVt52rL44E0c=;
- b=gciRtYeknZ//EAdHDZKfH8VD2ZMWPA2qb97yzBLNWS2BkI+3GevepQ2Ulp5T5zQffi
- 2CCVm8RpQwA1He7WglOgUiNpGwRvCJp5E7EMOV+sKFqts9JjN2Yr0dmvE8QcqC7/IMf8
- cXp0YxQzieF179l2xSDNab36tPS/PYnkeT5vpYk5DZbPai71GUbV3G2bZw5ZmxNYNSTu
- 3lDcFWqUMpvJumM4itrGoxPk+90ZJRe+lxN54WhwLifmX6wAfj6hFszuRxPeYASJLlYk
- KPs5cRnfO6DUcs57QQnni4T0KbbZFI374u+V8GYJdXVoQ0YyL64Qkb7dL7JS71bdSY48
- DsIg==
-X-Gm-Message-State: AOJu0Yy5GO94f1dSRayCcFhC7rPOfi1jlnVaCBIEPEuAw2N9PkKLiFCu
- HVlEJa0MARsRVwH2Quw/75jBndqBuIOfCa1QNb/U6dgbJB7mxwsKZaKR0qMvFPnJ7Le+rZk3Qar
- 1bWiQUwDgDp9v
-X-Gm-Gg: ASbGncuakn+H9ZmwBDDFRxg29kZRT0OFUHTK+5sgEeKX4LN5m60Nq2SwmkR2hkdBXxQ
- KlpPJiiLQm58tsWE3WvUxzFhRrJBz9PRRzx38xKaD+AP9/ZiJb/l6z5Dmb0hdXuyM8ePuOjdJHv
- sLGm7R5UEKTWcLAAftRrHTSvf+crAGffWkJltqMCnlmZyc6+hvNhYIccOZikYXKtZ0YmhSOvxWF
- /LepCl/QHn1zj6pScdW0B8d20r3AlkeUQ6DRamMZs9q+RdQpVT06b8IA4gx8aL1Xkhgh3ojaoRD
- JkZcR+iaLpC7N+6+A5jwYyiXejF85FQr4L0Md2JKhUjzl8/J7HpLppeovVcozlVNYEdRJTZ7KsB
- P0Zi7BgJC4CV4oHop38a6KLDG9RRXkLDNlAAg
-X-Google-Smtp-Source: AGHT+IFaWPsyD0EsNvCNC3AxIsLtq06C4XnXclSN4qjrVpKVPd9FZU3SiXRJL9UXD+Ako6VLg6ncTA==
-X-Received: by 2002:a05:6402:350e:b0:61e:cacc:76db with SMTP id
- 4fb4d7f45d1cf-61ecacc79f6mr3660101a12.8.1756897260607; 
- Wed, 03 Sep 2025 04:01:00 -0700 (PDT)
-Received: from dragon.home ([2a02:a03f:73a7:c001:49b1:76d4:3e52:5347])
+ d=1e100.net; s=20230601; t=1756899217; x=1757504017;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=7nsyjZDQBSVmxFd1+j0KjqhG5kNl5RIKQTIfDbDIsHY=;
+ b=fFNTk3YyWLHQBs+CRTHoHurgr8R4F8PHPNsZ/aBK+W6BF0KI+dt1RT2RPJB0ppsA9g
+ 4ZoEhApSws2jUgiboOMDK4dpNMugpTS3cC3Evn4HI71lNRn33OsjAAvM4Xr8Oe9FjVGF
+ sneM3RL7UE22iHrbXZJWdR7Cvze9vqBBMcU6XxLsDFCICI/KcNN7FOInzSzMmG2Xu5mE
+ Rt4WeLJogCwhguyYf5ES8qaTd7jKrWpoxLe7mub+mNUWBEtkeZEs6itsnOU+sd1lZzR0
+ Z34HFjeg0U05vr0tjdztOt1dDohhAnHpUlCTl8Bw3zhmn3AtfBPYwid2X8KqgdxODU9o
+ Th/g==
+X-Gm-Message-State: AOJu0Yy9KRe9rBwC48VjV8W3LLthATi4khq5SHPGXAipt8SWktnsIEsY
+ gB6p0ora9TSSea0O9ZaCiRrMX89ryOo1MKHjrxujsj66DKqNerJKUcO6ahLk6w==
+X-Gm-Gg: ASbGncv/JQa8nDFxgWRPCyqBX9XmhnHhbXoFSnLHO9bCEDKCDZYuVwjZE9flovOBaxZ
+ jNn/GdcvHsqyyuKoLiLVWrr2a5GWA3S1/swnEePcJEpKKyAgIDGQ9MLfysD/qPc2MrIR/rIDoH3
+ tTV3uPUXgOpDl3i4HB/1gWDT0dKafzRVXhCHrxcc7wIQeik4ETeL0+esyPS+1dEGHnAoo1aifl7
+ Y036icBPY7f3+4vfqy2qbS78mE/keHPnEyqJdHXTDl1V/ASdskjkZt+4P2UXtXlE+zFRsOa+6Iq
+ eYtwLKuToyleFZckhjsvIk3o/rMh+2QBG8TIvdlhQoexle1mDErGx9adjK6ZCRpPlUN6myYE0/q
+ /deX2ZL6BRk9WOHBUwOPDhGs37JyDLEKFfPFg
+X-Google-Smtp-Source: AGHT+IFlf+9VgxWfJe5JRpyQfio4d3WRlusPqJt9F8MEYK19WKMiQm0KmHxlpGkdL9Va7yKRQKTbuw==
+X-Received: by 2002:a05:600c:c059:20b0:45b:9135:d8af with SMTP id
+ 5b1f17b1804b1-45b9135e637mr20541965e9.8.1756899216704; 
+ Wed, 03 Sep 2025 04:33:36 -0700 (PDT)
+Received: from nuremberg.jambulanet ([41.84.201.45])
  by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-61cfc4bbc9asm11863399a12.25.2025.09.03.04.01.00
- for <buildroot@buildroot.org>
+ ffacd0b85a97d-3d0a1f807f9sm22487482f8f.38.2025.09.03.04.33.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 03 Sep 2025 04:01:00 -0700 (PDT)
+ Wed, 03 Sep 2025 04:33:36 -0700 (PDT)
+From: "Joseph Zikusooka (ZIK)" <josephzik@gmail.com>
+X-Google-Original-From: "Joseph Zikusooka (ZIK)" <zik@jambula.net>
 To: buildroot@buildroot.org
-Date: Wed,  3 Sep 2025 13:00:48 +0200
-Message-ID: <20250903110048.441164-3-titouan.christophe@mind.be>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250903110048.441164-1-titouan.christophe@mind.be>
-References: <20250903110048.441164-1-titouan.christophe@mind.be>
+Cc: "Joseph Zikusooka (ZIK)" <zik@jambula.net>
+Date: Wed,  3 Sep 2025 14:33:07 +0300
+Message-ID: <20250903113307.100754-1-zik@jambula.net>
+X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1756897261; x=1757502061; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
- :reply-to;
- bh=4JuRwVI0Uxodaor6ViIbHKdW0GVn5FNOVt52rL44E0c=;
- b=hh0HGx5zrL0cQCD3XrMYJ/sCo/sD1kTZRoRqkgmEmYsM6dsCnnaQ65QlhfJ9WYhUCH
- dZ5NtBoRouB4cmAAmvHL1h1gTGTo8W9tVlh8c+rIamgldkLYuaTLt3ZTs8ReqnByC0M1
- zx+3dvDfSBxBP0v5954tfUHVi0e3r3+/sfLGIVZ3Y9Q14yIgt5Ih67XDXuQ9x5U4Gncs
- aPeX+nwAGj3Bl6xd5ym96RL9Nci2Ox7DDMWmOA0TrxR0GUwEvtaKHktoKhCz8Z4o0844
- nlNiG9jqK1ElhU6OIcG2hDAythF7M8g6PYlaroR8dCXl4DLKGW1TZHXVkhz5LWjkiA5O
- YF0Q==
+ d=gmail.com; s=20230601; t=1756899217; x=1757504017; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=7nsyjZDQBSVmxFd1+j0KjqhG5kNl5RIKQTIfDbDIsHY=;
+ b=RHdqD0GE+ybjSRRQZPsefjRBLV/KdLcZt4y+FsWoiEh3QWnzi8VPWDtOFWC/+Iukd2
+ d2T9IcnovK4sLl0jmFkUhUh07NK0DHbzdQJwO/dO9Ku4mDzK7TBaVEwDstnsgjfX58Y2
+ fk95+qM/NLOk/YtKf//MDlUyCtWu0tH/C5a3m5RkojZ5RIfvi6tO8cqbCFLeqFIm1uFV
+ hfZE7e3SOxeIQGC2Dgjtkl/Bv6B/PfBF1kzoOTrO9113syhRzg0laFty4GlUj2szSfs4
+ TrjeASC5Ln3GnmCAZjwjbRBcYz1WYasYCcG8BG3sWqNLghhhPEnQPn4132OnPP+XlcX1
+ 3QaQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=hh0HGx5z
-Subject: [Buildroot] [PATCH 2/2] package/wireshark: bump to latest upstream
- stable v4.4.9
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=RHdqD0GE
+Subject: [Buildroot] [PATCH] package/kea: new package for ISC Kea DHCP server
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,58 +107,139 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See the release notes:
-- https://www.wireshark.org/docs/relnotes/wireshark-4.4.0.html
-- https://www.wireshark.org/docs/relnotes/wireshark-4.4.9.html
-- (and all patch versions inbetween)
+Kea is a DHCP server implementation from ISC that supports
+DHCPv4, DHCPv6, and Dynamic DNS. It uses Boost, log4cplus, and
+OpenSSL.
 
-Also update the README hash, as it has been updated in Wireshark commit
-1832f2bc3948248bf21acab5dd16fca8d5477a1a
+This package enables the core Kea components with support for
+address assignment, prefix delegation, and DNS updates via a
+separate DDNS daemon.
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Joseph Zikusooka (ZIK) <zik@jambula.net>
+
+Changes v2 -> v3:
+- Bumped version to 2.6.4
+- Removed PostgreSQL support temporarily - Requires wrapper
+- Added KEA_USERS
+- Minor cleanup and rebase
+
+Signed-off-by: Joseph Zikusooka (ZIK) <zik@jambula.net>
 ---
- package/wireshark/wireshark.hash | 8 ++++----
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ DEVELOPERS            |  3 +++
+ package/kea/Config.in | 34 ++++++++++++++++++++++++++++++++++
+ package/kea/kea.hash  |  3 +++
+ package/kea/kea.mk    | 33 +++++++++++++++++++++++++++++++++
+ 4 files changed, 73 insertions(+)
+ create mode 100644 package/kea/Config.in
+ create mode 100644 package/kea/kea.hash
+ create mode 100644 package/kea/kea.mk
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index f1f2f58442..88eb7ef494 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,7 +1,7 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.2.13.txt
--sha1  e5a08396a98d5dfba4078c66677aacd50d47ec90  wireshark-4.2.13.tar.xz
--sha256  2454aa650276264d23aca28e1b62eb5d4bd12b64aa261d38c06b33f97b8fa3dd  wireshark-4.2.13.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.4.9.txt
-+sha1  dc91c68b03b389645fa6dade92960863d74bca1d  wireshark-4.4.9.tar.xz
-+sha256  60551dc787f41e87aeaa1e9c33304f9008037e3baf9fa11aef9c2d584cc0b54b  wireshark-4.4.9.tar.xz
- 
- # Locally calculated
- sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYING
--sha256  fce67c1558e448fac784ce9a30cb47956488bc3ef6ec16316c38b0668b3cad2e  README.md
-+sha256  39887d884b6473f5897c915ae8e9497e5bc2c1f6decec2ce820d5fd716d763cc  README.md
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index bd81224ae7..9ccd8f9a9e 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 4.2.13
-+WIRESHARK_VERSION = 4.4.9
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 32d7c8ac61..f6ee1fe069 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3531,3 +3531,6 @@ F:	package/quazip/
+ F:	package/shapelib/
+ F:	package/simple-mail/
+ F:	package/tinc/
++
++N:	Joseph Zikusooka (ZIK) <zik@jambula.net>
++F:	package/kea/
+diff --git a/package/kea/Config.in b/package/kea/Config.in
+new file mode 100644
+index 0000000000..387b006014
+--- /dev/null
++++ b/package/kea/Config.in
+@@ -0,0 +1,34 @@
++config BR2_PACKAGE_KEA
++	bool "kea"
++	depends on BR2_INSTALL_LIBSTDCPP # boost, log4cplus
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # log4cplus
++	depends on BR2_TOOLCHAIN_HAS_THREADS # log4cplus, boost
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_USE_WCHAR # log4cplus, boost
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # log4cplus
++	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_BOOST_ATOMIC
++	select BR2_PACKAGE_BOOST_DATE_TIME
++	select BR2_PACKAGE_BOOST_FILESYSTEM
++	select BR2_PACKAGE_BOOST_REGEX
++	select BR2_PACKAGE_BOOST_SYSTEM
++	select BR2_PACKAGE_BOOST_THREAD
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LOG4CPLUS
++	help
++	  Kea is a DHCP implementation from the Internet Systems
++	  Consortium, Inc., supporting fully functional DHCPv4, DHCPv6,
++	  and dynamic DNS servers.
++	  Both DHCP servers support address assignment, renewal,
++	  rebinding, release, and server discovery. The DHCPv6 server
++	  also supports prefix delegation. DNS updates are handled by a
++	  standalone DDNS daemon.
++
++	  https://www.isc.org/kea
++
++comment "kea needs a toolchain w/ C++, wchar, threads, gcc >= 4.8"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++
++comment "kea needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/package/kea/kea.hash b/package/kea/kea.hash
+new file mode 100644
+index 0000000000..e10c516278
+--- /dev/null
++++ b/package/kea/kea.hash
+@@ -0,0 +1,3 @@
++# Locally computed - sha256
++sha256  6806405e4d559abc10febd2c273dc6e2bc6ac42767afa5ca20b118ffba84a671  kea-2.6.4.tar.gz
++sha256  2768ea1cbc79ac048f0c34c5cb50cf7e7d4c13a83337ebfa147a700b876431d5  COPYING
+diff --git a/package/kea/kea.mk b/package/kea/kea.mk
+new file mode 100644
+index 0000000000..23f0792d61
+--- /dev/null
++++ b/package/kea/kea.mk
+@@ -0,0 +1,33 @@
++################################################################################
++#
++# Kea DHCP Server
++#
++################################################################################
++
++KEA_VERSION = 2.6.4
++KEA_SITE = https://dl.cloudsmith.io/public/isc/kea-2-6/raw/versions/$(KEA_VERSION)
++KEA_SOURCE = kea-$(KEA_VERSION).tar.gz
++KEA_LICENSE = MPL-2.0
++KEA_LICENSE_FILES = COPYING
++
++KEA_DEPENDENCIES = boost log4cplus openssl
++
++KEA_CONF_OPTS = \
++	--prefix=/usr \
++	--with-boost=$(STAGING_DIR)/usr \
++	--with-log4cplus=$(STAGING_DIR)/usr \
++	--with-openssl=$(STAGING_DIR)/usr \
++	--enable-shell
++
++ifeq ($(BR2_PACKAGE_MARIADB),y)
++KEA_CONF_OPTS += --with-mysql=$(STAGING_DIR)/usr/bin/mysql_config
++KEA_DEPENDENCIES += mariadb
++else
++KEA_CONF_OPTS += --without-mysql
++endif
++
++define KEA_USERS
++	kea -1 kea -1 * /home/kea - Kea DHCP Daemon
++endef
++
++$(eval $(autotools-package))
 -- 
-2.51.0
+2.50.1
 
 _______________________________________________
 buildroot mailing list
