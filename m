@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61F8DCAC586
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:18:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7ED17CAC581
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:18:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 37284809A7;
-	Mon,  8 Sep 2025 14:18:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 545CE809A8;
+	Mon,  8 Sep 2025 14:18:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9aUqdOzKqewX; Mon,  8 Sep 2025 14:18:38 +0000 (UTC)
+ id PmVt1BnFHo4l; Mon,  8 Sep 2025 14:18:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FF0680999
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0594809B1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0FF0680999;
-	Mon,  8 Sep 2025 14:18:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9D38B186
+	by smtp1.osuosl.org (Postfix) with ESMTP id C0594809B1;
+	Mon,  8 Sep 2025 14:18:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id ED062186
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5457740082
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E39A84020A
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QTffNcvgyLH5 for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5iEOWexFZECS for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C3EE40074
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4357A40212
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9C3EE40074
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4357A40212
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9912180DA7; Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
+ id 4036B818B3; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 5 Sep 2025 22:40:42 +0200
+Date: Wed, 3 Sep 2025 19:10:51 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 076888b071516c540bbdac5003e307f052fc81fc
-X-Git-Newrev: 4b47f88cb4652c5bdc4700ee058cdf240f7f9064
+X-Git-Oldrev: 98399d11ff6afe053a052f867bb0610eaacd52a0
+X-Git-Newrev: 5c618d65ff749832801f9c5f5114c9b944d408d2
 X-Patchwork-Hint: ignore
-Message-Id: <20250908141631.9912180DA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/linux-firmware: add Intel 7 WiFi
- firmware
+Message-Id: <20250908141630.4036B818B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/re2: bump to version 2025-08-12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,65 +65,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b47f88cb4652c5bdc4700ee058cdf240f7f9064
+commit: https://git.buildroot.net/buildroot/commit/?id=5c618d65ff749832801f9c5f5114c9b944d408d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- add firmware to support BE20x devices
-- extend bluetooth helptext as it already includes the required firmwares
+- re2 now needs C++17
+
+changelog: https://github.com/google/re2/compare/2024-07-02...2025-08-12
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-[Julien: reflow BR2_PACKAGE_LINUX_FIRMWARE_IBT help string
-    to fix check-package error]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/linux-firmware/Config.in         | 10 ++++++++--
- package/linux-firmware/linux-firmware.mk |  5 +++++
- 2 files changed, 13 insertions(+), 2 deletions(-)
+ package/re2/Config.in | 2 +-
+ package/re2/re2.hash  | 2 +-
+ package/re2/re2.mk    | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 778dfef8a0..e1bbfc19ec 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -81,8 +81,8 @@ config BR2_PACKAGE_LINUX_FIRMWARE_AMLOGIC
- config BR2_PACKAGE_LINUX_FIRMWARE_IBT
- 	bool "Intel Wireless Bluetooth"
- 	help
--	  Firmware files for Intel 3160/7260/7265/8260/8265 Wireless
--	  bluetooth support.
-+	  Firmware files for Intel 3160/7260/7265/8260/8265/9xxx/6E/7
-+	  Wireless bluetooth support.
+diff --git a/package/re2/Config.in b/package/re2/Config.in
+index b79e711ad3..acc4bdbe46 100644
+--- a/package/re2/Config.in
++++ b/package/re2/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_RE2
+ 	bool "re2"
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++14
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS # libabseil-cpp
+ 	select BR2_PACKAGE_LIBABSEIL_CPP
+diff --git a/package/re2/re2.hash b/package/re2/re2.hash
+index baa3a927c5..25ca9b4896 100644
+--- a/package/re2/re2.hash
++++ b/package/re2/re2.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256  eb2df807c781601c14a260a507a5bb4509be1ee626024cb45acbd57cb9d4032b  re2-2024-07-02.tar.gz
++sha256  2f3bec634c3e51ea1faf0d441e0a8718b73ef758d7020175ed7e352df3f6ae12  re2-2025-08-12.tar.gz
+ sha256  6040cda75d90b1738292a631d89934c411ef7ffd543c4d6a1b7edfc8edf29449  LICENSE
+diff --git a/package/re2/re2.mk b/package/re2/re2.mk
+index 80db4db650..1068e7cc54 100644
+--- a/package/re2/re2.mk
++++ b/package/re2/re2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7650
- 	bool "MediaTek MT7650"
-@@ -355,6 +355,12 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6E
- 	  Firmware files for the Intel Wi-Fi 6 and Wi-Fi 6E devices
- 	  supported by the iwlwifi kernel driver.
- 
-+config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7
-+	bool "Intel iwlwifi 7"
-+	help
-+	  Firmware files for the Intel Wi-Fi 7 (BE20x) devices
-+	  supported by the iwlwifi kernel driver.
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_QUZ
- 	bool "Intel iwlwifi QuZ"
- 	help
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 40758054e5..59de2ea8b8 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -629,6 +629,11 @@ LINUX_FIRMWARE_FILES += iwlwifi-so-a0-gf-a0*.{ucode,pnvm}
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7),y)
-+LINUX_FIRMWARE_FILES += iwlwifi-gl-c0-fm-c0*.{ucode,pnvm}
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
-+endif
-+
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_QUZ),y)
- LINUX_FIRMWARE_FILES += iwlwifi-QuZ-*.ucode
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
+-RE2_VERSION = 2024-07-02
++RE2_VERSION = 2025-08-12
+ RE2_SITE = $(call github,google,re2,$(RE2_VERSION))
+ RE2_LICENSE = BSD-3-Clause
+ RE2_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
