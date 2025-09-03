@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5F7ACA0FF2
-	for <buildroot@archiver.kernel.org>; Wed,  3 Sep 2025 16:23:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BD56CA1009
+	for <buildroot@archiver.kernel.org>; Wed,  3 Sep 2025 16:23:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C731F42308;
-	Wed,  3 Sep 2025 16:23:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3AA4E4233B;
+	Wed,  3 Sep 2025 16:23:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sTjhv6ExAiQg; Wed,  3 Sep 2025 16:23:33 +0000 (UTC)
+ id 90VAfWTq9SJT; Wed,  3 Sep 2025 16:23:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D9B940E11
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 516E24231E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D9B940E11;
-	Wed,  3 Sep 2025 16:23:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D64A110E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 516E24231E;
+	Wed,  3 Sep 2025 16:23:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id EB5C02BA8
  for <buildroot@buildroot.org>; Wed,  3 Sep 2025 16:23:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CF4D3615B8
+ by smtp4.osuosl.org (Postfix) with ESMTP id E7F6340D51
  for <buildroot@buildroot.org>; Wed,  3 Sep 2025 16:23:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d9QoqkZeWqWm for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hMAeWDw2SIKD for <buildroot@buildroot.org>;
  Wed,  3 Sep 2025 16:23:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D6B46153D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F9F840C47
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2D6B46153D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3F9F840C47
  for <buildroot@buildroot.org>; Wed,  3 Sep 2025 16:23:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2890087EA3; Wed,  3 Sep 2025 16:23:14 +0000 (UTC)
+ id 3A2F987EA7; Wed,  3 Sep 2025 16:23:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 3 Sep 2025 18:17:49 +0200
+Date: Wed, 3 Sep 2025 18:19:28 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 04cd135b26406dcc31cb66af1480d53fffe81e59
-X-Git-Newrev: f84765314459c0f92c5e7f98746ba08d5d82cf1f
+X-Git-Oldrev: f19d98eee2dae8511c95302beaf88208e2767b3c
+X-Git-Newrev: fa4148d45a0e4bed3c8444c6ebc41bb7444580c7
 X-Patchwork-Hint: ignore
-Message-Id: <20250903162314.2890087EA3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/jose: needs shared libraries
+Message-Id: <20250903162314.3A2F987EA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wipe: autoreconf to fix configure
+ with >= gcc-15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,47 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f84765314459c0f92c5e7f98746ba08d5d82cf1f
+commit: https://git.buildroot.net/buildroot/commit/?id=fa4148d45a0e4bed3c8444c6ebc41bb7444580c7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes https://autobuild.buildroot.net/results/bf23e75461877a4ca3a189626f30cf8cde24de36/
+Fixes https://autobuild.buildroot.net/results/9d4e2f156d76e2acc83e3a25adb5e5cf0705e7c6/
 
-Jose unconditionally builds a shared library since v11 with:
+configure:781: checking whether the C compiler (/home/buildroot/instance-0/output-1/host/bin/armeb-buildroot-linux-gnueabi-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Og -g0 -D_FORTIFY_SOURCE=1 ) works
+configure:797: /home/buildroot/instance-0/output-1/host/bin/armeb-buildroot-linux-gnueabi-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Og -g0 -D_FORTIFY_SOURCE=1 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c  1>&5
+configure:794:1: error: return type defaults to 'int' [-Wimplicit-int]
+  794 | main(){return(0);}
+      | ^~~~
+configure: failed program was:
 
- commit b72f8cad002edc87286dd1f2331c359158c512e8
- Author: Rosen Penev <rosenp@gmail.com>
- Date:   Tue May 30 12:18:30 2023 +0300
+ #line 792 "configure"
+ #include "confdefs.h"
 
-   jose: build library only as shared (#119)
+ main(){return(0);}
 
-   Needed because of constructor usage in library.
+Wipe uses a very old configure script where the compile checks are missing
+the return type on main(), breaking the configure step with >= gcc-15.
 
-So add a dependency on BR2_SHARED_LIBS.
+As a workaround, use AUTORECONF to regenerate the configure script.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jose/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/wipe/wipe.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/jose/Config.in b/package/jose/Config.in
-index 4a9ed8da65..32e17276b6 100644
---- a/package/jose/Config.in
-+++ b/package/jose/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_JOSE
- 	bool "jose"
-+	depends on BR2_SHARED_LIBS # builds .so
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_JANSSON
-@@ -10,5 +11,5 @@ config BR2_PACKAGE_JOSE
+diff --git a/package/wipe/wipe.mk b/package/wipe/wipe.mk
+index 83a8c87587..f6134ba55b 100644
+--- a/package/wipe/wipe.mk
++++ b/package/wipe/wipe.mk
+@@ -9,6 +9,8 @@ WIPE_SITE = http://downloads.sourceforge.net/project/wipe/wipe/$(WIPE_VERSION)
+ WIPE_SOURCE = wipe-$(WIPE_VERSION).tar.bz2
+ WIPE_LICENSE = GPL-2.0+
+ WIPE_LICENSE_FILES = LICENSE
++# configure script not compatible with >= gcc-15
++WIPE_AUTORECONF = YES
  
- 	  https://github.com/latchset/jose
- 
--comment "jose needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "jose needs a toolchain w/ shared libraries, threads"
-+	depends on !BR2_SHARED_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+ define WIPE_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/wipe $(TARGET_DIR)/usr/bin/wipe
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
