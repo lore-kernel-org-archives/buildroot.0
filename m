@@ -1,75 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1CDFCA0FF2
-	for <buildroot@archiver.kernel.org>; Wed,  3 Sep 2025 13:50:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE738CA0FF2
+	for <buildroot@archiver.kernel.org>; Wed,  3 Sep 2025 16:14:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7650F42148;
-	Wed,  3 Sep 2025 13:50:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7F70961672;
+	Wed,  3 Sep 2025 16:14:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gtwvxt5H__RG; Wed,  3 Sep 2025 13:50:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 84R0q_-QSn21; Wed,  3 Sep 2025 16:14:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1E5D42155
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A80B261622
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B1E5D42155;
-	Wed,  3 Sep 2025 13:50:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8E8662BA8
- for <buildroot@buildroot.org>; Wed,  3 Sep 2025 13:50:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A80B261622;
+	Wed,  3 Sep 2025 16:14:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4AFD110E
+ for <buildroot@buildroot.org>; Wed,  3 Sep 2025 16:14:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7554241561
- for <buildroot@buildroot.org>; Wed,  3 Sep 2025 13:50:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 47591842DE
+ for <buildroot@buildroot.org>; Wed,  3 Sep 2025 16:14:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OCXXaaRTwcDB for <buildroot@buildroot.org>;
- Wed,  3 Sep 2025 13:50:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.70.43.23;
- helo=mail-4323.protonmail.ch; envelope-from=philip@philipmolloy.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZrbrbipU3AFV for <buildroot@buildroot.org>;
+ Wed,  3 Sep 2025 16:14:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 480244014E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 480244014E
-Received: from mail-4323.protonmail.ch (mail-4323.protonmail.ch [185.70.43.23])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 480244014E
- for <buildroot@buildroot.org>; Wed,  3 Sep 2025 13:50:28 +0000 (UTC)
-Date: Wed, 03 Sep 2025 13:50:19 +0000
-To: buildroot@buildroot.org
-From: Philip Molloy <philip@philipmolloy.com>
-Cc: Michael Hennerich <michael.hennerich@analog.com>,
- Philip Molloy <philip.molloy@analog.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20250903135005.1803497-3-philip@philipmolloy.com>
-In-Reply-To: <20250903135005.1803497-1-philip@philipmolloy.com>
-References: <20250903135005.1803497-1-philip@philipmolloy.com>
-Feedback-ID: 9117015:user:proton
-X-Pm-Message-ID: ff5c01775d031881f958ee1ba8725aa64d9dde82
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ECBF8842AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECBF8842AB
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ECBF8842AB
+ for <buildroot@buildroot.org>; Wed,  3 Sep 2025 16:13:51 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1980063380; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Wed, 03 Sep 2025 16:13:44 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1utq7D-000zeP-0n;
+ Wed, 03 Sep 2025 18:13:43 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Cc: Titouan Christophe <titouan.christophe@mind.be>
+References: <20250903101253.117289-1-titouan.christophe@mind.be>
+Date: Wed, 03 Sep 2025 18:13:43 +0200
+In-Reply-To: <20250903101253.117289-1-titouan.christophe@mind.be> (Titouan
+ Christophe via buildroot's message of "Wed, 3 Sep 2025 12:12:53
+ +0200")
+Message-ID: <877byfo6o8.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=philipmolloy.com; 
- s=protonmail3; t=1756907424; x=1757166624;
- bh=KJF8iv7Mqf/aiE9VfPkuA9CLqFn0dEwsGuFXJDgxj+8=;
- h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
- Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
- Message-ID:BIMI-Selector;
- b=Mmc76NFDVbzJMBo3M2grfAUyXQDWMpCsqCXYOCFLJk6e4CESVc0ZFY6VcviJWyx01
- m/ZGgALoYLIMqud82IbQ6TC2T0mXSU3ezThCl4wCCCtoLvNajn98jbhX6UuQj2oY7d
- sLoyWGmVzVSOovUcLFQ/2JsjAQuoXFEmpignK/ugduT+KvioxtTcd9llmP0RGzVb8t
- H/8g96DpFy461bBqP/19750/5/w3maCHZDfRcu/wAyjCMaby3JIdZekPCkFEgtLQQH
- /uRMMOX30CGD0KAu2bwf8296hoKizJNnDZuuXtwWDpi8T25Z3rvxKw5Jn90kQePFDV
- uAL57+MREUdLw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=philipmolloy.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=Kz6ebovOMKaAFynBqddK7/gthX+4TROHu9w5Hb5uQyWM0/WlxY+pWIxaVrckp4HpHx4ZhlQ6/IZXzLYaO4GKMO42CszPbvY+T5TbrOq72xFSGeRXlBZWVFwtCEeR13mejx0Fdc/JHJRxW0SYf2NFR1/Te0mCiJi3Os1Rs7NefI0avm02YwB1vA/FJeOp0yJpTdn0QBYNv3S6h6oTKTJqMVIqVKa7L9bMyA9D/5GlqZLuUUe++4KXjGXKBaA0nMramdmqxrDQPuebQESIKepTsk7crJSXjjFbJRqCLK5YlvkMJ1zawm2Ku0CD1s8ssUxmG+DGub6NDH97NrKRCmEdKg==;
+ s=purelymail2; d=purelymail.com; v=1;
+ bh=yA598HtSUalij1tjDqC43/Nj2n4JGIwG+57hP6kZfI4=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=philipmolloy.com header.i=@philipmolloy.com
- header.a=rsa-sha256 header.s=protonmail3 header.b=Mmc76NFD
-Subject: [Buildroot] [PATCH v2 2/2] boot/uboot: add ADSP LDR binary format
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail2 header.b=Kz6ebovO
+Subject: Re: [Buildroot] [PATCH] package/netavark: security bump to v1.16.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,59 +86,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Philip Molloy <philip.molloy@analog.com>
+>>>>> "Titouan" == Titouan Christophe via buildroot <buildroot@buildroot.org> writes:
 
-Signed-off-by: Philip Molloy <philip.molloy@analog.com>
----
- boot/uboot/Config.in | 4 ++++
- boot/uboot/uboot.mk  | 8 ++++++++
- 2 files changed, 12 insertions(+)
+ > Even though this is not mentioned in the release notes:
+ > - https://github.com/containers/netavark/releases/tag/v1.16.0
+ > - https://github.com/containers/netavark/releases/tag/v1.16.1
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index a2301b7747..813a29828d 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -479,6 +479,10 @@ config BR2_TARGET_UBOOT_FORMAT_QSPI_BIN
- 	  file for flashing by combining the spl/boot.bin and
- 	  u-boot.itb files into a unified binary.
- 
-+config BR2_TARGET_UBOOT_FORMAT_ADSP_LDR
-+	bool "u-boot.ldr"
-+	depends on BR2_arm || BR2_aarch64
-+
- config BR2_TARGET_UBOOT_FORMAT_STM32
- 	bool "u-boot.stm32"
- 	depends on BR2_arm
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 2796b0a310..844984c9e6 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -144,6 +144,10 @@ UBOOT_MAKE_TARGET += u-boot.stm32
- endif
- endif
- 
-+ifeq ($(BR2_TARGET_UBOOT_FORMAT_ADSP_LDR),y)
-+UBOOT_BINS += u-boot.ldr
-+endif
-+
- ifeq ($(BR2_TARGET_UBOOT_INITIAL_ENV),y)
- UBOOT_MAKE_TARGET += u-boot-initial-env
- define UBOOT_INSTALL_UBOOT_INITIAL_ENV
-@@ -257,6 +261,10 @@ UBOOT_MAKE_OPTS += TEE=$(BINARIES_DIR)/$(notdir $(ROCKCHIP_RKBIN_TEE_FILENAME))
- endif
- endif
- 
-+ifeq ($(BR2_TARGET_UBOOT_FORMAT_ADSP_LDR),y)
-+UBOOT_DEPENDENCIES += host-adsp-ldr
-+endif
-+
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
- UBOOT_DEPENDENCIES += host-dtc
- UBOOT_MAKE_OPTS += DTC=$(HOST_DIR)/bin/dtc
+ > According to https://bugzilla.redhat.com/show_bug.cgi?id=2383941,
+ > the fix for the CVE has been merged upstream, and is in netavark
+ > since v1.16.0.
+
+ > This fixes the following vulnerability:
+ > - CVE-2025-8283:
+ >     A vulnerability was found in the netavark package, a network stack for
+ >     containers used with Podman. Due to dns.podman search domain being
+ >     removed, netavark may return external servers if a valid A/AAAA record
+ >     is sent as a response. When creating a container with a given name,
+ >     this name will be used as the hostname for the container itself, as
+ >     the podman's search domain is not added anymore the container is using
+ >     the host's resolv.conf, and the DNS resolver will try to look into the
+ >     search domains contained on it. If one of the domains contain a name
+ >     with the same hostname as the running container, the connection will
+ >     forward to unexpected external servers.
+ >     https://www.cve.org/CVERecord?id=CVE-2025-8283
+
+ > Also bump package/aardvark-dns in the same lockstep, as advised in
+ > the packages .mk version comments.
+
+ > Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+
+Committed, thanks.
+
 -- 
-2.50.1
-
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
