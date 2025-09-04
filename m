@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FF6BCA1013
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:14:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2DDDCA101C
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:14:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 24BF7403B8;
-	Thu,  4 Sep 2025 16:14:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A85996063A;
+	Thu,  4 Sep 2025 16:14:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id loo_uVzmfgA1; Thu,  4 Sep 2025 16:14:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nIxRRvki5B1y; Thu,  4 Sep 2025 16:14:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 521F040407
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3E3F60614
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 521F040407;
-	Thu,  4 Sep 2025 16:14:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0CD24AE8
+	by smtp3.osuosl.org (Postfix) with ESMTP id B3E3F60614;
+	Thu,  4 Sep 2025 16:14:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 48E2AAE8
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 727B180787
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4B44B40064
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rF93RPPDXukm for <buildroot@buildroot.org>;
- Thu,  4 Sep 2025 16:13:47 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ylUizJuPt3a2 for <buildroot@buildroot.org>;
+ Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F76380764
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8AD864006A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9F76380764
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8AD864006A
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9CBF88617D; Thu,  4 Sep 2025 16:13:47 +0000 (UTC)
+ id 88CB087F0E; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Sep 2025 13:57:23 +0200
+Date: Thu, 4 Sep 2025 13:57:24 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: b3624ce42ed0b3400f37181fd26c0ac517372316
-X-Git-Newrev: 60d63597000dc5e91d7775176d9debc585ed107e
+X-Git-Oldrev: 575465c786238fea61c7b2795afbdaca9bc3348d
+X-Git-Newrev: 18809021cc690ab58255556ff8ef026c98c65194
 X-Patchwork-Hint: ignore
-Message-Id: <20250904161347.9CBF88617D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] arch/Config.in.arm: fix
- typo in help text
+Message-Id: <20250904161349.88CB087F0E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/unbound: mark
+ CVE-2025-5994 as not applicable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,39 +66,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60d63597000dc5e91d7775176d9debc585ed107e
+commit: https://git.buildroot.net/buildroot/commit/?id=18809021cc690ab58255556ff8ef026c98c65194
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 36eed021b6cb291e4892e4749e8b123aed328ba4)
+Unbound is vulnerable to CVE-2025-5994: "Cache poisoning via the ECS-enabled
+Rebirthday Attack" if built with --enable-subnet, which is not the case in
+Buildroot, so mark it as not applicable.
+
+https://nlnetlabs.nl/downloads/unbound/CVE-2025-5994.txt
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit c7721b0174d9e978e58bdffba26ff2151b47af9c)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- arch/Config.in.arm | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/unbound/unbound.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 546ba8070e..f01dcc4d5a 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -777,7 +777,7 @@ config BR2_ARM_INSTRUCTIONS_THUMB
- 	# Thumb-1 and VFP are not compatible
- 	depends on BR2_ARM_SOFT_FLOAT
- 	help
--	  This option instructions the compiler to generate Thumb
-+	  This option instructs the compiler to generate Thumb
- 	  instructions, which allows to mix 16 bits instructions and
- 	  32 bits instructions. This generally provides a much smaller
- 	  compiled binary size.
-@@ -790,7 +790,7 @@ config BR2_ARM_INSTRUCTIONS_THUMB2
- 	bool "Thumb2"
- 	depends on BR2_ARM_CPU_HAS_THUMB2
- 	help
--	  This option instructions the compiler to generate Thumb2
-+	  This option instructs the compiler to generate Thumb2
- 	  instructions, which allows to mix 16 bits instructions and
- 	  32 bits instructions. This generally provides a much smaller
- 	  compiled binary size.
+diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
+index 03a5e8e150..e9a32e6129 100644
+--- a/package/unbound/unbound.mk
++++ b/package/unbound/unbound.mk
+@@ -23,6 +23,9 @@ UNBOUND_CONF_OPTS = \
+ 	--with-libexpat=$(STAGING_DIR)/usr \
+ 	--with-ssl=$(STAGING_DIR)/usr
+ 
++# Only vulnerable if built with --enable-subnet
++UNBOUND_IGNORE_CVES += CVE-2025-5994
++
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),y)
+ UNBOUND_CONF_OPTS += --with-pthreads
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
