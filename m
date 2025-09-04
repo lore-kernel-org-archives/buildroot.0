@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B590ECA1002
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:15:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBE67CA101C
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:15:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 86B8C6066B;
-	Thu,  4 Sep 2025 16:15:02 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jtf-VFjKERGc; Thu,  4 Sep 2025 16:15:01 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B95C460600
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B95C460600;
+	by smtp4.osuosl.org (Postfix) with ESMTP id B44F2404D5;
 	Thu,  4 Sep 2025 16:15:01 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h8BC33xJZU-C; Thu,  4 Sep 2025 16:15:00 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87B1F4042F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 87B1F4042F;
+	Thu,  4 Sep 2025 16:15:00 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0FFE7AE8
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:14:25 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1289A106
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:14:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 12FBD80792
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D57F38077E
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DtAlepdK7x26 for <buildroot@buildroot.org>;
- Thu,  4 Sep 2025 16:13:53 +0000 (UTC)
+ id jMLq5a63tMgA for <buildroot@buildroot.org>;
+ Thu,  4 Sep 2025 16:13:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFC738079C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C96680781
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AFC738079C
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8C96680781
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AE19587F44; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
+ id 8AC9987F0E; Thu,  4 Sep 2025 16:13:48 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Sep 2025 13:57:24 +0200
+Date: Thu, 4 Sep 2025 13:57:23 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 13de70b4b4bca6529d3fc617d22cf15a8fcd1797
-X-Git-Newrev: 0f0fe331ff9ba6891e07e1c4da3751eeb7c20b8a
+X-Git-Oldrev: d7a398b38c9f00ef9cc23f6a4cd21ef22159a3e0
+X-Git-Newrev: 1ab57faa175ccceb5223589b16ce86ca2a078464
 X-Patchwork-Hint: ignore
-Message-Id: <20250904161349.AE19587F44@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/uclibc: fix grub2
- compilation
+Message-Id: <20250904161348.8AC9987F0E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] configs/ts7680: remove
+ defconfig, broken
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,66 +61,180 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Titouan Christophe via buildroot <buildroot@buildroot.org>
 Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6776093586377213450=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f0fe331ff9ba6891e07e1c4da3751eeb7c20b8a
+--===============6776093586377213450==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=1ab57faa175ccceb5223589b16ce86ca2a078464
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fixes:
- https://autobuild.buildroot.org/results/7a4/7a4d0f0571cd0cef1c87f3ef207618de72c1c78c/build-end.log
+This defconfig no longer builds:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11026774180
+
+It has been broken for at least 2 months:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs?name=T%3Dts7680&kind=BUILD
+
+It uses the outdated Linux 4.9 kernel, which is no longer maintained,
+and no longer builds with recent toolchains.
+
+Unless a fix is provided, this defconfig will be removed.
+
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11026774180
+
+Cc: Julien Grossholtz <julien.grossholtz@openest.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit 08a1e10fbe7538d8775196ae680df002c0271854)
+(cherry picked from commit a933920ff0d28947f5f6d4f6b6be04f113ad960c)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- ...001-remove-uClibc-specific-gettext_printf.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ .checkpackageignore                   |  1 -
+ DEVELOPERS                            |  2 --
+ board/technologic/ts7680/genimage.cfg | 14 ----------
+ board/technologic/ts7680/readme.txt   | 50 -----------------------------------
+ configs/ts7680_defconfig              | 16 -----------
+ 5 files changed, 83 deletions(-)
 
-diff --git a/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch b/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch
-new file mode 100644
-index 0000000000..96736da562
---- /dev/null
-+++ b/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch
-@@ -0,0 +1,34 @@
-+From 9ffed9adb130d45b9f31ca7a305153e86586c877 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Fri, 15 Aug 2025 20:29:52 +0200
-+Subject: [PATCH] remove uClibc specific gettext_printf
-+
-+Other C libraries like musl/glibc does not define it.
-+Including stdio.h here breaks Grub2 compilation with
-+gcc 14 and above.
-+Thanks to Thomas Petazzoni for analyzing the Grub2 build error.
-+
-+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+Upstream: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=9ffed9adb130d45b9f31ca7a305153e86586c877
-+---
-+ include/libintl.h | 3 ---
-+ 1 file changed, 3 deletions(-)
-+
-+diff --git a/include/libintl.h b/include/libintl.h
-+index b7123a963..6d8b9f342 100644
-+--- a/include/libintl.h
-++++ b/include/libintl.h
-+@@ -50,9 +50,6 @@ char *bindtextdomain(const char *domainname, const char *dirname);
-+ 
-+ #endif
-+ 
-+-#include <stdio.h>
-+-#define gettext_printf(args...) printf(args)
-+-
-+ /* to supply LC_MESSAGES and other stuff GNU expects to be exported when
-+    including libintl.h */
-+ #include <locale.h>
-+-- 
-+2.47.2
-+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index e22b3b3038..5f0562e484 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -203,7 +203,6 @@ configs/stm32mp157c_odyssey_defconfig lib_defconfig.ForceCheckHash
+ configs/terasic_de10nano_cyclone5_defconfig lib_defconfig.ForceCheckHash
+ configs/ts4900_defconfig lib_defconfig.ForceCheckHash
+ configs/ts5500_defconfig lib_defconfig.ForceCheckHash
+-configs/ts7680_defconfig lib_defconfig.ForceCheckHash
+ configs/uevm5432_defconfig lib_defconfig.ForceCheckHash
+ configs/visionfive_defconfig lib_defconfig.ForceCheckHash
+ configs/wandboard_defconfig lib_defconfig.ForceCheckHash
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 11f8a98171..1179ba0b90 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1767,9 +1767,7 @@ F:	package/qt5/
+ 
+ N:	Julien Grossholtz <julien.grossholtz@openest.io>
+ F:	board/raspberrypi/
+-F:	board/technologic/ts7680/
+ F:	configs/raspberrypizero2w_defconfig
+-F:	configs/ts7680_defconfig
+ F:	package/paho-mqtt-c
+ 
+ N:	Julien Olivain <ju.o@free.fr>
+diff --git a/board/technologic/ts7680/genimage.cfg b/board/technologic/ts7680/genimage.cfg
+deleted file mode 100644
+index 58a63edd1a..0000000000
+--- a/board/technologic/ts7680/genimage.cfg
++++ /dev/null
+@@ -1,14 +0,0 @@
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition unused {
+-		size = 512
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-		size = 256M
+-	}
+-}
+diff --git a/board/technologic/ts7680/readme.txt b/board/technologic/ts7680/readme.txt
+deleted file mode 100644
+index 3f703330bf..0000000000
+--- a/board/technologic/ts7680/readme.txt
++++ /dev/null
+@@ -1,50 +0,0 @@
+-Technologic Systems TS-7680 SBC
+-===============================
+-
+-This document explains how to set up a basic Buildroot system for
+-the Technologic Systems TS-7680 Single Board Computer.
+-
+-The TS-7680 SBC is based on the Freescale i.MX286 ARM ARM926EJ-S
+-running at 454MHz. The TS-7680 features are 10/100 Ethernet ports,
+-Wi-Fi, microSD card, eMMC, NOR Flash, USB host port, CAN ports,
+-relays and ADC/DAC. More details on the board here:
+-https://docs.embeddedTS.com/TS-7680
+-
+-The TS-7680 uses a 4.9 Linux kernel provided by Technologic Systems.
+-
+-To build the default configuration you only have to run:
+-
+-  $ make ts7680_defconfig
+-  $ make
+-
+-The output looks like:
+-output/images
+-├── imx28-ts7680.dtb
+-├── rootfs.ext2
+-├── rootfs.ext4 -> rootfs.ext2
+-├── rootfs.tar
+-├── sdcard.img
+-└── uImage
+-
+-The provided genimage configuration generates an image file containing
+-two partitions. The first one is unused, but mandatory as the
+-TS-7680 built-in bootloader loads the Linux uImage from the /boot
+-directory in the second partition. The second partition contains the
+-rootfs with the Linux uImage into the /boot directory.
+-
+-  $ fdisk output/images/sdcard.img
+-  output/images/sdcard.img1          1      1       1  512B  0 Empty
+-  output/images/sdcard.img2          2 524289  524288  256M 83 Linux
+-
+-This image can be directly written to an SD card.
+-
+-    $ sudo dd if=output/images/sdcard.img of=/dev/mmcblk0
+-
+-To boot with Buildroot, insert this SD card on the board, make sure
+-the SD jumper is present and the U-Boot jumper is not.
+-
+-The bootloader comes pre-flashed on the board on an SPI flash. Since
+-updating the bootloader is risky and not trivial, it is not included
+-in the Buildroot defconfig. Refer to
+-https://docs.embeddedts.com/TS-7680#U-Boot for details on
+-which U-Boot config to use and how to flash it.
+diff --git a/configs/ts7680_defconfig b/configs/ts7680_defconfig
+deleted file mode 100644
+index 9e058b1d78..0000000000
+--- a/configs/ts7680_defconfig
++++ /dev/null
+@@ -1,16 +0,0 @@
+-BR2_arm=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/technologic/ts7680/genimage.cfg"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,embeddedTS,linux-4.9.y,v4.9.311-ts)/linux-v4.9.311-ts.tar.gz"
+-BR2_LINUX_KERNEL_DEFCONFIG="ts_imx28"
+-BR2_LINUX_KERNEL_UIMAGE=y
+-BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx28-ts7680"
+-BR2_LINUX_KERNEL_INSTALL_TARGET=y
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+
+--===============6776093586377213450==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6776093586377213450==--
