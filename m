@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7652BCA1002
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:33:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4004CA1015
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:33:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 420EC40567;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3930A6063E;
 	Thu,  4 Sep 2025 16:33:39 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LVRiQXJFgC5C; Thu,  4 Sep 2025 16:33:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E75A40560
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E75A40560;
-	Thu,  4 Sep 2025 16:33:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id AB81EB69
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9DC076063E
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VcYCgdxQm8CQ for <buildroot@buildroot.org>;
+ id AnZnUjkGapJT; Thu,  4 Sep 2025 16:33:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2426A6063A
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2426A6063A;
+	Thu,  4 Sep 2025 16:33:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9ECCFAE8
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8511840097
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:35 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TjtOM361UlkE for <buildroot@buildroot.org>;
  Thu,  4 Sep 2025 16:33:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9395460638
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A1C74006D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9395460638
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9A1C74006D
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 84FC387F4B; Thu,  4 Sep 2025 16:33:34 +0000 (UTC)
+ id 9843987E99; Thu,  4 Sep 2025 16:33:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Sep 2025 14:00:47 +0200
+Date: Thu, 4 Sep 2025 14:02:58 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: e1ab48a663b16e27551e4fccdc9c893dd41d687d
-X-Git-Newrev: 2bb4c691eaa1d63b078e8f4cbc245dfc0a533afd
+X-Git-Oldrev: 46d3fc2595313b4257df6ec8ff4f66029c377b8e
+X-Git-Newrev: 14364c7384bb827fab81effd2d8e56fb403a6d22
 X-Patchwork-Hint: ignore
-Message-Id: <20250904163334.84FC387F4B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/python-pyroute2:
- add missing python3 ssl dependency
+Message-Id: <20250904163334.9843987E99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] DEVELOPERS: upgrade
+ Andreas Ziegler's email address
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,58 +66,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2bb4c691eaa1d63b078e8f4cbc245dfc0a533afd
+commit: https://git.buildroot.net/buildroot/commit/?id=14364c7384bb827fab81effd2d8e56fb403a6d22
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Buildroot commit [1] "package/python-pyroute2: bump to version 0.9.4"
-added the python3 ssl runtime dependency while updating the package
-in the "next" branch. It incorrectly suggested the dependency was
-introduced in version 0.9.4.
+The old one lasted for 10 years, lately spam
+levels reached a rather uncomfortable level ...
 
-This dependency was in fact introduced in upstream commit [2],
-first time included in pyroute2 0.8.1, which is the current version
-in the Buildroot release stabilization branch. It is worth mentioning
-that this package was updated to that version in Buildroot commit [3].
-
-Running the command on target:
-
-    python3 -c 'import pyroute2'
-
-Fails at runtime with error:
-
-    ModuleNotFoundError: No module named '_ssl'
-
-This commit fixes the issue by adding this missing dependency,
-the same was it was done in commit [1].
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/786557d859dba7e52c883e5215e53e93fac13b88
-[2] https://github.com/svinota/pyroute2/commit/e87c14581b883c12ecadc75bf0fd07bf359de842
-[3] https://gitlab.com/buildroot.org/buildroot/-/commit/816641bbe1c60e881526510bd55fb2ed0d740298
-
-Signed-off-by: Yacin Belmihoub-Martel <yacin.belmihoub-martel@silabs.com>
-[Julien:
- - reword commit log
- - add the "runtime" comment
-]
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit c399b6d682c480512622d71ac2317c8494d2d73e)
+(cherry picked from commit e13a3c95c111168b1bfe0ec9fdb0879a83490b18)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/python-pyroute2/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-pyroute2/Config.in b/package/python-pyroute2/Config.in
-index 9e685f9d1e..2e667165a8 100644
---- a/package/python-pyroute2/Config.in
-+++ b/package/python-pyroute2/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PYTHON_PYROUTE2
- 	bool "python-pyroute2"
- 	select BR2_PACKAGE_PYTHON3_SQLITE
-+	select BR2_PACKAGE_PYTHON3_SSL # runtime
- 	help
- 	  Python netlink library - Linux network / netns / wireless /
- 	  ipset configuration.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7e73d9b2bd..75caa50993 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -187,7 +187,7 @@ F:	package/pkg-qmake.mk
+ F:	package/qt5/qt5opcua/
+ F:	package/qt6/qt6opcua/
+ 
+-N:	Andreas Ziegler <br015@umbiko.net>
++N:	Andreas Ziegler <br025@umbiko.net>
+ F:	package/mpd/
+ 
+ N:	Andrey Smirnov <andrew.smirnov@gmail.com>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
