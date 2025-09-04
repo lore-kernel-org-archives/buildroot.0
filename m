@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA065CA1015
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:35:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9ECF4CA1013
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:35:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A0F9F6088D;
-	Thu,  4 Sep 2025 16:35:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7627C60882;
+	Thu,  4 Sep 2025 16:35:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZKrvKWLO0Wj1; Thu,  4 Sep 2025 16:35:03 +0000 (UTC)
+ id T8xmpt07AkfF; Thu,  4 Sep 2025 16:35:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B4B260880
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC50C60883
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9B4B260880;
-	Thu,  4 Sep 2025 16:34:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BC50C60883;
+	Thu,  4 Sep 2025 16:35:02 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 92A1DAE8
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:34:10 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id AE1F7106
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:34:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EE97040073
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3DDE34008E
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zbLogOLFa44R for <buildroot@buildroot.org>;
- Thu,  4 Sep 2025 16:33:39 +0000 (UTC)
+ id PSPwfcgDONcY for <buildroot@buildroot.org>;
+ Thu,  4 Sep 2025 16:33:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 769AF400AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 274F440085
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 769AF400AD
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 274F440085
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 74F4187E99; Thu,  4 Sep 2025 16:33:36 +0000 (UTC)
+ id 2542E87EEF; Thu,  4 Sep 2025 16:33:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Sep 2025 14:19:18 +0200
+Date: Thu, 4 Sep 2025 14:04:14 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 136d4d8355c124937d9bbaaa5a0800517cc804a6
-X-Git-Newrev: 631bda1a189c52cdf75708b86429f29f126785af
+X-Git-Oldrev: 9fefd698925b1f3e15124002e7def13c572f43fa
+X-Git-Newrev: c891569a02ccfd5f6d87e86c2484b723b57ccaff
 X-Patchwork-Hint: ignore
-Message-Id: <20250904163336.74F4187E99@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/uclibc: fix grub2
- compilation
+Message-Id: <20250904163335.2542E87EEF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] configs/riotboard: remove
+ defconfig, broken
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,60 +66,180 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=631bda1a189c52cdf75708b86429f29f126785af
+commit: https://git.buildroot.net/buildroot/commit/?id=c891569a02ccfd5f6d87e86c2484b723b57ccaff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Fixes:
- https://autobuild.buildroot.org/results/7a4/7a4d0f0571cd0cef1c87f3ef207618de72c1c78c/build-end.log
+This defconfig no longer builds:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11026769450
+
+It has been broken for at least 2 months:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs?name=T%3Driotboard&kind=BUILD
+
+It is using the outdated, not even LTS 4.18.x kernel, which most
+likely explains why it no longer builds with modern toolchains.
+
+Unless a fix is provided, this defconfig will be removed.
+
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11026769450
+
+Cc: Nikolay Dimitrov <nikolay.dimitrov@retrohub.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit 08a1e10fbe7538d8775196ae680df002c0271854)
+(cherry picked from commit caf055a96c461ca3aa693fd0f7291d151be633ed)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- ...001-remove-uClibc-specific-gettext_printf.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ .checkpackageignore                                |  1 -
+ DEVELOPERS                                         |  4 ---
+ board/embest/riotboard/genimage.cfg                | 17 ----------
+ board/embest/riotboard/readme.txt                  | 38 ----------------------
+ .../rootfs_overlay/boot/extlinux/extlinux.conf     |  6 ----
+ configs/riotboard_defconfig                        | 28 ----------------
+ 6 files changed, 94 deletions(-)
 
-diff --git a/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch b/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch
-new file mode 100644
-index 0000000000..96736da562
---- /dev/null
-+++ b/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch
-@@ -0,0 +1,34 @@
-+From 9ffed9adb130d45b9f31ca7a305153e86586c877 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Fri, 15 Aug 2025 20:29:52 +0200
-+Subject: [PATCH] remove uClibc specific gettext_printf
-+
-+Other C libraries like musl/glibc does not define it.
-+Including stdio.h here breaks Grub2 compilation with
-+gcc 14 and above.
-+Thanks to Thomas Petazzoni for analyzing the Grub2 build error.
-+
-+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+Upstream: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=9ffed9adb130d45b9f31ca7a305153e86586c877
-+---
-+ include/libintl.h | 3 ---
-+ 1 file changed, 3 deletions(-)
-+
-+diff --git a/include/libintl.h b/include/libintl.h
-+index b7123a963..6d8b9f342 100644
-+--- a/include/libintl.h
-++++ b/include/libintl.h
-+@@ -50,9 +50,6 @@ char *bindtextdomain(const char *domainname, const char *dirname);
-+ 
-+ #endif
-+ 
-+-#include <stdio.h>
-+-#define gettext_printf(args...) printf(args)
-+-
-+ /* to supply LC_MESSAGES and other stuff GNU expects to be exported when
-+    including libintl.h */
-+ #include <locale.h>
-+-- 
-+2.47.2
-+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index c3a93ea1eb..d436c2f3eb 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -180,7 +180,6 @@ configs/pc_x86_64_efi_defconfig lib_defconfig.ForceCheckHash
+ configs/pine64_defconfig lib_defconfig.ForceCheckHash
+ configs/pine64_pinecube_defconfig lib_defconfig.ForceCheckHash
+ configs/pine64_star64_defconfig lib_defconfig.ForceCheckHash
+-configs/riotboard_defconfig lib_defconfig.ForceCheckHash
+ configs/rock64_defconfig lib_defconfig.ForceCheckHash
+ configs/rock_pi_n8_defconfig lib_defconfig.ForceCheckHash
+ configs/roseapplepi_defconfig lib_defconfig.ForceCheckHash
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a93f08bc13..bfdabec686 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2546,10 +2546,6 @@ F:	package/ofono/
+ N:	Niklas Cassel <niklas.cassel@wdc.com>
+ F:	configs/qemu_riscv64_nommu_virt_defconfig
+ 
+-N:	Nikolay Dimitrov <nikolay.dimitrov@retrohub.org>
+-F:	board/embest/riotboard/
+-F:	configs/riotboard_defconfig
+-
+ N:	Nimai Mahajan <nimaim@gmail.com>
+ F:	package/libucl/
+ 
+diff --git a/board/embest/riotboard/genimage.cfg b/board/embest/riotboard/genimage.cfg
+deleted file mode 100644
+index d2e851a78d..0000000000
+--- a/board/embest/riotboard/genimage.cfg
++++ /dev/null
+@@ -1,17 +0,0 @@
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition u-boot {
+-		in-partition-table = "no"
+-		image = "u-boot.imx"
+-		offset = 1K
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext2"
+-		offset = 1M
+-		size = 60M
+-	}
+-}
+diff --git a/board/embest/riotboard/readme.txt b/board/embest/riotboard/readme.txt
+deleted file mode 100644
+index 4ba836fa5a..0000000000
+--- a/board/embest/riotboard/readme.txt
++++ /dev/null
+@@ -1,38 +0,0 @@
+-Buildroot for Embest RIoTboard
+-==============================
+-
+-This is a small development board, based on Freescale IMX6 Solo SoC
+-(single core ARM Cortex-A9).
+-
+-More details about the board can be found at:
+-
+-  http://www.embest-tech.com/riotboard
+-
+-1. Compiling buildroot
+-----------------------
+-
+-$ make riotboard_defconfig
+-$ make
+-
+-2. Installing buildroot
+------------------------
+-
+-Prepare an SD-card and plug it into your card reader. Always double
+-check the block device before writing to it, as writing to the wrong
+-block device can cause irrecoverable data loss. Now you can write the
+-image to your SD-card:
+-
+-sudo dd if=output/images/sdcard.img of=/dev/<sdcard-block-device> bs=1M
+-
+-3. Running buildroot
+---------------------
+-
+-Position the board so you can read the label "RIoTboard" on the right
+-side of SW1 DIP switches. Configure the SW1 swiches like this:
+-
+-1   0  1   0   0  1   0  1
+-ON OFF ON OFF OFF ON OFF ON
+-
+-Now plug your prepared SD-card in slot J6. Connect a serial console
+-(115200, 8, N, 1) to header J18. Connect a 5V/1A power supply to the
+-board and enjoy.
+diff --git a/board/embest/riotboard/rootfs_overlay/boot/extlinux/extlinux.conf b/board/embest/riotboard/rootfs_overlay/boot/extlinux/extlinux.conf
+deleted file mode 100644
+index 23e48a0da7..0000000000
+--- a/board/embest/riotboard/rootfs_overlay/boot/extlinux/extlinux.conf
++++ /dev/null
+@@ -1,6 +0,0 @@
+-default buildroot
+-
+-label buildroot
+-kernel /boot/zImage
+-devicetree /boot/imx6dl-riotboard.dtb
+-append console=ttymxc1,115200 root=/dev/mmcblk1p1 rw
+diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
+deleted file mode 100644
+index 709b54ff06..0000000000
+--- a/configs/riotboard_defconfig
++++ /dev/null
+@@ -1,28 +0,0 @@
+-BR2_arm=y
+-BR2_cortex_a9=y
+-BR2_ARM_ENABLE_NEON=y
+-BR2_ARM_ENABLE_VFP=y
+-BR2_ARM_FPU_VFPV3=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
+-BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+-BR2_ROOTFS_OVERLAY="board/embest/riotboard/rootfs_overlay"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/embest/riotboard/genimage.cfg"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.10"
+-BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-riotboard"
+-BR2_LINUX_KERNEL_INSTALL_TARGET=y
+-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="riotboard"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.07"
+-BR2_TARGET_UBOOT_FORMAT_IMX=y
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
