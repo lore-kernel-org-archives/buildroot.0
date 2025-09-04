@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29421CA1013
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:14:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8101CCA1002
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:14:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F05A180840;
-	Thu,  4 Sep 2025 16:14:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 57A9A40490;
+	Thu,  4 Sep 2025 16:14:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dXoYxa5sS5YI; Thu,  4 Sep 2025 16:14:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id diS5peNEcNDh; Thu,  4 Sep 2025 16:14:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2622780836
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8441F404B5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2622780836;
-	Thu,  4 Sep 2025 16:14:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8441F404B5;
+	Thu,  4 Sep 2025 16:14:52 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1A333AE8
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:14:17 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 14704AE8
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:14:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0776980772
+ by smtp1.osuosl.org (Postfix) with ESMTP id 157208077C
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m_RnKz1ky3Jt for <buildroot@buildroot.org>;
+ id TVcE6Yo7VdyR for <buildroot@buildroot.org>;
  Thu,  4 Sep 2025 16:13:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 419FD80793
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64C9380797
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 419FD80793
+ by smtp1.osuosl.org (Postfix) with ESMTP id 64C9380797
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3FB0787F44; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
+ id 62BBF87F46; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 4 Sep 2025 13:57:24 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 2fdc74add522db174e01b9027b90d366823bba31
-X-Git-Newrev: 4a2f2973e33eb4eedda903f253975fb70b2c7884
+X-Git-Oldrev: 66af5b9914f3c81bba787c260771c3c7883ac8d2
+X-Git-Newrev: 82ba9e3547dfec54f6b079daf080cec08e84c718
 X-Patchwork-Hint: ignore
-Message-Id: <20250904161349.3FB0787F44@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/mariadb:
- explicitly disable the column store plugin
+Message-Id: <20250904161349.62BBF87F46@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libsvgtiny: add
+ patch to fix GCC 15.x build issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,63 +66,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a2f2973e33eb4eedda903f253975fb70b2c7884
+commit: https://git.buildroot.net/buildroot/commit/?id=82ba9e3547dfec54f6b079daf080cec08e84c718
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Building the column store plugin (which gets automatically enabled
-when Boost with a bunch of submodules is found) currently fails as it
-requires a number of runtime checks that obviously cannot work when
-cross-compiling.
+Add a small, easily backportable patch to fix GCC 15.x build
+issue. The issue is also fixed upstream in later releases, but this
+patch is a minimal fix that can be backported to LTS independently
+from a version bump.
 
-OpenEmbedded has defined them as such:
+Fixes:
 
-  -DLSTAT_FOLLOWS_SLASHED_SYMLINK_EXITCODE=0 \
-  -DSTAT_EMPTY_STRING_BUG_EXITCODE=0 \
-  -DMASK_LONGDOUBLE_EXITCODE=0 \
-
-but it really isn't clear whether those values are completely correct
-for all CPU architectures, especially the last one.
-
-So instead, let's disable the column store plugin until someone
-actually needs it and figures out how to set those variables properly.
-
-The issue fixed by this commit can be reproduced using the following
-defconfig:
-
-BR2_aarch64=y
-BR2_ARM_FPU_VFPV3D16=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_PACKAGE_MARIADB=y
-BR2_PACKAGE_MARIADB_SERVER=y
-BR2_PACKAGE_BOOST=y
-BR2_PACKAGE_BOOST_DATE_TIME=y
-BR2_PACKAGE_BOOST_FILESYSTEM=y
-BR2_PACKAGE_BOOST_REGEX=y
-BR2_PACKAGE_BOOST_THREAD=y
+  https://autobuild.buildroot.org/results/c3d703663faabe40448d908afbdbb351a016aece/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 44bba495071f754a5cc91b15a3bbfa221de0e55e)
+(cherry picked from commit 6fdebc54b301ca4729789849c602aa4203bcfbe6)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/mariadb/mariadb.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ ..._gradient-svgtiny_list-.c-add-missing-std.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 0d872442f2..53395afc91 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -112,7 +112,8 @@ MARIADB_CONF_OPTS += \
- 	-DINSTALL_SQLBENCHDIR=share/mysql/bench \
- 	-DINSTALL_SUPPORTFILESDIR=share/mysql \
- 	-DMYSQL_DATADIR=/var/lib/mysql \
--	-DMYSQL_UNIX_ADDR=$(MYSQL_SOCKET)
-+	-DMYSQL_UNIX_ADDR=$(MYSQL_SOCKET) \
-+	-DPLUGIN_COLUMNSTORE=NO
- 
- HOST_MARIADB_DEPENDENCIES = host-openssl
- HOST_MARIADB_CONF_OPTS += -DWITH_SSL=system
+diff --git a/package/libsvgtiny/0005-src-svgtiny_gradient-svgtiny_list-.c-add-missing-std.patch b/package/libsvgtiny/0005-src-svgtiny_gradient-svgtiny_list-.c-add-missing-std.patch
+new file mode 100644
+index 0000000000..17e63ba541
+--- /dev/null
++++ b/package/libsvgtiny/0005-src-svgtiny_gradient-svgtiny_list-.c-add-missing-std.patch
+@@ -0,0 +1,42 @@
++From 1d86ce7e6ea9fae8285eed23d838f87ab3ac083c Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Tue, 19 Aug 2025 23:28:35 +0200
++Subject: [PATCH] src/{svgtiny_gradient,svgtiny_list}.c: add missing <stdlib.h>
++
++Needed to get the prototype for malloc()/free().
++
++Upstream: N/A, already fixed upstream in a later release (but as part
++of a larger commit)
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/svgtiny_gradient.c | 1 +
++ src/svgtiny_list.c     | 1 +
++ 2 files changed, 2 insertions(+)
++
++diff --git a/src/svgtiny_gradient.c b/src/svgtiny_gradient.c
++index 3a8db73..5172223 100644
++--- a/src/svgtiny_gradient.c
+++++ b/src/svgtiny_gradient.c
++@@ -8,6 +8,7 @@
++ #include <assert.h>
++ #include <math.h>
++ #include <string.h>
+++#include <stdlib.h>
++ #include "svgtiny.h"
++ #include "svgtiny_internal.h"
++ 
++diff --git a/src/svgtiny_list.c b/src/svgtiny_list.c
++index 53cfb34..91e2c98 100644
++--- a/src/svgtiny_list.c
+++++ b/src/svgtiny_list.c
++@@ -11,6 +11,7 @@
++  */
++ 
++ #include <assert.h>
+++#include <stdlib.h>
++ #include "svgtiny.h"
++ #include "svgtiny_internal.h"
++ 
++-- 
++2.50.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
