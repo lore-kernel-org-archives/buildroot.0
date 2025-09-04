@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4E68CA1002
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9EFFCA1013
 	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:13:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 61F45605EC;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 89D37403A0;
 	Thu,  4 Sep 2025 16:13:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vOTUEoZoWNBE; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66A994038A
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 66A994038A;
+	Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C289B106
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A91CA605F1
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8gSlnbXTHlWb; Thu,  4 Sep 2025 16:13:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2C00605F0
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A2C00605F0;
-	Thu,  4 Sep 2025 16:13:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id DA438106
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C0CC28078B
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:48 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TLZT4xW4l8yi for <buildroot@buildroot.org>;
+ id w-4F1p6tk1kp for <buildroot@buildroot.org>;
  Thu,  4 Sep 2025 16:13:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDB1280765
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DBFB605F0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BDB1280765
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8DBFB605F0
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BBAAF8617D; Thu,  4 Sep 2025 16:13:47 +0000 (UTC)
+ id 7F6FB87F44; Thu,  4 Sep 2025 16:13:47 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 4 Sep 2025 13:57:23 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: f8c134efa8739e1476a8fb7d8ae30fb5b5a6789f
-X-Git-Newrev: c753b52bb4b8d167453c9362f05099ce2c613bda
+X-Git-Oldrev: dafed7e9d2617ed460f1a7f9d90bd301eff696b9
+X-Git-Newrev: 7229f0fdde0bb108ca81326b661204242f5530d4
 X-Patchwork-Hint: ignore
-Message-Id: <20250904161347.BBAAF8617D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] DEVELOPERS: upgrade
- Andreas Ziegler's email address
+Message-Id: <20250904161347.7F6FB87F44@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/vim: security
+ bump to version 9.1.1684
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,33 +66,83 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c753b52bb4b8d167453c9362f05099ce2c613bda
+commit: https://git.buildroot.net/buildroot/commit/?id=7229f0fdde0bb108ca81326b661204242f5530d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-The old one lasted for 10 years, lately spam
-levels reached a rather uncomfortable level ...
+Fixes the following CVEs:
+- CVE-2024-41957
+- CVE-2024-41965
+- CVE-2024-45306
+- CVE-2024-47814
+- CVE-2025-1215
+- CVE-2025-22134
+- CVE-2025-24014
+- CVE-2025-26603
+- CVE-2025-29768
+- CVE-2025-53905
+- CVE-2025-53906
 
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+README.txt got updated three times since the last bump:
+- [0] updated some wording regarding who the developers are.
+- [1] updated the link to the release archives
+- [2] updated the goals of the project
+
+netrw (the builtin file explorer of vim) changed maintainer and was
+subsequently restructured [3]. Therefore we need to run installpack,
+otherwise we run into this on startup (reported by Julien, thanks!):
+
+Error detected while processing
+/usr/share/vim/vim91/plugin/netrwPlugin.vim:
+line    7:
+E919: Directory not found in 'packpath': "pack/*/opt/netrw"
+Press ENTER or type command to continue
+
+[0]: https://github.com/vim/vim/commit/b75825f749cf87feb9ae8e7e5327bd2efe707c86
+[1]: https://github.com/vim/vim/commit/4225f28855c5d3023662b3a90a70b22caf9b6ade
+[2]: https://github.com/vim/vim/commit/2bfd1ee161e26ece8e5a72cdca4fff22d11728a2
+[3]: https://github.com/vim/vim/commit/9cfdabb074feefc9848e9f7a4538f201e28c7f06
+
+Signed-off-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit e13a3c95c111168b1bfe0ec9fdb0879a83490b18)
+(cherry picked from commit 089731c8ea4e90cb84a25cbae3e9cb5fc871a6aa)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/vim/vim.hash | 4 ++--
+ package/vim/vim.mk   | 3 ++-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e66fd91fb8..55e88af347 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -186,7 +186,7 @@ F:	package/pkg-qmake.mk
- F:	package/qt5/qt5opcua/
- F:	package/qt6/qt6opcua/
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index 194bcb4378..ae909aaeac 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  0056537cb57190aa41c12ba6c2ad04ce10e7f714cde4c1fe7193a37e1c44db46  vim-9.1.0145.tar.gz
++sha256  4fe4cb284007e26255267338dde1ceac6f8326f78123ae8c96a36ee15a1ea7ba  vim-9.1.1684.tar.gz
+ sha256  0b3f1f330cb1b179bb17c7c687d4cec601e0aa3462bc7f890ad4c3888d37d720  LICENSE
+-sha256  7a2f621c8496396dae5eecdcc4dccff9d534dff4627193d3ebf7fa6d2cb27042  README.txt
++sha256  ee1d0885bbc4a95a24e49873a075391bdf26b69d13758e30f3d9271f8f42bd2d  README.txt
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 7d51a6ddab..4297bdd198 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--N:	Andreas Ziegler <br015@umbiko.net>
-+N:	Andreas Ziegler <br025@umbiko.net>
- F:	package/mpd/
- 
- N:	Andrey Smirnov <andrew.smirnov@gmail.com>
+-VIM_VERSION = 9.1.0145
++VIM_VERSION = 9.1.1684
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
+@@ -49,6 +49,7 @@ endif
+ define VIM_INSTALL_TARGET_CMDS
+ 	cd $(@D)/src; \
+ 		$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) installvimbin; \
++		$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) installpack; \
+ 		$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) installtools; \
+ 		$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) installlinks
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
