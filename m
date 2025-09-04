@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A52BCA1015
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:34:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17FFCCA1002
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:34:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6FE9606B4;
-	Thu,  4 Sep 2025 16:34:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E583940590;
+	Thu,  4 Sep 2025 16:34:19 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nu2JJ-PppzLX; Thu,  4 Sep 2025 16:34:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1967E405E9
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1967E405E9;
+	Thu,  4 Sep 2025 16:34:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 04A28AE8
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 668B56063C
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5P4oFDcRNN5E; Thu,  4 Sep 2025 16:34:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A67760755
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9A67760755;
-	Thu,  4 Sep 2025 16:34:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id E12ECAE8
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DFFD340051
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:37 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vUJdKTy01M65 for <buildroot@buildroot.org>;
+ id cIM0nGmEaI8V for <buildroot@buildroot.org>;
  Thu,  4 Sep 2025 16:33:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CDD040094
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F104560635
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7CDD040094
+ by smtp3.osuosl.org (Postfix) with ESMTP id F104560635
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7B12787EEF; Thu,  4 Sep 2025 16:33:35 +0000 (UTC)
+ id EF30F87F4B; Thu,  4 Sep 2025 16:33:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Sep 2025 14:05:56 +0200
+Date: Thu, 4 Sep 2025 14:13:41 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 2530c49b64a6bd766def9c877ca61cb964eb4349
-X-Git-Newrev: 3b818043e950511b1a413cd5f0e20c0aed712c7f
+X-Git-Oldrev: 3e14a3d714cc9f0910ad0bd918c0f6ee4528a765
+X-Git-Newrev: 2e81a3282ae318d975dc037142dfc6670902a2f7
 X-Patchwork-Hint: ignore
-Message-Id: <20250904163335.7B12787EEF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] python-yarl: bump to
- v1.20.1
+Message-Id: <20250904163335.EF30F87F4B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/tcpreplay: bump
+ to version 4.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,68 +66,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b818043e950511b1a413cd5f0e20c0aed712c7f
+commit: https://git.buildroot.net/buildroot/commit/?id=2e81a3282ae318d975dc037142dfc6670902a2f7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Since the python-cython bump to v3.1.2 (see [1]), python-yarl has been
-failing on the autobuilder with the following error message:
+Bugfix release, fixing compatibility w/ gcc-15.
 
-```
-ERROR Missing dependencies:
-	Cython~=3.0.0; python_version >= "3.12"
-make: *** [package/pkg-generic.mk:273: /home/buildroot/instance-0/output-1/build/python-yarl-1.18.3/.stamp_built] Error 1
-```
+For change log, see:
+https://github.com/appneta/tcpreplay/releases/tag/v4.5.2
 
-The cython dependency has been addressed in python-yarl v1.20.1, for
-more information see the github issue [2].
-
-For more information on the release, see:
-
-  - https://github.com/aio-libs/yarl/releases/tag/v1.19.0
-  - https://github.com/aio-libs/yarl/releases/tag/v1.20.0
-  - https://github.com/aio-libs/yarl/releases/tag/v1.20.1
-
-[1] b536caaec0 package/python-cython: bump to version 3.1.2
-[2] https://github.com/aio-libs/yarl/pull/1514
-
-Fixes: https://autobuild.buildroot.org/results/d36/d367b69b85a65fa94e923ecff3ba03723b2a6e88
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit 0bd88146ee355109faf55f73133dc8d8632d8ba1)
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+[Peter: mention gcc+15 fix]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 0f80622f1cc33dc9f845d0fe1272a38788a789e9)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/python-yarl/python-yarl.hash | 4 ++--
- package/python-yarl/python-yarl.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/tcpreplay/tcpreplay.hash | 4 ++--
+ package/tcpreplay/tcpreplay.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-yarl/python-yarl.hash b/package/python-yarl/python-yarl.hash
-index ca2d42bf58..43ba31f81f 100644
---- a/package/python-yarl/python-yarl.hash
-+++ b/package/python-yarl/python-yarl.hash
+diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
+index 6dc6e48f9a..4307fa60fc 100644
+--- a/package/tcpreplay/tcpreplay.hash
++++ b/package/tcpreplay/tcpreplay.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/yarl/json
--md5  80b89d2b28be7345a38f099b2f839d7d  yarl-1.18.3.tar.gz
--sha256  ac1801c45cbf77b6c99242eeff4fffb5e4e73a800b5c4ad4fc0be5def634d2e1  yarl-1.18.3.tar.gz
-+md5  23352fbc2b165825d4a33682c91788bc  yarl-1.20.1.tar.gz
-+sha256  d017a4997ee50c91fd5466cef416231bb82177b93b029906cefc542ce14c35ac  yarl-1.20.1.tar.gz
- # Locally computed sha256 checksums
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-yarl/python-yarl.mk b/package/python-yarl/python-yarl.mk
-index 160dec8a1b..4f25394c8b 100644
---- a/package/python-yarl/python-yarl.mk
-+++ b/package/python-yarl/python-yarl.mk
-@@ -4,9 +4,9 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/appneta/tcpreplay/releases/download/v4.5.1/tcpreplay-4.5.1.tar.xz.asc
++# https://github.com/appneta/tcpreplay/releases/download/v4.5.2/tcpreplay-4.5.2.tar.xz.asc
+ # using key 84E4FA215C934A7D97DC76D5E9E2149793BDE17E
+-sha256  5126613f783062b43f514b05ad981376050a8fee35b03c8de4445ddeefd95049  tcpreplay-4.5.1.tar.xz
++sha256  2df15bc6d49f96a77617d137049f998193bbae95c1a31b04ca02856a24cbf384  tcpreplay-4.5.2.tar.xz
+ sha256  07cf5e92d475287a7d1663b33097f40cae5adf03ed8920fcd4374e3dfb48c8ad  docs/LICENSE
+diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
+index 17766707e6..32bcf8d278 100644
+--- a/package/tcpreplay/tcpreplay.mk
++++ b/package/tcpreplay/tcpreplay.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_YARL_VERSION = 1.18.3
-+PYTHON_YARL_VERSION = 1.20.1
- PYTHON_YARL_SOURCE = yarl-$(PYTHON_YARL_VERSION).tar.gz
--PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/b7/9d/4b94a8e6d2b51b599516a5cb88e5bc99b4d8d4583e468057eaa29d5f0918
-+PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/3c/fb/efaa23fa4e45537b827620f04cf8f3cd658b76642205162e072703a5b963
- PYTHON_YARL_LICENSE = Apache-2.0
- PYTHON_YARL_LICENSE_FILES = LICENSE
- PYTHON_YARL_SETUP_TYPE = setuptools
+-TCPREPLAY_VERSION = 4.5.1
++TCPREPLAY_VERSION = 4.5.2
+ TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
+ TCPREPLAY_SOURCE = tcpreplay-$(TCPREPLAY_VERSION).tar.xz
+ TCPREPLAY_LICENSE = GPL-3.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
