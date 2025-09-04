@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C0ADCA1015
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E8F0CA1013
 	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:14:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19D59403F8;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0D653807A6;
 	Thu,  4 Sep 2025 16:14:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X0DfCs72iaTq; Thu,  4 Sep 2025 16:14:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id U5FCco1zUVj8; Thu,  4 Sep 2025 16:14:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0959F40459
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD628807EB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0959F40459;
-	Thu,  4 Sep 2025 16:14:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 09E05B69
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD628807EB;
+	Thu,  4 Sep 2025 16:14:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 02B28106
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:14:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CBCA140070
+ by smtp1.osuosl.org (Postfix) with ESMTP id B43CF80762
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bx16FIIzPlGK for <buildroot@buildroot.org>;
- Thu,  4 Sep 2025 16:13:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jZ0JbcGTa-MP for <buildroot@buildroot.org>;
+ Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A6D364006B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A48A8077E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A6D364006B
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6A48A8077E
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A4DF287F0E; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
+ id 6855487F44; Thu,  4 Sep 2025 16:13:48 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Sep 2025 13:57:24 +0200
+Date: Thu, 4 Sep 2025 13:57:23 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: ba1b5c41ce2899705c43015e84237ccca7d2553b
-X-Git-Newrev: 13de70b4b4bca6529d3fc617d22cf15a8fcd1797
+X-Git-Oldrev: fe80c626d43df3182c907e05874639a2df6d5494
+X-Git-Newrev: fd7720562bb6b32bd0f039ad28ca3b933fa4d961
 X-Patchwork-Hint: ignore
-Message-Id: <20250904161349.A4DF287F0E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/lighttpd:
- security bump to 1.4.81
+Message-Id: <20250904161348.6855487F44@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] configs/rock_pi_n8:
+ remove defconfig, broken
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,114 +61,255 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Titouan Christophe via buildroot <buildroot@buildroot.org>
 Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7386112294795374816=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13de70b4b4bca6529d3fc617d22cf15a8fcd1797
+--===============7386112294795374816==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=fd7720562bb6b32bd0f039ad28ca3b933fa4d961
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-News:
-- https://www.lighttpd.net/2025/8/13/1.4.80/
-  - detect and issue error trace for HTTP/2 MadeYouReset VU#767506 CVE-2025-8671
-- https://www.lighttpd.net/2025/8/17/1.4.81/
-  - security: fix to reject disallowed trailers
+This defconfig no longer builds:
 
-See Changes from 1.4.79:
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11026769867
 
-[build] remove references to libev; no longer used
+It has been broken for at least 2 months:
 
-So drop here as well.
+  https://gitlab.com/buildroot.org/buildroot/-/jobs?name=T%3Drock_pi_n8&kind=BUILD
 
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+This defconfig was maintained by Suniel Mahesh, but his e-mail at
+Amarula is bouncing, so basically this defconfig is unmaintained.
+
+Unless a fix is provided, this defconfig will be removed.
+
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11026769867
+
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: Jagan Teki <jagan@amarulasolutions.com>
+Cc: Meena Murthy <meena.murthy@amarulasolutions.com>
+Cc: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit 0d643a8636420a85512aae69932bba2fbe9e5829)
+(cherry picked from commit 883ef369e41dbce1d16b3403950c5be1d9841bd9)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- Config.in.legacy               | 6 ++++++
- package/lighttpd/Config.in     | 6 ------
- package/lighttpd/lighttpd.hash | 8 ++++----
- package/lighttpd/lighttpd.mk   | 9 +--------
- 4 files changed, 11 insertions(+), 18 deletions(-)
+ .checkpackageignore                 |  2 --
+ board/radxa/rockpi-n8/extlinux.conf |  4 ---
+ board/radxa/rockpi-n8/genimage.cfg  | 39 ------------------------
+ board/radxa/rockpi-n8/post-build.sh |  5 ---
+ board/radxa/rockpi-n8/readme.txt    | 61 -------------------------------------
+ configs/rock_pi_n8_defconfig        | 35 ---------------------
+ 6 files changed, 146 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 8c534b4317..290a5257a0 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2025.02.6"
- 
-+config BR2_PACKAGE_LIGHTTPD_LIBEV
-+	bool "lighttpd removed libev support"
-+	select BR2_LEGACY
-+	help
-+	  Lighttpd 1.4.80 removed optional libev support.
-+
- config BR2_PACKAGE_THTTPD
- 	bool "thttpd has been removed"
- 	select BR2_LEGACY
-diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
-index 1a9a9a277d..fe2c7a2815 100644
---- a/package/lighttpd/Config.in
-+++ b/package/lighttpd/Config.in
-@@ -67,12 +67,6 @@ config BR2_PACKAGE_LIGHTTPD_LDAP
- comment "ldap support needs a toolchain w/ wchar"
- 	depends on !BR2_USE_WCHAR
- 
--config BR2_PACKAGE_LIGHTTPD_LIBEV
--	bool "libev support"
--	select BR2_PACKAGE_LIBEV
--	help
--	  Enable libev support for lighttpd fdevent handlers.
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 02d0ddb9f0..6b87803dca 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -52,7 +52,6 @@ board/orangepi/orangepi-zero/patches/linux/0004-ARM-dts-orange-pi-zero-enable-ua
+ board/qemu/aarch64-sbsa/assemble-flash-images Shellcheck
+ board/qemu/x86/post-build.sh Shellcheck
+ board/qemu/x86_64/post-build.sh Shellcheck
+-board/radxa/rockpi-n8/post-build.sh Shellcheck
+ board/raspberrypi/post-build.sh Shellcheck
+ board/raspberrypi/post-image.sh Shellcheck
+ board/roseapplepi/patches/uboot/0001-compiler-.h-sync-include-linux-compiler-.h-with-Linu.patch lib_patch.Upstream
+@@ -180,7 +179,6 @@ configs/pc_x86_64_efi_defconfig lib_defconfig.ForceCheckHash
+ configs/pine64_defconfig lib_defconfig.ForceCheckHash
+ configs/pine64_pinecube_defconfig lib_defconfig.ForceCheckHash
+ configs/pine64_star64_defconfig lib_defconfig.ForceCheckHash
+-configs/rock_pi_n8_defconfig lib_defconfig.ForceCheckHash
+ configs/roseapplepi_defconfig lib_defconfig.ForceCheckHash
+ configs/s6lx9_microboard_defconfig lib_defconfig.ForceCheckHash
+ configs/sipeed_lichee_rv_defconfig lib_defconfig.ForceCheckHash
+diff --git a/board/radxa/rockpi-n8/extlinux.conf b/board/radxa/rockpi-n8/extlinux.conf
+deleted file mode 100644
+index c323fe10ef..0000000000
+--- a/board/radxa/rockpi-n8/extlinux.conf
++++ /dev/null
+@@ -1,4 +0,0 @@
+-label RK3288_ROCKPI_N8 linux
+-  kernel /zImage
+-  devicetree /rk3288-rock-pi-n8.dtb
+-  append console=ttyS2,115200n8 root=/dev/mmcblk0p4 rw rootwait
+diff --git a/board/radxa/rockpi-n8/genimage.cfg b/board/radxa/rockpi-n8/genimage.cfg
+deleted file mode 100644
+index bfcd92f590..0000000000
+--- a/board/radxa/rockpi-n8/genimage.cfg
++++ /dev/null
+@@ -1,39 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"zImage",
+-			"rk3288-rock-pi-n8.dtb",
+-			"extlinux"
+-		}
+-	}
 -
- config BR2_PACKAGE_LIGHTTPD_LUA
- 	bool "lua support"
- 	depends on BR2_PACKAGE_LUA
-diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
-index d4742b5746..a23af84c28 100644
---- a/package/lighttpd/lighttpd.hash
-+++ b/package/lighttpd/lighttpd.hash
-@@ -1,6 +1,6 @@
--# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.77.sha512sum
--sha512  696fd4fd8486a6c3fd1131c7e8a935a02b5384882b74ddc19bf79d085e2a0abed9184a30f97e3a7aafb816d3589e110e8d70115daa15cdc52cf61aa4129e3565  lighttpd-1.4.77.tar.xz
--# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.77.sha256sum
--sha256  acafabdbfa2267d8b6452d03d85fdd2a66525f3f05a36a79b6645c017f1562ce  lighttpd-1.4.77.tar.xz
-+# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.81.sha512sum
-+sha512  10c24b1c1ce1aa1d826a426868223393eb81d7c0fbcc0b4f032b082a14593e0364228a5275e1440ed8782a2e78f0ded7cf72bc6642e5528bc82defcefab9301b  lighttpd-1.4.81.tar.xz
-+# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.81.sha256sum
-+sha256  d7d42c3fd2fd94b63c915aa7d18f4da3cac5937ddba33e909f81cf50842a5840  lighttpd-1.4.81.tar.xz
- # Locally calculated
- sha256  5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index 609fe3e3be..71c860a31a 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIGHTTPD_VERSION_MAJOR = 1.4
--LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).77
-+LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).81
- LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
- LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
- LIGHTTPD_LICENSE = BSD-3-Clause
-@@ -76,13 +76,6 @@ else
- LIGHTTPD_CONF_OPTS += -Dwith_ldap=disabled
- endif
- 
--ifeq ($(BR2_PACKAGE_LIGHTTPD_LIBEV),y)
--LIGHTTPD_DEPENDENCIES += libev
--LIGHTTPD_CONF_OPTS += -Dwith_libev=enabled
--else
--LIGHTTPD_CONF_OPTS += -Dwith_libev=disabled
--endif
+-	size = 16M
+-}
 -
- ifeq ($(BR2_PACKAGE_LIGHTTPD_LUA),y)
- LIGHTTPD_DEPENDENCIES += lua
- LIGHTTPD_CONF_OPTS += -Dwith_lua=true
+-image sdcard.img {
+-	hdimage {
+-		partition-table-type = "gpt"
+-	}
+-
+-	partition loader1 {
+-		image = "idbloader.img"
+-		offset = 32K
+-	}
+-
+-	partition loader2 {
+-		image = "u-boot-dtb.img"
+-		offset = 8M
+-	}
+-
+-	partition boot {
+-		partition-type-uuid = F
+-		bootable = "true"
+-		image = "boot.vfat"
+-		offset = 16M
+-	}
+-
+-	partition rootfs {
+-		partition-type-uuid = 69dad710-2ce4-4e3c-b16c-21a1d49abed3
+-		image = "rootfs.ext4"
+-	}
+-}
+diff --git a/board/radxa/rockpi-n8/post-build.sh b/board/radxa/rockpi-n8/post-build.sh
+deleted file mode 100755
+index ba29375c05..0000000000
+--- a/board/radxa/rockpi-n8/post-build.sh
++++ /dev/null
+@@ -1,5 +0,0 @@
+-#!/bin/sh
+-
+-BOARD_DIR="$(dirname $0)"
+-
+-install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
+diff --git a/board/radxa/rockpi-n8/readme.txt b/board/radxa/rockpi-n8/readme.txt
+deleted file mode 100644
+index ac83d5c8c6..0000000000
+--- a/board/radxa/rockpi-n8/readme.txt
++++ /dev/null
+@@ -1,61 +0,0 @@
+-RADXA ROCKPI-N8
+-================
+-https://wiki.radxa.com/RockpiN8
+-
+-Build:
+-======
+-  $ make rock_pi_n8_defconfig
+-  $ make
+-
+-Files created in output directory
+-=================================
+-
+-output/images
+-.
+-├── boot.vfat
+-├── extlinux
+-├── idbloader.img
+-├── rk3288-rock-pi-n8.dtb
+-├── rootfs.ext2
+-├── rootfs.ext4 -> rootfs.ext2
+-├── rootfs.tar
+-├── sdcard.img
+-├── u-boot.bin
+-├── u-boot-dtb.bin
+-├── u-boot-dtb.img
+-└── zImage
+-
+-Creating bootable SD card:
+-==========================
+-
+-Simply invoke (as root)
+-
+-sudo dd if=output/images/sdcard.img of=/dev/sdX && sync
+-
+-Where X is your SD card device.
+-
+-Booting:
+-========
+-
+-Serial console:
+----------------
+-RockPi-N8 has a 40-pin GPIO header. The pin layout is as follows:
+-
+-pin 6:  gnd
+-pin 8:  tx
+-pin 10: rx
+-
+-Baudrate for this board is 115200.
+-
+-The boot order on rockpi-n8 is emmc, sd. If emmc contains a valid Image, the board
+-always boots from emmc. To boot from SD, erase emmc as per the guide:
+-
+-https://wiki.amarulasolutions.com/bsp/setup/rockchip/rk3399_emmc.html
+-
+-Login:
+-------
+-Enter 'root' as login user, and the prompt is ready.
+-
+-wiki link:
+-----------
+-https://wiki.amarulasolutions.com/bsp/rockchip/rk3288/rock-pi-n8.html
+diff --git a/configs/rock_pi_n8_defconfig b/configs/rock_pi_n8_defconfig
+deleted file mode 100644
+index 3689d18e45..0000000000
+--- a/configs/rock_pi_n8_defconfig
++++ /dev/null
+@@ -1,35 +0,0 @@
+-BR2_arm=y
+-BR2_cortex_a17=y
+-BR2_ARM_FPU_NEON_VFPV4=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
+-BR2_TARGET_GENERIC_HOSTNAME="rockpi-n8"
+-BR2_TARGET_GENERIC_ISSUE="Welcome to ROCKPI-N8"
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/radxa/rockpi-n8/post-build.sh"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/radxa/rockpi-n8/genimage.cfg"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/amarula/linux-amarula.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="5dcb0132685b07beb82065c5d7521e6c555c55b6"
+-BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="rk3288-rock-pi-n8"
+-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/amarula/u-boot-amarula.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="ba120841bf40ebaed049d64bb4f980083a1cf6b7"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock-pi-n8-rk3288"
+-BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+-BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+-BR2_TARGET_UBOOT_FORMAT_DTB_BIN=y
+-BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+-BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="idbloader.img"
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
+
+--===============7386112294795374816==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7386112294795374816==--
