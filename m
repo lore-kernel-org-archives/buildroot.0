@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53F13CA1002
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:35:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA065CA1015
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:35:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 261A460885;
-	Thu,  4 Sep 2025 16:35:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A0F9F6088D;
+	Thu,  4 Sep 2025 16:35:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id svXlOyGzA0fe; Thu,  4 Sep 2025 16:34:59 +0000 (UTC)
+ id ZKrvKWLO0Wj1; Thu,  4 Sep 2025 16:35:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 883AD60869
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B4B260880
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 883AD60869;
-	Thu,  4 Sep 2025 16:34:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B4B260880;
+	Thu,  4 Sep 2025 16:34:59 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8F2C8106
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:34:09 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 92A1DAE8
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:34:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9D5AF400B0
+ by smtp2.osuosl.org (Postfix) with ESMTP id EE97040073
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cjs1nq9aYd-h for <buildroot@buildroot.org>;
- Thu,  4 Sep 2025 16:33:36 +0000 (UTC)
+ id zbLogOLFa44R for <buildroot@buildroot.org>;
+ Thu,  4 Sep 2025 16:33:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6BDFD4008E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 769AF400AD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6BDFD4008E
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 769AF400AD
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6905887E99; Thu,  4 Sep 2025 16:33:35 +0000 (UTC)
+ id 74F4187E99; Thu,  4 Sep 2025 16:33:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Sep 2025 14:04:15 +0200
+Date: Thu, 4 Sep 2025 14:19:18 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: afec8ee86a16fc6551bd04b0bc2f35e8c47a5ea9
-X-Git-Newrev: 4fc45b12be2d4c3cd132a26e9b9f40b3f60e61af
+X-Git-Oldrev: 136d4d8355c124937d9bbaaa5a0800517cc804a6
+X-Git-Newrev: 631bda1a189c52cdf75708b86429f29f126785af
 X-Patchwork-Hint: ignore
-Message-Id: <20250904163335.6905887E99@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] configs/engicam_imx6*:
- remove defconfigs, broken
+Message-Id: <20250904163336.74F4187E99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/uclibc: fix grub2
+ compilation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,871 +66,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4fc45b12be2d4c3cd132a26e9b9f40b3f60e61af
+commit: https://git.buildroot.net/buildroot/commit/?id=631bda1a189c52cdf75708b86429f29f126785af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Remove numerous Engicam i.MX6 defconfigs as they don't build:
+Fixes:
+ https://autobuild.buildroot.org/results/7a4/7a4d0f0571cd0cef1c87f3ef207618de72c1c78c/build-end.log
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012273148
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012273147
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012273145
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012273144
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012273136
-
-All of them are using outdated Linux kernel versions, not even LTS,
-which fail to build with modern toolchains.
-
-Unless fixes are provided, these defconfigs will be dropped.
-
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: Jagan Teki <jagan@amarulasolutions.com>
-Cc: Meena Murthy <meena.murthy@amarulasolutions.com>
-Cc: Michael Trimarchi <michael@amarulasolutions.com>
-Cc: Suniel Mahesh <sunil@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit 61d361c3c59514669a0cc47ac402fbe2dc15c5e7)
+(cherry picked from commit 08a1e10fbe7538d8775196ae680df002c0271854)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- .checkpackageignore                                |  5 --
- DEVELOPERS                                         |  5 --
- board/engicam/geam6ul/genimage.cfg                 | 39 ---------
- board/engicam/geam6ul/readme.txt                   | 66 ---------------
- board/engicam/icorem6/genimage.cfg                 | 42 ----------
- board/engicam/icorem6/linux_qt5.fragment           |  4 -
- board/engicam/icorem6/readme.txt                   | 93 ----------------------
- .../rootfs_overlay/root/imx6qdl-icore-ofcap10.json | 11 ---
- .../rootfs_overlay/root/imx6qdl-icore-ofcap12.json | 11 ---
- .../icorem6/rootfs_overlay/root/imx6qdl-icore.json | 11 ---
- board/engicam/icorem6_rqs/genimage.cfg             | 40 ----------
- board/engicam/icorem6_rqs/readme.txt               | 69 ----------------
- board/engicam/isiot/genimage.cfg                   | 39 ---------
- board/engicam/isiot/readme.txt                     | 66 ---------------
- configs/engicam_imx6qdl_icore_defconfig            | 33 --------
- configs/engicam_imx6qdl_icore_qt5_defconfig        | 60 --------------
- configs/engicam_imx6qdl_icore_rqs_defconfig        | 33 --------
- configs/engicam_imx6ul_geam_defconfig              | 33 --------
- configs/engicam_imx6ul_isiot_defconfig             | 33 --------
- 19 files changed, 693 deletions(-)
+ ...001-remove-uClibc-specific-gettext_printf.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 1fc905e8c9..d450af5312 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -114,11 +114,6 @@ configs/bananapi_m2_zero_defconfig lib_defconfig.ForceCheckHash
- configs/broadcom_northstar_defconfig lib_defconfig.ForceCheckHash
- configs/canaan_kd233_defconfig lib_defconfig.ForceCheckHash
- configs/ci20_defconfig lib_defconfig.ForceCheckHash
--configs/engicam_imx6qdl_icore_defconfig lib_defconfig.ForceCheckHash
--configs/engicam_imx6qdl_icore_qt5_defconfig lib_defconfig.ForceCheckHash
--configs/engicam_imx6qdl_icore_rqs_defconfig lib_defconfig.ForceCheckHash
--configs/engicam_imx6ul_geam_defconfig lib_defconfig.ForceCheckHash
--configs/engicam_imx6ul_isiot_defconfig lib_defconfig.ForceCheckHash
- configs/freescale_p1025twr_defconfig lib_defconfig.ForceCheckHash
- configs/freescale_t1040d4rdb_defconfig lib_defconfig.ForceCheckHash
- configs/freescale_t2080_qds_rdb_defconfig lib_defconfig.ForceCheckHash
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c3b569d7b2..e3e0a13b4b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1490,11 +1490,6 @@ F:	board/orangepi/orangepi-zero-plus2/
- F:	board/pine64/
- F:	configs/amarula_vyasa_rk3288_defconfig
- F:	configs/asus_tinker_rk3288_defconfig
--F:	configs/engicam_imx6qdl_icore_defconfig
--F:	configs/engicam_imx6qdl_icore_qt5_defconfig
--F:	configs/engicam_imx6qdl_icore_rqs_defconfig
--F:	configs/engicam_imx6ul_geam_defconfig
--F:	configs/engicam_imx6ul_isiot_defconfig
- F:	configs/olimex_a33_olinuxino_defconfig
- F:	configs/olimex_a64_olinuxino_defconfig
- F:	configs/orangepi_zero_plus2_defconfig
-diff --git a/board/engicam/geam6ul/genimage.cfg b/board/engicam/geam6ul/genimage.cfg
-deleted file mode 100644
-index 3d290b2ea6..0000000000
---- a/board/engicam/geam6ul/genimage.cfg
-+++ /dev/null
-@@ -1,39 +0,0 @@
--image boot.vfat {
--	vfat {
--		files = {
--			"uImage",
--			"imx6ul-geam-kit.dtb"
--		}
--	}
--
--	size = 64M
--}
--
--image sdcard.img {
--	hdimage {
--	}
--
--	partition SPL {
--		in-partition-table = "no"
--		image = "SPL"
--		offset = 1K
--	}
--
--	partition u-boot-dtb {
--		in-partition-table = "no"
--		image = "u-boot-dtb.img"
--		offset = 69K
--	}
--
--	partition boot {
--		partition-type = 0xC
--		bootable = "true"
--		image = "boot.vfat"
--		offset = 8M
--	}
--
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext2"
--	}
--}
-diff --git a/board/engicam/geam6ul/readme.txt b/board/engicam/geam6ul/readme.txt
-deleted file mode 100644
-index ace993a661..0000000000
---- a/board/engicam/geam6ul/readme.txt
-+++ /dev/null
-@@ -1,66 +0,0 @@
--********************************************
--Buildroot for Engicam GEAM6UL SOM platforms:
--********************************************
--
--This file documents the Buildroot support for all Engicam GEAM6UL
--SOM platform boards.
--
--GEAM6UL SOM Starter kits:
--https://www.engicam.com/vis-prod/101115
--
--This configuration uses U-Boot mainline and kernel mainline.
--
--Build
--=====
--
--First, configure Buildroot for the Engicam GEAM6UL SOM:
--
--- for GEAM6UL SOM:
--
--  make engicam_imx6ul_geam_defconfig
--
--Build all components:
--
--  make
--
--You will find the following files in output/images/:
--  - imx6ul-geam-kit.dtb
--  - rootfs.ext4
--  - rootfs.tar
--  - sdcard.img
--  - SPL
--  - u-boot-dtb.img
--  - uImage
--
--Create a bootable SD card
--=========================
--
--To determine the device associated to the SD card have a look in the
--/proc/partitions file:
--
--  cat /proc/partitions
--
--Buildroot prepares a bootable "sdcard.img" image in the output/images/
--directory, ready to be dumped on a SD card. Launch the following
--command as root:
--
--  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
--  sync
--
--*** WARNING! This will destroy all the card content. Use with care! ***
--
--For details about the medium image layout, see the definition in
--board/engicam/geam6ul/genimage.cfg
--
--Boot the GEAM6UL boards with SD boot:
--====================================
--
--To boot your newly created system:
--- insert the SD card in the SD slot of the board;
--- connect 3-wire RS232 serial port J28 on board, and connect with other
--  serial end or USB cable(if serial-to-usb converter used) using
--  a terminal emulator at 115200 bps, 8n1;
--- close JM3 for sd boot.
--- power on the board.
--
--Enjoy!
-diff --git a/board/engicam/icorem6/genimage.cfg b/board/engicam/icorem6/genimage.cfg
-deleted file mode 100644
-index 985d9e5de1..0000000000
---- a/board/engicam/icorem6/genimage.cfg
-+++ /dev/null
-@@ -1,42 +0,0 @@
--image boot.vfat {
--	vfat {
--		files = {
--			"uImage",
--			"imx6dl-icore.dtb",
--			"imx6q-icore.dtb",
--			"imx6q-icore-ofcap10.dtb",
--			"imx6q-icore-ofcap12.dtb"
--		}
--	}
--
--	size = 64M
--}
--
--image sdcard.img {
--	hdimage {
--	}
--
--	partition SPL {
--		in-partition-table = "no"
--		image = "SPL"
--		offset = 1K
--	}
--
--	partition u-boot-dtb {
--		in-partition-table = "no"
--		image = "u-boot-dtb.img"
--		offset = 69K
--	}
--
--	partition boot {
--		partition-type = 0xC
--		bootable = "true"
--		image = "boot.vfat"
--		offset = 8M
--	}
--
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext2"
--	}
--}
-diff --git a/board/engicam/icorem6/linux_qt5.fragment b/board/engicam/icorem6/linux_qt5.fragment
-deleted file mode 100644
-index 5c0505e510..0000000000
---- a/board/engicam/icorem6/linux_qt5.fragment
-+++ /dev/null
-@@ -1,4 +0,0 @@
--# Currently kernel mainline exhibits issues when running cpufreq as ondemand
--# governor on mx6.
--# CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND is not set
--CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
-diff --git a/board/engicam/icorem6/readme.txt b/board/engicam/icorem6/readme.txt
-deleted file mode 100644
-index bd78c5a556..0000000000
---- a/board/engicam/icorem6/readme.txt
-+++ /dev/null
-@@ -1,93 +0,0 @@
--*********************************************
--Buildroot for Engicam i.CoreM6 SOM platforms:
--*********************************************
--
--This file documents the Buildroot support for Engicam i.CoreM6
--platform boards.
--
--i.CoreM6 Quad/Dual/DualLite/Solo SOM Starter kits:
--https://www.engicam.com/vis-prod/101120
--i.CoreM6 Quad/Dual/DualLite/Solo Open Frame 10.1 C.TOUCH kits:
--https://www.engicam.com/vis-prod/101133
--
--This configuration uses U-Boot mainline and kernel mainline.
--
--Build
--=====
--
--First, configure Buildroot for the Engicam i.CoreM6:
--
--  make engicam_imx6qdl_icore_defconfig
--
--Build all components:
--
--  make
--
--You will find the following files in output/images/:
--  - imx6q-icore.dtb (for i.CoreM6 Quad/Dual)
--  - imx6dl-icore.dtb (for i.CoreM6 DualLite/Solo)
--  - imx6q-icore-ofcap10.dtb (for i.CoreM6 Quad/Dual ofcap 10)
--  - imx6q-icore-ofcap12.dtb (for i.CoreM6 Quad/Dual ofcap 12)
--  - rootfs.ext4
--  - rootfs.tar
--  - sdcard.img
--  - SPL
--  - u-boot-dtb.img
--  - uImage
--
--Create a bootable SD card
--=========================
--
--To determine the device associated to the SD card have a look in the
--/proc/partitions file:
--
--  cat /proc/partitions
--
--Buildroot prepares a bootable "sdcard.img" image in the output/images/
--directory, ready to be dumped on a SD card. Launch the following
--command as root:
--
--  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
--  sync
--
--*** WARNING! This will destroy all the card content. Use with care! ***
--
--For details about the medium image layout, see the definition in
--board/engicam/icorem6/genimage.cfg
--
--Boot the i.CoreM6 boards with SD boot:
--=====================================
--
--To boot your newly created system:
--- insert the SD card in the SD slot of the board;
--- connect 3-wire RS232 serial port J28 on board, and connect with other
--  serial end or USB cable(if serial-to-usb converter used) using
--  a terminal emulator at 115200 bps, 8n1;
--- close JM3 for sd boot.
--- power on the board.
--
--Testing graphics on i.CoreM6:
--============================
--
--Build with support for Etnaviv, Qt5 and demo applications:
--
--  make engicam_imx6qdl_icore_qt5_defconfig
--  make
--
--Running kmscube
--# kmscube -D /dev/dri/card1
--
--Running glmark2-es2-drm
--# glmark2-es2-drm
--
--Running Qt5 Cinematic Demo:
--- for i.CoreM6 Starter Kit
--# export QT_QPA_EGLFS_KMS_CONFIG=/root/imx6qdl-icore.json
--- for i.CoreM6 ofcap10
--# export QT_QPA_EGLFS_KMS_CONFIG=/root/imx6qdl-icore-ofcap10.json
--- for i.CoreM6 ofcap12
--# export QT_QPA_EGLFS_KMS_CONFIG=/root/imx6qdl-icore-ofcap12.json
--
--# CinematicExperience-demo
--
--Enjoy!
-diff --git a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap10.json b/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap10.json
-deleted file mode 100644
-index 3bfe4a2362..0000000000
---- a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap10.json
-+++ /dev/null
-@@ -1,11 +0,0 @@
--{
--  "device": "/dev/dri/card1",
--  "hwcursor": false,
--  "pbuffers": true,
--  "outputs": [
--    {
--      "name": "LVDS1",
--      "mode": "1280x800"
--    }
--  ]
--}
-diff --git a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap12.json b/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap12.json
-deleted file mode 100644
-index ea5ce6f97a..0000000000
---- a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap12.json
-+++ /dev/null
-@@ -1,11 +0,0 @@
--{
--  "device": "/dev/dri/card1",
--  "hwcursor": false,
--  "pbuffers": true,
--  "outputs": [
--    {
--      "name": "LVDS1",
--      "mode": "1280x480"
--    }
--  ]
--}
-diff --git a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore.json b/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore.json
-deleted file mode 100644
-index b4fa359b64..0000000000
---- a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore.json
-+++ /dev/null
-@@ -1,11 +0,0 @@
--{
--  "device": "/dev/dri/card1",
--  "hwcursor": false,
--  "pbuffers": true,
--  "outputs": [
--    {
--      "name": "LVDS1",
--      "mode": "800x480"
--    }
--  ]
--}
-diff --git a/board/engicam/icorem6_rqs/genimage.cfg b/board/engicam/icorem6_rqs/genimage.cfg
-deleted file mode 100644
-index d6936f8109..0000000000
---- a/board/engicam/icorem6_rqs/genimage.cfg
-+++ /dev/null
-@@ -1,40 +0,0 @@
--image boot.vfat {
--	vfat {
--		files = {
--			"uImage",
--			"imx6dl-icore-rqs.dtb",
--			"imx6q-icore-rqs.dtb"
--		}
--	}
--
--	size = 64M
--}
--
--image sdcard.img {
--	hdimage {
--	}
--
--	partition SPL {
--		in-partition-table = "no"
--		image = "SPL"
--		offset = 1K
--	}
--
--	partition u-boot-dtb {
--		in-partition-table = "no"
--		image = "u-boot-dtb.img"
--		offset = 69K
--	}
--
--	partition boot {
--		partition-type = 0xC
--		bootable = "true"
--		image = "boot.vfat"
--		offset = 8M
--	}
--
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext2"
--	}
--}
-diff --git a/board/engicam/icorem6_rqs/readme.txt b/board/engicam/icorem6_rqs/readme.txt
-deleted file mode 100644
-index a0bf6f508f..0000000000
---- a/board/engicam/icorem6_rqs/readme.txt
-+++ /dev/null
-@@ -1,69 +0,0 @@
--*************************************************
--Buildroot for Engicam i.CoreM6 RQS SOM platforms:
--*************************************************
--
--This file documents the Buildroot support for Engicam i.CoreM6 RQS
--SOM platform boards.
--
--i.CoreM6 Quad/Dual/DualLite/Solo RQS SOM Starter kits:
--https://www.engicam.com/vis-prod/101124
--
--This configuration uses U-Boot mainline and kernel mainline.
--
--Build
--=====
--
--First, configure Buildroot for the Engicam i.CoreM6 RQS:
--
--- for i.CoreM6 RQS Quad/Dual/DualLite/Solo:
--
--  make engicam_imx6qdl_icore_rqs_defconfig
--
--Build all components:
--
--  make
--
--You will find the following files in output/images/:
--- for i.CoreM6 Quad/Dual RQS:
--  - imx6q-icore-rqs.dtb
--- for i.CoreM6 DualLite/Solo RQS:
--  - imx6dl-icore-rqs.dtb
--  - rootfs.ext4
--  - rootfs.tar
--  - sdcard.img
--  - SPL
--  - u-boot-dtb.img
--  - uImage
--
--Create a bootable SD card
--=========================
--
--To determine the device associated to the SD card have a look in the
--/proc/partitions file:
--
--  cat /proc/partitions
--
--Buildroot prepares a bootable "sdcard.img" image in the output/images/
--directory, ready to be dumped on a SD card. Launch the following
--command as root:
--
--  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
--  sync
--
--*** WARNING! This will destroy all the card content. Use with care! ***
--
--For details about the medium image layout, see the definition in
--board/engicam/icorem6_rqs/genimage.cfg
--
--Boot the i.CoreM6 RQS boards with SD boot:
--=========================================
--
--To boot your newly created system:
--- insert the SD card in the SD slot of the board;
--- connect 3-wire RS232 serial port J7 on board, and connect with other
--  serial end or USB cable(if serial-to-usb converter used) using
--  a terminal emulator at 115200 bps, 8n1;
--- close JM2 for sd boot.
--- power on the board.
--
--Enjoy!
-diff --git a/board/engicam/isiot/genimage.cfg b/board/engicam/isiot/genimage.cfg
-deleted file mode 100644
-index 4e65a70110..0000000000
---- a/board/engicam/isiot/genimage.cfg
-+++ /dev/null
-@@ -1,39 +0,0 @@
--image boot.vfat {
--	vfat {
--		files = {
--			"uImage",
--			"imx6ul-isiot-emmc.dtb"
--		}
--	}
--
--	size = 64M
--}
--
--image sdcard.img {
--	hdimage {
--	}
--
--	partition SPL {
--		in-partition-table = "no"
--		image = "SPL"
--		offset = 1K
--	}
--
--	partition u-boot-dtb {
--		in-partition-table = "no"
--		image = "u-boot-dtb.img"
--		offset = 69K
--	}
--
--	partition boot {
--		partition-type = 0xC
--		bootable = "true"
--		image = "boot.vfat"
--		offset = 8M
--	}
--
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext2"
--	}
--}
-diff --git a/board/engicam/isiot/readme.txt b/board/engicam/isiot/readme.txt
-deleted file mode 100644
-index 5394007ca5..0000000000
---- a/board/engicam/isiot/readme.txt
-+++ /dev/null
-@@ -1,66 +0,0 @@
--********************************************
--Buildroot for Engicam Is.IoT SOM platforms:
--********************************************
--
--This file documents the Buildroot support for all Engicam Is.IoT MX6UL
--SOM platform boards.
--
--Is.IoT MX6UL SOM Starter kits:
--https://www.engicam.com/vis-prod/101122
--
--This configuration uses U-Boot mainline and kernel mainline.
--
--Build
--=====
--
--First, configure Buildroot for the Engicam Is.IoT MX6UL SOM:
--
--- for Is.IoT MX6UL SOM:
--
--  make engicam_imx6ul_isiot_defconfig
--
--Build all components:
--
--  make
--
--You will find the following files in output/images/:
--  - imx6ul-isiot-emmc.dtb
--  - rootfs.ext4
--  - rootfs.tar
--  - sdcard.img
--  - SPL
--  - u-boot-dtb.img
--  - uImage
--
--Create a bootable SD card
--=========================
--
--To determine the device associated to the SD card have a look in the
--/proc/partitions file:
--
--  cat /proc/partitions
--
--Buildroot prepares a bootable "sdcard.img" image in the output/images/
--directory, ready to be dumped on a SD card. Launch the following
--command as root:
--
--  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
--  sync
--
--*** WARNING! This will destroy all the card content. Use with care! ***
--
--For details about the medium image layout, see the definition in
--board/engicam/isiot/genimage.cfg
--
--Boot the Is.IoT MX6UL boards with SD boot:
--=========================================
--
--To boot your newly created system:
--- insert the SD card in the SD slot of the board;
--- connect 3-wire RS232 serial port J28 on board, and connect with other
--  serial end or USB cable(if serial-to-usb converter used) using
--  a terminal emulator at 115200 bps, 8n1;
--- close JM3 for sd boot.
--- power on the board.
--
--Enjoy!
-diff --git a/configs/engicam_imx6qdl_icore_defconfig b/configs/engicam_imx6qdl_icore_defconfig
-deleted file mode 100644
-index 2ac415e335..0000000000
---- a/configs/engicam_imx6qdl_icore_defconfig
-+++ /dev/null
-@@ -1,33 +0,0 @@
--BR2_arm=y
--BR2_cortex_a9=y
--BR2_ARM_ENABLE_NEON=y
--BR2_ARM_ENABLE_VFP=y
--BR2_ARM_FPU_VFPV3=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
--BR2_TARGET_GENERIC_ISSUE="Welcome to Engicam i.CoreM6 Quad/Dual/DualLite/Solo"
--BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/engicam/icorem6/genimage.cfg"
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
--BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
--BR2_LINUX_KERNEL_UIMAGE=y
--BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-icore imx6q-icore imx6q-icore-ofcap10 imx6q-icore-ofcap12"
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6qdl_icore_mmc"
--BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
--BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
--BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="SPL"
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
-diff --git a/configs/engicam_imx6qdl_icore_qt5_defconfig b/configs/engicam_imx6qdl_icore_qt5_defconfig
-deleted file mode 100644
-index 8b0c8bbe28..0000000000
---- a/configs/engicam_imx6qdl_icore_qt5_defconfig
-+++ /dev/null
-@@ -1,60 +0,0 @@
--BR2_arm=y
--BR2_cortex_a9=y
--BR2_ARM_ENABLE_NEON=y
--BR2_ARM_ENABLE_VFP=y
--BR2_ARM_FPU_VFPV3=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
--BR2_TOOLCHAIN_BUILDROOT_CXX=y
--BR2_TARGET_GENERIC_ISSUE="Welcome to Engicam i.CoreM6 Quad/Dual/DualLite/Solo"
--BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
--BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
--BR2_ROOTFS_OVERLAY="board/engicam/icorem6/rootfs_overlay"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/engicam/icorem6/genimage.cfg"
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13"
--BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
--BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/engicam/icorem6/linux_qt5.fragment"
--BR2_LINUX_KERNEL_UIMAGE=y
--BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-icore imx6q-icore imx6q-icore-ofcap10 imx6q-icore-ofcap12"
--BR2_PACKAGE_BITSTREAM_VERA=y
--BR2_PACKAGE_CANTARELL=y
--BR2_PACKAGE_DEJAVU=y
--BR2_PACKAGE_FONT_AWESOME=y
--BR2_PACKAGE_GHOSTSCRIPT_FONTS=y
--BR2_PACKAGE_INCONSOLATA=y
--BR2_PACKAGE_LIBERATION=y
--BR2_PACKAGE_GLMARK2=y
--BR2_PACKAGE_KMSCUBE=y
--BR2_PACKAGE_MESA3D_DEMOS=y
--BR2_PACKAGE_QT5CINEX=y
--BR2_PACKAGE_QT5CINEX_HD=y
--BR2_PACKAGE_MESA3D=y
--BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV=y
--BR2_PACKAGE_MESA3D_OPENGL_EGL=y
--BR2_PACKAGE_MESA3D_OPENGL_ES=y
--BR2_PACKAGE_QT5=y
--BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
--BR2_PACKAGE_QT5BASE_LINUXFB=y
--BR2_PACKAGE_QT5BASE_FONTCONFIG=y
--BR2_PACKAGE_QT5BASE_GIF=y
--BR2_PACKAGE_QT5BASE_JPEG=y
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6qdl_icore_mmc"
--BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
--BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
--BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="SPL"
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
-diff --git a/configs/engicam_imx6qdl_icore_rqs_defconfig b/configs/engicam_imx6qdl_icore_rqs_defconfig
-deleted file mode 100644
-index 7d4d4e3df4..0000000000
---- a/configs/engicam_imx6qdl_icore_rqs_defconfig
-+++ /dev/null
-@@ -1,33 +0,0 @@
--BR2_arm=y
--BR2_cortex_a9=y
--BR2_ARM_ENABLE_NEON=y
--BR2_ARM_ENABLE_VFP=y
--BR2_ARM_FPU_VFPV3=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
--BR2_TARGET_GENERIC_ISSUE="Welcome to Engicam i.CoreM6 Quad/Dual/DualLite/Solo RQS Starter Kit"
--BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/engicam/icorem6_rqs/genimage.cfg"
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
--BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
--BR2_LINUX_KERNEL_UIMAGE=y
--BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-icore-rqs imx6q-icore-rqs"
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6qdl_icore_rqs"
--BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
--BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
--BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="SPL"
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
-diff --git a/configs/engicam_imx6ul_geam_defconfig b/configs/engicam_imx6ul_geam_defconfig
-deleted file mode 100644
-index ed4b491ebe..0000000000
---- a/configs/engicam_imx6ul_geam_defconfig
-+++ /dev/null
-@@ -1,33 +0,0 @@
--BR2_arm=y
--BR2_cortex_a9=y
--BR2_ARM_ENABLE_NEON=y
--BR2_ARM_ENABLE_VFP=y
--BR2_ARM_FPU_VFPV3=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
--BR2_TARGET_GENERIC_ISSUE="Welcome to Engicam GEAM6UL Starter Kit"
--BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/engicam/geam6ul/genimage.cfg"
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.5"
--BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
--BR2_LINUX_KERNEL_UIMAGE=y
--BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-geam-kit"
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07-rc1"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6ul_geam_mmc"
--BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
--BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
--BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="SPL"
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
-diff --git a/configs/engicam_imx6ul_isiot_defconfig b/configs/engicam_imx6ul_isiot_defconfig
-deleted file mode 100644
-index 1377022c30..0000000000
---- a/configs/engicam_imx6ul_isiot_defconfig
-+++ /dev/null
-@@ -1,33 +0,0 @@
--BR2_arm=y
--BR2_cortex_a9=y
--BR2_ARM_ENABLE_NEON=y
--BR2_ARM_ENABLE_VFP=y
--BR2_ARM_FPU_VFPV3=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
--BR2_TARGET_GENERIC_ISSUE="Welcome to Engicam Is.IoT eMMC Starter Kit"
--BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/engicam/isiot/genimage.cfg"
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
--BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
--BR2_LINUX_KERNEL_UIMAGE=y
--BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-isiot-emmc"
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6ul_isiot_emmc"
--BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
--BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
--BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="SPL"
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
+diff --git a/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch b/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch
+new file mode 100644
+index 0000000000..96736da562
+--- /dev/null
++++ b/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch
+@@ -0,0 +1,34 @@
++From 9ffed9adb130d45b9f31ca7a305153e86586c877 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Fri, 15 Aug 2025 20:29:52 +0200
++Subject: [PATCH] remove uClibc specific gettext_printf
++
++Other C libraries like musl/glibc does not define it.
++Including stdio.h here breaks Grub2 compilation with
++gcc 14 and above.
++Thanks to Thomas Petazzoni for analyzing the Grub2 build error.
++
++Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=9ffed9adb130d45b9f31ca7a305153e86586c877
++---
++ include/libintl.h | 3 ---
++ 1 file changed, 3 deletions(-)
++
++diff --git a/include/libintl.h b/include/libintl.h
++index b7123a963..6d8b9f342 100644
++--- a/include/libintl.h
+++++ b/include/libintl.h
++@@ -50,9 +50,6 @@ char *bindtextdomain(const char *domainname, const char *dirname);
++ 
++ #endif
++ 
++-#include <stdio.h>
++-#define gettext_printf(args...) printf(args)
++-
++ /* to supply LC_MESSAGES and other stuff GNU expects to be exported when
++    including libintl.h */
++ #include <locale.h>
++-- 
++2.47.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
