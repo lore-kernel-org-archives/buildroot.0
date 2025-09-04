@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D6C1CA1002
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:34:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E36C7CA1015
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:34:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C81FA606E0;
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC1B9405C3;
 	Thu,  4 Sep 2025 16:34:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4-mKs7iD9pEu; Thu,  4 Sep 2025 16:34:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5ookQJSW-G-i; Thu,  4 Sep 2025 16:34:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B07896071A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CCDD405AB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B07896071A;
-	Thu,  4 Sep 2025 16:34:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 10FBE106
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5CCDD405AB;
+	Thu,  4 Sep 2025 16:34:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2EA29AE8
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 25E296064B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2EDE8400B8
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h7XhwexflMpq for <buildroot@buildroot.org>;
- Thu,  4 Sep 2025 16:33:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gSOyTdlAOC4T for <buildroot@buildroot.org>;
+ Thu,  4 Sep 2025 16:33:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51E7C60643
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F149B4007F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 51E7C60643
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F149B4007F
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4FDE487F4B; Thu,  4 Sep 2025 16:33:36 +0000 (UTC)
+ id EF2E087E99; Thu,  4 Sep 2025 16:33:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Sep 2025 14:15:53 +0200
+Date: Thu, 4 Sep 2025 14:04:14 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 8478600a1c3d16d924707d1fa0c61e3405a90f8e
-X-Git-Newrev: 4c8ecf88b106573d27029d0f8ac7fe9c24f66835
+X-Git-Oldrev: 5abc5326fd695be7d2add2e848398c62891bcfdc
+X-Git-Newrev: 07d12a41a817b8fb2009e8747ab907e0791e83e9
 X-Patchwork-Hint: ignore
-Message-Id: <20250904163336.4FDE487F4B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x]
- utils/bump-stable-kernel-versions: new tool
+Message-Id: <20250904163334.EF2E087E99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] configs/orangepi_lite2:
+ remove defconfig, broken
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,145 +61,336 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Titouan Christophe via buildroot <buildroot@buildroot.org>
 Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0530606791113472335=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0530606791113472335==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=4c8ecf88b106573d27029d0f8ac7fe9c24f66835
+commit: https://git.buildroot.net/buildroot/commit/?id=07d12a41a817b8fb2009e8747ab907e0791e83e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-This tool helps to update Linux stable releases.
+This defconfig no longer builds:
 
-The script uses the versions found in linux/linux.hash. For each of the
-versions it downloads the related hash list and tries to find an updated
-stable release. If found it updates all related files and hashes.
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012274018
 
-Signed-off-by: Gero Schwäricke <gero.schwaericke@grandcentrix.net>
-[Arnout: commonalize the sed expression for linux and linux-headers]
+It has been broken for at least 2 months:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs?name=T%3Dorangepi_lite2&kind=BUILD
+
+Unless a fix is provided, this defconfig will be removed.
+
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012274018
+
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: Jagan Teki <jagan@amarulasolutions.com>
+Cc: Meena Murthy <meena.murthy@amarulasolutions.com>
+Cc: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit a87b1800b959f5cd2ca871f89668a7c42802448f)
+(cherry picked from commit ea24b22344024d8da95828cfdde9da51daad0ce2)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- utils/bump-stable-kernel-versions | 98 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 98 insertions(+)
+ .checkpackageignore                                |  2 -
+ DEVELOPERS                                         |  2 -
+ board/orangepi/orangepi-lite2/extlinux.conf        |  4 --
+ board/orangepi/orangepi-lite2/genimage.cfg         | 34 ---------
+ board/orangepi/orangepi-lite2/post-build.sh        |  4 --
+ board/orangepi/orangepi-lite2/readme.txt           | 44 ------------
+ .../lib/firmware/brcm/brcmfmac43455-sdio.txt       | 82 ----------------------
+ configs/orangepi_lite2_defconfig                   | 43 ------------
+ 8 files changed, 215 deletions(-)
 
-diff --git a/utils/bump-stable-kernel-versions b/utils/bump-stable-kernel-versions
-new file mode 100755
-index 0000000000..577a6841c8
---- /dev/null
-+++ b/utils/bump-stable-kernel-versions
-@@ -0,0 +1,98 @@
-+#!/usr/bin/env bash
-+# SPDX-License-Identifier: MIT-0
-+# Copyright (C) 2024 by Gero Schwäricke <gero.schwaericke@grandcentrix.net>
-+#
-+# Permission is hereby granted, free of charge, to any person obtaining a copy of this
-+# software and associated documentation files (the "Software"), to deal in the Software
-+# without restriction, including without limitation the rights to use, copy, modify,
-+# merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
-+# permit persons to whom the Software is furnished to do so.
-+#
-+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-+# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-+# PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-+# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
-+# OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-+# OTHER DEALINGS IN THE SOFTWARE.
-+
-+# Check for updates to Linux stable releases. The script uses the versions found in
-+# linux/linux.hash. For each of the versions it downloads the related hash list and tries
-+# to find an updated stable release. If found it updates all related files and hashes.
-+
-+set -euo pipefail
-+
-+latest_version=$(sed -rn 's|^\tdefault "(.+)" if BR2_LINUX_KERNEL_LATEST_VERSION$|\1|p' linux/Config.in)
-+latest_release_version=$(echo "${latest_version}" | cut -f 1-2 -d .)
-+echo "${latest_version} -> ${latest_release_version}"
-+
-+updated_releases_list=''
-+
-+hash_list=
-+while read -r line; do
-+    # e.g.: # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+    url=$(echo "${line}" | sed -n 's|^# From \(https://www\.kernel\.org/pub/linux/kernel/.*/sha256sums.asc\)|\1|p')
-+    # e.g.: sha256  f905f1238ea7a8e85314bacf283302e8097006010d25fcea726d0de0ea5bc9b6  linux-6.8.9.tar.xz
-+    old_hash=$(echo "${line}" | sed -rn 's|^sha256 +([0-9a-f]+) +linux-.*$|\1|p')
-+    old_version=$(echo "${line}" | sed -rn 's|^sha256 +[0-9a-f]+ +linux-(.+)\.tar\.xz$|\1|p')
-+    if [ -n "${url}" ]; then
-+        # Line contained a URL: Download hash list and use it.
-+        if [ -a "${hash_list}" ]; then
-+            rm "${hash_list}"
-+        fi
-+
-+        hash_list=$(basename "${url}")
-+        echo ">>> Downloading hash list from ${url}"
-+        wget --no-verbose "${url}"
-+        gpg --verify "${hash_list}"
-+
-+        echo "${line}" >> linux/linux.hash.new
-+    elif [ -n "${old_version}" ]; then
-+        # Line contained a hash entry: Search for newer versions.
-+        release_version=$(echo "${old_version}" | cut -f 1-2 -d .) # e.g.: 6.8 instead of 6.8.9
-+        # e.g.: 19b31956d229b5b9ca5671fa1c74320179682a3d8d00fc86794114b21da86039  linux-6.8.12.tar.xz
-+        new_hash_entry=$(grep "^[0-9a-f]\+ \+linux-${release_version//./\\.}\.[0-9]\+\.tar\.xz$" "${hash_list}" | sort -V --key '2' | tail -1)
-+        new_hash=$(echo "${new_hash_entry}" | cut -f 1 -d ' ')
-+        new_version=$(echo "${new_hash_entry}" | cut -f 3 -d ' ' | sed -rn 's|linux-(.+)\.tar\.xz|\1|p')
-+
-+        if [ "$new_version" == "$old_version" ]; then
-+            # Same version as before
-+            echo ">>> Release ${release_version}.x already on newest version ${new_version}."
-+            echo "${line}" >> linux/linux.hash.new
-+
-+            if [ "${old_hash}" != "${new_hash}" ]; then
-+                # Hash changed! This should never happen!
-+                echo ">>> Version hash changed for ${release_version}.x!"
-+                echo ">>> It was: ${old_hash}"
-+                echo ">>> It is:  ${new_hash}"
-+                exit 1
-+            fi
-+        else
-+            # Different version: update hash list, default headers, and possibly latest
-+            # version.
-+            echo ">>> Updating hash for ${release_version}.x in linux/linux.hash"
-+            echo "sha256  ${new_hash}  linux-${new_version}.tar.xz" >> linux/linux.hash.new
-+
-+            echo ">>> Updating version from ${old_version} to ${new_version} in Config.in files"
-+            sed -Ei "s/\tdefault \"${old_version}\"([\t ]+)if /\tdefault \"${new_version}\"\1if /" \
-+                package/linux-headers/Config.in.host linux/Config.in
-+
-+            updated_releases_list="${updated_releases_list} ${release_version}.x"
-+        fi
-+    else
-+        # Different line: Reset hash list and just copy this line over as is.
-+        if [ -a "${hash_list}" ]; then
-+            rm "${hash_list}"
-+            hash_list=
-+        fi
-+        echo "${line}" >> linux/linux.hash.new
-+    fi
-+done < linux/linux.hash
-+
-+# We were iterating over this file so we could not edit in-place.
-+mv linux/linux.hash.new linux/linux.hash
-+
-+if [ -n "${updated_releases_list}" ]; then
-+    echo ">>> Suggested subject: {linux, linux-headers}: bump${updated_releases_list//.x /.x, } series"
-+else
-+    echo '>>> Nothing happened.'
-+fi
-
---===============0530606791113472335==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 142e7b0dd0..694ad4b3b5 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -45,7 +45,6 @@ board/olimex/a20_olinuxino/post-build.sh Shellcheck
+ board/olimex/a33_olinuxino/post-build.sh Shellcheck
+ board/olpc/post-build.sh Shellcheck
+ board/orangepi/common/post-build.sh Shellcheck
+-board/orangepi/orangepi-lite2/post-build.sh Shellcheck
+ board/orangepi/orangepi-one-plus/post-build.sh Shellcheck
+ board/orangepi/orangepi-zero/patches/linux/0001-ARM-dts-orange-pi-zero-interrupt-triggering-xr819.patch lib_patch.Upstream
+ board/orangepi/orangepi-zero/patches/linux/0002-ARM-dts-orange-pi-zero-enable-spi-nor.patch lib_patch.Upstream
+@@ -175,7 +174,6 @@ configs/olimex_a33_olinuxino_defconfig lib_defconfig.ForceCheckHash
+ configs/olimex_a64_olinuxino_defconfig lib_defconfig.ForceCheckHash
+ configs/olpc_xo175_defconfig lib_defconfig.ForceCheckHash
+ configs/olpc_xo1_defconfig lib_defconfig.ForceCheckHash
+-configs/orangepi_lite2_defconfig lib_defconfig.ForceCheckHash
+ configs/orangepi_one_plus_defconfig lib_defconfig.ForceCheckHash
+ configs/orangepi_pc2_defconfig lib_defconfig.ForceCheckHash
+ configs/orangepi_zero_plus_defconfig lib_defconfig.ForceCheckHash
+diff --git a/DEVELOPERS b/DEVELOPERS
+index dac0c4694f..c62f1a69e8 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1488,7 +1488,6 @@ F:	board/bananapi/
+ F:	board/engicam/
+ F:	board/olimex/a33_olinuxino/
+ F:	board/olimex/a64-olinuxino/
+-F:	board/orangepi/orangepi-lite2/
+ F:	board/orangepi/orangepi-one-plus
+ F:	board/orangepi/orangepi-zero-plus2/
+ F:	board/pine64/
+@@ -1501,7 +1500,6 @@ F:	configs/engicam_imx6ul_geam_defconfig
+ F:	configs/engicam_imx6ul_isiot_defconfig
+ F:	configs/olimex_a33_olinuxino_defconfig
+ F:	configs/olimex_a64_olinuxino_defconfig
+-F:	configs/orangepi_lite2_defconfig
+ F:	configs/orangepi_one_plus_defconfig
+ F:	configs/orangepi_zero_plus2_defconfig
+ F:	configs/pine64_defconfig
+diff --git a/board/orangepi/orangepi-lite2/extlinux.conf b/board/orangepi/orangepi-lite2/extlinux.conf
+deleted file mode 100644
+index 1966186a20..0000000000
+--- a/board/orangepi/orangepi-lite2/extlinux.conf
++++ /dev/null
+@@ -1,4 +0,0 @@
+-label linux
+-  kernel /Image
+-  devicetree /sun50i-h6-orangepi-lite2.dtb
+-  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
+diff --git a/board/orangepi/orangepi-lite2/genimage.cfg b/board/orangepi/orangepi-lite2/genimage.cfg
+deleted file mode 100644
+index bc981eed51..0000000000
+--- a/board/orangepi/orangepi-lite2/genimage.cfg
++++ /dev/null
+@@ -1,34 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"Image",
+-			"sun50i-h6-orangepi-lite2.dtb",
+-			"extlinux"
+-		}
+-	}
+-
+-	size = 64M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition u-boot {
+-		in-partition-table = "no"
+-		image = "u-boot-sunxi-with-spl.bin"
+-		offset = 8K
+-		size = 1016K # 1MB - 8KB
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-	}
+-}
+diff --git a/board/orangepi/orangepi-lite2/post-build.sh b/board/orangepi/orangepi-lite2/post-build.sh
+deleted file mode 100755
+index ec20fca7d9..0000000000
+--- a/board/orangepi/orangepi-lite2/post-build.sh
++++ /dev/null
+@@ -1,4 +0,0 @@
+-#!/bin/sh
+-BOARD_DIR="$(dirname $0)"
+-
+-install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
+diff --git a/board/orangepi/orangepi-lite2/readme.txt b/board/orangepi/orangepi-lite2/readme.txt
+deleted file mode 100644
+index 7f88250418..0000000000
+--- a/board/orangepi/orangepi-lite2/readme.txt
++++ /dev/null
+@@ -1,44 +0,0 @@
+-Intro
+-=====
+-
+-This default configuration will allow you to start experimenting with the
+-buildroot environment for the Orangepi Lite2. With the current configuration
+-it will bring-up the board, and allow access through the serial console.
+-
+-Orangepi Lite2 link:
+-http://www.orangepi.org/html/hardWare/computerAndMicrocontrollers/details/Orange-Pi-Lite-2.html
+-
+-Wiki link:
+-https://openedev.amarulasolutions.com/display/ODWIKI/Orangepi+Lite2
+-
+-How to build
+-============
+-
+-    $ make orangepi_lite2_defconfig
+-    $ make
+-
+-Note: you will need access to the internet to download the required
+-sources.
+-
+-How to write the SD card
+-========================
+-
+-Once the build process is finished you will have an image called "sdcard.img"
+-in the output/images/ directory.
+-
+-Copy the bootable "sdcard.img" onto an SD card with "dd":
+-
+-  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+-  $ sudo sync
+-
+-Insert the micro SDcard in your Orangepi Lite2 and power it up. The console
+-is on the serial line, 115200 8N1.
+-
+-WiFi
+-====
+-
+- # wpa_passphrase ACCESSPOINTNAME >> /etc/wpa_supplicant.conf
+-   (type password and enter)
+- # wpa_supplicant -i wlan0 -c /etc/wpa_supplicant.conf -B
+- # udhcpc -i wlan0
+- # ping google.com
+diff --git a/board/orangepi/orangepi-lite2/rootfs_overlay/lib/firmware/brcm/brcmfmac43455-sdio.txt b/board/orangepi/orangepi-lite2/rootfs_overlay/lib/firmware/brcm/brcmfmac43455-sdio.txt
+deleted file mode 100755
+index c1cc4c3c2e..0000000000
+--- a/board/orangepi/orangepi-lite2/rootfs_overlay/lib/firmware/brcm/brcmfmac43455-sdio.txt
++++ /dev/null
+@@ -1,82 +0,0 @@
+-#AP6255_NVRAM_V1.0_29052015
+-
+-NVRAMRev=$Rev: 498373 $
+-sromrev=11
+-vendid=0x14e4
+-devid=0x43ab
+-manfid=0x2d0
+-prodid=0x06e4
+-macaddr=00:90:4c:c5:12:38
+-nocrc=1
+-boardtype=0x6e4
+-boardrev=0x1304
+-xtalfreq=37400
+-#boardflags: 5GHz eTR switch by default
+-#2.4GHz eTR switch by default
+-#bit1 for btcoex
+-boardflags=0x00080201
+-boardflags2=0x40000000
+-boardflags3=0x48200100
+-rxgains2gelnagaina0=0
+-rxgains2gtrisoa0=0
+-rxgains2gtrelnabypa0=0
+-rxgains5gelnagaina0=0
+-rxgains5gtrisoa0=0
+-rxgains5gtrelnabypa0=0
+-rxchain=1
+-txchain=1
+-aa2g=1
+-aa5g=1
+-tssipos5g=1
+-tssipos2g=1
+-femctrl=0
+-AvVmid_c0=0,157,1,126,1,126,1,126,1,126
+-pa2ga0=-112,6296,-662
+-pa2ga1=-165,3699,-515
+-pa5ga0=-143,6016,-683,-141,6013,-678,-137,5988,-670,-136,5982,-670
+-pa5ga1=-161,3544,-499,-166,3543,-497,-169,3569,-497,-171,3598,-498
+-itrsw=1
+-pdoffset2g40ma0=10
+-pdoffset40ma0=0xaaaa
+-pdoffset80ma0=0xaaaa
+-extpagain5g=2
+-extpagain2g=2
+-tworangetssi2g=1
+-tworangetssi5g=1
+-# LTECX flags
+-# WCI2
+-ltecxmux=0
+-ltecxpadnum=0x0504
+-ltecxfnsel=0x22
+-ltecxgcigpio=0x32
+-
+-maxp2ga0=64
+-ofdmlrbw202gpo=0x0033
+-dot11agofdmhrbw202gpo=0x1553
+-mcsbw202gpo=0x99355533
+-
+-maxp5ga0=80,82,76,77
+-
+-mcsbw205glpo=0x99755000
+-mcsbw205gmpo=0x9df55000
+-mcsbw205ghpo=0x99855000
+-
+-mcsbw405glpo=0xb8555000
+-mcsbw405gmpo=0xed955000
+-mcsbw405ghpo=0xd9755000
+-
+-mcsbw805glpo=0xc8555000
+-mcsbw805gmpo=0xe9555000
+-mcsbw805ghpo=0xd9555000
+-
+-swctrlmap_2g=0x00040004,0x00020002,0x00040004,0x010a02,0x1ff
+-swctrlmap_5g=0x00100010,0x00200020,0x00100010,0x010a02,0x2f4
+-swctrlmapext_5g=0x00000000,0x00000000,0x00000000,0x000000,0x000
+-swctrlmapext_2g=0x00000000,0x00000000,0x00000000,0x000000,0x000
+-
+-vcodivmode=1
+-deadman_to=481500000
+-ed_thresh2g=-54
+-ed_thresh5g=-54
+-
+-muxenab=0x10
+diff --git a/configs/orangepi_lite2_defconfig b/configs/orangepi_lite2_defconfig
+deleted file mode 100644
+index ad847a8205..0000000000
+--- a/configs/orangepi_lite2_defconfig
++++ /dev/null
+@@ -1,43 +0,0 @@
+-BR2_aarch64=y
+-BR2_ARM_FPU_VFPV4=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Orangepi Lite2"
+-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+-BR2_ROOTFS_OVERLAY="board/orangepi/orangepi-lite2/rootfs_overlay"
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepi-lite2/post-build.sh"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-lite2/genimage.cfg"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,amarula,linux-amarula,h6-v1.0b)/linux-amarula_h6-v1.0b.tar.gz"
+-BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h6-orangepi-lite2"
+-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+-BR2_PACKAGE_LINUX_FIRMWARE=y
+-BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX=y
+-BR2_PACKAGE_IW=y
+-BR2_PACKAGE_WPA_SUPPLICANT=y
+-BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=y
+-BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.0"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_h6"
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/amarula/u-boot-amarula"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="h6-v1.0a"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_lite2"
+-BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+-BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+-BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0530606791113472335==--
