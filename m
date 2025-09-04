@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBE67CA101C
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:15:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A0CDCA1013
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:15:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B44F2404D5;
-	Thu,  4 Sep 2025 16:15:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 10AA7404E6;
+	Thu,  4 Sep 2025 16:15:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h8BC33xJZU-C; Thu,  4 Sep 2025 16:15:00 +0000 (UTC)
+ id YJlLPinKs_Dd; Thu,  4 Sep 2025 16:15:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87B1F4042F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 318CA404CC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 87B1F4042F;
-	Thu,  4 Sep 2025 16:15:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 318CA404CC;
+	Thu,  4 Sep 2025 16:15:04 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1289A106
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:14:24 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0A0F9106
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:14:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D57F38077E
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9734080783
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jMLq5a63tMgA for <buildroot@buildroot.org>;
- Thu,  4 Sep 2025 16:13:50 +0000 (UTC)
+ id EgxR1HCYnDtU for <buildroot@buildroot.org>;
+ Thu,  4 Sep 2025 16:13:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C96680781
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4EB0080795
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8C96680781
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4EB0080795
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8AC9987F0E; Thu,  4 Sep 2025 16:13:48 +0000 (UTC)
+ id 4CE7687F0E; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Sep 2025 13:57:23 +0200
+Date: Thu, 4 Sep 2025 13:57:24 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: d7a398b38c9f00ef9cc23f6a4cd21ef22159a3e0
-X-Git-Newrev: 1ab57faa175ccceb5223589b16ce86ca2a078464
+X-Git-Oldrev: 4a2f2973e33eb4eedda903f253975fb70b2c7884
+X-Git-Newrev: d63f8ad6ad548e6e73d384918f212cbed1a7d332
 X-Patchwork-Hint: ignore
-Message-Id: <20250904161348.8AC9987F0E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] configs/ts7680: remove
- defconfig, broken
+Message-Id: <20250904161349.4CE7687F0E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] {linux,
+ linux-headers}: bump 6.12.x, 6.6.x, 6.1.x, 5.15.x, 5.10.x, 5.4.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,180 +61,88 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Titouan Christophe via buildroot <buildroot@buildroot.org>
 Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6776093586377213450=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6776093586377213450==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=1ab57faa175ccceb5223589b16ce86ca2a078464
+commit: https://git.buildroot.net/buildroot/commit/?id=d63f8ad6ad548e6e73d384918f212cbed1a7d332
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-This defconfig no longer builds:
+Update the latest kernel releases to:
+ - 6.12.41 -> 6.12.44
+ - 6.6.101 -> 6.6.103
+ - 6.1.147 -> 6.1.149
+ - 5.15.189 -> 5.15.190
+ - 5.10.240 -> 5.10.241
+ - 5.4.296 -> 5.4.297
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/11026774180
-
-It has been broken for at least 2 months:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs?name=T%3Dts7680&kind=BUILD
-
-It uses the outdated Linux 4.9 kernel, which is no longer maintained,
-and no longer builds with recent toolchains.
-
-Unless a fix is provided, this defconfig will be removed.
-
-Fixes:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/11026774180
-
-Cc: Julien Grossholtz <julien.grossholtz@openest.io>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit a933920ff0d28947f5f6d4f6b6be04f113ad960c)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- .checkpackageignore                   |  1 -
- DEVELOPERS                            |  2 --
- board/technologic/ts7680/genimage.cfg | 14 ----------
- board/technologic/ts7680/readme.txt   | 50 -----------------------------------
- configs/ts7680_defconfig              | 16 -----------
- 5 files changed, 83 deletions(-)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 12 ++++++------
+ package/linux-headers/Config.in.host | 12 ++++++------
+ 3 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index e22b3b3038..5f0562e484 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -203,7 +203,6 @@ configs/stm32mp157c_odyssey_defconfig lib_defconfig.ForceCheckHash
- configs/terasic_de10nano_cyclone5_defconfig lib_defconfig.ForceCheckHash
- configs/ts4900_defconfig lib_defconfig.ForceCheckHash
- configs/ts5500_defconfig lib_defconfig.ForceCheckHash
--configs/ts7680_defconfig lib_defconfig.ForceCheckHash
- configs/uevm5432_defconfig lib_defconfig.ForceCheckHash
- configs/visionfive_defconfig lib_defconfig.ForceCheckHash
- configs/wandboard_defconfig lib_defconfig.ForceCheckHash
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 11f8a98171..1179ba0b90 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1767,9 +1767,7 @@ F:	package/qt5/
+diff --git a/linux/Config.in b/linux/Config.in
+index b36f926c18..e3a7fb1e4c 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -137,7 +137,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
  
- N:	Julien Grossholtz <julien.grossholtz@openest.io>
- F:	board/raspberrypi/
--F:	board/technologic/ts7680/
- F:	configs/raspberrypizero2w_defconfig
--F:	configs/ts7680_defconfig
- F:	package/paho-mqtt-c
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.12.41" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.12.44" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 9c39093397..8d2b2129ef 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,11 +1,11 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  6b19a3ae99423de2416964d67251d745910277af258b4c4c63e88fd87dbf0e27  linux-6.12.41.tar.xz
+-sha256  8c4ff2869736538b9b0d88ea8dbf0332b79c6ecc40a32066768a754df1fae1c0  linux-6.6.101.tar.xz
+-sha256  218f25663a41e3d811e84fa1c4acec50684898b2f6d0c8c0deb531d937e466f7  linux-6.1.147.tar.xz
++sha256  b650210ed3027b224969d148aa377452a9aad3ae7f2851abedd31adfef16bdae  linux-6.12.44.tar.xz
++sha256  d288dd38c3e62ba576ba6b3ad2a84cfba65cd43b702f6c50d1f701aee942b18e  linux-6.6.103.tar.xz
++sha256  c4e906b8d39a5866d25e06371d4de4454fbfaaeb67979a04e4137e807877be39  linux-6.1.149.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  e3d0025b87278e14733cb326700f17c7cceb54d920622b0d5fcd58a88c6850c3  linux-5.15.189.tar.xz
+-sha256  8d88c3977226d666554b75f480d1e6c5f4e4d2acdf2a3462840c6bac88634d13  linux-5.10.240.tar.xz
+-sha256  3d63614e58bf1befaba3f5713145200d09f26e564832c8948094fdf5b11fa73a  linux-5.4.296.tar.xz
++sha256  62b814f1a48e1d67764a28611f23ca1f1ce1084ad7f1d319acc05720a9a68604  linux-5.15.190.tar.xz
++sha256  08c1e982064c81f8445a8fff2293d430c716c11fd3185606b8275718d696d8d6  linux-5.10.241.tar.xz
++sha256  f10cfcea7acf7588087d7cc17ebeeb7d3ff783c040536698c544eed7c5e8a841  linux-5.4.297.tar.xz
+ # Locally computed
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+ sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index cece9858dd..38f4863621 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -428,12 +428,12 @@ endchoice
  
- N:	Julien Olivain <ju.o@free.fr>
-diff --git a/board/technologic/ts7680/genimage.cfg b/board/technologic/ts7680/genimage.cfg
-deleted file mode 100644
-index 58a63edd1a..0000000000
---- a/board/technologic/ts7680/genimage.cfg
-+++ /dev/null
-@@ -1,14 +0,0 @@
--image sdcard.img {
--	hdimage {
--	}
--
--	partition unused {
--		size = 512
--	}
--
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext4"
--		size = 256M
--	}
--}
-diff --git a/board/technologic/ts7680/readme.txt b/board/technologic/ts7680/readme.txt
-deleted file mode 100644
-index 3f703330bf..0000000000
---- a/board/technologic/ts7680/readme.txt
-+++ /dev/null
-@@ -1,50 +0,0 @@
--Technologic Systems TS-7680 SBC
--===============================
--
--This document explains how to set up a basic Buildroot system for
--the Technologic Systems TS-7680 Single Board Computer.
--
--The TS-7680 SBC is based on the Freescale i.MX286 ARM ARM926EJ-S
--running at 454MHz. The TS-7680 features are 10/100 Ethernet ports,
--Wi-Fi, microSD card, eMMC, NOR Flash, USB host port, CAN ports,
--relays and ADC/DAC. More details on the board here:
--https://docs.embeddedTS.com/TS-7680
--
--The TS-7680 uses a 4.9 Linux kernel provided by Technologic Systems.
--
--To build the default configuration you only have to run:
--
--  $ make ts7680_defconfig
--  $ make
--
--The output looks like:
--output/images
--├── imx28-ts7680.dtb
--├── rootfs.ext2
--├── rootfs.ext4 -> rootfs.ext2
--├── rootfs.tar
--├── sdcard.img
--└── uImage
--
--The provided genimage configuration generates an image file containing
--two partitions. The first one is unused, but mandatory as the
--TS-7680 built-in bootloader loads the Linux uImage from the /boot
--directory in the second partition. The second partition contains the
--rootfs with the Linux uImage into the /boot directory.
--
--  $ fdisk output/images/sdcard.img
--  output/images/sdcard.img1          1      1       1  512B  0 Empty
--  output/images/sdcard.img2          2 524289  524288  256M 83 Linux
--
--This image can be directly written to an SD card.
--
--    $ sudo dd if=output/images/sdcard.img of=/dev/mmcblk0
--
--To boot with Buildroot, insert this SD card on the board, make sure
--the SD jumper is present and the U-Boot jumper is not.
--
--The bootloader comes pre-flashed on the board on an SPI flash. Since
--updating the bootloader is risky and not trivial, it is not included
--in the Buildroot defconfig. Refer to
--https://docs.embeddedts.com/TS-7680#U-Boot for details on
--which U-Boot config to use and how to flash it.
-diff --git a/configs/ts7680_defconfig b/configs/ts7680_defconfig
-deleted file mode 100644
-index 9e058b1d78..0000000000
---- a/configs/ts7680_defconfig
-+++ /dev/null
-@@ -1,16 +0,0 @@
--BR2_arm=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/technologic/ts7680/genimage.cfg"
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,embeddedTS,linux-4.9.y,v4.9.311-ts)/linux-v4.9.311-ts.tar.gz"
--BR2_LINUX_KERNEL_DEFCONFIG="ts_imx28"
--BR2_LINUX_KERNEL_UIMAGE=y
--BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx28-ts7680"
--BR2_LINUX_KERNEL_INSTALL_TARGET=y
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_PACKAGE_HOST_GENIMAGE=y
-
---===============6776093586377213450==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "5.4.296"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.240"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.189"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.147"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.101"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.12.41"	if BR2_KERNEL_HEADERS_6_12
++	default "5.4.297"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.241"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.190"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.149"	if BR2_KERNEL_HEADERS_6_1
++	default "6.6.103"	if BR2_KERNEL_HEADERS_6_6
++	default "6.12.44"	if BR2_KERNEL_HEADERS_6_12
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6776093586377213450==--
