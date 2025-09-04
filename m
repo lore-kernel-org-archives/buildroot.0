@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9EFFCA1013
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:13:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DEF1CA1013
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:13:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 89D37403A0;
-	Thu,  4 Sep 2025 16:13:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E5287403BD;
+	Thu,  4 Sep 2025 16:13:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vOTUEoZoWNBE; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
+ id IdROXlkedGCB; Thu,  4 Sep 2025 16:13:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66A994038A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1645840398
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 66A994038A;
-	Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id C289B106
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1645840398;
+	Thu,  4 Sep 2025 16:13:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 176AC106
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A91CA605F1
+ by smtp1.osuosl.org (Postfix) with ESMTP id DCD8F8078B
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w-4F1p6tk1kp for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uIHrHGsVIZff for <buildroot@buildroot.org>;
  Thu,  4 Sep 2025 16:13:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DBFB605F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DAED38075B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8DBFB605F0
+ by smtp1.osuosl.org (Postfix) with ESMTP id DAED38075B
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7F6FB87F44; Thu,  4 Sep 2025 16:13:47 +0000 (UTC)
+ id D92018617D; Thu,  4 Sep 2025 16:13:47 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 4 Sep 2025 13:57:23 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: dafed7e9d2617ed460f1a7f9d90bd301eff696b9
-X-Git-Newrev: 7229f0fdde0bb108ca81326b661204242f5530d4
+X-Git-Oldrev: 5ecffe7d7725c74a5fc21c8401eb0c9407ee1eb7
+X-Git-Newrev: 38f77ed4915be2aff49d3177c7e689fb27eca176
 X-Patchwork-Hint: ignore
-Message-Id: <20250904161347.7F6FB87F44@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/vim: security
- bump to version 9.1.1684
+Message-Id: <20250904161347.D92018617D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] configs/at91sam9rlek:
+ remove defconfig, broken
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,83 +66,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7229f0fdde0bb108ca81326b661204242f5530d4
+commit: https://git.buildroot.net/buildroot/commit/?id=38f77ed4915be2aff49d3177c7e689fb27eca176
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fixes the following CVEs:
-- CVE-2024-41957
-- CVE-2024-41965
-- CVE-2024-45306
-- CVE-2024-47814
-- CVE-2025-1215
-- CVE-2025-22134
-- CVE-2025-24014
-- CVE-2025-26603
-- CVE-2025-29768
-- CVE-2025-53905
-- CVE-2025-53906
+This defconfig no longer builds:
 
-README.txt got updated three times since the last bump:
-- [0] updated some wording regarding who the developers are.
-- [1] updated the link to the release archives
-- [2] updated the goals of the project
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012272534
 
-netrw (the builtin file explorer of vim) changed maintainer and was
-subsequently restructured [3]. Therefore we need to run installpack,
-otherwise we run into this on startup (reported by Julien, thanks!):
+It is still based on the 4.8.6 kernel, which is not even an LTS
+kernel, so we cannot easily update to fix the issues which are most
+likely due to the newer gcc/binutils versions we're using now.
 
-Error detected while processing
-/usr/share/vim/vim91/plugin/netrwPlugin.vim:
-line    7:
-E919: Directory not found in 'packpath': "pack/*/opt/netrw"
-Press ENTER or type command to continue
+There is no DEVELOPERS entry attached to this configuration as well,
+and this defconfig has been broken for at least 2 months, probably
+more (our Gitlab CI history is only kept for ~2 months). So let's drop
+it, unless someone volunteers to resurrect it.
 
-[0]: https://github.com/vim/vim/commit/b75825f749cf87feb9ae8e7e5327bd2efe707c86
-[1]: https://github.com/vim/vim/commit/4225f28855c5d3023662b3a90a70b22caf9b6ade
-[2]: https://github.com/vim/vim/commit/2bfd1ee161e26ece8e5a72cdca4fff22d11728a2
-[3]: https://github.com/vim/vim/commit/9cfdabb074feefc9848e9f7a4538f201e28c7f06
-
-Signed-off-by: Daniel Lang <dalang@gmx.at>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 089731c8ea4e90cb84a25cbae3e9cb5fc871a6aa)
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
+Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc: Patrice Vilchez <Patrice.Vilchez@microchip.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit 76bd2fc38ae3275c99b254383b31aade53f532ec)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/vim/vim.hash | 4 ++--
- package/vim/vim.mk   | 3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ .checkpackageignore            |  1 -
+ configs/at91sam9rlek_defconfig | 21 ---------------------
+ 2 files changed, 22 deletions(-)
 
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index 194bcb4378..ae909aaeac 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  0056537cb57190aa41c12ba6c2ad04ce10e7f714cde4c1fe7193a37e1c44db46  vim-9.1.0145.tar.gz
-+sha256  4fe4cb284007e26255267338dde1ceac6f8326f78123ae8c96a36ee15a1ea7ba  vim-9.1.1684.tar.gz
- sha256  0b3f1f330cb1b179bb17c7c687d4cec601e0aa3462bc7f890ad4c3888d37d720  LICENSE
--sha256  7a2f621c8496396dae5eecdcc4dccff9d534dff4627193d3ebf7fa6d2cb27042  README.txt
-+sha256  ee1d0885bbc4a95a24e49873a075391bdf26b69d13758e30f3d9271f8f42bd2d  README.txt
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index 7d51a6ddab..4297bdd198 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VIM_VERSION = 9.1.0145
-+VIM_VERSION = 9.1.1684
- VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
- VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
- VIM_SUBDIR = src
-@@ -49,6 +49,7 @@ endif
- define VIM_INSTALL_TARGET_CMDS
- 	cd $(@D)/src; \
- 		$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) installvimbin; \
-+		$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) installpack; \
- 		$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) installtools; \
- 		$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) installlinks
- endef
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 0fbfaf667d..d4b5da19b3 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -110,7 +110,6 @@ configs/aspeed_ast2600evb_defconfig lib_defconfig.ForceCheckHash
+ configs/asus_tinker-s_rk3288_defconfig lib_defconfig.ForceCheckHash
+ configs/asus_tinker_rk3288_defconfig lib_defconfig.ForceCheckHash
+ configs/at91sam9260eknf_defconfig lib_defconfig.ForceCheckHash
+-configs/at91sam9rlek_defconfig lib_defconfig.ForceCheckHash
+ configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig lib_defconfig.ForceCheckHash
+ configs/atmel_sama5d2_xplained_mmc_defconfig lib_defconfig.ForceCheckHash
+ configs/atmel_sama5d2_xplained_mmc_dev_defconfig lib_defconfig.ForceCheckHash
+diff --git a/configs/at91sam9rlek_defconfig b/configs/at91sam9rlek_defconfig
+deleted file mode 100644
+index 8a1cb46e16..0000000000
+--- a/configs/at91sam9rlek_defconfig
++++ /dev/null
+@@ -1,21 +0,0 @@
+-BR2_arm=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.6"
+-BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91sam9rlek"
+-BR2_TARGET_ROOTFS_UBI=y
+-BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2047
+-BR2_TARGET_AT91BOOTSTRAP3=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
+-BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9rleknf_uboot"
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="at91sam9rlek_nandflash"
+-BR2_PACKAGE_HOST_SAM_BA=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
