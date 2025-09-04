@@ -1,102 +1,107 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5201BCA1002
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 15:10:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE311CA1002
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 15:12:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E49B3426CE;
-	Thu,  4 Sep 2025 15:10:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93A23607F5;
+	Thu,  4 Sep 2025 15:12:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FGN4nPX0FCvN; Thu,  4 Sep 2025 15:10:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UIBSY4NeTNt2; Thu,  4 Sep 2025 15:12:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 179F8426C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C85076165D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 179F8426C6;
-	Thu,  4 Sep 2025 15:10:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C85076165D;
+	Thu,  4 Sep 2025 15:12:21 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id D56C5111
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 15:10:05 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id AF7AA930
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 15:12:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D279542587
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 15:10:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 961FB426D4
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 15:12:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LGbjMtz7-Z-m for <buildroot@buildroot.org>;
- Thu,  4 Sep 2025 15:10:05 +0000 (UTC)
+ id uMSpc1zmiUBe for <buildroot@buildroot.org>;
+ Thu,  4 Sep 2025 15:12:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::135; helo=mail-lf1-x135.google.com;
+ client-ip=2a00:1450:4864:20::130; helo=mail-lf1-x130.google.com;
  envelope-from=elmehdi.younes@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org ABB5142565
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABB5142565
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com
- [IPv6:2a00:1450:4864:20::135])
- by smtp4.osuosl.org (Postfix) with ESMTPS id ABB5142565
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 15:10:04 +0000 (UTC)
-Received: by mail-lf1-x135.google.com with SMTP id
- 2adb3069b0e04-55f6b0049fbso1348426e87.0
- for <buildroot@buildroot.org>; Thu, 04 Sep 2025 08:10:04 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7FDAD426D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FDAD426D9
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
+ [IPv6:2a00:1450:4864:20::130])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7FDAD426D9
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 15:12:19 +0000 (UTC)
+Received: by mail-lf1-x130.google.com with SMTP id
+ 2adb3069b0e04-55f6186cc17so1058055e87.2
+ for <buildroot@buildroot.org>; Thu, 04 Sep 2025 08:12:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1756998602; x=1757603402;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=wXDFGg0pA8pAdFxv8AB0jiK4Nmaaql1Bq01LQptUF1Y=;
- b=bk6PYS5yhL5VjjcsWiJo32NAUGFqwBrZR8B0gvBIla7AyHBcSlpkP7FZcxelxVxTbX
- oQO3na3mwcVviO5shfIsc0ByCD5RiO/0eNk0ULfnq6PZbZzlYc81CroPhEv1cFIx33dv
- TyvME+n4uMiclF3lKO14g0KWiOYSq9y2jhim7TkflPChHhfC91PpGksbtxUiMC7HnOX5
- eFBVdVSOqMzD04vuzoI9GQsFUXmtJN1bW8OMrjN2u97jwSHFFcALg4zZra4GMSLNUZA3
- hRw6Cx4QUHMkF8pSFWxgwJlTKyTePkhS6h2L3Knfl57JZln6hb90fBfRc58YdFsQfv/u
- Ihag==
-X-Gm-Message-State: AOJu0Ywqpy+02R/VwPXL9YiKauVV98mj0JLx8idY0QS+kfv4KFfAljPR
- VfzI59frJc5BC2+895tj+UiH8e9oqdwaLOI146aWsbhcf1cCZhA4midp6RHeXoOR/FoxUSOVEfY
- nD8gB
-X-Gm-Gg: ASbGncvL1mSOrwvHRLGQhzZKvpcLuPQTVlwZhQbb32Z3FW1iiSV9beVJ0hNWrrirEa+
- FNnFHREPqP+h30UYE0lTTqjSoLUkSDz7Qf8V+35Yyn5afbYDQidG8Su+nTJWIxT4PcqvoaoIUx5
- 59+6xZh8tVEKtjsjbrA3uOjVxzUtN51/xmduB9IX3TDNQ+4cJ9jYIsiwwF20Sor2lgYW2CdBZAM
- FA6FlAo94htc/BiK5W4qZMSl5inAofZ62EXlsHkth4cMtUDISgwj6Bk5sD00PCrqA/hyQWykm0E
- 6jV00A0mtMulNdHJDRUw+wxvRcJSNpQ016W3lqJfcu347Y940Jg/gciSCL+lcoGFAR9MwpFe/7E
- Z8Di91ocwY3F3N41+sL7n/JGsqSBUjboESzISMzTjbMzFTzF+bMhAtPimWWtPdzc4WrpJNr8Liq
- he6rm+ZkFJewtY9eZqTRBB6AiUNvc=
-X-Google-Smtp-Source: AGHT+IHsgDtibVLIjpm1b40jBHogNRZzcNI8khwuukt5zeeyIdgJzfH4SgKlY+jiyyEVtjv11GCljA==
-X-Received: by 2002:a05:6512:3e15:b0:55f:6db5:748d with SMTP id
- 2adb3069b0e04-55f7089c530mr6563839e87.4.1756998601819; 
- Thu, 04 Sep 2025 08:10:01 -0700 (PDT)
-Received: from P-NAN-ABRICOT..
+ d=1e100.net; s=20230601; t=1756998737; x=1757603537;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=OK9mUHxgqUII8unDXbEY7zLziXGWZXzYTYihlYrVQdY=;
+ b=MkeR++3oaa+fxuoyNk46n141cXtixgPtooVdYOAbjO1RkYUBi+rNLXap/tZeTpeKuI
+ 7aDmynA1S/+Gqxa1q5vQx0TjwvEaD7fXhtAH5aT9A1OnS9dXZgQmtYY+QjIppKulCr4+
+ F0+mT8BQ32UaUGkcMFXEc3mf9ixJppVLUTdlvU64QkmCmLBW5+mHGBqLINivvk8jLSMq
+ B9DPh14tzqScU8qCyvdmDmwYgRZLflUMJimbChQh8sxZNazN5pzqsWMVEXVcy+IFEtFF
+ +o84P1YGNsrskyTzxqDo82GndQdkk1DNg+RAree82ZaypLkQkBGkrrtM6Q6bw2k5fo9K
+ cwWw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCWdA4KzkNuXXr9LHm7N5HCxxBnvTLFoGmbyVlA20mOmN4GwGrLZ3SdxDV/usd6Nn5uUNuFqtXxn4lA=@buildroot.org
+X-Gm-Message-State: AOJu0YxspRo2bkUJtDpHIfciWU/6afEu3oHFEqw3aLAPhy+FepthOSal
+ GvXJ1nXOhWGH29DqAmvGL9KyidVMHjQ4Bxh0MIAPxQGKlrMIEDo8XxYWrqIxc4xHOpTGuUe2Aaq
+ 69eWL
+X-Gm-Gg: ASbGnctBe8r779UfXZEwnRfAqzIlrpbtnbsuN8GEeoKQ0uJPu9Hzdayz/wAnx7Ovn+S
+ 6VAuv2vMrfWTdkyJJUSlZoMO3b8lVLS78yEVEq3V+vPNIsxHYIfB2gkVeeaNMYqNJiZS5VKlTgH
+ m7veqFItskaB42iQB3HhdFF+pGHXKb3ujcqWUByaUXAMzZmXjMr2IRI1DUv9ryeP6dJXwMYWMlC
+ JjWUg8gIJzRFPLJjHZCsnQR47DRuh6IoobF0SKZa/k0rFxTWJ8RMRPOBYzbpG/4ln5JeE5UDvyE
+ n+DWKwPO2E1AE7A2Hu+S6DapWrd4Z+L79FJqj4xO55gWfk/z/pMFW/lInFxr8MNS3zcVvhshLD1
+ xnLjClvg0CXOEfQjxCBxYdnodA2mo9fIHDmk42NYoRVi0YSH9sBIsJrn5OObeG7lwj/NrtvfTDf
+ l4/YNlM7s/QWsB
+X-Google-Smtp-Source: AGHT+IEwx/ACVbvwowcqy4hu0/05D98dP54ekXxQLM9ulketg3gndtPgWq0OxVwr449blsqQ1x7oCQ==
+X-Received: by 2002:a05:6512:6609:b0:55f:44b8:1ed8 with SMTP id
+ 2adb3069b0e04-55f709bf41amr5804452e87.57.1756998737061; 
+ Thu, 04 Sep 2025 08:12:17 -0700 (PDT)
+Received: from [10.5.90.83]
  (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
  by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-5608ad25e15sm1261085e87.126.2025.09.04.08.10.00
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 04 Sep 2025 08:10:01 -0700 (PDT)
-To: buildroot@buildroot.org
-Cc: David Pierret <david.pierret@smile.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- El Mehdi YOUNES <elmehdi.younes@smile.fr>
-Date: Thu,  4 Sep 2025 17:09:41 +0200
-Message-ID: <20250904150941.427455-1-elmehdi.younes@smile.fr>
-X-Mailer: git-send-email 2.43.0
+ 2adb3069b0e04-5608ad2c222sm1233386e87.130.2025.09.04.08.12.16
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 04 Sep 2025 08:12:16 -0700 (PDT)
+Message-ID: <245cbd37-11e2-4610-b85d-7fd6b8c4319d@smile.fr>
+Date: Thu, 4 Sep 2025 17:12:15 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ El Mehdi YOUNES via buildroot <buildroot@buildroot.org>
+Cc: David Pierret <david.pierret@smile.fr>
+References: <20250902134250.622347-1-elmehdi.younes@smile.fr>
+ <20250903212121.5fa1d5f3@windsurf>
+Content-Language: en-US
+In-Reply-To: <20250903212121.5fa1d5f3@windsurf>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1756998602; x=1757603402; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=wXDFGg0pA8pAdFxv8AB0jiK4Nmaaql1Bq01LQptUF1Y=;
- b=xauvwLRpWmOm52pIpIFEegtH0DUAcSbJMRmTJ8qYZ5qha/ZL5yNUZJDALYq3fHgGrG
- /qCE+1+/xpSZOhsEPzVuSNzNl4cknnxW8emMRIyKbe84skywH3GjM+w/kN/gQx0Hd9dm
- dFLufrJvdul/lCmL2npFkZ3iPstQopMNkFjyU=
+ d=smile.fr; s=google; t=1756998737; x=1757603537; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=OK9mUHxgqUII8unDXbEY7zLziXGWZXzYTYihlYrVQdY=;
+ b=SlDSGG9KEYFABkxx50HOGssg3KPtMTdhorzBG/danoHB8V+r58XhPV/3mWz9pFJv/C
+ si0OdTfyly3MWCmdSdF3KBCxF7uEhgRqLsK1xh9JtQEoOgurgJ5qsRcG2gpfYZRJ9Fia
+ r/w6qrhyD2QqJnZwoXTTkLOIFOohHer2lnIAc=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=xauvwLRp
-Subject: [Buildroot] [PATCH v2 1/1] package/bat: fix build with GCC 15
+ dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
+ header.a=rsa-sha256 header.s=google header.b=SlDSGG9K
+Subject: Re: [Buildroot] [PATCH 1/1] package/bat: fix build with GCC 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,89 +115,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: El Mehdi YOUNES via buildroot <buildroot@buildroot.org>
 Reply-To: El Mehdi YOUNES <elmehdi.younes@smile.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bat pulls in the onig crate (version 6.4.0) through syntect with the
-default "regex-onig" feature. This crate depends on the Oniguruma C
-library (via onig_sys), which fails to build with GCC 15 due to C23
-keyword conflicts. Newer versions of onig fix this issue, but bat
-cannot directly update the onig version because it is pinned by syntect.
-
-To resolve the build failure, apply a patch that replaces the
-"regex-onig" feature with "regex-fancy" in bat's minimal-application
-feature set. This switches bat to use the pure-Rust fancy-regex engine
-instead of Oniguruma, avoiding the problematic onig_sys dependency.
-
-Fixes:
-
-  https://autobuild.buildroot.net/results/ecc/ecc3b0c83e691e9a8ed5c7ff9d0a92ee06409f20
-
-Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
----
- ...ig-by-regex-fancy-in-minimal-applica.patch | 47 +++++++++++++++++++
- 1 file changed, 47 insertions(+)
- create mode 100644 package/bat/0001-Replace-regex-onig-by-regex-fancy-in-minimal-applica.patch
-
-diff --git a/package/bat/0001-Replace-regex-onig-by-regex-fancy-in-minimal-applica.patch b/package/bat/0001-Replace-regex-onig-by-regex-fancy-in-minimal-applica.patch
-new file mode 100644
-index 0000000000..de6a3fc70c
---- /dev/null
-+++ b/package/bat/0001-Replace-regex-onig-by-regex-fancy-in-minimal-applica.patch
-@@ -0,0 +1,47 @@
-+From 9b6727df25e45222b3863dbe5f5bc58237b68ab9 Mon Sep 17 00:00:00 2001
-+From: El Mehdi YOUNES <elmehdi.younes@smile.fr>
-+Date: Tue, 2 Sep 2025 14:02:11 +0200
-+Subject: [PATCH] Replace regex-onig by regex-fancy in minimal-application
-+
-+The default "application" feature enables "minimal-application", which
-+in turn pulls in the "regex-onig" feature of syntect. This brings in the
-+onig crate (version 6.4.0) and its dependency onig_sys, which fail to
-+build with GCC 15 due to C23 keyword conflicts.
-+
-+It is not possible to simply update the onig crate from bat itself,
-+since its version is pinned indirectly by syntect. To avoid this
-+dependency and fix the build, replace "regex-onig" with "regex-fancy" in
-+"minimal-application". This makes bat use the pure-Rust fancy-regex
-+engine instead of Oniguruma, removing the need for onig_sys and allowing
-+the package to build with GCC 15.
-+
-+There is an an ongoing discussion about removing Oniguruma from bat
-+since Oniguruma has been declared archived:
-+
-+see https://github.com/sharkdp/bat/issues/3285
-+
-+The Upstream project for now is refusing to use fancy-regex as default.
-+
-+Upstream: not submitted
-+
-+Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
-+---
-+ Cargo.toml | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Cargo.toml b/Cargo.toml
-+index 80d19321..93a07a1d 100644
-+--- a/Cargo.toml
-++++ b/Cargo.toml
-+@@ -29,7 +29,7 @@ minimal-application = [
-+     "clap",
-+     "etcetera",
-+     "paging",
-+-    "regex-onig",
-++    "regex-fancy",
-+     "wild",
-+ ]
-+ git = ["git2"] # Support indicating git modifications
-+-- 
-+2.43.0
-+
--- 
-2.43.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CkxlIDAzLzA5LzIwMjUgw6AgMjE6MjEsIFRob21hcyBQZXRhenpvbmkgYSDDqWNyaXTCoDoKPiBP
+biBUdWUsICAyIFNlcCAyMDI1IDE1OjQyOjUwICswMjAwCj4gRWwgTWVoZGkgWU9VTkVTIHZpYSBi
+dWlsZHJvb3QgPGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnPiB3cm90ZToKPgo+PiBCYXQgcHVsbHMg
+aW4gdGhlIG9uaWcgY3JhdGUgKHZlcnNpb24gNi40LjApIHRocm91Z2ggc3ludGVjdCB3aXRoIHRo
+ZQo+PiBkZWZhdWx0ICJyZWdleC1vbmlnIiBmZWF0dXJlLiBUaGlzIGNyYXRlIGRlcGVuZHMgb24g
+dGhlIE9uaWd1cnVtYSBDCj4+IGxpYnJhcnkgKHZpYSBvbmlnX3N5cyksIHdoaWNoIGZhaWxzIHRv
+IGJ1aWxkIHdpdGggR0NDIDE1IGR1ZSB0byBDMjMKPj4ga2V5d29yZCBjb25mbGljdHMuIE5ld2Vy
+IHZlcnNpb25zIG9mIG9uaWcgZml4IHRoaXMgaXNzdWUsIGJ1dCBiYXQKPj4gY2Fubm90IGRpcmVj
+dGx5IHVwZGF0ZSB0aGUgb25pZyB2ZXJzaW9uIGJlY2F1c2UgaXQgaXMgcGlubmVkIGJ5IHN5bnRl
+Y3QuCj4+Cj4+IFRvIHJlc29sdmUgdGhlIGJ1aWxkIGZhaWx1cmUsIGFwcGx5IGEgcGF0Y2ggdGhh
+dCByZXBsYWNlcyB0aGUKPj4gInJlZ2V4LW9uaWciIGZlYXR1cmUgd2l0aCAicmVnZXgtZmFuY3ki
+IGluIGJhdCdzIG1pbmltYWwtYXBwbGljYXRpb24KPj4gZmVhdHVyZSBzZXQuIFRoaXMgc3dpdGNo
+ZXMgYmF0IHRvIHVzZSB0aGUgcHVyZS1SdXN0IGZhbmN5LXJlZ2V4IGVuZ2luZQo+PiBpbnN0ZWFk
+IG9mIE9uaWd1cnVtYSwgYXZvaWRpbmcgdGhlIHByb2JsZW1hdGljIG9uaWdfc3lzIGRlcGVuZGVu
+Y3kuCj4+Cj4+IEZpeGVzOgo+Pgo+PiAgICBodHRwczovL2F1dG9idWlsZC5idWlsZHJvb3QubmV0
+Lz9yZWFzb249YmF0LSUKPj4KPj4gU2lnbmVkLW9mZi1ieTogRWwgTWVoZGkgWU9VTkVTIDxlbG1l
+aGRpLnlvdW5lc0BzbWlsZS5mcj4KPj4gLS0tCj4+ICAgLi4uaWctYnktcmVnZXgtZmFuY3ktaW4t
+bWluaW1hbC1hcHBsaWNhLnBhdGNoIHwgNDAgKysrKysrKysrKysrKysrKysrKwo+PiAgIDEgZmls
+ZSBjaGFuZ2VkLCA0MCBpbnNlcnRpb25zKCspCj4+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2th
+Z2UvYmF0LzAwMDEtUmVwbGFjZS1yZWdleC1vbmlnLWJ5LXJlZ2V4LWZhbmN5LWluLW1pbmltYWwt
+YXBwbGljYS5wYXRjaAo+IFRlc3RlZC1ieTogVGhvbWFzIFBldGF6em9uaSA8dGhvbWFzLnBldGF6
+em9uaUBib290bGluLmNvbT4KPgo+IElmIHlvdSBmaXggdGhlIGF1dG9idWlsZC5idWlsZHJvb3Qu
+bmV0IFVSTCBhbmQgY2xhcmlmeSB0aGUgIlVwc3RyZWFtOgo+IG5vdCBzdWJtaXR0ZWQiIHRhZyBp
+biB0aGUgcGF0Y2gsIHRoaXMgaXMgZ29vZCB0byBnbyBmb3IgbWUgYXMgaXQgYWxsb3dzCj4gdG8g
+Zml4IHRoZSBidWlsZCBpc3N1ZS4KPgo+IFRoYW5rcyEKCkRvbmUhIEkgc2VudCBhIHYyLgoKQmVz
+dCByZWdhcmRzLAoKRWwgTWVoZGkKCj4gVGhvbWFzCl9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1
+aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8v
+YnVpbGRyb290Cg==
