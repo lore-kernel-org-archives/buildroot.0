@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE023CA1015
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:14:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80CA6CA1002
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:14:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B414E606BB;
-	Thu,  4 Sep 2025 16:14:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 599754047B;
+	Thu,  4 Sep 2025 16:14:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ox5JgQPxGpls; Thu,  4 Sep 2025 16:14:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MKIWa8VU0V5C; Thu,  4 Sep 2025 16:14:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC58B60642
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E5E240486
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DC58B60642;
-	Thu,  4 Sep 2025 16:14:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E5E240486;
+	Thu,  4 Sep 2025 16:14:56 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 12662106
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:14:19 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D9DAAE8
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:14:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4005180764
+ by smtp1.osuosl.org (Postfix) with ESMTP id 632E580796
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d0z0aAveKg2t for <buildroot@buildroot.org>;
- Thu,  4 Sep 2025 16:13:53 +0000 (UTC)
+ id KDcZLLiY6d9J for <buildroot@buildroot.org>;
+ Thu,  4 Sep 2025 16:13:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCB608079E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81A7880798
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CCB608079E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 81A7880798
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CB0AB87F44; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
+ id 7FDA087F46; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 4 Sep 2025 13:57:24 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 427fbd3af6082adaddf33576c606f439b93cce13
-X-Git-Newrev: 2ec463fa2f759a02cc6bf2305a0ad3a7c7f6f2e6
+X-Git-Oldrev: 25cc2a6f5b425997cf0a257d4437451379a62f39
+X-Git-Newrev: 575465c786238fea61c7b2795afbdaca9bc3348d
 X-Patchwork-Hint: ignore
-Message-Id: <20250904161349.CB0AB87F44@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/go: fix CPE id
+Message-Id: <20250904161349.7FDA087F46@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/ffmpeg: add
+ optional support for libsoxr
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,75 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ec463fa2f759a02cc6bf2305a0ad3a7c7f6f2e6
+commit: https://git.buildroot.net/buildroot/commit/?id=575465c786238fea61c7b2795afbdaca9bc3348d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-This patch fixes the CPE ID for both go-bin and go-src packages.
+Now that libsoxr no longer depends on ffmpeg, we can actually use
+libsoxr in ffmpeg.
 
-The go-src package did had a CPE ID because GO_SRC_CPE_ID_VENDOR is
-defined but the generated CPE ID would be the following:
+See:
 
-cpe:2.3:a:golang:go-src:*:*:*:*:*:*:*:*
+  https://trac.ffmpeg.org/wiki/FFmpeg%20and%20the%20SoX%20Resampler
 
-The CPE product go-src doesn't match to anything and should be 'go'
-instead.
+for some details.
 
-For go-bin no CPE_ID variable were defined so no CPE ID would be
-generated if using a pre-build toolchain.
-
-This patch duplicate the definition of the CPE_ID variables, I didn't
-put the definition in the 'package/go/go.mk' file to avoid generate a
-CPE for the go virtual package.
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1869b4065c6b4df909f5623719c818c0cc6394d2)
+(cherry picked from commit c719a73a21ba5b35901e422f899afe5c19bf76fc)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/go/go-bin/go-bin.mk | 3 +++
- package/go/go-src/go-src.mk | 2 ++
- 2 files changed, 5 insertions(+)
+ package/ffmpeg/ffmpeg.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/go/go-bin/go-bin.mk b/package/go/go-bin/go-bin.mk
-index a0f1e26e8f..ac42e4cbf3 100644
---- a/package/go/go-bin/go-bin.mk
-+++ b/package/go/go-bin/go-bin.mk
-@@ -4,12 +4,15 @@
- #
- ################################################################################
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 0211c35afb..f218e60067 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -372,6 +372,13 @@ else
+ FFMPEG_CONF_OPTS += --disable-libopenmpt
+ endif
  
-+GO_BIN_VERSION = $(GO_VERSION)
- GO_BIN_SITE = https://go.dev/dl
- GO_BIN_SOURCE = go$(GO_VERSION).linux-$(call qstrip, $(BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH)).tar.gz
- GO_BIN_DL_SUBDIR = go
- HOST_GO_BIN_ACTUAL_SOURCE_TARBALL = go$(GO_VERSION).src.tar.gz
- GO_BIN_LICENSE = BSD-3-Clause
- GO_BIN_LICENSE_FILES = LICENSE
-+GO_BIN_CPE_ID_VENDOR = golang
-+GO_BIN_CPE_ID_PRODUCT = go
- 
- HOST_GO_BIN_PROVIDES = host-go
- 
-diff --git a/package/go/go-src/go-src.mk b/package/go/go-src/go-src.mk
-index 340aada94c..c1f11a2262 100644
---- a/package/go/go-src/go-src.mk
-+++ b/package/go/go-src/go-src.mk
-@@ -4,6 +4,7 @@
- #
- ################################################################################
- 
-+GO_SRC_VERSION = $(GO_VERSION)
- GO_SRC_SITE = https://storage.googleapis.com/golang
- GO_SRC_SOURCE = go$(GO_VERSION).src.tar.gz
- GO_SRC_DL_SUBDIR = go
-@@ -11,6 +12,7 @@ GO_SRC_DL_SUBDIR = go
- GO_SRC_LICENSE = BSD-3-Clause
- GO_SRC_LICENSE_FILES = LICENSE
- GO_SRC_CPE_ID_VENDOR = golang
-+GO_SRC_CPE_ID_PRODUCT = go
- 
- HOST_GO_SRC_PROVIDES = host-go
- HOST_GO_SRC_DEPENDENCIES = \
++ifeq ($(BR2_PACKAGE_LIBSOXR),y)
++FFMPEG_CONF_OPTS += --enable-libsoxr
++FFMPEG_DEPENDENCIES += libsoxr
++else
++FFMPEG_CONF_OPTS += --disable-libsoxr
++endif
++
+ ifeq ($(BR2_PACKAGE_SPEEX),y)
+ FFMPEG_CONF_OPTS += --enable-libspeex
+ FFMPEG_DEPENDENCIES += speex
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
