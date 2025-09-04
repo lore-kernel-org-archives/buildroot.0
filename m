@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7223CAC581
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:17:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93945CAC588
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:18:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A939780772;
-	Mon,  8 Sep 2025 14:17:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D741606DA;
+	Mon,  8 Sep 2025 14:18:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EYz0NC67HVIY; Mon,  8 Sep 2025 14:17:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mwAY9e4ad5Gy; Mon,  8 Sep 2025 14:17:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AA6B80732
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA2E7605D2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6AA6B80732;
-	Mon,  8 Sep 2025 14:17:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F4A9279
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA2E7605D2;
+	Mon,  8 Sep 2025 14:17:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 01825186
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4110540073
+ by smtp3.osuosl.org (Postfix) with ESMTP id DF8CC605EE
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BbQ2fpUeRCf7 for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ffpcw0fDTVcM for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92CEF40054
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37DD360606
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 92CEF40054
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 37DD360606
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8F52A80DA7; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
+ id 348ED81353; Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 3 Sep 2025 23:53:46 +0200
+Date: Thu, 4 Sep 2025 20:19:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7489133fe11c986600760949e24b3b6824158ac4
-X-Git-Newrev: 10a831794bbb276fca2666b77fac8692654c3752
+X-Git-Oldrev: cb0c193c81fe0afb54de5d445b8c9dfa2831cc92
+X-Git-Newrev: d652b20128b8498777db4788ae14049bcac3d58d
 X-Patchwork-Hint: ignore
-Message-Id: <20250908141630.8F52A80DA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uuu: bump to version 1.5.233
+Message-Id: <20250908141631.348ED81353@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] DEVELOPERS: add Andrea Ricchi for
+ cutekeyboard
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,41 +66,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10a831794bbb276fca2666b77fac8692654c3752
+commit: https://git.buildroot.net/buildroot/commit/?id=d652b20128b8498777db4788ae14049bcac3d58d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://github.com/nxp-imx/mfgtools/releases/tag/uuu_1.5.233
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/uuu/uuu.hash | 2 +-
- package/uuu/uuu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/uuu/uuu.hash b/package/uuu/uuu.hash
-index 75e298e4a3..b7d5c06f7e 100644
---- a/package/uuu/uuu.hash
-+++ b/package/uuu/uuu.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  50bd2ce7e7fbc5fea38bcd138da46ca84aee3aaf723f674fa8546ce70c070c0f  uuu_source-uuu_1.5.222.tar.gz
-+sha256  aadd7edb9494fe1768f7d2964aa470931da15bd83f82a1829d786f8ec80ca169  uuu_source-uuu_1.5.233.tar.gz
- sha256  cc8d47f7b9260f6669ecd41c24554c552f17581d81ee8fc602c6d23edb8bf495  LICENSE
-diff --git a/package/uuu/uuu.mk b/package/uuu/uuu.mk
-index 61f4e82ee3..bdfd00581a 100644
---- a/package/uuu/uuu.mk
-+++ b/package/uuu/uuu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 87a26b4388..fb8eedb5cf 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -180,6 +180,9 @@ F:	package/libkrb5/
+ F:	package/p7zip/
+ F:	package/wine/
  
--UUU_VERSION = 1.5.222
-+UUU_VERSION = 1.5.233
- UUU_SOURCE = uuu_source-uuu_$(UUU_VERSION).tar.gz
- UUU_SITE = https://github.com/nxp-imx/mfgtools/releases/download/uuu_$(UUU_VERSION)
- UUU_LICENSE = BSD 3-Clause "New" or "Revised" License
++N:	Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
++F:	package/cutekeyboard/
++
+ N:	Andreas Klinger <ak@it-klinger.de>
+ F:	package/ply/
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
