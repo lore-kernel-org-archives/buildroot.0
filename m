@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 999D5CA101F
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:34:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDCBCCA1002
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:34:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5F3FE6083F;
-	Thu,  4 Sep 2025 16:34:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A8F9160854;
+	Thu,  4 Sep 2025 16:34:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pEuXekd-iFbj; Thu,  4 Sep 2025 16:34:51 +0000 (UTC)
+ id vtw7RTS_bM3z; Thu,  4 Sep 2025 16:34:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B70106080E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6DE7D607E6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B70106080E;
-	Thu,  4 Sep 2025 16:34:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6DE7D607E6;
+	Thu,  4 Sep 2025 16:34:48 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D4479106
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:34:00 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id F13D4106
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:34:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C5205400A2
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 13CED4007B
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nkyaUxeparzk for <buildroot@buildroot.org>;
+ id FjCh-wr8J_1B for <buildroot@buildroot.org>;
  Thu,  4 Sep 2025 16:33:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 62D53400AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F898400AE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 62D53400AC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7F898400AE
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 60F6B87EEF; Thu,  4 Sep 2025 16:33:36 +0000 (UTC)
+ id 7DD7487EEF; Thu,  4 Sep 2025 16:33:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Sep 2025 14:17:45 +0200
+Date: Thu, 4 Sep 2025 14:19:31 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: c66f43d5f15110c72308ce67974aff835cfe3571
-X-Git-Newrev: 54d74ee95bde567d27c05eade14b2a4b17d8f861
+X-Git-Oldrev: 631bda1a189c52cdf75708b86429f29f126785af
+X-Git-Newrev: 14955d287355d11774212329236ca0e02e6fd72f
 X-Patchwork-Hint: ignore
-Message-Id: <20250904163336.60F6B87EEF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] board/zynqmp: increase
- vfat partition to 64M
+Message-Id: <20250904163336.7DD7487EEF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/vde2: fix build
+ w/ gcc-15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,43 +66,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=54d74ee95bde567d27c05eade14b2a4b17d8f861
+commit: https://git.buildroot.net/buildroot/commit/?id=14955d287355d11774212329236ca0e02e6fd72f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Now that the qspi.bin file is included for zynqmp images, the 32M vfat
-partition is getting dangerously close to being full.
+Fixes: https://autobuild.buildroot.net/results/8d14173f31922a737c326be75aa24c9f9471342a/
 
-In the process of bumping Linux kernel 6.12.10 to 6.12.40, the size of the
-default Linux kernel Image file for zynqmp products is increasing from 23.4M
-to 26.9M. This is leaving less than 1M of free space in the vfat partition
-meaning users may unknowingly exceed the 32M size by just adding Linux kernel
-configs.
+The vde2 source code uses empty argument function pointer prototypes like:
 
-To avoid potential problems, this patch doubles the size of the vfat partition
-to 64M, which should be plenty of space for any configuration.
+typedef ssize_t (* ssize_fun)();
+extern ssize_fun vdehist_vderead;
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+In C17 and earlier, such prototypes means unknown number of arguments,
+whereas with C23 it means no arguments, leading to build failures:
+
+libvdehist.c:39:27: error: initialization of 'ssize_fun' {aka 'long int
+  (*)(void)'} from incompatible pointer type 'ssize_t (*)(int,  void *,
+  size_t)' {aka 'long int (*)(int,  void *, long unsigned int)'}
+  [-Wincompatible-pointer-types]
+
+Workaround it using -std=gnu99.  Vde2 is provided both as a host and target
+package, so do this unconditionally for both.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit c7a45b8302663b0c3ec4ea1e9073b68cd1676cab)
+(cherry picked from commit 2218f0215557278cf9b9810960eca019f33fcfe7)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- board/zynqmp/genimage.cfg | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/vde2/vde2.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/board/zynqmp/genimage.cfg b/board/zynqmp/genimage.cfg
-index 0a6aea7a29..193aff2a2d 100644
---- a/board/zynqmp/genimage.cfg
-+++ b/board/zynqmp/genimage.cfg
-@@ -12,7 +12,7 @@ image boot.vfat {
- 		}
- 	}
+diff --git a/package/vde2/vde2.mk b/package/vde2/vde2.mk
+index ab4c32143d..7c7fbfca9c 100644
+--- a/package/vde2/vde2.mk
++++ b/package/vde2/vde2.mk
+@@ -38,5 +38,10 @@ HOST_VDE2_CONF_OPTS = \
+ 	--disable-profile \
+ 	--enable-tuntap
  
--	size = 32M
-+	size = 64M
- }
- 
- image sdcard.img {
++# C23 changes meaning of empty argument prototypes like int (*)()
++# causing build failures, so force gnu99
++VDE2_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
++HOST_VDE2_CONF_ENV = CFLAGS="$(HOST_CFLAGS) -std=gnu99"
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
