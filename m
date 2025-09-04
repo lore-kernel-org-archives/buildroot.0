@@ -4,73 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15691CA1002
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 17:00:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB1C1CA1002
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 17:03:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF1126067F;
-	Thu,  4 Sep 2025 17:00:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A071F60675;
+	Thu,  4 Sep 2025 17:03:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kB6Nafx1m4po; Thu,  4 Sep 2025 17:00:41 +0000 (UTC)
+ id av6mJs2XmSoC; Thu,  4 Sep 2025 17:03:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 065826066C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D04FB60648
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 065826066C;
-	Thu,  4 Sep 2025 17:00:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id EF761AE8
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 17:00:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D04FB60648;
+	Thu,  4 Sep 2025 17:03:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1996E111
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 17:03:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DE73D6066C
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 17:00:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0B3CE401B3
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 17:03:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kD9dE3bnVoux for <buildroot@buildroot.org>;
- Thu,  4 Sep 2025 17:00:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E5D0160616
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5D0160616
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E5D0160616
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 17:00:38 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pSSxbuikWMFt for <buildroot@buildroot.org>;
+ Thu,  4 Sep 2025 17:03:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5C232401A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C232401A1
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5C232401A1
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 17:03:14 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
  (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id E3ED75FFB4;
- Thu,  4 Sep 2025 19:00:33 +0200 (CEST)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 1C28613F8B3;
+ Thu,  4 Sep 2025 19:03:10 +0200 (CEST)
 Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
  via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 04 Sep 2025 19:00:33 +0200
+ with HTTP (HTTP/1.0 POST); Thu, 04 Sep 2025 19:03:10 +0200
 MIME-Version: 1.0
-Date: Thu, 04 Sep 2025 19:00:33 +0200
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org, =?UTF-8?Q?J=C3=A9r=C3=B4me_Pouiller?=
- <jezz@sysmic.org>
-In-Reply-To: <20250829131304.1845147-2-thomas.petazzoni@bootlin.com>
-References: <20250829131304.1845147-1-thomas.petazzoni@bootlin.com>
- <20250829131304.1845147-2-thomas.petazzoni@bootlin.com>
+Date: Thu, 04 Sep 2025 19:03:10 +0200
+To: Fabio Estevam <festevam@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250829012913.2050830-1-festevam@gmail.com>
+References: <20250829012913.2050830-1-festevam@gmail.com>
 User-Agent: Webmail Free/1.6.11
-Message-ID: <ec1719278ff2340db021e159767b717f@free.fr>
+Message-ID: <2647a9a997ea870292be492981993273@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1757005236;
- bh=0uz3SA/jmUsSkoM96t/GA02Rjs4xJnXx2euRfUpcjIM=;
+ d=free.fr; s=smtp-20201208; t=1757005391;
+ bh=H+ffTobg2RdRX4lPyiE20pdZqgYqZ0a4zzuzjdb/P80=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=J9vK8A/O1ovaO+fVd+3tSCe44UWJ6cQYCma6bKnnvguW6Ewd+dtPQqwhJPCvAoaNz
- 6hNt8hD69PHc7f0PjCYD1Xwf/ARYyH0W5LgxbLFH3mxYR9f1nKdaLYziOlzDPs3uwo
- bE7nlMLm4BT7sNtaJKK6s9SWrbLuU8h1QOMyGfxdidJR9bkoyJfYP6QOxc0GvLey8d
- JhSdzLES1Fq8lPxfyyQSEtQCbfhOVo8Sn9Q9mULEPOFQEyr/Synw53nJhU0YD2+jl1
- 7y4RDfJGF2Cv7Kg8ByaL5NB4DtgcpqTcSlAnnjYIDcQlQmeFXYY8E8r2mQrla3woyp
- Rar3odb7/HWlQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=q8DMUtY/a+0OFMLiZ0qm6jzmS2bptc9tGa+5PZTvCNognKuayxFqBWaQ3Y7aq6U6e
+ k3r4HsdUh0kIMZLjs4gKn8ACCgtJeq5PaDA00uLN7CYqEtyQ9CzWHgHkbnngRkmQC0
+ NsO2ILhGsfkrSgY0R2l1N1beUJ44iHClkPbNWEc2AM4DDCH3w4sE+Y/8kSLe7BLLQh
+ kEUszrhiXptbYHWBNEaT+s+HnnJ0AIZtIBUjNDOBOY7fxCNlpAq1R8rLoB1C7db051
+ l5lx5dFa75nRTHS+qem6blCSUE1UpAypVAdOLlIy/2Ww0zN24xovcdFFIc8RRK2gm6
+ vrUxIR9scWVHA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=J9vK8A/O
-Subject: Re: [Buildroot] [PATCH 2/2] package/apitrace: bump to version 13
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=q8DMUtY/
+Subject: Re: [Buildroot] [PATCH] configs/imx8mm-evk_defconfig: Update kernel
+ and U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,30 +88,59 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 29/08/2025 15:13, Thomas Petazzoni via buildroot wrote:
-> We're bumping from version 10 to 13.
-> 
-> Version 11 doesn't really have release notes.
-> 
-> Version 12: https://github.com/apitrace/apitrace/releases/tag/12.0
-> 
-> Version 13: https://github.com/apitrace/apitrace/releases/tag/13.0
-> 
-> Patch 0001-thirdparty-libbacktrace-backtrace-h-include-config.h.patch
-> no longer makes sense: config.h no longer exists, and building with
-> musl works fine without it.
-> 
-> Both patches 0002 and 0003 were backport from upstream, so they can be
-> dropped.
-> 
-> We must switch from downloaded the auto-generated Github tarball to
-> fetching using Git, as fetching submodules is now mandatory to get
-> some bundled thirdparty libraries (yerk).
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Hi Fabio,
 
-Applied to next (after cherry-picking patch 1/2 from master).
-Thanks.
+Thanks for the patch!
+
+On 29/08/2025 03:29, Fabio Estevam wrote:
+> Update the kernel version to 6.12.43 and U-Boot to 2025.07.
+> 
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+>  configs/imx8mm-evk_defconfig | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/configs/imx8mm-evk_defconfig 
+> b/configs/imx8mm-evk_defconfig
+> index 00fe2fa76119..1af55040a7b8 100644
+> --- a/configs/imx8mm-evk_defconfig
+> +++ b/configs/imx8mm-evk_defconfig
+> @@ -10,7 +10,7 @@ 
+> BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+>  BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.16"
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.43"
+
+Since this defconfig has BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+it should also update hashes for uboot and kernel in
+board/freescale/imx8mm-evk/patches
+
+With this patch, doing a "make source" currently fail with:
+
+     ERROR: No hash found for linux-6.12.43.tar.xz
+
+Could you send an updated patch, please?
+
+>  BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>  BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-evk"
+> @@ -31,7 +31,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+>  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
+>  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mm_evk"
+>  BR2_TARGET_UBOOT_NEEDS_DTC=y
+>  BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+> --
+> 2.34.1
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
