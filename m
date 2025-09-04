@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97341CA1015
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:33:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7779CA1002
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:33:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 67E824057B;
-	Thu,  4 Sep 2025 16:33:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A29BD606E1;
+	Thu,  4 Sep 2025 16:33:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LB0psSXo414I; Thu,  4 Sep 2025 16:33:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1tKt0tx2p99F; Thu,  4 Sep 2025 16:33:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56E9D40563
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C368606CF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 56E9D40563;
-	Thu,  4 Sep 2025 16:33:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7C368606CF;
+	Thu,  4 Sep 2025 16:33:57 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 12CB0B69
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:40 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D6A2AE8
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BFC99400B7
+ by smtp2.osuosl.org (Postfix) with ESMTP id D01E640081
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MTIY1CWYlp2s for <buildroot@buildroot.org>;
+ id Jw9PwCu4ojVG for <buildroot@buildroot.org>;
  Thu,  4 Sep 2025 16:33:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 086AC40081
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1225640082
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 086AC40081
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1225640082
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0577A87EEF; Thu,  4 Sep 2025 16:33:35 +0000 (UTC)
+ id 1037987F4B; Thu,  4 Sep 2025 16:33:35 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 4 Sep 2025 14:04:14 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 07d12a41a817b8fb2009e8747ab907e0791e83e9
-X-Git-Newrev: dde5fe5637c7079c48e6eeb80375dacd6421aabe
+X-Git-Oldrev: dde5fe5637c7079c48e6eeb80375dacd6421aabe
+X-Git-Newrev: b2771c017c806bf301337e8af72d5c703d6c47b0
 X-Patchwork-Hint: ignore
-Message-Id: <20250904163335.0577A87EEF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x]
- configs/orangepi_one_plus: remove defconfig, broken
+Message-Id: <20250904163335.1037987F4B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] configs/pcengines_apu2:
+ remove defconfig, broken
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,225 +66,203 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dde5fe5637c7079c48e6eeb80375dacd6421aabe
+commit: https://git.buildroot.net/buildroot/commit/?id=b2771c017c806bf301337e8af72d5c703d6c47b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
 This defconfig no longer builds:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012274055
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012274139
+
+It is using the unmaintained, not even LTS 5.16 kernel, which no
+longer builds with recent toolchains.
 
 It has been broken for at least 2 months:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs?name=T%3Dorangepi_one_plus&kind=BUILD
+  https://gitlab.com/buildroot.org/buildroot/-/jobs?name=T%3Dpcengines_apu2&kind=BUILD
 
 Unless a fix is provided, this defconfig will be removed.
 
 Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012274055
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012274139
 
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: Jagan Teki <jagan@amarulasolutions.com>
-Cc: Meena Murthy <meena.murthy@amarulasolutions.com>
-Cc: Michael Trimarchi <michael@amarulasolutions.com>
+Cc: Danilo Bargen <mail@dbrgn.ch>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit d1eadf2455a7fbdda33676738d1724e96d9b43d2)
+(cherry picked from commit 3601fb6fef2a1c99dd265d963d046d065b208571)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- .checkpackageignore                            |  2 --
- DEVELOPERS                                     |  2 --
- board/orangepi/orangepi-one-plus/extlinux.conf |  4 ---
- board/orangepi/orangepi-one-plus/genimage.cfg  | 34 -----------------------
- board/orangepi/orangepi-one-plus/post-build.sh |  4 ---
- board/orangepi/orangepi-one-plus/readme.txt    | 37 --------------------------
- configs/orangepi_one_plus_defconfig            | 34 -----------------------
- 7 files changed, 117 deletions(-)
+ .checkpackageignore               |  1 -
+ DEVELOPERS                        |  2 --
+ board/pcengines/apu2/isolinux.cfg |  6 -----
+ board/pcengines/apu2/linux.config | 51 ---------------------------------------
+ board/pcengines/apu2/readme.txt   | 40 ------------------------------
+ configs/pcengines_apu2_defconfig  | 17 -------------
+ 6 files changed, 117 deletions(-)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index 694ad4b3b5..952320a8c2 100644
+index 952320a8c2..6e2ab4e2c6 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -45,7 +45,6 @@ board/olimex/a20_olinuxino/post-build.sh Shellcheck
- board/olimex/a33_olinuxino/post-build.sh Shellcheck
- board/olpc/post-build.sh Shellcheck
- board/orangepi/common/post-build.sh Shellcheck
--board/orangepi/orangepi-one-plus/post-build.sh Shellcheck
- board/orangepi/orangepi-zero/patches/linux/0001-ARM-dts-orange-pi-zero-interrupt-triggering-xr819.patch lib_patch.Upstream
- board/orangepi/orangepi-zero/patches/linux/0002-ARM-dts-orange-pi-zero-enable-spi-nor.patch lib_patch.Upstream
- board/orangepi/orangepi-zero/patches/linux/0003-ARM-dts-orange-pi-zero-enable-spidev.patch lib_patch.Upstream
-@@ -174,7 +173,6 @@ configs/olimex_a33_olinuxino_defconfig lib_defconfig.ForceCheckHash
- configs/olimex_a64_olinuxino_defconfig lib_defconfig.ForceCheckHash
- configs/olpc_xo175_defconfig lib_defconfig.ForceCheckHash
- configs/olpc_xo1_defconfig lib_defconfig.ForceCheckHash
--configs/orangepi_one_plus_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_pc2_defconfig lib_defconfig.ForceCheckHash
+@@ -177,7 +177,6 @@ configs/orangepi_pc2_defconfig lib_defconfig.ForceCheckHash
  configs/orangepi_zero_plus_defconfig lib_defconfig.ForceCheckHash
  configs/pc_x86_64_bios_defconfig lib_defconfig.ForceCheckHash
+ configs/pc_x86_64_efi_defconfig lib_defconfig.ForceCheckHash
+-configs/pcengines_apu2_defconfig lib_defconfig.ForceCheckHash
+ configs/pine64_defconfig lib_defconfig.ForceCheckHash
+ configs/pine64_pinecube_defconfig lib_defconfig.ForceCheckHash
+ configs/pine64_sopine_defconfig lib_defconfig.ForceCheckHash
 diff --git a/DEVELOPERS b/DEVELOPERS
-index c62f1a69e8..a141e6bb32 100644
+index a141e6bb32..818dd9deaf 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1488,7 +1488,6 @@ F:	board/bananapi/
- F:	board/engicam/
- F:	board/olimex/a33_olinuxino/
- F:	board/olimex/a64-olinuxino/
--F:	board/orangepi/orangepi-one-plus
- F:	board/orangepi/orangepi-zero-plus2/
- F:	board/pine64/
- F:	configs/amarula_vyasa_rk3288_defconfig
-@@ -1500,7 +1499,6 @@ F:	configs/engicam_imx6ul_geam_defconfig
- F:	configs/engicam_imx6ul_isiot_defconfig
- F:	configs/olimex_a33_olinuxino_defconfig
- F:	configs/olimex_a64_olinuxino_defconfig
--F:	configs/orangepi_one_plus_defconfig
- F:	configs/orangepi_zero_plus2_defconfig
- F:	configs/pine64_defconfig
- F:	configs/pine64_sopine_defconfig
-diff --git a/board/orangepi/orangepi-one-plus/extlinux.conf b/board/orangepi/orangepi-one-plus/extlinux.conf
+@@ -776,8 +776,6 @@ N:	Daniel Sangue <daniel.sangue@sangue.ch>
+ F:	package/libftdi1/
+ 
+ N:	Danilo Bargen <mail@dbrgn.ch>
+-F:	board/pcengines/apu2/
+-F:	configs/pcengines_apu2_defconfig
+ F:	package/tealdeer/
+ 
+ N:	Danomi Manchego <danomimanchego123@gmail.com>
+diff --git a/board/pcengines/apu2/isolinux.cfg b/board/pcengines/apu2/isolinux.cfg
 deleted file mode 100644
-index f573aa17d0..0000000000
---- a/board/orangepi/orangepi-one-plus/extlinux.conf
+index cb19b5a89e..0000000000
+--- a/board/pcengines/apu2/isolinux.cfg
 +++ /dev/null
-@@ -1,4 +0,0 @@
--label linux
--  kernel /Image
--  devicetree /sun50i-h6-orangepi-one-plus.dtb
--  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
-diff --git a/board/orangepi/orangepi-one-plus/genimage.cfg b/board/orangepi/orangepi-one-plus/genimage.cfg
+@@ -1,6 +0,0 @@
+-serial 0 115200
+-default 1
+-label 1
+-      kernel __KERNEL_PATH__
+-      initrd __INITRD_PATH__
+-      append root=/dev/sr0 console=ttyS0,115200n8
+diff --git a/board/pcengines/apu2/linux.config b/board/pcengines/apu2/linux.config
 deleted file mode 100644
-index 80b83b0215..0000000000
---- a/board/orangepi/orangepi-one-plus/genimage.cfg
+index 5e3593b018..0000000000
+--- a/board/pcengines/apu2/linux.config
 +++ /dev/null
-@@ -1,34 +0,0 @@
--image boot.vfat {
--	vfat {
--		files = {
--			"Image",
--			"sun50i-h6-orangepi-one-plus.dtb",
--			"extlinux"
--		}
--	}
--
--	size = 64M
--}
--
--image sdcard.img {
--	hdimage {
--	}
--
--	partition u-boot {
--		in-partition-table = "no"
--		image = "u-boot-sunxi-with-spl.bin"
--		offset = 8K
--		size = 1016K # 1MB - 8KB
--	}
--
--	partition boot {
--		partition-type = 0xC
--		bootable = "true"
--		image = "boot.vfat"
--	}
--
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext4"
--	}
--}
-diff --git a/board/orangepi/orangepi-one-plus/post-build.sh b/board/orangepi/orangepi-one-plus/post-build.sh
-deleted file mode 100755
-index ec20fca7d9..0000000000
---- a/board/orangepi/orangepi-one-plus/post-build.sh
-+++ /dev/null
-@@ -1,4 +0,0 @@
--#!/bin/sh
--BOARD_DIR="$(dirname $0)"
--
--install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-diff --git a/board/orangepi/orangepi-one-plus/readme.txt b/board/orangepi/orangepi-one-plus/readme.txt
+@@ -1,51 +0,0 @@
+-CONFIG_SYSVIPC=y
+-CONFIG_CGROUPS=y
+-CONFIG_BLK_DEV_INITRD=y
+-CONFIG_SMP=y
+-CONFIG_HYPERVISOR_GUEST=y
+-CONFIG_PARAVIRT=y
+-CONFIG_MODULES=y
+-CONFIG_MODULE_UNLOAD=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_INET=y
+-# CONFIG_WIRELESS is not set
+-CONFIG_DEVTMPFS=y
+-CONFIG_DEVTMPFS_MOUNT=y
+-CONFIG_VIRTIO_BLK=y
+-CONFIG_BLK_DEV_SD=y
+-CONFIG_SCSI_VIRTIO=y
+-CONFIG_ATA=y
+-CONFIG_SATA_AHCI=y
+-CONFIG_ATA_PIIX=y
+-CONFIG_NETDEVICES=y
+-CONFIG_VIRTIO_NET=y
+-CONFIG_IGB=y
+-CONFIG_NE2K_PCI=y
+-CONFIG_8139CP=y
+-# CONFIG_WLAN is not set
+-CONFIG_INPUT_EVDEV=y
+-CONFIG_SERIAL_8250=y
+-CONFIG_SERIAL_8250_CONSOLE=y
+-CONFIG_VIRTIO_CONSOLE=y
+-CONFIG_HW_RANDOM_VIRTIO=m
+-CONFIG_DRM=y
+-CONFIG_SOUND=y
+-CONFIG_SND=y
+-# CONFIG_SND_PCI is not set
+-CONFIG_USB=y
+-CONFIG_USB_XHCI_HCD=y
+-CONFIG_USB_EHCI_HCD=y
+-CONFIG_USB_UHCI_HCD=y
+-CONFIG_USB_STORAGE=y
+-CONFIG_VIRTIO_PCI=y
+-CONFIG_VIRTIO_BALLOON=y
+-CONFIG_VIRTIO_INPUT=y
+-CONFIG_VIRTIO_MMIO=y
+-CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
+-CONFIG_EXT4_FS=y
+-CONFIG_AUTOFS4_FS=y
+-CONFIG_TMPFS=y
+-CONFIG_TMPFS_POSIX_ACL=y
+-CONFIG_UNWINDER_FRAME_POINTER=y
+diff --git a/board/pcengines/apu2/readme.txt b/board/pcengines/apu2/readme.txt
 deleted file mode 100644
-index 547f874288..0000000000
---- a/board/orangepi/orangepi-one-plus/readme.txt
+index 9da1b802cc..0000000000
+--- a/board/pcengines/apu2/readme.txt
 +++ /dev/null
-@@ -1,37 +0,0 @@
+@@ -1,40 +0,0 @@
 -Intro
 -=====
 -
--This default configuration will allow you to start experimenting with the
--buildroot environment for the Orangepi One Plus. With the current configuration
--it will bring-up the board, and allow access through the serial console.
+-This is a board configuration for the apu2 platform by PC Engines.
 -
--Orangepi One Plus link:
--http://www.orangepi.org/html/hardWare/computerAndMicrocontrollers/details/Orange-Pi-One-Plus.html
+-https://pcengines.ch/apu2.htm
 -
--Wiki link:
--https://openedev.amarulasolutions.com/display/ODWIKI/Orangepi+One+Plus
--
--This configuration uses U-Boot mainline and kernel mainline.
+-Since the apu2 does not have any graphical output, the default configuration
+-will ensure that the kernel output as well as the login prompt will be sent to
+-the serial port.
 -
 -How to build
 -============
 -
--    $ make orangepi_one_plus_defconfig
+-The provided defconfig creates a hybrid isolinux image that can be booted from
+-either an USB stick or a CD.
+-
+-    $ make pcengines_apu2_defconfig
 -    $ make
 -
--Note: you will need access to the internet to download the required
--sources.
+-How to write to an USB stick
+-============================
 -
--How to write the SD card
--========================
+-Once the build process is finished you will have an image
+-called "rootfs.iso9660" in the output/images/ directory.
 -
--Once the build process is finished you will have an image called "sdcard.img"
--in the output/images/ directory.
+-Copy the bootable "rootfs.iso9660" onto the USB stick with "dd":
 -
--Copy the bootable "sdcard.img" onto an SD card with "dd":
+-    $ sudo dd if=output/images/rootfs.iso9660 of=/dev/sdX bs=1M conv=fsync
+-    $ sudo sync
 -
--  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
--  $ sudo sync
+-How to connect to the apu2
+-==========================
 -
--Insert the micro SDcard in your Orangepi One Plus and power it up. The console
--is on the serial line, 115200 8N1.
-diff --git a/configs/orangepi_one_plus_defconfig b/configs/orangepi_one_plus_defconfig
+-Connect to the DB9 serial port of the apu2 board (either directly or through a
+-USB adapter) with a baudrate of 115200.
+-
+-For example with miniterm (part of pyserial):
+-
+-    $ miniterm.py -f direct /dev/ttyUSB0 115200
+diff --git a/configs/pcengines_apu2_defconfig b/configs/pcengines_apu2_defconfig
 deleted file mode 100644
-index 8de158b0b1..0000000000
---- a/configs/orangepi_one_plus_defconfig
+index b55d55fe2e..0000000000
+--- a/configs/pcengines_apu2_defconfig
 +++ /dev/null
-@@ -1,34 +0,0 @@
--BR2_aarch64=y
--BR2_ARM_FPU_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
--BR2_TARGET_GENERIC_ISSUE="Welcome to Orangepi One+"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepi-one-plus/post-build.sh"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-one-plus/genimage.cfg"
+@@ -1,17 +0,0 @@
+-BR2_x86_64=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
+-BR2_TARGET_GENERIC_HOSTNAME="apu2"
+-BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+-BR2_SYSTEM_DHCP="eth0"
 -BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,amarula,linux-amarula,h6-v1.0b)/linux-amarula_h6-v1.0b.tar.gz"
--BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h6-orangepi-one-plus"
--BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.16"
+-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pcengines/apu2/linux.config"
+-BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
 -BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.0"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_h6"
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.09"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_one_plus"
--BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
--BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
--BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
+-BR2_TARGET_ROOTFS_ISO9660=y
+-BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="board/pcengines/apu2/isolinux.cfg"
+-BR2_TARGET_ROOTFS_ISO9660_HYBRID=y
+-# BR2_TARGET_ROOTFS_TAR is not set
+-BR2_TARGET_SYSLINUX=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
