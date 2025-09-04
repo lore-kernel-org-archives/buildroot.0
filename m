@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4CBACA101C
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:34:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7884ECA1013
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:34:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7CEF86073B;
-	Thu,  4 Sep 2025 16:34:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 30B8E60747;
+	Thu,  4 Sep 2025 16:34:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nnDE5DgeCxZE; Thu,  4 Sep 2025 16:34:20 +0000 (UTC)
+ id sDLnuQZE7A4A; Thu,  4 Sep 2025 16:34:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 868646075E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29E6960742
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 868646075E;
-	Thu,  4 Sep 2025 16:34:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 30AD9AE8
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 29E6960742;
+	Thu,  4 Sep 2025 16:34:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0CF07106
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0188B40094
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5977760643
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VaDcr4HXK2fP for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UNbzeJwVIV7a for <buildroot@buildroot.org>;
  Thu,  4 Sep 2025 16:33:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E9A34008C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6DF1C6063C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5E9A34008C
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6DF1C6063C
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5C96687EEF; Thu,  4 Sep 2025 16:33:35 +0000 (UTC)
+ id 6BE9B87F4B; Thu,  4 Sep 2025 16:33:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Sep 2025 14:04:15 +0200
+Date: Thu, 4 Sep 2025 14:19:06 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 4c1b9c2fe7ac49bc4651caf94fa947245473dcbb
-X-Git-Newrev: afec8ee86a16fc6551bd04b0bc2f35e8c47a5ea9
+X-Git-Oldrev: 54d74ee95bde567d27c05eade14b2a4b17d8f861
+X-Git-Newrev: 136d4d8355c124937d9bbaaa5a0800517cc804a6
 X-Patchwork-Hint: ignore
-Message-Id: <20250904163335.5C96687EEF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] configs/ts7680: remove
- defconfig, broken
+Message-Id: <20250904163336.6BE9B87F4B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/lighttpd:
+ security bump to 1.4.81
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,180 +61,114 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Titouan Christophe via buildroot <buildroot@buildroot.org>
 Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2366647641075779074=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2366647641075779074==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=afec8ee86a16fc6551bd04b0bc2f35e8c47a5ea9
+commit: https://git.buildroot.net/buildroot/commit/?id=136d4d8355c124937d9bbaaa5a0800517cc804a6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-This defconfig no longer builds:
+News:
+- https://www.lighttpd.net/2025/8/13/1.4.80/
+  - detect and issue error trace for HTTP/2 MadeYouReset VU#767506 CVE-2025-8671
+- https://www.lighttpd.net/2025/8/17/1.4.81/
+  - security: fix to reject disallowed trailers
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/11026774180
+See Changes from 1.4.79:
 
-It has been broken for at least 2 months:
+[build] remove references to libev; no longer used
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs?name=T%3Dts7680&kind=BUILD
+So drop here as well.
 
-It uses the outdated Linux 4.9 kernel, which is no longer maintained,
-and no longer builds with recent toolchains.
-
-Unless a fix is provided, this defconfig will be removed.
-
-Fixes:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/11026774180
-
-Cc: Julien Grossholtz <julien.grossholtz@openest.io>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit a933920ff0d28947f5f6d4f6b6be04f113ad960c)
+(cherry picked from commit 0d643a8636420a85512aae69932bba2fbe9e5829)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- .checkpackageignore                   |  1 -
- DEVELOPERS                            |  2 --
- board/technologic/ts7680/genimage.cfg | 14 ----------
- board/technologic/ts7680/readme.txt   | 50 -----------------------------------
- configs/ts7680_defconfig              | 16 -----------
- 5 files changed, 83 deletions(-)
+ Config.in.legacy               | 6 ++++++
+ package/lighttpd/Config.in     | 6 ------
+ package/lighttpd/lighttpd.hash | 8 ++++----
+ package/lighttpd/lighttpd.mk   | 9 +--------
+ 4 files changed, 11 insertions(+), 18 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 7fe0a539d9..1fc905e8c9 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -201,7 +201,6 @@ configs/stm32mp157c_odyssey_defconfig lib_defconfig.ForceCheckHash
- configs/terasic_de10nano_cyclone5_defconfig lib_defconfig.ForceCheckHash
- configs/ts4900_defconfig lib_defconfig.ForceCheckHash
- configs/ts5500_defconfig lib_defconfig.ForceCheckHash
--configs/ts7680_defconfig lib_defconfig.ForceCheckHash
- configs/uevm5432_defconfig lib_defconfig.ForceCheckHash
- configs/visionfive_defconfig lib_defconfig.ForceCheckHash
- configs/wandboard_defconfig lib_defconfig.ForceCheckHash
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e6f4fff9b3..c3b569d7b2 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1787,9 +1787,7 @@ F:	package/qt5/
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 5c31c24fbd..5907a91a09 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
  
- N:	Julien Grossholtz <julien.grossholtz@openest.io>
- F:	board/raspberrypi/
--F:	board/technologic/ts7680/
- F:	configs/raspberrypizero2w_defconfig
--F:	configs/ts7680_defconfig
- F:	package/paho-mqtt-c
+ comment "Legacy options removed in 2025.05.2"
  
- N:	Julien Olivain <ju.o@free.fr>
-diff --git a/board/technologic/ts7680/genimage.cfg b/board/technologic/ts7680/genimage.cfg
-deleted file mode 100644
-index 58a63edd1a..0000000000
---- a/board/technologic/ts7680/genimage.cfg
-+++ /dev/null
-@@ -1,14 +0,0 @@
--image sdcard.img {
--	hdimage {
--	}
++config BR2_PACKAGE_LIGHTTPD_LIBEV
++	bool "lighttpd removed libev support"
++	select BR2_LEGACY
++	help
++	  Lighttpd 1.4.80 removed optional libev support.
++
+ config BR2_PACKAGE_THTTPD
+ 	bool "thttpd has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
+index 1a9a9a277d..fe2c7a2815 100644
+--- a/package/lighttpd/Config.in
++++ b/package/lighttpd/Config.in
+@@ -67,12 +67,6 @@ config BR2_PACKAGE_LIGHTTPD_LDAP
+ comment "ldap support needs a toolchain w/ wchar"
+ 	depends on !BR2_USE_WCHAR
+ 
+-config BR2_PACKAGE_LIGHTTPD_LIBEV
+-	bool "libev support"
+-	select BR2_PACKAGE_LIBEV
+-	help
+-	  Enable libev support for lighttpd fdevent handlers.
 -
--	partition unused {
--		size = 512
--	}
+ config BR2_PACKAGE_LIGHTTPD_LUA
+ 	bool "lua support"
+ 	depends on BR2_PACKAGE_LUA
+diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
+index 4adbd08648..a23af84c28 100644
+--- a/package/lighttpd/lighttpd.hash
++++ b/package/lighttpd/lighttpd.hash
+@@ -1,6 +1,6 @@
+-# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.79.sha512sum
+-sha512  e0f1bb2cfca5e81001ea30d13f088425dfc7acbec924ecddf438eb6326ab3158a61c6c4aaee0b68a90666d1cb987ce94b1f6a48afd92485cc995db5b58265f83  lighttpd-1.4.79.tar.xz
+-# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.79.sha256sum
+-sha256  3b29a625b3ad88702d1fea4f5f42bb7d87488f2e4efc977d7f185329ca6084bd  lighttpd-1.4.79.tar.xz
++# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.81.sha512sum
++sha512  10c24b1c1ce1aa1d826a426868223393eb81d7c0fbcc0b4f032b082a14593e0364228a5275e1440ed8782a2e78f0ded7cf72bc6642e5528bc82defcefab9301b  lighttpd-1.4.81.tar.xz
++# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.81.sha256sum
++sha256  d7d42c3fd2fd94b63c915aa7d18f4da3cac5937ddba33e909f81cf50842a5840  lighttpd-1.4.81.tar.xz
+ # Locally calculated
+ sha256  5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 5337042340..71c860a31a 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).79
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).81
+ LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+ LIGHTTPD_LICENSE = BSD-3-Clause
+@@ -76,13 +76,6 @@ else
+ LIGHTTPD_CONF_OPTS += -Dwith_ldap=disabled
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIGHTTPD_LIBEV),y)
+-LIGHTTPD_DEPENDENCIES += libev
+-LIGHTTPD_CONF_OPTS += -Dwith_libev=enabled
+-else
+-LIGHTTPD_CONF_OPTS += -Dwith_libev=disabled
+-endif
 -
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext4"
--		size = 256M
--	}
--}
-diff --git a/board/technologic/ts7680/readme.txt b/board/technologic/ts7680/readme.txt
-deleted file mode 100644
-index 3f703330bf..0000000000
---- a/board/technologic/ts7680/readme.txt
-+++ /dev/null
-@@ -1,50 +0,0 @@
--Technologic Systems TS-7680 SBC
--===============================
--
--This document explains how to set up a basic Buildroot system for
--the Technologic Systems TS-7680 Single Board Computer.
--
--The TS-7680 SBC is based on the Freescale i.MX286 ARM ARM926EJ-S
--running at 454MHz. The TS-7680 features are 10/100 Ethernet ports,
--Wi-Fi, microSD card, eMMC, NOR Flash, USB host port, CAN ports,
--relays and ADC/DAC. More details on the board here:
--https://docs.embeddedTS.com/TS-7680
--
--The TS-7680 uses a 4.9 Linux kernel provided by Technologic Systems.
--
--To build the default configuration you only have to run:
--
--  $ make ts7680_defconfig
--  $ make
--
--The output looks like:
--output/images
--├── imx28-ts7680.dtb
--├── rootfs.ext2
--├── rootfs.ext4 -> rootfs.ext2
--├── rootfs.tar
--├── sdcard.img
--└── uImage
--
--The provided genimage configuration generates an image file containing
--two partitions. The first one is unused, but mandatory as the
--TS-7680 built-in bootloader loads the Linux uImage from the /boot
--directory in the second partition. The second partition contains the
--rootfs with the Linux uImage into the /boot directory.
--
--  $ fdisk output/images/sdcard.img
--  output/images/sdcard.img1          1      1       1  512B  0 Empty
--  output/images/sdcard.img2          2 524289  524288  256M 83 Linux
--
--This image can be directly written to an SD card.
--
--    $ sudo dd if=output/images/sdcard.img of=/dev/mmcblk0
--
--To boot with Buildroot, insert this SD card on the board, make sure
--the SD jumper is present and the U-Boot jumper is not.
--
--The bootloader comes pre-flashed on the board on an SPI flash. Since
--updating the bootloader is risky and not trivial, it is not included
--in the Buildroot defconfig. Refer to
--https://docs.embeddedts.com/TS-7680#U-Boot for details on
--which U-Boot config to use and how to flash it.
-diff --git a/configs/ts7680_defconfig b/configs/ts7680_defconfig
-deleted file mode 100644
-index 9e058b1d78..0000000000
---- a/configs/ts7680_defconfig
-+++ /dev/null
-@@ -1,16 +0,0 @@
--BR2_arm=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/technologic/ts7680/genimage.cfg"
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,embeddedTS,linux-4.9.y,v4.9.311-ts)/linux-v4.9.311-ts.tar.gz"
--BR2_LINUX_KERNEL_DEFCONFIG="ts_imx28"
--BR2_LINUX_KERNEL_UIMAGE=y
--BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx28-ts7680"
--BR2_LINUX_KERNEL_INSTALL_TARGET=y
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_PACKAGE_HOST_GENIMAGE=y
-
---===============2366647641075779074==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_LUA),y)
+ LIGHTTPD_DEPENDENCIES += lua
+ LIGHTTPD_CONF_OPTS += -Dwith_lua=true
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2366647641075779074==--
