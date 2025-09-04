@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 274ADCAC586
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:18:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA415CAC588
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:18:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EC35C607DA;
-	Mon,  8 Sep 2025 14:18:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 91FB38055B;
+	Mon,  8 Sep 2025 14:18:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dl7TxmNwIIPD; Mon,  8 Sep 2025 14:18:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8pQiZov36LVK; Mon,  8 Sep 2025 14:18:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 153B9607A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 427BF80988
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 153B9607A0;
-	Mon,  8 Sep 2025 14:18:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 427BF80988;
+	Mon,  8 Sep 2025 14:18:35 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7FCC7234
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:44 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 71C6FCA
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 64A8440074
+ by smtp2.osuosl.org (Postfix) with ESMTP id 404A340055
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NhJChGfuQNhn for <buildroot@buildroot.org>;
+ id ufhM8ayOJaan for <buildroot@buildroot.org>;
  Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B06B4007B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7AAF240085
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0B06B4007B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7AAF240085
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0794980DA7; Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
+ id 77AE880DA7; Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Sep 2025 18:58:44 +0200
+Date: Thu, 4 Sep 2025 21:32:12 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a7216460a3afc07b5a263e54a20158eccb2affa4
-X-Git-Newrev: bf55f4713e1ba877183b9e31469df5d3823ec4c0
+X-Git-Oldrev: 7bf44f11e70e66bdefc39c78f79a7b7e07c24fc4
+X-Git-Newrev: aa6b9c979dfb4a3a55109d819cac66924cde5913
 X-Patchwork-Hint: ignore
-Message-Id: <20250908141631.0794980DA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/apitrace: fix build with GCC 15.x
+Message-Id: <20250908141631.77AE880DA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dust: bump version to 1.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,94 +60,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1497090811296335717=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1497090811296335717==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=bf55f4713e1ba877183b9e31469df5d3823ec4c0
+commit: https://git.buildroot.net/buildroot/commit/?id=aa6b9c979dfb4a3a55109d819cac66924cde5913
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+Last time dust was updated, we could not go beyond 1.1.2 since
+1.2.0 requires Rust edition 2024. Now that Rust 1.88 is available,
+this condition is satisfied and we can bump to 1.2.3.
 
-  /home/thomas/buildroot/buildroot/outputs/all/build/apitrace-10.0/retrace/metric_writer.cpp:50:70: error: ‘uint64_t’ does not name a type
-   50 |         case CNT_NUM_UINT64: std::cout << "\t" << *(reinterpret_cast<uint64_t*>(data)); break;
-      |                                                                      ^~~~~~~~
+Release:
+https://github.com/bootandy/dust/releases/tag/v1.2.3
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/6e4/6e4e841b4f0be29956fdfad43a406d2dab3003f3/build-end.log
-
-Patch is backported from upstream.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a4b0913280b95b62cd74fdc5ff0b25e3afa2c529)
+Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/apitrace/0003-Explicit-header-stdint.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ package/dust/dust.hash | 2 +-
+ package/dust/dust.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/apitrace/0003-Explicit-header-stdint.patch b/package/apitrace/0003-Explicit-header-stdint.patch
-new file mode 100644
-index 0000000000..efd7522314
---- /dev/null
-+++ b/package/apitrace/0003-Explicit-header-stdint.patch
-@@ -0,0 +1,42 @@
-+From 3cc8956995d6d702a2c3ef0d7f91500c6accbfad Mon Sep 17 00:00:00 2001
-+From: Nicolas PARLANT <nicolas.parlant@parhuet.fr>
-+Date: Fri, 21 Mar 2025 05:02:23 +0000
-+Subject: [PATCH] Explicit header: stdint
-+
-+Fix building with GCC-15. It no longer includes it by default.
-+
-+Signed-off-by: Nicolas PARLANT <nicolas.parlant@parhuet.fr>
-+Upstream: 952bad1469ea747012bdc48c48993bd5f13eec04
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ frametrim/ft_dependecyobject.hpp | 1 +
-+ retrace/metric_writer.cpp        | 1 +
-+ 2 files changed, 2 insertions(+)
-+
-+diff --git a/frametrim/ft_dependecyobject.hpp b/frametrim/ft_dependecyobject.hpp
-+index cf1885f1..53b910d0 100644
-+--- a/frametrim/ft_dependecyobject.hpp
-++++ b/frametrim/ft_dependecyobject.hpp
-+@@ -28,6 +28,7 @@
-+ #pragma once
-+ 
-+ #include "ft_tracecall.hpp"
-++#include <stdint.h>
-+ 
-+ namespace frametrim {
-+ 
-+diff --git a/retrace/metric_writer.cpp b/retrace/metric_writer.cpp
-+index e923ed1d..4e4ce748 100644
-+--- a/retrace/metric_writer.cpp
-++++ b/retrace/metric_writer.cpp
-+@@ -24,6 +24,7 @@
-+  **************************************************************************/
-+ 
-+ #include <iostream>
-++#include <stdint.h>
-+ 
-+ #include "metric_writer.hpp"
-+ 
-+-- 
-+2.50.1
-+
-
---===============1497090811296335717==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/dust/dust.hash b/package/dust/dust.hash
+index a25176a9dd..83b01447b6 100644
+--- a/package/dust/dust.hash
++++ b/package/dust/dust.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  06cb47200dce72a51ceebc5fb97094b20afacf6c303758540809808f24e59435  dust-1.1.2-cargo4.tar.gz
++sha256  275c2d7bd06205588b7e20e4b478e0df7213f426a1441923e3f2dfaa80cf4828  dust-1.2.3-cargo4.tar.gz
+ sha256  aee6e2d13d3a55c7881630c09b41ca7b3b44bb1437b5d36695d22decc3655160  LICENSE
+diff --git a/package/dust/dust.mk b/package/dust/dust.mk
+index a6b6f43c40..e83d15c95c 100644
+--- a/package/dust/dust.mk
++++ b/package/dust/dust.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DUST_VERSION = 1.1.2
++DUST_VERSION = 1.2.3
+ DUST_SITE = $(call github,bootandy,dust,v$(DUST_VERSION))
+ DUST_LICENSE = APACHE-2.0
+ DUST_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1497090811296335717==--
