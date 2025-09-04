@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E134CA1002
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:14:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEAEACA1015
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:14:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D610A8082A;
-	Thu,  4 Sep 2025 16:14:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 85938606BA;
+	Thu,  4 Sep 2025 16:14:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o25FUMLZZtug; Thu,  4 Sep 2025 16:14:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Faur0rwfXpxM; Thu,  4 Sep 2025 16:14:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F190480765
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7D21606BB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F190480765;
-	Thu,  4 Sep 2025 16:14:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C7D21606BB;
+	Thu,  4 Sep 2025 16:14:49 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 01AE3AE8
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:14:14 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EE1E106
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:14:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B533280780
+ by smtp1.osuosl.org (Postfix) with ESMTP id E755680773
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jpQOyIYP1k7S for <buildroot@buildroot.org>;
- Thu,  4 Sep 2025 16:13:53 +0000 (UTC)
+ id reWg7ddCykCn for <buildroot@buildroot.org>;
+ Thu,  4 Sep 2025 16:13:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B1D58079B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77F9980772
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9B1D58079B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 77F9980772
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9974987F46; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
+ id 763F187F44; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 4 Sep 2025 13:57:24 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 89f5bf04064105f7745223cd7082b2448fc26005
-X-Git-Newrev: ba1b5c41ce2899705c43015e84237ccca7d2553b
+X-Git-Oldrev: 8761f5ed7bf1b03698535483ecd66944e90d47e6
+X-Git-Newrev: 25cc2a6f5b425997cf0a257d4437451379a62f39
 X-Patchwork-Hint: ignore
-Message-Id: <20250904161349.9974987F46@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] board/zynqmp: increase
- vfat partition to 64M
+Message-Id: <20250904161349.763F187F44@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] Reapply "package/ffmpeg:
+ add support for pulseaudio"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,43 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba1b5c41ce2899705c43015e84237ccca7d2553b
+commit: https://git.buildroot.net/buildroot/commit/?id=25cc2a6f5b425997cf0a257d4437451379a62f39
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Now that the qspi.bin file is included for zynqmp images, the 32M vfat
-partition is getting dangerously close to being full.
+This reverts commit fecc337d21f337a30ef7f9f448683d99c01fc245,
+re-adding optional support for pulseuadio in ffmpeg.
 
-In the process of bumping Linux kernel 6.12.10 to 6.12.40, the size of the
-default Linux kernel Image file for zynqmp products is increasing from 23.4M
-to 26.9M. This is leaving less than 1M of free space in the vfat partition
-meaning users may unknowingly exceed the 32M size by just adding Linux kernel
-configs.
+This is possible now that the circular dependency:
 
-To avoid potential problems, this patch doubles the size of the vfat partition
-to 64M, which should be plenty of space for any configuration.
+  pulseaudio -> libsoxr -> ffmpeg -> pulseaudio
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit c7a45b8302663b0c3ec4ea1e9073b68cd1676cab)
+has been broken between libsoxr and ffmpeg.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 8db836d2924ca50269f4a2de199cce19cab5a2d7)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- board/zynqmp/genimage.cfg | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ffmpeg/ffmpeg.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/board/zynqmp/genimage.cfg b/board/zynqmp/genimage.cfg
-index 0a6aea7a29..193aff2a2d 100644
---- a/board/zynqmp/genimage.cfg
-+++ b/board/zynqmp/genimage.cfg
-@@ -12,7 +12,7 @@ image boot.vfat {
- 		}
- 	}
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 8ee45a8034..0211c35afb 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -92,6 +92,13 @@ else
+ FFMPEG_CONF_OPTS += --disable-libjack
+ endif
  
--	size = 32M
-+	size = 64M
- }
- 
- image sdcard.img {
++ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
++FFMPEG_DEPENDENCIES += pulseaudio
++FFMPEG_CONF_OPTS += --enable-libpulse
++else
++FFMPEG_CONF_OPTS += --disable-libpulse
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBV4L),y)
+ FFMPEG_DEPENDENCIES += libv4l
+ FFMPEG_CONF_OPTS += --enable-libv4l2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
