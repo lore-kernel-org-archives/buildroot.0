@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34CDECA1015
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:14:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A5B0CA101C
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:14:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0F4D3403E4;
-	Thu,  4 Sep 2025 16:14:16 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2GRVppVoxSyT; Thu,  4 Sep 2025 16:14:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B5894040C
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B5894040C;
-	Thu,  4 Sep 2025 16:14:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 12519106
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EA144807A5
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 542FE80773;
+	Thu,  4 Sep 2025 16:14:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IJ7l1oV0YOmI for <buildroot@buildroot.org>;
+ id 0Aa8d-j31pj5; Thu,  4 Sep 2025 16:14:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DE0B8079D
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2DE0B8079D;
+	Thu,  4 Sep 2025 16:14:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 02E54AE8
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2A26C8077D
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9P81BIaJMnY8 for <buildroot@buildroot.org>;
  Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 604198077D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32AAF80776
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 604198077D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 32AAF80776
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5E17B8617D; Thu,  4 Sep 2025 16:13:48 +0000 (UTC)
+ id 30B3B87F0E; Thu,  4 Sep 2025 16:13:48 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 4 Sep 2025 13:57:23 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 14a3ed05f3569825fe7fb53e20796ae138daa0a5
-X-Git-Newrev: fe80c626d43df3182c907e05874639a2df6d5494
+X-Git-Oldrev: b5f10141e896b35a0b1f2e575e35631c210bf152
+X-Git-Newrev: 35488a2f875a54242105ffc751e661502d5ce78d
 X-Patchwork-Hint: ignore
-Message-Id: <20250904161348.5E17B8617D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] configs/rock64: remove
- defconfig, broken
+Message-Id: <20250904161348.30B3B87F0E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ configs/orangepi_one_plus: remove defconfig, broken
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,332 +61,231 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Titouan Christophe via buildroot <buildroot@buildroot.org>
 Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1902656407821007198=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1902656407821007198==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=fe80c626d43df3182c907e05874639a2df6d5494
+commit: https://git.buildroot.net/buildroot/commit/?id=35488a2f875a54242105ffc751e661502d5ce78d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
 This defconfig no longer builds:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/11026769723
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012274055
 
 It has been broken for at least 2 months:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs?name=T%3Drock64&kind=BUILD
-
-The old u-boot-2020.07-rc4 no longer builds.
+  https://gitlab.com/buildroot.org/buildroot/-/jobs?name=T%3Dorangepi_one_plus&kind=BUILD
 
 Unless a fix is provided, this defconfig will be removed.
 
 Fixes:
 
-    https://gitlab.com/buildroot.org/buildroot/-/jobs/11026769723
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012274055
 
-Cc: Michał Łyszczek <michal.lyszczek@bofc.pl>
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: Jagan Teki <jagan@amarulasolutions.com>
+Cc: Meena Murthy <meena.murthy@amarulasolutions.com>
+Cc: Michael Trimarchi <michael@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit 83af501540b8a3f48fca1bacdc3ec11bd7abb9fe)
+(cherry picked from commit d1eadf2455a7fbdda33676738d1724e96d9b43d2)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- .checkpackageignore                                |  3 -
- DEVELOPERS                                         |  2 -
- board/pine64/rock64/extlinux.conf                  |  4 -
- board/pine64/rock64/genimage.cfg                   | 23 ------
- ...e-rk3328-needs-itb-image-to-boot-properly.patch | 34 --------
- board/pine64/rock64/post-build.sh                  |  9 --
- board/pine64/rock64/readme.txt                     | 95 ----------------------
- configs/rock64_defconfig                           | 39 ---------
- 8 files changed, 209 deletions(-)
+ .checkpackageignore                            |  2 --
+ DEVELOPERS                                     |  2 --
+ board/orangepi/orangepi-one-plus/extlinux.conf |  4 ---
+ board/orangepi/orangepi-one-plus/genimage.cfg  | 34 -----------------------
+ board/orangepi/orangepi-one-plus/post-build.sh |  4 ---
+ board/orangepi/orangepi-one-plus/readme.txt    | 37 --------------------------
+ configs/orangepi_one_plus_defconfig            | 34 -----------------------
+ 7 files changed, 117 deletions(-)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index 645281fe9e..02d0ddb9f0 100644
+index 1a8fe383cf..7457749c62 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -49,8 +49,6 @@ board/orangepi/orangepi-zero/patches/linux/0001-ARM-dts-orange-pi-zero-interrupt
+@@ -45,7 +45,6 @@ board/olimex/a20_olinuxino/post-build.sh Shellcheck
+ board/olimex/a33_olinuxino/post-build.sh Shellcheck
+ board/olpc/post-build.sh Shellcheck
+ board/orangepi/common/post-build.sh Shellcheck
+-board/orangepi/orangepi-one-plus/post-build.sh Shellcheck
+ board/orangepi/orangepi-zero/patches/linux/0001-ARM-dts-orange-pi-zero-interrupt-triggering-xr819.patch lib_patch.Upstream
  board/orangepi/orangepi-zero/patches/linux/0002-ARM-dts-orange-pi-zero-enable-spi-nor.patch lib_patch.Upstream
  board/orangepi/orangepi-zero/patches/linux/0003-ARM-dts-orange-pi-zero-enable-spidev.patch lib_patch.Upstream
- board/orangepi/orangepi-zero/patches/linux/0004-ARM-dts-orange-pi-zero-enable-uart.patch lib_patch.Upstream
--board/pine64/rock64/patches/uboot/0001-Makefile-rk3328-needs-itb-image-to-boot-properly.patch lib_patch.Upstream
--board/pine64/rock64/post-build.sh Shellcheck
- board/qemu/aarch64-sbsa/assemble-flash-images Shellcheck
- board/qemu/x86/post-build.sh Shellcheck
- board/qemu/x86_64/post-build.sh Shellcheck
-@@ -182,7 +180,6 @@ configs/pc_x86_64_efi_defconfig lib_defconfig.ForceCheckHash
- configs/pine64_defconfig lib_defconfig.ForceCheckHash
- configs/pine64_pinecube_defconfig lib_defconfig.ForceCheckHash
- configs/pine64_star64_defconfig lib_defconfig.ForceCheckHash
--configs/rock64_defconfig lib_defconfig.ForceCheckHash
- configs/rock_pi_n8_defconfig lib_defconfig.ForceCheckHash
- configs/roseapplepi_defconfig lib_defconfig.ForceCheckHash
- configs/s6lx9_microboard_defconfig lib_defconfig.ForceCheckHash
+@@ -176,7 +175,6 @@ configs/olimex_a33_olinuxino_defconfig lib_defconfig.ForceCheckHash
+ configs/olimex_a64_olinuxino_defconfig lib_defconfig.ForceCheckHash
+ configs/olpc_xo175_defconfig lib_defconfig.ForceCheckHash
+ configs/olpc_xo1_defconfig lib_defconfig.ForceCheckHash
+-configs/orangepi_one_plus_defconfig lib_defconfig.ForceCheckHash
+ configs/orangepi_pc2_defconfig lib_defconfig.ForceCheckHash
+ configs/orangepi_zero_plus_defconfig lib_defconfig.ForceCheckHash
+ configs/pc_x86_64_bios_defconfig lib_defconfig.ForceCheckHash
 diff --git a/DEVELOPERS b/DEVELOPERS
-index f34c47233a..3c687d590e 100644
+index 3639665ae1..d6f145a8b5 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2404,8 +2404,6 @@ F:	package/rcw-smarc-sal28/
- 
- N:	Michał Łyszczek <michal.lyszczek@bofc.pl>
- F:	board/altera/socrates_cyclone5/
--F:	board/pine64/rock64
--F:	configs/rock64_defconfig
- F:	configs/socrates_cyclone5_defconfig
- F:	package/netifrc/
- F:	package/openrc/
-diff --git a/board/pine64/rock64/extlinux.conf b/board/pine64/rock64/extlinux.conf
+@@ -1469,7 +1469,6 @@ F:	board/bananapi/
+ F:	board/engicam/
+ F:	board/olimex/a33_olinuxino/
+ F:	board/olimex/a64-olinuxino/
+-F:	board/orangepi/orangepi-one-plus
+ F:	board/orangepi/orangepi-zero-plus2/
+ F:	board/pine64/
+ F:	configs/amarula_vyasa_rk3288_defconfig
+@@ -1481,7 +1480,6 @@ F:	configs/engicam_imx6ul_geam_defconfig
+ F:	configs/engicam_imx6ul_isiot_defconfig
+ F:	configs/olimex_a33_olinuxino_defconfig
+ F:	configs/olimex_a64_olinuxino_defconfig
+-F:	configs/orangepi_one_plus_defconfig
+ F:	configs/orangepi_zero_plus2_defconfig
+ F:	configs/pine64_defconfig
+ F:	configs/pine64_sopine_defconfig
+diff --git a/board/orangepi/orangepi-one-plus/extlinux.conf b/board/orangepi/orangepi-one-plus/extlinux.conf
 deleted file mode 100644
-index bf71982a9f..0000000000
---- a/board/pine64/rock64/extlinux.conf
+index f573aa17d0..0000000000
+--- a/board/orangepi/orangepi-one-plus/extlinux.conf
 +++ /dev/null
 @@ -1,4 +0,0 @@
--label rock64-buildroot
--  kernel /boot/Image
--  devicetree /boot/rk3328-rock64.dtb
--  append console=ttyS2,1500000n8 root=/dev/mmcblk0p1 ro rootwait
-diff --git a/board/pine64/rock64/genimage.cfg b/board/pine64/rock64/genimage.cfg
+-label linux
+-  kernel /Image
+-  devicetree /sun50i-h6-orangepi-one-plus.dtb
+-  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
+diff --git a/board/orangepi/orangepi-one-plus/genimage.cfg b/board/orangepi/orangepi-one-plus/genimage.cfg
 deleted file mode 100644
-index 7b749d1dd6..0000000000
---- a/board/pine64/rock64/genimage.cfg
+index 80b83b0215..0000000000
+--- a/board/orangepi/orangepi-one-plus/genimage.cfg
 +++ /dev/null
-@@ -1,23 +0,0 @@
+@@ -1,34 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"Image",
+-			"sun50i-h6-orangepi-one-plus.dtb",
+-			"extlinux"
+-		}
+-	}
+-
+-	size = 64M
+-}
+-
 -image sdcard.img {
 -	hdimage {
 -	}
 -
--	partition uboot-spl {
+-	partition u-boot {
 -		in-partition-table = "no"
--		image = "u-boot-tpl-spl.img"
--		offset = 32K # 512 * 0x40 from start of sd card
+-		image = "u-boot-sunxi-with-spl.bin"
+-		offset = 8K
+-		size = 1016K # 1MB - 8KB
 -	}
 -
--	partition uboot {
--		in-partition-table = "no"
--		image = "u-boot.itb"
--		offset = 256K # 512 * 0x200 from start of sd card
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
 -	}
 -
 -	partition rootfs {
 -		partition-type = 0x83
--		bootable = "yes"
--		image = "rootfs.ext2"
--		size = 500M
+-		image = "rootfs.ext4"
 -	}
 -}
-diff --git a/board/pine64/rock64/patches/uboot/0001-Makefile-rk3328-needs-itb-image-to-boot-properly.patch b/board/pine64/rock64/patches/uboot/0001-Makefile-rk3328-needs-itb-image-to-boot-properly.patch
-deleted file mode 100644
-index 7c84736034..0000000000
---- a/board/pine64/rock64/patches/uboot/0001-Makefile-rk3328-needs-itb-image-to-boot-properly.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From d312c4e40bf816823bdcfd066dd2511b23e83c9c Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
--Date: Tue, 5 Feb 2019 22:08:54 +0100
--Subject: [PATCH] Makefile: rk3328 needs itb image to boot properly
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Signed-off-by: Michał Łyszczek <michal.lyszczek@bofc.pl>
--[Dario: make the patch to be applied with fuzz factor 0]
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-----
-- Makefile | 5 +++++
-- 1 file changed, 5 insertions(+)
--
--diff --git a/Makefile b/Makefile
--index 149f83994814..ebbdf2596b9b 100644
----- a/Makefile
--+++ b/Makefile
--@@ -923,6 +923,11 @@ ifeq ($(CONFIG_SYS_COREBOOT)$(CONFIG_SPL),yy)
-- ALL-$(CONFIG_BINMAN) += u-boot-x86-with-spl.bin
-- endif
-- 
--+# rk3328 needs itb image to boot properly
--+ifeq ($(CONFIG_ROCKCHIP_RK3328),y)
--+ALL-y += u-boot.itb
--+endif
--+
-- # Build a combined spl + u-boot image for sunxi
-- ifeq ($(CONFIG_ARCH_SUNXI)$(CONFIG_SPL),yy)
-- ALL-y += u-boot-sunxi-with-spl.bin
---- 
--2.43.0
--
-diff --git a/board/pine64/rock64/post-build.sh b/board/pine64/rock64/post-build.sh
+diff --git a/board/orangepi/orangepi-one-plus/post-build.sh b/board/orangepi/orangepi-one-plus/post-build.sh
 deleted file mode 100755
-index 26b53cba8e..0000000000
---- a/board/pine64/rock64/post-build.sh
+index ec20fca7d9..0000000000
+--- a/board/orangepi/orangepi-one-plus/post-build.sh
 +++ /dev/null
-@@ -1,9 +0,0 @@
+@@ -1,4 +0,0 @@
 -#!/bin/sh
--
--MKIMAGE=$HOST_DIR/bin/mkimage
 -BOARD_DIR="$(dirname $0)"
 -
--$MKIMAGE -n rk3328 -T rksd -d $BINARIES_DIR/u-boot-tpl.bin $BINARIES_DIR/u-boot-tpl.img
--cat $BINARIES_DIR/u-boot-tpl.img $BINARIES_DIR/u-boot-spl.bin > $BINARIES_DIR/u-boot-tpl-spl.img
--
--install -m 0644 -D $BOARD_DIR/extlinux.conf $TARGET_DIR/boot/extlinux/extlinux.conf
-diff --git a/board/pine64/rock64/readme.txt b/board/pine64/rock64/readme.txt
+-install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
+diff --git a/board/orangepi/orangepi-one-plus/readme.txt b/board/orangepi/orangepi-one-plus/readme.txt
 deleted file mode 100644
-index 029c67641e..0000000000
---- a/board/pine64/rock64/readme.txt
+index 547f874288..0000000000
+--- a/board/orangepi/orangepi-one-plus/readme.txt
 +++ /dev/null
-@@ -1,95 +0,0 @@
+@@ -1,37 +0,0 @@
 -Intro
 -=====
 -
 -This default configuration will allow you to start experimenting with the
--buildroot environment for the Rock64. With this default configuration you
--can log in into board via uart and look around.
+-buildroot environment for the Orangepi One Plus. With the current configuration
+-it will bring-up the board, and allow access through the serial console.
 -
--Board homepage: https://www.pine64.org/?page_id=7147
+-Orangepi One Plus link:
+-http://www.orangepi.org/html/hardWare/computerAndMicrocontrollers/details/Orange-Pi-One-Plus.html
 -
--Build
--=====
+-Wiki link:
+-https://openedev.amarulasolutions.com/display/ODWIKI/Orangepi+One+Plus
 -
--First, load rock64 config for buildroot
+-This configuration uses U-Boot mainline and kernel mainline.
 -
--  $ make rock64_defconfig
+-How to build
+-============
 -
--Optionally make changes to buildroot config (to install more programs)
+-    $ make orangepi_one_plus_defconfig
+-    $ make
 -
--  $ make menuconfig
+-Note: you will need access to the internet to download the required
+-sources.
 -
--And then build everything
+-How to write the SD card
+-========================
 -
--  $ make
+-Once the build process is finished you will have an image called "sdcard.img"
+-in the output/images/ directory.
 -
--When completed, following files will be generated in output/images directory:
+-Copy the bootable "sdcard.img" onto an SD card with "dd":
 -
--  .
--  ├── Image
--  ├── bl31.bin
--  ├── bl31.elf
--  ├── rk3328-rock64.dtb
--  ├── rootfs.ext2
--  ├── rootfs.ext4 -> rootfs.ext2
--  ├── rootfs.tar
--  ├── sdcard.img
--  ├── u-boot-spl.bin
--  ├── u-boot-tpl-spl.img
--  ├── u-boot-tpl.bin
--  ├── u-boot-tpl.img
--  ├── u-boot.bin
--  └── u-boot.itb
+-  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+-  $ sudo sync
 -
--Creating bootable SD card
--=========================
--
--!!! THIS COMMAND MAY WIPE YOUR DISK!
--!!! MAKE SURE YOU PASSED CORRECT DEVICE!
--!!! OR IT THIS WILL WIPE YOUR DISK!
--
--Simply invoke (as root)
--
--  # dd if=output/images/sdcard.img of=/dev/sdX && sync
--
--Where X is your SD card device (not partition), of= argument may also be
--/dev/mmcblk0 if you are using built-in sd card reader.
--
--Runtime
--=======
--
--Login
-------
--
--By default, buildroot has no password, just type 'root' as login user, and
--you will be logged in.
--
--Serial console
----------------
--
--Serial console needs to be connected to pins (into 40pin rpi compatible part)
--
--pin 6:  gnd
--pin 8:  tx
--pin 10: rx
--
--Pin numbers are printed on board.
--
--Uart configuration is not standard. Rock64 uses 1500000 (1,5M) baudrate
--with standard 8n1.
--
--Ethernet
----------
--
--To enable ethernet you need to load modules for it:
--
--# modprobe stmmac
--# modprobe dwmac-rk
--
--and since by default there is no dhcp installed, you need to configure ip
--address, remember to change address to fit your network.
--
--# ifconfig eth0 up
--# ip addr add 10.1.1.180/24 dev eth0
--# ping 10.1.1.1
--PING 10.1.1.1 (10.1.1.1): 56 data bytes
--64 bytes from 10.1.1.1: seq=0 ttl=64 time=0.695 ms
-diff --git a/configs/rock64_defconfig b/configs/rock64_defconfig
+-Insert the micro SDcard in your Orangepi One Plus and power it up. The console
+-is on the serial line, 115200 8N1.
+diff --git a/configs/orangepi_one_plus_defconfig b/configs/orangepi_one_plus_defconfig
 deleted file mode 100644
-index 744d3a7159..0000000000
---- a/configs/rock64_defconfig
+index 8de158b0b1..0000000000
+--- a/configs/orangepi_one_plus_defconfig
 +++ /dev/null
-@@ -1,39 +0,0 @@
+@@ -1,34 +0,0 @@
 -BR2_aarch64=y
+-BR2_ARM_FPU_VFPV4=y
 -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
--BR2_GLOBAL_PATCH_DIR="board/pine64/rock64/patches"
--BR2_TARGET_GENERIC_GETTY_PORT="ttyS2"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/pine64/rock64/post-build.sh"
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Orangepi One+"
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepi-one-plus/post-build.sh"
 -BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/rock64/genimage.cfg"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-one-plus/genimage.cfg"
 -BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.216"
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,amarula,linux-amarula,h6-v1.0b)/linux-amarula_h6-v1.0b.tar.gz"
 -BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
 -BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3328-rock64"
--BR2_LINUX_KERNEL_INSTALL_TARGET=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h6-orangepi-one-plus"
 -BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 -BR2_TARGET_ROOTFS_EXT2=y
 -BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
 -BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.2"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3328"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="bl31/*.elf"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.0"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_h6"
 -BR2_TARGET_UBOOT=y
 -BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/ayufan-rock64/linux-mainline-u-boot.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="release-2020-07"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock64-rk3328"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.09"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_one_plus"
 -BR2_TARGET_UBOOT_NEEDS_DTC=y
 -BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 -BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
--BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
 -BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin tpl/u-boot-tpl.bin"
+-BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
 -BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-
---===============1902656407821007198==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-BR2_PACKAGE_HOST_MTOOLS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1902656407821007198==--
