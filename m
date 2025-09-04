@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E8F0CA1013
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:14:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A5DCCA101C
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:14:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D653807A6;
-	Thu,  4 Sep 2025 16:14:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1066B6066B;
+	Thu,  4 Sep 2025 16:14:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U5FCco1zUVj8; Thu,  4 Sep 2025 16:14:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id F_Dy8Mblb7yG; Thu,  4 Sep 2025 16:14:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD628807EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51C026065E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DD628807EB;
-	Thu,  4 Sep 2025 16:14:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 51C026065E;
+	Thu,  4 Sep 2025 16:14:29 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 02B28106
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:14:01 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 01987AE8
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:14:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B43CF80762
+ by smtp1.osuosl.org (Postfix) with ESMTP id EEAFA807A2
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jZ0JbcGTa-MP for <buildroot@buildroot.org>;
- Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
+ id A4vEA8XcIibQ for <buildroot@buildroot.org>;
+ Thu,  4 Sep 2025 16:13:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A48A8077E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D12E38078D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6A48A8077E
+ by smtp1.osuosl.org (Postfix) with ESMTP id D12E38078D
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6855487F44; Thu,  4 Sep 2025 16:13:48 +0000 (UTC)
+ id CF4E287F44; Thu,  4 Sep 2025 16:13:48 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Sep 2025 13:57:23 +0200
+Date: Thu, 4 Sep 2025 13:57:24 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: fe80c626d43df3182c907e05874639a2df6d5494
-X-Git-Newrev: fd7720562bb6b32bd0f039ad28ca3b933fa4d961
+X-Git-Oldrev: a99a6f3848c87797abd1e9a899173c9d8a8566c2
+X-Git-Newrev: 5c2362007679c953e24eb6fa74e7923dfd6222f5
 X-Patchwork-Hint: ignore
-Message-Id: <20250904161348.6855487F44@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] configs/rock_pi_n8:
- remove defconfig, broken
+Message-Id: <20250904161348.CF4E287F44@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ configs/sipeed_licheepi_zero: update Linux, U-Boot to fix build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,255 +61,132 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Titouan Christophe via buildroot <buildroot@buildroot.org>
 Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7386112294795374816=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7386112294795374816==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=fd7720562bb6b32bd0f039ad28ca3b933fa4d961
+commit: https://git.buildroot.net/buildroot/commit/?id=5c2362007679c953e24eb6fa74e7923dfd6222f5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-This defconfig no longer builds:
+Since Buildroot commit [1] dc0f7215c6 "package/gcc: switch to 13.x as
+default", sipeed_licheepi_zero_defconfig fails when building the Linux
+kernel with the error message:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/11026769867
+    drivers/ata/libahci.c: In function 'ahci_led_store':
+    ./include/linux/compiler.h:350:45: error: call to '__compiletime_assert_1138' declared with attribute error: BUILD_BUG_ON failed: sizeof(_s) > sizeof(long)
+      350 |         _compiletime_assert(condition, msg, __compiletime_assert_, __LINE__)
 
-It has been broken for at least 2 months:
+This issue is fixed by upstream Kernel commit [2].
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs?name=T%3Drock_pi_n8&kind=BUILD
+This commit fixes this issue by updating the Linux Kernel from v5.3.5
+(which is not a LTS series) to v6.12.43 (which is a LTS series
+including the fixes). With this update,
+BR2_LINUX_KERNEL_INTREE_DTS_NAME is updated accordingly to follow the
+new DTS organization.
 
-This defconfig was maintained by Suniel Mahesh, but his e-mail at
-Amarula is bouncing, so basically this defconfig is unmaintained.
+This commit also updates U-Boot from 2022.01 to 2025.07. This new
+version now requires BR2_TARGET_UBOOT_NEEDS_GNUTLS=y.
 
-Unless a fix is provided, this defconfig will be removed.
+While at it, this commit also switches to a stable glibc Bootlin
+external toolchain, to follow the new guidelines from [3].
+
+Finally, this commit adds BR2_DOWNLOAD_FORCE_CHECK_HASHES=y and the
+corresponding hash files. The .checkpackageignore is also updated to
+reflect that change.
 
 Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771001
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/11026769867
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/dc0f7215c604e845009e03784a221332867bf35a
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=f07788079f515ca4a681c5f595bdad19cfbd7b1d
+[3] https://elinux.org/Buildroot:DeveloperDaysELCE2024#Rules_for_defconfigs
 
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: Jagan Teki <jagan@amarulasolutions.com>
-Cc: Meena Murthy <meena.murthy@amarulasolutions.com>
-Cc: Michael Trimarchi <michael@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Michel Stempin <michel.stempin@wanadoo.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit 883ef369e41dbce1d16b3403950c5be1d9841bd9)
+(cherry picked from commit db951a4c712930c2fde893d2d56ee5e3f9318911)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- .checkpackageignore                 |  2 --
- board/radxa/rockpi-n8/extlinux.conf |  4 ---
- board/radxa/rockpi-n8/genimage.cfg  | 39 ------------------------
- board/radxa/rockpi-n8/post-build.sh |  5 ---
- board/radxa/rockpi-n8/readme.txt    | 61 -------------------------------------
- configs/rock_pi_n8_defconfig        | 35 ---------------------
- 6 files changed, 146 deletions(-)
+ .checkpackageignore                                 |  1 -
+ board/sipeed/licheepi_zero/patches/linux/linux.hash |  2 ++
+ board/sipeed/licheepi_zero/patches/uboot/uboot.hash |  2 ++
+ configs/sipeed_licheepi_zero_defconfig              | 13 +++++++++----
+ 4 files changed, 13 insertions(+), 5 deletions(-)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index 02d0ddb9f0..6b87803dca 100644
+index 5f0562e484..34f4ee5d3b 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -52,7 +52,6 @@ board/orangepi/orangepi-zero/patches/linux/0004-ARM-dts-orange-pi-zero-enable-ua
- board/qemu/aarch64-sbsa/assemble-flash-images Shellcheck
- board/qemu/x86/post-build.sh Shellcheck
- board/qemu/x86_64/post-build.sh Shellcheck
--board/radxa/rockpi-n8/post-build.sh Shellcheck
- board/raspberrypi/post-build.sh Shellcheck
- board/raspberrypi/post-image.sh Shellcheck
- board/roseapplepi/patches/uboot/0001-compiler-.h-sync-include-linux-compiler-.h-with-Linu.patch lib_patch.Upstream
-@@ -180,7 +179,6 @@ configs/pc_x86_64_efi_defconfig lib_defconfig.ForceCheckHash
- configs/pine64_defconfig lib_defconfig.ForceCheckHash
- configs/pine64_pinecube_defconfig lib_defconfig.ForceCheckHash
- configs/pine64_star64_defconfig lib_defconfig.ForceCheckHash
--configs/rock_pi_n8_defconfig lib_defconfig.ForceCheckHash
- configs/roseapplepi_defconfig lib_defconfig.ForceCheckHash
- configs/s6lx9_microboard_defconfig lib_defconfig.ForceCheckHash
+@@ -183,7 +183,6 @@ configs/s6lx9_microboard_defconfig lib_defconfig.ForceCheckHash
  configs/sipeed_lichee_rv_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/radxa/rockpi-n8/extlinux.conf b/board/radxa/rockpi-n8/extlinux.conf
-deleted file mode 100644
-index c323fe10ef..0000000000
---- a/board/radxa/rockpi-n8/extlinux.conf
-+++ /dev/null
-@@ -1,4 +0,0 @@
--label RK3288_ROCKPI_N8 linux
--  kernel /zImage
--  devicetree /rk3288-rock-pi-n8.dtb
--  append console=ttyS2,115200n8 root=/dev/mmcblk0p4 rw rootwait
-diff --git a/board/radxa/rockpi-n8/genimage.cfg b/board/radxa/rockpi-n8/genimage.cfg
-deleted file mode 100644
-index bfcd92f590..0000000000
---- a/board/radxa/rockpi-n8/genimage.cfg
-+++ /dev/null
-@@ -1,39 +0,0 @@
--image boot.vfat {
--	vfat {
--		files = {
--			"zImage",
--			"rk3288-rock-pi-n8.dtb",
--			"extlinux"
--		}
--	}
--
--	size = 16M
--}
--
--image sdcard.img {
--	hdimage {
--		partition-table-type = "gpt"
--	}
--
--	partition loader1 {
--		image = "idbloader.img"
--		offset = 32K
--	}
--
--	partition loader2 {
--		image = "u-boot-dtb.img"
--		offset = 8M
--	}
--
--	partition boot {
--		partition-type-uuid = F
--		bootable = "true"
--		image = "boot.vfat"
--		offset = 16M
--	}
--
--	partition rootfs {
--		partition-type-uuid = 69dad710-2ce4-4e3c-b16c-21a1d49abed3
--		image = "rootfs.ext4"
--	}
--}
-diff --git a/board/radxa/rockpi-n8/post-build.sh b/board/radxa/rockpi-n8/post-build.sh
-deleted file mode 100755
-index ba29375c05..0000000000
---- a/board/radxa/rockpi-n8/post-build.sh
-+++ /dev/null
-@@ -1,5 +0,0 @@
--#!/bin/sh
--
--BOARD_DIR="$(dirname $0)"
--
--install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-diff --git a/board/radxa/rockpi-n8/readme.txt b/board/radxa/rockpi-n8/readme.txt
-deleted file mode 100644
-index ac83d5c8c6..0000000000
---- a/board/radxa/rockpi-n8/readme.txt
-+++ /dev/null
-@@ -1,61 +0,0 @@
--RADXA ROCKPI-N8
--================
--https://wiki.radxa.com/RockpiN8
--
--Build:
--======
--  $ make rock_pi_n8_defconfig
--  $ make
--
--Files created in output directory
--=================================
--
--output/images
--.
--├── boot.vfat
--├── extlinux
--├── idbloader.img
--├── rk3288-rock-pi-n8.dtb
--├── rootfs.ext2
--├── rootfs.ext4 -> rootfs.ext2
--├── rootfs.tar
--├── sdcard.img
--├── u-boot.bin
--├── u-boot-dtb.bin
--├── u-boot-dtb.img
--└── zImage
--
--Creating bootable SD card:
--==========================
--
--Simply invoke (as root)
--
--sudo dd if=output/images/sdcard.img of=/dev/sdX && sync
--
--Where X is your SD card device.
--
--Booting:
--========
--
--Serial console:
-----------------
--RockPi-N8 has a 40-pin GPIO header. The pin layout is as follows:
--
--pin 6:  gnd
--pin 8:  tx
--pin 10: rx
--
--Baudrate for this board is 115200.
--
--The boot order on rockpi-n8 is emmc, sd. If emmc contains a valid Image, the board
--always boots from emmc. To boot from SD, erase emmc as per the guide:
--
--https://wiki.amarulasolutions.com/bsp/setup/rockchip/rk3399_emmc.html
--
--Login:
--------
--Enter 'root' as login user, and the prompt is ready.
--
--wiki link:
------------
--https://wiki.amarulasolutions.com/bsp/rockchip/rk3288/rock-pi-n8.html
-diff --git a/configs/rock_pi_n8_defconfig b/configs/rock_pi_n8_defconfig
-deleted file mode 100644
-index 3689d18e45..0000000000
---- a/configs/rock_pi_n8_defconfig
-+++ /dev/null
-@@ -1,35 +0,0 @@
--BR2_arm=y
--BR2_cortex_a17=y
--BR2_ARM_FPU_NEON_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
--BR2_TARGET_GENERIC_HOSTNAME="rockpi-n8"
--BR2_TARGET_GENERIC_ISSUE="Welcome to ROCKPI-N8"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/radxa/rockpi-n8/post-build.sh"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/radxa/rockpi-n8/genimage.cfg"
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/amarula/linux-amarula.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="5dcb0132685b07beb82065c5d7521e6c555c55b6"
--BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="rk3288-rock-pi-n8"
--BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/amarula/u-boot-amarula.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="ba120841bf40ebaed049d64bb4f980083a1cf6b7"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock-pi-n8-rk3288"
--BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
--BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
--BR2_TARGET_UBOOT_FORMAT_DTB_BIN=y
--BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
--BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="idbloader.img"
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
-
---===============7386112294795374816==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ configs/sipeed_lichee_rv_dock_defconfig lib_defconfig.ForceCheckHash
+ configs/sipeed_licheepi_nano_defconfig lib_defconfig.ForceCheckHash
+-configs/sipeed_licheepi_zero_defconfig lib_defconfig.ForceCheckHash
+ configs/sipeed_maix_bit_defconfig lib_defconfig.ForceCheckHash
+ configs/sipeed_maix_bit_sdcard_defconfig lib_defconfig.ForceCheckHash
+ configs/sipeed_maix_dock_defconfig lib_defconfig.ForceCheckHash
+diff --git a/board/sipeed/licheepi_zero/patches/linux/linux.hash b/board/sipeed/licheepi_zero/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..216d9b9d39
+--- /dev/null
++++ b/board/sipeed/licheepi_zero/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
++sha256  0fcbbbbcd456e87bbbfc8bf37af541fda62ccfcce76903503424fd101ef7bdee  linux-6.12.43.tar.xz
+diff --git a/board/sipeed/licheepi_zero/patches/uboot/uboot.hash b/board/sipeed/licheepi_zero/patches/uboot/uboot.hash
+new file mode 100644
+index 0000000000..440526977b
+--- /dev/null
++++ b/board/sipeed/licheepi_zero/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  0f933f6c5a426895bf306e93e6ac53c60870e4b54cda56d95211bec99e63bec7  u-boot-2025.07.tar.bz2
+diff --git a/configs/sipeed_licheepi_zero_defconfig b/configs/sipeed_licheepi_zero_defconfig
+index e92c1d854e..0c60a5c763 100644
+--- a/configs/sipeed_licheepi_zero_defconfig
++++ b/configs/sipeed_licheepi_zero_defconfig
+@@ -1,7 +1,11 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_VFPV4=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
++BR2_GLOBAL_PATCH_DIR="board/sipeed/licheepi_zero/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_HOSTNAME="licheepi-zero"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the LicheePi Zero"
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+@@ -10,10 +14,10 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/sipeed/licheepi_zero/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.43"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-v3s-licheepi-zero sun8i-v3s-licheepi-zero-dock"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun8i-v3s-licheepi-zero allwinner/sun8i-v3s-licheepi-zero-dock"
+ BR2_PACKAGE_LINUX_FIRMWARE=y
+ BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX=y
+ BR2_PACKAGE_WPA_SUPPLICANT=y
+@@ -23,11 +27,12 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="LicheePi_Zero"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7386112294795374816==--
