@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EACA1CA1002
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:14:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34CDECA1015
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:14:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE0D16063E;
-	Thu,  4 Sep 2025 16:14:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0F4D3403E4;
+	Thu,  4 Sep 2025 16:14:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ll3w3sBrkfnw; Thu,  4 Sep 2025 16:14:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2GRVppVoxSyT; Thu,  4 Sep 2025 16:14:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D679660650
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B5894040C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D679660650;
-	Thu,  4 Sep 2025 16:14:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id ACEEBAE8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B5894040C;
+	Thu,  4 Sep 2025 16:14:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 12519106
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C8DE84005E
+ by smtp1.osuosl.org (Postfix) with ESMTP id EA144807A5
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FjAMbBgGa4q7 for <buildroot@buildroot.org>;
- Thu,  4 Sep 2025 16:13:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IJ7l1oV0YOmI for <buildroot@buildroot.org>;
+ Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A22FE40051
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 604198077D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A22FE40051
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 604198077D
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9384187F0E; Thu,  4 Sep 2025 16:13:47 +0000 (UTC)
+ id 5E17B8617D; Thu,  4 Sep 2025 16:13:48 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 4 Sep 2025 13:57:23 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: b57939e61959923180c40aeda7700ee62ef95113
-X-Git-Newrev: b3624ce42ed0b3400f37181fd26c0ac517372316
+X-Git-Oldrev: 14a3ed05f3569825fe7fb53e20796ae138daa0a5
+X-Git-Newrev: fe80c626d43df3182c907e05874639a2df6d5494
 X-Patchwork-Hint: ignore
-Message-Id: <20250904161347.9384187F0E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libv4l: backport
- fix jpeg-v9x/gcc-14.x build
+Message-Id: <20250904161348.5E17B8617D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] configs/rock64: remove
+ defconfig, broken
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,122 +61,324 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Titouan Christophe via buildroot <buildroot@buildroot.org>
 Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3259783824609189849=="
+Content-Type: multipart/mixed; boundary="===============1902656407821007198=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3259783824609189849==
+--===============1902656407821007198==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3624ce42ed0b3400f37181fd26c0ac517372316
+commit: https://git.buildroot.net/buildroot/commit/?id=fe80c626d43df3182c907e05874639a2df6d5494
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-This issue seems to caused by gcc-14 (added in 2024.05) which has
-become the default version in 2025.08.
+This defconfig no longer builds:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11026769723
+
+It has been broken for at least 2 months:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs?name=T%3Drock64&kind=BUILD
+
+The old u-boot-2020.07-rc4 no longer builds.
+
+Unless a fix is provided, this defconfig will be removed.
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/11042295052 (TestZbar)
-https://autobuild.buildroot.org/results/e0f/e0fac4a10181139d975c627f22a55d6681547d33
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 37741586af7696985bff7ef398581681fe6e96b9)
+    https://gitlab.com/buildroot.org/buildroot/-/jobs/11026769723
+
+Cc: Michał Łyszczek <michal.lyszczek@bofc.pl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit 83af501540b8a3f48fca1bacdc3ec11bd7abb9fe)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- ...rt-fix-jpeg-v9x-gcc-14.x-compile-jpeg_mem.patch | 83 ++++++++++++++++++++++
- 1 file changed, 83 insertions(+)
+ .checkpackageignore                                |  3 -
+ DEVELOPERS                                         |  2 -
+ board/pine64/rock64/extlinux.conf                  |  4 -
+ board/pine64/rock64/genimage.cfg                   | 23 ------
+ ...e-rk3328-needs-itb-image-to-boot-properly.patch | 34 --------
+ board/pine64/rock64/post-build.sh                  |  9 --
+ board/pine64/rock64/readme.txt                     | 95 ----------------------
+ configs/rock64_defconfig                           | 39 ---------
+ 8 files changed, 209 deletions(-)
 
-diff --git a/package/libv4l/0002-libv4lconvert-fix-jpeg-v9x-gcc-14.x-compile-jpeg_mem.patch b/package/libv4l/0002-libv4lconvert-fix-jpeg-v9x-gcc-14.x-compile-jpeg_mem.patch
-new file mode 100644
-index 0000000000..298eaaf888
---- /dev/null
-+++ b/package/libv4l/0002-libv4lconvert-fix-jpeg-v9x-gcc-14.x-compile-jpeg_mem.patch
-@@ -0,0 +1,83 @@
-+From 9f0da8467183f9f647bddc4a5b4f01aad930846a Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Mon, 2 Sep 2024 15:59:53 +0200
-+Subject: [PATCH] libv4lconvert: fix jpeg-v9x/gcc-14.x compile (jpeg_mem_dest
-+ argument mismatch)
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+- fix jpeg_mem_dest pointer arument mismatch (long unsigned int vs. size_t)
-+  with jpeg-v9x/gcc-14.x 32-bit arm compile
-+
-+Fixes:
-+
-+  ../lib/libv4lconvert/jl2005bcd.c: In function ‘v4lconvert_decode_jl2005bcd’:
-+  ../lib/libv4lconvert/jl2005bcd.c:94:46: error: passing argument 3 of ‘jpeg_mem_dest’ from incompatible pointer type [-Wincompatible-pointer-types]
-+     94 |         jpeg_mem_dest (&cinfo, &jpeg_header, &jpeg_header_size);
-+        |                                              ^~~~~~~~~~~~~~~~~
-+        |                                              |
-+        |                                              long unsigned int *
-+  In file included from ../lib/libv4lconvert/libv4lconvert-priv.h:26,
-+                   from ../lib/libv4lconvert/jl2005bcd.c:30:
-+  .../host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/jpeglib.h:979:28: note: expected ‘size_t *’ {aka ‘unsigned int *’} but argument is of type ‘long unsigned int *’
-+    979 | EXTERN(void) jpeg_mem_dest JPP((j_compress_ptr cinfo,
-+        |                            ^~~
-+
-+  ../lib/libv4lconvert/jpeg.c: In function ‘init_libjpeg_cinfo’:
-+  ../lib/libv4lconvert/jpeg.c:157:45: error: passing argument 3 of ‘jpeg_mem_dest’ from incompatible pointer type [-Wincompatible-pointer-types]
-+    157 |         jpeg_mem_dest(&cinfo, &jpeg_header, &jpeg_header_size);
-+        |                                             ^~~~~~~~~~~~~~~~~
-+        |                                             |
-+        |                                             long unsigned int *
-+  In file included from ../lib/libv4lconvert/libv4lconvert-priv.h:26,
-+                   from ../lib/libv4lconvert/jpeg.c:21:
-+  .../host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/jpeglib.h:979:28: note: expected ‘size_t *’ {aka ‘unsigned int *’} but argument is of type ‘long unsigned int *’
-+    979 | EXTERN(void) jpeg_mem_dest JPP((j_compress_ptr cinfo,
-+        |                            ^~~
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+Signed-off-by: Hans Verkuil <hverkuil@xs4all.nl>
-+Upstream: https://git.linuxtv.org/v4l-utils.git/commit/?id=e11e10ff7c8a4ef69526edd275c0ed92a450fbf3
-+[Romain: backport to 1.28.1]
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ lib/libv4lconvert/jl2005bcd.c | 4 ++++
-+ lib/libv4lconvert/jpeg.c      | 4 ++++
-+ 2 files changed, 8 insertions(+)
-+
-+diff --git a/lib/libv4lconvert/jl2005bcd.c b/lib/libv4lconvert/jl2005bcd.c
-+index 707c3205..14b040f3 100644
-+--- a/lib/libv4lconvert/jl2005bcd.c
-++++ b/lib/libv4lconvert/jl2005bcd.c
-+@@ -63,7 +63,11 @@ int v4lconvert_decode_jl2005bcd(struct v4lconvert_data *data,
-+ 	struct jpeg_decompress_struct dinfo;
-+ 	struct jpeg_error_mgr jcerr, jderr;
-+ 	JOCTET *jpeg_header = NULL;
-++#if JPEG_LIB_VERSION >= 90
-++	size_t jpeg_header_size = 0;
-++#else
-+ 	unsigned long jpeg_header_size = 0;
-++#endif
-+ 	int i, x, y, x1, y1, jpeg_data_size, jpeg_data_idx, eoi, size;
-+ 
-+ 	/* src_size had better be bigger than 16 */
-+diff --git a/lib/libv4lconvert/jpeg.c b/lib/libv4lconvert/jpeg.c
-+index ebfc8149..450d0967 100644
-+--- a/lib/libv4lconvert/jpeg.c
-++++ b/lib/libv4lconvert/jpeg.c
-+@@ -136,7 +136,11 @@ static void init_libjpeg_cinfo(struct v4lconvert_data *data)
-+ {
-+ 	struct jpeg_compress_struct cinfo;
-+ 	unsigned char *jpeg_header = NULL;
-++#if JPEG_LIB_VERSION >= 90
-++	size_t jpeg_header_size = 0;
-++#else
-+ 	unsigned long jpeg_header_size = 0;
-++#endif
-+ 
-+ 	if (data->cinfo_initialized)
-+ 		return;
-+-- 
-+2.50.1
-+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 645281fe9e..02d0ddb9f0 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -49,8 +49,6 @@ board/orangepi/orangepi-zero/patches/linux/0001-ARM-dts-orange-pi-zero-interrupt
+ board/orangepi/orangepi-zero/patches/linux/0002-ARM-dts-orange-pi-zero-enable-spi-nor.patch lib_patch.Upstream
+ board/orangepi/orangepi-zero/patches/linux/0003-ARM-dts-orange-pi-zero-enable-spidev.patch lib_patch.Upstream
+ board/orangepi/orangepi-zero/patches/linux/0004-ARM-dts-orange-pi-zero-enable-uart.patch lib_patch.Upstream
+-board/pine64/rock64/patches/uboot/0001-Makefile-rk3328-needs-itb-image-to-boot-properly.patch lib_patch.Upstream
+-board/pine64/rock64/post-build.sh Shellcheck
+ board/qemu/aarch64-sbsa/assemble-flash-images Shellcheck
+ board/qemu/x86/post-build.sh Shellcheck
+ board/qemu/x86_64/post-build.sh Shellcheck
+@@ -182,7 +180,6 @@ configs/pc_x86_64_efi_defconfig lib_defconfig.ForceCheckHash
+ configs/pine64_defconfig lib_defconfig.ForceCheckHash
+ configs/pine64_pinecube_defconfig lib_defconfig.ForceCheckHash
+ configs/pine64_star64_defconfig lib_defconfig.ForceCheckHash
+-configs/rock64_defconfig lib_defconfig.ForceCheckHash
+ configs/rock_pi_n8_defconfig lib_defconfig.ForceCheckHash
+ configs/roseapplepi_defconfig lib_defconfig.ForceCheckHash
+ configs/s6lx9_microboard_defconfig lib_defconfig.ForceCheckHash
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f34c47233a..3c687d590e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2404,8 +2404,6 @@ F:	package/rcw-smarc-sal28/
+ 
+ N:	Michał Łyszczek <michal.lyszczek@bofc.pl>
+ F:	board/altera/socrates_cyclone5/
+-F:	board/pine64/rock64
+-F:	configs/rock64_defconfig
+ F:	configs/socrates_cyclone5_defconfig
+ F:	package/netifrc/
+ F:	package/openrc/
+diff --git a/board/pine64/rock64/extlinux.conf b/board/pine64/rock64/extlinux.conf
+deleted file mode 100644
+index bf71982a9f..0000000000
+--- a/board/pine64/rock64/extlinux.conf
++++ /dev/null
+@@ -1,4 +0,0 @@
+-label rock64-buildroot
+-  kernel /boot/Image
+-  devicetree /boot/rk3328-rock64.dtb
+-  append console=ttyS2,1500000n8 root=/dev/mmcblk0p1 ro rootwait
+diff --git a/board/pine64/rock64/genimage.cfg b/board/pine64/rock64/genimage.cfg
+deleted file mode 100644
+index 7b749d1dd6..0000000000
+--- a/board/pine64/rock64/genimage.cfg
++++ /dev/null
+@@ -1,23 +0,0 @@
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition uboot-spl {
+-		in-partition-table = "no"
+-		image = "u-boot-tpl-spl.img"
+-		offset = 32K # 512 * 0x40 from start of sd card
+-	}
+-
+-	partition uboot {
+-		in-partition-table = "no"
+-		image = "u-boot.itb"
+-		offset = 256K # 512 * 0x200 from start of sd card
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		bootable = "yes"
+-		image = "rootfs.ext2"
+-		size = 500M
+-	}
+-}
+diff --git a/board/pine64/rock64/patches/uboot/0001-Makefile-rk3328-needs-itb-image-to-boot-properly.patch b/board/pine64/rock64/patches/uboot/0001-Makefile-rk3328-needs-itb-image-to-boot-properly.patch
+deleted file mode 100644
+index 7c84736034..0000000000
+--- a/board/pine64/rock64/patches/uboot/0001-Makefile-rk3328-needs-itb-image-to-boot-properly.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From d312c4e40bf816823bdcfd066dd2511b23e83c9c Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
+-Date: Tue, 5 Feb 2019 22:08:54 +0100
+-Subject: [PATCH] Makefile: rk3328 needs itb image to boot properly
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Signed-off-by: Michał Łyszczek <michal.lyszczek@bofc.pl>
+-[Dario: make the patch to be applied with fuzz factor 0]
+-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+----
+- Makefile | 5 +++++
+- 1 file changed, 5 insertions(+)
+-
+-diff --git a/Makefile b/Makefile
+-index 149f83994814..ebbdf2596b9b 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -923,6 +923,11 @@ ifeq ($(CONFIG_SYS_COREBOOT)$(CONFIG_SPL),yy)
+- ALL-$(CONFIG_BINMAN) += u-boot-x86-with-spl.bin
+- endif
+- 
+-+# rk3328 needs itb image to boot properly
+-+ifeq ($(CONFIG_ROCKCHIP_RK3328),y)
+-+ALL-y += u-boot.itb
+-+endif
+-+
+- # Build a combined spl + u-boot image for sunxi
+- ifeq ($(CONFIG_ARCH_SUNXI)$(CONFIG_SPL),yy)
+- ALL-y += u-boot-sunxi-with-spl.bin
+--- 
+-2.43.0
+-
+diff --git a/board/pine64/rock64/post-build.sh b/board/pine64/rock64/post-build.sh
+deleted file mode 100755
+index 26b53cba8e..0000000000
+--- a/board/pine64/rock64/post-build.sh
++++ /dev/null
+@@ -1,9 +0,0 @@
+-#!/bin/sh
+-
+-MKIMAGE=$HOST_DIR/bin/mkimage
+-BOARD_DIR="$(dirname $0)"
+-
+-$MKIMAGE -n rk3328 -T rksd -d $BINARIES_DIR/u-boot-tpl.bin $BINARIES_DIR/u-boot-tpl.img
+-cat $BINARIES_DIR/u-boot-tpl.img $BINARIES_DIR/u-boot-spl.bin > $BINARIES_DIR/u-boot-tpl-spl.img
+-
+-install -m 0644 -D $BOARD_DIR/extlinux.conf $TARGET_DIR/boot/extlinux/extlinux.conf
+diff --git a/board/pine64/rock64/readme.txt b/board/pine64/rock64/readme.txt
+deleted file mode 100644
+index 029c67641e..0000000000
+--- a/board/pine64/rock64/readme.txt
++++ /dev/null
+@@ -1,95 +0,0 @@
+-Intro
+-=====
+-
+-This default configuration will allow you to start experimenting with the
+-buildroot environment for the Rock64. With this default configuration you
+-can log in into board via uart and look around.
+-
+-Board homepage: https://www.pine64.org/?page_id=7147
+-
+-Build
+-=====
+-
+-First, load rock64 config for buildroot
+-
+-  $ make rock64_defconfig
+-
+-Optionally make changes to buildroot config (to install more programs)
+-
+-  $ make menuconfig
+-
+-And then build everything
+-
+-  $ make
+-
+-When completed, following files will be generated in output/images directory:
+-
+-  .
+-  ├── Image
+-  ├── bl31.bin
+-  ├── bl31.elf
+-  ├── rk3328-rock64.dtb
+-  ├── rootfs.ext2
+-  ├── rootfs.ext4 -> rootfs.ext2
+-  ├── rootfs.tar
+-  ├── sdcard.img
+-  ├── u-boot-spl.bin
+-  ├── u-boot-tpl-spl.img
+-  ├── u-boot-tpl.bin
+-  ├── u-boot-tpl.img
+-  ├── u-boot.bin
+-  └── u-boot.itb
+-
+-Creating bootable SD card
+-=========================
+-
+-!!! THIS COMMAND MAY WIPE YOUR DISK!
+-!!! MAKE SURE YOU PASSED CORRECT DEVICE!
+-!!! OR IT THIS WILL WIPE YOUR DISK!
+-
+-Simply invoke (as root)
+-
+-  # dd if=output/images/sdcard.img of=/dev/sdX && sync
+-
+-Where X is your SD card device (not partition), of= argument may also be
+-/dev/mmcblk0 if you are using built-in sd card reader.
+-
+-Runtime
+-=======
+-
+-Login
+------
+-
+-By default, buildroot has no password, just type 'root' as login user, and
+-you will be logged in.
+-
+-Serial console
+---------------
+-
+-Serial console needs to be connected to pins (into 40pin rpi compatible part)
+-
+-pin 6:  gnd
+-pin 8:  tx
+-pin 10: rx
+-
+-Pin numbers are printed on board.
+-
+-Uart configuration is not standard. Rock64 uses 1500000 (1,5M) baudrate
+-with standard 8n1.
+-
+-Ethernet
+---------
+-
+-To enable ethernet you need to load modules for it:
+-
+-# modprobe stmmac
+-# modprobe dwmac-rk
+-
+-and since by default there is no dhcp installed, you need to configure ip
+-address, remember to change address to fit your network.
+-
+-# ifconfig eth0 up
+-# ip addr add 10.1.1.180/24 dev eth0
+-# ping 10.1.1.1
+-PING 10.1.1.1 (10.1.1.1): 56 data bytes
+-64 bytes from 10.1.1.1: seq=0 ttl=64 time=0.695 ms
+diff --git a/configs/rock64_defconfig b/configs/rock64_defconfig
+deleted file mode 100644
+index 744d3a7159..0000000000
+--- a/configs/rock64_defconfig
++++ /dev/null
+@@ -1,39 +0,0 @@
+-BR2_aarch64=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+-BR2_GLOBAL_PATCH_DIR="board/pine64/rock64/patches"
+-BR2_TARGET_GENERIC_GETTY_PORT="ttyS2"
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/pine64/rock64/post-build.sh"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/rock64/genimage.cfg"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.216"
+-BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3328-rock64"
+-BR2_LINUX_KERNEL_INSTALL_TARGET=y
+-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.2"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3328"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="bl31/*.elf"
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/ayufan-rock64/linux-mainline-u-boot.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="release-2020-07"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock64-rk3328"
+-BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+-BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+-BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
+-BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin tpl/u-boot-tpl.bin"
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 
---===============3259783824609189849==
+--===============1902656407821007198==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -187,4 +389,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============3259783824609189849==--
+--===============1902656407821007198==--
