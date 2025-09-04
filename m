@@ -1,52 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FD4BCA1013
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 19:52:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A005CA1012
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 19:58:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E056404DC;
-	Thu,  4 Sep 2025 19:52:55 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S-yZKFOjAeW9; Thu,  4 Sep 2025 19:52:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C57940486
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C57940486;
-	Thu,  4 Sep 2025 19:52:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F8C5111
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 19:52:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0C73980CA0
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 19:52:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5305280CF0;
+	Thu,  4 Sep 2025 19:58:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yHgllr7sjJtN for <buildroot@buildroot.org>;
- Thu,  4 Sep 2025 19:52:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8557809CB
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C8557809CB
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 19:52:51 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B166F82C08; Thu,  4 Sep 2025 19:52:51 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id LbvoO1Ci3kGi; Thu,  4 Sep 2025 19:58:48 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8E5080CEC
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id E8E5080CEC;
+	Thu,  4 Sep 2025 19:58:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8384C111
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 19:58:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 69C1A60712
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 19:58:46 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CkqtV4C_NmsQ for <buildroot@buildroot.org>;
+ Thu,  4 Sep 2025 19:58:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=195.201.24.99;
+ helo=mail.heine.tech; envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7C8956064E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C8956064E
+Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7C8956064E
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 19:58:45 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id BCECC1814B9; Thu,  4 Sep 2025 21:58:42 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Thu, 4 Sep 2025 21:52:39 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b24cc7f5015fe3460ef43a1396cdfe222c2273e0
-X-Git-Newrev: 717138c83c857d1dd119750f1af6eda033d9206f
-X-Patchwork-Hint: ignore
-Message-Id: <20250904195251.B166F82C08@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mbpfan: fix musl / uclibc-ng patch
+Date: Thu,  4 Sep 2025 21:58:07 +0200
+Message-ID: <20250904195812.3259342-2-buildroot@heine.tech>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=heine.tech; s=dkim; 
+ t=1757015923; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=5xzuOjZhmWhdNRFIx7K5mAil1IhVFG5ffLN9xQQB1Mk=;
+ b=HU6im8JA98LlHd5lnFZ4+ULjYO85RowpXh8gu4te31j/nzcwc+Bef8sR9GWipkLA4DdS7Y
+ VekcORVnPcu3gdeTNO6/fWEZZL6ZkNWwc7ZNQgL/xMhwYPhhmSYW68dr9ezn/QVghJGCiv
+ eaIFxdw4RddMJ1v1EmnRJXofq/7IJEo=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=heine.tech
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
+ header.s=dkim header.b=HU6im8JA
+Subject: [Buildroot] [PATCH v2 1/2] package/libcpprestsdk: add dependency on
+ Boost.System
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,85 +71,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=717138c83c857d1dd119750f1af6eda033d9206f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+libcpprestsdk searches for the Boost.System module in its
+CMakeLists. Hence it should be selected as a dependency.
 
-Commit 759a08633e ("package/mbpfan: fix build on musl / uclibc-ng") added a
-patch for musl / uclibc-ng, but the upstream patch did not correctly apply
-to the 2.4.0 release, breaking the build.
-
-Fix that.  In the mean time the patch has been applied upstream, so add a
-reference to the upstream commit.
-
-Fixes:
-
-  https://autobuild.buildroot.net/results/785be6231c1edc4e5461ce083a3d65fd27fc5843/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- .../0001-Makefile-util.c-fix-build-on-musl-uClibc-ng.patch | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ package/libcpprestsdk/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/mbpfan/0001-Makefile-util.c-fix-build-on-musl-uClibc-ng.patch b/package/mbpfan/0001-Makefile-util.c-fix-build-on-musl-uClibc-ng.patch
-index ac15143e2e..7b42957bdd 100644
---- a/package/mbpfan/0001-Makefile-util.c-fix-build-on-musl-uClibc-ng.patch
-+++ b/package/mbpfan/0001-Makefile-util.c-fix-build-on-musl-uClibc-ng.patch
-@@ -1,4 +1,4 @@
--From 924e38f159e4f5906f88cd8ddbe27f273c601cb0 Mon Sep 17 00:00:00 2001
-+From 2e6ae7ce5c28acaff9b3e77d7a693b7224a46003 Mon Sep 17 00:00:00 2001
- From: Peter Korsgaard <peter@korsgaard.com>
- Date: Mon, 1 Sep 2025 12:08:53 +0200
- Subject: [PATCH] {Makefile,util.c}: fix build on musl / uClibc-ng
-@@ -27,6 +27,8 @@ _DEFAULT_SOURCE is:
- https://github.com/bminor/glibc/blob/master/include/features.h#L417-L419
- 
- Upstream: https://github.com/linux-on-mac/mbpfan/pull/271
-+(cherry picked from commit 25c2a09bd0d74e19c3843ce35ac54b5e288480ab)
-+[Peter: backport to 2.4.0]
- Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- ---
-  Makefile   | 2 +-
-@@ -34,29 +36,29 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-  2 files changed, 1 insertion(+), 2 deletions(-)
- 
- diff --git a/Makefile b/Makefile
--index 94d72ee..ff1b7e6 100644
-+index 41873fa..bb6c913 100644
- --- a/Makefile
- +++ b/Makefile
- @@ -19,7 +19,7 @@ BINFLAG = -o
-  INCLUDES =
-  LIBS = -lm
-  LIBPATH =
---CFLAGS += $(COPT) -g $(INCLUDES) -Wall -Wextra -Wno-unused-function -Wno-unused-parameter -std=c99 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=500
--+CFLAGS += $(COPT) -g $(INCLUDES) -Wall -Wextra -Wno-unused-function -Wno-unused-parameter -std=c99 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=500 -D_DEFAULT_SOURCE
-+-CFLAGS += $(COPT) -g $(INCLUDES) -Wall -Wextra -Wno-unused-function -std=c99 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=500
-++CFLAGS += $(COPT) -g $(INCLUDES) -Wall -Wextra -Wno-unused-function -std=c99 -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=500 -D_DEFAULT_SOURCE
-  LDFLAGS += $(LIBPATH) -g
-  
-  OBJS := $(patsubst %.$(C),%.$(OBJ),$(wildcard $(SOURCE_PATH)*.$(C)))
- diff --git a/src/util.c b/src/util.c
--index df5b03f..25415b9 100644
-+index c66e6d7..b7fe71e 100644
- --- a/src/util.c
- +++ b/src/util.c
- @@ -1,6 +1,5 @@
-  #include <stdarg.h>
-  #include <stdio.h>
- -#define __USE_MISC
-- #define _GNU_SOURCE
-  #include <syslog.h>
-  
-+ #include "global.h"
- -- 
- 2.39.5
- 
+diff --git a/package/libcpprestsdk/Config.in b/package/libcpprestsdk/Config.in
+index e533b30393..7688021ed0 100644
+--- a/package/libcpprestsdk/Config.in
++++ b/package/libcpprestsdk/Config.in
+@@ -13,6 +13,7 @@ config BR2_PACKAGE_LIBCPPRESTSDK
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM
+ 	select BR2_PACKAGE_BOOST_RANDOM
+ 	select BR2_PACKAGE_BOOST_REGEX
++	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_BOOST_THREAD
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
