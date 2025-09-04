@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D60F7CA1013
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:14:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5734CA1013
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:14:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7E24D807FA;
-	Thu,  4 Sep 2025 16:14:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BDF2860671;
+	Thu,  4 Sep 2025 16:14:34 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9mIiNMa-3T52; Thu,  4 Sep 2025 16:14:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D35A560663
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id D35A560663;
+	Thu,  4 Sep 2025 16:14:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 103CFAE8
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:14:04 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3DE0780774
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1kXBNt8BZL7c; Thu,  4 Sep 2025 16:14:30 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 917EB807F0
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 917EB807F0;
-	Thu,  4 Sep 2025 16:14:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0C0E5B69
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:14:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 21DCA4006B
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:52 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JjBGgpQgjFGv for <buildroot@buildroot.org>;
- Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
+ id 2aeC8AzEdgJM for <buildroot@buildroot.org>;
+ Thu,  4 Sep 2025 16:13:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A99340057
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0663A80791
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2A99340057
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0663A80791
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2844087F46; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
+ id 04A6F87F44; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 4 Sep 2025 13:57:24 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 8af66709c705ad98edc165e738795c6150b02783
-X-Git-Newrev: cd49292b2d8bb6f852ff425266ab8022f2b57c8c
+X-Git-Oldrev: e9b0c7f909b9f7ca1e39f62ee9c525ffd22b0369
+X-Git-Newrev: 02f652cf1645d69d6db61ddebe71ba5f69b49c91
 X-Patchwork-Hint: ignore
-Message-Id: <20250904161349.2844087F46@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/tcpreplay: bump
- to version 4.5.2
+Message-Id: <20250904161349.04A6F87F44@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] support/testing:
+ TestLibCurl: replace thttpd by Busybox's httpd server
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,49 +66,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd49292b2d8bb6f852ff425266ab8022f2b57c8c
+commit: https://git.buildroot.net/buildroot/commit/?id=02f652cf1645d69d6db61ddebe71ba5f69b49c91
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Bugfix release, fixing compatibility w/ gcc-15.
+In order to remove thttpd package from Buildroot, we have to replace it
+from TestLibCurl.
 
-For change log, see:
-https://github.com/appneta/tcpreplay/releases/tag/v4.5.2
+Busybox's httpd server doesn't report server identification, update
+TestLibCurl accordingly.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-[Peter: mention gcc+15 fix]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0f80622f1cc33dc9f845d0fe1272a38788a789e9)
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/11042294712
+
+Cc: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit 667871b06d92b58bc86c668fdef1df8a9c60b5a9)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/tcpreplay/tcpreplay.hash | 4 ++--
- package/tcpreplay/tcpreplay.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ support/testing/tests/package/test_libcurl.py | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
-index 6dc6e48f9a..4307fa60fc 100644
---- a/package/tcpreplay/tcpreplay.hash
-+++ b/package/tcpreplay/tcpreplay.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://github.com/appneta/tcpreplay/releases/download/v4.5.1/tcpreplay-4.5.1.tar.xz.asc
-+# https://github.com/appneta/tcpreplay/releases/download/v4.5.2/tcpreplay-4.5.2.tar.xz.asc
- # using key 84E4FA215C934A7D97DC76D5E9E2149793BDE17E
--sha256  5126613f783062b43f514b05ad981376050a8fee35b03c8de4445ddeefd95049  tcpreplay-4.5.1.tar.xz
-+sha256  2df15bc6d49f96a77617d137049f998193bbae95c1a31b04ca02856a24cbf384  tcpreplay-4.5.2.tar.xz
- sha256  07cf5e92d475287a7d1663b33097f40cae5adf03ed8920fcd4374e3dfb48c8ad  docs/LICENSE
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index 17766707e6..32bcf8d278 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/testing/tests/package/test_libcurl.py b/support/testing/tests/package/test_libcurl.py
+index b326f9308f..076a5388ca 100644
+--- a/support/testing/tests/package/test_libcurl.py
++++ b/support/testing/tests/package/test_libcurl.py
+@@ -8,7 +8,7 @@ class TestLibCurl(infra.basetest.BRTest):
+         """
+         BR2_PACKAGE_LIBCURL=y
+         BR2_PACKAGE_LIBCURL_CURL=y
+-        BR2_PACKAGE_THTTPD=y
++        BR2_PACKAGE_BUSYBOX_HTTPD=y
+         BR2_TARGET_ROOTFS_CPIO=y
+         # BR2_TARGET_ROOTFS_TAR is not set
+         """
+@@ -45,11 +45,9 @@ class TestLibCurl(infra.basetest.BRTest):
+         self.assertEqual(out[0], msg)
  
--TCPREPLAY_VERSION = 4.5.1
-+TCPREPLAY_VERSION = 4.5.2
- TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
- TCPREPLAY_SOURCE = tcpreplay-$(TCPREPLAY_VERSION).tar.xz
- TCPREPLAY_LICENSE = GPL-3.0
+         # We download one last time, showing the server response. We
+-        # check we can see the OK status and our thttpd server
+-        # identification.
++        # check we can see the OK status.
+         cmd = f"curl --no-progress-meter --dump-header - -o /dev/null {url}"
+         out, ret = self.emulator.run(cmd)
+         self.assertEqual(ret, 0)
+         out_str = "\n".join(out)
+         self.assertIn("HTTP/1.1 200 OK", out_str)
+-        self.assertIn("Server: thttpd/", out_str)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
