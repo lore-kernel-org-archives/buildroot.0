@@ -4,72 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB1C1CA1002
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 17:03:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 457E4CA1012
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 17:46:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A071F60675;
-	Thu,  4 Sep 2025 17:03:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5EDF36069F;
+	Thu,  4 Sep 2025 17:46:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id av6mJs2XmSoC; Thu,  4 Sep 2025 17:03:16 +0000 (UTC)
+ id ya3ldNa8o5q9; Thu,  4 Sep 2025 17:45:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D04FB60648
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AD9860686
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D04FB60648;
-	Thu,  4 Sep 2025 17:03:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1996E111
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 17:03:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9AD9860686;
+	Thu,  4 Sep 2025 17:45:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 99E16111
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 17:45:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0B3CE401B3
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 17:03:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8B5F940075
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 17:45:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pSSxbuikWMFt for <buildroot@buildroot.org>;
- Thu,  4 Sep 2025 17:03:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5C232401A1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C232401A1
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5C232401A1
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 17:03:14 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 1C28613F8B3;
- Thu,  4 Sep 2025 19:03:10 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 04 Sep 2025 19:03:10 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6wRG98flfy8U for <buildroot@buildroot.org>;
+ Thu,  4 Sep 2025 17:45:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::630; helo=mail-ej1-x630.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2435D4004D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2435D4004D
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2435D4004D
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 17:45:55 +0000 (UTC)
+Received: by mail-ej1-x630.google.com with SMTP id
+ a640c23a62f3a-b02c719a117so244415666b.1
+ for <buildroot@buildroot.org>; Thu, 04 Sep 2025 10:45:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1757007953; x=1757612753;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=9TGpMMvQZtt0GsZoYmowSDHHMUDDWwmqMZyaBPNxuhU=;
+ b=WPFp5HILvbDJ3/grzZWAsKTYFWWewzTGBo6YvWRoth7if2HrBTEEulokUcQwH6VTqN
+ ELjid2awH3wyFELhKA2Lzi53fE2Mwjdz9P6ddXFAAjwIvH+GQg9OGba76zI/9479U6WU
+ QBymHlZajsv1iAlgf75/Pk03tXU/jiQQe15e/3+5kwrEJm8ALs/JPccDmJNkg8XTEqZl
+ Nw4A8qm/j3aFY7CVJxnPYs0ZX1ogN62oPH3I9lHpUBUtygNTNYdjDSaxdoO3wjAOoe1b
+ KZ2TCGY5ljiEpR41qrqUfn/FhCisMVAftDITKexEjrB5DYmKC3OhHfrMh6Q/DWmf9/Ap
+ 6YSw==
+X-Gm-Message-State: AOJu0YyQlYcqY5nqOgeoWiQTuCU4RneaN5BedrEuYbdXSoXjdne23rEe
+ bMZH8Teb3YQAh4vOPYXowm8xeITcjs0l0wBDqRvAChT8qMa2ugS21cEcjF8cnvmc0Ii+b5MxlrB
+ x4IUfiko=
+X-Gm-Gg: ASbGnctYAjEDH5MA4nMyNFzrI7+A5QrrhbwmYtNoYnvoQEcOo77XgtQNmzhOA0rIuD0
+ Ago7MGTSCUINn9Jd4R/1YyWqVgYnLXJbR6m3DN6/JB7oFpsaB5PjLnn4YyZ25mtjO3sbdiA1/Xf
+ KAhfq30jHCqOXSapWpxFKtzALM+OAkM99pVexPwWn5LlMKCb1g+SuKA0LGLFr15lDIbAvPrR3Yk
+ CYtOjrK5YssRfMyb/0WEk4t/mqEdEw9JWr98VYWjexP7I2xmDRjVmYY/tYPT8rurMpLm6muRD5C
+ cDTFZSuBskAOi/Z3mh9BHQIFoZ3ZwLWWkdyQgrvUMiyKj7KtwffuyjXOZE2LGSyrCx1qbJNqDwg
+ Eyza3vBBiUGwnwlpKtj9+jum+byhj3lzSSIRtqrdPH08CKC0=
+X-Google-Smtp-Source: AGHT+IGFdXvbtrmSBmxHJNLN4pDaiABUMy9VqLrl9C7Ezj+X1ZBg11V0ae10G5S9X9Q7hQJkKnS6ew==
+X-Received: by 2002:a17:906:f0cd:b0:b04:1cb0:bac3 with SMTP id
+ a640c23a62f3a-b041cb0c00bmr1413574866b.37.1757007953566; 
+ Thu, 04 Sep 2025 10:45:53 -0700 (PDT)
+Received: from localhost.localdomain ([79.132.233.79])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-b0424cc1698sm1086291966b.21.2025.09.04.10.45.52
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 04 Sep 2025 10:45:52 -0700 (PDT)
+To: buildroot@buildroot.org
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>
+Date: Thu,  4 Sep 2025 19:45:39 +0200
+Message-Id: <20250904174539.596715-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-Date: Thu, 04 Sep 2025 19:03:10 +0200
-To: Fabio Estevam <festevam@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250829012913.2050830-1-festevam@gmail.com>
-References: <20250829012913.2050830-1-festevam@gmail.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <2647a9a997ea870292be492981993273@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1757005391;
- bh=H+ffTobg2RdRX4lPyiE20pdZqgYqZ0a4zzuzjdb/P80=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=q8DMUtY/a+0OFMLiZ0qm6jzmS2bptc9tGa+5PZTvCNognKuayxFqBWaQ3Y7aq6U6e
- k3r4HsdUh0kIMZLjs4gKn8ACCgtJeq5PaDA00uLN7CYqEtyQ9CzWHgHkbnngRkmQC0
- NsO2ILhGsfkrSgY0R2l1N1beUJ44iHClkPbNWEc2AM4DDCH3w4sE+Y/8kSLe7BLLQh
- kEUszrhiXptbYHWBNEaT+s+HnnJ0AIZtIBUjNDOBOY7fxCNlpAq1R8rLoB1C7db051
- l5lx5dFa75nRTHS+qem6blCSUE1UpAypVAdOLlIy/2Ww0zN24xovcdFFIc8RRK2gm6
- vrUxIR9scWVHA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1757007953; x=1757612753; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=9TGpMMvQZtt0GsZoYmowSDHHMUDDWwmqMZyaBPNxuhU=;
+ b=N/FBB52Cfbpk1ZCDa1vgFSaOg6Bz6zLH65CibrUzfx681FLcIE9QAoQGzugW8qSIUL
+ yrxkybxyD2Jm/ed/33Dxs6049hdf6dE/HcxRjKl5pfHN17PGkKvZnWQXP1/j6J+4TjzQ
+ D4QfplNfEpqQbY9ccEZHIRQlc2SYOtnkeRAODK9gHY2d1Nz8vJlBfkIKAio2DO7QnKFn
+ NqxdIy/MRPc4SnFPkG/6VeyYGIGf0SllsbhNcvuz+UVgrzK+2LJHtMk7hbe0EwVTKoeR
+ hZR4vQKsm2wUg09PeOuXdMj6fBSxjibYQO0wRxlZCbjbYCQe2/t+JUfbRsr5L6c+ttYy
+ ctdQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=q8DMUtY/
-Subject: Re: [Buildroot] [PATCH] configs/imx8mm-evk_defconfig: Update kernel
- and U-Boot
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=N/FBB52C
+Subject: [Buildroot] [2025.02.x, PATCH 1/1] package/ipset: fix build w/ musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,66 +107,97 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Fabio,
+When building ipset with musl libc the following error appeared on the
+autobuilder in 2025.02.x:
 
-Thanks for the patch!
+```
+ipset.c: In function 'main':
+ipset.c:35:21: error: implicit declaration of function 'basename' [-Wimplicit-function-declaration]
+   35 |         if (!strcmp(basename(argv[0]), "ipset-translate")) {
+      |                     ^~~~~~~~
+ipset.c:35:21: error: passing argument 1 of 'strcmp' makes pointer from integer without a cast [-Wint-conversion]
+   35 |         if (!strcmp(basename(argv[0]), "ipset-translate")) {
+      |                     ^~~~~~~~~~~~~~~~~
+      |                     |
+      |                     int
+In file included from ipset.c:13:
+```
 
-On 29/08/2025 03:29, Fabio Estevam wrote:
-> Update the kernel version to 6.12.43 and U-Boot to 2025.07.
-> 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  configs/imx8mm-evk_defconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/configs/imx8mm-evk_defconfig 
-> b/configs/imx8mm-evk_defconfig
-> index 00fe2fa76119..1af55040a7b8 100644
-> --- a/configs/imx8mm-evk_defconfig
-> +++ b/configs/imx8mm-evk_defconfig
-> @@ -10,7 +10,7 @@ 
-> BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
->  BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.16"
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.43"
+This error can be reproduced with:
 
-Since this defconfig has BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-it should also update hashes for uboot and kernel in
-board/freescale/imx8mm-evk/patches
+```
+cat >.config <<EOF
+BR2_aarch64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_MUSL_BLEEDING_EDGE=y
+BR2_PACKAGE_IPSET=y
+EOF
+make olddefconfig
+make ipset
+```
 
-With this patch, doing a "make source" currently fail with:
+This patch adds the upstream commit [1], that fixes this issue by
+including explicitely `libgen.h`. This patch is part of the master
+branch since commit [2].
 
-     ERROR: No hash found for linux-6.12.43.tar.xz
+[1] https://git.netfilter.org/ipset/commit/?id=316f592ddc547c28388da4e7cb7c5c8f89cd3591
+[2] 8fdbbefa08 package/ipset: bump to version 7.23
 
-Could you send an updated patch, please?
+Fixes: https://autobuild.buildroot.org/results/930/930802ecc324c4cfc697191aa6a68642a4188e7b
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ ...cit-declaration-of-function-basename.patch | 31 +++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/ipset/0001-ipset-fix-implicit-declaration-of-function-basename.patch
 
->  BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-evk"
-> @@ -31,7 +31,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mm_evk"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
->  BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-> --
-> 2.34.1
+diff --git a/package/ipset/0001-ipset-fix-implicit-declaration-of-function-basename.patch b/package/ipset/0001-ipset-fix-implicit-declaration-of-function-basename.patch
+new file mode 100644
+index 0000000000..c01fdaf671
+--- /dev/null
++++ b/package/ipset/0001-ipset-fix-implicit-declaration-of-function-basename.patch
+@@ -0,0 +1,31 @@
++From 316f592ddc547c28388da4e7cb7c5c8f89cd3591 Mon Sep 17 00:00:00 2001
++From: Mike Pagano <mpagano@gentoo.org>
++Date: Fri, 30 Aug 2024 11:31:19 -0400
++Subject: ipset: Fix implicit declaration of function basename
++
++basename(3) is defined in libgen.h in MUSL.
++Include libgen.h where basename(3) is used.
++
++Signed-off-by: Mike Pagano <mpagano@gentoo.org>
++Acked-by: Phil Sutter <phil@nwl.cc>
++Signed-off-by: Jozsef Kadlecsik <kadlec@netfilter.org>
++Upstream: https://git.netfilter.org/ipset/commit/?id=316f592ddc547c28388da4e7cb7c5c8f89cd3591
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ src/ipset.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/ipset.c b/src/ipset.c
++index 162f477..d7733bf 100644
++--- a/src/ipset.c
+++++ b/src/ipset.c
++@@ -15,6 +15,7 @@
++ #include <config.h>
++ #include <libipset/ipset.h>		/* ipset library */
++ #include <libipset/xlate.h>		/* translate to nftables */
+++#include <libgen.h>
++ 
++ int
++ main(int argc, char *argv[])
++-- 
++cgit v1.2.3
+-- 
+2.39.5
 
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
