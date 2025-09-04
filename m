@@ -1,75 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D899CA1013
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:05:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2BAACA1013
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:09:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C77058069B;
-	Thu,  4 Sep 2025 16:05:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9274F4035E;
+	Thu,  4 Sep 2025 16:09:59 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3ull2xj9xsPq; Thu,  4 Sep 2025 16:09:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAD834035F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BAD834035F;
+	Thu,  4 Sep 2025 16:09:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id EE2C9106
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:09:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CE4A680712
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:09:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TyRTjf6ilXuc; Thu,  4 Sep 2025 16:05:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 015C080698
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 015C080698;
-	Thu,  4 Sep 2025 16:05:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id CBD25106
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:05:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BD827605C7
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:05:13 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HY5UhSe8-ouK for <buildroot@buildroot.org>;
- Thu,  4 Sep 2025 16:05:13 +0000 (UTC)
+ id l07aA9S_bXoB for <buildroot@buildroot.org>;
+ Thu,  4 Sep 2025 16:09:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
  helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BEFBA605CA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BEFBA605CA
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D0BD280710
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0BD280710
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BEFBA605CA
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:05:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D0BD280710
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:09:55 +0000 (UTC)
 Feedback-ID: 21632:4007:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1131975576; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 2065305048; 
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Thu, 04 Sep 2025 16:05:10 +0000 (UTC)
+ Thu, 04 Sep 2025 16:09:54 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1uuCST-002e2c-1C;
- Thu, 04 Sep 2025 18:05:09 +0200
+ (envelope-from <peter@korsgaard.com>) id 1uuCX2-002heG-2I;
+ Thu, 04 Sep 2025 18:09:52 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Perale via buildroot <buildroot@buildroot.org>
-Cc: Thomas Perale <thomas.perale@mind.be>
-References: <20250811205938.784904-1-thomas.perale@mind.be>
-Date: Thu, 04 Sep 2025 18:05:09 +0200
-In-Reply-To: <20250811205938.784904-1-thomas.perale@mind.be> (Thomas Perale
- via buildroot's message of "Mon, 11 Aug 2025 22:59:38 +0200")
-Message-ID: <87plc6i4p6.fsf@dell.be.48ers.dk>
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,  Ezequiel Garcia
+ <ezequiel@vanguardiasur.com.ar>,  Romain Naour <romain.naour@gmail.com>
+References: <20250829084753.1175658-1-thomas.petazzoni@bootlin.com>
+Date: Thu, 04 Sep 2025 18:09:52 +0200
+In-Reply-To: <20250829084753.1175658-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni via buildroot's message of "Fri, 29 Aug 2025 10:47:52
+ +0200")
+Message-ID: <87ldmui4hb.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=pFLnvUP4WxCGbl5qR0ybBNkE16mF5ZKN6Pu5a+RAfD6aiD3RctwdHfWNExVeX1DoDOHckubIQrT49EDdsYDNK8iRPIOstlF1mG9Oec2uSftke2pUUy0MfMDu/ENrmZ4lnKZDQp9gojuQPo79Hq/zo+Yk23KDXrcZlgNdS9CzUzn09vjtNgkyIO6g26WfT+qcGcR1zitIqnhCD5JitdI/niq6/uGn9VSdzIJjQ434TVO9aL86K0Jk1ISUqosH6ZQ3Lv9QhGgkvmIVR+BFcaiV6OFRxikfhcPYW2NskcdrdXB6i4UUECvUgU7h4DQfJqdRBhomLLM+hajZs5tJUjbIZw==;
+ b=FAipncUMpR/Yxw741R7gE0i+r/7tjps1u5fitTJDfyiBNtL4PMpXETpa/KZCWzQJlHKPofMoroNkQ4Ao6qOZRMzOJvGTA+v+JK0aVoMoTx/ITZ04rFnl7pcQKSsscI3J0zMR83bfuVyg3qURj38g4gAn5cmG+/BJWz9vYz3PdffCkEEv0xEZG0qYxBTsbK1w5Xz0SXZhErHgCoN8L8slg0JfZoPUudiNyebp2G2bTqvsFwh9CxtxQyka8IeCo0gMKYkCyIDhpVPPi4gmpgsqd5lCvGzU+InamPHrZrtS+peZoDmKzZW2YFOom+LsDdsQ6BWurbQO9lcBBTlCImZZEg==;
  s=purelymail2; d=purelymail.com; v=1;
- bh=E+fXfCqNNU61+SJDUBJBa1n/6SJp4cf4GkivHFmjDDI=;
+ bh=4OzJBVI5m+He4JVLnKQrlAdRNjGMzGSnp6tY92zXC08=;
  h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=pFLnvUP4
-Subject: Re: [Buildroot] [PATCH] package/mariadb: fix openssl RMD160
- requirement
+ header.a=rsa-sha256 header.s=purelymail2 header.b=FAipncUM
+Subject: Re: [Buildroot] [PATCH] package/openal: bump to 1.24.3 to fix GCC
+ 15.x build issues
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,56 +88,20 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Perale via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
- > On the autobuilder the mariadb package fails to build when the
- > BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 variable is not set.
+ > openal 1.22.0 does not build with GCC 15.x, but the backport of the
+ > fixes to 1.22.0 turns out to be too complicated, so let's bump to
+ > 1.24.3 instead.
 
- > See the following autobuilder error:
+ > Since 1.24.3 uses C++17, and after testing with GCC 7.x, then GCC 8.x
+ > then GCC 9.x, we found out that GCC 9.x at least is
+ > necessary. Therefore, reverse dependencies are updated accordingly.
 
- > ```
- > /workdir/instance-0/output-1/build/mariadb-10.11.11/libmariadb/libmariadb/secure/openssl_crypt.c:
- > In function 'ma_hash_get_algorithm':
- > /workdir/instance-0/output-1/build/mariadb-10.11.11/libmariadb/libmariadb/secure/openssl_crypt.c:40:12:
- > error: implicit declaration of function 'EVP_ripemd160'; did you mean
- > 'LN_ripemd160'? [-Wimplicit-function-declaration]
- >    40 |     return EVP_ripemd160();
- >       |            ^~~~~~~~~~~~~
- >       |            LN_ripemd160
- > /workdir/instance-0/output-1/build/mariadb-10.11.11/libmariadb/libmariadb/secure/openssl_crypt.c:40:12:
- > error: returning 'int' from a function with return type 'const EVP_MD
- > *' {aka 'const struct evp_md_st *'} makes pointer from integer without
- > a cast [-Wint-conversion]
- >    40 |     return EVP_ripemd160();
- >       |            ^~~~~~~~~~~~~~~
- > ```
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
- > This error can be reproduced with the following config:
-
- > ```
- > cat <<EOF >.config
- > BR2_arm=y
- > BR2_cortex_a7=y
- > BR2_TOOLCHAIN_EXTERNAL=y
- > BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
- > BR2_PACKAGE_LIBOPENSSL=y
- > # BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 is not set
- > BR2_PACKAGE_MARIADB=y
- > EOF
- > make olddefconfig
- > make mariadb
- > ```
-
- > This patch adds a requirement to the RMD160 crypto for the MariaDB
- > package.
-
- > Fixes: https://autobuild.buildroot.org/results/f2b/f2b749cb7019856c5434c27987e8bfb2dc179cda
- > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
- > ---
- > Tested building by removing all the other crypto except DES & RMD160. It
- > builds on that case.
-
-Committed, thanks.
+It is a bit unfortunate that we cannot fix it in a simpler/smaller way,
+but oh well - Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
