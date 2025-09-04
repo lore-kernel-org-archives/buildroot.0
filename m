@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79A3ACAC589
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:18:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 274ADCAC586
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:18:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 549C5606C1;
-	Mon,  8 Sep 2025 14:18:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC35C607DA;
+	Mon,  8 Sep 2025 14:18:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5J31hmLVzN7F; Mon,  8 Sep 2025 14:18:41 +0000 (UTC)
+ id dl7TxmNwIIPD; Mon,  8 Sep 2025 14:18:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5867C60726
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 153B9607A0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5867C60726;
-	Mon,  8 Sep 2025 14:18:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 693F4CA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 153B9607A0;
+	Mon,  8 Sep 2025 14:18:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7FCC7234
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E880B40211
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 64A8440074
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WUCHFBCABERW for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NhJChGfuQNhn for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FB214020B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B06B4007B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2FB214020B
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0B06B4007B
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 21C4B80DA7; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
+ id 0794980DA7; Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 2 Sep 2025 21:49:50 +0200
+Date: Thu, 4 Sep 2025 18:58:44 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 498b5f3846831e4e9407eed2069bb33e1f5442f8
-X-Git-Newrev: 98399d11ff6afe053a052f867bb0610eaacd52a0
+X-Git-Oldrev: a7216460a3afc07b5a263e54a20158eccb2affa4
+X-Git-Newrev: bf55f4713e1ba877183b9e31469df5d3823ec4c0
 X-Patchwork-Hint: ignore
-Message-Id: <20250908141630.21C4B80DA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zfs: bump version to 2.3.4
+Message-Id: <20250908141631.0794980DA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/apitrace: fix build with GCC 15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,146 +60,86 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2108642455882261189=="
+Content-Type: multipart/mixed; boundary="===============1497090811296335717=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2108642455882261189==
+--===============1497090811296335717==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98399d11ff6afe053a052f867bb0610eaacd52a0
+commit: https://git.buildroot.net/buildroot/commit/?id=bf55f4713e1ba877183b9e31469df5d3823ec4c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added backported patch:
-- 0001-use-sys_stath-instead-of-linux_stath.patch
-  https://github.com/openzfs/zfs/commit/ccf5a8a6fcfdfbdaa2f0fdca5d787958224bf06d
+Fixes:
 
-For release note, see:
-https://github.com/openzfs/zfs/releases/tag/zfs-2.3.4
+  /home/thomas/buildroot/buildroot/outputs/all/build/apitrace-10.0/retrace/metric_writer.cpp:50:70: error: ‘uint64_t’ does not name a type
+   50 |         case CNT_NUM_UINT64: std::cout << "\t" << *(reinterpret_cast<uint64_t*>(data)); break;
+      |                                                                      ^~~~~~~~
 
-Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
+Fixes:
+
+  http://autobuild.buildroot.net/results/6e4/6e4e841b4f0be29956fdfad43a406d2dab3003f3/build-end.log
+
+Patch is backported from upstream.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit a4b0913280b95b62cd74fdc5ff0b25e3afa2c529)
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...0001-use-sys_stath-instead-of-linux_stath.patch | 82 ++++++++++++++++++++++
- package/zfs/zfs.hash                               |  4 +-
- package/zfs/zfs.mk                                 |  2 +-
- 3 files changed, 85 insertions(+), 3 deletions(-)
+ package/apitrace/0003-Explicit-header-stdint.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/package/zfs/0001-use-sys_stath-instead-of-linux_stath.patch b/package/zfs/0001-use-sys_stath-instead-of-linux_stath.patch
+diff --git a/package/apitrace/0003-Explicit-header-stdint.patch b/package/apitrace/0003-Explicit-header-stdint.patch
 new file mode 100644
-index 0000000000..5e5d21ec52
+index 0000000000..efd7522314
 --- /dev/null
-+++ b/package/zfs/0001-use-sys_stath-instead-of-linux_stath.patch
-@@ -0,0 +1,82 @@
-+From ccf5a8a6fcfdfbdaa2f0fdca5d787958224bf06d Mon Sep 17 00:00:00 2001
-+From: classabbyamp <5366828+classabbyamp@users.noreply.github.com>
-+Date: Wed, 27 Aug 2025 17:42:32 -0400
-+Subject: [PATCH] linux: use sys/stat.h instead of linux/stat.h
++++ b/package/apitrace/0003-Explicit-header-stdint.patch
+@@ -0,0 +1,42 @@
++From 3cc8956995d6d702a2c3ef0d7f91500c6accbfad Mon Sep 17 00:00:00 2001
++From: Nicolas PARLANT <nicolas.parlant@parhuet.fr>
++Date: Fri, 21 Mar 2025 05:02:23 +0000
++Subject: [PATCH] Explicit header: stdint
 +
-+glibc includes linux/stat.h for statx, but musl defines its own statx
-+struct and associated constants, which does not include STATX_MNT_ID
-+yet. Thus, including linux/stat.h directly should be avoided for
-+maximum libc compatibility.
++Fix building with GCC-15. It no longer includes it by default.
 +
-+Tested on:
-+  - glibc: x86_64, i686, aarch64, armv7l, armv6l
-+  - musl: x86_64, aarch64, armv7l, armv6l
-+
-+Reviewed-by: Brian Behlendorf <behlendorf1@llnl.gov>
-+Tested-By: Achill Gilgenast <achill@achill.org>
-+Signed-off-by: classabbyamp <dev@placeviolette.net>
-+Closes #17675
-+
-+Upstream: https://github.com/openzfs/zfs/commit/ccf5a8a6fcfdfbdaa2f0fdca5d787958224bf06d
-+Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
++Signed-off-by: Nicolas PARLANT <nicolas.parlant@parhuet.fr>
++Upstream: 952bad1469ea747012bdc48c48993bd5f13eec04
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +---
-+ config/user-statx.m4                   | 6 +++---
-+ include/os/linux/spl/sys/stat.h        | 2 +-
-+ lib/libspl/include/os/linux/sys/stat.h | 2 +-
-+ 3 files changed, 5 insertions(+), 5 deletions(-)
++ frametrim/ft_dependecyobject.hpp | 1 +
++ retrace/metric_writer.cpp        | 1 +
++ 2 files changed, 2 insertions(+)
 +
-+diff --git a/config/user-statx.m4 b/config/user-statx.m4
-+index 0315f93e0c20..1ba74a40e9b8 100644
-+--- a/config/user-statx.m4
-++++ b/config/user-statx.m4
-+@@ -2,7 +2,7 @@ dnl #
-+ dnl # Check for statx() function and STATX_MNT_ID availability
-+ dnl #
-+ AC_DEFUN([ZFS_AC_CONFIG_USER_STATX], [
-+-	AC_CHECK_HEADERS([linux/stat.h],
-++	AC_CHECK_HEADERS([sys/stat.h],
-+ 		[have_stat_headers=yes],
-+ 		[have_stat_headers=no])
++diff --git a/frametrim/ft_dependecyobject.hpp b/frametrim/ft_dependecyobject.hpp
++index cf1885f1..53b910d0 100644
++--- a/frametrim/ft_dependecyobject.hpp
+++++ b/frametrim/ft_dependecyobject.hpp
++@@ -28,6 +28,7 @@
++ #pragma once
 + 
-+@@ -14,7 +14,7 @@ AC_DEFUN([ZFS_AC_CONFIG_USER_STATX], [
-+ 			AC_MSG_CHECKING([for STATX_MNT_ID])
-+ 			AC_COMPILE_IFELSE([
-+ 				AC_LANG_PROGRAM([[
-+-					#include <linux/stat.h>
-++					#include <sys/stat.h>
-+ 				]], [[
-+ 					struct statx stx;
-+ 					int mask = STATX_MNT_ID;
-+@@ -29,6 +29,6 @@ AC_DEFUN([ZFS_AC_CONFIG_USER_STATX], [
-+ 			])
-+ 		])
-+ 	], [
-+-		AC_MSG_WARN([linux/stat.h not found; skipping statx support])
-++		AC_MSG_WARN([sys/stat.h not found; skipping statx support])
-+ 	])
-+ ])  dnl end AC_DEFUN
-+diff --git a/include/os/linux/spl/sys/stat.h b/include/os/linux/spl/sys/stat.h
-+index 087389b57b34..ad2815e46394 100644
-+--- a/include/os/linux/spl/sys/stat.h
-++++ b/include/os/linux/spl/sys/stat.h
-+@@ -25,6 +25,6 @@
-+ #ifndef _SPL_STAT_H
-+ #define	_SPL_STAT_H
++ #include "ft_tracecall.hpp"
+++#include <stdint.h>
 + 
-+-#include <linux/stat.h>
-++#include <sys/stat.h>
++ namespace frametrim {
 + 
-+ #endif /* SPL_STAT_H */
-+diff --git a/lib/libspl/include/os/linux/sys/stat.h b/lib/libspl/include/os/linux/sys/stat.h
-+index a605af962a6d..13cc0b46ac93 100644
-+--- a/lib/libspl/include/os/linux/sys/stat.h
-++++ b/lib/libspl/include/os/linux/sys/stat.h
-+@@ -33,7 +33,7 @@
++diff --git a/retrace/metric_writer.cpp b/retrace/metric_writer.cpp
++index e923ed1d..4e4ce748 100644
++--- a/retrace/metric_writer.cpp
+++++ b/retrace/metric_writer.cpp
++@@ -24,6 +24,7 @@
++  **************************************************************************/
 + 
-+ #ifdef HAVE_STATX
-+ #include <fcntl.h>
-+-#include <linux/stat.h>
-++#include <sys/stat.h>
-+ #endif
++ #include <iostream>
+++#include <stdint.h>
 + 
-+ /*
-diff --git a/package/zfs/zfs.hash b/package/zfs/zfs.hash
-index 87ee513aed..0f309155ae 100644
---- a/package/zfs/zfs.hash
-+++ b/package/zfs/zfs.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/openzfs/zfs/releases/download/zfs-2.3.3/zfs-2.3.3.sha256.asc
--sha256  844122118f0ea81205a01753bbcb1315330f8967c1f866dcd10155273131f071  zfs-2.3.3.tar.gz
-+# From https://github.com/openzfs/zfs/releases/download/zfs-2.3.4/zfs-2.3.4.sha256.asc
-+sha256  9ec397cf360133161a1180035f3e7d6962186ed2b3457953a28d45aa883fa495  zfs-2.3.4.tar.gz
- 
- # Hash for license files:
- sha256  1ffb70c33c4f79f04e947facc5c7851f289609256aacb47fc115f700427d9520  LICENSE
-diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
-index ad4f3f232d..a48f89922b 100644
---- a/package/zfs/zfs.mk
-+++ b/package/zfs/zfs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ZFS_VERSION = 2.3.3
-+ZFS_VERSION = 2.3.4
- ZFS_SITE = https://github.com/openzfs/zfs/releases/download/zfs-$(ZFS_VERSION)
- ZFS_SELINUX_MODULES = zfs
- ZFS_LICENSE = CDDL
++ #include "metric_writer.hpp"
++ 
++-- 
++2.50.1
++
 
---===============2108642455882261189==
+--===============1497090811296335717==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -210,4 +150,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============2108642455882261189==--
+--===============1497090811296335717==--
