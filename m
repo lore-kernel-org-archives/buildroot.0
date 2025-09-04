@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DA2FCAC58A
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:18:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D4ABCAC586
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:18:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DA6BC80970;
-	Mon,  8 Sep 2025 14:18:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D0BE280549;
+	Mon,  8 Sep 2025 14:18:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9fRbjgm_h6dh; Mon,  8 Sep 2025 14:18:29 +0000 (UTC)
+ id dNVvi6ofFKty; Mon,  8 Sep 2025 14:18:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0B9F8094E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2CD28096C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C0B9F8094E;
-	Mon,  8 Sep 2025 14:18:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 352BC186
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C2CD28096C;
+	Mon,  8 Sep 2025 14:18:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 10F0F186
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1DFE04004F
+ by smtp3.osuosl.org (Postfix) with ESMTP id E53FD605DC
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CiRSC4hMtgxf for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Vh9wIbgDqjl4 for <buildroot@buildroot.org>;
  Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F0DE40082
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CD84605C1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F0DE40082
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6CD84605C1
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5B53180DA7; Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
+ id 6A2EB81353; Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Sep 2025 20:48:45 +0200
+Date: Thu, 4 Sep 2025 20:49:04 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e255cfff44f25fdc91fe871b6923932c7b728a6c
-X-Git-Newrev: 7c20afb95eae62ebffd7f9f093e6a60cea274892
+X-Git-Oldrev: 7c20afb95eae62ebffd7f9f093e6a60cea274892
+X-Git-Newrev: 7bf44f11e70e66bdefc39c78f79a7b7e07c24fc4
 X-Patchwork-Hint: ignore
-Message-Id: <20250908141631.5B53180DA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/aspeed_ast2600evb: bump U-Boot to
- commit 66672e5af36f
+Message-Id: <20250908141631.6A2EB81353@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/aspeed_*: update hostname and
+ /etc/issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,43 +61,58 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0404761001839871668=="
+Content-Type: multipart/mixed; boundary="===============2597878142721367406=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0404761001839871668==
+--===============2597878142721367406==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c20afb95eae62ebffd7f9f093e6a60cea274892
+commit: https://git.buildroot.net/buildroot/commit/?id=7bf44f11e70e66bdefc39c78f79a7b7e07c24fc4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use a newer commit ID (2023-07-24). While not the latest, this commit
-marks a significant milestone in the ongoing development and support
-of AST2600 SoC boards.
+Include the SoC model in both hostname and /etc/issue to match the
+.dts file names.
 
 Signed-off-by: Cédric Le Goater <clg@kaod.org>
 Reviewed-by: Joel Stanley <joel@jms.id.au>
-[Julien: reword commit title]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- configs/aspeed_ast2600evb_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/aspeed_ast2500evb_defconfig | 4 ++--
+ configs/aspeed_ast2600evb_defconfig | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/configs/aspeed_ast2500evb_defconfig b/configs/aspeed_ast2500evb_defconfig
+index ffc0ec8d52..64666cc3d7 100644
+--- a/configs/aspeed_ast2500evb_defconfig
++++ b/configs/aspeed_ast2500evb_defconfig
+@@ -1,7 +1,7 @@
+ BR2_arm=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_16=y
+-BR2_TARGET_GENERIC_HOSTNAME="aspeed-evb"
+-BR2_TARGET_GENERIC_ISSUE="Aspeed EVB"
++BR2_TARGET_GENERIC_HOSTNAME="ast2500-evb"
++BR2_TARGET_GENERIC_ISSUE="Aspeed AST2500 EVB"
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/aspeed/common/post-image.sh"
+ BR2_LINUX_KERNEL=y
 diff --git a/configs/aspeed_ast2600evb_defconfig b/configs/aspeed_ast2600evb_defconfig
-index 4e49c4acbe..2057091776 100644
+index 2057091776..0572f78599 100644
 --- a/configs/aspeed_ast2600evb_defconfig
 +++ b/configs/aspeed_ast2600evb_defconfig
-@@ -18,7 +18,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/openbmc/u-boot.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="f2b82fa4ba17ed8091fe76c284220006645a293b"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="66672e5af36fe294df56f8e7942069e3909f3790"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="evb-ast2600"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=ast2600a1-evb"
+@@ -1,8 +1,8 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_16=y
+-BR2_TARGET_GENERIC_HOSTNAME="aspeed-evb"
+-BR2_TARGET_GENERIC_ISSUE="Aspeed EVB"
++BR2_TARGET_GENERIC_HOSTNAME="ast2600-evb"
++BR2_TARGET_GENERIC_ISSUE="Aspeed AST2600 EVB"
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/aspeed/common/post-image.sh"
+ BR2_LINUX_KERNEL=y
 
---===============0404761001839871668==
+--===============2597878142721367406==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -108,4 +123,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0404761001839871668==--
+--===============2597878142721367406==--
