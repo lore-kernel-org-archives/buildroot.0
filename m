@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7F5FCA1015
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:35:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE810CA1002
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:35:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8025B6089D;
-	Thu,  4 Sep 2025 16:35:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C74F2608AC;
+	Thu,  4 Sep 2025 16:35:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rtsy4D4oOnPC; Thu,  4 Sep 2025 16:35:09 +0000 (UTC)
+ id cSFdOzf82O-5; Thu,  4 Sep 2025 16:35:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5E616089A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B447860836
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5E616089A;
-	Thu,  4 Sep 2025 16:35:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B447860836;
+	Thu,  4 Sep 2025 16:35:09 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D80E1AE8
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:34:15 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id DB266106
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:34:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C6B144009F
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E1AAC40082
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pduWhwy50esC for <buildroot@buildroot.org>;
+ id S2rUvEel8hTY for <buildroot@buildroot.org>;
  Thu,  4 Sep 2025 16:33:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AA62400AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F4D74008A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5AA62400AB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2F4D74008A
  for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:33:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 58E8087E99; Thu,  4 Sep 2025 16:33:36 +0000 (UTC)
+ id 2C49587EEF; Thu,  4 Sep 2025 16:33:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Sep 2025 14:16:53 +0200
+Date: Thu, 4 Sep 2025 14:15:11 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 4c8ecf88b106573d27029d0f8ac7fe9c24f66835
-X-Git-Newrev: c66f43d5f15110c72308ce67974aff835cfe3571
+X-Git-Oldrev: 11fd877d5d55334440f708f6e66dffcebdb7a885
+X-Git-Newrev: 5cf3e448d1d352f5339a1f7e2c086fb4372f34ac
 X-Patchwork-Hint: ignore
-Message-Id: <20250904163336.58E8087E99@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] {linux,
- linux-headers}: bump 6.12.x, 6.6.x, 6.1.x, 5.15.x, 5.10.x, 5.4.x series
+Message-Id: <20250904163336.2C49587EEF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/libsoxr: drop
+ ffmpeg support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,75 +61,189 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Titouan Christophe via buildroot <buildroot@buildroot.org>
 Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7829626503082548449=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c66f43d5f15110c72308ce67974aff835cfe3571
+--===============7829626503082548449==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=5cf3e448d1d352f5339a1f7e2c086fb4372f34ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Update the latest kernel releases to:
- - 6.12.41 -> 6.12.44
- - 6.6.101 -> 6.6.103
- - 6.1.147 -> 6.1.149
- - 5.15.189 -> 5.15.190
- - 5.10.240 -> 5.10.241
- - 5.4.296 -> 5.4.297
+Having support for ffmpeg in libsoxr causes several circular
+dependencies:
 
+- pulseaudio -> libsoxr -> ffmpeg -> pulseaudio
+
+  (This one was worked around in
+  fecc337d21f337a30ef7f9f448683d99c01fc245 by dropping the ffmpeg ->
+  pulseaudio dependency, but it's annoying as being able to output
+  audio from ffmpeg into pulseaudio seems useful)
+
+- libopenmpt -> pulseaudio -> libsoxr -> ffmpeg -> libopenmpt
+
+  (This is one exists, and is fixed by this commit)
+
+To fix both circular dependencies, we propose to drop the dependency
+of libsoxr on ffmpeg, which is used to get some optimized FFT
+implementation. While not being useless, this is the point where
+breaking the dependency seems the most logical.
+
+Neither Debian nor Fedora build libsoxr with ffmpeg support.
+
+In order to achieve that, we add a new patch making the option
+WITH_AVFFT actually effective. Since we no longer build against
+ffmpeg, the previously added patch that was fixing the pkg-config file
+is no longer needed.
+
+Fixes:
+
+  https://autobuild.buildroot.net/results/bbfce69f35cafd56245ebeae79086a8b64592a16/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 4bf2a854f93c6d5d6b230a3bf2a661b1e9a9b245)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- linux/linux.hash                     | 12 ++++++------
- package/linux-headers/Config.in.host | 12 ++++++------
- 2 files changed, 12 insertions(+), 12 deletions(-)
+ .checkpackageignore                                |  1 -
+ .../0001-Add-Libs.private-for-static-linking.patch | 43 ----------------------
+ ...txt-allow-building-without-ffmpeg-support.patch | 33 +++++++++++++++++
+ package/libsoxr/libsoxr.mk                         |  6 +--
+ 4 files changed, 34 insertions(+), 49 deletions(-)
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index a259bf7a58..f723b9015b 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,12 +1,12 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
- sha256  3f1ccd0a6dc9c9777cb6fcef357c77e4a2386c84c52b6d5bbcda79c16af33b1b  linux-6.14.11.tar.xz
--sha256  6b19a3ae99423de2416964d67251d745910277af258b4c4c63e88fd87dbf0e27  linux-6.12.41.tar.xz
--sha256  8c4ff2869736538b9b0d88ea8dbf0332b79c6ecc40a32066768a754df1fae1c0  linux-6.6.101.tar.xz
--sha256  218f25663a41e3d811e84fa1c4acec50684898b2f6d0c8c0deb531d937e466f7  linux-6.1.147.tar.xz
-+sha256  b650210ed3027b224969d148aa377452a9aad3ae7f2851abedd31adfef16bdae  linux-6.12.44.tar.xz
-+sha256  d288dd38c3e62ba576ba6b3ad2a84cfba65cd43b702f6c50d1f701aee942b18e  linux-6.6.103.tar.xz
-+sha256  c4e906b8d39a5866d25e06371d4de4454fbfaaeb67979a04e4137e807877be39  linux-6.1.149.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  e3d0025b87278e14733cb326700f17c7cceb54d920622b0d5fcd58a88c6850c3  linux-5.15.189.tar.xz
--sha256  8d88c3977226d666554b75f480d1e6c5f4e4d2acdf2a3462840c6bac88634d13  linux-5.10.240.tar.xz
--sha256  3d63614e58bf1befaba3f5713145200d09f26e564832c8948094fdf5b11fa73a  linux-5.4.296.tar.xz
-+sha256  62b814f1a48e1d67764a28611f23ca1f1ce1084ad7f1d319acc05720a9a68604  linux-5.15.190.tar.xz
-+sha256  08c1e982064c81f8445a8fff2293d430c716c11fd3185606b8275718d696d8d6  linux-5.10.241.tar.xz
-+sha256  f10cfcea7acf7588087d7cc17ebeeb7d3ff783c040536698c544eed7c5e8a841  linux-5.4.297.tar.xz
- # Locally computed
- sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
- sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 8ca868ea3c..2e0158cb60 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -440,12 +440,12 @@ endchoice
+diff --git a/.checkpackageignore b/.checkpackageignore
+index bb1a305b30..2347c57ce5 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -658,7 +658,6 @@ package/libsigrokdecode/0001-configure-ac-Add-support-for-Python-3-9.patch lib_p
+ package/libsigrokdecode/0002-configure-Add-python-3-10-support.patch lib_patch.Upstream
+ package/libsigrokdecode/0003-configure-ac-Use-python3-embed-pc-as-a-fallback.patch lib_patch.Upstream
+ package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch lib_patch.Upstream
+-package/libsoxr/0001-Add-Libs.private-for-static-linking.patch lib_patch.Upstream
+ package/libspatialindex/0001-allow-building-static-libs.patch lib_patch.Upstream
+ package/libspatialindex/0002-CMakeLists.txt-fix-CMAKE_BUILD_TYPE.patch lib_patch.Upstream
+ package/libsquish/0001-Makefile-add-f-option-for-ln-to-remove-existing-dest.patch lib_patch.Upstream
+diff --git a/package/libsoxr/0001-Add-Libs.private-for-static-linking.patch b/package/libsoxr/0001-Add-Libs.private-for-static-linking.patch
+deleted file mode 100644
+index be96c6e649..0000000000
+--- a/package/libsoxr/0001-Add-Libs.private-for-static-linking.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From 7d2d1039f303b6322ecb72eebae39b699fd28d19 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+-Date: Fri, 22 Feb 2019 01:31:11 +0100
+-Subject: [PATCH] Add Libs.private in soxr.pc.in for static linking
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-If libsoxr is build statically against libavutil other applications
+-needs to know that they must link with `-lavutil` when building in a
+-static context.
+-
+-Signed-off-by: Jörg Krause <joerg.krause@embedded.rocks>
+----
+- CMakeLists.txt | 1 +
+- src/soxr.pc.in | 1 +
+- 2 files changed, 2 insertions(+)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index ee48f6c..714bd4d 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -139,6 +139,7 @@ if (WITH_AVFFT OR (CMAKE_SYSTEM_PROCESSOR MATCHES "^arm" AND SIMD32_FOUND AND WI
+-   if (AVUTIL_FOUND)
+-     include_directories (${AVUTIL_INCLUDE_DIRS})
+-     set (LIBS ${LIBS} ${AVUTIL_LIBRARIES})
+-+    set (PKGCONF_LIBS_PRIV ${PKGCONF_LIBS_PRIV} -lavutil)
+-   endif ()
+- endif ()
+- 
+-diff --git a/src/soxr.pc.in b/src/soxr.pc.in
+-index 69d225b..6c530a6 100644
+---- a/src/soxr.pc.in
+-+++ b/src/soxr.pc.in
+-@@ -2,4 +2,5 @@ Name: ${PROJECT_NAME}
+- Description: ${DESCRIPTION_SUMMARY}
+- Version: ${PROJECT_VERSION}
+- Libs: -L${LIB_INSTALL_DIR} -l${PROJECT_NAME}
+-+Libs.private: ${PKGCONF_LIBS_PRIV}
+- Cflags: -I${INCLUDE_INSTALL_DIR}
+--- 
+-2.20.1
+-
+diff --git a/package/libsoxr/0001-CMakeLists.txt-allow-building-without-ffmpeg-support.patch b/package/libsoxr/0001-CMakeLists.txt-allow-building-without-ffmpeg-support.patch
+new file mode 100644
+index 0000000000..37c931f4f5
+--- /dev/null
++++ b/package/libsoxr/0001-CMakeLists.txt-allow-building-without-ffmpeg-support.patch
+@@ -0,0 +1,33 @@
++From 2592f0d38826e8db3603ce1535d82ab427ac73bc Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Thu, 28 Aug 2025 18:11:13 +0200
++Subject: [PATCH] CMakeLists.txt: allow building without ffmpeg support
++
++The ffmpeg support is optional, but is automatically pulled in (if
++available) on ARM with SIMD, even when WITH_AVFFT is disabled.
++
++Instead, ensure WITH_AVFFT does its job, which is to allow disabling
++ffmpeg usage if not desired.
++
++Upstream: https://github.com/chirlu/soxr/pull/16
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index ee48f6c..48f91f1 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -134,7 +134,7 @@ if (WITH_AVFFT)
++   endif ()
++ endif ()
++ 
++-if (WITH_AVFFT OR (CMAKE_SYSTEM_PROCESSOR MATCHES "^arm" AND SIMD32_FOUND AND WITH_CR32))
+++if (WITH_AVFFT AND (CMAKE_SYSTEM_PROCESSOR MATCHES "^arm" AND SIMD32_FOUND AND WITH_CR32))
++   find_package (LibAVUtil)
++   if (AVUTIL_FOUND)
++     include_directories (${AVUTIL_INCLUDE_DIRS})
++-- 
++2.50.1
++
+diff --git a/package/libsoxr/libsoxr.mk b/package/libsoxr/libsoxr.mk
+index b34962c4ad..ace13c630b 100644
+--- a/package/libsoxr/libsoxr.mk
++++ b/package/libsoxr/libsoxr.mk
+@@ -10,7 +10,7 @@ LIBSOXR_SITE = http://downloads.sourceforge.net/project/soxr
+ LIBSOXR_LICENSE = LGPL-2.1+
+ LIBSOXR_LICENSE_FILES = LICENCE COPYING.LGPL
+ LIBSOXR_INSTALL_STAGING = YES
+-LIBSOXR_CONF_OPTS = -DWITH_OPENMP=OFF
++LIBSOXR_CONF_OPTS = -DWITH_OPENMP=OFF -DWITH_AVFFT=OFF
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "5.4.296"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.240"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.189"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.147"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.101"	if BR2_KERNEL_HEADERS_6_6
--	default "6.12.41"	if BR2_KERNEL_HEADERS_6_12
-+	default "5.4.297"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.241"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.190"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.149"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.103"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.12.44"	if BR2_KERNEL_HEADERS_6_12
- 	default "6.14.11"	if BR2_KERNEL_HEADERS_6_14
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ ifeq ($(call qstrip,$(BR2_ENDIAN)),BIG)
+ LIBSOXR_CONF_OPTS += -DHAVE_WORDS_BIGENDIAN=1
+@@ -18,8 +18,4 @@ else
+ LIBSOXR_CONF_OPTS += -DHAVE_WORDS_BIGENDIAN=0
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_FFMPEG),y)
+-LIBSOXR_DEPENDENCIES += ffmpeg
+-endif
+-
+ $(eval $(cmake-package))
+
+--===============7829626503082548449==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7829626503082548449==--
