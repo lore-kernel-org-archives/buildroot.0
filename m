@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFA8ACA1013
-	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:14:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FAECCA1002
+	for <buildroot@archiver.kernel.org>; Thu,  4 Sep 2025 16:14:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 91D814042D;
-	Thu,  4 Sep 2025 16:14:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 063DE60651;
+	Thu,  4 Sep 2025 16:14:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NrPmEggoZkru; Thu,  4 Sep 2025 16:14:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id njzaf6nFOWHg; Thu,  4 Sep 2025 16:14:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9617740426
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC14A6065C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9617740426;
-	Thu,  4 Sep 2025 16:14:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C5811106
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC14A6065C;
+	Thu,  4 Sep 2025 16:14:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 14938106
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E00A140051
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5AB848077B
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ofN01nPc9wPK for <buildroot@buildroot.org>;
- Thu,  4 Sep 2025 16:13:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id J1CFZjMbWexC for <buildroot@buildroot.org>;
+ Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFF4A40075
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48D4080779
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DFF4A40075
- for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 48D4080779
+ for <buildroot@buildroot.org>; Thu,  4 Sep 2025 16:13:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DDF5A87F0E; Thu,  4 Sep 2025 16:13:49 +0000 (UTC)
+ id 470148617D; Thu,  4 Sep 2025 16:13:48 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Sep 2025 13:57:24 +0200
+Date: Thu, 4 Sep 2025 13:57:23 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 9ecc8d0abfbb8dabceec601f4edb1a4e7726377c
-X-Git-Newrev: 65c245324dcacff304843efa438d7012b8a4efcb
+X-Git-Oldrev: ed5efcf57aa4e7df7d0b7731b568618637fc3510
+X-Git-Newrev: 3caa6986b5e6916166f576ca5152c5e1e103b5a9
 X-Patchwork-Hint: ignore
-Message-Id: <20250904161349.DDF5A87F0E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-h2:
- security bump to version 4.3.0
+Message-Id: <20250904161348.470148617D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] configs/pine64_sopine:
+ remove defconfig, broken
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,51 +66,205 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65c245324dcacff304843efa438d7012b8a4efcb
+commit: https://git.buildroot.net/buildroot/commit/?id=3caa6986b5e6916166f576ca5152c5e1e103b5a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fixes the following security vulnerability:
+This defconfig no longer builds:
 
-- CVE-2025-57804: HTTP/2 request splitting via CRLF injection
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012274147
 
-  https://github.com/python-hyper/h2/security/advisories/GHSA-847f-9342-265h
+It has been broken for at least 2 months:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 2389965eaf8ba396f74e35d4558be79bf1e8c8a6)
+  https://gitlab.com/buildroot.org/buildroot/-/jobs?name=T%3Dpine64_sopine&kind=BUILD
+
+Unless a fix is provided, this defconfig will be removed.
+
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012274147
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit 54ac9c6450fc996681227f7100ffd64d66af2f37)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/python-h2/python-h2.hash | 4 ++--
- package/python-h2/python-h2.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .checkpackageignore              |  1 -
+ DEVELOPERS                       |  1 -
+ board/pine64/sopine/boot.cmd     |  6 ------
+ board/pine64/sopine/genimage.cfg | 40 ----------------------------------------
+ board/pine64/sopine/readme.txt   | 38 --------------------------------------
+ configs/pine64_sopine_defconfig  | 37 -------------------------------------
+ 6 files changed, 123 deletions(-)
 
-diff --git a/package/python-h2/python-h2.hash b/package/python-h2/python-h2.hash
-index 2f9c8f647f..5adfc86f52 100644
---- a/package/python-h2/python-h2.hash
-+++ b/package/python-h2/python-h2.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/h2/json
--md5  4274f9619c0a43bb4ae01b6b02bf0c99  h2-4.1.0.tar.gz
--sha256  a83aca08fbe7aacb79fec788c9c0bac936343560ed9ec18b82a13a12c28d2abb  h2-4.1.0.tar.gz
-+md5  b4781bbaaae609aa759565585718e0d7  h2-4.3.0.tar.gz
-+sha256  6c59efe4323fa18b47a632221a1888bd7fde6249819beda254aeca909f221bf1  h2-4.3.0.tar.gz
- # Locally computed sha256 checksums
- sha256  7a65a5af0cbabf1c16251c7c6b2b7cb46d16a7222e79975b9b61fcd66a2e3f28  LICENSE
-diff --git a/package/python-h2/python-h2.mk b/package/python-h2/python-h2.mk
-index 699e8baece..d9cfbdbf92 100644
---- a/package/python-h2/python-h2.mk
-+++ b/package/python-h2/python-h2.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_H2_VERSION = 4.1.0
-+PYTHON_H2_VERSION = 4.3.0
- PYTHON_H2_SOURCE = h2-$(PYTHON_H2_VERSION).tar.gz
--PYTHON_H2_SITE = https://files.pythonhosted.org/packages/2a/32/fec683ddd10629ea4ea46d206752a95a2d8a48c22521edd70b142488efe1
-+PYTHON_H2_SITE = https://files.pythonhosted.org/packages/1d/17/afa56379f94ad0fe8defd37d6eb3f89a25404ffc71d4d848893d270325fc
- PYTHON_H2_SETUP_TYPE = setuptools
- PYTHON_H2_LICENSE = MIT
- PYTHON_H2_LICENSE_FILES = LICENSE
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 3ba2dedfad..5eb6879798 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -181,7 +181,6 @@ configs/pc_x86_64_bios_defconfig lib_defconfig.ForceCheckHash
+ configs/pc_x86_64_efi_defconfig lib_defconfig.ForceCheckHash
+ configs/pine64_defconfig lib_defconfig.ForceCheckHash
+ configs/pine64_pinecube_defconfig lib_defconfig.ForceCheckHash
+-configs/pine64_sopine_defconfig lib_defconfig.ForceCheckHash
+ configs/pine64_star64_defconfig lib_defconfig.ForceCheckHash
+ configs/riotboard_defconfig lib_defconfig.ForceCheckHash
+ configs/rock64_defconfig lib_defconfig.ForceCheckHash
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 78557bcd65..52fcd7e141 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1480,7 +1480,6 @@ F:	configs/olimex_a33_olinuxino_defconfig
+ F:	configs/olimex_a64_olinuxino_defconfig
+ F:	configs/orangepi_zero_plus2_defconfig
+ F:	configs/pine64_defconfig
+-F:	configs/pine64_sopine_defconfig
+ F:	package/python-scipy/
+ F:	support/testing/tests/package/sample_python_scipy.py
+ F:	support/testing/tests/package/test_python_scipy.py
+diff --git a/board/pine64/sopine/boot.cmd b/board/pine64/sopine/boot.cmd
+deleted file mode 100644
+index 2eab642370..0000000000
+--- a/board/pine64/sopine/boot.cmd
++++ /dev/null
+@@ -1,6 +0,0 @@
+-setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
+-
+-fatload mmc 0 $kernel_addr_r Image
+-fatload mmc 0 $fdt_addr_r sun50i-a64-sopine-baseboard.dtb
+-
+-booti $kernel_addr_r - $fdt_addr_r
+diff --git a/board/pine64/sopine/genimage.cfg b/board/pine64/sopine/genimage.cfg
+deleted file mode 100644
+index 9300f3d601..0000000000
+--- a/board/pine64/sopine/genimage.cfg
++++ /dev/null
+@@ -1,40 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"Image",
+-			"sun50i-a64-sopine-baseboard.dtb",
+-			"boot.scr"
+-		}
+-	}
+-
+-	size = 64M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition spl {
+-		in-partition-table = "no"
+-		image = "sunxi-spl.bin"
+-		offset = 8K
+-	}
+-
+-	partition u-boot {
+-		in-partition-table = "no"
+-		image = "u-boot.itb"
+-		offset = 40K
+-		size = 1M # 1MB - 40KB
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-	}
+-}
+diff --git a/board/pine64/sopine/readme.txt b/board/pine64/sopine/readme.txt
+deleted file mode 100644
+index 08cb380b46..0000000000
+--- a/board/pine64/sopine/readme.txt
++++ /dev/null
+@@ -1,38 +0,0 @@
+-Intro
+-=====
+-
+-This default configuration will allow you to start experimenting with the
+-buildroot environment for the SoPine. With the current configuration
+-it will bring-up the board, and allow access through the serial console.
+-
+-SoPINE link:
+-https://www.pine64.org/?page_id=1491
+-
+-Wiki link:
+-https://openedev.amarulasolutions.com/display/ODWIKI/SoPine
+-
+-This configuration uses U-Boot mainline and kernel mainline.
+-
+-How to build
+-============
+-
+-    $ make pine64_sopine_defconfig
+-
+-    $ make
+-
+-Note: you will need access to the internet to download the required
+-sources.
+-
+-How to write the SD card
+-========================
+-
+-Once the build process is finished you will have an image called "sdcard.img"
+-in the output/images/ directory.
+-
+-Copy the bootable "sdcard.img" onto an SD card with "dd":
+-
+-  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+-  $ sudo sync
+-
+-Insert the micro SDcard in your SoPine and power it up. The console
+-is on the serial line, 115200 8N1.
+diff --git a/configs/pine64_sopine_defconfig b/configs/pine64_sopine_defconfig
+deleted file mode 100644
+index 845775338b..0000000000
+--- a/configs/pine64_sopine_defconfig
++++ /dev/null
+@@ -1,37 +0,0 @@
+-BR2_aarch64=y
+-BR2_ARM_FPU_VFPV4=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+-BR2_TARGET_GENERIC_ISSUE="Welcome to PINE64 SOPINE"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/sopine/genimage.cfg"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
+-BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-sopine-baseboard"
+-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.7"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sopine_baseboard"
+-BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+-BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
+-BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/pine64/sopine/boot.cmd"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
