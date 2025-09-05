@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A5EBCAC588
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 10:59:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1743ECA1013
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 10:59:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 50DE642B60;
-	Mon,  8 Sep 2025 10:59:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E462684E6F;
+	Mon,  8 Sep 2025 10:59:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sI3hwUmzkbVO; Mon,  8 Sep 2025 10:59:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kB33Hy8y1UdA; Mon,  8 Sep 2025 10:59:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9786742BEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDD9484E3B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9786742BEA;
-	Mon,  8 Sep 2025 10:59:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DDD9484E3B;
+	Mon,  8 Sep 2025 10:59:40 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1591F186
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:59:24 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DD041D9
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:59:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A68B461BF1
+ by smtp3.osuosl.org (Postfix) with ESMTP id BB4E361C28
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:59:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id is9Sf1z05UnC for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 10:59:18 +0000 (UTC)
+ id 6SqGaHZN72pC for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 10:59:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51E9461C33
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E65161C37
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 51E9461C33
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E65161C37
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:59:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5037283B4D; Mon,  8 Sep 2025 10:59:18 +0000 (UTC)
+ id 6C17E80714; Mon,  8 Sep 2025 10:59:18 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 5 Sep 2025 17:26:13 +0200
+Date: Fri, 5 Sep 2025 17:26:44 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: d157e3e65063cf86c078de1d051a2c636be3812e
-X-Git-Newrev: d21e49dc64879506ddad52b97021197caee4dc02
+X-Git-Oldrev: 122445fc543a09ceffba54cb2056fc0f222e8501
+X-Git-Newrev: 16b2636aab4e884a1224919fccadb56beee648e3
 X-Patchwork-Hint: ignore
-Message-Id: <20250908105918.5037283B4D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/weston: do not
- select JPEG, no longer needed
+Message-Id: <20250908105918.6C17E80714@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] support/testing: use
+ again the default BR2_BACKUP_SITE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,38 +66,119 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d21e49dc64879506ddad52b97021197caee4dc02
+commit: https://git.buildroot.net/buildroot/commit/?id=16b2636aab4e884a1224919fccadb56beee648e3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Since upstream commit 66e1614122c22d455cc3a28db08b3afac2b7be29, which
-first appeared in version 1.11.0, back in 2016, jpeg is no longer a
-mandatory dependency. And in fact, Buildroot no longer has it
-unconditionally in WESTON_DEPENDENCIES since commit
-f67a6e9b7a7be9adbc405b3126000056120a01af, but BR2_PACKAGE_WESTON is
-still selecting in.
+This reverts commit 559bb33ae71dd2358ca2314ccb24b56cc3809fc1, which
+was disabling BR2_BACKUP_SITE in our tests with the following
+reasoning:
 
-A build without libjpeg works just fine, so let's drop this select.
+    support/testing: do not use s.b.o
+
+    Currently, the runtime tests will use the sources.buildroot.org backup
+    mirror, which is the default setup.
+
+    However, in some cases we do not want to use the backup site, because we
+    want to ensure that the download actually works.
+
+    This is the case for vendored packages, like cargo or golang packages,
+    for whbich we want to check that gthe download still works when we
+    update the rust or go versions, or when our download helpers change.
+
+    So, disable the use of the backup site in all runtime tests, and drop
+    the no-longer needed special cases.
+
+    Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+    Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+However, not using the backup site is causing a LOT of random failures
+in Gitlab CI, making the results barely usable. Since it's more
+important to get real failures than random ones due to download
+issues, let's re-enable BR2_BACKUP_SITE in our testing infrastructure.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit c8edd532c2ad7309efc36f9851127c9a55124411)
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+(cherry picked from commit d26f3717588cfec10ab8572aa5ffa0a8ae471341)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/weston/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ support/testing/infra/basetest.py               | 1 -
+ support/testing/tests/download/test_git.py      | 5 ++++-
+ support/testing/tests/download/test_gitforge.py | 5 ++++-
+ support/testing/tests/download/test_ssh.py      | 4 +++-
+ support/testing/tests/package/test_rust.py      | 1 +
+ 5 files changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 89bcaa4aa0..614fef6bcc 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -15,7 +15,6 @@ config BR2_PACKAGE_WESTON
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PNG
- 	select BR2_PACKAGE_LIBPNG
--	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_LIBINPUT
- 	select BR2_PACKAGE_LIBDISPLAY_INFO
- 	select BR2_PACKAGE_LIBDRM
+diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
+index 4f020e8a93..9fb9dffc53 100644
+--- a/support/testing/infra/basetest.py
++++ b/support/testing/infra/basetest.py
+@@ -37,7 +37,6 @@ class BRConfigTest(unittest.TestCase):
+         super(BRConfigTest, self).__init__(names)
+         self.testname = self.__class__.__name__
+         self.builddir = self.outputdir and os.path.join(self.outputdir, self.testname)
+-        self.config += '\nBR2_BACKUP_SITE=""\n'
+         self.config += '\nBR2_DL_DIR="{}"\n'.format(self.downloaddir)
+         self.config += "\nBR2_JLEVEL={}\n".format(self.jlevel)
+ 
+diff --git a/support/testing/tests/download/test_git.py b/support/testing/tests/download/test_git.py
+index 3cf98f6456..ba52e03ef5 100644
+--- a/support/testing/tests/download/test_git.py
++++ b/support/testing/tests/download/test_git.py
+@@ -7,7 +7,10 @@ import infra
+ 
+ 
+ class GitTestBase(infra.basetest.BRConfigTest):
+-    config = ""
++    config = \
++        """
++        BR2_BACKUP_SITE=""
++        """
+     gitremotedir = infra.filepath("tests/download/git-remote")
+     gitremote = None
+ 
+diff --git a/support/testing/tests/download/test_gitforge.py b/support/testing/tests/download/test_gitforge.py
+index 477c365a34..e1ac35ec67 100644
+--- a/support/testing/tests/download/test_gitforge.py
++++ b/support/testing/tests/download/test_gitforge.py
+@@ -5,7 +5,10 @@ import infra
+ 
+ 
+ class GitforgeTestBase(infra.basetest.BRConfigTest):
+-    config = ""
++    config = \
++        """
++        BR2_BACKUP_SITE=""
++        """
+ 
+     def setUp(self):
+         super(GitforgeTestBase, self).setUp()
+diff --git a/support/testing/tests/download/test_ssh.py b/support/testing/tests/download/test_ssh.py
+index 7d6ac3aaf7..126002a355 100644
+--- a/support/testing/tests/download/test_ssh.py
++++ b/support/testing/tests/download/test_ssh.py
+@@ -7,7 +7,9 @@ import infra
+ 
+ 
+ class SSHTestBase(infra.basetest.BRConfigTest):
+-    config = infra.basetest.MINIMAL_CONFIG
++    config = infra.basetest.MINIMAL_CONFIG + '''
++BR2_BACKUP_SITE=""
++'''
+     sshd_test_dir = infra.filepath("tests/download/sshd")
+     sshd = None
+ 
+diff --git a/support/testing/tests/package/test_rust.py b/support/testing/tests/package/test_rust.py
+index 8160cb6053..763125ca20 100644
+--- a/support/testing/tests/package/test_rust.py
++++ b/support/testing/tests/package/test_rust.py
+@@ -70,6 +70,7 @@ class TestRustVendoring(infra.basetest.BRConfigTest):
+         BR2_PACKAGE_RIPGREP=y
+         BR2_PACKAGE_PYTHON3=y
+         BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
++        BR2_BACKUP_SITE=""
+         """
+ 
+     def setUp(self):
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
