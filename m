@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28DD5CAC583
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 10:39:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0648CA1013
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 10:39:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DFE2083F0E;
-	Mon,  8 Sep 2025 10:39:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 75E3C61C33;
+	Mon,  8 Sep 2025 10:39:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oRTgXQUu4Jnb; Mon,  8 Sep 2025 10:39:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KMIraMDT6kWl; Mon,  8 Sep 2025 10:39:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1791C83F7C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AF1561587
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1791C83F7C;
-	Mon,  8 Sep 2025 10:39:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6AA9E1D9
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:39:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7AF1561587;
+	Mon,  8 Sep 2025 10:39:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 22EE9186
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:39:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E52604151D
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:39:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 974EB42B94
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:39:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C0edLDWLa6TZ for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 10:39:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 89LWEo43kw75 for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 10:39:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78AF441534
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AA9842B74
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 78AF441534
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4AA9842B74
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:39:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 76B2483A95; Mon,  8 Sep 2025 10:39:08 +0000 (UTC)
+ id 4895983A90; Mon,  8 Sep 2025 10:39:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 8 Sep 2025 12:36:55 +0200
+Date: Fri, 5 Sep 2025 17:19:20 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: cd32013c57363a44ee266426eda6f3d0ee789c48
-X-Git-Newrev: 633f0731e11ca87a141469aae28262046156980c
+X-Git-Oldrev: 7e83660caecf3f95e6b311669b59a5391ce198a5
+X-Git-Newrev: 39615bc2727fa3fa706baed2a96a12de8b8228e1
 X-Patchwork-Hint: ignore
-Message-Id: <20250908103908.76B2483A95@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/ipset: fix build
- w/ musl
+Message-Id: <20250908103908.4895983A90@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/weston: do not
+ select JPEG, no longer needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,98 +58,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=633f0731e11ca87a141469aae28262046156980c
+commit: https://git.buildroot.net/buildroot/commit/?id=39615bc2727fa3fa706baed2a96a12de8b8228e1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-When building ipset with musl libc the following error appeared on the
-autobuilder in 2025.02.x:
+Since upstream commit 66e1614122c22d455cc3a28db08b3afac2b7be29, which
+first appeared in version 1.11.0, back in 2016, jpeg is no longer a
+mandatory dependency. And in fact, Buildroot no longer has it
+unconditionally in WESTON_DEPENDENCIES since commit
+f67a6e9b7a7be9adbc405b3126000056120a01af, but BR2_PACKAGE_WESTON is
+still selecting in.
 
-```
-ipset.c: In function 'main':
-ipset.c:35:21: error: implicit declaration of function 'basename' [-Wimplicit-function-declaration]
-   35 |         if (!strcmp(basename(argv[0]), "ipset-translate")) {
-      |                     ^~~~~~~~
-ipset.c:35:21: error: passing argument 1 of 'strcmp' makes pointer from integer without a cast [-Wint-conversion]
-   35 |         if (!strcmp(basename(argv[0]), "ipset-translate")) {
-      |                     ^~~~~~~~~~~~~~~~~
-      |                     |
-      |                     int
-In file included from ipset.c:13:
-```
+A build without libjpeg works just fine, so let's drop this select.
 
-This error can be reproduced with:
-
-```
-cat >.config <<EOF
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_MUSL_BLEEDING_EDGE=y
-BR2_PACKAGE_IPSET=y
-EOF
-make olddefconfig
-make ipset
-```
-
-This patch adds the upstream commit [1], that fixes this issue by
-including explicitly `libgen.h`. This patch is part of the master
-branch since commit [2].
-
-[1] https://git.netfilter.org/ipset/commit/?id=316f592ddc547c28388da4e7cb7c5c8f89cd3591
-[2] 8fdbbefa08 package/ipset: bump to version 7.23
-
-Fixes: https://autobuild.buildroot.org/results/930/930802ecc324c4cfc697191aa6a68642a4188e7b
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit c8edd532c2ad7309efc36f9851127c9a55124411)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- ...implicit-declaration-of-function-basename.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ package/weston/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/ipset/0001-ipset-fix-implicit-declaration-of-function-basename.patch b/package/ipset/0001-ipset-fix-implicit-declaration-of-function-basename.patch
-new file mode 100644
-index 0000000000..c01fdaf671
---- /dev/null
-+++ b/package/ipset/0001-ipset-fix-implicit-declaration-of-function-basename.patch
-@@ -0,0 +1,31 @@
-+From 316f592ddc547c28388da4e7cb7c5c8f89cd3591 Mon Sep 17 00:00:00 2001
-+From: Mike Pagano <mpagano@gentoo.org>
-+Date: Fri, 30 Aug 2024 11:31:19 -0400
-+Subject: ipset: Fix implicit declaration of function basename
-+
-+basename(3) is defined in libgen.h in MUSL.
-+Include libgen.h where basename(3) is used.
-+
-+Signed-off-by: Mike Pagano <mpagano@gentoo.org>
-+Acked-by: Phil Sutter <phil@nwl.cc>
-+Signed-off-by: Jozsef Kadlecsik <kadlec@netfilter.org>
-+Upstream: https://git.netfilter.org/ipset/commit/?id=316f592ddc547c28388da4e7cb7c5c8f89cd3591
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ src/ipset.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/ipset.c b/src/ipset.c
-+index 162f477..d7733bf 100644
-+--- a/src/ipset.c
-++++ b/src/ipset.c
-+@@ -15,6 +15,7 @@
-+ #include <config.h>
-+ #include <libipset/ipset.h>		/* ipset library */
-+ #include <libipset/xlate.h>		/* translate to nftables */
-++#include <libgen.h>
-+ 
-+ int
-+ main(int argc, char *argv[])
-+-- 
-+cgit v1.2.3
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index 89bcaa4aa0..614fef6bcc 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -15,7 +15,6 @@ config BR2_PACKAGE_WESTON
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_CAIRO_PNG
+ 	select BR2_PACKAGE_LIBPNG
+-	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_LIBINPUT
+ 	select BR2_PACKAGE_LIBDISPLAY_INFO
+ 	select BR2_PACKAGE_LIBDRM
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
