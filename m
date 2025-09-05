@@ -4,63 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4935CCA0FED
-	for <buildroot@archiver.kernel.org>; Fri,  5 Sep 2025 12:21:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C054CA1013
+	for <buildroot@archiver.kernel.org>; Fri,  5 Sep 2025 12:26:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DD71B81ED1;
-	Fri,  5 Sep 2025 12:21:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E548C82003;
+	Fri,  5 Sep 2025 12:26:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uXMRdY8F13-3; Fri,  5 Sep 2025 12:21:18 +0000 (UTC)
+ id 8UhONre68NHx; Fri,  5 Sep 2025 12:26:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF1F781ECC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2458581F44
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EF1F781ECC;
-	Fri,  5 Sep 2025 12:21:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id DFF851E04
- for <buildroot@buildroot.org>; Fri,  5 Sep 2025 12:21:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2458581F44;
+	Fri,  5 Sep 2025 12:26:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 54863B69
+ for <buildroot@buildroot.org>; Fri,  5 Sep 2025 12:26:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C5AC5405F3
- for <buildroot@buildroot.org>; Fri,  5 Sep 2025 12:21:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3B39181EBE
+ for <buildroot@buildroot.org>; Fri,  5 Sep 2025 12:26:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lthPw057r9UR for <buildroot@buildroot.org>;
- Fri,  5 Sep 2025 12:21:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LJ81j592pMIc for <buildroot@buildroot.org>;
+ Fri,  5 Sep 2025 12:26:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2412::619;
- helo=nam10-mw2-obe.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:2418::61d;
+ helo=nam12-bn8-obe.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 551B8405E4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 551B8405E4
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com
- (mail-mw2nam10on20619.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2412::619])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 551B8405E4
- for <buildroot@buildroot.org>; Fri,  5 Sep 2025 12:21:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7CA2A81F44
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CA2A81F44
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com
+ (mail-bn8nam12on2061d.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2418::61d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7CA2A81F44
+ for <buildroot@buildroot.org>; Fri,  5 Sep 2025 12:26:19 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Gl8d8RsOS5vkXMqNirNht2Yt7WVASyXmpIya2yLxoXYNgSb24Rb3R+GbKlvf4J+2XWZM7DH6W29ShWSBR0fQOmN6gfxVKhpyqgc64+BqHgm03wnBvQ+A5fbhj+jEnVXpnabeO0yeEAB82DP5h3U9rXOiLzpmFcNGPOPET+NZQZVzFdVdnBIklYYpYYB3z6xPTHVQZWmLOzZfpjOTw8RrRr5FmLarIMETm3g/FmqnEqLygKgaQhdDzI64GC9snnZCZOGEKhq8+Vr8hnk1T4pPSm7NUmXQ0NPoKGboFeJcDwl8PU/6IJD2wPLAvN2GjlOCL8LGugSTgh+sJAsZauJwmQ==
+ b=Ae0DyOJLoThYybD1tVw7rryDq6krDKSfR/G2G0g1wT+ofPQgWph4OSP+L0NeeA6gUe8ScHVZNeVIrP+EdMbgd99670s9ac5LQaIqvQUd3qbEjzZoEk7uwMQru4g/sFynweQJjCeGdnKZUyNBszSXXpBbZSecfh8jbYnT6PZ0tIcBG+ILAKDoBCiKCPfNko72/p8jJspr5Nw7X9xSSSqkQwCq+Ym5/H9TGgIUTyAfAad4km9pMZKoC5SxtHCbZTpR2XiaNG3CCP+q8X8QfNiXmX59+BJF9vwP2u545GfycCzKIflvxdcULLnU1Eo6mbUXsI0yodcd6wxA2HfpH9+EQA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8Fl4bZNv6vFqdKzbKoRhtoAvYTSNU2gvO1d4sMVpnVA=;
- b=evgVmbGnsJvxrq3G6mSqCYM8PLYjA6rO6kG9d5Gi+CwRAEOr2qUhcN8aa5Ha16CPrBdx9ASBM3WncGoD/ekHhbE95BHFOpkToqmAXx54+tL9PMb1Kfg6od2imdW1nPnR39UIntmNv5St34gNsmEjVTLLr/okZmKiKilHUdO2hYlTD8G8hMMA//0nhvQc0MNcCmgWEben3xGhuTG5TFpEz9LUmb9ibdjziChTpKpQ1xIBU5erwAOPZS/rpk0Cs023KNYaGBG5YeSkCfldvUd5mP+ZaQtV3ZmO/BuOUQUjl8zy0+Ce7yqkdDXlJmjQPQvyyL6MwkgahnXf1zs/DtUErQ==
+ bh=aI6y48NOCfjPQyIiCz6jlHfphSC3YW9TzyydF7UR8nc=;
+ b=WvM5V6pDX1ZrOmnoVVh5nz33kEYWAR97zkiSiDYQU/TQhbFJMKEM8ugPMaYVdmOFV9qJ+Bd3EPAwb5Du/MuQTWP3v5KMzLeTLvq1GN7mbciFVcPWdfLSbeLX21ISZFwnBrZw11VWwJaNvPbqqJbKprFsQKGfnQaOYrEZMXNAIWed+EbqyOAF8LB8rdmUJEwGxqBAgsRh6SL0vYTZnuyXa6PlTalP/FxWTKFVbEhyDENWLkgIayAy8/ammgUFYO5wWzRZjOtkaW/2Ym507oG8Lt52KT79e2VuE1uHl7rl3t/fZhrcaxKK0ecfijBfX8wxfSBDFx6GxoMPAazMEp/wcg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from MW4PR03CA0009.namprd03.prod.outlook.com (2603:10b6:303:8f::14)
- by DS4PR12MB9748.namprd12.prod.outlook.com (2603:10b6:8:29e::14) with
- Microsoft SMTP Server (version=TLS1_2,
+Received: from SJ0PR03CA0097.namprd03.prod.outlook.com (2603:10b6:a03:333::12)
+ by SN7PR12MB6887.namprd12.prod.outlook.com (2603:10b6:806:261::12)
+ with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9094.17; Fri, 5 Sep
- 2025 12:21:08 +0000
-Received: from MWH0EPF000971E2.namprd02.prod.outlook.com
- (2603:10b6:303:8f:cafe::14) by MW4PR03CA0009.outlook.office365.com
- (2603:10b6:303:8f::14) with Microsoft SMTP Server (version=TLS1_3,
+ 2025 12:26:14 +0000
+Received: from SJ1PEPF00002326.namprd03.prod.outlook.com
+ (2603:10b6:a03:333:cafe::ee) by SJ0PR03CA0097.outlook.office365.com
+ (2603:10b6:a03:333::12) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.9094.18 via Frontend Transport; Fri,
- 5 Sep 2025 12:21:08 +0000
+ 5 Sep 2025 12:26:14 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -68,88 +68,86 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
 Received: from SATLEXMB03.amd.com (165.204.84.17) by
- MWH0EPF000971E2.mail.protection.outlook.com (10.167.243.69) with Microsoft
+ SJ1PEPF00002326.mail.protection.outlook.com (10.167.242.89) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.9094.14 via Frontend Transport; Fri, 5 Sep 2025 12:21:07 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
+ 15.20.9094.14 via Frontend Transport; Fri, 5 Sep 2025 12:26:13 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 5 Sep
- 2025 07:21:06 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 5 Sep
- 2025 07:21:06 -0500
+ 2025 07:26:11 -0500
 Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Fri, 5 Sep 2025 07:21:04 -0500
+ Transport; Fri, 5 Sep 2025 07:26:10 -0500
 To: <buildroot@buildroot.org>
-Date: Fri, 5 Sep 2025 13:20:57 +0100
-Message-ID: <20250905122057.2520997-1-neal.frager@amd.com>
+Date: Fri, 5 Sep 2025 13:26:03 +0100
+Message-ID: <20250905122603.2521801-1-neal.frager@amd.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Received-SPF: None (SATLEXMB03.amd.com: neal.frager@amd.com does not designate
+ permitted sender hosts)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000971E2:EE_|DS4PR12MB9748:EE_
-X-MS-Office365-Filtering-Correlation-Id: 145b6c80-630a-4949-cc19-08ddec76b0c2
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00002326:EE_|SN7PR12MB6887:EE_
+X-MS-Office365-Filtering-Correlation-Id: 41b71bad-cf50-4881-886a-08ddec77674a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
- ARA:13230040|1800799024|36860700013|7416014|376014|82310400026|41080700001; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?2mf/iwwyzfppWiKNxvB2HQobX7JobEdkBL/q6fIagKUxliG6v2LHG9eB534c?=
- =?us-ascii?Q?Ip7tGvMNec4MbPFUG2BZ+77zX3K0SbyR3KLtDiNdXKXmngiboNkL+/A/aPIN?=
- =?us-ascii?Q?yR7zCTx9lz04i2uOTmQZlnTZxywU6GKqRpKB8Yp55viPCvqtwzXUe+tl3Dih?=
- =?us-ascii?Q?TSYBVRyKR56Uened7/8yNp3lg8ZnYuhhG1Ynm+PTmNH6vJ3sXbjeoKTgY6qh?=
- =?us-ascii?Q?6L3ToI8CHVyQV0iBt3wIE4lAcyuGvMfsCeHgVRH1ubXu2UZ8MFqUllRZ4w7N?=
- =?us-ascii?Q?QOGAOmSeDG5lapj19cOvaaS4G2Y8KkxC+/Hz7G7mtfhDRAlCKC9HyPCZDJ2l?=
- =?us-ascii?Q?yvm+0473ta8QhtvGD1s0QPDVujzM4qSYl/cvT+VtNDF643TmTNWL/m6zBpJD?=
- =?us-ascii?Q?vSMIhWp1AWCkFu5DyOJ9fs9AtkSRlkuXlvAi8tyFsw8OT2NRJdB4lHklPZlV?=
- =?us-ascii?Q?7tQyzejI6bKbdk9uJ/brfe2UrAVd9NxHSKRrWqHEQm9Kpcu/Ao5RNMheZCOF?=
- =?us-ascii?Q?l3Y8KKvsirMaAtPbuy0rYLLLiqf4LLgvI0//Ufuo2BC5z9qwNrZNslqaLQkt?=
- =?us-ascii?Q?g+Mr5BHpxsekG9bMvm0jsGeH0fVMPOLHligDvGd7WEj9z31K1dftAitgjbwb?=
- =?us-ascii?Q?Jp/9n+AXP95tBIwKJmFFX4UIfuACsEryjzDFgxBwzthpuACE366UU/2R0Pgh?=
- =?us-ascii?Q?NX80JNwof0Ko9+NtX1KUFkPijLlA9tSutODiSPK1yxzOxU8nu68vJJNOPrwu?=
- =?us-ascii?Q?/URwSmMCd5UtFfsP70Omokywhaxj/r25jA3qlq84s6clVfeVpvOsIE65eTf7?=
- =?us-ascii?Q?tyRGPuvzJoiQtZvqNIidZKt1OInNZVe2iIdcqGoY/zUlD5I+7NyxKCNgPnIU?=
- =?us-ascii?Q?sJExG4JVKDRU53bnckeOOHGlrgtfTokvy8w0oI+QbZHlo5DMLjw99SXXxXS5?=
- =?us-ascii?Q?8BH7zZrm1s4dIw8Hqfnf0AyKq9paJ3EMwQ0piWtpPyvR/OXxmlMEync/GYUS?=
- =?us-ascii?Q?9jnuqfZ/ol9OaX5GmM0+oIWVIULwNTW8Mogi2eAXc31ikJ7WxP12o+zTAXxJ?=
- =?us-ascii?Q?w3FBFNzwxa0Rw+vd1j+n7BUVnG3N/Q7dqqYrrf49AfRTQeAxbl7WlhE/fwhM?=
- =?us-ascii?Q?vf5+3YTlpYcOjqrCj7OrGJwT7GTxJfkMGzU9OXAfcD67OnBbiS8NM4Po85GK?=
- =?us-ascii?Q?9xBwQKZngCsRKuwvYm7R6Eck7mxDrZxnOdcXJ2EmNOf77suv1NcNz9/Uo/X9?=
- =?us-ascii?Q?SRtIQRidBXgl2SQWGXVpFh6LyZff0K/lCIzVqoh2xOE/xiDTHMMi00jZB8BD?=
- =?us-ascii?Q?KCU/ahpjAr6W8GlvNs4moCwGMCU+iMVTyiInoZJh98N/6XL0G83H6+WlXUF/?=
- =?us-ascii?Q?Xiq4arpzc9mPG6xtS2MwWZAvihboqXBga257BqzMzV7m7nQk+80NcpviNEQh?=
- =?us-ascii?Q?oAEffmKY95EaD1F7GxYVZJUYXNFJWZ0kPCw07TGcly6kcgDLelf6ocu+sGFy?=
- =?us-ascii?Q?MLGnOdxdBPGzh0yqxOIgd8Qr71BrKxv+rRL7HWVKgFRGrJmbotf1/WrCa5rP?=
- =?us-ascii?Q?QBCTnhYt71OF1O8e4zU=3D?=
+ ARA:13230040|82310400026|7416014|376014|36860700013|1800799024|41080700001; 
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?oumWrqO7wVURgy/h13nvujVaOVDQqsGh5eTCaPJLrFwktXT8wi+szdah9lvz?=
+ =?us-ascii?Q?+bzukukU//X8NFsQoEASGtAQRD/ODGQLlIns2SBv5d+k128YAKToIuRIbZpb?=
+ =?us-ascii?Q?3PVQa87in0HGbAB8WGjzzXbSjCDpKyRIeIMf2zhpGQvXqNgNftMS1XOdyVpi?=
+ =?us-ascii?Q?/WEiyJg4wBRV54KgYKfHphsLiSy8tFuyV+HIZrZv2m0iDlxNCxUcDNt4065h?=
+ =?us-ascii?Q?PuGouulwiU5FBXvWdMX8iPLcd/YGsraEX1qSGygmkWOxF7sgsR5N6tr9HOFE?=
+ =?us-ascii?Q?mOv+n7IBnozK4Y6hplnCaXakopNdS0RWrZPAno9AXAkQn3bbQmDdTCjYzkto?=
+ =?us-ascii?Q?UqQGxYi+9YCd9wS1cRHggcRDApElmdvXOoW4thqzfXqOSR9OeP/wbNoV9YAN?=
+ =?us-ascii?Q?o13AZCPgyoFqqm1vUsK0+PY1Bm2qrFsHFAtEpA/EVp3BYgEjyz0Sla0JFtg7?=
+ =?us-ascii?Q?K/+08Vu9+oQPvlHxWjyxab0HiUO1yToXRPJXcsPn3zyzfHZjnQQ+JWDVHY5p?=
+ =?us-ascii?Q?oKkChHqDGL3N6TQ4fABIqZ0B0eTaDti6BfntnyQRvZgniog49Cq3IQOLnoab?=
+ =?us-ascii?Q?oFAoHyd33cPLr1obgfkScFae7WMHXMEuz8mzsDFAJPwHDd/eVMUGX13OZUug?=
+ =?us-ascii?Q?O4ZYQUsZt/qp7jFdpc0x0cr5m0mY2hp7RSDj69wiE5skC/IUoVPmn7r3ihcE?=
+ =?us-ascii?Q?ILQ8WDBFN4giOjtIiX/B2kmX9qwE0vPoGQ0K2Kvhzk4lVbORk9LowGzTiCSQ?=
+ =?us-ascii?Q?DWjIANdQitJla3+xGYPJLTlujXgPsjZe4VdXXzzeBDH4d450XjQ4gnhdJlc6?=
+ =?us-ascii?Q?J4hbLFI4T0C5XNCGehdZa5LUMavhVg1x6tZdby7xFNSWLgaR5D84Rgpp4D3W?=
+ =?us-ascii?Q?An9MezLkvacwisjgMFgRBATPuOxkae/9+vCilf1BJQvv5yD3hZkARWHrdMuz?=
+ =?us-ascii?Q?btD2uT7f728gePJvzgBAWpTZQhqEUU4jnaZWk9Ci/6CXa89hUsEg8M1OJjkp?=
+ =?us-ascii?Q?RuxQfy1jBQFthCD4PlQMQjzmCc6yTyJ563yQbw77kvdHhFIKZcJTmqyjC1jX?=
+ =?us-ascii?Q?WKbzX9toCDjrGLXf1VvxuhoMqGW3VQCjztpFYbLidZtgL215at4nVQHwDVuU?=
+ =?us-ascii?Q?Tk6SGZtk1fCo2QpQN4mMCnLhoKZzRJHMHUxh/G4HibMcm+nD4Kph816Ez6Pi?=
+ =?us-ascii?Q?F0ooaUm9n7Cd+hvg+pao7tDAJrm07x06AfsFv2JqiPquTXfm8qlF1HEKQFmA?=
+ =?us-ascii?Q?9CUaVrt2WkYcpuUzakZde5eq1IpbUcrphjq7az2QVY7//z3BCwrEKBhyWmWo?=
+ =?us-ascii?Q?eM0NBx7XAINfau06Q2B8oEbl36xgLSLhEQF700zANptNkz3Brl/Tj4O1N/RZ?=
+ =?us-ascii?Q?iemlMtrdQp8FqHKtpRZrrUeab0RKgG57PCJP17Bq+hKYIYNY0obl4qTenEWZ?=
+ =?us-ascii?Q?48wpROQ7+Dj4DomjXQbBQ4+Vo2LtUXHwq3XYWd56asHDNBT/wp4oS+AKado7?=
+ =?us-ascii?Q?6mOykRQpnpYenNAumFCZ0DAQ99/Y8FAfA2p7Glb+y1Y3GXXb6E9C7rKAnnkJ?=
+ =?us-ascii?Q?1Q2ZQQaApEITWe0q2Mg=3D?=
 X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
  IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(1800799024)(36860700013)(7416014)(376014)(82310400026)(41080700001);
+ SFS:(13230040)(82310400026)(7416014)(376014)(36860700013)(1800799024)(41080700001);
  DIR:OUT; SFP:1101; 
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2025 12:21:07.0945 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 145b6c80-630a-4949-cc19-08ddec76b0c2
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2025 12:26:13.3337 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 41b71bad-cf50-4881-886a-08ddec77674a
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
  Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: MWH0EPF000971E2.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PEPF00002326.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS4PR12MB9748
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6887
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8Fl4bZNv6vFqdKzbKoRhtoAvYTSNU2gvO1d4sMVpnVA=;
- b=UYscmVQvV5vcXeTquMaX/45GRxzX6ef1vTziuegbyYY48kh3APbm5lR5XrqmLkxEAR4043BGPk6fZOVW/v6mzXBe0BQ9Tlg5DwqMm+RAEphVc3xFxWsm05v9n7HTmbnwF2CP184y9gj0KNn1wLzSg8CM+0v5rpk8laiuYl4jNuU=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=aI6y48NOCfjPQyIiCz6jlHfphSC3YW9TzyydF7UR8nc=;
+ b=qDYkvn4mSYDpZhDX6j+sizcmvKQ+AEo7fATol/05T6uUHuZrVBo3IAt4sCBswNM3efmCXxFKcqWqmY6WNrr6uruGBXuaMKDoqrkDww7bP+u4FXPKNWzXwMwDKlq90sI7bn8Njy6TKY1htoae9p3L8kqHXlxaCBjVkhPvAAHMEKM=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=UYscmVQv
-Subject: [Buildroot] [PATCH v1 1/1] board/arm-trusted-firmware: override
- BL31 environment variable error
+ header.s=selector1 header.b=qDYkvn4m
+Subject: [Buildroot] [PATCH v2 1/1] boot/arm-trusted-firmware: override BL31
+ environment variable error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -188,6 +186,9 @@ To fix this, clear the BL31 variable in the MAKE_OPTS, so that building the
 arm-trusted-firmware will build regardless of the host environment.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
+---
+V1->V2:
+- correct file path in commit subject
 ---
  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 1 +
  1 file changed, 1 insertion(+)
