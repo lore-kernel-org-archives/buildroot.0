@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 780BCCAC581
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 10:39:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8318CAC583
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 10:39:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 428D461C44;
-	Mon,  8 Sep 2025 10:39:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7872742C0F;
+	Mon,  8 Sep 2025 10:39:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0EItAr4b7lB9; Mon,  8 Sep 2025 10:39:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GD2QB9SAtKve; Mon,  8 Sep 2025 10:39:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2489361C5C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AFCB42B43
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2489361C5C;
-	Mon,  8 Sep 2025 10:39:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1358C1D9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8AFCB42B43;
+	Mon,  8 Sep 2025 10:39:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 17F85234
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:39:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C381F41516
+ by smtp4.osuosl.org (Postfix) with ESMTP id A89BE41F35
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:39:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hhkkIMnj5YO6 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dpH_GK4bjMFO for <buildroot@buildroot.org>;
  Mon,  8 Sep 2025 10:39:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0390E414DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A14841F41
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0390E414DE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2A14841F41
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:39:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E52B383A95; Mon,  8 Sep 2025 10:39:07 +0000 (UTC)
+ id 2856A83A90; Mon,  8 Sep 2025 10:39:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 5 Sep 2025 17:09:47 +0200
+Date: Fri, 5 Sep 2025 17:15:53 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: b014d18e927384c6bb63eef47c83554c555d32f2
-X-Git-Newrev: 4ad84775e8718822b773823039a97b822cfdce76
+X-Git-Oldrev: 879dcc6930447c8e264d7f332cb70f85cff789b8
+X-Git-Newrev: 4bcb1ed67a699020847bfbd25135e65590185a52
 X-Patchwork-Hint: ignore
-Message-Id: <20250908103907.E52B383A95@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] configs/{canaan_kd233,
- sipeed*}: use BR2_LINUX_KENREL_IMAGE_TARGET_NAME
+Message-Id: <20250908103908.2856A83A90@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ package/liblog4c-localtime: fix build with GCC 15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,173 +66,81 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ad84775e8718822b773823039a97b822cfdce76
+commit: https://git.buildroot.net/buildroot/commit/?id=4bcb1ed67a699020847bfbd25135e65590185a52
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Since commit cb4f11a6964902990ce774ff7144b24a1ffd635c ("linux: handle
-empty BR2_LINUX_KERNEL_IMAGE_TARGET_NAME situation"), we error out if
-BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y but
-BR2_LINUX_KERNEL_IMAGE_TARGET_NAME is empty, which is exactly the case
-of the RISC-V configurations being fixed by this commit.
+Add simple patch, submitted upstream, to fix the build with GCC 15.x:
 
-They define the BR2_LINUX_KERNEL_IMAGE_NAME variable, but not
-BR2_LINUX_KERNEL_IMAGE_TARGET_NAME, while BR2_LINUX_KERNEL_IMAGE_NAME
-will automatically default to BR2_LINUX_KERNEL_IMAGE_TARGET_NAME if
-BR2_LINUX_KERNEL_IMAGE_NAME is not provided.
-
-It probably used to work because specifying an empty make target was
-generating the right images, and they did have the name specified in
-BR2_LINUX_KERNEL_IMAGE_TARGET_NAME. But with the additional check
-added in cb4f11a6964902990ce774ff7144b24a1ffd635c this scenario is no
-longer supported.
+userloc_formatter.c: In function 'userloc_format':
+userloc_formatter.c:30:5: error: implicit declaration of function 'sd_debug' [-Wimplicit-function-declaration]
+   30 |     sd_debug("Formatter s13_userloc checking location info for userdata %X",a_event->evt_loc->loc_data);
+      |     ^~~~~~~~
+make[4]: *** [Makefile:519: userloc_formatter.lo] Error 1
 
 Fixes:
 
-              canaan_kd233 | https://gitlab.com/buildroot.org/buildroot/-/jobs/11012273088
-           sipeed_maix_bit | https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771237
-    sipeed_maix_bit_sdcard | https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771342
-          sipeed_maix_dock | https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771387
-   sipeed_maix_dock_sdcard | https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771472
-            sipeed_maix_go | https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771505
-     sipeed_maix_go_sdcard | https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771581
-          sipeed_maixduino | https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771663
-   sipeed_maixduino_sdcard | https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771885
+  https://autobuild.buildroot.org/results/dab64025e6a1688d5fadc2b9bd3738a2c886aa9c/
 
-Cc: Damien Le Moal <dlemoal@kernel.org>
+Considering the level of upstream maintenance, we did hesitate with
+dropping the package, but as the fix was quite simple, we did the fix
+instead.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 070d91ed04a2a3c462dbd5ad1878ce47c2433986)
+(cherry picked from commit 41463deed46b1085d7e6d327d0846805c110d7fe)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- configs/canaan_kd233_defconfig            | 2 +-
- configs/sipeed_maix_bit_defconfig         | 2 +-
- configs/sipeed_maix_bit_sdcard_defconfig  | 2 +-
- configs/sipeed_maix_dock_defconfig        | 2 +-
- configs/sipeed_maix_dock_sdcard_defconfig | 2 +-
- configs/sipeed_maix_go_defconfig          | 2 +-
- configs/sipeed_maix_go_sdcard_defconfig   | 2 +-
- configs/sipeed_maixduino_defconfig        | 2 +-
- configs/sipeed_maixduino_sdcard_defconfig | 2 +-
- 9 files changed, 9 insertions(+), 9 deletions(-)
+ ...serloc_formatter.c-drop-usage-of-sd_debug.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/configs/canaan_kd233_defconfig b/configs/canaan_kd233_defconfig
-index 491a834477..47d0b55e90 100644
---- a/configs/canaan_kd233_defconfig
-+++ b/configs/canaan_kd233_defconfig
-@@ -15,7 +15,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
- BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/canaan/kd233/linux-cpio.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
--BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
-+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="loader.bin"
- BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/busybox-tiny.config"
- # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
-diff --git a/configs/sipeed_maix_bit_defconfig b/configs/sipeed_maix_bit_defconfig
-index 00c6a993d8..c3fc9192c6 100644
---- a/configs/sipeed_maix_bit_defconfig
-+++ b/configs/sipeed_maix_bit_defconfig
-@@ -15,7 +15,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
- BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/maix-bit/linux-cpio.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
--BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
-+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="loader.bin"
- BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/busybox-tiny.config"
- # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
-diff --git a/configs/sipeed_maix_bit_sdcard_defconfig b/configs/sipeed_maix_bit_sdcard_defconfig
-index 5127bfeae6..4ae824a26b 100644
---- a/configs/sipeed_maix_bit_sdcard_defconfig
-+++ b/configs/sipeed_maix_bit_sdcard_defconfig
-@@ -19,7 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
- BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210_sdcard"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/linux-sdcard.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
--BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
-+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="loader.bin"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="canaan/sipeed_maix_bit"
- # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
-diff --git a/configs/sipeed_maix_dock_defconfig b/configs/sipeed_maix_dock_defconfig
-index d97e185311..73372056a3 100644
---- a/configs/sipeed_maix_dock_defconfig
-+++ b/configs/sipeed_maix_dock_defconfig
-@@ -15,7 +15,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
- BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/maix-dock/linux-cpio.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
--BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
-+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="loader.bin"
- BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/busybox-tiny.config"
- # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
-diff --git a/configs/sipeed_maix_dock_sdcard_defconfig b/configs/sipeed_maix_dock_sdcard_defconfig
-index a755872cfd..66317d968c 100644
---- a/configs/sipeed_maix_dock_sdcard_defconfig
-+++ b/configs/sipeed_maix_dock_sdcard_defconfig
-@@ -19,7 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
- BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210_sdcard"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/linux-sdcard.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
--BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
-+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="loader.bin"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="canaan/sipeed_maix_dock"
- # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
-diff --git a/configs/sipeed_maix_go_defconfig b/configs/sipeed_maix_go_defconfig
-index a4d976353f..bb64dccdf4 100644
---- a/configs/sipeed_maix_go_defconfig
-+++ b/configs/sipeed_maix_go_defconfig
-@@ -15,7 +15,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
- BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/maix-go/linux-cpio.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
--BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
-+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="loader.bin"
- BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/busybox-tiny.config"
- # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
-diff --git a/configs/sipeed_maix_go_sdcard_defconfig b/configs/sipeed_maix_go_sdcard_defconfig
-index 6067fea785..a3076c3e12 100644
---- a/configs/sipeed_maix_go_sdcard_defconfig
-+++ b/configs/sipeed_maix_go_sdcard_defconfig
-@@ -19,7 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
- BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210_sdcard"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/linux-sdcard.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
--BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
-+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="loader.bin"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="canaan/sipeed_maix_go"
- # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
-diff --git a/configs/sipeed_maixduino_defconfig b/configs/sipeed_maixduino_defconfig
-index 37c6eb4582..27bf958c76 100644
---- a/configs/sipeed_maixduino_defconfig
-+++ b/configs/sipeed_maixduino_defconfig
-@@ -15,7 +15,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
- BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/maixduino/linux-cpio.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
--BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
-+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="loader.bin"
- BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/busybox-tiny.config"
- # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
-diff --git a/configs/sipeed_maixduino_sdcard_defconfig b/configs/sipeed_maixduino_sdcard_defconfig
-index 0a460f15d3..1b6db4f8a4 100644
---- a/configs/sipeed_maixduino_sdcard_defconfig
-+++ b/configs/sipeed_maixduino_sdcard_defconfig
-@@ -19,7 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
- BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210_sdcard"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/linux-sdcard.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
--BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
-+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="loader.bin"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="canaan/sipeed_maixduino"
- # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
+diff --git a/package/liblog4c-localtime/0006-examples-userloc_formatter.c-drop-usage-of-sd_debug.patch b/package/liblog4c-localtime/0006-examples-userloc_formatter.c-drop-usage-of-sd_debug.patch
+new file mode 100644
+index 0000000000..8f54d1d6fd
+--- /dev/null
++++ b/package/liblog4c-localtime/0006-examples-userloc_formatter.c-drop-usage-of-sd_debug.patch
+@@ -0,0 +1,42 @@
++From 1dfc4a60ebf96766b682c464ae69c453ce15105a Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Tue, 19 Aug 2025 20:04:09 +0200
++Subject: [PATCH] examples/userloc_formatter.c: drop usage of sd_debug()
++
++With recent compilers, log4c-localtime fails to build with:
++
++userloc_formatter.c: In function 'userloc_format':
++userloc_formatter.c:30:5: error: implicit declaration of function 'sd_debug' [-Wimplicit-function-declaration]
++   30 |     sd_debug("Formatter s13_userloc checking location info for userdata %X",a_event->evt_loc->loc_data);
++      |     ^~~~~~~~
++make[4]: *** [Makefile:519: userloc_formatter.lo] Error 1
++
++This function seems to be an internal function of the log4c-localtime
++library, and is not used by any other example application. Since it's
++only used to print some debugging information, we simply get rid of
++the problematic code.
++
++Upstream: https://github.com/rcmadruga/log4c-localtime/pull/2
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ examples/userloc_formatter.c | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/examples/userloc_formatter.c b/examples/userloc_formatter.c
++index 4299a48..7bcf0e9 100644
++--- a/examples/userloc_formatter.c
+++++ b/examples/userloc_formatter.c
++@@ -27,10 +27,8 @@ static const char* userloc_format(
++     static char buffer[4096];
++     user_locinfo_t* uloc = NULL;
++ 
++-    sd_debug("Formatter s13_userloc checking location info for userdata %X",a_event->evt_loc->loc_data);
++     if (a_event->evt_loc->loc_data != NULL)
++     {
++-	sd_debug("Formatter s13_userloc getting a valid user location info pointer");
++         uloc = (user_locinfo_t*) a_event->evt_loc->loc_data;
++         sprintf(buffer, "[%s][HOST:%s][PID:%i][FILE:%s][LINE:%i][MSG:%s]",
++ 		a_event->evt_category,  
++-- 
++2.50.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
