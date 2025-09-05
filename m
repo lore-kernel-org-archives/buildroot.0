@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1743ECA1013
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 10:59:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4182BCAC581
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 10:59:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E462684E6F;
-	Mon,  8 Sep 2025 10:59:41 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kB33Hy8y1UdA; Mon,  8 Sep 2025 10:59:41 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDD9484E3B
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DDD9484E3B;
-	Mon,  8 Sep 2025 10:59:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DD041D9
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:59:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BB4E361C28
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:59:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 18D5D61CC7;
+	Mon,  8 Sep 2025 10:59:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6SqGaHZN72pC for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 10:59:19 +0000 (UTC)
+ id Vaj7A6wWQT-n; Mon,  8 Sep 2025 10:59:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1406661CA0
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1406661CA0;
+	Mon,  8 Sep 2025 10:59:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EFDB1D9
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:59:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5C8D061C33
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:59:20 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sNLjaJEp2zHA for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 10:59:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E65161C37
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6326F61C36
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E65161C37
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6326F61C36
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:59:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6C17E80714; Mon,  8 Sep 2025 10:59:18 +0000 (UTC)
+ id 615C583B4B; Mon,  8 Sep 2025 10:59:18 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 5 Sep 2025 17:26:44 +0200
+Date: Fri, 5 Sep 2025 17:26:32 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 122445fc543a09ceffba54cb2056fc0f222e8501
-X-Git-Newrev: 16b2636aab4e884a1224919fccadb56beee648e3
+X-Git-Oldrev: b517571f220e535af4466d97d4b1f2bd3ef676db
+X-Git-Newrev: 122445fc543a09ceffba54cb2056fc0f222e8501
 X-Patchwork-Hint: ignore
-Message-Id: <20250908105918.6C17E80714@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] support/testing: use
- again the default BR2_BACKUP_SITE
+Message-Id: <20250908105918.615C583B4B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] support/testing:
+ test_systemd_selinux: fix test after bootlin toolchains update
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,119 +66,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=16b2636aab4e884a1224919fccadb56beee648e3
+commit: https://git.buildroot.net/buildroot/commit/?id=122445fc543a09ceffba54cb2056fc0f222e8501
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-This reverts commit 559bb33ae71dd2358ca2314ccb24b56cc3809fc1, which
-was disabling BR2_BACKUP_SITE in our tests with the following
-reasoning:
+Since Buildroot commit [1] "update to Bootlin toolchains 2025.08-1",
+the tests.init.test_systemd_selinux fails when building its
+Kernel 6.1.26 with gcc 15.1.0.
 
-    support/testing: do not use s.b.o
+This commit fixes the issue by updating the test Kernel to the
+latest 6.1.y version (6.1.148 at the time of this commit) which
+includes several fixes for gcc-15 like this one [2].
 
-    Currently, the runtime tests will use the sources.buildroot.org backup
-    mirror, which is the default setup.
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/10984685949
+https://gitlab.com/buildroot.org/buildroot/-/jobs/10984685950
 
-    However, in some cases we do not want to use the backup site, because we
-    want to ensure that the download actually works.
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/947dbc92a20c5acea7882166cae7893e6ea661e1
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=0f82f6f1556389d6489795f03ac3f68cde99d5ad
 
-    This is the case for vendored packages, like cargo or golang packages,
-    for whbich we want to check that gthe download still works when we
-    update the rust or go versions, or when our download helpers change.
-
-    So, disable the use of the backup site in all runtime tests, and drop
-    the no-longer needed special cases.
-
-    Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-    Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-However, not using the backup site is causing a LOT of random failures
-in Gitlab CI, making the results barely usable. Since it's more
-important to get real failures than random ones due to download
-issues, let's re-enable BR2_BACKUP_SITE in our testing infrastructure.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+[Romain: Add a link to one of the kernel commit related to gcc-15]
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
-(cherry picked from commit d26f3717588cfec10ab8572aa5ffa0a8ae471341)
+(cherry picked from commit 8d6f9393ec2ad039554b32b8c7da192559c7887a)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/testing/infra/basetest.py               | 1 -
- support/testing/tests/download/test_git.py      | 5 ++++-
- support/testing/tests/download/test_gitforge.py | 5 ++++-
- support/testing/tests/download/test_ssh.py      | 4 +++-
- support/testing/tests/package/test_rust.py      | 1 +
- 5 files changed, 12 insertions(+), 4 deletions(-)
+ support/testing/tests/init/test_systemd_selinux.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
-index 4f020e8a93..9fb9dffc53 100644
---- a/support/testing/infra/basetest.py
-+++ b/support/testing/infra/basetest.py
-@@ -37,7 +37,6 @@ class BRConfigTest(unittest.TestCase):
-         super(BRConfigTest, self).__init__(names)
-         self.testname = self.__class__.__name__
-         self.builddir = self.outputdir and os.path.join(self.outputdir, self.testname)
--        self.config += '\nBR2_BACKUP_SITE=""\n'
-         self.config += '\nBR2_DL_DIR="{}"\n'.format(self.downloaddir)
-         self.config += "\nBR2_JLEVEL={}\n".format(self.jlevel)
- 
-diff --git a/support/testing/tests/download/test_git.py b/support/testing/tests/download/test_git.py
-index 3cf98f6456..ba52e03ef5 100644
---- a/support/testing/tests/download/test_git.py
-+++ b/support/testing/tests/download/test_git.py
-@@ -7,7 +7,10 @@ import infra
- 
- 
- class GitTestBase(infra.basetest.BRConfigTest):
--    config = ""
-+    config = \
-+        """
-+        BR2_BACKUP_SITE=""
-+        """
-     gitremotedir = infra.filepath("tests/download/git-remote")
-     gitremote = None
- 
-diff --git a/support/testing/tests/download/test_gitforge.py b/support/testing/tests/download/test_gitforge.py
-index 477c365a34..e1ac35ec67 100644
---- a/support/testing/tests/download/test_gitforge.py
-+++ b/support/testing/tests/download/test_gitforge.py
-@@ -5,7 +5,10 @@ import infra
- 
- 
- class GitforgeTestBase(infra.basetest.BRConfigTest):
--    config = ""
-+    config = \
-+        """
-+        BR2_BACKUP_SITE=""
-+        """
- 
-     def setUp(self):
-         super(GitforgeTestBase, self).setUp()
-diff --git a/support/testing/tests/download/test_ssh.py b/support/testing/tests/download/test_ssh.py
-index 7d6ac3aaf7..126002a355 100644
---- a/support/testing/tests/download/test_ssh.py
-+++ b/support/testing/tests/download/test_ssh.py
-@@ -7,7 +7,9 @@ import infra
- 
- 
- class SSHTestBase(infra.basetest.BRConfigTest):
--    config = infra.basetest.MINIMAL_CONFIG
-+    config = infra.basetest.MINIMAL_CONFIG + '''
-+BR2_BACKUP_SITE=""
-+'''
-     sshd_test_dir = infra.filepath("tests/download/sshd")
-     sshd = None
- 
-diff --git a/support/testing/tests/package/test_rust.py b/support/testing/tests/package/test_rust.py
-index 8160cb6053..763125ca20 100644
---- a/support/testing/tests/package/test_rust.py
-+++ b/support/testing/tests/package/test_rust.py
-@@ -70,6 +70,7 @@ class TestRustVendoring(infra.basetest.BRConfigTest):
-         BR2_PACKAGE_RIPGREP=y
-         BR2_PACKAGE_PYTHON3=y
-         BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
-+        BR2_BACKUP_SITE=""
-         """
- 
-     def setUp(self):
+diff --git a/support/testing/tests/init/test_systemd_selinux.py b/support/testing/tests/init/test_systemd_selinux.py
+index e9bb3405cd..398cfbaa82 100644
+--- a/support/testing/tests/init/test_systemd_selinux.py
++++ b/support/testing/tests/init/test_systemd_selinux.py
+@@ -12,7 +12,7 @@ class TestSELinuxSystemd(infra.basetest.BRTest):
+         BR2_INIT_SYSTEMD=y
+         BR2_LINUX_KERNEL=y
+         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.26"
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.148"
+         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
+         BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
