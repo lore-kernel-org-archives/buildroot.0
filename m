@@ -4,97 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E8C2CA0FED
-	for <buildroot@archiver.kernel.org>; Fri,  5 Sep 2025 07:48:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83CB2CA0FED
+	for <buildroot@archiver.kernel.org>; Fri,  5 Sep 2025 07:48:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BABE8408A6;
-	Fri,  5 Sep 2025 07:48:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3EE014087A;
+	Fri,  5 Sep 2025 07:48:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LlHqKkUUGyaC; Fri,  5 Sep 2025 07:48:06 +0000 (UTC)
+ id gJoUERoVbwbF; Fri,  5 Sep 2025 07:48:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7CE340850
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D9F640850
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C7CE340850;
-	Fri,  5 Sep 2025 07:48:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A3B52111
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D9F640850;
+	Fri,  5 Sep 2025 07:48:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id EF97CB69
  for <buildroot@buildroot.org>; Fri,  5 Sep 2025 07:48:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 89ABB407FF
+ by smtp3.osuosl.org (Postfix) with ESMTP id D6E4760594
  for <buildroot@buildroot.org>; Fri,  5 Sep 2025 07:48:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rXviiG0tbUWK for <buildroot@buildroot.org>;
- Fri,  5 Sep 2025 07:48:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zzZZziGZREGf for <buildroot@buildroot.org>;
+ Fri,  5 Sep 2025 07:48:05 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::533; helo=mail-ed1-x533.google.com;
+ client-ip=2a00:1450:4864:20::52c; helo=mail-ed1-x52c.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6F92140787
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F92140787
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
- [IPv6:2a00:1450:4864:20::533])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6F92140787
- for <buildroot@buildroot.org>; Fri,  5 Sep 2025 07:48:03 +0000 (UTC)
-Received: by mail-ed1-x533.google.com with SMTP id
- 4fb4d7f45d1cf-61cd3748c6dso3617729a12.3
- for <buildroot@buildroot.org>; Fri, 05 Sep 2025 00:48:03 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6F2D860B33
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F2D860B33
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6F2D860B33
+ for <buildroot@buildroot.org>; Fri,  5 Sep 2025 07:48:04 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id
+ 4fb4d7f45d1cf-61cf0901a72so3209509a12.1
+ for <buildroot@buildroot.org>; Fri, 05 Sep 2025 00:48:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1757058481; x=1757663281;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=d/+c9alBOC3lgRqs2YRxjYWdGhkxbXULv1V8JnjTZQ8=;
- b=ucn1DYeKYz64jtgzYmMAIiSHOUO03DSp776d19iZwBfVCy7Cuim6kvHnxT8sM2Y9sr
- 06cVeXxRxgqhfHxnrXLNGSg451g/SSnisE+mGsbdPV1qw9mj6OmaiX/kKypVYypusxMF
- jfAJkoDpFLUeU4UpZovrAfTPhD9MIYCuAbYDXrtBzEDuNyv32COyv6h9lzjJRYK/pExt
- GLA72JxczcoTmqFPpcrUr4JDM7vY1JdsAANj6Qo9qmqSvM3B5FP00eFg7ROGiRy0fldl
- t9+jt7wB5h6glPROD7xIbE+RYKVvgc3EmLJ5kVpmguBnK7kwlG3zRVUCkunabFrAkSod
- MUew==
-X-Gm-Message-State: AOJu0Ywlo86LOxamdhJEo1CiuomLkbANbZffF8RaZu/dBrCo6mwpnVUr
- VJwekpMvPhRJBl0fDcgA9XI9pc8cUZAWk/3Rwf/cWOpab7vSKA3/Nt2nZxT84/H7+0DrXU9cozX
- Ikao+3G0=
-X-Gm-Gg: ASbGncubkzZo2myDZDG/b36up2TD2ati144pgQbPnCNirfI2lkD11Tb/ocKQCIYiViF
- UxaopDRQmMW+0Tq+H0Zi36x2bhuesHJIedjr11XfEZGOYnxgs29JsCkt/foCdnHS69ngDLa/1hJ
- yW5z9asZRc+xd3zwUX74JEJ/UyQtFeeE1GGKtZMMOW5ClZ0NBArl4D4HJd51tJ7wIuJ9ypjyi+k
- F/wbPkppdIMvaiwOjxwTxKuc3DbyMaNwiCngru9wGS+rK1yVdYHpOOmHSuPxI5T+idBjiqhQXGP
- I6O62k2iVOP7pQB3jroJiEZGZZR9VQZFKXwSmJRmy/Lp2DI4KJf5wSzEJAnR1IhI5n2LDfNEYnG
- vKnQlazGhZ9rMgzbbgaU9Mew7MQ==
-X-Google-Smtp-Source: AGHT+IGHBs+enu0+19ui5PRXO73hV7e1IZtCTvErHWD1338SmYLsAfSvuFHFeQBygRlurpaearBBLw==
-X-Received: by 2002:a05:6402:5211:b0:61d:1d16:19b1 with SMTP id
- 4fb4d7f45d1cf-61d2699c0bamr19679918a12.14.1757058481457; 
+ d=1e100.net; s=20230601; t=1757058482; x=1757663282;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=ytX6WYzNDSwE0fadVDB4TrxHHIHIwjeiNJS38P22ghM=;
+ b=TC9xnfB+d4Uc/u8Pe4Cz03e7IVMqNIoi/wimjk3+0Xs5Kfj0x7PHrKTMKHe+6dD1AG
+ zFLuw2utktZykgjnU/ZsupxDFHVmzDHMfSAK3O4DX1PKbVGbEnwj33EYRsuhG2XCcGlq
+ im1lNywBeJxQOJrfGgN+GSoAwJP0b9ofudqYRHj9nl459ZOSHv9wywCi07hMW0/rpqDt
+ abPwpTZAjZY2LecnpJ70y8Bsw62QLvdvyh3YHxsDnKxuLi91DGWdWpAYiYCV0n60Pv+c
+ wk9X1jQhIeo2IaGlAs0hEMZ/nRZms/ogOtNR+O5uGwPtGEg500QX51obaJ9/G4EMxQhT
+ ltOw==
+X-Gm-Message-State: AOJu0Yw3yBfn56D8ueOhqz1CLGg9PPIguHurea0q/rP5xQycgz4ruUMj
+ oxO+cW60Ht2g9kP+W7hJvtL4i4O2l1aDSp1T3f5LK3Id97h1VwMs1m5L0TRDvGr3dIXMCYDr2om
+ sahkfKW0=
+X-Gm-Gg: ASbGnctbgcXhMCA/v5OTh1bgpR9C3bLXKr469JN81mDzAQW3cV3qglXB5igp3JcJ0iO
+ 9TGl6YHwOexHL8JihSChoMGhXx6IlyzyAxmEQNi/NF9+AJo52B+7voK4Jk/W8xg0gSq+6/5vXQp
+ DA4iO3eH4hot8oxspQqMLrlLDim95emRZpR+POp3c/iTfNzLSphYGsBDpeabx+lG9Io/bFX93qP
+ tFswjUmMEr1k+eO4eUzwAj65MXM5UzT6ivbWNZ7FgrLmAm+rzux3DJ8oCjPrT3sU3yPy4lflqXi
+ lAHsFc0P7tS4Ou6XqmAGYxB3dR+nd6HZaCoT1uS4+z/LTpLQlmb3yND9WNdGJJF9H3souykQKIN
+ borpgy/tm+m8h+2A=
+X-Google-Smtp-Source: AGHT+IFp1bNJyblbsoyQL09TuyAOe2p3NBG9IKGoaljgKk8vCB1hPBTsc9ZoAIqlUft2yRQeiP1bfw==
+X-Received: by 2002:a05:6402:13cc:b0:61c:d118:618d with SMTP id
+ 4fb4d7f45d1cf-61d26ec5da2mr22559110a12.35.1757058481900; 
  Fri, 05 Sep 2025 00:48:01 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-61cfc1c7dfesm16101925a12.7.2025.09.05.00.48.00
+ 4fb4d7f45d1cf-61cfc1c7dfesm16101925a12.7.2025.09.05.00.48.01
  for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Fri, 05 Sep 2025 00:48:01 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Fri,  5 Sep 2025 09:47:59 +0200
-Message-ID: <20250905074800.469349-1-thomas.perale@mind.be>
+Date: Fri,  5 Sep 2025 09:48:00 +0200
+Message-ID: <20250905074800.469349-2-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250905074800.469349-1-thomas.perale@mind.be>
+References: <20250905074800.469349-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1757058481; x=1757663281; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:from:to:cc:subject:date:message-id:reply-to;
- bh=d/+c9alBOC3lgRqs2YRxjYWdGhkxbXULv1V8JnjTZQ8=;
- b=KMazVBPlp2FVoo7g6jy4iaRKBDNruv3PvX9gQ453U2JKXeInl3DlyHj+1XAjRlcL7l
- 6OohH8fLXJnWcFdfLT6/JeAVRnpPqsBYiIrdEJD1TE+z+yD67/570MONzEJzryHCHUZC
- DcEAx3qtY9GjHBoh8s57sYbabzea/UiJZeRbipl2emDIm+DlJBQx4ZJUTzHO6PABzmuC
- FdPHjsiHYm9CGq028F+R7jTaGuGtdIYNMk7WyQa78fJrHJ2Ln8DJqFv27mIKWTzu4xbD
- lZEQp81CoVp1qrkdEE0+clIt8Ehk8qtHSmYTj6hTJfdq3XdY30D9177ZLjb39RlJ5wgc
- EmMw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=mind.be; s=google; t=1757058482; x=1757663282; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=ytX6WYzNDSwE0fadVDB4TrxHHIHIwjeiNJS38P22ghM=;
+ b=VNi8iZRhAX66mNPYwXIxoPv/WERHXtsIGydZD9ce/C5eSACzdc8Ayj4pnDdImmn6EQ
+ ZGD+Ix4n/SBAOO3qM1QLsRDK37iHLcvErPijqgE5fcT7UK9FlKqaqCq4XcRrRlAQbBvf
+ AkcZNRPTp+dl/UkiF6sZSQWKxuOnlfHQPrPvndJKzav7/VlwPWS3i5Khc/VsSJpnSeI1
+ NWtJvIre3kPFEIhnM+7A8TViG0qTQpO+O3ojVpfawV97ukJbSwMit1I1f8ISlN9AUsJO
+ Jd3wIxaUH10fQfsRdDLOc6XZGdLS9V05BeW9iWM/ZvcfU+JKkQym2Ck+iI9f+sb3e54L
+ U86g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=KMazVBPl
-Subject: [Buildroot] [PATCH 1/2] package/iperf3: add patch to fix
- CVE-2025-54349
+ header.s=google header.b=VNi8iZRh
+Subject: [Buildroot] [PATCH 2/2] package/iperf3: add patch to fix
+ CVE-2025-54350
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,131 +119,71 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Fixes the following vulnerability:
 
-- CVE-2025-54349
-
-    In iperf before 3.19.1, iperf_auth.c has an off-by-one error and
-    resultant heap-based buffer overflow.
+    In iperf before 3.19.1, iperf_auth.c has a Base64Decode assertion
+    failure and application exit upon a malformed authentication attempt.
 
 For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2025-54349
-  - https://github.com/esnet/iperf/commit/4e5313bab0b9b3fe03513ab54f722c8a3e4b7bdf
+  - https://www.cve.org/CVERecord?id=CVE-2025-54350
+  - https://github.com/esnet/iperf/commit/4eab661da0bbaac04493fa40164e928c6df7934a
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...Fix-off-by-one-head-overflow-in-auth.patch | 93 +++++++++++++++++++
- package/iperf3/iperf3.mk                      |  3 +
- 2 files changed, 96 insertions(+)
- create mode 100644 package/iperf3/0001-Fix-off-by-one-head-overflow-in-auth.patch
+ ...-on-malformed-authentication-attempt.patch | 35 +++++++++++++++++++
+ package/iperf3/iperf3.mk                      |  3 ++
+ 2 files changed, 38 insertions(+)
+ create mode 100644 package/iperf3/0002-Prevent-crash-due-to-assertion-failures-on-malformed-authentication-attempt.patch
 
-diff --git a/package/iperf3/0001-Fix-off-by-one-head-overflow-in-auth.patch b/package/iperf3/0001-Fix-off-by-one-head-overflow-in-auth.patch
+diff --git a/package/iperf3/0002-Prevent-crash-due-to-assertion-failures-on-malformed-authentication-attempt.patch b/package/iperf3/0002-Prevent-crash-due-to-assertion-failures-on-malformed-authentication-attempt.patch
 new file mode 100644
-index 0000000000..38fe1327ce
+index 0000000000..bcba77be21
 --- /dev/null
-+++ b/package/iperf3/0001-Fix-off-by-one-head-overflow-in-auth.patch
-@@ -0,0 +1,93 @@
-+From 4e5313bab0b9b3fe03513ab54f722c8a3e4b7bdf Mon Sep 17 00:00:00 2001
-+From: Sarah Larsen <swlarsen@es.net>
-+Date: Wed, 25 Jun 2025 15:11:03 +0000
-+Subject: [PATCH] Fix off-by-one heap overflow in auth.
++++ b/package/iperf3/0002-Prevent-crash-due-to-assertion-failures-on-malformed-authentication-attempt.patch
+@@ -0,0 +1,35 @@
++From de932ea16bc959f839d28d370f0602de52c5def1 Mon Sep 17 00:00:00 2001
++From: "Bruce A. Mah" <bmah@es.net>
++Date: Tue, 24 Jun 2025 15:58:21 -0700
++Subject: [PATCH] Prevent crash due to assertion failures on malformed
++ authentication attempt.
 +
 +Reported by Han Lee (Apple Information Security)
 +
-+CVE: CVE-2025-54349
-+Upstream: https://github.com/esnet/iperf/commit/4e5313bab0b9b3fe03513ab54f722c8a3e4b7bdf
++CVE: CVE-2025-54350
++Upstream: https://github.com/esnet/iperf/commit/de932ea16bc959f839d28d370f0602de52c5def1
 +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 +---
-+ src/iperf_auth.c | 18 +++++++++++++-----
-+ 1 file changed, 13 insertions(+), 5 deletions(-)
++ src/iperf_auth.c | 2 --
++ 1 file changed, 2 deletions(-)
 +
 +diff --git a/src/iperf_auth.c b/src/iperf_auth.c
-+index b9f2bc0f2..632f03d24 100644
++index 72e85fc9a..b9f2bc0f2 100644
 +--- a/src/iperf_auth.c
 ++++ b/src/iperf_auth.c
-+@@ -288,6 +288,7 @@ int encrypt_rsa_message(const char *plaintext, EVP_PKEY *public_key, unsigned ch
-+ }
++@@ -28,7 +28,6 @@
++ #include "iperf_config.h"
 + 
-+ int decrypt_rsa_message(const unsigned char *encryptedtext, const int encryptedtext_len, EVP_PKEY *private_key, unsigned char **plaintext, int use_pkcs1_padding) {
-++    int ret =0;
-+ #if OPENSSL_VERSION_MAJOR >= 3
-+     EVP_PKEY_CTX *ctx;
-+ #else
-+@@ -310,7 +311,8 @@ int decrypt_rsa_message(const unsigned char *encryptedtext, const int encryptedt
-+     keysize = RSA_size(rsa);
-+ #endif
-+     rsa_buffer  = OPENSSL_malloc(keysize * 2);
-+-    *plaintext = (unsigned char*)OPENSSL_malloc(keysize);
-++    // Note: +1 for NULL
-++    *plaintext = (unsigned char*)OPENSSL_malloc(keysize + 1);
++ #include <string.h>
++-#include <assert.h>
++ #include <time.h>
++ #include <sys/types.h>
++ /* FreeBSD needs _WITH_GETLINE to enable the getline() declaration */
++@@ -152,7 +151,6 @@ int Base64Decode(const char* b64message, unsigned char** buffer, size_t* length)
 + 
-+     BIO *bioBuff   = BIO_new_mem_buf((void*)encryptedtext, encryptedtext_len);
-+     rsa_buffer_len = BIO_read(bioBuff, rsa_buffer, keysize * 2);
-+@@ -320,13 +322,15 @@ int decrypt_rsa_message(const unsigned char *encryptedtext, const int encryptedt
-+         padding = RSA_PKCS1_PADDING;
-+     }
-+ #if OPENSSL_VERSION_MAJOR >= 3
-++
-+     plaintext_len = keysize;
-+     EVP_PKEY_decrypt_init(ctx);
-+-    int ret = EVP_PKEY_CTX_set_rsa_padding(ctx, padding);
-++
-++    ret = EVP_PKEY_CTX_set_rsa_padding(ctx, padding);
-+     if (ret < 0){
-+         goto errreturn;
-+     }
-+-    EVP_PKEY_decrypt(ctx, *plaintext, &plaintext_len, rsa_buffer, rsa_buffer_len);
-++    ret = EVP_PKEY_decrypt(ctx, *plaintext, &plaintext_len, rsa_buffer, rsa_buffer_len);
-+     EVP_PKEY_CTX_free(ctx);
-+ #else
-+     plaintext_len = RSA_private_decrypt(rsa_buffer_len, rsa_buffer, *plaintext, rsa, padding);
-+@@ -337,7 +341,7 @@ int decrypt_rsa_message(const unsigned char *encryptedtext, const int encryptedt
-+     BIO_free(bioBuff);
++     BIO_set_flags(bio, BIO_FLAGS_BASE64_NO_NL); //Do not use newlines to flush buffer
++     *length = BIO_read(bio, *buffer, strlen(b64message));
++-    assert(*length == decodeLen); //length should equal decodeLen, else something went horribly wrong
++     BIO_free_all(bio);
 + 
-+     /* Treat a decryption error as an empty string. */
-+-    if (plaintext_len < 0) {
-++    if (plaintext_len <= 0) {
-+         plaintext_len = 0;
-+     }
-+ 
-+@@ -386,24 +390,28 @@ int decode_auth_setting(int enable_debug, const char *authtoken, EVP_PKEY *priva
-+     int plaintext_len;
-+     plaintext_len = decrypt_rsa_message(encrypted_b64, encrypted_len_b64, private_key, &plaintext, use_pkcs1_padding);
-+     free(encrypted_b64);
-+-    if (plaintext_len < 0) {
-++    if (plaintext_len <= 0) {
-+         return -1;
-+     }
-++
-+     plaintext[plaintext_len] = '\0';
-+ 
-+     char *s_username, *s_password;
-+     s_username = (char *) calloc(plaintext_len, sizeof(char));
-+     if (s_username == NULL) {
-++        OPENSSL_free(plaintext);
-+ 	return -1;
-+     }
-+     s_password = (char *) calloc(plaintext_len, sizeof(char));
-+     if (s_password == NULL) {
-++        OPENSSL_free(plaintext);
-+ 	free(s_username);
-+ 	return -1;
-+     }
-+ 
-+     int rc = sscanf((char *) plaintext, auth_text_format, s_username, s_password, &utc_seconds);
-+     if (rc != 3) {
-++        OPENSSL_free(plaintext);
-+ 	free(s_password);
-+ 	free(s_username);
-+ 	return -1;
++     return (0); //success
 diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
-index 744ee070a4..c5efb1d784 100644
+index c5efb1d784..43f791b082 100644
 --- a/package/iperf3/iperf3.mk
 +++ b/package/iperf3/iperf3.mk
-@@ -11,6 +11,9 @@ IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
- IPERF3_LICENSE_FILES = LICENSE
- IPERF3_CPE_ID_VENDOR = es
+@@ -14,6 +14,9 @@ IPERF3_CPE_ID_VENDOR = es
+ # 0001-Fix-off-by-one-head-overflow-in-auth.patch
+ IPERF3_IGNORE_CVES += CVE-2025-54349
  
-+# 0001-Fix-off-by-one-head-overflow-in-auth.patch
-+IPERF3_IGNORE_CVES += CVE-2025-54349
++# 0002-Prevent-crash-due-to-assertion-failures-on-malformed-authentication-attempt.patch
++IPERF3_IGNORE_CVES += CVE-2025-54350
 +
  IPERF3_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
  
