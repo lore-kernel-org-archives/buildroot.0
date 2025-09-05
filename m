@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36FC4CAC583
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 10:39:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 780BCCAC581
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 10:39:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 07E5C84F40;
-	Mon,  8 Sep 2025 10:39:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 428D461C44;
+	Mon,  8 Sep 2025 10:39:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ivmGNWMp62Hk; Mon,  8 Sep 2025 10:39:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0EItAr4b7lB9; Mon,  8 Sep 2025 10:39:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B92E284E73
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2489361C5C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B92E284E73;
-	Mon,  8 Sep 2025 10:39:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2489361C5C;
+	Mon,  8 Sep 2025 10:39:19 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A38D7186
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:39:10 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1358C1D9
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:39:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A4DD3414BD
+ by smtp2.osuosl.org (Postfix) with ESMTP id C381F41516
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:39:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ljqhX3_U2r1c for <buildroot@buildroot.org>;
+ id hhkkIMnj5YO6 for <buildroot@buildroot.org>;
  Mon,  8 Sep 2025 10:39:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33EF741527
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0390E414DE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 33EF741527
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0390E414DE
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:39:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 320F783A96; Mon,  8 Sep 2025 10:39:08 +0000 (UTC)
+ id E52B383A95; Mon,  8 Sep 2025 10:39:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 5 Sep 2025 17:16:56 +0200
+Date: Fri, 5 Sep 2025 17:09:47 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 4bcb1ed67a699020847bfbd25135e65590185a52
-X-Git-Newrev: 5d35b11416e68df70192f2277659f707f9bb0d10
+X-Git-Oldrev: b014d18e927384c6bb63eef47c83554c555d32f2
+X-Git-Newrev: 4ad84775e8718822b773823039a97b822cfdce76
 X-Patchwork-Hint: ignore
-Message-Id: <20250908103908.320F783A96@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/sdl: improve
- existing patches
+Message-Id: <20250908103907.E52B383A95@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] configs/{canaan_kd233,
+ sipeed*}: use BR2_LINUX_KENREL_IMAGE_TARGET_NAME
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,146 +66,173 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d35b11416e68df70192f2277659f707f9bb0d10
+commit: https://git.buildroot.net/buildroot/commit/?id=4ad84775e8718822b773823039a97b822cfdce76
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-- Replace patch 0001 by a properly Git-formatted patch, cherry-picked
-  from the upstream Git repository at
-  https://github.com/libsdl-org/SDL-1.2
+Since commit cb4f11a6964902990ce774ff7144b24a1ffd635c ("linux: handle
+empty BR2_LINUX_KERNEL_IMAGE_TARGET_NAME situation"), we error out if
+BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y but
+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME is empty, which is exactly the case
+of the RISC-V configurations being fixed by this commit.
 
-- Add Upstream: tags on both patches, with the upstream Git
-  commit. Updated .checkpackageignore accordingly.
+They define the BR2_LINUX_KERNEL_IMAGE_NAME variable, but not
+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME, while BR2_LINUX_KERNEL_IMAGE_NAME
+will automatically default to BR2_LINUX_KERNEL_IMAGE_TARGET_NAME if
+BR2_LINUX_KERNEL_IMAGE_NAME is not provided.
 
+It probably used to work because specifying an empty make target was
+generating the right images, and they did have the name specified in
+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME. But with the additional check
+added in cb4f11a6964902990ce774ff7144b24a1ffd635c this scenario is no
+longer supported.
+
+Fixes:
+
+              canaan_kd233 | https://gitlab.com/buildroot.org/buildroot/-/jobs/11012273088
+           sipeed_maix_bit | https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771237
+    sipeed_maix_bit_sdcard | https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771342
+          sipeed_maix_dock | https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771387
+   sipeed_maix_dock_sdcard | https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771472
+            sipeed_maix_go | https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771505
+     sipeed_maix_go_sdcard | https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771581
+          sipeed_maixduino | https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771663
+   sipeed_maixduino_sdcard | https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771885
+
+Cc: Damien Le Moal <dlemoal@kernel.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-(cherry picked from commit da3996a39d3330722a8458c296c5bccfdd6a0adc)
+Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 070d91ed04a2a3c462dbd5ad1878ce47c2433986)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .checkpackageignore                                |  2 -
- ...1-Fix-compilation-with-libX11-1.5.99.902.patch} | 51 +++++++++++++---------
- ...-SDL_x11yuv.c-fix-possible-use-after-free.patch |  5 ++-
- 3 files changed, 33 insertions(+), 25 deletions(-)
+ configs/canaan_kd233_defconfig            | 2 +-
+ configs/sipeed_maix_bit_defconfig         | 2 +-
+ configs/sipeed_maix_bit_sdcard_defconfig  | 2 +-
+ configs/sipeed_maix_dock_defconfig        | 2 +-
+ configs/sipeed_maix_dock_sdcard_defconfig | 2 +-
+ configs/sipeed_maix_go_defconfig          | 2 +-
+ configs/sipeed_maix_go_sdcard_defconfig   | 2 +-
+ configs/sipeed_maixduino_defconfig        | 2 +-
+ configs/sipeed_maixduino_sdcard_defconfig | 2 +-
+ 9 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 2f88ef4698..541d3d3767 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1033,8 +1033,6 @@ package/screen/0002-Change-binary-permission-flags-even-if-chown-fails.patch lib
- package/screen/0003-Support-overriding-SCREEN-to-get-a-non-versioned-bin.patch lib_patch.Upstream
- package/screen/0004-Renamed-sched.h-to-eventqueue.h.patch lib_patch.Upstream
- package/scrub/0001-configure-ac-make-sure-m4-macros-are-included-in-the-build.patch lib_patch.Upstream
--package/sdl/0001-fix-compilation-with-libx11.patch lib_patch.Upstream
--package/sdl/0002-SDL_x11yuv.c-fix-possible-use-after-free.patch lib_patch.Upstream
- package/sdl_mixer/0001-Add-Libs.private-field-to-pkg-config-file.patch lib_patch.Upstream
- package/sdl_mixer/0002-configure__set_macro_directory.patch lib_patch.Upstream
- package/sdl_mixer/0003-configure.ac-fix-static-linking-with-tremor.patch lib_patch.Upstream
-diff --git a/package/sdl/0001-fix-compilation-with-libx11.patch b/package/sdl/0001-Fix-compilation-with-libX11-1.5.99.902.patch
-similarity index 57%
-rename from package/sdl/0001-fix-compilation-with-libx11.patch
-rename to package/sdl/0001-Fix-compilation-with-libX11-1.5.99.902.patch
-index 27f244883e..83f0ab2bb1 100644
---- a/package/sdl/0001-fix-compilation-with-libx11.patch
-+++ b/package/sdl/0001-Fix-compilation-with-libX11-1.5.99.902.patch
-@@ -1,20 +1,24 @@
--sdl: Fix compilation with libX11 >= 1.5.99.902
--Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--
--# HG changeset patch
--# User Azamat H. Hackimov <azamat.hackimov@gmail.com>
--# Date 1370184533 -21600
--# Node ID 91ad7b43317a6387e115ecdf63a49137f47e42c8
--# Parent  f7fd5c3951b9ed922fdf696f7182e71b58a13268
--Fix compilation with libX11 >= 1.5.99.902.
-+From 41410b72746cfc7ff515aefed62b0b179bf6e8da Mon Sep 17 00:00:00 2001
-+From: "Azamat H. Hackimov" <azamat.hackimov@gmail.com>
-+Date: Sun, 2 Jun 2013 20:48:53 +0600
-+Subject: [PATCH] Fix compilation with libX11 >= 1.5.99.902.
- 
- These changes fixes bug #1769 for SDL 1.2
- (http://bugzilla.libsdl.org/show_bug.cgi?id=1769).
- 
--diff -r f7fd5c3951b9 -r 91ad7b43317a configure.in
----- a/configure.in	Wed Apr 17 00:56:53 2013 -0700
--+++ b/configure.in	Sun Jun 02 20:48:53 2013 +0600
--@@ -1169,6 +1169,17 @@
-+Upstream: 5d79977ec7a6b58afa6e4817035aaaba186f7e9f
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+---
-+ configure.in               | 11 +++++++++++
-+ include/SDL_config.h.in    |  1 +
-+ src/video/x11/SDL_x11sym.h |  4 ++++
-+ 3 files changed, 16 insertions(+)
-+
-+diff --git a/configure.in b/configure.in
-+index 08c8e1e9..89c526d4 100644
-+--- a/configure.in
-++++ b/configure.in
-+@@ -1127,6 +1127,17 @@ AC_HELP_STRING([--enable-video-x11-xrandr], [enable X11 Xrandr extension for ful
-              if test x$definitely_enable_video_x11_xrandr = xyes; then
-                  AC_DEFINE(SDL_VIDEO_DRIVER_X11_XRANDR)
-              fi
-@@ -32,10 +36,11 @@ diff -r f7fd5c3951b9 -r 91ad7b43317a configure.in
-          fi
-      fi
-  }
--diff -r f7fd5c3951b9 -r 91ad7b43317a include/SDL_config.h.in
----- a/include/SDL_config.h.in	Wed Apr 17 00:56:53 2013 -0700
--+++ b/include/SDL_config.h.in	Sun Jun 02 20:48:53 2013 +0600
--@@ -283,6 +283,7 @@
-+diff --git a/include/SDL_config.h.in b/include/SDL_config.h.in
-+index 8bb1773c..78ca747b 100644
-+--- a/include/SDL_config.h.in
-++++ b/include/SDL_config.h.in
-+@@ -282,6 +282,7 @@
-  #undef SDL_VIDEO_DRIVER_WINDIB
-  #undef SDL_VIDEO_DRIVER_WSCONS
-  #undef SDL_VIDEO_DRIVER_X11
-@@ -43,10 +48,11 @@ diff -r f7fd5c3951b9 -r 91ad7b43317a include/SDL_config.h.in
-  #undef SDL_VIDEO_DRIVER_X11_DGAMOUSE
-  #undef SDL_VIDEO_DRIVER_X11_DYNAMIC
-  #undef SDL_VIDEO_DRIVER_X11_DYNAMIC_XEXT
--diff -r f7fd5c3951b9 -r 91ad7b43317a src/video/x11/SDL_x11sym.h
----- a/src/video/x11/SDL_x11sym.h	Wed Apr 17 00:56:53 2013 -0700
--+++ b/src/video/x11/SDL_x11sym.h	Sun Jun 02 20:48:53 2013 +0600
--@@ -165,7 +165,11 @@
-+diff --git a/src/video/x11/SDL_x11sym.h b/src/video/x11/SDL_x11sym.h
-+index 4875b989..bd83f7f5 100644
-+--- a/src/video/x11/SDL_x11sym.h
-++++ b/src/video/x11/SDL_x11sym.h
-+@@ -165,7 +165,11 @@ SDL_X11_SYM(Bool,XShmQueryExtension,(Display* a),(a),return)
-   */
-  #ifdef LONG64
-  SDL_X11_MODULE(IO_32BIT)
-@@ -58,3 +64,6 @@ diff -r f7fd5c3951b9 -r 91ad7b43317a src/video/x11/SDL_x11sym.h
-  SDL_X11_SYM(void,_XRead32,(Display *dpy,register long *data,long len),(dpy,data,len),)
-  #endif
-  
-+-- 
-+2.50.1
-+
-diff --git a/package/sdl/0002-SDL_x11yuv.c-fix-possible-use-after-free.patch b/package/sdl/0002-SDL_x11yuv.c-fix-possible-use-after-free.patch
-index d7858d0f96..68e66bd5a2 100644
---- a/package/sdl/0002-SDL_x11yuv.c-fix-possible-use-after-free.patch
-+++ b/package/sdl/0002-SDL_x11yuv.c-fix-possible-use-after-free.patch
-@@ -1,9 +1,10 @@
--From d7e00208738a0bc6af302723fe64908ac35b777b Mon Sep 17 00:00:00 2001
-+From c24c08c9aa0f92213793e5ef404f2c387603d7f8 Mon Sep 17 00:00:00 2001
- From: Ozkan Sezer <sezeroz@gmail.com>
- Date: Sat, 18 Jun 2022 14:55:00 +0300
- Subject: [PATCH] SDL_x11yuv.c: fix possible use-after-free
- 
- Fixes: https://github.com/libsdl-org/SDL-1.2/issues/863
-+Upstream: d7e00208738a0bc6af302723fe64908ac35b777b
- Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- ---
-  src/video/x11/SDL_x11yuv.c | 2 +-
-@@ -24,5 +25,5 @@ index 62698dfd..0d5754e3 100644
-  								0, width, height);
-  		}
- -- 
--2.30.2
-+2.50.1
- 
+diff --git a/configs/canaan_kd233_defconfig b/configs/canaan_kd233_defconfig
+index 491a834477..47d0b55e90 100644
+--- a/configs/canaan_kd233_defconfig
++++ b/configs/canaan_kd233_defconfig
+@@ -15,7 +15,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
+ BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/canaan/kd233/linux-cpio.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+-BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
++BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="loader.bin"
+ BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/busybox-tiny.config"
+ # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+diff --git a/configs/sipeed_maix_bit_defconfig b/configs/sipeed_maix_bit_defconfig
+index 00c6a993d8..c3fc9192c6 100644
+--- a/configs/sipeed_maix_bit_defconfig
++++ b/configs/sipeed_maix_bit_defconfig
+@@ -15,7 +15,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
+ BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/maix-bit/linux-cpio.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+-BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
++BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="loader.bin"
+ BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/busybox-tiny.config"
+ # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+diff --git a/configs/sipeed_maix_bit_sdcard_defconfig b/configs/sipeed_maix_bit_sdcard_defconfig
+index 5127bfeae6..4ae824a26b 100644
+--- a/configs/sipeed_maix_bit_sdcard_defconfig
++++ b/configs/sipeed_maix_bit_sdcard_defconfig
+@@ -19,7 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
+ BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210_sdcard"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/linux-sdcard.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+-BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
++BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="loader.bin"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="canaan/sipeed_maix_bit"
+ # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
+diff --git a/configs/sipeed_maix_dock_defconfig b/configs/sipeed_maix_dock_defconfig
+index d97e185311..73372056a3 100644
+--- a/configs/sipeed_maix_dock_defconfig
++++ b/configs/sipeed_maix_dock_defconfig
+@@ -15,7 +15,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
+ BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/maix-dock/linux-cpio.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+-BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
++BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="loader.bin"
+ BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/busybox-tiny.config"
+ # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+diff --git a/configs/sipeed_maix_dock_sdcard_defconfig b/configs/sipeed_maix_dock_sdcard_defconfig
+index a755872cfd..66317d968c 100644
+--- a/configs/sipeed_maix_dock_sdcard_defconfig
++++ b/configs/sipeed_maix_dock_sdcard_defconfig
+@@ -19,7 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
+ BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210_sdcard"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/linux-sdcard.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+-BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
++BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="loader.bin"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="canaan/sipeed_maix_dock"
+ # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
+diff --git a/configs/sipeed_maix_go_defconfig b/configs/sipeed_maix_go_defconfig
+index a4d976353f..bb64dccdf4 100644
+--- a/configs/sipeed_maix_go_defconfig
++++ b/configs/sipeed_maix_go_defconfig
+@@ -15,7 +15,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
+ BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/maix-go/linux-cpio.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+-BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
++BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="loader.bin"
+ BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/busybox-tiny.config"
+ # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+diff --git a/configs/sipeed_maix_go_sdcard_defconfig b/configs/sipeed_maix_go_sdcard_defconfig
+index 6067fea785..a3076c3e12 100644
+--- a/configs/sipeed_maix_go_sdcard_defconfig
++++ b/configs/sipeed_maix_go_sdcard_defconfig
+@@ -19,7 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
+ BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210_sdcard"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/linux-sdcard.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+-BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
++BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="loader.bin"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="canaan/sipeed_maix_go"
+ # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
+diff --git a/configs/sipeed_maixduino_defconfig b/configs/sipeed_maixduino_defconfig
+index 37c6eb4582..27bf958c76 100644
+--- a/configs/sipeed_maixduino_defconfig
++++ b/configs/sipeed_maixduino_defconfig
+@@ -15,7 +15,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
+ BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/maixduino/linux-cpio.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+-BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
++BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="loader.bin"
+ BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/busybox-tiny.config"
+ # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+diff --git a/configs/sipeed_maixduino_sdcard_defconfig b/configs/sipeed_maixduino_sdcard_defconfig
+index 0a460f15d3..1b6db4f8a4 100644
+--- a/configs/sipeed_maixduino_sdcard_defconfig
++++ b/configs/sipeed_maixduino_sdcard_defconfig
+@@ -19,7 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
+ BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210_sdcard"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/linux-sdcard.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+-BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
++BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="loader.bin"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="canaan/sipeed_maixduino"
+ # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
