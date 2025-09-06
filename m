@@ -1,107 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE987CA1012
-	for <buildroot@archiver.kernel.org>; Sat,  6 Sep 2025 16:21:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D17FCA1012
+	for <buildroot@archiver.kernel.org>; Sat,  6 Sep 2025 16:26:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3081E83F1E;
-	Sat,  6 Sep 2025 16:21:08 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LUQ9Z-E6awUi; Sat,  6 Sep 2025 16:21:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2798383F15
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2798383F15;
-	Sat,  6 Sep 2025 16:21:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id A5DCECA
- for <buildroot@buildroot.org>; Sat,  6 Sep 2025 16:21:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8BE1C60BD5
- for <buildroot@buildroot.org>; Sat,  6 Sep 2025 16:21:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5763660DA4;
+	Sat,  6 Sep 2025 16:26:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cl2EMaiQA3PY for <buildroot@buildroot.org>;
- Sat,  6 Sep 2025 16:21:05 +0000 (UTC)
+ id b69wT0nRpY89; Sat,  6 Sep 2025 16:26:02 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3113613E5
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id D3113613E5;
+	Sat,  6 Sep 2025 16:26:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 50577E0E
+ for <buildroot@buildroot.org>; Sat,  6 Sep 2025 16:26:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 40A474154F
+ for <buildroot@buildroot.org>; Sat,  6 Sep 2025 16:25:59 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CVr2fNZKXpnV for <buildroot@buildroot.org>;
+ Sat,  6 Sep 2025 16:25:58 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::342; helo=mail-wm1-x342.google.com;
+ client-ip=2a00:1450:4864:20::344; helo=mail-wm1-x344.google.com;
  envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3E3CD60D95
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E3CD60D95
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com
- [IPv6:2a00:1450:4864:20::342])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3E3CD60D95
- for <buildroot@buildroot.org>; Sat,  6 Sep 2025 16:21:04 +0000 (UTC)
-Received: by mail-wm1-x342.google.com with SMTP id
- 5b1f17b1804b1-45cb5e1adf7so25278565e9.0
- for <buildroot@buildroot.org>; Sat, 06 Sep 2025 09:21:04 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BE47741557
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE47741557
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com
+ [IPv6:2a00:1450:4864:20::344])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BE47741557
+ for <buildroot@buildroot.org>; Sat,  6 Sep 2025 16:25:57 +0000 (UTC)
+Received: by mail-wm1-x344.google.com with SMTP id
+ 5b1f17b1804b1-45ddddbe31fso3448725e9.1
+ for <buildroot@buildroot.org>; Sat, 06 Sep 2025 09:25:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1757175663; x=1757780463;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=gH0709geSFuUefc95EhdmE12iovMAETCjS+6GWT9mZ8=;
- b=LMKCBGTij0PcSm7/hnHc8iZC06vCcsz6cZkDgucYjqtZExzZLda0higBtN9vbcIbMV
- 4X0bqOoC/EVvRLqA5x/b0HMoyrVRlrUNxus4kA4FBxW3zjvmtQ7tkZ6m37euiRBdn98p
- pzfzTvOz6oBNrE4Sb9NrMmPCUSyzB3kD6NwuEJ7E2xHeJEBr0jcq55c5ARVBAbfW3nwu
- Oopc/1FIdg6rpesWtFC2gD/cn/1hVX9pYZyWePOqzPZ7GG/7rey7n10y3u2ws3Twv2mx
- i7tlj/Tdqy9QKDFeKS5yCPz6lHPRUg2YetRcBe7ft1sP9n9PChthWos8NIttpQq1yhD/
- xfTA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCUXW0lD6tSLkcz77RuQ5Uv6AcjDHovENTFSknwTihYBWb5P72/XJMLcRSpDZ37BMY3ifIRD9mfVAis=@buildroot.org
-X-Gm-Message-State: AOJu0Ywg+PJwZPumwjT+95AdMdoys0+0mgk/G5BAkoRpV1jiX8Cqsm1/
- OwbtcA8PWbNBjW3bN7QKOiyQziS87wLm2eBkU3oNnBMHx94PuLiFuVVTbRdESNNAKJowNSFChQL
- 3uyxyE7JBRw==
-X-Gm-Gg: ASbGncv6GB4v8qAHTCPa2ml25IvO21xQ5NU2RNZmDmiRtXaiwV9TvDOSewNBv8u2Xsv
- TQq26krinYxBPE0FBEG/AB6ls+BCQ5ngcxpYbWmqTUIc/7Mb8BW4VY6i5f7hZ4D7H4mgXqA4gSp
- 2+LEATBGJfo5uyqzIAU1MF7HEWlKRybQD4ET2A5s0tRWQKpA8/UQ9R9wTZBRvmIDkb43QjSUQcj
- uUaHHc5QqE4VHwrNWBKK08giwvRpDm7CsnsdVyLFLpoS3V0UL5vgEUJMiFNXwTKDrYuf3SMoU22
- gscJ5PmMDEX0Ul4iV7FfUOmWXLE6lLchscA3TufJ6d9aPyagNqu+FSW6JERw1wggEdfC3T/nZe2
- w+n6lIZhldTyXQjPJaSM5+A0vcKPR3P1toonn2dDu07ZavnNZMkoBgvEcKTx4cmUS9sDBNSHVFi
- AqEIl2fEW7w6qzgW0SvYOiT84gvCburHfDvSbrGqre1SfldRfYHSRKjXFBanddMjG1bxt1+/E=
-X-Google-Smtp-Source: AGHT+IF8UxgsWaM/mtCUgjXfxWzfH+eBRPuMB5NIuMfAoY46dv67WbjTeqzYxm/jA7KI8NvPeMLGtA==
-X-Received: by 2002:a05:6000:401f:b0:3cf:3fe7:21f6 with SMTP id
- ffacd0b85a97d-3e64c1c2a05mr2120309f8f.44.1757175662921; 
- Sat, 06 Sep 2025 09:21:02 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:94a2:a200:2ad9:827a:59cb:148a?
+ d=1e100.net; s=20230601; t=1757175955; x=1757780755;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=M6tTbk0HU6lmTdrZfF/a6qnEc+NEjYzrKusiudxdzqw=;
+ b=nFfvPh2WaRuffQrAu7KJeTRutZHetQ4q/RvfWXdhHfqHitQJ5UNAk4QoGgXF2slNJc
+ s+j4960Va41DaYe57TRKitk/B9nWlLq1iboM9XaGJCK/TSiytMQWdyfMi6jkIwMHxwgj
+ UmBPlLGnmHJJKlg4nSMe7eL27BePy4jHvaRtDIytfi51vTFA6XCX1nhkicFq3drcIGDu
+ wAReFyMzT83zyrBb9FqdhI4eDsKvn3ugnOxbZnwsx4YBV3O0N1+T4+bDatj3Sw4cG+Ao
+ 1rsLhNkueKzbGByLvi2MJt7BqXBfCHi5HkrbbVSYnYV1Ec8BXnWhNwI5z0bNjPnufOl/
+ hb9Q==
+X-Gm-Message-State: AOJu0Yx1POZy/5wVNElw/z7NsLU3ndZIkXDDhZnbcFouYG6U4PLUQ6fs
+ Gvu0y5n7Ce4oJt3xsr6SUm6na+JDEQ8tKIe/hkMmaB79kc0qlOAoj7n15HFfvVW7vkcnnsFoydG
+ vcBTQFekUBQ==
+X-Gm-Gg: ASbGncsguB45x9HPbhTGbTI5/H6HY2KIKp/wVq5pkFHDFhK6uStLPIKv/s3LgpxjVTa
+ tYSnXyDNsptNH0P6ffpTYJ47ASut6xvyjh/HzlQz/jaxbDpFF7IrO5OQ9sRYmkCrZwAnXt6IAd+
+ ypqdFJlj5MxshfcOgDU5g8ZSFI+kHam+O8PV/tBfALLiuLHAGU4Ot93Aszvv3NNCUMqONucNrN1
+ OELZUZl501B5P1Q2QW5JcI1+Jsaoxxk3suC4xoKzY8flOes0BaBlXv2MLHwSQEgjhq2Cj9965CL
+ +t7g/7jG8MPfpd51vTQaoldD46IKaGYzg0wl0XUnToRJ0ceaFBuEAH5E43Q10xtuHBByShT4A3E
+ Nz/dIc5t52K4Xoxi+lfGeSdYDk7y1Epddbh9AuqnYWhn4JVAlYGtAZg0XuGwFXJj16M0badQFq7
+ 8hCs+CfPJZk+t0icD5YbE/yxxiYx3oXVk=
+X-Google-Smtp-Source: AGHT+IEdNY5wvj15JJxkD1pJvc5BHDIr4pp3sGZYEIIyCEvRDfUhuuKall1nZJA5D4XY40SlsNw4bg==
+X-Received: by 2002:a05:6000:2b0f:b0:3e7:428f:d26 with SMTP id
+ ffacd0b85a97d-3e7428f0f3bmr274779f8f.43.1757175955294; 
+ Sat, 06 Sep 2025 09:25:55 -0700 (PDT)
+Received: from P-NTS-Evian.home
  (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
  [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3cf34491a65sm34584389f8f.56.2025.09.06.09.21.02
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 06 Sep 2025 09:21:02 -0700 (PDT)
-Message-ID: <43f04497-9836-4d00-9607-91b33c4ea4d7@smile.fr>
-Date: Sat, 6 Sep 2025 18:21:01 +0200
+ 5b1f17b1804b1-45dd2304e16sm116467295e9.7.2025.09.06.09.25.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 06 Sep 2025 09:25:55 -0700 (PDT)
+To: buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@smile.fr>
+Date: Sat,  6 Sep 2025 18:25:50 +0200
+Message-ID: <20250906162551.3715975-1-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-References: <20250829152440.2183374-1-thomas.petazzoni@bootlin.com>
-Content-Language: fr
-In-Reply-To: <20250829152440.2183374-1-thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1757175663; x=1757780463; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:to:subject:user-agent:mime-version:date:message-id:from
- :to:cc:subject:date:message-id:reply-to;
- bh=gH0709geSFuUefc95EhdmE12iovMAETCjS+6GWT9mZ8=;
- b=jsn9GeOZM8TAlC0wgjnBHq3l9pCsWlmFy6sI5fEo6OG6SKLGUT22pSuQtMVg1ZNdOQ
- fdEUZJhS/YuUc2aKTl8KfSABchWxsZD0MA3or1EAYyWHFLtXpkvURTp5dWDUsggf/ko/
- wwnlV48c0f6aRlw4Ubn8KFopnLL9Ck1I7kiYA=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=smile.fr; s=google; t=1757175955; x=1757780755; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=M6tTbk0HU6lmTdrZfF/a6qnEc+NEjYzrKusiudxdzqw=;
+ b=WgNPx3eF3BHzG3nsSSYQDfSh7Kxm3NPyvoR+J1fh9ZzkW+eReg7Aqa34aRSbckldEj
+ rWNcmXXIzlZdafpsrDveeIFyUjfN4v+qw4pGVqKsPfKb03n7FxCi/DoKlK+Elb7XE3TQ
+ 4mlaW1A88INOfHTjHxhulyVETUhTifUmtDC+E=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=jsn9GeOZ
-Subject: Re: [Buildroot] [PATCH v2] package/gdb: really fix build with GCC
- 15.x by using external readline
+ header.s=google header.b=WgNPx3eF
+Subject: [Buildroot] [PATCH 1/2] package/iozone: bump to version 3.508
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,102 +109,359 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gVGhvbWFzLCBBbGwsCgpMZSAyOS8wOC8yMDI1IMOgIDE3OjI0LCBUaG9tYXMgUGV0YXp6
-b25pIHZpYSBidWlsZHJvb3QgYSDDqWNyaXTCoDoKPiBUaGUgY29weSBvZiByZWFkbGluZSBidW5k
-bGVkIHdpdGggZ2RiIHZlcnNpb25zIGVhcmxpZXIgdGhhbiAxNi54IGRvZXMKPiBub3QgYnVpbGQg
-d2l0aCBHQ0MgMTUueCwgZGVzcGl0ZSBvdXIKPiAwMDEwLXJlYWRsaW5lLXRjYXAuaC1VcGRhdGUt
-ZGVmaW5pdGlvbnMtZm9yLUMyMy5wYXRjaC4gSW4gR0RCIDE2LngsCj4gcmVhZGxpbmUgaGFzIGJl
-ZW4gdXBkYXRlZCB0byA4LjIsIHdoaWNoIGZpeGVzIHRoZSBpc3N1ZSwgYnV0Cj4gYmFja3BvcnRp
-bmcgdGhpcyB0byBvbGRlciBHREIgdmVyc2lvbnMgcmVzdWx0cyBpbiBhIH40NTAgS0IuCj4gCj4g
-U28gbGV0J3MgdGFrZSB0aGUgYXBwcm9hY2ggd2Ugc2hvdWxkIGhhdmUgcHJvYmFibHkgdGFrZW4g
-ZnJvbSB0aGUKPiBncm91bmQgdXA6IHVzZSBhbiBleHRlcm5hbCByZWFkbGluZSwgaW5zdGVhZCBv
-ZiB0aGUgYnVuZGxlZCBvbmUuIFRoaXMKPiBpcyBleGFjdGx5IHdoYXQgdGhpcyBwYXRjaCBkb2Vz
-LiBJbnN0ZWFkIG9mIGhhdmluZyBnZGIgZGVwZW5kIG9uCj4gbmN1cnNlcyBhbmQgaG9zdC1nZGIg
-ZGVwZW5kIG9uIGhvc3QtbmN1cnNlcywgd2UgbWFrZSBpdCBkZXBlbmQgb24KPiByZWFkbGluZS9o
-b3N0LXJlYWRsaW5lICh3aGljaCBpbiB0dXJuIGFscmVhZHkgaGFzIGEgZGVwZW5kZW5jeSBvbgo+
-IG5jdXJzZXMpLiBJbiBmYWN0LCBnZGIgZG9lcyBub3QgbmVlZCBuY3Vyc2VzIGl0c2VsZiwgaXQg
-cmVhbGx5IG5lZWRzCj4gb25seSByZWFkbGluZS4KPiAKPiBTaW5jZSB0aGUgR0RCIFRVSSBpdHNl
-bGYgbmVlZHMgbmN1cnNlcywgd2UgbW92ZSB0aGUgbmN1cnNlcwo+IHNlbGVjdC9kZXBlbmRlbmN5
-IGRvd24gdG8gdGhlIEdEQiBUVUkgb3B0aW9uLiBUaGlzIHdhcyBwb2ludGVkIG91dCBieQo+IFJv
-bWFpbiBOYW91ci4KPiAKPiBGaXhlczoKPiAKPiAgIGh0dHBzOi8vYXV0b2J1aWxkLmJ1aWxkcm9v
-dC5uZXQvcmVzdWx0cy8zYjBjZTVjZmFjODFlMTUwODE2MDI3ZmMxMjU5NjAwZWUwMmYwZjFmLyAo
-aG9zdCBnZGIgMTQueCkKPiAgIGh0dHBzOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0
-cy9lNjRlM2NkN2FhNWU3MzE1NDY0ZTM4MDk4MmY3ZmViYWZmNWRmOTA4LyAoaG9zdCBnZGIgMTUu
-eCkKPiAgIGh0dHBzOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy8yZjI2MTZhNGFj
-N2Q5Y2JjMDZiYTc3NzVlYjU3YmRkMmEwNDE5Y2I1LyAoaG9zdCBhcmMgZ2RiKQoKQWN0dWFsbHkg
-aXQgZml4ZXMgdHdvIG1vcmUgaXNzdWVzIG9uIEdpdGxhYi1DSToKICAgICAgaHR0cHM6Ly9naXRs
-YWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy8xMTE3Njc3NDM0OQooVGVzdEdk
-YkZ1bGxUYXJnZXQpCiAgICAgIGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxk
-cm9vdC8tL2pvYnMvMTExNzY3NzQzNDggKFRlc3RHZGJBcmMpCgpCdXQgdGhlIGxhc3Qgb25lIHN0
-aWxsIGZhaWw6Cmh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pv
-YnMvMTExNzY3NzQzNTUgKFRlc3RHZGJzZXJ2ZXJPbmx5KQoKc2VlIGJlbG93LgoKPiAKPiBTaWdu
-ZWQtb2ZmLWJ5OiBUaG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29t
-Pgo+IC0tLQo+IHYxIC0+IHYyOiBzZWxlY3QgbmN1cnNlcyBmb3IgR0RCIFRVSQo+IC0tLQo+ICAu
-Li5uZS10Y2FwLmgtVXBkYXRlLWRlZmluaXRpb25zLWZvci1DMjMucGF0Y2ggfCA1MiAtLS0tLS0t
-LS0tLS0tLS0tLS0tCj4gIC4uLm5lLXRjYXAuaC1VcGRhdGUtZGVmaW5pdGlvbnMtZm9yLUMyMy5w
-YXRjaCB8IDUyIC0tLS0tLS0tLS0tLS0tLS0tLS0KPiAgLi4ubmUtdGNhcC5oLVVwZGF0ZS1kZWZp
-bml0aW9ucy1mb3ItQzIzLnBhdGNoIHwgNTIgLS0tLS0tLS0tLS0tLS0tLS0tLQo+ICBwYWNrYWdl
-L2dkYi9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAgICAgfCAgMyArLQo+ICAuLi5uZS10
-Y2FwLmgtVXBkYXRlLWRlZmluaXRpb25zLWZvci1DMjMucGF0Y2ggfCA1MiAtLS0tLS0tLS0tLS0t
-LS0tLS0tCj4gIHBhY2thZ2UvZ2RiL2dkYi5tayAgICAgICAgICAgICAgICAgICAgICAgICAgICB8
-ICA4ICsrLQo+ICA2IGZpbGVzIGNoYW5nZWQsIDggaW5zZXJ0aW9ucygrKSwgMjExIGRlbGV0aW9u
-cygtKQo+ICBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9nZGIvMTQuMi8wMDEwLXJlYWRsaW5l
-LXRjYXAuaC1VcGRhdGUtZGVmaW5pdGlvbnMtZm9yLUMyMy5wYXRjaAo+ICBkZWxldGUgbW9kZSAx
-MDA2NDQgcGFja2FnZS9nZGIvMTUuMi8wMDEwLXJlYWRsaW5lLXRjYXAuaC1VcGRhdGUtZGVmaW5p
-dGlvbnMtZm9yLUMyMy5wYXRjaAo+ICBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9nZGIvMTYu
-My8wMDEwLXJlYWRsaW5lLXRjYXAuaC1VcGRhdGUtZGVmaW5pdGlvbnMtZm9yLUMyMy5wYXRjaAo+
-ICBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9nZGIvYXJjLTIwMjQuMTItcmVsZWFzZS1nZGIv
-MDAwMS1yZWFkbGluZS10Y2FwLmgtVXBkYXRlLWRlZmluaXRpb25zLWZvci1DMjMucGF0Y2gKPiAK
-ClsuLi5dCgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2dkYi9Db25maWcuaW4gYi9wYWNrYWdlL2dk
-Yi9Db25maWcuaW4KPiBpbmRleCBiMTY3OGUwZDYzLi5mZjdhZmI4ZjEzIDEwMDY0NAo+IC0tLSBh
-L3BhY2thZ2UvZ2RiL0NvbmZpZy5pbgo+ICsrKyBiL3BhY2thZ2UvZ2RiL0NvbmZpZy5pbgo+IEBA
-IC02MCw3ICs2MCw3IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9HREJfREVCVUdHRVIKPiAgCWRlcGVu
-ZHMgb24gIUJSMl9zaAo+ICAJc2VsZWN0IEJSMl9QQUNLQUdFX0dNUAo+ICAJc2VsZWN0IEJSMl9Q
-QUNLQUdFX01QRlIKPiAtCXNlbGVjdCBCUjJfUEFDS0FHRV9OQ1VSU0VTCj4gKwlzZWxlY3QgQlIy
-X1BBQ0tBR0VfUkVBRExJTkUKPiAgCXNlbGVjdCBCUjJfUEFDS0FHRV9aTElCCj4gIAo+ICBjb21t
-ZW50ICJmdWxsIGdkYiBvbiB0YXJnZXQgbmVlZHMgYSB0b29sY2hhaW4gdy8gd2NoYXIiCj4gQEAg
-LTcxLDYgKzcxLDcgQEAgaWYgQlIyX1BBQ0tBR0VfR0RCX0RFQlVHR0VSCj4gIAo+ICBjb25maWcg
-QlIyX1BBQ0tBR0VfR0RCX1RVSQo+ICAJYm9vbCAiVFVJIHN1cHBvcnQiCj4gKwlzZWxlY3QgQlIy
-X1BBQ0tBR0VfTkNVUlNFUwo+ICAJaGVscAo+ICAJICBUaGlzIG9wdGlvbiBlbmFibGVzIHRlcm1p
-bmFsIHVzZXIgaW50ZXJmYWNlIChUVUkpIGZvciBnZGIKPiAgCgpbLi4uXQoKPiBkaWZmIC0tZ2l0
-IGEvcGFja2FnZS9nZGIvZ2RiLm1rIGIvcGFja2FnZS9nZGIvZ2RiLm1rCj4gaW5kZXggY2E5YzZk
-NzRkNS4uYzNjNTU3Mzk3MyAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2dkYi9nZGIubWsKPiArKysg
-Yi9wYWNrYWdlL2dkYi9nZGIubWsKPiBAQCAtMzAsNyArMzAsNyBAQCBHREJfUFJFX0NPTkZJR1VS
-RV9IT09LUyArPSBHREJfQ09ORklHVVJFX1NZTUxJTksKPiAgIyBGb3IgdGhlIGhvc3QgdmFyaWFu
-dCwgd2UgcmVhbGx5IHdhbnQgdG8gYnVpbGQgd2l0aCBYTUwgc3VwcG9ydCwKPiAgIyB3aGljaCBp
-cyBuZWVkZWQgdG8gcmVhZCBYTUwgZGVzY3JpcHRpb25zIG9mIHRhcmdldCBhcmNoaXRlY3R1cmVz
-LiBXZQo+ICAjIGFsc28gbmVlZCBuY3Vyc2VzLgo+IC1IT1NUX0dEQl9ERVBFTkRFTkNJRVMgPSBo
-b3N0LWV4cGF0IGhvc3QtbmN1cnNlcyBob3N0LXpsaWIKPiArSE9TVF9HREJfREVQRU5ERU5DSUVT
-ID0gaG9zdC1leHBhdCBob3N0LXJlYWRsaW5lIGhvc3QtemxpYgo+ICAKPiAgIyBEaXNhYmxlIGJ1
-aWxkaW5nIGRvY3VtZW50YXRpb24KPiAgR0RCX01BS0VfT1BUUyArPSBNQUtFSU5GTz10cnVlCj4g
-QEAgLTEzNiw5ICsxMzYsMTAgQEAgaWZlcSAoJChCUjJfUEFDS0FHRV9HREJfREVCVUdHRVIpLHkp
-Cj4gIEdEQl9ERVBFTkRFTkNJRVMgKz0gemxpYgo+ICBHREJfQ09ORl9PUFRTICs9IFwKPiAgCS0t
-ZW5hYmxlLWdkYiBcCj4gKwktLXdpdGgtc3lzdGVtLXJlYWRsaW5lIFwKPiAgCS0td2l0aC1jdXJz
-ZXMgXAo+ICAJLS13aXRoLXN5c3RlbS16bGliCj4gLUdEQl9ERVBFTkRFTkNJRVMgKz0gbmN1cnNl
-cyBcCj4gK0dEQl9ERVBFTkRFTkNJRVMgKz0gcmVhZGxpbmUgXAoKQWN0dWFsbHkgZ2Ric2VydmVy
-IGFsc28gZGVwZW5kcyBvbiByZWFkbGluZSBidXQgdGhpcyBwYXJ0IGlzIG9ubHkgdXNlZCB3aGVu
-CkJSMl9QQUNLQUdFX0dEQl9ERUJVR0dFUiBpcyBlbmFibGVkLgoKV2hlbiBvbmx5IEJSMl9QQUNL
-QUdFX0dEQl9TRVJWRVIgaXMgZW5hYmxlZCwgdGhlIHJlYWRsaW5lIGRlcGVuZGVuY3kgaXMgbWlz
-c2luZy4KCldpdGggdGhhdCBmaXhlZCwgdGhlIFRlc3RHZGJzZXJ2ZXJPbmx5IHBhc3MgbG9jYWxs
-eS4KCkJlc3QgcmVnYXJkcywKUm9tYWluCgoKPiAgCSQoaWYgJChCUjJfUEFDS0FHRV9MSUJJQ09O
-ViksbGliaWNvbnYpCj4gIGVsc2UKPiAgIyBXaGVuIG9ubHkgYnVpbGRpbmcgZ2Ric2VydmVyLCB3
-ZSBkb24ndCBuZWVkIHpsaWIuIEJ1dCB3ZSBoYXZlIG5vIHdheSB0bwo+IEBAIC0xODcsNiArMTg4
-LDcgQEAgR0RCX0NPTkZfT1BUUyArPSAtLWRpc2FibGUtaW5wcm9jZXNzLWFnZW50Cj4gIGVuZGlm
-Cj4gIAo+ICBpZmVxICgkKEJSMl9QQUNLQUdFX0dEQl9UVUkpLHkpCj4gK0dEQl9ERVBFTkRFTkNJ
-RVMgKz0gbmN1cnNlcwo+ICBHREJfQ09ORl9PUFRTICs9IC0tZW5hYmxlLXR1aQo+ICBlbHNlCj4g
-IEdEQl9DT05GX09QVFMgKz0gLS1kaXNhYmxlLXR1aQo+IEBAIC0yNjIsMTAgKzI2NCwxMiBAQCBI
-T1NUX0dEQl9DT05GX09QVFMgPSBcCj4gIAktLXdpdGgtc3lzdGVtLXpsaWIgXAo+ICAJLS13aXRo
-LWN1cnNlcyBcCj4gIAktLWRpc2FibGUtc291cmNlLWhpZ2hsaWdodCBcCj4gKwktLXdpdGgtc3lz
-dGVtLXJlYWRsaW5lIFwKPiAgCSQoR0RCX0RJU0FCTEVfQklOVVRJTFNfQ09ORl9PUFRTKSBcCj4g
-IAktLXdpdGgtbXBmcj0kKEhPU1RfRElSKQo+ICAKPiAgaWZlcSAoJChCUjJfUEFDS0FHRV9IT1NU
-X0dEQl9UVUkpLHkpCj4gK0hPU1RfR0RCX0RFUEVOREVOQ0lFUyArPSBob3N0LW5jdXJzZXMKPiAg
-SE9TVF9HREJfQ09ORl9PUFRTICs9IC0tZW5hYmxlLXR1aQo+ICBlbHNlCj4gIEhPU1RfR0RCX0NP
-TkZfT1BUUyArPSAtLWRpc2FibGUtdHVpCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
-b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
-cm9vdAo=
+iozone releases 3.507 and 3.508 seems to be only build fixes releases
+for latest GCC compiler version but since there is no public vcs
+it's not easy to review the history between releases and backport
+any patches.
+
+Based on the changelog from [1]:
+
+  Revision 3.507
+  Fix GCC compile warnings.
+
+  Revision 3.508
+  Put an end to the (&*% stupid GCC breaking builds for no valid reason.
+
+So bump to the latest 508 release.
+
+Rebase 0001-Add-new-targets-for-iozone.patch
+Rebase 0002-fix-build-without-aio.patch and convert to git format
+
+The TestIozone build issue is not yet fixed by the version bump [2].
+
+[1] https://www.iozone.org/src/current/Changes.txt
+[2] https://gitlab.com/buildroot.org/buildroot/-/jobs/11176774405
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ .../0001-Add-new-targets-for-iozone.patch     | 24 +++----
+ ... => 0002-Fix-build-without-ASYNC_IO.patch} | 63 ++++++++++++-------
+ package/iozone/iozone.hash                    |  2 +-
+ package/iozone/iozone.mk                      |  2 +-
+ 4 files changed, 54 insertions(+), 37 deletions(-)
+ rename package/iozone/{0002-fix-build-without-aio.patch => 0002-Fix-build-without-ASYNC_IO.patch} (64%)
+
+diff --git a/package/iozone/0001-Add-new-targets-for-iozone.patch b/package/iozone/0001-Add-new-targets-for-iozone.patch
+index 3cc184ec8f..585f128724 100644
+--- a/package/iozone/0001-Add-new-targets-for-iozone.patch
++++ b/package/iozone/0001-Add-new-targets-for-iozone.patch
+@@ -1,4 +1,4 @@
+-From 5b1e973b2333e838624abf195b3ba9716591f304 Mon Sep 17 00:00:00 2001
++From 015b6fa0c4a503ae822e6cf787de82e09bc44511 Mon Sep 17 00:00:00 2001
+ From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Date: Sun, 10 Oct 2021 10:15:26 +0200
+ Subject: [PATCH] Add new targets for iozone:
+@@ -10,12 +10,14 @@ And make largefile support optional via CFLAGS.
+ 
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
++[Romain: rebase on 3.508]
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
+ ---
+  src/current/makefile | 56 +++++++++++++++++++++++++++++++++++++-------
+  1 file changed, 47 insertions(+), 9 deletions(-)
+ 
+ diff --git a/src/current/makefile b/src/current/makefile
+-index 3a54701..3b17b1b 100644
++index 24a391e..bd66a4e 100755
+ --- a/src/current/makefile
+ +++ b/src/current/makefile
+ @@ -172,10 +172,28 @@ hpux_no_ansi:	iozone_hpux_no.o  libbif.o
+@@ -54,15 +56,15 @@ index 3a54701..3b17b1b 100644
+  	@echo ""
+  	@echo "Building iozone for Linux"
+  	@echo ""
+--	$(CC) -Wmissing-prototypes -Wall -c -O3 -Dunix -DHAVE_ANSIC_C -DASYNC_IO -DHAVE_PREAD \
++-	$(CC) -Wmissing-prototypes -c -O3 -Dunix -DHAVE_ANSIC_C -DASYNC_IO -DHAVE_PREAD \
+ -		-DSHARED_MEM -Dlinux -D_LARGEFILE64_SOURCE $(CFLAGS) iozone.c \
+-+	$(CC) -Wmissing-prototypes -Wall -c -Dunix -DHAVE_ANSIC_C -DASYNC_IO -DHAVE_PREAD \
+++	$(CC) -Wmissing-prototypes -c -Dunix -DHAVE_ANSIC_C -DASYNC_IO -DHAVE_PREAD \
+ +		-DSHARED_MEM -Dlinux $(CFLAGS) iozone.c \
+  		-DNAME='"linux"' -o iozone_linux.o
+--	$(CC) -Wmissing-prototypes -Wall -c -O3 -Dunix -DHAVE_ANSIC_C -DASYNC_IO -D_LARGEFILE64_SOURCE \
+-+	$(CC) -Wmissing-prototypes -Wall -c -Dunix -DHAVE_ANSIC_C -DASYNC_IO \
++-	$(CC) -Wmissing-prototypes -c -O3 -Dunix -DHAVE_ANSIC_C -DASYNC_IO -D_LARGEFILE64_SOURCE \
+++	$(CC) -Wmissing-prototypes -c -Dunix -DHAVE_ANSIC_C -DASYNC_IO \
+ +		-DSHARED_MEM -Dlinux $(CFLAGS) libbif.c -o libbif.o
+-+	$(CC) -Wmissing-prototypes -Wall -c -Dunix -Dlinux -DHAVE_ANSIC_C -DASYNC_IO \
+++	$(CC) -Wmissing-prototypes -c -Dunix -Dlinux -DHAVE_ANSIC_C -DASYNC_IO \
+ +		$(CFLAGS) libasync.c  -o libasync.o
+ +
+ +iozone_linux-noaio.o: iozone.c libbif.c
+@@ -84,7 +86,7 @@ index 3a54701..3b17b1b 100644
+ +		-DNAME='"linux"' -o iozone_linux-noth.o
+ +	$(CC) -Wmissing-prototypes -Wall -c -Dunix -DHAVE_ANSIC_C -DNO_THREADS \
+  		-DSHARED_MEM -Dlinux $(CFLAGS) libbif.c -o libbif.o
+--	$(CC) -Wmissing-prototypes -Wall -c -O3 -Dunix -Dlinux -DHAVE_ANSIC_C -DASYNC_IO \
++-	$(CC) -Wmissing-prototypes -c -O3 -Dunix -Dlinux -DHAVE_ANSIC_C -DASYNC_IO \
+ -		-D_LARGEFILE64_SOURCE $(CFLAGS) libasync.c  -o libasync.o 
+  
+  fileop_AIX.o:	fileop.c
+@@ -93,11 +95,11 @@ index 3a54701..3b17b1b 100644
+  	@echo ""
+  	@echo "Building fileop for Linux"
+  	@echo ""
+--	$(CC) -Wall -c -O3 $(CFLAGS) fileop.c -o fileop_linux.o
+-+	$(CC) -Wall -c $(CFLAGS) fileop.c -o fileop_linux.o
++-	$(CC) -c -O3 $(CFLAGS) fileop.c -o fileop_linux.o
+++	$(CC) -c $(CFLAGS) fileop.c -o fileop_linux.o
+  
+  fileop_openbsd.o:	fileop.c
+  	@echo ""
+ -- 
+-2.27.0
++2.51.0
+ 
+diff --git a/package/iozone/0002-fix-build-without-aio.patch b/package/iozone/0002-Fix-build-without-ASYNC_IO.patch
+similarity index 64%
+rename from package/iozone/0002-fix-build-without-aio.patch
+rename to package/iozone/0002-Fix-build-without-ASYNC_IO.patch
+index 8b54bef4e1..92621e5242 100644
+--- a/package/iozone/0002-fix-build-without-aio.patch
++++ b/package/iozone/0002-Fix-build-without-ASYNC_IO.patch
+@@ -1,4 +1,7 @@
+-Fix build without ASYNC_IO
++From cdd5e78a275c8cda5d48d15acc96c3be5170bf2f Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@smile.fr>
++Date: Sat, 6 Sep 2025 00:26:00 +0200
++Subject: [PATCH] Fix build without ASYNC_IO
+ 
+ Fix the following build failure without ASYNC_IO:
+ 
+@@ -10,11 +13,20 @@ Fixes:
+ 
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Upstream: sent to capps@iozone.org
++[Romain:
++  rebase on 3.508
++  convert to git format
++]
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ src/current/iozone.c | 20 ++++++++++++++++++++
++ 1 file changed, 20 insertions(+)
+ 
+-diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/current/iozone.c
+---- iozone3_506.orig/src/current/iozone.c	2024-03-06 12:28:16.734023725 +0100
+-+++ iozone3_506/src/current/iozone.c	2024-03-06 12:39:14.453991162 +0100
+-@@ -9153,6 +9153,7 @@
++diff --git a/src/current/iozone.c b/src/current/iozone.c
++index 6657a9b..8de26cf 100755
++--- a/src/current/iozone.c
+++++ b/src/current/iozone.c
++@@ -9196,6 +9196,7 @@ long long *data1,*data2;
+  				}
+  			  }
+  			}
+@@ -22,7 +34,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
+  			if(async_flag)
+  			{
+  				if(no_copy_flag)
+-@@ -9160,6 +9161,7 @@
++@@ -9203,6 +9204,7 @@ long long *data1,*data2;
+  				end_async(gc);
+  				gc=0;
+  			}
+@@ -30,7 +42,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
+  			buffer1=0;
+  			if(hist_summary)
+  			{
+-@@ -9634,6 +9636,7 @@
++@@ -9677,6 +9679,7 @@ long long *data1, *data2;
+  				}
+  			  }
+  			}
+@@ -38,7 +50,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
+  			if(async_flag)
+  			{
+  				if(no_copy_flag)
+-@@ -9641,6 +9644,7 @@
++@@ -9684,6 +9687,7 @@ long long *data1, *data2;
+  				end_async(gc);
+  				gc=0;
+  			}
+@@ -46,7 +58,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
+  			if(rlocking)
+  			{
+  				lock_offset=I_LSEEK(fd,0,SEEK_CUR);
+-@@ -10097,6 +10101,7 @@
++@@ -10140,6 +10144,7 @@ long long *data1,*data2;
+  				}
+  			   }
+  			}
+@@ -54,7 +66,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
+  			if(async_flag)
+  			{
+  				if(no_copy_flag)
+-@@ -10104,6 +10109,7 @@
++@@ -10147,6 +10152,7 @@ long long *data1,*data2;
+  				end_async(gc);
+  				gc=0;
+  			}
+@@ -62,7 +74,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
+  			if(rlocking)
+  			{
+  				mylockr((int) fd, (int) 0, (int)1,
+-@@ -10749,6 +10755,7 @@
++@@ -10792,6 +10798,7 @@ printf("Read_Stride\n");
+  			   }
+  			}
+  		}
+@@ -70,7 +82,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
+  		if(async_flag)
+  		{
+  			if(no_copy_flag)
+-@@ -10756,6 +10763,7 @@
++@@ -10799,6 +10806,7 @@ printf("Read_Stride\n");
+  			end_async(gc);
+  			gc=0;
+  		}
+@@ -78,7 +90,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
+  			
+  		/* This is a bit tricky.  The goal is to read with a stride through
+  		   the file. The problem is that you need to touch all of the file
+-@@ -15485,6 +15493,7 @@
++@@ -15528,6 +15536,7 @@ thread_read_test(x)
+  			   }
+  		   }
+  		}
+@@ -86,7 +98,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
+  		if(async_flag)
+  		{
+  			if(no_copy_flag)
+-@@ -15492,6 +15501,7 @@
++@@ -15535,6 +15544,7 @@ thread_read_test(x)
+  			end_async(gc);
+  			gc=0;
+  		}
+@@ -94,7 +106,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
+  		read_so_far+=reclen/1024;
+  		r_traj_bytes_completed+=reclen;
+  		r_traj_ops_completed++;
+-@@ -16050,6 +16060,7 @@
++@@ -16093,6 +16103,7 @@ thread_pread_test(x)
+  			   }
+  		   }
+  		}
+@@ -102,7 +114,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
+  		if(async_flag)
+  		{
+  			if(no_copy_flag)
+-@@ -16057,6 +16068,7 @@
++@@ -16100,6 +16111,7 @@ thread_pread_test(x)
+  			end_async(gc);
+  			gc=0;
+  		}
+@@ -110,7 +122,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
+  		read_so_far+=reclen/1024;
+  		r_traj_bytes_completed+=reclen;
+  		r_traj_ops_completed++;
+-@@ -16665,6 +16677,7 @@
++@@ -16708,6 +16720,7 @@ thread_rread_test(x)
+  			}
+  		   }
+  		}
+@@ -118,7 +130,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
+  		if(async_flag)
+  		{
+  			if(no_copy_flag)
+-@@ -16672,6 +16685,7 @@
++@@ -16715,6 +16728,7 @@ thread_rread_test(x)
+  			end_async(gc);
+  			gc=0;
+  		}
+@@ -126,7 +138,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
+  		re_read_so_far+=reclen/1024;
+  		r_traj_bytes_completed+=reclen;
+  		r_traj_ops_completed++;
+-@@ -17244,6 +17258,7 @@
++@@ -17287,6 +17301,7 @@ thread_reverse_read_test(x)
+  			  lock_offset, reclen);
+  		}
+  		current_position+=reclen;
+@@ -134,7 +146,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
+  		if(async_flag)
+  		{
+  			if(no_copy_flag)
+-@@ -17251,6 +17266,7 @@
++@@ -17294,6 +17309,7 @@ thread_reverse_read_test(x)
+  			end_async(gc);
+  			gc=0;
+  		}
+@@ -142,7 +154,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
+  		t_offset = (off64_t)reclen*2;
+  		if (!(h_flag || k_flag || mmapflag))
+  		{
+-@@ -17778,6 +17794,7 @@
++@@ -17821,6 +17837,7 @@ thread_stride_read_test(x)
+  			}
+  		   }
+  		}
+@@ -150,7 +162,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
+  		if(async_flag)
+  		{
+  			if(no_copy_flag)
+-@@ -17785,6 +17802,7 @@
++@@ -17828,6 +17845,7 @@ thread_stride_read_test(x)
+  			end_async(gc);
+  			gc=0;
+  		}
+@@ -158,7 +170,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
+  		if(current_position + (stride * reclen) >= (numrecs64 * reclen)-reclen) 
+  		{
+  			current_position=0;
+-@@ -18528,6 +18546,7 @@
++@@ -18571,6 +18589,7 @@ void *x;
+  			}
+  		   }
+  		}
+@@ -166,7 +178,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
+  		if(async_flag)
+  		{
+  			if(no_copy_flag)
+-@@ -18535,6 +18554,7 @@
++@@ -18578,6 +18597,7 @@ void *x;
+  			end_async(gc);
+  			gc=0;
+  		}
+@@ -174,3 +186,6 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
+  		ranread_so_far+=reclen/1024;
+  		if(*stop_flag)
+  		{
++-- 
++2.51.0
++
+diff --git a/package/iozone/iozone.hash b/package/iozone/iozone.hash
+index 936ab5a646..1f41483b4a 100644
+--- a/package/iozone/iozone.hash
++++ b/package/iozone/iozone.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  114ce5c071873b9a2c7ba6e73d05d5ef7e66564392acbfcdc0b3261db10fcbe7  iozone3_506.tar
++sha256  ee55af310a65ec97e1db214aebd75ee87f458b529cea3da37081a63974e8ace3  iozone3_508.tar
+ sha256  bff7909fd698708d15613a4fb977a193cff98f44ef170c2dc1dd502974df75b2  docs/License.txt
+diff --git a/package/iozone/iozone.mk b/package/iozone/iozone.mk
+index b1b29d1098..07034cd96f 100644
+--- a/package/iozone/iozone.mk
++++ b/package/iozone/iozone.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IOZONE_VERSION = 3.506
++IOZONE_VERSION = 3.508
+ IOZONE_SOURCE = iozone$(subst .,_,$(IOZONE_VERSION)).tar
+ IOZONE_SITE = http://www.iozone.org/src/current
+ IOZONE_LICENSE = IOzone license (NO DERIVED WORKS ALLOWED)
+-- 
+2.51.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
