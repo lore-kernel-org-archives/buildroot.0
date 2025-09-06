@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82AB1CAC588
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B47FCAC581
 	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:18:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B0106069F;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 45C2A8099B;
 	Mon,  8 Sep 2025 14:18:37 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id INFVfkrJxOcw; Mon,  8 Sep 2025 14:18:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DCF8807C1
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9DCF8807C1;
+	Mon,  8 Sep 2025 14:18:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1590E279
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 69CEC605CB
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q-3LzA9RCbg3; Mon,  8 Sep 2025 14:18:36 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E3F6606F7
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8E3F6606F7;
-	Mon,  8 Sep 2025 14:18:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id DED4ACA
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 30EB64021C
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:27 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fmB3MoBBwTZU for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 14:16:26 +0000 (UTC)
+ id NRMPxXLlWnpR for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 882FE40211
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA91A605BB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 882FE40211
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AA91A605BB
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 77EDA818B3; Mon,  8 Sep 2025 14:16:26 +0000 (UTC)
+ id A6F5C81353; Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 27 Aug 2025 23:51:01 +0200
+Date: Sat, 6 Sep 2025 11:55:43 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 369518b372c0c1748aa4456dee2f8b8bc8a3052b
-X-Git-Newrev: 97e52b323c8940d6022e39451cc4e7c9500a8081
+X-Git-Oldrev: 4b47f88cb4652c5bdc4700ee058cdf240f7f9064
+X-Git-Newrev: 53e0a4bd355d0d48dad74407de32a096a342649f
 X-Patchwork-Hint: ignore
-Message-Id: <20250908141626.77EDA818B3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libfcgi: update to 2.4.6
+Message-Id: <20250908141631.A6F5C81353@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-firmware: add option for
+ mediatek MT7986 firmware (WiFi)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,47 +61,88 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4877108855138113638=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97e52b323c8940d6022e39451cc4e7c9500a8081
+--===============4877108855138113638==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=53e0a4bd355d0d48dad74407de32a096a342649f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Announcement:
-- https://github.com/FastCGI-Archives/fcgi2/releases/tag/2.4.6
+Add an option to install the firmware files for Wifi in Mediatek
+MT7986 SOC, which are present on BananaPi r3.
 
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Signed-off-by: Mattias Walström <lazzer@gmail.com>
+[Julien:
+ - fix tabs/spaces to remove check-package errors
+ - move config to keep alphabetical order
+ - add info in .mk comment
+ - reindent LINUX_FIRMWARE_FILES
+ - move .mk block to keep alphabetical order
+ - fix license file to LICENCE.mediatek
+]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libfcgi/libfcgi.hash | 2 +-
- package/libfcgi/libfcgi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/linux-firmware/Config.in         |  5 +++++
+ package/linux-firmware/linux-firmware.mk | 17 +++++++++++++++++
+ 2 files changed, 22 insertions(+)
 
-diff --git a/package/libfcgi/libfcgi.hash b/package/libfcgi/libfcgi.hash
-index 371dba8939..348b0b6867 100644
---- a/package/libfcgi/libfcgi.hash
-+++ b/package/libfcgi/libfcgi.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  92b0111a98d8636e06c128444a3d4d7a720bdd54e6ee4dd0c7b67775b1b0abff  libfcgi-2.4.5.tar.gz
-+sha256  39af4fb21a6d695a5f0b1c4fa95776d2725f6bc6c77680943a2ab314acd505c1  libfcgi-2.4.6.tar.gz
- sha256  f0a8fe4513a43e8eebb24cdcf9d2e7efc52e4d8259178c6d76d3d84418397d81  LICENSE
-diff --git a/package/libfcgi/libfcgi.mk b/package/libfcgi/libfcgi.mk
-index 2348af843b..e0ef6da55c 100644
---- a/package/libfcgi/libfcgi.mk
-+++ b/package/libfcgi/libfcgi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index e1bbfc19ec..1f33fbc0bd 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -480,6 +480,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7925
+ 	help
+ 	  MediaTek MT7925
  
--LIBFCGI_VERSION = 2.4.5
-+LIBFCGI_VERSION = 2.4.6
- LIBFCGI_SITE = $(call github,FastCGI-Archives,fcgi2,$(LIBFCGI_VERSION))
- LIBFCGI_LICENSE = OML
- LIBFCGI_LICENSE_FILES = LICENSE
++config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7986
++	bool "MediaTek MT7986 SOC WiFi"
++	help
++	  MediaTek MT7986 SOC WiFi
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174
+ 	bool "Qualcomm Atheros 6174"
+ 	help
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 59de2ea8b8..7f1a789057 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -432,6 +432,23 @@ LINUX_FIRMWARE_FILES += mediatek/mt7925/BT_RAM_CODE_MT7925_1_1_hdr.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.mediatek
+ endif
+ 
++# Mediatek MT7986 SoC WiFi
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7986),y)
++LINUX_FIRMWARE_FILES += \
++	mediatek/mt7986_eeprom_mt7975_dual.bin \
++	mediatek/mt7986_eeprom_mt7976.bin \
++	mediatek/mt7986_eeprom_mt7976_dbdc.bin \
++	mediatek/mt7986_eeprom_mt7976_dual.bin \
++	mediatek/mt7986_rom_patch.bin \
++	mediatek/mt7986_rom_patch_mt7975.bin \
++	mediatek/mt7986_wa.bin \
++	mediatek/mt7986_wm.bin \
++	mediatek/mt7986_wm_mt7975.bin \
++	mediatek/mt7986_wo_0.bin \
++	mediatek/mt7986_wo_1.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.mediatek
++endif
++
+ # qca6174
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174),y)
+ LINUX_FIRMWARE_FILES += ath10k/QCA6174
+
+--===============4877108855138113638==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4877108855138113638==--
