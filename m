@@ -1,101 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D17FCA1012
-	for <buildroot@archiver.kernel.org>; Sat,  6 Sep 2025 16:26:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40ACDCA1002
+	for <buildroot@archiver.kernel.org>; Sat,  6 Sep 2025 16:26:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5763660DA4;
-	Sat,  6 Sep 2025 16:26:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 016CD81EC0;
+	Sat,  6 Sep 2025 16:26:04 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uh1VtydsbzcR; Sat,  6 Sep 2025 16:26:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EAA00821D3
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id EAA00821D3;
+	Sat,  6 Sep 2025 16:26:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1CAF5E0E
+ for <buildroot@buildroot.org>; Sat,  6 Sep 2025 16:26:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8054760E0C
+ for <buildroot@buildroot.org>; Sat,  6 Sep 2025 16:25:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b69wT0nRpY89; Sat,  6 Sep 2025 16:26:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3113613E5
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D3113613E5;
-	Sat,  6 Sep 2025 16:26:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 50577E0E
- for <buildroot@buildroot.org>; Sat,  6 Sep 2025 16:26:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 40A474154F
- for <buildroot@buildroot.org>; Sat,  6 Sep 2025 16:25:59 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CVr2fNZKXpnV for <buildroot@buildroot.org>;
+ id 3Y6WvAcYX1J7 for <buildroot@buildroot.org>;
  Sat,  6 Sep 2025 16:25:58 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::344; helo=mail-wm1-x344.google.com;
+ client-ip=2a00:1450:4864:20::342; helo=mail-wm1-x342.google.com;
  envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BE47741557
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE47741557
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com
- [IPv6:2a00:1450:4864:20::344])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BE47741557
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4359160DEC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4359160DEC
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com
+ [IPv6:2a00:1450:4864:20::342])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4359160DEC
  for <buildroot@buildroot.org>; Sat,  6 Sep 2025 16:25:57 +0000 (UTC)
-Received: by mail-wm1-x344.google.com with SMTP id
- 5b1f17b1804b1-45ddddbe31fso3448725e9.1
+Received: by mail-wm1-x342.google.com with SMTP id
+ 5b1f17b1804b1-45dd7b15a64so15441155e9.0
  for <buildroot@buildroot.org>; Sat, 06 Sep 2025 09:25:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1757175955; x=1757780755;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=M6tTbk0HU6lmTdrZfF/a6qnEc+NEjYzrKusiudxdzqw=;
- b=nFfvPh2WaRuffQrAu7KJeTRutZHetQ4q/RvfWXdhHfqHitQJ5UNAk4QoGgXF2slNJc
- s+j4960Va41DaYe57TRKitk/B9nWlLq1iboM9XaGJCK/TSiytMQWdyfMi6jkIwMHxwgj
- UmBPlLGnmHJJKlg4nSMe7eL27BePy4jHvaRtDIytfi51vTFA6XCX1nhkicFq3drcIGDu
- wAReFyMzT83zyrBb9FqdhI4eDsKvn3ugnOxbZnwsx4YBV3O0N1+T4+bDatj3Sw4cG+Ao
- 1rsLhNkueKzbGByLvi2MJt7BqXBfCHi5HkrbbVSYnYV1Ec8BXnWhNwI5z0bNjPnufOl/
- hb9Q==
-X-Gm-Message-State: AOJu0Yx1POZy/5wVNElw/z7NsLU3ndZIkXDDhZnbcFouYG6U4PLUQ6fs
- Gvu0y5n7Ce4oJt3xsr6SUm6na+JDEQ8tKIe/hkMmaB79kc0qlOAoj7n15HFfvVW7vkcnnsFoydG
- vcBTQFekUBQ==
-X-Gm-Gg: ASbGncsguB45x9HPbhTGbTI5/H6HY2KIKp/wVq5pkFHDFhK6uStLPIKv/s3LgpxjVTa
- tYSnXyDNsptNH0P6ffpTYJ47ASut6xvyjh/HzlQz/jaxbDpFF7IrO5OQ9sRYmkCrZwAnXt6IAd+
- ypqdFJlj5MxshfcOgDU5g8ZSFI+kHam+O8PV/tBfALLiuLHAGU4Ot93Aszvv3NNCUMqONucNrN1
- OELZUZl501B5P1Q2QW5JcI1+Jsaoxxk3suC4xoKzY8flOes0BaBlXv2MLHwSQEgjhq2Cj9965CL
- +t7g/7jG8MPfpd51vTQaoldD46IKaGYzg0wl0XUnToRJ0ceaFBuEAH5E43Q10xtuHBByShT4A3E
- Nz/dIc5t52K4Xoxi+lfGeSdYDk7y1Epddbh9AuqnYWhn4JVAlYGtAZg0XuGwFXJj16M0badQFq7
- 8hCs+CfPJZk+t0icD5YbE/yxxiYx3oXVk=
-X-Google-Smtp-Source: AGHT+IEdNY5wvj15JJxkD1pJvc5BHDIr4pp3sGZYEIIyCEvRDfUhuuKall1nZJA5D4XY40SlsNw4bg==
-X-Received: by 2002:a05:6000:2b0f:b0:3e7:428f:d26 with SMTP id
- ffacd0b85a97d-3e7428f0f3bmr274779f8f.43.1757175955294; 
+ d=1e100.net; s=20230601; t=1757175956; x=1757780756;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=UGv5MQyxz7pCWLeRa6k9uILDAkmb6iiFvqVlus4z8AA=;
+ b=W6dtWJXsgaOH6tzYKnU9PPYxF/tSDDRJqUz56VFxvKBbi9JJF3irpRb0S4WGESntWy
+ /OAj321F254xWBQqnxOFL8t9noBsnLnhybyYunT2nllNLkyH2cv04HTR3398iAUf82xV
+ XWz7n4ksCJi1MWNlIr918gDvjVlKhdzMJpVHEvcm1YgaLk5zBZgrpClpbjxfBzIXBh6P
+ 892YJTnY1fqx+btF1cbbJpCybjVWbZttBmCIVGbcqcdrzOjclrnvofZhiCo3JAHvwUkm
+ jPLEFBssF1gj7xa1er+GHlio72AXoe49ReQorGat0RrBsk05uA8cRgu7Bkvj7n0mdgB7
+ P86Q==
+X-Gm-Message-State: AOJu0Yzoa966zpryFQ24WkYwSKMIoZWWfM1/a4U1/4d+zWkfWMR7i87M
+ amYoKo28jAVqiw46GVh6MFUlQgWoQGiWJBy2W/DefPKHmkLvsF32aEMVo1DuR4OQUrAXr7mVJey
+ uJU4ZXCOfIw==
+X-Gm-Gg: ASbGncvaAEm1ph7zuTCE1XAuB9hkvDVVuHqCdey3AazHf4RMnUpz3PEu1+Moana8Aze
+ ftQhGIqkH1gt5Vfv4Kyt62Tv1Fl+ehQfwBL84PY4ncaaTAkjg+f8ANxljOGo3gAJDggrJWomn41
+ McDb4JTE+cAfImTwWnRYD3148BqPelB02xR3hFhCqYaua/Xze3mg6s61eM5V6nueb0ra91oYZix
+ uU7bq5mqNz5XyvzHPYlo/u+GFUVjZN+DPmzdaEb/B3nb2IIpbyrfxpNXeSkGwime0fZgJvk1XTq
+ dIZ4+sOe9s3h0vA6p7UGyZf9f/UMQkbd6rfL/jy/+TFrS7KsdOhncg6UWuaCDgvDPp48vxVKOyN
+ FKcx/SZoF4OnzBaAn4d3YuzV40xXlzgMcwPBmNfqOBVhGHWWd5U773xuhmVeJEAxfqTnAjOnsVm
+ xsr80ff9XgIJ8FuUJeutb4fubLRKOuDHY=
+X-Google-Smtp-Source: AGHT+IGXOAEZmDud92hNyX9w9Xet7jyyM7McAlS2BIrgz4DxWDEGXrp8IdbI+h2LI/dR5oQE3AnK3w==
+X-Received: by 2002:a05:600c:1993:b0:45b:8ad2:76c8 with SMTP id
+ 5b1f17b1804b1-45dde1a835bmr20480825e9.2.1757175955912; 
  Sat, 06 Sep 2025 09:25:55 -0700 (PDT)
 Received: from P-NTS-Evian.home
  (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
  [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-45dd2304e16sm116467295e9.7.2025.09.06.09.25.54
+ 5b1f17b1804b1-45dd2304e16sm116467295e9.7.2025.09.06.09.25.55
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Sat, 06 Sep 2025 09:25:55 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Romain Naour <romain.naour@smile.fr>
-Date: Sat,  6 Sep 2025 18:25:50 +0200
-Message-ID: <20250906162551.3715975-1-romain.naour@smile.fr>
+Date: Sat,  6 Sep 2025 18:25:51 +0200
+Message-ID: <20250906162551.3715975-2-romain.naour@smile.fr>
 X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20250906162551.3715975-1-romain.naour@smile.fr>
+References: <20250906162551.3715975-1-romain.naour@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1757175955; x=1757780755; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=M6tTbk0HU6lmTdrZfF/a6qnEc+NEjYzrKusiudxdzqw=;
- b=WgNPx3eF3BHzG3nsSSYQDfSh7Kxm3NPyvoR+J1fh9ZzkW+eReg7Aqa34aRSbckldEj
- rWNcmXXIzlZdafpsrDveeIFyUjfN4v+qw4pGVqKsPfKb03n7FxCi/DoKlK+Elb7XE3TQ
- 4mlaW1A88INOfHTjHxhulyVETUhTifUmtDC+E=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=smile.fr; s=google; t=1757175956; x=1757780756; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=UGv5MQyxz7pCWLeRa6k9uILDAkmb6iiFvqVlus4z8AA=;
+ b=kHG7qS1BLKll4IfUa0nkdHGmTQZurzzluO8o1Ba4h1uwD9czYvGg9JwO9mb7Xyq0fG
+ TZi69SkhELyItJG+4zUcGkNtSkCVYEZO3iLcoqRZRg/HqcgvttMyGZL1ANPXYyy85AhN
+ WdBp+TScgSZx6MtWMwhR6hevQSJcbrq3jivzI=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=WgNPx3eF
-Subject: [Buildroot] [PATCH 1/2] package/iozone: bump to version 3.508
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
+ header.a=rsa-sha256 header.s=google header.b=kHG7qS1B
+Subject: [Buildroot] [PATCH 2/2] package/iozone: Fix parallel build problem
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,350 +116,139 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-iozone releases 3.507 and 3.508 seems to be only build fixes releases
-for latest GCC compiler version but since there is no public vcs
-it's not easy to review the history between releases and backport
-any patches.
+Apply a patch from meta-openembedded fixing a cross-build issue [1].
 
-Based on the changelog from [1]:
+[1] https://github.com/openembedded/meta-openembedded/blob/walnascar/meta-oe/recipes-benchmark/iozone3/iozone3/parallelism.patch
 
-  Revision 3.507
-  Fix GCC compile warnings.
-
-  Revision 3.508
-  Put an end to the (&*% stupid GCC breaking builds for no valid reason.
-
-So bump to the latest 508 release.
-
-Rebase 0001-Add-new-targets-for-iozone.patch
-Rebase 0002-fix-build-without-aio.patch and convert to git format
-
-The TestIozone build issue is not yet fixed by the version bump [2].
-
-[1] https://www.iozone.org/src/current/Changes.txt
-[2] https://gitlab.com/buildroot.org/buildroot/-/jobs/11176774405
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/11176774405 (TestIozone)
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- .../0001-Add-new-targets-for-iozone.patch     | 24 +++----
- ... => 0002-Fix-build-without-ASYNC_IO.patch} | 63 ++++++++++++-------
- package/iozone/iozone.hash                    |  2 +-
- package/iozone/iozone.mk                      |  2 +-
- 4 files changed, 54 insertions(+), 37 deletions(-)
- rename package/iozone/{0002-fix-build-without-aio.patch => 0002-Fix-build-without-ASYNC_IO.patch} (64%)
+ ...ve-libasync.o-and-libbif.o-from-deps.patch | 114 ++++++++++++++++++
+ 1 file changed, 114 insertions(+)
+ create mode 100644 package/iozone/0003-remove-libasync.o-and-libbif.o-from-deps.patch
 
-diff --git a/package/iozone/0001-Add-new-targets-for-iozone.patch b/package/iozone/0001-Add-new-targets-for-iozone.patch
-index 3cc184ec8f..585f128724 100644
---- a/package/iozone/0001-Add-new-targets-for-iozone.patch
-+++ b/package/iozone/0001-Add-new-targets-for-iozone.patch
-@@ -1,4 +1,4 @@
--From 5b1e973b2333e838624abf195b3ba9716591f304 Mon Sep 17 00:00:00 2001
-+From 015b6fa0c4a503ae822e6cf787de82e09bc44511 Mon Sep 17 00:00:00 2001
- From: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Date: Sun, 10 Oct 2021 10:15:26 +0200
- Subject: [PATCH] Add new targets for iozone:
-@@ -10,12 +10,14 @@ And make largefile support optional via CFLAGS.
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-+[Romain: rebase on 3.508]
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
- ---
-  src/current/makefile | 56 +++++++++++++++++++++++++++++++++++++-------
-  1 file changed, 47 insertions(+), 9 deletions(-)
- 
- diff --git a/src/current/makefile b/src/current/makefile
--index 3a54701..3b17b1b 100644
-+index 24a391e..bd66a4e 100755
- --- a/src/current/makefile
- +++ b/src/current/makefile
- @@ -172,10 +172,28 @@ hpux_no_ansi:	iozone_hpux_no.o  libbif.o
-@@ -54,15 +56,15 @@ index 3a54701..3b17b1b 100644
-  	@echo ""
-  	@echo "Building iozone for Linux"
-  	@echo ""
---	$(CC) -Wmissing-prototypes -Wall -c -O3 -Dunix -DHAVE_ANSIC_C -DASYNC_IO -DHAVE_PREAD \
-+-	$(CC) -Wmissing-prototypes -c -O3 -Dunix -DHAVE_ANSIC_C -DASYNC_IO -DHAVE_PREAD \
- -		-DSHARED_MEM -Dlinux -D_LARGEFILE64_SOURCE $(CFLAGS) iozone.c \
--+	$(CC) -Wmissing-prototypes -Wall -c -Dunix -DHAVE_ANSIC_C -DASYNC_IO -DHAVE_PREAD \
-++	$(CC) -Wmissing-prototypes -c -Dunix -DHAVE_ANSIC_C -DASYNC_IO -DHAVE_PREAD \
- +		-DSHARED_MEM -Dlinux $(CFLAGS) iozone.c \
-  		-DNAME='"linux"' -o iozone_linux.o
---	$(CC) -Wmissing-prototypes -Wall -c -O3 -Dunix -DHAVE_ANSIC_C -DASYNC_IO -D_LARGEFILE64_SOURCE \
--+	$(CC) -Wmissing-prototypes -Wall -c -Dunix -DHAVE_ANSIC_C -DASYNC_IO \
-+-	$(CC) -Wmissing-prototypes -c -O3 -Dunix -DHAVE_ANSIC_C -DASYNC_IO -D_LARGEFILE64_SOURCE \
-++	$(CC) -Wmissing-prototypes -c -Dunix -DHAVE_ANSIC_C -DASYNC_IO \
- +		-DSHARED_MEM -Dlinux $(CFLAGS) libbif.c -o libbif.o
--+	$(CC) -Wmissing-prototypes -Wall -c -Dunix -Dlinux -DHAVE_ANSIC_C -DASYNC_IO \
-++	$(CC) -Wmissing-prototypes -c -Dunix -Dlinux -DHAVE_ANSIC_C -DASYNC_IO \
- +		$(CFLAGS) libasync.c  -o libasync.o
- +
- +iozone_linux-noaio.o: iozone.c libbif.c
-@@ -84,7 +86,7 @@ index 3a54701..3b17b1b 100644
- +		-DNAME='"linux"' -o iozone_linux-noth.o
- +	$(CC) -Wmissing-prototypes -Wall -c -Dunix -DHAVE_ANSIC_C -DNO_THREADS \
-  		-DSHARED_MEM -Dlinux $(CFLAGS) libbif.c -o libbif.o
---	$(CC) -Wmissing-prototypes -Wall -c -O3 -Dunix -Dlinux -DHAVE_ANSIC_C -DASYNC_IO \
-+-	$(CC) -Wmissing-prototypes -c -O3 -Dunix -Dlinux -DHAVE_ANSIC_C -DASYNC_IO \
- -		-D_LARGEFILE64_SOURCE $(CFLAGS) libasync.c  -o libasync.o 
-  
-  fileop_AIX.o:	fileop.c
-@@ -93,11 +95,11 @@ index 3a54701..3b17b1b 100644
-  	@echo ""
-  	@echo "Building fileop for Linux"
-  	@echo ""
---	$(CC) -Wall -c -O3 $(CFLAGS) fileop.c -o fileop_linux.o
--+	$(CC) -Wall -c $(CFLAGS) fileop.c -o fileop_linux.o
-+-	$(CC) -c -O3 $(CFLAGS) fileop.c -o fileop_linux.o
-++	$(CC) -c $(CFLAGS) fileop.c -o fileop_linux.o
-  
-  fileop_openbsd.o:	fileop.c
-  	@echo ""
- -- 
--2.27.0
-+2.51.0
- 
-diff --git a/package/iozone/0002-fix-build-without-aio.patch b/package/iozone/0002-Fix-build-without-ASYNC_IO.patch
-similarity index 64%
-rename from package/iozone/0002-fix-build-without-aio.patch
-rename to package/iozone/0002-Fix-build-without-ASYNC_IO.patch
-index 8b54bef4e1..92621e5242 100644
---- a/package/iozone/0002-fix-build-without-aio.patch
-+++ b/package/iozone/0002-Fix-build-without-ASYNC_IO.patch
-@@ -1,4 +1,7 @@
--Fix build without ASYNC_IO
-+From cdd5e78a275c8cda5d48d15acc96c3be5170bf2f Mon Sep 17 00:00:00 2001
+diff --git a/package/iozone/0003-remove-libasync.o-and-libbif.o-from-deps.patch b/package/iozone/0003-remove-libasync.o-and-libbif.o-from-deps.patch
+new file mode 100644
+index 0000000000..ea4c9c97b3
+--- /dev/null
++++ b/package/iozone/0003-remove-libasync.o-and-libbif.o-from-deps.patch
+@@ -0,0 +1,114 @@
++From 34c25d67c33050f42f0f243c0fb6674c28ff44b5 Mon Sep 17 00:00:00 2001
 +From: Romain Naour <romain.naour@smile.fr>
-+Date: Sat, 6 Sep 2025 00:26:00 +0200
-+Subject: [PATCH] Fix build without ASYNC_IO
- 
- Fix the following build failure without ASYNC_IO:
- 
-@@ -10,11 +13,20 @@ Fixes:
- 
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Upstream: sent to capps@iozone.org
++Date: Sat, 6 Sep 2025 00:31:48 +0200
++Subject: [PATCH] remove libasync.o and libbif.o from deps
++
++there are no implicit rules to build them and they get wrong CFLAGS
++when compiled with implicit rule.
++
++They are built as part of iozone_linux.o target anyway
++
++Only fixed linux targets for now
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Upstream: Pending
 +[Romain:
 +  rebase on 3.508
 +  convert to git format
 +]
 +Signed-off-by: Romain Naour <romain.naour@smile.fr>
 +---
-+ src/current/iozone.c | 20 ++++++++++++++++++++
-+ 1 file changed, 20 insertions(+)
- 
--diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/current/iozone.c
----- iozone3_506.orig/src/current/iozone.c	2024-03-06 12:28:16.734023725 +0100
--+++ iozone3_506/src/current/iozone.c	2024-03-06 12:39:14.453991162 +0100
--@@ -9153,6 +9153,7 @@
-+diff --git a/src/current/iozone.c b/src/current/iozone.c
-+index 6657a9b..8de26cf 100755
-+--- a/src/current/iozone.c
-++++ b/src/current/iozone.c
-+@@ -9196,6 +9196,7 @@ long long *data1,*data2;
-  				}
-  			  }
-  			}
-@@ -22,7 +34,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
-  			if(async_flag)
-  			{
-  				if(no_copy_flag)
--@@ -9160,6 +9161,7 @@
-+@@ -9203,6 +9204,7 @@ long long *data1,*data2;
-  				end_async(gc);
-  				gc=0;
-  			}
-@@ -30,7 +42,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
-  			buffer1=0;
-  			if(hist_summary)
-  			{
--@@ -9634,6 +9636,7 @@
-+@@ -9677,6 +9679,7 @@ long long *data1, *data2;
-  				}
-  			  }
-  			}
-@@ -38,7 +50,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
-  			if(async_flag)
-  			{
-  				if(no_copy_flag)
--@@ -9641,6 +9644,7 @@
-+@@ -9684,6 +9687,7 @@ long long *data1, *data2;
-  				end_async(gc);
-  				gc=0;
-  			}
-@@ -46,7 +58,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
-  			if(rlocking)
-  			{
-  				lock_offset=I_LSEEK(fd,0,SEEK_CUR);
--@@ -10097,6 +10101,7 @@
-+@@ -10140,6 +10144,7 @@ long long *data1,*data2;
-  				}
-  			   }
-  			}
-@@ -54,7 +66,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
-  			if(async_flag)
-  			{
-  				if(no_copy_flag)
--@@ -10104,6 +10109,7 @@
-+@@ -10147,6 +10152,7 @@ long long *data1,*data2;
-  				end_async(gc);
-  				gc=0;
-  			}
-@@ -62,7 +74,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
-  			if(rlocking)
-  			{
-  				mylockr((int) fd, (int) 0, (int)1,
--@@ -10749,6 +10755,7 @@
-+@@ -10792,6 +10798,7 @@ printf("Read_Stride\n");
-  			   }
-  			}
-  		}
-@@ -70,7 +82,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
-  		if(async_flag)
-  		{
-  			if(no_copy_flag)
--@@ -10756,6 +10763,7 @@
-+@@ -10799,6 +10806,7 @@ printf("Read_Stride\n");
-  			end_async(gc);
-  			gc=0;
-  		}
-@@ -78,7 +90,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
-  			
-  		/* This is a bit tricky.  The goal is to read with a stride through
-  		   the file. The problem is that you need to touch all of the file
--@@ -15485,6 +15493,7 @@
-+@@ -15528,6 +15536,7 @@ thread_read_test(x)
-  			   }
-  		   }
-  		}
-@@ -86,7 +98,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
-  		if(async_flag)
-  		{
-  			if(no_copy_flag)
--@@ -15492,6 +15501,7 @@
-+@@ -15535,6 +15544,7 @@ thread_read_test(x)
-  			end_async(gc);
-  			gc=0;
-  		}
-@@ -94,7 +106,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
-  		read_so_far+=reclen/1024;
-  		r_traj_bytes_completed+=reclen;
-  		r_traj_ops_completed++;
--@@ -16050,6 +16060,7 @@
-+@@ -16093,6 +16103,7 @@ thread_pread_test(x)
-  			   }
-  		   }
-  		}
-@@ -102,7 +114,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
-  		if(async_flag)
-  		{
-  			if(no_copy_flag)
--@@ -16057,6 +16068,7 @@
-+@@ -16100,6 +16111,7 @@ thread_pread_test(x)
-  			end_async(gc);
-  			gc=0;
-  		}
-@@ -110,7 +122,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
-  		read_so_far+=reclen/1024;
-  		r_traj_bytes_completed+=reclen;
-  		r_traj_ops_completed++;
--@@ -16665,6 +16677,7 @@
-+@@ -16708,6 +16720,7 @@ thread_rread_test(x)
-  			}
-  		   }
-  		}
-@@ -118,7 +130,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
-  		if(async_flag)
-  		{
-  			if(no_copy_flag)
--@@ -16672,6 +16685,7 @@
-+@@ -16715,6 +16728,7 @@ thread_rread_test(x)
-  			end_async(gc);
-  			gc=0;
-  		}
-@@ -126,7 +138,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
-  		re_read_so_far+=reclen/1024;
-  		r_traj_bytes_completed+=reclen;
-  		r_traj_ops_completed++;
--@@ -17244,6 +17258,7 @@
-+@@ -17287,6 +17301,7 @@ thread_reverse_read_test(x)
-  			  lock_offset, reclen);
-  		}
-  		current_position+=reclen;
-@@ -134,7 +146,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
-  		if(async_flag)
-  		{
-  			if(no_copy_flag)
--@@ -17251,6 +17266,7 @@
-+@@ -17294,6 +17309,7 @@ thread_reverse_read_test(x)
-  			end_async(gc);
-  			gc=0;
-  		}
-@@ -142,7 +154,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
-  		t_offset = (off64_t)reclen*2;
-  		if (!(h_flag || k_flag || mmapflag))
-  		{
--@@ -17778,6 +17794,7 @@
-+@@ -17821,6 +17837,7 @@ thread_stride_read_test(x)
-  			}
-  		   }
-  		}
-@@ -150,7 +162,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
-  		if(async_flag)
-  		{
-  			if(no_copy_flag)
--@@ -17785,6 +17802,7 @@
-+@@ -17828,6 +17845,7 @@ thread_stride_read_test(x)
-  			end_async(gc);
-  			gc=0;
-  		}
-@@ -158,7 +170,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
-  		if(current_position + (stride * reclen) >= (numrecs64 * reclen)-reclen) 
-  		{
-  			current_position=0;
--@@ -18528,6 +18546,7 @@
-+@@ -18571,6 +18589,7 @@ void *x;
-  			}
-  		   }
-  		}
-@@ -166,7 +178,7 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
-  		if(async_flag)
-  		{
-  			if(no_copy_flag)
--@@ -18535,6 +18554,7 @@
-+@@ -18578,6 +18597,7 @@ void *x;
-  			end_async(gc);
-  			gc=0;
-  		}
-@@ -174,3 +186,6 @@ diff '--color=auto' -Nura iozone3_506.orig/src/current/iozone.c iozone3_506/src/
-  		ranread_so_far+=reclen/1024;
-  		if(*stop_flag)
-  		{
++Patch from Yocto:
++https://github.com/openembedded/meta-openembedded/blob/walnascar/meta-oe/recipes-benchmark/iozone3/iozone3/parallelism.patch
++---
++ src/current/makefile | 18 +++++++++---------
++ 1 file changed, 9 insertions(+), 9 deletions(-)
++
++diff --git a/src/current/makefile b/src/current/makefile
++index bd66a4e..ba5759f 100755
++--- a/src/current/makefile
+++++ b/src/current/makefile
++@@ -171,7 +171,7 @@ hpux_no_ansi:	iozone_hpux_no.o  libbif.o
++ #
++ # GNU 'C' compiler Linux build with threads, largefiles, async I/O 
++ #
++-linux:	iozone_linux.o libasync.o libbif.o fileop_linux.o pit_server.o
+++linux:	iozone_linux.o fileop_linux.o pit_server.o
++ 	$(CC)  $(CFLAGS) $(LDFLAGS) iozone_linux.o libasync.o libbif.o \
++ 		-lpthread -lrt -o iozone
++ 	$(CC)  $(CFLAGS) -Dlinux fileop_linux.o -o fileop
++@@ -198,7 +198,7 @@ linux-noth: iozone_linux-noth.o libbif.o fileop_linux.o pit_server.o
++ #
++ # GNU 'C' compiler Linux build for powerpc chip with threads, largefiles, async I/O 
++ #
++-linux-powerpc: iozone_linux-powerpc.o  libbif.o libasync.o fileop_linux-ppc.o pit_server.o
+++linux-powerpc: iozone_linux-powerpc.o fileop_linux-ppc.o pit_server.o
++ 	$(CC) -O3 $(LDFLAGS) iozone_linux-powerpc.o libasync.o \
++ 		libbif.o -lpthread  -lrt -o iozone
++ 	$(CC)  -O3 -Dlinux fileop_linux-ppc.o -o fileop
++@@ -206,7 +206,7 @@ linux-powerpc: iozone_linux-powerpc.o  libbif.o libasync.o fileop_linux-ppc.o pi
++ #
++ # GNU 'C' compiler Linux build for sparc chip with threads, largefiles, async I/O 
++ #
++-linux-sparc: iozone_linux-sparc.o  libbif.o libasync.o fileop_linux.o pit_server.o
+++linux-sparc: iozone_linux-sparc.o fileop_linux.o pit_server.o
++ 	$(CC) -O3 $(LDFLAGS) iozone_linux-sparc.o libasync.o libbif.o \
++ 		-lpthread -lrt -o iozone
++ 	$(CC) -O3 -Dlinux fileop_linux.o -o fileop
++@@ -215,7 +215,7 @@ linux-sparc: iozone_linux-sparc.o  libbif.o libasync.o fileop_linux.o pit_server
++ #
++ # GNU 'C' compiler Linux build with threads, largefiles, async I/O 
++ #
++-linux-ia64:	iozone_linux-ia64.o  libbif.o libasync.o fileop_linux-ia64.o pit_server.o
+++linux-ia64:	iozone_linux-ia64.o fileop_linux-ia64.o pit_server.o
++ 	$(CC) -O3 $(LDFLAGS) iozone_linux-ia64.o libbif.o libasync.o \
++ 		-lrt -lpthread -o iozone
++ 	$(CC)  -O3 -Dlinux fileop_linux-ia64.o -o fileop
++@@ -224,7 +224,7 @@ linux-ia64:	iozone_linux-ia64.o  libbif.o libasync.o fileop_linux-ia64.o pit_ser
++ #
++ # GNU 'C' compiler Linux build for powerpc chip with threads, largefiles, async I/O 
++ #
++-linux-powerpc64: iozone_linux-powerpc64.o  libbif.o libasync.o fileop_linux-ppc64.o pit_server-linux-powerpc64.o
+++linux-powerpc64: iozone_linux-powerpc64.o fileop_linux-ppc64.o pit_server-linux-powerpc64.o
++ 	$(CC) -O3 -Dunix -DHAVE_ANSIC_C -DSHARED_MEM -DASYNC_IO \
++ 		-D_LARGEFILE64_SOURCE -Dlinux \
++ 		iozone_linux-powerpc64.o libasync.o libbif.o -lpthread \
++@@ -235,7 +235,7 @@ linux-powerpc64: iozone_linux-powerpc64.o  libbif.o libasync.o fileop_linux-ppc6
++ #
++ # GNU 'C' compiler Linux build with threads, largefiles, async I/O
++ #
++-linux-arm:	iozone_linux-arm.o  libbif.o libasync.o fileop_linux-arm.o pit_server.o
+++linux-arm:	iozone_linux-arm.o fileop_linux-arm.o pit_server.o
++ 	$(CC) -O3 $(LDFLAGS) iozone_linux-arm.o libbif.o libasync.o \
++ 		-lrt -lpthread -o iozone
++ 	$(CC) -O3 -Dlinux fileop_linux-arm.o -o fileop
++@@ -267,7 +267,7 @@ endif
++ #
++ # GNU 'C' compiler Linux build with threads, largefiles, async I/O 
++ #
++-linux-AMD64:	iozone_linux-AMD64.o  libbif.o libasync.o fileop_linux-AMD64.o pit_server.o
+++linux-AMD64:	iozone_linux-AMD64.o fileop_linux-AMD64.o pit_server.o
++ 	$(CC)  -O3 $(LDFLAGS) iozone_linux-AMD64.o libbif.o libasync.o \
++ 		-lrt -lpthread -o iozone
++ 	$(CC)  -O3 -Dlinux fileop_linux-AMD64.o -o fileop
++@@ -276,7 +276,7 @@ linux-AMD64:	iozone_linux-AMD64.o  libbif.o libasync.o fileop_linux-AMD64.o pit_
++ #
++ # GNU 'C' compiler Linux build with S/390, threads, largfiles, async I/O
++ #
++-linux-S390:	iozone_linux-s390.o libbif.o libasync.o fileop_linux-s390.o pit_server.o
+++linux-S390:	iozone_linux-s390.o fileop_linux-s390.o pit_server.o
++ 	$(CC)  -O2 $(LDFLAGS) -lpthread -lrt iozone_linux-s390.o \
++ 		libbif.o libasync.o -o iozone
++ 	$(CC)  -O3 -Dlinux fileop_linux-s390.o -o fileop
++@@ -285,7 +285,7 @@ linux-S390:	iozone_linux-s390.o libbif.o libasync.o fileop_linux-s390.o pit_serv
++ #
++ # GNU 'C' compiler Linux build with S/390, threads, largfiles, async I/O
++ #
++-linux-S390X:	iozone_linux-s390x.o libbif.o libasync.o fileop_linux-s390x.o pit_server.o
+++linux-S390X:	iozone_linux-s390x.o fileop_linux-s390x.o pit_server.o
++ 	$(CC)  -O2 $(LDFLAGS) -lpthread -lrt iozone_linux-s390x.o \
++ 		libbif.o libasync.o -o iozone
++ 	$(CC)  -O3 -Dlinux fileop_linux-s390x.o -o fileop
 +-- 
 +2.51.0
 +
-diff --git a/package/iozone/iozone.hash b/package/iozone/iozone.hash
-index 936ab5a646..1f41483b4a 100644
---- a/package/iozone/iozone.hash
-+++ b/package/iozone/iozone.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  114ce5c071873b9a2c7ba6e73d05d5ef7e66564392acbfcdc0b3261db10fcbe7  iozone3_506.tar
-+sha256  ee55af310a65ec97e1db214aebd75ee87f458b529cea3da37081a63974e8ace3  iozone3_508.tar
- sha256  bff7909fd698708d15613a4fb977a193cff98f44ef170c2dc1dd502974df75b2  docs/License.txt
-diff --git a/package/iozone/iozone.mk b/package/iozone/iozone.mk
-index b1b29d1098..07034cd96f 100644
---- a/package/iozone/iozone.mk
-+++ b/package/iozone/iozone.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IOZONE_VERSION = 3.506
-+IOZONE_VERSION = 3.508
- IOZONE_SOURCE = iozone$(subst .,_,$(IOZONE_VERSION)).tar
- IOZONE_SITE = http://www.iozone.org/src/current
- IOZONE_LICENSE = IOzone license (NO DERIVED WORKS ALLOWED)
 -- 
 2.51.0
 
