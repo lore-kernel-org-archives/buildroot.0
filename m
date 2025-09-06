@@ -4,99 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94A7DCA1002
-	for <buildroot@archiver.kernel.org>; Sat,  6 Sep 2025 21:19:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98131CA1002
+	for <buildroot@archiver.kernel.org>; Sat,  6 Sep 2025 21:20:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 46FDA83B75;
-	Sat,  6 Sep 2025 21:19:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 459B082ED2;
+	Sat,  6 Sep 2025 21:20:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rQv0Rj9Eh9VL; Sat,  6 Sep 2025 21:19:08 +0000 (UTC)
+ id BeEQ5a_9LUqR; Sat,  6 Sep 2025 21:20:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5983F83F35
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C693B82F4F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5983F83F35;
-	Sat,  6 Sep 2025 21:19:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A9579CA
- for <buildroot@buildroot.org>; Sat,  6 Sep 2025 21:19:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C693B82F4F;
+	Sat,  6 Sep 2025 21:20:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C21D4DCA
+ for <buildroot@buildroot.org>; Sat,  6 Sep 2025 21:20:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9B9EF40592
- for <buildroot@buildroot.org>; Sat,  6 Sep 2025 21:19:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A83D14183E
+ for <buildroot@buildroot.org>; Sat,  6 Sep 2025 21:20:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mAZb5pH9AHki for <buildroot@buildroot.org>;
- Sat,  6 Sep 2025 21:19:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::444; helo=mail-wr1-x444.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5CFE640169
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5CFE640169
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com
- [IPv6:2a00:1450:4864:20::444])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5CFE640169
- for <buildroot@buildroot.org>; Sat,  6 Sep 2025 21:19:05 +0000 (UTC)
-Received: by mail-wr1-x444.google.com with SMTP id
- ffacd0b85a97d-3d3ff4a4d6fso2086095f8f.0
- for <buildroot@buildroot.org>; Sat, 06 Sep 2025 14:19:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1757193543; x=1757798343;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=8ZEEnZiAfy5u0CLxIGwYKiTSGs6t2FdeNDf7pfNirz8=;
- b=UkubLQq5a3RQ/zCAKb6OPFjIfCtTVXNyJEU8cbP193HX+Pxpr8aH6dNwVfLSlprLGP
- aEm8/CcHZsrhLG4BIvCQ6WgGgt2/NlUmJlkJgIC+8k6+71gZV7B4TIpulmrLQEk2+OaP
- /Si0BQ8nKGPBWDLEOR+Y6Huu2Daa7Q62zTsHOuL+302wLPDkMxme9qGl5oQXLBmvKdbs
- eUVKm1qnxgHlOHGV2skCpd0vGgY25XIKE2baFSKr9jqW2P/KX/oPZodhBPhx2P45p90z
- VkOJZOEBwrAttC3/brwk3o/h/Y+HMniNQEPKULd5uonqonrfM+HGSgQcqzkB7t+5CcYq
- /74g==
-X-Gm-Message-State: AOJu0YyepKGybTjS3VBCBQ9KYzOpkniYgLSHV0TAQEoGxs7GvA8xfs31
- j7EP0JEmDE9BIOh+TefRTNbrkeAzrIE+iEFq7Hyfkcq9pvJqSw4IjNtPCR6OEfWMVsx9O65K6VR
- bU1VDi+da/w==
-X-Gm-Gg: ASbGncthizLv+bo5TOxXAHnq00xWZ4L8wx/bg7DzQnbKwq/9FdzGpX6QqAA0zXC/UBo
- NFFlmBsOO8eIKIeB+HeBPU70ZtWtHPS4P2LM6Zy86h3FjapLBOf0nGyso4uRDntWHfbNHK44tGW
- h5mTjkCX34/rI5lQWkVUW1zIsqHDPr7y1Bjcs1p6nuPTdvXJ8CcweR1WWvb5rf4ximt08nuGPM4
- mCd7j9v7flm4wxMkYs/t2WykPBWRgs+66C1rCP4HIXQ3+TfRIjGT20TIW1b3ney1z4bjqtgGZ5i
- f51Dgt4NSJqwJizzyXWkBjcO/Lesy8qnYBALRKJcx6GNkg6fOn8210uMdGRgvqRy45sK0hidgyC
- 9yV5gjuLhURAemIdRvjWrD0Sbfe2sVAfaI8T7y832xh3Le9YZkct1IOWky9dSxh1zXMyF/DHJrM
- uuIIB38hAMRSKwA5fs9/iW
-X-Google-Smtp-Source: AGHT+IHhi0fyU0QR1/Y70UY4JXOdJfGasgwtK57creH75LMRWJ1eO+3yvxyM7plXbWSioew+xmhsig==
-X-Received: by 2002:a05:6000:1449:b0:3e3:b6ef:7243 with SMTP id
- ffacd0b85a97d-3e643556a10mr2048229f8f.51.1757193543236; 
- Sat, 06 Sep 2025 14:19:03 -0700 (PDT)
-Received: from P-NTS-Evian.home
- (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
- [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3e21e4c0e6fsm9426730f8f.17.2025.09.06.14.19.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 06 Sep 2025 14:19:02 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SeChXD8bU_ZW for <buildroot@buildroot.org>;
+ Sat,  6 Sep 2025 21:19:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45A734183B
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 45A734183B
+ for <buildroot@buildroot.org>; Sat,  6 Sep 2025 21:19:59 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3C8BE8360A; Sat,  6 Sep 2025 21:19:59 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@smile.fr>
-Date: Sat,  6 Sep 2025 23:19:00 +0200
-Message-ID: <20250906211900.648495-1-romain.naour@smile.fr>
-X-Mailer: git-send-email 2.51.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1757193543; x=1757798343; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=8ZEEnZiAfy5u0CLxIGwYKiTSGs6t2FdeNDf7pfNirz8=;
- b=0N+RKOup07in//hNyfFk0tuD2lz/luQ2rTDIma7td5dQ7zZoIMasvnb3h2J+3uOUPC
- lnL2v7vFMOD0xqqiMjp7eiZ5RGha4Q3mVE1j0mnY9xl1JhRn+16+L3y72Yh9Li21JUH3
- Ynl2RXxPdo85tEhuiEGJ015jwLmS9rYJ3MI/A=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=0N+RKOup
-Subject: [Buildroot] [PATCH] support/testing: test_hardening: update
- toolchain to aarch64 for checksec tests
+Date: Sat, 6 Sep 2025 22:37:18 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f255b90afcc0e9c163a711bfe483cdf39e45e672
+X-Git-Newrev: d98e15a3639d9758ab3223f0a6de3a94d506e6fa
+X-Patchwork-Hint: ignore
+Message-Id: <20250906211959.3C8BE8360A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gdb: really fix build with GCC
+ 15.x by using external readline
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,84 +58,382 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TestRelroPartial is broken since the last checksec update to 2.7.1 [1]
-(Buildroot 2024.08) due to a relro check fix [2] that doesn't work for
-powerpc architecture where .got.plt doesn't exist for some reasons
-(that's why the expected result "full" is replaced by "Partial").
+commit: https://git.buildroot.net/buildroot/commit/?id=d98e15a3639d9758ab3223f0a6de3a94d506e6fa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-From [3]:
+The copy of readline bundled with gdb versions earlier than 16.x does
+not build with GCC 15.x, despite our
+0010-readline-tcap.h-Update-definitions-for-C23.patch. In GDB 16.x,
+readline has been updated to 8.2, which fixes the issue, but
+backporting this to older GDB versions results in a ~450 KB.
 
-  if ${readelf} -d "${1}/exe" 2> /dev/null | grep -q 'BIND_NOW' || ! ${readelf} -l "${1}/exe" 2> /dev/null | grep -q '\.got\.plt'; then
-    echo_message '\033[32mFull RELRO   \033[m   ' 'Full RELRO,' ' relro="full"' '"relro":"full",'
-  else
-    echo_message '\033[33mPartial RELRO\033[m   ' 'Partial RELRO,' ' relro="partial"' '"relro":"partial",'
+So let's take the approach we should have probably taken from the
+ground up: use an external readline, instead of the bundled one. This
+is exactly what this patch does. Instead of having gdb depend on
+ncurses and host-gdb depend on host-ncurses, we make it depend on
+readline/host-readline (which in turn already has a dependency on
+ncurses). In fact, gdb does not need ncurses itself, it really needs
+only readline.
 
-checksec tool is problably tested upstream on more common architectures
-like x86_64 or aarch64 than powerpc64 e5500. This may explain why
-checksec broke on powerpc64 e5500 target.
-
-Also, the Booltin powerpc64-e5500--glibc--stable-2018.02-2 toolchain
-used by test_hardening tests was not updated since the hardening tests
-were introduced back in 2018.11 release.
-
-So, switch to the current Bootling aarch64 stable toolchain
-(currently Bootlin aarch64 glibc stable 2025.08-1).
-
-Checked that all 6 hardening tests pass with this new toolchain:
-
-  tests.core.test_hardening.TestFortifyConserv
-  tests.core.test_hardening.TestFortifyNone
-  tests.core.test_hardening.TestRelro
-  tests.core.test_hardening.TestRelroPartial
-  tests.core.test_hardening.TestSspNone
-  tests.core.test_hardening.TestSspStrong
+Since the GDB TUI itself needs ncurses, we move the ncurses
+select/dependency down to the GDB TUI option. This was pointed out by
+Romain Naour.
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/11176773995 (TestRelroPartial)
 
-[1] 61505649746cb4d0dd57e35ff6139b7925bab72d
-[2] https://github.com/slimm609/checksec/commit/1c80e39c4956f902ed15c4baa8d9c17851096900
-[3] https://github.com/slimm609/checksec/commit/1c80e39c4956f902ed15c4baa8d9c17851096900#diff-9e8d1b28dfaf1c704560ac51a5613b70d70de2dcd84e87b9fa20f28811e6484aL1491
+  https://autobuild.buildroot.net/results/3b0ce5cfac81e150816027fc1259600ee02f0f1f/ (host gdb 14.x)
+  https://autobuild.buildroot.net/results/e64e3cd7aa5e7315464e380982f7febaff5df908/ (host gdb 15.x)
+  https://autobuild.buildroot.net/results/2f2616a4ac7d9cbc06ba7775eb57bdd2a0419cb5/ (host arc gdb)
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11176774348 (TestGdbArc)
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11176774349 (TestGdbFullTarget)
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11176774355 (TestGdbserverOnly)
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Julien: as pointed out by Romain Naour:
+ - also select and add readline dependency when
+   BR2_PACKAGE_GDB_SERVER=y
+ - add links to gitlab CI failures in commit log
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- support/testing/tests/core/test_hardening.py | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ ...eadline-tcap.h-Update-definitions-for-C23.patch | 52 ----------------------
+ ...eadline-tcap.h-Update-definitions-for-C23.patch | 52 ----------------------
+ ...eadline-tcap.h-Update-definitions-for-C23.patch | 52 ----------------------
+ package/gdb/Config.in                              |  4 +-
+ ...eadline-tcap.h-Update-definitions-for-C23.patch | 52 ----------------------
+ package/gdb/gdb.mk                                 | 16 +++++--
+ 6 files changed, 15 insertions(+), 213 deletions(-)
 
-diff --git a/support/testing/tests/core/test_hardening.py b/support/testing/tests/core/test_hardening.py
-index e9d30f3a38..2daafbd883 100644
---- a/support/testing/tests/core/test_hardening.py
-+++ b/support/testing/tests/core/test_hardening.py
-@@ -7,16 +7,10 @@ import infra.basetest
- class TestHardeningBase(infra.basetest.BRTest):
-     config = \
-         """
--        BR2_powerpc64=y
--        BR2_powerpc_e5500=y
-+        BR2_aarch64=y
-         BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
--        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--        BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc64-e5500/tarballs/powerpc64-e5500--glibc--stable-2018.02-2.tar.bz2"
--        BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
--        BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
--        BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
--        BR2_TOOLCHAIN_EXTERNAL_CXX=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
-         BR2_PACKAGE_LIGHTTPD=y
-         BR2_PACKAGE_HOST_CHECKSEC=y
-         # BR2_TARGET_ROOTFS_TAR is not set
--- 
-2.51.0
-
+diff --git a/package/gdb/14.2/0010-readline-tcap.h-Update-definitions-for-C23.patch b/package/gdb/14.2/0010-readline-tcap.h-Update-definitions-for-C23.patch
+deleted file mode 100644
+index 50100d8bfc..0000000000
+--- a/package/gdb/14.2/0010-readline-tcap.h-Update-definitions-for-C23.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+-From 0f81e47dff4bddc6ba9c45402821f857251f2b0f Mon Sep 17 00:00:00 2001
+-From: Chris Packham <judge.packham@gmail.com>
+-Date: Wed, 30 Apr 2025 16:49:44 +1200
+-Subject: [PATCH] readline/tcap.h: Update definitions for C23
+-
+-C23 changes how function definitions like int `int tputs ()` are
+-interpreted. In older standards this meant that the function arguments
+-are unknown. In C23 this is interpreted as `int tputs (void)` so now
+-when we compile with GCC15 (which defaults to -std=gnu23) we get an
+-error such as
+-
+-  readline/display.c:2839:17: error: too many arguments to function 'tputs'; expected 0, have 3
+-
+-Add the function arguments for tgetent(), tgetflag(), tgetnum(),
+-tgetstr(), tputs() and tgoto().
+-
+-Signed-off-by: Chris Packham <judge.packham@gmail.com>
+-Approved-By: Tom Tromey <tom@tromey.com>
+-Upstream: 5c87b330e910f8be1443c881fd16a70e685f1f2f
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- readline/readline/tcap.h | 12 ++++++------
+- 1 file changed, 6 insertions(+), 6 deletions(-)
+-
+-diff --git a/readline/readline/tcap.h b/readline/readline/tcap.h
+-index 859e6eed5aa..9e2ed124e49 100644
+---- a/readline/readline/tcap.h
+-+++ b/readline/readline/tcap.h
+-@@ -46,14 +46,14 @@ extern char *UP, *BC;
+- 
+- extern short ospeed;
+- 
+--extern int tgetent ();
+--extern int tgetflag ();
+--extern int tgetnum ();
+--extern char *tgetstr ();
+-+extern int tgetent (char *bp, const char *name);
+-+extern int tgetflag (char *id);
+-+extern int tgetnum (char *id);
+-+extern char *tgetstr (char *id, char **area);
+- 
+--extern int tputs ();
+-+extern int tputs (const char *str, int affcnt, int (*putc)(int));
+- 
+--extern char *tgoto ();
+-+extern char *tgoto (const char *cap, int col, int row);
+- 
+- #endif /* HAVE_TERMCAP_H */
+- 
+--- 
+-2.49.0
+-
+diff --git a/package/gdb/15.2/0010-readline-tcap.h-Update-definitions-for-C23.patch b/package/gdb/15.2/0010-readline-tcap.h-Update-definitions-for-C23.patch
+deleted file mode 100644
+index 64f741fe75..0000000000
+--- a/package/gdb/15.2/0010-readline-tcap.h-Update-definitions-for-C23.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+-From 130750cf9607fc1c4bcbead820a27bee6ee60f04 Mon Sep 17 00:00:00 2001
+-From: Chris Packham <judge.packham@gmail.com>
+-Date: Wed, 30 Apr 2025 16:49:44 +1200
+-Subject: [PATCH] readline/tcap.h: Update definitions for C23
+-
+-C23 changes how function definitions like int `int tputs ()` are
+-interpreted. In older standards this meant that the function arguments
+-are unknown. In C23 this is interpreted as `int tputs (void)` so now
+-when we compile with GCC15 (which defaults to -std=gnu23) we get an
+-error such as
+-
+-  readline/display.c:2839:17: error: too many arguments to function 'tputs'; expected 0, have 3
+-
+-Add the function arguments for tgetent(), tgetflag(), tgetnum(),
+-tgetstr(), tputs() and tgoto().
+-
+-Signed-off-by: Chris Packham <judge.packham@gmail.com>
+-Approved-By: Tom Tromey <tom@tromey.com>
+-Upstream: 5c87b330e910f8be1443c881fd16a70e685f1f2f
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- readline/readline/tcap.h | 12 ++++++------
+- 1 file changed, 6 insertions(+), 6 deletions(-)
+-
+-diff --git a/readline/readline/tcap.h b/readline/readline/tcap.h
+-index 859e6eed5aa..9e2ed124e49 100644
+---- a/readline/readline/tcap.h
+-+++ b/readline/readline/tcap.h
+-@@ -46,14 +46,14 @@ extern char *UP, *BC;
+- 
+- extern short ospeed;
+- 
+--extern int tgetent ();
+--extern int tgetflag ();
+--extern int tgetnum ();
+--extern char *tgetstr ();
+-+extern int tgetent (char *bp, const char *name);
+-+extern int tgetflag (char *id);
+-+extern int tgetnum (char *id);
+-+extern char *tgetstr (char *id, char **area);
+- 
+--extern int tputs ();
+-+extern int tputs (const char *str, int affcnt, int (*putc)(int));
+- 
+--extern char *tgoto ();
+-+extern char *tgoto (const char *cap, int col, int row);
+- 
+- #endif /* HAVE_TERMCAP_H */
+- 
+--- 
+-2.49.0
+-
+diff --git a/package/gdb/16.3/0010-readline-tcap.h-Update-definitions-for-C23.patch b/package/gdb/16.3/0010-readline-tcap.h-Update-definitions-for-C23.patch
+deleted file mode 100644
+index c9a34e9a89..0000000000
+--- a/package/gdb/16.3/0010-readline-tcap.h-Update-definitions-for-C23.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+-From f37d1bbe334c751b9bd77fa3a9d9accd93614677 Mon Sep 17 00:00:00 2001
+-From: Chris Packham <judge.packham@gmail.com>
+-Date: Wed, 30 Apr 2025 16:49:44 +1200
+-Subject: [PATCH] readline/tcap.h: Update definitions for C23
+-
+-C23 changes how function definitions like int `int tputs ()` are
+-interpreted. In older standards this meant that the function arguments
+-are unknown. In C23 this is interpreted as `int tputs (void)` so now
+-when we compile with GCC15 (which defaults to -std=gnu23) we get an
+-error such as
+-
+-  readline/display.c:2839:17: error: too many arguments to function 'tputs'; expected 0, have 3
+-
+-Add the function arguments for tgetent(), tgetflag(), tgetnum(),
+-tgetstr(), tputs() and tgoto().
+-
+-Signed-off-by: Chris Packham <judge.packham@gmail.com>
+-Approved-By: Tom Tromey <tom@tromey.com>
+-Upstream: 5c87b330e910f8be1443c881fd16a70e685f1f2f
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- readline/readline/tcap.h | 12 ++++++------
+- 1 file changed, 6 insertions(+), 6 deletions(-)
+-
+-diff --git a/readline/readline/tcap.h b/readline/readline/tcap.h
+-index 859e6eed5aa..9e2ed124e49 100644
+---- a/readline/readline/tcap.h
+-+++ b/readline/readline/tcap.h
+-@@ -46,14 +46,14 @@ extern char *UP, *BC;
+- 
+- extern short ospeed;
+- 
+--extern int tgetent ();
+--extern int tgetflag ();
+--extern int tgetnum ();
+--extern char *tgetstr ();
+-+extern int tgetent (char *bp, const char *name);
+-+extern int tgetflag (char *id);
+-+extern int tgetnum (char *id);
+-+extern char *tgetstr (char *id, char **area);
+- 
+--extern int tputs ();
+-+extern int tputs (const char *str, int affcnt, int (*putc)(int));
+- 
+--extern char *tgoto ();
+-+extern char *tgoto (const char *cap, int col, int row);
+- 
+- #endif /* HAVE_TERMCAP_H */
+- 
+--- 
+-2.49.0
+-
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index b1678e0d63..0f4c6a6c3c 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -50,6 +50,7 @@ if BR2_PACKAGE_GDB
+ config BR2_PACKAGE_GDB_SERVER
+ 	bool "gdbserver"
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
++	select BR2_PACKAGE_READLINE
+ 	help
+ 	  Build the gdbserver stub to run on the target.
+ 	  A full gdb is needed to debug the program.
+@@ -60,7 +61,7 @@ config BR2_PACKAGE_GDB_DEBUGGER
+ 	depends on !BR2_sh
+ 	select BR2_PACKAGE_GMP
+ 	select BR2_PACKAGE_MPFR
+-	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_READLINE
+ 	select BR2_PACKAGE_ZLIB
+ 
+ comment "full gdb on target needs a toolchain w/ wchar"
+@@ -71,6 +72,7 @@ if BR2_PACKAGE_GDB_DEBUGGER
+ 
+ config BR2_PACKAGE_GDB_TUI
+ 	bool "TUI support"
++	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  This option enables terminal user interface (TUI) for gdb
+ 
+diff --git a/package/gdb/arc-2024.12-release-gdb/0001-readline-tcap.h-Update-definitions-for-C23.patch b/package/gdb/arc-2024.12-release-gdb/0001-readline-tcap.h-Update-definitions-for-C23.patch
+deleted file mode 100644
+index 64f741fe75..0000000000
+--- a/package/gdb/arc-2024.12-release-gdb/0001-readline-tcap.h-Update-definitions-for-C23.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+-From 130750cf9607fc1c4bcbead820a27bee6ee60f04 Mon Sep 17 00:00:00 2001
+-From: Chris Packham <judge.packham@gmail.com>
+-Date: Wed, 30 Apr 2025 16:49:44 +1200
+-Subject: [PATCH] readline/tcap.h: Update definitions for C23
+-
+-C23 changes how function definitions like int `int tputs ()` are
+-interpreted. In older standards this meant that the function arguments
+-are unknown. In C23 this is interpreted as `int tputs (void)` so now
+-when we compile with GCC15 (which defaults to -std=gnu23) we get an
+-error such as
+-
+-  readline/display.c:2839:17: error: too many arguments to function 'tputs'; expected 0, have 3
+-
+-Add the function arguments for tgetent(), tgetflag(), tgetnum(),
+-tgetstr(), tputs() and tgoto().
+-
+-Signed-off-by: Chris Packham <judge.packham@gmail.com>
+-Approved-By: Tom Tromey <tom@tromey.com>
+-Upstream: 5c87b330e910f8be1443c881fd16a70e685f1f2f
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- readline/readline/tcap.h | 12 ++++++------
+- 1 file changed, 6 insertions(+), 6 deletions(-)
+-
+-diff --git a/readline/readline/tcap.h b/readline/readline/tcap.h
+-index 859e6eed5aa..9e2ed124e49 100644
+---- a/readline/readline/tcap.h
+-+++ b/readline/readline/tcap.h
+-@@ -46,14 +46,14 @@ extern char *UP, *BC;
+- 
+- extern short ospeed;
+- 
+--extern int tgetent ();
+--extern int tgetflag ();
+--extern int tgetnum ();
+--extern char *tgetstr ();
+-+extern int tgetent (char *bp, const char *name);
+-+extern int tgetflag (char *id);
+-+extern int tgetnum (char *id);
+-+extern char *tgetstr (char *id, char **area);
+- 
+--extern int tputs ();
+-+extern int tputs (const char *str, int affcnt, int (*putc)(int));
+- 
+--extern char *tgoto ();
+-+extern char *tgoto (const char *cap, int col, int row);
+- 
+- #endif /* HAVE_TERMCAP_H */
+- 
+--- 
+-2.49.0
+-
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index ca9c6d74d5..1841002dc1 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -30,7 +30,7 @@ GDB_PRE_CONFIGURE_HOOKS += GDB_CONFIGURE_SYMLINK
+ # For the host variant, we really want to build with XML support,
+ # which is needed to read XML descriptions of target architectures. We
+ # also need ncurses.
+-HOST_GDB_DEPENDENCIES = host-expat host-ncurses host-zlib
++HOST_GDB_DEPENDENCIES = host-expat host-readline host-zlib
+ 
+ # Disable building documentation
+ GDB_MAKE_OPTS += MAKEINFO=true
+@@ -136,9 +136,10 @@ ifeq ($(BR2_PACKAGE_GDB_DEBUGGER),y)
+ GDB_DEPENDENCIES += zlib
+ GDB_CONF_OPTS += \
+ 	--enable-gdb \
++	--with-system-readline \
+ 	--with-curses \
+ 	--with-system-zlib
+-GDB_DEPENDENCIES += ncurses \
++GDB_DEPENDENCIES += readline \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ else
+ # When only building gdbserver, we don't need zlib. But we have no way to
+@@ -169,8 +170,12 @@ GDB_CONF_OPTS += --without-mpfr
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
+-GDB_CONF_OPTS += --enable-gdbserver
+-GDB_DEPENDENCIES += $(TARGET_NLS_DEPENDENCIES)
++GDB_CONF_OPTS += \
++	--enable-gdbserver \
++	--with-system-readline
++GDB_DEPENDENCIES += \
++	$(TARGET_NLS_DEPENDENCIES) \
++	readline
+ else
+ GDB_CONF_OPTS += --disable-gdbserver
+ endif
+@@ -187,6 +192,7 @@ GDB_CONF_OPTS += --disable-inprocess-agent
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GDB_TUI),y)
++GDB_DEPENDENCIES += ncurses
+ GDB_CONF_OPTS += --enable-tui
+ else
+ GDB_CONF_OPTS += --disable-tui
+@@ -262,10 +268,12 @@ HOST_GDB_CONF_OPTS = \
+ 	--with-system-zlib \
+ 	--with-curses \
+ 	--disable-source-highlight \
++	--with-system-readline \
+ 	$(GDB_DISABLE_BINUTILS_CONF_OPTS) \
+ 	--with-mpfr=$(HOST_DIR)
+ 
+ ifeq ($(BR2_PACKAGE_HOST_GDB_TUI),y)
++HOST_GDB_DEPENDENCIES += host-ncurses
+ HOST_GDB_CONF_OPTS += --enable-tui
+ else
+ HOST_GDB_CONF_OPTS += --disable-tui
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
