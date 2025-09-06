@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2766CA1012
-	for <buildroot@archiver.kernel.org>; Sat,  6 Sep 2025 18:03:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E03ECA1002
+	for <buildroot@archiver.kernel.org>; Sat,  6 Sep 2025 18:04:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 810F041339;
-	Sat,  6 Sep 2025 18:03:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CF7D941583;
+	Sat,  6 Sep 2025 18:04:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wHoNTFJthJn1; Sat,  6 Sep 2025 18:03:41 +0000 (UTC)
+ id Ze1211ji6Ptm; Sat,  6 Sep 2025 18:03:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 928EF413A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0431413B6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 928EF413A8;
-	Sat,  6 Sep 2025 18:03:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 58F5CDCA
- for <buildroot@buildroot.org>; Sat,  6 Sep 2025 18:03:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B0431413B6;
+	Sat,  6 Sep 2025 18:03:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 87F8DE0E
+ for <buildroot@buildroot.org>; Sat,  6 Sep 2025 18:03:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4AC25404C9
- for <buildroot@buildroot.org>; Sat,  6 Sep 2025 18:03:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6EBC760E56
+ for <buildroot@buildroot.org>; Sat,  6 Sep 2025 18:03:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9NMx8rn9WO8X for <buildroot@buildroot.org>;
- Sat,  6 Sep 2025 18:03:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8410C40099
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8410C40099
- for <buildroot@buildroot.org>; Sat,  6 Sep 2025 18:03:39 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7A0D4835EA; Sat,  6 Sep 2025 18:03:39 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 6 Sep 2025 19:57:24 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d7233ae04854727730340f9b34ad85161e17f97a
-X-Git-Newrev: f255b90afcc0e9c163a711bfe483cdf39e45e672
-X-Patchwork-Hint: ignore
-Message-Id: <20250906180339.7A0D4835EA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lua-utf8: fix missing header
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LzZj4IS6ZtRl for <buildroot@buildroot.org>;
+ Sat,  6 Sep 2025 18:03:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4396060E46
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4396060E46
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4396060E46
+ for <buildroot@buildroot.org>; Sat,  6 Sep 2025 18:03:55 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 5C30E5FFA3;
+ Sat,  6 Sep 2025 20:03:52 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 06 Sep 2025 20:03:52 +0200
+MIME-Version: 1.0
+Date: Sat, 06 Sep 2025 20:03:52 +0200
+To: Romain Naour <romain.naour@smile.fr>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250906172419.3848350-1-romain.naour@smile.fr>
+References: <20250906172419.3848350-1-romain.naour@smile.fr>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <0ff878e5c2d013f9cfb45517ec79b811@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1757181833;
+ bh=gFKJfSfjxX3mzmJLAiuOoem09cAfmEjj6kemjmRzK6A=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=eeN59fxAgMuCcoA0Jgf3ucWdBBWIEp1pKjZpr/M7uQ4HwdzV6JpX9anPYgt7WMTYU
+ SqyY/CJ0oweZacn7BDm1M3an8fohQLRUJ4pNsz9kXZdQHFAKIuYGFUQd/uvWFJA/jS
+ SGX6DtBEc4TahQTpfBaG2kZrbGLeglPqAALvmUWAZnxtEQfCssoG6xQog0yXOD/btn
+ CaaPt6G433eVFAjJqqt6Q6CJO7TSkbKEnRh0ta9eWyc70a20BfkxKr+C8lj94yh612
+ ZE8S68/hCH2Y5EgMUllMWTu0ZJ/WA0dlzMN3TvigxIiz7JP+cQ4iHQi7D7O1k+3f3q
+ JUppI0uy2tP6A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=eeN59fxA
+Subject: Re: [Buildroot] [PATCH] package/lua-utf8: fix missing header
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,101 +83,21 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8686353227082287230=="
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8686353227082287230==
-Content-Type: text/plain
+On 06/09/2025 19:24, Romain Naour via buildroot wrote:
+> Backport an upstream patch adding missing limits.h.
+> 
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/11176774630 
+> (TestLuajitUtf8)
+> 
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f255b90afcc0e9c163a711bfe483cdf39e45e672
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Backport an upstream patch adding missing limits.h.
-
-https://gitlab.com/buildroot.org/buildroot/-/jobs/11176774630 (TestLuajitUtf8)
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...include-limits.h-instead-of-transitively-.patch | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
-
-diff --git a/package/lua-utf8/0001-Explicitly-include-limits.h-instead-of-transitively-.patch b/package/lua-utf8/0001-Explicitly-include-limits.h-instead-of-transitively-.patch
-new file mode 100644
-index 0000000000..f87930e6a9
---- /dev/null
-+++ b/package/lua-utf8/0001-Explicitly-include-limits.h-instead-of-transitively-.patch
-@@ -0,0 +1,58 @@
-+From feda38c6b7ef4c564f77213037dc20768c638d9c Mon Sep 17 00:00:00 2001
-+From: Caleb Maclennan <caleb@alerque.com>
-+Date: Thu, 2 Jan 2025 15:42:05 +0300
-+Subject: [PATCH] Explicitly include limits.h instead of transitively assuming
-+ it
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Recent upstream releases of LuaJIT have broken building this Lua Rock
-+entirely. PUC Lua and LuaJIT builds up to a certain point included this
-+header in lua.h, which meant that it was always around as a transitive
-+dependency. Recent upstream LuaJIT builds no longer include the header
-+since they aren't using it directly any more, but that means things that
-+include lua.h don't get it for free any more. It should never have been
-+assumed anyway, but that's been the status quo for a while.
-+
-+This fixes build errors when using LuaJIT headers instead of PUC Lua:
-+
-+```
-+lutf8lib.c: In function ‘Lutf8_codepoint’:
-+lutf8lib.c:398:22: error: ‘INT_MAX’ undeclared (first use in this function)
-+  398 |   if (pose - posi >= INT_MAX)  /* (lua_Integer -> int) overflow? */
-+      |                      ^~~~~~~
-+lutf8lib.c:12:1: note: ‘INT_MAX’ is defined in header ‘<limits.h>’; did you forget to ‘#include <limits.h>’?
-+   11 | #include "unidata.h"
-+  +++ |+#include <limits.h>
-+   12 |
-+lutf8lib.c:398:22: note: each undeclared identifier is reported only once for each function it appears in
-+  398 |   if (pose - posi >= INT_MAX)  /* (lua_Integer -> int) overflow? */
-+      |                      ^~~~~~~
-+```
-+
-+This is because `INT_MAX` is defined appropriately for a given platfrom
-+in in limits.h.
-+
-+Upstream: 1bb70d45208d4033dcc75efee968be70534dd3ab
-+[Romain: rebase on 0.1.5]
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ luautf8-0.1.5/lutf8lib.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/luautf8-0.1.5/lutf8lib.c b/luautf8-0.1.5/lutf8lib.c
-+index 522599e..71f2f42 100644
-+--- a/luautf8-0.1.5/lutf8lib.c
-++++ b/luautf8-0.1.5/lutf8lib.c
-+@@ -7,6 +7,7 @@
-+ #include <assert.h>
-+ #include <string.h>
-+ #include <stdint.h>
-++#include <limits.h>
-+ 
-+ #include "unidata.h"
-+ 
-+-- 
-+2.51.0
-+
-
---===============8686353227082287230==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8686353227082287230==--
