@@ -4,74 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC69CCAC581
-	for <buildroot@archiver.kernel.org>; Sun,  7 Sep 2025 13:37:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4F87CA1017
+	for <buildroot@archiver.kernel.org>; Sun,  7 Sep 2025 15:03:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8AA2761CC0;
-	Sun,  7 Sep 2025 13:37:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 30ABB60DEA;
+	Sun,  7 Sep 2025 15:03:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M719KflyB6yO; Sun,  7 Sep 2025 13:37:38 +0000 (UTC)
+ id ufTHE5vD1KA5; Sun,  7 Sep 2025 15:03:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E031C61CB0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 505F161B4E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E031C61CB0;
-	Sun,  7 Sep 2025 13:37:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1228A9E4
- for <buildroot@buildroot.org>; Sun,  7 Sep 2025 13:37:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 505F161B4E;
+	Sun,  7 Sep 2025 15:03:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 629669E4
+ for <buildroot@buildroot.org>; Sun,  7 Sep 2025 15:03:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 868F484758
- for <buildroot@buildroot.org>; Sun,  7 Sep 2025 13:37:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 48BBB4212A
+ for <buildroot@buildroot.org>; Sun,  7 Sep 2025 15:03:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B1ByW5fTan63 for <buildroot@buildroot.org>;
- Sun,  7 Sep 2025 13:37:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2u0b0GREDDea for <buildroot@buildroot.org>;
+ Sun,  7 Sep 2025 15:03:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E27118475F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E27118475F
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E27118475F
- for <buildroot@buildroot.org>; Sun,  7 Sep 2025 13:37:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5AC1B420A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5AC1B420A6
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5AC1B420A6
+ for <buildroot@buildroot.org>; Sun,  7 Sep 2025 15:03:40 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 52F774E40C48
- for <buildroot@buildroot.org>; Sun,  7 Sep 2025 13:37:30 +0000 (UTC)
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 35DB21A0DA5
+ for <buildroot@buildroot.org>; Sun,  7 Sep 2025 15:03:38 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 2C3016061A
- for <buildroot@buildroot.org>; Sun,  7 Sep 2025 13:37:30 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 001A66061A
+ for <buildroot@buildroot.org>; Sun,  7 Sep 2025 15:03:37 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 4EADB102F286D; 
- Sun,  7 Sep 2025 15:37:29 +0200 (CEST)
+ with ESMTPSA id DAFF5102F27DF; 
+ Sun,  7 Sep 2025 17:03:28 +0200 (CEST)
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun,  7 Sep 2025 15:37:17 +0200
-Message-ID: <20250907133721.3416326-7-thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>
+Date: Sun,  7 Sep 2025 17:03:23 +0200
+Message-ID: <20250907150323.3437695-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250907133721.3416326-1-thomas.petazzoni@bootlin.com>
-References: <20250907133721.3416326-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1757252249; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=fwsAfJNheWsZ3KW+3tElttujYdcR5Q2ehSScnKEUwjQ=;
- b=S2SZxE43EmRxBWjPlHVCXiqKZSiEW10KoFsgz4lFRdPIUqJEGfzJgSLJgBetM15x5iC6ND
- xfTrJw213RISD6+Cjjt9lrCJBKSiFvxhBH3fQXuJUeHuyXg6zsWqOx8l0LXLDrbu1H7cgI
- MGpDKHu0/VAlRO2uW/UQdkmHWJVPqfTqrQIKVwpSYscBUo8OrQJ5KyJbx/BQYQq0ZFgWfi
- vWIqIphUQsM9clb8HwD8aN37L+wmhq0PpPcmPrN1F/zfGUDktju5E+uZWPCMtyz3WLcoOF
- gbp5itnZIkO9wXlQk38DF3gXYBb8lBiRXb1pvu9mWjSn3xp/drGwHIPrXJokVg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ t=1757257417; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=4s0I/rSFZ+YW1HVVOwZ5wlaEXV/ebPBTIxd/eMgjWjg=;
+ b=thqvIgYiIlVrHIaiB6rkFchrUkP0A6pBylUyrOZ0xrolAmqoiphSS1r9gVx/O7baeY950B
+ zH1zFT7c7fXCQDrlqsHX2pv7Mx+DQfUycDX77M4IzIEwxOlfXAh3J0jbJauKeexfB8OYhQ
+ /m+h8QUA11FXUdhwnyaoXr1mzE1Al+6y+gO8VFZkrTnjPm5hiyJV7LtcpSFMz2WyumzjQX
+ tS6glftKU8zicIRnyqmAWzd/GXjlqnNPyeM4RtjxkjfNfPVnWCTCClpiCrOT5LpBX2c6xT
+ Dk51xQYhwRcE/n9RahE5xzYnXi9Mv3GpC2eCw6Tzhb2Cmu6+90YrKOXJOKP+tQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=S2SZxE43
-Subject: [Buildroot] [PATCH 6/6] package/bctoolbox: remove package
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=thqvIgYi
+Subject: [Buildroot] [PATCH] package/unzip: bump to Debian patch level -29
+ to fix GCC 15.x issues
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,140 +85,73 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-YmN0b29sYm94IHdhcyBvbmx5IG5lZWRlZCBhcyBhIGRlcGVuZGVuY3kgb2YgbGlucGhvbmUsIGFz
-IGlzIGFueXdheQpidW5kbGVkIGluIG1vcmUgcmVjZW50IHZlcnNpb25zIG9mIGxpbnBob25lLCBt
-YWtpbmcgYSBzZXBhcmF0ZSBwYWNrYWdlCnVubm5lY2Vzc2FyeS4KClNpZ25lZC1vZmYtYnk6IFRo
-b21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+Ci0tLQogLmNoZWNr
-cGFja2FnZWlnbm9yZSAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDEgLQogQ29uZmlnLmlu
-LmxlZ2FjeSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDggKysrKwogcGFja2FnZS9D
-b25maWcuaW4gICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDEgLQogLi4uMS1GaXgtTGli
-cy5wcml2YXRlLWZsYWdzLWZvci1tYmVkdGxzLnBhdGNoIHwgMzcgLS0tLS0tLS0tLS0tLS0tLQog
-cGFja2FnZS9iY3Rvb2xib3gvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgIHwgMTkgLS0tLS0t
-LS0tCiBwYWNrYWdlL2JjdG9vbGJveC9iY3Rvb2xib3guaGFzaCAgICAgICAgICAgICAgfCAgMyAt
-LQogcGFja2FnZS9iY3Rvb2xib3gvYmN0b29sYm94Lm1rICAgICAgICAgICAgICAgIHwgNDIgLS0t
-LS0tLS0tLS0tLS0tLS0tLQogNyBmaWxlcyBjaGFuZ2VkLCA4IGluc2VydGlvbnMoKyksIDEwMyBk
-ZWxldGlvbnMoLSkKIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2JjdG9vbGJveC8wMDAxLUZp
-eC1MaWJzLnByaXZhdGUtZmxhZ3MtZm9yLW1iZWR0bHMucGF0Y2gKIGRlbGV0ZSBtb2RlIDEwMDY0
-NCBwYWNrYWdlL2JjdG9vbGJveC9Db25maWcuaW4KIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdl
-L2JjdG9vbGJveC9iY3Rvb2xib3guaGFzaAogZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvYmN0
-b29sYm94L2JjdG9vbGJveC5tawoKZGlmZiAtLWdpdCBhLy5jaGVja3BhY2thZ2VpZ25vcmUgYi8u
-Y2hlY2twYWNrYWdlaWdub3JlCmluZGV4IDlkZjQ2ZTA5YzkuLmMzZDVlYmNmZDggMTAwNjQ0Ci0t
-LSBhLy5jaGVja3BhY2thZ2VpZ25vcmUKKysrIGIvLmNoZWNrcGFja2FnZWlnbm9yZQpAQCAtMjU1
-LDcgKzI1NSw2IEBAIHBhY2thZ2UvYmMvMDAwMi1ub3RpY2UtcmVhZC1hbmQtd3JpdGUtZXJyb3Jz
-LW9uLWlucHV0LWFuZC1vdXRwdXQucGF0Y2ggbGliX3BhdGNoCiBwYWNrYWdlL2JjLzAwMDMtZGMt
-Zml4LWV4aXQtY29kZS1vZi1xLWNvbW1hbmQucGF0Y2ggbGliX3BhdGNoLlVwc3RyZWFtCiBwYWNr
-YWdlL2JjLzAwMDQtbm8tZ2VuLWxpYm1hdGgucGF0Y2ggbGliX3BhdGNoLlVwc3RyZWFtCiBwYWNr
-YWdlL2JjYWNoZS10b29scy8wMDAxLURvbi10LWlubGluZS1jcmM2NC1mb3ItZ2NjLTUtY29tcGF0
-YWJpbGl0eS5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0KLXBhY2thZ2UvYmN0b29sYm94LzAwMDEt
-Rml4LUxpYnMucHJpdmF0ZS1mbGFncy1mb3ItbWJlZHRscy5wYXRjaCBsaWJfcGF0Y2guVXBzdHJl
-YW0KIHBhY2thZ2UvYmN1c2RrLzAwMDItZWliZC1maXgtZW5kbGVzcy1yZWN1cnNpb24td2hlbi11
-c2luZy1VU0ItYmFja2VuZHMucGF0Y2ggbGliX3BhdGNoLlVwc3RyZWFtCiBwYWNrYWdlL2JlYXJz
-c2wvMDAwMS1GaXgtbWlzc2luZy1vYmpkaXItZGVwZW5kZW5jeS5wYXRjaCBsaWJfcGF0Y2guVXBz
-dHJlYW0KIHBhY2thZ2UvYmVuZWpzb24vMDAwMS1jLXN0ZC5wYXRjaCBsaWJfcGF0Y2guVXBzdHJl
-YW0KZGlmZiAtLWdpdCBhL0NvbmZpZy5pbi5sZWdhY3kgYi9Db25maWcuaW4ubGVnYWN5CmluZGV4
-IDNiMmI1OWFlOTcuLmU4ZDI0YzI5NGMgMTAwNjQ0Ci0tLSBhL0NvbmZpZy5pbi5sZWdhY3kKKysr
-IGIvQ29uZmlnLmluLmxlZ2FjeQpAQCAtMTQ2LDYgKzE0NiwxNCBAQCBlbmRpZgogCiBjb21tZW50
-ICJMZWdhY3kgb3B0aW9ucyByZW1vdmVkIGluIDIwMjUuMDgiCiAKK2NvbmZpZyBCUjJfUEFDS0FH
-RV9CQ1RPT0xCT1gKKwlib29sICJiY3Rvb2xib3ggaGFzIGJlZW4gcmVtb3ZlZCIKKwlzZWxlY3Qg
-QlIyX0xFR0FDWQorCWhlbHAKKwkgIFRoaXMgcGFja2FnZSBoYXMgYmVlbiByZW1vdmVkIGFzIHBh
-cnQgb2YgdGhlIGxpbnBob25lCisJICByZW1vdmFsLiBJbiBhZGRpdGlvbiwgbmV3ZXIgdmVyc2lv
-biBvZiBsaW5waG9uZSBkaXJlY3RseQorCSAgYnVuZGxlIGJjdG9vbGJveCBtYWtpbmcgYSBzZXBh
-cmF0ZSBwYWNrYWdlIHVubmVjZXNzYXJ5LgorCiBjb25maWcgQlIyX1BBQ0tBR0VfT1JUUAogCWJv
-b2wgIm9ydHAgaGFzIGJlZW4gcmVtb3ZlZCIKIAlzZWxlY3QgQlIyX0xFR0FDWQpkaWZmIC0tZ2l0
-IGEvcGFja2FnZS9Db25maWcuaW4gYi9wYWNrYWdlL0NvbmZpZy5pbgppbmRleCBlYWZmMzQ0N2Qz
-Li42NjZlYmQzMjUwIDEwMDY0NAotLS0gYS9wYWNrYWdlL0NvbmZpZy5pbgorKysgYi9wYWNrYWdl
-L0NvbmZpZy5pbgpAQCAtMjE3Niw3ICsyMTc2LDYgQEAgbWVudSAiT3RoZXIiCiAJc291cmNlICJw
-YWNrYWdlL2F0Zi9Db25maWcuaW4iCiAJc291cmNlICJwYWNrYWdlL2F2cm8tYy9Db25maWcuaW4i
-CiAJc291cmNlICJwYWNrYWdlL2Jhc3UvQ29uZmlnLmluIgotCXNvdXJjZSAicGFja2FnZS9iY3Rv
-b2xib3gvQ29uZmlnLmluIgogCXNvdXJjZSAicGFja2FnZS9iZHdnYy9Db25maWcuaW4iCiAJc291
-cmNlICJwYWNrYWdlL2Jvb3N0L0NvbmZpZy5pbiIKIAlzb3VyY2UgInBhY2thZ2UvYy1jYXBucHJv
-dG8vQ29uZmlnLmluIgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9iY3Rvb2xib3gvMDAwMS1GaXgtTGli
-cy5wcml2YXRlLWZsYWdzLWZvci1tYmVkdGxzLnBhdGNoIGIvcGFja2FnZS9iY3Rvb2xib3gvMDAw
-MS1GaXgtTGlicy5wcml2YXRlLWZsYWdzLWZvci1tYmVkdGxzLnBhdGNoCmRlbGV0ZWQgZmlsZSBt
-b2RlIDEwMDY0NAppbmRleCAzNDIwNDJkNTljLi4wMDAwMDAwMDAwCi0tLSBhL3BhY2thZ2UvYmN0
-b29sYm94LzAwMDEtRml4LUxpYnMucHJpdmF0ZS1mbGFncy1mb3ItbWJlZHRscy5wYXRjaAorKysg
-L2Rldi9udWxsCkBAIC0xLDM3ICswLDAgQEAKLUZyb20gYjdmMTRhODAwYmJkYWQxOTNmNDU2OTVi
-YzViOGM1MTczZjM4ODJiYSBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKLUZyb206IEZhYnJpY2Ug
-Rm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgotRGF0ZTogU3VuLCAxMCBGZWIg
-MjAxOSAxNzo1MTowNSArMDEwMAotU3ViamVjdDogW1BBVENIXSBDTWFrZUxpc3RzLnR4dDogZml4
-IG1iZWR0bHMgbGlicmFyaWVzIGluIGJjdG9vbGJveC5wYwotTUlNRS1WZXJzaW9uOiAxLjAKLUNv
-bnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOAotQ29udGVudC1UcmFuc2Zlci1F
-bmNvZGluZzogOGJpdAotCi1iY3Rvb2xib3gucGMgc2hvdWxkIG5vdCBjb250YWluIHRoZSBmdWxs
-IGxpYnJhcmllcyBwYXRoLCBwYXRoIHNob3VsZCBiZQotZ2l2ZW4gYnkgLUwgYW5kIGxpYnJhcnkg
-bmFtZXMgYnkgLWwKLVNvIHNlbnQgYmFjayB0aGUgZml4IGFscmVhZHkgc3VnZ2VzdGVkIGJ5IErD
-tnJnIEtyYXVzZSBpbgotaHR0cHM6Ly9naXRodWIuY29tL0JlbGxlZG9ubmVDb21tdW5pY2F0aW9u
-cy9iY3Rvb2xib3gvcHVsbC80Ci0KLVNpZ25lZC1vZmYtYnk6IErDtnJnIEtyYXVzZSA8am9lcmcu
-a3JhdXNlQGVtYmVkZGVkLnJvY2tzPgotU2lnbmVkLW9mZi1ieTogRmFicmljZSBGb250YWluZSA8
-Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+Ci1bVXBzdHJlYW0gc3RhdHVzOgotaHR0cHM6Ly9n
-aXRodWIuY29tL0JlbGxlZG9ubmVDb21tdW5pY2F0aW9ucy9iY3Rvb2xib3gvcHVsbC83XQotLS0t
-Ci0gQ01ha2VMaXN0cy50eHQgfCA1ICsrLS0tCi0gMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9u
-cygrKSwgMyBkZWxldGlvbnMoLSkKLQotZGlmZiAtLWdpdCBhL0NNYWtlTGlzdHMudHh0IGIvQ01h
-a2VMaXN0cy50eHQKLWluZGV4IDI5ZjNlYjYuLmIyZjI2YzIgMTAwNjQ0Ci0tLS0gYS9DTWFrZUxp
-c3RzLnR4dAotKysrIGIvQ01ha2VMaXN0cy50eHQKLUBAIC0xMDEsOSArMTAxLDggQEAgZWxzZSgp
-Ci0gZW5kaWYoKQotIAotIGlmKE1CRURUTFNfRk9VTkQpCi0tCWdldF9maWxlbmFtZV9jb21wb25l
-bnQobWJlZHRsc19saWJyYXJ5X3BhdGggIiR7TUJFRFRMU19MSUJSQVJJRVN9IiBQQVRIKQotLQlz
-dHJpbmcoUkVQTEFDRSAiOyIgIiAiIE1CRURUTFNfTElCUkFSSUVTX1NUUiAiJHtNQkVEVExTX0xJ
-QlJBUklFU30iKQotLQlzZXQoTElCU19QUklWQVRFICIke0xJQlNfUFJJVkFURX0gJHtNQkVEVExT
-X0xJQlJBUklFU19TVFJ9IikKLSsJZ2V0X2ZpbGVuYW1lX2NvbXBvbmVudChtYmVkdGxzX2xpYnJh
-cnlfcGF0aCAiJHtNQkVEVExTX0xJQlJBUll9IiBQQVRIKQotKwlzZXQoTElCU19QUklWQVRFICIk
-e0xJQlNfUFJJVkFURX0gLUwke21iZWR0bHNfbGlicmFyeV9wYXRofSAtbG1iZWR0bHMgLWxtYmVk
-Y3J5cHRvIC1sbWJlZHg1MDkiKQotIGVuZGlmKCkKLSBpZihQT0xBUlNTTF9GT1VORCkKLSAJZ2V0
-X2ZpbGVuYW1lX2NvbXBvbmVudChwb2xhcnNzbF9saWJyYXJ5X3BhdGggIiR7UE9MQVJTU0xfTElC
-UkFSSUVTfSIgUEFUSCkKZGlmZiAtLWdpdCBhL3BhY2thZ2UvYmN0b29sYm94L0NvbmZpZy5pbiBi
-L3BhY2thZ2UvYmN0b29sYm94L0NvbmZpZy5pbgpkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKaW5k
-ZXggMWNmMmI3ZTIzNi4uMDAwMDAwMDAwMAotLS0gYS9wYWNrYWdlL2JjdG9vbGJveC9Db25maWcu
-aW4KKysrIC9kZXYvbnVsbApAQCAtMSwxOSArMCwwIEBACi1jb25maWcgQlIyX1BBQ0tBR0VfQkNU
-T09MQk9YCi0JYm9vbCAiYmN0b29sYm94IgotCWRlcGVuZHMgb24gQlIyX0lOU1RBTExfTElCU1RE
-Q1BQCi0JZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hBU19USFJFQURTCi0JZGVwZW5kcyBvbiAh
-QlIyX1RPT0xDSEFJTl9IQVNfR0NDX0JVR182NDczNSAjIGV4Y2VwdGlvbl9wdHIKLQlzZWxlY3Qg
-QlIyX1BBQ0tBR0VfTElCSUNPTlYgaWYgIUJSMl9FTkFCTEVfTE9DQUxFCi0JaGVscAotCSAgVXRp
-bGl0aWVzIGxpYnJhcnkgdXNlZCBieSBCZWxsZWRvbm5lIENvbW11bmljYXRpb25zCi0JICBzb2Z0
-d2FyZXMgbGlrZSBiZWxsZS1zaXAsIG1lZGlhc3RyZWFtZXIyIGFuZCBsaW5waG9uZS4KLQotCSAg
-U2VsZWN0IEJSMl9QQUNLQUdFX01CRURUTFMgZm9yIGNyeXB0byBzdXBwb3J0LgotCi0JICBodHRw
-czovL2dpdGh1Yi5jb20vQmVsbGVkb25uZUNvbW11bmljYXRpb25zL2JjdG9vbGJveAotCi1jb21t
-ZW50ICJiY3Rvb2xib3ggbmVlZHMgYSB0b29sY2hhaW4gdy8gQysrLCB0aHJlYWRzIgotCWRlcGVu
-ZHMgb24gIUJSMl9JTlNUQUxMX0xJQlNURENQUCB8fCAhQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFE
-UwotCi1jb21tZW50ICJiY3Rvb2xib3ggbmVlZHMgYSB0b29sY2hhaW4gbm90IGFmZmVjdGVkIGJ5
-IEdDQyBidWcgNjQ3MzUiCi0JZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hBU19HQ0NfQlVHXzY0
-NzM1CmRpZmYgLS1naXQgYS9wYWNrYWdlL2JjdG9vbGJveC9iY3Rvb2xib3guaGFzaCBiL3BhY2th
-Z2UvYmN0b29sYm94L2JjdG9vbGJveC5oYXNoCmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRl
-eCA5YjFmOWU4MjFkLi4wMDAwMDAwMDAwCi0tLSBhL3BhY2thZ2UvYmN0b29sYm94L2JjdG9vbGJv
-eC5oYXNoCisrKyAvZGV2L251bGwKQEAgLTEsMyArMCwwIEBACi0jIExvY2FsbHkgY2FsY3VsYXRl
-ZAotc2hhMjU2ICA0NDZiNjBlODFhNzliMTFlODIxMmM0NGUzMTJhZWIwY2U0NmU5ZWNmMDI2OWEz
-NWM0OTJlY2RjYTNlNzQyOGMzICBiY3Rvb2xib3gtNC40LjgudGFyLmd6Ci1zaGEyNTYgIDFiMzc4
-MmNjYWQ3Yjg2MTQxMDBjZGEzMGQzZmFmNDJmYzM5ZjJlOTc5MzI5MDhjNTQzMDA1MDUzYjY1NGNh
-NjggIExJQ0VOU0UudHh0CmRpZmYgLS1naXQgYS9wYWNrYWdlL2JjdG9vbGJveC9iY3Rvb2xib3gu
-bWsgYi9wYWNrYWdlL2JjdG9vbGJveC9iY3Rvb2xib3gubWsKZGVsZXRlZCBmaWxlIG1vZGUgMTAw
-NjQ0CmluZGV4IGFjOTM2MTAyNmYuLjAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9iY3Rvb2xib3gv
-YmN0b29sYm94Lm1rCisrKyAvZGV2L251bGwKQEAgLTEsNDIgKzAsMCBAQAotIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMKLSMKLSMgYmN0b29sYm94Ci0jCi0jIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwot
-Ci1CQ1RPT0xCT1hfVkVSU0lPTiA9IDQuNC44Ci1CQ1RPT0xCT1hfU0lURSA9ICQoY2FsbCBnaXRo
-dWIsQmVsbGVkb25uZUNvbW11bmljYXRpb25zLGJjdG9vbGJveCwkKEJDVE9PTEJPWF9WRVJTSU9O
-KSkKLUJDVE9PTEJPWF9MSUNFTlNFID0gR1BMLTMuMCsKLUJDVE9PTEJPWF9MSUNFTlNFX0ZJTEVT
-ID0gTElDRU5TRS50eHQKLUJDVE9PTEJPWF9JTlNUQUxMX1NUQUdJTkcgPSBZRVMKLQotIyBTZXQg
-Q01BS0VfU0tJUF9SUEFUSCB0byBwcmV2ZW50IGJjdG9vbGJveCBmcm9tIGFkZGluZyB0aGUgcnBh
-dGggdG8KLSMgc2hhcmVkIGxpYnJhcnkuCi1CQ1RPT0xCT1hfQ09ORl9PUFRTID0gXAotCS1ERU5B
-QkxFX1BPTEFSU1NMPU9GRiBcCi0JLURFTkFCTEVfU1RSSUNUPU9GRiBcCi0JLURFTkFCTEVfVEVT
-VFNfQ09NUE9ORU5UPU9GRiBcCi0JLURFTkFCTEVfVEVTVFM9T0ZGIFwKLQktRENNQUtFX1NLSVBf
-UlBBVEg9T04KLQotaWZlcSAoJChCUjJfUEFDS0FHRV9MSUJJQ09OVikseSkKLUJDVE9PTEJPWF9E
-RVBFTkRFTkNJRVMgKz0gbGliaWNvbnYKLUJDVE9PTEJPWF9DT05GX09QVFMgKz0gLURDTUFLRV9D
-WFhfRkxBR1M9IiQoVEFSR0VUX0NYWEZMQUdTKSAtbGljb252IgotZW5kaWYKLQotaWZlcSAoJChC
-UjJfUEFDS0FHRV9NQkVEVExTKSx5KQotQkNUT09MQk9YX0RFUEVOREVOQ0lFUyArPSBtYmVkdGxz
-Ci1CQ1RPT0xCT1hfQ09ORl9PUFRTICs9IC1ERU5BQkxFX01CRURUTFM9T04KLWVsc2UKLUJDVE9P
-TEJPWF9DT05GX09QVFMgKz0gLURFTkFCTEVfTUJFRFRMUz1PRkYKLWVuZGlmCi0KLWlmZXEgKCQo
-QlIyX1NUQVRJQ19MSUJTKSx5KQotQkNUT09MQk9YX0NPTkZfT1BUUyArPSAtREVOQUJMRV9TSEFS
-RUQ9T0ZGIC1ERU5BQkxFX1NUQVRJQz1PTgotZWxzZSBpZmVxICgkKEJSMl9TSEFSRURfU1RBVElD
-X0xJQlMpLHkpCi1CQ1RPT0xCT1hfQ09ORl9PUFRTICs9IC1ERU5BQkxFX1NIQVJFRD1PTiAtREVO
-QUJMRV9TVEFUSUM9T04KLWVsc2UgaWZlcSAoJChCUjJfU0hBUkVEX0xJQlMpLHkpCi1CQ1RPT0xC
-T1hfQ09ORl9PUFRTICs9IC1ERU5BQkxFX1NIQVJFRD1PTiAtREVOQUJMRV9TVEFUSUM9T0ZGCi1l
-bmRpZgotCi0kKGV2YWwgJChjbWFrZS1wYWNrYWdlKSkKLS0gCjIuNTEuMAoKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
-dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
-bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+unzip currently fails to build with GCC 15.x. We're already fetching
+from Debian, using patchlevel -28, and it turns out that Debian
+patchlevel -29 has the GCC 15.x fix, and very few other fixes:
+
+unzip (6.0-29) unstable; urgency=medium
+
+  * Ignore invalid "Total number of disks" field on Microsoft ZIP64 files.
+    Closes: #661956, #1064000.
+  * Drop conflicting declarations of gmtime() and localtime().
+    Should fix build with gcc-15. Closes: #1098043.
+  * Fix zipgrep handling of escapes. Closes: #1054628.
+  * Stop using update-mime. Closes: #1072396.
+  * Add debian/source/lintian-overrides for *.a files.
+  * Do not trim Debian changelog.
+  * Add debian/salsa-ci.yml.
+  * Add Vcs-Git and Vcs-Browser fields.
+  * Update Standards-Version.
+
+So let's just bump to this patchlevel version.
+
+Fixes:
+
+  https://autobuild.buildroot.net/results/d81cb9d7c9e87dd233dde350d15cb03427ba2036/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/unzip/unzip.hash | 5 ++---
+ package/unzip/unzip.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/package/unzip/unzip.hash b/package/unzip/unzip.hash
+index bbf4f7d71f..5e2bbcb0b0 100644
+--- a/package/unzip/unzip.hash
++++ b/package/unzip/unzip.hash
+@@ -1,6 +1,5 @@
+-# From https://snapshot.debian.org/archive/debian/20210110T204103Z/pool/main/u/unzip/unzip_6.0-26.dsc
++# From https://snapshot.debian.org/archive/debian-debug/20250311T212313Z/pool/main/u/unzip/unzip_6.0-29.dsc
+ sha256  036d96991646d0449ed0aa952e4fbe21b476ce994abc276e49d30e686708bd37  unzip_6.0.orig.tar.gz
+-sha256  67bde7c71d52afd61aa936d4415c8d12fd90ca26e9637a3cd67cae9b71298c12  unzip_6.0-27.debian.tar.xz
+-
++sha256  14043e5ea351c02b3bc8676e1e6d20d79b9a690b6d7520e8138ac629cc048417  unzip_6.0-29.debian.tar.xz
+ # Locally computed:
+ sha256  7469b81d5d29ac4fd670f7c86ba0cb9fa34f137a2d4d5198437d92ddf918984b  LICENSE
+diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
+index 5effebee4a..4329054c1c 100644
+--- a/package/unzip/unzip.mk
++++ b/package/unzip/unzip.mk
+@@ -6,8 +6,8 @@
+ 
+ UNZIP_VERSION = 6.0
+ UNZIP_SOURCE = unzip_$(UNZIP_VERSION).orig.tar.gz
+-UNZIP_PATCH = unzip_$(UNZIP_VERSION)-27.debian.tar.xz
+-UNZIP_SITE = https://snapshot.debian.org/archive/debian/20220916T090657Z/pool/main/u/unzip
++UNZIP_PATCH = unzip_$(UNZIP_VERSION)-29.debian.tar.xz
++UNZIP_SITE = https://snapshot.debian.org/archive/debian-debug/20250311T212313Z/pool/main/u/unzip
+ UNZIP_LICENSE = Info-ZIP
+ UNZIP_LICENSE_FILES = LICENSE
+ UNZIP_CPE_ID_VALID = YES
+-- 
+2.51.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
