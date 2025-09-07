@@ -4,52 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A0DBCA1017
-	for <buildroot@archiver.kernel.org>; Sun,  7 Sep 2025 13:37:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE46DCAC582
+	for <buildroot@archiver.kernel.org>; Sun,  7 Sep 2025 13:37:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CF44360D7A;
-	Sun,  7 Sep 2025 13:37:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 35FD361BB5;
+	Sun,  7 Sep 2025 13:37:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XNlbBC3QN1FV; Sun,  7 Sep 2025 13:37:31 +0000 (UTC)
+ id DhOaXkQ5334b; Sun,  7 Sep 2025 13:37:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3D0061BB5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FCB461C67
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E3D0061BB5;
-	Sun,  7 Sep 2025 13:37:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0FCB461C67;
+	Sun,  7 Sep 2025 13:37:33 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8B3E39E4
- for <buildroot@buildroot.org>; Sun,  7 Sep 2025 13:37:29 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 234229E4
+ for <buildroot@buildroot.org>; Sun,  7 Sep 2025 13:37:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7234240731
- for <buildroot@buildroot.org>; Sun,  7 Sep 2025 13:37:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1531E40731
+ for <buildroot@buildroot.org>; Sun,  7 Sep 2025 13:37:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R5QsykJD14yI for <buildroot@buildroot.org>;
- Sun,  7 Sep 2025 13:37:28 +0000 (UTC)
+ id 3XZqdIM9tqW3 for <buildroot@buildroot.org>;
+ Sun,  7 Sep 2025 13:37:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
  helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 441E24021B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 441E24021B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DA9E8404E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA9E8404E4
 Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 441E24021B
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DA9E8404E4
  for <buildroot@buildroot.org>; Sun,  7 Sep 2025 13:37:28 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 52BFE4E40C4A
- for <buildroot@buildroot.org>; Sun,  7 Sep 2025 13:37:26 +0000 (UTC)
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 3D84B4E40C48
+ for <buildroot@buildroot.org>; Sun,  7 Sep 2025 13:37:27 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 2D1BF6061A
- for <buildroot@buildroot.org>; Sun,  7 Sep 2025 13:37:26 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 11C456061A
+ for <buildroot@buildroot.org>; Sun,  7 Sep 2025 13:37:27 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 9186E102F1D00; 
- Sun,  7 Sep 2025 15:37:25 +0200 (CEST)
+ with ESMTPSA id 7D862102F286D; 
+ Sun,  7 Sep 2025 15:37:26 +0200 (CEST)
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun,  7 Sep 2025 15:37:13 +0200
-Message-ID: <20250907133721.3416326-3-thomas.petazzoni@bootlin.com>
+Date: Sun,  7 Sep 2025 15:37:14 +0200
+Message-ID: <20250907133721.3416326-4-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250907133721.3416326-1-thomas.petazzoni@bootlin.com>
 References: <20250907133721.3416326-1-thomas.petazzoni@bootlin.com>
@@ -57,21 +57,21 @@ MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1757252245; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1757252246; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=Y2wtOD/8CK9bsF82HeVJb+aXE7sWzAPhRAkFpsoVZ8k=;
- b=NwucTI6n999zlYJwPIQgznZzebWquP2HMqNTyr1FuNeJ4yq2qS0IQxuxxWMr8nYqQuXJz0
- Cg+3nMdf3Zqi1Gfa46Bl10cV0WGr5rOOIZahI6tEptyDzZ5k/txUwuCpZtZXd0tsULjvvA
- so5AX9NnQvJpj3N8q9eQZ8IbiTPOIO2A0L0k0O639fJhN2E1NtzC8qCKuTSNZ2xIfMD8Lh
- 3IxOaoaHNvzsYywHsE2r0xHSMy2hROkZqY87oehsCk1XfIb4IkXeZPGggk3b+FFfO40ihM
- asVxrdcCHosmJ8L7tF9rhQ28KndwnsbE4Kv5KyMfBxstcw9qDSDb34qiHL/UUg==
+ bh=LUcOuKfOVM1ET9JpsRjTaau7sDPABdQw2gdtoIdW0p0=;
+ b=uRfPxwMenGvkZ7a2ZHyIUiMbuurBPBCMM9F3GyNV87smp+cRhcpFlSVpAZ13oNVAQrfBX3
+ WAibkHkDeWcc2nfueD366JVmpw2gPXNZaw0LBn4f8xITx2irGRHFg8pkmqfkj3ca8HPByR
+ gWpdF9eOZGmaKWqityAaJsluzQrq6BRRHWXcMT+hBEJrpzcWVfsW1/U45gBYvyHm0YmWBu
+ wVSuJnJGiE00VhiS/MKsWV8HJM1s+7yXq29lUmr+/m3wGBygBZV9GS0h0PcxRKNI0GwmhO
+ B55qnm2yUtAqC0+LQ8qabZAJNfnfTxsb97cH4RRlntDgKgOFFsksu4TyYhaXJg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=NwucTI6n
-Subject: [Buildroot] [PATCH 2/6] package/belle-sip: remove package
+ header.a=rsa-sha256 header.s=dkim header.b=uRfPxwMe
+Subject: [Buildroot] [PATCH 3/6] package/belr: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,147 +90,129 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-belle-sip was only needed as a dependency of linphone, as is anyway
-bundled in more recent versions of linphone, making a separate package
+belr was only needed as a dependency of linphone, as is anyway bundled
+in more recent versions of linphone, making a separate package
 unnnecessary.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy                 |  8 +++++++
- DEVELOPERS                       |  1 -
- package/Config.in                |  1 -
- package/belle-sip/Config.in      | 22 ------------------
- package/belle-sip/belle-sip.hash |  3 ---
- package/belle-sip/belle-sip.mk   | 40 --------------------------------
- 6 files changed, 8 insertions(+), 67 deletions(-)
- delete mode 100644 package/belle-sip/Config.in
- delete mode 100644 package/belle-sip/belle-sip.hash
- delete mode 100644 package/belle-sip/belle-sip.mk
+ Config.in.legacy       |  8 ++++++++
+ DEVELOPERS             |  1 -
+ package/Config.in      |  1 -
+ package/belr/Config.in | 19 -------------------
+ package/belr/belr.hash |  3 ---
+ package/belr/belr.mk   | 25 -------------------------
+ 6 files changed, 8 insertions(+), 49 deletions(-)
+ delete mode 100644 package/belr/Config.in
+ delete mode 100644 package/belr/belr.hash
+ delete mode 100644 package/belr/belr.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 27ef1cf430..d2f2684673 100644
+index d2f2684673..3e7bd457a6 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,14 @@ endif
  
  comment "Legacy options removed in 2025.08"
  
-+config BR2_PACKAGE_BELLE_SIP
-+	bool "belle-sip has been removed"
++config BR2_PACKAGE_BELR
++	bool "belr has been removed"
 +	select BR2_LEGACY
 +	help
 +	  This package has been removed as part of the linphone
 +	  removal. In addition, newer version of linphone directly
-+	  bundle belle-sip making a separate package unnecessary.
++	  bundle belr making a separate package unnecessary.
 +
- config BR2_PACKAGE_LINPHONE
- 	bool "linphone has been removed"
+ config BR2_PACKAGE_BELLE_SIP
+ 	bool "belle-sip has been removed"
  	select BR2_LEGACY
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 32d7c8ac61..2c188d8dca 100644
+index 2c188d8dca..6a8acf8589 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
 @@ -1012,7 +1012,6 @@ F:	package/openzwave/
  
  N:	Fabrice Fontaine <fontaine.fabrice@gmail.com>
  F:	package/bearssl/
--F:	package/belle-sip/
- F:	package/belr/
+-F:	package/belr/
  F:	package/boinc/
  F:	package/cairo/
+ F:	package/daq3/
 diff --git a/package/Config.in b/package/Config.in
-index 989cb36d79..17cc0288e0 100644
+index 17cc0288e0..989d7a1efd 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2023,7 +2023,6 @@ menu "Networking"
- 	source "package/azmq/Config.in"
- 	source "package/azure-iot-sdk-c/Config.in"
- 	source "package/batman-adv/Config.in"
--	source "package/belle-sip/Config.in"
- 	source "package/bluez5_utils-headers/Config.in"
- 	source "package/c-ares/Config.in"
- 	source "package/cni-plugins/Config.in"
-diff --git a/package/belle-sip/Config.in b/package/belle-sip/Config.in
+@@ -2180,7 +2180,6 @@ menu "Other"
+ 	source "package/basu/Config.in"
+ 	source "package/bctoolbox/Config.in"
+ 	source "package/bdwgc/Config.in"
+-	source "package/belr/Config.in"
+ 	source "package/boost/Config.in"
+ 	source "package/c-capnproto/Config.in"
+ 	source "package/capnproto/Config.in"
+diff --git a/package/belr/Config.in b/package/belr/Config.in
 deleted file mode 100644
-index 8e4de366e4..0000000000
---- a/package/belle-sip/Config.in
+index f3f742ad28..0000000000
+--- a/package/belr/Config.in
 +++ /dev/null
-@@ -1,22 +0,0 @@
--config BR2_PACKAGE_BELLE_SIP
--	bool "belle-sip"
+@@ -1,19 +0,0 @@
+-config BR2_PACKAGE_BELR
+-	bool "belr"
 -	depends on BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_STATIC_LIBS # dlfcn.h
--	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # bctoolbox
 -	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # bctoolbox
--	depends on BR2_USE_WCHAR
 -	select BR2_PACKAGE_BCTOOLBOX
--	# needs crypto support in bctoolbox
--	select BR2_PACKAGE_MBEDTLS
 -	help
--	  Belle-sip is a modern library implementing SIP (RFC 3261)
--	  transport, transaction and dialog layers.
+-	  Belr is Belledonne Communications' language recognition
+-	  library, written in C++11. It parses text inputs formatted
+-	  according to a language defined by an ABNF grammar, such as
+-	  the protocols standardized at IETF.
 -
--	  http://www.linphone.org/technical-corner/belle-sip
+-	  https://gitlab.linphone.org/BC/public/belr
 -
--comment "belle-sip needs a toolchain w/ threads, C++, dynamic library, wchar"
--	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
--		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+-comment "belr needs a toolchain w/ threads, C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
 -
--comment "belle-sip needs a toolchain not affected by GCC bug 64735"
+-comment "belr needs a toolchain not affected by GCC bug 64735"
 -	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/belle-sip/belle-sip.hash b/package/belle-sip/belle-sip.hash
+diff --git a/package/belr/belr.hash b/package/belr/belr.hash
 deleted file mode 100644
-index 670ce0062e..0000000000
---- a/package/belle-sip/belle-sip.hash
+index 00c733c7df..0000000000
+--- a/package/belr/belr.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
 -# Locally calculated
--sha256  eabba615c97080572c1b9d3c76f8f9cf6a7432eedf37482672e5fa178a688f72  belle-sip-4.4.8.tar.gz
+-sha256  6358aa680193d972c831d677da1652c7f57d7e00649b971d4d9fbdebf4331b48  belr-4.4.8.tar.gz
 -sha256  1b3782ccad7b8614100cda30d3faf42fc39f2e97932908c543005053b654ca68  LICENSE.txt
-diff --git a/package/belle-sip/belle-sip.mk b/package/belle-sip/belle-sip.mk
+diff --git a/package/belr/belr.mk b/package/belr/belr.mk
 deleted file mode 100644
-index b4de3612ce..0000000000
---- a/package/belle-sip/belle-sip.mk
+index 26b949734f..0000000000
+--- a/package/belr/belr.mk
 +++ /dev/null
-@@ -1,40 +0,0 @@
+@@ -1,25 +0,0 @@
 -################################################################################
 -#
--# belle-sip
+-# belr
 -#
 -################################################################################
 -
--BELLE_SIP_VERSION = 4.4.8
--BELLE_SIP_SITE = \
--	https://gitlab.linphone.org/BC/public/belle-sip/-/archive/$(BELLE_SIP_VERSION)
--BELLE_SIP_LICENSE = GPL-3.0+
--BELLE_SIP_LICENSE_FILES = LICENSE.txt
--BELLE_SIP_CPE_ID_VENDOR = linphone
--BELLE_SIP_INSTALL_STAGING = YES
--BELLE_SIP_DEPENDENCIES = \
--	bctoolbox \
--	$(if $(BR2_PACKAGE_ZLIB),zlib)
--BELLE_SIP_CONF_OPTS = \
+-BELR_VERSION = 4.4.8
+-BELR_SITE = https://gitlab.linphone.org/BC/public/belr/-/archive/$(BELR_VERSION)
+-BELR_LICENSE = GPL-3.0+
+-BELR_LICENSE_FILES = LICENSE.txt
+-BELR_INSTALL_STAGING = YES
+-BELR_DEPENDENCIES = bctoolbox
+-BELR_CONF_OPTS = \
 -	-DENABLE_STRICT=OFF \
--	-DENABLE_TESTS=OFF
--
--ifeq ($(BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY),y)
--BELLE_SIP_CONF_OPTS += -DENABLE_MDNS=ON
--BELLE_SIP_DEPENDENCIES += avahi
--else
--BELLE_SIP_CONF_OPTS += -DENABLE_MDNS=OFF
--endif
+-	-DENABLE_TESTS=OFF \
+-	-DENABLE_TOOLS=OFF
 -
 -ifeq ($(BR2_STATIC_LIBS),y)
--BELLE_SIP_CONF_OPTS += -DENABLE_SHARED=OFF -DENABLE_STATIC=ON
--else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
--BELLE_SIP_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_STATIC=ON
--else ifeq ($(BR2_SHARED_LIBS),y)
--BELLE_SIP_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_STATIC=OFF
+-BELR_CONF_OPTS += -DENABLE_SHARED=OFF -DENABLE_STATIC=ON
+-else
+-# cannot build static and shared together
+-BELR_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_STATIC=OFF
 -endif
--
--BELLE_SIP_CFLAGS = $(TARGET_CFLAGS)
--
--BELLE_SIP_CONF_OPTS += -DCMAKE_C_FLAGS="$(BELLE_SIP_CFLAGS)"
 -
 -$(eval $(cmake-package))
 -- 
