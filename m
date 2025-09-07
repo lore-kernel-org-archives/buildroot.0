@@ -4,72 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B23EDCA1013
-	for <buildroot@archiver.kernel.org>; Sun,  7 Sep 2025 07:49:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 563A3CA1017
+	for <buildroot@archiver.kernel.org>; Sun,  7 Sep 2025 09:57:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7A0BB84640;
-	Sun,  7 Sep 2025 07:49:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C98708470F;
+	Sun,  7 Sep 2025 09:57:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eJNzGFHM1OSO; Sun,  7 Sep 2025 07:49:03 +0000 (UTC)
+ id qLeTAEGgXnFK; Sun,  7 Sep 2025 09:57:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 746DB84635
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0343B84710
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 746DB84635;
-	Sun,  7 Sep 2025 07:49:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 848E2273
- for <buildroot@buildroot.org>; Sun,  7 Sep 2025 07:49:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0343B84710;
+	Sun,  7 Sep 2025 09:57:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 015BF273
+ for <buildroot@buildroot.org>; Sun,  7 Sep 2025 09:57:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6ACBE4220A
- for <buildroot@buildroot.org>; Sun,  7 Sep 2025 07:49:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E607B4021F
+ for <buildroot@buildroot.org>; Sun,  7 Sep 2025 09:57:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W9q4sRelyaBY for <buildroot@buildroot.org>;
- Sun,  7 Sep 2025 07:49:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5A6EF42209
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A6EF42209
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5A6EF42209
- for <buildroot@buildroot.org>; Sun,  7 Sep 2025 07:49:00 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 71387B00563;
- Sun,  7 Sep 2025 09:48:57 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 07 Sep 2025 09:48:57 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9CTGYdQvK4gY for <buildroot@buildroot.org>;
+ Sun,  7 Sep 2025 09:57:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::343; helo=mail-wm1-x343.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C639540C60
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C639540C60
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com
+ [IPv6:2a00:1450:4864:20::343])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C639540C60
+ for <buildroot@buildroot.org>; Sun,  7 Sep 2025 09:57:22 +0000 (UTC)
+Received: by mail-wm1-x343.google.com with SMTP id
+ 5b1f17b1804b1-45ddc7d5731so9109485e9.1
+ for <buildroot@buildroot.org>; Sun, 07 Sep 2025 02:57:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1757239040; x=1757843840;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=kqTWw7ovFgGl+m0o3EqPNMvUYdH7K7taC042z19ZmBk=;
+ b=NT34O2ldOgZpYURQ6H6tylvl+TyCkVU52xzrbLSemkj8TziyxbpsAYqhZxik0kXbXw
+ Y3UFk9iCtcNQL+5q+aYKHgbUHR+Vf1LwQ7LNZZ9x9+wb7r880Pr4HiFXU7lUL173hMRE
+ Cy7GwiAbfKG7MeC0QLq3NSZAS50n2LUPaKAC0RNsAA4x0dsS7BByuf6IuDlI7wtyaH1q
+ 4NzNr7nZyy0fdvuqT670XRPePqdXDhL7zp29ePVlKCe1cc0KNp2dmvCIKSnjISeJIAkV
+ u84T5oygzC4DH8jxktcpND6lBNVD/qACCeLxs+ItUeH3MwIIvQFgIbp4yodWBR5nY3R7
+ Vw0w==
+X-Gm-Message-State: AOJu0Yw+hbUU5lN5t2UP9rNhWcakrH8Eh0FkSmLFCo1rPtCPWjZLO8/l
+ l5pLFhGWlhukCI5nEeuoHNVMm1CueO5JsE3aFIIc6tQcx3mHYu8soPdxH0K2S6G3htxX/jwM5Hl
+ uJBSZSA8Uog==
+X-Gm-Gg: ASbGncv8M6ixn4ALuYDK/TLHlPuoml+u/MOm2CIaSuCREDuvvKNA7xWkMIhglYJ9D1w
+ BZDSBoY9HPmUbCxS5ZBMUKnUHRzYzirNvOo5B31Vh4WfiCiv0fRxWXAGdK+fN/jAfdgKCuT8KR5
+ OvPoCcDt5Uwpc08s+MJu4kUIreNTfA08Re5fpr9ljpCvgm/VR178tBdllPrM9eBhvgWv7aCHA54
+ NAqytAD5WiQ2Md/v16sA9yGqTem/AkRSOdp9wOFhbvSwi2uVHUUsM8rusmtlp8HRiIzYDCxgzkf
+ DUrb7K9r+ffpYxC2H2Mw+vzdpDKOYE0psdRz3+2uMbt02Mhgm60srqS9MYXqBe9R7tLX9gE1/gu
+ +s7AZkw1ncj419m0qccSaZHTllSLfpRG3oaXqO+3TKh6zcAiT5nSI1JVA748mYXpGLnIG7HEoVr
+ 6k826D9azTqnDaXsOn5Nib
+X-Google-Smtp-Source: AGHT+IEvKMXxTLBVycI+e2jKAYekt8ZFKVefOody7jd433D0IyHPmo3dCV0pEo8uPoR4xXvyqEIWTg==
+X-Received: by 2002:a05:600c:8a0c:10b0:45c:b574:b264 with SMTP id
+ 5b1f17b1804b1-45de0060ba6mr24390095e9.0.1757239040473; 
+ Sun, 07 Sep 2025 02:57:20 -0700 (PDT)
+Received: from P-NTS-Evian.home
+ (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-45dcfcacd2csm70835105e9.1.2025.09.07.02.57.19
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 07 Sep 2025 02:57:20 -0700 (PDT)
+To: buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@smile.fr>
+Date: Sun,  7 Sep 2025 11:57:17 +0200
+Message-ID: <20250907095717.2202752-1-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-Date: Sun, 07 Sep 2025 09:48:57 +0200
-To: Romain Naour <romain.naour@smile.fr>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250906211900.648495-1-romain.naour@smile.fr>
-References: <20250906211900.648495-1-romain.naour@smile.fr>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <7902991d0de6d4367110d430483c8551@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1757231338;
- bh=cSHx3MsDrDiHV3w0AfJwgfn888AHS+kZyMvzKc31HhA=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Rhnwr0N7mVGhCDSqt1HRVJQLtg0QoDX7qkd2bpjlbBmNyjkzhr0fPTkgtfegMIEYz
- u/ALDGJEI10OtBJviy1XQC8zUu03uJFjNtmZCjruGSfXXojIDvu4Q9L8iQ0T71KlPl
- BLvNwFzQcFQGlBw12ahY8q+xwSWFkHzvGItSYStyYcwYZ2Wt6khvz/7ahlvdgq4zxf
- lLAzkdpg2TBfPAgMwCiRYvSlc1T5cUrMh1fSfm6MLHoHJtVNiPjQaNdKy907rXOy0w
- hVIUTq3rfc7lJNBFwWChsFu0kBhXBiBsK7XFgmqaK9tz27lgLxix1rbOnNtdDpE5mO
- vo3XixXG5TdVA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Rhnwr0N7
-Subject: Re: [Buildroot] [PATCH] support/testing: test_hardening: update
- toolchain to aarch64 for checksec tests
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1757239040; x=1757843840; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=kqTWw7ovFgGl+m0o3EqPNMvUYdH7K7taC042z19ZmBk=;
+ b=pHAE9rc3pUYnoTlFafIldrvd3LXqtBSzoR9ApNRzIZ6tPDt3aF9d1GuyB8CiCidvvi
+ KhWFdm+hyPOK0EQcf62gH14ZrHNbGO/wuXpLs5XXmfWB5rBuyZecs5tJaPsoitaX6ZM2
+ azfnkUf70fsRoDHRfTmZk9QqKvBZTbN/KCIjI=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=pHAE9rc3
+Subject: [Buildroot] [PATCH] package/micropython: fix segfault at exit()
+ with gcc >= 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,62 +108,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 06/09/2025 23:19, Romain Naour via buildroot wrote:
-> TestRelroPartial is broken since the last checksec update to 2.7.1 [1]
-> (Buildroot 2024.08) due to a relro check fix [2] that doesn't work for
-> powerpc architecture where .got.plt doesn't exist for some reasons
-> (that's why the expected result "full" is replaced by "Partial").
-> 
-> From [3]:
-> 
->   if ${readelf} -d "${1}/exe" 2> /dev/null | grep -q 'BIND_NOW' || ! 
-> ${readelf} -l "${1}/exe" 2> /dev/null | grep -q '\.got\.plt'; then
->     echo_message '\033[32mFull RELRO   \033[m   ' 'Full RELRO,' ' 
-> relro="full"' '"relro":"full",'
->   else
->     echo_message '\033[33mPartial RELRO\033[m   ' 'Partial RELRO,' ' 
-> relro="partial"' '"relro":"partial",'
-> 
-> checksec tool is problably tested upstream on more common architectures
-> like x86_64 or aarch64 than powerpc64 e5500. This may explain why
-> checksec broke on powerpc64 e5500 target.
-> 
-> Also, the Booltin powerpc64-e5500--glibc--stable-2018.02-2 toolchain
-> used by test_hardening tests was not updated since the hardening tests
-> were introduced back in 2018.11 release.
-> 
-> So, switch to the current Bootling aarch64 stable toolchain
-> (currently Bootlin aarch64 glibc stable 2025.08-1).
-> 
-> Checked that all 6 hardening tests pass with this new toolchain:
-> 
->   tests.core.test_hardening.TestFortifyConserv
->   tests.core.test_hardening.TestFortifyNone
->   tests.core.test_hardening.TestRelro
->   tests.core.test_hardening.TestRelroPartial
->   tests.core.test_hardening.TestSspNone
->   tests.core.test_hardening.TestSspStrong
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/11176773995 
-> (TestRelroPartial)
-> 
-> [1] 61505649746cb4d0dd57e35ff6139b7925bab72d
-> [2] 
-> https://github.com/slimm609/checksec/commit/1c80e39c4956f902ed15c4baa8d9c17851096900
-> [3] 
-> https://github.com/slimm609/checksec/commit/1c80e39c4956f902ed15c4baa8d9c17851096900#diff-9e8d1b28dfaf1c704560ac51a5613b70d70de2dcd84e87b9fa20f28811e6484aL1491
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Since Buildroot commit [1] "update to Bootlin toolchains 2025.08-1",
+the TestMicroPython segfault when testing if micropython can return a
+non-zero exit code.
 
-Applied to master, thanks.
+   micropython -c "import sys ; sys.exit(123)"
+
+This issue is related to the gcc version used to build micropython
+(gcc 14 or newer). Using gcc 13 (like Bootlin toolchain 2024.05-1
+previously used) micropython run without issue.
+
+The issue has been reported upstream [2] and fixed in newer micropython
+releases [3]. For now, apply a temporary workaround (suggested in the
+bug report) using -DMICROPY_NLR_SETJMP=1 only for gcc 14 or newer.
+MICROPY_NLR_SETJMP avoid the architecture specific implementation of
+nlr_push.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/11176774762 (TestMicroPython)
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/947dbc92a20c5acea7882166cae7893e6ea661e1
+[2] https://github.com/micropython/micropython/issues/14115
+[3] https://github.com/micropython/micropython/commit/35f3f0a87db2580041dd0f7dfd4361df48887796
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ package/micropython/micropython.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index 949abe3b0b..32b361db16 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -29,6 +29,13 @@ ifeq ($(BR2_xtensa),y)
+ MICROPYTHON_CFLAGS = -DMICROPY_NLR_SETJMP=1
+ endif
+ 
++# https://github.com/micropython/micropython/issues/14115
++# Temporary fix for GCC 14 compatibility, should be removed after updating to
++# 1.23.0 or later.
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_14),y)
++MICROPYTHON_CFLAGS += -DMICROPY_NLR_SETJMP=1
++endif
++
+ # When building from a tarball we don't have some of the dependencies that are in
+ # the git repository as submodules
+ MICROPYTHON_MAKE_OPTS += \
+-- 
+2.51.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
