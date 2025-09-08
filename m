@@ -1,108 +1,109 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72F27CAC588
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 10:56:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D798CAC589
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 10:56:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 48C844275B;
-	Mon,  8 Sep 2025 10:56:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6D85884F58;
+	Mon,  8 Sep 2025 10:56:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w8t9jUtAOIuk; Mon,  8 Sep 2025 10:56:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id l5KCgCOZ3PAW; Mon,  8 Sep 2025 10:56:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33BEE42749
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E4A284F49
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 33BEE42749;
-	Mon,  8 Sep 2025 10:56:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 02D50186
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:55:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7E4A284F49;
+	Mon,  8 Sep 2025 10:56:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 282F3186
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:55:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DD609423C3
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:55:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 251B484E6F
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:55:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YF0y79YvvBOo for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 10:55:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dQCLSgaLqo2J for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 10:55:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D515C423BF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D515C423BF
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D515C423BF
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:55:55 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-3da9ad0c1f4so2923933f8f.3
- for <buildroot@buildroot.org>; Mon, 08 Sep 2025 03:55:55 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 21CF184EDC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21CF184EDC
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 21CF184EDC
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:55:56 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-3d118d8fa91so934306f8f.1
+ for <buildroot@buildroot.org>; Mon, 08 Sep 2025 03:55:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1757328954; x=1757933754;
+ d=1e100.net; s=20230601; t=1757328955; x=1757933755;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=b4Tn+zygb0xBODws+mM7e3Nzgbi/uI7Q9SDaYEk7v+Q=;
- b=urCHkXBzfnV2dYcC11q/mbgdG6H+x5bi6FuI7ooGHqFNrIqvNcUGY0Sy7OceOpV+TX
- E5ywZx4QCWSxLHguqI6LtnUKkKeIyxAiOYbTsomjt3bhmkK+am6DFMBUnyHaSDT92nvd
- liGmsAQigR/zFptYnVx8+V14NTzTu9CkQaNynkwjxXcNfLvW1LjjQVhtN+QbPOCN+s2T
- 3CqWe43nmW8+aaLVoC/0U8aWiMSv1vrb+2AGh8Wo2/zWaIdPuTHDPLVpyLkBNNRlBpzh
- raniKe1p39Mulx6R52aWCc1/TceB2Fw32DkK9ctDZCEfc8MR7xSVS9bWoAVxlF6gQvYm
- ujzw==
+ bh=/zmAOjh5zh/zruS2CjKYIw+KUF9VMoUi4QrIR0Nv01E=;
+ b=cO9n6ChkrZgNtS3VFLt9sSkU5quHi4FEFys3QCHMPNFlNJu6W3BXfCVt6soulBRUa2
+ 1GVusCjiO7yd0gfW8ZGuqJFO9FviYpfw0uq1E4xpkIlUK7b77eWw7wq9BEP9Xh0iWN88
+ UA/BbuK4UymvZ4NROK+MNYOrABuzvIU4LkX9hiNhDT1F8459tR3xI1UDi0oB0PRpNhYK
+ 5JsRDM0SYQeTOxjS0EYEcoj7VLW6yZo8e4sRWiZxWf5rwVtkmsrhxjp9sf41bB2lyrRw
+ MA49sM3+Il0M+k+yK0rratQnnRKHhUL+YDDcpSz+IYfV/VYrOTG80GR6WPp9ufK06UwU
+ 0oGA==
 X-Forwarded-Encrypted: i=1;
- AJvYcCXKDpmzvkWy67KY8zEX1habJNBEVV+FY0PqQeVgemWT5RN6Y4g6EuMar2eHAKl/4p4iGghUj5+U7Qo=@buildroot.org
-X-Gm-Message-State: AOJu0YzZMwurHou6YwTSwoRMh9IuHuZy8F4mCit8B3938d7Egwj1Y/RS
- oWlpwCbwFb8Etb+0gosvmpdAuDrGnPf3Wn5sKwPruEJI5yzbK2mVPH/4jSp6l30A49o=
-X-Gm-Gg: ASbGncsITz2sjgbMBV9BKRArnygNzmvMwFsw6fg7S+iAtzXZZWWs6q16A1vzsF6sxwW
- HhHfAYnAEKprXlBpJ2zUQtEwcZUVVflqNj2WFqZkKriTNEu0Amt3uJeGfV/IuwcXVRxjQGnMhiU
- pu0MF38hWvrqbtGxxI2R7oY8IdWkfMy7ZiFKC1tFMLODITIPgh3UaEBmXMZTDvWW5tcoTUDD1yQ
- myDuILPgtse61ThfUTvHeY7RkRIQmXuVOorbi0zDP9DPdkl2I+zR1TCfhKyhBI2S8VT03uahCxF
- gvmcVpW2zlZUkIc1l6o28PV3xxhvwKe1bICF/qnAHq2NRl3KbV/dFYqp3EphuBfASqFKslGCDkU
- aBExYYxr9TWUoVQcEwDzTq8S4EcuH0V5rabFrlW0hhoUsmM09v+pg9IIQvJim59qprjQmFL0+5o
- +uzQ3A0DhoBjzEQzXPAL6a9BIo
-X-Google-Smtp-Source: AGHT+IFHvwE2KZyHZ3wMZu1W+/PjJIKZHT0qRm/nt1yOi9pPlvo6EeSJqPDbqEIaCLM0ysqHu836Sg==
-X-Received: by 2002:a05:6000:2385:b0:3e2:a287:2d07 with SMTP id
- ffacd0b85a97d-3e64cf45316mr5365773f8f.58.1757328953812; 
- Mon, 08 Sep 2025 03:55:53 -0700 (PDT)
+ AJvYcCWRhBwyVImXrRNGp1NQRotO+UzsuLZaKNhS7ECN/txZxfVhLNhwr0IMH3xE1DUa6hHxJ+1JPTtaQyg=@buildroot.org
+X-Gm-Message-State: AOJu0Yw8KmdO7okFUEOeF00oYNhHz6W324FI4o/mn/2d6FdNjP7OBNig
+ vTYNXt1q2gep6F3ULDL3yPcCiisk+Rh8mPsQQbpxE99yMlReQulMv0FRpIzKYwAPiMGl6n/rC33
+ JQo3tN1s=
+X-Gm-Gg: ASbGnctVarCHdO5U1Ul2Zw2GK5aokaIKZw3Gx+POYJGr0dT6yGhQBibHjESkx75EbGE
+ qKzFqQp0ZkiZpjkOkOUxXTkC/LS//7jkEZUZmSsFvXx1U24h5TigfC36Q3uZEkORCQycGLvEvUZ
+ MqWX3SPMJvl7rF88aqASEsY+K1NN6rsBI/qUwHZdFVqlS75lafXRt6hTobMi3OGaD5OZZG0InmS
+ dwF5Ahb7LvDLi281xTQI6Zh33xrXy+52P+YgYWmvX+7xUdPHlYnzWGwdwilDLQFGEscEWYuvgqS
+ XphWj8MG+YqFcdU36pROJ6ID7FXX5r3H3D0DDqlzYBqI8BlKEE/2jDZ0nGh6nk8+U9VhzrZ6Qsf
+ WlI5QVP1AzJuEJHaSV9L1O55GvY6CmJZLIuoDrunKPM+y/C+lSLp/br4Vx7+rGrVVwvmtOYna2X
+ OTzRfH+vRFlDk6+zwy18nZri4W
+X-Google-Smtp-Source: AGHT+IFhOkfhUZIt2L16lNrbD9ymYxSKKCtpO0Zgm/pb1n0UH+bLCJV/h0Wa6cekGtYilu4baFiIRg==
+X-Received: by 2002:a05:6000:22c4:b0:3ce:7673:bb30 with SMTP id
+ ffacd0b85a97d-3e3048266c8mr10746126f8f.14.1757328955049; 
+ Mon, 08 Sep 2025 03:55:55 -0700 (PDT)
 Received: from sah2lpt241.local.essensium.com
  (ip-94-140-185-241.reverse.destiny.be. [94.140.185.241])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3e7483597ccsm4195444f8f.31.2025.09.08.03.55.53
+ ffacd0b85a97d-3e06dbde2d2sm17545077f8f.12.2025.09.08.03.55.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 08 Sep 2025 03:55:53 -0700 (PDT)
+ Mon, 08 Sep 2025 03:55:54 -0700 (PDT)
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Mon,  8 Sep 2025 12:55:52 +0200
-Message-Id: <20250908105552.681881-1-thomas.perale@mind.be>
+Date: Mon,  8 Sep 2025 12:55:54 +0200
+Message-Id: <20250908105554.681932-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250819212631.3570549-1-thomas.petazzoni@bootlin.com>
-References: <20250819212631.3570549-1-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20250819202922.3407686-1-thomas.petazzoni@bootlin.com>
+References: <20250819202922.3407686-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1757328954; x=1757933754; darn=buildroot.org;
+ d=mind.be; s=google; t=1757328955; x=1757933755; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=b4Tn+zygb0xBODws+mM7e3Nzgbi/uI7Q9SDaYEk7v+Q=;
- b=d2xIv1WZ2xECTV2zyxwJF+3Bd9cXjpd8UaFib/rKUOCSs6RhwcMrOXJwJKp5+AP4Ew
- e/pTE/ZYrEE4gL7yLbDKtbxGkT8MdpsvkUzQH5gjyixCaiPoWbloUbfX67x6MQEFe6NA
- 4Wce0iWWo+dhqSlQ9qnyhxzDDSv7R/q49sWT+9BZKQwK+t83/yFlpRJZ3oM1M8A1PeRm
- 1AcGmCgWVF0CA9bXytGfzxmaRDUa1LaK5OHGSWLHbS1YZXXcsYBFSUJgdvbpPcVq2vTq
- +z2+AGP6TvZizVbUJ2HiCi9z7/Bt5hbiLA0uAIVrmm0G05xhrsMyjHIQXhlql0cmHddv
- C52A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=/zmAOjh5zh/zruS2CjKYIw+KUF9VMoUi4QrIR0Nv01E=;
+ b=GTlKR2wfn7qkE1Y+vluvOD8QR8PaPqOggG4T1lE6+p+t4ct3A8bO5plxcL/7uFMPHE
+ CKxdSaRXMLv0pdbddvcABUP78Pq3zG9LdWxzSE+1kY29PfPnkQB7SmZHWXolQOnOmMfd
+ oTjhjoPoaNaPx1tlsgi1gZxjh3MPNjQrMeInt7/zhTVCPS9f5DuY22xa5iZF72Ub4w7O
+ NkOnfqMPjxKt7FB32ypVXL3iydfXgdxBS15Gu1libwIzx69oFv5lpe1orf59FpgIhH7u
+ I5S85IN8tDayJz5Q+liuKCecY1o2eJRDZV04gap1etA87d21LHgDheA4bYl1YHZcBsOl
+ D9JQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=d2xIv1WZ
-Subject: Re: [Buildroot] [PATCH] linux: enable
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL on a few more architectures
+ header.a=rsa-sha256 header.s=google header.b=GTlKR2wf
+Subject: Re: [Buildroot] [PATCH] package/liblog4c-localtime: fix build with
+ GCC 15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,44 +123,79 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> This commit is an extension of
-> 5dae966a30c5485e45b94f750a739d36810cba4c ("linux: select
-> BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL when needed"), which solves
-> autobuilder issues by making sure that
-> BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL is automatically enabled on some
-> architecture if the default architecture defconfig is used and the
-> latest kernel is built (which is what happens in the autobuilders).
+> Add simple patch, submitted upstream, to fix the build with GCC 15.x:
 > 
-> This new commit adds BR2_or1k and BR2_riscv to the list to fix
-> autobuilder issues.
+> userloc_formatter.c: In function 'userloc_format':
+> userloc_formatter.c:30:5: error: implicit declaration of function 'sd_debug' [-Wimplicit-function-declaration]
+>    30 |     sd_debug("Formatter s13_userloc checking location info for userdata %X",a_event->evt_loc->loc_data);
+>       |     ^~~~~~~~
+> make[4]: *** [Makefile:519: userloc_formatter.lo] Error 1
 > 
 > Fixes:
 > 
->   https://autobuild.buildroot.org/results/1a739eee39bdef8986279a9e21f8637fbe263353/ (or1k)
->   https://autobuild.buildroot.org/results/acb62b7a486f3f8e99c6cc2b52b0c259bfa18a0e/ (riscv)
+>   https://autobuild.buildroot.org/results/dab64025e6a1688d5fadc2b9bd3738a2c886aa9c/
+> 
+> Considering the level of upstream maintenance, we did hesitate with
+> dropping the package, but as the fix was quite simple, we did the fix
+> instead.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Applied to 2025.02.x & 2025.05.x. Thanks
 
 > ---
->  linux/Config.in | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  ...c_formatter.c-drop-usage-of-sd_debug.patch | 42 +++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 package/liblog4c-localtime/0006-examples-userloc_formatter.c-drop-usage-of-sd_debug.patch
 > 
-> diff --git a/linux/Config.in b/linux/Config.in
-> index 7f90c566b0..27321eee50 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -176,7 +176,8 @@ config BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG
->  	# version. This is mainly needed to fix autobuilder testing.
->  	select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL if \
->  	       BR2_LINUX_KERNEL_LATEST_VERSION && \
-> -	       (BR2_aarch64 || BR2_aarch64_be || BR2_arcle || BR2_arceb || BR2_sparc || BR2_x86_64)
-> +	       (BR2_aarch64 || BR2_aarch64_be || BR2_arcle || BR2_arceb || \
-> +	        BR2_or1k || BR2_riscv || BR2_sparc || BR2_x86_64)
->  	help
->  	  This option will use the default configuration for the
->  	  selected architecture. I.e, it is equivalent to running
+> diff --git a/package/liblog4c-localtime/0006-examples-userloc_formatter.c-drop-usage-of-sd_debug.patch b/package/liblog4c-localtime/0006-examples-userloc_formatter.c-drop-usage-of-sd_debug.patch
+> new file mode 100644
+> index 0000000000..8f54d1d6fd
+> --- /dev/null
+> +++ b/package/liblog4c-localtime/0006-examples-userloc_formatter.c-drop-usage-of-sd_debug.patch
+> @@ -0,0 +1,42 @@
+> +From 1dfc4a60ebf96766b682c464ae69c453ce15105a Mon Sep 17 00:00:00 2001
+> +From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> +Date: Tue, 19 Aug 2025 20:04:09 +0200
+> +Subject: [PATCH] examples/userloc_formatter.c: drop usage of sd_debug()
+> +
+> +With recent compilers, log4c-localtime fails to build with:
+> +
+> +userloc_formatter.c: In function 'userloc_format':
+> +userloc_formatter.c:30:5: error: implicit declaration of function 'sd_debug' [-Wimplicit-function-declaration]
+> +   30 |     sd_debug("Formatter s13_userloc checking location info for userdata %X",a_event->evt_loc->loc_data);
+> +      |     ^~~~~~~~
+> +make[4]: *** [Makefile:519: userloc_formatter.lo] Error 1
+> +
+> +This function seems to be an internal function of the log4c-localtime
+> +library, and is not used by any other example application. Since it's
+> +only used to print some debugging information, we simply get rid of
+> +the problematic code.
+> +
+> +Upstream: https://github.com/rcmadruga/log4c-localtime/pull/2
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> +---
+> + examples/userloc_formatter.c | 2 --
+> + 1 file changed, 2 deletions(-)
+> +
+> +diff --git a/examples/userloc_formatter.c b/examples/userloc_formatter.c
+> +index 4299a48..7bcf0e9 100644
+> +--- a/examples/userloc_formatter.c
+> ++++ b/examples/userloc_formatter.c
+> +@@ -27,10 +27,8 @@ static const char* userloc_format(
+> +     static char buffer[4096];
+> +     user_locinfo_t* uloc = NULL;
+> + 
+> +-    sd_debug("Formatter s13_userloc checking location info for userdata %X",a_event->evt_loc->loc_data);
+> +     if (a_event->evt_loc->loc_data != NULL)
+> +     {
+> +-	sd_debug("Formatter s13_userloc getting a valid user location info pointer");
+> +         uloc = (user_locinfo_t*) a_event->evt_loc->loc_data;
+> +         sprintf(buffer, "[%s][HOST:%s][PID:%i][FILE:%s][LINE:%i][MSG:%s]",
+> + 		a_event->evt_category,  
+> +-- 
+> +2.50.1
+> +
 > -- 
 > 2.50.1
 > 
