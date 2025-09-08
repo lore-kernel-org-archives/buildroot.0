@@ -1,52 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0871FCAC581
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 10:39:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 265ACCA1013
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 10:39:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D1F0584625;
-	Mon,  8 Sep 2025 10:39:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F252D61436;
+	Mon,  8 Sep 2025 10:39:46 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JSSaWa5yGWAv; Mon,  8 Sep 2025 10:39:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16B1E615A5
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 16B1E615A5;
+	Mon,  8 Sep 2025 10:39:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E8FA91D9
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:39:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DB24884A95
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:39:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ur0svI90h6Bb; Mon,  8 Sep 2025 10:39:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D70A6846F1
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D70A6846F1;
-	Mon,  8 Sep 2025 10:39:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0B32B1D9
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:39:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 307AD42B83
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:39:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 692w_BCE0XmR for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 10:39:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8481942B9F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8481942B9F
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:39:08 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 82C0083A90; Mon,  8 Sep 2025 10:39:08 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 8 Sep 2025 12:37:31 +0200
-X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 633f0731e11ca87a141469aae28262046156980c
-X-Git-Newrev: 7172f0642c10b79ec3fd250c9311b69e7abc03e4
-X-Patchwork-Hint: ignore
-Message-Id: <20250908103908.82C0083A90@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/iperf3: add patch
- to fix CVE-2025-54349
+ id GZlYM1tFnjQn for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 10:39:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D8F9F83F0E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8F9F83F0E
+Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D8F9F83F0E
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:39:43 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 7C9D5B9785B8; Mon,  8 Sep 2025 12:39:41 +0200 (CEST)
+Message-ID: <9fc07256-8fa9-4029-b2e2-e04e61f8d582@rnout.be>
+Date: Mon, 8 Sep 2025 12:39:39 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>
+References: <20250904174539.596715-1-thomas.perale@mind.be>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20250904174539.596715-1-thomas.perale@mind.be>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rnout.be; s=dkim; 
+ t=1757327981; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=CBrArom+bQU8gJkhBVegsq5gXwB6bsa/4vSdawnxLr4=;
+ b=Vxbsk+8FS77jm0l6Yq2nfvGhKp+0gFPvSmzBak1V9VIw5hiK1d0Mx+oJAiUQhjxb2Gi6hv
+ 5296c8qxkiZhDb9d70/Qry/Tc/KJVX19g+FONOazDuocVRXI5OlQNVwUkiYON1EPQcTFmi
+ 1Ug5CwNNPFl4T4b6CSotGVkNd1qnIId9CpWaqF8D5FprCB2tSSJ/nh3a4i3OEj5COPD8eZ
+ Q8CsAGff+FKPhVKiN8M3vBTY/mXnPsA4QGVqhZtdcUGDt79Dpv2QgYxNPnCSMHF97bLA1W
+ YyadZQvRjbEEuhY4odj5FmQge3tkMrP2wdXgbNROrLF7QX1ODvtzuYmeOXm33Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=Vxbsk+8F
+Subject: Re: [Buildroot] [2025.02.x,
+ PATCH 1/1] package/ipset: fix build w/ musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,146 +80,102 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7172f0642c10b79ec3fd250c9311b69e7abc03e4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fixes the following vulnerability:
 
-- CVE-2025-54349
+On 04/09/2025 19:45, Thomas Perale via buildroot wrote:
+> When building ipset with musl libc the following error appeared on the
+> autobuilder in 2025.02.x:
+> 
+> ```
+> ipset.c: In function 'main':
+> ipset.c:35:21: error: implicit declaration of function 'basename' [-Wimplicit-function-declaration]
+>     35 |         if (!strcmp(basename(argv[0]), "ipset-translate")) {
+>        |                     ^~~~~~~~
+> ipset.c:35:21: error: passing argument 1 of 'strcmp' makes pointer from integer without a cast [-Wint-conversion]
+>     35 |         if (!strcmp(basename(argv[0]), "ipset-translate")) {
+>        |                     ^~~~~~~~~~~~~~~~~
+>        |                     |
+>        |                     int
+> In file included from ipset.c:13:
+> ```
+> 
+> This error can be reproduced with:
+> 
+> ```
+> cat >.config <<EOF
+> BR2_aarch64=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_MUSL_BLEEDING_EDGE=y
+> BR2_PACKAGE_IPSET=y
+> EOF
+> make olddefconfig
+> make ipset
+> ```
+> 
+> This patch adds the upstream commit [1], that fixes this issue by
+> including explicitely `libgen.h`. This patch is part of the master
+> branch since commit [2].
+> 
+> [1] https://git.netfilter.org/ipset/commit/?id=316f592ddc547c28388da4e7cb7c5c8f89cd3591
+> [2] 8fdbbefa08 package/ipset: bump to version 7.23
+> 
+> Fixes: https://autobuild.buildroot.org/results/930/930802ecc324c4cfc697191aa6a68642a4188e7b
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
-    In iperf before 3.19.1, iperf_auth.c has an off-by-one error and
-    resultant heap-based buffer overflow.
+  Applied to 2025.02.x, thanks.
 
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2025-54349
-  - https://github.com/esnet/iperf/commit/4e5313bab0b9b3fe03513ab54f722c8a3e4b7bdf
+  Regards,
+  Arnout
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
----
- ...0001-Fix-off-by-one-head-overflow-in-auth.patch | 93 ++++++++++++++++++++++
- package/iperf3/iperf3.mk                           |  3 +
- 2 files changed, 96 insertions(+)
+> ---
+>   ...cit-declaration-of-function-basename.patch | 31 +++++++++++++++++++
+>   1 file changed, 31 insertions(+)
+>   create mode 100644 package/ipset/0001-ipset-fix-implicit-declaration-of-function-basename.patch
+> 
+> diff --git a/package/ipset/0001-ipset-fix-implicit-declaration-of-function-basename.patch b/package/ipset/0001-ipset-fix-implicit-declaration-of-function-basename.patch
+> new file mode 100644
+> index 0000000000..c01fdaf671
+> --- /dev/null
+> +++ b/package/ipset/0001-ipset-fix-implicit-declaration-of-function-basename.patch
+> @@ -0,0 +1,31 @@
+> +From 316f592ddc547c28388da4e7cb7c5c8f89cd3591 Mon Sep 17 00:00:00 2001
+> +From: Mike Pagano <mpagano@gentoo.org>
+> +Date: Fri, 30 Aug 2024 11:31:19 -0400
+> +Subject: ipset: Fix implicit declaration of function basename
+> +
+> +basename(3) is defined in libgen.h in MUSL.
+> +Include libgen.h where basename(3) is used.
+> +
+> +Signed-off-by: Mike Pagano <mpagano@gentoo.org>
+> +Acked-by: Phil Sutter <phil@nwl.cc>
+> +Signed-off-by: Jozsef Kadlecsik <kadlec@netfilter.org>
+> +Upstream: https://git.netfilter.org/ipset/commit/?id=316f592ddc547c28388da4e7cb7c5c8f89cd3591
+> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> +---
+> + src/ipset.c | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/src/ipset.c b/src/ipset.c
+> +index 162f477..d7733bf 100644
+> +--- a/src/ipset.c
+> ++++ b/src/ipset.c
+> +@@ -15,6 +15,7 @@
+> + #include <config.h>
+> + #include <libipset/ipset.h>		/* ipset library */
+> + #include <libipset/xlate.h>		/* translate to nftables */
+> ++#include <libgen.h>
+> +
+> + int
+> + main(int argc, char *argv[])
+> +--
+> +cgit v1.2.3
 
-diff --git a/package/iperf3/0001-Fix-off-by-one-head-overflow-in-auth.patch b/package/iperf3/0001-Fix-off-by-one-head-overflow-in-auth.patch
-new file mode 100644
-index 0000000000..38fe1327ce
---- /dev/null
-+++ b/package/iperf3/0001-Fix-off-by-one-head-overflow-in-auth.patch
-@@ -0,0 +1,93 @@
-+From 4e5313bab0b9b3fe03513ab54f722c8a3e4b7bdf Mon Sep 17 00:00:00 2001
-+From: Sarah Larsen <swlarsen@es.net>
-+Date: Wed, 25 Jun 2025 15:11:03 +0000
-+Subject: [PATCH] Fix off-by-one heap overflow in auth.
-+
-+Reported by Han Lee (Apple Information Security)
-+
-+CVE: CVE-2025-54349
-+Upstream: https://github.com/esnet/iperf/commit/4e5313bab0b9b3fe03513ab54f722c8a3e4b7bdf
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ src/iperf_auth.c | 18 +++++++++++++-----
-+ 1 file changed, 13 insertions(+), 5 deletions(-)
-+
-+diff --git a/src/iperf_auth.c b/src/iperf_auth.c
-+index b9f2bc0f2..632f03d24 100644
-+--- a/src/iperf_auth.c
-++++ b/src/iperf_auth.c
-+@@ -288,6 +288,7 @@ int encrypt_rsa_message(const char *plaintext, EVP_PKEY *public_key, unsigned ch
-+ }
-+ 
-+ int decrypt_rsa_message(const unsigned char *encryptedtext, const int encryptedtext_len, EVP_PKEY *private_key, unsigned char **plaintext, int use_pkcs1_padding) {
-++    int ret =0;
-+ #if OPENSSL_VERSION_MAJOR >= 3
-+     EVP_PKEY_CTX *ctx;
-+ #else
-+@@ -310,7 +311,8 @@ int decrypt_rsa_message(const unsigned char *encryptedtext, const int encryptedt
-+     keysize = RSA_size(rsa);
-+ #endif
-+     rsa_buffer  = OPENSSL_malloc(keysize * 2);
-+-    *plaintext = (unsigned char*)OPENSSL_malloc(keysize);
-++    // Note: +1 for NULL
-++    *plaintext = (unsigned char*)OPENSSL_malloc(keysize + 1);
-+ 
-+     BIO *bioBuff   = BIO_new_mem_buf((void*)encryptedtext, encryptedtext_len);
-+     rsa_buffer_len = BIO_read(bioBuff, rsa_buffer, keysize * 2);
-+@@ -320,13 +322,15 @@ int decrypt_rsa_message(const unsigned char *encryptedtext, const int encryptedt
-+         padding = RSA_PKCS1_PADDING;
-+     }
-+ #if OPENSSL_VERSION_MAJOR >= 3
-++
-+     plaintext_len = keysize;
-+     EVP_PKEY_decrypt_init(ctx);
-+-    int ret = EVP_PKEY_CTX_set_rsa_padding(ctx, padding);
-++
-++    ret = EVP_PKEY_CTX_set_rsa_padding(ctx, padding);
-+     if (ret < 0){
-+         goto errreturn;
-+     }
-+-    EVP_PKEY_decrypt(ctx, *plaintext, &plaintext_len, rsa_buffer, rsa_buffer_len);
-++    ret = EVP_PKEY_decrypt(ctx, *plaintext, &plaintext_len, rsa_buffer, rsa_buffer_len);
-+     EVP_PKEY_CTX_free(ctx);
-+ #else
-+     plaintext_len = RSA_private_decrypt(rsa_buffer_len, rsa_buffer, *plaintext, rsa, padding);
-+@@ -337,7 +341,7 @@ int decrypt_rsa_message(const unsigned char *encryptedtext, const int encryptedt
-+     BIO_free(bioBuff);
-+ 
-+     /* Treat a decryption error as an empty string. */
-+-    if (plaintext_len < 0) {
-++    if (plaintext_len <= 0) {
-+         plaintext_len = 0;
-+     }
-+ 
-+@@ -386,24 +390,28 @@ int decode_auth_setting(int enable_debug, const char *authtoken, EVP_PKEY *priva
-+     int plaintext_len;
-+     plaintext_len = decrypt_rsa_message(encrypted_b64, encrypted_len_b64, private_key, &plaintext, use_pkcs1_padding);
-+     free(encrypted_b64);
-+-    if (plaintext_len < 0) {
-++    if (plaintext_len <= 0) {
-+         return -1;
-+     }
-++
-+     plaintext[plaintext_len] = '\0';
-+ 
-+     char *s_username, *s_password;
-+     s_username = (char *) calloc(plaintext_len, sizeof(char));
-+     if (s_username == NULL) {
-++        OPENSSL_free(plaintext);
-+ 	return -1;
-+     }
-+     s_password = (char *) calloc(plaintext_len, sizeof(char));
-+     if (s_password == NULL) {
-++        OPENSSL_free(plaintext);
-+ 	free(s_username);
-+ 	return -1;
-+     }
-+ 
-+     int rc = sscanf((char *) plaintext, auth_text_format, s_username, s_password, &utc_seconds);
-+     if (rc != 3) {
-++        OPENSSL_free(plaintext);
-+ 	free(s_password);
-+ 	free(s_username);
-+ 	return -1;
-diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
-index 744ee070a4..c5efb1d784 100644
---- a/package/iperf3/iperf3.mk
-+++ b/package/iperf3/iperf3.mk
-@@ -11,6 +11,9 @@ IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
- IPERF3_LICENSE_FILES = LICENSE
- IPERF3_CPE_ID_VENDOR = es
- 
-+# 0001-Fix-off-by-one-head-overflow-in-auth.patch
-+IPERF3_IGNORE_CVES += CVE-2025-54349
-+
- IPERF3_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
