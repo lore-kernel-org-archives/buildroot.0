@@ -4,68 +4,106 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A6C4CA1013
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 10:40:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FE66CAC586
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 10:55:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6006F41902;
-	Mon,  8 Sep 2025 10:40:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C63F425DD;
+	Mon,  8 Sep 2025 10:55:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gI04RFZaAl04; Mon,  8 Sep 2025 10:40:57 +0000 (UTC)
+ id kzkPlCy5Wkb2; Mon,  8 Sep 2025 10:55:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 653A741966
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 065C9425ED
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 653A741966;
-	Mon,  8 Sep 2025 10:40:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 065C9425ED;
+	Mon,  8 Sep 2025 10:55:48 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 70FA01D9
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:40:56 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 8E9F71D9
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:55:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 63258414DE
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:40:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 789F9423C1
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:55:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dRgQFOVgwhrB for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 10:40:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2423B414BD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2423B414BD
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2423B414BD
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:40:54 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 5844FB978681; Mon,  8 Sep 2025 12:40:52 +0200 (CEST)
-Message-ID: <1d6fa4d4-8ccd-4f14-9e8a-10a9ada69d56@rnout.be>
-Date: Mon, 8 Sep 2025 12:40:50 +0200
+ id R-36ubkWlplr for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 10:55:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B8AD8423BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8AD8423BF
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B8AD8423BF
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:55:44 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id
+ ffacd0b85a97d-3e34dbc38easo1630041f8f.1
+ for <buildroot@buildroot.org>; Mon, 08 Sep 2025 03:55:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1757328942; x=1757933742;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=Ka8lmHJ+2cisXQJK5c798XT1IwgYh5fWV1lAuKVE0ek=;
+ b=kFLXDTTnCFRlgn0Rl+NgkQGNwxEhCT3R1ZXkRyg6GZR5pZXP9BySeMJCn3BGayGUT0
+ Jjpmn74akWG5aq81kflOSAzqNDEku3LYHOLqi9hOqZH2JjdxBpdVH/BiTrJmr2XofV8I
+ XmmOKJWJbQicVRiMOH8/M48BnluwqpugMQfYszq2Go6W5BbwsPPAeLrFQ0hZERzVLXnJ
+ g0FLvtHkTfnFONoPkiquUl30QXl7B3uoPHdNHAR17jyravhXPkWrBP1xfcmQ/7Hi5l5C
+ +kvu7/NEB4oTZOU98xHhoQQmSLJB5TXoh6X3d5JnEwKYr6Bp2wlipwk7IuiOiyrvzdSj
+ nVpQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXxgFzQHLLLl+BOU2tzIvbHAX1rVypFThYoxxe8oD+aI7OyiZVxli5Wh7RFWRgfDRHx3JXwRHkdB+c=@buildroot.org
+X-Gm-Message-State: AOJu0YxstmwfR545TaZgeTsMbBAPRxHYZa7rh6CrONggpCfHdpA91gUj
+ 5Y0HEaYXGKnsTDsm/ElzPHwxdbCivLD9j6QgoIjLJUSaJp+utF26KeAHEz+iVjIMNOU=
+X-Gm-Gg: ASbGncuNbeL6kuUYRRZ5Z85cZko6MFBwzDEiJJ2xJnztVYvj1SmIbVvPSiMdmYt1HFS
+ EvmuoNSKQmWAucc8V9MSkubSJm57ncbjtzzL/xkzRKnOC88423Dya/9dre7jUl9oHcnqbDKkP66
+ 9vW2z8d9jyUfirzYp2OJarMezK1BTonwyKhRfvisxEaBt/qZiUEh3jbmRhdYMQnNuVtGGmMzcYI
+ Sl42p7tXekgB27XzheTtj1KRc33khqBvHA1GcPVKXWWU5Q8U2O5+QJypc/B+BLdOK6329Uvwlys
+ dGys+YH2EKQWqijAIb0G7hfto4WSTPYQqBXQZPgRqfeozJwAInP1aMyMqoyx75hcfsRknkW+ZdE
+ AbxEl7ZE6DEd+8vnhW9PpH/va+mIyoxayK13opK69WFa8CsaOxKz6GNZFZDsUrMUk6+V5KQkWIq
+ 5ixe6cw/DKbdmAxa+fM7whfWo0
+X-Google-Smtp-Source: AGHT+IGXsj95f9ZFORRuhRfIK24Do+U5qtOQ57bWe2FzdBT6kQFs2r1aenpKVnKhl1S9zD4MH160Cw==
+X-Received: by 2002:a05:6000:220f:b0:3cb:3ca5:8717 with SMTP id
+ ffacd0b85a97d-3e643180594mr6228877f8f.23.1757328942024; 
+ Mon, 08 Sep 2025 03:55:42 -0700 (PDT)
+Received: from sah2lpt241.local.essensium.com
+ (ip-94-140-185-241.reverse.destiny.be. [94.140.185.241])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3e74893acecsm3875602f8f.36.2025.09.08.03.55.41
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 08 Sep 2025 03:55:41 -0700 (PDT)
+To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	buildroot@buildroot.org
+Date: Mon,  8 Sep 2025 12:55:40 +0200
+Message-Id: <20250908105540.681404-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250811-php-lua-v3-1-f238174c6e4a@bootlin.com>
+References: <20250811-php-lua-v3-1-f238174c6e4a@bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
-References: <20250905074834.470035-1-thomas.perale@mind.be>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <20250905074834.470035-1-thomas.perale@mind.be>
-X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1757328052; h=from:subject:date:message-id:to:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=Jx1V9Ig2Ui1JC/8cXt0Sb23Mn/8jxNaoXikjaeEyH2o=;
- b=Ftq5MwXr3IiwPcJpTpOMatTNBgSpm8AZKsQMbrlhgvy+RyDWaaQZQD3qycXQFCXpEwx5Ss
- 4vVVnGlyaRb+A0h9MMrqkKPD/AJOK91kM1+duftML5VG9yvtQhqNVqOr9rNMJ1lYAcO0Ne
- 8lP8402i/WlMyNGHTyzZXii/aiuLkhdVLpSLQJz14k2YbhvGjvpNY/UjKfIuxapeSKRqlN
- m7jfBpggXiEUXtdXww0b5Z1foqVDGrubxPyFZASn4Wte+JSbnCcHhI2hTdtNg3iH5/UM2c
- zOxOoLi2HFzlxAmPMWfK8+hbF7j5UOEcgeaBEBYkgZ9eQLiXj1gLP9UFCdsnbA==
+ d=mind.be; s=google; t=1757328942; x=1757933742; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Ka8lmHJ+2cisXQJK5c798XT1IwgYh5fWV1lAuKVE0ek=;
+ b=NnnXbY3LzRIGJYRjcZ6Hvn3qIvPrqjZw6JogwsaT+8uKDXQLNJ4+Sczsirs5flapaM
+ BR80hqhQFbui5O2lRAJJ0Mkgn8NjIjKxewgVjZThBPtjY9C7oErmlx0mSoTipXJWMYcq
+ ugX4fFrqHdoydYdZ2oGZ94J9na4dLjSy785SPV/n4LLmV2fS71BGmthrYKOPBY5Y8Uh3
+ xAilDVS4S5o8BqYvQissp5oEHpGIlh69jw0bvBSvsi4Qu1iADsn3/q5UfTvuEn70b9OL
+ PIlYDVg6TAY+pCF9hDMrT4aia7LdAp7hS3QFZ5g9ceY4Tor7qK63y4iGq0V54Xt1QMvb
+ F20w==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=Ftq5MwXr
-Subject: Re: [Buildroot] [2025.02.x,
- PATCH 1/2] package/iperf3: add patch to fix CVE-2025-54349
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=NnnXbY3L
+Subject: Re: [Buildroot] [PATCH v3] package/php-lua: fix build with
+ PHP8/GCC14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,155 +115,126 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 05/09/2025 09:48, Thomas Perale via buildroot wrote:
-> Fixes the following vulnerability:
-> 
-> - CVE-2025-54349
-> 
->      In iperf before 3.19.1, iperf_auth.c has an off-by-one error and
->      resultant heap-based buffer overflow.
-> 
-> For more information, see:
->    - https://www.cve.org/CVERecord?id=CVE-2025-54349
->    - https://github.com/esnet/iperf/commit/4e5313bab0b9b3fe03513ab54f722c8a3e4b7bdf
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-
-  Applied both to 2025.02.x, thanks.
-
-  Regards,
-  Arnout
-
-> ---
->   ...Fix-off-by-one-head-overflow-in-auth.patch | 93 +++++++++++++++++++
->   package/iperf3/iperf3.mk                      |  3 +
->   2 files changed, 96 insertions(+)
->   create mode 100644 package/iperf3/0001-Fix-off-by-one-head-overflow-in-auth.patch
-> 
-> diff --git a/package/iperf3/0001-Fix-off-by-one-head-overflow-in-auth.patch b/package/iperf3/0001-Fix-off-by-one-head-overflow-in-auth.patch
-> new file mode 100644
-> index 0000000000..38fe1327ce
-> --- /dev/null
-> +++ b/package/iperf3/0001-Fix-off-by-one-head-overflow-in-auth.patch
-> @@ -0,0 +1,93 @@
-> +From 4e5313bab0b9b3fe03513ab54f722c8a3e4b7bdf Mon Sep 17 00:00:00 2001
-> +From: Sarah Larsen <swlarsen@es.net>
-> +Date: Wed, 25 Jun 2025 15:11:03 +0000
-> +Subject: [PATCH] Fix off-by-one heap overflow in auth.
-> +
-> +Reported by Han Lee (Apple Information Security)
-> +
-> +CVE: CVE-2025-54349
-> +Upstream: https://github.com/esnet/iperf/commit/4e5313bab0b9b3fe03513ab54f722c8a3e4b7bdf
-> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> +---
-> + src/iperf_auth.c | 18 +++++++++++++-----
-> + 1 file changed, 13 insertions(+), 5 deletions(-)
-> +
-> +diff --git a/src/iperf_auth.c b/src/iperf_auth.c
-> +index b9f2bc0f2..632f03d24 100644
-> +--- a/src/iperf_auth.c
-> ++++ b/src/iperf_auth.c
-> +@@ -288,6 +288,7 @@ int encrypt_rsa_message(const char *plaintext, EVP_PKEY *public_key, unsigned ch
-> + }
-> +
-> + int decrypt_rsa_message(const unsigned char *encryptedtext, const int encryptedtext_len, EVP_PKEY *private_key, unsigned char **plaintext, int use_pkcs1_padding) {
-> ++    int ret =0;
-> + #if OPENSSL_VERSION_MAJOR >= 3
-> +     EVP_PKEY_CTX *ctx;
-> + #else
-> +@@ -310,7 +311,8 @@ int decrypt_rsa_message(const unsigned char *encryptedtext, const int encryptedt
-> +     keysize = RSA_size(rsa);
-> + #endif
-> +     rsa_buffer  = OPENSSL_malloc(keysize * 2);
-> +-    *plaintext = (unsigned char*)OPENSSL_malloc(keysize);
-> ++    // Note: +1 for NULL
-> ++    *plaintext = (unsigned char*)OPENSSL_malloc(keysize + 1);
-> +
-> +     BIO *bioBuff   = BIO_new_mem_buf((void*)encryptedtext, encryptedtext_len);
-> +     rsa_buffer_len = BIO_read(bioBuff, rsa_buffer, keysize * 2);
-> +@@ -320,13 +322,15 @@ int decrypt_rsa_message(const unsigned char *encryptedtext, const int encryptedt
-> +         padding = RSA_PKCS1_PADDING;
-> +     }
-> + #if OPENSSL_VERSION_MAJOR >= 3
-> ++
-> +     plaintext_len = keysize;
-> +     EVP_PKEY_decrypt_init(ctx);
-> +-    int ret = EVP_PKEY_CTX_set_rsa_padding(ctx, padding);
-> ++
-> ++    ret = EVP_PKEY_CTX_set_rsa_padding(ctx, padding);
-> +     if (ret < 0){
-> +         goto errreturn;
-> +     }
-> +-    EVP_PKEY_decrypt(ctx, *plaintext, &plaintext_len, rsa_buffer, rsa_buffer_len);
-> ++    ret = EVP_PKEY_decrypt(ctx, *plaintext, &plaintext_len, rsa_buffer, rsa_buffer_len);
-> +     EVP_PKEY_CTX_free(ctx);
-> + #else
-> +     plaintext_len = RSA_private_decrypt(rsa_buffer_len, rsa_buffer, *plaintext, rsa, padding);
-> +@@ -337,7 +341,7 @@ int decrypt_rsa_message(const unsigned char *encryptedtext, const int encryptedt
-> +     BIO_free(bioBuff);
-> +
-> +     /* Treat a decryption error as an empty string. */
-> +-    if (plaintext_len < 0) {
-> ++    if (plaintext_len <= 0) {
-> +         plaintext_len = 0;
-> +     }
-> +
-> +@@ -386,24 +390,28 @@ int decode_auth_setting(int enable_debug, const char *authtoken, EVP_PKEY *priva
-> +     int plaintext_len;
-> +     plaintext_len = decrypt_rsa_message(encrypted_b64, encrypted_len_b64, private_key, &plaintext, use_pkcs1_padding);
-> +     free(encrypted_b64);
-> +-    if (plaintext_len < 0) {
-> ++    if (plaintext_len <= 0) {
-> +         return -1;
-> +     }
-> ++
-> +     plaintext[plaintext_len] = '\0';
-> +
-> +     char *s_username, *s_password;
-> +     s_username = (char *) calloc(plaintext_len, sizeof(char));
-> +     if (s_username == NULL) {
-> ++        OPENSSL_free(plaintext);
-> + 	return -1;
-> +     }
-> +     s_password = (char *) calloc(plaintext_len, sizeof(char));
-> +     if (s_password == NULL) {
-> ++        OPENSSL_free(plaintext);
-> + 	free(s_username);
-> + 	return -1;
-> +     }
-> +
-> +     int rc = sscanf((char *) plaintext, auth_text_format, s_username, s_password, &utc_seconds);
-> +     if (rc != 3) {
-> ++        OPENSSL_free(plaintext);
-> + 	free(s_password);
-> + 	free(s_username);
-> + 	return -1;
-> diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
-> index 744ee070a4..c5efb1d784 100644
-> --- a/package/iperf3/iperf3.mk
-> +++ b/package/iperf3/iperf3.mk
-> @@ -11,6 +11,9 @@ IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
->   IPERF3_LICENSE_FILES = LICENSE
->   IPERF3_CPE_ID_VENDOR = es
->   
-> +# 0001-Fix-off-by-one-head-overflow-in-auth.patch
-> +IPERF3_IGNORE_CVES += CVE-2025-54349
-> +
->   IPERF3_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
->   
->   ifeq ($(BR2_PACKAGE_OPENSSL),y)
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SW4gcmVwbHkgb2Y6Cj4gT24gYm90aCBCdWlsZHJvb3QgMjAyNS4wMi54IGFuZCBtYXN0ZXIgYnJh
+bmNoLCBwaHAtbHVhIGJ1aWxkIGZhaWxzIG9uCj4gdGhlIGZvbGxvd2luZyBlcnJvcjoKPiAKPiBs
+dWEuYzo4NjI6NDQ6IGVycm9yOiBhc3NpZ25tZW50IHRvICd6ZW5kX29iamVjdF93cml0ZV9wcm9w
+ZXJ0eV90JyB7YWthCj4gJ3N0cnVjdCBfenZhbF9zdHJ1Y3QgKiAoKikoc3RydWN0IF96ZW5kX29i
+amVjdCAqLCBzdHJ1Y3QgX3plbmRfc3RyaW5nICosCj4gc3RydWN0IF96dmFsX3N0cnVjdCAqLCB2
+b2lkICoqKSd9IGZyb20gaW5jb21wYXRpYmxlIHBvaW50ZXIgdHlwZSAndm9pZAo+ICgqKSh6dmFs
+ICosIHp2YWwgKiwgenZhbCAqLCB2b2lkICoqKScge2FrYSAndm9pZCAoKikoc3RydWN0IF96dmFs
+X3N0cnVjdAo+ICosIHN0cnVjdCBfenZhbF9zdHJ1Y3QgKiwgc3RydWN0IF96dmFsX3N0cnVjdCAq
+LCB2b2lkICoqKSd9Cj4gWy1XaW5jb21wYXRpYmxlLXBvaW50ZXItdHlwZXNdCj4gICA4NjIgfCAg
+ICAgICAgIGx1YV9vYmplY3RfaGFuZGxlcnMud3JpdGVfcHJvcGVydHkgPQo+IHBocF9sdWFfd3Jp
+dGVfcHJvcGVydHk7Cj4gICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgXgo+IGx1YS5jOjg2Mzo0NDogZXJyb3I6IGFzc2lnbm1lbnQgdG8gJ3plbmRfb2Jq
+ZWN0X3JlYWRfcHJvcGVydHlfdCcge2FrYQo+ICdzdHJ1Y3QgX3p2YWxfc3RydWN0ICogKCopKHN0
+cnVjdCBfemVuZF9vYmplY3QgKiwgc3RydWN0IF96ZW5kX3N0cmluZyAqLAo+IGludCwgIHZvaWQg
+KiosIHN0cnVjdCBfenZhbF9zdHJ1Y3QgKiknfSBmcm9tIGluY29tcGF0aWJsZSBwb2ludGVyIHR5
+cGUKPiAnenZhbCAqICgqKSh6dmFsICosIHp2YWwgKiwgaW50LCAgdm9pZCAqKiwgenZhbCAqKScg
+e2FrYSAnc3RydWN0Cj4gX3p2YWxfc3RydWN0ICogKCopKHN0cnVjdCBfenZhbF9zdHJ1Y3QgKiwg
+c3RydWN0IF96dmFsX3N0cnVjdCAqLCBpbnQsCj4gdm9pZCAqKiwgc3RydWN0IF96dmFsX3N0cnVj
+dCAqKSd9IFstV2luY29tcGF0aWJsZS1wb2ludGVyLXR5cGVzXQo+ICAgODYzIHwgICAgICAgICBs
+dWFfb2JqZWN0X2hhbmRsZXJzLnJlYWRfcHJvcGVydHkgID0KPiBwaHBfbHVhX3JlYWRfcHJvcGVy
+dHk7Cj4gICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+Xgo+IG1ha2VbMl06ICoqKiBbTWFrZWZpbGU6MjE0OiBsdWEubG9dIEVycm9yIDEKPiAKPiBUaGUg
+ZXJyb3IgY2FuIGJlIHJlcHJvZHVjZWQgd2l0aCB0aGUgZm9sbG93aW5nIG1pbmltYWwgZGVmY29u
+ZmlnOgo+IAo+IEJSMl9hcm09eQo+IEJSMl9jb3J0ZXhfYTk9eQo+IEJSMl9BUk1fRU5BQkxFX05F
+T049eQo+IEJSMl9BUk1fRU5BQkxFX1ZGUD15Cj4gQlIyX0FSTV9GUFVfTkVPTj15Cj4gQlIyX1RP
+T0xDSEFJTl9FWFRFUk5BTD15Cj4gQlIyX1RPT0xDSEFJTl9FWFRFUk5BTF9CT09UTElOPXkKPiBC
+UjJfUEFDS0FHRV9MVUE9eQo+IEJSMl9QQUNLQUdFX1BIUD15Cj4gQlIyX1BBQ0tBR0VfUEhQX0xV
+QT15Cj4gCj4gVGhpcyBidWlsZCBmYWlsdXJlIGlzIHRoZSByZXN1bHQgb2YgdHdvIGV2ZW50cy9j
+b25kaXRpb25zOgo+IC0gdGhlIHVwZGF0ZSB0byBQSFA4IGhhcyBjaGFuZ2VkIHRoZSBwcm90b3R5
+cGUgZm9yCj4gICB6ZW5kX29iamVjdF9yZWFkX3Byb3BlcnR5X3QgKHNlZSBbMV0pLiBCdXQgYXQg
+dGhpcyB0aW1lLCBwaHAtbHVhIGp1c3QKPiAgIGdlbmVyYXRlZCBhIG5ldyB3YXJuaW5nICgtV2lu
+Y29tcGF0aWJsZS1wb2ludGVyLXR5cGVzKQo+IC0gdXNpbmcgYm9vdGxpbiBibGVlZGluZy1lZGdl
+IHRvb2xjaGFpbiBicmluZ3MgaW4gR0NDMTQsIHdoaWNoIG5vdyB0dXJucwo+ICAgdGhpcyB3YXJu
+aW5nIGludG8gYSBzeXN0ZW1hdGljIGVycm9yIChzZWUgWzJdKQo+IAo+IFRoaXMgaXNzdWUgaXMg
+c3RpbGwgcHJlc2VudCBvbiB0aGUgdXBzdHJlYW0gcmVwb3NpdG9yeSwgYnV0IGl0IGhhcyBiZWVu
+Cj4gZml4ZWQgb24gb25lIG9mIGl0cyBmb3Jrcy4gQnJpbmcgdGhlIHJlbGV2YW50IHBhdGNoIGZy
+b20gdGhlIGZvcmsgdG8KPiBhbGxvdyBidWlsZGluZyBwaHAtbHVhLgo+IAo+IFsxXSBodHRwczov
+L2dpdGh1Yi5jb20vcGhwL3BocC1zcmMvY29tbWl0LzkxZWY0MTI0ZTU2Cj4gWzJdIGh0dHBzOi8v
+Z2NjLmdudS5vcmcvZ2NjLTE0L3BvcnRpbmdfdG8uaHRtbCNpbmNvbXBhdGlibGUtcG9pbnRlci10
+eXBlcwo+IAo+IFNpZ25lZC1vZmYtYnk6IEFsZXhpcyBMb3Rob3LDqSA8YWxleGlzLmxvdGhvcmVA
+Ym9vdGxpbi5jb20+CgpBcHBsaWVkIHRvIDIwMjUuMDIueCAmIDIwMjUuMDUueC4gVGhhbmtzCgo+
+IC0tLQo+IENoYW5nZXMgaW4gdjM6Cj4gLSBBZGRlZCBlbXB0eSBVcHN0cmVhbSB0YWcKPiAtIExp
+bmsgdG8gdjI6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL3IvMjAyNTA4MDYtcGhwLWx1YS12Mi0x
+LWE3M2ZhYWQ5MzllOUBib290bGluLmNvbQo+IAo+IENoYW5nZXMgaW4gdjI6Cj4gLSB1cGRhdGUg
+Y29tbWl0IHRpdGxlIAo+IC0gYWRkIG1vcmUgZGV0YWlscyBhYm91dCB0aGUgY29uZGl0aW9ucyBs
+ZWFkaW5nIHRvIHRoZSBidWlsZCBmYWlsdXJlCj4gLSBhZGQgbWluaW1hbCBkZWZjb25maWcKPiAt
+IExpbmsgdG8gdjE6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL3IvMjAyNTA4MDYtcGhwLWx1YS12
+MS0xLWUxZjUyNGZlZDBhNUBib290bGluLmNvbQo+IC0tLQo+ICAuLi4td3JpdGUtcHJvcGVybHkt
+cmVhZC1wcm9wZXJ0eS13YXMtY2hhbmdlZC5wYXRjaCB8IDc5ICsrKysrKysrKysrKysrKysrKysr
+KysKPiAgMSBmaWxlIGNoYW5nZWQsIDc5IGluc2VydGlvbnMoKykKPiAKPiBkaWZmIC0tZ2l0IGEv
+cGFja2FnZS9waHAtbHVhLzAwMDMtcGhwOC1TaWduYXR1cmUtb2Ytd3JpdGUtcHJvcGVybHktcmVh
+ZC1wcm9wZXJ0eS13YXMtY2hhbmdlZC5wYXRjaCBiL3BhY2thZ2UvcGhwLWx1YS8wMDAzLXBocDgt
+U2lnbmF0dXJlLW9mLXdyaXRlLXByb3Blcmx5LXJlYWQtcHJvcGVydHktd2FzLWNoYW5nZWQucGF0
+Y2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw
+MDAwMDAwMDAwMDAwMDAwMDAuLmMxMzU3YjU5MWI1Yjc5NGIxZWVjZjdjYjAyNjA5YTIxZGU2MTVi
+NGMKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9waHAtbHVhLzAwMDMtcGhwOC1TaWdu
+YXR1cmUtb2Ytd3JpdGUtcHJvcGVybHktcmVhZC1wcm9wZXJ0eS13YXMtY2hhbmdlZC5wYXRjaAo+
+IEBAIC0wLDAgKzEsNzkgQEAKPiArRnJvbSBkZTEwNjhkNjM0NTE5YWJmMjQ2MWRhYzk0MjdiNWZm
+MjRiNjYwM2FmIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+ICtGcm9tOiBNaWtoYWlsIEdhbGFu
+aW4gPG1pa2hhaWwuZ2FsYW5pbkB0ZWFtLmJ1bWJsZS5jb20+Cj4gK0RhdGU6IFR1ZSwgMjQgQXVn
+IDIwMjEgMDg6Mjg6NDcgKzAxMDAKPiArU3ViamVjdDogW1BBVENIXSBwaHA4OiBTaWduYXR1cmUg
+b2Ygd3JpdGVfcHJvcGVydHkvcmVhZF9wcm9wZXJ0eSB3YXMgY2hhbmdlZAo+ICsgaW4gaHR0cHM6
+Ly9naXRodWIuY29tL3BocC9waHAtc3JjL2NvbW1pdC85MWVmNDEyNGU1Ngo+ICsKPiArVGFrZW4g
+ZnJvbSBodHRwczovL2dpdGh1Yi5jb20vYmFkb28vcGhwLWx1YS9wdWxsLzgKPiArCj4gK1Vwc3Ry
+ZWFtOiBuL2EKPiArU2lnbmVkLW9mZi1ieTogQWxleGlzIExvdGhvcsOpIDxhbGV4aXMubG90aG9y
+ZUBib290bGluLmNvbT4KPiArLS0tCj4gKyBsdWEuYyB8IDI4ICsrKysrKysrKysrKysrLS0tLS0t
+LS0tLS0tLS0KPiArIDEgZmlsZSBjaGFuZ2VkLCAxNCBpbnNlcnRpb25zKCspLCAxNCBkZWxldGlv
+bnMoLSkKPiArCj4gK2RpZmYgLS1naXQgYS9sdWEuYyBiL2x1YS5jCj4gK2luZGV4IGVkYzI4Njgu
+LjMyYzE0NzEgMTAwNzU1Cj4gKy0tLSBhL2x1YS5jCj4gKysrKyBiL2x1YS5jCj4gK0BAIC0yMjks
+NDYgKzIyOSw0NiBAQCB6ZW5kX29iamVjdCAqcGhwX2x1YV9jcmVhdGVfb2JqZWN0KHplbmRfY2xh
+c3NfZW50cnkgKmNlKQo+ICsgCj4gKyAvKioge3t7IHN0YXRpYyB6dmFsICogcGhwX2x1YV9yZWFk
+X3Byb3BlcnR5KHp2YWwgKm9iamVjdCwgenZhbCAqbWVtYmVyLCBpbnQgdHlwZSkKPiArICovCj4g
+Ky16dmFsICpwaHBfbHVhX3JlYWRfcHJvcGVydHkoenZhbCAqb2JqZWN0LCB6dmFsICptZW1iZXIs
+IGludCB0eXBlLCB2b2lkICoqY2FjaGVfc2xvdCwgenZhbCAqcnYpewo+ICstCWx1YV9TdGF0ZSAq
+TCA9IChaX0xVQVZBTF9QKG9iamVjdCkpLT5MOwo+ICstCXplbmRfc3RyaW5nICpzdHJfbWVtYmVy
+Owo+ICsrenZhbCAqcGhwX2x1YV9yZWFkX3Byb3BlcnR5KHplbmRfb2JqZWN0ICpvYmplY3QsIHpl
+bmRfc3RyaW5nICptZW1iZXIsIGludCB0eXBlLCB2b2lkICoqY2FjaGVfc2xvdCwgenZhbCAqcnYp
+ewo+ICsrCWx1YV9TdGF0ZSAqTCA9IHBocF9sdWFfb2JqX2Zyb21fb2JqKG9iamVjdCktPkw7Cj4g
+KyAKPiArIAlpZiAodHlwZSAhPSBCUF9WQVJfUikgewo+ICsgCQlaVkFMX05VTEwocnYpOwo+ICsg
+CQlyZXR1cm4gcnY7Cj4gKyAJfQo+ICsgCj4gKy0Jc3RyX21lbWJlciA9IHp2YWxfZ2V0X3N0cmlu
+ZyhtZW1iZXIpOwo+ICsgI2lmIChMVUFfVkVSU0lPTl9OVU0gPCA1MDIpCj4gKy0JbHVhX2dldGZp
+ZWxkKEwsIExVQV9HTE9CQUxTSU5ERVgsIFpTVFJfVkFMKHN0cl9tZW1iZXIpKTsKPiArKwlsdWFf
+Z2V0ZmllbGQoTCwgTFVBX0dMT0JBTFNJTkRFWCwgWlNUUl9WQUwobWVtYmVyKSk7Cj4gKyAjZWxz
+ZQo+ICstCWx1YV9nZXRnbG9iYWwoTCwgWlNUUl9WQUwoc3RyX21lbWJlcikpOwo+ICsrCWx1YV9n
+ZXRnbG9iYWwoTCwgWlNUUl9WQUwobWVtYmVyKSk7Cj4gKyAjZW5kaWYKPiArLQl6ZW5kX3N0cmlu
+Z19yZWxlYXNlKHN0cl9tZW1iZXIpOwo+ICsgCj4gKy0JcGhwX2x1YV9nZXRfenZhbF9mcm9tX2x1
+YShMLCAtMSwgb2JqZWN0LCBydik7Cj4gKysJenZhbCBsdWFfenZhbF9vYmplY3Q7Cj4gKysJWlZB
+TF9PQkooJmx1YV96dmFsX29iamVjdCwgb2JqZWN0KTsKPiArKwo+ICsrCXBocF9sdWFfZ2V0X3p2
+YWxfZnJvbV9sdWEoTCwgLTEsICZsdWFfenZhbF9vYmplY3QsIHJ2KTsKPiArIAlsdWFfcG9wKEws
+IDEpOwo+ICsrCj4gKyAJcmV0dXJuIHJ2Owo+ICsgfQo+ICsgLyogfX19ICovCj4gKyAKPiArIC8q
+KiB7e3sgc3RhdGljIHZvaWQgcGhwX2x1YV93cml0ZV9wcm9wZXJ0eSh6dmFsICpvYmplY3QsIHp2
+YWwgKm1lbWJlciwgenZhbCAqdmFsdWUpCj4gKyAqLwo+ICstc3RhdGljIHZvaWQgcGhwX2x1YV93
+cml0ZV9wcm9wZXJ0eSh6dmFsICpvYmplY3QsIHp2YWwgKm1lbWJlciwgenZhbCAqdmFsdWUsIHZv
+aWQgKioga2V5KSB7Cj4gKy0JbHVhX1N0YXRlICpMID0gKFpfTFVBVkFMX1Aob2JqZWN0KSktPkw7
+Cj4gKy0JemVuZF9zdHJpbmcgKnN0cl9tZW1iZXIgPSB6dmFsX2dldF9zdHJpbmcobWVtYmVyKTsK
+PiArK3N0YXRpYyB6dmFsKiBwaHBfbHVhX3dyaXRlX3Byb3BlcnR5KHplbmRfb2JqZWN0ICpvYmpl
+Y3QsIHplbmRfc3RyaW5nICptZW1iZXIsIHp2YWwgKnZhbHVlLCB2b2lkICoqIGtleSkgewo+ICsr
+CWx1YV9TdGF0ZSAqTCA9IHBocF9sdWFfb2JqX2Zyb21fb2JqKG9iamVjdCktPkw7Cj4gKyAKPiAr
+ICNpZiAoTFVBX1ZFUlNJT05fTlVNIDwgNTAyKQo+ICstCXBocF9sdWFfc2VuZF96dmFsX3RvX2x1
+YShMLCBtZW1iZXIpOwo+ICsrCWx1YV9wdXNobHN0cmluZyhMLCBaU1RSX1ZBTCh2YWwpLCBaU1RS
+X0xFTih2YWwpKTsKPiArIAlwaHBfbHVhX3NlbmRfenZhbF90b19sdWEoTCwgdmFsdWUpOwo+ICsg
+Cj4gKyAJbHVhX3NldHRhYmxlKEwsIExVQV9HTE9CQUxTSU5ERVgpOwo+ICsgI2Vsc2UKPiArIAlw
+aHBfbHVhX3NlbmRfenZhbF90b19sdWEoTCwgdmFsdWUpOwo+ICstCWx1YV9zZXRnbG9iYWwoTCwg
+Wl9TVFJWQUxfUChtZW1iZXIpKTsKPiArKwlsdWFfc2V0Z2xvYmFsKEwsIFpTVFJfVkFMKG1lbWJl
+cikpOwo+ICsgI2VuZGlmCj4gKyAKPiArLQl6ZW5kX3N0cmluZ19yZWxlYXNlKHN0cl9tZW1iZXIp
+Owo+ICsrCXJldHVybiB2YWx1ZTsKPiArIH0KPiArIC8qIH19fSAqLwo+ICsgCj4gCj4gLS0tCj4g
+YmFzZS1jb21taXQ6IDJmZDUyMGM4ZDUyYjllMGVkNWUyNjM0MzgxM2ZkZDhkYmNhZGI0NWYKPiBj
+aGFuZ2UtaWQ6IDIwMjUwODA2LXBocC1sdWEtMzk4OTVkNGZlMTc5Cj4gCj4gQmVzdCByZWdhcmRz
+LAo+IC0tIAo+IEFsZXhpcyBMb3Rob3LDqSwgQm9vdGxpbgo+IEVtYmVkZGVkIExpbnV4IGFuZCBL
+ZXJuZWwgZW5naW5lZXJpbmcKPiBodHRwczovL2Jvb3RsaW4uY29tCj4gCj4gX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBs
+aXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
+cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
+bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
+dWlsZHJvb3QK
