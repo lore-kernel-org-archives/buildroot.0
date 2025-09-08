@@ -1,107 +1,110 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A943CAC581
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 891AACAC589
 	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 10:55:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0AB5684E7F;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5DC57615A5;
 	Mon,  8 Sep 2025 10:55:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l3zmZrW961Ox; Mon,  8 Sep 2025 10:55:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MNsnxaNHqhTQ; Mon,  8 Sep 2025 10:55:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5117584E48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76BED6175B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5117584E48;
-	Mon,  8 Sep 2025 10:55:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id CF037186
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:55:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 76BED6175B;
+	Mon,  8 Sep 2025 10:55:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 169861D9
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:55:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C122F84E33
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:55:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 089F46175B
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:55:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uyM52DN8wvnd for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 10:55:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id G_zyGsg9zY9o for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 10:55:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 77B0F84E38
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77B0F84E38
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 77B0F84E38
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:55:45 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-45de6415102so7659735e9.1
- for <buildroot@buildroot.org>; Mon, 08 Sep 2025 03:55:45 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org ABCBB61514
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABCBB61514
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id ABCBB61514
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 10:55:46 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-45debcea3aeso564015e9.3
+ for <buildroot@buildroot.org>; Mon, 08 Sep 2025 03:55:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1757328943; x=1757933743;
+ d=1e100.net; s=20230601; t=1757328944; x=1757933744;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=z8EfP/ams0xkVHXYk605HkUL1Fc1hlxqogEmb50yZTQ=;
- b=tDKWDbrXibZdPpki9aVmOpSXcSvcQmjbqedDKlfiXuFS7fAlPmOyM1/KOGBJ+8ffBM
- /Q4pGGOD7HTyKN5WahUlMU4Wx4K7x+ptIwvj3MFmTaU/vLLKbtlNZYERjopoOKJa1NAp
- ue0YXBNoEi4gQ5+NFQ67gCl/H5iMItqCCcNUkrxtWslGWRDzBO5fMeSKdzp0qMyq83/F
- uqE69c4Ju0xNefjDcwIDXOeFrh6KxMlS8WqdWU8qXl5NgHiTN2N5I6FTj/CmZjmUYWbo
- gEat2ezfYn+yRuZfeYP6HJ4zfAXtFiUyV1aBi6lvuD5qyehiT6mcyTsomsDn9FF7ppBD
- usIw==
-X-Gm-Message-State: AOJu0YywrObtco7HG8KJ4AiwN9EiV5Kj3uvxSk1G6Ajum72YB78YJ8jC
- kXpmrUISvA7HEMRUbrrEjbkoSKqIr97vwSFWcBJbmlAoNCrCoPgatSLCNr5l7XofKpW+qsb35Rn
- Vd3mvEc8=
-X-Gm-Gg: ASbGnctdSiMn1nDY26PeDlhaGzkQV5zm1QbBm8Zi43roM5qJY5eHkQ9M8/mJbFb7+8P
- SfLumLXj77CrLwMy5e3eEqOhRxVdupJVW57pv1KUKxunrgNQ6SQcDTE3LRRmreVG2Jh4+ZgqoWr
- 9hbFI1w8wD+Z8AC/ixe1MZrN829CLn79EQlCpe3OXCG212gR6pglRrP6EKWeTvNtGvcyYz40N2m
- 13uO2JPhcaNuQKo9wK0N8Ki4xA3y1gU0s38HnNvqu5ZDHfs1G5tReMA45TdYv2X6HIGDUiqH+Wv
- 20SjbTb6OcIaqRbPtpDrzEJrqwizFgmUenCoXBe+FdM5hKu2So3LOWN+z2jnrwIvkRvhtg28yU/
- kaM7GU3JMnackiYOs5RmA2KDNgMn3W/dam4OowvjidWiaaH6X/yzuPUGNi+iI7UQ265NM5pL9p7
- mh7/nwJAPmLbuUQoIxuRxpyFQA
-X-Google-Smtp-Source: AGHT+IFUstRm0d+yEP/sbgIh3l1WTXV6tJqqteT2GWizYKZ6nYg9gw2aoE6//9hg237UhoTxs0PdVQ==
-X-Received: by 2002:a5d:5f90:0:b0:3e7:4835:8eeb with SMTP id
- ffacd0b85a97d-3e74835953emr3038650f8f.53.1757328943261; 
- Mon, 08 Sep 2025 03:55:43 -0700 (PDT)
+ bh=uNg89y0E+eVTQQO/y4gVUq7ABpD1w9BdspaB107DXBs=;
+ b=QxLxofRqh+M+ebI5gKPmYiyJEm7vfFqQef5DmGDCrttcGXhYQtGpiUg9kT8tf8Rf/y
+ C9qzUtB/r26Sb0AjD2URYse/yMRPhJYvI5qgj4AuIfVAmoKN/BKsiAoBeKxpQoA9b2D8
+ 15WhS0waGkyUTncdcPv+pYnN8DVpg6EVU7AGbGDpIcj+WI/UI+BaxTSJAJ0Zw7z4VWtj
+ VqzDgNEZyP7prQQmSdiGH+lvl4Pxmvnc4z7LSxPL1f53OF/QMljYVh+APaWgHJ/1miew
+ Wue2Nvr09N/dhptmY7sbzrV8ALCykW+6LebzepmPbnVp4ZB9IXDHIbSW6//wIXJFNWGE
+ y7Lw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVWSvnBAgPJmmq1tfPtrMFMlyfXn2HeNi8jUgfz6VJH2ojg+vPgNCJPoGWDEA0q35es4/Usgmy2ueY=@buildroot.org
+X-Gm-Message-State: AOJu0YzMzKjOmkfvZPNREc1+HFm14vdd/YrtvDRFCNbTYUDjklas5kMz
+ exgk4FfSWWYMO57M9mM92JiaaIxK5PVUIgHgTPY9hVQX9i6LcaHOlLGZ+taJJn265myKDGu3XHv
+ HFtDK4ms=
+X-Gm-Gg: ASbGncv8DE4aQzIgpY/nHNo8RWkQn+++uzv5UeEXSwIN3sScVEQNQTpNAKNZaGbhL7o
+ hGWwdZKUjQXCDiGHHHqMqFxTLA1ZwbtNhD1mkBG7y/fjuQBp4wzcY5Gqjf2W4J/7CGuBfXZD6cQ
+ rdLcJfb52WgAVJn6tK1ZT3wQkQyOv0lqu0gkQkiF8GwEDiyHwJxbMinkP90US0g/D3T4my/h0rw
+ VAZiFLHghrZ05O+VOacnk/K9JBSvosI4O0GFdn/pkSNdBtIxie970VMwro0vrkeBO3OMdE1FRbS
+ 8Ad2ar9t/UoToZjMc3DGQiA9MYsZ6UYSlaiqxfb6JGZBE3cGTYJr8omPhgHKza9qbbvP5J/u6fH
+ 3GGj2As612+cC05ssunt7iV2g69B2ZkuQDk+nLo+UDKOsn2u8A772biToUt+sFZKKm3UzKUkt/U
+ 6rl6yYQuJNR+Cs3UmI0lvDqT3UMxVomqEjcwk=
+X-Google-Smtp-Source: AGHT+IFLje/cMu5vl6PxJ0fRiMxqxr4oXSaw+99oCvpfsAVkeRaEHKdRGhPVBwokmjavAxlSL/mDhQ==
+X-Received: by 2002:a05:600c:5247:b0:45b:615c:cd2 with SMTP id
+ 5b1f17b1804b1-45de2028b99mr55881995e9.8.1757328944380; 
+ Mon, 08 Sep 2025 03:55:44 -0700 (PDT)
 Received: from sah2lpt241.local.essensium.com
  (ip-94-140-185-241.reverse.destiny.be. [94.140.185.241])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-45dd6891d23sm141043835e9.4.2025.09.08.03.55.42
+ 5b1f17b1804b1-45dd6891d23sm141044495e9.4.2025.09.08.03.55.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 08 Sep 2025 03:55:42 -0700 (PDT)
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-Date: Mon,  8 Sep 2025 12:55:42 +0200
-Message-Id: <20250908105542.681457-1-thomas.perale@mind.be>
+ Mon, 08 Sep 2025 03:55:44 -0700 (PDT)
+To: Julien Olivain <ju.o@free.fr>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	buildroot@buildroot.org
+Date: Mon,  8 Sep 2025 12:55:43 +0200
+Message-Id: <20250908105543.681508-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250816091300.3104974-1-thomas.perale@mind.be>
-References: <20250816091300.3104974-1-thomas.perale@mind.be>
+In-Reply-To: <20250817163144.1217520-1-ju.o@free.fr>
+References: <20250817163144.1217520-1-ju.o@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1757328943; x=1757933743; darn=buildroot.org;
+ d=mind.be; s=google; t=1757328944; x=1757933744; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=z8EfP/ams0xkVHXYk605HkUL1Fc1hlxqogEmb50yZTQ=;
- b=BeCHQ5i+bXaJaYTVYOlSRhXj/ffz7EOrMhkTGZ/V/r+x1WWej22PVFFsNRObIic+a+
- Qz0e8p7anNCA0FGdSx4seztdNKeS1s7spGKSug1cOnmG+3E2Sz7oN1LWi6An0D2AkZmU
- Jv9pq8r+ifFln1EmEQtukFVZbZiKWDSbTuNM3FWiYcDyD2o0JVmj4OBRbutPANiMvKnv
- 7wFSIKOiXv0llmt3dKX3jhnLqZl7Pt5PVIWRjm9wxNrJcdZxPq1vQbShq5d/B7kQKeqO
- +fMZxKyzG4JSkh9B56gtuWmCYxMDNypJFtrP4FS9ynDATW8AlQAfjPlvH6snCfvBVSm4
- Efng==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=uNg89y0E+eVTQQO/y4gVUq7ABpD1w9BdspaB107DXBs=;
+ b=ZGToUJcUQh9gqK9J2jTCcytMKzlqD9ll7pR/g1I88cRVFU5ImIbZO/qvWlOslHqwbV
+ PNTDGGEXTvQT9qda2TLXD4jSbf8lhNJ24/+GB/SXCfb+GfBIX4Q6bvAx/UBg/c+PfrTr
+ t7KS5iKjWWiNSQdDLRs2IZTQI4TlK/zyl4XosDRRXSxzFA8MK1txP9crt3Qyi8njcwTW
+ wwJ6L1dRoYXp3KB0TfIVNsuBpDtXsfwkSO22QExt0lbzp9ZBT6PWzJUHfd4x+0ulmsm/
+ VsvkABK0+5geGiy2BYiUmLzBufxGfY3IrMm6tIYdZv/JLeBSuRRmrhYKCizlyaoUz8C9
+ Jvcg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=BeCHQ5i+
-Subject: Re: [Buildroot] [PATCH 1/2] package/cpp-httplib: add patch for
- CVE-2025-46728
+ header.s=google header.b=ZGToUJcU
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: test_systemd_selinux:
+ fix test after bootlin toolchains update
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -121,164 +124,41 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Fix the following vulnerability:
+> Since Buildroot commit [1] "update to Bootlin toolchains 2025.08-1",
+> the tests.init.test_systemd_selinux fails when building its
+> Kernel 6.1.26 with gcc 15.1.0.
 > 
-> - CVE-2025-46728
+> This commit fixes the issue by updating the test Kernel to the
+> latest 6.1.y version (6.1.148 at the time of this commit) which
+> includes the fix for gcc-15.
 > 
->     cpp-httplib is a C++ header-only HTTP/HTTPS server and client library.
->     Prior to version 0.20.1, the library fails to enforce configured size
->     limits on incoming request bodies when `Transfer-Encoding: chunked` is
->     used or when no `Content-Length` header is provided. A remote attacker
->     can send a chunked request without the terminating zero-length chunk,
->     causing uncontrolled memory allocation on the server. This leads to
->     potential exhaustion of system memory and results in a server crash or
->     unresponsiveness. Version 0.20.1 fixes the issue by enforcing limits
->     during parsing. If the limit is exceeded at any point during reading,
->     the connection is terminated immediately. A short-term workaround
->     through a Reverse Proxy is available. If updating the library
->     immediately is not feasible, deploy a reverse proxy (e.g., Nginx,
->     HAProxy) in front of the `cpp-httplib` application. Configure the
->     proxy to enforce maximum request body size limits, thereby stopping
->     excessively large requests before they reach the vulnerable library
->     code.
+> Fixes:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/10984685949
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/10984685950
 > 
-> For more information, see:
->   - https://www.cve.org/CVERecord?id=CVE-2025-46728
->   - https://github.com/yhirose/cpp-httplib/commit/7b752106ac42bd5b907793950d9125a0972c8e8e
+> [1] https://gitlab.com/buildroot.org/buildroot/-/commit/947dbc92a20c5acea7882166cae7893e6ea661e1
 > 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
 Applied to 2025.02.x & 2025.05.x. Thanks
 
 > ---
->  .../0001-merge-commit-from-fork.patch         | 103 ++++++++++++++++++
->  package/cpp-httplib/cpp-httplib.mk            |   3 +
->  2 files changed, 106 insertions(+)
->  create mode 100644 package/cpp-httplib/0001-merge-commit-from-fork.patch
+>  support/testing/tests/init/test_systemd_selinux.py | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/cpp-httplib/0001-merge-commit-from-fork.patch b/package/cpp-httplib/0001-merge-commit-from-fork.patch
-> new file mode 100644
-> index 0000000000..180bb22e11
-> --- /dev/null
-> +++ b/package/cpp-httplib/0001-merge-commit-from-fork.patch
-> @@ -0,0 +1,103 @@
-> +From 7b752106ac42bd5b907793950d9125a0972c8e8e Mon Sep 17 00:00:00 2001
-> +From: Ville Vesilehto <ville@vesilehto.fi>
-> +Date: Sat, 3 May 2025 11:39:01 +0300
-> +Subject: [PATCH] Merge commit from fork
-> +
-> +* fix(parser): Limit line length in getline
-> +
-> +Prevents potential infinite loop and memory exhaustion in
-> +stream_line_reader::getline by enforcing max line length.
-> +
-> +Signed-off-by: Ville Vesilehto <ville@vesilehto.fi>
-> +
-> +* fix: increase default max line length to 32k
-> +
-> +LONG_QUERY_VALUE test is set at 25k.
-> +
-> +Signed-off-by: Ville Vesilehto <ville@vesilehto.fi>
-> +
-> +* test(client): expect read error with too long query
-> +
-> +Adds a test case (`TooLongQueryValue`) to verify client behavior
-> +when the request URI is excessively long, exceeding
-> +`CPPHTTPLIB_MAX_LINE_LENGTH`. In this scenario, the server is
-> +expected to reset the connection.
-> +
-> +Signed-off-by: Ville Vesilehto <ville@vesilehto.fi>
-> +
-> +CVE: CVE-2025-46728
-> +Upstream: https://github.com/yhirose/cpp-httplib/commit/7b752106ac42bd5b907793950d9125a0972c8e8e
-> +[thomas: adapt lines numbers to v0.19.0]
-> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> +---
-> + httplib.h    |  9 +++++++++
-> + test/test.cc | 15 +++++++++++++++
-> + 2 files changed, 24 insertions(+)
-> +
-> +diff --git a/httplib.h b/httplib.h
-> +index cb182c4129..a2aa24f96b 100644
-> +--- a/httplib.h
-> ++++ b/httplib.h
-> +@@ -145,6 +145,10 @@
-> + #define CPPHTTPLIB_LISTEN_BACKLOG 5
-> + #endif
-> + 
-> ++#ifndef CPPHTTPLIB_MAX_LINE_LENGTH
-> ++#define CPPHTTPLIB_MAX_LINE_LENGTH 32768
-> ++#endif
-> ++
-> + /*
-> +  * Headers
-> +  */
-> +@@ -2998,6 +3002,11 @@ inline bool stream_line_reader::getline() {
-> + #endif
-> + 
-> +   for (size_t i = 0;; i++) {
-> ++    if (size() >= CPPHTTPLIB_MAX_LINE_LENGTH) {
-> ++      // Treat exceptionally long lines as an error to
-> ++      // prevent infinite loops/memory exhaustion
-> ++      return false;
-> ++    }
-> +     char byte;
-> +     auto n = strm_.read(&byte, 1);
-> + 
-> +diff --git a/test/test.cc b/test/test.cc
-> +index 4fd9983bd8..7f5cc8a9d0 100644
-> +--- a/test/test.cc
-> ++++ b/test/test.cc
-> +@@ -42,6 +42,9 @@ const int PORT = 1234;
-> + const string LONG_QUERY_VALUE = string(25000, '@');
-> + const string LONG_QUERY_URL = "/long-query-value?key=" + LONG_QUERY_VALUE;
-> + 
-> ++const string TOO_LONG_QUERY_VALUE = string(35000, '@');
-> ++const string TOO_LONG_QUERY_URL = "/too-long-query-value?key=" + TOO_LONG_QUERY_VALUE;
-> ++
-> + const std::string JSON_DATA = "{\"hello\":\"world\"}";
-> + 
-> + const string LARGE_DATA = string(1024 * 1024 * 100, '@'); // 100MB
-> +@@ -2839,6 +2842,11 @@ class ServerTest : public ::testing::Test {
-> +                EXPECT_EQ(LONG_QUERY_URL, req.target);
-> +                EXPECT_EQ(LONG_QUERY_VALUE, req.get_param_value("key"));
-> +              })
-> ++        .Get("/too-long-query-value",
-> ++             [&](const Request &req, Response & /*res*/) {
-> ++               EXPECT_EQ(TOO_LONG_QUERY_URL, req.target);
-> ++               EXPECT_EQ(TOO_LONG_QUERY_VALUE, req.get_param_value("key"));
-> ++             })
-> +         .Get("/array-param",
-> +              [&](const Request &req, Response & /*res*/) {
-> +                EXPECT_EQ(3u, req.get_param_value_count("array"));
-> +@@ -3624,6 +3632,13 @@ TEST_F(ServerTest, LongQueryValue) {
-> +   EXPECT_EQ(StatusCode::UriTooLong_414, res->status);
-> + }
-> + 
-> ++TEST_F(ServerTest, TooLongQueryValue) {
-> ++  auto res = cli_.Get(TOO_LONG_QUERY_URL.c_str());
-> ++
-> ++  ASSERT_FALSE(res);
-> ++  EXPECT_EQ(Error::Read, res.error());
-> ++}
-> ++
-> + TEST_F(ServerTest, TooLongHeader) {
-> +   Request req;
-> +   req.method = "GET";
-> diff --git a/package/cpp-httplib/cpp-httplib.mk b/package/cpp-httplib/cpp-httplib.mk
-> index 712c3f7293..928cef8a86 100644
-> --- a/package/cpp-httplib/cpp-httplib.mk
-> +++ b/package/cpp-httplib/cpp-httplib.mk
-> @@ -13,6 +13,9 @@ CPP_HTTPLIB_INSTALL_STAGING = YES
->  CPP_HTTPLIB_CONF_OPTS = \
->  	-Dcpp-httplib_test=false
->  
-> +# 0001-merge-commit-from-fork.patch
-> +CPP_HTTPLIB_IGNORE_CVES += CVE-2025-46728
-> +
->  ifeq ($(BR2_PACKAGE_CPP_HTTPLIB_COMPILE),y)
->  CPP_HTTPLIB_CONF_OPTS += -Dcpp-httplib_compile=true
->  CPP_HTTPLIB_DEPENDENCIES += host-python3
+> diff --git a/support/testing/tests/init/test_systemd_selinux.py b/support/testing/tests/init/test_systemd_selinux.py
+> index e9bb3405cd..398cfbaa82 100644
+> --- a/support/testing/tests/init/test_systemd_selinux.py
+> +++ b/support/testing/tests/init/test_systemd_selinux.py
+> @@ -12,7 +12,7 @@ class TestSELinuxSystemd(infra.basetest.BRTest):
+>          BR2_INIT_SYSTEMD=y
+>          BR2_LINUX_KERNEL=y
+>          BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> -        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.26"
+> +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.148"
+>          BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>          BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
+>          BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
 > -- 
 > 2.50.1
 > 
