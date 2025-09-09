@@ -1,97 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12D7FCAC589
-	for <buildroot@archiver.kernel.org>; Tue,  9 Sep 2025 07:47:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AE7ACA0FED
+	for <buildroot@archiver.kernel.org>; Tue,  9 Sep 2025 12:31:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C10016130A;
-	Tue,  9 Sep 2025 07:47:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 24BC140B5B;
+	Tue,  9 Sep 2025 12:31:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xb-OCvFvd7bI; Tue,  9 Sep 2025 07:47:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2IAiOYXGdeNe; Tue,  9 Sep 2025 12:31:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6B03612FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A09040B6C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6B03612FA;
-	Tue,  9 Sep 2025 07:47:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 321C5CA
- for <buildroot@buildroot.org>; Tue,  9 Sep 2025 07:47:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A09040B6C;
+	Tue,  9 Sep 2025 12:31:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A55521D9
+ for <buildroot@buildroot.org>; Tue,  9 Sep 2025 12:31:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 244B4400A8
- for <buildroot@buildroot.org>; Tue,  9 Sep 2025 07:47:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8B7A740B36
+ for <buildroot@buildroot.org>; Tue,  9 Sep 2025 12:31:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xCQDSslZ8ogV for <buildroot@buildroot.org>;
- Tue,  9 Sep 2025 07:47:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.121;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3ABE94086C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3ABE94086C
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.121])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3ABE94086C
- for <buildroot@buildroot.org>; Tue,  9 Sep 2025 07:47:04 +0000 (UTC)
-X-CSE-ConnectionGUID: /AfFMNU/SBOelmjGt3piEA==
-X-CSE-MsgGUID: uDV7CuAyS/aGfy7k+iuoVA==
-Received: from unknown (HELO opfedv3rlp0h.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
- 09 Sep 2025 09:47:02 +0200
-Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv3rlp0h.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 09 Sep 2025 09:47:02 +0200
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.58;
- Tue, 9 Sep 2025 09:47:00 +0200
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Tue, 09 Sep 2025 09:47:00 +0200
-From: yann.morin@orange.com
-X-CSE-ConnectionGUID: VGuCCQkzQkmVTOFC+XJzwA==
-X-CSE-MsgGUID: 2871Lw+zRrWy4rpZMEYsHg==
-X-IronPort-AV: E=Sophos;i="6.18,250,1751234400"; d="scan'208";a="330410954"
-Date: Tue, 9 Sep 2025 09:47:00 +0200
-To: Romain Naour <romain.naour@smile.fr>
-CC: <buildroot@buildroot.org>, Christian Stewart <christian@aperture.us>
-Message-ID: <aL/bdHOwN/ENpcOl@yd-6wlzhs3>
-References: <cover.1751377540.git.yann.morin@orange.com>
- <d23125d705a0c24ca91071624d507392ecfe7b0d.1751377540.git.yann.morin@orange.com>
- <a8b668d1-24da-4b18-8235-e98a29732884@smile.fr>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oIXqz3ACWLdx for <buildroot@buildroot.org>;
+ Tue,  9 Sep 2025 12:31:46 +0000 (UTC)
+X-Greylist: delayed 581 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 09 Sep 2025 12:31:46 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8668740B48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8668740B48
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.23.235;
+ helo=lelvem-ot02.ext.ti.com; envelope-from=bb@ti.com; receiver=<UNKNOWN> 
+Received: from lelvem-ot02.ext.ti.com (lelvem-ot02.ext.ti.com [198.47.23.235])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8668740B48
+ for <buildroot@buildroot.org>; Tue,  9 Sep 2025 12:31:46 +0000 (UTC)
+Received: from lelvem-sh02.itg.ti.com ([10.180.78.226])
+ by lelvem-ot02.ext.ti.com (8.15.2/8.15.2) with ESMTP id 589CM4tY334765;
+ Tue, 9 Sep 2025 07:22:04 -0500
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+ by lelvem-sh02.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 589CM4Xw3701630
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+ Tue, 9 Sep 2025 07:22:04 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Tue, 9
+ Sep 2025 07:22:03 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
+ Frontend Transport; Tue, 9 Sep 2025 07:22:03 -0500
+Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
+ by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 589CM3sM2318693;
+ Tue, 9 Sep 2025 07:22:03 -0500
+Date: Tue, 9 Sep 2025 07:21:56 -0500
+Message-ID: <20250909-ti-k3-boot-firmware-src-v1-0-542b606ef0c7@ti.com>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <a8b668d1-24da-4b18-8235-e98a29732884@smile.fr>
-X-Originating-IP: [10.115.27.53]
-X-ClientProxiedBy: OPE16NORMBX101.corporate.adroot.infra.ftgroup (10.115.26.2)
- To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
+X-B4-Tracking: v=1; b=H4sIAOQbwGgC/x3M3QpAQBBA4VfRXJtaf4VXkYuxZpnEalYoeXeby
+ +/inAcCq3CANnlA+ZQgfovI0gTsTNvEKGM05CavTGMaPASXAgfvD3Si60XKGNRibTNHZUXGjQS
+ x3pWd3P+569/3A/ibKsJpAAAA
+X-Change-ID: 20250909-ti-k3-boot-firmware-src-8c1fa45a0fda
+To: <buildroot@buildroot.org>
+CC: Anand Gadiyar <gadiyar@ti.com>, Dario Binacchi
+ <dario.binacchi@amarulasolutions.com>,
+ Xuanhao Shi <X15000177@gmail.com>, Bryan Brattlof <bb@ti.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=969; i=bb@ti.com;
+ h=from:subject:message-id; bh=UrkiRbXPpRsSBDbqOylhnw2ifw0sj+Va1Og7rhzF68Q=;
+ b=owNCWmg5MUFZJlNZ+QmyYQAAb////v5t7+33+n/19+9sP+9/2rf+0++eqFaN/a9/qvP/6newA
+ RsYHagAA2o000A0NGgBoAMJoGgAAGgNAA0aAAANAaDTJoGgZqaaNG1HqMyaah0ADQAGmQA0A0Mh
+ oeoaaNDQAA9NTQDRoaHqAbSBtT1A0zU00GgB6QaDTQyNBoAhkZBpkGTTI00ZANGAQxGQaaNNA00
+ 0AYBBkANDIwTQAAANGEAAAAGmgIF3hKoIGgr0HAfWoGbh05ajk4SBssyxrYZkKDv2H0vdLnAJWa
+ aRX/K7uAShfeLJlK1dCK7PgJLE5a5HmFfYGVn1B1fz67UZlxIqXQh1Vv71uoQbP4o6kDlZgpxAj
+ YAyVqDVl8fKSHPFIzBp4n5YihiaXeMQOEeYyrJaH6Jp2MJcJc/gKjIBMSWKZZNdWazBhpoiMS6O
+ +BlBRFN8s7KA0F4VaCxQRBz+XuqXCWSk1LigHuNpjdpaIB2s1MZM+u8o7BDTI+jJ3ZY6X3yvaN0
+ rs/lKEewKcOo9F0CdDBPfP0lMLIPOyENMMqAFkmg1troEGMtH/aBgEEnJBbNScXsVeX8RKWMRhl
+ GLyy6hTQs4tYTtyfELgK9t/EUgNqEcU5Cc5VYOAIMIiZM2ZCQlRE1CRemFPYI7RqfU7vcYAayxZ
+ URFIv8XckU4UJD5CbJh
+X-Developer-Key: i=bb@ti.com; a=openpgp;
+ fpr=D3D177E40A38DF4D1853FEEF41B90D5D71D56CE0
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1757404025; x=1788940025;
- h=date:to:cc:subject:message-id:references:mime-version:
- in-reply-to:content-transfer-encoding:from;
- bh=ys3I6rgcl0cKi7Rk7Y3OMmcUliVgaZhl0Cb2nWSwwHw=;
- b=YdexWeI8jxUTG4KeB39glfTGbFaj9Ej9HNEFoON2+lM6k5LKVF4tQ8T+
- P8sFJUW2g1/+CDZluyL72/isYsi3I1aIIo1y0maCoMSwVqWN6WTSPorld
- DxnVSm26R9c5u9ZtmCaGp75iBwjStojOco40krieNI4XhsXmlIkgzgrUR
- DHOqIMPqYGNbSj9nXq4GB8lOVlgrOuuO6FjJsJtPfqwCeZNKm66U1eBVq
- A3nJ5+F2lWkBkraft2MbNM+dsIUZ8qDoeWFF+WWQXZs63O+C4YPSvFVi4
- efodvc1AT1fUjHqAh7MV8xvB1NvV/C2m6+Y3t13lDzH3oiyQGqj7P3ZPA
- g==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=YdexWeI8
-Subject: Re: [Buildroot] [PATCH 1/4 v2] package/pkg-golang: simplify
- installing multiple binaries
+ d=ti.com; s=ti-com-17Q1; t=1757420524;
+ bh=fs5O+wHrisw1/b2wib/nuKeMb/fEt4jJ1UIGqPcNdpE=;
+ h=From:Subject:Date:To:CC;
+ b=gBP2kYqc8yorNecPuHRPxbVCPhYR2STk5zC8tjr/CW0GZlpHr5lJFt9ncDu/R7Xb/
+ aS0xa8lbGqrRKDCGfuyDj74wNJD3E6RuPYdh80rVxTITUKq9i9oCxfMtctxOetV/id
+ 5CLd8bEld6xAAMeB7+1cADEzUcV3RMZdq0UPtx0E=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=ti.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=ti-com-17Q1 header.b=gBP2kYqc
+Subject: [Buildroot] [PATCH 0/2] boot/ti-k3-boot-firmware: source change and
+ a version bump
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,54 +110,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Bryan Brattlof via buildroot <buildroot@buildroot.org>
+Reply-To: Bryan Brattlof <bb@ti.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Um9tYWluLCBBbGwsCgpPbiAyMDI1LTA3LTA1IDIyOjUxICswMjAwLCBSb21haW4gTmFvdXIgc3Bh
-a2UgdGh1c2x5Ogo+IExlIDAxLzA3LzIwMjUgw6AgMTU6NDUsIHlhbm4ubW9yaW5Ab3JhbmdlLmNv
-bSBhIMOpY3JpdMKgOgo+ID4gRnJvbTogIllhbm4gRS4gTU9SSU4iIDx5YW5uLm1vcmluQG9yYW5n
-ZS5jb20+Cj4gPiBDdXJyZW50bHksIHdoZW4gYSBnb2xhbmcgcGFja2FnZSBkZWZpbmVzIG11bHRp
-cGxlIF9CVUlMRF9UQVJHRVRTLCBpdCBoYXMKPiA+IHRvIGJhc2ljYWxseSByZXBlYXQgdGhlIHNh
-bWUgbGlzdCBpbiBpdHMgX0lOU1RBTExfQklOUy4KWy0tU05JUC0tXQo+ID4gV2Ugbm93IGNvbnNp
-ZGVyIHRoYXQgX0lOU1RBTExfQklOUyBpcyBhbiBpbnRlcm5hbCBpbXBsZW1lbnRhdGlvbiBkZXRh
-aWxzCj4gPiB0aGF0IHNob3VsZCBubyBsb25nZXIgYmUgZXhwb3NlZCB0byB0aGUgdXNlcnMsIHNv
-IHdlIGRyb3AgaXQgZnJvbSB0aGUKPiA+IGRvY3VtZW50YXRpb247IHdlIHJlcGhyYXNlIHRoZSBj
-b3JyZXNwb25kaW5nIHBhcnQgZm9yIF9CVUlMRF9UQVJHRVRTLgo+ID4gCj4gPiBTaWduZWQtb2Zm
-LWJ5OiBZYW5uIEUuIE1PUklOIDx5YW5uLm1vcmluQG9yYW5nZS5jb20+Cj4gPiBDYzogQ2hyaXN0
-aWFuIFN0ZXdhcnQgPGNocmlzdGlhbkBhcGVydHVyZS51cz4KPiBSZXZpZXdlZC1ieTogUm9tYWlu
-IE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUuZnI+Cj4gU2luY2UgaXQncyBhYm91dCBhIHBhY2th
-Z2UgaW5mcmFzdHVjdHVyZSBjaGFuZ2UsIEkgcHJlZmVyIHdhaXQgZm9yIGEgc2Vjb25kIHJldmll
-dy4KCldoYXQgYWJvdXQgdGhlIHN0YXR1cyBvZiB0aGlzIHNlcmllcz8gQ2hyaXN0aWFuIGhhcyBw
-cm92aWRlZCBoaXMKUmV2aWV3ZWQtYnkgYSB3aGlsZSBiYWNrLi4uCgpSZWdhcmRzLApZYW5uIEUu
-IE1PUklOLgoKLS0gCgouLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS06zIXM
-hSDMhcyFzIXMhSDMhcyFzIXMhSDMhcyFzIXMhSDMhcyFzIXMhSDMhcyFzIXMhSDMhcyFzIXMhSDM
-hcyFzIXMhV/MhSDMhcyFzIXMhSDMhcyFzIXMhSDMhcyFzIXMhSDMhTotLS0tLS0tLS0tLS0tLS0t
-LS0uCnwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgICAgX18vICkgICB8
-IC8iXCBBU0NJSSBSSUJCT04gfAp8ICAgICAgICAgICAgICAgICB8IFNvZnR3YXJlICBEZXNpZ25l
-ciB8ICBfLyAtIC8nICAgfCBcIC8gQ0FNUEFJR04gICAgIHwKfCArMzMgNjM4LjQxMS4yNDUgJy0t
-LS0tLS0tLS0tLS0tLS0tLS0tOiAoXyAgICBgLS0sIHwgIFggIEFHQUlOU1QgICAgICB8CnwgeWFu
-bi5tb3JpbiAoYXQpIG9yYW5nZS5jb20gICAgICAgICAgIHxfPSIgICAgLC0tJyB8IC8gXCBIVE1M
-IE1BSUwgICAgfAonLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS06X19fX19f
-L19fX19fOi0tLS0tLS0tLS0tLS0tLS0tLScKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXw0KQ2UgbWVzc2FnZSBldCBzZXMgcGllY2VzIGpvaW50ZXMg
-cGV1dmVudCBjb250ZW5pciBkZXMgaW5mb3JtYXRpb25zIGNvbmZpZGVudGllbGxlcyBvdSBwcml2
-aWxlZ2llZXMgZXQgbmUgZG9pdmVudCBkb25jDQpwYXMgZXRyZSBkaWZmdXNlcywgZXhwbG9pdGVz
-IG91IGNvcGllcyBzYW5zIGF1dG9yaXNhdGlvbi4gU2kgdm91cyBhdmV6IHJlY3UgY2UgbWVzc2Fn
-ZSBwYXIgZXJyZXVyLCB2ZXVpbGxleiBsZSBzaWduYWxlcg0KYSBsJ2V4cGVkaXRldXIgZXQgbGUg
-ZGV0cnVpcmUgYWluc2kgcXVlIGxlcyBwaWVjZXMgam9pbnRlcy4gTGVzIG1lc3NhZ2VzIGVsZWN0
-cm9uaXF1ZXMgZXRhbnQgc3VzY2VwdGlibGVzIGQnYWx0ZXJhdGlvbiwNCk9yYW5nZSBkZWNsaW5l
-IHRvdXRlIHJlc3BvbnNhYmlsaXRlIHNpIGNlIG1lc3NhZ2UgYSBldGUgYWx0ZXJlLCBkZWZvcm1l
-IG91IGZhbHNpZmllLiBNZXJjaS4NCg0KVGhpcyBtZXNzYWdlIGFuZCBpdHMgYXR0YWNobWVudHMg
-bWF5IGNvbnRhaW4gY29uZmlkZW50aWFsIG9yIHByaXZpbGVnZWQgaW5mb3JtYXRpb24gdGhhdCBt
-YXkgYmUgcHJvdGVjdGVkIGJ5IGxhdzsNCnRoZXkgc2hvdWxkIG5vdCBiZSBkaXN0cmlidXRlZCwg
-dXNlZCBvciBjb3BpZWQgd2l0aG91dCBhdXRob3Jpc2F0aW9uLg0KSWYgeW91IGhhdmUgcmVjZWl2
-ZWQgdGhpcyBlbWFpbCBpbiBlcnJvciwgcGxlYXNlIG5vdGlmeSB0aGUgc2VuZGVyIGFuZCBkZWxl
-dGUgdGhpcyBtZXNzYWdlIGFuZCBpdHMgYXR0YWNobWVudHMuDQpBcyBlbWFpbHMgbWF5IGJlIGFs
-dGVyZWQsIE9yYW5nZSBpcyBub3QgbGlhYmxlIGZvciBtZXNzYWdlcyB0aGF0IGhhdmUgYmVlbiBt
-b2RpZmllZCwgY2hhbmdlZCBvciBmYWxzaWZpZWQuDQpUaGFuayB5b3UuCl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
-YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
-YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Hello Everyone!
+
+When looking into bumping the version of ti-linux-firmware, I noticed 
+git.ti.com is no longer providing archive downloads of any of the 
+projects hosted there. 
+
+So, while we work internally to understand if we can get this feature 
+back, move ti-k3-boot-firmware to download from TI's Github mirror 
+before bumping the version to 11.01.12 to pull in newer versions of TI's 
+DM and TIFS firmware
+
+Happy Hacking
+~Bryan
+
+Signed-off-by: Bryan Brattlof <bb@ti.com>
+---
+Bryan Brattlof (2):
+      boot/ti-k3-boot-firmware: switch to github mirror
+      boot/ti-k3-boot-firmware: bump to 11.01.12
+
+ boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash | 2 +-
+ boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+---
+base-commit: 0af159ae2b0363a90b8c5432cd4cb9bfd3476c5a
+change-id: 20250909-ti-k3-boot-firmware-src-8c1fa45a0fda
+
+Best regards,
+-- 
+Bryan Brattlof <bb@ti.com>
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
