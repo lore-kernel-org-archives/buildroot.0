@@ -4,74 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 359CECAC587
-	for <buildroot@archiver.kernel.org>; Tue,  9 Sep 2025 07:27:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12D7FCAC589
+	for <buildroot@archiver.kernel.org>; Tue,  9 Sep 2025 07:47:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 03F24612DD;
-	Tue,  9 Sep 2025 07:27:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C10016130A;
+	Tue,  9 Sep 2025 07:47:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VQ0uCYb2S7iQ; Tue,  9 Sep 2025 07:27:10 +0000 (UTC)
+ id xb-OCvFvd7bI; Tue,  9 Sep 2025 07:47:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA9A961174
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6B03612FA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA9A961174;
-	Tue,  9 Sep 2025 07:27:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E09D81D9
- for <buildroot@buildroot.org>; Tue,  9 Sep 2025 07:27:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6B03612FA;
+	Tue,  9 Sep 2025 07:47:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 321C5CA
+ for <buildroot@buildroot.org>; Tue,  9 Sep 2025 07:47:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C396F40F43
- for <buildroot@buildroot.org>; Tue,  9 Sep 2025 07:27:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 244B4400A8
+ for <buildroot@buildroot.org>; Tue,  9 Sep 2025 07:47:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fbk0GP1b7FYh for <buildroot@buildroot.org>;
- Tue,  9 Sep 2025 07:27:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xCQDSslZ8ogV for <buildroot@buildroot.org>;
+ Tue,  9 Sep 2025 07:47:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.121;
+ helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A913340F4A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A913340F4A
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A913340F4A
- for <buildroot@buildroot.org>; Tue,  9 Sep 2025 07:27:07 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id E3F821A0DA7;
- Tue,  9 Sep 2025 07:27:04 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id BD52260630;
- Tue,  9 Sep 2025 07:27:04 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 09F9D102F278C; 
- Tue,  9 Sep 2025 09:27:02 +0200 (CEST)
-To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Rodrigo Rebello <rprebello@gmail.com>
-Date: Tue,  9 Sep 2025 09:26:52 +0200
-Message-ID: <20250909072653.942584-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.51.0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3ABE94086C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3ABE94086C
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.121])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3ABE94086C
+ for <buildroot@buildroot.org>; Tue,  9 Sep 2025 07:47:04 +0000 (UTC)
+X-CSE-ConnectionGUID: /AfFMNU/SBOelmjGt3piEA==
+X-CSE-MsgGUID: uDV7CuAyS/aGfy7k+iuoVA==
+Received: from unknown (HELO opfedv3rlp0h.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
+ 09 Sep 2025 09:47:02 +0200
+Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv3rlp0h.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 09 Sep 2025 09:47:02 +0200
+Received: from yd-6wlzhs3 [x.x.x.x] by
+ OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.58;
+ Tue, 9 Sep 2025 09:47:00 +0200
+Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
+ Tue, 09 Sep 2025 09:47:00 +0200
+From: yann.morin@orange.com
+X-CSE-ConnectionGUID: VGuCCQkzQkmVTOFC+XJzwA==
+X-CSE-MsgGUID: 2871Lw+zRrWy4rpZMEYsHg==
+X-IronPort-AV: E=Sophos;i="6.18,250,1751234400"; d="scan'208";a="330410954"
+Date: Tue, 9 Sep 2025 09:47:00 +0200
+To: Romain Naour <romain.naour@smile.fr>
+CC: <buildroot@buildroot.org>, Christian Stewart <christian@aperture.us>
+Message-ID: <aL/bdHOwN/ENpcOl@yd-6wlzhs3>
+References: <cover.1751377540.git.yann.morin@orange.com>
+ <d23125d705a0c24ca91071624d507392ecfe7b0d.1751377540.git.yann.morin@orange.com>
+ <a8b668d1-24da-4b18-8235-e98a29732884@smile.fr>
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Disposition: inline
+In-Reply-To: <a8b668d1-24da-4b18-8235-e98a29732884@smile.fr>
+X-Originating-IP: [10.115.27.53]
+X-ClientProxiedBy: OPE16NORMBX101.corporate.adroot.infra.ftgroup (10.115.26.2)
+ To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1757402823; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=Tc+XPvYptobo9a+RoYJnxMCaRIiDo6JzmtIlZOqlOkw=;
- b=kguSXS2SLG7qiD/Vf1PkuOF3tuBlIBGsAebff2g5+iJbsvdZB6kk+jfZDgV4vfGN8wCb4D
- s7Bhy17UqsfQUmthYrEK+RwHvF8/vqRqUqD3fl79RLf1WJO4dyQoUcKSXPRwFbBtt5dIj8
- 5JvEUe1pDvF6l/NaurBJFjl0qa+CpLv9RnU5IaVepIwNhTzjwrhiZdzt+1BLbphplig7sN
- eqJJOegHSXVb0uyEeowt2DF1k8vbWIvvIX/Gr3LkCoZwuEEQzAn3ptK+iRaTNI2wgHT3D2
- BgTlmR/WAAvsAGaBeJDoA865JjaFQAmGoDN85x3VPhqKAm5MAVJPq6bhQBwydA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1757404025; x=1788940025;
+ h=date:to:cc:subject:message-id:references:mime-version:
+ in-reply-to:content-transfer-encoding:from;
+ bh=ys3I6rgcl0cKi7Rk7Y3OMmcUliVgaZhl0Cb2nWSwwHw=;
+ b=YdexWeI8jxUTG4KeB39glfTGbFaj9Ej9HNEFoON2+lM6k5LKVF4tQ8T+
+ P8sFJUW2g1/+CDZluyL72/isYsi3I1aIIo1y0maCoMSwVqWN6WTSPorld
+ DxnVSm26R9c5u9ZtmCaGp75iBwjStojOco40krieNI4XhsXmlIkgzgrUR
+ DHOqIMPqYGNbSj9nXq4GB8lOVlgrOuuO6FjJsJtPfqwCeZNKm66U1eBVq
+ A3nJ5+F2lWkBkraft2MbNM+dsIUZ8qDoeWFF+WWQXZs63O+C4YPSvFVi4
+ efodvc1AT1fUjHqAh7MV8xvB1NvV/C2m6+Y3t13lDzH3oiyQGqj7P3ZPA
+ g==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=orange.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=kguSXS2S
-Subject: [Buildroot] [PATCH] package/chocolate-doom: bump to 3.1.1 to fix
- GCC 15.x issues
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=YdexWeI8
+Subject: Re: [Buildroot] [PATCH 1/4 v2] package/pkg-golang: simplify
+ installing multiple binaries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,155 +103,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changes in 3.1.0:
-
-  https://github.com/chocolate-doom/chocolate-doom/releases/tag/chocolate-doom-3.1.0
-
-Changes in 3.1.1:
-
-  https://github.com/chocolate-doom/chocolate-doom/releases/tag/chocolate-doom-3.1.1
-
-The SDL2_mixer and SDL2_net dependencies are now optional since 3.1.0,
-so adjust the packaging accordingly.
-
-Fixes:
-
-  https://autobuild.buildroot.net/results/90a01c5925e7f5f50b3ea06d6ea7b0da66814a15/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .checkpackageignore                           |  1 -
- ...move-redundant-demoextend-definition.patch | 29 -------------------
- package/chocolate-doom/Config.in              |  2 --
- package/chocolate-doom/chocolate-doom.hash    |  2 +-
- package/chocolate-doom/chocolate-doom.mk      | 22 ++++++++++++--
- 5 files changed, 20 insertions(+), 36 deletions(-)
- delete mode 100644 package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 8cf2f4a215..5b0e0b177b 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -292,7 +292,6 @@ package/cdrkit/0003-Add-extern-to-char-outfile-declaration-to-fix-build-.patch l
- package/cfm/S65cfm lib_sysv.Indent lib_sysv.Variables
- package/cgroupfs-mount/S30cgroupfs Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/chipmunk/0001-Fix-build-failure-on-musl.patch lib_patch.Upstream
--package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch lib_patch.Upstream
- package/chrony/S49chronyd lib_sysv.Variables
- package/cmake/0001-rename-cmake-rootfile.patch lib_patch.Upstream
- package/cmocka/0001-Don-t-redefine-uintptr_t.patch lib_patch.Upstream
-diff --git a/package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch b/package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch
-deleted file mode 100644
-index 06bf54c583..0000000000
---- a/package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From a8fd4b1f563d24d4296c3e8225c8404e2724d4c2 Mon Sep 17 00:00:00 2001
--From: Jordan Christiansen <xordspar0@gmail.com>
--Date: Sun, 15 Mar 2020 16:55:33 -0500
--Subject: [PATCH] Remove redundant demoextend definition
--
--GCC 10 enables -fno-common by default, which causes the linker to fail when
--there are multiple definitions of a global variable.
--
--See https://gcc.gnu.org/gcc-10/porting_to.html
--
--[Retrieved from:
--https://github.com/chocolate-doom/chocolate-doom/commit/a8fd4b1f563d24d4296c3e8225c8404e2724d4c2]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/hexen/mn_menu.c | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/src/hexen/mn_menu.c b/src/hexen/mn_menu.c
--index 059f45b3e..a97b7fcd1 100644
----- a/src/hexen/mn_menu.c
--+++ b/src/hexen/mn_menu.c
--@@ -131,7 +131,6 @@ boolean MenuActive;
-- int InfoType;
-- int messageson = true;
-- boolean mn_SuicideConsole;
---boolean demoextend; // from h2def.h
-- 
-- // PRIVATE DATA DEFINITIONS ------------------------------------------------
-- 
-diff --git a/package/chocolate-doom/Config.in b/package/chocolate-doom/Config.in
-index 406b04ecf1..3cefd057ec 100644
---- a/package/chocolate-doom/Config.in
-+++ b/package/chocolate-doom/Config.in
-@@ -3,8 +3,6 @@ config BR2_PACKAGE_CHOCOLATE_DOOM
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS # sdl2
- 	select BR2_PACKAGE_SDL2
--	select BR2_PACKAGE_SDL2_MIXER
--	select BR2_PACKAGE_SDL2_NET
- 	help
- 	  Chocolate Doom is a set of conservative source ports for Doom,
- 	  Heretic, Hexen and Strife, with a philosophy of preserving the
-diff --git a/package/chocolate-doom/chocolate-doom.hash b/package/chocolate-doom/chocolate-doom.hash
-index 79eb1c6a3f..9d89b830f6 100644
---- a/package/chocolate-doom/chocolate-doom.hash
-+++ b/package/chocolate-doom/chocolate-doom.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  d435d6177423491d60be706da9f07d3ab4fabf3e077ec2a3fc216e394fcfc8c7  chocolate-doom-3.0.1.tar.gz
-+sha256  1edcc41254bdc194beb0d33e267fae306556c4d24110a1d3d3f865717f25da23  chocolate-doom-3.1.1.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/chocolate-doom/chocolate-doom.mk b/package/chocolate-doom/chocolate-doom.mk
-index 581b2c51c2..599a15d3fa 100644
---- a/package/chocolate-doom/chocolate-doom.mk
-+++ b/package/chocolate-doom/chocolate-doom.mk
-@@ -4,13 +4,15 @@
- #
- ################################################################################
- 
--CHOCOLATE_DOOM_VERSION = 3.0.1
--CHOCOLATE_DOOM_SITE = http://www.chocolate-doom.org/downloads/$(CHOCOLATE_DOOM_VERSION)
-+CHOCOLATE_DOOM_VERSION = 3.1.1
-+CHOCOLATE_DOOM_SITE = $(call github,chocolate-doom,chocolate-doom,chocolate-doom-$(CHOCOLATE_DOOM_VERSION))
- CHOCOLATE_DOOM_LICENSE = GPL-2.0+
- CHOCOLATE_DOOM_LICENSE_FILES = COPYING
- CHOCOLATE_DOOM_CPE_ID_VENDOR = chocolate-doom
- CHOCOLATE_DOOM_CPE_ID_PRODUCT = chocolate_doom
--CHOCOLATE_DOOM_DEPENDENCIES = host-pkgconf sdl2 sdl2_mixer sdl2_net
-+CHOCOLATE_DOOM_DEPENDENCIES = host-pkgconf sdl2
-+# Fetch from git
-+CHOCOLATE_DOOM_AUTORECONF = YES
- 
- # Avoid installing desktop entries, icons, etc.
- CHOCOLATE_DOOM_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-exec
-@@ -23,6 +25,20 @@ endif
- 
- CHOCOLATE_DOOM_CONF_ENV += CFLAGS="$(CHOCOLATE_DOOM_CFLAGS)"
- 
-+ifeq ($(BR2_PACKAGE_SDL2_MIXER),y)
-+CHOCOLATE_DOOM_DEPENDENCIES += sdl2_mixer
-+CHOCOLATE_DOOM_CONF_OPTS += --enable-sdl2mixer
-+else
-+CHOCOLATE_DOOM_CONF_OPTS += --disable-sdl2mixer
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SDL2_NET),y)
-+CHOCOLATE_DOOM_DEPENDENCIES += sdl2_net
-+CHOCOLATE_DOOM_CONF_OPTS += --enable-sdl2net
-+else
-+CHOCOLATE_DOOM_CONF_OPTS += --disable-sdl2net
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- CHOCOLATE_DOOM_DEPENDENCIES += libpng
- CHOCOLATE_DOOM_CONF_OPTS += --with-libpng
--- 
-2.51.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Um9tYWluLCBBbGwsCgpPbiAyMDI1LTA3LTA1IDIyOjUxICswMjAwLCBSb21haW4gTmFvdXIgc3Bh
+a2UgdGh1c2x5Ogo+IExlIDAxLzA3LzIwMjUgw6AgMTU6NDUsIHlhbm4ubW9yaW5Ab3JhbmdlLmNv
+bSBhIMOpY3JpdMKgOgo+ID4gRnJvbTogIllhbm4gRS4gTU9SSU4iIDx5YW5uLm1vcmluQG9yYW5n
+ZS5jb20+Cj4gPiBDdXJyZW50bHksIHdoZW4gYSBnb2xhbmcgcGFja2FnZSBkZWZpbmVzIG11bHRp
+cGxlIF9CVUlMRF9UQVJHRVRTLCBpdCBoYXMKPiA+IHRvIGJhc2ljYWxseSByZXBlYXQgdGhlIHNh
+bWUgbGlzdCBpbiBpdHMgX0lOU1RBTExfQklOUy4KWy0tU05JUC0tXQo+ID4gV2Ugbm93IGNvbnNp
+ZGVyIHRoYXQgX0lOU1RBTExfQklOUyBpcyBhbiBpbnRlcm5hbCBpbXBsZW1lbnRhdGlvbiBkZXRh
+aWxzCj4gPiB0aGF0IHNob3VsZCBubyBsb25nZXIgYmUgZXhwb3NlZCB0byB0aGUgdXNlcnMsIHNv
+IHdlIGRyb3AgaXQgZnJvbSB0aGUKPiA+IGRvY3VtZW50YXRpb247IHdlIHJlcGhyYXNlIHRoZSBj
+b3JyZXNwb25kaW5nIHBhcnQgZm9yIF9CVUlMRF9UQVJHRVRTLgo+ID4gCj4gPiBTaWduZWQtb2Zm
+LWJ5OiBZYW5uIEUuIE1PUklOIDx5YW5uLm1vcmluQG9yYW5nZS5jb20+Cj4gPiBDYzogQ2hyaXN0
+aWFuIFN0ZXdhcnQgPGNocmlzdGlhbkBhcGVydHVyZS51cz4KPiBSZXZpZXdlZC1ieTogUm9tYWlu
+IE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUuZnI+Cj4gU2luY2UgaXQncyBhYm91dCBhIHBhY2th
+Z2UgaW5mcmFzdHVjdHVyZSBjaGFuZ2UsIEkgcHJlZmVyIHdhaXQgZm9yIGEgc2Vjb25kIHJldmll
+dy4KCldoYXQgYWJvdXQgdGhlIHN0YXR1cyBvZiB0aGlzIHNlcmllcz8gQ2hyaXN0aWFuIGhhcyBw
+cm92aWRlZCBoaXMKUmV2aWV3ZWQtYnkgYSB3aGlsZSBiYWNrLi4uCgpSZWdhcmRzLApZYW5uIEUu
+IE1PUklOLgoKLS0gCgouLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS06zIXM
+hSDMhcyFzIXMhSDMhcyFzIXMhSDMhcyFzIXMhSDMhcyFzIXMhSDMhcyFzIXMhSDMhcyFzIXMhSDM
+hcyFzIXMhV/MhSDMhcyFzIXMhSDMhcyFzIXMhSDMhcyFzIXMhSDMhTotLS0tLS0tLS0tLS0tLS0t
+LS0uCnwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgICAgX18vICkgICB8
+IC8iXCBBU0NJSSBSSUJCT04gfAp8ICAgICAgICAgICAgICAgICB8IFNvZnR3YXJlICBEZXNpZ25l
+ciB8ICBfLyAtIC8nICAgfCBcIC8gQ0FNUEFJR04gICAgIHwKfCArMzMgNjM4LjQxMS4yNDUgJy0t
+LS0tLS0tLS0tLS0tLS0tLS0tOiAoXyAgICBgLS0sIHwgIFggIEFHQUlOU1QgICAgICB8CnwgeWFu
+bi5tb3JpbiAoYXQpIG9yYW5nZS5jb20gICAgICAgICAgIHxfPSIgICAgLC0tJyB8IC8gXCBIVE1M
+IE1BSUwgICAgfAonLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS06X19fX19f
+L19fX19fOi0tLS0tLS0tLS0tLS0tLS0tLScKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fXw0KQ2UgbWVzc2FnZSBldCBzZXMgcGllY2VzIGpvaW50ZXMg
+cGV1dmVudCBjb250ZW5pciBkZXMgaW5mb3JtYXRpb25zIGNvbmZpZGVudGllbGxlcyBvdSBwcml2
+aWxlZ2llZXMgZXQgbmUgZG9pdmVudCBkb25jDQpwYXMgZXRyZSBkaWZmdXNlcywgZXhwbG9pdGVz
+IG91IGNvcGllcyBzYW5zIGF1dG9yaXNhdGlvbi4gU2kgdm91cyBhdmV6IHJlY3UgY2UgbWVzc2Fn
+ZSBwYXIgZXJyZXVyLCB2ZXVpbGxleiBsZSBzaWduYWxlcg0KYSBsJ2V4cGVkaXRldXIgZXQgbGUg
+ZGV0cnVpcmUgYWluc2kgcXVlIGxlcyBwaWVjZXMgam9pbnRlcy4gTGVzIG1lc3NhZ2VzIGVsZWN0
+cm9uaXF1ZXMgZXRhbnQgc3VzY2VwdGlibGVzIGQnYWx0ZXJhdGlvbiwNCk9yYW5nZSBkZWNsaW5l
+IHRvdXRlIHJlc3BvbnNhYmlsaXRlIHNpIGNlIG1lc3NhZ2UgYSBldGUgYWx0ZXJlLCBkZWZvcm1l
+IG91IGZhbHNpZmllLiBNZXJjaS4NCg0KVGhpcyBtZXNzYWdlIGFuZCBpdHMgYXR0YWNobWVudHMg
+bWF5IGNvbnRhaW4gY29uZmlkZW50aWFsIG9yIHByaXZpbGVnZWQgaW5mb3JtYXRpb24gdGhhdCBt
+YXkgYmUgcHJvdGVjdGVkIGJ5IGxhdzsNCnRoZXkgc2hvdWxkIG5vdCBiZSBkaXN0cmlidXRlZCwg
+dXNlZCBvciBjb3BpZWQgd2l0aG91dCBhdXRob3Jpc2F0aW9uLg0KSWYgeW91IGhhdmUgcmVjZWl2
+ZWQgdGhpcyBlbWFpbCBpbiBlcnJvciwgcGxlYXNlIG5vdGlmeSB0aGUgc2VuZGVyIGFuZCBkZWxl
+dGUgdGhpcyBtZXNzYWdlIGFuZCBpdHMgYXR0YWNobWVudHMuDQpBcyBlbWFpbHMgbWF5IGJlIGFs
+dGVyZWQsIE9yYW5nZSBpcyBub3QgbGlhYmxlIGZvciBtZXNzYWdlcyB0aGF0IGhhdmUgYmVlbiBt
+b2RpZmllZCwgY2hhbmdlZCBvciBmYWxzaWZpZWQuDQpUaGFuayB5b3UuCl9fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
+YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
+YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
