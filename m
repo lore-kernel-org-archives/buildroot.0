@@ -4,70 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A8AECAC583
-	for <buildroot@archiver.kernel.org>; Tue,  9 Sep 2025 12:43:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 806BCCA0FED
+	for <buildroot@archiver.kernel.org>; Tue,  9 Sep 2025 12:59:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6558140407;
-	Tue,  9 Sep 2025 12:43:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 34A4D40DF4;
+	Tue,  9 Sep 2025 12:59:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xb8q5loY-r9g; Tue,  9 Sep 2025 12:43:08 +0000 (UTC)
+ id et9OpoBX8kSW; Tue,  9 Sep 2025 12:59:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 885D440B69
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DA6540DE8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 885D440B69;
-	Tue,  9 Sep 2025 12:43:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4DA6540DE8;
+	Tue,  9 Sep 2025 12:59:49 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 08A46186
- for <buildroot@buildroot.org>; Tue,  9 Sep 2025 12:43:07 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 3BAC9CA
+ for <buildroot@buildroot.org>; Tue,  9 Sep 2025 12:59:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E14B282521
- for <buildroot@buildroot.org>; Tue,  9 Sep 2025 12:43:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2DF5480DF5
+ for <buildroot@buildroot.org>; Tue,  9 Sep 2025 12:59:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dWDAPnbHEDbX for <buildroot@buildroot.org>;
- Tue,  9 Sep 2025 12:43:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
+ id PgmjQZsnX8hQ for <buildroot@buildroot.org>;
+ Tue,  9 Sep 2025 12:59:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 184A180D47
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 184A180D47
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 184A180D47
- for <buildroot@buildroot.org>; Tue,  9 Sep 2025 12:43:04 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1183990879; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Tue, 09 Sep 2025 12:43:03 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1uvxgb-00G6hv-2b;
- Tue, 09 Sep 2025 14:43:01 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4245780DD4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4245780DD4
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4245780DD4
+ for <buildroot@buildroot.org>; Tue,  9 Sep 2025 12:59:46 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id DC7421A0DB4
+ for <buildroot@buildroot.org>; Tue,  9 Sep 2025 12:59:43 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id AAA8D60630
+ for <buildroot@buildroot.org>; Tue,  9 Sep 2025 12:59:43 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 2F39D102F28A9; 
+ Tue,  9 Sep 2025 14:59:38 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Tue,  9 Sep 2025 14:43:00 +0200
-Message-Id: <20250909124300.3839010-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue,  9 Sep 2025 14:08:05 +0200
+Message-ID: <20250909120822.1069595-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=qxg4VHUecnxGXHaMOGuw68TVYdDoa9tdvgCJ5B/p7pyO3TflsYWJ/5c+vv5648sfXbgGT11SOvicynNTq9eG+/oYAfY2Iwmr25jc4Svl2OsvucgQ1R32DzzAXMTLq6nws1bS948n1aYwNvJrq0h8oXv2F7S6B7VewB7WU9l1dWJjxHSHyHIqzzz2WdNlla5WNhdmmDPFOB4pLnnUvWnQfmzJkkWKNdfS2k+yXwH7HLWWwxwSdQFhvf+BL0P5nDIXqIEGD1xm+RNHQQ8U8hOt1VDqe3U4Y1WdsfkWq/gDmiqy0/KFjr9OMcbMxXLxEUxIMrF2cSAwLtU0xoqg0kh2qw==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=SggVhwwokctm1Hw4bWSRAckIHQyi/p96UIit3O+L/ik=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1757422783; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=LSUgPzMI13mazpifvG+xz82hZOnJ+t/jPuWvDDPvuCI=;
+ b=QZSElZ/FN9nw1QrnwKp+QoIOprINwFE5jrWleHNZkA2BNmg1ueihiXwE56gH1Luk+vIFtY
+ 5aWIUY77WQuyNph0SCyxpQhL2/qsDHdWzet5c7c0THiCd4saHqJtRZWt97b1ZZmC/dxWpl
+ EoFlHyVlvOrbEM8X3gpfXjAqaCNncP4hkMxCSR/uAIpEP28czt2jzG0G+NRbsZsnOLzHzs
+ vbmAPj6tvesQNUnm0OzsDMBywaJN+3PqHaoH4/k5mxSP6R6BCza4EH0NiLM4pQKo4XL+of
+ Ti6+FRa1135UjbidZYmWmYMvXhWy5mBscC0ObZVfEHek/+1FWiG4OkxWh6bfgg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=qxg4VHUe
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH] package/fatcat: add upstream patch to fix CMake
- 4 compatibility
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=QZSElZ/F
+Subject: [Buildroot] [PATCH 00/11] SELinux fixes and updates
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,74 +81,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add upstream patch fixing cmake 4 compatibility:
+Hello,
 
-CMake Error at CMakeLists.txt:1 (cmake_minimum_required):
-  Compatibility with CMake < 3.5 has been removed from CMake.
+This series has 3 patches fixing various build issues with the current
+SELinux stack, and then continues with an update of all SELinux
+components.
 
-Fixes:
+It was verified by running our SELinux runtime tests:
 
- https://autobuild.buildroot.org/results/548e662429e7cf91bd48e447345374c6734f1de7/
+  https://gitlab.com/tpetazzoni/buildroot/-/pipelines/2029530265
+  https://gitlab.com/tpetazzoni/buildroot/-/pipelines/2029530263
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...m-required-version-to-3.5-for-CMake-.patch | 40 +++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/fatcat/0001-cmake-Set-minimum-required-version-to-3.5-for-CMake-.patch
+Best regards,
 
-diff --git a/package/fatcat/0001-cmake-Set-minimum-required-version-to-3.5-for-CMake-.patch b/package/fatcat/0001-cmake-Set-minimum-required-version-to-3.5-for-CMake-.patch
-new file mode 100644
-index 0000000000..31dfedda22
---- /dev/null
-+++ b/package/fatcat/0001-cmake-Set-minimum-required-version-to-3.5-for-CMake-.patch
-@@ -0,0 +1,40 @@
-+From 2e3476a84cbe32598d36b5506c21025b3f94eb03 Mon Sep 17 00:00:00 2001
-+From: Alper Ak <alperyasinak1@gmail.com>
-+Date: Wed, 9 Jul 2025 19:30:26 +0300
-+Subject: [PATCH] cmake: Set minimum required version to 3.5 for CMake 4+
-+ compatibility
-+
-+Fix:
-+
-+| CMake Error at CMakeLists.txt:1 (cmake_minimum_required):
-+|   Compatibility with CMake < 3.5 has been removed from CMake.
-+|
-+|   Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
-+|   to tell CMake that the project requires at least <min> but has been updated
-+|   to work with policies introduced by <max> or earlier.
-+|
-+|   Or, add -DCMAKE_POLICY_VERSION_MINIMUM=3.5 to try configuring anyway.
-+|
-+|
-+| -- Configuring incomplete, errors occurred!
-+
-+Upstream: https://github.com/Gregwar/fatcat/commit/2e3476a84cbe32598d36b5506c21025b3f94eb03
-+Signed-off-by: Alper Ak <alperyasinak1@gmail.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index d6a2649..8f3eadc 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,4 +1,4 @@
-+-cmake_minimum_required(VERSION 2.8)
-++cmake_minimum_required(VERSION 3.5)
-+ project(fatcat)
-+ 
-+ OPTION(DEFINE_WIN "Compiling windows" OFF)
-+-- 
-+2.39.5
-+
+Thomas
+
+Thomas Petazzoni (11):
+  package/libselinux: fix build issues caused by 3.8.1 bump
+  package/libsemanage: fix build issue due to basename()
+  package/policycoreutils: fix build with musl due to getpass()
+  package/libselinux: bump version to 3.9
+  package/checkpolicy: bump to version 3.9
+  package/libsemanage: bump to version 3.9
+  package/libsepol: bump to version 3.9
+  package/policycoreutils: bump to version 3.9
+  package/restorecond: bump to version 3.9
+  package/selinux-python: bump to version 3.9
+  package/semodule-utils: bump to version 3.9
+
+ .checkpackageignore                           |  1 -
+ package/checkpolicy/checkpolicy.hash          |  2 +-
+ package/checkpolicy/checkpolicy.mk            |  2 +-
+ package/libselinux/libselinux.hash            |  2 +-
+ package/libselinux/libselinux.mk              |  2 +-
+ package/libsemanage/libsemanage.hash          |  2 +-
+ package/libsemanage/libsemanage.mk            |  2 +-
+ .../libsepol/0001-support-static-only.patch   | 52 -------------------
+ package/libsepol/libsepol.hash                |  2 +-
+ package/libsepol/libsepol.mk                  |  4 +-
+ ...-all-paths-that-use-an-absolute-path.patch |  2 +-
+ .../0002-Add-PREFIX-to-host-paths.patch       |  2 +-
+ package/policycoreutils/Config.in             |  5 +-
+ package/policycoreutils/policycoreutils.hash  |  2 +-
+ package/policycoreutils/policycoreutils.mk    | 37 ++++---------
+ package/restorecond/restorecond.hash          |  2 +-
+ package/restorecond/restorecond.mk            |  2 +-
+ package/selinux-python/selinux-python.hash    |  2 +-
+ package/selinux-python/selinux-python.mk      |  2 +-
+ package/semodule-utils/semodule-utils.hash    |  2 +-
+ package/semodule-utils/semodule-utils.mk      |  2 +-
+ 21 files changed, 30 insertions(+), 101 deletions(-)
+ delete mode 100644 package/libsepol/0001-support-static-only.patch
+
 -- 
-2.39.5
+2.51.0
 
 _______________________________________________
 buildroot mailing list
