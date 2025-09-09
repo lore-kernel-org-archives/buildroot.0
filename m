@@ -1,54 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF301CAC583
-	for <buildroot@archiver.kernel.org>; Tue,  9 Sep 2025 12:59:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE92ECAC58D
+	for <buildroot@archiver.kernel.org>; Tue,  9 Sep 2025 12:59:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A361D612E2;
-	Tue,  9 Sep 2025 12:59:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AAAF7411CB;
+	Tue,  9 Sep 2025 12:59:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ftmoOkWi49A8; Tue,  9 Sep 2025 12:59:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6mift7_VenTp; Tue,  9 Sep 2025 12:59:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90AE4613EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B77F5411CD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 90AE4613EB;
-	Tue,  9 Sep 2025 12:59:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B77F5411CD;
+	Tue,  9 Sep 2025 12:59:58 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DA82CA
- for <buildroot@buildroot.org>; Tue,  9 Sep 2025 12:59:55 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 243D3186
+ for <buildroot@buildroot.org>; Tue,  9 Sep 2025 12:59:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F3D37610A5
- for <buildroot@buildroot.org>; Tue,  9 Sep 2025 12:59:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0A92A61426
+ for <buildroot@buildroot.org>; Tue,  9 Sep 2025 12:59:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2qiiBLmj9j22 for <buildroot@buildroot.org>;
- Tue,  9 Sep 2025 12:59:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id 7RxtesTn13ah for <buildroot@buildroot.org>;
+ Tue,  9 Sep 2025 12:59:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D10C160B22
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D10C160B22
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D10C160B22
- for <buildroot@buildroot.org>; Tue,  9 Sep 2025 12:59:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C450B60B22
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C450B60B22
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C450B60B22
+ for <buildroot@buildroot.org>; Tue,  9 Sep 2025 12:59:55 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 1C3691A0DB4;
- Tue,  9 Sep 2025 12:59:52 +0000 (UTC)
+ by smtpout-04.galae.net (Postfix) with ESMTPS id 41A64C8F450
+ for <buildroot@buildroot.org>; Tue,  9 Sep 2025 12:59:37 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id E971E60630;
- Tue,  9 Sep 2025 12:59:51 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id EA8F160630;
+ Tue,  9 Sep 2025 12:59:52 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 03731102F2908; 
- Tue,  9 Sep 2025 14:59:43 +0200 (CEST)
+ with ESMTPSA id 2E553102F2836; 
+ Tue,  9 Sep 2025 14:59:52 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Tue,  9 Sep 2025 14:08:06 +0200
-Message-ID: <20250909120822.1069595-2-thomas.petazzoni@bootlin.com>
+Date: Tue,  9 Sep 2025 14:08:07 +0200
+Message-ID: <20250909120822.1069595-3-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250909120822.1069595-1-thomas.petazzoni@bootlin.com>
 References: <20250909120822.1069595-1-thomas.petazzoni@bootlin.com>
@@ -56,23 +56,22 @@ MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1757422791; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1757422792; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=OSRUb4cPXs1vnQ66atvuq5ZBDteUyaHSF8oaG9SvO2U=;
- b=Q9JsrzjCcg0hXgZ12ssb0YB7NfrOyEGC3lZy0s1DUDKihCrfM04cCYdBsz9IYtm+zE9L5Q
- bAbwrvQJiwNFe60x46ipfurmQIUpX39uE7lxEPRWdfRxhzkykqb4eNEPtLJLTlKA87uNOw
- yXvOOjnmtfLCD8q4sWORvvLR5r+vEABGsb4+zRXr9mbSXGPFs0RDB4+1UnxtNSwbktxlb8
- KTbZ0wAett3ftM/RV6SrBxqMMgiSbLJXIlnGUT4M7KIwZ7Hlz36tpt0P7j6IvjzFtKenzC
- iX1C+Z3sO2j6X9Yf1c8++KtBqNyrrWeO3Q52htUy09lZUWCLLQklAin1rvBagw==
+ bh=z3aNPOYgdTiQEv6K1MAb3eJaLHNvgQUTWLAZBMPGEFE=;
+ b=dQo5H6+EcXUohCuHsU+hl17epOmH6xb6qfTE6H9NJ0hd6SMrMm2t3zH0HQnQZJZ8H30WcE
+ SVD6JRbOwKJ8GMCSxdo7UpNWo7ivH/ePKGwsmMGdy/dB8PjEJisBT8SzTJ1nU5qct1Zx6e
+ YgHo8/k39cCUZ3OJ7r95yaQXivO7/MXuBV1/cg3/ljuLJEdANP/jVeIKeSjsW5rlCaYijx
+ tBgQeXJA1E9aHzy3aR/Qsx4ZNGng4ZUekG9K9ylIuSUyktNfBuUZTzQCAzbYgGS8+rvv6T
+ r6GXF/UMyeVLTjM7ZCuU/9P8A8RYHeJfxbKaAKYVuEITR6b7IWTVCEbOBKHzJA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=Q9JsrzjC
-Subject: [Buildroot] [PATCH 01/11] package/libselinux: fix build issues
- caused by 3.8.1 bump
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=dQo5H6+E
+Subject: [Buildroot] [PATCH 02/11] package/libsemanage: fix build issue due
+ to basename()
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,165 +85,217 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Antoine Tenart <atenart@kernel.org>,
- Marcus Folkesson <marcus.folkesson@gmail.com>,
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-U2luY2UgdGhlIGJ1bXAgdG8gdmVyc2lvbiAzLjguMSBpbiBjb21taXQKMWFlM2FkNGU4NzhlMWY0
-MjE3YmEzMjc2ZmYwYzllNTg0MjM0YWZhNCwgbGlic2VsaW51eCBmYWlscyB0byBidWlsZAp3aXRo
-IGF0IGxlYXN0CgotIE11c2wgY29uZmlndXJhdGlvbnMKLSBSSVNDLVYgMzItYml0IGNvbmZpZ3Vy
-YXRpb25zCi0gT3BlblJJU0MgY29uZmlndXJhdGlvbnMKClRoZXNlIGJ1aWxkIGZhaWx1cmVzIGFy
-ZSBkdWUgdG8gYWRkaXRpb25hbCBjaGVja3Mgb24gdGhlIHNpemUgb2Ygc29tZQpkYXRhIHN0cnVj
-dHVyZXM6CgptYXRjaHBhdGhjb24uYzoyNzA6NDc6IGVycm9yOiAnX19pbm9fdCcgdW5kZWNsYXJl
-ZCBoZXJlIChub3QgaW4gYSBmdW5jdGlvbik7IGRpZCB5b3UgbWVhbiAnaW5vX3QnPwogIDI3MCB8
-IHN0YXRpY19hc3NlcnQoc2l6ZW9mKHVuc2lnbmVkIGxvbmcpID09IHNpemVvZihfX2lub190KSwg
-Imlub2RlIHNpemUgbWlzbWF0Y2giKTsKICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgXn5+fn5+fgogICAgICB8ICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICBpbm9fdAptYXRjaHBhdGhjb24uYzoyNzA6MTU6IGVy
-cm9yOiBleHByZXNzaW9uIGluIHN0YXRpYyBhc3NlcnRpb24gaXMgbm90IGFuIGludGVnZXIKICAy
-NzAgfCBzdGF0aWNfYXNzZXJ0KHNpemVvZih1bnNpZ25lZCBsb25nKSA9PSBzaXplb2YoX19pbm9f
-dCksICJpbm9kZSBzaXplIG1pc21hdGNoIik7CiAgICAgIHwgICAgICAgICAgICAgICBefn5+fn4K
-ClRoZXNlIGlzc3VlcyBoYXZlIGJlZW4gZml4ZWQgaW4gZm9sbG93LXVwIHVwc3RyZWFtIGNvbW1p
-dHMsIHdoaWNoIHdlCmJhY2twb3J0LgoKRml4ZXM6CgogIGh0dHBzOi8vYXV0b2J1aWxkLmJ1aWxk
-cm9vdC5uZXQvcmVzdWx0cy8wMGExYWIzMGNjNmI3YWY1MDNhYTk2Mzg0YmE0YzQ0NDRjMjE3NDAx
-LyAobXVzbCkKICBodHRwczovL2F1dG9idWlsZC5idWlsZHJvb3QubmV0L3Jlc3VsdHMvYzgzMjFi
-ZTY4NzIwMTkzN2JkNWViNDhiMzFkZmFiYWMxMmY0ZTllYS8gKGdsaWJjIG9yMWspCiAgaHR0cHM6
-Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5ldC9yZXN1bHRzLzdiOTRmNDQyODI1ODJkNTk5NGY0MGE3
-NDFjYzBjMzhiZDY4YjUzYmQvIChyaXNjLXYgMzItYml0KQoKU2lnbmVkLW9mZi1ieTogVGhvbWFz
-IFBldGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBib290bGluLmNvbT4KLS0tCiAuLi5jb25fZmls
-ZXNwZWNfYWRkNjQtaWYtZGVmaW5lZC1fX0lOT18ucGF0Y2ggfCA4NCArKysrKysrKysrKysrKysr
-KysrCiAuLi4tY2FyZWZ1bC13aXRoLW5vbi1wb3J0YWJsZS1MRlMtbWFjcm8ucGF0Y2ggfCA1NiAr
-KysrKysrKysrKysrCiAyIGZpbGVzIGNoYW5nZWQsIDE0MCBpbnNlcnRpb25zKCspCiBjcmVhdGUg
-bW9kZSAxMDA2NDQgcGFja2FnZS9saWJzZWxpbnV4LzAwMDMtSW5qZWN0LW1hdGNocGF0aGNvbl9m
-aWxlc3BlY19hZGQ2NC1pZi1kZWZpbmVkLV9fSU5PXy5wYXRjaAogY3JlYXRlIG1vZGUgMTAwNjQ0
-IHBhY2thZ2UvbGlic2VsaW51eC8wMDA0LWxpYnNlbGludXgtYmUtY2FyZWZ1bC13aXRoLW5vbi1w
-b3J0YWJsZS1MRlMtbWFjcm8ucGF0Y2gKCmRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYnNlbGludXgv
-MDAwMy1JbmplY3QtbWF0Y2hwYXRoY29uX2ZpbGVzcGVjX2FkZDY0LWlmLWRlZmluZWQtX19JTk9f
-LnBhdGNoIGIvcGFja2FnZS9saWJzZWxpbnV4LzAwMDMtSW5qZWN0LW1hdGNocGF0aGNvbl9maWxl
-c3BlY19hZGQ2NC1pZi1kZWZpbmVkLV9fSU5PXy5wYXRjaApuZXcgZmlsZSBtb2RlIDEwMDY0NApp
-bmRleCAwMDAwMDAwMDAwLi42NTczY2IxNjczCi0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9s
-aWJzZWxpbnV4LzAwMDMtSW5qZWN0LW1hdGNocGF0aGNvbl9maWxlc3BlY19hZGQ2NC1pZi1kZWZp
-bmVkLV9fSU5PXy5wYXRjaApAQCAtMCwwICsxLDg0IEBACitGcm9tIGRhZWNjNTQ4NzhlNjc2OGIz
-ZTZhMmIyYTAwNjFkMjY5MGE2M2RlYTQgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCitGcm9tOiA9
-P1VURi04P3E/PUQwPUJEPUQwPUIwPUQwPUIxPz0gPG5hYmlqYWN6bGV3ZWxpQG5hYmlqYWN6bGV3
-ZWxpLnh5ej4KK0RhdGU6IFRodSwgMjAgTWFyIDIwMjUgMTY6NTU6MTcgKzAxMDAKK1N1YmplY3Q6
-IFtQQVRDSF0gSW5qZWN0IG1hdGNocGF0aGNvbl9maWxlc3BlY19hZGQ2NCgpIGlmCisgIWRlZmlu
-ZWQoX19JTk9fVF9NQVRDSEVTX0lOTzY0X1QpIGluc3RlYWQgb2YgdXNpbmcgX19CSVRTX1BFUl9M
-T05HIDwgNjQgYXMKKyBwcm94eQorTUlNRS1WZXJzaW9uOiAxLjAKK0NvbnRlbnQtVHlwZTogdGV4
-dC9wbGFpbjsgY2hhcnNldD1VVEYtOAorQ29udGVudC1UcmFuc2Zlci1FbmNvZGluZzogOGJpdAor
-CitUaGUgX19JTk9fVF9NQVRDSEVTX0lOTzY0X1QgaXMgZGVmaW5lZAoraWYgaW5vX3Qgd291bGQg
-YmUgdGhlIHNhbWUgc2l6ZSBhcyBpbm82NF90CitpZiAtRF9GSUxFX09GRlNFVF9CSVRTPTY0IHdl
-cmUgbm90IGRlZmluZWQuCisKK1RoaXMgaXMgL2V4YWN0bHkvIHdoYXQKKyAgLyogQUJJIGJhY2t3
-YXJkcy1jb21wYXRpYmxlIHNoaW0gZm9yIG5vbi1MRlMgMzItYml0IHN5c3RlbXMgKi8KKyAgI2lm
-IGRlZmluZWQoX0ZJTEVfT0ZGU0VUX0JJVFMpICYmIF9GSUxFX09GRlNFVF9CSVRTID09IDY0ICYm
-IF9fQklUU19QRVJfTE9ORyA8IDY0CitpcyB0cnlpbmcgdG8gZ2V0IGF0LCBidXQgY3VycmVudGx5
-IGZhaWxzIGJlY2F1c2UgeDMyL1JWMzIgYXJlICJMRlMiCit3aXRoIDMyLWJpdCBsb25ncyBhbmQg
-NjQtYml0IHRpbWVfdHMgbmF0aXZlbHkuCisKK1RodXMsIHRoZQorICBzdGF0aWNfYXNzZXJ0KHNp
-emVvZih1bnNpZ25lZCBsb25nKSA9PSBzaXplb2YoX19pbm9fdCksICJpbm9kZSBzaXplIG1pc21h
-dGNoIik7Cithc3NlcnRpb24gZmFpbHMgKF9faW5vX3QgaXMgdGhlICJrZXJuZWwgaW5vX3QiIHR5
-cGUsCit3aGljaCBnZW5lcmFsbHkgY29ycmVzcG9uZHMgdG8gdGhlIGtlcm5lbCdzIHVsb25nLCB3
-aGljaCBpcyB1NjQgb24geDMyKS4KKworZ2xpYmMgaGVhZGVycyBhbGxvdyB1cyB0byBjaGVjayB0
-aGUgY29uZGl0aW9uIHdlIGNhcmUgYWJvdXQgZGlyZWN0bHkuCisKK0ZpeGVzOiBjb21taXQgOTM5
-NWNjMDMyMiAoIkFsd2F5cyBidWlsZCBmb3IgTEZTIG1vZGUgb24gMzItYml0IGFyY2hzLiIpCitD
-bG9zZXM6ICM0NjMKK0Nsb3NlczogRGViaWFuIzEwOTg0ODEKK1NpZ25lZC1vZmYtYnk6INC90LDQ
-sSA8bmFiaWphY3psZXdlbGlAbmFiaWphY3psZXdlbGkueHl6PgorQ2M6IEFsYmEgTWVuZGV6IDxt
-ZUBhbGJhLnNoPgorQWNrZWQtYnk6IEphbWVzIENhcnRlciA8andjYXJ0MkBnbWFpbC5jb20+CitV
-cHN0cmVhbTogNWMzZmNiZDkzMWI3Zjk3NTJiNWNlMjljZWMzYjY4MTM5OTFkNjFjMAorU2lnbmVk
-LW9mZi1ieTogVGhvbWFzIFBldGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBib290bGluLmNvbT4K
-Ky0tLQorIGluY2x1ZGUvc2VsaW51eC9zZWxpbnV4LmggfCAyICstCisgc3JjL21hdGNocGF0aGNv
-bi5jICAgICAgICB8IDggKysrKysrLS0KKyAyIGZpbGVzIGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygr
-KSwgMyBkZWxldGlvbnMoLSkKKworZGlmZiAtLWdpdCBhL2luY2x1ZGUvc2VsaW51eC9zZWxpbnV4
-LmggYi9pbmNsdWRlL3NlbGludXgvc2VsaW51eC5oCitpbmRleCBmM2NmNWEyMC4uZjY0ODk2Yjcg
-MTAwNjQ0CistLS0gYS9pbmNsdWRlL3NlbGludXgvc2VsaW51eC5oCisrKysgYi9pbmNsdWRlL3Nl
-bGludXgvc2VsaW51eC5oCitAQCAtNTM3LDcgKzUzNyw3IEBAIGV4dGVybiBpbnQgbWF0Y2hwYXRo
-Y29uX2luZGV4KGNvbnN0IGNoYXIgKnBhdGgsCisgICAgd2l0aCB0aGUgc2FtZSBpbm9kZSAoZS5n
-LiBkdWUgdG8gbXVsdGlwbGUgaGFyZCBsaW5rcykuICBJZiBzbywgdGhlbgorICAgIHVzZSB0aGUg
-bGF0dGVyIG9mIHRoZSB0d28gc3BlY2lmaWNhdGlvbnMgYmFzZWQgb24gdGhlaXIgb3JkZXIgaW4g
-dGhlIAorICAgIGZpbGUgY29udGV4dHMgY29uZmlndXJhdGlvbi4gIFJldHVybiB0aGUgdXNlZCBz
-cGVjaWZpY2F0aW9uIGluZGV4LiAqLworLSNpZiBkZWZpbmVkKF9GSUxFX09GRlNFVF9CSVRTKSAm
-JiBfRklMRV9PRkZTRVRfQklUUyA9PSA2NCAmJiBfX0JJVFNfUEVSX0xPTkcgPCA2NAorKyNpZiBk
-ZWZpbmVkKF9GSUxFX09GRlNFVF9CSVRTKSAmJiBfRklMRV9PRkZTRVRfQklUUyA9PSA2NCAmJiAh
-ZGVmaW5lZChfX0lOT19UX01BVENIRVNfSU5PNjRfVCkKKyAjZGVmaW5lIG1hdGNocGF0aGNvbl9m
-aWxlc3BlY19hZGQgbWF0Y2hwYXRoY29uX2ZpbGVzcGVjX2FkZDY0CisgI2VuZGlmCisgZXh0ZXJu
-IGludCBtYXRjaHBhdGhjb25fZmlsZXNwZWNfYWRkKGlub190IGlubywgaW50IHNwZWNpbmQsIGNv
-bnN0IGNoYXIgKmZpbGUpOworZGlmZiAtLWdpdCBhL3NyYy9tYXRjaHBhdGhjb24uYyBiL3NyYy9t
-YXRjaHBhdGhjb24uYworaW5kZXggNTFmMGU0ZmYuLmE0ZjY1MDQ1IDEwMDY0NAorLS0tIGEvc3Jj
-L21hdGNocGF0aGNvbi5jCisrKysgYi9zcmMvbWF0Y2hwYXRoY29uLmMKK0BAIC0yNjEsNyArMjYx
-LDcgQEAgaW50IG1hdGNocGF0aGNvbl9maWxlc3BlY19hZGQoaW5vX3QgaW5vLCBpbnQgc3BlY2lu
-ZCwgY29uc3QgY2hhciAqZmlsZSkKKyAJcmV0dXJuIC0xOworIH0KKyAKKy0jaWYgZGVmaW5lZChf
-RklMRV9PRkZTRVRfQklUUykgJiYgX0ZJTEVfT0ZGU0VUX0JJVFMgPT0gNjQgJiYgX19CSVRTX1BF
-Ul9MT05HIDwgNjQKKysjaWYgKGRlZmluZWQoX0ZJTEVfT0ZGU0VUX0JJVFMpICYmIF9GSUxFX09G
-RlNFVF9CSVRTID09IDY0KSAmJiAhZGVmaW5lZChfX0lOT19UX01BVENIRVNfSU5PNjRfVCkKKyAv
-KiBhbGlhcyBkZWZpbmVkIGluIHRoZSBwdWJsaWMgaGVhZGVyIGJ1dCB3ZSB1bmRlZmluZSBpdCBo
-ZXJlICovCisgI3VuZGVmIG1hdGNocGF0aGNvbl9maWxlc3BlY19hZGQKKyAKK0BAIC0yODAsOSAr
-MjgwLDEzIEBAIGludCBtYXRjaHBhdGhjb25fZmlsZXNwZWNfYWRkKHVuc2lnbmVkIGxvbmcgaW5v
-LCBpbnQgc3BlY2luZCwKKyB7CisgCXJldHVybiBtYXRjaHBhdGhjb25fZmlsZXNwZWNfYWRkNjQo
-aW5vLCBzcGVjaW5kLCBmaWxlKTsKKyB9CisrI2VsaWYgKGRlZmluZWQoX0ZJTEVfT0ZGU0VUX0JJ
-VFMpICYmIF9GSUxFX09GRlNFVF9CSVRTID09IDY0KSB8fCBkZWZpbmVkKF9fSU5PX1RfTUFUQ0hF
-U19JTk82NF9UKQorKworK3N0YXRpY19hc3NlcnQoc2l6ZW9mKHVpbnQ2NF90KSA9PSBzaXplb2Yo
-aW5vX3QpLCAiaW5vZGUgc2l6ZSBtaXNtYXRjaCIpOworKworICNlbHNlCisgCistc3RhdGljX2Fz
-c2VydChzaXplb2YodW5zaWduZWQgbG9uZykgPT0gc2l6ZW9mKGlub190KSwgImlub2RlIHNpemUg
-bWlzbWF0Y2giKTsKKytzdGF0aWNfYXNzZXJ0KHNpemVvZih1aW50MzJfdCkgPT0gc2l6ZW9mKGlu
-b190KSwgImlub2RlIHNpemUgbWlzbWF0Y2giKTsKKyAKKyAjZW5kaWYKKyAKKy0tIAorMi41MS4w
-CisKZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGlic2VsaW51eC8wMDA0LWxpYnNlbGludXgtYmUtY2Fy
-ZWZ1bC13aXRoLW5vbi1wb3J0YWJsZS1MRlMtbWFjcm8ucGF0Y2ggYi9wYWNrYWdlL2xpYnNlbGlu
-dXgvMDAwNC1saWJzZWxpbnV4LWJlLWNhcmVmdWwtd2l0aC1ub24tcG9ydGFibGUtTEZTLW1hY3Jv
-LnBhdGNoCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLjlhMWQ4NzQ3MDYK
-LS0tIC9kZXYvbnVsbAorKysgYi9wYWNrYWdlL2xpYnNlbGludXgvMDAwNC1saWJzZWxpbnV4LWJl
-LWNhcmVmdWwtd2l0aC1ub24tcG9ydGFibGUtTEZTLW1hY3JvLnBhdGNoCkBAIC0wLDAgKzEsNTYg
-QEAKK0Zyb20gYmZjZGFmMmZmMzZkNjlhNTc4MTA0NzBmNTQwNWU1ZjI3ZTUxZTAxYyBNb24gU2Vw
-IDE3IDAwOjAwOjAwIDIwMDEKK0Zyb206IEFseXNzYSBSb3NzIDxoaUBhbHlzc2EuaXM+CitEYXRl
-OiBTYXQsIDI2IEFwciAyMDI1IDE3OjEzOjU3ICswMjAwCitTdWJqZWN0OiBbUEFUQ0hdIGxpYnNl
-bGludXg6IGJlIGNhcmVmdWwgd2l0aCBub24tcG9ydGFibGUgTEZTIG1hY3JvCitNSU1FLVZlcnNp
-b246IDEuMAorQ29udGVudC1UeXBlOiB0ZXh0L3BsYWluOyBjaGFyc2V0PVVURi04CitDb250ZW50
-LVRyYW5zZmVyLUVuY29kaW5nOiA4Yml0CisKK211c2wgZG9lcyBub3QgcHJvdmlkZSB0aGUgb2Jz
-b2xldGUgTEZTNjQgQVBJcyAobGlrZSBpbm82NF90KSDigJQgaW5vX3QKK2hhcyBhbHdheXMgYmVl
-biA2NC1iaXQgb24gYWxsIHBsYXRmb3JtcyB0aGVyZS4gIFRoYXQgbWVhbnMgdGhlcmUncworYWxz
-byBubyBfX0lOT19UX01BVENIRVNfSU5PNjRfVCBtYWNybywgbWVhbmluZyB0aGUgY2hlY2sgd291
-bGQgcGFzcworYW5kIHJlYWNoIHRoZSBzdGF0aWMgYXNzZXJ0cyBmb3IgdGhlIHNoaW0sIHdoaWNo
-IHdvdWxkIGZhaWwgZHVlIHRvCit0aGVyZSBiZWluZyBubyBpbm82NF90IHRvIGNoZWNrIHRoZSBz
-aXplIG9mLiAgRml4IHRoaXMgYnkgb25seQorYXNzdW1pbmcgdGhlIGFic2Vuc2Ugb2YgX19JTk9f
-VF9NQVRDSEVTX0lOTzY0X3QgaXMgbWVhbmluZ2Z1bCB3aGVuCithbm90aGVyIG5vbi1wb3J0YWJs
-ZSBHbGliYyBtYWNybywgX19JTk82NF9UX1RZUEUsIGlzIGRlZmluZWQuICBJZiBib3RoCithcmUg
-bWlzc2luZywgdGhhdCBwcm9iYWJseSBqdXN0IG1lYW5zIHRoZXJlIGlzIG5vIGlubzY0X3QuCisK
-K0ZpeGVzOiA1YzNmY2JkOSAoIkluamVjdCBtYXRjaHBhdGhjb25fZmlsZXNwZWNfYWRkNjQoKSBp
-ZiAhZGVmaW5lZChfX0lOT19UX01BVENIRVNfSU5PNjRfVCkgaW5zdGVhZCBvZiB1c2luZyBfX0JJ
-VFNfUEVSX0xPTkcgPCA2NCBhcyBwcm94eSIpCitTaWduZWQtb2ZmLWJ5OiBBbHlzc2EgUm9zcyA8
-aGlAYWx5c3NhLmlzPgorQWNrZWQtYnk6IEphbWVzIENhcnRlciA8andjYXJ0MkBnbWFpbC5jb20+
-CitVcHN0cmVhbTogMjFkZDAwNzEzYWU5OWIxM2UzNmM2MzI5OTJjYjE3MWM2ZWMxYWJjZQorU2ln
-bmVkLW9mZi1ieTogVGhvbWFzIFBldGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBib290bGluLmNv
-bT4KKy0tLQorIGluY2x1ZGUvc2VsaW51eC9zZWxpbnV4LmggfCAyICstCisgc3JjL21hdGNocGF0
-aGNvbi5jICAgICAgICB8IDIgKy0KKyAyIGZpbGVzIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwg
-MiBkZWxldGlvbnMoLSkKKworZGlmZiAtLWdpdCBhL2luY2x1ZGUvc2VsaW51eC9zZWxpbnV4Lmgg
-Yi9pbmNsdWRlL3NlbGludXgvc2VsaW51eC5oCitpbmRleCBmNjQ4OTZiNy4uYjE0MzFlNWQgMTAw
-NjQ0CistLS0gYS9pbmNsdWRlL3NlbGludXgvc2VsaW51eC5oCisrKysgYi9pbmNsdWRlL3NlbGlu
-dXgvc2VsaW51eC5oCitAQCAtNTM3LDcgKzUzNyw3IEBAIGV4dGVybiBpbnQgbWF0Y2hwYXRoY29u
-X2luZGV4KGNvbnN0IGNoYXIgKnBhdGgsCisgICAgd2l0aCB0aGUgc2FtZSBpbm9kZSAoZS5nLiBk
-dWUgdG8gbXVsdGlwbGUgaGFyZCBsaW5rcykuICBJZiBzbywgdGhlbgorICAgIHVzZSB0aGUgbGF0
-dGVyIG9mIHRoZSB0d28gc3BlY2lmaWNhdGlvbnMgYmFzZWQgb24gdGhlaXIgb3JkZXIgaW4gdGhl
-IAorICAgIGZpbGUgY29udGV4dHMgY29uZmlndXJhdGlvbi4gIFJldHVybiB0aGUgdXNlZCBzcGVj
-aWZpY2F0aW9uIGluZGV4LiAqLworLSNpZiBkZWZpbmVkKF9GSUxFX09GRlNFVF9CSVRTKSAmJiBf
-RklMRV9PRkZTRVRfQklUUyA9PSA2NCAmJiAhZGVmaW5lZChfX0lOT19UX01BVENIRVNfSU5PNjRf
-VCkKKysjaWYgZGVmaW5lZChfRklMRV9PRkZTRVRfQklUUykgJiYgX0ZJTEVfT0ZGU0VUX0JJVFMg
-PT0gNjQgJiYgZGVmaW5lZChfX0lOTzY0X1RfVFlQRSkgJiYgIWRlZmluZWQoX19JTk9fVF9NQVRD
-SEVTX0lOTzY0X1QpCisgI2RlZmluZSBtYXRjaHBhdGhjb25fZmlsZXNwZWNfYWRkIG1hdGNocGF0
-aGNvbl9maWxlc3BlY19hZGQ2NAorICNlbmRpZgorIGV4dGVybiBpbnQgbWF0Y2hwYXRoY29uX2Zp
-bGVzcGVjX2FkZChpbm9fdCBpbm8sIGludCBzcGVjaW5kLCBjb25zdCBjaGFyICpmaWxlKTsKK2Rp
-ZmYgLS1naXQgYS9zcmMvbWF0Y2hwYXRoY29uLmMgYi9zcmMvbWF0Y2hwYXRoY29uLmMKK2luZGV4
-IGE0ZjY1MDQ1Li4yNDBjOWZhNyAxMDA2NDQKKy0tLSBhL3NyYy9tYXRjaHBhdGhjb24uYworKysr
-IGIvc3JjL21hdGNocGF0aGNvbi5jCitAQCAtMjYxLDcgKzI2MSw3IEBAIGludCBtYXRjaHBhdGhj
-b25fZmlsZXNwZWNfYWRkKGlub190IGlubywgaW50IHNwZWNpbmQsIGNvbnN0IGNoYXIgKmZpbGUp
-CisgCXJldHVybiAtMTsKKyB9CisgCistI2lmIChkZWZpbmVkKF9GSUxFX09GRlNFVF9CSVRTKSAm
-JiBfRklMRV9PRkZTRVRfQklUUyA9PSA2NCkgJiYgIWRlZmluZWQoX19JTk9fVF9NQVRDSEVTX0lO
-TzY0X1QpCisrI2lmIChkZWZpbmVkKF9GSUxFX09GRlNFVF9CSVRTKSAmJiBfRklMRV9PRkZTRVRf
-QklUUyA9PSA2NCkgJiYgZGVmaW5lZChfX0lOTzY0X1RfVFlQRSkgJiYgIWRlZmluZWQoX19JTk9f
-VF9NQVRDSEVTX0lOTzY0X1QpCisgLyogYWxpYXMgZGVmaW5lZCBpbiB0aGUgcHVibGljIGhlYWRl
-ciBidXQgd2UgdW5kZWZpbmUgaXQgaGVyZSAqLworICN1bmRlZiBtYXRjaHBhdGhjb25fZmlsZXNw
-ZWNfYWRkCisgCistLSAKKzIuNTEuMAorCi0tIAoyLjUxLjAKCl9fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
-b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
-dGluZm8vYnVpbGRyb290Cg==
+The build of libsemanage on musl configurations fails with:
+
+direct_api.c: In function 'semanage_direct_install_file':
+direct_api.c:1746:20: error: implicit declaration of function 'basename' [-Wimplicit-function-declaration]
+ 1746 |         filename = basename(path);
+      |                    ^~~~~~~~
+
+This fails to build even with a GCC 14.x toolchain, even with
+libsemanage 3.7, which is the version we have in our LTS branch.
+
+Let's backport an upstream patch fixing this issue.
+
+Fixes:
+
+  https://autobuild.buildroot.net/results/913852e35c925888ced37e15be3731b9d3963019/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...te-semanage_basename-to-ensure-posix.patch | 172 ++++++++++++++++++
+ 1 file changed, 172 insertions(+)
+ create mode 100644 package/libsemanage/0001-libsemanage-create-semanage_basename-to-ensure-posix.patch
+
+diff --git a/package/libsemanage/0001-libsemanage-create-semanage_basename-to-ensure-posix.patch b/package/libsemanage/0001-libsemanage-create-semanage_basename-to-ensure-posix.patch
+new file mode 100644
+index 0000000000..10a81241a1
+--- /dev/null
++++ b/package/libsemanage/0001-libsemanage-create-semanage_basename-to-ensure-posix.patch
+@@ -0,0 +1,172 @@
++From 795f8381fd64abf692b26d01369561fc68be230c Mon Sep 17 00:00:00 2001
++From: Rahul Sandhu <nvraxn@gmail.com>
++Date: Fri, 21 Feb 2025 09:39:10 +0000
++Subject: [PATCH] libsemanage: create semanage_basename to ensure posix
++ compliance
++
++Passing a const char * to basename(3) is a glibc-specific extension, so
++create our own basename implementation. As it's a trivial 2 LOC, always
++use our implementation of basename even if glibc is available to avoid
++the complications of attaining the non-posix glibc implementation of
++basename(3) as _GNU_SOURCE needs to be defined, but libgen.h also needs
++to have not been included.
++
++Also fix a missing check for selinux_policy_root(3). From the man page:
++On failure, selinux_policy_root returns NULL.
++
++As the glibc basename(3) (unlike posix basename(3)) does not support
++having a nullptr passed to it, only pass the policy_root to basename(3)
++if it is non-null.
++
++Signed-off-by: Rahul Sandhu <nvraxn@gmail.com>
++Acked-by: James Carter <jwcart2@gmail.com>
++Upstream: a339594da6f027aed5d66ec6798a3d732df235e4
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/conf-parse.y       | 13 ++++++++++---
++ src/direct_api.c       |  1 +
++ src/utilities.c        |  9 +++++++++
++ src/utilities.h        | 13 +++++++++++++
++ tests/test_utilities.c | 26 ++++++++++++++++++++++++++
++ 5 files changed, 59 insertions(+), 3 deletions(-)
++
++diff --git a/src/conf-parse.y b/src/conf-parse.y
++index 6cb8a598..d3ca5f1f 100644
++--- a/src/conf-parse.y
+++++ b/src/conf-parse.y
++@@ -21,6 +21,7 @@
++ %{
++ 
++ #include "semanage_conf.h"
+++#include "utilities.h"
++ 
++ #include <sepol/policydb.h>
++ #include <selinux/selinux.h>
++@@ -382,7 +383,10 @@ external_opt:   PROG_PATH '=' ARG  { PASSIGN(new_external->path, $3); }
++ static int semanage_conf_init(semanage_conf_t * conf)
++ {
++ 	conf->store_type = SEMANAGE_CON_DIRECT;
++-	conf->store_path = strdup(basename(selinux_policy_root()));
+++	const char *policy_root = selinux_policy_root();
+++	if (policy_root != NULL) {
+++		conf->store_path = strdup(semanage_basename(policy_root));
+++	}
++ 	conf->ignoredirs = NULL;
++ 	conf->store_root_path = strdup("/var/lib/selinux");
++ 	conf->compiler_directory_path = strdup("/usr/libexec/selinux/hll");
++@@ -544,8 +548,11 @@ static int parse_module_store(char *arg)
++ 	free(current_conf->store_path);
++ 	if (strcmp(arg, "direct") == 0) {
++ 		current_conf->store_type = SEMANAGE_CON_DIRECT;
++-		current_conf->store_path =
++-		    strdup(basename(selinux_policy_root()));
+++		const char *policy_root = selinux_policy_root();
+++		if (policy_root != NULL) {
+++			current_conf->store_path =
+++			    strdup(semanage_basename(policy_root));
+++		}
++ 		current_conf->server_port = -1;
++ 	} else if (*arg == '/') {
++ 		current_conf->store_type = SEMANAGE_CON_POLSERV_LOCAL;
++diff --git a/src/direct_api.c b/src/direct_api.c
++index 99cba7f7..ce12ccaf 100644
++--- a/src/direct_api.c
+++++ b/src/direct_api.c
++@@ -26,6 +26,7 @@
++ 
++ #include <assert.h>
++ #include <fcntl.h>
+++#include <libgen.h>
++ #include <stdio.h>
++ #include <stdio_ext.h>
++ #include <stdlib.h>
++diff --git a/src/utilities.c b/src/utilities.c
++index 70b5b677..004ffb62 100644
++--- a/src/utilities.c
+++++ b/src/utilities.c
++@@ -349,3 +349,12 @@ int write_full(int fd, const void *buf, size_t len)
++ 
++ 	return 0;
++ }
+++
+++#ifdef __GNUC__
+++__attribute__((nonnull))
+++#endif
+++char *semanage_basename(const char *filename)
+++{
+++	char *p = strrchr(filename, '/');
+++	return p ? p + 1 : (char *)filename;
+++}
++diff --git a/src/utilities.h b/src/utilities.h
++index c2d484a7..7481077a 100644
++--- a/src/utilities.h
+++++ b/src/utilities.h
++@@ -156,4 +156,17 @@ semanage_list_t *semanage_slurp_file_filter(FILE * file,
++ 
++ int write_full(int fd, const void *buf, size_t len) WARN_UNUSED;
++ 
+++/**
+++ * Portable implementation of the glibc version of basename(3).
+++ *
+++ * @param filename  path to find basename of
+++ *
+++ * @return          basename of filename
+++ */
+++
+++#ifdef __GNUC__
+++__attribute__((nonnull))
+++#endif
+++char *semanage_basename(const char *filename);
+++
++ #endif
++diff --git a/tests/test_utilities.c b/tests/test_utilities.c
++index bbd5af30..70a76fe7 100644
++--- a/tests/test_utilities.c
+++++ b/tests/test_utilities.c
++@@ -46,6 +46,7 @@ static void test_semanage_rtrim(void);
++ static void test_semanage_str_replace(void);
++ static void test_semanage_findval(void);
++ static void test_slurp_file_filter(void);
+++static void test_semanage_basename(void);
++ 
++ static char fname[] = {
++ 	'T', 'E', 'S', 'T', '_', 'T', 'E', 'M', 'P', '_', 'X', 'X', 'X', 'X',
++@@ -117,6 +118,10 @@ int semanage_utilities_add_tests(CU_pSuite suite)
++ 				test_slurp_file_filter)) {
++ 		goto err;
++ 	}
+++	if (NULL == CU_add_test(suite, "semanage_basename",
+++				test_semanage_basename)) {
+++		goto err;
+++	}
++ 	return 0;
++       err:
++ 	CU_cleanup_registry();
++@@ -346,3 +351,24 @@ static void test_slurp_file_filter(void)
++ 
++ 	semanage_list_destroy(&data);
++ }
+++
+++static void test_semanage_basename(void)
+++{
+++	char *basename1 = semanage_basename("/foo/bar");
+++	CU_ASSERT_STRING_EQUAL(basename1, "bar");
+++
+++	char *basename2 = semanage_basename("/foo/bar/");
+++	CU_ASSERT_STRING_EQUAL(basename2, "");
+++
+++	char *basename3 = semanage_basename("/foo.bar");
+++	CU_ASSERT_STRING_EQUAL(basename3, "foo.bar");
+++
+++	char *basename5 = semanage_basename(".");
+++	CU_ASSERT_STRING_EQUAL(basename5, ".");
+++
+++	char *basename6 = semanage_basename("");
+++	CU_ASSERT_STRING_EQUAL(basename6, "");
+++
+++	char *basename7 = semanage_basename("/");
+++	CU_ASSERT_STRING_EQUAL(basename7, "");
+++}
++-- 
++2.51.0
++
+-- 
+2.51.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
