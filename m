@@ -1,119 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54176CA0FED
-	for <buildroot@archiver.kernel.org>; Tue,  9 Sep 2025 17:56:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41830CA0FED
+	for <buildroot@archiver.kernel.org>; Tue,  9 Sep 2025 19:21:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 08D286065F;
-	Tue,  9 Sep 2025 17:56:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BEDAE843D2;
+	Tue,  9 Sep 2025 19:21:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q3kqD7qUT1IX; Tue,  9 Sep 2025 17:56:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Rzhsk8VSrXgJ; Tue,  9 Sep 2025 19:21:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27D2C60689
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BBCC843D8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 27D2C60689;
-	Tue,  9 Sep 2025 17:56:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3E3F9E1F
- for <buildroot@buildroot.org>; Tue,  9 Sep 2025 17:56:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9BBCC843D8;
+	Tue,  9 Sep 2025 19:21:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 96AAAE1F
+ for <buildroot@buildroot.org>; Tue,  9 Sep 2025 19:21:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3020060689
- for <buildroot@buildroot.org>; Tue,  9 Sep 2025 17:56:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 88317400E2
+ for <buildroot@buildroot.org>; Tue,  9 Sep 2025 19:21:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cFpF62lrMBNX for <buildroot@buildroot.org>;
- Tue,  9 Sep 2025 17:56:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::12c; helo=mail-lf1-x12c.google.com;
- envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 13FE86065F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13FE86065F
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com
- [IPv6:2a00:1450:4864:20::12c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 13FE86065F
- for <buildroot@buildroot.org>; Tue,  9 Sep 2025 17:56:32 +0000 (UTC)
-Received: by mail-lf1-x12c.google.com with SMTP id
- 2adb3069b0e04-55f98e7782bso6743644e87.0
- for <buildroot@buildroot.org>; Tue, 09 Sep 2025 10:56:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1757440590; x=1758045390;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=ra8eKVgPDBgY8PLU4klsIhngMADNUec/QUbphgcQ5Q0=;
- b=g32FeNd5xK0pk+0YfPSlqRCESVjpLVbZC5uT4AY8Z3jcnayWrZjw1S5GpS4NRa1HYE
- VXvu7y67do3bu4Yb/RjffxpfHLEHwuSoxrhEzLvctF0pdNvioR/cxy29WreVOyebek70
- RyWm4rxXF6MjA1yWlNvB67RKUpq6nVDZCEMRgWPqwKHAkLkuUVM1JPqZBtaqrEzvYM60
- wFIFwafA5/qPz8DtLQpZk5ivGuTPje529Q+Q7RLW1h07bSWNzjBqfB9/D6NXuNdFPs3V
- 2IzGmAFDdmh+BgHxa5iGVkdZPKjUat/sQ//cRgCx2qseZg7mfwWknDMIIkyeLVNGiY/i
- 50Gw==
-X-Forwarded-Encrypted: i=1;
- AJvYcCUazUvGAvHGaj1ZCS6fHzuzV/99yWHbMxZKBLRklzazTI1z6rEYMkG7L7vEZiWcMri3Ca2tz7EjSOE=@buildroot.org
-X-Gm-Message-State: AOJu0Yz97UrIjpDegxCMt0FBiN8DoQZaEvwahUQmnpe4ansX/4SnHVOZ
- dzFeAgMxulz75Qct+JU+QIwa1or7mx43LmYv+shk6aB3XI9JKpecXTlZ5eYbE5HEIBWF7C+97Tf
- wI11Sqes92A==
-X-Gm-Gg: ASbGncucwRecES5zZ+c9ujordIQRCZ/wh+K/ZDFPN38vY4+RFOFrK0R2KlKPZ50DxKb
- MLDMpzzMAGc4+etWidfUmNiNNLSZUdt2kYbvkFbRY94S8nNGX5JE5Lt+KtlGzu/BWanYTHd5m4U
- grbnve8AzSy5On+ldA8MelcRbyJJQ3sgWlk+fZKV3lVvywBrPfLJVe3CfnSk1WBQTasV5TGgqou
- 4PDbGj1aj8U1jz7H8D+t/z2XMtkLQZj8g2FbskaeJHs6Rt6pZszCITilK/H3pP2+wdDRP5vau+q
- 2Wl9TuWm1q6mqqEXLR4VB3a1ZMz+NNkHCUo/grnNXyLkRI2DwnLgFp88HhsuJEUfkcl53fAnyg+
- hspzzTHBjtcNDtI1SE9ZUZ/Yp/z7CUn9vipRdrGt418l/J7wwxVRVkGhBaC50qX8f89LGxzQP
-X-Google-Smtp-Source: AGHT+IE5Ra5ycrsERCChPJe6DBVIyqItfomDOgC2TrVqmcuSCu7SqU3o4ETyF1ho1u8hnbrbq/d3vA==
-X-Received: by 2002:a05:6512:3c9a:b0:55f:563e:f16f with SMTP id
- 2adb3069b0e04-56275bcbb47mr3905284e87.21.1757440589892; 
- Tue, 09 Sep 2025 10:56:29 -0700 (PDT)
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com.
- [209.85.167.53]) by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-56818cfbdd7sm643230e87.136.2025.09.09.10.56.29
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 09 Sep 2025 10:56:29 -0700 (PDT)
-Received: by mail-lf1-f53.google.com with SMTP id
- 2adb3069b0e04-56a04f7691aso497961e87.1
- for <buildroot@buildroot.org>; Tue, 09 Sep 2025 10:56:29 -0700 (PDT)
-X-Forwarded-Encrypted: i=1;
- AJvYcCW0VfrWdRHEYhUJXs2HSHkQpUuqfaXI67LL2lG0/jAygtshk1olE/oW4o6cA7Ov0Q9spSK1DZk7hio=@buildroot.org
-X-Received: by 2002:a05:6512:6d5:b0:55f:3ae4:fe57 with SMTP id
- 2adb3069b0e04-562758dd55cmr3931826e87.20.1757440588675; Tue, 09 Sep 2025
- 10:56:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1751377540.git.yann.morin@orange.com>
- <d23125d705a0c24ca91071624d507392ecfe7b0d.1751377540.git.yann.morin@orange.com>
- <a8b668d1-24da-4b18-8235-e98a29732884@smile.fr> <aL/bdHOwN/ENpcOl@yd-6wlzhs3>
-In-Reply-To: <aL/bdHOwN/ENpcOl@yd-6wlzhs3>
-Date: Tue, 9 Sep 2025 10:56:17 -0700
-X-Gmail-Original-Message-ID: <CA+h8R2rxQ6Na-hG=BLZrNvL=Wu5bwur_8YeC3wNdFkjrKfsP4Q@mail.gmail.com>
-X-Gm-Features: Ac12FXw-2fQTS0o9UScl35LZwdpZ3BFj5NVq31n08VWoLROJTltSWr4njY6SSjY
-Message-ID: <CA+h8R2rxQ6Na-hG=BLZrNvL=Wu5bwur_8YeC3wNdFkjrKfsP4Q@mail.gmail.com>
-To: yann.morin@orange.com
-Cc: Romain Naour <romain.naour@smile.fr>,
- Buildroot Mailing List <buildroot@buildroot.org>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1757440590; x=1758045390; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=ra8eKVgPDBgY8PLU4klsIhngMADNUec/QUbphgcQ5Q0=;
- b=aHwhTg9h1V3DeqLjBmI6Gr6XsDcsbePCdJSBh24ZF9dCywlXbq5VDCFyxwJMbAnobY
- jbQtoTMi4D90pBrTi0ZwkDwqGPSnbdKy5ymJPJzzZs2ZBXHeEdrIzz7oNItGvi2PrsTt
- wPUovZUFN6VNMIZZW5uEZl+GTJlC/E7eyDCc05ZWUvUVoDdzZ2cwQrTd2hgh+AYZIUcQ
- PcZZgXc8kheBC/GRBrspajaVTTPRWAYfdzxrtDBD33momuDFdhpByCp/PJ9vWLlGAILk
- OK1IFV75j3fOxtWWi8vN7+6huF5mZl9Bn2P2DxV/j0kJ2rnA6mIcbxOyv20pGA8yAj2r
- dDng==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=aperture.us
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
- header.s=google header.b=aHwhTg9h
-Subject: Re: [Buildroot] [PATCH 1/4 v2] package/pkg-golang: simplify
- installing multiple binaries
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jdRVNNZyQ9pA for <buildroot@buildroot.org>;
+ Tue,  9 Sep 2025 19:21:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1ADB40050
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B1ADB40050
+ for <buildroot@buildroot.org>; Tue,  9 Sep 2025 19:21:16 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9E80783A19; Tue,  9 Sep 2025 19:21:16 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 9 Sep 2025 21:20:53 +0200
+X-Git-Refname: refs/heads/2025.05.x
+X-Git-Oldrev: 6f191b4dcc808f54a82315be4b453333d727b20e
+X-Git-Newrev: 0e67d9709ede8ecb7b68fcb75f03f9ec6c411c6e
+X-Patchwork-Hint: ignore
+Message-Id: <20250909192116.9E80783A19@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] CHANGES: update for
+ 2025.05.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,108 +58,121 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
-Content-Type: multipart/mixed; boundary="===============4378004484361484807=="
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4378004484361484807==
-Content-Type: multipart/alternative; boundary="0000000000000081e4063e6206a1"
+commit: https://git.buildroot.net/buildroot/commit/?id=0e67d9709ede8ecb7b68fcb75f03f9ec6c411c6e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
---0000000000000081e4063e6206a1
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+[Arnout: reorder, summary infrastructure updates]
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+---
+ CHANGES | 88 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 88 insertions(+)
 
-Hi Yann,
-
-On Tue, Sep 9, 2025, 12:47=E2=80=AFAM <yann.morin@orange.com> wrote:
-
-> Romain, All,
->
-> On 2025-07-05 22:51 +0200, Romain Naour spake thusly:
-> > Le 01/07/2025 =C3=A0 15:45, yann.morin@orange.com a =C3=A9crit :
-> > > From: "Yann E. MORIN" <yann.morin@orange.com>
-> > > Currently, when a golang package defines multiple _BUILD_TARGETS, it
-> has
-> > > to basically repeat the same list in its _INSTALL_BINS.
-> [--SNIP--]
-> > > We now consider that _INSTALL_BINS is an internal implementation
-> details
-> > > that should no longer be exposed to the users, so we drop it from the
-> > > documentation; we rephrase the corresponding part for _BUILD_TARGETS.
-> > >
-> > > Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-> > > Cc: Christian Stewart <christian@aperture.us>
-> > Reviewed-by: Romain Naour <romain.naour@smile.fr>
-> > Since it's about a package infrastucture change, I prefer wait for a
-> second review.
->
-> What about the status of this series? Christian has provided his
-> Reviewed-by a while back...
->
-
-It still looks good to me!
-
-Best regards,
-Christian
-
---0000000000000081e4063e6206a1
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"auto"><div>Hi Yann,<br><br><div class=3D"gmail_quote gmail_quot=
-e_container"><div dir=3D"ltr" class=3D"gmail_attr">On Tue, Sep 9, 2025, 12:=
-47=E2=80=AFAM  &lt;<a href=3D"mailto:yann.morin@orange.com">yann.morin@oran=
-ge.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"m=
-argin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">Romain, All,<=
-br>
-<br>
-On 2025-07-05 22:51 +0200, Romain Naour spake thusly:<br>
-&gt; Le 01/07/2025 =C3=A0 15:45, <a href=3D"mailto:yann.morin@orange.com" t=
-arget=3D"_blank" rel=3D"noreferrer">yann.morin@orange.com</a> a =C3=A9crit=
-=C2=A0:<br>
-&gt; &gt; From: &quot;Yann E. MORIN&quot; &lt;<a href=3D"mailto:yann.morin@=
-orange.com" target=3D"_blank" rel=3D"noreferrer">yann.morin@orange.com</a>&=
-gt;<br>
-&gt; &gt; Currently, when a golang package defines multiple _BUILD_TARGETS,=
- it has<br>
-&gt; &gt; to basically repeat the same list in its _INSTALL_BINS.<br>
-[--SNIP--]<br>
-&gt; &gt; We now consider that _INSTALL_BINS is an internal implementation =
-details<br>
-&gt; &gt; that should no longer be exposed to the users, so we drop it from=
- the<br>
-&gt; &gt; documentation; we rephrase the corresponding part for _BUILD_TARG=
-ETS.<br>
-&gt; &gt; <br>
-&gt; &gt; Signed-off-by: Yann E. MORIN &lt;<a href=3D"mailto:yann.morin@ora=
-nge.com" target=3D"_blank" rel=3D"noreferrer">yann.morin@orange.com</a>&gt;=
-<br>
-&gt; &gt; Cc: Christian Stewart &lt;<a href=3D"mailto:christian@aperture.us=
-" target=3D"_blank" rel=3D"noreferrer">christian@aperture.us</a>&gt;<br>
-&gt; Reviewed-by: Romain Naour &lt;<a href=3D"mailto:romain.naour@smile.fr"=
- target=3D"_blank" rel=3D"noreferrer">romain.naour@smile.fr</a>&gt;<br>
-&gt; Since it&#39;s about a package infrastucture change, I prefer wait for=
- a second review.<br>
-<br>
-What about the status of this series? Christian has provided his<br>
-Reviewed-by a while back...<br></blockquote></div></div><div dir=3D"auto"><=
-br></div><div dir=3D"auto">It still looks good to me!</div><div dir=3D"auto=
-"><br></div><div dir=3D"auto">Best regards,</div><div dir=3D"auto">Christia=
-n</div></div>
-
---0000000000000081e4063e6206a1--
-
---===============4378004484361484807==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/CHANGES b/CHANGES
+index 239dbd1d38..459072ca1a 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,91 @@
++2025.05.2, released September 09, 2025
++
++	Important / security related fixes:
++
++	- libssh: CVE-2025-4878, CVE-2025-5318, CVE-2025-5351, CVE-2025-5372,
++	    CVE-2025-5449, CVE-2025-5987
++	- glibc: CVE-2025-5702, CVE-2025-5745, CVE-2025-8058
++	- gnutls: CVE-2025-32989, CVE-2025-32988, CVE-2025-32990, CVE-2025-6395
++	- python3: CVE-2025-8194
++	- libhtp: CVE-2025-53537
++	- tiff: CVE-2025-8176, CVE-2025-8177
++	- libglib2: CVE-2025-6052
++	- ofono: CVE-2023-2794, CVE-2024-7537, CVE-2024-7539, CVE-2024-7540,
++	    CVE-2024-7541, CVE-2024-7542
++	- elfutils: CVE-2025-1352, CVE-2025-1365, CVE-2025-1371, CVE-2025-1372,
++	    CVE-2025-1376, CVE-2025-1377
++	- grub2: CVE-2024-45777, CVE-2024-45778, CVE-2024-45779,
++	    CVE-2024-45780, CVE-2024-45782, CVE-2024-56737, CVE-2024-56738,
++	    CVE-2025-0678, CVE-2025-0684, CVE-2025-0685, CVE-2025-0686,
++	    CVE-2025-0689, CVE-2025-1125
++	- openjpeg: CVE-2025-54874
++	- go: CVE-2025-4674, CVE-2025-47907
++	- gst1-plugins-base: CVE-2025-47806, CVE-2025-47807
++	- gst1-plugins-good: CVE-2025-47219, CVE-2025-47183
++	- vorbis-tools: CVE-2023-43361
++	- vim: CVE-2024-41957, CVE-2024-41965, CVE-2024-45306, CVE-2024-47814,
++	    CVE-2025-1215, CVE-2025-22134, CVE-2025-24014, CVE-2025-26603,
++	    CVE-2025-29768, CVE-2025-53905, CVE-2025-53906
++	- ffmpeg: CVE-2023-6602
++	- lighttpd: CVE-2025-8671
++	- python-h2: CPE-2025-57804
++	- cpp-httplib: CVE-2025-46728
++
++	Removed packages: liboauth, thttpd
++
++	Removed defconfigs: at91sam9g20dfc, at91sam9g45m10ek,
++	at91sam9rlek, bananapro, beelink_gs1, chromebook_snow, galileo,
++	odroidxu4, orangepi_lite2, orangepi_one_plus, pcengines_apu2,
++	pine64_sopine, riotboard, rock64, rock_pi_n8, socrates_cyclone5,
++	toradex_apalis_imx6, ts7680, engicam_imx6*, kontron_pitx_imx8m,
++	imx6ulz_bsh_smm_m2,
++
++	Test Improvements:
++
++	- test_gstreamer1: raise tesseract-ocr timeout to 15s
++	- test_wine: fix test after bootlin toolchains update
++	- test_numactl: fix test after bootlin toolchains update
++	- test_dpdk: fix test after bootlin toolchains update
++	- test_msr_tools: fix test after bootlin toolchains update
++	- test_dmidecode: fix test after bootlin toolchains update
++	- test_iso9660: use a more recent toolchain
++	- test_grub: use glibc toolchain
++	- test_wget: replace thttpd by Busybox's httpd server
++	- test_libcurl: replace thttpd by Busybox's httpd server
++	- test_systemd_selinux: fix test after bootlin toolchains update
++
++	Updated / fixed packages: python-propcache, pipewire, apache, xinetd,
++	libssh, glibc, libhtp, libapparmor, libopenssl, rpi-firmware,
++	brcmfmac_sdio-firmware-rpi, grout, php-pecl-dbus, tini, snooze, ngrep,
++	libzenoh-pico, janet, cjson, flatcc, nanocom, rtl8189es, gcc, ofono,
++	python-numpy, elfutils, libtracefs, tinyssh, start-stop-daemon, bcusdk,
++	prboom, setserial, grub2, openjpeg, go, gstreamer1, gst1-plugins-base,
++	gst1-plugins-good, gst1-plugins-bad, gst1-plugins-ugly, gst1-devtools,
++	gst1-libav, gst1-python, gst1-rtsp-server, gst1-vaapi,
++	gstreamer1-editing-services, vorbis-tools, jq, lbijwt, vim, ffmpeg,
++	libv4l, python-yarl, lirc-tools, b43-firmware, tcpreplay, libsvgtiny,
++	libsoxr, lighttpd, uclibc, vde2, libcap-ng, python-h2, squid, ipmitool,
++	ell, proftpd, liblog4c-localtime, wpewebkit, weston, cpp-httplib,
++	ipset, python3, python-aexpect, libftdi1
++
++	Infrastructure updates/fixes:
++	- Various tweaks to utils/generate-cyclonedx for better SBOM
++	  compatibility and project name/version customization
++	- go: make pre-built compiler provide target support too
++	- test-pkg: add new option -T/--toolchain-name
++	- pkg-utils.mk: include package directory in show-info output
++	- bump-stable-kernel-versions: new tool
++
++	Boards updated / fixed:
++
++	- qemu_sh4*: switch back to disk emulation
++	- acmesystems_acqua_a5_*: update linux
++	- sipeed_licheepi_zero: update linux & uboot
++	- zynqmp: increase vfat partition to 64M
++	- qemu_{arm,aarch64}_{ebbr,sbsa}*: linux needs host python3
++	- canaan_kd233, sipeed*: use BR2_LINUX_KENREL_IMAGE_TARGET_NAME
++	- ci20: U-Boot needs host-openssl
++
+ 2025.05.1, released August 11th, 2025
+ 
+ 	Important / security related fixes:
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4378004484361484807==--
