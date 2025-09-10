@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E966ECA0FED
-	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 11:19:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CE60CAC583
+	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 11:19:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 97F8A60651;
+	by smtp4.osuosl.org (Postfix) with ESMTP id CA72D4183C;
+	Wed, 10 Sep 2025 11:19:53 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2fzozu2KnA1g; Wed, 10 Sep 2025 11:19:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D027541839
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id D027541839;
 	Wed, 10 Sep 2025 11:19:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 279EFE1F
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 11:19:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0E63661106
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 11:19:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TyZ44MWNSnZJ; Wed, 10 Sep 2025 11:19:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A98FF60B69
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A98FF60B69;
-	Wed, 10 Sep 2025 11:19:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 05730E1F
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 11:19:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EB84D80F12
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 11:19:49 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RzVfS2MgjQCl for <buildroot@buildroot.org>;
+ id mW5GYfrjy_NR for <buildroot@buildroot.org>;
  Wed, 10 Sep 2025 11:19:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FA5180ED2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 544D960B63
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3FA5180ED2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 544D960B63
  for <buildroot@buildroot.org>; Wed, 10 Sep 2025 11:19:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3BB9683D37; Wed, 10 Sep 2025 11:19:49 +0000 (UTC)
+ id 44D7483D39; Wed, 10 Sep 2025 11:19:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 10 Sep 2025 13:08:56 +0200
+Date: Wed, 10 Sep 2025 13:15:34 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: eb007fe2db461425d9e6ba70d7542c13bfd58f84
-X-Git-Newrev: cfdd4ed4e3e2776199897cb0080751956dc5ec4d
+X-Git-Oldrev: cfdd4ed4e3e2776199897cb0080751956dc5ec4d
+X-Git-Newrev: 00230e7ae3b52b122874cac5146c1ccdbe887082
 X-Patchwork-Hint: ignore
-Message-Id: <20250910111949.3BB9683D37@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cni-plugin: simplify installation
+Message-Id: <20250910111949.44D7483D39@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pkg-golang: catch use of legacy
+ FOO_INSTALL_BINS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,54 +66,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cfdd4ed4e3e2776199897cb0080751956dc5ec4d
+commit: https://git.buildroot.net/buildroot/commit/?id=00230e7ae3b52b122874cac5146c1ccdbe887082
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-In all theory, we could iterate over CNI_PLUGINS_INSTALL_BINS, which
-already contains the basenames $(notdir) of the binaries to install,
-but *_INSTALL_BINS is now an internal implementation detail, and
-can't be guaranteed to be stable.
-
-Hence, iterate over the list of targets, and somewhat duplicate the
-install commands from the infra, using make's $(notdir) rather than
-calling to the shell's to call basename.
-
-Note: we need to stop setting _INSTALL_BINS, as a following commit will
-check that it is not explicitly set, and fail otherwise.
 
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 Cc: Christian Stewart <christian@aperture.us>
 Reviewed-by: Romain Naour <romain.naour@smile.fr>
+[Romain: update "Migrating to 2025.08" by "2025.11"]
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- package/cni-plugins/cni-plugins.mk | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ docs/manual/migrating.adoc | 6 ++++++
+ package/pkg-golang.mk      | 6 ++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/package/cni-plugins/cni-plugins.mk b/package/cni-plugins/cni-plugins.mk
-index d682053e75..85783e433f 100644
---- a/package/cni-plugins/cni-plugins.mk
-+++ b/package/cni-plugins/cni-plugins.mk
-@@ -28,7 +28,6 @@ CNI_PLUGINS_BUILD_TARGETS = \
- 	plugins/meta/sbr \
- 	plugins/meta/tuning \
- 	plugins/meta/vrf
--CNI_PLUGINS_INSTALL_BINS = $(CNI_PLUGINS_BUILD_TARGETS)
+diff --git a/docs/manual/migrating.adoc b/docs/manual/migrating.adoc
+index 4e6225a987..130d7a1012 100644
+--- a/docs/manual/migrating.adoc
++++ b/docs/manual/migrating.adoc
+@@ -222,3 +222,9 @@ from +-cargo2+ to +-cargo4+.
+ In 2025.08, starting with systemd version 257, systemd-networkd requires kernel
+ 5.4 or later. If you are still using a kernel older than 5.4, please update
+ your kernel or use an alternative network manager.
++
++[[migrating-golang-packages]]
++=== Migrating to 2025.11
++In 2025.11, the +FOO_INSTALL_BINS+ variable for golang packages is no longer
++supported; the list of binaries to install is automatically derived from
++the +FOO_BULD_TARGETS+ variable.
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index ff8d28aa7e..ffd50adecc 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -40,6 +40,12 @@ GO_BIN = $(HOST_DIR)/bin/go
  
- ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
- CNI_PLUGINS_DEPENDENCIES += libapparmor
-@@ -47,9 +46,9 @@ endif
+ define inner-golang-package
  
- define CNI_PLUGINS_INSTALL_TARGET_CMDS
- 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/opt/cni/bin
--	$(foreach d,$(CNI_PLUGINS_INSTALL_BINS),\
--		$(INSTALL) -D -m 0755 $(@D)/bin/$$(basename $(d)) \
--			$(TARGET_DIR)/opt/cni/bin
-+	$(foreach d,$(CNI_PLUGINS_BUILD_TARGETS),\
-+		$(INSTALL) -D -m 0755 $(@D)/bin/$(notdir $(d)) \
-+			$(TARGET_DIR)/opt/cni/bin/$(notdir $(d))
- 	)
- endef
- 
++# Legacy
++ifneq ($$($(2)_INSTALL_BINS),)
++$$(error Package $(1) sets $(2)_INSTALL_BINS, which is no longer supported; \
++see the manual: https://buildroot.org/manual.html#migrating-golang-package )
++endif
++
+ $(2)_BUILD_OPTS += \
+ 	-ldflags "$$($(2)_LDFLAGS)" \
+ 	-modcacherw \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
