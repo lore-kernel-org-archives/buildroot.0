@@ -1,52 +1,109 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4066CCA101F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87F6ACA0FED
 	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 21:34:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 16BFE41952;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F37E61507;
 	Wed, 10 Sep 2025 21:34:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tbQ2knwoYSCg; Wed, 10 Sep 2025 21:34:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFCEB614CD
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id DFCEB614CD;
+	Wed, 10 Sep 2025 21:34:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 01D6D2BB3
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 21:34:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id DC66D418E4
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 21:34:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FR4NHuiJ8WsS; Wed, 10 Sep 2025 21:34:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E78B44191F
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E78B44191F;
-	Wed, 10 Sep 2025 21:34:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F160234
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 21:34:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 002D580D51
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 21:34:47 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lx0VBCzWHqY3 for <buildroot@buildroot.org>;
+ id l02RCzZoXfNI for <buildroot@buildroot.org>;
  Wed, 10 Sep 2025 21:34:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2068380D30
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2068380D30
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 21:34:46 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1DD8C83E4F; Wed, 10 Sep 2025 21:34:46 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 10 Sep 2025 23:27:28 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6b20ffb4cbcd9109117c923059184880ae336ff6
-X-Git-Newrev: 03a10e4a39b34a6f4aa5cce4d52874caf3d1f6cf
-X-Patchwork-Hint: ignore
-Message-Id: <20250910213446.1DD8C83E4F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] toolchain/external: remove Linaro armeb
- toolchain
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::344; helo=mail-wm1-x344.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E58D2418D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E58D2418D5
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com
+ [IPv6:2a00:1450:4864:20::344])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E58D2418D5
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 21:34:45 +0000 (UTC)
+Received: by mail-wm1-x344.google.com with SMTP id
+ 5b1f17b1804b1-45dcfecdc0fso683025e9.1
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 14:34:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1757540084; x=1758144884;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=dZk9MJetWlHK6xLQlK3U1JHmIXqatwmeJLksiEhl1uk=;
+ b=qgpYWkXBHf3rhPVixPaZx1NVjpcGRCLFzVgsWEmklRdFSQf2A8GuGuELpfsctNuwKD
+ po623l9flwmCLgRuF2NH+ZNOI3DJ1e5/9zqqTR+Eyci4oaF8Kep2IFFD/95wFSc2duR6
+ 0em+QDtd4TlR9b/Qop7HslXCofKPXd0MfsQyBb4aWwVNP0AMu1sad8XiIhRry5sn14rQ
+ 7atXkGuPjd5q9FCytm3LygwApFYXGIP77DHSB+cmhZQPs4SLTcXeHb7EePezHRtq0/ls
+ 92366vrEWsBO+KHKtKyuf6QPz0wXyOwAxGLiYQ9eTWsV2Lir9X9y0c2wzBZjTOEpZ0FR
+ irZw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCWsJSgil+follZ5GackdWpeKDp1DWgkD+5+6bO6mW/jFa1Dax5/FHtmeB+kPbeprbcFV8GFjLMUdEk=@buildroot.org
+X-Gm-Message-State: AOJu0YxhrZiqRdRDMdoQJXkrY7XslL2czzUGCYXX2W2GZ9WNIUtMHqpM
+ hWcE/rDUnnveRmfXMXK0/ilY8Ass6/sLt2dImAtSoAVlzhQ7Xthkfc0mLsufXQtRzO8=
+X-Gm-Gg: ASbGncu0GaiFJ7LzlTrRw5g+Bs/mVT0cdVfK5kPhfBHPEvFFZ7gaNlELfLyJCxMTx0C
+ kI3t1H5oUKIiI+dxJrrYCNAGUNU5swo8a1okcmXkFCO3jarCb/9ZSQW8IAiRhey4LSdAu4xQ08k
+ WKLvJ3mA+thjVoCV5QvGa03rGA9c3jheZyz3v3M2z1paw4okd0aGghTSvo60L8sU9suLGYZWTse
+ 6jaPDg9lpGmVF21a8gDyujLnAWiYUGf2PgPlxLFSbdxfN7XcAJav313iYIlZW1Qt1cy1PYr3/Lf
+ hLSYNqwcWaDfJ6+6Yq+IXkfl8sNNVdm4Tz6aHnHKmlw65ngfw4XAN7nKmwfpulJCwMrJcKTvPQk
+ igsNi547fPgW+yhBNaQzbd4l5cuMR04dOxXYo5muDhYaK7wHzx/7U2HJ+k/KMMN/ouu11JDQ8Cl
+ Xx0R1KMmimj3dBc164va2AzBze8K36v0MPrkowgKIwEvzrmUzQzqLYjzk5kvJd
+X-Google-Smtp-Source: AGHT+IEsG8mtwzxi1eLf5uVw1sqIF4JSuKg96fjEarIzVqHjh46E2lru89T+IgRYH1UfeihcrspQ0w==
+X-Received: by 2002:a05:600c:4711:b0:45b:4282:7b60 with SMTP id
+ 5b1f17b1804b1-45dddf01a4fmr143085935e9.34.1757540083741; 
+ Wed, 10 Sep 2025 14:34:43 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:94a2:a200:2ad9:827a:59cb:148a?
+ (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-45e01578272sm2217095e9.9.2025.09.10.14.34.43
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 10 Sep 2025 14:34:43 -0700 (PDT)
+Message-ID: <e7b5ff92-ba31-46e9-87ea-5d2c859dbaa0@smile.fr>
+Date: Wed, 10 Sep 2025 23:34:42 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Titouan Christophe <titouan.christophe@mind.be>, buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Julien Olivain <ju.o@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20250829112818.129101-1-titouan.christophe@mind.be>
+Content-Language: fr
+In-Reply-To: <20250829112818.129101-1-titouan.christophe@mind.be>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1757540084; x=1758144884; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=dZk9MJetWlHK6xLQlK3U1JHmIXqatwmeJLksiEhl1uk=;
+ b=Ouy0dpkO5Ck4Pxyj77dq8pxI+t59Ahh7Mogg6FIgIiwpeW/19UuYWMzoMoomlG8LbD
+ Qpd/dfQzZPifJxnKR/vjIHLfq9d1y7MHB5H28413jJF2FM3kWPIb3plBu80XDVRLPYNq
+ CgDhllU09LsUctl2t7bdNpLT5JoBTgJeOcG0c=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=Ouy0dpkO
+Subject: Re: [Buildroot] [PATCH 0/5] Remove legacy external toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,152 +117,114 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03a10e4a39b34a6f4aa5cce4d52874caf3d1f6cf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This toolchain is more than 7 years old now, and not maintained anymore.
-Let's therefore remove it from Buildroot. There are still some
-alternatives in-tree, such as Bootlin toolchains
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- Config.in.legacy                                   |  7 ++++++
- toolchain/toolchain-external/Config.in             |  6 -----
- .../toolchain-external-linaro-armeb/Config.in      | 26 ----------------------
- .../Config.in.options                              |  9 --------
- .../toolchain-external-linaro-armeb.hash           |  3 ---
- .../toolchain-external-linaro-armeb.mk             | 17 --------------
- 6 files changed, 7 insertions(+), 61 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 6867f129d1..181ec4b3b1 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2025.11"
- 
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
-+	bool "Linaro armeb 2018.05 external toolchain is deprecated"
-+	select BR2_LEGACY
-+	help
-+	  Linaro armeb 2018.05 is no longer maintained and has been
-+	  removed from Buildroot.
-+
- config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
- 	bool "Linaro ARM 2018.05 external toolchain is deprecated"
- 	select BR2_LEGACY
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 2599015d4b..831387bc4e 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -20,9 +20,6 @@ source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in"
- # ARM (use ARM toolchain by default)
- source "toolchain/toolchain-external/toolchain-external-arm-arm/Config.in"
- 
--# ARM big-endian
--source "toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in"
--
- # Bootlin toolchains, available for virtually all architectures
- source "toolchain/toolchain-external/toolchain-external-bootlin/Config.in"
- 
-@@ -111,9 +108,6 @@ source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.o
- # ARM
- source "toolchain/toolchain-external/toolchain-external-arm-arm/Config.in.options"
- 
--# ARM big-endian
--source "toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in.options"
--
- # Bootlin toolchains
- source "toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options"
- 
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
-deleted file mode 100644
-index b143ee5e24..0000000000
---- a/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
-+++ /dev/null
-@@ -1,26 +0,0 @@
--comment "Linaro toolchains available for Cortex-A + EABIhf"
--	depends on BR2_armeb
--	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF
--
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
--	bool "Linaro armeb 2018.05"
--	depends on BR2_armeb
--	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	depends on BR2_ARM_EABIHF
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
--	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
--	select BR2_TOOLCHAIN_HAS_SSP
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	select BR2_TOOLCHAIN_HAS_OPENMP
--	select BR2_INSTALL_LIBSTDCPP
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
--	help
--	  Linaro toolchain for the ARM big endian architecture. It
--	  uses Linaro GCC 2018.05 (based on gcc 7.3.1), Linaro GDB
--	  2018.05 (based on GDB 8.1), glibc 2.25, Binutils 2018.05
--	  (based on 2.28). It generates code that runs on all Cortex-A
--	  profile devices, but tuned for the Cortex-A9. The code
--	  generated is Thumb 2, with the hard floating point calling
--	  convention, and uses the VFPv3-D16 FPU instructions.
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in.options b/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in.options
-deleted file mode 100644
-index 225e90f009..0000000000
---- a/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in.options
-+++ /dev/null
-@@ -1,9 +0,0 @@
--if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
--
--config BR2_TOOLCHAIN_EXTERNAL_PREFIX
--	default "armeb-linux-gnueabihf"
--
--config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
--	default "toolchain-external-linaro-armeb"
--
--endif
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.hash b/toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.hash
-deleted file mode 100644
-index 2b80f396d1..0000000000
---- a/toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256  60bf9924a0c039c94deb85cb9b129d0f28b28eadbb1fb3f7e2e227679cc43fc9  gcc-linaro-7.3.1-2018.05-i686_armeb-linux-gnueabihf.tar.xz
--sha256  c1bbd598b78458d6b7ea1c971fddf736c00d57890c7131fdafd4e789289c42f9  gcc-linaro-7.3.1-2018.05-x86_64_armeb-linux-gnueabihf.tar.xz
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.mk b/toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.mk
-deleted file mode 100644
-index b8ea80ff60..0000000000
---- a/toolchain/toolchain-external/toolchain-external-linaro-armeb/toolchain-external-linaro-armeb.mk
-+++ /dev/null
-@@ -1,17 +0,0 @@
--################################################################################
--#
--# toolchain-external-linaro-armeb
--#
--################################################################################
--
--TOOLCHAIN_EXTERNAL_LINARO_ARMEB_VERSION = 2018.05
--
--TOOLCHAIN_EXTERNAL_LINARO_ARMEB_SITE = https://releases.linaro.org/components/toolchain/binaries/7.3-$(TOOLCHAIN_EXTERNAL_LINARO_ARMEB_VERSION)/armeb-linux-gnueabihf
--
--ifeq ($(HOSTARCH),x86)
--TOOLCHAIN_EXTERNAL_LINARO_ARMEB_SOURCE = gcc-linaro-7.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARMEB_VERSION)-i686_armeb-linux-gnueabihf.tar.xz
--else
--TOOLCHAIN_EXTERNAL_LINARO_ARMEB_SOURCE = gcc-linaro-7.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARMEB_VERSION)-x86_64_armeb-linux-gnueabihf.tar.xz
--endif
--
--$(eval $(toolchain-external-package))
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gVGl0b3VhbiwgQWxsLAoKTGUgMjkvMDgvMjAyNSDDoCAxMzoyOCwgVGl0b3VhbiBDaHJp
+c3RvcGhlIHZpYSBidWlsZHJvb3QgYSDDqWNyaXTCoDoKPiBSZW1vdmUgb2xkIGFuZCB1bm1haW50
+YWluZWQgZXh0ZXJuYWwgdG9vbGNoYWlucyBmcm9tIExpbmFybyBhbmQKPiBTb3VyY2VyeSBDb2Rl
+YmVuY2guIEFzIGRpc2N1c3NlZCBkdXJpbmcgdGhlIEJ1aWxkcm9vdCBkZXZlbG9wZXIgbWVldGlu
+ZywKPiB0aGVyZSBhcmUgc3RpbGwgYWx0ZXJuYXRpdmUgdXAtdG8tZGF0ZSBleHRlcm5hbCB0b29s
+Y2hhaW5zIGluIEJ1aWxkcm9vdC4KPiAKPiBUaGlzIGlzIGFpbWVkIGF0IGhlbHBpbmcgZG93bnN0
+cmVhbSB1c2VycyB0byBhdm9pZCB1c2luZyB1bm1haW50YWluZWQKPiB0b29sY2hhaW5zIHdpdGgg
+cG9zc2libGUgc2VjdXJpdHkgaXNzdWVzCj4gCj4gVGl0b3VhbiBDaHJpc3RvcGhlICg1KToKPiAg
+IHRvb2xjaGFpbi9leHRlcm5hbDogcmVtb3ZlIFNvdXJjZXJ5IENvZGViZW5jaCBNSVBTIHRvb2xj
+aGFpbgoKQSByZW1vdmVkIGxlZnRvdmVyIGxpbmsgdG8gYmludXRpbHMgMi4yNyBidWcgMTk5MDgg
+aW4gY29tbWVudHMKCj4gICB0b29sY2hhaW4vZXh0ZXJuYWw6IHJlbW92ZSBMaW5hcm8gYWFyY2g2
+NCB0b29sY2hhaW4KPiAgIHRvb2xjaGFpbi9leHRlcm5hbDogcmVtb3ZlIExpbmFybyBhYXJjaDY0
+IEJFIHRvb2xjaGFpbgo+ICAgdG9vbGNoYWluL2V4dGVybmFsOiByZW1vdmUgTGluYXJvIGFybSB0
+b29sY2hhaW4KClRoZSB0d28gcnVudGltZSB0ZXN0cyB3YXMgYnJva2VuIGR1ZSB0byB0aGUgdG9v
+bGNoYWluIHN3aXRjaCAodG9vbGNoYWluIHByZWZpeAphbmQgTkVPTiBzdXBwb3J0KS4KCkkgcmVu
+YW1lZCBUZXN0RXh0ZXJuYWxUb29sY2hhaW5MaW5hcm9Bcm0gdG8gVGVzdEV4dGVybmFsVG9vbGNo
+YWluQXJtR251IHNpbmNlIHdlCnRlc3QgR05VIGV4dGVybmFsIHRvb2xjaGFpbnMgaW1wb3J0IGlu
+IHRoaXMgdGVzdC4KCldpdGggdGhhdCBmaXhlZDoKCkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3Mu
+CgpCZXN0IHJlZ2FyZHMsClJvbWFpbgoKCj4gICB0b29sY2hhaW4vZXh0ZXJuYWw6IHJlbW92ZSBM
+aW5hcm8gYXJtZWIgdG9vbGNoYWluCj4gCj4gIENvbmZpZy5pbi5sZWdhY3kgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICB8IDM1ICsrKysrKysKPiAgcGFja2FnZS9lZmlib290bWdyL0NvbmZp
+Zy5pbiAgICAgICAgICAgICAgICAgIHwgIDIgLQo+ICBwYWNrYWdlL2VmaXZhci9Db25maWcuaW4g
+ICAgICAgICAgICAgICAgICAgICAgfCAgMiAtCj4gIHBhY2thZ2UvZmx1aWRzeW50aC9Db25maWcu
+aW4gICAgICAgICAgICAgICAgICB8ICA0IC0KPiAgcGFja2FnZS9tb2t1dGlsL0NvbmZpZy5pbiAg
+ICAgICAgICAgICAgICAgICAgIHwgIDEgLQo+ICBwYWNrYWdlL3NlZHV0aWwvQ29uZmlnLmluICAg
+ICAgICAgICAgICAgICAgICAgfCAgMiAtCj4gIC4uLi9hdXRvYnVpbGQvbGluYXJvLWFhcmNoNjQt
+YmUuY29uZmlnICAgICAgICB8ICAzIC0KPiAgLi4uL2F1dG9idWlsZC9saW5hcm8tYWFyY2g2NC5j
+b25maWcgICAgICAgICAgIHwgIDMgLQo+ICAuLi4vYXV0b2J1aWxkL2xpbmFyby1hcm0uY29uZmln
+ICAgICAgICAgICAgICAgfCAgNSAtCj4gIC4uLi9hdXRvYnVpbGQvc291cmNlcnktbWlwcy5jb25m
+aWcgICAgICAgICAgICB8ICA0IC0KPiAgLi4uL2F1dG9idWlsZC9zb3VyY2VyeS1taXBzNjQuY29u
+ZmlnICAgICAgICAgIHwgIDUgLQo+ICAuLi4vYXV0b2J1aWxkL3Rvb2xjaGFpbi1jb25maWdzLmNz
+diAgICAgICAgICAgfCAgNSAtCj4gIHN1cHBvcnQvdGVzdGluZy90ZXN0cy9ib290L3Rlc3RfYXRm
+LnB5ICAgICAgICB8ICAyICstCj4gIC4uLi90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9nc3Qx
+X3B5dGhvbi5weSB8ICAyICstCj4gIC4uLi90ZXN0aW5nL3Rlc3RzL3Rvb2xjaGFpbi90ZXN0X2V4
+dGVybmFsLnB5ICB8ICAyICstCj4gIHRvb2xjaGFpbi90b29sY2hhaW4tZXh0ZXJuYWwvQ29uZmln
+LmluICAgICAgICB8IDE4IC0tLS0KPiAgLi4uL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIHwgOTQgLS0tLS0tLS0tLS0tLS0tLS0tLQo+ICAuLi4vQ29uZmlnLmluLm9w
+dGlvbnMgICAgICAgICAgICAgICAgICAgICAgICAgfCAgOSAtLQo+ICAuLi4vdG9vbGNoYWluLWV4
+dGVybmFsLWNvZGVzb3VyY2VyeS1taXBzLmhhc2ggfCAgMyAtCj4gIC4uLi90b29sY2hhaW4tZXh0
+ZXJuYWwtY29kZXNvdXJjZXJ5LW1pcHMubWsgICB8IDEzIC0tLQo+ICAuLi4vQ29uZmlnLmluICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAxNiAtLS0tCj4gIC4uLi9Db25maWcuaW4u
+b3B0aW9ucyAgICAgICAgICAgICAgICAgICAgICAgICB8ICA5IC0tCj4gIC4uLi90b29sY2hhaW4t
+ZXh0ZXJuYWwtbGluYXJvLWFhcmNoNjQtYmUuaGFzaCB8ICAzIC0KPiAgLi4uL3Rvb2xjaGFpbi1l
+eHRlcm5hbC1saW5hcm8tYWFyY2g2NC1iZS5tayAgIHwgMTYgLS0tLQo+ICAuLi4vQ29uZmlnLmlu
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAxNiAtLS0tCj4gIC4uLi9Db25maWcu
+aW4ub3B0aW9ucyAgICAgICAgICAgICAgICAgICAgICAgICB8ICA5IC0tCj4gIC4uLi90b29sY2hh
+aW4tZXh0ZXJuYWwtbGluYXJvLWFhcmNoNjQuaGFzaCAgICB8ICAzIC0KPiAgLi4uL3Rvb2xjaGFp
+bi1leHRlcm5hbC1saW5hcm8tYWFyY2g2NC5tayAgICAgIHwgMTYgLS0tLQo+ICAuLi4vdG9vbGNo
+YWluLWV4dGVybmFsLWxpbmFyby1hcm0vQ29uZmlnLmluICAgfCAyNyAtLS0tLS0KPiAgLi4uL0Nv
+bmZpZy5pbi5vcHRpb25zICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDkgLS0KPiAgLi4uL3Rv
+b2xjaGFpbi1leHRlcm5hbC1saW5hcm8tYXJtLmhhc2ggICAgICAgIHwgIDMgLQo+ICAuLi4vdG9v
+bGNoYWluLWV4dGVybmFsLWxpbmFyby1hcm0ubWsgICAgICAgICAgfCAxNiAtLS0tCj4gIC4uLi90
+b29sY2hhaW4tZXh0ZXJuYWwtbGluYXJvLWFybWViL0NvbmZpZy5pbiB8IDI2IC0tLS0tCj4gIC4u
+Li9Db25maWcuaW4ub3B0aW9ucyAgICAgICAgICAgICAgICAgICAgICAgICB8ICA5IC0tCj4gIC4u
+Li90b29sY2hhaW4tZXh0ZXJuYWwtbGluYXJvLWFybWViLmhhc2ggICAgICB8ICAzIC0KPiAgLi4u
+L3Rvb2xjaGFpbi1leHRlcm5hbC1saW5hcm8tYXJtZWIubWsgICAgICAgIHwgMTcgLS0tLQo+ICAz
+NiBmaWxlcyBjaGFuZ2VkLCAzOCBpbnNlcnRpb25zKCspLCAzNzQgZGVsZXRpb25zKC0pCj4gIGRl
+bGV0ZSBtb2RlIDEwMDY0NCBzdXBwb3J0L2NvbmZpZy1mcmFnbWVudHMvYXV0b2J1aWxkL2xpbmFy
+by1hYXJjaDY0LWJlLmNvbmZpZwo+ICBkZWxldGUgbW9kZSAxMDA2NDQgc3VwcG9ydC9jb25maWct
+ZnJhZ21lbnRzL2F1dG9idWlsZC9saW5hcm8tYWFyY2g2NC5jb25maWcKPiAgZGVsZXRlIG1vZGUg
+MTAwNjQ0IHN1cHBvcnQvY29uZmlnLWZyYWdtZW50cy9hdXRvYnVpbGQvbGluYXJvLWFybS5jb25m
+aWcKPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IHN1cHBvcnQvY29uZmlnLWZyYWdtZW50cy9hdXRvYnVp
+bGQvc291cmNlcnktbWlwcy5jb25maWcKPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IHN1cHBvcnQvY29u
+ZmlnLWZyYWdtZW50cy9hdXRvYnVpbGQvc291cmNlcnktbWlwczY0LmNvbmZpZwo+ICBkZWxldGUg
+bW9kZSAxMDA2NDQgdG9vbGNoYWluL3Rvb2xjaGFpbi1leHRlcm5hbC90b29sY2hhaW4tZXh0ZXJu
+YWwtY29kZXNvdXJjZXJ5LW1pcHMvQ29uZmlnLmluCj4gIGRlbGV0ZSBtb2RlIDEwMDY0NCB0b29s
+Y2hhaW4vdG9vbGNoYWluLWV4dGVybmFsL3Rvb2xjaGFpbi1leHRlcm5hbC1jb2Rlc291cmNlcnkt
+bWlwcy9Db25maWcuaW4ub3B0aW9ucwo+ICBkZWxldGUgbW9kZSAxMDA2NDQgdG9vbGNoYWluL3Rv
+b2xjaGFpbi1leHRlcm5hbC90b29sY2hhaW4tZXh0ZXJuYWwtY29kZXNvdXJjZXJ5LW1pcHMvdG9v
+bGNoYWluLWV4dGVybmFsLWNvZGVzb3VyY2VyeS1taXBzLmhhc2gKPiAgZGVsZXRlIG1vZGUgMTAw
+NjQ0IHRvb2xjaGFpbi90b29sY2hhaW4tZXh0ZXJuYWwvdG9vbGNoYWluLWV4dGVybmFsLWNvZGVz
+b3VyY2VyeS1taXBzL3Rvb2xjaGFpbi1leHRlcm5hbC1jb2Rlc291cmNlcnktbWlwcy5tawo+ICBk
+ZWxldGUgbW9kZSAxMDA2NDQgdG9vbGNoYWluL3Rvb2xjaGFpbi1leHRlcm5hbC90b29sY2hhaW4t
+ZXh0ZXJuYWwtbGluYXJvLWFhcmNoNjQtYmUvQ29uZmlnLmluCj4gIGRlbGV0ZSBtb2RlIDEwMDY0
+NCB0b29sY2hhaW4vdG9vbGNoYWluLWV4dGVybmFsL3Rvb2xjaGFpbi1leHRlcm5hbC1saW5hcm8t
+YWFyY2g2NC1iZS9Db25maWcuaW4ub3B0aW9ucwo+ICBkZWxldGUgbW9kZSAxMDA2NDQgdG9vbGNo
+YWluL3Rvb2xjaGFpbi1leHRlcm5hbC90b29sY2hhaW4tZXh0ZXJuYWwtbGluYXJvLWFhcmNoNjQt
+YmUvdG9vbGNoYWluLWV4dGVybmFsLWxpbmFyby1hYXJjaDY0LWJlLmhhc2gKPiAgZGVsZXRlIG1v
+ZGUgMTAwNjQ0IHRvb2xjaGFpbi90b29sY2hhaW4tZXh0ZXJuYWwvdG9vbGNoYWluLWV4dGVybmFs
+LWxpbmFyby1hYXJjaDY0LWJlL3Rvb2xjaGFpbi1leHRlcm5hbC1saW5hcm8tYWFyY2g2NC1iZS5t
+awo+ICBkZWxldGUgbW9kZSAxMDA2NDQgdG9vbGNoYWluL3Rvb2xjaGFpbi1leHRlcm5hbC90b29s
+Y2hhaW4tZXh0ZXJuYWwtbGluYXJvLWFhcmNoNjQvQ29uZmlnLmluCj4gIGRlbGV0ZSBtb2RlIDEw
+MDY0NCB0b29sY2hhaW4vdG9vbGNoYWluLWV4dGVybmFsL3Rvb2xjaGFpbi1leHRlcm5hbC1saW5h
+cm8tYWFyY2g2NC9Db25maWcuaW4ub3B0aW9ucwo+ICBkZWxldGUgbW9kZSAxMDA2NDQgdG9vbGNo
+YWluL3Rvb2xjaGFpbi1leHRlcm5hbC90b29sY2hhaW4tZXh0ZXJuYWwtbGluYXJvLWFhcmNoNjQv
+dG9vbGNoYWluLWV4dGVybmFsLWxpbmFyby1hYXJjaDY0Lmhhc2gKPiAgZGVsZXRlIG1vZGUgMTAw
+NjQ0IHRvb2xjaGFpbi90b29sY2hhaW4tZXh0ZXJuYWwvdG9vbGNoYWluLWV4dGVybmFsLWxpbmFy
+by1hYXJjaDY0L3Rvb2xjaGFpbi1leHRlcm5hbC1saW5hcm8tYWFyY2g2NC5tawo+ICBkZWxldGUg
+bW9kZSAxMDA2NDQgdG9vbGNoYWluL3Rvb2xjaGFpbi1leHRlcm5hbC90b29sY2hhaW4tZXh0ZXJu
+YWwtbGluYXJvLWFybS9Db25maWcuaW4KPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IHRvb2xjaGFpbi90
+b29sY2hhaW4tZXh0ZXJuYWwvdG9vbGNoYWluLWV4dGVybmFsLWxpbmFyby1hcm0vQ29uZmlnLmlu
+Lm9wdGlvbnMKPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IHRvb2xjaGFpbi90b29sY2hhaW4tZXh0ZXJu
+YWwvdG9vbGNoYWluLWV4dGVybmFsLWxpbmFyby1hcm0vdG9vbGNoYWluLWV4dGVybmFsLWxpbmFy
+by1hcm0uaGFzaAo+ICBkZWxldGUgbW9kZSAxMDA2NDQgdG9vbGNoYWluL3Rvb2xjaGFpbi1leHRl
+cm5hbC90b29sY2hhaW4tZXh0ZXJuYWwtbGluYXJvLWFybS90b29sY2hhaW4tZXh0ZXJuYWwtbGlu
+YXJvLWFybS5tawo+ICBkZWxldGUgbW9kZSAxMDA2NDQgdG9vbGNoYWluL3Rvb2xjaGFpbi1leHRl
+cm5hbC90b29sY2hhaW4tZXh0ZXJuYWwtbGluYXJvLWFybWViL0NvbmZpZy5pbgo+ICBkZWxldGUg
+bW9kZSAxMDA2NDQgdG9vbGNoYWluL3Rvb2xjaGFpbi1leHRlcm5hbC90b29sY2hhaW4tZXh0ZXJu
+YWwtbGluYXJvLWFybWViL0NvbmZpZy5pbi5vcHRpb25zCj4gIGRlbGV0ZSBtb2RlIDEwMDY0NCB0
+b29sY2hhaW4vdG9vbGNoYWluLWV4dGVybmFsL3Rvb2xjaGFpbi1leHRlcm5hbC1saW5hcm8tYXJt
+ZWIvdG9vbGNoYWluLWV4dGVybmFsLWxpbmFyby1hcm1lYi5oYXNoCj4gIGRlbGV0ZSBtb2RlIDEw
+MDY0NCB0b29sY2hhaW4vdG9vbGNoYWluLWV4dGVybmFsL3Rvb2xjaGFpbi1leHRlcm5hbC1saW5h
+cm8tYXJtZWIvdG9vbGNoYWluLWV4dGVybmFsLWxpbmFyby1hcm1lYi5tawo+IAoKX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
+bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
+bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
