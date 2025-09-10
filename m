@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA818CA101F
-	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 21:01:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E58B3CA0FED
+	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 21:02:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8625D842DF;
-	Wed, 10 Sep 2025 21:01:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A8464409FC;
+	Wed, 10 Sep 2025 21:02:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F1bYnoeZNA15; Wed, 10 Sep 2025 21:01:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id q0G3sQkmZKcL; Wed, 10 Sep 2025 21:02:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93D2E84319
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACDF940A4D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 93D2E84319;
-	Wed, 10 Sep 2025 21:01:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B1C23234
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 21:01:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ACDF940A4D;
+	Wed, 10 Sep 2025 21:02:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E9A9C234
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 21:01:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A36B641501
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 21:01:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DBCAA405F6
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 21:01:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RGp0YANKWyUr for <buildroot@buildroot.org>;
+ id 80M4Ux0b_FpD for <buildroot@buildroot.org>;
  Wed, 10 Sep 2025 21:01:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDE2B405F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C89EE406AA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BDE2B405F6
+ by smtp2.osuosl.org (Postfix) with ESMTP id C89EE406AA
  for <buildroot@buildroot.org>; Wed, 10 Sep 2025 21:01:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BB30683D43; Wed, 10 Sep 2025 21:01:56 +0000 (UTC)
+ id C4B5D83D47; Wed, 10 Sep 2025 21:01:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 10 Sep 2025 22:26:01 +0200
+Date: Wed, 10 Sep 2025 22:26:52 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a1daf153bf962d1797598943f8c8709ed04e4642
-X-Git-Newrev: efe00fb3fb1c6ab34794a2a19cc71caef1afdcd9
+X-Git-Oldrev: efe00fb3fb1c6ab34794a2a19cc71caef1afdcd9
+X-Git-Newrev: b07b0bb4560ce49f1c4e0e54a21c28435f17bf17
 X-Patchwork-Hint: ignore
-Message-Id: <20250910210156.BB30683D43@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- support/testing/tests/package/test_docker_compose.py: update kernel & VM
- CPU
+Message-Id: <20250910210156.C4B5D83D47@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/docker-engine: depend on cgroup v2
+ and kernel >=5.2 without systemd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -67,163 +66,111 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=efe00fb3fb1c6ab34794a2a19cc71caef1afdcd9
+commit: https://git.buildroot.net/buildroot/commit/?id=b07b0bb4560ce49f1c4e0e54a21c28435f17bf17
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since commit 947dbc92a20c5acea7882166cae7893e6ea661e1 the Bootlin
-stable toolchain uses headers 5.4, which can lead to build outputs
-incompatible with older kernels. Update to the latest 5.4 kernel to
-avoid this. The kernel config is updated according to the requirements
-of current Docker, runc, and crun.
+Without systemd package/docker-engine requires another way to mount
+/sys/fs/cgroup, so far provided by BR2_PACKAGE_CGROUPFS_MOUNT for
+cgroup v1. Replace this with BR2_PACKAGE_CGROUPFS_V2_MOUNT for cgroup
+v2 support. 5.2 is the minimum recommended version for cgroup v2
+support according to the Docker documentation: "v4.15 or later (v5.2
+or later is recommended)" [1].
 
-Additionally switch the CPU of the test VM to Haswell, to avoid
-dockerd failing to start with a "This program can only be run on AMD64
-processors with v3 microarchitecture support" error.
+Depending on the selected container runtime users may need to adjust
+kernel configurations to enable options required by that runtime with
+cgroup v2 (e.g. CONFIG_CGROUP_BPF for runc).
+
+Propagate dependencies accordingly: The Docker btrfs filesystem driver
+does not need a separate and lower minimum headers version,
+package/mender-update-modules needs to apply the new "depends on".
+
+[1] https://docs.docker.com/engine/containers/runmetrics/#running-docker-on-cgroup-v2
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- support/testing/conf/docker-compose-kernel.config  | 57 +++++++++++++++-------
- .../testing/tests/package/test_docker_compose.py   |  4 +-
- 2 files changed, 41 insertions(+), 20 deletions(-)
+ package/docker-engine/Config.in         | 13 +++++--------
+ package/mender-update-modules/Config.in |  7 ++++---
+ 2 files changed, 9 insertions(+), 11 deletions(-)
 
-diff --git a/support/testing/conf/docker-compose-kernel.config b/support/testing/conf/docker-compose-kernel.config
-index 4d30a578ec..fd28da7a4a 100644
---- a/support/testing/conf/docker-compose-kernel.config
-+++ b/support/testing/conf/docker-compose-kernel.config
-@@ -1,10 +1,22 @@
- # CONFIG_SWAP is not set
- CONFIG_SYSVIPC=y
-+CONFIG_POSIX_MQUEUE=y
- # CONFIG_CROSS_MEMORY_ATTACH is not set
- CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_CGROUPS=y
-+CONFIG_MEMCG=y
-+CONFIG_BLK_CGROUP=y
-+CONFIG_CGROUP_SCHED=y
-+CONFIG_CGROUP_PIDS=y
-+CONFIG_CGROUP_FREEZER=y
-+CONFIG_CPUSETS=y
-+CONFIG_CGROUP_DEVICE=y
-+CONFIG_CGROUP_CPUACCT=y
-+CONFIG_CGROUP_BPF=y
-+CONFIG_BPF_SYSCALL=y
- # CONFIG_COMPAT_BRK is not set
-+CONFIG_SMP=y
- # CONFIG_X86_EXTENDED_PLATFORM is not set
--CONFIG_IOSF_MBI=y
- CONFIG_MCORE2=y
- # CONFIG_X86_MCE is not set
- # CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS is not set
-@@ -12,9 +24,8 @@ CONFIG_LEGACY_VSYSCALL_NONE=y
- # CONFIG_SUSPEND is not set
- # CONFIG_ACPI is not set
- CONFIG_CPU_IDLE=y
--CONFIG_PCI_MSI=y
- # CONFIG_VIRTUALIZATION is not set
--# CONFIG_IOSCHED_CFQ is not set
-+CONFIG_BLK_DEV_THROTTLING=y
- # CONFIG_MQ_IOSCHED_DEADLINE is not set
- # CONFIG_MQ_IOSCHED_KYBER is not set
- # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
-@@ -25,23 +36,36 @@ CONFIG_UNIX=y
- CONFIG_INET=y
- CONFIG_IP_MULTICAST=y
- CONFIG_IP_ADVANCED_ROUTER=y
--# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
--# CONFIG_INET_XFRM_MODE_TUNNEL is not set
--# CONFIG_INET_XFRM_MODE_BEET is not set
--# CONFIG_IPV6 is not set
--# CONFIG_NF_CONNTRACK_PROCFS is not set
--# CONFIG_NF_CT_PROTO_DCCP is not set
--# CONFIG_NF_CT_PROTO_SCTP is not set
--# CONFIG_NF_CT_PROTO_UDPLITE is not set
-+# CONFIG_IPV6_SIT is not set
-+CONFIG_NETFILTER=y
-+CONFIG_NF_CONNTRACK=y
-+CONFIG_NETFILTER_XT_MARK=y
-+CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=y
-+CONFIG_NETFILTER_XT_MATCH_CONNTRACK=y
-+CONFIG_NETFILTER_XT_MATCH_IPVS=y
- CONFIG_IP_VS=y
- CONFIG_IP_VS_RR=y
- CONFIG_IP_VS_NFCT=y
--# CONFIG_BRIDGE_IGMP_SNOOPING is not set
-+CONFIG_IP_NF_IPTABLES=y
-+CONFIG_IP_NF_FILTER=y
-+CONFIG_IP_NF_NAT=y
-+CONFIG_IP_NF_TARGET_MASQUERADE=y
-+CONFIG_IP_NF_MANGLE=y
-+CONFIG_IP_NF_RAW=y
-+CONFIG_IP6_NF_IPTABLES=y
-+CONFIG_IP6_NF_FILTER=y
-+CONFIG_IP6_NF_MANGLE=y
-+CONFIG_IP6_NF_RAW=y
-+CONFIG_IP6_NF_NAT=y
-+CONFIG_IP6_NF_TARGET_MASQUERADE=y
-+CONFIG_BRIDGE=y
- # CONFIG_WIRELESS is not set
-+CONFIG_PCI=y
- CONFIG_DEVTMPFS=y
- CONFIG_DEVTMPFS_MOUNT=y
- CONFIG_VIRTIO_BLK=y
- CONFIG_NETDEVICES=y
-+CONFIG_VETH=y
- CONFIG_VIRTIO_NET=y
- # CONFIG_ETHERNET is not set
- # CONFIG_WLAN is not set
-@@ -52,26 +76,23 @@ CONFIG_VT_HW_CONSOLE_BINDING=y
- # CONFIG_DEVMEM is not set
- CONFIG_SERIAL_8250=y
- CONFIG_SERIAL_8250_CONSOLE=y
--# CONFIG_SERIAL_8250_LPSS is not set
--# CONFIG_SERIAL_8250_MID is not set
- # CONFIG_HW_RANDOM_INTEL is not set
- # CONFIG_HW_RANDOM_AMD is not set
- # CONFIG_HW_RANDOM_VIA is not set
- CONFIG_HW_RANDOM_VIRTIO=y
--# CONFIG_DEVPORT is not set
- # CONFIG_HWMON is not set
- # CONFIG_USB_SUPPORT is not set
- CONFIG_RTC_CLASS=y
- CONFIG_VIRTIO_PCI=y
--# CONFIG_VIRTIO_PCI_LEGACY is not set
-+CONFIG_VIRTIO_MMIO=y
- # CONFIG_X86_PLATFORM_DEVICES is not set
- # CONFIG_IOMMU_SUPPORT is not set
- CONFIG_EXT4_FS=y
-+CONFIG_OVERLAY_FS=y
- CONFIG_TMPFS=y
- # CONFIG_MISC_FILESYSTEMS is not set
- # CONFIG_NETWORK_FILESYSTEMS is not set
-+CONFIG_KEYS=y
- CONFIG_SECURITYFS=y
--# CONFIG_CRYPTO_ECHAINIV is not set
- # CONFIG_CRYPTO_HW is not set
--# CONFIG_UNUSED_SYMBOLS is not set
- CONFIG_UNWINDER_FRAME_POINTER=y
-diff --git a/support/testing/tests/package/test_docker_compose.py b/support/testing/tests/package/test_docker_compose.py
-index 6a8f6f4010..a96c9d1481 100644
---- a/support/testing/tests/package/test_docker_compose.py
-+++ b/support/testing/tests/package/test_docker_compose.py
-@@ -17,7 +17,7 @@ class BaseTestDockerCompose(infra.basetest.BRTest):
-         BR2_ROOTFS_POST_SCRIPT_ARGS="{}"
-         BR2_LINUX_KERNEL=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.262"
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.296"
-         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="{}"
-         BR2_PACKAGE_PYTHON3=y
-@@ -59,7 +59,7 @@ class BaseTestDockerCompose(infra.basetest.BRTest):
-         self.emulator.boot(arch="x86_64",
-                            kernel=kernel,
-                            kernel_cmdline=["root=/dev/vda", "console=ttyS0"],
--                           options=["-cpu", "Nehalem",
-+                           options=["-cpu", "Haswell",
-                                     "-m", "512M",
-                                     "-device", "virtio-rng-pci",
-                                     "-drive", "file={},format=raw,if=virtio".format(rootfs),
+diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
+index 6338eeeef1..ae07b5e19d 100644
+--- a/package/docker-engine/Config.in
++++ b/package/docker-engine/Config.in
+@@ -3,11 +3,12 @@ config BR2_PACKAGE_DOCKER_ENGINE
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # containerd -> runc
+ 	depends on BR2_USE_MMU # containerd
++	depends on !BR2_PACKAGE_CGROUPFS_MOUNT
+ 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # libseccomp
+-	select BR2_PACKAGE_CGROUPFS_MOUNT if !BR2_PACKAGE_SYSTEMD # runtime dependency
++	select BR2_PACKAGE_CGROUPFS_V2_MOUNT if !BR2_PACKAGE_SYSTEMD # runtime dependency
+ 	select BR2_PACKAGE_CONTAINERD # runtime dependency
+ 	select BR2_PACKAGE_HOST_GO
+ 	select BR2_PACKAGE_IPTABLES # runtime dependency
+@@ -22,13 +23,9 @@ if BR2_PACKAGE_DOCKER_ENGINE
+ 
+ config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
+ 	bool "btrfs filesystem driver"
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+ 	help
+ 	  Build the btrfs filesystem driver for Docker.
+ 
+-comment "brtfs filesystem driver needs headers >= 4.12"
+-	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+-
+ config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER
+ 	bool "devicemapper filesystem driver"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
+@@ -83,11 +80,11 @@ config BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_NAME
+ 
+ endif
+ 
+-comment "docker-engine needs a glibc or musl toolchain w/ threads, headers >= 3.17"
++comment "docker-engine needs a glibc or musl toolchain w/ threads, headers >= 5.2"
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		BR2_TOOLCHAIN_USES_UCLIBC || \
+-		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
+ 	depends on BR2_USE_MMU
+diff --git a/package/mender-update-modules/Config.in b/package/mender-update-modules/Config.in
+index 76158ab6c7..e71309c3d6 100644
+--- a/package/mender-update-modules/Config.in
++++ b/package/mender-update-modules/Config.in
+@@ -79,8 +79,9 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_DOCKER
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # docker-engine, docker-cli
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # containerd -> runc
+ 	depends on BR2_USE_MMU # containerd
++	depends on !BR2_PACKAGE_CGROUPFS_MOUNT # docker-engine
+ 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # libseccom
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2 # docker-engine
+ 	select BR2_PACKAGE_DOCKER_ENGINE
+ 	select BR2_PACKAGE_DOCKER_CLI
+ 	select BR2_PACKAGE_JQ # runtime
+@@ -97,13 +98,13 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_DOCKER
+ 
+ 	  https://github.com/mendersoftware/mender-update-modules/tree/master/docker
+ 
+-comment "docker support needs a glibc or musl toolchain w/ threads, headers >= 3.17"
++comment "docker support needs a glibc or musl toolchain w/ threads, headers >= 5.2"
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		BR2_TOOLCHAIN_USES_UCLIBC || \
+-		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
+ 	depends on BR2_USE_MMU
+ 
+ config BR2_PACKAGE_MENDER_UPDATE_MODULES_IPK
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
