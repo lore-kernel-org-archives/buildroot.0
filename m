@@ -1,123 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C74BDCA0FED
-	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 19:14:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 378FFCA0FED
+	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 20:06:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 97D41613AC;
-	Wed, 10 Sep 2025 19:14:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D81BD4087E;
+	Wed, 10 Sep 2025 20:06:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Dqf6k88X74ih; Wed, 10 Sep 2025 19:14:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hSta4dmnLPm0; Wed, 10 Sep 2025 20:06:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC67D6060B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA0FB40889
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DC67D6060B;
-	Wed, 10 Sep 2025 19:14:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 926CA2BB3
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 19:14:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CA0FB40889;
+	Wed, 10 Sep 2025 20:06:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2D0D62BB3
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:06:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 753DD841BD
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 19:14:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 138984134D
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:06:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YPDE2XSjKga5 for <buildroot@buildroot.org>;
- Wed, 10 Sep 2025 19:14:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::130; helo=mail-lf1-x130.google.com;
- envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7377B841A0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7377B841A0
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
- [IPv6:2a00:1450:4864:20::130])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7377B841A0
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 19:14:00 +0000 (UTC)
-Received: by mail-lf1-x130.google.com with SMTP id
- 2adb3069b0e04-5679dbcf9d8so2159895e87.0
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 12:14:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1757531638; x=1758136438;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=A6RJQo80/wcf/N/EsE3Mg/QryGwJc4dTJG9Tf6BwEdc=;
- b=f9viYtVpVhmWryQWKnILeLVT3k9axvqwBo8wenr625lbAZBcZuuHi0W/kZCmVmKE+1
- 4EuSUaFKkWP0IzNkRdpjL4jC5CmjRRAxBeuh5misDUpZuGNwCsfiMVZ1ZcfRgWDAvYJT
- LHuUYlUOwUZ8soU6bqVfRk4RGQsJwBhIZ9S+MDXpsgarEDMpsQ6aoIZfkaoTKT6WVE25
- I8jQNkdKRAMxpZL99uhDRpMY20tGRhMUJkiVppcUxlhwH43YGb78ivaRKDLM7I7WOCed
- sZ283Qy86v/v5eAO4R1BsjBc/xZOURawzXkzJ5BZnv9866DK5CFKjwaioSnqSdWU8Mes
- EUpA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCXi5XLw7bIlIATLBvNi4VDmXgKLC82dCu/dfeLhCZuHzkku2zhF19killBLjuKXzUF0UCNzAXJQJeY=@buildroot.org
-X-Gm-Message-State: AOJu0YzTZA4mMdZhDGlYGVKCR01tOLW5J2DRFvauqE3SshUjKJMtSpQ6
- vhLwfrzlFrw/lma9cXVVpPCpquItWGFkDtLa1yrwXCmJZIibt+SparQXfF3ua0Tpkc2wR1menZD
- QdMO0qkOduQ==
-X-Gm-Gg: ASbGncv+SmKPKIOXCB0jCAYG5w3z1FPhrahws/f6lmqk3rWL7Knm2sa0DhP1sVKyh+l
- TvnSIyPaJRT7jcx/O3eMINIZewznrb6XWRp/9mkEsdee85UUuXMTJ5SA8NEKu+Zn9BXaYp8udIt
- BD9fd/OjkXvoJVCliJy5Q88o2eLSmXBYdc0xi4zAXMidRNGBs+dC2E5V1KGlhy+/9+SySwIqxDv
- SjY0u3m1xdJpWhg751g8EgeAgpLhAGIaK8f3A2Kh6XLHs6hIY0uxIS/Abrc6WUk/L7Qhdqts4xi
- 8VVMu/YjFTWjK+33mAvsOfWY6ovrbBdan2xkoCV8k5QlZsLfj72YsORv6fCH4yZ1aoHf3Fgh7f8
- OuC7Qh1tMVVFJqSWjyeWHvd3fpNPs/aIiJmbwtzmDQmtVbwlUxuPB7b8nGyufSsth8A==
-X-Google-Smtp-Source: AGHT+IHt//14c1601a0S2418+LHnFjxYOZ4EGa5D/PLCgcu0J20gnh5rRPy2LD0pmfMmFjvXDxVptA==
-X-Received: by 2002:ac2:4bce:0:b0:55f:4fac:3f2d with SMTP id
- 2adb3069b0e04-5625ee79710mr5354613e87.6.1757531637972; 
- Wed, 10 Sep 2025 12:13:57 -0700 (PDT)
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com.
- [209.85.208.170]) by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-56db891175csm40328e87.21.2025.09.10.12.13.57
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 10 Sep 2025 12:13:57 -0700 (PDT)
-Received: by mail-lj1-f170.google.com with SMTP id
- 38308e7fff4ca-336bbcebca9so56234911fa.1
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 12:13:57 -0700 (PDT)
-X-Forwarded-Encrypted: i=1;
- AJvYcCX35E+25PaMTAAGO9fL/djGjcAQTOtmh2orBuHqkBdHjG1/pT4gTMvaYAHRplsGs65dvzDtcDMTkAE=@buildroot.org
-X-Received: by 2002:a05:651c:2113:b0:348:9ed5:ce33 with SMTP id
- 38308e7fff4ca-3489ed5d246mr24352271fa.36.1757531636892; Wed, 10 Sep 2025
- 12:13:56 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qDoBqvZY4cCT for <buildroot@buildroot.org>;
+ Wed, 10 Sep 2025 20:06:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4B491407CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B491407CE
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4B491407CE
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:06:12 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1b0bb.dip0.t-ipconnect.de [84.161.176.187])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 3B48BA4C2D06;
+ Wed, 10 Sep 2025 22:06:09 +0200 (CEST)
+Received: from [192.168.1.144] (port=47702 helo=bruckner.lan.fli4l)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1uwR4y-000000008AP-2d90;
+ Wed, 10 Sep 2025 20:06:08 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Wed, 10 Sep 2025 22:06:07 +0200
+Message-ID: <20250910200608.2114508-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-References: <cover.1751377540.git.yann.morin@orange.com>
- <d23125d705a0c24ca91071624d507392ecfe7b0d.1751377540.git.yann.morin@orange.com>
- <a8b668d1-24da-4b18-8235-e98a29732884@smile.fr> <aL/bdHOwN/ENpcOl@yd-6wlzhs3>
- <CA+h8R2rxQ6Na-hG=BLZrNvL=Wu5bwur_8YeC3wNdFkjrKfsP4Q@mail.gmail.com>
- <69b87840-6431-412e-9f27-a8acb3112a7e@smile.fr> <aMFj2gv8Icxm+IDh@yd-6wlzhs3>
- <CA+h8R2prwcPxD-8QF+hYg0zAj22zT_Guo3LcXXFStpR8E82zXA@mail.gmail.com>
-In-Reply-To: <CA+h8R2prwcPxD-8QF+hYg0zAj22zT_Guo3LcXXFStpR8E82zXA@mail.gmail.com>
-Date: Wed, 10 Sep 2025 12:13:45 -0700
-X-Gmail-Original-Message-ID: <CA+h8R2ojX40fLh2SQmfGRXsTNO4PzNke=eaa7p+S7Rzg0fo_rA@mail.gmail.com>
-X-Gm-Features: Ac12FXyTZSqFpBoIBdsLmrktx07DIPeZ18nMosnky_fpANjrdZGV_0Jql2oBW9g
-Message-ID: <CA+h8R2ojX40fLh2SQmfGRXsTNO4PzNke=eaa7p+S7Rzg0fo_rA@mail.gmail.com>
-To: yann.morin@orange.com
-Cc: Romain Naour <romain.naour@smile.fr>,
- Buildroot Mailing List <buildroot@buildroot.org>
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1757531638; x=1758136438; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=A6RJQo80/wcf/N/EsE3Mg/QryGwJc4dTJG9Tf6BwEdc=;
- b=dZvlEk1MkvKrZHj9EAa26ln7GMdCuR9Epg6k7Eqz9MZH5LMypzCQ2j6kFBtUR/ZwjO
- dtc27W3/3WFpgJBICyE1vg29ik/37QlszWPIHkeDtO04mVKfTBWTbY4UQPP9T0LwbTMK
- 4a+zNbHzxdXsMa2Ti9qtrBBnK2v5pkx+0Y9ZuCwF5wTHS7IzCLAvHTkBojg8xcJHtMBQ
- 04385IZk8f/9ax6WBQfFbPlboDNTi+vAuMTMtBihSpRUqU5TlXD63lGT0ALb7xXlvEj1
- PnF+n+4evioCt4VE7JjmMwolW7G9sPBbbs+rbO6Z/s25/SO/Vdj3R+OcUeztOTaSnwI8
- Zfjg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=aperture.us
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=kuhls.net; 
+ s=kas202506031021; t=1757534769;
+ bh=JvcZhft/yo1t1H0HvnwrZcsYekTYlpcvXaM5ylf7vAY=;
+ h=From:To:Cc:Subject:Date:From;
+ b=XDhZDq9AMIajatypwZ+Es4jSOBpdVWUYloCaNNmSjETwwA0wSQ4EhgB6B30fnESA3
+ cJEOwVbywWpuCw6scZGSxMcm4pHZ7mR1+RuFsvaVKXow5mdJxCsrD4g2mm/Npybn6f
+ d3OeaKb1BkkBfK+Ke2hs2NaMLUXyqthRXmOmjxfFRX30ngevEUFxGFOfPhS9uYtvii
+ 1BJcRNGbnD+SMhrlqPexLO7XB4YFa8cmMcas9jSO4sqAJBF5Q97ThBSku3y0LjhUnp
+ cxKPhnPjJkVuVXoP9QgebDN95/IFkYi3v0vPipWUtOZGCOa1jIsBfBfhs+L9lIupBT
+ NTnL4+wCsbXow==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
- header.s=google header.b=dZvlEk1M
-Subject: Re: [Buildroot] [PATCH 1/4 v2] package/pkg-golang: simplify
- installing multiple binaries
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=XDhZDq9A
+Subject: [Buildroot] [PATCH 1/2] package/libcurl: security bump version to
+ 8.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -129,33 +81,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-aGkgWWFubiwKCk9uIFdlZCwgU2VwIDEwLCAyMDI1IGF0IDEyOjA34oCvUE0gQ2hyaXN0aWFuIFN0
-ZXdhcnQKPGNocmlzdGlhbkBhcGVydHVyZS51cz4gd3JvdGU6Cj4KPiBZYW5uLAo+Cj4gT24gV2Vk
-LCBTZXAgMTAsIDIwMjUgYXQgNDo0MeKAr0FNIDx5YW5uLm1vcmluQG9yYW5nZS5jb20+IHdyb3Rl
-Ogo+ID4KPiA+IFJvbWFpbiwgQWxsLAo+ID4KPiA+IE9uIDIwMjUtMDktMTAgMTM6MTkgKzAyMDAs
-IFJvbWFpbiBOYW91ciBzcGFrZSB0aHVzbHk6Cj4gPiA+IExlIDA5LzA5LzIwMjUgw6AgMTk6NTYs
-IENocmlzdGlhbiBTdGV3YXJ0IGEgw6ljcml0IDoKPiA+ID4gPiBPbiBUdWUsIFNlcCA5LCAyMDI1
-LCAxMjo0N+KAr0FNIDx5YW5uLm1vcmluQG9yYW5nZS5jb20KPiA+ID4gPiA8bWFpbHRvOnlhbm4u
-bW9yaW5Ab3JhbmdlLmNvbT4+IHdyb3RlOgo+ID4gPiA+ID4gV2hhdCBhYm91dCB0aGUgc3RhdHVz
-IG9mIHRoaXMgc2VyaWVzPyBDaHJpc3RpYW4gaGFzIHByb3ZpZGVkIGhpcwo+ID4gPiA+ID4gUmV2
-aWV3ZWQtYnkgYSB3aGlsZSBiYWNrLi4uCj4gPiA+ID4gSXQgc3RpbGwgbG9va3MgZ29vZCB0byBt
-ZSEKPiA+ID4gVGhhbmtzIGZvciB0aGUgcmVtaW5kZXIhCj4gPiA+IE5vdyB0aGUgMjAyNS4wOCBp
-cyByZWxlYXNlIChhbmQgbmV4dCBtZXJnZWQgaW4gbWFzdGVyKSwgd2UgY2FuIGdvIGFoZWFkLgo+
-ID4gPiBCdHcsIEkgcmVwbGFjZWQgMjAyNS4wOCBieSAyMDI1LjExIGluIHRoZSBsYXN0IGNvbW1p
-dC4KPiA+Cj4gPiBJIG1pZ2h0IGhhdmUgYmVlbiBhIGxpdHRsZSB0aW55IHdlZW55IGJpdCB0b28g
-b3B0aW1pc3RpYy4g8J+YnAo+ID4KPiA+ID4gQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KPgo+
-IE5vdyB0aGF0IHRoaXMgaXMgbWVyZ2VkLCBob3cgZG8gSSByZW5hbWUgYSBidWlsZCBiaW5hcnkg
-YmVmb3JlIGluc3RhbGxpbmc/Cj4KPiBIZXJlJ3MgYW4gZXhhbXBsZToKPgo+IGh0dHBzOi8vZ2l0
-aHViLmNvbS9za2lmZm9zL2J1aWxkcm9vdC9ibG9iL3NraWZmL3BhY2thZ2UvZ2VudWluZXRvb2xz
-LWltZy9nZW51aW5ldG9vbHMtaW1nLm1rCgpPaCwgSSBndWVzcyB3ZSBjYW4gc3RpbGwganVzdCBz
-ZXQgQklOX05BTUUuIElnbm9yZSEKClRoYW5rcywKQ2hyaXN0aWFuCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290Cg==
+Changelog: https://curl.se/ch/8.16.0.html
+
+Fixes CVEs:
+CVE-2025-9086: https://curl.se/docs/CVE-2025-9086.html
+CVE-2025-10148: https://curl.se/docs/CVE-2025-10148.html
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 2e36917382..4cc4da4f26 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-8.15.0.tar.xz.asc
++# https://curl.se/download/curl-8.16.0.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  6cd0a8a5b126ddfda61c94dc2c3fc53481ba7a35461cf7c5ab66aa9d6775b609  curl-8.15.0.tar.xz
++sha256  40c8cddbcb6cc6251c03dea423a472a6cea4037be654ba5cf5dec6eb2d22ff1d  curl-8.16.0.tar.xz
+ sha256  e18f1989333b70044b2adfb7dc2f905d0119dbdcac3bc9f4bc9d540e3a29de5b  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 1cfdda27d2..0aa88044bd 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 8.15.0
++LIBCURL_VERSION = 8.16.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
+-- 
+2.47.3
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
