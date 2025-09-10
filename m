@@ -4,111 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59772CA0FED
-	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 20:33:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D01BCA101F
+	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 20:38:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2BC39841E3;
-	Wed, 10 Sep 2025 20:33:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1B45284291;
+	Wed, 10 Sep 2025 20:38:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pw_6V6UK5pKt; Wed, 10 Sep 2025 20:33:43 +0000 (UTC)
+ id ZrPMZbDflfS8; Wed, 10 Sep 2025 20:38:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92570842AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B654842B5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 92570842AC;
-	Wed, 10 Sep 2025 20:33:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id F1FBF443
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:33:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0B654842B5;
+	Wed, 10 Sep 2025 20:38:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 64331443
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:38:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D86CF611B3
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:33:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4AC12407BE
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:38:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p0oakQDONFqj for <buildroot@buildroot.org>;
- Wed, 10 Sep 2025 20:33:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::131; helo=mail-lf1-x131.google.com;
- envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8B63260A7C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B63260A7C
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com
- [IPv6:2a00:1450:4864:20::131])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8B63260A7C
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:33:40 +0000 (UTC)
-Received: by mail-lf1-x131.google.com with SMTP id
- 2adb3069b0e04-55f753ec672so8290233e87.2
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 13:33:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1757536418; x=1758141218;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=bZ/pfL0zOIYu020oJIhXwsIDl5S69Kk1pdE0wTsi5O8=;
- b=WmYw4kJ4YFk4CGHjzjqqcXr4u1lXZdhYP7Dghb7DKrRXpsDRKU3YlhUNpjpgfopsa0
- u/v4RlOWviI5IiJI2xnCvWIuuPVpqdz4o7A9BEsGe0lIml9DiotacZkMgIwJlIP7f8NM
- QRBt+DWSEc/lmifv1hm29S2pDL887jKUVfyS5TBPDbxnsremf1Ike0/lCkSFLhiSD41i
- aK69whJ4wTDVGWl6BGt1sB45vx58RcQLBkiYxUe+0qjGOY9jg5j6IAc+IRA36I3HJ1VO
- El7cr8TKEfYQ8F8S5yZFFVDRzCNTVY60AKl/Wy9zOrtNCJfCjhSlGXouI7D32C9SyDgp
- rzXQ==
-X-Gm-Message-State: AOJu0YwPpWDMMjEepl90fO+z0DrAoJ4hfBBw5T6u4HVdAQP5FY9uKz7C
- 4ZAwzzNProEsYj4F+SpFJ/jyGHMx/5ThwagIXxLpNT9wd2scpuoP8fHo9tdbOUHhbWJhEdGht9A
- aQ3ctNY89Vw==
-X-Gm-Gg: ASbGncvrTLEtOJs0Ma3vklE+nUWKFe9pINNapFlmdCHYxM28lE3tdsPPGTPEh+SyE3P
- gRY3Bpi+sPsLTMV0mK+0in4vy/2zBvR0ReGlpntoib61YWALfoORg+QYF/a1XSgSIrwXRn7ORW7
- 8P3A/YjLiPudRC/vcfIQOPf1ampYVu/QWsOGKlhP/tAwYFERSD2BAcf0MUvGnKXpxETkFiUdZLM
- ZDZIbJ6eOPNFTd92LZdgHmUphkQoXxFVrOKsuVZsE+70HwLXzntpUXLfxR+gLQfVMhT3z4MEC8+
- E3GV2vUFvyY/OVmWnFhCk7HlO4Hi7dZInART6ye0ON9i0m3EIJG4u1yqupYv4+YtIU9imynpGoa
- K//f1wVPx2cNuYaZ7I82MWFa4oziQx48ZkcP5JT+oZRkImMwiI+U313CtqISaFSg1QVa6vXHoar
- 7z
-X-Google-Smtp-Source: AGHT+IEthQVF1ORFsWiUGOTpdCLc6MrLVclNF3MYr3gXLI7ilqKwpbl5LfAh8Tnmg628DamXPCJk6w==
-X-Received: by 2002:a05:6512:3a8b:b0:55f:6a68:c44a with SMTP id
- 2adb3069b0e04-5625eb94e96mr5260009e87.2.1757536417772; 
- Wed, 10 Sep 2025 13:33:37 -0700 (PDT)
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com.
- [209.85.208.178]) by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-56db89110c4sm78710e87.5.2025.09.10.13.33.36
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 10 Sep 2025 13:33:37 -0700 (PDT)
-Received: by mail-lj1-f178.google.com with SMTP id
- 38308e7fff4ca-336cdca64e6so285421fa.0
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 13:33:36 -0700 (PDT)
-X-Received: by 2002:a05:6512:3b82:b0:55c:e752:e9c6 with SMTP id
- 2adb3069b0e04-5625eb94f96mr5817889e87.10.1757536416522; Wed, 10 Sep 2025
- 13:33:36 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iO4z5kkCuGJf for <buildroot@buildroot.org>;
+ Wed, 10 Sep 2025 20:38:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 11FDE407EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11FDE407EA
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 11FDE407EA
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:38:40 +0000 (UTC)
+Received: from localhost.localdomain (unknown
+ [IPv6:2a01:e0a:2af:22b0:382f:cdeb:de75:d1ab])
+ (Authenticated sender: vjardin@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 3D32F13F880;
+ Wed, 10 Sep 2025 22:38:34 +0200 (CEST)
+To: buildroot@buildroot.org
+Cc: Vladimir Oltean <olteanv@gmail.com>,
+	Vincent Jardin <vjardin@free.fr>
+Date: Wed, 10 Sep 2025 22:38:23 +0200
+Message-ID: <20250910203826.41407-1-vjardin@free.fr>
+X-Mailer: git-send-email 2.49.0
 MIME-Version: 1.0
-References: <20250910183458.1288165-1-james.hilliard1@gmail.com>
-In-Reply-To: <20250910183458.1288165-1-james.hilliard1@gmail.com>
-Date: Wed, 10 Sep 2025 13:33:24 -0700
-X-Gmail-Original-Message-ID: <CA+h8R2ozbY7zf0=x+gP=bgruLYOK7qW1Ex5Sa0x_h_gaqqHrwg@mail.gmail.com>
-X-Gm-Features: Ac12FXyW5AzQr2EP0gfFxA9GGKPxqDvlBdY9we5FFVwQcZu9OPZhq4tnYv3GIY8
-Message-ID: <CA+h8R2ozbY7zf0=x+gP=bgruLYOK7qW1Ex5Sa0x_h_gaqqHrwg@mail.gmail.com>
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: buildroot@buildroot.org, Thomas Perale <thomas.perale@mind.be>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1757536418; x=1758141218; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=bZ/pfL0zOIYu020oJIhXwsIDl5S69Kk1pdE0wTsi5O8=;
- b=RcV/TDD3DYFrn6SSW5rf9ncAm7C1LmRzMVbawJpNalTjh+qi6Ogz3CryFUMVDA2UER
- TOBhqvWjoRSjI6QwicsVIyhyWceDTQpwCh39GFhSGoPZuhOb9/TS/Hg6NGUlACO/oJiC
- hgbhDTOUs6q8/5bWytYQfMtTtw6UStbV7v9J2G2ByXZYM1JVulImXcZN5KfVYt6NwpQw
- GYEeAQ67g+DpD56ML+SfMjSXI2UX6mroFDXv0m99ZiGbOETsnwGRoYlJQZkfeGgqgFk0
- j/uBsRy9RXcbrCwjuaWsom9F2+flQRD/7cRLiSW76kyqMPIW614cvPZlIit7DP2iGc8S
- 1GHA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=aperture.us
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
- header.s=google header.b=RcV/TDD3
-Subject: Re: [Buildroot] [PATCH 1/2] package/go: bump to version 1.25.1
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1757536717;
+ bh=fZKn58+OLFfEDSY9p+cY05XSR3As7hnBxvpZBCyIl+I=;
+ h=From:To:Cc:Subject:Date:From;
+ b=oZkKnCeBxAbOEGEx5QqZbtd059F2Fw+dwUJ2kgh/2EAxq/oaMcq2zn4YW6FDiz4yi
+ rEYibNHh0K/7oDVs34DpkvuKS6gv7GihSzsWX2Ls8jFGJboUR1hBUw9JsalY6DnGCJ
+ G1UvRa7cOnVKbObPJ8r3B9hvYS2BTLjXxKfoamP569l1KiTNTA8SpW0+g4euvvD6Wr
+ 4J4LL4XuLZ/kUm6EQigiK3Q/0zuSk6Rsp2yKW4uwiSyyBXMxGqBzUHpKzJ1L+a13mz
+ lXlG54pNt6JgurOYTTjWmv/mL8InWQV/en3oFPn1ibOpgSSx+IctpfmsXiRqApBj5m
+ 1y3NUG7f7uVlQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=oZkKnCeB
+Subject: [Buildroot] [PATCH v4 0/2] board/lx2160acex7: new platform
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,51 +76,151 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Vincent Jardin via buildroot <buildroot@buildroot.org>
+Reply-To: Vincent Jardin <vjardin@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgSmFtZXMsCgpPbiBXZWQsIFNlcCAxMCwgMjAyNSBhdCAxMTozNOKAr0FNIEphbWVzIEhpbGxp
-YXJkCjxqYW1lcy5oaWxsaWFyZDFAZ21haWwuY29tPiB3cm90ZToKPgo+IEJ1aWxkaW5nIEdvIDEu
-MjQgYW5kIGxhdGVyIHJlcXVpcmVzIEdvIDEuMjIuNiBvciBsYXRlciBmb3IgYm9vdHN0cmFwLgo+
-Cj4gVG8gc3VwcG9ydCB0aGlzIHdlIHVzZSBvdXIgcHJldmlvdXMgR28gdmVyc2lvbiAxLjIzLjEy
-IGFzIHRoZSB2ZXJzaW9uCj4gZm9yIGdvLWJvb3RzdHJhcC1zdGFnZTQgYW5kIGhhdmUgdGhlIGJ1
-aWxkIGZvciBHbyAxLjI1LjEgZGVwZW5kIG9uCj4gZ28tYm9vdHN0cmFwLXN0YWdlNC4KPgo+IEdv
-IHZlcnNpb24gMS4yMy4xMiBpcyB0aGUgbGF0ZXN0IGdvIHZlcnNpb24gd2UgY2FuIGJ1aWxkIHVz
-aW5nCj4gZ28tYm9vdHN0cmFwLXN0YWdlMy4KPgo+IFRoZSBwYWNrYWdlIGJ1aWxkIGZvciBnby1i
-b290c3RyYXAtc3RhZ2U0IGlmIGVmZmVjdGl2ZWx5IGlkZW50aWNhbCB0bwo+IGdvLWJvb3RzdHJh
-cC1zdGFnZTMgd2l0aCBvbmx5IHRoZSBHbyB2ZXJzaW9uIGFuZCBzdGFnZSBudW1iZXIgY2hhbmdl
-ZC4KPgo+IFNpZ25lZC1vZmYtYnk6IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFyZDFAZ21h
-aWwuY29tPgo+IC0tLQo+ICBwYWNrYWdlL2dvL0NvbmZpZy5pbi5ob3N0ICAgICAgICAgICAgICAg
-ICAgICAgfCAgOSArLS0KPiAgLi4ubGR2Y3MtZmFsc2Utd2hlbi1idWlsZGluZy1nby1ib290c3Ry
-LnBhdGNoIHwgNzEgKysrKysrKysrKysrKysrKysrKwo+ICBwYWNrYWdlL2dvL2dvLWJvb3RzdHJh
-cC1zdGFnZTQvQ29uZmlnLmluLmhvc3QgfCAgNCArKwo+ICAuLi4vZ28tYm9vdHN0cmFwLXN0YWdl
-NC5oYXNoICAgICAgICAgICAgICAgICAgfCAgMyArCj4gIC4uLi9nby1ib290c3RyYXAtc3RhZ2U0
-Lm1rICAgICAgICAgICAgICAgICAgICB8IDU0ICsrKysrKysrKysrKysrCj4gIHBhY2thZ2UvZ28v
-Z28tc3JjL2dvLXNyYy5tayAgICAgICAgICAgICAgICAgICB8ICA0ICstCj4gIHBhY2thZ2UvZ28v
-Z28uaGFzaCAgICAgICAgICAgICAgICAgICAgICAgICAgICB8IDE0ICsrLS0KPiAgcGFja2FnZS9n
-by9nby5tayAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KPiAgOCBmaWxlcyBj
-aGFuZ2VkLCAxNDcgaW5zZXJ0aW9ucygrKSwgMTQgZGVsZXRpb25zKC0pCj4gIGNyZWF0ZSBtb2Rl
-IDEwMDY0NCBwYWNrYWdlL2dvL2dvLWJvb3RzdHJhcC1zdGFnZTQvMDAwMS1jbWQtZGlzdC1zZXQt
-YnVpbGR2Y3MtZmFsc2Utd2hlbi1idWlsZGluZy1nby1ib290c3RyLnBhdGNoCj4gIGNyZWF0ZSBt
-b2RlIDEwMDY0NCBwYWNrYWdlL2dvL2dvLWJvb3RzdHJhcC1zdGFnZTQvQ29uZmlnLmluLmhvc3QK
-PiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvZ28vZ28tYm9vdHN0cmFwLXN0YWdlNC9nby1i
-b290c3RyYXAtc3RhZ2U0Lmhhc2gKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvZ28vZ28t
-Ym9vdHN0cmFwLXN0YWdlNC9nby1ib290c3RyYXAtc3RhZ2U0Lm1rCgpJIGp1c3Qgc3VibWl0dGVk
-IGEgZGlmZmVyZW50IHNlcmllcyB0byBkbyB0aGUgc2FtZSB0aGluZywgc29ycnksIEkKZGlkbid0
-IHNlZSB5b3VycyB1bnRpbCBJIGhhZCBhbHJlYWR5IHN1Ym1pdHRlZC4KCkl0J3MgYSBiaXQgZGlm
-ZmVyZW50IHRob3VnaCwgc2VwYXJhdGUgY29tbWl0cyBmb3IgYWRkaW5nIHN0YWdlNCBhbmQKZ28x
-LjI0IGFuZCBnbyAxLjI1IGZvciBiZXR0ZXIgYmlzZWN0LgoKV2hhdCBkbyB5b3UgdGhpbms/Cgox
-LiBodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVpbGRyb290L3BhdGNoLzIw
-MjUwOTEwMjAyMTM4LjEzNjQ4LTEtY2hyaXN0aWFuQGFwZXJ0dXJlLnVzLwoyLiBodHRwczovL3Bh
-dGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVpbGRyb290L3BhdGNoLzIwMjUwOTEwMjAyMTM4
-LjEzNjQ4LTItY2hyaXN0aWFuQGFwZXJ0dXJlLnVzLwozLiBodHRwczovL3BhdGNod29yay5vemxh
-YnMub3JnL3Byb2plY3QvYnVpbGRyb290L3BhdGNoLzIwMjUwOTEwMjAyMTM4LjEzNjQ4LTMtY2hy
-aXN0aWFuQGFwZXJ0dXJlLnVzLwoKSXQncyBhY3R1YWxseSBhbm90aGVyIHJldmlzaW9uIG9mIGEg
-dmVyeSBvbGQgc2VyaWVzIEkgc3VibWl0dGVkIGZvciBnbzEuMjQuCgpUaGFua3MsCkNocmlzdGlh
-biBTdGV3YXJ0Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
-aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+v4:
+  - rebase on upstream instead of using nxp lf repository
+  - drop useless patches because of internal boards, automatic generated
+    contents
+  - upgrade rcw to use templates for generated rcw
+  - fix few bugs (devtype should not be enforced with dhcp, ethprime was
+    not properly set to dpmac17)
+  - the patch is now 30% the size of v3
+
+v3:
+  - rebase Vladimir's serie
+  - import all patches from SolidRun
+  - https://patchwork.ozlabs.org/project/buildroot/patch/20250904112858.36171-1-vjardin@free.fr/
+
+v2:
+  - I do not remember...
+
+Vincent Jardin (2):
+  board/lx2160acex7: new platform
+  package/qoriq-rcw: Generate RCW from templates
+
+ .../lx2160acex7/clearfog-cx-s1_8-s2_0-dpc.dts |  109 +
+ .../lx2160acex7/clearfog-cx-s1_8-s2_0-dpl.dts |  556 ++++++
+ board/solidrun/lx2160acex7/extlinux.conf      |    8 +
+ board/solidrun/lx2160acex7/genimage.cfg       |   84 +
+ board/solidrun/lx2160acex7/linux.config       |  636 ++++++
+ .../0002-plat-nxp-lx2160a-auto-boot.patch     |  204 ++
+ ...ccount-MEM_PLL_CFG_SHIFT-for-ddr-fre.patch |   86 +
+ ...ptional-S5-gpio-from-Makefile-consta.patch |   61 +
+ ...flexible-value-for-CONFIG_DDR_NODIMM.patch |   33 +
+ ...ape-mmap-dynamic-configuration-regio.patch |   48 +
+ ...ort-flushing-i2c-bus-before-ddr-init.patch |  384 ++++
+ ...p-SPD-EEPROM-content-on-debug-builds.patch |   40 +
+ ...error-when-using-non-identical-DIMMs.patch |   35 +
+ ...g-output-for-dimm-parameters-parsed-.patch |   83 +
+ ...-building-without-NXP_NV_SW_MAINT_LA.patch |   49 +
+ ...-boot-without-spi-flash-disable-non-.patch |   33 +
+ ...te-platform-for-solidrun-cex7-module.patch |  423 ++++
+ ...ime-flag-to-disable-SYSTEM_OFF-funct.patch |   67 +
+ ...a-cex7-add-interrupts-for-rtc-and-et.patch |   39 +
+ ...a-clearfog-itx-enable-pcie-nodes-for.patch |   40 +
+ ...cf2127-clear-minute-second-interrupt.patch |   62 +
+ ...reate-driver-for-ds250df4x10-retimer.patch |  502 +++++
+ ...a-clearfog-cx-add-description-for-re.patch |   81 +
+ ...c-jumpc-and-jump-to-pbi-instructions.patch |   55 +
+ ...otlocptr-script-for-automatic-boot-f.patch |   80 +
+ ...ocedure-splitting-sd1-lanes-A-D-40GE.patch |  132 ++
+ ...ocedure-converting-sd1-lanes-g-h-fro.patch |   65 +
+ ...ipt-generating-configs-from-template.patch |   71 +
+ ...n-solidrun-lx2160a-cex-7-on-clearfog.patch |  735 +++++++
+ ...ait-100ms-for-Link-Up-in-ls_pcie_g4_.patch |   66 +
+ ...t-100ms-for-Link-Up-in-ls_pcie_probe.patch |   65 +
+ ...-calculation-of-ddr-clock-rate-to-in.patch |   63 +
+ ...able-workaround-for-SPI-erratum-A-05.patch |  103 +
+ ...upport-specifying-tlv-eeprom-in-DT-a.patch |   57 +
+ ...mpc8xxx-fix-build-on-layerscape-arch.patch |   29 +
+ ...rm-dts-fsl-lx2160a.dtsi-add-pcs-phys.patch |  386 ++++
+ ...m-dts-fsl-lx2160a.dtsi-add-psci-node.patch |   30 +
+ ...rvell10g-add-support-for-88e2580-phy.patch |   43 +
+ ...d-solidrun-lx2160-cex7-board-support.patch | 1753 +++++++++++++++++
+ ...x2160cex7-add-support-for-clearfog-c.patch |  238 +++
+ ...x2160cex7-configure-fan-controller-d.patch |  138 ++
+ ...x2160cex7-fix-read-rcw-from-dcsr-mem.patch |   48 +
+ ...-copy-optee-to-OS-DTB-regardless-if-.patch |   56 +
+ ...x2160cex7-fix-xspi-flash-compatible-.patch |   30 +
+ ...x2160acex7-fix-serdes-lane-dpmac-swa.patch |  124 ++
+ ...-adding-optee-subnode-if-not-present.patch |   31 +
+ ...n-disable-some-unused-config-options.patch |   66 +
+ ...x2160acex7-fix-various-mistakes-in-s.patch |  703 +++++++
+ ...x2160acex7-disable-disabled-ports-pr.patch |  367 ++++
+ board/solidrun/lx2160acex7/post-build.sh      |   10 +
+ board/solidrun/lx2160acex7/readme.txt         |  142 ++
+ .../udev/rules.d/74-dpaa2-networking.rules    |   12 +
+ .../lx2160acex7/u-boot-environment-sd.txt     |   96 +
+ board/solidrun/lx2160acex7/u-boot.config      |    2 +
+ configs/solidrun_lx2160acex7_defconfig        |   56 +
+ package/qoriq-rcw/qoriq-rcw.mk                |    1 +
+ 56 files changed, 9516 insertions(+)
+ create mode 100644 board/solidrun/lx2160acex7/clearfog-cx-s1_8-s2_0-dpc.dts
+ create mode 100644 board/solidrun/lx2160acex7/clearfog-cx-s1_8-s2_0-dpl.dts
+ create mode 100644 board/solidrun/lx2160acex7/extlinux.conf
+ create mode 100644 board/solidrun/lx2160acex7/genimage.cfg
+ create mode 100644 board/solidrun/lx2160acex7/linux.config
+ create mode 100644 board/solidrun/lx2160acex7/patches/arm-trusted-firmware/0002-plat-nxp-lx2160a-auto-boot.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/arm-trusted-firmware/0003-dcfg-Take-into-account-MEM_PLL_CFG_SHIFT-for-ddr-fre.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/arm-trusted-firmware/0004-lx2160a-assert-optional-S5-gpio-from-Makefile-consta.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/arm-trusted-firmware/0005-lx2160a-support-flexible-value-for-CONFIG_DDR_NODIMM.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/arm-trusted-firmware/0006-plat-nxp-layerscape-mmap-dynamic-configuration-regio.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/arm-trusted-firmware/0007-lx2160a-support-flushing-i2c-bus-before-ddr-init.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/arm-trusted-firmware/0008-nxp-ddr-dump-SPD-EEPROM-content-on-debug-builds.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/arm-trusted-firmware/0009-nxp-ddr-disarm-error-when-using-non-identical-DIMMs.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/arm-trusted-firmware/0010-nxp-ddr-add-debug-output-for-dimm-parameters-parsed-.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/arm-trusted-firmware/0011-plat-lx2160a-fix-building-without-NXP_NV_SW_MAINT_LA.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/arm-trusted-firmware/0012-plat-lx2160a-fix-boot-without-spi-flash-disable-non-.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/arm-trusted-firmware/0013-add-separate-platform-for-solidrun-cex7-module.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/arm-trusted-firmware/0016-psci-add-build-time-flag-to-disable-SYSTEM_OFF-funct.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/linux/0004-arm64-dts-lx2160a-cex7-add-interrupts-for-rtc-and-et.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/linux/0005-arm64-dts-lx2160a-clearfog-itx-enable-pcie-nodes-for.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/linux/0006-rtc-pcf2127-clear-minute-second-interrupt.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/linux/0010-net-phy-create-driver-for-ds250df4x10-retimer.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/linux/0012-arm64-dts-lx2160a-clearfog-cx-add-description-for-re.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/qoriq-rcw/0002-add-loadc-jumpc-and-jump-to-pbi-instructions.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/qoriq-rcw/0003-lx2160asi-add-bootlocptr-script-for-automatic-boot-f.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/qoriq-rcw/0004-lx2160asi-add-procedure-splitting-sd1-lanes-A-D-40GE.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/qoriq-rcw/0005-lx2160asi-add-procedure-converting-sd1-lanes-g-h-fro.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/qoriq-rcw/0006-solidrun-add-script-generating-configs-from-template.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/qoriq-rcw/0007-add-configuration-solidrun-lx2160a-cex-7-on-clearfog.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/uboot/0001-pci-ls_pcie_g4-Wait-100ms-for-Link-Up-in-ls_pcie_g4_.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/uboot/0002-pci-ls_pcie-Wait-100ms-for-Link-Up-in-ls_pcie_probe.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/uboot/0003-fsl-lsch3-update-calculation-of-ddr-clock-rate-to-in.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/uboot/0004-armv8-lx2160a-enable-workaround-for-SPI-erratum-A-05.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/uboot/0006-cmd-tlv_eeprom-support-specifying-tlv-eeprom-in-DT-a.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/uboot/0007-gpio-mpc8xxx-fix-build-on-layerscape-arch.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/uboot/0008-arch-arm-dts-fsl-lx2160a.dtsi-add-pcs-phys.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/uboot/0009-arch-arm-dts-fsl-lx2160a.dtsi-add-psci-node.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/uboot/0010-net-phy-marvell10g-add-support-for-88e2580-phy.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/uboot/0011-add-solidrun-lx2160-cex7-board-support.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/uboot/0014-board-solidrun-lx2160cex7-add-support-for-clearfog-c.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/uboot/0015-board-solidrun-lx2160cex7-configure-fan-controller-d.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/uboot/0016-board-solidrun-lx2160cex7-fix-read-rcw-from-dcsr-mem.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/uboot/0018-lib-optee-always-copy-optee-to-OS-DTB-regardless-if-.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/uboot/0019-board-solidrun-lx2160cex7-fix-xspi-flash-compatible-.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/uboot/0020-board-solidrun-lx2160acex7-fix-serdes-lane-dpmac-swa.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/uboot/0021-lib-optee-fix-adding-optee-subnode-if-not-present.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/uboot/0023-board-solidrun-disable-some-unused-config-options.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/uboot/0024-board-solidrun-lx2160acex7-fix-various-mistakes-in-s.patch
+ create mode 100644 board/solidrun/lx2160acex7/patches/uboot/0025-board-solidrun-lx2160acex7-disable-disabled-ports-pr.patch
+ create mode 100755 board/solidrun/lx2160acex7/post-build.sh
+ create mode 100644 board/solidrun/lx2160acex7/readme.txt
+ create mode 100644 board/solidrun/lx2160acex7/rootfs_overlay/etc/udev/rules.d/74-dpaa2-networking.rules
+ create mode 100644 board/solidrun/lx2160acex7/u-boot-environment-sd.txt
+ create mode 100644 board/solidrun/lx2160acex7/u-boot.config
+ create mode 100644 configs/solidrun_lx2160acex7_defconfig
+
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
