@@ -1,87 +1,107 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A7F4CA101F
-	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 11:19:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E5F4CA0FED
+	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 11:20:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E8C6C41839;
-	Wed, 10 Sep 2025 11:19:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2BA9061247;
+	Wed, 10 Sep 2025 11:20:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ntxOwkEYXg6y; Wed, 10 Sep 2025 11:19:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mX2OjwVX70K9; Wed, 10 Sep 2025 11:19:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DDD5A4183A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DE52611ED
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DDD5A4183A;
-	Wed, 10 Sep 2025 11:19:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2E01A10E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2DE52611ED;
+	Wed, 10 Sep 2025 11:19:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6D8D010E
  for <buildroot@buildroot.org>; Wed, 10 Sep 2025 11:19:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 143AD80F31
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 11:19:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A653B60BBB
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 11:19:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QIhxfAwslWqM for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id C5jgLptu0y_3 for <buildroot@buildroot.org>;
  Wed, 10 Sep 2025 11:19:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.218.47;
- helo=mail-ej1-f47.google.com; envelope-from=thomas.devoogdt@gmail.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CDB8D80ED2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDB8D80ED2
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com
- [209.85.218.47])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CDB8D80ED2
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::129; helo=mail-lf1-x129.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B04BE60B69
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B04BE60B69
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com
+ [IPv6:2a00:1450:4864:20::129])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B04BE60B69
  for <buildroot@buildroot.org>; Wed, 10 Sep 2025 11:19:50 +0000 (UTC)
-Received: by mail-ej1-f47.google.com with SMTP id
- a640c23a62f3a-aff0775410eso112582766b.0
+Received: by mail-lf1-x129.google.com with SMTP id
+ 2adb3069b0e04-55f7c0fb972so7300022e87.3
  for <buildroot@buildroot.org>; Wed, 10 Sep 2025 04:19:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1757503189; x=1758107989;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Gh38e0SRkZTHlAytW3fbnJKgty3+VX+ayyiFwVsrOA4=;
- b=sG4GCra/eKVxPRa8F7zBwoBqWbde9lmfeA2i/JqoXdWQMzQ4T7OFexJkbswKVigyc0
- xnNrYM7UOxUPoQSalNdVWI10ZtYvkIDePJh5Pf+o1d5UJgb9m5ye8j47837qoI0koZaO
- YfOpBrb002zsOkyXzlst08lm8LdEmtoFiujn+dC3yTah3fIOpmLMH+7KpKsgzOwWBM9B
- G8WAueQkh+pXP6cxgW/EAUdkF4FaRQr8+sL1Slz5QiJx5Z7sB3RnInsNjhLK7/prwqcK
- m0iVe7xiykCac8NxO+om7at2TQ0FFNBVDkPRm8YTl24p6BOIzN5YND3h9m4XoxkwBZhz
- slUg==
-X-Gm-Message-State: AOJu0YwwLSVUyTPtILGMqQ6B3tg9Cgw900byrduT9G2rE4yKVUhp5iWr
- xUnvSDTc589y4fBJcKx2/DYLhh2IsotAl4NGQEstfcGNcydXu/kBfrYznyzaiAMw
-X-Gm-Gg: ASbGncv2X+Ur1Vns8W6BOhtSDDcINlZMk8XVd3xXTKHF/Tz32PMRfY89f7g6PhuWz45
- Odd3uiNqe0o1BjX6H3I5gK6Z9PRn6hMQiTHZfBaEoMFJBX9VqUr2SEGN4czsW1zCOdNlbZyfZ4H
- Bh6oa4BDkLabwTv5NGPgXgdO6Qw6bfmQJbhhGoQ7KhNR+/zIHR+LaUCzaCOptMw8zAO+ClY8slZ
- 0kjB2jlcdZXDIFGvYwbt8qrEuvlBLXQtgDqlicJL/yOX438ji9QjWcqAWpBtRNpmAyYDC3S/MrO
- osT+SR7smRhuflFmrCJN4NFaot2W7r1paBvnqH62wPny+ZvDL7+wWpLMaKEs35qQ6ZjY0kKEW/5
- +9DhpLUCbYZOcJal3zRBPIFvYxhANKmaA+On9QKA4vhL9njO6i2xoNw4yv6KZed6d0v1Y3TnyOF
- OGH6o1SYwR9AxuiWtispUmWByCmdoFVeeO
-X-Google-Smtp-Source: AGHT+IH+iXWqbR96WiPVBRW/4443WLaAFbya6YUXGhvpKPiR3M3QaThPOBf9n3Tjif7fM1HHRvwiPw==
-X-Received: by 2002:a17:907:1ca3:b0:b04:5bb5:2745 with SMTP id
- a640c23a62f3a-b04b1f0cfa0mr1440729866b.21.1757503188251; 
+ d=1e100.net; s=20230601; t=1757503188; x=1758107988;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=tSyIPgQdB3tySAtu0vKeuS3LN8lmHcUEB3PotrWpAQQ=;
+ b=PYXh9ohSSSw3idcO2oPwfc8wrxcab0Hl+VEUZ5qBX8Y2D/5ODI8CZd868/v9VsNoSb
+ Kf6B0r1ZJM6f+eTSi4tYNj8KTf0H+lbldOw6s+jFBQeaYZWvLq97lhrGpk3A5mL6ZuSG
+ Rja9TvAOzFCNtT6QCKLuoCoW0mWfSw+ojd2DfFCx2253JQaXFlyYEE6Yr9MBsLDOdHlE
+ wX92Wc35wgfynah4irjR3FuVN3Nx1nTSE7sbCyi0Dld5I95H7Oj3k6OEN3L+N1mTt+pC
+ Q4fYge46UuSFtgonYJppbZS98giQNOmdpU29zm8UexQbh4E4Ov/vr0yLNAwKo+FgLgLe
+ fwpA==
+X-Gm-Message-State: AOJu0YyCekkwFSb24JcqKuQnl7VZibRg7ks8/swYsIclsFNTQQDSQop6
+ egKyXrJ75yOAZZOFwCxt7uclMTxJ+9bGJJKuLU1p/gc77TDkjt8oGWXduOKheFsgZo0=
+X-Gm-Gg: ASbGnct9bwKmSBywBZshvOXRA2sU8PRAPxg1rLdjXkoNeiUnF9HSkrcAixEm9F54PEH
+ HImj3jmhQzYbTWoXzA5twZgfhgXrF5FF63V6Nwo+kiy4JwAn6ZDt8kc6/T6QBo6Qx6DpvnY0z6Z
+ Ruy8JxszkTj1BLB+0AG0VCvBwXEJIaciaCCJKyl0oJgOYR6iFM5c2zvHXEM3ZB0riooj+0W80bh
+ aQgK7xprFBJglf0K963w0EMF3K38Yu8E/w+hvvmsVn3s+S7JRWo1QKrlncWkD6InCSv47SG8CeC
+ IaAd6ceOb5QzQ/cXuqkCXt+eHBxkcqYSh21MUPPlgYHrj3ERayFxdrHIJmG55QyfbyksID6Lo+K
+ +EyvjNA8R4c1A3b6OAfktGcr7/6Qw3IIar6KDVkFk6rsFoVPOJYSOIfm0m6wazDzYvo8UwzeiyY
+ V2Xy2tPw0zJA==
+X-Google-Smtp-Source: AGHT+IEfss1TwftJHoJ3ASRt7eUegll9U5FdGh0a6lTl0eZyng9c9vJm7stjFv+gaaq048vMg3/mFQ==
+X-Received: by 2002:a05:6512:1150:b0:553:ab9a:c94 with SMTP id
+ 2adb3069b0e04-56261314101mr4532599e87.6.1757503188031; 
  Wed, 10 Sep 2025 04:19:48 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:a03f:eb6f:7900:4f:f8b0:4863:3492])
+Received: from [10.5.90.80]
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b07833ecf7asm152993766b.86.2025.09.10.04.19.47
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ 2adb3069b0e04-5681795da6bsm1180472e87.94.2025.09.10.04.19.47
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
  Wed, 10 Sep 2025 04:19:47 -0700 (PDT)
-From: Thomas Devoogdt <thomas@devoogdt.com>
-To: buildroot@buildroot.org
-Cc: Thomas Devoogdt <thomas@devoogdt.com>
-Date: Wed, 10 Sep 2025 13:19:44 +0200
-Message-ID: <20250910111944.2685069-1-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.43.0
+Message-ID: <69b87840-6431-412e-9f27-a8acb3112a7e@smile.fr>
+Date: Wed, 10 Sep 2025 13:19:46 +0200
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=devoogdt.com
-Subject: [Buildroot] [PATCH v1] package/fluent-bit: bump to 4.0.9
+User-Agent: Mozilla Thunderbird
+To: Christian Stewart <christian@aperture.us>, yann.morin@orange.com
+Cc: Buildroot Mailing List <buildroot@buildroot.org>
+References: <cover.1751377540.git.yann.morin@orange.com>
+ <d23125d705a0c24ca91071624d507392ecfe7b0d.1751377540.git.yann.morin@orange.com>
+ <a8b668d1-24da-4b18-8235-e98a29732884@smile.fr> <aL/bdHOwN/ENpcOl@yd-6wlzhs3>
+ <CA+h8R2rxQ6Na-hG=BLZrNvL=Wu5bwur_8YeC3wNdFkjrKfsP4Q@mail.gmail.com>
+Content-Language: fr, en-US
+In-Reply-To: <CA+h8R2rxQ6Na-hG=BLZrNvL=Wu5bwur_8YeC3wNdFkjrKfsP4Q@mail.gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1757503188; x=1758107988; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=tSyIPgQdB3tySAtu0vKeuS3LN8lmHcUEB3PotrWpAQQ=;
+ b=mWH2bCN23zr6I1joAgatUJkAPYmEQHkOpY45hITu5QM7L3agbcR9wWCnAbz7N0hn9Z
+ 2oDrqQsJEZwN/sbxEp89DB/3iCox6uSPDEV8j3/xKPi+nz0LN1+ZKneY3cuhwvC8E/fm
+ QiJ96muaMDU09RXX9ixC/n/ZOKMsLuhR7fpdQ=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=mWH2bCN2
+Subject: Re: [Buildroot] [PATCH 1/4 v2] package/pkg-golang: simplify
+ installing multiple binaries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,145 +113,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-News:
- - https://fluentbit.io/announcements/v4.0.4/
- - https://fluentbit.io/announcements/v4.0.5/
- - https://fluentbit.io/announcements/v4.0.6/
- - https://fluentbit.io/announcements/v4.0.7/
- - https://fluentbit.io/announcements/v4.0.8/
- - https://fluentbit.io/announcements/v4.0.9/
-
-Fixes:
- - https://autobuild.buildroot.org/results/770/770e9106a0c92f02e0f699505e69b35ac0e6cd41/build-end.log
-
-   /home/buildroot/instance-0/output-1/build/fluent-bit-4.0.3/plugins/out_cloudwatch_logs/cloudwatch_api.c:1540:66: error: implicit declaration of function 'strcasestr'; did you mean 'strcasecmp'? [-Wimplicit-function-declaration]
-
-   Fix commit: https://github.com/fluent/fluent-bit/pull/10452
-
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
----
- ...s-kafka-fix-cmake-cross-compile-error.patch | 10 +++++-----
- ...-librdkafka-only-require-a-C-compiler.patch | 18 +++++++++---------
- package/fluent-bit/fluent-bit.hash             |  2 +-
- package/fluent-bit/fluent-bit.mk               |  2 +-
- 4 files changed, 16 insertions(+), 16 deletions(-)
-
-diff --git a/package/fluent-bit/0001-plugins-kafka-fix-cmake-cross-compile-error.patch b/package/fluent-bit/0001-plugins-kafka-fix-cmake-cross-compile-error.patch
-index de5dc54e75..8b74d5911d 100644
---- a/package/fluent-bit/0001-plugins-kafka-fix-cmake-cross-compile-error.patch
-+++ b/package/fluent-bit/0001-plugins-kafka-fix-cmake-cross-compile-error.patch
-@@ -1,4 +1,4 @@
--From f32c4e909ec4a4872c2c5fc186f27d1f7e4e8c2a Mon Sep 17 00:00:00 2001
-+From a21de9cb95f2199270a6ac6922ffa4ca8d453f26 Mon Sep 17 00:00:00 2001
- From: Thomas Devoogdt <thomas@devoogdt.com>
- Date: Sat, 16 Nov 2024 19:46:28 +0100
- Subject: [PATCH] plugins: kafka: fix cmake cross compile error
-@@ -17,26 +17,26 @@ Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-  2 files changed, 6 insertions(+), 2 deletions(-)
- 
- diff --git a/plugins/in_kafka/CMakeLists.txt b/plugins/in_kafka/CMakeLists.txt
--index ede0831f9..02e2dc786 100644
-+index 928266b57..dc251276e 100644
- --- a/plugins/in_kafka/CMakeLists.txt
- +++ b/plugins/in_kafka/CMakeLists.txt
- @@ -3,5 +3,7 @@ set(src
-    )
-  
-- FLB_PLUGIN(in_kafka "${src}" ${KAFKA_LIBRARIES})
-+ FLB_PLUGIN(in_kafka "${src}" ${KAFKA_LIBRARIES} flb-aws)
- -target_include_directories(flb-plugin-in_kafka PUBLIC ${KAFKA_INCLUDEDIR}/librdkafka)
- +if(DEFINED KAFKA_INCLUDEDIR)
- +  target_include_directories(flb-plugin-in_kafka PUBLIC ${KAFKA_INCLUDEDIR}/librdkafka)
- +endif()
-  target_link_libraries(flb-plugin-in_kafka -lpthread)
- diff --git a/plugins/out_kafka/CMakeLists.txt b/plugins/out_kafka/CMakeLists.txt
--index 01c96529b..54b14fc2a 100644
-+index 9d8b34642..1c967329f 100644
- --- a/plugins/out_kafka/CMakeLists.txt
- +++ b/plugins/out_kafka/CMakeLists.txt
- @@ -5,5 +5,7 @@ set(src
-    kafka.c)
-  
-- FLB_PLUGIN(out_kafka "${src}" ${KAFKA_LIBRARIES})
-+ FLB_PLUGIN(out_kafka "${src}" ${KAFKA_LIBRARIES} flb-aws)
- -target_include_directories(flb-plugin-out_kafka PUBLIC ${KAFKA_INCLUDEDIR}/librdkafka)
- +if(DEFINED KAFKA_INCLUDEDIR)
- +  target_include_directories(flb-plugin-out_kafka PUBLIC ${KAFKA_INCLUDEDIR}/librdkafka)
-diff --git a/package/fluent-bit/0002-lib-librdkafka-only-require-a-C-compiler.patch b/package/fluent-bit/0002-lib-librdkafka-only-require-a-C-compiler.patch
-index d7c6bba20b..83c77ff70c 100644
---- a/package/fluent-bit/0002-lib-librdkafka-only-require-a-C-compiler.patch
-+++ b/package/fluent-bit/0002-lib-librdkafka-only-require-a-C-compiler.patch
-@@ -1,4 +1,4 @@
--From dea6fb0138d9356ebdc4983a61c185bc759d86b0 Mon Sep 17 00:00:00 2001
-+From c33d6bd392c5c8bbd231b2a9d00d4959cc553c44 Mon Sep 17 00:00:00 2001
- From: Thomas Devoogdt <thomas.devoogdt@barco.com>
- Date: Tue, 25 Jul 2023 09:10:41 +0200
- Subject: [PATCH] lib: librdkafka: only require a C compiler
-@@ -6,14 +6,14 @@ Subject: [PATCH] lib: librdkafka: only require a C compiler
- Upstream: https://github.com/confluentinc/librdkafka/pull/4366
- Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
- ---
-- lib/librdkafka-2.8.0/CMakeLists.txt          | 22 ++++++++++++--
-- lib/librdkafka-2.8.0/examples/CMakeLists.txt | 31 +++++++++++++-------
-+ lib/librdkafka-2.10.1/CMakeLists.txt          | 22 +++++++++++--
-+ lib/librdkafka-2.10.1/examples/CMakeLists.txt | 31 ++++++++++++-------
-  2 files changed, 39 insertions(+), 14 deletions(-)
- 
--diff --git a/lib/librdkafka-2.8.0/CMakeLists.txt b/lib/librdkafka-2.8.0/CMakeLists.txt
-+diff --git a/lib/librdkafka-2.10.1/CMakeLists.txt b/lib/librdkafka-2.10.1/CMakeLists.txt
- index f3d05bad7..8ef47053a 100644
----- a/lib/librdkafka-2.8.0/CMakeLists.txt
--+++ b/lib/librdkafka-2.8.0/CMakeLists.txt
-+--- a/lib/librdkafka-2.10.1/CMakeLists.txt
-++++ b/lib/librdkafka-2.10.1/CMakeLists.txt
- @@ -3,7 +3,16 @@ cmake_minimum_required(VERSION 3.5)
-  include("packaging/cmake/parseversion.cmake")
-  parseversion("src/rdkafka.h")
-@@ -57,10 +57,10 @@ index f3d05bad7..8ef47053a 100644
-  
-  if(RDKAFKA_BUILD_EXAMPLES)
-    add_subdirectory(examples)
--diff --git a/lib/librdkafka-2.8.0/examples/CMakeLists.txt b/lib/librdkafka-2.8.0/examples/CMakeLists.txt
-+diff --git a/lib/librdkafka-2.10.1/examples/CMakeLists.txt b/lib/librdkafka-2.10.1/examples/CMakeLists.txt
- index 91851d2cb..6874195ce 100644
----- a/lib/librdkafka-2.8.0/examples/CMakeLists.txt
--+++ b/lib/librdkafka-2.8.0/examples/CMakeLists.txt
-+--- a/lib/librdkafka-2.10.1/examples/CMakeLists.txt
-++++ b/lib/librdkafka-2.10.1/examples/CMakeLists.txt
- @@ -5,8 +5,10 @@ endif(WIN32)
-  add_executable(producer producer.c ${win32_sources})
-  target_link_libraries(producer PUBLIC rdkafka)
-diff --git a/package/fluent-bit/fluent-bit.hash b/package/fluent-bit/fluent-bit.hash
-index ec820416ed..3a4e637d88 100644
---- a/package/fluent-bit/fluent-bit.hash
-+++ b/package/fluent-bit/fluent-bit.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  c7d276238d25242467218941842d8cd4df6cfa52cc9379ae5755220cdefd1dc1  fluent-bit-4.0.3.tar.gz
-+sha256  0031f74b616b4669064a59902559da2f87174aa8007e749b5df19ed79c534f5b  fluent-bit-4.0.9.tar.gz
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
-diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
-index 3e7e04907e..73bd686b27 100644
---- a/package/fluent-bit/fluent-bit.mk
-+++ b/package/fluent-bit/fluent-bit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLUENT_BIT_VERSION = 4.0.3
-+FLUENT_BIT_VERSION = 4.0.9
- FLUENT_BIT_SITE = $(call github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION))
- FLUENT_BIT_LICENSE = Apache-2.0
- FLUENT_BIT_LICENSE_FILES = LICENSE
--- 
-2.43.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gWWFubiwgQ2hyaXN0aWFuLCBBbGwsCgpMZSAwOS8wOS8yMDI1IMOgIDE5OjU2LCBDaHJp
+c3RpYW4gU3Rld2FydCBhIMOpY3JpdMKgOgo+IEhpIFlhbm4sCj4gCj4gT24gVHVlLCBTZXAgOSwg
+MjAyNSwgMTI6NDfigK9BTSA8eWFubi5tb3JpbkBvcmFuZ2UuY29tCj4gPG1haWx0bzp5YW5uLm1v
+cmluQG9yYW5nZS5jb20+PiB3cm90ZToKPiAKPiAgICAgUm9tYWluLCBBbGwsCj4gCj4gICAgIE9u
+IDIwMjUtMDctMDUgMjI6NTEgKzAyMDAsIFJvbWFpbiBOYW91ciBzcGFrZSB0aHVzbHk6Cj4gICAg
+ID4gTGUgMDEvMDcvMjAyNSDDoCAxNTo0NSwgeWFubi5tb3JpbkBvcmFuZ2UuY29tCj4gICAgIDxt
+YWlsdG86eWFubi5tb3JpbkBvcmFuZ2UuY29tPiBhIMOpY3JpdMKgOgo+ICAgICA+ID4gRnJvbTog
+Illhbm4gRS4gTU9SSU4iIDx5YW5uLm1vcmluQG9yYW5nZS5jb20gPG1haWx0bzp5YW5uLm1vcmlu
+QG9yYW5nZS5jb20+Pgo+ICAgICA+ID4gQ3VycmVudGx5LCB3aGVuIGEgZ29sYW5nIHBhY2thZ2Ug
+ZGVmaW5lcyBtdWx0aXBsZSBfQlVJTERfVEFSR0VUUywgaXQgaGFzCj4gICAgID4gPiB0byBiYXNp
+Y2FsbHkgcmVwZWF0IHRoZSBzYW1lIGxpc3QgaW4gaXRzIF9JTlNUQUxMX0JJTlMuCj4gICAgIFst
+LVNOSVAtLV0KPiAgICAgPiA+IFdlIG5vdyBjb25zaWRlciB0aGF0IF9JTlNUQUxMX0JJTlMgaXMg
+YW4gaW50ZXJuYWwgaW1wbGVtZW50YXRpb24gZGV0YWlscwo+ICAgICA+ID4gdGhhdCBzaG91bGQg
+bm8gbG9uZ2VyIGJlIGV4cG9zZWQgdG8gdGhlIHVzZXJzLCBzbyB3ZSBkcm9wIGl0IGZyb20gdGhl
+Cj4gICAgID4gPiBkb2N1bWVudGF0aW9uOyB3ZSByZXBocmFzZSB0aGUgY29ycmVzcG9uZGluZyBw
+YXJ0IGZvciBfQlVJTERfVEFSR0VUUy4KPiAgICAgPiA+Cj4gICAgID4gPiBTaWduZWQtb2ZmLWJ5
+OiBZYW5uIEUuIE1PUklOIDx5YW5uLm1vcmluQG9yYW5nZS5jb20KPiAgICAgPG1haWx0bzp5YW5u
+Lm1vcmluQG9yYW5nZS5jb20+Pgo+ICAgICA+ID4gQ2M6IENocmlzdGlhbiBTdGV3YXJ0IDxjaHJp
+c3RpYW5AYXBlcnR1cmUudXMgPG1haWx0bzpjaHJpc3RpYW5AYXBlcnR1cmUudXM+Pgo+ICAgICA+
+IFJldmlld2VkLWJ5OiBSb21haW4gTmFvdXIgPHJvbWFpbi5uYW91ckBzbWlsZS5mcgo+ICAgICA8
+bWFpbHRvOnJvbWFpbi5uYW91ckBzbWlsZS5mcj4+Cj4gICAgID4gU2luY2UgaXQncyBhYm91dCBh
+IHBhY2thZ2UgaW5mcmFzdHVjdHVyZSBjaGFuZ2UsIEkgcHJlZmVyIHdhaXQgZm9yIGEKPiAgICAg
+c2Vjb25kIHJldmlldy4KPiAKPiAgICAgV2hhdCBhYm91dCB0aGUgc3RhdHVzIG9mIHRoaXMgc2Vy
+aWVzPyBDaHJpc3RpYW4gaGFzIHByb3ZpZGVkIGhpcwo+ICAgICBSZXZpZXdlZC1ieSBhIHdoaWxl
+IGJhY2suLi4KPiAKPiAKPiBJdCBzdGlsbCBsb29rcyBnb29kIHRvIG1lIQoKVGhhbmtzIGZvciB0
+aGUgcmVtaW5kZXIhCk5vdyB0aGUgMjAyNS4wOCBpcyByZWxlYXNlIChhbmQgbmV4dCBtZXJnZWQg
+aW4gbWFzdGVyKSwgd2UgY2FuIGdvIGFoZWFkLgoKQnR3LCBJIHJlcGxhY2VkIDIwMjUuMDggYnkg
+MjAyNS4xMSBpbiB0aGUgbGFzdCBjb21taXQuCgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoK
+QmVzdCByZWdhcmRzLApSb21haW4KCgo+IAo+IEJlc3QgcmVnYXJkcywKPiBDaHJpc3RpYW4KCl9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
+YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
+b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
