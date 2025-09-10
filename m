@@ -1,103 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FCEACA0FED
-	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 20:22:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AEEFCA101F
+	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 20:25:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6474D418AB;
-	Wed, 10 Sep 2025 20:21:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F035782242;
+	Wed, 10 Sep 2025 20:24:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UbAcbYZStx69; Wed, 10 Sep 2025 20:21:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JZhH2HNOM1Hx; Wed, 10 Sep 2025 20:24:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD635418A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0944C82255
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD635418A4;
-	Wed, 10 Sep 2025 20:21:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A8C7D234
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:21:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0944C82255;
+	Wed, 10 Sep 2025 20:24:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8B8F1443
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:24:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8F1D44186B
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:21:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7DED3407BB
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:24:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eeL-dR7nfo0s for <buildroot@buildroot.org>;
- Wed, 10 Sep 2025 20:21:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::102a; helo=mail-pj1-x102a.google.com;
- envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org ABF53413DC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABF53413DC
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com
- [IPv6:2607:f8b0:4864:20::102a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id ABF53413DC
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:21:55 +0000 (UTC)
-Received: by mail-pj1-x102a.google.com with SMTP id
- 98e67ed59e1d1-329a41dc2ebso5419012a91.3
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 13:21:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1757535715; x=1758140515;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=PXVQ9V38zvE8bKBmi7IbCPSP1uxl1bqkXB9+K4sdtlI=;
- b=CmqRKSOfvDipUrSYkoa6eeMx3LXeEoD6yfUd039ASUIdPZ02+5dnwYyyeYQl059yES
- 4Spt7mq1fokswkWJHn1aXp0vnuujNXfv2w8He1qtFvpKoDsaP/v9ZkYnsPvq1KSIxPcq
- JHdZT36Zmtp6kagUzg6KCFGgteSb9IKZnOk1tMHzwRl7LC/gKQF6UXGI/i2N3eWbW4fy
- RSc1Ks+xYXBF8/c7GgPh6jzJwdzmDLDQPdrlF34AJprWUyE2AUBoxZucJIq8c4ujkQ3B
- aQ2ugEU4ju1dV8d3sPm5Cl52CZemv+PeX+lL/ahaAUzA96ASmTlockEOLwJWzw9m8/3q
- 28Cw==
-X-Gm-Message-State: AOJu0YwB/5oiI7IXWXV/0vFO12ZmnNTtdXxo51iLPV77irwOzlHqqH8X
- +UaSBovtw9H2haCrvFjpJEn2pcSg5iPtlZt9iofK4kyKRqmMzdRNLrF1oBsgTx6xgtbjlhAZtmI
- it4nftFTyeA==
-X-Gm-Gg: ASbGncsBaClW7GMTPeB/5YFhwlpm2IBrNn+Mg1cB+4QcuSJ6No+6jTZohkOpNMwu11L
- YC62dJMIh3SKWt+zGf0PJ55qtu3KT5wmuQ0MhbAEsskUvIcPZ7fDLW9O3YPy5qiZhriu3JWI9zi
- wq3NEpyBbIOPRrTf2Ig+4XPPg1tsul28jYpC/AkcP1JtSrs4BABZtJDeM+E2bchRjvcn3soWZeW
- z8krfsaTwYPT5bNCXEWE9WsOof3w3U+7o/fUqVMzl/Teqkbw5v75GpppBORc/d2qPYzmqoCZqXK
- CORy8fcQcvIrX2shWb9OrFxL7yTDE8xFNI51HiN5VYiFxu0QDgLQhWlzPlOitk6iSugcHGtx8cN
- JcL1bUl7YAKLExt7zrrVibz29gXikgJGS2UBsDux6PYQKpj7GAW78/RPKLvbFKZMfV3qTYQ==
-X-Google-Smtp-Source: AGHT+IHs91jRs0GXdmZ63PYq9pEt420XFZiwjEQ/cFIZZ3ieIH+K53Ak08dz09C1UMG8ga3UmIbkxw==
-X-Received: by 2002:a17:90a:e7c1:b0:32b:5f76:9e29 with SMTP id
- 98e67ed59e1d1-32d43f9a56dmr21177198a91.32.1757535714542; 
- Wed, 10 Sep 2025 13:21:54 -0700 (PDT)
-Received: from localhost.localdomain ([185.81.124.170])
- by smtp.gmail.com with ESMTPSA id
- 98e67ed59e1d1-32dbb5efe7asm3538296a91.17.2025.09.10.13.21.53
- (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
- Wed, 10 Sep 2025 13:21:54 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id c00IWAXJF2oL for <buildroot@buildroot.org>;
+ Wed, 10 Sep 2025 20:24:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B93CD41382
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B93CD41382
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:24:56 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A2A0183CDB; Wed, 10 Sep 2025 20:24:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 10 Sep 2025 13:21:38 -0700
-Message-ID: <20250910202138.13648-3-christian@aperture.us>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250910202138.13648-1-christian@aperture.us>
-References: <20250910202138.13648-1-christian@aperture.us>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1757535715; x=1758140515; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=PXVQ9V38zvE8bKBmi7IbCPSP1uxl1bqkXB9+K4sdtlI=;
- b=pTI6IBD7v6WXTk4A1isYry05/5Yk2VrPyHMk+2mS7cZgSUaL3/C0N5HMcqPjsnr0Ju
- FNxq3Bffr8ZpTaP0FbzdrZe1ncLquhY8owhwnQDl0xBSEYjVQIc8hjkiBPX96FTJMJGB
- fT8wLgpwEgViLWQTnlIp7w8BzaeciIuCNyUe0V4eNKZw/MLwUslqUeWJ4U9hl5FBTFi0
- YrP4n/BisAFAQGGiN/HImpcTt0/U71jBChuCv6fy7Vpt5C6cYBRE4ebJfIXaCmAbZ1GG
- 8pw2ZEOWavXDyMbGcTwQw76sHg9mp4IPSC3TjeB1d6BhQrSvfQ4ih8d+5fraLxz7Sbrg
- K2MQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=aperture.us
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
- header.s=google header.b=pTI6IBD7
-Subject: [Buildroot] [PATCH v1 3/3] package/go: bump to version 1.25.1
+Date: Wed, 10 Sep 2025 22:17:07 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4cd4b2e1e6e8816555db38771d18daad46df3a6c
+X-Git-Newrev: a1daf153bf962d1797598943f8c8709ed04e4642
+X-Patchwork-Hint: ignore
+Message-Id: <20250910202456.A2A0183CDB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/php-lua: fix build with lua < 5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,72 +57,115 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
-Cc: Christian Stewart <christian@aperture.us>,
- James Hilliard <james.hilliard1@gmail.com>,
- Thomas Perale <thomas.perale@mind.be>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============7272280119311539810=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The latest Go release, version 1.25, arrives in August 2025, six months after Go
-1.24. Most of its changes are in the implementation of the toolchain, runtime,
-and libraries. As always, the release maintains the Go 1 promise of
-compatibility.
+--===============7272280119311539810==
+Content-Type: text/plain
 
-go1.25.1 (released 2025-09-03) includes security fixes to the net/http package,
-as well as bug fixes to the go command, and the net, os, os/exec, and
-testing/synctest packages.
+commit: https://git.buildroot.net/buildroot/commit/?id=a1daf153bf962d1797598943f8c8709ed04e4642
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://go.dev/doc/devel/release#go1.25.0
+php-lua fails to build in buildroot 2025.08-rc3 on the following error:
 
-Signed-off-by: Christian Stewart <christian@aperture.us>
+in file included from [...]/usr/include/php/Zend/zend.h:32,
+                 from [...]/usr/include/php/main/php.h:31,
+                 from [...]/build/php-lua-2.0.7/lua.c:24:
+[...]/build/php-lua-2.0.7/lua.c: In function ‘php_lua_write_property’:
+[...]/build/php-lua-2.0.7/lua.c:247:37:
+error: ‘val’ undeclared (first use in this function); did you mean
+‘zval’?
+  247 |         lua_pushlstring(L, ZSTR_VAL(val), ZSTR_LEN(val));
+      |                                     ^~~
+[...]/usr/include/php/Zend/zend_string.h:66:26:
+note: in definition of macro ‘ZSTR_VAL’
+   66 | #define ZSTR_VAL(zstr)  (zstr)->val
+      |                          ^~~~
+[...]/build/php-lua-2.0.7/lua.c:247:37:
+note: each undeclared identifier is reported only once for each function
+it appears in
+  247 |         lua_pushlstring(L, ZSTR_VAL(val), ZSTR_LEN(val));
+      |                                     ^~~
+[...]/usr/include/php/Zend/zend_string.h:66:26:
+note: in definition of macro ‘ZSTR_VAL’
+   66 | #define ZSTR_VAL(zstr)  (zstr)->val
+      |                          ^~~~
+make[2]: *** [Makefile:214: lua.lo] Error 1
+
+The issue triggers only if lua interpreter version is lower than 5.2. In
+this case,  php_lua_write_property calls ZSTR_VAL on the wrong variable.
+
+Fix php-lua build by calling ZSTR_VAL on the correct variable.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/11271124501 (TestPhpLuaLuajit)
+
+Suggested-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+[Romain: add link to failing TestPhpLuaLuajit]
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- package/go/go.hash | 14 +++++++-------
- package/go/go.mk   |  2 +-
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ ...a.c-fix-ZSTR_VAL-usage-when-using-lua-5.2.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 8b61824d0d..60d61433fc 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,9 +1,9 @@
- # sha256 checksum from https://go.dev/dl/
--sha256  2a8f50db0f88803607c50d7ea8834dcb7bd483c6b428a91e360fdf8624b46464  go1.24.7.src.tar.gz
--sha256  1bdf0441ff9c50cceef289a72efecbb6bd60aea545aa9412ef85d8b12199c741  go1.24.7.linux-386.tar.gz
--sha256  da18191ddb7db8a9339816f3e2b54bdded8047cdc2a5d67059478f8d1595c43f  go1.24.7.linux-amd64.tar.gz
--sha256  fd2bccce882e29369f56c86487663bb78ba7ea9e02188a5b0269303a0c3d33ab  go1.24.7.linux-arm64.tar.gz
--sha256  eaff4aace921075da371b91a5911f0c0fbcb6f712a527a25113f971944b78c36  go1.24.7.linux-armv6l.tar.gz
--sha256  e50462c5ad6ae7600eed24414729d0e0ab63d166ff6e5da550afc3010dfa084c  go1.24.7.linux-ppc64le.tar.gz
--sha256  48caa1c5011f625bada49adea12a9693ffe9813196451e2d2b9120b3add50784  go1.24.7.linux-s390x.tar.gz
-+sha256  d010c109cee94d80efe681eab46bdea491ac906bf46583c32e9f0dbb0bd1a594  go1.25.1.src.tar.gz
-+sha256  d03cdcbc9bd8baf5cf028de390478e9e2b3e4d0afe5a6582dedc19bfe6a263b2  go1.25.1.linux-386.tar.gz
-+sha256  7716a0d940a0f6ae8e1f3b3f4f36299dc53e31b16840dbd171254312c41ca12e  go1.25.1.linux-amd64.tar.gz
-+sha256  65a3e34fb2126f55b34e1edfc709121660e1be2dee6bdf405fc399a63a95a87d  go1.25.1.linux-arm64.tar.gz
-+sha256  eb949be683e82a99e9861dafd7057e31ea40b161eae6c4cd18fdc0e8c4ae6225  go1.25.1.linux-armv6l.tar.gz
-+sha256  8b0c8d3ee5b1b5c28b6bd63dc4438792012e01d03b4bf7a61d985c87edab7d1f  go1.25.1.linux-ppc64le.tar.gz
-+sha256  9cfe517ba423f59f3738ca5c3d907c103253cffbbcc2987142f79c5de8c1bf93  go1.25.1.linux-s390x.tar.gz
- sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index ad4ae35f06..535787c92a 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.24.7
-+GO_VERSION = 1.25.1
- 
- HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
- HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
--- 
-2.39.5
+diff --git a/package/php-lua/0004-lua.c-fix-ZSTR_VAL-usage-when-using-lua-5.2.patch b/package/php-lua/0004-lua.c-fix-ZSTR_VAL-usage-when-using-lua-5.2.patch
+new file mode 100644
+index 0000000000..c5d99db7f5
+--- /dev/null
++++ b/package/php-lua/0004-lua.c-fix-ZSTR_VAL-usage-when-using-lua-5.2.patch
+@@ -0,0 +1,38 @@
++From 7bf334832ad36d1f2976406d680b35a168ffaa91 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>
++Date: Mon, 8 Sep 2025 17:20:12 +0200
++Subject: [PATCH] lua.c: fix ZSTR_VAL usage when using lua < 5.2
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++When using a lua interpreter with a version lower than 5.1, the
++php_lua_write_property ends up calling the ZSTR_VAL with the wrong
++variable (it is expected to receive "member", a zend_string variable,
++but it is "value" that is passed, which is a zval).
++
++Fix php-lua compatibility with interpreters < 5.2 by passing the correct
++variable
++
++Upstream: upstream dead, custom patch
++Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
++---
++ lua.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lua.c b/lua.c
++index a40e5da442a4..5889bc7f83ea 100755
++--- a/lua.c
+++++ b/lua.c
++@@ -244,7 +244,7 @@ static zval* php_lua_write_property(zend_object *object, zend_string *member, zv
++ 	lua_State *L = php_lua_obj_from_obj(object)->L;
++ 
++ #if (LUA_VERSION_NUM < 502)
++-	lua_pushlstring(L, ZSTR_VAL(val), ZSTR_LEN(val));
+++	lua_pushlstring(L, ZSTR_VAL(member), ZSTR_LEN(member));
++ 	php_lua_send_zval_to_lua(L, value);
++ 
++ 	lua_settable(L, LUA_GLOBALSINDEX);
++-- 
++2.51.0
++
+
+--===============7272280119311539810==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7272280119311539810==--
