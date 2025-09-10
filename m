@@ -1,52 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED10ACAC583
-	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 11:19:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A7F4CA101F
+	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 11:19:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 99F576120F;
-	Wed, 10 Sep 2025 11:19:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E8C6C41839;
+	Wed, 10 Sep 2025 11:19:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6sMYLvniNUC8; Wed, 10 Sep 2025 11:19:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ntxOwkEYXg6y; Wed, 10 Sep 2025 11:19:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1D6A61210
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DDD5A4183A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B1D6A61210;
-	Wed, 10 Sep 2025 11:19:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4DFA3E1F
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 11:19:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DDD5A4183A;
+	Wed, 10 Sep 2025 11:19:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2E01A10E
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 11:19:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2B92660651
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 11:19:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 143AD80F31
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 11:19:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5ur7Dts47rHJ for <buildroot@buildroot.org>;
- Wed, 10 Sep 2025 11:19:49 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QIhxfAwslWqM for <buildroot@buildroot.org>;
+ Wed, 10 Sep 2025 11:19:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.218.47;
+ helo=mail-ej1-f47.google.com; envelope-from=thomas.devoogdt@gmail.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 444DB60BBB
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 444DB60BBB
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 11:19:49 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3332983D35; Wed, 10 Sep 2025 11:19:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CDB8D80ED2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDB8D80ED2
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com
+ [209.85.218.47])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CDB8D80ED2
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 11:19:50 +0000 (UTC)
+Received: by mail-ej1-f47.google.com with SMTP id
+ a640c23a62f3a-aff0775410eso112582766b.0
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 04:19:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1757503189; x=1758107989;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Gh38e0SRkZTHlAytW3fbnJKgty3+VX+ayyiFwVsrOA4=;
+ b=sG4GCra/eKVxPRa8F7zBwoBqWbde9lmfeA2i/JqoXdWQMzQ4T7OFexJkbswKVigyc0
+ xnNrYM7UOxUPoQSalNdVWI10ZtYvkIDePJh5Pf+o1d5UJgb9m5ye8j47837qoI0koZaO
+ YfOpBrb002zsOkyXzlst08lm8LdEmtoFiujn+dC3yTah3fIOpmLMH+7KpKsgzOwWBM9B
+ G8WAueQkh+pXP6cxgW/EAUdkF4FaRQr8+sL1Slz5QiJx5Z7sB3RnInsNjhLK7/prwqcK
+ m0iVe7xiykCac8NxO+om7at2TQ0FFNBVDkPRm8YTl24p6BOIzN5YND3h9m4XoxkwBZhz
+ slUg==
+X-Gm-Message-State: AOJu0YwwLSVUyTPtILGMqQ6B3tg9Cgw900byrduT9G2rE4yKVUhp5iWr
+ xUnvSDTc589y4fBJcKx2/DYLhh2IsotAl4NGQEstfcGNcydXu/kBfrYznyzaiAMw
+X-Gm-Gg: ASbGncv2X+Ur1Vns8W6BOhtSDDcINlZMk8XVd3xXTKHF/Tz32PMRfY89f7g6PhuWz45
+ Odd3uiNqe0o1BjX6H3I5gK6Z9PRn6hMQiTHZfBaEoMFJBX9VqUr2SEGN4czsW1zCOdNlbZyfZ4H
+ Bh6oa4BDkLabwTv5NGPgXgdO6Qw6bfmQJbhhGoQ7KhNR+/zIHR+LaUCzaCOptMw8zAO+ClY8slZ
+ 0kjB2jlcdZXDIFGvYwbt8qrEuvlBLXQtgDqlicJL/yOX438ji9QjWcqAWpBtRNpmAyYDC3S/MrO
+ osT+SR7smRhuflFmrCJN4NFaot2W7r1paBvnqH62wPny+ZvDL7+wWpLMaKEs35qQ6ZjY0kKEW/5
+ +9DhpLUCbYZOcJal3zRBPIFvYxhANKmaA+On9QKA4vhL9njO6i2xoNw4yv6KZed6d0v1Y3TnyOF
+ OGH6o1SYwR9AxuiWtispUmWByCmdoFVeeO
+X-Google-Smtp-Source: AGHT+IH+iXWqbR96WiPVBRW/4443WLaAFbya6YUXGhvpKPiR3M3QaThPOBf9n3Tjif7fM1HHRvwiPw==
+X-Received: by 2002:a17:907:1ca3:b0:b04:5bb5:2745 with SMTP id
+ a640c23a62f3a-b04b1f0cfa0mr1440729866b.21.1757503188251; 
+ Wed, 10 Sep 2025 04:19:48 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:a03f:eb6f:7900:4f:f8b0:4863:3492])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-b07833ecf7asm152993766b.86.2025.09.10.04.19.47
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 10 Sep 2025 04:19:47 -0700 (PDT)
+From: Thomas Devoogdt <thomas@devoogdt.com>
 To: buildroot@buildroot.org
-Date: Wed, 10 Sep 2025 13:08:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fd4ece315109f327613ff9ca26d02894c73d8be6
-X-Git-Newrev: eb007fe2db461425d9e6ba70d7542c13bfd58f84
-X-Patchwork-Hint: ignore
-Message-Id: <20250910111949.3332983D35@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package: drop default _INSTALL_BINS in
- golang-package
+Cc: Thomas Devoogdt <thomas@devoogdt.com>
+Date: Wed, 10 Sep 2025 13:19:44 +0200
+Message-ID: <20250910111944.2685069-1-thomas@devoogdt.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=devoogdt.com
+Subject: [Buildroot] [PATCH v1] package/fluent-bit: bump to 4.0.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,164 +93,144 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb007fe2db461425d9e6ba70d7542c13bfd58f84
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+News:
+ - https://fluentbit.io/announcements/v4.0.4/
+ - https://fluentbit.io/announcements/v4.0.5/
+ - https://fluentbit.io/announcements/v4.0.6/
+ - https://fluentbit.io/announcements/v4.0.7/
+ - https://fluentbit.io/announcements/v4.0.8/
+ - https://fluentbit.io/announcements/v4.0.9/
 
-Now that the pkg-golang infra automatically sets _INSTALL_BINS by
-default to the list of notdir of _BUILD_TARGETS, there is no need to do
-that in packages anymore.
+Fixes:
+ - https://autobuild.buildroot.org/results/770/770e9106a0c92f02e0f699505e69b35ac0e6cd41/build-end.log
 
-Most packages were already using the notdir construct, so those are
-trivially fixed; a few had a hard-coded list that matched the built
-targets list, so they too are trivially fixed.
+   /home/buildroot/instance-0/output-1/build/fluent-bit-4.0.3/plugins/out_cloudwatch_logs/cloudwatch_api.c:1540:66: error: implicit declaration of function 'strcasestr'; did you mean 'strcasecmp'? [-Wimplicit-function-declaration]
 
-host-mender-artifact was slightly different, in that it explicitly set
-the _BIN_NAME to mender-artifact, which happens to be the default; it
-also set _INSTALL_BINS to _BIN_NAME, so again using the default. This
-package can also be fixed easily.
+   Fix commit: https://github.com/fluent/fluent-bit/pull/10452
 
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Cc: Christian Stewart <christian@aperture.us>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 ---
- package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.mk | 1 -
- package/containerd/containerd.mk                                     | 1 -
- package/delve/delve.mk                                               | 2 --
- package/distribution-registry/distribution-registry.mk               | 1 -
- package/docker-cli/docker-cli.mk                                     | 2 --
- package/docker-engine/docker-engine.mk                               | 2 --
- package/mender-artifact/mender-artifact.mk                           | 3 ---
- package/moby-buildkit/moby-buildkit.mk                               | 4 ----
- package/tailscale/tailscale.mk                                       | 1 -
- 9 files changed, 17 deletions(-)
+ ...s-kafka-fix-cmake-cross-compile-error.patch | 10 +++++-----
+ ...-librdkafka-only-require-a-C-compiler.patch | 18 +++++++++---------
+ package/fluent-bit/fluent-bit.hash             |  2 +-
+ package/fluent-bit/fluent-bit.mk               |  2 +-
+ 4 files changed, 16 insertions(+), 16 deletions(-)
 
-diff --git a/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.mk b/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.mk
-index 06bc98bc79..5ac416912c 100644
---- a/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.mk
-+++ b/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.mk
-@@ -15,6 +15,5 @@ AMAZON_ECR_CREDENTIAL_HELPER_SUBDIR = ecr-login
+diff --git a/package/fluent-bit/0001-plugins-kafka-fix-cmake-cross-compile-error.patch b/package/fluent-bit/0001-plugins-kafka-fix-cmake-cross-compile-error.patch
+index de5dc54e75..8b74d5911d 100644
+--- a/package/fluent-bit/0001-plugins-kafka-fix-cmake-cross-compile-error.patch
++++ b/package/fluent-bit/0001-plugins-kafka-fix-cmake-cross-compile-error.patch
+@@ -1,4 +1,4 @@
+-From f32c4e909ec4a4872c2c5fc186f27d1f7e4e8c2a Mon Sep 17 00:00:00 2001
++From a21de9cb95f2199270a6ac6922ffa4ca8d453f26 Mon Sep 17 00:00:00 2001
+ From: Thomas Devoogdt <thomas@devoogdt.com>
+ Date: Sat, 16 Nov 2024 19:46:28 +0100
+ Subject: [PATCH] plugins: kafka: fix cmake cross compile error
+@@ -17,26 +17,26 @@ Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+  2 files changed, 6 insertions(+), 2 deletions(-)
  
- AMAZON_ECR_CREDENTIAL_HELPER_GOMOD = ./cli
- AMAZON_ECR_CREDENTIAL_HELPER_BUILD_TARGETS = docker-credential-ecr-login
--AMAZON_ECR_CREDENTIAL_HELPER_INSTALL_BINS = docker-credential-ecr-login
+ diff --git a/plugins/in_kafka/CMakeLists.txt b/plugins/in_kafka/CMakeLists.txt
+-index ede0831f9..02e2dc786 100644
++index 928266b57..dc251276e 100644
+ --- a/plugins/in_kafka/CMakeLists.txt
+ +++ b/plugins/in_kafka/CMakeLists.txt
+ @@ -3,5 +3,7 @@ set(src
+    )
+  
+- FLB_PLUGIN(in_kafka "${src}" ${KAFKA_LIBRARIES})
++ FLB_PLUGIN(in_kafka "${src}" ${KAFKA_LIBRARIES} flb-aws)
+ -target_include_directories(flb-plugin-in_kafka PUBLIC ${KAFKA_INCLUDEDIR}/librdkafka)
+ +if(DEFINED KAFKA_INCLUDEDIR)
+ +  target_include_directories(flb-plugin-in_kafka PUBLIC ${KAFKA_INCLUDEDIR}/librdkafka)
+ +endif()
+  target_link_libraries(flb-plugin-in_kafka -lpthread)
+ diff --git a/plugins/out_kafka/CMakeLists.txt b/plugins/out_kafka/CMakeLists.txt
+-index 01c96529b..54b14fc2a 100644
++index 9d8b34642..1c967329f 100644
+ --- a/plugins/out_kafka/CMakeLists.txt
+ +++ b/plugins/out_kafka/CMakeLists.txt
+ @@ -5,5 +5,7 @@ set(src
+    kafka.c)
+  
+- FLB_PLUGIN(out_kafka "${src}" ${KAFKA_LIBRARIES})
++ FLB_PLUGIN(out_kafka "${src}" ${KAFKA_LIBRARIES} flb-aws)
+ -target_include_directories(flb-plugin-out_kafka PUBLIC ${KAFKA_INCLUDEDIR}/librdkafka)
+ +if(DEFINED KAFKA_INCLUDEDIR)
+ +  target_include_directories(flb-plugin-out_kafka PUBLIC ${KAFKA_INCLUDEDIR}/librdkafka)
+diff --git a/package/fluent-bit/0002-lib-librdkafka-only-require-a-C-compiler.patch b/package/fluent-bit/0002-lib-librdkafka-only-require-a-C-compiler.patch
+index d7c6bba20b..83c77ff70c 100644
+--- a/package/fluent-bit/0002-lib-librdkafka-only-require-a-C-compiler.patch
++++ b/package/fluent-bit/0002-lib-librdkafka-only-require-a-C-compiler.patch
+@@ -1,4 +1,4 @@
+-From dea6fb0138d9356ebdc4983a61c185bc759d86b0 Mon Sep 17 00:00:00 2001
++From c33d6bd392c5c8bbd231b2a9d00d4959cc553c44 Mon Sep 17 00:00:00 2001
+ From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+ Date: Tue, 25 Jul 2023 09:10:41 +0200
+ Subject: [PATCH] lib: librdkafka: only require a C compiler
+@@ -6,14 +6,14 @@ Subject: [PATCH] lib: librdkafka: only require a C compiler
+ Upstream: https://github.com/confluentinc/librdkafka/pull/4366
+ Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+ ---
+- lib/librdkafka-2.8.0/CMakeLists.txt          | 22 ++++++++++++--
+- lib/librdkafka-2.8.0/examples/CMakeLists.txt | 31 +++++++++++++-------
++ lib/librdkafka-2.10.1/CMakeLists.txt          | 22 +++++++++++--
++ lib/librdkafka-2.10.1/examples/CMakeLists.txt | 31 ++++++++++++-------
+  2 files changed, 39 insertions(+), 14 deletions(-)
  
- $(eval $(golang-package))
-diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
-index 1f70a26ebf..2ef70ab5d7 100644
---- a/package/containerd/containerd.mk
-+++ b/package/containerd/containerd.mk
-@@ -20,7 +20,6 @@ CONTAINERD_BUILD_TARGETS = \
- 	cmd/containerd-shim-runc-v2 \
- 	cmd/ctr
+-diff --git a/lib/librdkafka-2.8.0/CMakeLists.txt b/lib/librdkafka-2.8.0/CMakeLists.txt
++diff --git a/lib/librdkafka-2.10.1/CMakeLists.txt b/lib/librdkafka-2.10.1/CMakeLists.txt
+ index f3d05bad7..8ef47053a 100644
+---- a/lib/librdkafka-2.8.0/CMakeLists.txt
+-+++ b/lib/librdkafka-2.8.0/CMakeLists.txt
++--- a/lib/librdkafka-2.10.1/CMakeLists.txt
+++++ b/lib/librdkafka-2.10.1/CMakeLists.txt
+ @@ -3,7 +3,16 @@ cmake_minimum_required(VERSION 3.5)
+  include("packaging/cmake/parseversion.cmake")
+  parseversion("src/rdkafka.h")
+@@ -57,10 +57,10 @@ index f3d05bad7..8ef47053a 100644
+  
+  if(RDKAFKA_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+-diff --git a/lib/librdkafka-2.8.0/examples/CMakeLists.txt b/lib/librdkafka-2.8.0/examples/CMakeLists.txt
++diff --git a/lib/librdkafka-2.10.1/examples/CMakeLists.txt b/lib/librdkafka-2.10.1/examples/CMakeLists.txt
+ index 91851d2cb..6874195ce 100644
+---- a/lib/librdkafka-2.8.0/examples/CMakeLists.txt
+-+++ b/lib/librdkafka-2.8.0/examples/CMakeLists.txt
++--- a/lib/librdkafka-2.10.1/examples/CMakeLists.txt
+++++ b/lib/librdkafka-2.10.1/examples/CMakeLists.txt
+ @@ -5,8 +5,10 @@ endif(WIN32)
+  add_executable(producer producer.c ${win32_sources})
+  target_link_libraries(producer PUBLIC rdkafka)
+diff --git a/package/fluent-bit/fluent-bit.hash b/package/fluent-bit/fluent-bit.hash
+index ec820416ed..3a4e637d88 100644
+--- a/package/fluent-bit/fluent-bit.hash
++++ b/package/fluent-bit/fluent-bit.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  c7d276238d25242467218941842d8cd4df6cfa52cc9379ae5755220cdefd1dc1  fluent-bit-4.0.3.tar.gz
++sha256  0031f74b616b4669064a59902559da2f87174aa8007e749b5df19ed79c534f5b  fluent-bit-4.0.9.tar.gz
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
+index 3e7e04907e..73bd686b27 100644
+--- a/package/fluent-bit/fluent-bit.mk
++++ b/package/fluent-bit/fluent-bit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--CONTAINERD_INSTALL_BINS = $(notdir $(CONTAINERD_BUILD_TARGETS))
- CONTAINERD_TAGS = no_aufs
- 
- ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
-diff --git a/package/delve/delve.mk b/package/delve/delve.mk
-index 408286e3b4..8206721fe2 100644
---- a/package/delve/delve.mk
-+++ b/package/delve/delve.mk
-@@ -12,11 +12,9 @@ DELVE_DEPENDENCIES = host-pkgconf
- 
- DELVE_TAGS = cgo
- DELVE_BUILD_TARGETS = cmd/dlv
--DELVE_INSTALL_BINS = $(notdir $(DELVE_BUILD_TARGETS))
- 
- HOST_DELVE_TAGS = cgo
- HOST_DELVE_BUILD_TARGETS = cmd/dlv
--HOST_DELVE_INSTALL_BINS = $(notdir $(HOST_DELVE_BUILD_TARGETS))
- 
- $(eval $(golang-package))
- $(eval $(host-golang-package))
-diff --git a/package/distribution-registry/distribution-registry.mk b/package/distribution-registry/distribution-registry.mk
-index 901b9c40e5..a01a3c1710 100644
---- a/package/distribution-registry/distribution-registry.mk
-+++ b/package/distribution-registry/distribution-registry.mk
-@@ -18,7 +18,6 @@ DISTRIBUTION_REGISTRY_BUILD_TARGETS = cmd/registry
- # distribution-registry builds and installs the 'registry' executable, but
- # that name is a bit too generic. Rename it to match the package name.
- DISTRIBUTION_REGISTRY_BIN_NAME = distribution-registry
--DISTRIBUTION_REGISTRY_INSTALL_BINS = distribution-registry
- 
- # Inject the version as if done by upstream's wrapper Makefile
- define DISTRIBUTION_REGISTRY_SET_VERSION
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index 511ec1c8dd..abe0aac348 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
-@@ -38,6 +38,4 @@ define DOCKER_CLI_FIX_VENDORING
- endef
- DOCKER_CLI_POST_EXTRACT_HOOKS += DOCKER_CLI_FIX_VENDORING
- 
--DOCKER_CLI_INSTALL_BINS = $(notdir $(DOCKER_CLI_BUILD_TARGETS))
--
- $(eval $(golang-package))
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 28905b28d6..37d42edaea 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -70,8 +70,6 @@ define DOCKER_ENGINE_FIX_VENDORING
- endef
- DOCKER_ENGINE_POST_EXTRACT_HOOKS += DOCKER_ENGINE_FIX_VENDORING
- 
--DOCKER_ENGINE_INSTALL_BINS = $(notdir $(DOCKER_ENGINE_BUILD_TARGETS))
--
- define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/docker.service
-diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
-index bcab91890a..7d6f0929e2 100644
---- a/package/mender-artifact/mender-artifact.mk
-+++ b/package/mender-artifact/mender-artifact.mk
-@@ -115,7 +115,4 @@ HOST_MENDER_ARTIFACT_GO_ENV += \
- 
- HOST_MENDER_ARTIFACT_LDFLAGS = -X github.com/mendersoftware/mender-artifact/cli.Version=$(HOST_MENDER_ARTIFACT_VERSION)
- 
--HOST_MENDER_ARTIFACT_BIN_NAME = mender-artifact
--HOST_MENDER_ARTIFACT_INSTALL_BINS = $(HOST_MENDER_ARTIFACT_BIN_NAME)
--
- $(eval $(host-golang-package))
-diff --git a/package/moby-buildkit/moby-buildkit.mk b/package/moby-buildkit/moby-buildkit.mk
-index 91560c1ed1..4ae1abde3a 100644
---- a/package/moby-buildkit/moby-buildkit.mk
-+++ b/package/moby-buildkit/moby-buildkit.mk
-@@ -17,12 +17,8 @@ MOBY_BUILDKIT_BUILD_TARGETS = cmd/buildctl cmd/buildkitd
- MOBY_BUILDKIT_LDFLAGS = \
- 	-X $(MOBY_BUILDKIT_GOMOD)/version.Version="$(MOBY_BUILDKIT_VERSION)"
- 
--MOBY_BUILDKIT_INSTALL_BINS = $(notdir $(MOBY_BUILDKIT_BUILD_TARGETS))
--
- HOST_MOBY_BUILDKIT_TAGS = cgo
- HOST_MOBY_BUILDKIT_BUILD_TARGETS = cmd/buildctl cmd/buildkitd
- 
--HOST_MOBY_BUILDKIT_INSTALL_BINS = $(notdir $(HOST_MOBY_BUILDKIT_BUILD_TARGETS))
--
- $(eval $(golang-package))
- $(eval $(host-golang-package))
-diff --git a/package/tailscale/tailscale.mk b/package/tailscale/tailscale.mk
-index c63710c131..3c6c7bce1e 100644
---- a/package/tailscale/tailscale.mk
-+++ b/package/tailscale/tailscale.mk
-@@ -11,7 +11,6 @@ TAILSCALE_LICENSE_FILES = LICENSE
- TAILSCALE_GOMOD = tailscale.com
- TAILSCALE_CPE_ID_VENDOR = tailscale
- TAILSCALE_BUILD_TARGETS = cmd/tailscale cmd/tailscaled
--TAILSCALE_INSTALL_BINS = tailscale tailscaled
- TAILSCALE_LDFLAGS = \
- 	-X tailscale.com/version.longStamp=$(TAILSCALE_VERSION) \
- 	-X tailscale.com/version.shortStamp=$(TAILSCALE_VERSION)
+-FLUENT_BIT_VERSION = 4.0.3
++FLUENT_BIT_VERSION = 4.0.9
+ FLUENT_BIT_SITE = $(call github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION))
+ FLUENT_BIT_LICENSE = Apache-2.0
+ FLUENT_BIT_LICENSE_FILES = LICENSE
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
