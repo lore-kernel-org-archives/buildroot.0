@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA4A0CA0FED
-	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 21:34:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAE1ACA101F
+	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 21:34:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8394A418E6;
-	Wed, 10 Sep 2025 21:34:48 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3YVyYWIft3vK; Wed, 10 Sep 2025 21:34:47 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 801F9418E4
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 801F9418E4;
-	Wed, 10 Sep 2025 21:34:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id C5206234
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 21:34:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C26C761250
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 21:34:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C214961116;
+	Wed, 10 Sep 2025 21:34:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LuXdAOkLjzk3 for <buildroot@buildroot.org>;
+ id bps4qtAEXYUZ; Wed, 10 Sep 2025 21:34:48 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCE8261250
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id BCE8261250;
+	Wed, 10 Sep 2025 21:34:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id EE201234
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 21:34:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E02634152E
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 21:34:46 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GcElb_kImRsi for <buildroot@buildroot.org>;
  Wed, 10 Sep 2025 21:34:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F053C6059F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C7674080B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F053C6059F
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 21:34:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0C7674080B
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 21:34:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DF10C83E4F; Wed, 10 Sep 2025 21:34:45 +0000 (UTC)
+ id EF12583E54; Wed, 10 Sep 2025 21:34:45 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 10 Sep 2025 23:02:31 +0200
+Date: Wed, 10 Sep 2025 23:02:32 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4daac8b973d3b99eb916949ed57a3704afa42c69
-X-Git-Newrev: 8cc71fafc3273c719f0a7b8fd6a487298cef0c52
+X-Git-Oldrev: 8cc71fafc3273c719f0a7b8fd6a487298cef0c52
+X-Git-Newrev: 27ea54c9762f27999033fc61c7ae8a978c9afdae
 X-Patchwork-Hint: ignore
-Message-Id: <20250910213445.DF10C83E4F@busybox.osuosl.org>
+Message-Id: <20250910213445.EF12583E54@busybox.osuosl.org>
 Subject: [Buildroot] [git commit] toolchain/external: remove Linaro aarch64
- toolchain
+ BE toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,7 +66,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8cc71fafc3273c719f0a7b8fd6a487298cef0c52
+commit: https://git.buildroot.net/buildroot/commit/?id=27ea54c9762f27999033fc61c7ae8a978c9afdae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This toolchain is more than 7 years old now, and not maintained anymore.
@@ -77,96 +77,81 @@ Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
  Config.in.legacy                                         |  7 +++++++
- support/config-fragments/autobuild/linaro-aarch64.config |  3 ---
+ .../config-fragments/autobuild/linaro-aarch64-be.config  |  3 ---
  support/config-fragments/autobuild/toolchain-configs.csv |  1 -
- support/testing/tests/boot/test_atf.py                   |  2 +-
  toolchain/toolchain-external/Config.in                   |  2 --
- .../toolchain-external-linaro-aarch64/Config.in          | 16 ----------------
- .../toolchain-external-linaro-aarch64/Config.in.options  |  9 ---------
- .../toolchain-external-linaro-aarch64.hash               |  3 ---
- .../toolchain-external-linaro-aarch64.mk                 | 16 ----------------
- 9 files changed, 8 insertions(+), 51 deletions(-)
+ .../toolchain-external-linaro-aarch64-be/Config.in       | 16 ----------------
+ .../Config.in.options                                    |  9 ---------
+ .../toolchain-external-linaro-aarch64-be.hash            |  3 ---
+ .../toolchain-external-linaro-aarch64-be.mk              | 16 ----------------
+ 8 files changed, 7 insertions(+), 50 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index c0f10d2d09..a1c1550b14 100644
+index a1c1550b14..6a43c86c9c 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,13 @@ endif
  
  comment "Legacy options removed in 2025.11"
  
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
-+	bool "Linaro AArch64 2018.05 external toolchain is deprecated"
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE
++	bool "Linaro AArch64 BE 2018.05 external toolchain is deprecated"
 +	select BR2_LEGACY
 +	help
-+	  Linaro AArch64 2018.05 is no longer maintained and has been
++	  Linaro AArch64 2018.05 BE is no longer maintained and has been
 +	  removed from Buildroot.
 +
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
- 	bool "Sourcery CodeBench MIPS external toolchain is deprecated"
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+ 	bool "Linaro AArch64 2018.05 external toolchain is deprecated"
  	select BR2_LEGACY
-diff --git a/support/config-fragments/autobuild/linaro-aarch64.config b/support/config-fragments/autobuild/linaro-aarch64.config
+diff --git a/support/config-fragments/autobuild/linaro-aarch64-be.config b/support/config-fragments/autobuild/linaro-aarch64-be.config
 deleted file mode 100644
-index f65f78a39b..0000000000
---- a/support/config-fragments/autobuild/linaro-aarch64.config
+index e075fe7eb0..0000000000
+--- a/support/config-fragments/autobuild/linaro-aarch64-be.config
 +++ /dev/null
 @@ -1,3 +0,0 @@
--BR2_aarch64=y
+-BR2_aarch64_be=y
 -BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
+-BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE=y
 diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-index a2fba3a2cc..5c2f4c673e 100644
+index 5c2f4c673e..87c58946bc 100644
 --- a/support/config-fragments/autobuild/toolchain-configs.csv
 +++ b/support/config-fragments/autobuild/toolchain-configs.csv
-@@ -61,6 +61,5 @@ support/config-fragments/autobuild/br-powerpc-internal-full.config,any
+@@ -61,5 +61,4 @@ support/config-fragments/autobuild/br-powerpc-internal-full.config,any
  support/config-fragments/autobuild/br-riscv64-full-internal.config,any
  support/config-fragments/autobuild/br-s390x-z13-internal-glibc.config,any
  support/config-fragments/autobuild/br-xtensa-full-internal.config,any
--support/config-fragments/autobuild/linaro-aarch64.config,x86
- support/config-fragments/autobuild/linaro-aarch64-be.config,x86
+-support/config-fragments/autobuild/linaro-aarch64-be.config,x86
  support/config-fragments/autobuild/linaro-arm.config,x86
-diff --git a/support/testing/tests/boot/test_atf.py b/support/testing/tests/boot/test_atf.py
-index 6142dd36c1..b822b9d357 100644
---- a/support/testing/tests/boot/test_atf.py
-+++ b/support/testing/tests/boot/test_atf.py
-@@ -6,7 +6,7 @@ class TestATFAllwinner(infra.basetest.BRTest):
-         """
-         BR2_aarch64=y
-         BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
-+        BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64=y
-         BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-         BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-         BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.11"
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 6e66fb63f1..9abd77302f 100644
+index 9abd77302f..007d91d451 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -10,7 +10,6 @@ choice
- 
- # Aarch64 (use ARM toolchain by default)
- source "toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in"
--source "toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in"
+@@ -13,7 +13,6 @@ source "toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in"
  
  # Aarch64 big-endian
  source "toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in"
-@@ -104,7 +103,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+-source "toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in"
  
- # Aarch64
- source "toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in.options"
--source "toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in.options"
+ # ARC
+ source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in"
+@@ -106,7 +105,6 @@ source "toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in.op
  
  # Aarch64 big-endian
  source "toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in.options"
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
+-source "toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in.options"
+ 
+ # ARC
+ source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options"
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in
 deleted file mode 100644
-index 1b0ec7cd9f..0000000000
---- a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
+index 295a8987f1..0000000000
+--- a/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in
 +++ /dev/null
 @@ -1,16 +0,0 @@
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
--	bool "Linaro AArch64 2018.05"
--	depends on BR2_aarch64
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE
+-	bool "Linaro AArch64 BE 2018.05"
+-	depends on BR2_aarch64_be
 -	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
 -	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
 -	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
@@ -178,51 +163,51 @@ index 1b0ec7cd9f..0000000000
 -	select BR2_TOOLCHAIN_HAS_FORTRAN
 -	select BR2_TOOLCHAIN_HAS_OPENMP
 -	help
--	  Toolchain for the AArch64 architecture, from
+-	  Toolchain for the AArch64 Big Endian architecture, from
 -	  http://www.linaro.org/engineering/armv8/
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in.options b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in.options
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in.options b/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in.options
 deleted file mode 100644
-index 099c6c0d07..0000000000
---- a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in.options
+index d44750ff08..0000000000
+--- a/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in.options
 +++ /dev/null
 @@ -1,9 +0,0 @@
--if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+-if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE
 -
 -config BR2_TOOLCHAIN_EXTERNAL_PREFIX
--	default "aarch64-linux-gnu"
+-	default "aarch64_be-linux-gnu"
 -
 -config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
--	default "toolchain-external-linaro-aarch64"
+-	default "toolchain-external-linaro-aarch64-be"
 -
 -endif
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.hash b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.hash
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/toolchain-external-linaro-aarch64-be.hash b/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/toolchain-external-linaro-aarch64-be.hash
 deleted file mode 100644
-index 70841a4fa2..0000000000
---- a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.hash
+index 53b6966e7b..0000000000
+--- a/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/toolchain-external-linaro-aarch64-be.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
 -# Locally calculated
--sha256  466b801a60491ae1e2ce9952e0615cf04cf611596c6ffd5bfe8a89ef5be47e03  gcc-linaro-7.3.1-2018.05-i686_aarch64-linux-gnu.tar.xz
--sha256  73eed74e593e2267504efbcf3678918bb22409ab7afa3dc7c135d2c6790c2345  gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu.tar.xz
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.mk b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.mk
+-sha256  412da19c1d1bff0f3172bc19fd2c024207d8d716dbe7a8dad4bf9e3d6b71d149  gcc-linaro-7.3.1-2018.05-i686_aarch64_be-linux-gnu.tar.xz
+-sha256  277c1483f8dbd6007c945ffeb706fa1ba1da8ec1c397cf5cf1e29c25081426e5  gcc-linaro-7.3.1-2018.05-x86_64_aarch64_be-linux-gnu.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/toolchain-external-linaro-aarch64-be.mk b/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/toolchain-external-linaro-aarch64-be.mk
 deleted file mode 100644
-index 1015d63014..0000000000
---- a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/toolchain-external-linaro-aarch64.mk
+index 7a01151bf1..0000000000
+--- a/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/toolchain-external-linaro-aarch64-be.mk
 +++ /dev/null
 @@ -1,16 +0,0 @@
 -################################################################################
 -#
--# toolchain-external-linaro-aarch64
+-# toolchain-external-linaro-aarch64-be
 -#
 -################################################################################
 -
--TOOLCHAIN_EXTERNAL_LINARO_AARCH64_VERSION = 2018.05
--TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SITE = https://releases.linaro.org/components/toolchain/binaries/7.3-$(TOOLCHAIN_EXTERNAL_LINARO_AARCH64_VERSION)/aarch64-linux-gnu
+-TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE_VERSION = 2018.05
+-TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE_SITE = https://releases.linaro.org/components/toolchain/binaries/7.3-$(TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE_VERSION)/aarch64_be-linux-gnu
 -
 -ifeq ($(HOSTARCH),x86)
--TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SOURCE = gcc-linaro-7.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_AARCH64_VERSION)-i686_aarch64-linux-gnu.tar.xz
+-TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE_SOURCE = gcc-linaro-7.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE_VERSION)-i686_aarch64_be-linux-gnu.tar.xz
 -else
--TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SOURCE = gcc-linaro-7.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_AARCH64_VERSION)-x86_64_aarch64-linux-gnu.tar.xz
+-TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE_SOURCE = gcc-linaro-7.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE_VERSION)-x86_64_aarch64_be-linux-gnu.tar.xz
 -endif
 -
 -$(eval $(toolchain-external-package))
