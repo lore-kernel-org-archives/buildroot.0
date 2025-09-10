@@ -4,49 +4,103 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E58B3CA0FED
-	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 21:02:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54EA6CA0FED
+	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 21:02:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A8464409FC;
-	Wed, 10 Sep 2025 21:02:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 31FAF4126F;
+	Wed, 10 Sep 2025 21:02:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q0G3sQkmZKcL; Wed, 10 Sep 2025 21:02:00 +0000 (UTC)
+ id Oc1wa2SSXCLs; Wed, 10 Sep 2025 21:02:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACDF940A4D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A34A40B51
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ACDF940A4D;
-	Wed, 10 Sep 2025 21:02:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E9A9C234
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 21:01:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A34A40B51;
+	Wed, 10 Sep 2025 21:02:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B0152443
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 21:02:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DBCAA405F6
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 21:01:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 96A6661452
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 21:02:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 80M4Ux0b_FpD for <buildroot@buildroot.org>;
- Wed, 10 Sep 2025 21:01:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C89EE406AA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C89EE406AA
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 21:01:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C4B5D83D47; Wed, 10 Sep 2025 21:01:56 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 10 Sep 2025 22:26:52 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: efe00fb3fb1c6ab34794a2a19cc71caef1afdcd9
-X-Git-Newrev: b07b0bb4560ce49f1c4e0e54a21c28435f17bf17
-X-Patchwork-Hint: ignore
-Message-Id: <20250910210156.C4B5D83D47@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/docker-engine: depend on cgroup v2
- and kernel >=5.2 without systemd
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CD3IwE_kadMT for <buildroot@buildroot.org>;
+ Wed, 10 Sep 2025 21:02:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A3470611CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3470611CE
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A3470611CE
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 21:02:00 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-3d44d734cabso51868f8f.3
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 14:02:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1757538119; x=1758142919;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=NV7jsm4iwTMQruk/mbCXlNC40IJhmzkUpGb24yFe1Jg=;
+ b=Ee4yrt88kACWTua9nBypTi1mi4PV0tFQU1RpZCDJMcURPCvBxoxOHTW5FdUpVrm9DZ
+ eV8arNzicZl16RQQjFWivPAEiVTcpHLwbMibTonGaWBIqPjv4aocQCTEGdwVO0r3cNgB
+ 22b0iYACRysg+peYxzFiFLQjkmoJP6FDT5WCtSvAsad97UblIko2HSRLp8CDWHJvRCdU
+ UmJMgE0h2DwYFZQwj1pMx72eZnWfRULARrRA5z/VJGNgQOBgY5EGdE/mvG5aWI8eXdO1
+ gFYeVjMMnrsLDXATGtk2IoucvUIHz+LTrkxH3C/LtncO/pLMZYa6huiF+55LosOgXH9M
+ mhCQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCX4S43yyvtINDSKlAzzoQPDIlUGW4jSDvvsImgbN0v0tfLJL5cnnZxqmfXcR3a9xNU/SLuJyBH5o5g=@buildroot.org
+X-Gm-Message-State: AOJu0YzJMzNvHCxHerjs7sqPTzH49WOnX7pKfQfGzum9xgK0s5D8mRQ1
+ hIed34kkkHa7zuGFl0/YPgyLn85WnR5Dvt8X6jKZojqirNdg+niLr8/zPXZULBz9AQ0=
+X-Gm-Gg: ASbGnctpaCUthI1ppYiMj9zZEX45Rvf/FbIMgag9kIMAzhHcH6/WWifQKH86Iuplq2J
+ 4BWiPtaGuuWHNlFRjvBUnP2GinST5/riJts/h7zPXgJeQknpcm0edJeO6TRgextCqWRQXKs9bjx
+ 3YAADpm4gzv+eBiX5iG0dvLZVCZHhEncZyw4NijMsUogSYOJbNppPva02dZuzQ2K77L22NEyoYp
+ 4bOhvulBfLxDwWfvmRY31X+41Lj3Bguu3RM3yYkqAFeTXBSK2KsMHNAU0ct2WutNLe5WLIpXSDq
+ 8ohfkhUz79MExXsAC2CWAHKQu+SDc4GCru24PwsB7JaTYPMpqms5irupqJNMAwwFWxyl+j09TEs
+ H059lk1GDe6oTlNXpXA0PCK5s3/9ovcA7YWps6ckXeBuSBAcyd6dVEhvvviBdapkylyzRZpmhg3
+ 0M3ypxqzj0qiCBoEzw3tBE5SNTJvtxDS5AYxmfBYcEDz8eFoLI02f4Sh5QPfNwwuBfl7jiGfI=
+X-Google-Smtp-Source: AGHT+IFk2iAIYTIix+NKHz2yp0FodcWgw+b7dR0J1V6NWKUEDTcdnV6Trnc0R8RDTTe60j5TkxZy9w==
+X-Received: by 2002:a05:6000:420e:b0:3d1:c805:822 with SMTP id
+ ffacd0b85a97d-3e64cc628fbmr12891756f8f.57.1757538118638; 
+ Wed, 10 Sep 2025 14:01:58 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:94a2:a200:2ad9:827a:59cb:148a?
+ (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3e7521d8882sm8017008f8f.28.2025.09.10.14.01.54
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 10 Sep 2025 14:01:58 -0700 (PDT)
+Message-ID: <9a945215-4b16-4d21-aadb-661a3b91fc5f@smile.fr>
+Date: Wed, 10 Sep 2025 23:01:54 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Fiona Klute <fiona.klute@gmx.de>, buildroot@buildroot.org
+References: <20250829113119.2892270-1-fiona.klute@gmx.de>
+Content-Language: fr
+In-Reply-To: <20250829113119.2892270-1-fiona.klute@gmx.de>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1757538119; x=1758142919; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=NV7jsm4iwTMQruk/mbCXlNC40IJhmzkUpGb24yFe1Jg=;
+ b=rOd0TJ+y4WytkHW4QRp4jLTx9WQnwYD5cc1ic2BsB3lmC23inmm4Qc70Ww5l/BQRSa
+ fHCT3Q2EA9Fasm87BLFnzBZFwmuhtGSAUOePmUsyh82OzOw+4wcoZnjTaMsOyZWfkgdc
+ /bnSbtJ4nRTzLoXvmlPEw+VWvQrCAeY/q8Ozw=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
+ header.a=rsa-sha256 header.s=google header.b=rOd0TJ+y
+Subject: Re: [Buildroot] [PATCH v3 1/2]
+ support/testing/tests/package/test_docker_compose.py: update kernel & VM
+ CPU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,118 +114,119 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
+ Christian Stewart <christian@aperture.us>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b07b0bb4560ce49f1c4e0e54a21c28435f17bf17
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Without systemd package/docker-engine requires another way to mount
-/sys/fs/cgroup, so far provided by BR2_PACKAGE_CGROUPFS_MOUNT for
-cgroup v1. Replace this with BR2_PACKAGE_CGROUPFS_V2_MOUNT for cgroup
-v2 support. 5.2 is the minimum recommended version for cgroup v2
-support according to the Docker documentation: "v4.15 or later (v5.2
-or later is recommended)" [1].
-
-Depending on the selected container runtime users may need to adjust
-kernel configurations to enable options required by that runtime with
-cgroup v2 (e.g. CONFIG_CGROUP_BPF for runc).
-
-Propagate dependencies accordingly: The Docker btrfs filesystem driver
-does not need a separate and lower minimum headers version,
-package/mender-update-modules needs to apply the new "depends on".
-
-[1] https://docs.docker.com/engine/containers/runmetrics/#running-docker-on-cgroup-v2
-
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- package/docker-engine/Config.in         | 13 +++++--------
- package/mender-update-modules/Config.in |  7 ++++---
- 2 files changed, 9 insertions(+), 11 deletions(-)
-
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 6338eeeef1..ae07b5e19d 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -3,11 +3,12 @@ config BR2_PACKAGE_DOCKER_ENGINE
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # containerd -> runc
- 	depends on BR2_USE_MMU # containerd
-+	depends on !BR2_PACKAGE_CGROUPFS_MOUNT
- 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # libseccomp
--	select BR2_PACKAGE_CGROUPFS_MOUNT if !BR2_PACKAGE_SYSTEMD # runtime dependency
-+	select BR2_PACKAGE_CGROUPFS_V2_MOUNT if !BR2_PACKAGE_SYSTEMD # runtime dependency
- 	select BR2_PACKAGE_CONTAINERD # runtime dependency
- 	select BR2_PACKAGE_HOST_GO
- 	select BR2_PACKAGE_IPTABLES # runtime dependency
-@@ -22,13 +23,9 @@ if BR2_PACKAGE_DOCKER_ENGINE
- 
- config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
- 	bool "btrfs filesystem driver"
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
- 	help
- 	  Build the btrfs filesystem driver for Docker.
- 
--comment "brtfs filesystem driver needs headers >= 4.12"
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
--
- config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER
- 	bool "devicemapper filesystem driver"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
-@@ -83,11 +80,11 @@ config BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_NAME
- 
- endif
- 
--comment "docker-engine needs a glibc or musl toolchain w/ threads, headers >= 3.17"
-+comment "docker-engine needs a glibc or musl toolchain w/ threads, headers >= 5.2"
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_TOOLCHAIN_USES_UCLIBC || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
- 	depends on BR2_USE_MMU
-diff --git a/package/mender-update-modules/Config.in b/package/mender-update-modules/Config.in
-index 76158ab6c7..e71309c3d6 100644
---- a/package/mender-update-modules/Config.in
-+++ b/package/mender-update-modules/Config.in
-@@ -79,8 +79,9 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_DOCKER
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # docker-engine, docker-cli
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # containerd -> runc
- 	depends on BR2_USE_MMU # containerd
-+	depends on !BR2_PACKAGE_CGROUPFS_MOUNT # docker-engine
- 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # libseccom
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2 # docker-engine
- 	select BR2_PACKAGE_DOCKER_ENGINE
- 	select BR2_PACKAGE_DOCKER_CLI
- 	select BR2_PACKAGE_JQ # runtime
-@@ -97,13 +98,13 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_DOCKER
- 
- 	  https://github.com/mendersoftware/mender-update-modules/tree/master/docker
- 
--comment "docker support needs a glibc or musl toolchain w/ threads, headers >= 3.17"
-+comment "docker support needs a glibc or musl toolchain w/ threads, headers >= 5.2"
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_TOOLCHAIN_USES_UCLIBC || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
- 	depends on BR2_USE_MMU
- 
- config BR2_PACKAGE_MENDER_UPDATE_MODULES_IPK
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gRmlvbmEsIEFsbCwKCkxlIDI5LzA4LzIwMjUgw6AgMTM6MzEsIEZpb25hIEtsdXRlIGEg
+w6ljcml0wqA6Cj4gRnJvbTogIkZpb25hIEtsdXRlIChXSVdBKSIgPGZpb25hLmtsdXRlQGdteC5k
+ZT4KPiAKPiBTaW5jZSBjb21taXQgOTQ3ZGJjOTJhMjBjNWFjZWE3ODgyMTY2Y2FlNzg5M2U2ZWE2
+NjFlMSB0aGUgQm9vdGxpbgo+IHN0YWJsZSB0b29sY2hhaW4gdXNlcyBoZWFkZXJzIDUuNCwgd2hp
+Y2ggY2FuIGxlYWQgdG8gYnVpbGQgb3V0cHV0cwo+IGluY29tcGF0aWJsZSB3aXRoIG9sZGVyIGtl
+cm5lbHMuIFVwZGF0ZSB0byB0aGUgbGF0ZXN0IDUuNCBrZXJuZWwgdG8KPiBhdm9pZCB0aGlzLiBU
+aGUga2VybmVsIGNvbmZpZyBpcyB1cGRhdGVkIGFjY29yZGluZyB0byB0aGUgcmVxdWlyZW1lbnRz
+Cj4gb2YgY3VycmVudCBEb2NrZXIsIHJ1bmMsIGFuZCBjcnVuLgo+IAo+IEFkZGl0aW9uYWxseSBz
+d2l0Y2ggdGhlIENQVSBvZiB0aGUgdGVzdCBWTSB0byBIYXN3ZWxsLCB0byBhdm9pZAo+IGRvY2tl
+cmQgZmFpbGluZyB0byBzdGFydCB3aXRoIGEgIlRoaXMgcHJvZ3JhbSBjYW4gb25seSBiZSBydW4g
+b24gQU1ENjQKPiBwcm9jZXNzb3JzIHdpdGggdjMgbWljcm9hcmNoaXRlY3R1cmUgc3VwcG9ydCIg
+ZXJyb3IuCgpTZXJpZXMgYXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KCkJlc3QgcmVnYXJkcywK
+Um9tYWluCgo+IAo+IFNpZ25lZC1vZmYtYnk6IEZpb25hIEtsdXRlIChXSVdBKSA8ZmlvbmEua2x1
+dGVAZ214LmRlPgo+IC0tLQo+IENoYW5nZXMgdjEgLT4gdjI6Cj4gKiBBZGQgdGhpcyBwYXRjaCB0
+byBhdm9pZCB0ZXN0IGZhaWx1cmVzIG9ic2VydmVkIHdpdGggd2hhdCdzIG5vdyBwYXRjaAo+ICAg
+MiBhbG9uZSwgdGhvdWdoIG5vdCBuZWNlc3NhcmlseSBjYXVzZWQgYnkgaXQKPiAKPiAgLi4uL3Rl
+c3RpbmcvY29uZi9kb2NrZXItY29tcG9zZS1rZXJuZWwuY29uZmlnIHwgNTcgKysrKysrKysrKysr
+Ky0tLS0tLQo+ICAuLi4vdGVzdHMvcGFja2FnZS90ZXN0X2RvY2tlcl9jb21wb3NlLnB5ICAgICAg
+fCAgNCArLQo+ICAyIGZpbGVzIGNoYW5nZWQsIDQxIGluc2VydGlvbnMoKyksIDIwIGRlbGV0aW9u
+cygtKQo+IAo+IGRpZmYgLS1naXQgYS9zdXBwb3J0L3Rlc3RpbmcvY29uZi9kb2NrZXItY29tcG9z
+ZS1rZXJuZWwuY29uZmlnIGIvc3VwcG9ydC90ZXN0aW5nL2NvbmYvZG9ja2VyLWNvbXBvc2Uta2Vy
+bmVsLmNvbmZpZwo+IGluZGV4IDRkMzBhNTc4ZWMuLmZkMjhkYTdhNGEgMTAwNjQ0Cj4gLS0tIGEv
+c3VwcG9ydC90ZXN0aW5nL2NvbmYvZG9ja2VyLWNvbXBvc2Uta2VybmVsLmNvbmZpZwo+ICsrKyBi
+L3N1cHBvcnQvdGVzdGluZy9jb25mL2RvY2tlci1jb21wb3NlLWtlcm5lbC5jb25maWcKPiBAQCAt
+MSwxMCArMSwyMiBAQAo+ICAjIENPTkZJR19TV0FQIGlzIG5vdCBzZXQKPiAgQ09ORklHX1NZU1ZJ
+UEM9eQo+ICtDT05GSUdfUE9TSVhfTVFVRVVFPXkKPiAgIyBDT05GSUdfQ1JPU1NfTUVNT1JZX0FU
+VEFDSCBpcyBub3Qgc2V0Cj4gIENPTkZJR19ISUdIX1JFU19USU1FUlM9eQo+ICtDT05GSUdfQ0dS
+T1VQUz15Cj4gK0NPTkZJR19NRU1DRz15Cj4gK0NPTkZJR19CTEtfQ0dST1VQPXkKPiArQ09ORklH
+X0NHUk9VUF9TQ0hFRD15Cj4gK0NPTkZJR19DR1JPVVBfUElEUz15Cj4gK0NPTkZJR19DR1JPVVBf
+RlJFRVpFUj15Cj4gK0NPTkZJR19DUFVTRVRTPXkKPiArQ09ORklHX0NHUk9VUF9ERVZJQ0U9eQo+
+ICtDT05GSUdfQ0dST1VQX0NQVUFDQ1Q9eQo+ICtDT05GSUdfQ0dST1VQX0JQRj15Cj4gK0NPTkZJ
+R19CUEZfU1lTQ0FMTD15Cj4gICMgQ09ORklHX0NPTVBBVF9CUksgaXMgbm90IHNldAo+ICtDT05G
+SUdfU01QPXkKPiAgIyBDT05GSUdfWDg2X0VYVEVOREVEX1BMQVRGT1JNIGlzIG5vdCBzZXQKPiAt
+Q09ORklHX0lPU0ZfTUJJPXkKPiAgQ09ORklHX01DT1JFMj15Cj4gICMgQ09ORklHX1g4Nl9NQ0Ug
+aXMgbm90IHNldAo+ICAjIENPTkZJR19YODZfSU5URUxfTUVNT1JZX1BST1RFQ1RJT05fS0VZUyBp
+cyBub3Qgc2V0Cj4gQEAgLTEyLDkgKzI0LDggQEAgQ09ORklHX0xFR0FDWV9WU1lTQ0FMTF9OT05F
+PXkKPiAgIyBDT05GSUdfU1VTUEVORCBpcyBub3Qgc2V0Cj4gICMgQ09ORklHX0FDUEkgaXMgbm90
+IHNldAo+ICBDT05GSUdfQ1BVX0lETEU9eQo+IC1DT05GSUdfUENJX01TST15Cj4gICMgQ09ORklH
+X1ZJUlRVQUxJWkFUSU9OIGlzIG5vdCBzZXQKPiAtIyBDT05GSUdfSU9TQ0hFRF9DRlEgaXMgbm90
+IHNldAo+ICtDT05GSUdfQkxLX0RFVl9USFJPVFRMSU5HPXkKPiAgIyBDT05GSUdfTVFfSU9TQ0hF
+RF9ERUFETElORSBpcyBub3Qgc2V0Cj4gICMgQ09ORklHX01RX0lPU0NIRURfS1lCRVIgaXMgbm90
+IHNldAo+ICAjIENPTkZJR19DT1JFX0RVTVBfREVGQVVMVF9FTEZfSEVBREVSUyBpcyBub3Qgc2V0
+Cj4gQEAgLTI1LDIzICszNiwzNiBAQCBDT05GSUdfVU5JWD15Cj4gIENPTkZJR19JTkVUPXkKPiAg
+Q09ORklHX0lQX01VTFRJQ0FTVD15Cj4gIENPTkZJR19JUF9BRFZBTkNFRF9ST1VURVI9eQo+IC0j
+IENPTkZJR19JTkVUX1hGUk1fTU9ERV9UUkFOU1BPUlQgaXMgbm90IHNldAo+IC0jIENPTkZJR19J
+TkVUX1hGUk1fTU9ERV9UVU5ORUwgaXMgbm90IHNldAo+IC0jIENPTkZJR19JTkVUX1hGUk1fTU9E
+RV9CRUVUIGlzIG5vdCBzZXQKPiAtIyBDT05GSUdfSVBWNiBpcyBub3Qgc2V0Cj4gLSMgQ09ORklH
+X05GX0NPTk5UUkFDS19QUk9DRlMgaXMgbm90IHNldAo+IC0jIENPTkZJR19ORl9DVF9QUk9UT19E
+Q0NQIGlzIG5vdCBzZXQKPiAtIyBDT05GSUdfTkZfQ1RfUFJPVE9fU0NUUCBpcyBub3Qgc2V0Cj4g
+LSMgQ09ORklHX05GX0NUX1BST1RPX1VEUExJVEUgaXMgbm90IHNldAo+ICsjIENPTkZJR19JUFY2
+X1NJVCBpcyBub3Qgc2V0Cj4gK0NPTkZJR19ORVRGSUxURVI9eQo+ICtDT05GSUdfTkZfQ09OTlRS
+QUNLPXkKPiArQ09ORklHX05FVEZJTFRFUl9YVF9NQVJLPXkKPiArQ09ORklHX05FVEZJTFRFUl9Y
+VF9NQVRDSF9BRERSVFlQRT15Cj4gK0NPTkZJR19ORVRGSUxURVJfWFRfTUFUQ0hfQ09OTlRSQUNL
+PXkKPiArQ09ORklHX05FVEZJTFRFUl9YVF9NQVRDSF9JUFZTPXkKPiAgQ09ORklHX0lQX1ZTPXkK
+PiAgQ09ORklHX0lQX1ZTX1JSPXkKPiAgQ09ORklHX0lQX1ZTX05GQ1Q9eQo+IC0jIENPTkZJR19C
+UklER0VfSUdNUF9TTk9PUElORyBpcyBub3Qgc2V0Cj4gK0NPTkZJR19JUF9ORl9JUFRBQkxFUz15
+Cj4gK0NPTkZJR19JUF9ORl9GSUxURVI9eQo+ICtDT05GSUdfSVBfTkZfTkFUPXkKPiArQ09ORklH
+X0lQX05GX1RBUkdFVF9NQVNRVUVSQURFPXkKPiArQ09ORklHX0lQX05GX01BTkdMRT15Cj4gK0NP
+TkZJR19JUF9ORl9SQVc9eQo+ICtDT05GSUdfSVA2X05GX0lQVEFCTEVTPXkKPiArQ09ORklHX0lQ
+Nl9ORl9GSUxURVI9eQo+ICtDT05GSUdfSVA2X05GX01BTkdMRT15Cj4gK0NPTkZJR19JUDZfTkZf
+UkFXPXkKPiArQ09ORklHX0lQNl9ORl9OQVQ9eQo+ICtDT05GSUdfSVA2X05GX1RBUkdFVF9NQVNR
+VUVSQURFPXkKPiArQ09ORklHX0JSSURHRT15Cj4gICMgQ09ORklHX1dJUkVMRVNTIGlzIG5vdCBz
+ZXQKPiArQ09ORklHX1BDST15Cj4gIENPTkZJR19ERVZUTVBGUz15Cj4gIENPTkZJR19ERVZUTVBG
+U19NT1VOVD15Cj4gIENPTkZJR19WSVJUSU9fQkxLPXkKPiAgQ09ORklHX05FVERFVklDRVM9eQo+
+ICtDT05GSUdfVkVUSD15Cj4gIENPTkZJR19WSVJUSU9fTkVUPXkKPiAgIyBDT05GSUdfRVRIRVJO
+RVQgaXMgbm90IHNldAo+ICAjIENPTkZJR19XTEFOIGlzIG5vdCBzZXQKPiBAQCAtNTIsMjYgKzc2
+LDIzIEBAIENPTkZJR19WVF9IV19DT05TT0xFX0JJTkRJTkc9eQo+ICAjIENPTkZJR19ERVZNRU0g
+aXMgbm90IHNldAo+ICBDT05GSUdfU0VSSUFMXzgyNTA9eQo+ICBDT05GSUdfU0VSSUFMXzgyNTBf
+Q09OU09MRT15Cj4gLSMgQ09ORklHX1NFUklBTF84MjUwX0xQU1MgaXMgbm90IHNldAo+IC0jIENP
+TkZJR19TRVJJQUxfODI1MF9NSUQgaXMgbm90IHNldAo+ICAjIENPTkZJR19IV19SQU5ET01fSU5U
+RUwgaXMgbm90IHNldAo+ICAjIENPTkZJR19IV19SQU5ET01fQU1EIGlzIG5vdCBzZXQKPiAgIyBD
+T05GSUdfSFdfUkFORE9NX1ZJQSBpcyBub3Qgc2V0Cj4gIENPTkZJR19IV19SQU5ET01fVklSVElP
+PXkKPiAtIyBDT05GSUdfREVWUE9SVCBpcyBub3Qgc2V0Cj4gICMgQ09ORklHX0hXTU9OIGlzIG5v
+dCBzZXQKPiAgIyBDT05GSUdfVVNCX1NVUFBPUlQgaXMgbm90IHNldAo+ICBDT05GSUdfUlRDX0NM
+QVNTPXkKPiAgQ09ORklHX1ZJUlRJT19QQ0k9eQo+IC0jIENPTkZJR19WSVJUSU9fUENJX0xFR0FD
+WSBpcyBub3Qgc2V0Cj4gK0NPTkZJR19WSVJUSU9fTU1JTz15Cj4gICMgQ09ORklHX1g4Nl9QTEFU
+Rk9STV9ERVZJQ0VTIGlzIG5vdCBzZXQKPiAgIyBDT05GSUdfSU9NTVVfU1VQUE9SVCBpcyBub3Qg
+c2V0Cj4gIENPTkZJR19FWFQ0X0ZTPXkKPiArQ09ORklHX09WRVJMQVlfRlM9eQo+ICBDT05GSUdf
+VE1QRlM9eQo+ICAjIENPTkZJR19NSVNDX0ZJTEVTWVNURU1TIGlzIG5vdCBzZXQKPiAgIyBDT05G
+SUdfTkVUV09SS19GSUxFU1lTVEVNUyBpcyBub3Qgc2V0Cj4gK0NPTkZJR19LRVlTPXkKPiAgQ09O
+RklHX1NFQ1VSSVRZRlM9eQo+IC0jIENPTkZJR19DUllQVE9fRUNIQUlOSVYgaXMgbm90IHNldAo+
+ICAjIENPTkZJR19DUllQVE9fSFcgaXMgbm90IHNldAo+IC0jIENPTkZJR19VTlVTRURfU1lNQk9M
+UyBpcyBub3Qgc2V0Cj4gIENPTkZJR19VTldJTkRFUl9GUkFNRV9QT0lOVEVSPXkKPiBkaWZmIC0t
+Z2l0IGEvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9kb2NrZXJfY29tcG9zZS5w
+eSBiL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfZG9ja2VyX2NvbXBvc2UucHkK
+PiBpbmRleCA2YThmNmY0MDEwLi5hOTZjOWQxNDgxIDEwMDY0NAo+IC0tLSBhL3N1cHBvcnQvdGVz
+dGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfZG9ja2VyX2NvbXBvc2UucHkKPiArKysgYi9zdXBwb3J0
+L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X2RvY2tlcl9jb21wb3NlLnB5Cj4gQEAgLTE3LDcg
+KzE3LDcgQEAgY2xhc3MgQmFzZVRlc3REb2NrZXJDb21wb3NlKGluZnJhLmJhc2V0ZXN0LkJSVGVz
+dCk6Cj4gICAgICAgICAgQlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTPSJ7fSIKPiAgICAgICAg
+ICBCUjJfTElOVVhfS0VSTkVMPXkKPiAgICAgICAgICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9W
+RVJTSU9OPXkKPiAtICAgICAgICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVF
+PSI0LjE5LjI2MiIKPiArICAgICAgICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZB
+TFVFPSI1LjQuMjk2Igo+ICAgICAgICAgIEJSMl9MSU5VWF9LRVJORUxfVVNFX0NVU1RPTV9DT05G
+SUc9eQo+ICAgICAgICAgIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX0NPTkZJR19GSUxFPSJ7fSIK
+PiAgICAgICAgICBCUjJfUEFDS0FHRV9QWVRIT04zPXkKPiBAQCAtNTksNyArNTksNyBAQCBjbGFz
+cyBCYXNlVGVzdERvY2tlckNvbXBvc2UoaW5mcmEuYmFzZXRlc3QuQlJUZXN0KToKPiAgICAgICAg
+ICBzZWxmLmVtdWxhdG9yLmJvb3QoYXJjaD0ieDg2XzY0IiwKPiAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAga2VybmVsPWtlcm5lbCwKPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAga2Vy
+bmVsX2NtZGxpbmU9WyJyb290PS9kZXYvdmRhIiwgImNvbnNvbGU9dHR5UzAiXSwKPiAtICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgb3B0aW9ucz1bIi1jcHUiLCAiTmVoYWxlbSIsCj4gKyAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIG9wdGlvbnM9WyItY3B1IiwgIkhhc3dlbGwiLAo+ICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAiLW0iLCAiNTEyTSIsCj4gICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICItZGV2aWNlIiwgInZpcnRpby1ybmctcGNpIiwK
+PiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIi1kcml2ZSIsICJmaWxlPXt9
+LGZvcm1hdD1yYXcsaWY9dmlydGlvIi5mb3JtYXQocm9vdGZzKSwKCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
+bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
+bGlzdGluZm8vYnVpbGRyb290Cg==
