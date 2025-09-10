@@ -4,103 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BBFECA0FED
-	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 22:03:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6827BCA0FED
+	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 22:03:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F34526117E;
-	Wed, 10 Sep 2025 22:03:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 89D85614F7;
+	Wed, 10 Sep 2025 22:03:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VLQVdLe3EyTg; Wed, 10 Sep 2025 22:03:31 +0000 (UTC)
+ id UJuNHbUUz8XR; Wed, 10 Sep 2025 22:03:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70EAF6128C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFB2E614EA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 70EAF6128C;
-	Wed, 10 Sep 2025 22:03:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 40FA3234
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 22:03:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AFB2E614EA;
+	Wed, 10 Sep 2025 22:03:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 678A12BB3
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 22:03:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 327ED41907
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 22:03:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 598FF4154C
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 22:03:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LoR9aUbcN8Ls for <buildroot@buildroot.org>;
- Wed, 10 Sep 2025 22:03:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::442; helo=mail-wr1-x442.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 842E041385
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 842E041385
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com
- [IPv6:2a00:1450:4864:20::442])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 842E041385
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 22:03:28 +0000 (UTC)
-Received: by mail-wr1-x442.google.com with SMTP id
- ffacd0b85a97d-3e2fdddd01dso19000f8f.2
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 15:03:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1757541806; x=1758146606;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=DU6b7kfpeGK0z5a7pyRC02CItRfZBXcr+HXcLrsFB3E=;
- b=XxCkm22rksatgXxtnKu4drl1HVPl6kXievbBImlUkv+duQWLZxreqm+Q1KNV6irFgd
- JyrZpYOkN81652YsTtCSSD4G0xSWPabv99wdupgxBS8FsWk2Mny8pY6E+qd+SshVOewX
- 6dEZnojNlErAZ1YyvZXr1oCBO8OXVvJRJzuuGgw0FXhEWZ1bqzVK5zP/Jg7SvDepq7sZ
- nXM+DwmZ7Kkt25b8fBV7FP9uKRtN76EgRfNnddQbeDsHTwKVEeNZTZ8Cn+6vtghbPp3+
- IKCyNNRJLZAB02izfCKT+T0nCmRgLrRlTqdPPGAwq0y3nqiSPjinc71lGfdPaBzryAvl
- 5lpA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCUd7qDstXZ0Fq27XB6nfJ9TDCmO51xG6O4cPJUfIsT7rOxmUIUD2LVe6SWEeZrheL4kNhdFHDAbuCk=@buildroot.org
-X-Gm-Message-State: AOJu0YxTI9WueRjTH8qBR7qw5cvAUpNfPdsllWc7Ow643GMAGjHBiWve
- a955DC8r92vwteClBSnCSu8diChIgDrKahbmeNDzFkNXrStuS3p/AwNr6RWfQhwo0VC1YyJYwp0
- eGb+G2WdBnQ==
-X-Gm-Gg: ASbGncsRjsTHP2r3wjgAqcwY53SrugwXaRo36M89kp0BO/JR5xDSBrXubgZh/Xz4UrB
- 818tkmZ6YMUjyaeDbtP1tP+1ZKUPFMwRqlc7jLSwPe60wTudz+mExvckMViOn77WULKxq4DYSM8
- A/hWvsxCD1nU9wI+kQhSqYh9Dw3jIj57lIKmOpSFMoIGx7cB0LGTZ2Y9MLfd16iUN177+1PfVFQ
- U0HKn6ftxPqLZXJpxmuoT3MCSuYPQ5Au6C3rU2pCKPuMlCVHFnc7vaZsU7odnAkilvux4hiUDu9
- MlJUXTB2sJGoB21E4/T/2Wt5zmdrWZiPkTzs5oilK7VUD0jtYNw3KkvhGnt3VRDaCVZQIGKMFBy
- 2OiF8dp7R1zyzP2B/yEJAH3FS2ctXTYPB/IP74mKinJbbH9py3flwycdKyvrkCYmDkk3K7ut4Ee
- fOZCeOJz0GzN4bIV0du9JG6jLOv8lmZEB2PAynM+Fvjx3ZSmmNtf3ey6Yfv+uc
-X-Google-Smtp-Source: AGHT+IESJAXBU5SDrNWhg9wdxbLYGPL42Af7IvzCcl0MOIsak+igMw0MA8xCvQ6MNF60dMwPEgKVTA==
-X-Received: by 2002:a05:6000:2510:b0:3e4:8163:b6f9 with SMTP id
- ffacd0b85a97d-3e642401335mr15359873f8f.14.1757541806336; 
- Wed, 10 Sep 2025 15:03:26 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:94a2:a200:2ad9:827a:59cb:148a?
- (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
- [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-45e015784c3sm2852285e9.10.2025.09.10.15.03.25
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 10 Sep 2025 15:03:25 -0700 (PDT)
-Message-ID: <20a0f8af-2094-4dd4-8baa-8d37e1cd8674@smile.fr>
-Date: Thu, 11 Sep 2025 00:03:24 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Titouan Christophe <titouan.christophe@mind.be>, buildroot@buildroot.org
-Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
-References: <20250829143358.151035-1-titouan.christophe@mind.be>
-Content-Language: fr
-In-Reply-To: <20250829143358.151035-1-titouan.christophe@mind.be>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1757541806; x=1758146606; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=DU6b7kfpeGK0z5a7pyRC02CItRfZBXcr+HXcLrsFB3E=;
- b=y14iJrDElmfwAiigun8c8Vo5L4xtu8Q/yBr5UAHP+1vlEYT7iFVEgs7AF5vC7ffuEt
- cb3utRlxm4qUE8+IvrMUZKap/tXm+co2KX8yK0fQoJkBwcQPW9h0k/iXRKuXZht6Fxvl
- M4xpsD4Vu5vSopXJpgZhnEtes07Hnv8q1Mdg4=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=y14iJrDE
-Subject: Re: [Buildroot] [PATCH] package/aufs{-util}: remove package
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P1E6txcRCL46 for <buildroot@buildroot.org>;
+ Wed, 10 Sep 2025 22:03:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34C784154D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 34C784154D
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 22:03:32 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1DECF81ECF; Wed, 10 Sep 2025 22:03:32 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 10 Sep 2025 23:57:12 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 289dd6bd7641d98b1a7edd84a707474873cd17a5
+X-Git-Newrev: 72c95d947f46eaffc1ff33ef1b59017ba9b316cc
+X-Patchwork-Hint: ignore
+Message-Id: <20250910220332.1DECF81ECF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/aufs{-util}: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,315 +59,471 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gVGl0b3VhbiwgQWxsLAoKTGUgMjkvMDgvMjAyNSDDoCAxNjozMywgVGl0b3VhbiBDaHJp
-c3RvcGhlIHZpYSBidWlsZHJvb3QgYSDDqWNyaXTCoDoKPiBSZW1vdmUgc3VwcG9ydCBmb3IgYXVm
-cywgYXMgaXQgaXMgb3V0ZGF0ZWQgYW5kIHVubWFpbnRhaW5lZCBpbiBCdWlsZHJvb3QuCj4gVXNl
-cnMgYXJlIGVuY291cmFnZWQgdG8gdXNlIG92ZXJsYXlmcyBpbiBwbGFjZSBvZiBhdWZzLgo+IAo+
-IFRoaXMgcGF0Y2ggcmVtb3ZlcyBzdXBwb3J0IGZvciBhdWZzIHBhY2thZ2UgcHJvdmlkaW5nIHNv
-dXJjZXMgZm9yCj4gdGhlIGtlcm5lbCBleHRlbnNpb24sIHRoZSByZWxhdGVkIEJ1aWxkcm9vdCBr
-ZXJuZWwgZXh0ZW5zaW9uIGNvbmZpZ3VyYXRpb24sCj4gYXMgd2VsbCBhcyB0aGUgdXNlcnNwYWNl
-IHV0aWxpdGllcy4KPiAKPiBUaGlzIGFsc28gYWxsb3dzIHRvIHJlbW92ZSBzb21lIHNwZWNpYWwg
-Y2FzZXMgaW4gY29uZmlndXJhdGlvbiB1dGlsaXRpZXMuCj4gCj4gU2lnbmVkLW9mZi1ieTogVGl0
-b3VhbiBDaHJpc3RvcGhlIDx0aXRvdWFuLmNocmlzdG9waGVAbWluZC5iZT4KPiAtLS0KPiAgLmNo
-ZWNrcGFja2FnZWlnbm9yZSAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDMgLQo+ICBDb25m
-aWcuaW4ubGVnYWN5ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAxMiArKysrCj4gIGxp
-bnV4L0NvbmZpZy5leHQuaW4gICAgICAgICAgICAgICAgICAgICAgICAgICB8IDYyIC0tLS0tLS0t
-LS0tLS0tLS0tLS0KPiAgbGludXgvbGludXgtZXh0LWF1ZnMubWsgICAgICAgICAgICAgICAgICAg
-ICAgIHwgMjEgLS0tLS0tLQo+ICBwYWNrYWdlL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgfCAgMiAtCj4gIC4uLi9hdWZzLXV0aWwvMDAwMS1yZW1vdmUtdXNlci1zZXR0aW5n
-cy5wYXRjaCB8IDE2IC0tLS0tCj4gIHBhY2thZ2UvYXVmcy11dGlsLzAwMDItbm8tY2hlY2stdmVy
-LnBhdGNoICAgICB8IDI0IC0tLS0tLS0KPiAgcGFja2FnZS9hdWZzLXV0aWwvMDAwMy1uby1zdHJp
-cC1saWIucGF0Y2ggICAgIHwgMTggLS0tLS0tCj4gIHBhY2thZ2UvYXVmcy11dGlsL0NvbmZpZy5p
-biAgICAgICAgICAgICAgICAgICB8IDM2IC0tLS0tLS0tLS0tCj4gIHBhY2thZ2UvYXVmcy11dGls
-L2F1ZnMtdXRpbC5tayAgICAgICAgICAgICAgICB8IDU5IC0tLS0tLS0tLS0tLS0tLS0tLQo+ICBw
-YWNrYWdlL2F1ZnMvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgICAgICAgfCAxNiAtLS0tLQo+
-ICBwYWNrYWdlL2F1ZnMvYXVmcy5tayAgICAgICAgICAgICAgICAgICAgICAgICAgfCAyNCAtLS0t
-LS0tCj4gIHV0aWxzL2NoZWNrcGFja2FnZWxpYi90ZXN0X2xpYl9tay5weSAgICAgICAgICB8ICAz
-IC0KPiAgdXRpbHMvZ2VucmFuZGNvbmZpZyAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDgg
-LS0tCj4gIDE0IGZpbGVzIGNoYW5nZWQsIDEyIGluc2VydGlvbnMoKyksIDI5MiBkZWxldGlvbnMo
-LSkKPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IGxpbnV4L2xpbnV4LWV4dC1hdWZzLm1rCj4gIGRlbGV0
-ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2F1ZnMtdXRpbC8wMDAxLXJlbW92ZS11c2VyLXNldHRpbmdz
-LnBhdGNoCj4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2F1ZnMtdXRpbC8wMDAyLW5vLWNo
-ZWNrLXZlci5wYXRjaAo+ICBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9hdWZzLXV0aWwvMDAw
-My1uby1zdHJpcC1saWIucGF0Y2gKPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvYXVmcy11
-dGlsL0NvbmZpZy5pbgo+ICBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9hdWZzLXV0aWwvYXVm
-cy11dGlsLm1rCj4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2F1ZnMvQ29uZmlnLmluCj4g
-IGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2F1ZnMvYXVmcy5tawo+IAo+IGRpZmYgLS1naXQg
-YS8uY2hlY2twYWNrYWdlaWdub3JlIGIvLmNoZWNrcGFja2FnZWlnbm9yZQo+IGluZGV4IDMxY2E3
-Y2RjYzEuLjRmM2FhOThkNzYgMTAwNjQ0Cj4gLS0tIGEvLmNoZWNrcGFja2FnZWlnbm9yZQo+ICsr
-KyBiLy5jaGVja3BhY2thZ2VpZ25vcmUKPiBAQCAtMjM3LDkgKzIzNyw2IEBAIHBhY2thZ2UvYXN0
-ZXJpc2svMDAwNC1pbnN0YWxsLXNhbXBsZXMtbmVlZC10aGUtZGF0YS1maWxlcy5wYXRjaCBsaWJf
-cGF0Y2guVXBzdHJlCj4gIHBhY2thZ2UvYXQvMDAwMS1NYWtlZmlsZS5pbi1maXgtbWFrZS1pbnN0
-YWxsLWZvci1ub24tcm9vdC1kb24tdC1zdHJpLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQo+ICBw
-YWNrYWdlL2F0L1M5OWF0IGxpYl9zeXN2LkluZGVudCBsaWJfc3lzdi5WYXJpYWJsZXMKPiAgcGFj
-a2FnZS9hdHRyLzAwMDEtYnVpbGQtd2l0aC1vbGRlci1HQ0NzLnBhdGNoIGxpYl9wYXRjaC5VcHN0
-cmVhbQo+IC1wYWNrYWdlL2F1ZnMtdXRpbC8wMDAxLXJlbW92ZS11c2VyLXNldHRpbmdzLnBhdGNo
-IGxpYl9wYXRjaC5VcHN0cmVhbQo+IC1wYWNrYWdlL2F1ZnMtdXRpbC8wMDAyLW5vLWNoZWNrLXZl
-ci5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0KPiAtcGFja2FnZS9hdWZzLXV0aWwvMDAwMy1uby1z
-dHJpcC1saWIucGF0Y2ggbGliX3BhdGNoLlVwc3RyZWFtCj4gIHBhY2thZ2UvYXVtaXgvMDAwMS1m
-aXgtaW5jb3JyZWN0LW1ha2VmaWxlLWFtLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQo+ICBwYWNr
-YWdlL2F1dG9jb25mLzAwMDEtZG9udC1hZGQtZGlydHktdG8tdmVyc2lvbi5wYXRjaCBsaWJfcGF0
-Y2guVXBzdHJlYW0KPiAgcGFja2FnZS9hdXRvbWFrZS8wMDAxLW5vbWFuLnBhdGNoIGxpYl9wYXRj
-aC5VcHN0cmVhbQo+IGRpZmYgLS1naXQgYS9Db25maWcuaW4ubGVnYWN5IGIvQ29uZmlnLmluLmxl
-Z2FjeQo+IGluZGV4IGY3NjFjOTA2M2EuLjdjMmRiYmJmYzYgMTAwNjQ0Cj4gLS0tIGEvQ29uZmln
-LmluLmxlZ2FjeQo+ICsrKyBiL0NvbmZpZy5pbi5sZWdhY3kKPiBAQCAtMTQ2LDYgKzE0NiwxOCBA
-QCBlbmRpZgo+ICAKPiAgY29tbWVudCAiTGVnYWN5IG9wdGlvbnMgcmVtb3ZlZCBpbiAyMDI1LjA4
-Igo+ICAKPiArY29uZmlnIEJSMl9MSU5VWF9LRVJORUxfRVhUX0FVRlMKPiArCWJvb2wgIkF1ZnMg
-RmlsZXN5c3RlbSBNb2R1bGUgcGF0Y2ggaXMgZGVwcmVjYXRlZCIKPiArCXNlbGVjdCBCUjJfTEVH
-QUNZCj4gKwloZWxwCj4gKwkgIGF1ZnMgaXMgbm8gbG9uZ2VyIG1haW50YWluZWQgaW4gQnVpbGRy
-b290Cj4gKwo+ICtjb25maWcgQlIyX1BBQ0tBR0VfQVVGU19VVElMCj4gKwlib29sICJhdWZzLXV0
-aWwgaXMgZGVwcmVjYXRlZCIKPiArCXNlbGVjdCBCUjJfTEVHQUNZCj4gKwloZWxwCj4gKwkgIGF1
-ZnMgaXMgbm8gbG9uZ2VyIG1haW50YWluZWQgaW4gQnVpbGRyb290CgpJIHVwZGF0ZWQgdGhlIGxl
-Z2FjeSBoYW5kbGluZyBvcHRpb24gdGV4dC4KCiJBdWZzIEZpbGVzeXN0ZW0gTW9kdWxlIHBhdGNo
-IGhhcyBiZWVuIHJlbW92ZWQiCgphdWZzIGtlcm5lbCBtb2R1bGUgcGF0Y2ggaXMgdW5tYWludGFp
-bmVkIGFuZCBoYXMgYmVlbiByZW1vdmVkLgoKSW5kZWVkLCB3ZSBubyBsb25nZXIgZGVwcmVjYXRl
-IGEgcGFja2FnZSBpbiBCdWlsZHJvb3QsIHdlIHJlbW92ZSB0aGVtLgoKaHR0cHM6Ly9naXRsYWIu
-Y29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vY29tbWl0LzQ5MzE1ZjJmYWM1NDBiNTMxMjVi
-NDZkZjM0MWY3ZDgxNWJiYjk1Y2QKCgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoKQmVzdCBy
-ZWdhcmRzLApSb21haW4KCj4gKwo+ICBjb25maWcgQlIyX1BBQ0tBR0VfVEhUVFBECj4gIAlib29s
-ICJ0aHR0cGQgaGFzIGJlZW4gcmVtb3ZlZCIKPiAgCXNlbGVjdCBCUjJfTEVHQUNZCj4gZGlmZiAt
-LWdpdCBhL2xpbnV4L0NvbmZpZy5leHQuaW4gYi9saW51eC9Db25maWcuZXh0LmluCj4gaW5kZXgg
-M2NiZjQyZDM0NC4uYzcyNDg1NGE5MCAxMDA2NDQKPiAtLS0gYS9saW51eC9Db25maWcuZXh0Lmlu
-Cj4gKysrIGIvbGludXgvQ29uZmlnLmV4dC5pbgo+IEBAIC04Niw2OCArODYsNiBAQCBjb25maWcg
-QlIyX0xJTlVYX0tFUk5FTF9FWFRfRkJURlQKPiAgCj4gIAkgIGh0dHBzOi8vZ2l0aHViLmNvbS9u
-b3Ryby9mYnRmdAo+ICAKPiAtIyBhdWZzLXN0YW5kYWxvbmUKPiAtY29uZmlnIEJSMl9MSU5VWF9L
-RVJORUxfRVhUX0FVRlMKPiAtCWJvb2wgIkF1ZnMgRmlsZXN5c3RlbSBNb2R1bGUgcGF0Y2giCj4g
-LQlzZWxlY3QgQlIyX1BBQ0tBR0VfQVVGUwo+IC0JaGVscAo+IC0JICBBdWZzIGlzIHNwbGl0IGlu
-IHR3byBwYXJ0czogYSBrZXJuZWwgcGFydCBhbmQgYSB1c2Vyc3BhY2UKPiAtCSAgcGFydC4gRW5h
-YmxpbmcgdGhpcyBvcHRpb24gYXV0b21hdGljYWxseSBzZWxlY3RzIHRoZSBhdWZzCj4gLQkgIHN0
-YW5kYWxvbmUgKG1vZHVsZSkgcGFja2FnZSBhbmQgcGF0Y2hlcyB0aGUgTGludXgga2VybmVsCj4g
-LQkgIGJ1aWx0IGJ5IEJ1aWxkcm9vdCB3aXRoIHRoZSBhdWZzIGtlcm5lbCBwYXJ0IChpZSBmcy9h
-dWZzKS4KPiAtCj4gLQkgIEl0IGlzIGltcG9ydGFudCB0byB1c2UgdGhlIGNvcnJlY3QgYnJhbmNo
-IG9mIGF1ZnMtc3RhbmRhbG9uZS4KPiAtCj4gLWlmIEJSMl9MSU5VWF9LRVJORUxfRVhUX0FVRlMK
-PiAtCj4gLWNob2ljZQo+IC0JYm9vbCAiYXVmcy1zdGFuZGFsb25lIHNlcmllcyIKPiAtCWhlbHAK
-PiAtCSAgU2VsZWN0IHRoZSBtYWpvciBzZXJpZXMgb2YgdGhpcyB2ZXJzaW9uLiBUaGlzIG11c3Qg
-bWF0Y2ggdGhlCj4gLQkgIG1ham9yIHZlcnNpb24gb2YgeW91ciBrZXJuZWwgKGUuZy4gZm9yIGtl
-cm5lbHMgMy54LCBzZWxlY3QKPiAtCSAgYXVmczMueDsgZm9yIGtlcm5lbHMgNC54LCBzZWxlY3Qg
-YXVmczQueDsgZm9yIGtlcm5lbHMgNS54LAo+IC0JICBzZWxlY3QgYXVmczUueCApLgo+IC0KPiAt
-CSAgTm90ZTogbmVpdGhlciBhdWZzMS54IG5vciBhdWZzMi54IChib3RoIGZvciBrZXJuZWxzIG9s
-ZGVyIHRoYW4KPiAtCSAgMy54KSBhcmUgc3VwcG9ydGVkLgo+IC0KPiAtY29uZmlnIEJSMl9MSU5V
-WF9LRVJORUxfRVhUX0FVRlNfU0VSSUVTXzMKPiAtCWJvb2wgImF1ZnMzLngiCj4gLQo+IC1jb25m
-aWcgQlIyX0xJTlVYX0tFUk5FTF9FWFRfQVVGU19TRVJJRVNfNAo+IC0JYm9vbCAiYXVmczQueCIK
-PiAtCj4gLWNvbmZpZyBCUjJfTElOVVhfS0VSTkVMX0VYVF9BVUZTX1NFUklFU181Cj4gLQlib29s
-ICJhdWZzNS54Igo+IC0KPiAtZW5kY2hvaWNlCj4gLQo+IC1jb25maWcgQlIyX0xJTlVYX0tFUk5F
-TF9FWFRfQVVGU19TRVJJRVMKPiAtCWludAo+IC0JZGVmYXVsdCAzIGlmIEJSMl9MSU5VWF9LRVJO
-RUxfRVhUX0FVRlNfU0VSSUVTXzMKPiAtCWRlZmF1bHQgNCBpZiBCUjJfTElOVVhfS0VSTkVMX0VY
-VF9BVUZTX1NFUklFU180Cj4gLQlkZWZhdWx0IDUgaWYgQlIyX0xJTlVYX0tFUk5FTF9FWFRfQVVG
-U19TRVJJRVNfNQo+IC0KPiAtY29uZmlnIEJSMl9MSU5VWF9LRVJORUxfRVhUX0FVRlNfVkVSU0lP
-Tgo+IC0Jc3RyaW5nICJhdWZzLXN0YW5kYWxvbmUgdmVyc2lvbiIKPiAtCWRlZmF1bHQgIiIKPiAt
-CWhlbHAKPiAtCSAgVGhlIHZlcnNpb24geW91IGNob29zZSBtdXN0IG1hdGNoIHRoYXQgb2YgeW91
-ciBrZXJuZWwuCj4gLQkgIFVzdWFsbHksIHRoZSBzaGExIG9mIHRoZSBjc2V0IHlvdSB3YW50IHRv
-IHVzZTsgYXZvaWQgdXNpbmcgYQo+IC0JICBicmFuY2ggbmFtZSBhcyB0aGlzIHlpZWxkcyBub24t
-cmVwcm9kdWNpYmxlIGJ1aWxkcy4KPiAtCj4gLQkgIFNlZSB0aGUgZm9sbG93aW5nIHJlc291cmNl
-cyB0byBzZWUgd2hhdCB2ZXJzaW9ucyBhcmUKPiAtCSAgYXZhaWxhYmxlOgo+IC0KPiAtCSAgRm9y
-IGF1ZnMzLng6Cj4gLQkgIGh0dHBzOi8vc291cmNlZm9yZ2UubmV0L3AvYXVmcy9hdWZzMy1zdGFu
-ZGFsb25lL3JlZi9tYXN0ZXIvYnJhbmNoZXMvCj4gLQkgIEZvciBhdWZzNC54Ogo+IC0JICBodHRw
-czovL2dpdGh1Yi5jb20vc2Zqcm8vYXVmczQtc3RhbmRhbG9uZS9icmFuY2hlcy9hbGwKPiAtCSAg
-Rm9yIGF1ZnM1Lng6Cj4gLQkgIGh0dHBzOi8vZ2l0aHViLmNvbS9zZmpyby9hdWZzNS1zdGFuZGFs
-b25lL2JyYW5jaGVzL2FsbAo+IC0KPiAtZW5kaWYgIyBhdWZzCj4gLQo+ICAjIGtlcm5lbCBleHRl
-bnNpb25zIGZyb20gYnIyLWV4dGVybmFsIHRyZWVzLCBpZiBhbnkKPiAgc291cmNlICIkQlIyX0JB
-U0VfRElSLy5icjItZXh0ZXJuYWwuaW4ubGludXgiCj4gIAo+IGRpZmYgLS1naXQgYS9saW51eC9s
-aW51eC1leHQtYXVmcy5tayBiL2xpbnV4L2xpbnV4LWV4dC1hdWZzLm1rCj4gZGVsZXRlZCBmaWxl
-IG1vZGUgMTAwNjQ0Cj4gaW5kZXggZDRiYmIwNzE5Ni4uMDAwMDAwMDAwMAo+IC0tLSBhL2xpbnV4
-L2xpbnV4LWV4dC1hdWZzLm1rCj4gKysrIC9kZXYvbnVsbAo+IEBAIC0xLDIxICswLDAgQEAKPiAt
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiAtIwo+IC0jIFBhdGNoIHRoZSBsaW51eCBrZXJuZWwg
-d2l0aCBhdWZzIGV4dGVuc2lvbgo+IC0jCj4gLSMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gLQo+
-IC1MSU5VWF9FWFRFTlNJT05TICs9IGF1ZnMKPiAtCj4gLWRlZmluZSBBVUZTX1BSRVBBUkVfS0VS
-TkVMCj4gLQlpZiB0ZXN0IC1kICQoQEQpL2ZzL2F1ZnMvOyB0aGVuIFwKPiAtCQllY2hvICJZb3Vy
-IGtlcm5lbCBhbHJlYWR5IHN1cHBvcnRzIEFVRlMuIjsgXAo+IC0JCWV4aXQgMTsgXAo+IC0JZmkK
-PiAtCSQoQVBQTFlfUEFUQ0hFUykgJChARCkgJChBVUZTX0RJUikgXAo+IC0JCWF1ZnMkKEJSMl9Q
-QUNLQUdFX0FVRlNfU0VSSUVTKS1rYnVpbGQucGF0Y2ggXAo+IC0JCWF1ZnMkKEJSMl9QQUNLQUdF
-X0FVRlNfU0VSSUVTKS1iYXNlLnBhdGNoIFwKPiAtCQlhdWZzJChCUjJfUEFDS0FHRV9BVUZTX1NF
-UklFUyktbW1hcC5wYXRjaCBcCj4gLQkJYXVmcyQoQlIyX1BBQ0tBR0VfQVVGU19TRVJJRVMpLXN0
-YW5kYWxvbmUucGF0Y2gKPiAtCWNwIC1yICQoQVVGU19ESVIpL2ZzL2F1ZnMvICQoQEQpL2ZzLwo+
-IC0JY3AgJChBVUZTX0RJUikvaW5jbHVkZS91YXBpL2xpbnV4L2F1ZnNfdHlwZS5oICQoQEQpL2lu
-Y2x1ZGUvdWFwaS9saW51eC8KPiAtZW5kZWYKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9Db25maWcu
-aW4gYi9wYWNrYWdlL0NvbmZpZy5pbgo+IGluZGV4IGMyMjk3ODQwOGMuLjYxMzFiYjMzNDQgMTAw
-NjQ0Cj4gLS0tIGEvcGFja2FnZS9Db25maWcuaW4KPiArKysgYi9wYWNrYWdlL0NvbmZpZy5pbgo+
-IEBAIC0yMDgsOCArMjA4LDYgQEAgZW5kbWVudQo+ICAKPiAgbWVudSAiRmlsZXN5c3RlbSBhbmQg
-Zmxhc2ggdXRpbGl0aWVzIgo+ICAJc291cmNlICJwYWNrYWdlL2Fib290aW1nL0NvbmZpZy5pbiIK
-PiAtCXNvdXJjZSAicGFja2FnZS9hdWZzL0NvbmZpZy5pbiIKPiAtCXNvdXJjZSAicGFja2FnZS9h
-dWZzLXV0aWwvQ29uZmlnLmluIgo+ICAJc291cmNlICJwYWNrYWdlL2F1dG9mcy9Db25maWcuaW4i
-Cj4gIAlzb3VyY2UgInBhY2thZ2UvYm1hcC10b29scy9Db25maWcuaW4iCj4gIAlzb3VyY2UgInBh
-Y2thZ2UvYm1hcC13cml0ZXIvQ29uZmlnLmluIgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2F1ZnMt
-dXRpbC8wMDAxLXJlbW92ZS11c2VyLXNldHRpbmdzLnBhdGNoIGIvcGFja2FnZS9hdWZzLXV0aWwv
-MDAwMS1yZW1vdmUtdXNlci1zZXR0aW5ncy5wYXRjaAo+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0
-NAo+IGluZGV4IDdlZWJjOTVkZDQuLjAwMDAwMDAwMDAKPiAtLS0gYS9wYWNrYWdlL2F1ZnMtdXRp
-bC8wMDAxLXJlbW92ZS11c2VyLXNldHRpbmdzLnBhdGNoCj4gKysrIC9kZXYvbnVsbAo+IEBAIC0x
-LDE2ICswLDAgQEAKPiAtaW5zdGFsbDogZHJvcCBzZXR0aW5nIG93bmVyc2hpcAo+IC0KPiAtU2ln
-bmVkLW9mZi1ieTogIllhbm4gRS4gTU9SSU4iIDx5YW5uLm1vcmluLjE5OThAZnJlZS5mcj4KPiAt
-Cj4gLWRpZmYgLS1naXQgYS9NYWtlZmlsZSBiL01ha2VmaWxlCj4gLS0tLSBhL01ha2VmaWxlCj4g
-LSsrKyBiL01ha2VmaWxlCj4gLUBAIC0yMSw3ICsyMSw3IEBACj4gLSBvdmVycmlkZSBDUFBGTEFH
-UyArPSAtREFVRkhTTV9DTUQ9XCIvdXNyL2Jpbi9hdWZoc21cIgo+IC0gb3ZlcnJpZGUgQ0ZMQUdT
-ICs9IC1PIC1XYWxsCj4gLSBJTlNUQUxMID89IGluc3RhbGwKPiAtLUluc3RhbGwgPSAke0lOU1RB
-TEx9IC1vIHJvb3QgLWcgcm9vdCAtcAo+IC0rSW5zdGFsbCA9ICR7SU5TVEFMTH0gLXAKPiAtIE1h
-bkRpciA9IC91c3Ivc2hhcmUvbWFuCj4gLSAKPiAtICMKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9h
-dWZzLXV0aWwvMDAwMi1uby1jaGVjay12ZXIucGF0Y2ggYi9wYWNrYWdlL2F1ZnMtdXRpbC8wMDAy
-LW5vLWNoZWNrLXZlci5wYXRjaAo+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDVm
-ZTY5MjA3MmYuLjAwMDAwMDAwMDAKPiAtLS0gYS9wYWNrYWdlL2F1ZnMtdXRpbC8wMDAyLW5vLWNo
-ZWNrLXZlci5wYXRjaAo+ICsrKyAvZGV2L251bGwKPiBAQCAtMSwyNCArMCwwIEBACj4gLU1ha2Vm
-aWxlOiBkbyBub3QgY2hlY2sgdmVyc2lvbgo+IC0KPiAtVGhlIGF1ZnMtdXRpbCBwYWNrYWdlIHRy
-aWVzIHRvIGVuc3VyZSB0aGF0IGl0cyB2ZXJzaW9uIGlzIGNvbXBhdGlibGUKPiAtd2l0aCB0aGUg
-b25lIGluIHRoZSBydW5uaW5nIGtlcm5lbC4gSG93ZXZlciwgdGhpcyB0ZXN0IGlzIGZsYXdlZDog
-dGhlCj4gLXZlcnNpb24gc3RyaW5nIGluIHRoZSBhdWZzNHggYnJhbmNoIGZvciBhdWZzLXV0aWwg
-aXMgYXVmczMueCwgc28gaXQgZG9lcwo+IC1ub3QgbWF0Y2ggdGhlIHZlcnNpb24gaW4gdGhlIGtl
-cm5lbCB3aGVuIGl0IGlzIGF1ZnM0LnguCj4gLQo+IC1EaXNlbmdhZ2UgdGhpcyBjaGVjaywgaW9u
-IHRoZSBhc3N1bXB0aW9uIHRoZSB1c2VyIGtub3dzIHdoYXQgaGUgaXMKPiAtZG9pbmcuCj4gLQo+
-IC1TaWduZWQtb2ZmLWJ5OiAiWWFubiBFLiBNT1JJTiIgPHlhbm4ubW9yaW4uMTk5OEBmcmVlLmZy
-Pgo+IC0KPiAtZGlmZiAtLWdpdCBhL01ha2VmaWxlIGIvTWFrZWZpbGUKPiAtLS0tIGEvTWFrZWZp
-bGUKPiAtKysrIGIvTWFrZWZpbGUKPiAtQEAgLTYyLDcgKzYyLDcgQEAKPiAtICQoZm9yZWFjaCB2
-LCBDUFBGTEFHUyBDRkxBR1MgSU5TVEFMTCBJbnN0YWxsIE1hbkRpciBMaWJVdGlsSGRyLCBcCj4g
-LSAJJChldmFsIE1BS0UgKz0gJHt2fT0iJCR7JHt2fX0iKSkKPiAtIAo+IC0tYWxsOiB2ZXJfdGVz
-dCAke01hbn0gJHtCaW59ICR7RXRjfQo+IC0rYWxsOiAke01hbn0gJHtCaW59ICR7RXRjfQo+IC0g
-CSR7TUFLRX0gLUMgbGliYXUgJEAKPiAtIAlsbiAtc2YgLi9saWJhdS9saWJhdSouc28gLgo+IC0g
-CSQoY2FsbCBNYWtlRkhTTSwgJEApCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvYXVmcy11dGlsLzAw
-MDMtbm8tc3RyaXAtbGliLnBhdGNoIGIvcGFja2FnZS9hdWZzLXV0aWwvMDAwMy1uby1zdHJpcC1s
-aWIucGF0Y2gKPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAxNTgzMDUwM2I1Li4w
-MDAwMDAwMDAwCj4gLS0tIGEvcGFja2FnZS9hdWZzLXV0aWwvMDAwMy1uby1zdHJpcC1saWIucGF0
-Y2gKPiArKysgL2Rldi9udWxsCj4gQEAgLTEsMTggKzAsMCBAQAo+IC1pbnN0YWxsOiBkbyBub3Qg
-c3RyaXAgbGlicyB3aGVuIGluc3RhbGxpbmcKPiAtCj4gLVdlIHdhbnQgdW5zdHJpcHBlZCBiaW5h
-cmllcyBpbiBzdGFnaW5nOyBzdHJpcHBpbmcgaXMgZG9uZSBieSBCdWlsZHJvb3QKPiAtYXMgYSB3
-aG9sZSBpbiB0YXJnZXQtZmluYWxpemUgaWYgbmVlZGVkLCBhbnl3YXkuCj4gLQo+IC1TaWduZWQt
-b2ZmLWJ5OiAiWWFubiBFLiBNT1JJTiIgPHlhbm4ubW9yaW4uMTk5OEBmcmVlLmZyPgo+IC0KPiAt
-ZGlmZiAtLWdpdCBhL2xpYmF1L01ha2VmaWxlIGIvbGliYXUvTWFrZWZpbGUKPiAtLS0tIGEvbGli
-YXUvTWFrZWZpbGUKPiAtKysrIGIvbGliYXUvTWFrZWZpbGUKPiAtQEAgLTM3LDcgKzM3LDYgQEAK
-PiAtIAlsbiAtc2YgJDwgJEAKPiAtICR7TGliU299LiR7TGliU29NYWpvcn06ICR7TGliU299LiR7
-TGliU29NYWpvcn0uJHtMaWJTb01pbm9yfQo+IC0gCWxuIC1zZiAkPCAkQAo+IC0tJHtMaWJTb30u
-JHtMaWJTb01ham9yfS4ke0xpYlNvTWlub3J9OiBvdmVycmlkZSBMREZMQUdTICs9IC1zCj4gLSAk
-e0xpYlNvfS4ke0xpYlNvTWFqb3J9LiR7TGliU29NaW5vcn06IG92ZXJyaWRlIExETElCUyArPSAt
-bGRsIC1scHRocmVhZAo+IC0gJHtMaWJTb30uJHtMaWJTb01ham9yfS4ke0xpYlNvTWlub3J9OiAk
-e0xpYlNvT2JqfQo+IC0gCSR7Q0N9IC0tc2hhcmVkIC1XbCwtc29uYW1lLCR7TGliU299LiR7TGli
-U29NYWpvcn0gJHtMREZMQUdTfSBcCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvYXVmcy11dGlsL0Nv
-bmZpZy5pbiBiL3BhY2thZ2UvYXVmcy11dGlsL0NvbmZpZy5pbgo+IGRlbGV0ZWQgZmlsZSBtb2Rl
-IDEwMDY0NAo+IGluZGV4IGE0MjYzNDNmZDMuLjAwMDAwMDAwMDAKPiAtLS0gYS9wYWNrYWdlL2F1
-ZnMtdXRpbC9Db25maWcuaW4KPiArKysgL2Rldi9udWxsCj4gQEAgLTEsMzYgKzAsMCBAQAo+IC1j
-b21tZW50ICJhdWZzLXV0aWwgbmVlZHMgYSBsaW51eCBrZXJuZWwgYW5kIGEgdG9vbGNoYWluIHcv
-IHRocmVhZHMiCj4gLQlkZXBlbmRzIG9uIEJSMl9VU0VfTU1VCj4gLQlkZXBlbmRzIG9uICFCUjJf
-TElOVVhfS0VSTkVMIHx8ICFCUjJfVE9PTENIQUlOX0hBU19USFJFQURTCj4gLQo+IC1jb25maWcg
-QlIyX1BBQ0tBR0VfQVVGU19VVElMCj4gLQlib29sICJhdWZzLXV0aWwiCj4gLQlkZXBlbmRzIG9u
-IEJSMl9VU0VfTU1VCj4gLQlkZXBlbmRzIG9uIEJSMl9MSU5VWF9LRVJORUwKPiAtCWRlcGVuZHMg
-b24gQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUwo+IC0JaGVscAo+IC0JICBBdWZzIGNvbW1hbmQg
-bGluZSB1dGlsaXRpZXMuCj4gLQo+IC0JICBOZWVkcyBhIGtlcm5lbCB3aXRoIGF1ZnMgc3VwcG9y
-dC4gQSBrZXJuZWwKPiAtCSAgZXh0ZW5zaW9uIHBhY2thZ2UgaXMgYXZhaWxhYmxlLgo+IC0KPiAt
-CSAgaHR0cDovL3NvdXJjZWZvcmdlLm5ldC9wL2F1ZnMvYXVmcy11dGlsLwo+IC0KPiAtaWYgQlIy
-X1BBQ0tBR0VfQVVGU19VVElMCj4gLQo+IC1jb25maWcgQlIyX1BBQ0tBR0VfQVVGU19VVElMX1ZF
-UlNJT04KPiAtCXN0cmluZyAiYXVmcy11dGlsIHZlcnNpb24iCj4gLQlkZWZhdWx0ICIiCj4gLQlo
-ZWxwCj4gLQkgIFRoZSB2ZXJzaW9uIHlvdSBjaG9vc2UgbXVzdCBtYXRjaCB0aGF0IG9mIHRoZSBh
-dWZzIHN1cHBvcnQKPiAtCSAgaW4geW91ciBrZXJuZWwuIFVzdWFsbHksIHRoaXMgaXMgYXVmczMu
-eCBmb3IgMy54IGtlcm5lbHMgYW5kCj4gLQkgIGF1ZnM0LnggZm9yIDQueCBrZXJuZWxzLgo+IC0K
-PiAtCSAgVXN1YWxseSwgdGhlIHNoYTEgb2YgdGhlIGNzZXQgeW91IHdhbnQgdG8gdXNlOyBhdm9p
-ZCB1c2luZyBhCj4gLQkgIGJyYW5jaCBuYW1lIGFzIHRoaXMgeWllbGRzIG5vbi1yZXByb2R1Y2li
-bGUgYnVpbGRzLgo+IC0KPiAtCSAgU2VlIHRoZSBmb2xsb3dpbmcgcmVzb3VyY2VzIHRvIHNlZSB3
-aGF0IHZlcnNpb25zIGFyZQo+IC0JICBhdmFpbGFibGU6Cj4gLQo+IC0JICBodHRwczovL3NvdXJj
-ZWZvcmdlLm5ldC9wL2F1ZnMvYXVmcy11dGlsL2NpL21hc3Rlci90cmVlLwo+IC0KPiAtZW5kaWYK
-PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9hdWZzLXV0aWwvYXVmcy11dGlsLm1rIGIvcGFja2FnZS9h
-dWZzLXV0aWwvYXVmcy11dGlsLm1rCj4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXgg
-MzJmM2JjYTE1MS4uMDAwMDAwMDAwMAo+IC0tLSBhL3BhY2thZ2UvYXVmcy11dGlsL2F1ZnMtdXRp
-bC5tawo+ICsrKyAvZGV2L251bGwKPiBAQCAtMSw1OSArMCwwIEBACj4gLSMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjCj4gLSMKPiAtIyBhdWZzLXV0aWwKPiAtIwo+IC0jIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIwo+IC0KPiAtIyBsaW51eC1oZWFkZXJzCj4gLUFVRlNfVVRJTF9WRVJTSU9OID0gJChjYWxs
-IHFzdHJpcCwkKEJSMl9QQUNLQUdFX0FVRlNfVVRJTF9WRVJTSU9OKSkKPiAtQVVGU19VVElMX1NJ
-VEUgPSBodHRwczovL2dpdC5jb2RlLnNmLm5ldC9wL2F1ZnMvYXVmcy11dGlsCj4gLUFVRlNfVVRJ
-TF9TSVRFX01FVEhPRCA9IGdpdAo+IC1BVUZTX1VUSUxfTElDRU5TRSA9IEdQTC0yLjAKPiAtQVVG
-U19VVElMX0xJQ0VOU0VfRklMRVMgPSBDT1BZSU5HCj4gLQo+IC1BVUZTX1VUSUxfREVQRU5ERU5D
-SUVTID0gbGludXgKPiAtCj4gLSMgQnVpbGRpbmcgYXVmcy11dGlsIHJlcXVpcmVzIGFjY2VzcyB0
-byB0aGUga2VybmVsIGhlYWRlcnMgb2YgYXVmcywKPiAtIyB3aGljaCBhcmUgb25seSBhdmFpbGFi
-bGUgaW4gdGhlIGtlcm5lbCBidWlsZCBkaXJlY3RvcnksIHdoaWNoIGlzIHdoeQo+IC0jIHdlIGFk
-ZCAtSSQoTElOVVhfRElSKS9pbmNsdWRlL3VhcGkuIFRoZXNlIGhlYWRlcnMgaGF2ZSBub3QgYmVl
-bgo+IC0jIHByZXBhcmVkIGZvciB1c2FnZSBieSB1c2Vyc3BhY2UsIHNvIHRvIHdvcmthcm91bmQg
-dGhpcyB3ZSBoYXZlIHRvCj4gLSMgZGVmaW5lZCB0aGUgIl9fdXNlciIgbWFjcm8gYXMgZW1wdHku
-Cj4gLUFVRlNfVVRJTF9IT1NUX0NQUEZMQUdTID0gXAo+IC0JJChIT1NUX0NQUEZMQUdTKSBcCj4g
-LQktSSQoTElOVVhfRElSKS9pbmNsdWRlL3VhcGkgXAo+IC0JLURfX3VzZXI9Cj4gLQo+IC1BVUZT
-X1VUSUxfQ1BQRkxBR1MgPSBcCj4gLQkkKFRBUkdFVF9DUFBGTEFHUykgXAo+IC0JLUkkKExJTlVY
-X0RJUikvaW5jbHVkZS91YXBpIFwKPiAtCS1EX191c2VyPQo+IC0KPiAtIyByZHU2NCBpcyBzdXBw
-b3NlZCB0byBwcm92aWRlIHRoZSBMRlMgdmFyaWFudCBvZiByZWFkZGlyKCksCj4gLSMgcmVhZGRp
-cjY0KCkuIEhvd2V2ZXIsIGJlY2F1c2UgQnVpbGRyb290IGlzIGFsd2F5cyBMRlMtZW5hYmxlZCwK
-PiAtIyByZWFkZGlyKCkgaXMgYWx3YXlzIHRoZSBMRlMgdmFyaWFudC4gRHJvcCByZHU2NCBmcm9t
-IHRoZSBidWlsZCwgYXMKPiAtIyBpdCBjYXVzZXMgYnVpbGQgZmFpbHVyZXMgZHVlIHRvIG11bHRp
-cGxlIGltcGxlbWVudGF0aW9ucyBvZgo+IC0jIHJlYWRkaXI2NCgpLgo+IC1kZWZpbmUgQVVGU19V
-VElMX1JFTU9WRV9SRFU2NAo+IC0JJChTRUQpICdzJSByZHU2NC5vJSUnICQoQEQpL2xpYmF1L01h
-a2VmaWxlCj4gLWVuZGVmCj4gLQo+IC1BVUZTX1VUSUxfUE9TVF9QQVRDSF9IT09LUyArPSBBVUZT
-X1VUSUxfUkVNT1ZFX1JEVTY0Cj4gLQo+IC0jIEZpcnN0LCB3ZSBidWlsZCB0aGUgaG9zdCB0b29s
-cywgbmVlZGVkIHRvIGJ1aWxkIHRoZSB0YXJnZXQgdG9vbHMuCj4gLWRlZmluZSBBVUZTX1VUSUxf
-QlVJTERfQ01EUwo+IC0JJChIT1NUX01BS0VfRU5WKSAkKE1BS0UpIC1DICQoQEQpIFwKPiAtCQkk
-KEhPU1RfQ09ORklHVVJFX09QVFMpIFwKPiAtCQlDUFBGTEFHUz0iJChBVUZTX1VUSUxfSE9TVF9D
-UFBGTEFHUykiIFwKPiAtCQlIT1NUQ0M9IiQoSE9TVENDKSIgSE9TVExEPSIkKEhPU1RMRCkiIFwK
-PiAtCQlJTlNUQUxMPSIkKElOU1RBTEwpIiBjMnNoIGMydG1hYwo+IC0JJChUQVJHRVRfTUFLRV9F
-TlYpICQoTUFLRTEpIC1DICQoQEQpIFwKPiAtCQkkKFRBUkdFVF9DT05GSUdVUkVfT1BUUykgXAo+
-IC0JCUNQUEZMQUdTPSIkKEFVRlNfVVRJTF9DUFBGTEFHUykiIFwKPiAtCQlJTlNUQUxMPSIkKElO
-U1RBTEwpIiBhbGwKPiAtZW5kZWYKPiAtCj4gLWRlZmluZSBBVUZTX1VUSUxfSU5TVEFMTF9UQVJH
-RVRfQ01EUwo+IC0JJChUQVJHRVRfTUFLRV9FTlYpICQoTUFLRSkgLUMgJChARCkgSU5TVEFMTD0i
-JChJTlNUQUxMKSIgREVTVERJUj0iJChUQVJHRVRfRElSKSIgaW5zdGFsbAo+IC1lbmRlZgo+IC0K
-PiAtJChldmFsICQoZ2VuZXJpYy1wYWNrYWdlKSkKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9hdWZz
-L0NvbmZpZy5pbiBiL3BhY2thZ2UvYXVmcy9Db25maWcuaW4KPiBkZWxldGVkIGZpbGUgbW9kZSAx
-MDA2NDQKPiBpbmRleCBjYzVmZjM2NWZlLi4wMDAwMDAwMDAwCj4gLS0tIGEvcGFja2FnZS9hdWZz
-L0NvbmZpZy5pbgo+ICsrKyAvZGV2L251bGwKPiBAQCAtMSwxNiArMCwwIEBACj4gLSMgQXV0b21h
-dGljYWxseSBzZWxlY3RlZCBieSB0aGUgY29ycmVzcG9uZGluZyBsaW51eCBleHRlbnNpb24KPiAt
-Y29uZmlnIEJSMl9QQUNLQUdFX0FVRlMKPiAtCWJvb2wKPiAtCj4gLWlmIEJSMl9QQUNLQUdFX0FV
-RlMKPiAtCj4gLSMgQm90aCBjb21lIGZyb20gdGhlIHNlbGVjdGlvbiBvZiB0aGUgbGludXggZXh0
-ZW5zaW9uLgo+IC1jb25maWcgQlIyX1BBQ0tBR0VfQVVGU19TRVJJRVMKPiAtCWludAo+IC0JZGVm
-YXVsdCBCUjJfTElOVVhfS0VSTkVMX0VYVF9BVUZTX1NFUklFUwo+IC0KPiAtY29uZmlnIEJSMl9Q
-QUNLQUdFX0FVRlNfVkVSU0lPTgo+IC0Jc3RyaW5nCj4gLQlkZWZhdWx0IEJSMl9MSU5VWF9LRVJO
-RUxfRVhUX0FVRlNfVkVSU0lPTgo+IC0KPiAtZW5kaWYKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9h
-dWZzL2F1ZnMubWsgYi9wYWNrYWdlL2F1ZnMvYXVmcy5tawo+IGRlbGV0ZWQgZmlsZSBtb2RlIDEw
-MDY0NAo+IGluZGV4IGQwMGU3YTFhMjEuLjAwMDAwMDAwMDAKPiAtLS0gYS9wYWNrYWdlL2F1ZnMv
-YXVmcy5tawo+ICsrKyAvZGV2L251bGwKPiBAQCAtMSwyNCArMCwwIEBACj4gLSMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjCj4gLSMKPiAtIyBhdWZzCj4gLSMKPiAtIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMKPiAtCj4gLUFVRlNfVkVSU0lPTiA9ICQoY2FsbCBxc3RyaXAsJChCUjJfUEFDS0FHRV9BVUZT
-X1ZFUlNJT04pKQo+IC1BVUZTX0xJQ0VOU0UgPSBHUEwtMi4wCj4gLUFVRlNfTElDRU5TRV9GSUxF
-UyA9IENPUFlJTkcKPiAtCj4gLWlmZXEgKCQoQlIyX1BBQ0tBR0VfQVVGU19TRVJJRVMpLDMpCj4g
-LUFVRlNfU0lURSA9IGh0dHBzOi8vZ2l0LmNvZGUuc2YubmV0L3AvYXVmcy9hdWZzMy1zdGFuZGFs
-b25lCj4gLUFVRlNfU0lURV9NRVRIT0QgPSBnaXQKPiAtZWxzZSBpZmVxICgkKEJSMl9QQUNLQUdF
-X0FVRlNfU0VSSUVTKSw0KQo+IC1BVUZTX1NJVEUgPSAkKGNhbGwgZ2l0aHViLHNmanJvLGF1ZnM0
-LXN0YW5kYWxvbmUsJChBVUZTX1ZFUlNJT04pKQo+IC1lbHNlIGlmZXEgKCQoQlIyX1BBQ0tBR0Vf
-QVVGU19TRVJJRVMpLDUpCj4gLUFVRlNfU0lURSA9ICQoY2FsbCBnaXRodWIsc2Zqcm8sYXVmczUt
-c3RhbmRhbG9uZSwkKEFVRlNfVkVSU0lPTikpCj4gLWVuZGlmCj4gLQo+IC1pZmVxICgkKEJSX0JV
-SUxESU5HKTokKEJSMl9QQUNLQUdFX0FVRlMpOiQoQVVGU19WRVJTSU9OKSx5Onk6KQo+IC0kKGVy
-cm9yIE5vIGF1ZnMgdmVyc2lvbiBzcGVjaWZpZWQpCj4gLWVuZGlmCj4gLQo+IC0kKGV2YWwgJChn
-ZW5lcmljLXBhY2thZ2UpKQo+IGRpZmYgLS1naXQgYS91dGlscy9jaGVja3BhY2thZ2VsaWIvdGVz
-dF9saWJfbWsucHkgYi91dGlscy9jaGVja3BhY2thZ2VsaWIvdGVzdF9saWJfbWsucHkKPiBpbmRl
-eCBjODZjNTViOWNiLi4zZjk3YzI1YjJkIDEwMDY0NAo+IC0tLSBhL3V0aWxzL2NoZWNrcGFja2Fn
-ZWxpYi90ZXN0X2xpYl9tay5weQo+ICsrKyBiL3V0aWxzL2NoZWNrcGFja2FnZWxpYi90ZXN0X2xp
-Yl9tay5weQo+IEBAIC03NSw5ICs3NSw2IEBAIGRlZiB0ZXN0X0lmZGVmKHRlc3RuYW1lLCBmaWxl
-bmFtZSwgc3RyaW5nLCBleHBlY3RlZCk6Cj4gIAo+ICAKPiAgZ2V0X3BhY2thZ2VfcHJlZml4X2Zy
-b21fZmlsZW5hbWUgPSBbCj4gLSAgICAoJ2xpbnV4IGV4dGVuc2lvbicsCj4gLSAgICAgJ2xpbnV4
-L2xpbnV4LWV4dC1hdWZzLm1rJywKPiAtICAgICBbJ2F1ZnMnLCAnQVVGUyddKSwKPiAgICAgICgn
-bGludXggdG9vbCcsCj4gICAgICAgJ3BhY2thZ2UvbGludXgtdG9vbHMvbGludXgtdG9vbC1ncGlv
-Lm1rLmluJywKPiAgICAgICBbJ2dwaW8nLCAnR1BJTyddKSwKPiBkaWZmIC0tZ2l0IGEvdXRpbHMv
-Z2VucmFuZGNvbmZpZyBiL3V0aWxzL2dlbnJhbmRjb25maWcKPiBpbmRleCA2N2YwZWE5ZjczLi4z
-MWJlY2UwY2E4IDEwMDc1NQo+IC0tLSBhL3V0aWxzL2dlbnJhbmRjb25maWcKPiArKysgYi91dGls
-cy9nZW5yYW5kY29uZmlnCj4gQEAgLTE0OSw5ICsxNDksNiBAQCBhc3luYyBkZWYgZml4dXBfY29u
-ZmlnKHN5c2luZm8sIGNvbmZpZ2ZpbGUpOgo+ICAgICAgICAgIGNvbmZpZ2xpbmVzLnJlbW92ZSgn
-QlIyX1RPT0xDSEFJTl9CQVJFX01FVEFMX0JVSUxEUk9PVF9BUkNIPSIiXG4nKQo+ICAgICAgICAg
-IGNvbmZpZ2xpbmVzLmFwcGVuZCgnQlIyX1RPT0xDSEFJTl9CQVJFX01FVEFMX0JVSUxEUk9PVF9B
-UkNIPSJtaWNyb2JsYXplZWwteGlsaW54LWVsZiJcbicpCj4gIAo+IC0gICAgaWYgJ0JSMl9QQUNL
-QUdFX0FVRlNfVVRJTD15XG4nIGluIGNvbmZpZ2xpbmVzIGFuZCBcCj4gLSAgICAgICAnQlIyX1BB
-Q0tBR0VfQVVGU19VVElMX1ZFUlNJT049IiJcbicgaW4gY29uZmlnbGluZXM6Cj4gLSAgICAgICAg
-cmV0dXJuIEZhbHNlCj4gICAgICBpZiAnQlIyX1BBQ0tBR0VfQTEwRElTUD15XG4nIGluIGNvbmZp
-Z2xpbmVzOgo+ICAgICAgICAgIHJldHVybiBGYWxzZQo+ICAKPiBAQCAtMjUyLDExICsyNDksNiBA
-QCBhc3luYyBkZWYgZml4dXBfY29uZmlnKHN5c2luZm8sIGNvbmZpZ2ZpbGUpOgo+ICAgICAgICAg
-J0JSMl9MSU5VWF9LRVJORUxfSU1BR0VfVEFSR0VUX0NVU1RPTT15XG4nIGluIGNvbmZpZ2xpbmVz
-Ogo+ICAgICAgICAgIGNvbmZpZ2xpbmVzLnJlbW92ZSgnQlIyX0xJTlVYX0tFUk5FTF9JTUFHRV9U
-QVJHRVRfQ1VTVE9NPXknKQo+ICAKPiAtICAgIGlmICdCUjJfTElOVVhfS0VSTkVMX0VYVF9BVUZT
-PXlcbicgaW4gY29uZmlnbGluZXMgYW5kIFwKPiAtICAgICAgICdCUjJfTElOVVhfS0VSTkVMX0VY
-VF9BVUZTX1ZFUlNJT049IiJcbicgaW4gY29uZmlnbGluZXM6Cj4gLSAgICAgICAgY29uZmlnbGlu
-ZXMucmVtb3ZlKCdCUjJfTElOVVhfS0VSTkVMX0VYVF9BVUZTPXlcbicpCj4gLSAgICAgICAgY29u
-ZmlnbGluZXMucmVtb3ZlKCdCUjJfTElOVVhfS0VSTkVMX0VYVF9BVUZTX1ZFUlNJT049IiJcbicp
-Cj4gLQo+ICAgICAgaWYgJ0JSMl9QQUNLQUdFX0xJTlVYX0JBQ0tQT1JUUz15XG4nIGluIGNvbmZp
-Z2xpbmVzIGFuZCBcCj4gICAgICAgICAnQlIyX1BBQ0tBR0VfTElOVVhfQkFDS1BPUlRTX1VTRV9D
-VVNUT01fQ09ORklHPXlcbicgaW4gY29uZmlnbGluZXMgYW5kIFwKPiAgICAgICAgICdCUjJfUEFD
-S0FHRV9MSU5VWF9CQUNLUE9SVFNfQ1VTVE9NX0NPTkZJR19GSUxFPSIiXG4nIGluIGNvbmZpZ2xp
-bmVzOgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
-bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
-LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=72c95d947f46eaffc1ff33ef1b59017ba9b316cc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Remove support for aufs, as it is outdated and unmaintained in Buildroot.
+Users are encouraged to use overlayfs in place of aufs.
+
+This patch removes support for aufs package providing sources for
+the kernel extension, the related Buildroot kernel extension configuration,
+as well as the userspace utilities.
+
+This also allows to remove some special cases in configuration utilities.
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+[Romain: fix legacy handling text]
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ .checkpackageignore                               |  3 --
+ Config.in.legacy                                  | 13 +++++
+ linux/Config.ext.in                               | 62 -----------------------
+ linux/linux-ext-aufs.mk                           | 21 --------
+ package/Config.in                                 |  2 -
+ package/aufs-util/0001-remove-user-settings.patch | 16 ------
+ package/aufs-util/0002-no-check-ver.patch         | 24 ---------
+ package/aufs-util/0003-no-strip-lib.patch         | 18 -------
+ package/aufs-util/Config.in                       | 36 -------------
+ package/aufs-util/aufs-util.mk                    | 59 ---------------------
+ package/aufs/Config.in                            | 16 ------
+ package/aufs/aufs.mk                              | 24 ---------
+ utils/checkpackagelib/test_lib_mk.py              |  3 --
+ utils/genrandconfig                               |  8 ---
+ 14 files changed, 13 insertions(+), 292 deletions(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 426d112c14..23b7e734d9 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -234,9 +234,6 @@ package/asterisk/0004-install-samples-need-the-data-files.patch lib_patch.Upstre
+ package/at/0001-Makefile.in-fix-make-install-for-non-root-don-t-stri.patch lib_patch.Upstream
+ package/at/S99at lib_sysv.Indent lib_sysv.Variables
+ package/attr/0001-build-with-older-GCCs.patch lib_patch.Upstream
+-package/aufs-util/0001-remove-user-settings.patch lib_patch.Upstream
+-package/aufs-util/0002-no-check-ver.patch lib_patch.Upstream
+-package/aufs-util/0003-no-strip-lib.patch lib_patch.Upstream
+ package/aumix/0001-fix-incorrect-makefile-am.patch lib_patch.Upstream
+ package/autoconf/0001-dont-add-dirty-to-version.patch lib_patch.Upstream
+ package/automake/0001-noman.patch lib_patch.Upstream
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 181ec4b3b1..895e42fc30 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,19 @@ endif
+ 
+ comment "Legacy options removed in 2025.11"
+ 
++config BR2_LINUX_KERNEL_EXT_AUFS
++	bool "Aufs Filesystem Module patch has been removed"
++	select BR2_LEGACY
++	help
++	  aufs kernel module patch is unmaintained and has been
++	  removed.
++
++config BR2_PACKAGE_AUFS_UTIL
++	bool "aufs-util has been removed"
++	select BR2_LEGACY
++	help
++	  aufs-util package is unmaintained and has been removed.
++
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
+ 	bool "Linaro armeb 2018.05 external toolchain is deprecated"
+ 	select BR2_LEGACY
+diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+index 229d6b8c76..e1d99426ff 100644
+--- a/linux/Config.ext.in
++++ b/linux/Config.ext.in
+@@ -76,68 +76,6 @@ config BR2_LINUX_KERNEL_EXT_FBTFT
+ 
+ 	  https://github.com/notro/fbtft
+ 
+-# aufs-standalone
+-config BR2_LINUX_KERNEL_EXT_AUFS
+-	bool "Aufs Filesystem Module patch"
+-	select BR2_PACKAGE_AUFS
+-	help
+-	  Aufs is split in two parts: a kernel part and a userspace
+-	  part. Enabling this option automatically selects the aufs
+-	  standalone (module) package and patches the Linux kernel
+-	  built by Buildroot with the aufs kernel part (ie fs/aufs).
+-
+-	  It is important to use the correct branch of aufs-standalone.
+-
+-if BR2_LINUX_KERNEL_EXT_AUFS
+-
+-choice
+-	bool "aufs-standalone series"
+-	help
+-	  Select the major series of this version. This must match the
+-	  major version of your kernel (e.g. for kernels 3.x, select
+-	  aufs3.x; for kernels 4.x, select aufs4.x; for kernels 5.x,
+-	  select aufs5.x ).
+-
+-	  Note: neither aufs1.x nor aufs2.x (both for kernels older than
+-	  3.x) are supported.
+-
+-config BR2_LINUX_KERNEL_EXT_AUFS_SERIES_3
+-	bool "aufs3.x"
+-
+-config BR2_LINUX_KERNEL_EXT_AUFS_SERIES_4
+-	bool "aufs4.x"
+-
+-config BR2_LINUX_KERNEL_EXT_AUFS_SERIES_5
+-	bool "aufs5.x"
+-
+-endchoice
+-
+-config BR2_LINUX_KERNEL_EXT_AUFS_SERIES
+-	int
+-	default 3 if BR2_LINUX_KERNEL_EXT_AUFS_SERIES_3
+-	default 4 if BR2_LINUX_KERNEL_EXT_AUFS_SERIES_4
+-	default 5 if BR2_LINUX_KERNEL_EXT_AUFS_SERIES_5
+-
+-config BR2_LINUX_KERNEL_EXT_AUFS_VERSION
+-	string "aufs-standalone version"
+-	default ""
+-	help
+-	  The version you choose must match that of your kernel.
+-	  Usually, the sha1 of the cset you want to use; avoid using a
+-	  branch name as this yields non-reproducible builds.
+-
+-	  See the following resources to see what versions are
+-	  available:
+-
+-	  For aufs3.x:
+-	  https://sourceforge.net/p/aufs/aufs3-standalone/ref/master/branches/
+-	  For aufs4.x:
+-	  https://github.com/sfjro/aufs4-standalone/branches/all
+-	  For aufs5.x:
+-	  https://github.com/sfjro/aufs5-standalone/branches/all
+-
+-endif # aufs
+-
+ # kernel extensions from br2-external trees, if any
+ source "$BR2_BASE_DIR/.br2-external.in.linux"
+ 
+diff --git a/linux/linux-ext-aufs.mk b/linux/linux-ext-aufs.mk
+deleted file mode 100644
+index d4bbb07196..0000000000
+--- a/linux/linux-ext-aufs.mk
++++ /dev/null
+@@ -1,21 +0,0 @@
+-################################################################################
+-#
+-# Patch the linux kernel with aufs extension
+-#
+-################################################################################
+-
+-LINUX_EXTENSIONS += aufs
+-
+-define AUFS_PREPARE_KERNEL
+-	if test -d $(@D)/fs/aufs/; then \
+-		echo "Your kernel already supports AUFS."; \
+-		exit 1; \
+-	fi
+-	$(APPLY_PATCHES) $(@D) $(AUFS_DIR) \
+-		aufs$(BR2_PACKAGE_AUFS_SERIES)-kbuild.patch \
+-		aufs$(BR2_PACKAGE_AUFS_SERIES)-base.patch \
+-		aufs$(BR2_PACKAGE_AUFS_SERIES)-mmap.patch \
+-		aufs$(BR2_PACKAGE_AUFS_SERIES)-standalone.patch
+-	cp -r $(AUFS_DIR)/fs/aufs/ $(@D)/fs/
+-	cp $(AUFS_DIR)/include/uapi/linux/aufs_type.h $(@D)/include/uapi/linux/
+-endef
+diff --git a/package/Config.in b/package/Config.in
+index 5ac6dc6972..6b4eb7d15a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -208,8 +208,6 @@ endmenu
+ 
+ menu "Filesystem and flash utilities"
+ 	source "package/abootimg/Config.in"
+-	source "package/aufs/Config.in"
+-	source "package/aufs-util/Config.in"
+ 	source "package/autofs/Config.in"
+ 	source "package/bmap-tools/Config.in"
+ 	source "package/bmap-writer/Config.in"
+diff --git a/package/aufs-util/0001-remove-user-settings.patch b/package/aufs-util/0001-remove-user-settings.patch
+deleted file mode 100644
+index 7eebc95dd4..0000000000
+--- a/package/aufs-util/0001-remove-user-settings.patch
++++ /dev/null
+@@ -1,16 +0,0 @@
+-install: drop setting ownership
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-
+-diff --git a/Makefile b/Makefile
+---- a/Makefile
+-+++ b/Makefile
+-@@ -21,7 +21,7 @@
+- override CPPFLAGS += -DAUFHSM_CMD=\"/usr/bin/aufhsm\"
+- override CFLAGS += -O -Wall
+- INSTALL ?= install
+--Install = ${INSTALL} -o root -g root -p
+-+Install = ${INSTALL} -p
+- ManDir = /usr/share/man
+- 
+- #
+diff --git a/package/aufs-util/0002-no-check-ver.patch b/package/aufs-util/0002-no-check-ver.patch
+deleted file mode 100644
+index 5fe692072f..0000000000
+--- a/package/aufs-util/0002-no-check-ver.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-Makefile: do not check version
+-
+-The aufs-util package tries to ensure that its version is compatible
+-with the one in the running kernel. However, this test is flawed: the
+-version string in the aufs4x branch for aufs-util is aufs3.x, so it does
+-not match the version in the kernel when it is aufs4.x.
+-
+-Disengage this check, ion the assumption the user knows what he is
+-doing.
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-
+-diff --git a/Makefile b/Makefile
+---- a/Makefile
+-+++ b/Makefile
+-@@ -62,7 +62,7 @@
+- $(foreach v, CPPFLAGS CFLAGS INSTALL Install ManDir LibUtilHdr, \
+- 	$(eval MAKE += ${v}="$${${v}}"))
+- 
+--all: ver_test ${Man} ${Bin} ${Etc}
+-+all: ${Man} ${Bin} ${Etc}
+- 	${MAKE} -C libau $@
+- 	ln -sf ./libau/libau*.so .
+- 	$(call MakeFHSM, $@)
+diff --git a/package/aufs-util/0003-no-strip-lib.patch b/package/aufs-util/0003-no-strip-lib.patch
+deleted file mode 100644
+index 15830503b5..0000000000
+--- a/package/aufs-util/0003-no-strip-lib.patch
++++ /dev/null
+@@ -1,18 +0,0 @@
+-install: do not strip libs when installing
+-
+-We want unstripped binaries in staging; stripping is done by Buildroot
+-as a whole in target-finalize if needed, anyway.
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-
+-diff --git a/libau/Makefile b/libau/Makefile
+---- a/libau/Makefile
+-+++ b/libau/Makefile
+-@@ -37,7 +37,6 @@
+- 	ln -sf $< $@
+- ${LibSo}.${LibSoMajor}: ${LibSo}.${LibSoMajor}.${LibSoMinor}
+- 	ln -sf $< $@
+--${LibSo}.${LibSoMajor}.${LibSoMinor}: override LDFLAGS += -s
+- ${LibSo}.${LibSoMajor}.${LibSoMinor}: override LDLIBS += -ldl -lpthread
+- ${LibSo}.${LibSoMajor}.${LibSoMinor}: ${LibSoObj}
+- 	${CC} --shared -Wl,-soname,${LibSo}.${LibSoMajor} ${LDFLAGS} \
+diff --git a/package/aufs-util/Config.in b/package/aufs-util/Config.in
+deleted file mode 100644
+index a426343fd3..0000000000
+--- a/package/aufs-util/Config.in
++++ /dev/null
+@@ -1,36 +0,0 @@
+-comment "aufs-util needs a linux kernel and a toolchain w/ threads"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_LINUX_KERNEL || !BR2_TOOLCHAIN_HAS_THREADS
+-
+-config BR2_PACKAGE_AUFS_UTIL
+-	bool "aufs-util"
+-	depends on BR2_USE_MMU
+-	depends on BR2_LINUX_KERNEL
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	help
+-	  Aufs command line utilities.
+-
+-	  Needs a kernel with aufs support. A kernel
+-	  extension package is available.
+-
+-	  http://sourceforge.net/p/aufs/aufs-util/
+-
+-if BR2_PACKAGE_AUFS_UTIL
+-
+-config BR2_PACKAGE_AUFS_UTIL_VERSION
+-	string "aufs-util version"
+-	default ""
+-	help
+-	  The version you choose must match that of the aufs support
+-	  in your kernel. Usually, this is aufs3.x for 3.x kernels and
+-	  aufs4.x for 4.x kernels.
+-
+-	  Usually, the sha1 of the cset you want to use; avoid using a
+-	  branch name as this yields non-reproducible builds.
+-
+-	  See the following resources to see what versions are
+-	  available:
+-
+-	  https://sourceforge.net/p/aufs/aufs-util/ci/master/tree/
+-
+-endif
+diff --git a/package/aufs-util/aufs-util.mk b/package/aufs-util/aufs-util.mk
+deleted file mode 100644
+index 32f3bca151..0000000000
+--- a/package/aufs-util/aufs-util.mk
++++ /dev/null
+@@ -1,59 +0,0 @@
+-################################################################################
+-#
+-# aufs-util
+-#
+-################################################################################
+-
+-# linux-headers
+-AUFS_UTIL_VERSION = $(call qstrip,$(BR2_PACKAGE_AUFS_UTIL_VERSION))
+-AUFS_UTIL_SITE = https://git.code.sf.net/p/aufs/aufs-util
+-AUFS_UTIL_SITE_METHOD = git
+-AUFS_UTIL_LICENSE = GPL-2.0
+-AUFS_UTIL_LICENSE_FILES = COPYING
+-
+-AUFS_UTIL_DEPENDENCIES = linux
+-
+-# Building aufs-util requires access to the kernel headers of aufs,
+-# which are only available in the kernel build directory, which is why
+-# we add -I$(LINUX_DIR)/include/uapi. These headers have not been
+-# prepared for usage by userspace, so to workaround this we have to
+-# defined the "__user" macro as empty.
+-AUFS_UTIL_HOST_CPPFLAGS = \
+-	$(HOST_CPPFLAGS) \
+-	-I$(LINUX_DIR)/include/uapi \
+-	-D__user=
+-
+-AUFS_UTIL_CPPFLAGS = \
+-	$(TARGET_CPPFLAGS) \
+-	-I$(LINUX_DIR)/include/uapi \
+-	-D__user=
+-
+-# rdu64 is supposed to provide the LFS variant of readdir(),
+-# readdir64(). However, because Buildroot is always LFS-enabled,
+-# readdir() is always the LFS variant. Drop rdu64 from the build, as
+-# it causes build failures due to multiple implementations of
+-# readdir64().
+-define AUFS_UTIL_REMOVE_RDU64
+-	$(SED) 's% rdu64.o%%' $(@D)/libau/Makefile
+-endef
+-
+-AUFS_UTIL_POST_PATCH_HOOKS += AUFS_UTIL_REMOVE_RDU64
+-
+-# First, we build the host tools, needed to build the target tools.
+-define AUFS_UTIL_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
+-		$(HOST_CONFIGURE_OPTS) \
+-		CPPFLAGS="$(AUFS_UTIL_HOST_CPPFLAGS)" \
+-		HOSTCC="$(HOSTCC)" HOSTLD="$(HOSTLD)" \
+-		INSTALL="$(INSTALL)" c2sh c2tmac
+-	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		CPPFLAGS="$(AUFS_UTIL_CPPFLAGS)" \
+-		INSTALL="$(INSTALL)" all
+-endef
+-
+-define AUFS_UTIL_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) INSTALL="$(INSTALL)" DESTDIR="$(TARGET_DIR)" install
+-endef
+-
+-$(eval $(generic-package))
+diff --git a/package/aufs/Config.in b/package/aufs/Config.in
+deleted file mode 100644
+index cc5ff365fe..0000000000
+--- a/package/aufs/Config.in
++++ /dev/null
+@@ -1,16 +0,0 @@
+-# Automatically selected by the corresponding linux extension
+-config BR2_PACKAGE_AUFS
+-	bool
+-
+-if BR2_PACKAGE_AUFS
+-
+-# Both come from the selection of the linux extension.
+-config BR2_PACKAGE_AUFS_SERIES
+-	int
+-	default BR2_LINUX_KERNEL_EXT_AUFS_SERIES
+-
+-config BR2_PACKAGE_AUFS_VERSION
+-	string
+-	default BR2_LINUX_KERNEL_EXT_AUFS_VERSION
+-
+-endif
+diff --git a/package/aufs/aufs.mk b/package/aufs/aufs.mk
+deleted file mode 100644
+index d00e7a1a21..0000000000
+--- a/package/aufs/aufs.mk
++++ /dev/null
+@@ -1,24 +0,0 @@
+-################################################################################
+-#
+-# aufs
+-#
+-################################################################################
+-
+-AUFS_VERSION = $(call qstrip,$(BR2_PACKAGE_AUFS_VERSION))
+-AUFS_LICENSE = GPL-2.0
+-AUFS_LICENSE_FILES = COPYING
+-
+-ifeq ($(BR2_PACKAGE_AUFS_SERIES),3)
+-AUFS_SITE = https://git.code.sf.net/p/aufs/aufs3-standalone
+-AUFS_SITE_METHOD = git
+-else ifeq ($(BR2_PACKAGE_AUFS_SERIES),4)
+-AUFS_SITE = $(call github,sfjro,aufs4-standalone,$(AUFS_VERSION))
+-else ifeq ($(BR2_PACKAGE_AUFS_SERIES),5)
+-AUFS_SITE = $(call github,sfjro,aufs5-standalone,$(AUFS_VERSION))
+-endif
+-
+-ifeq ($(BR_BUILDING):$(BR2_PACKAGE_AUFS):$(AUFS_VERSION),y:y:)
+-$(error No aufs version specified)
+-endif
+-
+-$(eval $(generic-package))
+diff --git a/utils/checkpackagelib/test_lib_mk.py b/utils/checkpackagelib/test_lib_mk.py
+index c86c55b9cb..3f97c25b2d 100644
+--- a/utils/checkpackagelib/test_lib_mk.py
++++ b/utils/checkpackagelib/test_lib_mk.py
+@@ -75,9 +75,6 @@ def test_Ifdef(testname, filename, string, expected):
+ 
+ 
+ get_package_prefix_from_filename = [
+-    ('linux extension',
+-     'linux/linux-ext-aufs.mk',
+-     ['aufs', 'AUFS']),
+     ('linux tool',
+      'package/linux-tools/linux-tool-gpio.mk.in',
+      ['gpio', 'GPIO']),
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 0ec478e6ca..ac80982f63 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -149,9 +149,6 @@ async def fixup_config(sysinfo, configfile):
+         configlines.remove('BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH=""\n')
+         configlines.append('BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"\n')
+ 
+-    if 'BR2_PACKAGE_AUFS_UTIL=y\n' in configlines and \
+-       'BR2_PACKAGE_AUFS_UTIL_VERSION=""\n' in configlines:
+-        return False
+     if 'BR2_PACKAGE_A10DISP=y\n' in configlines:
+         return False
+ 
+@@ -252,11 +249,6 @@ async def fixup_config(sysinfo, configfile):
+        'BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y\n' in configlines:
+         configlines.remove('BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y')
+ 
+-    if 'BR2_LINUX_KERNEL_EXT_AUFS=y\n' in configlines and \
+-       'BR2_LINUX_KERNEL_EXT_AUFS_VERSION=""\n' in configlines:
+-        configlines.remove('BR2_LINUX_KERNEL_EXT_AUFS=y\n')
+-        configlines.remove('BR2_LINUX_KERNEL_EXT_AUFS_VERSION=""\n')
+-
+     if 'BR2_PACKAGE_LINUX_BACKPORTS=y\n' in configlines and \
+        'BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG=y\n' in configlines and \
+        'BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE=""\n' in configlines:
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
