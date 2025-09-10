@@ -4,104 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C3E4CA0FED
-	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 11:49:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 402E0CA0FED
+	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 12:54:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F25D606CC;
-	Wed, 10 Sep 2025 11:49:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F32BB6086D;
+	Wed, 10 Sep 2025 12:54:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NFS_KLvl0yg0; Wed, 10 Sep 2025 11:49:25 +0000 (UTC)
+ id ZfhFxTki3EXV; Wed, 10 Sep 2025 12:54:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48A5B60B7D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04A5D60D80
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 48A5B60B7D;
-	Wed, 10 Sep 2025 11:49:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2C513234
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 11:49:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 04A5D60D80;
+	Wed, 10 Sep 2025 12:54:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7BD3EE1F
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 12:54:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 11C4180AF8
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 11:49:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 61F484076C
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 12:54:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bk3HJxm7gF2M for <buildroot@buildroot.org>;
- Wed, 10 Sep 2025 11:49:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5g7Zj8Fnl5WZ for <buildroot@buildroot.org>;
+ Wed, 10 Sep 2025 12:54:23 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::144; helo=mail-lf1-x144.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A67D883F6A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A67D883F6A
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com
- [IPv6:2a00:1450:4864:20::144])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A67D883F6A
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 11:49:22 +0000 (UTC)
-Received: by mail-lf1-x144.google.com with SMTP id
- 2adb3069b0e04-55f716e25d9so6355665e87.1
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 04:49:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1757504960; x=1758109760;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=zcK2yN0Ji31v3hTbVUdU1gBm2rfAsx6+sRkcO5q1fTs=;
- b=EMxQDqghD+8EjVsU0msj5u/KFK2RLJ8kDaktDwkXtTD+n1T9o/wQBG1k3U6HCfS/QM
- KTo/0hoC+sEuWS/zDaSZvMzkBfST6nfOShcOCjwGwsUFAdYGT21b2cF5SOJtyiCIB+8P
- y0x7J9aicpsK7YZnVoDPfSblr3PwAup/ZKwXbQ3Og9GKL5NBmHQOAVBt22OKVRir6rIu
- Efv3+Hn4oNequ9aAsZDO0oyC6atZ56Uv/KD+NU/7+HWAxMfp6eCsKE8bX6QiXdghUsVV
- UymdJppJVXZ9FJXL79CIdGBH/ss73W6qiVK0m2d7aleJBtvwATWQUmdcgOIXGDmfUXf4
- 59gw==
-X-Forwarded-Encrypted: i=1;
- AJvYcCUWNrhac3L6HMnCn7MA7Xikf/ljp6QInM9y/ZjXIjGXpmKiLCHCEvwHmm3yv02o0I7L5ATA2Ed2QGQ=@buildroot.org
-X-Gm-Message-State: AOJu0YyocfWuVHLs7fD2mkhF80O2i9afTarTZy+gjUM1Qtfh6/X9b3z4
- 31EHfteKl6nwWoN/4CkgeoOGg1ZD55EyIhskqmw2/IRR42KRQb/FjtQ3JIPIpiCFifpqWbFXZMC
- ht5rTHihl5A==
-X-Gm-Gg: ASbGncuDPGrLUf8WByvDVUZkvaA1TGddyVlfTvjwicS57e+Bi+V7R1Vaw8Llsz+Te7m
- NU0BfJ45MEyiy0m56Ky8+5x4YPqaetBPqJ/dhVBJo3Jz+BeT+WiOm7xr/kN30YWtz0qif3TK7HW
- j3Eo4ECWP/16Bxgs1k/JtRCPqcwkZl+BnM4Afej0clK3VDwwaNijZdWC5AJo60Lq93OG9z07ai+
- r1FRANQjSAq/NRX1Ofj5AFfqgCDADG2OcZ2+mZCw83BzfvdFOgFRA9KRxy07zlxs5ZbfR9gXa5n
- EsZ9NreqjSVcSLhew9msdg8XCJUUOh3POV9YUsQKsUahupsL6K6LNL1UwhoEi0eK9pQI4CgQylx
- 9lul2Qsra/wlZLq8uW6o1xwNhd+5YAdyG5o/bzurvAbVqL5UvTVZurJsLQVDLib2HucwUlASKgk
- bXEBajDfCSG8Uxk+8ZWn15
-X-Google-Smtp-Source: AGHT+IHymyo6o/N23A5AtObt9SOJTOvO2OHcjjC5aC6kLHv0+TAtspoBU8FSvrhptbJshG7I2UP5cQ==
-X-Received: by 2002:a05:6512:3d08:b0:55f:6391:a34b with SMTP id
- 2adb3069b0e04-56261219ca9mr5198418e87.36.1757504960202; 
- Wed, 10 Sep 2025 04:49:20 -0700 (PDT)
-Received: from [10.5.90.80]
- (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
- by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-5680cdee5c0sm1189426e87.55.2025.09.10.04.49.19
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 10 Sep 2025 04:49:19 -0700 (PDT)
-Message-ID: <65be9a4b-1053-4b07-a1ec-aaa9a7c3db01@smile.fr>
-Date: Wed, 10 Sep 2025 13:49:19 +0200
+ client-ip=2a01:4f8:1c0c:5073::1; helo=mail.heine.tech;
+ envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 67A214075F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67A214075F
+Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 67A214075F
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 12:54:21 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id D6B631814B9; Wed, 10 Sep 2025 14:54:16 +0200 (CEST)
+To: buildroot@buildroot.org
+Date: Wed, 10 Sep 2025 14:54:07 +0200
+Message-ID: <20250910125410.3890456-1-buildroot@heine.tech>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@gmail.com>
-References: <20250909161325.59760-1-bernd@kuhls.net>
-Content-Language: en-US
-In-Reply-To: <20250909161325.59760-1-bernd@kuhls.net>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1757504960; x=1758109760; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=zcK2yN0Ji31v3hTbVUdU1gBm2rfAsx6+sRkcO5q1fTs=;
- b=ErbSh8/9VsT40yGLn7BrWUklZ8JocdKwrrnYNmJB+sHuheH4oZDoZwVAxm1xXX22u0
- bviRD4IBxb4epP1QrQudzO90dhtE4Nh/sZFgehmCBq7wUk06grg0Y8sRLwqH5CJlxACm
- VkRBBYyEnwViFA5oM+QgLqCkjEG5AzTYhX088=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=heine.tech; s=dkim; 
+ t=1757508858; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=kRipaf2fk85eOFqwX3vt/HtGsqVTM82XD8nYUDIOtQM=;
+ b=okPK3diYr0AwFo93W+XPZuxZtpG8fbJdmVWJKcsTMUMjl/+/7lxiFp88i9ws+Ttu7UJkoC
+ wCI/JI9a3rYB+ozLUKCi6I1M1NCm/KbeJQyH+N8rFhUJ6YqUvrVT9TiKoxDi9tuPrsilPu
+ t51MVzXksuTMrQ43Vd539hBhmSgPNx4=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=heine.tech
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=ErbSh8/9
-Subject: Re: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 25.2.2
+ unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
+ header.s=dkim header.b=okPK3diY
+Subject: [Buildroot] [PATCH] package/usbguard: bump to version 1.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,140 +71,178 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Kamel Bouhara <kamel.bouhara@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gQmVybmQsIEFsbCwKCkxlIDA5LzA5LzIwMjUgw6AgMTg6MTMsIEJlcm5kIEt1aGxzIGEg
-w6ljcml0wqA6Cj4gUmViYXNlZCBwYXRjaCAwMDAxLgo+IAo+IFJlbW92ZWQgR2FsbGl1bSB4YSBz
-dGF0ZSB0cmFja2VyOgo+IGh0dHBzOi8vZ2l0bGFiLmZyZWVkZXNrdG9wLm9yZy9tZXNhL21lc2Ev
-LS9jb21taXQvM2JlMmM0N2RiMjMxOGViZTkyMjJjODBiZjk4MTAzOGRmNDM3NGIyZAo+IAo+IExl
-Z2FjeSBoYW5kbGluZyBmb3IgYmxpbmQgb3B0aW9uIEJSMl9QQUNLQUdFX01FU0EzRF9ORUVEU19Y
-QSBpcyBub3QKPiBuZWNlc3NhcnkuCj4gCj4gUmVsZWFzZSBub3RlczoKPiBodHRwczovL2xpc3Rz
-LmZyZWVkZXNrdG9wLm9yZy9hcmNoaXZlcy9tZXNhLWFubm91bmNlLzIwMjUtQXVndXN0LzAwMDgx
-NS5odG1sCj4gaHR0cHM6Ly9saXN0cy5mcmVlZGVza3RvcC5vcmcvYXJjaGl2ZXMvbWVzYS1hbm5v
-dW5jZS8yMDI1LUF1Z3VzdC8wMDA4MTguaHRtbAo+IGh0dHBzOi8vbGlzdHMuZnJlZWRlc2t0b3Au
-b3JnL2FyY2hpdmVzL21lc2EtYW5ub3VuY2UvMjAyNS1TZXB0ZW1iZXIvMDAwODIwLmh0bWwKCk9u
-IHN1Y2ggY29tcGxleCBwYWNrYWdlLCBjYW4geW91IHRyeSBhdCBsZWFzdCBvbmUgb2YgdGhlIHRl
-c3RzdWl0ZSBjYXNlIHdlcmUKbWVzYTNkIGlzIGVuYWJsZWQ/Cgp0ZXN0X2ZsdXR0ZXIucHk6MjQ6
-ICAgICAgICBCUjJfUEFDS0FHRV9NRVNBM0Q9eQp0ZXN0X2dsc2xzYW5kYm94X3BsYXllci5weTox
-OTogICAgICAgIEJSMl9QQUNLQUdFX01FU0EzRD15CnRlc3RfZ2x4aW5mby5weToyMTogICAgICAg
-IEJSMl9QQUNLQUdFX01FU0EzRD15CnRlc3Rfa21zY3ViZS5weToyMDogICAgICAgIEJSMl9QQUNL
-QUdFX01FU0EzRD15CnRlc3RfbWVzYTNkLnB5OjE3OiAgICAgICAgQlIyX1BBQ0tBR0VfTUVTQTNE
-PXkKdGVzdF9weXRob25fcHlxdDUucHk6MzA6ICAgICAgICBCUjJfUEFDS0FHRV9NRVNBM0Q9eQp0
-ZXN0X3dlc3Rvbi5weToyNDogICAgICAgIEJSMl9QQUNLQUdFX01FU0EzRD15CgpBdCBsZWFzdCB0
-aGUgVGVzdE1lc2EzRFJ1c3RpY2wgb25lPwooSSB1bmRlcnN0YW5kIHRoYXQgZWFjaCBvZiB0aGVt
-IHJlcXVpcmVzIHRpbWUsIHJlc291cmNlcyBhbmQgQ0kgbWludXRlcykKCj4gCj4gU2lnbmVkLW9m
-Zi1ieTogQmVybmQgS3VobHMgPGJlcm5kQGt1aGxzLm5ldD4KPiAtLS0KPiAgcGFja2FnZS9tZXNh
-M2QtaGVhZGVycy9tZXNhM2QtaGVhZGVycy5tayAgICAgICAgICAgICAgIHwgIDIgKy0KPiAgLi4u
-LW1lc29uLW9wdGlvbi10by1kaXNhYmxlLW9wdGlvbmFsLW5lb24tc3VwcG9yLnBhdGNoIHwgIDYg
-KysrLS0tCj4gIHBhY2thZ2UvbWVzYTNkL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICB8ICA5IC0tLS0tLS0tLQo+ICBwYWNrYWdlL21lc2EzZC9tZXNhM2QuaGFzaCAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgfCAgNiArKystLS0KPiAgcGFja2FnZS9tZXNhM2QvbWVz
-YTNkLm1rICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgMTAgKystLS0tLS0tLQo+ICA1
-IGZpbGVzIGNoYW5nZWQsIDkgaW5zZXJ0aW9ucygrKSwgMjQgZGVsZXRpb25zKC0pCj4gCj4gZGlm
-ZiAtLWdpdCBhL3BhY2thZ2UvbWVzYTNkLWhlYWRlcnMvbWVzYTNkLWhlYWRlcnMubWsgYi9wYWNr
-YWdlL21lc2EzZC1oZWFkZXJzL21lc2EzZC1oZWFkZXJzLm1rCj4gaW5kZXggNWNkMDVjYzlmZi4u
-NTkzMmQ3M2YyYyAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL21lc2EzZC1oZWFkZXJzL21lc2EzZC1o
-ZWFkZXJzLm1rCj4gKysrIGIvcGFja2FnZS9tZXNhM2QtaGVhZGVycy9tZXNhM2QtaGVhZGVycy5t
-awo+IEBAIC0xMiw3ICsxMiw3IEBAIGVuZGlmCj4gIAo+ICAjIE5vdCBwb3NzaWJsZSB0byBkaXJl
-Y3RseSByZWZlciB0byBtZXNhM2QgdmFyaWFibGVzLCBiZWNhdXNlIG9mCj4gICMgZmlyc3Qvc2Vj
-b25kIGV4cGFuc2lvbiB0cmlja2VyeS4uLgo+IC1NRVNBM0RfSEVBREVSU19WRVJTSU9OID0gMjUu
-MS44Cj4gK01FU0EzRF9IRUFERVJTX1ZFUlNJT04gPSAyNS4yLjIKPiAgTUVTQTNEX0hFQURFUlNf
-U09VUkNFID0gbWVzYS0kKE1FU0EzRF9IRUFERVJTX1ZFUlNJT04pLnRhci54ego+ICBNRVNBM0Rf
-SEVBREVSU19TSVRFID0gaHR0cHM6Ly9hcmNoaXZlLm1lc2EzZC5vcmcKPiAgTUVTQTNEX0hFQURF
-UlNfRExfU1VCRElSID0gbWVzYTNkCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbWVzYTNkLzAwMDEt
-dmM0LWFkZC1tZXNvbi1vcHRpb24tdG8tZGlzYWJsZS1vcHRpb25hbC1uZW9uLXN1cHBvci5wYXRj
-aCBiL3BhY2thZ2UvbWVzYTNkLzAwMDEtdmM0LWFkZC1tZXNvbi1vcHRpb24tdG8tZGlzYWJsZS1v
-cHRpb25hbC1uZW9uLXN1cHBvci5wYXRjaAo+IGluZGV4IDA0YjMzYTc4NTYuLjUyZTIzZTM1ZGEg
-MTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9tZXNhM2QvMDAwMS12YzQtYWRkLW1lc29uLW9wdGlvbi10
-by1kaXNhYmxlLW9wdGlvbmFsLW5lb24tc3VwcG9yLnBhdGNoCj4gKysrIGIvcGFja2FnZS9tZXNh
-M2QvMDAwMS12YzQtYWRkLW1lc29uLW9wdGlvbi10by1kaXNhYmxlLW9wdGlvbmFsLW5lb24tc3Vw
-cG9yLnBhdGNoCj4gQEAgLTEwLDcgKzEwLDcgQEAgdG8gZm9yY2UgZGlzYWJsaW5nIGl0IGF0IGNv
-bXBpbGUgdGltZS4KPiAgVXBzdHJlYW06IGh0dHBzOi8vZ2l0bGFiLmZyZWVkZXNrdG9wLm9yZy9t
-ZXNhL21lc2EvLS9tZXJnZV9yZXF1ZXN0cy80MTE0Cj4gIFNpZ25lZC1vZmYtYnk6IFBldGVyIFNl
-aWRlcmVyIDxwcy5yZXBvcnRAZ214Lm5ldD4KPiAgU2lnbmVkLW9mZi1ieTogQmVybmQgS3VobHMg
-PGJlcm5kQGt1aGxzLm5ldD4KPiAtW3JlYmFzZWQgZm9yIDIwLjIuMCwgMjAuMy4wLCAyMS4xLjAs
-IDIzLjEuMCwgMjMuMi4wLCAyNC4zLjAgJiAyNS4xLjBdCj4gK1tyZWJhc2VkIGZvciAyMC4yLjAs
-IDIwLjMuMCwgMjEuMS4wLCAyMy4xLjAsIDIzLjIuMCwgMjQuMy4wLCAyNS4xLjAgJiAyNS4yLjBd
-CgpUaGlzIGlzIGEgbG9uZyBsaXN0LiBPbmx5IHRoZSBsYXN0IG9uZSBpcyByZWFsbHkgcmVsZXZh
-bnQgc2luY2Ugd2UgcGFja2FnZSBvbmx5Cm9uZSBtZXNhM2QgdmVyc2lvbiBhdCB0aGUgdGltZS4K
-CkknbGwgcnVuIHNvbWUgdGVzdHMsIGp1c3QgdG8gZG91YmxlIGNoZWNrLgoKQmVzdCByZWdhcmRz
-LApSb21haW4KCgo+ICBTaWduZWQtb2ZmLWJ5OiBQZXRlciBTZWlkZXJlciA8cHMucmVwb3J0QGdt
-eC5uZXQ+Cj4gIFtmaXggc3ludGF4IGVycm9yIGFmdGVyIHByZXZpb3VzIHJlYmFzZXNdCj4gIC0t
-LQo+IEBAIC0yMyw4ICsyMyw4IEBAIGRpZmYgLS1naXQgYS9tZXNvbi5vcHRpb25zIGIvbWVzb24u
-b3B0aW9ucwo+ICBpbmRleCA4ZTBiZjJhLi4xY2YwZTA3IDEwMDY0NAo+ICAtLS0gYS9tZXNvbi5v
-cHRpb25zCj4gICsrKyBiL21lc29uLm9wdGlvbnMKPiAtQEAgLTExNyw2ICsxMTcsMTMgQEAgb3B0
-aW9uKAo+IC0gICBkZXNjcmlwdGlvbiA6ICdlbmFibGUgZ2FsbGl1bSB2YSBmcm9udGVuZC4nLAo+
-ICtAQCAtMTMxLDYgKzEzMSwxMyBAQCBvcHRpb24oCj4gKyAgIGRlc2NyaXB0aW9uIDogJ2VuYWJs
-ZSBnYWxsaXVtIG1lZGlhZm91bmRhdGlvbiBmcm9udGVuZCB0ZXN0cy4nLAo+ICAgKQo+ICAgCj4g
-ICtvcHRpb24oCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbWVzYTNkL0NvbmZpZy5pbiBiL3BhY2th
-Z2UvbWVzYTNkL0NvbmZpZy5pbgo+IGluZGV4IDkyNDQzN2YwMzMuLmQyMDAzZmNlNDIgMTAwNjQ0
-Cj4gLS0tIGEvcGFja2FnZS9tZXNhM2QvQ29uZmlnLmluCj4gKysrIGIvcGFja2FnZS9tZXNhM2Qv
-Q29uZmlnLmluCj4gQEAgLTEwMiwxMiArMTAyLDYgQEAgY29uZmlnIEJSMl9QQUNLQUdFX01FU0Ez
-RF9EUklWRVIKPiAgCWJvb2wKPiAgCXNlbGVjdCBCUjJfUEFDS0FHRV9YTElCX0xJQlhTSE1GRU5D
-RSBpZiBCUjJfUEFDS0FHRV9YT1JHNwo+ICAKPiAtIyBHYWxsaXVtIHhhIHN0YXRlIHRyYWNrZXIu
-Cj4gLSMgUXVvdGUgZnJvbSBtZXNhM2QgbWVzb24uYnVpbGQ6ICJYQSBzdGF0ZSB0cmFja2VyIHJl
-cXVpcmVzIGF0IGxlYXN0Cj4gLSMgb25lIG9mIHRoZSBmb2xsb3dpbmcgZ2FsbGl1bSBkcml2ZXJz
-OiBub3V2ZWF1LCBmcmVlZHJlbm8sIGk5MTUsIHN2Z2EuCj4gLWNvbmZpZyBCUjJfUEFDS0FHRV9N
-RVNBM0RfTkVFRFNfWEEKPiAtCWJvb2wKPiAtCj4gICMgT3BlbkdMIEdMWCBhbmQgR2FsbGl1bSBW
-RFBBVSBib3RoIG5lZWRzIFgxMQo+ICBjb25maWcgQlIyX1BBQ0tBR0VfTUVTQTNEX05FRURTX1gx
-MQo+ICAJYm9vbAo+IEBAIC0xOTQsNyArMTg4LDYgQEAgY29uZmlnIEJSMl9QQUNLQUdFX01FU0Ez
-RF9HQUxMSVVNX0RSSVZFUl9OT1VWRUFVCj4gIAlib29sICJHYWxsaXVtIG5vdXZlYXUgZHJpdmVy
-Igo+ICAJc2VsZWN0IEJSMl9QQUNLQUdFX01FU0EzRF9HQUxMSVVNX0RSSVZFUgo+ICAJc2VsZWN0
-IEJSMl9QQUNLQUdFX0xJQkRSTV9OT1VWRUFVCj4gLQlzZWxlY3QgQlIyX1BBQ0tBR0VfTUVTQTNE
-X05FRURTX1hBCj4gIAlzZWxlY3QgQlIyX1BBQ0tBR0VfTExWTV9SVFRJIGlmIEJSMl9QQUNLQUdF
-X01FU0EzRF9MTFZNCj4gIAlzZWxlY3QgQlIyX1BBQ0tBR0VfTUVTQTNEX1JVU1RJQ0xfU1VQUE9S
-VEVEX0RSSVZFUgo+ICAJaGVscAo+IEBAIC0yNjYsNyArMjU5LDYgQEAgY29uZmlnIEJSMl9QQUNL
-QUdFX01FU0EzRF9HQUxMSVVNX0RSSVZFUl9TVkdBCj4gIAlkZXBlbmRzIG9uIEJSMl9pMzg2IHx8
-IEJSMl94ODZfNjQKPiAgCXNlbGVjdCBCUjJfUEFDS0FHRV9NRVNBM0RfR0FMTElVTV9EUklWRVIK
-PiAgCXNlbGVjdCBCUjJfUEFDS0FHRV9MSUJEUk1fVk1XR0ZYCj4gLQlzZWxlY3QgQlIyX1BBQ0tB
-R0VfTUVTQTNEX05FRURTX1hBCj4gIAloZWxwCj4gIAkgIFRoaXMgaXMgYSB2aXJ0dWFsIEdQVSBk
-cml2ZXIgZm9yIFZNV2FyZSB2aXJ0dWFsIG1hY2hpbmVzLgo+ICAKPiBAQCAtMjgyLDcgKzI3NCw2
-IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9NRVNBM0RfR0FMTElVTV9EUklWRVJfVEVHUkEKPiAgCXNl
-bGVjdCBCUjJfUEFDS0FHRV9NRVNBM0RfR0FMTElVTV9EUklWRVIKPiAgCXNlbGVjdCBCUjJfUEFD
-S0FHRV9NRVNBM0RfR0FMTElVTV9EUklWRVJfTk9VVkVBVQo+ICAJc2VsZWN0IEJSMl9QQUNLQUdF
-X0xJQkRSTV9OT1VWRUFVCj4gLQlzZWxlY3QgQlIyX1BBQ0tBR0VfTUVTQTNEX05FRURTX1hBCj4g
-IAloZWxwCj4gIAkgIEFkZHMgc3VwcG9ydCBmb3IgTnZpZGlhIFRlZ3JhIEdQVXMsIHJlcXVpcmVz
-IG5vdXZlYXUuCj4gIAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL21lc2EzZC9tZXNhM2QuaGFzaCBi
-L3BhY2thZ2UvbWVzYTNkL21lc2EzZC5oYXNoCj4gaW5kZXggYTM4NThkMzk4ZC4uZDc2YjM4NGUy
-NiAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL21lc2EzZC9tZXNhM2QuaGFzaAo+ICsrKyBiL3BhY2th
-Z2UvbWVzYTNkL21lc2EzZC5oYXNoCj4gQEAgLTEsNiArMSw2IEBACj4gLSMgRnJvbSBodHRwczov
-L2xpc3RzLmZyZWVkZXNrdG9wLm9yZy9hcmNoaXZlcy9tZXNhLWFubm91bmNlLzIwMjUtQXVndXN0
-LzAwMDgxNy5odG1sCj4gLXNoYTI1NiAgNWNmMTU3MWQwZDY0NmQ5MDA0N2YzZDkzZjU3YWNjNzg3
-Y2Y4OGVjN2U5NWVmZTE3MmM1NTViNDkyYzMwZmI3MSAgbWVzYS0yNS4xLjgudGFyLnh6Cj4gLXNo
-YTUxMiAgOTg0MzVkNTJhMjg1NWM3MWIxNTA2MDc4NWMyMjVkYzY3NGIzNTY1NTQ1YTg1ODFhNWRk
-NTAxNjA1YTA0ZjlkNTk3NjM2MjgyZjFiY2U2MWU3YTJlOGVlOThjMzFlY2Y3ZmJjY2FiNTk0NTcx
-ZTMxYmM4YjgyN2UxOGU5OGFhYTUgIG1lc2EtMjUuMS44LnRhci54ego+ICsjIEZyb20gaHR0cHM6
-Ly9saXN0cy5mcmVlZGVza3RvcC5vcmcvYXJjaGl2ZXMvbWVzYS1hbm5vdW5jZS8yMDI1LVNlcHRl
-bWJlci8wMDA4MjAuaHRtbAo+ICtzaGEyNTYgIDQzZDdhYmNkNGFhODA0OWQ4ZmQ3NTUzODM0NGEz
-NzQxMDQ3NjVlODFlMTdiNGE2MzE0Y2VlMmMwMTYwZTQ0MTIgIG1lc2EtMjUuMi4yLnRhci54ego+
-ICtzaGE1MTIgIDY5Y2Q3ZWQzM2QwODU2ZTIyN2EwMjE5YTlkMDllNWViMmZhZDI4MTYyMjc2YjU5
-NzFiZmY0ZjcxMDJjZjU4YjBkOTE0MTMxYWQ2NTQzNTYyY2JhMjMwY2U2ZmI5YjIwNzZkM2IxNTZi
-MWI4YzM3NWU3NDcyMmExNDNhZWU1Mzc5ICBtZXNhLTI1LjIuMi50YXIueHoKPiAgIyBMaWNlbnNl
-Cj4gIHNoYTI1NiAgMGQxYTA0NzJlY2M4MTgzMGU3NWMyMGQ1OWIwZWEwMjg0MWUzZGIyMTI1NWUw
-ZWJhZDk3YWI2ODJjNTRkNjYxNSAgZG9jcy9saWNlbnNlLnJzdAo+ICBzaGEyNTYgIDMyM2M1ODdk
-MGNjZjEwZTM3NmY4YmY5YTdmMzFmYjRjYTYwNzgxMDUxOTRiNDJlMGIxZTBlZTJiYzliZGU3MWYg
-IGxpY2Vuc2VzL01JVAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL21lc2EzZC9tZXNhM2QubWsgYi9w
-YWNrYWdlL21lc2EzZC9tZXNhM2QubWsKPiBpbmRleCBlOTRiYWZlZDhjLi45YWIwZmZkZmMzIDEw
-MDY0NAo+IC0tLSBhL3BhY2thZ2UvbWVzYTNkL21lc2EzZC5tawo+ICsrKyBiL3BhY2thZ2UvbWVz
-YTNkL21lc2EzZC5tawo+IEBAIC01LDcgKzUsNyBAQAo+ICAjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-Iwo+ICAKPiAgIyBXaGVuIHVwZGF0aW5nIHRoZSB2ZXJzaW9uLCBwbGVhc2UgYWxzbyB1cGRhdGUg
-bWVzYTNkLWhlYWRlcnMKPiAtTUVTQTNEX1ZFUlNJT04gPSAyNS4xLjgKPiArTUVTQTNEX1ZFUlNJ
-T04gPSAyNS4yLjIKPiAgTUVTQTNEX1NPVVJDRSA9IG1lc2EtJChNRVNBM0RfVkVSU0lPTikudGFy
-Lnh6Cj4gIE1FU0EzRF9TSVRFID0gaHR0cHM6Ly9hcmNoaXZlLm1lc2EzZC5vcmcKPiAgTUVTQTNE
-X0xJQ0VOU0UgPSBNSVQsIFNHSSwgS2hyb25vcwo+IEBAIC05MiwxNSArOTIsOSBAQCBpZmVxICgk
-KEJSMl9QQUNLQUdFX01FU0EzRF9PUEVOR0xfR0xYKSx5KQo+ICBNRVNBM0RfQ09ORl9PUFRTICs9
-IFwKPiAgCS1EZ2x4PWRyaSBcCj4gIAktRGdseC1kaXJlY3Q9dHJ1ZQo+IC1pZmVxICgkKEJSMl9Q
-QUNLQUdFX01FU0EzRF9ORUVEU19YQSkseSkKPiAtTUVTQTNEX0NPTkZfT1BUUyArPSAtRGdhbGxp
-dW0teGE9ZW5hYmxlZAo+IC1lbHNlCj4gLU1FU0EzRF9DT05GX09QVFMgKz0gLURnYWxsaXVtLXhh
-PWRpc2FibGVkCj4gLWVuZGlmCj4gIGVsc2UKPiAgTUVTQTNEX0NPTkZfT1BUUyArPSBcCj4gLQkt
-RGdseD1kaXNhYmxlZCBcCj4gLQktRGdhbGxpdW0teGE9ZGlzYWJsZWQKPiArCS1EZ2x4PWRpc2Fi
-bGVkCj4gIGVuZGlmCj4gIAo+ICBpZmVxICgkKEJSMl9BUk1fQ1BVX0hBU19ORU9OKSx5KQoKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
-aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
-dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+- brings compatibility with protobuf v30.0+
+- drop upstreamed patch
+
+Changelog:
+https://github.com/USBGuard/usbguard/releases/tag/usbguard-1.1.4
+https://github.com/USBGuard/usbguard/releases/tag/usbguard-1.1.3
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+---
+ ...tHub-Actions-cover-build-with-GCC-13.patch | 114 ------------------
+ package/usbguard/usbguard.hash                |   4 +-
+ package/usbguard/usbguard.mk                  |   2 +-
+ 3 files changed, 3 insertions(+), 117 deletions(-)
+ delete mode 100644 package/usbguard/0001-Fix-build-for-GCC-13-make-GitHub-Actions-cover-build-with-GCC-13.patch
+
+diff --git a/package/usbguard/0001-Fix-build-for-GCC-13-make-GitHub-Actions-cover-build-with-GCC-13.patch b/package/usbguard/0001-Fix-build-for-GCC-13-make-GitHub-Actions-cover-build-with-GCC-13.patch
+deleted file mode 100644
+index 415b8e1dd1..0000000000
+--- a/package/usbguard/0001-Fix-build-for-GCC-13-make-GitHub-Actions-cover-build-with-GCC-13.patch
++++ /dev/null
+@@ -1,114 +0,0 @@
+-From 22b1e0897af977cc96af926c730ff948bd120bb5 Mon Sep 17 00:00:00 2001
+-From: Sebastian Pipping <sebastian@pipping.org>
+-Date: Fri, 31 Mar 2023 09:39:49 +0200
+-Subject: [PATCH] Fix build for GCC 13 + make GitHub Actions cover build with
+- GCC 13 (#586)
+-
+-* include missing <cstdint>
+-
+-gcc 13 moved some includes around and as a result <cstdint> is no
+-longer transitively included [1]. Explicitly include it for
+-uint8_t.
+-
+-[1] https://gcc.gnu.org/gcc-13/porting_to.html#header-dep-changes
+-
+-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+-
+-* docker.yml: Cover openSUSE Tumbleweed with GCC 13+
+-
+-Based on scripts/docker/build_on_centos_8_2.Dockerfile .
+-
+----------
+-
+-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+-Co-authored-by: Khem Raj <raj.khem@gmail.com>
+-Upstream: https://github.com/USBGuard/usbguard/commit/22b1e0897af977cc96af926c730ff948bd120bb5
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- .github/workflows/docker.yml                  |  1 +
+- .../build_on_opensuse_tumbleweed.Dockerfile   | 50 +++++++++++++++++++
+- src/Library/Base64.cpp                        |  1 -
+- src/Library/Base64.hpp                        |  1 +
+- 4 files changed, 52 insertions(+), 1 deletion(-)
+- create mode 100644 scripts/docker/build_on_opensuse_tumbleweed.Dockerfile
+-
+-diff --git a/scripts/docker/build_on_opensuse_tumbleweed.Dockerfile b/scripts/docker/build_on_opensuse_tumbleweed.Dockerfile
+-new file mode 100644
+-index 00000000..d0993d8c
+---- /dev/null
+-+++ b/scripts/docker/build_on_opensuse_tumbleweed.Dockerfile
+-@@ -0,0 +1,50 @@
+-+##
+-+## Copyright (c) 2023 Sebastian Pipping <sebastian@pipping.org>
+-+##
+-+## This program is free software; you can redistribute it and/or modify
+-+## it under the terms of the GNU General Public License as published by
+-+## the Free Software Foundation; either version 2 of the License, or
+-+## (at your option) any later version.
+-+##
+-+## This program is distributed in the hope that it will be useful,
+-+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+-+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-+## GNU General Public License for more details.
+-+##
+-+## You should have received a copy of the GNU General Public License
+-+## along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-+
+-+FROM opensuse/tumbleweed:latest
+-+RUN zypper --non-interactive install dnf rpm-repos-openSUSE-Tumbleweed \
+-+        && \
+-+    dnf install -y \
+-+            asciidoc \
+-+            autoconf \
+-+            automake \
+-+            dbus-1-glib-devel \
+-+            diffutils \
+-+            file \
+-+            gcc-c++ \
+-+            git \
+-+            libgcrypt-devel \
+-+            libqb-devel \
+-+            libsodium-devel \
+-+            libtool \
+-+            libxslt \
+-+            make \
+-+            polkit-devel \
+-+            protobuf-devel
+-+ADD usbguard.tar usbguard/
+-+ADD catch.tar usbguard/src/ThirdParty/Catch/
+-+ADD pegtl.tar usbguard/src/ThirdParty/PEGTL/
+-+WORKDIR usbguard
+-+RUN git init &>/dev/null && ./autogen.sh
+-+RUN ./configure --with-bundled-catch --with-bundled-pegtl || ! cat config.log
+-+RUN make dist
+-+RUN tar xf usbguard-*.tar.gz
+-+RUN mv -v usbguard-*.*.*/ usbguard-release/
+-+RUN mkdir usbguard-release/build/
+-+WORKDIR usbguard-release/build/
+-+RUN ../configure --with-bundled-catch --with-bundled-pegtl || ! cat config.log
+-+RUN bash -c 'set -o pipefail; make V=1 "-j$(nproc)" |& tee build.log'
+-+RUN ! grep -F 'include file not found' build.log
+-diff --git a/src/Library/Base64.cpp b/src/Library/Base64.cpp
+-index ddb28dce..0246a134 100644
+---- a/src/Library/Base64.cpp
+-+++ b/src/Library/Base64.cpp
+-@@ -22,7 +22,6 @@
+- 
+- #include "Base64.hpp"
+- #include <stdexcept>
+--#include <cstdint>
+- 
+- namespace usbguard
+- {
+-diff --git a/src/Library/Base64.hpp b/src/Library/Base64.hpp
+-index 0947f214..e0c745cb 100644
+---- a/src/Library/Base64.hpp
+-+++ b/src/Library/Base64.hpp
+-@@ -23,6 +23,7 @@
+- #endif
+- 
+- #include <string>
+-+#include <cstdint>
+- #include <cstddef>
+- 
+- namespace usbguard
+diff --git a/package/usbguard/usbguard.hash b/package/usbguard/usbguard.hash
+index 6c10dc9d3e..10eab07f95 100644
+--- a/package/usbguard/usbguard.hash
++++ b/package/usbguard/usbguard.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/USBGuard/usbguard/releases/download/usbguard-1.1.2/usbguard-1.1.2.tar.gz.sum
+-sha256  dcf5c90f3f93030e04df1baeb8d388b678c40dd48b135ea12a7be7dee8944934  usbguard-1.1.2.tar.gz
++# From https://github.com/USBGuard/usbguard/releases/download/usbguard-1.1.4/usbguard-1.1.4.tar.gz.sum
++sha256  7d76b75e779e3c9e6c2fc10e7389dfa34056864c9f0c6eaca722687b7e75893c  usbguard-1.1.4.tar.gz
+ 
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/usbguard/usbguard.mk b/package/usbguard/usbguard.mk
+index 4a5028f509..5f6672d44a 100644
+--- a/package/usbguard/usbguard.mk
++++ b/package/usbguard/usbguard.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-USBGUARD_VERSION = 1.1.2
++USBGUARD_VERSION = 1.1.4
+ USBGUARD_SITE = https://github.com/USBGuard/usbguard/releases/download/usbguard-$(USBGUARD_VERSION)
+ USBGUARD_LICENSE = GPL-2.0+
+ USBGUARD_LICENSE_FILES = LICENSE
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
