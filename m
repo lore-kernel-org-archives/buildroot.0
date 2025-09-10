@@ -1,51 +1,107 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AEEFCA101F
-	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 20:25:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D659CA0FED
+	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 20:25:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F035782242;
-	Wed, 10 Sep 2025 20:24:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 27C07418E8;
+	Wed, 10 Sep 2025 20:25:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JZhH2HNOM1Hx; Wed, 10 Sep 2025 20:24:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZG2kpLmZxoUP; Wed, 10 Sep 2025 20:25:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0944C82255
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42892418D9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0944C82255;
-	Wed, 10 Sep 2025 20:24:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8B8F1443
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:24:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 42892418D9;
+	Wed, 10 Sep 2025 20:25:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CA4BD234
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:24:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7DED3407BB
+ by smtp2.osuosl.org (Postfix) with ESMTP id AF94D407BB
  for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:24:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c00IWAXJF2oL for <buildroot@buildroot.org>;
- Wed, 10 Sep 2025 20:24:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B93CD41382
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B93CD41382
+ id b2fD4F5onn8b for <buildroot@buildroot.org>;
+ Wed, 10 Sep 2025 20:24:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BB8AB41491
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB8AB41491
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BB8AB41491
  for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:24:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A2A0183CDB; Wed, 10 Sep 2025 20:24:56 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 10 Sep 2025 22:17:07 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4cd4b2e1e6e8816555db38771d18daad46df3a6c
-X-Git-Newrev: a1daf153bf962d1797598943f8c8709ed04e4642
-X-Patchwork-Hint: ignore
-Message-Id: <20250910202456.A2A0183CDB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/php-lua: fix build with lua < 5.2
+Received: by mail-wr1-x434.google.com with SMTP id
+ ffacd0b85a97d-3e3aafe06a7so32068f8f.0
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 13:24:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1757535894; x=1758140694;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=dIdz+WgRQfyCEX+aR+O2TL6khAUD3FunVXUUHLsEOuk=;
+ b=gI3UD/Xxhl86nvFEgwZt/vvi8nK60Gafv2Nu+jsZEYhCjJ5amNzkMyfQE0tYzNKGqS
+ VAYImhQcBQWllaa/gTnb0OiZ0h2tDVm9HU8QwdLteaJVn+qBLuFOs54pzlJrjrIBGT54
+ pbNL9kbqVJPRT8s8QppGKf++asIlh0874ER+eaKg31AJnzkj2jvncayzMjaCWLZnzxdL
+ WfkGtAJt1j7HcIRAzj2U67eHhmp3AKKD92RDlvoC2r1iB6sp/xNdKTJciJJKIDhtDuD5
+ VVR0O7khPt32n6xsIab6VKEKrMY8pMlCP9yMPEJtHFhv919aYFPvZFJC9abnBETluyG5
+ +Rqw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXqRzxO0DubexPpAd1GsqeM4kFRvwhtq5+tEIkS2bgkCMBhIUqSr5zCtnzLw8s1wkO69MWlKQt/8kQ=@buildroot.org
+X-Gm-Message-State: AOJu0YyvHyuBnjS1CzcttNH9U2PrVl/62q6gPuh+57Lq2e/Suc5XIoW7
+ Nh2+J9nC3WIRZixykXo5Xmlr2V3bMH8mCvBiVWGa25g5RiVyQYwhq9n1p5oaG77s7uQ=
+X-Gm-Gg: ASbGncuVmLTbmEI3XlhCneGgWUMDFOkLlm5UmiBTcwX5nHpVugX6Oeb1nief84zZhFe
+ uCfceiXEUIALSBoeQMBlpYAkiey5lo3SRB5OlAKPQPXelReMGSGWQ6yvdorAp80qlDeJW+lKnR4
+ Ds2NnN/szOzH5mssFkPB7twzf89D3INwnOxeWi7mwBQ/XjfueKHo7TA8I1v7l4+8gvwjtKz9+/K
+ dCYSkAJdpvJbpmcVw8FE4x6CoWFbh73lfLbRc/nAcLbDnhZWvkK21MtHaCFYSntf2Q53CPMfyPd
+ o0TH/O7btbou8PH7y6Nj+oNQNDyc+kvkfUZe0527ppJfsHnmRqIg44KPQNl2a78eIlzEy60hTj+
+ Sov6wq4/NM1YVl5PfH10Ew7VOsZvUgh6Wr84nz9PLXz3k+WYduGvuZVfmEW89UijiJdzRI9ILEh
+ iCLApgDuXT2I8YzRagp4UN8/T+uJ8nGEHeLWqce6MQUo/L7y+b/hnET8heKjfcRY8zhHoYW0Ppp
+ N61VzUskg==
+X-Google-Smtp-Source: AGHT+IHYIo4IFZQyhJICUTDvI6DygcPyEdQgB7GzEz5+6m508r6XGlaijpZcXBYbte5Eu49ZFTbYZw==
+X-Received: by 2002:a05:6000:24ca:b0:3d4:4a27:b1c with SMTP id
+ ffacd0b85a97d-3e642cade47mr13721338f8f.28.1757535894390; 
+ Wed, 10 Sep 2025 13:24:54 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:94a2:a200:2ad9:827a:59cb:148a?
+ (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3e7522562d1sm8045150f8f.63.2025.09.10.13.24.53
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 10 Sep 2025 13:24:53 -0700 (PDT)
+Message-ID: <3e98f4b8-2007-4c4e-8511-f969b13bc55c@smile.fr>
+Date: Wed, 10 Sep 2025 22:24:52 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+ buildroot@buildroot.org
+References: <20250909-fix_php_lua-v1-1-f3e379f98bf9@bootlin.com>
+Content-Language: fr
+In-Reply-To: <20250909-fix_php_lua-v1-1-f3e379f98bf9@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1757535894; x=1758140694; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=dIdz+WgRQfyCEX+aR+O2TL6khAUD3FunVXUUHLsEOuk=;
+ b=to0Ca17ijtHe4nbLaD3UBcJgFmc6mYd/GHE6d9tFT/ao9friNqsWNaWawraF3kczbr
+ xCLUIktSlGkrUfQcoHZt2v2D4xtxPo5yn3DOlK4RbwyrpE/SnyURIfcXFWRSutHx8Sae
+ NnRRQEs06lLIN64jrxVia9C+S45OhFyLQJiK4=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=to0Ca17i
+Subject: Re: [Buildroot] [PATCH] package/php-lua: fix build with lua < 5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,113 +115,86 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7272280119311539810=="
+Cc: =?UTF-8?Q?Herv=C3=A9_Codina?= <herve.codina@bootlin.com>,
+ Thomas Perale <thomas.perale@mind.be>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7272280119311539810==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=a1daf153bf962d1797598943f8c8709ed04e4642
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-php-lua fails to build in buildroot 2025.08-rc3 on the following error:
-
-in file included from [...]/usr/include/php/Zend/zend.h:32,
-                 from [...]/usr/include/php/main/php.h:31,
-                 from [...]/build/php-lua-2.0.7/lua.c:24:
-[...]/build/php-lua-2.0.7/lua.c: In function ‘php_lua_write_property’:
-[...]/build/php-lua-2.0.7/lua.c:247:37:
-error: ‘val’ undeclared (first use in this function); did you mean
-‘zval’?
-  247 |         lua_pushlstring(L, ZSTR_VAL(val), ZSTR_LEN(val));
-      |                                     ^~~
-[...]/usr/include/php/Zend/zend_string.h:66:26:
-note: in definition of macro ‘ZSTR_VAL’
-   66 | #define ZSTR_VAL(zstr)  (zstr)->val
-      |                          ^~~~
-[...]/build/php-lua-2.0.7/lua.c:247:37:
-note: each undeclared identifier is reported only once for each function
-it appears in
-  247 |         lua_pushlstring(L, ZSTR_VAL(val), ZSTR_LEN(val));
-      |                                     ^~~
-[...]/usr/include/php/Zend/zend_string.h:66:26:
-note: in definition of macro ‘ZSTR_VAL’
-   66 | #define ZSTR_VAL(zstr)  (zstr)->val
-      |                          ^~~~
-make[2]: *** [Makefile:214: lua.lo] Error 1
-
-The issue triggers only if lua interpreter version is lower than 5.2. In
-this case,  php_lua_write_property calls ZSTR_VAL on the wrong variable.
-
-Fix php-lua build by calling ZSTR_VAL on the correct variable.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/11271124501 (TestPhpLuaLuajit)
-
-Suggested-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-[Romain: add link to failing TestPhpLuaLuajit]
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- ...a.c-fix-ZSTR_VAL-usage-when-using-lua-5.2.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
-
-diff --git a/package/php-lua/0004-lua.c-fix-ZSTR_VAL-usage-when-using-lua-5.2.patch b/package/php-lua/0004-lua.c-fix-ZSTR_VAL-usage-when-using-lua-5.2.patch
-new file mode 100644
-index 0000000000..c5d99db7f5
---- /dev/null
-+++ b/package/php-lua/0004-lua.c-fix-ZSTR_VAL-usage-when-using-lua-5.2.patch
-@@ -0,0 +1,38 @@
-+From 7bf334832ad36d1f2976406d680b35a168ffaa91 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-+Date: Mon, 8 Sep 2025 17:20:12 +0200
-+Subject: [PATCH] lua.c: fix ZSTR_VAL usage when using lua < 5.2
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+When using a lua interpreter with a version lower than 5.1, the
-+php_lua_write_property ends up calling the ZSTR_VAL with the wrong
-+variable (it is expected to receive "member", a zend_string variable,
-+but it is "value" that is passed, which is a zval).
-+
-+Fix php-lua compatibility with interpreters < 5.2 by passing the correct
-+variable
-+
-+Upstream: upstream dead, custom patch
-+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-+---
-+ lua.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/lua.c b/lua.c
-+index a40e5da442a4..5889bc7f83ea 100755
-+--- a/lua.c
-++++ b/lua.c
-+@@ -244,7 +244,7 @@ static zval* php_lua_write_property(zend_object *object, zend_string *member, zv
-+ 	lua_State *L = php_lua_obj_from_obj(object)->L;
-+ 
-+ #if (LUA_VERSION_NUM < 502)
-+-	lua_pushlstring(L, ZSTR_VAL(val), ZSTR_LEN(val));
-++	lua_pushlstring(L, ZSTR_VAL(member), ZSTR_LEN(member));
-+ 	php_lua_send_zval_to_lua(L, value);
-+ 
-+ 	lua_settable(L, LUA_GLOBALSINDEX);
-+-- 
-+2.51.0
-+
-
---===============7272280119311539810==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7272280119311539810==--
+SGVsbG8gQWxleGlzLCBBbGwsCgpMZSAwOS8wOS8yMDI1IMOgIDA5OjI0LCBBbGV4aXMgTG90aG9y
+w6kgYSDDqWNyaXTCoDoKPiBwaHAtbHVhIGZhaWxzIHRvIGJ1aWxkIGluIGJ1aWxkcm9vdCAyMDI1
+LjA4LXJjMyBvbiB0aGUgZm9sbG93aW5nIGVycm9yOgo+IAo+IGluIGZpbGUgaW5jbHVkZWQgZnJv
+bSBbLi4uXS91c3IvaW5jbHVkZS9waHAvWmVuZC96ZW5kLmg6MzIsCj4gICAgICAgICAgICAgICAg
+ICBmcm9tIFsuLi5dL3Vzci9pbmNsdWRlL3BocC9tYWluL3BocC5oOjMxLAo+ICAgICAgICAgICAg
+ICAgICAgZnJvbSBbLi4uXS9idWlsZC9waHAtbHVhLTIuMC43L2x1YS5jOjI0Ogo+IFsuLi5dL2J1
+aWxkL3BocC1sdWEtMi4wLjcvbHVhLmM6IEluIGZ1bmN0aW9uIOKAmHBocF9sdWFfd3JpdGVfcHJv
+cGVydHnigJk6Cj4gWy4uLl0vYnVpbGQvcGhwLWx1YS0yLjAuNy9sdWEuYzoyNDc6Mzc6Cj4gZXJy
+b3I6IOKAmHZhbOKAmSB1bmRlY2xhcmVkIChmaXJzdCB1c2UgaW4gdGhpcyBmdW5jdGlvbik7IGRp
+ZCB5b3UgbWVhbgo+IOKAmHp2YWzigJk/Cj4gICAyNDcgfCAgICAgICAgIGx1YV9wdXNobHN0cmlu
+ZyhMLCBaU1RSX1ZBTCh2YWwpLCBaU1RSX0xFTih2YWwpKTsKPiAgICAgICB8ICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIF5+fgo+IFsuLi5dL3Vzci9pbmNsdWRlL3BocC9aZW5k
+L3plbmRfc3RyaW5nLmg6NjY6MjY6Cj4gbm90ZTogaW4gZGVmaW5pdGlvbiBvZiBtYWNybyDigJha
+U1RSX1ZBTOKAmQo+ICAgIDY2IHwgI2RlZmluZSBaU1RSX1ZBTCh6c3RyKSAgKHpzdHIpLT52YWwK
+PiAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICBefn5+Cj4gWy4uLl0vYnVpbGQvcGhw
+LWx1YS0yLjAuNy9sdWEuYzoyNDc6Mzc6Cj4gbm90ZTogZWFjaCB1bmRlY2xhcmVkIGlkZW50aWZp
+ZXIgaXMgcmVwb3J0ZWQgb25seSBvbmNlIGZvciBlYWNoIGZ1bmN0aW9uCj4gaXQgYXBwZWFycyBp
+bgo+ICAgMjQ3IHwgICAgICAgICBsdWFfcHVzaGxzdHJpbmcoTCwgWlNUUl9WQUwodmFsKSwgWlNU
+Ul9MRU4odmFsKSk7Cj4gICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICBefn4KPiBbLi4uXS91c3IvaW5jbHVkZS9waHAvWmVuZC96ZW5kX3N0cmluZy5oOjY2OjI2Ogo+
+IG5vdGU6IGluIGRlZmluaXRpb24gb2YgbWFjcm8g4oCYWlNUUl9WQUzigJkKPiAgICA2NiB8ICNk
+ZWZpbmUgWlNUUl9WQUwoenN0cikgICh6c3RyKS0+dmFsCj4gICAgICAgfCAgICAgICAgICAgICAg
+ICAgICAgICAgICAgXn5+fgo+IG1ha2VbMl06ICoqKiBbTWFrZWZpbGU6MjE0OiBsdWEubG9dIEVy
+cm9yIDEKPiAKPiBUaGUgaXNzdWUgdHJpZ2dlcnMgb25seSBpZiBsdWEgaW50ZXJwcmV0ZXIgdmVy
+c2lvbiBpcyBsb3dlciB0aGFuIDUuMi4gSW4KPiB0aGlzIGNhc2UsICBwaHBfbHVhX3dyaXRlX3By
+b3BlcnR5IGNhbGxzIFpTVFJfVkFMIG9uIHRoZSB3cm9uZyB2YXJpYWJsZS4KPiAKPiBGaXggcGhw
+LWx1YSBidWlsZCBieSBjYWxsaW5nIFpTVFJfVkFMIG9uIHRoZSBjb3JyZWN0IHZhcmlhYmxlLgo+
+IAo+IFN1Z2dlc3RlZC1ieTogUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUuZnI+Cj4g
+U2lnbmVkLW9mZi1ieTogQWxleGlzIExvdGhvcsOpIDxhbGV4aXMubG90aG9yZUBib290bGluLmNv
+bT4KCkFkZGluZyBUaG9tYXMgUGVyYWxlIGluIENjIGZvciBzdGFibGUgYnJhbmNoZXMuCgpBcHBs
+aWVkIHRvIG1hc3RlciwgdGhhbmtzLgoKQmVzdCByZWdhcmRzLApSb21haW4KCgo+IC0tLQo+IFdo
+aWxlIHRoaXMgcGF0Y2ggZml4ZXMgcGhwLWx1YSB3aXRoIGx1YSA8IDUuMiwgdGhpcyB3b3VsZCBt
+YWtlcyBpdCB5ZXQKPiBhbm90aGVyIGRvd25zdHJlYW0tb25seSBwYXRjaCwgd2hpY2ggaXMgbm90
+IHJlYWxseSBkZXNpcmFibGUuIEkgd2lsbAo+IHBpbmcgaW4gdGhlIG1lYW4gdGltZSB0aGUgaW5h
+Y3RpdmUgdXBzdHJlYW0gcmVwb3NpdG9yeXYgdG8gY2hlY2sgaWYKPiB0aGVyZSBpcyBhbnkgY2hh
+bmNlIHRoYXQgaXQgY291bGQgYmUgdXBkYXRlZCB0byBpbnRlZ3JhdGUgdGhvc2UgcGF0Y2hlcy4K
+PiAtLS0KPiAgLi4uYS5jLWZpeC1aU1RSX1ZBTC11c2FnZS13aGVuLXVzaW5nLWx1YS01LjIucGF0
+Y2ggfCAzOCArKysrKysrKysrKysrKysrKysrKysrCj4gIDEgZmlsZSBjaGFuZ2VkLCAzOCBpbnNl
+cnRpb25zKCspCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcGhwLWx1YS8wMDA0LWx1YS5jLWZp
+eC1aU1RSX1ZBTC11c2FnZS13aGVuLXVzaW5nLWx1YS01LjIucGF0Y2ggYi9wYWNrYWdlL3BocC1s
+dWEvMDAwNC1sdWEuYy1maXgtWlNUUl9WQUwtdXNhZ2Utd2hlbi11c2luZy1sdWEtNS4yLnBhdGNo
+Cj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw
+MDAwMDAwMDAwMDAwMDAwLi5jNWQ5OWRiN2Y1MTgzNjJiZjZlOGQwOTgxZTM4Y2E4OWQ0YWU3MDg4
+Cj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3BhY2thZ2UvcGhwLWx1YS8wMDA0LWx1YS5jLWZpeC1a
+U1RSX1ZBTC11c2FnZS13aGVuLXVzaW5nLWx1YS01LjIucGF0Y2gKPiBAQCAtMCwwICsxLDM4IEBA
+Cj4gK0Zyb20gN2JmMzM0ODMyYWQzNmQxZjI5NzY0MDZkNjgwYjM1YTE2OGZmYWE5MSBNb24gU2Vw
+IDE3IDAwOjAwOjAwIDIwMDEKPiArRnJvbTogPT9VVEYtOD9xP0FsZXhpcz0yMExvdGhvcj1DMz1B
+OT89IDxhbGV4aXMubG90aG9yZUBib290bGluLmNvbT4KPiArRGF0ZTogTW9uLCA4IFNlcCAyMDI1
+IDE3OjIwOjEyICswMjAwCj4gK1N1YmplY3Q6IFtQQVRDSF0gbHVhLmM6IGZpeCBaU1RSX1ZBTCB1
+c2FnZSB3aGVuIHVzaW5nIGx1YSA8IDUuMgo+ICtNSU1FLVZlcnNpb246IDEuMAo+ICtDb250ZW50
+LVR5cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRGLTgKPiArQ29udGVudC1UcmFuc2Zlci1FbmNv
+ZGluZzogOGJpdAo+ICsKPiArV2hlbiB1c2luZyBhIGx1YSBpbnRlcnByZXRlciB3aXRoIGEgdmVy
+c2lvbiBsb3dlciB0aGFuIDUuMSwgdGhlCj4gK3BocF9sdWFfd3JpdGVfcHJvcGVydHkgZW5kcyB1
+cCBjYWxsaW5nIHRoZSBaU1RSX1ZBTCB3aXRoIHRoZSB3cm9uZwo+ICt2YXJpYWJsZSAoaXQgaXMg
+ZXhwZWN0ZWQgdG8gcmVjZWl2ZSAibWVtYmVyIiwgYSB6ZW5kX3N0cmluZyB2YXJpYWJsZSwKPiAr
+YnV0IGl0IGlzICJ2YWx1ZSIgdGhhdCBpcyBwYXNzZWQsIHdoaWNoIGlzIGEgenZhbCkuCj4gKwo+
+ICtGaXggcGhwLWx1YSBjb21wYXRpYmlsaXR5IHdpdGggaW50ZXJwcmV0ZXJzIDwgNS4yIGJ5IHBh
+c3NpbmcgdGhlIGNvcnJlY3QKPiArdmFyaWFibGUKPiArCj4gK1Vwc3RyZWFtOiB1cHN0cmVhbSBk
+ZWFkLCBjdXN0b20gcGF0Y2gKPiArU2lnbmVkLW9mZi1ieTogQWxleGlzIExvdGhvcsOpIDxhbGV4
+aXMubG90aG9yZUBib290bGluLmNvbT4KPiArLS0tCj4gKyBsdWEuYyB8IDIgKy0KPiArIDEgZmls
+ZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQo+ICsKPiArZGlmZiAtLWdp
+dCBhL2x1YS5jIGIvbHVhLmMKPiAraW5kZXggYTQwZTVkYTQ0MmE0Li41ODg5YmM3ZjgzZWEgMTAw
+NzU1Cj4gKy0tLSBhL2x1YS5jCj4gKysrKyBiL2x1YS5jCj4gK0BAIC0yNDQsNyArMjQ0LDcgQEAg
+c3RhdGljIHp2YWwqIHBocF9sdWFfd3JpdGVfcHJvcGVydHkoemVuZF9vYmplY3QgKm9iamVjdCwg
+emVuZF9zdHJpbmcgKm1lbWJlciwgenYKPiArIAlsdWFfU3RhdGUgKkwgPSBwaHBfbHVhX29ial9m
+cm9tX29iaihvYmplY3QpLT5MOwo+ICsgCj4gKyAjaWYgKExVQV9WRVJTSU9OX05VTSA8IDUwMikK
+PiArLQlsdWFfcHVzaGxzdHJpbmcoTCwgWlNUUl9WQUwodmFsKSwgWlNUUl9MRU4odmFsKSk7Cj4g
+KysJbHVhX3B1c2hsc3RyaW5nKEwsIFpTVFJfVkFMKG1lbWJlciksIFpTVFJfTEVOKG1lbWJlcikp
+Owo+ICsgCXBocF9sdWFfc2VuZF96dmFsX3RvX2x1YShMLCB2YWx1ZSk7Cj4gKyAKPiArIAlsdWFf
+c2V0dGFibGUoTCwgTFVBX0dMT0JBTFNJTkRFWCk7Cj4gKy0tIAo+ICsyLjUxLjAKPiArCj4gCj4g
+LS0tCj4gYmFzZS1jb21taXQ6IDU2ZDlkNWU4ZjA4NzI3MzdmZDc5YWJmNmE2MGU2NjkyMGJiNzg2
+MWMKPiBjaGFuZ2UtaWQ6IDIwMjUwOTA4LWZpeF9waHBfbHVhLTliZjc4NzJiMjViNQo+IAo+IEJl
+c3QgcmVnYXJkcywKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6
+Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
