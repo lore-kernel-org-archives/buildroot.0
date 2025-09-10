@@ -1,51 +1,107 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA6ADCA0FED
-	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 20:13:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DED7BCA0FED
+	for <buildroot@archiver.kernel.org>; Wed, 10 Sep 2025 20:13:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 76CF78426E;
-	Wed, 10 Sep 2025 20:13:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B44514045A;
+	Wed, 10 Sep 2025 20:13:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wzQfGPuYIf2k; Wed, 10 Sep 2025 20:13:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id G_c4pdNxARtH; Wed, 10 Sep 2025 20:13:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64B358426F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A25784054B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 64B358426F;
-	Wed, 10 Sep 2025 20:13:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id AC601234
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:13:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A25784054B;
+	Wed, 10 Sep 2025 20:13:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 60B182BB3
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:13:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A98628426F
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:13:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4760561430
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:13:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gcmRTZhfwLKO for <buildroot@buildroot.org>;
- Wed, 10 Sep 2025 20:13:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDDEA8426E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BDDEA8426E
- for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:13:33 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AB80B83CE7; Wed, 10 Sep 2025 20:13:33 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 10 Sep 2025 13:38:29 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b401a61f35dde14505f0f22f3bebf01af1e37290
-X-Git-Newrev: 4cd4b2e1e6e8816555db38771d18daad46df3a6c
-X-Patchwork-Hint: ignore
-Message-Id: <20250910201333.AB80B83CE7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{mesa3d,
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ib3xNN0hA1Eb for <buildroot@buildroot.org>;
+ Wed, 10 Sep 2025 20:13:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::343; helo=mail-wm1-x343.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 15E6E610E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15E6E610E0
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com
+ [IPv6:2a00:1450:4864:20::343])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 15E6E610E0
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 20:13:36 +0000 (UTC)
+Received: by mail-wm1-x343.google.com with SMTP id
+ 5b1f17b1804b1-45dd513f4ecso46055965e9.3
+ for <buildroot@buildroot.org>; Wed, 10 Sep 2025 13:13:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1757535215; x=1758140015;
+ h=content-transfer-encoding:in-reply-to:content-language:references
+ :cc:to:from:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=m6GH8MHsINS+f+RntzP64dPkcY2kdxhXdISxv4Ka0BQ=;
+ b=gIMPyT3/mHC2Ik6hPo7IoO866eBcX7OJjozq9tW5ZUFV2I+EdHGGHZL2wyh2zbqSPJ
+ pvMD0jr7l6i1iPZ0/NkAHHdlEBI5eomUjJMIPw0hUIxS9oF07ILC/6qDtGnq7sLCQRTg
+ kGHrtUT5/wQD9kf2RPpzgbaNAzsU7950jIEPoKaP+uZKrLvToh19/IGVIfwstOt2ehhy
+ JYrbxH7L5kcw/LQ+JJdBoClY+VGhtC5CFORV3ny7iuDg/w8MKBBk3nC32+a5qKQwwY1y
+ gAW2bEDHNwgN0CW48Mvv2PSyjPYnB/bW46nKTT/lMK8R8Jx/mhPC6xRKUKY1LngyqaAn
+ MJdw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCWbkl6cO9noGgaaCoTSYgC6Tz6zbofnJllw0WMnd83JsYoJwihP/jHIb6EcEhdJmv0dQOzQjF2ogyY=@buildroot.org
+X-Gm-Message-State: AOJu0YxKFMUk1Ge1OSH37+ZUOFa7hff/iCXiooKg9O4A9NtWJKGiAuml
+ F3cJ/BjVl9WyZEA9wMQkgVXZOWUPk+BFnK5y0i9REKFVuXTkbYvJTXOdW+jPNEjecY0=
+X-Gm-Gg: ASbGncuUIVEhsC7s5UV10CdvONqVFYnM97o4QQkgLl/NrvrpHbi36YbBkS7xQLlk1cg
+ 1Hpslzaefc/YQ+9FCFqFaZnKrNiw78gZrH9CzEhcmAD6qRRB8cevh2YH8AsmPHZkhWwOuAMzcY3
+ vzzVu9HnalqbRIS8T07ZMvK5VY2h1yvMQvYL77CsLAwcxs+92tZ9a32vVYU+tVEiDgR5Z0cV1Vw
+ VdNDD/33nb67TprlsLyWh5z0g3cK0eG9tczVFF1rEVHotUcsPBSgaY8sR2c/jMVBwN+sz63mchm
+ XSHY/LVLR7H95gV6zVXOPQ4rBhy0zMtwEUzlroCk5q1g2JCqoM7hJ+ErKutH461gGrkspx2ZP4e
+ HiSrJRqthZZNzy7/9rwFUVC4oB8EAlvhIghkUhFFh2Qr7299ug9ypH5oM4qPq9I7wUd7waLjN7K
+ iotZuothi/+D9vuLtKKggE0gB73dVKiMbOLNEQAbWxfDp9q0U77kiDPpTyfOhPpyX4tlPs+eE=
+X-Google-Smtp-Source: AGHT+IHWiX3Zyro8oKEqi+jyRsMD8+2nZPgTVQ4vesjvDp3SSWbBhApItC6qf1AlFFaGRHJaSnN5Nw==
+X-Received: by 2002:a05:600c:19c8:b0:45b:7ce0:fb98 with SMTP id
+ 5b1f17b1804b1-45ddde866c8mr159393785e9.5.1757535215033; 
+ Wed, 10 Sep 2025 13:13:35 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:94a2:a200:2ad9:827a:59cb:148a?
+ (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-45df8259524sm39416435e9.21.2025.09.10.13.13.34
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 10 Sep 2025 13:13:34 -0700 (PDT)
+Message-ID: <156867a4-c8ba-4ce5-b047-a2971ead5bc6@smile.fr>
+Date: Wed, 10 Sep 2025 22:13:34 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>
+References: <20250909161325.59760-1-bernd@kuhls.net>
+ <65be9a4b-1053-4b07-a1ec-aaa9a7c3db01@smile.fr>
+Content-Language: fr, en-US
+In-Reply-To: <65be9a4b-1053-4b07-a1ec-aaa9a7c3db01@smile.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1757535215; x=1758140015; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:references
+ :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+ :cc:subject:date:message-id:reply-to;
+ bh=m6GH8MHsINS+f+RntzP64dPkcY2kdxhXdISxv4Ka0BQ=;
+ b=WYHSwfLE5XoKTYAW9lhXJm+7I6sayhUeX7pKNNEWcWrvRCUoUrAjMcyQkhTsBvRlag
+ tfCMOZrXGOqkGhJGCJBC/aVREiSgqPihyn/KcEOAi2gPnbOCi97radcMTufe7upRDQe3
+ P7OdY0KaZGrlHuHCA8higg6fPmDvjWfZClUqU=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=WYHSwfLE
+Subject: Re: [Buildroot] [PATCH 1/1] package/{mesa3d,
  mesa3d-headers}: bump version to 25.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -60,161 +116,145 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4cd4b2e1e6e8816555db38771d18daad46df3a6c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Rebased patch 0001.
-
-Removed Gallium xa state tracker:
-https://gitlab.freedesktop.org/mesa/mesa/-/commit/3be2c47db2318ebe9222c80bf981038df4374b2d
-
-Legacy handling for blind option BR2_PACKAGE_MESA3D_NEEDS_XA is not
-necessary.
-
-Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2025-August/000815.html
-https://lists.freedesktop.org/archives/mesa-announce/2025-August/000818.html
-https://lists.freedesktop.org/archives/mesa-announce/2025-September/000820.html
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- package/mesa3d-headers/mesa3d-headers.mk                       |  2 +-
- ...-vc4-add-meson-option-to-disable-optional-neon-suppor.patch |  6 +++---
- package/mesa3d/Config.in                                       |  9 ---------
- package/mesa3d/mesa3d.hash                                     |  6 +++---
- package/mesa3d/mesa3d.mk                                       | 10 ++--------
- 5 files changed, 9 insertions(+), 24 deletions(-)
-
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 5cd05cc9ff..5932d73f2c 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 25.1.8
-+MESA3D_HEADERS_VERSION = 25.2.2
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/0001-vc4-add-meson-option-to-disable-optional-neon-suppor.patch b/package/mesa3d/0001-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
-index 04b33a7856..52e23e35da 100644
---- a/package/mesa3d/0001-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
-+++ b/package/mesa3d/0001-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
-@@ -10,7 +10,7 @@ to force disabling it at compile time.
- Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/4114
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
--[rebased for 20.2.0, 20.3.0, 21.1.0, 23.1.0, 23.2.0, 24.3.0 & 25.1.0]
-+[rebased for 20.2.0, 20.3.0, 21.1.0, 23.1.0, 23.2.0, 24.3.0, 25.1.0 & 25.2.0]
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- [fix syntax error after previous rebases]
- ---
-@@ -23,8 +23,8 @@ diff --git a/meson.options b/meson.options
- index 8e0bf2a..1cf0e07 100644
- --- a/meson.options
- +++ b/meson.options
--@@ -117,6 +117,13 @@ option(
--   description : 'enable gallium va frontend.',
-+@@ -131,6 +131,13 @@ option(
-+   description : 'enable gallium mediafoundation frontend tests.',
-  )
-  
- +option(
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 924437f033..d2003fce42 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -102,12 +102,6 @@ config BR2_PACKAGE_MESA3D_DRIVER
- 	bool
- 	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
- 
--# Gallium xa state tracker.
--# Quote from mesa3d meson.build: "XA state tracker requires at least
--# one of the following gallium drivers: nouveau, freedreno, i915, svga.
--config BR2_PACKAGE_MESA3D_NEEDS_XA
--	bool
--
- # OpenGL GLX and Gallium VDPAU both needs X11
- config BR2_PACKAGE_MESA3D_NEEDS_X11
- 	bool
-@@ -194,7 +188,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
- 	bool "Gallium nouveau driver"
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_LIBDRM_NOUVEAU
--	select BR2_PACKAGE_MESA3D_NEEDS_XA
- 	select BR2_PACKAGE_LLVM_RTTI if BR2_PACKAGE_MESA3D_LLVM
- 	select BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
- 	help
-@@ -266,7 +259,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
- 	depends on BR2_i386 || BR2_x86_64
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_LIBDRM_VMWGFX
--	select BR2_PACKAGE_MESA3D_NEEDS_XA
- 	help
- 	  This is a virtual GPU driver for VMWare virtual machines.
- 
-@@ -282,7 +274,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
- 	select BR2_PACKAGE_LIBDRM_NOUVEAU
--	select BR2_PACKAGE_MESA3D_NEEDS_XA
- 	help
- 	  Adds support for Nvidia Tegra GPUs, requires nouveau.
- 
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index a3858d398d..d76b384e26 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2025-August/000817.html
--sha256  5cf1571d0d646d90047f3d93f57acc787cf88ec7e95efe172c555b492c30fb71  mesa-25.1.8.tar.xz
--sha512  98435d52a2855c71b15060785c225dc674b3565545a8581a5dd501605a04f9d597636282f1bce61e7a2e8ee98c31ecf7fbccab594571e31bc8b827e18e98aaa5  mesa-25.1.8.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2025-September/000820.html
-+sha256  43d7abcd4aa8049d8fd75538344a374104765e81e17b4a6314cee2c0160e4412  mesa-25.2.2.tar.xz
-+sha512  69cd7ed33d0856e227a0219a9d09e5eb2fad28162276b5971bff4f7102cf58b0d914131ad6543562cba230ce6fb9b2076d3b156b1b8c375e74722a143aee5379  mesa-25.2.2.tar.xz
- # License
- sha256  0d1a0472ecc81830e75c20d59b0ea02841e3db21255e0ebad97ab682c54d6615  docs/license.rst
- sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  licenses/MIT
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index e94bafed8c..9ab0ffdfc3 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 25.1.8
-+MESA3D_VERSION = 25.2.2
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
-@@ -92,15 +92,9 @@ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
- MESA3D_CONF_OPTS += \
- 	-Dglx=dri \
- 	-Dglx-direct=true
--ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_XA),y)
--MESA3D_CONF_OPTS += -Dgallium-xa=enabled
--else
--MESA3D_CONF_OPTS += -Dgallium-xa=disabled
--endif
- else
- MESA3D_CONF_OPTS += \
--	-Dglx=disabled \
--	-Dgallium-xa=disabled
-+	-Dglx=disabled
- endif
- 
- ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gQmVybmQsIEFsbCwKCkxlIDEwLzA5LzIwMjUgw6AgMTM6NDksIFJvbWFpbiBOYW91ciBh
+IMOpY3JpdMKgOgo+IEhlbGxvIEJlcm5kLCBBbGwsCj4gCj4gTGUgMDkvMDkvMjAyNSDDoCAxODox
+MywgQmVybmQgS3VobHMgYSDDqWNyaXTCoDoKPj4gUmViYXNlZCBwYXRjaCAwMDAxLgo+Pgo+PiBS
+ZW1vdmVkIEdhbGxpdW0geGEgc3RhdGUgdHJhY2tlcjoKPj4gaHR0cHM6Ly9naXRsYWIuZnJlZWRl
+c2t0b3Aub3JnL21lc2EvbWVzYS8tL2NvbW1pdC8zYmUyYzQ3ZGIyMzE4ZWJlOTIyMmM4MGJmOTgx
+MDM4ZGY0Mzc0YjJkCj4+Cj4+IExlZ2FjeSBoYW5kbGluZyBmb3IgYmxpbmQgb3B0aW9uIEJSMl9Q
+QUNLQUdFX01FU0EzRF9ORUVEU19YQSBpcyBub3QKPj4gbmVjZXNzYXJ5Lgo+Pgo+PiBSZWxlYXNl
+IG5vdGVzOgo+PiBodHRwczovL2xpc3RzLmZyZWVkZXNrdG9wLm9yZy9hcmNoaXZlcy9tZXNhLWFu
+bm91bmNlLzIwMjUtQXVndXN0LzAwMDgxNS5odG1sCj4+IGh0dHBzOi8vbGlzdHMuZnJlZWRlc2t0
+b3Aub3JnL2FyY2hpdmVzL21lc2EtYW5ub3VuY2UvMjAyNS1BdWd1c3QvMDAwODE4Lmh0bWwKPj4g
+aHR0cHM6Ly9saXN0cy5mcmVlZGVza3RvcC5vcmcvYXJjaGl2ZXMvbWVzYS1hbm5vdW5jZS8yMDI1
+LVNlcHRlbWJlci8wMDA4MjAuaHRtbAo+IAo+IE9uIHN1Y2ggY29tcGxleCBwYWNrYWdlLCBjYW4g
+eW91IHRyeSBhdCBsZWFzdCBvbmUgb2YgdGhlIHRlc3RzdWl0ZSBjYXNlIHdlcmUKPiBtZXNhM2Qg
+aXMgZW5hYmxlZD8KPiAKPiB0ZXN0X2ZsdXR0ZXIucHk6MjQ6ICAgICAgICBCUjJfUEFDS0FHRV9N
+RVNBM0Q9eQo+IHRlc3RfZ2xzbHNhbmRib3hfcGxheWVyLnB5OjE5OiAgICAgICAgQlIyX1BBQ0tB
+R0VfTUVTQTNEPXkKPiB0ZXN0X2dseGluZm8ucHk6MjE6ICAgICAgICBCUjJfUEFDS0FHRV9NRVNB
+M0Q9eQo+IHRlc3Rfa21zY3ViZS5weToyMDogICAgICAgIEJSMl9QQUNLQUdFX01FU0EzRD15Cj4g
+dGVzdF9tZXNhM2QucHk6MTc6ICAgICAgICBCUjJfUEFDS0FHRV9NRVNBM0Q9eQo+IHRlc3RfcHl0
+aG9uX3B5cXQ1LnB5OjMwOiAgICAgICAgQlIyX1BBQ0tBR0VfTUVTQTNEPXkKPiB0ZXN0X3dlc3Rv
+bi5weToyNDogICAgICAgIEJSMl9QQUNLQUdFX01FU0EzRD15Cj4gCj4gQXQgbGVhc3QgdGhlIFRl
+c3RNZXNhM0RSdXN0aWNsIG9uZT8KPiAoSSB1bmRlcnN0YW5kIHRoYXQgZWFjaCBvZiB0aGVtIHJl
+cXVpcmVzIHRpbWUsIHJlc291cmNlcyBhbmQgQ0kgbWludXRlcykKPiAKPj4KPj4gU2lnbmVkLW9m
+Zi1ieTogQmVybmQgS3VobHMgPGJlcm5kQGt1aGxzLm5ldD4KPj4gLS0tCj4+ICBwYWNrYWdlL21l
+c2EzZC1oZWFkZXJzL21lc2EzZC1oZWFkZXJzLm1rICAgICAgICAgICAgICAgfCAgMiArLQo+PiAg
+Li4uLW1lc29uLW9wdGlvbi10by1kaXNhYmxlLW9wdGlvbmFsLW5lb24tc3VwcG9yLnBhdGNoIHwg
+IDYgKysrLS0tCj4+ICBwYWNrYWdlL21lc2EzZC9Db25maWcuaW4gICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgfCAgOSAtLS0tLS0tLS0KPj4gIHBhY2thZ2UvbWVzYTNkL21lc2EzZC5oYXNo
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA2ICsrKy0tLQo+PiAgcGFja2FnZS9tZXNh
+M2QvbWVzYTNkLm1rICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgMTAgKystLS0tLS0t
+LQo+PiAgNSBmaWxlcyBjaGFuZ2VkLCA5IGluc2VydGlvbnMoKyksIDI0IGRlbGV0aW9ucygtKQo+
+Pgo+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9tZXNhM2QtaGVhZGVycy9tZXNhM2QtaGVhZGVycy5t
+ayBiL3BhY2thZ2UvbWVzYTNkLWhlYWRlcnMvbWVzYTNkLWhlYWRlcnMubWsKPj4gaW5kZXggNWNk
+MDVjYzlmZi4uNTkzMmQ3M2YyYyAxMDA2NDQKPj4gLS0tIGEvcGFja2FnZS9tZXNhM2QtaGVhZGVy
+cy9tZXNhM2QtaGVhZGVycy5tawo+PiArKysgYi9wYWNrYWdlL21lc2EzZC1oZWFkZXJzL21lc2Ez
+ZC1oZWFkZXJzLm1rCj4+IEBAIC0xMiw3ICsxMiw3IEBAIGVuZGlmCj4+ICAKPj4gICMgTm90IHBv
+c3NpYmxlIHRvIGRpcmVjdGx5IHJlZmVyIHRvIG1lc2EzZCB2YXJpYWJsZXMsIGJlY2F1c2Ugb2YK
+Pj4gICMgZmlyc3Qvc2Vjb25kIGV4cGFuc2lvbiB0cmlja2VyeS4uLgo+PiAtTUVTQTNEX0hFQURF
+UlNfVkVSU0lPTiA9IDI1LjEuOAo+PiArTUVTQTNEX0hFQURFUlNfVkVSU0lPTiA9IDI1LjIuMgo+
+PiAgTUVTQTNEX0hFQURFUlNfU09VUkNFID0gbWVzYS0kKE1FU0EzRF9IRUFERVJTX1ZFUlNJT04p
+LnRhci54ego+PiAgTUVTQTNEX0hFQURFUlNfU0lURSA9IGh0dHBzOi8vYXJjaGl2ZS5tZXNhM2Qu
+b3JnCj4+ICBNRVNBM0RfSEVBREVSU19ETF9TVUJESVIgPSBtZXNhM2QKPj4gZGlmZiAtLWdpdCBh
+L3BhY2thZ2UvbWVzYTNkLzAwMDEtdmM0LWFkZC1tZXNvbi1vcHRpb24tdG8tZGlzYWJsZS1vcHRp
+b25hbC1uZW9uLXN1cHBvci5wYXRjaCBiL3BhY2thZ2UvbWVzYTNkLzAwMDEtdmM0LWFkZC1tZXNv
+bi1vcHRpb24tdG8tZGlzYWJsZS1vcHRpb25hbC1uZW9uLXN1cHBvci5wYXRjaAo+PiBpbmRleCAw
+NGIzM2E3ODU2Li41MmUyM2UzNWRhIDEwMDY0NAo+PiAtLS0gYS9wYWNrYWdlL21lc2EzZC8wMDAx
+LXZjNC1hZGQtbWVzb24tb3B0aW9uLXRvLWRpc2FibGUtb3B0aW9uYWwtbmVvbi1zdXBwb3IucGF0
+Y2gKPj4gKysrIGIvcGFja2FnZS9tZXNhM2QvMDAwMS12YzQtYWRkLW1lc29uLW9wdGlvbi10by1k
+aXNhYmxlLW9wdGlvbmFsLW5lb24tc3VwcG9yLnBhdGNoCj4+IEBAIC0xMCw3ICsxMCw3IEBAIHRv
+IGZvcmNlIGRpc2FibGluZyBpdCBhdCBjb21waWxlIHRpbWUuCj4+ICBVcHN0cmVhbTogaHR0cHM6
+Ly9naXRsYWIuZnJlZWRlc2t0b3Aub3JnL21lc2EvbWVzYS8tL21lcmdlX3JlcXVlc3RzLzQxMTQK
+Pj4gIFNpZ25lZC1vZmYtYnk6IFBldGVyIFNlaWRlcmVyIDxwcy5yZXBvcnRAZ214Lm5ldD4KPj4g
+IFNpZ25lZC1vZmYtYnk6IEJlcm5kIEt1aGxzIDxiZXJuZEBrdWhscy5uZXQ+Cj4+IC1bcmViYXNl
+ZCBmb3IgMjAuMi4wLCAyMC4zLjAsIDIxLjEuMCwgMjMuMS4wLCAyMy4yLjAsIDI0LjMuMCAmIDI1
+LjEuMF0KPj4gK1tyZWJhc2VkIGZvciAyMC4yLjAsIDIwLjMuMCwgMjEuMS4wLCAyMy4xLjAsIDIz
+LjIuMCwgMjQuMy4wLCAyNS4xLjAgJiAyNS4yLjBdCj4gCj4gVGhpcyBpcyBhIGxvbmcgbGlzdC4g
+T25seSB0aGUgbGFzdCBvbmUgaXMgcmVhbGx5IHJlbGV2YW50IHNpbmNlIHdlIHBhY2thZ2Ugb25s
+eQo+IG9uZSBtZXNhM2QgdmVyc2lvbiBhdCB0aGUgdGltZS4KPiAKPiBJJ2xsIHJ1biBzb21lIHRl
+c3RzLCBqdXN0IHRvIGRvdWJsZSBjaGVjay4KClRlc3RzIGFyZSBzdWNjZXNzZnVsOgpUZXN0R2x4
+aW5mbwpUZXN0TWVzYTNEUnVzdGljbApUZXN0V2VzdG9uCgpBcHBsaWVkIHRvIG1hc3RlciwgdGhh
+bmtzLgoKQmVzdCByZWdhcmRzLApSb21haW4KCgo+IAo+IEJlc3QgcmVnYXJkcywKPiBSb21haW4K
+PiAKPiAKPj4gIFNpZ25lZC1vZmYtYnk6IFBldGVyIFNlaWRlcmVyIDxwcy5yZXBvcnRAZ214Lm5l
+dD4KPj4gIFtmaXggc3ludGF4IGVycm9yIGFmdGVyIHByZXZpb3VzIHJlYmFzZXNdCj4+ICAtLS0K
+Pj4gQEAgLTIzLDggKzIzLDggQEAgZGlmZiAtLWdpdCBhL21lc29uLm9wdGlvbnMgYi9tZXNvbi5v
+cHRpb25zCj4+ICBpbmRleCA4ZTBiZjJhLi4xY2YwZTA3IDEwMDY0NAo+PiAgLS0tIGEvbWVzb24u
+b3B0aW9ucwo+PiAgKysrIGIvbWVzb24ub3B0aW9ucwo+PiAtQEAgLTExNyw2ICsxMTcsMTMgQEAg
+b3B0aW9uKAo+PiAtICAgZGVzY3JpcHRpb24gOiAnZW5hYmxlIGdhbGxpdW0gdmEgZnJvbnRlbmQu
+JywKPj4gK0BAIC0xMzEsNiArMTMxLDEzIEBAIG9wdGlvbigKPj4gKyAgIGRlc2NyaXB0aW9uIDog
+J2VuYWJsZSBnYWxsaXVtIG1lZGlhZm91bmRhdGlvbiBmcm9udGVuZCB0ZXN0cy4nLAo+PiAgICkK
+Pj4gICAKPj4gICtvcHRpb24oCj4+IGRpZmYgLS1naXQgYS9wYWNrYWdlL21lc2EzZC9Db25maWcu
+aW4gYi9wYWNrYWdlL21lc2EzZC9Db25maWcuaW4KPj4gaW5kZXggOTI0NDM3ZjAzMy4uZDIwMDNm
+Y2U0MiAxMDA2NDQKPj4gLS0tIGEvcGFja2FnZS9tZXNhM2QvQ29uZmlnLmluCj4+ICsrKyBiL3Bh
+Y2thZ2UvbWVzYTNkL0NvbmZpZy5pbgo+PiBAQCAtMTAyLDEyICsxMDIsNiBAQCBjb25maWcgQlIy
+X1BBQ0tBR0VfTUVTQTNEX0RSSVZFUgo+PiAgCWJvb2wKPj4gIAlzZWxlY3QgQlIyX1BBQ0tBR0Vf
+WExJQl9MSUJYU0hNRkVOQ0UgaWYgQlIyX1BBQ0tBR0VfWE9SRzcKPj4gIAo+PiAtIyBHYWxsaXVt
+IHhhIHN0YXRlIHRyYWNrZXIuCj4+IC0jIFF1b3RlIGZyb20gbWVzYTNkIG1lc29uLmJ1aWxkOiAi
+WEEgc3RhdGUgdHJhY2tlciByZXF1aXJlcyBhdCBsZWFzdAo+PiAtIyBvbmUgb2YgdGhlIGZvbGxv
+d2luZyBnYWxsaXVtIGRyaXZlcnM6IG5vdXZlYXUsIGZyZWVkcmVubywgaTkxNSwgc3ZnYS4KPj4g
+LWNvbmZpZyBCUjJfUEFDS0FHRV9NRVNBM0RfTkVFRFNfWEEKPj4gLQlib29sCj4+IC0KPj4gICMg
+T3BlbkdMIEdMWCBhbmQgR2FsbGl1bSBWRFBBVSBib3RoIG5lZWRzIFgxMQo+PiAgY29uZmlnIEJS
+Ml9QQUNLQUdFX01FU0EzRF9ORUVEU19YMTEKPj4gIAlib29sCj4+IEBAIC0xOTQsNyArMTg4LDYg
+QEAgY29uZmlnIEJSMl9QQUNLQUdFX01FU0EzRF9HQUxMSVVNX0RSSVZFUl9OT1VWRUFVCj4+ICAJ
+Ym9vbCAiR2FsbGl1bSBub3V2ZWF1IGRyaXZlciIKPj4gIAlzZWxlY3QgQlIyX1BBQ0tBR0VfTUVT
+QTNEX0dBTExJVU1fRFJJVkVSCj4+ICAJc2VsZWN0IEJSMl9QQUNLQUdFX0xJQkRSTV9OT1VWRUFV
+Cj4+IC0Jc2VsZWN0IEJSMl9QQUNLQUdFX01FU0EzRF9ORUVEU19YQQo+PiAgCXNlbGVjdCBCUjJf
+UEFDS0FHRV9MTFZNX1JUVEkgaWYgQlIyX1BBQ0tBR0VfTUVTQTNEX0xMVk0KPj4gIAlzZWxlY3Qg
+QlIyX1BBQ0tBR0VfTUVTQTNEX1JVU1RJQ0xfU1VQUE9SVEVEX0RSSVZFUgo+PiAgCWhlbHAKPj4g
+QEAgLTI2Niw3ICsyNTksNiBAQCBjb25maWcgQlIyX1BBQ0tBR0VfTUVTQTNEX0dBTExJVU1fRFJJ
+VkVSX1NWR0EKPj4gIAlkZXBlbmRzIG9uIEJSMl9pMzg2IHx8IEJSMl94ODZfNjQKPj4gIAlzZWxl
+Y3QgQlIyX1BBQ0tBR0VfTUVTQTNEX0dBTExJVU1fRFJJVkVSCj4+ICAJc2VsZWN0IEJSMl9QQUNL
+QUdFX0xJQkRSTV9WTVdHRlgKPj4gLQlzZWxlY3QgQlIyX1BBQ0tBR0VfTUVTQTNEX05FRURTX1hB
+Cj4+ICAJaGVscAo+PiAgCSAgVGhpcyBpcyBhIHZpcnR1YWwgR1BVIGRyaXZlciBmb3IgVk1XYXJl
+IHZpcnR1YWwgbWFjaGluZXMuCj4+ICAKPj4gQEAgLTI4Miw3ICsyNzQsNiBAQCBjb25maWcgQlIy
+X1BBQ0tBR0VfTUVTQTNEX0dBTExJVU1fRFJJVkVSX1RFR1JBCj4+ICAJc2VsZWN0IEJSMl9QQUNL
+QUdFX01FU0EzRF9HQUxMSVVNX0RSSVZFUgo+PiAgCXNlbGVjdCBCUjJfUEFDS0FHRV9NRVNBM0Rf
+R0FMTElVTV9EUklWRVJfTk9VVkVBVQo+PiAgCXNlbGVjdCBCUjJfUEFDS0FHRV9MSUJEUk1fTk9V
+VkVBVQo+PiAtCXNlbGVjdCBCUjJfUEFDS0FHRV9NRVNBM0RfTkVFRFNfWEEKPj4gIAloZWxwCj4+
+ICAJICBBZGRzIHN1cHBvcnQgZm9yIE52aWRpYSBUZWdyYSBHUFVzLCByZXF1aXJlcyBub3V2ZWF1
+Lgo+PiAgCj4+IGRpZmYgLS1naXQgYS9wYWNrYWdlL21lc2EzZC9tZXNhM2QuaGFzaCBiL3BhY2th
+Z2UvbWVzYTNkL21lc2EzZC5oYXNoCj4+IGluZGV4IGEzODU4ZDM5OGQuLmQ3NmIzODRlMjYgMTAw
+NjQ0Cj4+IC0tLSBhL3BhY2thZ2UvbWVzYTNkL21lc2EzZC5oYXNoCj4+ICsrKyBiL3BhY2thZ2Uv
+bWVzYTNkL21lc2EzZC5oYXNoCj4+IEBAIC0xLDYgKzEsNiBAQAo+PiAtIyBGcm9tIGh0dHBzOi8v
+bGlzdHMuZnJlZWRlc2t0b3Aub3JnL2FyY2hpdmVzL21lc2EtYW5ub3VuY2UvMjAyNS1BdWd1c3Qv
+MDAwODE3Lmh0bWwKPj4gLXNoYTI1NiAgNWNmMTU3MWQwZDY0NmQ5MDA0N2YzZDkzZjU3YWNjNzg3
+Y2Y4OGVjN2U5NWVmZTE3MmM1NTViNDkyYzMwZmI3MSAgbWVzYS0yNS4xLjgudGFyLnh6Cj4+IC1z
+aGE1MTIgIDk4NDM1ZDUyYTI4NTVjNzFiMTUwNjA3ODVjMjI1ZGM2NzRiMzU2NTU0NWE4NTgxYTVk
+ZDUwMTYwNWEwNGY5ZDU5NzYzNjI4MmYxYmNlNjFlN2EyZThlZTk4YzMxZWNmN2ZiY2NhYjU5NDU3
+MWUzMWJjOGI4MjdlMThlOThhYWE1ICBtZXNhLTI1LjEuOC50YXIueHoKPj4gKyMgRnJvbSBodHRw
+czovL2xpc3RzLmZyZWVkZXNrdG9wLm9yZy9hcmNoaXZlcy9tZXNhLWFubm91bmNlLzIwMjUtU2Vw
+dGVtYmVyLzAwMDgyMC5odG1sCj4+ICtzaGEyNTYgIDQzZDdhYmNkNGFhODA0OWQ4ZmQ3NTUzODM0
+NGEzNzQxMDQ3NjVlODFlMTdiNGE2MzE0Y2VlMmMwMTYwZTQ0MTIgIG1lc2EtMjUuMi4yLnRhci54
+ego+PiArc2hhNTEyICA2OWNkN2VkMzNkMDg1NmUyMjdhMDIxOWE5ZDA5ZTVlYjJmYWQyODE2MjI3
+NmI1OTcxYmZmNGY3MTAyY2Y1OGIwZDkxNDEzMWFkNjU0MzU2MmNiYTIzMGNlNmZiOWIyMDc2ZDNi
+MTU2YjFiOGMzNzVlNzQ3MjJhMTQzYWVlNTM3OSAgbWVzYS0yNS4yLjIudGFyLnh6Cj4+ICAjIExp
+Y2Vuc2UKPj4gIHNoYTI1NiAgMGQxYTA0NzJlY2M4MTgzMGU3NWMyMGQ1OWIwZWEwMjg0MWUzZGIy
+MTI1NWUwZWJhZDk3YWI2ODJjNTRkNjYxNSAgZG9jcy9saWNlbnNlLnJzdAo+PiAgc2hhMjU2ICAz
+MjNjNTg3ZDBjY2YxMGUzNzZmOGJmOWE3ZjMxZmI0Y2E2MDc4MTA1MTk0YjQyZTBiMWUwZWUyYmM5
+YmRlNzFmICBsaWNlbnNlcy9NSVQKPj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbWVzYTNkL21lc2Ez
+ZC5tayBiL3BhY2thZ2UvbWVzYTNkL21lc2EzZC5tawo+PiBpbmRleCBlOTRiYWZlZDhjLi45YWIw
+ZmZkZmMzIDEwMDY0NAo+PiAtLS0gYS9wYWNrYWdlL21lc2EzZC9tZXNhM2QubWsKPj4gKysrIGIv
+cGFja2FnZS9tZXNhM2QvbWVzYTNkLm1rCj4+IEBAIC01LDcgKzUsNyBAQAo+PiAgIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMKPj4gIAo+PiAgIyBXaGVuIHVwZGF0aW5nIHRoZSB2ZXJzaW9uLCBwbGVh
+c2UgYWxzbyB1cGRhdGUgbWVzYTNkLWhlYWRlcnMKPj4gLU1FU0EzRF9WRVJTSU9OID0gMjUuMS44
+Cj4+ICtNRVNBM0RfVkVSU0lPTiA9IDI1LjIuMgo+PiAgTUVTQTNEX1NPVVJDRSA9IG1lc2EtJChN
+RVNBM0RfVkVSU0lPTikudGFyLnh6Cj4+ICBNRVNBM0RfU0lURSA9IGh0dHBzOi8vYXJjaGl2ZS5t
+ZXNhM2Qub3JnCj4+ICBNRVNBM0RfTElDRU5TRSA9IE1JVCwgU0dJLCBLaHJvbm9zCj4+IEBAIC05
+MiwxNSArOTIsOSBAQCBpZmVxICgkKEJSMl9QQUNLQUdFX01FU0EzRF9PUEVOR0xfR0xYKSx5KQo+
+PiAgTUVTQTNEX0NPTkZfT1BUUyArPSBcCj4+ICAJLURnbHg9ZHJpIFwKPj4gIAktRGdseC1kaXJl
+Y3Q9dHJ1ZQo+PiAtaWZlcSAoJChCUjJfUEFDS0FHRV9NRVNBM0RfTkVFRFNfWEEpLHkpCj4+IC1N
+RVNBM0RfQ09ORl9PUFRTICs9IC1EZ2FsbGl1bS14YT1lbmFibGVkCj4+IC1lbHNlCj4+IC1NRVNB
+M0RfQ09ORl9PUFRTICs9IC1EZ2FsbGl1bS14YT1kaXNhYmxlZAo+PiAtZW5kaWYKPj4gIGVsc2UK
+Pj4gIE1FU0EzRF9DT05GX09QVFMgKz0gXAo+PiAtCS1EZ2x4PWRpc2FibGVkIFwKPj4gLQktRGdh
+bGxpdW0teGE9ZGlzYWJsZWQKPj4gKwktRGdseD1kaXNhYmxlZAo+PiAgZW5kaWYKPj4gIAo+PiAg
+aWZlcSAoJChCUjJfQVJNX0NQVV9IQVNfTkVPTikseSkKPiAKCl9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
+b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
+dGluZm8vYnVpbGRyb290Cg==
