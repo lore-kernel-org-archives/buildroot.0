@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70BA7CAC58F
-	for <buildroot@archiver.kernel.org>; Thu, 11 Sep 2025 18:55:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A2BBCAC587
+	for <buildroot@archiver.kernel.org>; Thu, 11 Sep 2025 18:55:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 49CA14241D;
-	Thu, 11 Sep 2025 18:55:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D5B7E84A97;
+	Thu, 11 Sep 2025 18:55:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0iFYhnp0taq1; Thu, 11 Sep 2025 18:55:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QRt2MzOjIf9r; Thu, 11 Sep 2025 18:55:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DF964241E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76A7084A57
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3DF964241E;
-	Thu, 11 Sep 2025 18:55:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 76A7084A57;
+	Thu, 11 Sep 2025 18:55:22 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0205C443
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 18:55:03 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DCEFE20
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 18:55:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 64FC261C69
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7D38F6F479
  for <buildroot@buildroot.org>; Thu, 11 Sep 2025 18:54:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V62UavD34kyp for <buildroot@buildroot.org>;
+ id fHWWF0RlPtUU for <buildroot@buildroot.org>;
  Thu, 11 Sep 2025 18:54:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45CD86E73A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F89D61CCF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 45CD86E73A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2F89D61CCF
  for <buildroot@buildroot.org>; Thu, 11 Sep 2025 18:54:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 43349840F1; Thu, 11 Sep 2025 18:54:54 +0000 (UTC)
+ id 2CF4A84109; Thu, 11 Sep 2025 18:54:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Sep 2025 17:41:15 +0200
+Date: Thu, 11 Sep 2025 17:15:17 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 1a729cbf5c2c392c83636d50bb6a244aafd3eea2
-X-Git-Newrev: a3d99db3e0d59fdc8113e4fb87b2dab2aadad735
+X-Git-Oldrev: 2b21f3fb354030ec4161f5bc1b87b115dbfeece2
+X-Git-Newrev: dd4299e87a87bffee4491fdd30c9c23dc75fa7cb
 X-Patchwork-Hint: ignore
-Message-Id: <20250911185454.43349840F1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/netstat-nat:
- remove package
+Message-Id: <20250911185454.2CF4A84109@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/avrdude: disable
+ Python support to fix build issues
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,98 +66,119 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3d99db3e0d59fdc8113e4fb87b2dab2aadad735
+commit: https://git.buildroot.net/buildroot/commit/?id=dd4299e87a87bffee4491fdd30c9c23dc75fa7cb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fixes http://autobuild.buildroot.net/results/bc52c072121286ddde3eee98ac28feb98f33dbbd/
+The build of avrdude sometimes fails with:
 
-The package has not been updated in 15 years (since commit 60ce1b0842de
-"Bump netstat-nat to 1.4.10"), the upstream URL is gone and the package
-fails to build on modern gcc versions because of missing prototypes, so drop
-it.
+avrdude: installs files in /home/autobuild/autobuild/instance-1/output-1/target//home/autobuild/autobuild/instance-1/output-1
 
+This is due to an issue in the installation logic for the Python
+code. However, our avrdude.mk doesn't explicitly support building
+avrdude's Python support, so it's really only by luck (or lack
+thereof) that sometimes host-swig and python3 end up built before
+avrdude, causing avrdude to build its Python support, which installs
+at the wrong location.
+
+In order to address this, we add a small patch, submitted upstream,
+that allows to explicitly disable Python support, which we then use in
+avrdude.mk.
+
+The actual Python issue can be investigated at a later point if
+someone needs it. But in any case, being able to explicitly disable
+Python support if not needed is useful.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/f18d47289d8b4dee768275a468c25b4f4399cf8c/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit bbb0164de08f761a3399c961700db44befff5c70)
+(cherry picked from commit d3229d7fa0a583ee1d0796b570c1990f1e5fd582)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- Config.in.legacy                     |  9 +++++++++
- package/Config.in                    |  1 -
- package/netstat-nat/Config.in        |  6 ------
- package/netstat-nat/netstat-nat.hash |  3 ---
- package/netstat-nat/netstat-nat.mk   | 12 ------------
- 5 files changed, 9 insertions(+), 22 deletions(-)
+ ...eLists.txt-allow-disabling-Python-support.patch | 59 ++++++++++++++++++++++
+ package/avrdude/avrdude.mk                         |  2 +-
+ 2 files changed, 60 insertions(+), 1 deletion(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 290a5257a0..2fa98283b5 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -144,6 +144,15 @@ endif
- 
- ###############################################################################
- 
-+comment "Legacy options removed in 2025.02.7"
+diff --git a/package/avrdude/0001-CMakeLists.txt-allow-disabling-Python-support.patch b/package/avrdude/0001-CMakeLists.txt-allow-disabling-Python-support.patch
+new file mode 100644
+index 0000000000..fc6210c099
+--- /dev/null
++++ b/package/avrdude/0001-CMakeLists.txt-allow-disabling-Python-support.patch
+@@ -0,0 +1,59 @@
++From 41ee27cf1d31bbc62425aab286b7e524acc64bff Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Fri, 29 Aug 2025 22:21:50 +0200
++Subject: [PATCH] CMakeLists.txt: allow disabling Python support
 +
-+config BR2_PACKAGE_NETSTAT_NAT
-+	bool "netstat-nat has been removed"
-+	select BR2_LEGACY
-+	help
-+	  The upstream URL is gone and netstat-nat has been removed
-+	  from Buildroot.
++In some cases, even if Swig is found and Python3 is found, it may not
++be desirable to build Python support in avrdude, so this commit adds
++an ENABLE_PYTHON_SUPPORT option to be able to explicitly disable using
++Python support (unfortunately CMake doesn't allow passing arguments
++that would prevent it from finding Swig/Python 3 if available).
 +
- comment "Legacy options removed in 2025.02.6"
++To preserve existing behavior, this option defaults to enabled (ON).
++
++Upstream: https://github.com/avrdudes/avrdude/pull/2051
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ CMakeLists.txt | 19 +++++++++++--------
++ 1 file changed, 11 insertions(+), 8 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 7f3fce92..94263bab 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -34,6 +34,7 @@ option(USE_EXTERNAL_LIBS "Use external libraries from AVRDUDE GitHub repositorie
++ option(USE_LIBUSBWIN32 "Prefer libusb-win32 over libusb" OFF)
++ option(DEBUG_CMAKE "Enable debugging output for this CMake project" OFF)
++ option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+++option(ENABLE_PYTHON_SUPPORT "Enable Python support" ON)
++ 
++ if(WIN32)
++     # Prefer static libraries over DLLs on Windows
++@@ -281,14 +282,16 @@ if(HAVE_LINUXGPIO)
++ endif()
++ 
++ # -------------------------------------
++-# Find SWIG
++-find_package(SWIG 4.0 COMPONENTS python)
++-if(SWIG_FOUND)
++-  find_package(Python3 COMPONENTS Interpreter Development)
++-  if(PYTHON3_FOUND)
++-    set(HAVE_SWIG 1)
++-  else()
++-    message(STATUS "Found SWIG but no Python3 header/library; cannot use SWIG")
+++# Find SWIG/Python3 if needed
+++if(ENABLE_PYTHON_SUPPORT)
+++  find_package(SWIG 4.0 COMPONENTS python)
+++  if(SWIG_FOUND)
+++    find_package(Python3 COMPONENTS Interpreter Development)
+++    if(PYTHON3_FOUND)
+++      set(HAVE_SWIG 1)
+++    else()
+++      message(STATUS "Found SWIG but no Python3 header/library; cannot use SWIG")
+++    endif()
++   endif()
++ endif()
++ 
++-- 
++2.50.1
++
+diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
+index 54d83dec4b..7ffecce041 100644
+--- a/package/avrdude/avrdude.mk
++++ b/package/avrdude/avrdude.mk
+@@ -9,7 +9,7 @@ AVRDUDE_SITE = $(call github,avrdudes,avrdude,v$(AVRDUDE_VERSION))
+ AVRDUDE_LICENSE = GPL-2.0+
+ AVRDUDE_LICENSE_FILES = COPYING
  
- config BR2_PACKAGE_LIGHTTPD_LIBEV
-diff --git a/package/Config.in b/package/Config.in
-index 9cbe8b5efd..9b6bef6dd6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2561,7 +2561,6 @@ endif
- 	source "package/nethogs/Config.in"
- 	source "package/netplug/Config.in"
- 	source "package/netsnmp/Config.in"
--	source "package/netstat-nat/Config.in"
- 	source "package/network-manager/Config.in"
- 	source "package/network-manager-openvpn/Config.in"
- 	source "package/networkd-dispatcher/Config.in"
-diff --git a/package/netstat-nat/Config.in b/package/netstat-nat/Config.in
-deleted file mode 100644
-index 6afcf89e3b..0000000000
---- a/package/netstat-nat/Config.in
-+++ /dev/null
-@@ -1,6 +0,0 @@
--config BR2_PACKAGE_NETSTAT_NAT
--	bool "netstat-nat"
--	help
--	  Displays NAT connections
--
--	  http://tweegy.nl/projects/netstat-nat/
-diff --git a/package/netstat-nat/netstat-nat.hash b/package/netstat-nat/netstat-nat.hash
-deleted file mode 100644
-index 7530b8a09f..0000000000
---- a/package/netstat-nat/netstat-nat.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256  e945faa283a49f33af15de915a949c9273a230fc17154925364c547adab676ca  netstat-nat-1.4.10.tar.gz
--sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
-diff --git a/package/netstat-nat/netstat-nat.mk b/package/netstat-nat/netstat-nat.mk
-deleted file mode 100644
-index 0d16579a6a..0000000000
---- a/package/netstat-nat/netstat-nat.mk
-+++ /dev/null
-@@ -1,12 +0,0 @@
--################################################################################
--#
--# netstat-nat
--#
--################################################################################
--
--NETSTAT_NAT_VERSION = 1.4.10
--NETSTAT_NAT_SITE = http://tweegy.nl/download
--NETSTAT_NAT_LICENSE = GPL-2.0+
--NETSTAT_NAT_LICENSE_FILES = COPYING
--
--$(eval $(autotools-package))
+-AVRDUDE_CONF_OPTS = -DHAVE_LINUXGPIO=ON
++AVRDUDE_CONF_OPTS = -DHAVE_LINUXGPIO=ON -DENABLE_PYTHON_SUPPORT=NO
+ AVRDUDE_DEPENDENCIES = elfutils libusb libusb-compat ncurses \
+ 	host-flex host-bison
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
