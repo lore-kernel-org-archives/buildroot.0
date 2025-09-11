@@ -1,107 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14136CAC587
-	for <buildroot@archiver.kernel.org>; Thu, 11 Sep 2025 19:22:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E1E6CAC58E
+	for <buildroot@archiver.kernel.org>; Thu, 11 Sep 2025 19:23:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D5FA284ADC;
-	Thu, 11 Sep 2025 19:22:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 46FEC60E37;
+	Thu, 11 Sep 2025 19:23:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BLxplwL9VHuh; Thu, 11 Sep 2025 19:22:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Gt99DtLZ4oRW; Thu, 11 Sep 2025 19:23:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D461B84A26
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5BCF261325
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D461B84A26;
-	Thu, 11 Sep 2025 19:22:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F6C1E20
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:22:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5BCF261325;
+	Thu, 11 Sep 2025 19:23:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id EA4B7E20
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:23:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E9A7684A26
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:22:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E71AD61325
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:23:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ANsVEAg-M09h for <buildroot@buildroot.org>;
- Thu, 11 Sep 2025 19:22:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rn0wLcoxf9kP for <buildroot@buildroot.org>;
+ Thu, 11 Sep 2025 19:23:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62a; helo=mail-ej1-x62a.google.com;
+ client-ip=2a00:1450:4864:20::529; helo=mail-ed1-x529.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C822184A1C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C822184A1C
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
- [IPv6:2a00:1450:4864:20::62a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C822184A1C
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:22:49 +0000 (UTC)
-Received: by mail-ej1-x62a.google.com with SMTP id
- a640c23a62f3a-b04770a25f2so155158266b.2
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 12:22:49 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F1C6D60E37
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1C6D60E37
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F1C6D60E37
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:23:11 +0000 (UTC)
+Received: by mail-ed1-x529.google.com with SMTP id
+ 4fb4d7f45d1cf-6228de280a4so1878517a12.2
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 12:23:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1757618568; x=1758223368;
+ d=1e100.net; s=20230601; t=1757618590; x=1758223390;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=VrSL4dOuCORFHrzahfpvPs5gOsAJWh1UEwQHahyKPCo=;
- b=cdnanrpTdgU7G4DJiKQX8AotPgoGvme/V1mjC2sm6yaoBQx+5QuVMNtYkcDL+KAeaS
- ZvSe+stk4mSKqK/ZfR9g2bqMXbzMJPtYshFS8A702v6MUD2BCoJi/SflOlD6jWD446rr
- ZHoM0/JU9XLFapvB7Qa+q5zaOawgsgrhHSgI8mHVXc9LMn8Yf7L+43twjqP5vC1T+Aw9
- jF9CmpwBUJl/tdboiVKEVWKjCpUo+HKBB/bmYJ5AOizt+68XZc24Rl0Wos+i+NaUGCaD
- fHB+q2VydzR9/JVbTiDrQlTralB7bkH2mJ+FIpK8Rql7PRt1iDgT9v1hn4Rrp8sN9/9P
- gX1A==
+ bh=T26iujOSNjm9wAzFyI4yFNAqoTEQibrfE6j4wimT+04=;
+ b=HxQCFNUFOqO+iMvbQMOhyKCpzOPLgM1EmKCyQyW8Eqg1NW74nqlTqKvpeKubN2ESQF
+ Tqjjcvahwdy2K17zTGGSqhqkMWzIp5cyjNJw7OfHQdXcMsUDQoINwqrg7pPMXAUuEJVM
+ r0jb3iw2fNt4H1iKk3YHIYWx7Rq7eUJ9JiaNp6lnu25x2fz7SLWWpeXibWwVpcsz/y9C
+ ChY0CVNZkhFqZHSscR/y4BpLvj4lCoadiiVLYaHpAzse9Sb0stUlAjHQVEnZxfU44H6m
+ wDSmpG1MYZAb4Di3UeJpKM8kesbyRQulLxAchCbkLjIA742ztw3Whh2j2e6eZfOwMhg5
+ jGKw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCXRO+rXtmbYvoDozGV4dVJLn4Q35pKvDLve/N6sz67mPDSmpdQ1fJnC6/s7tMmHKn+1YuMpg3OjQL8=@buildroot.org
-X-Gm-Message-State: AOJu0YzwqM2QpPNPm7wUdzZ28ZRSe2fQiBD9OrKI9Pi3s6bbqZVZl4xY
- 9yLqxEDAUEtgzg0FfsBbQgQttiRDsAd3gayiv/6SrfF7l+0+WDznlkv18kvcPH8mggj6huh0dm7
- hlnfgMJE=
-X-Gm-Gg: ASbGncs4F3I18GDS7lv1vMeoU7S3fLxEyRZ5tvqKs+xR3EHWe8qOOVx0KVqzeIJHG0H
- LIfPboenUL3wp4V9ZzNKUOYBe6u8awdB8faRlcKwIGp7DNc3k+oc9bjTz5jiP/EbM7DTIv1r/0v
- otu6Y9q1mUjyPIlFz08zL2cnOLPRNvhYhZQektBMaLT4qDwBRnDIBhVr8lsPtsXOh/yaXM+U8f9
- fR4J5Zx3IOXXa1J6CYzHaasceIRIBmQKSGk6qow784Hdb5A6akdcyblRNrFfurAnd6BdpukaecL
- W+hDP0ibZTe56dqsIRRF9MEvt1Nlt/VL5z0cvroHpAZ2AdTyPgRPTTXVqjyy9gKQtBJ61Hc5cLl
- judjaICbfDfD/d419LJXNewObNrnUNlFg7bXo
-X-Google-Smtp-Source: AGHT+IE0tEHIScgDD/VE84q28sRL7LKvr/XKOvuZzyRD4g5OoEpqM+beX2eAj66j3JRXbReShH956g==
-X-Received: by 2002:a17:907:608b:b0:b04:6cf7:75cd with SMTP id
- a640c23a62f3a-b07c3a6dc8bmr28893966b.54.1757618567521; 
- Thu, 11 Sep 2025 12:22:47 -0700 (PDT)
+ AJvYcCVsCVRNRE62kNWdviXc0rI9PWCaJcqlcgAhJyTMkCzPQC46Q0DoHkBQ+lkHAtNuwczcCy1kWnXQXvk=@buildroot.org
+X-Gm-Message-State: AOJu0YxsHr03icZDFvBkQiyTj58yz0MSvfWn4Q/uZJj6J24FJ6dkudF+
+ lkHw1UfTO2Q2CkDFFkToAOoV2QeLGNSSMktaS06w9IUAVDXKuQatydiHHxqnobnY5EU=
+X-Gm-Gg: ASbGncuvfqz/klBbA/a53xfL02RWvf4oDBWklMojSUffPeyJwx6EGt3gG0TKzLmYr54
+ DDDaDAN7t7K024eG0aqf0HYyJ58/ZSFQiSBOuOuScraQ+5hCB0qVE7MwjFKZkurDXmvKaZo4IzD
+ liibMvwnk3DujjNzuSUmztmt3HZ8RJibm+vKJW3UWDO0AkduTxTooBvjiJIUTnJoPB1okC89XT8
+ NZ4MdG1zJlvnPFRud2uS6cYDN1qc8rc7XCrrlMz3AnQi4G+P7sU55YRfknP1nNELZA8J6SGfAJY
+ mJceuFG+Admo86lfqx50F3ehRUOj7KUht6VwvtcPQ6xfrcl0pkZ1gJlZUR8i5fqPiV+kBwCqNpl
+ KuaWGCoQw9gQ+PtTyVc75w/3YDDCxCfI6XayE3McSyPFE98E=
+X-Google-Smtp-Source: AGHT+IHQIskhY3BvC+WdIY36kybOCz7Bj67H358aNmUAnwa9GQVKT2+yHzmw1OsN8RrBhB046XXciw==
+X-Received: by 2002:a17:907:7ea8:b0:afe:7b35:9c8e with SMTP id
+ a640c23a62f3a-b07c347e046mr31090166b.12.1757618589877; 
+ Thu, 11 Sep 2025 12:23:09 -0700 (PDT)
 Received: from localhost.localdomain ([79.132.233.79])
  by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-62ec3400cd4sm1761454a12.41.2025.09.11.12.22.46
+ a640c23a62f3a-b07b32f202dsm190387866b.84.2025.09.11.12.23.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 11 Sep 2025 12:22:47 -0700 (PDT)
-To: Romain Naour <romain.naour@smile.fr>
+ Thu, 11 Sep 2025 12:23:09 -0700 (PDT)
+To: Peter Korsgaard <peter@korsgaard.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 11 Sep 2025 21:22:24 +0200
-Message-Id: <20250911192224.2671690-1-thomas.perale@mind.be>
+Date: Thu, 11 Sep 2025 21:22:46 +0200
+Message-Id: <20250911192246.2671956-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250831213843.1310171-2-romain.naour@smile.fr>
-References: <20250831213843.1310171-2-romain.naour@smile.fr>
+In-Reply-To: <20250901143252.672903-1-peter@korsgaard.com>
+References: <20250901143252.672903-1-peter@korsgaard.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1757618568; x=1758223368; darn=buildroot.org;
+ d=mind.be; s=google; t=1757618590; x=1758223390; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=VrSL4dOuCORFHrzahfpvPs5gOsAJWh1UEwQHahyKPCo=;
- b=hdV5+1OatHKeyVI06BFYWcInqpBLC5uqAGt6ChWDd9GGUGkpQHHgzNkIUcUsxHg2ix
- 0ESPDusErdl7wAc9Fzjx4oBqksVTL6YtVIIwq/XGMFEYOu+I9AgXINBAGhu2eYRRNLt1
- g6v9cFk1k+YW7MYhdZXVGFf+UOKkKllsmKA6MxMbMo2BIg2ldk1qyTBtlgpvA0J/Uw4q
- RUTBXGfMcCRALNt03ycuPyUXMoVorPOMxMd2vjs5XWgcmV7C6i57Nyacn3DcbAkuJh9x
- hO/pzlCmzpp9Yio44dbDP/z4cdK7CYDn/uKjbB08LnOZkrGjF9/LOKLJupGeUgNsbRXA
- SyWg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=T26iujOSNjm9wAzFyI4yFNAqoTEQibrfE6j4wimT+04=;
+ b=GkrpCp/F4HptyNfyCY5GKhBfsHwSOG/6Cc6wlmZAQknIZrXaL5RNYgUPM+5DvDpWkD
+ KrabIt9EffOPdbZNKA/EWoP1FDMQ0E/4dysKCJJF8JbBplv0tGqsuuHMicuKIvCXO1Ga
+ P0iLuF91sIUUxJFMtqWmAYgi9mBaeLwq9dcoo7fMAY/SF/fdroeGNKiOGP5RyA203yR+
+ mAO6nfyE4Vx17gioOdPVtQgXuMcevi8QwlQSA3L4rrqMrJ88UvgdZbOaCjnC3EGp1X61
+ 9UqQIOxSX1REPobvPbF9uxHuA7lxngnDtpQAROEm5KHWdVUeXcNHFV0AiuMDCuy00J1E
+ XIvQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=hdV5+1Oa
-Subject: Re: [Buildroot] [PATCH 2/2] support/testing: TestOpenJdk: remove
- stime() function call
+ header.a=rsa-sha256 header.s=google header.b=GkrpCp/F
+Subject: Re: [Buildroot] [PATCH] package/jose: needs shared libraries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -121,67 +119,49 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> stime() has been deprecated in glibc 2.31 [1] and replaced with
-> clock_settime(). Let's replace the stime() function call used in
-> BR2_PACKAGE_OPENJDK_JNI_TEST sources with clock_settime().
+> Fixes https://autobuild.buildroot.net/results/bf23e75461877a4ca3a189626f30cf8cde24de36/
 > 
-> Apply the same change as busybox [2]. Make sure that timeToSet
-> has been zeroed.
+> Jose unconditionally builds a shared library since v11 with:
 > 
-> With that fixed, the test "Call Native Library to Set System Time"
-> succeed:
+>  commit b72f8cad002edc87286dd1f2331c359158c512e8
+>  Author: Rosen Penev <rosenp@gmail.com>
+>  Date:   Tue May 30 12:18:30 2023 +0300
 > 
->   [BRTEST# java -cp /usr/bin JniTest
->   Test: Get JNI Version passed
->   Test: Read Native String Constant passed
->   Test: Write Java String to Native Library passed
->   Test: Write Java Char Array to Native Library passed
->   Test: Write String Member to Native Library passed
->   Test: Set String Member from Native Library passed
->   Test: Execeute Java Function from Native Library passed
->   Test: Instantiate Java Class passed
->   Test: Call Native Library to Set System Time passed
->   [BRTEST# echo $?
->   0
+>    jose: build library only as shared (#119)
 > 
-> The last external toolchain using a glibc 2.30 was the Bootlin
-> aarch64--glibc--bleeding-edge-2020.02-2, so since then TestOpenJdk
-> is broken.
+>    Needed because of constructor usage in library.
 > 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/11176774851
+> So add a dependency on BR2_SHARED_LIBS.
 > 
-> [1] https://lists.gnu.org/archive/html/info-gnu/2020-02/msg00001.html
-> [2] https://git.busybox.net/busybox/commit/?id=d3539be8f27b8cbfdfee460fe08299158f08bcd9
-> [3] https://toolchains.bootlin.com/downloads/releases/toolchains/aarch64/readmes/aarch64--glibc--bleeding-edge-2020.02-2.txt
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Applied to 2025.02.x & 2025.05.x. Thanks
 
 > ---
->  .../br2-external/openjdk/package/openjdk-jni-test/native.c  | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  package/jose/Config.in | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/native.c b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/native.c
-> index ed87e345af..9e926a27d9 100644
-> --- a/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/native.c
-> +++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/native.c
-> @@ -29,8 +29,10 @@ void execute_function(void(*function)(void*), void* context)
->  }
->  void set_time_in_seconds(int seconds)
->  {
-> -	time_t timeToSet = seconds;
-> -	stime(&timeToSet);
-> +	struct timespec timeToSet = { 0, 0 };
-> +
-> +	timeToSet.tv_sec = seconds;
-> +	clock_settime(CLOCK_REALTIME, &timeToSet);
->  }
->  void write_internal_time_in_seconds()
->  {
+> diff --git a/package/jose/Config.in b/package/jose/Config.in
+> index 4a9ed8da65..32e17276b6 100644
+> --- a/package/jose/Config.in
+> +++ b/package/jose/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_JOSE
+>  	bool "jose"
+> +	depends on BR2_SHARED_LIBS # builds .so
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	select BR2_PACKAGE_ZLIB
+>  	select BR2_PACKAGE_JANSSON
+> @@ -10,5 +11,5 @@ config BR2_PACKAGE_JOSE
+>  
+>  	  https://github.com/latchset/jose
+>  
+> -comment "jose needs a toolchain w/ threads"
+> -	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> +comment "jose needs a toolchain w/ shared libraries, threads"
+> +	depends on !BR2_SHARED_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
 > -- 
-> 2.51.0
+> 2.39.5
 > 
 > _______________________________________________
 > buildroot mailing list
