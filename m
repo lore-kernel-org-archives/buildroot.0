@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0B73CAC58F
-	for <buildroot@archiver.kernel.org>; Thu, 11 Sep 2025 18:55:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 986D3CAC587
+	for <buildroot@archiver.kernel.org>; Thu, 11 Sep 2025 19:01:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A7FC26F4CD;
-	Thu, 11 Sep 2025 18:55:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A3EA84852;
+	Thu, 11 Sep 2025 19:01:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I2yhgLM-k-5C; Thu, 11 Sep 2025 18:55:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id q6xYMBLP-jxr; Thu, 11 Sep 2025 19:01:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2B476F4B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0CE384855
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B2B476F4B6;
-	Thu, 11 Sep 2025 18:55:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1033EE20
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 18:55:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A0CE384855;
+	Thu, 11 Sep 2025 19:01:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 735FB443
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:01:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8EB8361C78
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 18:54:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 658194090F
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:01:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gcYnTKjz4kJ4 for <buildroot@buildroot.org>;
- Thu, 11 Sep 2025 18:54:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vclXdZSJlSpZ for <buildroot@buildroot.org>;
+ Thu, 11 Sep 2025 19:01:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F28E6F1BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AABF04067D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8F28E6F1BA
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 18:54:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AABF04067D
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:01:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8C88F840F1; Thu, 11 Sep 2025 18:54:54 +0000 (UTC)
+ id 9A414842A4; Thu, 11 Sep 2025 19:01:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Sep 2025 17:44:01 +0200
-X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 7c6f97f9b4e14710ab9f4cba554e5638f1f27190
-X-Git-Newrev: d3fb877dee2411f6199f59f6988a869110ef27b9
+Date: Thu, 11 Sep 2025 17:07:45 +0200
+X-Git-Refname: refs/heads/2025.05.x
+X-Git-Oldrev: 6a3055eb048680d271c6f72e8cf701f0aa81e9a6
+X-Git-Newrev: 3ffa8534e3e0e19cadf359e1dabaebdff2d786bb
 X-Patchwork-Hint: ignore
-Message-Id: <20250911185454.8C88F840F1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] support/testing:
- test_hardening: update toolchain to aarch64 for checksec tests
+Message-Id: <20250911190108.9A414842A4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/udisks: security
+ bump to version 2.10.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,80 +66,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3fb877dee2411f6199f59f6988a869110ef27b9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3ffa8534e3e0e19cadf359e1dabaebdff2d786bb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-TestRelroPartial is broken since the last checksec update to 2.7.1 [1]
-(Buildroot 2024.08) due to a relro check fix [2] that doesn't work for
-powerpc architecture where .got.plt doesn't exist for some reasons
-(that's why the expected result "full" is replaced by "Partial").
+This fixes this security bug:
+https://github.com/storaged-project/udisks/security/advisories/GHSA-742q-gggc-473g
 
-From [3]:
+Release notes:
+https://github.com/storaged-project/udisks/releases/tag/udisks-2.10.2
 
-  if ${readelf} -d "${1}/exe" 2> /dev/null | grep -q 'BIND_NOW' || ! ${readelf} -l "${1}/exe" 2> /dev/null | grep -q '\.got\.plt'; then
-    echo_message '\033[32mFull RELRO   \033[m   ' 'Full RELRO,' ' relro="full"' '"relro":"full",'
-  else
-    echo_message '\033[33mPartial RELRO\033[m   ' 'Partial RELRO,' ' relro="partial"' '"relro":"partial",'
-
-checksec tool is problably tested upstream on more common architectures
-like x86_64 or aarch64 than powerpc64 e5500. This may explain why
-checksec broke on powerpc64 e5500 target.
-
-Also, the Booltin powerpc64-e5500--glibc--stable-2018.02-2 toolchain
-used by test_hardening tests was not updated since the hardening tests
-were introduced back in 2018.11 release.
-
-So, switch to the current Bootling aarch64 stable toolchain
-(currently Bootlin aarch64 glibc stable 2025.08-1).
-
-Checked that all 6 hardening tests pass with this new toolchain:
-
-  tests.core.test_hardening.TestFortifyConserv
-  tests.core.test_hardening.TestFortifyNone
-  tests.core.test_hardening.TestRelro
-  tests.core.test_hardening.TestRelroPartial
-  tests.core.test_hardening.TestSspNone
-  tests.core.test_hardening.TestSspStrong
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/11176773995 (TestRelroPartial)
-
-[1] 61505649746cb4d0dd57e35ff6139b7925bab72d
-[2] https://github.com/slimm609/checksec/commit/1c80e39c4956f902ed15c4baa8d9c17851096900
-[3] https://github.com/slimm609/checksec/commit/1c80e39c4956f902ed15c4baa8d9c17851096900#diff-9e8d1b28dfaf1c704560ac51a5613b70d70de2dcd84e87b9fa20f28811e6484aL1491
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 10e289e0a970d2852fea18e3d9833f0f37b2959b)
+(cherry picked from commit f55145837edbaebd2182d0b81782af79843f36cf)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/testing/tests/core/test_hardening.py | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ package/udisks/udisks.hash | 2 +-
+ package/udisks/udisks.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/core/test_hardening.py b/support/testing/tests/core/test_hardening.py
-index e9d30f3a38..2daafbd883 100644
---- a/support/testing/tests/core/test_hardening.py
-+++ b/support/testing/tests/core/test_hardening.py
-@@ -7,16 +7,10 @@ import infra.basetest
- class TestHardeningBase(infra.basetest.BRTest):
-     config = \
-         """
--        BR2_powerpc64=y
--        BR2_powerpc_e5500=y
-+        BR2_aarch64=y
-         BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
--        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--        BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc64-e5500/tarballs/powerpc64-e5500--glibc--stable-2018.02-2.tar.bz2"
--        BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
--        BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
--        BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
--        BR2_TOOLCHAIN_EXTERNAL_CXX=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
-         BR2_PACKAGE_LIGHTTPD=y
-         BR2_PACKAGE_HOST_CHECKSEC=y
-         # BR2_TARGET_ROOTFS_TAR is not set
+diff --git a/package/udisks/udisks.hash b/package/udisks/udisks.hash
+index 66f4be5e1f..8803bedb21 100644
+--- a/package/udisks/udisks.hash
++++ b/package/udisks/udisks.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  b75734ccf602540dedb4068bec206adcb508a4c003725e117ae8f994d92d8ece  udisks-2.10.1.tar.bz2
++sha256  6401c715d287ec84fe605e0cb90579e8da6c395bce5f42e419f205dd297e261f  udisks-2.10.2.tar.bz2
+ sha256  98046e932dc6c739001e79d7079a3bd958fc55475dcd917d27f884c0c93525cc  COPYING
+diff --git a/package/udisks/udisks.mk b/package/udisks/udisks.mk
+index 0d63532d8a..515797f39a 100644
+--- a/package/udisks/udisks.mk
++++ b/package/udisks/udisks.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UDISKS_VERSION = 2.10.1
++UDISKS_VERSION = 2.10.2
+ UDISKS_SOURCE = udisks-$(UDISKS_VERSION).tar.bz2
+ UDISKS_SITE = https://github.com/storaged-project/udisks/releases/download/udisks-$(UDISKS_VERSION)
+ UDISKS_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
