@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61163CAC587
-	for <buildroot@archiver.kernel.org>; Thu, 11 Sep 2025 18:55:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C43A0CAC58E
+	for <buildroot@archiver.kernel.org>; Thu, 11 Sep 2025 18:55:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 32CE161C84;
-	Thu, 11 Sep 2025 18:55:01 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KB_yTlv6iJWq; Thu, 11 Sep 2025 18:55:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 337D361CCF
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 337D361CCF;
-	Thu, 11 Sep 2025 18:55:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 489422735
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 18:54:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 42B5F42387
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 18:54:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8DAD2423CB;
+	Thu, 11 Sep 2025 18:55:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZUKrAQDpAAbR for <buildroot@buildroot.org>;
+ id uV1WE9w1H5L6; Thu, 11 Sep 2025 18:55:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7116D423BD
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7116D423BD;
+	Thu, 11 Sep 2025 18:55:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0FE56443
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 18:54:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4956A400F9
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 18:54:55 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4k7qBAiokH9S for <buildroot@buildroot.org>;
  Thu, 11 Sep 2025 18:54:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F7C7423A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87F1F41E9D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5F7C7423A1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 87F1F41E9D
  for <buildroot@buildroot.org>; Thu, 11 Sep 2025 18:54:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5C1258410B; Thu, 11 Sep 2025 18:54:54 +0000 (UTC)
+ id 8540C84108; Thu, 11 Sep 2025 18:54:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Sep 2025 17:42:42 +0200
+Date: Thu, 11 Sep 2025 17:43:42 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: de2bf5404b7bc0417d7983d7e2f817973f941197
-X-Git-Newrev: c50e95e02688ee4b75585bbecfbd70987fa8c73d
+X-Git-Oldrev: b5f3d090f97824654851bf19e93511c1cf43e63b
+X-Git-Newrev: 7c6f97f9b4e14710ab9f4cba554e5638f1f27190
 X-Patchwork-Hint: ignore
-Message-Id: <20250911185454.5C1258410B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] support/testing:
- TestOpenJdk: remove stime() function call
+Message-Id: <20250911185454.8540C84108@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/lua-utf8: fix
+ missing header
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,74 +61,102 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6716988650857509463=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c50e95e02688ee4b75585bbecfbd70987fa8c73d
+--===============6716988650857509463==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=7c6f97f9b4e14710ab9f4cba554e5638f1f27190
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-stime() has been deprecated in glibc 2.31 [1] and replaced with
-clock_settime(). Let's replace the stime() function call used in
-BR2_PACKAGE_OPENJDK_JNI_TEST sources with clock_settime().
+Backport an upstream patch adding missing limits.h.
 
-Apply the same change as busybox [2]. Make sure that timeToSet
-has been zeroed.
-
-With that fixed, the test "Call Native Library to Set System Time"
-succeed:
-
-  [BRTEST# java -cp /usr/bin JniTest
-  Test: Get JNI Version passed
-  Test: Read Native String Constant passed
-  Test: Write Java String to Native Library passed
-  Test: Write Java Char Array to Native Library passed
-  Test: Write String Member to Native Library passed
-  Test: Set String Member from Native Library passed
-  Test: Execeute Java Function from Native Library passed
-  Test: Instantiate Java Class passed
-  Test: Call Native Library to Set System Time passed
-  [BRTEST# echo $?
-  0
-
-The last external toolchain using a glibc 2.30 was the Bootlin
-aarch64--glibc--bleeding-edge-2020.02-2, so since then TestOpenJdk
-is broken.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/11176774851
-
-[1] https://lists.gnu.org/archive/html/info-gnu/2020-02/msg00001.html
-[2] https://git.busybox.net/busybox/commit/?id=d3539be8f27b8cbfdfee460fe08299158f08bcd9
-[3] https://toolchains.bootlin.com/downloads/releases/toolchains/aarch64/readmes/aarch64--glibc--bleeding-edge-2020.02-2.txt
+https://gitlab.com/buildroot.org/buildroot/-/jobs/11176774630 (TestLuajitUtf8)
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 681b92664da62f807f836a8c28ecbf54b7ca6818)
+(cherry picked from commit f255b90afcc0e9c163a711bfe483cdf39e45e672)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../package/br2-external/openjdk/package/openjdk-jni-test/native.c  | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ ...include-limits.h-instead-of-transitively-.patch | 58 ++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
 
-diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/native.c b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/native.c
-index ed87e345af..9e926a27d9 100644
---- a/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/native.c
-+++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/native.c
-@@ -29,8 +29,10 @@ void execute_function(void(*function)(void*), void* context)
- }
- void set_time_in_seconds(int seconds)
- {
--	time_t timeToSet = seconds;
--	stime(&timeToSet);
-+	struct timespec timeToSet = { 0, 0 };
+diff --git a/package/lua-utf8/0001-Explicitly-include-limits.h-instead-of-transitively-.patch b/package/lua-utf8/0001-Explicitly-include-limits.h-instead-of-transitively-.patch
+new file mode 100644
+index 0000000000..f87930e6a9
+--- /dev/null
++++ b/package/lua-utf8/0001-Explicitly-include-limits.h-instead-of-transitively-.patch
+@@ -0,0 +1,58 @@
++From feda38c6b7ef4c564f77213037dc20768c638d9c Mon Sep 17 00:00:00 2001
++From: Caleb Maclennan <caleb@alerque.com>
++Date: Thu, 2 Jan 2025 15:42:05 +0300
++Subject: [PATCH] Explicitly include limits.h instead of transitively assuming
++ it
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+	timeToSet.tv_sec = seconds;
-+	clock_settime(CLOCK_REALTIME, &timeToSet);
- }
- void write_internal_time_in_seconds()
- {
++Recent upstream releases of LuaJIT have broken building this Lua Rock
++entirely. PUC Lua and LuaJIT builds up to a certain point included this
++header in lua.h, which meant that it was always around as a transitive
++dependency. Recent upstream LuaJIT builds no longer include the header
++since they aren't using it directly any more, but that means things that
++include lua.h don't get it for free any more. It should never have been
++assumed anyway, but that's been the status quo for a while.
++
++This fixes build errors when using LuaJIT headers instead of PUC Lua:
++
++```
++lutf8lib.c: In function ‘Lutf8_codepoint’:
++lutf8lib.c:398:22: error: ‘INT_MAX’ undeclared (first use in this function)
++  398 |   if (pose - posi >= INT_MAX)  /* (lua_Integer -> int) overflow? */
++      |                      ^~~~~~~
++lutf8lib.c:12:1: note: ‘INT_MAX’ is defined in header ‘<limits.h>’; did you forget to ‘#include <limits.h>’?
++   11 | #include "unidata.h"
++  +++ |+#include <limits.h>
++   12 |
++lutf8lib.c:398:22: note: each undeclared identifier is reported only once for each function it appears in
++  398 |   if (pose - posi >= INT_MAX)  /* (lua_Integer -> int) overflow? */
++      |                      ^~~~~~~
++```
++
++This is because `INT_MAX` is defined appropriately for a given platfrom
++in in limits.h.
++
++Upstream: 1bb70d45208d4033dcc75efee968be70534dd3ab
++[Romain: rebase on 0.1.5]
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ luautf8-0.1.5/lutf8lib.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/luautf8-0.1.5/lutf8lib.c b/luautf8-0.1.5/lutf8lib.c
++index 522599e..71f2f42 100644
++--- a/luautf8-0.1.5/lutf8lib.c
+++++ b/luautf8-0.1.5/lutf8lib.c
++@@ -7,6 +7,7 @@
++ #include <assert.h>
++ #include <string.h>
++ #include <stdint.h>
+++#include <limits.h>
++ 
++ #include "unidata.h"
++ 
++-- 
++2.51.0
++
+
+--===============6716988650857509463==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6716988650857509463==--
