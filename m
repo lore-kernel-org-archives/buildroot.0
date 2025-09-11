@@ -1,72 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EC4FCAC58E
-	for <buildroot@archiver.kernel.org>; Thu, 11 Sep 2025 19:51:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBFC7CAC587
+	for <buildroot@archiver.kernel.org>; Thu, 11 Sep 2025 19:52:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D29F06F55D;
-	Thu, 11 Sep 2025 19:51:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A870942011;
+	Thu, 11 Sep 2025 19:52:19 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZjhcM_RrOUZf; Thu, 11 Sep 2025 19:52:18 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C70044246A
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id C70044246A;
+	Thu, 11 Sep 2025 19:52:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C68C9234
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:52:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id AD1476F55A
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:52:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j_LbU68ycq_t; Thu, 11 Sep 2025 19:51:24 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B5106F54F
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4B5106F54F;
-	Thu, 11 Sep 2025 19:51:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2BD3E443
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:51:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 12E0284B7D
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:51:23 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aaxx9RsiHyzt for <buildroot@buildroot.org>;
- Thu, 11 Sep 2025 19:51:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 549E484B76
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 549E484B76
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 549E484B76
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:51:22 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id C882EB978576; Thu, 11 Sep 2025 21:51:19 +0200 (CEST)
-Message-ID: <e3b95719-ddac-489f-8b45-74ca8fa84f12@rnout.be>
-Date: Thu, 11 Sep 2025 21:51:18 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Matt Flax <flatmax@flatmax.org>
-References: <20250910213241.1529448-1-thomas.petazzoni@bootlin.com>
- <20250910213241.1529448-6-thomas.petazzoni@bootlin.com>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <20250910213241.1529448-6-thomas.petazzoni@bootlin.com>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1757620280; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=89SkI4RXS26yEc3sSRjRnKWm9SPvpZRmJIfPQV4Stw0=;
- b=lEtrGkBC5Yr7UINjrIbxrTedtAAunldqQmVW6DL6iJZirpLXd1MBYyYCgY9emV7yZlUQex
- Rhac2pobbD8rxTvbYJD29Y6uCkt/ecOnfasrH+vWFdQmSCOTmynDv2jF4ab/r+0/0ct7wE
- NLloeSYwm5Lxl+UYJ6jz3aL1W0wF+w7FZS9Dh1hWNRM8qSGYH2fHhhonjqk2KmqppJ/J7k
- W/MLL1tmJjYXI6q1Uj8mOhLs+ZphswKehkvfUiTdOTTVfqV4NgtsCdCOLFU2KNFWcnxh4p
- Z0UjGNwO7G00Kpggnzs8LJIgJkzUnQ6QYIub4sfmppWB4Wyq52xQll38Y/lH5Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=lEtrGkBC
-Subject: Re: [Buildroot] [PATCH 05/23] package/gtkiostream: drop optional
+ id tXK76jAkjy57 for <buildroot@buildroot.org>;
+ Thu, 11 Sep 2025 19:52:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EA476F557
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0EA476F557
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:52:16 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EFB9A84322; Thu, 11 Sep 2025 19:52:15 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 11 Sep 2025 21:46:21 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8ebb3ddfd10056d819b5b95e334559e5e1b6d3a1
+X-Git-Newrev: 5d979430dbb00b6cb6f4307b66a45f58abf71422
+X-Patchwork-Hint: ignore
+Message-Id: <20250911195215.EFB9A84322@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gtkiostream: drop optional
  dependency on libgtk2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -81,44 +60,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=5d979430dbb00b6cb6f4307b66a45f58abf71422
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+As we're about to remove libgtk2, let's drop the optional dependency
+of gtkiostream on libgtk2.
 
-On 10/09/2025 23:32, Thomas Petazzoni via buildroot wrote:
-> As we're about to remove libgtk2, let's drop the optional dependency
-> of gtkiostream on libgtk2.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+---
+ package/gtkiostream/gtkiostream.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-  Applied to master, thanks.
-
-  Regards,
-  Arnout
-
-> ---
->   package/gtkiostream/gtkiostream.mk | 4 ----
->   1 file changed, 4 deletions(-)
-> 
-> diff --git a/package/gtkiostream/gtkiostream.mk b/package/gtkiostream/gtkiostream.mk
-> index bc3d859d4e..c748c7a000 100644
-> --- a/package/gtkiostream/gtkiostream.mk
-> +++ b/package/gtkiostream/gtkiostream.mk
-> @@ -39,10 +39,6 @@ ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
->   GTKIOSTREAM_DEPENDENCIES += libglib2
->   endif
->   
-> -ifeq ($(BR2_PACKAGE_LIBGTK2),y)
-> -GTKIOSTREAM_DEPENDENCIES += libgtk2
-> -endif
-> -
->   ifeq ($(BR2_PACKAGE_LIBGTK3),y)
->   GTKIOSTREAM_DEPENDENCIES += libgtk3
->   endif
-
+diff --git a/package/gtkiostream/gtkiostream.mk b/package/gtkiostream/gtkiostream.mk
+index bc3d859d4e..c748c7a000 100644
+--- a/package/gtkiostream/gtkiostream.mk
++++ b/package/gtkiostream/gtkiostream.mk
+@@ -39,10 +39,6 @@ ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
+ GTKIOSTREAM_DEPENDENCIES += libglib2
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBGTK2),y)
+-GTKIOSTREAM_DEPENDENCIES += libgtk2
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBGTK3),y)
+ GTKIOSTREAM_DEPENDENCIES += libgtk3
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
