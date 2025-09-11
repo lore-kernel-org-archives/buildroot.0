@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94CA0CAC58E
-	for <buildroot@archiver.kernel.org>; Thu, 11 Sep 2025 19:01:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06175CAC587
+	for <buildroot@archiver.kernel.org>; Thu, 11 Sep 2025 19:01:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F7494128B;
-	Thu, 11 Sep 2025 19:01:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D3EDF84AF1;
+	Thu, 11 Sep 2025 19:01:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y-QzY5R4ixip; Thu, 11 Sep 2025 19:01:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gXBoyRFkIWMG; Thu, 11 Sep 2025 19:01:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F45D423F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A04FC84AF9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F45D423F5;
-	Thu, 11 Sep 2025 19:01:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A04FC84AF9;
+	Thu, 11 Sep 2025 19:01:40 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 671ACE20
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:01:19 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id DA252443
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:01:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BA10F41ED2
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:01:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 09B9841EEE
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:01:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YV3SS5koCNxz for <buildroot@buildroot.org>;
- Thu, 11 Sep 2025 19:01:09 +0000 (UTC)
+ id i8Bz1dovSOsE for <buildroot@buildroot.org>;
+ Thu, 11 Sep 2025 19:01:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E53B41EEE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE70340896
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4E53B41EEE
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:01:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BE70340896
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:01:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4B9F1842A2; Thu, 11 Sep 2025 19:01:09 +0000 (UTC)
+ id ADA94842A5; Thu, 11 Sep 2025 19:01:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Sep 2025 18:01:11 +0200
+Date: Thu, 11 Sep 2025 17:13:40 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 9040d52457d888d768db2dc9eb18d02e64de4368
-X-Git-Newrev: 5196ff7564fd48a5e55c437694a32d33aebc3edb
+X-Git-Oldrev: 2648aa30c1fc61f66ab2b6f0bcfe5840a83b183b
+X-Git-Newrev: d1a3c2144206a0fc9bbe387c9da0b95802570952
 X-Patchwork-Hint: ignore
-Message-Id: <20250911190109.4B9F1842A2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/exiv2: security
- bump version to 0.28.7
+Message-Id: <20250911190108.ADA94842A5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/sqlite: add patch
+ for CVE-2025-6965
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,182 +66,168 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5196ff7564fd48a5e55c437694a32d33aebc3edb
+commit: https://git.buildroot.net/buildroot/commit/?id=d1a3c2144206a0fc9bbe387c9da0b95802570952
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Changelog:
-https://exiv2.org/whatsnew.html
-https://github.com/Exiv2/exiv2/blob/v0.28.7/doc/ChangeLog
+This fixes the following vulnerability:
+- CVE-2025-6965:
+    There exists a vulnerability in SQLite versions before 3.50.2 where
+    the number of aggregate terms could exceed the number of columns
+    available. This could lead to a memory corruption issue. We recommend
+    upgrading to version 3.50.2 or above.
+    https://www.cve.org/CVERecord?id=CVE-2025-6965
 
-Release notes of 0.28.0 with a long list of security-related fixes:
-https://github.com/Exiv2/exiv2/issues/2406#issuecomment-1529139799
-
-0.28.1 fixed CVE-2023-44398: https://github.com/Exiv2/exiv2/issues/2813
-
-0.28.2 fixed CVE-2024-24826 & CVE-2024-25112:
-https://github.com/Exiv2/exiv2/issues/2914
-
-0.28.3 fixed CVE-2024-39695: https://github.com/Exiv2/exiv2/issues/3008
-
-0.28.5 fixed CVE-2025-26623: https://github.com/Exiv2/exiv2/issues/3181
-
-0.28.6 fixed
-* [CVE-2025-54080](https://github.com/Exiv2/exiv2/security/advisories/GHSA-496f-x7cq-cq39)
-* [CVE-2025-55304](https://github.com/Exiv2/exiv2/security/advisories/GHSA-m54q-mm9w-fp6g)
-
-Please read https://github.com/Exiv2/exiv2/issues/2406 for the discussion
-whether these CVEs are relevant and their status of backporting to the
-0.27.x branch.
-
-Removed patch which is included in this release.
-Switch to github helper due to upstream not providing tarballs anymore.
-
-Added optional support for inih:
-https://github.com/Exiv2/exiv2/commit/43c9ec0f5095d92e2dd748c6c0b6f7ae4e6c73bf
-and brotli:
-https://github.com/Exiv2/exiv2/commit/557a5cebd52ced79d11080089d8e2874126fb038
-both introduced in the 0.28.x branch.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 5e99e8a38282dbd810450c4be0156ea77e4c6e04)
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit c4c282f8ec2bec752ca41f4cfebe3c34f45ffade)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...001-add-BUILD_WITH_STACK_PROTECTOR-option.patch | 54 ----------------------
- package/exiv2/Config.in                            | 12 +++++
- package/exiv2/exiv2.hash                           |  2 +-
- package/exiv2/exiv2.mk                             | 19 ++++++--
- 4 files changed, 29 insertions(+), 58 deletions(-)
+ ...3-Raise-error-if-too-many-aggregate-terms.patch | 123 +++++++++++++++++++++
+ package/sqlite/sqlite.mk                           |   2 +
+ 2 files changed, 125 insertions(+)
 
-diff --git a/package/exiv2/0001-add-BUILD_WITH_STACK_PROTECTOR-option.patch b/package/exiv2/0001-add-BUILD_WITH_STACK_PROTECTOR-option.patch
-deleted file mode 100644
-index 18684ebbfa..0000000000
---- a/package/exiv2/0001-add-BUILD_WITH_STACK_PROTECTOR-option.patch
-+++ /dev/null
-@@ -1,54 +0,0 @@
--From 4bb57da5fb0bb0d7e747b9e325e9ec0876ffc1f9 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 31 Jul 2021 16:36:50 +0200
--Subject: [PATCH] add BUILD_WITH_STACK_PROTECTOR option
--
--Add BUILD_WITH_STACK_PROTECTOR to avoid the following build failure with
--toolchains that don't support stack-protector:
--
--/home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/9.3.0/../../../../mipsel-buildroot-linux-uclibc/bin/ld: utils.cpp:(.text._ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPcEEvT_S7_St20forward_iterator_tag[_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPcEEvT_S7_St20forward_iterator_tag]+0xd0): undefined reference to `__stack_chk_fail'
--
--Indeed, support for -fstack-protector-strong can't be detected through
--check_cxx_compiler_flag as some toolchains need to link with -lssp to
--enable SSP support
--
--Fixes:
-- - http://autobuild.buildroot.org/results/ae4635899124c602c70d2b342a76f95c34aa4a3d
--
--Upstream: https://github.com/Exiv2/exiv2/commit/f31c0eba098889899d29b7b0da830aee2b62a7b8
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- CMakeLists.txt            | 1 +
-- cmake/compilerFlags.cmake | 4 ++--
-- 2 files changed, 3 insertions(+), 2 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 6f0da06a..0746ee14 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -47,6 +47,7 @@ mark_as_advanced(
--     EXIV2_TEAM_USE_SANITIZERS
-- )
-- 
--+option( BUILD_WITH_STACK_PROTECTOR    "Build with stack protector"                            ON )
-- option( BUILD_WITH_CCACHE             "Use ccache to speed up compilations"                   OFF )
-- option( BUILD_WITH_COVERAGE           "Add compiler flags to generate coverage stats"         OFF )
-- 
--diff --git a/cmake/compilerFlags.cmake b/cmake/compilerFlags.cmake
--index 35faf501..0a646e50 100644
----- a/cmake/compilerFlags.cmake
--+++ b/cmake/compilerFlags.cmake
--@@ -33,8 +33,8 @@ if ( MINGW OR UNIX OR MSYS ) # MINGW, Linux, APPLE, CYGWIN
--             endif()
--             if(HAS_FCF_PROTECTION)
--                 add_compile_options(-fcf-protection)
---            endif()
---            if(HAS_FSTACK_PROTECTOR_STRONG)
--+              endif()
--+	    if(BUILD_WITH_STACK_PROTECTOR AND HAS_FSTACK_PROTECTOR_STRONG)
--                 add_compile_options(-fstack-protector-strong)
--             endif()
--         endif()
---- 
--2.31.1
--
-diff --git a/package/exiv2/Config.in b/package/exiv2/Config.in
-index 8407c25b41..c65e484b2e 100644
---- a/package/exiv2/Config.in
-+++ b/package/exiv2/Config.in
-@@ -20,6 +20,18 @@ config BR2_PACKAGE_EXIV2
- 
- if BR2_PACKAGE_EXIV2
- 
-+config BR2_PACKAGE_EXIV2_BROTLI
-+	bool "Brotli support"
-+	select BR2_PACKAGE_BROTLI
-+	help
-+	  Build with Brotli support for JPEG XL
+diff --git a/package/sqlite/0003-Raise-error-if-too-many-aggregate-terms.patch b/package/sqlite/0003-Raise-error-if-too-many-aggregate-terms.patch
+new file mode 100644
+index 0000000000..43be545b83
+--- /dev/null
++++ b/package/sqlite/0003-Raise-error-if-too-many-aggregate-terms.patch
+@@ -0,0 +1,123 @@
++From 1cbb088f4be95e7a02627f64de60653ef2b13ab5 Mon Sep 17 00:00:00 2001
++From: drh <>
++Date: Sun, 16 Feb 2025 10:57:25 +0000
++Subject: [PATCH] Raise an error right away if the number of aggregate terms in a query exceeds the maximum number of columns. 
 +
-+config BR2_PACKAGE_EXIV2_INIH
-+	bool "Inih support"
-+	select BR2_PACKAGE_INIH
-+	help
-+	  Build with inih support
++CVE: CVE-2025-6965
 +
- config BR2_PACKAGE_EXIV2_PNG
- 	bool "PNG image support"
- 	select BR2_PACKAGE_ZLIB
-diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
-index c871277801..1c85f2e1db 100644
---- a/package/exiv2/exiv2.hash
-+++ b/package/exiv2/exiv2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  4c192483a1125dc59a3d70b30d30d32edace9e14adf52802d2f853abf72db8a6  exiv2-0.27.6-Source.tar.gz
-+sha256  5e292b02614dbc0cee40fe1116db2f42f63ef6b2ba430c77b614e17b8d61a638  exiv2-0.28.7.tar.gz
- sha256  a7ba75cb966aca374711e2af49e5f3aea6a4443a803440f5d93e73a5a1222f66  COPYING
-diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
-index 869f8e48dd..e5b55ecde7 100644
---- a/package/exiv2/exiv2.mk
-+++ b/package/exiv2/exiv2.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
++For more info see https://nvd.nist.gov/vuln/detail/CVE-2025-6965
++
++Upstream: https://www.sqlite.org/src/vinfo/5508b56fd24016c13981ec280ecdd833007c9d8dd595edb295b984c2b487b5c8
++
++[Titouan: adapt to sqlite3 "amalgamation" source code]
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ sqlite3.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/sqlite3.c b/sqlite3.c
++index 80433f6..8a43734 100644
++--- a/sqlite3.c	2025-09-03 13:04:29.799853238 +0200
+++++ b/sqlite3.c	2025-09-03 13:47:54.274155427 +0200
++@@ -20,7 +20,7 @@
++ ** The content in this amalgamation comes from Fossil check-in
++ ** d2fe6b05f38d9d7cd78c5d252e99ac59f1ae with changes in files:
++ **
++-**    
+++**
++ */
++ #ifndef SQLITE_AMALGAMATION
++ #define SQLITE_CORE 1
++@@ -15258,6 +15258,14 @@
++ #define SMALLEST_INT64 (((i64)-1) - LARGEST_INT64)
++ 
++ /*
+++** Macro SMXV(n) return the maximum value that can be held in variable n,
+++** assuming n is a signed integer type.  UMXV(n) is similar for unsigned
+++** integer types.
+++*/
+++#define SMXV(n) ((((i64)1)<<(sizeof(n)*8-1))-1)
+++#define UMXV(n) ((((i64)1)<<(sizeof(n)*8))-1)
+++
+++/*
++ ** Round up a number to the next larger multiple of 8.  This is used
++ ** to force 8-byte alignment on 64-bit architectures.
++ **
++@@ -19046,7 +19054,7 @@
++                           ** from source tables rather than from accumulators */
++   u8 useSortingIdx;       /* In direct mode, reference the sorting index rather
++                           ** than the source table */
++-  u16 nSortingColumn;     /* Number of columns in the sorting index */
+++  u32 nSortingColumn;     /* Number of columns in the sorting index */
++   int sortingIdx;         /* Cursor number of the sorting index */
++   int sortingIdxPTab;     /* Cursor number of pseudo-table */
++   int iFirstReg;          /* First register in range for aCol[] and aFunc[] */
++@@ -19055,8 +19063,8 @@
++     Table *pTab;             /* Source table */
++     Expr *pCExpr;            /* The original expression */
++     int iTable;              /* Cursor number of the source table */
++-    i16 iColumn;             /* Column number within the source table */
++-    i16 iSorterColumn;       /* Column number in the sorting index */
+++    int iColumn;             /* Column number within the source table */
+++    int iSorterColumn;       /* Column number in the sorting index */
++   } *aCol;
++   int nColumn;            /* Number of used entries in aCol[] */
++   int nAccumulator;       /* Number of columns that show through to the output.
++@@ -116445,7 +116453,9 @@
++ ){
++   struct AggInfo_col *pCol;
++   int k;
+++  int mxTerm = pParse->db->aLimit[SQLITE_LIMIT_COLUMN];
++ 
+++  assert( mxTerm <= SMXV(i16) );
++   assert( pAggInfo->iFirstReg==0 );
++   pCol = pAggInfo->aCol;
++   for(k=0; k<pAggInfo->nColumn; k++, pCol++){
++@@ -116463,6 +116473,10 @@
++     assert( pParse->db->mallocFailed );
++     return;
++   }
+++  if( k>mxTerm ){
+++    sqlite3ErrorMsg(pParse, "more than %d aggregate terms", mxTerm);
+++    k = mxTerm;
+++  }
++   pCol = &pAggInfo->aCol[k];
++   assert( ExprUseYTab(pExpr) );
++   pCol->pTab = pExpr->y.pTab;
++@@ -116496,6 +116510,7 @@
++   if( pExpr->op==TK_COLUMN ){
++     pExpr->op = TK_AGG_COLUMN;
++   }
+++  assert( k <= SMXV(pExpr->iAgg) );
++   pExpr->iAgg = (i16)k;
++ }
++ 
++@@ -116580,13 +116595,19 @@
++         ** function that is already in the pAggInfo structure
++         */
++         struct AggInfo_func *pItem = pAggInfo->aFunc;
+++        int mxTerm = pParse->db->aLimit[SQLITE_LIMIT_COLUMN];
+++        assert( mxTerm <= SMXV(i16) );
++         for(i=0; i<pAggInfo->nFunc; i++, pItem++){
++           if( NEVER(pItem->pFExpr==pExpr) ) break;
++           if( sqlite3ExprCompare(0, pItem->pFExpr, pExpr, -1)==0 ){
++             break;
++           }
++         }
++-        if( i>=pAggInfo->nFunc ){
+++        if( i>mxTerm ){
+++          sqlite3ErrorMsg(pParse, "more than %d aggregate terms", mxTerm);
+++          i = mxTerm;
+++          assert( i<pAggInfo->nFunc );
+++        }else if( i>=pAggInfo->nFunc ){
++           /* pExpr is original.  Make a new entry in pAggInfo->aFunc[]
++           */
++           u8 enc = ENC(pParse->db);
++@@ -116640,6 +116661,7 @@
++         */
++         assert( !ExprHasProperty(pExpr, EP_TokenOnly|EP_Reduced) );
++         ExprSetVVAProperty(pExpr, EP_NoReduce);
+++        assert( i <= SMXV(pExpr->iAgg) );
++         pExpr->iAgg = (i16)i;
++         pExpr->pAggInfo = pAggInfo;
++         return WRC_Prune;
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 4f4bc9d3af..29ebb0365d 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -15,6 +15,8 @@ SQLITE_INSTALL_STAGING = YES
  
--EXIV2_VERSION = 0.27.6
--EXIV2_SOURCE = exiv2-$(EXIV2_VERSION)-Source.tar.gz
--EXIV2_SITE = https://github.com/Exiv2/exiv2/releases/download/v$(EXIV2_VERSION)
-+EXIV2_VERSION = 0.28.7
-+EXIV2_SITE = $(call github,Exiv2,exiv2,v$(EXIV2_VERSION))
- EXIV2_INSTALL_STAGING = YES
- EXIV2_LICENSE = GPL-2.0+
- EXIV2_LICENSE_FILES = COPYING
-@@ -16,6 +15,20 @@ EXIV2_CONF_OPTS += \
- 	-DBUILD_WITH_STACK_PROTECTOR=OFF \
- 	-DEXIV2_BUILD_SAMPLES=OFF
+ # 0002-Add-a-typecast-to-avoid-32-bit-integer-overflow-in-t.patch
+ SQLITE_IGNORE_CVES = CVE-2025-29087 CVE-2025-3277
++# 0003-Raise-error-if-too-many-aggregate-terms.patch
++SQLITE_IGNORE_CVES += CVE-2025-6965
  
-+ifeq ($(BR2_PACKAGE_EXIV2_BROTLI),y)
-+EXIV2_CONF_OPTS += -DEXIV2_ENABLE_BROTLI=ON
-+EXIV2_DEPENDENCIES += brotli
-+else
-+EXIV2_CONF_OPTS += -DEXIV2_ENABLE_BROTLI=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_EXIV2_INIH),y)
-+EXIV2_CONF_OPTS += -DEXIV2_ENABLE_INIH=ON
-+EXIV2_DEPENDENCIES += inih
-+else
-+EXIV2_CONF_OPTS += -DEXIV2_ENABLE_INIH=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_EXIV2_LENSDATA),y)
- EXIV2_CONF_OPTS += -DEXIV2_ENABLE_LENSDATA=ON
- else
+ ifeq ($(BR2_PACKAGE_SQLITE_STAT4),y)
+ SQLITE_CFLAGS += -DSQLITE_ENABLE_STAT4
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
