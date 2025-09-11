@@ -1,106 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20755CAC58F
-	for <buildroot@archiver.kernel.org>; Thu, 11 Sep 2025 19:26:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7641ACAC587
+	for <buildroot@archiver.kernel.org>; Thu, 11 Sep 2025 19:26:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E647A40D94;
-	Thu, 11 Sep 2025 19:26:14 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a-KXGmDEkA2j; Thu, 11 Sep 2025 19:26:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3CFE40DA7
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E3CFE40DA7;
-	Thu, 11 Sep 2025 19:26:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8D9BD443
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:26:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7F3656F4B6
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:26:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A99F6F4B3;
+	Thu, 11 Sep 2025 19:26:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N4qDD9-k2fwH for <buildroot@buildroot.org>;
- Thu, 11 Sep 2025 19:26:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::532; helo=mail-ed1-x532.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 499E46F4B3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 499E46F4B3
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 499E46F4B3
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:26:11 +0000 (UTC)
-Received: by mail-ed1-x532.google.com with SMTP id
- 4fb4d7f45d1cf-62598fcf41aso1449417a12.3
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 12:26:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1757618769; x=1758223569;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=5pQfUcKuQ9dWVqRhO29Q8P2jmgXdzHkXVwsZMpaosn4=;
- b=YWzz7f6rdloaFLzpsvPrcyrlqEAbJr4vdrOgoa64A3CLh6M9FWMjl+7jJo0/hLZCG8
- +yDW8KRwfjrJIiRKZqrqeA1aytOWBR5D+RUuW0LJpn7IA89je7qGeW0LTl9J11sen+WL
- PWqUHgL0efsJNJ47acs9Sy8MWQ7AvGgLvDyYqHZ2jfZnCISG/xyg+LS16x5GmfHWfuG+
- nFxi8OP1xjSrN61RGWKBCvXJ7fEZcvWNuloLXutiEa9NqiaZiBhGC0uc8cgjMR8l44Iv
- NwJEbUHoJYNE77f+3s5FfqMXSKLXkaxRUOIrYfEjWY21Qkzi/EXaoPdSuq4JCpPZNvED
- jecQ==
-X-Forwarded-Encrypted: i=1;
- AJvYcCX4hNB0WSeYtOxwuHamz+Jp2rZ9eYz2fO/GQuwsgVzv3Y6gvF6o1Y/X3onZXHuzfsmHUiIKEc5wqeI=@buildroot.org
-X-Gm-Message-State: AOJu0Yyg3R5xr5YboQ6ENNuQfwPlZaB1x3bLB0M6YvQy8lCBgnybq0Kk
- 1eeCmo6Mv+qY2aNQRB0U2Ix25pr/rH+GINXeP3I/tq3RW2tKLwMVtpLe7JjWoOnk4xU=
-X-Gm-Gg: ASbGncs+TJIlXfJx3zTEeaatoj6Rw1n0EigzZz9ZU9ukSOvV4SlgX5p2Llq2za0TPJE
- yurXUyQvHCWPuOFqf+dEeBrwCXjpYFZ7NmFVQRsIavu/4oNPEXpuyassCxIXS2WaaRDSf5XFQsA
- y8A9+uzUCDleqTYu/IwaJ7hOUfZyip00mzqiEJ5OLXOYfhGIdokKjHOCA471+1pUaEMYQh6Z+J1
- BJSWb+y2h+iylbsUYLqgv8rJmh3zNKkfo4gxVOfgDZ8Tiv8a43JWl1LevVGlR09bnBIdiltAyuT
- SDQLZ97Zh7oPmrJ7rrC2aCTV/eK/Hh4H8/O1OAtyQZDPNeUXd5TKza2RdKXk7Wxmf/3BgPPyOns
- Qup+1ggKMo50rkBXEPjc5aXliei2CMoHiT+hU
-X-Google-Smtp-Source: AGHT+IEkwPVTco5eUw8khQmotVTqddIo/Q8KNtYTnJWKToPqfpajvEpIm3M5kEM7OONpXBQ2DV7V/A==
-X-Received: by 2002:a17:907:3c91:b0:b04:26d8:97b7 with SMTP id
- a640c23a62f3a-b07c3573a59mr33714066b.17.1757618769134; 
- Thu, 11 Sep 2025 12:26:09 -0700 (PDT)
-Received: from localhost.localdomain ([79.132.233.79])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b07b32dd309sm193568766b.53.2025.09.11.12.26.08
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 11 Sep 2025 12:26:08 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Thu, 11 Sep 2025 21:25:46 +0200
-Message-Id: <20250911192546.2672578-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250905055201.76291-1-bernd@kuhls.net>
-References: <20250905055201.76291-1-bernd@kuhls.net>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1757618769; x=1758223569; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=5pQfUcKuQ9dWVqRhO29Q8P2jmgXdzHkXVwsZMpaosn4=;
- b=c/Z/PN3Ar5SicXNiODCfahwMLklSdRgpI635MtHNY5fNZlFZw7pf8DPRgPRoYv+EUI
- LFpy6mEmS98SXtpxUccLsTN1bNd+X8/ERKYjOjahPlWNgm1qEBJ2coRJ90/nFqcrdM2p
- yZofMHjJsJ0TybtUCIBwm4JUAZFauriGYKRdV6BMCE1eDZaADRjBkMVCwpFuWa1gUQCM
- +nrQuPtQM39ozzRQ7e08dnhrBxfcYxy2cNYVS2foPYbT64r0cj2oaDibcfic4U5mKnYP
- GBrKuC6fsQCMi7t8U21wk9dVCes0sDz9dRyV4k+B95nCaUlfKnGQ6xAFHLDjrbwRIjjC
- yfYQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=c/Z/PN3A
-Subject: Re: [Buildroot] [PATCH 1/1] package/exiv2: security bump version to
- 0.28.7
+ id gsy814OI_SJF; Thu, 11 Sep 2025 19:26:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 527D86F4B6
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 527D86F4B6;
+	Thu, 11 Sep 2025 19:26:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E045C234
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:26:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D29FC41402
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:26:27 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZJwa0ye4_Tzu for <buildroot@buildroot.org>;
+ Thu, 11 Sep 2025 19:26:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 089B1413E2
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 089B1413E2
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:26:27 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E6BEA842BE; Thu, 11 Sep 2025 19:26:26 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 11 Sep 2025 21:25:27 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f92bf750fe58d4030558c3b4f1f62ae743e3dee9
+X-Git-Newrev: 27e1031aa42ae8b7e9fd6d10a3d249d6c8e72922
+X-Patchwork-Hint: ignore
+Message-Id: <20250911192626.E6BEA842BE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] {linux, linux-headers}: security bump 5.{4,
+ 10, 15}.x / 6.{1, 6, 12, 16}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,195 +58,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In reply of:
-> Changelog:
-> https://exiv2.org/whatsnew.html
-> https://github.com/Exiv2/exiv2/blob/v0.28.7/doc/ChangeLog
-> 
-> Release notes of 0.28.0 with a long list of security-related fixes:
-> https://github.com/Exiv2/exiv2/issues/2406#issuecomment-1529139799
-> 
-> 0.28.1 fixed CVE-2023-44398: https://github.com/Exiv2/exiv2/issues/2813
-> 
-> 0.28.2 fixed CVE-2024-24826 & CVE-2024-25112:
-> https://github.com/Exiv2/exiv2/issues/2914
-> 
-> 0.28.3 fixed CVE-2024-39695: https://github.com/Exiv2/exiv2/issues/3008
-> 
-> 0.28.5 fixed CVE-2025-26623: https://github.com/Exiv2/exiv2/issues/3181
-> 
-> 0.28.6 fixed
-> * [CVE-2025-54080](https://github.com/Exiv2/exiv2/security/advisories/GHSA-496f-x7cq-cq39)
-> * [CVE-2025-55304](https://github.com/Exiv2/exiv2/security/advisories/GHSA-m54q-mm9w-fp6g)
-> 
-> Please read https://github.com/Exiv2/exiv2/issues/2406 for the discussion
-> whether these CVEs are relevant and their status of backporting to the
-> 0.27.x branch.
-> 
-> Removed patch which is included in this release.
-> Switch to github helper due to upstream not providing tarballs anymore.
-> 
-> Added optional support for inih:
-> https://github.com/Exiv2/exiv2/commit/43c9ec0f5095d92e2dd748c6c0b6f7ae4e6c73bf
-> and brotli:
-> https://github.com/Exiv2/exiv2/commit/557a5cebd52ced79d11080089d8e2874126fb038
-> both introduced in the 0.28.x branch.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=27e1031aa42ae8b7e9fd6d10a3d249d6c8e72922
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to 2025.02.x & 2025.05.x. Thanks
+This bump, with the exception of the 5.4 series, fixes the VMSCAPE bug:
+CVE-2025-40300.
 
-> ---
->  ...dd-BUILD_WITH_STACK_PROTECTOR-option.patch | 54 -------------------
->  package/exiv2/Config.in                       | 12 +++++
->  package/exiv2/exiv2.hash                      |  2 +-
->  package/exiv2/exiv2.mk                        | 19 +++++--
->  4 files changed, 29 insertions(+), 58 deletions(-)
->  delete mode 100644 package/exiv2/0001-add-BUILD_WITH_STACK_PROTECTOR-option.patch
-> 
-> diff --git a/package/exiv2/0001-add-BUILD_WITH_STACK_PROTECTOR-option.patch b/package/exiv2/0001-add-BUILD_WITH_STACK_PROTECTOR-option.patch
-> deleted file mode 100644
-> index 18684ebbfa..0000000000
-> --- a/package/exiv2/0001-add-BUILD_WITH_STACK_PROTECTOR-option.patch
-> +++ /dev/null
-> @@ -1,54 +0,0 @@
-> -From 4bb57da5fb0bb0d7e747b9e325e9ec0876ffc1f9 Mon Sep 17 00:00:00 2001
-> -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -Date: Sat, 31 Jul 2021 16:36:50 +0200
-> -Subject: [PATCH] add BUILD_WITH_STACK_PROTECTOR option
-> -
-> -Add BUILD_WITH_STACK_PROTECTOR to avoid the following build failure with
-> -toolchains that don't support stack-protector:
-> -
-> -/home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/9.3.0/../../../../mipsel-buildroot-linux-uclibc/bin/ld: utils.cpp:(.text._ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPcEEvT_S7_St20forward_iterator_tag[_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPcEEvT_S7_St20forward_iterator_tag]+0xd0): undefined reference to `__stack_chk_fail'
-> -
-> -Indeed, support for -fstack-protector-strong can't be detected through
-> -check_cxx_compiler_flag as some toolchains need to link with -lssp to
-> -enable SSP support
-> -
-> -Fixes:
-> - - http://autobuild.buildroot.org/results/ae4635899124c602c70d2b342a76f95c34aa4a3d
-> -
-> -Upstream: https://github.com/Exiv2/exiv2/commit/f31c0eba098889899d29b7b0da830aee2b62a7b8
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ----
-> - CMakeLists.txt            | 1 +
-> - cmake/compilerFlags.cmake | 4 ++--
-> - 2 files changed, 3 insertions(+), 2 deletions(-)
-> -
-> -diff --git a/CMakeLists.txt b/CMakeLists.txt
-> -index 6f0da06a..0746ee14 100644
-> ---- a/CMakeLists.txt
-> -+++ b/CMakeLists.txt
-> -@@ -47,6 +47,7 @@ mark_as_advanced(
-> -     EXIV2_TEAM_USE_SANITIZERS
-> - )
-> - 
-> -+option( BUILD_WITH_STACK_PROTECTOR    "Build with stack protector"                            ON )
-> - option( BUILD_WITH_CCACHE             "Use ccache to speed up compilations"                   OFF )
-> - option( BUILD_WITH_COVERAGE           "Add compiler flags to generate coverage stats"         OFF )
-> - 
-> -diff --git a/cmake/compilerFlags.cmake b/cmake/compilerFlags.cmake
-> -index 35faf501..0a646e50 100644
-> ---- a/cmake/compilerFlags.cmake
-> -+++ b/cmake/compilerFlags.cmake
-> -@@ -33,8 +33,8 @@ if ( MINGW OR UNIX OR MSYS ) # MINGW, Linux, APPLE, CYGWIN
-> -             endif()
-> -             if(HAS_FCF_PROTECTION)
-> -                 add_compile_options(-fcf-protection)
-> --            endif()
-> --            if(HAS_FSTACK_PROTECTOR_STRONG)
-> -+              endif()
-> -+	    if(BUILD_WITH_STACK_PROTECTOR AND HAS_FSTACK_PROTECTOR_STRONG)
-> -                 add_compile_options(-fstack-protector-strong)
-> -             endif()
-> -         endif()
-> --- 
-> -2.31.1
-> -
-> diff --git a/package/exiv2/Config.in b/package/exiv2/Config.in
-> index 8407c25b41..c65e484b2e 100644
-> --- a/package/exiv2/Config.in
-> +++ b/package/exiv2/Config.in
-> @@ -20,6 +20,18 @@ config BR2_PACKAGE_EXIV2
->  
->  if BR2_PACKAGE_EXIV2
->  
-> +config BR2_PACKAGE_EXIV2_BROTLI
-> +	bool "Brotli support"
-> +	select BR2_PACKAGE_BROTLI
-> +	help
-> +	  Build with Brotli support for JPEG XL
-> +
-> +config BR2_PACKAGE_EXIV2_INIH
-> +	bool "Inih support"
-> +	select BR2_PACKAGE_INIH
-> +	help
-> +	  Build with inih support
-> +
->  config BR2_PACKAGE_EXIV2_PNG
->  	bool "PNG image support"
->  	select BR2_PACKAGE_ZLIB
-> diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
-> index c871277801..1c85f2e1db 100644
-> --- a/package/exiv2/exiv2.hash
-> +++ b/package/exiv2/exiv2.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  4c192483a1125dc59a3d70b30d30d32edace9e14adf52802d2f853abf72db8a6  exiv2-0.27.6-Source.tar.gz
-> +sha256  5e292b02614dbc0cee40fe1116db2f42f63ef6b2ba430c77b614e17b8d61a638  exiv2-0.28.7.tar.gz
->  sha256  a7ba75cb966aca374711e2af49e5f3aea6a4443a803440f5d93e73a5a1222f66  COPYING
-> diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
-> index 869f8e48dd..e5b55ecde7 100644
-> --- a/package/exiv2/exiv2.mk
-> +++ b/package/exiv2/exiv2.mk
-> @@ -4,9 +4,8 @@
->  #
->  ################################################################################
->  
-> -EXIV2_VERSION = 0.27.6
-> -EXIV2_SOURCE = exiv2-$(EXIV2_VERSION)-Source.tar.gz
-> -EXIV2_SITE = https://github.com/Exiv2/exiv2/releases/download/v$(EXIV2_VERSION)
-> +EXIV2_VERSION = 0.28.7
-> +EXIV2_SITE = $(call github,Exiv2,exiv2,v$(EXIV2_VERSION))
->  EXIV2_INSTALL_STAGING = YES
->  EXIV2_LICENSE = GPL-2.0+
->  EXIV2_LICENSE_FILES = COPYING
-> @@ -16,6 +15,20 @@ EXIV2_CONF_OPTS += \
->  	-DBUILD_WITH_STACK_PROTECTOR=OFF \
->  	-DEXIV2_BUILD_SAMPLES=OFF
->  
-> +ifeq ($(BR2_PACKAGE_EXIV2_BROTLI),y)
-> +EXIV2_CONF_OPTS += -DEXIV2_ENABLE_BROTLI=ON
-> +EXIV2_DEPENDENCIES += brotli
-> +else
-> +EXIV2_CONF_OPTS += -DEXIV2_ENABLE_BROTLI=OFF
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_EXIV2_INIH),y)
-> +EXIV2_CONF_OPTS += -DEXIV2_ENABLE_INIH=ON
-> +EXIV2_DEPENDENCIES += inih
-> +else
-> +EXIV2_CONF_OPTS += -DEXIV2_ENABLE_INIH=OFF
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_EXIV2_LENSDATA),y)
->  EXIV2_CONF_OPTS += -DEXIV2_ENABLE_LENSDATA=ON
->  else
-> -- 
-> 2.47.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+---
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 14 +++++++-------
+ package/linux-headers/Config.in.host | 14 +++++++-------
+ 3 files changed, 15 insertions(+), 15 deletions(-)
+
+diff --git a/linux/Config.in b/linux/Config.in
+index e5c08d91c6..1f1c014ba2 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -141,7 +141,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.16.5" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.16.7" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index bd876d5ee8..8a02b43a67 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,12 +1,12 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  76bffbae7eab2a1de1ed05692bef709f43b02a52fe95ae655cacf0fa252213f3  linux-6.16.5.tar.xz
+-sha256  8f95a8549cfbdfb89c1181a1f55a971f04dfcd629508a2ed70b777ab92f9db3e  linux-6.12.45.tar.xz
+-sha256  2a772f9d661afabaaddcdfd1116239acb2d943377aceab9e0baed2b7a915e36a  linux-6.6.104.tar.xz
+-sha256  001bffcc08e2b544fb507c0588f9270f8b5b1138508a4be1205492e3c57824ef  linux-6.1.150.tar.xz
++sha256  5be3daa1f9427b1bdb34c4894d9c1adfac38cff674376fe0611a3065729a1a81  linux-6.16.7.tar.xz
++sha256  e82fe40871743048226987bd349ef107168b15aab90140e872ca4ed470922e25  linux-6.12.47.tar.xz
++sha256  0c3180e2d8dcd0b70fe83554d9c440e31bab17873e360b89c4ab62a4fd26a8a0  linux-6.6.106.tar.xz
++sha256  1a173be2a9cc886698b8205e639e4482b6cd84ba0be988d519415c7d2bb5b7d9  linux-6.1.152.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  7a2db3ac34a3edb6f497204cc287497c29bb3218fdb7876951f8bceac46e924e  linux-5.15.191.tar.xz
+-sha256  bc3ae7003174e26c9a39534cfb8d66cee1a0ba6e1dd0381a9fe092f9de6ba9cd  linux-5.10.242.tar.xz
+-sha256  01163bed1abadc1e5e6480f0d694c360281cbff3446023c2e015f1e24504e4e6  linux-5.4.298.tar.xz
++sha256  c70262d2f902710b773ef2f35c04b3ff2111e5186c8a97da351454180aac1e99  linux-5.15.193.tar.xz
++sha256  210a37cc09f5c2b3d6f011aa1c65d2484d6f4ec17cf90df473f917abb2c26dc0  linux-5.10.244.tar.xz
++sha256  88de95aeeb8d941fe61497f5e2e886bed25a79d509aa71ba25a2727fd7f0bf2d  linux-5.4.299.tar.xz
+ # Locally computed
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+ sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index f8a259b2c0..d0555ccde4 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -454,13 +454,13 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "5.4.298"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.242"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.191"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.150"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.104"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.12.45"	if BR2_KERNEL_HEADERS_6_12
+-	default "6.16.5"	if BR2_KERNEL_HEADERS_6_16
++	default "5.4.299"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.244"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.193"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.152"	if BR2_KERNEL_HEADERS_6_1
++	default "6.6.106"	if BR2_KERNEL_HEADERS_6_6
++	default "6.12.47"	if BR2_KERNEL_HEADERS_6_12
++	default "6.16.7"	if BR2_KERNEL_HEADERS_6_16
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
