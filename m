@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE562CAC58E
-	for <buildroot@archiver.kernel.org>; Thu, 11 Sep 2025 19:01:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93491CAC587
+	for <buildroot@archiver.kernel.org>; Thu, 11 Sep 2025 19:01:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C12C440A0F;
-	Thu, 11 Sep 2025 19:01:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A34184949;
+	Thu, 11 Sep 2025 19:01:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RrN0_7GO-9mY; Thu, 11 Sep 2025 19:01:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SjmvmyT42R3E; Thu, 11 Sep 2025 19:01:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 036F640CED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 49B8084909
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 036F640CED;
-	Thu, 11 Sep 2025 19:01:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id BB95AE20
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:01:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 49B8084909;
+	Thu, 11 Sep 2025 19:01:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 17CF3E20
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:01:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8CD5861C69
+ by smtp2.osuosl.org (Postfix) with ESMTP id B3FD641E9D
  for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:01:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N7jyr_CMnb9d for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id geoQP67ma0JF for <buildroot@buildroot.org>;
  Thu, 11 Sep 2025 19:01:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5E2661C78
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF67E41E9C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C5E2661C78
+ by smtp2.osuosl.org (Postfix) with ESMTP id CF67E41E9C
  for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:01:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B713683A1C; Thu, 11 Sep 2025 19:01:08 +0000 (UTC)
+ id C06A8842A4; Thu, 11 Sep 2025 19:01:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Sep 2025 17:14:13 +0200
+Date: Thu, 11 Sep 2025 17:14:23 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: d1a3c2144206a0fc9bbe387c9da0b95802570952
-X-Git-Newrev: 55e2d91e35ed6dfa67c0a56752f4235fdadd0b8d
+X-Git-Oldrev: 55e2d91e35ed6dfa67c0a56752f4235fdadd0b8d
+X-Git-Newrev: 3956c292d4407d27170752ae3a91ab22b336d6c2
 X-Patchwork-Hint: ignore
-Message-Id: <20250911190108.B713683A1C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/imagemagick:
- security bump to v7.1.2-3
+Message-Id: <20250911190108.C06A8842A4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x]
+ package/python-flask-cors: security bump to v6.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,74 +66,86 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55e2d91e35ed6dfa67c0a56752f4235fdadd0b8d
+commit: https://git.buildroot.net/buildroot/commit/?id=3956c292d4407d27170752ae3a91ab22b336d6c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
+This is a major version bump, because it could break user code that depends
+on the (wrong) previous logic fixed by the new release
+
+See the release notes:
+- https://github.com/corydolphin/flask-cors/releases/tag/6.0.0
+- https://github.com/corydolphin/flask-cors/releases/tag/6.0.1
+
 This fixes the following vulnerabilities:
-- CVE-2023-5341:
-    A heap use-after-free flaw was found in coders/bmp.c in ImageMagick.
-    https://www.cve.org/CVERecord?id=CVE-2023-5341
+- CVE-2024-6839:
+    corydolphin/flask-cors version 4.0.1 contains an improper regex path
+    matching vulnerability. The plugin prioritizes longer regex patterns
+    over more specific ones when matching paths, which can lead to less
+    restrictive CORS policies being applied to sensitive endpoints. This
+    mismatch in regex pattern priority allows unauthorized cross-origin
+    access to sensitive data or functionality, potentially exposing
+    confidential information and increasing the risk of unauthorized
+    actions by malicious actors.
+    https://www.cve.org/CVERecord?id=CVE-2024-6839
 
-- CVE-2025-55004:
-    ImageMagick is free and open-source software used for editing and
-    manipulating digital images. Prior to version 7.1.2-1, ImageMagick is
-    vulnerable to heap-buffer overflow read around the handling of images
-    with separate alpha channels when performing image magnification in
-    ReadOneMNGIMage. This can likely be used to leak subsequent memory
-    contents into the output image. This issue has been patched in version
-    7.1.2-1.
-    https://www.cve.org/CVERecord?id=CVE-2025-55004
+- CVE-2024-6844:
+    A vulnerability in corydolphin/flask-cors version 4.0.1 allows for
+    inconsistent CORS matching due to the handling of the '+' character in
+    URL paths. The request.path is passed through the unquote_plus
+    function, which converts the '+' character to a space ' '. This
+    behavior leads to incorrect path normalization, causing potential
+    mismatches in CORS configuration. As a result, endpoints may not be
+    matched correctly to their CORS settings, leading to unexpected CORS
+    policy application. This can cause unauthorized cross-origin access or
+    block valid requests, creating security vulnerabilities and usability
+    issues.
+    https://www.cve.org/CVERecord?id=CVE-2024-6844
 
-- CVE-2025-55005:
-    ImageMagick is free and open-source software used for editing and
-    manipulating digital images. Prior to version 7.1.2-1, when preparing
-    to transform from Log to sRGB colorspaces, the logmap construction
-    fails to handle cases where the reference-black or reference-white
-    value is larger than 1024. This leads to corrupting memory beyond the
-    end of the allocated logmap buffer. This issue has been patched in
-    version 7.1.2-1.
-    https://www.cve.org/CVERecord?id=CVE-2025-55005
-
-- CVE-2025-55160:
-    ImageMagick is free and open-source software used for editing and
-    manipulating digital images. Prior to versions 6.9.13-27 and 7.1.2-1,
-    there is undefined behavior (function-type-mismatch) in splay tree
-    cloning callback. This results in a deterministic abort under UBSan
-    (DoS in sanitizer builds), with no crash in a non-sanitized build.
-    This issue has been patched in versions 6.9.13-27 and 7.1.2-1.
-    https://www.cve.org/CVERecord?id=CVE-2025-55160
+- CVE-2024-6866:
+    corydolphin/flask-cors version 4.01 contains a vulnerability where the
+    request path matching is case-insensitive due to the use of the
+    `try_match` function, which is originally intended for matching hosts.
+    This results in a mismatch because paths in URLs are case-sensitive,
+    but the regex matching treats them as case-insensitive. This
+    misconfiguration can lead to significant security vulnerabilities,
+    allowing unauthorized origins to access paths meant to be restricted,
+    resulting in data exposure and potential data leaks.
+    https://www.cve.org/CVERecord?id=CVE-2024-6866
 
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0eefa1095de0f9b18987ac76979b90a55411dc68)
+(cherry picked from commit 04cd135b26406dcc31cb66af1480d53fffe81e59)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-flask-cors/python-flask-cors.hash | 4 ++--
+ package/python-flask-cors/python-flask-cors.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 2983b511cc..f260a0e0fb 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  ceb972266b23dc7c1cfce0da5a7f0c9acfb4dc81f40eb542a49476fedbc2618f  imagemagick-7.1.1-43.tar.gz
-+sha256  b16415e8694a2e15e5282d64fc7b358f309ff3a514a90eb5da268676c772de3d  imagemagick-7.1.2-3.tar.gz
- sha256  a556c5292c87c9a6ac795c80669b0c3660f9f729de8c476bf2b10f83ab1b34ec  LICENSE
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 6bbda40396..30cacc7f1a 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
+diff --git a/package/python-flask-cors/python-flask-cors.hash b/package/python-flask-cors/python-flask-cors.hash
+index 41c232df36..7070b5462e 100644
+--- a/package/python-flask-cors/python-flask-cors.hash
++++ b/package/python-flask-cors/python-flask-cors.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/flask-cors/json
+-md5  a6e8202cc008ef6f70ce75a7ae7f8d9d  flask_cors-5.0.0.tar.gz
+-sha256  5aadb4b950c4e93745034594d9f3ea6591f734bb3662e16e255ffbf5e89c88ef  flask_cors-5.0.0.tar.gz
++md5  2879503d54f25a4cacb62f7060b96e14  flask_cors-6.0.1.tar.gz
++sha256  d81bcb31f07b0985be7f48406247e9243aced229b7747219160a0559edd678db  flask_cors-6.0.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  6e1a1bdc54834c1e0740cbce5d5f6f2cae1c846fd2a7f482b11649594fafbd5d  LICENSE
+diff --git a/package/python-flask-cors/python-flask-cors.mk b/package/python-flask-cors/python-flask-cors.mk
+index 1119648370..d0923d665b 100644
+--- a/package/python-flask-cors/python-flask-cors.mk
++++ b/package/python-flask-cors/python-flask-cors.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IMAGEMAGICK_VERSION = 7.1.1-43
-+IMAGEMAGICK_VERSION = 7.1.2-3
- IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
- IMAGEMAGICK_LICENSE = Apache-2.0
- IMAGEMAGICK_LICENSE_FILES = LICENSE
+-PYTHON_FLASK_CORS_VERSION = 5.0.0
++PYTHON_FLASK_CORS_VERSION = 6.0.1
+ PYTHON_FLASK_CORS_SOURCE = flask_cors-$(PYTHON_FLASK_CORS_VERSION).tar.gz
+ PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/4f/d0/d9e52b154e603b0faccc0b7c2ad36a764d8755ef4036acbf1582a67fb86b
+ PYTHON_FLASK_CORS_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
