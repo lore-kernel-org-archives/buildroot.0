@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FBAFCAC58F
-	for <buildroot@archiver.kernel.org>; Thu, 11 Sep 2025 19:01:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94CA0CAC58E
+	for <buildroot@archiver.kernel.org>; Thu, 11 Sep 2025 19:01:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 03C856F55F;
-	Thu, 11 Sep 2025 19:01:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F7494128B;
+	Thu, 11 Sep 2025 19:01:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rn6HcKyvqTYH; Thu, 11 Sep 2025 19:01:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Y-QzY5R4ixip; Thu, 11 Sep 2025 19:01:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37E236F54D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F45D423F5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 37E236F54D;
-	Thu, 11 Sep 2025 19:01:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F45D423F5;
+	Thu, 11 Sep 2025 19:01:39 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 76A19E20
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:01:18 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 671ACE20
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:01:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8CBEC41EF6
+ by smtp2.osuosl.org (Postfix) with ESMTP id BA10F41ED2
  for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:01:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OuvD73p3TEBb for <buildroot@buildroot.org>;
+ id YV3SS5koCNxz for <buildroot@buildroot.org>;
  Thu, 11 Sep 2025 19:01:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F45D41ED2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E53B41EEE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1F45D41ED2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4E53B41EEE
  for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:01:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1C97D842A4; Thu, 11 Sep 2025 19:01:09 +0000 (UTC)
+ id 4B9F1842A2; Thu, 11 Sep 2025 19:01:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Sep 2025 18:01:05 +0200
+Date: Thu, 11 Sep 2025 18:01:11 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: c80f90e4d281cb332a888ae74abb399f59c93a1c
-X-Git-Newrev: 393b36b22bb230eefb1b480351b0e60ea61c0f89
+X-Git-Oldrev: 9040d52457d888d768db2dc9eb18d02e64de4368
+X-Git-Newrev: 5196ff7564fd48a5e55c437694a32d33aebc3edb
 X-Patchwork-Hint: ignore
-Message-Id: <20250911190109.1C97D842A4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] support/testing:
- TestSWIPL: increase timeout value
+Message-Id: <20250911190109.4B9F1842A2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/exiv2: security
+ bump version to 0.28.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,56 +66,182 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=393b36b22bb230eefb1b480351b0e60ea61c0f89
+commit: https://git.buildroot.net/buildroot/commit/?id=5196ff7564fd48a5e55c437694a32d33aebc3edb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-The swipl runtime test is unreliable, depending on the execution speed
-of its runner or local host.
+Changelog:
+https://exiv2.org/whatsnew.html
+https://github.com/Exiv2/exiv2/blob/v0.28.7/doc/ChangeLog
 
-Running on a build server, the last test resolve the sudoku in
-30sec while the timeout is 10sec.
+Release notes of 0.28.0 with a long list of security-related fixes:
+https://github.com/Exiv2/exiv2/issues/2406#issuecomment-1529139799
 
-  # time swipl -g top -t halt /root/sudoku.pl
-  Sudoku solution:
-  [9, 8, 7, 6, 5, 4, 3, 2, 1].
-  [2, 4, 6, 1, 7, 3, 9, 8, 5].
-  [3, 5, 1, 9, 2, 8, 7, 4, 6].
-  [1, 2, 8, 5, 3, 7, 6, 9, 4].
-  [6, 3, 4, 8, 9, 2, 1, 5, 7].
-  [7, 9, 5, 4, 6, 1, 8, 3, 2].
-  [5, 1, 9, 2, 8, 6, 4, 7, 3].
-  [4, 7, 2, 3, 1, 9, 5, 6, 8].
-  [8, 6, 3, 7, 4, 5, 2, 1, 9].
-  real	0m 28.53s
-  user	0m 27.99s
-  sys	0m 0.51s
+0.28.1 fixed CVE-2023-44398: https://github.com/Exiv2/exiv2/issues/2813
 
-Increase the timout to 120sec.
+0.28.2 fixed CVE-2024-24826 & CVE-2024-25112:
+https://github.com/Exiv2/exiv2/issues/2914
 
-Note: On Gitlab-CI, every emulator timeout are increased by a factor 10
-to avoid sporadic failures in elastic runners.
+0.28.3 fixed CVE-2024-39695: https://github.com/Exiv2/exiv2/issues/3008
 
-https://gitlab.com/buildroot.org/buildroot/-/blame/2025.08-rc3/support/misc/gitlab-ci.yml.in?ref_type=tags#L101
+0.28.5 fixed CVE-2025-26623: https://github.com/Exiv2/exiv2/issues/3181
 
-Cc: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+0.28.6 fixed
+* [CVE-2025-54080](https://github.com/Exiv2/exiv2/security/advisories/GHSA-496f-x7cq-cq39)
+* [CVE-2025-55304](https://github.com/Exiv2/exiv2/security/advisories/GHSA-m54q-mm9w-fp6g)
+
+Please read https://github.com/Exiv2/exiv2/issues/2406 for the discussion
+whether these CVEs are relevant and their status of backporting to the
+0.27.x branch.
+
+Removed patch which is included in this release.
+Switch to github helper due to upstream not providing tarballs anymore.
+
+Added optional support for inih:
+https://github.com/Exiv2/exiv2/commit/43c9ec0f5095d92e2dd748c6c0b6f7ae4e6c73bf
+and brotli:
+https://github.com/Exiv2/exiv2/commit/557a5cebd52ced79d11080089d8e2874126fb038
+both introduced in the 0.28.x branch.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit dac94834cc7db00b47576cf44c7841ed12a1d55f)
+(cherry picked from commit 5e99e8a38282dbd810450c4be0156ea77e4c6e04)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/testing/tests/package/test_swipl.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...001-add-BUILD_WITH_STACK_PROTECTOR-option.patch | 54 ----------------------
+ package/exiv2/Config.in                            | 12 +++++
+ package/exiv2/exiv2.hash                           |  2 +-
+ package/exiv2/exiv2.mk                             | 19 ++++++--
+ 4 files changed, 29 insertions(+), 58 deletions(-)
 
-diff --git a/support/testing/tests/package/test_swipl.py b/support/testing/tests/package/test_swipl.py
-index 0839101599..0f317bb617 100644
---- a/support/testing/tests/package/test_swipl.py
-+++ b/support/testing/tests/package/test_swipl.py
-@@ -43,4 +43,4 @@ class TestSWIPL(infra.basetest.BRTest):
+diff --git a/package/exiv2/0001-add-BUILD_WITH_STACK_PROTECTOR-option.patch b/package/exiv2/0001-add-BUILD_WITH_STACK_PROTECTOR-option.patch
+deleted file mode 100644
+index 18684ebbfa..0000000000
+--- a/package/exiv2/0001-add-BUILD_WITH_STACK_PROTECTOR-option.patch
++++ /dev/null
+@@ -1,54 +0,0 @@
+-From 4bb57da5fb0bb0d7e747b9e325e9ec0876ffc1f9 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 31 Jul 2021 16:36:50 +0200
+-Subject: [PATCH] add BUILD_WITH_STACK_PROTECTOR option
+-
+-Add BUILD_WITH_STACK_PROTECTOR to avoid the following build failure with
+-toolchains that don't support stack-protector:
+-
+-/home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/9.3.0/../../../../mipsel-buildroot-linux-uclibc/bin/ld: utils.cpp:(.text._ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPcEEvT_S7_St20forward_iterator_tag[_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_M_constructIPcEEvT_S7_St20forward_iterator_tag]+0xd0): undefined reference to `__stack_chk_fail'
+-
+-Indeed, support for -fstack-protector-strong can't be detected through
+-check_cxx_compiler_flag as some toolchains need to link with -lssp to
+-enable SSP support
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/ae4635899124c602c70d2b342a76f95c34aa4a3d
+-
+-Upstream: https://github.com/Exiv2/exiv2/commit/f31c0eba098889899d29b7b0da830aee2b62a7b8
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- CMakeLists.txt            | 1 +
+- cmake/compilerFlags.cmake | 4 ++--
+- 2 files changed, 3 insertions(+), 2 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 6f0da06a..0746ee14 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -47,6 +47,7 @@ mark_as_advanced(
+-     EXIV2_TEAM_USE_SANITIZERS
+- )
+- 
+-+option( BUILD_WITH_STACK_PROTECTOR    "Build with stack protector"                            ON )
+- option( BUILD_WITH_CCACHE             "Use ccache to speed up compilations"                   OFF )
+- option( BUILD_WITH_COVERAGE           "Add compiler flags to generate coverage stats"         OFF )
+- 
+-diff --git a/cmake/compilerFlags.cmake b/cmake/compilerFlags.cmake
+-index 35faf501..0a646e50 100644
+---- a/cmake/compilerFlags.cmake
+-+++ b/cmake/compilerFlags.cmake
+-@@ -33,8 +33,8 @@ if ( MINGW OR UNIX OR MSYS ) # MINGW, Linux, APPLE, CYGWIN
+-             endif()
+-             if(HAS_FCF_PROTECTION)
+-                 add_compile_options(-fcf-protection)
+--            endif()
+--            if(HAS_FSTACK_PROTECTOR_STRONG)
+-+              endif()
+-+	    if(BUILD_WITH_STACK_PROTECTOR AND HAS_FSTACK_PROTECTOR_STRONG)
+-                 add_compile_options(-fstack-protector-strong)
+-             endif()
+-         endif()
+--- 
+-2.31.1
+-
+diff --git a/package/exiv2/Config.in b/package/exiv2/Config.in
+index 8407c25b41..c65e484b2e 100644
+--- a/package/exiv2/Config.in
++++ b/package/exiv2/Config.in
+@@ -20,6 +20,18 @@ config BR2_PACKAGE_EXIV2
  
-         # Run a more complex logic program (solve a sudoku).
-         cmd = "swipl -g top -t halt /root/sudoku.pl"
--        self.assertRunOk(cmd, timeout=10)
-+        self.assertRunOk(cmd, timeout=120)
+ if BR2_PACKAGE_EXIV2
+ 
++config BR2_PACKAGE_EXIV2_BROTLI
++	bool "Brotli support"
++	select BR2_PACKAGE_BROTLI
++	help
++	  Build with Brotli support for JPEG XL
++
++config BR2_PACKAGE_EXIV2_INIH
++	bool "Inih support"
++	select BR2_PACKAGE_INIH
++	help
++	  Build with inih support
++
+ config BR2_PACKAGE_EXIV2_PNG
+ 	bool "PNG image support"
+ 	select BR2_PACKAGE_ZLIB
+diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
+index c871277801..1c85f2e1db 100644
+--- a/package/exiv2/exiv2.hash
++++ b/package/exiv2/exiv2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  4c192483a1125dc59a3d70b30d30d32edace9e14adf52802d2f853abf72db8a6  exiv2-0.27.6-Source.tar.gz
++sha256  5e292b02614dbc0cee40fe1116db2f42f63ef6b2ba430c77b614e17b8d61a638  exiv2-0.28.7.tar.gz
+ sha256  a7ba75cb966aca374711e2af49e5f3aea6a4443a803440f5d93e73a5a1222f66  COPYING
+diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
+index 869f8e48dd..e5b55ecde7 100644
+--- a/package/exiv2/exiv2.mk
++++ b/package/exiv2/exiv2.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-EXIV2_VERSION = 0.27.6
+-EXIV2_SOURCE = exiv2-$(EXIV2_VERSION)-Source.tar.gz
+-EXIV2_SITE = https://github.com/Exiv2/exiv2/releases/download/v$(EXIV2_VERSION)
++EXIV2_VERSION = 0.28.7
++EXIV2_SITE = $(call github,Exiv2,exiv2,v$(EXIV2_VERSION))
+ EXIV2_INSTALL_STAGING = YES
+ EXIV2_LICENSE = GPL-2.0+
+ EXIV2_LICENSE_FILES = COPYING
+@@ -16,6 +15,20 @@ EXIV2_CONF_OPTS += \
+ 	-DBUILD_WITH_STACK_PROTECTOR=OFF \
+ 	-DEXIV2_BUILD_SAMPLES=OFF
+ 
++ifeq ($(BR2_PACKAGE_EXIV2_BROTLI),y)
++EXIV2_CONF_OPTS += -DEXIV2_ENABLE_BROTLI=ON
++EXIV2_DEPENDENCIES += brotli
++else
++EXIV2_CONF_OPTS += -DEXIV2_ENABLE_BROTLI=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_EXIV2_INIH),y)
++EXIV2_CONF_OPTS += -DEXIV2_ENABLE_INIH=ON
++EXIV2_DEPENDENCIES += inih
++else
++EXIV2_CONF_OPTS += -DEXIV2_ENABLE_INIH=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_EXIV2_LENSDATA),y)
+ EXIV2_CONF_OPTS += -DEXIV2_ENABLE_LENSDATA=ON
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
