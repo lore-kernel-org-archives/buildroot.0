@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C596CAC58F
-	for <buildroot@archiver.kernel.org>; Thu, 11 Sep 2025 19:01:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C186CAC587
+	for <buildroot@archiver.kernel.org>; Thu, 11 Sep 2025 19:01:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 19A3584A47;
-	Thu, 11 Sep 2025 19:01:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 609D66F4E3;
+	Thu, 11 Sep 2025 19:01:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PeWigeNgfBzG; Thu, 11 Sep 2025 19:01:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 72zYFu1KCwWm; Thu, 11 Sep 2025 19:01:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B3D384950
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68D456F4C8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B3D384950;
-	Thu, 11 Sep 2025 19:01:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0BBDD443
+	by smtp3.osuosl.org (Postfix) with ESMTP id 68D456F4C8;
+	Thu, 11 Sep 2025 19:01:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 13CF5E20
  for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:01:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 34AA241E9C
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:01:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B4F7E407B6
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:01:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3U0e-2yx1bke for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WQ1alb_UM-XT for <buildroot@buildroot.org>;
  Thu, 11 Sep 2025 19:01:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15CD941EC3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA10F40847
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 15CD941EC3
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:01:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EA10F40847
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:01:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1301F842A2; Thu, 11 Sep 2025 19:01:09 +0000 (UTC)
+ id E7260842A2; Thu, 11 Sep 2025 19:01:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Sep 2025 18:01:03 +0200
+Date: Thu, 11 Sep 2025 17:15:33 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: b362148e1472914af6b17798f7600082e101e89b
-X-Git-Newrev: c80f90e4d281cb332a888ae74abb399f59c93a1c
+X-Git-Oldrev: ac924169fc5a23a4d1f7af4c847b9e6ca7c8f729
+X-Git-Newrev: e7669f94b50927ed23dd9b42ceedda678ec28280
 X-Patchwork-Hint: ignore
-Message-Id: <20250911190109.1301F842A2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/mariadb: fix
- openssl RMD160 requirement
+Message-Id: <20250911190108.E7260842A2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/firewalld:
+ backport Python 3.13 port
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,65 +66,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c80f90e4d281cb332a888ae74abb399f59c93a1c
+commit: https://git.buildroot.net/buildroot/commit/?id=e7669f94b50927ed23dd9b42ceedda678ec28280
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-On the autobuilder the mariadb package fails to build when the
-BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 variable is not set.
+The module pipes is no longer part of the Python standard library. It
+was removed in Python 3.13 after being deprecated in Python 3.11. The
+last version of Python that provided the pipes module was Python 3.12.
 
-See the following autobuilder error:
+Our firewalld 2.0.2 version is now superseded by several releases
+(up to 2.3.1) that include this patch (since 2.1.0).
 
-```
-/workdir/instance-0/output-1/build/mariadb-10.11.11/libmariadb/libmariadb/secure/openssl_crypt.c: In function 'ma_hash_get_algorithm':
-/workdir/instance-0/output-1/build/mariadb-10.11.11/libmariadb/libmariadb/secure/openssl_crypt.c:40:12: error: implicit declaration of function 'EVP_ripemd160'; did you mean 'LN_ripemd160'? [-Wimplicit-function-declaration]
-   40 |     return EVP_ripemd160();
-      |            ^~~~~~~~~~~~~
-      |            LN_ripemd160
-/workdir/instance-0/output-1/build/mariadb-10.11.11/libmariadb/libmariadb/secure/openssl_crypt.c:40:12: error: returning 'int' from a function with return type 'const EVP_MD *' {aka 'const struct evp_md_st *'} makes pointer from integer without a cast [-Wint-conversion]
-   40 |     return EVP_ripemd160();
-      |            ^~~~~~~~~~~~~~~
-```
+[1] https://github.com/firewalld/firewalld/releases/tag/v2.3.1
 
-This error can be reproduced with the following config:
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/11198422466 (TestFirewalldSysVInit)
 
-```
-cat <<EOF >.config
-BR2_arm=y
-BR2_cortex_a7=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_PACKAGE_LIBOPENSSL=y
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 is not set
-BR2_PACKAGE_MARIADB=y
-EOF
-make olddefconfig
-make mariadb
-```
-
-This patch adds a requirement to the RMD160 crypto for the MariaDB
-package.
-
-Fixes: https://autobuild.buildroot.org/results/f2b/f2b749cb7019856c5434c27987e8bfb2dc179cda
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5ce1d6f01736cf8c41b7a191e2e35b7f9efb50b4)
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit cd0b373314017c4579e319a824e7cda3df5dfe6c)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/mariadb/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ ...-functions-don-t-use-deprecated-pipes.quo.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/package/mariadb/Config.in b/package/mariadb/Config.in
-index 693b7ce925..503f884c62 100644
---- a/package/mariadb/Config.in
-+++ b/package/mariadb/Config.in
-@@ -12,6 +12,7 @@ config BR2_PACKAGE_MARIADB
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
- 	select BR2_PACKAGE_PCRE2
- 	help
- 	  MariaDB is one of the most popular database servers in the
+diff --git a/package/firewalld/0001-improvement-functions-don-t-use-deprecated-pipes.quo.patch b/package/firewalld/0001-improvement-functions-don-t-use-deprecated-pipes.quo.patch
+new file mode 100644
+index 0000000000..0deacbcca0
+--- /dev/null
++++ b/package/firewalld/0001-improvement-functions-don-t-use-deprecated-pipes.quo.patch
+@@ -0,0 +1,42 @@
++From 0bfa4eb3e15d8df8a68a8c3429505905afae112e Mon Sep 17 00:00:00 2001
++From: Thomas Haller <thaller@redhat.com>
++Date: Fri, 7 Jul 2023 18:13:10 +0200
++Subject: [PATCH] improvement(functions): don't use deprecated pipes.quote()
++
++Since Python 3.3, shlex.quote() replaces it. This avoids a deprecation
++warning.
++
++Upstream: f7f5613b76c044c62c876ae87c6b85f5a41acb2a
++[Romain: backport to 2.0.2]
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ src/firewall/functions.py | 6 +-----
++ 1 file changed, 1 insertion(+), 5 deletions(-)
++
++diff --git a/src/firewall/functions.py b/src/firewall/functions.py
++index f7133d71..6213e778 100644
++--- a/src/firewall/functions.py
+++++ b/src/firewall/functions.py
++@@ -34,7 +34,6 @@ import socket
++ import os
++ import os.path
++ import shlex
++-import pipes
++ import string
++ import tempfile
++ from firewall.core.logger import log
++@@ -607,10 +606,7 @@ def checkContext(context):
++     return True
++ 
++ def joinArgs(args):
++-    if "quote" in dir(shlex):
++-        return " ".join(shlex.quote(a) for a in args)
++-    else:
++-        return " ".join(pipes.quote(a) for a in args)
+++    return " ".join(shlex.quote(a) for a in args)
++ 
++ def splitArgs(_string):
++     return shlex.split(_string)
++-- 
++2.51.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
