@@ -1,107 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44ACCCAC58E
-	for <buildroot@archiver.kernel.org>; Thu, 11 Sep 2025 19:29:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66568CAC587
+	for <buildroot@archiver.kernel.org>; Thu, 11 Sep 2025 19:34:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 19C436F4E9;
-	Thu, 11 Sep 2025 19:29:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 159074233D;
+	Thu, 11 Sep 2025 19:34:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wR_I10dHUJB8; Thu, 11 Sep 2025 19:29:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aLJl15Vylenp; Thu, 11 Sep 2025 19:34:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 460A16F4CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 336EF42110
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 460A16F4CD;
-	Thu, 11 Sep 2025 19:29:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A29FB443
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:29:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 336EF42110;
+	Thu, 11 Sep 2025 19:34:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6EC40234
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:34:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 890A084B16
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:29:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5FFFB41F3A
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:34:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fSPYn_UcBayH for <buildroot@buildroot.org>;
- Thu, 11 Sep 2025 19:29:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52a; helo=mail-ed1-x52a.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8D24784B12
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D24784B12
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
- [IPv6:2a00:1450:4864:20::52a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8D24784B12
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:29:04 +0000 (UTC)
-Received: by mail-ed1-x52a.google.com with SMTP id
- 4fb4d7f45d1cf-628f29d68ecso2274250a12.3
- for <buildroot@buildroot.org>; Thu, 11 Sep 2025 12:29:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1757618942; x=1758223742;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=4yuLAJ8b6+osP+FpD24Q6uRqiNiIjj8cDBGCxxpJ9mw=;
- b=a7tfY5SOqmh4wb6hBpQaIv785rOQVBSo4lelVG9DxpGTsfSo69imKYudmjEPjIbykE
- JWOJqpeZBkpV/jkyjXMdsZOuAyGxa6bimPXcYHGwlywZyLTMkx5DYH4fUdTfZe1o8Sac
- FfQ1xo6K1PazSH3ahVxKnWY9CigOw+be/0UACqkN81EB4olA4VHiAOEyr9+NWG19TiJG
- b0yklbMU4qKdY6dpp8m7ls8yasQyBwihkyOj6zvuIdVpiy/zzc3cSgNjTvunfSKmbXVI
- 770ky7EiUB876iQUELOVZYDW9x/z7Siun7F66462Kq/paqKJCM0Wk1BGl+Ijj3101/TS
- NEvw==
-X-Forwarded-Encrypted: i=1;
- AJvYcCWx7mKZwCsfpGkuFp/eW34pMGpDA/Rw34i7tMxm7RMXDFlhEzrAFG4edEfZ0Nb7bojW1Yo51W5PfAI=@buildroot.org
-X-Gm-Message-State: AOJu0YyNLwT5mfLva84lbj1gqCluv72AnWUWEu6G9npGoMKd0OHLVRF8
- 8a04PXoJp4UEsfXcit90GbSIkGPENNryjuTpa0DGcGa0fW0Ugqp2RZF4v6Xwvlu3iTEJR+lp3ei
- v4q6sH7Y=
-X-Gm-Gg: ASbGncsosiJaEnNE9Fe6arcD5DuPt6rJ2qKVPcifl+oZfILxtXUJCQHZeuMzlnW9Tyd
- 21eHrtit4/+4WzOB3srRXHzUy50bHTut9M5jGbDJWinkorBg8/IB8K5SjFqMbLTZJNFXZkzsYT7
- F6YT3D57SRhTCjdzPAcIAIH+LTpmkZy1uECh7zA1vpdhwax0Z7dp374hWAdO+sQNeyAsLcmhuUI
- Mq9mqrN/tZzm8nIavouZjdvXez5jUdgx2pPUowEkhtayox9VYz/Nc9aS35MFyZsM+Lr7QnGQAqV
- Ijp67nHIdmM8rlAoGEixGAI8EdnyVTrLqCUJiaVwR17Z5QU3mw+YEgWGwXhLmVCp2skN/mQ3Uap
- 9317min3zjN05M3DjXOGcQTIcP/23TzkjRZABjFAZB8fe7So=
-X-Google-Smtp-Source: AGHT+IFC/XzSZt0rZNMtn5ncFvq+Pc20Abr9vr95z8JJCbueBQpFlNnLvPz7Op7qCd8dZI2LHQwyYQ==
-X-Received: by 2002:a05:6402:40cd:b0:62e:db9e:92c7 with SMTP id
- 4fb4d7f45d1cf-62edb9e9435mr205110a12.20.1757618942317; 
- Thu, 11 Sep 2025 12:29:02 -0700 (PDT)
-Received: from localhost.localdomain ([79.132.233.79])
- by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-62ec3400cd4sm1770547a12.41.2025.09.11.12.29.01
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 11 Sep 2025 12:29:02 -0700 (PDT)
-To: Romain Naour <romain.naour@smile.fr>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Thu, 11 Sep 2025 21:28:37 +0200
-Message-Id: <20250911192837.2673097-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250902221547.2205648-2-romain.naour@smile.fr>
-References: <20250902221547.2205648-2-romain.naour@smile.fr>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JN0kzSLNKQPZ for <buildroot@buildroot.org>;
+ Thu, 11 Sep 2025 19:34:34 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E2774404C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2774404C2
+Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E2774404C2
+ for <buildroot@buildroot.org>; Thu, 11 Sep 2025 19:34:33 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id CA69DB978576; Thu, 11 Sep 2025 21:34:31 +0200 (CEST)
+Message-ID: <2777d457-1ca4-443f-b533-33338add797a@rnout.be>
+Date: Thu, 11 Sep 2025 21:34:30 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+References: <20250911171700.594432-1-bernd@kuhls.net>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20250911171700.594432-1-bernd@kuhls.net>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1757618942; x=1758223742; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=4yuLAJ8b6+osP+FpD24Q6uRqiNiIjj8cDBGCxxpJ9mw=;
- b=NfaXTxu5ck6X2DClWPhrPYp+fe2DpzT9gQLibRb5JHAVTrwqHNibadz9KW2h0BAmpY
- AP7lltyzC7dIZCZGYLF7IG/F9mlwHlvAZ7W2ip1Epe4gHOU2mDrB9RswFZuF+FNdJdgQ
- XWheoNrE7Wo13sdMSl/QOrVB0wQsnJMrCnzqCdYW0C+8a/f0LTGR/0bEWugZkkKIsndz
- tLtj57CGTx+2S9C3550hbzxVTNr3D/8kg9j8niumCxtwruZnAuuZgLC/rJIbLR6Q3krB
- 9B/jIxD3M+zUGudQ430TWIBJ7m0OHc01aiTY6aoHxtk4wKJd9wa8NG9W3Oxo6gQzStwf
- ef0g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=NfaXTxu5
-Subject: Re: [Buildroot] [PATCH 2/2] package/firewalld: add missing nftables
- json runtime dependency
+ d=rnout.be; s=dkim; 
+ t=1757619272; h=from:subject:date:message-id:to:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=9EVY7lKaFjqUdXbiDf3qrfk3ycVc7JJonyEVeYze/38=;
+ b=XVtQANDb54EDN8UpbTe6/onsmEVGg5AqCaWPOYPkEZkudqKqHmjWv36SskwN81NHsdeDvI
+ DwK7AQ5EcwPel24kI0lRhpK8lv300l+fpce0Tr72FHHMjW62O5PXJhyCwUnwryy/lyYBdD
+ yB7w+t+NzSgUdge5b47jce2HuonkB35nFAmxg5NGGJSRmNXI2Yboa2NnMyxo2I25/nSZZB
+ eRSZnHbPirf8WRkQEdqBWoGczJKZ0oJNkQe6OA36YuWNBy/6TZKD+u6LQ3DhSbShgd6add
+ nmOLW88RGbxjPEi+OQnZb2nsqi8dXprrtD0BPiJPpJGaMzOu4PeJVxXA2fgDIw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=XVtQANDb
+Subject: Re: [Buildroot] [PATCH 1/1] package/gkrellm: remove client,
+ needs libgtk2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,60 +77,143 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In reply of:
-> Now that firewalld has been fixed for Python 3.13,
-> TestFirewalldSysVInit still fail at runtime due to missing nftables json
-> support [1].
-> 
-> cat /var/log/firewalld
->   2025-09-02 21:34:50 Traceback (most recent call last):
->     File "/usr/lib/python3.13/site-packages/firewall/core/fw.py", line 649, in start
->     File "/usr/lib/python3.13/site-packages/firewall/core/fw.py", line 613, in _start
->     File "/usr/lib/python3.13/site-packages/firewall/core/fw.py", line 510, in _start_apply_objects
->     File "/usr/lib/python3.13/site-packages/firewall/core/fw_transaction.py", line 133, in execute
->   firewall.errors.FirewallError: COMMAND_FAILED: 'python-nftables' failed: Error: syntax error, unexpected '{'
->   {"nftables": [{"metainfo": {"json_schema_version": 1}}, {"add": {"table": {"family": "inet", "name": "firewalld"}}}, {"delete": {"table": {"family": "inet", "name": "firewalld"}}}, {"add": {"table": {"family": "inet", "name": "firewalld"}}}]}
->   ^
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/11198422467 (TestFirewalldSystemd)
-> 
-> [1] https://github.com/firewalld/firewalld/commit/1582c5dd736a11177ec320eb4ecbeb09fcae313a
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
-Applied to 2025.05.x. Thanks
+
+On 11/09/2025 19:17, Bernd Kuhls wrote:
+> The gkrellm client needs libgtk2, which we are about to drop from
+> Buildroot.
+> 
+> Even though gkrellm has a somewhat active upstream at
+> https://git.srcbox.net/gkrellm/gkrellm, it isn't clear whether it is
+> compatible with Gtk 3 or not.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+
+  Applied to master, thanks, with some modifications, see below.
 
 > ---
->  package/firewalld/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+>   Config.in.legacy           | 15 +++++++++++++++
+>   package/gkrellm/Config.in  | 31 +------------------------------
+>   package/gkrellm/gkrellm.mk | 12 ------------
+>   3 files changed, 16 insertions(+), 42 deletions(-)
 > 
-> diff --git a/package/firewalld/Config.in b/package/firewalld/Config.in
-> index cc8411b34d..407f57c604 100644
-> --- a/package/firewalld/Config.in
-> +++ b/package/firewalld/Config.in
-> @@ -14,6 +14,7 @@ config BR2_PACKAGE_FIREWALLD
->  	select BR2_PACKAGE_GOBJECT_INTROSPECTION
->  	select BR2_PACKAGE_JANSSON # Uses the nftables json interface
->  	select BR2_PACKAGE_NFTABLES
-> +	select BR2_PACKAGE_NFTABLES_JSON # runtime
->  	select BR2_PACKAGE_PYTHON3
->  	select BR2_PACKAGE_PYTHON_GOBJECT
->  	help
-> -- 
-> 2.51.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 895e42fc30..69255b201c 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -146,6 +146,21 @@ endif
+>   
+>   comment "Legacy options removed in 2025.11"
+>   
+> +config BR2_PACKAGE_GKRELLM_SERVER
+> +	bool "gkrellm server option has been removed"
+
+  People who only had the server enabled don't feel any effect of this change, 
+so they don't need to be bothered with a useless legacy warning. I removed this 
+symbol.
+
+> +	select BR2_LEGACY
+> +	help
+> +	  After removing the client option the gkrellm package only
+> +	  builds the server part so the server option is not needed
+> +	  anymore.
+> +
+> +config BR2_PACKAGE_GKRELLM_CLIENT
+> +	bool "gkrellm client has been removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  The gkrellm client option has been removed, as it required
+> +	  libgtk2, which was removed from Buildroot.
+> +
+>   config BR2_LINUX_KERNEL_EXT_AUFS
+>   	bool "Aufs Filesystem Module patch has been removed"
+>   	select BR2_LEGACY
+> diff --git a/package/gkrellm/Config.in b/package/gkrellm/Config.in
+> index e957c058de..a572c9474d 100644
+> --- a/package/gkrellm/Config.in
+> +++ b/package/gkrellm/Config.in
+> @@ -3,41 +3,12 @@ config BR2_PACKAGE_GKRELLM
+>   	depends on BR2_USE_WCHAR # libglib2
+>   	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+>   	depends on BR2_USE_MMU # libglib2
+> -	select BR2_PACKAGE_GKRELLM_SERVER if !BR2_PACKAGE_GKRELLM_CLIENT
+>   	select BR2_PACKAGE_LIBGLIB2
+>   	help
+> -	  GKrellM is a single process stack of system monitors which
+> -	  supports applying themes to match its appearance to your
+> -	  window manager, Gtk, or any other theme.
+> +	  GKrellM is a single process stack of system monitors.
+
+  I extended the help text to mention that only the server is supported and the 
+client can run remotely.
+
+  Regards,
+  Arnout
+
+>   
+>   	  http://gkrellm.srcbox.net/
+>   
+> -if BR2_PACKAGE_GKRELLM
+> -
+> -config BR2_PACKAGE_GKRELLM_SERVER
+> -	bool "server"
+> -	help
+> -	  Enable gkrellm server.
+> -
+> -config BR2_PACKAGE_GKRELLM_CLIENT
+> -	bool "client"
+> -	depends on BR2_PACKAGE_XORG7 # libgtk2
+> -	depends on BR2_INSTALL_LIBSTDCPP # libgtk2
+> -	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2
+> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libgtk2
+> -	select BR2_PACKAGE_LIBGTK2
+> -	select BR2_PACKAGE_XLIB_LIBSM
+> -	help
+> -	  Enable gkrellm client.
+> -
+> -comment "client needs a toolchain w/ C++, gcc >= 4.8"
+> -	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+> -	depends on BR2_PACKAGE_XORG7
+> -	depends on !BR2_INSTALL_LIBSTDCPP || \
+> -		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+> -
+> -endif # BR2_PACKAGE_GKRELLM
+> -
+>   comment "gkrellm needs a toolchain w/ wchar, threads"
+>   	depends on BR2_USE_MMU
+>   	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/gkrellm/gkrellm.mk b/package/gkrellm/gkrellm.mk
+> index 165b71c7c8..257ebadfc4 100644
+> --- a/package/gkrellm/gkrellm.mk
+> +++ b/package/gkrellm/gkrellm.mk
+> @@ -32,19 +32,7 @@ else
+>   GKRELLM_BUILD_OPTS += enable_nls=0
+>   endif
+>   
+> -ifeq ($(BR2_PACKAGE_GKRELLM_SERVER)$(BR2_PACKAGE_GKRELLM_CLIENT),yy)
+> -GKRELLM_BUILD_DIR = $(@D)
+> -else ifeq ($(BR2_PACKAGE_GKRELLM_SERVER),y)
+>   GKRELLM_BUILD_DIR = $(@D)/server
+> -else
+> -GKRELLM_BUILD_DIR = $(@D)/src
+> -endif
+> -
+> -ifeq ($(BR2_PACKAGE_GKRELLM_CLIENT),y)
+> -GKRELLM_DEPENDENCIES += libgtk2 xlib_libSM
+> -GKRELLM_BUILD_OPTS += X11_LIBS="-lX11 -lSM -lICE"
+> -GKRELLM_LICENSE += GPL (base64.c), Public Domain (md5.h, md5c.c)
+> -endif
+>   
+>   define GKRELLM_BUILD_CMDS
+>   	$(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) \
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
