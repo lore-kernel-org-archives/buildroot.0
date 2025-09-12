@@ -1,75 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BE4ECAC582
-	for <buildroot@archiver.kernel.org>; Fri, 12 Sep 2025 15:32:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E328FCA101F
+	for <buildroot@archiver.kernel.org>; Fri, 12 Sep 2025 15:33:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E3B041378;
-	Fri, 12 Sep 2025 15:32:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A6472836C3;
+	Fri, 12 Sep 2025 15:33:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zLkh2sCAczCR; Fri, 12 Sep 2025 15:32:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GefFLGUy_TDI; Fri, 12 Sep 2025 15:33:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26D7841350
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8885A83BCA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 26D7841350;
-	Fri, 12 Sep 2025 15:32:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id DA9A812D
- for <buildroot@buildroot.org>; Fri, 12 Sep 2025 15:32:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8885A83BCA;
+	Fri, 12 Sep 2025 15:33:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 246BC12D
+ for <buildroot@buildroot.org>; Fri, 12 Sep 2025 15:33:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CCF22412F6
- for <buildroot@buildroot.org>; Fri, 12 Sep 2025 15:32:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 218A983B68
+ for <buildroot@buildroot.org>; Fri, 12 Sep 2025 15:33:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l7uZEA9wSjEo for <buildroot@buildroot.org>;
- Fri, 12 Sep 2025 15:32:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rrIVXz4QapBy for <buildroot@buildroot.org>;
+ Fri, 12 Sep 2025 15:33:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C7E6841323
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7E6841323
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C7E6841323
- for <buildroot@buildroot.org>; Fri, 12 Sep 2025 15:32:06 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -114170160
- for <buildroot@buildroot.org>
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Fri, 12 Sep 2025 15:32:03 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1ux5kn-001sZt-2Y
- for buildroot@buildroot.org; Fri, 12 Sep 2025 17:32:01 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56D0E835E4
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 56D0E835E4
+ for <buildroot@buildroot.org>; Fri, 12 Sep 2025 15:33:06 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4F1D3844AF; Fri, 12 Sep 2025 15:33:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-References: <20250909124300.3839010-1-peter@korsgaard.com>
-Date: Fri, 12 Sep 2025 17:32:01 +0200
-In-Reply-To: <20250909124300.3839010-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 9 Sep 2025 14:43:00 +0200")
-Message-ID: <87frcr4rgu.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=vhOP1RzM41/2lplVXWE446eaKPH0yfF5xVJOoXsV5E9+9t7lvWvDtKbgOfatZqABRMBCiULHU6kdmhOZ/boGra/JbzbqDwrQ4j4EPRisEX8e4WZpOWsVWcODiHZbx6SY7U2uQ7UH0zbxPL7VKsvo0/rLIiYuJ7Q9KCgVRdYdJiqerZ7oMErRAwDGnst8J8h5W7Sdf9JeHDkwMwZ2YrJ1sYGAUyGEWGSNpNEuGMLmuc9XRNF7PQLnmwKEyRqLprBgQEI6VxX38C9GreHcfKa6i1YPJOricUiXlOcReTw//fGtREHRQzsDrDN5oBeiRkmqZwA+b2cEmKN+jlYHN5rasw==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=jB8o2M2uLRkeNXvjqEXEVZVqYrT0X/vlNV4AVoMBU4A=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=vhOP1RzM
-Subject: Re: [Buildroot] [PATCH] package/fatcat: add upstream patch to fix
- CMake 4 compatibility
+Date: Fri, 12 Sep 2025 17:21:46 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5b6b80bfc5237ab4f4e35c081fdac1376efdd396
+X-Git-Newrev: a0797adf4078484c90c95ddfe216d4fc1b881b97
+X-Patchwork-Hint: ignore
+Message-Id: <20250912153306.4F1D3844AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-django: security bump to
+ v5.2.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,27 +59,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a0797adf4078484c90c95ddfe216d4fc1b881b97
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Add upstream patch fixing cmake 4 compatibility:
- > CMake Error at CMakeLists.txt:1 (cmake_minimum_required):
- >   Compatibility with CMake < 3.5 has been removed from CMake.
+See the release notes:
+- https://docs.djangoproject.com/en/5.2/releases/5.2.6/
+- https://docs.djangoproject.com/en/5.2/releases/5.2.5/
 
- > Fixes:
+This fixes the following vulnerability:
+- CVE-2025-57833:
+    An issue was discovered in Django 4.2 before 4.2.24, 5.1 before
+    5.1.12, and 5.2 before 5.2.6. FilteredRelation is subject to SQL
+    injection in column aliases, using a suitably crafted dictionary, with
+    dictionary expansion, as the **kwargs passed QuerySet.annotate() or
+    QuerySet.alias().
+    https://www.cve.org/CVERecord?id=CVE-2025-57833
 
- >  https://autobuild.buildroot.org/results/548e662429e7cf91bd48e447345374c6734f1de7/
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 25200ef783..3ff4eb4e36 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  6ecc4875e8cdc08706faea1cc4740fdf  django-5.2.4.tar.gz
+-sha256  a1228c384f8fa13eebc015196db7b3e08722c5058d4758d20cb287503a540d8f  django-5.2.4.tar.gz
++md5  1f0327293cc3768903ce8cd390ec3f47  django-5.2.6.tar.gz
++sha256  da5e00372763193d73cecbf71084a3848458cecf4cee36b9a1e8d318d114a87b  django-5.2.6.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+ sha256  dcac1c86cb7ab491702bdb4c41be680fafde51536748cc8aaee3840eec53ed17  django/contrib/gis/measure.py
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index ca258bbea5..e3959f4192 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DJANGO_VERSION = 5.2.4
++PYTHON_DJANGO_VERSION = 5.2.6
+ PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/9c/7e/034f0f9fb10c029a02daaf44d364d6bf2eced8c73f0d38c69da359d26b01
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/4c/8c/2a21594337250a171d45dda926caa96309d5136becd1f48017247f9cdea0
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause, MIT (jquery, utils/archive.py), BSD-2-Clause (inlines.js)
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE \
+ 	django/contrib/gis/measure.py \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
