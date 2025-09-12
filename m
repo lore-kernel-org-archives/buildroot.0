@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E328FCA101F
-	for <buildroot@archiver.kernel.org>; Fri, 12 Sep 2025 15:33:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4E30CAC582
+	for <buildroot@archiver.kernel.org>; Fri, 12 Sep 2025 15:33:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A6472836C3;
-	Fri, 12 Sep 2025 15:33:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 86601413DB;
+	Fri, 12 Sep 2025 15:33:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GefFLGUy_TDI; Fri, 12 Sep 2025 15:33:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vXl2iv-31qds; Fri, 12 Sep 2025 15:33:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8885A83BCA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9850413C5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8885A83BCA;
-	Fri, 12 Sep 2025 15:33:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 246BC12D
+	by smtp4.osuosl.org (Postfix) with ESMTP id A9850413C5;
+	Fri, 12 Sep 2025 15:33:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B1B7D25B
  for <buildroot@buildroot.org>; Fri, 12 Sep 2025 15:33:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 218A983B68
+ by smtp2.osuosl.org (Postfix) with ESMTP id A3DF8406E1
  for <buildroot@buildroot.org>; Fri, 12 Sep 2025 15:33:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rrIVXz4QapBy for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uBgikQL9w5P7 for <buildroot@buildroot.org>;
  Fri, 12 Sep 2025 15:33:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56D0E835E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7061E406DF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 56D0E835E4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7061E406DF
  for <buildroot@buildroot.org>; Fri, 12 Sep 2025 15:33:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4F1D3844AF; Fri, 12 Sep 2025 15:33:06 +0000 (UTC)
+ id 60EA0844B2; Fri, 12 Sep 2025 15:33:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 12 Sep 2025 17:21:46 +0200
+Date: Fri, 12 Sep 2025 17:23:40 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5b6b80bfc5237ab4f4e35c081fdac1376efdd396
-X-Git-Newrev: a0797adf4078484c90c95ddfe216d4fc1b881b97
+X-Git-Oldrev: 013565ecfc18ad627f91a425412373a210bdf7ab
+X-Git-Newrev: 3ed6c8e727934ef9c84699f1de14e46724bfa7f1
 X-Patchwork-Hint: ignore
-Message-Id: <20250912153306.4F1D3844AF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-django: security bump to
- v5.2.6
+Message-Id: <20250912153306.60EA0844B2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi: Fix build with curl 8.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,59 +64,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0797adf4078484c90c95ddfe216d4fc1b881b97
+commit: https://git.buildroot.net/buildroot/commit/?id=3ed6c8e727934ef9c84699f1de14e46724bfa7f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See the release notes:
-- https://docs.djangoproject.com/en/5.2/releases/5.2.6/
-- https://docs.djangoproject.com/en/5.2/releases/5.2.5/
+curl 8.16.0 bumped the enums to long, see
+https://github.com/curl/curl/pull/18054
 
-This fixes the following vulnerability:
-- CVE-2025-57833:
-    An issue was discovered in Django 4.2 before 4.2.24, 5.1 before
-    5.1.12, and 5.2 before 5.2.6. FilteredRelation is subject to SQL
-    injection in column aliases, using a suitably crafted dictionary, with
-    dictionary expansion, as the **kwargs passed QuerySet.annotate() or
-    QuerySet.alias().
-    https://www.cve.org/CVERecord?id=CVE-2025-57833
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/kodi/0002-curl-8.16.0.patch | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 25200ef783..3ff4eb4e36 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  6ecc4875e8cdc08706faea1cc4740fdf  django-5.2.4.tar.gz
--sha256  a1228c384f8fa13eebc015196db7b3e08722c5058d4758d20cb287503a540d8f  django-5.2.4.tar.gz
-+md5  1f0327293cc3768903ce8cd390ec3f47  django-5.2.6.tar.gz
-+sha256  da5e00372763193d73cecbf71084a3848458cecf4cee36b9a1e8d318d114a87b  django-5.2.6.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
- sha256  dcac1c86cb7ab491702bdb4c41be680fafde51536748cc8aaee3840eec53ed17  django/contrib/gis/measure.py
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index ca258bbea5..e3959f4192 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_DJANGO_VERSION = 5.2.4
-+PYTHON_DJANGO_VERSION = 5.2.6
- PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/9c/7e/034f0f9fb10c029a02daaf44d364d6bf2eced8c73f0d38c69da359d26b01
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/4c/8c/2a21594337250a171d45dda926caa96309d5136becd1f48017247f9cdea0
- PYTHON_DJANGO_LICENSE = BSD-3-Clause, MIT (jquery, utils/archive.py), BSD-2-Clause (inlines.js)
- PYTHON_DJANGO_LICENSE_FILES = LICENSE \
- 	django/contrib/gis/measure.py \
+diff --git a/package/kodi/0002-curl-8.16.0.patch b/package/kodi/0002-curl-8.16.0.patch
+new file mode 100644
+index 0000000000..31ffa7b964
+--- /dev/null
++++ b/package/kodi/0002-curl-8.16.0.patch
+@@ -0,0 +1,24 @@
++Fix build with curl 8.16.0
++
++Downloaded from
++https://gitlab.alpinelinux.org/alpine/aports/-/commit/106a02411488e3f71b9f2085a4a857e4be27b9ea
++
++Upstream: https://github.com/xbmc/xbmc/pull/27224
++
++The upstream patch is aimed at the upcoming release of Kodi 22.0 which
++saw many changes to CurlFile.cpp so we use the fix from Alpine.
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++
++--- a/xbmc/filesystem/CurlFile.cpp
+++++ b/xbmc/filesystem/CurlFile.cpp
++@@ -44,7 +44,7 @@ using namespace std::chrono_literals;
++ 
++ #define FITS_INT(a) (((a) <= INT_MAX) && ((a) >= INT_MIN))
++ 
++-curl_proxytype proxyType2CUrlProxyType[] = {
+++long proxyType2CUrlProxyType[] = {
++     CURLPROXY_HTTP,   CURLPROXY_SOCKS4,          CURLPROXY_SOCKS4A,
++     CURLPROXY_SOCKS5, CURLPROXY_SOCKS5_HOSTNAME, CURLPROXY_HTTPS,
++ };
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
