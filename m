@@ -1,53 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F3E9CAC582
-	for <buildroot@archiver.kernel.org>; Fri, 12 Sep 2025 15:33:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CACCCA101F
+	for <buildroot@archiver.kernel.org>; Fri, 12 Sep 2025 18:46:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 144BA83BE6;
-	Fri, 12 Sep 2025 15:33:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 738A761222;
+	Fri, 12 Sep 2025 18:46:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UxTuaewEPNhz; Fri, 12 Sep 2025 15:33:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QAL8icNB0lks; Fri, 12 Sep 2025 18:46:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08F6183BD8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE87960DB2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 08F6183BD8;
-	Fri, 12 Sep 2025 15:33:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 57FA712D
- for <buildroot@buildroot.org>; Fri, 12 Sep 2025 15:33:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE87960DB2;
+	Fri, 12 Sep 2025 18:46:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6DD7392E
+ for <buildroot@buildroot.org>; Fri, 12 Sep 2025 18:46:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 477684072E
- for <buildroot@buildroot.org>; Fri, 12 Sep 2025 15:33:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 57ADC60DB2
+ for <buildroot@buildroot.org>; Fri, 12 Sep 2025 18:46:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9770C0Z4vXWj for <buildroot@buildroot.org>;
- Fri, 12 Sep 2025 15:33:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bbEDd5ZVEDNI for <buildroot@buildroot.org>;
+ Fri, 12 Sep 2025 18:46:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68DCE406DA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 68DCE406DA
- for <buildroot@buildroot.org>; Fri, 12 Sep 2025 15:33:06 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 58589844B1; Fri, 12 Sep 2025 15:33:06 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 12 Sep 2025 17:22:59 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a0797adf4078484c90c95ddfe216d4fc1b881b97
-X-Git-Newrev: 013565ecfc18ad627f91a425412373a210bdf7ab
-X-Patchwork-Hint: ignore
-Message-Id: <20250912153306.58589844B1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fatcat: add upstream patch to fix
- CMake 4 compatibility
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 534DD60BA1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 534DD60BA1
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 534DD60BA1
+ for <buildroot@buildroot.org>; Fri, 12 Sep 2025 18:46:31 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-04.galae.net (Postfix) with ESMTPS id 1A53FC8EC5C
+ for <buildroot@buildroot.org>; Fri, 12 Sep 2025 18:46:13 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id A98E860638;
+ Fri, 12 Sep 2025 18:46:28 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 7AEBC102F2A87; 
+ Fri, 12 Sep 2025 20:45:46 +0200 (CEST)
+Date: Fri, 12 Sep 2025 20:45:45 +0200
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+Message-ID: <20250912204545.082c51b4@windsurf>
+In-Reply-To: <87qzwb4rku.fsf@dell.be.48ers.dk>
+References: <20250911171334.593571-1-bernd@kuhls.net>
+ <20250911171334.593571-2-bernd@kuhls.net>
+ <87qzwb4rku.fsf@dell.be.48ers.dk>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1757702752; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=bIw/XjnNaG/r+lywGyMKcx2sS3fORxVIQgLrl8rPxHg=;
+ b=FF3pr/P4K9548tRzelgpy7BNw6221RAEcJjAlhgDjGTbRiKDXQ2tkVmQSP7KjUWdmPazuj
+ 7JnVmMxd0Xul9GrSdew611aIHzYDv2qYq5oRApvnqVThgIt+4JeNdl9Te3b03dygd8ntLn
+ PNZReBXuAS07hmbTvTxIbL0i9VEOinq3LFhZFVNMOkC+qDDdfgDIJe+34V7hxK6x809Wwm
+ g3Aw3CLGu10ggmO23huYmaAjtYtiHXlavQ0pIUt6AYZzLuHJjoGe2863T6Z++lW6JBu/Xw
+ 7VTOsZI9iUQIG6S/xiJ7i91+26ZI8FE+XcFmknT0lVx2Wm0lrGNfl6fNlp2Tnw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=FF3pr/P4
+Subject: Re: [Buildroot] [PATCH 2/3] package/cmake: bump version to 4.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,75 +87,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=013565ecfc18ad627f91a425412373a210bdf7ab
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 12 Sep 2025 17:29:37 +0200
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-Add upstream patch fixing cmake 4 compatibility:
+> Given that libcurl 8.16.0 is a security fix we would like to backport it
+> to stable/lts. Could we do some simpler fix and only later move to cmake
+> 4?
 
-CMake Error at CMakeLists.txt:1 (cmake_minimum_required):
-  Compatibility with CMake < 3.5 has been removed from CMake.
+Also worth mentioning that CMake is broken in 2025.02.x:
 
-Fixes:
+  https://autobuild.buildroot.net/results/bda/bdac2534f79e0def3185138f00efb189d68c7cad/build-end.log
 
- https://autobuild.buildroot.org/results/548e662429e7cf91bd48e447345374c6734f1de7/
+/workdir/instance-0/output-1/build/cmake-3.31.5/Source/cmCurl.cxx: In function 'std::string cmCurlSetNETRCOption(CURL*, const std::string&, const std::string&)':
+/workdir/instance-0/output-1/build/cmake-3.31.5/Source/cmCurl.cxx:178:26: error: invalid conversion from 'long int' to 'CURL_NETRC_OPTION' [-fpermissive]
+  178 |       curl_netrc_level = CURL_NETRC_OPTIONAL;
+      |                          ^~~~~~~~~~~~~~~~~~~
+      |                          |
+      |                          long int
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...inimum-required-version-to-3.5-for-CMake-.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+I suspect upstream CMake commit
+1b0c92a3a1b782ff3e1c4499b6ab8db614d45bcd might help, but I'm not sure.
 
-diff --git a/package/fatcat/0001-cmake-Set-minimum-required-version-to-3.5-for-CMake-.patch b/package/fatcat/0001-cmake-Set-minimum-required-version-to-3.5-for-CMake-.patch
-new file mode 100644
-index 0000000000..31dfedda22
---- /dev/null
-+++ b/package/fatcat/0001-cmake-Set-minimum-required-version-to-3.5-for-CMake-.patch
-@@ -0,0 +1,40 @@
-+From 2e3476a84cbe32598d36b5506c21025b3f94eb03 Mon Sep 17 00:00:00 2001
-+From: Alper Ak <alperyasinak1@gmail.com>
-+Date: Wed, 9 Jul 2025 19:30:26 +0300
-+Subject: [PATCH] cmake: Set minimum required version to 3.5 for CMake 4+
-+ compatibility
-+
-+Fix:
-+
-+| CMake Error at CMakeLists.txt:1 (cmake_minimum_required):
-+|   Compatibility with CMake < 3.5 has been removed from CMake.
-+|
-+|   Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
-+|   to tell CMake that the project requires at least <min> but has been updated
-+|   to work with policies introduced by <max> or earlier.
-+|
-+|   Or, add -DCMAKE_POLICY_VERSION_MINIMUM=3.5 to try configuring anyway.
-+|
-+|
-+| -- Configuring incomplete, errors occurred!
-+
-+Upstream: https://github.com/Gregwar/fatcat/commit/2e3476a84cbe32598d36b5506c21025b3f94eb03
-+Signed-off-by: Alper Ak <alperyasinak1@gmail.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index d6a2649..8f3eadc 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,4 +1,4 @@
-+-cmake_minimum_required(VERSION 2.8)
-++cmake_minimum_required(VERSION 3.5)
-+ project(fatcat)
-+ 
-+ OPTION(DEFINE_WIN "Compiling windows" OFF)
-+-- 
-+2.39.5
-+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
