@@ -1,51 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF2ECCAC58E
-	for <buildroot@archiver.kernel.org>; Sat, 13 Sep 2025 15:01:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9F5DCAC587
+	for <buildroot@archiver.kernel.org>; Sat, 13 Sep 2025 15:02:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E81B0842FB;
-	Sat, 13 Sep 2025 15:01:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6472E6169C;
+	Sat, 13 Sep 2025 15:02:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FX4zR1gaJxkx; Sat, 13 Sep 2025 15:01:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X_dqTrnM7OZt; Sat, 13 Sep 2025 15:02:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99039842C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 970FA615AE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 99039842C2;
-	Sat, 13 Sep 2025 15:01:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id EC0B692E
- for <buildroot@buildroot.org>; Sat, 13 Sep 2025 15:01:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 970FA615AE;
+	Sat, 13 Sep 2025 15:02:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DBD5025B
+ for <buildroot@buildroot.org>; Sat, 13 Sep 2025 15:02:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D2E9784279
- for <buildroot@buildroot.org>; Sat, 13 Sep 2025 15:01:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CDF2C615EC
+ for <buildroot@buildroot.org>; Sat, 13 Sep 2025 15:02:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wRcthL-RG6yS for <buildroot@buildroot.org>;
- Sat, 13 Sep 2025 15:01:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2693184232
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2693184232
- for <buildroot@buildroot.org>; Sat, 13 Sep 2025 15:01:16 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 151938458E; Sat, 13 Sep 2025 15:01:16 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 13 Sep 2025 16:47:31 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 39afca752df341053d3c82e86ae64dbffff8948e
-X-Git-Newrev: d21948be38a43c0b24a6152fa357061c879327a2
-X-Patchwork-Hint: ignore
-Message-Id: <20250913150116.151938458E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/htpdate: bump to version 2.0.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dkg6-UgkhD8D for <buildroot@buildroot.org>;
+ Sat, 13 Sep 2025 15:02:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D7DF961465
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7DF961465
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D7DF961465
+ for <buildroot@buildroot.org>; Sat, 13 Sep 2025 15:02:09 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 734C0B00583;
+ Sat, 13 Sep 2025 17:02:06 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 13 Sep 2025 17:02:06 +0200
+MIME-Version: 1.0
+Date: Sat, 13 Sep 2025 17:02:06 +0200
+To: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250909161259.34807-1-angelo.compagnucci@gmail.com>
+References: <20250909161259.34807-1-angelo.compagnucci@gmail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <52bbcaf64366fa6a608ba8c3d945915c@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1757775727;
+ bh=GSMxKWNociBglTvlWgBzKKi36ehGMjjFZPvgg300/Wg=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=PSjJGtY6EMaKoZDcUBb+30beZhdX+domYD1JAzd2TAbuOKRQKVFIR/xxQNlt9Zhqz
+ WSVEyvyHtQrPc8xe9P7Azk6D5NsHlj/f/25H9XqHQ0M4e58RMy+F/EuL4eqfumiRut
+ CII1pRBV5CO7MszQquoe0LrJiJkFiv1n4tptoEoerARX5WKfm3H5AsUjOxGv8b4HJB
+ gKPMaJm1Q8SqxOc4UvsLcUr/CUFbru3zGa8cDobVmerKue5ZxE8vfCfp5JnsSXkcw3
+ cXBlyh0i/Ft2jpQ9LFLYvQoQRNCnnZLKayDmNw+DaVk1Pq8AkcmQo9gYpkdbd2QQ5G
+ voFla5fw2ahRg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=PSjJGtY6
+Subject: Re: [Buildroot] [PATCH 1/2] package/htpdate: bump to version 2.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,47 +82,25 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d21948be38a43c0b24a6152fa357061c879327a2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 09/09/2025 18:12, Angelo Compagnucci wrote:
+> Changelog:
+> https://github.com/twekkel/htpdate/releases/tag/v2.0.1
+> 
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
-Changelog:
-https://github.com/twekkel/htpdate/releases/tag/v2.0.1
+Series applied to master, thanks.
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/htpdate/htpdate.hash | 2 +-
- package/htpdate/htpdate.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+For info, I did a minor fixup in patch 2/2, see:
+https://gitlab.com/buildroot.org/buildroot/-/commit/1f2b459b56b117e97164feb397ad14435717d524
 
-diff --git a/package/htpdate/htpdate.hash b/package/htpdate/htpdate.hash
-index efccaf0097..44d73fbe2f 100644
---- a/package/htpdate/htpdate.hash
-+++ b/package/htpdate/htpdate.hash
-@@ -1,3 +1,3 @@
- # Locally calculated:
--sha256  52f25811f00dfe714e0bcf122358ee0ad74e25db3ad230d5a4196e7a62633f27  htpdate-2.0.0.tar.gz
-+sha256  4c771fe3fc5c4ab5f9393dd501bdc51e4c067297cf304ad1e74e1965ac1c066f  htpdate-2.0.1.tar.gz
- sha256  74096c67e102bb6545b84487b5e7f18edd038fd5fc0199c8a0b25efb3c522f06  LICENSE
-diff --git a/package/htpdate/htpdate.mk b/package/htpdate/htpdate.mk
-index 7040500a3c..8d4b1e073c 100644
---- a/package/htpdate/htpdate.mk
-+++ b/package/htpdate/htpdate.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HTPDATE_VERSION = 2.0.0
-+HTPDATE_VERSION = 2.0.1
- HTPDATE_SITE = $(call github,twekkel,htpdate,v$(HTPDATE_VERSION))
- HTPDATE_LICENSE = GPL-2.0+
- HTPDATE_LICENSE_FILES = LICENSE
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
