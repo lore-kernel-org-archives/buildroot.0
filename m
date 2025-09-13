@@ -1,96 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80678CAC587
-	for <buildroot@archiver.kernel.org>; Sat, 13 Sep 2025 17:42:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E211DCAC587
+	for <buildroot@archiver.kernel.org>; Sat, 13 Sep 2025 19:04:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 48D0C83FA7;
-	Sat, 13 Sep 2025 17:42:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8ADB3415A1;
+	Sat, 13 Sep 2025 19:04:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ag1y2Ygnqu-Z; Sat, 13 Sep 2025 17:42:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id s3ABMkZHdQer; Sat, 13 Sep 2025 19:04:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41E2183FA8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B20D641584
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 41E2183FA8;
-	Sat, 13 Sep 2025 17:42:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 77A5812D
- for <buildroot@buildroot.org>; Sat, 13 Sep 2025 17:42:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B20D641584;
+	Sat, 13 Sep 2025 19:04:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B920A12D
+ for <buildroot@buildroot.org>; Sat, 13 Sep 2025 19:04:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5D07883FA9
- for <buildroot@buildroot.org>; Sat, 13 Sep 2025 17:42:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9EF286077D
+ for <buildroot@buildroot.org>; Sat, 13 Sep 2025 19:04:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Hh1hBYl7M9Nj for <buildroot@buildroot.org>;
- Sat, 13 Sep 2025 17:42:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::1134; helo=mail-yw1-x1134.google.com;
- envelope-from=softwarej@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3BAAB83FA7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BAAB83FA7
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com
- [IPv6:2607:f8b0:4864:20::1134])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3BAAB83FA7
- for <buildroot@buildroot.org>; Sat, 13 Sep 2025 17:42:53 +0000 (UTC)
-Received: by mail-yw1-x1134.google.com with SMTP id
- 00721157ae682-724b9ba77d5so29180047b3.3
- for <buildroot@buildroot.org>; Sat, 13 Sep 2025 10:42:53 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vIw6itQ-iX7k for <buildroot@buildroot.org>;
+ Sat, 13 Sep 2025 19:04:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.218.53;
+ helo=mail-ej1-f53.google.com; envelope-from=thomas.devoogdt@gmail.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7A55360777
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A55360777
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com
+ [209.85.218.53])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7A55360777
+ for <buildroot@buildroot.org>; Sat, 13 Sep 2025 19:04:39 +0000 (UTC)
+Received: by mail-ej1-f53.google.com with SMTP id
+ a640c23a62f3a-b07d01fd4fbso219605766b.0
+ for <buildroot@buildroot.org>; Sat, 13 Sep 2025 12:04:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1757785372; x=1758390172;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1757790278; x=1758395078;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=9Si9FVBCW2oqKaZzC4vgQHmo7b+RUafLAVeAAEFby/A=;
- b=QCWN7//2EyHLErIbEF1A4LmT53SOXpaoD0ebMIjVwC8J/Sv9m/URT2JqSu4ZhZmjwM
- WNpWhM2akgRnJmOSJk931UWRIST+xCC7NtSgQQzFVmcJmNewJ/WHSDUtp3YjU0CCIm8K
- ebQlvmfeJFM0JblsPacqdbfiyXeHfU9tSdlsB+NnNs/OTLzbfI09mE+UnDL6ftccO4Ty
- MXT7G4OT4kwZ4t38IL4y6qzr9WYahFTBPs0yuCzYwgW+44orCI4AtjSBrctV2KvIrwXG
- 2tHo36DNaN8Hfyi7PPc+rw4+lTEnXShsvtOQqyIJ3urABM1Gtoc7DHtspJv/tksMzcqI
- GPyg==
-X-Gm-Message-State: AOJu0YxMMWNo1hKr9FQkQjn3HQVxDvwuv1v/8Gh2lvpLer609UNEUkzC
- doO/tEj9UT9AyuyBHeGmhaDcbBTQGqWapEHRxYBgyB1DTWWO/FsIuUiQNzXygPkdFQJ4aUoieC4
- OutGJdI0kCBj/ui3p+5hKj8Eqb5oKvssW9Q==
-X-Gm-Gg: ASbGncum6oli0u1liNn2cSBMQg2GmUH2dTdxC4ZCR+hcC02lpbvMMoKDVWNvmZec2Gr
- kwQU576SN4tMh4B0zTHWIqc1DSJGcOGrvy4dN9WQbK20t8sy/xvjV1bJANx33r3VUzmUx4X8Q6v
- AcLX3EyB+tpwnPGhDmEzaeXuHOG4U+hxGm0gWnCnd0M7bbNggeARBJJjChrKDhh46f3uploO73h
- 5eU0to=
-X-Google-Smtp-Source: AGHT+IEtIwifIIjqwgkoNKnFZuvZFzyqwTg9Xa74rbHin7bMCg/X26bTPEavm90zitqMkJGeAsxkRqeB/V4vE1KZcg0=
-X-Received: by 2002:a05:690c:724a:b0:723:c010:c3ac with SMTP id
- 00721157ae682-730652dd1eamr67781957b3.29.1757785371713; Sat, 13 Sep 2025
- 10:42:51 -0700 (PDT)
+ bh=BmlTSLBk7lewTphsEpGv6iUn05dGYPlqIdj6l3Pb8zk=;
+ b=WYHTQvIGNPG0un0uHcd59NJfOkug7xTt+nx1VpeNGBTzZ10tHSiTh6naafbai5I1D0
+ l3R6CXXiqAj4lcY3oemIQjOP3ViSnggNAa/2MWbMNVkHt0waxew1QHsJkmY4NJPqKpoW
+ 8AKWkk6B3FY8vL5Ppxfgs66TeImDFamPtHP2etnAnM837breoJ8VxBnqpuru6f3iU61r
+ GAkWrpu+C0RY5HrYf/DES+aMa6dMh8t23k8x0q/N5ju+SBi73aXanI+37BCcTLNqj/aI
+ GYPELcYbF6r+h0POATK7x3m6L2/3Nu450hAnk8MLx7qB7BqQzgBwSTU+RqYrQhkYwRMD
+ Uzow==
+X-Gm-Message-State: AOJu0Yw/7lSc/LyEbZE7rvoKsj4PWJG6bpL1KT3rV66CjTwgZsL7/B/R
+ mrtTo7KTZrjHAfpDvuUIYD+9pzVABMdLqDw0uZwQvp7aLGI4+lhGUpAnLnLJ2nno
+X-Gm-Gg: ASbGncuXTPjltmO8Gmxiy87rbslhH2ZhJWzncdb4hoT8qlgbCooH1OykQ8FhvUaYmfR
+ 5O1oapj+AnOwq47eROyroX6sGbvNweADHfo0joDRMh+lxmuEA2ZFh3RWL+9AzPReyMCrY9gjFKA
+ 0sRBYZ6p40WH4Mw3a162530AXEVDhuNmIK3nkWaHHFB6KwfNG+7oqDhKRLPG5FvskZvba6Dj/dB
+ hok5AqvrkfpvIxnL+ZCdalTusoZxhXXXAXZgnhmhC5Yd1XcPE+6OvIZA1PjRfTnRirsNWWup2Nb
+ eJisUuIQigApJBkT7cSLQkCnyc/ile75RCSBRqthOsOx3Z6CFWI908TWPDfWKL4M0zbPVi8kMeC
+ 0lfQ3MoHvR9BixXOalaXE6WhiC0eEbaU3SEkcnw6zHk99DZHowPlSR7g7EyDh+ZywQgw4VDLIaO
+ QOws+6V4tbnKVoW9n2cbuekJK/xNbcr4zE6P8=
+X-Google-Smtp-Source: AGHT+IHuO6riHa778zo2+ugSXjWOfuoBglhsbiAHs+fNXWAW1N605a3PdFPmCrZ3Xmw9IcmrRk4k/g==
+X-Received: by 2002:a17:907:6e87:b0:b04:a1a4:4be9 with SMTP id
+ a640c23a62f3a-b07c351046fmr674555266b.28.1757790277582; 
+ Sat, 13 Sep 2025 12:04:37 -0700 (PDT)
+Received: from localhost.localdomain
+ ([2a02:a03f:eb6f:7900:f67f:75ec:aef0:e4f5])
+ by smtp.googlemail.com with ESMTPSA id
+ a640c23a62f3a-b07da7a8918sm243901366b.56.2025.09.13.12.04.36
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 13 Sep 2025 12:04:37 -0700 (PDT)
+From: Thomas Devoogdt <thomas@devoogdt.com>
+To: buildroot@buildroot.org
+Date: Sat, 13 Sep 2025 21:04:30 +0200
+Message-ID: <20250913190434.2224911-1-thomas@devoogdt.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-References: <20250913173311.2624001-1-romain.naour@smile.fr>
-In-Reply-To: <20250913173311.2624001-1-romain.naour@smile.fr>
-From: =?UTF-8?Q?Jos=C3=A9_Luis_Salvador_Rufo?= <salvador.joseluis@gmail.com>
-Date: Sat, 13 Sep 2025 19:42:40 +0200
-X-Gm-Features: AS18NWAQcxS6bMndpkdZyQf_Pmk4dzwg2J1WMN-qnjyPcjxE6eH9YhubXRH0ZMI
-Message-ID: <CAH+XeQbB0dt4w35qafBkrSd62xXTr7VB_-BW5oeg9PoxN_-XDA@mail.gmail.com>
-To: Romain Naour <romain.naour@smile.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1757785372; x=1758390172; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=9Si9FVBCW2oqKaZzC4vgQHmo7b+RUafLAVeAAEFby/A=;
- b=m5CuCAHr4e14mSq+g6iVV88jcPVrJIzqSfJS3//1D/Hg4XncOliB8qr2qCKeH+XjW0
- Qh6SPjeI7C2IHQh+pk4cHpx3JSqWtCMTjfK7klTgJE/i1wYocpf3ECszJ73O72WCIuHk
- 82PhdRN76e5AfcIMof641Mh1lblWF0dl1YFge13Af+C4OcHmKWDE5GyEp8OwOJLO78Ul
- kywUTsdTNARSceQyjnPEn4pIomHlcGpb0sz1wRRIsGOSbQuwNu7Ulj42JrUZHXNVYhRj
- YWAcfhNZHW5I8wtL3MMdpjEeGWPne/UJUfjTu7uqfujnLvW4MmVeCCOpZW8hYd7cqkvd
- qagw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=m5CuCAHr
-Subject: Re: [Buildroot] [PATCH 1/2] support/testing: remove TestZfsUclibc
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=devoogdt.com
+Subject: [Buildroot] [PATCH v1 1/4] package/wayland-protocols: bump to 1.45
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -102,210 +93,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Baruch Siach via buildroot <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============4730995055776638935=="
+Cc: Thomas Devoogdt <thomas@devoogdt.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4730995055776638935==
-Content-Type: multipart/alternative; boundary="000000000000ac2574063eb24cf1"
+News:
+ - 1.43: http://lists.freedesktop.org/archives/wayland-devel/2025-April/044134.html
+ - 1.44: http://lists.freedesktop.org/archives/wayland-devel/2025-April/044161.html
+ - 1.45: https://lore.freedesktop.org/wayland-devel/aEw0AP7h6T8l11ug@gmail.com/T/#u
 
---000000000000ac2574063eb24cf1
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+---
+ package/wayland-protocols/wayland-protocols.hash | 6 +++---
+ package/wayland-protocols/wayland-protocols.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Hello all,
-
-I would rather remove the Python command that checks the ARC stats than
-remove the uClibc test entirely, as I have used it numerous times to check
-future ZFS versions and to ensure that OpenZFS compiles correctly with
-uClibc.
-
-Greetings.
-
-El s=C3=A1b, 13 sept 2025, 19:33, Romain Naour <romain.naour@smile.fr> escr=
-ibi=C3=B3:
-
-> As reported on the mailing list [1] while investigating the
-> TestZfsUclibc Gitlab-CI failure, the python 3.13 interpreter itsef
-> segfault at runtime:
->
->   Fatal Python error: _PyThreadState_Attach: non-NULL old thread state
->   Python runtime state: preinitialized
->   Thread 0xSegmentation fault
->
-> This issue is related to the python 3.13 version bump [2] were several
-> internal changes were added [3] to support PEP 703 [4].
-> PEP 793 is about CPython=E2=80=99s global interpreter lock (=E2=80=9CGIL=
-=E2=80=9D) removal
-> for multi-threads support that requires a working C11 "thread_local"
-> for thread-local storage [5].
->
-> Remove TestZfsUclibc since this issue is not related to ZFS and since
-> we are going to disable python3 package for aarch64 uClibc-ng
-> toolchains.
->
-> Keeping TestZfsUclibc is possible by using another architecture than
-> aarch64. But it requires to update TestZfsBase.
->
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/11271124859
-> (TestZfsUclibc)
->
-> [1]
-> https://lore.kernel.org/buildroot/7a4d245d-1556-43c9-8997-6b1f791afbfe@gm=
-ail.com/
-> (TestZfsUclibc)
-> [2] d63e207eb869063f82c867658676c2903beb08cb
-> [3]
-> https://github.com/python/cpython/commit/6e97a9647ae028facb392d12fc249735=
-03693bd6
-> [4] https://peps.python.org/pep-0703/
-> [5] https://gcc.gnu.org/onlinedocs/gcc-15.1.0/gcc/Thread-Local.html
->
-> Cc: Jos=C3=A9 Luis Salvador Rufo <salvador.joseluis@gmail.com>
-> Cc: Waldemar Brodkorb <wbx@openadk.org>
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> ---
->  support/testing/tests/package/test_zfs.py | 10 ----------
->  1 file changed, 10 deletions(-)
->
-> diff --git a/support/testing/tests/package/test_zfs.py
-> b/support/testing/tests/package/test_zfs.py
-> index 1b907ac4de..3833838e3a 100644
-> --- a/support/testing/tests/package/test_zfs.py
-> +++ b/support/testing/tests/package/test_zfs.py
-> @@ -73,16 +73,6 @@ class TestZfsGlibc(TestZfsBase):
->          TestZfsBase.base_test_run(self)
->
->
-> -class TestZfsUclibc(TestZfsBase):
-> -    config =3D TestZfsBase.config + \
-> -        """
-> -        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_UCLIBC_STABLE=3Dy
-> -        """
-> -
-> -    def test_run(self):
-> -        TestZfsBase.base_test_run(self)
-> -
-> -
->  class TestZfsMusl(TestZfsBase):
->      config =3D TestZfsBase.config + \
->          """
-> --
-> 2.51.0
->
->
-
---000000000000ac2574063eb24cf1
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"auto"><div>Hello all,<div dir=3D"auto"><br></div><div dir=3D"au=
-to">I would rather remove the Python command that checks the ARC stats than=
- remove the uClibc test entirely, as I have used it numerous times to check=
- future ZFS versions and to ensure that OpenZFS compiles correctly with uCl=
-ibc.</div></div><div dir=3D"auto"><br></div><div dir=3D"auto">Greetings.<br=
-><br><div class=3D"gmail_quote gmail_quote_container" dir=3D"auto"><div dir=
-=3D"ltr" class=3D"gmail_attr">El s=C3=A1b, 13 sept 2025, 19:33, Romain Naou=
-r &lt;<a href=3D"mailto:romain.naour@smile.fr">romain.naour@smile.fr</a>&gt=
-; escribi=C3=B3:<br></div><blockquote class=3D"gmail_quote" style=3D"margin=
-:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"=
->As reported on the mailing list [1] while investigating the<br>
-TestZfsUclibc Gitlab-CI failure, the python 3.13 interpreter itsef<br>
-segfault at runtime:<br>
-<br>
-=C2=A0 Fatal Python error: _PyThreadState_Attach: non-NULL old thread state=
-<br>
-=C2=A0 Python runtime state: preinitialized<br>
-=C2=A0 Thread 0xSegmentation fault<br>
-<br>
-This issue is related to the python 3.13 version bump=C2=A0[2] were several=
-<br>
-internal changes were added [3] to support PEP 703 [4].<br>
-PEP 793 is about CPython=E2=80=99s global interpreter lock (=E2=80=9CGIL=E2=
-=80=9D) removal<br>
-for multi-threads support that requires a working C11 &quot;thread_local&qu=
-ot;<br>
-for thread-local storage [5].<br>
-<br>
-Remove TestZfsUclibc since this issue is not related to ZFS and since<br>
-we are going to disable python3 package for aarch64 uClibc-ng<br>
-toolchains.<br>
-<br>
-Keeping TestZfsUclibc is possible by using another architecture than<br>
-aarch64. But it requires to update TestZfsBase.<br>
-<br>
-Fixes:<br>
-<a href=3D"https://gitlab.com/buildroot.org/buildroot/-/jobs/11271124859" r=
-el=3D"noreferrer noreferrer" target=3D"_blank">https://gitlab.com/buildroot=
-.org/buildroot/-/jobs/11271124859</a> (TestZfsUclibc)<br>
-<br>
-[1] <a href=3D"https://lore.kernel.org/buildroot/7a4d245d-1556-43c9-8997-6b=
-1f791afbfe@gmail.com/" rel=3D"noreferrer noreferrer" target=3D"_blank">http=
-s://lore.kernel.org/buildroot/7a4d245d-1556-43c9-8997-6b1f791afbfe@gmail.co=
-m/</a> (TestZfsUclibc)<br>
-[2] d63e207eb869063f82c867658676c2903beb08cb<br>
-[3] <a href=3D"https://github.com/python/cpython/commit/6e97a9647ae028facb3=
-92d12fc24973503693bd6" rel=3D"noreferrer noreferrer" target=3D"_blank">http=
-s://github.com/python/cpython/commit/6e97a9647ae028facb392d12fc24973503693b=
-d6</a><br>
-[4] <a href=3D"https://peps.python.org/pep-0703/" rel=3D"noreferrer norefer=
-rer" target=3D"_blank">https://peps.python.org/pep-0703/</a><br>
-[5] <a href=3D"https://gcc.gnu.org/onlinedocs/gcc-15.1.0/gcc/Thread-Local.h=
-tml" rel=3D"noreferrer noreferrer" target=3D"_blank">https://gcc.gnu.org/on=
-linedocs/gcc-15.1.0/gcc/Thread-Local.html</a><br>
-<br>
-Cc: Jos=C3=A9 Luis Salvador Rufo &lt;<a href=3D"mailto:salvador.joseluis@gm=
-ail.com" target=3D"_blank" rel=3D"noreferrer">salvador.joseluis@gmail.com</=
-a>&gt;<br>
-Cc: Waldemar Brodkorb &lt;<a href=3D"mailto:wbx@openadk.org" target=3D"_bla=
-nk" rel=3D"noreferrer">wbx@openadk.org</a>&gt;<br>
-Signed-off-by: Romain Naour &lt;<a href=3D"mailto:romain.naour@smile.fr" ta=
-rget=3D"_blank" rel=3D"noreferrer">romain.naour@smile.fr</a>&gt;<br>
----<br>
-=C2=A0support/testing/tests/package/test_zfs.py | 10 ----------<br>
-=C2=A01 file changed, 10 deletions(-)<br>
-<br>
-diff --git a/support/testing/tests/package/test_zfs.py b/support/testing/te=
-sts/package/test_zfs.py<br>
-index 1b907ac4de..3833838e3a 100644<br>
---- a/support/testing/tests/package/test_zfs.py<br>
-+++ b/support/testing/tests/package/test_zfs.py<br>
-@@ -73,16 +73,6 @@ class TestZfsGlibc(TestZfsBase):<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0TestZfsBase.base_test_run(self)<br>
-<br>
-<br>
--class TestZfsUclibc(TestZfsBase):<br>
--=C2=A0 =C2=A0 config =3D TestZfsBase.config + \<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0 &quot;&quot;&quot;<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0 BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_UCLIBC_=
-STABLE=3Dy<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0 &quot;&quot;&quot;<br>
--<br>
--=C2=A0 =C2=A0 def test_run(self):<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0 TestZfsBase.base_test_run(self)<br>
--<br>
--<br>
-=C2=A0class TestZfsMusl(TestZfsBase):<br>
-=C2=A0 =C2=A0 =C2=A0config =3D TestZfsBase.config + \<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&quot;&quot;&quot;<br>
--- <br>
-2.51.0<br>
-<br>
-</blockquote></div></div></div>
-
---000000000000ac2574063eb24cf1--
-
---===============4730995055776638935==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
+index c6fca6cd25..f35c054dff 100644
+--- a/package/wayland-protocols/wayland-protocols.hash
++++ b/package/wayland-protocols/wayland-protocols.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2025-March/044027.html
+-sha256  23ba80d410d1200a86fe29592c19766eae8f1c350b67289999e9e7ea12d9f7aa  wayland-protocols-1.42.tar.xz
+-sha512  ce85fecbe886264eaeb34c7992d4e493295f57f6213d5a2ec04b3471daee04a4225b1a7e77a27ccf39306074780553ec1383c55af30cc2c78942b40cc5777c1b  wayland-protocols-1.42.tar.xz
++# From https://lore.freedesktop.org/wayland-devel/aEw0AP7h6T8l11ug@gmail.com/T/#u
++sha256  4d2b2a9e3e099d017dc8107bf1c334d27bb87d9e4aff19a0c8d856d17cd41ef0  wayland-protocols-1.45.tar.xz
++sha512  d0557a75eb486fb824f182648bec346e270cb1ada8727613377ab95b0ccb595c516de242f486110c88b7009e98c87b071bf5b598f84466e5624aa1d81f19e195  wayland-protocols-1.45.tar.xz
+ sha256  f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  COPYING
+diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
+index b7c5b118e6..0cb23f8438 100644
+--- a/package/wayland-protocols/wayland-protocols.mk
++++ b/package/wayland-protocols/wayland-protocols.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WAYLAND_PROTOCOLS_VERSION = 1.42
++WAYLAND_PROTOCOLS_VERSION = 1.45
+ WAYLAND_PROTOCOLS_SITE = https://gitlab.freedesktop.org/wayland/wayland-protocols/-/releases/$(WAYLAND_PROTOCOLS_VERSION)/downloads
+ WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
+ WAYLAND_PROTOCOLS_LICENSE = MIT
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4730995055776638935==--
