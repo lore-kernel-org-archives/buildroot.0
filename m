@@ -4,75 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C667ECAC58E
-	for <buildroot@archiver.kernel.org>; Sat, 13 Sep 2025 11:47:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAC7ACAC587
+	for <buildroot@archiver.kernel.org>; Sat, 13 Sep 2025 11:49:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9984D41850;
-	Sat, 13 Sep 2025 11:47:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7F89841850;
+	Sat, 13 Sep 2025 11:49:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C9snMCdJB3vQ; Sat, 13 Sep 2025 11:47:34 +0000 (UTC)
+ id DdSI2D_W74PW; Sat, 13 Sep 2025 11:49:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3CA3C41955
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 939A641B27
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3CA3C41955;
-	Sat, 13 Sep 2025 11:47:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 09A3D25B
- for <buildroot@buildroot.org>; Sat, 13 Sep 2025 11:47:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 939A641B27;
+	Sat, 13 Sep 2025 11:49:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 91C0612D
+ for <buildroot@buildroot.org>; Sat, 13 Sep 2025 11:49:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E440B40D44
- for <buildroot@buildroot.org>; Sat, 13 Sep 2025 11:47:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7841841B64
+ for <buildroot@buildroot.org>; Sat, 13 Sep 2025 11:49:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ro-SOWEgC9Eg for <buildroot@buildroot.org>;
- Sat, 13 Sep 2025 11:47:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E8EFC40C81
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8EFC40C81
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E8EFC40C81
- for <buildroot@buildroot.org>; Sat, 13 Sep 2025 11:47:31 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id C365D13F8B3;
- Sat, 13 Sep 2025 13:47:23 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 13 Sep 2025 13:47:23 +0200
-MIME-Version: 1.0
-Date: Sat, 13 Sep 2025 13:47:23 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: buildroot@buildroot.org, Angelo Compagnucci
- <angelo.compagnucci@gmail.com>, Christian Stewart <christian@aperture.us>,
- Kris Bahnsen <kris@embeddedts.com>, Sergey Matyukevich <geomatsi@gmail.com>
-In-Reply-To: <20250908192435.214306-5-giulio.benetti@benettiengineering.com>
-References: <20250908192435.214306-1-giulio.benetti@benettiengineering.com>
- <20250908192435.214306-5-giulio.benetti@benettiengineering.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <e6e23b2657445822512e036a7f8876b8@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1757764049;
- bh=Y425u+T6P97MirGBnElbbEztEbTS8QLDcrORymUdw8k=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=HycjVXcO644YDDuAT+GRqZtK3b+NV2gelynlXjTuvfQpzYIy106pKEMJn4/iC2Ayh
- DUL1kT9k13E2Wc902OU6GrAQEK3fAeJ43ejFLwoebF3pV5NRKPF+NLGEgEjK+u2hO/
- WbrhjZ02trh0j9l6rC2O990S2o2Kq8pupVQk4xK0sEjC511fJOPQ7W91Oca+75k/RY
- LgC3nPS6am+3Ie1erVllhC4XZR00ShPg3GhiRn/VL3ZSB0gaPz2JW3V07BJMZFjgDN
- oIGafnpmBrxQeQen1qluzOu20beWu45L8oHieAtVrscavKImHrL4PJTETsSs0V4EeQ
- cr2aAELgmhypQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=HycjVXcO
-Subject: Re: [Buildroot] [PATCH] package/wilc-driver: fix build failure with
- Linux 6.16
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id umRcw1wRcJZ9 for <buildroot@buildroot.org>;
+ Sat, 13 Sep 2025 11:49:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C22CC41AB7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C22CC41AB7
+ for <buildroot@buildroot.org>; Sat, 13 Sep 2025 11:49:27 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AC7D0844F1; Sat, 13 Sep 2025 11:49:27 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 13 Sep 2025 13:48:21 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: df7d287c81c6131b88fb091ad1e7b663bd80c0be
+X-Git-Newrev: c28daa7422192d54d4372635bdb380d1491ba200
+X-Patchwork-Hint: ignore
+Message-Id: <20250913114927.AC7D0844F1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xr819-xradio: bump to version
+ 2025-08-08
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,29 +60,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 08/09/2025 21:24, Giulio Benetti wrote:
-> Add a local patch pending upstream to fix build failure with Linux 6.16
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=c28daa7422192d54d4372635bdb380d1491ba200
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+With this patch package builds with Linux up to version 6.16
 
-This commit adds the fourteenth package patch to wilc-driver.
-The package is currently at version linux4microchip-2021.10-1
-and I see there is a newer tag:
-https://github.com/embeddedTS/wilc3000-external-module/releases/tag/linux4microchip-2024.04
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/xr819-xradio/xr819-xradio.hash | 2 +-
+ package/xr819-xradio/xr819-xradio.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Could we reduce a bit the number package patches by bumping
-the package version?
-
-Best regards,
-
-Julien.
+diff --git a/package/xr819-xradio/xr819-xradio.hash b/package/xr819-xradio/xr819-xradio.hash
+index 3189b3b7f1..fe91d856ec 100644
+--- a/package/xr819-xradio/xr819-xradio.hash
++++ b/package/xr819-xradio/xr819-xradio.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  049849b0821e5a41a3f7ce291caf216775f8fa2060de6d49351165cc4e6aa7f3  xr819-xradio-506fbc323f1c675d037eaf7ee928939394761aee.tar.gz
++sha256  c06dd87948b4a4c1bee070bbc3ce07b8711ec027e78ab9b83ea1c7350472105d  xr819-xradio-d766844ce8307e5902b3ab461f06bf8ad06891dd.tar.gz
+ # Locally computed
+ sha256  db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73  LICENSE
+diff --git a/package/xr819-xradio/xr819-xradio.mk b/package/xr819-xradio/xr819-xradio.mk
+index 5315ab0ef0..93fbdacb38 100644
+--- a/package/xr819-xradio/xr819-xradio.mk
++++ b/package/xr819-xradio/xr819-xradio.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XR819_XRADIO_VERSION = 506fbc323f1c675d037eaf7ee928939394761aee
++XR819_XRADIO_VERSION = d766844ce8307e5902b3ab461f06bf8ad06891dd
+ XR819_XRADIO_SITE = $(call github,fifteenhex,xradio,$(XR819_XRADIO_VERSION))
+ XR819_XRADIO_LICENSE = GPL-2.0
+ XR819_XRADIO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
