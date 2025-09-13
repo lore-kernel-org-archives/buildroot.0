@@ -4,72 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47FC2CAC587
-	for <buildroot@archiver.kernel.org>; Sat, 13 Sep 2025 22:26:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 987B8CAC592
+	for <buildroot@archiver.kernel.org>; Sat, 13 Sep 2025 22:39:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1E87840EF3;
-	Sat, 13 Sep 2025 22:26:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6151D419A3;
+	Sat, 13 Sep 2025 22:39:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ANNYNzxRF5Cq; Sat, 13 Sep 2025 22:26:52 +0000 (UTC)
+ id Y3h4TwSnUncW; Sat, 13 Sep 2025 22:39:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FA9E40E42
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DB39419CB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4FA9E40E42;
-	Sat, 13 Sep 2025 22:26:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 340C6117
- for <buildroot@buildroot.org>; Sat, 13 Sep 2025 22:26:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8DB39419CB;
+	Sat, 13 Sep 2025 22:39:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 10F0112D
+ for <buildroot@buildroot.org>; Sat, 13 Sep 2025 22:39:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3181840373
- for <buildroot@buildroot.org>; Sat, 13 Sep 2025 22:26:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EAEF3419A3
+ for <buildroot@buildroot.org>; Sat, 13 Sep 2025 22:39:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GVp4f7wNTYQk for <buildroot@buildroot.org>;
- Sat, 13 Sep 2025 22:26:50 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4529940058
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4529940058
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4529940058
- for <buildroot@buildroot.org>; Sat, 13 Sep 2025 22:26:50 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id C359119F54D;
- Sun, 14 Sep 2025 00:26:46 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 14 Sep 2025 00:26:46 +0200
-MIME-Version: 1.0
-Date: Sun, 14 Sep 2025 00:26:46 +0200
-To: Romain Naour <romain.naour@smile.fr>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250913163458.2608400-1-romain.naour@smile.fr>
-References: <20250913163458.2608400-1-romain.naour@smile.fr>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <e718403b19f36f522fafb207d709b798@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1757802407;
- bh=Q/Q3P09ZObx+qv/deOdNEpUHq4fNoYV3pLc3anu+ZhU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=CLlcsxJpVS9rKfmNY9oxhD5rmaYwoqwf3zpWBJQ3TD0XdR8vJRrIYJtCIzpfd+P1e
- PQxpk3w1cJluVDM1RHmbrLB8frYosMOpdUAqPZjEQ1a4YpYfdK6VRBHl0HaHGAS/Gw
- DNgPIIq68rnYKx4K/saIG5sDGttqlgJubxFelCMmdJgWOTf5tIjahA20pdPDS4LTNG
- HkC/ilqrS4CGS67N6f72NE3f/X5EbdjBjoCxy0KNFGSf1HlLjivsQ2kEvycgHeiBFx
- fFwQeUctSOZStYjEmIwWdjOJh0ZgbRL8nT6XBDqNmGAJjh5zgm0Gg8/TZdmK+BChlw
- 7JWxkbvRemmhQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=CLlcsxJp
-Subject: Re: [Buildroot] [PATCH] package/mariadb: workaround cmake < 3.30
- check TRY_RUN issue
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8Y1qajVR5PO5 for <buildroot@buildroot.org>;
+ Sat, 13 Sep 2025 22:39:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F0AE41955
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4F0AE41955
+ for <buildroot@buildroot.org>; Sat, 13 Sep 2025 22:39:28 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 49864845E6; Sat, 13 Sep 2025 22:39:28 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 14 Sep 2025 00:37:15 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: de9c0f971c4798ea2d87cfcba17dad9519f209e9
+X-Git-Newrev: a5a084b7e438079a4ba186d8bebca28b84e4f5e8
+X-Patchwork-Hint: ignore
+Message-Id: <20250913223928.49864845E6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/hwdata: bump version to 0.399
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,45 +59,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 13/09/2025 18:34, Romain Naour via buildroot wrote:
-> The last mariadb version bump [1] added -DHAVE_SYSTEM_LIBFMT_EXITCODE=0
-> to workaround cross-compiling issue during libfmt cmake check.
-> But it actually requies at least cmake >= 3.30 to work.
-> Indeed, our docker image used by Gitlab-CI uses cmake 3.25.1 and
-> segfault while testing for libfmt.
-> 
->   -- Performing Test HAVE_SYSTEM_LIBFMT
->   /bin/bash: line 1: 163369 Segmentation fault
-> 
->   $ cmake --version
->   cmake version 3.25.1
-> 
-> Using the same TestPerlDBDmysql configuration locally with
-> cmake 3.30.8 installed build fine.
-> 
-> Looking at cmake cmTryRunCommand.cxx history from 3.30.x show that
-> several fixes about cross-compiling isses were applied to cmake 3.26.x
-> [2] probably solving the issue. Requires BR2_HOST_CMAKE_AT_LEAST_3_30
-> for now, since only cmake 3.30.8 installed locally was tested.
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/11271124486 
-> (TestPerlDBDmysql)
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/11271124439 
-> (TestMariaDB)
-> 
-> [1] 6cd8f95346 ("package/mariadb: bump version to 10.11.11")
-> [2] 
-> https://gitlab.kitware.com/cmake/cmake/-/commits/v3.30.9/Source/cmTryRunCommand.cxx?ref_type=tags
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+commit: https://git.buildroot.net/buildroot/commit/?id=a5a084b7e438079a4ba186d8bebca28b84e4f5e8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Release notes: https://github.com/vcrhonek/hwdata/releases
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/hwdata/hwdata.hash | 2 +-
+ package/hwdata/hwdata.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
+index 5507a6b0df..db9a789dec 100644
+--- a/package/hwdata/hwdata.hash
++++ b/package/hwdata/hwdata.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  cd52f7eb5c0f438a3605d1799d9f345a2894ad0f269ab6e8441f55e27e80dd78  hwdata-0.398.tar.gz
++sha256  74872355e14d5ddc48a0f63036227ffb5f7796a3012c6377ac1fc7432ffe2b41  hwdata-0.399.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
+diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
+index fd914c238d..ace30889f0 100644
+--- a/package/hwdata/hwdata.mk
++++ b/package/hwdata/hwdata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HWDATA_VERSION = 0.398
++HWDATA_VERSION = 0.399
+ HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
+ HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
+ HWDATA_LICENSE_FILES = COPYING LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
