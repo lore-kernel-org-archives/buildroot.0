@@ -1,52 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1240CAC58F
-	for <buildroot@archiver.kernel.org>; Sat, 13 Sep 2025 23:03:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90FF5CAC58E
+	for <buildroot@archiver.kernel.org>; Sat, 13 Sep 2025 23:04:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 86DA141B5C;
-	Sat, 13 Sep 2025 23:03:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 638358447D;
+	Sat, 13 Sep 2025 23:04:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qdx2Mx39L1ku; Sat, 13 Sep 2025 23:03:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pcWoGbjxmMAn; Sat, 13 Sep 2025 23:04:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE86A41B46
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7B728448C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE86A41B46;
-	Sat, 13 Sep 2025 23:03:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5203C117
- for <buildroot@buildroot.org>; Sat, 13 Sep 2025 23:03:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A7B728448C;
+	Sat, 13 Sep 2025 23:04:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1CAA5117
+ for <buildroot@buildroot.org>; Sat, 13 Sep 2025 23:03:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 84199403CC
- for <buildroot@buildroot.org>; Sat, 13 Sep 2025 23:03:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C3171605C8
+ for <buildroot@buildroot.org>; Sat, 13 Sep 2025 23:03:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id viEXI04wPwa8 for <buildroot@buildroot.org>;
- Sat, 13 Sep 2025 23:03:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F86D403D4
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4F86D403D4
- for <buildroot@buildroot.org>; Sat, 13 Sep 2025 23:03:35 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3E8A484623; Sat, 13 Sep 2025 23:03:35 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 14 Sep 2025 00:48:27 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 52faa2aadd0610b1acf9084beebbb5063c64a55f
-X-Git-Newrev: 34010c1e98a7d60e595b369d42347bb02d0d2254
-X-Patchwork-Hint: ignore
-Message-Id: <20250913230335.3E8A484623@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/intel-mediadriver: bump version to
- 25.3.3
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QAbIzgi3DC-D for <buildroot@buildroot.org>;
+ Sat, 13 Sep 2025 23:03:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 222A660E34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 222A660E34
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 222A660E34
+ for <buildroot@buildroot.org>; Sat, 13 Sep 2025 23:03:58 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id D4C2478035B;
+ Sun, 14 Sep 2025 01:03:54 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 14 Sep 2025 01:03:54 +0200
+MIME-Version: 1.0
+Date: Sun, 14 Sep 2025 01:03:54 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250909161100.59508-1-bernd@kuhls.net>
+References: <20250909161100.59508-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <c4e5d26512ffbda1688515499a97bf56@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1757804636;
+ bh=ut4DOupJGWuSLZosq+8hqeRPECagTSsD0qwRrWDMP9M=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=GzwKzxbLYUGMhTvdu7tV/0dyqIUi5f0vbbL/i2Hby4/LsLt/G7LKAzaUsx8J5z7XD
+ KZGf9kGGsT7bKNUuTkoHHzrs0OQQTzj3UwO0C/1G7FLqVf2KbosEkEfCdFAEW9glo2
+ cqJoNMuEM+eLhVpxw6i8rw6AyjkUxdu46lh0n0UcpiRvBnnqPRKo9VIl4G8Gc6CRb2
+ 862PhKNzh/8v3uBzaxdSCBgqSqk9Gmexog+ScL6exWG+1IebeBb8LjEAAsXByxUnGB
+ Ukj3Y1kk0aPNP2Xf63hDjup+n9iPj3pRaUdeKUx9nKOEVMWLoZUc05jn/ovtbqDBlb
+ 8lbgUyYSD+Z0Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=GzwKzxbL
+Subject: Re: [Buildroot] [PATCH 1/2] package/intel-mediadriver: bump version
+ to 25.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,44 +83,15 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34010c1e98a7d60e595b369d42347bb02d0d2254
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 09/09/2025 18:10, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/intel-mediadriver/intel-mediadriver.hash | 2 +-
- package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index 9e6b14fb0f..5a8f5a9309 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  ea515121a4c758373aa4641cafef91ebd5efa947cfb7a284544263ab7e90d6df  intel-media-25.3.1.tar.gz
-+sha256  fc8d552e47c32e2a636d394e8f0118e145ae34374d08a6b124957be02c46a9dc  intel-media-25.3.3.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index eadf58dc5f..abe86b2f8a 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
- 
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
- 
--INTEL_MEDIADRIVER_VERSION = 25.3.1
-+INTEL_MEDIADRIVER_VERSION = 25.3.3
- INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
