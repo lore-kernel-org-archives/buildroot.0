@@ -1,71 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75A69CAC587
-	for <buildroot@archiver.kernel.org>; Sat, 13 Sep 2025 10:15:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22318CAC58E
+	for <buildroot@archiver.kernel.org>; Sat, 13 Sep 2025 10:30:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D5C661572;
-	Sat, 13 Sep 2025 10:15:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CEE9A82251;
+	Sat, 13 Sep 2025 10:30:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id teBmElKGoMuH; Sat, 13 Sep 2025 10:15:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZILDhQb7wzjU; Sat, 13 Sep 2025 10:30:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FAEE61663
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F24A982263
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2FAEE61663;
-	Sat, 13 Sep 2025 10:15:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 05EE812D
- for <buildroot@buildroot.org>; Sat, 13 Sep 2025 10:15:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F24A982263;
+	Sat, 13 Sep 2025 10:30:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5AE1C92E
+ for <buildroot@buildroot.org>; Sat, 13 Sep 2025 10:29:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E034B408C3
- for <buildroot@buildroot.org>; Sat, 13 Sep 2025 10:15:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4070241F05
+ for <buildroot@buildroot.org>; Sat, 13 Sep 2025 10:29:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SJuJjfmw22sx for <buildroot@buildroot.org>;
- Sat, 13 Sep 2025 10:15:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B3B2E405B9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3B2E405B9
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B3B2E405B9
- for <buildroot@buildroot.org>; Sat, 13 Sep 2025 10:15:29 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:7427:ac55:2702:f075])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id C5BF760132;
- Sat, 13 Sep 2025 12:15:24 +0200 (CEST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IV73hHxSf1Rx for <buildroot@buildroot.org>;
+ Sat, 13 Sep 2025 10:29:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5AF5141F04
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5AF5141F04
+ for <buildroot@buildroot.org>; Sat, 13 Sep 2025 10:29:58 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 49C6B83F79; Sat, 13 Sep 2025 10:29:58 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>,
- Julien Olivain <ju.o@free.fr>
-Date: Sat, 13 Sep 2025 12:15:20 +0200
-Message-ID: <20250913101520.28649-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.51.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1757758527;
- bh=I59e65J9U96fxRDdATx0t7CHTEYI8R0qYXVNIvaPAcQ=;
- h=From:To:Cc:Subject:Date:From;
- b=o2mTUKfoAvd2MXzzRGUVoHma0QPf+e0z7r3QgDPu4C1ywU880HbVl4rLyjNSRBcKJ
- i1cJG9l2WwgwRLRrGTie6eUuU4ZjsauAVdTF8mm14tidi4HePNN/A3W262O1Z3Pj91
- Pcb6IypG2OY608wWhlCzd4ycpiiAmmzMf6OJO9zyl5jDjv7y96ylrO34ovBTXeYFpM
- dMameD5vU3xhwhQVXjKjhINpYlKP+E7tetdxuUj6J+hR1V9NaI129gVk2x/YtNyLMb
- Os9GCt2Ble4v83ISnyvtkYBOQHoRaVLe/jXVlO6CDMQqFxqcuDyz9rCOHycLISUnhP
- MvrbHn9+iJ5Cg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=o2mTUKfo
-Subject: [Buildroot] [PATCH 1/1] package/cpp-httplib: remove stale patch
+Date: Sat, 13 Sep 2025 12:23:36 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: fb5fb06ee5a886df5036c5c5e6c4536f2bc8e1c1
+X-Git-Newrev: fe046c9a811e418ad9ff14384aa3b906383c6c68
+X-Patchwork-Hint: ignore
+Message-Id: <20250913102958.49C6B83F79@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/harfbuzz: bump to version 11.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,166 +59,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Running the command:
+commit: https://git.buildroot.net/buildroot/commit/?id=fe046c9a811e418ad9ff14384aa3b906383c6c68
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-    make cpp-httplib-patch
+Release Notes:
+https://github.com/harfbuzz/harfbuzz/releases/tag/11.5.0
 
-fails with error:
-
-    Applying 0001-merge-commit-from-fork.patch using patch:
-    patching file httplib.h
-    Reversed (or previously applied) patch detected!  Skipping patch.
-    2 out of 2 hunks ignored -- saving rejects to file httplib.h.rej
-    patching file test/test.cc
-    Hunk #1 FAILED at 42.
-    Hunk #2 FAILED at 2839.
-    Hunk #3 FAILED at 3624.
-    3 out of 3 hunks FAILED -- saving rejects to file test/test.cc.rej
-
-Commit [1] "package/cpp-httplib: add patch for CVE-2025-46728"
-introduced a package patch in the branch next while Buildroot was in
-RC cycle. Just after, commit [2] "package/cpp-httplib: bump to
-v0.25.0", also in branch next, removed this package patch.
-
-This commit [1] was cherry-picked in [3] in the branch master, to
-apply only the security fix for the 2025.08 release.
-
-The merge commit [4] kept the cpp-httplib package patch
-"0001-merge-commit-from-fork.patch".
-
-This commit fixes the issue by removing this stale patch.
-
-Fixes:
-https://autobuild.buildroot.org/results/5b9843089ade428997035e49817208ce9c09a10e
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/aea7c89396f20570b5ce32c4a235f7011ad0bd01
-[2] https://gitlab.com/buildroot.org/buildroot/-/commit/519d03657c6a247f739003a3590c93948e6a48d8
-[3] https://gitlab.com/buildroot.org/buildroot/-/commit/fd313c4cebc8c0a8db2ff9641b48e2d8a993c245
-[4] https://gitlab.com/buildroot.org/buildroot/-/commit/0af159ae2b0363a90b8c5432cd4cb9bfd3476c5a
-
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../0001-merge-commit-from-fork.patch         | 103 ------------------
- 1 file changed, 103 deletions(-)
- delete mode 100644 package/cpp-httplib/0001-merge-commit-from-fork.patch
+ package/harfbuzz/harfbuzz.hash | 2 +-
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cpp-httplib/0001-merge-commit-from-fork.patch b/package/cpp-httplib/0001-merge-commit-from-fork.patch
-deleted file mode 100644
-index 180bb22e11..0000000000
---- a/package/cpp-httplib/0001-merge-commit-from-fork.patch
-+++ /dev/null
-@@ -1,103 +0,0 @@
--From 7b752106ac42bd5b907793950d9125a0972c8e8e Mon Sep 17 00:00:00 2001
--From: Ville Vesilehto <ville@vesilehto.fi>
--Date: Sat, 3 May 2025 11:39:01 +0300
--Subject: [PATCH] Merge commit from fork
--
--* fix(parser): Limit line length in getline
--
--Prevents potential infinite loop and memory exhaustion in
--stream_line_reader::getline by enforcing max line length.
--
--Signed-off-by: Ville Vesilehto <ville@vesilehto.fi>
--
--* fix: increase default max line length to 32k
--
--LONG_QUERY_VALUE test is set at 25k.
--
--Signed-off-by: Ville Vesilehto <ville@vesilehto.fi>
--
--* test(client): expect read error with too long query
--
--Adds a test case (`TooLongQueryValue`) to verify client behavior
--when the request URI is excessively long, exceeding
--`CPPHTTPLIB_MAX_LINE_LENGTH`. In this scenario, the server is
--expected to reset the connection.
--
--Signed-off-by: Ville Vesilehto <ville@vesilehto.fi>
--
--CVE: CVE-2025-46728
--Upstream: https://github.com/yhirose/cpp-httplib/commit/7b752106ac42bd5b907793950d9125a0972c8e8e
--[thomas: adapt lines numbers to v0.19.0]
--Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-----
-- httplib.h    |  9 +++++++++
-- test/test.cc | 15 +++++++++++++++
-- 2 files changed, 24 insertions(+)
--
--diff --git a/httplib.h b/httplib.h
--index cb182c4129..a2aa24f96b 100644
----- a/httplib.h
--+++ b/httplib.h
--@@ -145,6 +145,10 @@
-- #define CPPHTTPLIB_LISTEN_BACKLOG 5
-- #endif
-- 
--+#ifndef CPPHTTPLIB_MAX_LINE_LENGTH
--+#define CPPHTTPLIB_MAX_LINE_LENGTH 32768
--+#endif
--+
-- /*
--  * Headers
--  */
--@@ -2998,6 +3002,11 @@ inline bool stream_line_reader::getline() {
-- #endif
-- 
--   for (size_t i = 0;; i++) {
--+    if (size() >= CPPHTTPLIB_MAX_LINE_LENGTH) {
--+      // Treat exceptionally long lines as an error to
--+      // prevent infinite loops/memory exhaustion
--+      return false;
--+    }
--     char byte;
--     auto n = strm_.read(&byte, 1);
-- 
--diff --git a/test/test.cc b/test/test.cc
--index 4fd9983bd8..7f5cc8a9d0 100644
----- a/test/test.cc
--+++ b/test/test.cc
--@@ -42,6 +42,9 @@ const int PORT = 1234;
-- const string LONG_QUERY_VALUE = string(25000, '@');
-- const string LONG_QUERY_URL = "/long-query-value?key=" + LONG_QUERY_VALUE;
-- 
--+const string TOO_LONG_QUERY_VALUE = string(35000, '@');
--+const string TOO_LONG_QUERY_URL = "/too-long-query-value?key=" + TOO_LONG_QUERY_VALUE;
--+
-- const std::string JSON_DATA = "{\"hello\":\"world\"}";
-- 
-- const string LARGE_DATA = string(1024 * 1024 * 100, '@'); // 100MB
--@@ -2839,6 +2842,11 @@ class ServerTest : public ::testing::Test {
--                EXPECT_EQ(LONG_QUERY_URL, req.target);
--                EXPECT_EQ(LONG_QUERY_VALUE, req.get_param_value("key"));
--              })
--+        .Get("/too-long-query-value",
--+             [&](const Request &req, Response & /*res*/) {
--+               EXPECT_EQ(TOO_LONG_QUERY_URL, req.target);
--+               EXPECT_EQ(TOO_LONG_QUERY_VALUE, req.get_param_value("key"));
--+             })
--         .Get("/array-param",
--              [&](const Request &req, Response & /*res*/) {
--                EXPECT_EQ(3u, req.get_param_value_count("array"));
--@@ -3624,6 +3632,13 @@ TEST_F(ServerTest, LongQueryValue) {
--   EXPECT_EQ(StatusCode::UriTooLong_414, res->status);
-- }
-- 
--+TEST_F(ServerTest, TooLongQueryValue) {
--+  auto res = cli_.Get(TOO_LONG_QUERY_URL.c_str());
--+
--+  ASSERT_FALSE(res);
--+  EXPECT_EQ(Error::Read, res.error());
--+}
--+
-- TEST_F(ServerTest, TooLongHeader) {
--   Request req;
--   req.method = "GET";
--- 
-2.51.0
-
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index a4978ca134..ccf96ec6d0 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  0f052eb4ab01d8bae98ba971c954becb32be57d7250f18af343b1d27892e03fa  harfbuzz-11.4.5.tar.xz
++sha256  2d30ba45c4c8ec4de661a1002b4f88d0841ff1a3087f34629275f5436d722109  harfbuzz-11.5.0.tar.xz
+ sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index b1bec26ccb..4ec3165e57 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HARFBUZZ_VERSION = 11.4.5
++HARFBUZZ_VERSION = 11.5.0
+ HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
