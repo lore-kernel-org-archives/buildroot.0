@@ -1,100 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8B4DCAC587
-	for <buildroot@archiver.kernel.org>; Sun, 14 Sep 2025 21:08:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2AB6CAC587
+	for <buildroot@archiver.kernel.org>; Sun, 14 Sep 2025 21:23:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4D5C741910;
-	Sun, 14 Sep 2025 21:08:43 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wl6n4mv4xk7f; Sun, 14 Sep 2025 21:08:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56CD741949
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 56CD741949;
-	Sun, 14 Sep 2025 21:08:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 15CA112D
- for <buildroot@buildroot.org>; Sun, 14 Sep 2025 21:08:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 07A296F6B3
- for <buildroot@buildroot.org>; Sun, 14 Sep 2025 21:08:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 754EB611F5;
+	Sun, 14 Sep 2025 21:23:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uDEGksDn01op for <buildroot@buildroot.org>;
- Sun, 14 Sep 2025 21:08:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 02CFD6F6A4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02CFD6F6A4
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 02CFD6F6A4
- for <buildroot@buildroot.org>; Sun, 14 Sep 2025 21:08:39 +0000 (UTC)
-Received: by mail-ej1-x62b.google.com with SMTP id
- a640c23a62f3a-b0787fc3008so521222066b.3
- for <buildroot@buildroot.org>; Sun, 14 Sep 2025 14:08:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1757884117; x=1758488917;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=jbYfQIXmU9occKd8wTSi62d5rr/6CLMfBNg3iRC/rIw=;
- b=odrKh5MZ+0LqQmOl8ndqY8nZ3s2x6pRxaJilGR9Gq2G+uh6rLbFQHt+81AaRa8Dlh2
- V5e6xfCvB47d06YXHCdslX99pC509cBWpAWzVRx49vbQdRBmPprejsoHUE8bEYWGwryu
- 784v2YQx7J8XMFMWuXQz6+6p05Vaf5SKac8IS+D/q+NKQv2Jz1q6AdCpr6N33sURlAQ+
- jTCd+ZPPx/U9uObTrjAOd6ays8PRNMyUlrAHtV2eNKJ/QKifXzo/OF9VQZBQZWlIdCgE
- T7UXL+CJzFVDRDHlByAGm7Gs397LaxGmhIl6lkWN/PKgprRw48/1pytxNDgozjAhdmtf
- 4ZTQ==
-X-Gm-Message-State: AOJu0YwdmROQMmbkhTRZH+eDdjH1138opfJdmvbYZw+cmI0IJgMocZOM
- HzmTTdRvTLwrNDadXTUqOJfWYf32d/7pmK935lUOhi35o9v1pOnQTvOD5AlHBA==
-X-Gm-Gg: ASbGncvb1xEM7b6ivADu6+FyUYv7tKksomFt/6/8qDVucHrDkvQJla1XAoA1HnoML34
- EKods9ubtJ60qgN7gzHpRO8OdBU505We3TJrSscxa1aGkYueAFNXG6Gg7rBc/ZaWJFtTB68eNdg
- CtRFr7YkGsZ3ztHJjiiMzd1gt8GXB9V1y93tfpbsYJNOgEqTo8giYuUMoSAmtVDWs1Q6Gpo0+5V
- FGYuUcWROuSpchGHsXpkv6L+NdoURbh+8a3gMC5xrEeJSOBwbcyPVcF3IgpTN9ol0zj5XdKdus1
- +rOe8n0B34v9cU6oTJ0UYWdzp8rNLBbqO5RF7cZ3v+Bg3aBvjJ0hlETk2DTFnqD9+YL/e4Ai9Ax
- Pr9T8LDl3VBdaqgB166wEU08CCmIXdte7RB4IE2sX1vZR0n8tJbo+nSSFSsGGO4ayXJR+q+JWnb
- s0ENM=
-X-Google-Smtp-Source: AGHT+IF76afCGKCzDUQ5VQfZzyV8dB/6TLNszk90E8R/g7r6555ndG0DKG8CFowT4bQYpPViuSzXkQ==
-X-Received: by 2002:a17:906:f40d:b0:b07:dad7:e4cd with SMTP id
- a640c23a62f3a-b07dad7ecbemr681580666b.53.1757884117150; 
- Sun, 14 Sep 2025 14:08:37 -0700 (PDT)
-Received: from development2.visionsystems.local (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b07b30da58asm829997266b.5.2025.09.14.14.08.36
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 14 Sep 2025 14:08:36 -0700 (PDT)
+ id 7N3t5jtTIwZm; Sun, 14 Sep 2025 21:23:17 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 585E66127B
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 585E66127B;
+	Sun, 14 Sep 2025 21:23:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CA5CE1F7
+ for <buildroot@buildroot.org>; Sun, 14 Sep 2025 21:23:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BC5BC41FB4
+ for <buildroot@buildroot.org>; Sun, 14 Sep 2025 21:23:15 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yYGYMtWqfQSv for <buildroot@buildroot.org>;
+ Sun, 14 Sep 2025 21:23:14 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C144441F99
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C144441F99
+ for <buildroot@buildroot.org>; Sun, 14 Sep 2025 21:23:14 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AFC9F84527; Sun, 14 Sep 2025 21:23:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 14 Sep 2025 23:08:11 +0200
-Message-Id: <20250914210811.489994-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20230601; t=1757884117; x=1758488917; darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=jbYfQIXmU9occKd8wTSi62d5rr/6CLMfBNg3iRC/rIw=;
- b=NLQjKQlOo0P1LX6RAwF/G5okU6NrNpZpwgJx6ufPRS9mPvC8KKONZ3AdwyMpbb9nTb
- u291AXZqmmNBedIRSU2oTNnT6mqfzcPVgyyMKhbMqKHFlkvTxu23uhjbKdp8LlcD10TU
- gTG1GVFia4xi85/tqFqFFL1/f4ofgwzr+FIGAbjYkXo6Z51ETXg7v6Pdn8XaIHEwfQ6o
- Aiq1gx1WiLHr8jd4T5UVNc31/aVMc+RVgZptFvzCVjHmrchyvsWoEYU2Wcs3BYgvvskK
- ZCZDkAtQO6FMMtUQ0qUqkhXHC0Hop67VgHfRfiMZMdk0JXjO9kHsNtvKG77FWieGJgv6
- 2n9A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=googlemail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20230601 header.b=NLQjKQlO
-Subject: [Buildroot] [PATCH] package/libxmlrpc: add BR2_USE_MMU dependency
+Date: Sun, 14 Sep 2025 23:12:15 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2accd86633edadd0b61b96cf3c9ce9bf2115aebc
+X-Git-Newrev: 00317f0aff243986983650671fd220ab040af50f
+X-Patchwork-Hint: ignore
+Message-Id: <20250914212314.AFC9F84527@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/luvi: bump to version 2.15.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,56 +57,290 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: yegorslists--- via buildroot <buildroot@buildroot.org>
-Reply-To: yegorslists@googlemail.com
-Cc: "Alvaro G . M" <alvaro.gamez@hazent.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============8702449905040394384=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+--===============8702449905040394384==
+Content-Type: text/plain
 
-Build fails with:
-server.c: In function 'ServerDaemonize':
-server.c:1590:13: error: implicit declaration of function 'fork'
-[-Wimplicit-function-declaration]
- 1590 |     switch (fork()) {
-      |             ^~~~
+commit: https://git.buildroot.net/buildroot/commit/?id=00317f0aff243986983650671fd220ab040af50f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hence, add BR2_USE_MMU to avoid building with toolchains without MMU
-support.
+Luvi 2.14.0 fails to build with GCC 14.x for several reasons due to
+too old lua-openssl 0.8.2-0 submodule:
+
+TestLuvi/build/luvi-2.14.0/deps/lua-openssl/src/ocsp.c: In function 'openssl_ocsp_request_read':
+TestLuvi/build/luvi-2.14.0/deps/lua-openssl/src/ocsp.c:124:29: error: passing argument 1 of 'PEM_ASN1_read_bio' from incompatible pointer type [-Wincompatible-pointer-types]
+  124 |   OCSP_REQUEST *req = pem ? PEM_read_bio_OCSP_REQUEST(bio, NULL, NULL)
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                             |
+      |                             char * (*)()
+
+Fixed in lua-openssl by [1].
+
+TestLuvi/build/luvi-2.14.0/deps/lua-openssl/src/x509.c: In function 'openssl_push_general_name':
+TestLuvi/build/luvi-2.14.0/deps/lua-openssl/src/x509.c:377:45: error: passing argument 2 of 'openssl_push_asn1type' from incompatible pointer type [-Wincompatible-pointer-types]
+  377 |     openssl_push_asn1type(L, general_name->d.x400Address);
+      |                              ~~~~~~~~~~~~~~~^~~~~~~~~~~~
+      |                                             |
+      |                                             ASN1_STRING * {aka struct asn1_string_st *}
+
+Fixed in lua-openssl by [2].
+
+TestLuvi/build/luvi-2.14.0/deps/lua-openssl/src/openssl.c: In function 'luaclose_openssl':
+TestLuvi/build/luvi-2.14.0/deps/lua-openssl/src/stdatomic.h:387:9: error: implicit declaration of function '__c11_atomic_fetch_sub'; did you mean '__atomic_fetch_sub'? [-Wimplicit-function-declaration]
+  387 |         __c11_atomic_fetch_sub(object, operand, order)
+
+Fixed in lua-openssl by [3].
+
+Instead of fixing one by one each issues, update to the latest release
+that include lua-openssl 0.9.0-0. Luvi v2.15.0 still have some GCC 14.x
+issues, backport two additional patches.
+
+Download luvi sources using git method since the release archive
+no longer include the release version in its name [4].
+
+Luvi switched to PCRE2 [5], update the optional dependency.
+
+Update TestLuvi to select PCR2 package.
 
 Fixes:
-https://autobuild.buildroot.org/results/10464159f2a9ff41ea0921a45ce12ecd0fa50ae7/
+https://gitlab.com/buildroot.org/buildroot/-/jobs/11271124430 (TestLuvi)
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+[1] https://github.com/zhaozg/lua-openssl/commit/bfeedbe8c06d8b4400fa670edecd452a433ddac4
+[2] https://github.com/zhaozg/lua-openssl/commit/e5b5420cc506c7507d1d0e7302ea3f1979a6b2ed
+[3] https://github.com/zhaozg/lua-openssl/commit/cfcaa16d1acaab17f4f0178e61ea77ebc2c8f24c
+[4] https://github.com/luvit/luvi/releases/download/v2.15.0/luvi-source.tar.gz
+[5] https://github.com/luvit/luvi/releases/tag/v2.15.0
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libxmlrpc/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ ...ctively-disable-GCC-diagnostics-in-ocsp.c.patch | 80 ++++++++++++++++++++++
+ ...txt-disable-Wincompatible-pointer-types-f.patch | 54 +++++++++++++++
+ package/luvi/luvi.hash                             |  2 +-
+ package/luvi/luvi.mk                               | 17 ++---
+ support/testing/tests/package/test_luvi.py         |  2 +-
+ 5 files changed, 145 insertions(+), 10 deletions(-)
 
-diff --git a/package/libxmlrpc/Config.in b/package/libxmlrpc/Config.in
-index 33d512328e..fa1b1674da 100644
---- a/package/libxmlrpc/Config.in
-+++ b/package/libxmlrpc/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBXMLRPC
- 	bool "libxmlrpc"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_LIBCURL
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  XML-RPC is a quick-and-easy way to make procedure calls over
- 	  the Internet. It converts the procedure call into an XML
-@@ -24,4 +25,5 @@ comment "cli tool needs a toolchain w/ dynamic library"
- endif # BR2_PACKAGE_LIBXMLRPC
+diff --git a/package/luvi/0001-Selectively-disable-GCC-diagnostics-in-ocsp.c.patch b/package/luvi/0001-Selectively-disable-GCC-diagnostics-in-ocsp.c.patch
+new file mode 100644
+index 0000000000..d29ba37bcf
+--- /dev/null
++++ b/package/luvi/0001-Selectively-disable-GCC-diagnostics-in-ocsp.c.patch
+@@ -0,0 +1,80 @@
++From 52bc36f5a548543835c24b87e7b7b72a327b1df7 Mon Sep 17 00:00:00 2001
++From: RDW <duckwhale@mail.ru>
++Date: Sun, 14 Sep 2025 00:33:10 +0200
++Subject: [PATCH] Selectively disable GCC diagnostics in ocsp.c
++
++GCC 14 fails to compile the library because -Wincompatible-pointer-types is now fatal.
++Since the warning is already disabled for clang here, might as well include GCC also.
++Needless to say, this is a workaround and a proper fix would require upstream changes.
++
++Upstream: https://github.com/zhaozg/lua-openssl/commit/bfeedbe8c06d8b4400fa670edecd452a433ddac4
++[Romain:
++  - rebase on lua-openssl 0.9.0-0
++  - format the patch as luvi patch (patching lua-openssl submodule)
++]
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ deps/lua-openssl/src/ocsp.c | 22 ++++++++++++++++++++++
++ 1 file changed, 22 insertions(+)
++
++diff --git a/deps/lua-openssl/src/ocsp.c b/deps/lua-openssl/src/ocsp.c
++index ac67a53..00e3b61 100644
++--- a/deps/lua-openssl/src/ocsp.c
+++++ b/deps/lua-openssl/src/ocsp.c
++@@ -183,15 +183,26 @@ static int openssl_ocsp_request_read(lua_State *L)
++   BIO *bio = load_bio_object(L, 1);
++   int pem = lua_gettop(L) > 1 ? auxiliar_checkboolean(L, 2) : 0;
++ 
+++#if defined(__GNUC__)
+++#pragma GCC diagnostic push
+++#pragma GCC diagnostic ignored "-Wincompatible-pointer-types"
+++#endif
+++
++ #if defined(__clang__)
++ #pragma clang diagnostic push
++ #pragma clang diagnostic ignored "-Wincompatible-pointer-types"
++ #endif
++   OCSP_REQUEST *req = pem ? PEM_read_bio_OCSP_REQUEST(bio, NULL, NULL)
++                           : d2i_OCSP_REQUEST_bio(bio, NULL);
+++
+++#if defined(__GNUC__)
+++#pragma GCC diagnostic pop
+++#endif
+++
++ #if defined(__clang__)
++ #pragma clang diagnostic pop
++ #endif
+++
++   BIO_free(bio);
++ 
++   if (req)
++@@ -359,15 +370,26 @@ static int openssl_ocsp_response_read(lua_State *L)
++   int pem = lua_gettop(L) > 1 ? auxiliar_checkboolean(L, 2) : 0;
++   int ret = 0;
++ 
+++#if defined(__GNUC__)
+++#pragma GCC diagnostic push
+++#pragma GCC diagnostic ignored "-Wincompatible-pointer-types"
+++#endif
+++
++ #if defined(__clang__)
++ #pragma clang diagnostic push
++ #pragma clang diagnostic ignored "-Wincompatible-pointer-types"
++ #endif
++   OCSP_RESPONSE *res = pem ? PEM_read_bio_OCSP_RESPONSE(bio, NULL, NULL)
++                            : d2i_OCSP_RESPONSE_bio(bio, NULL);
+++
+++#if defined(__GNUC__)
+++#pragma GCC diagnostic pop
+++#endif
+++
++ #if defined(__clang__)
++ #pragma clang diagnostic pop
++ #endif
+++
++   if (res)
++   {
++     PUSH_OBJECT(res, "openssl.ocsp_response");
++-- 
++2.51.0
++
+diff --git a/package/luvi/0002-CMakeLists.txt-disable-Wincompatible-pointer-types-f.patch b/package/luvi/0002-CMakeLists.txt-disable-Wincompatible-pointer-types-f.patch
+new file mode 100644
+index 0000000000..b658fed202
+--- /dev/null
++++ b/package/luvi/0002-CMakeLists.txt-disable-Wincompatible-pointer-types-f.patch
+@@ -0,0 +1,54 @@
++From c82c147e83d6a21f572353bf6e95dcf3a736490c Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@smile.fr>
++Date: Sat, 13 Sep 2025 23:21:04 +0200
++Subject: [PATCH] CMakeLists.txt: disable Wincompatible-pointer-types for gcc
++ >= 14
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Backport partially a patch [1] disabling GCC 14 warning
++Wincompatible-pointer-types.
++
++From [1]:
++"lua-openssl triggering the incompatible pointer types error by
++silencing the warning, which lua-openssl does internally but only for
++clang."
++
++Latest lua-openssl version (0.9.1-0) also disable this warning [2].
++
++Fixes:
++https://gitlab.com/buildroot.org/buildroot/-/jobs/11271124430 (TestLuvi)
++
++[1] https://github.com/luvit/luvi/commit/85d7d7bf51bc523159ad579d846cbefbbff38fdb
++[2] https://github.com/zhaozg/lua-openssl/commit/bfeedbe8c06d8b4400fa670edecd452a433ddac4
++
++Upstream: https://github.com/luvit/luvi/commit/85d7d7bf51bc523159ad579d846cbefbbff38fdb
++
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ CMakeLists.txt | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 0b0007d..bf10de5 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -141,6 +141,14 @@ if (WIN32)
++   add_library (luvi_renamed src/luvi_renamed.c)
++ endif ()
++ 
+++if (CMAKE_C_COMPILER_ID MATCHES "Clang|GNU")
+++  add_compile_options(-Wno-incompatible-pointer-types)
+++endif()
+++
+++if(UNIX)
+++  add_definitions(-Wall)
+++endif()
+++
++ if (WITH_LUA_ENGINE STREQUAL Lua)
++   add_definitions(-DWITH_PLAIN_LUA)
++ endif ()
++-- 
++2.51.0
++
+diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
+index 3518a2dc85..d8825487db 100644
+--- a/package/luvi/luvi.hash
++++ b/package/luvi/luvi.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  4be4468d01657100967a9c696f503aa3c30de6f23af39050c1aae909fbf0aaf2  luvi-src-v2.14.0.tar.gz
++sha256  f933bf1899a5419b26d46d7f111aaa50101831922716ffaed62e355b1bc9de1d  luvi-v2.15.0-git4.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
+index ebd1066c5c..78de76aa45 100644
+--- a/package/luvi/luvi.mk
++++ b/package/luvi/luvi.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
  
- comment "libxmlrpc needs a toolchain w/ threads"
-+	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
--- 
-2.34.1
+-LUVI_VERSION = 2.14.0
+-LUVI_SOURCE = luvi-src-v$(LUVI_VERSION).tar.gz
+-LUVI_SITE = https://github.com/luvit/luvi/releases/download/v$(LUVI_VERSION)
++LUVI_VERSION = v2.15.0
++LUVI_SITE = https://github.com/luvit/luvi.git
++LUVI_SITE_METHOD = git
++LUVI_GIT_SUBMODULES = YES
+ LUVI_LICENSE = Apache-2.0
+ LUVI_LICENSE_FILES = LICENSE.txt
+ LUVI_DEPENDENCIES = libuv luajit luv host-luajit host-pkgconf
+@@ -44,12 +45,12 @@ LUVI_CONF_OPTS = \
+ 	-DTARGET_ARCH=$(LUVI_TARGET_ARCH) \
+ 	-DLUA_PATH=$(HOST_DIR)/share/luajit-$(LUVI_LUAJIT_MAJVER).$(LUVI_LUAJIT_MINVER)/?.lua
+ 
+-# Add "rex" module (PCRE via bundled lrexlib)
+-ifeq ($(BR2_PACKAGE_PCRE),y)
+-LUVI_DEPENDENCIES += pcre
+-LUVI_CONF_OPTS += -DWithPCRE=ON -DWithSharedPCRE=ON
++# Add "rex" module (PCRE2 via bundled lrexlib)
++ifeq ($(BR2_PACKAGE_PCRE2),y)
++LUVI_DEPENDENCIES += pcre2
++LUVI_CONF_OPTS += -DWithPCRE2=ON -DWithSharedPCRE2=ON
+ else
+-LUVI_CONF_OPTS += -DWithPCRE=OFF -DWithSharedPCRE=OFF
++LUVI_CONF_OPTS += -DWithPCRE2=OFF -DWithSharedPCRE2=OFF
+ endif
+ 
+ # Add "ssl" module (via bundled lua-openssl)
+diff --git a/support/testing/tests/package/test_luvi.py b/support/testing/tests/package/test_luvi.py
+index 4b55091762..b9d43fe266 100644
+--- a/support/testing/tests/package/test_luvi.py
++++ b/support/testing/tests/package/test_luvi.py
+@@ -11,7 +11,7 @@ class TestLuvi(infra.basetest.BRTest):
+         BR2_PACKAGE_LUAJIT=y
+         BR2_PACKAGE_LUVI=y
+         BR2_PACKAGE_OPENSSL=y
+-        BR2_PACKAGE_PCRE=y
++        BR2_PACKAGE_PCRE2=y
+         BR2_PACKAGE_ZLIB=y
+         """
+ 
+
+--===============8702449905040394384==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8702449905040394384==--
