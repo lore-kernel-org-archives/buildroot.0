@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7704CA0EE8
-	for <buildroot@archiver.kernel.org>; Sun, 14 Sep 2025 22:21:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9E49CAC587
+	for <buildroot@archiver.kernel.org>; Sun, 14 Sep 2025 22:21:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EDF9041F42;
-	Sun, 14 Sep 2025 22:21:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7769A41F75;
+	Sun, 14 Sep 2025 22:21:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id plQFs7aMPh09; Sun, 14 Sep 2025 22:21:43 +0000 (UTC)
+ id Jc3Z701S8PrW; Sun, 14 Sep 2025 22:21:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AEC541F2C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C70141F44
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6AEC541F2C;
-	Sun, 14 Sep 2025 22:21:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1E90322F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8C70141F44;
+	Sun, 14 Sep 2025 22:21:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 72E2F22F
  for <buildroot@buildroot.org>; Sun, 14 Sep 2025 22:21:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9E135848DB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8682B411A3
  for <buildroot@buildroot.org>; Sun, 14 Sep 2025 22:21:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nKlWaIMIcYTw for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T1UBSzXuClNw for <buildroot@buildroot.org>;
  Sun, 14 Sep 2025 22:21:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8BCA848DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63F6740F94
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A8BCA848DA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 63F6740F94
  for <buildroot@buildroot.org>; Sun, 14 Sep 2025 22:21:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9707D846E8; Sun, 14 Sep 2025 22:21:37 +0000 (UTC)
+ id 5DA3F846E1; Sun, 14 Sep 2025 22:21:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 14 Sep 2025 23:47:01 +0200
+Date: Sun, 14 Sep 2025 23:45:30 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d2262b0af78c66fca5ed1feac8729c0d8446e214
-X-Git-Newrev: 5bed5470a4478a88f05701e98c6ceaa41049c360
+X-Git-Oldrev: 00317f0aff243986983650671fd220ab040af50f
+X-Git-Newrev: d5aab5289c3a148c23d65d288f5d651e158318c8
 X-Patchwork-Hint: ignore
-Message-Id: <20250914222137.9707D846E8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libsepol: bump to version 3.9
+Message-Id: <20250914222137.5DA3F846E1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libselinux: fix build issues
+ caused by 3.8.1 bump
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,142 +61,213 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8239544879815290914=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5bed5470a4478a88f05701e98c6ceaa41049c360
+--===============8239544879815290914==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=d5aab5289c3a148c23d65d288f5d651e158318c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changes:
-https://github.com/SELinuxProject/selinux/releases/download/3.9/RELEASE-3.9.txt
+Since the bump to version 3.8.1 in commit
+1ae3ad4e878e1f4217ba3276ff0c9e584234afa4, libselinux fails to build
+with at least
 
-Notable changes for libsepol:
+- Musl configurations
+- RISC-V 32-bit configurations
+- OpenRISC configurations
 
-* libsepol: Add new 'netif_wildcard' policy capability
+These build failures are due to additional checks on the size of some
+data structures:
 
-* libsepol: Allow multiple policycap statements
+matchpathcon.c:270:47: error: '__ino_t' undeclared here (not in a function); did you mean 'ino_t'?
+  270 | static_assert(sizeof(unsigned long) == sizeof(__ino_t), "inode size mismatch");
+      |                                               ^~~~~~~
+      |                                               ino_t
+matchpathcon.c:270:15: error: expression in static assertion is not an integer
+  270 | static_assert(sizeof(unsigned long) == sizeof(__ino_t), "inode size mismatch");
+      |               ^~~~~~
 
-* libsepol: Support genfs_seclabel_wildcard
+These issues have been fixed in follow-up upstream commits, which we
+backport.
 
-We can drop our patch since SELinux now has an official DISABLE_SHARED
-variable to do a static-only build (but it needs a 'y' value and not a
-'1' value like our previous variable needed).
+Fixes:
+
+  https://autobuild.buildroot.net/results/00a1ab30cc6b7af503aa96384ba4c4444c217401/ (musl)
+  https://autobuild.buildroot.net/results/c8321be687201937bd5eb48b31dfabac12f4e9ea/ (glibc or1k)
+  https://autobuild.buildroot.net/results/7b94f44282582d5994f40a741cc0c38bd68b53bd/ (risc-v 32-bit)
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .checkpackageignore                             |  1 -
- package/libsepol/0001-support-static-only.patch | 52 -------------------------
- package/libsepol/libsepol.hash                  |  2 +-
- package/libsepol/libsepol.mk                    |  4 +-
- 4 files changed, 3 insertions(+), 56 deletions(-)
+ ...hpathcon_filespec_add64-if-defined-__INO_.patch | 84 ++++++++++++++++++++++
+ ...ux-be-careful-with-non-portable-LFS-macro.patch | 56 +++++++++++++++
+ 2 files changed, 140 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index f45f141d50..d8d0bc6969 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -629,7 +629,6 @@ package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch lib_patch.Upstrea
- package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch lib_patch.Upstream
- package/librtlsdr/0001-Makefile.am-respect-DESTDIR-with-install-udev-rules.patch lib_patch.Upstream
- package/libselinux/0001-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch lib_patch.Upstream
--package/libsepol/0001-support-static-only.patch lib_patch.Upstream
- package/libserial/0001-SerialPort.cpp-fix-build-when-size_t-is-an-unsigned-.patch lib_patch.Upstream
- package/libserial/0002-SerialPort.cpp-don-t-use-high-baudrates-when-not-ava.patch lib_patch.Upstream
- package/libshdata/0001-backend-Add-missing-include-files.patch lib_patch.Upstream
-diff --git a/package/libsepol/0001-support-static-only.patch b/package/libsepol/0001-support-static-only.patch
-deleted file mode 100644
-index 7a614d7d0d..0000000000
---- a/package/libsepol/0001-support-static-only.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--From 2140db697c7f1da2a0a3f7bbcb14c1a0dade84e5 Mon Sep 17 00:00:00 2001
--From: Adam Duskett <adam.duskett@amarulasolutions.com>
--Date: Wed, 14 May 2025 16:32:53 +0200
--Subject: [PATCH] Add support for static-only build
--
--Instead of unconditionally building shared libraries, this patch
--improves the libsepol build system with a "STATIC" variable, which
--when defined to some non-empty value, will disable the build of shared
--libraries. It allows to support cases where the target architecture
--does not have support for shared libraries.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--[Updated for 3.8.1]
--Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Update for 2.8]
-----
-- src/Makefile | 9 ++++++++-
-- 1 file changed, 8 insertions(+), 1 deletion(-)
--
--diff --git a/src/Makefile b/src/Makefile
--index 71fa3ed..efb81bc 100644
----- a/src/Makefile
--+++ b/src/Makefile
--@@ -45,7 +45,12 @@ LDFLAGS += -undefined dynamic_lookup
-- LN=gln
-- endif
-- 
---all: $(LIBA) $(LIBSO) $(LIBPC)
--+ALL_TARGETS = $(LIBA) $(LIBPC)
--+ifeq ($(STATIC),)
--+ALL_TARGETS += $(LIBSO)
--+endif
--+
--+all: $(ALL_TARGETS)
-- 
-- 
-- $(LIBA):  $(OBJS)
--@@ -87,8 +92,10 @@ endif
-- install: all
-- 	test -d $(DESTDIR)$(LIBDIR) || install -m 755 -d $(DESTDIR)$(LIBDIR)
-- 	install -m 644 $(LIBA) $(DESTDIR)$(LIBDIR)
--+ifeq ($(STATIC),)
-- 	test -d $(DESTDIR)$(SHLIBDIR) || install -m 755 -d $(DESTDIR)$(SHLIBDIR)
-- 	install -m 755 $(LIBSO) $(DESTDIR)$(SHLIBDIR)
--+endif
-- 	test -d $(DESTDIR)$(LIBDIR)/pkgconfig || install -m 755 -d $(DESTDIR)$(LIBDIR)/pkgconfig
-- 	install -m 644 $(LIBPC) $(DESTDIR)$(LIBDIR)/pkgconfig
-- 	$(LN) -sf --relative $(DESTDIR)$(SHLIBDIR)/$(LIBSO) $(DESTDIR)$(LIBDIR)/$(TARGET)
---- 
--2.49.0
--
-diff --git a/package/libsepol/libsepol.hash b/package/libsepol/libsepol.hash
-index adf7cb86bb..08a1bf0cc2 100644
---- a/package/libsepol/libsepol.hash
-+++ b/package/libsepol/libsepol.hash
-@@ -1,5 +1,5 @@
- # From: https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256  0e78705305f955abd4c0654d37a5477ee26349ab74db9e2b03a7868897ae1ddf  libsepol-3.8.1.tar.gz
-+sha256  ba630b59e50c5fbf9e9dd45eb3734f373cf78d689d8c10c537114c9bd769fa2e  libsepol-3.9.tar.gz
- 
- # Hash for license file
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  LICENSE
-diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
-index 2376ab852d..3e1a275808 100644
---- a/package/libsepol/libsepol.mk
-+++ b/package/libsepol/libsepol.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBSEPOL_VERSION = 3.8.1
-+LIBSEPOL_VERSION = 3.9
- LIBSEPOL_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(LIBSEPOL_VERSION)
- LIBSEPOL_LICENSE = LGPL-2.1+
- LIBSEPOL_LICENSE_FILES = LICENSE
-@@ -17,7 +17,7 @@ HOST_LIBSEPOL_DEPENDENCIES = $(BR2_COREUTILS_HOST_DEPENDENCY) host-flex
- LIBSEPOL_MAKE_FLAGS = $(TARGET_CONFIGURE_OPTS)
- 
- ifeq ($(BR2_STATIC_LIBS),y)
--LIBSEPOL_MAKE_FLAGS += STATIC=1
-+LIBSEPOL_MAKE_FLAGS += DISABLE_SHARED=y
- endif
- 
- define LIBSEPOL_BUILD_CMDS
+diff --git a/package/libselinux/0003-Inject-matchpathcon_filespec_add64-if-defined-__INO_.patch b/package/libselinux/0003-Inject-matchpathcon_filespec_add64-if-defined-__INO_.patch
+new file mode 100644
+index 0000000000..6573cb1673
+--- /dev/null
++++ b/package/libselinux/0003-Inject-matchpathcon_filespec_add64-if-defined-__INO_.patch
+@@ -0,0 +1,84 @@
++From daecc54878e6768b3e6a2b2a0061d2690a63dea4 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?=D0=BD=D0=B0=D0=B1?= <nabijaczleweli@nabijaczleweli.xyz>
++Date: Thu, 20 Mar 2025 16:55:17 +0100
++Subject: [PATCH] Inject matchpathcon_filespec_add64() if
++ !defined(__INO_T_MATCHES_INO64_T) instead of using __BITS_PER_LONG < 64 as
++ proxy
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++The __INO_T_MATCHES_INO64_T is defined
++if ino_t would be the same size as ino64_t
++if -D_FILE_OFFSET_BITS=64 were not defined.
++
++This is /exactly/ what
++  /* ABI backwards-compatible shim for non-LFS 32-bit systems */
++  #if defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64 && __BITS_PER_LONG < 64
++is trying to get at, but currently fails because x32/RV32 are "LFS"
++with 32-bit longs and 64-bit time_ts natively.
++
++Thus, the
++  static_assert(sizeof(unsigned long) == sizeof(__ino_t), "inode size mismatch");
++assertion fails (__ino_t is the "kernel ino_t" type,
++which generally corresponds to the kernel's ulong, which is u64 on x32).
++
++glibc headers allow us to check the condition we care about directly.
++
++Fixes: commit 9395cc0322 ("Always build for LFS mode on 32-bit archs.")
++Closes: #463
++Closes: Debian#1098481
++Signed-off-by: наб <nabijaczleweli@nabijaczleweli.xyz>
++Cc: Alba Mendez <me@alba.sh>
++Acked-by: James Carter <jwcart2@gmail.com>
++Upstream: 5c3fcbd931b7f9752b5ce29cec3b6813991d61c0
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ include/selinux/selinux.h | 2 +-
++ src/matchpathcon.c        | 8 ++++++--
++ 2 files changed, 7 insertions(+), 3 deletions(-)
++
++diff --git a/include/selinux/selinux.h b/include/selinux/selinux.h
++index f3cf5a20..f64896b7 100644
++--- a/include/selinux/selinux.h
+++++ b/include/selinux/selinux.h
++@@ -537,7 +537,7 @@ extern int matchpathcon_index(const char *path,
++    with the same inode (e.g. due to multiple hard links).  If so, then
++    use the latter of the two specifications based on their order in the 
++    file contexts configuration.  Return the used specification index. */
++-#if defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64 && __BITS_PER_LONG < 64
+++#if defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64 && !defined(__INO_T_MATCHES_INO64_T)
++ #define matchpathcon_filespec_add matchpathcon_filespec_add64
++ #endif
++ extern int matchpathcon_filespec_add(ino_t ino, int specind, const char *file);
++diff --git a/src/matchpathcon.c b/src/matchpathcon.c
++index 51f0e4ff..a4f65045 100644
++--- a/src/matchpathcon.c
+++++ b/src/matchpathcon.c
++@@ -261,7 +261,7 @@ int matchpathcon_filespec_add(ino_t ino, int specind, const char *file)
++ 	return -1;
++ }
++ 
++-#if defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64 && __BITS_PER_LONG < 64
+++#if (defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64) && !defined(__INO_T_MATCHES_INO64_T)
++ /* alias defined in the public header but we undefine it here */
++ #undef matchpathcon_filespec_add
++ 
++@@ -280,9 +280,13 @@ int matchpathcon_filespec_add(unsigned long ino, int specind,
++ {
++ 	return matchpathcon_filespec_add64(ino, specind, file);
++ }
+++#elif (defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64) || defined(__INO_T_MATCHES_INO64_T)
+++
+++static_assert(sizeof(uint64_t) == sizeof(ino_t), "inode size mismatch");
+++
++ #else
++ 
++-static_assert(sizeof(unsigned long) == sizeof(ino_t), "inode size mismatch");
+++static_assert(sizeof(uint32_t) == sizeof(ino_t), "inode size mismatch");
++ 
++ #endif
++ 
++-- 
++2.51.0
++
+diff --git a/package/libselinux/0004-libselinux-be-careful-with-non-portable-LFS-macro.patch b/package/libselinux/0004-libselinux-be-careful-with-non-portable-LFS-macro.patch
+new file mode 100644
+index 0000000000..9a1d874706
+--- /dev/null
++++ b/package/libselinux/0004-libselinux-be-careful-with-non-portable-LFS-macro.patch
+@@ -0,0 +1,56 @@
++From bfcdaf2ff36d69a57810470f5405e5f27e51e01c Mon Sep 17 00:00:00 2001
++From: Alyssa Ross <hi@alyssa.is>
++Date: Sat, 26 Apr 2025 17:13:57 +0200
++Subject: [PATCH] libselinux: be careful with non-portable LFS macro
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++musl does not provide the obsolete LFS64 APIs (like ino64_t) — ino_t
++has always been 64-bit on all platforms there.  That means there's
++also no __INO_T_MATCHES_INO64_T macro, meaning the check would pass
++and reach the static asserts for the shim, which would fail due to
++there being no ino64_t to check the size of.  Fix this by only
++assuming the absense of __INO_T_MATCHES_INO64_t is meaningful when
++another non-portable Glibc macro, __INO64_T_TYPE, is defined.  If both
++are missing, that probably just means there is no ino64_t.
++
++Fixes: 5c3fcbd9 ("Inject matchpathcon_filespec_add64() if !defined(__INO_T_MATCHES_INO64_T) instead of using __BITS_PER_LONG < 64 as proxy")
++Signed-off-by: Alyssa Ross <hi@alyssa.is>
++Acked-by: James Carter <jwcart2@gmail.com>
++Upstream: 21dd00713ae99b13e36c632992cb171c6ec1abce
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ include/selinux/selinux.h | 2 +-
++ src/matchpathcon.c        | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/include/selinux/selinux.h b/include/selinux/selinux.h
++index f64896b7..b1431e5d 100644
++--- a/include/selinux/selinux.h
+++++ b/include/selinux/selinux.h
++@@ -537,7 +537,7 @@ extern int matchpathcon_index(const char *path,
++    with the same inode (e.g. due to multiple hard links).  If so, then
++    use the latter of the two specifications based on their order in the 
++    file contexts configuration.  Return the used specification index. */
++-#if defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64 && !defined(__INO_T_MATCHES_INO64_T)
+++#if defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64 && defined(__INO64_T_TYPE) && !defined(__INO_T_MATCHES_INO64_T)
++ #define matchpathcon_filespec_add matchpathcon_filespec_add64
++ #endif
++ extern int matchpathcon_filespec_add(ino_t ino, int specind, const char *file);
++diff --git a/src/matchpathcon.c b/src/matchpathcon.c
++index a4f65045..240c9fa7 100644
++--- a/src/matchpathcon.c
+++++ b/src/matchpathcon.c
++@@ -261,7 +261,7 @@ int matchpathcon_filespec_add(ino_t ino, int specind, const char *file)
++ 	return -1;
++ }
++ 
++-#if (defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64) && !defined(__INO_T_MATCHES_INO64_T)
+++#if (defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64) && defined(__INO64_T_TYPE) && !defined(__INO_T_MATCHES_INO64_T)
++ /* alias defined in the public header but we undefine it here */
++ #undef matchpathcon_filespec_add
++ 
++-- 
++2.51.0
++
+
+--===============8239544879815290914==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8239544879815290914==--
