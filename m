@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76166CAC587
-	for <buildroot@archiver.kernel.org>; Sun, 14 Sep 2025 20:39:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFF9ECAC592
+	for <buildroot@archiver.kernel.org>; Sun, 14 Sep 2025 20:39:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1927541830;
-	Sun, 14 Sep 2025 20:39:49 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xJncIfbd8TO7; Sun, 14 Sep 2025 20:39:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 291884178F
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 291884178F;
-	Sun, 14 Sep 2025 20:39:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id E325E92E
- for <buildroot@buildroot.org>; Sun, 14 Sep 2025 20:39:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C88286F682
- for <buildroot@buildroot.org>; Sun, 14 Sep 2025 20:39:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 211C96F682;
+	Sun, 14 Sep 2025 20:39:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jfoz2zi6ECC7 for <buildroot@buildroot.org>;
+ id 2NY12KW84_82; Sun, 14 Sep 2025 20:39:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E2136F69E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4E2136F69E;
+	Sun, 14 Sep 2025 20:39:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id F07C4117
+ for <buildroot@buildroot.org>; Sun, 14 Sep 2025 20:39:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E1FF64178F
+ for <buildroot@buildroot.org>; Sun, 14 Sep 2025 20:39:44 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PjCaNo0TaHIf for <buildroot@buildroot.org>;
  Sun, 14 Sep 2025 20:39:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 074376F5F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 212EA41754
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 074376F5F4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 212EA41754
  for <buildroot@buildroot.org>; Sun, 14 Sep 2025 20:39:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E91EC843BA; Sun, 14 Sep 2025 20:39:43 +0000 (UTC)
+ id 11930844AB; Sun, 14 Sep 2025 20:39:44 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 14 Sep 2025 22:34:19 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9fd06f212a9488484b93be511b7c6fa42b2f8adb
-X-Git-Newrev: 171bd290053a061ae11c7af18444a5d30105d058
+X-Git-Oldrev: e25f5083a0186e18abc2d73a67c72d1d5bd5bdbe
+X-Git-Newrev: 2accd86633edadd0b61b96cf3c9ce9bf2115aebc
 X-Patchwork-Hint: ignore
-Message-Id: <20250914203943.E91EC843BA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wayland-protocols: bump to 1.45
+Message-Id: <20250914203944.11930844AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgtk4: bump to 4.20.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,46 +65,82 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=171bd290053a061ae11c7af18444a5d30105d058
+commit: https://git.buildroot.net/buildroot/commit/?id=2accd86633edadd0b61b96cf3c9ce9bf2115aebc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-News:
- - 1.43: http://lists.freedesktop.org/archives/wayland-devel/2025-April/044134.html
- - 1.44: http://lists.freedesktop.org/archives/wayland-devel/2025-April/044161.html
- - 1.45: https://lore.freedesktop.org/wayland-devel/aEw0AP7h6T8l11ug@gmail.com/T/#u
+News: https://gitlab.gnome.org/GNOME/gtk/-/blob/4.20.1/NEWS
+
+Also select librsvg as it is required now. (See changes in 4.19.2)
 
 Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/wayland-protocols/wayland-protocols.hash | 6 +++---
- package/wayland-protocols/wayland-protocols.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libgtk4/Config.in    | 3 +++
+ package/libgtk4/libgtk4.hash | 4 ++--
+ package/libgtk4/libgtk4.mk   | 5 +++--
+ 3 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
-index c6fca6cd25..f35c054dff 100644
---- a/package/wayland-protocols/wayland-protocols.hash
-+++ b/package/wayland-protocols/wayland-protocols.hash
-@@ -1,4 +1,4 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2025-March/044027.html
--sha256  23ba80d410d1200a86fe29592c19766eae8f1c350b67289999e9e7ea12d9f7aa  wayland-protocols-1.42.tar.xz
--sha512  ce85fecbe886264eaeb34c7992d4e493295f57f6213d5a2ec04b3471daee04a4225b1a7e77a27ccf39306074780553ec1383c55af30cc2c78942b40cc5777c1b  wayland-protocols-1.42.tar.xz
-+# From https://lore.freedesktop.org/wayland-devel/aEw0AP7h6T8l11ug@gmail.com/T/#u
-+sha256  4d2b2a9e3e099d017dc8107bf1c334d27bb87d9e4aff19a0c8d856d17cd41ef0  wayland-protocols-1.45.tar.xz
-+sha512  d0557a75eb486fb824f182648bec346e270cb1ada8727613377ab95b0ccb595c516de242f486110c88b7009e98c87b071bf5b598f84466e5624aa1d81f19e195  wayland-protocols-1.45.tar.xz
- sha256  f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  COPYING
-diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
-index b7c5b118e6..0cb23f8438 100644
---- a/package/wayland-protocols/wayland-protocols.mk
-+++ b/package/wayland-protocols/wayland-protocols.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libgtk4/Config.in b/package/libgtk4/Config.in
+index 99553fc44e..259226e0e4 100644
+--- a/package/libgtk4/Config.in
++++ b/package/libgtk4/Config.in
+@@ -1,4 +1,5 @@
+ comment "libgtk4 needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+@@ -12,6 +13,7 @@ comment "libgtk4 needs an OpenGL(ES) EGL backend"
+ 
+ config BR2_PACKAGE_LIBGTK4
+ 	bool "libgtk4"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # librsvg
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	depends on BR2_USE_MMU # glib2
+@@ -27,6 +29,7 @@ config BR2_PACKAGE_LIBGTK4
+ 	select BR2_PACKAGE_GRAPHENE
+ 	select BR2_PACKAGE_LIBEPOXY
+ 	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBRSVG
+ 	select BR2_PACKAGE_PANGO
+ 	select BR2_PACKAGE_TIFF
+ 	# At least one backend is required
+diff --git a/package/libgtk4/libgtk4.hash b/package/libgtk4/libgtk4.hash
+index 636b675d15..6c07161eff 100644
+--- a/package/libgtk4/libgtk4.hash
++++ b/package/libgtk4/libgtk4.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/gtk/4.14/gtk-4.14.5.sha256sum
+-sha256  5547f2b9f006b133993e070b87c17804e051efda3913feaca1108fa2be41e24d  gtk-4.14.5.tar.xz
++# From https://download.gnome.org/sources/gtk/4.20/gtk-4.20.1.sha256sum
++sha256  bf32fac019171c45681b2c45d05658ee8598c6341572e32a6a6bcb0b5673998d  gtk-4.20.1.tar.xz
+ 
+ # Hash for license file:
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libgtk4/libgtk4.mk b/package/libgtk4/libgtk4.mk
+index b00a2facad..029eb5920c 100644
+--- a/package/libgtk4/libgtk4.mk
++++ b/package/libgtk4/libgtk4.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--WAYLAND_PROTOCOLS_VERSION = 1.42
-+WAYLAND_PROTOCOLS_VERSION = 1.45
- WAYLAND_PROTOCOLS_SITE = https://gitlab.freedesktop.org/wayland/wayland-protocols/-/releases/$(WAYLAND_PROTOCOLS_VERSION)/downloads
- WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
- WAYLAND_PROTOCOLS_LICENSE = MIT
+-LIBGTK4_VERSION_MAJOR = 4.14
+-LIBGTK4_VERSION = $(LIBGTK4_VERSION_MAJOR).5
++LIBGTK4_VERSION_MAJOR = 4.20
++LIBGTK4_VERSION = $(LIBGTK4_VERSION_MAJOR).1
+ LIBGTK4_SOURCE = gtk-$(LIBGTK4_VERSION).tar.xz
+ LIBGTK4_SITE = https://download.gnome.org/sources/gtk/$(LIBGTK4_VERSION_MAJOR)
+ LIBGTK4_LICENSE = LGPL-2.0+
+@@ -21,6 +21,7 @@ LIBGTK4_DEPENDENCIES = \
+ 	graphene \
+ 	libepoxy \
+ 	libglib2 \
++	librsvg \
+ 	pango \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
