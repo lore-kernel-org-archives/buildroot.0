@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9E49CAC587
-	for <buildroot@archiver.kernel.org>; Sun, 14 Sep 2025 22:21:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57687CAC597
+	for <buildroot@archiver.kernel.org>; Sun, 14 Sep 2025 22:21:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7769A41F75;
-	Sun, 14 Sep 2025 22:21:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1F597848DE;
+	Sun, 14 Sep 2025 22:21:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jc3Z701S8PrW; Sun, 14 Sep 2025 22:21:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dzOenhB0OiAw; Sun, 14 Sep 2025 22:21:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C70141F44
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17183848DF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C70141F44;
-	Sun, 14 Sep 2025 22:21:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17183848DF;
+	Sun, 14 Sep 2025 22:21:48 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 72E2F22F
- for <buildroot@buildroot.org>; Sun, 14 Sep 2025 22:21:39 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 23FCE1F7
+ for <buildroot@buildroot.org>; Sun, 14 Sep 2025 22:21:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8682B411A3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 980EF40F94
  for <buildroot@buildroot.org>; Sun, 14 Sep 2025 22:21:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T1UBSzXuClNw for <buildroot@buildroot.org>;
+ id j3B4mK1Jm_2P for <buildroot@buildroot.org>;
  Sun, 14 Sep 2025 22:21:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63F6740F94
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B59B741206
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 63F6740F94
+ by smtp4.osuosl.org (Postfix) with ESMTP id B59B741206
  for <buildroot@buildroot.org>; Sun, 14 Sep 2025 22:21:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5DA3F846E1; Sun, 14 Sep 2025 22:21:37 +0000 (UTC)
+ id A729E84504; Sun, 14 Sep 2025 22:21:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 14 Sep 2025 23:45:30 +0200
+Date: Sun, 14 Sep 2025 23:47:33 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 00317f0aff243986983650671fd220ab040af50f
-X-Git-Newrev: d5aab5289c3a148c23d65d288f5d651e158318c8
+X-Git-Oldrev: 5bed5470a4478a88f05701e98c6ceaa41049c360
+X-Git-Newrev: 8de4aadda72b3ba3487badc71e75ab394a630974
 X-Patchwork-Hint: ignore
-Message-Id: <20250914222137.5DA3F846E1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libselinux: fix build issues
- caused by 3.8.1 bump
+Message-Id: <20250914222137.A729E84504@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/policycoreutils: bump to version
+ 3.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,213 +61,225 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8239544879815290914=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8239544879815290914==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=d5aab5289c3a148c23d65d288f5d651e158318c8
+commit: https://git.buildroot.net/buildroot/commit/?id=8de4aadda72b3ba3487badc71e75ab394a630974
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the bump to version 3.8.1 in commit
-1ae3ad4e878e1f4217ba3276ff0c9e584234afa4, libselinux fails to build
-with at least
+Changes:
+https://github.com/SELinuxProject/selinux/releases/download/3.9/RELEASE-3.9.txt
 
-- Musl configurations
-- RISC-V 32-bit configurations
-- OpenRISC configurations
+Notable changes related to policycoreutils: none.
 
-These build failures are due to additional checks on the size of some
-data structures:
+However, in terms of packaging, there's a change: the top-level
+Makefile of policycoreutils now uses pkg-config to find libselinux and
+libsemanage. So building directly the subdirs no longer works because
+the variables defined by the top-level Makefile are no longer set. So
+we simplify the whole packaging by building from the top-level
+Makefile. In order for this pkg-config to work for the host variant,
+we need to pass $(HOST_MAKE_ENV) in the environment of make, so we
+also did the same for consistency with $(TARGET_MAKE_ENV).
 
-matchpathcon.c:270:47: error: '__ino_t' undeclared here (not in a function); did you mean 'ino_t'?
-  270 | static_assert(sizeof(unsigned long) == sizeof(__ino_t), "inode size mismatch");
-      |                                               ^~~~~~~
-      |                                               ino_t
-matchpathcon.c:270:15: error: expression in static assertion is not an integer
-  270 | static_assert(sizeof(unsigned long) == sizeof(__ino_t), "inode size mismatch");
-      |               ^~~~~~
+In terms of dependencies: policycoreutils directly links with
+libselinux, libsemanage and libsepol, so all three are needed for both
+the target and host variants. And host-pkgconf is now needed for the
+host variant, as it's used to detect the dependent libraries.
 
-These issues have been fixed in follow-up upstream commits, which we
-backport.
-
-Fixes:
-
-  https://autobuild.buildroot.net/results/00a1ab30cc6b7af503aa96384ba4c4444c217401/ (musl)
-  https://autobuild.buildroot.net/results/c8321be687201937bd5eb48b31dfabac12f4e9ea/ (glibc or1k)
-  https://autobuild.buildroot.net/results/7b94f44282582d5994f40a741cc0c38bd68b53bd/ (risc-v 32-bit)
+The patches also need to be refreshed, except 0003 that is dropped
+since it was a backport from upstream.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+merge policycoreutils
+
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...hpathcon_filespec_add64-if-defined-__INO_.patch | 84 ++++++++++++++++++++++
- ...ux-be-careful-with-non-portable-LFS-macro.patch | 56 +++++++++++++++
- 2 files changed, 140 insertions(+)
+ ...IR-to-all-paths-that-use-an-absolute-path.patch |  2 +-
+ .../0002-Add-PREFIX-to-host-paths.patch            |  2 +-
+ ...licycoreutils-run_init-define-_GNU_SOURCE.patch | 37 ----------------------
+ package/policycoreutils/Config.in                  |  5 +--
+ package/policycoreutils/policycoreutils.hash       |  2 +-
+ package/policycoreutils/policycoreutils.mk         | 37 ++++++----------------
+ 6 files changed, 15 insertions(+), 70 deletions(-)
 
-diff --git a/package/libselinux/0003-Inject-matchpathcon_filespec_add64-if-defined-__INO_.patch b/package/libselinux/0003-Inject-matchpathcon_filespec_add64-if-defined-__INO_.patch
-new file mode 100644
-index 0000000000..6573cb1673
---- /dev/null
-+++ b/package/libselinux/0003-Inject-matchpathcon_filespec_add64-if-defined-__INO_.patch
-@@ -0,0 +1,84 @@
-+From daecc54878e6768b3e6a2b2a0061d2690a63dea4 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?=D0=BD=D0=B0=D0=B1?= <nabijaczleweli@nabijaczleweli.xyz>
-+Date: Thu, 20 Mar 2025 16:55:17 +0100
-+Subject: [PATCH] Inject matchpathcon_filespec_add64() if
-+ !defined(__INO_T_MATCHES_INO64_T) instead of using __BITS_PER_LONG < 64 as
-+ proxy
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+The __INO_T_MATCHES_INO64_T is defined
-+if ino_t would be the same size as ino64_t
-+if -D_FILE_OFFSET_BITS=64 were not defined.
-+
-+This is /exactly/ what
-+  /* ABI backwards-compatible shim for non-LFS 32-bit systems */
-+  #if defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64 && __BITS_PER_LONG < 64
-+is trying to get at, but currently fails because x32/RV32 are "LFS"
-+with 32-bit longs and 64-bit time_ts natively.
-+
-+Thus, the
-+  static_assert(sizeof(unsigned long) == sizeof(__ino_t), "inode size mismatch");
-+assertion fails (__ino_t is the "kernel ino_t" type,
-+which generally corresponds to the kernel's ulong, which is u64 on x32).
-+
-+glibc headers allow us to check the condition we care about directly.
-+
-+Fixes: commit 9395cc0322 ("Always build for LFS mode on 32-bit archs.")
-+Closes: #463
-+Closes: Debian#1098481
-+Signed-off-by: наб <nabijaczleweli@nabijaczleweli.xyz>
-+Cc: Alba Mendez <me@alba.sh>
-+Acked-by: James Carter <jwcart2@gmail.com>
-+Upstream: 5c3fcbd931b7f9752b5ce29cec3b6813991d61c0
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ include/selinux/selinux.h | 2 +-
-+ src/matchpathcon.c        | 8 ++++++--
-+ 2 files changed, 7 insertions(+), 3 deletions(-)
-+
-+diff --git a/include/selinux/selinux.h b/include/selinux/selinux.h
-+index f3cf5a20..f64896b7 100644
-+--- a/include/selinux/selinux.h
-++++ b/include/selinux/selinux.h
-+@@ -537,7 +537,7 @@ extern int matchpathcon_index(const char *path,
-+    with the same inode (e.g. due to multiple hard links).  If so, then
-+    use the latter of the two specifications based on their order in the 
-+    file contexts configuration.  Return the used specification index. */
-+-#if defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64 && __BITS_PER_LONG < 64
-++#if defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64 && !defined(__INO_T_MATCHES_INO64_T)
-+ #define matchpathcon_filespec_add matchpathcon_filespec_add64
-+ #endif
-+ extern int matchpathcon_filespec_add(ino_t ino, int specind, const char *file);
-+diff --git a/src/matchpathcon.c b/src/matchpathcon.c
-+index 51f0e4ff..a4f65045 100644
-+--- a/src/matchpathcon.c
-++++ b/src/matchpathcon.c
-+@@ -261,7 +261,7 @@ int matchpathcon_filespec_add(ino_t ino, int specind, const char *file)
-+ 	return -1;
-+ }
-+ 
-+-#if defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64 && __BITS_PER_LONG < 64
-++#if (defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64) && !defined(__INO_T_MATCHES_INO64_T)
-+ /* alias defined in the public header but we undefine it here */
-+ #undef matchpathcon_filespec_add
-+ 
-+@@ -280,9 +280,13 @@ int matchpathcon_filespec_add(unsigned long ino, int specind,
-+ {
-+ 	return matchpathcon_filespec_add64(ino, specind, file);
-+ }
-++#elif (defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64) || defined(__INO_T_MATCHES_INO64_T)
-++
-++static_assert(sizeof(uint64_t) == sizeof(ino_t), "inode size mismatch");
-++
-+ #else
-+ 
-+-static_assert(sizeof(unsigned long) == sizeof(ino_t), "inode size mismatch");
-++static_assert(sizeof(uint32_t) == sizeof(ino_t), "inode size mismatch");
-+ 
-+ #endif
-+ 
-+-- 
-+2.51.0
-+
-diff --git a/package/libselinux/0004-libselinux-be-careful-with-non-portable-LFS-macro.patch b/package/libselinux/0004-libselinux-be-careful-with-non-portable-LFS-macro.patch
-new file mode 100644
-index 0000000000..9a1d874706
---- /dev/null
-+++ b/package/libselinux/0004-libselinux-be-careful-with-non-portable-LFS-macro.patch
-@@ -0,0 +1,56 @@
-+From bfcdaf2ff36d69a57810470f5405e5f27e51e01c Mon Sep 17 00:00:00 2001
-+From: Alyssa Ross <hi@alyssa.is>
-+Date: Sat, 26 Apr 2025 17:13:57 +0200
-+Subject: [PATCH] libselinux: be careful with non-portable LFS macro
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+musl does not provide the obsolete LFS64 APIs (like ino64_t) — ino_t
-+has always been 64-bit on all platforms there.  That means there's
-+also no __INO_T_MATCHES_INO64_T macro, meaning the check would pass
-+and reach the static asserts for the shim, which would fail due to
-+there being no ino64_t to check the size of.  Fix this by only
-+assuming the absense of __INO_T_MATCHES_INO64_t is meaningful when
-+another non-portable Glibc macro, __INO64_T_TYPE, is defined.  If both
-+are missing, that probably just means there is no ino64_t.
-+
-+Fixes: 5c3fcbd9 ("Inject matchpathcon_filespec_add64() if !defined(__INO_T_MATCHES_INO64_T) instead of using __BITS_PER_LONG < 64 as proxy")
-+Signed-off-by: Alyssa Ross <hi@alyssa.is>
-+Acked-by: James Carter <jwcart2@gmail.com>
-+Upstream: 21dd00713ae99b13e36c632992cb171c6ec1abce
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ include/selinux/selinux.h | 2 +-
-+ src/matchpathcon.c        | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/include/selinux/selinux.h b/include/selinux/selinux.h
-+index f64896b7..b1431e5d 100644
-+--- a/include/selinux/selinux.h
-++++ b/include/selinux/selinux.h
-+@@ -537,7 +537,7 @@ extern int matchpathcon_index(const char *path,
-+    with the same inode (e.g. due to multiple hard links).  If so, then
-+    use the latter of the two specifications based on their order in the 
-+    file contexts configuration.  Return the used specification index. */
-+-#if defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64 && !defined(__INO_T_MATCHES_INO64_T)
-++#if defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64 && defined(__INO64_T_TYPE) && !defined(__INO_T_MATCHES_INO64_T)
-+ #define matchpathcon_filespec_add matchpathcon_filespec_add64
-+ #endif
-+ extern int matchpathcon_filespec_add(ino_t ino, int specind, const char *file);
-+diff --git a/src/matchpathcon.c b/src/matchpathcon.c
-+index a4f65045..240c9fa7 100644
-+--- a/src/matchpathcon.c
-++++ b/src/matchpathcon.c
-+@@ -261,7 +261,7 @@ int matchpathcon_filespec_add(ino_t ino, int specind, const char *file)
-+ 	return -1;
-+ }
-+ 
-+-#if (defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64) && !defined(__INO_T_MATCHES_INO64_T)
-++#if (defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64) && defined(__INO64_T_TYPE) && !defined(__INO_T_MATCHES_INO64_T)
-+ /* alias defined in the public header but we undefine it here */
-+ #undef matchpathcon_filespec_add
-+ 
-+-- 
-+2.51.0
-+
-
---===============8239544879815290914==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch b/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
+index 18f0001aef..e894987f49 100644
+--- a/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
++++ b/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
+@@ -32,7 +32,7 @@ index a3bbbe1..df675cf 100644
+ +AUDITH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/libaudit.h && echo y)
+  
+  CFLAGS ?= -g -Werror -Wall -W
+- override LDLIBS += -lselinux -lsepol -lpthread
++ override CFLAGS += -I../../libselinux/include
+ -- 
+ 2.13.6
+ 
+diff --git a/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch b/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch
+index 2daed57c97..6f838e8d54 100644
+--- a/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch
++++ b/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch
+@@ -48,7 +48,7 @@ index e86364a..20a64d4 100644
+ +AUDITH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/libaudit.h && echo y)
+  
+  CFLAGS ?= -Werror -Wall -W
+- override CFLAGS += -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
++ override CFLAGS += -I../../libselinux/include -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
+ -- 
+ 2.31.1
+ 
+diff --git a/package/policycoreutils/0003-policycoreutils-run_init-define-_GNU_SOURCE.patch b/package/policycoreutils/0003-policycoreutils-run_init-define-_GNU_SOURCE.patch
+deleted file mode 100644
+index bef6909b0a..0000000000
+--- a/package/policycoreutils/0003-policycoreutils-run_init-define-_GNU_SOURCE.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From f338b2e7d2bbf70cb811eb1331162e33deb4ce6c Mon Sep 17 00:00:00 2001
+-From: Robert Marko <robimarko@gmail.com>
+-Date: Thu, 1 May 2025 21:59:13 +0200
+-Subject: [PATCH] policycoreutils: run_init: define _GNU_SOURCE
+-
+-Trying to compile run_init with musl will fail with:
+-run_init.c: In function 'authenticate_via_shadow_passwd':
+-run_init.c:206:40: error: implicit declaration of function 'getpass' [-Wimplicit-function-declaration]
+-  206 |         if (!(unencrypted_password_s = getpass(PASSWORD_PROMPT))) {
+-
+-This is because getpass in musl is guarded only for _GNU_SOURCE, so
+-define _GNU_SOURCE for run_init.
+-
+-Signed-off-by: Robert Marko <robimarko@gmail.com>
+-Acked-by: James Carter <jwcart2@gmail.com>
+-Upstream: 50bafc3d9c08cf26c3b0f61e29157a0ea8efbf4a
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- policycoreutils/run_init/run_init.c | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/policycoreutils/run_init/run_init.c b/policycoreutils/run_init/run_init.c
+-index ce499781..4531a8ba 100644
+---- a/policycoreutils/run_init/run_init.c
+-+++ b/policycoreutils/run_init/run_init.c
+-@@ -37,6 +37,8 @@
+-  *
+-  *************************************************************************/
+- 
+-+#define _GNU_SOURCE
+-+
+- #include <stdio.h>
+- #include <stdlib.h>		/* for malloc(), realloc(), free() */
+- #include <pwd.h>		/* for getpwuid() */
+--- 
+-2.51.0
+-
+diff --git a/package/policycoreutils/Config.in b/package/policycoreutils/Config.in
+index 07e171a53f..db9eb9f6b5 100644
+--- a/package/policycoreutils/Config.in
++++ b/package/policycoreutils/Config.in
+@@ -6,9 +6,10 @@ comment "policycoreutils needs a toolchain w/ threads, dynamic library, gcc >= 5
+ config BR2_PACKAGE_POLICYCOREUTILS
+ 	bool "policycoreutils"
+ 	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS # libsemanage
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libsemanage, libsepol
+-	depends on !BR2_STATIC_LIBS # libsemanage, libsepol
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libselinux, libsemanage, libsepol
++	depends on !BR2_STATIC_LIBS # libselinux, libsemanage, libsepol
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # libsemanage -> libselinux -> libsepol
++	select BR2_PACKAGE_LIBSELINUX
+ 	select BR2_PACKAGE_LIBSEMANAGE
+ 	select BR2_PACKAGE_LIBSEPOL
+ 	select BR2_PACKAGE_LIBCAP_NG
+diff --git a/package/policycoreutils/policycoreutils.hash b/package/policycoreutils/policycoreutils.hash
+index 4884c55770..7664be0b35 100644
+--- a/package/policycoreutils/policycoreutils.hash
++++ b/package/policycoreutils/policycoreutils.hash
+@@ -1,3 +1,3 @@
+ # https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256  eef23196b501d141cb95f5fc52ef1a7289f459b65e4415ea0fe9aeedc5d80ef2  policycoreutils-3.8.1.tar.gz
++sha256  44a294139876cf4c7969cb6a75d1932cb42543d74a7661760ded44a20bf7ebe8  policycoreutils-3.9.tar.gz
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
+diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
+index 3265986bff..d0e1aae312 100644
+--- a/package/policycoreutils/policycoreutils.mk
++++ b/package/policycoreutils/policycoreutils.mk
+@@ -4,13 +4,13 @@
+ #
+ ################################################################################
+ 
+-POLICYCOREUTILS_VERSION = 3.8.1
++POLICYCOREUTILS_VERSION = 3.9
+ POLICYCOREUTILS_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(POLICYCOREUTILS_VERSION)
+ POLICYCOREUTILS_LICENSE = GPL-2.0
+ POLICYCOREUTILS_LICENSE_FILES = LICENSE
+ POLICYCOREUTILS_CPE_ID_VENDOR = selinuxproject
+ 
+-POLICYCOREUTILS_DEPENDENCIES = libsemanage libsepol libcap-ng $(TARGET_NLS_DEPENDENCIES)
++POLICYCOREUTILS_DEPENDENCIES = libselinux libsemanage libsepol libcap-ng host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ POLICYCOREUTILS_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) LDLIBS=$(TARGET_NLS_LIBS)
+ 
+ ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
+@@ -32,28 +32,19 @@ ifeq ($(BR2_PACKAGE_LINUX_PAM)$(BR2_PACKAGE_AUDIT),yy)
+ POLICYCOREUTILS_MAKE_OPTS += LSPP_PRIV=y
+ endif
+ 
+-POLICYCOREUTILS_MAKE_DIRS = \
+-	load_policy newrole run_init \
+-	secon semodule sestatus setfiles \
+-	setsebool scripts
+-
+ # We need to pass DESTDIR at build time because it's used by
+ # policycoreutils build system to find headers and libraries.
+ define POLICYCOREUTILS_BUILD_CMDS
+-	$(foreach d,$(POLICYCOREUTILS_MAKE_DIRS),
+-		$(MAKE) -C $(@D)/$(d) $(POLICYCOREUTILS_MAKE_OPTS) \
+-			DESTDIR=$(STAGING_DIR) all
+-	)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(POLICYCOREUTILS_MAKE_OPTS) \
++		DESTDIR=$(STAGING_DIR) all
+ endef
+ 
+ define POLICYCOREUTILS_INSTALL_TARGET_CMDS
+-	$(foreach d,$(POLICYCOREUTILS_MAKE_DIRS),
+-		$(MAKE) -C $(@D)/$(d) $(POLICYCOREUTILS_MAKE_OPTS) \
+-			DESTDIR=$(TARGET_DIR) install
+-	)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(POLICYCOREUTILS_MAKE_OPTS) \
++		DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+-HOST_POLICYCOREUTILS_DEPENDENCIES = host-libsemanage
++HOST_POLICYCOREUTILS_DEPENDENCIES = host-libselinux host-libsemanage host-libsepol host-pkgconf
+ 
+ # We need to pass PREFIX because it defaults to $(DESTDIR)/usr
+ HOST_POLICYCOREUTILS_MAKE_OPTS = \
+@@ -62,22 +53,12 @@ HOST_POLICYCOREUTILS_MAKE_OPTS = \
+ 	ETCDIR=$(HOST_DIR)/etc \
+ 	SBINDIR=$(HOST_DIR)/sbin
+ 
+-# Note: We are only building the programs required by the refpolicy build
+-HOST_POLICYCOREUTILS_MAKE_DIRS = \
+-	load_policy newrole run_init \
+-	secon semodule sestatus setfiles \
+-	setsebool
+-
+ define HOST_POLICYCOREUTILS_BUILD_CMDS
+-	$(foreach d,$(HOST_POLICYCOREUTILS_MAKE_DIRS),
+-		$(MAKE) -C $(@D)/$(d) $(HOST_POLICYCOREUTILS_MAKE_OPTS) all
+-	)
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_POLICYCOREUTILS_MAKE_OPTS) all
+ endef
+ 
+ define HOST_POLICYCOREUTILS_INSTALL_CMDS
+-	$(foreach d,$(HOST_POLICYCOREUTILS_MAKE_DIRS),
+-		$(MAKE) -C $(@D)/$(d) $(HOST_POLICYCOREUTILS_MAKE_OPTS) install
+-	)
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_POLICYCOREUTILS_MAKE_OPTS) install
+ endef
+ 
+ $(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8239544879815290914==--
