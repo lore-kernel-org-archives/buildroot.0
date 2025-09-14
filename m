@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85DC8CA0EE8
-	for <buildroot@archiver.kernel.org>; Sun, 14 Sep 2025 22:21:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D49BCCAC587
+	for <buildroot@archiver.kernel.org>; Sun, 14 Sep 2025 22:21:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E2DD4159A;
-	Sun, 14 Sep 2025 22:21:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AD89841F99;
+	Sun, 14 Sep 2025 22:21:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TolmfVNB4T3H; Sun, 14 Sep 2025 22:21:53 +0000 (UTC)
+ id t_xNIveN7HzO; Sun, 14 Sep 2025 22:21:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89DEA41FE4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 326AA41FE4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 89DEA41FE4;
-	Sun, 14 Sep 2025 22:21:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 326AA41FE4;
+	Sun, 14 Sep 2025 22:21:55 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0EE121F7
- for <buildroot@buildroot.org>; Sun, 14 Sep 2025 22:21:44 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0FBFD22F
+ for <buildroot@buildroot.org>; Sun, 14 Sep 2025 22:21:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 72657848DB
+ by smtp1.osuosl.org (Postfix) with ESMTP id E171F848D9
  for <buildroot@buildroot.org>; Sun, 14 Sep 2025 22:21:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XEHYjpmyXQAj for <buildroot@buildroot.org>;
+ id Tw-6PsDMzFsR for <buildroot@buildroot.org>;
  Sun, 14 Sep 2025 22:21:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6F31848D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8821F848C6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C6F31848D9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8821F848C6
  for <buildroot@buildroot.org>; Sun, 14 Sep 2025 22:21:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C4E5C846E3; Sun, 14 Sep 2025 22:21:37 +0000 (UTC)
+ id 78FBD846E1; Sun, 14 Sep 2025 22:21:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 14 Sep 2025 23:48:15 +0200
+Date: Sun, 14 Sep 2025 23:46:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8de4aadda72b3ba3487badc71e75ab394a630974
-X-Git-Newrev: 66b0ad1097a5a245407eadc7daa2b24946538f8f
+X-Git-Oldrev: fc472cc8c75406ae10d2cbb3d0a8e10889f692a6
+X-Git-Newrev: 5417543007da2fd524c42f8a50a9553d457d45b5
 X-Patchwork-Hint: ignore
-Message-Id: <20250914222137.C4E5C846E3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/restorecond: bump to version 3.9
+Message-Id: <20250914222137.78FBD846E1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libselinux: bump version to 3.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,51 +60,220 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7132630211283077636=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66b0ad1097a5a245407eadc7daa2b24946538f8f
+--===============7132630211283077636==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=5417543007da2fd524c42f8a50a9553d457d45b5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changes:
-https://github.com/SELinuxProject/selinux/releases/download/3.9/RELEASE-3.9.txt
+Release notes:
 
-No notable changes related to restorecond.
+https://github.com/SELinuxProject/selinux/releases/tag/3.9
+
+For libselinux:
+
+libselinux: Fix local literal fcontext definitions priority
+libselinux: Fix order for path substitutions
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/restorecond/restorecond.hash | 2 +-
- package/restorecond/restorecond.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...hpathcon_filespec_add64-if-defined-__INO_.patch | 84 ----------------------
+ ...ux-be-careful-with-non-portable-LFS-macro.patch | 56 ---------------
+ package/libselinux/libselinux.hash                 |  2 +-
+ package/libselinux/libselinux.mk                   |  2 +-
+ 4 files changed, 2 insertions(+), 142 deletions(-)
 
-diff --git a/package/restorecond/restorecond.hash b/package/restorecond/restorecond.hash
-index 2a55edc313..dcfbd54617 100644
---- a/package/restorecond/restorecond.hash
-+++ b/package/restorecond/restorecond.hash
+diff --git a/package/libselinux/0003-Inject-matchpathcon_filespec_add64-if-defined-__INO_.patch b/package/libselinux/0003-Inject-matchpathcon_filespec_add64-if-defined-__INO_.patch
+deleted file mode 100644
+index 6573cb1673..0000000000
+--- a/package/libselinux/0003-Inject-matchpathcon_filespec_add64-if-defined-__INO_.patch
++++ /dev/null
+@@ -1,84 +0,0 @@
+-From daecc54878e6768b3e6a2b2a0061d2690a63dea4 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?=D0=BD=D0=B0=D0=B1?= <nabijaczleweli@nabijaczleweli.xyz>
+-Date: Thu, 20 Mar 2025 16:55:17 +0100
+-Subject: [PATCH] Inject matchpathcon_filespec_add64() if
+- !defined(__INO_T_MATCHES_INO64_T) instead of using __BITS_PER_LONG < 64 as
+- proxy
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-The __INO_T_MATCHES_INO64_T is defined
+-if ino_t would be the same size as ino64_t
+-if -D_FILE_OFFSET_BITS=64 were not defined.
+-
+-This is /exactly/ what
+-  /* ABI backwards-compatible shim for non-LFS 32-bit systems */
+-  #if defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64 && __BITS_PER_LONG < 64
+-is trying to get at, but currently fails because x32/RV32 are "LFS"
+-with 32-bit longs and 64-bit time_ts natively.
+-
+-Thus, the
+-  static_assert(sizeof(unsigned long) == sizeof(__ino_t), "inode size mismatch");
+-assertion fails (__ino_t is the "kernel ino_t" type,
+-which generally corresponds to the kernel's ulong, which is u64 on x32).
+-
+-glibc headers allow us to check the condition we care about directly.
+-
+-Fixes: commit 9395cc0322 ("Always build for LFS mode on 32-bit archs.")
+-Closes: #463
+-Closes: Debian#1098481
+-Signed-off-by: наб <nabijaczleweli@nabijaczleweli.xyz>
+-Cc: Alba Mendez <me@alba.sh>
+-Acked-by: James Carter <jwcart2@gmail.com>
+-Upstream: 5c3fcbd931b7f9752b5ce29cec3b6813991d61c0
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- include/selinux/selinux.h | 2 +-
+- src/matchpathcon.c        | 8 ++++++--
+- 2 files changed, 7 insertions(+), 3 deletions(-)
+-
+-diff --git a/include/selinux/selinux.h b/include/selinux/selinux.h
+-index f3cf5a20..f64896b7 100644
+---- a/include/selinux/selinux.h
+-+++ b/include/selinux/selinux.h
+-@@ -537,7 +537,7 @@ extern int matchpathcon_index(const char *path,
+-    with the same inode (e.g. due to multiple hard links).  If so, then
+-    use the latter of the two specifications based on their order in the 
+-    file contexts configuration.  Return the used specification index. */
+--#if defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64 && __BITS_PER_LONG < 64
+-+#if defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64 && !defined(__INO_T_MATCHES_INO64_T)
+- #define matchpathcon_filespec_add matchpathcon_filespec_add64
+- #endif
+- extern int matchpathcon_filespec_add(ino_t ino, int specind, const char *file);
+-diff --git a/src/matchpathcon.c b/src/matchpathcon.c
+-index 51f0e4ff..a4f65045 100644
+---- a/src/matchpathcon.c
+-+++ b/src/matchpathcon.c
+-@@ -261,7 +261,7 @@ int matchpathcon_filespec_add(ino_t ino, int specind, const char *file)
+- 	return -1;
+- }
+- 
+--#if defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64 && __BITS_PER_LONG < 64
+-+#if (defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64) && !defined(__INO_T_MATCHES_INO64_T)
+- /* alias defined in the public header but we undefine it here */
+- #undef matchpathcon_filespec_add
+- 
+-@@ -280,9 +280,13 @@ int matchpathcon_filespec_add(unsigned long ino, int specind,
+- {
+- 	return matchpathcon_filespec_add64(ino, specind, file);
+- }
+-+#elif (defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64) || defined(__INO_T_MATCHES_INO64_T)
+-+
+-+static_assert(sizeof(uint64_t) == sizeof(ino_t), "inode size mismatch");
+-+
+- #else
+- 
+--static_assert(sizeof(unsigned long) == sizeof(ino_t), "inode size mismatch");
+-+static_assert(sizeof(uint32_t) == sizeof(ino_t), "inode size mismatch");
+- 
+- #endif
+- 
+--- 
+-2.51.0
+-
+diff --git a/package/libselinux/0004-libselinux-be-careful-with-non-portable-LFS-macro.patch b/package/libselinux/0004-libselinux-be-careful-with-non-portable-LFS-macro.patch
+deleted file mode 100644
+index 9a1d874706..0000000000
+--- a/package/libselinux/0004-libselinux-be-careful-with-non-portable-LFS-macro.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-From bfcdaf2ff36d69a57810470f5405e5f27e51e01c Mon Sep 17 00:00:00 2001
+-From: Alyssa Ross <hi@alyssa.is>
+-Date: Sat, 26 Apr 2025 17:13:57 +0200
+-Subject: [PATCH] libselinux: be careful with non-portable LFS macro
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-musl does not provide the obsolete LFS64 APIs (like ino64_t) — ino_t
+-has always been 64-bit on all platforms there.  That means there's
+-also no __INO_T_MATCHES_INO64_T macro, meaning the check would pass
+-and reach the static asserts for the shim, which would fail due to
+-there being no ino64_t to check the size of.  Fix this by only
+-assuming the absense of __INO_T_MATCHES_INO64_t is meaningful when
+-another non-portable Glibc macro, __INO64_T_TYPE, is defined.  If both
+-are missing, that probably just means there is no ino64_t.
+-
+-Fixes: 5c3fcbd9 ("Inject matchpathcon_filespec_add64() if !defined(__INO_T_MATCHES_INO64_T) instead of using __BITS_PER_LONG < 64 as proxy")
+-Signed-off-by: Alyssa Ross <hi@alyssa.is>
+-Acked-by: James Carter <jwcart2@gmail.com>
+-Upstream: 21dd00713ae99b13e36c632992cb171c6ec1abce
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- include/selinux/selinux.h | 2 +-
+- src/matchpathcon.c        | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/include/selinux/selinux.h b/include/selinux/selinux.h
+-index f64896b7..b1431e5d 100644
+---- a/include/selinux/selinux.h
+-+++ b/include/selinux/selinux.h
+-@@ -537,7 +537,7 @@ extern int matchpathcon_index(const char *path,
+-    with the same inode (e.g. due to multiple hard links).  If so, then
+-    use the latter of the two specifications based on their order in the 
+-    file contexts configuration.  Return the used specification index. */
+--#if defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64 && !defined(__INO_T_MATCHES_INO64_T)
+-+#if defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64 && defined(__INO64_T_TYPE) && !defined(__INO_T_MATCHES_INO64_T)
+- #define matchpathcon_filespec_add matchpathcon_filespec_add64
+- #endif
+- extern int matchpathcon_filespec_add(ino_t ino, int specind, const char *file);
+-diff --git a/src/matchpathcon.c b/src/matchpathcon.c
+-index a4f65045..240c9fa7 100644
+---- a/src/matchpathcon.c
+-+++ b/src/matchpathcon.c
+-@@ -261,7 +261,7 @@ int matchpathcon_filespec_add(ino_t ino, int specind, const char *file)
+- 	return -1;
+- }
+- 
+--#if (defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64) && !defined(__INO_T_MATCHES_INO64_T)
+-+#if (defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64) && defined(__INO64_T_TYPE) && !defined(__INO_T_MATCHES_INO64_T)
+- /* alias defined in the public header but we undefine it here */
+- #undef matchpathcon_filespec_add
+- 
+--- 
+-2.51.0
+-
+diff --git a/package/libselinux/libselinux.hash b/package/libselinux/libselinux.hash
+index 0933398f1e..2f897e1287 100644
+--- a/package/libselinux/libselinux.hash
++++ b/package/libselinux/libselinux.hash
 @@ -1,5 +1,5 @@
- # https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256  164fe4825a9c65f3dd664f68fe252e67df72d4ea817a90d8f62ae0544bfb8ba2  restorecond-3.8.1.tar.gz
-+sha256  d57b6ffe7eafd01af58e5efa50f8522eca73c0b3cb2955ca3f33397ba074a1a7  restorecond-3.9.tar.gz
+ # From: https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256  ec2d2789f931152d21c1db1eb4bc202ce4eccede34d9be9e360e3b45243cee2c  libselinux-3.8.1.tar.gz
++sha256  e7ee2c01dba64a0c35c9d7c9c0e06209d8186b325b0638a0d83f915cc3c101e8  libselinux-3.9.tar.gz
  
  # Hash for license file
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
-diff --git a/package/restorecond/restorecond.mk b/package/restorecond/restorecond.mk
-index f2618c20b3..e8f432c88d 100644
---- a/package/restorecond/restorecond.mk
-+++ b/package/restorecond/restorecond.mk
+ sha256  86657b4c0fe868d7cbd977cb04c63b6c667e08fa51595a7bc846ad4bed8fc364  LICENSE
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index e19bb4dd2d..405c4a9f21 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RESTORECOND_VERSION = 3.8.1
-+RESTORECOND_VERSION = 3.9
- RESTORECOND_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(RESTORECOND_VERSION)
- RESTORECOND_LICENSE = GPL-2.0
- RESTORECOND_LICENSE_FILES = LICENSE
+-LIBSELINUX_VERSION = 3.8.1
++LIBSELINUX_VERSION = 3.9
+ LIBSELINUX_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(LIBSELINUX_VERSION)
+ LIBSELINUX_LICENSE = Public Domain
+ LIBSELINUX_LICENSE_FILES = LICENSE
+
+--===============7132630211283077636==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7132630211283077636==--
