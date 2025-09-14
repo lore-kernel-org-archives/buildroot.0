@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AF1ECA0EE8
-	for <buildroot@archiver.kernel.org>; Sun, 14 Sep 2025 21:24:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E283DCA0EE8
+	for <buildroot@archiver.kernel.org>; Sun, 14 Sep 2025 22:21:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 18E2841AA8;
-	Sun, 14 Sep 2025 21:24:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8C4C2412FE;
+	Sun, 14 Sep 2025 22:21:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e0fpmWA8sKKa; Sun, 14 Sep 2025 21:24:00 +0000 (UTC)
+ id Hs3hWc-whM9p; Sun, 14 Sep 2025 22:21:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DADD41A77
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58C974121F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3DADD41A77;
-	Sun, 14 Sep 2025 21:24:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7DAEB12D
- for <buildroot@buildroot.org>; Sun, 14 Sep 2025 21:23:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 58C974121F;
+	Sun, 14 Sep 2025 22:21:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5ADE522F
+ for <buildroot@buildroot.org>; Sun, 14 Sep 2025 22:21:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6FA0E6165D
- for <buildroot@buildroot.org>; Sun, 14 Sep 2025 21:23:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 418D141301
+ for <buildroot@buildroot.org>; Sun, 14 Sep 2025 22:21:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3YxPbJ5lAdma for <buildroot@buildroot.org>;
- Sun, 14 Sep 2025 21:23:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 48144611F5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48144611F5
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 48144611F5
- for <buildroot@buildroot.org>; Sun, 14 Sep 2025 21:23:57 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id F38CAB00576;
- Sun, 14 Sep 2025 23:23:52 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 14 Sep 2025 23:23:52 +0200
-MIME-Version: 1.0
-Date: Sun, 14 Sep 2025 23:23:52 +0200
-To: Romain Naour <romain.naour@smile.fr>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250914122628.3232001-1-romain.naour@smile.fr>
-References: <20250914122628.3232001-1-romain.naour@smile.fr>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <464566117f524923936d9a9eb18dfb71@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1757885034;
- bh=pQ3SELXsSAw3tYFDU85UowKpngWuwlFACmr1WZ3+7PY=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=AxaTdzRpQRf4Spww2dYwdGVJ15m243tvA3UALZ2L8PVZHdC8QS2rdSe6p5uEPSPI5
- +EputdYfIq7mXDiJTnUvkwhaiwuwBW8RwSlSo1kNM/Hn7RgbcDo/RbxZN+0nqPoldY
- ItGCjcufhtEXpZLPEmU9ceg/1jFRsFvFzXZNcCwuD1vvsSnoc8obV33w1cLQOyRl1s
- lo/tQ7ZHJp4AMXiSr8b0p0K4ayAFGdr/UXq+9Nyy/gY0V3PLmYMtAUA6QL2cdRK7tq
- LUbDW8wtW5AwxB/1qyh3mdrvEzRb7ga3taOJrL2OsEg7ERAGjRx6CXO/MY5yKjln1g
- pPhHq9Rhoup9g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=AxaTdzRp
-Subject: Re: [Buildroot] [PATCH] package/luvi: bump to version 2.15.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tCp2Z-vs-Jnn for <buildroot@buildroot.org>;
+ Sun, 14 Sep 2025 22:21:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6BE8542359
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6BE8542359
+ for <buildroot@buildroot.org>; Sun, 14 Sep 2025 22:21:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 66D75846E3; Sun, 14 Sep 2025 22:21:37 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 14 Sep 2025 23:45:50 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d5aab5289c3a148c23d65d288f5d651e158318c8
+X-Git-Newrev: 79031b79c273c9346487592ee1638bdd48ba7749
+X-Patchwork-Hint: ignore
+Message-Id: <20250914222137.66D75846E3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libsemanage: fix build issue due
+ to basename()
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,78 +60,215 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 14/09/2025 14:26, Romain Naour via buildroot wrote:
-> Luvi 2.14.0 fails to build with GCC 14.x for several reasons due to
-> too old lua-openssl 0.8.2-0 submodule:
-> 
-> TestLuvi/build/luvi-2.14.0/deps/lua-openssl/src/ocsp.c: In function 
-> 'openssl_ocsp_request_read':
-> TestLuvi/build/luvi-2.14.0/deps/lua-openssl/src/ocsp.c:124:29: error: 
-> passing argument 1 of 'PEM_ASN1_read_bio' from incompatible pointer 
-> type [-Wincompatible-pointer-types]
->   124 |   OCSP_REQUEST *req = pem ? PEM_read_bio_OCSP_REQUEST(bio, 
-> NULL, NULL)
->       |                             ^~~~~~~~~~~~~~~~~~~~~~~~~
->       |                             |
->       |                             char * (*)()
-> 
-> Fixed in lua-openssl by [1].
-> 
-> TestLuvi/build/luvi-2.14.0/deps/lua-openssl/src/x509.c: In function 
-> 'openssl_push_general_name':
-> TestLuvi/build/luvi-2.14.0/deps/lua-openssl/src/x509.c:377:45: error: 
-> passing argument 2 of 'openssl_push_asn1type' from incompatible pointer 
-> type [-Wincompatible-pointer-types]
->   377 |     openssl_push_asn1type(L, general_name->d.x400Address);
->       |                              ~~~~~~~~~~~~~~~^~~~~~~~~~~~
->       |                                             |
->       |                                             ASN1_STRING * {aka 
-> struct asn1_string_st *}
-> 
-> Fixed in lua-openssl by [2].
-> 
-> TestLuvi/build/luvi-2.14.0/deps/lua-openssl/src/openssl.c: In function 
-> 'luaclose_openssl':
-> TestLuvi/build/luvi-2.14.0/deps/lua-openssl/src/stdatomic.h:387:9: 
-> error: implicit declaration of function '__c11_atomic_fetch_sub'; did 
-> you mean '__atomic_fetch_sub'? [-Wimplicit-function-declaration]
->   387 |         __c11_atomic_fetch_sub(object, operand, order)
-> 
-> Fixed in lua-openssl by [3].
-> 
-> Instead of fixing one by one each issues, update to the latest release
-> that include lua-openssl 0.9.0-0. Luvi v2.15.0 still have some GCC 14.x
-> issues, backport two additional patches.
-> 
-> Download luvi sources using git method since the release archive
-> no longer include the release version in its name [4].
-> 
-> Luvi switched to PCRE2 [5], update the optional dependency.
-> 
-> Update TestLuvi to select PCR2 package.
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/11271124430 
-> (TestLuvi)
-> 
-> [1] 
-> https://github.com/zhaozg/lua-openssl/commit/bfeedbe8c06d8b4400fa670edecd452a433ddac4
-> [2] 
-> https://github.com/zhaozg/lua-openssl/commit/e5b5420cc506c7507d1d0e7302ea3f1979a6b2ed
-> [3] 
-> https://github.com/zhaozg/lua-openssl/commit/cfcaa16d1acaab17f4f0178e61ea77ebc2c8f24c
-> [4] 
-> https://github.com/luvit/luvi/releases/download/v2.15.0/luvi-source.tar.gz
-> [5] https://github.com/luvit/luvi/releases/tag/v2.15.0
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+commit: https://git.buildroot.net/buildroot/commit/?id=79031b79c273c9346487592ee1638bdd48ba7749
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+The build of libsemanage on musl configurations fails with:
+
+direct_api.c: In function 'semanage_direct_install_file':
+direct_api.c:1746:20: error: implicit declaration of function 'basename' [-Wimplicit-function-declaration]
+ 1746 |         filename = basename(path);
+      |                    ^~~~~~~~
+
+This fails to build even with a GCC 14.x toolchain, even with
+libsemanage 3.7, which is the version we have in our LTS branch.
+
+Let's backport an upstream patch fixing this issue.
+
+Fixes:
+
+  https://autobuild.buildroot.net/results/913852e35c925888ced37e15be3731b9d3963019/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...-create-semanage_basename-to-ensure-posix.patch | 172 +++++++++++++++++++++
+ 1 file changed, 172 insertions(+)
+
+diff --git a/package/libsemanage/0001-libsemanage-create-semanage_basename-to-ensure-posix.patch b/package/libsemanage/0001-libsemanage-create-semanage_basename-to-ensure-posix.patch
+new file mode 100644
+index 0000000000..10a81241a1
+--- /dev/null
++++ b/package/libsemanage/0001-libsemanage-create-semanage_basename-to-ensure-posix.patch
+@@ -0,0 +1,172 @@
++From 795f8381fd64abf692b26d01369561fc68be230c Mon Sep 17 00:00:00 2001
++From: Rahul Sandhu <nvraxn@gmail.com>
++Date: Fri, 21 Feb 2025 09:39:10 +0000
++Subject: [PATCH] libsemanage: create semanage_basename to ensure posix
++ compliance
++
++Passing a const char * to basename(3) is a glibc-specific extension, so
++create our own basename implementation. As it's a trivial 2 LOC, always
++use our implementation of basename even if glibc is available to avoid
++the complications of attaining the non-posix glibc implementation of
++basename(3) as _GNU_SOURCE needs to be defined, but libgen.h also needs
++to have not been included.
++
++Also fix a missing check for selinux_policy_root(3). From the man page:
++On failure, selinux_policy_root returns NULL.
++
++As the glibc basename(3) (unlike posix basename(3)) does not support
++having a nullptr passed to it, only pass the policy_root to basename(3)
++if it is non-null.
++
++Signed-off-by: Rahul Sandhu <nvraxn@gmail.com>
++Acked-by: James Carter <jwcart2@gmail.com>
++Upstream: a339594da6f027aed5d66ec6798a3d732df235e4
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/conf-parse.y       | 13 ++++++++++---
++ src/direct_api.c       |  1 +
++ src/utilities.c        |  9 +++++++++
++ src/utilities.h        | 13 +++++++++++++
++ tests/test_utilities.c | 26 ++++++++++++++++++++++++++
++ 5 files changed, 59 insertions(+), 3 deletions(-)
++
++diff --git a/src/conf-parse.y b/src/conf-parse.y
++index 6cb8a598..d3ca5f1f 100644
++--- a/src/conf-parse.y
+++++ b/src/conf-parse.y
++@@ -21,6 +21,7 @@
++ %{
++ 
++ #include "semanage_conf.h"
+++#include "utilities.h"
++ 
++ #include <sepol/policydb.h>
++ #include <selinux/selinux.h>
++@@ -382,7 +383,10 @@ external_opt:   PROG_PATH '=' ARG  { PASSIGN(new_external->path, $3); }
++ static int semanage_conf_init(semanage_conf_t * conf)
++ {
++ 	conf->store_type = SEMANAGE_CON_DIRECT;
++-	conf->store_path = strdup(basename(selinux_policy_root()));
+++	const char *policy_root = selinux_policy_root();
+++	if (policy_root != NULL) {
+++		conf->store_path = strdup(semanage_basename(policy_root));
+++	}
++ 	conf->ignoredirs = NULL;
++ 	conf->store_root_path = strdup("/var/lib/selinux");
++ 	conf->compiler_directory_path = strdup("/usr/libexec/selinux/hll");
++@@ -544,8 +548,11 @@ static int parse_module_store(char *arg)
++ 	free(current_conf->store_path);
++ 	if (strcmp(arg, "direct") == 0) {
++ 		current_conf->store_type = SEMANAGE_CON_DIRECT;
++-		current_conf->store_path =
++-		    strdup(basename(selinux_policy_root()));
+++		const char *policy_root = selinux_policy_root();
+++		if (policy_root != NULL) {
+++			current_conf->store_path =
+++			    strdup(semanage_basename(policy_root));
+++		}
++ 		current_conf->server_port = -1;
++ 	} else if (*arg == '/') {
++ 		current_conf->store_type = SEMANAGE_CON_POLSERV_LOCAL;
++diff --git a/src/direct_api.c b/src/direct_api.c
++index 99cba7f7..ce12ccaf 100644
++--- a/src/direct_api.c
+++++ b/src/direct_api.c
++@@ -26,6 +26,7 @@
++ 
++ #include <assert.h>
++ #include <fcntl.h>
+++#include <libgen.h>
++ #include <stdio.h>
++ #include <stdio_ext.h>
++ #include <stdlib.h>
++diff --git a/src/utilities.c b/src/utilities.c
++index 70b5b677..004ffb62 100644
++--- a/src/utilities.c
+++++ b/src/utilities.c
++@@ -349,3 +349,12 @@ int write_full(int fd, const void *buf, size_t len)
++ 
++ 	return 0;
++ }
+++
+++#ifdef __GNUC__
+++__attribute__((nonnull))
+++#endif
+++char *semanage_basename(const char *filename)
+++{
+++	char *p = strrchr(filename, '/');
+++	return p ? p + 1 : (char *)filename;
+++}
++diff --git a/src/utilities.h b/src/utilities.h
++index c2d484a7..7481077a 100644
++--- a/src/utilities.h
+++++ b/src/utilities.h
++@@ -156,4 +156,17 @@ semanage_list_t *semanage_slurp_file_filter(FILE * file,
++ 
++ int write_full(int fd, const void *buf, size_t len) WARN_UNUSED;
++ 
+++/**
+++ * Portable implementation of the glibc version of basename(3).
+++ *
+++ * @param filename  path to find basename of
+++ *
+++ * @return          basename of filename
+++ */
+++
+++#ifdef __GNUC__
+++__attribute__((nonnull))
+++#endif
+++char *semanage_basename(const char *filename);
+++
++ #endif
++diff --git a/tests/test_utilities.c b/tests/test_utilities.c
++index bbd5af30..70a76fe7 100644
++--- a/tests/test_utilities.c
+++++ b/tests/test_utilities.c
++@@ -46,6 +46,7 @@ static void test_semanage_rtrim(void);
++ static void test_semanage_str_replace(void);
++ static void test_semanage_findval(void);
++ static void test_slurp_file_filter(void);
+++static void test_semanage_basename(void);
++ 
++ static char fname[] = {
++ 	'T', 'E', 'S', 'T', '_', 'T', 'E', 'M', 'P', '_', 'X', 'X', 'X', 'X',
++@@ -117,6 +118,10 @@ int semanage_utilities_add_tests(CU_pSuite suite)
++ 				test_slurp_file_filter)) {
++ 		goto err;
++ 	}
+++	if (NULL == CU_add_test(suite, "semanage_basename",
+++				test_semanage_basename)) {
+++		goto err;
+++	}
++ 	return 0;
++       err:
++ 	CU_cleanup_registry();
++@@ -346,3 +351,24 @@ static void test_slurp_file_filter(void)
++ 
++ 	semanage_list_destroy(&data);
++ }
+++
+++static void test_semanage_basename(void)
+++{
+++	char *basename1 = semanage_basename("/foo/bar");
+++	CU_ASSERT_STRING_EQUAL(basename1, "bar");
+++
+++	char *basename2 = semanage_basename("/foo/bar/");
+++	CU_ASSERT_STRING_EQUAL(basename2, "");
+++
+++	char *basename3 = semanage_basename("/foo.bar");
+++	CU_ASSERT_STRING_EQUAL(basename3, "foo.bar");
+++
+++	char *basename5 = semanage_basename(".");
+++	CU_ASSERT_STRING_EQUAL(basename5, ".");
+++
+++	char *basename6 = semanage_basename("");
+++	CU_ASSERT_STRING_EQUAL(basename6, "");
+++
+++	char *basename7 = semanage_basename("/");
+++	CU_ASSERT_STRING_EQUAL(basename7, "");
+++}
++-- 
++2.51.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
