@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57687CAC597
-	for <buildroot@archiver.kernel.org>; Sun, 14 Sep 2025 22:21:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC0C6CA0EE8
+	for <buildroot@archiver.kernel.org>; Sun, 14 Sep 2025 22:21:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F597848DE;
-	Sun, 14 Sep 2025 22:21:49 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dzOenhB0OiAw; Sun, 14 Sep 2025 22:21:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17183848DF
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 17183848DF;
-	Sun, 14 Sep 2025 22:21:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 23FCE1F7
- for <buildroot@buildroot.org>; Sun, 14 Sep 2025 22:21:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 980EF40F94
- for <buildroot@buildroot.org>; Sun, 14 Sep 2025 22:21:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A69A941F84;
+	Sun, 14 Sep 2025 22:21:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j3B4mK1Jm_2P for <buildroot@buildroot.org>;
+ id g733yTKz-TBf; Sun, 14 Sep 2025 22:21:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F27141F88
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F27141F88;
+	Sun, 14 Sep 2025 22:21:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id F038F1F7
+ for <buildroot@buildroot.org>; Sun, 14 Sep 2025 22:21:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B4C59848DA
+ for <buildroot@buildroot.org>; Sun, 14 Sep 2025 22:21:38 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oHSfGtz0Uf_8 for <buildroot@buildroot.org>;
  Sun, 14 Sep 2025 22:21:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B59B741206
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA34E848DC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B59B741206
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA34E848DC
  for <buildroot@buildroot.org>; Sun, 14 Sep 2025 22:21:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A729E84504; Sun, 14 Sep 2025 22:21:37 +0000 (UTC)
+ id 8C765846EA; Sun, 14 Sep 2025 22:21:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 14 Sep 2025 23:47:33 +0200
+Date: Sun, 14 Sep 2025 23:46:40 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5bed5470a4478a88f05701e98c6ceaa41049c360
-X-Git-Newrev: 8de4aadda72b3ba3487badc71e75ab394a630974
+X-Git-Oldrev: ca143cd857f2901393fffa013cc6bb1853144275
+X-Git-Newrev: d2262b0af78c66fca5ed1feac8729c0d8446e214
 X-Patchwork-Hint: ignore
-Message-Id: <20250914222137.A729E84504@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/policycoreutils: bump to version
- 3.9
+Message-Id: <20250914222137.8C765846EA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libsemanage: bump to version 3.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,219 +65,224 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8de4aadda72b3ba3487badc71e75ab394a630974
+commit: https://git.buildroot.net/buildroot/commit/?id=d2262b0af78c66fca5ed1feac8729c0d8446e214
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Changes:
 https://github.com/SELinuxProject/selinux/releases/download/3.9/RELEASE-3.9.txt
 
-Notable changes related to policycoreutils: none.
-
-However, in terms of packaging, there's a change: the top-level
-Makefile of policycoreutils now uses pkg-config to find libselinux and
-libsemanage. So building directly the subdirs no longer works because
-the variables defined by the top-level Makefile are no longer set. So
-we simplify the whole packaging by building from the top-level
-Makefile. In order for this pkg-config to work for the host variant,
-we need to pass $(HOST_MAKE_ENV) in the environment of make, so we
-also did the same for consistency with $(TARGET_MAKE_ENV).
-
-In terms of dependencies: policycoreutils directly links with
-libselinux, libsemanage and libsepol, so all three are needed for both
-the target and host variants. And host-pkgconf is now needed for the
-host variant, as it's used to detect the dependent libraries.
-
-The patches also need to be refreshed, except 0003 that is dropped
-since it was a backport from upstream.
+Related to libsemanage: nothing relevant.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-merge policycoreutils
-
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...IR-to-all-paths-that-use-an-absolute-path.patch |  2 +-
- .../0002-Add-PREFIX-to-host-paths.patch            |  2 +-
- ...licycoreutils-run_init-define-_GNU_SOURCE.patch | 37 ----------------------
- package/policycoreutils/Config.in                  |  5 +--
- package/policycoreutils/policycoreutils.hash       |  2 +-
- package/policycoreutils/policycoreutils.mk         | 37 ++++++----------------
- 6 files changed, 15 insertions(+), 70 deletions(-)
+ ...-create-semanage_basename-to-ensure-posix.patch | 172 ---------------------
+ package/libsemanage/libsemanage.hash               |   2 +-
+ package/libsemanage/libsemanage.mk                 |   2 +-
+ 3 files changed, 2 insertions(+), 174 deletions(-)
 
-diff --git a/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch b/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
-index 18f0001aef..e894987f49 100644
---- a/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
-+++ b/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
-@@ -32,7 +32,7 @@ index a3bbbe1..df675cf 100644
- +AUDITH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/libaudit.h && echo y)
-  
-  CFLAGS ?= -g -Werror -Wall -W
-- override LDLIBS += -lselinux -lsepol -lpthread
-+ override CFLAGS += -I../../libselinux/include
- -- 
- 2.13.6
- 
-diff --git a/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch b/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch
-index 2daed57c97..6f838e8d54 100644
---- a/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch
-+++ b/package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch
-@@ -48,7 +48,7 @@ index e86364a..20a64d4 100644
- +AUDITH ?= $(shell test -f $(DESTDIR)$(PREFIX)/include/libaudit.h && echo y)
-  
-  CFLAGS ?= -Werror -Wall -W
-- override CFLAGS += -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
-+ override CFLAGS += -I../../libselinux/include -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
- -- 
- 2.31.1
- 
-diff --git a/package/policycoreutils/0003-policycoreutils-run_init-define-_GNU_SOURCE.patch b/package/policycoreutils/0003-policycoreutils-run_init-define-_GNU_SOURCE.patch
+diff --git a/package/libsemanage/0001-libsemanage-create-semanage_basename-to-ensure-posix.patch b/package/libsemanage/0001-libsemanage-create-semanage_basename-to-ensure-posix.patch
 deleted file mode 100644
-index bef6909b0a..0000000000
---- a/package/policycoreutils/0003-policycoreutils-run_init-define-_GNU_SOURCE.patch
+index 10a81241a1..0000000000
+--- a/package/libsemanage/0001-libsemanage-create-semanage_basename-to-ensure-posix.patch
 +++ /dev/null
-@@ -1,37 +0,0 @@
--From f338b2e7d2bbf70cb811eb1331162e33deb4ce6c Mon Sep 17 00:00:00 2001
--From: Robert Marko <robimarko@gmail.com>
--Date: Thu, 1 May 2025 21:59:13 +0200
--Subject: [PATCH] policycoreutils: run_init: define _GNU_SOURCE
+@@ -1,172 +0,0 @@
+-From 795f8381fd64abf692b26d01369561fc68be230c Mon Sep 17 00:00:00 2001
+-From: Rahul Sandhu <nvraxn@gmail.com>
+-Date: Fri, 21 Feb 2025 09:39:10 +0000
+-Subject: [PATCH] libsemanage: create semanage_basename to ensure posix
+- compliance
 -
--Trying to compile run_init with musl will fail with:
--run_init.c: In function 'authenticate_via_shadow_passwd':
--run_init.c:206:40: error: implicit declaration of function 'getpass' [-Wimplicit-function-declaration]
--  206 |         if (!(unencrypted_password_s = getpass(PASSWORD_PROMPT))) {
+-Passing a const char * to basename(3) is a glibc-specific extension, so
+-create our own basename implementation. As it's a trivial 2 LOC, always
+-use our implementation of basename even if glibc is available to avoid
+-the complications of attaining the non-posix glibc implementation of
+-basename(3) as _GNU_SOURCE needs to be defined, but libgen.h also needs
+-to have not been included.
 -
--This is because getpass in musl is guarded only for _GNU_SOURCE, so
--define _GNU_SOURCE for run_init.
+-Also fix a missing check for selinux_policy_root(3). From the man page:
+-On failure, selinux_policy_root returns NULL.
 -
--Signed-off-by: Robert Marko <robimarko@gmail.com>
+-As the glibc basename(3) (unlike posix basename(3)) does not support
+-having a nullptr passed to it, only pass the policy_root to basename(3)
+-if it is non-null.
+-
+-Signed-off-by: Rahul Sandhu <nvraxn@gmail.com>
 -Acked-by: James Carter <jwcart2@gmail.com>
--Upstream: 50bafc3d9c08cf26c3b0f61e29157a0ea8efbf4a
+-Upstream: a339594da6f027aed5d66ec6798a3d732df235e4
 -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ----
-- policycoreutils/run_init/run_init.c | 2 ++
-- 1 file changed, 2 insertions(+)
+- src/conf-parse.y       | 13 ++++++++++---
+- src/direct_api.c       |  1 +
+- src/utilities.c        |  9 +++++++++
+- src/utilities.h        | 13 +++++++++++++
+- tests/test_utilities.c | 26 ++++++++++++++++++++++++++
+- 5 files changed, 59 insertions(+), 3 deletions(-)
 -
--diff --git a/policycoreutils/run_init/run_init.c b/policycoreutils/run_init/run_init.c
--index ce499781..4531a8ba 100644
----- a/policycoreutils/run_init/run_init.c
--+++ b/policycoreutils/run_init/run_init.c
--@@ -37,6 +37,8 @@
--  *
--  *************************************************************************/
+-diff --git a/src/conf-parse.y b/src/conf-parse.y
+-index 6cb8a598..d3ca5f1f 100644
+---- a/src/conf-parse.y
+-+++ b/src/conf-parse.y
+-@@ -21,6 +21,7 @@
+- %{
 - 
--+#define _GNU_SOURCE
--+
+- #include "semanage_conf.h"
+-+#include "utilities.h"
+- 
+- #include <sepol/policydb.h>
+- #include <selinux/selinux.h>
+-@@ -382,7 +383,10 @@ external_opt:   PROG_PATH '=' ARG  { PASSIGN(new_external->path, $3); }
+- static int semanage_conf_init(semanage_conf_t * conf)
+- {
+- 	conf->store_type = SEMANAGE_CON_DIRECT;
+--	conf->store_path = strdup(basename(selinux_policy_root()));
+-+	const char *policy_root = selinux_policy_root();
+-+	if (policy_root != NULL) {
+-+		conf->store_path = strdup(semanage_basename(policy_root));
+-+	}
+- 	conf->ignoredirs = NULL;
+- 	conf->store_root_path = strdup("/var/lib/selinux");
+- 	conf->compiler_directory_path = strdup("/usr/libexec/selinux/hll");
+-@@ -544,8 +548,11 @@ static int parse_module_store(char *arg)
+- 	free(current_conf->store_path);
+- 	if (strcmp(arg, "direct") == 0) {
+- 		current_conf->store_type = SEMANAGE_CON_DIRECT;
+--		current_conf->store_path =
+--		    strdup(basename(selinux_policy_root()));
+-+		const char *policy_root = selinux_policy_root();
+-+		if (policy_root != NULL) {
+-+			current_conf->store_path =
+-+			    strdup(semanage_basename(policy_root));
+-+		}
+- 		current_conf->server_port = -1;
+- 	} else if (*arg == '/') {
+- 		current_conf->store_type = SEMANAGE_CON_POLSERV_LOCAL;
+-diff --git a/src/direct_api.c b/src/direct_api.c
+-index 99cba7f7..ce12ccaf 100644
+---- a/src/direct_api.c
+-+++ b/src/direct_api.c
+-@@ -26,6 +26,7 @@
+- 
+- #include <assert.h>
+- #include <fcntl.h>
+-+#include <libgen.h>
 - #include <stdio.h>
-- #include <stdlib.h>		/* for malloc(), realloc(), free() */
-- #include <pwd.h>		/* for getpwuid() */
+- #include <stdio_ext.h>
+- #include <stdlib.h>
+-diff --git a/src/utilities.c b/src/utilities.c
+-index 70b5b677..004ffb62 100644
+---- a/src/utilities.c
+-+++ b/src/utilities.c
+-@@ -349,3 +349,12 @@ int write_full(int fd, const void *buf, size_t len)
+- 
+- 	return 0;
+- }
+-+
+-+#ifdef __GNUC__
+-+__attribute__((nonnull))
+-+#endif
+-+char *semanage_basename(const char *filename)
+-+{
+-+	char *p = strrchr(filename, '/');
+-+	return p ? p + 1 : (char *)filename;
+-+}
+-diff --git a/src/utilities.h b/src/utilities.h
+-index c2d484a7..7481077a 100644
+---- a/src/utilities.h
+-+++ b/src/utilities.h
+-@@ -156,4 +156,17 @@ semanage_list_t *semanage_slurp_file_filter(FILE * file,
+- 
+- int write_full(int fd, const void *buf, size_t len) WARN_UNUSED;
+- 
+-+/**
+-+ * Portable implementation of the glibc version of basename(3).
+-+ *
+-+ * @param filename  path to find basename of
+-+ *
+-+ * @return          basename of filename
+-+ */
+-+
+-+#ifdef __GNUC__
+-+__attribute__((nonnull))
+-+#endif
+-+char *semanage_basename(const char *filename);
+-+
+- #endif
+-diff --git a/tests/test_utilities.c b/tests/test_utilities.c
+-index bbd5af30..70a76fe7 100644
+---- a/tests/test_utilities.c
+-+++ b/tests/test_utilities.c
+-@@ -46,6 +46,7 @@ static void test_semanage_rtrim(void);
+- static void test_semanage_str_replace(void);
+- static void test_semanage_findval(void);
+- static void test_slurp_file_filter(void);
+-+static void test_semanage_basename(void);
+- 
+- static char fname[] = {
+- 	'T', 'E', 'S', 'T', '_', 'T', 'E', 'M', 'P', '_', 'X', 'X', 'X', 'X',
+-@@ -117,6 +118,10 @@ int semanage_utilities_add_tests(CU_pSuite suite)
+- 				test_slurp_file_filter)) {
+- 		goto err;
+- 	}
+-+	if (NULL == CU_add_test(suite, "semanage_basename",
+-+				test_semanage_basename)) {
+-+		goto err;
+-+	}
+- 	return 0;
+-       err:
+- 	CU_cleanup_registry();
+-@@ -346,3 +351,24 @@ static void test_slurp_file_filter(void)
+- 
+- 	semanage_list_destroy(&data);
+- }
+-+
+-+static void test_semanage_basename(void)
+-+{
+-+	char *basename1 = semanage_basename("/foo/bar");
+-+	CU_ASSERT_STRING_EQUAL(basename1, "bar");
+-+
+-+	char *basename2 = semanage_basename("/foo/bar/");
+-+	CU_ASSERT_STRING_EQUAL(basename2, "");
+-+
+-+	char *basename3 = semanage_basename("/foo.bar");
+-+	CU_ASSERT_STRING_EQUAL(basename3, "foo.bar");
+-+
+-+	char *basename5 = semanage_basename(".");
+-+	CU_ASSERT_STRING_EQUAL(basename5, ".");
+-+
+-+	char *basename6 = semanage_basename("");
+-+	CU_ASSERT_STRING_EQUAL(basename6, "");
+-+
+-+	char *basename7 = semanage_basename("/");
+-+	CU_ASSERT_STRING_EQUAL(basename7, "");
+-+}
 --- 
 -2.51.0
 -
-diff --git a/package/policycoreutils/Config.in b/package/policycoreutils/Config.in
-index 07e171a53f..db9eb9f6b5 100644
---- a/package/policycoreutils/Config.in
-+++ b/package/policycoreutils/Config.in
-@@ -6,9 +6,10 @@ comment "policycoreutils needs a toolchain w/ threads, dynamic library, gcc >= 5
- config BR2_PACKAGE_POLICYCOREUTILS
- 	bool "policycoreutils"
- 	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS # libsemanage
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libsemanage, libsepol
--	depends on !BR2_STATIC_LIBS # libsemanage, libsepol
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libselinux, libsemanage, libsepol
-+	depends on !BR2_STATIC_LIBS # libselinux, libsemanage, libsepol
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # libsemanage -> libselinux -> libsepol
-+	select BR2_PACKAGE_LIBSELINUX
- 	select BR2_PACKAGE_LIBSEMANAGE
- 	select BR2_PACKAGE_LIBSEPOL
- 	select BR2_PACKAGE_LIBCAP_NG
-diff --git a/package/policycoreutils/policycoreutils.hash b/package/policycoreutils/policycoreutils.hash
-index 4884c55770..7664be0b35 100644
---- a/package/policycoreutils/policycoreutils.hash
-+++ b/package/policycoreutils/policycoreutils.hash
-@@ -1,3 +1,3 @@
- # https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256  eef23196b501d141cb95f5fc52ef1a7289f459b65e4415ea0fe9aeedc5d80ef2  policycoreutils-3.8.1.tar.gz
-+sha256  44a294139876cf4c7969cb6a75d1932cb42543d74a7661760ded44a20bf7ebe8  policycoreutils-3.9.tar.gz
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
-diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
-index 3265986bff..d0e1aae312 100644
---- a/package/policycoreutils/policycoreutils.mk
-+++ b/package/policycoreutils/policycoreutils.mk
-@@ -4,13 +4,13 @@
+diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
+index 78067b3ede..1fd5a8019b 100644
+--- a/package/libsemanage/libsemanage.hash
++++ b/package/libsemanage/libsemanage.hash
+@@ -1,5 +1,5 @@
+ # From: https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256  7b39127b219cc70bfd935a4af6b0f2ba83d4b35c916f253c7e942c23ab490f07  libsemanage-3.8.1.tar.gz
++sha256  ec05850aef48bfb8e02135a7f4f3f7edba3670f63d5e67f2708d4bd80b9a4634  libsemanage-3.9.tar.gz
+ 
+ # Hash for license file
+ sha256  e1c0890440efe31b6cd2ee2abf895eb917c787799f079133f5809414d90d5d60  LICENSE
+diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+index 21ca9fd3f9..289954f700 100644
+--- a/package/libsemanage/libsemanage.mk
++++ b/package/libsemanage/libsemanage.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--POLICYCOREUTILS_VERSION = 3.8.1
-+POLICYCOREUTILS_VERSION = 3.9
- POLICYCOREUTILS_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(POLICYCOREUTILS_VERSION)
- POLICYCOREUTILS_LICENSE = GPL-2.0
- POLICYCOREUTILS_LICENSE_FILES = LICENSE
- POLICYCOREUTILS_CPE_ID_VENDOR = selinuxproject
- 
--POLICYCOREUTILS_DEPENDENCIES = libsemanage libsepol libcap-ng $(TARGET_NLS_DEPENDENCIES)
-+POLICYCOREUTILS_DEPENDENCIES = libselinux libsemanage libsepol libcap-ng host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- POLICYCOREUTILS_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) LDLIBS=$(TARGET_NLS_LIBS)
- 
- ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
-@@ -32,28 +32,19 @@ ifeq ($(BR2_PACKAGE_LINUX_PAM)$(BR2_PACKAGE_AUDIT),yy)
- POLICYCOREUTILS_MAKE_OPTS += LSPP_PRIV=y
- endif
- 
--POLICYCOREUTILS_MAKE_DIRS = \
--	load_policy newrole run_init \
--	secon semodule sestatus setfiles \
--	setsebool scripts
--
- # We need to pass DESTDIR at build time because it's used by
- # policycoreutils build system to find headers and libraries.
- define POLICYCOREUTILS_BUILD_CMDS
--	$(foreach d,$(POLICYCOREUTILS_MAKE_DIRS),
--		$(MAKE) -C $(@D)/$(d) $(POLICYCOREUTILS_MAKE_OPTS) \
--			DESTDIR=$(STAGING_DIR) all
--	)
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(POLICYCOREUTILS_MAKE_OPTS) \
-+		DESTDIR=$(STAGING_DIR) all
- endef
- 
- define POLICYCOREUTILS_INSTALL_TARGET_CMDS
--	$(foreach d,$(POLICYCOREUTILS_MAKE_DIRS),
--		$(MAKE) -C $(@D)/$(d) $(POLICYCOREUTILS_MAKE_OPTS) \
--			DESTDIR=$(TARGET_DIR) install
--	)
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(POLICYCOREUTILS_MAKE_OPTS) \
-+		DESTDIR=$(TARGET_DIR) install
- endef
- 
--HOST_POLICYCOREUTILS_DEPENDENCIES = host-libsemanage
-+HOST_POLICYCOREUTILS_DEPENDENCIES = host-libselinux host-libsemanage host-libsepol host-pkgconf
- 
- # We need to pass PREFIX because it defaults to $(DESTDIR)/usr
- HOST_POLICYCOREUTILS_MAKE_OPTS = \
-@@ -62,22 +53,12 @@ HOST_POLICYCOREUTILS_MAKE_OPTS = \
- 	ETCDIR=$(HOST_DIR)/etc \
- 	SBINDIR=$(HOST_DIR)/sbin
- 
--# Note: We are only building the programs required by the refpolicy build
--HOST_POLICYCOREUTILS_MAKE_DIRS = \
--	load_policy newrole run_init \
--	secon semodule sestatus setfiles \
--	setsebool
--
- define HOST_POLICYCOREUTILS_BUILD_CMDS
--	$(foreach d,$(HOST_POLICYCOREUTILS_MAKE_DIRS),
--		$(MAKE) -C $(@D)/$(d) $(HOST_POLICYCOREUTILS_MAKE_OPTS) all
--	)
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_POLICYCOREUTILS_MAKE_OPTS) all
- endef
- 
- define HOST_POLICYCOREUTILS_INSTALL_CMDS
--	$(foreach d,$(HOST_POLICYCOREUTILS_MAKE_DIRS),
--		$(MAKE) -C $(@D)/$(d) $(HOST_POLICYCOREUTILS_MAKE_OPTS) install
--	)
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_POLICYCOREUTILS_MAKE_OPTS) install
- endef
- 
- $(eval $(generic-package))
+-LIBSEMANAGE_VERSION = 3.8.1
++LIBSEMANAGE_VERSION = 3.9
+ LIBSEMANAGE_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(LIBSEMANAGE_VERSION)
+ LIBSEMANAGE_LICENSE = LGPL-2.1+
+ LIBSEMANAGE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
