@@ -1,51 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83F54CAC592
-	for <buildroot@archiver.kernel.org>; Mon, 15 Sep 2025 20:52:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7CD0CAC592
+	for <buildroot@archiver.kernel.org>; Mon, 15 Sep 2025 20:54:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B80B60B30;
-	Mon, 15 Sep 2025 20:52:39 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xcOXjdnnvncW; Mon, 15 Sep 2025 20:52:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AD6360B36
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2AD6360B36;
-	Mon, 15 Sep 2025 20:52:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id D711D12D
- for <buildroot@buildroot.org>; Mon, 15 Sep 2025 20:52:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B8C8281233
- for <buildroot@buildroot.org>; Mon, 15 Sep 2025 20:52:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6FA8F81271;
+	Mon, 15 Sep 2025 20:54:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pzNg2QAA7SEt for <buildroot@buildroot.org>;
- Mon, 15 Sep 2025 20:52:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D09D98113E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D09D98113E
- for <buildroot@buildroot.org>; Mon, 15 Sep 2025 20:52:35 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BEAA584767; Mon, 15 Sep 2025 20:52:35 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 15 Sep 2025 22:33:00 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cbc3cb2c8deebd362399cc7867dda94709d552e7
-X-Git-Newrev: c7be3e603830f505c0c7df7e1b967122aa06fed0
-X-Patchwork-Hint: ignore
-Message-Id: <20250915205235.BEAA584767@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgeos: bump version to 3.14.0
+ id WfTsOKE3EpUx; Mon, 15 Sep 2025 20:54:00 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6EF8581140
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6EF8581140;
+	Mon, 15 Sep 2025 20:54:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E1F51F7
+ for <buildroot@buildroot.org>; Mon, 15 Sep 2025 20:53:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3052B60B36
+ for <buildroot@buildroot.org>; Mon, 15 Sep 2025 20:53:59 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GPW2k4dpzxO9 for <buildroot@buildroot.org>;
+ Mon, 15 Sep 2025 20:53:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
+ envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 99B7F60A69
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99B7F60A69
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 99B7F60A69
+ for <buildroot@buildroot.org>; Mon, 15 Sep 2025 20:53:56 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id A57943520CCC; Mon, 15 Sep 2025 22:54:04 +0200 (CEST)
+Date: Mon, 15 Sep 2025 22:54:04 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: Romain Naour <romain.naour@smile.fr>
+Message-ID: <aMh87DWmal5nH0JK@waldemar-brodkorb.de>
+References: <20250914042054.771446-1-salvador.joseluis@gmail.com>
+ <55c98b57-f4be-47b7-a87c-06f5130df8fe@smile.fr>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <55c98b57-f4be-47b7-a87c-06f5130df8fe@smile.fr>
+X-Operating-System: Linux 6.12.41 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1757969644; bh=AzbpJ8Ca9Zd/ASh4H/ApA0bjpYtbFDpGus4y420P8bE=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=PybX1sDmy+ru7gJVI9czBkaiqjX7XSPYyyq+GE46lCJwtRDlQyXW9P5dg+ovf/AKx
+ PRRU/BdSRfhIpoWq3n1dh3ccpzu5wVchi0KtnjQO+bJKuciEbD4WH4/v84qMjkinFT
+ AIEWrLFQsEhuC6XPki1kDopMgieB2Bd/rVG1SiO75u8Z1PF/W2KLcZy2oM9LPbn9t6
+ aIOEkjmmAyckxdyziTWaf9Vww7zPyT0M/ClxMjSl1072fheqXqjs9xcHlXGI0gtzV2
+ ZXs3/6HHGRkW2w5XPDxPjfikS4/atU1bg9QPF+xPPmu9/E7i8c6vTU7MivsKna5391
+ d2Hf+f/rAZ6tA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=PybX1sDm
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: remove arc_summary
+ from ZFS tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -57,185 +80,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Josss Luis Salvador Rufo <salvador.joseluis@gmail.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7be3e603830f505c0c7df7e1b967122aa06fed0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Changelog: https://github.com/libgeos/geos/releases/tag/3.14.0
-
-Bump minimal GCC version to 7. (Switched to C++17 as minimum requirement)
-https://github.com/libgeos/geos/commit/e142764b77f4b8d0c36ec88406300c5f876743fb
-
-Since commit https://github.com/libgeos/geos/commit/26292ce88077321ced5db5869ea0b11cabaa2d12
-libgeos uses fenv.h to catch FPU exceptions. Some libc implementation may
-have no fenv support. So add a patch to detect fenv.h availability.
-
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-[Julien:
- - reformat patch title to fix check-package error
- - add Upstream header in patch to fix check-package error
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...p-make-floating-point-exceptions-optional.patch | 71 ++++++++++++++++++++++
- package/libgeos/Config.in                          |  6 +-
- package/libgeos/libgeos.hash                       |  2 +-
- package/libgeos/libgeos.mk                         |  2 +-
- package/postgis/Config.in                          |  6 +-
- 5 files changed, 79 insertions(+), 8 deletions(-)
-
-diff --git a/package/libgeos/0001-geosop-make-floating-point-exceptions-optional.patch b/package/libgeos/0001-geosop-make-floating-point-exceptions-optional.patch
-new file mode 100644
-index 0000000000..6adcd39861
---- /dev/null
-+++ b/package/libgeos/0001-geosop-make-floating-point-exceptions-optional.patch
-@@ -0,0 +1,71 @@
-+From a6bac7bd506988085fa692ff2e12727ae0e9db84 Mon Sep 17 00:00:00 2001
-+From: Maxim Kochetkov <fido_max@inbox.ru>
-+Date: Mon, 15 Sep 2025 17:16:08 +0300
-+Subject: [PATCH] geosop: make floating-point exceptions optional
-+
-+commit 26292ce ("geosop: show most floating-point exceptions in verbose mode")
-+add fenv.h dependency. Some libc implementations (uclibc-ng )may have no fenv
-+support. So make floating-point exceptions optional and detetct fenv.h at
-+configure stage.
-+
-+Upstream: https://github.com/libgeos/geos/pull/1305
-+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-+---
-+ CMakeLists.txt         | 7 +++++++
-+ util/geosop/GeosOp.cpp | 6 ++++++
-+ 2 files changed, 13 insertions(+)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 12411e586..a1e2f0c6e 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -558,3 +558,10 @@ if(PROJECT_IS_TOP_LEVEL)
-+ 
-+   unset(_is_multi_config_generator)
-+ endif()  # PROJECT_IS_TOP_LEVEL
-++
-++include(CheckIncludeFile)
-++check_include_file(fenv.h HAVE_FENV_H)
-++
-++if(HAVE_FENV_H)
-++    target_compile_definitions(geos_cxx_flags INTERFACE HAVE_FENV)
-++endif()
-+diff --git a/util/geosop/GeosOp.cpp b/util/geosop/GeosOp.cpp
-+index 2cb17f000..05307cf30 100644
-+--- a/util/geosop/GeosOp.cpp
-++++ b/util/geosop/GeosOp.cpp
-+@@ -26,7 +26,9 @@
-+ #include <geos/io/WKBStreamReader.h>
-+ #include <geos/io/WKBWriter.h>
-+ 
-++#if defined(HAVE_FENV)
-+ #include <cfenv>
-++#endif
-+ #include <fstream>
-+ #include <iostream>
-+ #include <sstream>
-+@@ -394,10 +396,13 @@ void GeosOp::run(OpArguments& opArgs) {
-+     //------------------------
-+ 
-+     try {
-++#if defined(HAVE_FENV)
-+         std::feclearexcept(FE_ALL_EXCEPT); // clear floating-point status flags
-++#endif
-+ 
-+         execute(op, opArgs);
-+ 
-++#if defined(HAVE_FENV)
-+         // Catch everything except for FE_INEXACT, which is usually harmless
-+         const int fpexp = std::fetestexcept(FE_ALL_EXCEPT ^ FE_INEXACT);
-+         if (args.isVerbose && (fpexp != 0)) {
-+@@ -414,6 +419,7 @@ void GeosOp::run(OpArguments& opArgs) {
-+                 std::cerr << " FE_UNDERFLOW";
-+             std::cerr << std::endl;
-+         }
-++#endif
-+     }
-+     catch (std::exception &e) {
-+         std::cerr << "Run-time exception: " << e.what() << std::endl;
-+-- 
-+2.51.0
-+
-diff --git a/package/libgeos/Config.in b/package/libgeos/Config.in
-index 76cbb9bdcd..ff88f7254d 100644
---- a/package/libgeos/Config.in
-+++ b/package/libgeos/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_LIBGEOS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
- 	help
- 	  GEOS (Geometry Engine - Open Source) is a C++ port of the
- 	  JTS Topology Suite (JTS). It aims to contain the complete
-@@ -13,7 +13,7 @@ config BR2_PACKAGE_LIBGEOS
- 
- 	  https://trac.osgeo.org/geos
- 
--comment "libgeos needs a toolchain w/ C++, wchar, gcc >= 4.9, threads"
-+comment "libgeos needs a toolchain w/ C++, wchar, gcc >= 7, threads"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		   !BR2_TOOLCHAIN_HAS_THREADS || \
--		   !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+		   !BR2_TOOLCHAIN_GCC_AT_LEAST_7
-diff --git a/package/libgeos/libgeos.hash b/package/libgeos/libgeos.hash
-index f404b267e2..538933873b 100644
---- a/package/libgeos/libgeos.hash
-+++ b/package/libgeos/libgeos.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  df2c50503295f325e7c8d7b783aca8ba4773919cde984193850cf9e361dfd28c  geos-3.13.1.tar.bz2
-+sha256  fe85286b1977121894794b36a7464d05049361bedabf972e70d8f9bf1e3ce928  geos-3.14.0.tar.bz2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libgeos/libgeos.mk b/package/libgeos/libgeos.mk
-index 475a54f79f..0de73e2688 100644
---- a/package/libgeos/libgeos.mk
-+++ b/package/libgeos/libgeos.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGEOS_VERSION = 3.13.1
-+LIBGEOS_VERSION = 3.14.0
- LIBGEOS_SITE = http://download.osgeo.org/geos
- LIBGEOS_SOURCE = geos-$(LIBGEOS_VERSION).tar.bz2
- LIBGEOS_LICENSE = LGPL-2.1
-diff --git a/package/postgis/Config.in b/package/postgis/Config.in
-index 593c0dc1f3..a0f64bd76a 100644
---- a/package/postgis/Config.in
-+++ b/package/postgis/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_POSTGIS
- 	bool "postgis"
- 	depends on BR2_PACKAGE_POSTGRESQL_FULL
- 	depends on BR2_INSTALL_LIBSTDCPP # libgeos, proj
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgeos
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # libgeos
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # proj
- 	depends on BR2_USE_WCHAR # libgeos, proj
- 	select BR2_PACKAGE_LIBGEOS
-@@ -17,6 +17,6 @@ config BR2_PACKAGE_POSTGIS
- 
- 	  https://postgis.net/
- 
--comment "postgis needs a toolchain w/ C++, NPTL, wchar, gcc >= 4.9"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-+comment "postgis needs a toolchain w/ C++, NPTL, wchar, gcc >= 7"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_USE_WCHAR
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksClJvbWFpbiBOYW91ciB3cm90ZSwKCj4gSGVsbG8gSm9zw6ksIEFsbCwKPiAKPiBMZSAxNC8w
+OS8yMDI1IMOgIDA2OjIwLCBKb3PDqSBMdWlzIFNhbHZhZG9yIFJ1Zm8gYSDDqWNyaXTCoDoKPiA+
+IFRoaXMgcGF0Y2ggcmVwbGFjZSB0aGUgWzFdIHBhdGNoLgo+ID4gCj4gPiBUaGUgUHl0aG9uIDMu
+MTMgaW50ZXJwcmV0ZXIgaXRzZWxmIHNlZ2ZhdWx0cyBhdCBydW50aW1lIHdoZW4gY29tcGlsZWQK
+PiA+IHdpdGggdUNsaWJjIG9uIHRoZSBhYXJjaDY0IHBsYXRmb3JtLgo+ID4gCj4gPiBUbyBrZWVw
+IFRlc3RaZnNVY2xpYmMsIHRoZSBleGVjdXRpb24gb2YgdGhlIGFyY19zdW1tYXJ5IGNvbW1hbmQg
+aGFzCj4gPiBiZWVuIHJlbW92ZWQgZnJvbSB0aGUgWkZTIHRlc3RzLiBUaGlzIGNvbW1hbmQgb25s
+eSBwcmludHMgc29tZSBBUkMKPiA+IHN0YXRzIGFueXdheS4KPiA+IAo+ID4gRml4ZXM6Cj4gPiBo
+dHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9qb2JzLzExMjcxMTI0
+ODU5IChUZXN0WmZzVWNsaWJjKQo+ID4gCj4gPiBbMV0gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
+b3JnL3BpcGVybWFpbC9idWlsZHJvb3QvMjAyNS1TZXB0ZW1iZXIvNzg2Mzk2Lmh0bWwKPiA+IAo+
+ID4gU2lnbmVkLW9mZi1ieTogSm9zw6kgTHVpcyBTYWx2YWRvciBSdWZvIDxzYWx2YWRvci5qb3Nl
+bHVpc0BnbWFpbC5jb20+Cj4gPiAtLS0KPiA+ICBzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2Fn
+ZS90ZXN0X3pmcy5weSB8IDIgLS0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgMiBkZWxldGlvbnMoLSkK
+PiA+IAo+ID4gZGlmZiAtLWdpdCBhL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3Rf
+emZzLnB5IGIvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF96ZnMucHkKPiA+IGlu
+ZGV4IDFiOTA3YWM0ZGUuLjlmZWFlNDllODYgMTAwNjQ0Cj4gPiAtLS0gYS9zdXBwb3J0L3Rlc3Rp
+bmcvdGVzdHMvcGFja2FnZS90ZXN0X3pmcy5weQo+ID4gKysrIGIvc3VwcG9ydC90ZXN0aW5nL3Rl
+c3RzL3BhY2thZ2UvdGVzdF96ZnMucHkKPiA+IEBAIC01Niw4ICs1Niw2IEBAIGNsYXNzIFRlc3Ra
+ZnNCYXNlKGluZnJhLmJhc2V0ZXN0LkJSVGVzdCk6Cj4gPiAgICAgICAgICAgICAgInpwb29sIHNj
+cnViIC13IHBvb2wiLAo+ID4gICAgICAgICAgICAgICJzaGEyNTZzdW0gLWMgL3RtcC91cmFuZG9t
+LnNoYTI1NiIsCj4gPiAgICAgICAgICAgICAgInpwb29sIHN0YXR1cyAtdiIsCj4gPiAtICAgICAg
+ICAgICAgIyBDaGVjayBQeVpGUwo+ID4gLSAgICAgICAgICAgICJhcmNfc3VtbWFyeSIsCj4gCj4g
+QWN0dWFsbHkgdGhlIHRlc3QgaXMgbm90IGFib3V0IEFSQyBzdGF0cyByZXBvcnRlZCBieSBhcmNf
+c3VtbWFyeSBzY3JpcHQgYnV0IGEKPiBjaGVjayBpZiBQeVpGUyBkb2Vzbid0IHRyaWdnZXIgc29t
+ZSBQeXRob24gZXhjZXB0aW9uIGR1ZSB0byBtaXNzaW5nIHB5dGhvbgo+IHJ1bnRpbWUgZGVwZW5k
+ZW5jeSAoaWYgUHlaRlMgaXMgd29ya2luZyBhcyBleHBlY3RlZCB3aGVuIHB5dGhvbjMgaXMgZW5h
+YmxlZCkuCj4gCj4gVGhpcyBhbHNvIHJlbW92ZSB0aGUgUHlaRlMgdGVzdCBmb3IgbXVzbCBhbmQg
+R2xpYmMgdGhhdCBhcmUgd29ya2luZyB3ZWxsLgo+IAo+IElmIGFyY19zdW1tYXJ5IGlzIHJlbW92
+ZWQgZnJvbSB0aGUgdGVzdCwgdGhlbiB3ZSBzaG91bGQgYWxzbyByZW1vdmUKPiBCUjJfUEFDS0FH
+RV9QWVRIT04zPXkgZnJvbSBUZXN0WmZzQmFzZS4KPiAKPiBUaGUgVGVzdFpmc0Jhc2UgaXMgZmlu
+ZSBhcyBpcywgd2Ugc2hvdWxkIG5vdCB0cnkgdG8gcmVtb3ZlIFB5WkZTIHRlc3QgZm9yIHRoZQo+
+IHNha2Ugb2YgdUNsaWJjLW5nLgo+IAo+IEFjdHVhbGx5LCBJJ20gd29ycmllZCBhYm91dCB0aGUg
+YWFyY2g2NCBwb3J0IG9uIHVDbGliYy1uZy4gSXQncyBwb3NzaWJsZSB0aGF0Cj4gdGhlIGlzc3Vl
+IHdlIGRpc2NvdmVyIG9uIHB5dGhvbjMgcGFja2FnZSBjYW4gaGFwcGVuIGF0IHJ1bnRpbWUgb24g
+b3RoZXIgcGFja2FnZXMuCj4gCj4gSWYgeW91IHJlYWxseSB3YW50IHRvIGtlZXAgVGVzdFpmc1Vj
+bGliYywgdGhlIFB5WkZTIHRlc3Qgc2hvdWxkIGJlIG9ubHkgZXhlY3V0ZWQKPiBieSBUZXN0WmZz
+R2xpYmMgYW5kIFRlc3RaZnNNdXNsLiBJJ20gbm90IHN1cmUgaXQgd29ydGggdGhlIGVmZm9ydC4g
+TGV0cyByZW1vdmUKPiBUZXN0WmZzVWNsaWJjIGZvciBub3cgYW5kIGhvcGUgdGhlIGlzc3VlIHdp
+bGwgYmUgZml4ZWQgaW4gdUNsaWJjLW5nIGluIHVwY29taW5nCj4gcmVsZWFzZXMuIFRoZW4gVGVz
+dFpmc1VjbGliYyBjYW4gYmUgYWRkZWQgYmFjay4KPiAKPiBUaG91Z2h0cz8KCkkgZm91bmQgdGhl
+IGJ1ZyBpbiB1Q2xpYmMtbmcgbGQuc28gY29kZSBmb3IgYWFyY2g2NC4gSSB3aWxsIGRvIGEKcmVs
+ZWFzZSB0aGlzIHdlZWtlbmQgd2hlbiBJIGhhdmUgZmluaXNoZWQgdGVzdGluZy4KCmJlc3QgcmVn
+YXJkcwogV2FsZGVtYXIKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRw
+czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
