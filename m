@@ -1,102 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BDE8CAC597
-	for <buildroot@archiver.kernel.org>; Mon, 15 Sep 2025 23:47:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A323CAC597
+	for <buildroot@archiver.kernel.org>; Mon, 15 Sep 2025 23:54:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 45D32409F4;
-	Mon, 15 Sep 2025 23:47:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D557360D86;
+	Mon, 15 Sep 2025 23:54:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4tV5RBxYoeG9; Mon, 15 Sep 2025 23:47:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id W5Q_BWDgdwf1; Mon, 15 Sep 2025 23:54:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA0F340A52
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E29126066B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EA0F340A52;
-	Mon, 15 Sep 2025 23:47:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5357812D
- for <buildroot@buildroot.org>; Mon, 15 Sep 2025 23:47:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E29126066B;
+	Mon, 15 Sep 2025 23:53:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id BEFF722F
+ for <buildroot@buildroot.org>; Mon, 15 Sep 2025 23:53:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 30FE54056C
- for <buildroot@buildroot.org>; Mon, 15 Sep 2025 23:47:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AC14E81432
+ for <buildroot@buildroot.org>; Mon, 15 Sep 2025 23:53:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PwSG7Ii4zY9F for <buildroot@buildroot.org>;
- Mon, 15 Sep 2025 23:47:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8GvbMiHLXwIj for <buildroot@buildroot.org>;
+ Mon, 15 Sep 2025 23:53:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::12f; helo=mail-il1-x12f.google.com;
+ client-ip=2607:f8b0:4864:20::12e; helo=mail-il1-x12e.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 30B5640547
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30B5640547
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com
- [IPv6:2607:f8b0:4864:20::12f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 30B5640547
- for <buildroot@buildroot.org>; Mon, 15 Sep 2025 23:47:22 +0000 (UTC)
-Received: by mail-il1-x12f.google.com with SMTP id
- e9e14a558f8ab-423fe622487so28547785ab.0
- for <buildroot@buildroot.org>; Mon, 15 Sep 2025 16:47:22 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C1FB781431
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1FB781431
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
+ [IPv6:2607:f8b0:4864:20::12e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C1FB781431
+ for <buildroot@buildroot.org>; Mon, 15 Sep 2025 23:53:56 +0000 (UTC)
+Received: by mail-il1-x12e.google.com with SMTP id
+ e9e14a558f8ab-42401f30515so10701595ab.0
+ for <buildroot@buildroot.org>; Mon, 15 Sep 2025 16:53:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1757980042; x=1758584842;
+ d=1e100.net; s=20230601; t=1757980435; x=1758585235;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=sOB8J6wgN1k6iLlfdTdjo0BPnJbzt0tb5FkUAvuG+BA=;
- b=cPwOY7l93rskjhexPnC1v0noPOkmu0mmZtznEkxowZTE3bM13xBwiKkglMKv/q64wD
- VDU0k1t74K3NHdeyz/Qz1nPnM1cPmgbvrtrwgHNidqCz1PNaI4WphtKwXqQ0ASrIC38f
- rjiRc3giYpjOov9jcmYvwtbhzwWgQcCZpaeBSUimosKwc7Bp7x24LQYdMXb7Qrh5C9tY
- aBfnRbi0arXWnvywKckxnKpl89LDbJCtMnsB17mScu2BGx+SdGfDu/FS91APC/OQsHuN
- Qwg4EYp+L/NKMuwV5lbXaxquP7GvwffN80hEoy8NSDjHRPXE8+JVTSUlSJCAZJaohjJU
- ewuA==
-X-Gm-Message-State: AOJu0YxUey9D6PH6KBJN03ZoCFljUxHP36PahFq3U7GIbro358PspZ4y
- rbQxjqJb9D6jW7jC2ekOyE509FjELy2SY+aRJFLNwATAQ6p3ib10B/WqHxCUyA==
-X-Gm-Gg: ASbGncvzlNS9itqlv9Q0muaN/VDroIH0nlUR1jKOMQBIstoJ8LNZwSjoa6R8vRB5r9F
- leUgDJEROcJckbBfopnbhjtJx/y2vg+KI6vIUD2+FWqU8DdRaBBeuckLXI06NkQM3cfkJ6px5st
- 57zE8p4ha64r9Kt2sSfCjYF1rT52bm8pyb+CjJjjMWpJEZttWzBsSQO/s+bxt07xGAFP3mt5M68
- LNsRY1J89ouW/k/9NQJVc0oGPwLBtqTj0i0WvZguKONLUfpDdjW0QVv61Ut8cLQvKhFw3zry5Ju
- HOIVhXhJMEnnuzDEP30bBCcHf7oNaPxO7hR88K/L0tbULQeJrQSzNg8rWHZPNbOifK2WJOiTVPz
- jJI69DZJV3NXyShX/ldr1cIa6KKCWk6gCGuHSEUFTLb0m9XVa4V2/LeSKONOnSWnuND6msSERI+
- fZdYOKMyA0/2U=
-X-Google-Smtp-Source: AGHT+IG5xzsi2jn2FJAxojFvZ1XU05DFjdSge2XqHtp4tza43vwSlaMiVZ699mrsT+Ris9JqOihIcQ==
-X-Received: by 2002:a05:6e02:2587:b0:3e5:4bc5:539a with SMTP id
- e9e14a558f8ab-420a3ca7919mr127085115ab.19.1757980041700; 
- Mon, 15 Sep 2025 16:47:21 -0700 (PDT)
+ bh=TkfT2ipMGlSe5PsaE6+PAg0912T89189X0CGBLgqjBQ=;
+ b=ezaupEpKT5p2GXwP/Hq3EWdLIm6BibcpsZ9wMCqCUO2nyWwMMln7VLLCKKObNTvGoS
+ rN7G+XQJuwL7qL2RyDQqXMVoKLYHZ6J2Pp95WNEc3jd7Su1SdTGfmTGq7acPyFuE1ip5
+ FLmP/cNBQWb60VoCxpTm3XzF976vgKstHFBUEnzqDtmmAh5X1UrqhT5n8heucHmPq+gF
+ wEVV8Gz+YwA35/XfxOUAujEVLe7q4aT9ru9WW4CZstfzD+qxykst+xTlhbh482uupZ6v
+ OWIWQ25k+gYf/vWq95Z04eU+fdrflhaF/P5syyqB5uSJQ0nrALlbjeg1P87Md7Tcer6z
+ srvA==
+X-Gm-Message-State: AOJu0YykqW7oiyO8fC6FchsyqCNsnj0q8bZ3+ObOpc4OvAJAC8msYTRe
+ /WKKJs4/sGn5govItgDebvzf+hFWZ38wTFOFmRGKoR/g/TIXwi17Yib0uyzHEw==
+X-Gm-Gg: ASbGnctam5YyJmAoWFmVMftJroQNBFTRDO2l96SDUu1yV7DRwWMh2F7U3dDzqf8KkYD
+ mYSr2LYIHq+Gmp7L3mNXWENhs/15zuBd+9lU3GdzpB4kZ9sVYthsuwsr2bdFQpQ26d7bfBIvV7b
+ Zehn6Y7NyZoCWzhALnw1IcIvaEJQ9ELMKSd5yuJzAq9ZzUDRI5TaEHT6pBIhkS7rpzG57cPhKsa
+ dyD9tMV/nZIpTm5U6v9xs6Tp+wY4gEHhqdJjiIBSexQmuUhjf8lIDMkOjS9eaeDwe/GLrOnc0uZ
+ z70vqB5VqmYPibYYX2kLMeSPpndv8ezyIpJMzg/rlr6r8sKdVOsUnkdgumBwxLuT/8WlWL1Lo72
+ 8kIKq63CKQkcNoyo3kzGBD/vZJiLxbthc82PSXRUPsrpDvtiNNIzWPqrESOIMVOrAiHpHtAUDG4
+ OM1PtrLqyqHkY=
+X-Google-Smtp-Source: AGHT+IH4XSrfRA0tegPnWVGbeYMsNAAi772aVMehLjlkoC+pGU6sZj8GOyn582R8VUOX29ggZjeWSA==
+X-Received: by 2002:a05:6e02:1489:b0:423:f113:749d with SMTP id
+ e9e14a558f8ab-424114566c6mr2384755ab.4.1757980435347; 
+ Mon, 15 Sep 2025 16:53:55 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-100-179.hlrn.qwest.net.
  [71.218.100.179]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-41dfb240f88sm61804955ab.42.2025.09.15.16.47.21
+ e9e14a558f8ab-42406eea76fsm19025085ab.26.2025.09.15.16.53.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 15 Sep 2025 16:47:21 -0700 (PDT)
+ Mon, 15 Sep 2025 16:53:54 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 15 Sep 2025 17:47:20 -0600
-Message-ID: <20250915234720.2443123-1-james.hilliard1@gmail.com>
+Date: Mon, 15 Sep 2025 17:53:24 -0600
+Message-ID: <20250915235324.2448456-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1757980042; x=1758584842; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1757980435; x=1758585235; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=sOB8J6wgN1k6iLlfdTdjo0BPnJbzt0tb5FkUAvuG+BA=;
- b=W0DnSWM2o8COcZAV/61ghWUtJ0djs845pZnBqX5NJ7n09XQ2o+IMHCnsjU1QQFXhLO
- JLRF+YSHbi4URbCQ0RQOZYLS5bw8O800vlhscWXADKe8+JJezTGDV8cLUlRxCs53VfTm
- wPZrw5dI20cQ0Pd/Y0w/2xgI4fa6tl2zEjuhDQSkgw9xT+Z5zI8fCAWqKhoN47egpHRp
- P8fs2BqoVDIRC5HLfZVkuVQC8qWUbgoNEORsXNBjt1cgCukSw9XoLPz0In4eWUcyO+aU
- C3nX52LzoWeIUs+fjQxIloUYf7+E1NOZVtFB8n/fMu+Ku4A0vJrdBsxPUn2vScnLZS/D
- CBWA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=TkfT2ipMGlSe5PsaE6+PAg0912T89189X0CGBLgqjBQ=;
+ b=G0oWzs4/WeU98DcGNqhoKMNga79NjWtSrDjkTUIb4PvZFXmVejFubN58cK+5tkX5uW
+ sdOPJ8oKJrPqwG3TCUrxyP0R39M4mQLxi0Ja36k31AxvNNx0ngY4CK1miJkQE2+l+d82
+ w3IOkBz37RaZOTgL1G3WVAcAwLjrsb6TSvr1szjsJ+I585zwArjTMQM7MQOYaHIGZqTN
+ wYWF8blnFrLYd4rjSJbTdPu7rvvOKwZBq034AQc0scGP9V0k99pFKelZQjWNTlgfYjTc
+ 8FAltB9nfpC6S7/u5k33aMzmdvzR3Dp/FOVhn+5qzu+W3CqHFzxH4R3YxtU5SXUqa4VU
+ kkWQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=W0DnSWM2
-Subject: [Buildroot] [PATCH 1/1] package/python-gobject: bump to version
- 3.54.2
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=G0oWzs4/
+Subject: [Buildroot] [PATCH 1/1] package/python-grpclib: bump to version
+ 0.4.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,213 +113,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-License hash changed due to formatting changes:
-https://gitlab.gnome.org/GNOME/pygobject/-/commit/e80a612fd78c46c97a9d1f1bb29dc93344e24aba
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- ...tor.get_map-look-up-file-objects-by-.patch | 164 ------------------
- package/python-gobject/python-gobject.hash    |   6 +-
- package/python-gobject/python-gobject.mk      |   4 +-
- 3 files changed, 5 insertions(+), 169 deletions(-)
- delete mode 100644 package/python-gobject/0001-gi.events._Selector.get_map-look-up-file-objects-by-.patch
+ package/python-grpclib/python-grpclib.hash | 4 ++--
+ package/python-grpclib/python-grpclib.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-gobject/0001-gi.events._Selector.get_map-look-up-file-objects-by-.patch b/package/python-gobject/0001-gi.events._Selector.get_map-look-up-file-objects-by-.patch
-deleted file mode 100644
-index a275abd9c7..0000000000
---- a/package/python-gobject/0001-gi.events._Selector.get_map-look-up-file-objects-by-.patch
-+++ /dev/null
-@@ -1,164 +0,0 @@
--From 4b97688d527276fc1e835fed71dbb73bbd09ac11 Mon Sep 17 00:00:00 2001
--From: Fiona Klute <fiona.klute@gmx.de>
--Date: Tue, 25 Mar 2025 13:29:04 +0100
--Subject: [PATCH] gi.events._Selector.get_map(): look up file objects by file
-- descriptor
--
--File objects and their underlying file descriptors must be treated as
--equivalent for lookup, or one may incorrectly be treated as not
--registered when the other was used for the registration, leading to
--bugs.
--
--Fixes: #689
--Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
--Upstream: https://gitlab.gnome.org/GNOME/pygobject/-/commit/4b97688d527276fc1e835fed71dbb73bbd09ac11
-----
-- gi/events.py         | 36 +++++++++++++++++++++-----
-- tests/test_events.py | 61 ++++++++++++++++++++++++++++++++++++++++++++
-- 2 files changed, 90 insertions(+), 7 deletions(-)
--
--diff --git a/gi/events.py b/gi/events.py
--index da4775dc..9eba1629 100644
----- a/gi/events.py
--+++ b/gi/events.py
--@@ -28,6 +28,7 @@ import threading
-- import selectors
-- import weakref
-- import warnings
--+from collections.abc import Mapping
-- from contextlib import contextmanager
-- from . import _ossighelper
-- 
--@@ -508,9 +509,33 @@ if sys.platform != 'win32':
--         # Subclass to attach _tag
--         pass
-- 
--+    class _FileObjectMapping(Mapping):
--+        def __init__(self, fd_dict):
--+            self.fd_dict = fd_dict
--+
--+        def __len__(self):
--+            return len(self.fd_dict)
--+
--+        def get(self, fileobj, default=None):
--+            fd = _fileobj_to_fd(fileobj)
--+            return self.fd_dict.get(fd, default)
--+
--+        def __getitem__(self, fileobj):
--+            value = self.get(fileobj)
--+            if value is None:
--+                raise KeyError("{!r} is not registered".format(fileobj))
--+            return value
--+
--+        def __iter__(self):
--+            return iter(self.fd_dict)
--+
--     class _Selector(_SelectorMixin, selectors.BaseSelector):
--         """A Selector for gi.events.GLibEventLoop registering python IO with GLib."""
-- 
--+        def __init__(self, context, loop):
--+            super().__init__(context, loop)
--+            self._map = _FileObjectMapping(self._fd_to_key)
--+
--         def attach(self):
--             self._source.attach(self._loop._context)
-- 
--@@ -559,15 +584,12 @@ if sys.platform != 'win32':
--         # We could override modify, but it is only slightly when the "events" change.
-- 
--         def get_key(self, fileobj):
---            fd = _fileobj_to_fd(fileobj)
---            return self._fd_to_key[fd]
--+            return self._map[fileobj]
-- 
--         def get_map(self):
---            """Return a mapping of file objects to selector keys."""
---            # Horribly inefficient
---            # It should never be called and exists just to prevent issues if e.g.
---            # python decides to use it for debug purposes.
---            return {k.fileobj: k for k in self._fd_to_key.values()}
--+            """Return a mapping of file objects or file descriptors to
--+            selector keys."""
--+            return self._map
-- 
-- 
-- else:
--diff --git a/tests/test_events.py b/tests/test_events.py
--index a6585468..9dbf3827 100644
----- a/tests/test_events.py
--+++ b/tests/test_events.py
--@@ -46,6 +46,7 @@ import sys
-- import gi
-- import gi.events
-- import asyncio
--+import socket
-- import threading
-- from gi.repository import GLib, Gio
-- 
--@@ -344,3 +345,63 @@ class GLibEventLoopPolicyTests(unittest.TestCase):
--         self.assertEqual(order, [GLib.PRIORITY_HIGH] * 3 +
--                                 [GLib.PRIORITY_DEFAULT] * 3 +
--                                 [GLib.PRIORITY_DEFAULT_IDLE] * 3)
--+
--+    @unittest.skipIf(sys.platform == 'win32', 'add reader/writer not implemented')
--+    def test_source_fileobj_fd(self):
--+        """Regression test for
--+        https://gitlab.gnome.org/GNOME/pygobject/-/issues/689
--+        """
--+        class Echo:
--+            def __init__(self, sock, expect_bytes):
--+                self.sock = sock
--+                self.sent_bytes = 0
--+                self.expect_bytes = expect_bytes
--+                self.done = asyncio.Future()
--+                self.data = bytes()
--+
--+            def send(self):
--+                if self.done.done():
--+                    return
--+                if self.sent_bytes < len(self.data):
--+                    self.sent_bytes += self.sock.send(
--+                        self.data[self.sent_bytes:])
--+                    print('sent', self.data)
--+                if self.sent_bytes >= self.expect_bytes:
--+                    self.done.set_result(None)
--+                    self.sock.shutdown(socket.SHUT_WR)
--+
--+            def recv(self):
--+                if self.done.done():
--+                    return
--+                self.data += self.sock.recv(self.expect_bytes)
--+                print('received', self.data)
--+                if len(self.data) >= self.expect_bytes:
--+                    self.sock.shutdown(socket.SHUT_RD)
--+
--+        async def run():
--+            loop = asyncio.get_running_loop()
--+            s1, s2 = socket.socketpair()
--+            sample = b'Hello!'
--+            e = Echo(s1, len(sample))
--+            # register using file object and file descriptor
--+            loop.add_reader(s1, e.recv)
--+            loop.add_writer(s1.fileno(), e.send)
--+            s2.sendall(sample)
--+            await asyncio.wait_for(e.done, timeout=2.0)
--+            echo = bytes()
--+            for _ in range(len(sample)):
--+                echo += s2.recv(len(sample))
--+                if len(echo) == len(sample):
--+                    break
--+            # remove using file object and file descriptor
--+            loop.remove_reader(s1)
--+            loop.remove_writer(s1.fileno())
--+            s1.close()
--+            s2.close()
--+            # check if the data was echoed correctly
--+            self.assertEqual(sample, echo)
--+
--+        policy = self.create_policy()
--+        loop = policy.get_event_loop()
--+        loop.run_until_complete(run())
--+        loop.close()
---- 
--2.49.0
--
-diff --git a/package/python-gobject/python-gobject.hash b/package/python-gobject/python-gobject.hash
-index e49c7ddd08..be19fc1900 100644
---- a/package/python-gobject/python-gobject.hash
-+++ b/package/python-gobject/python-gobject.hash
-@@ -1,3 +1,3 @@
--# from https://download.gnome.org/sources/pygobject/3.52/pygobject-3.52.3.sha256sum
--sha256  00e427d291e957462a8fad659a9f9c8be776ff82a8b76bdf402f1eaeec086d82  pygobject-3.52.3.tar.gz
--sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
-+# from https://download.gnome.org/sources/pygobject/3.54/pygobject-3.54.2.sha256sum
-+sha256  03cffeb49d8a1879b621d8f606ac904218019a0ae699b1cd3780a8ee611e696b  pygobject-3.54.2.tar.gz
-+sha256  f4cac31434b287b10a70b81c62cfa973d250417f8f248c4c1b5566d061ecfb2f  COPYING
-diff --git a/package/python-gobject/python-gobject.mk b/package/python-gobject/python-gobject.mk
-index 3021937887..0d96c299cf 100644
---- a/package/python-gobject/python-gobject.mk
-+++ b/package/python-gobject/python-gobject.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/python-grpclib/python-grpclib.hash b/package/python-grpclib/python-grpclib.hash
+index cc65209138..31ff505fdb 100644
+--- a/package/python-grpclib/python-grpclib.hash
++++ b/package/python-grpclib/python-grpclib.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/grpclib/json
+-md5  60ce203e5b9f95de3d7e5721dbce2bd9  grpclib-0.4.7.tar.gz
+-sha256  2988ef57c02b22b7a2e8e961792c41ccf97efc2ace91ae7a5b0de03c363823c3  grpclib-0.4.7.tar.gz
++md5  c37be825d02fa3f3f488f172c784ca71  grpclib-0.4.8.tar.gz
++sha256  d8823763780ef94fed8b2c562f7485cf0bbee15fc7d065a640673667f7719c9a  grpclib-0.4.8.tar.gz
+ # Locally computed sha256 checksums
+ sha256  6c7fa8cf9b94ad5043a6b550a0ffb98356e66100b69dd1cb8e1f82606b436e8e  LICENSE.txt
+diff --git a/package/python-grpclib/python-grpclib.mk b/package/python-grpclib/python-grpclib.mk
+index 0bec0a1879..4f8406ee69 100644
+--- a/package/python-grpclib/python-grpclib.mk
++++ b/package/python-grpclib/python-grpclib.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_GOBJECT_VERSION_MAJOR = 3.52
--PYTHON_GOBJECT_VERSION = $(PYTHON_GOBJECT_VERSION_MAJOR).3
-+PYTHON_GOBJECT_VERSION_MAJOR = 3.54
-+PYTHON_GOBJECT_VERSION = $(PYTHON_GOBJECT_VERSION_MAJOR).2
- PYTHON_GOBJECT_SOURCE = pygobject-$(PYTHON_GOBJECT_VERSION).tar.gz
- PYTHON_GOBJECT_SITE = https://download.gnome.org/sources/pygobject/$(PYTHON_GOBJECT_VERSION_MAJOR)
- PYTHON_GOBJECT_LICENSE = LGPL-2.1+
+-PYTHON_GRPCLIB_VERSION = 0.4.7
++PYTHON_GRPCLIB_VERSION = 0.4.8
+ PYTHON_GRPCLIB_SOURCE = grpclib-$(PYTHON_GRPCLIB_VERSION).tar.gz
+-PYTHON_GRPCLIB_SITE = https://files.pythonhosted.org/packages/79/b9/55936e462a5925190d7427e880b3033601d1effd13809b483d13a926061a
++PYTHON_GRPCLIB_SITE = https://files.pythonhosted.org/packages/19/75/0f0d3524b38b35e5cd07334b754aa9bd0570140ad982131b04ebfa3b0374
+ PYTHON_GRPCLIB_SETUP_TYPE = setuptools
+ PYTHON_GRPCLIB_LICENSE = BSD-3-Clause
+ PYTHON_GRPCLIB_LICENSE_FILES = LICENSE.txt
 -- 
 2.43.0
 
