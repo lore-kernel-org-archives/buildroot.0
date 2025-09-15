@@ -1,51 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FBFCCAC597
-	for <buildroot@archiver.kernel.org>; Mon, 15 Sep 2025 20:22:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6ED5FCAC592
+	for <buildroot@archiver.kernel.org>; Mon, 15 Sep 2025 20:27:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E653C80AAB;
-	Mon, 15 Sep 2025 20:22:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32F044076C;
+	Mon, 15 Sep 2025 20:27:41 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0rLQ-OLtgn_X; Mon, 15 Sep 2025 20:27:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 676DE40810
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 676DE40810;
+	Mon, 15 Sep 2025 20:27:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 879711F7
+ for <buildroot@buildroot.org>; Mon, 15 Sep 2025 20:27:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 819DF8123F
+ for <buildroot@buildroot.org>; Mon, 15 Sep 2025 20:27:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9FJ5oUg8DNJ8; Mon, 15 Sep 2025 20:22:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0166880ABB
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0166880ABB;
-	Mon, 15 Sep 2025 20:22:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id EF49B22F
- for <buildroot@buildroot.org>; Mon, 15 Sep 2025 20:22:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E13BD60AF2
- for <buildroot@buildroot.org>; Mon, 15 Sep 2025 20:22:18 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MBWlhGn1JXxc for <buildroot@buildroot.org>;
- Mon, 15 Sep 2025 20:22:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEA7960AF5
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EEA7960AF5
- for <buildroot@buildroot.org>; Mon, 15 Sep 2025 20:22:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E5D25846F3; Mon, 15 Sep 2025 20:22:17 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 15 Sep 2025 22:19:26 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ccbcb0d47854e93b10ee90167da033b250026d97
-X-Git-Newrev: cbc3cb2c8deebd362399cc7867dda94709d552e7
-X-Patchwork-Hint: ignore
-Message-Id: <20250915202217.E5D25846F3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-flask-cors: fix PKG_SITE
+ id gRNxwnRu0GMP for <buildroot@buildroot.org>;
+ Mon, 15 Sep 2025 20:27:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 67BDC81237
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67BDC81237
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 67BDC81237
+ for <buildroot@buildroot.org>; Mon, 15 Sep 2025 20:27:36 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 419305FFB1;
+ Mon, 15 Sep 2025 22:27:32 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 15 Sep 2025 22:27:32 +0200
+MIME-Version: 1.0
+Date: Mon, 15 Sep 2025 22:27:32 +0200
+To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>
+In-Reply-To: <20250915132556.47191-1-titouan.christophe@mind.be>
+References: <20250915132556.47191-1-titouan.christophe@mind.be>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <847d2ff7f402a465c8d2fac38be47ed3@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1757968054;
+ bh=08jyajnazOFwSEParH404qH/K8fnUvxcBiGatBb0TPI=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=XdO9XG0ctw21HqcVHUWkLXd8c6eIpxZvKD0yfpkMbaX8YqudBgfP0hlRbaA1IFLnC
+ KAC7V8/5sw4BU1CgYzE+xxngFZPwevLQXobS2uh+pCqeip6YR84grYxXdfL0kaT6z8
+ YHnmPT/bx6njYmPzj4rKzFr0qc1tPQlEOvykSGnKdK0VodQPqGiTok/AbMfOLUHSxu
+ GAgCyVH3zc1DevoPd11Ax8xrFxtA0eC3rAPFfkkhd2eAZizBBpMT6iMFhr1V6seSe7
+ GI9ARyU+jZ+LoOe2idEWb6+gqQ4dmC8JrTrYBwCABaZk/y36lR3IcG5Yaej7Y570Qs
+ 8cy3cR9lCgZqA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=XdO9XG0c
+Subject: Re: [Buildroot] [PATCH] package/python-flask-cors: fix PKG_SITE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,44 +82,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cbc3cb2c8deebd362399cc7867dda94709d552e7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 15/09/2025 15:25, Titouan Christophe via buildroot wrote:
+> python-flask-cors was security bumped in commit 04cd135b26 [1], however 
+> this
+> commit did not update the _SITE url; which changes with each new 
+> release on
+> pypi. Therefore, downloading python-flask-cors would always fail.
+> 
+> [1] 
+> https://gitlab.com/buildroot.org/buildroot/-/commit/04cd135b26406dcc31cb66af1480d53fffe81e59
+> 
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 
-python-flask-cors was security bumped in commit 04cd135b26 [1], however this
-commit did not update the _SITE url; which changes with each new release on
-pypi. Therefore, downloading python-flask-cors would always fail.
+I applied this patch to master, including the comment from Yegor.
+It fixes the source archive download.
 
-Fixes:
-https://autobuild.buildroot.org/results/eeadcb2e416cddaa5d059b31ea5dcc9f766a3cff
+While testing, I also observed that the license legal-info is also 
+failing,
+running "make python-flask-cors-legal-info". It would be great if 
+somebody
+could send a followup patch fixing this.
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/04cd135b26406dcc31cb66af1480d53fffe81e59
+Best regards,
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-[Julien: add "Fixes" in commit log, from Yegor Yefremov comment]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-flask-cors/python-flask-cors.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/python-flask-cors/python-flask-cors.mk b/package/python-flask-cors/python-flask-cors.mk
-index d0923d665b..26198e6fb4 100644
---- a/package/python-flask-cors/python-flask-cors.mk
-+++ b/package/python-flask-cors/python-flask-cors.mk
-@@ -6,7 +6,7 @@
- 
- PYTHON_FLASK_CORS_VERSION = 6.0.1
- PYTHON_FLASK_CORS_SOURCE = flask_cors-$(PYTHON_FLASK_CORS_VERSION).tar.gz
--PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/4f/d0/d9e52b154e603b0faccc0b7c2ad36a764d8755ef4036acbf1582a67fb86b
-+PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/76/37/bcfa6c7d5eec777c4c7cf45ce6b27631cebe5230caf88d85eadd63edd37a
- PYTHON_FLASK_CORS_SETUP_TYPE = setuptools
- PYTHON_FLASK_CORS_LICENSE = MIT
- PYTHON_FLASK_CORS_LICENSE_FILES = LICENSE
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
