@@ -4,50 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C4F1CAC59B
-	for <buildroot@archiver.kernel.org>; Tue, 16 Sep 2025 19:57:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEE79CAC592
+	for <buildroot@archiver.kernel.org>; Tue, 16 Sep 2025 20:02:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6D96B82C61;
-	Tue, 16 Sep 2025 19:57:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A15482EC7;
+	Tue, 16 Sep 2025 20:02:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KVsUuD2vUdUr; Tue, 16 Sep 2025 19:57:55 +0000 (UTC)
+ id vJoCVUN8gl4G; Tue, 16 Sep 2025 20:02:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94FDA82C3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6D6E82382
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 94FDA82C3B;
-	Tue, 16 Sep 2025 19:57:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id C983412D
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 19:57:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E6D6E82382;
+	Tue, 16 Sep 2025 20:02:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0BD29199
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:02:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C6BE382C61
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 19:57:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E6612610FE
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:02:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ub0QCWBdLJT8 for <buildroot@buildroot.org>;
- Tue, 16 Sep 2025 19:57:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id owBsRqLPzKmW for <buildroot@buildroot.org>;
+ Tue, 16 Sep 2025 20:02:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17B8E82C38
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 17B8E82C38
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 19:57:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 124B7848AE; Tue, 16 Sep 2025 19:57:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BE2B960FFF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE2B960FFF
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BE2B960FFF
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:02:40 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1790757336; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Tue, 16 Sep 2025 20:02:38 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1uybsr-0034xT-1J;
+ Tue, 16 Sep 2025 22:02:37 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 16 Sep 2025 21:55:52 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f8fd48a9241286e7a6e329b9e371c151baa510a6
-X-Git-Newrev: dd68f4edd28007a58f7061056a3d65dd1bdfcb0d
-X-Patchwork-Hint: ignore
-Message-Id: <20250916195753.124B7848AE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/webkitgtk: security bump to
- version 2.48.6
+To: Julien Olivain via buildroot <buildroot@buildroot.org>
+Cc: Julien Olivain <ju.o@free.fr>,  Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>
+References: <20250915185448.11118-1-ju.o@free.fr>
+Date: Tue, 16 Sep 2025 22:02:37 +0200
+In-Reply-To: <20250915185448.11118-1-ju.o@free.fr> (Julien Olivain via
+ buildroot's message of "Mon, 15 Sep 2025 20:54:46 +0200")
+Message-ID: <87qzw69ndu.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=mo4wab2xh4dWHmZfSyEOFoO3F7T88H+E/PcPH5UcEy9naPnOKuB5xAJrBomLnkmkZZaCJNUfTE+BAm5yOfvoX1sW4p3qryK/y0Qqmq48/onronOLafwiQb3EcF6pxz/bq3uc0ypb7dZoM3Qu8ou0ExKepwH4rjgN2j74+CESwtYNnvt9zq9H2bTSps6MbxOKamXIBfz6LSUblSPGdXqXsg5F8jVPdx+ZDNatpinsasP9QoTekBxBb2fxf4YyjMEle27F0/0lMdvbZJ1GwytACBRXGge5kD+2eECsThCtZfHB5dIpU9ToiELFX1/3lPrT/bEK3He4GUChO5nmOvGavg==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=4ifT5pWGriD8BllbgHZLY8K8KPlBU9IDFdm20VC5OD4=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=mo4wab2x
+Subject: Re: [Buildroot] [PATCH 1/3] boot/boot-wrapper-aarch64/Config.in:
+ switch homepage URL to https
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,60 +82,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd68f4edd28007a58f7061056a3d65dd1bdfcb0d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Julien" == Julien Olivain via buildroot <buildroot@buildroot.org> writes:
 
-Fixes a number of crashes. Release notes:
+ > Buildroot commit [1] ("package: replace git:// URLs with https://
+ > URLs where possible") switched _SITE URL from git to https, but did
+ > not updated the package homepage in Config.in.
 
- - https://webkitgtk.org/2025/07/30/webkitgtk2.48.4-released.html
- - https://webkitgtk.org/2025/08/01/webkitgtk2.48.5-released.html
- - https://webkitgtk.org/2025/09/03/webkitgtk2.48.6-released.html
+ > This commit updates it to match the package _SITE URL.
 
-And brings some security fixes. Security advisory:
+ > [1] https://gitlab.com/buildroot.org/buildroot/-/commit/6626bf7c5fc1f5f47fcade03090de212a6121db3
 
- - https://webkitgtk.org/security/WSA-2025-0005.html
+ > Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-Acked-By: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/webkitgtk/webkitgtk.hash | 6 +++---
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Committed, thanks.
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 6c2beb7d1d..fde2439dd5 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,6 +1,6 @@
--# From https://www.webkitgtk.org/releases/webkitgtk-2.48.3.tar.xz.sums
--sha1  36faf2c30967db57175caf88cefd3d25781ae6d7  webkitgtk-2.48.3.tar.xz
--sha256  d4dc5970f0fc6a529ff7fd67bcbfab2bbb5e91be789b2e9279640b3217a782c3  webkitgtk-2.48.3.tar.xz
-+# From https://www.webkitgtk.org/releases/webkitgtk-2.48.6.tar.xz.sums
-+sha1  8f8e27722b29be5aba84322cf7252fe14afcec60  webkitgtk-2.48.6.tar.xz
-+sha256  d9ac3034b7a39c2aaa567e6112b3124b158e591a74439e46974a031dd0e44e24  webkitgtk-2.48.6.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 419bef9d8e..cb66641e3d 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.48.3
-+WEBKITGTK_VERSION = 2.48.6
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
