@@ -4,108 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA8EBCAC598
-	for <buildroot@archiver.kernel.org>; Tue, 16 Sep 2025 11:42:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 723E7CAC598
+	for <buildroot@archiver.kernel.org>; Tue, 16 Sep 2025 12:20:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3E99B8198D;
-	Tue, 16 Sep 2025 11:42:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17DF680C7D;
+	Tue, 16 Sep 2025 12:20:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ReU4IhSBD-LQ; Tue, 16 Sep 2025 11:42:01 +0000 (UTC)
+ id SY6L21ouWkPA; Tue, 16 Sep 2025 12:20:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42C9181970
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63B9E80C38
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 42C9181970;
-	Tue, 16 Sep 2025 11:42:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7DACA22F
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 11:41:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 63B9E80C38;
+	Tue, 16 Sep 2025 12:20:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 177BD199
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 12:20:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6405760B61
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 11:41:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F18CF40819
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 12:20:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Lksm93hYg-rR for <buildroot@buildroot.org>;
- Tue, 16 Sep 2025 11:41:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4BE6E60645
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BE6E60645
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4BE6E60645
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 11:41:57 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id
- ffacd0b85a97d-3eb3f05c35bso1566097f8f.1
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 04:41:57 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SLozc0Hm-Xax for <buildroot@buildroot.org>;
+ Tue, 16 Sep 2025 12:20:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.53;
+ helo=mail-wm1-f53.google.com; envelope-from=thomas.devoogdt@gmail.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0174B40145
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0174B40145
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com
+ [209.85.128.53])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0174B40145
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 12:20:11 +0000 (UTC)
+Received: by mail-wm1-f53.google.com with SMTP id
+ 5b1f17b1804b1-45de1084868so29606085e9.2
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 05:20:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1758022916; x=1758627716;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=JqoVnt9OWerxvKhskitTS+OCgD0mVvmieV0mG/FRxMA=;
- b=P/svuJAc7rO4BJvKPOwX9HsSVjXzbG1d+b5AzCBzBjGKYFd3wscccml7WLHoK3QMD6
- Ut94qPxsHGaZBAJ53kMQORSc7bs8KCuiiy1yOzpjfhNBxtJrzVrPTMKKsuXlTwkBlFIw
- uzzVMkgEaWPIjtyX4VDf8neiB4gTrt2FaKKmezle4/LVNcjmPhAZto7vT2GODiwwku5B
- iew8H0ZJktXzPXDygB/MG+VdUxn0qDdv21KDVrwUHsVnNpjpXxj+l8earUNteSnrYwVV
- rCAO53QrznjzkoJU2Y6EMrMs4lEwpfIMuDUaSalRBtQedVUDycftPiRKnj5EDngS0TMO
- GFsA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCXa/W3CStc+0b+xkRMtV14SFf9+qlKePX5xPPdznHNo6YSE5li2+FGODRcF07t3n3gNWg+F/qTLM7A=@buildroot.org
-X-Gm-Message-State: AOJu0Yw71lPL3LELqVjTtTr5Y2cJeH5xn49uam7ETGZ5M+mBNXzQFgT5
- oLaBtm69tN9owA39daC3ZVjnab29v7BXPnywi1Gueiz8qQuvkjB3K4RT55GMdPdzKGrEn4WMzAo
- CymCW
-X-Gm-Gg: ASbGncvalhV8GsLAeEk+xt3y69GCatjUuqU/gh/f9aRVKIFMa5j75Q3E/7R4lnJJlcb
- b6E9iwL56bz1EeAywbsOBMsa26Vutg/Yg6lW9sV/oG2ysOOVcPmErwBIaB3Ghljl/7iWxfp/Z+v
- yvOUAAxydKkGWUHfr63G3D4VyMfWND3Iv0oWEs1KNMBB8Bc5VdkodeC7iuDfUw2xcZweHWaGPpk
- bWTicFgR8+4Rj2xU2YUI1UfGGK/bnoTkB+jFFa1Wm8+oaLd/ZpVN24zjAtmn24EqtiD9LOgPvNM
- 14p2BOl2TWS/FA5lo1RKrIVuobdIiHfVH62I86eeLslYXizXilzC4SYrSi+kASM2CBoOUn1jUxu
- 5vlD3UxFr3y8sLzcQ3cgxTQduca7NcruZZHR9SwuSpiEN5qkqmxoWyKsalAdYFqDH/0EJB/L774
- PVjTwXMc02kU2oN6OgnVTXL7/1A72I7OK3t+LskcaiANO1HCDOmJ27nd78mjqT
-X-Google-Smtp-Source: AGHT+IEf/bTyfQRNRoL7tvYNDgNYfdeugWMAn7OFLdXh78mJxmUX93S+S1Gns7wGFJjhND+w0g7SWg==
-X-Received: by 2002:a05:6000:4023:b0:3eb:4e88:55e with SMTP id
- ffacd0b85a97d-3eb4e88099emr4662530f8f.41.1758022915740; 
- Tue, 16 Sep 2025 04:41:55 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:94a2:a200:2ad9:827a:59cb:148a?
- (2a01cb0594a2a2002ad9827a59cb148a.ipv6.abo.wanadoo.fr.
- [2a01:cb05:94a2:a200:2ad9:827a:59cb:148a])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3e7607cd329sm21660225f8f.31.2025.09.16.04.41.55
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 16 Sep 2025 04:41:55 -0700 (PDT)
-Message-ID: <bcc3f93b-dfd9-45ea-b668-447b07f3009a@smile.fr>
-Date: Tue, 16 Sep 2025 13:41:54 +0200
+ d=1e100.net; s=20230601; t=1758025209; x=1758630009;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=06CEK3s0K5asOzm+ICqoDcbG0LBFDmIlsUVU+NxkOfs=;
+ b=d1gLkNgLQjkJYjS2AYmJP5hZVJ1h+KblPOD4T1STieNJiaJwDjt3FSuGm6JQwnyKQW
+ CnmD2dlSq3LWaB0h7l/zOBiikTffrkahiCmjYFvEbKCxC4ClfbMZ8r0UhiBj1JdWtLVD
+ DAEoJfwmyS0NZ3H4gy2v9PnCHqpj3qMne/CGTxZOwEPWZzAlT7hp8DGdI3jAoZVX93EM
+ PT7C0+y8TqWstnjdzmXNL5vXw09ogoKqtG7RympUlzV7jWSJP6KZi7gitZ3NrqFCrbWo
+ /WivbSkhRCJ9RCiSJbWRbVZlJMmH3Qrv1/sk1SlYlSqNp4uSz224t3GeaZzb2XCK3dEA
+ g+5A==
+X-Gm-Message-State: AOJu0YzQgPRrPtlq95Y6imZn+L+vQj0NBmFUNK6NzlfsPkZJpd3yUvW8
+ mpkvl2K6nzC74PjRdvE9dVNJdKYfqFjA+itciYIyC8LA9rdDjxeqpkhJPmvZYAs7
+X-Gm-Gg: ASbGnct5Dszzu7+Ko3UIjveXBvZackoP/Dy7aJl2RptXE7s2VRmmH2HCFtemUxWrnU1
+ PWEufrZ73e1CHY+pw0HRzv6ChvXae/yzvQCf5JvajR/FqrrRnregj+KrG8hT0jzwPZnTk15Za+y
+ xmUYxiSNawCO2UwnIbXTrWrybxqr/eqvQ5W+sV2SbdbCVpBiamGMVnhBn4eGWgVbU9KGH5UX4NW
+ zlS83TSpgxvFbgJTLzjjK2aKPtIcX20jQHbewTpuZbg07b+Q57oYfYuYhak5/46dAfjuQ2QeJ1F
+ LSfv5dYXUpVRynDZTEczyzuXVsEovfmM+1/awejC7kBfd3ZK4u678e+r6bhqMVu9veItXKmZVo5
+ FnM3b08HAaZkkszKynPye7PpndlTKPqVjzvaX5d2O6GNYGJW6WE7ksJOC2+Gn+XV9SA3WyH3Ghc
+ blC7dPjaAG1UfUaKHHmsw9nnx5CrjQ6EHWAZPpiFHEH0gxqTs=
+X-Google-Smtp-Source: AGHT+IG24+vEi9hH1MoBv0G198nGmMuMzLhMbC52a8AfkNTaEb+XSaX1wokx/ZfkSZ/RlUOF2VuDiQ==
+X-Received: by 2002:a05:600c:3515:b0:45f:28ed:6e1e with SMTP id
+ 5b1f17b1804b1-45f28ed71c9mr123859785e9.16.1758025209368; 
+ Tue, 16 Sep 2025 05:20:09 -0700 (PDT)
+Received: from KORLIN44614.barco.com (d528f5fde.static.telenet.be.
+ [82.143.95.222]) by smtp.googlemail.com with ESMTPSA id
+ 5b1f17b1804b1-45e0156abecsm219797195e9.4.2025.09.16.05.20.08
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 16 Sep 2025 05:20:08 -0700 (PDT)
+From: Thomas Devoogdt <thomas@devoogdt.com>
+To: buildroot@buildroot.org
+Cc: Adrian Perez de Castro <aperez@igalia.com>,
+ Thomas Devoogdt <thomas@devoogdt.com>
+Date: Tue, 16 Sep 2025 14:20:05 +0200
+Message-ID: <20250916122005.30652-1-thomas@devoogdt.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Waldemar Brodkorb <wbx@openadk.org>
-Cc: Josss Luis Salvador Rufo <salvador.joseluis@gmail.com>,
- buildroot@buildroot.org
-References: <20250914042054.771446-1-salvador.joseluis@gmail.com>
- <55c98b57-f4be-47b7-a87c-06f5130df8fe@smile.fr>
- <aMh87DWmal5nH0JK@waldemar-brodkorb.de>
-Content-Language: fr, en-US
-In-Reply-To: <aMh87DWmal5nH0JK@waldemar-brodkorb.de>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1758022916; x=1758627716; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=JqoVnt9OWerxvKhskitTS+OCgD0mVvmieV0mG/FRxMA=;
- b=PLm5qjKPbMiQayfDecwjy9xnn5Vl/sIsA4EMaPNB/wae64PG7CeIj+0T6VhSZ9KMof
- bqKjh87hZism+686BN5nQTucRNUr63YoWELvGyT3ElECXpHF1HEroUJKzJwy1R3ekiTl
- yESIrp3ZSfSOSejysbpQOiti6cNFrjrRjq23A=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=PLm5qjKP
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: remove arc_summary
- from ZFS tests
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=devoogdt.com
+Subject: [Buildroot] [PATCH v1] package/webkitgtk: bump to version 2.48.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,61 +94,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gV2FsZGVtYXIsIEFsbCwKCkxlIDE1LzA5LzIwMjUgw6AgMjI6NTQsIFdhbGRlbWFyIEJy
-b2Rrb3JiIGEgw6ljcml0wqA6Cj4gSGksCj4gUm9tYWluIE5hb3VyIHdyb3RlLAo+IAo+PiBIZWxs
-byBKb3PDqSwgQWxsLAo+Pgo+PiBMZSAxNC8wOS8yMDI1IMOgIDA2OjIwLCBKb3PDqSBMdWlzIFNh
-bHZhZG9yIFJ1Zm8gYSDDqWNyaXTCoDoKPj4+IFRoaXMgcGF0Y2ggcmVwbGFjZSB0aGUgWzFdIHBh
-dGNoLgo+Pj4KPj4+IFRoZSBQeXRob24gMy4xMyBpbnRlcnByZXRlciBpdHNlbGYgc2VnZmF1bHRz
-IGF0IHJ1bnRpbWUgd2hlbiBjb21waWxlZAo+Pj4gd2l0aCB1Q2xpYmMgb24gdGhlIGFhcmNoNjQg
-cGxhdGZvcm0uCj4+Pgo+Pj4gVG8ga2VlcCBUZXN0WmZzVWNsaWJjLCB0aGUgZXhlY3V0aW9uIG9m
-IHRoZSBhcmNfc3VtbWFyeSBjb21tYW5kIGhhcwo+Pj4gYmVlbiByZW1vdmVkIGZyb20gdGhlIFpG
-UyB0ZXN0cy4gVGhpcyBjb21tYW5kIG9ubHkgcHJpbnRzIHNvbWUgQVJDCj4+PiBzdGF0cyBhbnl3
-YXkuCj4+Pgo+Pj4gRml4ZXM6Cj4+PiBodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9i
-dWlsZHJvb3QvLS9qb2JzLzExMjcxMTI0ODU5IChUZXN0WmZzVWNsaWJjKQo+Pj4KPj4+IFsxXSBo
-dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvcGlwZXJtYWlsL2J1aWxkcm9vdC8yMDI1LVNlcHRl
-bWJlci83ODYzOTYuaHRtbAo+Pj4KPj4+IFNpZ25lZC1vZmYtYnk6IEpvc8OpIEx1aXMgU2FsdmFk
-b3IgUnVmbyA8c2FsdmFkb3Iuam9zZWx1aXNAZ21haWwuY29tPgo+Pj4gLS0tCj4+PiAgc3VwcG9y
-dC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF96ZnMucHkgfCAyIC0tCj4+PiAgMSBmaWxlIGNo
-YW5nZWQsIDIgZGVsZXRpb25zKC0pCj4+Pgo+Pj4gZGlmZiAtLWdpdCBhL3N1cHBvcnQvdGVzdGlu
-Zy90ZXN0cy9wYWNrYWdlL3Rlc3RfemZzLnB5IGIvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2th
-Z2UvdGVzdF96ZnMucHkKPj4+IGluZGV4IDFiOTA3YWM0ZGUuLjlmZWFlNDllODYgMTAwNjQ0Cj4+
-PiAtLS0gYS9zdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3pmcy5weQo+Pj4gKysr
-IGIvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF96ZnMucHkKPj4+IEBAIC01Niw4
-ICs1Niw2IEBAIGNsYXNzIFRlc3RaZnNCYXNlKGluZnJhLmJhc2V0ZXN0LkJSVGVzdCk6Cj4+PiAg
-ICAgICAgICAgICAgInpwb29sIHNjcnViIC13IHBvb2wiLAo+Pj4gICAgICAgICAgICAgICJzaGEy
-NTZzdW0gLWMgL3RtcC91cmFuZG9tLnNoYTI1NiIsCj4+PiAgICAgICAgICAgICAgInpwb29sIHN0
-YXR1cyAtdiIsCj4+PiAtICAgICAgICAgICAgIyBDaGVjayBQeVpGUwo+Pj4gLSAgICAgICAgICAg
-ICJhcmNfc3VtbWFyeSIsCj4+Cj4+IEFjdHVhbGx5IHRoZSB0ZXN0IGlzIG5vdCBhYm91dCBBUkMg
-c3RhdHMgcmVwb3J0ZWQgYnkgYXJjX3N1bW1hcnkgc2NyaXB0IGJ1dCBhCj4+IGNoZWNrIGlmIFB5
-WkZTIGRvZXNuJ3QgdHJpZ2dlciBzb21lIFB5dGhvbiBleGNlcHRpb24gZHVlIHRvIG1pc3Npbmcg
-cHl0aG9uCj4+IHJ1bnRpbWUgZGVwZW5kZW5jeSAoaWYgUHlaRlMgaXMgd29ya2luZyBhcyBleHBl
-Y3RlZCB3aGVuIHB5dGhvbjMgaXMgZW5hYmxlZCkuCj4+Cj4+IFRoaXMgYWxzbyByZW1vdmUgdGhl
-IFB5WkZTIHRlc3QgZm9yIG11c2wgYW5kIEdsaWJjIHRoYXQgYXJlIHdvcmtpbmcgd2VsbC4KPj4K
-Pj4gSWYgYXJjX3N1bW1hcnkgaXMgcmVtb3ZlZCBmcm9tIHRoZSB0ZXN0LCB0aGVuIHdlIHNob3Vs
-ZCBhbHNvIHJlbW92ZQo+PiBCUjJfUEFDS0FHRV9QWVRIT04zPXkgZnJvbSBUZXN0WmZzQmFzZS4K
-Pj4KPj4gVGhlIFRlc3RaZnNCYXNlIGlzIGZpbmUgYXMgaXMsIHdlIHNob3VsZCBub3QgdHJ5IHRv
-IHJlbW92ZSBQeVpGUyB0ZXN0IGZvciB0aGUKPj4gc2FrZSBvZiB1Q2xpYmMtbmcuCj4+Cj4+IEFj
-dHVhbGx5LCBJJ20gd29ycmllZCBhYm91dCB0aGUgYWFyY2g2NCBwb3J0IG9uIHVDbGliYy1uZy4g
-SXQncyBwb3NzaWJsZSB0aGF0Cj4+IHRoZSBpc3N1ZSB3ZSBkaXNjb3ZlciBvbiBweXRob24zIHBh
-Y2thZ2UgY2FuIGhhcHBlbiBhdCBydW50aW1lIG9uIG90aGVyIHBhY2thZ2VzLgo+Pgo+PiBJZiB5
-b3UgcmVhbGx5IHdhbnQgdG8ga2VlcCBUZXN0WmZzVWNsaWJjLCB0aGUgUHlaRlMgdGVzdCBzaG91
-bGQgYmUgb25seSBleGVjdXRlZAo+PiBieSBUZXN0WmZzR2xpYmMgYW5kIFRlc3RaZnNNdXNsLiBJ
-J20gbm90IHN1cmUgaXQgd29ydGggdGhlIGVmZm9ydC4gTGV0cyByZW1vdmUKPj4gVGVzdFpmc1Vj
-bGliYyBmb3Igbm93IGFuZCBob3BlIHRoZSBpc3N1ZSB3aWxsIGJlIGZpeGVkIGluIHVDbGliYy1u
-ZyBpbiB1cGNvbWluZwo+PiByZWxlYXNlcy4gVGhlbiBUZXN0WmZzVWNsaWJjIGNhbiBiZSBhZGRl
-ZCBiYWNrLgo+Pgo+PiBUaG91Z2h0cz8KPiAKPiBJIGZvdW5kIHRoZSBidWcgaW4gdUNsaWJjLW5n
-IGxkLnNvIGNvZGUgZm9yIGFhcmNoNjQuIEkgd2lsbCBkbyBhCj4gcmVsZWFzZSB0aGlzIHdlZWtl
-bmQgd2hlbiBJIGhhdmUgZmluaXNoZWQgdGVzdGluZy4KCk5pY2UsIFRoYW5rcyBmb3IgdGhlIGhl
-bHAuCgpBY3R1YWxseSwgSSdtIGhhcHB5IHRvIG1hcmsgdGhpcyBzZXJpZXMgYXMgcmVqZWN0ZWQg
-ZnJvbSBwYXRjaHdvcmsuIDopCgpMZXQgdXMga25vdyB3aGVuIHlvdXIgcGF0Y2ggaXMgcmVhZHku
-CgpCZXN0IHJlZ2FyZHMsClJvbWFpbgoKCj4gCj4gYmVzdCByZWdhcmRzCj4gIFdhbGRlbWFyCgpf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
-bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
-b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Fixes a number of crashes. Release notes:
+
+ - https://webkitgtk.org/2025/07/30/webkitgtk2.48.4-released.html
+ - https://webkitgtk.org/2025/08/01/webkitgtk2.48.5-released.html
+ - https://webkitgtk.org/2025/09/03/webkitgtk2.48.6-released.html
+
+And brings some security fixes. Security advisory:
+
+ - https://webkitgtk.org/security/WSA-2025-0005.html
+
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+---
+ package/webkitgtk/webkitgtk.hash | 6 +++---
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 6c2beb7d1d..fde2439dd5 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,6 +1,6 @@
+-# From https://www.webkitgtk.org/releases/webkitgtk-2.48.3.tar.xz.sums
+-sha1  36faf2c30967db57175caf88cefd3d25781ae6d7  webkitgtk-2.48.3.tar.xz
+-sha256  d4dc5970f0fc6a529ff7fd67bcbfab2bbb5e91be789b2e9279640b3217a782c3  webkitgtk-2.48.3.tar.xz
++# From https://www.webkitgtk.org/releases/webkitgtk-2.48.6.tar.xz.sums
++sha1  8f8e27722b29be5aba84322cf7252fe14afcec60  webkitgtk-2.48.6.tar.xz
++sha256  d9ac3034b7a39c2aaa567e6112b3124b158e591a74439e46974a031dd0e44e24  webkitgtk-2.48.6.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 419bef9d8e..cb66641e3d 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.48.3
++WEBKITGTK_VERSION = 2.48.6
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
