@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 767F4CAC592
-	for <buildroot@archiver.kernel.org>; Tue, 16 Sep 2025 20:44:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2B00CAC598
+	for <buildroot@archiver.kernel.org>; Tue, 16 Sep 2025 20:51:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 399214129E;
-	Tue, 16 Sep 2025 20:44:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C2783404BE;
+	Tue, 16 Sep 2025 20:51:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E7fuvgOJjF9a; Tue, 16 Sep 2025 20:44:50 +0000 (UTC)
+ id ux3XfsQXGH03; Tue, 16 Sep 2025 20:51:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 567F44129F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C794140480
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 567F44129F;
-	Tue, 16 Sep 2025 20:44:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 328C912D
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:44:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C794140480;
+	Tue, 16 Sep 2025 20:51:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E253F199
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:51:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9C9FE400F9
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:44:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D421E611CD
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:51:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TTqRGk-P5tQ3 for <buildroot@buildroot.org>;
- Tue, 16 Sep 2025 20:44:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u32Tcs0SCLCU for <buildroot@buildroot.org>;
+ Tue, 16 Sep 2025 20:51:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56FC2404FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0949C611CA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 56FC2404FF
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:44:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0949C611CA
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:51:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5267484C9B; Tue, 16 Sep 2025 20:44:47 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 03CF984DBF; Tue, 16 Sep 2025 20:51:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 16 Sep 2025 22:42:45 +0200
+Date: Tue, 16 Sep 2025 22:50:53 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 89882782411608e1fc8f9072324a4276b9b4699e
-X-Git-Newrev: 6615c1bed8224a5f1018989b2ab10d38496d0e46
+X-Git-Oldrev: 42772667538c82a875bb2766ec189d8833ab9437
+X-Git-Newrev: 0865a1ae4b929b3af21921d382d273b518a0db9c
 X-Patchwork-Hint: ignore
-Message-Id: <20250916204447.5267484C9B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/apitrace: remove stale patch
+Message-Id: <20250916205105.03CF984DBF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-asyncclick: bump to version
+ 8.2.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,99 +58,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6615c1bed8224a5f1018989b2ab10d38496d0e46
+commit: https://git.buildroot.net/buildroot/commit/?id=0865a1ae4b929b3af21921d382d273b518a0db9c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Running the command:
+Drop python-anyio runtime dependency which is now an optional
+dependency of asyncclick. See:
+https://github.com/python-trio/asyncclick/commit/ca93155e162cfe15127d443b1de1d76edeafddec
 
-    make apitrace-patch
-
-fails with error:
-
-    Applying 0003-Explicit-header-stdint.patch using patch:
-    patching file frametrim/ft_dependecyobject.hpp
-    Reversed (or previously applied) patch detected!  Skipping patch.
-    1 out of 1 hunk ignored -- saving rejects to file frametrim/ft_dependecyobject.hpp.rej
-    patching file retrace/metric_writer.cpp
-    Reversed (or previously applied) patch detected!  Skipping patch.
-    1 out of 1 hunk ignored -- saving rejects to file retrace/metric_writer.cpp.rej
-
-Commit [1] "package/apitrace: fix build with GCC 15.x" introduced a
-package patch in the branch master while Buildroot was in RC cycle.
-This same commit was cherry-picked in [2] in the branch "next" to also
-apply cleanly the patch for commit [3] "package/apitrace: bump to
-version 13".
-
-The merge commit [4] kept the apitrace package patch
-"0003-Explicit-header-stdint.patch".
-
-This commit fixes the issue by removing this stale patch.
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/a4b0913280b95b62cd74fdc5ff0b25e3afa2c529
-[2] https://gitlab.com/buildroot.org/buildroot/-/commit/bf55f4713e1ba877183b9e31469df5d3823ec4c0
-[3] https://gitlab.com/buildroot.org/buildroot/-/commit/aec2f2ddc44d037ad21c9a061475459dd9f3d3a1
-[4] https://gitlab.com/buildroot.org/buildroot/-/commit/0af159ae2b0363a90b8c5432cd4cb9bfd3476c5a
-
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[Julien: add commit reference for anyio dependency change]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apitrace/0003-Explicit-header-stdint.patch | 42 ----------------------
- 1 file changed, 42 deletions(-)
+ package/python-asyncclick/Config.in              | 1 -
+ package/python-asyncclick/python-asyncclick.hash | 4 ++--
+ package/python-asyncclick/python-asyncclick.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/apitrace/0003-Explicit-header-stdint.patch b/package/apitrace/0003-Explicit-header-stdint.patch
-deleted file mode 100644
-index efd7522314..0000000000
---- a/package/apitrace/0003-Explicit-header-stdint.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From 3cc8956995d6d702a2c3ef0d7f91500c6accbfad Mon Sep 17 00:00:00 2001
--From: Nicolas PARLANT <nicolas.parlant@parhuet.fr>
--Date: Fri, 21 Mar 2025 05:02:23 +0000
--Subject: [PATCH] Explicit header: stdint
--
--Fix building with GCC-15. It no longer includes it by default.
--
--Signed-off-by: Nicolas PARLANT <nicolas.parlant@parhuet.fr>
--Upstream: 952bad1469ea747012bdc48c48993bd5f13eec04
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- frametrim/ft_dependecyobject.hpp | 1 +
-- retrace/metric_writer.cpp        | 1 +
-- 2 files changed, 2 insertions(+)
--
--diff --git a/frametrim/ft_dependecyobject.hpp b/frametrim/ft_dependecyobject.hpp
--index cf1885f1..53b910d0 100644
----- a/frametrim/ft_dependecyobject.hpp
--+++ b/frametrim/ft_dependecyobject.hpp
--@@ -28,6 +28,7 @@
-- #pragma once
-- 
-- #include "ft_tracecall.hpp"
--+#include <stdint.h>
-- 
-- namespace frametrim {
-- 
--diff --git a/retrace/metric_writer.cpp b/retrace/metric_writer.cpp
--index e923ed1d..4e4ce748 100644
----- a/retrace/metric_writer.cpp
--+++ b/retrace/metric_writer.cpp
--@@ -24,6 +24,7 @@
--  **************************************************************************/
-- 
-- #include <iostream>
--+#include <stdint.h>
-- 
-- #include "metric_writer.hpp"
-- 
---- 
--2.50.1
--
+diff --git a/package/python-asyncclick/Config.in b/package/python-asyncclick/Config.in
+index 9264245213..7147803d23 100644
+--- a/package/python-asyncclick/Config.in
++++ b/package/python-asyncclick/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_ASYNCCLICK
+ 	bool "python-asyncclick"
+-	select BR2_PACKAGE_PYTHON_ANYIO # runtime
+ 	help
+ 	  Composable command line interface toolkit, async version.
+ 
+diff --git a/package/python-asyncclick/python-asyncclick.hash b/package/python-asyncclick/python-asyncclick.hash
+index d121097130..1a2603d2aa 100644
+--- a/package/python-asyncclick/python-asyncclick.hash
++++ b/package/python-asyncclick/python-asyncclick.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/asyncclick/json
+-md5  e9bab017b26d1310d42b4043742812ce  asyncclick-8.1.8.tar.gz
+-sha256  0f0eb0f280e04919d67cf71b9fcdfb4db2d9ff7203669c40284485c149578e4c  asyncclick-8.1.8.tar.gz
++md5  3c8af1a8b6151c24a102e5ed891d19d1  asyncclick-8.2.2.2.tar.gz
++sha256  014f6b7bfb1ef34a2215bc36aebd5150d5d2e50668b12eceb749961e32c24660  asyncclick-8.2.2.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  9a8ad106a394e853bfe21f42f4e72d592819a22805d991b5f3275029292b658d  LICENSE.txt
+diff --git a/package/python-asyncclick/python-asyncclick.mk b/package/python-asyncclick/python-asyncclick.mk
+index 9168d65b58..d413242def 100644
+--- a/package/python-asyncclick/python-asyncclick.mk
++++ b/package/python-asyncclick/python-asyncclick.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_ASYNCCLICK_VERSION = 8.1.8
++PYTHON_ASYNCCLICK_VERSION = 8.2.2.2
+ PYTHON_ASYNCCLICK_SOURCE = asyncclick-$(PYTHON_ASYNCCLICK_VERSION).tar.gz
+-PYTHON_ASYNCCLICK_SITE = https://files.pythonhosted.org/packages/cb/b5/e1e5fdf1c1bb7e6e614987c120a98d9324bf8edfaa5f5cd16a6235c9d91b
++PYTHON_ASYNCCLICK_SITE = https://files.pythonhosted.org/packages/35/51/b01dd77c9a14fb0b312d799fd8c10b145b882535dbaa9ac055a52515b390
+ PYTHON_ASYNCCLICK_SETUP_TYPE = flit
+ PYTHON_ASYNCCLICK_LICENSE = BSD-3-Clause
+ PYTHON_ASYNCCLICK_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
