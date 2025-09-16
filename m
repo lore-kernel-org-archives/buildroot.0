@@ -1,78 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0039BCAC592
-	for <buildroot@archiver.kernel.org>; Tue, 16 Sep 2025 20:27:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AB80CAC598
+	for <buildroot@archiver.kernel.org>; Tue, 16 Sep 2025 20:27:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B8EEE41174;
-	Tue, 16 Sep 2025 20:27:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EEE136119D;
+	Tue, 16 Sep 2025 20:27:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OEw3p-diMUGK; Tue, 16 Sep 2025 20:27:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id c5MSdD9wvDiG; Tue, 16 Sep 2025 20:27:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0026741207
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E746611AD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0026741207;
-	Tue, 16 Sep 2025 20:27:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 14FFD12D
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:27:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3E746611AD;
+	Tue, 16 Sep 2025 20:27:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2F238199
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:27:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0745841963
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:27:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 203E68350A
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:27:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GcTDUWVD1V7S for <buildroot@buildroot.org>;
- Tue, 16 Sep 2025 20:27:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dFE1Yki2_xQB for <buildroot@buildroot.org>;
+ Tue, 16 Sep 2025 20:27:42 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 106A541C7F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 106A541C7F
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 106A541C7F
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:27:40 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-3e8ef75b146so2463241f8f.0
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 13:27:40 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 07AD9834FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07AD9834FE
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 07AD9834FE
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:27:41 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-3ebc706eb7bso1376878f8f.3
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 13:27:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1758054459; x=1758659259;
+ d=1e100.net; s=20230601; t=1758054460; x=1758659260;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=LnO3D1rCHPlya9uqU4jv7cZKfseJLrzrifd39gq6+1g=;
- b=czBFj499T/SifmJObJaeCBqSwhBxp9oZcmMG5T/C4ACTgHCdc37rbbga6Cit9IccSc
- rMTfVlJ+QLfZqGKuZUTGoP25nF5MqUgV36sA02WZ4ADN4tFp3iHw3JC8LLLr/Xt1i/6o
- 4udGb0ec6VlcSGmxVkjUwkRczU0d9rQW0tO2D6PBLM9ZrDad6noue972Xwu0hhV/7A8T
- s9OKuf2ScJA2AFHZqo2r/TKzTFOpnKOpY7OQ0jSCflRwM2+PGVgNX93aGaONS8WmwjOX
- mzlwmNBhG6RjrOey7sEsm+iEdScPEG5mgo1rB1BuwM5+rKlx1NnjZsH6Z+Z2suL3YBWQ
- nk4w==
-X-Gm-Message-State: AOJu0YxQlSG9Xzp0Uq675DdMyA0ILS1PkgP0SvOyZaAU0zdObaya2Too
- OrBen4cKQ5p2OaLPzzPR9ak5OXLq+7Y/DcMc/l6Vwv3W+hYetDbepDv7yCDsVdWNjjJ+r1YwGTj
- ndS7vXkI=
-X-Gm-Gg: ASbGnct9LCXuGNEKT21Qv/DIvcQXE1qwUW/tX1YzLbb7ilLpy2SFftdWQ1LOJWTi8WW
- 0Z1GmNI+D8MIp9avv5y2+2QgW2VvYBvoWEk8lGtJiHMRXx6hQVf4hDR0HcghHMto663cEomkRig
- BMHXW1YCF0G18tr0r3JS0M1t6s3Kpx1Wx/6Yo82X0KRtSthXJvOFAIEHONddLMMdTmZa63lO8VP
- z2RpklwFjB57djWYla4lpPXRUGGLhaq9OcI4NcmuEDce98Ly8GGBn3G57NgqtosgQpd9KuOBl4r
- cxt73y2OHR2bzjPnxI2Df9RHGyUBWBfARzutfkwE2YcZc0UXx2SSiC87IqL2c12jX02Cl9ILZN7
- tObwhp4+Ozg/HDGA=
-X-Google-Smtp-Source: AGHT+IGFINgKFyrVINabI2H6rz8bItcbH4kEq5SsPrmEsSa0Nfq8xQTQbagRfPJEchxYHyo4RXgDGA==
-X-Received: by 2002:adf:f6ce:0:b0:3ec:dc9d:bfcd with SMTP id
- ffacd0b85a97d-3ecdc9dc016mr1344810f8f.63.1758054458758; 
- Tue, 16 Sep 2025 13:27:38 -0700 (PDT)
+ bh=aG98iMNRfDKEUd1BbqhuRUanfGUoj2jELKZ1/RRs2qk=;
+ b=rFljGhr180mIc+c/QFSegqU6W3M9LpjW4Op0GaSJcWuVy3KcLbmQPNeSQESf6t8lKl
+ Hf5AFp9AO5N8BkefrlDNM41wrvszOLBFpY/2+Ams6zunUosq3FUnvquwUEg03mpwmqV4
+ cTBosJZ0SlX1ThZ0I3/efcjKtsZXRwhpK/SB+rsxep9wLxYeBTZ9bc+j+XLLO3X9lWOJ
+ YAeQ2uwZj1UtIGUJQiK5HPYfv+/lPo1SnTS3h60aoTUES/9xQ35B4o36luwxJDhAmfaj
+ v3mai7J4XS2/Y8LYTF4YmRS6ldhRKNtjB3LNtu3kK3LddJoAZCOJOad6aiX9/ucaPn1L
+ Rzlw==
+X-Gm-Message-State: AOJu0YzCjlDTtEqiNnnVe4LGerFWGoPF3XY3K13RoFpjrIZ/wZPftcfg
+ 71MRKBWimPPwCJ9iorXdCPbgXARQ+6ndyNj3I4sy4bvlFSGx/a9x3aViLkofHjgJ0sT1kWzhx9j
+ 6OnkfOAw=
+X-Gm-Gg: ASbGncstCV4FBg6Cdn5GzzrM39XzqJ2L5ONOO4C3kf80fzXoVmGCO7yYTgq0jgs6ZwF
+ 3npACP37dJoU9+oy4awIL3mGm0V+XynNST4Jqn9QfW2iYjb3vcW252H5iYsXBR5GMbyveFlEqEv
+ qPWJ1Q1cIpJ1nKwpCGuVJ0Ltlqg/t8C1cYOG8J8HO7RwH+DY70rEqh3cGn5sjwFeEA/eUBepqeB
+ 39LgaG2a9Tm4FoyjJOmHVLGsgtoBpWyBG69JgqPopP9vwhuUI0CIKW1J0go4GBTbXYkfetmgWPh
+ OcG6r1wOcydwPbhF7OTUZXhmLV/f0AVP6alEKTXlYA6MLJSGIF6UT9d/Q6mydS0IfvturVIXeLk
+ 3soayzJaTC8jjCPF1NWTkW9v/2w==
+X-Google-Smtp-Source: AGHT+IE56nXs2htwCKr/rIeGxF0bA/6JQAogLr1IceIumr9wyjr3otqHZVeG5/ArkdEPveKq6eHmxA==
+X-Received: by 2002:a5d:5f50:0:b0:3e9:d0a5:e436 with SMTP id
+ ffacd0b85a97d-3e9d0a622f1mr9524780f8f.23.1758054459557; 
+ Tue, 16 Sep 2025 13:27:39 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
  ffacd0b85a97d-3ec22b16adesm5497723f8f.13.2025.09.16.13.27.38
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 16 Sep 2025 13:27:38 -0700 (PDT)
+ Tue, 16 Sep 2025 13:27:39 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Tue, 16 Sep 2025 22:27:26 +0200
-Message-ID: <20250916202735.1121872-3-thomas.perale@mind.be>
+Date: Tue, 16 Sep 2025 22:27:27 +0200
+Message-ID: <20250916202735.1121872-4-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250916202735.1121872-1-thomas.perale@mind.be>
 References: <20250916202735.1121872-1-thomas.perale@mind.be>
@@ -82,20 +82,20 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=LnO3D1rCHPlya9uqU4jv7cZKfseJLrzrifd39gq6+1g=;
- b=Gl6e8G3d+Rr7Up89VPUvOdlW9vet20mUrSk8IT5Bi/pV34O7T6ct7KCDIIujT2P01t
- RogxIKZ+SSDWfYpXXjLFWB51fpQd5RA+Puu35siKGX1Q0GIrWS5MOSXknp37nb+OGrA4
- 4vkfmE+zL/vUW52NlEE1XFtd5V8v/32lscrmmfjXn0jBh+GETD/ksyiG9wsrZrPeXO/Z
- Uaq2fZVz7/0zocSS+i45yuc1AtenEMbhi8uPGRlxd7a5fDeJMKy94jp+wnV5ls8+Nee5
- EJ7tmIskS1La4e+ZAZJBrsu5whAQVf4+IyRzc1blR3cclFmOMpOngV8qFJl8Its9006b
- eYCA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=aG98iMNRfDKEUd1BbqhuRUanfGUoj2jELKZ1/RRs2qk=;
+ b=byYZrLwJdXb9KQeZYtMNBSwW4olRzkaPqw033Ny6tSUpHchzzNrATbYQySo7PGbmp4
+ PeTAMEjdoFEbn2z9UaeiGam3C8/UyP92UoapU1G9qAzg9fcWv0ehasvc1S8/S6//wVqm
+ NCEqWXjQMwNnZ/pFJW9kefZi2ge6f6CTOmqxh0a1vgAb1mumjrDjceWyJW7ntH2HR3Zm
+ b3u+iT6mkZhjoU4QFs0WyFR5+bnsOMilNZi4aOkW0sRt9LJRlTiVmsC5cQzBAFfU5ElG
+ yODRGfZonEs5LBHhvE6llerNyG2SsPh0vGa6LbzfFMTDQJDN4bNza0ltoUc89zuQfbRx
+ 5oNQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Gl6e8G3d
-Subject: [Buildroot] [PATCH 03/12] package/cpp-httplib: fix deprecated CPE
+ header.a=rsa-sha256 header.s=google header.b=byYZrLwJ
+Subject: [Buildroot] [PATCH 04/12] package/gnuplot: fix deprecated CPE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -121,29 +121,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The CPE 'cpp_httplib_project:cpp-httplib' has been deprecated in favour
-of 'yhirose:cpp-httplib'.
+The CPE 'gnuplot_project:gnuplot' has been deprecated in favour of
+'gnuplot:gnuplot'.
 
-See https://nvd.nist.gov/products/cpe/detail/5D557BEA-8246-464C-AB90-EA9495A0732A
+See the following:
+  - https://nvd.nist.gov/products/cpe/detail/DB68C9F5-3330-4749-A6F5-61FF041037CC
+  - https://nvd.nist.gov/vuln/detail/cve-2025-31178
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/cpp-httplib/cpp-httplib.mk | 2 +-
+ package/gnuplot/gnuplot.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/cpp-httplib/cpp-httplib.mk b/package/cpp-httplib/cpp-httplib.mk
-index 64b517ed8b..3f63e3a865 100644
---- a/package/cpp-httplib/cpp-httplib.mk
-+++ b/package/cpp-httplib/cpp-httplib.mk
-@@ -8,7 +8,7 @@ CPP_HTTPLIB_VERSION = 0.25.0
- CPP_HTTPLIB_SITE = $(call github,yhirose,cpp-httplib,v$(CPP_HTTPLIB_VERSION))
- CPP_HTTPLIB_LICENSE = MIT
- CPP_HTTPLIB_LICENSE_FILES = LICENSE
--CPP_HTTPLIB_CPE_ID_VALID = YES
-+CPP_HTTPLIB_CPE_ID_VENDOR = yhirose
- CPP_HTTPLIB_INSTALL_STAGING = YES
- CPP_HTTPLIB_CONF_OPTS = \
- 	-Dtest=false
+diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
+index 2a1072a55c..efdc08deae 100644
+--- a/package/gnuplot/gnuplot.mk
++++ b/package/gnuplot/gnuplot.mk
+@@ -8,7 +8,7 @@ GNUPLOT_VERSION = 6.0.3
+ GNUPLOT_SITE = http://downloads.sourceforge.net/project/gnuplot/gnuplot/$(GNUPLOT_VERSION)
+ GNUPLOT_LICENSE = gnuplot license (open source)
+ GNUPLOT_LICENSE_FILES = Copyright
+-GNUPLOT_CPE_ID_VALID = YES
++GNUPLOT_CPE_ID_VENDOR = gnuplot
+ 
+ GNUPLOT_AUTORECONF = YES
+ 
 -- 
 2.51.0
 
