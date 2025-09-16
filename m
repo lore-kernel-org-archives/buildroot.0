@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 369CACAC59D
-	for <buildroot@archiver.kernel.org>; Tue, 16 Sep 2025 20:18:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84FA4CAC592
+	for <buildroot@archiver.kernel.org>; Tue, 16 Sep 2025 20:18:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E80C36112E;
-	Tue, 16 Sep 2025 20:17:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 55E9C4120A;
+	Tue, 16 Sep 2025 20:18:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NL5lvL_3CvyD; Tue, 16 Sep 2025 20:17:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0zJLLknzaFGu; Tue, 16 Sep 2025 20:18:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 184DB60A39
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 861A241206
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 184DB60A39;
-	Tue, 16 Sep 2025 20:17:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 32E627AB
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:17:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 861A241206;
+	Tue, 16 Sep 2025 20:18:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 10FCC199
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:18:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 22487400F9
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:17:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 01EF241206
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:18:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dHX0fU0tFHGr for <buildroot@buildroot.org>;
- Tue, 16 Sep 2025 20:17:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FB4041906
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6FB4041906
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:17:52 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 601F884BC1; Tue, 16 Sep 2025 20:17:52 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 16 Sep 2025 22:10:04 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d9792fa4e6181b50e764b31f22fca5049df43f64
-X-Git-Newrev: 7740031390353429796f21273ace4a34efce84d7
-X-Patchwork-Hint: ignore
-Message-Id: <20250916201752.601F884BC1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/procs: bump to version 0.14.10
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cj161w1gOOMU for <buildroot@buildroot.org>;
+ Tue, 16 Sep 2025 20:18:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 33C364059E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33C364059E
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 33C364059E
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:18:25 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 57A0020039E;
+ Tue, 16 Sep 2025 22:18:22 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 16 Sep 2025 22:18:22 +0200
+MIME-Version: 1.0
+Date: Tue, 16 Sep 2025 22:18:22 +0200
+To: Saeed Kazemi <kazemi.ms@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250915140623.3308484-1-kazemi.ms@gmail.com>
+References: <20250915140623.3308484-1-kazemi.ms@gmail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <ce5bfeea8f58707520672451e990308a@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1758053903;
+ bh=OzmDw3bBEemfSgtnD3KPbf72GBhqTwa3I6gpxj7uzys=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=rHSlI1KytuPehKZfxRFLuPR0CgnZICzM9Tg7DowxFEcyIbeoe93U52cQNabvKG4VA
+ hNKkOgPJJsTkRQ97jrv52jg7vX5BWUqZuAtaFDavlDnJW6mI3BgtYji9MejmVxCxzx
+ u2+PWosdf21zR26WSyiyUMT38tH1fUdHfiIa7RKrDbW9IgHkmmhq3/cV9lgkoDoh4O
+ iEWM/iB1QF/dp3OvYxTdkbpgILDMwRIZ3uPitouN/TU9y8lM8j6C00knOhwjoESYjk
+ Bx+Xbc5CebMHBLME1IYRtsTO/2jpiA7uy5dGREPnRYIFx5ECpXxT8S0hAdoVLgeZrL
+ KI52DXcQCWsPA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=rHSlI1Ky
+Subject: Re: [Buildroot] [PATCH 1/1] package/eza: bump to version 0.23.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,47 +83,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7740031390353429796f21273ace4a34efce84d7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 15/09/2025 16:06, Saeed Kazemi wrote:
+> Release notes:
+> https://github.com/eza-community/eza/releases/tag/v0.23.3
+> 
+> Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
 
-Release notes:
-https://github.com/dalance/procs/releases/tag/v0.14.10
-
-Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/procs/procs.hash | 2 +-
- package/procs/procs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/procs/procs.hash b/package/procs/procs.hash
-index d79e205231..35f1f6d2f4 100644
---- a/package/procs/procs.hash
-+++ b/package/procs/procs.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  bcb75fd23307581e23c20697edd876a5a231dac25191b9e8166f62e0f82af997  procs-0.14.9-cargo4.tar.gz
-+sha256  09f2faee76bad885af50bf2977ea34b64810645a0b781699f8c822311211575e  procs-0.14.10-cargo4.tar.gz
- sha256  feb87a2e0c305de3464cc44077da5393c52d8ca6362d37427157d04ec6f4510d  LICENSE
-diff --git a/package/procs/procs.mk b/package/procs/procs.mk
-index b6ada48115..c85c521341 100644
---- a/package/procs/procs.mk
-+++ b/package/procs/procs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PROCS_VERSION = 0.14.9
-+PROCS_VERSION = 0.14.10
- PROCS_SITE = $(call github,dalance,procs,v$(PROCS_VERSION))
- PROCS_LICENSE = MIT
- PROCS_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
