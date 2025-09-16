@@ -1,102 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C94F4CAC592
-	for <buildroot@archiver.kernel.org>; Tue, 16 Sep 2025 00:25:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 306A7CAC597
+	for <buildroot@archiver.kernel.org>; Tue, 16 Sep 2025 00:30:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 92A1540AAB;
-	Tue, 16 Sep 2025 00:25:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F3D0D81233;
+	Tue, 16 Sep 2025 00:30:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MqgrILwy8BFS; Tue, 16 Sep 2025 00:25:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1sL0Z8Kg9Gh1; Tue, 16 Sep 2025 00:30:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC73440AAE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F62B81264
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC73440AAE;
-	Tue, 16 Sep 2025 00:25:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 88372199
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 00:25:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0F62B81264;
+	Tue, 16 Sep 2025 00:30:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5C67A22F
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 00:30:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6688340595
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 00:25:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3D8DE60DB9
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 00:30:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FStj-CwBG4wG for <buildroot@buildroot.org>;
- Tue, 16 Sep 2025 00:25:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p3m7cap5xFKz for <buildroot@buildroot.org>;
+ Tue, 16 Sep 2025 00:30:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::12f; helo=mail-il1-x12f.google.com;
+ client-ip=2607:f8b0:4864:20::131; helo=mail-il1-x131.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8C79F40547
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C79F40547
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com
- [IPv6:2607:f8b0:4864:20::12f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8C79F40547
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 00:25:18 +0000 (UTC)
-Received: by mail-il1-x12f.google.com with SMTP id
- e9e14a558f8ab-42403719c73so20913565ab.0
- for <buildroot@buildroot.org>; Mon, 15 Sep 2025 17:25:18 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5441560DAB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5441560DAB
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com
+ [IPv6:2607:f8b0:4864:20::131])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5441560DAB
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 00:30:39 +0000 (UTC)
+Received: by mail-il1-x131.google.com with SMTP id
+ e9e14a558f8ab-408929699eeso23358005ab.1
+ for <buildroot@buildroot.org>; Mon, 15 Sep 2025 17:30:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1757982317; x=1758587117;
+ d=1e100.net; s=20230601; t=1757982638; x=1758587438;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=V32si9xMgzhk8wv3XrtT99dj4i1YqFic0VA7zbr2/Ts=;
- b=wDsP1FBPJsZsym8tImkfSS5tWJ7krLI7Dm3z8fm3VdJgz8ROhZ79QOH43ApoJavPm6
- fnib60zjjF+H2bKZcNGGNvobE+oYTOIBkyiWLO8ytaDXVFe1FxME8LftBWKcA9T4YQSp
- fl3g4vy66eQp1+g1aCN0nu7GsftOOUyluZzMAM/YumkZnQ1YHKY46/gapTQfUx88SIYx
- AhHjWGBo/GVKk4qgGy77GfmPdYvWAL1TxKwaZYiCKrapylIomLNbNryvQ+ffJIMqDCwc
- c6BuJu3s9KR1jpP+fLb8V7aVV++YXoiv35Hht55jGCates9DawEt7UBlKk4HQx6uR9dI
- v+qg==
-X-Gm-Message-State: AOJu0YxYBtecgMBW2t4q8kqKnCX+YcvCMRJ8k00oymyqup2CznKvQtQP
- hMufw0I+Ftej83ER29b/KQDXroW07yIpoz81SvWmkrthqbmPEPzZq8kQDs/l8w==
-X-Gm-Gg: ASbGncvSfnGikdpxQjpu0XwJzrG0LKfiMU6Emt/EiIvIr5sou6udpsp6bDDvQpG26dZ
- aBAw1hbnikzTvAEM3yrXCl/XjzkiWctb8XW+cnDyCCOwmhS34hj9iqHIBv1Tf4qFTxryS8bm4en
- NdABLO7YliAWqT8n/wOiSwciadjekZLqC11y2KTImrNdJxFI5XbF+n6+DosLvvVr3Mlhz2XzLAA
- xQ+OsUAD3FuuzuWax8hMe3JH/87xPRN534xsvflvZrbQIA49L8UZP02ECL+Qs1H4uZNuuoxCjdn
- zFYoevpOwFZ5pJnn+5LFSqZ8/VJ0/onEuZ4z3hIIXolRU5RjRvkpLaX9r0fb+rZW6kc5PGYkVc2
- uT2v1xxSkNaWqSZ2NAdXu+MJop86dCdbPYWurXuz1G7ojrjQn2nG6plIAVzwOY0bDdTbSdDP4ol
- 15uTJOWvI97pM=
-X-Google-Smtp-Source: AGHT+IFQDR1xTAuSQ2ujiF1xjA/I9MaWdKuL0qBL9qRzchsXA1UY8OQjAHFutP95gcm7NDC0nKdQ1w==
-X-Received: by 2002:a05:6e02:17cb:b0:423:fb44:e8c9 with SMTP id
- e9e14a558f8ab-423fb44eb67mr77514355ab.11.1757982317431; 
- Mon, 15 Sep 2025 17:25:17 -0700 (PDT)
+ bh=PnfIOiEVo7oUIZ77mTcaLeLVkG7GRGF+Djy4/yCrU6c=;
+ b=Bfoou3qW1wJ3DtJfmn5jq9iyFr2pn/AGoDEPvLB54rRFrhRVnQ4VUHw56V2Uqu+yQc
+ mgvp7TjKmhbiKCOU8X8o0sIg6dkzMhMLPCjqIe23FCJ2T8PmHlY5Nad/k422l7FIzbqk
+ FgcjNIiMd/dzh+Yln6vDDcY8TZ0witoheGTqy12Zxdf+PDrVB6kGGtUtC4jk1oL+ZXIe
+ bKw4aNUlHMEQS+KjRF+H4/tXeVHPQf9MIbKMFKsBqhWa1vzRkeVujgWdEs7AMgdFVvSH
+ 8aYRn1t9iceiecxw/qQTaIXtznJV2/gSIzgTiIgkLXhZ0qG+3B+EC0q95pg5NL/FvkU0
+ 4CQA==
+X-Gm-Message-State: AOJu0YwBk3bKNHbs0AYnRgIILZPIV1cZssPbrZd2GRbg2GbgVY7vZl5q
+ jzROrtIlTHHAB6fZIiSWjzZGVgZcYE47O/8EGIgGFlp4B4i7BEzqKNjfqV+Zvw==
+X-Gm-Gg: ASbGncvSJJQi3ojCL9hU6rdznvjmg3EMs53/O5FC8uxT+oKqB9vHE+GOPL47QTPj4Ce
+ GTUAjWuqIf/kkao/1+8Q6Oh3CE8fsVI3zuugB409XDFC+kJqQseCTDAHtdxac53XjOMPy1NvgCW
+ VK4Ahi9RqqTkyu59dabgznTM8DXpv7g2s0TV7xMgrpVIEE2SD3kc2/Dyac0AprpRM8ieLuaEmr8
+ HV8tL20xxpBdL5PXRoLgwN71H4B5EausaaCzruE1PKKTdXrQatvT+72oLUWZ6LbAS/il6JMCSSb
+ XqtNOdgc9pRyYIRmBEwPoteZ+AZhY5uD6L+frZDyaytwjsBw2/96Qm+yLChZ8Mf5sWd36K0PVGP
+ vevx69VjfgzWmWjz5OZonY2DN2rLtkvKdNa/WtMyB9/Up7T52UADy3tp+RC/99k/m9jn+urCvpV
+ H5QkpH3rvL5mU=
+X-Google-Smtp-Source: AGHT+IEbDK7jt20/saskkGdBx5kA3XWCi9tyf2V+S6cWk8Qw6fOsfBAgjZmxx8lg2quP+17l+0iHHQ==
+X-Received: by 2002:a05:6e02:1988:b0:40e:9e8c:b48c with SMTP id
+ e9e14a558f8ab-420a311fe64mr146122735ab.15.1757982637977; 
+ Mon, 15 Sep 2025 17:30:37 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-100-179.hlrn.qwest.net.
  [71.218.100.179]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-41dfb14c032sm62095355ab.40.2025.09.15.17.25.16
+ 8926c6da1cb9f-511f2efb5d5sm5263988173.14.2025.09.15.17.30.37
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 15 Sep 2025 17:25:17 -0700 (PDT)
+ Mon, 15 Sep 2025 17:30:37 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 15 Sep 2025 18:25:15 -0600
-Message-ID: <20250916002515.2488746-1-james.hilliard1@gmail.com>
+Date: Mon, 15 Sep 2025 18:30:36 -0600
+Message-ID: <20250916003036.2506534-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1757982317; x=1758587117; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1757982638; x=1758587438; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=V32si9xMgzhk8wv3XrtT99dj4i1YqFic0VA7zbr2/Ts=;
- b=WyzAwEr7n2e7JAIiHz1wl0Q0lZ8DTEnISYza1zqI0DtuI9VwvmkcyzNYPZ7AU1RTFg
- o4+h85PFhbicGpv0fosm7mYKeOlEZi7YmhleBXf0PVXcECuB1DMPtSh/+35pZR8ntLB1
- 2M3c9ZwNLImnjptjx5BOpOkmOlMSbWXiVWyeUHpZ5bWRYHYVV2GASojac8lY5PEWengS
- /uJDXJXCkjRD6KkfeGiuZa8ErU9de+yqwPp2Snh5KBVn3/a35FtYftUZKU7z6x9HHO3V
- cEhvBFfVSObTqhOxA7pzsZGzGkn2R/8WPp+WF1TBWDETwqvJtqY5/oIUDGN+zFiNpjy5
- M9nQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=PnfIOiEVo7oUIZ77mTcaLeLVkG7GRGF+Djy4/yCrU6c=;
+ b=Y90m3Uf10ySquimj1X2jvUTlWpp789sPyI5dNGuFKxIhc4wSl/LoXObNKEceXGNZEq
+ 8nennig1vn3GCjjRe1Uev2z2DFObNi8YBpzEX7jhKKWMoHaDigEewr6X5PSkKIUCZWZM
+ vGob1ao+QD7t0j2P5ED62mfSRhCWZGHMbCCYLyycY7f4+jEhOSo8dw6xAp8VI1hZj9N/
+ DlezpMnmbdppMscNmCBEug+i+NwzNxbVIVqayXve711cghyWc1i54Uj0uR1U8+TvEpkS
+ YWLk4vz3w+G8vQxymMPHHNXV2q3l25LFGm9hOa6LA5xmjPrSLiesD7d5vlAYuJ9iX2oK
+ wt4A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=WyzAwEr7
-Subject: [Buildroot] [PATCH 1/1] package/python-pycparser: bump to version
- 2.23
+ header.s=20230601 header.b=Y90m3Uf1
+Subject: [Buildroot] [PATCH 1/1] package/python-pydantic-core: bump to
+ version 2.39.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,7 +108,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Marcus Hoffmann <bubu@bubu1.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -116,38 +116,37 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pycparser/python-pycparser.hash | 4 ++--
- package/python-pycparser/python-pycparser.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pydantic-core/python-pydantic-core.hash | 2 +-
+ package/python-pydantic-core/python-pydantic-core.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-pycparser/python-pycparser.hash b/package/python-pycparser/python-pycparser.hash
-index 3ec1862b75..b93c6ac906 100644
---- a/package/python-pycparser/python-pycparser.hash
-+++ b/package/python-pycparser/python-pycparser.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pycparser/json
--md5  8922b0b1b53b419e3a38fba4aa43a348  pycparser-2.22.tar.gz
--sha256  491c8be9c040f5390f5bf44a5b07752bd07f56edf992381b05c701439eec10f6  pycparser-2.22.tar.gz
-+md5  bb4946a7b0d83569f5d29f566a55180a  pycparser-2.23.tar.gz
-+sha256  78816d4f24add8f10a06d6f05b4d424ad9e96cfebf68a4ddc99c65c0720d00c2  pycparser-2.23.tar.gz
+diff --git a/package/python-pydantic-core/python-pydantic-core.hash b/package/python-pydantic-core/python-pydantic-core.hash
+index 735abcb4c6..4f4fb124d2 100644
+--- a/package/python-pydantic-core/python-pydantic-core.hash
++++ b/package/python-pydantic-core/python-pydantic-core.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after vendoring
+-sha256  d075c06f299090879748db99ab202a253e9a2b22ee4140b96c0257257b9351c8  python-pydantic-core-2.33.2-cargo4.tar.gz
++sha256  7bd7d4a01c14c612d1f03654695e57ce4669df7bbfda1febc23b08b79dafd4cd  python-pydantic-core-2.39.0-cargo4.tar.gz
  # Locally computed sha256 checksums
- sha256  0c846399369ea76ddd7b5c44fe6d16497415fcf015f5cbb508c24bf98b81c5b1  LICENSE
-diff --git a/package/python-pycparser/python-pycparser.mk b/package/python-pycparser/python-pycparser.mk
-index 6d01844fb3..7194347e78 100644
---- a/package/python-pycparser/python-pycparser.mk
-+++ b/package/python-pycparser/python-pycparser.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+ sha256  2afdd30d54b4d62b6f488a6bcc1546e84ec5061f13f4209c03d012348783795a  LICENSE
+diff --git a/package/python-pydantic-core/python-pydantic-core.mk b/package/python-pydantic-core/python-pydantic-core.mk
+index 5085b906d5..7342711b2a 100644
+--- a/package/python-pydantic-core/python-pydantic-core.mk
++++ b/package/python-pydantic-core/python-pydantic-core.mk
+@@ -6,10 +6,10 @@
  
--PYTHON_PYCPARSER_VERSION = 2.22
-+PYTHON_PYCPARSER_VERSION = 2.23
- PYTHON_PYCPARSER_SOURCE = pycparser-$(PYTHON_PYCPARSER_VERSION).tar.gz
--PYTHON_PYCPARSER_SITE = https://files.pythonhosted.org/packages/1d/b2/31537cf4b1ca988837256c910a668b553fceb8f069bedc4b1c826024b52c
-+PYTHON_PYCPARSER_SITE = https://files.pythonhosted.org/packages/fe/cf/d2d3b9f5699fb1e4615c8e32ff220203e43b248e1dfcc6736ad9057731ca
- PYTHON_PYCPARSER_SETUP_TYPE = setuptools
- PYTHON_PYCPARSER_LICENSE = BSD-3-Clause
- PYTHON_PYCPARSER_LICENSE_FILES = LICENSE
+ # python-pydantic pins an exact version of pydantic-core in pyproject.toml,
+ # make sure to sync pydantic-core to this version when updating pydantic
+-PYTHON_PYDANTIC_CORE_VERSION = 2.33.2
++PYTHON_PYDANTIC_CORE_VERSION = 2.39.0
+ PYTHON_PYDANTIC_CORE_SOURCE_PYPI = pydantic_core-$(PYTHON_PYDANTIC_CORE_VERSION).tar.gz
+ PYTHON_PYDANTIC_CORE_SITE = $(PYTHON_PYDANTIC_CORE_SITE_PYPI)/$(PYTHON_PYDANTIC_CORE_SOURCE_PYPI)?buildroot-path=filename
+-PYTHON_PYDANTIC_CORE_SITE_PYPI = https://files.pythonhosted.org/packages/ad/88/5f2260bdfae97aabf98f1778d43f69574390ad787afb646292a638c923d4
++PYTHON_PYDANTIC_CORE_SITE_PYPI = https://files.pythonhosted.org/packages/fe/29/7ce2ccd75e3da2dae8b2c21ed15f596ddd6430fc603951b4c6292b47dec3
+ PYTHON_PYDANTIC_CORE_SETUP_TYPE = maturin
+ PYTHON_PYDANTIC_CORE_LICENSE = MIT
+ PYTHON_PYDANTIC_CORE_LICENSE_FILES = LICENSE
 -- 
 2.43.0
 
