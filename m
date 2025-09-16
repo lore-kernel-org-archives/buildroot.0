@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32BC3CAC592
-	for <buildroot@archiver.kernel.org>; Tue, 16 Sep 2025 20:51:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77594CAC592
+	for <buildroot@archiver.kernel.org>; Tue, 16 Sep 2025 20:51:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 01568611D7;
-	Tue, 16 Sep 2025 20:51:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 47BB7611CF;
+	Tue, 16 Sep 2025 20:51:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ndOdWYY_fIgU; Tue, 16 Sep 2025 20:51:08 +0000 (UTC)
+ id 9PFGAei1AdTC; Tue, 16 Sep 2025 20:51:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18C5A611CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36343611DD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 18C5A611CD;
-	Tue, 16 Sep 2025 20:51:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 02D7E7AB
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:51:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 36343611DD;
+	Tue, 16 Sep 2025 20:51:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E114A199
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:51:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DE00182977
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:51:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D2CB440480
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:51:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PNPJOSOeHO7p for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Psp0gqjRkL3V for <buildroot@buildroot.org>;
  Tue, 16 Sep 2025 20:51:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08CA182950
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24C3A40338
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 08CA182950
+ by smtp4.osuosl.org (Postfix) with ESMTP id 24C3A40338
  for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:51:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E9DE484DBE; Tue, 16 Sep 2025 20:51:04 +0000 (UTC)
+ id 0DD1284DC6; Tue, 16 Sep 2025 20:51:05 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 16 Sep 2025 22:50:53 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6615c1bed8224a5f1018989b2ab10d38496d0e46
-X-Git-Newrev: 42772667538c82a875bb2766ec189d8833ab9437
+X-Git-Oldrev: 0865a1ae4b929b3af21921d382d273b518a0db9c
+X-Git-Newrev: 86b1af2c3f838efe97dae681265153e13bba7dff
 X-Patchwork-Hint: ignore
-Message-Id: <20250916205104.E9DE484DBE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-anyio: bump to version
- 4.10.0
+Message-Id: <20250916205105.0DD1284DC6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-asyncssh: bump to version
+ 2.21.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,44 +66,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42772667538c82a875bb2766ec189d8833ab9437
+commit: https://git.buildroot.net/buildroot/commit/?id=86b1af2c3f838efe97dae681265153e13bba7dff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-anyio/python-anyio.hash | 4 ++--
- package/python-anyio/python-anyio.mk   | 4 ++--
+ package/python-asyncssh/python-asyncssh.hash | 4 ++--
+ package/python-asyncssh/python-asyncssh.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-anyio/python-anyio.hash b/package/python-anyio/python-anyio.hash
-index e1fdf474c2..297188db48 100644
---- a/package/python-anyio/python-anyio.hash
-+++ b/package/python-anyio/python-anyio.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/anyio/json
--md5  d0e4db5f5e4041d1bc9664042b454218  anyio-4.9.0.tar.gz
--sha256  673c0c244e15788651a4ff38710fea9675823028a6f08a5eda409e0c9840a028  anyio-4.9.0.tar.gz
-+md5  cb471a6d2338e026d7ba9eed50cf8fff  anyio-4.10.0.tar.gz
-+sha256  3f3fae35c96039744587aa5b8371e7e8e603c0702999535961dd336026973ba6  anyio-4.10.0.tar.gz
+diff --git a/package/python-asyncssh/python-asyncssh.hash b/package/python-asyncssh/python-asyncssh.hash
+index dbc5232d15..604e57bd66 100644
+--- a/package/python-asyncssh/python-asyncssh.hash
++++ b/package/python-asyncssh/python-asyncssh.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/asyncssh/json
+-md5  3da75998b89240d5473a92419d3d187e  asyncssh-2.19.0.tar.gz
+-sha256  723dead4d068b558708dc66a4ca7e7a93a813aa9416036eccb9af4c03ae2cf30  asyncssh-2.19.0.tar.gz
++md5  2405165d0ccd23ae8ba6cfcf92d6a0dc  asyncssh-2.21.0.tar.gz
++sha256  450fe13bb8d86a8f4e7d7b5fafce7791181ca3e7c92e15bbc45dfb25866e48b3  asyncssh-2.21.0.tar.gz
  # Locally computed sha256 checksums
- sha256  5361ac9dc58f2ef5fd2e9b09c68297c17f04950909bbc8023bdb82eacf22c2b0  LICENSE
-diff --git a/package/python-anyio/python-anyio.mk b/package/python-anyio/python-anyio.mk
-index 3be3f2b78f..122900f3c7 100644
---- a/package/python-anyio/python-anyio.mk
-+++ b/package/python-anyio/python-anyio.mk
+ sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  LICENSE
+ sha256  68c286b0cf4507bec8922103efe861adb0bd3218003b1ec1b25e2e64bdd76bd3  COPYRIGHT
+diff --git a/package/python-asyncssh/python-asyncssh.mk b/package/python-asyncssh/python-asyncssh.mk
+index f053453a7b..24d0e0474f 100644
+--- a/package/python-asyncssh/python-asyncssh.mk
++++ b/package/python-asyncssh/python-asyncssh.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ANYIO_VERSION = 4.9.0
-+PYTHON_ANYIO_VERSION = 4.10.0
- PYTHON_ANYIO_SOURCE = anyio-$(PYTHON_ANYIO_VERSION).tar.gz
--PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/95/7d/4c1bd541d4dffa1b52bd83fb8527089e097a106fc90b467a7313b105f840
-+PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/f1/b4/636b3b65173d3ce9a38ef5f0522789614e590dab6a8d505340a4efe4c567
- PYTHON_ANYIO_SETUP_TYPE = setuptools
- PYTHON_ANYIO_LICENSE = MIT
- PYTHON_ANYIO_LICENSE_FILES = LICENSE
+-PYTHON_ASYNCSSH_VERSION = 2.19.0
++PYTHON_ASYNCSSH_VERSION = 2.21.0
+ PYTHON_ASYNCSSH_SOURCE = asyncssh-$(PYTHON_ASYNCSSH_VERSION).tar.gz
+-PYTHON_ASYNCSSH_SITE = https://files.pythonhosted.org/packages/75/85/c723aa7dd69570a31b6638c1405e659712f18f569f280da2da27989445d3
++PYTHON_ASYNCSSH_SITE = https://files.pythonhosted.org/packages/e8/d6/823ed5a227f7da70b33681e49eec4a36fae31b9296b27a8d6aead2bd3f77
+ PYTHON_ASYNCSSH_SETUP_TYPE = setuptools
+ PYTHON_ASYNCSSH_LICENSE = EPL-2.0 or GPL-2.0+
+ PYTHON_ASYNCSSH_LICENSE_FILES = LICENSE COPYRIGHT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
