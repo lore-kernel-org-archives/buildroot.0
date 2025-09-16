@@ -1,101 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C201CAC592
-	for <buildroot@archiver.kernel.org>; Tue, 16 Sep 2025 20:28:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2761CAC598
+	for <buildroot@archiver.kernel.org>; Tue, 16 Sep 2025 20:43:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E435661202;
-	Tue, 16 Sep 2025 20:28:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7C833412A0;
+	Tue, 16 Sep 2025 20:43:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TOVQSUNQmigi; Tue, 16 Sep 2025 20:28:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dqzINhD1kK6y; Tue, 16 Sep 2025 20:43:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D92C611D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9610441297
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1D92C611D7;
-	Tue, 16 Sep 2025 20:28:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 07EE112D
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:27:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9610441297;
+	Tue, 16 Sep 2025 20:43:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B376B12D
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:43:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E2DD041C7F
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:27:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A44D4834F5
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:43:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TE-istZplCFm for <buildroot@buildroot.org>;
- Tue, 16 Sep 2025 20:27:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D5B4B418D4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5B4B418D4
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D5B4B418D4
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:27:48 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-45dde353b47so36002655e9.3
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 13:27:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1758054466; x=1758659266;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=X4s30r5HrzS2T6WqpUhGtL5t9u0BfUwtiSSXW2IrJEg=;
- b=w9zTVY5BlC51Mo5ZSc9pvdWVKtWUws1CLpJwOx77t6OAdl8V5j7COaU6ASJ2j8F/R5
- 4+KREKWdjXQ5y6IUYsLTSMzwfjEZVVuI7clXBBQeIGOy12RKz/d9917AAUpWd0HljgJ2
- WHBUwCVgmuUhB+7f7pxfWtK6JQAZjNvzKQKt2hpwGv02jjU8+GI/IG5ThLEgOpTaz2Jc
- zA7hWvN4VQ90eDqDVs6PcZch5UeIkurH1vNZjPhKEzTyaUHO45P+wCtIcD3vp7YXHx3v
- 9VVYqYvdEMuN+pMp2d2QpSUgELBcUlIOENASEGjnbWECPa3iyIVjyn+X6qoLJdL8oHdG
- b9/g==
-X-Gm-Message-State: AOJu0Yw9jlEbYsSLa4uC8b3Kb/roA1h4ZmnDv7ulNtvRBkdGe6MoBpeV
- QslmGUAMZjMBIDa/RAxw11WZY0Jb70RSb7Yb4+X4kDUfW7bdHy+9F09KFXUPBEJ0ZcsvN2h1Aqa
- 9LPe90B0=
-X-Gm-Gg: ASbGncsm4by3OizNfvxTVJOD3gYgXq0tAkbvHxK2jkIK64NR9pJP5P9eDlZ5JKKEbsq
- bNktEPMOL4y60SHNYB4eG3NqS2jE0bKTgiR98Cd8xGj5G+Z3pmju7gaZM/nXH0xLZIoDbsNTB92
- XuDOBgwP24Rr2SPziPjPoijlLrZ766aWjCbhwYMW6QkjDTVMv+BDWoNJkLHP4bK/XZyXOaa7NMe
- aW6VNIdX/U23U2wrxEt/RYHdltTxoTEKxQr0aZjSJaB9ACW43QwqLx22NU/dxPsOTxs/djxvUAK
- lPOoU7brXNX0wQcWZm5ep//gVtDuBwNVbQwsgofEs+mMgpagxiFLDWZAy4I37+gDGbZAhQbtDig
- QfqWzbrNRbYsYfco=
-X-Google-Smtp-Source: AGHT+IEE+NSn6cveI6N74owPzPdFrIPGCX20q64vRxI7kwOkKsDrsgiQ5PS/A6ds/7RaFsrY8DQ7Wg==
-X-Received: by 2002:a05:600c:5755:b0:45b:71ac:b45a with SMTP id
- 5b1f17b1804b1-45f211d5128mr131039675e9.11.1758054466499; 
- Tue, 16 Sep 2025 13:27:46 -0700 (PDT)
-Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3ec22b16adesm5497723f8f.13.2025.09.16.13.27.45
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 16 Sep 2025 13:27:46 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Tue, 16 Sep 2025 22:27:35 +0200
-Message-ID: <20250916202735.1121872-12-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250916202735.1121872-1-thomas.perale@mind.be>
-References: <20250916202735.1121872-1-thomas.perale@mind.be>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MAHFWKFZiyEz for <buildroot@buildroot.org>;
+ Tue, 16 Sep 2025 20:43:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 866418164A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 866418164A
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 866418164A
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:43:38 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 512801549; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Tue, 16 Sep 2025 20:43:37 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1uycWW-0039JQ-03;
+ Tue, 16 Sep 2025 22:43:36 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Julien Olivain via buildroot <buildroot@buildroot.org>
+Cc: Julien Olivain <ju.o@free.fr>,  =?utf-8?B?SsOpcsO0bWU=?= Pouiller
+ <jezz@sysmic.org>
+References: <20250913095642.20835-1-ju.o@free.fr>
+Date: Tue, 16 Sep 2025 22:43:35 +0200
+In-Reply-To: <20250913095642.20835-1-ju.o@free.fr> (Julien Olivain via
+ buildroot's message of "Sat, 13 Sep 2025 11:56:42 +0200")
+Message-ID: <875xdi9lhk.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1758054466; x=1758659266; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=X4s30r5HrzS2T6WqpUhGtL5t9u0BfUwtiSSXW2IrJEg=;
- b=Qo3jd+RIPANsCdxQTMt501oPAI8ep8AFHzUxs3Su9e19+6PiPcPT5PO+mBGtKAHzef
- t4wSqdYHtEF4bsPW2DhiCE9Ds3JOU3l9D08OfC0l0asTJ1a/Wuxm7uQDigbaWnWJ33sR
- oFhuRy1UUuBKii02N34No/IDRwOghqbfE2DUUFHCmr0p7aczcKewZiPX7GAHzbI3kwFb
- dQJMcZSt87SNNIHEx9KInveQbjgIy3IU69jads5lh6FAMkJsPpTKx3Lo4eF+KwwjZ9TA
- CTP7OTzduRSYZx+NjP+HqgcuPB0jCLCj14QDJD5C8I/rCC3SOdz9kNRSVoy7BUL1fLrf
- 1VPg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Qo3jd+RI
-Subject: [Buildroot] [PATCH 12/12] package/zziplib: fix deprecated CPE
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=iztee9aZUzkllAWdo+IzcWHYokZtzW7i2MzJ2zc3j0AnjyzrcLwi6Mky4nzCvql4hm7RnNr5OSesm9kStuDjBGbXZcVvijUM/XkroRrEYaXItmyBtm5OL7lWtaO4AaCQcKzkXq7goTN8vVCxNPePvMj1yZWkekv1LY7OCt6vzTbW5y72WAanrks4EeRi8Tmdl/zhxH7yDBv36V7A5AmX/PsEwU4GkuL3Ga7mKXgOrCTYNGT8XqV42+Vg1FlKSR5LxXPLI9M/SUrdPIo03dXY5xUw/xEodx8/GO228++fpAL4z1SwBDtjrdE16qRKkoJRT7Q2ziAuThg0iqCn8iNXDQ==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=VQbwm/Jq6qVPLCXudHqGNHxfFuN/LM2niODjPHBrLek=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=iztee9aZ
+Subject: Re: [Buildroot] [PATCH 1/1] package/apitrace: remove stale patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,46 +81,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
-Cc: Michael Fischer <mf@go-sys.de>,
- Aleksandr Makarov <aleksandr.o.makarov@gmail.com>,
- =?UTF-8?q?Herv=C3=A9=20Codina?= <herve.codina@bootlin.com>,
- Anthony Viallard <viallard@syscom-instruments.com>,
- James Hilliard <james.hilliard1@gmail.com>, Petr Vorel <petr.vorel@gmail.com>,
- Romain Naour <romain.naour@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The CPE 'zziplib_project:zziplib' is deprecated in favour of
-'gdraheim:zziplib'.
+>>>>> "Julien" == Julien Olivain via buildroot <buildroot@buildroot.org> writes:
 
-See https://nvd.nist.gov/products/cpe/detail/FB4124F9-087E-454D-B5D4-642FF08B23A8
+ > Running the command:
+ >     make apitrace-patch
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- package/zziplib/zziplib.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > fails with error:
 
-diff --git a/package/zziplib/zziplib.mk b/package/zziplib/zziplib.mk
-index 0ef53436d2..ba902b84fd 100644
---- a/package/zziplib/zziplib.mk
-+++ b/package/zziplib/zziplib.mk
-@@ -8,7 +8,7 @@ ZZIPLIB_VERSION = 0.13.74
- ZZIPLIB_SITE = $(call github,gdraheim,zziplib,v$(ZZIPLIB_VERSION))
- ZZIPLIB_LICENSE = LGPL-2.0+ or MPL-1.1
- ZZIPLIB_LICENSE_FILES = docs/COPYING.LIB docs/COPYING.MPL docs/copying.htm.md
--ZZIPLIB_CPE_ID_VALID = YES
-+ZZIPLIB_CPE_ID_VENDOR = gdraheim
- ZZIPLIB_INSTALL_STAGING = YES
- ZZIPLIB_CONF_OPTS += \
- 	-DZZIPDOCS=OFF \
+ >     Applying 0003-Explicit-header-stdint.patch using patch:
+ >     patching file frametrim/ft_dependecyobject.hpp
+ >     Reversed (or previously applied) patch detected!  Skipping patch.
+ >     1 out of 1 hunk ignored -- saving rejects to file frametrim/ft_dependecyobject.hpp.rej
+ >     patching file retrace/metric_writer.cpp
+ >     Reversed (or previously applied) patch detected!  Skipping patch.
+ >     1 out of 1 hunk ignored -- saving rejects to file retrace/metric_writer.cpp.rej
+
+ > Commit [1] "package/apitrace: fix build with GCC 15.x" introduced a
+ > package patch in the branch master while Buildroot was in RC cycle.
+ > This same commit was cherry-picked in [2] in the branch "next" to also
+ > apply cleanly the patch for commit [3] "package/apitrace: bump to
+ > version 13".
+
+ > The merge commit [4] kept the apitrace package patch
+ > "0003-Explicit-header-stdint.patch".
+
+ > This commit fixes the issue by removing this stale patch.
+
+ > [1] https://gitlab.com/buildroot.org/buildroot/-/commit/a4b0913280b95b62cd74fdc5ff0b25e3afa2c529
+ > [2] https://gitlab.com/buildroot.org/buildroot/-/commit/bf55f4713e1ba877183b9e31469df5d3823ec4c0
+ > [3] https://gitlab.com/buildroot.org/buildroot/-/commit/aec2f2ddc44d037ad21c9a061475459dd9f3d3a1
+ > [4] https://gitlab.com/buildroot.org/buildroot/-/commit/0af159ae2b0363a90b8c5432cd4cb9bfd3476c5a
+
+ > Signed-off-by: Julien Olivain <ju.o@free.fr>
+
+Committed, thanks.
+
 -- 
-2.51.0
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
