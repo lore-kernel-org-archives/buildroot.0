@@ -1,78 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2216CAC59D
-	for <buildroot@archiver.kernel.org>; Tue, 16 Sep 2025 20:27:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C49BCAC592
+	for <buildroot@archiver.kernel.org>; Tue, 16 Sep 2025 20:27:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 88E32611BE;
-	Tue, 16 Sep 2025 20:27:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 42F824125D;
+	Tue, 16 Sep 2025 20:27:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JY10ubkHer5l; Tue, 16 Sep 2025 20:27:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id igGgXxQmPsTH; Tue, 16 Sep 2025 20:27:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93385611AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BDE54123B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 93385611AA;
-	Tue, 16 Sep 2025 20:27:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id EB032199
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:27:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6BDE54123B;
+	Tue, 16 Sep 2025 20:27:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C6FC412D
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:27:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D1B1A61198
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:27:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id ADA5E41C7F
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:27:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8xB9Wwps9Q33 for <buildroot@buildroot.org>;
- Tue, 16 Sep 2025 20:27:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XOGfYbkdpK7N for <buildroot@buildroot.org>;
+ Tue, 16 Sep 2025 20:27:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E17556117A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E17556117A
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E17556117A
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:27:42 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-3ebc706eb7bso1376887f8f.3
- for <buildroot@buildroot.org>; Tue, 16 Sep 2025 13:27:42 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CFB8F418D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CFB8F418D4
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CFB8F418D4
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 20:27:43 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-3e9c5faa858so3132692f8f.3
+ for <buildroot@buildroot.org>; Tue, 16 Sep 2025 13:27:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1758054461; x=1758659261;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=wCnsWHxoln6B7bC+0JCta1MtCFvB5mvIZxr3cCirRB8=;
- b=v8+VMh2iUWDR0i3tgigAAye4ZSMxrHhRoOE4MncYfE6fNFe4CZf6mRbJvF5i+lQ9D/
- 8GQcQLh/ueHXMQdxZLF8TfS68UKmCfPbwiqEixi5DuX9cZXH+p/9bMh3NzAXCr7yX0/v
- uejvZJWttgwbGPAp6ii7jfEqnxfyv7FgdOV2ejCItriqbrUD/5u65iOxFhFLYfcaBvD9
- 559DyB6bBPTfzz3lFOpW4kU/h1q98ieB5pJKcvc65tIoJAngu5u6hLHSNqRHFZ6uKjWg
- sJyShhkIFoYvitj6sLE/DLCxXDGTu5J4ds6W2DaRpLUZnB+Uv8MwlNil8BbcXo6oz5aG
- 97ng==
-X-Gm-Message-State: AOJu0YxjcuOxPgQQcX9ves0ZKo5hgKMK8uVrSON1e7QZlEyhUdkXbv2y
- MZZ8A9QvVozCB0WiA2FDo2RldXPHOztS+Srg/Bk6WOuPYW4IzGlns4gmcpNcBL5n2FldqiGjsEs
- peIbxKzA=
-X-Gm-Gg: ASbGncs4hxtGhG3PyrloRUU/xZ/ZigR7UthrH70qVhh1kpEhPCM+6ZdHUxTbZzwePyb
- 9S+aEqBJynE9zemxi5CiJxcY20bDj5QqouYwMXVwBIcBaooYKkddcCwlmB6g9dmv8YjJqKOTAPX
- tes/rO0DL0iBOTqyh1GVDCxPq1VMSFDzPH0TkuS8EpHQahiIVDNPyZtwZOB0plyddUHFbjVimDB
- 2a75uPuuYdpjhTmbv7+zNRcaW4ZuzolkEq6oGEPv7eS27O3sMR0Tlw+pMPR5wl0o1lF9CRQ2D6/
- wD74CmWtCLOhugSv5qZqm5LUES2cSZUjKcqdCAY3pf0CWmK+T5LBsDrycZtLpw8sHh5uJ4rOrou
- J2Vj7go7DWnM+C9g=
-X-Google-Smtp-Source: AGHT+IGd0MJHesl6A3Vboxi+Y1sxUJ7iNkjMQJaMs/XdbQZVBhJtZZqz1Ax9L2r2mYIrWD3ERa5Ngg==
-X-Received: by 2002:a5d:64c4:0:b0:3ea:a8a:5473 with SMTP id
- ffacd0b85a97d-3ea0a8a636bmr9653529f8f.34.1758054460662; 
- Tue, 16 Sep 2025 13:27:40 -0700 (PDT)
+ bh=/nnmXcgIUz2l11AfwaOJ1HnjFTrkZnmR1Y0iv8fkXiw=;
+ b=u9qG+LF2AalZE7zbzC+gAsubTdXV2rbRfTc0Ob8LOX3vUXxApKMuxEumxVNa1QkYrJ
+ hx5hgmmXbez8F164qMpl6PlXYJ4PU3vNJRyiPEcwMhEn8fW9xhxdhQmHhFhV/Ml9klnE
+ urCvGLscGcAqzt2WZVjbeMgvx7BCkexzor5zVHYXt0hOU7R5f83jit7Y3WqOPd2KGraj
+ XgZWsMefS7IsLzxjXaOpyZ0OeuPxxzTLtyzCcXwzAx2cGwtgRwLRp+7Qnql6VIjlZtuV
+ rBDJ6mYTaBfNvh7epLuTk9nkBvPdip4u90YS/Yp+K7aWTCeUKz2JNypVNJHcmuR9D44e
+ AphA==
+X-Gm-Message-State: AOJu0YyJ/3L4/rMuweZ1SX++lQWtR/CJvRnIUdwsr2Rk1x6JIM2bP2x7
+ 097n6R7EdGOyQmX6aWgpFgyy0ndfkLuRclC3GfzWoO4G7gUVGn8MMXnoPo3Sr7NV4RouJo9gEzR
+ PrwPb3nI=
+X-Gm-Gg: ASbGnct3NeggRyn7Tu4K+/mUHXukHRjEYQ1z/3pJXl2xzrzsUXY2Lxt0NHJtVoOM31R
+ Uv3r3JYFy+FXFQeAjVq6L73LQsKG/pNXGuqrr5RxYiPiNnI+70Q6GHi6qN/9DuvdyQahciWST/i
+ FIuGzKZp1DejU7EFh2QQuigB1rDwWg5yAeo6k3d9m3on6NTPKLkPdcfGG/8QHyo5zNc16PrHGH+
+ 8TYhcTFqTGef97RClhWYaIIl4TPRHbx84b0Rv7m+8JOC2waxjeExqd2cfxHNkSAvFnYMYuKCm6U
+ d0m6TaT5b18uRqwcBg6VX2KDekuxEacTzZ/gEhe/1+pA6/IJQuIEb9hG2QNKHv6sMKbRNISNcsV
+ 76b5y+IXSTNahE3s=
+X-Google-Smtp-Source: AGHT+IHJMUu0frUx6ZQr05LPJBHRXbdUqiW/wajOdBe6LXYA89TcZW3fQdRb7UpZkb85y3rf4m4Adw==
+X-Received: by 2002:a05:6000:2901:b0:3ea:a694:ae0a with SMTP id
+ ffacd0b85a97d-3eaa694b10fmr8487718f8f.48.1758054461528; 
+ Tue, 16 Sep 2025 13:27:41 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3ec22b16adesm5497723f8f.13.2025.09.16.13.27.39
+ ffacd0b85a97d-3ec22b16adesm5497723f8f.13.2025.09.16.13.27.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 16 Sep 2025 13:27:39 -0700 (PDT)
+ Tue, 16 Sep 2025 13:27:40 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Tue, 16 Sep 2025 22:27:28 +0200
-Message-ID: <20250916202735.1121872-5-thomas.perale@mind.be>
+Date: Tue, 16 Sep 2025 22:27:29 +0200
+Message-ID: <20250916202735.1121872-6-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250916202735.1121872-1-thomas.perale@mind.be>
 References: <20250916202735.1121872-1-thomas.perale@mind.be>
@@ -82,20 +82,21 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=wCnsWHxoln6B7bC+0JCta1MtCFvB5mvIZxr3cCirRB8=;
- b=L/ocAZDnmSO05+dGBXgvvTsUWbuLIkn7tsqoiUmpQKSjboVzk8Hhb3DyDHuYJWNE/k
- fukDuJt76CBYHp7snP69r8Z5WC7SlADLT16kIGJHIO4QI7R3881bchuakHok5TLTubh3
- AF9DiAjlvKTvz8XaL2H+2VVQi8ufGxaQ2D+LlxXOvIPHzVCvfi5MPjyIEulj67+GoXP+
- 2cT1Yys3RUYRMaXRTQYDyIozt/7Ig/ZEdGEwBxv1B8mz0xGIou1iLf4D6OdvBDkW84WQ
- Zx61y3pHowXxNe84aogKdBTYR1yXMAUwz/AhDQ6DNory8ZIqM4msQKg0j9OQi+48w+Ua
- y1Vg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=/nnmXcgIUz2l11AfwaOJ1HnjFTrkZnmR1Y0iv8fkXiw=;
+ b=L/62SvaDF3w4VAjE0sef2mGpvuSJJOrikgkU+Xvsoh4I72Igo+aC+Ae/iXbTdJE8Jb
+ 4F6K6eUZyPg3TNsz8K9lFLh3yNejB79Bx6qd/SjDkpGAWgJpbcrPVtqNpNI73ZPPub4h
+ PIOx3J8ZqjZtDmodwEy8LMCzo5QknLMiumnWTx4FuIayzU4IOCkAljkluWN5njkBMBRz
+ ekzzoPFDp5Nvj9ivUPTZUEkQdBmYnFeke2jUvEFbm6HUC+HmK8dRcTIuPyw4BD7qTdV8
+ O4tJ3krLvuGopyNPuBktjNUoBC5wH9Ki0IMT17RqX4ksDAbUybaGZ8rsVMzRUH2G6gE7
+ z8mg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=L/ocAZDn
-Subject: [Buildroot] [PATCH 05/12] package/pango: fix deprecated CPE
+ header.a=rsa-sha256 header.s=google header.b=L/62SvaD
+Subject: [Buildroot] [PATCH 06/12] package/python-cryptography: fix
+ deprecated CPE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -121,28 +122,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The CPE 'pango:pango' has been deprecated in favour of 'gnome:pango'.
+The CPE 'cryptography_project:cryptography' has been deprecated in
+favour of 'cryptography.io:cryptography'.
 
-See https://nvd.nist.gov/products/cpe/detail/19B77822-6C34-41C8-8160-367D56AD1569
+See the following:
+ - https://nvd.nist.gov/products/cpe/detail/2EBA50FC-F3F9-40D5-82BD-EFB67F761153
+ - https://nvd.nist.gov/vuln/detail/cve-2023-49083
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/pango/pango.mk | 2 +-
+ package/python-cryptography/python-cryptography.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index bd5dd4d332..671705d0b3 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -11,7 +11,7 @@ PANGO_SITE = https://download.gnome.org/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_INSTALL_STAGING = YES
- PANGO_LICENSE = LGPL-2.0+
- PANGO_LICENSE_FILES = COPYING
--PANGO_CPE_ID_VENDOR = pango
-+PANGO_CPE_ID_VENDOR = gnome
- 
- PANGO_CONF_OPTS = -Dfontconfig=enabled
- HOST_PANGO_CONF_OPTS = -Dfontconfig=enabled -Dintrospection=disabled
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index fd2c3d7a50..b2142ddef1 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
+@@ -11,7 +11,7 @@ PYTHON_CRYPTOGRAPHY_SITE = $(PYTHON_CRYPTOGRAPHY_SITE_PYPI)/$(PYTHON_CRYPTOGRAPH
+ PYTHON_CRYPTOGRAPHY_SETUP_TYPE = maturin
+ PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
+ PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+-PYTHON_CRYPTOGRAPHY_CPE_ID_VENDOR = cryptography_project
++PYTHON_CRYPTOGRAPHY_CPE_ID_VENDOR = cryptography.io
+ PYTHON_CRYPTOGRAPHY_CPE_ID_PRODUCT = cryptography
+ PYTHON_CRYPTOGRAPHY_CARGO_MANIFEST_PATH = src/rust/Cargo.toml
+ PYTHON_CRYPTOGRAPHY_DEPENDENCIES = \
 -- 
 2.51.0
 
