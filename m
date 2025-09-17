@@ -1,75 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07172CAC598
-	for <buildroot@archiver.kernel.org>; Wed, 17 Sep 2025 19:54:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09B8CCAC598
+	for <buildroot@archiver.kernel.org>; Wed, 17 Sep 2025 20:17:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BFB1741612;
-	Wed, 17 Sep 2025 19:54:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A0DFC84698;
+	Wed, 17 Sep 2025 20:17:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GbayaoCYrMXf; Wed, 17 Sep 2025 19:54:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id i_3c9QSqQqEJ; Wed, 17 Sep 2025 20:17:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2AF841622
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 934E98469A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D2AF841622;
-	Wed, 17 Sep 2025 19:54:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 91C9D279
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 19:54:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 934E98469A;
+	Wed, 17 Sep 2025 20:17:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1E380199
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 20:17:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8347061722
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 19:54:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 04E64406A1
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 20:17:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OFhnkHnIpHMj for <buildroot@buildroot.org>;
- Wed, 17 Sep 2025 19:54:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A37BC61695
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A37BC61695
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A37BC61695
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 19:54:13 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 50A7613F8B5;
- Wed, 17 Sep 2025 21:54:09 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 17 Sep 2025 21:54:09 +0200
-MIME-Version: 1.0
-Date: Wed, 17 Sep 2025 21:54:09 +0200
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org, Michael Vetter <jubalh@iodoru.org>
-In-Reply-To: <20250917185443.2881784-1-thomas.perale@mind.be>
-References: <20250917185443.2881784-1-thomas.perale@mind.be>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <ff9a3bab4493f06a7b452d6875f8847f@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1758138851;
- bh=q4JTgFFEGmzWqHG/34CwSWmBkoYSm6lyfeSghNVXtvw=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=UX0gfvdfg8+KhkdR85CDkNaqsYkVWVhHCsy2cN5oXW9i9TVu7/SkGL9wz1pSRSLYC
- LjvDWoqPHNQLvwoZZwSKULXa/Tzrg3L1LYWeRwVIPsTzuuoXETz4DP1DcDbx1j0fZM
- a7+UWa/arodkGMb0zNl001hQLailA0k4Lm6UpSF8IoZo91044CnzzNFGjNswrSbTxV
- RDEBFGh9A8ox8Mi8dqgN/l0NRzGMQbw9vMKBQ0eOML2e1mgt0OrK/MVQyrdvl9y+2v
- jcnKRpksYg4jLhcpV77CDm27jB8Mvyfdk/3pXFIXEZ3MthuTzvboor9WTVi7q5x/vH
- AblOKm/c9daKw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=UX0gfvdf
-Subject: Re: [Buildroot] [PATCH 1/2] package/jasper: add patch for
- CVE-2023-51257
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8Rej1Fw0ei4H for <buildroot@buildroot.org>;
+ Wed, 17 Sep 2025 20:17:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FD5140623
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2FD5140623
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 20:17:51 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 17CF785B78; Wed, 17 Sep 2025 20:17:51 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 17 Sep 2025 22:13:01 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6e81b51f683e075d4a20a6c28a0fd778d977f4a4
+X-Git-Newrev: be466c265ba09ed47ec1eb40f006dd17753e69d1
+X-Patchwork-Hint: ignore
+Message-Id: <20250917201751.17CF785B78@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/chocolate-doom: bump to 3.1.1 to
+ fix GCC 15.x issues
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,27 +60,161 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 17/09/2025 20:54, Thomas Perale via buildroot wrote:
-> This fixes the following vulnerability:
-> 
-> - CVE-2023-51257:
-> 
-> An invalid memory write issue in Jasper-Software Jasper v.4.1.1 and
-> before allows a local attacker to execute arbitrary code.
-> 
-> For more information see:
->   - https://nvd.nist.gov//vuln/detail/CVE-2023-51257
->   - 
-> https://github.com/jasper-software/jasper/commit/aeef5293c978158255ad4f127089644745602f2a
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+commit: https://git.buildroot.net/buildroot/commit/?id=be466c265ba09ed47ec1eb40f006dd17753e69d1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Series applied to master, thanks.
+Changes in 3.1.0:
+
+  https://github.com/chocolate-doom/chocolate-doom/releases/tag/chocolate-doom-3.1.0
+
+Changes in 3.1.1:
+
+  https://github.com/chocolate-doom/chocolate-doom/releases/tag/chocolate-doom-3.1.1
+
+The SDL2_mixer and SDL2_net dependencies are now optional since 3.1.0,
+so adjust the packaging accordingly.
+
+Also, the license file was renamed upstream in commit:
+https://github.com/chocolate-doom/chocolate-doom/commit/91a66a7ecba5e0dea87c8d98237d6a224f13347a
+So _LICENSE_FILES and the .hash file are also updated to reflect
+that change.
+
+Fixes:
+
+  https://autobuild.buildroot.net/results/90a01c5925e7f5f50b3ea06d6ea7b0da66814a15/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Julien: fix license file and hash]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .checkpackageignore                                |  1 -
+ ...01-Remove-redundant-demoextend-definition.patch | 29 ----------------------
+ package/chocolate-doom/Config.in                   |  2 --
+ package/chocolate-doom/chocolate-doom.hash         |  4 +--
+ package/chocolate-doom/chocolate-doom.mk           | 24 +++++++++++++++---
+ 5 files changed, 22 insertions(+), 38 deletions(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index d8d0bc6969..8779b26823 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -289,7 +289,6 @@ package/cdrkit/0003-Add-extern-to-char-outfile-declaration-to-fix-build-.patch l
+ package/cfm/S65cfm lib_sysv.Indent lib_sysv.Variables
+ package/cgroupfs-mount/S30cgroupfs Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/chipmunk/0001-Fix-build-failure-on-musl.patch lib_patch.Upstream
+-package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch lib_patch.Upstream
+ package/chrony/S49chronyd lib_sysv.Variables
+ package/cmake/0001-rename-cmake-rootfile.patch lib_patch.Upstream
+ package/cmocka/0001-Don-t-redefine-uintptr_t.patch lib_patch.Upstream
+diff --git a/package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch b/package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch
+deleted file mode 100644
+index 06bf54c583..0000000000
+--- a/package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From a8fd4b1f563d24d4296c3e8225c8404e2724d4c2 Mon Sep 17 00:00:00 2001
+-From: Jordan Christiansen <xordspar0@gmail.com>
+-Date: Sun, 15 Mar 2020 16:55:33 -0500
+-Subject: [PATCH] Remove redundant demoextend definition
+-
+-GCC 10 enables -fno-common by default, which causes the linker to fail when
+-there are multiple definitions of a global variable.
+-
+-See https://gcc.gnu.org/gcc-10/porting_to.html
+-
+-[Retrieved from:
+-https://github.com/chocolate-doom/chocolate-doom/commit/a8fd4b1f563d24d4296c3e8225c8404e2724d4c2]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/hexen/mn_menu.c | 1 -
+- 1 file changed, 1 deletion(-)
+-
+-diff --git a/src/hexen/mn_menu.c b/src/hexen/mn_menu.c
+-index 059f45b3e..a97b7fcd1 100644
+---- a/src/hexen/mn_menu.c
+-+++ b/src/hexen/mn_menu.c
+-@@ -131,7 +131,6 @@ boolean MenuActive;
+- int InfoType;
+- int messageson = true;
+- boolean mn_SuicideConsole;
+--boolean demoextend; // from h2def.h
+- 
+- // PRIVATE DATA DEFINITIONS ------------------------------------------------
+- 
+diff --git a/package/chocolate-doom/Config.in b/package/chocolate-doom/Config.in
+index 406b04ecf1..3cefd057ec 100644
+--- a/package/chocolate-doom/Config.in
++++ b/package/chocolate-doom/Config.in
+@@ -3,8 +3,6 @@ config BR2_PACKAGE_CHOCOLATE_DOOM
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS # sdl2
+ 	select BR2_PACKAGE_SDL2
+-	select BR2_PACKAGE_SDL2_MIXER
+-	select BR2_PACKAGE_SDL2_NET
+ 	help
+ 	  Chocolate Doom is a set of conservative source ports for Doom,
+ 	  Heretic, Hexen and Strife, with a philosophy of preserving the
+diff --git a/package/chocolate-doom/chocolate-doom.hash b/package/chocolate-doom/chocolate-doom.hash
+index 79eb1c6a3f..a86a86b790 100644
+--- a/package/chocolate-doom/chocolate-doom.hash
++++ b/package/chocolate-doom/chocolate-doom.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  d435d6177423491d60be706da9f07d3ab4fabf3e077ec2a3fc216e394fcfc8c7  chocolate-doom-3.0.1.tar.gz
+-sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256  1edcc41254bdc194beb0d33e267fae306556c4d24110a1d3d3f865717f25da23  chocolate-doom-3.1.1.tar.gz
++sha256  aef8b4222b79d0dbf6bf17cfff71c90a6a6bb8917a4162abe417b469ed22da2e  COPYING.md
+diff --git a/package/chocolate-doom/chocolate-doom.mk b/package/chocolate-doom/chocolate-doom.mk
+index 581b2c51c2..abe0e128b2 100644
+--- a/package/chocolate-doom/chocolate-doom.mk
++++ b/package/chocolate-doom/chocolate-doom.mk
+@@ -4,13 +4,15 @@
+ #
+ ################################################################################
+ 
+-CHOCOLATE_DOOM_VERSION = 3.0.1
+-CHOCOLATE_DOOM_SITE = http://www.chocolate-doom.org/downloads/$(CHOCOLATE_DOOM_VERSION)
++CHOCOLATE_DOOM_VERSION = 3.1.1
++CHOCOLATE_DOOM_SITE = $(call github,chocolate-doom,chocolate-doom,chocolate-doom-$(CHOCOLATE_DOOM_VERSION))
+ CHOCOLATE_DOOM_LICENSE = GPL-2.0+
+-CHOCOLATE_DOOM_LICENSE_FILES = COPYING
++CHOCOLATE_DOOM_LICENSE_FILES = COPYING.md
+ CHOCOLATE_DOOM_CPE_ID_VENDOR = chocolate-doom
+ CHOCOLATE_DOOM_CPE_ID_PRODUCT = chocolate_doom
+-CHOCOLATE_DOOM_DEPENDENCIES = host-pkgconf sdl2 sdl2_mixer sdl2_net
++CHOCOLATE_DOOM_DEPENDENCIES = host-pkgconf sdl2
++# Fetch from git
++CHOCOLATE_DOOM_AUTORECONF = YES
+ 
+ # Avoid installing desktop entries, icons, etc.
+ CHOCOLATE_DOOM_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-exec
+@@ -23,6 +25,20 @@ endif
+ 
+ CHOCOLATE_DOOM_CONF_ENV += CFLAGS="$(CHOCOLATE_DOOM_CFLAGS)"
+ 
++ifeq ($(BR2_PACKAGE_SDL2_MIXER),y)
++CHOCOLATE_DOOM_DEPENDENCIES += sdl2_mixer
++CHOCOLATE_DOOM_CONF_OPTS += --enable-sdl2mixer
++else
++CHOCOLATE_DOOM_CONF_OPTS += --disable-sdl2mixer
++endif
++
++ifeq ($(BR2_PACKAGE_SDL2_NET),y)
++CHOCOLATE_DOOM_DEPENDENCIES += sdl2_net
++CHOCOLATE_DOOM_CONF_OPTS += --enable-sdl2net
++else
++CHOCOLATE_DOOM_CONF_OPTS += --disable-sdl2net
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ CHOCOLATE_DOOM_DEPENDENCIES += libpng
+ CHOCOLATE_DOOM_CONF_OPTS += --with-libpng
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
