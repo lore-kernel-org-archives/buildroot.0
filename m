@@ -4,73 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48D78CAC598
-	for <buildroot@archiver.kernel.org>; Wed, 17 Sep 2025 21:01:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 908C8CAC59A
+	for <buildroot@archiver.kernel.org>; Wed, 17 Sep 2025 21:06:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1395184730;
-	Wed, 17 Sep 2025 21:01:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 277E18473F;
+	Wed, 17 Sep 2025 21:06:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q_imyPP7-anK; Wed, 17 Sep 2025 21:01:23 +0000 (UTC)
+ id dP6KM4qEqa-3; Wed, 17 Sep 2025 21:06:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 672F48472B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 667828472B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 672F48472B;
-	Wed, 17 Sep 2025 21:01:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id EF21EAF1
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 21:01:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 667828472B;
+	Wed, 17 Sep 2025 21:06:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BD729AF1
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 21:06:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EC4FA407E4
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 21:01:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AF1BB42748
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 21:06:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jWL_LCzOpRNT for <buildroot@buildroot.org>;
- Wed, 17 Sep 2025 21:01:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 49E7E407D2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49E7E407D2
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 49E7E407D2
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 21:01:19 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id F3170780333;
- Wed, 17 Sep 2025 23:01:14 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 17 Sep 2025 23:01:14 +0200
-MIME-Version: 1.0
-Date: Wed, 17 Sep 2025 23:01:14 +0200
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org, =?UTF-8?Q?R=C3=A9mi_R=C3=A9rolle?=
- <remi.rerolle@gmail.com>
-In-Reply-To: <20250908183816.3689041-1-thomas.petazzoni@bootlin.com>
-References: <20250908183816.3689041-1-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <bd757a7940086167856b1811cfda383e@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1758142877;
- bh=k4mdXsOrPNhrbGWf3pkHBKLErre3XuENb8I4UdQl1q0=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=e3IWBt+AIjW8JJXF+cqZk7W/T4y9OrcTHgNQUg6Rry8P1rc6MxOvldr3FchsgqGkE
- /MXk9J+kkL5XfyVUOrqzKcsa8/3eWAmAui9hsY/Jxe2r6JEKODDcwIDaLguOYIzGva
- LnAmArFYCRyxo3uGLj3uOFrCPw4IF8ye9liDy+JyQPeQpXZn8S2qfbZsOt4iXDSS7t
- CYnxdpRdVwrrIUYKoy/gfoCiUxcWDyFFJTF/QwEPta0tlk9eHgGsi8FpSs49FRR/+X
- uFNkd2By3/s87Fy6brbUNuvxlWmWWxU+97h2pq4HqcMAVvxbMdyrRDnDHUwCwtYBnU
- qy0UHAMXgSMnw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=e3IWBt+A
-Subject: Re: [Buildroot] [PATCH] package/libfreeimage: fix build with GCC
- 14.x
+ id oekikjunwxl1 for <buildroot@buildroot.org>;
+ Wed, 17 Sep 2025 21:06:14 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 05E584273C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 05E584273C
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 21:06:14 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EA21585C35; Wed, 17 Sep 2025 21:06:13 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 17 Sep 2025 23:04:10 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 64f6d524c56171d27afe11a36b76565f117d1cf6
+X-Git-Newrev: e028c2cdc9ee67602af98293ce0589add1fe4df8
+X-Patchwork-Hint: ignore
+Message-Id: <20250917210613.EA21585C35@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ support/testing/tests/package/test_fwts.py: switch to neoverse-n2 cpu
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,43 +60,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 08/09/2025 20:38, Thomas Petazzoni via buildroot wrote:
-> Take two patches from the Debian jxrlib package, and integrate them to
-> fix the build of the bundled jxrlib library found in the libfreeimage
-> package.
-> 
-> libfreeimage isn't exactly well maintained: its last version 3.18.0 is
-> quite old (July 2018), there's a fairly large number of tickets in the
-> bug tracker claiming to be CVE
-> reports (https://sourceforge.net/p/freeimage/bugs/), it is still using
-> SVN as the version control system.
-> 
-> However, it is used as an optional dependency for CEGUI, and a
-> mandatory dependency for Ogre. However, it no longer seems to be a
-> dependency for more recent versions of Ogre. But in any case it cannot
-> simply be dropped.
-> 
-> Fixes:
-> 
->   
-> https://autobuild.buildroot.net/results/452462285bf93b13f092fb41696952f415e75b2f/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=e028c2cdc9ee67602af98293ce0589add1fe4df8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+The SBSA Reference Platform was updated to neoverse-n2 (armv9.0a)
+in Qemu v9.1 [1].
 
-For info, I fixed the DOS-newlines in the patches, which I believe
-were correct when you sent the patch but were removed by the mailing
-list.
+The Armv9-A and Neoverse N2 core support was added in Buildroot
+commit [2].
 
-Best regards,
+Since the test_fwts uses the Qemu sbsa-ref machine, this commit
+aligns it to use the neoverse-n2 cpu.
 
-Julien.
+[1] https://gitlab.com/qemu-project/qemu/-/commit/b1d592e7b0a7301eae8e3baa99744ac35db3cd2a
+[2] https://gitlab.com/buildroot.org/buildroot/-/commit/9845bd4541cb03e97e577281f3c64f00c6ead881
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ support/testing/tests/package/test_fwts.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/support/testing/tests/package/test_fwts.py b/support/testing/tests/package/test_fwts.py
+index e33adcaea4..90bf086a58 100644
+--- a/support/testing/tests/package/test_fwts.py
++++ b/support/testing/tests/package/test_fwts.py
+@@ -7,7 +7,7 @@ class TestFwts(infra.basetest.BRTest):
+     config = \
+         """
+         BR2_aarch64=y
+-        BR2_neoverse_n1=y
++        BR2_neoverse_n2=y
+         BR2_TOOLCHAIN_EXTERNAL=y
+         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+         BR2_TARGET_ROOTFS_EXT2=y
+@@ -45,7 +45,7 @@ class TestFwts(infra.basetest.BRTest):
+         flash1 = os.path.join(self.builddir, "images", "SBSA_FLASH1.fd")
+         self.emulator.boot(arch="aarch64",
+                            options=["-M", "sbsa-ref",
+-                                    "-cpu", "neoverse-n1",
++                                    "-cpu", "neoverse-n2",
+                                     "-m", "512M",
+                                     "-pflash", flash0,
+                                     "-pflash", flash1,
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
