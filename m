@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 644E8CAC59A
-	for <buildroot@archiver.kernel.org>; Wed, 17 Sep 2025 11:58:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C047CA0EE8
+	for <buildroot@archiver.kernel.org>; Wed, 17 Sep 2025 11:59:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3137A40D71;
-	Wed, 17 Sep 2025 11:58:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 56D496145F;
+	Wed, 17 Sep 2025 11:59:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pPMxcdlr0fLv; Wed, 17 Sep 2025 11:58:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Hm633pOjNd9O; Wed, 17 Sep 2025 11:59:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 422C640A85
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C0A161500
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 422C640A85;
-	Wed, 17 Sep 2025 11:58:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8DB0D279
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 11:58:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8C0A161500;
+	Wed, 17 Sep 2025 11:59:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E605279
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 11:59:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 74A6D4021F
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 11:58:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 245054057D
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 11:59:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6IBXKUsb2V17 for <buildroot@buildroot.org>;
- Wed, 17 Sep 2025 11:58:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B2404057D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6B2404057D
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 11:58:51 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 59F3F851CA; Wed, 17 Sep 2025 11:58:51 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 17 Sep 2025 13:57:40 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e2f0e4c115a3ed99aeb38f0590205d56b74c724b
-X-Git-Newrev: 44e0ba2bd256b269b578e64e0ebb0ab386bdf51d
-X-Patchwork-Hint: ignore
-Message-Id: <20250917115851.59F3F851CA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-trove-classifiers: bump to
- version 2025.9.11.17
+ id HQX4nRVXAp9G for <buildroot@buildroot.org>;
+ Wed, 17 Sep 2025 11:59:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1585A4057F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1585A4057F
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1585A4057F
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 11:59:27 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 187CA780395;
+ Wed, 17 Sep 2025 13:59:23 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 17 Sep 2025 13:59:22 +0200
+MIME-Version: 1.0
+Date: Wed, 17 Sep 2025 13:59:22 +0200
+To: Fiona Klute <fiona.klute@gmx.de>
+Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>
+In-Reply-To: <20250917112337.2521059-1-fiona.klute@gmx.de>
+References: <20250917112337.2521059-1-fiona.klute@gmx.de>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <01347364a3dd80018379bd33df5c58b6@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1758110365;
+ bh=StgHXyMl/7VEPPq4V23mamnUB1ijjM0TH9zIWC0NzMw=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=AJoddsFfsaYKS7QB5TxGFYxkyXIzP0OsGM8wGy5KuTbbfTjEH/qvnq+lLvdwkpj/T
+ 6N3inLK35EDVn9bQZmxbggL7rWteOLy48S3Oc+O4MZQwjvnw3/jp8QAuLp6O/5cGOO
+ eBZ03TFP60nz6BKdkzIxT63YbifvAuqOxrp+fiio/p6CbqHRrqqO39/HYwd0ANTmiN
+ 10NWsBgRLVi0ZRAy/hwF+i+loYNfV2K3T1lRdL7u6YaV/mrNlBu8BoeYXE5fTcCob5
+ q6Rs0w4lFFw2c035fAikZpIbUi8kr/Ni5Fh2TlI6pumxVuVGTX+yuNUsLsQf4fgDPj
+ iYEGOTBgouCrQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=AJoddsFf
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-trove-classifiers: bump
+ to version 2025.9.11.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,86 +84,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44e0ba2bd256b269b578e64e0ebb0ab386bdf51d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 17/09/2025 13:23, Fiona Klute via buildroot wrote:
+> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+> 
+> package/python-cffi 2.0.0 (bumped in commit
+> 07903d2b274bc98f930e06dee237682015acb1d7) fails to build due to an
+> unknown trove-classifier:
+> 
+> * Getting build dependencies for wheel...
+> configuration error: `project.classifiers[8]` must be trove-classifier
+> DESCRIPTION:
+>     `PyPI classifier <https://pypi.org/classifiers/>`_.
+> 
+> GIVEN VALUE:
+>     "Programming Language :: Python :: Free Threading :: 2 - Beta"
+> 
+> OFFENDING RULE: 'format'
+> 
+> DEFINITION:
+>     {
+>         "type": "string",
+>         "format": "trove-classifier"
+>     }
+> 
+> For more details about `format` see
+> https://validate-pyproject.readthedocs.io/en/latest/api/validate_pyproject.formats.html
+> 
+> The list of trove classifiers Setuptools checks against is provided by
+> package/python-trove-classifiers. Upstream has added the classifier as
+> of version 2025.5.8.15 [1], as well as a bunch of others [2], so
+> update to fix the problem.
+> 
+> [1] 
+> https://github.com/pypa/trove-classifiers/commit/331838aaea0eea6374e4e51e8fe05e13bf7e4957
+> [2] 
+> https://github.com/pypa/trove-classifiers/compare/2025.1.15.22...2025.9.11.17
+> 
+> Fixes: 07903d2b274bc98f930e06dee237682015acb1d7
+> 
+> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 
-package/python-cffi 2.0.0 (bumped in commit
-07903d2b274bc98f930e06dee237682015acb1d7) fails to build due to an
-unknown trove-classifier:
-
-* Getting build dependencies for wheel...
-configuration error: `project.classifiers[8]` must be trove-classifier
-DESCRIPTION:
-    `PyPI classifier <https://pypi.org/classifiers/>`_.
-
-GIVEN VALUE:
-    "Programming Language :: Python :: Free Threading :: 2 - Beta"
-
-OFFENDING RULE: 'format'
-
-DEFINITION:
-    {
-        "type": "string",
-        "format": "trove-classifier"
-    }
-
-For more details about `format` see
-https://validate-pyproject.readthedocs.io/en/latest/api/validate_pyproject.formats.html
-
-The list of trove classifiers Setuptools checks against is provided by
-package/python-trove-classifiers. Upstream has added the classifier as
-of version 2025.5.8.15 [1], as well as a bunch of others [2], so
-update to fix the problem.
-
-[1] https://github.com/pypa/trove-classifiers/commit/331838aaea0eea6374e4e51e8fe05e13bf7e4957
-[2] https://github.com/pypa/trove-classifiers/compare/2025.1.15.22...2025.9.11.17
-
-Fixes:
-- 07903d2b274bc98f930e06dee237682015acb1d7
-- https://autobuild.buildroot.org/results/45b57a919182ae3f9ea0db9b0fa430a72e1e3cdf/
-
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-[Julien: add link to autobuilder failure]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-trove-classifiers/python-trove-classifiers.hash | 4 ++--
- package/python-trove-classifiers/python-trove-classifiers.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-trove-classifiers/python-trove-classifiers.hash b/package/python-trove-classifiers/python-trove-classifiers.hash
-index bb9f40a7f3..008c3a0b3e 100644
---- a/package/python-trove-classifiers/python-trove-classifiers.hash
-+++ b/package/python-trove-classifiers/python-trove-classifiers.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/trove-classifiers/json
--md5  3656424a10a761108fa8250033ffe3d4  trove_classifiers-2025.1.15.22.tar.gz
--sha256  90af74358d3a01b3532bc7b3c88d8c6a094c2fd50a563d13d9576179326d7ed9  trove_classifiers-2025.1.15.22.tar.gz
-+md5  769cd978e6756c423958bbfe76f130d8  trove_classifiers-2025.9.11.17.tar.gz
-+sha256  931ca9841a5e9c9408bc2ae67b50d28acf85bef56219b56860876dd1f2d024dd  trove_classifiers-2025.9.11.17.tar.gz
- # Locally computed sha256 checksums
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/python-trove-classifiers/python-trove-classifiers.mk b/package/python-trove-classifiers/python-trove-classifiers.mk
-index 8d2238d41a..a556cbd3dd 100644
---- a/package/python-trove-classifiers/python-trove-classifiers.mk
-+++ b/package/python-trove-classifiers/python-trove-classifiers.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_TROVE_CLASSIFIERS_VERSION = 2025.1.15.22
-+PYTHON_TROVE_CLASSIFIERS_VERSION = 2025.9.11.17
- PYTHON_TROVE_CLASSIFIERS_SOURCE = trove_classifiers-$(PYTHON_TROVE_CLASSIFIERS_VERSION).tar.gz
--PYTHON_TROVE_CLASSIFIERS_SITE = https://files.pythonhosted.org/packages/f3/cb/8f6a91c74049180e395590901834d68bef5d6a2ce4c9ca9792cfadc1b9b4
-+PYTHON_TROVE_CLASSIFIERS_SITE = https://files.pythonhosted.org/packages/ca/9a/778622bc06632529817c3c524c82749a112603ae2bbcf72ee3eb33a2c4f1
- PYTHON_TROVE_CLASSIFIERS_SETUP_TYPE = setuptools
- PYTHON_TROVE_CLASSIFIERS_LICENSE = Apache-2.0
- PYTHON_TROVE_CLASSIFIERS_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
