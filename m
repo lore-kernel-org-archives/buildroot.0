@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E138BCAC5A5
-	for <buildroot@archiver.kernel.org>; Wed, 17 Sep 2025 16:46:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D543CAC59A
+	for <buildroot@archiver.kernel.org>; Wed, 17 Sep 2025 16:46:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B74EF84447;
-	Wed, 17 Sep 2025 16:46:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E31A16166F;
+	Wed, 17 Sep 2025 16:46:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S3-TEOZAMWCr; Wed, 17 Sep 2025 16:46:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id npZ5isZ1IH-A; Wed, 17 Sep 2025 16:46:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4FD18444E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 020F16166E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B4FD18444E;
-	Wed, 17 Sep 2025 16:46:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 020F16166E;
+	Wed, 17 Sep 2025 16:46:03 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1CA9C1290
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 16:45:48 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 071A4199
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 16:45:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9BFC161579
+ by smtp3.osuosl.org (Postfix) with ESMTP id A49B9615A8
  for <buildroot@buildroot.org>; Wed, 17 Sep 2025 16:45:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cPaiJsC3-sai for <buildroot@buildroot.org>;
+ id a6vZjt6_SYkD for <buildroot@buildroot.org>;
  Wed, 17 Sep 2025 16:45:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6176B615DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BCB961357
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6176B615DA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0BCB961357
  for <buildroot@buildroot.org>; Wed, 17 Sep 2025 16:45:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5F5DC851CA; Wed, 17 Sep 2025 16:45:34 +0000 (UTC)
+ id 0991E85232; Wed, 17 Sep 2025 16:45:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 17 Sep 2025 18:42:51 +0200
+Date: Wed, 17 Sep 2025 18:42:50 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6448c3b425ebe416103cc6878f1d7d0024f09932
-X-Git-Newrev: 53eb75ef535b656e9cd762fb9412dc5c1340f64b
+X-Git-Oldrev: 431545111ace08698deb14dd4138cfaec04aaef2
+X-Git-Newrev: 598b20ca0a822f21a4bdddb3c5c810b96e36af88
 X-Patchwork-Hint: ignore
-Message-Id: <20250917164534.5F5DC851CA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] utils/scanpypi: remove python six module
+Message-Id: <20250917164534.0991E85232@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-uswid: bump to version 0.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,122 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53eb75ef535b656e9cd762fb9412dc5c1340f64b
+commit: https://git.buildroot.net/buildroot/commit/?id=598b20ca0a822f21a4bdddb3c5c810b96e36af88
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We dropped support for python2 a while back in [1], as such we
-can remove the python six module which was only needed for
-backwards comaptibility with python2.
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/2743ce00ca61fde1537b64a165a69d497052be58
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[Julien: add commit ref removing python2 support]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- utils/scanpypi | 37 ++++++++++++++-----------------------
- 1 file changed, 14 insertions(+), 23 deletions(-)
+ package/python-uswid/python-uswid.hash | 4 ++--
+ package/python-uswid/python-uswid.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/utils/scanpypi b/utils/scanpypi
-index af62c01632..61879e39d4 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -22,16 +22,10 @@ import tempfile
- import traceback
- import importlib
- import importlib.metadata
--import six.moves.urllib.request
--import six.moves.urllib.error
--import six.moves.urllib.parse
--from six.moves import map
--from six.moves import zip
--from six.moves import input
--if six.PY2:
--    import StringIO
--else:
--    import io
-+import urllib.request
-+import urllib.error
-+import urllib.parse
-+import io
+diff --git a/package/python-uswid/python-uswid.hash b/package/python-uswid/python-uswid.hash
+index eb9011bad6..3385fc58a0 100644
+--- a/package/python-uswid/python-uswid.hash
++++ b/package/python-uswid/python-uswid.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/uswid/json
+-md5  dc9a4aa4f9293b9e24c35c14dad6f296  uswid-0.5.1.tar.gz
+-sha256  92b48a8f6601687c1cc556878571abf9ddb0bdbaf244713b7ff838c48fcb68b3  uswid-0.5.1.tar.gz
++md5  3d4295821faf35512528381716126c03  uswid-0.5.2.tar.gz
++sha256  1d6c53acf160edc9b42e4ba535343b3567f2f341d289b9e63ca6a84372c2c518  uswid-0.5.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  98bc07f3fb70d05b01ff740e8191b9f29c080159f01588991fbd872c611236f9  LICENSE
+diff --git a/package/python-uswid/python-uswid.mk b/package/python-uswid/python-uswid.mk
+index e6ca702742..8596307938 100644
+--- a/package/python-uswid/python-uswid.mk
++++ b/package/python-uswid/python-uswid.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- BUF_SIZE = 65536
- 
-@@ -225,15 +219,15 @@ class BuildrootPackage():
-         self.metadata_url = 'https://pypi.org/pypi/{pkg}/json'.format(
-             pkg=self.real_name)
-         try:
--            pkg_json = six.moves.urllib.request.urlopen(self.metadata_url).read().decode()
--        except six.moves.urllib.error.HTTPError as error:
-+            pkg_json = urllib.request.urlopen(self.metadata_url).read().decode()
-+        except urllib.error.HTTPError as error:
-             print('ERROR:', error.getcode(), error.msg, file=sys.stderr)
-             print('ERROR: Could not find package {pkg}.\n'
-                   'Check syntax inside the python package index:\n'
-                   'https://pypi.python.org/pypi/ '
-                   .format(pkg=self.real_name))
-             raise
--        except six.moves.urllib.error.URLError:
-+        except urllib.error.URLError:
-             print('ERROR: Could not find package {pkg}.\n'
-                   'Check syntax inside the python package index:\n'
-                   'https://pypi.python.org/pypi/ '
-@@ -260,7 +254,7 @@ class BuildrootPackage():
-                 'digests': None}]
-             # In this case, we can't get the name of the downloaded file
-             # from the pypi api, so we need to find it, this should work
--            urlpath = six.moves.urllib.parse.urlparse(
-+            urlpath = urllib.parse.urlparse(
-                 self.metadata['info']['download_url']).path
-             # urlparse().path give something like
-             # /path/to/file-version.tar.gz
-@@ -272,8 +266,8 @@ class BuildrootPackage():
-             try:
-                 print('Downloading package {pkg} from {url}...'.format(
-                     pkg=self.real_name, url=download_url['url']))
--                download = six.moves.urllib.request.urlopen(download_url['url'])
--            except six.moves.urllib.error.HTTPError as http_error:
-+                download = urllib.request.urlopen(download_url['url'])
-+            except urllib.error.HTTPError as http_error:
-                 download = http_error
-             else:
-                 self.used_url = download_url
-@@ -288,7 +282,7 @@ class BuildrootPackage():
-             raise DownloadFailed('Failed to download package {pkg}: '
-                                  'No source archive available'
-                                  .format(pkg=self.real_name))
--        elif download.__class__ == six.moves.urllib.error.HTTPError:
-+        elif download.__class__ == urllib.error.HTTPError:
-             raise download
- 
-         self.filename = self.used_url['filename']
-@@ -317,10 +311,7 @@ class BuildrootPackage():
-         Keyword arguments:
-         tmp_path -- directory where you want the package to be extracted
-         """
--        if six.PY2:
--            as_file = StringIO.StringIO(self.as_string)
--        else:
--            as_file = io.BytesIO(self.as_string)
-+        as_file = io.BytesIO(self.as_string)
-         if self.filename[-3:] == 'zip':
-             with zipfile.ZipFile(as_file) as as_zipfile:
-                 tmp_pkg = os.path.join(tmp_path, self.buildroot_name)
-@@ -797,12 +788,12 @@ def main():
-             print('Fetching package', package.real_name)
-             try:
-                 package.fetch_package_info()
--            except (six.moves.urllib.error.URLError, six.moves.urllib.error.HTTPError):
-+            except (urllib.error.URLError, urllib.error.HTTPError):
-                 continue
- 
-             try:
-                 package.download_package()
--            except six.moves.urllib.error.HTTPError as error:
-+            except urllib.error.HTTPError as error:
-                 print('Error: {code} {reason}'.format(code=error.code,
-                                                       reason=error.reason))
-                 print('Error downloading package :', package.buildroot_name)
+-PYTHON_USWID_VERSION = 0.5.1
++PYTHON_USWID_VERSION = 0.5.2
+ PYTHON_USWID_SOURCE = uswid-$(PYTHON_USWID_VERSION).tar.gz
+-PYTHON_USWID_SITE = https://files.pythonhosted.org/packages/5c/67/9244d29d6391d49f30128da6c73a61c7a6c1f8bfcf0181f83298aa050832
++PYTHON_USWID_SITE = https://files.pythonhosted.org/packages/15/64/d200424bf8f87ef25b516d438d745b03aa4ec381756d86cc3ff6bf29393c
+ PYTHON_USWID_SETUP_TYPE = setuptools
+ PYTHON_USWID_LICENSE = BSD-2-Clause-Patent
+ PYTHON_USWID_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
