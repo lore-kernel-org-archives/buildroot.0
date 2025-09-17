@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CAF0CAC5A8
-	for <buildroot@archiver.kernel.org>; Wed, 17 Sep 2025 16:45:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40D7BCAC5A0
+	for <buildroot@archiver.kernel.org>; Wed, 17 Sep 2025 16:45:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 46ED3412D8;
-	Wed, 17 Sep 2025 16:45:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ECA808438C;
+	Wed, 17 Sep 2025 16:45:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WlHVIOmAnhoD; Wed, 17 Sep 2025 16:45:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tDk1LyRqv9EU; Wed, 17 Sep 2025 16:45:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CAB1412C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF13B84376
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6CAB1412C0;
-	Wed, 17 Sep 2025 16:45:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C5977E87
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 16:45:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF13B84376;
+	Wed, 17 Sep 2025 16:45:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 17BDF279
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 16:45:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A900C4072B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 741C2611A1
  for <buildroot@buildroot.org>; Wed, 17 Sep 2025 16:45:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ogcW89PfOfh5 for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id i77ePlq6x6Rb for <buildroot@buildroot.org>;
  Wed, 17 Sep 2025 16:45:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B35BA4020A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F8A961194
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B35BA4020A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9F8A961194
  for <buildroot@buildroot.org>; Wed, 17 Sep 2025 16:45:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A4F5785233; Wed, 17 Sep 2025 16:45:33 +0000 (UTC)
+ id 90CF585212; Wed, 17 Sep 2025 16:45:33 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Wed, 17 Sep 2025 18:42:50 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8595b5da177816c4c688c41c965c242ccd61b15c
-X-Git-Newrev: b117d439bd3de57b4e6a0d6f9f7a43f219407b41
+X-Git-Oldrev: 34386548d3bb77e104164722ed20f5017681e83f
+X-Git-Newrev: 37e0d69f543cce831efdd79a0738d2b7bf092ff2
 X-Patchwork-Hint: ignore
-Message-Id: <20250917164533.A4F5785233@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pymodbus: bump to version
- 3.11.2
+Message-Id: <20250917164533.90CF585212@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pyaml: bump to version
+ 25.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,48 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b117d439bd3de57b4e6a0d6f9f7a43f219407b41
+commit: https://git.buildroot.net/buildroot/commit/?id=37e0d69f543cce831efdd79a0738d2b7bf092ff2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-License hash changed due to year update:
-https://github.com/pymodbus-dev/pymodbus/commit/c1e7f3b70648585b865524f3a7468e3e3239c35f
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-pymodbus/python-pymodbus.hash | 6 +++---
- package/python-pymodbus/python-pymodbus.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pyaml/python-pyaml.hash | 4 ++--
+ package/python-pyaml/python-pyaml.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pymodbus/python-pymodbus.hash b/package/python-pymodbus/python-pymodbus.hash
-index 38d921229b..f6f712d6b4 100644
---- a/package/python-pymodbus/python-pymodbus.hash
-+++ b/package/python-pymodbus/python-pymodbus.hash
+diff --git a/package/python-pyaml/python-pyaml.hash b/package/python-pyaml/python-pyaml.hash
+index 29863ed502..c1029bba59 100644
+--- a/package/python-pyaml/python-pyaml.hash
++++ b/package/python-pyaml/python-pyaml.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pymodbus/json
--md5  af760b61450c670a280c098e3484635d  pymodbus-3.8.6.tar.gz
--sha256  7689b56cc3ad05a594e1486e772abb9d9646c01737935df492db04455680baf6  pymodbus-3.8.6.tar.gz
-+md5  658112be7a0ca2c9d85789a64751ece0  pymodbus-3.11.2.tar.gz
-+sha256  132712baf79cae339aac694739b14551bab69b2a078570cb1350b1db0cccdba7  pymodbus-3.11.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pyaml/json
+-md5  ce3505d0331fdfc05c98f0a514308063  pyaml-25.1.0.tar.gz
+-sha256  33a93ac49218f57e020b81e280d2706cea554ac5a76445ac79add760d019c709  pyaml-25.1.0.tar.gz
++md5  b5b6dc631c2c117ba3373faecf6d72f5  pyaml-25.7.0.tar.gz
++sha256  e113a64ec16881bf2b092e2beb84b7dcf1bd98096ad17f5f14e8fb782a75d99b  pyaml-25.7.0.tar.gz
  # Locally computed sha256 checksums
--sha256  47f904249172e795a6b32de91f471073297befffd74e17cafc288d348a55972e  LICENSE
-+sha256  572a4d6fa7541553f70cc6d494fbcbee7eb7d3f2fbd16080d39b20cccda26f0b  LICENSE
-diff --git a/package/python-pymodbus/python-pymodbus.mk b/package/python-pymodbus/python-pymodbus.mk
-index ff5a8eb725..383979ebf4 100644
---- a/package/python-pymodbus/python-pymodbus.mk
-+++ b/package/python-pymodbus/python-pymodbus.mk
+ sha256  dc1342cc1cb49e24c1c9e8a495acc9625ce2e04146c116279af0ab0949cd829c  COPYING
+diff --git a/package/python-pyaml/python-pyaml.mk b/package/python-pyaml/python-pyaml.mk
+index 06e3871b5a..a39f6d5568 100644
+--- a/package/python-pyaml/python-pyaml.mk
++++ b/package/python-pyaml/python-pyaml.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYMODBUS_VERSION = 3.8.6
-+PYTHON_PYMODBUS_VERSION = 3.11.2
- PYTHON_PYMODBUS_SOURCE = pymodbus-$(PYTHON_PYMODBUS_VERSION).tar.gz
--PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/47/3a/a6958507d6f9c0c50f11cd299b056161c10f3cef7c227b44bc183a7e7854
-+PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/d1/28/34f667085cb162ac68be849e4ea1ced4c54d97b7d8099c11b27ec1cf2fa1
- PYTHON_PYMODBUS_SETUP_TYPE = setuptools
- PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
- PYTHON_PYMODBUS_LICENSE_FILES = LICENSE
+-PYTHON_PYAML_VERSION = 25.1.0
++PYTHON_PYAML_VERSION = 25.7.0
+ PYTHON_PYAML_SOURCE = pyaml-$(PYTHON_PYAML_VERSION).tar.gz
+-PYTHON_PYAML_SITE = https://files.pythonhosted.org/packages/f4/06/04b9c1907c13dc81729a9c6b4f42eab47baab7a8738ed5d2683eac215ad0
++PYTHON_PYAML_SITE = https://files.pythonhosted.org/packages/c4/01/41f63d66a801a561c9e335523516bd5f761bc43cc61f8b75918306bf2da8
+ PYTHON_PYAML_SETUP_TYPE = setuptools
+ PYTHON_PYAML_LICENSE = WTFPL
+ PYTHON_PYAML_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
