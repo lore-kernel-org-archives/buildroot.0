@@ -1,75 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DC44CAC598
-	for <buildroot@archiver.kernel.org>; Wed, 17 Sep 2025 21:16:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FAE1CAC59A
+	for <buildroot@archiver.kernel.org>; Wed, 17 Sep 2025 22:54:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B10FE84789;
-	Wed, 17 Sep 2025 21:16:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C741041897;
+	Wed, 17 Sep 2025 22:54:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z4qt0mAhQKRV; Wed, 17 Sep 2025 21:16:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Mq-kwDgsrB0F; Wed, 17 Sep 2025 22:54:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 724A784770
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49A06417CA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 724A784770;
-	Wed, 17 Sep 2025 21:16:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 49A06417CA;
+	Wed, 17 Sep 2025 22:54:36 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 91188199
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 21:16:43 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5BE37199
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 22:54:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 772816175A
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 21:16:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 425B66149A
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 22:54:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M6J0NsLlbMB9 for <buildroot@buildroot.org>;
- Wed, 17 Sep 2025 21:16:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A7DC761759
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7DC761759
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A7DC761759
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 21:16:42 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id E3E132003C3;
- Wed, 17 Sep 2025 23:16:38 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 17 Sep 2025 23:16:38 +0200
+ id VMVbO332uGBp for <buildroot@buildroot.org>;
+ Wed, 17 Sep 2025 22:54:34 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::d30; helo=mail-io1-xd30.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D59446147E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D59446147E
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
+ [IPv6:2607:f8b0:4864:20::d30])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D59446147E
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 22:54:33 +0000 (UTC)
+Received: by mail-io1-xd30.google.com with SMTP id
+ ca18e2360f4ac-88f1b8e448bso15681739f.2
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 15:54:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1758149672; x=1758754472;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=CmdT/3iezYwW4z3FrkoWlQRvqaxHVolJRsUmTp6MOE8=;
+ b=ld8itRe0EsXVHYy7w68EDWEq1r1B6x8u14HBGEBVLQeFbTu3IHdOvPxJl6OnHoXXNH
+ ouJZKf+fHxoS2FfT8YvVmUCeoxOpmZjQbNCp+i2BJ8dmRbQur/bEgtoJzvDNY5UmZypO
+ EWvTqHHsab667ZzMldmZn456YSmo7g8CMaoFm3kztMU8e5Ec4kb7+Q3XZtUW9t1u29Sc
+ GgIaR2bC3YYc2tIgk6vwJ3B8SgKQxffn6vPZAHzOVdQdJo6OfrECqQg0fkXAYTb/1ptE
+ hnxV9Ynb0xqg5isdZNXZPNu/3B6cFipgzP3HYrZ4RBYmgCDYU58OzAWDZz00vTM5/Tyr
+ tBFw==
+X-Gm-Message-State: AOJu0YxJHlqhv2SWy4G1weOsE4OH/zOBFWzzo+5cjoiuzMlnHBewUDcY
+ 3FSFkKolVvI72dy3iBYCRWZ2lTeL7BTDlJrhl9rT7kM5e/G6MbgfcYMVqMprJWO7
+X-Gm-Gg: ASbGncvqQdL/HXA1IyAFREYR0RrdDxdjFZPiuoHlrHagZ2G0kcWaOL1uYn02ujEWUYv
+ 2vh6HIRu1xdfIYXDWFENCI+o3cvkzFdUhVj1D3dSPnjSOArCB3yiWsJ1muFxGc7vN7P8aEfg6YH
+ Wfg/TH9ICSk1+O5NRRv/9uKIvw/faHzIvSEKVjnK/4FBL12Ckn4p5c05UM9NtLF/w/K3hKGgvI9
+ vePVTzLCGRG52kep2bhtyjADO6q1V98MmJYKBzL8snxn+VKZU/kh9sTr8LrBBfWBiKFFY4ApdoP
+ lFN4QAkZGUaA41m/lBwm1xBrNLde8xJ9NeS33nKkzP6cHd5oHFhShbgLpq4Jb+pvBfqYcgondLo
+ u7wTX71VjmYBSi4yqd88BcWlR6ZHBeLukaxZkNYFaIzQxIcZNR6q/ILxMb0+H+J3K+43jwf3Jev
+ hQquYTL0cAdi4pOSlV6gH96h+EBA==
+X-Google-Smtp-Source: AGHT+IFloG2Im1DQibRXDOb9MXJGCUUb/EgMCD3+cV09P1M+UPiRRuDISDSWakn6hJREjm7xCYrv7w==
+X-Received: by 2002:a05:6e02:1fc2:b0:415:de5:2e1 with SMTP id
+ e9e14a558f8ab-4241a528474mr50983035ab.18.1758149672500; 
+ Wed, 17 Sep 2025 15:54:32 -0700 (PDT)
+Received: from james-x399.tailafd1a.ts.net (71-218-100-179.hlrn.qwest.net.
+ [71.218.100.179]) by smtp.gmail.com with ESMTPSA id
+ 8926c6da1cb9f-53d56b5a299sm253322173.69.2025.09.17.15.54.31
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 17 Sep 2025 15:54:32 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 17 Sep 2025 16:54:30 -0600
+Message-ID: <20250917225430.2843930-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Date: Wed, 17 Sep 2025 23:16:38 +0200
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250907160424.3546872-1-thomas.petazzoni@bootlin.com>
-References: <20250907160424.3546872-1-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <6474f8594d0c2f6f0fd52d5008a8aac8@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1758143800;
- bh=2ZKVzQ8gwiOsIPBg44S0bGEZ5850nItfZjNc1aqchjw=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=mZIRS7WQG+WjkAL8OSXSbn/T8BOpqSjZ01yJW0E/OSPtYqPsISYSwD3JNNW/+ZJ7k
- +ZBrcBYd+4HypB+gD6YWE8d3Tsg2RIZwrzFYPd8Wusv1D5NRdYTagmSu9iqUIyOsWw
- J8dy3x5G1Yau8O4X/nxu6qilDL79XlXVQb9cVPGG2HTPfiB94jY3RkgSBjTiRmCD06
- tpIPNywefTwOmQ7TQXYg7AmpbrRNjOfY4ICHjed9/FxyGfdydNQLVzpu7FfygygCWk
- RrXn77Y5KRTNKgnSp2cX1IwFQborQDuqGMDR2WYzROYHOrxEJTXFigWnKpgzr+EKm1
- 29R083BgTCx1g==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1758149672; x=1758754472; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=CmdT/3iezYwW4z3FrkoWlQRvqaxHVolJRsUmTp6MOE8=;
+ b=Q8DfQssUM2AXMUFv/a07pTLpTBdel3UORmLRrzxWuBgRJFJIWC9DgowLig+sqWm59t
+ P1RVZV6NgpBSiUb81Ow2TTVeBGnyipjc3RCfQ6NV12l1pbiQtCEs7bDXvwbGMgFJ9LHw
+ j2t0NQZNvmiJlUfQKD2hEzrwfrBldhc2XG8KD9VHYZQ02/nGv9Tx54LnNV6baq3reawi
+ fQLn+vJftKd2E7xWYNWJaUtzzU3BiAf1tLUGkomSpauYyPXspztJG7StyiMvxh/2FEZz
+ MYcuZHpRHihXSLI+TLMYzhZ7ER05CBk5rzw1g4V709HPdppBF6M0cFe+0+HbMlpKQbjU
+ 1lqQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=mZIRS7WQ
-Subject: Re: [Buildroot] [PATCH 1/2] package/c-icap: add patches to fix GCC
- 15.x build issues
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Q8DfQssU
+Subject: [Buildroot] [PATCH 1/1] package/weston: bump to version 14.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,25 +108,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 07/09/2025 18:04, Thomas Petazzoni via buildroot wrote:
-> Patches 0003 and 0004 are upstream backport. Patch 0005 isn't because
-> the code has completely changed upstream in newer releases.
-> 
-> Fixes:
-> 
->   
-> https://autobuild.buildroot.net/results/e9b4d9033f0283b133b58049a03b5f0b595e30db/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/weston/weston.hash | 6 +++---
+ package/weston/weston.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Series applied to master, thanks.
+diff --git a/package/weston/weston.hash b/package/weston/weston.hash
+index 35fe608e20..cd2a82508d 100644
+--- a/package/weston/weston.hash
++++ b/package/weston/weston.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2024-October/043858.html
+-sha256  a8150505b126a59df781fe8c30c8e6f87da7013e179039eb844a5bbbcc7c79b3  weston-14.0.1.tar.xz
+-sha512  2d782f98f28b39b990acecfc885f62ab34c9cdd22ef06b09c5d8df792112c47b365f89c2bf05d871e36ddfb4c49aa7e6d05ff60fe67a2657727162e4f564a412  weston-14.0.1.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2025-April/044158.html
++sha256  b47216b3530da76d02a3a1acbf1846a9cd41d24caa86448f9c46f78f20b6e0ac  weston-14.0.2.tar.xz
++sha512  e8214ec893e6c3ae94eb3c92feba104b0201843e9143f726a3e9a4d396d02523c94da706c1348cf934bc339fb1a4bc1fecdb865f0ea914115fd346d9eda091f5  weston-14.0.2.tar.xz
+ sha256  fdb65868f65d0fbdb05c2d3b779e10ce9969fa0c4b9262ba4f260e87086ab860  COPYING
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 1d55a1fcba..57869b7e63 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WESTON_VERSION = 14.0.1
++WESTON_VERSION = 14.0.2
+ WESTON_SITE = https://gitlab.freedesktop.org/wayland/weston/-/releases/$(WESTON_VERSION)/downloads
+ WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
+ WESTON_LICENSE = MIT
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
