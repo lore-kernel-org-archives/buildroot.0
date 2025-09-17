@@ -1,52 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B5FDCAC5A8
-	for <buildroot@archiver.kernel.org>; Wed, 17 Sep 2025 16:46:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B83ACAC59A
+	for <buildroot@archiver.kernel.org>; Wed, 17 Sep 2025 16:48:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 12C8340CBD;
-	Wed, 17 Sep 2025 16:46:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 32C468430B;
+	Wed, 17 Sep 2025 16:48:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4t2vnNiyOp6R; Wed, 17 Sep 2025 16:46:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E2RBAyShMOVT; Wed, 17 Sep 2025 16:47:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BA6140BEF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F4A281C6F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3BA6140BEF;
-	Wed, 17 Sep 2025 16:46:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 10D53199
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 16:45:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1F4A281C6F;
+	Wed, 17 Sep 2025 16:47:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D0FEC279
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 16:47:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7FD3461164
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 16:45:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B78E740716
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 16:47:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rADgxL2XkM9H for <buildroot@buildroot.org>;
- Wed, 17 Sep 2025 16:45:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A234615CB
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5A234615CB
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 16:45:34 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 57FCD851BB; Wed, 17 Sep 2025 16:45:34 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 17 Sep 2025 18:42:51 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b08d65ac395aa95f7a675038a8316558f67cb6fc
-X-Git-Newrev: 6448c3b425ebe416103cc6878f1d7d0024f09932
-X-Patchwork-Hint: ignore
-Message-Id: <20250917164534.57FCD851BB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-distlib: bump to version
- 0.4.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aKchjimSkd5t for <buildroot@buildroot.org>;
+ Wed, 17 Sep 2025 16:47:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E533B406DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E533B406DF
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E533B406DF
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 16:47:56 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 10ACD5FF95;
+ Wed, 17 Sep 2025 18:47:51 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 17 Sep 2025 18:47:51 +0200
+MIME-Version: 1.0
+Date: Wed, 17 Sep 2025 18:47:51 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250915234720.2443123-1-james.hilliard1@gmail.com>
+References: <20250915234720.2443123-1-james.hilliard1@gmail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <fdbd423dbe7540d3e3bf31429bda540c@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1758127673;
+ bh=MGffODJKxS9oqRJjCLLW28SHAxd5+LE26972w0y7l58=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=vPcsrEMr/AXBpNE2qNf87s3DUxi7MSsjM0qs6y73JKmO9GsHGEPOM23p/YkyxloBU
+ GnOPPlMz8Ob7InrPjPqgTzfvYC1MwsaqAQdO6KBK1WPKZ/bcbHmTB1KGBU8yTmwYI8
+ a5omxoHYFCsHn9V+rSW9JhBibhqM7Zz8iHXYPD4ymaqXNfsyo+MPigbeFUwxlnmKed
+ rpn+77T4nuLgjCa69wQXnbJsf5pjLi7BcRJ1OOrAqVnZuGhGcaXik/bRe4ULMDeg5T
+ WTlisNGJe1jJfGCgWsxkngkrLkpIsd3KhfWCe1Xs2RYIhw/YS2ow/y4OQ7kDsEM+iz
+ cAe/oM1813dQQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=vPcsrEMr
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-gobject: bump to version
+ 3.54.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,50 +83,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6448c3b425ebe416103cc6878f1d7d0024f09932
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 16/09/2025 01:47, James Hilliard wrote:
+> License hash changed due to formatting changes:
+> https://gitlab.gnome.org/GNOME/pygobject/-/commit/e80a612fd78c46c97a9d1f1bb29dc93344e24aba
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-distlib/python-distlib.hash | 4 ++--
- package/python-distlib/python-distlib.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-distlib/python-distlib.hash b/package/python-distlib/python-distlib.hash
-index 6cf3715865..d31ab90f09 100644
---- a/package/python-distlib/python-distlib.hash
-+++ b/package/python-distlib/python-distlib.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/distlib/json
--md5  958df85785458fa326a07af4f9c1c328  distlib-0.3.9.tar.gz
--sha256  a60f20dea646b8a33f3e7772f74dc0b2d0772d2837ee1342a00645c81edf9403  distlib-0.3.9.tar.gz
-+md5  555fd6076016da3a89ff9b959677eaa6  distlib-0.4.0.tar.gz
-+sha256  feec40075be03a04501a973d81f633735b4b69f98b05450592310c0f401a4e0d  distlib-0.4.0.tar.gz
- # Locally computed sha256 checksums
- sha256  808e10c8a6ab8deb149ff9b3fb19f447a808094606d712a9ca57fead3552599d  LICENSE.txt
-diff --git a/package/python-distlib/python-distlib.mk b/package/python-distlib/python-distlib.mk
-index e95c28c518..d71896237d 100644
---- a/package/python-distlib/python-distlib.mk
-+++ b/package/python-distlib/python-distlib.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_DISTLIB_VERSION = 0.3.9
-+PYTHON_DISTLIB_VERSION = 0.4.0
- PYTHON_DISTLIB_SOURCE = distlib-$(PYTHON_DISTLIB_VERSION).tar.gz
--PYTHON_DISTLIB_SITE = https://files.pythonhosted.org/packages/0d/dd/1bec4c5ddb504ca60fc29472f3d27e8d4da1257a854e1d96742f15c1d02d
-+PYTHON_DISTLIB_SITE = https://files.pythonhosted.org/packages/96/8e/709914eb2b5749865801041647dc7f4e6d00b549cfe88b65ca192995f07c
- PYTHON_DISTLIB_SETUP_TYPE = setuptools
- PYTHON_DISTLIB_LICENSE = PSF-2.0
- PYTHON_DISTLIB_LICENSE_FILES = LICENSE.txt
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
