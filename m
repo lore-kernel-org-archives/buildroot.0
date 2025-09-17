@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A2BCCAC59A
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF2FACAC5A0
 	for <buildroot@archiver.kernel.org>; Wed, 17 Sep 2025 16:46:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 403428447D;
+	by smtp3.osuosl.org (Postfix) with ESMTP id C73426166C;
 	Wed, 17 Sep 2025 16:46:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z-SAi2cE26J9; Wed, 17 Sep 2025 16:46:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gxFqIwd4TqIT; Wed, 17 Sep 2025 16:46:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FF7584486
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FDD5611D4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9FF7584486;
-	Wed, 17 Sep 2025 16:46:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0FDD5611D4;
+	Wed, 17 Sep 2025 16:46:07 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F970279
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 16:45:51 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D24C279
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 16:45:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1EAC461324
+ by smtp3.osuosl.org (Postfix) with ESMTP id 51289611A1
  for <buildroot@buildroot.org>; Wed, 17 Sep 2025 16:45:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EgFvR3CmtkMM for <buildroot@buildroot.org>;
- Wed, 17 Sep 2025 16:45:35 +0000 (UTC)
+ id zwSYwfcMq19X for <buildroot@buildroot.org>;
+ Wed, 17 Sep 2025 16:45:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17D79614FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 96F6861164
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 17D79614FF
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 16:45:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 96F6861164
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 16:45:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 138A1851CA; Wed, 17 Sep 2025 16:45:34 +0000 (UTC)
+ id 85F06851CA; Wed, 17 Sep 2025 16:45:33 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Wed, 17 Sep 2025 18:42:50 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 598b20ca0a822f21a4bdddb3c5c810b96e36af88
-X-Git-Newrev: 3d3f4768dfa429eb21950ba943aad37a8476aa2c
+X-Git-Oldrev: d2a540a537b92bad16b341e04fe86a826f4fc50f
+X-Git-Newrev: 34386548d3bb77e104164722ed20f5017681e83f
 X-Patchwork-Hint: ignore
-Message-Id: <20250917164534.138A1851CA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-maturin: bump to version
- 1.9.4
+Message-Id: <20250917164533.85F06851CA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-multidict: bump to version
+ 6.6.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,43 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d3f4768dfa429eb21950ba943aad37a8476aa2c
+commit: https://git.buildroot.net/buildroot/commit/?id=34386548d3bb77e104164722ed20f5017681e83f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-maturin/python-maturin.hash | 2 +-
- package/python-maturin/python-maturin.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-multidict/python-multidict.hash | 4 ++--
+ package/python-multidict/python-multidict.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-maturin/python-maturin.hash b/package/python-maturin/python-maturin.hash
-index fd7ef77adf..f439f5d9b9 100644
---- a/package/python-maturin/python-maturin.hash
-+++ b/package/python-maturin/python-maturin.hash
+diff --git a/package/python-multidict/python-multidict.hash b/package/python-multidict/python-multidict.hash
+index 3230ac9b56..8a07c29cc6 100644
+--- a/package/python-multidict/python-multidict.hash
++++ b/package/python-multidict/python-multidict.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  344b213648e4954b157132ba8a3b5158576af7499bbd68712f42c5d314a13b40  python-maturin-1.9.1-cargo4.tar.gz
-+sha256  32ed28b14691d95daf862ec78cc26fcf01ce55eafd4b22b0c27c02f8d4530806  python-maturin-1.9.4-cargo4.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/multidict/json
+-md5  2c8cf03b6e92e1b9c335de56b606c2fc  multidict-6.1.0.tar.gz
+-sha256  22ae2ebf9b0c69d206c003e2f6a914ea33f0a932d4aa16f236afc049d9958f4a  multidict-6.1.0.tar.gz
++md5  479587db63b5fe7f74a921b51bdbd371  multidict-6.6.4.tar.gz
++sha256  d2d4e4787672911b48350df02ed3fa3fffdc2f2e8ca06dd6afdf34189b76a9dd  multidict-6.6.4.tar.gz
  # Locally computed sha256 checksums
- sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  license-apache
- sha256  ea7882c559733766ad08343bde1d1ec80a4967c03a738fb8e0058ef6289f7b7c  license-mit
-diff --git a/package/python-maturin/python-maturin.mk b/package/python-maturin/python-maturin.mk
-index 313dedf114..aab4ccef6f 100644
---- a/package/python-maturin/python-maturin.mk
-+++ b/package/python-maturin/python-maturin.mk
+ sha256  93d11a968e2f0f36373c40811ff6d20e173f58c3cab5884cd6617bbfd795492a  LICENSE
+diff --git a/package/python-multidict/python-multidict.mk b/package/python-multidict/python-multidict.mk
+index 6b952244bc..551fbd0ac0 100644
+--- a/package/python-multidict/python-multidict.mk
++++ b/package/python-multidict/python-multidict.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MATURIN_VERSION = 1.9.1
-+PYTHON_MATURIN_VERSION = 1.9.4
- PYTHON_MATURIN_SOURCE_PYPI = maturin-$(PYTHON_MATURIN_VERSION).tar.gz
--PYTHON_MATURIN_SITE_PYPI = https://files.pythonhosted.org/packages/94/f7/73cf2ae0d6db943a627d28c09f5368735fce6b8b2ad1e1f6bcda2632c80a
-+PYTHON_MATURIN_SITE_PYPI = https://files.pythonhosted.org/packages/13/7c/b11b870fc4fd84de2099906314ce45488ae17be32ff5493519a6cddc518a
- PYTHON_MATURIN_SITE = $(PYTHON_MATURIN_SITE_PYPI)/$(PYTHON_MATURIN_SOURCE_PYPI)?buildroot-path=filename
- PYTHON_MATURIN_SETUP_TYPE = setuptools-rust
- PYTHON_MATURIN_LICENSE = Apache-2.0 or MIT
+-PYTHON_MULTIDICT_VERSION = 6.1.0
++PYTHON_MULTIDICT_VERSION = 6.6.4
+ PYTHON_MULTIDICT_SOURCE = multidict-$(PYTHON_MULTIDICT_VERSION).tar.gz
+-PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/d6/be/504b89a5e9ca731cd47487e91c469064f8ae5af93b7259758dcfc2b9c848
++PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/69/7f/0652e6ed47ab288e3756ea9c0df8b14950781184d4bd7883f4d87dd41245
+ PYTHON_MULTIDICT_SETUP_TYPE = setuptools
+ PYTHON_MULTIDICT_LICENSE = Apache-2.0
+ PYTHON_MULTIDICT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
