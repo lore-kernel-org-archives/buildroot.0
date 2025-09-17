@@ -1,101 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D54DCAC59A
-	for <buildroot@archiver.kernel.org>; Wed, 17 Sep 2025 15:19:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17865CAC599
+	for <buildroot@archiver.kernel.org>; Wed, 17 Sep 2025 15:20:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A884D615B1;
-	Wed, 17 Sep 2025 15:19:58 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dOxUwmMFH1a6; Wed, 17 Sep 2025 15:19:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C362C615BC
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C362C615BC;
-	Wed, 17 Sep 2025 15:19:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3A182AF1
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 15:19:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1F99482252
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 15:19:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C54C382322;
+	Wed, 17 Sep 2025 15:20:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mEjXbbN2ttZG for <buildroot@buildroot.org>;
- Wed, 17 Sep 2025 15:19:56 +0000 (UTC)
+ id e7GDvih94gxV; Wed, 17 Sep 2025 15:20:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0172583DBF
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0172583DBF;
+	Wed, 17 Sep 2025 15:20:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id F32EAAF1
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 15:20:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D86E9615AF
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 15:20:39 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TQ-a0Jjb5rlE for <buildroot@buildroot.org>;
+ Wed, 17 Sep 2025 15:20:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::643; helo=mail-ej1-x643.google.com;
+ client-ip=2a00:1450:4864:20::543; helo=mail-ed1-x543.google.com;
  envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C2AD382209
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2AD382209
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com
- [IPv6:2a00:1450:4864:20::643])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C2AD382209
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 15:19:54 +0000 (UTC)
-Received: by mail-ej1-x643.google.com with SMTP id
- a640c23a62f3a-afcb7a16441so1032699566b.2
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 08:19:54 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9DE5C605ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DE5C605ED
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com
+ [IPv6:2a00:1450:4864:20::543])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9DE5C605ED
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 15:20:38 +0000 (UTC)
+Received: by mail-ed1-x543.google.com with SMTP id
+ 4fb4d7f45d1cf-624fdf51b44so8254723a12.1
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 08:20:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1758122393; x=1758727193;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=VvEC4k8LzGtu9Q6jrq885o0Zcu0L9UaKlT6Z3FNjGM8=;
- b=hVGSc2yqxvmfAl9OVhKgW/47+7yog6ZjPaaMsBTai8Mn026pHm/7G564IuUsZ9nco3
- +EAKb6BLNbOmlFlQpyP8HSgxkx2CUiopvGmJttV9dVxPbh13lgJhB6xfBq1FKhOxo6p3
- /Jr1L6dp2NviEdd+HbU56IYPgjxt2lJNtyMbe3CrfSTFc64m5vCq5fjphx9AMG/COFl3
- lEQgg5EP+N47DPxaB/Ee8jsurgZ5iJIKyiCQ/W7kwJ1hlflh0Ef7toPRv0Y7e+jCV+zE
- xhQ6Wqiwqvah6gMwPS3NO3RmF/aCbd3I6ngybA0gXQe2UCFFML7ilpIha2q8SSTySfJ1
- rtew==
-X-Gm-Message-State: AOJu0YwlIn8lvUz2EZ+y36V8ocaAMVTYkWpJLolZH1JmFLF69hx3KFId
- OYajXptpjCjhry2OT3TQ0ZdyEiZPCsrltbiKiWM/NwYqdTNw0sI4yqhEB8AgxHN8OKJSQDEopPG
- Z79COzYkpSg==
-X-Gm-Gg: ASbGncvw6spiF1z1taksCYm5pc4Jpobit4GDN2qkQl1NzZgMQ6FaO1QzxKjgEqaqooA
- IdNfPs21j11u+8sjw/eVWQrPPCNnPYVes8jopuZG9GL7NyKc5NqNclzhz2WhTOl4GMOGfvOU5Bn
- AmO7sY51ZIt6SZFW9QHVCyhTK4Otd1KptLh0PesXe+Bm870+1+kruZPn0rhhT/QlRzOIgRCiv9w
- OMHvbH/yVWc5IYt0MeYMHko51nv9lshizOPLYBnKfIdoKnPP4ypOrNZ49DGYNsoKJs5fLGWgj/g
- ifBOxhqhyAifItaNm8eOigMd7pemDB/QYPn/mPd16fJzfDL3jEYaNjGSuaKs63F2igBmsbeMoAZ
- c+mBrCvcIeR4zIppdXHH02SFPnnj4wlsj2DOKjeyMufg=
-X-Google-Smtp-Source: AGHT+IGVA8jpjBpH+EXYzpk5jPDe+iK9rNpjUdvEF4CnbLosAq8O95DJ+HanFUCvuUJpageyPJsdJw==
-X-Received: by 2002:a17:907:dac:b0:afe:cded:bf96 with SMTP id
- a640c23a62f3a-b1bb50c5925mr257487966b.6.1758122392791; 
- Wed, 17 Sep 2025 08:19:52 -0700 (PDT)
-Received: from dragon.home ([109.136.97.112]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b1186294af1sm590616566b.35.2025.09.17.08.19.52
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 17 Sep 2025 08:19:52 -0700 (PDT)
-To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Woodrow Douglass <wdouglass@carnegierobotics.com>
-Date: Wed, 17 Sep 2025 17:17:17 +0200
-Message-ID: <20250917151717.362991-1-titouan.christophe@mind.be>
-X-Mailer: git-send-email 2.51.0
+ d=1e100.net; s=20230601; t=1758122436; x=1758727236;
+ h=content-transfer-encoding:subject:from:cc:to:content-language
+ :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+ :cc:subject:date:message-id:reply-to;
+ bh=c85EQh/S1caWGFr3MJdnjvwuB8AI4GRS2L/K760GYTU=;
+ b=Hi0OTzIJAnCeh0zEqBt2fqmrza+0ahuhY3ND1OaBuhGUCvS603PEZxkazhMrpG+9qD
+ ZseKuI/2OidCfrn10/r3W6c6pk4715k1ZMBvTiZet/xYV/7YpxzXLKh0V3wzH7wyJkQS
+ YpuzYLHVUS0xTeHMQMJ4zmCUpW6bCUYe4KiO2aICs1a3XGrHTUQ4idEKPX3b+G3IBP9S
+ EP0J4ni8R98eEBbPpWsHRBvB84V6DsX+0jVbfC6tl0EEeXMROwhD95EPsb8aDXpf9ZMg
+ NWvkiJ2TPl3dRx+TQSXAb1jPc+4A+dsphEYjxQceQMbOF5aiacn3/SiuKA6y7cEbKlRE
+ wvsg==
+X-Gm-Message-State: AOJu0YxDu1tnzpSwuf+4V+czLEV4+Mo2lCh0Vs4Egy7k278qLBr+7So/
+ uBCDqQp8cyEv2Qcb8RjjYuR09QeoTEnieav187rpriluf3lFHI1XTcIAkqide7yU9cVVwkMrBxv
+ OwkXBmAEUUQ==
+X-Gm-Gg: ASbGnctqLuVJgxn5TmaCtfO+T7vxgWoyamA1V2xBoC2R+fckf0SJBg7PxG41SMqj7xN
+ Ob7zPUEGqEcdS6oSF4OAoWXF4kQj9p/V5Y0I9ZDWXTMa3451k54qj631Ouuj+4RVI/y/ACpJkV6
+ 2c7+IKF3MkhPol9WYbN82a4mlRPy+L2uTzJZN4N+o7Tq+Anhx57bGj52ScdJdvulyuWPViGul9v
+ x6m031DxxbB5DDakB4+hTGq/flCo6W7NfmpHKBYqu/itBewSpUcS15nD4T1Up5wh9hrdTJ7YI9I
+ RNV0JRrTFnDAqLdrMrnx7DKfM4UxJgrokCyrrdbqi/CFj5YEIPJqhbHwpNDCZlJoFXBUB4QJbYJ
+ NgvJGsqBGhYWrJ4NJ3EkNsCtnd7GxYJdz5w3tPJwFGJoGn/AA1+URGBcbCDmXWagw+95LqnnLZ3
+ DeSMZ+Kws=
+X-Google-Smtp-Source: AGHT+IERiuWPC8rIWNjqwUi+nnohtMbUPRk5a1892rQtsdvUk9pPnQcSwFnzrykA3IF6A5Ex+6hF5w==
+X-Received: by 2002:a05:6402:1e93:b0:62f:48e3:223a with SMTP id
+ 4fb4d7f45d1cf-62f83c3f3ffmr2956279a12.3.1758122436532; 
+ Wed, 17 Sep 2025 08:20:36 -0700 (PDT)
+Received: from ?IPV6:2a02:a03f:73a7:c001:49b1:76d4:3e52:5347?
+ ([2a02:a03f:73a7:c001:49b1:76d4:3e52:5347])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-62f86ecf183sm1462709a12.12.2025.09.17.08.20.36
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 17 Sep 2025 08:20:36 -0700 (PDT)
+Message-ID: <59c225f0-289d-4f14-b9d6-053ea8eacf40@mind.be>
+Date: Wed, 17 Sep 2025 17:20:35 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: securitylab@github.com
+Cc: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1758122393; x=1758727193; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=VvEC4k8LzGtu9Q6jrq885o0Zcu0L9UaKlT6Z3FNjGM8=;
- b=PT9DIzJsNGfdn0xYI5pJVKTBCMX3IEV/wRvx6hIqMBvGcNc7lFi08Y3C1adU3ai8G4
- OS5Beb7e3GZYvL/pCdK6haYh9AXjMtJRXQEEyY868cFxaZOCjP2IZtSa7YeMI1KbGp2g
- HtRSkewq0SwdinATBFsdS2Rl3bRMcge1iT/Uukfpx9n4HXl0ofij3I+KjaLRLu5LGYze
- 9Is4wHqB6AGI8FgzJADBucSwqtVghNVmxsM98gu5vMs19Y+mSv+U47wCKdAl0IBTf1fu
- UKTZZainfQ0s05vKEfPtjmPp4ojWV4dKZOtlOBOMQZjREWYT2iKp5eJBkWxn8lpmH7bY
- cwZw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=mind.be; s=google; t=1758122436; x=1758727236; darn=buildroot.org;
+ h=content-transfer-encoding:subject:from:cc:to:content-language
+ :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=c85EQh/S1caWGFr3MJdnjvwuB8AI4GRS2L/K760GYTU=;
+ b=evAcN7gLYPHMJvhUb6XeI5mw96NmZQht+a2c3kdrFD80UOD+0Zg/SJgD41I0+gkptn
+ sy9gfn039lgYmmwZo6S+0Bq5tun8kHMsOlbPYUqGGa8EQ4echnZiAAbtK0Kr5EeUhCsN
+ lVSReZ0JRG58+B7Pg62qjWv92304h1DNRIS5bmebaMiK4BsPNyobDwTtt1m63suMZNfl
+ MboE2A4qU9F6omFo4KJCg1bklGnQvu0F538UelLbVrYOXin+cqRyvihaJjgUc9dDq5qJ
+ +M4Lw9MEmwcRQ/92xdARn10F9BaaEcAL6SNt3i6rUHLk3ukP2xjdwvvQwyR3Vlsykk1t
+ XANA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=PT9DIzJs
-Subject: [Buildroot] [PATCH] package/opencv4 (-contrib): security bump to
- v4.12.0
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=evAcN7gL
+Subject: [Buildroot] GHSL-2025-057 - Does not affect OpenCV 3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,73 +113,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Titouan Christophe via buildroot <buildroot@buildroot.org>
 Reply-To: Titouan Christophe <titouan.christophe@mind.be>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This fixes the following vulnerability:
-- CVE-2025-53644:
-    OpenCV is an Open Source Computer Vision Library. Versions prior to
-    4.12.0 have an uninitialized pointer variable on stack that may lead
-    to arbitrary heap buffer write when reading crafted JPEG images.
-    Version 4.12.0 fixes the vulnerability.
-    https://www.cve.org/CVERecord?id=CVE-2025-53644
+Dear Github Security Lab,
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
----
- package/opencv4-contrib/opencv4-contrib.hash | 2 +-
- package/opencv4-contrib/opencv4-contrib.mk   | 2 +-
- package/opencv4/opencv4.hash                 | 2 +-
- package/opencv4/opencv4.mk                   | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+As part of the Buildroot (https://buildroot.org/) LTS maintenance 
+program, I am looking at the issue CVE-2025-53644 [1] / GHSL-2025-057 [2].
 
-diff --git a/package/opencv4-contrib/opencv4-contrib.hash b/package/opencv4-contrib/opencv4-contrib.hash
-index b406f3d11e..dc9e810318 100644
---- a/package/opencv4-contrib/opencv4-contrib.hash
-+++ b/package/opencv4-contrib/opencv4-contrib.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  2dfc5957201de2aa785064711125af6abb2e80a64e2dc246aca4119b19687041  opencv4-contrib-4.11.0.tar.gz
-+sha256  4197722b4c5ed42b476d42e29beb29a52b6b25c34ec7b4d589c3ae5145fee98e  opencv4-contrib-4.12.0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/opencv4-contrib/opencv4-contrib.mk b/package/opencv4-contrib/opencv4-contrib.mk
-index 3961ca4a25..c1273237aa 100644
---- a/package/opencv4-contrib/opencv4-contrib.mk
-+++ b/package/opencv4-contrib/opencv4-contrib.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update opencv4
--OPENCV4_CONTRIB_VERSION = 4.11.0
-+OPENCV4_CONTRIB_VERSION = 4.12.0
- OPENCV4_CONTRIB_SITE = $(call github,opencv,opencv_contrib,$(OPENCV4_CONTRIB_VERSION))
- OPENCV4_CONTRIB_INSTALL_TARGET = NO
- OPENCV4_CONTRIB_LICENSE = Apache-2.0
-diff --git a/package/opencv4/opencv4.hash b/package/opencv4/opencv4.hash
-index 6a3501b051..a39b199166 100644
---- a/package/opencv4/opencv4.hash
-+++ b/package/opencv4/opencv4.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  9a7c11f924eff5f8d8070e297b322ee68b9227e003fd600d4b8122198091665f  opencv4-4.11.0.tar.gz
-+sha256  44c106d5bb47efec04e531fd93008b3fcd1d27138985c5baf4eafac0e1ec9e9d  opencv4-4.12.0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/opencv4/opencv4.mk b/package/opencv4/opencv4.mk
-index d3df1a39f7..9691eb78e8 100644
---- a/package/opencv4/opencv4.mk
-+++ b/package/opencv4/opencv4.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update opencv4-contrib
--OPENCV4_VERSION = 4.11.0
-+OPENCV4_VERSION = 4.12.0
- OPENCV4_SITE = $(call github,opencv,opencv,$(OPENCV4_VERSION))
- OPENCV4_INSTALL_STAGING = YES
- OPENCV4_LICENSE = Apache-2.0
--- 
-2.51.0
+In Buildroot, we provide both OpenCV3 (currently v3.4.20) and OpenCV4 
+(currently v4.11.0), and the above issue is reportedly affecting both 
+versions of the package. Looking at the NVD entry, the vulnerability is 
+marked as affecting OpenCV up to v4.12. However, looking at the patch 
+that fixes the issue [3], it updates a file that does not exist in 
+OpenCV3 (3rdparty/openjpeg/openjp2/jp2.c).
+
+To the best of my understanding, it looks like this issue only affects 
+OpenCV4, do you agree with that finding ? If so, could you please update 
+the CVE entry, such that it would only affect OpenCV>=4;<4.12 ?
+
+Best regards,
+Titouan CHRISTOPHE
+
+[1] https://nvd.nist.gov/vuln/detail/cve-2025-53644
+[2] https://securitylab.github.com/advisories/GHSL-2025-057_OpenCV/
+[3] 
+https://github.com/opencv/opencv/commit/a39db41390de546d18962ee1278bd6dbb715f466
 
 _______________________________________________
 buildroot mailing list
