@@ -1,75 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88B0CCAC59A
-	for <buildroot@archiver.kernel.org>; Wed, 17 Sep 2025 19:38:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A00A3CAC598
+	for <buildroot@archiver.kernel.org>; Wed, 17 Sep 2025 19:53:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5423084535;
-	Wed, 17 Sep 2025 19:38:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5275661728;
+	Wed, 17 Sep 2025 19:53:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jRSQTCBpThdn; Wed, 17 Sep 2025 19:38:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iZvpaUoiC-JB; Wed, 17 Sep 2025 19:53:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81FD28453C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5900261722
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 81FD28453C;
-	Wed, 17 Sep 2025 19:38:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4C4CF279
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 19:38:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5900261722;
+	Wed, 17 Sep 2025 19:53:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2923FAF1
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 19:53:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 30FC74143B
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 19:38:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 17C6F42718
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 19:53:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NFAwIII8yt5L for <buildroot@buildroot.org>;
- Wed, 17 Sep 2025 19:38:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 306474142E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 306474142E
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 306474142E
- for <buildroot@buildroot.org>; Wed, 17 Sep 2025 19:38:41 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 9DDEE19F5A7;
- Wed, 17 Sep 2025 21:38:38 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 17 Sep 2025 21:38:38 +0200
-MIME-Version: 1.0
-Date: Wed, 17 Sep 2025 21:38:38 +0200
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250917185344.2881523-1-thomas.perale@mind.be>
-References: <20250917185344.2881523-1-thomas.perale@mind.be>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <a8ce719acfe7a59191b15d59937719ef@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1758137919;
- bh=iyM1kuRby7sVHWTX3aW4x+AWQWJP/7sJVOgdJMi55w0=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=e5Db6VafLS8ULhi7E74DzHtm3wm3SqPXC4eatspGT6/0dFpKux/uYqlpf6NCSUJ3s
- WekCgBB/NynV+iQKgCdH8QU5PZSxG3gzLEIeVvs7VQZjtgqKvLHj5VEliwKDr1Xfcv
- MvEkZ0RbquBOjD42VZlmQG33VnO+SpfQnt3l0OQfttajZSAko+rg4hFf12+hCne5S+
- OXonTLSMi8PXD9J9k3VLjyWKsNkcM7+APcLEcij5gQsxfJESHsxVeR0KGJBvDQdcuu
- qBKgfq50zJqnJATb3VKqjx+0gnBLCwf5kjF4x53vXYbcI9s5RYEPT6+Tg8XNK5K6GM
- Zj5zEpyOgTsbg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=e5Db6Vaf
-Subject: Re: [Buildroot] [PATCH 1/1] package/lua/5.1.5: add patch for
- CVE-2014-5461
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GUU7Zuf_VK7d for <buildroot@buildroot.org>;
+ Wed, 17 Sep 2025 19:53:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3EB942710
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id F3EB942710
+ for <buildroot@buildroot.org>; Wed, 17 Sep 2025 19:53:51 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DF5D885A56; Wed, 17 Sep 2025 19:53:51 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 17 Sep 2025 21:45:04 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a2c906ee3b6b9057ea2c83987ddac9b7971cebd2
+X-Git-Newrev: 860c35d1ac7ce3377b9ec9788c0fa9ad1c4c642b
+X-Patchwork-Hint: ignore
+Message-Id: <20250917195351.DF5D885A56@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/jasper: add patch for
+ CVE-2023-51257
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,32 +60,99 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 17/09/2025 20:53, Thomas Perale via buildroot wrote:
-> This CVE is specific for the version 5.1.5 still present in Buildroot.
-> It has been fixed in 5.2.3 and thereby doesn't affects the other
-> versions available in Buildroot.
-> 
-> - CVE-2014-5461
-> 
-> Buffer overflow in the vararg functions in ldo.c in Lua 5.1 through
-> 5.2.x before 5.2.3 allows context-dependent attackers to cause a denial
-> of service (crash) via a small number of arguments to a function with a
-> large number of fixed arguments.
-> 
-> For more information see:
->   - https://security-tracker.debian.org/tracker/CVE-2014-5461
->   - https://udd.debian.org/patches.cgi?src=lua5.1&version=5.1.5-11
-> 
-> A patch present in Debian is used to address this vulnerability.
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+commit: https://git.buildroot.net/buildroot/commit/?id=860c35d1ac7ce3377b9ec9788c0fa9ad1c4c642b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+This fixes the following vulnerability:
+
+- CVE-2023-51257:
+
+An invalid memory write issue in Jasper-Software Jasper v.4.1.1 and
+before allows a local attacker to execute arbitrary code.
+
+For more information see:
+  - https://nvd.nist.gov//vuln/detail/CVE-2023-51257
+  - https://github.com/jasper-software/jasper/commit/aeef5293c978158255ad4f127089644745602f2a
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/jasper/0001-Fixes-367.patch | 46 +++++++++++++++++++++++++++++++++++++
+ package/jasper/jasper.mk            |  3 +++
+ 2 files changed, 49 insertions(+)
+
+diff --git a/package/jasper/0001-Fixes-367.patch b/package/jasper/0001-Fixes-367.patch
+new file mode 100644
+index 0000000000..11dfb5672f
+--- /dev/null
++++ b/package/jasper/0001-Fixes-367.patch
+@@ -0,0 +1,46 @@
++From aeef5293c978158255ad4f127089644745602f2a Mon Sep 17 00:00:00 2001
++From: Michael Adams <mdadams@ece.uvic.ca>
++Date: Thu, 14 Dec 2023 19:04:19 -0800
++Subject: [PATCH] Fixes #367.
++
++Fixed an integer-overflow bug in the ICC profile parsing code.
++Added another invalid image to the test set.
++
++CVE: CVE-2023-51257
++Upstream: https://github.com/jasper-software/jasper/commit/aeef5293c978158255ad4f127089644745602f2a
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ src/libjasper/base/jas_icc.c | 16 ++++++++++++++--
++ 1 file changed, 14 insertions(+), 2 deletions(-)
++
++diff --git a/src/libjasper/base/jas_icc.c b/src/libjasper/base/jas_icc.c
++index 905b823..2d1e91e 100644
++--- a/src/libjasper/base/jas_icc.c
+++++ b/src/libjasper/base/jas_icc.c
++@@ -1295,10 +1295,22 @@ static int jas_icctxt_input(jas_iccattrval_t *attrval, jas_stream_t *in,
++ {
++ 	jas_icctxt_t *txt = &attrval->data.txt;
++ 	txt->string = 0;
++-	if (!(txt->string = jas_malloc(cnt)))
+++	/* The string must at least contain a single null character. */
+++	if (cnt < 1) {
++ 		goto error;
++-	if (jas_stream_read(in, txt->string, cnt) != cnt)
+++	}
+++	if (!(txt->string = jas_malloc(cnt))) {
+++		goto error;
+++	}
+++	if (jas_stream_read(in, txt->string, cnt) != cnt) {
++ 		goto error;
+++	}
+++	/* Ensure that the string is null terminated. */
+++	if (txt->string[cnt - 1] != '\0') {
+++		goto error;
+++	}
+++	/* The following line is redundant, unless we do not enforce that
+++	  the last character must be null. */
++ 	txt->string[cnt - 1] = '\0';
++ 	if (strlen(txt->string) + 1 != cnt)
++ 		goto error;
++-- 
++2.39.5
+diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
+index 45b9c49558..dd0badbc8f 100644
+--- a/package/jasper/jasper.mk
++++ b/package/jasper/jasper.mk
+@@ -15,6 +15,9 @@ JASPER_CONF_OPTS = \
+ 	-DJAS_ENABLE_DOC=OFF \
+ 	-DJAS_ENABLE_PROGRAMS=OFF
+ 
++# 0001-Fixes-367.patch
++JASPER_IGNORE_CVES += CVE-2023-51257
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ JASPER_CONF_OPTS += -DJAS_ENABLE_SHARED=OFF
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
