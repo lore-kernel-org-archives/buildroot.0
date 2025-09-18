@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72DF9CAC59A
-	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 12:48:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CFC6CAC5A8
+	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 12:48:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4441F82525;
-	Fri, 19 Sep 2025 12:48:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2373260ACB;
+	Fri, 19 Sep 2025 12:48:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mIFgiq1Ur6i8; Fri, 19 Sep 2025 12:48:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BFDVrakiOy6d; Fri, 19 Sep 2025 12:48:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A584B824E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0448461085
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A584B824E2;
-	Fri, 19 Sep 2025 12:48:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B3001290
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0448461085;
+	Fri, 19 Sep 2025 12:48:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8C6FF273
  for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E9E5540C14
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 011D861039
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mt3RiCO-0oRw for <buildroot@buildroot.org>;
- Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RWhoigiytLbM for <buildroot@buildroot.org>;
+ Fri, 19 Sep 2025 12:48:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C05640A7A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E101960F8D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7C05640A7A
+ by smtp3.osuosl.org (Postfix) with ESMTP id E101960F8D
  for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7868E85F2B; Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
+ id DF8A7842A0; Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 18 Sep 2025 10:20:39 +0200
+Date: Thu, 18 Sep 2025 10:48:20 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 7d0b96a347eb1cec75debb9bc9499b082c835601
-X-Git-Newrev: fc61109e594de95f21a37a8a1fad88f4aca25eab
+X-Git-Oldrev: 66ccfef7c004bab70ac37ca401728f44d0a84ab7
+X-Git-Newrev: ea4f8ce14ecfe79e12c0a37c87810544b6e65701
 X-Patchwork-Hint: ignore
-Message-Id: <20250919124805.7868E85F2B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/php-lua: fix
- build with PHP8/GCC14
+Message-Id: <20250919124805.DF8A7842A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/luvi: bump to
+ version 2.15.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,160 +61,281 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8468908018982393078=="
+Content-Type: multipart/mixed; boundary="===============6051854013187411172=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8468908018982393078==
+--===============6051854013187411172==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc61109e594de95f21a37a8a1fad88f4aca25eab
+commit: https://git.buildroot.net/buildroot/commit/?id=ea4f8ce14ecfe79e12c0a37c87810544b6e65701
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-On both Buildroot 2025.02.x and master branch, php-lua build fails on
-the following error:
+Luvi 2.14.0 fails to build with GCC 14.x for several reasons due to
+too old lua-openssl 0.8.2-0 submodule:
 
-lua.c:862:44: error: assignment to 'zend_object_write_property_t' {aka
-'struct _zval_struct * (*)(struct _zend_object *, struct _zend_string *,
-struct _zval_struct *, void **)'} from incompatible pointer type 'void
-(*)(zval *, zval *, zval *, void **)' {aka 'void (*)(struct _zval_struct
-*, struct _zval_struct *, struct _zval_struct *, void **)'}
-[-Wincompatible-pointer-types]
-  862 |         lua_object_handlers.write_property =
-php_lua_write_property;
-      |                                            ^
-lua.c:863:44: error: assignment to 'zend_object_read_property_t' {aka
-'struct _zval_struct * (*)(struct _zend_object *, struct _zend_string *,
-int,  void **, struct _zval_struct *)'} from incompatible pointer type
-'zval * (*)(zval *, zval *, int,  void **, zval *)' {aka 'struct
-_zval_struct * (*)(struct _zval_struct *, struct _zval_struct *, int,
-void **, struct _zval_struct *)'} [-Wincompatible-pointer-types]
-  863 |         lua_object_handlers.read_property  =
-php_lua_read_property;
-      |                                            ^
-make[2]: *** [Makefile:214: lua.lo] Error 1
+TestLuvi/build/luvi-2.14.0/deps/lua-openssl/src/ocsp.c: In function 'openssl_ocsp_request_read':
+TestLuvi/build/luvi-2.14.0/deps/lua-openssl/src/ocsp.c:124:29: error: passing argument 1 of 'PEM_ASN1_read_bio' from incompatible pointer type [-Wincompatible-pointer-types]
+  124 |   OCSP_REQUEST *req = pem ? PEM_read_bio_OCSP_REQUEST(bio, NULL, NULL)
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                             |
+      |                             char * (*)()
 
-The error can be reproduced with the following minimal defconfig:
+Fixed in lua-openssl by [1].
 
-BR2_arm=y
-BR2_cortex_a9=y
-BR2_ARM_ENABLE_NEON=y
-BR2_ARM_ENABLE_VFP=y
-BR2_ARM_FPU_NEON=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_PACKAGE_LUA=y
-BR2_PACKAGE_PHP=y
-BR2_PACKAGE_PHP_LUA=y
+TestLuvi/build/luvi-2.14.0/deps/lua-openssl/src/x509.c: In function 'openssl_push_general_name':
+TestLuvi/build/luvi-2.14.0/deps/lua-openssl/src/x509.c:377:45: error: passing argument 2 of 'openssl_push_asn1type' from incompatible pointer type [-Wincompatible-pointer-types]
+  377 |     openssl_push_asn1type(L, general_name->d.x400Address);
+      |                              ~~~~~~~~~~~~~~~^~~~~~~~~~~~
+      |                                             |
+      |                                             ASN1_STRING * {aka struct asn1_string_st *}
 
-This build failure is the result of two events/conditions:
-- the update to PHP8 has changed the prototype for
-  zend_object_read_property_t (see [1]). But at this time, php-lua just
-  generated a new warning (-Wincompatible-pointer-types)
-- using bootlin bleeding-edge toolchain brings in GCC14, which now turns
-  this warning into a systematic error (see [2])
+Fixed in lua-openssl by [2].
 
-This issue is still present on the upstream repository, but it has been
-fixed on one of its forks. Bring the relevant patch from the fork to
-allow building php-lua.
+TestLuvi/build/luvi-2.14.0/deps/lua-openssl/src/openssl.c: In function 'luaclose_openssl':
+TestLuvi/build/luvi-2.14.0/deps/lua-openssl/src/stdatomic.h:387:9: error: implicit declaration of function '__c11_atomic_fetch_sub'; did you mean '__atomic_fetch_sub'? [-Wimplicit-function-declaration]
+  387 |         __c11_atomic_fetch_sub(object, operand, order)
 
-[1] https://github.com/php/php-src/commit/91ef4124e56
-[2] https://gcc.gnu.org/gcc-14/porting_to.html#incompatible-pointer-types
+Fixed in lua-openssl by [3].
 
-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-[Romain: update Upstream link]
+Instead of fixing one by one each issues, update to the latest release
+that include lua-openssl 0.9.0-0. Luvi v2.15.0 still have some GCC 14.x
+issues, backport two additional patches.
+
+Download luvi sources using git method since the release archive
+no longer include the release version in its name [4].
+
+Luvi switched to PCRE2 [5], update the optional dependency.
+
+Update TestLuvi to select PCR2 package.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/11271124430 (TestLuvi)
+
+[1] https://github.com/zhaozg/lua-openssl/commit/bfeedbe8c06d8b4400fa670edecd452a433ddac4
+[2] https://github.com/zhaozg/lua-openssl/commit/e5b5420cc506c7507d1d0e7302ea3f1979a6b2ed
+[3] https://github.com/zhaozg/lua-openssl/commit/cfcaa16d1acaab17f4f0178e61ea77ebc2c8f24c
+[4] https://github.com/luvit/luvi/releases/download/v2.15.0/luvi-source.tar.gz
+[5] https://github.com/luvit/luvi/releases/tag/v2.15.0
+
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
-(cherry picked from commit b4d8147a9532cbe2abf25d69f58e0c73b82136fb)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 00317f0aff243986983650671fd220ab040af50f)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...-write-properly-read-property-was-changed.patch | 77 ++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+ ...ctively-disable-GCC-diagnostics-in-ocsp.c.patch | 80 ++++++++++++++++++++++
+ ...txt-disable-Wincompatible-pointer-types-f.patch | 54 +++++++++++++++
+ package/luvi/luvi.hash                             |  2 +-
+ package/luvi/luvi.mk                               | 17 ++---
+ support/testing/tests/package/test_luvi.py         |  2 +-
+ 5 files changed, 145 insertions(+), 10 deletions(-)
 
-diff --git a/package/php-lua/0003-php8-Signature-of-write-properly-read-property-was-changed.patch b/package/php-lua/0003-php8-Signature-of-write-properly-read-property-was-changed.patch
+diff --git a/package/luvi/0001-Selectively-disable-GCC-diagnostics-in-ocsp.c.patch b/package/luvi/0001-Selectively-disable-GCC-diagnostics-in-ocsp.c.patch
 new file mode 100644
-index 0000000000..82a6bbd0b2
+index 0000000000..d29ba37bcf
 --- /dev/null
-+++ b/package/php-lua/0003-php8-Signature-of-write-properly-read-property-was-changed.patch
-@@ -0,0 +1,77 @@
-+From de1068d634519abf2461dac9427b5ff24b6603af Mon Sep 17 00:00:00 2001
-+From: Mikhail Galanin <mikhail.galanin@team.bumble.com>
-+Date: Tue, 24 Aug 2021 08:28:47 +0100
-+Subject: [PATCH] php8: Signature of write_property/read_property was changed
-+ in https://github.com/php/php-src/commit/91ef4124e56
++++ b/package/luvi/0001-Selectively-disable-GCC-diagnostics-in-ocsp.c.patch
+@@ -0,0 +1,80 @@
++From 52bc36f5a548543835c24b87e7b7b72a327b1df7 Mon Sep 17 00:00:00 2001
++From: RDW <duckwhale@mail.ru>
++Date: Sun, 14 Sep 2025 00:33:10 +0200
++Subject: [PATCH] Selectively disable GCC diagnostics in ocsp.c
 +
-+Upstream: upstream dead, taken from fork at https://github.com/badoo/php-lua/pull/8
-+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
++GCC 14 fails to compile the library because -Wincompatible-pointer-types is now fatal.
++Since the warning is already disabled for clang here, might as well include GCC also.
++Needless to say, this is a workaround and a proper fix would require upstream changes.
++
++Upstream: https://github.com/zhaozg/lua-openssl/commit/bfeedbe8c06d8b4400fa670edecd452a433ddac4
++[Romain:
++  - rebase on lua-openssl 0.9.0-0
++  - format the patch as luvi patch (patching lua-openssl submodule)
++]
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
 +---
-+ lua.c | 28 ++++++++++++++--------------
-+ 1 file changed, 14 insertions(+), 14 deletions(-)
++ deps/lua-openssl/src/ocsp.c | 22 ++++++++++++++++++++++
++ 1 file changed, 22 insertions(+)
 +
-+diff --git a/lua.c b/lua.c
-+index edc2868..32c1471 100755
-+--- a/lua.c
-++++ b/lua.c
-+@@ -229,46 +229,46 @@ zend_object *php_lua_create_object(zend_class_entry *ce)
++diff --git a/deps/lua-openssl/src/ocsp.c b/deps/lua-openssl/src/ocsp.c
++index ac67a53..00e3b61 100644
++--- a/deps/lua-openssl/src/ocsp.c
+++++ b/deps/lua-openssl/src/ocsp.c
++@@ -183,15 +183,26 @@ static int openssl_ocsp_request_read(lua_State *L)
++   BIO *bio = load_bio_object(L, 1);
++   int pem = lua_gettop(L) > 1 ? auxiliar_checkboolean(L, 2) : 0;
 + 
-+ /** {{{ static zval * php_lua_read_property(zval *object, zval *member, int type)
-+ */
-+-zval *php_lua_read_property(zval *object, zval *member, int type, void **cache_slot, zval *rv){
-+-	lua_State *L = (Z_LUAVAL_P(object))->L;
-+-	zend_string *str_member;
-++zval *php_lua_read_property(zend_object *object, zend_string *member, int type, void **cache_slot, zval *rv){
-++	lua_State *L = php_lua_obj_from_obj(object)->L;
-+ 
-+ 	if (type != BP_VAR_R) {
-+ 		ZVAL_NULL(rv);
-+ 		return rv;
-+ 	}
-+ 
-+-	str_member = zval_get_string(member);
-+ #if (LUA_VERSION_NUM < 502)
-+-	lua_getfield(L, LUA_GLOBALSINDEX, ZSTR_VAL(str_member));
-++	lua_getfield(L, LUA_GLOBALSINDEX, ZSTR_VAL(member));
-+ #else
-+-	lua_getglobal(L, ZSTR_VAL(str_member));
-++	lua_getglobal(L, ZSTR_VAL(member));
-+ #endif
-+-	zend_string_release(str_member);
-+ 
-+-	php_lua_get_zval_from_lua(L, -1, object, rv);
-++	zval lua_zval_object;
-++	ZVAL_OBJ(&lua_zval_object, object);
+++#if defined(__GNUC__)
+++#pragma GCC diagnostic push
+++#pragma GCC diagnostic ignored "-Wincompatible-pointer-types"
+++#endif
 ++
-++	php_lua_get_zval_from_lua(L, -1, &lua_zval_object, rv);
-+ 	lua_pop(L, 1);
-++
-+ 	return rv;
-+ }
-+ /* }}} */
-+ 
-+ /** {{{ static void php_lua_write_property(zval *object, zval *member, zval *value)
-+ */
-+-static void php_lua_write_property(zval *object, zval *member, zval *value, void ** key) {
-+-	lua_State *L = (Z_LUAVAL_P(object))->L;
-+-	zend_string *str_member = zval_get_string(member);
-++static zval* php_lua_write_property(zend_object *object, zend_string *member, zval *value, void ** key) {
-++	lua_State *L = php_lua_obj_from_obj(object)->L;
-+ 
-+ #if (LUA_VERSION_NUM < 502)
-+-	php_lua_send_zval_to_lua(L, member);
-++	lua_pushlstring(L, ZSTR_VAL(val), ZSTR_LEN(val));
-+ 	php_lua_send_zval_to_lua(L, value);
-+ 
-+ 	lua_settable(L, LUA_GLOBALSINDEX);
-+ #else
-+ 	php_lua_send_zval_to_lua(L, value);
-+-	lua_setglobal(L, Z_STRVAL_P(member));
-++	lua_setglobal(L, ZSTR_VAL(member));
++ #if defined(__clang__)
++ #pragma clang diagnostic push
++ #pragma clang diagnostic ignored "-Wincompatible-pointer-types"
 + #endif
++   OCSP_REQUEST *req = pem ? PEM_read_bio_OCSP_REQUEST(bio, NULL, NULL)
++                           : d2i_OCSP_REQUEST_bio(bio, NULL);
+++
+++#if defined(__GNUC__)
+++#pragma GCC diagnostic pop
+++#endif
+++
++ #if defined(__clang__)
++ #pragma clang diagnostic pop
++ #endif
+++
++   BIO_free(bio);
 + 
-+-	zend_string_release(str_member);
-++	return value;
-+ }
-+ /* }}} */
++   if (req)
++@@ -359,15 +370,26 @@ static int openssl_ocsp_response_read(lua_State *L)
++   int pem = lua_gettop(L) > 1 ? auxiliar_checkboolean(L, 2) : 0;
++   int ret = 0;
 + 
+++#if defined(__GNUC__)
+++#pragma GCC diagnostic push
+++#pragma GCC diagnostic ignored "-Wincompatible-pointer-types"
+++#endif
+++
++ #if defined(__clang__)
++ #pragma clang diagnostic push
++ #pragma clang diagnostic ignored "-Wincompatible-pointer-types"
++ #endif
++   OCSP_RESPONSE *res = pem ? PEM_read_bio_OCSP_RESPONSE(bio, NULL, NULL)
++                            : d2i_OCSP_RESPONSE_bio(bio, NULL);
+++
+++#if defined(__GNUC__)
+++#pragma GCC diagnostic pop
+++#endif
+++
++ #if defined(__clang__)
++ #pragma clang diagnostic pop
++ #endif
+++
++   if (res)
++   {
++     PUSH_OBJECT(res, "openssl.ocsp_response");
++-- 
++2.51.0
++
+diff --git a/package/luvi/0002-CMakeLists.txt-disable-Wincompatible-pointer-types-f.patch b/package/luvi/0002-CMakeLists.txt-disable-Wincompatible-pointer-types-f.patch
+new file mode 100644
+index 0000000000..b658fed202
+--- /dev/null
++++ b/package/luvi/0002-CMakeLists.txt-disable-Wincompatible-pointer-types-f.patch
+@@ -0,0 +1,54 @@
++From c82c147e83d6a21f572353bf6e95dcf3a736490c Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@smile.fr>
++Date: Sat, 13 Sep 2025 23:21:04 +0200
++Subject: [PATCH] CMakeLists.txt: disable Wincompatible-pointer-types for gcc
++ >= 14
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Backport partially a patch [1] disabling GCC 14 warning
++Wincompatible-pointer-types.
++
++From [1]:
++"lua-openssl triggering the incompatible pointer types error by
++silencing the warning, which lua-openssl does internally but only for
++clang."
++
++Latest lua-openssl version (0.9.1-0) also disable this warning [2].
++
++Fixes:
++https://gitlab.com/buildroot.org/buildroot/-/jobs/11271124430 (TestLuvi)
++
++[1] https://github.com/luvit/luvi/commit/85d7d7bf51bc523159ad579d846cbefbbff38fdb
++[2] https://github.com/zhaozg/lua-openssl/commit/bfeedbe8c06d8b4400fa670edecd452a433ddac4
++
++Upstream: https://github.com/luvit/luvi/commit/85d7d7bf51bc523159ad579d846cbefbbff38fdb
++
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ CMakeLists.txt | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 0b0007d..bf10de5 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -141,6 +141,14 @@ if (WIN32)
++   add_library (luvi_renamed src/luvi_renamed.c)
++ endif ()
++ 
+++if (CMAKE_C_COMPILER_ID MATCHES "Clang|GNU")
+++  add_compile_options(-Wno-incompatible-pointer-types)
+++endif()
+++
+++if(UNIX)
+++  add_definitions(-Wall)
+++endif()
+++
++ if (WITH_LUA_ENGINE STREQUAL Lua)
++   add_definitions(-DWITH_PLAIN_LUA)
++ endif ()
++-- 
++2.51.0
++
+diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
+index 3518a2dc85..d8825487db 100644
+--- a/package/luvi/luvi.hash
++++ b/package/luvi/luvi.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  4be4468d01657100967a9c696f503aa3c30de6f23af39050c1aae909fbf0aaf2  luvi-src-v2.14.0.tar.gz
++sha256  f933bf1899a5419b26d46d7f111aaa50101831922716ffaed62e355b1bc9de1d  luvi-v2.15.0-git4.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
+index ebd1066c5c..78de76aa45 100644
+--- a/package/luvi/luvi.mk
++++ b/package/luvi/luvi.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
+ 
+-LUVI_VERSION = 2.14.0
+-LUVI_SOURCE = luvi-src-v$(LUVI_VERSION).tar.gz
+-LUVI_SITE = https://github.com/luvit/luvi/releases/download/v$(LUVI_VERSION)
++LUVI_VERSION = v2.15.0
++LUVI_SITE = https://github.com/luvit/luvi.git
++LUVI_SITE_METHOD = git
++LUVI_GIT_SUBMODULES = YES
+ LUVI_LICENSE = Apache-2.0
+ LUVI_LICENSE_FILES = LICENSE.txt
+ LUVI_DEPENDENCIES = libuv luajit luv host-luajit host-pkgconf
+@@ -44,12 +45,12 @@ LUVI_CONF_OPTS = \
+ 	-DTARGET_ARCH=$(LUVI_TARGET_ARCH) \
+ 	-DLUA_PATH=$(HOST_DIR)/share/luajit-$(LUVI_LUAJIT_MAJVER).$(LUVI_LUAJIT_MINVER)/?.lua
+ 
+-# Add "rex" module (PCRE via bundled lrexlib)
+-ifeq ($(BR2_PACKAGE_PCRE),y)
+-LUVI_DEPENDENCIES += pcre
+-LUVI_CONF_OPTS += -DWithPCRE=ON -DWithSharedPCRE=ON
++# Add "rex" module (PCRE2 via bundled lrexlib)
++ifeq ($(BR2_PACKAGE_PCRE2),y)
++LUVI_DEPENDENCIES += pcre2
++LUVI_CONF_OPTS += -DWithPCRE2=ON -DWithSharedPCRE2=ON
+ else
+-LUVI_CONF_OPTS += -DWithPCRE=OFF -DWithSharedPCRE=OFF
++LUVI_CONF_OPTS += -DWithPCRE2=OFF -DWithSharedPCRE2=OFF
+ endif
+ 
+ # Add "ssl" module (via bundled lua-openssl)
+diff --git a/support/testing/tests/package/test_luvi.py b/support/testing/tests/package/test_luvi.py
+index 4b55091762..b9d43fe266 100644
+--- a/support/testing/tests/package/test_luvi.py
++++ b/support/testing/tests/package/test_luvi.py
+@@ -11,7 +11,7 @@ class TestLuvi(infra.basetest.BRTest):
+         BR2_PACKAGE_LUAJIT=y
+         BR2_PACKAGE_LUVI=y
+         BR2_PACKAGE_OPENSSL=y
+-        BR2_PACKAGE_PCRE=y
++        BR2_PACKAGE_PCRE2=y
+         BR2_PACKAGE_ZLIB=y
+         """
+ 
 
---===============8468908018982393078==
+--===============6051854013187411172==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -225,4 +346,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8468908018982393078==--
+--===============6051854013187411172==--
