@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51219CAC597
-	for <buildroot@archiver.kernel.org>; Thu, 18 Sep 2025 19:51:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19AF7CAC597
+	for <buildroot@archiver.kernel.org>; Thu, 18 Sep 2025 20:01:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1F4EC60B43;
-	Thu, 18 Sep 2025 19:51:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D27260B6C;
+	Thu, 18 Sep 2025 20:01:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TFIQMVsV245f; Thu, 18 Sep 2025 19:51:07 +0000 (UTC)
+ id iBNwm4mzZRv5; Thu, 18 Sep 2025 20:01:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4870A60B13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0944A60B46
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4870A60B13;
-	Thu, 18 Sep 2025 19:51:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 882E3273
- for <buildroot@buildroot.org>; Thu, 18 Sep 2025 19:51:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0944A60B46;
+	Thu, 18 Sep 2025 20:01:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B969A1E3
+ for <buildroot@buildroot.org>; Thu, 18 Sep 2025 20:00:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6F70840215
- for <buildroot@buildroot.org>; Thu, 18 Sep 2025 19:51:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A97C660B46
+ for <buildroot@buildroot.org>; Thu, 18 Sep 2025 20:00:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OGAbxSKVRdX6 for <buildroot@buildroot.org>;
- Thu, 18 Sep 2025 19:51:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C21F340152
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C21F340152
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C21F340152
- for <buildroot@buildroot.org>; Thu, 18 Sep 2025 19:51:04 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id BCF222003C8;
- Thu, 18 Sep 2025 21:50:59 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 18 Sep 2025 21:50:59 +0200
-MIME-Version: 1.0
-Date: Thu, 18 Sep 2025 21:50:59 +0200
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: buildroot@buildroot.org, linux-amarula@amarulasolutions.com
-In-Reply-To: <20250918161306.2539341-1-dario.binacchi@amarulasolutions.com>
-References: <20250918161306.2539341-1-dario.binacchi@amarulasolutions.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <224ecf6d9df37b4238467921c06d46b6@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1758225062;
- bh=CpdHIbE5DO/lF0OBDDtW1JAE2xROGOnIGcN4U7GVR/8=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=iqJiSpk8w7RUmvsYOs2XYyoNd/hscLyfymO3WFiQiU7/HSe/MonefK/tNQVz3zF7Q
- CCxaOi8COW+4UYFd81M5agMa+Vc2kbhwu7tRyhk0LRRMMiARdSQsOmr2+qJkYsO9Bp
- b8s2J1HjM7wJ+8Rf7UZkw0KG0wNraKYDQkYSx+3ZgFo7J0beCQwjsuNnYxopomsZfF
- u7RVJX+zd6aUAgtwK1H3U7j+IZCuWMM2UNpRySWjxJ4U7JcFlGz1LIWNH+4TtDyHwH
- d421QqKw/eruuUEVYtB/s6VNEGYQYMkYF50KUtpGC3dnyKnFvcExTzlZi+XM/UEdaZ
- AsmJO3BgcG6gQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=iqJiSpk8
-Subject: Re: [Buildroot] [PATCH 1/1] package/aespipe: bump to version 2.4j
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mBqNlY46K_QD for <buildroot@buildroot.org>;
+ Thu, 18 Sep 2025 20:00:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09A9F60B34
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 09A9F60B34
+ for <buildroot@buildroot.org>; Thu, 18 Sep 2025 20:00:58 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EA9E785CC8; Thu, 18 Sep 2025 20:00:57 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 18 Sep 2025 21:51:50 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e94b305e1e248cea18e2b44dfe45cdc8dd2b5a59
+X-Git-Newrev: cbc1dbc8895e92d51dd7c0c93c704fc5312fbd3c
+X-Patchwork-Hint: ignore
+Message-Id: <20250918200057.EA9E785CC8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/acsccid: bump to version 1.1.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,25 +59,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 18/09/2025 18:13, Dario Binacchi wrote:
-> aespipe-v2.4i     April 29 2025
->     - Added AES Crypto Extension opcodes for 64-bit arm64 on Linux.
->     - aes-armv8sca.S aes-armv8ce.S : add PAC/BTI branch protection
->       support. Patch from Emanuele Rocca <emanuele.rocca@arm.com>
-> 
-> aespipe-v2.4j     September 2 2025
->     - Added configure script autodetection for 32-bit ARM -marm compile
->       flag. This option is needed with some compilers that default to
->       generating code in Thumb mode.
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=cbc1dbc8895e92d51dd7c0c93c704fc5312fbd3c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Release notes:
+https://sourceforge.net/p/acsccid/news/2025/07/acsccid-1112-released/
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/acsccid/acsccid.hash | 8 ++++----
+ package/acsccid/acsccid.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/acsccid/acsccid.hash b/package/acsccid/acsccid.hash
+index e5fe669ceb..25f894c577 100644
+--- a/package/acsccid/acsccid.hash
++++ b/package/acsccid/acsccid.hash
+@@ -1,6 +1,6 @@
+-# From https://sourceforge.net/projects/acsccid/files/acsccid/1.1.11/
+-sha1  75d3d17fb9d9ee7d0b291b460e2c6eb3c71654c5  acsccid-1.1.11.tar.bz2
+-md5  0bbbce89a934861b7c5b003da962f1d9  acsccid-1.1.11.tar.bz2
++# From https://sourceforge.net/projects/acsccid/files/acsccid/1.1.12/
++sha1  6d9aa64b195e1b4d72a9b032f8ee70ad0798802d  acsccid-1.1.12.tar.bz2
++md5  34bf40daedd3428c07f9937d4ec43129  acsccid-1.1.12.tar.bz2
+ # Locally computed
+-sha256  2fcda6ed1f5d2f07e202b51f9a600a61c83e1a73a96f51ed0f9e4f781c9c1282  acsccid-1.1.11.tar.bz2
++sha256  28f6075a5494a568ce2fd8666c489f6f4a51599b44fbc9390e1ddb48d3ccc5bd  acsccid-1.1.12.tar.bz2
+ sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
+diff --git a/package/acsccid/acsccid.mk b/package/acsccid/acsccid.mk
+index 93cca8e09d..3be1379552 100644
+--- a/package/acsccid/acsccid.mk
++++ b/package/acsccid/acsccid.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ACSCCID_VERSION = 1.1.11
++ACSCCID_VERSION = 1.1.12
+ ACSCCID_SOURCE = acsccid-$(ACSCCID_VERSION).tar.bz2
+ ACSCCID_SITE = http://downloads.sourceforge.net/acsccid
+ ACSCCID_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
