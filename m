@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 543AECAC592
-	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 12:42:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B7E3CAC592
+	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 12:42:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 02260822E5;
-	Fri, 19 Sep 2025 12:42:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6CFED822B6;
+	Fri, 19 Sep 2025 12:42:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CFaWpAnGg6Xb; Fri, 19 Sep 2025 12:42:48 +0000 (UTC)
+ id VdoYlUiUe-I8; Fri, 19 Sep 2025 12:42:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B455822E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACAEA822EC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B455822E9;
-	Fri, 19 Sep 2025 12:42:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B657273
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:42:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ACAEA822EC;
+	Fri, 19 Sep 2025 12:42:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0A555E7
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:42:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BEBB240C14
+ by smtp3.osuosl.org (Postfix) with ESMTP id CF5EF61036
  for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:42:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FJYbRcq0T2B4 for <buildroot@buildroot.org>;
- Fri, 19 Sep 2025 12:42:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rb2DbRBFyxXn for <buildroot@buildroot.org>;
+ Fri, 19 Sep 2025 12:42:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E45D4087A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 057866103B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5E45D4087A
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:42:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 057866103B
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:42:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4EDE385E80; Fri, 19 Sep 2025 12:42:35 +0000 (UTC)
+ id 03C9585E81; Fri, 19 Sep 2025 12:42:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 15 Sep 2025 09:40:37 +0200
+Date: Thu, 18 Sep 2025 16:44:52 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 599ce8869357de58a92865caa541b90a94df5994
-X-Git-Newrev: 7be8dd89cee2d5a28a21e2d4a06db9b4e6f41829
+X-Git-Oldrev: 8ae3a147ed28e22a72e27768616f4367d8a92024
+X-Git-Newrev: 70d17547e473f55772cec5f454f2484b6e91ca89
 X-Patchwork-Hint: ignore
-Message-Id: <20250919124235.4EDE385E80@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/avrdude: remove
- 0001 patch
+Message-Id: <20250919124236.03C9585E81@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ package/python-aiohappyeyeballs: bump to version 2.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,100 +66,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7be8dd89cee2d5a28a21e2d4a06db9b4e6f41829
+commit: https://git.buildroot.net/buildroot/commit/?id=70d17547e473f55772cec5f454f2484b6e91ca89
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-This reverts commit dd4299e87a87bffee4491fdd30c9c23dc75fa7cb.
-
-The SWIG implementation is not present on version 7.2 avaiable on
-2025.02.x. It was introduced in version 8.0 of avrdude [1].
-
-[1] https://github.com/avrdudes/avrdude/pull/1714
-
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit f64eeb88540afddaad45996f53a3c3d3ff23d78c)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...eLists.txt-allow-disabling-Python-support.patch | 59 ----------------------
- package/avrdude/avrdude.mk                         |  2 +-
- 2 files changed, 1 insertion(+), 60 deletions(-)
+ package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash | 4 ++--
+ package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/avrdude/0001-CMakeLists.txt-allow-disabling-Python-support.patch b/package/avrdude/0001-CMakeLists.txt-allow-disabling-Python-support.patch
-deleted file mode 100644
-index fc6210c099..0000000000
---- a/package/avrdude/0001-CMakeLists.txt-allow-disabling-Python-support.patch
-+++ /dev/null
-@@ -1,59 +0,0 @@
--From 41ee27cf1d31bbc62425aab286b7e524acc64bff Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Fri, 29 Aug 2025 22:21:50 +0200
--Subject: [PATCH] CMakeLists.txt: allow disabling Python support
--
--In some cases, even if Swig is found and Python3 is found, it may not
--be desirable to build Python support in avrdude, so this commit adds
--an ENABLE_PYTHON_SUPPORT option to be able to explicitly disable using
--Python support (unfortunately CMake doesn't allow passing arguments
--that would prevent it from finding Swig/Python 3 if available).
--
--To preserve existing behavior, this option defaults to enabled (ON).
--
--Upstream: https://github.com/avrdudes/avrdude/pull/2051
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- CMakeLists.txt | 19 +++++++++++--------
-- 1 file changed, 11 insertions(+), 8 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 7f3fce92..94263bab 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -34,6 +34,7 @@ option(USE_EXTERNAL_LIBS "Use external libraries from AVRDUDE GitHub repositorie
-- option(USE_LIBUSBWIN32 "Prefer libusb-win32 over libusb" OFF)
-- option(DEBUG_CMAKE "Enable debugging output for this CMake project" OFF)
-- option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
--+option(ENABLE_PYTHON_SUPPORT "Enable Python support" ON)
-- 
-- if(WIN32)
--     # Prefer static libraries over DLLs on Windows
--@@ -281,14 +282,16 @@ if(HAVE_LINUXGPIO)
-- endif()
-- 
-- # -------------------------------------
---# Find SWIG
---find_package(SWIG 4.0 COMPONENTS python)
---if(SWIG_FOUND)
---  find_package(Python3 COMPONENTS Interpreter Development)
---  if(PYTHON3_FOUND)
---    set(HAVE_SWIG 1)
---  else()
---    message(STATUS "Found SWIG but no Python3 header/library; cannot use SWIG")
--+# Find SWIG/Python3 if needed
--+if(ENABLE_PYTHON_SUPPORT)
--+  find_package(SWIG 4.0 COMPONENTS python)
--+  if(SWIG_FOUND)
--+    find_package(Python3 COMPONENTS Interpreter Development)
--+    if(PYTHON3_FOUND)
--+      set(HAVE_SWIG 1)
--+    else()
--+      message(STATUS "Found SWIG but no Python3 header/library; cannot use SWIG")
--+    endif()
--   endif()
-- endif()
-- 
---- 
--2.50.1
--
-diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
-index 7ffecce041..54d83dec4b 100644
---- a/package/avrdude/avrdude.mk
-+++ b/package/avrdude/avrdude.mk
-@@ -9,7 +9,7 @@ AVRDUDE_SITE = $(call github,avrdudes,avrdude,v$(AVRDUDE_VERSION))
- AVRDUDE_LICENSE = GPL-2.0+
- AVRDUDE_LICENSE_FILES = COPYING
+diff --git a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash
+index 069dad89cf..10d3d5cadc 100644
+--- a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash
++++ b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiohappyeyeballs/json
+-md5  57d956f516c6558674f6248d8ba38321  aiohappyeyeballs-2.4.4.tar.gz
+-sha256  5fdd7d87889c63183afc18ce9271f9b0a7d32c2303e394468dd45d514a757745  aiohappyeyeballs-2.4.4.tar.gz
++md5  2fa845a1ce2f7730045fa763aa9987f8  aiohappyeyeballs-2.6.1.tar.gz
++sha256  c3f9d0113123803ccadfdf3f0faa505bc78e6a72d1cc4806cbd719826e943558  aiohappyeyeballs-2.6.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
+diff --git a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk
+index 9669b04793..8dcc59a77b 100644
+--- a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk
++++ b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
--AVRDUDE_CONF_OPTS = -DHAVE_LINUXGPIO=ON -DENABLE_PYTHON_SUPPORT=NO
-+AVRDUDE_CONF_OPTS = -DHAVE_LINUXGPIO=ON
- AVRDUDE_DEPENDENCIES = elfutils libusb libusb-compat ncurses \
- 	host-flex host-bison
- 
+-PYTHON_AIOHAPPYEYEBALLS_VERSION = 2.4.4
++PYTHON_AIOHAPPYEYEBALLS_VERSION = 2.6.1
+ PYTHON_AIOHAPPYEYEBALLS_SOURCE = aiohappyeyeballs-$(PYTHON_AIOHAPPYEYEBALLS_VERSION).tar.gz
+-PYTHON_AIOHAPPYEYEBALLS_SITE = https://files.pythonhosted.org/packages/7f/55/e4373e888fdacb15563ef6fa9fa8c8252476ea071e96fb46defac9f18bf2
++PYTHON_AIOHAPPYEYEBALLS_SITE = https://files.pythonhosted.org/packages/26/30/f84a107a9c4331c14b2b586036f40965c128aa4fee4dda5d3d51cb14ad54
+ PYTHON_AIOHAPPYEYEBALLS_SETUP_TYPE = poetry
+ PYTHON_AIOHAPPYEYEBALLS_LICENSE = PSF-2.0
+ PYTHON_AIOHAPPYEYEBALLS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
