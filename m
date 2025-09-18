@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7AD7CAC59A
-	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 12:48:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E106CCAC59A
+	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 12:48:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6D8F08233A;
-	Fri, 19 Sep 2025 12:48:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B89388235B;
+	Fri, 19 Sep 2025 12:48:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Sxoedt3ubvaw; Fri, 19 Sep 2025 12:48:16 +0000 (UTC)
+ id KdM_34fxL7gZ; Fri, 19 Sep 2025 12:48:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F42F822D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38F9282343
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F42F822D8;
-	Fri, 19 Sep 2025 12:48:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 16B89273
+	by smtp1.osuosl.org (Postfix) with ESMTP id 38F9282343;
+	Fri, 19 Sep 2025 12:48:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1F574E7
  for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3507581EA6
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B960360D78
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eubLpc2alSM8 for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pWZ91_h--SIB for <buildroot@buildroot.org>;
  Fri, 19 Sep 2025 12:48:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7AF982292
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 057BD61039
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D7AF982292
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 057BD61039
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D66D485F2B; Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
+ id 041A7842A0; Fri, 19 Sep 2025 12:48:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 18 Sep 2025 10:43:33 +0200
+Date: Thu, 18 Sep 2025 11:39:48 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 4ebd192104a698eb4f627f8774e65f6949ea1d2a
-X-Git-Newrev: 66ccfef7c004bab70ac37ca401728f44d0a84ab7
+X-Git-Oldrev: 67a5d87a9030eed06b2106778d26c199eb4e8620
+X-Git-Newrev: 47a77649a7f28573e0d1f3b7aac909a8f7b3df85
 X-Patchwork-Hint: ignore
-Message-Id: <20250919124805.D66D485F2B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/pcre2: security
- bump to version 10.46
+Message-Id: <20250919124806.041A7842A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/policycoreutils:
+ fix build with musl due to getpass()
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,60 +66,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66ccfef7c004bab70ac37ca401728f44d0a84ab7
+commit: https://git.buildroot.net/buildroot/commit/?id=47a77649a7f28573e0d1f3b7aac909a8f7b3df85
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Fixes the following security issue:
+policycoreutils uses getpass(), which with musl is only defined with
+some feature macro defined, such as _GNU_SOURCE. So let's pick-up an
+upstream fix to address this issue.
 
-- CVE-2025-58050: PCRE2: heap-buffer-overflow read in match_ref due to
-  missing boundary restoration in SCS
+There are no autobuilder failures, the issue was most likely hidden by
+other failures with musl affecting the SELinux stack.
 
-Compared to 10.45, this release has only a minimal code change to prevent a
-read-past-the-end memory error, of arbitrary length.  An attacker-controlled
-regex pattern is required, and it cannot be triggered by providing crafted
-subject (match) text.  The (*ACCEPT) and (*scs:) pattern features must be
-used together.
-
-Release 10.44 and earlier are not affected.
-
-https://github.com/PCRE2Project/pcre2/security/advisories/GHSA-c2gv-xgf5-5cc2
-https://www.cve.org/CVERecord?id=CVE-2025-58050
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Julien: add link to CVE in commit log]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 9fd06f212a9488484b93be511b7c6fa42b2f8adb)
+(cherry picked from commit fc472cc8c75406ae10d2cbb3d0a8e10889f692a6)
+[thomas: fix patch]
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/pcre2/pcre2.hash | 4 ++--
- package/pcre2/pcre2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...licycoreutils-run_init-define-_GNU_SOURCE.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/package/pcre2/pcre2.hash b/package/pcre2/pcre2.hash
-index 35b87ad854..bd2422d991 100644
---- a/package/pcre2/pcre2.hash
-+++ b/package/pcre2/pcre2.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature:
--# https://github.com/PhilipHazel/pcre2/releases/download/pcre2-10.45/pcre2-10.45.tar.bz2.sig
--sha256  21547f3516120c75597e5b30a992e27a592a31950b5140e7b8bfde3f192033c4  pcre2-10.45.tar.bz2
-+# https://github.com/PhilipHazel/pcre2/releases/download/pcre2-10.46/pcre2-10.46.tar.bz2.sig
-+sha256  15fbc5aba6beee0b17aecb04602ae39432393aba1ebd8e39b7cabf7db883299f  pcre2-10.46.tar.bz2
- # Locally computed
- sha256  9cf7ac6976099a1d856826d3ef1b093bd6b84489dc6100628ac79e740cf9885a  LICENCE.md
-diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
-index 6d2b729dfe..1d0a3b845f 100644
---- a/package/pcre2/pcre2.mk
-+++ b/package/pcre2/pcre2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PCRE2_VERSION = 10.45
-+PCRE2_VERSION = 10.46
- PCRE2_SITE = https://github.com/PCRE2Project/pcre2/releases/download/pcre2-$(PCRE2_VERSION)
- PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
- PCRE2_LICENSE = BSD-3-Clause
+diff --git a/package/policycoreutils/0003-policycoreutils-run_init-define-_GNU_SOURCE.patch b/package/policycoreutils/0003-policycoreutils-run_init-define-_GNU_SOURCE.patch
+new file mode 100644
+index 0000000000..ca26506b74
+--- /dev/null
++++ b/package/policycoreutils/0003-policycoreutils-run_init-define-_GNU_SOURCE.patch
+@@ -0,0 +1,39 @@
++From f338b2e7d2bbf70cb811eb1331162e33deb4ce6c Mon Sep 17 00:00:00 2001
++From: Robert Marko <robimarko@gmail.com>
++Date: Thu, 1 May 2025 21:59:13 +0200
++Subject: [PATCH] policycoreutils: run_init: define _GNU_SOURCE
++
++Trying to compile run_init with musl will fail with:
++run_init.c: In function 'authenticate_via_shadow_passwd':
++run_init.c:206:40: error: implicit declaration of function 'getpass' [-Wimplicit-function-declaration]
++  206 |         if (!(unencrypted_password_s = getpass(PASSWORD_PROMPT))) {
++
++This is because getpass in musl is guarded only for _GNU_SOURCE, so
++define _GNU_SOURCE for run_init.
++
++Signed-off-by: Robert Marko <robimarko@gmail.com>
++Acked-by: James Carter <jwcart2@gmail.com>
++Upstream: 50bafc3d9c08cf26c3b0f61e29157a0ea8efbf4a
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++[thomas: fix filename]
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ run_init/run_init.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/run_init/run_init.c b/run_init/run_init.c
++index ce499781..4531a8ba 100644
++--- a/run_init/run_init.c
+++++ b/run_init/run_init.c
++@@ -37,6 +37,8 @@
++  *
++  *************************************************************************/
++ 
+++#define _GNU_SOURCE
+++
++ #include <stdio.h>
++ #include <stdlib.h>		/* for malloc(), realloc(), free() */
++ #include <pwd.h>		/* for getpwuid() */
++-- 
++2.51.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
