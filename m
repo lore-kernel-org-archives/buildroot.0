@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2B79CAC592
-	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 12:48:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35EE3CAC59A
+	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 12:54:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B898D8230E;
-	Fri, 19 Sep 2025 12:48:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D3A5E60738;
+	Fri, 19 Sep 2025 12:54:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pWUUZtm-Hu8i; Fri, 19 Sep 2025 12:48:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M5x9015tIbGi; Fri, 19 Sep 2025 12:54:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A81B824EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D12C60D7A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9A81B824EE;
-	Fri, 19 Sep 2025 12:48:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 11A43E7
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D12C60D7A;
+	Fri, 19 Sep 2025 12:54:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DBFAFE7
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:54:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C1A94822A6
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C010C60F83
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:54:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5HAG55GpMW52 for <buildroot@buildroot.org>;
- Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tWdcAEYEGQcU for <buildroot@buildroot.org>;
+ Fri, 19 Sep 2025 12:54:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9796C80C7A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1350260738
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9796C80C7A
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1350260738
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:54:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 88D9285F29; Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
+ id 039E985FD8; Fri, 19 Sep 2025 12:54:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 18 Sep 2025 10:25:09 +0200
-X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: c96ed68430cbe526f2a38ace6f7be42e8cd4532c
-X-Git-Newrev: 22ad4074c7ca7ff170b065ad0ae33c7e98d33d47
+Date: Thu, 18 Sep 2025 10:19:03 +0200
+X-Git-Refname: refs/heads/2025.08.x
+X-Git-Oldrev: 88c3dac5dd4411a7cd484749a234d4df1ba68f18
+X-Git-Newrev: 7129e735be893a7f385d16515c4b6411afad8056
 X-Patchwork-Hint: ignore
-Message-Id: <20250919124805.88D9285F29@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x]
- support/testing/tests/package/test_docker_compose.py: update kernel & VM
- CPU
+Message-Id: <20250919125411.039E985FD8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] boot/ti-k3-boot-firmware:
+ switch to github mirror
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -67,165 +66,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22ad4074c7ca7ff170b065ad0ae33c7e98d33d47
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7129e735be893a7f385d16515c4b6411afad8056
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-Since commit 947dbc92a20c5acea7882166cae7893e6ea661e1 the Bootlin
-stable toolchain uses headers 5.4, which can lead to build outputs
-incompatible with older kernels. Update to the latest 5.4 kernel to
-avoid this. The kernel config is updated according to the requirements
-of current Docker, runc, and crun.
+The git.ti.com cgit server continues to be plagued with reliability
+issues which are reportedly from heavy bot traffic. To combat this the
+system administrators have removed the archived downloads feature from
+this server.
 
-Additionally switch the CPU of the test VM to Haswell, to avoid
-dockerd failing to start with a "This program can only be run on AMD64
-processors with v3 microarchitecture support" error.
+Switch to TI's Github mirror so new downloads continue to be possible.
 
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Signed-off-by: Bryan Brattlof <bb@ti.com>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
-(cherry picked from commit efe00fb3fb1c6ab34794a2a19cc71caef1afdcd9)
+(cherry picked from commit ebf0131e3e832e125c7fb1d9cd333e558eca663d)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/testing/conf/docker-compose-kernel.config  | 57 +++++++++++++++-------
- .../testing/tests/package/test_docker_compose.py   |  4 +-
- 2 files changed, 41 insertions(+), 20 deletions(-)
+ boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash | 2 +-
+ boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/support/testing/conf/docker-compose-kernel.config b/support/testing/conf/docker-compose-kernel.config
-index 4d30a578ec..fd28da7a4a 100644
---- a/support/testing/conf/docker-compose-kernel.config
-+++ b/support/testing/conf/docker-compose-kernel.config
-@@ -1,10 +1,22 @@
- # CONFIG_SWAP is not set
- CONFIG_SYSVIPC=y
-+CONFIG_POSIX_MQUEUE=y
- # CONFIG_CROSS_MEMORY_ATTACH is not set
- CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_CGROUPS=y
-+CONFIG_MEMCG=y
-+CONFIG_BLK_CGROUP=y
-+CONFIG_CGROUP_SCHED=y
-+CONFIG_CGROUP_PIDS=y
-+CONFIG_CGROUP_FREEZER=y
-+CONFIG_CPUSETS=y
-+CONFIG_CGROUP_DEVICE=y
-+CONFIG_CGROUP_CPUACCT=y
-+CONFIG_CGROUP_BPF=y
-+CONFIG_BPF_SYSCALL=y
- # CONFIG_COMPAT_BRK is not set
-+CONFIG_SMP=y
- # CONFIG_X86_EXTENDED_PLATFORM is not set
--CONFIG_IOSF_MBI=y
- CONFIG_MCORE2=y
- # CONFIG_X86_MCE is not set
- # CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS is not set
-@@ -12,9 +24,8 @@ CONFIG_LEGACY_VSYSCALL_NONE=y
- # CONFIG_SUSPEND is not set
- # CONFIG_ACPI is not set
- CONFIG_CPU_IDLE=y
--CONFIG_PCI_MSI=y
- # CONFIG_VIRTUALIZATION is not set
--# CONFIG_IOSCHED_CFQ is not set
-+CONFIG_BLK_DEV_THROTTLING=y
- # CONFIG_MQ_IOSCHED_DEADLINE is not set
- # CONFIG_MQ_IOSCHED_KYBER is not set
- # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
-@@ -25,23 +36,36 @@ CONFIG_UNIX=y
- CONFIG_INET=y
- CONFIG_IP_MULTICAST=y
- CONFIG_IP_ADVANCED_ROUTER=y
--# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
--# CONFIG_INET_XFRM_MODE_TUNNEL is not set
--# CONFIG_INET_XFRM_MODE_BEET is not set
--# CONFIG_IPV6 is not set
--# CONFIG_NF_CONNTRACK_PROCFS is not set
--# CONFIG_NF_CT_PROTO_DCCP is not set
--# CONFIG_NF_CT_PROTO_SCTP is not set
--# CONFIG_NF_CT_PROTO_UDPLITE is not set
-+# CONFIG_IPV6_SIT is not set
-+CONFIG_NETFILTER=y
-+CONFIG_NF_CONNTRACK=y
-+CONFIG_NETFILTER_XT_MARK=y
-+CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=y
-+CONFIG_NETFILTER_XT_MATCH_CONNTRACK=y
-+CONFIG_NETFILTER_XT_MATCH_IPVS=y
- CONFIG_IP_VS=y
- CONFIG_IP_VS_RR=y
- CONFIG_IP_VS_NFCT=y
--# CONFIG_BRIDGE_IGMP_SNOOPING is not set
-+CONFIG_IP_NF_IPTABLES=y
-+CONFIG_IP_NF_FILTER=y
-+CONFIG_IP_NF_NAT=y
-+CONFIG_IP_NF_TARGET_MASQUERADE=y
-+CONFIG_IP_NF_MANGLE=y
-+CONFIG_IP_NF_RAW=y
-+CONFIG_IP6_NF_IPTABLES=y
-+CONFIG_IP6_NF_FILTER=y
-+CONFIG_IP6_NF_MANGLE=y
-+CONFIG_IP6_NF_RAW=y
-+CONFIG_IP6_NF_NAT=y
-+CONFIG_IP6_NF_TARGET_MASQUERADE=y
-+CONFIG_BRIDGE=y
- # CONFIG_WIRELESS is not set
-+CONFIG_PCI=y
- CONFIG_DEVTMPFS=y
- CONFIG_DEVTMPFS_MOUNT=y
- CONFIG_VIRTIO_BLK=y
- CONFIG_NETDEVICES=y
-+CONFIG_VETH=y
- CONFIG_VIRTIO_NET=y
- # CONFIG_ETHERNET is not set
- # CONFIG_WLAN is not set
-@@ -52,26 +76,23 @@ CONFIG_VT_HW_CONSOLE_BINDING=y
- # CONFIG_DEVMEM is not set
- CONFIG_SERIAL_8250=y
- CONFIG_SERIAL_8250_CONSOLE=y
--# CONFIG_SERIAL_8250_LPSS is not set
--# CONFIG_SERIAL_8250_MID is not set
- # CONFIG_HW_RANDOM_INTEL is not set
- # CONFIG_HW_RANDOM_AMD is not set
- # CONFIG_HW_RANDOM_VIA is not set
- CONFIG_HW_RANDOM_VIRTIO=y
--# CONFIG_DEVPORT is not set
- # CONFIG_HWMON is not set
- # CONFIG_USB_SUPPORT is not set
- CONFIG_RTC_CLASS=y
- CONFIG_VIRTIO_PCI=y
--# CONFIG_VIRTIO_PCI_LEGACY is not set
-+CONFIG_VIRTIO_MMIO=y
- # CONFIG_X86_PLATFORM_DEVICES is not set
- # CONFIG_IOMMU_SUPPORT is not set
- CONFIG_EXT4_FS=y
-+CONFIG_OVERLAY_FS=y
- CONFIG_TMPFS=y
- # CONFIG_MISC_FILESYSTEMS is not set
- # CONFIG_NETWORK_FILESYSTEMS is not set
-+CONFIG_KEYS=y
- CONFIG_SECURITYFS=y
--# CONFIG_CRYPTO_ECHAINIV is not set
- # CONFIG_CRYPTO_HW is not set
--# CONFIG_UNUSED_SYMBOLS is not set
- CONFIG_UNWINDER_FRAME_POINTER=y
-diff --git a/support/testing/tests/package/test_docker_compose.py b/support/testing/tests/package/test_docker_compose.py
-index 6a8f6f4010..a96c9d1481 100644
---- a/support/testing/tests/package/test_docker_compose.py
-+++ b/support/testing/tests/package/test_docker_compose.py
-@@ -17,7 +17,7 @@ class BaseTestDockerCompose(infra.basetest.BRTest):
-         BR2_ROOTFS_POST_SCRIPT_ARGS="{}"
-         BR2_LINUX_KERNEL=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.262"
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.296"
-         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="{}"
-         BR2_PACKAGE_PYTHON3=y
-@@ -59,7 +59,7 @@ class BaseTestDockerCompose(infra.basetest.BRTest):
-         self.emulator.boot(arch="x86_64",
-                            kernel=kernel,
-                            kernel_cmdline=["root=/dev/vda", "console=ttyS0"],
--                           options=["-cpu", "Nehalem",
-+                           options=["-cpu", "Haswell",
-                                     "-m", "512M",
-                                     "-device", "virtio-rng-pci",
-                                     "-drive", "file={},format=raw,if=virtio".format(rootfs),
+diff --git a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash
+index 571bbf1219..2396948381 100644
+--- a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash
++++ b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256  ab20ffbe7bba7e94be246b3417d33a914b3f07c16c47ef5a7f7602349a666a61  LICENSE.ti
+-sha256  f9e09b84e206d605a9fb5691a325dcd4a7d6a3e6bf70a69cbc169d1a5c617804  ti-linux-firmware-11.00.11.tar.xz
++sha256  e98ae3350964100b6137d32d4874c16229a97b1cc7f8f4f23f8da59a386520c8  ti-k3-boot-firmware-11.00.11.tar.gz
+diff --git a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
+index 117c0a9a5a..25956be68b 100644
+--- a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
++++ b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
+@@ -5,8 +5,7 @@
+ ################################################################################
+ 
+ TI_K3_BOOT_FIRMWARE_VERSION = 11.00.11
+-TI_K3_BOOT_FIRMWARE_SITE = https://git.ti.com/cgit/processor-firmware/ti-linux-firmware/snapshot
+-TI_K3_BOOT_FIRMWARE_SOURCE = ti-linux-firmware-$(TI_K3_BOOT_FIRMWARE_VERSION).tar.xz
++TI_K3_BOOT_FIRMWARE_SITE = $(call github,TexasInstruments,ti-linux-firmware,$(TI_K3_BOOT_FIRMWARE_VERSION))
+ TI_K3_BOOT_FIRMWARE_INSTALL_IMAGES = YES
+ TI_K3_BOOT_FIRMWARE_LICENSE = TI Proprietary
+ TI_K3_BOOT_FIRMWARE_LICENSE_FILES = LICENSE.ti
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
