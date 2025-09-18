@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 347C9CAC5AB
-	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 12:48:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00E2BCAC592
+	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 12:48:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F2F978258A;
-	Fri, 19 Sep 2025 12:48:30 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6YLDZzHivlOd; Fri, 19 Sep 2025 12:48:30 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2C558266C
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E2C558266C;
+	by smtp3.osuosl.org (Postfix) with ESMTP id CCDB161098;
 	Fri, 19 Sep 2025 12:48:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2C737273
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CA3E060F83
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lOxagoB0JLPj for <buildroot@buildroot.org>;
- Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
+ id C3nxbvjAxRsD; Fri, 19 Sep 2025 12:48:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C46C461068
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id C46C461068;
+	Fri, 19 Sep 2025 12:48:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F96C273
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9AB7D822C0
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:07 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RIXUWq4S2RKV for <buildroot@buildroot.org>;
+ Fri, 19 Sep 2025 12:48:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9574260ACB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F163B822A6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9574260ACB
+ by smtp1.osuosl.org (Postfix) with ESMTP id F163B822A6
  for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 92613842A0; Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
+ id F029185F2B; Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 18 Sep 2025 10:30:54 +0200
+Date: Thu, 18 Sep 2025 10:49:08 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 22ad4074c7ca7ff170b065ad0ae33c7e98d33d47
-X-Git-Newrev: f4ab5609515238f6105f354762f430d289c41082
+X-Git-Oldrev: 075b51ec40b15ece8f52b52835bcff3365da2b4a
+X-Git-Newrev: 67a5d87a9030eed06b2106778d26c199eb4e8620
 X-Patchwork-Hint: ignore
-Message-Id: <20250919124805.92613842A0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/docker-engine:
- depend on cgroup v2 and kernel >=5.2 without systemd
+Message-Id: <20250919124805.F029185F2B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/libsemanage: fix
+ build issue due to basename()
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,113 +66,211 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4ab5609515238f6105f354762f430d289c41082
+commit: https://git.buildroot.net/buildroot/commit/?id=67a5d87a9030eed06b2106778d26c199eb4e8620
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Without systemd package/docker-engine requires another way to mount
-/sys/fs/cgroup, so far provided by BR2_PACKAGE_CGROUPFS_MOUNT for
-cgroup v1. Replace this with BR2_PACKAGE_CGROUPFS_V2_MOUNT for cgroup
-v2 support. 5.2 is the minimum recommended version for cgroup v2
-support according to the Docker documentation: "v4.15 or later (v5.2
-or later is recommended)" [1].
+The build of libsemanage on musl configurations fails with:
 
-Depending on the selected container runtime users may need to adjust
-kernel configurations to enable options required by that runtime with
-cgroup v2 (e.g. CONFIG_CGROUP_BPF for runc).
+direct_api.c: In function 'semanage_direct_install_file':
+direct_api.c:1746:20: error: implicit declaration of function 'basename' [-Wimplicit-function-declaration]
+ 1746 |         filename = basename(path);
+      |                    ^~~~~~~~
 
-Propagate dependencies accordingly: The Docker btrfs filesystem driver
-does not need a separate and lower minimum headers version,
-package/mender-update-modules needs to apply the new "depends on".
+This fails to build even with a GCC 14.x toolchain, even with
+libsemanage 3.7, which is the version we have in our LTS branch.
 
-[1] https://docs.docker.com/engine/containers/runmetrics/#running-docker-on-cgroup-v2
+Let's backport an upstream patch fixing this issue.
 
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-(cherry picked from commit b07b0bb4560ce49f1c4e0e54a21c28435f17bf17)
+Fixes:
+
+  https://autobuild.buildroot.net/results/913852e35c925888ced37e15be3731b9d3963019/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 79031b79c273c9346487592ee1638bdd48ba7749)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/docker-engine/Config.in         | 13 +++++--------
- package/mender-update-modules/Config.in |  7 ++++---
- 2 files changed, 9 insertions(+), 11 deletions(-)
+ ...-create-semanage_basename-to-ensure-posix.patch | 172 +++++++++++++++++++++
+ 1 file changed, 172 insertions(+)
 
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 6338eeeef1..ae07b5e19d 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -3,11 +3,12 @@ config BR2_PACKAGE_DOCKER_ENGINE
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # containerd -> runc
- 	depends on BR2_USE_MMU # containerd
-+	depends on !BR2_PACKAGE_CGROUPFS_MOUNT
- 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # libseccomp
--	select BR2_PACKAGE_CGROUPFS_MOUNT if !BR2_PACKAGE_SYSTEMD # runtime dependency
-+	select BR2_PACKAGE_CGROUPFS_V2_MOUNT if !BR2_PACKAGE_SYSTEMD # runtime dependency
- 	select BR2_PACKAGE_CONTAINERD # runtime dependency
- 	select BR2_PACKAGE_HOST_GO
- 	select BR2_PACKAGE_IPTABLES # runtime dependency
-@@ -22,13 +23,9 @@ if BR2_PACKAGE_DOCKER_ENGINE
- 
- config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
- 	bool "btrfs filesystem driver"
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
- 	help
- 	  Build the btrfs filesystem driver for Docker.
- 
--comment "brtfs filesystem driver needs headers >= 4.12"
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
--
- config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER
- 	bool "devicemapper filesystem driver"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
-@@ -83,11 +80,11 @@ config BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_NAME
- 
- endif
- 
--comment "docker-engine needs a glibc or musl toolchain w/ threads, headers >= 3.17"
-+comment "docker-engine needs a glibc or musl toolchain w/ threads, headers >= 5.2"
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_TOOLCHAIN_USES_UCLIBC || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
- 	depends on BR2_USE_MMU
-diff --git a/package/mender-update-modules/Config.in b/package/mender-update-modules/Config.in
-index 76158ab6c7..e71309c3d6 100644
---- a/package/mender-update-modules/Config.in
-+++ b/package/mender-update-modules/Config.in
-@@ -79,8 +79,9 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_DOCKER
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # docker-engine, docker-cli
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # containerd -> runc
- 	depends on BR2_USE_MMU # containerd
-+	depends on !BR2_PACKAGE_CGROUPFS_MOUNT # docker-engine
- 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # libseccom
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2 # docker-engine
- 	select BR2_PACKAGE_DOCKER_ENGINE
- 	select BR2_PACKAGE_DOCKER_CLI
- 	select BR2_PACKAGE_JQ # runtime
-@@ -97,13 +98,13 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_DOCKER
- 
- 	  https://github.com/mendersoftware/mender-update-modules/tree/master/docker
- 
--comment "docker support needs a glibc or musl toolchain w/ threads, headers >= 3.17"
-+comment "docker support needs a glibc or musl toolchain w/ threads, headers >= 5.2"
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_TOOLCHAIN_USES_UCLIBC || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
- 	depends on BR2_USE_MMU
- 
- config BR2_PACKAGE_MENDER_UPDATE_MODULES_IPK
+diff --git a/package/libsemanage/0001-libsemanage-create-semanage_basename-to-ensure-posix.patch b/package/libsemanage/0001-libsemanage-create-semanage_basename-to-ensure-posix.patch
+new file mode 100644
+index 0000000000..10a81241a1
+--- /dev/null
++++ b/package/libsemanage/0001-libsemanage-create-semanage_basename-to-ensure-posix.patch
+@@ -0,0 +1,172 @@
++From 795f8381fd64abf692b26d01369561fc68be230c Mon Sep 17 00:00:00 2001
++From: Rahul Sandhu <nvraxn@gmail.com>
++Date: Fri, 21 Feb 2025 09:39:10 +0000
++Subject: [PATCH] libsemanage: create semanage_basename to ensure posix
++ compliance
++
++Passing a const char * to basename(3) is a glibc-specific extension, so
++create our own basename implementation. As it's a trivial 2 LOC, always
++use our implementation of basename even if glibc is available to avoid
++the complications of attaining the non-posix glibc implementation of
++basename(3) as _GNU_SOURCE needs to be defined, but libgen.h also needs
++to have not been included.
++
++Also fix a missing check for selinux_policy_root(3). From the man page:
++On failure, selinux_policy_root returns NULL.
++
++As the glibc basename(3) (unlike posix basename(3)) does not support
++having a nullptr passed to it, only pass the policy_root to basename(3)
++if it is non-null.
++
++Signed-off-by: Rahul Sandhu <nvraxn@gmail.com>
++Acked-by: James Carter <jwcart2@gmail.com>
++Upstream: a339594da6f027aed5d66ec6798a3d732df235e4
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/conf-parse.y       | 13 ++++++++++---
++ src/direct_api.c       |  1 +
++ src/utilities.c        |  9 +++++++++
++ src/utilities.h        | 13 +++++++++++++
++ tests/test_utilities.c | 26 ++++++++++++++++++++++++++
++ 5 files changed, 59 insertions(+), 3 deletions(-)
++
++diff --git a/src/conf-parse.y b/src/conf-parse.y
++index 6cb8a598..d3ca5f1f 100644
++--- a/src/conf-parse.y
+++++ b/src/conf-parse.y
++@@ -21,6 +21,7 @@
++ %{
++ 
++ #include "semanage_conf.h"
+++#include "utilities.h"
++ 
++ #include <sepol/policydb.h>
++ #include <selinux/selinux.h>
++@@ -382,7 +383,10 @@ external_opt:   PROG_PATH '=' ARG  { PASSIGN(new_external->path, $3); }
++ static int semanage_conf_init(semanage_conf_t * conf)
++ {
++ 	conf->store_type = SEMANAGE_CON_DIRECT;
++-	conf->store_path = strdup(basename(selinux_policy_root()));
+++	const char *policy_root = selinux_policy_root();
+++	if (policy_root != NULL) {
+++		conf->store_path = strdup(semanage_basename(policy_root));
+++	}
++ 	conf->ignoredirs = NULL;
++ 	conf->store_root_path = strdup("/var/lib/selinux");
++ 	conf->compiler_directory_path = strdup("/usr/libexec/selinux/hll");
++@@ -544,8 +548,11 @@ static int parse_module_store(char *arg)
++ 	free(current_conf->store_path);
++ 	if (strcmp(arg, "direct") == 0) {
++ 		current_conf->store_type = SEMANAGE_CON_DIRECT;
++-		current_conf->store_path =
++-		    strdup(basename(selinux_policy_root()));
+++		const char *policy_root = selinux_policy_root();
+++		if (policy_root != NULL) {
+++			current_conf->store_path =
+++			    strdup(semanage_basename(policy_root));
+++		}
++ 		current_conf->server_port = -1;
++ 	} else if (*arg == '/') {
++ 		current_conf->store_type = SEMANAGE_CON_POLSERV_LOCAL;
++diff --git a/src/direct_api.c b/src/direct_api.c
++index 99cba7f7..ce12ccaf 100644
++--- a/src/direct_api.c
+++++ b/src/direct_api.c
++@@ -26,6 +26,7 @@
++ 
++ #include <assert.h>
++ #include <fcntl.h>
+++#include <libgen.h>
++ #include <stdio.h>
++ #include <stdio_ext.h>
++ #include <stdlib.h>
++diff --git a/src/utilities.c b/src/utilities.c
++index 70b5b677..004ffb62 100644
++--- a/src/utilities.c
+++++ b/src/utilities.c
++@@ -349,3 +349,12 @@ int write_full(int fd, const void *buf, size_t len)
++ 
++ 	return 0;
++ }
+++
+++#ifdef __GNUC__
+++__attribute__((nonnull))
+++#endif
+++char *semanage_basename(const char *filename)
+++{
+++	char *p = strrchr(filename, '/');
+++	return p ? p + 1 : (char *)filename;
+++}
++diff --git a/src/utilities.h b/src/utilities.h
++index c2d484a7..7481077a 100644
++--- a/src/utilities.h
+++++ b/src/utilities.h
++@@ -156,4 +156,17 @@ semanage_list_t *semanage_slurp_file_filter(FILE * file,
++ 
++ int write_full(int fd, const void *buf, size_t len) WARN_UNUSED;
++ 
+++/**
+++ * Portable implementation of the glibc version of basename(3).
+++ *
+++ * @param filename  path to find basename of
+++ *
+++ * @return          basename of filename
+++ */
+++
+++#ifdef __GNUC__
+++__attribute__((nonnull))
+++#endif
+++char *semanage_basename(const char *filename);
+++
++ #endif
++diff --git a/tests/test_utilities.c b/tests/test_utilities.c
++index bbd5af30..70a76fe7 100644
++--- a/tests/test_utilities.c
+++++ b/tests/test_utilities.c
++@@ -46,6 +46,7 @@ static void test_semanage_rtrim(void);
++ static void test_semanage_str_replace(void);
++ static void test_semanage_findval(void);
++ static void test_slurp_file_filter(void);
+++static void test_semanage_basename(void);
++ 
++ static char fname[] = {
++ 	'T', 'E', 'S', 'T', '_', 'T', 'E', 'M', 'P', '_', 'X', 'X', 'X', 'X',
++@@ -117,6 +118,10 @@ int semanage_utilities_add_tests(CU_pSuite suite)
++ 				test_slurp_file_filter)) {
++ 		goto err;
++ 	}
+++	if (NULL == CU_add_test(suite, "semanage_basename",
+++				test_semanage_basename)) {
+++		goto err;
+++	}
++ 	return 0;
++       err:
++ 	CU_cleanup_registry();
++@@ -346,3 +351,24 @@ static void test_slurp_file_filter(void)
++ 
++ 	semanage_list_destroy(&data);
++ }
+++
+++static void test_semanage_basename(void)
+++{
+++	char *basename1 = semanage_basename("/foo/bar");
+++	CU_ASSERT_STRING_EQUAL(basename1, "bar");
+++
+++	char *basename2 = semanage_basename("/foo/bar/");
+++	CU_ASSERT_STRING_EQUAL(basename2, "");
+++
+++	char *basename3 = semanage_basename("/foo.bar");
+++	CU_ASSERT_STRING_EQUAL(basename3, "foo.bar");
+++
+++	char *basename5 = semanage_basename(".");
+++	CU_ASSERT_STRING_EQUAL(basename5, ".");
+++
+++	char *basename6 = semanage_basename("");
+++	CU_ASSERT_STRING_EQUAL(basename6, "");
+++
+++	char *basename7 = semanage_basename("/");
+++	CU_ASSERT_STRING_EQUAL(basename7, "");
+++}
++-- 
++2.51.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
