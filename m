@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3359ACAC592
-	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 12:48:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72DF9CAC59A
+	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 12:48:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D749282347;
-	Fri, 19 Sep 2025 12:48:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4441F82525;
+	Fri, 19 Sep 2025 12:48:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TOibB7_-g8aq; Fri, 19 Sep 2025 12:48:22 +0000 (UTC)
+ id mIFgiq1Ur6i8; Fri, 19 Sep 2025 12:48:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A79F682342
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A584B824E2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A79F682342;
-	Fri, 19 Sep 2025 12:48:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4402C273
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A584B824E2;
+	Fri, 19 Sep 2025 12:48:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1B3001290
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ADC5780D84
+ by smtp4.osuosl.org (Postfix) with ESMTP id E9E5540C14
  for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cx44lzF-qmcr for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mt3RiCO-0oRw for <buildroot@buildroot.org>;
  Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDDC881EA6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C05640A7A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BDDC881EA6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7C05640A7A
  for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BC8CD85F2D; Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
+ id 7868E85F2B; Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 18 Sep 2025 10:39:51 +0200
+Date: Thu, 18 Sep 2025 10:20:39 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: fe75232ca30c86d743c8327144299c1d15600f8d
-X-Git-Newrev: d8a72d9181e3b6bf009105912c9db3279ebab20f
+X-Git-Oldrev: 7d0b96a347eb1cec75debb9bc9499b082c835601
+X-Git-Newrev: fc61109e594de95f21a37a8a1fad88f4aca25eab
 X-Patchwork-Hint: ignore
-Message-Id: <20250919124805.BC8CD85F2D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/libcurl: security
- bump version to 8.16.0
+Message-Id: <20250919124805.7868E85F2B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/php-lua: fix
+ build with PHP8/GCC14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,55 +61,168 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8468908018982393078=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8a72d9181e3b6bf009105912c9db3279ebab20f
+--===============8468908018982393078==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=fc61109e594de95f21a37a8a1fad88f4aca25eab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Changelog: https://curl.se/ch/8.16.0.html
+On both Buildroot 2025.02.x and master branch, php-lua build fails on
+the following error:
 
-Fixed CVEs:
-CVE-2025-9086: https://curl.se/docs/CVE-2025-9086.html
-CVE-2025-10148: https://curl.se/docs/CVE-2025-10148.html
+lua.c:862:44: error: assignment to 'zend_object_write_property_t' {aka
+'struct _zval_struct * (*)(struct _zend_object *, struct _zend_string *,
+struct _zval_struct *, void **)'} from incompatible pointer type 'void
+(*)(zval *, zval *, zval *, void **)' {aka 'void (*)(struct _zval_struct
+*, struct _zval_struct *, struct _zval_struct *, void **)'}
+[-Wincompatible-pointer-types]
+  862 |         lua_object_handlers.write_property =
+php_lua_write_property;
+      |                                            ^
+lua.c:863:44: error: assignment to 'zend_object_read_property_t' {aka
+'struct _zval_struct * (*)(struct _zend_object *, struct _zend_string *,
+int,  void **, struct _zval_struct *)'} from incompatible pointer type
+'zval * (*)(zval *, zval *, int,  void **, zval *)' {aka 'struct
+_zval_struct * (*)(struct _zval_struct *, struct _zval_struct *, int,
+void **, struct _zval_struct *)'} [-Wincompatible-pointer-types]
+  863 |         lua_object_handlers.read_property  =
+php_lua_read_property;
+      |                                            ^
+make[2]: *** [Makefile:214: lua.lo] Error 1
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit fb5fb06ee5a886df5036c5c5e6c4536f2bc8e1c1)
+The error can be reproduced with the following minimal defconfig:
+
+BR2_arm=y
+BR2_cortex_a9=y
+BR2_ARM_ENABLE_NEON=y
+BR2_ARM_ENABLE_VFP=y
+BR2_ARM_FPU_NEON=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_PACKAGE_LUA=y
+BR2_PACKAGE_PHP=y
+BR2_PACKAGE_PHP_LUA=y
+
+This build failure is the result of two events/conditions:
+- the update to PHP8 has changed the prototype for
+  zend_object_read_property_t (see [1]). But at this time, php-lua just
+  generated a new warning (-Wincompatible-pointer-types)
+- using bootlin bleeding-edge toolchain brings in GCC14, which now turns
+  this warning into a systematic error (see [2])
+
+This issue is still present on the upstream repository, but it has been
+fixed on one of its forks. Bring the relevant patch from the fork to
+allow building php-lua.
+
+[1] https://github.com/php/php-src/commit/91ef4124e56
+[2] https://gcc.gnu.org/gcc-14/porting_to.html#incompatible-pointer-types
+
+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+[Romain: update Upstream link]
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+(cherry picked from commit b4d8147a9532cbe2abf25d69f58e0c73b82136fb)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...-write-properly-read-property-was-changed.patch | 77 ++++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 2e36917382..4cc4da4f26 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.se/download/curl-8.15.0.tar.xz.asc
-+# https://curl.se/download/curl-8.16.0.tar.xz.asc
- # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256  6cd0a8a5b126ddfda61c94dc2c3fc53481ba7a35461cf7c5ab66aa9d6775b609  curl-8.15.0.tar.xz
-+sha256  40c8cddbcb6cc6251c03dea423a472a6cea4037be654ba5cf5dec6eb2d22ff1d  curl-8.16.0.tar.xz
- sha256  e18f1989333b70044b2adfb7dc2f905d0119dbdcac3bc9f4bc9d540e3a29de5b  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 1cfdda27d2..0aa88044bd 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 8.15.0
-+LIBCURL_VERSION = 8.16.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+diff --git a/package/php-lua/0003-php8-Signature-of-write-properly-read-property-was-changed.patch b/package/php-lua/0003-php8-Signature-of-write-properly-read-property-was-changed.patch
+new file mode 100644
+index 0000000000..82a6bbd0b2
+--- /dev/null
++++ b/package/php-lua/0003-php8-Signature-of-write-properly-read-property-was-changed.patch
+@@ -0,0 +1,77 @@
++From de1068d634519abf2461dac9427b5ff24b6603af Mon Sep 17 00:00:00 2001
++From: Mikhail Galanin <mikhail.galanin@team.bumble.com>
++Date: Tue, 24 Aug 2021 08:28:47 +0100
++Subject: [PATCH] php8: Signature of write_property/read_property was changed
++ in https://github.com/php/php-src/commit/91ef4124e56
++
++Upstream: upstream dead, taken from fork at https://github.com/badoo/php-lua/pull/8
++Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
++---
++ lua.c | 28 ++++++++++++++--------------
++ 1 file changed, 14 insertions(+), 14 deletions(-)
++
++diff --git a/lua.c b/lua.c
++index edc2868..32c1471 100755
++--- a/lua.c
+++++ b/lua.c
++@@ -229,46 +229,46 @@ zend_object *php_lua_create_object(zend_class_entry *ce)
++ 
++ /** {{{ static zval * php_lua_read_property(zval *object, zval *member, int type)
++ */
++-zval *php_lua_read_property(zval *object, zval *member, int type, void **cache_slot, zval *rv){
++-	lua_State *L = (Z_LUAVAL_P(object))->L;
++-	zend_string *str_member;
+++zval *php_lua_read_property(zend_object *object, zend_string *member, int type, void **cache_slot, zval *rv){
+++	lua_State *L = php_lua_obj_from_obj(object)->L;
++ 
++ 	if (type != BP_VAR_R) {
++ 		ZVAL_NULL(rv);
++ 		return rv;
++ 	}
++ 
++-	str_member = zval_get_string(member);
++ #if (LUA_VERSION_NUM < 502)
++-	lua_getfield(L, LUA_GLOBALSINDEX, ZSTR_VAL(str_member));
+++	lua_getfield(L, LUA_GLOBALSINDEX, ZSTR_VAL(member));
++ #else
++-	lua_getglobal(L, ZSTR_VAL(str_member));
+++	lua_getglobal(L, ZSTR_VAL(member));
++ #endif
++-	zend_string_release(str_member);
++ 
++-	php_lua_get_zval_from_lua(L, -1, object, rv);
+++	zval lua_zval_object;
+++	ZVAL_OBJ(&lua_zval_object, object);
+++
+++	php_lua_get_zval_from_lua(L, -1, &lua_zval_object, rv);
++ 	lua_pop(L, 1);
+++
++ 	return rv;
++ }
++ /* }}} */
++ 
++ /** {{{ static void php_lua_write_property(zval *object, zval *member, zval *value)
++ */
++-static void php_lua_write_property(zval *object, zval *member, zval *value, void ** key) {
++-	lua_State *L = (Z_LUAVAL_P(object))->L;
++-	zend_string *str_member = zval_get_string(member);
+++static zval* php_lua_write_property(zend_object *object, zend_string *member, zval *value, void ** key) {
+++	lua_State *L = php_lua_obj_from_obj(object)->L;
++ 
++ #if (LUA_VERSION_NUM < 502)
++-	php_lua_send_zval_to_lua(L, member);
+++	lua_pushlstring(L, ZSTR_VAL(val), ZSTR_LEN(val));
++ 	php_lua_send_zval_to_lua(L, value);
++ 
++ 	lua_settable(L, LUA_GLOBALSINDEX);
++ #else
++ 	php_lua_send_zval_to_lua(L, value);
++-	lua_setglobal(L, Z_STRVAL_P(member));
+++	lua_setglobal(L, ZSTR_VAL(member));
++ #endif
++ 
++-	zend_string_release(str_member);
+++	return value;
++ }
++ /* }}} */
++ 
+
+--===============8468908018982393078==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8468908018982393078==--
