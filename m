@@ -1,75 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9931CAC597
-	for <buildroot@archiver.kernel.org>; Thu, 18 Sep 2025 19:23:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56ECDCAC597
+	for <buildroot@archiver.kernel.org>; Thu, 18 Sep 2025 19:34:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9733081E9D;
-	Thu, 18 Sep 2025 19:23:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EAFC540B5A;
+	Thu, 18 Sep 2025 19:34:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A-MXyiSAfdgO; Thu, 18 Sep 2025 19:23:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dAZEAHtyjk6q; Thu, 18 Sep 2025 19:34:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CEFC781EA0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF1E940B37
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CEFC781EA0;
-	Thu, 18 Sep 2025 19:23:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id D5A3B273
- for <buildroot@buildroot.org>; Thu, 18 Sep 2025 19:23:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF1E940B37;
+	Thu, 18 Sep 2025 19:34:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 00C3B273
+ for <buildroot@buildroot.org>; Thu, 18 Sep 2025 19:34:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D269D81E9B
- for <buildroot@buildroot.org>; Thu, 18 Sep 2025 19:23:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DB75F60ACA
+ for <buildroot@buildroot.org>; Thu, 18 Sep 2025 19:34:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JT2nknspJXE4 for <buildroot@buildroot.org>;
- Thu, 18 Sep 2025 19:23:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 15AFF81E9D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 15AFF81E9D
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 15AFF81E9D
- for <buildroot@buildroot.org>; Thu, 18 Sep 2025 19:23:30 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 277B219F54D;
- Thu, 18 Sep 2025 21:23:26 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 18 Sep 2025 21:23:26 +0200
-MIME-Version: 1.0
-Date: Thu, 18 Sep 2025 21:23:26 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20250917225430.2843930-1-james.hilliard1@gmail.com>
-References: <20250917225430.2843930-1-james.hilliard1@gmail.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <94cebd3d3e21b88c12db8d28b92b2f06@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1758223408;
- bh=hCpDDGgq1auiyP3cQxMuPHD2Htt3t5d4r7hu4B65wEg=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=k764t+aXno/NuUprGgkzZiWh3mUjNjxXtHGFRCpEn1gSntrWytdPmpsKGM7ntHokj
- /F00n5UutocdoPZMC4YLj+huo2k61iylBVeorw/S0EdB/pBOoaPngBoDf3QjRh1zE1
- 3qGdKfrGag7nm8YYJq+i9VU/gdk1uw9Iv4VQ3Z7uqlhKiaEJfP8KedlqK+IUk4tRJ7
- PsJLlkS/fZLTNqSJuR8XKNZxBIhOGksCYIYGz+Tap+V8CaX3CtOKuJ4d9tAme/zg7F
- DTwPSOK4QCbPef73fAyWLczJyPHKMDbhXjEFRiRUN4D27Ht0LYM51ZRywaU4fnwncN
- ZG/DPx5J7guUQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=k764t+aX
-Subject: Re: [Buildroot] [PATCH 1/1] package/weston: bump to version 14.0.2
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j1TGQpl3o1ab for <buildroot@buildroot.org>;
+ Thu, 18 Sep 2025 19:34:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 947AD60A8A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 947AD60A8A
+ for <buildroot@buildroot.org>; Thu, 18 Sep 2025 19:34:19 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 829C285CAC; Thu, 18 Sep 2025 19:34:19 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 18 Sep 2025 21:29:34 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ddb2fa5c5ac06beda7291729838bbdfefe83dfee
+X-Git-Newrev: 426d7635c7e99af49c3cc24c122c95b1ed89c082
+X-Patchwork-Hint: ignore
+Message-Id: <20250918193419.829C285CAC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/civetweb: add patch for
+ CVE-2025-55763
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,15 +60,112 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 18/09/2025 00:54, James Hilliard wrote:
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=426d7635c7e99af49c3cc24c122c95b1ed89c082
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+This fixes the following vulnerability:
+
+- CVE-2025-55763
+
+Buffer Overflow in the URI parser of CivetWeb 1.14 through 1.16 (latest)
+allows a remote attacker to achieve remote code execution via a crafted
+HTTP request. This vulnerability is triggered during request processing
+and may allow an attacker to corrupt heap memory, potentially leading to
+denial of service or arbitrary code execution.
+
+For more information, see:
+  - https://nvd.nist.gov//vuln/detail/CVE-2025-55763
+  - https://github.com/civetweb/civetweb/commit/76e222bcb77ba8452e5da4e82ae6cecd499c25e0
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...erflow-in-directory-URI-slash-redirection.patch | 56 ++++++++++++++++++++++
+ package/civetweb/civetweb.mk                       |  3 ++
+ 2 files changed, 59 insertions(+)
+
+diff --git a/package/civetweb/0002-Fix-heap-overflow-in-directory-URI-slash-redirection.patch b/package/civetweb/0002-Fix-heap-overflow-in-directory-URI-slash-redirection.patch
+new file mode 100644
+index 0000000000..399fafb4bd
+--- /dev/null
++++ b/package/civetweb/0002-Fix-heap-overflow-in-directory-URI-slash-redirection.patch
+@@ -0,0 +1,56 @@
++From 76e222bcb77ba8452e5da4e82ae6cecd499c25e0 Mon Sep 17 00:00:00 2001
++From: krispybyte <krispybyte@proton.me>
++Date: Sat, 21 Jun 2025 23:33:50 +0300
++Subject: [PATCH] Fix heap overflow in directory URI slash redirection
++
++CVE: CVE-2025-55763
++Upstream: https://github.com/civetweb/civetweb/commit/76e222bcb77ba8452e5da4e82ae6cecd499c25e0
++[thomas: fix offset]
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ src/civetweb.c | 23 ++++++++++++++++++-----
++ 1 file changed, 18 insertions(+), 5 deletions(-)
++
++diff --git a/src/civetweb.c b/src/civetweb.c
++index bbc9aa8be..e969c939f 100644
++--- a/src/civetweb.c
+++++ b/src/civetweb.c
++@@ -15242,7 +15242,6 @@ handle_request(struct mg_connection *conn)
++ 	/* 12. Directory uris should end with a slash */
++ 	if (file.stat.is_directory && ((uri_len = (int)strlen(ri->local_uri)) > 0)
++ 	    && (ri->local_uri[uri_len - 1] != '/')) {
++-
++ 		/* Path + server root */
++ 		size_t buflen = UTF8_PATH_MAX * 2 + 2;
++ 		char *new_path;
++@@ -15254,12 +15254,26 @@ handle_request(struct mg_connection *conn)
++ 			mg_send_http_error(conn, 500, "out or memory");
++ 		} else {
++ 			mg_get_request_link(conn, new_path, buflen - 1);
++-			strcat(new_path, "/");
+++
+++			size_t len = strlen(new_path);
+++			if (len + 1 < buflen) {
+++				new_path[len] = '/';
+++				new_path[len + 1] = '\0';
+++				len += 1;
+++			}
+++
++ 			if (ri->query_string) {
++-				/* Append ? and query string */
++-				strcat(new_path, "?");
++-				strcat(new_path, ri->query_string);
+++				if (len + 1 < buflen) {
+++					new_path[len] = '?';
+++					new_path[len + 1] = '\0';
+++					len += 1;
+++				}
+++
+++				/* Append with size of space left for query string + null terminator */
+++				size_t max_append = buflen - len - 1;
+++				strncat(new_path, ri->query_string, max_append);
++ 			}
+++
++ 			mg_send_http_redirect(conn, new_path, 301);
++ 			mg_free(new_path);
++ 		}
+diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
+index 629c1b59b2..af221e9133 100644
+--- a/package/civetweb/civetweb.mk
++++ b/package/civetweb/civetweb.mk
+@@ -10,6 +10,9 @@ CIVETWEB_LICENSE = MIT
+ CIVETWEB_LICENSE_FILES = LICENSE.md
+ CIVETWEB_CPE_ID_VALID = YES
+ 
++# 0002-Fix-heap-overflow-in-directory-URI-slash-redirection.patch
++CIVETWEB_IGNORE_CVES += CVE-2025-55763
++
+ CIVETWEB_CONF_OPTS = TARGET_OS=LINUX WITH_IPV6=1 \
+ 	$(if $(BR2_INSTALL_LIBSTDCPP),WITH_CPP=1)
+ CIVETWEB_COPT = -DHAVE_POSIX_FALLOCATE=0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
