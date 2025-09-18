@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87A7CCAC59A
-	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 12:48:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7B71CAC592
+	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 12:48:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 56AA282292;
-	Fri, 19 Sep 2025 12:48:08 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 748ZBfvNyzH7; Fri, 19 Sep 2025 12:48:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5458480D84
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5458480D84;
-	Fri, 19 Sep 2025 12:48:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 235CFE7
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2115F61046
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A36B60ACB;
+	Fri, 19 Sep 2025 12:48:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YYZnZdJS4qrx for <buildroot@buildroot.org>;
+ id 0iqRG3h8oEJk; Fri, 19 Sep 2025 12:48:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF5CF60D78
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF5CF60D78;
+	Fri, 19 Sep 2025 12:48:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 944F3273
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7B044822C0
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:06 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9y_1jmGOg7dj for <buildroot@buildroot.org>;
  Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F27860738
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4B6D80D84
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6F27860738
+ by smtp1.osuosl.org (Postfix) with ESMTP id B4B6D80D84
  for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 63C8185F29; Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
+ id B365C85F29; Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 17 Sep 2025 16:25:22 +0200
+Date: Thu, 18 Sep 2025 10:36:13 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 02f4d62bbf95ae12eb0cc2cbf7ecbcdb1ab8c9fe
-X-Git-Newrev: 8453b46193384b2fc9d69f621e52ef77d99297cc
+X-Git-Oldrev: 466681da77f3e0b697ad9ab9c66e4bf83a30f92c
+X-Git-Newrev: fe75232ca30c86d743c8327144299c1d15600f8d
 X-Patchwork-Hint: ignore
-Message-Id: <20250919124805.63C8185F29@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] {linux,
- linux-headers}: bump 6.12.x, 6.6.x, 6.1.x, 5.15.x, 5.10.x, 5.4.x series
+Message-Id: <20250919124805.B365C85F29@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/kodi: Fix build
+ with curl 8.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,77 +58,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8453b46193384b2fc9d69f621e52ef77d99297cc
+commit: https://git.buildroot.net/buildroot/commit/?id=fe75232ca30c86d743c8327144299c1d15600f8d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Update the latest kernel releases to:
- - 6.12.44 -> 6.12.47
- - 6.6.103 -> 6.6.106
- - 6.1.149 -> 6.1.152
- - 5.15.190 -> 5.15.193
- - 5.10.241 -> 5.10.244
- - 5.4.297 -> 5.4.29
+curl 8.16.0 bumped the enums to long, see
+https://github.com/curl/curl/pull/18054
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 3ed6c8e727934ef9c84699f1de14e46724bfa7f1)
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- linux/linux.hash                     | 12 ++++++------
- package/linux-headers/Config.in.host | 12 ++++++------
- 2 files changed, 12 insertions(+), 12 deletions(-)
+ package/kodi/0002-curl-8.16.0.patch | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index f723b9015b..8fee502c0e 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,12 +1,12 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
- sha256  3f1ccd0a6dc9c9777cb6fcef357c77e4a2386c84c52b6d5bbcda79c16af33b1b  linux-6.14.11.tar.xz
--sha256  b650210ed3027b224969d148aa377452a9aad3ae7f2851abedd31adfef16bdae  linux-6.12.44.tar.xz
--sha256  d288dd38c3e62ba576ba6b3ad2a84cfba65cd43b702f6c50d1f701aee942b18e  linux-6.6.103.tar.xz
--sha256  c4e906b8d39a5866d25e06371d4de4454fbfaaeb67979a04e4137e807877be39  linux-6.1.149.tar.xz
-+sha256  e82fe40871743048226987bd349ef107168b15aab90140e872ca4ed470922e25  linux-6.12.47.tar.xz
-+sha256  0c3180e2d8dcd0b70fe83554d9c440e31bab17873e360b89c4ab62a4fd26a8a0  linux-6.6.106.tar.xz
-+sha256  1a173be2a9cc886698b8205e639e4482b6cd84ba0be988d519415c7d2bb5b7d9  linux-6.1.152.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  62b814f1a48e1d67764a28611f23ca1f1ce1084ad7f1d319acc05720a9a68604  linux-5.15.190.tar.xz
--sha256  08c1e982064c81f8445a8fff2293d430c716c11fd3185606b8275718d696d8d6  linux-5.10.241.tar.xz
--sha256  f10cfcea7acf7588087d7cc17ebeeb7d3ff783c040536698c544eed7c5e8a841  linux-5.4.297.tar.xz
-+sha256  c70262d2f902710b773ef2f35c04b3ff2111e5186c8a97da351454180aac1e99  linux-5.15.193.tar.xz
-+sha256  210a37cc09f5c2b3d6f011aa1c65d2484d6f4ec17cf90df473f917abb2c26dc0  linux-5.10.244.tar.xz
-+sha256  88de95aeeb8d941fe61497f5e2e886bed25a79d509aa71ba25a2727fd7f0bf2d  linux-5.4.299.tar.xz
- # Locally computed
- sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
- sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 2e0158cb60..7f711b8e36 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -440,12 +440,12 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "5.4.297"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.241"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.190"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.149"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.103"	if BR2_KERNEL_HEADERS_6_6
--	default "6.12.44"	if BR2_KERNEL_HEADERS_6_12
-+	default "5.4.299"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.244"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.193"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.152"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.106"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.12.47"	if BR2_KERNEL_HEADERS_6_12
- 	default "6.14.11"	if BR2_KERNEL_HEADERS_6_14
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+diff --git a/package/kodi/0002-curl-8.16.0.patch b/package/kodi/0002-curl-8.16.0.patch
+new file mode 100644
+index 0000000000..31ffa7b964
+--- /dev/null
++++ b/package/kodi/0002-curl-8.16.0.patch
+@@ -0,0 +1,24 @@
++Fix build with curl 8.16.0
++
++Downloaded from
++https://gitlab.alpinelinux.org/alpine/aports/-/commit/106a02411488e3f71b9f2085a4a857e4be27b9ea
++
++Upstream: https://github.com/xbmc/xbmc/pull/27224
++
++The upstream patch is aimed at the upcoming release of Kodi 22.0 which
++saw many changes to CurlFile.cpp so we use the fix from Alpine.
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++
++--- a/xbmc/filesystem/CurlFile.cpp
+++++ b/xbmc/filesystem/CurlFile.cpp
++@@ -44,7 +44,7 @@ using namespace std::chrono_literals;
++ 
++ #define FITS_INT(a) (((a) <= INT_MAX) && ((a) >= INT_MIN))
++ 
++-curl_proxytype proxyType2CUrlProxyType[] = {
+++long proxyType2CUrlProxyType[] = {
++     CURLPROXY_HTTP,   CURLPROXY_SOCKS4,          CURLPROXY_SOCKS4A,
++     CURLPROXY_SOCKS5, CURLPROXY_SOCKS5_HOSTNAME, CURLPROXY_HTTPS,
++ };
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
