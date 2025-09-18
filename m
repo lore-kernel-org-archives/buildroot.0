@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E480CAC597
-	for <buildroot@archiver.kernel.org>; Thu, 18 Sep 2025 19:22:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9931CAC597
+	for <buildroot@archiver.kernel.org>; Thu, 18 Sep 2025 19:23:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0AD1F81E9F;
-	Thu, 18 Sep 2025 19:22:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9733081E9D;
+	Thu, 18 Sep 2025 19:23:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eZghT-yKx3Ax; Thu, 18 Sep 2025 19:22:50 +0000 (UTC)
+ id A-MXyiSAfdgO; Thu, 18 Sep 2025 19:23:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F372881E99
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CEFC781EA0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F372881E99;
-	Thu, 18 Sep 2025 19:22:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1DE20150
- for <buildroot@buildroot.org>; Thu, 18 Sep 2025 19:22:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CEFC781EA0;
+	Thu, 18 Sep 2025 19:23:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D5A3B273
+ for <buildroot@buildroot.org>; Thu, 18 Sep 2025 19:23:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0412F40B31
- for <buildroot@buildroot.org>; Thu, 18 Sep 2025 19:22:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D269D81E9B
+ for <buildroot@buildroot.org>; Thu, 18 Sep 2025 19:23:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QmtbbvPY8JlI for <buildroot@buildroot.org>;
- Thu, 18 Sep 2025 19:22:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00C0C40B30
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 00C0C40B30
- for <buildroot@buildroot.org>; Thu, 18 Sep 2025 19:22:48 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EF42D85C7A; Thu, 18 Sep 2025 19:22:47 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 18 Sep 2025 20:39:26 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2febca71f78fc45805b7b004339cc2d83fdc5e28
-X-Git-Newrev: ddb2fa5c5ac06beda7291729838bbdfefe83dfee
-X-Patchwork-Hint: ignore
-Message-Id: <20250918192247.EF42D85C7A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/weston: bump to version 14.0.2
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JT2nknspJXE4 for <buildroot@buildroot.org>;
+ Thu, 18 Sep 2025 19:23:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 15AFF81E9D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 15AFF81E9D
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 15AFF81E9D
+ for <buildroot@buildroot.org>; Thu, 18 Sep 2025 19:23:30 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 277B219F54D;
+ Thu, 18 Sep 2025 21:23:26 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 18 Sep 2025 21:23:26 +0200
+MIME-Version: 1.0
+Date: Thu, 18 Sep 2025 21:23:26 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20250917225430.2843930-1-james.hilliard1@gmail.com>
+References: <20250917225430.2843930-1-james.hilliard1@gmail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <94cebd3d3e21b88c12db8d28b92b2f06@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1758223408;
+ bh=hCpDDGgq1auiyP3cQxMuPHD2Htt3t5d4r7hu4B65wEg=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=k764t+aXno/NuUprGgkzZiWh3mUjNjxXtHGFRCpEn1gSntrWytdPmpsKGM7ntHokj
+ /F00n5UutocdoPZMC4YLj+huo2k61iylBVeorw/S0EdB/pBOoaPngBoDf3QjRh1zE1
+ 3qGdKfrGag7nm8YYJq+i9VU/gdk1uw9Iv4VQ3Z7uqlhKiaEJfP8KedlqK+IUk4tRJ7
+ PsJLlkS/fZLTNqSJuR8XKNZxBIhOGksCYIYGz+Tap+V8CaX3CtOKuJ4d9tAme/zg7F
+ DTwPSOK4QCbPef73fAyWLczJyPHKMDbhXjEFRiRUN4D27Ht0LYM51ZRywaU4fnwncN
+ ZG/DPx5J7guUQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=k764t+aX
+Subject: Re: [Buildroot] [PATCH 1/1] package/weston: bump to version 14.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,51 +83,15 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ddb2fa5c5ac06beda7291729838bbdfefe83dfee
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 18/09/2025 00:54, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Release announce:
-https://lists.freedesktop.org/archives/wayland-devel/2025-April/044158.html
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[Julien: add release announce link in commit log]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/weston/weston.hash | 6 +++---
- package/weston/weston.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/weston/weston.hash b/package/weston/weston.hash
-index 35fe608e20..cd2a82508d 100644
---- a/package/weston/weston.hash
-+++ b/package/weston/weston.hash
-@@ -1,4 +1,4 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2024-October/043858.html
--sha256  a8150505b126a59df781fe8c30c8e6f87da7013e179039eb844a5bbbcc7c79b3  weston-14.0.1.tar.xz
--sha512  2d782f98f28b39b990acecfc885f62ab34c9cdd22ef06b09c5d8df792112c47b365f89c2bf05d871e36ddfb4c49aa7e6d05ff60fe67a2657727162e4f564a412  weston-14.0.1.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2025-April/044158.html
-+sha256  b47216b3530da76d02a3a1acbf1846a9cd41d24caa86448f9c46f78f20b6e0ac  weston-14.0.2.tar.xz
-+sha512  e8214ec893e6c3ae94eb3c92feba104b0201843e9143f726a3e9a4d396d02523c94da706c1348cf934bc339fb1a4bc1fecdb865f0ea914115fd346d9eda091f5  weston-14.0.2.tar.xz
- sha256  fdb65868f65d0fbdb05c2d3b779e10ce9969fa0c4b9262ba4f260e87086ab860  COPYING
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 1d55a1fcba..57869b7e63 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WESTON_VERSION = 14.0.1
-+WESTON_VERSION = 14.0.2
- WESTON_SITE = https://gitlab.freedesktop.org/wayland/weston/-/releases/$(WESTON_VERSION)/downloads
- WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
- WESTON_LICENSE = MIT
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
