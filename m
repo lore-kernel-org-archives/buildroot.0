@@ -4,77 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED925CAC597
-	for <buildroot@archiver.kernel.org>; Thu, 18 Sep 2025 22:24:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7073FCA1013
+	for <buildroot@archiver.kernel.org>; Thu, 18 Sep 2025 22:25:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 784FF80724;
-	Thu, 18 Sep 2025 22:24:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 336BF807B1;
+	Thu, 18 Sep 2025 22:25:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sJwWrycV5CN3; Thu, 18 Sep 2025 22:24:36 +0000 (UTC)
+ id DaI4Wx4orofz; Thu, 18 Sep 2025 22:25:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5A418071D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79419807A6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A5A418071D;
-	Thu, 18 Sep 2025 22:24:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 63EFC150
- for <buildroot@buildroot.org>; Thu, 18 Sep 2025 22:24:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 79419807A6;
+	Thu, 18 Sep 2025 22:25:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 70577150
+ for <buildroot@buildroot.org>; Thu, 18 Sep 2025 22:25:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 55655806F6
- for <buildroot@buildroot.org>; Thu, 18 Sep 2025 22:24:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6D99C40D41
+ for <buildroot@buildroot.org>; Thu, 18 Sep 2025 22:25:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vzZ02lMoL14S for <buildroot@buildroot.org>;
- Thu, 18 Sep 2025 22:24:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BB3E480706
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB3E480706
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BB3E480706
- for <buildroot@buildroot.org>; Thu, 18 Sep 2025 22:24:32 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 980B313F861;
- Fri, 19 Sep 2025 00:24:16 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 19 Sep 2025 00:24:16 +0200
-MIME-Version: 1.0
-Date: Fri, 19 Sep 2025 00:24:16 +0200
-To: Scott Fan <fancp2007@gmail.com>
-Cc: buildroot@buildroot.org, Niklas Cassel <niklas.cassel@wdc.com>,
- =?UTF-8?Q?Vincent_Stehl=C3=A9?= <vincent.stehle@arm.com>, Mark Corbin
- <mark@dibsco.co.uk>, Jiaxun Yang <jiaxun.yang@flygoat.com>, Dmitry Chestnykh
- <dm.chestnykh@gmail.com>, =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>,
- Dick Olsson <hi@senzilla.io>, Romain Naour <romain.naour@gmail.com>,
- Alexander Egorenkov <egorenar@linux.ibm.com>, Joel Stanley <joel@jms.id.au>
-In-Reply-To: <20250918174133.6713-1-fancp2007@gmail.com>
-References: <20250918174133.6713-1-fancp2007@gmail.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <4d16966fe657590471b7e5137bab9c55@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1758234269;
- bh=9UWm/pt/Ealx/4peq3Fh1WkndbQsu9L4UuQiagWNh5g=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=MQqTIkiPY3E+6UuvlT1BWtqeZGI1QIpEAeCV9chGcGxeELma3iuQafuzaTNya1+mb
- yF+lOKRPnYi7De0ml+wYjNDrsXjqU3vgk2L9rbPpVbhYVQzz5466gzEMDyiYh3JXtf
- 1RyMQp8+ZNbGirw+MV8r11F5jGGX3NyIiG09wivTx51AcJZ6hO1OVhlBZNaRNex7tx
- VRVG1N4U2TBPt4nDNJ4J3IKvJxrWLyH4rvImTF8zmkfRZ6epHkNM9HwwsAgnpIRged
- t2HV8hh1bl5a3s23kXGNMvemulcembwQ3RrH9uftxEfV5/3plneTU2qSa3/Ep69c61
- 84rC97ZjpqKng==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=MQqTIkiP
-Subject: Re: [Buildroot] [PATCH] configs/qemu: update defconfigs to Linux
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HlqlLg6LS0ZB for <buildroot@buildroot.org>;
+ Thu, 18 Sep 2025 22:25:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8572D40D39
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8572D40D39
+ for <buildroot@buildroot.org>; Thu, 18 Sep 2025 22:25:12 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 73DE885DA2; Thu, 18 Sep 2025 22:25:12 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 19 Sep 2025 00:21:39 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c878e088391a180429bb374020db36d097df9070
+X-Git-Newrev: f83cb153a5e963a052b512388c3c9f5f10c581a7
+X-Patchwork-Hint: ignore
+Message-Id: <20250918222512.73DE885DA2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/qemu: update defconfigs to Linux
  6.12.47
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -89,17 +60,754 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 18/09/2025 19:41, Scott Fan wrote:
-> Update all qemu defconfigs to the latest Kernel LTS version.
-> 
-> Signed-off-by: Scott Fan <fancp2007@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=f83cb153a5e963a052b512388c3c9f5f10c581a7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Update all qemu defconfigs to the latest Kernel LTS version.
+
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...d-flag-specified-in-KBUILD_CFLAGS-to-vdso.patch | 52 ----------------------
+ .../0002-powerpc-boot-Fix-build-with-gcc-15.patch  | 38 ----------------
+ board/qemu/patches/linux/linux.hash                |  2 +-
+ configs/qemu_aarch64_ebbr_defconfig                |  2 +-
+ configs/qemu_aarch64_sbsa_defconfig                |  2 +-
+ configs/qemu_aarch64_virt_defconfig                |  2 +-
+ configs/qemu_arm_ebbr_defconfig                    |  2 +-
+ configs/qemu_arm_versatile_defconfig               |  2 +-
+ configs/qemu_arm_vexpress_defconfig                |  2 +-
+ configs/qemu_arm_vexpress_tz_defconfig             |  2 +-
+ configs/qemu_loongarch64_virt_efi_defconfig        |  2 +-
+ configs/qemu_m68k_mcf5208_defconfig                |  2 +-
+ configs/qemu_m68k_q800_defconfig                   |  2 +-
+ configs/qemu_microblazebe_mmu_defconfig            |  2 +-
+ configs/qemu_microblazeel_mmu_defconfig            |  2 +-
+ configs/qemu_mips32r2_malta_defconfig              |  2 +-
+ configs/qemu_mips32r2el_malta_defconfig            |  2 +-
+ configs/qemu_mips32r6_malta_defconfig              |  2 +-
+ configs/qemu_mips32r6el_malta_defconfig            |  2 +-
+ configs/qemu_mips64_malta_defconfig                |  2 +-
+ configs/qemu_mips64el_malta_defconfig              |  2 +-
+ configs/qemu_mips64r6_malta_defconfig              |  2 +-
+ configs/qemu_mips64r6el_malta_defconfig            |  2 +-
+ configs/qemu_or1k_defconfig                        |  2 +-
+ configs/qemu_ppc64_e5500_defconfig                 |  2 +-
+ configs/qemu_ppc64_pseries_defconfig               |  2 +-
+ configs/qemu_ppc64le_powernv8_defconfig            |  2 +-
+ configs/qemu_ppc64le_pseries_defconfig             |  2 +-
+ configs/qemu_ppc_bamboo_defconfig                  |  2 +-
+ configs/qemu_ppc_e500mc_defconfig                  |  2 +-
+ configs/qemu_ppc_g3beige_defconfig                 |  2 +-
+ configs/qemu_ppc_mac99_defconfig                   |  2 +-
+ configs/qemu_ppc_mpc8544ds_defconfig               |  2 +-
+ configs/qemu_riscv32_nommu_virt_defconfig          |  2 +-
+ configs/qemu_riscv32_virt_defconfig                |  2 +-
+ configs/qemu_riscv64_nommu_virt_defconfig          |  2 +-
+ configs/qemu_riscv64_virt_defconfig                |  2 +-
+ configs/qemu_riscv64_virt_efi_defconfig            |  2 +-
+ configs/qemu_s390x_defconfig                       |  2 +-
+ configs/qemu_sh4_r2d_defconfig                     |  2 +-
+ configs/qemu_sh4eb_r2d_defconfig                   |  2 +-
+ configs/qemu_sparc64_sun4u_defconfig               |  2 +-
+ configs/qemu_sparc_ss10_defconfig                  |  2 +-
+ configs/qemu_x86_64_defconfig                      |  2 +-
+ configs/qemu_x86_defconfig                         |  2 +-
+ configs/qemu_xtensa_lx60_defconfig                 |  2 +-
+ configs/qemu_xtensa_lx60_nommu_defconfig           |  2 +-
+ 47 files changed, 45 insertions(+), 135 deletions(-)
+
+diff --git a/board/qemu/patches/linux/0001-mips-Add-std-flag-specified-in-KBUILD_CFLAGS-to-vdso.patch b/board/qemu/patches/linux/0001-mips-Add-std-flag-specified-in-KBUILD_CFLAGS-to-vdso.patch
+deleted file mode 100644
+index 630fcf6315..0000000000
+--- a/board/qemu/patches/linux/0001-mips-Add-std-flag-specified-in-KBUILD_CFLAGS-to-vdso.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+-From c94606e06b54bc7b909fb342aa8dae732b50f5cd Mon Sep 17 00:00:00 2001
+-From: Khem Raj <raj.khem@gmail.com>
+-Date: Sat, 29 Mar 2025 08:39:03 -0700
+-Subject: [PATCH] mips: Add -std= flag specified in KBUILD_CFLAGS to vdso
+- CFLAGS
+-
+-GCC 15 changed the default C standard dialect from gnu17 to gnu23,
+-which should not have impacted the kernel because it explicitly requests
+-the gnu11 standard in the main Makefile. However, mips/vdso code uses
+-its own CFLAGS without a '-std=' value, which break with this dialect
+-change because of the kernel's own definitions of bool, false, and true
+-conflicting with the C23 reserved keywords.
+-
+-  include/linux/stddef.h:11:9: error: cannot use keyword 'false' as enumeration constant
+-     11 |         false   = 0,
+-        |         ^~~~~
+-  include/linux/stddef.h:11:9: note: 'false' is a keyword with '-std=c23' onwards
+-  include/linux/types.h:35:33: error: 'bool' cannot be defined via 'typedef'
+-     35 | typedef _Bool                   bool;
+-        |                                 ^~~~
+-  include/linux/types.h:35:33: note: 'bool' is a keyword with '-std=c23' onwards
+-
+-Add -std as specified in KBUILD_CFLAGS to the decompressor and purgatory
+-CFLAGS to eliminate these errors and make the C standard version of these
+-areas match the rest of the kernel.
+-
+-Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?id=0f4ae7c6ecb89bfda026d210dcf8216fb67d2333
+-
+-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+-Cc: stable@vger.kernel.org
+-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+-[Romain: backport to 6.12.27]
+-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+----
+- arch/mips/vdso/Makefile | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
+-index b289b2c1b294..c729bd687804 100644
+---- a/arch/mips/vdso/Makefile
+-+++ b/arch/mips/vdso/Makefile
+-@@ -27,6 +27,7 @@ endif
+- # offsets.
+- cflags-vdso := $(ccflags-vdso) \
+- 	$(filter -W%,$(filter-out -Wa$(comma)%,$(KBUILD_CFLAGS))) \
+-+	$(filter -std=%,$(KBUILD_CFLAGS)) \
+- 	-O3 -g -fPIC -fno-strict-aliasing -fno-common -fno-builtin -G 0 \
+- 	-mrelax-pic-calls $(call cc-option, -mexplicit-relocs) \
+- 	-fno-stack-protector -fno-jump-tables -DDISABLE_BRANCH_PROFILING \
+--- 
+-2.49.0
+-
+diff --git a/board/qemu/patches/linux/0002-powerpc-boot-Fix-build-with-gcc-15.patch b/board/qemu/patches/linux/0002-powerpc-boot-Fix-build-with-gcc-15.patch
+deleted file mode 100644
+index 78a4034a32..0000000000
+--- a/board/qemu/patches/linux/0002-powerpc-boot-Fix-build-with-gcc-15.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 2d04c5b3c5728cd5e5202176e8796ffc0085c24a Mon Sep 17 00:00:00 2001
+-From: Michal Suchanek <msuchanek@suse.de>
+-Date: Mon, 31 Mar 2025 12:57:19 +0200
+-Subject: [PATCH] powerpc/boot: Fix build with gcc 15
+-
+-Similar to x86 the ppc boot code does not build with GCC 15.
+-
+-Copy the fix from
+-commit ee2ab467bddf ("x86/boot: Use '-std=gnu11' to fix build with GCC 15")
+-
+-Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?h=next-test&id=5a821e2d69e26b51b7f3740b6b0c3462b8cacaff
+-
+-Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+-Tested-by: Amit Machhiwal <amachhiw@linux.ibm.com>
+-Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+-Signed-off-by: Madhavan Srinivasan <maddy@linux.ibm.com>
+-Link: https://patch.msgid.link/20250331105722.19709-1-msuchanek@suse.de
+-[Romain: backport to 6.12.27]
+-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+----
+- arch/powerpc/boot/Makefile | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/arch/powerpc/boot/Makefile b/arch/powerpc/boot/Makefile
+-index fa8518067d38..60a495771c05 100644
+---- a/arch/powerpc/boot/Makefile
+-+++ b/arch/powerpc/boot/Makefile
+-@@ -70,6 +70,7 @@ BOOTCPPFLAGS	:= -nostdinc $(LINUXINCLUDE)
+- BOOTCPPFLAGS	+= -isystem $(shell $(BOOTCC) -print-file-name=include)
+- 
+- BOOTCFLAGS	:= $(BOOTTARGETFLAGS) \
+-+		   -std=gnu11 \
+- 		   -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
+- 		   -fno-strict-aliasing -O2 \
+- 		   -msoft-float -mno-altivec -mno-vsx \
+--- 
+-2.49.0
+-
+diff --git a/board/qemu/patches/linux/linux.hash b/board/qemu/patches/linux/linux.hash
+index 48552f63e3..9bcf1f561d 100644
+--- a/board/qemu/patches/linux/linux.hash
++++ b/board/qemu/patches/linux/linux.hash
+@@ -1,5 +1,5 @@
+ # sha256 locally computed
+-sha256  8f4655a4cc7f93d72f515bbca54756de26ddaf5949790da6a17f766e3c33dc79  linux-6.12.27.tar.xz
++sha256  e82fe40871743048226987bd349ef107168b15aab90140e872ca4ed470922e25  linux-6.12.47.tar.xz
+ 
+ # sha256 locally computed
+ sha256  a76052c0c71d4025b117dcfc18ca7e189ac495a7645fa98c1bdaddca15cce815  xtensa_dc233c.tar.gz
+diff --git a/configs/qemu_aarch64_ebbr_defconfig b/configs/qemu_aarch64_ebbr_defconfig
+index 0299c2855a..4dc2d1e396 100644
+--- a/configs/qemu_aarch64_ebbr_defconfig
++++ b/configs/qemu_aarch64_ebbr_defconfig
+@@ -6,7 +6,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh board/qemu/aarch64-ebbr/p
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG) -c board/qemu/aarch64-ebbr/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_PYTHON3=y
+diff --git a/configs/qemu_aarch64_sbsa_defconfig b/configs/qemu_aarch64_sbsa_defconfig
+index 2560aacdb2..84ae76ca0b 100644
+--- a/configs/qemu_aarch64_sbsa_defconfig
++++ b/configs/qemu_aarch64_sbsa_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh board/qemu/aarch64-sbsa/a
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG) -c board/qemu/aarch64-sbsa/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_PYTHON3=y
+diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
+index 78b2a62047..6695f2b2d8 100644
+--- a/configs/qemu_aarch64_virt_defconfig
++++ b/configs/qemu_aarch64_virt_defconfig
+@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+diff --git a/configs/qemu_arm_ebbr_defconfig b/configs/qemu_arm_ebbr_defconfig
+index a3adb4c381..dfd3f47578 100644
+--- a/configs/qemu_arm_ebbr_defconfig
++++ b/configs/qemu_arm_ebbr_defconfig
+@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh board/qemu/arm-ebbr/post-
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG) -c board/qemu/arm-ebbr/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/arm-ebbr/linux.fragment"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
+index 998c337ca9..b00b309b05 100644
+--- a/configs/qemu_arm_versatile_defconfig
++++ b/configs/qemu_arm_versatile_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_DEFCONFIG="versatile"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/arm-versatile/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
+index 63bfdc41de..9698b1c6c5 100644
+--- a/configs/qemu_arm_vexpress_defconfig
++++ b/configs/qemu_arm_vexpress_defconfig
+@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/vexpress-v2p-ca9"
+diff --git a/configs/qemu_arm_vexpress_tz_defconfig b/configs/qemu_arm_vexpress_tz_defconfig
+index e5de1a45b0..5dca55fdce 100644
+--- a/configs/qemu_arm_vexpress_tz_defconfig
++++ b/configs/qemu_arm_vexpress_tz_defconfig
+@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/arm-vexpress-tz/linux.fragment"
+ BR2_PACKAGE_OPENSSL=y
+diff --git a/configs/qemu_loongarch64_virt_efi_defconfig b/configs/qemu_loongarch64_virt_efi_defconfig
+index 945cb9232d..4a4cd93b52 100644
+--- a/configs/qemu_loongarch64_virt_efi_defconfig
++++ b/configs/qemu_loongarch64_virt_efi_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/loongarch64-virt-efi/post-image.sh boar
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG) -c board/qemu/loongarch64-virt-efi/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
+diff --git a/configs/qemu_m68k_mcf5208_defconfig b/configs/qemu_m68k_mcf5208_defconfig
+index f50809809c..1850f67087 100644
+--- a/configs/qemu_m68k_mcf5208_defconfig
++++ b/configs/qemu_m68k_mcf5208_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/m68k-mcf5208/linux.config"
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+diff --git a/configs/qemu_m68k_q800_defconfig b/configs/qemu_m68k_q800_defconfig
+index 9cb7b61f13..6e84e1e791 100644
+--- a/configs/qemu_m68k_q800_defconfig
++++ b/configs/qemu_m68k_q800_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/m68k-q800/linux.config"
+ BR2_TARGET_ROOTFS_EXT2=y
+diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
+index 9d67d71920..5444380f25 100644
+--- a/configs/qemu_microblazebe_mmu_defconfig
++++ b/configs/qemu_microblazebe_mmu_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux.config"
+ BR2_LINUX_KERNEL_LINUX_BIN=y
+diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
+index 46befedd57..e5bd065019 100644
+--- a/configs/qemu_microblazeel_mmu_defconfig
++++ b/configs/qemu_microblazeel_mmu_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux.config"
+ BR2_LINUX_KERNEL_LINUX_BIN=y
+diff --git a/configs/qemu_mips32r2_malta_defconfig b/configs/qemu_mips32r2_malta_defconfig
+index 4ec4322dbb..d5051f7c39 100644
+--- a/configs/qemu_mips32r2_malta_defconfig
++++ b/configs/qemu_mips32r2_malta_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r2-malta/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_mips32r2el_malta_defconfig b/configs/qemu_mips32r2el_malta_defconfig
+index 2901a5ff03..ce03bc21bd 100644
+--- a/configs/qemu_mips32r2el_malta_defconfig
++++ b/configs/qemu_mips32r2el_malta_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r2el-malta/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_mips32r6_malta_defconfig b/configs/qemu_mips32r6_malta_defconfig
+index bdbaa4030d..6d026e2a50 100644
+--- a/configs/qemu_mips32r6_malta_defconfig
++++ b/configs/qemu_mips32r6_malta_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r6-malta/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_mips32r6el_malta_defconfig b/configs/qemu_mips32r6el_malta_defconfig
+index 5ec51d34a5..5ea91f281e 100644
+--- a/configs/qemu_mips32r6el_malta_defconfig
++++ b/configs/qemu_mips32r6el_malta_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r6el-malta/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_mips64_malta_defconfig b/configs/qemu_mips64_malta_defconfig
+index a9c48afcd3..f33cff7963 100644
+--- a/configs/qemu_mips64_malta_defconfig
++++ b/configs/qemu_mips64_malta_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_mips64el_malta_defconfig b/configs/qemu_mips64el_malta_defconfig
+index 61edea24fa..c535228b53 100644
+--- a/configs/qemu_mips64el_malta_defconfig
++++ b/configs/qemu_mips64el_malta_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_mips64r6_malta_defconfig b/configs/qemu_mips64r6_malta_defconfig
+index 342140c957..f514bacd83 100644
+--- a/configs/qemu_mips64r6_malta_defconfig
++++ b/configs/qemu_mips64r6_malta_defconfig
+@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64r6-malta/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_mips64r6el_malta_defconfig b/configs/qemu_mips64r6el_malta_defconfig
+index e0dd72b981..83d9f109f9 100644
+--- a/configs/qemu_mips64r6el_malta_defconfig
++++ b/configs/qemu_mips64r6el_malta_defconfig
+@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64r6el-malta/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_or1k_defconfig b/configs/qemu_or1k_defconfig
+index 42dc6ce969..b97774d39c 100644
+--- a/configs/qemu_or1k_defconfig
++++ b/configs/qemu_or1k_defconfig
+@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/or1k/linux.config"
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+diff --git a/configs/qemu_ppc64_e5500_defconfig b/configs/qemu_ppc64_e5500_defconfig
+index 9237cdc2e5..88e3d99f90 100644
+--- a/configs/qemu_ppc64_e5500_defconfig
++++ b/configs/qemu_ppc64_e5500_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_DEFCONFIG="corenet64_smp"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc64-e5500/linux.fragment"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+diff --git a/configs/qemu_ppc64_pseries_defconfig b/configs/qemu_ppc64_pseries_defconfig
+index eb6f2fe14e..e89f4e2b3e 100644
+--- a/configs/qemu_ppc64_pseries_defconfig
++++ b/configs/qemu_ppc64_pseries_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_DEFCONFIG="pseries"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+diff --git a/configs/qemu_ppc64le_powernv8_defconfig b/configs/qemu_ppc64le_powernv8_defconfig
+index d9586884e3..a999a767dc 100644
+--- a/configs/qemu_ppc64le_powernv8_defconfig
++++ b/configs/qemu_ppc64le_powernv8_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_DEFCONFIG="powernv"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
+diff --git a/configs/qemu_ppc64le_pseries_defconfig b/configs/qemu_ppc64le_pseries_defconfig
+index b7bc8e5d94..2c633f198d 100644
+--- a/configs/qemu_ppc64le_pseries_defconfig
++++ b/configs/qemu_ppc64le_pseries_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_DEFCONFIG="pseries_le"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+diff --git a/configs/qemu_ppc_bamboo_defconfig b/configs/qemu_ppc_bamboo_defconfig
+index d851e4e4f9..a71e368cc9 100644
+--- a/configs/qemu_ppc_bamboo_defconfig
++++ b/configs/qemu_ppc_bamboo_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_DEFCONFIG="44x/bamboo"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-bamboo/linux.fragment"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_ppc_e500mc_defconfig b/configs/qemu_ppc_e500mc_defconfig
+index 4728501ac9..632d6400e1 100644
+--- a/configs/qemu_ppc_e500mc_defconfig
++++ b/configs/qemu_ppc_e500mc_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_DEFCONFIG="corenet32_smp"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-e500mc/linux.fragment"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
+index 5d3fefc374..0d2a1798ec 100644
+--- a/configs/qemu_ppc_g3beige_defconfig
++++ b/configs/qemu_ppc_g3beige_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-g3beige/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_ppc_mac99_defconfig b/configs/qemu_ppc_mac99_defconfig
+index a28a58d268..ecaa8d7ccc 100644
+--- a/configs/qemu_ppc_mac99_defconfig
++++ b/configs/qemu_ppc_mac99_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_DEFCONFIG="pmac32"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-mac99/linux.fragment"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
+index ad453efb69..d2a35bd70e 100644
+--- a/configs/qemu_ppc_mpc8544ds_defconfig
++++ b/configs/qemu_ppc_mpc8544ds_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-mpc8544ds/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_riscv32_nommu_virt_defconfig b/configs/qemu_riscv32_nommu_virt_defconfig
+index dcf37c7b2d..5fa9a174bf 100644
+--- a/configs/qemu_riscv32_nommu_virt_defconfig
++++ b/configs/qemu_riscv32_nommu_virt_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv32-virt/linux-nommu.config"
+ BR2_TARGET_ROOTFS_EXT2=y
+diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
+index ac431413a4..4369d644cd 100644
+--- a/configs/qemu_riscv32_virt_defconfig
++++ b/configs/qemu_riscv32_virt_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_DEFCONFIG="rv32"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_OPENSBI=y
+diff --git a/configs/qemu_riscv64_nommu_virt_defconfig b/configs/qemu_riscv64_nommu_virt_defconfig
+index 9367010c27..6c3d2608cc 100644
+--- a/configs/qemu_riscv64_nommu_virt_defconfig
++++ b/configs/qemu_riscv64_nommu_virt_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv64-virt/linux-nommu.config"
+ BR2_TARGET_ROOTFS_EXT2=y
+diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
+index fd093a6162..f436dac143 100644
+--- a/configs/qemu_riscv64_virt_defconfig
++++ b/configs/qemu_riscv64_virt_defconfig
+@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_OPENSBI=y
+diff --git a/configs/qemu_riscv64_virt_efi_defconfig b/configs/qemu_riscv64_virt_efi_defconfig
+index 8b9b232853..b9d622df05 100644
+--- a/configs/qemu_riscv64_virt_efi_defconfig
++++ b/configs/qemu_riscv64_virt_efi_defconfig
+@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh board/qemu/riscv64-virt-e
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG) -c board/qemu/riscv64-virt-efi/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+diff --git a/configs/qemu_s390x_defconfig b/configs/qemu_s390x_defconfig
+index f9609075d6..cc85d87d35 100644
+--- a/configs/qemu_s390x_defconfig
++++ b/configs/qemu_s390x_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
+index 628ca05543..7f22dab3c4 100644
+--- a/configs/qemu_sh4_r2d_defconfig
++++ b/configs/qemu_sh4_r2d_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_sh4eb_r2d_defconfig b/configs/qemu_sh4eb_r2d_defconfig
+index 4fd07775ed..a1fc4a89e6 100644
+--- a/configs/qemu_sh4eb_r2d_defconfig
++++ b/configs/qemu_sh4eb_r2d_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4eb-r2d/linux.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_sparc64_sun4u_defconfig b/configs/qemu_sparc64_sun4u_defconfig
+index 469575ff61..a147b129e7 100644
+--- a/configs/qemu_sparc64_sun4u_defconfig
++++ b/configs/qemu_sparc64_sun4u_defconfig
+@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc64-sun4u/linux.config"
+ BR2_TARGET_ROOTFS_EXT2=y
+diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
+index e8650652d5..2f05c0947f 100644
+--- a/configs/qemu_sparc_ss10_defconfig
++++ b/configs/qemu_sparc_ss10_defconfig
+@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc-ss10/linux.config"
+ BR2_TARGET_ROOTFS_EXT2=y
+diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
+index 18bd7f2734..39d7793a04 100644
+--- a/configs/qemu_x86_64_defconfig
++++ b/configs/qemu_x86_64_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
+ BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
+diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
+index 70bc173037..f8cb83a4b0 100644
+--- a/configs/qemu_x86_defconfig
++++ b/configs/qemu_x86_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux.config"
+ BR2_TARGET_ROOTFS_EXT2=y
+diff --git a/configs/qemu_xtensa_lx60_defconfig b/configs/qemu_xtensa_lx60_defconfig
+index d731499e5e..92c0795698 100644
+--- a/configs/qemu_xtensa_lx60_defconfig
++++ b/configs/qemu_xtensa_lx60_defconfig
+@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+diff --git a/configs/qemu_xtensa_lx60_nommu_defconfig b/configs/qemu_xtensa_lx60_nommu_defconfig
+index e2979d21c7..bb5a7600dd 100644
+--- a/configs/qemu_xtensa_lx60_nommu_defconfig
++++ b/configs/qemu_xtensa_lx60_nommu_defconfig
+@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux-nommu.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
