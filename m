@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BDFACAC592
-	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 12:54:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AE6ECAC59A
+	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 12:54:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1196F807C2;
-	Fri, 19 Sep 2025 12:54:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C78A661079;
+	Fri, 19 Sep 2025 12:54:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oom4eHhIcDsF; Fri, 19 Sep 2025 12:54:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zKIGJ71O8nkp; Fri, 19 Sep 2025 12:54:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A0F080819
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B4A160F83
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1A0F080819;
-	Fri, 19 Sep 2025 12:54:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2EFF8E7
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:54:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B4A160F83;
+	Fri, 19 Sep 2025 12:54:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0552BE7
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:54:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 80D8940B35
+ by smtp2.osuosl.org (Postfix) with ESMTP id E9D1240C14
  for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:54:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4m4hpjUspOPc for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2xM-84BB8lrb for <buildroot@buildroot.org>;
  Fri, 19 Sep 2025 12:54:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FB5F40A7A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F14A40C27
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2FB5F40A7A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2F14A40C27
  for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:54:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2088085FD5; Fri, 19 Sep 2025 12:54:11 +0000 (UTC)
+ id 0F4D0817A9; Fri, 19 Sep 2025 12:54:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 18 Sep 2025 10:30:57 +0200
+Date: Thu, 18 Sep 2025 10:22:13 +0200
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: eb399a6825df69cee7546dc2cebfc67d77ae5786
-X-Git-Newrev: d142844ce38aa8f009fabe4b6e262ab49cda7da7
+X-Git-Oldrev: 7129e735be893a7f385d16515c4b6411afad8056
+X-Git-Newrev: e11497dacbe74e38c9648bb68c49f00428688625
 X-Patchwork-Hint: ignore
-Message-Id: <20250919125411.2088085FD5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/docker-engine:
- depend on cgroup v2 and kernel >=5.2 without systemd
+Message-Id: <20250919125411.0F4D0817A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/php-lua: fix
+ build with lua < 5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,119 +61,114 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2682342346217471629=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d142844ce38aa8f009fabe4b6e262ab49cda7da7
+--===============2682342346217471629==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=e11497dacbe74e38c9648bb68c49f00428688625
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-Without systemd package/docker-engine requires another way to mount
-/sys/fs/cgroup, so far provided by BR2_PACKAGE_CGROUPFS_MOUNT for
-cgroup v1. Replace this with BR2_PACKAGE_CGROUPFS_V2_MOUNT for cgroup
-v2 support. 5.2 is the minimum recommended version for cgroup v2
-support according to the Docker documentation: "v4.15 or later (v5.2
-or later is recommended)" [1].
+php-lua fails to build in buildroot 2025.08-rc3 on the following error:
 
-Depending on the selected container runtime users may need to adjust
-kernel configurations to enable options required by that runtime with
-cgroup v2 (e.g. CONFIG_CGROUP_BPF for runc).
+in file included from [...]/usr/include/php/Zend/zend.h:32,
+                 from [...]/usr/include/php/main/php.h:31,
+                 from [...]/build/php-lua-2.0.7/lua.c:24:
+[...]/build/php-lua-2.0.7/lua.c: In function ‘php_lua_write_property’:
+[...]/build/php-lua-2.0.7/lua.c:247:37:
+error: ‘val’ undeclared (first use in this function); did you mean
+‘zval’?
+  247 |         lua_pushlstring(L, ZSTR_VAL(val), ZSTR_LEN(val));
+      |                                     ^~~
+[...]/usr/include/php/Zend/zend_string.h:66:26:
+note: in definition of macro ‘ZSTR_VAL’
+   66 | #define ZSTR_VAL(zstr)  (zstr)->val
+      |                          ^~~~
+[...]/build/php-lua-2.0.7/lua.c:247:37:
+note: each undeclared identifier is reported only once for each function
+it appears in
+  247 |         lua_pushlstring(L, ZSTR_VAL(val), ZSTR_LEN(val));
+      |                                     ^~~
+[...]/usr/include/php/Zend/zend_string.h:66:26:
+note: in definition of macro ‘ZSTR_VAL’
+   66 | #define ZSTR_VAL(zstr)  (zstr)->val
+      |                          ^~~~
+make[2]: *** [Makefile:214: lua.lo] Error 1
 
-Propagate dependencies accordingly: The Docker btrfs filesystem driver
-does not need a separate and lower minimum headers version,
-package/mender-update-modules needs to apply the new "depends on".
+The issue triggers only if lua interpreter version is lower than 5.2. In
+this case,  php_lua_write_property calls ZSTR_VAL on the wrong variable.
 
-[1] https://docs.docker.com/engine/containers/runmetrics/#running-docker-on-cgroup-v2
+Fix php-lua build by calling ZSTR_VAL on the correct variable.
 
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/11271124501 (TestPhpLuaLuajit)
+
+Suggested-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+[Romain: add link to failing TestPhpLuaLuajit]
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
-(cherry picked from commit b07b0bb4560ce49f1c4e0e54a21c28435f17bf17)
+(cherry picked from commit a1daf153bf962d1797598943f8c8709ed04e4642)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/docker-engine/Config.in         | 13 +++++--------
- package/mender-update-modules/Config.in |  7 ++++---
- 2 files changed, 9 insertions(+), 11 deletions(-)
+ ...a.c-fix-ZSTR_VAL-usage-when-using-lua-5.2.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 6338eeeef1..ae07b5e19d 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -3,11 +3,12 @@ config BR2_PACKAGE_DOCKER_ENGINE
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # containerd -> runc
- 	depends on BR2_USE_MMU # containerd
-+	depends on !BR2_PACKAGE_CGROUPFS_MOUNT
- 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # libseccomp
--	select BR2_PACKAGE_CGROUPFS_MOUNT if !BR2_PACKAGE_SYSTEMD # runtime dependency
-+	select BR2_PACKAGE_CGROUPFS_V2_MOUNT if !BR2_PACKAGE_SYSTEMD # runtime dependency
- 	select BR2_PACKAGE_CONTAINERD # runtime dependency
- 	select BR2_PACKAGE_HOST_GO
- 	select BR2_PACKAGE_IPTABLES # runtime dependency
-@@ -22,13 +23,9 @@ if BR2_PACKAGE_DOCKER_ENGINE
- 
- config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
- 	bool "btrfs filesystem driver"
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
- 	help
- 	  Build the btrfs filesystem driver for Docker.
- 
--comment "brtfs filesystem driver needs headers >= 4.12"
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
--
- config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER
- 	bool "devicemapper filesystem driver"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
-@@ -83,11 +80,11 @@ config BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_NAME
- 
- endif
- 
--comment "docker-engine needs a glibc or musl toolchain w/ threads, headers >= 3.17"
-+comment "docker-engine needs a glibc or musl toolchain w/ threads, headers >= 5.2"
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_TOOLCHAIN_USES_UCLIBC || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
- 	depends on BR2_USE_MMU
-diff --git a/package/mender-update-modules/Config.in b/package/mender-update-modules/Config.in
-index 76158ab6c7..e71309c3d6 100644
---- a/package/mender-update-modules/Config.in
-+++ b/package/mender-update-modules/Config.in
-@@ -79,8 +79,9 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_DOCKER
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # docker-engine, docker-cli
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # containerd -> runc
- 	depends on BR2_USE_MMU # containerd
-+	depends on !BR2_PACKAGE_CGROUPFS_MOUNT # docker-engine
- 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # libseccom
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2 # docker-engine
- 	select BR2_PACKAGE_DOCKER_ENGINE
- 	select BR2_PACKAGE_DOCKER_CLI
- 	select BR2_PACKAGE_JQ # runtime
-@@ -97,13 +98,13 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_DOCKER
- 
- 	  https://github.com/mendersoftware/mender-update-modules/tree/master/docker
- 
--comment "docker support needs a glibc or musl toolchain w/ threads, headers >= 3.17"
-+comment "docker support needs a glibc or musl toolchain w/ threads, headers >= 5.2"
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_TOOLCHAIN_USES_UCLIBC || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
- 	depends on BR2_USE_MMU
- 
- config BR2_PACKAGE_MENDER_UPDATE_MODULES_IPK
+diff --git a/package/php-lua/0004-lua.c-fix-ZSTR_VAL-usage-when-using-lua-5.2.patch b/package/php-lua/0004-lua.c-fix-ZSTR_VAL-usage-when-using-lua-5.2.patch
+new file mode 100644
+index 0000000000..c5d99db7f5
+--- /dev/null
++++ b/package/php-lua/0004-lua.c-fix-ZSTR_VAL-usage-when-using-lua-5.2.patch
+@@ -0,0 +1,38 @@
++From 7bf334832ad36d1f2976406d680b35a168ffaa91 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>
++Date: Mon, 8 Sep 2025 17:20:12 +0200
++Subject: [PATCH] lua.c: fix ZSTR_VAL usage when using lua < 5.2
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++When using a lua interpreter with a version lower than 5.1, the
++php_lua_write_property ends up calling the ZSTR_VAL with the wrong
++variable (it is expected to receive "member", a zend_string variable,
++but it is "value" that is passed, which is a zval).
++
++Fix php-lua compatibility with interpreters < 5.2 by passing the correct
++variable
++
++Upstream: upstream dead, custom patch
++Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
++---
++ lua.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lua.c b/lua.c
++index a40e5da442a4..5889bc7f83ea 100755
++--- a/lua.c
+++++ b/lua.c
++@@ -244,7 +244,7 @@ static zval* php_lua_write_property(zend_object *object, zend_string *member, zv
++ 	lua_State *L = php_lua_obj_from_obj(object)->L;
++ 
++ #if (LUA_VERSION_NUM < 502)
++-	lua_pushlstring(L, ZSTR_VAL(val), ZSTR_LEN(val));
+++	lua_pushlstring(L, ZSTR_VAL(member), ZSTR_LEN(member));
++ 	php_lua_send_zval_to_lua(L, value);
++ 
++ 	lua_settable(L, LUA_GLOBALSINDEX);
++-- 
++2.51.0
++
+
+--===============2682342346217471629==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2682342346217471629==--
