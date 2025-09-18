@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0108CAC59A
-	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 12:48:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 347C9CAC5AB
+	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 12:48:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 615E0824E2;
-	Fri, 19 Sep 2025 12:48:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F2F978258A;
+	Fri, 19 Sep 2025 12:48:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MfzAEncA4PQM; Fri, 19 Sep 2025 12:48:28 +0000 (UTC)
+ id 6YLDZzHivlOd; Fri, 19 Sep 2025 12:48:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB06F8258A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2C558266C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB06F8258A;
-	Fri, 19 Sep 2025 12:48:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E2C558266C;
+	Fri, 19 Sep 2025 12:48:29 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7081BE7
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:10 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2C737273
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ACE2B60738
+ by smtp3.osuosl.org (Postfix) with ESMTP id CA3E060F83
  for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LBFn-xazFgH0 for <buildroot@buildroot.org>;
+ id lOxagoB0JLPj for <buildroot@buildroot.org>;
  Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6FF060F83
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9574260ACB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C6FF060F83
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9574260ACB
  for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C59B0842A0; Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
+ id 92613842A0; Fri, 19 Sep 2025 12:48:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 18 Sep 2025 10:41:35 +0200
+Date: Thu, 18 Sep 2025 10:30:54 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: d8a72d9181e3b6bf009105912c9db3279ebab20f
-X-Git-Newrev: b9701c24333edea1a86be97a0f0a9dbeb3fcbf7c
+X-Git-Oldrev: 22ad4074c7ca7ff170b065ad0ae33c7e98d33d47
+X-Git-Newrev: f4ab5609515238f6105f354762f430d289c41082
 X-Patchwork-Hint: ignore
-Message-Id: <20250919124805.C59B0842A0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/htpdate: fix
- shellcheck SC1090
+Message-Id: <20250919124805.92613842A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/docker-engine:
+ depend on cgroup v2 and kernel >=5.2 without systemd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,49 +66,113 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9701c24333edea1a86be97a0f0a9dbeb3fcbf7c
+commit: https://git.buildroot.net/buildroot/commit/?id=f4ab5609515238f6105f354762f430d289c41082
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Using /dev/null as file source because the package doesn't provide a default
-systemv service configuration file.
+Without systemd package/docker-engine requires another way to mount
+/sys/fs/cgroup, so far provided by BR2_PACKAGE_CGROUPFS_MOUNT for
+cgroup v1. Replace this with BR2_PACKAGE_CGROUPFS_V2_MOUNT for cgroup
+v2 support. 5.2 is the minimum recommended version for cgroup v2
+support according to the Docker documentation: "v4.15 or later (v5.2
+or later is recommended)" [1].
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-[Julien: remove S43htpdate .checkpackageignore entry
-  to fix check-package error
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 1f2b459b56b117e97164feb397ad14435717d524)
+Depending on the selected container runtime users may need to adjust
+kernel configurations to enable options required by that runtime with
+cgroup v2 (e.g. CONFIG_CGROUP_BPF for runc).
+
+Propagate dependencies accordingly: The Docker btrfs filesystem driver
+does not need a separate and lower minimum headers version,
+package/mender-update-modules needs to apply the new "depends on".
+
+[1] https://docs.docker.com/engine/containers/runmetrics/#running-docker-on-cgroup-v2
+
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+(cherry picked from commit b07b0bb4560ce49f1c4e0e54a21c28435f17bf17)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .checkpackageignore        | 1 -
- package/htpdate/S43htpdate | 2 ++
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/docker-engine/Config.in         | 13 +++++--------
+ package/mender-update-modules/Config.in |  7 ++++---
+ 2 files changed, 9 insertions(+), 11 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index a4617600c0..76230f8f7b 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -498,7 +498,6 @@ package/haveged/S21haveged Shellcheck lib_sysv.Variables
- package/heirloom-mailx/0001-fix-libressl-support.patch lib_patch.Upstream
- package/hplip/0001-build-use-pkg-config-to-discover-libusb.patch lib_patch.Upstream
- package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch lib_patch.Upstream
--package/htpdate/S43htpdate Shellcheck
- package/i2pd/S99i2pd Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/i7z/0001-fix-build-with-gcc-10.patch lib_patch.Upstream
- package/ibm-sw-tpm2/0001-Use-LONG_BIT-to-define-RADIX_BITS.patch lib_patch.Upstream
-diff --git a/package/htpdate/S43htpdate b/package/htpdate/S43htpdate
-index 5971d70639..22e5e6c803 100644
---- a/package/htpdate/S43htpdate
-+++ b/package/htpdate/S43htpdate
-@@ -4,6 +4,8 @@ DAEMON="htpdate"
- PIDFILE="/var/run/$DAEMON.pid"
+diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
+index 6338eeeef1..ae07b5e19d 100644
+--- a/package/docker-engine/Config.in
++++ b/package/docker-engine/Config.in
+@@ -3,11 +3,12 @@ config BR2_PACKAGE_DOCKER_ENGINE
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # containerd -> runc
+ 	depends on BR2_USE_MMU # containerd
++	depends on !BR2_PACKAGE_CGROUPFS_MOUNT
+ 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # libseccomp
+-	select BR2_PACKAGE_CGROUPFS_MOUNT if !BR2_PACKAGE_SYSTEMD # runtime dependency
++	select BR2_PACKAGE_CGROUPFS_V2_MOUNT if !BR2_PACKAGE_SYSTEMD # runtime dependency
+ 	select BR2_PACKAGE_CONTAINERD # runtime dependency
+ 	select BR2_PACKAGE_HOST_GO
+ 	select BR2_PACKAGE_IPTABLES # runtime dependency
+@@ -22,13 +23,9 @@ if BR2_PACKAGE_DOCKER_ENGINE
  
- HTPDATE_ARGS="-a -s -t https://google.com"
-+
-+# shellcheck source=/dev/null
- test -r "/etc/default/$DAEMON" && . "/etc/default/$DAEMON"
+ config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
+ 	bool "btrfs filesystem driver"
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+ 	help
+ 	  Build the btrfs filesystem driver for Docker.
  
- start() {
+-comment "brtfs filesystem driver needs headers >= 4.12"
+-	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+-
+ config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER
+ 	bool "devicemapper filesystem driver"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
+@@ -83,11 +80,11 @@ config BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_NAME
+ 
+ endif
+ 
+-comment "docker-engine needs a glibc or musl toolchain w/ threads, headers >= 3.17"
++comment "docker-engine needs a glibc or musl toolchain w/ threads, headers >= 5.2"
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		BR2_TOOLCHAIN_USES_UCLIBC || \
+-		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
+ 	depends on BR2_USE_MMU
+diff --git a/package/mender-update-modules/Config.in b/package/mender-update-modules/Config.in
+index 76158ab6c7..e71309c3d6 100644
+--- a/package/mender-update-modules/Config.in
++++ b/package/mender-update-modules/Config.in
+@@ -79,8 +79,9 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_DOCKER
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # docker-engine, docker-cli
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # containerd -> runc
+ 	depends on BR2_USE_MMU # containerd
++	depends on !BR2_PACKAGE_CGROUPFS_MOUNT # docker-engine
+ 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # libseccom
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2 # docker-engine
+ 	select BR2_PACKAGE_DOCKER_ENGINE
+ 	select BR2_PACKAGE_DOCKER_CLI
+ 	select BR2_PACKAGE_JQ # runtime
+@@ -97,13 +98,13 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_DOCKER
+ 
+ 	  https://github.com/mendersoftware/mender-update-modules/tree/master/docker
+ 
+-comment "docker support needs a glibc or musl toolchain w/ threads, headers >= 3.17"
++comment "docker support needs a glibc or musl toolchain w/ threads, headers >= 5.2"
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		BR2_TOOLCHAIN_USES_UCLIBC || \
+-		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
+ 	depends on BR2_USE_MMU
+ 
+ config BR2_PACKAGE_MENDER_UPDATE_MODULES_IPK
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
