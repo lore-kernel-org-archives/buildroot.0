@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45FA5CAC592
-	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 12:54:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B16DDCAC59A
+	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 12:54:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D24781011;
-	Fri, 19 Sep 2025 12:54:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 88D2A81062;
+	Fri, 19 Sep 2025 12:54:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id doFxtL9O_kK6; Fri, 19 Sep 2025 12:54:31 +0000 (UTC)
+ id WbmPc_ESh0UZ; Fri, 19 Sep 2025 12:54:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26DE980D5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A444380F10
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 26DE980D5F;
-	Fri, 19 Sep 2025 12:54:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A444380F10;
+	Fri, 19 Sep 2025 12:54:30 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 37A34E7
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:54:15 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 92B46D7F
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:54:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BA82B40C3C
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:54:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2A31940C47
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:54:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i_C_LvE8iYpk for <buildroot@buildroot.org>;
- Fri, 19 Sep 2025 12:54:11 +0000 (UTC)
+ id EZmFLGikAwgU for <buildroot@buildroot.org>;
+ Fri, 19 Sep 2025 12:54:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B537409F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F78C40CA0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1B537409F7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7F78C40CA0
  for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:54:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1753685FDA; Fri, 19 Sep 2025 12:54:11 +0000 (UTC)
+ id 7DF2C85FD5; Fri, 19 Sep 2025 12:54:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 18 Sep 2025 10:25:11 +0200
+Date: Thu, 18 Sep 2025 10:40:54 +0200
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: e11497dacbe74e38c9648bb68c49f00428688625
-X-Git-Newrev: eb399a6825df69cee7546dc2cebfc67d77ae5786
+X-Git-Oldrev: ded88f281005ed1b96af2c678bb0568bb5c46221
+X-Git-Newrev: b2e212c91ceea27efa60f43f0aaa1ed424662111
 X-Patchwork-Hint: ignore
-Message-Id: <20250919125411.1753685FDA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x]
- support/testing/tests/package/test_docker_compose.py: update kernel & VM
- CPU
+Message-Id: <20250919125411.7DF2C85FD5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/rtl8822cs bump
+ driver version to latest with support kernel 6.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -67,165 +66,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb399a6825df69cee7546dc2cebfc67d77ae5786
+commit: https://git.buildroot.net/buildroot/commit/?id=b2e212c91ceea27efa60f43f0aaa1ed424662111
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-Since commit 947dbc92a20c5acea7882166cae7893e6ea661e1 the Bootlin
-stable toolchain uses headers 5.4, which can lead to build outputs
-incompatible with older kernels. Update to the latest 5.4 kernel to
-avoid this. The kernel config is updated according to the requirements
-of current Docker, runc, and crun.
+- Update driver for kernel 6.16+
+- Update repository link
 
-Additionally switch the CPU of the test VM to Haswell, to avoid
-dockerd failing to start with a "This program can only be run on AMD64
-processors with v3 microarchitecture support" error.
-
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-(cherry picked from commit efe00fb3fb1c6ab34794a2a19cc71caef1afdcd9)
+Signed-off-by: Viacheslav Bocharov <adeep@lexina.in>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 718b6ff826fbae23c9f3fcd4b899ace22616e976)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/testing/conf/docker-compose-kernel.config  | 57 +++++++++++++++-------
- .../testing/tests/package/test_docker_compose.py   |  4 +-
- 2 files changed, 41 insertions(+), 20 deletions(-)
+ package/rtl8822cs/Config.in      | 2 +-
+ package/rtl8822cs/rtl8822cs.hash | 2 +-
+ package/rtl8822cs/rtl8822cs.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/support/testing/conf/docker-compose-kernel.config b/support/testing/conf/docker-compose-kernel.config
-index 4d30a578ec..fd28da7a4a 100644
---- a/support/testing/conf/docker-compose-kernel.config
-+++ b/support/testing/conf/docker-compose-kernel.config
-@@ -1,10 +1,22 @@
- # CONFIG_SWAP is not set
- CONFIG_SYSVIPC=y
-+CONFIG_POSIX_MQUEUE=y
- # CONFIG_CROSS_MEMORY_ATTACH is not set
- CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_CGROUPS=y
-+CONFIG_MEMCG=y
-+CONFIG_BLK_CGROUP=y
-+CONFIG_CGROUP_SCHED=y
-+CONFIG_CGROUP_PIDS=y
-+CONFIG_CGROUP_FREEZER=y
-+CONFIG_CPUSETS=y
-+CONFIG_CGROUP_DEVICE=y
-+CONFIG_CGROUP_CPUACCT=y
-+CONFIG_CGROUP_BPF=y
-+CONFIG_BPF_SYSCALL=y
- # CONFIG_COMPAT_BRK is not set
-+CONFIG_SMP=y
- # CONFIG_X86_EXTENDED_PLATFORM is not set
--CONFIG_IOSF_MBI=y
- CONFIG_MCORE2=y
- # CONFIG_X86_MCE is not set
- # CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS is not set
-@@ -12,9 +24,8 @@ CONFIG_LEGACY_VSYSCALL_NONE=y
- # CONFIG_SUSPEND is not set
- # CONFIG_ACPI is not set
- CONFIG_CPU_IDLE=y
--CONFIG_PCI_MSI=y
- # CONFIG_VIRTUALIZATION is not set
--# CONFIG_IOSCHED_CFQ is not set
-+CONFIG_BLK_DEV_THROTTLING=y
- # CONFIG_MQ_IOSCHED_DEADLINE is not set
- # CONFIG_MQ_IOSCHED_KYBER is not set
- # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
-@@ -25,23 +36,36 @@ CONFIG_UNIX=y
- CONFIG_INET=y
- CONFIG_IP_MULTICAST=y
- CONFIG_IP_ADVANCED_ROUTER=y
--# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
--# CONFIG_INET_XFRM_MODE_TUNNEL is not set
--# CONFIG_INET_XFRM_MODE_BEET is not set
--# CONFIG_IPV6 is not set
--# CONFIG_NF_CONNTRACK_PROCFS is not set
--# CONFIG_NF_CT_PROTO_DCCP is not set
--# CONFIG_NF_CT_PROTO_SCTP is not set
--# CONFIG_NF_CT_PROTO_UDPLITE is not set
-+# CONFIG_IPV6_SIT is not set
-+CONFIG_NETFILTER=y
-+CONFIG_NF_CONNTRACK=y
-+CONFIG_NETFILTER_XT_MARK=y
-+CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=y
-+CONFIG_NETFILTER_XT_MATCH_CONNTRACK=y
-+CONFIG_NETFILTER_XT_MATCH_IPVS=y
- CONFIG_IP_VS=y
- CONFIG_IP_VS_RR=y
- CONFIG_IP_VS_NFCT=y
--# CONFIG_BRIDGE_IGMP_SNOOPING is not set
-+CONFIG_IP_NF_IPTABLES=y
-+CONFIG_IP_NF_FILTER=y
-+CONFIG_IP_NF_NAT=y
-+CONFIG_IP_NF_TARGET_MASQUERADE=y
-+CONFIG_IP_NF_MANGLE=y
-+CONFIG_IP_NF_RAW=y
-+CONFIG_IP6_NF_IPTABLES=y
-+CONFIG_IP6_NF_FILTER=y
-+CONFIG_IP6_NF_MANGLE=y
-+CONFIG_IP6_NF_RAW=y
-+CONFIG_IP6_NF_NAT=y
-+CONFIG_IP6_NF_TARGET_MASQUERADE=y
-+CONFIG_BRIDGE=y
- # CONFIG_WIRELESS is not set
-+CONFIG_PCI=y
- CONFIG_DEVTMPFS=y
- CONFIG_DEVTMPFS_MOUNT=y
- CONFIG_VIRTIO_BLK=y
- CONFIG_NETDEVICES=y
-+CONFIG_VETH=y
- CONFIG_VIRTIO_NET=y
- # CONFIG_ETHERNET is not set
- # CONFIG_WLAN is not set
-@@ -52,26 +76,23 @@ CONFIG_VT_HW_CONSOLE_BINDING=y
- # CONFIG_DEVMEM is not set
- CONFIG_SERIAL_8250=y
- CONFIG_SERIAL_8250_CONSOLE=y
--# CONFIG_SERIAL_8250_LPSS is not set
--# CONFIG_SERIAL_8250_MID is not set
- # CONFIG_HW_RANDOM_INTEL is not set
- # CONFIG_HW_RANDOM_AMD is not set
- # CONFIG_HW_RANDOM_VIA is not set
- CONFIG_HW_RANDOM_VIRTIO=y
--# CONFIG_DEVPORT is not set
- # CONFIG_HWMON is not set
- # CONFIG_USB_SUPPORT is not set
- CONFIG_RTC_CLASS=y
- CONFIG_VIRTIO_PCI=y
--# CONFIG_VIRTIO_PCI_LEGACY is not set
-+CONFIG_VIRTIO_MMIO=y
- # CONFIG_X86_PLATFORM_DEVICES is not set
- # CONFIG_IOMMU_SUPPORT is not set
- CONFIG_EXT4_FS=y
-+CONFIG_OVERLAY_FS=y
- CONFIG_TMPFS=y
- # CONFIG_MISC_FILESYSTEMS is not set
- # CONFIG_NETWORK_FILESYSTEMS is not set
-+CONFIG_KEYS=y
- CONFIG_SECURITYFS=y
--# CONFIG_CRYPTO_ECHAINIV is not set
- # CONFIG_CRYPTO_HW is not set
--# CONFIG_UNUSED_SYMBOLS is not set
- CONFIG_UNWINDER_FRAME_POINTER=y
-diff --git a/support/testing/tests/package/test_docker_compose.py b/support/testing/tests/package/test_docker_compose.py
-index 6a8f6f4010..a96c9d1481 100644
---- a/support/testing/tests/package/test_docker_compose.py
-+++ b/support/testing/tests/package/test_docker_compose.py
-@@ -17,7 +17,7 @@ class BaseTestDockerCompose(infra.basetest.BRTest):
-         BR2_ROOTFS_POST_SCRIPT_ARGS="{}"
-         BR2_LINUX_KERNEL=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.262"
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.296"
-         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="{}"
-         BR2_PACKAGE_PYTHON3=y
-@@ -59,7 +59,7 @@ class BaseTestDockerCompose(infra.basetest.BRTest):
-         self.emulator.boot(arch="x86_64",
-                            kernel=kernel,
-                            kernel_cmdline=["root=/dev/vda", "console=ttyS0"],
--                           options=["-cpu", "Nehalem",
-+                           options=["-cpu", "Haswell",
-                                     "-m", "512M",
-                                     "-device", "virtio-rng-pci",
-                                     "-drive", "file={},format=raw,if=virtio".format(rootfs),
+diff --git a/package/rtl8822cs/Config.in b/package/rtl8822cs/Config.in
+index c827291ae4..2e1c376902 100644
+--- a/package/rtl8822cs/Config.in
++++ b/package/rtl8822cs/Config.in
+@@ -10,4 +10,4 @@ config BR2_PACKAGE_RTL8822CS
+ 	  Realtek RTL8822CS Wi-Fi driver as a kernel module (JetHome
+ 	  repository)
+ 
+-          https://github.com/jethome-ru/rtl88x2cs/
++          https://github.com/jethome-iot/rtl88x2cs/
+diff --git a/package/rtl8822cs/rtl8822cs.hash b/package/rtl8822cs/rtl8822cs.hash
+index 1d7c074ff1..2a649fe493 100644
+--- a/package/rtl8822cs/rtl8822cs.hash
++++ b/package/rtl8822cs/rtl8822cs.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  6150edd8e5d5812831597d4f49a6631a503468c512f85cbe449d853b6caea261  rtl8822cs-0986d5734e7630efea218dae9c16d11a10231819.tar.gz
++sha256  12bf44c0dbce921440f5800a98e877fadda2d656824cca546c2b9e0e99e6a489  rtl8822cs-0ef9ddd619d2a386df90fd7c32b65958b0d675ed.tar.gz
+diff --git a/package/rtl8822cs/rtl8822cs.mk b/package/rtl8822cs/rtl8822cs.mk
+index 345e4a0c48..d10388c2e1 100644
+--- a/package/rtl8822cs/rtl8822cs.mk
++++ b/package/rtl8822cs/rtl8822cs.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-RTL8822CS_VERSION = 0986d5734e7630efea218dae9c16d11a10231819
+-RTL8822CS_SITE = $(call github,jethome-ru,rtl88x2cs,$(RTL8822CS_VERSION))
++RTL8822CS_VERSION = 0ef9ddd619d2a386df90fd7c32b65958b0d675ed
++RTL8822CS_SITE = $(call github,jethome-iot,rtl88x2cs,$(RTL8822CS_VERSION))
+ RTL8822CS_LICENSE = GPL-2.0
+ 
+ RTL8822CS_MODULE_MAKE_OPTS = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
