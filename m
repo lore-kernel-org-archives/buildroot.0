@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CDD6CAC592
-	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 13:00:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C014ACAC59A
+	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 13:00:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F2328110E;
-	Fri, 19 Sep 2025 13:00:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 97CA8822FC;
+	Fri, 19 Sep 2025 13:00:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V-6ivVCl2pHo; Fri, 19 Sep 2025 13:00:01 +0000 (UTC)
+ id 6nAoEfqy0TE6; Fri, 19 Sep 2025 13:00:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 587B8810B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF6F582291
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 587B8810B7;
-	Fri, 19 Sep 2025 13:00:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 967FDE7
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 13:00:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AF6F582291;
+	Fri, 19 Sep 2025 13:00:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7A29FE7
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 13:00:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7DE8F40C14
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 13:00:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 60BB78217A
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 13:00:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fdE6lAQ1VPOA for <buildroot@buildroot.org>;
- Fri, 19 Sep 2025 12:59:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Jb7y4OPhKyIL for <buildroot@buildroot.org>;
+ Fri, 19 Sep 2025 13:00:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0E7C4087A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FA7A81F2C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A0E7C4087A
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 12:59:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8FA7A81F2C
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 13:00:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9944D85FEA; Fri, 19 Sep 2025 12:59:59 +0000 (UTC)
+ id 8214E85FEA; Fri, 19 Sep 2025 13:00:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 19 Sep 2025 14:53:56 +0200
-X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 70d17547e473f55772cec5f454f2484b6e91ca89
-X-Git-Newrev: c55bed263d38dda020484650cf7d07e9477a0d5b
+Date: Fri, 19 Sep 2025 14:55:10 +0200
+X-Git-Refname: refs/heads/2025.05.x
+X-Git-Oldrev: 47a77649a7f28573e0d1f3b7aac909a8f7b3df85
+X-Git-Newrev: 097e117a7d543ac156e42b9ddf60c2e1480e9a97
 X-Patchwork-Hint: ignore
-Message-Id: <20250919125959.9944D85FEA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/samba4: bump to
+Message-Id: <20250919130029.8214E85FEA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/samba4: bump to
  v4.21.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -66,8 +66,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c55bed263d38dda020484650cf7d07e9477a0d5b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=097e117a7d543ac156e42b9ddf60c2e1480e9a97
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
 See the release notes
 https://www.samba.org/samba/history/samba-4.21.8.html
