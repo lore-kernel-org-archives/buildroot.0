@@ -1,75 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DDD0CAC59A
-	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 17:33:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 062C1CAC59A
+	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 18:21:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1E9D040F34;
-	Fri, 19 Sep 2025 17:33:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B07D61230;
+	Fri, 19 Sep 2025 18:21:12 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8Pvo29uheZUu; Fri, 19 Sep 2025 18:21:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9528E61233
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9528E61233;
+	Fri, 19 Sep 2025 18:21:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 92875150
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 18:21:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9006B40CB3
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 18:21:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ezC-R-FnX3Ii; Fri, 19 Sep 2025 17:33:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4786A40F12
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4786A40F12;
-	Fri, 19 Sep 2025 17:33:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id B4A0B150
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 17:33:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9AE0F83B89
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 17:33:30 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iwu_jQwPOOQk for <buildroot@buildroot.org>;
- Fri, 19 Sep 2025 17:33:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8FE6183B67
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FE6183B67
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8FE6183B67
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 17:33:28 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 5696D5FFA3;
- Fri, 19 Sep 2025 19:33:25 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 19 Sep 2025 19:33:25 +0200
+ id cCyA7hbbL0Ft for <buildroot@buildroot.org>;
+ Fri, 19 Sep 2025 18:21:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
+ envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C71E5404A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C71E5404A7
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C71E5404A7
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 18:21:04 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id EDEF631E02D3; Fri, 19 Sep 2025 20:21:00 +0200 (CEST)
+Date: Fri, 19 Sep 2025 20:21:00 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: buildroot@buildroot.org
+Message-ID: <aM2fDL1IHgxX7arz@waldemar-brodkorb.de>
 MIME-Version: 1.0
-Date: Fri, 19 Sep 2025 19:33:25 +0200
-To: Maxim Kochetkov <fido_max@inbox.ru>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250919072349.169149-1-fido_max@inbox.ru>
-References: <20250919072349.169149-1-fido_max@inbox.ru>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <e155e911435893c111d4caf4919a4e1c@free.fr>
-X-Sender: ju.o@free.fr
+Content-Disposition: inline
+X-Operating-System: Linux 6.12.43+deb13-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1758303206;
- bh=nxxCTf6mHFzTkMpqSyTiy9ShGV576B37AG+1tcgsB8I=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Elg8HC2WuNxAMKaA5h2HqiECjdz675jH9zTVTpDt7S2eJrGlp/2PwdPd76tf54AjN
- SgvCqI4gkpkHWjWj4mvAG6sM1oq6IDuFq8sBwP2bfG1L/8fHwWCfmj1+7i9bq9NheY
- e2gkksIX2/kK70Fg2K8HL4iKyKZTr+Jd6pL9IetziwE4ClpCJFtCjEi/h4uSGSQO0U
- IiQE2r9bo4MUZ3y0WSJQW93vLV/w4yshg/oLnuuUh5GvD3B1gJXk46f7S5mMq29L+u
- vr6C2PACE/QlIRMIOBRICgmgZ4+EauGD7ax2EVp2iN7/Janq1osYhYePzJdOHR5d36
- zveWRsq2E8uSA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Elg8HC2W
-Subject: Re: [Buildroot] [PATCH 1/1] package/postgresql: security bump to
- version 17.6
+ d=openadk.org; s=2022; 
+ t=1758306061; bh=Mwpompy0hfmZpwTgfVck6cR/u8NNH6I/j/JEtIdeDFY=;
+ h=Date:From:To:Subject:From;
+ b=dwXFWJdENncPltWOsgeC1AK6jTitTaebt5IbYUMHPbQKLu2nQbU55Rkn+TeMfqFb1
+ 75q5Z/6FhYKvpRMB0dNkztEGPcrUqAyJbjrcK6glY703g0cmTL2mIKuj9PjYHzneYJ
+ f0ucVlMiEaxoUPAhBA6VZyQrefWdLqeftDXL9xT5bRImmlYmm/B04QB5ByNAflytlI
+ P+Ybq4AOhN6mohIsiRyHL4LABv/aPgexlXR2EhjAXGiAQGn6g6UsOQx7xTiOCf48SO
+ 996GA8HQQGVlV3QOdni6Xn/fNNM7wA4+Zm6esMrAaPYCcPYtXQEdT2M7hHg49N86ZL
+ OHugG2FctUBRA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=dwXFWJdE
+Subject: [Buildroot] [PATCH] package/uclibc: bump to 1.0.55
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,77 +76,113 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 19/09/2025 09:23, Maxim Kochetkov via buildroot wrote:
-> Fixes the following security issue:
-> 
-> CVE-2025-8713: PostgreSQL optimizer statistics can expose sampled data
-> within a view, partition, or child table
-> 
-> PostgreSQL optimizer statistics allow a user to read sampled data 
-> within
-> a view that the user cannot access. Separately, statistics allow a user
-> to read sampled data that a row security policy intended to hide.
-> PostgreSQL maintains statistics for tables by sampling data available 
-> in
-> columns; this data is consulted during the query planning process. 
-> Prior
-> to this release, a user could craft a leaky operator that bypassed view
-> access control lists (ACLs) and bypassed row security policies in
-> partitioning or table inheritance hierarchies. Reachable statistics 
-> data
-> notably included histograms and most- common-values lists. 
-> CVE-2017-7484
-> and CVE-2019-10130 intended to close this class of vulnerability, but
-> this gap remained. Versions before PostgreSQL 17.6, 16.10, 15.14, 
-> 14.19,
-> and 13.22 are affected.
-> 
-> CVE-2025-8714: PostgreSQL pg_dump lets superuser of origin server 
-> execute
-> arbitrary code in psql client
-> 
-> Untrusted data inclusion in pg_dump in PostgreSQL allows a malicious
-> superuser of the origin server to inject arbitrary code for 
-> restore-time
-> execution as the client operating system account running psql to 
-> restore
-> the dump, via psql meta-commands. pg_dumpall is also affected. 
-> pg_restore
-> is affected when used to generate a plain-format dump. This is similar 
-> to
-> MySQL CVE-2024-21096. Versions before PostgreSQL 17.6, 16.10, 15.14,
-> 14.19, and 13.22 are affected.
-> 
-> CVE-2025-8715: PostgreSQL pg_dump newline in object name executes
-> arbitrary code in psql client and in restore target server
-> 
-> Improper neutralization of newlines in pg_dump in PostgreSQL allows a 
-> user
-> of the origin server to inject arbitrary code for restore-time 
-> execution
-> as the client operating system account running psql to restore the 
-> dump,
-> via psql meta-commands inside a purpose-crafted object name. The same
-> attacks can achieve SQL injection as a superuser of the restore target
-> server. pg_dumpall, pg_restore, and pg_upgrade are also affected.
-> Versions before PostgreSQL 17.6, 16.10, 15.14, 14.19, and 13.22 are 
-> affected.
-> Versions before 11.20 are unaffected. CVE-2012-0868 had fixed this 
-> class
-> of problem, but version 11.20 reintroduced it.
-> 
-> https://www.postgresql.org/about/news/postgresql-176-1610-1514-1419-1322-and-18-beta-3-released-3118/
-> 
-> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Finally the aarch64 tls bug is fixed. (python 3.13 segfault)
+Unfortunately it is not covered by any testcase of uClibc-ng-test.
 
-Applied to master, thanks.
+Here is the git shortlog for the release:
+
+Marius Melzer (1):
+      malloc-standard: Fix truncation problem in malloc
+
+Waldemar Brodkorb (5):
+      Fix Sysvipc for ARM, AARCH64, RISCV64, KVX and m68k
+      remove uClibc specific gettext_printf
+      aarch64: do not force tls-model in CPU_CFLAGS, this isn't required
+      aarch64: respect r_addend for TLSDESC relocations
+      bump version for 1.0.55 release
+
+yliu (5):
+      mips32: Preventing FORCE_FRAME_POINTER from being optimized away
+      mips32: Define __IPC_64 according to kernel version
+      time64: fixed msgctl/semctl/shmctl result errors for for MIPS32/RISCV32
+      time64: fix *ctl functions in mips32eb/mips64
+      time64: fix *ctl functions in mips32eb
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+
+Dear stable Maintainers, it would be nice if you could update all
+stable branches with this maintenance release.
+
+---
+ ...emove-uClibc-specific-gettext_printf.patch | 34 -------------------
+ package/uclibc/uclibc.hash                    |  4 +--
+ package/uclibc/uclibc.mk                      |  2 +-
+ 3 files changed, 3 insertions(+), 37 deletions(-)
+ delete mode 100644 package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch
+
+diff --git a/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch b/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch
+deleted file mode 100644
+index 96736da562..0000000000
+--- a/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 9ffed9adb130d45b9f31ca7a305153e86586c877 Mon Sep 17 00:00:00 2001
+-From: Waldemar Brodkorb <wbx@openadk.org>
+-Date: Fri, 15 Aug 2025 20:29:52 +0200
+-Subject: [PATCH] remove uClibc specific gettext_printf
+-
+-Other C libraries like musl/glibc does not define it.
+-Including stdio.h here breaks Grub2 compilation with
+-gcc 14 and above.
+-Thanks to Thomas Petazzoni for analyzing the Grub2 build error.
+-
+-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-Upstream: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=9ffed9adb130d45b9f31ca7a305153e86586c877
+----
+- include/libintl.h | 3 ---
+- 1 file changed, 3 deletions(-)
+-
+-diff --git a/include/libintl.h b/include/libintl.h
+-index b7123a963..6d8b9f342 100644
+---- a/include/libintl.h
+-+++ b/include/libintl.h
+-@@ -50,9 +50,6 @@ char *bindtextdomain(const char *domainname, const char *dirname);
+- 
+- #endif
+- 
+--#include <stdio.h>
+--#define gettext_printf(args...) printf(args)
+--
+- /* to supply LC_MESSAGES and other stuff GNU expects to be exported when
+-    including libintl.h */
+- #include <locale.h>
+--- 
+-2.47.2
+-
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index 8d8b333958..56174a33b8 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.uclibc-ng.org/releases/1.0.54/uClibc-ng-1.0.54.tar.xz.sha256
+-sha256  d1ecf65cc2217dd4118a4dafc1abf27c585b5cb578f3bd7991fc640b79643ff2  uClibc-ng-1.0.54.tar.xz
++# From https://downloads.uclibc-ng.org/releases/1.0.55/uClibc-ng-1.0.55.tar.xz.sha256
++sha256  5f7f3aafddb2ca08fb295be45561c0188407103d7446cfd264b9b822fed3ed2d  uClibc-ng-1.0.55.tar.xz
+ # Locally calculated
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 1e49463dd4..0c303d77f8 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UCLIBC_VERSION = 1.0.54
++UCLIBC_VERSION = 1.0.55
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+ UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_LICENSE = LGPL-2.1+
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
