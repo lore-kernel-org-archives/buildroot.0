@@ -1,87 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFE43CAC5A0
-	for <buildroot@archiver.kernel.org>; Sat, 20 Sep 2025 08:46:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D01AFCAC597
+	for <buildroot@archiver.kernel.org>; Sat, 20 Sep 2025 09:11:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9094F83F0E;
-	Sat, 20 Sep 2025 08:46:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 851536133E;
+	Sat, 20 Sep 2025 09:11:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gn9UAo9DU4Oe; Sat, 20 Sep 2025 08:45:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ksRnY-xhkUKY; Sat, 20 Sep 2025 09:11:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C20AD83ECA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A48DB615D2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C20AD83ECA;
-	Sat, 20 Sep 2025 08:45:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id D251EE7
- for <buildroot@buildroot.org>; Sat, 20 Sep 2025 08:45:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A48DB615D2;
+	Sat, 20 Sep 2025 09:11:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 26EAFE7
+ for <buildroot@buildroot.org>; Sat, 20 Sep 2025 09:11:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B8BEA83ECA
- for <buildroot@buildroot.org>; Sat, 20 Sep 2025 08:45:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0D2F24141A
+ for <buildroot@buildroot.org>; Sat, 20 Sep 2025 09:11:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7dv_f6qSxJdV for <buildroot@buildroot.org>;
- Sat, 20 Sep 2025 08:45:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Yxnw2y9-fjbi for <buildroot@buildroot.org>;
+ Sat, 20 Sep 2025 09:11:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 53BEC83E53
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53BEC83E53
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 53BEC83E53
- for <buildroot@buildroot.org>; Sat, 20 Sep 2025 08:45:54 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 01F101A0F27;
- Sat, 20 Sep 2025 08:45:52 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id BC7E560630;
- Sat, 20 Sep 2025 08:45:51 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id DE639102F18C4; 
- Sat, 20 Sep 2025 10:45:41 +0200 (CEST)
-Date: Sat, 20 Sep 2025 10:45:40 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Cc: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org, Antoine Tenart
- <atenart@kernel.org>, Marcus Folkesson <marcus.folkesson@gmail.com>
-Message-ID: <20250920104540.70c271d7@windsurf>
-In-Reply-To: <aM5EvEkrOXv30D78@waldemar-brodkorb.de>
-References: <20250909120822.1069595-1-thomas.petazzoni@bootlin.com>
- <20250909120822.1069595-2-thomas.petazzoni@bootlin.com>
- <14e1befe002ce593820b4bc1dd63d04e@free.fr>
- <20250915080605.579fa2e0@windsurf>
- <aM2kFrdPdzNWbXhj@waldemar-brodkorb.de>
- <20250919210040.6f247422@windsurf>
- <aM5EvEkrOXv30D78@waldemar-brodkorb.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1758357950; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=2oxHOde/iFckBOdqALppQhbPpmfqUWZl12ngIGMgqqc=;
- b=GNnNCiLdU7AmbNRngVxXq+oweyVdH9ox7xnlHaY+GkCTFIPCr8w1NGV76FbmP73IGKiD01
- 4YKgAaC6VTbD0h39ICtBWjp3Z+i2DvYoK6d9tY+7pD2u9bYr0QTl8M92pRBcsD84Zr7JBn
- n/wgXpVvTuohHAuDTlsW3RviQR98zwamjo9wK4FdbojtwVq4i1Ksrx/ubo0VeOh5Fsx7g7
- aj8xbpuKCZ1M3z/b6LmtfTZt1cxUwEsNqUba3XcvsJMcPzNT8zpKIVy0kA66gNK03bLq67
- 6BNirXw8nlMT+fmVr0z9yEdwQK1GFHsVxgFhVCUnN+uNxQJbwKRw+TQiXC4O+w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=GNnNCiLd
-Subject: Re: [Buildroot] [PATCH 01/11] package/libselinux: fix build issues
- caused by 3.8.1 bump
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11D5F41405
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 11D5F41405
+ for <buildroot@buildroot.org>; Sat, 20 Sep 2025 09:11:35 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EFC3E85D09; Sat, 20 Sep 2025 09:11:34 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 19 Sep 2025 20:52:12 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4f0a9596e35dfdcdc82dce1a2e16a74974d3e4d9
+X-Git-Newrev: 36357247d5826386b57de8c8cf5d16ca3d471789
+X-Patchwork-Hint: ignore
+Message-Id: <20250920091134.EFC3E85D09@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/poco: add patch for CVE-2025-6375
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,35 +57,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 20 Sep 2025 08:07:56 +0200
-Waldemar Brodkorb <wbx@openadk.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=36357247d5826386b57de8c8cf5d16ca3d471789
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > Defining FILE_OFFSET_BITS=64 all the time works fine with everything
-> > but uClibc-ng, so I'm tempted to think that something else is wrong in
-> > uClibc-ng, but I'm not 100% sure.  
-> 
-> __INO_T_MATCHES_INO64_T is a internal macro in glibc.
-> As uClibc-ng tries to be compatible to glibc we can add this macro.
-> 
-> What do you think about following patch, attached to this email?
+This fixes the following vulnerability:
 
-I guess it does fix the build, but I have no idea whether this is the
-right fix. Probably it is if glibc defines those magic macros under the
-same WORDSIZE == 64 condition, but I clearly don't pretend to fully
-grasp what's going on.
+- CVE-2025-6375:
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+A vulnerability was found in poco up to 1.14.1. It has been rated as
+problematic. Affected by this issue is the function MultipartInputStream
+of the file Net/src/MultipartReader.cpp. The manipulation leads to null
+pointer dereference. The attack needs to be approached locally. The
+exploit has been disclosed to the public and may be used. Upgrading to
+version 1.14.2 is able to address this issue. The patch is identified as
+6f2f85913c191ab9ddfb8fae781f5d66afccf3bf. It is recommended to upgrade
+the affected component.
+
+For more information see:
+  - https://nvd.nist.gov//vuln/detail/CVE-2025-6375
+  - https://github.com/pocoproject/poco/commit/6f2f85913c191ab9ddfb8fae781f5d66afccf3bf
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...Net-A-SEGV-at-Net-src-MultipartReader-cpp.patch | 34 ++++++++++++++++++++++
+ package/poco/poco.mk                               |  3 ++
+ 2 files changed, 37 insertions(+)
+
+diff --git a/package/poco/0001-fix-Net-A-SEGV-at-Net-src-MultipartReader-cpp.patch b/package/poco/0001-fix-Net-A-SEGV-at-Net-src-MultipartReader-cpp.patch
+new file mode 100644
+index 0000000000..cfb22d690a
+--- /dev/null
++++ b/package/poco/0001-fix-Net-A-SEGV-at-Net-src-MultipartReader-cpp.patch
+@@ -0,0 +1,34 @@
++From 6f2f85913c191ab9ddfb8fae781f5d66afccf3bf Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?G=C3=BCnter=20Obiltschnig?= <guenter.obiltschnig@appinf.com>
++Date: Wed, 16 Apr 2025 09:15:33 +0200
++Subject: [PATCH] fix(Net): A SEGV at Net/src/MultipartReader.cpp:164:1 #4915
++ (move assertion out of ctor)
++
++Upstream: https://github.com/pocoproject/poco/commit/6f2f85913c191ab9ddfb8fae781f5d66afccf3bf
++CVE: CVE-2025-6375
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ Net/src/MultipartReader.cpp | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/Net/src/MultipartReader.cpp b/Net/src/MultipartReader.cpp
++index f3a2f2bba2..f4aa27dd86 100644
++--- a/Net/src/MultipartReader.cpp
+++++ b/Net/src/MultipartReader.cpp
++@@ -36,7 +36,6 @@ MultipartStreamBuf::MultipartStreamBuf(std::istream& istr, const std::string& bo
++ 	_boundary(boundary),
++ 	_lastPart(false)
++ {
++-	poco_assert (!boundary.empty() && boundary.length() < STREAM_BUFFER_SIZE - 6);
++ }
++ 
++ 
++@@ -47,7 +46,7 @@ MultipartStreamBuf::~MultipartStreamBuf()
++ 
++ int MultipartStreamBuf::readFromDevice(char* buffer, std::streamsize length)
++ {
++-	poco_assert_dbg (length >= _boundary.length() + 6);
+++	poco_assert (!_boundary.empty() && _boundary.length() < length - 6);
++ 
++ 	static const int eof = std::char_traits<char>::eof();
++ 	std::streambuf& buf = *_istr.rdbuf();
+diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+index ee740b2377..f7d9cdc009 100644
+--- a/package/poco/poco.mk
++++ b/package/poco/poco.mk
+@@ -11,6 +11,9 @@ POCO_LICENSE_FILES = LICENSE
+ POCO_CPE_ID_VENDOR = pocoproject
+ POCO_INSTALL_STAGING = YES
+ 
++# 0001-fix-Net-A-SEGV-at-Net-src-MultipartReader-cpp.patch
++POCO_IGNORE_CVES += CVE-2025-6375
++
+ POCO_DEPENDENCIES = \
+ 	pcre2 \
+ 	zlib \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
