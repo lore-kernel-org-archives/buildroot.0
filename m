@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D31CFCAC592
-	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 17:29:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DDD0CAC59A
+	for <buildroot@archiver.kernel.org>; Fri, 19 Sep 2025 17:33:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 859B340A2E;
-	Fri, 19 Sep 2025 17:29:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1E9D040F34;
+	Fri, 19 Sep 2025 17:33:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pUAMT2SdZ41E; Fri, 19 Sep 2025 17:29:29 +0000 (UTC)
+ id ezC-R-FnX3Ii; Fri, 19 Sep 2025 17:33:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E1F040D58
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4786A40F12
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9E1F040D58;
-	Fri, 19 Sep 2025 17:29:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5E2E0E7
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 17:29:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4786A40F12;
+	Fri, 19 Sep 2025 17:33:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B4A0B150
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 17:33:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 502D640EFC
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 17:29:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9AE0F83B89
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 17:33:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SxMfUxRT6keF for <buildroot@buildroot.org>;
- Fri, 19 Sep 2025 17:29:27 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3643640A2E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3643640A2E
- for <buildroot@buildroot.org>; Fri, 19 Sep 2025 17:29:27 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2FED086006; Fri, 19 Sep 2025 17:29:27 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 19 Sep 2025 19:26:27 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f83cb153a5e963a052b512388c3c9f5f10c581a7
-X-Git-Newrev: 4f0a9596e35dfdcdc82dce1a2e16a74974d3e4d9
-X-Patchwork-Hint: ignore
-Message-Id: <20250919172927.2FED086006@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/postgresql: security bump to
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iwu_jQwPOOQk for <buildroot@buildroot.org>;
+ Fri, 19 Sep 2025 17:33:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8FE6183B67
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FE6183B67
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8FE6183B67
+ for <buildroot@buildroot.org>; Fri, 19 Sep 2025 17:33:28 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 5696D5FFA3;
+ Fri, 19 Sep 2025 19:33:25 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 19 Sep 2025 19:33:25 +0200
+MIME-Version: 1.0
+Date: Fri, 19 Sep 2025 19:33:25 +0200
+To: Maxim Kochetkov <fido_max@inbox.ru>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250919072349.169149-1-fido_max@inbox.ru>
+References: <20250919072349.169149-1-fido_max@inbox.ru>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <e155e911435893c111d4caf4919a4e1c@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1758303206;
+ bh=nxxCTf6mHFzTkMpqSyTiy9ShGV576B37AG+1tcgsB8I=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Elg8HC2WuNxAMKaA5h2HqiECjdz675jH9zTVTpDt7S2eJrGlp/2PwdPd76tf54AjN
+ SgvCqI4gkpkHWjWj4mvAG6sM1oq6IDuFq8sBwP2bfG1L/8fHwWCfmj1+7i9bq9NheY
+ e2gkksIX2/kK70Fg2K8HL4iKyKZTr+Jd6pL9IetziwE4ClpCJFtCjEi/h4uSGSQO0U
+ IiQE2r9bo4MUZ3y0WSJQW93vLV/w4yshg/oLnuuUh5GvD3B1gJXk46f7S5mMq29L+u
+ vr6C2PACE/QlIRMIOBRICgmgZ4+EauGD7ax2EVp2iN7/Janq1osYhYePzJdOHR5d36
+ zveWRsq2E8uSA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Elg8HC2W
+Subject: Re: [Buildroot] [PATCH 1/1] package/postgresql: security bump to
  version 17.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -60,91 +83,75 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f0a9596e35dfdcdc82dce1a2e16a74974d3e4d9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 19/09/2025 09:23, Maxim Kochetkov via buildroot wrote:
+> Fixes the following security issue:
+> 
+> CVE-2025-8713: PostgreSQL optimizer statistics can expose sampled data
+> within a view, partition, or child table
+> 
+> PostgreSQL optimizer statistics allow a user to read sampled data 
+> within
+> a view that the user cannot access. Separately, statistics allow a user
+> to read sampled data that a row security policy intended to hide.
+> PostgreSQL maintains statistics for tables by sampling data available 
+> in
+> columns; this data is consulted during the query planning process. 
+> Prior
+> to this release, a user could craft a leaky operator that bypassed view
+> access control lists (ACLs) and bypassed row security policies in
+> partitioning or table inheritance hierarchies. Reachable statistics 
+> data
+> notably included histograms and most- common-values lists. 
+> CVE-2017-7484
+> and CVE-2019-10130 intended to close this class of vulnerability, but
+> this gap remained. Versions before PostgreSQL 17.6, 16.10, 15.14, 
+> 14.19,
+> and 13.22 are affected.
+> 
+> CVE-2025-8714: PostgreSQL pg_dump lets superuser of origin server 
+> execute
+> arbitrary code in psql client
+> 
+> Untrusted data inclusion in pg_dump in PostgreSQL allows a malicious
+> superuser of the origin server to inject arbitrary code for 
+> restore-time
+> execution as the client operating system account running psql to 
+> restore
+> the dump, via psql meta-commands. pg_dumpall is also affected. 
+> pg_restore
+> is affected when used to generate a plain-format dump. This is similar 
+> to
+> MySQL CVE-2024-21096. Versions before PostgreSQL 17.6, 16.10, 15.14,
+> 14.19, and 13.22 are affected.
+> 
+> CVE-2025-8715: PostgreSQL pg_dump newline in object name executes
+> arbitrary code in psql client and in restore target server
+> 
+> Improper neutralization of newlines in pg_dump in PostgreSQL allows a 
+> user
+> of the origin server to inject arbitrary code for restore-time 
+> execution
+> as the client operating system account running psql to restore the 
+> dump,
+> via psql meta-commands inside a purpose-crafted object name. The same
+> attacks can achieve SQL injection as a superuser of the restore target
+> server. pg_dumpall, pg_restore, and pg_upgrade are also affected.
+> Versions before PostgreSQL 17.6, 16.10, 15.14, 14.19, and 13.22 are 
+> affected.
+> Versions before 11.20 are unaffected. CVE-2012-0868 had fixed this 
+> class
+> of problem, but version 11.20 reintroduced it.
+> 
+> https://www.postgresql.org/about/news/postgresql-176-1610-1514-1419-1322-and-18-beta-3-released-3118/
+> 
+> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 
-Fixes the following security issue:
-
-CVE-2025-8713: PostgreSQL optimizer statistics can expose sampled data
-within a view, partition, or child table
-
-PostgreSQL optimizer statistics allow a user to read sampled data within
-a view that the user cannot access. Separately, statistics allow a user
-to read sampled data that a row security policy intended to hide.
-PostgreSQL maintains statistics for tables by sampling data available in
-columns; this data is consulted during the query planning process. Prior
-to this release, a user could craft a leaky operator that bypassed view
-access control lists (ACLs) and bypassed row security policies in
-partitioning or table inheritance hierarchies. Reachable statistics data
-notably included histograms and most- common-values lists. CVE-2017-7484
-and CVE-2019-10130 intended to close this class of vulnerability, but
-this gap remained. Versions before PostgreSQL 17.6, 16.10, 15.14, 14.19,
-and 13.22 are affected.
-
-CVE-2025-8714: PostgreSQL pg_dump lets superuser of origin server execute
-arbitrary code in psql client
-
-Untrusted data inclusion in pg_dump in PostgreSQL allows a malicious
-superuser of the origin server to inject arbitrary code for restore-time
-execution as the client operating system account running psql to restore
-the dump, via psql meta-commands. pg_dumpall is also affected. pg_restore
-is affected when used to generate a plain-format dump. This is similar to
-MySQL CVE-2024-21096. Versions before PostgreSQL 17.6, 16.10, 15.14,
-14.19, and 13.22 are affected.
-
-CVE-2025-8715: PostgreSQL pg_dump newline in object name executes
-arbitrary code in psql client and in restore target server
-
-Improper neutralization of newlines in pg_dump in PostgreSQL allows a user
-of the origin server to inject arbitrary code for restore-time execution
-as the client operating system account running psql to restore the dump,
-via psql meta-commands inside a purpose-crafted object name. The same
-attacks can achieve SQL injection as a superuser of the restore target
-server. pg_dumpall, pg_restore, and pg_upgrade are also affected.
-Versions before PostgreSQL 17.6, 16.10, 15.14, 14.19, and 13.22 are affected.
-Versions before 11.20 are unaffected. CVE-2012-0868 had fixed this class
-of problem, but version 11.20 reintroduced it.
-
-https://www.postgresql.org/about/news/postgresql-176-1610-1514-1419-1322-and-18-beta-3-released-3118/
-
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/postgresql/postgresql.hash | 6 +++---
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index f17d4ca3ce..3b5e773c65 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.postgresql.org/pub/source/v17.5/postgresql-17.5.tar.bz2.sha256
--sha256  fcb7ab38e23b264d1902cb25e6adafb4525a6ebcbd015434aeef9eda80f528d8  postgresql-17.5.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v17.6/postgresql-17.6.tar.bz2.sha256
-+sha256  e0630a3600aea27511715563259ec2111cd5f4353a4b040e0be827f94cd7a8b0  postgresql-17.6.tar.bz2
- # License file, Locally calculated
--sha256  e3822c4797fadcab31a3fc73f75c28ac20c73d72b565da91e9974cf9398ef4d2  COPYRIGHT
-+sha256  5ed3ce5c9373dff7f98b1fae7a6c7ccd98df7d734d46d24c1bcebf1240be8307  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 671bd30347..31d0068328 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 17.5
-+POSTGRESQL_VERSION = 17.6
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
