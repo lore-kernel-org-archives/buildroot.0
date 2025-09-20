@@ -1,76 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94FBBCAC597
-	for <buildroot@archiver.kernel.org>; Sat, 20 Sep 2025 09:14:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDEF8CAC597
+	for <buildroot@archiver.kernel.org>; Sat, 20 Sep 2025 09:46:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 47427615D2;
-	Sat, 20 Sep 2025 09:14:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 409F840695;
+	Sat, 20 Sep 2025 09:46:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fUS-ToJKA-Ii; Sat, 20 Sep 2025 09:14:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GPDrFaGY726o; Sat, 20 Sep 2025 09:46:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57864615D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C00240670
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 57864615D3;
-	Sat, 20 Sep 2025 09:14:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C00240670;
+	Sat, 20 Sep 2025 09:46:28 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 76353E7
- for <buildroot@buildroot.org>; Sat, 20 Sep 2025 09:13:59 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id BCCF7D7F
+ for <buildroot@buildroot.org>; Sat, 20 Sep 2025 09:46:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5C7FC83F96
- for <buildroot@buildroot.org>; Sat, 20 Sep 2025 09:13:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A3EA783ECB
+ for <buildroot@buildroot.org>; Sat, 20 Sep 2025 09:46:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MhtDquHv9iv8 for <buildroot@buildroot.org>;
- Sat, 20 Sep 2025 09:13:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0C39183F98
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C39183F98
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0C39183F98
- for <buildroot@buildroot.org>; Sat, 20 Sep 2025 09:13:57 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id E3AC719F5A5;
- Sat, 20 Sep 2025 11:13:51 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 20 Sep 2025 11:13:51 +0200
+ id VNmW5-HQtzwb for <buildroot@buildroot.org>;
+ Sat, 20 Sep 2025 09:46:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::532; helo=mail-ed1-x532.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8E58383EC9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E58383EC9
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
+ [IPv6:2a00:1450:4864:20::532])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8E58383EC9
+ for <buildroot@buildroot.org>; Sat, 20 Sep 2025 09:46:25 +0000 (UTC)
+Received: by mail-ed1-x532.google.com with SMTP id
+ 4fb4d7f45d1cf-631787faf35so569483a12.3
+ for <buildroot@buildroot.org>; Sat, 20 Sep 2025 02:46:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1758361583; x=1758966383;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=syJ7KQwNO4zEw5qSNTGwZg0HLN4Oq06/+O+/kJBPjKo=;
+ b=COMNTB+Y2+JECLe1JSzpcI3/Hm1kJ58HtMjVDimiRqWG8+QpUSIaNWKq1vJS/faSGE
+ q8cXfY+d9lEsh7gCy3+dB6Nplu8w2o2djswODG+tmcaNZz1Bg7H7PPViyBquaCfXN1Tm
+ Ai2IK4zJOSWSsDXPL3DU8NQeBuqOJMcWeD5Fl7yMz1b97k+DmiwSBzNHLwdAKg7NmlIw
+ /1J+mvGLOcCK51WLUhC6Dj7iJqW4Gb0a6iBxzXQYKIafFUjLfzJf1hgAGe11Kruumctw
+ aUSBvgX5sQMbdli4oFf2hxAJVGk4e5s5PVz1iLd6HMgB08HxKHNmFMAzYQ5PMBjA4+Bg
+ llXg==
+X-Gm-Message-State: AOJu0YwFKNFnCgAl0emSdDqnkunvVS+kTF4Ea7hwgAsEzki8u7qAIRdy
+ w5RVgyWMFlYg8fYe3edU1l8E+qbPwtKMzb08CuLONsPFhmGJVt1x80/O6U/IstPd8/1ouIVpma0
+ QJsO9
+X-Gm-Gg: ASbGncsiq8Jb0CSx/O+ashyTLrWIRtRh2p7+WWEKATlwtzsCMnd3/HqjIVDqKZGaKhx
+ hEUuB1cRKiWCaLUUM8tkwjj2V7IwxkLTYxQGzYYESLFYuBp1iZ5hqPMVJABJ4PiyNEG9DafBXwW
+ TsYDVI+Owf9XvsZsmM0uTCvMhX9uWEH+CAzDIp8DajdX7yU0USnSqUz1gVctPGyhSgI4CSZhjh0
+ sc3RSA9rcY5Zfy+nuWkTI1V5dfzmJDzk7tdR3HJm5C5VdaFBEvqAyxa0x/fUv2u1LkB2nFE7P2L
+ yTp7pUlxo7X+y6fG+RvswQTq1ZGTBeJ9yVYWsql0NbxWUdrvnQWSXA0Y2l4SzNjTWfNzQAaxFab
+ rlacq/KU5EKFuRr2E2y6fwHusKonuSjKiJeCEyr6AziYZZvB/ZPXFjefqGnyHr9VEkefmfSdaGk
+ 8LZmd8Uhve1pjoOvVHMhPcMj43Z0ZdbPjYLRBOQXM5J/e7/vK5Dlbg9da8KZ9QXr8S
+X-Google-Smtp-Source: AGHT+IF3Ez1zERXIL6WMNCkJopRicNPPeHG4Tz+bpRChq3aJL2IxwoDIT/N29pK/MsKQ++aGC8W6yA==
+X-Received: by 2002:a05:6402:5c8:b0:628:6fc1:a3f with SMTP id
+ 4fb4d7f45d1cf-62fc09610e0mr4708617a12.17.1758361583244; 
+ Sat, 20 Sep 2025 02:46:23 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
+ (host-82-56-38-125.retail.telecomitalia.it. [82.56.38.125])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-62fa5d51e5asm4977621a12.21.2025.09.20.02.46.21
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 20 Sep 2025 02:46:22 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: buildroot@buildroot.org
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com
+Date: Sat, 20 Sep 2025 11:46:16 +0200
+Message-ID: <20250920094617.2571648-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Date: Sat, 20 Sep 2025 11:13:51 +0200
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250919065303.60285-1-thomas.perale@mind.be>
-References: <20250919065303.60285-1-thomas.perale@mind.be>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <543a0ee0a3616c0f6663f02399763e77@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1758359633;
- bh=jjzV5cpI4zt4JmxURgbAqB3nTabvutW12ACnX7jOn6U=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=cjTHQRiErJvcpYZFJLYt7EqwZCtgjn+1yXnzXSnQ3ZTOVEMFwffEEhaXgN5h8plLz
- gT59Nx0oTwj4nf62w2u5YEonR9sHfNTm9+6wjU9k3r1nLAyPyJAQQZCUsL+dMHq3+G
- 5e4AKFnJkSeoG+uHr72lMNLhSZ8U25966PAoAX/gu/LlmLYU5YAE/2qM6Pyw35eAYi
- ZDqn/46lKspEJCS27+EqrlSzSR4KNr497h3D6Cy+FoUd9Utw1CusEJ1cmoUPwBLg/t
- ooH+SeZmmIDbjkQl0meAiUbVEbC9w5YRjyeyHA7eD4OtmbO7A1k+ESwwa8Ushh/kyL
- 8BN53P6zp9gWw==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1758361583; x=1758966383;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=syJ7KQwNO4zEw5qSNTGwZg0HLN4Oq06/+O+/kJBPjKo=;
+ b=VsNt4WQMxcE2jNf90/Dc7+RimtU/cYrK+lYiWB6j9SHxJdrz40IjYwZE7V1UPaWsuC
+ 3z3HK1gX0/AfvyRWF6fCXUVdpeWrKDBAhZ//FGJhF3z/JMR9HkonAOMkJab/mUMEFzXI
+ LzjMBu0dciBayhXNVk4ljMaQTjhlPHlT0dkMc=
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=cjTHQRiE
-Subject: Re: [Buildroot] [PATCH 1/2] package/poco: add patch for
- CVE-2025-6375
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=VsNt4WQM
+Subject: [Buildroot] [PATCH 1/2] package/atf: bump to version 0.23
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,44 +109,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 19/09/2025 08:53, Thomas Perale via buildroot wrote:
-> This fixes the following vulnerability:
-> 
-> - CVE-2025-6375:
-> 
-> A vulnerability was found in poco up to 1.14.1. It has been rated as
-> problematic. Affected by this issue is the function 
-> MultipartInputStream
-> of the file Net/src/MultipartReader.cpp. The manipulation leads to null
-> pointer dereference. The attack needs to be approached locally. The
-> exploit has been disclosed to the public and may be used. Upgrading to
-> version 1.14.2 is able to address this issue. The patch is identified 
-> as
-> 6f2f85913c191ab9ddfb8fae781f5d66afccf3bf. It is recommended to upgrade
-> the affected component.
-> 
-> For more information see:
->   - https://nvd.nist.gov//vuln/detail/CVE-2025-6375
->   - 
-> https://github.com/pocoproject/poco/commit/6f2f85913c191ab9ddfb8fae781f5d66afccf3bf
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Release notes:
+https://github.com/freebsd/atf/releases/tag/atf-0.23
 
-Series applied to master, thanks.
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+ package/atf/atf.hash | 2 +-
+ package/atf/atf.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-For info, I added a new dependency to utf8proc  in the patch 2/2. See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/90e8845b1393bc3042ea8c9edc1172f3951742fe
+diff --git a/package/atf/atf.hash b/package/atf/atf.hash
+index 5b4bbeb8e224..6cd2323ab078 100644
+--- a/package/atf/atf.hash
++++ b/package/atf/atf.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  92bc64180135eea8fe84c91c9f894e678767764f6dbc8482021d4dde09857505  atf-0.21.tar.gz
++sha256  a64e2427d021297f25b3f2e1798f8ec4dc3061ffb01a1cd3f66cc4cee486b10f  atf-0.23.tar.gz
+ sha256  2a15172ddf6386297734c9800c899e6e8dc16c5a03931dcf95a9ab321a24cfe4  COPYING
+diff --git a/package/atf/atf.mk b/package/atf/atf.mk
+index 9630cf1a3338..27c25c8b279a 100644
+--- a/package/atf/atf.mk
++++ b/package/atf/atf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ATF_VERSION = 0.21
++ATF_VERSION = 0.23
+ ATF_SITE = https://github.com/jmmv/atf/releases/download/atf-$(ATF_VERSION)
+ ATF_INSTALL_STAGING = YES
+ ATF_LICENSE = BSD-2-Clause, BSD-3-Clause
+-- 
+2.43.0
 
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
