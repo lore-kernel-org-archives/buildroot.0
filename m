@@ -1,51 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70890CAC597
-	for <buildroot@archiver.kernel.org>; Sat, 20 Sep 2025 11:57:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62E66CAC5A0
+	for <buildroot@archiver.kernel.org>; Sat, 20 Sep 2025 12:01:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2EC9D84082;
-	Sat, 20 Sep 2025 11:57:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E7D2640C5D;
+	Sat, 20 Sep 2025 12:01:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TWnw2-Y4g5oA; Sat, 20 Sep 2025 11:57:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sP90YmaHbEdS; Sat, 20 Sep 2025 12:01:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E0F58407C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19C0640B60
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3E0F58407C;
-	Sat, 20 Sep 2025 11:57:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 23702219
- for <buildroot@buildroot.org>; Sat, 20 Sep 2025 11:57:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 19C0640B60;
+	Sat, 20 Sep 2025 12:01:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 967A8E7
+ for <buildroot@buildroot.org>; Sat, 20 Sep 2025 12:01:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 09BEF405AA
- for <buildroot@buildroot.org>; Sat, 20 Sep 2025 11:57:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7CC8940B57
+ for <buildroot@buildroot.org>; Sat, 20 Sep 2025 12:01:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F_oik6jscutm for <buildroot@buildroot.org>;
- Sat, 20 Sep 2025 11:57:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F6C340479
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F6C340479
- for <buildroot@buildroot.org>; Sat, 20 Sep 2025 11:57:38 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 35F7F85DD5; Sat, 20 Sep 2025 11:57:38 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 20 Sep 2025 12:02:23 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 90e8845b1393bc3042ea8c9edc1172f3951742fe
-X-Git-Newrev: 35f7279ad355ab0760588f3bc850895db2a20521
-X-Patchwork-Hint: ignore
-Message-Id: <20250920115738.35F7F85DD5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qemu: bump to version 10.1.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YQuNumtYIFul for <buildroot@buildroot.org>;
+ Sat, 20 Sep 2025 12:01:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2FAFC40B3C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FAFC40B3C
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2FAFC40B3C
+ for <buildroot@buildroot.org>; Sat, 20 Sep 2025 12:01:24 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id C5CB219F57B;
+ Sat, 20 Sep 2025 14:01:18 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 20 Sep 2025 14:01:18 +0200
+MIME-Version: 1.0
+Date: Sat, 20 Sep 2025 14:01:18 +0200
+To: Scott Fan <fancp2007@gmail.com>
+Cc: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org, Romain
+ Naour <romain.naour@gmail.com>
+In-Reply-To: <CAFkzVZYb2T-mJzzh3RRjGydnQx6UGVLNh8MXJOxOVX330nskuw@mail.gmail.com>
+References: <20250919081032.1132163-1-fancp2007@gmail.com>
+ <ab3a31ee-f76c-4e94-8a66-3cf00805f3a8@smile.fr>
+ <CAFkzVZYb2T-mJzzh3RRjGydnQx6UGVLNh8MXJOxOVX330nskuw@mail.gmail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <f4a77b72db8e765ebd404830ac3ab4c2@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1758369682;
+ bh=nduc6IHlqxIVnEd2nKLb+vpMFiaayUJuCWAj4JvEPFg=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=RWx8vWn/AS/PsfDpEXc9Rk7bTj8TKKVVTfErQ/7wS08SQI9TTwERqBdSi0v8wnyFQ
+ NpKylKvHhSuYEBhUAnP0Nc31DBFEkubprMfhiFLJCzDox886T+cFmTnwvxOkBYcEax
+ j8OJERj3DefuIvljypPgjMzf5Xw4qZQwNzEWQ319bNwLuib9i8ZwZa7NHOKN7fQiuo
+ eaixZ+Z2e80gFvijhwTvvD9F6rj23E4Bbz/kE2+Bp0/mR1IxFjTt0hgwn1HVOUn5zW
+ x3hMnFwuozttSAcXd4bbYqzAxp3uSaj3xqQ7K4eGNSCAhjPWibcfOcewQ9Bh2M5fL9
+ uZfNhnDbKNv2Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=RWx8vWn/
+Subject: Re: [Buildroot] [PATCH] package/qemu: bump to version 10.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,53 +86,40 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35f7279ad355ab0760588f3bc850895db2a20521
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Changes log:
-https://wiki.qemu.org/ChangeLog/10.1
-
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
-Tested-by: Julien Olivain <ju.o@free.fr>
-[Julien: fix license hashes]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/qemu/qemu.hash | 6 +++---
- package/qemu/qemu.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index a8b7d688e8..f4691af1dd 100644
---- a/package/qemu/qemu.hash
-+++ b/package/qemu/qemu.hash
-@@ -1,4 +1,4 @@
- # Locally computed, tarball verified with GPG signature
--sha256  22c075601fdcf8c7b2671a839ebdcef1d4f2973eb6735254fd2e1bd0f30b3896  qemu-10.0.0.tar.xz
--sha256  6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-+sha256  e0517349b50ca73ebec2fa85b06050d5c463ca65c738833bd8fc1f15f180be51  qemu-10.1.0.tar.xz
-+sha256  dd3ce02338c3a48abb6ba59b48809f7108a8bd242cb0cc8be90daafa30707c28  COPYING
-+sha256  31c90ce76b6f5aab90a205851e71d5c27e31c0aa3d7017a4383b98a6fe3f1faa  COPYING.LIB
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index fdc8591e54..0d1d154371 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -6,7 +6,7 @@
- 
- # When updating the version, check whether the list of supported targets
- # needs to be updated.
--QEMU_VERSION = 10.0.0
-+QEMU_VERSION = 10.1.0
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
- QEMU_SITE = https://download.qemu.org
- QEMU_SELINUX_MODULES = qemu virt
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgU2NvdHQsIFJvbWFpbiwKCk9uIDE5LzA5LzIwMjUgMTc6MzAsIFNjb3R0IEZhbiB3cm90ZToK
+PiBIZWxsbyBSb21haW4sCj4gCj4gT25seSBxZW11X2xvb25nYXJjaDY0X3ZpcnRfZWZpX2RlZmNv
+bmZpZyBhbmQKPiBxZW11X3Jpc2N2NjRfdmlydF9lZmlfZGVmY29uZmlnIHdlcmUgdGVzdGVkIG9u
+IG15IGxhcHRvcC4KPiAKPiBIb3dldmVyLCBJIGZvcmdvdCB0byBjaGVjayB0aGUgaGFzaGVzIG9m
+IHRoZSBDT1BZSU5HIGFuZCBDT1BZSU5HLkxJQiAKPiBmaWxlcy4KCkFmdGVyIGZpeGluZyB0aG9z
+ZSBsaWNlbnNlIGhhc2hlcy4uLgoKPiBTY290dCBGYW4KPiAKPiBPbiBGcmksIFNlcCAxOSwgMjAy
+NSBhdCA2OjM34oCvUE0gUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUuZnI+IAo+IHdy
+b3RlOgo+PiAKPj4gSGVsbG8gU2NvdHQsIEFsbCwKPj4gCj4+IExlIDE5LzA5LzIwMjUgw6AgMTA6
+MTAsIFNjb3R0IEZhbiBhIMOpY3JpdCA6Cj4+ID4gQ2hhbmdlcyBsb2c6Cj4+ID4gaHR0cHM6Ly93
+aWtpLnFlbXUub3JnL0NoYW5nZUxvZy8xMC4xCj4+IAo+PiBUaGFua3MgZm9yIHRoaXMgcGF0Y2gh
+Cj4+IAo+PiBIb3cgZGlkIHlvdSB0ZXN0IGl0Pwo+PiAKPj4gUWVtdSBpcyB1c2VkIGJ5IG91ciBH
+aXRsYWItQ0kgdGVzdGluZyBmb3IgYWxtb3N0IGFsbCBhcmNoaXRlY3R1cmVzIAo+PiBzdXBwb3J0
+ZWQgYnkKPj4gQnVpbGRyb290LiBTbyBhbnkgdmVyc2lvbiBidW1wIGNhbiBjYXVzZSBzb21lIGlz
+c3VlLgo+PiAKPj4gSWYgcG9zc2libGUgY2FuIHlvdSB0ZXN0cyBhdCBsZWFzdCBlYWNoIHFlbXUg
+ZGVmY29uZmlncyAoc2VlIHByZXZpb3VzIAo+PiB2ZXJzaW9uIGJ1bXApOgo+PiAKPj4gICAgIFFl
+bXUgZGVmY29uZmlncyB3ZXJlIHJ1bnRpbWUgdGVzdGVkIG9uIEdpdGxhYi1DSToKPj4gICAgIGh0
+dHBzOi8vZ2l0bGFiLmNvbS9rdWJ1OTMvYnVpbGRyb290Ly0vcGlwZWxpbmVzLzE4MDU2NzI2ODUK
+Pj4gCj4+ICAgICBxZW11X3MzOTB4X2RlZmNvbmZpZywgcWVtdV9hcm1fdmV4cHJlc3NfdHpfZGVm
+Y29uZmlnLAo+PiAgICAgcWVtdV9hYXJjaDY0X2ViYnJfZGVmY29uZmlnIHdlcmUgdGVzdGVkIGxv
+Y2FsbHkuCj4+IAo+PiAgICAgUnVudGltZSB0ZXN0cyB1c2luZyBob3N0LXFlbXUgd2VyZSBsb2Nh
+bGx5IHRlc3RlZDoKPj4gICAgIFRlc3RYdmlzb3IsIFRlc3RGd3RzLCBUZXN0RWRrMiwgVGVzdEdy
+dWJBQXJjaDY0RUZJLgoKLi4uYW5kIGNoZWNraW5nIHRoYXQgYWxsIHRob3NlIHRlc3RzIGFyZSBw
+YXNzaW5nLCBJIGFwcGxpZWQgdGhpcwpwYXRjaCB0byBtYXN0ZXIuIFNlZToKaHR0cHM6Ly9naXRs
+YWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vY29tbWl0LzM1ZjcyNzlhZDM1NWFiMDc2
+MDU4OGYzYmM4NTA4OTVkYjJhMjA1MjEKCj4+IAo+PiBJJ20gZmluZSBpZiB5b3UgdGVzdGVkIGlm
+IG9ubHkgb24gb25lIHRlc3QgY2FzZS4KPj4gSW4gdGhpcyBjYXNlLCB3ZSB3aWxsIG5lZWQgdG8g
+cGVyZm9ybSBhZGRpdGlvbmFsIHRlc3RpbmcgYmVmb3JlIAo+PiBtZXJnaW5nIHRoZQo+PiB2ZXJz
+aW9uIGJ1bXAuCj4+IAo+PiBCZXN0IHJlZ2FyZHMsCj4+IFJvbWFpbgo+PiAKPj4gCj4+ID4KPj4g
+PiBTaWduZWQtb2ZmLWJ5OiBTY290dCBGYW4gPGZhbmNwMjAwN0BnbWFpbC5jb20+CgpCZXN0IHJl
+Z2FyZHMsCgpKdWxpZW4uCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
+cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
