@@ -4,100 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CD98CAC597
-	for <buildroot@archiver.kernel.org>; Sat, 20 Sep 2025 11:10:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7F23CAC5A0
+	for <buildroot@archiver.kernel.org>; Sat, 20 Sep 2025 11:13:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D4018615E1;
-	Sat, 20 Sep 2025 11:10:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 859E7615E3;
+	Sat, 20 Sep 2025 11:13:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D8fTAqHwNw16; Sat, 20 Sep 2025 11:10:39 +0000 (UTC)
+ id ZYD-Ag9Z8_Lq; Sat, 20 Sep 2025 11:13:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15283614B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9EC5F615D9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15283614B8;
-	Sat, 20 Sep 2025 11:10:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 35161D7F
- for <buildroot@buildroot.org>; Sat, 20 Sep 2025 11:10:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9EC5F615D9;
+	Sat, 20 Sep 2025 11:13:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B2961D7F
+ for <buildroot@buildroot.org>; Sat, 20 Sep 2025 11:13:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 26A0E82258
- for <buildroot@buildroot.org>; Sat, 20 Sep 2025 11:10:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 998D6614B8
+ for <buildroot@buildroot.org>; Sat, 20 Sep 2025 11:13:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PLXLMiLWzmcW for <buildroot@buildroot.org>;
- Sat, 20 Sep 2025 11:10:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p4IclZqon3A2 for <buildroot@buildroot.org>;
+ Sat, 20 Sep 2025 11:13:11 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::633; helo=mail-ej1-x633.google.com;
+ client-ip=2a00:1450:4864:20::530; helo=mail-ed1-x530.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 23AB58224C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 23AB58224C
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
- [IPv6:2a00:1450:4864:20::633])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 23AB58224C
- for <buildroot@buildroot.org>; Sat, 20 Sep 2025 11:10:35 +0000 (UTC)
-Received: by mail-ej1-x633.google.com with SMTP id
- a640c23a62f3a-b07c28f390eso528844666b.2
- for <buildroot@buildroot.org>; Sat, 20 Sep 2025 04:10:35 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 526766133B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 526766133B
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
+ [IPv6:2a00:1450:4864:20::530])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 526766133B
+ for <buildroot@buildroot.org>; Sat, 20 Sep 2025 11:13:11 +0000 (UTC)
+Received: by mail-ed1-x530.google.com with SMTP id
+ 4fb4d7f45d1cf-62f4a8dfadcso3460080a12.1
+ for <buildroot@buildroot.org>; Sat, 20 Sep 2025 04:13:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1758366634; x=1758971434;
+ d=1e100.net; s=20230601; t=1758366789; x=1758971589;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=sC6G9ZuHvrfcGTfaDSJa2qA7I474uqNIfdn9IEqwPYc=;
- b=ijwg92Uz9BP/XojWwV/IJdE+nJWZIK8j1CD77CeAC5Wj2gU9OBBaw0sOO5LPYl60H8
- AkH6pAwmoiSGEweyd0TIUwonV9e7+a3Em1M3Zz6klwob6vlqZCA6sisuoNHTJcjE3t7m
- nFs/ZYAya+1CdO6IDv5AQdomic1yi7eUadJhP494pYcvRO/RgZqaIKePmKwN3wMZuJqv
- HZ7i1zIdNGOvajdpvMSEV0833YrTIbpnmn3fvvTdxEIqKifHyCEssjWtllQsX6wzwLTB
- fsdnOrb7ldfJsrD59GGxjdyOBjd8bPpjGQv/8ingFGo8BmG7xd2+bekJq+vq4Ks1zyB0
- ezug==
-X-Gm-Message-State: AOJu0Yw8SFJW9qvXtxNsYi1gwG642jkDx87ZlLHZoKANnBHi6jqgs7yX
- kj5fhT+wad+cdg3O29x5oNkRMLcwwdSvXa0RaTj2EmRVQxZ74MkWZvL0BQG12Un8nqSWUDLjhPk
- HULX7
-X-Gm-Gg: ASbGncu+aJsWKWK4sccG8gnQAXrL4Am2xoSrqYVbF9LnGJFibh284Wc7+DK2bKhn+xE
- bpTl4eEV+dkq+0KbOvci+Qlv9V90TfTTtkntyS7pMCNBPFVfByArDoFcp0ousIAaLl9VX1iD0HS
- 9h7f0RL7j0mL/eqe1l/n5XxtiEkLAXAjq86NTA+YyR2NOB7h2yXavgxhcY4csrS2a9NZIWIZV6K
- EesvKpLFb6vwFIW5sc+jjyI2osq62OK3Lj2eWRHfwBEyqw+dMepmQeCUDVRUitkR66i8OWCuj+t
- CDRvsNYt3uW6wf8BOvW2SF8LmFuBWS9eBg3Et1zOns6PvY38SuemAsEPnr0A9wBSUJpD7E+4lQn
- uIXZjvhMXb6LcfjdzGYuLVh+MN0g6OrcSi3jLt2WpxFRCd7d8d2GyYlvRIUbqe1pfHjY5OODr6J
- VkxHQsg9m/r/DBQE72KePm5r1fVBjLXALElPUp669pS4UTwCxUQ0upVYG+ZcTq/xCg
-X-Google-Smtp-Source: AGHT+IG2a4pyw7UBG+En49ulhLH9NV1LlFvE7yh5J0xksTgc1fsQRpr33fJSPmVPnC3EYyJxRpw/OQ==
-X-Received: by 2002:a17:906:7310:b0:b04:858e:c1ee with SMTP id
- a640c23a62f3a-b24ed886e06mr715296566b.2.1758366633626; 
- Sat, 20 Sep 2025 04:10:33 -0700 (PDT)
+ bh=4jFsBcN6kprcNVT/Skq1F41EQ7EjefdR+TGHkLBOSag=;
+ b=v0zMjwZ0xSGvOupIQka7YX0TLQ7mWup99R+0trzm/rbU9SRlFNA2hbIVwjfuOYji/8
+ AVhRIRF0I6RxNQeSyB1GqgugRy6nxQeRg5ESkdgpmcfo64xxnGYbxti7+M/DW9fb9rnr
+ rlNRyeQvgGZIE6uAhuP0H+uxlUPctJSWOZwbUIFCxXN5vg3UfoXKFn3keDcwDKN0aRQc
+ 2p5WuXsoUu6RS3T5vxBVSQIUDecHDFrzaryKSG3s3Z1/a6T21XTHqF9wpDcxBXrvbOAm
+ 361z+R3GDnf0Shomp4HRYeJahM/N4glhMNFVfpJsjIksWSJO4+WTPsQvXVPLQpvd4FI/
+ A27g==
+X-Gm-Message-State: AOJu0YwnHuMLA8KJ/6upgEPkZeRGQtZNnj/Mpnd9uDqknVmsG/Ap5Cw6
+ Si7lHMhtZQwu5qLRAup2vYRFyDK6Fda7vKrkQUw0aDTkKgcxK167K38qOIQ0o/HZbdtNahddD0M
+ eC0Kx
+X-Gm-Gg: ASbGnct/931kbzyVFZAv7x7K8O12wDm9IcrhKwJJY+/S3BL/aI5mY/Kw9yFPX9yEZrV
+ nHPc4k3h2chyEeNTD5oqzWW1OTDvkcpmSFyTpCJXWMDuEJ5YBRaITye/M2bzdBr9zPTe/pT9U5W
+ 3lVTLjAX/ovu0U9xN8zzObbbqUIwsWx+3I65NY0dh5HU1jGBkocqFjs50iopbw9k2Cz0HvurNYN
+ YB1FOjXliO5YqIEQbP+VMmraou73BdtMi3DUL4YfzIiob2x3WVN9SgtHpMtJHKTgUq6m3s/Anio
+ aq/X9kbLHNIuYmhzFwKHu/1VXNX3xBBejogjNaEmeB1fvMAzfXlnd6AFjObr15LPbBtZZY/tFAX
+ 9c+pVIgaF4DTkRW2nloAYzmNPDCvdvc2ue1tZWU7NNNLuUZpzMD14xOcu2GeFQ1vssSj4hAUW/g
+ HaYDCgDhtJ9T11hNx/zqg+rIkQCbrwZtvgbZqCfV5UcT+aGvjf5BFyr05wLxlf8DED
+X-Google-Smtp-Source: AGHT+IHzeXuFt6LaWPlfxHU6D3IRaXzlht48A4xYIZZayFGCc4Cua3iIvb10XnRqOA68TNCHNhTF9w==
+X-Received: by 2002:a05:6402:27cb:b0:631:fe26:a661 with SMTP id
+ 4fb4d7f45d1cf-631fe26af8dmr631734a12.3.1758366788915; 
+ Sat, 20 Sep 2025 04:13:08 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
  (host-82-56-38-125.retail.telecomitalia.it. [82.56.38.125])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b29912fb4d2sm27474666b.14.2025.09.20.04.10.31
+ 4fb4d7f45d1cf-62fa5d17efdsm4884874a12.15.2025.09.20.04.13.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 20 Sep 2025 04:10:33 -0700 (PDT)
+ Sat, 20 Sep 2025 04:13:08 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Sat, 20 Sep 2025 13:10:28 +0200
-Message-ID: <20250920111028.2574590-1-dario.binacchi@amarulasolutions.com>
+Date: Sat, 20 Sep 2025 13:12:43 +0200
+Message-ID: <20250920111244.2575859-1-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1758366634; x=1758971434;
+ d=amarulasolutions.com; s=google; t=1758366789; x=1758971589;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=sC6G9ZuHvrfcGTfaDSJa2qA7I474uqNIfdn9IEqwPYc=;
- b=eCgFG6du+OMypEiCVzlQwyF8604WgaofrJjUTutn4z56dL7VcBLQlhgVHRWBAhDj+a
- jKcdEKc6y4Gor4i7Xo3mi34IOr25Wdl1AuUjtV/M7+q8cuCf0qIdcKVHqMrTz6ofRpRm
- v6cyIabgs7Hw8LbshFgTSa0eYqXjWrjopNaQw=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=4jFsBcN6kprcNVT/Skq1F41EQ7EjefdR+TGHkLBOSag=;
+ b=mw9g45tsExqGYau4LPmgx4ZNaRNpzC0783DKGp1wuuznqDtaUmyyg1hr0RRmyfdT0P
+ 45FALim12qqIGNy8mBmHjsbFkezh1WoGd8tTIq4vq23Piy3srxOONRfBCxYtG51rssey
+ QBtD21k6hKfyeqrNXC8WHAn0LAAY4hwXYbZH0=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=eCgFG6du
-Subject: [Buildroot] [PATCH 1/1] package/atop: bump to version 2.12.0
+ header.a=rsa-sha256 header.s=google header.b=mw9g45ts
+Subject: [Buildroot] [PATCH 1/2] package/cmocka: bump to version 1.1.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,88 +107,146 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Patch 0001-Makefile-allow-the-user-to-pass-additional-CFLAGS-an.patch
-was removed because it has been integrated with commit
-631defdd22e3b6872c440d368d7acf459150eea5.
+The removed patch has been merged in version 1.1.6.
 
 Release notes:
-https://www.atoptool.nl/downloadatop.php
+https://gitlab.com/cmocka/cmocka/-/tags/cmocka-1.1.6
+https://gitlab.com/cmocka/cmocka/-/tags/cmocka-1.1.7
+https://gitlab.com/cmocka/cmocka/-/tags/cmocka-1.1.8
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- ...he-user-to-pass-additional-CFLAGS-an.patch | 32 -------------------
- package/atop/atop.hash                        |  2 +-
- package/atop/atop.mk                          |  2 +-
- 3 files changed, 2 insertions(+), 34 deletions(-)
- delete mode 100644 package/atop/0001-Makefile-allow-the-user-to-pass-additional-CFLAGS-an.patch
+ .checkpackageignore                           |  1 -
+ .../0001-Don-t-redefine-uintptr_t.patch       | 77 -------------------
+ package/cmocka/cmocka.hash                    |  2 +-
+ package/cmocka/cmocka.mk                      |  2 +-
+ 4 files changed, 2 insertions(+), 80 deletions(-)
+ delete mode 100644 package/cmocka/0001-Don-t-redefine-uintptr_t.patch
 
-diff --git a/package/atop/0001-Makefile-allow-the-user-to-pass-additional-CFLAGS-an.patch b/package/atop/0001-Makefile-allow-the-user-to-pass-additional-CFLAGS-an.patch
+diff --git a/.checkpackageignore b/.checkpackageignore
+index d8d0bc6969fe..17deae937c7e 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -292,7 +292,6 @@ package/chipmunk/0001-Fix-build-failure-on-musl.patch lib_patch.Upstream
+ package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch lib_patch.Upstream
+ package/chrony/S49chronyd lib_sysv.Variables
+ package/cmake/0001-rename-cmake-rootfile.patch lib_patch.Upstream
+-package/cmocka/0001-Don-t-redefine-uintptr_t.patch lib_patch.Upstream
+ package/collectd/0001-src-netlink.c-remove-REG_NOERROR.patch lib_patch.Upstream
+ package/connman/S45connman lib_sysv.Variables
+ package/copas/0001-Do-not-load-coxpcall-for-LuaJIT.patch lib_patch.Upstream
+diff --git a/package/cmocka/0001-Don-t-redefine-uintptr_t.patch b/package/cmocka/0001-Don-t-redefine-uintptr_t.patch
 deleted file mode 100644
-index 0fc8f142b14a..000000000000
---- a/package/atop/0001-Makefile-allow-the-user-to-pass-additional-CFLAGS-an.patch
+index 4123d8db22da..000000000000
+--- a/package/cmocka/0001-Don-t-redefine-uintptr_t.patch
 +++ /dev/null
-@@ -1,32 +0,0 @@
--From c8e9d2b885deca065bd7955019a6aa071974042d Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Mon, 5 Aug 2024 23:38:08 +0200
--Subject: [PATCH] Makefile: allow the user to pass additional CFLAGS and
-- LDFLAGS
+@@ -1,77 +0,0 @@
+-From 28ce16b29911e5adc60140b572dee177adc7a178 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 18 Nov 2019 18:56:46 +0100
+-Subject: [PATCH] Don't redefine uintptr_t
 -
--This is needed for some build systems. For example, Buildroot needs to
--disable optimizations on some CPU architectures.
+-Add a call to check_type_size in ConfigureChecks.cmake and use it in
+-include/cmocka.h to avoid the following redefinition error on riscv64:
 -
--Upstream: https://github.com/Atoptool/atop/pull/314
--[Waldemar: rebase on top of 2.11.0]
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-In file included from /data/buildroot/buildroot-test/instance-0/output/build/cmocka-1.1.5/src/cmocka.c:62:
+-/data/buildroot/buildroot-test/instance-0/output/build/cmocka-1.1.5/include/cmocka.h:132:28: error: conflicting types for 'uintptr_t'
+-       typedef unsigned int uintptr_t;
+-                            ^~~~~~~~~
+-In file included from /data/buildroot/buildroot-test/instance-0/output/host/riscv64-buildroot-linux-musl/sysroot/usr/include/stdint.h:20,
+-                 from /data/buildroot/buildroot-test/instance-0/output/host/riscv64-buildroot-linux-musl/sysroot/usr/include/inttypes.h:9,
+-                 from /data/buildroot/buildroot-test/instance-0/output/build/cmocka-1.1.5/src/cmocka.c:27:
+-/data/buildroot/buildroot-test/instance-0/output/host/riscv64-buildroot-linux-musl/sysroot/usr/include/bits/alltypes.h:104:24: note: previous declaration of 'uintptr_t' was here
+- typedef unsigned _Addr uintptr_t;
+-                        ^~~~~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/30922c18150ea62aefe123d1b7cd1444efab963f
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Reviewed-by: Andreas Schneider <asn@cryptomilk.org>
+-[Retrieved from:
+-https://gitlab.com/cmocka/cmocka/commit/28ce16b29911e5adc60140b572dee177adc7a178]
 ----
-- Makefile | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
+- ConfigureChecks.cmake | 3 +++
+- config.h.cmake        | 4 ++++
+- include/cmocka.h      | 2 +-
+- 3 files changed, 8 insertions(+), 1 deletion(-)
 -
--diff --git a/Makefile b/Makefile
--index 3a63f69..ab44eaa 100644
----- a/Makefile
--+++ b/Makefile
--@@ -21,8 +21,8 @@ PMPATH2  = /usr/lib64/pm-utils/sleep.d
-- PMPATHD  = /usr/lib/systemd/system-sleep
+-diff --git a/ConfigureChecks.cmake b/ConfigureChecks.cmake
+-index fe8da35..028774f 100644
+---- a/ConfigureChecks.cmake
+-+++ b/ConfigureChecks.cmake
+-@@ -70,6 +70,9 @@ if (HAVE_TIME_H)
+-     check_struct_has_member("struct timespec" tv_sec "time.h" HAVE_STRUCT_TIMESPEC)
+- endif (HAVE_TIME_H)
 - 
-- PKG_CONFIG ?= pkg-config
---CFLAGS  += -O2 -I. -Wall $(shell $(PKG_CONFIG) --cflags glib-2.0)  -Wno-stringop-truncation -Wmissing-prototypes -Wmissing-declarations -Wformat-security # -DNOPERFEVENT   # -DHTTPSTATS
---LDFLAGS += $(shell $(PKG_CONFIG) --libs glib-2.0)
--+override CFLAGS  += -O2 -I. -Wall $(shell $(PKG_CONFIG) --cflags glib-2.0)  -Wno-stringop-truncation -Wmissing-prototypes -Wmissing-declarations -Wformat-security # -DNOPERFEVENT   # -DHTTPSTATS
--+override LDFLAGS += $(shell $(PKG_CONFIG) --libs glib-2.0)
-- OBJMOD0  = version.o
-- OBJMOD1  = various.o  deviate.o   procdbase.o
-- OBJMOD2  = acctproc.o photoproc.o photosyst.o cgroups.o rawlog.o ifprop.o parseable.o
-diff --git a/package/atop/atop.hash b/package/atop/atop.hash
-index 8774fb577dea..aeb9a469d7d3 100644
---- a/package/atop/atop.hash
-+++ b/package/atop/atop.hash
-@@ -1,5 +1,5 @@
+-+# TYPES
+-+check_type_size(uintptr_t UINTPTR_T)
+-+
+- # FUNCTIONS
+- check_function_exists(calloc HAVE_CALLOC)
+- check_function_exists(exit HAVE_EXIT)
+-diff --git a/config.h.cmake b/config.h.cmake
+-index f8d79da..55fc69f 100644
+---- a/config.h.cmake
+-+++ b/config.h.cmake
+-@@ -75,6 +75,10 @@
+- 
+- #cmakedefine HAVE_STRUCT_TIMESPEC 1
+- 
+-+/***************************** TYPES *****************************/
+-+
+-+#cmakedefine HAVE_UINTPTR_T 1
+-+
+- /*************************** FUNCTIONS ***************************/
+- 
+- /* Define to 1 if you have the `calloc' function. */
+-diff --git a/include/cmocka.h b/include/cmocka.h
+-index 3e923dd..0aa557e 100644
+---- a/include/cmocka.h
+-+++ b/include/cmocka.h
+-@@ -120,7 +120,7 @@ typedef uintmax_t LargestIntegralType;
+-     ((LargestIntegralType)(value))
+- 
+- /* Smallest integral type capable of holding a pointer. */
+--#if !defined(_UINTPTR_T) && !defined(_UINTPTR_T_DEFINED)
+-+#if !defined(_UINTPTR_T) && !defined(_UINTPTR_T_DEFINED) && !defined(HAVE_UINTPTR_T)
+- # if defined(_WIN32)
+-     /* WIN32 is an ILP32 platform */
+-     typedef unsigned int uintptr_t;
+--- 
+-2.22.0
+-
+diff --git a/package/cmocka/cmocka.hash b/package/cmocka/cmocka.hash
+index 74d67d6ecb6c..8dc0532388dc 100644
+--- a/package/cmocka/cmocka.hash
++++ b/package/cmocka/cmocka.hash
+@@ -1,3 +1,3 @@
  # Locally computed:
--sha256  9b94c666602efff7bf402ecce706c347f38c39cb63498f9d39626861e5646e20  atop-2.11.0.tar.gz
-+sha256  0d09ecc90c14e6ef41c22e3c57c142c3e4fb9cf3c94379077a33c961d5343086  atop-2.12.0.tar.gz
- 
- # Hash for license file:
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
-diff --git a/package/atop/atop.mk b/package/atop/atop.mk
-index f7dfed5e8df3..b4a5bda52e40 100644
---- a/package/atop/atop.mk
-+++ b/package/atop/atop.mk
+-sha256  f0ccd8242d55e2fd74b16ba518359151f6f8383ff8aef4976e48393f77bba8b6  cmocka-1.1.5.tar.xz
++sha256  58435b558766d7f4c729ba163bdf3aec38bed3bc766dab684e3526ed0aa7c780  cmocka-1.1.8.tar.xz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
+diff --git a/package/cmocka/cmocka.mk b/package/cmocka/cmocka.mk
+index 297f95f46504..04a0640f4cbd 100644
+--- a/package/cmocka/cmocka.mk
++++ b/package/cmocka/cmocka.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ATOP_VERSION = 2.11.0
-+ATOP_VERSION = 2.12.0
- ATOP_SITE = http://www.atoptool.nl/download
- ATOP_LICENSE = GPL-2.0+
- ATOP_LICENSE_FILES = COPYING
+-CMOCKA_VERSION = 1.1.5
++CMOCKA_VERSION = 1.1.8
+ CMOCKA_SOURCE = cmocka-$(CMOCKA_VERSION).tar.xz
+ CMOCKA_SITE = https://cmocka.org/files/1.1
+ CMOCKA_LICENSE = Apache-2.0
 -- 
 2.43.0
 
