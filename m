@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 196AECAC5A7
-	for <buildroot@archiver.kernel.org>; Sun, 21 Sep 2025 19:24:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74A9BCAC5A7
+	for <buildroot@archiver.kernel.org>; Sun, 21 Sep 2025 19:25:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CCD2860C1E;
-	Sun, 21 Sep 2025 19:24:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 457798249E;
+	Sun, 21 Sep 2025 19:25:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p9jWLCuyO2Z9; Sun, 21 Sep 2025 19:24:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GLH1cUFnQAvd; Sun, 21 Sep 2025 19:25:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F21D160C2D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6128382513
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F21D160C2D;
-	Sun, 21 Sep 2025 19:24:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 50B74E7
- for <buildroot@buildroot.org>; Sun, 21 Sep 2025 19:24:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6128382513;
+	Sun, 21 Sep 2025 19:25:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1E377E7
+ for <buildroot@buildroot.org>; Sun, 21 Sep 2025 19:25:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 42A9260C2D
- for <buildroot@buildroot.org>; Sun, 21 Sep 2025 19:24:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1B65882513
+ for <buildroot@buildroot.org>; Sun, 21 Sep 2025 19:25:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4yACWPn7ax2T for <buildroot@buildroot.org>;
- Sun, 21 Sep 2025 19:24:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 834A860C1E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 834A860C1E
- for <buildroot@buildroot.org>; Sun, 21 Sep 2025 19:24:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 71FA58613F; Sun, 21 Sep 2025 19:24:20 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 21 Sep 2025 21:23:50 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a367362af00ed349915b0b4496ebeb9910fc86e4
-X-Git-Newrev: a33e1af4a01cab51988fba8bbb02b94f7ed28ecf
-X-Patchwork-Hint: ignore
-Message-Id: <20250921192420.71FA58613F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/scripts/gen-bootlin-toolchains:
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SwGXJxztRWwt for <buildroot@buildroot.org>;
+ Sun, 21 Sep 2025 19:25:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 20BA9823C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20BA9823C6
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 20BA9823C6
+ for <buildroot@buildroot.org>; Sun, 21 Sep 2025 19:24:59 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id B74AE2003D0;
+ Sun, 21 Sep 2025 21:24:56 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 21 Sep 2025 21:24:56 +0200
+MIME-Version: 1.0
+Date: Sun, 21 Sep 2025 21:24:56 +0200
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250921185034.7025c654@windsurf>
+References: <20250921161721.2070176-1-ju.o@free.fr>
+ <20250921185034.7025c654@windsurf>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <02a18f4cff33b6802fab4db7877f2a39@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1758482697;
+ bh=JLKJECm7TMiOO3f1LubNhlTOH3zkoZ3VTSKsZE4xqiY=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=hxdYoikdoabkEcleoMiL3W9dLBkR14tEeo2Jlc9PgY8KqLmPfoxQuON1S9rkfg+Sj
+ dI/TzOpgXuHt92H8rwsr9AmM3ZyHkMYAEKlbgAXo7y7natQQnNLdVZLi7IhVrVbv3+
+ 1DiUGKQN7SDSs2P2qCdBBOHNA8x5eBIG1yScFDAaMOJjCxxYlWOxBWZme/q2aCugVj
+ WwdzNIeqYrc9JJ6wjb9Ma++nyNWLq1Q2yU9EoFDodd/TqrK14LLq3bql05c1pujmI8
+ mv4n7kI9Uc++J51EIgp7UWzTY0HKMiWECogNlqo2qWGJqUlRZPBnWgr9KnrxVUWCJK
+ gLCqNC+ed/lIg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=hxdYoikd
+Subject: Re: [Buildroot] [PATCH 1/1] support/scripts/gen-bootlin-toolchains:
  avoid selecting _HAS_THREADS multiple times
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -60,59 +84,58 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a33e1af4a01cab51988fba8bbb02b94f7ed28ecf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 21/09/2025 18:50, Thomas Petazzoni via buildroot wrote:
+> On Sun, 21 Sep 2025 18:17:21 +0200
+> Julien Olivain <ju.o@free.fr> wrote:
+> 
+>> The Bootlin external toolchain file Config.in.options contains 
+>> multiple
+>> occurrences of "select BR2_TOOLCHAIN_HAS_THREADS". See for example 
+>> [1].
+>> 
+>> This file is generated by the support/scripts/gen-bootlin-toolchains
+>> script from the information published at [2].
+>> 
+>> Those multiple occurrences happens with toolchains having
+>> BR2_TOOLCHAIN_HAS_THREADS_DEBUG and/or BR2_TOOLCHAIN_HAS_THREADS_NPTL.
+>> 
+>> Since the script uses the startswith() method, the _HAS_THREADS
+>> selection is also generated for _HAS_THREADS_DEBUG and
+>> _HAS_THREADS_NPTL. See [3].
+>> 
+>> This commit solve the issue by adding a '=' character to make sure the
+>> test will be distinct from other strings having the same prefix.
+>> 
+>> Note: there is no functional problem due to those multiple selections,
+>> since it is allowed by Kconfig. This commit is simply cosmetic, for
+>> correctness.
+>> 
+>> [1] 
+>> https://gitlab.com/buildroot.org/buildroot/-/blob/2025.08/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options#L167
+>> [2] https://toolchains.bootlin.com/
+>> [3] 
+>> https://gitlab.com/buildroot.org/buildroot/-/blob/2025.08/support/scripts/gen-bootlin-toolchains#L366
+>> 
+>> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> 
+> Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-The Bootlin external toolchain file Config.in.options contains multiple
-occurrences of "select BR2_TOOLCHAIN_HAS_THREADS". See for example [1].
+Applied to master, thanks.
 
-This file is generated by the support/scripts/gen-bootlin-toolchains
-script from the information published at [2].
-
-Those multiple occurrences happens with toolchains having
-BR2_TOOLCHAIN_HAS_THREADS_DEBUG and/or BR2_TOOLCHAIN_HAS_THREADS_NPTL.
-
-Since the script uses the startswith() method, the _HAS_THREADS
-selection is also generated for _HAS_THREADS_DEBUG and
-_HAS_THREADS_NPTL. See [3].
-
-This commit solve the issue by adding a '=' character to make sure the
-test will be distinct from other strings having the same prefix.
-
-Note: there is no functional problem due to those multiple selections,
-since it is allowed by Kconfig. This commit is simply cosmetic, for
-correctness.
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/blob/2025.08/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options#L167
-[2] https://toolchains.bootlin.com/
-[3] https://gitlab.com/buildroot.org/buildroot/-/blob/2025.08/support/scripts/gen-bootlin-toolchains#L366
-
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- support/scripts/gen-bootlin-toolchains | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
-index 78123ed1a7..75fa2c7e0f 100755
---- a/support/scripts/gen-bootlin-toolchains
-+++ b/support/scripts/gen-bootlin-toolchains
-@@ -363,7 +363,7 @@ class Toolchain:
-                 selects.append("BR2_ENABLE_LOCALE")
- 
-             # thread support
--            if frag.startswith("BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS"):
-+            if frag.startswith("BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS="):
-                 selects.append("BR2_TOOLCHAIN_HAS_THREADS")
- 
-             if frag.startswith("BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG"):
+> 
+> Thanks a lot!
+> 
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
