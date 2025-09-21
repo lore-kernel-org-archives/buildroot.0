@@ -4,86 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAF6FCAC59A
-	for <buildroot@archiver.kernel.org>; Sun, 21 Sep 2025 14:54:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 457B8CAC59A
+	for <buildroot@archiver.kernel.org>; Sun, 21 Sep 2025 15:16:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF914840A8;
-	Sun, 21 Sep 2025 14:54:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DF51683E6C;
+	Sun, 21 Sep 2025 15:16:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ck7Bqx_4DPQo; Sun, 21 Sep 2025 14:54:11 +0000 (UTC)
+ id Vj72rdZQsgys; Sun, 21 Sep 2025 15:16:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B51B4840EF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0045A83E48
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B51B4840EF;
-	Sun, 21 Sep 2025 14:54:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id DF3D1D3
- for <buildroot@buildroot.org>; Sun, 21 Sep 2025 14:54:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0045A83E48;
+	Sun, 21 Sep 2025 15:16:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id AC4E8E7
+ for <buildroot@buildroot.org>; Sun, 21 Sep 2025 15:16:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C51054091D
- for <buildroot@buildroot.org>; Sun, 21 Sep 2025 14:54:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9242D400E0
+ for <buildroot@buildroot.org>; Sun, 21 Sep 2025 15:16:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D9rBS7XgmRvX for <buildroot@buildroot.org>;
- Sun, 21 Sep 2025 14:54:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=160.92.124.96;
- helo=smtp-outgoing-1601.laposte.net; envelope-from=vincent.stehle@laposte.net;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iY_gCpAQadCv for <buildroot@buildroot.org>;
+ Sun, 21 Sep 2025 15:16:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9E68F408DE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E68F408DE
-Received: from smtp-outgoing-1601.laposte.net (smtp-outgoing-1601.laposte.net
- [160.92.124.96])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9E68F408DE
- for <buildroot@buildroot.org>; Sun, 21 Sep 2025 14:54:07 +0000 (UTC)
-X-mail-filterd: {"version":"1.9.4","queueID":"4cV5lS6gFLzdZLZ","contextId":
- "fd2f11c6-3fe7-49f1-b7c5-4b4285f83897"}
-Received: from outgoing-mail.laposte.net (localhost.localdomain [127.0.0.1])
- by mlpnf0106.laposte.net (SMTP Server) with ESMTP id 4cV5lS6gFLzdZLZ;
- Sun, 21 Sep 2025 14:53:40 +0200 (CEST)
-X-mail-filterd: {"version":"1.9.4","queueID":"4cV5lS5XCyzdZLM","contextId":
- "045776fc-1d4d-4ebe-a03e-7aa6bf4f6487"}
-X-lpn-mailing: LEGIT
-X-lpn-spamrating: 36
-X-lpn-spamlevel: not-spam
-Received: from romuald.bergerie (88-169-129-225.subs.proxad.net
- [88.169.129.225])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits))
- (No client certificate requested)
- by mlpnf0106.laposte.net (SMTP Server) with ESMTPSA id 4cV5lS5XCyzdZLM;
- Sun, 21 Sep 2025 14:53:40 +0200 (CEST)
-Received: from radicelle (radicelle.bergerie [192.168.42.3])
- by romuald.bergerie (Postfix) with ESMTP id 192876A1890F;
- Sun, 21 Sep 2025 14:53:46 +0200 (CEST)
-Received: from vincent by radicelle with local (Exim 4.98.2)
- (envelope-from <vincent@radicelle.bergerie>)
- id 1v0Jad-000000002U8-2E6a; Sun, 21 Sep 2025 14:54:51 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6090340071
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6090340071
+ for <buildroot@buildroot.org>; Sun, 21 Sep 2025 15:16:55 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5A0258608D; Sun, 21 Sep 2025 15:16:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Julien Olivain <ju.o@free.fr>
-Date: Sun, 21 Sep 2025 14:54:21 +0200
-Message-ID: <20250921125422.7944-6-vincent.stehle@laposte.net>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250921125422.7944-1-vincent.stehle@laposte.net>
-References: <20250921125422.7944-1-vincent.stehle@laposte.net>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=laposte.net; s=lpn-wlmd; t=1758466445;
- bh=3OwAtt2I2+deIjratFUIDObKByafIWngq52Gr4INYTQ=;
- h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding;
- b=q0fPHLlEBx6kKV7cUPGutHXwfO1UhPyIel53APpHYu2ysJ/SjiEGYINyOXfEw+mUAXibZo4n8uygWt2bCC2kE0/IZwPxrpXe6g0GbgDGfafrHFeSmWRaAG89O7AVwQ1fZr43b7hzKqzUoLGHDGJDuiTMJgrw+52gl+tWvQZABHARuSVERwmOpg3EkPaeha7Nr11iPzWGbGpF+O/8M3810TK+A5e9j92VIyEbn1D+CraWYS/wAqzZELKrOjvYmg4TmFuGUxOqnGMzjdwUTCyv5/1E2dqbovePAE80ZGlK57xFMG3H/WINuSS+kwOKS7UUGU7ZhthrGZuGIHJLOVtvMQ==;
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=laposte.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=laposte.net header.i=@laposte.net
- header.a=rsa-sha256 header.s=lpn-wlmd header.b=q0fPHLlE
-Subject: [Buildroot] [PATCH 5/6] boot/palo: new boot package
+Date: Sun, 21 Sep 2025 17:15:26 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5d2abdc66ca687c926e1c4546c12aca7f7d72ca4
+X-Git-Newrev: 5208b7a1bde348c60a40ca6a62526d95a9ce93f6
+X-Patchwork-Hint: ignore
+Message-Id: <20250921151655.5A0258608D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: TestZfsUclibc: use
+ internal backend for uClibc-ng toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,70 +58,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Vincent_Stehl=C3=A9_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============6542602603748710665=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-UGFsbyBpcyBhIFBBLVJJU0MvTGludXggYm9vdCBsb2FkZXIuCkl0IGNhbiBiZSB1c2VkIHRvIG1h
-a2UgYm9vdGFibGUgZGlzayBpbWFnZXMgb3IgbmV0d29yayBib290YWJsZSBpbWFnZXMuCgpXaGls
-ZSBhdCBpdCwgYWRkIHRoaXMgYm9vdCBwYWNrYWdlIHRvIG15c2VsZiBpbiBERVZFTE9QRVJTLgoK
-U2lnbmVkLW9mZi1ieTogVmluY2VudCBTdGVobMOpIDx2aW5jZW50LnN0ZWhsZUBsYXBvc3RlLm5l
-dD4KQ2M6IFRob21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+Ci0t
-LQogREVWRUxPUEVSUyAgICAgICAgICB8ICAxICsKIGJvb3QvQ29uZmlnLmluICAgICAgfCAgMSAr
-CiBib290L3BhbG8vQ29uZmlnLmluIHwgMTMgKysrKysrKysrKysrKwogYm9vdC9wYWxvL3BhbG8u
-aGFzaCB8ICAzICsrKwogYm9vdC9wYWxvL3BhbG8ubWsgICB8IDI1ICsrKysrKysrKysrKysrKysr
-KysrKysrKysKIDUgZmlsZXMgY2hhbmdlZCwgNDMgaW5zZXJ0aW9ucygrKQogY3JlYXRlIG1vZGUg
-MTAwNjQ0IGJvb3QvcGFsby9Db25maWcuaW4KIGNyZWF0ZSBtb2RlIDEwMDY0NCBib290L3BhbG8v
-cGFsby5oYXNoCiBjcmVhdGUgbW9kZSAxMDA2NDQgYm9vdC9wYWxvL3BhbG8ubWsKCmRpZmYgLS1n
-aXQgYS9ERVZFTE9QRVJTIGIvREVWRUxPUEVSUwppbmRleCAwZDhhMjUzMDhhLi44OGU1M2JkZmVl
-IDEwMDY0NAotLS0gYS9ERVZFTE9QRVJTCisrKyBiL0RFVkVMT1BFUlMKQEAgLTMzNjUsNiArMzM2
-NSw3IEBAIEY6CWFyY2gvYXJjaC5tay5ocHBhCiBGOglib2FyZC9hcm0vZm91bmRhdGlvbi12OC8K
-IEY6CWJvYXJkL2JhbmFuYXBpL2JhbmFuYXBpLW0yLXplcm8vCiBGOglib2FyZC9xZW11L2hwcGEt
-YjE2MGwvCitGOglib290L3BhbG8vCiBGOgljb25maWdzL2FybV9mb3VuZGF0aW9udjhfZGVmY29u
-ZmlnCiBGOgljb25maWdzL2JhbmFuYXBpX20yX3plcm9fZGVmY29uZmlnCiBGOgljb25maWdzL3Fl
-bXVfaHBwYV9iMTYwbF9kZWZjb25maWcKZGlmZiAtLWdpdCBhL2Jvb3QvQ29uZmlnLmluIGIvYm9v
-dC9Db25maWcuaW4KaW5kZXggZjE2NzM0NmNkZi4uZTRkZDMxMjYyNiAxMDA2NDQKLS0tIGEvYm9v
-dC9Db25maWcuaW4KKysrIGIvYm9vdC9Db25maWcuaW4KQEAgLTEyLDYgKzEyLDcgQEAgc291cmNl
-ICJib290L212LWRkci1tYXJ2ZWxsL0NvbmZpZy5pbiIKIHNvdXJjZSAiYm9vdC9teHMtYm9vdGxl
-dHMvQ29uZmlnLmluIgogc291cmNlICJib290L29wdGVlLW9zL0NvbmZpZy5pbiIKIHNvdXJjZSAi
-Ym9vdC9vcGVuc2JpL0NvbmZpZy5pbiIKK3NvdXJjZSAiYm9vdC9wYWxvL0NvbmZpZy5pbiIKIHNv
-dXJjZSAiYm9vdC9zNTAwLWJvb3Rsb2FkZXIvQ29uZmlnLmluIgogc291cmNlICJib290L3NoaW0v
-Q29uZmlnLmluIgogc291cmNlICJib290L3N5c2xpbnV4L0NvbmZpZy5pbiIKZGlmZiAtLWdpdCBh
-L2Jvb3QvcGFsby9Db25maWcuaW4gYi9ib290L3BhbG8vQ29uZmlnLmluCm5ldyBmaWxlIG1vZGUg
-MTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLjM0ZTJkNWJmMDAKLS0tIC9kZXYvbnVsbAorKysgYi9i
-b290L3BhbG8vQ29uZmlnLmluCkBAIC0wLDAgKzEsMTMgQEAKK2NvbmZpZyBCUjJfVEFSR0VUX1BB
-TE8KKwlib29sICJwYWxvIgorCWRlcGVuZHMgb24gQlIyX2hwcGEKKwloZWxwCisJICBQYWxvIGlz
-IGEgUEEtUklTQy9MaW51eCBib290IGxvYWRlci4KKworCSAgSXQgY29tcHJpc2VzIGlwbGJvb3Qs
-IGEgYm9vdGxvYWRlciBsb2FkZWQgYnkgdGhlIEhQIGZpcm13YXJlLAorCSAgYW5kIHBhbG8sIGEg
-Ym9vdCBtZWRpYSBtYW5hZ2VtZW50IHRvb2wuCisKKwkgIFBhbG8gYWxsb3dzIHRvIHVwZGF0ZSBk
-aXNrIGltYWdlcyB3aXRoIGEgYm9vdGxvYWRlciB0byBtYWtlCisJICB0aGVtIGJvb3RhYmxlLCBv
-ciB0byBjcmVhdGUgbmV0d29yayBib290YWJsZSBpbWFnZXMuCisKKwkgIGh0dHBzOi8vcGFyaXNj
-LmRvY3Mua2VybmVsLm9yZwpkaWZmIC0tZ2l0IGEvYm9vdC9wYWxvL3BhbG8uaGFzaCBiL2Jvb3Qv
-cGFsby9wYWxvLmhhc2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uMmE3
-ZTJlZjg5YQotLS0gL2Rldi9udWxsCisrKyBiL2Jvb3QvcGFsby9wYWxvLmhhc2gKQEAgLTAsMCAr
-MSwzIEBACisjIExvY2FsbHkgY2FsY3VsYXRlZAorc2hhMjU2ICA3M2RiOWY2MGQ0MzljNGFlOWQz
-MWIwNDk2NzEyODNlMDFkOTVhZTM2NGZjNzhiNGRiMzdlZWQ1NTIzMjE4ZDZjICBwYWxvLTIuMjgu
-dGFyLmd6CitzaGEyNTYgIGZhNWZjMWQxZWVjMzk1MzJlYTUxNzUxOGVlZWZkN2I2ZTNjMTQzNDFh
-NTVlNTg4MGEwZTJhNDllZWU0N2E1YjcgIENPUFlJTkcKZGlmZiAtLWdpdCBhL2Jvb3QvcGFsby9w
-YWxvLm1rIGIvYm9vdC9wYWxvL3BhbG8ubWsKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAw
-MDAwMDAwMC4uZGFkYjBjZGU5MgotLS0gL2Rldi9udWxsCisrKyBiL2Jvb3QvcGFsby9wYWxvLm1r
-CkBAIC0wLDAgKzEsMjUgQEAKKyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCisjCisjIHBhbG8KKyMK
-KyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCisKK1BBTE9fVkVSU0lPTiA9IDIuMjgKK1BBTE9fU0lU
-RSA9IGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L2RlbGxl
-ci9wYWxvLmdpdC9zbmFwc2hvdAorUEFMT19MSUNFTlNFID0gR1BMLTIuMAorUEFMT19MSUNFTlNF
-X0ZJTEVTID0gQ09QWUlORworUEFMT19JTlNUQUxMX0lNQUdFUyAgPSBZRVMKKworZGVmaW5lIFBB
-TE9fQlVJTERfQ01EUworCSMgRHVtbXkgUkVBRE1FIHRvIHJlbW92ZSB0aGUgZGVwZW5kZW5jeSBv
-biBseW54LgorCXRvdWNoICQoQEQpL1JFQURNRQorCSQoVEFSR0VUX01BS0VfRU5WKSAkKE1BS0Up
-IC1DICQoQEQpIFwKKwkJQ1JPU1NfQ09NUElMRT0kKFRBUkdFVF9DUk9TUykgYWxsIG1ha2VpcGwK
-K2VuZGVmCisKK2RlZmluZSBQQUxPX0lOU1RBTExfSU1BR0VTX0NNRFMKKwkkKElOU1RBTEwpIC1E
-IC1tIDA2NDQgJChARCkvaXBsYm9vdCAkKEJJTkFSSUVTX0RJUikvaXBsYm9vdAorCSQoSU5TVEFM
-TCkgLUQgLW0gMDc1NSAkKEBEKS9wYWxvL3BhbG8gJChIT1NUX0RJUikvYmluL3BhbG8KK2VuZGVm
-CisKKyQoZXZhbCAkKGdlbmVyaWMtcGFja2FnZSkpCi0tIAoyLjUxLjAKCl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
-YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
-YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+--===============6542602603748710665==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=5208b7a1bde348c60a40ca6a62526d95a9ce93f6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+As reported on the mailing list [1] while investigating the
+TestZfsUclibc Gitlab-CI failure, the python 3.13 interpreter itsef
+segfault at runtime:
+
+  Fatal Python error: _PyThreadState_Attach: non-NULL old thread state
+  Python runtime state: preinitialized
+  Thread 0xSegmentation fault
+
+This issue is related to the python 3.13 version bump [2] were several
+internal changes were added [3] to support PEP 703 [4].
+PEP 793 is about CPython’s global interpreter lock (“GIL”) removal
+for multi-threads support that requires a working C11 "thread_local"
+for thread-local storage [5].
+
+The new uclibc-ng 1.0.55 release contains a fix for this issue [6].
+This version is included in Buildroot commit [7].
+
+Since the prebuilt Bootling aarch64 uclibc stable 2025.08-1 is based
+on previous uClibc-ng release (1.0.54) we have to use the internal
+toolchain backend to build a new uClibc-ng toolchain using uclibc-ng
+1.0.55. Note: the toolchain config defined in this commit reflects
+the options enabled in the Bootling aarch64 uclibc external
+toolchains.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/11271124859 (TestZfsUclibc)
+
+[1] https://lore.kernel.org/buildroot/7a4d245d-1556-43c9-8997-6b1f791afbfe@gmail.com/ (TestZfsUclibc)
+[2] https://gitlab.com/buildroot.org/buildroot/-/commit/d63e207eb869063f82c867658676c2903beb08cb
+[3] https://github.com/python/cpython/commit/6e97a9647ae028facb392d12fc24973503693bd6
+[4] https://peps.python.org/pep-0703/
+[5] https://gcc.gnu.org/onlinedocs/gcc-15.1.0/gcc/Thread-Local.html
+[6] https://github.com/wbx-github/uclibc-ng/commit/94c1297d52263e20cd9715601afa37f49d008d93
+[7] https://gitlab.com/buildroot.org/buildroot/-/commit/5250bba8e5b1aaeb58977baf1d91e2be66656476
+
+Cc: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
+Tested-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+[Julien:
+ - add link to buildroot commit updating uclibc-ng to 1.0.55
+ - add a note in the commit log about the toolchain config
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ support/testing/tests/package/test_zfs.py | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/support/testing/tests/package/test_zfs.py b/support/testing/tests/package/test_zfs.py
+index 1b907ac4de..c218cc36a8 100644
+--- a/support/testing/tests/package/test_zfs.py
++++ b/support/testing/tests/package/test_zfs.py
+@@ -74,9 +74,18 @@ class TestZfsGlibc(TestZfsBase):
+ 
+ 
+ class TestZfsUclibc(TestZfsBase):
+-    config = TestZfsBase.config + \
++    # The Bootling aarch64 uclibc stable 2025.08-1 needs to be
++    # rebuild with uClibc-ng 1.0.55.
++    # See: https://github.com/wbx-github/uclibc-ng/commit/94c1297d52263e20cd9715601afa37f49d008d93
++    config = TestZfsBase.config.replace('BR2_TOOLCHAIN_EXTERNAL=y\n', '')
++    config = config.replace('BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y\n', '') + \
+         """
+-        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_UCLIBC_STABLE=y
++        BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
++        BR2_KERNEL_HEADERS_5_4=y
++        BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
++        BR2_PTHREAD_DEBUG=y
++        BR2_TOOLCHAIN_BUILDROOT_CXX=y
++        BR2_GCC_ENABLE_OPENMP=y
+         """
+ 
+     def test_run(self):
+
+--===============6542602603748710665==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6542602603748710665==--
