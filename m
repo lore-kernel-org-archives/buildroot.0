@@ -4,72 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2ABCFCAC5A8
-	for <buildroot@archiver.kernel.org>; Sun, 21 Sep 2025 09:38:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87330CAC5A8
+	for <buildroot@archiver.kernel.org>; Sun, 21 Sep 2025 10:04:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CD69884079;
-	Sun, 21 Sep 2025 09:38:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2AA66840B1;
+	Sun, 21 Sep 2025 10:04:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xZa2ygQOgLO4; Sun, 21 Sep 2025 09:38:43 +0000 (UTC)
+ id erek-mYFbv14; Sun, 21 Sep 2025 10:04:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E61BB84087
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5C6D829A9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E61BB84087;
-	Sun, 21 Sep 2025 09:38:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id CFD051C0
- for <buildroot@buildroot.org>; Sun, 21 Sep 2025 09:38:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E5C6D829A9;
+	Sun, 21 Sep 2025 10:04:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1DC41D3
+ for <buildroot@buildroot.org>; Sun, 21 Sep 2025 10:04:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C067C401A1
- for <buildroot@buildroot.org>; Sun, 21 Sep 2025 09:38:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 01927608BB
+ for <buildroot@buildroot.org>; Sun, 21 Sep 2025 10:04:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hd9v5dySJN-q for <buildroot@buildroot.org>;
- Sun, 21 Sep 2025 09:38:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7E20640074
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E20640074
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7E20640074
- for <buildroot@buildroot.org>; Sun, 21 Sep 2025 09:38:40 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 560047803A2;
- Sun, 21 Sep 2025 11:38:35 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 21 Sep 2025 11:38:35 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7kuYp7IAdp3p for <buildroot@buildroot.org>;
+ Sun, 21 Sep 2025 10:04:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C2B4F608AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2B4F608AE
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C2B4F608AE
+ for <buildroot@buildroot.org>; Sun, 21 Sep 2025 10:04:01 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id
+ a640c23a62f3a-b07c2908f3eso518659266b.1
+ for <buildroot@buildroot.org>; Sun, 21 Sep 2025 03:04:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1758449039; x=1759053839;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=kTUV2EaKfo1m33kgzt0q9EhZdCMs6u30T1uFww7DJeM=;
+ b=ggwxY8xrx8ouhePrajjjirnDudsEwTPqLRYpr8ZLr0J/w7SsnS57KOOHT6k9OUFEDV
+ JAZZHKPbkXXmFnZrLSahH0nkVrpeK6uLhDycg4QMr1ZQ3gUIs61GMXD/RuZIWVPMXe3I
+ j8CWPRGMr0vXBzggilotr5YqnRgfNQFsyrL0o6VstTKIjVww8vGtUUuffL79U4niXqSJ
+ JtPpd1w+iJmoC/exf18P49Lr+Ev+NDX/Y3t2B+Bg4H7P85FjFtrXBT1zfwm+HDcIyNz5
+ efo6hVUIpfch1YEUcfA3XqTPiCSRj+/fLq79bCHz+5ePJvO5yl/iGCvonIJwL8XB8mP3
+ WKgQ==
+X-Gm-Message-State: AOJu0YzhUjnksTXzA2BfevXFNJumDxiBVKJGnkzLfnMrooW+lMZxf1WB
+ dhIgNTpPTGmsjHLbURnU8HcfQDPH5S8bUKUsM8+vFjUt+MzPnRIVgC4WJaCYONn7o1g/7dDGjn2
+ /0nkI
+X-Gm-Gg: ASbGncu4jaryE4eKJ+hZhwNN1AKwET2iaf4KWP+bCuV1VoPC162s6XWjLK/QbsCehhX
+ XxfcmcwBw9bjySpL7qPIqnX5NBsUj7m0hAzvnOhVjK1hd1a6GPTNULTi5syTEicHIi2Xo435dEg
+ E08XWGGrhtrfA0LtaURgzcnMwLp2lMUBndqk6G28Dfob4yqTuIPZkqSLIbULMGZ8EoFD3yw+xxc
+ Lq68V5iqZGL54HHwZX0ZsuA1Z8U7V11yWAVEC24B72ZJplHdILZXZcidW3mIycIJTbRigqbqNBx
+ dsNhZ7snvwAGeV5dguYhUTCu7/Z8TrzAJ5AWbRwORC5dyhX272CaDlBkSphqQzbPDDyDyDeTO7u
+ IrJ4AQ9fbH80XsI/yLpA26p+RPOv9SF5+rzzp3bKJbxN4UxxD54lFlEWBLJCWeecFIBV/W+H9dQ
+ K0yXdvS2tgg0vVzFqVkZFE42FczzNeHWcoO6eZ0G2KSPssFDCPvVV7C4W+Rg9X4HpK9ht/1lv7a
+ Bg=
+X-Google-Smtp-Source: AGHT+IG04HmF5le8qiC74yQB9MjBVMFqjuyCCeJqazZUAQsB0R/SkOTJrH1ypwuEbrZoQpujSOvCLQ==
+X-Received: by 2002:a17:907:1c94:b0:b07:c905:21c with SMTP id
+ a640c23a62f3a-b24f4ebfa65mr1184945366b.48.1758449039396; 
+ Sun, 21 Sep 2025 03:03:59 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
+ (host-82-56-38-125.retail.telecomitalia.it. [82.56.38.125])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-b1fcfe888bcsm853361266b.71.2025.09.21.03.03.57
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 21 Sep 2025 03:03:58 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: buildroot@buildroot.org
+Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
+ linux-amarula@amarulasolutions.com,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date: Sun, 21 Sep 2025 12:03:51 +0200
+Message-ID: <20250921100352.2620720-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Date: Sun, 21 Sep 2025 11:38:35 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: buildroot@buildroot.org, Jesse Taube <Mr.Bossman075@gmail.com>
-In-Reply-To: <20250920205055.291492-1-giulio.benetti@benettiengineering.com>
-References: <20250920205055.291492-1-giulio.benetti@benettiengineering.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <0aee18b7a7e5c118ba3134e2bca4b19f@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1758447517;
- bh=+ttTE9rzbBrbUayAyEJAuW6qtyN5WllxHBDelzJtbEo=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=HcQuXSJB1uZc3TT1t5NJVdibJ2ZAOQZ6vXohzyHSjoIJnTWCRKbxMFhAGpRCeqcC9
- oXn5ZcejC32nFcOaTlW5XNMWcDy1ZJYzoTvx7XmCwxIZ+NQt+p2K/AdEVHHHEXsdkn
- bFTiuMuep696FH/JMWZUgFQkVuyaqyizI5cGCepx0NTATE+gepSQ31v3zBB/948eUl
- gQzQPdp6JAloMQaUTAwh+2al9TFtdkOWlyY8W74J1+9GwROXfmh8z+xNQ4UMhmll7s
- 0zLUmbCqSiAlBoCuWnpaUvYesBsmFrMHuGKeyZwBMaZEii1UA6A4E7l4T+hjmeWzpE
- r6TDJXe7XQOVA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=HcQuXSJB
-Subject: Re: [Buildroot] [PATCH] configs/imxrt1050-evk: fix build failure
- due to wrong toolchain
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1758449039; x=1759053839;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=kTUV2EaKfo1m33kgzt0q9EhZdCMs6u30T1uFww7DJeM=;
+ b=ks7POb2nD7YarZyqERqHiTtGBnWTAqDFAREmYT4nj8SotEYEu/08wBwQmoW3Xy4Znn
+ gjpoIRGANL2781pgIggF9cRlaDbuYWGqUuEfoOnjyrWaPbUD+YmpCNwPy5asFbZ/YqFY
+ wCefCdv39UZJsPBd6h6GrxCqwUdh7+hiIoT1o=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=ks7POb2n
+Subject: [Buildroot] [PATCH v2 1/2] package/atop: bump to version 2.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,24 +111,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 20/09/2025 22:50, Giulio Benetti wrote:
-> i.MXRT1050 is based on a ARMv7M core and we can't build using ARMV7
-> toolchain, so let's switch toolchain to
-> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7M_UCLIBC_STABLE
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/11393506762
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+This bump includes the security fix for CVE-2025-31160.
 
-Applied to master, thanks.
+Release notes:
+https://www.atoptool.nl/downloadatop.php
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+
+Added in v2
+
+ package/atop/atop.hash | 2 +-
+ package/atop/atop.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/atop/atop.hash b/package/atop/atop.hash
+index 8774fb577dea..8f0cb695814b 100644
+--- a/package/atop/atop.hash
++++ b/package/atop/atop.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  9b94c666602efff7bf402ecce706c347f38c39cb63498f9d39626861e5646e20  atop-2.11.0.tar.gz
++sha256  77650f79f9e388b6f5666dc113849894575a29bb4de21b8cd58767bf8a905154  atop-2.11.1.tar.gz
+ 
+ # Hash for license file:
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
+diff --git a/package/atop/atop.mk b/package/atop/atop.mk
+index f7dfed5e8df3..155dec617747 100644
+--- a/package/atop/atop.mk
++++ b/package/atop/atop.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ATOP_VERSION = 2.11.0
++ATOP_VERSION = 2.11.1
+ ATOP_SITE = http://www.atoptool.nl/download
+ ATOP_LICENSE = GPL-2.0+
+ ATOP_LICENSE_FILES = COPYING
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
