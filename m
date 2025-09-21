@@ -4,73 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 212BDCAC59A
-	for <buildroot@archiver.kernel.org>; Sun, 21 Sep 2025 11:05:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EDD3CAC5A7
+	for <buildroot@archiver.kernel.org>; Sun, 21 Sep 2025 11:09:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB7E941853;
-	Sun, 21 Sep 2025 11:05:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E349641856;
+	Sun, 21 Sep 2025 11:09:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X7q85bNJw-Yc; Sun, 21 Sep 2025 11:05:49 +0000 (UTC)
+ id nC_VgPQufOmx; Sun, 21 Sep 2025 11:09:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6464441841
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2653C41840
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6464441841;
-	Sun, 21 Sep 2025 11:05:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id EAF34D3
- for <buildroot@buildroot.org>; Sun, 21 Sep 2025 11:05:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2653C41840;
+	Sun, 21 Sep 2025 11:09:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 705FED3
+ for <buildroot@buildroot.org>; Sun, 21 Sep 2025 11:09:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DD163812ED
- for <buildroot@buildroot.org>; Sun, 21 Sep 2025 11:05:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 67FF641841
+ for <buildroot@buildroot.org>; Sun, 21 Sep 2025 11:09:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LCtYJZY2snVF for <buildroot@buildroot.org>;
- Sun, 21 Sep 2025 11:05:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E58F8812DC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E58F8812DC
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E58F8812DC
- for <buildroot@buildroot.org>; Sun, 21 Sep 2025 11:05:46 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 33WOPYzwkKAL for <buildroot@buildroot.org>;
+ Sun, 21 Sep 2025 11:09:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6BDA841840
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BDA841840
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6BDA841840
+ for <buildroot@buildroot.org>; Sun, 21 Sep 2025 11:09:55 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
  (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 2EC4F2003C1;
- Sun, 21 Sep 2025 13:05:41 +0200 (CEST)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 895CF19F5A7;
+ Sun, 21 Sep 2025 13:09:49 +0200 (CEST)
 Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
  via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 21 Sep 2025 13:05:41 +0200
+ with HTTP (HTTP/1.0 POST); Sun, 21 Sep 2025 13:09:49 +0200
 MIME-Version: 1.0
-Date: Sun, 21 Sep 2025 13:05:41 +0200
+Date: Sun, 21 Sep 2025 13:09:49 +0200
 To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: buildroot@buildroot.org, Ricardo Martincoski
- <ricardo.martincoski@datacom.com.br>, linux-amarula@amarulasolutions.com
-In-Reply-To: <20250921100352.2620720-1-dario.binacchi@amarulasolutions.com>
-References: <20250921100352.2620720-1-dario.binacchi@amarulasolutions.com>
+Cc: buildroot@buildroot.org, linux-amarula@amarulasolutions.com
+In-Reply-To: <20250920112138.2577200-1-dario.binacchi@amarulasolutions.com>
+References: <20250920112138.2577200-1-dario.binacchi@amarulasolutions.com>
 User-Agent: Webmail Free/1.6.11
-Message-ID: <267cae1e0781f662fb0dfd737c05fa9a@free.fr>
+Message-ID: <b4940fdac2faf828495e9da0ee8fb6df@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1758452744;
- bh=3hAKDQt/2bwYoGe2SfvUfPHAA7BKmTi1/FihWNp/taY=;
+ d=free.fr; s=smtp-20201208; t=1758452991;
+ bh=WYiezXjZrH7IcCDszWtiRu2kDVxaFQxp1lpUFKuwsGw=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=MLE/WZSnP2fUbydO9jQAIGip6DxQ4L9nq4rMjxSvQavelWUi7cIQFV41k0xsibPCN
- Z8ASbmjEu+6YBk8cbuzQhKwQlRLSyINFQlztWQIIFQTPcUrpUgmX7s7bcPGKNQK+5k
- WrA3QdgjCq6I8EchaJAzZCVxLgFJjAxwE3zdXQ0u9SyWHBEPF3E6exXLLuPCvzzFSh
- lyf+RT7Q/2gSVQZnVnfcaZBk2i6bkhmIQe6LbClDQHG351fsaOlNzYccBYQcyqd1Re
- duvgGfbYKFERm9in/Z2eD4maxOq2SBmPLXC3ESTeKhA/P3RvEPQxFQwvo7ZZzAud6Z
- ZLKjgnqtkpErw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=jsAvD4RuU0QsAktUgZrkfbnRiIHWcLQGLtBJZisPRzYoJYQlG9qAeo9lSiKAmGfwE
+ QuZ1VASSbvfqmSzMMbSgHzws416kv/fuzvNHM/QJZYZ6CXUcelIoGZYim4xvNsO0y+
+ hdQWrENOmH26nPv+83UvnM0xhcddtnQEknBTT7xkBdXEdG5QcVz73JlbGuSYYAOq05
+ e6b0UdhhP9mjUjqd/xIfj1vhzL7o5ipp4mnISbILqFjC/UFqDfe5g2bivka8iZbKhO
+ NOQ9/EnxZt0Y2LlCFLwpeAovu+IoZfZ7fbQMeJGV6VvToF8r4vxjRkKHd2PsRILFD/
+ Knc8ckL4ZjWWQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=MLE/WZSn
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/atop: bump to version 2.11.1
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=jsAvD4Ru
+Subject: Re: [Buildroot] [PATCH 1/2] package/bc: bump to 1.08.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,15 +87,41 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 21/09/2025 12:03, Dario Binacchi wrote:
-> This bump includes the security fix for CVE-2025-31160.
-> 
+Hi Dario,
+
+Thanks for the patch.
+
+On 20/09/2025 13:21, Dario Binacchi wrote:
 > Release notes:
-> https://www.atoptool.nl/downloadatop.php
+> https://mail.gnu.org/archive/html/info-gnu/2025-01/msg00000.html
+> https://lists.gnu.org/archive/html/info-gnu/2025-01/msg00002.html
+> https://lists.gnu.org/archive/html/info-gnu/2025-05/msg00006.html
 > 
 > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> ---
+>  .checkpackageignore                           |   3 -
+>  ...and-write-errors-on-input-and-output.patch | 793 ------------------
+>  .../0003-dc-fix-exit-code-of-q-command.patch  |  46 -
+>  package/bc/0004-no-gen-libmath.patch          |  97 ---
+>  package/bc/bc.hash                            |   2 +-
+>  package/bc/bc.mk                              |   6 +-
+>  6 files changed, 4 insertions(+), 943 deletions(-)
+>  delete mode 100644 
+> package/bc/0002-notice-read-and-write-errors-on-input-and-output.patch
 
-Series applied to master, thanks.
+Could you explain why you removed this patch 0002? I can't see any 
+reason why.
+Should it be rebased on top of this new bc version instead?
+
+>  delete mode 100644 package/bc/0003-dc-fix-exit-code-of-q-command.patch
+>  delete mode 100644 package/bc/0004-no-gen-libmath.patch
+
+For the two other patches, I see fixes in the new 1.08.2 addressing 
+those.
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
