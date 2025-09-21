@@ -4,97 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9312CAC59A
-	for <buildroot@archiver.kernel.org>; Sun, 21 Sep 2025 16:02:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE027CAC59A
+	for <buildroot@archiver.kernel.org>; Sun, 21 Sep 2025 16:17:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 893D860BCA;
-	Sun, 21 Sep 2025 16:02:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6952E60765;
+	Sun, 21 Sep 2025 16:17:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rhsk5Z6bkEf3; Sun, 21 Sep 2025 16:02:12 +0000 (UTC)
+ id pbQSWWlldbcW; Sun, 21 Sep 2025 16:17:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C05F260B9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7829560B23
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C05F260B9F;
-	Sun, 21 Sep 2025 16:02:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4536ED3
- for <buildroot@buildroot.org>; Sun, 21 Sep 2025 16:02:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7829560B23;
+	Sun, 21 Sep 2025 16:17:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CFBAC1C0
+ for <buildroot@buildroot.org>; Sun, 21 Sep 2025 16:17:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 374D240140
- for <buildroot@buildroot.org>; Sun, 21 Sep 2025 16:02:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C0F4B40140
+ for <buildroot@buildroot.org>; Sun, 21 Sep 2025 16:17:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gzmbnvZCIaLP for <buildroot@buildroot.org>;
- Sun, 21 Sep 2025 16:02:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::529; helo=mail-pg1-x529.google.com;
- envelope-from=fancp2007@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8E72140071
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E72140071
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com
- [IPv6:2607:f8b0:4864:20::529])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8E72140071
- for <buildroot@buildroot.org>; Sun, 21 Sep 2025 16:02:10 +0000 (UTC)
-Received: by mail-pg1-x529.google.com with SMTP id
- 41be03b00d2f7-b5516ee0b0bso1749272a12.1
- for <buildroot@buildroot.org>; Sun, 21 Sep 2025 09:02:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1758470529; x=1759075329;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=CH8e7YsuF4HeXAyqxVHlXYDh2i+WlLncJrNjf8In3+Q=;
- b=DfF/1PghUtKyPLRAoheNmVAJ/rSKbfADG3jU2rDmuUpzCXznvasFT0DSgkoWoVpD2F
- hxT81ukcVdLZqAUjl5dwR+end6Edk3dDnje4X3uudVV/8Ove5TOKVHVX5olqVwpDmjEo
- 82Tu2+WxdQNs/PiJIMshKXDuRXESqk1rbn+6csEuNvp55UKH9jkRkzUZeTXtQbnmx0YR
- b61hj7mRHUO5Suu/qo2oDe29/78PQEAib1/nWN0QrBhe8LR17wAnvb62OvSGxgkuhRL5
- iAJbDxe3zAwnVanOH/E2jEd8FCh+E6jG72TbjbBAJK5SoCD1+nsHcR+88nO98yCwScyL
- vtnA==
-X-Gm-Message-State: AOJu0Yz2BhRL4PB9e9nHFHJx8CLKOYihmn0eAQoB0OkT9n1Prao0BePt
- cWPs7anweMksxEjU5FD7Bd6Ka0XP6FlKJVSMpYbudCzbukYJyTNgai1YWGwFeg==
-X-Gm-Gg: ASbGncsBH3197w0ZiobA/tRp7LyfJlKx+jOIgXzIFWx0DSSgX5cBcl3qvOZqAESzPtM
- RtYklQiZbPHMvp54tczt1XD+Q+Wu3qTm9An1ehOWqlSaQpYzMJAwMfC8HtAt1mhbesFFS0uSg76
- sTUoHcPK4nbFhpkYmmgSR9BuMpqpCKdlG5GMAm2lLNfiR73wol0i6uqGAFeBtsLQb0UwrYoScIR
- y9Us9cAoa+Z5cZNS2VeJ+lkB+G9x1NpcpNAPUTRkF8pnubBbQmcwLmw44qHtHn2NIao4ZWFeibK
- RMZHpgzR5PWfVrn//UtoVZ5kZ95LWMliFlqpb/t+k21Or6SKaxofBQq/D49HQpbsXRrcPHgAdDo
- Mjt4+DS7CT38gHA58gRk=
-X-Google-Smtp-Source: AGHT+IFIgJ8pH61ptRCR9PUZFWq8PU6kUVzSfN8aVoIAc8D2BLulLQkQ3O/wBG2tWRU+zoRAteB0ww==
-X-Received: by 2002:a17:903:2ace:b0:26c:bcb5:1573 with SMTP id
- d9443c01a7336-26cbcb51803mr82969425ad.53.1758470529317; 
- Sun, 21 Sep 2025 09:02:09 -0700 (PDT)
-Received: from localhost ([66.112.214.180]) by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-269802fe08bsm108440555ad.103.2025.09.21.09.02.08
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 21 Sep 2025 09:02:08 -0700 (PDT)
-From: Scott Fan <fancp2007@gmail.com>
+ id ljY5GSlxlHCC for <buildroot@buildroot.org>;
+ Sun, 21 Sep 2025 16:17:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C518540071
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C518540071
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C518540071
+ for <buildroot@buildroot.org>; Sun, 21 Sep 2025 16:17:43 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:7427:ac55:2702:f075])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 6999E5FF88;
+ Sun, 21 Sep 2025 18:17:38 +0200 (CEST)
 To: buildroot@buildroot.org
-Cc: Scott Fan <fancp2007@gmail.com>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Mon, 22 Sep 2025 00:01:57 +0800
-Message-ID: <20250921160158.8190-1-fancp2007@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Cc: Julien Olivain <ju.o@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 21 Sep 2025 18:17:21 +0200
+Message-ID: <20250921161721.2070176-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1758470529; x=1759075329; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=CH8e7YsuF4HeXAyqxVHlXYDh2i+WlLncJrNjf8In3+Q=;
- b=J0TDdS1TjDSloUGR8xKhD3FsJ7cBjKwj5uUX+L2agNkUdydMa2QdAQ5jfjuGWRLfxD
- B/gYKOQDgBpwz8t9vQIoRRllIPjncsJSfcg+qbyGnlY8oaqkyHnD/x28/h0Ex4HR9OT1
- W9xO/CkO2u2nO1sbch9B4FKyTeCKbscjUkrT5rYBEwLOXNrFiHOmBN4qZnAE1KBYoo4A
- C6hMT63ooVNHPMFVZ2tayGWgHszBsL+szn2fdPnWkv3OKtqPS9Y7eQ8VotGCBpuIENA/
- Kzic8uRntbU28DKi61ElLIq8iIga2m2XxQM5MLstShnqaF3Oew4jKGBcLqwZpVPlHQ0B
- LAGA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1758471460;
+ bh=vdvQA3qduLi/2GepmGBiSMJJjXQ9nb7XZEYedb4pKn8=;
+ h=From:To:Cc:Subject:Date:From;
+ b=JOpRW7ZAQC5Cbgixy5u/pjWRKuBpnHVQgziQukxrV5pHPikIiKwXzDJuFRVfHlw7L
+ QPFQtPO+ydBzcMVP1F4zr6Pdreg8+Lhhc04FQVfz+kz3oUTstzqBuR/4pRbxXQt8bo
+ tc8OogOadgQZuFzC8oM08QuKKLQv8bvbKomp0d4brQl7g/wpHj5CX1fspAXnFSGW+r
+ uDjXKMJ3kYb1j2wRThD85+bECeXwgEU58FPIRaznXYm/q9XYGnJZUdN/yriIltLFOX
+ OYcQn+r7Mrwk1ak1sKjucVO9wEpp0kaDOOXlA5o3vAXdpyDbNXNvfmIZBhFSEEIuyk
+ IhR3qVbPCmgBQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=J0TDdS1T
-Subject: [Buildroot] [PATCH] board/loongarch64-efi: fix typo in grub config
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=JOpRW7ZA
+Subject: [Buildroot] [PATCH 1/1] support/scripts/gen-bootlin-toolchains:
+ avoid selecting _HAS_THREADS multiple times
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,28 +77,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
+The Bootlin external toolchain file Config.in.options contains multiple
+occurrences of "select BR2_TOOLCHAIN_HAS_THREADS". See for example [1].
+
+This file is generated by the support/scripts/gen-bootlin-toolchains
+script from the information published at [2].
+
+Those multiple occurrences happens with toolchains having
+BR2_TOOLCHAIN_HAS_THREADS_DEBUG and/or BR2_TOOLCHAIN_HAS_THREADS_NPTL.
+
+Since the script uses the startswith() method, the _HAS_THREADS
+selection is also generated for _HAS_THREADS_DEBUG and
+_HAS_THREADS_NPTL. See [3].
+
+This commit solve the issue by adding a '=' character to make sure the
+test will be distinct from other strings having the same prefix.
+
+Note: there is no functional problem due to those multiple selections,
+since it is allowed by Kconfig. This commit is simply cosmetic, for
+correctness.
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/blob/2025.08/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options#L167
+[2] https://toolchains.bootlin.com/
+[3] https://gitlab.com/buildroot.org/buildroot/-/blob/2025.08/support/scripts/gen-bootlin-toolchains#L366
+
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- board/loongarch64-efi/grub.cfg | 2 +-
+ support/scripts/gen-bootlin-toolchains | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/loongarch64-efi/grub.cfg b/board/loongarch64-efi/grub.cfg
-index 2006f6d60d..c84a7f646b 100644
---- a/board/loongarch64-efi/grub.cfg
-+++ b/board/loongarch64-efi/grub.cfg
-@@ -1,4 +1,4 @@
--/set default="0"
-+set default="0"
- set timeout="5"
+diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
+index 78123ed1a7..75fa2c7e0f 100755
+--- a/support/scripts/gen-bootlin-toolchains
++++ b/support/scripts/gen-bootlin-toolchains
+@@ -363,7 +363,7 @@ class Toolchain:
+                 selects.append("BR2_ENABLE_LOCALE")
  
- menuentry "Buildroot" {
+             # thread support
+-            if frag.startswith("BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS"):
++            if frag.startswith("BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS="):
+                 selects.append("BR2_TOOLCHAIN_HAS_THREADS")
+ 
+             if frag.startswith("BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG"):
 -- 
-2.43.0
+2.51.0
 
 _______________________________________________
 buildroot mailing list
