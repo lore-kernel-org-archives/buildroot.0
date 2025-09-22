@@ -1,74 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24689CAC5AC
-	for <buildroot@archiver.kernel.org>; Mon, 22 Sep 2025 08:16:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C1D2CAC5A7
+	for <buildroot@archiver.kernel.org>; Mon, 22 Sep 2025 08:22:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D03F4844E0;
-	Mon, 22 Sep 2025 08:16:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 09C32614F2;
+	Mon, 22 Sep 2025 08:22:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8Ulrwxxa56xD; Mon, 22 Sep 2025 08:16:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gPhst6i9x3we; Mon, 22 Sep 2025 08:22:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 291EF844BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 194E5614CF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 291EF844BC;
-	Mon, 22 Sep 2025 08:16:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 194E5614CF;
+	Mon, 22 Sep 2025 08:22:21 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 626D3116C
- for <buildroot@buildroot.org>; Mon, 22 Sep 2025 08:15:58 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5C9DA116C
+ for <buildroot@buildroot.org>; Mon, 22 Sep 2025 08:22:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4907341A4B
- for <buildroot@buildroot.org>; Mon, 22 Sep 2025 08:15:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 59B7840EF9
+ for <buildroot@buildroot.org>; Mon, 22 Sep 2025 08:22:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Yxz8uiSyYAqK for <buildroot@buildroot.org>;
- Mon, 22 Sep 2025 08:15:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C64CC41988
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C64CC41988
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C64CC41988
- for <buildroot@buildroot.org>; Mon, 22 Sep 2025 08:15:56 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 2086051619; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 22 Sep 2025 08:15:55 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1v0biE-00F6BY-0K;
- Mon, 22 Sep 2025 10:15:54 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+ id VDr-oldEz3_I for <buildroot@buildroot.org>;
+ Mon, 22 Sep 2025 08:22:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
+ helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7BBD440EE5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7BBD440EE5
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7BBD440EE5
+ for <buildroot@buildroot.org>; Mon, 22 Sep 2025 08:22:17 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 7F50331E0A54; Mon, 22 Sep 2025 10:22:14 +0200 (CEST)
+Date: Mon, 22 Sep 2025 10:22:14 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Date: Mon, 22 Sep 2025 10:15:51 +0200
-Message-Id: <20250922081552.3598651-2-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250922081552.3598651-1-peter@korsgaard.com>
-References: <20250922081552.3598651-1-peter@korsgaard.com>
+Message-ID: <aNEHNhC3tCHIasx8@waldemar-brodkorb.de>
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=xLnQEUDYoxLLAFcLmGrKQDAlvWmY0DEhju2owCcD/VtYsObd2dxSly5+L/Wjg2rRqOVnfY7VTP0jIofKqHaEFwU9yrPicXBh2rtOfvcmuHWdeAq7LlUo/DvrwauOfmdptjNE7ELFYpv1dNVNICJYLyHYOXl8SDQJKGQn77cIdNksK1V4QuXPfutl9lcwxLB5ZIk71H50I4FigaGWWI1dnyxZmmunQsYxq5+eGbuCm2zpdk8trxYpuDm26EnyrZ7aAaPcevvPM1JRgRSfDTEEpmKFMbeqPsQhIqQ26tcMWw6GtpHDNeowgnB783GPIlgKSthb41pLAgWN3JJq2VR6HQ==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=ZNnheaC+FpkgjudGENOpDKBN8eWTaSBulv/9NT8OX+k=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+Content-Disposition: inline
+X-Operating-System: Linux 6.12.43+deb13-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1758529334; bh=ZirHLEjNmPo9aGGZvckOgNMlVa10Lp8RN1frUAVNQZk=;
+ h=Date:From:To:Subject:From;
+ b=fevfNnhfv6OwaXBrQP4Tr7TGaxFCH3jmyhe7mcWrdsTLKS/dsZrGh6SL2+S3w0kjM
+ qp7ZcSNgUkZekoaJM2SFIVc2wx1w49R3gsqzKGdqCSP1ZGUVv2LpxE2MZNzJf+jNqw
+ 5C/hs7yQDR8fFC6y9OeyZ1wmL4IEwgyMwO01v388DIRbBgj48ZKYw84dTSNDPc1dy3
+ 295Xm8ICkpUAOIlcu4si8ZTTlbomUNS+q/lGNpd8BYuVn9Ser/Px8jIRQhMv8476ui
+ jSpYVm2vGyr7bEaNrJjL4UoY9dejmZP9y9rmlVS2Xh6GzWPZ0cEjtIw+EmxZpxKRIS
+ qv1zITJnsYyig==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=korsgaard.com
+ header.from=openadk.org
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=xLnQEUDY
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH 2/2] package/rtl_433: bump to version 25.02
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=fevfNnhf
+Subject: [Buildroot] [PATCH] package/icu: bump to 77.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,46 +74,159 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For details, see the release notes:
-https://github.com/merbanan/rtl_433/releases/tag/25.02
+Update icu to 77.1.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+The LICENSE file contains a lot of changes, so no diff
+is presented.
+
+Patch 0002-workaround-toolchain-bugs.patch is no longer required.
+Reorder the other patches accordingly.
+Update patch 0003-fix-static-linking-with-icu-uc.patch so that
+it applies cleanly.
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/rtl_433/rtl_433.hash | 2 +-
- package/rtl_433/rtl_433.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .checkpackageignore                           |  5 +--
+ ...h => 0002-link-icudata-as-data-only.patch} |  0
+ .../icu/0002-workaround-toolchain-bugs.patch  | 37 -------------------
+ ...0003-fix-static-linking-with-icu-uc.patch} | 24 +++++-------
+ package/icu/icu.hash                          |  4 +-
+ package/icu/icu.mk                            |  2 +-
+ 6 files changed, 15 insertions(+), 57 deletions(-)
+ rename package/icu/{0003-link-icudata-as-data-only.patch => 0002-link-icudata-as-data-only.patch} (100%)
+ delete mode 100644 package/icu/0002-workaround-toolchain-bugs.patch
+ rename package/icu/{0004-fix-static-linking-with-icu-uc.patch => 0003-fix-static-linking-with-icu-uc.patch} (50%)
 
-diff --git a/package/rtl_433/rtl_433.hash b/package/rtl_433/rtl_433.hash
-index 3a00e0cae7..30f60a82f7 100644
---- a/package/rtl_433/rtl_433.hash
-+++ b/package/rtl_433/rtl_433.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  1260c58400bf35832ac1b76cb3cccf3dc1335ffa2416909c63c7d7060c74663b  rtl_433-23.11.tar.gz
-+sha256  5a409ea10e6d3d7d4aa5ea91d2d6cc92ebb2d730eb229c7b37ade65458223432  rtl_433-25.02.tar.gz
- # License file, locally calculated
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/rtl_433/rtl_433.mk b/package/rtl_433/rtl_433.mk
-index 60f90a94c7..08735be850 100644
---- a/package/rtl_433/rtl_433.mk
-+++ b/package/rtl_433/rtl_433.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/.checkpackageignore b/.checkpackageignore
+index f5e550736c..e28db178c7 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -491,9 +491,8 @@ package/ibrcommon/0001-ibrcommon-data-File.cpp-support-POSIX-basename-call.patch
+ package/ibrcommon/0002-ibrcommon-added-openssl-1.1-compatibility-264.patch lib_patch.Upstream
+ package/ibrcommon/0003-ibrcommon-ssl-gcm-fix-static-build-with-openssl.patch lib_patch.Upstream
+ package/icu/0001-dont-build-static-dynamic-twice.patch lib_patch.Upstream
+-package/icu/0002-workaround-toolchain-bugs.patch lib_patch.Upstream
+-package/icu/0003-link-icudata-as-data-only.patch lib_patch.Upstream
+-package/icu/0004-fix-static-linking-with-icu-uc.patch lib_patch.Upstream
++package/icu/0002-link-icudata-as-data-only.patch lib_patch.Upstream
++package/icu/0003-fix-static-linking-with-icu-uc.patch lib_patch.Upstream
+ package/ifmetric/0001-Fix-issue-NETLINK-Packet-too-small-or-truncated-92-1.patch lib_patch.Upstream
+ package/ifplugd/0001-cross.patch lib_patch.Sob lib_patch.Upstream
+ package/ifplugd/0002-fix-headers.patch lib_patch.Sob lib_patch.Upstream
+diff --git a/package/icu/0003-link-icudata-as-data-only.patch b/package/icu/0002-link-icudata-as-data-only.patch
+similarity index 100%
+rename from package/icu/0003-link-icudata-as-data-only.patch
+rename to package/icu/0002-link-icudata-as-data-only.patch
+diff --git a/package/icu/0002-workaround-toolchain-bugs.patch b/package/icu/0002-workaround-toolchain-bugs.patch
+deleted file mode 100644
+index f6b124cc2a..0000000000
+--- a/package/icu/0002-workaround-toolchain-bugs.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-Workaround toolchain bugs
+-
+-Many of ARM Sourcery CodeBench toolchain have a bug when compiling
+-icu's translit.cpp source file. The bug is triggered when there is a
+-combination of "-W -Wall" and "-Os", and causes an internal compiler
+-error. The bug has been reported to Mentor Graphics.
+-
+-Even though it is clearly a toolchain bug, having a workaround for it
+-is trivial in this case. So it will avoid our users falling into this
+-internal compiler error, and allow our autobuilders to test more
+-packages using this Sourcery CodeBench toolchain.qq
+-
+-[Gustavo: update for ICU4C 54.1]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura icu.orig/source/configure icu/source/configure
+---- icu.orig/source/configure	2014-12-18 15:49:43.038628644 -0300
+-+++ icu/source/configure	2014-12-18 15:51:23.183083232 -0300
+-@@ -4323,7 +4323,7 @@
+-                 ;;
+-             esac
+- 
+--            CFLAGS="$CFLAGS -Wall -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings"
+-+            CFLAGS="$CFLAGS -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings"
+-         else
+-             case "${host}" in
+-             *-*-cygwin)
+-@@ -4337,7 +4337,7 @@
+-         fi
+-         if test "$GXX" = yes
+-         then
+--            CXXFLAGS="$CXXFLAGS -W -Wall -pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long"
+-+            CXXFLAGS="$CXXFLAGS -pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long"
+-         else
+-             case "${host}" in
+-             *-*-cygwin)
+diff --git a/package/icu/0004-fix-static-linking-with-icu-uc.patch b/package/icu/0003-fix-static-linking-with-icu-uc.patch
+similarity index 50%
+rename from package/icu/0004-fix-static-linking-with-icu-uc.patch
+rename to package/icu/0003-fix-static-linking-with-icu-uc.patch
+index 965906b9b9..36a3d1f696 100644
+--- a/package/icu/0004-fix-static-linking-with-icu-uc.patch
++++ b/package/icu/0003-fix-static-linking-with-icu-uc.patch
+@@ -16,19 +16,15 @@ Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+  source/Makefile.in | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
  
--RTL_433_VERSION = 23.11
-+RTL_433_VERSION = 25.02
- RTL_433_SITE = $(call github,merbanan,rtl_433,$(RTL_433_VERSION))
- RTL_433_LICENSE = GPL-2.0+
- RTL_433_LICENSE_FILES = COPYING
+-diff --git a/source/Makefile.in b/source/Makefile.in
+-index 9db6c52..ca48e16 100644
+---- a/source/Makefile.in
+-+++ b/source/Makefile.in
+-@@ -264,7 +264,7 @@ config/icu-uc.pc: config/icu.pc Makefile icudefs.mk
+- 	@echo "Description: $(PACKAGE_ICU_DESCRIPTION): Common and Data libraries" >> $@
+- 	@echo "Name: $(PACKAGE)-uc" >> $@
+- 	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" "${ICULIBS_DT}" >> $@
+--	@echo "Libs.private:" '$${baselibs}' >> $@
+-+	@echo "Libs.private:" '$${baselibs}' -lstdc++ >> $@
++diff -git icu.orig/source/Makefile.in icu/source/Makefile.in
++--- icu.orig/source/Makefile.in	2025-03-13 19:31:23.000000000 +0100
+++++ icu/source/Makefile.in	2025-09-22 08:56:36.791792784 +0200
++@@ -279,7 +279,7 @@
++ 	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" "${ICULIBS_DT}" '$${baselibs}' >> $@
++ else
++ 	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" >> $@
++-	@echo "Libs.private:" "${ICULIBS_DT}" '$${baselibs}' >> $@
+++	@echo "Libs.private:" "${ICULIBS_DT}" '$${baselibs}' -lstdc++ >> $@
++ endif
+  	@echo $@ updated.
+  
+- config/icu-i18n.pc: config/icu.pc Makefile icudefs.mk
+--- 
+-2.4.3
+-
+diff --git a/package/icu/icu.hash b/package/icu/icu.hash
+index 0948bf495e..bf9451db8e 100644
+--- a/package/icu/icu.hash
++++ b/package/icu/icu.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  818a80712ed3caacd9b652305e01afc7fa167e6f2e94996da44b90c2ab604ce1  icu4c-73_2-src.tgz
+-sha256  f3005e195ff74d8812cc1f182a1c446fab678d70a10e3dada497585befee5416  LICENSE
++sha256  588e431f77327c39031ffbb8843c0e3bc122c211374485fa87dc5f3faff24061  icu4c-77_1-src.tgz
++sha256  451167c55c0fa447cc2d5632714f5e3c567fe4f1e1badefab2c1333852198aca  LICENSE
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index 73547a7537..4789edf0e2 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -7,7 +7,7 @@
+ # Git tags (and therefore versions on release-monitoring.org) use the
+ # XX-Y format, but the tarballs are named XX_Y and the containing
+ # directories XX.Y.
+-ICU_VERSION = 73-2
++ICU_VERSION = 77-1
+ ICU_SOURCE = icu4c-$(subst -,_,$(ICU_VERSION))-src.tgz
+ ICU_SITE = \
+ 	https://github.com/unicode-org/icu/releases/download/release-$(ICU_VERSION)
 -- 
-2.39.5
+2.47.3
 
 _______________________________________________
 buildroot mailing list
