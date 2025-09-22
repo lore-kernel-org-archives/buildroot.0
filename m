@@ -4,76 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02AF4CAC592
-	for <buildroot@archiver.kernel.org>; Mon, 22 Sep 2025 22:26:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC6CFCAC5AA
+	for <buildroot@archiver.kernel.org>; Tue, 23 Sep 2025 00:30:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 87AF160707;
-	Mon, 22 Sep 2025 22:26:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5FAC3608CD;
+	Tue, 23 Sep 2025 00:30:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EtZQRBJXyoey; Mon, 22 Sep 2025 22:26:09 +0000 (UTC)
+ id 7zIBZXohKP4Z; Tue, 23 Sep 2025 00:30:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5039D60782
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5250608AF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5039D60782;
-	Mon, 22 Sep 2025 22:26:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id BC6A5498
- for <buildroot@buildroot.org>; Mon, 22 Sep 2025 22:26:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B5250608AF;
+	Tue, 23 Sep 2025 00:30:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0027B200D
+ for <buildroot@buildroot.org>; Tue, 23 Sep 2025 00:30:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ACA4A606EA
- for <buildroot@buildroot.org>; Mon, 22 Sep 2025 22:26:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D9F00407C4
+ for <buildroot@buildroot.org>; Tue, 23 Sep 2025 00:30:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rX9ENMVm3IZB for <buildroot@buildroot.org>;
- Mon, 22 Sep 2025 22:26:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.97.179.56;
- helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D72D060707
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D72D060707
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D72D060707
- for <buildroot@buildroot.org>; Mon, 22 Sep 2025 22:26:00 +0000 (UTC)
-Received: from 91-153-34-249.elisa-laajakaista.fi ([91.153.34.249] helo=kodama)
- by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
- id 1v0oyr-00FwCS-ND; Tue, 23 Sep 2025 00:25:57 +0200
-Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id 8ce61346;
- Mon, 22 Sep 2025 22:25:55 +0000 (UTC)
-From: Adrian Perez de Castro <aperez@igalia.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XP9-ovsJo_3a for <buildroot@buildroot.org>;
+ Tue, 23 Sep 2025 00:30:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.133;
+ helo=smtpdh18-2.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BE53E4070A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE53E4070A
+Received: from smtpdh18-2.aruba.it (smtpdh18-2.aruba.it [62.149.155.133])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BE53E4070A
+ for <buildroot@buildroot.org>; Tue, 23 Sep 2025 00:30:08 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id 0quzvly2rUZSE0quzv7N7J; Tue, 23 Sep 2025 02:30:05 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Cc: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 23 Sep 2025 01:25:49 +0300
-Message-ID: <20250922222555.351974-3-aperez@igalia.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250922222555.351974-1-aperez@igalia.com>
-References: <20250922222555.351974-1-aperez@igalia.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Tue, 23 Sep 2025 00:28:19 +0200
+Message-ID: <20250922222819.330433-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=igalia.com; 
- s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
- Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=MlUv+e24vHxb293ZcrXeuHUHHFgV84OUQxzehI5Ib1w=; b=rPk56n4g2Lxlrg036a0PChXXFb
- KRYMkWITXWQccUO9o7Hs5YfN/nVU/ykmD98OhSsNNDKyTIpmLo5q9cLgd6/0bfVX+KAD4+VWywI/A
- x76mC7NtS3HGIIorvDKlW4ptreLSfVSxF/uimnN2T6vPSeebQN4FWHLvn+90vVD3w4lK69O8/hqb0
- Hlt+KUSIL3OKjWHuejLf451J1FI4urHjbB8agOSwTvO5Kl4k2EcSXjNqaoyFpXwgN12obdaDPuxNY
- drzAlgQ6D3VnVGE5WzM0/7/pOsvDMUydUdfYumXZk5W3dYQdh164+l6Pyc38qucktxGjbk23/aJ2A
- YbzkBqeA==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-CMAE-Envelope: MS4xfISd2s7mB8zi3hFXPN9Q9sGnQhGOGPZjCgYYKiFvVNdZbuLFqaa9q7FEzCZwCNPwgITCgWHNnoAy/J9YRs/AyO3hlz3YyPUexsrsbAfniJ9xisZrN1RH
+ Ukr/PHGxqpe7MRikCPonOLWqZs0yx9FP34NHY0BO66WGka+kHR/i9alRhuT3TtgOPq/jjDaFIyiIs58tms5Ui4RhyD6tYmqCkLEWUEXZskhTxY1qNx3fQhZN
+ L9+8rKIT17FKnIV+KYG2jWAax5IuMaVcgwr9R6zzl9g=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1758587405; bh=0GCFL0Mdod+r1HBB2FDWggrQ6sHuERMn2csTQbBLyIo=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=GL71mQ/hB1tw32WEEtXlYz+QnL5tQRhoE7AxDjvc0tXpwF8s8CdeEQ01g0C1ajviu
+ tvOhCk9amZIt6XNfNacU/ggpERLGlA+IWfXXZfkOeUQ19Vxckh8AFsfaIWQNS4gv3c
+ 3aifFii3dFZmrEXm5Rm2Qu/Bwq/wLF5uE89wW6PARbNMa9HazbSCEkAdtpXsYyW1Ir
+ h7hRAj5p+U9kRRWWLtSVIOk0/e3I+genhUw7lMOS22xabN5Zu24pYdnNY/SSIfyc42
+ SsbHXRfSsuk10up87Iyhzsh+we9e79BqWtSW2q4p/g8ewWyM+JiaBCTL9iDxRTeIyR
+ hiDBbe57ikOIA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=igalia.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
- header.s=20170329 header.b=rPk56n4g
-Subject: [Buildroot] [PATCH 2/2] package/sysprof: unconditionally select
- elfutils
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=GL71mQ/h
+Subject: [Buildroot] [PATCH] package/harfbuzz: bump to version 11.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,53 +84,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The elfutils package provides libdw, which is required by sysprof.
-It is not an optional dependency.
+Release Notes:
+https://github.com/harfbuzz/harfbuzz/releases/tag/11.5.1
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/sysprof/Config.in  | 7 ++++---
- package/sysprof/sysprof.mk | 2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/harfbuzz/harfbuzz.hash | 2 +-
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sysprof/Config.in b/package/sysprof/Config.in
-index a4f53a1179..e89a0e539e 100644
---- a/package/sysprof/Config.in
-+++ b/package/sysprof/Config.in
-@@ -1,14 +1,15 @@
- config BR2_PACKAGE_SYSPROF
- 	bool "sysprof"
--	depends on BR2_USE_WCHAR # glib2, libdex, json-glib
--	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2, libdex, json-glib, polkit
-+	depends on BR2_USE_WCHAR # glib2, libdex, json-glib, elfutils
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2, libdex, json-glib, polkit, elfutils
- 	depends on BR2_USE_MMU # glib2, libdex, json-glib
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # libunwind, polkit
- 	depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
--	depends on !BR2_STATIC_LIBS # libdex, libunwind, polkit
-+	depends on !BR2_STATIC_LIBS # libdex, libunwind, polkit, elfutils
- 	depends on !BR2_OPTIMIZE_FAST # polkit
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
-+	select BR2_PACKAGE_ELFUTILS
- 	select BR2_PACKAGE_JSON_GLIB
- 	select BR2_PACKAGE_LIBDEX
- 	select BR2_PACKAGE_LIBGLIB2
-diff --git a/package/sysprof/sysprof.mk b/package/sysprof/sysprof.mk
-index 2670588ebb..f64f6d7120 100644
---- a/package/sysprof/sysprof.mk
-+++ b/package/sysprof/sysprof.mk
-@@ -10,7 +10,7 @@ SYSPROF_SOURCE = sysprof-$(SYSPROF_VERSION).tar.xz
- SYSPROF_SITE = https://download.gnome.org/sources/sysprof/$(SYSPROF_VERSION_MAJOR)
- SYSPROF_LICENSE = GPL-3.0+
- SYSPROF_LICENSE_FILES = COPYING
--SYSPROF_DEPENDENCIES = libglib2 libdex libunwind json-glib polkit
-+SYSPROF_DEPENDENCIES = elfutils libglib2 libdex libunwind json-glib polkit
- SYSPROF_CONF_OPTS = \
- 	-Ddebuginfod=disabled \
- 	-Ddevelopment=false \
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index ccf96ec6d0..a6c34d92a3 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  2d30ba45c4c8ec4de661a1002b4f88d0841ff1a3087f34629275f5436d722109  harfbuzz-11.5.0.tar.xz
++sha256  972a60a8d274d49e70361da6920c3a73dfb0fb4387f6c6811906a47ba634d8a1  harfbuzz-11.5.1.tar.xz
+ sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 4ec3165e57..5c3666bf75 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HARFBUZZ_VERSION = 11.5.0
++HARFBUZZ_VERSION = 11.5.1
+ HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
 -- 
-2.51.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
