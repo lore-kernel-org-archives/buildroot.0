@@ -1,75 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5900ECAC592
-	for <buildroot@archiver.kernel.org>; Mon, 22 Sep 2025 19:00:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05AE7CAC592
+	for <buildroot@archiver.kernel.org>; Mon, 22 Sep 2025 19:11:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 09A6A845B0;
-	Mon, 22 Sep 2025 19:00:37 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2AV7WuZfxRY1; Mon, 22 Sep 2025 19:00:36 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 151E5845B3
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 151E5845B3;
-	Mon, 22 Sep 2025 19:00:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 35A56498
- for <buildroot@buildroot.org>; Mon, 22 Sep 2025 19:00:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3267961B78
- for <buildroot@buildroot.org>; Mon, 22 Sep 2025 19:00:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B0267615B2;
+	Mon, 22 Sep 2025 19:11:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zb4eDBd8c__u for <buildroot@buildroot.org>;
- Mon, 22 Sep 2025 19:00:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5AE8361B64
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AE8361B64
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5AE8361B64
- for <buildroot@buildroot.org>; Mon, 22 Sep 2025 19:00:33 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 19B5C19F576;
- Mon, 22 Sep 2025 21:00:29 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 22 Sep 2025 21:00:28 +0200
-MIME-Version: 1.0
-Date: Mon, 22 Sep 2025 21:00:28 +0200
-To: Adrian Perez de Castro <aperez@igalia.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250922162241.289717-1-aperez@igalia.com>
-References: <20250922162241.289717-1-aperez@igalia.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <9935a8314f1f6385d5e8ac3b3e5014b8@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1758567630;
- bh=3Wa2noHjDpzUM0Y6Rrnb0GKWj4VbE8ngUb003xIYl60=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=hiXd2VqQ5kfv9FcMQs+luHclEMUVyVyyVjpuN9G3gAVEuIYORBlLtsxgcTpEQ6XA4
- gwjNZF4YypFjZzTJlx72ruUvmABbtM/env2IO1Jk3OfjZE1wdXiK4/pZbencTeDWwn
- Z3taN4pa2hkstraqrvalY5uRFMe/RZzrA9M6Bl5XWHqhzt1lPS/uUYG0nA2vBIBMRZ
- YcFyBPKy5JX4lxMrUH43yleEx1YJPtqKsvO2Wn1Mkvj8gBDxi+Yv8C7zPLhLMcXvEW
- pboyeASElks8a3SJGykAeTzYBD27KQFBHptT5VggjtldO5I5QPW4qmLzEwwbo29ldt
- j7zhYXYIxAUng==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=hiXd2VqQ
-Subject: Re: [Buildroot] [PATCH] package/libdex: bump to version 1.0.0
+ id rafPIJHhxf9l; Mon, 22 Sep 2025 19:11:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3B4F61667
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id E3B4F61667;
+	Mon, 22 Sep 2025 19:11:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 178E81C0
+ for <buildroot@buildroot.org>; Mon, 22 Sep 2025 19:11:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id F1FD261667
+ for <buildroot@buildroot.org>; Mon, 22 Sep 2025 19:11:50 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GU926YyEZA0Y for <buildroot@buildroot.org>;
+ Mon, 22 Sep 2025 19:11:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53A9E615B2
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 53A9E615B2
+ for <buildroot@buildroot.org>; Mon, 22 Sep 2025 19:11:50 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 42B5C8614C; Mon, 22 Sep 2025 19:11:50 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 22 Sep 2025 21:08:22 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9ca5434350d00d9ab5a09be64acedf91efcf9f3b
+X-Git-Newrev: af87b91b8f5bf6977cd205c5bacf2d6f020832a0
+X-Patchwork-Hint: ignore
+Message-Id: <20250922191150.42B5C8614C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/armadillo: bump to version 15.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,21 +59,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 22/09/2025 18:22, Adrian Perez de Castro wrote:
-> This is the first release considered feature-complete, and despite the
-> ceremonious version number, it mainly includes fixes and API additions
-> providing improved ergonomics.
-> 
->   https://gitlab.gnome.org/GNOME/libdex/-/blob/1.0.0/NEWS
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=af87b91b8f5bf6977cd205c5bacf2d6f020832a0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Release notes:
+https://arma.sourceforge.net/docs.html#changelog
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/armadillo/armadillo.hash | 2 +-
+ package/armadillo/armadillo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
+index 1da8c30d99..f3c847372e 100644
+--- a/package/armadillo/armadillo.hash
++++ b/package/armadillo/armadillo.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  990ab4ccb7eff1b6d70409e9aa7fa4119877ac5f5d10ba219e98460ab3e4d6eb  armadillo-15.0.2.tar.xz
++sha256  9f55ec10f0a91fb6479ab4ed2b37a52445aee917706a238d170b5220c022fe43  armadillo-15.0.3.tar.xz
+ # License files, locally calculated
+ sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index 2efc33d52b..3f9eee407b 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ARMADILLO_VERSION = 15.0.2
++ARMADILLO_VERSION = 15.0.3
+ ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
+ ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
+ ARMADILLO_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
