@@ -1,92 +1,93 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75241CAC5AC
-	for <buildroot@archiver.kernel.org>; Mon, 22 Sep 2025 07:13:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80F67CAC5A7
+	for <buildroot@archiver.kernel.org>; Mon, 22 Sep 2025 07:14:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 27C2961728;
-	Mon, 22 Sep 2025 07:13:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 459628451A;
+	Mon, 22 Sep 2025 07:14:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d754Kc5R6a_b; Mon, 22 Sep 2025 07:13:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4ukBej56WGGj; Mon, 22 Sep 2025 07:14:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58FBF61712
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A74AB8452A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 58FBF61712;
-	Mon, 22 Sep 2025 07:13:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 88091D3
- for <buildroot@buildroot.org>; Mon, 22 Sep 2025 07:13:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A74AB8452A;
+	Mon, 22 Sep 2025 07:14:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 861FDD3
+ for <buildroot@buildroot.org>; Mon, 22 Sep 2025 07:13:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6E49941360
- for <buildroot@buildroot.org>; Mon, 22 Sep 2025 07:13:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6C9C54116C
+ for <buildroot@buildroot.org>; Mon, 22 Sep 2025 07:13:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a-tvzwWFnwE3 for <buildroot@buildroot.org>;
- Mon, 22 Sep 2025 07:13:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.53;
- helo=mail-wm1-f53.google.com; envelope-from=thomas.devoogdt@gmail.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EO1F1Ug0MN03 for <buildroot@buildroot.org>;
+ Mon, 22 Sep 2025 07:13:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.221.47;
+ helo=mail-wr1-f47.google.com; envelope-from=thomas.devoogdt@gmail.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 522204138F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 522204138F
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com
- [209.85.128.53])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 522204138F
- for <buildroot@buildroot.org>; Mon, 22 Sep 2025 07:13:53 +0000 (UTC)
-Received: by mail-wm1-f53.google.com with SMTP id
- 5b1f17b1804b1-45e03730f83so15976145e9.0
- for <buildroot@buildroot.org>; Mon, 22 Sep 2025 00:13:53 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1B47E41159
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B47E41159
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com
+ [209.85.221.47])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1B47E41159
+ for <buildroot@buildroot.org>; Mon, 22 Sep 2025 07:13:54 +0000 (UTC)
+Received: by mail-wr1-f47.google.com with SMTP id
+ ffacd0b85a97d-3c6abcfd142so1948004f8f.2
+ for <buildroot@buildroot.org>; Mon, 22 Sep 2025 00:13:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1758525231; x=1759130031;
+ d=1e100.net; s=20230601; t=1758525233; x=1759130033;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=i44PXyA0949f6/ZqUMVNMukUfaDBH6plFrYo8ZaSIKU=;
- b=p4ZIFJRTBcoh/EZpSAMrJSh2+0O7oDdsYQZOX4Xv7bRQFvdko5EztbJii3rCju8Z3m
- 0rlD4RxZd8tn8R56tyzrSpKrfOxzYCtWyrfqQeW8qvZf6jC+J3sPvoJpd37MkO/AwjGP
- EXgLQ03x65zY3dbGcOx07HE7Srqd6eX+LHFA39xHMfVfGt6UVx31SoxO0HNdk2kwfP6d
- X3btvzCqqqbmciQPdDVVgl5md6+GQdU0LsAeG/IfDtViYPl3Yo/+sD4q+O4GeXctKajC
- /TiQU64YKABp6mk4xUyIDfejeCK3lMQBPfE4IXylP/kBS3y7Ymw3ph4ZVBuYf259h0mV
- QDdg==
-X-Gm-Message-State: AOJu0Yzl1cpI4B/nrG+SKp5AR12tFki+XCz9JAEuOFLKmowvpq8c0kWd
- TN2ON9ws4cSLZLMofyEm/1ngw2AjULBlSBlJHjNUUPaT0BRyjVtc5EBfQF7mIL1l
-X-Gm-Gg: ASbGncuP90Jck3iSNevwDj/oO+N0c7QDSfnYQjiQXAz/RGIZLLAuqkNbxraMWqcJKb2
- h8qfBEjsS5oGh//mldcUsgFAj2g5v0Kh774id9NiaCRUdWKd8wLF/iaKk77vMvckE3dMIe/KzVu
- 0YE2ZlPXP6SSpJ5/DA9+1LEBpAlEZdDSJjJbwDFarTjoSPYMmx90/jkfF+Ab7VzT4ZxPORYdESy
- 1bnG3xjoYawtsDnS6mV+wJWjKZ6Q0k+INd4r50B0Q5QEWgjUoqvRIfo6oHwKO6f2Q2qivIhRRdu
- cVsbdvWsAM8Aly097JBYgsYTD1szGaPwkOa1JW9gOsgxiAnKbTGPiAcIoiqbMFzklWUzQvmMkmN
- wKDVfrrZ/dxqfkuOjEokL7/6LoE9yKcm1jvNZZRnhgCX+YVcGxj5AULKYA2JFwEaNO2tj4jUUPP
- lP8nt5fG5HN3hCMAVgxHl66HjVPGpw2GavufzhONACDAmN7ek=
-X-Google-Smtp-Source: AGHT+IFZ5H+37FdP88HCDRWf1jqbCWQoKBwiVWBOofz3rpWKDFHm2OprFYHGTqjjXJFKVfcDZVBo2Q==
-X-Received: by 2002:a05:6000:26c1:b0:3ce:bf23:3c32 with SMTP id
- ffacd0b85a97d-3ee7db4c58dmr8283625f8f.22.1758525230976; 
- Mon, 22 Sep 2025 00:13:50 -0700 (PDT)
+ bh=NJaeAIyexJZljFfczZ95ucdxS5KcXkcJsna2i8Ecpuo=;
+ b=kW7SJP0JtbhUqrG+/RpX7sTKU+2BYFNMfBhD6nl59mduZ3E5zLui8KDccG3feTEehd
+ SQLGFP5fd8TwYVd74XZR0Y9rgTXK9nawbnT7C+7eQhOuZECc61hmrMmUYo0bBQzt5oEE
+ HiPGurwwJVFq6IB4DpE93CL/WZ+b+H03enSVROZtLvE0ulZnfmRh2ETuphux4wa1f5DZ
+ fCIEE93MAwenlFpqTdGvWqbath/n7mqABVCcbehIpE+GMn9LmPrY542el3EsQ40kG8Ib
+ j5walOyjHq+JuEts3XZRBcgS9HVgabgB9Y7yg4T3MaeAsFNQEBedDVuwEh3Tj7DsBwEx
+ l20g==
+X-Gm-Message-State: AOJu0Yw6qauZbQIhoptRfYEuGpiRJFJ6lTRryareSk/dPyV9tuNRQAZB
+ C6ozbrPxXmltJ4MtAcu1bXmarxB/x1ZFGINvC7sCbA47hsmkbE3Es7kjO9jX4M7b
+X-Gm-Gg: ASbGncs+A0l/+5xfsKyLyyvG4ioM34+zACllULNbtpggOApsN6DnlopQW/fhtJEjhX3
+ 4QPUIKWOOk1a9Y1T0e+MJGSkhmJqsXDfGC5sHqD9+b0OdUpNU2kOb+LRJWM96ip6Hzgm5pgch6c
+ JfExiRtR/yBaAdY06nvJGWXB0lOd4m1Vsh2CO6EJj7Vuo+SNa3+8xkkKqy35RnDmXvwNvYBS2P3
+ WRmIfTuyXSNiBawPLd9QmkTHnjVruRt5txzzg+boksBxCrVOv7xp4aWJRMhPYq0u4+I2o/aSLJr
+ sI0sW2O385QE4Ip5/Oaoe9YPpB9qNN0WrCPrfgfDzXJnyb7Hvc+JQJXwhSmmzcQcNSj7i42tuaJ
+ l2Qgw/r31XC54XsRPsHU00RlJ3M8cva+YpqxZqulwlc6V9GGKEZmPNgnsLa94sT2pjvNog0lCKK
+ OU94hRUzT1UzvYO326uMOH5TPBTVQdh6JBP0jLGbJ+2goAZ00=
+X-Google-Smtp-Source: AGHT+IFe16toZ+TtrmfRZouUJe7Nq6V8YeP52jQYzH91Fc5sb3jc4GXH28VVgb1XLr3Xg5Zy6yj9BQ==
+X-Received: by 2002:a05:6000:310e:b0:3e9:2fea:6795 with SMTP id
+ ffacd0b85a97d-3ee852a434cmr10440972f8f.53.1758525232660; 
+ Mon, 22 Sep 2025 00:13:52 -0700 (PDT)
 Received: from KORLIN44614.barco.com (d528f5fde.static.telenet.be.
  [82.143.95.222]) by smtp.googlemail.com with ESMTPSA id
- ffacd0b85a97d-3ee073f3d8csm17746771f8f.9.2025.09.22.00.13.50
+ ffacd0b85a97d-3ee073f3d8csm17746771f8f.9.2025.09.22.00.13.52
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 22 Sep 2025 00:13:50 -0700 (PDT)
+ Mon, 22 Sep 2025 00:13:52 -0700 (PDT)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 To: buildroot@buildroot.org
 Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>,
  Guillaume Chaye <guillaume.chaye@zeetim.com>,
  Thomas Devoogdt <thomas@devoogdt.com>
-Date: Mon, 22 Sep 2025 09:13:43 +0200
-Message-ID: <20250922071344.3864120-2-thomas@devoogdt.com>
+Date: Mon, 22 Sep 2025 09:13:44 +0200
+Message-ID: <20250922071344.3864120-3-thomas@devoogdt.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250922071344.3864120-1-thomas@devoogdt.com>
 References: <20250922071344.3864120-1-thomas@devoogdt.com>
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=devoogdt.com
-Subject: [Buildroot] [PATCH v1 2/3] package/cargo-c: add new package
+Subject: [Buildroot] [PATCH v1 3/3 WIP] package/librsvg: bump version to
+ 2.61.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,67 +104,264 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Guillaume Chaye <guillaume.chaye@zeetim.com>
+This is a major update, which replaces autotools with meson.
+The package uses cargo in the background, so copy the relevant
+environment from the cargo package to get things working.
 
-Cargo-c is a cargo applet to build and install C-ABI
-compatible dynamic and static libraries.
+Announcement (for what it's worth):
+ - https://gitlab.gnome.org/GNOME/librsvg/-/releases/2.61.1
 
-It will be required for librsvg.
-
-Signed-off-by: Guillaume Chaye <guillaume.chaye@zeetim.com>
 Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 ---
-Superseeds https://patchwork.ozlabs.org/project/buildroot/patch/20250324173246.100112-2-guillaume.chaye@zeetim.com/.
----
- DEVELOPERS                   |  1 +
- package/cargo-c/cargo-c.hash |  3 +++
- package/cargo-c/cargo-c.mk   | 15 +++++++++++++++
- 3 files changed, 19 insertions(+)
- create mode 100644 package/cargo-c/cargo-c.hash
- create mode 100644 package/cargo-c/cargo-c.mk
+./utils/test-pkg -p librsvg -a
+                             arm-aarch64 [ 1/35]: OK
+                   bootlin-aarch64-glibc [ 2/35]: OK
+               bootlin-arcle-hs38-uclibc [ 3/35]: SKIPPED
+                    bootlin-armv5-uclibc [ 4/35]: SKIPPED
+                     bootlin-armv7-glibc [ 5/35]: OK
+                   bootlin-armv7m-uclibc [ 6/35]: SKIPPED
+                      bootlin-armv7-musl [ 7/35]: FAILED
+                bootlin-m68k-5208-uclibc [ 8/35]: SKIPPED
+               bootlin-m68k-68040-uclibc [ 9/35]: SKIPPED
+             bootlin-microblazeel-uclibc [10/35]: SKIPPED
+                bootlin-mipsel32r6-glibc [11/35]: SKIPPED
+                   bootlin-mipsel-uclibc [12/35]: SKIPPED
+                 bootlin-openrisc-uclibc [13/35]: SKIPPED
+        bootlin-powerpc64le-power8-glibc [14/35]: OK
+           bootlin-powerpc-e500mc-uclibc [15/35]: SKIPPED
+                   bootlin-riscv32-glibc [16/35]: SKIPPED
+                   bootlin-riscv64-glibc [17/35]: SKIPPED
+                    bootlin-riscv64-musl [18/35]: SKIPPED
+                 bootlin-s390x-z13-glibc [19/35]: OK
+                      bootlin-sh4-uclibc [20/35]: SKIPPED
+                   bootlin-sparc64-glibc [21/35]: OK
+                    bootlin-sparc-uclibc [22/35]: SKIPPED
+                    bootlin-x86-64-glibc [23/35]: OK
+                     bootlin-x86-64-musl [24/35]: FAILED
+                   bootlin-x86-64-uclibc [25/35]: SKIPPED
+                   bootlin-x86-i686-musl [26/35]: FAILED
+                   bootlin-xtensa-uclibc [27/35]: SKIPPED
+                            br-arm-basic [28/35]: SKIPPED
+                    br-arm-full-nothread [29/35]: SKIPPED
+                      br-arm-full-static [30/35]: SKIPPED
+                   br-i386-pentium4-full [31/35]: SKIPPED
+                      br-mips64-n64-full [32/35]: SKIPPED
+                 br-mips64r6-el-hf-glibc [33/35]: SKIPPED
+               br-powerpc-603e-basic-cpp [34/35]: SKIPPED
+               br-powerpc64-power7-glibc [35/35]: OK
+35 builds, 24 skipped, 3 build failed, 0 legal-info failed, 0 show-info failed
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4c6ff40886..6a862e75f1 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1367,6 +1367,7 @@ F:	package/rpi-rgb-led-matrix/
- 
- N:	Guillaume Chaye <guillaume.chaye@zeetim.com>
- F:	package/sane-airscan/
-+F:	package/cargo-c/
- 
- N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
- F:	package/libnids/
-diff --git a/package/cargo-c/cargo-c.hash b/package/cargo-c/cargo-c.hash
+Some tests are failing, for which I could use some help.
+In prep to fix https://lore.kernel.org/buildroot/155c0a1f-c6f4-4484-a6e6-5da44d2d4100@gmx.de/,
+where the exact same tests failed.
+
+This is a meson package, but it uses cargo in the background. I'm also not sure
+about cargo vendoring, see: https://gnome.pages.gitlab.gnome.org/librsvg/devel-docs/compiling.html#building-with-no-network-access
+---
+ ...o_wrapper-fixup-the-usage-of-cargo_c.patch | 57 +++++++++++++++++++
+ ...r-Makefile.am-set-GDK_PIXBUF_MODULED.patch | 41 -------------
+ package/librsvg/librsvg.hash                  |  4 +-
+ package/librsvg/librsvg.mk                    | 54 ++++++++++++------
+ 4 files changed, 97 insertions(+), 59 deletions(-)
+ create mode 100644 package/librsvg/0001-cargo_wrapper-fixup-the-usage-of-cargo_c.patch
+ delete mode 100644 package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch
+
+diff --git a/package/librsvg/0001-cargo_wrapper-fixup-the-usage-of-cargo_c.patch b/package/librsvg/0001-cargo_wrapper-fixup-the-usage-of-cargo_c.patch
 new file mode 100644
-index 0000000000..64353c5628
+index 0000000000..b9410f2ad7
 --- /dev/null
-+++ b/package/cargo-c/cargo-c.hash
-@@ -0,0 +1,3 @@
-+# locally computed
-+sha256  757034535d42b345cd7b47c9d5e3624073332437805634153a19259439491be2  cargo-c-0.10.15-cargo4.tar.gz
-+sha256  d69f24ad84ec2ade64c0b68bdb31b41170e997b158370342056918329cc9af1e  LICENSE
-diff --git a/package/cargo-c/cargo-c.mk b/package/cargo-c/cargo-c.mk
-new file mode 100644
-index 0000000000..1f9e1f786b
---- /dev/null
-+++ b/package/cargo-c/cargo-c.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# cargo-c
-+#
-+################################################################################
++++ b/package/librsvg/0001-cargo_wrapper-fixup-the-usage-of-cargo_c.patch
+@@ -0,0 +1,57 @@
++From 487eabde9ddac7571cbfdbccb33fd911ad4b17da Mon Sep 17 00:00:00 2001
++From: Thomas Devoogdt <thomas@devoogdt.com>
++Date: Sat, 20 Sep 2025 18:36:19 +0200
++Subject: [PATCH] cargo_wrapper: fixup the usage of cargo_c
 +
-+CARGO_C_VERSION = 0.10.15
-+CARGO_C_SITE = $(call github,lu-zero,cargo-c,v$(CARGO_C_VERSION))
-+CARGO_C_CARGO_LOCK_FILE = https://github.com/lu-zero/cargo-c/releases/download/v$(CARGO_C_VERSION)/Cargo.lock
-+CARGO_C_LICENSE = MIT
-+CARGO_C_LICENSE_FILES = LICENSE
++The wrong bin file was used, so add a second --cargo-c arg,
++which point to the right bin.
 +
-+HOST_CARGO_C_DEPENDENCIES = host-libopenssl host-pkgconf
++Upstream: https://gitlab.gnome.org/GNOME/librsvg/-/merge_requests/1136
++Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
++---
++ meson.build            | 1 +
++ meson/cargo_wrapper.py | 9 ++++++++-
++ 2 files changed, 9 insertions(+), 1 deletion(-)
 +
-+$(eval $(host-cargo-package))
++diff --git a/meson.build b/meson.build
++index ed8989939..3e7387348 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -466,6 +466,7 @@ endif
++ 
++ cargo_wrapper_args = [
++   '--cargo', cargo.full_path(),
+++  '--cargo-c', cargo_c.full_path(),
++   '--manifest-path', cargo_toml,
++   '--project-build-root', meson.project_build_root(),
++   '--prefix', get_option('prefix'),
++diff --git a/meson/cargo_wrapper.py b/meson/cargo_wrapper.py
++index 5f1761cd2..54293154a 100755
++--- a/meson/cargo_wrapper.py
+++++ b/meson/cargo_wrapper.py
++@@ -20,6 +20,10 @@ parser.add_argument(
++     "--cargo", required=True, type=Path, help="Path to the cargo executable"
++ )
++ 
+++parser.add_argument(
+++    "--cargo-c", required=True, type=Path, help="Path to the cargo-c executable"
+++)
+++
++ parser.add_argument(
++     "--manifest-path", required=True, type=Path, help="Path to Cargo.toml"
++ )
++@@ -136,7 +140,10 @@ cargo_prefixes = [
++     (Path(args.prefix) / args.libdir).as_posix(),
++ ]
++ 
++-cargo_cmd = [Path(args.cargo).as_posix()]
+++if args.command == "cbuild":
+++    cargo_cmd = [Path(args.cargo_c).as_posix()]
+++else:
+++    cargo_cmd = [Path(args.cargo).as_posix()]
++ 
++ if args.toolchain_version is not None:
++     if args.build_triplet is not None:
++-- 
++2.43.0
++
+diff --git a/package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch b/package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch
+deleted file mode 100644
+index 761ff92605..0000000000
+--- a/package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 2c472bf55289ccbd7f305aa3e98d6fd70be4e3ab Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 19 Feb 2022 12:02:10 +0100
+-Subject: [PATCH] gdk-pixbuf-loader/Makefile.am: set GDK_PIXBUF_MODULEDIR
+-
+-Set GDK_PIXBUF_MODULEDIR to gdk_pixbuf_moduledir before calling
+-gdk-pixbuf-query-loaders to build a correct gdk_pixbuf_cache_file and
+-gdk-pixbuf.loaders on 'exotic' systems
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://gitlab.gnome.org/GNOME/librsvg/-/merge_requests/668]
+----
+- gdk-pixbuf-loader/Makefile.am | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/gdk-pixbuf-loader/Makefile.am b/gdk-pixbuf-loader/Makefile.am
+-index c3493736..de1f9641 100644
+---- a/gdk-pixbuf-loader/Makefile.am
+-+++ b/gdk-pixbuf-loader/Makefile.am
+-@@ -49,7 +49,7 @@ rsvg_loader_LDADD = \
+- EXTRA_rsvg_loader_DEPENDENCIES = libpixbufloader-svg.la gdk-pixbuf-loaders
+- 
+- gdk-pixbuf-loaders: Makefile
+--	$(AM_V_GEN) ( $(GDK_PIXBUF_QUERYLOADERS) ./libpixbufloader-svg.la && $(GDK_PIXBUF_QUERYLOADERS)) > gdk-pixbuf.loaders 2>/dev/null
+-+	$(AM_V_GEN) ( $(GDK_PIXBUF_QUERYLOADERS) ./libpixbufloader-svg.la && GDK_PIXBUF_MODULEDIR=$(gdk_pixbuf_moduledir) $(GDK_PIXBUF_QUERYLOADERS)) > gdk-pixbuf.loaders 2>/dev/null
+- 
+- if CROSS_COMPILING
+- RUN_QUERY_LOADER_TEST=false
+-@@ -68,7 +68,7 @@ endif
+- install-data-hook:
+- 	@if $(RUN_QUERY_LOADER_TEST) ; then \
+- 		$(mkinstalldirs) $(DESTDIR)$(gdk_pixbuf_binarydir) ; \
+--		$(GDK_PIXBUF_QUERYLOADERS) > $(DESTDIR)$(gdk_pixbuf_cache_file) ; \
+-+		GDK_PIXBUF_MODULEDIR=$(gdk_pixbuf_moduledir) $(GDK_PIXBUF_QUERYLOADERS) > $(DESTDIR)$(gdk_pixbuf_cache_file) ; \
+- 	else \
+- 	  echo "***" ; \
+- 	  echo "*** Warning: loaders.cache not built" ; \
+--- 
+-2.34.1
+-
+diff --git a/package/librsvg/librsvg.hash b/package/librsvg/librsvg.hash
+index 4eab8cdfba..2fcb170a44 100644
+--- a/package/librsvg/librsvg.hash
++++ b/package/librsvg/librsvg.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/librsvg/2.50/librsvg-2.50.9.sha256sum
+-sha256  518905fffa879b6c7f3db1aae961cf31333e0eadc7b4cdd4f531707868c54b53  librsvg-2.50.9.tar.xz
++# From https://download.gnome.org/sources/librsvg/2.61/librsvg-2.61.1.sha256sum
++sha256  bc1bbcd419120b098db28bea55335d9de2470d4e6a9f6ee97207b410fc15867d  librsvg-2.61.1.tar.xz
+ 
+ # Locally computed
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
+index 81a6667817..0ecb42f129 100644
+--- a/package/librsvg/librsvg.mk
++++ b/package/librsvg/librsvg.mk
+@@ -4,31 +4,53 @@
+ #
+ ################################################################################
+ 
+-LIBRSVG_VERSION_MAJOR = 2.50
+-LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).9
++LIBRSVG_VERSION_MAJOR = 2.61
++LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).1
+ LIBRSVG_SITE = https://download.gnome.org/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)
+ LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
+ LIBRSVG_INSTALL_STAGING = YES
+-LIBRSVG_CONF_ENV = \
+-	LIBS=$(TARGET_NLS_LIBS) \
+-	RUST_TARGET=$(RUSTC_TARGET_NAME)
+-LIBRSVG_CONF_OPTS = --disable-pixbuf-loader --disable-tools
+-HOST_LIBRSVG_CONF_OPTS = --enable-introspection=no
+-LIBRSVG_DEPENDENCIES = cairo host-gdk-pixbuf gdk-pixbuf host-rustc libglib2 libxml2 pango \
+-	$(TARGET_NLS_DEPENDENCIES)
+-HOST_LIBRSVG_DEPENDENCIES = host-cairo host-gdk-pixbuf host-libglib2 host-libxml2 host-pango host-rustc
+ LIBRSVG_LICENSE = LGPL-2.1+
+ LIBRSVG_LICENSE_FILES = COPYING.LIB
+ LIBRSVG_CPE_ID_VENDOR = gnome
+-# We're patching gdk-pixbuf-loader/Makefile.am
+-LIBRSVG_AUTORECONF = YES
++
++LIBRSVG_CONF_ENV = $(PKG_CARGO_ENV)
++LIBRSVG_NINJA_ENV = $(PKG_CARGO_ENV)
++LIBRSVG_CONF_OPTS = \
++	-Dtriplet=$(RUSTC_TARGET_NAME) \
++	-Dpixbuf-loader=disabled \
++	-Ddocs=disabled \
++	-Dtests=false
++LIBRSVG_DEPENDENCIES = \
++	host-cairo \
++	host-cargo-c \
++	host-libxml2 \
++	host-pango \
++	host-rustc \
++	cairo \
++	gdk-pixbuf \
++	libglib2 \
++	libxml2 \
++	pango \
++	$(TARGET_NLS_DEPENDENCIES)
++
++HOST_LIBRSVG_CONF_ENV = $(HOST_PKG_CARGO_ENV)
++HOST_LIBRSVG_NINJA_ENV = $(HOST_PKG_CARGO_ENV)
++HOST_LIBRSVG_CONF_OPTS = -Dintrospection=disabled
++HOST_LIBRSVG_DEPENDENCIES = \
++	host-cairo \
++	host-cargo-c \
++	host-gdk-pixbuf \
++	host-libglib2 \
++	host-libxml2 \
++	host-pango \
++	host-rustc
+ 
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+-LIBRSVG_CONF_OPTS += --enable-introspection
++LIBRSVG_CONF_OPTS += -Dintrospection=enabled
+ LIBRSVG_DEPENDENCIES += gobject-introspection
+ else
+-LIBRSVG_CONF_OPTS += --disable-introspection
++LIBRSVG_CONF_OPTS += -Dintrospection=disabled
+ endif
+ 
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
++$(eval $(meson-package))
++$(eval $(host-meson-package))
 -- 
 2.43.0
 
