@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8350CAC592
-	for <buildroot@archiver.kernel.org>; Mon, 22 Sep 2025 19:39:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DF79CA100F
+	for <buildroot@archiver.kernel.org>; Mon, 22 Sep 2025 19:53:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AEC8A61BD9;
-	Mon, 22 Sep 2025 19:39:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DDC13616D8;
+	Mon, 22 Sep 2025 19:53:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h6Um6UJW-QEp; Mon, 22 Sep 2025 19:39:37 +0000 (UTC)
+ id B4bf5GpX9he0; Mon, 22 Sep 2025 19:53:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A922D61B8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A99761B91
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A922D61B8C;
-	Mon, 22 Sep 2025 19:39:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1A99761B91;
+	Mon, 22 Sep 2025 19:53:53 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 60BCE1F1
- for <buildroot@buildroot.org>; Mon, 22 Sep 2025 19:39:36 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 7BC4E1F1
+ for <buildroot@buildroot.org>; Mon, 22 Sep 2025 19:53:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 476D640B85
- for <buildroot@buildroot.org>; Mon, 22 Sep 2025 19:39:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 653CC4216A
+ for <buildroot@buildroot.org>; Mon, 22 Sep 2025 19:53:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IxUkXfsHAOqH for <buildroot@buildroot.org>;
- Mon, 22 Sep 2025 19:39:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 86BA340A90
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86BA340A90
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 86BA340A90
- for <buildroot@buildroot.org>; Mon, 22 Sep 2025 19:39:35 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id A3F4878035E;
- Mon, 22 Sep 2025 21:39:31 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 22 Sep 2025 21:39:31 +0200
-MIME-Version: 1.0
-Date: Mon, 22 Sep 2025 21:39:31 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Cc: buildroot@buildroot.org
-In-Reply-To: <aNEHNhC3tCHIasx8@waldemar-brodkorb.de>
-References: <aNEHNhC3tCHIasx8@waldemar-brodkorb.de>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <f34f2c8379b9f2bb82c3c6dafcc8bdce@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1758569972;
- bh=+AkWtA9+jUMPHsN9joV0DaUqMrBWv6L4qOT2i8428oM=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=K4988F6Qk145f3EDWLqMVLqKEgx88Wtp4u716mhtc6dMRrHYf8ECYezHyKT0x0A8N
- h1eoEgjHW4ONMhh9c5OQ3hFB+qoDKeYuc4zGScxUqtyqnvQyTaw6mz8Y5y8PgS+EJV
- fISCcjkx0z9WKUQ9C3po/JjjuhtbBDTK6muqR/zG1YXX0bEN57AWXeJgwEdp2EEIKE
- tOGwSQdkIAe4HNzLE8/KUi1TSVUrAwcFiScZp6SPIIX5yelxux/3o48rTXIRhI317s
- 59t1tbxu5imMP/ksC03BKYIEcObx5VAYwreJWLAsk6CUF2IFG/YsvYEkzMdmtuC/9y
- 8yYcSwv93toUw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=K4988F6Q
-Subject: Re: [Buildroot] [PATCH] package/icu: bump to 77.1
+ id K8NzuqixRUIe for <buildroot@buildroot.org>;
+ Mon, 22 Sep 2025 19:53:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA9D442154
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id AA9D442154
+ for <buildroot@buildroot.org>; Mon, 22 Sep 2025 19:53:50 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A3961861DB; Mon, 22 Sep 2025 19:53:50 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 22 Sep 2025 21:44:18 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: dcee99507c6767230fd1faeeefe95f5662eb03a3
+X-Git-Newrev: 817611686a12535aaa15b3e930be0dab95b9b60c
+X-Patchwork-Hint: ignore
+Message-Id: <20250922195350.A3961861DB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rtl_433: do not leak Buildroot git
+ info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,25 +60,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 22/09/2025 10:22, Waldemar Brodkorb wrote:
-> Update icu to 77.1.
-> 
-> The LICENSE file contains a lot of changes, so no diff
-> is presented.
-> 
-> Patch 0002-workaround-toolchain-bugs.patch is no longer required.
-> Reorder the other patches accordingly.
-> Update patch 0003-fix-static-linking-with-icu-uc.patch so that
-> it applies cleanly.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+commit: https://git.buildroot.net/buildroot/commit/?id=817611686a12535aaa15b3e930be0dab95b9b60c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+The CMake build system has logic to detect the git repo info and include it
+in the version output.  This unfortunately gets confused and adds the git
+info of the Buildroot repository when building inside the repo:
+
+-- Found Git version: refs/heads/rtl_433-25.02 commit a367362af00ed349915b0b4496ebeb9910fc86e4                                 from 2025-09-21T20:07:58+0200
+-- Using Git version tag: 2025.08-283-ga367362af0 on rtl_433-25.02 at 202509212007
+
+rtl_433 -V
+rtl_433 version 2025.08-283-ga367362af0 branch rtl_433-25.02 at 202509212007 inputs file rtl_tcp RTL-SDR
+
+Pass GIT_DIR=.  to the configure step similar to how it is already done for
+the build step to disable this.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/rtl_433/rtl_433.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/rtl_433/rtl_433.mk b/package/rtl_433/rtl_433.mk
+index 0af25c7936..60f90a94c7 100644
+--- a/package/rtl_433/rtl_433.mk
++++ b/package/rtl_433/rtl_433.mk
+@@ -18,6 +18,9 @@ RTL_433_CONF_OPTS = \
+ 	-DBUILD_TESTING_ANALYZER=OFF \
+ 	-DENABLE_SOAPYSDR=OFF
+ 
++# do not include Buildroot git info in version output
++RTL_433_CONF_ENV = GIT_DIR=.
++
+ ifeq ($(BR2_PACKAGE_LIBRTLSDR),y)
+ RTL_433_DEPENDENCIES += librtlsdr
+ RTL_433_CONF_OPTS += -DENABLE_RTLSDR=ON
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
