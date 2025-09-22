@@ -4,69 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C856CA100F
-	for <buildroot@archiver.kernel.org>; Mon, 22 Sep 2025 19:59:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC249CAC592
+	for <buildroot@archiver.kernel.org>; Mon, 22 Sep 2025 20:07:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 40836613BE;
-	Mon, 22 Sep 2025 19:59:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7F54260087;
+	Mon, 22 Sep 2025 20:07:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U02NvHPLAx_9; Mon, 22 Sep 2025 19:59:10 +0000 (UTC)
+ id PWHsnZ0NRgFs; Mon, 22 Sep 2025 20:07:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 508C16169C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A652A600B6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 508C16169C;
-	Mon, 22 Sep 2025 19:59:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A652A600B6;
+	Mon, 22 Sep 2025 20:07:04 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id B7DBC498
- for <buildroot@buildroot.org>; Mon, 22 Sep 2025 19:59:08 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 57AB7498
+ for <buildroot@buildroot.org>; Mon, 22 Sep 2025 20:07:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AA0E26169C
- for <buildroot@buildroot.org>; Mon, 22 Sep 2025 19:59:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 54DBC600B6
+ for <buildroot@buildroot.org>; Mon, 22 Sep 2025 20:07:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6TxPw-bltIXy for <buildroot@buildroot.org>;
- Mon, 22 Sep 2025 19:59:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 066FD613BE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 066FD613BE
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 066FD613BE
- for <buildroot@buildroot.org>; Mon, 22 Sep 2025 19:59:06 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -2051901418; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 22 Sep 2025 19:59:04 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1v0mgh-00GFg2-0m;
- Mon, 22 Sep 2025 21:59:03 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 22 Sep 2025 21:59:01 +0200
-Message-Id: <20250922195902.3873493-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
+ id 05BXwtxRq9k9 for <buildroot@buildroot.org>;
+ Mon, 22 Sep 2025 20:07:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2A30D60067
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A30D60067
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2A30D60067
+ for <buildroot@buildroot.org>; Mon, 22 Sep 2025 20:07:01 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 899BE780375;
+ Mon, 22 Sep 2025 22:06:55 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 22 Sep 2025 22:06:55 +0200
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=WEo9/G35+7mJ2kp4N8E+hEnPuyKkvAUs3owyQNTEm2lY7kMFSGcs26WY6bM5MZ9lp5IPCzD8hDM1Wzf6qFvqmTc6OAGDdDeNW3LSIPK4w8esC1V362L+8YYMKb2mFNZ6qItoMZYAk9fMaHe7jRQYYJ6qkB8f9NY582E5fcVccWmJBTH519jzL7TLc8tPdg2n6DXVcw/ItkT6JFVJL8EgQp/tmvAuCWmQCCf3tfw9Af6XTkhI3KO8zNENVI8so3dGxFSWVRw3sLKVldYUIy7eMeilDc2P6DbXbH3eAgC05QXOH+Vgp9M32r1nfM4h5gw56zp/QU7WiDIhMuAdblo+hA==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=GxSWrqjiM8hYXuCQFiEPzpFMIEYMjQ7WqIq8qgaTIR8=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+Date: Mon, 22 Sep 2025 22:06:55 +0200
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+In-Reply-To: <DCZE1NNPYVQP.VA152ACRNNYT@bootlin.com>
+References: <20250921-fix_doc_dead_link-v1-1-4f39903e93c7@bootlin.com>
+ <87wm5sosjs.fsf@tarshish> <DCZE1NNPYVQP.VA152ACRNNYT@bootlin.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <84848ccb6383f38eff8fcdf17ac292ab@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1758571619;
+ bh=Ht+V2+Gh7uN7I3vJsiez15o3o9Fep0U9/xkxb3hkvhw=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=t9M5kA3eRwPIG1KHwFzal613nIheGWOO7PddPzdwHVTFbFUv1xQ+xfU710seejtjv
+ DOG/r1O+yIrU0w0eIL3daOWuQzis5pZ3Ncf0yS1GXH8XFbDW9W3EBovUduuThu+1Ym
+ 7Rhifk9UtI2qLQo6hs16TQq+yhZtMhOF1mIOHX9Sv3H0kV0sBqRmvE6DStxYycaGgN
+ 8kqK/m4tts0PHyfVKVa8sYV4EClQ2BTF+56tf0FT/xX4J2N8vgRw8SlIDeuuJLZxMq
+ r8Op4y9z0igd6vchBcLLhpGeExd359kYNU+Y67IRbFSkFbgKtWboUuEW7OvYuqZ7zz
+ Y5tDgKgN/EkGQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=WEo9/G35
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH] package/openjpeg: bump version to 2.5.4
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=t9M5kA3e
+Subject: Re: [Buildroot] [PATCH] docs/manual/getting: fix dead link
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,107 +80,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Olivier Schonken <olivier.schonken@gmail.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ =?UTF-8?Q?Alexis_Lothor=C3=A9_via_b?= =?UTF-8?Q?uildroot?=
+ <buildroot@buildroot.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-And drop now included security patch. For details, see:
-
-https://github.com/uclouvain/openjpeg/releases/tag/v2.5.4
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...check-for-error-after-parsing-header.patch | 41 -------------------
- package/openjpeg/openjpeg.hash                |  2 +-
- package/openjpeg/openjpeg.mk                  |  5 +--
- 3 files changed, 2 insertions(+), 46 deletions(-)
- delete mode 100644 package/openjpeg/0001-check-for-error-after-parsing-header.patch
-
-diff --git a/package/openjpeg/0001-check-for-error-after-parsing-header.patch b/package/openjpeg/0001-check-for-error-after-parsing-header.patch
-deleted file mode 100644
-index 9a02fbf3d4..0000000000
---- a/package/openjpeg/0001-check-for-error-after-parsing-header.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From f809b80c67717c152a5ad30bf06774f00da4fd2d Mon Sep 17 00:00:00 2001
--From: Sebastian Rasmussen <sebras@gmail.com>
--Date: Thu, 16 Jan 2025 02:13:43 +0100
--Subject: [PATCH] opj_jp2_read_header: Check for error after parsing header.
--
--Consider the case where the caller has not set the p_image
--pointer to NULL before calling opj_read_header().
--
--If opj_j2k_read_header_procedure() fails while obtaining the rest
--of the marker segment when calling opj_stream_read_data() because
--the data stream is too short, then opj_j2k_read_header() will
--never have the chance to initialize p_image, leaving it
--uninitialized.
--
--opj_jp2_read_header() will check the p_image value whether
--opj_j2k_read_header() suceeded or failed. This may be detected as
--an error in valgrind or ASAN.
--
--The fix is to check whether opj_j2k_read_header() suceeded before
--using the output argument p_image.
--
--Upstream: https://github.com/uclouvain/openjpeg/commit/f809b80c67717c152a5ad30bf06774f00da4fd2d
--CVE: CVE-2025-54874
--Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-----
-- src/lib/openjp2/jp2.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/lib/openjp2/jp2.c b/src/lib/openjp2/jp2.c
--index 4df055a54..da5063186 100644
----- a/src/lib/openjp2/jp2.c
--+++ b/src/lib/openjp2/jp2.c
--@@ -2873,7 +2873,7 @@ OPJ_BOOL opj_jp2_read_header(opj_stream_private_t *p_stream,
--                               p_image,
--                               p_manager);
-- 
---    if (p_image && *p_image) {
--+    if (ret && p_image && *p_image) {
--         /* Set Image Color Space */
--         if (jp2->enumcs == 16) {
--             (*p_image)->color_space = OPJ_CLRSPC_SRGB;
-diff --git a/package/openjpeg/openjpeg.hash b/package/openjpeg/openjpeg.hash
-index 1992d5ca6a..3fda2a243b 100644
---- a/package/openjpeg/openjpeg.hash
-+++ b/package/openjpeg/openjpeg.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  368fe0468228e767433c9ebdea82ad9d801a3ad1e4234421f352c8b06e7aa707  openjpeg-2.5.3.tar.gz
-+sha256  a695fbe19c0165f295a8531b1e4e855cd94d0875d2f88ec4b61080677e27188a  openjpeg-2.5.4.tar.gz
- sha256  a6af136f3e15038a666b61f376612a07d9a4e48cb7c01adbf3e33b3f14ab49b6  LICENSE
-diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
-index 7b1352c222..bc5d8143a6 100644
---- a/package/openjpeg/openjpeg.mk
-+++ b/package/openjpeg/openjpeg.mk
-@@ -4,16 +4,13 @@
- #
- ################################################################################
- 
--OPENJPEG_VERSION = 2.5.3
-+OPENJPEG_VERSION = 2.5.4
- OPENJPEG_SITE = $(call github,uclouvain,openjpeg,v$(OPENJPEG_VERSION))
- OPENJPEG_LICENSE = BSD-2-Clause
- OPENJPEG_LICENSE_FILES = LICENSE
- OPENJPEG_CPE_ID_VENDOR = uclouvain
- OPENJPEG_INSTALL_STAGING = YES
- 
--# 0001-check-for-error-after-parsing-header.patch
--OPENJPEG_IGNORE_CVES += CVE-2025-54874
--
- OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
- OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
- OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_TIFF),tiff)
--- 
-2.39.5
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgQWxleGlzLCBCYXJ1Y2gsIEFsbCwKCk9uIDIyLzA5LzIwMjUgMTY6MTEsIEFsZXhpcyBMb3Ro
+b3LDqSB2aWEgYnVpbGRyb290IHdyb3RlOgo+IEhpIEJhcnVjaCwKPiAKPiBPbiBTdW4gU2VwIDIx
+LCAyMDI1IGF0IDM6MTUgUE0gQ0VTVCwgQmFydWNoIFNpYWNoIHdyb3RlOgo+PiBIaSBBbGV4aXMs
+Cj4+IAo+PiBPbiBTdW4sIFNlcCAyMSAyMDI1LCBBbGV4aXMgTG90aG9yw6kgdmlhIGJ1aWxkcm9v
+dCB3cm90ZToKPiAKPiBbLi4uXQo+IAo+Pj4gIElmIHlvdSB3YW50IHRvIGZvbGxvdyBkZXZlbG9w
+bWVudCwgeW91IGNhbiB1c2UgdGhlIGRhaWx5IHNuYXBzaG90cyAKPj4+IG9yCj4+PiAgbWFrZSBh
+IGNsb25lIG9mIHRoZSBHaXQgcmVwb3NpdG9yeS4gUmVmZXIgdG8gdGhlCj4+PiAtaHR0cDovL2J1
+aWxkcm9vdC5vcmcvZG93bmxvYWRbRG93bmxvYWQgcGFnZV0gb2YgdGhlIEJ1aWxkcm9vdCAKPj4+
+IHdlYnNpdGUKPj4+ICtodHRwOi8vYnVpbGRyb290Lm9yZy9kb3dubG9hZC5odG1sW0Rvd25sb2Fk
+IHBhZ2VdIG9mIHRoZSBCdWlsZHJvb3QgCj4+PiB3ZWJzaXRlCj4+IAo+PiBNYXliZSBzd2l0Y2gg
+dG8gaHR0cHMgd2hpbGUgYXQgaXQ/IFRoaXMgbGluayByZWRpcmVjdHMgdGhlcmUgYW55d2F5Lgo+
+IAo+IFN1cmUuIEJ1dCBpbiB0aGlzIGNhc2UsIEkgZ3Vlc3MgaXQgZG9lcyBub3QgbWFrZSBzZW5z
+ZSB0byBkbyBpdCBvbmx5IAo+IGZvcgo+IHRoaXMgbGluaywgYW5kIGl0IHNob3VsZCBiZSBkb25l
+IGZvciBhbnkgbGluayBwb2ludGluZyB0byAKPiBidWlsZHJvb3Qub3JnOgo+IAo+ICQgZ3JlcCAt
+cmkgImh0dHA6Ly8uKmJ1aWxkcm9vdC5vcmciIH4vc3JjL2J1aWxkcm9vdC9kb2NzL21hbnVhbAo+
+IC9ob21lL2FsZXhpcy9zcmMvYnVpbGRyb290L2RvY3MvbWFudWFsL2NvbnRyaWJ1dGUuYWRvYzpB
+bGwgYnVpbGQgCj4gcmVzdWx0cyBhcmUgYXZhaWxhYmxlIGF0IGh0dHA6Ly9hdXRvYnVpbGQuYnVp
+bGRyb290Lm9yZ1tdLAo+IC9ob21lL2FsZXhpcy9zcmMvYnVpbGRyb290L2RvY3MvbWFudWFsL2Nv
+bnRyaWJ1dGUuYWRvYzpzdGF0aXN0aWNzIGFyZSAKPiBhdCBodHRwOi8vYXV0b2J1aWxkLmJ1aWxk
+cm9vdC5vcmcvc3RhdHMucGhwW10uIEV2ZXJ5IGRheSwKPiAvaG9tZS9hbGV4aXMvc3JjL2J1aWxk
+cm9vdC9kb2NzL21hbnVhbC9jb250cmlidXRlLmFkb2M6ICAgIAo+IGh0dHA6Ly9naXQuYnVpbGRy
+b290Lm9yZy9idWlsZHJvb3QtdGVzdC90cmVlL3V0aWxzL2JyLXJlcHJvZHVjZS1idWlsZFtici1y
+ZXByb2R1Y2UtYnVpbGRdCj4gL2hvbWUvYWxleGlzL3NyYy9idWlsZHJvb3QvZG9jcy9tYW51YWwv
+Y29udHJpYnV0ZS5hZG9jOkZpeGVzOiAKPiBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcv
+cmVzdWx0cy81MTAwMGE5ZDQ2NTZhZmU5ZTBlYTZmMDdiOWY4ZWQzNzRjMmU0MDY5Cj4gL2hvbWUv
+YWxleGlzL3NyYy9idWlsZHJvb3QvZG9jcy9tYW51YWwvcmVzb3VyY2VzLmFkb2M6aHR0cDovL2xp
+c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3RbbWFpbGluZyAKPiBs
+aXN0IGluZm8KPiAvaG9tZS9hbGV4aXMvc3JjL2J1aWxkcm9vdC9kb2NzL21hbnVhbC9yZXNvdXJj
+ZXMuYWRvYzpodHRwOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9waXBlcm1haWwvYnVpbGRyb290W01h
+aWxtYW5dIAo+IG9yIGF0Cj4gL2hvbWUvYWxleGlzL3NyYy9idWlsZHJvb3QvZG9jcy9tYW51YWwv
+Z2V0dGluZy5hZG9jOlJlbGVhc2UgdGFyYmFsbHMgCj4gYXJlIGF2YWlsYWJsZSBhdCBodHRwOi8v
+YnVpbGRyb290Lm9yZy9kb3dubG9hZHMvW10uCj4gL2hvbWUvYWxleGlzL3NyYy9idWlsZHJvb3Qv
+ZG9jcy9tYW51YWwvZ2V0dGluZy5hZG9jOmh0dHA6Ly9idWlsZHJvb3Qub3JnL2Rvd25sb2FkLmh0
+bWxbRG93bmxvYWQgCj4gcGFnZV0gb2YgdGhlIEJ1aWxkcm9vdCB3ZWJzaXRlCj4gL2hvbWUvYWxl
+eGlzL3NyYy9idWlsZHJvb3QvZG9jcy9tYW51YWwvbWFudWFsLmFkb2M6aHR0cDovL2dpdC5idWls
+ZHJvb3Qub3JnL2J1aWxkcm9vdC90cmVlL0NPUFlJTkc/aWQ9e3N5czpnaXQgCj4gcmV2LXBhcnNl
+IEhFQUR9W0NPUFlJTkddCj4gL2hvbWUvYWxleGlzL3NyYy9idWlsZHJvb3QvZG9jcy9tYW51YWwv
+YWRkaW5nLXBhY2thZ2VzLXRpcHMuYWRvYzpCdWlsZHJvb3QgCj4gcnVucyBodHRwOi8vYXV0b2J1
+aWxkLmJ1aWxkcm9vdC5vcmcvW2F1dG9idWlsZGVyc10gd2hpY2gKPiAKPiBJZiBtYWludGFpbmVy
+cyBhcmUgZmluZSB3aXRoIHRoYXQsIEkgY2FuIGFkZCBhIGRlZGljYXRlZCBjb21taXQgaW4gYSAK
+PiB2Mi4KCkkgYXBwbGllZCB0aGlzIHBhdGNoIG9uIG1hc3RlciwgdG8gZml4IHRoaXMgYnJva2Vu
+IGxpbmsuCgpCdXQgSSBhZ3JlZSB3ZSBjb3VsZCBtb3ZlIGFsbCBodHRwOi8vYnVpbGRyb290Lm9y
+ZyBsaW5rcyB0byBodHRwcy4gQ291bGQKeW91IHNlbmQgYSBzZXBhcmF0ZSBwYXRjaCBmb3IgdGhh
+dCBwbGVhc2U/CgpGb3IgYW5vdGhlciBkb2N1bWVudGF0aW9uIHVybCBjbGVhbnVwLCBJJ20gYWxz
+byBzdWdnZXN0aW5nIHRvIHVwZGF0ZSBhbGwKZ2l0LmJ1aWxkcm9vdC5vcmcgbGlua3MgdG8gaHR0
+cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcKCj4gCj4gVGhhbmtzLAo+IAo+IEFsZXhpcwo+
+IAo+IAo+IC0tCj4gQWxleGlzIExvdGhvcsOpLCBCb290bGluCj4gRW1iZWRkZWQgTGludXggYW5k
+IEtlcm5lbCBlbmdpbmVlcmluZwo+IGh0dHBzOi8vYm9vdGxpbi5jb20KCkJlc3QgcmVnYXJkcywK
+Ckp1bGllbi4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
+c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
