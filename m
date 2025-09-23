@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2C20CAC5AC
-	for <buildroot@archiver.kernel.org>; Tue, 23 Sep 2025 16:38:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 633C5CAC5AC
+	for <buildroot@archiver.kernel.org>; Tue, 23 Sep 2025 16:39:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 893C540253;
-	Tue, 23 Sep 2025 16:38:48 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lMO3w52Sj36U; Tue, 23 Sep 2025 16:38:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2101F40AB5
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2101F40AB5;
-	Tue, 23 Sep 2025 16:38:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 874B4E7
- for <buildroot@buildroot.org>; Tue, 23 Sep 2025 16:38:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E17060E53
- for <buildroot@buildroot.org>; Tue, 23 Sep 2025 16:38:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 30AB360EB3;
+	Tue, 23 Sep 2025 16:39:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nHWKm8Ge1D01 for <buildroot@buildroot.org>;
- Tue, 23 Sep 2025 16:38:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C76E160DDC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C76E160DDC
- for <buildroot@buildroot.org>; Tue, 23 Sep 2025 16:38:40 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C0B348630F; Tue, 23 Sep 2025 16:38:40 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 23 Sep 2025 18:37:30 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7660818b4bbe3aa2540f76ed4d75fcd99c8c8bd9
-X-Git-Newrev: 6f29c81703221b448f60ba1611fe2a06324cfc09
-X-Patchwork-Hint: ignore
-Message-Id: <20250923163840.C0B348630F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/manual: update links to buildroot.org
- from http to https
+ id k6zMTihl8D9u; Tue, 23 Sep 2025 16:39:17 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FD9360657
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5FD9360657;
+	Tue, 23 Sep 2025 16:39:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id EFDB9E7
+ for <buildroot@buildroot.org>; Tue, 23 Sep 2025 16:39:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D6EAA60E44
+ for <buildroot@buildroot.org>; Tue, 23 Sep 2025 16:39:15 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wTR6Fyjelj0v for <buildroot@buildroot.org>;
+ Tue, 23 Sep 2025 16:39:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E58ED60650
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E58ED60650
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E58ED60650
+ for <buildroot@buildroot.org>; Tue, 23 Sep 2025 16:39:14 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 6AF84B00593;
+ Tue, 23 Sep 2025 18:39:10 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 23 Sep 2025 18:39:10 +0200
+MIME-Version: 1.0
+Date: Tue, 23 Sep 2025 18:39:10 +0200
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20250923-update_br_links-v1-1-3fe23dc818ba@bootlin.com>
+References: <20250923-update_br_links-v1-0-3fe23dc818ba@bootlin.com>
+ <20250923-update_br_links-v1-1-3fe23dc818ba@bootlin.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <bde348b4fe2c9d327586b5b65a50628f@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1758645552;
+ bh=1MKdtzd4i3zmVB82sILiqQvwgpoKwPTGeIF2nh2OPiA=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=NIMMHC7+TWnbmiqxG03HV8QGVX0g8iXrgyGKQiXHSVAaaLzhrs6CkyxeKtUU4qAj6
+ RkCI+/RHQ5ZYuMuFisZ2yyIuoLVqPoUflAnKc5VLXK9lDLo8IdqwXRJEkp+Kv6yvny
+ VRprnBVIXO9UpQkWOlY8RIKJ7p3ExKYwSW0l4lscp2MBoGhy2a6fUlZuKAc3ghG+Wg
+ uAb2I7BGCkYQL5EpYi4UodtU99mMRd2XYPNwZckRClqUjFoiW5wO6VL4Nyegbvf1Ia
+ c+ZTkCzGzqvbTWfT4mupRw4J4CuXNrvSLudyVbIbQJeVRKK8sgwewW8QXUjYulFjGX
+ B92N4SKt4A1sg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=NIMMHC7+
+Subject: Re: [Buildroot] [PATCH 1/2] docs/manual: update links to
+ buildroot.org from http to https
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,138 +84,16 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8945384922627416200=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8945384922627416200==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=6f29c81703221b448f60ba1611fe2a06324cfc09
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Many links pointing to buildroot.org are still prefixed with HTTP.
-Update those to HTTPS.
-
-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- docs/manual/adding-packages-tips.adoc | 2 +-
- docs/manual/contribute.adoc           | 8 ++++----
- docs/manual/getting.adoc              | 4 ++--
- docs/manual/manual.adoc               | 2 +-
- docs/manual/resources.adoc            | 4 ++--
- 5 files changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/docs/manual/adding-packages-tips.adoc b/docs/manual/adding-packages-tips.adoc
-index c243e7b75b..57ca11ab5d 100644
---- a/docs/manual/adding-packages-tips.adoc
-+++ b/docs/manual/adding-packages-tips.adoc
-@@ -85,7 +85,7 @@ under various conditions: does it build for all architectures? Does it
- build with the different C libraries? Does it need threads, NPTL? And
- so on...
- 
--Buildroot runs http://autobuild.buildroot.org/[autobuilders] which
-+Buildroot runs https://autobuild.buildroot.org/[autobuilders] which
- continuously test random configurations. However, these only build the
- `master` branch of the git tree, and your new fancy package is not yet
- there.
-diff --git a/docs/manual/contribute.adoc b/docs/manual/contribute.adoc
-index f77aff9d6c..caecd09764 100644
---- a/docs/manual/contribute.adoc
-+++ b/docs/manual/contribute.adoc
-@@ -40,8 +40,8 @@ with a random selection of packages. With the large commit activity on
- Buildroot, these autobuilders are a great help in detecting problems
- very early after commit.
- 
--All build results are available at http://autobuild.buildroot.org[],
--statistics are at http://autobuild.buildroot.org/stats.php[]. Every day,
-+All build results are available at https://autobuild.buildroot.org[],
-+statistics are at https://autobuild.buildroot.org/stats.php[]. Every day,
- an overview of all failed packages is sent to the mailing list.
- 
- Detecting problems is great, but obviously these problems have to be
-@@ -58,7 +58,7 @@ basically two things that can be done:
-   these steps:
-   . Check if you can reproduce the problem by building with the same
-     configuration. You can do this manually, or use the
--    http://git.buildroot.org/buildroot-test/tree/utils/br-reproduce-build[br-reproduce-build]
-+    https://git.buildroot.org/buildroot-test/tree/utils/br-reproduce-build[br-reproduce-build]
-     script that will automatically clone a Buildroot git repository,
-     checkout the correct revision, download and set the right
-     configuration, and start the build.
-@@ -73,7 +73,7 @@ basically two things that can be done:
-     In the commit message of a patch fixing an autobuild failure, add a
-     reference to the build result directory, as follows:
- ----
--Fixes: http://autobuild.buildroot.org/results/51000a9d4656afe9e0ea6f07b9f8ed374c2e4069
-+Fixes: https://autobuild.buildroot.org/results/51000a9d4656afe9e0ea6f07b9f8ed374c2e4069
- ----
- 
- === Reviewing and testing patches
-diff --git a/docs/manual/getting.adoc b/docs/manual/getting.adoc
-index 1437a3ccef..b3a451f67d 100644
---- a/docs/manual/getting.adoc
-+++ b/docs/manual/getting.adoc
-@@ -8,7 +8,7 @@ Buildroot releases are made every 3 months, in February, May, August and
- November. Release numbers are in the format YYYY.MM, so for example
- 2013.02, 2014.08.
- 
--Release tarballs are available at http://buildroot.org/downloads/[].
-+Release tarballs are available at https://buildroot.org/downloads/[].
- 
- For your convenience, a https://www.vagrantup.com/[Vagrantfile] is
- available in `support/misc/Vagrantfile` in the Buildroot source tree
-@@ -32,5 +32,5 @@ vagrant up
- 
- If you want to follow development, you can use the daily snapshots or
- make a clone of the Git repository. Refer to the
--http://buildroot.org/download.html[Download page] of the Buildroot website
-+https://buildroot.org/download.html[Download page] of the Buildroot website
- for more details.
-diff --git a/docs/manual/manual.adoc b/docs/manual/manual.adoc
-index cfcc3e52a9..d4748c5c68 100644
---- a/docs/manual/manual.adoc
-+++ b/docs/manual/manual.adoc
-@@ -9,7 +9,7 @@ Buildroot {sys:echo $BR2_VERSION} manual generated on {localdate}
- 
- The Buildroot manual is written by the Buildroot developers.
- It is licensed under the GNU General Public License, version 2. Refer to the
--http://git.buildroot.org/buildroot/tree/COPYING?id={sys:git rev-parse HEAD}[COPYING]
-+https://git.buildroot.org/buildroot/tree/COPYING?id={sys:git rev-parse HEAD}[COPYING]
- file in the Buildroot sources for the full text of this license.
- 
- Copyright (C) The Buildroot developers <buildroot@buildroot.org>
-diff --git a/docs/manual/resources.adoc b/docs/manual/resources.adoc
-index 4ef709c317..a1b8b366e1 100644
---- a/docs/manual/resources.adoc
-+++ b/docs/manual/resources.adoc
-@@ -17,12 +17,12 @@ main method of interaction for Buildroot users and developers.
- +
- Only subscribers to the Buildroot mailing list are allowed to post to
- this list. You can subscribe via the
--http://lists.buildroot.org/mailman/listinfo/buildroot[mailing list info
-+https://lists.buildroot.org/mailman/listinfo/buildroot[mailing list info
- page].
- +
- Mails that are sent to the mailing list are also available in the
- mailing list archives, available through
--http://lists.buildroot.org/pipermail/buildroot[Mailman] or at
-+https://lists.buildroot.org/pipermail/buildroot[Mailman] or at
- https://lore.kernel.org/buildroot/[lore.kernel.org].
- 
- IRC::
-
---===============8945384922627416200==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8945384922627416200==--
+T24gMjMvMDkvMjAyNSAwOToxMCwgQWxleGlzIExvdGhvcsOpIHZpYSBidWlsZHJvb3Qgd3JvdGU6
+Cj4gTWFueSBsaW5rcyBwb2ludGluZyB0byBidWlsZHJvb3Qub3JnIGFyZSBzdGlsbCBwcmVmaXhl
+ZCB3aXRoIEhUVFAuCj4gVXBkYXRlIHRob3NlIHRvIEhUVFBTLgo+IAo+IFNpZ25lZC1vZmYtYnk6
+IEFsZXhpcyBMb3Rob3LDqSA8YWxleGlzLmxvdGhvcmVAYm9vdGxpbi5jb20+CgpTZXJpZXMgYXBw
+bGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
+Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
+b3QK
