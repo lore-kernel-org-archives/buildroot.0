@@ -4,73 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 633C5CAC5AC
-	for <buildroot@archiver.kernel.org>; Tue, 23 Sep 2025 16:39:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8F05CAC5A7
+	for <buildroot@archiver.kernel.org>; Tue, 23 Sep 2025 16:40:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 30AB360EB3;
-	Tue, 23 Sep 2025 16:39:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 97FE960DDC;
+	Tue, 23 Sep 2025 16:40:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k6zMTihl8D9u; Tue, 23 Sep 2025 16:39:17 +0000 (UTC)
+ id 3xsgwjAwEbV0; Tue, 23 Sep 2025 16:40:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FD9360657
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BDF7A60E53
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5FD9360657;
-	Tue, 23 Sep 2025 16:39:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BDF7A60E53;
+	Tue, 23 Sep 2025 16:40:46 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id EFDB9E7
- for <buildroot@buildroot.org>; Tue, 23 Sep 2025 16:39:15 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4D022200D
+ for <buildroot@buildroot.org>; Tue, 23 Sep 2025 16:40:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D6EAA60E44
- for <buildroot@buildroot.org>; Tue, 23 Sep 2025 16:39:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 49FD560650
+ for <buildroot@buildroot.org>; Tue, 23 Sep 2025 16:40:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wTR6Fyjelj0v for <buildroot@buildroot.org>;
- Tue, 23 Sep 2025 16:39:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E58ED60650
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E58ED60650
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E58ED60650
- for <buildroot@buildroot.org>; Tue, 23 Sep 2025 16:39:14 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 6AF84B00593;
- Tue, 23 Sep 2025 18:39:10 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 23 Sep 2025 18:39:10 +0200
-MIME-Version: 1.0
-Date: Tue, 23 Sep 2025 18:39:10 +0200
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20250923-update_br_links-v1-1-3fe23dc818ba@bootlin.com>
-References: <20250923-update_br_links-v1-0-3fe23dc818ba@bootlin.com>
- <20250923-update_br_links-v1-1-3fe23dc818ba@bootlin.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <bde348b4fe2c9d327586b5b65a50628f@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1758645552;
- bh=1MKdtzd4i3zmVB82sILiqQvwgpoKwPTGeIF2nh2OPiA=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=NIMMHC7+TWnbmiqxG03HV8QGVX0g8iXrgyGKQiXHSVAaaLzhrs6CkyxeKtUU4qAj6
- RkCI+/RHQ5ZYuMuFisZ2yyIuoLVqPoUflAnKc5VLXK9lDLo8IdqwXRJEkp+Kv6yvny
- VRprnBVIXO9UpQkWOlY8RIKJ7p3ExKYwSW0l4lscp2MBoGhy2a6fUlZuKAc3ghG+Wg
- uAb2I7BGCkYQL5EpYi4UodtU99mMRd2XYPNwZckRClqUjFoiW5wO6VL4Nyegbvf1Ia
- c+ZTkCzGzqvbTWfT4mupRw4J4CuXNrvSLudyVbIbQJeVRKK8sgwewW8QXUjYulFjGX
- B92N4SKt4A1sg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=NIMMHC7+
-Subject: Re: [Buildroot] [PATCH 1/2] docs/manual: update links to
- buildroot.org from http to https
+ id djJOBk173hWw for <buildroot@buildroot.org>;
+ Tue, 23 Sep 2025 16:40:44 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76B8660DDC
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 76B8660DDC
+ for <buildroot@buildroot.org>; Tue, 23 Sep 2025 16:40:44 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 70C9B8631C; Tue, 23 Sep 2025 16:40:44 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 23 Sep 2025 18:39:27 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8d01dfebd39e9e768503c8910f5933abc614be81
+X-Git-Newrev: 194a6e039154488c88316dafa91bc72dd300cbdc
+X-Patchwork-Hint: ignore
+Message-Id: <20250923164044.70C9B8631C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sysprof: unconditionally select
+ elfutils
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,16 +60,62 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMjMvMDkvMjAyNSAwOToxMCwgQWxleGlzIExvdGhvcsOpIHZpYSBidWlsZHJvb3Qgd3JvdGU6
-Cj4gTWFueSBsaW5rcyBwb2ludGluZyB0byBidWlsZHJvb3Qub3JnIGFyZSBzdGlsbCBwcmVmaXhl
-ZCB3aXRoIEhUVFAuCj4gVXBkYXRlIHRob3NlIHRvIEhUVFBTLgo+IAo+IFNpZ25lZC1vZmYtYnk6
-IEFsZXhpcyBMb3Rob3LDqSA8YWxleGlzLmxvdGhvcmVAYm9vdGxpbi5jb20+CgpTZXJpZXMgYXBw
-bGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
-Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
-b3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=194a6e039154488c88316dafa91bc72dd300cbdc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The elfutils package provides libdw, which is required by sysprof.
+It is not an optional dependency.
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/sysprof/Config.in  | 7 ++++---
+ package/sysprof/sysprof.mk | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/package/sysprof/Config.in b/package/sysprof/Config.in
+index a4f53a1179..e89a0e539e 100644
+--- a/package/sysprof/Config.in
++++ b/package/sysprof/Config.in
+@@ -1,14 +1,15 @@
+ config BR2_PACKAGE_SYSPROF
+ 	bool "sysprof"
+-	depends on BR2_USE_WCHAR # glib2, libdex, json-glib
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2, libdex, json-glib, polkit
++	depends on BR2_USE_WCHAR # glib2, libdex, json-glib, elfutils
++	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2, libdex, json-glib, polkit, elfutils
+ 	depends on BR2_USE_MMU # glib2, libdex, json-glib
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # libunwind, polkit
+ 	depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
+-	depends on !BR2_STATIC_LIBS # libdex, libunwind, polkit
++	depends on !BR2_STATIC_LIBS # libdex, libunwind, polkit, elfutils
+ 	depends on !BR2_OPTIMIZE_FAST # polkit
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
++	select BR2_PACKAGE_ELFUTILS
+ 	select BR2_PACKAGE_JSON_GLIB
+ 	select BR2_PACKAGE_LIBDEX
+ 	select BR2_PACKAGE_LIBGLIB2
+diff --git a/package/sysprof/sysprof.mk b/package/sysprof/sysprof.mk
+index 2670588ebb..f64f6d7120 100644
+--- a/package/sysprof/sysprof.mk
++++ b/package/sysprof/sysprof.mk
+@@ -10,7 +10,7 @@ SYSPROF_SOURCE = sysprof-$(SYSPROF_VERSION).tar.xz
+ SYSPROF_SITE = https://download.gnome.org/sources/sysprof/$(SYSPROF_VERSION_MAJOR)
+ SYSPROF_LICENSE = GPL-3.0+
+ SYSPROF_LICENSE_FILES = COPYING
+-SYSPROF_DEPENDENCIES = libglib2 libdex libunwind json-glib polkit
++SYSPROF_DEPENDENCIES = elfutils libglib2 libdex libunwind json-glib polkit
+ SYSPROF_CONF_OPTS = \
+ 	-Ddebuginfod=disabled \
+ 	-Ddevelopment=false \
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
