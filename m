@@ -1,104 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D423BCAC5B0
-	for <buildroot@archiver.kernel.org>; Tue, 23 Sep 2025 10:26:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F3C4CAC5A7
+	for <buildroot@archiver.kernel.org>; Tue, 23 Sep 2025 13:11:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2DD2560D79;
-	Tue, 23 Sep 2025 10:26:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0CF63811DA;
+	Tue, 23 Sep 2025 13:11:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4Ev56ymwvybv; Tue, 23 Sep 2025 10:26:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oS5MFmU4Azcy; Tue, 23 Sep 2025 13:11:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9341860D68
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD37F811C1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9341860D68;
-	Tue, 23 Sep 2025 10:26:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD37F811C1;
+	Tue, 23 Sep 2025 13:11:50 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1E7A1498
- for <buildroot@buildroot.org>; Tue, 23 Sep 2025 10:26:51 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id EC531E7
+ for <buildroot@buildroot.org>; Tue, 23 Sep 2025 13:11:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 04EA540BE1
- for <buildroot@buildroot.org>; Tue, 23 Sep 2025 10:26:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D618E4096B
+ for <buildroot@buildroot.org>; Tue, 23 Sep 2025 13:11:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7D7Nu4Da-qjZ for <buildroot@buildroot.org>;
- Tue, 23 Sep 2025 10:26:49 +0000 (UTC)
+ id 4Oijhtdy7b6L for <buildroot@buildroot.org>;
+ Tue, 23 Sep 2025 13:11:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::634; helo=mail-ej1-x634.google.com;
- envelope-from=shirokovalexs@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 438E740B92
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 438E740B92
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
- [IPv6:2a00:1450:4864:20::634])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 438E740B92
- for <buildroot@buildroot.org>; Tue, 23 Sep 2025 10:26:49 +0000 (UTC)
-Received: by mail-ej1-x634.google.com with SMTP id
- a640c23a62f3a-b07d4d24d09so912914666b.2
- for <buildroot@buildroot.org>; Tue, 23 Sep 2025 03:26:49 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::643; helo=mail-ej1-x643.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E447B409AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E447B409AA
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com
+ [IPv6:2a00:1450:4864:20::643])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E447B409AA
+ for <buildroot@buildroot.org>; Tue, 23 Sep 2025 13:11:46 +0000 (UTC)
+Received: by mail-ej1-x643.google.com with SMTP id
+ a640c23a62f3a-afcb7322da8so1015893566b.0
+ for <buildroot@buildroot.org>; Tue, 23 Sep 2025 06:11:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1758623207; x=1759228007;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=0tSLBw3C8RQlVbVDxp5Wlk2jDs/tybgYHd8nI6Qd8Z0=;
- b=Z0ixhOR6MsSafmMUccK+yO0dmAwhfHUA8DbeSX69Hw7aVlGKNTyQaqxXgSIQIWpfNM
- CGCdIZ8kNwYS+WgTeu4lcKFqs8tBFAbGkMFKAk+3XfsVsrZ/enotGBfqllYEbn4ALFtH
- gd2BwWELZLxkYwktaESdEvb/PlVgUFt5bbzdduFBJc/V4P1zW+ecEWLyvYS8kpMRvVwl
- 7BzrgPHRSQfjAHuN17tw4FMfdmElEO0IpGlMek219VFPlTvBbBKGBXsfmxOFJzWY8WSw
- W46YfCv/iy5m0IlKcHwRsi8f9hX2RP+My9vzu94VWzylrjdB/l5kV3bhiZIkuyJBc64T
- OuWg==
-X-Gm-Message-State: AOJu0YwF87Fbf2nryZI7sZXlaarx+KmvnTVmgxONOGJjlxjVM5iRyP5M
- /xi0O92J62wykOHDWd5z4lyobXvrSeHLqmZF2WMGcyhrtORGWxYpvuzLAnNR
-X-Gm-Gg: ASbGnctkzozAzVxmIJsD+6IrgSNWAADlvlLHpTsxBBGAMBRe8X7oxl50NpINdHazIPB
- aht3QjUfOD1uUKBVAO53j11e3lbZF1NE/9zaCYFAScYsHF1IEk6xS2aZbILRdg8w62FhkHirQO3
- lPFSjv7e1eBmuDJo1mi6x2JFpHKzS4UupEjFRAQBQ0L1wCyLIFlvvQ0QqjxSnhSYLvHvD71ekpn
- TsLV8Z9FZchfttwNKVN4fQCshKuRFj0MLWo/W1tTw6zVVjGfIoqEdGEGoalmQj3CvHt4BESyHya
- Sro1vG0MTJT982tMa/HaKqG989sGfXxGe4GIABfl7b9b75sTMQf8nCfEC6B1TsJdfi+RwYhttgU
- lLwKjtlyKM8wQG1th9nxrfCYhFQQ=
-X-Google-Smtp-Source: AGHT+IEMvySp5ByIQLoNGFepyzNSt9iVfI5aKxN5qI+vHys+inqJ7yhPzms/WW1y4KFSkdGM8lb1JQ==
-X-Received: by 2002:a17:907:3f21:b0:b09:2331:f14d with SMTP id
- a640c23a62f3a-b302dc63619mr165163066b.64.1758623206755; 
- Tue, 23 Sep 2025 03:26:46 -0700 (PDT)
-Received: from devhost1 ([2a02:a319:a1e0:eb00:f133:8e97:2009:ce5d])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b27d7eeafc7sm839576566b.86.2025.09.23.03.26.45
+ d=1e100.net; s=20230601; t=1758633104; x=1759237904;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=qO+mJLUYbBbwo/Tw40ynVM+p3WCburxe/oR5+O520N8=;
+ b=BiyEd8Nl6/nElD2EduEOWZikjjjhWrqdg4EZnQZrcaCoSTgclQuanulVBEhPaG+FeY
+ QDl2WluZb4W0SDwpMMqrVP/XEi37881f19Ou0pmCSjYKc5/uyllvizg0MfC8MsTOUMsm
+ EGOWV9yhIUvbhwyDnh5MmCRphr3uavhn/QsftNomZQYP1wakeCV4y9MR2Ws8jmIOOHcg
+ QkTmwPUNJ8hWXFq80e3dVI1GwWqgMVP0BfPoEBAiLsXoNv3zw6bHvfCDY5JtAlLv5047
+ I9AKVuIzXt94ohTq80ZLD4K9JUkQzIJTcDdiG3LHVWLkP26DDZ0nnMRMFeM4/pSqXWTd
+ TPCg==
+X-Gm-Message-State: AOJu0YyFNq/tqdORWBgo2mkNczbShW+Rq73Q9tas9xu/hT5QiP2E3SNf
+ erd7rkI+yVmoNj21bbTNwhcHW2gD1ePqs4SUSWowVk22Z6FxHgYhDoDUpZYxPA5tnme5BHft2sE
+ H1+tIuh9HlQ==
+X-Gm-Gg: ASbGncueXig/2kE0UEEgs96hJS9FCNyTCrZ0aJEolXqCHZF0//LNAMEohVNbQ43lSJ2
+ TWv25LNgKYmvJ4f1tj50J9HzmTD1AsqkTmnR+wiGRTJW02CNcWcgMO1u/z3Yd3LlYh+d+h60lju
+ POjukdjcnTbcGIf1QOhr0+qYr6wftpVJXs5vdinA5N/mpj4GAfkOrL7+ft0d0UPoYKY/dC5024O
+ oL4LscaRgDbGIFV8I4G3Ay2zuMKM/4UX5h8J6pSYpZ6FPhEWpn6XpnOQy98chSzJU0rqCMA7FFo
+ ijUs/ucVCMieOjib7Vs7K4t4ggWlih3r8lXoj+YPQn/wh/af6AmcgEALxPbH5H8wnVHNUC5yp93
+ UQnQlFv8ucf2VBc12qiHMGj6ggUjW7xaX
+X-Google-Smtp-Source: AGHT+IE63hTTnEpnxwmMEBjc0Rpp+ZhrCyON3d/Ey6iVhmNZ2uvWLa1d8C7P3a57qYKXVIEi1O+yYA==
+X-Received: by 2002:a17:907:970e:b0:b04:a780:4673 with SMTP id
+ a640c23a62f3a-b302b513b3bmr231875766b.31.1758633104109; 
+ Tue, 23 Sep 2025 06:11:44 -0700 (PDT)
+Received: from dragon.home ([109.136.97.112]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-b28be3fa38bsm776942466b.46.2025.09.23.06.11.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 23 Sep 2025 03:26:46 -0700 (PDT)
-From: Alexander Shirokov <shirokovalexs@gmail.com>
-To: buildroot@buildroot.org,
-	thomas.petazzoni@bootlin.com
-Cc: Alexander Shirokov <shirokovalexs@gmail.com>
-Date: Tue, 23 Sep 2025 12:26:42 +0200
-Message-ID: <20250923102642.304379-1-shirokovalexs@gmail.com>
+ Tue, 23 Sep 2025 06:11:43 -0700 (PDT)
+To: buildroot@buildroot.org
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Olivier Schonken <olivier.schonken@gmail.com>
+Date: Tue, 23 Sep 2025 15:11:34 +0200
+Message-ID: <20250923131134.156372-1-titouan.christophe@mind.be>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250728131926.848832-1-shirokovalexs@gmail.com>
-References: <20250728131926.848832-1-shirokovalexs@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1758623207; x=1759228007; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=0tSLBw3C8RQlVbVDxp5Wlk2jDs/tybgYHd8nI6Qd8Z0=;
- b=BAVgOEfCyB1JvjEIwmTDaYvkfA2cP9NxiT4fQM4WzYA77z/3zu2/LJAMDa1r9k0q6n
- 47F2p1zsYW6W0JUfz/rxKn4w9SFcBle6MapjdDtuJ9yAShLVDCPcewCf5Ij5WSGsphDb
- WZT3VyyqSABdkcFaNRLMHgHRJHAVSb/cZ5fr2N96vV5Vryu1vPELKPxM5F+X2aO3E51w
- gcVg0XrM1/XwkCvnAcNJFfNpZbi/1rL5uxdCoIfWeBXj+Pt7PNLV4HcaEfGUgcab4iHX
- Z9mju70+wH9CPY+koSQnW1OlJ159zqYGGELww4Hpn6WCU7WyQQZNhcBH7nlZyFgDcLj3
- T4kA==
+ d=mind.be; s=google; t=1758633104; x=1759237904; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=qO+mJLUYbBbwo/Tw40ynVM+p3WCburxe/oR5+O520N8=;
+ b=ZbjmNfMW+AQ7bn91TVM3KJ/1g0zOW2/c7Z+mlyd/6kFAs0SXqGeGD/ysPU95rQAr1r
+ FWvrZh12yqG+wX0hDcDDCdClDw6dPn0aCr+6aJF++JNhGezjO/E15mWa4UVOsQsf56dY
+ NgW5iL+oboSDxJW1whkPLkoyB/snpL3UoXZKycpb2SSVu2QGelsI/e6Yg8ruFaCXP7zR
+ juQdpzUsHqgpbPwiCc+9STabfAsXifN6jj9nIBjuf81/5czuA4CW8MdBE+MQ4dsuNmOv
+ Uqm3U2KTQU/Xw3R9u424S2ogskEgrhgG8btlNLVevUbIxUT9STo1MRB/FZzEuvImtfl/
+ jcFg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=BAVgOEfC
-Subject: [Buildroot] [v4,1/1] package/zellij: new package
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=ZbjmNfMW
+Subject: [Buildroot] [PATCH] package/cups: security bump to v2.4.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,120 +107,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-An advanced terminal multiplexer with batteries included. Supports
-layouts, floating and stacked panes, plugins, and customization.
-Provides rich functionality out of the box.
+See the release notes:
 
-Zellij is aimed at developers, operations-oriented users, and anyone who
-loves the terminal.
+- https://github.com/OpenPrinting/cups/releases/tag/v2.4.13
+- https://github.com/OpenPrinting/cups/releases/tag/v2.4.14
 
-https://github.com/zellij-org/zellij
+This fixes the following vulnerabilities:
+- CVE-2025-58060:
+    OpenPrinting CUPS is an open source printing system for Linux and
+    other Unix-like operating systems. In versions 2.4.12 and earlier,
+    when the `AuthType` is set to anything but `Basic`, if the request
+    contains an `Authorization: Basic ...` header, the password is not
+    checked. This results in authentication bypass. Any configuration that
+    allows an `AuthType` that is not `Basic` is affected. Version 2.4.13
+    fixes the issue.
+    https://www.cve.org/CVERecord?id=CVE-2025-58060
 
-Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
+- CVE-2025-58364:
+    OpenPrinting CUPS is an open source printing system for Linux and
+    other Unix-like operating systems. In versions 2.4.12 and earlier, an
+    unsafe deserialization and validation of printer attributes causes
+    null dereference in the libcups library. This is a remote DoS
+    vulnerability available in local subnet in default configurations. It
+    can cause the cups & cups-browsed to crash, on all the machines in
+    local network who are listening for printers (so by default for all
+    regular linux machines). On systems where the vulnerability
+    CVE-2024-47176 (cups-filters 1.x/cups-browsed 2.x vulnerability) was
+    not fixed, and the firewall on the machine does not reject incoming
+    communication to IPP port, and the machine is set to be available to
+    public internet, attack vector "Network" is possible. The current
+    versions of CUPS and cups-browsed projects have the attack vector
+    "Adjacent" in their default configurations. Version 2.4.13 contains a
+    patch for CVE-2025-58364.
+    https://www.cve.org/CVERecord?id=CVE-2025-58364
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
-Changes v4->v3:
--  Bump version to 0.43.1
+ package/cups/cups.hash | 2 +-
+ package/cups/cups.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Changes v3->v2:
--  Changes have been squashed.
-
-Changes v1->v2:
-- Fixed format of Config.in file. Added comments.
-- Fixed ZELLIJ_VERSION.'v' symbol is removed from the variable.
-- Updated DEVELOPERS list.
----
-
-Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
----
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/zellij/Config.in   | 17 +++++++++++++++++
- package/zellij/zellij.hash |  3 +++
- package/zellij/zellij.mk   | 12 ++++++++++++
- 5 files changed, 34 insertions(+)
- create mode 100644 package/zellij/Config.in
- create mode 100644 package/zellij/zellij.hash
- create mode 100644 package/zellij/zellij.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4c6ff40886..e0c5ebe20b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -93,6 +93,7 @@ F:	package/cpp-httplib/
+diff --git a/package/cups/cups.hash b/package/cups/cups.hash
+index e363a761eb..a200a82deb 100644
+--- a/package/cups/cups.hash
++++ b/package/cups/cups.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated:
+-sha256  b1dde191a4ae2760c47220c82ca6155a28c382701e6c1a0159d1054990231d59  cups-2.4.12-source.tar.gz
++sha256  660288020dd6f79caf799811c4c1a3207a48689899ac2093959d70a3bdcb7699  cups-2.4.14-source.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+ sha256  977206f041b9a6f47ac00531e1242c0fab7063da71178f8d868b167b70866b6d  NOTICE
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 21fe6a7c5e..e6de671174 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Alexander Shirokov <shirokovalexs@gmail.com>
- F:	package/nnn/
-+F:	package/zellij/
- 
- N:	Alessandro Partesotti <a.partesotti@gmail.com>
- F:	package/oatpp/
-diff --git a/package/Config.in b/package/Config.in
-index 85928509f8..37b2fd34c1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2816,6 +2816,7 @@ comment "Utilities"
- 	source "package/xmlstarlet/Config.in"
- 	source "package/xxhash/Config.in"
- 	source "package/ytree/Config.in"
-+	source "package/zellij/Config.in"
- 	source "package/zoxide/Config.in"
- endmenu
- 
-diff --git a/package/zellij/Config.in b/package/zellij/Config.in
-new file mode 100644
-index 0000000000..64b158cfe3
---- /dev/null
-+++ b/package/zellij/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_ZELLIJ
-+	bool "zellij"
-+	# Zellij uses the cranelift crate which has architecure
-+	# dependencies. Specify them explicitly. See details here:
-+	# https://docs.rs/cranelift-codegen/0.122.0/cranelift_codegen/
-+	depends on BR2_x86_64 || BR2_x86_i686 || BR2_aarch64
-+	depends on BR2_PACKAGE_HOST_RUSTC
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	help
-+	  An advanced terminal multiplexer with batteries included.
-+	  Supports layouts, floating and stacked panes, plugins, and
-+	  customization. Provides rich functionality out of the box.
-+
-+	  Zellij is aimed at developers, operations-oriented users,
-+	  and anyone who loves the terminal.
-+
-+	  https://github.com/zellij-org/zellij
-diff --git a/package/zellij/zellij.hash b/package/zellij/zellij.hash
-new file mode 100644
-index 0000000000..6a8c5a5857
---- /dev/null
-+++ b/package/zellij/zellij.hash
-@@ -0,0 +1,3 @@
-+# Locally generated
-+sha256  248cb15f4853079dbc02962f2d41db8e1108c5b7b369bbf6feb484d8b1a5be5d  zellij-0.43.1-cargo4.tar.gz
-+sha256  9aa6c363b18a48eeecbffe13ff390c76ede2c90eb37ba17dfbbaffc42892d87d  LICENSE.md
-diff --git a/package/zellij/zellij.mk b/package/zellij/zellij.mk
-new file mode 100644
-index 0000000000..d345c34d4c
---- /dev/null
-+++ b/package/zellij/zellij.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# zellij
-+#
-+################################################################################
-+
-+ZELLIJ_VERSION = 0.43.1
-+ZELLIJ_SITE = $(call github,zellij-org,zellij,v$(ZELLIJ_VERSION))
-+ZELLIJ_LICENSE = MIT
-+ZELLIJ_LICENSE_FILES = LICENSE
-+
-+$(eval $(cargo-package))
+-CUPS_VERSION = 2.4.12
++CUPS_VERSION = 2.4.14
+ CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
+ CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
+ CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
 -- 
 2.51.0
 
