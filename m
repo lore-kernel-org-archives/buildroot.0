@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EBEDCAC5AE
-	for <buildroot@archiver.kernel.org>; Wed, 24 Sep 2025 19:01:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 203FECAC5A5
+	for <buildroot@archiver.kernel.org>; Wed, 24 Sep 2025 19:35:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 219F540D61;
-	Wed, 24 Sep 2025 19:01:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BF03141306;
+	Wed, 24 Sep 2025 19:35:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VbXaqPSCckgg; Wed, 24 Sep 2025 19:01:29 +0000 (UTC)
+ id zkpZ1MRmBrTu; Wed, 24 Sep 2025 19:35:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E5D340F28
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3A0B40DBC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E5D340F28;
-	Wed, 24 Sep 2025 19:01:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D3A0B40DBC;
+	Wed, 24 Sep 2025 19:35:31 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5A97612D
- for <buildroot@buildroot.org>; Wed, 24 Sep 2025 19:01:27 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 65BE9199
+ for <buildroot@buildroot.org>; Wed, 24 Sep 2025 19:35:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 41763831CA
- for <buildroot@buildroot.org>; Wed, 24 Sep 2025 19:01:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4C2E082803
+ for <buildroot@buildroot.org>; Wed, 24 Sep 2025 19:35:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PFr8-7OdbFxG for <buildroot@buildroot.org>;
- Wed, 24 Sep 2025 19:01:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6ED54831C1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6ED54831C1
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6ED54831C1
- for <buildroot@buildroot.org>; Wed, 24 Sep 2025 19:01:25 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 9311D19F59C;
- Wed, 24 Sep 2025 21:01:22 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 24 Sep 2025 21:01:22 +0200
-MIME-Version: 1.0
-Date: Wed, 24 Sep 2025 21:01:22 +0200
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250924103828.2944967-1-dario.binacchi@amarulasolutions.com>
-References: <20250924103828.2944967-1-dario.binacchi@amarulasolutions.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <519b5d533b11799ecf3d6258d0ce57d3@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1758740483;
- bh=iAQ1LvqwIMcnjNd6nUipFJTO0QOe6LddpdXa1Vlj5VQ=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=XX81p2rEA/qyGqfckEtCzBWqDA7JsvjqoZn4BBBRWBATOHlenQ8nBdU++M/jEGYtW
- ezoqwjoLF0AsFYBUjra146Adj7rJjZbXT5rHct4uDTMn7RI+N84Ud6554LEJlzpUal
- +A+ZIJn0JO5TtAcn+HtmqsQLQEH0c9l1A59JkaCHkGeP7IkZqcAejKbf56lFwwSm8v
- Z2mXixZkVxbsg9KFZ7YttvDVQcx25uDE9M7bybfz3YcB8rvYPzX9FN5GCaYmzsgE1H
- Wt4Rt3VnrwjHk1i3Qh+KZBqImfr+iL5CJeEweH9B3n3QQn/uyFcfTsTNgUc0zUYT67
- SVCrF+bM/4URQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=XX81p2rE
-Subject: Re: [Buildroot] [PATCH v3 1/2] package/bc: bump to 1.08.2
+ id kaJiXYt4q2nJ for <buildroot@buildroot.org>;
+ Wed, 24 Sep 2025 19:35:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9615F827F0
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9615F827F0
+ for <buildroot@buildroot.org>; Wed, 24 Sep 2025 19:35:30 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8A942863B9; Wed, 24 Sep 2025 19:35:30 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 24 Sep 2025 21:02:58 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d2bd4655259299fded94727e94a4fa4389113202
+X-Git-Newrev: e7937c52b6da69c4ff7de5ce40d836a0636c775c
+X-Patchwork-Hint: ignore
+Message-Id: <20250924193530.8A942863B9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/qemu/{x86,
+ x86_64}: fix shellcheck warning in post-build.sh
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,23 +60,72 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 24/09/2025 12:38, Dario Binacchi wrote:
-> Update patch 2 and drop patch 3 and 4 because integrated in the
-> new version.
-> 
-> Release notes:
-> https://mail.gnu.org/archive/html/info-gnu/2025-01/msg00000.html
-> https://lists.gnu.org/archive/html/info-gnu/2025-01/msg00002.html
-> https://lists.gnu.org/archive/html/info-gnu/2025-05/msg00006.html
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=e7937c52b6da69c4ff7de5ce40d836a0636c775c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Series applied to master, thanks.
+This removes a warning reported by shellcheck: "Double quote to prevent
+globbing and word splitting". As a result, the file can be removed from
+.checkpackageignore.
+
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .checkpackageignore             | 2 --
+ board/qemu/x86/post-build.sh    | 6 +++---
+ board/qemu/x86_64/post-build.sh | 6 +++---
+ 3 files changed, 6 insertions(+), 8 deletions(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index a3437c1cf3..ebbc6a5a05 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -48,8 +48,6 @@ board/orangepi/orangepi-zero/patches/linux/0002-ARM-dts-orange-pi-zero-enable-sp
+ board/orangepi/orangepi-zero/patches/linux/0003-ARM-dts-orange-pi-zero-enable-spidev.patch lib_patch.Upstream
+ board/orangepi/orangepi-zero/patches/linux/0004-ARM-dts-orange-pi-zero-enable-uart.patch lib_patch.Upstream
+ board/qemu/aarch64-sbsa/assemble-flash-images Shellcheck
+-board/qemu/x86/post-build.sh Shellcheck
+-board/qemu/x86_64/post-build.sh Shellcheck
+ board/raspberrypi/post-build.sh Shellcheck
+ board/raspberrypi/post-image.sh Shellcheck
+ board/roseapplepi/patches/uboot/0001-compiler-.h-sync-include-linux-compiler-.h-with-Linu.patch lib_patch.Upstream
+diff --git a/board/qemu/x86/post-build.sh b/board/qemu/x86/post-build.sh
+index bf83a002c2..24eee7f0e5 100755
+--- a/board/qemu/x86/post-build.sh
++++ b/board/qemu/x86/post-build.sh
+@@ -4,8 +4,8 @@ set -u
+ set -e
+ 
+ # Add a console on tty1
+-if [ -e ${TARGET_DIR}/etc/inittab ]; then
+-    grep -qE '^tty1::' ${TARGET_DIR}/etc/inittab || \
++if [ -e "${TARGET_DIR}/etc/inittab" ]; then
++    grep -qE '^tty1::' "${TARGET_DIR}/etc/inittab" || \
+ 	sed -i '/GENERIC_SERIAL/a\
+-tty1::respawn:/sbin/getty -L  tty1 0 vt100 # QEMU graphical window' ${TARGET_DIR}/etc/inittab
++tty1::respawn:/sbin/getty -L  tty1 0 vt100 # QEMU graphical window' "${TARGET_DIR}/etc/inittab"
+ fi
+diff --git a/board/qemu/x86_64/post-build.sh b/board/qemu/x86_64/post-build.sh
+index bf83a002c2..24eee7f0e5 100755
+--- a/board/qemu/x86_64/post-build.sh
++++ b/board/qemu/x86_64/post-build.sh
+@@ -4,8 +4,8 @@ set -u
+ set -e
+ 
+ # Add a console on tty1
+-if [ -e ${TARGET_DIR}/etc/inittab ]; then
+-    grep -qE '^tty1::' ${TARGET_DIR}/etc/inittab || \
++if [ -e "${TARGET_DIR}/etc/inittab" ]; then
++    grep -qE '^tty1::' "${TARGET_DIR}/etc/inittab" || \
+ 	sed -i '/GENERIC_SERIAL/a\
+-tty1::respawn:/sbin/getty -L  tty1 0 vt100 # QEMU graphical window' ${TARGET_DIR}/etc/inittab
++tty1::respawn:/sbin/getty -L  tty1 0 vt100 # QEMU graphical window' "${TARGET_DIR}/etc/inittab"
+ fi
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
