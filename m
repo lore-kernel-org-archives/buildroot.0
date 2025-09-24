@@ -1,76 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 355E1CAC5A5
-	for <buildroot@archiver.kernel.org>; Wed, 24 Sep 2025 20:54:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD310CAC5A5
+	for <buildroot@archiver.kernel.org>; Wed, 24 Sep 2025 21:18:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6DF26102F;
-	Wed, 24 Sep 2025 20:54:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7BF5441420;
+	Wed, 24 Sep 2025 21:18:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XpB7YqPIyTNG; Wed, 24 Sep 2025 20:54:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NGsesYC2_syQ; Wed, 24 Sep 2025 21:18:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 189656102A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9469414FA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 189656102A;
-	Wed, 24 Sep 2025 20:54:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id AF5C612D
- for <buildroot@buildroot.org>; Wed, 24 Sep 2025 20:54:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A9469414FA;
+	Wed, 24 Sep 2025 21:18:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 11DF2199
+ for <buildroot@buildroot.org>; Wed, 24 Sep 2025 21:18:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A188A80C01
- for <buildroot@buildroot.org>; Wed, 24 Sep 2025 20:54:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D4C8E40E58
+ for <buildroot@buildroot.org>; Wed, 24 Sep 2025 21:18:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K1I3hHvKArSs for <buildroot@buildroot.org>;
- Wed, 24 Sep 2025 20:54:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9F04E807B0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F04E807B0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9F04E807B0
- for <buildroot@buildroot.org>; Wed, 24 Sep 2025 20:54:24 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id A98C15FFB1;
- Wed, 24 Sep 2025 22:54:16 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 24 Sep 2025 22:54:16 +0200
-MIME-Version: 1.0
-Date: Wed, 24 Sep 2025 22:54:16 +0200
-To: Neal Frager <neal.frager@amd.com>
-Cc: buildroot@buildroot.org, thomas.petazzoni@bootlin.com,
- romain.naour@smile.fr, romain.naour@gmail.com, ibai.erkiaga-elorza@amd.com
-In-Reply-To: <20250818113038.3885637-1-neal.frager@amd.com>
-References: <20250818113038.3885637-1-neal.frager@amd.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <c9ea632e6e213771a6cc2828deb00334@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1758747262;
- bh=6pP49wPVLkXnakXHCc1gMi7TwyCv0CpJiPoPjb23Ox4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=pL5BFeLJvpc55n+oBG7ZlXYQVd+7l3cp+O9zb9OkJPTIBdz1NLpoGnB+Mpo5xeFx8
- XwQ9c0qPPvtzuROj/XbLT1AAGQtwzizG27JGBi1qP3oRI3P5fEeRasoDsNmQU729io
- EzriHjWFe89IwOqkV/GwmnIR2zcLHzadhjn6QI0uo8RR1KPfp5ID30I7vIpOufCQSn
- VPYVac/ZupI4PYBzrNI3EZCHsnMzCRTx6DrNSXkjEV/EZ2AIQybYYvhKFqR0mAhqJl
- vIsu55Xgv1V8F9Od1YTrLk+nHr15zPG9fENRwLoEZ6/jJUzJT6YqxG11LKnzD6ict5
- GEFPqljjk4iOg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=pL5BFeLJ
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/binutils-bare-metal: bump to
- binutils 2.45
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3bM-0i5QFdzq for <buildroot@buildroot.org>;
+ Wed, 24 Sep 2025 21:18:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E44940E4E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2E44940E4E
+ for <buildroot@buildroot.org>; Wed, 24 Sep 2025 21:18:23 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1D3A7863F8; Wed, 24 Sep 2025 21:18:23 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 24 Sep 2025 23:04:02 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 98b57fafdf882e8d15f4816e35903270999b50a4
+X-Git-Newrev: e0ed51ca8b9ec854caf33c7698d09fa8526f2c55
+X-Patchwork-Hint: ignore
+Message-Id: <20250924211823.1D3A7863F8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/uboot: add cpu dependency to
+ BR2_TARGET_UBOOT_ZYNQ
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,36 +60,38 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 18/08/2025 13:30, Neal Frager via buildroot wrote:
-> This patch bumps the binutils-bare-metal package to version 2.45. In 
-> the
-> process, it also decouples binutils-bare-metal from the binutils 
-> package
-> since the binutils package does not yet have support for version 2.45.
-> 
-> With the decoupling, the 3 downstream binutils 2.44 patches were 
-> evaluated.
-> 
-> Patches not needed for binutils-bare-metal:
-> 0001-sh-conf.patch
-> 0002-poison-system-directories.patch
-> 
-> Patches already included with binutils version 2.45:
-> 0003-objdump-memleak.patch
-> https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=ba6ad3a18cb26b79e0e3b84c39f707535bbc344d
-> 
-> Since none of these patches need to be applied to binutils-bare-metal 
-> 2.45,
-> the link to the binutils patch directory is deleted.
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=e0ed51ca8b9ec854caf33c7698d09fa8526f2c55
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Since the Xilinx Zynq SoC family is always based on ARM Cortex-A9 CPUs, the
+BR2_TARGET_UBOOT_ZYNQ option should only be available when the BR2_cortex_a9
+option is selected.
+
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ boot/uboot/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 18b58753a7..445fbd3ed0 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -704,6 +704,7 @@ endif
+ config BR2_TARGET_UBOOT_ZYNQ
+ 	bool "Boot on the Xilinx Zynq SoCs"
+ 	depends on BR2_arm
++	depends on BR2_cortex_a9
+ 	help
+ 	  Enable options specific to the Xilinx Zynq family of SoCs.
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
