@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E55E4CAC5B9
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:20:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00BFCCAC5B5
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:20:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B511B61652;
-	Thu, 25 Sep 2025 20:20:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CB8CB6165F;
+	Thu, 25 Sep 2025 20:20:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WERAHfOjxbQn; Thu, 25 Sep 2025 20:20:08 +0000 (UTC)
+ id Q27-7Qv6fZ0V; Thu, 25 Sep 2025 20:20:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AF1361646
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D89496164A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0AF1361646;
-	Thu, 25 Sep 2025 20:20:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D8FC1EB
+	by smtp3.osuosl.org (Postfix) with ESMTP id D89496164A;
+	Thu, 25 Sep 2025 20:20:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8F79412D
  for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA57E41505
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 20F31412AA
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zCTnFYMb2r2Y for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hGaFV09h0JXe for <buildroot@buildroot.org>;
  Thu, 25 Sep 2025 20:19:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 354DA41525
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40327412A9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 354DA41525
+ by smtp2.osuosl.org (Postfix) with ESMTP id 40327412A9
  for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 337B986418; Thu, 25 Sep 2025 20:19:42 +0000 (UTC)
+ id 3E71286449; Thu, 25 Sep 2025 20:19:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 25 Sep 2025 22:07:21 +0200
+Date: Thu, 25 Sep 2025 22:07:22 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 0e4a951c67ca15cfbadb810f4bac97d97317aa06
-X-Git-Newrev: e14ecaf42d190970be2cfa8c5a4385babe3cacf7
+X-Git-Oldrev: e14ecaf42d190970be2cfa8c5a4385babe3cacf7
+X-Git-Newrev: 6b503d76dc9b321c3ca096d141208b9d7e2ec6ef
 X-Patchwork-Hint: ignore
-Message-Id: <20250925201942.337B986418@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/pango: fix
- deprecated CPE
+Message-Id: <20250925201942.3E71286449@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ package/python-cryptography: fix deprecated CPE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,34 +66,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e14ecaf42d190970be2cfa8c5a4385babe3cacf7
+commit: https://git.buildroot.net/buildroot/commit/?id=6b503d76dc9b321c3ca096d141208b9d7e2ec6ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-The CPE 'pango:pango' has been deprecated in favour of 'gnome:pango'.
+The CPE 'cryptography_project:cryptography' has been deprecated in
+favour of 'cryptography.io:cryptography'.
 
-See https://nvd.nist.gov/products/cpe/detail/19B77822-6C34-41C8-8160-367D56AD1569
+See the following:
+ - https://nvd.nist.gov/products/cpe/detail/2EBA50FC-F3F9-40D5-82BD-EFB67F761153
+ - https://nvd.nist.gov/vuln/detail/cve-2023-49083
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 6c5f1b6414ecf6fa77472f5f657d5ddcea419168)
+(cherry picked from commit 2f993d55e8e6b59969f61a3d76eec23dc0e538c3)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/pango/pango.mk | 2 +-
+ package/python-cryptography/python-cryptography.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index df82b456fb..11c049c746 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -11,7 +11,7 @@ PANGO_SITE = https://download.gnome.org/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_INSTALL_STAGING = YES
- PANGO_LICENSE = LGPL-2.0+
- PANGO_LICENSE_FILES = COPYING
--PANGO_CPE_ID_VENDOR = pango
-+PANGO_CPE_ID_VENDOR = gnome
- 
- PANGO_CONF_OPTS = -Dfontconfig=enabled
- HOST_PANGO_CONF_OPTS = -Dfontconfig=enabled -Dintrospection=disabled
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index fd2c3d7a50..b2142ddef1 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
+@@ -11,7 +11,7 @@ PYTHON_CRYPTOGRAPHY_SITE = $(PYTHON_CRYPTOGRAPHY_SITE_PYPI)/$(PYTHON_CRYPTOGRAPH
+ PYTHON_CRYPTOGRAPHY_SETUP_TYPE = maturin
+ PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
+ PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+-PYTHON_CRYPTOGRAPHY_CPE_ID_VENDOR = cryptography_project
++PYTHON_CRYPTOGRAPHY_CPE_ID_VENDOR = cryptography.io
+ PYTHON_CRYPTOGRAPHY_CPE_ID_PRODUCT = cryptography
+ PYTHON_CRYPTOGRAPHY_CARGO_MANIFEST_PATH = src/rust/Cargo.toml
+ PYTHON_CRYPTOGRAPHY_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
