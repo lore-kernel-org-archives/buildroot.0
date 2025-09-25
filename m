@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E8A1CAC5B5
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:31:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 624BACAC5B9
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:31:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F060E6177C;
-	Thu, 25 Sep 2025 20:31:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A1A06179E;
+	Thu, 25 Sep 2025 20:31:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LfWB3L1TUtWQ; Thu, 25 Sep 2025 20:31:13 +0000 (UTC)
+ id EMe3nJhHX6eS; Thu, 25 Sep 2025 20:31:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F38FA6175C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9104561782
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F38FA6175C;
-	Thu, 25 Sep 2025 20:31:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9104561782;
+	Thu, 25 Sep 2025 20:31:14 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1331412D
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:40 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 9F59112D
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 89CD4412CC
+ by smtp2.osuosl.org (Postfix) with ESMTP id A76F4412BD
  for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KmjlN3bWn5WS for <buildroot@buildroot.org>;
- Thu, 25 Sep 2025 20:30:22 +0000 (UTC)
+ id OjzXHzm5J3YG for <buildroot@buildroot.org>;
+ Thu, 25 Sep 2025 20:30:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0D25412BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A190412D6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E0D25412BD
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3A190412D6
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DEF8986433; Thu, 25 Sep 2025 20:30:21 +0000 (UTC)
+ id 3841F83B7E; Thu, 25 Sep 2025 20:30:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 25 Sep 2025 16:30:35 +0200
+Date: Thu, 25 Sep 2025 16:44:29 +0200
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: 61ec739c2a682f8c184bf29ba8cdb02b77e70aea
-X-Git-Newrev: c8055b92f026e34122455b0bff2f746ff19e6d9a
+X-Git-Oldrev: b25b1e2a051f8013157f5fe6ae92382dd73ab664
+X-Git-Newrev: 5ceb38f69299113765a5c1c5f10e75a5edd0b511
 X-Patchwork-Hint: ignore
-Message-Id: <20250925203021.DEF8986433@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x]
- package/python-trove-classifiers: bump to version 2025.9.11.17
+Message-Id: <20250925203023.3841F83B7E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] support/testing:
+ TestZfsUclibc: use internal backend for uClibc-ng toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,88 +61,101 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3689808169965516854=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8055b92f026e34122455b0bff2f746ff19e6d9a
+--===============3689808169965516854==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=5ceb38f69299113765a5c1c5f10e75a5edd0b511
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-package/python-cffi 2.0.0 (bumped in commit
-07903d2b274bc98f930e06dee237682015acb1d7) fails to build due to an
-unknown trove-classifier:
+As reported on the mailing list [1] while investigating the
+TestZfsUclibc Gitlab-CI failure, the python 3.13 interpreter itsef
+segfault at runtime:
 
-* Getting build dependencies for wheel...
-configuration error: `project.classifiers[8]` must be trove-classifier
-DESCRIPTION:
-    `PyPI classifier <https://pypi.org/classifiers/>`_.
+  Fatal Python error: _PyThreadState_Attach: non-NULL old thread state
+  Python runtime state: preinitialized
+  Thread 0xSegmentation fault
 
-GIVEN VALUE:
-    "Programming Language :: Python :: Free Threading :: 2 - Beta"
+This issue is related to the python 3.13 version bump [2] were several
+internal changes were added [3] to support PEP 703 [4].
+PEP 793 is about CPython’s global interpreter lock (“GIL”) removal
+for multi-threads support that requires a working C11 "thread_local"
+for thread-local storage [5].
 
-OFFENDING RULE: 'format'
+The new uclibc-ng 1.0.55 release contains a fix for this issue [6].
+This version is included in Buildroot commit [7].
 
-DEFINITION:
-    {
-        "type": "string",
-        "format": "trove-classifier"
-    }
-
-For more details about `format` see
-https://validate-pyproject.readthedocs.io/en/latest/api/validate_pyproject.formats.html
-
-The list of trove classifiers Setuptools checks against is provided by
-package/python-trove-classifiers. Upstream has added the classifier as
-of version 2025.5.8.15 [1], as well as a bunch of others [2], so
-update to fix the problem.
-
-[1] https://github.com/pypa/trove-classifiers/commit/331838aaea0eea6374e4e51e8fe05e13bf7e4957
-[2] https://github.com/pypa/trove-classifiers/compare/2025.1.15.22...2025.9.11.17
+Since the prebuilt Bootling aarch64 uclibc stable 2025.08-1 is based
+on previous uClibc-ng release (1.0.54) we have to use the internal
+toolchain backend to build a new uClibc-ng toolchain using uclibc-ng
+1.0.55. Note: the toolchain config defined in this commit reflects
+the options enabled in the Bootling aarch64 uclibc external
+toolchains.
 
 Fixes:
-- 07903d2b274bc98f930e06dee237682015acb1d7
-- https://autobuild.buildroot.org/results/45b57a919182ae3f9ea0db9b0fa430a72e1e3cdf/
+https://gitlab.com/buildroot.org/buildroot/-/jobs/11271124859 (TestZfsUclibc)
 
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-[Julien: add link to autobuilder failure]
+[1] https://lore.kernel.org/buildroot/7a4d245d-1556-43c9-8997-6b1f791afbfe@gmail.com/ (TestZfsUclibc)
+[2] https://gitlab.com/buildroot.org/buildroot/-/commit/d63e207eb869063f82c867658676c2903beb08cb
+[3] https://github.com/python/cpython/commit/6e97a9647ae028facb392d12fc24973503693bd6
+[4] https://peps.python.org/pep-0703/
+[5] https://gcc.gnu.org/onlinedocs/gcc-15.1.0/gcc/Thread-Local.html
+[6] https://github.com/wbx-github/uclibc-ng/commit/94c1297d52263e20cd9715601afa37f49d008d93
+[7] https://gitlab.com/buildroot.org/buildroot/-/commit/5250bba8e5b1aaeb58977baf1d91e2be66656476
+
+Cc: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
+Tested-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+[Julien:
+ - add link to buildroot commit updating uclibc-ng to 1.0.55
+ - add a note in the commit log about the toolchain config
+]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 44e0ba2bd256b269b578e64e0ebb0ab386bdf51d)
+(cherry picked from commit 5208b7a1bde348c60a40ca6a62526d95a9ce93f6)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-trove-classifiers/python-trove-classifiers.hash | 4 ++--
- package/python-trove-classifiers/python-trove-classifiers.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ support/testing/tests/package/test_zfs.py | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-trove-classifiers/python-trove-classifiers.hash b/package/python-trove-classifiers/python-trove-classifiers.hash
-index bb9f40a7f3..008c3a0b3e 100644
---- a/package/python-trove-classifiers/python-trove-classifiers.hash
-+++ b/package/python-trove-classifiers/python-trove-classifiers.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/trove-classifiers/json
--md5  3656424a10a761108fa8250033ffe3d4  trove_classifiers-2025.1.15.22.tar.gz
--sha256  90af74358d3a01b3532bc7b3c88d8c6a094c2fd50a563d13d9576179326d7ed9  trove_classifiers-2025.1.15.22.tar.gz
-+md5  769cd978e6756c423958bbfe76f130d8  trove_classifiers-2025.9.11.17.tar.gz
-+sha256  931ca9841a5e9c9408bc2ae67b50d28acf85bef56219b56860876dd1f2d024dd  trove_classifiers-2025.9.11.17.tar.gz
- # Locally computed sha256 checksums
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/python-trove-classifiers/python-trove-classifiers.mk b/package/python-trove-classifiers/python-trove-classifiers.mk
-index 8d2238d41a..a556cbd3dd 100644
---- a/package/python-trove-classifiers/python-trove-classifiers.mk
-+++ b/package/python-trove-classifiers/python-trove-classifiers.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/support/testing/tests/package/test_zfs.py b/support/testing/tests/package/test_zfs.py
+index 1b907ac4de..c218cc36a8 100644
+--- a/support/testing/tests/package/test_zfs.py
++++ b/support/testing/tests/package/test_zfs.py
+@@ -74,9 +74,18 @@ class TestZfsGlibc(TestZfsBase):
  
--PYTHON_TROVE_CLASSIFIERS_VERSION = 2025.1.15.22
-+PYTHON_TROVE_CLASSIFIERS_VERSION = 2025.9.11.17
- PYTHON_TROVE_CLASSIFIERS_SOURCE = trove_classifiers-$(PYTHON_TROVE_CLASSIFIERS_VERSION).tar.gz
--PYTHON_TROVE_CLASSIFIERS_SITE = https://files.pythonhosted.org/packages/f3/cb/8f6a91c74049180e395590901834d68bef5d6a2ce4c9ca9792cfadc1b9b4
-+PYTHON_TROVE_CLASSIFIERS_SITE = https://files.pythonhosted.org/packages/ca/9a/778622bc06632529817c3c524c82749a112603ae2bbcf72ee3eb33a2c4f1
- PYTHON_TROVE_CLASSIFIERS_SETUP_TYPE = setuptools
- PYTHON_TROVE_CLASSIFIERS_LICENSE = Apache-2.0
- PYTHON_TROVE_CLASSIFIERS_LICENSE_FILES = LICENSE
+ 
+ class TestZfsUclibc(TestZfsBase):
+-    config = TestZfsBase.config + \
++    # The Bootling aarch64 uclibc stable 2025.08-1 needs to be
++    # rebuild with uClibc-ng 1.0.55.
++    # See: https://github.com/wbx-github/uclibc-ng/commit/94c1297d52263e20cd9715601afa37f49d008d93
++    config = TestZfsBase.config.replace('BR2_TOOLCHAIN_EXTERNAL=y\n', '')
++    config = config.replace('BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y\n', '') + \
+         """
+-        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_UCLIBC_STABLE=y
++        BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
++        BR2_KERNEL_HEADERS_5_4=y
++        BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
++        BR2_PTHREAD_DEBUG=y
++        BR2_TOOLCHAIN_BUILDROOT_CXX=y
++        BR2_GCC_ENABLE_OPENMP=y
+         """
+ 
+     def test_run(self):
+
+--===============3689808169965516854==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3689808169965516854==--
