@@ -1,103 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 194FBCAC5A5
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 05:34:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78538CAC5A7
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 09:20:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C20BB613C3;
-	Thu, 25 Sep 2025 05:34:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E011D8222B;
+	Thu, 25 Sep 2025 09:20:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W16NE3nII3BP; Thu, 25 Sep 2025 05:34:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pqt5tf661v66; Thu, 25 Sep 2025 09:20:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6F22613C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E98682266
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6F22613C5;
-	Thu, 25 Sep 2025 05:34:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 511DC12D
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 05:34:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0E98682266;
+	Thu, 25 Sep 2025 09:20:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0B888199
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 09:20:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 431364106D
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 05:34:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E65588222B
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 09:20:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Whl3ZeweJRcl for <buildroot@buildroot.org>;
- Thu, 25 Sep 2025 05:34:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bi5PzD2IFSjP for <buildroot@buildroot.org>;
+ Thu, 25 Sep 2025 09:20:02 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:4860:4864:20::30; helo=mail-oa1-x30.google.com;
- envelope-from=jdknight@jdknight.me; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4AA26410A0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AA26410A0
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com
- [IPv6:2001:4860:4864:20::30])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4AA26410A0
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 05:34:05 +0000 (UTC)
-Received: by mail-oa1-x30.google.com with SMTP id
- 586e51a60fabf-30cce892b7dso366634fac.1
- for <buildroot@buildroot.org>; Wed, 24 Sep 2025 22:34:05 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::533; helo=mail-ed1-x533.google.com;
+ envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1349A815D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1349A815D9
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1349A815D9
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 09:20:01 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id
+ 4fb4d7f45d1cf-634515fc54eso109630a12.3
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 02:20:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1758778444; x=1759383244;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1758791999; x=1759396799;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=wbJtiZ7Mjhl5pYbPdUg9M4UL0l/D9M5zgzf/p3dGMRI=;
- b=XLRn04WyAL0iDQyekS1Nisn71/aq9vp9ksUihG3dtB0iclGV2Otj/aYN3LDDO+i5tE
- fMe1mOwHo+MaB3GDrB5zMPYBCHPakKSxwK34tULLv4FSxoH00U+IWY5s1ampD+YzpIzz
- TymPEeMF6v8WXIl/wbfxP8LZ8vYIJI6cIJARtzVNoFboFJhLg6ktaGOYJkKHDiTTc2w6
- hMAqiw2fwHxpH4JNJaoB2E/JqNONAamg3HmF8XQD/McyVmNQGShLGX67rBK+InfC21mE
- bXLCkuFfeQP0srgzuS4MBbIVvm2T/QyYOsnjbjr6TZvujz9ldDU3s2KyzQoRaMTE5Qbu
- Gkxg==
-X-Forwarded-Encrypted: i=1;
- AJvYcCXj0M33C2pDrsjFPDDShtPlQ3qxlWDkPtTFQyIGhgCSP/q1XOvQzMpMCfpuFPc0XRKkmuTx5icyVVo=@buildroot.org
-X-Gm-Message-State: AOJu0YxN01eAwkX6waoVrk7lKhLqeYy8rrA+Xxs8IYigVzN4/bqxbJUI
- Jv8w9X8CXjIHcUPvX68OFJcVWbsYKR8vVIINortSzICdHaSYRYuOJdC9D7+YqZ2dFDWHBoafZ5o
- VVkX4bnjqIfTK4v1qRDchwgTCYglA2MFKNTMJ6eudZSQvJepln3ZLhwCG33kp
-X-Gm-Gg: ASbGncvLeqQipTdOtXYeAm3kIAkVeI3dWFwZznLYkpCgM54dhX7agXzmbBJ7xH+esxl
- KIbvc3mwcaQVFiFe2eyj8L+/MFBxYTblJszT0n71w4lXbRH0LvEnQ8WQ29nJc5w56X8WtIjaE2g
- jB8l68F+cNuEzul1rBbXyefv6a2EKUmUapMhr1hrJTwSnAmjdVQL6yfkk34AAtdyvtaEqmrnvBL
- Fpp
-X-Google-Smtp-Source: AGHT+IF5/QEX3u8Q+946PPNY8Dgvsv/WRqWSr0nsXrSMAQmxh7ZF02/CQoPJsNT1F21EF29bzgz8LtvqZt1SKKZMVT4=
-X-Received: by 2002:a05:6870:961e:b0:2ff:89c8:44f4 with SMTP id
- 586e51a60fabf-35ec120529fmr916335fac.11.1758778444024; Wed, 24 Sep 2025
- 22:34:04 -0700 (PDT)
+ bh=eE+jjOLTgy1jvO3Lk6muJNpe3yyFA6ImvjBvxWLpN0c=;
+ b=W7WfldRs4B9uYAR1msAAz6cd6a1ccC2+rTFFGEoV/M5V+XyNCqTDYuTstbI7qOhcrI
+ ejASe/11NdlGlANs5L73xWEJJsfEM5OKwMz/hjsSvQwMe/7FMgm3Q6D3RxwE9KRjCyXK
+ enwc3iUNva6x8V5Hx7DRxfIvnwi9uOhStGB0TWy59U56EezwvkJE1r5MO2WwnCalxd+B
+ 4HcQ/yEFKxgtdd/kXvkq8QwtooZcOj8DQ/7DGh8avBVhfOSUL8Gz2GhLdohdBK6aqW4d
+ zyotrs7t8YsAH4kSw8xN+u8pMWYTPzcY6l7mQ4bNLs0Pif3iwF6Bk2cyEnb1X4CafxEe
+ +BDw==
+X-Gm-Message-State: AOJu0Yx8UyZ92FR6xyIHUNhW04Yhq3ObE5tL03/t/rPlVoGGJPF1qvZL
+ 6nQ3WjnslMWpZlypiOncQjoGyfMKPpazlt0tXCUUfDARsMLTk3sWiECsT7XnBLBuzULc/vjIKsA
+ PdHuz
+X-Gm-Gg: ASbGnctFzpN1UkLlizuLqe0Ca9jspGLGCGjnLXmz0veiqE+q7vXvICVcz+kaArw4jPi
+ pU8Ohu9vlIXKN564oMxExTXrJrdNqcFPsC7lFoe86HjZVGTyDx3nX+wgKkSwQraTPWMbTtLPq+v
+ wYToENVT/rGr1s+lmOW2Wa8SgLWSevOBDwXscRO69tIL4Azq6W1/i5WDSK6AVwdARA/arBidPFc
+ 8Ua0qVDBI/i1GAPf7EWctviFoUgL4d3uX8Altdbnjqz/vnsfHu9vxP09Pz2adJc062F/NSkAoqn
+ LPmI7Y5mOWg0+/DH3Ne3rCcdmmRuOWjGYDIUjIBp6X5weLPH8VNYc6BMaQvwmgeHkezKf3znch+
+ ZvEhH9g64/od4lALYILx0OylNIqupu954Qgfs/91dnZ+Tcd83xK6ihFgJADglv3n1xtEJ9JX6am
+ l9l8bcAFGshKPspVjYcMpUARtjHkZMtOkGKw2pYZnn+mM/jTBQhPXoi2iNz3SO
+X-Google-Smtp-Source: AGHT+IEK62h5AO2e5iqXoMHpb3J0I93iuKzuG7cVWkqmX/Wix5/8xG6jHcYzTbvNya9ZwJYjiKQRkQ==
+X-Received: by 2002:a05:6402:4602:10b0:61b:1d72:d429 with SMTP id
+ 4fb4d7f45d1cf-6349fac70b9mr1022931a12.8.1758791999470; 
+ Thu, 25 Sep 2025 02:19:59 -0700 (PDT)
+Received: from adam.arnhem.chello.nl
+ (2001-1c00-8101-1200-3ddc-5bb8-0efa-16f1.cable.dynamic.v6.ziggo.nl.
+ [2001:1c00:8101:1200:3ddc:5bb8:efa:16f1])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-634a3ae321csm921959a12.24.2025.09.25.02.19.59
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 25 Sep 2025 02:19:59 -0700 (PDT)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
+To: buildroot@buildroot.org
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
+Date: Thu, 25 Sep 2025 11:19:56 +0200
+Message-ID: <20250925091956.25697-1-adam.duskett@amarulasolutions.com>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-References: <20250319043935.7756-1-git@jdknight.me>
- <712727dd-ca6e-4646-b335-cf1aa99ac3ea@mind.be>
- <024aabe1-f252-47df-be78-34c1ceb59211@mind.be>
-In-Reply-To: <024aabe1-f252-47df-be78-34c1ceb59211@mind.be>
-From: James Knight <git@jdknight.me>
-Date: Thu, 25 Sep 2025 01:33:53 -0400
-X-Gm-Features: AS18NWDLuBlb1qC0DMvT5rkx5uTRoT07jpCuuJQ1KoY1JDO8nYbnLfakJl7Mt1g
-Message-ID: <CALAjcgWJrawEH8YwL+jw3PxznqDikTVyUomM9kR41iT9KGKqWQ@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@rnout.be>
-Cc: James Knight <git@jdknight.me>, buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=jdknight-me.20230601.gappssmtp.com; s=20230601; t=1758778444; x=1759383244;
+ d=amarulasolutions.com; s=google; t=1758791999; x=1759396799;
  darn=buildroot.org; 
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=wbJtiZ7Mjhl5pYbPdUg9M4UL0l/D9M5zgzf/p3dGMRI=;
- b=OLJjoinm3PRjpaEHqwwTGt6QtFhR+gSEGdnmeM03pU2bs8TeouX7UK+goGoXGJOqmZ
- qROyAxgmG2QGA5d0FzT4WqDxsrcFdegAPkc0yhqnixW5CKl+L/P6SANDXen7PWe8YYK5
- YUI/KG9s8uTEHQean9QHtfN+TcArc2vacsq7HES9SfCjfqs/eTdug10jKgdNc2/AqJmi
- WAoNo96NCooB8ro2Rix2VT+d4j76ZztonYc4ij4fxhN/XAIwWK2gYJmr9Yvg9mOGteEy
- FYiUX8ybNkkRNqeCn0NCYngtOqKwe/F49UaBLnvzsx464HkXVHTvQIhk/uYkRNm767MR
- sJxw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=jdknight.me
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=jdknight-me.20230601.gappssmtp.com
- header.i=@jdknight-me.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=OLJjoinm
-Subject: Re: [Buildroot] [PATCH 1/1] package: add support for <pkg>_SITE_ONLY
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=eE+jjOLTgy1jvO3Lk6muJNpe3yyFA6ImvjBvxWLpN0c=;
+ b=oSlLT5cuNrv01P/NVWJm9CUom0CTLdb1GCqMhTTHehvCGManEC61PjDVLSldbJceY3
+ w3Qd45umv8KKQ3JE11V1krY6qVFMM8LT+M2oyJr4yMLeEuAPnLw84ZluTzh3k683ocpW
+ yK2xP2JfbM+ioaxeNf0/qDdu8Hc/cX46ruYp0=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=oSlLT5cu
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: Remove
+ adam.duskett@amarulasolutions from sway package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,56 +115,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Arnout,
+Patches submitted to update these packages have gone ignored for
+months without comment, and I no longer wish to recieve daily
+emails about them being out of date.
 
-> On Tue, Mar 25, 2025 at 4:19 PM Arnout Vandecappelle wrote:
-> [It] was already marked as Deferred... Did you do that?
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+---
+ DEVELOPERS | 5 -----
+ 1 file changed, 5 deletions(-)
 
-First off, sorry for the late reply to all this.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9094973fdf..fc561eb1ea 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -28,9 +28,6 @@
+ 
+ N:	Adam Duskett <adam.duskett@amarulasolutions.com>
+ F:	package/depot-tools/
+-F:	package/dmenu-wayland/
+-F:	package/fcft/
+-F:	package/foot/
+ F:	package/flutter-engine/
+ F:	package/flutter-packages/
+ F:	package/flutter-packages/flutter-adaptive-scaffold-example/
+@@ -42,9 +39,7 @@ F:	package/flutter-packages/flutter-rfw-local-example/
+ F:	package/flutter-pi/
+ F:	package/flutter-sdk-bin/
+ F:	package/ivi-homescreen/
+-F:	package/libutempter/
+ F:	package/mender-update-modules/
+-F:	package/tllist/
+ F:	support/testing/tests/package/test_flutter.py
+ 
+ N:	Adam Heinrich <adam@adamh.cz>
+-- 
+2.51.0
 
-Yes, I flagged it as deferred as the more testing performed at the
-time revealed issues with the implementation. I am still planning to
-revisit this again in the future when time permits (taking into
-consideration the points you have previously made).
-
-> On Tue, Mar 25, 2025 at 4:15 PM Arnout Vandecappelle wrote:
-> Can you be a bit more specific about the use case? Is it intended for
-non-upstream packages for which you're sure they won't be in BR2_BACKUP_SITE?
-
-Yes.
-
-For the Buildroot configurations I use, I typically set up the
-`BR2_PRIMARY_SITE` configuration to point to a local cache node of
-artifacts to improve fetch duration (and as a bonus to avoid wasting
-bandwidth). However, if the cache does not have a copy of an artifact
-(e.g. an updated Buildroot revision), the preference is to fall back
-onto the package-defined site and then fallback onto `BR2_BACKUP_SITE`
-(which is current left configured as the stock Buildroot site mirror).
-At the end of a build, any newly downloaded artifacts are stored on
-the local cache.
-
-This process works great for most packages. However, there are some
-cases where there can be packages defined under a br2-external path
-that will never be stored on the local cache (if it's already being
-stored on another local instance) and will most likely never be hosted
-on Buildroot's cache mirror. So, it would be nice if there was a way
-for a package to define a means to say "only ever download from the
-configured site since it will never be on a primary override (cache)
-or external mirrors".
-
-> I have a few more concerns...
-
-I agree with all the comments you made. If I recall correctly, the use
-of the `_EXTRA_DOWNLOADS` feature was something I overlooked that was
-not handled. If I can submit another patch by EOY, I will make
-appropriate changes.
-
-However,
-
-> [We'll] want the automatic host-from-target inheritance in pkg-generic.mk. Cfr. _AUTORECONF in pkg-autotools.mk.
-
-I am not sure I understand this point, but maybe I'll figure it out
-the more I look into specifics of the code.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
