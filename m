@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEFA4CAC5B9
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:03:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E76C7CAC5B0
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:03:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C530A6151F;
-	Thu, 25 Sep 2025 20:03:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B9C9541655;
+	Thu, 25 Sep 2025 20:03:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R12-DAuWdtKu; Thu, 25 Sep 2025 20:03:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KgLkqi-wUVXL; Thu, 25 Sep 2025 20:03:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0162861532
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BA1B41800
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0162861532;
-	Thu, 25 Sep 2025 20:03:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3BA1B41800;
+	Thu, 25 Sep 2025 20:03:33 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0280212D
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:02:57 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D41C177
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:02:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8EB2F61528
+ by smtp3.osuosl.org (Postfix) with ESMTP id A5D9961529
  for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:02:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pVuIWhps2h1m for <buildroot@buildroot.org>;
+ id dT8MulNx6MQP for <buildroot@buildroot.org>;
  Thu, 25 Sep 2025 20:02:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F12EB61529
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 175A66153F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F12EB61529
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:02:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 175A66153F
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:02:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EF61C86441; Thu, 25 Sep 2025 20:02:42 +0000 (UTC)
+ id 1595286441; Thu, 25 Sep 2025 20:02:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 25 Sep 2025 21:58:15 +0200
+Date: Thu, 25 Sep 2025 21:58:18 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: e716ef529533fe8062682bbfecea960d6c692d4c
-X-Git-Newrev: 507d71236a71b789302e6f220e75ddf08498ca5c
+X-Git-Oldrev: 2d703d9437644cce3e54ec23416474f0a7df4ee5
+X-Git-Newrev: 20d4df73faa5f2220a25f92643a5ca970c232a5e
 X-Patchwork-Hint: ignore
-Message-Id: <20250925200242.EF61C86441@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/atop: security
- bump to version 2.11.1
+Message-Id: <20250925200243.1595286441@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/libxmlrpc: add
+ BR2_USE_MMU dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,54 +66,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=507d71236a71b789302e6f220e75ddf08498ca5c
+commit: https://git.buildroot.net/buildroot/commit/?id=20d4df73faa5f2220a25f92643a5ca970c232a5e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-This bump includes the security fix for CVE-2025-31160.
+Build fails with:
+server.c: In function 'ServerDaemonize':
+server.c:1590:13: error: implicit declaration of function 'fork'
+[-Wimplicit-function-declaration]
+ 1590 |     switch (fork()) {
+      |             ^~~~
 
-Release notes:
-https://www.atoptool.nl/downloadatop.php
+Hence, add BR2_USE_MMU to avoid building with toolchains without MMU
+support.
 
 Fixes:
-https://www.cve.org/CVERecord?id=CVE-2025-31160
+https://autobuild.buildroot.org/results/10464159f2a9ff41ea0921a45ce12ecd0fa50ae7/
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-[Julien:
- - add "security" in commit log title
- - add link to CVE
-]
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+[Julien: move BR2_USE_MMU up to fix check-package error]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 45e7fe281160fe645e26ad58775aa5e384dbf222)
+(cherry picked from commit 059138326eb1e411dfcedc7947263e95a74efd4b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/atop/atop.hash | 2 +-
- package/atop/atop.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libxmlrpc/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/atop/atop.hash b/package/atop/atop.hash
-index 8774fb577d..8f0cb69581 100644
---- a/package/atop/atop.hash
-+++ b/package/atop/atop.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  9b94c666602efff7bf402ecce706c347f38c39cb63498f9d39626861e5646e20  atop-2.11.0.tar.gz
-+sha256  77650f79f9e388b6f5666dc113849894575a29bb4de21b8cd58767bf8a905154  atop-2.11.1.tar.gz
+diff --git a/package/libxmlrpc/Config.in b/package/libxmlrpc/Config.in
+index 33d512328e..798c286f2d 100644
+--- a/package/libxmlrpc/Config.in
++++ b/package/libxmlrpc/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBXMLRPC
+ 	bool "libxmlrpc"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_LIBCURL
+ 	help
+ 	  XML-RPC is a quick-and-easy way to make procedure calls over
+@@ -24,4 +25,5 @@ comment "cli tool needs a toolchain w/ dynamic library"
+ endif # BR2_PACKAGE_LIBXMLRPC
  
- # Hash for license file:
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
-diff --git a/package/atop/atop.mk b/package/atop/atop.mk
-index f7dfed5e8d..155dec6177 100644
---- a/package/atop/atop.mk
-+++ b/package/atop/atop.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ATOP_VERSION = 2.11.0
-+ATOP_VERSION = 2.11.1
- ATOP_SITE = http://www.atoptool.nl/download
- ATOP_LICENSE = GPL-2.0+
- ATOP_LICENSE_FILES = COPYING
+ comment "libxmlrpc needs a toolchain w/ threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
