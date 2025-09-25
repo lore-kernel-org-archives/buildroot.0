@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B1D5CAC5B9
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:20:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AEABCAC5B0
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:20:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5BD096168F;
-	Thu, 25 Sep 2025 20:20:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E707141812;
+	Thu, 25 Sep 2025 20:20:27 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PwKsKN-u0Zzx; Thu, 25 Sep 2025 20:20:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06D96416B7
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 06D96416B7;
+	Thu, 25 Sep 2025 20:20:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1100C446
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:49 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E4529613C7
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uJPx4FLHzNUW; Thu, 25 Sep 2025 20:20:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41D9F6152C
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 41D9F6152C;
-	Thu, 25 Sep 2025 20:20:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 03CC5177
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 03B08412AD
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:44 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SPut_MxmYORy for <buildroot@buildroot.org>;
- Thu, 25 Sep 2025 20:19:42 +0000 (UTC)
+ id FzkD32OD7u-L for <buildroot@buildroot.org>;
+ Thu, 25 Sep 2025 20:19:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F332541275
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CB2561532
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F332541275
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1CB2561532
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E4A1D86418; Thu, 25 Sep 2025 20:19:41 +0000 (UTC)
+ id 19BD685FD4; Thu, 25 Sep 2025 20:19:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 25 Sep 2025 22:07:14 +0200
+Date: Thu, 25 Sep 2025 22:07:43 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: a5e85ef3a98ce17eec24bb6bced6381bf7cb83e9
-X-Git-Newrev: 695eeceddb16b3045b707ccca7c911bd5aa75f5b
+X-Git-Oldrev: 5a8838ef12d18217908dfa00e2ccc9b98356666d
+X-Git-Newrev: 99d80d51f7caff29276ea3321d4e6bfeaa43237b
 X-Patchwork-Hint: ignore
-Message-Id: <20250925201941.E4A1D86418@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-pytz: bump
- to version 2025.2
+Message-Id: <20250925201943.19BD685FD4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/poco: add patch
+ for CVE-2025-6375
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,46 +66,89 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=695eeceddb16b3045b707ccca7c911bd5aa75f5b
+commit: https://git.buildroot.net/buildroot/commit/?id=99d80d51f7caff29276ea3321d4e6bfeaa43237b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+This fixes the following vulnerability:
+
+- CVE-2025-6375:
+
+A vulnerability was found in poco up to 1.14.1. It has been rated as
+problematic. Affected by this issue is the function MultipartInputStream
+of the file Net/src/MultipartReader.cpp. The manipulation leads to null
+pointer dereference. The attack needs to be approached locally. The
+exploit has been disclosed to the public and may be used. Upgrading to
+version 1.14.2 is able to address this issue. The patch is identified as
+6f2f85913c191ab9ddfb8fae781f5d66afccf3bf. It is recommended to upgrade
+the affected component.
+
+For more information see:
+  - https://nvd.nist.gov//vuln/detail/CVE-2025-6375
+  - https://github.com/pocoproject/poco/commit/6f2f85913c191ab9ddfb8fae781f5d66afccf3bf
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 9a54553b857b30d1d7c6e5ba28d17f57983182a2)
+(cherry picked from commit 36357247d5826386b57de8c8cf5d16ca3d471789)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-pytz/python-pytz.hash | 4 ++--
- package/python-pytz/python-pytz.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...Net-A-SEGV-at-Net-src-MultipartReader-cpp.patch | 34 ++++++++++++++++++++++
+ package/poco/poco.mk                               |  3 ++
+ 2 files changed, 37 insertions(+)
 
-diff --git a/package/python-pytz/python-pytz.hash b/package/python-pytz/python-pytz.hash
-index ca64cb7d79..2779cebed4 100644
---- a/package/python-pytz/python-pytz.hash
-+++ b/package/python-pytz/python-pytz.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pytz/json
--md5  efcb554763a36b3e18acee074f44d1a5  pytz-2024.2.tar.gz
--sha256  2aa355083c50a0f93fa581709deac0c9ad65cca8a9e9beac660adcbd493c798a  pytz-2024.2.tar.gz
-+md5  6a7760c71e38b6c75577b34b18b89d5b  pytz-2025.2.tar.gz
-+sha256  360b9e3dbb49a209c21ad61809c7fb453643e048b38924c765813546746e81c3  pytz-2025.2.tar.gz
- # Locally computed sha256 checksums
- sha256  be8b1a37ebe26c592a90f6c0eb33103a7f383ce2f4d7498c0af9a526990a07b8  LICENSE.txt
-diff --git a/package/python-pytz/python-pytz.mk b/package/python-pytz/python-pytz.mk
-index 1d37d09ab1..4ad946cd65 100644
---- a/package/python-pytz/python-pytz.mk
-+++ b/package/python-pytz/python-pytz.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/poco/0001-fix-Net-A-SEGV-at-Net-src-MultipartReader-cpp.patch b/package/poco/0001-fix-Net-A-SEGV-at-Net-src-MultipartReader-cpp.patch
+new file mode 100644
+index 0000000000..cfb22d690a
+--- /dev/null
++++ b/package/poco/0001-fix-Net-A-SEGV-at-Net-src-MultipartReader-cpp.patch
+@@ -0,0 +1,34 @@
++From 6f2f85913c191ab9ddfb8fae781f5d66afccf3bf Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?G=C3=BCnter=20Obiltschnig?= <guenter.obiltschnig@appinf.com>
++Date: Wed, 16 Apr 2025 09:15:33 +0200
++Subject: [PATCH] fix(Net): A SEGV at Net/src/MultipartReader.cpp:164:1 #4915
++ (move assertion out of ctor)
++
++Upstream: https://github.com/pocoproject/poco/commit/6f2f85913c191ab9ddfb8fae781f5d66afccf3bf
++CVE: CVE-2025-6375
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ Net/src/MultipartReader.cpp | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/Net/src/MultipartReader.cpp b/Net/src/MultipartReader.cpp
++index f3a2f2bba2..f4aa27dd86 100644
++--- a/Net/src/MultipartReader.cpp
+++++ b/Net/src/MultipartReader.cpp
++@@ -36,7 +36,6 @@ MultipartStreamBuf::MultipartStreamBuf(std::istream& istr, const std::string& bo
++ 	_boundary(boundary),
++ 	_lastPart(false)
++ {
++-	poco_assert (!boundary.empty() && boundary.length() < STREAM_BUFFER_SIZE - 6);
++ }
++ 
++ 
++@@ -47,7 +46,7 @@ MultipartStreamBuf::~MultipartStreamBuf()
++ 
++ int MultipartStreamBuf::readFromDevice(char* buffer, std::streamsize length)
++ {
++-	poco_assert_dbg (length >= _boundary.length() + 6);
+++	poco_assert (!_boundary.empty() && _boundary.length() < length - 6);
++ 
++ 	static const int eof = std::char_traits<char>::eof();
++ 	std::streambuf& buf = *_istr.rdbuf();
+diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+index ee740b2377..f7d9cdc009 100644
+--- a/package/poco/poco.mk
++++ b/package/poco/poco.mk
+@@ -11,6 +11,9 @@ POCO_LICENSE_FILES = LICENSE
+ POCO_CPE_ID_VENDOR = pocoproject
+ POCO_INSTALL_STAGING = YES
  
--PYTHON_PYTZ_VERSION = 2024.2
-+PYTHON_PYTZ_VERSION = 2025.2
- PYTHON_PYTZ_SOURCE = pytz-$(PYTHON_PYTZ_VERSION).tar.gz
--PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/3a/31/3c70bf7603cc2dca0f19bdc53b4537a797747a58875b552c8c413d963a3f
-+PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/f8/bf/abbd3cdfb8fbc7fb3d4d38d320f2441b1e7cbe29be4f23797b4a2b5d8aac
- PYTHON_PYTZ_SETUP_TYPE = setuptools
- PYTHON_PYTZ_LICENSE = MIT
- PYTHON_PYTZ_LICENSE_FILES = LICENSE.txt
++# 0001-fix-Net-A-SEGV-at-Net-src-MultipartReader-cpp.patch
++POCO_IGNORE_CVES += CVE-2025-6375
++
+ POCO_DEPENDENCIES = \
+ 	pcre2 \
+ 	zlib \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
