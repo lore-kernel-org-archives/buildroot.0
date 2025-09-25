@@ -1,77 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE74ACAC5B5
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:42:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90346CAC5B0
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:45:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AEA694125E;
-	Thu, 25 Sep 2025 20:42:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5BDCF61528;
+	Thu, 25 Sep 2025 20:45:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HPn12Uy_4WMv; Thu, 25 Sep 2025 20:42:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lOFaYe-3RT7Q; Thu, 25 Sep 2025 20:45:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F030A40F96
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 874EC6152F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F030A40F96;
-	Thu, 25 Sep 2025 20:42:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id B563E177
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:42:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 874EC6152F;
+	Thu, 25 Sep 2025 20:45:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 82EE0199
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:44:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9BBDC843F7
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:42:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 69BEE83BD0
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:44:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H6Q1Dtor9Rav for <buildroot@buildroot.org>;
- Thu, 25 Sep 2025 20:42:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 71C77843F5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71C77843F5
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 71C77843F5
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:42:21 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 85AEA20039E;
- Thu, 25 Sep 2025 22:42:14 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 25 Sep 2025 22:42:14 +0200
-MIME-Version: 1.0
-Date: Thu, 25 Sep 2025 22:42:14 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: buildroot@buildroot.org, Christian Stewart <christian@aperture.us>,
- Thomas Perale <thomas.perale@mind.be>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20250916224602.2935203-1-james.hilliard1@gmail.com>
-References: <20250916224602.2935203-1-james.hilliard1@gmail.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <7b659fdc59f99a7bc145b62380e8ad3f@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1758832939;
- bh=AWOz0sxwat548nApzCVrphZSaZJfovuIXPvdCvzUanc=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=EMkGn3jLkdkDkxY3cw7Lgue/y8t93O8hhQnh+PRxNLzhE46JTVVlREq6XhoRl4Wni
- r6TRhj+7SPb8cqf5gB2pL7KnlAVt/Dj0OP3GaniFK61ql5g3+6so2/ip8bWfR/0cmy
- XHEezLtoSg5sUm++R+hNjwLjYgiiN/c1MqzcG/KMgacvkwpJjjZa+C55tDr0WBVUBA
- EKbiOnbblp0jf1EtSIP9rjE6xN5hPPdSGuA4xL4b5CLWmkmzksaUvEBwZZ7FaijuKw
- uG39RUf5laQT1i0lV1hbrX2c66/ia1kNqEYDIgS7b4LmIkYjLjHlWV49F/6gTnLqSX
- F9P5LfF5ETQ0w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=EMkGn3jL
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/go: bump to version 1.25.1
+ id khFT5MWZiAZW for <buildroot@buildroot.org>;
+ Thu, 25 Sep 2025 20:44:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ADC1F83BA0
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id ADC1F83BA0
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:44:58 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A98D986464; Thu, 25 Sep 2025 20:44:58 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 25 Sep 2025 22:37:34 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ecf12c186f1e62751980eb4c7345decd65305680
+X-Git-Newrev: 981efdb8ca9033656e272e1de447c5e2359f7bc0
+X-Patchwork-Hint: ignore
+Message-Id: <20250925204458.A98D986464@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cloudflared: bump to version
+ 2025.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,28 +60,63 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 17/09/2025 00:46, James Hilliard wrote:
-> Building Go 1.24 and later requires Go 1.22.6 or later for bootstrap.
-> 
-> To support this we use our previous Go version 1.23.12 as the version
-> for go-bootstrap-stage4 and have the build for Go 1.25.1 depend on
-> go-bootstrap-stage4.
-> 
-> Go version 1.23.12 is the latest go version we can build using
-> go-bootstrap-stage3.
-> 
-> The package build for go-bootstrap-stage4 if effectively identical to
-> go-bootstrap-stage3 with only the Go version and stage number changed.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> Tested-by: Christian Stewart <christian@aperture.us>
+commit: https://git.buildroot.net/buildroot/commit/?id=981efdb8ca9033656e272e1de447c5e2359f7bc0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Series applied to master, thanks.
+Also set BuiltForPackageManager=buildroot so that cloudflared's update
+command informs the user to update cloudflared via buildroot.
+
+Without BuiltForPackageManager set:
+cloudflared update
+INF cloudflared is up to date version=
+
+With BuiltForPackageManager set:
+cloudflared update
+ERR cloudflared was installed by buildroot. Please update using the same method.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/cloudflared/cloudflared.hash | 2 +-
+ package/cloudflared/cloudflared.mk   | 6 ++++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/package/cloudflared/cloudflared.hash b/package/cloudflared/cloudflared.hash
+index f199160a94..407d24ccdb 100644
+--- a/package/cloudflared/cloudflared.hash
++++ b/package/cloudflared/cloudflared.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  f9223cdefaa4b75aa1c49638936af9d5007b6c7bd943ab70203bb75bf32467da  cloudflared-2025.1.0-go2.tar.gz
++sha256  803d3e162dc91da6b3b4f7961f57c113fa818d45517758511f72d254d68a46ba  cloudflared-2025.8.1-go2.tar.gz
+ sha256  58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  LICENSE
+diff --git a/package/cloudflared/cloudflared.mk b/package/cloudflared/cloudflared.mk
+index bf341b6b62..03b6a8fae6 100644
+--- a/package/cloudflared/cloudflared.mk
++++ b/package/cloudflared/cloudflared.mk
+@@ -4,12 +4,14 @@
+ #
+ ################################################################################
+ 
+-CLOUDFLARED_VERSION = 2025.1.0
++CLOUDFLARED_VERSION = 2025.8.1
+ CLOUDFLARED_SITE = $(call github,cloudflare,cloudflared,$(CLOUDFLARED_VERSION))
+ CLOUDFLARED_LICENSE = Apache-2.0
+ CLOUDFLARED_LICENSE_FILES = LICENSE
+ CLOUDFLARED_CPE_ID_VENDOR = cloudflare
+ CLOUDFLARED_BUILD_TARGETS = cmd/cloudflared
+-CLOUDFLARED_LDFLAGS = -X main.Version=$(CLOUDFLARED_VERSION)
++CLOUDFLARED_LDFLAGS = \
++	-X main.Version=$(CLOUDFLARED_VERSION) \
++	-X github.com/cloudflare/cloudflared/cmd/cloudflared/updater.BuiltForPackageManager=buildroot
+ 
+ $(eval $(golang-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
