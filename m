@@ -4,103 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D3B2CAC5B5
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:17:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3078DCAC5BB
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:17:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 06247615D4;
+	by smtp3.osuosl.org (Postfix) with ESMTP id F2C17615C9;
 	Thu, 25 Sep 2025 20:17:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DsgDwZ191Lnb; Thu, 25 Sep 2025 20:17:18 +0000 (UTC)
+ id apclxvV-vFPL; Thu, 25 Sep 2025 20:17:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A2D96153C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34D5061526
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A2D96153C;
-	Thu, 25 Sep 2025 20:17:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id DFD1512D
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:17:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 34D5061526;
+	Thu, 25 Sep 2025 20:17:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 85B8212D
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:17:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C66088439B
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:17:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7858440066
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:17:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5eFPDPuleDql for <buildroot@buildroot.org>;
- Thu, 25 Sep 2025 20:17:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zVxYkHAAS1jn for <buildroot@buildroot.org>;
+ Thu, 25 Sep 2025 20:17:02 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B1A0D84384
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1A0D84384
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B1A0D84384
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:17:00 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-3ecdf2b1751so1001334f8f.0
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 13:17:00 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 617C7412A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 617C7412A0
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 617C7412A0
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:17:02 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-3ecdf2b1751so1001347f8f.0
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 13:17:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1758831419; x=1759436219;
+ d=1e100.net; s=20230601; t=1758831420; x=1759436220;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=KdNiuEHImtpGU2k4WJ3HMPzBuMIoKUIlIN/a9+xkX0A=;
- b=CsV2a1cSLR2ePPW1Qkt3Z1CklRjekNNKSvCSl1QlawG7V6ZmNCIkw11apvkYDlGavS
- zCan2JOIWkYiiyOcZ/oxlyLIRVZ1z3xiVXS5jwDy6hJsfTZt6JCLKVspVFrSdNWoFz48
- NFLYocGxped7cACxvixhlu7WJPixkJrOHigRaSDvLJUK52i8NcFraYI3c8AWMPjqD6qV
- YBjiEMMarxNqsIbi8eWRbQ5NYZ57cwc+kkeVuxXrXpTK4wdGKKW48B3jik9lq2iyTxgx
- zjW6sLUT9/pYVRpPFyJxzxMp4e2zEWwLU+0igeIWm1Dcgmu959bZ/F1X2mxBKS8MxWpt
- rfkQ==
+ bh=MHIs+Zla461LvOcTCITsih+VYDKtQyeDmeVd0XqA5A8=;
+ b=UmRB9akaGGyLwqZOOjw+BBKey++4bkbSIf+ekOV1UplP8u9tsMy0Q7UuLRyzTgUu6x
+ 3nkDmjEMdF6R22ZVgx/YMlwY5VCjZZ6oLEnMBrOrFHN8xcXWLkiSbXAJLtFUqoD2vErL
+ MoqySWjmY30HEU8+x3iG8FCeI+kSyY9jmalv+RUZ/lNK7mb9J8zfXMunv1wJDuCRYkOh
+ oH+w9EXBZhFC3tmDY0lP1czxlFzezI5KFeHL+2/9Uv6l0+yJaTLkSU4whZVJJsOz0NcE
+ KssN/DF1NodCqpmBznoWaHJ4bL/v9Zk7S6l9W9eEbE8sajE/tsLUpBVM1RXiRDjwh1Pd
+ ZsKw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUVbaAptJN+/HMcLPsXg2tzS7RRtbNU7/T6YZ3cbi+DwN1s0BbCfCwOdAg04Rlvr28YVjHOLsyEPd0=@buildroot.org
-X-Gm-Message-State: AOJu0YzB+jkyazU+maaRghzfgF8a2ojLzVbDqPBELnQ21YnomgFIhzx5
- o9iVmPWZdlxE5Cev5YwTNarW8/RcSLeNQ6+n2DIshEAKlP3v6K9x4mvEhinHlhgT0/G08BIlAuo
- 5iVgybvY=
-X-Gm-Gg: ASbGnctgEFXqzxjQX9BdYvo7CTb4SYavz/qsWOhkGBheDLCEPhwiGW33394smNvApMq
- G1kRFoaM8hV5UesCHj3C/jmsBd29SNMlZBJlw4njc/qDX1gYNWLCb/7jfhcm3Fr2SMLq7SbBh2t
- 4bRMWD2HfXCTAN3q6h32i7+YpLursXrWhP0HcMwAyCQMNjQfOkUQoRpupYbWl6NZS5I/rxxeClh
- E1NKFzGncDM5nIIYC+kx+MZwWH2UPfYlIehMYrmnxJrfForAlw3Zpg5b4HaM2EW/vouCigCBOgM
- YLQEo+w9SraeNYeHRJ2lxJwJTYRafuliYuJVW8ymOg/ufmr6oO0krp/6uNQq5qhfYCB2FzaReWa
- 9Kgf1/gXdmlvVzzMKjMMKyiFkxQ==
-X-Google-Smtp-Source: AGHT+IEks0NMHEYX9+SYEbZpr37rUWK9w80LGtGcGhiFEaCe9aJkYe0JwmHaYw9hy2o/+IOO9WjoRw==
-X-Received: by 2002:a05:6000:430d:b0:3ec:dd12:54d3 with SMTP id
- ffacd0b85a97d-40e4ece58bamr4738073f8f.35.1758831418728; 
- Thu, 25 Sep 2025 13:16:58 -0700 (PDT)
+ AJvYcCX6hUOnm8LmPsDbC5TkmQSLZGm8GwrkPHni34lZ3vP/DimmCkEEXAJ87R9PJUCTLs2UiZ2DQkO0yj8=@buildroot.org
+X-Gm-Message-State: AOJu0YwbOgiv8mjba4/6+6mH9Ik0XUQWhCmfMLcU+d10vEcssKC0GBO8
+ JMNXisofpVQKd29vY3AUGfWgHFElfY4fl3BbVfhA7+Y1PpD7yUh5h6vT70uxVrRoSt30Co5Hj8F
+ 7R2mKkMI=
+X-Gm-Gg: ASbGncu7j2qBZgL8IqZkNx0AULRRk4pqgNsmTMRly111dcR08/4LXpVc67J219GKWds
+ F9GHDeRZDZ4QgSYhRJT04ebhWvPpC8R4p/F0nx0v8Nh19yeuZp7NQXMl6owFuH/jAtunjQsEEPj
+ c30uJgcX/bPLJjtrKFRl5uMCrRgSqlGnTVNFAaYHnUQr29N1SeZMQe4gTGnSpkbjoQ7N0lNrchr
+ Zmd7L9CMxltzzX7AtMitM3zh8/XnSmUZvu2oyfDYt3u2V6Al+u06+D0zThfcIrcxZzUsTjTHvlv
+ nNOE631KxxEQvjiPPePsXLkvb6d4wTZBCbU8pRhLcizbIitnanv9wwkA0mBeS1aEVPvDhMEO44F
+ LuuFmExX1NqeTvbDRz8bJyaxclg==
+X-Google-Smtp-Source: AGHT+IHFSt1XhzakVvj+OVJMTrq4Htzqkh5u8FZuirVySXLrufgG6XfoTM1KR2iIktrmmHfQquinlg==
+X-Received: by 2002:a05:6000:2507:b0:40b:c42e:fe39 with SMTP id
+ ffacd0b85a97d-40e4ece625cmr4809398f8f.40.1758831420464; 
+ Thu, 25 Sep 2025 13:17:00 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-40fc5602dc2sm4171476f8f.32.2025.09.25.13.16.58
+ ffacd0b85a97d-40fc82f2ff6sm4102880f8f.56.2025.09.25.13.17.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 25 Sep 2025 13:16:58 -0700 (PDT)
-To: Maxim Kochetkov <fido_max@inbox.ru>
+ Thu, 25 Sep 2025 13:17:00 -0700 (PDT)
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 25 Sep 2025 22:16:58 +0200
-Message-ID: <20250925201658.44178-1-thomas.perale@mind.be>
+Date: Thu, 25 Sep 2025 22:16:59 +0200
+Message-ID: <20250925201659.44286-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250919072349.169149-1-fido_max@inbox.ru>
-References: <20250919072349.169149-1-fido_max@inbox.ru>
+In-Reply-To: <20250920094617.2571648-2-dario.binacchi@amarulasolutions.com>
+References: <20250920094617.2571648-2-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1758831419; x=1759436219; darn=buildroot.org;
+ d=mind.be; s=google; t=1758831420; x=1759436220; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=KdNiuEHImtpGU2k4WJ3HMPzBuMIoKUIlIN/a9+xkX0A=;
- b=OAl6suUVKEdSV8bjZ/+EPNIqzgYO/znahER4Z7k+UP+w0OIE87LDzovU/T6yXNE4fN
- p7yC+hjSRPwSPX9jv3r2Qaj0SVFM1kBxu1e7qI6RVCEBcsgmp5ryCuPlqc0jZJR/CGef
- QHqN+4/1Y5//xrfbxKsnZZInYP7TXOB70RGAEklNQvC3tn7W8xLTKWFeoo0dUHCF5ZZX
- pDwyVIYR2EZoLT6dITIA6kkIFL0E3aqWG0+ZDLhGnhrfNc8cVoyW0LvvZ/2CH49ZESAR
- uzp3DFiNq1mPSNTmP3yzot5rOZufF3vJvpCFvty4pmW8Axo7HKie7U1o7fk1HVk9NdpO
- REAw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=MHIs+Zla461LvOcTCITsih+VYDKtQyeDmeVd0XqA5A8=;
+ b=c7Pz9Pb551Wei3eIlRgq8d6ZXkzam54F50KJeuBEZNjR9KXBf/LXykJaulx/wE7B3V
+ Gxlgnowf3pSFI4nU4DWAGX/lY/hwpMFAmrgBKm3Z/mKjQ02/4lZveZ0UAnYtG4VrkIam
+ +YEHfd4TuF/SB9t9AebOcpJomfgxK/ggU9Ce3sDPlzO5xYLAj4/PwCt1/Edn0wgmRzcJ
+ 6Fyb/Zk+XP46bz5NbgiUeRf12uvV0J8bjzJnYG5jYmWAFCA720oviFdeCdAUKsfP+IiX
+ RskFOWW1G1njSOt6nuBHjzZJg/cEj5SO+4/CY1MNpk4Cw9QTE0x3WN0HIClauApH/r7P
+ 2ocA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=OAl6suUV
-Subject: Re: [Buildroot] [PATCH 1/1] package/postgresql: security bump to
- version 17.6
+ header.a=rsa-sha256 header.s=google header.b=c7Pz9Pb5
+Subject: Re: [Buildroot] [PATCH 2/2] DEVELOPERS: add Dario Binacchi for atf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,86 +119,28 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Fixes the following security issue:
-> 
-> CVE-2025-8713: PostgreSQL optimizer statistics can expose sampled data
-> within a view, partition, or child table
-> 
-> PostgreSQL optimizer statistics allow a user to read sampled data within
-> a view that the user cannot access. Separately, statistics allow a user
-> to read sampled data that a row security policy intended to hide.
-> PostgreSQL maintains statistics for tables by sampling data available in
-> columns; this data is consulted during the query planning process. Prior
-> to this release, a user could craft a leaky operator that bypassed view
-> access control lists (ACLs) and bypassed row security policies in
-> partitioning or table inheritance hierarchies. Reachable statistics data
-> notably included histograms and most- common-values lists. CVE-2017-7484
-> and CVE-2019-10130 intended to close this class of vulnerability, but
-> this gap remained. Versions before PostgreSQL 17.6, 16.10, 15.14, 14.19,
-> and 13.22 are affected.
-> 
-> CVE-2025-8714: PostgreSQL pg_dump lets superuser of origin server execute
-> arbitrary code in psql client
-> 
-> Untrusted data inclusion in pg_dump in PostgreSQL allows a malicious
-> superuser of the origin server to inject arbitrary code for restore-time
-> execution as the client operating system account running psql to restore
-> the dump, via psql meta-commands. pg_dumpall is also affected. pg_restore
-> is affected when used to generate a plain-format dump. This is similar to
-> MySQL CVE-2024-21096. Versions before PostgreSQL 17.6, 16.10, 15.14,
-> 14.19, and 13.22 are affected.
-> 
-> CVE-2025-8715: PostgreSQL pg_dump newline in object name executes
-> arbitrary code in psql client and in restore target server
-> 
-> Improper neutralization of newlines in pg_dump in PostgreSQL allows a user
-> of the origin server to inject arbitrary code for restore-time execution
-> as the client operating system account running psql to restore the dump,
-> via psql meta-commands inside a purpose-crafted object name. The same
-> attacks can achieve SQL injection as a superuser of the restore target
-> server. pg_dumpall, pg_restore, and pg_upgrade are also affected.
-> Versions before PostgreSQL 17.6, 16.10, 15.14, 14.19, and 13.22 are affected.
-> Versions before 11.20 are unaffected. CVE-2012-0868 had fixed this class
-> of problem, but version 11.20 reintroduced it.
-> 
-> https://www.postgresql.org/about/news/postgresql-176-1610-1514-1419-1322-and-18-beta-3-released-3118/
-> 
-> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
 Applied to 2025.02.x, 2025.05.x & 2025.08.x. Thanks
 
 > ---
->  package/postgresql/postgresql.hash | 6 +++---
->  package/postgresql/postgresql.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  DEVELOPERS | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-> index f17d4ca3ce..3b5e773c65 100644
-> --- a/package/postgresql/postgresql.hash
-> +++ b/package/postgresql/postgresql.hash
-> @@ -1,4 +1,4 @@
-> -# From https://ftp.postgresql.org/pub/source/v17.5/postgresql-17.5.tar.bz2.sha256
-> -sha256  fcb7ab38e23b264d1902cb25e6adafb4525a6ebcbd015434aeef9eda80f528d8  postgresql-17.5.tar.bz2
-> +# From https://ftp.postgresql.org/pub/source/v17.6/postgresql-17.6.tar.bz2.sha256
-> +sha256  e0630a3600aea27511715563259ec2111cd5f4353a4b040e0be827f94cd7a8b0  postgresql-17.6.tar.bz2
->  # License file, Locally calculated
-> -sha256  e3822c4797fadcab31a3fc73f75c28ac20c73d72b565da91e9974cf9398ef4d2  COPYRIGHT
-> +sha256  5ed3ce5c9373dff7f98b1fae7a6c7ccd98df7d734d46d24c1bcebf1240be8307  COPYRIGHT
-> diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-> index 671bd30347..31d0068328 100644
-> --- a/package/postgresql/postgresql.mk
-> +++ b/package/postgresql/postgresql.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -POSTGRESQL_VERSION = 17.5
-> +POSTGRESQL_VERSION = 17.6
->  POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
->  POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
->  POSTGRESQL_LICENSE = PostgreSQL
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 16d9ee892bdb..2f2a76334d08 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -805,6 +805,7 @@ F:	configs/stm32f746_disco_sd_defconfig
+>  F:	configs/stm32f769_disco_sd_defconfig
+>  F:	package/aespipe/
+>  F:	package/armadillo/
+> +F:	package/atf/
+>  F:	package/babeld/
+>  F:	package/iana-assignments/
+>  F:	package/inih/
 > -- 
-> 2.51.0
+> 2.43.0
 > 
 > _______________________________________________
 > buildroot mailing list
