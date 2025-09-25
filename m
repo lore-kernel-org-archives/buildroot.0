@@ -4,103 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BEE8CAC5A5
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 04:51:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 194FBCAC5A5
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 05:34:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4435A613B5;
-	Thu, 25 Sep 2025 04:51:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C20BB613C3;
+	Thu, 25 Sep 2025 05:34:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dYA-uZuDAiHp; Thu, 25 Sep 2025 04:51:44 +0000 (UTC)
+ id W16NE3nII3BP; Thu, 25 Sep 2025 05:34:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E3C3613B2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6F22613C5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3E3C3613B2;
-	Thu, 25 Sep 2025 04:51:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A5FA1177
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 04:51:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6F22613C5;
+	Thu, 25 Sep 2025 05:34:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 511DC12D
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 05:34:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8F4EF4096D
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 04:51:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 431364106D
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 05:34:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jjvvxhYmArfB for <buildroot@buildroot.org>;
- Thu, 25 Sep 2025 04:51:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Whl3ZeweJRcl for <buildroot@buildroot.org>;
+ Thu, 25 Sep 2025 05:34:05 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::f64; helo=mail-qv1-xf64.google.com;
- envelope-from=git@jdknight.me; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E19F5409B7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E19F5409B7
-Received: from mail-qv1-xf64.google.com (mail-qv1-xf64.google.com
- [IPv6:2607:f8b0:4864:20::f64])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E19F5409B7
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 04:51:40 +0000 (UTC)
-Received: by mail-qv1-xf64.google.com with SMTP id
- 6a1803df08f44-70ba7aa131fso5236406d6.2
- for <buildroot@buildroot.org>; Wed, 24 Sep 2025 21:51:40 -0700 (PDT)
+ client-ip=2001:4860:4864:20::30; helo=mail-oa1-x30.google.com;
+ envelope-from=jdknight@jdknight.me; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4AA26410A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AA26410A0
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com
+ [IPv6:2001:4860:4864:20::30])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4AA26410A0
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 05:34:05 +0000 (UTC)
+Received: by mail-oa1-x30.google.com with SMTP id
+ 586e51a60fabf-30cce892b7dso366634fac.1
+ for <buildroot@buildroot.org>; Wed, 24 Sep 2025 22:34:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1758775899; x=1759380699;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1758778444; x=1759383244;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=A7j5UpoHJKs6U0F1FuG8TQR5ALgGRzAcQbK1cqNLgOw=;
- b=BJPugSkZBdOd96WNaQa5xYonpVwr4y0/9a4EC1RtRh8aidmQv5y8dyM/XawEQkvh3M
- jiV61T++Zde75oSl8PS8rwZXjE5yND9xuBXaxNkrCbF+9SBY73qNlVLZfqwOTvqLfN8f
- MnAVHWwZ3CHnbNd5Bc4Yj16jy2RKMrft/uZmOE/OLVv/XaHDc3sTPHNw3WaE+6vbP5ng
- 30EZadGIF7w036yw+ieyhoAavmtduyBKbUuthsmZXZRYxaHeXGmku0558VtUuTowTq1o
- u3LYgPcNdlRanfceVrMHp0XqZtXrPIjLCBx0lrW7nQi3GgcpLWg61VEPP8CraK1W00ab
- EwZw==
-X-Gm-Message-State: AOJu0YxysqBNJnWyz/8xEUqSNLs9ld+nIOfjYF/sNLJSjvJiMEvngBhr
- O6iLsNgXb5mL/RfYv5iDbheXsBYFm3+pnDZAMNH/a4Z759pY/mk3SicUWkQ3MzvSLzP6oZjL1vZ
- VWPyVMfNyXGY7euCtCtmZbKEe4mHLUv09jUz2/X4Aw7fCSek=
-X-Gm-Gg: ASbGncur9hL1CUy+7X0ftHXoFBrrW7YOohE7WA/YXFtc0jSEdweAXIS/qpCEgjagDlX
- njaQYHi1ZDm66ZIWIguii4WVauE/ZpF6v8GlIeCw4DrbFS3tndwiHn+j1TaDjjOinsz1/yYwiBP
- GGFuFbj3te+uDdsLZr1xDhZCiYopmcCI5hAujvuQ3OSRfZOjRP4D3GRu++IAiwwtQhKeLSuuIBs
- J9atOx0dfzDE3QqA+PkdAd73opZywjXScUi+cl/HtPkeaO+T6XxGgEeDH0EhRVEsnZ2OPy4mAbq
- fPrB3D6eqOP+vIf5I1EWRIqn3o4MOzNSSOPE5GvA0l+eSDsNbpmuBTa14A==
-X-Google-Smtp-Source: AGHT+IFOGcN+kJBQKCHEkThDfCdY9AJXB1lToBoqSnY5TK7jndbX5crTLDQqC+OaH75iBFw6e6klkNmtGCoa
-X-Received: by 2002:ad4:594c:0:b0:798:7d70:9cfa with SMTP id
- 6a1803df08f44-7fc3f52e79amr40328786d6.39.1758775899466; 
- Wed, 24 Sep 2025 21:51:39 -0700 (PDT)
-Received: from localhost.localdomain ([70.53.89.16])
- by smtp-relay.gmail.com with ESMTPS id
- 6a1803df08f44-8016193d064sm655356d6.28.2025.09.24.21.51.39
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 24 Sep 2025 21:51:39 -0700 (PDT)
-X-Relaying-Domain: jdknight.me
-From: James Knight <git@jdknight.me>
-To: buildroot@buildroot.org
-Cc: Sen Hastings <sen@hastings.org>,
-	James Knight <git@jdknight.me>
-Date: Thu, 25 Sep 2025 00:51:15 -0400
-Message-ID: <20250925045115.1655-1-git@jdknight.me>
-X-Mailer: git-send-email 2.49.0.windows.1
+ bh=wbJtiZ7Mjhl5pYbPdUg9M4UL0l/D9M5zgzf/p3dGMRI=;
+ b=XLRn04WyAL0iDQyekS1Nisn71/aq9vp9ksUihG3dtB0iclGV2Otj/aYN3LDDO+i5tE
+ fMe1mOwHo+MaB3GDrB5zMPYBCHPakKSxwK34tULLv4FSxoH00U+IWY5s1ampD+YzpIzz
+ TymPEeMF6v8WXIl/wbfxP8LZ8vYIJI6cIJARtzVNoFboFJhLg6ktaGOYJkKHDiTTc2w6
+ hMAqiw2fwHxpH4JNJaoB2E/JqNONAamg3HmF8XQD/McyVmNQGShLGX67rBK+InfC21mE
+ bXLCkuFfeQP0srgzuS4MBbIVvm2T/QyYOsnjbjr6TZvujz9ldDU3s2KyzQoRaMTE5Qbu
+ Gkxg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXj0M33C2pDrsjFPDDShtPlQ3qxlWDkPtTFQyIGhgCSP/q1XOvQzMpMCfpuFPc0XRKkmuTx5icyVVo=@buildroot.org
+X-Gm-Message-State: AOJu0YxN01eAwkX6waoVrk7lKhLqeYy8rrA+Xxs8IYigVzN4/bqxbJUI
+ Jv8w9X8CXjIHcUPvX68OFJcVWbsYKR8vVIINortSzICdHaSYRYuOJdC9D7+YqZ2dFDWHBoafZ5o
+ VVkX4bnjqIfTK4v1qRDchwgTCYglA2MFKNTMJ6eudZSQvJepln3ZLhwCG33kp
+X-Gm-Gg: ASbGncvLeqQipTdOtXYeAm3kIAkVeI3dWFwZznLYkpCgM54dhX7agXzmbBJ7xH+esxl
+ KIbvc3mwcaQVFiFe2eyj8L+/MFBxYTblJszT0n71w4lXbRH0LvEnQ8WQ29nJc5w56X8WtIjaE2g
+ jB8l68F+cNuEzul1rBbXyefv6a2EKUmUapMhr1hrJTwSnAmjdVQL6yfkk34AAtdyvtaEqmrnvBL
+ Fpp
+X-Google-Smtp-Source: AGHT+IF5/QEX3u8Q+946PPNY8Dgvsv/WRqWSr0nsXrSMAQmxh7ZF02/CQoPJsNT1F21EF29bzgz8LtvqZt1SKKZMVT4=
+X-Received: by 2002:a05:6870:961e:b0:2ff:89c8:44f4 with SMTP id
+ 586e51a60fabf-35ec120529fmr916335fac.11.1758778444024; Wed, 24 Sep 2025
+ 22:34:04 -0700 (PDT)
 MIME-Version: 1.0
+References: <20250319043935.7756-1-git@jdknight.me>
+ <712727dd-ca6e-4646-b335-cf1aa99ac3ea@mind.be>
+ <024aabe1-f252-47df-be78-34c1ceb59211@mind.be>
+In-Reply-To: <024aabe1-f252-47df-be78-34c1ceb59211@mind.be>
+From: James Knight <git@jdknight.me>
+Date: Thu, 25 Sep 2025 01:33:53 -0400
+X-Gm-Features: AS18NWDLuBlb1qC0DMvT5rkx5uTRoT07jpCuuJQ1KoY1JDO8nYbnLfakJl7Mt1g
+Message-ID: <CALAjcgWJrawEH8YwL+jw3PxznqDikTVyUomM9kR41iT9KGKqWQ@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@rnout.be>
+Cc: James Knight <git@jdknight.me>, buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=jdknight-me.20230601.gappssmtp.com; s=20230601; t=1758775899; x=1759380699;
+ d=jdknight-me.20230601.gappssmtp.com; s=20230601; t=1758778444; x=1759383244;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=A7j5UpoHJKs6U0F1FuG8TQR5ALgGRzAcQbK1cqNLgOw=;
- b=xOah2dqhI5opfPRIWFlXzBTpJ6zqKcicBhMNPJOhY3WxwEXs2vGfCKL8ioTLGLy0VE
- a5jjwo8FhokmqTGrzvEVjOxGzlDk2tLATXLTLYfcLAdWlzrc3dxn89U+N+3++4VZGm5H
- h1lkLKvyW4qtqrVLTZXCfCKQJnsuWpOuX5ny2om0YlTeBHaL7rWM1+hCHZ6a947SuS4r
- 29v7ocJAUXAL0A1MJLkz3KeFH8Cc2QPxUnDjIt/qwbDVhrKZfY4n7I7Z30cOzyeYWjFC
- PMtXbb5/ZxWEBnhPSKoOJoBvqSTFVxtQqUDMjTW7xZLFveDqtRuuWbxBFh6vX3zLbXMx
- 6Gzg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=wbJtiZ7Mjhl5pYbPdUg9M4UL0l/D9M5zgzf/p3dGMRI=;
+ b=OLJjoinm3PRjpaEHqwwTGt6QtFhR+gSEGdnmeM03pU2bs8TeouX7UK+goGoXGJOqmZ
+ qROyAxgmG2QGA5d0FzT4WqDxsrcFdegAPkc0yhqnixW5CKl+L/P6SANDXen7PWe8YYK5
+ YUI/KG9s8uTEHQean9QHtfN+TcArc2vacsq7HES9SfCjfqs/eTdug10jKgdNc2/AqJmi
+ WAoNo96NCooB8ro2Rix2VT+d4j76ZztonYc4ij4fxhN/XAIwWK2gYJmr9Yvg9mOGteEy
+ FYiUX8ybNkkRNqeCn0NCYngtOqKwe/F49UaBLnvzsx464HkXVHTvQIhk/uYkRNm767MR
+ sJxw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=jdknight.me
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=jdknight-me.20230601.gappssmtp.com
  header.i=@jdknight-me.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=xOah2dqh
-Subject: [Buildroot] [PATCH 1/1] support/scripts/pkg-stats: configurable
- upstream-check api endpoint
+ header.s=20230601 header.b=OLJjoinm
+Subject: Re: [Buildroot] [PATCH 1/1] package: add support for <pkg>_SITE_ONLY
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,134 +114,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Provide the ability for a caller to override the API endpoint used for
-upstream checks. This can be helpful for environments which support a
-reverse proxy for caching an Anitya target.
+Arnout,
 
-Signed-off-by: James Knight <git@jdknight.me>
----
- support/scripts/pkg-stats | 31 +++++++++++++++++++------------
- 1 file changed, 19 insertions(+), 12 deletions(-)
+> On Tue, Mar 25, 2025 at 4:19 PM Arnout Vandecappelle wrote:
+> [It] was already marked as Deferred... Did you do that?
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index a0a46aa8cbac1532f84d67bed9924dace4f6778b..3b9c9bd5b11d6434ffab847fe5de18154936e34e 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -37,6 +37,7 @@ from getdeveloperlib import parse_developers  # noqa: E402
- INFRA_RE = re.compile(r"\$\(eval \$\(([a-z-]*)-package\)\)")
- URL_RE = re.compile(r"\s*https?://\S*\s*$")
- 
-+DEFAULT_RM_API_ENDPOINT = "https://release-monitoring.org/api"
- RM_API_STATUS_ERROR = 1
- RM_API_STATUS_FOUND_BY_DISTRO = 2
- RM_API_STATUS_FOUND_BY_PATTERN = 3
-@@ -523,8 +524,8 @@ def check_package_latest_version_set_status(pkg, status, version, identifier):
-         pkg.status['version'] = ('ok', 'up-to-date')
- 
- 
--async def check_package_get_latest_version_by_distro(session, pkg, retry=True):
--    url = "https://release-monitoring.org/api/project/Buildroot/%s" % pkg.name
-+async def check_package_get_latest_version_by_distro(rm_url, session, pkg, retry=True):
-+    url = f"{rm_url}/project/Buildroot/{pkg.name}"
-     try:
-         async with session.get(url) as resp:
-             if resp.status != 200:
-@@ -545,13 +546,13 @@ async def check_package_get_latest_version_by_distro(session, pkg, retry=True):
- 
-     except (aiohttp.ClientError, asyncio.TimeoutError):
-         if retry:
--            return await check_package_get_latest_version_by_distro(session, pkg, retry=False)
-+            return await check_package_get_latest_version_by_distro(rm_url, session, pkg, retry=False)
-         else:
-             return False
- 
- 
--async def check_package_get_latest_version_by_guess(session, pkg, retry=True):
--    url = "https://release-monitoring.org/api/projects/?pattern=%s" % pkg.name
-+async def check_package_get_latest_version_by_guess(rm_url, session, pkg, retry=True):
-+    url = f"{rm_url}/projects/?pattern={pkg.name}"
-     try:
-         async with session.get(url) as resp:
-             if resp.status != 200:
-@@ -576,7 +577,7 @@ async def check_package_get_latest_version_by_guess(session, pkg, retry=True):
- 
-     except (aiohttp.ClientError, asyncio.TimeoutError):
-         if retry:
--            return await check_package_get_latest_version_by_guess(session, pkg, retry=False)
-+            return await check_package_get_latest_version_by_guess(rm_url, session, pkg, retry=False)
-         else:
-             return False
- 
-@@ -584,16 +585,16 @@ async def check_package_get_latest_version_by_guess(session, pkg, retry=True):
- check_latest_count = 0
- 
- 
--async def check_package_latest_version_get(session, pkg, npkgs, verbose=False):
-+async def check_package_latest_version_get(rm_url, session, pkg, npkgs, verbose=False):
-     global check_latest_count
- 
--    if await check_package_get_latest_version_by_distro(session, pkg):
-+    if await check_package_get_latest_version_by_distro(rm_url, session, pkg):
-         check_latest_count += 1
-         if verbose:
-             print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
-         return
- 
--    if await check_package_get_latest_version_by_guess(session, pkg):
-+    if await check_package_get_latest_version_by_guess(rm_url, session, pkg):
-         check_latest_count += 1
-         if verbose:
-             print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
-@@ -607,7 +608,7 @@ async def check_package_latest_version_get(session, pkg, npkgs, verbose=False):
-         print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
- 
- 
--async def check_package_latest_version(packages, verbose=False):
-+async def check_package_latest_version(rm_url, packages, verbose=False):
-     """
-     Fills in the .latest_version field of all Package objects
- 
-@@ -630,7 +631,7 @@ async def check_package_latest_version(packages, verbose=False):
-     async with aiohttp.ClientSession(connector=connector, trust_env=True) as sess:
-         packages = [p for p in packages if p.is_actual_package]
-         for pkg in packages:
--            tasks.append(asyncio.ensure_future(check_package_latest_version_get(sess, pkg, len(packages), verbose=verbose)))
-+            tasks.append(asyncio.ensure_future(check_package_latest_version_get(rm_url, sess, pkg, len(packages), verbose=verbose)))
-         await asyncio.wait(tasks)
- 
- 
-@@ -1303,6 +1304,9 @@ def parse_args():
-                           help='List of packages (comma separated)')
-     parser.add_argument('--nvd-path', dest='nvd_path',
-                         help='Path to the local NVD database', type=resolvepath)
-+    parser.add_argument('--upstream-url', dest='upstream_url',
-+                        help='Upstream API endpoint to use',
-+                        default=DEFAULT_RM_API_ENDPOINT)
-     parser.add_argument('--disable', type=list_str,
-                         help='Features to disable, comma-separated (cve, upstream, url, warnings)',
-                         default=[])
-@@ -1317,6 +1321,9 @@ def parse_args():
- def __main__():
-     global cvecheck
- 
-+    loop = asyncio.new_event_loop()
-+    asyncio.set_event_loop(loop)
-+
-     args = parse_args()
- 
-     if args.nvd_path:
-@@ -1365,7 +1372,7 @@ def __main__():
-     if "upstream" not in args.disable:
-         print("Getting latest versions ...")
-         loop = asyncio.get_event_loop()
--        loop.run_until_complete(check_package_latest_version(packages, verbose=args.verbose))
-+        loop.run_until_complete(check_package_latest_version(args.upstream_url, packages, verbose=args.verbose))
-     if "cve" not in args.disable and args.nvd_path:
-         print("Checking packages CVEs")
-         check_package_cves(args.nvd_path, packages)
--- 
-2.49.0.windows.1
+First off, sorry for the late reply to all this.
 
+Yes, I flagged it as deferred as the more testing performed at the
+time revealed issues with the implementation. I am still planning to
+revisit this again in the future when time permits (taking into
+consideration the points you have previously made).
+
+> On Tue, Mar 25, 2025 at 4:15 PM Arnout Vandecappelle wrote:
+> Can you be a bit more specific about the use case? Is it intended for
+non-upstream packages for which you're sure they won't be in BR2_BACKUP_SITE?
+
+Yes.
+
+For the Buildroot configurations I use, I typically set up the
+`BR2_PRIMARY_SITE` configuration to point to a local cache node of
+artifacts to improve fetch duration (and as a bonus to avoid wasting
+bandwidth). However, if the cache does not have a copy of an artifact
+(e.g. an updated Buildroot revision), the preference is to fall back
+onto the package-defined site and then fallback onto `BR2_BACKUP_SITE`
+(which is current left configured as the stock Buildroot site mirror).
+At the end of a build, any newly downloaded artifacts are stored on
+the local cache.
+
+This process works great for most packages. However, there are some
+cases where there can be packages defined under a br2-external path
+that will never be stored on the local cache (if it's already being
+stored on another local instance) and will most likely never be hosted
+on Buildroot's cache mirror. So, it would be nice if there was a way
+for a package to define a means to say "only ever download from the
+configured site since it will never be on a primary override (cache)
+or external mirrors".
+
+> I have a few more concerns...
+
+I agree with all the comments you made. If I recall correctly, the use
+of the `_EXTRA_DOWNLOADS` feature was something I overlooked that was
+not handled. If I can submit another patch by EOY, I will make
+appropriate changes.
+
+However,
+
+> [We'll] want the automatic host-from-target inheritance in pkg-generic.mk. Cfr. _AUTORECONF in pkg-autotools.mk.
+
+I am not sure I understand this point, but maybe I'll figure it out
+the more I look into specifics of the code.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
