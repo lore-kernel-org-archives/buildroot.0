@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 725F3CAC5B0
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:30:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9CA4CAC5B5
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:30:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 40CA041609;
-	Thu, 25 Sep 2025 20:30:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B4CB26153A;
+	Thu, 25 Sep 2025 20:30:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3UQtqM6IOWei; Thu, 25 Sep 2025 20:30:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xVlmvB2zAMFi; Thu, 25 Sep 2025 20:30:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E44A4161A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC11E61593
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E44A4161A;
-	Thu, 25 Sep 2025 20:30:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2B49312D
+	by smtp3.osuosl.org (Postfix) with ESMTP id AC11E61593;
+	Thu, 25 Sep 2025 20:30:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 43703177
  for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B344F41605
+ by smtp1.osuosl.org (Postfix) with ESMTP id C8B3B8301F
  for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id obVYT3ARBbYm for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jcGoFLAzVgLM for <buildroot@buildroot.org>;
  Thu, 25 Sep 2025 20:30:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D140C415F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2A2282FE7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D140C415F6
+ by smtp1.osuosl.org (Postfix) with ESMTP id B2A2282FE7
  for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C34908644A; Thu, 25 Sep 2025 20:30:21 +0000 (UTC)
+ id AE2328644B; Thu, 25 Sep 2025 20:30:21 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 25 Sep 2025 16:29:21 +0200
+Date: Thu, 25 Sep 2025 16:28:45 +0200
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: a801534ff51464613269f2251799dfd156cbd611
-X-Git-Newrev: afda443c99854d0bcc6fbb20d49b8bee0650e964
+X-Git-Oldrev: 38eb67b78712df6c851a035041483a0d66a24e71
+X-Git-Newrev: 87514cc0aeb7d242ca9dbc2867ade3b719ce18ad
 X-Patchwork-Hint: ignore
-Message-Id: <20250925203021.C34908644A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x]
- boot/boot-wrapper-aarch64/Config.in: switch homepage URL to https
+Message-Id: <20250925203021.AE2328644B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/cjson: security
+ bump to version 1.7.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,44 +61,89 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7437362774532460289=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=afda443c99854d0bcc6fbb20d49b8bee0650e964
+--===============7437362774532460289==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=87514cc0aeb7d242ca9dbc2867ade3b719ce18ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-Buildroot commit [1] ("package: replace git:// URLs with https://
-URLs where possible") switched _SITE URL from git to https, but did
-not updated the package homepage in Config.in.
+Fixes the following security issue:
 
-This commit updates it to match the package _SITE URL.
+CVE-2025-57052: cJSON 1.5.0 through 1.7.18 allows out-of-bounds access via
+the decode_array_index_from_pointer function in cJSON_Utils.c, allowing
+remote attackers to bypass array bounds checking and access restricted data
+via malformed JSON pointer strings containing alphanumeric characters
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/6626bf7c5fc1f5f47fcade03090de212a6121db3
+https://nvd.nist.gov/vuln/detail/CVE-2025-57052
+https://x-0r.com/posts/cJSON-Array-Index-Parsing-Vulnerability
+https://github.com/DaveGamble/cJSON/commit/74e1ff4994aa4139126967f6d289b675b4b36fef
+https://github.com/DaveGamble/cJSON/releases/tag/v1.7.19
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit afff65c340594e9cdf73774db8cfb5b4220c5ed2)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit a93602c00b355e54322c8b0ce0a1cea98ea202f9)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- boot/boot-wrapper-aarch64/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/cjson/0001-make_compatible_with_cmake_4.0.patch | 4 +++-
+ package/cjson/cjson.hash                                | 2 +-
+ package/cjson/cjson.mk                                  | 2 +-
+ 3 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/boot/boot-wrapper-aarch64/Config.in b/boot/boot-wrapper-aarch64/Config.in
-index dfefb7a9fd..7271336166 100644
---- a/boot/boot-wrapper-aarch64/Config.in
-+++ b/boot/boot-wrapper-aarch64/Config.in
-@@ -11,7 +11,7 @@ menuconfig BR2_TARGET_BOOT_WRAPPER_AARCH64
- 	  possible to start an Aarch64 kernel inside the available
- 	  software simulators for the Aarch64 architecture.
+diff --git a/package/cjson/0001-make_compatible_with_cmake_4.0.patch b/package/cjson/0001-make_compatible_with_cmake_4.0.patch
+index 1fe5cd43ef..684773e4da 100644
+--- a/package/cjson/0001-make_compatible_with_cmake_4.0.patch
++++ b/package/cjson/0001-make_compatible_with_cmake_4.0.patch
+@@ -16,6 +16,8 @@ CMake Error at CMakeLists.txt:2 (cmake_minimum_required):
+ This change raises the minimum required CMake version to 3.5 and thus makes the project compatible with CMake 4.0
  
--	  git://git.kernel.org/pub/scm/linux/kernel/git/mark/boot-wrapper-aarch64.git
-+	  https://git.kernel.org/pub/scm/linux/kernel/git/mark/boot-wrapper-aarch64.git
+ Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++Peter: update for 1.7.19
+ Upstream: https://github.com/DaveGamble/cJSON/pull/935
+ ---
+  CMakeLists.txt | 2 +-
+@@ -31,4 +33,4 @@ index 36a6cb57..9428da58 100644
+ +cmake_minimum_required(VERSION 3.5)
+  
+  project(cJSON
+-     VERSION 1.7.18
++     VERSION 1.7.19
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index e07ae0f7bf..a876ffafe8 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  3aa806844a03442c00769b83e99970be70fbef03735ff898f4811dd03b9f5ee5  cjson-1.7.18.tar.gz
++sha256  7fa616e3046edfa7a28a32d5f9eacfd23f92900fe1f8ccd988c1662f30454562  cjson-1.7.19.tar.gz
+ sha256  a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index b87ce97ca2..cb4525d1a4 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- if BR2_TARGET_BOOT_WRAPPER_AARCH64
- 
+-CJSON_VERSION = 1.7.18
++CJSON_VERSION = 1.7.19
+ CJSON_SITE = $(call github,DaveGamble,cjson,v$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
+
+--===============7437362774532460289==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7437362774532460289==--
