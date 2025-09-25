@@ -1,52 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B369CAC5BA
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 19:03:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3945CAC5BA
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 19:05:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 48B5F614D6;
-	Thu, 25 Sep 2025 19:03:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A9BEE4145E;
+	Thu, 25 Sep 2025 19:05:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KOSSoM28VO5Y; Thu, 25 Sep 2025 19:03:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QodjaQNYbjhw; Thu, 25 Sep 2025 19:05:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7831B614C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1C9541464
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7831B614C8;
-	Thu, 25 Sep 2025 19:03:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 53279199
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 19:03:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1C9541464;
+	Thu, 25 Sep 2025 19:05:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B0B01177
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 19:05:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 39A4E8416A
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 19:03:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A2EDF84313
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 19:05:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tly2u08t_whG for <buildroot@buildroot.org>;
- Thu, 25 Sep 2025 19:03:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46B3884311
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 46B3884311
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 19:03:45 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 30E3386386; Thu, 25 Sep 2025 19:03:45 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 25 Sep 2025 20:58:34 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e0ed51ca8b9ec854caf33c7698d09fa8526f2c55
-X-Git-Newrev: 20f99312c9ae6b20da8a5c801d972d76c8c0784f
-X-Patchwork-Hint: ignore
-Message-Id: <20250925190345.30E3386386@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] DEVELOPERS: Remove
- adam.duskett@amarulasolutions from sway packages
+ id j8PfyXy_lr6E for <buildroot@buildroot.org>;
+ Thu, 25 Sep 2025 19:05:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CED2984311
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CED2984311
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CED2984311
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 19:05:39 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 06D3D19F57B;
+ Thu, 25 Sep 2025 21:05:35 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 25 Sep 2025 21:05:35 +0200
+MIME-Version: 1.0
+Date: Thu, 25 Sep 2025 21:05:35 +0200
+To: Adam Duskett <adam.duskett@amarulasolutions.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250925091956.25697-1-adam.duskett@amarulasolutions.com>
+References: <20250925091956.25697-1-adam.duskett@amarulasolutions.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <83470a17ab7eaf8e331311757144ad00@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1758827137;
+ bh=AatcWcP1oKeB+yNDJMSHtmgeSDyAFt8uSkap42SNRfQ=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=G9ZGAYkxn0Ftz0K05IBrX9HkHjiJpeKsAfEFRL0lI1XwPbiu2gCm36wpV2t0Gjrq7
+ aEPvhV401ZB9yDb1z1M/8rFIlOtSJilEYr5J/4ZeADyPW80cYHsZC/tOajye+DA6I7
+ EKbsbBDFzagwkaevhDhLKPs4alt2H0Nui1xGnRFCpZprsiAIePQOYNqkuRpSIuxCzy
+ Tj3YRKhmal3y2H9tvQpGPAkPkWTP8mphjxZorzlL4tjRwXmv1iAP3jKghCSV8GW5U3
+ yDMaBxlq5h+whySpYP7fqTTd0C4YygJwEp7ttlUsouTO68sPyBIukoNi6ayVVIrW5v
+ 2DlZlugiUzlSg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=G9ZGAYkx
+Subject: Re: [Buildroot] [PATCH 1/1] DEVELOPERS: Remove
+ adam.duskett@amarulasolutions from sway package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,49 +83,19 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20f99312c9ae6b20da8a5c801d972d76c8c0784f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 25/09/2025 11:19, Adam Duskett wrote:
+> Patches submitted to update these packages have gone ignored for
+> months without comment, and I no longer wish to recieve daily
+> emails about them being out of date.
+> 
+> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 
-Patches submitted to update these packages have gone ignored for
-months without comment, and I no longer wish to recieve daily
-emails about them being out of date.
-
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- DEVELOPERS | 5 -----
- 1 file changed, 5 deletions(-)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9094973fdf..fc561eb1ea 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -28,9 +28,6 @@
- 
- N:	Adam Duskett <adam.duskett@amarulasolutions.com>
- F:	package/depot-tools/
--F:	package/dmenu-wayland/
--F:	package/fcft/
--F:	package/foot/
- F:	package/flutter-engine/
- F:	package/flutter-packages/
- F:	package/flutter-packages/flutter-adaptive-scaffold-example/
-@@ -42,9 +39,7 @@ F:	package/flutter-packages/flutter-rfw-local-example/
- F:	package/flutter-pi/
- F:	package/flutter-sdk-bin/
- F:	package/ivi-homescreen/
--F:	package/libutempter/
- F:	package/mender-update-modules/
--F:	package/tllist/
- F:	support/testing/tests/package/test_flutter.py
- 
- N:	Adam Heinrich <adam@adamh.cz>
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
