@@ -1,105 +1,106 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85C7BCAC5B0
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:17:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E54ACCAC5BC
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:17:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6150B411E9;
-	Thu, 25 Sep 2025 20:17:20 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PI7Z3fi1BuDg; Thu, 25 Sep 2025 20:17:19 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBA02416F8
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DBA02416F8;
-	Thu, 25 Sep 2025 20:17:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 208B8177
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:17:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0D71561553
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:17:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B8B4F615D6;
+	Thu, 25 Sep 2025 20:17:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2oRQ2g8SH9qU for <buildroot@buildroot.org>;
- Thu, 25 Sep 2025 20:17:02 +0000 (UTC)
+ id RWoaPScjEPUJ; Thu, 25 Sep 2025 20:17:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E060B615EC
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id E060B615EC;
+	Thu, 25 Sep 2025 20:17:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7C825177
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:17:04 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7A53C41678
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:17:04 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aIPntYzsZepB for <buildroot@buildroot.org>;
+ Thu, 25 Sep 2025 20:17:03 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AF04E6156B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF04E6156B
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AF04E6156B
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:17:01 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-46e37d10ed2so10426335e9.2
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 13:17:01 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7D9CF4169A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D9CF4169A
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7D9CF4169A
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:17:03 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-3c68ac7e18aso816351f8f.2
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 13:17:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1758831420; x=1759436220;
+ d=1e100.net; s=20230601; t=1758831421; x=1759436221;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=Riy/XvlfzNS8NFdHkPGI+/P9clsaHCUMBD7PFD6hMAE=;
- b=WzlNJJ0rHJ+N2sMp/yA8TVvjI1pDuDp31hgfomsch3lXXAf1BN4u7ylaULRTJwCxDi
- xVRewKwRpEKDh7Ia+0c6nVhHOEgKJKqqfLKQR4s2MWAlMz4yS9gpydk1BYdH5kEj38j8
- BFacy98cky9p2hqeNsDHdKF2oj1SnQ2YfXMZ/XtD49eD2btjmV1uWlkryLI9dvFkIhn/
- Hl3ugvxv7gK83YBjdIZ2Lh3WcpHjU+jLTpBm0Lwh+K2cWV/kI/zskM/6I0D/4WuuEZOZ
- ds6cH1H1HjhtvQ9T4SGVoNP1XBr95r/a9awWW5tBXmXfujUSR7oNTPE5sGjpE5PA9iya
- 3yYQ==
+ bh=Qsx5lvQZj4m5YCjxCl1BtrRkdyt/iKOA4TimABKJNE4=;
+ b=KQGcCIEZjdkJDqVRzpy01Oa0orjmPJ4MYo9VMGcMK/TH0Ovl5z/o/YfFxB5LAgm+tQ
+ QC4ws2FQ17RUsKTrwn3XDZDaGMHfGSuGEiKzQbXzemzKajg0bvJffZF8WHEZ57tRuz9M
+ gSKMJGYpy16PJPwY/9zXhrnDgKBB1GYhcijdDeZ7qHSA13XAH5ma8jRF4v52yMUki0qr
+ C6RjhOm+0myh1QXVvbgQ97zkOHn8VV1rOghce4nq34PVA775UIrx2NorYzlHcUnTfs6N
+ BVd0v8g7wNADoeqvIgJUZ/iweUt/NhsA3LsEP+xGIbnUBdG81dP6TXTCJMKVkOCt6cY7
+ 7faw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUQbUpBXjKDlxSHObUh8ydPxd225sTueF37ySuXXr23IFHk5DcGCm649I2IpqzjjRXUWc9Stj50L34=@buildroot.org
-X-Gm-Message-State: AOJu0YxNoB7Nd5PmPzilCr12HW0fMgjEPViFMb04GQ/CMz+MFZZmN2U0
- +2xzZBinNDYIhNWikl88svxjE7RleyjdXpYKN8Y9abiP8Qk8jJYHxdZWG37opPkDLAvFZEL598d
- YGp496eA=
-X-Gm-Gg: ASbGnctl9gONHJuwHBCLousltzU4SXjifHaapuSb9DjLNncY2KRNXWF6czHVQ8rqqu5
- UAMgaqXoFCLC7llwCT10OxDxN5jMWisfHxhS1IqScXu8zpUfl2Kcjgf6Q/phUyS34/vA0Vdd74/
- Ha0CpEPpazYSHM3pRgyERc+yWBDP5pPJoYzVdpRCZn724G3n9YRziLnfzZ6xYHtyVAdsmPdtATc
- jE6xHIYPQBrDSm6hr2YcNSy5hAw8C6vV5I6aYMHMQXhHNJxzNQEaUHRV0XFz0/iVgcro25oQIIb
- UEEvX/mq8lxTs8x+WiC+qdbcNRkTJ+Q//oTMgGBpRpUYPvNuUY/E/8Lg83i8+bxfwMxV3CkirOu
- O26gOpg0HNU3lwMc=
-X-Google-Smtp-Source: AGHT+IGXKNuhJGgeFDA2SlHZkmYcTtKwBn5kfqyNCx26kq9HE1zSElzeXo8rEvjcCEgqdoIT1uVp6A==
-X-Received: by 2002:a05:600c:1f8c:b0:46d:6939:a83 with SMTP id
- 5b1f17b1804b1-46e32a3cec3mr42245025e9.28.1758831419574; 
- Thu, 25 Sep 2025 13:16:59 -0700 (PDT)
+ AJvYcCV8CqI58vPi9ngbXQvMzq6Y8f7kbUWlWZoee4q2Dl2WyHoYNkrEE+3CVWYiYrespCzdpjNyHepBMg0=@buildroot.org
+X-Gm-Message-State: AOJu0Yx7KE9en7WTgH3R/y8ZF/smYDvBLlVmXZVNXyZkic+voWpmVpRF
+ JpuOXMkn7xxnEhoxXVAiysBStivjqY/Uw+RBuzE+cLEvOVNy2QDvrUEyiXJ05srufuZWhIQVwvJ
+ PxrKBvrk=
+X-Gm-Gg: ASbGnct6YRY3qlDG0y7Jb+z56TbGda0nBiTdfySDXNUHF/pOEktBQNoEhybyYeZksoP
+ moBt3mby7IJ9ZqzMjJNmLlcjVvwKSU5GFi+U/7Pssa/OaKgK9hxmsbuhi/ztWLSxzJzKB7BvIz6
+ gSv8ExY6PSOKD23BySAyzPBPRTLzFRKIS2pgxTul5opBp66Dg/odpwgx6HnyQ1q0dJbzumniSn2
+ a5u5mBYgxPlybX/SOAwG0AZuXmlurqPFh3H4W5IF5iQfSIOZ2aA9jrgZmGOe5wykg7SrD+Gruaj
+ EItwHerH56cO9Jd1Rf8da1QL9f9XAUUxJcsed/JNuYqOFICX1MEMjo1fWReGEc3k9gA0qkp2eUM
+ qIP27J8GCM6L10Js=
+X-Google-Smtp-Source: AGHT+IFStYJZ7kzkfdWAxWX60j1IZZc3V4RK9hwaCpkrUhAFomOIM1L+Nw2qWWIS01E5vknMl1ji/Q==
+X-Received: by 2002:a05:6000:40e0:b0:3e1:9b75:f0b8 with SMTP id
+ ffacd0b85a97d-40e499acc26mr4003513f8f.47.1758831421446; 
+ Thu, 25 Sep 2025 13:17:01 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-46e2ab31f62sm89104235e9.15.2025.09.25.13.16.59
+ ffacd0b85a97d-40fc7c41e52sm4090951f8f.51.2025.09.25.13.17.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 25 Sep 2025 13:16:59 -0700 (PDT)
-To: Waldemar Brodkorb <wbx@openadk.org>
+ Thu, 25 Sep 2025 13:17:01 -0700 (PDT)
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 25 Sep 2025 22:16:58 +0200
-Message-ID: <20250925201658.44232-1-thomas.perale@mind.be>
+Date: Thu, 25 Sep 2025 22:17:00 +0200
+Message-ID: <20250925201700.44346-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <aM2fDL1IHgxX7arz@waldemar-brodkorb.de>
-References: <aM2fDL1IHgxX7arz@waldemar-brodkorb.de>
+In-Reply-To: <20250920111244.2575859-2-dario.binacchi@amarulasolutions.com>
+References: <20250920111244.2575859-2-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1758831420; x=1759436220; darn=buildroot.org;
+ d=mind.be; s=google; t=1758831421; x=1759436221; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=Riy/XvlfzNS8NFdHkPGI+/P9clsaHCUMBD7PFD6hMAE=;
- b=DM+aU7wMBSw3wVOebio6WbcWgf3V6iS6TjudkPVsJiKyG4NEQqBDKFZ2fsqes6cr1W
- TeB0S0WHg4twqA4IioIxAC3rY4Z3hzu0DQgrzyabb4/tSQQZlayT9Sa7+zrn7KnUxtTZ
- iAL/1Iwz1mXQdwTKiDVEvkohB5r/99FmBMN17cRct5s5wBg1UgHWwNKMT24cUI6C1F7l
- iTgAyG/g3Cm2sGVfbWj94h6rbDLQw8OUNezFwmPuDu/0IvN+UKWyRiF8OO81J8rVHM5p
- K1MGhERX3er9Qj1AuRxieLJ6o486fz42dOiEiZjN7Aim6UFp/dUxCAtrLCihT8aRPFzb
- 4+4A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=Qsx5lvQZj4m5YCjxCl1BtrRkdyt/iKOA4TimABKJNE4=;
+ b=KvrxhLw+chkkyLHfaLSfRPK4hd7diQ+PWTUPLTvhT1Jwp2fnj+599RUds5Y2FDh/h9
+ wJZT4oeCb0PG7HxmMIMNI+r1fGqXP37fD+Gh5SbZzPYbbvOldGwzTciajR63XRbiT2lD
+ yUh9EpIHjLxxxWU1vhivpBThQwAxQFGQS3nUUyP/r8gR9gYN+WyLaIsADjNR8/cUPnEn
+ YN7GAFrzhn0vbxcPtwsDJN/5x7LKn8v4zW2oQAx5lhLpqKVb8HIQkonLF+wbFkTHceqo
+ o0AANvt5quDWqD1flE1zynxg1Nl4sdaP0SW67tXnekIHCCp3XlGAUFY1UZcyE11EunDa
+ JD2A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=DM+aU7wM
-Subject: Re: [Buildroot] [PATCH] package/uclibc: bump to 1.0.55
+ header.a=rsa-sha256 header.s=google header.b=KvrxhLw+
+Subject: Re: [Buildroot] [PATCH 2/2] DEVELOPERS: add Dario Binacchi for
+ cmocka
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,110 +120,28 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Finally the aarch64 tls bug is fixed. (python 3.13 segfault)
-> Unfortunately it is not covered by any testcase of uClibc-ng-test.
-> 
-> Here is the git shortlog for the release:
-> 
-> Marius Melzer (1):
->       malloc-standard: Fix truncation problem in malloc
-> 
-> Waldemar Brodkorb (5):
->       Fix Sysvipc for ARM, AARCH64, RISCV64, KVX and m68k
->       remove uClibc specific gettext_printf
->       aarch64: do not force tls-model in CPU_CFLAGS, this isn't required
->       aarch64: respect r_addend for TLSDESC relocations
->       bump version for 1.0.55 release
-> 
-> yliu (5):
->       mips32: Preventing FORCE_FRAME_POINTER from being optimized away
->       mips32: Define __IPC_64 according to kernel version
->       time64: fixed msgctl/semctl/shmctl result errors for for MIPS32/RISCV32
->       time64: fix *ctl functions in mips32eb/mips64
->       time64: fix *ctl functions in mips32eb
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
 Applied to 2025.02.x, 2025.05.x & 2025.08.x. Thanks
 
 > ---
+>  DEVELOPERS | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Dear stable Maintainers, it would be nice if you could update all
-> stable branches with this maintenance release.
-> 
-> ---
->  ...emove-uClibc-specific-gettext_printf.patch | 34 -------------------
->  package/uclibc/uclibc.hash                    |  4 +--
->  package/uclibc/uclibc.mk                      |  2 +-
->  3 files changed, 3 insertions(+), 37 deletions(-)
->  delete mode 100644 package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch
-> 
-> diff --git a/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch b/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch
-> deleted file mode 100644
-> index 96736da562..0000000000
-> --- a/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch
-> +++ /dev/null
-> @@ -1,34 +0,0 @@
-> -From 9ffed9adb130d45b9f31ca7a305153e86586c877 Mon Sep 17 00:00:00 2001
-> -From: Waldemar Brodkorb <wbx@openadk.org>
-> -Date: Fri, 15 Aug 2025 20:29:52 +0200
-> -Subject: [PATCH] remove uClibc specific gettext_printf
-> -
-> -Other C libraries like musl/glibc does not define it.
-> -Including stdio.h here breaks Grub2 compilation with
-> -gcc 14 and above.
-> -Thanks to Thomas Petazzoni for analyzing the Grub2 build error.
-> -
-> -Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> -Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> -Upstream: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=9ffed9adb130d45b9f31ca7a305153e86586c877
-> ----
-> - include/libintl.h | 3 ---
-> - 1 file changed, 3 deletions(-)
-> -
-> -diff --git a/include/libintl.h b/include/libintl.h
-> -index b7123a963..6d8b9f342 100644
-> ---- a/include/libintl.h
-> -+++ b/include/libintl.h
-> -@@ -50,9 +50,6 @@ char *bindtextdomain(const char *domainname, const char *dirname);
-> - 
-> - #endif
-> - 
-> --#include <stdio.h>
-> --#define gettext_printf(args...) printf(args)
-> --
-> - /* to supply LC_MESSAGES and other stuff GNU expects to be exported when
-> -    including libintl.h */
-> - #include <locale.h>
-> --- 
-> -2.47.2
-> -
-> diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-> index 8d8b333958..56174a33b8 100644
-> --- a/package/uclibc/uclibc.hash
-> +++ b/package/uclibc/uclibc.hash
-> @@ -1,4 +1,4 @@
-> -# From https://downloads.uclibc-ng.org/releases/1.0.54/uClibc-ng-1.0.54.tar.xz.sha256
-> -sha256  d1ecf65cc2217dd4118a4dafc1abf27c585b5cb578f3bd7991fc640b79643ff2  uClibc-ng-1.0.54.tar.xz
-> +# From https://downloads.uclibc-ng.org/releases/1.0.55/uClibc-ng-1.0.55.tar.xz.sha256
-> +sha256  5f7f3aafddb2ca08fb295be45561c0188407103d7446cfd264b9b822fed3ed2d  uClibc-ng-1.0.55.tar.xz
->  # Locally calculated
->  sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
-> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-> index 1e49463dd4..0c303d77f8 100644
-> --- a/package/uclibc/uclibc.mk
-> +++ b/package/uclibc/uclibc.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -UCLIBC_VERSION = 1.0.54
-> +UCLIBC_VERSION = 1.0.55
->  UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
->  UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
->  UCLIBC_LICENSE = LGPL-2.1+
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 16d9ee892bdb..121455035926 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -806,6 +806,7 @@ F:	configs/stm32f769_disco_sd_defconfig
+>  F:	package/aespipe/
+>  F:	package/armadillo/
+>  F:	package/babeld/
+> +F:	package/cmocka/
+>  F:	package/iana-assignments/
+>  F:	package/inih/
+>  F:	package/pocketpy/
 > -- 
-> 2.47.3
+> 2.43.0
 > 
 > _______________________________________________
 > buildroot mailing list
