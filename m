@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1055CAC5B5
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:20:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20303CAC5B0
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:20:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C7D8441877;
-	Thu, 25 Sep 2025 20:20:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C40A76170C;
+	Thu, 25 Sep 2025 20:20:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JyRm3v_ExYST; Thu, 25 Sep 2025 20:20:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id W9cIad7p7Nlx; Thu, 25 Sep 2025 20:20:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3B834185E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97636616FD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E3B834185E;
-	Thu, 25 Sep 2025 20:20:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1353E12D
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 97636616FD;
+	Thu, 25 Sep 2025 20:20:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 87D8F12D
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0B7BA41525
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 34D3A412A7
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oAgMyVhauNu7 for <buildroot@buildroot.org>;
- Thu, 25 Sep 2025 20:19:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7U6v3Zp-pYXC for <buildroot@buildroot.org>;
+ Thu, 25 Sep 2025 20:19:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DC1E411E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C28E4412AF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3DC1E411E9
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C28E4412AF
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3BD5986443; Thu, 25 Sep 2025 20:19:43 +0000 (UTC)
+ id BE39186443; Thu, 25 Sep 2025 20:19:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 25 Sep 2025 22:07:46 +0200
+Date: Thu, 25 Sep 2025 22:07:35 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 73aa633876e9d3e2632a9204800448cfd28227fd
-X-Git-Newrev: eb81d4d8ce37d4cd27ed171859b71124802dce7c
+X-Git-Oldrev: 461ec47cd0542f359db5764dd1e951a3f1db0e48
+X-Git-Newrev: 1319b99257d689a629f7aece1a59880cee51a62f
 X-Patchwork-Hint: ignore
-Message-Id: <20250925201943.3BD5986443@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/uclibc: bump to
- 1.0.55
+Message-Id: <20250925201942.BE39186443@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/jasper: add patch
+ for CVE-2025-8835
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,106 +66,224 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb81d4d8ce37d4cd27ed171859b71124802dce7c
+commit: https://git.buildroot.net/buildroot/commit/?id=1319b99257d689a629f7aece1a59880cee51a62f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Finally the aarch64 tls bug is fixed. (python 3.13 segfault)
-Unfortunately it is not covered by any testcase of uClibc-ng-test.
+This fixes the following vulnerability:
 
-Here is the git shortlog for the release:
+- CVE-2025-8835:
 
-Marius Melzer (1):
-      malloc-standard: Fix truncation problem in malloc
+A vulnerability was found in JasPer up to 4.2.5. Affected by this
+vulnerability is the function jas_image_chclrspc of the file
+src/libjasper/base/jas_image.c of the component Image Color Space
+Conversion Handler. The manipulation leads to null pointer dereference.
+It is possible to launch the attack on the local host. The exploit has
+been disclosed to the public and may be used. The identifier of the
+patch is bb7d62bd0a2a8e0e1fdb4d603f3305f955158c52. It is recommended to
+apply a patch to fix this issue.
 
-Waldemar Brodkorb (5):
-      Fix Sysvipc for ARM, AARCH64, RISCV64, KVX and m68k
-      remove uClibc specific gettext_printf
-      aarch64: do not force tls-model in CPU_CFLAGS, this isn't required
-      aarch64: respect r_addend for TLSDESC relocations
-      bump version for 1.0.55 release
+For more information see:
+  - https://nvd.nist.gov//vuln/detail/CVE-2025-8835
+  - https://github.com/jasper-software/jasper/commit/bb7d62bd0a2a8e0e1fdb4d603f3305f955158c52
 
-yliu (5):
-      mips32: Preventing FORCE_FRAME_POINTER from being optimized away
-      mips32: Define __IPC_64 according to kernel version
-      time64: fixed msgctl/semctl/shmctl result errors for for MIPS32/RISCV32
-      time64: fix *ctl functions in mips32eb/mips64
-      time64: fix *ctl functions in mips32eb
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Tested-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 5250bba8e5b1aaeb58977baf1d91e2be66656476)
+(cherry picked from commit 6e81b51f683e075d4a20a6c28a0fd778d977f4a4)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...001-remove-uClibc-specific-gettext_printf.patch | 34 ----------------------
- package/uclibc/uclibc.hash                         |  4 +--
- package/uclibc/uclibc.mk                           |  2 +-
- 3 files changed, 3 insertions(+), 37 deletions(-)
+ package/jasper/0002-Fixes-400.patch | 169 ++++++++++++++++++++++++++++++++++++
+ package/jasper/jasper.mk            |   3 +
+ 2 files changed, 172 insertions(+)
 
-diff --git a/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch b/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch
-deleted file mode 100644
-index 96736da562..0000000000
---- a/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 9ffed9adb130d45b9f31ca7a305153e86586c877 Mon Sep 17 00:00:00 2001
--From: Waldemar Brodkorb <wbx@openadk.org>
--Date: Fri, 15 Aug 2025 20:29:52 +0200
--Subject: [PATCH] remove uClibc specific gettext_printf
--
--Other C libraries like musl/glibc does not define it.
--Including stdio.h here breaks Grub2 compilation with
--gcc 14 and above.
--Thanks to Thomas Petazzoni for analyzing the Grub2 build error.
--
--Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--Upstream: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=9ffed9adb130d45b9f31ca7a305153e86586c877
-----
-- include/libintl.h | 3 ---
-- 1 file changed, 3 deletions(-)
--
--diff --git a/include/libintl.h b/include/libintl.h
--index b7123a963..6d8b9f342 100644
----- a/include/libintl.h
--+++ b/include/libintl.h
--@@ -50,9 +50,6 @@ char *bindtextdomain(const char *domainname, const char *dirname);
-- 
-- #endif
-- 
---#include <stdio.h>
---#define gettext_printf(args...) printf(args)
---
-- /* to supply LC_MESSAGES and other stuff GNU expects to be exported when
--    including libintl.h */
-- #include <locale.h>
---- 
--2.47.2
--
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index 8d8b333958..56174a33b8 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.uclibc-ng.org/releases/1.0.54/uClibc-ng-1.0.54.tar.xz.sha256
--sha256  d1ecf65cc2217dd4118a4dafc1abf27c585b5cb578f3bd7991fc640b79643ff2  uClibc-ng-1.0.54.tar.xz
-+# From https://downloads.uclibc-ng.org/releases/1.0.55/uClibc-ng-1.0.55.tar.xz.sha256
-+sha256  5f7f3aafddb2ca08fb295be45561c0188407103d7446cfd264b9b822fed3ed2d  uClibc-ng-1.0.55.tar.xz
- # Locally calculated
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 1e49463dd4..0c303d77f8 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/jasper/0002-Fixes-400.patch b/package/jasper/0002-Fixes-400.patch
+new file mode 100644
+index 0000000000..b663f1e72e
+--- /dev/null
++++ b/package/jasper/0002-Fixes-400.patch
+@@ -0,0 +1,169 @@
++From bb7d62bd0a2a8e0e1fdb4d603f3305f955158c52 Mon Sep 17 00:00:00 2001
++From: Michael Adams <mdadams@ece.uvic.ca>
++Date: Tue, 29 Jul 2025 20:16:35 -0700
++Subject: [PATCH] Fixes #400.
++
++Added a check for a missing color component in the jas_image_chclrspc
++function.
++
++CVE: CVE-2025-8835
++Upstream: https://github.com/jasper-software/jasper/commit/bb7d62bd0a2a8e0e1fdb4d603f3305f955158c52
++[thomas: backport to v2.0.33]
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ src/libjasper/base/jas_image.c | 71 ++++++++++++++++++++++++++++------
++ 1 file changed, 59 insertions(+), 12 deletions(-)
++
++diff --git a/src/libjasper/base/jas_image.c b/src/libjasper/base/jas_image.c
++index 68a94e1..cd99ba2 100644
++--- a/src/libjasper/base/jas_image.c
+++++ b/src/libjasper/base/jas_image.c
++@@ -112,6 +112,8 @@ static long convert(long val, bool oldsgnd, unsigned oldprec, bool newsgnd,
++   unsigned newprec);
++ static void jas_image_calcbbox2(const jas_image_t *image, jas_image_coord_t *tlx,
++   jas_image_coord_t *tly, jas_image_coord_t *brx, jas_image_coord_t *bry);
+++static jas_cmcmptfmt_t* jas_cmcmptfmt_array_create(int n);
+++static void jas_cmcmptfmt_array_destroy(jas_cmcmptfmt_t* cmptfmts, int n);
++ 
++ /******************************************************************************\
++ * Global data.
++@@ -409,6 +411,31 @@ static void jas_image_cmpt_destroy(jas_image_cmpt_t *cmpt)
++ 	jas_free(cmpt);
++ }
++ 
+++static jas_cmcmptfmt_t* jas_cmcmptfmt_array_create(int n)
+++{
+++	jas_cmcmptfmt_t* cmptfmts;
+++	if (!(cmptfmts = jas_alloc2(n, sizeof(jas_cmcmptfmt_t)))) {
+++		return 0;
+++	}
+++	for (int i = 0; i < n; ++i) {
+++		cmptfmts[i].buf = 0;
+++	}
+++	return cmptfmts;
+++}
+++
+++static void jas_cmcmptfmt_array_destroy(jas_cmcmptfmt_t* cmptfmts, int n)
+++{
+++	assert(cmptfmts);
+++	assert(n > 0);
+++	for (int i = 0; i < n; ++i) {
+++		if (cmptfmts[i].buf) {
+++			jas_free(cmptfmts[i].buf);
+++		}
+++		cmptfmts[i].buf = 0;
+++	}
+++	jas_free(cmptfmts);
+++}
+++
++ /******************************************************************************\
++ * Load and save operations.
++ \******************************************************************************/
++@@ -1470,19 +1497,25 @@ jas_image_t *jas_image_chclrspc(jas_image_t *image, const jas_cmprof_t *outprof,
++ 	jas_cmcmptfmt_t *incmptfmts;
++ 	jas_cmcmptfmt_t *outcmptfmts;
++ 
+++	assert(image);
+++	assert(outprof);
+++
++ #if 0
++ jas_eprintf("IMAGE\n");
++ jas_image_dump(image, stderr);
++ #endif
++ 
++-	if (image->numcmpts_ == 0)
+++	if (!jas_image_numcmpts(image)) {
++ 		/* can't work with a file with no components;
++ 		   continuing would crash because we'd attempt to
++ 		   obtain information about the first component */
++ 		return NULL;
+++	}
++ 
++ 	outimage = 0;
++ 	xform = 0;
+++	incmptfmts = 0;
+++	outcmptfmts = 0;
++ 	if (!(inimage = jas_image_copy(image)))
++ 		goto error;
++ 	image = 0;
++@@ -1565,15 +1598,21 @@ jas_image_dump(image, stderr);
++ 	}
++ 
++ 	inpixmap.numcmpts = numinclrchans;
++-	if (!(incmptfmts = jas_alloc2(numinclrchans, sizeof(jas_cmcmptfmt_t)))) {
+++	assert(numinclrchans != 0);
+++	if (!(incmptfmts = jas_cmcmptfmt_array_create(numinclrchans))) {
++ 		abort();
++ 	}
++ 	inpixmap.cmptfmts = incmptfmts;
++ 	for (unsigned i = 0; i < numinclrchans; ++i) {
++ 		const int j = jas_image_getcmptbytype(inimage, JAS_IMAGE_CT_COLOR(i));
+++		if (j < 0) {
+++			jas_eprintf("missing color component %d\n", i);
+++			goto error;
+++		}
++ 		if (!(incmptfmts[i].buf = jas_alloc2(width, sizeof(long)))) {
++ 			goto error;
++ 		}
+++		assert(j >= 0 && j < jas_image_numcmpts(inimage));
++ 		incmptfmts[i].prec = jas_image_cmptprec(inimage, j);
++ 		incmptfmts[i].sgnd = jas_image_cmptsgnd(inimage, j);
++ 		incmptfmts[i].width = width;
++@@ -1581,15 +1620,21 @@ jas_image_dump(image, stderr);
++ 	}
++ 
++ 	outpixmap.numcmpts = numoutclrchans;
++-	if (!(outcmptfmts = jas_alloc2(numoutclrchans, sizeof(jas_cmcmptfmt_t)))) {
+++	if (!(outcmptfmts = jas_cmcmptfmt_array_create(numoutclrchans))) {
++ 		abort();
++ 	}
++ 	outpixmap.cmptfmts = outcmptfmts;
++ 
++ 	for (unsigned i = 0; i < numoutclrchans; ++i) {
++ 		const int j = jas_image_getcmptbytype(outimage, JAS_IMAGE_CT_COLOR(i));
++-		if (!(outcmptfmts[i].buf = jas_alloc2(width, sizeof(long))))
+++		if (j < 0) {
+++			jas_eprintf("missing color component %d\n", i);
++ 			goto error;
+++		}
+++		if (!(outcmptfmts[i].buf = jas_alloc2(width, sizeof(long)))) {
+++			goto error;
+++		}
+++		assert(j >= 0 && j < jas_image_numcmpts(outimage));
++ 		outcmptfmts[i].prec = jas_image_cmptprec(outimage, j);
++ 		outcmptfmts[i].sgnd = jas_image_cmptsgnd(outimage, j);
++ 		outcmptfmts[i].width = width;
++@@ -1612,14 +1657,8 @@ jas_image_dump(image, stderr);
++ 		}
++ 	}
++ 
++-	for (unsigned i = 0; i < numoutclrchans; ++i) {
++-		jas_free(outcmptfmts[i].buf);
++-	}
++-	jas_free(outcmptfmts);
++-	for (unsigned i = 0; i < numinclrchans; ++i) {
++-		jas_free(incmptfmts[i].buf);
++-	}
++-	jas_free(incmptfmts);
+++	jas_cmcmptfmt_array_destroy(outcmptfmts, numoutclrchans);
+++	jas_cmcmptfmt_array_destroy(incmptfmts, numinclrchans);
++ 	jas_cmxform_destroy(xform);
++ 	jas_image_destroy(inimage);
++ 
++@@ -1631,6 +1670,14 @@ jas_image_dump(outimage, stderr);
++ #endif
++ 	return outimage;
++ error:
+++	if (incmptfmts) {
+++		assert(numinclrchans);
+++		jas_cmcmptfmt_array_destroy(incmptfmts, numinclrchans);
+++	}
+++	if (outcmptfmts) {
+++		assert(numoutclrchans);
+++		jas_cmcmptfmt_array_destroy(outcmptfmts, numoutclrchans);
+++	}
++ 	if (xform)
++ 		jas_cmxform_destroy(xform);
++ 	if (inimage)
++-- 
++2.39.5
+diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
+index dd0badbc8f..527ad6fa8c 100644
+--- a/package/jasper/jasper.mk
++++ b/package/jasper/jasper.mk
+@@ -18,6 +18,9 @@ JASPER_CONF_OPTS = \
+ # 0001-Fixes-367.patch
+ JASPER_IGNORE_CVES += CVE-2023-51257
  
--UCLIBC_VERSION = 1.0.54
-+UCLIBC_VERSION = 1.0.55
- UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
- UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPL-2.1+
++# 0002-Fixes-400.patch
++JASPER_IGNORE_CVES += CVE-2025-8835
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ JASPER_CONF_OPTS += -DJAS_ENABLE_SHARED=OFF
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
