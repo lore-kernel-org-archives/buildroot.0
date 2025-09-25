@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1427ACAC5B0
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:03:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA2B9CAC5B0
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:03:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D88054167B;
-	Thu, 25 Sep 2025 20:03:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8DC9B417C6;
+	Thu, 25 Sep 2025 20:03:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id visufEMjtaYk; Thu, 25 Sep 2025 20:03:28 +0000 (UTC)
+ id XxOlBcnd7XB5; Thu, 25 Sep 2025 20:03:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 802B7417BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12735415D8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 802B7417BD;
-	Thu, 25 Sep 2025 20:03:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 12735415D8;
+	Thu, 25 Sep 2025 20:03:28 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1112812D
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:02:55 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F9A512D
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:02:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 427EC61526
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4BA0C61536
  for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:02:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hCAtE0iC5NO6 for <buildroot@buildroot.org>;
- Thu, 25 Sep 2025 20:02:43 +0000 (UTC)
+ id X1KAE5g0zfhn for <buildroot@buildroot.org>;
+ Thu, 25 Sep 2025 20:02:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C71856153B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01A2661528
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C71856153B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 01A2661528
  for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:02:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C4D3D86441; Thu, 25 Sep 2025 20:02:42 +0000 (UTC)
+ id F3A4586443; Thu, 25 Sep 2025 20:02:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 25 Sep 2025 21:58:10 +0200
+Date: Thu, 25 Sep 2025 21:57:43 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 62add70c9f7b3afec33db52de67dbc202f841759
-X-Git-Newrev: f3fec7955084f1e264d4d52476eaa3fc75e6e6dc
+X-Git-Oldrev: 2004334a6bd600df37aca83508e2039635b89f4f
+X-Git-Newrev: eb0fc97fb81ced8d792aa4f0470097f21a020c15
 X-Patchwork-Hint: ignore
-Message-Id: <20250925200242.C4D3D86441@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/poco: add patch
- for CVE-2025-6375
+Message-Id: <20250925200241.F3A4586443@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] utils/scanpypi: remove
+ python six module
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,89 +66,124 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3fec7955084f1e264d4d52476eaa3fc75e6e6dc
+commit: https://git.buildroot.net/buildroot/commit/?id=eb0fc97fb81ced8d792aa4f0470097f21a020c15
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-This fixes the following vulnerability:
+We dropped support for python2 a while back in [1], as such we
+can remove the python six module which was only needed for
+backwards comaptibility with python2.
 
-- CVE-2025-6375:
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/2743ce00ca61fde1537b64a165a69d497052be58
 
-A vulnerability was found in poco up to 1.14.1. It has been rated as
-problematic. Affected by this issue is the function MultipartInputStream
-of the file Net/src/MultipartReader.cpp. The manipulation leads to null
-pointer dereference. The attack needs to be approached locally. The
-exploit has been disclosed to the public and may be used. Upgrading to
-version 1.14.2 is able to address this issue. The patch is identified as
-6f2f85913c191ab9ddfb8fae781f5d66afccf3bf. It is recommended to upgrade
-the affected component.
-
-For more information see:
-  - https://nvd.nist.gov//vuln/detail/CVE-2025-6375
-  - https://github.com/pocoproject/poco/commit/6f2f85913c191ab9ddfb8fae781f5d66afccf3bf
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[Julien: add commit ref removing python2 support]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 36357247d5826386b57de8c8cf5d16ca3d471789)
+(cherry picked from commit 53eb75ef535b656e9cd762fb9412dc5c1340f64b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...Net-A-SEGV-at-Net-src-MultipartReader-cpp.patch | 34 ++++++++++++++++++++++
- package/poco/poco.mk                               |  3 ++
- 2 files changed, 37 insertions(+)
+ utils/scanpypi | 37 ++++++++++++++-----------------------
+ 1 file changed, 14 insertions(+), 23 deletions(-)
 
-diff --git a/package/poco/0001-fix-Net-A-SEGV-at-Net-src-MultipartReader-cpp.patch b/package/poco/0001-fix-Net-A-SEGV-at-Net-src-MultipartReader-cpp.patch
-new file mode 100644
-index 0000000000..cfb22d690a
---- /dev/null
-+++ b/package/poco/0001-fix-Net-A-SEGV-at-Net-src-MultipartReader-cpp.patch
-@@ -0,0 +1,34 @@
-+From 6f2f85913c191ab9ddfb8fae781f5d66afccf3bf Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?G=C3=BCnter=20Obiltschnig?= <guenter.obiltschnig@appinf.com>
-+Date: Wed, 16 Apr 2025 09:15:33 +0200
-+Subject: [PATCH] fix(Net): A SEGV at Net/src/MultipartReader.cpp:164:1 #4915
-+ (move assertion out of ctor)
-+
-+Upstream: https://github.com/pocoproject/poco/commit/6f2f85913c191ab9ddfb8fae781f5d66afccf3bf
-+CVE: CVE-2025-6375
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ Net/src/MultipartReader.cpp | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/Net/src/MultipartReader.cpp b/Net/src/MultipartReader.cpp
-+index f3a2f2bba2..f4aa27dd86 100644
-+--- a/Net/src/MultipartReader.cpp
-++++ b/Net/src/MultipartReader.cpp
-+@@ -36,7 +36,6 @@ MultipartStreamBuf::MultipartStreamBuf(std::istream& istr, const std::string& bo
-+ 	_boundary(boundary),
-+ 	_lastPart(false)
-+ {
-+-	poco_assert (!boundary.empty() && boundary.length() < STREAM_BUFFER_SIZE - 6);
-+ }
-+ 
-+ 
-+@@ -47,7 +46,7 @@ MultipartStreamBuf::~MultipartStreamBuf()
-+ 
-+ int MultipartStreamBuf::readFromDevice(char* buffer, std::streamsize length)
-+ {
-+-	poco_assert_dbg (length >= _boundary.length() + 6);
-++	poco_assert (!_boundary.empty() && _boundary.length() < length - 6);
-+ 
-+ 	static const int eof = std::char_traits<char>::eof();
-+ 	std::streambuf& buf = *_istr.rdbuf();
-diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index ee740b2377..f7d9cdc009 100644
---- a/package/poco/poco.mk
-+++ b/package/poco/poco.mk
-@@ -11,6 +11,9 @@ POCO_LICENSE_FILES = LICENSE
- POCO_CPE_ID_VENDOR = pocoproject
- POCO_INSTALL_STAGING = YES
+diff --git a/utils/scanpypi b/utils/scanpypi
+index af62c01632..61879e39d4 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -22,16 +22,10 @@ import tempfile
+ import traceback
+ import importlib
+ import importlib.metadata
+-import six.moves.urllib.request
+-import six.moves.urllib.error
+-import six.moves.urllib.parse
+-from six.moves import map
+-from six.moves import zip
+-from six.moves import input
+-if six.PY2:
+-    import StringIO
+-else:
+-    import io
++import urllib.request
++import urllib.error
++import urllib.parse
++import io
  
-+# 0001-fix-Net-A-SEGV-at-Net-src-MultipartReader-cpp.patch
-+POCO_IGNORE_CVES += CVE-2025-6375
-+
- POCO_DEPENDENCIES = \
- 	pcre2 \
- 	zlib \
+ BUF_SIZE = 65536
+ 
+@@ -225,15 +219,15 @@ class BuildrootPackage():
+         self.metadata_url = 'https://pypi.org/pypi/{pkg}/json'.format(
+             pkg=self.real_name)
+         try:
+-            pkg_json = six.moves.urllib.request.urlopen(self.metadata_url).read().decode()
+-        except six.moves.urllib.error.HTTPError as error:
++            pkg_json = urllib.request.urlopen(self.metadata_url).read().decode()
++        except urllib.error.HTTPError as error:
+             print('ERROR:', error.getcode(), error.msg, file=sys.stderr)
+             print('ERROR: Could not find package {pkg}.\n'
+                   'Check syntax inside the python package index:\n'
+                   'https://pypi.python.org/pypi/ '
+                   .format(pkg=self.real_name))
+             raise
+-        except six.moves.urllib.error.URLError:
++        except urllib.error.URLError:
+             print('ERROR: Could not find package {pkg}.\n'
+                   'Check syntax inside the python package index:\n'
+                   'https://pypi.python.org/pypi/ '
+@@ -260,7 +254,7 @@ class BuildrootPackage():
+                 'digests': None}]
+             # In this case, we can't get the name of the downloaded file
+             # from the pypi api, so we need to find it, this should work
+-            urlpath = six.moves.urllib.parse.urlparse(
++            urlpath = urllib.parse.urlparse(
+                 self.metadata['info']['download_url']).path
+             # urlparse().path give something like
+             # /path/to/file-version.tar.gz
+@@ -272,8 +266,8 @@ class BuildrootPackage():
+             try:
+                 print('Downloading package {pkg} from {url}...'.format(
+                     pkg=self.real_name, url=download_url['url']))
+-                download = six.moves.urllib.request.urlopen(download_url['url'])
+-            except six.moves.urllib.error.HTTPError as http_error:
++                download = urllib.request.urlopen(download_url['url'])
++            except urllib.error.HTTPError as http_error:
+                 download = http_error
+             else:
+                 self.used_url = download_url
+@@ -288,7 +282,7 @@ class BuildrootPackage():
+             raise DownloadFailed('Failed to download package {pkg}: '
+                                  'No source archive available'
+                                  .format(pkg=self.real_name))
+-        elif download.__class__ == six.moves.urllib.error.HTTPError:
++        elif download.__class__ == urllib.error.HTTPError:
+             raise download
+ 
+         self.filename = self.used_url['filename']
+@@ -317,10 +311,7 @@ class BuildrootPackage():
+         Keyword arguments:
+         tmp_path -- directory where you want the package to be extracted
+         """
+-        if six.PY2:
+-            as_file = StringIO.StringIO(self.as_string)
+-        else:
+-            as_file = io.BytesIO(self.as_string)
++        as_file = io.BytesIO(self.as_string)
+         if self.filename[-3:] == 'zip':
+             with zipfile.ZipFile(as_file) as as_zipfile:
+                 tmp_pkg = os.path.join(tmp_path, self.buildroot_name)
+@@ -797,12 +788,12 @@ def main():
+             print('Fetching package', package.real_name)
+             try:
+                 package.fetch_package_info()
+-            except (six.moves.urllib.error.URLError, six.moves.urllib.error.HTTPError):
++            except (urllib.error.URLError, urllib.error.HTTPError):
+                 continue
+ 
+             try:
+                 package.download_package()
+-            except six.moves.urllib.error.HTTPError as error:
++            except urllib.error.HTTPError as error:
+                 print('Error: {code} {reason}'.format(code=error.code,
+                                                       reason=error.reason))
+                 print('Error downloading package :', package.buildroot_name)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
