@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1810CAC5B9
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:03:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3106CAC5B0
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:03:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C880761545;
-	Thu, 25 Sep 2025 20:03:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D7C74185C;
+	Thu, 25 Sep 2025 20:03:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1fkxnp7qKDb2; Thu, 25 Sep 2025 20:03:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8ObzhKff6gaJ; Thu, 25 Sep 2025 20:03:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E69161556
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 449EB41842
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0E69161556;
-	Thu, 25 Sep 2025 20:03:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 449EB41842;
+	Thu, 25 Sep 2025 20:03:38 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D9D712D
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:03:00 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0FA70177
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:03:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E470861531
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:02:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 01EA46152C
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:02:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S7-kPDWWsPy8 for <buildroot@buildroot.org>;
- Thu, 25 Sep 2025 20:02:42 +0000 (UTC)
+ id szSqZZ4r34Im for <buildroot@buildroot.org>;
+ Thu, 25 Sep 2025 20:02:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65C0261532
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94CFF61538
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 65C0261532
+ by smtp3.osuosl.org (Postfix) with ESMTP id 94CFF61538
  for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:02:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 641CB8643F; Thu, 25 Sep 2025 20:02:42 +0000 (UTC)
+ id 8F29E86441; Thu, 25 Sep 2025 20:02:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 25 Sep 2025 21:57:57 +0200
+Date: Thu, 25 Sep 2025 21:58:03 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: a4b98a75d92f77ad86bb7a58c659bda762a4dd4b
-X-Git-Newrev: 042bf0e924612941c185a70c98d88b6f96c7f530
+X-Git-Oldrev: eb6a93ab867ba0d3a29c415d83ae184bafbfd46c
+X-Git-Newrev: 4230193b2226cf88ab482cc5d4af2e43de393b35
 X-Patchwork-Hint: ignore
-Message-Id: <20250925200242.641CB8643F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/zziplib: fix
- deprecated CPE
+Message-Id: <20250925200242.8F29E86441@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/jasper: add patch
+ for CVE-2025-8835
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,35 +66,224 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=042bf0e924612941c185a70c98d88b6f96c7f530
+commit: https://git.buildroot.net/buildroot/commit/?id=4230193b2226cf88ab482cc5d4af2e43de393b35
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-The CPE 'zziplib_project:zziplib' is deprecated in favour of
-'gdraheim:zziplib'.
+This fixes the following vulnerability:
 
-See https://nvd.nist.gov/products/cpe/detail/FB4124F9-087E-454D-B5D4-642FF08B23A8
+- CVE-2025-8835:
+
+A vulnerability was found in JasPer up to 4.2.5. Affected by this
+vulnerability is the function jas_image_chclrspc of the file
+src/libjasper/base/jas_image.c of the component Image Color Space
+Conversion Handler. The manipulation leads to null pointer dereference.
+It is possible to launch the attack on the local host. The exploit has
+been disclosed to the public and may be used. The identifier of the
+patch is bb7d62bd0a2a8e0e1fdb4d603f3305f955158c52. It is recommended to
+apply a patch to fix this issue.
+
+For more information see:
+  - https://nvd.nist.gov//vuln/detail/CVE-2025-8835
+  - https://github.com/jasper-software/jasper/commit/bb7d62bd0a2a8e0e1fdb4d603f3305f955158c52
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit c9d185e1823ea4a1c1dad761ac56d3bd9859302f)
+(cherry picked from commit 6e81b51f683e075d4a20a6c28a0fd778d977f4a4)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/zziplib/zziplib.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/jasper/0002-Fixes-400.patch | 169 ++++++++++++++++++++++++++++++++++++
+ package/jasper/jasper.mk            |   3 +
+ 2 files changed, 172 insertions(+)
 
-diff --git a/package/zziplib/zziplib.mk b/package/zziplib/zziplib.mk
-index 0ef53436d2..ba902b84fd 100644
---- a/package/zziplib/zziplib.mk
-+++ b/package/zziplib/zziplib.mk
-@@ -8,7 +8,7 @@ ZZIPLIB_VERSION = 0.13.74
- ZZIPLIB_SITE = $(call github,gdraheim,zziplib,v$(ZZIPLIB_VERSION))
- ZZIPLIB_LICENSE = LGPL-2.0+ or MPL-1.1
- ZZIPLIB_LICENSE_FILES = docs/COPYING.LIB docs/COPYING.MPL docs/copying.htm.md
--ZZIPLIB_CPE_ID_VALID = YES
-+ZZIPLIB_CPE_ID_VENDOR = gdraheim
- ZZIPLIB_INSTALL_STAGING = YES
- ZZIPLIB_CONF_OPTS += \
- 	-DZZIPDOCS=OFF \
+diff --git a/package/jasper/0002-Fixes-400.patch b/package/jasper/0002-Fixes-400.patch
+new file mode 100644
+index 0000000000..b663f1e72e
+--- /dev/null
++++ b/package/jasper/0002-Fixes-400.patch
+@@ -0,0 +1,169 @@
++From bb7d62bd0a2a8e0e1fdb4d603f3305f955158c52 Mon Sep 17 00:00:00 2001
++From: Michael Adams <mdadams@ece.uvic.ca>
++Date: Tue, 29 Jul 2025 20:16:35 -0700
++Subject: [PATCH] Fixes #400.
++
++Added a check for a missing color component in the jas_image_chclrspc
++function.
++
++CVE: CVE-2025-8835
++Upstream: https://github.com/jasper-software/jasper/commit/bb7d62bd0a2a8e0e1fdb4d603f3305f955158c52
++[thomas: backport to v2.0.33]
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ src/libjasper/base/jas_image.c | 71 ++++++++++++++++++++++++++++------
++ 1 file changed, 59 insertions(+), 12 deletions(-)
++
++diff --git a/src/libjasper/base/jas_image.c b/src/libjasper/base/jas_image.c
++index 68a94e1..cd99ba2 100644
++--- a/src/libjasper/base/jas_image.c
+++++ b/src/libjasper/base/jas_image.c
++@@ -112,6 +112,8 @@ static long convert(long val, bool oldsgnd, unsigned oldprec, bool newsgnd,
++   unsigned newprec);
++ static void jas_image_calcbbox2(const jas_image_t *image, jas_image_coord_t *tlx,
++   jas_image_coord_t *tly, jas_image_coord_t *brx, jas_image_coord_t *bry);
+++static jas_cmcmptfmt_t* jas_cmcmptfmt_array_create(int n);
+++static void jas_cmcmptfmt_array_destroy(jas_cmcmptfmt_t* cmptfmts, int n);
++ 
++ /******************************************************************************\
++ * Global data.
++@@ -409,6 +411,31 @@ static void jas_image_cmpt_destroy(jas_image_cmpt_t *cmpt)
++ 	jas_free(cmpt);
++ }
++ 
+++static jas_cmcmptfmt_t* jas_cmcmptfmt_array_create(int n)
+++{
+++	jas_cmcmptfmt_t* cmptfmts;
+++	if (!(cmptfmts = jas_alloc2(n, sizeof(jas_cmcmptfmt_t)))) {
+++		return 0;
+++	}
+++	for (int i = 0; i < n; ++i) {
+++		cmptfmts[i].buf = 0;
+++	}
+++	return cmptfmts;
+++}
+++
+++static void jas_cmcmptfmt_array_destroy(jas_cmcmptfmt_t* cmptfmts, int n)
+++{
+++	assert(cmptfmts);
+++	assert(n > 0);
+++	for (int i = 0; i < n; ++i) {
+++		if (cmptfmts[i].buf) {
+++			jas_free(cmptfmts[i].buf);
+++		}
+++		cmptfmts[i].buf = 0;
+++	}
+++	jas_free(cmptfmts);
+++}
+++
++ /******************************************************************************\
++ * Load and save operations.
++ \******************************************************************************/
++@@ -1470,19 +1497,25 @@ jas_image_t *jas_image_chclrspc(jas_image_t *image, const jas_cmprof_t *outprof,
++ 	jas_cmcmptfmt_t *incmptfmts;
++ 	jas_cmcmptfmt_t *outcmptfmts;
++ 
+++	assert(image);
+++	assert(outprof);
+++
++ #if 0
++ jas_eprintf("IMAGE\n");
++ jas_image_dump(image, stderr);
++ #endif
++ 
++-	if (image->numcmpts_ == 0)
+++	if (!jas_image_numcmpts(image)) {
++ 		/* can't work with a file with no components;
++ 		   continuing would crash because we'd attempt to
++ 		   obtain information about the first component */
++ 		return NULL;
+++	}
++ 
++ 	outimage = 0;
++ 	xform = 0;
+++	incmptfmts = 0;
+++	outcmptfmts = 0;
++ 	if (!(inimage = jas_image_copy(image)))
++ 		goto error;
++ 	image = 0;
++@@ -1565,15 +1598,21 @@ jas_image_dump(image, stderr);
++ 	}
++ 
++ 	inpixmap.numcmpts = numinclrchans;
++-	if (!(incmptfmts = jas_alloc2(numinclrchans, sizeof(jas_cmcmptfmt_t)))) {
+++	assert(numinclrchans != 0);
+++	if (!(incmptfmts = jas_cmcmptfmt_array_create(numinclrchans))) {
++ 		abort();
++ 	}
++ 	inpixmap.cmptfmts = incmptfmts;
++ 	for (unsigned i = 0; i < numinclrchans; ++i) {
++ 		const int j = jas_image_getcmptbytype(inimage, JAS_IMAGE_CT_COLOR(i));
+++		if (j < 0) {
+++			jas_eprintf("missing color component %d\n", i);
+++			goto error;
+++		}
++ 		if (!(incmptfmts[i].buf = jas_alloc2(width, sizeof(long)))) {
++ 			goto error;
++ 		}
+++		assert(j >= 0 && j < jas_image_numcmpts(inimage));
++ 		incmptfmts[i].prec = jas_image_cmptprec(inimage, j);
++ 		incmptfmts[i].sgnd = jas_image_cmptsgnd(inimage, j);
++ 		incmptfmts[i].width = width;
++@@ -1581,15 +1620,21 @@ jas_image_dump(image, stderr);
++ 	}
++ 
++ 	outpixmap.numcmpts = numoutclrchans;
++-	if (!(outcmptfmts = jas_alloc2(numoutclrchans, sizeof(jas_cmcmptfmt_t)))) {
+++	if (!(outcmptfmts = jas_cmcmptfmt_array_create(numoutclrchans))) {
++ 		abort();
++ 	}
++ 	outpixmap.cmptfmts = outcmptfmts;
++ 
++ 	for (unsigned i = 0; i < numoutclrchans; ++i) {
++ 		const int j = jas_image_getcmptbytype(outimage, JAS_IMAGE_CT_COLOR(i));
++-		if (!(outcmptfmts[i].buf = jas_alloc2(width, sizeof(long))))
+++		if (j < 0) {
+++			jas_eprintf("missing color component %d\n", i);
++ 			goto error;
+++		}
+++		if (!(outcmptfmts[i].buf = jas_alloc2(width, sizeof(long)))) {
+++			goto error;
+++		}
+++		assert(j >= 0 && j < jas_image_numcmpts(outimage));
++ 		outcmptfmts[i].prec = jas_image_cmptprec(outimage, j);
++ 		outcmptfmts[i].sgnd = jas_image_cmptsgnd(outimage, j);
++ 		outcmptfmts[i].width = width;
++@@ -1612,14 +1657,8 @@ jas_image_dump(image, stderr);
++ 		}
++ 	}
++ 
++-	for (unsigned i = 0; i < numoutclrchans; ++i) {
++-		jas_free(outcmptfmts[i].buf);
++-	}
++-	jas_free(outcmptfmts);
++-	for (unsigned i = 0; i < numinclrchans; ++i) {
++-		jas_free(incmptfmts[i].buf);
++-	}
++-	jas_free(incmptfmts);
+++	jas_cmcmptfmt_array_destroy(outcmptfmts, numoutclrchans);
+++	jas_cmcmptfmt_array_destroy(incmptfmts, numinclrchans);
++ 	jas_cmxform_destroy(xform);
++ 	jas_image_destroy(inimage);
++ 
++@@ -1631,6 +1670,14 @@ jas_image_dump(outimage, stderr);
++ #endif
++ 	return outimage;
++ error:
+++	if (incmptfmts) {
+++		assert(numinclrchans);
+++		jas_cmcmptfmt_array_destroy(incmptfmts, numinclrchans);
+++	}
+++	if (outcmptfmts) {
+++		assert(numoutclrchans);
+++		jas_cmcmptfmt_array_destroy(outcmptfmts, numoutclrchans);
+++	}
++ 	if (xform)
++ 		jas_cmxform_destroy(xform);
++ 	if (inimage)
++-- 
++2.39.5
+diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
+index dd0badbc8f..527ad6fa8c 100644
+--- a/package/jasper/jasper.mk
++++ b/package/jasper/jasper.mk
+@@ -18,6 +18,9 @@ JASPER_CONF_OPTS = \
+ # 0001-Fixes-367.patch
+ JASPER_IGNORE_CVES += CVE-2023-51257
+ 
++# 0002-Fixes-400.patch
++JASPER_IGNORE_CVES += CVE-2025-8835
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ JASPER_CONF_OPTS += -DJAS_ENABLE_SHARED=OFF
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
