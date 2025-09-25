@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DDE4CAC5B9
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:31:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B393CAC5BB
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:31:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 19D84616EA;
-	Thu, 25 Sep 2025 20:31:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E343661706;
+	Thu, 25 Sep 2025 20:31:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kZvYpBub_A-S; Thu, 25 Sep 2025 20:31:08 +0000 (UTC)
+ id PBSnI8kG-Q9c; Thu, 25 Sep 2025 20:31:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7909261713
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A74E36170A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7909261713;
-	Thu, 25 Sep 2025 20:31:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2961A12D
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A74E36170A;
+	Thu, 25 Sep 2025 20:31:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1130812D
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 432374028E
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F0E1F41602
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FIplNmLLdqer for <buildroot@buildroot.org>;
- Thu, 25 Sep 2025 20:30:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xgnymBCwEaSX for <buildroot@buildroot.org>;
+ Thu, 25 Sep 2025 20:30:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8D38412D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A36534152C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C8D38412D1
+ by smtp4.osuosl.org (Postfix) with ESMTP id A36534152C
  for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C6D7C86433; Thu, 25 Sep 2025 20:30:22 +0000 (UTC)
+ id A173383B7E; Thu, 25 Sep 2025 20:30:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 25 Sep 2025 16:42:02 +0200
+Date: Thu, 25 Sep 2025 16:41:12 +0200
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: f5d88700ecde8767f59fcad79c81cde06f438e6b
-X-Git-Newrev: bcdd49dcebf93a92529e6fd03df1f419c42b0500
+X-Git-Oldrev: 2a81f918393c1233d5de100b7782f80c4c15a1e6
+X-Git-Newrev: 232718e303904683a06c7c6cff7476923c5a6fcf
 X-Patchwork-Hint: ignore
-Message-Id: <20250925203022.C6D7C86433@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/civetweb: add
- patch for CVE-2025-55763
+Message-Id: <20250925203022.A173383B7E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/chocolate-doom:
+ bump to 3.1.1 to fix GCC 15.x issues
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,108 +66,157 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bcdd49dcebf93a92529e6fd03df1f419c42b0500
+commit: https://git.buildroot.net/buildroot/commit/?id=232718e303904683a06c7c6cff7476923c5a6fcf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-This fixes the following vulnerability:
+Changes in 3.1.0:
 
-- CVE-2025-55763
+  https://github.com/chocolate-doom/chocolate-doom/releases/tag/chocolate-doom-3.1.0
 
-Buffer Overflow in the URI parser of CivetWeb 1.14 through 1.16 (latest)
-allows a remote attacker to achieve remote code execution via a crafted
-HTTP request. This vulnerability is triggered during request processing
-and may allow an attacker to corrupt heap memory, potentially leading to
-denial of service or arbitrary code execution.
+Changes in 3.1.1:
 
-For more information, see:
-  - https://nvd.nist.gov//vuln/detail/CVE-2025-55763
-  - https://github.com/civetweb/civetweb/commit/76e222bcb77ba8452e5da4e82ae6cecd499c25e0
+  https://github.com/chocolate-doom/chocolate-doom/releases/tag/chocolate-doom-3.1.1
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+The SDL2_mixer and SDL2_net dependencies are now optional since 3.1.0,
+so adjust the packaging accordingly.
+
+Also, the license file was renamed upstream in commit:
+https://github.com/chocolate-doom/chocolate-doom/commit/91a66a7ecba5e0dea87c8d98237d6a224f13347a
+So _LICENSE_FILES and the .hash file are also updated to reflect
+that change.
+
+Fixes:
+
+  https://autobuild.buildroot.net/results/90a01c5925e7f5f50b3ea06d6ea7b0da66814a15/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Julien: fix license file and hash]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 426d7635c7e99af49c3cc24c122c95b1ed89c082)
+(cherry picked from commit be466c265ba09ed47ec1eb40f006dd17753e69d1)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...erflow-in-directory-URI-slash-redirection.patch | 56 ++++++++++++++++++++++
- package/civetweb/civetweb.mk                       |  3 ++
- 2 files changed, 59 insertions(+)
+ .checkpackageignore                                |  1 -
+ ...01-Remove-redundant-demoextend-definition.patch | 29 ----------------------
+ package/chocolate-doom/Config.in                   |  2 --
+ package/chocolate-doom/chocolate-doom.hash         |  4 +--
+ package/chocolate-doom/chocolate-doom.mk           | 24 +++++++++++++++---
+ 5 files changed, 22 insertions(+), 38 deletions(-)
 
-diff --git a/package/civetweb/0002-Fix-heap-overflow-in-directory-URI-slash-redirection.patch b/package/civetweb/0002-Fix-heap-overflow-in-directory-URI-slash-redirection.patch
-new file mode 100644
-index 0000000000..399fafb4bd
---- /dev/null
-+++ b/package/civetweb/0002-Fix-heap-overflow-in-directory-URI-slash-redirection.patch
-@@ -0,0 +1,56 @@
-+From 76e222bcb77ba8452e5da4e82ae6cecd499c25e0 Mon Sep 17 00:00:00 2001
-+From: krispybyte <krispybyte@proton.me>
-+Date: Sat, 21 Jun 2025 23:33:50 +0300
-+Subject: [PATCH] Fix heap overflow in directory URI slash redirection
-+
-+CVE: CVE-2025-55763
-+Upstream: https://github.com/civetweb/civetweb/commit/76e222bcb77ba8452e5da4e82ae6cecd499c25e0
-+[thomas: fix offset]
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ src/civetweb.c | 23 ++++++++++++++++++-----
-+ 1 file changed, 18 insertions(+), 5 deletions(-)
-+
-+diff --git a/src/civetweb.c b/src/civetweb.c
-+index bbc9aa8be..e969c939f 100644
-+--- a/src/civetweb.c
-++++ b/src/civetweb.c
-+@@ -15242,7 +15242,6 @@ handle_request(struct mg_connection *conn)
-+ 	/* 12. Directory uris should end with a slash */
-+ 	if (file.stat.is_directory && ((uri_len = (int)strlen(ri->local_uri)) > 0)
-+ 	    && (ri->local_uri[uri_len - 1] != '/')) {
-+-
-+ 		/* Path + server root */
-+ 		size_t buflen = UTF8_PATH_MAX * 2 + 2;
-+ 		char *new_path;
-+@@ -15254,12 +15254,26 @@ handle_request(struct mg_connection *conn)
-+ 			mg_send_http_error(conn, 500, "out or memory");
-+ 		} else {
-+ 			mg_get_request_link(conn, new_path, buflen - 1);
-+-			strcat(new_path, "/");
-++
-++			size_t len = strlen(new_path);
-++			if (len + 1 < buflen) {
-++				new_path[len] = '/';
-++				new_path[len + 1] = '\0';
-++				len += 1;
-++			}
-++
-+ 			if (ri->query_string) {
-+-				/* Append ? and query string */
-+-				strcat(new_path, "?");
-+-				strcat(new_path, ri->query_string);
-++				if (len + 1 < buflen) {
-++					new_path[len] = '?';
-++					new_path[len + 1] = '\0';
-++					len += 1;
-++				}
-++
-++				/* Append with size of space left for query string + null terminator */
-++				size_t max_append = buflen - len - 1;
-++				strncat(new_path, ri->query_string, max_append);
-+ 			}
-++
-+ 			mg_send_http_redirect(conn, new_path, 301);
-+ 			mg_free(new_path);
-+ 		}
-diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
-index 629c1b59b2..af221e9133 100644
---- a/package/civetweb/civetweb.mk
-+++ b/package/civetweb/civetweb.mk
-@@ -10,6 +10,9 @@ CIVETWEB_LICENSE = MIT
- CIVETWEB_LICENSE_FILES = LICENSE.md
- CIVETWEB_CPE_ID_VALID = YES
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 4bb387422b..54a167c9cc 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -295,7 +295,6 @@ package/cdrkit/0003-Add-extern-to-char-outfile-declaration-to-fix-build-.patch l
+ package/cfm/S65cfm lib_sysv.Indent lib_sysv.Variables
+ package/cgroupfs-mount/S30cgroupfs Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/chipmunk/0001-Fix-build-failure-on-musl.patch lib_patch.Upstream
+-package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch lib_patch.Upstream
+ package/chrony/S49chronyd lib_sysv.Variables
+ package/cmake/0001-rename-cmake-rootfile.patch lib_patch.Upstream
+ package/cmocka/0001-Don-t-redefine-uintptr_t.patch lib_patch.Upstream
+diff --git a/package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch b/package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch
+deleted file mode 100644
+index 06bf54c583..0000000000
+--- a/package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From a8fd4b1f563d24d4296c3e8225c8404e2724d4c2 Mon Sep 17 00:00:00 2001
+-From: Jordan Christiansen <xordspar0@gmail.com>
+-Date: Sun, 15 Mar 2020 16:55:33 -0500
+-Subject: [PATCH] Remove redundant demoextend definition
+-
+-GCC 10 enables -fno-common by default, which causes the linker to fail when
+-there are multiple definitions of a global variable.
+-
+-See https://gcc.gnu.org/gcc-10/porting_to.html
+-
+-[Retrieved from:
+-https://github.com/chocolate-doom/chocolate-doom/commit/a8fd4b1f563d24d4296c3e8225c8404e2724d4c2]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/hexen/mn_menu.c | 1 -
+- 1 file changed, 1 deletion(-)
+-
+-diff --git a/src/hexen/mn_menu.c b/src/hexen/mn_menu.c
+-index 059f45b3e..a97b7fcd1 100644
+---- a/src/hexen/mn_menu.c
+-+++ b/src/hexen/mn_menu.c
+-@@ -131,7 +131,6 @@ boolean MenuActive;
+- int InfoType;
+- int messageson = true;
+- boolean mn_SuicideConsole;
+--boolean demoextend; // from h2def.h
+- 
+- // PRIVATE DATA DEFINITIONS ------------------------------------------------
+- 
+diff --git a/package/chocolate-doom/Config.in b/package/chocolate-doom/Config.in
+index 406b04ecf1..3cefd057ec 100644
+--- a/package/chocolate-doom/Config.in
++++ b/package/chocolate-doom/Config.in
+@@ -3,8 +3,6 @@ config BR2_PACKAGE_CHOCOLATE_DOOM
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS # sdl2
+ 	select BR2_PACKAGE_SDL2
+-	select BR2_PACKAGE_SDL2_MIXER
+-	select BR2_PACKAGE_SDL2_NET
+ 	help
+ 	  Chocolate Doom is a set of conservative source ports for Doom,
+ 	  Heretic, Hexen and Strife, with a philosophy of preserving the
+diff --git a/package/chocolate-doom/chocolate-doom.hash b/package/chocolate-doom/chocolate-doom.hash
+index 79eb1c6a3f..a86a86b790 100644
+--- a/package/chocolate-doom/chocolate-doom.hash
++++ b/package/chocolate-doom/chocolate-doom.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  d435d6177423491d60be706da9f07d3ab4fabf3e077ec2a3fc216e394fcfc8c7  chocolate-doom-3.0.1.tar.gz
+-sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256  1edcc41254bdc194beb0d33e267fae306556c4d24110a1d3d3f865717f25da23  chocolate-doom-3.1.1.tar.gz
++sha256  aef8b4222b79d0dbf6bf17cfff71c90a6a6bb8917a4162abe417b469ed22da2e  COPYING.md
+diff --git a/package/chocolate-doom/chocolate-doom.mk b/package/chocolate-doom/chocolate-doom.mk
+index 581b2c51c2..abe0e128b2 100644
+--- a/package/chocolate-doom/chocolate-doom.mk
++++ b/package/chocolate-doom/chocolate-doom.mk
+@@ -4,13 +4,15 @@
+ #
+ ################################################################################
  
-+# 0002-Fix-heap-overflow-in-directory-URI-slash-redirection.patch
-+CIVETWEB_IGNORE_CVES += CVE-2025-55763
+-CHOCOLATE_DOOM_VERSION = 3.0.1
+-CHOCOLATE_DOOM_SITE = http://www.chocolate-doom.org/downloads/$(CHOCOLATE_DOOM_VERSION)
++CHOCOLATE_DOOM_VERSION = 3.1.1
++CHOCOLATE_DOOM_SITE = $(call github,chocolate-doom,chocolate-doom,chocolate-doom-$(CHOCOLATE_DOOM_VERSION))
+ CHOCOLATE_DOOM_LICENSE = GPL-2.0+
+-CHOCOLATE_DOOM_LICENSE_FILES = COPYING
++CHOCOLATE_DOOM_LICENSE_FILES = COPYING.md
+ CHOCOLATE_DOOM_CPE_ID_VENDOR = chocolate-doom
+ CHOCOLATE_DOOM_CPE_ID_PRODUCT = chocolate_doom
+-CHOCOLATE_DOOM_DEPENDENCIES = host-pkgconf sdl2 sdl2_mixer sdl2_net
++CHOCOLATE_DOOM_DEPENDENCIES = host-pkgconf sdl2
++# Fetch from git
++CHOCOLATE_DOOM_AUTORECONF = YES
+ 
+ # Avoid installing desktop entries, icons, etc.
+ CHOCOLATE_DOOM_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-exec
+@@ -23,6 +25,20 @@ endif
+ 
+ CHOCOLATE_DOOM_CONF_ENV += CFLAGS="$(CHOCOLATE_DOOM_CFLAGS)"
+ 
++ifeq ($(BR2_PACKAGE_SDL2_MIXER),y)
++CHOCOLATE_DOOM_DEPENDENCIES += sdl2_mixer
++CHOCOLATE_DOOM_CONF_OPTS += --enable-sdl2mixer
++else
++CHOCOLATE_DOOM_CONF_OPTS += --disable-sdl2mixer
++endif
 +
- CIVETWEB_CONF_OPTS = TARGET_OS=LINUX WITH_IPV6=1 \
- 	$(if $(BR2_INSTALL_LIBSTDCPP),WITH_CPP=1)
- CIVETWEB_COPT = -DHAVE_POSIX_FALLOCATE=0
++ifeq ($(BR2_PACKAGE_SDL2_NET),y)
++CHOCOLATE_DOOM_DEPENDENCIES += sdl2_net
++CHOCOLATE_DOOM_CONF_OPTS += --enable-sdl2net
++else
++CHOCOLATE_DOOM_CONF_OPTS += --disable-sdl2net
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ CHOCOLATE_DOOM_DEPENDENCIES += libpng
+ CHOCOLATE_DOOM_CONF_OPTS += --with-libpng
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
