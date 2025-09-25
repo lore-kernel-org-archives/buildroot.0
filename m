@@ -1,76 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8E32CAC5AE
-	for <buildroot@archiver.kernel.org>; Wed, 24 Sep 2025 21:54:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA2DECAC5AE
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 00:53:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 82DE2610B5;
-	Wed, 24 Sep 2025 21:54:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 742E683DD8;
+	Thu, 25 Sep 2025 00:53:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dOrlrpcL5PX1; Wed, 24 Sep 2025 21:54:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p-116KOHtPEv; Thu, 25 Sep 2025 00:53:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C489C610AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61C1F83DD5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C489C610AE;
-	Wed, 24 Sep 2025 21:54:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id DB1AD177
- for <buildroot@buildroot.org>; Wed, 24 Sep 2025 21:54:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 61C1F83DD5;
+	Thu, 25 Sep 2025 00:53:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5649D199
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 00:53:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CC20040F27
- for <buildroot@buildroot.org>; Wed, 24 Sep 2025 21:54:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3CC9183DD5
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 00:53:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PensdD4hdHIN for <buildroot@buildroot.org>;
- Wed, 24 Sep 2025 21:54:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.97.179.56;
- helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AA47D40EB2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA47D40EB2
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AA47D40EB2
- for <buildroot@buildroot.org>; Wed, 24 Sep 2025 21:54:22 +0000 (UTC)
-Received: from 91-153-34-249.elisa-laajakaista.fi ([91.153.34.249] helo=kodama)
- by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
- id 1v1XRL-00H4np-DK; Wed, 24 Sep 2025 23:54:19 +0200
-Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id 74882082;
- Wed, 24 Sep 2025 21:54:18 +0000 (UTC)
-From: Adrian Perez de Castro <aperez@igalia.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZxelmlrpU0qH for <buildroot@buildroot.org>;
+ Thu, 25 Sep 2025 00:53:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::636; helo=mail-pl1-x636.google.com;
+ envelope-from=fancp2007@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6F9FE83DD2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F9FE83DD2
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com
+ [IPv6:2607:f8b0:4864:20::636])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6F9FE83DD2
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 00:53:17 +0000 (UTC)
+Received: by mail-pl1-x636.google.com with SMTP id
+ d9443c01a7336-27d3540a43fso4388055ad.3
+ for <buildroot@buildroot.org>; Wed, 24 Sep 2025 17:53:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1758761596; x=1759366396;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=6MkAOyl+ZOZWGrriMQiSUkTyZ21yYEZBjo6zB4WJztI=;
+ b=R1Vvqd9fcmvl/Hb2zJdUpcfMnOxE6+tBPe8YIYe/3UcFJrJWVFv4XenlSb8/L2BeJr
+ PvYgO7iVfypQIiUmQkSe9ZcYLchkxNH4lWR+gzx0qLe2QtSx+aOL1pyRoHXnU9h84Lfk
+ 6Cgv7Jd9NEnSpoekqlYex3gBnOXC7WFg2LDpWnyy4cTHHI5Tkq7H8yAFsSP88a2IO/dK
+ D/t3WLWZKU63r56GM4/raPfxOiCDwkhUKvoQUb3cdx2+S47DbS83IiZCJRBwzXzNr773
+ 4S1y8QwGB+rlbGKP/Y4mnjAD5dchROiXXvPl0+sTNh8dB2t0dsZgd+yLYJPMVeCqS1aH
+ CEkQ==
+X-Gm-Message-State: AOJu0YzCQETumGmlM8OfTfIM0mNeLqkb8oRq7FAq6jv2jRo9gKPJKvfd
+ Rb9PqfPbVcWHXe/CeEX9WPQBpyDmtQ4P42K/1SL/5A3Weq1gFN9FAwSP4jeFMA==
+X-Gm-Gg: ASbGncvfbPZLtQls6iRsDwMhuDOOmNBixCimOqyr6g3sRlI4hAXWwn106Z1aMH+sU2g
+ YDvjHllmJgc9GFHLidcGEW5U9Et70TVagwF3DRtXoQMegm/DCd62jocP519v0bE7rj0lnb3tvud
+ Tmf/vewlpyc/L2CdT5byMly2gI+hgKFv8YZv0/yLdL5SWg3QM2cg1BzTzdc74RAh7PZnWY0TroR
+ hEEhkX68MUcUMwniHa9PChz15/UC4azjvQW3yZDJxgrAyA569QuhEbK3jFTH/6VlsnzgUQXY9+g
+ nQb5wkTiH7MzCuA9c5lg6z4B5lPm3erKv+wsLKHLSlrLtRdBA3b3yNNWKRJEUErnBPkkvUf+Py0
+ qDoY7QnBe13vjJwN+BOY=
+X-Google-Smtp-Source: AGHT+IEJbwpqnTHGwkxAk7WQEgjZMYs6UPG+mlTGH/3Ko6fLsvUWJQO76KLteRj04NsX4FqRoF2zWQ==
+X-Received: by 2002:a17:902:cecb:b0:269:8d85:2249 with SMTP id
+ d9443c01a7336-27ed4a0b73fmr16569625ad.22.1758761595546; 
+ Wed, 24 Sep 2025 17:53:15 -0700 (PDT)
+Received: from localhost ([66.112.214.180]) by smtp.gmail.com with ESMTPSA id
+ d9443c01a7336-27ed6882140sm5295785ad.70.2025.09.24.17.53.14
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 24 Sep 2025 17:53:14 -0700 (PDT)
+From: Scott Fan <fancp2007@gmail.com>
 To: buildroot@buildroot.org
-Cc: Adrian Perez de Castro <aperez@igalia.com>
-Date: Thu, 25 Sep 2025 00:54:15 +0300
-Message-ID: <20250924215418.1203802-1-aperez@igalia.com>
-X-Mailer: git-send-email 2.51.0
+Cc: Scott Fan <fancp2007@gmail.com>,
+	Romain Naour <romain.naour@gmail.com>
+Date: Thu, 25 Sep 2025 08:53:03 +0800
+Message-ID: <20250925005304.827639-1-fancp2007@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=igalia.com; 
- s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
- Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
- Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
- In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=UU510ZywuoUaIwUGL6plP7AGnNU0UyiPEEYfn6WQDuY=; b=CqLqju5jNvwr6m21PSbCwX5akq
- e3o0QLXOM4OXQKnHh0XwLDjMdMGkRHKRTpO3FRdy0YV9WkTM4Qzqo2oK2kFUwgow03uYcGdU4/KQU
- 10eGy/6gCcydpUaLx/YeFjFWN0RT2EyI+lUAKRLDzLueqOXZczMU619FS+gRxlLfNMa7A8zJ97uBB
- jdwiiABGMoOEJjUJqvxO86bgzbYghba/TDdvJulkSkiEi1EY9b/oceUvtmQSuA0fPKsN8ZhVnFTq9
- d7U9yObG0p7fLCwVrM8uaFX2feaqY2gTrwnqH9bRn9+xArvBfMmt03aiDgGInN+72Nv89dcqnbJF2
- Uc2iKScg==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1758761596; x=1759366396; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=6MkAOyl+ZOZWGrriMQiSUkTyZ21yYEZBjo6zB4WJztI=;
+ b=OtSxV/7iwNut+Oah9WAVQQWx15HyJook2sESE5SNjwcWspJ/zUTRcmB+EHtHIG9DvL
+ FNKkM5MpuBceXTRuQ4wcDxQRTFMbYSvp/9C6e66Ze+PgVq16rAeAMbgXob4oCPWIlzfB
+ rViwZvpq+M3jOU95Xrv3tbDUlMdC68Zr8AM0SQ7JgvMBp+CO0b5CAIaOG7C683GzToo+
+ kHXMH7noLCybZqQvVb0YvLlqjaR/jpux0XuUhjmrPx7gaOjZKY8fTph46GZlzpn7hKVW
+ bjTLZbBp2fiOokcbQYsXpjhI6pGg4FOw37UKq0mtMrxiBQbNfK0050FglLe4+2L4skSo
+ GaDQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=igalia.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
- header.s=20170329 header.b=CqLqju5j
-Subject: [Buildroot] [PATCH] package/sysprof: bump to version 49.0
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=OtSxV/7i
+Subject: [Buildroot] [PATCH] package/libiec61850: bump to version 1.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,42 +112,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://gitlab.gnome.org/GNOME/sysprof/-/blob/49.0/NEWS
+Release notes: https://github.com/mz-automation/libiec61850/blob/v1.6.1/CHANGELOG
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
 ---
- package/sysprof/sysprof.hash | 4 ++--
- package/sysprof/sysprof.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libiec61850/libiec61850.hash | 2 +-
+ package/libiec61850/libiec61850.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sysprof/sysprof.hash b/package/sysprof/sysprof.hash
-index 5084ee2b11..d68981d31e 100644
---- a/package/sysprof/sysprof.hash
-+++ b/package/sysprof/sysprof.hash
-@@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/sysprof/48/sysprof-48.0.sha256sum
--sha256  1b0f0380f2f30708ba87829321a06fee1db36dfa87797bbf07f0a7acf4498d18  sysprof-48.0.tar.xz
-+# From https://download.gnome.org/sources/sysprof/49/sysprof-49.0.sha256sum
-+sha256  ff04139637785c841948862087a4323b981680d942296409321b574fcb282878  sysprof-49.0.tar.xz
- 
- # License files
+diff --git a/package/libiec61850/libiec61850.hash b/package/libiec61850/libiec61850.hash
+index 3c23682c49..2c1870b984 100644
+--- a/package/libiec61850/libiec61850.hash
++++ b/package/libiec61850/libiec61850.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  0dd0adc7f13215e961d22511bcb1dadfdbdaab969f11a0d975775a6ebdff8099  libiec61850-1.6.0.tar.gz
++sha256  64113483eea8aec4f18cef9f8bb3c872585b2c67566824c4373db257bcc7bf8e  libiec61850-1.6.1.tar.gz
  sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/sysprof/sysprof.mk b/package/sysprof/sysprof.mk
-index f64f6d7120..92c840b795 100644
---- a/package/sysprof/sysprof.mk
-+++ b/package/sysprof/sysprof.mk
+diff --git a/package/libiec61850/libiec61850.mk b/package/libiec61850/libiec61850.mk
+index 2bf98f1f3d..b29285cbe2 100644
+--- a/package/libiec61850/libiec61850.mk
++++ b/package/libiec61850/libiec61850.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SYSPROF_VERSION_MAJOR = 48
-+SYSPROF_VERSION_MAJOR = 49
- SYSPROF_VERSION = $(SYSPROF_VERSION_MAJOR).0
- SYSPROF_SOURCE = sysprof-$(SYSPROF_VERSION).tar.xz
- SYSPROF_SITE = https://download.gnome.org/sources/sysprof/$(SYSPROF_VERSION_MAJOR)
+-LIBIEC61850_VERSION = 1.6.0
++LIBIEC61850_VERSION = 1.6.1
+ LIBIEC61850_SITE = $(call github,mz-automation,libiec61850,v$(LIBIEC61850_VERSION))
+ LIBIEC61850_INSTALL_STAGING = YES
+ LIBIEC61850_LICENSE = GPL-3.0+
 -- 
-2.51.0
+2.43.0
 
 _______________________________________________
 buildroot mailing list
