@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B393CAC5BB
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:31:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0370CAC5B0
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:31:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E343661706;
-	Thu, 25 Sep 2025 20:31:08 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PBSnI8kG-Q9c; Thu, 25 Sep 2025 20:31:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A74E36170A
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A74E36170A;
-	Thu, 25 Sep 2025 20:31:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1130812D
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F0E1F41602
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 93DB64123A;
+	Thu, 25 Sep 2025 20:31:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xgnymBCwEaSX for <buildroot@buildroot.org>;
- Thu, 25 Sep 2025 20:30:22 +0000 (UTC)
+ id qqunEunMdk8S; Thu, 25 Sep 2025 20:31:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD5B141253
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id AD5B141253;
+	Thu, 25 Sep 2025 20:31:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 029E7177
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7753E412BE
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:25 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4z2pVumIFIow for <buildroot@buildroot.org>;
+ Thu, 25 Sep 2025 20:30:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A36534152C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29A4B412D5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A36534152C
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 29A4B412D5
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A173383B7E; Thu, 25 Sep 2025 20:30:22 +0000 (UTC)
+ id 277FA8644A; Thu, 25 Sep 2025 20:30:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 25 Sep 2025 16:41:12 +0200
+Date: Thu, 25 Sep 2025 16:44:06 +0200
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: 2a81f918393c1233d5de100b7782f80c4c15a1e6
-X-Git-Newrev: 232718e303904683a06c7c6cff7476923c5a6fcf
+X-Git-Oldrev: 341f786325739e6aafc6213527b6946a9c46db8b
+X-Git-Newrev: a663637bea23ca79631986a834a4a7c424efe9b9
 X-Patchwork-Hint: ignore
-Message-Id: <20250925203022.A173383B7E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/chocolate-doom:
- bump to 3.1.1 to fix GCC 15.x issues
+Message-Id: <20250925203023.277FA8644A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/uclibc: bump to
+ 1.0.55
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,157 +66,106 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=232718e303904683a06c7c6cff7476923c5a6fcf
+commit: https://git.buildroot.net/buildroot/commit/?id=a663637bea23ca79631986a834a4a7c424efe9b9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-Changes in 3.1.0:
+Finally the aarch64 tls bug is fixed. (python 3.13 segfault)
+Unfortunately it is not covered by any testcase of uClibc-ng-test.
 
-  https://github.com/chocolate-doom/chocolate-doom/releases/tag/chocolate-doom-3.1.0
+Here is the git shortlog for the release:
 
-Changes in 3.1.1:
+Marius Melzer (1):
+      malloc-standard: Fix truncation problem in malloc
 
-  https://github.com/chocolate-doom/chocolate-doom/releases/tag/chocolate-doom-3.1.1
+Waldemar Brodkorb (5):
+      Fix Sysvipc for ARM, AARCH64, RISCV64, KVX and m68k
+      remove uClibc specific gettext_printf
+      aarch64: do not force tls-model in CPU_CFLAGS, this isn't required
+      aarch64: respect r_addend for TLSDESC relocations
+      bump version for 1.0.55 release
 
-The SDL2_mixer and SDL2_net dependencies are now optional since 3.1.0,
-so adjust the packaging accordingly.
+yliu (5):
+      mips32: Preventing FORCE_FRAME_POINTER from being optimized away
+      mips32: Define __IPC_64 according to kernel version
+      time64: fixed msgctl/semctl/shmctl result errors for for MIPS32/RISCV32
+      time64: fix *ctl functions in mips32eb/mips64
+      time64: fix *ctl functions in mips32eb
 
-Also, the license file was renamed upstream in commit:
-https://github.com/chocolate-doom/chocolate-doom/commit/91a66a7ecba5e0dea87c8d98237d6a224f13347a
-So _LICENSE_FILES and the .hash file are also updated to reflect
-that change.
-
-Fixes:
-
-  https://autobuild.buildroot.net/results/90a01c5925e7f5f50b3ea06d6ea7b0da66814a15/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[Julien: fix license file and hash]
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Tested-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit be466c265ba09ed47ec1eb40f006dd17753e69d1)
+(cherry picked from commit 5250bba8e5b1aaeb58977baf1d91e2be66656476)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .checkpackageignore                                |  1 -
- ...01-Remove-redundant-demoextend-definition.patch | 29 ----------------------
- package/chocolate-doom/Config.in                   |  2 --
- package/chocolate-doom/chocolate-doom.hash         |  4 +--
- package/chocolate-doom/chocolate-doom.mk           | 24 +++++++++++++++---
- 5 files changed, 22 insertions(+), 38 deletions(-)
+ ...001-remove-uClibc-specific-gettext_printf.patch | 34 ----------------------
+ package/uclibc/uclibc.hash                         |  4 +--
+ package/uclibc/uclibc.mk                           |  2 +-
+ 3 files changed, 3 insertions(+), 37 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 4bb387422b..54a167c9cc 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -295,7 +295,6 @@ package/cdrkit/0003-Add-extern-to-char-outfile-declaration-to-fix-build-.patch l
- package/cfm/S65cfm lib_sysv.Indent lib_sysv.Variables
- package/cgroupfs-mount/S30cgroupfs Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/chipmunk/0001-Fix-build-failure-on-musl.patch lib_patch.Upstream
--package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch lib_patch.Upstream
- package/chrony/S49chronyd lib_sysv.Variables
- package/cmake/0001-rename-cmake-rootfile.patch lib_patch.Upstream
- package/cmocka/0001-Don-t-redefine-uintptr_t.patch lib_patch.Upstream
-diff --git a/package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch b/package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch
+diff --git a/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch b/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch
 deleted file mode 100644
-index 06bf54c583..0000000000
---- a/package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch
+index 96736da562..0000000000
+--- a/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch
 +++ /dev/null
-@@ -1,29 +0,0 @@
--From a8fd4b1f563d24d4296c3e8225c8404e2724d4c2 Mon Sep 17 00:00:00 2001
--From: Jordan Christiansen <xordspar0@gmail.com>
--Date: Sun, 15 Mar 2020 16:55:33 -0500
--Subject: [PATCH] Remove redundant demoextend definition
+@@ -1,34 +0,0 @@
+-From 9ffed9adb130d45b9f31ca7a305153e86586c877 Mon Sep 17 00:00:00 2001
+-From: Waldemar Brodkorb <wbx@openadk.org>
+-Date: Fri, 15 Aug 2025 20:29:52 +0200
+-Subject: [PATCH] remove uClibc specific gettext_printf
 -
--GCC 10 enables -fno-common by default, which causes the linker to fail when
--there are multiple definitions of a global variable.
+-Other C libraries like musl/glibc does not define it.
+-Including stdio.h here breaks Grub2 compilation with
+-gcc 14 and above.
+-Thanks to Thomas Petazzoni for analyzing the Grub2 build error.
 -
--See https://gcc.gnu.org/gcc-10/porting_to.html
--
--[Retrieved from:
--https://github.com/chocolate-doom/chocolate-doom/commit/a8fd4b1f563d24d4296c3e8225c8404e2724d4c2]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-Upstream: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=9ffed9adb130d45b9f31ca7a305153e86586c877
 ----
-- src/hexen/mn_menu.c | 1 -
-- 1 file changed, 1 deletion(-)
+- include/libintl.h | 3 ---
+- 1 file changed, 3 deletions(-)
 -
--diff --git a/src/hexen/mn_menu.c b/src/hexen/mn_menu.c
--index 059f45b3e..a97b7fcd1 100644
----- a/src/hexen/mn_menu.c
--+++ b/src/hexen/mn_menu.c
--@@ -131,7 +131,6 @@ boolean MenuActive;
-- int InfoType;
-- int messageson = true;
-- boolean mn_SuicideConsole;
---boolean demoextend; // from h2def.h
+-diff --git a/include/libintl.h b/include/libintl.h
+-index b7123a963..6d8b9f342 100644
+---- a/include/libintl.h
+-+++ b/include/libintl.h
+-@@ -50,9 +50,6 @@ char *bindtextdomain(const char *domainname, const char *dirname);
 - 
-- // PRIVATE DATA DEFINITIONS ------------------------------------------------
+- #endif
 - 
-diff --git a/package/chocolate-doom/Config.in b/package/chocolate-doom/Config.in
-index 406b04ecf1..3cefd057ec 100644
---- a/package/chocolate-doom/Config.in
-+++ b/package/chocolate-doom/Config.in
-@@ -3,8 +3,6 @@ config BR2_PACKAGE_CHOCOLATE_DOOM
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS # sdl2
- 	select BR2_PACKAGE_SDL2
--	select BR2_PACKAGE_SDL2_MIXER
--	select BR2_PACKAGE_SDL2_NET
- 	help
- 	  Chocolate Doom is a set of conservative source ports for Doom,
- 	  Heretic, Hexen and Strife, with a philosophy of preserving the
-diff --git a/package/chocolate-doom/chocolate-doom.hash b/package/chocolate-doom/chocolate-doom.hash
-index 79eb1c6a3f..a86a86b790 100644
---- a/package/chocolate-doom/chocolate-doom.hash
-+++ b/package/chocolate-doom/chocolate-doom.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  d435d6177423491d60be706da9f07d3ab4fabf3e077ec2a3fc216e394fcfc8c7  chocolate-doom-3.0.1.tar.gz
--sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  1edcc41254bdc194beb0d33e267fae306556c4d24110a1d3d3f865717f25da23  chocolate-doom-3.1.1.tar.gz
-+sha256  aef8b4222b79d0dbf6bf17cfff71c90a6a6bb8917a4162abe417b469ed22da2e  COPYING.md
-diff --git a/package/chocolate-doom/chocolate-doom.mk b/package/chocolate-doom/chocolate-doom.mk
-index 581b2c51c2..abe0e128b2 100644
---- a/package/chocolate-doom/chocolate-doom.mk
-+++ b/package/chocolate-doom/chocolate-doom.mk
-@@ -4,13 +4,15 @@
+--#include <stdio.h>
+--#define gettext_printf(args...) printf(args)
+--
+- /* to supply LC_MESSAGES and other stuff GNU expects to be exported when
+-    including libintl.h */
+- #include <locale.h>
+--- 
+-2.47.2
+-
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index 8d8b333958..56174a33b8 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.uclibc-ng.org/releases/1.0.54/uClibc-ng-1.0.54.tar.xz.sha256
+-sha256  d1ecf65cc2217dd4118a4dafc1abf27c585b5cb578f3bd7991fc640b79643ff2  uClibc-ng-1.0.54.tar.xz
++# From https://downloads.uclibc-ng.org/releases/1.0.55/uClibc-ng-1.0.55.tar.xz.sha256
++sha256  5f7f3aafddb2ca08fb295be45561c0188407103d7446cfd264b9b822fed3ed2d  uClibc-ng-1.0.55.tar.xz
+ # Locally calculated
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 1e49463dd4..0c303d77f8 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CHOCOLATE_DOOM_VERSION = 3.0.1
--CHOCOLATE_DOOM_SITE = http://www.chocolate-doom.org/downloads/$(CHOCOLATE_DOOM_VERSION)
-+CHOCOLATE_DOOM_VERSION = 3.1.1
-+CHOCOLATE_DOOM_SITE = $(call github,chocolate-doom,chocolate-doom,chocolate-doom-$(CHOCOLATE_DOOM_VERSION))
- CHOCOLATE_DOOM_LICENSE = GPL-2.0+
--CHOCOLATE_DOOM_LICENSE_FILES = COPYING
-+CHOCOLATE_DOOM_LICENSE_FILES = COPYING.md
- CHOCOLATE_DOOM_CPE_ID_VENDOR = chocolate-doom
- CHOCOLATE_DOOM_CPE_ID_PRODUCT = chocolate_doom
--CHOCOLATE_DOOM_DEPENDENCIES = host-pkgconf sdl2 sdl2_mixer sdl2_net
-+CHOCOLATE_DOOM_DEPENDENCIES = host-pkgconf sdl2
-+# Fetch from git
-+CHOCOLATE_DOOM_AUTORECONF = YES
- 
- # Avoid installing desktop entries, icons, etc.
- CHOCOLATE_DOOM_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-exec
-@@ -23,6 +25,20 @@ endif
- 
- CHOCOLATE_DOOM_CONF_ENV += CFLAGS="$(CHOCOLATE_DOOM_CFLAGS)"
- 
-+ifeq ($(BR2_PACKAGE_SDL2_MIXER),y)
-+CHOCOLATE_DOOM_DEPENDENCIES += sdl2_mixer
-+CHOCOLATE_DOOM_CONF_OPTS += --enable-sdl2mixer
-+else
-+CHOCOLATE_DOOM_CONF_OPTS += --disable-sdl2mixer
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SDL2_NET),y)
-+CHOCOLATE_DOOM_DEPENDENCIES += sdl2_net
-+CHOCOLATE_DOOM_CONF_OPTS += --enable-sdl2net
-+else
-+CHOCOLATE_DOOM_CONF_OPTS += --disable-sdl2net
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- CHOCOLATE_DOOM_DEPENDENCIES += libpng
- CHOCOLATE_DOOM_CONF_OPTS += --with-libpng
+-UCLIBC_VERSION = 1.0.54
++UCLIBC_VERSION = 1.0.55
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+ UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
