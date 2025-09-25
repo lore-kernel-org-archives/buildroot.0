@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B2E0CAC5B0
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:20:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4022CAC5B5
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:20:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4500341525;
-	Thu, 25 Sep 2025 20:20:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9CC2F6166C;
+	Thu, 25 Sep 2025 20:20:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FHFzQ6mJnGUh; Thu, 25 Sep 2025 20:20:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tsHUZ3NlBlUE; Thu, 25 Sep 2025 20:20:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63C004176E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F27726166D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 63C004176E;
-	Thu, 25 Sep 2025 20:20:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 283BB12D
+	by smtp3.osuosl.org (Postfix) with ESMTP id F27726166D;
+	Thu, 25 Sep 2025 20:20:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EE3D1EB
  for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6445B412B4
+ by smtp3.osuosl.org (Postfix) with ESMTP id B045B61529
  for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bm85w15EqMYc for <buildroot@buildroot.org>;
- Thu, 25 Sep 2025 20:19:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pRHejc1ds-KK for <buildroot@buildroot.org>;
+ Thu, 25 Sep 2025 20:19:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08650412A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE91461526
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 08650412A6
+ by smtp3.osuosl.org (Postfix) with ESMTP id EE91461526
  for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EE34E86443; Thu, 25 Sep 2025 20:19:41 +0000 (UTC)
+ id ECABB86449; Thu, 25 Sep 2025 20:19:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 25 Sep 2025 22:07:15 +0200
+Date: Thu, 25 Sep 2025 22:07:40 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 695eeceddb16b3045b707ccca7c911bd5aa75f5b
-X-Git-Newrev: 5b42ae0e05a39bf3c0d8af63105f6b9b627274aa
+X-Git-Oldrev: af3e9238c70d2a3ff0886b2ea48f9436bb75da00
+X-Git-Newrev: 5daa5bbb8650dee3def11bad02b28338460c32c7
 X-Patchwork-Hint: ignore
-Message-Id: <20250925201941.EE34E86443@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] utils/scanpypi: remove
- python six module
+Message-Id: <20250925201942.ECABB86449@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/x11r7/xapp_xdm:
+ bump to 1.1.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,124 +66,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b42ae0e05a39bf3c0d8af63105f6b9b627274aa
+commit: https://git.buildroot.net/buildroot/commit/?id=5daa5bbb8650dee3def11bad02b28338460c32c7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-We dropped support for python2 a while back in [1], as such we
-can remove the python six module which was only needed for
-backwards comaptibility with python2.
+See here for Changes:
+https://lists.x.org/archives/xorg/2025-March/061902.html
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/2743ce00ca61fde1537b64a165a69d497052be58
+Fixes a compile error with gcc 14.x.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[Julien: add commit ref removing python2 support]
+COPYRIGHT was updated:
+-Copyright (c) 2002, 2006, 2009, 2010, Oracle and/or its affiliates.
+-All rights reserved.
++Copyright (c) 2002, 2006, 2009, 2010, 2025, Oracle and/or its affiliates.
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+[Julien: fix COPYING license hash]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 53eb75ef535b656e9cd762fb9412dc5c1340f64b)
+(cherry picked from commit c878e088391a180429bb374020db36d097df9070)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- utils/scanpypi | 37 ++++++++++++++-----------------------
- 1 file changed, 14 insertions(+), 23 deletions(-)
+ package/x11r7/xapp_xdm/xapp_xdm.hash | 8 ++++----
+ package/x11r7/xapp_xdm/xapp_xdm.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/utils/scanpypi b/utils/scanpypi
-index af62c01632..61879e39d4 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -22,16 +22,10 @@ import tempfile
- import traceback
- import importlib
- import importlib.metadata
--import six.moves.urllib.request
--import six.moves.urllib.error
--import six.moves.urllib.parse
--from six.moves import map
--from six.moves import zip
--from six.moves import input
--if six.PY2:
--    import StringIO
--else:
--    import io
-+import urllib.request
-+import urllib.error
-+import urllib.parse
-+import io
+diff --git a/package/x11r7/xapp_xdm/xapp_xdm.hash b/package/x11r7/xapp_xdm/xapp_xdm.hash
+index daf1b0852f..096fcf37f0 100644
+--- a/package/x11r7/xapp_xdm/xapp_xdm.hash
++++ b/package/x11r7/xapp_xdm/xapp_xdm.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2022-December/003265.html
+-sha256  3e9bf25636797ec9e595286dd6820ecc33901439f07705eaf608ecda012c3d5f  xdm-1.1.14.tar.xz
+-sha512  8ed1d2c946916c24cb4b2de9326f65629c97e53b145312c9cb9c6e4308d8b47d67d3981319fbd4feac9b3ed436b9dfb24a1c905d37d7bcf07b49c18a68c7a6e4  xdm-1.1.14.tar.xz
++# From https://lists.x.org/archives/xorg/2025-March/061902.html
++sha256  9494aef0911a031c53670725b5c8c9bb9d3f7c5ea7318b1f72ddd9dcbbeceb6a  xdm-1.1.17.tar.xz
++sha512  68499cdf73c9b6b48b974a724e5d045bb8333cfd17f1d7e36132e7aec51922c22260b361517c4f0d9fb7d28ce4909e0638e00180e93544bc7200d9bef55e822b  xdm-1.1.17.tar.xz
+ # Locally computed
+-sha256  b33b4bebbd6511b3e15315e8e29d67f25334ee45da8b7da6e6e97c53a70c6923  COPYING
++sha256  74cda705693518c793f05074a79bfc6876f97c8ce560856e2ba36e2d9bf0ab5a  COPYING
+diff --git a/package/x11r7/xapp_xdm/xapp_xdm.mk b/package/x11r7/xapp_xdm/xapp_xdm.mk
+index 2a343b55e2..03b9ad58e9 100644
+--- a/package/x11r7/xapp_xdm/xapp_xdm.mk
++++ b/package/x11r7/xapp_xdm/xapp_xdm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- BUF_SIZE = 65536
- 
-@@ -225,15 +219,15 @@ class BuildrootPackage():
-         self.metadata_url = 'https://pypi.org/pypi/{pkg}/json'.format(
-             pkg=self.real_name)
-         try:
--            pkg_json = six.moves.urllib.request.urlopen(self.metadata_url).read().decode()
--        except six.moves.urllib.error.HTTPError as error:
-+            pkg_json = urllib.request.urlopen(self.metadata_url).read().decode()
-+        except urllib.error.HTTPError as error:
-             print('ERROR:', error.getcode(), error.msg, file=sys.stderr)
-             print('ERROR: Could not find package {pkg}.\n'
-                   'Check syntax inside the python package index:\n'
-                   'https://pypi.python.org/pypi/ '
-                   .format(pkg=self.real_name))
-             raise
--        except six.moves.urllib.error.URLError:
-+        except urllib.error.URLError:
-             print('ERROR: Could not find package {pkg}.\n'
-                   'Check syntax inside the python package index:\n'
-                   'https://pypi.python.org/pypi/ '
-@@ -260,7 +254,7 @@ class BuildrootPackage():
-                 'digests': None}]
-             # In this case, we can't get the name of the downloaded file
-             # from the pypi api, so we need to find it, this should work
--            urlpath = six.moves.urllib.parse.urlparse(
-+            urlpath = urllib.parse.urlparse(
-                 self.metadata['info']['download_url']).path
-             # urlparse().path give something like
-             # /path/to/file-version.tar.gz
-@@ -272,8 +266,8 @@ class BuildrootPackage():
-             try:
-                 print('Downloading package {pkg} from {url}...'.format(
-                     pkg=self.real_name, url=download_url['url']))
--                download = six.moves.urllib.request.urlopen(download_url['url'])
--            except six.moves.urllib.error.HTTPError as http_error:
-+                download = urllib.request.urlopen(download_url['url'])
-+            except urllib.error.HTTPError as http_error:
-                 download = http_error
-             else:
-                 self.used_url = download_url
-@@ -288,7 +282,7 @@ class BuildrootPackage():
-             raise DownloadFailed('Failed to download package {pkg}: '
-                                  'No source archive available'
-                                  .format(pkg=self.real_name))
--        elif download.__class__ == six.moves.urllib.error.HTTPError:
-+        elif download.__class__ == urllib.error.HTTPError:
-             raise download
- 
-         self.filename = self.used_url['filename']
-@@ -317,10 +311,7 @@ class BuildrootPackage():
-         Keyword arguments:
-         tmp_path -- directory where you want the package to be extracted
-         """
--        if six.PY2:
--            as_file = StringIO.StringIO(self.as_string)
--        else:
--            as_file = io.BytesIO(self.as_string)
-+        as_file = io.BytesIO(self.as_string)
-         if self.filename[-3:] == 'zip':
-             with zipfile.ZipFile(as_file) as as_zipfile:
-                 tmp_pkg = os.path.join(tmp_path, self.buildroot_name)
-@@ -797,12 +788,12 @@ def main():
-             print('Fetching package', package.real_name)
-             try:
-                 package.fetch_package_info()
--            except (six.moves.urllib.error.URLError, six.moves.urllib.error.HTTPError):
-+            except (urllib.error.URLError, urllib.error.HTTPError):
-                 continue
- 
-             try:
-                 package.download_package()
--            except six.moves.urllib.error.HTTPError as error:
-+            except urllib.error.HTTPError as error:
-                 print('Error: {code} {reason}'.format(code=error.code,
-                                                       reason=error.reason))
-                 print('Error downloading package :', package.buildroot_name)
+-XAPP_XDM_VERSION = 1.1.14
++XAPP_XDM_VERSION = 1.1.17
+ XAPP_XDM_SOURCE = xdm-$(XAPP_XDM_VERSION).tar.xz
+ XAPP_XDM_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XDM_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
