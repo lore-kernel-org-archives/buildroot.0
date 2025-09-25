@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9373ACAC5B0
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:20:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1055CAC5B5
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:20:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69C706165B;
-	Thu, 25 Sep 2025 20:20:39 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xPWCCk932f1H; Thu, 25 Sep 2025 20:20:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 344CE616FB
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 344CE616FB;
-	Thu, 25 Sep 2025 20:20:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0FD94177
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EF17941520
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C7D8441877;
+	Thu, 25 Sep 2025 20:20:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id flId8WVkEKsA for <buildroot@buildroot.org>;
+ id JyRm3v_ExYST; Thu, 25 Sep 2025 20:20:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3B834185E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id E3B834185E;
+	Thu, 25 Sep 2025 20:20:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1353E12D
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0B7BA41525
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:44 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oAgMyVhauNu7 for <buildroot@buildroot.org>;
  Thu, 25 Sep 2025 20:19:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 280F341525
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DC1E411E9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 280F341525
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3DC1E411E9
  for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 03EAC86418; Thu, 25 Sep 2025 20:19:43 +0000 (UTC)
+ id 3BD5986443; Thu, 25 Sep 2025 20:19:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 25 Sep 2025 22:07:42 +0200
+Date: Thu, 25 Sep 2025 22:07:46 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 5daa5bbb8650dee3def11bad02b28338460c32c7
-X-Git-Newrev: 5a8838ef12d18217908dfa00e2ccc9b98356666d
+X-Git-Oldrev: 73aa633876e9d3e2632a9204800448cfd28227fd
+X-Git-Newrev: eb81d4d8ce37d4cd27ed171859b71124802dce7c
 X-Patchwork-Hint: ignore
-Message-Id: <20250925201943.03EAC86418@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/postgresql:
- security bump to version 17.6
+Message-Id: <20250925201943.3BD5986443@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/uclibc: bump to
+ 1.0.55
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,87 +66,106 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a8838ef12d18217908dfa00e2ccc9b98356666d
+commit: https://git.buildroot.net/buildroot/commit/?id=eb81d4d8ce37d4cd27ed171859b71124802dce7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fixes the following security issue:
+Finally the aarch64 tls bug is fixed. (python 3.13 segfault)
+Unfortunately it is not covered by any testcase of uClibc-ng-test.
 
-CVE-2025-8713: PostgreSQL optimizer statistics can expose sampled data
-within a view, partition, or child table
+Here is the git shortlog for the release:
 
-PostgreSQL optimizer statistics allow a user to read sampled data within
-a view that the user cannot access. Separately, statistics allow a user
-to read sampled data that a row security policy intended to hide.
-PostgreSQL maintains statistics for tables by sampling data available in
-columns; this data is consulted during the query planning process. Prior
-to this release, a user could craft a leaky operator that bypassed view
-access control lists (ACLs) and bypassed row security policies in
-partitioning or table inheritance hierarchies. Reachable statistics data
-notably included histograms and most- common-values lists. CVE-2017-7484
-and CVE-2019-10130 intended to close this class of vulnerability, but
-this gap remained. Versions before PostgreSQL 17.6, 16.10, 15.14, 14.19,
-and 13.22 are affected.
+Marius Melzer (1):
+      malloc-standard: Fix truncation problem in malloc
 
-CVE-2025-8714: PostgreSQL pg_dump lets superuser of origin server execute
-arbitrary code in psql client
+Waldemar Brodkorb (5):
+      Fix Sysvipc for ARM, AARCH64, RISCV64, KVX and m68k
+      remove uClibc specific gettext_printf
+      aarch64: do not force tls-model in CPU_CFLAGS, this isn't required
+      aarch64: respect r_addend for TLSDESC relocations
+      bump version for 1.0.55 release
 
-Untrusted data inclusion in pg_dump in PostgreSQL allows a malicious
-superuser of the origin server to inject arbitrary code for restore-time
-execution as the client operating system account running psql to restore
-the dump, via psql meta-commands. pg_dumpall is also affected. pg_restore
-is affected when used to generate a plain-format dump. This is similar to
-MySQL CVE-2024-21096. Versions before PostgreSQL 17.6, 16.10, 15.14,
-14.19, and 13.22 are affected.
+yliu (5):
+      mips32: Preventing FORCE_FRAME_POINTER from being optimized away
+      mips32: Define __IPC_64 according to kernel version
+      time64: fixed msgctl/semctl/shmctl result errors for for MIPS32/RISCV32
+      time64: fix *ctl functions in mips32eb/mips64
+      time64: fix *ctl functions in mips32eb
 
-CVE-2025-8715: PostgreSQL pg_dump newline in object name executes
-arbitrary code in psql client and in restore target server
-
-Improper neutralization of newlines in pg_dump in PostgreSQL allows a user
-of the origin server to inject arbitrary code for restore-time execution
-as the client operating system account running psql to restore the dump,
-via psql meta-commands inside a purpose-crafted object name. The same
-attacks can achieve SQL injection as a superuser of the restore target
-server. pg_dumpall, pg_restore, and pg_upgrade are also affected.
-Versions before PostgreSQL 17.6, 16.10, 15.14, 14.19, and 13.22 are affected.
-Versions before 11.20 are unaffected. CVE-2012-0868 had fixed this class
-of problem, but version 11.20 reintroduced it.
-
-https://www.postgresql.org/about/news/postgresql-176-1610-1514-1419-1322-and-18-beta-3-released-3118/
-
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Tested-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 4f0a9596e35dfdcdc82dce1a2e16a74974d3e4d9)
+(cherry picked from commit 5250bba8e5b1aaeb58977baf1d91e2be66656476)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/postgresql/postgresql.hash | 6 +++---
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...001-remove-uClibc-specific-gettext_printf.patch | 34 ----------------------
+ package/uclibc/uclibc.hash                         |  4 +--
+ package/uclibc/uclibc.mk                           |  2 +-
+ 3 files changed, 3 insertions(+), 37 deletions(-)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index f17d4ca3ce..3b5e773c65 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
+diff --git a/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch b/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch
+deleted file mode 100644
+index 96736da562..0000000000
+--- a/package/uclibc/0001-remove-uClibc-specific-gettext_printf.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 9ffed9adb130d45b9f31ca7a305153e86586c877 Mon Sep 17 00:00:00 2001
+-From: Waldemar Brodkorb <wbx@openadk.org>
+-Date: Fri, 15 Aug 2025 20:29:52 +0200
+-Subject: [PATCH] remove uClibc specific gettext_printf
+-
+-Other C libraries like musl/glibc does not define it.
+-Including stdio.h here breaks Grub2 compilation with
+-gcc 14 and above.
+-Thanks to Thomas Petazzoni for analyzing the Grub2 build error.
+-
+-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-Upstream: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=9ffed9adb130d45b9f31ca7a305153e86586c877
+----
+- include/libintl.h | 3 ---
+- 1 file changed, 3 deletions(-)
+-
+-diff --git a/include/libintl.h b/include/libintl.h
+-index b7123a963..6d8b9f342 100644
+---- a/include/libintl.h
+-+++ b/include/libintl.h
+-@@ -50,9 +50,6 @@ char *bindtextdomain(const char *domainname, const char *dirname);
+- 
+- #endif
+- 
+--#include <stdio.h>
+--#define gettext_printf(args...) printf(args)
+--
+- /* to supply LC_MESSAGES and other stuff GNU expects to be exported when
+-    including libintl.h */
+- #include <locale.h>
+--- 
+-2.47.2
+-
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index 8d8b333958..56174a33b8 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
 @@ -1,4 +1,4 @@
--# From https://ftp.postgresql.org/pub/source/v17.5/postgresql-17.5.tar.bz2.sha256
--sha256  fcb7ab38e23b264d1902cb25e6adafb4525a6ebcbd015434aeef9eda80f528d8  postgresql-17.5.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v17.6/postgresql-17.6.tar.bz2.sha256
-+sha256  e0630a3600aea27511715563259ec2111cd5f4353a4b040e0be827f94cd7a8b0  postgresql-17.6.tar.bz2
- # License file, Locally calculated
--sha256  e3822c4797fadcab31a3fc73f75c28ac20c73d72b565da91e9974cf9398ef4d2  COPYRIGHT
-+sha256  5ed3ce5c9373dff7f98b1fae7a6c7ccd98df7d734d46d24c1bcebf1240be8307  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 671bd30347..31d0068328 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
+-# From https://downloads.uclibc-ng.org/releases/1.0.54/uClibc-ng-1.0.54.tar.xz.sha256
+-sha256  d1ecf65cc2217dd4118a4dafc1abf27c585b5cb578f3bd7991fc640b79643ff2  uClibc-ng-1.0.54.tar.xz
++# From https://downloads.uclibc-ng.org/releases/1.0.55/uClibc-ng-1.0.55.tar.xz.sha256
++sha256  5f7f3aafddb2ca08fb295be45561c0188407103d7446cfd264b9b822fed3ed2d  uClibc-ng-1.0.55.tar.xz
+ # Locally calculated
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 1e49463dd4..0c303d77f8 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--POSTGRESQL_VERSION = 17.5
-+POSTGRESQL_VERSION = 17.6
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+-UCLIBC_VERSION = 1.0.54
++UCLIBC_VERSION = 1.0.55
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+ UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
