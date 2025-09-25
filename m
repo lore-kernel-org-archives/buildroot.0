@@ -1,106 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E89CDCAC5B9
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:17:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0EC0CAC5B0
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:19:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BB4B661627;
-	Thu, 25 Sep 2025 20:17:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A7CBB415B3;
+	Thu, 25 Sep 2025 20:19:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 36Puz4rQ4bLj; Thu, 25 Sep 2025 20:17:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hCkJlwVtQ5vD; Thu, 25 Sep 2025 20:19:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D1636161B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5FBE41690
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8D1636161B;
-	Thu, 25 Sep 2025 20:17:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 88F87177
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:17:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A5FBE41690;
+	Thu, 25 Sep 2025 20:19:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4454F177
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 85A304129D
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:17:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 367BE818E6
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TFfg7UGwVebb for <buildroot@buildroot.org>;
- Thu, 25 Sep 2025 20:17:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 695B941275
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 695B941275
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 695B941275
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:17:20 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-3ee15505cdeso1189846f8f.0
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 13:17:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1758831438; x=1759436238;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=/wqfXcodwqU5UIS/WNRseosr/OKhZULixZuwyG0uZOI=;
- b=K1npL+LskyPBoniXyIwCD+s3HM+aXX6pdklXddLyY0f5JpzHSJbZ4IjbIEvhy13bj8
- Hot+lOOmHsv/gBVfUnB9b9ONvb5cpqDgIjxoTDmpCJzfhm58tPrKwFPtLRP9m4bD6Z9k
- Y0j07vrUnx9HezVVbOt9FuuIxP5QwP+Ba8z15up0bapARPr11hp4Zx3wifjzLM/uWDss
- P+NN/jZmBhHdyQgGgjAkwOKBpc8X9fn0jI8ucxRx7W2Bk5QN+PK5qlCf18bMwcXEHcIJ
- WeEhK7Ku4saZxTGyjzDGbXhoP2kylPmxd1zKm9SNFS1UpIHjx+LpSFIMSpkNqD6/Eut3
- NnjA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCWx/4//0251Y73nDRG0j4r5isxnRrjo1yYAACYpyQ0ZjYqgyvSDawKKNdaN2TaEsfwxqwf3nGRNh0E=@buildroot.org
-X-Gm-Message-State: AOJu0Ywt6fLyLWgk4p5Vkyvx82m6mzSa498/yp8Z4JSgAJLIOJeHSJ9s
- ixr+MHwEDIOHDbqaPr+2CI446QKYXw5dnOVenJTkjPneLOfjKc9s9xo9wentP1nUYgnNIJpHHir
- cXfPlvZQ=
-X-Gm-Gg: ASbGncs/EqdQg5jefi0+i1rSp7S75i9d5GtuIevP/caldIcH+y/wxw9JU0MwqvSCV39
- YXoDWMp54kQJM7KNhoQCEBcUCwWdtpNNZDneN8vPj0HMsEroe6mnkaFrdP1gNOg5mlIFggUQ3WG
- e13Vv7KZIIQYNuE5whAOntawg9zLXB33cCoiGuiS2u9jM+Y1Usith0NgklhcaXbZirZS6K1LfKL
- CYTJdUCQz5yOJx3+RjQnCMjGQz5pVcpvb7FDqR0R7oreji9ZDecIVhBm2I4kWljscQANc1aEuxW
- sKUrFnC9jkhjXJ55vu6Zz7Q8y2nbcJx8+xl9qLji8OI8bzBQIqEdlkAuSolPAy2kSV+ypjpLzzg
- TJKqXXGHkoSxX+0NpYhy1wsJnAw==
-X-Google-Smtp-Source: AGHT+IGX/BAWjJXcBDby4kbd38m6Mg9rYCFjhrX9mEe20bwqp1TM1xlrkJLyCgCeqksvm8ExzMU64A==
-X-Received: by 2002:adf:a314:0:b0:3e7:6424:1b47 with SMTP id
- ffacd0b85a97d-40f5f8e9dc6mr3330736f8f.6.1758831438388; 
- Thu, 25 Sep 2025 13:17:18 -0700 (PDT)
-Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-40fb89fb264sm4394638f8f.20.2025.09.25.13.17.17
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 25 Sep 2025 13:17:18 -0700 (PDT)
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Thu, 25 Sep 2025 22:17:17 +0200
-Message-ID: <20250925201717.44835-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250916010409.2547083-1-james.hilliard1@gmail.com>
-References: <20250916010409.2547083-1-james.hilliard1@gmail.com>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1758831438; x=1759436238; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=/wqfXcodwqU5UIS/WNRseosr/OKhZULixZuwyG0uZOI=;
- b=a/7/FgfJQqbioO57hGp1EroBvzeAgun+C2zdvNpTUkzyMJkUxLbi+CIfeQu1iy+NYW
- KnJui+TapyM/U25HO828emiRN+GwClaYH1MwGJWwHqgcjIKXHj34ERl/7naqVsLKHZSz
- LV8vc/tE012wpsniyMRkbMJQxP6aOti2fgYsbM3Q7V9WyQPKdDMC4le/MFiRxSHD8Z9c
- kmKAtYm5h6G4bYsdB4UrhuP4WY4I2ws5dcgUG/odbykCeZ1Kvs6U3fm4T2XoO3LFdJQ4
- peCJ+ew4f5VjLSymcwPb4tsgFffiH3deLgom1HNLugBl51Rcg7SM9+yjARol0Z9iUzvQ
- hYGg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=a/7/FgfJ
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-typing-extensions: bump
- to version 4.15.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id d12GhbooQFng for <buildroot@buildroot.org>;
+ Thu, 25 Sep 2025 20:19:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 73EAE814D4
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 73EAE814D4
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:19:41 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6277986418; Thu, 25 Sep 2025 20:19:41 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 25 Sep 2025 22:07:04 +0200
+X-Git-Refname: refs/heads/2025.02.x
+X-Git-Oldrev: c55bed263d38dda020484650cf7d07e9477a0d5b
+X-Git-Newrev: 2d5f170e019814ca66d6f2e4f8a0bfc22c9e4fec
+X-Patchwork-Hint: ignore
+Message-Id: <20250925201941.6277986418@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] {linux,
+ linux-headers}: bump 6.12.x, 6.6.x, 6.1.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,58 +58,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In reply of:
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=2d5f170e019814ca66d6f2e4f8a0bfc22c9e4fec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Applied to 2025.08.x. Thanks
+Update the latest kernel releases to:
+ - 6.12.47 -> 6.12.48
+ - 6.6.106 -> 6.6.107
+ - 6.1.152 -> 6.1.153
 
-> ---
->  .../python-typing-extensions/python-typing-extensions.hash    | 4 ++--
->  package/python-typing-extensions/python-typing-extensions.mk  | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/python-typing-extensions/python-typing-extensions.hash b/package/python-typing-extensions/python-typing-extensions.hash
-> index c422691dab..c86b6716a8 100644
-> --- a/package/python-typing-extensions/python-typing-extensions.hash
-> +++ b/package/python-typing-extensions/python-typing-extensions.hash
-> @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/typing-extensions/json
-> -md5  da52c877660b1760771ce7553f729c5d  typing_extensions-4.14.1.tar.gz
-> -sha256  38b39f4aeeab64884ce9f74c94263ef78f3c22467c8724005483154c26648d36  typing_extensions-4.14.1.tar.gz
-> +md5  079e529d0b271647f3ec2720aee8fc65  typing_extensions-4.15.0.tar.gz
-> +sha256  0cea48d173cc12fa28ecabc3b837ea3cf6f38c6d1136f85cbaaf598984861466  typing_extensions-4.15.0.tar.gz
->  # Locally computed sha256 checksums
->  sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
-> diff --git a/package/python-typing-extensions/python-typing-extensions.mk b/package/python-typing-extensions/python-typing-extensions.mk
-> index 9ed8b71ff2..d181b973a5 100644
-> --- a/package/python-typing-extensions/python-typing-extensions.mk
-> +++ b/package/python-typing-extensions/python-typing-extensions.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->  
-> -PYTHON_TYPING_EXTENSIONS_VERSION = 4.14.1
-> +PYTHON_TYPING_EXTENSIONS_VERSION = 4.15.0
->  PYTHON_TYPING_EXTENSIONS_SOURCE = typing_extensions-$(PYTHON_TYPING_EXTENSIONS_VERSION).tar.gz
-> -PYTHON_TYPING_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/98/5a/da40306b885cc8c09109dc2e1abd358d5684b1425678151cdaed4731c822
-> +PYTHON_TYPING_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/72/94/1a15dd82efb362ac84269196e94cf00f187f7ed21c242792a923cdb1c61f
->  PYTHON_TYPING_EXTENSIONS_SETUP_TYPE = flit
->  PYTHON_TYPING_EXTENSIONS_LICENSE = Python-2.0
->  PYTHON_TYPING_EXTENSIONS_LICENSE_FILES = LICENSE
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+---
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 6 +++---
+ package/linux-headers/Config.in.host | 6 +++---
+ 3 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/linux/Config.in b/linux/Config.in
+index d5fb71771b..0016046914 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -137,7 +137,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.12.47" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.12.48" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 8e6506774a..c7a551b94e 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,7 +1,7 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  e82fe40871743048226987bd349ef107168b15aab90140e872ca4ed470922e25  linux-6.12.47.tar.xz
+-sha256  0c3180e2d8dcd0b70fe83554d9c440e31bab17873e360b89c4ab62a4fd26a8a0  linux-6.6.106.tar.xz
+-sha256  1a173be2a9cc886698b8205e639e4482b6cd84ba0be988d519415c7d2bb5b7d9  linux-6.1.152.tar.xz
++sha256  5bf9eb676751bf48978e38363c772298b41a75336d5038ed6d37012399471db2  linux-6.12.48.tar.xz
++sha256  c9b73017d3c7867b9c69a542e5318620cf2b14ed23d52f6aeaaee8aded9ee447  linux-6.6.107.tar.xz
++sha256  76ebbde05899ff712856ae9b06413d71ab7162771e7bc6df4d4ab335e1fc9e48  linux-6.1.153.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  c70262d2f902710b773ef2f35c04b3ff2111e5186c8a97da351454180aac1e99  linux-5.15.193.tar.xz
+ sha256  210a37cc09f5c2b3d6f011aa1c65d2484d6f4ec17cf90df473f917abb2c26dc0  linux-5.10.244.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 4084a36436..99225686c8 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -431,9 +431,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "5.4.299"	if BR2_KERNEL_HEADERS_5_4
+ 	default "5.10.244"	if BR2_KERNEL_HEADERS_5_10
+ 	default "5.15.193"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.152"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.106"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.12.47"	if BR2_KERNEL_HEADERS_6_12
++	default "6.1.153"	if BR2_KERNEL_HEADERS_6_1
++	default "6.6.107"	if BR2_KERNEL_HEADERS_6_6
++	default "6.12.48"	if BR2_KERNEL_HEADERS_6_12
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
