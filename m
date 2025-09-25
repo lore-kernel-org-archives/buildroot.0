@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77199CAC5B0
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:03:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E127CCAC5B0
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:03:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3BCDF41763;
-	Thu, 25 Sep 2025 20:03:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B924641756;
+	Thu, 25 Sep 2025 20:03:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JJgdVFIsO0oH; Thu, 25 Sep 2025 20:03:17 +0000 (UTC)
+ id 4LVw_DaIWMPx; Thu, 25 Sep 2025 20:03:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CCDA416FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6B8B4177A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0CCDA416FC;
-	Thu, 25 Sep 2025 20:03:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E6B8B4177A;
+	Thu, 25 Sep 2025 20:03:19 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 14543177
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:02:52 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1405312D
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:02:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F053561516
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:02:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 258D561534
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:02:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ugc5QuMtwNgm for <buildroot@buildroot.org>;
+ id QAcBo2ZS-Y0A for <buildroot@buildroot.org>;
  Thu, 25 Sep 2025 20:02:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FABB61534
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCAA56152A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7FABB61534
+ by smtp3.osuosl.org (Postfix) with ESMTP id DCAA56152A
  for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:02:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7DDBC8643F; Thu, 25 Sep 2025 20:02:42 +0000 (UTC)
+ id DAE528643F; Thu, 25 Sep 2025 20:02:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 25 Sep 2025 21:58:01 +0200
+Date: Thu, 25 Sep 2025 21:58:12 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 7c03d86be680f494b2b8df65b4175fc6c2a89483
-X-Git-Newrev: 42db5653f701d4d1b03ad2f8eb6167a5cde5633c
+X-Git-Oldrev: 9506b78ef19c08acaed7f870adf506ebb7840286
+X-Git-Newrev: a1197e8c5dedbe282db21fe89e88912e6cf123ab
 X-Patchwork-Hint: ignore
-Message-Id: <20250925200242.7DDBC8643F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/lua/5.1.5: add
- patch for CVE-2014-5461
+Message-Id: <20250925200242.DAE528643F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] DEVELOPERS: add Dario
+ Binacchi for cmocka
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,82 +66,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42db5653f701d4d1b03ad2f8eb6167a5cde5633c
+commit: https://git.buildroot.net/buildroot/commit/?id=a1197e8c5dedbe282db21fe89e88912e6cf123ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-This CVE is specific for the version 5.1.5 still present in Buildroot.
-It has been fixed in 5.2.3 and thereby doesn't affects the other
-versions available in Buildroot.
-
-- CVE-2014-5461
-
-Buffer overflow in the vararg functions in ldo.c in Lua 5.1 through
-5.2.x before 5.2.3 allows context-dependent attackers to cause a denial
-of service (crash) via a small number of arguments to a function with a
-large number of fixed arguments.
-
-For more information see:
-  - https://security-tracker.debian.org/tracker/CVE-2014-5461
-  - https://udd.debian.org/patches.cgi?src=lua5.1&version=5.1.5-11
-
-A patch present in Debian is used to address this vulnerability.
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit a2c906ee3b6b9057ea2c83987ddac9b7971cebd2)
+(cherry picked from commit 190c4823353db294e60773d3e4be6d51b1f08425)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...03-Fix-stack-overflow-in-vararg-functions.patch | 24 ++++++++++++++++++++++
- package/lua/lua.mk                                 |  6 ++++++
- 2 files changed, 30 insertions(+)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/lua/5.1.5/0003-Fix-stack-overflow-in-vararg-functions.patch b/package/lua/5.1.5/0003-Fix-stack-overflow-in-vararg-functions.patch
-new file mode 100644
-index 0000000000..00142d2338
---- /dev/null
-+++ b/package/lua/5.1.5/0003-Fix-stack-overflow-in-vararg-functions.patch
-@@ -0,0 +1,24 @@
-+From: Enrico Tassi <gareuselesinge@debian.org>
-+Date: Tue, 26 Aug 2014 16:20:55 +0200
-+Subject: Fix stack overflow in vararg functions
-+
-+CVE: CVE-2014-5461
-+Upstream: https://sources.debian.org/data/main/l/lua5.1/5.1.5-11/debian/patches/0004-Fix-stack-overflow-in-vararg-functions.patch
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ src/ldo.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/ldo.c b/src/ldo.c
-+index d1bf786..30333bf 100644
-+--- a/src/ldo.c
-++++ b/src/ldo.c
-+@@ -274,7 +274,7 @@ int luaD_precall (lua_State *L, StkId func, int nresults) {
-+     CallInfo *ci;
-+     StkId st, base;
-+     Proto *p = cl->p;
-+-    luaD_checkstack(L, p->maxstacksize);
-++    luaD_checkstack(L, p->maxstacksize + p->numparams);
-+     func = restorestack(L, funcr);
-+     if (!p->is_vararg) {  /* no varargs? */
-+       base = func + 1;
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 455b7e58b2..269eafe4bb 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -21,6 +21,12 @@ LUA_LICENSE_FILES = COPYRIGHT
- endif
- LUA_CPE_ID_VENDOR = lua
- 
-+ifeq ($(BR2_PACKAGE_LUA_5_1),y)
-+# Only affect lua version 5.1.5
-+# 5.1.5/0003-Fix-stack-overflow-in-vararg-functions.patch
-+LUA_IGNORE_CVES += CVE-2014-5461
-+endif
-+
- LUA_PROVIDES = luainterpreter
- 
- LUA_CFLAGS = -Wall -fPIC -DLUA_USE_POSIX
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0c9a70193c..fae8eb685b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -801,6 +801,7 @@ F:	package/aespipe/
+ F:	package/armadillo/
+ F:	package/atf/
+ F:	package/babeld/
++F:	package/cmocka/
+ F:	package/iana-assignments/
+ F:	package/inih/
+ F:	package/sscep/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
