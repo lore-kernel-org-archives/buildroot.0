@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1ECF9CAC5B9
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:30:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8DE2CAC5B5
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:31:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EAEF441609;
-	Thu, 25 Sep 2025 20:30:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 914E4615B1;
+	Thu, 25 Sep 2025 20:31:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RuKD3F-hudRM; Thu, 25 Sep 2025 20:30:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rD2IoI6GNody; Thu, 25 Sep 2025 20:31:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE1DF41775
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 234E6616C6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE1DF41775;
-	Thu, 25 Sep 2025 20:30:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 03FB0177
+	by smtp3.osuosl.org (Postfix) with ESMTP id 234E6616C6;
+	Thu, 25 Sep 2025 20:30:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E055A12D
  for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EB731416A3
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9BD94412C4
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OLoJjmPx67XD for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gRItbS-ddrAA for <buildroot@buildroot.org>;
  Thu, 25 Sep 2025 20:30:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31ABD41605
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 611B6412C8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 31ABD41605
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 611B6412C8
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2FBFA86433; Thu, 25 Sep 2025 20:30:23 +0000 (UTC)
+ id 5F50D8644A; Thu, 25 Sep 2025 20:30:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 25 Sep 2025 16:44:17 +0200
+Date: Thu, 25 Sep 2025 16:37:15 +0200
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: a663637bea23ca79631986a834a4a7c424efe9b9
-X-Git-Newrev: b25b1e2a051f8013157f5fe6ae92382dd73ab664
+X-Git-Oldrev: 76aae2522e7942e844ac700913960a3407641dec
+X-Git-Newrev: a21dde67e96de24d40b26b4f21ad026d5b39b77c
 X-Patchwork-Hint: ignore
-Message-Id: <20250925203023.2FBFA86433@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/atop: security
- bump to version 2.11.1
+Message-Id: <20250925203022.5F50D8644A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x]
+ package/python-aiohttp-session: fix deprecated CPE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,54 +66,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b25b1e2a051f8013157f5fe6ae92382dd73ab664
+commit: https://git.buildroot.net/buildroot/commit/?id=a21dde67e96de24d40b26b4f21ad026d5b39b77c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-This bump includes the security fix for CVE-2025-31160.
+The CPE 'aiohttp-session_project:aiohttp-session' has been deprecated in
+favour of 'aiohttp-session:aiohttp-session'.
 
-Release notes:
-https://www.atoptool.nl/downloadatop.php
+See https://nvd.nist.gov/products/cpe/detail/667389BF-3561-49F9-A61A-6C86C7B82922
 
-Fixes:
-https://www.cve.org/CVERecord?id=CVE-2025-31160
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-[Julien:
- - add "security" in commit log title
- - add link to CVE
-]
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+[Julien: add https:// prefix to url in commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 45e7fe281160fe645e26ad58775aa5e384dbf222)
+(cherry picked from commit fdb540a00e72190a8cb2df370226a2e916f899b2)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/atop/atop.hash | 2 +-
- package/atop/atop.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-aiohttp-session/python-aiohttp-session.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/atop/atop.hash b/package/atop/atop.hash
-index 8774fb577d..8f0cb69581 100644
---- a/package/atop/atop.hash
-+++ b/package/atop/atop.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  9b94c666602efff7bf402ecce706c347f38c39cb63498f9d39626861e5646e20  atop-2.11.0.tar.gz
-+sha256  77650f79f9e388b6f5666dc113849894575a29bb4de21b8cd58767bf8a905154  atop-2.11.1.tar.gz
+diff --git a/package/python-aiohttp-session/python-aiohttp-session.mk b/package/python-aiohttp-session/python-aiohttp-session.mk
+index 8b8337e68e..1a69e55ca6 100644
+--- a/package/python-aiohttp-session/python-aiohttp-session.mk
++++ b/package/python-aiohttp-session/python-aiohttp-session.mk
+@@ -10,7 +10,7 @@ PYTHON_AIOHTTP_SESSION_SITE = https://files.pythonhosted.org/packages/c2/c4/d73a
+ PYTHON_AIOHTTP_SESSION_SETUP_TYPE = setuptools
+ PYTHON_AIOHTTP_SESSION_LICENSE = Apache-2.0
+ PYTHON_AIOHTTP_SESSION_LICENSE_FILES = LICENSE
+-PYTHON_AIOHTTP_SESSION_CPE_ID_VENDOR = aiohttp-session_project
++PYTHON_AIOHTTP_SESSION_CPE_ID_VENDOR = aio-libs
+ PYTHON_AIOHTTP_SESSION_CPE_ID_PRODUCT = aiohttp-session
  
- # Hash for license file:
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
-diff --git a/package/atop/atop.mk b/package/atop/atop.mk
-index f7dfed5e8d..155dec6177 100644
---- a/package/atop/atop.mk
-+++ b/package/atop/atop.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ATOP_VERSION = 2.11.0
-+ATOP_VERSION = 2.11.1
- ATOP_SITE = http://www.atoptool.nl/download
- ATOP_LICENSE = GPL-2.0+
- ATOP_LICENSE_FILES = COPYING
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
