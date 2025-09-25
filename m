@@ -4,99 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 469D5CAC5BB
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:17:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A7D9CAC5B9
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:17:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D31BA61570;
-	Thu, 25 Sep 2025 20:17:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D9CCC615D1;
+	Thu, 25 Sep 2025 20:17:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FJ9rO5KQaRaQ; Thu, 25 Sep 2025 20:17:16 +0000 (UTC)
+ id XGE_YiibYIdq; Thu, 25 Sep 2025 20:17:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEC36615CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A0526159D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CEC36615CE;
-	Thu, 25 Sep 2025 20:17:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D8BB9177
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:17:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D672641275
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:17:00 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4GnlA6gOZRU6 for <buildroot@buildroot.org>;
- Thu, 25 Sep 2025 20:17:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D5A5440066
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5A5440066
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D5A5440066
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1A0526159D;
+	Thu, 25 Sep 2025 20:17:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id CC78B12D
  for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:16:59 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-3f0308469a4so874003f8f.0
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 13:16:59 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B106441678
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:16:59 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u9VJzL_0fy2i for <buildroot@buildroot.org>;
+ Thu, 25 Sep 2025 20:16:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CEBA54152E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CEBA54152E
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CEBA54152E
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:16:57 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-41174604d88so536875f8f.2
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 13:16:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1758831418; x=1759436218;
+ d=1e100.net; s=20230601; t=1758831416; x=1759436216;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=iZ1h6/rLdwVAi938u9RweQ4FpR9bEDesFn13gzt68dQ=;
- b=ZMgspc42+fC9ZsfwShpCaGSSaKhntgBu7x0s4UW7BDaYsMpSSyjWvFwBOSerR3JG3B
- dJgdsEJfA+jSk0YXrkviQTIFhm5aw8rl2FcTy6josdVUcxCb3BqjcNJjNOTNrvEV6v7/
- lO96gWK/EAk9KkHpucf0x0vcqpXje1IS7PNR7yytX/692s9KbYfl6a53M0kKJRx63QEl
- VuhVXCCTJhnx3gBUVVM+BAAKPsM92c5OCDs5bDMoW16PXLRfTkMYkYljeYE1XvHfcPk5
- PgJq6QNV7pJS1m4uW4UgvN13Yb5oXf6kvjczI1llq66NNsy0LIQLNN2r1kz1V47WiUhY
- CuWw==
-X-Gm-Message-State: AOJu0Yww79Jmmoqxwl/+u++jU2o6Z3YH2Ud5ad60MyMCWusKej1oZzfZ
- TwPEtkBGbEUONzeaCxscoBCH8R0Tan2KOXVR4Wfikxyb/9YxbUYxmMZtboc+XdLqRnA=
-X-Gm-Gg: ASbGncsfx0VhUtbVS6Poue5lWrjOx1yg3cN47D+f2UyPSdBEEx50emfDqg0rGt+Cr3n
- Rx4K6smP0Ae6FfFn7+PkMEFj8LK/ShzdZqRjeC6X5gM44fcqqHiHszUrsB8HhmMcYfMffW+a/YH
- QadHKusbnRGLDOsmqYwe0pZDn4RszxZApd17PLFZKiAC/ymZiKREBoOt8thayObSvoy9qm5cfnl
- itHuMNZ8+JXCqKniLot6IYNxhhGqV70xw7LdlwWvj5oZ3oGz8OtBdWqZyJXsx0f2Jv4oqNS4Xzr
- 1tF7dOYCxnHrY1CR4K+InyBvR7gLNTPp42Md5u2pseibieUIoF8b5P7jHjKXGX6nAwBAGzZiV85
- BRXnPE1cJXO+kCcLEQZvPnfsWwQ==
-X-Google-Smtp-Source: AGHT+IHofGqnpL/ECYMeuFAVzcaqVFVKSkpOaouRvLsJJHLO9lGMf6/sq3K60sfNyT0wZ3z543j3qA==
-X-Received: by 2002:a05:6000:2f87:b0:3e9:2fea:6795 with SMTP id
- ffacd0b85a97d-40e4b389223mr4988476f8f.53.1758831417845; 
- Thu, 25 Sep 2025 13:16:57 -0700 (PDT)
+ bh=IPWLEt/VYVPAGq/WbTWNwZ1ITJ4IU/uEaY4SvyStSvM=;
+ b=h+k+yiCFDf1Amg3Y4XeUCxkVC/hqBNL/9YtJJhlTs4ceE3UcF7WT+6Ovz8m337ij9Q
+ aG5AjfaJawfnvrhszbEahoI8rl3SZF5GWYxIUdXhlnWDADa8ewuCaVSWzEslfeV+Ua68
+ 76ZEpJe1FrWapvf3ccWR/rJBtzLdzlV/k0yGCu9p9TE+4FWPgPZDyS3VjRadDAkQKh9V
+ EMrbqdPdfbMOJEpRyZLHBlV6YtswbDmaZXzQTp2wM3Qe9I4E77HRku+QZuT3yUToPwhz
+ Np7VUnzdoKEIaqtIy9kh4HAJSN2g1gYdk+yXFsPEJdmrMJ7z9eZOOcBaBcZM1c+QPhJc
+ PXcg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXQZc1XcPXy/h0EQKuCg6Ep/f8j4NMKA80kCitPHRG3FQjEDQ6AaVJ68RioRHQkGA/uu8WLoZUGyH4=@buildroot.org
+X-Gm-Message-State: AOJu0YxR8KZUZ0oYD/KfrV8gofV1nIA1BxJNjfazT3TQpO3wtHdfA7Y5
+ p5Q/vqmj9nFi5HY6FLBEvQwEuzxbZ8gQZG75VKCcJZehNA8ku3YGKgkK2Ghf1bMDp2RANlTVAo/
+ Oa1ebbi0=
+X-Gm-Gg: ASbGncvmhvl+MrN7J+r+3O5WxCH+A2o1Ncyhk8up08N0sZOHGCjSVQD6NHqO0jQ217p
+ YOcjx9S6p/+4AkyVcDDePgRri0+c+F7/YGkLhvCJEV6wLP8fdGnyOqx+dMEOl0qZD3l1GtJmut3
+ Fd2n2csC+VDKW/sxq8mTmFbXUC+iJmnos//ZNOEqMDcsTNLYMPgxKoKjxIBoeTvQGD18YovCPjo
+ HAZClOs/bzvYiBrbxDLDcFHsBFkpX4fJhwOY/m9hEiP13bXBdILW0NIlMP8Cq6ZIQVF9k9VZgUX
+ yavgRHxOAedCNRF/I1DHrAXx47jwpzodwALBPPCwF0kNrES9+5GtK/nHZrpf0KdlZos+b9wqP8s
+ 1VxYaC8ymAY9jWu4=
+X-Google-Smtp-Source: AGHT+IGySEMDxgXaccLP9vlawOo0YMk8/ERrV8J2wU2g7PkksMPeXBeTxQ4+wnwBVD/5Zx5UF0Dthg==
+X-Received: by 2002:a05:6000:2c05:b0:3fb:6f9d:2704 with SMTP id
+ ffacd0b85a97d-40e46ad02e6mr4375639f8f.28.1758831415945; 
+ Thu, 25 Sep 2025 13:16:55 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-40fb72fbb27sm4088863f8f.4.2025.09.25.13.16.57
+ 5b1f17b1804b1-46e2a9ac582sm92780755e9.9.2025.09.25.13.16.55
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 25 Sep 2025 13:16:57 -0700 (PDT)
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-Date: Thu, 25 Sep 2025 22:16:57 +0200
-Message-ID: <20250925201657.44129-1-thomas.perale@mind.be>
+ Thu, 25 Sep 2025 13:16:55 -0700 (PDT)
+To: Waldemar Brodkorb <wbx@openadk.org>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	buildroot@buildroot.org
+Date: Thu, 25 Sep 2025 22:16:55 +0200
+Message-ID: <20250925201655.44015-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250919065303.60285-1-thomas.perale@mind.be>
-References: <20250919065303.60285-1-thomas.perale@mind.be>
+In-Reply-To: <aMuo808NcwB44GKN@waldemar-brodkorb.de>
+References: <aMuo808NcwB44GKN@waldemar-brodkorb.de>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1758831418; x=1759436218; darn=buildroot.org;
+ d=mind.be; s=google; t=1758831416; x=1759436216; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=iZ1h6/rLdwVAi938u9RweQ4FpR9bEDesFn13gzt68dQ=;
- b=fImdL2XxshbjyuysiQJFmupyfNBXQeKvYYBx9SOsktfYxPGnTjCnC0H1AVm+cMva5E
- 8HwCPiIRla1X92Q2rt6ItHIR0PbYmq9K8Jbeqf4jZFED5miLdSlfvBlNrE0iUlspl+D7
- Dpvu7yGtPtr429rdUQIvM3J+lm5NgRrD9XLUr0u5F2lzUEjgWxgOXAokzC/Mnp1j1vB/
- 7PiYWyTLqdORVNI6VBPF9VBdWU71W/A8ArLDQIRCPG8OYPsv/SNxWGLA+RLhdR+v0ZOS
- LoYZJJ+v9DtKog1nnrJ3BL4E8+JIpK4QFQ3brrPwmd8zaxQf4aXnevuC6ku5UwIwbYM8
- HUgQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=IPWLEt/VYVPAGq/WbTWNwZ1ITJ4IU/uEaY4SvyStSvM=;
+ b=FWyEIsIIRK/nGVHzlcir/Ch2aXo5UscE5sUjkrL/zqfFCCWtjSVFAuE8hYcQK2lmaF
+ kMsqotlOADPLB38huAkjxA1dbR61g305ODRtM4LeJpJoUmUiifAX72VafTJxmZrn4V2B
+ AVEt/IGMk/5UbO70IK8i9rojaypC/b8bFRiEoAhXXI2aQ1FqCFi34M/sVpFU/SX3L+3N
+ +TLAXulMS+AMnA6ZiVujtsT6oXYyYmF6BLnPjW0UerXjPyZMKZRaeh+dWN7ASjKyq5pm
+ fhtqADyfJnRko4l2t+QmLfkhFZouAv4yNPsJHtz6ADL7TKzxFwZMR5z16suVyRynrgyr
+ 2/7g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=fImdL2Xx
-Subject: Re: [Buildroot] [PATCH 1/2] package/poco: add patch for
- CVE-2025-6375
+ header.a=rsa-sha256 header.s=google header.b=FWyEIsII
+Subject: Re: [Buildroot] [PATCH] package/x11r7/xapp_xdm: bump to 1.1.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,89 +119,53 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> This fixes the following vulnerability:
+> See here for Changes:
+> https://lists.x.org/archives/xorg/2025-March/061902.html
 > 
-> - CVE-2025-6375:
+> Fixes a compile error with gcc 14.x.
 > 
-> A vulnerability was found in poco up to 1.14.1. It has been rated as
-> problematic. Affected by this issue is the function MultipartInputStream
-> of the file Net/src/MultipartReader.cpp. The manipulation leads to null
-> pointer dereference. The attack needs to be approached locally. The
-> exploit has been disclosed to the public and may be used. Upgrading to
-> version 1.14.2 is able to address this issue. The patch is identified as
-> 6f2f85913c191ab9ddfb8fae781f5d66afccf3bf. It is recommended to upgrade
-> the affected component.
+> COPYRIGHT was updated:
+> -Copyright (c) 2002, 2006, 2009, 2010, Oracle and/or its affiliates.
+> -All rights reserved.
+> +Copyright (c) 2002, 2006, 2009, 2010, 2025, Oracle and/or its affiliates.
 > 
-> For more information see:
->   - https://nvd.nist.gov//vuln/detail/CVE-2025-6375
->   - https://github.com/pocoproject/poco/commit/6f2f85913c191ab9ddfb8fae781f5d66afccf3bf
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
 Applied to 2025.02.x, 2025.05.x & 2025.08.x. Thanks
 
 > ---
->  ...-SEGV-at-Net-src-MultipartReader-cpp.patch | 34 +++++++++++++++++++
->  package/poco/poco.mk                          |  3 ++
->  2 files changed, 37 insertions(+)
->  create mode 100644 package/poco/0001-fix-Net-A-SEGV-at-Net-src-MultipartReader-cpp.patch
+>  package/x11r7/xapp_xdm/xapp_xdm.hash | 6 +++---
+>  package/x11r7/xapp_xdm/xapp_xdm.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/poco/0001-fix-Net-A-SEGV-at-Net-src-MultipartReader-cpp.patch b/package/poco/0001-fix-Net-A-SEGV-at-Net-src-MultipartReader-cpp.patch
-> new file mode 100644
-> index 0000000000..cfb22d690a
-> --- /dev/null
-> +++ b/package/poco/0001-fix-Net-A-SEGV-at-Net-src-MultipartReader-cpp.patch
-> @@ -0,0 +1,34 @@
-> +From 6f2f85913c191ab9ddfb8fae781f5d66afccf3bf Mon Sep 17 00:00:00 2001
-> +From: =?UTF-8?q?G=C3=BCnter=20Obiltschnig?= <guenter.obiltschnig@appinf.com>
-> +Date: Wed, 16 Apr 2025 09:15:33 +0200
-> +Subject: [PATCH] fix(Net): A SEGV at Net/src/MultipartReader.cpp:164:1 #4915
-> + (move assertion out of ctor)
-> +
-> +Upstream: https://github.com/pocoproject/poco/commit/6f2f85913c191ab9ddfb8fae781f5d66afccf3bf
-> +CVE: CVE-2025-6375
-> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> +---
-> + Net/src/MultipartReader.cpp | 3 +--
-> + 1 file changed, 1 insertion(+), 2 deletions(-)
-> +
-> +diff --git a/Net/src/MultipartReader.cpp b/Net/src/MultipartReader.cpp
-> +index f3a2f2bba2..f4aa27dd86 100644
-> +--- a/Net/src/MultipartReader.cpp
-> ++++ b/Net/src/MultipartReader.cpp
-> +@@ -36,7 +36,6 @@ MultipartStreamBuf::MultipartStreamBuf(std::istream& istr, const std::string& bo
-> + 	_boundary(boundary),
-> + 	_lastPart(false)
-> + {
-> +-	poco_assert (!boundary.empty() && boundary.length() < STREAM_BUFFER_SIZE - 6);
-> + }
-> + 
-> + 
-> +@@ -47,7 +46,7 @@ MultipartStreamBuf::~MultipartStreamBuf()
-> + 
-> + int MultipartStreamBuf::readFromDevice(char* buffer, std::streamsize length)
-> + {
-> +-	poco_assert_dbg (length >= _boundary.length() + 6);
-> ++	poco_assert (!_boundary.empty() && _boundary.length() < length - 6);
-> + 
-> + 	static const int eof = std::char_traits<char>::eof();
-> + 	std::streambuf& buf = *_istr.rdbuf();
-> diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-> index ee740b2377..f7d9cdc009 100644
-> --- a/package/poco/poco.mk
-> +++ b/package/poco/poco.mk
-> @@ -11,6 +11,9 @@ POCO_LICENSE_FILES = LICENSE
->  POCO_CPE_ID_VENDOR = pocoproject
->  POCO_INSTALL_STAGING = YES
+> diff --git a/package/x11r7/xapp_xdm/xapp_xdm.hash b/package/x11r7/xapp_xdm/xapp_xdm.hash
+> index daf1b0852f..13c9f3dc9b 100644
+> --- a/package/x11r7/xapp_xdm/xapp_xdm.hash
+> +++ b/package/x11r7/xapp_xdm/xapp_xdm.hash
+> @@ -1,5 +1,5 @@
+> -# From https://lists.x.org/archives/xorg-announce/2022-December/003265.html
+> -sha256  3e9bf25636797ec9e595286dd6820ecc33901439f07705eaf608ecda012c3d5f  xdm-1.1.14.tar.xz
+> -sha512  8ed1d2c946916c24cb4b2de9326f65629c97e53b145312c9cb9c6e4308d8b47d67d3981319fbd4feac9b3ed436b9dfb24a1c905d37d7bcf07b49c18a68c7a6e4  xdm-1.1.14.tar.xz
+> +# From https://lists.x.org/archives/xorg/2025-March/061902.html
+> +sha256  9494aef0911a031c53670725b5c8c9bb9d3f7c5ea7318b1f72ddd9dcbbeceb6a  xdm-1.1.17.tar.xz
+> +sha512  68499cdf73c9b6b48b974a724e5d045bb8333cfd17f1d7e36132e7aec51922c22260b361517c4f0d9fb7d28ce4909e0638e00180e93544bc7200d9bef55e822b  xdm-1.1.17.tar.xz
+>  # Locally computed
+>  sha256  b33b4bebbd6511b3e15315e8e29d67f25334ee45da8b7da6e6e97c53a70c6923  COPYING
+> diff --git a/package/x11r7/xapp_xdm/xapp_xdm.mk b/package/x11r7/xapp_xdm/xapp_xdm.mk
+> index 2a343b55e2..03b9ad58e9 100644
+> --- a/package/x11r7/xapp_xdm/xapp_xdm.mk
+> +++ b/package/x11r7/xapp_xdm/xapp_xdm.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
-> +# 0001-fix-Net-A-SEGV-at-Net-src-MultipartReader-cpp.patch
-> +POCO_IGNORE_CVES += CVE-2025-6375
-> +
->  POCO_DEPENDENCIES = \
->  	pcre2 \
->  	zlib \
+> -XAPP_XDM_VERSION = 1.1.14
+> +XAPP_XDM_VERSION = 1.1.17
+>  XAPP_XDM_SOURCE = xdm-$(XAPP_XDM_VERSION).tar.xz
+>  XAPP_XDM_SITE = https://xorg.freedesktop.org/archive/individual/app
+>  XAPP_XDM_LICENSE = MIT
 > -- 
-> 2.51.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
