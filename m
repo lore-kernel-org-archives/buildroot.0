@@ -1,106 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 487DDCAC5B5
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:16:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B99D6CAC5B9
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:16:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 005026152F;
-	Thu, 25 Sep 2025 20:16:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E85741520;
+	Thu, 25 Sep 2025 20:16:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aikM2yZXfPCP; Thu, 25 Sep 2025 20:16:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TQLVUvBBiCq2; Thu, 25 Sep 2025 20:16:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C775F61531
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3AD141481
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C775F61531;
-	Thu, 25 Sep 2025 20:16:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A3AD141481;
+	Thu, 25 Sep 2025 20:16:51 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8EF55177
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:16:44 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 41FFE177
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:16:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 812618439B
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:16:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3F78C84384
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:16:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ofF98yGVrq55 for <buildroot@buildroot.org>;
+ id wAUCxHhJPzdp for <buildroot@buildroot.org>;
  Thu, 25 Sep 2025 20:16:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8129384396
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8129384396
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8129384396
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:16:43 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-46e317bc647so10123645e9.2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3B5A184398
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B5A184398
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3B5A184398
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:16:44 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-46e3a50bc0fso1729085e9.3
  for <buildroot@buildroot.org>; Thu, 25 Sep 2025 13:16:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1758831401; x=1759436201;
+ d=1e100.net; s=20230601; t=1758831402; x=1759436202;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=ee8wfUXySj0qRdxkiukyh8sityZoYPzTjDgQ1gbNDf0=;
- b=FTz0gJo7LXv2BgUNzTm1h7loWbPNkMKyBdcdI+zHXHe3SsGNRREguu7VyP3ddhBMiw
- HezsEq9hGqK/qATK3JkB1PFRtsDemHJP9BIEfWzjWjqk3UT4YjY3HJsN1pGmXiMliTcm
- VmqXq7xa3D5rDL8+CHLwHLBNmDklDjdAtgRIOUn77OmZpK8JRs59TAaqdljhQGmwsQiw
- 8kK0gEIlR64B4MSlWiOvP+BBOTdTRzYivpucIthqOIf9nv/ow1/TRm9WJmaVGwL0SRlA
- Mjn3uCvIhD02v/linvgMW2aFTa3xmKq5IL2G2X8boiAzGO1W7UIVjoNwMxdjp1ymU+Y7
- kFXw==
+ bh=ozfwmGAV3UaVAczk2oRzB5Oi6wAASqR0smZ0Ml0WEOE=;
+ b=WCqfgJ9a2J2xCqGQALTFtwXOyD08+iPOPAMXeG65YinS7Ha2XOoKZhA97KC0M2Nl3o
+ OYwRYoHbQ1pDaBMp+0pY2sfzEbmuORWdI8PmYwUrADTLbtoL31LuhWhpD895CZnte998
+ 50jMvy4dEbvbirwii3kRbXH12VvQfWZnjQC+rXboCQc7dDcBjsMP/f+WZ7cQD0MALH7v
+ f3jmAv7mAZ9c2Oa91R4dzfdCwhguHLX9jsICDmAAbxbGHqFdCN6zctzD9lEjhCy6m7Yj
+ 8JMnS+P3QB9qw+ZJoA4T4kK+bptsMihC/AH17tJZo7ULUTT06d/VF1WZXTReZm/QSumd
+ SpQw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCXQNxvmILL+XF1KOi2XS2YpKlNkLyd2xo1Esr6c4A6aL86QT7Q97nl0SiUyFOtbYqOnQxre45mT6OU=@buildroot.org
-X-Gm-Message-State: AOJu0YxEjRlUijfU96S8KEEb45WsKIYy7j92hLCLRjAmbzM5tQROUf6u
- I9DSFBFxNylzaYmstiRvU802/aFdSoWiyyQAKEHaAy8XqRAGqJwQFVZkAqUiVd1y+oE=
-X-Gm-Gg: ASbGnctDYd9xmYtYWM5VC9R5i3XCUt7le/ainf/Mj1FJe+JQnMQjW1rc28Rl6scw4Fn
- rsnUm3Vy9Vcfcf8p19S62459lGTSiECei8/I8PbEzsu/ALqta4fuaqvdq/7K5J4qCOIaDJokw3I
- Y5vIyFL4yDVs/zXmjgjHVMo4q32Ap6c3yyIkgNtcQ10l0LtME8IHFu/WaWfCfEsBTKXHPAUyAwB
- tGzBqs8svmvP34UH/tsXuc58sXiDQa9LJNHbQmVayqBJwpnzUYJBYa6KWCMnef9tUf/ADEcQoX4
- fjxoAVvSpjkLFqRp8Zt+fx9UUokRr6kHNoycLu1Y8pWeeq0kb8/sFxHWP2kkIutv1Ba5hk7cSSf
- J3IO7n7PcotqAFc8=
-X-Google-Smtp-Source: AGHT+IGapTUZnPufPKwb5hbEUuzJ/8Sfpi07GddS5IY25kht3HdAmOP6V/rWwwrPxsRGaraaSDTPdw==
-X-Received: by 2002:a05:600c:1c8e:b0:46e:1f86:aeba with SMTP id
- 5b1f17b1804b1-46e329f819dmr54991745e9.17.1758831401362; 
- Thu, 25 Sep 2025 13:16:41 -0700 (PDT)
+ AJvYcCWV+6RwGkDorMeVvrm7izfcwD6GRNHE0LuEJfsNjAT3qUG35faB44EtlFj6ul6KRgcNe7vPPDmlYbk=@buildroot.org
+X-Gm-Message-State: AOJu0Yw56djuHe2ICVktIicDRK9YAmUXgUlmrvVsQTp6UL3GI54sU4hR
+ xPMo0GQXjySLdWR4ashG6mqqus4aFjD91pAd6EZiz0pjL78jx1cRgF/6A3TlT2heR+M=
+X-Gm-Gg: ASbGncuWBkY+Fv0kENKgQIt3B6TzHgMuBCGEvKRkJB+x6YJ8mqMNqnRT7zKgGJGT572
+ arwvB85AjZXWhPBhtTdmRfewUQWh52WOHkKGu8dsse/xhEcZ+35f0WxmHr8wiJEYqahLPahaBDt
+ MujWsIFgprPdm/j0BwAAfemwBG7xWAyiRGpGwaN3pVW8jLzgX+0Wix9QR63OrS+Rv5IkpwDz5NU
+ DbTQxZTDFsYSicwYe8LOy17/k7vUSrNJ1TAt0mEl70vnUIAEsj8qHdBb2unqnSborjK+SbdRzK0
+ KT4NU9Ov8qDq9ZO6sNTjPxhQiaLkuMFO8eO7gPi90UpkdhYdpBFvCI4s+YjwXWyRf3JWJ1gcZPM
+ ORU08+Hm/I1G8AVfXKQO4HsU9zQ==
+X-Google-Smtp-Source: AGHT+IH3Qv7H9n693BHY/cdNLHS8SAD1gC7xx+bh3bIjHqb/Qu6nAj4lbN7CpbSygOYmg6fe8ecblQ==
+X-Received: by 2002:a05:6000:2410:b0:405:ed47:b22b with SMTP id
+ ffacd0b85a97d-40e42502e37mr5077658f8f.10.1758831402233; 
+ Thu, 25 Sep 2025 13:16:42 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-46e2ab31ea3sm87505925e9.12.2025.09.25.13.16.41
+ ffacd0b85a97d-40fc7e2c6b3sm4485303f8f.54.2025.09.25.13.16.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Thu, 25 Sep 2025 13:16:41 -0700 (PDT)
-To: Julien Olivain <ju.o@free.fr>
+To: Titouan Christophe <titouan.christophe@mind.be>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 25 Sep 2025 22:16:40 +0200
-Message-ID: <20250925201640.43225-1-thomas.perale@mind.be>
+Date: Thu, 25 Sep 2025 22:16:41 +0200
+Message-ID: <20250925201641.43274-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250915185448.11118-1-ju.o@free.fr>
-References: <20250915185448.11118-1-ju.o@free.fr>
+In-Reply-To: <20250915132556.47191-1-titouan.christophe@mind.be>
+References: <20250915132556.47191-1-titouan.christophe@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1758831401; x=1759436201; darn=buildroot.org;
+ d=mind.be; s=google; t=1758831402; x=1759436202; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=ee8wfUXySj0qRdxkiukyh8sityZoYPzTjDgQ1gbNDf0=;
- b=NnM39kKPwFF66SF3W3wFHgLPo3S4rIfRBbr8TirdiRt+EAE1YOZyAH4HuqhCmtaNnU
- 0pjRTF/grAjv/c6cYcZ1FkWDGPY+IBiiDo5hbR4YWh9f/tbcnCzGGMXLXOf49i3g/a+R
- Ju9vbnOFn7Vbdu261jzX2nxSTJjraMFAPrH0PZUmBlbXmgUGKGaVVo9LhUTBi+NzXG0b
- NqlLJtAieug0GnRmVFdNoLOHnZxt+F6KO/4NjZcPD1RYnEyIvuAFPHJTyABkXUQPyEI4
- r4Ge8bFwh0L9/OMBah1Jj2XwoFALBsNQiCagAgBTG2NSeWD63yDuFaOvuYmatG3yMzTm
- KrJw==
+ bh=ozfwmGAV3UaVAczk2oRzB5Oi6wAASqR0smZ0Ml0WEOE=;
+ b=ge4WL/wB/zetA0cG+tQF0CItChsT8CbeCvh0CucLopHUSMyijh1UY1N8ZJYj7qhn7E
+ obm/YFTccPsZ0D1WROzGsLlvFJQAq7l5Hx5q14a+Zkj6uyKV/+G1p+Ryv7DAbcoUouzu
+ rTzX65ANYtuwpcNbd2mDKsk+EJ2jIpLxY3cjQNBM0EQa5Iig5K14qNjJTx9mUVErgbdN
+ MnSFj98EvSn35Lq0wUU04OxtKvJm5Lw8xqIJK6O55TfBdiEqHFdpA4r9nF09X8b0kvlW
+ wAOV+vxS++MdeiYjGuJN6jXanPWTB9Z7WPC8q/G7Xdtwc18TKP/LzMk6HJaolTx0wxn6
+ cYVg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=NnM39kKP
-Subject: Re: [Buildroot] [PATCH 1/3] boot/boot-wrapper-aarch64/Config.in:
- switch homepage URL to https
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=ge4WL/wB
+Subject: Re: [Buildroot] [PATCH] package/python-flask-cors: fix PKG_SITE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,35 +118,33 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Buildroot commit [1] ("package: replace git:// URLs with https://
-> URLs where possible") switched _SITE URL from git to https, but did
-> not updated the package homepage in Config.in.
+> python-flask-cors was security bumped in commit 04cd135b26 [1], however this
+> commit did not update the _SITE url; which changes with each new release on
+> pypi. Therefore, downloading python-flask-cors would always fail.
 > 
-> This commit updates it to match the package _SITE URL.
+> [1] https://gitlab.com/buildroot.org/buildroot/-/commit/04cd135b26406dcc31cb66af1480d53fffe81e59
 > 
-> [1] https://gitlab.com/buildroot.org/buildroot/-/commit/6626bf7c5fc1f5f47fcade03090de212a6121db3
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 
 Applied to 2025.02.x, 2025.05.x & 2025.08.x. Thanks
 
 > ---
->  boot/boot-wrapper-aarch64/Config.in | 2 +-
+>  package/python-flask-cors/python-flask-cors.mk | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/boot/boot-wrapper-aarch64/Config.in b/boot/boot-wrapper-aarch64/Config.in
-> index dfefb7a9fd..7271336166 100644
-> --- a/boot/boot-wrapper-aarch64/Config.in
-> +++ b/boot/boot-wrapper-aarch64/Config.in
-> @@ -11,7 +11,7 @@ menuconfig BR2_TARGET_BOOT_WRAPPER_AARCH64
->  	  possible to start an Aarch64 kernel inside the available
->  	  software simulators for the Aarch64 architecture.
+> diff --git a/package/python-flask-cors/python-flask-cors.mk b/package/python-flask-cors/python-flask-cors.mk
+> index d0923d665b..26198e6fb4 100644
+> --- a/package/python-flask-cors/python-flask-cors.mk
+> +++ b/package/python-flask-cors/python-flask-cors.mk
+> @@ -6,7 +6,7 @@
 >  
-> -	  git://git.kernel.org/pub/scm/linux/kernel/git/mark/boot-wrapper-aarch64.git
-> +	  https://git.kernel.org/pub/scm/linux/kernel/git/mark/boot-wrapper-aarch64.git
->  
->  if BR2_TARGET_BOOT_WRAPPER_AARCH64
->  
+>  PYTHON_FLASK_CORS_VERSION = 6.0.1
+>  PYTHON_FLASK_CORS_SOURCE = flask_cors-$(PYTHON_FLASK_CORS_VERSION).tar.gz
+> -PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/4f/d0/d9e52b154e603b0faccc0b7c2ad36a764d8755ef4036acbf1582a67fb86b
+> +PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/76/37/bcfa6c7d5eec777c4c7cf45ce6b27631cebe5230caf88d85eadd63edd37a
+>  PYTHON_FLASK_CORS_SETUP_TYPE = setuptools
+>  PYTHON_FLASK_CORS_LICENSE = MIT
+>  PYTHON_FLASK_CORS_LICENSE_FILES = LICENSE
 > -- 
 > 2.51.0
 > 
