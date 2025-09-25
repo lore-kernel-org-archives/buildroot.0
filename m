@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6670CCAC5B0
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:30:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC1DDCAC5B9
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:30:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CB82161552;
-	Thu, 25 Sep 2025 20:30:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA1BD61580;
+	Thu, 25 Sep 2025 20:30:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5RRid3BEmonB; Thu, 25 Sep 2025 20:30:26 +0000 (UTC)
+ id l8J7pomM8Ycx; Thu, 25 Sep 2025 20:30:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1F8861554
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6D5861554
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C1F8861554;
-	Thu, 25 Sep 2025 20:30:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id CFF2312D
+	by smtp3.osuosl.org (Postfix) with ESMTP id A6D5861554;
+	Thu, 25 Sep 2025 20:30:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id F34AC177
  for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B4FDC83381
+ by smtp2.osuosl.org (Postfix) with ESMTP id DA305412D3
  for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M3mlKcLwxC9W for <buildroot@buildroot.org>;
- Thu, 25 Sep 2025 20:30:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rBBy_-0Rdepw for <buildroot@buildroot.org>;
+ Thu, 25 Sep 2025 20:30:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2E598301F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7A86403B1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F2E598301F
+ by smtp2.osuosl.org (Postfix) with ESMTP id A7A86403B1
  for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:30:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F113083B7E; Thu, 25 Sep 2025 20:30:21 +0000 (UTC)
+ id 96FF28644A; Thu, 25 Sep 2025 20:30:21 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 25 Sep 2025 16:34:00 +0200
+Date: Thu, 25 Sep 2025 16:26:05 +0200
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: ee056ed2ea2efebfc036e2089eff756baa8a5124
-X-Git-Newrev: c53e310b23668a5dc94cc5b3921d6d3d8a57f5ac
+X-Git-Oldrev: 758e9121a091dbb7e65bb48c1c0c368ba34a2a51
+X-Git-Newrev: 1f1c9031832205da8bdffdceed32e9cf06265395
 X-Patchwork-Hint: ignore
-Message-Id: <20250925203021.F113083B7E@busybox.osuosl.org>
+Message-Id: <20250925203021.96FF28644A@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2025.08.x]
- package/python-typing-extensions: bump to version 4.15.0
+ package/python-flask-cors: fix PKG_SITE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,46 +66,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c53e310b23668a5dc94cc5b3921d6d3d8a57f5ac
+commit: https://git.buildroot.net/buildroot/commit/?id=1f1c9031832205da8bdffdceed32e9cf06265395
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+python-flask-cors was security bumped in commit 04cd135b26 [1], however this
+commit did not update the _SITE url; which changes with each new release on
+pypi. Therefore, downloading python-flask-cors would always fail.
+
+Fixes:
+https://autobuild.buildroot.org/results/eeadcb2e416cddaa5d059b31ea5dcc9f766a3cff
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/04cd135b26406dcc31cb66af1480d53fffe81e59
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+[Julien: add "Fixes" in commit log, from Yegor Yefremov comment]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 6ea8e60e497a518a6e9efd9ea5b85c00ef71578a)
+(cherry picked from commit cbc3cb2c8deebd362399cc7867dda94709d552e7)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-typing-extensions/python-typing-extensions.hash | 4 ++--
- package/python-typing-extensions/python-typing-extensions.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-flask-cors/python-flask-cors.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-typing-extensions/python-typing-extensions.hash b/package/python-typing-extensions/python-typing-extensions.hash
-index c422691dab..c86b6716a8 100644
---- a/package/python-typing-extensions/python-typing-extensions.hash
-+++ b/package/python-typing-extensions/python-typing-extensions.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/typing-extensions/json
--md5  da52c877660b1760771ce7553f729c5d  typing_extensions-4.14.1.tar.gz
--sha256  38b39f4aeeab64884ce9f74c94263ef78f3c22467c8724005483154c26648d36  typing_extensions-4.14.1.tar.gz
-+md5  079e529d0b271647f3ec2720aee8fc65  typing_extensions-4.15.0.tar.gz
-+sha256  0cea48d173cc12fa28ecabc3b837ea3cf6f38c6d1136f85cbaaf598984861466  typing_extensions-4.15.0.tar.gz
- # Locally computed sha256 checksums
- sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
-diff --git a/package/python-typing-extensions/python-typing-extensions.mk b/package/python-typing-extensions/python-typing-extensions.mk
-index 9ed8b71ff2..d181b973a5 100644
---- a/package/python-typing-extensions/python-typing-extensions.mk
-+++ b/package/python-typing-extensions/python-typing-extensions.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/python-flask-cors/python-flask-cors.mk b/package/python-flask-cors/python-flask-cors.mk
+index d0923d665b..26198e6fb4 100644
+--- a/package/python-flask-cors/python-flask-cors.mk
++++ b/package/python-flask-cors/python-flask-cors.mk
+@@ -6,7 +6,7 @@
  
--PYTHON_TYPING_EXTENSIONS_VERSION = 4.14.1
-+PYTHON_TYPING_EXTENSIONS_VERSION = 4.15.0
- PYTHON_TYPING_EXTENSIONS_SOURCE = typing_extensions-$(PYTHON_TYPING_EXTENSIONS_VERSION).tar.gz
--PYTHON_TYPING_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/98/5a/da40306b885cc8c09109dc2e1abd358d5684b1425678151cdaed4731c822
-+PYTHON_TYPING_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/72/94/1a15dd82efb362ac84269196e94cf00f187f7ed21c242792a923cdb1c61f
- PYTHON_TYPING_EXTENSIONS_SETUP_TYPE = flit
- PYTHON_TYPING_EXTENSIONS_LICENSE = Python-2.0
- PYTHON_TYPING_EXTENSIONS_LICENSE_FILES = LICENSE
+ PYTHON_FLASK_CORS_VERSION = 6.0.1
+ PYTHON_FLASK_CORS_SOURCE = flask_cors-$(PYTHON_FLASK_CORS_VERSION).tar.gz
+-PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/4f/d0/d9e52b154e603b0faccc0b7c2ad36a764d8755ef4036acbf1582a67fb86b
++PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/76/37/bcfa6c7d5eec777c4c7cf45ce6b27631cebe5230caf88d85eadd63edd37a
+ PYTHON_FLASK_CORS_SETUP_TYPE = setuptools
+ PYTHON_FLASK_CORS_LICENSE = MIT
+ PYTHON_FLASK_CORS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
