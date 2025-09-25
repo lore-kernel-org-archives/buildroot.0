@@ -4,102 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD40ACAC5B5
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:17:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B99C5CAC5B5
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:17:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A3F2361550;
-	Thu, 25 Sep 2025 20:17:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 90A3F61623;
+	Thu, 25 Sep 2025 20:17:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qHwJkBLiDyPY; Thu, 25 Sep 2025 20:17:29 +0000 (UTC)
+ id Svx8Jdre-btx; Thu, 25 Sep 2025 20:17:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 930F061616
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B9EE6157C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 930F061616;
-	Thu, 25 Sep 2025 20:17:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 107FB177
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:17:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5B9EE6157C;
+	Thu, 25 Sep 2025 20:17:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 93B12177
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:17:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0270C4129D
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:17:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8BA3F4129F
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:17:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tUicge7IBRf9 for <buildroot@buildroot.org>;
- Thu, 25 Sep 2025 20:17:18 +0000 (UTC)
+ id nfsas669qyNb for <buildroot@buildroot.org>;
+ Thu, 25 Sep 2025 20:17:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B69B540066
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B69B540066
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B69B540066
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:17:17 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-3ecdf2b1751so1001458f8f.0
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 13:17:17 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 630BD40066
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 630BD40066
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 630BD40066
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:17:19 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-45ed646b656so9888215e9.3
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 13:17:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1758831436; x=1759436236;
+ d=1e100.net; s=20230601; t=1758831437; x=1759436237;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=c+8QNGKTFeMBsqE7Fi8LhlSaJlVG7UDGlQ14B+Yl3gY=;
- b=MS/9EOUWn56nF8fcLZL3G+GXxxkKLI/MLYLF9gwXyHys9lXiX4zeMg9NY8zQ72RKlq
- Q/4UZV7ZrzhPs72iC4KfX4fvsGb2hF9/bmPKE7iGPZLD2MbXtG00xJHiiZxL4SpiRzjl
- 0HMQv1caQbUMV2+AeWecriU3RaPoix/VYN67hneHcw4UKBNVsprrGeveOnWZYS5z14hb
- rhZJsFV7CXKfUr3fEyEo/IHWXtrGWOsDw8F4HZFhQtueuKiiAPhxYYTBF93Bma8AzfOb
- dinjUE1Vascm/8qnK68/yUEI8r/DG9/gmISbzXUGGDHSadrDH3VTzDG7sFsMaMWfKkLq
- z6sg==
+ bh=hK8ugMqPaj6hmvDeH3T1XqkQeg5Fj9LSbDfjOGUj86I=;
+ b=Ms3JcRDsq6+L4RVgCDlNPSJw4JdeJTAuIi4D/uOrOxB8i/jRSbPw8EMmu9VXBtlP09
+ ax1RlZzDEx0d2qrf9kqAOjdqsBFhdYgH/zE9pB0Fr4vYM4aWUu324zA0Jc3vKq+qYZw4
+ X8+SLSd9vO+0zvOLHq4VG2LfZsCDJQumWkT1rFMq6/NjAJ8Axb6iHxKtCXJWxgBVrpja
+ XL1YBvmNNI9GgI+xmU6N0VlwG1FN40UpNy8299umbZJRArMyQxvP9Sd8oKcv7EGHocgy
+ zn/RG2R+P7hAxemCbd+C3UAeqJEVgSlQQXEPqsLLOxLAD32MnZrqCceQGm33BhlB5WYo
+ 3IDQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUffIjuD3Z3Ov5mOhoxZvSmn7cKyow/GRfPk0pbNXrPAoVMZvIdLmJ1QzUxmrJ5QPm+kihzUsxjuF8=@buildroot.org
-X-Gm-Message-State: AOJu0YzScxCAXZwKmxskLdMwk7bYZBefbGPCamA240vz+vUhSwcTdN/q
- RmMpP9rhs/oaxIB8lI74osPccjxejh15yADepf1QT3VJYLtQrkfok+mAjWqDyH5b5ls=
-X-Gm-Gg: ASbGncstCg+6ntT37lQb1dmpp5++9BgDtih9jU7QpeX2C9lmFMSq5/BGdidgIIGl0pS
- 4VKk2NlvwupugRDSJc73WgqsVh/0/I/Dc6+wuUP3n9mLOPSBgCBshLMcuAOYb3vPdFxsSrPLPL0
- LZSIVaNZtBhOI+lWEZ/LOfo12UusbAma0nLrUPYhOTx8s/msT9vaNPRlFOi/7N/rjQ2hckzWCwt
- duyyQ9qS8yDayPIWIgQEAGQRuD5Izvnp5t/Z+XtutdozWXUSmsAGo/oIHwSuDvhUpsARlBVtCq/
- 4kl9HuRyXaqtNFk+7vH/P2ubMOJOKPNoe/cKKfPiCXyAE/iEx7hhQ8IjNWDAA2Y0gDMSHWLNBgK
- eSXAuNXMntCHFGGY=
-X-Google-Smtp-Source: AGHT+IGK8+eP/UghHOap4sktjbbNmGGhtbnnugOs/8Nn3YnYEDE8jCsG3vvkuMhJJAxuuZk9FDq/yw==
-X-Received: by 2002:a05:6000:2005:b0:3ee:d165:2edd with SMTP id
- ffacd0b85a97d-40e4b666ffcmr5007267f8f.28.1758831435587; 
- Thu, 25 Sep 2025 13:17:15 -0700 (PDT)
+ AJvYcCVIX7hVe0i8jZgqWc0hj+tdet6NhAZ+zvrzi1lhhjsABStkA6uHvZVSyxqLvUjPbSkuhY/sDreAWt8=@buildroot.org
+X-Gm-Message-State: AOJu0YxwLnWhpEBztn1DadGBr66r2t50+sPjbM3EX8hjxQiKkYCkO3XO
+ 7FlAQSI66Ys9yUusM+Uc7Lc0b/463doSBJJePmc4XXwLWzfZHxho8zt4395QxfRT288=
+X-Gm-Gg: ASbGncu8q1W3zaixTADc918kvEDKICae9oyjCkIzrCgt/oAZOTw+ZnVuoDZjwjNNAtd
+ hoTBqAKS/+Ma0rLiXljWQVQBqdNj9awe9LEN/r5qGZ4T05q8oY5dk9Ly6IFmu28dzDGuU/tKl/A
+ yw/+ViB4RirNW0SR/zaDUYFHszzITIBtEKBJE4HmY9IK0bRNUjX+ny6IrwT07pPi8H5HhN/lldy
+ mU6FfXPUdcGtYSWgZcWIanSNSmRRcQWoksmF6uagiC75/9ebOWqysfF62zFMKVx++Ratv+h5A7B
+ lxfwNIw9AvgM9fdMyLc5ns5NiH1cK/us8oPBk08EvLlrx3dqqgKaydP6nLV4M/i2VYsN2hQ+rmO
+ MFb+J60xmStpFEBHAPD8ZGtuK6Q==
+X-Google-Smtp-Source: AGHT+IESaD5xw/OTx2hfcJOAYj6BPPjMeVgzo6+WAmLhCopTZUaO7Y0PV9qd7YkyhJNMhAmwItlAYA==
+X-Received: by 2002:a05:600c:c04b:10b0:46e:2d0d:8053 with SMTP id
+ 5b1f17b1804b1-46e32a30481mr41120125e9.18.1758831437391; 
+ Thu, 25 Sep 2025 13:17:17 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-46e33b9e8aesm45375755e9.4.2025.09.25.13.17.15
+ 5b1f17b1804b1-46e2ab31e97sm89947265e9.14.2025.09.25.13.17.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 25 Sep 2025 13:17:15 -0700 (PDT)
+ Thu, 25 Sep 2025 13:17:17 -0700 (PDT)
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 25 Sep 2025 22:17:14 +0200
-Message-ID: <20250925201714.44671-1-thomas.perale@mind.be>
+Date: Thu, 25 Sep 2025 22:17:16 +0200
+Message-ID: <20250925201716.44780-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250907160424.3546872-1-thomas.petazzoni@bootlin.com>
-References: <20250907160424.3546872-1-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20250909072653.942584-1-thomas.petazzoni@bootlin.com>
+References: <20250909072653.942584-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1758831436; x=1759436236; darn=buildroot.org;
+ d=mind.be; s=google; t=1758831437; x=1759436237; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=c+8QNGKTFeMBsqE7Fi8LhlSaJlVG7UDGlQ14B+Yl3gY=;
- b=DvuykKN4NykIo1KuwQg+gOr57d2UX9m8QZzfPGQ+3wWFKfLEd2gz8NAl9MYDEvv+09
- HEaDegTykkjKwZD27yjCRJTiuWy/8SfQatjGvpT5YXUlAcKDEcv5Yqx0y2i87Ordzl8/
- Gj5RWMs5qJuCtsa+lABQyIhhOPNL0PyQvWr2LALpJx4s9ey6nE8Am/2lyMfMZBbdzhLd
- 06gcygMzmdhjpJgoOaKsaFzrv+BthGtVoP0UTHdQdJr4TmKPcgiKUL4Sxx72VII4YVA2
- XxbHYjhjSZ6CgDE1C8g//HEozJfBKfhPgt89iv81/we560Q/W82JyyDTUbEWgRGNhrRp
- vqfg==
+ bh=hK8ugMqPaj6hmvDeH3T1XqkQeg5Fj9LSbDfjOGUj86I=;
+ b=fJWu7T8ssP4DGWLrq5NIIigQFDgT4mX2vEMP3kY9Nr6SN7A/etnpsJ67m7JOuPzaPO
+ Gs8ADKggMeNQGMKdGGFtcjuzLFRUXSCumM1P5G1V7mvgjzIGniJyztws5akqdFX7lUM/
+ fhhD8c1WnePZozkHCk9aHmZuIvyhqqXv6wm7TSl9ExoTZpOd+THHtB9MzgGG9HVKkF2X
+ PELPXsmn79amWjjk7p0orvmpDPvHGjWGi0/IxvfQDnrhoJVT4iKrFzJ6zb/5OU7wDolp
+ o8XPsDMcanBf+4wiomlexJQgHpZGuRcUmCAgBuK5wPlMTuKcCTGm61Vur0d9KpSFx1U0
+ i0gQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=DvuykKN4
-Subject: Re: [Buildroot] [PATCH 1/2] package/c-icap: add patches to fix GCC
- 15.x build issues
+ header.a=rsa-sha256 header.s=google header.b=fJWu7T8s
+Subject: Re: [Buildroot] [PATCH] package/chocolate-doom: bump to 3.1.1 to
+ fix GCC 15.x issues
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,355 +119,147 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Patches 0003 and 0004 are upstream backport. Patch 0005 isn't because
-> the code has completely changed upstream in newer releases.
+> Changes in 3.1.0:
+> 
+>   https://github.com/chocolate-doom/chocolate-doom/releases/tag/chocolate-doom-3.1.0
+> 
+> Changes in 3.1.1:
+> 
+>   https://github.com/chocolate-doom/chocolate-doom/releases/tag/chocolate-doom-3.1.1
+> 
+> The SDL2_mixer and SDL2_net dependencies are now optional since 3.1.0,
+> so adjust the packaging accordingly.
 > 
 > Fixes:
 > 
->   https://autobuild.buildroot.net/results/e9b4d9033f0283b133b58049a03b5f0b595e30db/
+>   https://autobuild.buildroot.net/results/90a01c5925e7f5f50b3ea06d6ea7b0da66814a15/
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Applied to 2025.08.x. Thanks
 
 > ---
->  ...thod-release_authentication_header-m.patch |  47 ++++
->  ...ith-GCC15-signal-handlers-require-an.patch |  31 +++
->  ...tion-prototypes-to-fix-GCC-15.x-buil.patch | 233 ++++++++++++++++++
->  3 files changed, 311 insertions(+)
->  create mode 100644 package/c-icap/0003-Fix-http_auth_method-release_authentication_header-m.patch
->  create mode 100644 package/c-icap/0004-Fix-to-compile-with-GCC15-signal-handlers-require-an.patch
->  create mode 100644 package/c-icap/0005-Fix-module-operation-prototypes-to-fix-GCC-15.x-buil.patch
+>  .checkpackageignore                           |  1 -
+>  ...move-redundant-demoextend-definition.patch | 29 -------------------
+>  package/chocolate-doom/Config.in              |  2 --
+>  package/chocolate-doom/chocolate-doom.hash    |  2 +-
+>  package/chocolate-doom/chocolate-doom.mk      | 22 ++++++++++++--
+>  5 files changed, 20 insertions(+), 36 deletions(-)
+>  delete mode 100644 package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch
 > 
-> diff --git a/package/c-icap/0003-Fix-http_auth_method-release_authentication_header-m.patch b/package/c-icap/0003-Fix-http_auth_method-release_authentication_header-m.patch
-> new file mode 100644
-> index 0000000000..940a67b70d
-> --- /dev/null
-> +++ b/package/c-icap/0003-Fix-http_auth_method-release_authentication_header-m.patch
-> @@ -0,0 +1,47 @@
-> +From 9ca4e5e2bd5fdf1d15a862faf8d4d1ddc0664bd0 Mon Sep 17 00:00:00 2001
-> +From: Christos Tsantilas <christos@chtsanti.net>
-> +Date: Fri, 21 Feb 2025 13:34:06 +0200
-> +Subject: [PATCH] Fix http_auth_method::release_authentication_header method
-> + declaration
+> diff --git a/.checkpackageignore b/.checkpackageignore
+> index 8cf2f4a215..5b0e0b177b 100644
+> --- a/.checkpackageignore
+> +++ b/.checkpackageignore
+> @@ -292,7 +292,6 @@ package/cdrkit/0003-Add-extern-to-char-outfile-declaration-to-fix-build-.patch l
+>  package/cfm/S65cfm lib_sysv.Indent lib_sysv.Variables
+>  package/cgroupfs-mount/S30cgroupfs Shellcheck lib_sysv.Indent lib_sysv.Variables
+>  package/chipmunk/0001-Fix-build-failure-on-musl.patch lib_patch.Upstream
+> -package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch lib_patch.Upstream
+>  package/chrony/S49chronyd lib_sysv.Variables
+>  package/cmake/0001-rename-cmake-rootfile.patch lib_patch.Upstream
+>  package/cmocka/0001-Don-t-redefine-uintptr_t.patch lib_patch.Upstream
+> diff --git a/package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch b/package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch
+> deleted file mode 100644
+> index 06bf54c583..0000000000
+> --- a/package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch
+> +++ /dev/null
+> @@ -1,29 +0,0 @@
+> -From a8fd4b1f563d24d4296c3e8225c8404e2724d4c2 Mon Sep 17 00:00:00 2001
+> -From: Jordan Christiansen <xordspar0@gmail.com>
+> -Date: Sun, 15 Mar 2020 16:55:33 -0500
+> -Subject: [PATCH] Remove redundant demoextend definition
+> -
+> -GCC 10 enables -fno-common by default, which causes the linker to fail when
+> -there are multiple definitions of a global variable.
+> -
+> -See https://gcc.gnu.org/gcc-10/porting_to.html
+> -
+> -[Retrieved from:
+> -https://github.com/chocolate-doom/chocolate-doom/commit/a8fd4b1f563d24d4296c3e8225c8404e2724d4c2]
+> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ----
+> - src/hexen/mn_menu.c | 1 -
+> - 1 file changed, 1 deletion(-)
+> -
+> -diff --git a/src/hexen/mn_menu.c b/src/hexen/mn_menu.c
+> -index 059f45b3e..a97b7fcd1 100644
+> ---- a/src/hexen/mn_menu.c
+> -+++ b/src/hexen/mn_menu.c
+> -@@ -131,7 +131,6 @@ boolean MenuActive;
+> - int InfoType;
+> - int messageson = true;
+> - boolean mn_SuicideConsole;
+> --boolean demoextend; // from h2def.h
+> - 
+> - // PRIVATE DATA DEFINITIONS ------------------------------------------------
+> - 
+> diff --git a/package/chocolate-doom/Config.in b/package/chocolate-doom/Config.in
+> index 406b04ecf1..3cefd057ec 100644
+> --- a/package/chocolate-doom/Config.in
+> +++ b/package/chocolate-doom/Config.in
+> @@ -3,8 +3,6 @@ config BR2_PACKAGE_CHOCOLATE_DOOM
+>  	depends on BR2_USE_MMU # fork()
+>  	depends on !BR2_STATIC_LIBS # sdl2
+>  	select BR2_PACKAGE_SDL2
+> -	select BR2_PACKAGE_SDL2_MIXER
+> -	select BR2_PACKAGE_SDL2_NET
+>  	help
+>  	  Chocolate Doom is a set of conservative source ports for Doom,
+>  	  Heretic, Hexen and Strife, with a philosophy of preserving the
+> diff --git a/package/chocolate-doom/chocolate-doom.hash b/package/chocolate-doom/chocolate-doom.hash
+> index 79eb1c6a3f..9d89b830f6 100644
+> --- a/package/chocolate-doom/chocolate-doom.hash
+> +++ b/package/chocolate-doom/chocolate-doom.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed
+> -sha256  d435d6177423491d60be706da9f07d3ab4fabf3e077ec2a3fc216e394fcfc8c7  chocolate-doom-3.0.1.tar.gz
+> +sha256  1edcc41254bdc194beb0d33e267fae306556c4d24110a1d3d3f865717f25da23  chocolate-doom-3.1.1.tar.gz
+>  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> diff --git a/package/chocolate-doom/chocolate-doom.mk b/package/chocolate-doom/chocolate-doom.mk
+> index 581b2c51c2..599a15d3fa 100644
+> --- a/package/chocolate-doom/chocolate-doom.mk
+> +++ b/package/chocolate-doom/chocolate-doom.mk
+> @@ -4,13 +4,15 @@
+>  #
+>  ################################################################################
+>  
+> -CHOCOLATE_DOOM_VERSION = 3.0.1
+> -CHOCOLATE_DOOM_SITE = http://www.chocolate-doom.org/downloads/$(CHOCOLATE_DOOM_VERSION)
+> +CHOCOLATE_DOOM_VERSION = 3.1.1
+> +CHOCOLATE_DOOM_SITE = $(call github,chocolate-doom,chocolate-doom,chocolate-doom-$(CHOCOLATE_DOOM_VERSION))
+>  CHOCOLATE_DOOM_LICENSE = GPL-2.0+
+>  CHOCOLATE_DOOM_LICENSE_FILES = COPYING
+>  CHOCOLATE_DOOM_CPE_ID_VENDOR = chocolate-doom
+>  CHOCOLATE_DOOM_CPE_ID_PRODUCT = chocolate_doom
+> -CHOCOLATE_DOOM_DEPENDENCIES = host-pkgconf sdl2 sdl2_mixer sdl2_net
+> +CHOCOLATE_DOOM_DEPENDENCIES = host-pkgconf sdl2
+> +# Fetch from git
+> +CHOCOLATE_DOOM_AUTORECONF = YES
+>  
+>  # Avoid installing desktop entries, icons, etc.
+>  CHOCOLATE_DOOM_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-exec
+> @@ -23,6 +25,20 @@ endif
+>  
+>  CHOCOLATE_DOOM_CONF_ENV += CFLAGS="$(CHOCOLATE_DOOM_CFLAGS)"
+>  
+> +ifeq ($(BR2_PACKAGE_SDL2_MIXER),y)
+> +CHOCOLATE_DOOM_DEPENDENCIES += sdl2_mixer
+> +CHOCOLATE_DOOM_CONF_OPTS += --enable-sdl2mixer
+> +else
+> +CHOCOLATE_DOOM_CONF_OPTS += --disable-sdl2mixer
+> +endif
 > +
-> +Requires a "char *" argument.
+> +ifeq ($(BR2_PACKAGE_SDL2_NET),y)
+> +CHOCOLATE_DOOM_DEPENDENCIES += sdl2_net
+> +CHOCOLATE_DOOM_CONF_OPTS += --enable-sdl2net
+> +else
+> +CHOCOLATE_DOOM_CONF_OPTS += --disable-sdl2net
+> +endif
 > +
-> +Reported with PR#72 at github:
-> + https://github.com/c-icap/c-icap-server/pull/72
-> +
-> +Upstream: 48a221b0197727b26f90c00544fa19c67d0f5d47
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> +---
-> + http_auth.c      | 2 +-
-> + include/module.h | 2 +-
-> + 2 files changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/http_auth.c b/http_auth.c
-> +index 1883b55..b831bb1 100644
-> +--- a/http_auth.c
-> ++++ b/http_auth.c
-> +@@ -62,7 +62,7 @@ int http_authenticate(ci_request_t * req, char *use_method)
-> +     authenticator_module_t **authenticators;
-> +     void *method_data;
-> +     const char *auth_str, *method_str, *username;
-> +-    char *auth_header = NULL;
-> ++    const char *auth_header = NULL;
-> +     int len, res;
-> + 
-> +     if (ALLOW_REMOTE_PROXY_USERS && !use_method) {
-> +diff --git a/include/module.h b/include/module.h
-> +index 286ef72..0e57586 100644
-> +--- a/include/module.h
-> ++++ b/include/module.h
-> +@@ -96,7 +96,7 @@ typedef struct http_auth_method {
-> +     void *(*create_auth_data)(const char *authorization_header,const char **username);
-> +     void (*release_auth_data)(void *data);
-> +     char *(*authentication_header)();
-> +-    void (*release_authentication_header)();
-> ++    void (*release_authentication_header)(char *);
-> +     struct ci_conf_entry *conf_table;
-> + } http_auth_method_t;
-> + 
-> +-- 
-> +2.51.0
-> +
-> diff --git a/package/c-icap/0004-Fix-to-compile-with-GCC15-signal-handlers-require-an.patch b/package/c-icap/0004-Fix-to-compile-with-GCC15-signal-handlers-require-an.patch
-> new file mode 100644
-> index 0000000000..97359ab4d6
-> --- /dev/null
-> +++ b/package/c-icap/0004-Fix-to-compile-with-GCC15-signal-handlers-require-an.patch
-> @@ -0,0 +1,31 @@
-> +From 8d21c9c18e3b03e28ef2831f3ecd287c4cc44694 Mon Sep 17 00:00:00 2001
-> +From: Christos Tsantilas <christos@chtsanti.net>
-> +Date: Fri, 21 Feb 2025 13:41:37 +0200
-> +Subject: [PATCH] Fix to compile with GCC15: signal handlers require an int
-> + argument
-> +
-> +Reported with PR#72 at github:
-> +     https://github.com/c-icap/c-icap-server/pull/72
-> +
-> +Upstream: 0b3408ad0e9f5ccadcd4d77dffa651f9211e4cd2
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> +---
-> + mpmt_server.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/mpmt_server.c b/mpmt_server.c
-> +index aab9db5..01bab65 100644
-> +--- a/mpmt_server.c
-> ++++ b/mpmt_server.c
-> +@@ -140,7 +140,7 @@ static void sigchld_handler_main(int sig)
-> +     /*Do nothing the signal will be ignored..... */
-> + }
-> + 
-> +-static void sighup_handler_main()
-> ++static void sighup_handler_main(int sig)
-> + {
-> +     c_icap_reconfigure = 1;
-> + }
-> +-- 
-> +2.51.0
-> +
-> diff --git a/package/c-icap/0005-Fix-module-operation-prototypes-to-fix-GCC-15.x-buil.patch b/package/c-icap/0005-Fix-module-operation-prototypes-to-fix-GCC-15.x-buil.patch
-> new file mode 100644
-> index 0000000000..d161a49ba6
-> --- /dev/null
-> +++ b/package/c-icap/0005-Fix-module-operation-prototypes-to-fix-GCC-15.x-buil.patch
-> @@ -0,0 +1,233 @@
-> +From 608392c023b00e9e512f012eab295995127c577a Mon Sep 17 00:00:00 2001
-> +From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> +Date: Sun, 7 Sep 2025 17:45:00 +0200
-> +Subject: [PATCH] Fix module operation prototypes to fix GCC 15.x build
-> +
-> +Upstream: N/A, code has completely changed upstream
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> +---
-> + default_acl.c          | 4 ++--
-> + http_auth.c            | 8 ++++----
-> + include/module.h       | 8 ++++----
-> + modules/bdb_tables.c   | 4 ++--
-> + modules/dnsbl_tables.c | 4 ++--
-> + modules/ldap_module.c  | 4 ++--
-> + modules/memcached.c    | 4 ++--
-> + modules/shared_cache.c | 4 ++--
-> + 8 files changed, 20 insertions(+), 20 deletions(-)
-> +
-> +diff --git a/default_acl.c b/default_acl.c
-> +index 135176a..cb84d9d 100644
-> +--- a/default_acl.c
-> ++++ b/default_acl.c
-> +@@ -34,7 +34,7 @@
-> + /* Default Authenticator  definitions                                                        */
-> + int default_acl_init(struct ci_server_conf *server_conf);
-> + int default_acl_post_init(struct ci_server_conf *server_conf);
-> +-void default_acl_release();
-> ++void default_acl_release(struct ci_server_conf *server_conf);
-> + int default_acl_client_match(ci_request_t *req);
-> + int default_acl_request_match(ci_request_t *req);
-> + 
-> +@@ -75,7 +75,7 @@ int default_acl_post_init(struct ci_server_conf *server_conf)
-> +     return 1;
-> + }
-> + 
-> +-void default_acl_release()
-> ++void default_acl_release(struct ci_server_conf *server_conf)
-> + {
-> +     ci_access_entry_release(acl_access_list);
-> +     ci_access_entry_release(acl_connection_access_list);
-> +diff --git a/http_auth.c b/http_auth.c
-> +index b831bb1..0000b12 100644
-> +--- a/http_auth.c
-> ++++ b/http_auth.c
-> +@@ -378,7 +378,7 @@ static struct ci_conf_entry basic_conf_params[] = {
-> + };
-> + 
-> + int basic_post_init(struct ci_server_conf *server_conf);
-> +-void basic_close();
-> ++void basic_close(struct ci_server_conf *);
-> + struct http_basic_auth_data *basic_create_auth_data(const char *auth_line,
-> +         const char **username);
-> + void basic_release_auth_data(struct http_basic_auth_data *data);
-> +@@ -409,7 +409,7 @@ int basic_post_init(struct ci_server_conf *server_conf)
-> +     return 1;
-> + }
-> + 
-> +-void basic_close()
-> ++void basic_close(struct ci_server_conf *)
-> + {
-> +     if (basic_authentication) {
-> +         free(basic_authentication);
-> +@@ -468,7 +468,7 @@ static struct ci_conf_entry basic_simple_db_conf_variables[] = {
-> + };
-> + 
-> + int basic_simple_db_post_init(struct ci_server_conf *server_conf);
-> +-void basic_simple_db_close();
-> ++void basic_simple_db_close(struct ci_server_conf *server_conf);
-> + int basic_simple_db_athenticate(struct http_basic_auth_data *data, const char *usedb);
-> + 
-> + 
-> +@@ -495,7 +495,7 @@ int basic_simple_db_post_init(struct ci_server_conf *server_conf)
-> +     return 1;
-> + }
-> + 
-> +-void basic_simple_db_close()
-> ++void basic_simple_db_close(struct ci_server_conf *server_conf)
-> + {
-> +     if (users_db) {
-> +         ci_lookup_table_destroy(users_db);
-> +diff --git a/include/module.h b/include/module.h
-> +index 0e57586..21124df 100644
-> +--- a/include/module.h
-> ++++ b/include/module.h
-> +@@ -63,7 +63,7 @@ typedef struct common_module {
-> +     const char *name;
-> +     int (*init_module)(struct ci_server_conf *server_conf);
-> +     int (*post_init_module)(struct ci_server_conf *server_conf);
-> +-    void (*close_module)();
-> ++    void (*close_module)(struct ci_server_conf *);
-> +     struct ci_conf_entry *conf_table;
-> + } common_module_t;
-> + 
-> +@@ -81,7 +81,7 @@ typedef struct  access_control_module {
-> +     const char *name;
-> +     int (*init_access_controller)(struct ci_server_conf *server_conf);
-> +     int (*post_init_access_controller)(struct ci_server_conf *server_conf);
-> +-    void (*release_access_controller)();
-> ++    void (*release_access_controller)(struct ci_server_conf *);
-> +     int (*client_access)(ci_request_t *req);
-> +     int (*request_access)(ci_request_t *req);
-> +     struct ci_conf_entry *conf_table;
-> +@@ -92,7 +92,7 @@ typedef struct http_auth_method {
-> +     const char *name;
-> +     int (*init_auth_method)(struct ci_server_conf *server_conf);
-> +     int (*post_init_auth_method)(struct ci_server_conf *server_conf);
-> +-    void (*close_auth_method)();
-> ++    void (*close_auth_method)(struct ci_server_conf *);
-> +     void *(*create_auth_data)(const char *authorization_header,const char **username);
-> +     void (*release_auth_data)(void *data);
-> +     char *(*authentication_header)();
-> +@@ -106,7 +106,7 @@ typedef struct authenticator_module {
-> +     const char *method;
-> +     int (*init_authenticator)(struct ci_server_conf *server_conf);
-> +     int (*post_init_authenticator)(struct ci_server_conf *server_conf);
-> +-    void (*close_authenticator)();
-> ++    void (*close_authenticator)(struct ci_server_conf *);
-> +     int (*authenticate)(void *data, const char *usedb);
-> +     struct ci_conf_entry *conf_table;
-> + } authenticator_module_t;
-> +diff --git a/modules/bdb_tables.c b/modules/bdb_tables.c
-> +index 1e908a9..c205278 100644
-> +--- a/modules/bdb_tables.c
-> ++++ b/modules/bdb_tables.c
-> +@@ -9,7 +9,7 @@
-> + 
-> + 
-> + int init_bdb_tables(struct ci_server_conf *server_conf);
-> +-void release_bdb_tables();
-> ++void release_bdb_tables(struct ci_server_conf *server_conf);
-> + 
-> + CI_DECLARE_MOD_DATA common_module_t module = {
-> +     "bdb_tables",
-> +@@ -41,7 +41,7 @@ int init_bdb_tables(struct ci_server_conf *server_conf)
-> +     return (ci_lookup_table_type_register(&bdb_table_type) != NULL);
-> + }
-> + 
-> +-void release_bdb_tables()
-> ++void release_bdb_tables(struct ci_server_conf *server_conf)
-> + {
-> +     ci_lookup_table_type_unregister(&bdb_table_type);
-> + }
-> +diff --git a/modules/dnsbl_tables.c b/modules/dnsbl_tables.c
-> +index 328c6fb..a90c715 100644
-> +--- a/modules/dnsbl_tables.c
-> ++++ b/modules/dnsbl_tables.c
-> +@@ -10,7 +10,7 @@
-> + 
-> + 
-> + int init_dnsbl_tables(struct ci_server_conf *server_conf);
-> +-void release_dnsbl_tables();
-> ++void release_dnsbl_tables(struct ci_server_conf *server_conf);
-> + 
-> + CI_DECLARE_MOD_DATA common_module_t module = {
-> +     "dnsbl_tables",
-> +@@ -42,7 +42,7 @@ int init_dnsbl_tables(struct ci_server_conf *server_conf)
-> +     return (ci_lookup_table_type_register(&dnsbl_table_type) != NULL);
-> + }
-> + 
-> +-void release_dnsbl_tables()
-> ++void release_dnsbl_tables(struct ci_server_conf *server_conf)
-> + {
-> +     ci_lookup_table_type_unregister(&dnsbl_table_type);
-> + }
-> +diff --git a/modules/ldap_module.c b/modules/ldap_module.c
-> +index 97e36d8..96668a9 100644
-> +--- a/modules/ldap_module.c
-> ++++ b/modules/ldap_module.c
-> +@@ -19,7 +19,7 @@ static int init_ldap_pools();
-> + static void release_ldap_pools();
-> + 
-> + int init_ldap_module(struct ci_server_conf *server_conf);
-> +-void release_ldap_module();
-> ++void release_ldap_module(struct ci_server_conf *server_conf);
-> + 
-> + CI_DECLARE_MOD_DATA common_module_t module = {
-> +     "ldap_module",
-> +@@ -76,7 +76,7 @@ int init_ldap_module(struct ci_server_conf *server_conf)
-> +     return 1;
-> + }
-> + 
-> +-void release_ldap_module()
-> ++void release_ldap_module(struct ci_server_conf *server_conf)
-> + {
-> +     release_ldap_pools();
-> +     ci_lookup_table_type_unregister(&ldap_table_type);
-> +diff --git a/modules/memcached.c b/modules/memcached.c
-> +index 8f15fbd..b1bbe5a 100644
-> +--- a/modules/memcached.c
-> ++++ b/modules/memcached.c
-> +@@ -61,7 +61,7 @@ static struct ci_conf_entry mc_conf_variables[] = {
-> + 
-> + static int mc_module_init(struct ci_server_conf *server_conf);
-> + static int mc_module_post_init(struct ci_server_conf *server_conf);
-> +-static void mc_module_release();
-> ++static void mc_module_release(struct ci_server_conf *server_conf);
-> + CI_DECLARE_MOD_DATA common_module_t module = {
-> +     "memcached",
-> +     mc_module_init,
-> +@@ -209,7 +209,7 @@ int mc_module_post_init(struct ci_server_conf *server_conf)
-> +     return 1;
-> + }
-> + 
-> +-void mc_module_release()
-> ++void mc_module_release(struct ci_server_conf *server_conf)
-> + {
-> +     memcached_pool_destroy(MC_POOL);
-> +     memcached_free(MC);
-> +diff --git a/modules/shared_cache.c b/modules/shared_cache.c
-> +index a79d51a..49a3784 100644
-> +--- a/modules/shared_cache.c
-> ++++ b/modules/shared_cache.c
-> +@@ -9,7 +9,7 @@
-> + #include <assert.h>
-> + 
-> + static int init_shared_cache(struct ci_server_conf *server_conf);
-> +-static void release_shared_cache();
-> ++static void release_shared_cache(struct ci_server_conf *server_conf);
-> + 
-> + CI_DECLARE_MOD_DATA common_module_t module = {
-> +     "shared_cache",
-> +@@ -26,7 +26,7 @@ static int init_shared_cache(struct ci_server_conf *server_conf)
-> +     return 1;
-> + }
-> + 
-> +-static void release_shared_cache()
-> ++static void release_shared_cache(struct ci_server_conf *server_conf)
-> + {
-> + }
-> + 
-> +-- 
-> +2.51.0
-> +
+>  ifeq ($(BR2_PACKAGE_LIBPNG),y)
+>  CHOCOLATE_DOOM_DEPENDENCIES += libpng
+>  CHOCOLATE_DOOM_CONF_OPTS += --with-libpng
 > -- 
 > 2.51.0
 > 
