@@ -1,51 +1,134 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 749A9CAC5B5
-	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 20:45:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BD00CAC5B0
+	for <buildroot@archiver.kernel.org>; Thu, 25 Sep 2025 21:26:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A4914152C;
-	Thu, 25 Sep 2025 20:45:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B95FF8448B;
+	Thu, 25 Sep 2025 21:26:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id roihntxJPk7u; Thu, 25 Sep 2025 20:45:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JyBzQX3xLMNv; Thu, 25 Sep 2025 21:26:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E91A1416D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C44838448A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E91A1416D4;
-	Thu, 25 Sep 2025 20:45:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D0145177
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:44:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C44838448A;
+	Thu, 25 Sep 2025 21:26:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 75F50177
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 21:26:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C149A61528
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:44:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 626CC84481
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 21:26:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EzA5FJry_0xx for <buildroot@buildroot.org>;
- Thu, 25 Sep 2025 20:44:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF0E16152F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AF0E16152F
- for <buildroot@buildroot.org>; Thu, 25 Sep 2025 20:44:58 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9CC9A818E9; Thu, 25 Sep 2025 20:44:58 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 25 Sep 2025 22:33:40 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 702ae953447be24e434125e1dcaaa32e78e1977e
-X-Git-Newrev: ecf12c186f1e62751980eb4c7345decd65305680
-X-Patchwork-Hint: ignore
-Message-Id: <20250925204458.9CC9A818E9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/go: bump to version 1.25.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aIUhRKuN0V6F for <buildroot@buildroot.org>;
+ Thu, 25 Sep 2025 21:26:09 +0000 (UTC)
+X-Greylist: delayed 427 seconds by postgrey-1.37 at util1.osuosl.org;
+ Thu, 25 Sep 2025 21:26:07 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 102A88447C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 102A88447C
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=46.105.37.156;
+ helo=8.mo552.mail-out.ovh.net; envelope-from=clg@kaod.org; receiver=<UNKNOWN> 
+Received: from 8.mo552.mail-out.ovh.net (8.mo552.mail-out.ovh.net
+ [46.105.37.156])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 102A88447C
+ for <buildroot@buildroot.org>; Thu, 25 Sep 2025 21:26:07 +0000 (UTC)
+Received: from mxplan5.mail.ovh.net (unknown [10.109.254.198])
+ by mo552.mail-out.ovh.net (Postfix) with ESMTPS id 4cXmmd3bHsz5vsq;
+ Thu, 25 Sep 2025 21:18:57 +0000 (UTC)
+Received: from kaod.org (37.59.142.110) by DAG8EX2.mxp5.local (172.16.2.72)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.59; Thu, 25 Sep
+ 2025 23:18:57 +0200
+X-OVh-ClientIp: 82.64.250.170
+Message-ID: <ef9e822c-c964-4fac-a733-d6b3c3475a96@kaod.org>
+Date: Thu, 25 Sep 2025 23:18:56 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Julien Olivain <ju.o@free.fr>
+CC: <buildroot@buildroot.org>, Joel Stanley <joel@jms.id.au>
+References: <20250923135223.1062683-1-clg@kaod.org>
+ <8d3ee63fa1e851699b49b789cfb5da9e@free.fr>
+From: =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>
+Content-Language: en-US, fr
+Autocrypt: addr=clg@kaod.org; keydata=
+ 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
+In-Reply-To: <8d3ee63fa1e851699b49b789cfb5da9e@free.fr>
+X-Originating-IP: [37.59.142.110]
+X-ClientProxiedBy: DAG8EX1.mxp5.local (172.16.2.71) To DAG8EX2.mxp5.local
+ (172.16.2.72)
+X-Ovh-Tracer-GUID: 48dbaf67-b28f-4d4f-ac0a-0dbec1348145
+X-Ovh-Tracer-Id: 12808518815743118301
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: dmFkZTFjUx94KucYm083EjqT/bL8f9cBSQ9OWVxuZhOfjqQy5zbI5U8tvc76d9k3QjefwDNb8sca1eodISAvlMRXxZmhvW7bKIPo1dsBfRWpLzeSX2xUWIEA+YdesOqlVW6+x62KIW6fu4X4lzTu4sm4xHQZhSf3uzw/zjDAST1+hCLeQO2iJhyzvVNq2nScbtwIzOrbTiPYB1v1gWEZzgi0WyBM1aDDQV+HGG+UBe0I+XPrvUETGVxU+M5tpwhNJrTDnH81TQdrcJzZI2e79SDIrymdQ0npkWa3GFsQtLEPlZmGTMGgIMigSmkkS6P2MoYYBPryXaAEFNq6aFITv89Nx6CkpuKxSbE0ZDzJ9ktFtd/ANZPfACBt1vZRuDBKaPu4c2qZOSB//jOmaufw7kWPpGnDcjxFvJmaMmmoksQRdFT9al1/srLj4GHLhhv7plikpllmXPj2QAuqPBx7u6bK511iWzkxZ5+9JlmQ4UfsnVXDjcpyUsyTXCCvWkZSNA5Yqe55r0lAuG6nU3N/TXDZZNtCaYF7Slui7hFw97fQ5/SRJoQBdmURbo5zchmSjf52dAhKDkqbIjnprKc3WrGClvtpnPIpsbCLjSbFaqaTjM/kJzy5Zv0XPBs2F1cyqS0iWo+YU8J7BqcJcSxiVXs83JmxT7Gkr6ujUWE9gYWitePTKg
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ bh=ElJBuNYQ+QJP0BGlpe4EZgzJCEN5oylJzPcuic0Q4to=; 
+ c=relaxed/relaxed; d=kaod.org; h=From; s=ovhmo393970-selector1;
+ t=1758835138; v=1;
+ b=lPJFidXMOsOiIx4jtH8Fzay+ggbIyu0UmDiqKtcVElnieF4WoDvUppMIuISbGUze1gMPp729
+ eYFfXy1mNybQPWKMo/DMxC5Uuu039IM56Auv4uHt8UbcXdXM5RbkThwYWzfgsBmGEFSJYSkC2cL
+ rcY8Kb9wQ4YRKgmePP258nUPIhqjMz3ey5fwuErTGqOl6KosD2UQKQtXRSCCOnak8Tgg8sn8SE+
+ 91YAOCrmYdDTswMjz2pLJFInMXNySPsjaA67rSsn5VTcMuxnSxQXGhTsFe3OjCZDwTJY/3JUJKy
+ fhnLcIv2Qw/TIPjwUboUiCveUFaXPO7bqcCdEaSyfVUQA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=kaod.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kaod.org header.i=@kaod.org header.a=rsa-sha256
+ header.s=ovhmo393970-selector1 header.b=lPJFidXM
+X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
+ (GARM-110S0044d15bc62-be20-479b-ae1c-286ddf35692b,
+ 430B70353558F8354C2EE2D8074F991CFFE72556) smtp.auth=clg@kaod.org
+Subject: Re: [Buildroot] [PATCH 1/4] configs/aspeed_ast2500evb: check hashes,
+ use bootlin toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -57,314 +140,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ecf12c186f1e62751980eb4c7345decd65305680
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-For relase notes, see:
-https://go.dev/doc/devel/release#go1.25.0
-
-Building Go 1.24 and later requires Go 1.22.6 or later for bootstrap.
-
-To support this we use our previous Go version 1.23.12 as the version
-for go-bootstrap-stage4 and have the build for Go 1.25.1 depend on
-go-bootstrap-stage4.
-
-Go version 1.23.12 is the latest go version we can build using
-go-bootstrap-stage3.
-
-The package build for go-bootstrap-stage4 if effectively identical to
-go-bootstrap-stage3 with only the Go version and stage number changed.
-
-Note: go version 1.25.1 release note mention a security fix
-which is for CVE-2025-47910. This commit is not marked as security
-bump, because the issue was introduced in version 1.25.0 which
-was not included in Buildroot. See:
-https://pkg.go.dev/vuln/GO-2025-3955
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Tested-by: Christian Stewart <christian@aperture.us>
-[Julien: add link to release notes and
-  comment about CVE in commit log.
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/go/Config.in.host                          |  9 +--
- ...t-buildvcs-false-when-building-go-bootstr.patch | 71 ++++++++++++++++++++++
- package/go/go-bootstrap-stage4/Config.in.host      |  4 ++
- .../go-bootstrap-stage4/go-bootstrap-stage4.hash   |  3 +
- .../go/go-bootstrap-stage4/go-bootstrap-stage4.mk  | 54 ++++++++++++++++
- package/go/go-src/go-src.mk                        |  4 +-
- package/go/go.hash                                 | 16 ++---
- package/go/go.mk                                   |  2 +-
- 8 files changed, 148 insertions(+), 15 deletions(-)
-
-diff --git a/package/go/Config.in.host b/package/go/Config.in.host
-index a42e37f90b..7ba70c9843 100644
---- a/package/go/Config.in.host
-+++ b/package/go/Config.in.host
-@@ -2,7 +2,7 @@
- config BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	bool
- 	default y
--	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE3_ARCH_SUPPORTS || BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE4_ARCH_SUPPORTS || BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH_SUPPORTS
- 	# See https://go.dev/doc/install/source#environment
- 	# See src/go/build/syslist.go for the list of supported architectures
- 	depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
-@@ -34,7 +34,7 @@ config BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- config BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
- 	bool
- 	default y
--	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE3_ARCH_SUPPORTS || BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE4_ARCH_SUPPORTS || BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH_SUPPORTS
- 
- # CGO linking for the host. Since we use the same compiler for target
- # and host, if the target can't do CGO linking, then the host can't.
-@@ -57,7 +57,7 @@ if BR2_PACKAGE_HOST_GO
- 
- choice
- 	prompt "Go compiler variant"
--	default BR2_PACKAGE_HOST_GO_SRC if BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE3_ARCH_SUPPORTS
-+	default BR2_PACKAGE_HOST_GO_SRC if BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE4_ARCH_SUPPORTS
- 	default BR2_PACKAGE_HOST_GO_BIN if BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH_SUPPORTS
- 	help
- 	  Select a Go compiler variant.
-@@ -66,7 +66,7 @@ choice
- 
- config BR2_PACKAGE_HOST_GO_SRC
- 	bool "host go (source)"
--	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE3_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE4_ARCH_SUPPORTS
- 	help
- 	  This package will build the go compiler for the host.
- 
-@@ -90,3 +90,4 @@ source "package/go/go-bin/Config.in.host"
- source "package/go/go-bootstrap-stage1/Config.in.host"
- source "package/go/go-bootstrap-stage2/Config.in.host"
- source "package/go/go-bootstrap-stage3/Config.in.host"
-+source "package/go/go-bootstrap-stage4/Config.in.host"
-diff --git a/package/go/go-bootstrap-stage4/0001-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch b/package/go/go-bootstrap-stage4/0001-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch
-new file mode 100644
-index 0000000000..58f4581b02
---- /dev/null
-+++ b/package/go/go-bootstrap-stage4/0001-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch
-@@ -0,0 +1,71 @@
-+From 6b05378097c6a386ed9912d2471976dc39504e86 Mon Sep 17 00:00:00 2001
-+From: Christian Stewart <christian@aperture.us>
-+Date: Thu, 27 Jul 2023 21:28:47 -0700
-+Subject: [PATCH] cmd/dist: set buildvcs=false when building go-bootstrap
-+
-+When building go-bootstrap as part of the make.bash process, the cmd/dist
-+invokes the bootstrap Go compiler to build the go_bootstrap tool:
-+
-+${GOROOT_BOOTSTRAP}/bin/go install -tags=math_big_pure_go compiler_bootstrap purego bootstrap/cmd/...
-+
-+If there is an invalid .git directory in a parent of ${GOROOT_BOOTSTRAP},
-+make.bash will fail. Reproduction of the issue:
-+
-+  mkdir go-issue-61620
-+  cd ./go-issue-61620
-+  wget https://go.dev/dl/go1.19.11.src.tar.gz
-+  mkdir go-bootstrap
-+  tar -xf go1.19.11.src.tar.gz -C ./go-bootstrap --strip-components=1
-+  cd ./go-bootstrap/src/
-+  bash make.bash
-+  cd ../../
-+  wget https://go.dev/dl/go1.20.6.src.tar.gz
-+  mkdir go
-+  tar -xf go1.20.6.src.tar.gz -C ./go/ --strip-components=1
-+  printf "gitdir: ../../does/not/exist/.git" > ./.git
-+  cd ./go/src/
-+  GOROOT_BOOTSTRAP=$(pwd)/../../go-bootstrap/ bash make.bash
-+
-+The build fails with the following error:
-+
-+  Building Go toolchain1 using [snip]/go-1.19.10.
-+  error obtaining VCS status: exit status 128
-+    Use -buildvcs=false to disable VCS stamping.
-+  go tool dist: FAILED: [snip]/go-1.19.10/bin/go install -tags=math_big_pure_go \
-+    compiler_bootstrap purego bootstrap/cmd/...: exit status 1
-+
-+This change unconditionally sets -buildvcs=false when compiling go-bootstrap. We
-+don't need the revision information in those binaries anyway. Setting this flag
-+was previously not done as we were unsure if the go-bootstrap compiler would be
-+new enough to support the buildvcs build flag. Since Go 1.20.x, Go 1.19.x is the
-+minimum version for go-bootstrap, and supports -buildvcs=false. We can now set
-+-buildvcs=false without worrying about compatibility.
-+
-+Related: https://github.com/golang/go/issues/54852
-+Fixes: https://github.com/golang/go/issues/61620
-+
-+Upstream: https://github.com/golang/go/pull/61621
-+
-+Signed-off-by: Christian Stewart <christian@aperture.us>
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ src/cmd/dist/buildtool.go | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/src/cmd/dist/buildtool.go b/src/cmd/dist/buildtool.go
-+index a528d7aa76..3b411d6ebb 100644
-+--- a/src/cmd/dist/buildtool.go
-++++ b/src/cmd/dist/buildtool.go
-+@@ -221,6 +221,9 @@ func bootstrapBuildTools() {
-+ 	cmd := []string{
-+ 		pathf("%s/bin/go", goroot_bootstrap),
-+ 		"install",
-++		// Fixes cases where an invalid .git is present in a parent of GOROOT_BOOTSTRAP.
-++		// See: https://github.com/golang/go/issues/61620
-++		"-buildvcs=false",
-+ 		"-tags=math_big_pure_go compiler_bootstrap purego",
-+ 	}
-+ 	if vflag > 0 {
-+--
-+2.41.0
-+
-diff --git a/package/go/go-bootstrap-stage4/Config.in.host b/package/go/go-bootstrap-stage4/Config.in.host
-new file mode 100644
-index 0000000000..292486582c
---- /dev/null
-+++ b/package/go/go-bootstrap-stage4/Config.in.host
-@@ -0,0 +1,4 @@
-+config BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE4_ARCH_SUPPORTS
-+	bool
-+	default y
-+	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE3_ARCH_SUPPORTS
-diff --git a/package/go/go-bootstrap-stage4/go-bootstrap-stage4.hash b/package/go/go-bootstrap-stage4/go-bootstrap-stage4.hash
-new file mode 100644
-index 0000000000..eb10323ece
---- /dev/null
-+++ b/package/go/go-bootstrap-stage4/go-bootstrap-stage4.hash
-@@ -0,0 +1,3 @@
-+# From https://go.dev/dl
-+sha256  e1cce9379a24e895714a412c7ddd157d2614d9edbe83a84449b6e1840b4f1226  go1.23.12.src.tar.gz
-+sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go-bootstrap-stage4/go-bootstrap-stage4.mk b/package/go/go-bootstrap-stage4/go-bootstrap-stage4.mk
-new file mode 100644
-index 0000000000..db0c85e3d0
---- /dev/null
-+++ b/package/go/go-bootstrap-stage4/go-bootstrap-stage4.mk
-@@ -0,0 +1,54 @@
-+################################################################################
-+#
-+# go-bootstrap-stage4
-+#
-+################################################################################
-+
-+# Use last Go version that go-bootstrap-stage3 can build: v1.23.x
-+# See https://go.dev/doc/go1.24#bootstrap
-+GO_BOOTSTRAP_STAGE4_VERSION = 1.23.12
-+GO_BOOTSTRAP_STAGE4_SITE = https://storage.googleapis.com/golang
-+GO_BOOTSTRAP_STAGE4_SOURCE = go$(GO_BOOTSTRAP_STAGE4_VERSION).src.tar.gz
-+
-+GO_BOOTSTRAP_STAGE4_LICENSE = BSD-3-Clause
-+GO_BOOTSTRAP_STAGE4_LICENSE_FILES = LICENSE
-+
-+# Use go-bootstrap-stage3 to bootstrap.
-+HOST_GO_BOOTSTRAP_STAGE4_DEPENDENCIES = host-go-bootstrap-stage3
-+
-+HOST_GO_BOOTSTRAP_STAGE4_ROOT = $(HOST_DIR)/lib/go-$(GO_BOOTSTRAP_STAGE4_VERSION)
-+
-+# The go build system is not compatible with ccache, so use
-+# HOSTCC_NOCCACHE.  See https://github.com/golang/go/issues/11685.
-+HOST_GO_BOOTSTRAP_STAGE4_MAKE_ENV = \
-+	GO111MODULE=off \
-+	GOCACHE=$(HOST_GO_HOST_CACHE) \
-+	GOROOT_BOOTSTRAP=$(HOST_GO_BOOTSTRAP_STAGE3_ROOT) \
-+	GOROOT_FINAL=$(HOST_GO_BOOTSTRAP_STAGE4_ROOT) \
-+	GOROOT="$(@D)" \
-+	GOBIN="$(@D)/bin" \
-+	GOOS=linux \
-+	CC=$(HOSTCC_NOCCACHE) \
-+	CXX=$(HOSTCXX_NOCCACHE) \
-+	CGO_ENABLED=0
-+
-+define HOST_GO_BOOTSTRAP_STAGE4_BUILD_CMDS
-+	cd $(@D)/src && \
-+		$(HOST_GO_BOOTSTRAP_STAGE4_MAKE_ENV) ./make.bash $(if $(VERBOSE),-v)
-+endef
-+
-+define HOST_GO_BOOTSTRAP_STAGE4_INSTALL_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/bin/go $(HOST_GO_BOOTSTRAP_STAGE4_ROOT)/bin/go
-+	$(INSTALL) -D -m 0755 $(@D)/bin/gofmt $(HOST_GO_BOOTSTRAP_STAGE4_ROOT)/bin/gofmt
-+
-+	cp -a $(@D)/lib $(HOST_GO_BOOTSTRAP_STAGE4_ROOT)/
-+
-+	mkdir -p $(HOST_GO_BOOTSTRAP_STAGE4_ROOT)/pkg
-+	cp -a $(@D)/pkg/include $(HOST_GO_BOOTSTRAP_STAGE4_ROOT)/pkg/
-+	cp -a $(@D)/pkg/tool $(HOST_GO_BOOTSTRAP_STAGE4_ROOT)/pkg/
-+
-+	# The Go sources must be installed to the host/ tree for the Go stdlib.
-+	cp -a $(@D)/src $(HOST_GO_BOOTSTRAP_STAGE4_ROOT)/
-+endef
-+
-+$(eval $(host-generic-package))
-diff --git a/package/go/go-src/go-src.mk b/package/go/go-src/go-src.mk
-index c1f11a2262..9a18b6afe8 100644
---- a/package/go/go-src/go-src.mk
-+++ b/package/go/go-src/go-src.mk
-@@ -16,7 +16,7 @@ GO_SRC_CPE_ID_PRODUCT = go
- 
- HOST_GO_SRC_PROVIDES = host-go
- HOST_GO_SRC_DEPENDENCIES = \
--	host-go-bootstrap-stage3 \
-+	host-go-bootstrap-stage4 \
- 	$(HOST_GO_DEPENDENCIES_CGO)
- 
- ifeq ($(BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS),y)
-@@ -37,7 +37,7 @@ endif
- HOST_GO_SRC_MAKE_ENV = \
- 	GO111MODULE=off \
- 	GOCACHE=$(HOST_GO_HOST_CACHE) \
--	GOROOT_BOOTSTRAP=$(HOST_GO_BOOTSTRAP_STAGE3_ROOT) \
-+	GOROOT_BOOTSTRAP=$(HOST_GO_BOOTSTRAP_STAGE4_ROOT) \
- 	GOROOT_FINAL=$(HOST_GO_ROOT) \
- 	GOROOT="$(@D)" \
- 	GOBIN="$(@D)/bin" \
-diff --git a/package/go/go.hash b/package/go/go.hash
-index dc88e9beab..60d61433fc 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,9 +1,9 @@
- # sha256 checksum from https://go.dev/dl/
--sha256  e1cce9379a24e895714a412c7ddd157d2614d9edbe83a84449b6e1840b4f1226  go1.23.12.src.tar.gz
--sha256  3b2fd446e26642555d1446a38ccbefb2a30bba3179d3ef132ed64d3c63b0c42a  go1.23.12.linux-386.tar.gz
--sha256  d3847fef834e9db11bf64e3fb34db9c04db14e068eeb064f49af747010454f90  go1.23.12.linux-amd64.tar.gz
--sha256  52ce172f96e21da53b1ae9079808560d49b02ac86cecfa457217597f9bc28ab3  go1.23.12.linux-arm64.tar.gz
--sha256  9704eba01401a3793f54fac162164b9c5d8cc6f3cab5cee72684bb72294d9f41  go1.23.12.linux-armv6l.tar.gz
--sha256  1a7cc5f7baeaf39125dce5d660a39438e7f0e04d13d3498590d240aae976b565  go1.23.12.linux-ppc64le.tar.gz
--sha256  2f43708aa0922d692da0a1fc775475c343907610bec77002de1bbe37601ea338  go1.23.12.linux-s390x.tar.gz
--sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-+sha256  d010c109cee94d80efe681eab46bdea491ac906bf46583c32e9f0dbb0bd1a594  go1.25.1.src.tar.gz
-+sha256  d03cdcbc9bd8baf5cf028de390478e9e2b3e4d0afe5a6582dedc19bfe6a263b2  go1.25.1.linux-386.tar.gz
-+sha256  7716a0d940a0f6ae8e1f3b3f4f36299dc53e31b16840dbd171254312c41ca12e  go1.25.1.linux-amd64.tar.gz
-+sha256  65a3e34fb2126f55b34e1edfc709121660e1be2dee6bdf405fc399a63a95a87d  go1.25.1.linux-arm64.tar.gz
-+sha256  eb949be683e82a99e9861dafd7057e31ea40b161eae6c4cd18fdc0e8c4ae6225  go1.25.1.linux-armv6l.tar.gz
-+sha256  8b0c8d3ee5b1b5c28b6bd63dc4438792012e01d03b4bf7a61d985c87edab7d1f  go1.25.1.linux-ppc64le.tar.gz
-+sha256  9cfe517ba423f59f3738ca5c3d907c103253cffbbcc2987142f79c5de8c1bf93  go1.25.1.linux-s390x.tar.gz
-+sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 69ca746783..535787c92a 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.23.12
-+GO_VERSION = 1.25.1
- 
- HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
- HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gOS8yNS8yNSAyMTo0MiwgSnVsaWVuIE9saXZhaW4gd3JvdGU6Cj4gSGkgQ8OpZHJpYywgSm9l
+bCwgQWxsLAo+IAo+IE9uIDIzLzA5LzIwMjUgMTU6NTIsIEPDqWRyaWMgTGUgR29hdGVyIHdyb3Rl
+Ogo+PiBUaGlzIGNvbW1pdCBhZGRzIEJSMl9ET1dOTE9BRF9GT1JDRV9DSEVDS19IQVNIRVM9eSBh
+bmQKPj4gQlIyX1RPT0xDSEFJTl9FWFRFUk5BTF9CT09UTElOX0FSTVY2X0VBQklIRl9HTElCQ19T
+VEFCTEU9eSBpbiB0aGUKPj4gZGVmY29uZmlnLCBidW1wcyBrZXJuZWwgdG8gNi4xNi43LCBhbmQg
+YWRkcyBjdXN0b20gaGFzaCBmaWxlcyBhbmQKPj4gcmVtb3ZlcyB0aGUgZXhjZXB0aW9uIGVudHJ5
+IGluIC5jaGVja3BhY2thZ2VpZ25vcmUuCj4+Cj4+IFNpZ25lZC1vZmYtYnk6IEPDqWRyaWMgTGUg
+R29hdGVyIDxjbGdAa2FvZC5vcmc+Cj4+IC0tLQo+IFsuLi5dCj4+IGRpZmYgLS1naXQgYS9jb25m
+aWdzL2FzcGVlZF9hc3QyNTAwZXZiX2RlZmNvbmZpZyBiL2NvbmZpZ3MvYXNwZWVkX2FzdDI1MDBl
+dmJfZGVmY29uZmlnCj4+IGluZGV4IDY0NjY2Y2MzZDcwNC4uY2E2YTFlZjNkMzhlIDEwMDY0NAo+
+PiAtLS0gYS9jb25maWdzL2FzcGVlZF9hc3QyNTAwZXZiX2RlZmNvbmZpZwo+PiArKysgYi9jb25m
+aWdzL2FzcGVlZF9hc3QyNTAwZXZiX2RlZmNvbmZpZwo+PiBAQCAtMSwxMiArMSwxNiBAQAo+PiDC
+oEJSMl9hcm09eQo+PiAtQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzE2
+PXkKPj4gK0JSMl9UT09MQ0hBSU5fRVhURVJOQUw9eQo+PiArQlIyX1RPT0xDSEFJTl9FWFRFUk5B
+TF9CT09UTElOPXkKPj4gK0JSMl9UT09MQ0hBSU5fRVhURVJOQUxfQk9PVExJTl9BUk1WNl9FQUJJ
+SEZfR0xJQkNfU1RBQkxFPXkKPiAKPiBUaGlzIHBhdGNoIGludHJvZHVjZXMgYSBjaGVjayBmYWls
+dXJlLiBTZWU6Cj4gaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0v
+am9icy8xMTQ4MTIzODM0MQo+IAo+IFdBUk46IGRlZmNvbmZpZyAuL2NvbmZpZ3MvYXNwZWVkX2Fz
+dDI1MDBldmJfZGVmY29uZmlnIGNhbid0IGJlIHVzZWQ6Cj4gIMKgwqDCoMKgwqAgTWlzc2luZzog
+QlIyX1RPT0xDSEFJTl9FWFRFUk5BTF9CT09UTElOX0FSTVY2X0VBQklIRl9HTElCQ19TVEFCTEU9
+eQo+IAo+IFRoaXMgZGVmY29uZmlnIGRvZXMgbm90IHNlbGVjdCBhbnkgQ1BVLCBzbyBpdCBkZWZh
+dWx0cyB0bzoKPiBCUjJfYXJtOTI2dD15Cj4gCj4gQWNjb3JkaW5nIHRvIHRoZSBLZXJuZWwgZHRz
+Ogo+IGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3N0YWJs
+ZS9saW51eC5naXQvdHJlZS9hcmNoL2FybS9ib290L2R0cy9hc3BlZWQvYXNwZWVkLWc1LmR0c2k/
+aD12Ni4xNi43I240MAo+IAo+IENwdSBzZWVtcyB0byBiZSAiYXJtMTE3Nmp6Zi1zIi4KCml0IGlz
+LgoKPiAKPiBJbiB0aGF0IGNhc2UsIHRoaXMgZGVmY29uZmlnIHNob3VsZCBhZGQ6Cj4gQlIyX2Fy
+bTExNzZqemZfcz15CgpvawogIAo+IENvdWxkIHlvdSBjb25maXJtIGl0IGlzIHRoZSBjYXNlIGFu
+ZCBzZW5kIGEgcGF0Y2ggZml4aW5nIHRoZSBpc3N1ZSwKPiBwbGVhc2U/CgpXaWxsIGRvLiBIb3cg
+Y29tZSBJIGRpZG4ndCBzZWUgYW55IGJ1aWxkIGZhaWx1cmVzID8KClRoYW5rcywKCkMuCgpfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFp
+bGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290
+Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
