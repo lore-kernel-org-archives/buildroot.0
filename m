@@ -1,74 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01E30CAC5B8
-	for <buildroot@archiver.kernel.org>; Fri, 26 Sep 2025 21:37:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECBDACAC5B8
+	for <buildroot@archiver.kernel.org>; Fri, 26 Sep 2025 21:37:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A383F4225B;
-	Fri, 26 Sep 2025 21:37:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B5B2C84C51;
+	Fri, 26 Sep 2025 21:37:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MdlZbS_FPaFr; Fri, 26 Sep 2025 21:37:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kSOAkMWUpVrF; Fri, 26 Sep 2025 21:37:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 473AB42275
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7255884CBD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 473AB42275;
-	Fri, 26 Sep 2025 21:37:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6AB4712D
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 21:37:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7255884CBD;
+	Fri, 26 Sep 2025 21:37:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3AB6512D
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 21:37:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5C60C615DF
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 21:37:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2BE5D84CBD
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 21:37:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SFwjeNsU5nfR for <buildroot@buildroot.org>;
- Fri, 26 Sep 2025 21:37:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.176;
- helo=smtpcmd15176.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 341FB61109
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 341FB61109
-Received: from smtpcmd15176.aruba.it (smtpcmd15176.aruba.it [62.149.156.176])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 341FB61109
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 21:37:03 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id 2G7gvKxGpX2UC2G7hvtRfb; Fri, 26 Sep 2025 23:37:01 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri, 26 Sep 2025 23:37:00 +0200
-Message-ID: <20250926213700.3341341-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.47.3
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Q4XESgH23yTi for <buildroot@buildroot.org>;
+ Fri, 26 Sep 2025 21:37:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 13ADB84CC4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13ADB84CC4
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 13ADB84CC4
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 21:37:22 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-04.galae.net (Postfix) with ESMTPS id B654AC8F1EA
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 21:37:02 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 1C7FB606B5;
+ Fri, 26 Sep 2025 21:37:20 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id BC085102F1820; 
+ Fri, 26 Sep 2025 23:37:13 +0200 (CEST)
+Date: Fri, 26 Sep 2025 23:37:11 +0200
+To: Thomas Perale via buildroot <buildroot@buildroot.org>
+Cc: Thomas Perale <thomas.perale@mind.be>
+Message-ID: <20250926233711.7e3b39a3@windsurf>
+In-Reply-To: <20250926163239.162734-1-thomas.perale@mind.be>
+References: <20250926163239.162734-1-thomas.perale@mind.be>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfA5uGRtL4YsAkHjVLYXvbfUM/BBFalq9YVDu1JKeZIIXzxqTN9gHsszZ/EBcuIrtTtIWHdJritpnteOmtIYBaHCG1AMx/rqpQJZde+1h9Q1M84WmlJ3U
- lZyBw6a9dvRbHxkynNLL7SaIXGmb2gSTlz8YLLvSZwGcEHkYf/pMvVQoC7VcQMTIwwTLtcSZLJ5R1/EllHYNiiqZ65Bi5e4LrU4jvQYb1Hi1zo3D2ktfBKoE
- iShCtlq9nu/SkYPjXSMGAbLfXTpnDkB+UQAWDt6OLyo=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1758922621; bh=2ifEg0bHpkVJH7iCoQUPTNCTEnmQmpX/yWVkqKIFMP8=;
- h=From:To:Subject:Date:MIME-Version;
- b=oBlN781MhQ2eMMXKU6wozv1jg7Ulzr1jVG5gjVp24HYd+3IJzGFXdJ9OYXYf99GES
- IyTk7YyAYf9zipp7PMNg8HNuRAcvPG4vFhfm9i2OTDV6Lulatr20Zug24ZfSQy78MK
- a2//DarqNJU3Lvbu3T3V16/4YP2RcCAa/QzakT4iQzoeHv6tO+56VYAGgKa9eYgi0s
- Lx+zX62OJKfhbx5ZnHqPvdS4bqSXfN1ptNSJhXlMp8CNhYXHMyzdY2nNDsC3AQGQTd
- e0BtB1LYFtMw5rEsqJiwrtAoqiAjNV2bJlfkTV92mKeGRTntrcX5SuMOIMdkdOmTqV
- DzdxgKU0f6u3g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1758922639; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=nTZ4M0a7tfjdfC66sB4LDUY5AxaClAYUaYFJHzw5nIg=;
+ b=pN+AlC/uNQgHtvJUgazWi+lrxWKMSTQ4tPDEa2mdpHYkHuuEqFl3Mdd4iUWyNz1VIE2IM2
+ BogjFlV4vZN+eQwRj6SDfz7H/psPHQuurvl+aQCcEgw0U0fzh89jyDRKZGQfc84PUbZorh
+ KnogtO8cCocRx1WZiburiRtpJwXy0sLicUzbeuiVvliIK/2mB9Hhthahy5na2p4MMZ7gWH
+ agySJRNh8hoVPTuBeRg5/0b5A5WxocKxLjCBVtgrbHfmgWbQeJaHTUyauDapHiZ8v9wcEC
+ gcVNVShYN46w62JxoFRXo7MLKEjnQinCyZ9XXukaTJtQpMbVZpyB94IcsV0JWA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=oBlN781M
-Subject: [Buildroot] [PATCH] package/libblockdev: security bump to version
- 3.4.0
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=pN+AlC/u
+Subject: Re: [Buildroot] [PATCH 1/2] package/tiff: ignore CVE-2025-8851
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,45 +85,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/storaged-project/libblockdev/blob/3.4.0/NEWS.rst
+Hello Thomas,
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/libblockdev/libblockdev.hash | 2 +-
- package/libblockdev/libblockdev.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Fri, 26 Sep 2025 18:32:38 +0200
+Thomas Perale via buildroot <buildroot@buildroot.org> wrote:
 
-diff --git a/package/libblockdev/libblockdev.hash b/package/libblockdev/libblockdev.hash
-index 38450c656d..ad0dce77ff 100644
---- a/package/libblockdev/libblockdev.hash
-+++ b/package/libblockdev/libblockdev.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  a2e2e448a19d420480b8cce5e0752197482a65cb62a9ed55d88b237da36600d1  libblockdev-3.3.1.tar.gz
-+sha256  65ef9a37babd44b85b8ff9b273f90f9f7d5f8ff7b0c76a8edb69240325fd83f4  libblockdev-3.4.0.tar.gz
- sha256  97bdc721d875501b6243a456333fdfdb1ab64d31c4da2554de845caf4674b946  LICENSE
-diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
-index ecee8dee24..b8f5a6cffc 100644
---- a/package/libblockdev/libblockdev.mk
-+++ b/package/libblockdev/libblockdev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBBLOCKDEV_VERSION = 3.3.1
-+LIBBLOCKDEV_VERSION = 3.4.0
- LIBBLOCKDEV_SITE = https://github.com/storaged-project/libblockdev/releases/download/$(LIBBLOCKDEV_VERSION)
- LIBBLOCKDEV_LICENSE = LGPL-2.1
- LIBBLOCKDEV_LICENSE_FILES = LICENSE
+> The CVE-2025-8851 [1] has been fixed in upstream commit [2] that is part
+> of the v4.7.0 release.
+> 
+> Because the NVD reference includes the version '<2024-08-11' most of CVE
+> checker will fail to compare it against 4.7.0 and report it as a
+> positive.
+
+Thanks for the patch. Why isn't this fixed in the NVD database? Was the
+issue reported to the NVD maintainers?
+
+Thanks a lot!
+
+Thomas
 -- 
-2.47.3
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
