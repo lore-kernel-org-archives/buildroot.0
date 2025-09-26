@@ -1,106 +1,106 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B3C7CAC5AE
-	for <buildroot@archiver.kernel.org>; Fri, 26 Sep 2025 10:06:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CD92CAC5B9
+	for <buildroot@archiver.kernel.org>; Fri, 26 Sep 2025 10:06:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19DEC40D02;
-	Fri, 26 Sep 2025 10:06:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F0D6605A4;
+	Fri, 26 Sep 2025 10:06:22 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nEtrUWlqwvDu; Fri, 26 Sep 2025 10:06:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 850D461B78
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 850D461B78;
+	Fri, 26 Sep 2025 10:06:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 25ABC12D
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 10:06:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0C0A440CCD
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 10:06:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i0ydr8CjGSCC; Fri, 26 Sep 2025 10:06:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3439E40CCD
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3439E40CCD;
-	Fri, 26 Sep 2025 10:06:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 235C8177
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 10:06:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0A3E441D5F
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 10:06:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fl1iTBzfqnWZ for <buildroot@buildroot.org>;
- Fri, 26 Sep 2025 10:06:16 +0000 (UTC)
+ id BL_gE6w_oryj for <buildroot@buildroot.org>;
+ Fri, 26 Sep 2025 10:06:17 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2F394400A4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F394400A4
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2F394400A4
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 10:06:15 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-46e2c3b6d4cso13158355e9.3
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 03:06:15 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 28FE940C3C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28FE940C3C
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 28FE940C3C
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 10:06:16 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-46e29d65728so13166365e9.3
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 03:06:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1758881174; x=1759485974;
+ d=1e100.net; s=20230601; t=1758881175; x=1759485975;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=vBOqFuz0jxZa1vBrq7f1YDBoGQSJL9EM1haGjjDNW0s=;
- b=b4n9ASFdqCPzbVcaNc9xBwbRTI51b13vzogH6ZXx/RGrTxGFfClqnbKepp8PT+ABpZ
- XQAi45pXBNVO8jQXEi2f8PrzrfphOR/ibz+HOpLsXcZDUcJQ8K+wc72IwZNKIg/K10IX
- A5r18zAwu8T9JTw27D6mHOiDQ37HUrX695M4D0Ow2ciKV/QG+oq/glfYShGADbSEmPV1
- zR2fDEBALdKmCj7FEEWGKqCGMt457w+zLaE/zbo/2DopN92RZKx0+SqSWyO+zVpfspkB
- iHUyFCyBWoSFl0Jm1N/vhU8P8shz1CM16XKehrR+X75bnhlwATv3R1C+SyFDxzDDigjE
- EvbA==
-X-Gm-Message-State: AOJu0YzoHqpxsv0KVsRYsvvxRyO9ub8Eh9VUEseeAIiPzGyUtcJaH7Y9
- CrPna/PtqSG2I9uzjzCQsSA7MMU6mssYG6mdSGS+8UZlkeToHp6UXVq8nye6CKuLt2e6CyMQGmT
- rsy4G4UM=
-X-Gm-Gg: ASbGncsCGAvKwTc5kRnR9oY8mBSBbr6waqfI+FQWVpsz4IbONnXQi2tSqlsjgOK+fs+
- JLupC39XgNIsYTNCpR/SqhdSvf4dEf23YpnlNg9/wqGYL6I+g5dsoGJDD18JZ1iDju1Jbf8y15S
- nUpOXn4pofpjJCe3GZ8MUGsnAueRSouuxDq/9B40zwJc3805D5kA/gprwV9WoLP8k64SgDMLREt
- 1HMySB6KbB6QSK40N06AH2j5mOYJ2T2AxtiE/Yeq8eomJNaR7UO2GLr50Rba5U1XzVv7xxDLh4k
- 2GqXvb3NHSe595so0/CKrBt7gnYRsLC3SQaX0//VUltLaLBIG/BKDAsajx4voALPq0dLQhB0gGT
- 4ACnh5wiCTuRfn4rhprGBiYTPdILvdohb7u+B+fHvPgsqpbFx5asbI/+IdCi7ndE=
-X-Google-Smtp-Source: AGHT+IGI526GV9vB193dp+TiLe1N8eB5W+v5I2TvNiW0sakI9NDjnjOuzBsTSBtCzOCJ4YE9lS0hAw==
-X-Received: by 2002:a05:600c:1e85:b0:45d:d5df:ab2d with SMTP id
- 5b1f17b1804b1-46e32a03456mr62763825e9.26.1758881173711; 
- Fri, 26 Sep 2025 03:06:13 -0700 (PDT)
+ bh=T1el7bOVkNSVJsNehCRG7KmaeYnDUnG5W7mKeC1dFfY=;
+ b=cRd+JGQBw+Ea19v9+G8JK1blcBo4/v/RkwWKDdgfHc71ORNWDD/IgBaFvx/Pyo29+N
+ FNsJLGpTfzQdD72UKdXKETWLkE8bvY0w/HA9Hu7gqUQQ+tzg42TT5JXpix4M0fCf4iTn
+ 6AVPiMxUr5HlPx9cy9rd+f5DYgYl35xMQvivuNPtU13kwSd065iRPY+ihXSGDsoGv/0P
+ IRYaOHLOA2N+fseiKbt07FwZNowaOS/VUiRQ54IktIr0TU31JhUJ2w/2ydBQWucpCNWI
+ boFJKK1MfmgVoWjyP/SVBM0osu6aocJbuo7vVkGfPdctLj7J3lFVj7WaQONEEXQOn2SB
+ OoRQ==
+X-Gm-Message-State: AOJu0YzztweFhhrtcB3fyRGGkh0vDSD7o0qCtNIJox3lsYo4+KKNi55B
+ 0fhNnRbsE0u6ZvUcaLPMGFEWIwW32mdISfG+BC+VBXXXD0rBbssdpdSvWV8V3seW7i/Vx0jAROT
+ dEpMMgQk=
+X-Gm-Gg: ASbGncsBKsLReSd56S8FmHymb0PkViy1kPqWnbb+Rjej/EEa9YJvDOjDir1drSzl1tb
+ xQau1gEniowqga3qApOEb9m2a3jYZgi2zrVzifSeoCCINn2LBehm18Pz8SOrE/HC/56s3RQPJRh
+ Hhm26YwmHrbskF4cLj5r9QQVK8jPZc7gX/PdkVMQL5f4/udVOCt7bkzXynisUsVrByoTQ5Z8TEt
+ YHToKks8kYBayZMtH3Jz5fTTIGfp37XQLHxI/D4V/qnui9WMm5HJIOyeoxzny26eqvylJ5yhhq4
+ BU/wYYE9oMZnZ9/74pcrkDKARarBW3KshdWn4Z+usRLIhgGVoh6voKbR1i3GaQcAASpVnxGafiV
+ STIGLKqOHoFb0c95pY1tg1uEsmr6cptCbub0hUS+3jbS6ObG7v6VuRy/4sXVdCNg=
+X-Google-Smtp-Source: AGHT+IHwEGWOJliUqycNNbfkFroFKolNjEaivdNit0YbqJo4DuMSUX012B/M6GAz20OOvKZTZVTv+g==
+X-Received: by 2002:a05:600c:6306:b0:459:db7b:988e with SMTP id
+ 5b1f17b1804b1-46e329b9bf6mr64140785e9.13.1758881174622; 
+ Fri, 26 Sep 2025 03:06:14 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.. ([2.196.40.179])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-46e2ab62233sm112622825e9.21.2025.09.26.03.06.12
+ 5b1f17b1804b1-46e2ab62233sm112622825e9.21.2025.09.26.03.06.13
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 26 Sep 2025 03:06:13 -0700 (PDT)
+ Fri, 26 Sep 2025 03:06:14 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
 Cc: Bernd Kuhls <bernd@kuhls.net>, Christian Stewart <christian@aperture.us>,
  Marcus Folkesson <marcus.folkesson@gmail.com>,
  Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Fri, 26 Sep 2025 12:06:05 +0200
-Message-ID: <20250926100609.4158676-2-dario.binacchi@amarulasolutions.com>
+Date: Fri, 26 Sep 2025 12:06:06 +0200
+Message-ID: <20250926100609.4158676-3-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250926100609.4158676-1-dario.binacchi@amarulasolutions.com>
 References: <20250926100609.4158676-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1758881174; x=1759485974;
+ d=amarulasolutions.com; s=google; t=1758881175; x=1759485975;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=vBOqFuz0jxZa1vBrq7f1YDBoGQSJL9EM1haGjjDNW0s=;
- b=rzr3dfP3UMTSfrLD8k+UM0J8p6TfYpbReA/AolA9/EyLc+gCPqccW+sgwk7Z3phZa7
- VKs+MkyTX54IdQhEaUlmkuYkBhQsQzbSUWen6Y8aqzZcVrqKfyoEtwOvLpjNhkoZ8Xke
- XkeAUkE480tKkMnKJxlpbRmdeM9sg7XbC3+J8=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=T1el7bOVkNSVJsNehCRG7KmaeYnDUnG5W7mKeC1dFfY=;
+ b=AmKo4Yyf58TBz2E4zgNoSSpp443TWDyD+F/wpUiN8Ss23xEOluDy1A5HVgBlNb7zYh
+ KSXtZJv3NXoCzXWr5Mm4ENjxevWNB8FKNW0Og0wzozeFdOENcfGuZf3xryuHvhfgdDC6
+ pkwjzMhlf4gztV1baB3sQ36MpvROksmwQONUc=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=rzr3dfP3
-Subject: [Buildroot] [PATCH 2/6] package/libcamera-apps: fix
- LIBCAMERA_APPS_VERSION
+ header.a=rsa-sha256 header.s=google header.b=AmKo4Yyf
+Subject: [Buildroot] [PATCH 3/6] package/libcrossguid: fix
+ LIBCROSSGUID_VERSION
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,39 +117,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Make LIBCAMERA_APPS_VERSION compliant with release-monitoring.org.
+Make LIBCROSSGUID_VERSION compliant with release-monitoring.org.
 
-Fixes: c6252c2e50b7fe555f62cbf38fdde8ba540f00ea
+Fixes: c61d7d61b1e3fe143569938f7c63b01a24169830
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- package/libcamera-apps/libcamera-apps.hash | 2 +-
- package/libcamera-apps/libcamera-apps.mk   | 4 ++--
+ package/libcrossguid/libcrossguid.hash | 2 +-
+ package/libcrossguid/libcrossguid.mk   | 4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libcamera-apps/libcamera-apps.hash b/package/libcamera-apps/libcamera-apps.hash
-index b11ea7fe67ca..0be04e44fbdc 100644
---- a/package/libcamera-apps/libcamera-apps.hash
-+++ b/package/libcamera-apps/libcamera-apps.hash
+diff --git a/package/libcrossguid/libcrossguid.hash b/package/libcrossguid/libcrossguid.hash
+index f65c25732d92..e0725bfacfe5 100644
+--- a/package/libcrossguid/libcrossguid.hash
++++ b/package/libcrossguid/libcrossguid.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  b5535933ebc398616fd1b261fa9e3755dfb419e10ee7866078a8a8d99f54a59a  libcamera-apps-v1.7.0-10-ge9645231008146fa0e75c2b3e0ff8c48ad70511a.tar.gz
-+sha256  b5535933ebc398616fd1b261fa9e3755dfb419e10ee7866078a8a8d99f54a59a  libcamera-apps-1.7.0-10-ge9645231008146fa0e75c2b3e0ff8c48ad70511a.tar.gz
- sha256  36dfed86bdef661a0a14ec1a1cc84c771d5a06b6f9b92e9ebb610ba711bd528a  license.txt
-diff --git a/package/libcamera-apps/libcamera-apps.mk b/package/libcamera-apps/libcamera-apps.mk
-index 06efb9a960ca..700cc9947a84 100644
---- a/package/libcamera-apps/libcamera-apps.mk
-+++ b/package/libcamera-apps/libcamera-apps.mk
+ # Locally calculated
+-sha256  6be27e0b3a4907f0cd3cfadec255ee1b925569e1bd06e67a4d2f4267299b69c4  libcrossguid-v0.2.2-52-gca1bf4b810e2d188d04cb6286f957008ee1b7681.tar.gz
++sha256  6be27e0b3a4907f0cd3cfadec255ee1b925569e1bd06e67a4d2f4267299b69c4  libcrossguid-0.2.2-52-gca1bf4b810e2d188d04cb6286f957008ee1b7681.tar.gz
+ sha256  779e58787f966a1552f68d5ec041513cef68785dae4a519dbda7bc0b86eda20e  LICENSE
+diff --git a/package/libcrossguid/libcrossguid.mk b/package/libcrossguid/libcrossguid.mk
+index c77f21ab2605..4afea680de5e 100644
+--- a/package/libcrossguid/libcrossguid.mk
++++ b/package/libcrossguid/libcrossguid.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBCAMERA_APPS_VERSION = v1.7.0-10-ge9645231008146fa0e75c2b3e0ff8c48ad70511a
--LIBCAMERA_APPS_SITE = $(call github,raspberrypi,rpicam-apps,$(LIBCAMERA_APPS_VERSION))
-+LIBCAMERA_APPS_VERSION = 1.7.0-10-ge9645231008146fa0e75c2b3e0ff8c48ad70511a
-+LIBCAMERA_APPS_SITE = $(call github,raspberrypi,rpicam-apps,v$(LIBCAMERA_APPS_VERSION))
- LIBCAMERA_APPS_LICENSE = BSD-2-Clause
- LIBCAMERA_APPS_LICENSE_FILES = license.txt
- LIBCAMERA_APPS_DEPENDENCIES = \
+-LIBCROSSGUID_VERSION = v0.2.2-52-gca1bf4b810e2d188d04cb6286f957008ee1b7681
+-LIBCROSSGUID_SITE = $(call github,graeme-hill,crossguid,$(LIBCROSSGUID_VERSION))
++LIBCROSSGUID_VERSION = 0.2.2-52-gca1bf4b810e2d188d04cb6286f957008ee1b7681
++LIBCROSSGUID_SITE = $(call github,graeme-hill,crossguid,v$(LIBCROSSGUID_VERSION))
+ LIBCROSSGUID_LICENSE = MIT
+ LIBCROSSGUID_LICENSE_FILES = LICENSE
+ LIBCROSSGUID_INSTALL_STAGING = YES
 -- 
 2.43.0
 
