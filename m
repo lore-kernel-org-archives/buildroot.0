@@ -1,106 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAECFCAC5AC
-	for <buildroot@archiver.kernel.org>; Fri, 26 Sep 2025 09:12:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F179CAC5AC
+	for <buildroot@archiver.kernel.org>; Fri, 26 Sep 2025 09:12:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE2274211D;
-	Fri, 26 Sep 2025 09:12:33 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yWZ1T9bRCehO; Fri, 26 Sep 2025 09:12:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D293842123
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D293842123;
-	Fri, 26 Sep 2025 09:12:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0C50D12D
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 09:12:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 096EC84ADD
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 09:12:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD73684AE5;
+	Fri, 26 Sep 2025 09:12:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wQeG7sYNdV5q for <buildroot@buildroot.org>;
- Fri, 26 Sep 2025 09:12:30 +0000 (UTC)
+ id CJLG7lhLkuUZ; Fri, 26 Sep 2025 09:12:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0244184ADD
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0244184ADD;
+	Fri, 26 Sep 2025 09:12:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 80A80177
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 09:12:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6708F61BEE
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 09:12:38 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2EBRARmMcgKT for <buildroot@buildroot.org>;
+ Fri, 26 Sep 2025 09:12:37 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::632; helo=mail-ej1-x632.google.com;
+ client-ip=2a00:1450:4864:20::630; helo=mail-ej1-x630.google.com;
  envelope-from=raphael.pavlidis@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 10CAC84ADC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10CAC84ADC
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 10CAC84ADC
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 09:12:29 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id
- a640c23a62f3a-b2e0513433bso305829466b.1
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 02:12:29 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 67E9661BED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67E9661BED
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 67E9661BED
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 09:12:37 +0000 (UTC)
+Received: by mail-ej1-x630.google.com with SMTP id
+ a640c23a62f3a-b38e5c2e055so38993266b.0
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 02:12:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1758877948; x=1759482748;
+ d=1e100.net; s=20230601; t=1758877955; x=1759482755;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=XCuhyUHKHOJcc0ZSMTrnIBydNem/XT5wHo0aSN3hsvA=;
- b=qpG+Xl+Z3yMcBkQwilJlhAb+JpWqFDNClMxEk2A7+Y0zZXc08ivhsaQmfERgUlZvAY
- 6FCoIdy9L8xHo93oFYOxq4xypTcZvHfMNySennA1GV6Bj8Z+HUh1ewGbSUAaB2n9QEpD
- 6o6nJPJEoJ9g2ZShd2+CbJZxl2KCCS7uH/MXIU7yqflTEl0hykMb5M4o0NrUVrxjFnyR
- AkG2LBHobWhVEjWZpIGyhwksynobTKkIhuaNaQcOr7fCGka449hRLABVXsTASNs2TUj6
- 8IVfj00ya4/0dBnjCOhD77GGxEAR6+JEI1P5AY5GEgSMOiHPs7N2PCJtHvzP957X19BH
- YiAQ==
-X-Gm-Message-State: AOJu0YyD0Yr/vPrLYpkZ/7jk5bPPhzgJpSwynuZuchYR1tLgDtYOVMJf
- V7a+5zSKyyoKmj2CtQN4K54sEyHO+Cd2eS41NFytU6iM84cfQ/rkhAPepWTDfvFy/Sc=
-X-Gm-Gg: ASbGncufuUeXCgx/OW5BNFLmQ69Siq+EnNgQa/6pgpv9a3lclVn8CG+CLomXihLAoiZ
- kOn+inavVV10RRNI7Ry9Bszwwow9lga0G8RCfP0n+x6mUU4HUeYJMpmolXC33j12Nu5wXhnu3ld
- gacUZ6Mc3sHwU+Tx/B9f0bF8Se88xUOkk3aIFfWyiVujY9yYa9Q5363yXzMmkxyVtj2qFNha0iP
- Dyj/U751RcvAMFtT9PonpXbmtUjf9BJTEX6P9eVG7l5/4hA/l2Rpp1pSA97U9g5EmtUuPskVy3H
- cYB0RwdvShBp1noV2Rs3LFzTbtwTZVY16++cfOoEyjEez3zOLRIIFoW/NcBM9eNriBbyEsjQfAv
- CwlIGVW9oMFdX
-X-Google-Smtp-Source: AGHT+IEqZ78WSU2s+Pett3lUgN8Co7lyT7mChAiNf3QKP/iizc9lCA0xajQ1wZVuKG+qTp75EYwHsg==
-X-Received: by 2002:a17:907:1c8c:b0:afe:e9ee:4ae0 with SMTP id
- a640c23a62f3a-b34beba9703mr727081166b.59.1758877947995; 
- Fri, 26 Sep 2025 02:12:27 -0700 (PDT)
+ bh=xWqu6upLepRYdGfDTDgLwXEQEgfoVigcpOj1lJjDzc8=;
+ b=ToDehL9FpcwEwT9iACNTkY0olRDNJG7CHRp6AgYew8pcqMoFhqH2s2gZhxR9tDw/QY
+ xGB0foj1p7AYnrIqcT69HnETIGA0aiBjhBvuMrRROYL7OpnxK4e/67Z+lTVIz4eUeYPp
+ k/NNM136O+jXsBiMc+wG93eeezKAWDFkxOfoCqzRW8lq/Tw8RNHxQ82AbJoaX3xHVH2i
+ +qh9mKzLAwQqZx5jjHMQzRbeE2CIXSuYHC6Z4te4cf48M1xU536p7bVuK4+pm1JQcQwF
+ J6Kv6ZkKKeStcjlhbZVY0XkXZlZiCCj7G6Ns4L3co+K9J0hBETTWUS1iZAmLONoUsJGy
+ 7CpQ==
+X-Gm-Message-State: AOJu0YxoJe2x2NIuGU5/oMYq8g/yszeGuCuGbArbuw1h5/H/qPgOEW6Q
+ pEFxLSFPG3+2Xs4Zdlpc8pPEol+8kaOGXQmUO6/u0gGIsgRgKyAU6WpLySt8dTcphYU=
+X-Gm-Gg: ASbGnctxN6ftE+Fxi4uHBKzlEM+tRGRX/ppJ+FrVRlGQwqo9C1TxbCnMxYzfPzHqB1m
+ lLFINf8TH3IShFuU9clYdE8xGXbKwu7bKxXTiZMLfoGHJxqhpLauBJXofdO2AW35vdUqRk2xDHR
+ pXzAlXuOxFszWlfo2vU+28MBtQ5AzUaunh60CqjT4wHwQbKSS63+em7IJkM3YVLSJD8eLpytkz/
+ xBQxZaANMFOUAIldl6xU/PK/OtghSmcwNlmjRrYwcbfVnpk57rTIvPqWy7/SwQq1atdRnBg0lAp
+ 5KFrrPNzdAlKkJWQG66tL4uejRsxJAwGQk29O0oAbc456OrTpLhTkL7MN/Nx6RJZWGf3jatDA0h
+ dWFV42pUgTDUk
+X-Google-Smtp-Source: AGHT+IG+CaVlnA6QJ7IwaIJMhvDmE6EsaS7rBCR/Ey43PnWkRdidnzO4XFXwy1vD7KBiTGXechJbCg==
+X-Received: by 2002:a17:907:7f04:b0:b04:626e:f435 with SMTP id
+ a640c23a62f3a-b34bb22baf2mr685647266b.22.1758877955042; 
+ Fri, 26 Sep 2025 02:12:35 -0700 (PDT)
 Received: from LinkMed ([2a02:8070:2483:7e00::f6da])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b3545c8510bsm328256466b.108.2025.09.26.02.12.27
+ a640c23a62f3a-b3545c8510bsm328256466b.108.2025.09.26.02.12.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 26 Sep 2025 02:12:27 -0700 (PDT)
+ Fri, 26 Sep 2025 02:12:34 -0700 (PDT)
 From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 To: buildroot@buildroot.org
 Cc: Adrian Perez de Castro <aperez@igalia.com>,
  Raphael Pavlidis <raphael.pavlidis@gmail.com>
-Date: Fri, 26 Sep 2025 11:11:18 +0000
-Message-ID: <20250926111120.357053-2-raphael.pavlidis@gmail.com>
+Date: Fri, 26 Sep 2025 11:11:19 +0000
+Message-ID: <20250926111120.357053-3-raphael.pavlidis@gmail.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20250926111120.357053-1-raphael.pavlidis@gmail.com>
 References: <20250926111120.357053-1-raphael.pavlidis@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1758877948; x=1759482748; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1758877955; x=1759482755; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=XCuhyUHKHOJcc0ZSMTrnIBydNem/XT5wHo0aSN3hsvA=;
- b=C7kv5MtqGzERLfO+nIByMmDdp/8u9uGs2zeT3IIETAzRK6Fk6JzY75Ixd4R8FToB5r
- 3NgpUiR5DVpUylMNt26sZUCMvzqe2Cfv4IN27ym2uqUitfFDvhwY6MVCJWhdeEkjFatb
- 7+OCbZ7kyQIkgLwFp4PLit3U8VeQ9OA3VWd3x84BELEOG8egL8rO1j0EIYfgLM1ouqMI
- 3+MvMqR6XBU2mptlYOI1KQBLdd4oIKWqH2mJsgMQcbk2XQBNaHNBZ3C08AXfkXc9RtF4
- 4+hRqwcVkGLqVfGeGHGobu7h4QCf+vwrSaGUjvMwIlUT9JJsHI4PYfpkr58BheEGW4jb
- Alqg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=xWqu6upLepRYdGfDTDgLwXEQEgfoVigcpOj1lJjDzc8=;
+ b=iu9/xAzPHC3+KoQlASs/fLWmchB8SxXoWEF7IaYogABZ+OARqbos+pi47l31F5Kr7z
+ MOb/uW+5Gzl1csT4QRNbwx3STBwMK1ZX1fjFJeIezGEs6Q6WnbLdEMPLceZ7wPargKmM
+ 7qFf1VmFffHLzZNO1cDDckz+sJhea1dKqJHByDtHAxlQmu2t06z1aMIbmY7QFemJ3sCc
+ TLEGhisExtyjMCd/XYr7FIk5kdnV0g9j/v5M+gBS9wx0JT+v5a4mPwarvUGM/VKsIvCI
+ TXwUz8flCrFCSS0Xt4p8nW9mu6SyTV5tyrhf7va8nbS+d9TNbMx6eoCxJqvsiCUvBXrU
+ TUqw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=C7kv5Mtq
-Subject: [Buildroot] [PATCH v2 2/4] package/wlroots: add missing dependency
- to libgbm
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=iu9/xAzP
+Subject: [Buildroot] [PATCH v2 3/4] package/cage: bump to version
+ 2e593fe5a8a2186a558ceb414674775e4ba5d2b1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,47 +116,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-If the render gles2 is enabled then libgbm is required (see [1]).
-Therefore, add the dependency to wlroots.
-
-[1]: https://gitlab.freedesktop.org/wlroots/wlroots/-/blob/0.19/render/meson.build?ref_type=heads#L44
-
 Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 ---
- package/wlroots/Config.in  | 3 ++-
- package/wlroots/wlroots.mk | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ package/cage/cage.hash | 6 ++----
+ package/cage/cage.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/wlroots/Config.in b/package/wlroots/Config.in
-index 02bd54c999..6d2992cf2c 100644
---- a/package/wlroots/Config.in
-+++ b/package/wlroots/Config.in
-@@ -1,4 +1,4 @@
--comment "wlroots needs udev, EGL and OpenGL ES support"
-+comment "wlroots needs udev, EGL, OpenGL ES and GBM support"
- 	depends on !BR2_PACKAGE_HAS_LIBEGL || \
- 		!BR2_PACKAGE_HAS_LIBEGL || \
- 		!BR2_PACKAGE_HAS_LIBGLES || \
-@@ -15,6 +15,7 @@ config BR2_PACKAGE_WLROOTS
- 	depends on BR2_PACKAGE_HAS_UDEV # libinput
- 	depends on BR2_PACKAGE_HAS_LIBEGL
- 	depends on BR2_PACKAGE_HAS_LIBGLES
-+	depends on BR2_PACKAGE_HAS_LIBGBM
- 	select BR2_PACKAGE_HWDATA
- 	select BR2_PACKAGE_HWDATA_PNP_IDS
- 	select BR2_PACKAGE_LIBDISPLAY_INFO
-diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
-index 689662f536..babadea94f 100644
---- a/package/wlroots/wlroots.mk
-+++ b/package/wlroots/wlroots.mk
-@@ -19,6 +19,7 @@ WLROOTS_DEPENDENCIES = \
- 	libxkbcommon \
- 	libegl \
- 	libgles \
-+	libgbm \
- 	pixman \
- 	seatd \
- 	udev \
+diff --git a/package/cage/cage.hash b/package/cage/cage.hash
+index e7c971ea26..895031ecf8 100644
+--- a/package/cage/cage.hash
++++ b/package/cage/cage.hash
+@@ -1,7 +1,5 @@
+-# Locally calculated after checking pgp signature
+-# https://github.com/cage-kiosk/cage/releases/download/v0.2.0/cage-0.2.0.tar.gz.sig
+-# with key 34FF9526CFEF0E97A340E2E40FDE7BE0E88F5E48 "emersion <contact@emersion.fr>"
+-sha256  557c194d18af7202a9ec2e8be6dd7129f6c16d0f4528f4079ba26ccd57b6ef88  cage-0.2.0.tar.gz
++# Locally computed
++sha256  f920e4be3522bfb8fe7e5d3c21e490c59de5ab8db3ae2818d7ea9ef1733f8243  cage-2e593fe5a8a2186a558ceb414674775e4ba5d2b1-git4.tar.gz
+ 
+ # Hashes for license files:
+ sha256  e117104073335dbaf78596fb1bedf89dda63c71f60f0b665947b2d369c77ecee  LICENSE
+diff --git a/package/cage/cage.mk b/package/cage/cage.mk
+index 6fa39122ee..d739fce65b 100644
+--- a/package/cage/cage.mk
++++ b/package/cage/cage.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-CAGE_VERSION = 0.2.0
+-CAGE_SITE = https://github.com/cage-kiosk/cage/releases/download/v$(CAGE_VERSION)
++CAGE_VERSION = 2e593fe5a8a2186a558ceb414674775e4ba5d2b1
++CAGE_SITE = https://github.com/cage-kiosk/cage.git
++CAGE_SITE_METHOD = git
+ CAGE_LICENSE = MIT
+ CAGE_LICENSE_FILES = LICENSE
+ CAGE_DEPENDENCIES = host-pkgconf wlroots
 -- 
 2.51.0
 
