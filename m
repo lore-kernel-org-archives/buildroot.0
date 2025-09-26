@@ -1,75 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2975CAC5AE
-	for <buildroot@archiver.kernel.org>; Fri, 26 Sep 2025 17:09:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22416CAC5B8
+	for <buildroot@archiver.kernel.org>; Fri, 26 Sep 2025 17:18:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7695A83366;
-	Fri, 26 Sep 2025 17:09:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D6C7161C9B;
+	Fri, 26 Sep 2025 17:18:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xRdthhmgIEKJ; Fri, 26 Sep 2025 17:09:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0OCz1TW25fGl; Fri, 26 Sep 2025 17:18:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 744C7834F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62B7F61C7F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 744C7834F6;
-	Fri, 26 Sep 2025 17:09:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 799BB198
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 17:09:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 62B7F61C7F;
+	Fri, 26 Sep 2025 17:18:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id AAF6B198
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 17:18:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5A97F836AE
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 17:09:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9CE0741F8B
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 17:18:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qtlls880Ua-s for <buildroot@buildroot.org>;
- Fri, 26 Sep 2025 17:09:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3F05183366
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F05183366
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3F05183366
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 17:09:42 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 26EF4780395;
- Fri, 26 Sep 2025 19:09:37 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 26 Sep 2025 19:09:37 +0200
-MIME-Version: 1.0
-Date: Fri, 26 Sep 2025 19:09:37 +0200
-To: =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>
-Cc: buildroot@buildroot.org, Joel Stanley <joel@jms.id.au>
-In-Reply-To: <20250926055738.319052-1-clg@kaod.org>
-References: <20250926055738.319052-1-clg@kaod.org>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <485303556dfa801e596b5ba078b210a9@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1758906580;
- bh=ULihb0BUR3nspXhizcvnW2umnPLlbi0fvG5y+P7kwxk=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=EjLA3C+QXlBUxTZnbSYtJVE/AwL2nLELFxuKuvPGYWx6v7dJmOjiOXtzY2qJMWczJ
- E/9lCh3Tq24WG+EU2/Cl9Dq0ZkhMaRqzQ5NmBz4Ebv/bDsyehk56rtQW9PbLYE2ZeR
- M/FXHewa6A7uEmQCyqKgtbwsFBmq4u9iqpdEK8MJ8hb+aic08zXWY9n/vwJ4PEGIYw
- IKQJHl81cJ3HIKUwJ+xNrYAjq4zYZo4LjmeA2zMMU8vCMNcswNGVGVU8UxHb1EtUj4
- zGSV1AuKGadcBQI5FsK9D5sx/aLbFWAQQABekOHGWYlm5+OYy4395UxnnUw4IhjrX3
- YmYmIAxb4fcQg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=EjLA3C+Q
-Subject: Re: [Buildroot] [PATCH 1/1] configs/aspeed_ast2500evb: select CPU
- arm1176jzf
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vqbe4vQk4kWK for <buildroot@buildroot.org>;
+ Fri, 26 Sep 2025 17:18:48 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04F9441F3F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 04F9441F3F
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 17:18:48 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E5B09864D1; Fri, 26 Sep 2025 17:18:47 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 26 Sep 2025 19:10:31 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9e25bcfdab69745b9bd52569b1fa5987f66bbd8a
+X-Git-Newrev: 92f76f6c35ee816f1f4e628bb619da0471ae3eed
+X-Patchwork-Hint: ignore
+Message-Id: <20250926171847.E5B09864D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/xilinx-prebuilt: only allow binaries
+ for device family
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,22 +60,56 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMjYvMDkvMjAyNSAwNzo1NywgQ8OpZHJpYyBMZSBHb2F0ZXIgd3JvdGU6Cj4gVGhlIEFzcGVl
-ZCBBU1QyNTAwIFNvQyBmYW1pbHkgZW1iZWRzIGEgQVJNMTE3NkpaRiAzMi1iaXQgQ1BVLiBzZWxl
-Y3QKPiB0aGlzIGFyY2hpdGVjdHVyZSB2YXJpYW50IGZvciB0aGUgdGFyZ2V0Lgo+IAo+IEFsbywg
-Zml4ZXMgQ0kgdGhpcyBmYWlsdXJlOgo+IAo+ICAgaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9v
-dC5vcmcvYnVpbGRyb290Ly0vam9icy8xMTQ4MTIzODM0MQo+IAo+IFdBUk46IGRlZmNvbmZpZyAu
-L2NvbmZpZ3MvYXNwZWVkX2FzdDI1MDBldmJfZGVmY29uZmlnIGNhbid0IGJlIHVzZWQ6Cj4gICAg
-ICAgTWlzc2luZzogCj4gQlIyX1RPT0xDSEFJTl9FWFRFUk5BTF9CT09UTElOX0FSTVY2X0VBQklI
-Rl9HTElCQ19TVEFCTEU9eQo+IAo+IEZpeGVzOiA2ZTVlNmY5OGZkNzMgKCJjb25maWdzL2FzcGVl
-ZF9hc3QyNTAwZXZiOiBidW1wIGtlcm5lbCB0byA2LjE2LjcsIAo+IGNoZWNrIGhhc2hlcywgdXNl
-IGJvb3RsaW4gdG9vbGNoYWluIikKPiBTaWduZWQtb2ZmLWJ5OiBDw6lkcmljIExlIEdvYXRlciA8
-Y2xnQGthb2Qub3JnPgoKQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
-dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=92f76f6c35ee816f1f4e628bb619da0471ae3eed
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Add an architecture cpu dependency to each family to make sure that users can
+only install prebuilt firmware which is applicable to their target device
+family.
+
+The versal family is based on BR2_cortex_a72.
+
+The kria and zynqmp families are based on BR2_cortex_a53.
+
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ boot/xilinx-prebuilt/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/boot/xilinx-prebuilt/Config.in b/boot/xilinx-prebuilt/Config.in
+index a37bdba540..5ebfb83c25 100644
+--- a/boot/xilinx-prebuilt/Config.in
++++ b/boot/xilinx-prebuilt/Config.in
+@@ -25,16 +25,20 @@ config BR2_TARGET_XILINX_PREBUILT_VERSION
+ choice
+ 	bool "family variant"
+ 	default BR2_TARGET_XILINX_PREBUILT_VERSAL if BR2_PACKAGE_VERSAL_FIRMWARE  # legacy
++	default BR2_TARGET_XILINX_PREBUILT_VERSAL if BR2_cortex_a72
+ 	default BR2_TARGET_XILINX_PREBUILT_ZYNQMP
+ 
+ config BR2_TARGET_XILINX_PREBUILT_ZYNQMP
+ 	bool "zynqmp"
++	depends on BR2_cortex_a53
+ 
+ config BR2_TARGET_XILINX_PREBUILT_KRIA
+ 	bool "kria"
++	depends on BR2_cortex_a53
+ 
+ config BR2_TARGET_XILINX_PREBUILT_VERSAL
+ 	bool "versal"
++	depends on BR2_cortex_a72
+ 
+ endchoice
+ 
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
