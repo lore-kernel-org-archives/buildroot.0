@@ -4,75 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AF75CAC5AE
-	for <buildroot@archiver.kernel.org>; Fri, 26 Sep 2025 17:25:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60757CAC5B8
+	for <buildroot@archiver.kernel.org>; Fri, 26 Sep 2025 17:44:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 00EE661CAB;
-	Fri, 26 Sep 2025 17:25:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0185561BA9;
+	Fri, 26 Sep 2025 17:44:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jaiw-U1pJoa2; Fri, 26 Sep 2025 17:25:51 +0000 (UTC)
+ id Dxpx5fdU4v5G; Fri, 26 Sep 2025 17:44:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A5B861C7F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E6A861C93
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1A5B861C7F;
-	Fri, 26 Sep 2025 17:25:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7E835177
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 17:25:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E6A861C93;
+	Fri, 26 Sep 2025 17:44:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C9DAF198
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 17:44:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6F5E2616D2
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 17:25:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A5B8B41F63
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 17:44:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4cUs6eCb1Gof for <buildroot@buildroot.org>;
- Fri, 26 Sep 2025 17:25:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6E8D261AE1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E8D261AE1
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6E8D261AE1
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 17:25:49 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 0607A19F576;
- Fri, 26 Sep 2025 19:25:37 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 26 Sep 2025 19:25:37 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IIbpEuK5Au8j for <buildroot@buildroot.org>;
+ Fri, 26 Sep 2025 17:44:25 +0000 (UTC)
+X-Greylist: delayed 532 seconds by postgrey-1.37 at util1.osuosl.org;
+ Fri, 26 Sep 2025 17:44:25 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 66AFE40147
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66AFE40147
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=208.88.110.44;
+ helo=mail.savoirfairelinux.com;
+ envelope-from=serosh.deljam@savoirfairelinux.com; receiver=<UNKNOWN> 
+Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com
+ [208.88.110.44])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 66AFE40147
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 17:44:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.savoirfairelinux.com (Postfix) with ESMTP id BC82C3D82FDC
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 13:35:32 -0400 (EDT)
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10032)
+ with ESMTP id tbOZAQjyp97t; Fri, 26 Sep 2025 13:35:32 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.savoirfairelinux.com (Postfix) with ESMTP id 0FF6B3D85382;
+ Fri, 26 Sep 2025 13:35:32 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com 0FF6B3D85382
+X-Virus-Scanned: amavis at mail.savoirfairelinux.com
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10026)
+ with ESMTP id 5LO2dU8w9as4; Fri, 26 Sep 2025 13:35:31 -0400 (EDT)
+Received: from localhost.localdomain (unknown [192.168.51.254])
+ by mail.savoirfairelinux.com (Postfix) with ESMTPSA id D30193D82FDC;
+ Fri, 26 Sep 2025 13:35:31 -0400 (EDT)
+From: Serosh Deljam <serosh.deljam@savoirfairelinux.com>
+To: buildroot@buildroot.org
+Cc: Serosh Deljam <serosh.deljam@savoirfairelinux.com>
+Date: Fri, 26 Sep 2025 13:35:29 -0400
+Message-ID: <20250926173529.348090-1-serosh.deljam@savoirfairelinux.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Date: Fri, 26 Sep 2025 19:25:37 +0200
-To: Neal Frager <neal.frager@amd.com>
-Cc: buildroot@buildroot.org, ibai.erkiaga-elorza@amd.com,
- luca.ceresoli@bootlin.com, yann.morin@orange.com, brandon.maier@collins.com,
- thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com,
- romain.naour@gmail.com
-In-Reply-To: <20250904211239.1928818-1-neal.frager@amd.com>
-References: <20250904211239.1928818-1-neal.frager@amd.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <8f678b6f960c7d54c25dc7feacb46cb1@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1758907547;
- bh=hTEY15ujtwQ/ZculHxY/KCpOq6J3Dbyu74VhDPPrcpM=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=V7qMweJEQOqlSScxxJZhOq08KlKh7tFb+V/ObIHAo5Ca2B3W4HAkLCDCTqNL8AeLI
- RVkJ1dvigBJ58NnHeu+6moDOO1+fuOpwUEBthvDVaMhAj6FPbQcJCrKOHAtRteZvNQ
- CnXu4qgnFfWZLFYJgpcFlg+EZ2btxTnpcyk8MiNlwEqMqVcSZjcygUKFTPDSBAJnki
- ssSI2tbUAO414TZmIO+XC1SoDueySnP+wadG6xHQe/LORq2RD0y1cxr5yvkKFQEw61
- LyxURQQxXSnjHC9ncahkKedzravh7kNtz38GHR6PwAYsSAdWuqqpBJUiIvhLssT36J
- aQjSdwMWzssCA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=V7qMweJE
-Subject: Re: [Buildroot] [PATCH v4 1/4] boot/xilinx-prebuilt: add support
- for plmfw.elf filename
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
+ t=1758908132; bh=XJO9N+Kwv7XogW6PxsRsnCx5vFAmxBOEBO9i38iQUzE=;
+ h=From:To:Date:Message-ID:MIME-Version;
+ b=f7D3SH0+7TpSa9ZuC+CUYcUaXmB1E+tEYh5NW8PBX/V29KocyWNfNxwcDLqzf/OFz
+ drfG1Stq9UoprTAsgOCi8JpneFi/04RYM5fRgUInt1yztxqc7ZEYMIaG8wXYQB5ZoZ
+ oRy7vUoXEiArbUQzwB5Yi0X5h7QPQeyKEw5SWnaqjhTHiebCHKO0yxcvdDJzikB+gj
+ K1KO3w5ZOnITTDfeW301ILw6Pu2TkSSxyd3I1YoRJkku26MRQ/eY/u5dYRAWjCvFJQ
+ NlQEhoJA/DjUgMw3QB/8U5J4GBXEvJSLxjGfqZfKPx0DLnlJy7uYqPBt07okOQcz9S
+ apnqPDCiFudVw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=savoirfairelinux.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com
+ header.a=rsa-sha256 header.s=DFC430D2-D198-11EC-948E-34200CB392D2
+ header.b=f7D3SH0+
+Subject: [Buildroot] [PATCH 1/1] package/cukinia: bump version to 0.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,25 +94,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 04/09/2025 23:12, Neal Frager via buildroot wrote:
-> AMD / Xilinx has made the decision to change the name of plm.elf to 
-> plmfw.elf
-> in the prebuilt binaries repo starting with the next update.
-> 
-> This patch updates the xilinx-prebuilt package to support either the 
-> old
-> plm.elf filename or the new plmfw.elf filename.
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Serosh Deljam <serosh.deljam@savoirfairelinux.com>
+---
+ package/cukinia/cukinia.hash | 2 +-
+ package/cukinia/cukinia.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Series applied to master, thanks.
+diff --git a/package/cukinia/cukinia.hash b/package/cukinia/cukinia.hash
+index cc0393aff9..6957c0e1b5 100644
+--- a/package/cukinia/cukinia.hash
++++ b/package/cukinia/cukinia.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  8f608571354d87f7ec2949bd335c616881c05f66fc60d7a2fc7488369c9d307d  cukinia-0.8.0.tar.gz
++sha256  fec5f1d06ed4072b32fff8c7b1e9784aa1d2923d501c4066d47ac792c28e11b0  cukinia-0.9.0.tar.gz
+ sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
+diff --git a/package/cukinia/cukinia.mk b/package/cukinia/cukinia.mk
+index a4e3658ede..f5eccdeb63 100644
+--- a/package/cukinia/cukinia.mk
++++ b/package/cukinia/cukinia.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CUKINIA_VERSION = 0.8.0
++CUKINIA_VERSION = 0.9.0
+ CUKINIA_SITE = $(call github,savoirfairelinux,cukinia,v$(CUKINIA_VERSION))
+ CUKINIA_LICENSE = Apache-2.0
+ CUKINIA_LICENSE_FILES = LICENSE
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
