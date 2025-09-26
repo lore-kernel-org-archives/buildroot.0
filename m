@@ -4,99 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CC66CAC5B8
-	for <buildroot@archiver.kernel.org>; Fri, 26 Sep 2025 16:32:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3098CAC5B8
+	for <buildroot@archiver.kernel.org>; Fri, 26 Sep 2025 16:54:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2704F84C83;
-	Fri, 26 Sep 2025 16:32:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7424B8384B;
+	Fri, 26 Sep 2025 16:54:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qSiIaDsMWW8G; Fri, 26 Sep 2025 16:32:48 +0000 (UTC)
+ id BRTCPHsQWQDA; Fri, 26 Sep 2025 16:54:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E48684CD5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E81C82CF1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5E48684CD5;
-	Fri, 26 Sep 2025 16:32:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id C153C198
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 16:32:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9E81C82CF1;
+	Fri, 26 Sep 2025 16:54:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id CFA9E198
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 16:54:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A738D84C83
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 16:32:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C13F941F88
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 16:54:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pTM2KNMWvygQ for <buildroot@buildroot.org>;
- Fri, 26 Sep 2025 16:32:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4358C84C89
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4358C84C89
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4358C84C89
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 16:32:42 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-46e3af7889fso8541265e9.2
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 09:32:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1758904361; x=1759509161;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=bL+SKlIUPbJ4r4hGSWXSHOn5hTRENBocvXMpL0nOyKQ=;
- b=tILcE7nqljBrihrF8YqRnKI/hsZgvrvDJdJRMOJCjWMTIqp2gKMupCf2jhorEkOn5R
- 2iKTLGYXrwCsz3AxTlMkr0568Oytj16JIKjl4xipcn19Y0ON4nB7L90Q1JkBt92mL77B
- IeUzkWNz3R+eo9gFXu7xrp7Qun1K0DYVIgoRqFlcplHrYYPQj7RYo0a6TZNzGuys8UJ8
- nX4PdnvaPYWLH15Zh9Ef+n2r5XRaEaZzplPNrM3vwJNT608MbjFVxyav1xTDniemIkje
- 8ogQLR9tkuSXm+wuUCWnkr28+ZOgzFCK2uC6E0j/wsucSh09i0bXZLExkPwQYaAo6Ajl
- E6ww==
-X-Gm-Message-State: AOJu0YyUlVWihv2ccLWL5P6MKbyjMn0ylEHG9JQyAfVWshhWoiaOutL6
- 2ZZnKjOy6J9B/8fS7IrfyDnsVeMaH18iLEG24Vuc8xIvGsDYbkNKdUWp7sflqzKPyTW2PQi/waz
- 94KqgVYs=
-X-Gm-Gg: ASbGncucjizXkx+rEhz40o20kcEdpVoFtnta57mgyuQbFSiOte3huhY0GqosyhNXBp5
- s1b8qxzL247/BsH0BAusBUtMveBXprmhNTu7UDTCQNOfOtjQMzDo6HACCEmh/P8Z5oMUth05PiT
- 0KVluOP+XC/z9KeVNtc2AI7HMw7royiqHO3THM6FsaXHvoSqYDwXPkZCcGbuSmZZV5hE4lU+GBq
- h0poVmJwQMX9FxbgbMQi7VUSDFSSAIOChAhqOfzTQ3n+461j20Q/oU9nKBi0+QCt8GPUKmB44uD
- WvD+RPGIBNYOLCneg1tQog6/8GjrPNHhKQ9Dki2RfEB9dnbLSd0pFbKyz69FI25rS9SYDYvL4rY
- zZmy+TAz5u6PDnyA=
-X-Google-Smtp-Source: AGHT+IEbzKv6hkl33dgsN/8arfWtPNrjGvRUJBaenNumZwUsRjTvt8cmWtfc+S25JfH73LUoY7/V9A==
-X-Received: by 2002:a05:600c:8b58:b0:45d:e326:96fb with SMTP id
- 5b1f17b1804b1-46e32a17d2bmr85078045e9.30.1758904360653; 
- Fri, 26 Sep 2025 09:32:40 -0700 (PDT)
-Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-46e2ab31ea3sm121249955e9.12.2025.09.26.09.32.40
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 26 Sep 2025 09:32:40 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YrMb5gfsiDhz for <buildroot@buildroot.org>;
+ Fri, 26 Sep 2025 16:54:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B71F415FD
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3B71F415FD
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 16:54:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 34C35864AA; Fri, 26 Sep 2025 16:54:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 26 Sep 2025 18:32:39 +0200
-Message-ID: <20250926163239.162734-2-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250926163239.162734-1-thomas.perale@mind.be>
-References: <20250926163239.162734-1-thomas.perale@mind.be>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1758904361; x=1759509161; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
- :reply-to;
- bh=bL+SKlIUPbJ4r4hGSWXSHOn5hTRENBocvXMpL0nOyKQ=;
- b=eoerdbkYH2Eas/yj4hNZzpC87gPbwgOb7jKgq0DxBrOk8R9AsGPGiY9ovlaTXR8Eck
- tyT/pV8RuRRGy2X/3ThR2PZVnbkM7VNd3uv4wtW67u6pQ5uS6LS5PKGBENIOqc/wFOUc
- mOvxQ+Tv8VFfNT0W6cNFnLKTfrO7S9hSTbGhIFG1qQHZ7o3r98CC8+w17Tuyrb4EBqrI
- dLg/ApnixjAxA6vpk3fF2fCHMmcWZ9VZSk5A/fpD/yQaIRh5CbXAc0E7ZE/2HWflp7GU
- COLqxT0mx+VJtASe6/MkP+UTaO7jBvS55TLY5VezQlxK9cZLDBsGc0HS/pta84+kdF4Z
- CMPg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=eoerdbkY
-Subject: [Buildroot] [PATCH 2/2] package/tiff: security bump to v4.7.1
+Date: Fri, 26 Sep 2025 18:30:12 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 981efdb8ca9033656e272e1de447c5e2359f7bc0
+X-Git-Newrev: c584135c0e9a2144ca2ecb09b2b21a1aa7178438
+X-Patchwork-Hint: ignore
+Message-Id: <20250926165443.34C35864AA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/iot-gate-imx8_ebbr: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,301 +57,485 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============0307396246572663972=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For more details on the version bump, see:
-  - https://gitlab.com/libtiff/libtiff/-/releases/v4.7.1
+--===============0307396246572663972==
+Content-Type: text/plain
 
-This bump includes the security fix for CVE-2025-8176, CVE-2025-8177
-that were addressed in commit [1][2].
+commit: https://git.buildroot.net/buildroot/commit/?id=c584135c0e9a2144ca2ecb09b2b21a1aa7178438
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also fixes the following vulnerabilities:
+Add a defconfig to build an AArch64 disk image with a U-Boot based
+firmware implementing the subset of UEFI defined by EBBR[1], as well as
+a Linux OS booting with UEFI, to run on the IOT-GATE-iMX8 from Compulab.
 
-- CVE-2024-13978
+The generated firmware binary can also be used to install or run another
+OS supporting the EBBR specification.
 
-    A vulnerability was found in LibTIFF up to 4.7.0. It has been
-    declared as problematic. Affected by this vulnerability is the
-    function t2p_read_tiff_init of the file tools/tiff2pdf.c of the
-    component fax2ps. The manipulation leads to null pointer
-    dereference. The attack needs to be approached locally. The
-    complexity of an attack is rather high. The exploitation appears to
-    be difficult. The patch is named
-    2ebfffb0e8836bfb1cd7d85c059cd285c59761a4. It is recommended to apply
-    a patch to fix this issue.
+This configuration is based on the work of Paul Liu[2] and is not related
+with the official BSP from Compulab.
 
-For more information, see:
-  - https://nvd.nist.gov//vuln/detail/CVE-2024-13978
-  - https://gitlab.com/libtiff/libtiff/-/commit/2ebfffb0e8836bfb1cd7d85c059cd285c59761a4
+This has been tested on actual hardware.
 
-- CVE-2025-8961
+While at it, add this defconfig to myself in DEVELOPERS.
 
-    A weakness has been identified in LibTIFF 4.7.0. This affects the
-    function main of the file tiffcrop.c of the component tiffcrop.
-    Executing manipulation can lead to memory corruption. The attack can
-    only be executed locally. The exploit has been made available to the
-    public and could be exploited.
+[1] https://github.com/ARM-software/ebbr
+[2] https://git.linaro.org/plugins/gitiles/people/paul.liu/systemready/build-scripts
 
-For more information, see:
-  - https://nvd.nist.gov//vuln/detail/CVE-2025-8961
-  - https://gitlab.com/libtiff/libtiff/-/commit/0ac97aa7a5bffddd88f7cdbe517264e9db3f5bd5
-
-- CVE-2025-9165
-
-    A flaw has been found in LibTIFF 4.7.0. This affects the function
-    _TIFFmallocExt/_TIFFCheckRealloc/TIFFHashSetNew/InitCCITTFax3 of the
-    file tools/tiffcmp.c of the component tiffcmp. Executing
-    manipulation can lead to memory leak. The attack is restricted to
-    local execution. The exploit has been published and may be used.
-    This patch is called ed141286a37f6e5ddafb5069347ff5d587e7a4e0. It is
-    best practice to apply a patch to resolve this issue.
-
-For more information, see:
-  - https://nvd.nist.gov//vuln/detail/CVE-2025-9165
-  - https://gitlab.com/libtiff/libtiff/-/commit/ed141286a37f6e5ddafb5069347ff5d587e7a4e0
-
-[1] b3974df966 package/tiff: add patches to fix CVE-2025-8176
-[2] 3db725d71d package/tiff: add patch to fix CVE-2025-8177
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+Cc: Ying-Chun Liu (Paul Liu) <paul.liu@linaro.org>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...ip-the-first-line-of-the-input-image.patch | 61 -------------------
- package/tiff/0002-fix-tiffmedian-bug.patch    | 31 ----------
- package/tiff/0003-conflict-resolution.patch   | 28 ---------
- .../tiff/0004-fix-for-thumbnail-issue.patch   | 35 -----------
- package/tiff/tiff.hash                        |  4 +-
- package/tiff/tiff.mk                          |  8 +--
- 6 files changed, 3 insertions(+), 164 deletions(-)
- delete mode 100644 package/tiff/0001-don-t-skip-the-first-line-of-the-input-image.patch
- delete mode 100644 package/tiff/0002-fix-tiffmedian-bug.patch
- delete mode 100644 package/tiff/0003-conflict-resolution.patch
- delete mode 100644 package/tiff/0004-fix-for-thumbnail-issue.patch
+ DEVELOPERS                                         |   2 +
+ board/compulab/iot-gate-imx8-ebbr/genimage.cfg     |  45 +++++++
+ board/compulab/iot-gate-imx8-ebbr/grub.cfg         |   6 +
+ .../arm-trusted-firmware/arm-trusted-firmware.hash |   2 +
+ .../patches/linux-headers/linux-headers.hash       |   1 +
+ .../iot-gate-imx8-ebbr/patches/linux/linux.hash    |   2 +
+ .../patches/optee-client/optee-client.hash         |   2 +
+ .../patches/optee-os/optee-os.hash                 |   2 +
+ .../iot-gate-imx8-ebbr/patches/uboot/uboot.hash    |   2 +
+ board/compulab/iot-gate-imx8-ebbr/post-image.sh    |  69 +++++++++++
+ board/compulab/iot-gate-imx8-ebbr/readme.txt       | 131 +++++++++++++++++++++
+ board/compulab/iot-gate-imx8-ebbr/u-boot.fragment  |   6 +
+ configs/iot-gate-imx8_ebbr_defconfig               |  62 ++++++++++
+ 13 files changed, 332 insertions(+)
 
-diff --git a/package/tiff/0001-don-t-skip-the-first-line-of-the-input-image.patch b/package/tiff/0001-don-t-skip-the-first-line-of-the-input-image.patch
-deleted file mode 100644
-index bdf4bd8e94..0000000000
---- a/package/tiff/0001-don-t-skip-the-first-line-of-the-input-image.patch
-+++ /dev/null
-@@ -1,61 +0,0 @@
--From 3994cf3b3bc6b54c32f240ca5a412cffa11633fa Mon Sep 17 00:00:00 2001
--From: Lee Howard <faxguy@howardsilvan.com>
--Date: Mon, 19 May 2025 10:53:30 -0700
--Subject: [PATCH] Don't skip the first line of the input image.  Addresses
-- issue #703
--
--Upstream: https://gitlab.com/libtiff/libtiff/-/commit/3994cf3b3bc6b54c32f240ca5a412cffa11633fa
--CVE: CVE-2025-8176
--Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-----
-- tools/tiffdither.c | 4 ++--
-- tools/tiffmedian.c | 4 ++--
-- 2 files changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/tools/tiffdither.c b/tools/tiffdither.c
--index 714fe03d4..bfed6df18 100644
----- a/tools/tiffdither.c
--+++ b/tools/tiffdither.c
--@@ -98,7 +98,7 @@ static int fsdither(TIFF *in, TIFF *out)
--     nextptr = nextline;
--     for (j = 0; j < imagewidth; ++j)
--         *nextptr++ = *inptr++;
---    for (i = 1; i < imagelength; ++i)
--+    for (i = 0; i < imagelength; ++i)
--     {
--         tmpptr = thisline;
--         thisline = nextline;
--@@ -146,7 +146,7 @@ static int fsdither(TIFF *in, TIFF *out)
--                     nextptr[0] += v / 16;
--             }
--         }
---        if (TIFFWriteScanline(out, outline, i - 1, 0) < 0)
--+        if (TIFFWriteScanline(out, outline, i, 0) < 0)
--             goto skip_on_error;
--     }
--     goto exit_label;
--diff --git a/tools/tiffmedian.c b/tools/tiffmedian.c
--index 02b0bc2b4..f6cf26c2c 100644
----- a/tools/tiffmedian.c
--+++ b/tools/tiffmedian.c
--@@ -917,7 +917,7 @@ static void quant_fsdither(TIFF *in, TIFF *out)
--     outline = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(out));
-- 
--     GetInputLine(in, 0, goto bad); /* get first line */
---    for (i = 1; i <= imagelength; ++i)
--+    for (i = 0; i <= imagelength; ++i)
--     {
--         SWAP(short *, thisline, nextline);
--         lastline = (i >= imax);
--@@ -997,7 +997,7 @@ static void quant_fsdither(TIFF *in, TIFF *out)
--                 nextptr += 3;
--             }
--         }
---        if (TIFFWriteScanline(out, outline, i - 1, 0) < 0)
--+        if (TIFFWriteScanline(out, outline, i, 0) < 0)
--             break;
--     }
-- bad:
---- 
--GitLab
--
-diff --git a/package/tiff/0002-fix-tiffmedian-bug.patch b/package/tiff/0002-fix-tiffmedian-bug.patch
-deleted file mode 100644
-index 880bade7d8..0000000000
---- a/package/tiff/0002-fix-tiffmedian-bug.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From ce46f002eca4148497363f80fab33f9396bcbeda Mon Sep 17 00:00:00 2001
--From: Lee Howard <faxguy@howardsilvan.com>
--Date: Sat, 24 May 2025 21:25:16 -0700
--Subject: [PATCH] Fix tiffmedian bug #707
--
--Upstream: https://gitlab.com/libtiff/libtiff/-/merge_requests/727/diffs?commit_id=ce46f002eca4148497363f80fab33f9396bcbeda
--CVE: CVE-2025-8176
--Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-----
-- tools/tiffmedian.c | 5 ++++-
-- 1 file changed, 4 insertions(+), 1 deletion(-)
--
--diff --git a/tools/tiffmedian.c b/tools/tiffmedian.c
--index f6cf26c2c..8c9978bab 100644
----- a/tools/tiffmedian.c
--+++ b/tools/tiffmedian.c
--@@ -414,7 +414,10 @@ static void get_histogram(TIFF *in, Colorbox *box)
--     for (i = 0; i < imagelength; i++)
--     {
--         if (TIFFReadScanline(in, inputline, i, 0) <= 0)
---            break;
--+        {
--+            fprintf(stderr, "Error reading scanline\n");
--+            exit(EXIT_FAILURE);
--+        }
--         inptr = inputline;
--         for (j = imagewidth; j-- > 0;)
--         {
---- 
--GitLab
--
-diff --git a/package/tiff/0003-conflict-resolution.patch b/package/tiff/0003-conflict-resolution.patch
-deleted file mode 100644
-index 0c16aa3271..0000000000
---- a/package/tiff/0003-conflict-resolution.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From ecc4ddbf1f0fed7957d1e20361e37f01907898e0 Mon Sep 17 00:00:00 2001
--From: Lee Howard <faxguy@howardsilvan.com>
--Date: Sat, 24 May 2025 21:38:09 -0700
--Subject: [PATCH] conflict resolution
--
--Upstream: https://gitlab.com/libtiff/libtiff/-/merge_requests/727/diffs?commit_id=ecc4ddbf1f0fed7957d1e20361e37f01907898e0
--CVE: CVE-2025-8176
--Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-----
-- tools/tiffmedian.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/tools/tiffmedian.c b/tools/tiffmedian.c
--index 8c9978bab..47e0524bc 100644
----- a/tools/tiffmedian.c
--+++ b/tools/tiffmedian.c
--@@ -920,7 +920,7 @@ static void quant_fsdither(TIFF *in, TIFF *out)
--     outline = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(out));
-- 
--     GetInputLine(in, 0, goto bad); /* get first line */
---    for (i = 0; i <= imagelength; ++i)
--+    for (i = 0; i < imagelength; ++i)
--     {
--         SWAP(short *, thisline, nextline);
--         lastline = (i >= imax);
---- 
--GitLab
--
-diff --git a/package/tiff/0004-fix-for-thumbnail-issue.patch b/package/tiff/0004-fix-for-thumbnail-issue.patch
-deleted file mode 100644
-index 237306f6c2..0000000000
---- a/package/tiff/0004-fix-for-thumbnail-issue.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From e8de4dc1f923576dce9d625caeebd93f9db697e1 Mon Sep 17 00:00:00 2001
--From: Lee Howard <faxguy@howardsilvan.com>
--Date: Wed, 25 Jun 2025 17:14:18 +0000
--Subject: [PATCH] Fix for thumbnail issue #715
--
--CVE: CVE-2025-8177
--Upstream: https://gitlab.com/libtiff/libtiff/-/commit/e8de4dc1f923576dce9d625caeebd93f9db697e1
--Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-----
-- tools/thumbnail.c | 10 +++++++++-
-- 1 file changed, 9 insertions(+), 1 deletion(-)
--
--diff --git a/tools/thumbnail.c b/tools/thumbnail.c
--index 9cade913..7e21f521 100644
----- a/tools/thumbnail.c
--+++ b/tools/thumbnail.c
--@@ -620,7 +620,15 @@ static void setrow(uint8_t *row, uint32_t nrows, const uint8_t *rows[])
--             }
--             acc += bits[*src & mask1];
--         }
---        *row++ = cmap[(255 * acc) / area];
--+        if (255 * acc / area < 256)
--+        {
--+            *row++ = cmap[(255 * acc) / area];
--+        }
--+        else
--+        {
--+            fprintf(stderr, "acc=%d, area=%d\n", acc, area);
--+            *row++ = cmap[0];
--+        }
--     }
-- }
-- 
---- 
--GitLab
-diff --git a/package/tiff/tiff.hash b/package/tiff/tiff.hash
-index 5e2dcca73c..d156f16226 100644
---- a/package/tiff/tiff.hash
-+++ b/package/tiff/tiff.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking pgp signature
--# https://download.osgeo.org/libtiff/tiff-4.7.0.tar.xz.sig
-+# https://download.osgeo.org/libtiff/tiff-4.7.1.tar.xz.sig
- # with key: B1FA7D81EEB8E66399178B9733EBBFC47B3DD87D
--sha256  273a0a73b1f0bed640afee4a5df0337357ced5b53d3d5d1c405b936501f71017  tiff-4.7.0.tar.xz
-+sha256  b92017489bdc1db3a4c97191aa4b75366673cb746de0dce5d7a749d5954681ba  tiff-4.7.1.tar.xz
- sha256  0780558a8bfba0af1160ec1ff11ade4f41c0d7deafd6ecfc796b492a788e380d  LICENSE.md
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index dd23c2bd43..32bebcf95f 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index fc561eb1ea..c074923650 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3348,10 +3348,12 @@ F:	package/utp_com/
  
--TIFF_VERSION = 4.7.0
-+TIFF_VERSION = 4.7.1
- TIFF_SOURCE = tiff-$(TIFF_VERSION).tar.xz
- TIFF_SITE = https://download.osgeo.org/libtiff
- TIFF_LICENSE = tiff license
-@@ -13,12 +13,6 @@ TIFF_CPE_ID_VENDOR = libtiff
- TIFF_CPE_ID_PRODUCT = libtiff
- TIFF_INSTALL_STAGING = YES
- 
--# 0001-don-t-skip-the-first-line-of-the-input-image.patch, 0002-fix-tiffmedian-bug.patch, 0003-conflict-resolution.patch
--TIFF_IGNORE_CVES += CVE-2025-8176
--
--# 0004-fix-for-thumbnail-issue.patch
--TIFF_IGNORE_CVES += CVE-2025-8177
--
- # Fixed in 4.7.0
- TIFF_IGNORE_CVES += CVE-2025-8851
- 
--- 
-2.51.0
+ N:	Vincent Stehlé <vincent.stehle@arm.com>
+ F:	board/arm/fvp-ebbr/
++F:	board/compulab/iot-gate-imx8-ebbr/
+ F:	board/pine64/rockpro64-ebbr/
+ F:	board/qemu/aarch64-ebbr/
+ F:	board/qemu/arm-ebbr/
+ F:	configs/arm_fvp_ebbr_defconfig
++F:	configs/iot-gate-imx8_ebbr_defconfig
+ F:	configs/qemu_aarch64_ebbr_defconfig
+ F:	configs/qemu_arm_ebbr_defconfig
+ F:	configs/rockpro64_ebbr_defconfig
+diff --git a/board/compulab/iot-gate-imx8-ebbr/genimage.cfg b/board/compulab/iot-gate-imx8-ebbr/genimage.cfg
+new file mode 100644
+index 0000000000..feda4c7c09
+--- /dev/null
++++ b/board/compulab/iot-gate-imx8-ebbr/genimage.cfg
+@@ -0,0 +1,45 @@
++image efi-part.vfat {
++	vfat {
++		file EFI {
++			image = "efi-part/EFI"
++		}
++
++		file Image {
++			image = "Image"
++		}
++	}
++
++	size = 64M
++}
++
++image disk.img {
++	hdimage {
++		partition-table-type = "gpt"
++	}
++
++	# When in eMMC user data, this protects U-Boot environment
++	partition env {
++		partition-type-uuid = u-boot-env
++		offset = 17K
++		size = 16K
++	}
++
++	# This allows to boot from recovery SD card
++	partition firmware {
++		image = "flash.bin"
++		# Linux reserved
++		partition-type-uuid = 8DA63339-0007-60C0-C436-083AC8230908
++		offset = 33K
++	}
++
++	partition boot {
++		image = "efi-part.vfat"
++		partition-type-uuid = esp
++		bootable = true
++	}
++
++	partition root {
++		partition-type-uuid = root-arm64
++		image = "rootfs.ext2"
++	}
++}
+diff --git a/board/compulab/iot-gate-imx8-ebbr/grub.cfg b/board/compulab/iot-gate-imx8-ebbr/grub.cfg
+new file mode 100644
+index 0000000000..d99e19c4cd
+--- /dev/null
++++ b/board/compulab/iot-gate-imx8-ebbr/grub.cfg
+@@ -0,0 +1,6 @@
++set default="0"
++set timeout="5"
++
++menuentry "Buildroot" {
++	linux /Image root=PARTLABEL=root rootwait
++}
+diff --git a/board/compulab/iot-gate-imx8-ebbr/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/compulab/iot-gate-imx8-ebbr/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+new file mode 100644
+index 0000000000..49079ecd7e
+--- /dev/null
++++ b/board/compulab/iot-gate-imx8-ebbr/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  e11880bf39dabfcb5945b58e848ddba661a1cd92425a997c626dec62b2dac6a9  arm-trusted-firmware-v2.13-git4.tar.gz
+diff --git a/board/compulab/iot-gate-imx8-ebbr/patches/linux-headers/linux-headers.hash b/board/compulab/iot-gate-imx8-ebbr/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/compulab/iot-gate-imx8-ebbr/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/compulab/iot-gate-imx8-ebbr/patches/linux/linux.hash b/board/compulab/iot-gate-imx8-ebbr/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..3f3de0911f
+--- /dev/null
++++ b/board/compulab/iot-gate-imx8-ebbr/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# From https://cdn.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
++sha256  231311bd7084dc3129944d26bb43be6ff837da82fb2104a67704aebca8bfa69f  linux-6.16.8.tar.xz
+diff --git a/board/compulab/iot-gate-imx8-ebbr/patches/optee-client/optee-client.hash b/board/compulab/iot-gate-imx8-ebbr/patches/optee-client/optee-client.hash
+new file mode 100644
+index 0000000000..e82a2dff1d
+--- /dev/null
++++ b/board/compulab/iot-gate-imx8-ebbr/patches/optee-client/optee-client.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  e6c6b93e2be417df57ceb05a2eb6505744e3fbdd3b2ae5e5bf79bf6028b6f84d  optee-client-4.7.0.tar.gz
+diff --git a/board/compulab/iot-gate-imx8-ebbr/patches/optee-os/optee-os.hash b/board/compulab/iot-gate-imx8-ebbr/patches/optee-os/optee-os.hash
+new file mode 100644
+index 0000000000..672e2a9203
+--- /dev/null
++++ b/board/compulab/iot-gate-imx8-ebbr/patches/optee-os/optee-os.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  976b9c184678516038d4e79766608e81d10bf136f76fd0db2dc48f90f994fbd9  optee-os-4.7.0.tar.gz
+diff --git a/board/compulab/iot-gate-imx8-ebbr/patches/uboot/uboot.hash b/board/compulab/iot-gate-imx8-ebbr/patches/uboot/uboot.hash
+new file mode 100644
+index 0000000000..440526977b
+--- /dev/null
++++ b/board/compulab/iot-gate-imx8-ebbr/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  0f933f6c5a426895bf306e93e6ac53c60870e4b54cda56d95211bec99e63bec7  u-boot-2025.07.tar.bz2
+diff --git a/board/compulab/iot-gate-imx8-ebbr/post-image.sh b/board/compulab/iot-gate-imx8-ebbr/post-image.sh
+new file mode 100755
+index 0000000000..4e60504300
+--- /dev/null
++++ b/board/compulab/iot-gate-imx8-ebbr/post-image.sh
+@@ -0,0 +1,69 @@
++#!/bin/sh
++set -eux
++
++BOARD_DIR=$(dirname "$0")
++
++# Override the default GRUB configuration file with our own.
++cp -vf "${BOARD_DIR}/grub.cfg" "${BINARIES_DIR}/efi-part/EFI/BOOT/grub.cfg"
++
++BINMAN_DIR="$BINARIES_DIR/binman"
++BINMAN_DTB="$BINMAN_DIR/u-boot.dtb"
++UBOOT_DIR=$(find "$BUILD_DIR" -maxdepth 1 -type d -name 'uboot-*')
++
++# Adjust binman dtb.
++rm -fr "$BINMAN_DIR"
++mkdir -v "$BINMAN_DIR"
++cp -v "$UBOOT_DIR/u-boot.dtb" "$BINMAN_DTB"
++# Add the fip image to the list of loadables.
++fdtput -t s "$BINMAN_DTB" /binman/section/fit/configurations/@config-SEQ loadables atf fip
++# Remove the tee node to avoid duplicate, as it is in the FIP image.
++fdtput --remove "$BINMAN_DTB" /binman/section/fit/images/tee
++
++# Generate flash image with binman.
++# We do this here to break the build dependency loop involving tf-a, op-tee, and
++# u-boot.
++# We use BL2 instead of BL31 in this configuration.
++(cd "${UBOOT_DIR}" && \
++./tools/binman/binman \
++	--toolpath ./tools \
++	-v5 \
++	build \
++	-u \
++	-d "$BINMAN_DTB" \
++	-O . \
++	-m \
++	--allow-missing \
++	--fake-ext-blobs \
++	-I "$BINMAN_DIR" \
++	-I . \
++	-I ./board/compulab/imx8mm-cl-iot-gate \
++	-I arch/arm/dts \
++	-a of-list="imx8mm-cl-iot-gate-optee" \
++	-I "$BINARIES_DIR" \
++	-a atf-bl31-path=bl2.bin \
++	-a tee-os-path= \
++	-a ti-dm-path= \
++	-a opensbi-path= \
++	-a default-dt="imx8mm-cl-iot-gate-optee" \
++	-a scp-path= \
++	-a rockchip-tpl-path= \
++	-a spl-bss-pad= \
++	-a tpl-bss-pad=1 \
++	-a vpl-bss-pad=1 \
++	-a spl-dtb=y \
++	-a tpl-dtb= \
++	-a vpl-dtb= \
++	-a pre-load-key-path= \
++	-a of-spl-remove-props="interrupt-parent interrupts" \
++	)
++
++# Copy the flash image.
++cp -v "$UBOOT_DIR/flash.bin" "$BINARIES_DIR/"
++
++# Verify that it will fit in the eMMC boot partition.
++size=$(du -b "$BINARIES_DIR/flash.bin" |cut -f 1)
++
++if [ "$size" -gt 4160512 ]; then
++	echo "Flash image is too big! (${size} bytes)" >&2
++	exit 1
++fi
+diff --git a/board/compulab/iot-gate-imx8-ebbr/readme.txt b/board/compulab/iot-gate-imx8-ebbr/readme.txt
+new file mode 100644
+index 0000000000..2b6183e13f
+--- /dev/null
++++ b/board/compulab/iot-gate-imx8-ebbr/readme.txt
+@@ -0,0 +1,131 @@
++Introduction
++============
++
++The iot-gate-imx8_ebbr_defconfig is meant to illustrate some aspects of the Arm
++EBBR specification[1] and the Arm SystemReady Devicetree band[2].
++It allows building an AArch64 disk image with a U-Boot based firmware
++implementing the subset of UEFI defined by EBBR, as well as a Linux OS booting
++with UEFI, to run on the Compulab IOT-GATE-iMX8. [3]
++
++This configuration is not related with the official BSP from Compulab. [4]
++
++Building
++========
++
++  $ make iot-gate-imx8_ebbr_defconfig
++  $ make
++
++Generated files under output/images/:
++
++* disk.img: An eMMC or USB key disk image comprising TF-A, OP-TEE, the U-Boot
++  bootloader, the GRUB bootloader, the Linux kernel and the root filesystem.
++
++* flash.bin: A firmware image suitable for flashing in eMMC boot partition
++  comprising TF-A, OP-TEE and the U-Boot bootloader.
++
++Running
++=======
++
++Before flashing the firmware to eMMC, make sure that you have the IOTG-ACC-M2SD
++M.2 to SD adapter for recovery and prepare a recovery SD card. [5]
++Insert the SD card and the M.2 adapter.
++
++Prepare a USB key on a PC:
++
++  # dd if=output/images/disk.img of=<USB key device> ; sync
++
++Insert the USB key, close jumper E1 on the board to select recovery boot,
++connect to the UART console on the micro USB connector (a Silicon Labs CP2104
++UART bridge) with baudrate 115200, power on the board and break to U-Boot
++prompt.
++
++Flash the firmware from the USB key to the eMMC boot partition:
++
++  u-boot=> usb start
++  u-boot=> usb dev 0
++  u-boot=> usb read ${loadaddr} 0x42 0x1fbe
++  u-boot=> mmc dev 2 1
++  u-boot=> mmc write ${loadaddr} 0x42 0x1fbe
++  u-boot=> mmc partconf 2 0 1 0
++
++Power off the board, remove jumper E1 and the M.2 SD card adapter, then restart
++the board; it should boot to Linux, with the root filesystem on the USB key.
++
++Other setups are also possible, with the firmware and/or the root filesystem in
++the eMMC user data. The firmware binary is also available as flash.bin for
++convenience, to allow network download for example.
++
++With the firmware in the eMMC boot partition, it is possible to install or run
++another OS supporting the EBBR specification.
++
++The image generated by the aarch64_efi_defconfig, the images from Linux
++distributions such as Debian, Fedora, openSUSE, Ubuntu, OpenWrt and Yocto, and
++the Arm ACS Devicetree images[6] are examples of compatible OS images.
++
++When installing other OSes to eMMC, it is recommended to protect the first 32KB
++of the user data with a partition, as this is where the U-Boot environment can
++be saved.
++
++Firmware details
++================
++
++Noteworthy firmware features:
++
++- TF-A, OP-TEE & U-Boot
++- UEFI, with EFI variables stored on disk in the ESP
++- Support for ethernet, USB and RTC
++- U-Boot environment in eMMC user data (starting from byte 0x4400)
++
++Architecture diagram:
++
++                 Non-Secure          :   Secure
++                                     :
++       +---------------------------+ :
++  EL0  |          Busybox          | :
++       +---------------------------+ : +--------+
++  EL1  |           Linux           | : | OP-TEE |  S-EL1
++       +---------------------------+ : +--------+
++  EL2  | U-Boot, GRUB, Linux (kvm) | :
++       +---------------------------+ :
++  ...................................:
++       +----------------------------------------+
++       |          ROM, U-Boot SPL, TF-A         |  EL3
++       +----------------------------------------+
++
++Boot flow:
++
++  ROM -+-> SPL -> TF-A -+-> OP-TEE
++                        `-> U-Boot -> GRUB -> Linux -> Busybox
++
++The ROM loads U-Boot SPL.
++U-Boot SPL does the DRAM setup, loads the fit image with TF-A, OP-TEE, U-Boot
++and the Devicetree.
++In this configuration TF-A is booting with BL2 and BL31.
++OP-TEE amends the Devicetree, calls back TF-A to go to normal world.
++U-Boot loads GRUB with UEFI, boots Linux at EL2.
++
++Miscellaneous
++=============
++
++This configuration is based on the work of Paul Liu[7] and is inspired by the
++other configurations related with EBBR, and the Arm SystemReady Devicetree Band
++Integration and Testing Guide[8].
++
++To avoid a circular build dependency, we skip the binman step during U-Boot
++build:
++
++  BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="cmd_binman=:"
++
++Then we run binman manually in the post-image script.
++
++Firmware update and UEFI Secure Boot are currently not supported.
++The disk image cannot be used for SD card recovery at this point.
++
++[1] https://github.com/ARM-software/ebbr
++[2] https://www.arm.com/architecture/system-architectures/systemready-compliance-program/systemready-devicetree-band
++[3] https://www.compulab.com/products/iot-gateways/iot-gate-imx8-industrial-arm-iot-gateway/
++[4] https://mediawiki.compulab.com/w/index.php?title=Building_IOT-GATE-iMX8_and_SBC-IOT-iMX8_Yocto_Linux_images
++[5] https://mediawiki.compulab.com/w/index.php?title=IOT-GATE-iMX8_and_SBC-IOT-iMX8:_U-Boot:_Recovery
++[6] https://github.com/ARM-software/arm-systemready/tree/main/SystemReady-devicetree-band/prebuilt_images
++[7] https://git.linaro.org/plugins/gitiles/people/paul.liu/systemready/build-scripts
++[8] https://developer.arm.com/documentation/DUI1101/latest/
+diff --git a/board/compulab/iot-gate-imx8-ebbr/u-boot.fragment b/board/compulab/iot-gate-imx8-ebbr/u-boot.fragment
+new file mode 100644
+index 0000000000..d72664dc5c
+--- /dev/null
++++ b/board/compulab/iot-gate-imx8-ebbr/u-boot.fragment
+@@ -0,0 +1,6 @@
++CONFIG_ARCH_MISC_INIT=y
++CONFIG_CMD_RNG=y
++CONFIG_DM_REGULATOR_ANATOP=y
++CONFIG_DM_RNG=y
++CONFIG_FSL_CAAM=y
++CONFIG_PHY_ANEG_TIMEOUT=5000
+diff --git a/configs/iot-gate-imx8_ebbr_defconfig b/configs/iot-gate-imx8_ebbr_defconfig
+new file mode 100644
+index 0000000000..ff646e8adc
+--- /dev/null
++++ b/configs/iot-gate-imx8_ebbr_defconfig
+@@ -0,0 +1,62 @@
++BR2_aarch64=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
++BR2_GLOBAL_PATCH_DIR="board/compulab/iot-gate-imx8-ebbr/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/compulab/iot-gate-imx8-ebbr/post-image.sh support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/compulab/iot-gate-imx8-ebbr/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.16.8"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_LINUX_KERNEL_NEEDS_HOST_PYTHON3=y
++BR2_PACKAGE_FREESCALE_IMX=y
++BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y
++BR2_PACKAGE_FIRMWARE_IMX=y
++BR2_PACKAGE_OPTEE_CLIENT=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.13"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS="bl2"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="BL32_BASE=0x7e000000 IMX_BOOT_UART_BASE=0x30880000 NEED_BL2=yes BL2_CFLAGS=-DIMX_FIP_MMAP"
++BR2_TARGET_GRUB2=y
++BR2_TARGET_GRUB2_BUILTIN_MODULES_EFI="boot efi_gop efifwsetup efinet efitextmode ext2 fat help linux lsefi lsefimmap lsefisystab normal part_gpt part_msdos reboot squash4"
++BR2_TARGET_OPTEE_OS=y
++BR2_TARGET_OPTEE_OS_CUSTOM_VERSION=y
++BR2_TARGET_OPTEE_OS_CUSTOM_VERSION_VALUE="4.7.0"
++BR2_TARGET_OPTEE_OS_NEEDS_DTC=y
++BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_CRYPTOGRAPHY=y
++BR2_TARGET_OPTEE_OS_PLATFORM="imx"
++BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR="mx8mm_cl_iot_gate"
++BR2_TARGET_OPTEE_OS_ADDITIONAL_VARIABLES="CFG_TEE_CORE_LOG_LEVEL=2 CFG_TEE_TA_LOG_LEVEL=2 CFG_EXTERNAL_DTB_OVERLAY=y CFG_DT=y CFG_DT_ADDR=0x52000000"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mm-cl-iot-gate-optee"
++BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/compulab/iot-gate-imx8-ebbr/u-boot.fragment"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
++BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
++BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE=y
++BR2_TARGET_UBOOT_USE_BINMAN=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="cmd_binman=:"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+
+--===============0307396246572663972==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0307396246572663972==--
