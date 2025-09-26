@@ -1,52 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86D7DCAC5B8
-	for <buildroot@archiver.kernel.org>; Fri, 26 Sep 2025 17:23:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA64CCAC5AE
+	for <buildroot@archiver.kernel.org>; Fri, 26 Sep 2025 17:25:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5E7C561C01;
-	Fri, 26 Sep 2025 17:23:49 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DHWApreCgch6; Fri, 26 Sep 2025 17:23:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65A4C61C22
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 65A4C61C22;
-	Fri, 26 Sep 2025 17:23:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id DC6F4198
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 17:23:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C2ED08402C
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 17:23:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8A9CB84381;
+	Fri, 26 Sep 2025 17:25:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HzbBwSXFUAN5 for <buildroot@buildroot.org>;
- Fri, 26 Sep 2025 17:23:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 923AD84022
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 923AD84022
- for <buildroot@buildroot.org>; Fri, 26 Sep 2025 17:23:40 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8039A864F3; Fri, 26 Sep 2025 17:23:40 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 26 Sep 2025 19:20:08 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5986c51219f9bc8a05d5903477a5a0292a869b94
-X-Git-Newrev: 6f435187c6a9c5d847003e40c584c82a5db61dfd
-X-Patchwork-Hint: ignore
-Message-Id: <20250926172340.8039A864F3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/xilinx-prebuilt: add support for
- plmfw.elf filename
+ id LcB1DpYA--XE; Fri, 26 Sep 2025 17:25:10 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC3ED84431
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC3ED84431;
+	Fri, 26 Sep 2025 17:25:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B3795177
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 17:25:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A593041E30
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 17:25:08 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Luqwbis5evw1 for <buildroot@buildroot.org>;
+ Fri, 26 Sep 2025 17:25:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E5B0C406F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5B0C406F5
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E5B0C406F5
+ for <buildroot@buildroot.org>; Fri, 26 Sep 2025 17:25:07 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 78BCEB00548;
+ Fri, 26 Sep 2025 19:24:56 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 26 Sep 2025 19:24:56 +0200
+MIME-Version: 1.0
+Date: Fri, 26 Sep 2025 19:24:56 +0200
+To: Neal Frager <neal.frager@amd.com>
+Cc: buildroot@buildroot.org, ibai.erkiaga-elorza@amd.com,
+ luca.ceresoli@bootlin.com, yann.morin@orange.com, brandon.maier@collins.com,
+ thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com,
+ romain.naour@gmail.com
+In-Reply-To: <20250901080249.454090-1-neal.frager@amd.com>
+References: <20250901080249.454090-1-neal.frager@amd.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <288e4e3207c7d674cdbd9a9fc6378351@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1758907506;
+ bh=m5FykdMf+ztDEY680sAl91CczKeUsMs9S6il3tNR34Q=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=ZfBrYYGwBuxCXwuS0NOBAjbwiEMW57fkpKoSwpeuPxfHEwxWQaY2dSH1Y/QsVEAsK
+ zLmFqxPfR9nfxccMyv/hVZ34Sh9+k7mUB+z0PzkqPbmEC/KLXeRy9VABgnP7A8J1tj
+ heV6GKcsXb9I3lKy6+DJsO8iRhrhIxbVcM3O7QOiFzI57i9uTqp4icimE1Q3E82JdA
+ rNNu9mKhMnlUrxNDdBbcy+38cy5tZdTshYmVTS7iV/pIhA5yHt328jNwqDTuskUICG
+ JNncBHNuRmg80IW9iEk88fCL4EKbZkszkF1gGx0X8YffkqlMm0RMKvT75ylA1bhnWr
+ PZ39siOXw91rg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ZfBrYYGw
+Subject: Re: [Buildroot] [PATCH v7 1/5] boot: add
+ BR2_TARGET_XILINX_FIRMWARE_ARCH_SUPPORTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,52 +86,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f435187c6a9c5d847003e40c584c82a5db61dfd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 01/09/2025 10:02, Neal Frager via buildroot wrote:
+> Currently, the xilinx-embeddedsw and xilinx-prebuilt packages are 
+> appearing
+> for any aarch64 processor. As all Xilinx processors that need these 
+> packages
+> are ARM Cortex-A53 or ARM Cortex-A72, this means that these packages 
+> are
+> often appearing as options for non-Xilinx platforms.
+> 
+> To reduce this occurrence, this patch creates a new symbol
+> BR2_TARGET_XILINX_FIRMWARE_ARCH_SUPPORTS to limit the appearance of the
+> xilinx-embeddedsw and xilinx-prebuilt boot packages to only platforms 
+> based
+> on the BR2_cortex_a53 or BR2_cortex_a72 CPU and aarch64 architecture.
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
 
-AMD / Xilinx has made the decision to change the name of plm.elf to plmfw.elf
-in the prebuilt binaries repo starting with the next update.
-
-This patch updates the xilinx-prebuilt package to support either the old
-plm.elf filename or the new plmfw.elf filename.
-
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- boot/xilinx-prebuilt/xilinx-prebuilt.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/boot/xilinx-prebuilt/xilinx-prebuilt.mk b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-index 62b60b88fa..5d984c4f82 100644
---- a/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-+++ b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-@@ -28,7 +28,8 @@ XILINX_PREBUILT_BOARD_DIR = $(@D)/$(XILINX_PREBUILT_BOARD)-$(XILINX_PREBUILT_FAM
- 
- ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL),y)
- ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA),y)
--XILINX_PREBUILT_PLM = $(@D)/pdi_files/gen_files/plm.elf
-+# Supports either plm.elf or plmfw.elf filenames
-+XILINX_PREBUILT_PLM = $(@D)/pdi_files/gen_files/plm*.elf
- # Unlike the psmfw.elf file for Xilinx development boards,
- # AMD Vivado Design Suite currently generates a file named psm_fw.elf.
- # Future versions of AMD Vivado will generate a file named psmfw.elf,
-@@ -60,7 +61,8 @@ define XILINX_PREBUILT_INSTALL_VERSAL_XSA_PLD_PDI
- endef
- endif # BR2_TARGET_XILINX_PREBUILT_VERSAL_PLD_PDI
- else # BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA
--XILINX_PREBUILT_PLM = $(XILINX_PREBUILT_BOARD_DIR)/plm.elf
-+# Supports either plm.elf or plmfw.elf filenames
-+XILINX_PREBUILT_PLM = $(XILINX_PREBUILT_BOARD_DIR)/plm*.elf
- XILINX_PREBUILT_PSMFW = $(XILINX_PREBUILT_BOARD_DIR)/psmfw.elf
- # We need the *.pdi glob, because the file has different names for the
- # different boards, and it has to be named boot.pdi when installed.
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
