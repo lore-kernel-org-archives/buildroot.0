@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E39AFCAC5BB
-	for <buildroot@archiver.kernel.org>; Sun, 28 Sep 2025 10:17:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7601CCAC5B5
+	for <buildroot@archiver.kernel.org>; Sun, 28 Sep 2025 10:17:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ABD28406C4;
-	Sun, 28 Sep 2025 10:17:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4537D80D62;
+	Sun, 28 Sep 2025 10:17:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aGzuBjj9Wefc; Sun, 28 Sep 2025 10:17:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LlDzHYc5U7ah; Sun, 28 Sep 2025 10:17:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFFAF4068C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5EFB480D67
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BFFAF4068C;
-	Sun, 28 Sep 2025 10:17:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5EFB480D67;
+	Sun, 28 Sep 2025 10:17:20 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3160B111
- for <buildroot@buildroot.org>; Sun, 28 Sep 2025 10:17:14 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 110E1197
+ for <buildroot@buildroot.org>; Sun, 28 Sep 2025 10:17:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 98B686071A
- for <buildroot@buildroot.org>; Sun, 28 Sep 2025 10:17:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 48A1F606FD
+ for <buildroot@buildroot.org>; Sun, 28 Sep 2025 10:17:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QUEb1d_h3SzL for <buildroot@buildroot.org>;
+ id jQjaS2I5_2e6 for <buildroot@buildroot.org>;
  Sun, 28 Sep 2025 10:17:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7EFCD606FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AAF860744
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7EFCD606FD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9AAF860744
  for <buildroot@buildroot.org>; Sun, 28 Sep 2025 10:17:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6A90086594; Sun, 28 Sep 2025 10:17:12 +0000 (UTC)
+ id 85FB386596; Sun, 28 Sep 2025 10:17:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 27 Sep 2025 22:46:14 +0200
+Date: Sun, 28 Sep 2025 00:12:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dd84d0584393a5f9209120bf83fcb62c86b4947f
-X-Git-Newrev: 1c3653466473c019889a361979e652b238b83a2e
+X-Git-Oldrev: 696113c2b7cd0eb46e705b7c37956303e359ebeb
+X-Git-Newrev: 74b502a54e9632e74ab14a57f045191ca03f2767
 X-Patchwork-Hint: ignore
-Message-Id: <20250928101712.6A90086594@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wmenu: new package
+Message-Id: <20250928101712.85FB386596@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/utf8proc: bump version to 2.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,133 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c3653466473c019889a361979e652b238b83a2e
+commit: https://git.buildroot.net/buildroot/commit/?id=74b502a54e9632e74ab14a57f045191ca03f2767
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-wmenu is an efficient dynamic menu for Sway and wlroots based Wayland
-compositors. It provides a Wayland-native dmenu replacement which
-maintains the look and feel of dmenu.
+Adds unicode 16 support
 
-Furthermore, as of commit [1], sway uses wmenu instead of dmenu-wayland
-with the following commit message:
-
-"""
-Switch default config to wmenu-run
-This removes the last dependency bit on dmenu. No need for
-"swaymsg exec" anymore: wmenu-run handles the xdg-activation
-shenanigans.
-"""
-
-As such, change sway/Config.in to select wmenu instead of dmenu-wayland when
-a user selects swaybar.
-
-[1] https://github.com/swaywm/sway/commit/b44015578a3d53cdd9436850202d4405696c1f52
+For release note, see:
+https://github.com/JuliaStrings/utf8proc/releases/tag/v2.10.0
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+[Julien: add link to release note]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/Config.in        |  1 +
- package/sway/Config.in   |  2 +-
- package/wmenu/Config.in  | 29 +++++++++++++++++++++++++++++
- package/wmenu/wmenu.hash |  3 +++
- package/wmenu/wmenu.mk   | 20 ++++++++++++++++++++
- 5 files changed, 54 insertions(+), 1 deletion(-)
+ package/utf8proc/utf8proc.hash | 2 +-
+ package/utf8proc/utf8proc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index c54be6275e..1e0d921913 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -334,6 +334,7 @@ comment "Graphic applications"
- 	source "package/swaybg/Config.in"
- 	source "package/tesseract-ocr/Config.in"
- 	source "package/tinifier/Config.in"
-+	source "package/wmenu/Config.in"
+diff --git a/package/utf8proc/utf8proc.hash b/package/utf8proc/utf8proc.hash
+index 7fee89968d..560c6b2ccf 100644
+--- a/package/utf8proc/utf8proc.hash
++++ b/package/utf8proc/utf8proc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  bd215d04313b5bc42c1abedbcb0a6574667e31acee1085543a232204e36384c4  utf8proc-2.9.0.tar.gz
++sha256  276a37dc4d1dd24d7896826a579f4439d1e5fe33603add786bb083cab802e23e  utf8proc-2.10.0.tar.gz
+ sha256  3b510150d34f248a221bb88e1d811238d6c6c18b51231822c42974c39bb07256  LICENSE.md
+diff --git a/package/utf8proc/utf8proc.mk b/package/utf8proc/utf8proc.mk
+index 42ec48e0a8..79909ec106 100644
+--- a/package/utf8proc/utf8proc.mk
++++ b/package/utf8proc/utf8proc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "Graphic libraries"
- 	source "package/cegui/Config.in"
-diff --git a/package/sway/Config.in b/package/sway/Config.in
-index d78f792c48..1f4b497af3 100644
---- a/package/sway/Config.in
-+++ b/package/sway/Config.in
-@@ -33,7 +33,7 @@ config BR2_PACKAGE_SWAY_SWAYBAR
- 	bool "swaybar"
- 	select BR2_PACKAGE_DEJAVU
- 	select BR2_PACKAGE_JQ if BR2_PACKAGE_BASH_COMPLETION # Runtime
--	select BR2_PACKAGE_DMENU_WAYLAND # Runtime
-+	select BR2_PACKAGE_WMENU # Runtime
- 	help
- 	  Enable support for swaybar
- 
-diff --git a/package/wmenu/Config.in b/package/wmenu/Config.in
-new file mode 100644
-index 0000000000..ce9e70f9f8
---- /dev/null
-+++ b/package/wmenu/Config.in
-@@ -0,0 +1,29 @@
-+config BR2_PACKAGE_WMENU
-+	bool "wmenu"
-+	depends on BR2_USE_MMU # pango
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, pango, wayland
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango
-+	depends on !BR2_STATIC_LIBS # wayland
-+	depends on BR2_INSTALL_LIBSTDCPP # pango
-+	depends on BR2_USE_WCHAR # libglib2, pango
-+	select BR2_PACKAGE_CAIRO
-+	select BR2_PACKAGE_CAIRO_PNG
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_LIBXKBCOMMON
-+	select BR2_PACKAGE_PANGO
-+	select BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS
-+	help
-+	  wmenu is an efficient dynamic menu for Sway and wlroots based
-+	  Wayland compositors. It provides a Wayland-native dmenu
-+	  replacement which maintains the look and feel of dmenu.
-+
-+	  https://codeberg.org/adnano/wmenu
-+
-+comment "wmenu needs a toolchain w/ wchar, threads, C++, dynamic library, gcc >= 4.9"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || BR2_STATIC_LIBS || \
-+		!BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
-diff --git a/package/wmenu/wmenu.hash b/package/wmenu/wmenu.hash
-new file mode 100644
-index 0000000000..c4941001f4
---- /dev/null
-+++ b/package/wmenu/wmenu.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  4e6aea3f8975fec720f6eb87aad620d5297a8a5a137615e4cf047e95d2b9d308  0.2.0.tar.gz
-+sha256  500f0a221b2f3667676f6a084fb4e92ba4f74d09f45bc492e55aec4dd296bff2  LICENSE
-diff --git a/package/wmenu/wmenu.mk b/package/wmenu/wmenu.mk
-new file mode 100644
-index 0000000000..7454dba8b9
---- /dev/null
-+++ b/package/wmenu/wmenu.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# wmenu
-+#
-+################################################################################
-+
-+WMENU_VERSION = 0.2.0
-+WMENU_SOURCE = $(WMENU_VERSION).tar.gz
-+WMENU_SITE = https://codeberg.org/adnano/wmenu/archive
-+WMENU_LICENSE = MIT
-+WMENU_LICENSE_FILES = LICENSE
-+WMENU_DEPENDENCIES = \
-+	cairo \
-+	pango \
-+	wayland \
-+	libxkbcommon \
-+	wayland \
-+	wayland-protocols
-+
-+$(eval $(meson-package))
+-UTF8PROC_VERSION = 2.9.0
++UTF8PROC_VERSION = 2.10.0
+ UTF8PROC_SITE = https://github.com/JuliaStrings/utf8proc/releases/download/v$(UTF8PROC_VERSION)
+ UTF8PROC_LICENSE = MIT
+ UTF8PROC_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
