@@ -4,70 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA9EBCAC5B0
-	for <buildroot@archiver.kernel.org>; Sat, 27 Sep 2025 13:03:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF668CAC5B8
+	for <buildroot@archiver.kernel.org>; Sat, 27 Sep 2025 16:44:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8509484E2A;
-	Sat, 27 Sep 2025 13:03:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 511AC8128F;
+	Sat, 27 Sep 2025 16:44:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eBpQlQQLlFQm; Sat, 27 Sep 2025 13:03:47 +0000 (UTC)
+ id ZA_pKqur6weW; Sat, 27 Sep 2025 16:44:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B46C84E2B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E14381291
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B46C84E2B;
-	Sat, 27 Sep 2025 13:03:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 46578198
- for <buildroot@buildroot.org>; Sat, 27 Sep 2025 13:03:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5E14381291;
+	Sat, 27 Sep 2025 16:44:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7CDBE111
+ for <buildroot@buildroot.org>; Sat, 27 Sep 2025 16:44:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 43A46614F2
- for <buildroot@buildroot.org>; Sat, 27 Sep 2025 13:03:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5B126421C1
+ for <buildroot@buildroot.org>; Sat, 27 Sep 2025 16:44:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9aDMT5K3Hqsy for <buildroot@buildroot.org>;
- Sat, 27 Sep 2025 13:03:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6E538614E7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E538614E7
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6E538614E7
- for <buildroot@buildroot.org>; Sat, 27 Sep 2025 13:03:45 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 41768B0055E;
- Sat, 27 Sep 2025 15:03:42 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 27 Sep 2025 15:03:42 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gWbkdbPewbPL for <buildroot@buildroot.org>;
+ Sat, 27 Sep 2025 16:44:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::935; helo=mail-ua1-x935.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 461B1421BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 461B1421BF
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com
+ [IPv6:2607:f8b0:4864:20::935])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 461B1421BF
+ for <buildroot@buildroot.org>; Sat, 27 Sep 2025 16:44:28 +0000 (UTC)
+Received: by mail-ua1-x935.google.com with SMTP id
+ a1e0cc1a2514c-90f5eb2feb8so964199241.0
+ for <buildroot@buildroot.org>; Sat, 27 Sep 2025 09:44:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1758991467; x=1759596267;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=eoEzlM3PmMi+DPOPW8n3EPQfqXHI5b7BOq/wvA2bMKE=;
+ b=hClTlBoCwg9Y4ue5anny2IDEsKUMmi3iOSjdN913prVO8BjYhxwoXX6XHzUBMdguXL
+ GZB6ooh2h8+NlXe4TFpRrQyOPSy29pM4pY4fQW6VG5kJym5krR4jAlp0nI1DRYmyL/cw
+ 9p0gslEfdwKOPiE5R6v0coHZ0d5Ej1BiEhUGdXPTs95/g3mbtKB5SdK1YfVXqEAmta6p
+ BCGrz46sbMKr2oht41yR4g3VZqh/CHvxlAFf3UlX/rY5ot1AHZ5Iwe0zJrtonDOxGfnq
+ AuFLrDOdg3A8rgyKVy79HCyFLuUHOYh19z8yllII8ELj8C0tmUPp2Kywu18XW14u071T
+ ltSg==
+X-Gm-Message-State: AOJu0YzMItAtjHzRv+bRp8y6XBUXlUmrFqZts9I5Ku33fqLGpyhVTaWh
+ U2c4qLFi5qLutOfD9+V7F2u8aa+HNssvjOSmDy8xDmHC0zRTFsRW19ZLkWABnVxBP6Xt8pXWrIv
+ 2unOWnWP2MPtfAzlm1DayD1KPmjhf2Dp+zS3z
+X-Gm-Gg: ASbGncsHTbYcjakFI2M5kFNJ1Y7k7BcYtNS0EG+BH+Qz1SLfQaTnPGTRvmamOtU0AJI
+ 4qkKrrgABCIdna/8Qtqu9vqTwAH8WcxlZN4lWJHIw6Rs48q0T9c0uT82DBRU8Z2a364TtY/+mVr
+ rCmdOicNSYcCLspEJ7ql3XDawGiDS7w8TBreaJxOsBFjm5thUwzgMzvUTmylPk/mqRhT1lf9ODs
+ dccgnsf
+X-Google-Smtp-Source: AGHT+IGHg6F+pIZwwxQXt4fVCARYdGdThaznqPhNybAUtJc4vt075MNQqCqB5G4NE0+z19FVJX0mr2xqYBG8HBuI7fA=
+X-Received: by 2002:a05:6102:d91:b0:52a:4903:95af with SMTP id
+ ada2fe7eead31-5accd4f6945mr3794879137.19.1758991466819; Sat, 27 Sep 2025
+ 09:44:26 -0700 (PDT)
 MIME-Version: 1.0
-Date: Sat, 27 Sep 2025 15:03:42 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250925222814.2323048-1-james.hilliard1@gmail.com>
 References: <20250925222814.2323048-1-james.hilliard1@gmail.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <465fee2707f10b55fa963edff7baea16@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1758978223;
- bh=Dj643TT+FWOue7zLuGMhH2mCqYOj4xJXhrhlSJ3h93M=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=DDs1kvsX0IP2SnKcT1aMaODyvVun2UcmEPF28QE7gRKYLA9K4OKh1GWBrySnt89m5
- ikF1brMB+Cmo2lcTMR718PxH94SoPkvFqRCulVxneVrKGLObJv0ZirU6y/vBEDCk7/
- SRNaM7c3GM4NOrW1Qt/jYiiX3lujxx7gIYxJ9D9O9cpqN3+cWZ3BZ8G1Kp1IjODMcx
- vF5U0aK+zY3z+qETrSQ/I2vGf6g/Vb9kRsuXnV7nqjCkhD/QJ2zYWR4fO7Bw01GVdh
- MpRw6VbfA2zJ6mw++GijiNepR3cElbSxrLfMr9DinmmDQTfX3qijNakZeI0zEMJJZZ
- MiGoekCZKfkDA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=DDs1kvsX
+ <465fee2707f10b55fa963edff7baea16@free.fr>
+In-Reply-To: <465fee2707f10b55fa963edff7baea16@free.fr>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sat, 27 Sep 2025 10:44:15 -0600
+X-Gm-Features: AS18NWCywLlDnjEoAqI1r_V5CuztDdkyAqruj6g5BnRtNeYRlQ0nUMYsA7gZocc
+Message-ID: <CADvTj4qz2Q=smPFhE3s+0XdbnT=40F3_4Jr_W3odKHKrpaSiNQ@mail.gmail.com>
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1758991467; x=1759596267; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=eoEzlM3PmMi+DPOPW8n3EPQfqXHI5b7BOq/wvA2bMKE=;
+ b=KgObKLYFb4ZJ4MAyHA/o0i8OL2jDfrvuHsYJKrXy/G2kIFwWlZxemJ7fWZkidF3lf5
+ qE0spSrJ+LHUyum9qkGReumFs8t9ZPNDp2DwfLKScYoxfvR3Qdkyrv9ALL6un0wxz0Dp
+ aJQIcG5EZC7IqEZfIZnsewA9HMGdwZI0QOZEg7SPyH2VUjJSC6QLlEPCDiuSMeXE7jxt
+ XrKs+2sGmMJBkY0WwC0R/7PrVs+3DJWq3O797XluJkN3yqdVGRaCNw+16dN+2JnQ20rn
+ tolNJzxxepRkWlMewR3W2TDqNHzHQrf1qMaMZHgJJ/UeinDS6qtc8EV5MiRnyHZKcuh5
+ Xlbw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=KgObKLYF
 Subject: Re: [Buildroot] [PATCH 1/1] package/tailscale: bump to version
  1.88.3
 X-BeenThere: buildroot@buildroot.org
@@ -81,73 +106,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi James,
-
-On 26/09/2025 00:28, James Hilliard wrote:
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/tailscale/tailscale.hash | 2 +-
->  package/tailscale/tailscale.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/tailscale/tailscale.hash 
-> b/package/tailscale/tailscale.hash
-> index e2d600f03e..444412f8f4 100644
-> --- a/package/tailscale/tailscale.hash
-> +++ b/package/tailscale/tailscale.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  
-> 4830cd822a838d5d44fd5eeebd07a2aacaf0255fb3fb7d3852d57659f54e51bc  
-> tailscale-1.78.1-go2.tar.gz
-> +sha256  
-> 98b51e95e84378ab280c5a8706508d493ab9152a0215f00f0f69e3ea2673ea0f  
-> tailscale-1.88.3-go2.tar.gz
->  sha256  
-> d1ee1c7947d4b2c1963ea214d5324f1d4c89f2f1d0f0224889b4dfb868dad725  
-> LICENSE
-> diff --git a/package/tailscale/tailscale.mk 
-> b/package/tailscale/tailscale.mk
-> index 3c6c7bce1e..141a5b98d6 100644
-> --- a/package/tailscale/tailscale.mk
-> +++ b/package/tailscale/tailscale.mk
-> @@ -4,7 +4,7 @@
->  #
->  
-> ################################################################################
-> 
-> -TAILSCALE_VERSION = 1.78.1
-> +TAILSCALE_VERSION = 1.88.3
-
-For some reason, the download of this dependency
-github.com/tdakkota/asciicheck v0.2.0
-is failing. See also:
-https://github.com/tailscale/tailscale/blob/v1.88.3/go.mod#L387
-
-https://github.com/tdakkota/asciicheck
-currently returns a 404.
-
-Any clue how to solve this issue?
-
-
->  TAILSCALE_SITE = $(call 
-> github,tailscale,tailscale,v$(TAILSCALE_VERSION))
->  TAILSCALE_LICENSE = BSD-3-Clause
->  TAILSCALE_LICENSE_FILES = LICENSE
-> --
-> 2.43.0
-
-Best regards,
-
-Julien.
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gU2F0LCBTZXAgMjcsIDIwMjUgYXQgNzowM+KAr0FNIEp1bGllbiBPbGl2YWluIDxqdS5vQGZy
+ZWUuZnI+IHdyb3RlOgo+Cj4gSGkgSmFtZXMsCj4KPiBPbiAyNi8wOS8yMDI1IDAwOjI4LCBKYW1l
+cyBIaWxsaWFyZCB3cm90ZToKPiA+IFNpZ25lZC1vZmYtYnk6IEphbWVzIEhpbGxpYXJkIDxqYW1l
+cy5oaWxsaWFyZDFAZ21haWwuY29tPgo+ID4gLS0tCj4gPiAgcGFja2FnZS90YWlsc2NhbGUvdGFp
+bHNjYWxlLmhhc2ggfCAyICstCj4gPiAgcGFja2FnZS90YWlsc2NhbGUvdGFpbHNjYWxlLm1rICAg
+fCAyICstCj4gPiAgMiBmaWxlcyBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25z
+KC0pCj4gPgo+ID4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvdGFpbHNjYWxlL3RhaWxzY2FsZS5oYXNo
+Cj4gPiBiL3BhY2thZ2UvdGFpbHNjYWxlL3RhaWxzY2FsZS5oYXNoCj4gPiBpbmRleCBlMmQ2MDBm
+MDNlLi40NDQ0MTJmOGY0IDEwMDY0NAo+ID4gLS0tIGEvcGFja2FnZS90YWlsc2NhbGUvdGFpbHNj
+YWxlLmhhc2gKPiA+ICsrKyBiL3BhY2thZ2UvdGFpbHNjYWxlL3RhaWxzY2FsZS5oYXNoCj4gPiBA
+QCAtMSwzICsxLDMgQEAKPiA+ICAjIExvY2FsbHkgY29tcHV0ZWQKPiA+IC1zaGEyNTYKPiA+IDQ4
+MzBjZDgyMmE4MzhkNWQ0NGZkNWVlZWJkMDdhMmFhY2FmMDI1NWZiM2ZiN2QzODUyZDU3NjU5ZjU0
+ZTUxYmMKPiA+IHRhaWxzY2FsZS0xLjc4LjEtZ28yLnRhci5nego+ID4gK3NoYTI1Ngo+ID4gOThi
+NTFlOTVlODQzNzhhYjI4MGM1YTg3MDY1MDhkNDkzYWI5MTUyYTAyMTVmMDBmMGY2OWUzZWEyNjcz
+ZWEwZgo+ID4gdGFpbHNjYWxlLTEuODguMy1nbzIudGFyLmd6Cj4gPiAgc2hhMjU2Cj4gPiBkMWVl
+MWM3OTQ3ZDRiMmMxOTYzZWEyMTRkNTMyNGYxZDRjODlmMmYxZDBmMDIyNDg4OWI0ZGZiODY4ZGFk
+NzI1Cj4gPiBMSUNFTlNFCj4gPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS90YWlsc2NhbGUvdGFpbHNj
+YWxlLm1rCj4gPiBiL3BhY2thZ2UvdGFpbHNjYWxlL3RhaWxzY2FsZS5tawo+ID4gaW5kZXggM2M2
+YzdiY2UxZS4uMTQxYTViOThkNiAxMDA2NDQKPiA+IC0tLSBhL3BhY2thZ2UvdGFpbHNjYWxlL3Rh
+aWxzY2FsZS5tawo+ID4gKysrIGIvcGFja2FnZS90YWlsc2NhbGUvdGFpbHNjYWxlLm1rCj4gPiBA
+QCAtNCw3ICs0LDcgQEAKPiA+ICAjCj4gPgo+ID4gIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiA+
+Cj4gPiAtVEFJTFNDQUxFX1ZFUlNJT04gPSAxLjc4LjEKPiA+ICtUQUlMU0NBTEVfVkVSU0lPTiA9
+IDEuODguMwo+Cj4gRm9yIHNvbWUgcmVhc29uLCB0aGUgZG93bmxvYWQgb2YgdGhpcyBkZXBlbmRl
+bmN5Cj4gZ2l0aHViLmNvbS90ZGFra290YS9hc2NpaWNoZWNrIHYwLjIuMAo+IGlzIGZhaWxpbmcu
+IFNlZSBhbHNvOgo+IGh0dHBzOi8vZ2l0aHViLmNvbS90YWlsc2NhbGUvdGFpbHNjYWxlL2Jsb2Iv
+djEuODguMy9nby5tb2QjTDM4Nwo+Cj4gaHR0cHM6Ly9naXRodWIuY29tL3RkYWtrb3RhL2FzY2lp
+Y2hlY2sKPiBjdXJyZW50bHkgcmV0dXJucyBhIDQwNC4KPgo+IEFueSBjbHVlIGhvdyB0byBzb2x2
+ZSB0aGlzIGlzc3VlPwoKT2gsIHRoaXMgcGF0Y2ggc2hvdWxkIGZpeCBpdDoKaHR0cHM6Ly9wYXRj
+aHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9wYXRjaC8yMDI1MDIwNTIzMjgzNy43
+MDMwMy0xLWNocmlzdGlhbkBhcGVydHVyZS51cy8KCj4KPgo+ID4gIFRBSUxTQ0FMRV9TSVRFID0g
+JChjYWxsCj4gPiBnaXRodWIsdGFpbHNjYWxlLHRhaWxzY2FsZSx2JChUQUlMU0NBTEVfVkVSU0lP
+TikpCj4gPiAgVEFJTFNDQUxFX0xJQ0VOU0UgPSBCU0QtMy1DbGF1c2UKPiA+ICBUQUlMU0NBTEVf
+TElDRU5TRV9GSUxFUyA9IExJQ0VOU0UKPiA+IC0tCj4gPiAyLjQzLjAKPgo+IEJlc3QgcmVnYXJk
+cywKPgo+IEp1bGllbi4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRw
+czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
