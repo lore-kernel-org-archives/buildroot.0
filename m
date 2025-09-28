@@ -1,76 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FFE2CAC5B5
-	for <buildroot@archiver.kernel.org>; Sun, 28 Sep 2025 16:24:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E517CAC5B5
+	for <buildroot@archiver.kernel.org>; Sun, 28 Sep 2025 16:38:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DA6C3406B8;
-	Sun, 28 Sep 2025 16:24:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BDF4F80B9E;
+	Sun, 28 Sep 2025 16:38:56 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KszNZDVc8RFf; Sun, 28 Sep 2025 16:38:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A826808CA
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9A826808CA;
+	Sun, 28 Sep 2025 16:38:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id EDF47111
+ for <buildroot@buildroot.org>; Sun, 28 Sep 2025 16:38:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D48E74067F
+ for <buildroot@buildroot.org>; Sun, 28 Sep 2025 16:38:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Tl50XFaoRnt9; Sun, 28 Sep 2025 16:24:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2ACBE40260
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2ACBE40260;
-	Sun, 28 Sep 2025 16:24:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 650D212D
- for <buildroot@buildroot.org>; Sun, 28 Sep 2025 16:24:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4B53740200
- for <buildroot@buildroot.org>; Sun, 28 Sep 2025 16:24:48 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pID7IYZXYIc4 for <buildroot@buildroot.org>;
- Sun, 28 Sep 2025 16:24:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 888DA40116
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 888DA40116
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 888DA40116
- for <buildroot@buildroot.org>; Sun, 28 Sep 2025 16:24:47 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 040126012F;
- Sun, 28 Sep 2025 18:24:40 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 28 Sep 2025 18:24:40 +0200
-MIME-Version: 1.0
-Date: Sun, 28 Sep 2025 18:24:40 +0200
-To: Florian Larysch <fl@n621.de>
-Cc: buildroot@buildroot.org, Heiko Thiery <heiko.thiery@gmail.com>, Petr
- Kulhavy <brain@jikos.cz>
-In-Reply-To: <20250928145118.32282-1-fl@n621.de>
-References: <20250928145118.32282-1-fl@n621.de>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <5ff3f6388cdb2b267347212ecad2871d@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1759076685;
- bh=45t8F6/XmWwdnDQZYHqvBy5lY6EFQXZxifMMP7f0pHg=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=qw/1DkHgBSWl1oXDXEZIpfkHE7RVVyuZAibKdPAWOJOda6626bqQpfjnQTW6JrETV
- xoMrHzxIj04iNYx1LFjG1qUdV89pvL7sm8QuOmURc23yHJXZJ6c/jCv4jxcRtSqLoU
- xtq7jDxqIVnfYj4JfIjPlYmVQfvkx3H9XekOhyjK8Jv4p9TpjLeB1dTYKgFARorRaI
- qgoCaQvJFkabsK7EwrpfKMDuMLf2nBhUZyoqm869H0uCRuIhVQpYP1C82auJQJGbNC
- sbsOl/LJpWdVRE4YMc2V3LyO4ngtF6k0iecNL803eYNrlX8Xrc0n171OH1VHxNxg65
- wtcUzG1YoliZw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=qw/1DkHg
-Subject: Re: [Buildroot] [PATCH 1/1] package/linuxptp: update default config
+ id u3_I-OnM-5fX for <buildroot@buildroot.org>;
+ Sun, 28 Sep 2025 16:38:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 002414067A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 002414067A
+ for <buildroot@buildroot.org>; Sun, 28 Sep 2025 16:38:52 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EE5CD86148; Sun, 28 Sep 2025 16:38:52 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 28 Sep 2025 18:32:55 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f70b83914f20a1ee10b29aa60f34fd5785a2af8e
+X-Git-Newrev: 74dcda25449b4d40a5f48820f0e53bf97315972d
+X-Patchwork-Hint: ignore
+Message-Id: <20250928163852.EE5CD86148@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/xilinx: migrate board web links to
+ amd.com
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,21 +60,108 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 28/09/2025 16:50, Florian Larysch wrote:
-> Since upstream commit fe01cc7 ("Deprecate the slaveOnly option in favor
-> of clientOnly."), included in v4.0, ptp4l complains about the
-> "slaveOnly" option being deprecated on startup.
-> 
-> Update the default config to silence this warning.
-> 
-> Signed-off-by: Florian Larysch <fl@n621.de>
+commit: https://git.buildroot.net/buildroot/commit/?id=74dcda25449b4d40a5f48820f0e53bf97315972d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+As the xilinx.com website will soon be going away, migrate all xilinx board
+web links from xilinx.com to amd.com.
+
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ board/versal/readme.txt      | 6 +++---
+ board/zynq/readme.txt        | 4 ++--
+ board/zynqmp/kria/readme.txt | 6 +++---
+ board/zynqmp/readme.txt      | 6 +++---
+ 4 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/board/versal/readme.txt b/board/versal/readme.txt
+index cd308a1226..3bcaccbb0e 100644
+--- a/board/versal/readme.txt
++++ b/board/versal/readme.txt
+@@ -11,13 +11,13 @@ Xilinx VPK180 board
+ Evaluation board features can be found here with the links below.
+ 
+ VCK190:
+-https://www.xilinx.com/products/boards-and-kits/vck190.html
++https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/vck190.html
+ 
+ VEK280:
+-https://www.xilinx.com/products/boards-and-kits/vek280.html
++https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/vek280.html
+ 
+ VPK180:
+-https://www.xilinx.com/products/boards-and-kits/vpk180.html
++https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/vpk180.html
+ 
+ 
+ How to build it
+diff --git a/board/zynq/readme.txt b/board/zynq/readme.txt
+index 085f47b09b..ed7509f2b5 100644
+--- a/board/zynq/readme.txt
++++ b/board/zynq/readme.txt
+@@ -36,11 +36,11 @@ myboot=...
+ References:
+  - ZC702 information including schematics, reference designs, and manuals are
+    available from
+-   https://www.xilinx.com/products/boards-and-kits/ek-z7-zc702-g.html
++   https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/ek-z7-zc702-g.html
+ 
+  - ZC706 information including schematics, reference designs, and manuals are
+    available from
+-   http://www.xilinx.com/products/boards-and-kits/ek-z7-zc706-g.html.
++   https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/ek-z7-zc706-g.html
+ 
+  - Zedboard/Microzed information including schematics, reference designs, and
+    manuals are available from http://www.zedboard.org .
+diff --git a/board/zynqmp/kria/readme.txt b/board/zynqmp/kria/readme.txt
+index 6fd7ca61ca..8d008332bf 100644
+--- a/board/zynqmp/kria/readme.txt
++++ b/board/zynqmp/kria/readme.txt
+@@ -10,13 +10,13 @@ the KD240, KR260 and KV260 production boards.
+ Evaluation board features can be found here with the links below.
+ 
+ KD240:
+-https://www.xilinx.com/products/som/kria/kd240-drives-starter-kit.html
++https://www.amd.com/en/products/system-on-modules/kria/k24/kd240-drives-starter-kit.html
+ 
+ KR260:
+-https://www.xilinx.com/products/som/kria/kr260-robotics-starter-kit.html
++https://www.amd.com/en/products/system-on-modules/kria/k26/kr260-robotics-starter-kit.html
+ 
+ KV260:
+-https://www.xilinx.com/products/som/kria/kv260-vision-starter-kit.html
++https://www.amd.com/en/products/system-on-modules/kria/k26/kv260-vision-starter-kit.html
+ 
+ How to build it
+ ===============
+diff --git a/board/zynqmp/readme.txt b/board/zynqmp/readme.txt
+index 242c643480..12b81f4a07 100644
+--- a/board/zynqmp/readme.txt
++++ b/board/zynqmp/readme.txt
+@@ -10,13 +10,13 @@ boards.
+ Evaluation board features can be found here with the links below.
+ 
+ ZCU102:
+-https://www.xilinx.com/products/boards-and-kits/zcu102.html
++https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/ek-u1-zcu102-g.html
+ 
+ ZCU104:
+-https://www.xilinx.com/products/boards-and-kits/zcu104.html
++https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/zcu104.html
+ 
+ ZCU106:
+-https://www.xilinx.com/products/boards-and-kits/zcu106.html
++https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/zcu106.html
+ 
+ 
+ How to build it
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
