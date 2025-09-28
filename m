@@ -1,69 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A289ECAC5B5
-	for <buildroot@archiver.kernel.org>; Sun, 28 Sep 2025 14:51:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24C1DCAC5BB
+	for <buildroot@archiver.kernel.org>; Sun, 28 Sep 2025 14:59:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4B4C3607A7;
-	Sun, 28 Sep 2025 14:51:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D943740556;
+	Sun, 28 Sep 2025 14:59:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NiaNDq1GonF2; Sun, 28 Sep 2025 14:51:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jtNFEh_me2hq; Sun, 28 Sep 2025 14:59:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DFB7607B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3CC040551
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7DFB7607B0;
-	Sun, 28 Sep 2025 14:51:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 44201111
- for <buildroot@buildroot.org>; Sun, 28 Sep 2025 14:51:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E3CC040551;
+	Sun, 28 Sep 2025 14:59:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4007C197
+ for <buildroot@buildroot.org>; Sun, 28 Sep 2025 14:59:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1ADCE607AD
- for <buildroot@buildroot.org>; Sun, 28 Sep 2025 14:51:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 31B8340559
+ for <buildroot@buildroot.org>; Sun, 28 Sep 2025 14:59:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oqL0Z9lUIQEB for <buildroot@buildroot.org>;
- Sun, 28 Sep 2025 14:51:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=136.243.2.102;
- helo=nyx.n621.de; envelope-from=fl@n621.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 04360607BE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04360607BE
-Received: from nyx.n621.de (v4gw.hekate.n621.de [136.243.2.102])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 04360607BE
- for <buildroot@buildroot.org>; Sun, 28 Sep 2025 14:51:26 +0000 (UTC)
-Received: from eos.home.n621.de (localhost [127.0.0.1])
- by nyx.n621.de (Postfix) with ESMTP id A8543E00078;
- Sun, 28 Sep 2025 16:51:23 +0200 (CEST)
-From: Florian Larysch <fl@n621.de>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6iJc9R97_EpK for <buildroot@buildroot.org>;
+ Sun, 28 Sep 2025 14:59:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A8AF40551
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3A8AF40551
+ for <buildroot@buildroot.org>; Sun, 28 Sep 2025 14:59:15 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 289F186603; Sun, 28 Sep 2025 14:59:15 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Heiko Thiery <heiko.thiery@gmail.com>, Petr Kulhavy <brain@jikos.cz>,
- Florian Larysch <fl@n621.de>
-Date: Sun, 28 Sep 2025 16:50:42 +0200
-Message-ID: <20250928145118.32282-1-fl@n621.de>
-X-Mailer: git-send-email 2.51.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=n621.de; s=dkim; t=1759071083;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=zZm37p9S/+xOrag312vXKqyF1spHBmtn1xu/ga1qeIc=;
- b=wJpBXgal9As4Yc511tb4FlTfEoOnmEjO1w5FXSk5+Ucq8mlm6wbSITFX4GIMcz9idUT5lX
- 7BeZhcWsdogsZ8fver89CRHsFp0i53+ITQF6nL2dx+yNEpjs/XDYAihfbSsi2DUopi89Ck
- jOzDLnj1e0XlRz/n2mfH+kVID+rwj+8=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=n621.de
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=n621.de header.i=@n621.de header.a=rsa-sha256
- header.s=dkim header.b=wJpBXgal
-Subject: [Buildroot] [PATCH 1/1] package/linuxptp: update default config
+Date: Sun, 28 Sep 2025 16:05:29 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d7a2937550f7aba58f5a24e7ed33910186658fdf
+X-Git-Newrev: e7f9f94a50982cee244fef81754da810139cf851
+X-Patchwork-Hint: ignore
+Message-Id: <20250928145915.289F186603@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] fs/axfs: drop support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,38 +57,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since upstream commit fe01cc7 ("Deprecate the slaveOnly option in favor
-of clientOnly."), included in v4.0, ptp4l complains about the
-"slaveOnly" option being deprecated on startup.
+commit: https://git.buildroot.net/buildroot/commit/?id=e7f9f94a50982cee244fef81754da810139cf851
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update the default config to silence this warning.
+The file system support is not mainline and hasn't been updated since 2019,
+so drop it.
 
-Signed-off-by: Florian Larysch <fl@n621.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/linuxptp/linuxptp.cfg | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Config.in.legacy  |  6 ++++++
+ fs/Config.in      |  1 -
+ fs/axfs/Config.in | 17 -----------------
+ fs/axfs/axfs.mk   | 13 -------------
+ 4 files changed, 6 insertions(+), 31 deletions(-)
 
-diff --git a/package/linuxptp/linuxptp.cfg b/package/linuxptp/linuxptp.cfg
-index f9d02e8d97..09a905ed9e 100644
---- a/package/linuxptp/linuxptp.cfg
-+++ b/package/linuxptp/linuxptp.cfg
-@@ -10,7 +10,7 @@
- # or the linuxptp SysV init script.
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 1febc3de0f..ffcd53930a 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
  
- [global]
--slaveOnly		1
-+clientOnly		1
- delay_mechanism		Auto
- network_transport	UDPv4
- time_stamping		hardware
--- 
-2.51.0
-
+ comment "Legacy options removed in 2025.11"
+ 
++config BR2_TARGET_ROOTFS_AXFS
++	bool "AXFS root filesystem has been removed"
++	select BR2_LEGACY
++	help
++	  AXFS root filesystem support has been removed.
++
+ config BR2_PACKAGE_LOGSURFER
+ 	bool "logsurfer has been removed"
+ 	select BR2_LEGACY
+diff --git a/fs/Config.in b/fs/Config.in
+index 6b338f8ec8..42b0e608ac 100644
+--- a/fs/Config.in
++++ b/fs/Config.in
+@@ -1,6 +1,5 @@
+ menu "Filesystem images"
+ 
+-source "fs/axfs/Config.in"
+ source "fs/btrfs/Config.in"
+ source "fs/cloop/Config.in"
+ source "fs/cpio/Config.in"
+diff --git a/fs/axfs/Config.in b/fs/axfs/Config.in
+deleted file mode 100644
+index 8dfaffab74..0000000000
+--- a/fs/axfs/Config.in
++++ /dev/null
+@@ -1,17 +0,0 @@
+-config BR2_TARGET_ROOTFS_AXFS
+-	bool "axfs root filesystem"
+-	help
+-	  The Advanced XIP File System is a Linux kernel filesystem
+-	  driver that enables files to be executed directly from flash
+-	  or ROM memory rather than being copied into RAM. It has the
+-	  ability to store individual *pages* in a file
+-	  uncompressed/XIP or compressed/Demand Paged.
+-
+-	  So far, the only supported mode is 'XIP all', so all the
+-	  files that have the execute attribute set will be XIP'ed.
+-
+-	  At the moment, the FS is not supported in Linux mainline
+-	  (v4.3-rc5), so the kernel has to be built with the axfs
+-	  patches to be able to read it. Patches can be found at:
+-
+-	  https://github.com/jaredeh/axfs
+diff --git a/fs/axfs/axfs.mk b/fs/axfs/axfs.mk
+deleted file mode 100644
+index 4b93df55c0..0000000000
+--- a/fs/axfs/axfs.mk
++++ /dev/null
+@@ -1,13 +0,0 @@
+-################################################################################
+-#
+-# Build the axfs root filesystem image
+-#
+-################################################################################
+-
+-ROOTFS_AXFS_DEPENDENCIES = host-axfsutils
+-
+-define ROOTFS_AXFS_CMD
+-	$(HOST_DIR)/bin/mkfs.axfs -s -a $(TARGET_DIR) $@
+-endef
+-
+-$(eval $(rootfs))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
