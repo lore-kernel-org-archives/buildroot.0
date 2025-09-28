@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC4B8CAC5BD
-	for <buildroot@archiver.kernel.org>; Sun, 28 Sep 2025 10:19:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 004BCCAC5B5
+	for <buildroot@archiver.kernel.org>; Sun, 28 Sep 2025 10:19:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2181406AA;
-	Sun, 28 Sep 2025 10:19:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C9DA14069E;
+	Sun, 28 Sep 2025 10:19:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WigTqdyAD6C6; Sun, 28 Sep 2025 10:19:51 +0000 (UTC)
+ id l2RwY3AIi0Mj; Sun, 28 Sep 2025 10:19:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D85BA4069C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 195C04069C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D85BA4069C;
-	Sun, 28 Sep 2025 10:19:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 132F0198
+	by smtp4.osuosl.org (Postfix) with ESMTP id 195C04069C;
+	Sun, 28 Sep 2025 10:19:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1F910FBC
  for <buildroot@buildroot.org>; Sun, 28 Sep 2025 10:19:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0500680D63
+ by smtp2.osuosl.org (Postfix) with ESMTP id 061A1401C2
  for <buildroot@buildroot.org>; Sun, 28 Sep 2025 10:19:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AIWPGwDL5kUF for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fb1-cnannG-k for <buildroot@buildroot.org>;
  Sun, 28 Sep 2025 10:19:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A2EA80D62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B25B401A4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3A2EA80D62
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4B25B401A4
  for <buildroot@buildroot.org>; Sun, 28 Sep 2025 10:19:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2A878865BF; Sun, 28 Sep 2025 10:19:48 +0000 (UTC)
+ id 34194865C0; Sun, 28 Sep 2025 10:19:48 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 28 Sep 2025 12:17:24 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0b5cb9cd26a78fea93e11b77a1b9218545087c5a
-X-Git-Newrev: 00fb3a57cbaedb8df43f75f0e891423c1ef7d8c6
+X-Git-Oldrev: 00fb3a57cbaedb8df43f75f0e891423c1ef7d8c6
+X-Git-Newrev: 151be15aa8c71cc5c2c4f56019a641b8aa26f6ad
 X-Patchwork-Hint: ignore
-Message-Id: <20250928101948.2A878865BF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wlroots: add missing dependency to
- libgbm
+Message-Id: <20250928101948.34194865C0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cage: bump to version
+ v0.2.0-15-g2e593fe5a
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,51 +66,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00fb3a57cbaedb8df43f75f0e891423c1ef7d8c6
+commit: https://git.buildroot.net/buildroot/commit/?id=151be15aa8c71cc5c2c4f56019a641b8aa26f6ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If the render gles2 is enabled then libgbm is required (see [1]).
-Therefore, add the dependency to wlroots.
+wlroots 0.19.0 includes API breaking changes.
 
-[1]: https://gitlab.freedesktop.org/wlroots/wlroots/-/blob/0.19/render/meson.build?ref_type=heads#L44
+This commit bump the cage version to include the upstream commit [1]
+which updates to this new wlroots API.
+
+[1] https://github.com/cage-kiosk/cage/commit/9ad44e4f521edf446ad66559726e6deeb8204101
 
 Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+[Julien: change _VERSION to use "git describe --abbrev=40" format]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/wlroots/Config.in  | 3 ++-
- package/wlroots/wlroots.mk | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ package/cage/cage.hash | 6 ++----
+ package/cage/cage.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/wlroots/Config.in b/package/wlroots/Config.in
-index 02bd54c999..6d2992cf2c 100644
---- a/package/wlroots/Config.in
-+++ b/package/wlroots/Config.in
-@@ -1,4 +1,4 @@
--comment "wlroots needs udev, EGL and OpenGL ES support"
-+comment "wlroots needs udev, EGL, OpenGL ES and GBM support"
- 	depends on !BR2_PACKAGE_HAS_LIBEGL || \
- 		!BR2_PACKAGE_HAS_LIBEGL || \
- 		!BR2_PACKAGE_HAS_LIBGLES || \
-@@ -15,6 +15,7 @@ config BR2_PACKAGE_WLROOTS
- 	depends on BR2_PACKAGE_HAS_UDEV # libinput
- 	depends on BR2_PACKAGE_HAS_LIBEGL
- 	depends on BR2_PACKAGE_HAS_LIBGLES
-+	depends on BR2_PACKAGE_HAS_LIBGBM
- 	select BR2_PACKAGE_HWDATA
- 	select BR2_PACKAGE_HWDATA_PNP_IDS
- 	select BR2_PACKAGE_LIBDISPLAY_INFO
-diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
-index 689662f536..babadea94f 100644
---- a/package/wlroots/wlroots.mk
-+++ b/package/wlroots/wlroots.mk
-@@ -19,6 +19,7 @@ WLROOTS_DEPENDENCIES = \
- 	libxkbcommon \
- 	libegl \
- 	libgles \
-+	libgbm \
- 	pixman \
- 	seatd \
- 	udev \
+diff --git a/package/cage/cage.hash b/package/cage/cage.hash
+index e7c971ea26..4d376c322d 100644
+--- a/package/cage/cage.hash
++++ b/package/cage/cage.hash
+@@ -1,7 +1,5 @@
+-# Locally calculated after checking pgp signature
+-# https://github.com/cage-kiosk/cage/releases/download/v0.2.0/cage-0.2.0.tar.gz.sig
+-# with key 34FF9526CFEF0E97A340E2E40FDE7BE0E88F5E48 "emersion <contact@emersion.fr>"
+-sha256  557c194d18af7202a9ec2e8be6dd7129f6c16d0f4528f4079ba26ccd57b6ef88  cage-0.2.0.tar.gz
++# Locally computed
++sha256  6b72e034c78c55432ad815e651ead8bd732ccc2087b08c666a68b865ba72ceff  cage-v0.2.0-15-g2e593fe5a8a2186a558ceb414674775e4ba5d2b1-git4.tar.gz
+ 
+ # Hashes for license files:
+ sha256  e117104073335dbaf78596fb1bedf89dda63c71f60f0b665947b2d369c77ecee  LICENSE
+diff --git a/package/cage/cage.mk b/package/cage/cage.mk
+index 6fa39122ee..7f8fff4833 100644
+--- a/package/cage/cage.mk
++++ b/package/cage/cage.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-CAGE_VERSION = 0.2.0
+-CAGE_SITE = https://github.com/cage-kiosk/cage/releases/download/v$(CAGE_VERSION)
++CAGE_VERSION = v0.2.0-15-g2e593fe5a8a2186a558ceb414674775e4ba5d2b1
++CAGE_SITE = https://github.com/cage-kiosk/cage.git
++CAGE_SITE_METHOD = git
+ CAGE_LICENSE = MIT
+ CAGE_LICENSE_FILES = LICENSE
+ CAGE_DEPENDENCIES = host-pkgconf wlroots
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
