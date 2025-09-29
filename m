@@ -4,75 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E84E6CAC5B0
-	for <buildroot@archiver.kernel.org>; Mon, 29 Sep 2025 16:14:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91CFBCAC5B9
+	for <buildroot@archiver.kernel.org>; Mon, 29 Sep 2025 18:50:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 945B18125F;
-	Mon, 29 Sep 2025 16:14:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 36A5380A91;
+	Mon, 29 Sep 2025 18:50:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mOg1QHCcQrEX; Mon, 29 Sep 2025 16:14:11 +0000 (UTC)
+ id wki9Yd_8d0th; Mon, 29 Sep 2025 18:50:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7D678121A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4EC7E80AA4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D7D678121A;
-	Mon, 29 Sep 2025 16:14:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3D73D12D
- for <buildroot@buildroot.org>; Mon, 29 Sep 2025 16:14:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4EC7E80AA4;
+	Mon, 29 Sep 2025 18:50:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id ADB0CCF
+ for <buildroot@buildroot.org>; Mon, 29 Sep 2025 18:50:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 27D7A406E1
- for <buildroot@buildroot.org>; Mon, 29 Sep 2025 16:14:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8C87B60BC7
+ for <buildroot@buildroot.org>; Mon, 29 Sep 2025 18:50:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j0iWI1t-IKyR for <buildroot@buildroot.org>;
- Mon, 29 Sep 2025 16:14:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=luca.ceresoli@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id J_bUw81-Ynid for <buildroot@buildroot.org>;
+ Mon, 29 Sep 2025 18:50:06 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 45530401FE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45530401FE
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 45530401FE
- for <buildroot@buildroot.org>; Mon, 29 Sep 2025 16:14:07 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 384C41A101E;
- Mon, 29 Sep 2025 16:14:05 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 0C204606AE;
- Mon, 29 Sep 2025 16:14:05 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 7CF63102F19CE; 
- Mon, 29 Sep 2025 18:13:57 +0200 (CEST)
-Date: Mon, 29 Sep 2025 18:13:55 +0200
-To: Neal Frager <neal.frager@amd.com>
-Message-ID: <20250929181355.09996a03@booty>
-In-Reply-To: <20250929071622.136094-1-neal.frager@amd.com>
-References: <20250929071622.136094-1-neal.frager@amd.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1759162444; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=YvlAyA2W3sDwvRFLaJkxJLWBxcicsbQ08XWofGP2BVc=;
- b=RDPPq8fK3hPMuCYgRBk8zXVOkXe9ZtJ0z4W3hQHxbJ/3efPXtOkQm2fpjPb/1ZjD/GIbiN
- 6RQctp4S1aWP1OgTfwrmUuajFUEYouJgOyB+9BXEtYzxpoV729IpkyK/FatAhwyYYC7/o2
- hqe/k8f0gM1pYIkET0ly7acsK2JBUSXh8BxNBoDC+S9F6sjo63BkyOqYBON+OgSGnEXU6L
- er3FA1k7m7zsvYjYYCdiRdXWHVOyORY/pa8RGWtxYryQtSPuSnvCnpuxZJnSGKWYLAyAzi
- 2UDkLaPDN6ZT76iW3jvuIQ+cJ2MHX6U7kz6xnNnYqNTih+LkJ3hBN+HkoQJeog==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=RDPPq8fK
-Subject: Re: [Buildroot] [PATCH v1 1/1] board/zynq: correct zed board links
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BDED60B39
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8BDED60B39
+ for <buildroot@buildroot.org>; Mon, 29 Sep 2025 18:50:06 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 865D2863E8; Mon, 29 Sep 2025 18:50:06 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 29 Sep 2025 20:47:28 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 74dcda25449b4d40a5f48820f0e53bf97315972d
+X-Git-Newrev: 4e7f03314d8b777c7616e6bf5edf69c8aa015782
+X-Patchwork-Hint: ignore
+Message-Id: <20250929185006.865D2863E8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/zynq: correct zed board links
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,31 +57,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
-Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: yann.morin@orange.com, ibai.erkiaga-elorza@amd.com, buildroot@buildroot.org,
- brandon.maier@collins.com, ju.o@free.fr, thomas.petazzoni@bootlin.com,
- romain.naour@smile.fr, michal.simek@amd.com, romain.naour@gmail.com
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 29 Sep 2025 08:16:22 +0100
-Neal Frager <neal.frager@amd.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=4e7f03314d8b777c7616e6bf5edf69c8aa015782
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The web link www.zedboard.org is no longer valid as it routes to a generic
-> avnet.com boards link. Fix this issue by providing direct links to the Avnet
-> ZedBoard and Tria MicroZed boards.
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
+The web link www.zedboard.org is no longer valid as it routes to a generic
+avnet.com boards link. Fix this issue by providing direct links to the Avnet
+ZedBoard and Tria MicroZed boards.
 
+Signed-off-by: Neal Frager <neal.frager@amd.com>
 Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ board/zynq/readme.txt | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/board/zynq/readme.txt b/board/zynq/readme.txt
+index ed7509f2b5..225af4b9dc 100644
+--- a/board/zynq/readme.txt
++++ b/board/zynq/readme.txt
+@@ -43,7 +43,9 @@ References:
+    https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/ek-z7-zc706-g.html
+ 
+  - Zedboard/Microzed information including schematics, reference designs, and
+-   manuals are available from http://www.zedboard.org .
++   manuals are available from
++   https://www.avnet.com/americas/products/avnet-boards/avnet-board-families/zedboard/
++   https://www.tria-technologies.com/product/microzed/
+ 
+ Support for other boards:
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
