@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9110ECCA471
-	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 21:00:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 110E0CAC5BB
+	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 21:00:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A08C61516;
-	Wed,  1 Oct 2025 21:00:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D8A2361535;
+	Wed,  1 Oct 2025 21:00:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rIdLmr6lVLSo; Wed,  1 Oct 2025 21:00:26 +0000 (UTC)
+ id CHC2XEd6FVmO; Wed,  1 Oct 2025 21:00:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54CF561504
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF9C1614DD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 54CF561504;
-	Wed,  1 Oct 2025 21:00:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1D39A1CE
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF9C1614DD;
+	Wed,  1 Oct 2025 21:00:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3CD6872
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D9C2C614C8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 98BAF41242
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mO9JL_Lui5vb for <buildroot@buildroot.org>;
- Wed,  1 Oct 2025 21:00:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y1i9eQ9MkTM4 for <buildroot@buildroot.org>;
+ Wed,  1 Oct 2025 21:00:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 218E9614CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C71F04123B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 218E9614CA
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C71F04123B
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1F9208131F; Wed,  1 Oct 2025 21:00:11 +0000 (UTC)
+ id C5093817A9; Wed,  1 Oct 2025 21:00:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Sep 2025 11:30:57 +0200
+Date: Tue, 30 Sep 2025 11:29:05 +0200
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: de786cdc70c7111e395af01ee5b330b4d07db148
-X-Git-Newrev: d2214afdf2368184eb1884edc122959e472b35c6
+X-Git-Oldrev: 0e9a2ddd0007ac15cd224101b5e5eb54bbaf3a9e
+X-Git-Newrev: c50711ddf54837bc8bd95548c1301f158aeb97ee
 X-Patchwork-Hint: ignore
-Message-Id: <20251001210011.1F9208131F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/cutekeyboard: fix
- CUTEKEYBOARD_VERSION
+Message-Id: <20251001210010.C5093817A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/syslog-ng:
+ security bump to v4.8.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,46 +66,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2214afdf2368184eb1884edc122959e472b35c6
+commit: https://git.buildroot.net/buildroot/commit/?id=c50711ddf54837bc8bd95548c1301f158aeb97ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-Make CUTEKEYBOARD_VERSION compliant with release-monitoring.org
+See the release notes:
+- https://github.com/syslog-ng/syslog-ng/releases/tag/syslog-ng-4.8.2
+- https://github.com/syslog-ng/syslog-ng/releases/tag/syslog-ng-4.8.3
 
-Fixes: b28ec6f4313cc805dfb152e06408f1e7137c2ea6
+This fixes the following vulnerability:
+- CVE-2024-47619:
+    syslog-ng is an enhanced log daemo. Prior to version 4.8.2,
+    `tls_wildcard_match()` matches on certificates such as `foo.*.bar`
+    although that is not allowed. It is also possible to pass partial
+    wildcards such as `foo.a*c.bar` which glib matches but should be
+    avoided / invalidated. This issue could have an impact on TLS
+    connections, such as in man-in-the-middle situations. Version 4.8.2
+    contains a fix for the issue.
+    https://www.cve.org/CVERecord?id=CVE-2024-47619
 
-(alternative to commit 14885464292df19e664d95ade46a0d13cf0d25c5)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-(cherry picked from commit 6e2b0dd9235456ea32fb9987017154b51374428a)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 7660818b4bbe3aa2540f76ed4d75fcd99c8c8bd9)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/cutekeyboard/cutekeyboard.hash | 2 +-
- package/cutekeyboard/cutekeyboard.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/syslog-ng/syslog-ng.hash | 2 +-
+ package/syslog-ng/syslog-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cutekeyboard/cutekeyboard.hash b/package/cutekeyboard/cutekeyboard.hash
-index 53b438cc1f..649fb0f8b3 100644
---- a/package/cutekeyboard/cutekeyboard.hash
-+++ b/package/cutekeyboard/cutekeyboard.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
+index 4ca6a3e33e..04f33926d5 100644
+--- a/package/syslog-ng/syslog-ng.hash
++++ b/package/syslog-ng/syslog-ng.hash
+@@ -1,5 +1,5 @@
  # Locally computed
--sha256  0f0af01ec99ad07607d2e58c2feee1fba37c9cb7118e8af309fa021f599aec86  cutekeyboard-v1.3.0.tar.gz
-+sha256  0f0af01ec99ad07607d2e58c2feee1fba37c9cb7118e8af309fa021f599aec86  cutekeyboard-1.3.0.tar.gz
- sha256  bdde6ec2ae2686623c0bb414bfb8bd731b314beff2264c602116ea60dd65964d  LICENSE
-diff --git a/package/cutekeyboard/cutekeyboard.mk b/package/cutekeyboard/cutekeyboard.mk
-index 775bed0fe9..681107014f 100644
---- a/package/cutekeyboard/cutekeyboard.mk
-+++ b/package/cutekeyboard/cutekeyboard.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+-sha256  e8b8b98c60a5b68b25e3462c4104c35d05b975e6778d38d8a81b8ff7c0e64c5b  syslog-ng-4.8.1.tar.gz
++sha256  f82732a8e639373037d2b69c0e6d5d6594290f0350350f7a146af4cd8ab9e2c7  syslog-ng-4.8.3.tar.gz
+ sha256  d7d51f8d0f6ee9757a371080e7f5fa19ac73afbef14db6e981705cf1ec813d6b  COPYING
+ sha256  ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index 6f608eed0d..fa405ca5cb 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -6,7 +6,7 @@
  
--CUTEKEYBOARD_VERSION = v1.3.0
--CUTEKEYBOARD_SITE = $(call github,amarula,cutekeyboard,$(CUTEKEYBOARD_VERSION))
-+CUTEKEYBOARD_VERSION = 1.3.0
-+CUTEKEYBOARD_SITE = $(call github,amarula,cutekeyboard,v$(CUTEKEYBOARD_VERSION))
- CUTEKEYBOARD_DEPENDENCIES = qt5declarative qt5quickcontrols2
- CUTEKEYBOARD_INSTALL_STAGING = YES
- CUTEKEYBOARD_LICENSE = MIT
+ # When updating the version, please check at runtime if the version in
+ # syslog-ng.conf header needs to be updated
+-SYSLOG_NG_VERSION = 4.8.1
++SYSLOG_NG_VERSION = 4.8.3
+ SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
+ SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
+ SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
