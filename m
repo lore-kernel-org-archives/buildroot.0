@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C139FCAC5BB
-	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 20:53:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6682CCA470
+	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 20:53:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 96DA661512;
-	Wed,  1 Oct 2025 20:53:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D89C6158B;
+	Wed,  1 Oct 2025 20:53:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cPwmuNKVK5-Z; Wed,  1 Oct 2025 20:52:59 +0000 (UTC)
+ id Ki8qUaEiHxXn; Wed,  1 Oct 2025 20:53:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C854361573
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9479C6157B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C854361573;
-	Wed,  1 Oct 2025 20:52:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9479C6157B;
+	Wed,  1 Oct 2025 20:52:59 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0CAE072
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:52:42 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 014CFCC0
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:52:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B6CFE41427
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:52:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 110904074C
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:52:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EaD_7-x9FxWu for <buildroot@buildroot.org>;
- Wed,  1 Oct 2025 20:52:34 +0000 (UTC)
+ id XggqkwMH0Lt6 for <buildroot@buildroot.org>;
+ Wed,  1 Oct 2025 20:52:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D1484145A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 394DC4145E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0D1484145A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 394DC4145E
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:52:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0B001866FE; Wed,  1 Oct 2025 20:52:33 +0000 (UTC)
+ id 3729B866F1; Wed,  1 Oct 2025 20:52:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Sep 2025 11:12:15 +0200
+Date: Tue, 30 Sep 2025 11:13:11 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 101e96d072f0626d5dc9d083063d825790c5fcf0
-X-Git-Newrev: 069f48d1c6eaf6a0a2da42e385d85b52f0572c7c
+X-Git-Oldrev: 0ac6bf04551b678141c66b62fb2ca87c685b9263
+X-Git-Newrev: cbd25b5b4d662a9c7e8766c64bff472d304a9ba6
 X-Patchwork-Hint: ignore
-Message-Id: <20251001205233.0B001866FE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] boot/xilinx-prebuilt:
- only allow binaries for device family
+Message-Id: <20251001205233.3729B866F1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/libxkbcommon:
+ bump to version 1.9.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,51 +66,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=069f48d1c6eaf6a0a2da42e385d85b52f0572c7c
+commit: https://git.buildroot.net/buildroot/commit/?id=cbd25b5b4d662a9c7e8766c64bff472d304a9ba6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Add an architecture cpu dependency to each family to make sure that users can
-only install prebuilt firmware which is applicable to their target device
-family.
+Changes:
+  - No longer hosted at https://xkbcommon.org/download. The website points to
+    the github repository. As such, change the URL accordingly.
 
-The versal family is based on BR2_cortex_a72.
+  - The sha256sum is not provided in the mailing list archive, so the sha256sum
+    is locally calculated.
 
-The kria and zynqmp families are based on BR2_cortex_a53.
+  - The license file was reworded as of commit e120807b:
+    """Update license notices to SDPX short identifiers + update LICENSE"""
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+See release notes, since version 1.7.0:
+- 1.8.0: https://lists.freedesktop.org/archives/wayland-devel/2025-February/043969.html
+- 1.8.1: https://lists.freedesktop.org/archives/wayland-devel/2025-March/044021.html
+- 1.9.0: https://lists.freedesktop.org/archives/wayland-devel/2025-April/044160.html
+- 1.9.1: https://lists.freedesktop.org/archives/wayland-devel/2025-May/044209.html
+- 1.9.2: https://lists.freedesktop.org/archives/wayland-devel/2025-May/044211.html
+
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+[Julien: add links to release notes]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 92f76f6c35ee816f1f4e628bb619da0471ae3eed)
+(cherry picked from commit 8abbc307a5b3c4bb2fab264b804a74754f87f1df)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- boot/xilinx-prebuilt/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/libxkbcommon/libxkbcommon.hash | 6 +++---
+ package/libxkbcommon/libxkbcommon.mk   | 5 ++---
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/boot/xilinx-prebuilt/Config.in b/boot/xilinx-prebuilt/Config.in
-index b95df5cbf4..7959117ad3 100644
---- a/boot/xilinx-prebuilt/Config.in
-+++ b/boot/xilinx-prebuilt/Config.in
-@@ -26,16 +26,20 @@ config BR2_TARGET_XILINX_PREBUILT_VERSION
- choice
- 	bool "family variant"
- 	default BR2_TARGET_XILINX_PREBUILT_VERSAL if BR2_PACKAGE_VERSAL_FIRMWARE  # legacy
-+	default BR2_TARGET_XILINX_PREBUILT_VERSAL if BR2_cortex_a72
- 	default BR2_TARGET_XILINX_PREBUILT_ZYNQMP
+diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
+index 6cdd79e01a..50bcf52f17 100644
+--- a/package/libxkbcommon/libxkbcommon.hash
++++ b/package/libxkbcommon/libxkbcommon.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2024-March/043539.html
+-sha256  65782f0a10a4b455af9c6baab7040e2f537520caa2ec2092805cdfd36863b247  libxkbcommon-1.7.0.tar.xz
++# Locally calculated
++sha256  8d68a8b45796f34f7cace357b9f89b8c92b158557274fef5889b03648b55fe59  libxkbcommon-1.9.2.tar.gz
  
- config BR2_TARGET_XILINX_PREBUILT_ZYNQMP
- 	bool "zynqmp"
-+	depends on BR2_cortex_a53
+ # License file:
+-sha256  086caee279449369d41c1157911ec7696e707b93feba7280de757d3c470b2dfb  LICENSE
++sha256  967e97b28658f0037bbe164a237bdfb0c3ec790e67f6c29372ea5b09306f61f3  LICENSE
+diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
+index c60580ef84..21a2b937ef 100644
+--- a/package/libxkbcommon/libxkbcommon.mk
++++ b/package/libxkbcommon/libxkbcommon.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_XILINX_PREBUILT_KRIA
- 	bool "kria"
-+	depends on BR2_cortex_a53
- 
- config BR2_TARGET_XILINX_PREBUILT_VERSAL
- 	bool "versal"
-+	depends on BR2_cortex_a72
- 
- endchoice
- 
+-LIBXKBCOMMON_VERSION = 1.7.0
+-LIBXKBCOMMON_SITE = https://xkbcommon.org/download
+-LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
++LIBXKBCOMMON_VERSION = 1.9.2
++LIBXKBCOMMON_SITE = $(call github,xkbcommon,libxkbcommon,xkbcommon-$(LIBXKBCOMMON_VERSION))
+ LIBXKBCOMMON_LICENSE = MIT/X11
+ LIBXKBCOMMON_LICENSE_FILES = LICENSE
+ LIBXKBCOMMON_CPE_ID_VENDOR = xkbcommon
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
