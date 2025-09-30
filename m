@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7A58CCA470
-	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 20:53:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63CCFCCA471
+	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 20:53:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A81156159E;
-	Wed,  1 Oct 2025 20:53:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 38D3D4148A;
+	Wed,  1 Oct 2025 20:53:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4JrAR0QCyfTS; Wed,  1 Oct 2025 20:53:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kNU6OTYKu8f1; Wed,  1 Oct 2025 20:53:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E28A61596
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54F3D4148B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E28A61596;
-	Wed,  1 Oct 2025 20:53:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 54F3D4148B;
+	Wed,  1 Oct 2025 20:53:08 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0395972
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:52:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 01112CC0
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:52:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3411041374
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3EB3141439
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:52:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D1yALk-Zu0dl for <buildroot@buildroot.org>;
- Wed,  1 Oct 2025 20:52:33 +0000 (UTC)
+ id S1PVTzdS3Bmq for <buildroot@buildroot.org>;
+ Wed,  1 Oct 2025 20:52:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD94E41419
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 205EE4145C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AD94E41419
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:52:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 205EE4145C
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:52:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9EB7986702; Wed,  1 Oct 2025 20:52:32 +0000 (UTC)
+ id 1E4E1866F1; Wed,  1 Oct 2025 20:52:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Sep 2025 11:10:04 +0200
+Date: Tue, 30 Sep 2025 11:12:32 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 41e852476cf12a3498111c0a22e9f672a7c74b35
-X-Git-Newrev: 4aef99b258a55baa740350118fe05939e002c581
+X-Git-Oldrev: 3067d64f9e2b2ee51c3500dc37ffcb410ce1d2e7
+X-Git-Newrev: 4ed2fe7ecf90b787e26eea73c999beb67a0ae7d0
 X-Patchwork-Hint: ignore
-Message-Id: <20251001205232.9EB7986702@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/cups: security
- bump to v2.4.14
+Message-Id: <20251001205233.1E4E1866F1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/tiff: ignore
+ CVE-2025-8851
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,75 +66,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4aef99b258a55baa740350118fe05939e002c581
+commit: https://git.buildroot.net/buildroot/commit/?id=4ed2fe7ecf90b787e26eea73c999beb67a0ae7d0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-See the release notes:
+The CVE-2025-8851 [1] has been fixed in upstream commit [2] that is part
+of the v4.7.0 release.
 
-- https://github.com/OpenPrinting/cups/releases/tag/v2.4.13
-- https://github.com/OpenPrinting/cups/releases/tag/v2.4.14
+Because the NVD reference includes the version '<2024-08-11' most of CVE
+checker will fail to compare it against 4.7.0 and report it as a
+positive.
 
-This fixes the following vulnerabilities:
-- CVE-2025-58060:
-    OpenPrinting CUPS is an open source printing system for Linux and
-    other Unix-like operating systems. In versions 2.4.12 and earlier,
-    when the `AuthType` is set to anything but `Basic`, if the request
-    contains an `Authorization: Basic ...` header, the password is not
-    checked. This results in authentication bypass. Any configuration that
-    allows an `AuthType` that is not `Basic` is affected. Version 2.4.13
-    fixes the issue.
-    https://www.cve.org/CVERecord?id=CVE-2025-58060
+[1] https://nvd.nist.gov//vuln/detail/CVE-2025-8851
+[2] https://gitlab.com/libtiff/libtiff/-/commit/8a7a48d7a645992ca83062b3a1873c951661e2b3
 
-- CVE-2025-58364:
-    OpenPrinting CUPS is an open source printing system for Linux and
-    other Unix-like operating systems. In versions 2.4.12 and earlier, an
-    unsafe deserialization and validation of printer attributes causes
-    null dereference in the libcups library. This is a remote DoS
-    vulnerability available in local subnet in default configurations. It
-    can cause the cups & cups-browsed to crash, on all the machines in
-    local network who are listening for printers (so by default for all
-    regular linux machines). On systems where the vulnerability
-    CVE-2024-47176 (cups-filters 1.x/cups-browsed 2.x vulnerability) was
-    not fixed, and the firewall on the machine does not reject incoming
-    communication to IPP port, and the machine is set to be available to
-    public internet, attack vector "Network" is possible. The current
-    versions of CUPS and cups-browsed projects have the attack vector
-    "Adjacent" in their default configurations. Version 2.4.13 contains a
-    patch for CVE-2025-58364.
-    https://www.cve.org/CVERecord?id=CVE-2025-58364
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 89fd61a127796813f50a1e77076fec3251aa4109)
+(cherry picked from commit 740412aefc57770cd5be71012c19eec8bc576637)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/cups/cups.hash | 2 +-
- package/cups/cups.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/tiff/tiff.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/cups/cups.hash b/package/cups/cups.hash
-index e363a761eb..a200a82deb 100644
---- a/package/cups/cups.hash
-+++ b/package/cups/cups.hash
-@@ -1,4 +1,4 @@
- # Locally calculated:
--sha256  b1dde191a4ae2760c47220c82ca6155a28c382701e6c1a0159d1054990231d59  cups-2.4.12-source.tar.gz
-+sha256  660288020dd6f79caf799811c4c1a3207a48689899ac2093959d70a3bdcb7699  cups-2.4.14-source.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
- sha256  977206f041b9a6f47ac00531e1242c0fab7063da71178f8d868b167b70866b6d  NOTICE
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index 21fe6a7c5e..e6de671174 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index 3d426fad4d..dd23c2bd43 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
+@@ -19,6 +19,9 @@ TIFF_IGNORE_CVES += CVE-2025-8176
+ # 0004-fix-for-thumbnail-issue.patch
+ TIFF_IGNORE_CVES += CVE-2025-8177
  
--CUPS_VERSION = 2.4.12
-+CUPS_VERSION = 2.4.14
- CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
- CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
- CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
++# Fixed in 4.7.0
++TIFF_IGNORE_CVES += CVE-2025-8851
++
+ # webp has a (optional) dependency on tiff, so we can't have webp
+ # support in tiff, or that would create a circular dependency.
+ TIFF_CONF_OPTS = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
