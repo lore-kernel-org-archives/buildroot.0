@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C454DCCA471
-	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 21:00:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88C5ECCA470
+	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 21:00:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 81D93614FD;
+	by smtp3.osuosl.org (Postfix) with ESMTP id E336D614DC;
 	Wed,  1 Oct 2025 21:00:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iXPLfdqs0HGL; Wed,  1 Oct 2025 21:00:18 +0000 (UTC)
+ id 4ITpLFSEFXkH; Wed,  1 Oct 2025 21:00:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08A8A614F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E9A4614DE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 08A8A614F3;
-	Wed,  1 Oct 2025 21:00:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4204772
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5E9A4614DE;
+	Wed,  1 Oct 2025 21:00:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5BFA872
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7302E41482
+ by smtp3.osuosl.org (Postfix) with ESMTP id ABF14614D4
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NMlkTGZBQPfr for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LyB_x2dndjC2 for <buildroot@buildroot.org>;
  Wed,  1 Oct 2025 21:00:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90E2B41440
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A76A6614C3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 90E2B41440
+ by smtp3.osuosl.org (Postfix) with ESMTP id A76A6614C3
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7EACA817A9; Wed,  1 Oct 2025 21:00:10 +0000 (UTC)
+ id 952808131F; Wed,  1 Oct 2025 21:00:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Sep 2025 11:28:19 +0200
+Date: Tue, 30 Sep 2025 11:28:36 +0200
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: 3af6b2fe9b02c7063cd0a8b465238b4c135dabd9
-X-Git-Newrev: 205eee9a6a32a253c2270eac71d2cb129fe5c3bd
+X-Git-Oldrev: bed14dbc3ee9ae0e441cdf2735b0d0ba2dca819e
+X-Git-Newrev: 6afb50fe423f9b47e9c4598e5549fcc5128801de
 X-Patchwork-Hint: ignore
-Message-Id: <20251001210010.7EACA817A9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/openjpeg: bump
- version to 2.5.4
+Message-Id: <20251001210010.952808131F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/connman: security
+ bump to version 1.45
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,101 +66,172 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=205eee9a6a32a253c2270eac71d2cb129fe5c3bd
+commit: https://git.buildroot.net/buildroot/commit/?id=6afb50fe423f9b47e9c4598e5549fcc5128801de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-And drop now included security patch. For details, see:
+This bump includes the security fixes for CVE-2025-32366 and
+CVE-2025-32743.
 
-https://github.com/uclouvain/openjpeg/releases/tag/v2.5.4
+Release notes:
+- Fix issue with setting MFP optional for PSK.
+- Fix issue with comparison in timezone checking.
+- Fix issue with dnsproxy and empty lookup.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+See also:
+https://git.kernel.org/pub/scm/network/connman/connman.git/tree/ChangeLog?h=1.45
+https://git.kernel.org/pub/scm/network/connman/connman.git/log/?h=1.45
+
+Fixes:
+https://www.cve.org/CVERecord?id=CVE-2025-32366
+https://www.cve.org/CVERecord?id=CVE-2025-32743
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+[Julien: add links to change logs]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 4655cfd8f306be2f1421e070b5686c6637bf4c5a)
+(cherry picked from commit f0b011e0aa497217385d9dc5af887757667281fe)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- ...0001-check-for-error-after-parsing-header.patch | 41 ----------------------
- package/openjpeg/openjpeg.hash                     |  2 +-
- package/openjpeg/openjpeg.mk                       |  5 +--
- 3 files changed, 2 insertions(+), 46 deletions(-)
+ ...x-NULL-empty-lookup-causing-potential-cra.patch | 46 ----------------------
+ ...roxy-Address-CVE-2025-32366-vulnerability.patch | 41 -------------------
+ package/connman/connman.hash                       |  2 +-
+ package/connman/connman.mk                         |  8 +---
+ 4 files changed, 2 insertions(+), 95 deletions(-)
 
-diff --git a/package/openjpeg/0001-check-for-error-after-parsing-header.patch b/package/openjpeg/0001-check-for-error-after-parsing-header.patch
+diff --git a/package/connman/0001-dnsproxy-Fix-NULL-empty-lookup-causing-potential-cra.patch b/package/connman/0001-dnsproxy-Fix-NULL-empty-lookup-causing-potential-cra.patch
 deleted file mode 100644
-index 9a02fbf3d4..0000000000
---- a/package/openjpeg/0001-check-for-error-after-parsing-header.patch
+index 9c1274e43c..0000000000
+--- a/package/connman/0001-dnsproxy-Fix-NULL-empty-lookup-causing-potential-cra.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-From d90b911f6760959bdf1393c39fe8d1118315490f Mon Sep 17 00:00:00 2001
+-From: Praveen Kumar <praveen.kumar@windriver.com>
+-Date: Thu, 24 Apr 2025 11:39:29 +0000
+-Subject: [PATCH] dnsproxy: Fix NULL/empty lookup causing potential crash
+-
+-In ConnMan through 1.44, the lookup string in ns_resolv in dnsproxy.c
+-can be NULL or an empty string when the TC (Truncated) bit is set in
+-a DNS response. This allows attackers to cause a denial of service
+-(application crash) or possibly execute arbitrary code, because those
+-lookup values lead to incorrect length calculations and incorrect
+-memcpy operations.
+-
+-This patch includes a check to make sure loookup value is valid before
+-using it. This helps avoid unexpected value when the input is empty or
+-incorrect.
+-
+-Fixes: CVE-2025-32743
+-
+-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+-Upstream: https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=d90b911f6760959bdf1393c39fe8d1118315490f
+----
+- src/dnsproxy.c | 7 ++++++-
+- 1 file changed, 6 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/dnsproxy.c b/src/dnsproxy.c
+-index f28a5d7551a4..7ee26d9ff886 100644
+---- a/src/dnsproxy.c
+-+++ b/src/dnsproxy.c
+-@@ -1685,8 +1685,13 @@ static int ns_resolv(struct server_data *server, struct request_data *req,
+- 				gpointer request, gpointer name)
+- {
+- 	int sk = -1;
+-+	int err;
+- 	const char *lookup = (const char *)name;
+--	int err = ns_try_resolv_from_cache(req, request, lookup);
+-+
+-+	if (!lookup || strlen(lookup) == 0)
+-+		return -EINVAL;
+-+
+-+	err = ns_try_resolv_from_cache(req, request, lookup);
+- 
+- 	if (err > 0)
+- 		/* cache hit */
+--- 
+-2.43.0
+-
+diff --git a/package/connman/0002-dnsproxy-Address-CVE-2025-32366-vulnerability.patch b/package/connman/0002-dnsproxy-Address-CVE-2025-32366-vulnerability.patch
+deleted file mode 100644
+index 9651b2dfe4..0000000000
+--- a/package/connman/0002-dnsproxy-Address-CVE-2025-32366-vulnerability.patch
 +++ /dev/null
 @@ -1,41 +0,0 @@
--From f809b80c67717c152a5ad30bf06774f00da4fd2d Mon Sep 17 00:00:00 2001
--From: Sebastian Rasmussen <sebras@gmail.com>
--Date: Thu, 16 Jan 2025 02:13:43 +0100
--Subject: [PATCH] opj_jp2_read_header: Check for error after parsing header.
+-From 8d3be0285f1d4667bfe85dba555c663eb3d704b4 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?=EC=8B=A0=EC=9C=A4=EC=A0=9C=28=ED=95=99=EB=B6=80=EC=83=9D-?=
+- =?UTF-8?q?=EC=86=8C=ED=94=84=ED=8A=B8=EC=9B=A8=EC=96=B4=EC=A0=84=EA=B3=B5?=
+- =?UTF-8?q?=29?= <ioerts@kookmin.ac.kr>
+-Date: Mon, 12 May 2025 10:48:18 +0200
+-Subject: [PATCH] dnsproxy: Address CVE-2025-32366 vulnerability
 -
--Consider the case where the caller has not set the p_image
--pointer to NULL before calling opj_read_header().
+-In Connman parse_rr in dnsproxy.c has a memcpy length
+-that depends on an RR RDLENGTH value (i.e., *rdlen=ntohs(rr->rdlen)
+-and memcpy(response+offset,*end,*rdlen)). Here, rdlen may be larger
+-than the amount of remaining packet data in the current state of
+-parsing. As a result, values of stack memory locations may be sent
+-over the network in a response.
 -
--If opj_j2k_read_header_procedure() fails while obtaining the rest
--of the marker segment when calling opj_stream_read_data() because
--the data stream is too short, then opj_j2k_read_header() will
--never have the chance to initialize p_image, leaving it
--uninitialized.
+-This patch adds a check to ensure that (*end + *rdlen) does not exceed
+-the valid range. If the condition is violated, the function returns
+--EINVAL.
 -
--opj_jp2_read_header() will check the p_image value whether
--opj_j2k_read_header() suceeded or failed. This may be detected as
--an error in valgrind or ASAN.
--
--The fix is to check whether opj_j2k_read_header() suceeded before
--using the output argument p_image.
--
--Upstream: https://github.com/uclouvain/openjpeg/commit/f809b80c67717c152a5ad30bf06774f00da4fd2d
--CVE: CVE-2025-54874
--Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+-Upstream: https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=8d3be0285f1d4667bfe85dba555c663eb3d704b4
 ----
-- src/lib/openjp2/jp2.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
+- src/dnsproxy.c | 3 +++
+- 1 file changed, 3 insertions(+)
 -
--diff --git a/src/lib/openjp2/jp2.c b/src/lib/openjp2/jp2.c
--index 4df055a54..da5063186 100644
----- a/src/lib/openjp2/jp2.c
--+++ b/src/lib/openjp2/jp2.c
--@@ -2873,7 +2873,7 @@ OPJ_BOOL opj_jp2_read_header(opj_stream_private_t *p_stream,
--                               p_image,
--                               p_manager);
+-diff --git a/src/dnsproxy.c b/src/dnsproxy.c
+-index 7ee26d9ff886..1dd2f7f5d47e 100644
+---- a/src/dnsproxy.c
+-+++ b/src/dnsproxy.c
+-@@ -998,6 +998,9 @@ static int parse_rr(const unsigned char *buf, const unsigned char *start,
+- 	if ((offset + *rdlen) > *response_size)
+- 		return -ENOBUFS;
 - 
---    if (p_image && *p_image) {
--+    if (ret && p_image && *p_image) {
--         /* Set Image Color Space */
--         if (jp2->enumcs == 16) {
--             (*p_image)->color_space = OPJ_CLRSPC_SRGB;
-diff --git a/package/openjpeg/openjpeg.hash b/package/openjpeg/openjpeg.hash
-index 1992d5ca6a..3fda2a243b 100644
---- a/package/openjpeg/openjpeg.hash
-+++ b/package/openjpeg/openjpeg.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  368fe0468228e767433c9ebdea82ad9d801a3ad1e4234421f352c8b06e7aa707  openjpeg-2.5.3.tar.gz
-+sha256  a695fbe19c0165f295a8531b1e4e855cd94d0875d2f88ec4b61080677e27188a  openjpeg-2.5.4.tar.gz
- sha256  a6af136f3e15038a666b61f376612a07d9a4e48cb7c01adbf3e33b3f14ab49b6  LICENSE
-diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
-index 7b1352c222..bc5d8143a6 100644
---- a/package/openjpeg/openjpeg.mk
-+++ b/package/openjpeg/openjpeg.mk
-@@ -4,16 +4,13 @@
+-+	if ((*end + *rdlen) > max)
+-+		return -EINVAL;
+-+
+- 	memcpy(response + offset, *end, *rdlen);
+- 
+- 	*end += *rdlen;
+--- 
+-2.43.0
+-
+diff --git a/package/connman/connman.hash b/package/connman/connman.hash
+index 38af1847ae..807f7144b1 100644
+--- a/package/connman/connman.hash
++++ b/package/connman/connman.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
+-sha256  2be2b00321632b775f9eff713acd04ef21e31fbf388f6ebf45512ff4289574ff  connman-1.44.tar.xz
++sha256  77128cce80865455c4f106b5901a575e2dfdb35a7d2e2e2996f16e85cba10913  connman-1.45.tar.xz
+ # Locally computed
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index c9637eadf5..695a81f1e5 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENJPEG_VERSION = 2.5.3
-+OPENJPEG_VERSION = 2.5.4
- OPENJPEG_SITE = $(call github,uclouvain,openjpeg,v$(OPENJPEG_VERSION))
- OPENJPEG_LICENSE = BSD-2-Clause
- OPENJPEG_LICENSE_FILES = LICENSE
- OPENJPEG_CPE_ID_VENDOR = uclouvain
- OPENJPEG_INSTALL_STAGING = YES
+-CONNMAN_VERSION = 1.44
++CONNMAN_VERSION = 1.45
+ CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
+ CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
+ CONNMAN_DEPENDENCIES = libglib2 dbus
+@@ -13,12 +13,6 @@ CONNMAN_LICENSE = GPL-2.0
+ CONNMAN_LICENSE_FILES = COPYING
+ CONNMAN_CPE_ID_VENDOR = intel
  
--# 0001-check-for-error-after-parsing-header.patch
--OPENJPEG_IGNORE_CVES += CVE-2025-54874
+-# 0001-dnsproxy-Fix-NULL-empty-lookup-causing-potential-cra.patch
+-CONNMAN_IGNORE_CVES += CVE-2025-32743
 -
- OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
- OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
- OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_TIFF),tiff)
+-# 0002-dnsproxy-Address-CVE-2025-32366-vulnerability.patch
+-CONNMAN_IGNORE_CVES += CVE-2025-32366
+-
+ CONNMAN_CONF_OPTS = --with-dbusconfdir=/etc
+ 
+ ifeq ($(BR2_INIT_SYSTEMD),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
