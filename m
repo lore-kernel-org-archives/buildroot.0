@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F74CCAC5B8
-	for <buildroot@archiver.kernel.org>; Tue, 30 Sep 2025 19:57:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40EE6CCA472
+	for <buildroot@archiver.kernel.org>; Tue, 30 Sep 2025 20:04:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D492D40B56;
-	Tue, 30 Sep 2025 19:57:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0DF7060E2D;
+	Tue, 30 Sep 2025 20:04:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sANF1VSlHFby; Tue, 30 Sep 2025 19:57:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EsIrLalxval3; Tue, 30 Sep 2025 20:04:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0540E40D3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25AFA6106C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0540E40D3B;
-	Tue, 30 Sep 2025 19:57:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6BF232A6
- for <buildroot@buildroot.org>; Tue, 30 Sep 2025 19:57:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 25AFA6106C;
+	Tue, 30 Sep 2025 20:04:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id ABC082A6
+ for <buildroot@buildroot.org>; Tue, 30 Sep 2025 20:04:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5278240234
- for <buildroot@buildroot.org>; Tue, 30 Sep 2025 19:57:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8F43140CD2
+ for <buildroot@buildroot.org>; Tue, 30 Sep 2025 20:04:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NAyCb6cKLxR9 for <buildroot@buildroot.org>;
- Tue, 30 Sep 2025 19:57:51 +0000 (UTC)
+ id w5PCWZg3oWYR for <buildroot@buildroot.org>;
+ Tue, 30 Sep 2025 20:04:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE23E40C6A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A63DA40234
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EE23E40C6A
- for <buildroot@buildroot.org>; Tue, 30 Sep 2025 19:57:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A63DA40234
+ for <buildroot@buildroot.org>; Tue, 30 Sep 2025 20:04:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E89B886629; Tue, 30 Sep 2025 19:57:50 +0000 (UTC)
+ id 9567E86634; Tue, 30 Sep 2025 20:04:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Sep 2025 21:54:14 +0200
+Date: Tue, 30 Sep 2025 22:03:33 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: aa8d5d89f75753aba6e9fd9fa6802371cb3c4758
-X-Git-Newrev: 78a8491d81f10c4ed19c12f3b29b64af1db1b843
+X-Git-Oldrev: 78a8491d81f10c4ed19c12f3b29b64af1db1b843
+X-Git-Newrev: ed8318f6eca8ce2ea54e192857d5282c093ebd3a
 X-Patchwork-Hint: ignore
-Message-Id: <20250930195750.E89B886629@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uefisettings: bump to version
- 149bc92970949d44be641ae1e3e942220d7390e7
+Message-Id: <20250930200451.9567E86634@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/crucible: bump to version
+ 2025.05.28
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,42 +66,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78a8491d81f10c4ed19c12f3b29b64af1db1b843
+commit: https://git.buildroot.net/buildroot/commit/?id=ed8318f6eca8ce2ea54e192857d5282c093ebd3a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For change list, see:
-https://github.com/linuxboot/uefisettings/compare/f90aed759b9c2217bea336e37ab5282616ece390...149bc92970949d44be641ae1e3e942220d7390e7
+Bump to version 2025.05.28. See release note:
+https://github.com/usbarmory/crucible/releases/tag/v2025.05.28
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[Julien: add link to change list]
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+[Julien: add link to release note]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/uefisettings/uefisettings.hash | 2 +-
- package/uefisettings/uefisettings.mk   | 2 +-
+ package/crucible/crucible.hash | 2 +-
+ package/crucible/crucible.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/uefisettings/uefisettings.hash b/package/uefisettings/uefisettings.hash
-index eb1a4f5edc..b9b5222d4b 100644
---- a/package/uefisettings/uefisettings.hash
-+++ b/package/uefisettings/uefisettings.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  846eb9b3efe09f6584a2c08f70a291b3733066f832008b935f010336cbe5e0b9  uefisettings-f90aed759b9c2217bea336e37ab5282616ece390-cargo4.tar.gz
-+sha256  3c199e92e9dde29d5a1be33994cef27eb9450f1dbc006eb5e09856e2be7f172b  uefisettings-149bc92970949d44be641ae1e3e942220d7390e7-cargo4.tar.gz
- sha256  acc0b83e151985bb943d35ac37e7522fef28d707af9a4829678e92baa409aaf1  LICENSE
-diff --git a/package/uefisettings/uefisettings.mk b/package/uefisettings/uefisettings.mk
-index 0559b1c504..2a11baa74d 100644
---- a/package/uefisettings/uefisettings.mk
-+++ b/package/uefisettings/uefisettings.mk
+diff --git a/package/crucible/crucible.hash b/package/crucible/crucible.hash
+index 959dc89286..0ec297c49d 100644
+--- a/package/crucible/crucible.hash
++++ b/package/crucible/crucible.hash
+@@ -1,2 +1,2 @@
+-sha256  466b7b0be8b5085d669d63cca2a80f04c6dcbdd887a51333532ecb804a6b74ca  crucible-2023.11.02-go2.tar.gz
++sha256  6912697626baf47b21ceb620eb2885bf0fea8a1657a9d0046d11c148289109e2  crucible-2025.05.28-go2.tar.gz
+ sha256  a89c50d83be30fe7ec75be69a07f6c1b5dfaae0a6b94a678d2394fff34acb69c  LICENSE
+diff --git a/package/crucible/crucible.mk b/package/crucible/crucible.mk
+index 5eedbca8ee..9b34cc52d9 100644
+--- a/package/crucible/crucible.mk
++++ b/package/crucible/crucible.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UEFISETTINGS_VERSION = f90aed759b9c2217bea336e37ab5282616ece390
-+UEFISETTINGS_VERSION = 149bc92970949d44be641ae1e3e942220d7390e7
- UEFISETTINGS_SITE = $(call github,linuxboot,uefisettings,$(UEFISETTINGS_VERSION))
- UEFISETTINGS_LICENSE = BSD-3-Clause
- UEFISETTINGS_LICENSE_FILES = LICENSE
+-CRUCIBLE_VERSION = 2023.11.02
++CRUCIBLE_VERSION = 2025.05.28
+ CRUCIBLE_SITE = $(call github,usbarmory,crucible,v$(CRUCIBLE_VERSION))
+ CRUCIBLE_LICENSE = BSD-3-Clause
+ CRUCIBLE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
