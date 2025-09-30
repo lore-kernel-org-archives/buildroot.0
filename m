@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 549EECCA471
-	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 20:01:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B68FCAC5BB
+	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 20:01:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B82361472;
-	Wed,  1 Oct 2025 20:01:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5E97484062;
+	Wed,  1 Oct 2025 20:01:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OIFhPdJgOBCf; Wed,  1 Oct 2025 20:01:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 70czXtpPqeSr; Wed,  1 Oct 2025 20:01:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CD6061475
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5031D8406B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1CD6061475;
-	Wed,  1 Oct 2025 20:01:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id EDB9272
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:01:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5031D8406B;
+	Wed,  1 Oct 2025 20:01:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DC82CC0
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:01:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CCC9B6146D
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:01:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D370411F5
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:01:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jkb2O8-jC5-O for <buildroot@buildroot.org>;
- Wed,  1 Oct 2025 20:01:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RuwSoyDdJXlb for <buildroot@buildroot.org>;
+ Wed,  1 Oct 2025 20:01:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0682E61470
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D602411DF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0682E61470
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:01:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D602411DF
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:01:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 03E2D866FF; Wed,  1 Oct 2025 20:01:30 +0000 (UTC)
+ id EDA298668C; Wed,  1 Oct 2025 20:01:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Sep 2025 11:06:36 +0200
+Date: Tue, 30 Sep 2025 10:19:27 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 43b34d7c6c241e249c0cd40df912c5fa5660d729
-X-Git-Newrev: ea30bd38f19144affbd8d808a22f9e1495dd7ef2
+X-Git-Oldrev: 9fecfa04406624fbf46f5a5d8d1d1921276ab6b7
+X-Git-Newrev: c44ab86026012c12207d2aef0fc8149d03654a09
 X-Patchwork-Hint: ignore
-Message-Id: <20251001200130.03E2D866FF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] configs/at91sam9260eknf:
- remove defconfig, broken
+Message-Id: <20251001200128.EDA298668C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/rtl_433: do not
+ leak Buildroot git info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,69 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea30bd38f19144affbd8d808a22f9e1495dd7ef2
+commit: https://git.buildroot.net/buildroot/commit/?id=c44ab86026012c12207d2aef0fc8149d03654a09
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-This defconfig no longer builds:
+The CMake build system has logic to detect the git repo info and include it
+in the version output.  This unfortunately gets confused and adds the git
+info of the Buildroot repository when building inside the repo:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/11161167596
+-- Found Git version: refs/heads/rtl_433-25.02 commit a367362af00ed349915b0b4496ebeb9910fc86e4                                 from 2025-09-21T20:07:58+0200
+-- Using Git version tag: 2025.08-283-ga367362af0 on rtl_433-25.02 at 202509212007
 
-It is still based on the 4.8.6 kernel, which is not even an LTS
-kernel, so we cannot easily update to fix the issues which are most
-likely due to the newer gcc/binutils versions we're using now.
+rtl_433 -V
+rtl_433 version 2025.08-283-ga367362af0 branch rtl_433-25.02 at 202509212007 inputs file rtl_tcp RTL-SDR
 
-There is no DEVELOPERS entry attached to this configuration as well,
-and this defconfig has been broken for at least 2 months, probably
-more (our Gitlab CI history is only kept for ~2 months). So let's drop
-it, unles someone volunteers to resurrect it.
+Pass GIT_DIR=.  to the configure step similar to how it is already done for
+the build step to disable this.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 0590ef1a81ba24e8584fcd4a9d0dfcda9568a91d)
+(cherry picked from commit 817611686a12535aaa15b3e930be0dab95b9b60c)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- .checkpackageignore               |  1 -
- configs/at91sam9260eknf_defconfig | 20 --------------------
- 2 files changed, 21 deletions(-)
+ package/rtl_433/rtl_433.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 9422706794..30fb6a114a 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -90,7 +90,6 @@ configs/aspeed_ast2500evb_defconfig lib_defconfig.ForceCheckHash
- configs/aspeed_ast2600evb_defconfig lib_defconfig.ForceCheckHash
- configs/asus_tinker-s_rk3288_defconfig lib_defconfig.ForceCheckHash
- configs/asus_tinker_rk3288_defconfig lib_defconfig.ForceCheckHash
--configs/at91sam9260eknf_defconfig lib_defconfig.ForceCheckHash
- configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig lib_defconfig.ForceCheckHash
- configs/atmel_sama5d2_xplained_mmc_defconfig lib_defconfig.ForceCheckHash
- configs/atmel_sama5d2_xplained_mmc_dev_defconfig lib_defconfig.ForceCheckHash
-diff --git a/configs/at91sam9260eknf_defconfig b/configs/at91sam9260eknf_defconfig
-deleted file mode 100644
-index d505d5b212..0000000000
---- a/configs/at91sam9260eknf_defconfig
-+++ /dev/null
-@@ -1,20 +0,0 @@
--BR2_arm=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.6"
--BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91sam9260ek"
--BR2_TARGET_ROOTFS_UBI=y
--BR2_TARGET_AT91BOOTSTRAP3=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
--BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9260eknf_uboot"
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="at91sam9260ek_nandflash"
--BR2_PACKAGE_HOST_SAM_BA=y
+diff --git a/package/rtl_433/rtl_433.mk b/package/rtl_433/rtl_433.mk
+index 0af25c7936..60f90a94c7 100644
+--- a/package/rtl_433/rtl_433.mk
++++ b/package/rtl_433/rtl_433.mk
+@@ -18,6 +18,9 @@ RTL_433_CONF_OPTS = \
+ 	-DBUILD_TESTING_ANALYZER=OFF \
+ 	-DENABLE_SOAPYSDR=OFF
+ 
++# do not include Buildroot git info in version output
++RTL_433_CONF_ENV = GIT_DIR=.
++
+ ifeq ($(BR2_PACKAGE_LIBRTLSDR),y)
+ RTL_433_DEPENDENCIES += librtlsdr
+ RTL_433_CONF_OPTS += -DENABLE_RTLSDR=ON
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
