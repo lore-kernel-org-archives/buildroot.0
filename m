@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B68FCAC5BB
-	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 20:01:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD1EDCCA471
+	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 20:01:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5E97484062;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E1CF40F38;
+	Wed,  1 Oct 2025 20:01:46 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lIAQREn_ZZ8g; Wed,  1 Oct 2025 20:01:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B5D941044
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B5D941044;
 	Wed,  1 Oct 2025 20:01:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 16F3972
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:01:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9BFC48404A
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:01:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 70czXtpPqeSr; Wed,  1 Oct 2025 20:01:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5031D8406B
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5031D8406B;
-	Wed,  1 Oct 2025 20:01:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DC82CC0
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:01:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0D370411F5
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:01:31 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RuwSoyDdJXlb for <buildroot@buildroot.org>;
+ id ISeiyEZypo5X for <buildroot@buildroot.org>;
  Wed,  1 Oct 2025 20:01:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D602411DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD94A8404C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0D602411DF
+ by smtp1.osuosl.org (Postfix) with ESMTP id AD94A8404C
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:01:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EDA298668C; Wed,  1 Oct 2025 20:01:28 +0000 (UTC)
+ id ABBA3866FC; Wed,  1 Oct 2025 20:01:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Sep 2025 10:19:27 +0200
+Date: Tue, 30 Sep 2025 11:04:54 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 9fecfa04406624fbf46f5a5d8d1d1921276ab6b7
-X-Git-Newrev: c44ab86026012c12207d2aef0fc8149d03654a09
+X-Git-Oldrev: 6e2b0dd9235456ea32fb9987017154b51374428a
+X-Git-Newrev: f924ba6ad1f8973e4cf746fe90bd5b040f2cb251
 X-Patchwork-Hint: ignore
-Message-Id: <20251001200128.EDA298668C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/rtl_433: do not
- leak Buildroot git info
+Message-Id: <20251001200129.ABBA3866FC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] boot/xilinx-embeddedsw:
+ only allow apps for device family
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,44 +66,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c44ab86026012c12207d2aef0fc8149d03654a09
+commit: https://git.buildroot.net/buildroot/commit/?id=f924ba6ad1f8973e4cf746fe90bd5b040f2cb251
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-The CMake build system has logic to detect the git repo info and include it
-in the version output.  This unfortunately gets confused and adds the git
-info of the Buildroot repository when building inside the repo:
+Add an architecture cpu dependency to each application to make sure that users
+can only build applications which are applicable to their target device
+family.
 
--- Found Git version: refs/heads/rtl_433-25.02 commit a367362af00ed349915b0b4496ebeb9910fc86e4                                 from 2025-09-21T20:07:58+0200
--- Using Git version tag: 2025.08-283-ga367362af0 on rtl_433-25.02 at 202509212007
+The versal_plm and versal_psmfw applications are specific to versal devices
+which are based on BR2_cortex_a72.
 
-rtl_433 -V
-rtl_433 version 2025.08-283-ga367362af0 branch rtl_433-25.02 at 202509212007 inputs file rtl_tcp RTL-SDR
+The zynqmp_pmufw application is specific to zynqmp devices which are based on
+BR2_cortex_a53.
 
-Pass GIT_DIR=.  to the configure step similar to how it is already done for
-the build step to disable this.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 817611686a12535aaa15b3e930be0dab95b9b60c)
+(cherry picked from commit 9e25bcfdab69745b9bd52569b1fa5987f66bbd8a)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/rtl_433/rtl_433.mk | 3 +++
+ boot/xilinx-embeddedsw/Config.in | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/package/rtl_433/rtl_433.mk b/package/rtl_433/rtl_433.mk
-index 0af25c7936..60f90a94c7 100644
---- a/package/rtl_433/rtl_433.mk
-+++ b/package/rtl_433/rtl_433.mk
-@@ -18,6 +18,9 @@ RTL_433_CONF_OPTS = \
- 	-DBUILD_TESTING_ANALYZER=OFF \
- 	-DENABLE_SOAPYSDR=OFF
+diff --git a/boot/xilinx-embeddedsw/Config.in b/boot/xilinx-embeddedsw/Config.in
+index 007b24e668..261a24dde9 100644
+--- a/boot/xilinx-embeddedsw/Config.in
++++ b/boot/xilinx-embeddedsw/Config.in
+@@ -28,6 +28,7 @@ config BR2_TARGET_XILINX_EMBEDDEDSW_VERSION
  
-+# do not include Buildroot git info in version output
-+RTL_433_CONF_ENV = GIT_DIR=.
-+
- ifeq ($(BR2_PACKAGE_LIBRTLSDR),y)
- RTL_433_DEPENDENCIES += librtlsdr
- RTL_433_CONF_OPTS += -DENABLE_RTLSDR=ON
+ config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM
+ 	bool "versal plm"
++	depends on BR2_cortex_a72
+ 	help
+ 	  Build versal plm application from Xilinx/embeddedsw repo.
+ 	  If selected, the xilinx-prebuilt package will not install
+@@ -38,6 +39,7 @@ config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM
+ 
+ config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW
+ 	bool "versal psmfw"
++	depends on BR2_cortex_a72
+ 	help
+ 	  Build versal psmfw application from Xilinx/embeddedsw repo.
+ 	  If selected, the xilinx-prebuilt package will not install
+@@ -48,6 +50,7 @@ config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW
+ 
+ config BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW
+ 	bool "zynqmp pmufw"
++	depends on BR2_cortex_a53
+ 	help
+ 	  Build zynqmp pmufw application from Xilinx/embeddedsw repo.
+ 	  If selected, the xilinx-prebuilt package will not install
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
