@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31D2DCCA471
-	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 21:00:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B82CCAC5BB
+	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 21:00:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA096615E3;
-	Wed,  1 Oct 2025 21:00:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 315F8615C2;
+	Wed,  1 Oct 2025 21:00:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 40vUGa0SSpt3; Wed,  1 Oct 2025 21:00:48 +0000 (UTC)
+ id Zmv0YMfQkk8P; Wed,  1 Oct 2025 21:00:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73D1E615C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E75E4615D8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 73D1E615C7;
-	Wed,  1 Oct 2025 21:00:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 11AEDD9F
+	by smtp3.osuosl.org (Postfix) with ESMTP id E75E4615D8;
+	Wed,  1 Oct 2025 21:00:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2764172
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AFFB84146F
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 549C241248
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8BIzQ3LpcN9A for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xuXiExIV1REo for <buildroot@buildroot.org>;
  Wed,  1 Oct 2025 21:00:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62B8141460
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5094E41244
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 62B8141460
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5094E41244
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6097E817A9; Wed,  1 Oct 2025 21:00:11 +0000 (UTC)
+ id 4E9158285C; Wed,  1 Oct 2025 21:00:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Sep 2025 11:32:08 +0200
+Date: Tue, 30 Sep 2025 11:31:52 +0200
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: d747b7aae11475d16424013c58ac7d2ba5d934d4
-X-Git-Newrev: 11f0a5f5e2369decaaf7f4ffafb4c97e6e71e700
+X-Git-Oldrev: 4f73d980267a45fcdd0903371fc65bbb1f048eb6
+X-Git-Newrev: 713f7c47f8b893d3779543cba44d702dcd6b23ba
 X-Patchwork-Hint: ignore
-Message-Id: <20251001210011.6097E817A9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/tiff: ignore
- CVE-2025-8851
+Message-Id: <20251001210011.4E9158285C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] boot/uboot: use
+ BR2_TARGET_XILINX_FIRMWARE_ARCH_SUPPORTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,41 +66,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11f0a5f5e2369decaaf7f4ffafb4c97e6e71e700
+commit: https://git.buildroot.net/buildroot/commit/?id=713f7c47f8b893d3779543cba44d702dcd6b23ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-The CVE-2025-8851 [1] has been fixed in upstream commit [2] that is part
-of the v4.7.0 release.
+Migrate the BR2_TARGET_UBOOT_ZYNQMP dependency to the new
+BR2_TARGET_XILINX_FIRMWARE_ARCH_SUPPORTS symbol. Also, add a cpu dependency
+on BR2_cortex_a53 since the zynqmp platform is based on the ARM Cortex-A53
+and the BR2_TARGET_UBOOT_ZYNQMP should not be available for other CPUs with
+aarch64 architecture.
 
-Because the NVD reference includes the version '<2024-08-11' most of CVE
-checker will fail to compare it against 4.7.0 and report it as a
-positive.
-
-[1] https://nvd.nist.gov//vuln/detail/CVE-2025-8851
-[2] https://gitlab.com/libtiff/libtiff/-/commit/8a7a48d7a645992ca83062b3a1873c951661e2b3
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 740412aefc57770cd5be71012c19eec8bc576637)
+(cherry picked from commit 5986c51219f9bc8a05d5903477a5a0292a869b94)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/tiff/tiff.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ boot/uboot/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index 3d426fad4d..dd23c2bd43 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -19,6 +19,9 @@ TIFF_IGNORE_CVES += CVE-2025-8176
- # 0004-fix-for-thumbnail-issue.patch
- TIFF_IGNORE_CVES += CVE-2025-8177
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 52e6050c81..0b27874e24 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -575,7 +575,8 @@ config BR2_TARGET_UBOOT_INITIAL_ENV
  
-+# Fixed in 4.7.0
-+TIFF_IGNORE_CVES += CVE-2025-8851
-+
- # webp has a (optional) dependency on tiff, so we can't have webp
- # support in tiff, or that would create a circular dependency.
- TIFF_CONF_OPTS = \
+ config BR2_TARGET_UBOOT_ZYNQMP
+ 	bool "Boot on the Xilinx ZynqMP SoCs"
+-	depends on BR2_aarch64
++	depends on BR2_TARGET_XILINX_FIRMWARE_ARCH_SUPPORTS
++	depends on BR2_cortex_a53
+ 	help
+ 	  Enable options specific to the Xilinx ZynqMP family of SoCs.
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
