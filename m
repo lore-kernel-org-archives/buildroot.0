@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D50DCCA471
-	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 21:00:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D9D4CCA470
+	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 21:00:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 44D7A614CA;
-	Wed,  1 Oct 2025 21:00:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DA56A41486;
+	Wed,  1 Oct 2025 21:00:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wuAaov7wskUd; Wed,  1 Oct 2025 21:00:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ks4izTW5YSUN; Wed,  1 Oct 2025 21:00:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D3F461513
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7A2D4148A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5D3F461513;
-	Wed,  1 Oct 2025 21:00:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 60EF572
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D7A2D4148A;
+	Wed,  1 Oct 2025 21:00:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1302172
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 746734124C
+ by smtp4.osuosl.org (Postfix) with ESMTP id C06E441487
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RT3cdbWvy6j8 for <buildroot@buildroot.org>;
- Wed,  1 Oct 2025 21:00:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pJtPyikghHKh for <buildroot@buildroot.org>;
+ Wed,  1 Oct 2025 21:00:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A816041242
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF82741465
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A816041242
+ by smtp4.osuosl.org (Postfix) with ESMTP id EF82741465
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A225B84E19; Wed,  1 Oct 2025 21:00:10 +0000 (UTC)
+ id ED66E8129B; Wed,  1 Oct 2025 21:00:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Sep 2025 11:28:42 +0200
+Date: Tue, 30 Sep 2025 11:30:12 +0200
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: 6afb50fe423f9b47e9c4598e5549fcc5128801de
-X-Git-Newrev: 7524d3c228d7c0f3316449398122248f6dbf2b26
+X-Git-Oldrev: 13cafab9d1676d11270ea351d94b393f986a79ed
+X-Git-Newrev: d2c6b391e79782349c50d61ab3e2dbe968ed3f00
 X-Patchwork-Hint: ignore
-Message-Id: <20251001210010.A225B84E19@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] DEVELOPERS: add Dario
- Binacchi for connman
+Message-Id: <20251001210010.ED66E8129B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/sysprof:
+ unconditionally select elfutils
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,29 +66,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7524d3c228d7c0f3316449398122248f6dbf2b26
+commit: https://git.buildroot.net/buildroot/commit/?id=d2c6b391e79782349c50d61ab3e2dbe968ed3f00
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+The elfutils package provides libdw, which is required by sysprof.
+It is not an optional dependency.
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 5f63c441f8f23d09b14df79b2a28f27f905d7427)
+(cherry picked from commit 194a6e039154488c88316dafa91bc72dd300cbdc)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ package/sysprof/Config.in  | 7 ++++---
+ package/sysprof/sysprof.mk | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 549a4d85ce..5af0df1cf6 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -802,6 +802,7 @@ F:	package/armadillo/
- F:	package/atf/
- F:	package/babeld/
- F:	package/cmocka/
-+F:	package/connman/
- F:	package/iana-assignments/
- F:	package/inih/
- F:	package/pocketpy/
+diff --git a/package/sysprof/Config.in b/package/sysprof/Config.in
+index a4f53a1179..e89a0e539e 100644
+--- a/package/sysprof/Config.in
++++ b/package/sysprof/Config.in
+@@ -1,14 +1,15 @@
+ config BR2_PACKAGE_SYSPROF
+ 	bool "sysprof"
+-	depends on BR2_USE_WCHAR # glib2, libdex, json-glib
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2, libdex, json-glib, polkit
++	depends on BR2_USE_WCHAR # glib2, libdex, json-glib, elfutils
++	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2, libdex, json-glib, polkit, elfutils
+ 	depends on BR2_USE_MMU # glib2, libdex, json-glib
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # libunwind, polkit
+ 	depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
+-	depends on !BR2_STATIC_LIBS # libdex, libunwind, polkit
++	depends on !BR2_STATIC_LIBS # libdex, libunwind, polkit, elfutils
+ 	depends on !BR2_OPTIMIZE_FAST # polkit
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
++	select BR2_PACKAGE_ELFUTILS
+ 	select BR2_PACKAGE_JSON_GLIB
+ 	select BR2_PACKAGE_LIBDEX
+ 	select BR2_PACKAGE_LIBGLIB2
+diff --git a/package/sysprof/sysprof.mk b/package/sysprof/sysprof.mk
+index 2670588ebb..f64f6d7120 100644
+--- a/package/sysprof/sysprof.mk
++++ b/package/sysprof/sysprof.mk
+@@ -10,7 +10,7 @@ SYSPROF_SOURCE = sysprof-$(SYSPROF_VERSION).tar.xz
+ SYSPROF_SITE = https://download.gnome.org/sources/sysprof/$(SYSPROF_VERSION_MAJOR)
+ SYSPROF_LICENSE = GPL-3.0+
+ SYSPROF_LICENSE_FILES = COPYING
+-SYSPROF_DEPENDENCIES = libglib2 libdex libunwind json-glib polkit
++SYSPROF_DEPENDENCIES = elfutils libglib2 libdex libunwind json-glib polkit
+ SYSPROF_CONF_OPTS = \
+ 	-Ddebuginfod=disabled \
+ 	-Ddevelopment=false \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
