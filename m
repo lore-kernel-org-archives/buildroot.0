@@ -1,75 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32581CAC5B8
-	for <buildroot@archiver.kernel.org>; Tue, 30 Sep 2025 20:26:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C063CAC5B8
+	for <buildroot@archiver.kernel.org>; Tue, 30 Sep 2025 20:31:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EABF4610A4;
-	Tue, 30 Sep 2025 20:26:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F2DDE82532;
+	Tue, 30 Sep 2025 20:31:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b4Swz9YYgzj2; Tue, 30 Sep 2025 20:26:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N0dVixZtvsVJ; Tue, 30 Sep 2025 20:31:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D687D61097
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F287182512
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D687D61097;
-	Tue, 30 Sep 2025 20:26:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F287182512;
+	Tue, 30 Sep 2025 20:31:53 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6071E111
- for <buildroot@buildroot.org>; Tue, 30 Sep 2025 20:26:21 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 37654111
+ for <buildroot@buildroot.org>; Tue, 30 Sep 2025 20:31:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5185C61097
- for <buildroot@buildroot.org>; Tue, 30 Sep 2025 20:26:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2966D610A2
+ for <buildroot@buildroot.org>; Tue, 30 Sep 2025 20:31:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xOz3LCgqcOwY for <buildroot@buildroot.org>;
- Tue, 30 Sep 2025 20:26:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8427061094
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8427061094
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8427061094
- for <buildroot@buildroot.org>; Tue, 30 Sep 2025 20:26:19 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 5EE042003C3;
- Tue, 30 Sep 2025 22:26:15 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 30 Sep 2025 22:26:15 +0200
+ id 9fhyxnQm0umu for <buildroot@buildroot.org>;
+ Tue, 30 Sep 2025 20:31:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B7EEA6109F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B7EEA6109F
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B7EEA6109F
+ for <buildroot@buildroot.org>; Tue, 30 Sep 2025 20:31:49 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c14e.dip0.t-ipconnect.de [79.214.193.78])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 1365BA4C5939;
+ Tue, 30 Sep 2025 22:31:46 +0200 (CEST)
+Received: from [192.168.1.144] (port=59878 helo=bruckner.lan.fli4l)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1v3h0j-000000000W9-2AmN;
+ Tue, 30 Sep 2025 20:31:45 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 30 Sep 2025 22:31:45 +0200
+Message-ID: <20250930203145.1197559-3-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20250930203145.1197559-1-bernd@kuhls.net>
+References: <20250930203145.1197559-1-bernd@kuhls.net>
 MIME-Version: 1.0
-Date: Tue, 30 Sep 2025 22:26:15 +0200
-To: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>
-In-Reply-To: <20250930100250.31565-1-nicolas.cavallari@green-communications.fr>
-References: <20250930100250.31565-1-nicolas.cavallari@green-communications.fr>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <9a3c162d45e67da78206cb529f264453@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1759263977;
- bh=eC8loW8/J6SP2Eb4KembHRZBSnDfY0Xd3QiX5D0sXCo=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=BezZRlt9VlQYzTzvKPv5qKjGUCPPK63GRH6XNAu8kyiVvHOWbbflYLK3wxYVYEALS
- dwPQ+XrfDWzmvo0Y1D2bXaMkHj9KZxaxHhznIJrV5LgTpb1WJFp597ZeHaBiSanDUv
- SaQVGQM/8Axvp9UvzOZdGK9hHKCVJjPjfsvp1CcDLc60VcKYkGaZiXr8YwDXhQy/XM
- +DWs4vZRrPTUFu+7vD5B9lVXjIuSpAzJ7I2oxS1g32dQnziDEivfFLvFBNxa4OBBnr
- yyxY963KOvA3agEZoyZnjS0BQ5zsZjRMAdPK9kJwEH66URCFvjtjZh8If4mHAxJnDJ
- pHjXIJuBoSk4w==
+X-Spamd-Bar: ++++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202506031021; t=1759264306;
+ bh=8n6NnC1SDkjbck80CQouNzUwmLoCw+x7jTaxtNIbSbo=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=lTFPXO9CVXQMII8APGh8dbrlddX6DhL/vZKfhn1yPwau++RNkVbtOjtzfu9i0tWBp
+ /lOPuvoQCzEqXECRABDpqYz/py08vg02AYUV3HCkVM98YdN/8xJx0cCBppIhYXmvKF
+ dNO7kNAeQ/SFw4YNMD6BonoeMHxyo3LYrGnLga+j+N5Hp3i0JaFsqiPm+4xdaqCceu
+ TITMYsllg1j8j9mLeI1hY/y+YpD/wuIHxUN1BeinIqFtIBc2YDjXZeZjpzfkankxLH
+ u0fLtZV4+XZcVquGvr6MIJvgYnzQQmPhVL2SQo4gQn8sAvJ5kM950IXV2DJoTupDTB
+ MgGglt8hmOs/w==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=BezZRlt9
-Subject: Re: [Buildroot] [PATCH 1/2] package/linux-firmware: fix license
- file for ath10k firmware
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=lTFPXO9C
+Subject: [Buildroot] [PATCH 3/3] linux: bump latest version to 6.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,29 +85,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 30/09/2025 12:02, Nicolas Cavallari wrote:
-> The WHENCE file indicates ath10k's license file is
-> LICENSE.QualcommAtheros_ath10k license and not 
-> LICENCE.atheros_firmware.
-> 
-> Signed-off-by: Nicolas Cavallari 
-> <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ linux/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Series applied to master, thanks.
-For info, I made few minor changes, see:
-https://gitlab.com/buildroot.org/buildroot/-/commit/752fc349a05910a08b08467e2f28fd80f1c239a1
-https://gitlab.com/buildroot.org/buildroot/-/commit/5e28e8d34d2ab2b6ba2c37ebcdce4428af8d9015
+diff --git a/linux/Config.in b/linux/Config.in
+index 4526676432..5c2264e5fe 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -28,8 +28,8 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (6.16)"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_16 if BR2_KERNEL_HEADERS_AS_KERNEL
++	bool "Latest version (6.17)"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_17 if BR2_KERNEL_HEADERS_AS_KERNEL
+ 	# mips always generates an ITB image
+ 	select BR2_PACKAGE_HOST_UBOOT_TOOLS if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 	select BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+@@ -141,7 +141,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.16.9" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.17" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+-- 
+2.47.3
 
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
