@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD4D5CAC5BB
-	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 20:53:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BD63CCA470
+	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 20:53:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A955E61547;
-	Wed,  1 Oct 2025 20:53:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 327EB4149F;
+	Wed,  1 Oct 2025 20:53:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xd1qVoXrIxmp; Wed,  1 Oct 2025 20:53:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id f7j2DvZkGoEm; Wed,  1 Oct 2025 20:53:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CCF4615C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4204141477
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8CCF4615C5;
-	Wed,  1 Oct 2025 20:53:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4204141477;
+	Wed,  1 Oct 2025 20:53:17 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 03FD072
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:52:54 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 3F67972
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:52:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B0DD14145B
+ by smtp4.osuosl.org (Postfix) with ESMTP id EB9BB4110E
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:52:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JDKhDfoDihKf for <buildroot@buildroot.org>;
- Wed,  1 Oct 2025 20:52:35 +0000 (UTC)
+ id KIblV12i6E-p for <buildroot@buildroot.org>;
+ Wed,  1 Oct 2025 20:52:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60F6E41465
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0556441453
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 60F6E41465
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0556441453
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:52:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5EE8A86702; Wed,  1 Oct 2025 20:52:33 +0000 (UTC)
+ id 0369F86701; Wed,  1 Oct 2025 20:52:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Sep 2025 11:18:35 +0200
+Date: Tue, 30 Sep 2025 11:12:09 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 1d54623df4724362e3402e67a8b24449326db694
-X-Git-Newrev: ba2321d0456c2e90b1deef1c3606e07b47edc860
+X-Git-Oldrev: 1c383b45c8b683e9657d99ed0bc90d33926aba26
+X-Git-Newrev: 101e96d072f0626d5dc9d083063d825790c5fcf0
 X-Patchwork-Hint: ignore
-Message-Id: <20251001205233.5EE8A86702@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] board/xilinx: migrate
- board web links to amd.com
+Message-Id: <20251001205233.0369F86701@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] boot/xilinx-embeddedsw:
+ only allow apps for device family
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,104 +66,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba2321d0456c2e90b1deef1c3606e07b47edc860
+commit: https://git.buildroot.net/buildroot/commit/?id=101e96d072f0626d5dc9d083063d825790c5fcf0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-As the xilinx.com website will soon be going away, migrate all xilinx board
-web links from xilinx.com to amd.com.
+Add an architecture cpu dependency to each application to make sure that users
+can only build applications which are applicable to their target device
+family.
+
+The versal_plm and versal_psmfw applications are specific to versal devices
+which are based on BR2_cortex_a72.
+
+The zynqmp_pmufw application is specific to zynqmp devices which are based on
+BR2_cortex_a53.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 74dcda25449b4d40a5f48820f0e53bf97315972d)
+(cherry picked from commit 9e25bcfdab69745b9bd52569b1fa5987f66bbd8a)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- board/versal/readme.txt      | 6 +++---
- board/zynq/readme.txt        | 4 ++--
- board/zynqmp/kria/readme.txt | 6 +++---
- board/zynqmp/readme.txt      | 6 +++---
- 4 files changed, 11 insertions(+), 11 deletions(-)
+ boot/xilinx-embeddedsw/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/board/versal/readme.txt b/board/versal/readme.txt
-index 4d8406fb1f..e1edbace11 100644
---- a/board/versal/readme.txt
-+++ b/board/versal/readme.txt
-@@ -11,13 +11,13 @@ Xilinx VPK180 board
- Evaluation board features can be found here with the links below.
+diff --git a/boot/xilinx-embeddedsw/Config.in b/boot/xilinx-embeddedsw/Config.in
+index a27253d594..04c7218284 100644
+--- a/boot/xilinx-embeddedsw/Config.in
++++ b/boot/xilinx-embeddedsw/Config.in
+@@ -28,6 +28,7 @@ config BR2_TARGET_XILINX_EMBEDDEDSW_VERSION
  
- VCK190:
--https://www.xilinx.com/products/boards-and-kits/vck190.html
-+https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/vck190.html
+ config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM
+ 	bool "versal plm"
++	depends on BR2_cortex_a72
+ 	help
+ 	  Build versal plm application from Xilinx/embeddedsw repo.
+ 	  If selected, the xilinx-prebuilt package will not install
+@@ -38,6 +39,7 @@ config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM
  
- VEK280:
--https://www.xilinx.com/products/boards-and-kits/vek280.html
-+https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/vek280.html
+ config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW
+ 	bool "versal psmfw"
++	depends on BR2_cortex_a72
+ 	help
+ 	  Build versal psmfw application from Xilinx/embeddedsw repo.
+ 	  If selected, the xilinx-prebuilt package will not install
+@@ -48,6 +50,7 @@ config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW
  
- VPK180:
--https://www.xilinx.com/products/boards-and-kits/vpk180.html
-+https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/vpk180.html
- 
- 
- How to build it
-diff --git a/board/zynq/readme.txt b/board/zynq/readme.txt
-index b2a4cefedd..54e01c9d8c 100644
---- a/board/zynq/readme.txt
-+++ b/board/zynq/readme.txt
-@@ -36,11 +36,11 @@ myboot=...
- References:
-  - ZC702 information including schematics, reference designs, and manuals are
-    available from
--   https://www.xilinx.com/products/boards-and-kits/ek-z7-zc702-g.html
-+   https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/ek-z7-zc702-g.html
- 
-  - ZC706 information including schematics, reference designs, and manuals are
-    available from
--   http://www.xilinx.com/products/boards-and-kits/ek-z7-zc706-g.html.
-+   https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/ek-z7-zc706-g.html
- 
-  - Zedboard/Microzed information including schematics, reference designs, and
-    manuals are available from http://www.zedboard.org .
-diff --git a/board/zynqmp/kria/readme.txt b/board/zynqmp/kria/readme.txt
-index 6fd7ca61ca..8d008332bf 100644
---- a/board/zynqmp/kria/readme.txt
-+++ b/board/zynqmp/kria/readme.txt
-@@ -10,13 +10,13 @@ the KD240, KR260 and KV260 production boards.
- Evaluation board features can be found here with the links below.
- 
- KD240:
--https://www.xilinx.com/products/som/kria/kd240-drives-starter-kit.html
-+https://www.amd.com/en/products/system-on-modules/kria/k24/kd240-drives-starter-kit.html
- 
- KR260:
--https://www.xilinx.com/products/som/kria/kr260-robotics-starter-kit.html
-+https://www.amd.com/en/products/system-on-modules/kria/k26/kr260-robotics-starter-kit.html
- 
- KV260:
--https://www.xilinx.com/products/som/kria/kv260-vision-starter-kit.html
-+https://www.amd.com/en/products/system-on-modules/kria/k26/kv260-vision-starter-kit.html
- 
- How to build it
- ===============
-diff --git a/board/zynqmp/readme.txt b/board/zynqmp/readme.txt
-index 3f1b3a80c2..0360ec5f77 100644
---- a/board/zynqmp/readme.txt
-+++ b/board/zynqmp/readme.txt
-@@ -10,13 +10,13 @@ boards.
- Evaluation board features can be found here with the links below.
- 
- ZCU102:
--https://www.xilinx.com/products/boards-and-kits/zcu102.html
-+https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/ek-u1-zcu102-g.html
- 
- ZCU104:
--https://www.xilinx.com/products/boards-and-kits/zcu104.html
-+https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/zcu104.html
- 
- ZCU106:
--https://www.xilinx.com/products/boards-and-kits/zcu106.html
-+https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/zcu106.html
- 
- 
- How to build it
+ config BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW
+ 	bool "zynqmp pmufw"
++	depends on BR2_cortex_a53
+ 	help
+ 	  Build zynqmp pmufw application from Xilinx/embeddedsw repo.
+ 	  If selected, the xilinx-prebuilt package will not install
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
