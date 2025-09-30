@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 796B9CCA471
-	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 20:53:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD4D5CAC5BB
+	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 20:53:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 51B5F61522;
-	Wed,  1 Oct 2025 20:53:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A955E61547;
+	Wed,  1 Oct 2025 20:53:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pA0joEekT4w0; Wed,  1 Oct 2025 20:53:14 +0000 (UTC)
+ id Xd1qVoXrIxmp; Wed,  1 Oct 2025 20:53:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42AB9615C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CCF4615C5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 42AB9615C5;
-	Wed,  1 Oct 2025 20:53:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8CCF4615C5;
+	Wed,  1 Oct 2025 20:53:15 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 15E05CC0
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:52:53 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 03FD072
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:52:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A52974144F
+ by smtp4.osuosl.org (Postfix) with ESMTP id B0DD14145B
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:52:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c6lkNoOgNK74 for <buildroot@buildroot.org>;
- Wed,  1 Oct 2025 20:52:34 +0000 (UTC)
+ id JDKhDfoDihKf for <buildroot@buildroot.org>;
+ Wed,  1 Oct 2025 20:52:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F9A64145B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60F6E41465
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1F9A64145B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 60F6E41465
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:52:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 15DD886702; Wed,  1 Oct 2025 20:52:33 +0000 (UTC)
+ id 5EE8A86702; Wed,  1 Oct 2025 20:52:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Sep 2025 11:12:24 +0200
+Date: Tue, 30 Sep 2025 11:18:35 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 069f48d1c6eaf6a0a2da42e385d85b52f0572c7c
-X-Git-Newrev: 3067d64f9e2b2ee51c3500dc37ffcb410ce1d2e7
+X-Git-Oldrev: 1d54623df4724362e3402e67a8b24449326db694
+X-Git-Newrev: ba2321d0456c2e90b1deef1c3606e07b47edc860
 X-Patchwork-Hint: ignore
-Message-Id: <20251001205233.15DD886702@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] boot/xilinx-prebuilt: add
- support for plmfw.elf filename
+Message-Id: <20251001205233.5EE8A86702@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] board/xilinx: migrate
+ board web links to amd.com
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,48 +66,104 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3067d64f9e2b2ee51c3500dc37ffcb410ce1d2e7
+commit: https://git.buildroot.net/buildroot/commit/?id=ba2321d0456c2e90b1deef1c3606e07b47edc860
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-AMD / Xilinx has made the decision to change the name of plm.elf to plmfw.elf
-in the prebuilt binaries repo starting with the next update.
-
-This patch updates the xilinx-prebuilt package to support either the old
-plm.elf filename or the new plmfw.elf filename.
+As the xilinx.com website will soon be going away, migrate all xilinx board
+web links from xilinx.com to amd.com.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 6f435187c6a9c5d847003e40c584c82a5db61dfd)
+(cherry picked from commit 74dcda25449b4d40a5f48820f0e53bf97315972d)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- boot/xilinx-prebuilt/xilinx-prebuilt.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ board/versal/readme.txt      | 6 +++---
+ board/zynq/readme.txt        | 4 ++--
+ board/zynqmp/kria/readme.txt | 6 +++---
+ board/zynqmp/readme.txt      | 6 +++---
+ 4 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/boot/xilinx-prebuilt/xilinx-prebuilt.mk b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-index d0817d3cc7..0be4f0aabe 100644
---- a/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-+++ b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-@@ -32,7 +32,8 @@ ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL),y)
- # different boards, but there is only one, and it has to be named
- # vpl_gen_fixed.pdi when installed.
- ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA),y)
--XILINX_PREBUILT_PLM = $(@D)/pdi_files/gen_files/plm.elf
-+# Supports either plm.elf or plmfw.elf filenames
-+XILINX_PREBUILT_PLM = $(@D)/pdi_files/gen_files/plm*.elf
- # Unlike the psmfw.elf file for Xilinx development boards,
- # AMD Vivado Design Suite currently generates a file named psm_fw.elf.
- # Future versions of AMD Vivado will generate a file named psmfw.elf,
-@@ -41,7 +42,8 @@ XILINX_PREBUILT_PLM = $(@D)/pdi_files/gen_files/plm.elf
- XILINX_PREBUILT_PSMFW = $(@D)/pdi_files/static_files/psm*fw.elf
- XILINX_PREBUILT_PDI = $(@D)/*.pdi
- else # BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA
--XILINX_PREBUILT_PLM = $(XILINX_PREBUILT_BOARD_DIR)/plm.elf
-+# Supports either plm.elf or plmfw.elf filenames
-+XILINX_PREBUILT_PLM = $(XILINX_PREBUILT_BOARD_DIR)/plm*.elf
- XILINX_PREBUILT_PSMFW = $(XILINX_PREBUILT_BOARD_DIR)/psmfw.elf
- XILINX_PREBUILT_PDI = $(XILINX_PREBUILT_BOARD_DIR)/*.pdi
- endif # BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA
+diff --git a/board/versal/readme.txt b/board/versal/readme.txt
+index 4d8406fb1f..e1edbace11 100644
+--- a/board/versal/readme.txt
++++ b/board/versal/readme.txt
+@@ -11,13 +11,13 @@ Xilinx VPK180 board
+ Evaluation board features can be found here with the links below.
+ 
+ VCK190:
+-https://www.xilinx.com/products/boards-and-kits/vck190.html
++https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/vck190.html
+ 
+ VEK280:
+-https://www.xilinx.com/products/boards-and-kits/vek280.html
++https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/vek280.html
+ 
+ VPK180:
+-https://www.xilinx.com/products/boards-and-kits/vpk180.html
++https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/vpk180.html
+ 
+ 
+ How to build it
+diff --git a/board/zynq/readme.txt b/board/zynq/readme.txt
+index b2a4cefedd..54e01c9d8c 100644
+--- a/board/zynq/readme.txt
++++ b/board/zynq/readme.txt
+@@ -36,11 +36,11 @@ myboot=...
+ References:
+  - ZC702 information including schematics, reference designs, and manuals are
+    available from
+-   https://www.xilinx.com/products/boards-and-kits/ek-z7-zc702-g.html
++   https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/ek-z7-zc702-g.html
+ 
+  - ZC706 information including schematics, reference designs, and manuals are
+    available from
+-   http://www.xilinx.com/products/boards-and-kits/ek-z7-zc706-g.html.
++   https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/ek-z7-zc706-g.html
+ 
+  - Zedboard/Microzed information including schematics, reference designs, and
+    manuals are available from http://www.zedboard.org .
+diff --git a/board/zynqmp/kria/readme.txt b/board/zynqmp/kria/readme.txt
+index 6fd7ca61ca..8d008332bf 100644
+--- a/board/zynqmp/kria/readme.txt
++++ b/board/zynqmp/kria/readme.txt
+@@ -10,13 +10,13 @@ the KD240, KR260 and KV260 production boards.
+ Evaluation board features can be found here with the links below.
+ 
+ KD240:
+-https://www.xilinx.com/products/som/kria/kd240-drives-starter-kit.html
++https://www.amd.com/en/products/system-on-modules/kria/k24/kd240-drives-starter-kit.html
+ 
+ KR260:
+-https://www.xilinx.com/products/som/kria/kr260-robotics-starter-kit.html
++https://www.amd.com/en/products/system-on-modules/kria/k26/kr260-robotics-starter-kit.html
+ 
+ KV260:
+-https://www.xilinx.com/products/som/kria/kv260-vision-starter-kit.html
++https://www.amd.com/en/products/system-on-modules/kria/k26/kv260-vision-starter-kit.html
+ 
+ How to build it
+ ===============
+diff --git a/board/zynqmp/readme.txt b/board/zynqmp/readme.txt
+index 3f1b3a80c2..0360ec5f77 100644
+--- a/board/zynqmp/readme.txt
++++ b/board/zynqmp/readme.txt
+@@ -10,13 +10,13 @@ boards.
+ Evaluation board features can be found here with the links below.
+ 
+ ZCU102:
+-https://www.xilinx.com/products/boards-and-kits/zcu102.html
++https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/ek-u1-zcu102-g.html
+ 
+ ZCU104:
+-https://www.xilinx.com/products/boards-and-kits/zcu104.html
++https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/zcu104.html
+ 
+ ZCU106:
+-https://www.xilinx.com/products/boards-and-kits/zcu106.html
++https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/zcu106.html
+ 
+ 
+ How to build it
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
