@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88C5ECCA470
-	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 21:00:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0494CCCD183
+	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 21:00:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E336D614DC;
-	Wed,  1 Oct 2025 21:00:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C9116614C7;
+	Wed,  1 Oct 2025 21:00:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4ITpLFSEFXkH; Wed,  1 Oct 2025 21:00:19 +0000 (UTC)
+ id LeuUw7SrFqQa; Wed,  1 Oct 2025 21:00:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E9A4614DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DAF89614CA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5E9A4614DE;
-	Wed,  1 Oct 2025 21:00:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DAF89614CA;
+	Wed,  1 Oct 2025 21:00:21 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5BFA872
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:12 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 11B53D9F
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ABF14614D4
+ by smtp3.osuosl.org (Postfix) with ESMTP id C0BE5614C3
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LyB_x2dndjC2 for <buildroot@buildroot.org>;
- Wed,  1 Oct 2025 21:00:10 +0000 (UTC)
+ id 2eCUGItGWm5y for <buildroot@buildroot.org>;
+ Wed,  1 Oct 2025 21:00:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A76A6614C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04D62614C8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A76A6614C3
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 04D62614C8
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 952808131F; Wed,  1 Oct 2025 21:00:10 +0000 (UTC)
+ id 024C88131F; Wed,  1 Oct 2025 21:00:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Sep 2025 11:28:36 +0200
+Date: Tue, 30 Sep 2025 11:30:24 +0200
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: bed14dbc3ee9ae0e441cdf2735b0d0ba2dca819e
-X-Git-Newrev: 6afb50fe423f9b47e9c4598e5549fcc5128801de
+X-Git-Oldrev: d2c6b391e79782349c50d61ab3e2dbe968ed3f00
+X-Git-Newrev: dcd616e49702745c66fc4213a63676537200b1b4
 X-Patchwork-Hint: ignore
-Message-Id: <20251001210010.952808131F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/connman: security
- bump to version 1.45
+Message-Id: <20251001210011.024C88131F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] DEVELOPERS: add Dario
+ Binacchi for bc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,172 +66,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6afb50fe423f9b47e9c4598e5549fcc5128801de
+commit: https://git.buildroot.net/buildroot/commit/?id=dcd616e49702745c66fc4213a63676537200b1b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-This bump includes the security fixes for CVE-2025-32366 and
-CVE-2025-32743.
-
-Release notes:
-- Fix issue with setting MFP optional for PSK.
-- Fix issue with comparison in timezone checking.
-- Fix issue with dnsproxy and empty lookup.
-
-See also:
-https://git.kernel.org/pub/scm/network/connman/connman.git/tree/ChangeLog?h=1.45
-https://git.kernel.org/pub/scm/network/connman/connman.git/log/?h=1.45
-
-Fixes:
-https://www.cve.org/CVERecord?id=CVE-2025-32366
-https://www.cve.org/CVERecord?id=CVE-2025-32743
-
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-[Julien: add links to change logs]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit f0b011e0aa497217385d9dc5af887757667281fe)
+(cherry picked from commit d2bd4655259299fded94727e94a4fa4389113202)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- ...x-NULL-empty-lookup-causing-potential-cra.patch | 46 ----------------------
- ...roxy-Address-CVE-2025-32366-vulnerability.patch | 41 -------------------
- package/connman/connman.hash                       |  2 +-
- package/connman/connman.mk                         |  8 +---
- 4 files changed, 2 insertions(+), 95 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/connman/0001-dnsproxy-Fix-NULL-empty-lookup-causing-potential-cra.patch b/package/connman/0001-dnsproxy-Fix-NULL-empty-lookup-causing-potential-cra.patch
-deleted file mode 100644
-index 9c1274e43c..0000000000
---- a/package/connman/0001-dnsproxy-Fix-NULL-empty-lookup-causing-potential-cra.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From d90b911f6760959bdf1393c39fe8d1118315490f Mon Sep 17 00:00:00 2001
--From: Praveen Kumar <praveen.kumar@windriver.com>
--Date: Thu, 24 Apr 2025 11:39:29 +0000
--Subject: [PATCH] dnsproxy: Fix NULL/empty lookup causing potential crash
--
--In ConnMan through 1.44, the lookup string in ns_resolv in dnsproxy.c
--can be NULL or an empty string when the TC (Truncated) bit is set in
--a DNS response. This allows attackers to cause a denial of service
--(application crash) or possibly execute arbitrary code, because those
--lookup values lead to incorrect length calculations and incorrect
--memcpy operations.
--
--This patch includes a check to make sure loookup value is valid before
--using it. This helps avoid unexpected value when the input is empty or
--incorrect.
--
--Fixes: CVE-2025-32743
--
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
--Upstream: https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=d90b911f6760959bdf1393c39fe8d1118315490f
-----
-- src/dnsproxy.c | 7 ++++++-
-- 1 file changed, 6 insertions(+), 1 deletion(-)
--
--diff --git a/src/dnsproxy.c b/src/dnsproxy.c
--index f28a5d7551a4..7ee26d9ff886 100644
----- a/src/dnsproxy.c
--+++ b/src/dnsproxy.c
--@@ -1685,8 +1685,13 @@ static int ns_resolv(struct server_data *server, struct request_data *req,
-- 				gpointer request, gpointer name)
-- {
-- 	int sk = -1;
--+	int err;
-- 	const char *lookup = (const char *)name;
---	int err = ns_try_resolv_from_cache(req, request, lookup);
--+
--+	if (!lookup || strlen(lookup) == 0)
--+		return -EINVAL;
--+
--+	err = ns_try_resolv_from_cache(req, request, lookup);
-- 
-- 	if (err > 0)
-- 		/* cache hit */
---- 
--2.43.0
--
-diff --git a/package/connman/0002-dnsproxy-Address-CVE-2025-32366-vulnerability.patch b/package/connman/0002-dnsproxy-Address-CVE-2025-32366-vulnerability.patch
-deleted file mode 100644
-index 9651b2dfe4..0000000000
---- a/package/connman/0002-dnsproxy-Address-CVE-2025-32366-vulnerability.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From 8d3be0285f1d4667bfe85dba555c663eb3d704b4 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?=EC=8B=A0=EC=9C=A4=EC=A0=9C=28=ED=95=99=EB=B6=80=EC=83=9D-?=
-- =?UTF-8?q?=EC=86=8C=ED=94=84=ED=8A=B8=EC=9B=A8=EC=96=B4=EC=A0=84=EA=B3=B5?=
-- =?UTF-8?q?=29?= <ioerts@kookmin.ac.kr>
--Date: Mon, 12 May 2025 10:48:18 +0200
--Subject: [PATCH] dnsproxy: Address CVE-2025-32366 vulnerability
--
--In Connman parse_rr in dnsproxy.c has a memcpy length
--that depends on an RR RDLENGTH value (i.e., *rdlen=ntohs(rr->rdlen)
--and memcpy(response+offset,*end,*rdlen)). Here, rdlen may be larger
--than the amount of remaining packet data in the current state of
--parsing. As a result, values of stack memory locations may be sent
--over the network in a response.
--
--This patch adds a check to ensure that (*end + *rdlen) does not exceed
--the valid range. If the condition is violated, the function returns
---EINVAL.
--
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
--Upstream: https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=8d3be0285f1d4667bfe85dba555c663eb3d704b4
-----
-- src/dnsproxy.c | 3 +++
-- 1 file changed, 3 insertions(+)
--
--diff --git a/src/dnsproxy.c b/src/dnsproxy.c
--index 7ee26d9ff886..1dd2f7f5d47e 100644
----- a/src/dnsproxy.c
--+++ b/src/dnsproxy.c
--@@ -998,6 +998,9 @@ static int parse_rr(const unsigned char *buf, const unsigned char *start,
-- 	if ((offset + *rdlen) > *response_size)
-- 		return -ENOBUFS;
-- 
--+	if ((*end + *rdlen) > max)
--+		return -EINVAL;
--+
-- 	memcpy(response + offset, *end, *rdlen);
-- 
-- 	*end += *rdlen;
---- 
--2.43.0
--
-diff --git a/package/connman/connman.hash b/package/connman/connman.hash
-index 38af1847ae..807f7144b1 100644
---- a/package/connman/connman.hash
-+++ b/package/connman/connman.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
--sha256  2be2b00321632b775f9eff713acd04ef21e31fbf388f6ebf45512ff4289574ff  connman-1.44.tar.xz
-+sha256  77128cce80865455c4f106b5901a575e2dfdb35a7d2e2e2996f16e85cba10913  connman-1.45.tar.xz
- # Locally computed
- sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index c9637eadf5..695a81f1e5 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CONNMAN_VERSION = 1.44
-+CONNMAN_VERSION = 1.45
- CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
- CONNMAN_DEPENDENCIES = libglib2 dbus
-@@ -13,12 +13,6 @@ CONNMAN_LICENSE = GPL-2.0
- CONNMAN_LICENSE_FILES = COPYING
- CONNMAN_CPE_ID_VENDOR = intel
- 
--# 0001-dnsproxy-Fix-NULL-empty-lookup-causing-potential-cra.patch
--CONNMAN_IGNORE_CVES += CVE-2025-32743
--
--# 0002-dnsproxy-Address-CVE-2025-32366-vulnerability.patch
--CONNMAN_IGNORE_CVES += CVE-2025-32366
--
- CONNMAN_CONF_OPTS = --with-dbusconfdir=/etc
- 
- ifeq ($(BR2_INIT_SYSTEMD),y)
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 5af0df1cf6..75470ca319 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -801,6 +801,7 @@ F:	package/aespipe/
+ F:	package/armadillo/
+ F:	package/atf/
+ F:	package/babeld/
++F:	package/bc/
+ F:	package/cmocka/
+ F:	package/connman/
+ F:	package/iana-assignments/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
