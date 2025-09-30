@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D4B1CCA470
-	for <buildroot@archiver.kernel.org>; Tue, 30 Sep 2025 19:45:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A545CAC5B8
+	for <buildroot@archiver.kernel.org>; Tue, 30 Sep 2025 19:50:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1D7E440E96;
-	Tue, 30 Sep 2025 19:45:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 004CF6108F;
+	Tue, 30 Sep 2025 19:50:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WVfq3u0lW0Ap; Tue, 30 Sep 2025 19:45:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id C0lTXiGItGuc; Tue, 30 Sep 2025 19:50:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3528E40E93
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07D8C6107E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3528E40E93;
-	Tue, 30 Sep 2025 19:45:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 39D74111
- for <buildroot@buildroot.org>; Tue, 30 Sep 2025 19:45:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 07D8C6107E;
+	Tue, 30 Sep 2025 19:50:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id F2938111
+ for <buildroot@buildroot.org>; Tue, 30 Sep 2025 19:50:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 37392823A7
- for <buildroot@buildroot.org>; Tue, 30 Sep 2025 19:45:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D63D540C6A
+ for <buildroot@buildroot.org>; Tue, 30 Sep 2025 19:50:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cty8XfAdfk3s for <buildroot@buildroot.org>;
- Tue, 30 Sep 2025 19:45:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7427280ECC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7427280ECC
- for <buildroot@buildroot.org>; Tue, 30 Sep 2025 19:45:23 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 63D848660F; Tue, 30 Sep 2025 19:45:23 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 30 Sep 2025 21:38:22 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 97ecafec8989c99f83a35d4b5bd0fadb91a6a394
-X-Git-Newrev: 03d413ee883f2415e2674bcc7219b3fd7586aff6
-X-Patchwork-Hint: ignore
-Message-Id: <20250930194523.63D848660F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/evtest: bump version to 1.36
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ai0ZULN43M5A for <buildroot@buildroot.org>;
+ Tue, 30 Sep 2025 19:50:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 22F1740CB0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22F1740CB0
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 22F1740CB0
+ for <buildroot@buildroot.org>; Tue, 30 Sep 2025 19:50:06 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 3884C19F57E;
+ Tue, 30 Sep 2025 21:50:03 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 30 Sep 2025 21:50:03 +0200
+MIME-Version: 1.0
+Date: Tue, 30 Sep 2025 21:50:03 +0200
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: buildroot@buildroot.org, Gao Xiang <hsiangkao@aol.com>
+In-Reply-To: <20250930173459.3792043-1-dario.binacchi@amarulasolutions.com>
+References: <20250930173459.3792043-1-dario.binacchi@amarulasolutions.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <70f56e4130d34603b209bc2cae6dbea4@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1759261805;
+ bh=zzKymNB51mi3ca6OmmxWpaxw5fiqs8ijY0hSvNfWVXA=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=K4twyXDX8DLNGY66lVYtqvmAvXDOHFI9GcZMcnncC/whhfpvuHI4Ry6iq372cm1Hx
+ gP90S+wVERQBCHMQWyKBkmqaREuE/q5L+rt48Js0a0NyDF3aOPx1dlZAdrzClXLvkD
+ 9UnX+YAtLOirnlSxb3myvjBEMSAS7grB8hY/WymhgqArcQVAqy5b29TIbNMzglCoMT
+ Przrm14HfDlGaIycZphHotg0zUB3pmbrkabHPswZOhBEPYi5KEdkZLapjeCZsNEqm3
+ VY+t9sku83kZ81CHNJhfmbRhLZUtMtyVhUuoY9m9/55VGcjUIBJEZXOQgfpiui/OYC
+ UAUiHR43HnUfg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=K4twyXDX
+Subject: Re: [Buildroot] [PATCH 1/1] package/erofs-utils: bump to version
+ 1.8.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,50 +83,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03d413ee883f2415e2674bcc7219b3fd7586aff6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 30/09/2025 19:34, Dario Binacchi wrote:
+> For a change log since 1.8.5, see:
+> https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/tree/ChangeLog?h=v1.8.10
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-For release note, see:
-https://gitlab.freedesktop.org/libevdev/evtest/-/releases/evtest-1.36
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-[Julien: add link to release note]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/evtest/evtest.hash | 2 +-
- package/evtest/evtest.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/evtest/evtest.hash b/package/evtest/evtest.hash
-index 0ed51df4e4..f5aa5ca525 100644
---- a/package/evtest/evtest.hash
-+++ b/package/evtest/evtest.hash
-@@ -1,5 +1,5 @@
- # locally computed
--sha256  06dfe6b9760b78f3f73aca2120cbcb79339b33e59d5c79a49b4bd5d34844b054  evtest-evtest-1.35.tar.gz
-+sha256  3b9a66c92e48b0cd13b689530b5729c031bc1bcbfe9d19c258f9245e2f8d2a0f  evtest-evtest-1.36.tar.gz
- 
- # License files
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/evtest/evtest.mk b/package/evtest/evtest.mk
-index 65897a41e6..0249bd88cc 100644
---- a/package/evtest/evtest.mk
-+++ b/package/evtest/evtest.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EVTEST_VERSION = 1.35
-+EVTEST_VERSION = 1.36
- EVTEST_SOURCE = evtest-evtest-$(EVTEST_VERSION).tar.gz
- EVTEST_SITE = https://gitlab.freedesktop.org/libevdev/evtest/-/archive/evtest-$(EVTEST_VERSION)
- EVTEST_LICENSE = GPL-2.0+
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
