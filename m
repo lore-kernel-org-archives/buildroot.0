@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB7B0CCA471
-	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 20:02:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8BEDCAC5BB
+	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 20:02:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6548E614EB;
-	Wed,  1 Oct 2025 20:02:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BEA7E41424;
+	Wed,  1 Oct 2025 20:02:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GFk4bhAYkSdv; Wed,  1 Oct 2025 20:02:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KkIJmCV92JGP; Wed,  1 Oct 2025 20:02:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39C66614A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B711541433
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 39C66614A7;
-	Wed,  1 Oct 2025 20:02:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B711541433;
+	Wed,  1 Oct 2025 20:02:09 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id DEC5872
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:01:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id D87DF72
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:01:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E1296411FC
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:01:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BBC05411DF
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:01:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GR8kc4rukVtS for <buildroot@buildroot.org>;
+ id PEE7xtsgAdEr for <buildroot@buildroot.org>;
  Wed,  1 Oct 2025 20:01:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 123F1411E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0186411FF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 123F1411E8
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:01:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F0186411FF
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:01:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1000C86441; Wed,  1 Oct 2025 20:01:30 +0000 (UTC)
+ id EDFB986441; Wed,  1 Oct 2025 20:01:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Sep 2025 11:06:44 +0200
+Date: Tue, 30 Sep 2025 11:06:25 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: ea30bd38f19144affbd8d808a22f9e1495dd7ef2
-X-Git-Newrev: c47111fa66f306414c57fe60396dcc091ae648a4
+X-Git-Oldrev: bc3e295081c09cc83a8d6028ef8dd5c833db74a1
+X-Git-Newrev: 43b34d7c6c241e249c0cd40df912c5fa5660d729
 X-Patchwork-Hint: ignore
-Message-Id: <20251001200130.1000C86441@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] configs/atmel_sama5d3xek:
- remove defconfig, broken
+Message-Id: <20251001200129.EDFB986441@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/wlroots: add
+ missing dependency to libgbm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,78 +66,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c47111fa66f306414c57fe60396dcc091ae648a4
+commit: https://git.buildroot.net/buildroot/commit/?id=43b34d7c6c241e249c0cd40df912c5fa5660d729
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-This defconfig no longer builds:
+If the render gles2 is enabled then libgbm is required (see [1]).
+Therefore, add the dependency to wlroots.
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/11161167647
+[1]: https://gitlab.freedesktop.org/wlroots/wlroots/-/blob/0.19/render/meson.build?ref_type=heads#L44
 
-It is still based on the 4.9 kernel, which was LTS but is no longer
-maintained.
-
-There is no DEVELOPERS entry attached to this configuration as well,
-and this defconfig has been broken for at least 2 months, probably
-more (our Gitlab CI history is only kept for ~2 months). So let's drop
-it, unles someone volunteers to resurrect it.
-
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
-Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc: Patrice Vilchez <Patrice.Vilchez@microchip.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 8e9e4feae1c17d8f34d12953cb4583a77086e3de)
+(cherry picked from commit 00fb3a57cbaedb8df43f75f0e891423c1ef7d8c6)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- .checkpackageignore                |  1 -
- configs/atmel_sama5d3xek_defconfig | 26 --------------------------
- 2 files changed, 27 deletions(-)
+ package/wlroots/Config.in  | 3 ++-
+ package/wlroots/wlroots.mk | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 30fb6a114a..e4543916e8 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -97,7 +97,6 @@ configs/atmel_sama5d3_xplained_defconfig lib_defconfig.ForceCheckHash
- configs/atmel_sama5d3_xplained_dev_defconfig lib_defconfig.ForceCheckHash
- configs/atmel_sama5d3_xplained_mmc_defconfig lib_defconfig.ForceCheckHash
- configs/atmel_sama5d3_xplained_mmc_dev_defconfig lib_defconfig.ForceCheckHash
--configs/atmel_sama5d3xek_defconfig lib_defconfig.ForceCheckHash
- configs/atmel_sama5d4_xplained_defconfig lib_defconfig.ForceCheckHash
- configs/atmel_sama5d4_xplained_dev_defconfig lib_defconfig.ForceCheckHash
- configs/atmel_sama5d4_xplained_mmc_defconfig lib_defconfig.ForceCheckHash
-diff --git a/configs/atmel_sama5d3xek_defconfig b/configs/atmel_sama5d3xek_defconfig
-deleted file mode 100644
-index 2fcd7e002b..0000000000
---- a/configs/atmel_sama5d3xek_defconfig
-+++ /dev/null
-@@ -1,26 +0,0 @@
--BR2_arm=y
--BR2_cortex_a5=y
--BR2_ARM_ENABLE_VFP=y
--BR2_ARM_INSTRUCTIONS_THUMB2=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_5.8)/linux-linux4sam_5.8.tar.gz"
--BR2_LINUX_KERNEL_DEFCONFIG="sama5"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="sama5d31ek sama5d33ek sama5d34ek sama5d35ek sama5d36ek"
--BR2_TARGET_ROOTFS_UBI=y
--BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
--BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
--BR2_TARGET_AT91BOOTSTRAP3=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.10.3)/at91bootstrap3-v3.10.3.tar.gz"
--BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3xeknf_uboot"
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_5.8)/u-boot-at91-linux4sam_5.8.tar.gz"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3xek_nandflash"
--BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_SPL=y
--BR2_PACKAGE_HOST_SAM_BA=y
+diff --git a/package/wlroots/Config.in b/package/wlroots/Config.in
+index 02bd54c999..6d2992cf2c 100644
+--- a/package/wlroots/Config.in
++++ b/package/wlroots/Config.in
+@@ -1,4 +1,4 @@
+-comment "wlroots needs udev, EGL and OpenGL ES support"
++comment "wlroots needs udev, EGL, OpenGL ES and GBM support"
+ 	depends on !BR2_PACKAGE_HAS_LIBEGL || \
+ 		!BR2_PACKAGE_HAS_LIBEGL || \
+ 		!BR2_PACKAGE_HAS_LIBGLES || \
+@@ -15,6 +15,7 @@ config BR2_PACKAGE_WLROOTS
+ 	depends on BR2_PACKAGE_HAS_UDEV # libinput
+ 	depends on BR2_PACKAGE_HAS_LIBEGL
+ 	depends on BR2_PACKAGE_HAS_LIBGLES
++	depends on BR2_PACKAGE_HAS_LIBGBM
+ 	select BR2_PACKAGE_HWDATA
+ 	select BR2_PACKAGE_HWDATA_PNP_IDS
+ 	select BR2_PACKAGE_LIBDISPLAY_INFO
+diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
+index 81f76fcdc7..e0f1e1053e 100644
+--- a/package/wlroots/wlroots.mk
++++ b/package/wlroots/wlroots.mk
+@@ -19,6 +19,7 @@ WLROOTS_DEPENDENCIES = \
+ 	libxkbcommon \
+ 	libegl \
+ 	libgles \
++	libgbm \
+ 	pixman \
+ 	seatd \
+ 	udev \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
