@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD8B1CCA470
-	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 21:00:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FAA2CAC5BB
+	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 21:00:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8995B41460;
-	Wed,  1 Oct 2025 21:00:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 62557614F4;
+	Wed,  1 Oct 2025 21:00:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4BbU718Xi6xM; Wed,  1 Oct 2025 21:00:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id f73Ifc33Ra8X; Wed,  1 Oct 2025 21:00:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F86541481
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23B5C614CA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F86541481;
-	Wed,  1 Oct 2025 21:00:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 257A572
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 23B5C614CA;
+	Wed,  1 Oct 2025 21:00:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9CCD71CE
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4B54841248
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8F417614D4
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3jLvPp_29TqJ for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ncb7RCl7ERQn for <buildroot@buildroot.org>;
  Wed,  1 Oct 2025 21:00:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 807BA41244
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BDC55614C7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 807BA41244
+ by smtp3.osuosl.org (Postfix) with ESMTP id BDC55614C7
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:00:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7072D8131F; Wed,  1 Oct 2025 21:00:10 +0000 (UTC)
+ id BBE278131F; Wed,  1 Oct 2025 21:00:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Sep 2025 11:28:12 +0200
+Date: Tue, 30 Sep 2025 11:28:57 +0200
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: c10902b9867e85da96e45ebe1d2ba1fb4571a1b9
-X-Git-Newrev: 3af6b2fe9b02c7063cd0a8b465238b4c135dabd9
+X-Git-Oldrev: 808f9b7f9b7ba483c47395756626ea7c7362d1ab
+X-Git-Newrev: 0e9a2ddd0007ac15cd224101b5e5eb54bbaf3a9e
 X-Patchwork-Hint: ignore
-Message-Id: <20251001210010.7072D8131F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] docs/manual/getting: fix
- dead link
+Message-Id: <20251001210010.BBE278131F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/cups: security
+ bump to v2.4.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,51 +61,81 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Titouan Christophe via buildroot <buildroot@buildroot.org>
 Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5132609975027813775=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5132609975027813775==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=3af6b2fe9b02c7063cd0a8b465238b4c135dabd9
+commit: https://git.buildroot.net/buildroot/commit/?id=0e9a2ddd0007ac15cd224101b5e5eb54bbaf3a9e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-When searching for the official git repository in the documentation,
-readers are forwarded to the buildroot website Download page with a link
-pointing to buildroot.org/download, which returns a 404.
+See the release notes:
 
-Fix the dead link by adding the missing .html suffix.
+- https://github.com/OpenPrinting/cups/releases/tag/v2.4.13
+- https://github.com/OpenPrinting/cups/releases/tag/v2.4.14
 
-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+This fixes the following vulnerabilities:
+- CVE-2025-58060:
+    OpenPrinting CUPS is an open source printing system for Linux and
+    other Unix-like operating systems. In versions 2.4.12 and earlier,
+    when the `AuthType` is set to anything but `Basic`, if the request
+    contains an `Authorization: Basic ...` header, the password is not
+    checked. This results in authentication bypass. Any configuration that
+    allows an `AuthType` that is not `Basic` is affected. Version 2.4.13
+    fixes the issue.
+    https://www.cve.org/CVERecord?id=CVE-2025-58060
+
+- CVE-2025-58364:
+    OpenPrinting CUPS is an open source printing system for Linux and
+    other Unix-like operating systems. In versions 2.4.12 and earlier, an
+    unsafe deserialization and validation of printer attributes causes
+    null dereference in the libcups library. This is a remote DoS
+    vulnerability available in local subnet in default configurations. It
+    can cause the cups & cups-browsed to crash, on all the machines in
+    local network who are listening for printers (so by default for all
+    regular linux machines). On systems where the vulnerability
+    CVE-2024-47176 (cups-filters 1.x/cups-browsed 2.x vulnerability) was
+    not fixed, and the firewall on the machine does not reject incoming
+    communication to IPP port, and the machine is set to be available to
+    public internet, attack vector "Network" is possible. The current
+    versions of CUPS and cups-browsed projects have the attack vector
+    "Adjacent" in their default configurations. Version 2.4.13 contains a
+    patch for CVE-2025-58364.
+    https://www.cve.org/CVERecord?id=CVE-2025-58364
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 8845586fc6b33937d996e3300bdbfa558d053af2)
+(cherry picked from commit 89fd61a127796813f50a1e77076fec3251aa4109)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- docs/manual/getting.adoc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/cups/cups.hash | 2 +-
+ package/cups/cups.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/getting.adoc b/docs/manual/getting.adoc
-index 51c97d5793..1437a3ccef 100644
---- a/docs/manual/getting.adoc
-+++ b/docs/manual/getting.adoc
-@@ -32,5 +32,5 @@ vagrant up
+diff --git a/package/cups/cups.hash b/package/cups/cups.hash
+index e363a761eb..a200a82deb 100644
+--- a/package/cups/cups.hash
++++ b/package/cups/cups.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated:
+-sha256  b1dde191a4ae2760c47220c82ca6155a28c382701e6c1a0159d1054990231d59  cups-2.4.12-source.tar.gz
++sha256  660288020dd6f79caf799811c4c1a3207a48689899ac2093959d70a3bdcb7699  cups-2.4.14-source.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+ sha256  977206f041b9a6f47ac00531e1242c0fab7063da71178f8d868b167b70866b6d  NOTICE
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 21fe6a7c5e..e6de671174 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- If you want to follow development, you can use the daily snapshots or
- make a clone of the Git repository. Refer to the
--http://buildroot.org/download[Download page] of the Buildroot website
-+http://buildroot.org/download.html[Download page] of the Buildroot website
- for more details.
-
---===============5132609975027813775==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-CUPS_VERSION = 2.4.12
++CUPS_VERSION = 2.4.14
+ CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
+ CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
+ CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5132609975027813775==--
