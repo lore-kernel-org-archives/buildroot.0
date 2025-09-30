@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87F66CAC5BB
-	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 20:01:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C7A0CCA470
+	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 20:01:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5AE3B61470;
-	Wed,  1 Oct 2025 20:01:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DFA6881514;
+	Wed,  1 Oct 2025 20:01:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qihw_t45QMHi; Wed,  1 Oct 2025 20:01:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oHqMarpwbudI; Wed,  1 Oct 2025 20:01:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BAC56147B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A15BF8406A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6BAC56147B;
-	Wed,  1 Oct 2025 20:01:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id EAED972
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:01:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A15BF8406A;
+	Wed,  1 Oct 2025 20:01:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1017B72
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:01:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 657ED6146F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 906BF411F3
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:01:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ytLS4fyjKVJG for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DlNeHYZGc-7h for <buildroot@buildroot.org>;
  Wed,  1 Oct 2025 20:01:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5599B6146D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5ED66411F5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5599B6146D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5ED66411F5
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:01:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 390D0866FE; Wed,  1 Oct 2025 20:01:29 +0000 (UTC)
+ id 5CC988668C; Wed,  1 Oct 2025 20:01:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Sep 2025 10:20:29 +0200
+Date: Tue, 30 Sep 2025 10:20:54 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 2081d05a9543ee71c7b179001d961873b3d38b28
-X-Git-Newrev: 6649d729bf318aea6e84d22baf6a4bf600d1579d
+X-Git-Oldrev: 1cdb089b498ea8d28a5c4014bda7f8554f15b954
+X-Git-Newrev: 9faeb6e9a255ab6bbfe0fd72f11d84156c05c18b
 X-Patchwork-Hint: ignore
-Message-Id: <20251001200129.390D0866FE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/cups: security
- bump to v2.4.14
+Message-Id: <20251001200129.5CC988668C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] docs/manual: update links
+ to buildroot.org from http to https
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,81 +61,139 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Titouan Christophe via buildroot <buildroot@buildroot.org>
 Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8783358243793954043=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6649d729bf318aea6e84d22baf6a4bf600d1579d
+--===============8783358243793954043==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=9faeb6e9a255ab6bbfe0fd72f11d84156c05c18b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-See the release notes:
+Many links pointing to buildroot.org are still prefixed with HTTP.
+Update those to HTTPS.
 
-- https://github.com/OpenPrinting/cups/releases/tag/v2.4.13
-- https://github.com/OpenPrinting/cups/releases/tag/v2.4.14
-
-This fixes the following vulnerabilities:
-- CVE-2025-58060:
-    OpenPrinting CUPS is an open source printing system for Linux and
-    other Unix-like operating systems. In versions 2.4.12 and earlier,
-    when the `AuthType` is set to anything but `Basic`, if the request
-    contains an `Authorization: Basic ...` header, the password is not
-    checked. This results in authentication bypass. Any configuration that
-    allows an `AuthType` that is not `Basic` is affected. Version 2.4.13
-    fixes the issue.
-    https://www.cve.org/CVERecord?id=CVE-2025-58060
-
-- CVE-2025-58364:
-    OpenPrinting CUPS is an open source printing system for Linux and
-    other Unix-like operating systems. In versions 2.4.12 and earlier, an
-    unsafe deserialization and validation of printer attributes causes
-    null dereference in the libcups library. This is a remote DoS
-    vulnerability available in local subnet in default configurations. It
-    can cause the cups & cups-browsed to crash, on all the machines in
-    local network who are listening for printers (so by default for all
-    regular linux machines). On systems where the vulnerability
-    CVE-2024-47176 (cups-filters 1.x/cups-browsed 2.x vulnerability) was
-    not fixed, and the firewall on the machine does not reject incoming
-    communication to IPP port, and the machine is set to be available to
-    public internet, attack vector "Network" is possible. The current
-    versions of CUPS and cups-browsed projects have the attack vector
-    "Adjacent" in their default configurations. Version 2.4.13 contains a
-    patch for CVE-2025-58364.
-    https://www.cve.org/CVERecord?id=CVE-2025-58364
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 89fd61a127796813f50a1e77076fec3251aa4109)
+(cherry picked from commit 6f29c81703221b448f60ba1611fe2a06324cfc09)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/cups/cups.hash | 2 +-
- package/cups/cups.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ docs/manual/adding-packages-tips.adoc | 2 +-
+ docs/manual/contribute.adoc           | 8 ++++----
+ docs/manual/getting.adoc              | 4 ++--
+ docs/manual/manual.adoc               | 2 +-
+ docs/manual/resources.adoc            | 4 ++--
+ 5 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/package/cups/cups.hash b/package/cups/cups.hash
-index e363a761eb..a200a82deb 100644
---- a/package/cups/cups.hash
-+++ b/package/cups/cups.hash
-@@ -1,4 +1,4 @@
- # Locally calculated:
--sha256  b1dde191a4ae2760c47220c82ca6155a28c382701e6c1a0159d1054990231d59  cups-2.4.12-source.tar.gz
-+sha256  660288020dd6f79caf799811c4c1a3207a48689899ac2093959d70a3bdcb7699  cups-2.4.14-source.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
- sha256  977206f041b9a6f47ac00531e1242c0fab7063da71178f8d868b167b70866b6d  NOTICE
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index 21fe6a7c5e..e6de671174 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/docs/manual/adding-packages-tips.adoc b/docs/manual/adding-packages-tips.adoc
+index c243e7b75b..57ca11ab5d 100644
+--- a/docs/manual/adding-packages-tips.adoc
++++ b/docs/manual/adding-packages-tips.adoc
+@@ -85,7 +85,7 @@ under various conditions: does it build for all architectures? Does it
+ build with the different C libraries? Does it need threads, NPTL? And
+ so on...
  
--CUPS_VERSION = 2.4.12
-+CUPS_VERSION = 2.4.14
- CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
- CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
- CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
+-Buildroot runs http://autobuild.buildroot.org/[autobuilders] which
++Buildroot runs https://autobuild.buildroot.org/[autobuilders] which
+ continuously test random configurations. However, these only build the
+ `master` branch of the git tree, and your new fancy package is not yet
+ there.
+diff --git a/docs/manual/contribute.adoc b/docs/manual/contribute.adoc
+index f77aff9d6c..caecd09764 100644
+--- a/docs/manual/contribute.adoc
++++ b/docs/manual/contribute.adoc
+@@ -40,8 +40,8 @@ with a random selection of packages. With the large commit activity on
+ Buildroot, these autobuilders are a great help in detecting problems
+ very early after commit.
+ 
+-All build results are available at http://autobuild.buildroot.org[],
+-statistics are at http://autobuild.buildroot.org/stats.php[]. Every day,
++All build results are available at https://autobuild.buildroot.org[],
++statistics are at https://autobuild.buildroot.org/stats.php[]. Every day,
+ an overview of all failed packages is sent to the mailing list.
+ 
+ Detecting problems is great, but obviously these problems have to be
+@@ -58,7 +58,7 @@ basically two things that can be done:
+   these steps:
+   . Check if you can reproduce the problem by building with the same
+     configuration. You can do this manually, or use the
+-    http://git.buildroot.org/buildroot-test/tree/utils/br-reproduce-build[br-reproduce-build]
++    https://git.buildroot.org/buildroot-test/tree/utils/br-reproduce-build[br-reproduce-build]
+     script that will automatically clone a Buildroot git repository,
+     checkout the correct revision, download and set the right
+     configuration, and start the build.
+@@ -73,7 +73,7 @@ basically two things that can be done:
+     In the commit message of a patch fixing an autobuild failure, add a
+     reference to the build result directory, as follows:
+ ----
+-Fixes: http://autobuild.buildroot.org/results/51000a9d4656afe9e0ea6f07b9f8ed374c2e4069
++Fixes: https://autobuild.buildroot.org/results/51000a9d4656afe9e0ea6f07b9f8ed374c2e4069
+ ----
+ 
+ === Reviewing and testing patches
+diff --git a/docs/manual/getting.adoc b/docs/manual/getting.adoc
+index 1437a3ccef..b3a451f67d 100644
+--- a/docs/manual/getting.adoc
++++ b/docs/manual/getting.adoc
+@@ -8,7 +8,7 @@ Buildroot releases are made every 3 months, in February, May, August and
+ November. Release numbers are in the format YYYY.MM, so for example
+ 2013.02, 2014.08.
+ 
+-Release tarballs are available at http://buildroot.org/downloads/[].
++Release tarballs are available at https://buildroot.org/downloads/[].
+ 
+ For your convenience, a https://www.vagrantup.com/[Vagrantfile] is
+ available in `support/misc/Vagrantfile` in the Buildroot source tree
+@@ -32,5 +32,5 @@ vagrant up
+ 
+ If you want to follow development, you can use the daily snapshots or
+ make a clone of the Git repository. Refer to the
+-http://buildroot.org/download.html[Download page] of the Buildroot website
++https://buildroot.org/download.html[Download page] of the Buildroot website
+ for more details.
+diff --git a/docs/manual/manual.adoc b/docs/manual/manual.adoc
+index cfcc3e52a9..d4748c5c68 100644
+--- a/docs/manual/manual.adoc
++++ b/docs/manual/manual.adoc
+@@ -9,7 +9,7 @@ Buildroot {sys:echo $BR2_VERSION} manual generated on {localdate}
+ 
+ The Buildroot manual is written by the Buildroot developers.
+ It is licensed under the GNU General Public License, version 2. Refer to the
+-http://git.buildroot.org/buildroot/tree/COPYING?id={sys:git rev-parse HEAD}[COPYING]
++https://git.buildroot.org/buildroot/tree/COPYING?id={sys:git rev-parse HEAD}[COPYING]
+ file in the Buildroot sources for the full text of this license.
+ 
+ Copyright (C) The Buildroot developers <buildroot@buildroot.org>
+diff --git a/docs/manual/resources.adoc b/docs/manual/resources.adoc
+index 4ef709c317..a1b8b366e1 100644
+--- a/docs/manual/resources.adoc
++++ b/docs/manual/resources.adoc
+@@ -17,12 +17,12 @@ main method of interaction for Buildroot users and developers.
+ +
+ Only subscribers to the Buildroot mailing list are allowed to post to
+ this list. You can subscribe via the
+-http://lists.buildroot.org/mailman/listinfo/buildroot[mailing list info
++https://lists.buildroot.org/mailman/listinfo/buildroot[mailing list info
+ page].
+ +
+ Mails that are sent to the mailing list are also available in the
+ mailing list archives, available through
+-http://lists.buildroot.org/pipermail/buildroot[Mailman] or at
++https://lists.buildroot.org/pipermail/buildroot[Mailman] or at
+ https://lore.kernel.org/buildroot/[lore.kernel.org].
+ 
+ IRC::
+
+--===============8783358243793954043==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8783358243793954043==--
