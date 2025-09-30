@@ -1,104 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6991FCAC5B8
-	for <buildroot@archiver.kernel.org>; Tue, 30 Sep 2025 17:35:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1F44CCA470
+	for <buildroot@archiver.kernel.org>; Tue, 30 Sep 2025 19:10:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2539440DB8;
-	Tue, 30 Sep 2025 17:35:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8819A60FB1;
+	Tue, 30 Sep 2025 19:10:39 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zVRxmFQTSE7d; Tue, 30 Sep 2025 19:10:38 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 919486101A
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 919486101A;
+	Tue, 30 Sep 2025 19:10:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5305C111
+ for <buildroot@buildroot.org>; Tue, 30 Sep 2025 19:10:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 445C140DE1
+ for <buildroot@buildroot.org>; Tue, 30 Sep 2025 19:10:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u_TzGayMyZct; Tue, 30 Sep 2025 17:35:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4363F40DCD
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4363F40DCD;
-	Tue, 30 Sep 2025 17:35:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id E73F5111
- for <buildroot@buildroot.org>; Tue, 30 Sep 2025 17:35:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D9447818C4
- for <buildroot@buildroot.org>; Tue, 30 Sep 2025 17:35:06 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DkBCyBEY3k0w for <buildroot@buildroot.org>;
- Tue, 30 Sep 2025 17:35:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52b; helo=mail-ed1-x52b.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4BE08816E2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BE08816E2
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
- [IPv6:2a00:1450:4864:20::52b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4BE08816E2
- for <buildroot@buildroot.org>; Tue, 30 Sep 2025 17:35:05 +0000 (UTC)
-Received: by mail-ed1-x52b.google.com with SMTP id
- 4fb4d7f45d1cf-62fc686dc41so6217682a12.1
- for <buildroot@buildroot.org>; Tue, 30 Sep 2025 10:35:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1759253703; x=1759858503;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=drto53XMp8yh9+xF9CcqrNHccgT9TAWbzdVhXhApAaQ=;
- b=fyu7oiq5arn38zWeOdtz5wMzg4FYA2zMgKkDWMPjxHNKg49Xp1+TH/SINleyUb8uL2
- 3TUAggOFEDJ4XpTK7wtRqaXEaKainH8QBS/aMkmBE6g52vjBrLuKeR9PH/HnGjEDWP6z
- 5cMNm9coU2Is9iuWtpiOsPXOSScD8SWNTqX4tAqWTFb68mNvJMhhHWBD1YmlW3hAhNnT
- zHq494HD3zaWmEAS3EbRtTZDxRdVA33OtuptJinD325T9sQJ6jidQqnp88pD9GiGmt5I
- xv7FWIi3JkWolymcGzAu8kbNAq1gJWkJY2EZsXCQIWinKvzfadx4l4peaHeoekOUdHxN
- Z9Dw==
-X-Gm-Message-State: AOJu0YwtKlaD6vF1jswfIb8HZS2uCEvixKczJbojho5xbEtlvBgNqVFL
- 7M83+CIZi9oN4mOoSjx1B64vsjws5wd2bhVqrQUehAst+e0ZGyO1oDjreIrES5SvgtiXb81VUGP
- FPto4hNE=
-X-Gm-Gg: ASbGnctyUjuGU55iZ5j3afabMAyB9k6W/eoNlZQxphhc+jC6oVwCaG6wQO7zNvez3Ur
- ufRf0GIysH/EhPDBEy50z1Kn3uo/TX4KJnYko1Q5w9EPJmTUi0h2hCAzrgDHZDYjE8h67FxXV6a
- 3g5fjTKJCRp7mxW3in5uHqu5vh7ph2dWmpOdXTbnNkMYLcUazTY4848vVqAHo97wQ+LMzzlV0gn
- 6OPPDRg7bs59PsbpP9KqkcM2sMCRDuhsYQWrNdAnCvTOZsF/2ERAB7rkxR0HKQsKmifCLRYV6Y9
- CS/SOekzxgP38LAJ/s0sMtY42pJmUQuEKQgkKE8VHvhRwbBPfsVreDwg2u0nB/vl6e1qmNTrXc4
- W1PvlxsQbGkPfikMuSeVrYnf/38i+03GCzUDbaRu+2zg7cztrF3Sp10bF5iLqCgic7pFjFFAEui
- lAwcJwcnxu4/LseBmbbFrY0dgUGqdVNyFtELA28pfDrZqEgXoA9tuGlsvFNtJL06gtEwEFC/ZtT
- xnl9fM4jePu/hG2Fteu2+8WKnv5bWfVQRUd
-X-Google-Smtp-Source: AGHT+IEcx9NEIxkCZsjEsqi10ueSBJwIrvnNlBkHJs8B4B3zZBZmx8tJfrQMBP1Dmz5zb2hHWaxvqQ==
-X-Received: by 2002:a50:fa92:0:b0:62f:386d:aeb1 with SMTP id
- 4fb4d7f45d1cf-63678e331ccmr575485a12.32.1759253703138; 
- Tue, 30 Sep 2025 10:35:03 -0700 (PDT)
-Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
- (host-79-25-27-158.retail.telecomitalia.it. [79.25.27.158])
- by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-634a3af4fe7sm10419920a12.39.2025.09.30.10.35.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 30 Sep 2025 10:35:02 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Cc: Gao Xiang <hsiangkao@aol.com>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Tue, 30 Sep 2025 19:34:59 +0200
-Message-ID: <20250930173459.3792043-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+ id IwwLRFM9oYwt for <buildroot@buildroot.org>;
+ Tue, 30 Sep 2025 19:10:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A7DA440DDD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7DA440DDD
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A7DA440DDD
+ for <buildroot@buildroot.org>; Tue, 30 Sep 2025 19:10:34 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id D055419F57B;
+ Tue, 30 Sep 2025 21:10:29 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 30 Sep 2025 21:10:29 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1759253703; x=1759858503;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=drto53XMp8yh9+xF9CcqrNHccgT9TAWbzdVhXhApAaQ=;
- b=X2kqaWv5WOoOHuSfdm0+BkHH97H0X2cfc+LyXKBRfdZVkaV/s4bYdMEk9Lxs+XCiid
- VAAlEHb1QgDvX7OjiEC7q21mrvQ8OaGP/dr8Du5j6aEy24EuSufUhdlIeC1lB0JxWJW+
- UzXxODhN+FamNpVsJL+OcItW8/0pGGxepPSyI=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=X2kqaWv5
-Subject: [Buildroot] [PATCH 1/1] package/erofs-utils: bump to version 1.8.10
+Date: Tue, 30 Sep 2025 21:10:29 +0200
+To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>
+In-Reply-To: <20250930103105.54262-1-titouan.christophe@mind.be>
+References: <20250930103105.54262-1-titouan.christophe@mind.be>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <1b787dd4f2150a41ff69dd921161ec48@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1759259432;
+ bh=tovC9YCOajorJFcBVgIIyoAg33sLFd1WPyb6Nto1oUE=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=T7OUAE1Bbj3zmeWmxwXB9a/63mlAmIm3GI5DquZT0DJ6VuP7ET4ezAhmoU1YhMV6+
+ q9qCVeww6cx6RH7UpvcYOtUVJgDxKCedGhztedO+UoH3+DOasTm46zbFf694xs5sh8
+ 4NwHX8vkG+9fWsLYZcupxtdBA9E0uP7uEm2Gw0nHROQuiAvj2+Bqlcom8ODSnTRkDd
+ NfC420QmIKDmX4n+6t9p/dli2YFG9k5J1fhql3IwJIVV7NkoNDa8kRcjjOnAuq/5AZ
+ hWY/Q4nenuqswNhkhOhn7d7skbUY9EbOJuzXzo+OpNEaE/Bm82YFTkzHmGxbse9I1Q
+ kee3j3WzbOJLw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=T7OUAE1B
+Subject: Re: [Buildroot] [PATCH] package/python-pip: security bump to v25.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,47 +81,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For a change log since 1.8.5, see:
-https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/tree/ChangeLog?h=v1.8.10
+Hi Titouan,
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
- package/erofs-utils/erofs-utils.hash | 2 +-
- package/erofs-utils/erofs-utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks for the patch.
 
-diff --git a/package/erofs-utils/erofs-utils.hash b/package/erofs-utils/erofs-utils.hash
-index 04bdd557f892..4e59e55af07e 100644
---- a/package/erofs-utils/erofs-utils.hash
-+++ b/package/erofs-utils/erofs-utils.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  cd8611270e9c86fe062f647103ca6ada9ed710e4430fdd5960d514777919200d  erofs-utils-1.8.5.tar.gz
-+sha256  05eb4edebe11decce6ecb34e98d2f80c8cd283c2f2967d8ba7efd58418570514  erofs-utils-1.8.10.tar.gz
- sha256  0df042de29b44887355db86c79708a4489ce6e6666f6e33ad02040293f09e6a2  COPYING
- sha256  a400f85dd06d230f1b308cde4290a53f345b6e320a376b7904b31c51c2fd4b1a  LICENSES/Apache-2.0
- sha256  feee3b3157dcdf78d4f50edefbd5dd7adf8b6d52c11bfaaa746a85a373256713  LICENSES/GPL-2.0
-diff --git a/package/erofs-utils/erofs-utils.mk b/package/erofs-utils/erofs-utils.mk
-index bfdcfe58eb8a..de3c97cbcabf 100644
---- a/package/erofs-utils/erofs-utils.mk
-+++ b/package/erofs-utils/erofs-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EROFS_UTILS_VERSION = 1.8.5
-+EROFS_UTILS_VERSION = 1.8.10
- EROFS_UTILS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/snapshot
- EROFS_UTILS_LICENSE = GPL-2.0+, GPL-2.0+ or Apache-2.0 (liberofs)
- EROFS_UTILS_LICENSE_FILES = COPYING LICENSES/Apache-2.0 LICENSES/GPL-2.0
--- 
-2.43.0
+On 30/09/2025 12:31, Titouan Christophe via buildroot wrote:
+> This fixes the following vulnerability:
+> - CVE-2025-8869:
+>     When extracting a tar archive pip may not check symbolic links 
+> point
+>     into the extraction directory if the tarfile module doesn't 
+> implement
+>     PEP 706. Note that upgrading pip to a "fixed" version for this
+>     vulnerability doesn't fix all known vulnerabilities that are
+>     remediated by using a Python version that implements PEP 706.  Note
+>     that this is a vulnerability in pip's fallback implementation of 
+> tar
+>     extraction for Python versions that don't implement PEP 706 and
+>     therefore are not secure to all vulnerabilities in the Python
+>     'tarfile' module. If you're using a Python version that implements 
+> PEP
+>     706 then pip doesn't use the "vulnerable" fallback code.  
+> Mitigations
+>     include upgrading to a version of pip that includes the fix, 
+> upgrading
+>     to a Python version that implements PEP 706 (Python >=3.9.17,
+>     >=3.10.12, >=3.11.4, or >=3.12), applying the linked patch, or
+>     inspecting source distributions (sdists) before installation as is
+>     already a best-practice.
+>     https://www.cve.org/CVERecord?id=CVE-2025-8869
+> 
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+> ---
+>  package/python-pip/python-pip.hash | 4 ++--
+>  package/python-pip/python-pip.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/python-pip/python-pip.hash 
+> b/package/python-pip/python-pip.hash
+> index f6b11ee26a..ad70f0da7b 100644
+> --- a/package/python-pip/python-pip.hash
+> +++ b/package/python-pip/python-pip.hash
+> @@ -1,5 +1,5 @@
+>  # md5, sha256 from https://pypi.org/pypi/pip/json
+> -md5  c698f55e2015dc7dbb5b77c6df1cc88a  pip-25.0.tar.gz
+> -sha256  
+> 8e0a97f7b4c47ae4a494560da84775e9e2f671d415d8d828e052efefb206b30b  
+> pip-25.0.tar.gz
+> +md5  6d109857fa69274dacfc1d6528471eb5  pip-25.2.tar.gz
+> +sha256  
+> 578283f006390f85bb6282dffb876454593d637f5d1be494b5202ce4877e71f2  
+> pip-25.2.tar.gz
+>  # Locally computed sha256 checksums
+>  sha256  
+> 634300a669d49aeae65b12c6c48c924c51a4cdf3d1ff086dc3456dc8bcaa2104  
+> LICENSE.txt
+> diff --git a/package/python-pip/python-pip.mk 
+> b/package/python-pip/python-pip.mk
+> index 9ffc0b66ea..42231e254c 100644
+> --- a/package/python-pip/python-pip.mk
+> +++ b/package/python-pip/python-pip.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  
+> ################################################################################
+> 
+> -PYTHON_PIP_VERSION = 25.0
+> +PYTHON_PIP_VERSION = 25.2
 
+With this new version, it fails to download the package.
+
+>  PYTHON_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
+>  PYTHON_PIP_SITE = 
+> https://files.pythonhosted.org/packages/47/3e/68beeeeb306ea20ffd30b3ed993f531d16cd884ec4f60c9b1e238f69f2af
+
+Maybe the PYTHON_PIP_SITE needs to be updated too?
+
+>  PYTHON_PIP_SETUP_TYPE = setuptools
+> --
+> 2.51.0
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
