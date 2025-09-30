@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02E9ACCA470
-	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 20:52:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E019BCCD183
+	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 20:52:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C221C6154D;
-	Wed,  1 Oct 2025 20:52:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B1CBA61552;
+	Wed,  1 Oct 2025 20:52:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q3t2byEWQkTp; Wed,  1 Oct 2025 20:52:48 +0000 (UTC)
+ id MiQRuuag6-Rf; Wed,  1 Oct 2025 20:52:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA3E1614F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F5A361555
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA3E1614F2;
-	Wed,  1 Oct 2025 20:52:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2C814CC0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9F5A361555;
+	Wed,  1 Oct 2025 20:52:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CF55672
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:52:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0C19C41434
+ by smtp2.osuosl.org (Postfix) with ESMTP id C42F741212
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:52:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E6swQkPupHp9 for <buildroot@buildroot.org>;
- Wed,  1 Oct 2025 20:52:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UIvJ9TjHEKAl for <buildroot@buildroot.org>;
+ Wed,  1 Oct 2025 20:52:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA39941440
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99B9341227
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EA39941440
+ by smtp2.osuosl.org (Postfix) with ESMTP id 99B9341227
  for <buildroot@buildroot.org>; Wed,  1 Oct 2025 20:52:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E8179866FE; Wed,  1 Oct 2025 20:52:32 +0000 (UTC)
+ id 890D1866FE; Wed,  1 Oct 2025 20:52:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 30 Sep 2025 11:11:46 +0200
+Date: Tue, 30 Sep 2025 11:09:43 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 4fabc452a3480f7e18643ad29baa415720003cea
-X-Git-Newrev: d25b9b3bc946a82c01920ab17587b5cd2f591ecc
+X-Git-Oldrev: e3b092625c0f38b8f75b9e4079e88737fb3c1d3c
+X-Git-Newrev: b446da25e3bbb4740a1033f6990f684b01884347
 X-Patchwork-Hint: ignore
-Message-Id: <20251001205232.E8179866FE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/cutekeyboard: fix
- CUTEKEYBOARD_VERSION
+Message-Id: <20251001205232.890D1866FE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] DEVELOPERS: add Dario
+ Binacchi for connman
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,46 +66,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d25b9b3bc946a82c01920ab17587b5cd2f591ecc
+commit: https://git.buildroot.net/buildroot/commit/?id=b446da25e3bbb4740a1033f6990f684b01884347
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Make CUTEKEYBOARD_VERSION compliant with release-monitoring.org
-
-Fixes: b28ec6f4313cc805dfb152e06408f1e7137c2ea6
-
-(alternative to commit 14885464292df19e664d95ade46a0d13cf0d25c5)
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-(cherry picked from commit 6e2b0dd9235456ea32fb9987017154b51374428a)
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 5f63c441f8f23d09b14df79b2a28f27f905d7427)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/cutekeyboard/cutekeyboard.hash | 2 +-
- package/cutekeyboard/cutekeyboard.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/cutekeyboard/cutekeyboard.hash b/package/cutekeyboard/cutekeyboard.hash
-index 53b438cc1f..649fb0f8b3 100644
---- a/package/cutekeyboard/cutekeyboard.hash
-+++ b/package/cutekeyboard/cutekeyboard.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  0f0af01ec99ad07607d2e58c2feee1fba37c9cb7118e8af309fa021f599aec86  cutekeyboard-v1.3.0.tar.gz
-+sha256  0f0af01ec99ad07607d2e58c2feee1fba37c9cb7118e8af309fa021f599aec86  cutekeyboard-1.3.0.tar.gz
- sha256  bdde6ec2ae2686623c0bb414bfb8bd731b314beff2264c602116ea60dd65964d  LICENSE
-diff --git a/package/cutekeyboard/cutekeyboard.mk b/package/cutekeyboard/cutekeyboard.mk
-index 775bed0fe9..681107014f 100644
---- a/package/cutekeyboard/cutekeyboard.mk
-+++ b/package/cutekeyboard/cutekeyboard.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--CUTEKEYBOARD_VERSION = v1.3.0
--CUTEKEYBOARD_SITE = $(call github,amarula,cutekeyboard,$(CUTEKEYBOARD_VERSION))
-+CUTEKEYBOARD_VERSION = 1.3.0
-+CUTEKEYBOARD_SITE = $(call github,amarula,cutekeyboard,v$(CUTEKEYBOARD_VERSION))
- CUTEKEYBOARD_DEPENDENCIES = qt5declarative qt5quickcontrols2
- CUTEKEYBOARD_INSTALL_STAGING = YES
- CUTEKEYBOARD_LICENSE = MIT
+diff --git a/DEVELOPERS b/DEVELOPERS
+index fae8eb685b..ef053cc04d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -802,6 +802,7 @@ F:	package/armadillo/
+ F:	package/atf/
+ F:	package/babeld/
+ F:	package/cmocka/
++F:	package/connman/
+ F:	package/iana-assignments/
+ F:	package/inih/
+ F:	package/sscep/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
