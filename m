@@ -1,85 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98967CAC5BB
-	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 16:03:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78996CCA470
+	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 16:08:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4EC226128D;
-	Wed,  1 Oct 2025 16:03:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4604183DDD;
+	Wed,  1 Oct 2025 16:08:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pBsMKrUDDuF1; Wed,  1 Oct 2025 16:03:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vhfACAdZp_Uu; Wed,  1 Oct 2025 16:08:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 526F461281
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F72E83DE6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 526F461281;
-	Wed,  1 Oct 2025 16:03:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id B7C022A6
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 16:03:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2F72E83DE6;
+	Wed,  1 Oct 2025 16:08:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B13322A6
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 16:08:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A92C741275
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 16:03:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9808D41050
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 16:08:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1dgqi31fQiew for <buildroot@buildroot.org>;
- Wed,  1 Oct 2025 16:03:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=kory.maincent@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C0EF541272
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0EF541272
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C0EF541272
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 16:03:18 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id EC63D4E40E67;
- Wed,  1 Oct 2025 16:03:15 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id AA8A0606BF;
- Wed,  1 Oct 2025 16:03:15 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 39EDF102F1870; 
- Wed,  1 Oct 2025 18:02:58 +0200 (CEST)
-Date: Wed, 1 Oct 2025 18:02:56 +0200
-To: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Cc: buildroot@buildroot.org, Etienne Carriere
- <etienne.carriere@foss.st.com>, Alistair Francis <alistair@alistair23.me>,
- Dick Olsson <hi@senzilla.io>, Sergey Matyukevich <geomatsi@gmail.com>,
- Simon Dawson <spdawson@gmail.com>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>
-Message-ID: <20251001180256.1de20ac4@kmaincent-XPS-13-7390>
-In-Reply-To: <fb085f40-4394-4870-996a-515af302fe39@grenoble.cnrs.fr>
-References: <20251001-fix_license-v2-0-bf18911c835d@bootlin.com>
- <20251001-fix_license-v2-7-bf18911c835d@bootlin.com>
- <fb085f40-4394-4870-996a-515af302fe39@grenoble.cnrs.fr>
-Organization: bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-pc-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rg3pVboqPIhw for <buildroot@buildroot.org>;
+ Wed,  1 Oct 2025 16:08:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6592B41049
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6592B41049
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6592B41049
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 16:08:28 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:7427:ac55:2702:f075])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 1ECE45FF95;
+ Wed,  1 Oct 2025 18:08:25 +0200 (CEST)
+To: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Wed,  1 Oct 2025 18:08:19 +0200
+Message-ID: <20251001160820.8829-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1759334594; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=oM0AtpYUHfXEuxl1/8uQaTAorMA8J89lFrDpJOHsgns=;
- b=KJ0ddIXrC+2xVwr9xTZ6uluN5SMiVNlBDXOcCa3ZYNZ/MkMZ6LTrx1Wm/8aocqMSxQ5y7l
- UtCt4WkMofv/CRaEtBvuCDz6mutqfWf/U5DZfx429vBt2Hhm/yXGntjqEs3VoV3OsSyuV5
- +qNsRLEHXEr8KdPl3grenXJPPMDtbfOG0mFYUan1UC68vOg7C86EEq85gIa+BGC9ldh819
- nRK7zVrPAiA9PZ/M0otHbjNlkY7NrTF31K2ca/sOsOFEl2Hbi5M1r14uwIEr/us5mfwIfm
- E6I/KsphJNUytqxJ8H4zY16ItdSY+n2YiPJHUHe6UNZwhDlRTJHG0ENrwCGTKQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=KJ0ddIXr
-Subject: Re: [Buildroot] [PATCH v2 7/7] at91bootstrap3: Add support for
- custom license files
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1759334906;
+ bh=2BQBbqb+cgKOUKAQ3RNwfiNGISXdwFN6lyHDERAFDYg=;
+ h=From:To:Cc:Subject:Date:From;
+ b=DkqrMJvcJLEP2o6BvI6ZH96AWv3Pr9Es3vatmPwegpGP4NFQr76YcFQ6BMAsL68if
+ v1nvbMtULJz12vjyNu1oTVz3JAUD82aU0f42B0I8FN2RXc/zG45hk4uXdhsrLW/owa
+ cPlRgy7FnlbsCpjbifDTx0RE9U0yPlkuCiPSL18rm3dIW6sHdOtzX0APDJtplhlJGK
+ DGGhqVhNpvRIhzx7lFjzCQvYxCs8KAgxc1zO30tKfU3orQ+ffLcZOyjHBikxOwwueY
+ FCU8RFQzneBV94EDTr+fr2j6kcUYnNsBXx22zR4vdpglpCMus5ulkOb777XWm1e3OE
+ ROEI0qLLGV3vg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=DkqrMJvc
+Subject: [Buildroot] [PATCH 1/1] package/fwts: bump to version 25.09.00
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,44 +75,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kory Maincent via buildroot <buildroot@buildroot.org>
-Reply-To: Kory Maincent <kory.maincent@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gV2VkLCAxIE9jdCAyMDI1IDE3OjQ0OjI2ICswMjAwCkVkZ2FyIEJvbmV0IDxib25ldEBncmVu
-b2JsZS5jbnJzLmZyPiB3cm90ZToKCj4gSGVsbG8gZXZlcnlib2R5IQo+IAo+IE9uIDAxLzEwLzIw
-MjUsIEtvcnkgTWFpbmNlbnQgd3JvdGU6Cj4gPiBUaGUgQVQ5MUJvb3RzdHJhcDMgcGFja2FnZSB3
-YXMgbm90IHByb3ZpZGluZyBhbnkgbGljZW5zZSBmaWxlIHdoZW4gYSBjdXN0b20KPiA+IExpbnV4
-IHZlcnNpb24gd2FzIHNlbGVjdGVkLgo+ID4gCj4gPiBGaXggdGhpcyBieSBhZGRpbmcgYSBLY29u
-ZmlnIG9wdGlvbiB0byBzcGVjaWZ5IHRoZSBsaWNlbnNlIGZpbGUsCj4gPiB3aXRoIGEgZGVmYXVs
-dCB2YWx1ZSBzZXQgdG8gdGhlIGNvbW1vbmx5IHVzZWQgbGljZW5zZSBwYXRocy4KPiA+IAo+ID4g
-U2lnbmVkLW9mZi1ieTogS29yeSBNYWluY2VudCA8a29yeS5tYWluY2VudEBib290bGluLmNvbT4K
-PiA+IC0tLQo+ID4gCj4gPiBDaGFuZ2UgaW4gdjI6Cj4gPiAtIERvIG5vdCBzaG93IGxpY2Vuc2Ug
-b3B0aW9uIGlmIGl0IGlzIG5vdCBhIGN1c3RvbSByZXBvCj4gPiAtLS0KPiA+ICBib290L2F0OTFi
-b290c3RyYXAzL0NvbmZpZy5pbiAgICAgICAgIHwgMTkgKysrKysrKysrKysrKysrKysrKwo+ID4g
-IGJvb3QvYXQ5MWJvb3RzdHJhcDMvYXQ5MWJvb3RzdHJhcDMubWsgfCAgMyArKy0KPiA+ICAyIGZp
-bGVzIGNoYW5nZWQsIDIxIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKPiA+IAo+ID4gZGlm
-ZiAtLWdpdCBhL2Jvb3QvYXQ5MWJvb3RzdHJhcDMvQ29uZmlnLmluIGIvYm9vdC9hdDkxYm9vdHN0
-cmFwMy9Db25maWcuaW4KPiA+IGluZGV4Cj4gPiAzNWJkYjI4MTYyYmVkYTk1NmZmNGZmZDE3Nzcy
-YjQ5MWJmNWY1Y2EwLi45ODdiNWViN2VmZDNkODQ1ODY1ZDM0YWZhY2E0ZjM1YWU1ZTg4ZjgwCj4g
-PiAxMDA2NDQgLS0tIGEvYm9vdC9hdDkxYm9vdHN0cmFwMy9Db25maWcuaW4gKysrCj4gPiBiL2Jv
-b3QvYXQ5MWJvb3RzdHJhcDMvQ29uZmlnLmluIEBAIC02Niw2ICs2NiwyNSBAQCBjb25maWcKPiA+
-IEJSMl9UQVJHRVRfQVQ5MUJPT1RTVFJBUDNfVkVSU0lPTiBpZiBCUjJfVEFSR0VUX0FUOTFCT09U
-U1RSQVAzX0NVU1RPTV9HSVQKPiA+IHx8IEJSMl9UQVJHRVRfQVQ5MUJPT1RTVFJBUDNfQ1VTVE9N
-X1NWTiBkZWZhdWx0ICJjdXN0b20iCWlmCj4gPiBCUjJfVEFSR0VUX0FUOTFCT09UU1RSQVAzX0NV
-U1RPTV9UQVJCQUxMIAo+ID4gK2NvbmZpZyBCUjJfVEFSR0VUX0FUOTFCT09UU1RSQVAzX0NVU1RP
-TV9MSUNFTlNFX0ZJTEVTCj4gPiArCXN0cmluZyAiQVQ5MUJvb3RzdHJhcDMgbGljZW5zZSBmaWxl
-cyIKPiA+ICsJZGVmYXVsdCAiTElDRU5TRVMvTUlULnR4dCIKPiA+ICsJZGVwZW5kcyBvbiBCUjJf
-VEFSR0VUX0FUOTFCT09UU1RSQVAzX0NVU1RPTV9HSVQgfHwgXAo+ID4gKwkJICAgQlIyX1RBUkdF
-VF9BVDkxQk9PVFNUUkFQM19DVVNUT01fU1ZOIHx8IFwKPiA+ICsJCSAgIEJSMl9UQVJHRVRfQVQ5
-MUJPT1RTVFJBUDNfQ1VTVE9NX1RBUkJBTEwKPiA+ICsJaGVscAo+ID4gKwkgIEEgc3BhY2Utc2Vw
-YXJhdGVkIGxpc3Qgb2YgbGljZW5zZSBmaWxlcyByZWxhdGVkIHRvIHRoZQo+ID4gKwkgIEFUOTFC
-b290c3RyYXAzIGtlcm5lbCBwYWNrYWdlLiAgCj4gCj4gcy9rZXJuZWwgcGFja2FnZS9wYWNrYWdl
-LwoKT29wcyBpbmRlZWQsIHRoYW5rcy4KClJlZ2FyZHMKLS0gCkvDtnJ5IE1haW5jZW50LCBCb290
-bGluCkVtYmVkZGVkIExpbnV4IGFuZCBrZXJuZWwgZW5naW5lZXJpbmcKaHR0cHM6Ly9ib290bGlu
-LmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
-ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
-YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+See release announce:
+https://lists.ubuntu.com/archives/fwts-devel/2025-September/014087.html
+
+The archive of this new version now includes a "fwts-25.09.00/" top
+directory. Therefore, this commit removes "FWTS_STRIP_COMPONENTS = 0".
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Patch tested in:
+https://gitlab.com/jolivain/buildroot/-/jobs/11555006341
+---
+ package/fwts/fwts.hash | 2 +-
+ package/fwts/fwts.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/package/fwts/fwts.hash b/package/fwts/fwts.hash
+index 9a4422069c..3f04288fb8 100644
+--- a/package/fwts/fwts.hash
++++ b/package/fwts/fwts.hash
+@@ -1,5 +1,5 @@
+ # Hash from: https://fwts.ubuntu.com/release/SHA256SUMS
+-sha256  19450b19cfd71a43d3716e4108d06db8b52f10801fb24bfb76f30dc0023d5142  fwts-V25.07.00.tar.gz
++sha256  ecba21d367b1c7aea41b378ad8fd3d43706c0fa4033cc31b59f8152c9cc0d69e  fwts-V25.09.00.tar.gz
+ 
+ # Hash for license file
+ sha256  77a5f0ea48e53ee8d67aecc7759cf468bcd340c1caca711ed4307b477a93fb47  debian/copyright
+diff --git a/package/fwts/fwts.mk b/package/fwts/fwts.mk
+index b3860c6fad..f8537fbcf5 100644
+--- a/package/fwts/fwts.mk
++++ b/package/fwts/fwts.mk
+@@ -4,10 +4,9 @@
+ #
+ ################################################################################
+ 
+-FWTS_VERSION = 25.07.00
++FWTS_VERSION = 25.09.00
+ FWTS_SOURCE = fwts-V$(FWTS_VERSION).tar.gz
+ FWTS_SITE = https://fwts.ubuntu.com/release
+-FWTS_STRIP_COMPONENTS = 0
+ FWTS_LICENSE = GPL-2.0, LGPL-2.1, Custom
+ FWTS_LICENSE_FILES = debian/copyright
+ FWTS_AUTORECONF = YES
+-- 
+2.51.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
