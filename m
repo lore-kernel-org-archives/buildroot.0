@@ -4,78 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3479ECCA470
-	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 15:44:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98967CAC5BB
+	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 16:03:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1E2E613C4;
-	Wed,  1 Oct 2025 15:44:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4EC226128D;
+	Wed,  1 Oct 2025 16:03:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4wfwN6SLh3ls; Wed,  1 Oct 2025 15:44:56 +0000 (UTC)
+ id pBsMKrUDDuF1; Wed,  1 Oct 2025 16:03:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17215613C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 526F461281
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 17215613C6;
-	Wed,  1 Oct 2025 15:44:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id F2EC62A6
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 15:44:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 526F461281;
+	Wed,  1 Oct 2025 16:03:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B7C022A6
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 16:03:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E4AE881C11
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 15:44:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A92C741275
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 16:03:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0F4iUCWufAW1 for <buildroot@buildroot.org>;
- Wed,  1 Oct 2025 15:44:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:660:530d:201::44; helo=mailgw-out1.grenoble.cnrs.fr;
- envelope-from=bonet@grenoble.cnrs.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F079181BC6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F079181BC6
-Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
- [IPv6:2001:660:530d:201::44])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F079181BC6
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 15:44:49 +0000 (UTC)
-Received: from [IPV6:2a01:e0a:12:eba0:a14e:ad95:d6a9:3433] (unknown
- [IPv6:2a01:e0a:12:eba0:a14e:ad95:d6a9:3433])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id E6BAABFA4E;
- Wed,  1 Oct 2025 17:44:44 +0200 (CEST)
-Message-ID: <fb085f40-4394-4870-996a-515af302fe39@grenoble.cnrs.fr>
-Date: Wed, 1 Oct 2025 17:44:26 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Kory Maincent <kory.maincent@bootlin.com>, buildroot@buildroot.org
-Cc: Etienne Carriere <etienne.carriere@foss.st.com>,
- Alistair Francis <alistair@alistair23.me>, Dick Olsson <hi@senzilla.io>,
- Sergey Matyukevich <geomatsi@gmail.com>, Simon Dawson <spdawson@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1dgqi31fQiew for <buildroot@buildroot.org>;
+ Wed,  1 Oct 2025 16:03:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=kory.maincent@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C0EF541272
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0EF541272
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C0EF541272
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 16:03:18 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id EC63D4E40E67;
+ Wed,  1 Oct 2025 16:03:15 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id AA8A0606BF;
+ Wed,  1 Oct 2025 16:03:15 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 39EDF102F1870; 
+ Wed,  1 Oct 2025 18:02:58 +0200 (CEST)
+Date: Wed, 1 Oct 2025 18:02:56 +0200
+To: Edgar Bonet <bonet@grenoble.cnrs.fr>
+Cc: buildroot@buildroot.org, Etienne Carriere
+ <etienne.carriere@foss.st.com>, Alistair Francis <alistair@alistair23.me>,
+ Dick Olsson <hi@senzilla.io>, Sergey Matyukevich <geomatsi@gmail.com>,
+ Simon Dawson <spdawson@gmail.com>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>
+Message-ID: <20251001180256.1de20ac4@kmaincent-XPS-13-7390>
+In-Reply-To: <fb085f40-4394-4870-996a-515af302fe39@grenoble.cnrs.fr>
 References: <20251001-fix_license-v2-0-bf18911c835d@bootlin.com>
  <20251001-fix_license-v2-7-bf18911c835d@bootlin.com>
-Content-Language: en-US
-In-Reply-To: <20251001-fix_license-v2-7-bf18911c835d@bootlin.com>
+ <fb085f40-4394-4870-996a-515af302fe39@grenoble.cnrs.fr>
+Organization: bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=grenoble.cnrs.fr; 
- s=202106-grenoble.cnrs.fr; t=1759333485;
- bh=ebvElOb0KSqA2TAMAZRmMsywMpIs7wLns8yYisXVmsU=;
- h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
- b=nQKVcG4Rrw3CjVdGgj0DmIY6orvLV4OQlko2a5JeLQJl8Gu/ilAnBtKWVUf/1HCL9
- IB7p7HL+nOqRS4XxEvcCKoODk2rSwiieutok5tqPI9lGf6NCxDztHou1lwXmc1OZ8+
- m7EBAUKD+smF9CjsUoJhjmV1Y1aQFOmRQpOUcmvXMre/yeG9St38f9zAiVKMZmTiQi
- 7AnirY8cOXy4uGnXV8jGkkYiElb8dTZwK44u/eSLDbygKhdgSlrXc/GHeAriIxQMM7
- NtLfxe7pt7gyLC7Ro4IQ/ei/MOJBQVnEIBTw4kkO31TlqgtYSF68G7eJeldsSCldGK
- ppqD0KhkiGwog==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=bootlin.com; s=dkim; 
+ t=1759334594; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=oM0AtpYUHfXEuxl1/8uQaTAorMA8J89lFrDpJOHsgns=;
+ b=KJ0ddIXrC+2xVwr9xTZ6uluN5SMiVNlBDXOcCa3ZYNZ/MkMZ6LTrx1Wm/8aocqMSxQ5y7l
+ UtCt4WkMofv/CRaEtBvuCDz6mutqfWf/U5DZfx429vBt2Hhm/yXGntjqEs3VoV3OsSyuV5
+ +qNsRLEHXEr8KdPl3grenXJPPMDtbfOG0mFYUan1UC68vOg7C86EEq85gIa+BGC9ldh819
+ nRK7zVrPAiA9PZ/M0otHbjNlkY7NrTF31K2ca/sOsOFEl2Hbi5M1r14uwIEr/us5mfwIfm
+ E6I/KsphJNUytqxJ8H4zY16ItdSY+n2YiPJHUHe6UNZwhDlRTJHG0ENrwCGTKQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=grenoble.cnrs.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
- header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=nQKVcG4R
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=KJ0ddIXr
 Subject: Re: [Buildroot] [PATCH v2 7/7] at91bootstrap3: Add support for
  custom license files
 X-BeenThere: buildroot@buildroot.org
@@ -89,90 +91,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Edgar Bonet via buildroot <buildroot@buildroot.org>
-Reply-To: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Kory Maincent via buildroot <buildroot@buildroot.org>
+Reply-To: Kory Maincent <kory.maincent@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello everybody!
-
-On 01/10/2025, Kory Maincent wrote:
-> The AT91Bootstrap3 package was not providing any license file when a custom
-> Linux version was selected.
-> 
-> Fix this by adding a Kconfig option to specify the license file,
-> with a default value set to the commonly used license paths.
-> 
-> Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
-> ---
-> 
-> Change in v2:
-> - Do not show license option if it is not a custom repo
-> ---
->  boot/at91bootstrap3/Config.in         | 19 +++++++++++++++++++
->  boot/at91bootstrap3/at91bootstrap3.mk |  3 ++-
->  2 files changed, 21 insertions(+), 1 deletion(-)
-> 
-> diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-> index 35bdb28162beda956ff4ffd17772b491bf5f5ca0..987b5eb7efd3d845865d34afaca4f35ae5e88f80 100644
-> --- a/boot/at91bootstrap3/Config.in
-> +++ b/boot/at91bootstrap3/Config.in
-> @@ -66,6 +66,25 @@ config BR2_TARGET_AT91BOOTSTRAP3_VERSION
->  		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT || BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_SVN
->  	default "custom"	if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
->  
-> +config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_LICENSE_FILES
-> +	string "AT91Bootstrap3 license files"
-> +	default "LICENSES/MIT.txt"
-> +	depends on BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT || \
-> +		   BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_SVN || \
-> +		   BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
-> +	help
-> +	  A space-separated list of license files related to the
-> +	  AT91Bootstrap3 kernel package.
-
-s/kernel package/package/
-
-Regards,
-
-Edgar.
-
-> +
-> +config BR2_TARGET_AT91BOOTSTRAP3_LICENSE_FILES
-> +	string
-> +	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_LICENSE_FILES \
-> +		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT || \
-> +		   BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_SVN || \
-> +		   BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
-> +	default "" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X
-> +	default "LICENSES/MIT.txt"
-> +
->  config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_PATCH_DIR
->  	string "custom patch dir"
->  	help
-> diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
-> index 4bbe7cc71819bb5841deac0ca9b513e7189796f4..2ed34f3de4d7285f9b14386fe3c21241b65aa4b1 100644
-> --- a/boot/at91bootstrap3/at91bootstrap3.mk
-> +++ b/boot/at91bootstrap3/at91bootstrap3.mk
-> @@ -25,11 +25,12 @@ endif
->  
->  ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION),y)
->  AT91BOOTSTRAP3_LICENSE = MIT
-> -AT91BOOTSTRAP3_LICENSE_FILES = LICENSES/MIT.txt
->  else ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X),y)
->  AT91BOOTSTRAP3_LICENSE = Atmel License
->  endif
->  
-> +AT91BOOTSTRAP3_LICENSE_FILES = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_LICENSE_FILES))
-> +
->  AT91BOOTSTRAP3_CPE_ID_VENDOR = linux4sam
->  AT91BOOTSTRAP3_CPE_ID_PRODUCT = at91bootstrap
->  
-> 
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gV2VkLCAxIE9jdCAyMDI1IDE3OjQ0OjI2ICswMjAwCkVkZ2FyIEJvbmV0IDxib25ldEBncmVu
+b2JsZS5jbnJzLmZyPiB3cm90ZToKCj4gSGVsbG8gZXZlcnlib2R5IQo+IAo+IE9uIDAxLzEwLzIw
+MjUsIEtvcnkgTWFpbmNlbnQgd3JvdGU6Cj4gPiBUaGUgQVQ5MUJvb3RzdHJhcDMgcGFja2FnZSB3
+YXMgbm90IHByb3ZpZGluZyBhbnkgbGljZW5zZSBmaWxlIHdoZW4gYSBjdXN0b20KPiA+IExpbnV4
+IHZlcnNpb24gd2FzIHNlbGVjdGVkLgo+ID4gCj4gPiBGaXggdGhpcyBieSBhZGRpbmcgYSBLY29u
+ZmlnIG9wdGlvbiB0byBzcGVjaWZ5IHRoZSBsaWNlbnNlIGZpbGUsCj4gPiB3aXRoIGEgZGVmYXVs
+dCB2YWx1ZSBzZXQgdG8gdGhlIGNvbW1vbmx5IHVzZWQgbGljZW5zZSBwYXRocy4KPiA+IAo+ID4g
+U2lnbmVkLW9mZi1ieTogS29yeSBNYWluY2VudCA8a29yeS5tYWluY2VudEBib290bGluLmNvbT4K
+PiA+IC0tLQo+ID4gCj4gPiBDaGFuZ2UgaW4gdjI6Cj4gPiAtIERvIG5vdCBzaG93IGxpY2Vuc2Ug
+b3B0aW9uIGlmIGl0IGlzIG5vdCBhIGN1c3RvbSByZXBvCj4gPiAtLS0KPiA+ICBib290L2F0OTFi
+b290c3RyYXAzL0NvbmZpZy5pbiAgICAgICAgIHwgMTkgKysrKysrKysrKysrKysrKysrKwo+ID4g
+IGJvb3QvYXQ5MWJvb3RzdHJhcDMvYXQ5MWJvb3RzdHJhcDMubWsgfCAgMyArKy0KPiA+ICAyIGZp
+bGVzIGNoYW5nZWQsIDIxIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKPiA+IAo+ID4gZGlm
+ZiAtLWdpdCBhL2Jvb3QvYXQ5MWJvb3RzdHJhcDMvQ29uZmlnLmluIGIvYm9vdC9hdDkxYm9vdHN0
+cmFwMy9Db25maWcuaW4KPiA+IGluZGV4Cj4gPiAzNWJkYjI4MTYyYmVkYTk1NmZmNGZmZDE3Nzcy
+YjQ5MWJmNWY1Y2EwLi45ODdiNWViN2VmZDNkODQ1ODY1ZDM0YWZhY2E0ZjM1YWU1ZTg4ZjgwCj4g
+PiAxMDA2NDQgLS0tIGEvYm9vdC9hdDkxYm9vdHN0cmFwMy9Db25maWcuaW4gKysrCj4gPiBiL2Jv
+b3QvYXQ5MWJvb3RzdHJhcDMvQ29uZmlnLmluIEBAIC02Niw2ICs2NiwyNSBAQCBjb25maWcKPiA+
+IEJSMl9UQVJHRVRfQVQ5MUJPT1RTVFJBUDNfVkVSU0lPTiBpZiBCUjJfVEFSR0VUX0FUOTFCT09U
+U1RSQVAzX0NVU1RPTV9HSVQKPiA+IHx8IEJSMl9UQVJHRVRfQVQ5MUJPT1RTVFJBUDNfQ1VTVE9N
+X1NWTiBkZWZhdWx0ICJjdXN0b20iCWlmCj4gPiBCUjJfVEFSR0VUX0FUOTFCT09UU1RSQVAzX0NV
+U1RPTV9UQVJCQUxMIAo+ID4gK2NvbmZpZyBCUjJfVEFSR0VUX0FUOTFCT09UU1RSQVAzX0NVU1RP
+TV9MSUNFTlNFX0ZJTEVTCj4gPiArCXN0cmluZyAiQVQ5MUJvb3RzdHJhcDMgbGljZW5zZSBmaWxl
+cyIKPiA+ICsJZGVmYXVsdCAiTElDRU5TRVMvTUlULnR4dCIKPiA+ICsJZGVwZW5kcyBvbiBCUjJf
+VEFSR0VUX0FUOTFCT09UU1RSQVAzX0NVU1RPTV9HSVQgfHwgXAo+ID4gKwkJICAgQlIyX1RBUkdF
+VF9BVDkxQk9PVFNUUkFQM19DVVNUT01fU1ZOIHx8IFwKPiA+ICsJCSAgIEJSMl9UQVJHRVRfQVQ5
+MUJPT1RTVFJBUDNfQ1VTVE9NX1RBUkJBTEwKPiA+ICsJaGVscAo+ID4gKwkgIEEgc3BhY2Utc2Vw
+YXJhdGVkIGxpc3Qgb2YgbGljZW5zZSBmaWxlcyByZWxhdGVkIHRvIHRoZQo+ID4gKwkgIEFUOTFC
+b290c3RyYXAzIGtlcm5lbCBwYWNrYWdlLiAgCj4gCj4gcy9rZXJuZWwgcGFja2FnZS9wYWNrYWdl
+LwoKT29wcyBpbmRlZWQsIHRoYW5rcy4KClJlZ2FyZHMKLS0gCkvDtnJ5IE1haW5jZW50LCBCb290
+bGluCkVtYmVkZGVkIExpbnV4IGFuZCBrZXJuZWwgZW5naW5lZXJpbmcKaHR0cHM6Ly9ib290bGlu
+LmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
+ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
+YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
