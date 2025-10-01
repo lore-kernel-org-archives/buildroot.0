@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79E3ECAC5BB
-	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 19:20:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85C2BCAC5BB
+	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 19:29:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4A13E83E3F;
-	Wed,  1 Oct 2025 19:20:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 451DD83B72;
+	Wed,  1 Oct 2025 19:29:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6t0nb7yNlhl3; Wed,  1 Oct 2025 19:20:19 +0000 (UTC)
+ id GNqKT1ztK14n; Wed,  1 Oct 2025 19:29:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 437C083E29
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6966C832EB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 437C083E29;
-	Wed,  1 Oct 2025 19:20:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id CF1E872
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 19:20:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6966C832EB;
+	Wed,  1 Oct 2025 19:29:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 79B9E93B
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 19:29:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C08D983E29
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 19:20:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6AF0941387
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 19:29:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FydCZHHdyQOR for <buildroot@buildroot.org>;
- Wed,  1 Oct 2025 19:20:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0C7C83E2B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F0C7C83E2B
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 19:20:16 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DF821866E5; Wed,  1 Oct 2025 19:20:16 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 1 Oct 2025 21:12:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cdb1407c0c6a9a7697e61419431cd4f1ccce08b8
-X-Git-Newrev: 06ca694d72bf7a490785fba28c1717aa302cc38b
-X-Patchwork-Hint: ignore
-Message-Id: <20251001192016.DF821866E5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/faad2: bump to version 2.11.2
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EOw6YgjjvyfE for <buildroot@buildroot.org>;
+ Wed,  1 Oct 2025 19:29:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6A1C44136A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A1C44136A
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6A1C44136A
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 19:29:33 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id E792B13F854;
+ Wed,  1 Oct 2025 21:29:28 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 01 Oct 2025 21:29:28 +0200
+MIME-Version: 1.0
+Date: Wed, 01 Oct 2025 21:29:28 +0200
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In-Reply-To: <20251001165714.3844047-1-dario.binacchi@amarulasolutions.com>
+References: <20251001165714.3844047-1-dario.binacchi@amarulasolutions.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <1a79f1918f843a26fe43ca8f1b0b8797@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1759346971;
+ bh=I02Nxppcm9/sVQuSB7qjGU+TPjjVExNN3u09VGXy/wo=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Z552kg4h/oE4CA6zwnPShWtPA61Ika72CvDr7C3nfoH97YNY64N62K/yA+w08icJn
+ 4hGB4eSo4ZtzXqdz+/1MQ/62NuzpK57Zzo0nAD/JjMLXH55JjkRm1jXjppvF1Tef52
+ a0GKV0UzndsIB6u175RzIHQVr1Gi/vcZTPxeRHDAn/y2BSaeEwWml81UQ/WMnUPcDQ
+ A2KspDIQzhyTYc9L5K9+BCQ0Wr0flhbH9Nx076TBeq32RTohXjeKk+z140pobtnVhm
+ kYwlmCtE6pAyRWUob/2ip8zOSKdvq7+HUvfy/qFqy2dmCcyRn+3Fk2jK0QluURy4wv
+ tz9VC0Tbw+apQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=Z552kg4h
+Subject: Re: [Buildroot] [PATCH 1/1] package/expat: bump to version 2.7.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,47 +83,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06ca694d72bf7a490785fba28c1717aa302cc38b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Dario,
 
-Release notes:
-https://github.com/knik0/faad2/blob/2.11.2/ChangeLog
+Thanks for the patch.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/faad2/faad2.hash | 2 +-
- package/faad2/faad2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 01/10/2025 18:57, Dario Binacchi wrote:
+> Release notes:
+> https://github.com/libexpat/libexpat/blob/R_2_7_2/expat/Changes
 
-diff --git a/package/faad2/faad2.hash b/package/faad2/faad2.hash
-index b7813130fd..6a641dc10f 100644
---- a/package/faad2/faad2.hash
-+++ b/package/faad2/faad2.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  72dbc0494de9ee38d240f670eccf2b10ef715fd0508c305532ca3def3225bb06  faad2-2.11.1.tar.gz
-+sha256  3fcbd305e4abd34768c62050e18ca0986f7d9c5eca343fb98275418013065c0e  faad2-2.11.2.tar.gz
- sha256  d3baf3a54943cf12a994c85867a18dec84f810901b2f2878ddfd77efcc3c150f  COPYING
-diff --git a/package/faad2/faad2.mk b/package/faad2/faad2.mk
-index 0b249b3450..62c469e3ef 100644
---- a/package/faad2/faad2.mk
-+++ b/package/faad2/faad2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FAAD2_VERSION = 2.11.1
-+FAAD2_VERSION = 2.11.2
- FAAD2_SITE = $(call github,knik0,faad2,$(FAAD2_VERSION))
- FAAD2_LICENSE = GPL-2.0
- FAAD2_LICENSE_FILES = COPYING
+This 2.7.2 release note says it fixes:
+https://www.cve.org/CVERecord?id=CVE-2025-59375
+
+Could you check it is applicable, and if yes, send a v2 marking the 
+patch
+as a "security bump" with the appropriate links to the CVE?
+
+> https://github.com/libexpat/libexpat/blob/R_2_7_3/expat/Changes
+
+Since 2.7.3 seems to be a bugfix only, you can keep this 2.7.1 -> 2.7.3 
+bump
+as is in a single commit. It will be back-ported on LTS branches.
+
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
