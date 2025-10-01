@@ -1,75 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85C2BCAC5BB
-	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 19:29:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECDDBCAC5BB
+	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 19:44:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 451DD83B72;
-	Wed,  1 Oct 2025 19:29:36 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GNqKT1ztK14n; Wed,  1 Oct 2025 19:29:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6966C832EB
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6966C832EB;
-	Wed,  1 Oct 2025 19:29:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 79B9E93B
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 19:29:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6AF0941387
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 19:29:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9914641321;
+	Wed,  1 Oct 2025 19:44:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EOw6YgjjvyfE for <buildroot@buildroot.org>;
- Wed,  1 Oct 2025 19:29:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6A1C44136A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A1C44136A
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6A1C44136A
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 19:29:33 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id E792B13F854;
- Wed,  1 Oct 2025 21:29:28 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 01 Oct 2025 21:29:28 +0200
+ id 4yZxCVA0ObWa; Wed,  1 Oct 2025 19:44:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84D814123D
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 84D814123D;
+	Wed,  1 Oct 2025 19:44:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id EE77F1CE
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 19:44:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E017381063
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 19:44:33 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CAjJ-6m5tYsV for <buildroot@buildroot.org>;
+ Wed,  1 Oct 2025 19:44:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 22F4A80F1A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22F4A80F1A
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 22F4A80F1A
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 19:44:31 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0767.dip0.t-ipconnect.de [91.58.7.103])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id D85D7A4C5926
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 21:44:27 +0200 (CEST)
+Received: from [192.168.1.144] (port=57520 helo=bruckner.lan.fli4l)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1v42kV-000000004QC-0mD8
+ for buildroot@buildroot.org; Wed, 01 Oct 2025 19:44:27 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Wed,  1 Oct 2025 21:44:26 +0200
+Message-ID: <20251001194426.3261816-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Wed, 01 Oct 2025 21:29:28 +0200
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>
-In-Reply-To: <20251001165714.3844047-1-dario.binacchi@amarulasolutions.com>
-References: <20251001165714.3844047-1-dario.binacchi@amarulasolutions.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <1a79f1918f843a26fe43ca8f1b0b8797@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1759346971;
- bh=I02Nxppcm9/sVQuSB7qjGU+TPjjVExNN3u09VGXy/wo=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Z552kg4h/oE4CA6zwnPShWtPA61Ika72CvDr7C3nfoH97YNY64N62K/yA+w08icJn
- 4hGB4eSo4ZtzXqdz+/1MQ/62NuzpK57Zzo0nAD/JjMLXH55JjkRm1jXjppvF1Tef52
- a0GKV0UzndsIB6u175RzIHQVr1Gi/vcZTPxeRHDAn/y2BSaeEwWml81UQ/WMnUPcDQ
- A2KspDIQzhyTYc9L5K9+BCQ0Wr0flhbH9Nx076TBeq32RTohXjeKk+z140pobtnVhm
- kYwlmCtE6pAyRWUob/2ip8zOSKdvq7+HUvfy/qFqy2dmCcyRn+3Fk2jK0QluURy4wv
- tz9VC0Tbw+apQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Spamd-Bar: +++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202506031021; t=1759347867;
+ bh=MX3VIgwr1Gk82fRQyqdtf4aXAj2CnkqYzL5orQBbDzM=;
+ h=From:To:Subject:Date:From;
+ b=ESCYJlbH7Ment6i8yTvHjGAI0kid6nLMJgfDhSBUlhYJLUcX9DiRicwVo+JoYBffL
+ pTfl13Zm6qm9tPdCdODjZhLxuvBwhDQVv/jR6pkIj+VbgUh8b3bn03hDBfbaDt1VqA
+ I4gbp5I9e5JV/d99Ovhr+7dCO2lo/Q7QeoLGQH64+ELH2n4SWBvaEJsJOtY+PEd1By
+ /uUq/H19p4PNX1kN79JDudr3OrAi0CTbrgswkjW+aAMeW1pb+q28C1sbEKTONPKoL2
+ GFRLZJHOgTy+T1aJGBL+cxZr2/QcYlsZtCbTZK+SrEe7RXeR2z64ywBEL1Hvw4YIPx
+ U+MsETkIvK/iA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=Z552kg4h
-Subject: Re: [Buildroot] [PATCH 1/1] package/expat: bump to version 2.7.3
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=ESCYJlbH
+Subject: [Buildroot] [PATCH 1/1] package/fetchmail: bump version to 6.5.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,39 +80,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Dario,
+Release notes:
+https://sourceforge.net/p/fetchmail/mailman/message/59238340/
 
-Thanks for the patch.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/fetchmail/fetchmail.hash | 4 ++--
+ package/fetchmail/fetchmail.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 01/10/2025 18:57, Dario Binacchi wrote:
-> Release notes:
-> https://github.com/libexpat/libexpat/blob/R_2_7_2/expat/Changes
+diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
+index 71c0756b15..402fe2c299 100644
+--- a/package/fetchmail/fetchmail.hash
++++ b/package/fetchmail/fetchmail.hash
+@@ -1,4 +1,4 @@
+-# From https://sourceforge.net/p/fetchmail/mailman/message/59196377/
+-sha256  c859156e9bff841d4d984cb3fdcb8042b6b31789fc3387c2649baa95a88d698b  fetchmail-6.5.4.tar.xz
++# From https://sourceforge.net/p/fetchmail/mailman/message/59238340/
++sha256  f989b62729c76afbcd65ec43b9c477f2d990f0913da141ff8166aa4e2bf56025  fetchmail-6.5.5.tar.xz
+ # Locally computed:
+ sha256  e5768c44445cf051dd88e0cf8bfc16d81f7b1a7cc28f4e0204a4f8d81cd16977  COPYING
+diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
+index 90345edf62..3eec63f071 100644
+--- a/package/fetchmail/fetchmail.mk
++++ b/package/fetchmail/fetchmail.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ FETCHMAIL_VERSION_MAJOR = 6.5
+-FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).4
++FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).5
+ FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
+ FETCHMAIL_SITE = https://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
+ FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
+-- 
+2.47.3
 
-This 2.7.2 release note says it fixes:
-https://www.cve.org/CVERecord?id=CVE-2025-59375
-
-Could you check it is applicable, and if yes, send a v2 marking the 
-patch
-as a "security bump" with the appropriate links to the CVE?
-
-> https://github.com/libexpat/libexpat/blob/R_2_7_3/expat/Changes
-
-Since 2.7.3 seems to be a bugfix only, you can keep this 2.7.1 -> 2.7.3 
-bump
-as is in a single commit. It will be back-ported on LTS branches.
-
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
