@@ -4,53 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F11CCCA470
-	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 15:06:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 110C2CAC5BB
+	for <buildroot@archiver.kernel.org>; Wed,  1 Oct 2025 15:16:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5BBB461348;
-	Wed,  1 Oct 2025 15:06:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C5087613CC;
+	Wed,  1 Oct 2025 15:16:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4qBV8NuQfPVK; Wed,  1 Oct 2025 15:06:23 +0000 (UTC)
+ id 0LB43DH0cEoX; Wed,  1 Oct 2025 15:16:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FAB66136F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA1BE613C7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5FAB66136F;
-	Wed,  1 Oct 2025 15:06:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BA1BE613C7;
+	Wed,  1 Oct 2025 15:16:24 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id B0A4D2A6
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 15:06:22 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 92A3A93C
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 15:16:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 91A7040B34
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 15:06:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 78BA840CE8
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 15:16:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CFghfLiSkA0o for <buildroot@buildroot.org>;
- Wed,  1 Oct 2025 15:06:21 +0000 (UTC)
-X-Greylist: delayed 452 seconds by postgrey-1.37 at util1.osuosl.org;
- Wed, 01 Oct 2025 15:06:20 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8A20940B07
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A20940B07
+ id TsG_0u8EQAA6 for <buildroot@buildroot.org>;
+ Wed,  1 Oct 2025 15:16:22 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
  helo=smtpout-04.galae.net; envelope-from=kory.maincent@bootlin.com;
  receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A7BE440D27
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7BE440D27
 Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8A20940B07
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 15:06:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A7BE440D27
+ for <buildroot@buildroot.org>; Wed,  1 Oct 2025 15:16:22 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id AB45DC0246D
- for <buildroot@buildroot.org>; Wed,  1 Oct 2025 14:58:32 +0000 (UTC)
+ by smtpout-04.galae.net (Postfix) with ESMTPS id 31BD2C01F90;
+ Wed,  1 Oct 2025 14:58:35 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 8502B606BF;
- Wed,  1 Oct 2025 14:58:50 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 0CD85606BF;
+ Wed,  1 Oct 2025 14:58:53 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 3505B102F1A41; 
- Wed,  1 Oct 2025 16:58:49 +0200 (CEST)
-Date: Wed, 01 Oct 2025 14:58:27 +0000
+ with ESMTPSA id A8AB5102F1A4D; 
+ Wed,  1 Oct 2025 16:58:51 +0200 (CEST)
+Date: Wed, 01 Oct 2025 14:58:29 +0000
 MIME-Version: 1.0
-Message-Id: <20251001-fix_license-v2-5-bf18911c835d@bootlin.com>
+Message-Id: <20251001-fix_license-v2-7-bf18911c835d@bootlin.com>
 References: <20251001-fix_license-v2-0-bf18911c835d@bootlin.com>
 In-Reply-To: <20251001-fix_license-v2-0-bf18911c835d@bootlin.com>
 To: buildroot@buildroot.org
@@ -63,22 +61,22 @@ X-Mailer: b4 0.14.2
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1759330730; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1759330732; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=pk6Bs7sm1HapPr1yhJATUBmiZJjjgnX2/IuGr7SJTJk=;
- b=CBfHWUNjK4wcvYHzkuI5U5fyPNIft+JN037Kw2g/0h/v1w7BtDLuM4INu/B3LK8PQCyeoS
- WpsV0NujiAxBg1BwN42dImL1n65Z1V58hXwKzgfhvOsaHkMf2i6tVJ4B/riNq5NfOVb2xO
- zCHmJeb8lr5g2hpv71glWhbL9rxYSF94mwGF3Jzu9E186KbOgJLD4r4UITIosV9E+50fCC
- xI9Bi71zIkE8bDz2FgAN/DXm8Lgsm6SSy7pR6pM0W82mvKOK+U6cpcQ2KNehS3LTUbtBS+
- iPx5Wq3tOGYBhxYFvjBcL1D/0AcMLDfveWx16IEuJNO0GdyKDr0ps4KzBQZFYA==
+ bh=QlLvnqMA79mLlXiYLqB1c1r7/XvUkPO5A2k3JhlqWko=;
+ b=c2H1SC6JovmS8mvAi3elmzqj4juBtOetpwfJ92tRT+sXlnyz4IwlTIb5ew+3H6Lo9/CPvZ
+ xQKiUfOvgzuB+h287Nm+JoMtiL2ZmtrhzugWFeRXrEZAKaAaF7PALpCv9n0oZYym4tDPOL
+ h9UrwMBMNTno2NyqvEgb0NVmK3UyFlKEFOxLQbkKzjIzh0EPyzI0kbCxnjQZf9e5NWNiZL
+ m5q3qf8qKRF9IX8MiYHhasKvsw9g+rRIw8lYMkNK65ZhH2Uy3WwU9PBNQPzhHFAeTJlaWI
+ LMkhfSXh2gmj45LUpc3sdTmwA1zf0n8Hal7fQBFvs3ERhZWtUegXUJwnvYuCCA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=CBfHWUNj
-Subject: [Buildroot] [PATCH v2 5/7] barebox: Add support for custom license
- files
+ header.a=rsa-sha256 header.s=dkim header.b=c2H1SC6J
+Subject: [Buildroot] [PATCH v2 7/7] at91bootstrap3: Add support for custom
+ license files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,7 +95,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The Barebox package was not providing any license file when a custom
+The AT91Bootstrap3 package was not providing any license file when a custom
 Linux version was selected.
 
 Fix this by adding a Kconfig option to specify the license file,
@@ -109,52 +107,58 @@ Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
 Change in v2:
 - Do not show license option if it is not a custom repo
 ---
- boot/barebox/Config.in  | 16 ++++++++++++++++
- boot/barebox/barebox.mk |  4 +---
- 2 files changed, 17 insertions(+), 3 deletions(-)
+ boot/at91bootstrap3/Config.in         | 19 +++++++++++++++++++
+ boot/at91bootstrap3/at91bootstrap3.mk |  3 ++-
+ 2 files changed, 21 insertions(+), 1 deletion(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index c3cb0b33325328415349408f5be01a4a32dfcf12..469497aff6833ebdfd61b95cc938c9380a0374fb 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -45,6 +45,22 @@ config BR2_TARGET_BAREBOX_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+index 35bdb28162beda956ff4ffd17772b491bf5f5ca0..987b5eb7efd3d845865d34afaca4f35ae5e88f80 100644
+--- a/boot/at91bootstrap3/Config.in
++++ b/boot/at91bootstrap3/Config.in
+@@ -66,6 +66,25 @@ config BR2_TARGET_AT91BOOTSTRAP3_VERSION
+ 		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT || BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_SVN
+ 	default "custom"	if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
  
-+config BR2_TARGET_BAREBOX_CUSTOM_LICENSE_FILES
-+	string "Barebox license files"
-+	default "COPYING"
-+	depends on BR2_TARGET_BAREBOX_CUSTOM_TARBALL || \
-+		   BR2_TARGET_BAREBOX_CUSTOM_GIT
++config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_LICENSE_FILES
++	string "AT91Bootstrap3 license files"
++	default "LICENSES/MIT.txt"
++	depends on BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT || \
++		   BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_SVN || \
++		   BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
 +	help
-+	  A space-separated list of license files related to the Barebox
-+	  package.
++	  A space-separated list of license files related to the
++	  AT91Bootstrap3 kernel package.
 +
-+config BR2_TARGET_BAREBOX_LICENSE_FILES
++config BR2_TARGET_AT91BOOTSTRAP3_LICENSE_FILES
 +	string
-+	default BR2_TARGET_BAREBOX_CUSTOM_LICENSE_FILES \
-+		if BR2_TARGET_BAREBOX_CUSTOM_TARBALL || \
-+		   BR2_TARGET_BAREBOX_CUSTOM_GIT
-+	default "COPYING"
++	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_LICENSE_FILES \
++		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT || \
++		   BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_SVN || \
++		   BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
++	default "" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X
++	default "LICENSES/MIT.txt"
 +
- config BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR
+ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_PATCH_DIR
  	string "custom patch dir"
  	help
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 929ed48ada8321c7b42a615501fb90645556a37b..cbd6f9313c8012de809d4b0d82f3ffd5d39f680b 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -39,9 +39,7 @@ $(1)_DL_SUBDIR = barebox
+diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+index 4bbe7cc71819bb5841deac0ca9b513e7189796f4..2ed34f3de4d7285f9b14386fe3c21241b65aa4b1 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.mk
++++ b/boot/at91bootstrap3/at91bootstrap3.mk
+@@ -25,11 +25,12 @@ endif
  
- $(1)_DEPENDENCIES = host-lzop
- $(1)_LICENSE = GPL-2.0 with exceptions
--ifeq ($(BR2_TARGET_BAREBOX_LATEST_VERSION),y)
--$(1)_LICENSE_FILES = COPYING
--endif
-+$(1)_LICENSE_FILES = $$(call qstrip,$$(BR2_TARGET_BAREBOX_LICENSE_FILES))
+ ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION),y)
+ AT91BOOTSTRAP3_LICENSE = MIT
+-AT91BOOTSTRAP3_LICENSE_FILES = LICENSES/MIT.txt
+ else ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X),y)
+ AT91BOOTSTRAP3_LICENSE = Atmel License
+ endif
  
- ifeq ($(BR2_TARGET_BAREBOX_NEEDS_OPENSSL),y)
- BAREBOX_DEPENDENCIES += host-openssl host-pkgconf
++AT91BOOTSTRAP3_LICENSE_FILES = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_LICENSE_FILES))
++
+ AT91BOOTSTRAP3_CPE_ID_VENDOR = linux4sam
+ AT91BOOTSTRAP3_CPE_ID_PRODUCT = at91bootstrap
+ 
 
 -- 
 2.43.0
