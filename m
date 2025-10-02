@@ -1,105 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82D8DCAC5B8
-	for <buildroot@archiver.kernel.org>; Thu,  2 Oct 2025 15:56:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49DF1CAC5B8
+	for <buildroot@archiver.kernel.org>; Thu,  2 Oct 2025 18:56:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0467B847E6;
-	Thu,  2 Oct 2025 15:56:14 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uPSTgBnrn5ZZ; Thu,  2 Oct 2025 15:56:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 855EB847D0
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 855EB847D0;
-	Thu,  2 Oct 2025 15:56:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6177E13D
- for <buildroot@buildroot.org>; Thu,  2 Oct 2025 15:56:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 50A2661B43
- for <buildroot@buildroot.org>; Thu,  2 Oct 2025 15:56:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F076960613;
+	Thu,  2 Oct 2025 18:56:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XXs-bk7dup87 for <buildroot@buildroot.org>;
- Thu,  2 Oct 2025 15:56:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52a; helo=mail-ed1-x52a.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8022761C02
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8022761C02
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
- [IPv6:2a00:1450:4864:20::52a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8022761C02
- for <buildroot@buildroot.org>; Thu,  2 Oct 2025 15:56:08 +0000 (UTC)
-Received: by mail-ed1-x52a.google.com with SMTP id
- 4fb4d7f45d1cf-6349e3578adso2033424a12.1
- for <buildroot@buildroot.org>; Thu, 02 Oct 2025 08:56:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1759420566; x=1760025366;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=LMXDNII8Q3NvyFNKSX2Gbby6JfjsrA4NZxTXbL01IcU=;
- b=RduuEurBD68rEmtR76ebZEcRYAzCfTyB+X5jhBlr2WajShFNZZ12QShW1otZgPOX+y
- mbHeQoV3/cBoCmvAG9YbAToofY96wQCfTYIHYDAoPlhZX2X4lktBuexxQsvPYgPZEJ5E
- GNpI3kpbj+5/hPxhvgFgUMyL4+0zvV/VaTfIRuSPVZRAoSh/GVdzZyB6DL3jsPYqr4Ql
- JUxx/wK9oP+RuA/VuXS2vICBlLj07GphCuDkHzH75+RoIi5esC/sNZeZRRMrIC+8PxUg
- 71vTXa2DaACDby4SUvsx6/1THRjxhQm0Z2aYAD26rQzFr1QYjA/k9QaLrUAW7Ql0Ylah
- 399g==
-X-Gm-Message-State: AOJu0YxSyOfVkU7BTkRxmSgNohEvmDjLgMXPbLmd/puVxzqfwN3SIBGn
- fROMhiLNijtO7tm0/1fcl3ytbCFy2Kb7pdO8fAKO2AxxZqA7/VdclYyzSwyk+r6D88/b95hCtuq
- OB9rzi1c=
-X-Gm-Gg: ASbGncsNK+q5464tNBH4NU7MCUlX3ORrrLpy67vOC1Jp0Wl0TVvt2uPR8WM2fUeH1+V
- FmxDxB0shQkomAs4OlITTCleIAH4BBdAt9XETYCpXaRDXALED8iqPNJdxCE73ORirVLVvL/agu0
- fBh2n8isyl3MGK7zJ9QvloJJgeSeEr4RG6Jz7AkgO7MSzrX4jvEW4ObzdQJ6vxp5td8QZZxsc4m
- FpFO96vPypoe3EFaJwh0c+RGTuCRIXO2+r8TVnSspVvqIt+XZ2cMY7PG2lX0c8b1W0lWXEHHbUR
- Ek0Cyi8du7kSedv2g3wmWe868rnri0/nLe2T2bk96db6A6r0SvyB4hLcacSyB/IxqhzWrIqlgxz
- /N2zed+GF4yVXkCRAc3bNs57+MNYwG4zoN013Sz5B97JNuusXzGXf0jgX2P4NUAsYLclGV/19zJ
- Kf8UB3L9k=
-X-Google-Smtp-Source: AGHT+IH/kqD7AoFcy7PyQzqaMEK/jf3fR/tcV2NJXhEe2gn8jUdUWK+0mn6NUqsc+GInSsNQW9tDUA==
-X-Received: by 2002:a17:907:8694:b0:b3b:b839:577b with SMTP id
- a640c23a62f3a-b46e42b6948mr1098104766b.12.1759420566255; 
- Thu, 02 Oct 2025 08:56:06 -0700 (PDT)
-Received: from localhost.localdomain ([2001:b07:6474:ebbf:d129:d23d:efca:4c23])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b4869c4e613sm222407766b.81.2025.10.02.08.56.05
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 02 Oct 2025 08:56:05 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ id 7wC1zgGKEb0h; Thu,  2 Oct 2025 18:56:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E372260607
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id E372260607;
+	Thu,  2 Oct 2025 18:56:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2BB4872
+ for <buildroot@buildroot.org>; Thu,  2 Oct 2025 18:56:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 119B4806D2
+ for <buildroot@buildroot.org>; Thu,  2 Oct 2025 18:56:23 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TotMw-eZQhl4 for <buildroot@buildroot.org>;
+ Thu,  2 Oct 2025 18:56:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 34F5E806D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 34F5E806D1
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 34F5E806D1
+ for <buildroot@buildroot.org>; Thu,  2 Oct 2025 18:56:20 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6cc8f.dip0.t-ipconnect.de [79.214.204.143])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id A660CA4C59B3
+ for <buildroot@buildroot.org>; Thu,  2 Oct 2025 20:56:17 +0200 (CEST)
+Received: from [192.168.1.144] (port=35988 helo=bruckner.lan.fli4l)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1v4OTQ-0000000084n-3TaK
+ for buildroot@buildroot.org; Thu, 02 Oct 2025 18:56:16 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Thu,  2 Oct 2025 17:56:02 +0200
-Message-ID: <20251002155602.872945-2-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251002155602.872945-1-dario.binacchi@amarulasolutions.com>
-References: <20251002155602.872945-1-dario.binacchi@amarulasolutions.com>
+Date: Thu,  2 Oct 2025 20:56:16 +0200
+Message-ID: <20251002185616.2326998-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1759420566; x=1760025366;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=LMXDNII8Q3NvyFNKSX2Gbby6JfjsrA4NZxTXbL01IcU=;
- b=YaJlmqDp8792uOXHX/JodreF/67dbiKf/OlkyILDq/pXXFHJPn4nLQB/ieEXCebwNW
- xqB/LX/IOnVVy28EXVRBx6KRrb9CCSJ2Wb1bLG3UlJkVt1NsKAVYH3qgb5h14IbQDYVS
- PVSDrpqwNFrUZyx1/4BYiCUSW8MDQuJSin9vA=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=kuhls.net; 
+ s=kas202506031021; t=1759431377;
+ bh=49scM5XUwbNfO137niSR9SlN0hvX67RpUuUjrjsHqso=;
+ h=From:To:Subject:Date:From;
+ b=Vx05Sz/faUfjFaNYvLgy5vmvIZfhNS2XvEsLlk/inBLTKA5tGypzJikTv8SdNzVx2
+ yZ7Yjw6de5Qu/thDPnH1v+3oBVott3nOOAYLAwued+bOtzjvEaFcSB+NMypbJickAS
+ Y4P1rMpJv11BDpTveplL1ez9ZFBo8TSEDiA8cqLZef3gvccFDByp4hAo9z0xwZMXV4
+ Iy8s3CKY88XwXGrdTrnnblQT/WKJd8KLAQzl7hNvF2dUZb7fLeTG746XL458HrsZz7
+ Pcke5ojTcOlEo+ZF9x5P4v8fbwl3yJLSyjkZogZ9y03IzsmmqTyCQ4i3nApQS9ZwbD
+ nfx8hpx+INsWg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=YaJlmqDp
-Subject: [Buildroot] [PATCH v2 2/2] package/expat: bump to version 2.7.3
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=Vx05Sz/f
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 5.{4, 10,
+ 15}.x / 6.{1, 6, 12, 16}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,44 +86,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/libexpat/libexpat/blob/R_2_7_3/expat/Changes
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
+ linux/linux.hash                     | 14 +++++++-------
+ package/linux-headers/Config.in.host | 14 +++++++-------
+ 2 files changed, 14 insertions(+), 14 deletions(-)
 
-Changes v1 -> v2:
-- bump from version 2.7.2 to 2.7.3
-
- package/expat/expat.hash | 2 +-
- package/expat/expat.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index 2346efbde56b..9d99c38a451b 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  21b778b34ec837c2ac285aef340f9fb5fa063a811b21ea4d2412a9702c88995c  expat-2.7.2.tar.xz
-+sha256  71df8f40706a7bb0a80a5367079ea75d91da4f8c65c58ec59bcdfbf7decdab9f  expat-2.7.3.tar.xz
- sha256  31b15de82aa19a845156169a17a5488bf597e561b2c318d159ed583139b25e87  COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index 02dda3b12c13..07aba205cfd0 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/linux.hash b/linux/linux.hash
+index d17675f20e..b975932778 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,13 +1,13 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+ sha256  9b607166a1c999d8326098121222feb080a20a3253975fcdfa2de96ba7f757a7  linux-6.17.tar.xz
+-sha256  7ac8c8a3cf05476375deaaa85dfcee095a826ffe557b437f43774fc3b64ce58d  linux-6.16.9.tar.xz
+-sha256  234621e146dacce2241049555d550e4f7a6bde67ccd7ef232d47ac8145425526  linux-6.12.49.tar.xz
+-sha256  601cd332aa695d16607b353feff369b4a0b36d111be077e8af54bdd41e1968a6  linux-6.6.108.tar.xz
+-sha256  6f1aba92c3d0d21299eebb73161a2056c7c78c6ee77462a7cb705bd8cca8b198  linux-6.1.154.tar.xz
++sha256  ab06bba8851e4b682e8834f6f90e56d32dcf98d8c62cd537676104cfd757a8f2  linux-6.16.10.tar.xz
++sha256  c435bd74d1c21fc5a950781a50d78bae2b93944144694843359948ad3afc72a5  linux-6.12.50.tar.xz
++sha256  7731cd99778cfdeedd63aa1b5aa8379511b97ec7df8c9eca44baed4e401730f4  linux-6.6.109.tar.xz
++sha256  c29387aeee085fbcbd91236224b9df805063bac43615e75cea2c6b29604a5c73  linux-6.1.155.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  c70262d2f902710b773ef2f35c04b3ff2111e5186c8a97da351454180aac1e99  linux-5.15.193.tar.xz
+-sha256  210a37cc09f5c2b3d6f011aa1c65d2484d6f4ec17cf90df473f917abb2c26dc0  linux-5.10.244.tar.xz
+-sha256  88de95aeeb8d941fe61497f5e2e886bed25a79d509aa71ba25a2727fd7f0bf2d  linux-5.4.299.tar.xz
++sha256  348d6faada05fd4684450cd7c4e666c3c98cdb96f2309b1520c9a92a378c267e  linux-5.15.194.tar.xz
++sha256  131e75eb14da6fd683b3882bcd856085cfca47cc1aa89cd2deb1b48d22d29d9f  linux-5.10.245.tar.xz
++sha256  9949210093ca924d7b41162bb4772becd3f28ff726a09d061558929690a1815a  linux-5.4.300.tar.xz
+ # Locally computed
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+ sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 0593c13282..cfdb8020c0 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -462,13 +462,13 @@ endchoice
  
--EXPAT_VERSION = 2.7.2
-+EXPAT_VERSION = 2.7.3
- EXPAT_SITE = https://github.com/libexpat/libexpat/releases/download/R_$(subst .,_,$(EXPAT_VERSION))
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
- EXPAT_INSTALL_STAGING = YES
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "5.4.299"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.244"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.193"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.154"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.108"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.12.49"	if BR2_KERNEL_HEADERS_6_12
+-	default "6.16.9"	if BR2_KERNEL_HEADERS_6_16
++	default "5.4.300"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.245"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.194"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.155"	if BR2_KERNEL_HEADERS_6_1
++	default "6.6.109"	if BR2_KERNEL_HEADERS_6_6
++	default "6.12.50"	if BR2_KERNEL_HEADERS_6_12
++	default "6.16.10"	if BR2_KERNEL_HEADERS_6_16
+ 	default "6.17"		if BR2_KERNEL_HEADERS_6_17
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
 -- 
-2.43.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
