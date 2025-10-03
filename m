@@ -1,105 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A64ECAC5B0
-	for <buildroot@archiver.kernel.org>; Fri,  3 Oct 2025 11:52:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E418CCA471
+	for <buildroot@archiver.kernel.org>; Fri,  3 Oct 2025 11:52:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BB5B040B0C;
-	Fri,  3 Oct 2025 11:52:49 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dUMTr_XS-hAd; Fri,  3 Oct 2025 11:52:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CADE040B1E
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CADE040B1E;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C8BA81D5F;
 	Fri,  3 Oct 2025 11:52:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 43B0D226
- for <buildroot@buildroot.org>; Fri,  3 Oct 2025 11:52:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 29C3660667
- for <buildroot@buildroot.org>; Fri,  3 Oct 2025 11:52:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5Vs6SBBP6Own for <buildroot@buildroot.org>;
- Fri,  3 Oct 2025 11:52:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rW-RW_vS--hC; Fri,  3 Oct 2025 11:52:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6931281D73
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6931281D73;
+	Fri,  3 Oct 2025 11:52:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C413191C
+ for <buildroot@buildroot.org>; Fri,  3 Oct 2025 11:52:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA0FE81E41
+ for <buildroot@buildroot.org>; Fri,  3 Oct 2025 11:52:45 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id godcGeohtQjv for <buildroot@buildroot.org>;
+ Fri,  3 Oct 2025 11:52:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::531; helo=mail-ed1-x531.google.com;
+ client-ip=2a00:1450:4864:20::52a; helo=mail-ed1-x52a.google.com;
  envelope-from=raphael.pavlidis@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 60C1D60663
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60C1D60663
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
- [IPv6:2a00:1450:4864:20::531])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 60C1D60663
- for <buildroot@buildroot.org>; Fri,  3 Oct 2025 11:52:46 +0000 (UTC)
-Received: by mail-ed1-x531.google.com with SMTP id
- 4fb4d7f45d1cf-62fc2d92d34so4458129a12.2
- for <buildroot@buildroot.org>; Fri, 03 Oct 2025 04:52:46 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7AFA981D73
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AFA981D73
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7AFA981D73
+ for <buildroot@buildroot.org>; Fri,  3 Oct 2025 11:52:43 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id
+ 4fb4d7f45d1cf-637a2543127so3837275a12.1
+ for <buildroot@buildroot.org>; Fri, 03 Oct 2025 04:52:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1759492364; x=1760097164;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=hgsr8rYu0yUWJ/u9+E3+c0UxOXH2OXN/jDZVsl1Zo0Y=;
- b=F7sfvicpbHbxBwHBcpRHPY0FY+PvEE72rXE0qZBKDVgTfvkX5j3F+wXefpeZMp8f/j
- kH5wnydA+66nf6gQQJXhhnVXvPBgKiA1cf6nOo0so1rTzxCtwk7Jy2HlnFq40JE4gTTg
- PCZy8QnbQ6Ld4mGLOhc2WGmUq782hd4yOhAG7u5v/RsGI4XuNGj7yCYPzd9KoEaZoS0q
- n6JIy9V9ORRBZsLTMDbOpV4xIp6x0ehLfOVnmVRFkcMzTNRi/2EXge2AkcLFHptVSH/2
- +/W5uoAWmGIT5GSuJNIyRpwXb0RGn0r/NlHTwJaGq99Y0av4X1MKBIEAabaiDX9SBieb
- dqhw==
-X-Gm-Message-State: AOJu0YynQnKf4pI8sxMBRA0oIO9qPHB5djN1xiKx4qlyOfW43lHQ4W7D
- Ego+Zpxg/Q6a40Gfk4ydtU3yHFODMgTrO4Xv6RxxvYbm5vQj/un5Wbl3tNopahiAeL0=
-X-Gm-Gg: ASbGncuhOM2oMIm5qwRyyDM9Y1DZnpw4YWmXatUj7VBrTKih+wdebc6JnjxE+lTnMv1
- Bwrm4gTyv1Z5I8s+Bguoq9HPFDYqU6MJa6I0GTEJoZBYHwcOyyJXnqcYr8+2T5YJtH5p2T6177/
- 8xKo5875JYGbQMh7pFI5xwyaLtVsdNaHrFWY7QUcb0H58hQLqhAGn0omcnBb0fGTH+OfVUz2+JK
- ePL45VnSZKNM5B8k10GTWLxVlMcXKr7GbdJJQeO5aQL0yZ93a/zYAZjUJ02TNV55K9J7/oZjYup
- G5MN2WvBkAxvR1fEQcoDoX/x7aIjcVgK7x5PivY4HlRYRnJfGXeuMMCZ7gsOgF0ZEvjtDU0NS19
- vpSE3+3fUlJZ6zy2VRTmONEMmrYJlBzwv56rI
-X-Google-Smtp-Source: AGHT+IGsxece3/hkkY55V6W5bhshP7loguCLxAu8vp6TalBN5vxaFfN7P2lPx057pLpCegH9a11zjg==
-X-Received: by 2002:a17:906:c10e:b0:b32:2b60:eed with SMTP id
- a640c23a62f3a-b49c3f77bb9mr317337966b.44.1759492364168; 
- Fri, 03 Oct 2025 04:52:44 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1759492361; x=1760097161;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=2a2WZMu5yIXjbXoxmg2dQ4DthSJ2cISGWyN0MCkOhLY=;
+ b=IgECEdKGZnT8gOCoJdEMz0kzAl69RcLOxNj3fh6VXFbNe8hDI8XCorBaOKo2vd83uA
+ R4Xgg0cUPqTsTXn5fB69rZDV0e46ox2ssshJpokGb6PEklh30xQwlTmhd1vd2fJZoau3
+ dkZZhwjhyGO3EGU003+Dn0S8dwLNxs+ON2dJAasJC041mk7yk1tvIF1W0+ym8nXcssOY
+ TERxE/V2wo4aFEhXaYyrlCpIjMIXfnoWEAJj0NJN1Ze6J2jLtj8ywJiT7275yL+uWQHD
+ BP26AfT1bEWnmH5fZS8wHaXE2NcaIoGA4mC0uJX7DqrGdTc1dTSNhwN6G0jEuzppUef0
+ hJkw==
+X-Gm-Message-State: AOJu0YyBx9bcxu+qaHq+Bq/Py5qnFG1Z2f1Rhw6w/RS1UC+41UJcLlNI
+ dFQal0R0b2QOKAOn4sIiuil3JLc8JZFn3/LAEAKZVt++i39DE8/k3fGs44ingH1d0xQ=
+X-Gm-Gg: ASbGnctHCIdMgHtEoaswtKKhYVaWfbDXnCc7nN4U7hRfOk0tkJ7A4SrLtzQGu+FLnOT
+ 4pXcY10jXU0hC9MokZuEWaooE1HtNmQy523b13DRt8UKaH4+5zbZYjzRHPkRO4yYMWGXG7whyEl
+ S2TGQNHaEAl9ZZv5FxwWs5Nb5my4c+1JBFjxE987OPJWVNGcSQH5TA2fobRQJykRG8pAIKdgUI2
+ RI7FkahWeHIh65hyZwKtI2eFlpop9m5zXZ9ZAlDVVVTYZ/tGqkvre5MC8ds/sB1Y8pFj8l1O6w+
+ FM65VfjeGkqO8EnQSNdFGx9KQv+YK51x6Vz1zwRVfq8iTmNDJBxn0jnRmbMGvhPjw9ACqzROZdd
+ GXG0JFS2Xd6U0STaDU6oaKheGgGVaU0Xf485E
+X-Google-Smtp-Source: AGHT+IHDkiWUXw7WKtmEsTPuHPnE5VuUg6HGrwvJCenRl5TESgx8OnX4gPGCjIxaDHZTz/rz6Br8jA==
+X-Received: by 2002:a17:907:7fa4:b0:b3c:364d:b884 with SMTP id
+ a640c23a62f3a-b49c4293209mr376956766b.63.1759492360995; 
+ Fri, 03 Oct 2025 04:52:40 -0700 (PDT)
 Received: from LinkMed ([2a02:8070:2483:7e00::f6da])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b486970b23csm430938966b.61.2025.10.03.04.52.43
+ a640c23a62f3a-b486970b23csm430938966b.61.2025.10.03.04.52.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 03 Oct 2025 04:52:43 -0700 (PDT)
+ Fri, 03 Oct 2025 04:52:40 -0700 (PDT)
 From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 To: buildroot@buildroot.org
 Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-Date: Fri,  3 Oct 2025 13:51:20 +0000
-Message-ID: <20251003135120.1221002-2-raphael.pavlidis@gmail.com>
+Date: Fri,  3 Oct 2025 13:51:19 +0000
+Message-ID: <20251003135120.1221002-1-raphael.pavlidis@gmail.com>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251003135120.1221002-1-raphael.pavlidis@gmail.com>
-References: <20251003135120.1221002-1-raphael.pavlidis@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1759492364; x=1760097164; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=hgsr8rYu0yUWJ/u9+E3+c0UxOXH2OXN/jDZVsl1Zo0Y=;
- b=bFSTQANx9te20dWqGZT9Xm+MqLYB6jvFR7MIm4Aa7/sKNdlnYQ72FMK+QDyVcU+mdz
- /bzG5F73ISkFxToQaupufGRUAMNRwX4KYGiU0XjFdUVMC5I3EJPdoGaDdcBokQBuOQbd
- s8ym8Y0Sl++t5ZnZJR2V/H5QMFOB2BuEjNzCjbaaC5PVMSx2UAptsE1arV/JUYcldPTO
- ToMWYX1z9N+YR6rTCK3UnCjC3E5sOVjva2tfE7dZoIhK90spxy0BtAjCMa7gFt9vfCxo
- LD6g1FzkniI5u4GCmj0jLeLpdl+UFzjx8txs1914oCALcqeWOde5X2dyFdhy/CkW+SXA
- /RIw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1759492361; x=1760097161; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=2a2WZMu5yIXjbXoxmg2dQ4DthSJ2cISGWyN0MCkOhLY=;
+ b=XhMqxyDXF6AOb7taoYgqrnNl+Jbb1ICOqygwFmR5mKBz3AlhyZA/+MXfNVoCAuz4uO
+ S8UeQUKe8A2Eph7xv9USGsEQRqNWZ47fRjxY8fO6fZmi08RsGUlXV2qzDczVUAMTqmQf
+ bYZIoa5LimA8NZvwJQl61cAhgjKfPAS/9EirPSk7wq0uYkjVKs5B/qz8QB/uOvTkcb7o
+ 1RSkwdv5Iq4nsSdvj2XJVRttFH/dsooKf8hmSJvhibGW7WztItTw+LnRg6bbDqHHFKZk
+ IN0CqD1oqbwgCxrTrBqRD+hZqLaUCKgB/O6SsSrVk9CZ9eDtuVaYVaIwdrwFGhAjXv5T
+ HYqw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=bFSTQANx
-Subject: [Buildroot] [PATCH v1 2/2] package/xwayland: add nettle and libmd
- as sha1 libraries
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=XhMqxyDX
+Subject: [Buildroot] [PATCH v1 1/2] package/wayland: make libdrm and
+ xlib_libxshemfence optional
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,55 +112,82 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-nettle or libdm can be used for sha1 library. Therefore, if one of those
-libraries is selected, then use it.
+To build XWayland with the DRI3 extension requires libdrm,
+xlib_libxshmfence and libepoxy. This is the same as with the glamour
+extension. Therefore, make the libdrm and xlib_libxshemfence optional
+and merge the checks together.
 
 Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 ---
- package/x11r7/xwayland/Config.in   | 8 ++++----
- package/x11r7/xwayland/xwayland.mk | 8 +++++++-
- 2 files changed, 11 insertions(+), 5 deletions(-)
+ package/x11r7/xwayland/Config.in   |  4 ----
+ package/x11r7/xwayland/xwayland.mk | 11 ++++-------
+ 2 files changed, 4 insertions(+), 11 deletions(-)
 
 diff --git a/package/x11r7/xwayland/Config.in b/package/x11r7/xwayland/Config.in
-index 4f14f2cc36..a4e4a4e46f 100644
+index 311dae25ec..4f14f2cc36 100644
 --- a/package/x11r7/xwayland/Config.in
 +++ b/package/x11r7/xwayland/Config.in
-@@ -3,10 +3,10 @@ config BR2_PACKAGE_XWAYLAND
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS # wayland
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
--	# We need a SHA1 implementation. If either openssl or
--	# libgcrypt are already part of the build, we'll use one of
--	# them, otherwise, use the small libsha1 library.
--	select BR2_PACKAGE_LIBSHA1 if (!BR2_PACKAGE_OPENSSL && !BR2_PACKAGE_LIBGCRYPT)
-+	# We need a SHA1 implementation. If either openssl, libgcrypt, nettle or
-+	# libsha1 are already part of the build, we'll use one of them,
-+	# otherwise, use the small libmd library.
-+	select BR2_PACKAGE_LIBMD if (!BR2_PACKAGE_OPENSSL && !BR2_PACKAGE_LIBGCRYPT && !BR2_PACKAGE_NETTLE && !BR2_PACKAGE_LIBSHA1)
+@@ -6,8 +6,6 @@ config BR2_PACKAGE_XWAYLAND
+ 	# We need a SHA1 implementation. If either openssl or
+ 	# libgcrypt are already part of the build, we'll use one of
+ 	# them, otherwise, use the small libsha1 library.
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # xlib_libxshmfence
+-	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_LIBSHA1 if (!BR2_PACKAGE_OPENSSL && !BR2_PACKAGE_LIBGCRYPT)
  	select BR2_PACKAGE_PIXMAN
  	select BR2_PACKAGE_WAYLAND
- 	select BR2_PACKAGE_WAYLAND_PROTOCOLS
+@@ -16,7 +14,6 @@ config BR2_PACKAGE_XWAYLAND
+ 	select BR2_PACKAGE_XLIB_LIBXFONT2
+ 	select BR2_PACKAGE_XLIB_LIBXKBFILE
+ 	select BR2_PACKAGE_XLIB_LIBXRANDR
+-	select BR2_PACKAGE_XLIB_LIBXSHMFENCE
+ 	select BR2_PACKAGE_XLIB_XTRANS
+ 	select BR2_PACKAGE_XORGPROTO
+ 	help
+@@ -26,5 +23,4 @@ config BR2_PACKAGE_XWAYLAND
+ 
+ comment "xwayland needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
 diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
-index a6d584705b..84c8598bf7 100644
+index e3b6727c19..a6d584705b 100644
 --- a/package/x11r7/xwayland/xwayland.mk
 +++ b/package/x11r7/xwayland/xwayland.mk
-@@ -72,9 +72,15 @@ XWAYLAND_DEPENDENCIES += openssl
- else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
- XWAYLAND_CONF_OPTS += -Dsha1=libgcrypt
- XWAYLAND_DEPENDENCIES += libgcrypt
--else
-+else ifeq ($(BR2_PACKAGE_NETTLE),y)
-+XWAYLAND_CONF_OPTS += -Dsha1=libnettle
-+XWAYLAND_DEPENDENCIES += nettle
-+else ifeq ($(BR2_PACKAGE_LIBSHA1),y)
- XWAYLAND_CONF_OPTS += -Dsha1=libsha1
- XWAYLAND_DEPENDENCIES += libsha1
-+else
-+XWAYLAND_CONF_OPTS += -Dsha1=libmd
-+XWAYLAND_DEPENDENCIES += libmd
+@@ -12,7 +12,6 @@ XWAYLAND_LICENSE_FILES = COPYING
+ XWAYLAND_CPE_ID_VENDOR = x.org
+ XWAYLAND_INSTALL_STAGING = YES
+ XWAYLAND_DEPENDENCIES = \
+-	libdrm \
+ 	pixman \
+ 	wayland \
+ 	wayland-protocols \
+@@ -20,21 +19,19 @@ XWAYLAND_DEPENDENCIES = \
+ 	xlib_libXfont2 \
+ 	xlib_libxkbfile \
+ 	xlib_libXrandr \
+-	xlib_libxshmfence \
+ 	xlib_xtrans \
+ 	xorgproto
+ XWAYLAND_CONF_OPTS = \
+-	-Ddri3=true \
+ 	-Dxvfb=false \
+ 	-Ddefault_font_path=/usr/share/fonts/X11/ \
+ 	-Ddtrace=false \
+ 	-Ddocs=false
+ 
+-ifeq ($(BR2_PACKAGE_LIBEPOXY),y)
+-XWAYLAND_CONF_OPTS += -Dglamor=true
+-XWAYLAND_DEPENDENCIES += libepoxy
++ifeq ($(BR2_PACKAGE_LIBDRM)$(BR2_PACKAGE_XLIB_LIBXSHMFENCE)$(BR2_PACKAGE_LIBEPOXY),yyy)
++XWAYLAND_CONF_OPTS += -Ddri3=true -Dglamor=true
++XWAYLAND_DEPENDENCIES += libdrm xlib_libxshmfence libepoxy
+ else
+-XWAYLAND_CONF_OPTS += -Dglamor=false
++XWAYLAND_CONF_OPTS += -Dglamor=false -Ddri3=false
  endif
  
- ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
+ ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
 -- 
 2.51.0
 
