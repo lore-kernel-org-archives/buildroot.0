@@ -1,99 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89602CCA471
-	for <buildroot@archiver.kernel.org>; Fri,  3 Oct 2025 10:47:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A64ECAC5B0
+	for <buildroot@archiver.kernel.org>; Fri,  3 Oct 2025 11:52:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 479336072F;
-	Fri,  3 Oct 2025 10:47:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BB5B040B0C;
+	Fri,  3 Oct 2025 11:52:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mYQ-2uVH8b1J; Fri,  3 Oct 2025 10:47:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dUMTr_XS-hAd; Fri,  3 Oct 2025 11:52:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C3716077A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CADE040B1E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C3716077A;
-	Fri,  3 Oct 2025 10:47:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CADE040B1E;
+	Fri,  3 Oct 2025 11:52:48 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D3AD3226
- for <buildroot@buildroot.org>; Fri,  3 Oct 2025 10:47:44 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 43B0D226
+ for <buildroot@buildroot.org>; Fri,  3 Oct 2025 11:52:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C32406077A
- for <buildroot@buildroot.org>; Fri,  3 Oct 2025 10:47:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 29C3660667
+ for <buildroot@buildroot.org>; Fri,  3 Oct 2025 11:52:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EFbn8JYVii5I for <buildroot@buildroot.org>;
- Fri,  3 Oct 2025 10:47:44 +0000 (UTC)
+ id 5Vs6SBBP6Own for <buildroot@buildroot.org>;
+ Fri,  3 Oct 2025 11:52:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52f; helo=mail-ed1-x52f.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 92BE460675
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92BE460675
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 92BE460675
- for <buildroot@buildroot.org>; Fri,  3 Oct 2025 10:47:43 +0000 (UTC)
-Received: by mail-ed1-x52f.google.com with SMTP id
- 4fb4d7f45d1cf-62fca216e4aso4899445a12.0
- for <buildroot@buildroot.org>; Fri, 03 Oct 2025 03:47:43 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::531; helo=mail-ed1-x531.google.com;
+ envelope-from=raphael.pavlidis@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 60C1D60663
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60C1D60663
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 60C1D60663
+ for <buildroot@buildroot.org>; Fri,  3 Oct 2025 11:52:46 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id
+ 4fb4d7f45d1cf-62fc2d92d34so4458129a12.2
+ for <buildroot@buildroot.org>; Fri, 03 Oct 2025 04:52:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1759488461; x=1760093261;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=NoBbTiFy2CIaaI6bsLktS2o38StmkbP8IJRxcJEdT6Q=;
- b=cJki+LvXEr7lKCaFocndVsZxvfxvEqv/F8WI468p6WovRhvqBJ8HFnue78Leh98YnU
- Um4oF5yd9oz+SXt5KtgC3F2vzzAO7cfPnW1Bvb1y0tfc63Wyn/w1mcHHlhMXUaLx+43P
- 7z5tt+f0z+h+aC421I0b2sM5+1pkTzuB94hzfpon4xPm2abLZp6LX+SSMur8l4RjHJc+
- fEygI6ai9sNglZ6R3NiNhHI8HHRSV21vCEquwF5F7SSj6qJGalRlrtfUaJWDiAROSZ4l
- H8b3Oqm0wm1qGdtQsGEO0eBgdEQRilJI/GyJXjxLa3wA8I9hKpkBNLPu8NjE3zoDuCVC
- knsw==
-X-Gm-Message-State: AOJu0YyxHF8VcC0VPIhRteup+FVBVHmBqKhqNZQtZEJtgbh+Y3qqNJVZ
- B3yaSALVIIPR1Dyz7w65y5DXmuAwkUJxTDSfhO+1PAa/xmBgTqCtUwlA/rIXpY5k8u0gLkDgF4D
- Gv8Vm
-X-Gm-Gg: ASbGnctjk7KJiJjeq4JCnkQJz653cwmT//g/z05nldofAZ7lFAA8HXASFArfda9E0zC
- w+xkJrcpDhBtNYombB6pT74W4KdZALSdxcL3hwudI/bWV7+4hguIcyx1OVXSCiG40M4LJEsg8GM
- sYeZktVahUuHfmRA3HwPzspBTxFCvbY+PiTAR06UjAp9G296LGDFesdHZ2pU6WRdMIAcgPVUSXt
- A+apx8GKtKiX0r3wSYPAKg5qSFsTxoiSk8AEZG9iaGYSY/UNO5w+psgFVJG7pi5w6RlTqPUMVPD
- BsG8Vf+Mil8ZSc145tCKih0gOL4/Vp8Ic51z9Y6I2Vb4R6Cry7JPEqzqGQmEJqOD/yGxIsAuXx/
- ED7ZrpKmrFDpwYWqcxaLVY95fRVYjOMmziKJRiFxFfiO1CntgHBszxh3nbljlYKTE4cHfU7w=
-X-Google-Smtp-Source: AGHT+IHVTktVw8Lo7FkNyGq2e9ek3UOBxySBde1NrHQdjiJslQpyUz4BzE9XvqmnIP2Uv/v1Dptcvg==
-X-Received: by 2002:a05:6402:54f:b0:62f:8bad:76e5 with SMTP id
- 4fb4d7f45d1cf-6376aace6cemr5027894a12.5.1759488461638; 
- Fri, 03 Oct 2025 03:47:41 -0700 (PDT)
-Received: from dragon.home ([2a02:a03f:73a7:c001:1291:d1ff:fe92:3b5a])
+ d=1e100.net; s=20230601; t=1759492364; x=1760097164;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=hgsr8rYu0yUWJ/u9+E3+c0UxOXH2OXN/jDZVsl1Zo0Y=;
+ b=F7sfvicpbHbxBwHBcpRHPY0FY+PvEE72rXE0qZBKDVgTfvkX5j3F+wXefpeZMp8f/j
+ kH5wnydA+66nf6gQQJXhhnVXvPBgKiA1cf6nOo0so1rTzxCtwk7Jy2HlnFq40JE4gTTg
+ PCZy8QnbQ6Ld4mGLOhc2WGmUq782hd4yOhAG7u5v/RsGI4XuNGj7yCYPzd9KoEaZoS0q
+ n6JIy9V9ORRBZsLTMDbOpV4xIp6x0ehLfOVnmVRFkcMzTNRi/2EXge2AkcLFHptVSH/2
+ +/W5uoAWmGIT5GSuJNIyRpwXb0RGn0r/NlHTwJaGq99Y0av4X1MKBIEAabaiDX9SBieb
+ dqhw==
+X-Gm-Message-State: AOJu0YynQnKf4pI8sxMBRA0oIO9qPHB5djN1xiKx4qlyOfW43lHQ4W7D
+ Ego+Zpxg/Q6a40Gfk4ydtU3yHFODMgTrO4Xv6RxxvYbm5vQj/un5Wbl3tNopahiAeL0=
+X-Gm-Gg: ASbGncuhOM2oMIm5qwRyyDM9Y1DZnpw4YWmXatUj7VBrTKih+wdebc6JnjxE+lTnMv1
+ Bwrm4gTyv1Z5I8s+Bguoq9HPFDYqU6MJa6I0GTEJoZBYHwcOyyJXnqcYr8+2T5YJtH5p2T6177/
+ 8xKo5875JYGbQMh7pFI5xwyaLtVsdNaHrFWY7QUcb0H58hQLqhAGn0omcnBb0fGTH+OfVUz2+JK
+ ePL45VnSZKNM5B8k10GTWLxVlMcXKr7GbdJJQeO5aQL0yZ93a/zYAZjUJ02TNV55K9J7/oZjYup
+ G5MN2WvBkAxvR1fEQcoDoX/x7aIjcVgK7x5PivY4HlRYRnJfGXeuMMCZ7gsOgF0ZEvjtDU0NS19
+ vpSE3+3fUlJZ6zy2VRTmONEMmrYJlBzwv56rI
+X-Google-Smtp-Source: AGHT+IGsxece3/hkkY55V6W5bhshP7loguCLxAu8vp6TalBN5vxaFfN7P2lPx057pLpCegH9a11zjg==
+X-Received: by 2002:a17:906:c10e:b0:b32:2b60:eed with SMTP id
+ a640c23a62f3a-b49c3f77bb9mr317337966b.44.1759492364168; 
+ Fri, 03 Oct 2025 04:52:44 -0700 (PDT)
+Received: from LinkMed ([2a02:8070:2483:7e00::f6da])
  by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-6378811f14bsm3785088a12.45.2025.10.03.03.47.41
+ a640c23a62f3a-b486970b23csm430938966b.61.2025.10.03.04.52.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 03 Oct 2025 03:47:41 -0700 (PDT)
+ Fri, 03 Oct 2025 04:52:43 -0700 (PDT)
+From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  3 Oct 2025 12:47:39 +0200
-Message-ID: <20251003104739.55723-1-titouan.christophe@mind.be>
+Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Date: Fri,  3 Oct 2025 13:51:20 +0000
+Message-ID: <20251003135120.1221002-2-raphael.pavlidis@gmail.com>
 X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251003135120.1221002-1-raphael.pavlidis@gmail.com>
+References: <20251003135120.1221002-1-raphael.pavlidis@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1759488461; x=1760093261; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=NoBbTiFy2CIaaI6bsLktS2o38StmkbP8IJRxcJEdT6Q=;
- b=SngCvZm7CmbXoYajLYEM7tMlKi/jXkmmeN1CdgGaVPK56JsdmNPNqkWkN1vOc0IHX8
- uf4AmemYjRJj2DzojNqoNMvZ0gPw8X/yInJajX9ZCAV+/KWJk3vqFrxGTrXcRfLeHp2D
- jpWvv2yNUF2MGX0DwU7Yk+ko8ykvuZKq/Ih6pNIxgCjrkIQK5lztUydaNlLaf1OX+LwU
- zwLPKHOm+KpDEf0vTlq0gKL+ygnvJopxMc5HkU4f3fjTNKrSVgWsPAifiB2sXLVBgTz/
- RhTDD0hBcysYXUiDTBhqKI5ryx0cMp7IwkaHqQMgrTWdrwVHPs6Vs6RLFrFPNZJp8E34
- lWNw==
+ d=gmail.com; s=20230601; t=1759492364; x=1760097164; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=hgsr8rYu0yUWJ/u9+E3+c0UxOXH2OXN/jDZVsl1Zo0Y=;
+ b=bFSTQANx9te20dWqGZT9Xm+MqLYB6jvFR7MIm4Aa7/sKNdlnYQ72FMK+QDyVcU+mdz
+ /bzG5F73ISkFxToQaupufGRUAMNRwX4KYGiU0XjFdUVMC5I3EJPdoGaDdcBokQBuOQbd
+ s8ym8Y0Sl++t5ZnZJR2V/H5QMFOB2BuEjNzCjbaaC5PVMSx2UAptsE1arV/JUYcldPTO
+ ToMWYX1z9N+YR6rTCK3UnCjC3E5sOVjva2tfE7dZoIhK90spxy0BtAjCMa7gFt9vfCxo
+ LD6g1FzkniI5u4GCmj0jLeLpdl+UFzjx8txs1914oCALcqeWOde5X2dyFdhy/CkW+SXA
+ /RIw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=SngCvZm7
-Subject: [Buildroot] [PATCH] package/python-django: security bump to v5.2.7
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=bFSTQANx
+Subject: [Buildroot] [PATCH v1 2/2] package/xwayland: add nettle and libmd
+ as sha1 libraries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,72 +111,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Oli Vogt <oli.vogt.pub01@gmail.com>, Marcus Hoffmann <bubu@bubu1.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See the release notes: https://docs.djangoproject.com/en/5.2/releases/5.2.7/
+nettle or libdm can be used for sha1 library. Therefore, if one of those
+libraries is selected, then use it.
 
-This fixes the following vulnerabilities:
-- CVE-2025-59681:
-    An issue was discovered in Django 4.2 before 4.2.25, 5.1 before
-    5.1.13, and 5.2 before 5.2.7. QuerySet.annotate(), QuerySet.alias(),
-    QuerySet.aggregate(), and QuerySet.extra() are subject to SQL
-    injection in column aliases, when using a suitably crafted dictionary,
-    with dictionary expansion, as the **kwargs passed to these methods (on
-    MySQL and MariaDB).
-    https://www.cve.org/CVERecord?id=CVE-2025-59681
-
-- CVE-2025-59682:
-    An issue was discovered in Django 4.2 before 4.2.25, 5.1 before
-    5.1.13, and 5.2 before 5.2.7. The django.utils.archive.extract()
-    function, used by the "startapp --template" and "startproject
-    --template" commands, allows partial directory traversal via an
-    archive with file paths sharing a common prefix with the target
-    directory.
-    https://www.cve.org/CVERecord?id=CVE-2025-59682
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/x11r7/xwayland/Config.in   | 8 ++++----
+ package/x11r7/xwayland/xwayland.mk | 8 +++++++-
+ 2 files changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 3ff4eb4e36..f13f5e9d7a 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  1f0327293cc3768903ce8cd390ec3f47  django-5.2.6.tar.gz
--sha256  da5e00372763193d73cecbf71084a3848458cecf4cee36b9a1e8d318d114a87b  django-5.2.6.tar.gz
-+md5  699a77ac347ca3484939762483dc4b08  django-5.2.7.tar.gz
-+sha256  e0f6f12e2551b1716a95a63a1366ca91bbcd7be059862c1b18f989b1da356cdd  django-5.2.7.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
- sha256  dcac1c86cb7ab491702bdb4c41be680fafde51536748cc8aaee3840eec53ed17  django/contrib/gis/measure.py
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index e3959f4192..139a15b13a 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+diff --git a/package/x11r7/xwayland/Config.in b/package/x11r7/xwayland/Config.in
+index 4f14f2cc36..a4e4a4e46f 100644
+--- a/package/x11r7/xwayland/Config.in
++++ b/package/x11r7/xwayland/Config.in
+@@ -3,10 +3,10 @@ config BR2_PACKAGE_XWAYLAND
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS # wayland
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
+-	# We need a SHA1 implementation. If either openssl or
+-	# libgcrypt are already part of the build, we'll use one of
+-	# them, otherwise, use the small libsha1 library.
+-	select BR2_PACKAGE_LIBSHA1 if (!BR2_PACKAGE_OPENSSL && !BR2_PACKAGE_LIBGCRYPT)
++	# We need a SHA1 implementation. If either openssl, libgcrypt, nettle or
++	# libsha1 are already part of the build, we'll use one of them,
++	# otherwise, use the small libmd library.
++	select BR2_PACKAGE_LIBMD if (!BR2_PACKAGE_OPENSSL && !BR2_PACKAGE_LIBGCRYPT && !BR2_PACKAGE_NETTLE && !BR2_PACKAGE_LIBSHA1)
+ 	select BR2_PACKAGE_PIXMAN
+ 	select BR2_PACKAGE_WAYLAND
+ 	select BR2_PACKAGE_WAYLAND_PROTOCOLS
+diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
+index a6d584705b..84c8598bf7 100644
+--- a/package/x11r7/xwayland/xwayland.mk
++++ b/package/x11r7/xwayland/xwayland.mk
+@@ -72,9 +72,15 @@ XWAYLAND_DEPENDENCIES += openssl
+ else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+ XWAYLAND_CONF_OPTS += -Dsha1=libgcrypt
+ XWAYLAND_DEPENDENCIES += libgcrypt
+-else
++else ifeq ($(BR2_PACKAGE_NETTLE),y)
++XWAYLAND_CONF_OPTS += -Dsha1=libnettle
++XWAYLAND_DEPENDENCIES += nettle
++else ifeq ($(BR2_PACKAGE_LIBSHA1),y)
+ XWAYLAND_CONF_OPTS += -Dsha1=libsha1
+ XWAYLAND_DEPENDENCIES += libsha1
++else
++XWAYLAND_CONF_OPTS += -Dsha1=libmd
++XWAYLAND_DEPENDENCIES += libmd
+ endif
  
--PYTHON_DJANGO_VERSION = 5.2.6
-+PYTHON_DJANGO_VERSION = 5.2.7
- PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/4c/8c/2a21594337250a171d45dda926caa96309d5136becd1f48017247f9cdea0
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/b1/96/bd84e2bb997994de8bcda47ae4560991084e86536541d7214393880f01a8
- PYTHON_DJANGO_LICENSE = BSD-3-Clause, MIT (jquery, utils/archive.py), BSD-2-Clause (inlines.js)
- PYTHON_DJANGO_LICENSE_FILES = LICENSE \
- 	django/contrib/gis/measure.py \
+ ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
 -- 
 2.51.0
 
