@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 882DCCCA471
-	for <buildroot@archiver.kernel.org>; Fri,  3 Oct 2025 20:58:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5883CCCA471
+	for <buildroot@archiver.kernel.org>; Fri,  3 Oct 2025 20:58:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 342754132C;
-	Fri,  3 Oct 2025 20:58:02 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xk_ZFqsBgA_I; Fri,  3 Oct 2025 20:58:01 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62E354132D
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 62E354132D;
-	Fri,  3 Oct 2025 20:58:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DD37909
- for <buildroot@buildroot.org>; Fri,  3 Oct 2025 20:58:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F3D3960648
- for <buildroot@buildroot.org>; Fri,  3 Oct 2025 20:57:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F338361580;
+	Fri,  3 Oct 2025 20:58:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 63ICZRATB9dg for <buildroot@buildroot.org>;
- Fri,  3 Oct 2025 20:57:59 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34C1060034
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 34C1060034
- for <buildroot@buildroot.org>; Fri,  3 Oct 2025 20:57:59 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2414786878; Fri,  3 Oct 2025 20:57:59 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 3 Oct 2025 22:43:34 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0a748cddf68bace1ba91a80856aa7ff5f86b0673
-X-Git-Newrev: 0619c666ac80f47fd2870d1e87c6b5dba8b7f55b
-X-Patchwork-Hint: ignore
-Message-Id: <20251003205759.2414786878@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/strace: bump version to 6.17
+ id g2z6sJ0RX1Wz; Fri,  3 Oct 2025 20:58:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92C346155E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 92C346155E;
+	Fri,  3 Oct 2025 20:58:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0B91E226
+ for <buildroot@buildroot.org>; Fri,  3 Oct 2025 20:58:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 087C68376B
+ for <buildroot@buildroot.org>; Fri,  3 Oct 2025 20:58:24 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LSg90Qmz2hOd for <buildroot@buildroot.org>;
+ Fri,  3 Oct 2025 20:58:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D2B2883759
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2B2883759
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D2B2883759
+ for <buildroot@buildroot.org>; Fri,  3 Oct 2025 20:58:22 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id C7CDC6014D;
+ Fri,  3 Oct 2025 22:58:18 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 03 Oct 2025 22:58:18 +0200
+MIME-Version: 1.0
+Date: Fri, 03 Oct 2025 22:58:18 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251003201423.2430485-1-bernd@kuhls.net>
+References: <20251003201423.2430485-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <8c7618321d60b5cc2a1309e2fa73b4a2@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1759525099;
+ bh=qlWUKg4Ct1b3FawigNyllDORYEsgQTTocrwU9dscTXI=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=NjmxZ5yNMipMX067IrsCouj75TCb8T9Pf6FgMx6Dv5Xfc4BthGWTqAx20nfrkU1gk
+ gzpP4S4BJp5ikJ2JJZUb69FLxuGeUx8IqVw4hIUgdfMUzeiw7ZfVVkH2f5Ffgjy/z+
+ tnABwehLBwsVMqlR/6A05gEGg7KSKSNb4o8QCnwcdY5s7m4x/S3KkNhSp2wg8uKIyC
+ 1POBS+Upkdfr5TNvr1PqacsP7ui8+FVLWQyQ6JQQGqKr9lyer7jmFf42mbaYYaF0aT
+ Ca0DyQVdJJG2sR8RE8r0rgvIrBq9/5DrDVTvtExLeErO2NRcDvwwrC6HuMHQ5jGX+B
+ 6pVRIuPscqfiA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=NjmxZ5yN
+Subject: Re: [Buildroot] [PATCH 1/1] package/strace: bump version to 6.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,50 +83,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0619c666ac80f47fd2870d1e87c6b5dba8b7f55b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 03/10/2025 22:14, Bernd Kuhls wrote:
+> Release notes:
+> https://github.com/strace/strace/releases/tag/v6.17
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Release notes:
-https://github.com/strace/strace/releases/tag/v6.17
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/strace/strace.hash | 4 ++--
- package/strace/strace.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index 515d1d296c..f6833d08f0 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
--# https://strace.io/files/6.16/strace-6.16.tar.xz.asc
--sha256  3d7aee7e4f044b2f67f3d51a8a76eda18076e9fb2774de54ac351d777d4ebffa  strace-6.16.tar.xz
-+# https://strace.io/files/6.17/strace-6.17.tar.xz.asc
-+sha256  0a7c7bedc7efc076f3242a0310af2ae63c292a36dd4236f079e88a93e98cb9c0  strace-6.17.tar.xz
- sha256  ca2a0994c57e48b16828008c80cdb626e471b6b59116a8443b2ce4e3c77ddc3b  COPYING
- sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index aaa1b5b830..c693d15bf9 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STRACE_VERSION = 6.16
-+STRACE_VERSION = 6.17
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
- STRACE_LICENSE = LGPL-2.1+
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
