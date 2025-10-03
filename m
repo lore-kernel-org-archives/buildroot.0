@@ -1,155 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FE59CAC5B0
-	for <buildroot@archiver.kernel.org>; Fri,  3 Oct 2025 09:25:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72B08CCA471
+	for <buildroot@archiver.kernel.org>; Fri,  3 Oct 2025 10:47:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD83440D39;
-	Fri,  3 Oct 2025 09:25:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A28360878;
+	Fri,  3 Oct 2025 10:47:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jUma_JvXhhWF; Fri,  3 Oct 2025 09:25:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 827VBXch4pXY; Fri,  3 Oct 2025 10:47:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B952C40CF6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 271676067F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B952C40CF6;
-	Fri,  3 Oct 2025 09:25:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 416E6226
- for <buildroot@buildroot.org>; Fri,  3 Oct 2025 09:25:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 271676067F;
+	Fri,  3 Oct 2025 10:47:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D10FE226
+ for <buildroot@buildroot.org>; Fri,  3 Oct 2025 10:47:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EA0F240818
- for <buildroot@buildroot.org>; Fri,  3 Oct 2025 09:25:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C2A8C6067F
+ for <buildroot@buildroot.org>; Fri,  3 Oct 2025 10:47:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WVPNIF1m-uVH for <buildroot@buildroot.org>;
- Fri,  3 Oct 2025 09:25:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MgsUnFwDQidr for <buildroot@buildroot.org>;
+ Fri,  3 Oct 2025 10:47:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:c105::7;
- helo=ch4pr04cu002.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E427740CF6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E427740CF6
-Received: from CH4PR04CU002.outbound.protection.outlook.com
- (mail-northcentralusazlp170130007.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c105::7])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E427740CF6
- for <buildroot@buildroot.org>; Fri,  3 Oct 2025 09:25:24 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=giIIvLcKI5qVqDQGPNa9sytomPyN8X3n3BJwGE3hZYI27SL4giWeQBxOnJpQ2t7flFPiCZSNdvOZzJ//6Tr+FC4bW/hC0vuWBV1x5zdDGIG4IbjwOjhOOWJck5zyudIZrb+YLG+n2iT3fBPTcDmqHOgq7NA2wiKbifWcJtHYqRejfiY74C4fynjjz/Lxn0n3SjA1FFYKKoYAl3rTi1P27cWStx2F7jAtReooUQ9TcD0CoFxtxHDJhub9+KQlO0RCgXMGo2GhMfF9GP8hND2/Dcll50l+pFaopOvb/IiYK7qcoRN8M+6ZIQ/Wk24J+JG4q37UqcLdYGEzyNqAfK9DQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fiBfa6ju4+yuXq1NqTnXjWelcp951o/nljuQcqmfVB0=;
- b=mcX5l54PVJN7f4zfikEVmEioLb5xTTThXcERrw7X/eOtG54X0Q1gDHLAZ/AxIPnRule0yqpmuX3c7hr9QO1IvRcQEJ830//AUz6fm78oEbKEWNpEB+Ly+uaDIZUyMSrMKxuV7OC5q90Psx2vN3VFEPz4gupvjK5QGgH+xgCs4EAkf1OLVB6U/U+bnSEnEhJPsQgXEyuPAWjV+/8+3Xw1Pt1TDFzAhD59mTPcVC0ZhthhdrCVJRtf0VRrKD76UrlvX2LhHbBnUGdnEtQgx/3aRT6NdO84Nyv/rSSgPdU0RCUiQgg2a3BYAtZoORIxqIgRPOcLNGteObXvV77nbYqw8w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from MW4PR04CA0254.namprd04.prod.outlook.com (2603:10b6:303:88::19)
- by DM6PR12MB4465.namprd12.prod.outlook.com (2603:10b6:5:28f::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.18; Fri, 3 Oct
- 2025 09:25:19 +0000
-Received: from SJ1PEPF00001CDD.namprd05.prod.outlook.com
- (2603:10b6:303:88:cafe::cf) by MW4PR04CA0254.outlook.office365.com
- (2603:10b6:303:88::19) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9182.16 via Frontend Transport; Fri,
- 3 Oct 2025 09:25:19 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
-Received: from satlexmb07.amd.com (165.204.84.17) by
- SJ1PEPF00001CDD.mail.protection.outlook.com (10.167.242.5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9182.15 via Frontend Transport; Fri, 3 Oct 2025 09:25:19 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by satlexmb07.amd.com
- (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.17; Fri, 3 Oct
- 2025 02:25:18 -0700
-Received: from satlexmb07.amd.com (10.181.42.216) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 3 Oct
- 2025 04:25:18 -0500
-Received: from xirengwts09.xilinx.com (10.180.168.240) by satlexmb07.amd.com
- (10.181.42.216) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
- Transport; Fri, 3 Oct 2025 02:25:17 -0700
-To: <buildroot@buildroot.org>
-Date: Fri, 3 Oct 2025 10:25:14 +0100
-Message-ID: <20251003092514.3686293-1-neal.frager@amd.com>
-X-Mailer: git-send-email 2.25.1
+ client-ip=2a00:1450:4864:20::629; helo=mail-ej1-x629.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2BC3160675
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BC3160675
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2BC3160675
+ for <buildroot@buildroot.org>; Fri,  3 Oct 2025 10:47:37 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id
+ a640c23a62f3a-b3ee18913c0so347745266b.3
+ for <buildroot@buildroot.org>; Fri, 03 Oct 2025 03:47:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1759488455; x=1760093255;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=ZZbzarPGf2ZaZEOqlt3b5n0b/QNzkglDtOWw5WluX+4=;
+ b=h+iqhCv2UrbKzCb63qPWpDqL4WJgJXvV5q1+dLsXFoS79iOrPyl5oNCKqj1U03TEwf
+ pyD70riIEuq9Gj9qy4j2isnyABxN2OMd85qr37uA1X8bUkobwTMFgs/puLAlvxaECT8i
+ jcUgCMDi8BUfmS+dosbDFwKUi/pr9nGwcutpAg5xqGRQTZ42Uue6iQ6xU4IQCSeyRTUZ
+ pI2/Rk9sAm4rFw6LLYdbUmwzfHVlYjcGRZLRdzrUILySl6yeNBfNxdYAU34xEWFk3dOG
+ yzxyyUOccC8J8gF6W/Tu4HpF+JWazLnS1NawEmnDUhmpZBOl1zH40UteS5wFJREFJXJh
+ uHeg==
+X-Gm-Message-State: AOJu0YzN0VtA2i1n/go7UsXiVdj2uaNAuRmArdMuoD54hG8b/vEyLMzE
+ CAvLW9UoPcmx0Y8PDB7JJMqal+lY6l4hLMyFLu5CefJHd20F1uNTVpHPD23RfWrqglgMLiDsHo8
+ 7BGdj
+X-Gm-Gg: ASbGnct0vOVNlVcu42mkFgwdpQqgUUnh2mZiwh2rua2p/cSjy4rpj9p5rKclHI0wxFv
+ hvY4oNnDqbBzVrxkNOUi2gHMANCLWxq0GTdgRi5xpq7KF7DEqsrfObR2mAc6MY7I0ntgWZBmBsE
+ gChp1ZcCGrBEC94K7Kyun8mgA7vvHrtT5+fiPJmeUIQ1W19Ip2lG8m1z8LFqaKjHkH7WR+EK1b7
+ eSXIxUimBR6M4MC/y68YhMxShZ0h6G0cI4rlbc+Wd1JnukzdePvZ4fl0VzNaT5E51FjWwEI+Uz0
+ siQ2kxzHpcT5A1ohqdUYGDqeoeyFKozeV8jGV/N9Z9x3UFhtPGn+yCqFol+DP4Q6QomqgbE1fwZ
+ nCM+C6V3LVEi64a5h1VnaiCWxZhYfh06p84ZxLB6poj/NZMhuQ/x6TvKNX/yI
+X-Google-Smtp-Source: AGHT+IHawrpyIF9qEXR42gZrGBb1+QddgF8y3gBtT1sbi+bIBXOocnbZIBVL/YxFIDaPomipGNuM3g==
+X-Received: by 2002:a17:907:1c0a:b0:b3d:b3fe:27ed with SMTP id
+ a640c23a62f3a-b49c3f71d55mr367685566b.57.1759488455512; 
+ Fri, 03 Oct 2025 03:47:35 -0700 (PDT)
+Received: from dragon.home ([2a02:a03f:73a7:c001:1291:d1ff:fe92:3b5a])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-b4865a83482sm415655766b.26.2025.10.03.03.47.34
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 03 Oct 2025 03:47:35 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Fri,  3 Oct 2025 12:47:28 +0200
+Message-ID: <20251003104728.55578-1-titouan.christophe@mind.be>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CDD:EE_|DM6PR12MB4465:EE_
-X-MS-Office365-Filtering-Correlation-Id: 833436d8-f792-4711-915f-08de025ec537
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
- ARA:13230040|376014|7416014|1800799024|82310400026|36860700013|41080700001; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?8vRLG0HBZdS0BenJ7u2OzW0fL85G2KjOSz9pFL5q4rVuZU6cYUMFENh/E3I+?=
- =?us-ascii?Q?Q0SlQw2J2n8+uWDMls/2kf0LqbPoLYZE78e9f34vkFMD6Ct68CW1CVr0ZREw?=
- =?us-ascii?Q?/oYP97C3gJubA7ZiCUR3SZ+OhTeRQh5FWPnMuspCU4mMnJ0rUcdOMv5UlZKq?=
- =?us-ascii?Q?fViJoEIWtqESQqcN89PaJDPuxPpfFkwZ2qyPuW+smyOfxzVj6OBzT9d8eHKS?=
- =?us-ascii?Q?ocdTSYmpV06dCU9YwUuyZljWG0WFQwNXE008QOftWkrmixvgy03Pf7IrWeOg?=
- =?us-ascii?Q?cddPuM/rMboulf91tCmNp40QzY6YTCkcvtohk4NGrGYIe0hiBztQ1MiaPRH7?=
- =?us-ascii?Q?TqBN9XLzR5nTDrMBsRTeQYPxOIUBmx60ZRKJSyv5Ly+3CvFhbyIKVKfJrfdF?=
- =?us-ascii?Q?xN4v3bStA9GpnPbOzIwjPOz5QPPlNy0XaWQhsgFw5O4huuXOnanuyvYtQnfA?=
- =?us-ascii?Q?EZ1ekvLdDCZzkC+3e34hMVlzyfR6Xi2QC3ritKNqdNzWlH9z2i786/dEAzCq?=
- =?us-ascii?Q?eJifGcxeNUZsSApYyoxzo8yTUg4V2lNj1+1jetXNgr7Rf+kxf+9yR2Leq9S2?=
- =?us-ascii?Q?V/aGNAX+ubQW4lxrBOf4pM3xwPId8DZUfzxgKZUgzAeAH9r8Xujqz0KNUlJ+?=
- =?us-ascii?Q?jw3r+O8tpm5XrLCrdWIJ91dHni8ALsXzc/UoTO/za/8y3ttuf1IICUW1076e?=
- =?us-ascii?Q?jIavdRfPROOdFh8VsRMLM2xtzHIMUR5lXVXNwH1IR4q0IoID8yEdS0pkCHqI?=
- =?us-ascii?Q?wu5VPTWotgvTCa+gdSwGAi1cqJnjebUrUzFRCxBWsM3/3VddYZ/Mn1qEp/4g?=
- =?us-ascii?Q?NuKUnN6eJlrfI4+tF0Z05khIsPbknTpsIaavDYwdCRbpEC7CF6UztP/2q94V?=
- =?us-ascii?Q?OQLWAEjuFrJiGAImmVt/BTDNZ5wKgy+898ARJi/M8smd8KoU694Qkpsqy3/d?=
- =?us-ascii?Q?LDHBb5O0IeGTuxMAx+QvNbFzX4C10FADsHyPDbmi1I2Qe/qSfI3NBVkQpm75?=
- =?us-ascii?Q?Q1b6MJyTmR/9zFD5zbiaVkWzKDpUb6oUn+F+U9wqCSO+m877dm3IWpKat5fA?=
- =?us-ascii?Q?2qY0fufpZd7wcQYo+/kLdeVu2K28EiMptZ3fqkFBsbr4TtWm8k69FaLuV4hk?=
- =?us-ascii?Q?XS65FbCD/0zvAZJzrWWg0Scf/GBBsDCSadtr5OPDInafsVZ13ckMIfHga6p7?=
- =?us-ascii?Q?YbH36hdH4cxVr9LpGru6QKWyJlm4HOauRSw513hXCVXg1ZDg8P2rMqHWxDrn?=
- =?us-ascii?Q?jXgwE7uVbEEj34vwEoIkiJCnYVr3XanlmAS87xWXtmJTWBD8mWyTaWxT3g6R?=
- =?us-ascii?Q?Zr+FlNKB31qull+fPr05cmUlSnzSfOf/p8wJOyEZXtQStGsvjqqamMhYdnFu?=
- =?us-ascii?Q?s4tMhnBuqD7unF+k0OAVRVJ5bXogRgDrCBNP+/zj6C9fgq2PQtZiHAfH4Q0h?=
- =?us-ascii?Q?gf67oNbMc7c2b/HV6zG2L40Dsn5W6zOorHzwWBz7ddo0B8rRfwFwntA0hoaD?=
- =?us-ascii?Q?EIds0tpX7yJ8GdEJf28AD/0CjOaKrTNVsi1gqatZ1ivl6g4WgfyyNMzzTtRw?=
- =?us-ascii?Q?+zOKhDUw0Vcln+Ck9oy081NGf7CE3VPsIEH6E8wl?=
-X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:CAL; SFV:NSPM; H:satlexmb07.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(376014)(7416014)(1800799024)(82310400026)(36860700013)(41080700001);
- DIR:OUT; SFP:1101; 
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Oct 2025 09:25:19.0863 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 833436d8-f792-4711-915f-08de025ec537
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[satlexmb07.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PEPF00001CDD.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4465
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fiBfa6ju4+yuXq1NqTnXjWelcp951o/nljuQcqmfVB0=;
- b=CcN/CoAccp0fBrjaN7fv+8NZIgvAUfgohZ0LuwaFM3q0c/xaztAQfsu+2UtZI0pGXDT74A8NaZASi5lLgTVKhgxpWrpHn9mn8FitEiI3ceMzLr797bmddCE+2vZFm3SnhnbXqrptsWcwGAMHBOuC+zNABbsbHJjiqU3WZyb0Bio=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=mind.be; s=google; t=1759488455; x=1760093255; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=ZZbzarPGf2ZaZEOqlt3b5n0b/QNzkglDtOWw5WluX+4=;
+ b=O+8H/ueUu0JFTKBj2PXhSwiFXE1UuXl5VhCOYx3aXJ1d/+kpFTkw3cWdUrpAldRlds
+ gLAh4P9virBRB+0q3YlEyhHxUfeLxRKPOdIiaIgbo/GlG8MrimHZuwRI9E8nBAjHxPZQ
+ ndBduiadDsiUF3bGYct5Dk20ndQgdyxV3ia3UQ/xPZuxc8WA5m1PdOOAybncLzidgpNI
+ KknPmwST5dNPVMMaGNcD7ranJxJ7rp8H9VSxqq9SVy7vWm9RBYVhp9PMSxl+Xo7kS02M
+ fv1+fMegfaLnaC880tls6MiCxBmuVP30MTzU3ge3Dr4aeSJ5VPoPq7md68zWZF/19zrX
+ 7FPA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=CcN/CoAc
-Subject: [Buildroot] [PATCH v1 1/1] board/versal/post-image: remove
- unnecessary mkdir
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=O+8H/ueU
+Subject: [Buildroot] [PATCH for 2025.02.x] package/python-django: security
+ bump to v5.1.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -161,47 +107,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
- yann.morin@orange.com, brandon.maier@collins.com, ju.o@free.fr,
- Neal Frager <neal.frager@amd.com>, thomas.petazzoni@bootlin.com,
- romain.naour@smile.fr, michal.simek@amd.com, romain.naour@gmail.com
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Oli Vogt <oli.vogt.pub01@gmail.com>, Marcus Hoffmann <bubu@bubu1.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The board/versal/post-image.sh script has an unnecessary mkdir command:
-mkdir -p "${BINARIES_DIR}"
+See the release notes: https://docs.djangoproject.com/en/5.1/releases/5.1.13/
 
-Just above the command, the script is making a symlink for the Linux DTB in
-the ${BINARIES_DIR}, so if the ${BINARIES_DIR} did not already exist with
-images inside, the script would fail regardless of whether this mkdir is
-executed or not.
+This fixes the following vulnerabilities:
+- CVE-2025-59681:
+    An issue was discovered in Django 4.2 before 4.2.25, 5.1 before
+    5.1.13, and 5.2 before 5.2.7. QuerySet.annotate(), QuerySet.alias(),
+    QuerySet.aggregate(), and QuerySet.extra() are subject to SQL
+    injection in column aliases, when using a suitably crafted dictionary,
+    with dictionary expansion, as the **kwargs passed to these methods (on
+    MySQL and MariaDB).
+    https://www.cve.org/CVERecord?id=CVE-2025-59681
 
-For this reason, remove the mkdir call from the script because it is not
-necessary.
+- CVE-2025-59682:
+    An issue was discovered in Django 4.2 before 4.2.25, 5.1 before
+    5.1.13, and 5.2 before 5.2.7. The django.utils.archive.extract()
+    function, used by the "startapp --template" and "startproject
+    --template" commands, allows partial directory traversal via an
+    archive with file paths sharing a common prefix with the target
+    directory.
+    https://www.cve.org/CVERecord?id=CVE-2025-59682
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- board/versal/post-image.sh | 1 -
- 1 file changed, 1 deletion(-)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/board/versal/post-image.sh b/board/versal/post-image.sh
-index b5ce2e3f0c..3242e4384a 100755
---- a/board/versal/post-image.sh
-+++ b/board/versal/post-image.sh
-@@ -12,7 +12,6 @@ FIRST_DT=$(sed -nr \
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 155e3af8ef..3946565f22 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  7f7a03e4f19ad7813d96f9fbbad65a5c  django-5.1.12.tar.gz
+-sha256  8a8991b1ec052ef6a44fefd1ef336ab8daa221287bcb91a4a17d5e1abec5bbcc  django-5.1.12.tar.gz
++md5  dad76d0dbdbc86402061182fc708a442  django-5.1.13.tar.gz
++sha256  543ff21679f15e80edfc01fe7ea35f8291b6d4ea589433882913626a7c1cf929  django-5.1.13.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+ sha256  dcac1c86cb7ab491702bdb4c41be680fafde51536748cc8aaee3840eec53ed17  django/contrib/gis/measure.py
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 3026c304be..c2581f5f90 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
- BOARD_DIR="$(dirname "$0")"
- 
--mkdir -p "${BINARIES_DIR}"
- cat <<-__HEADER_EOF > "${BINARIES_DIR}/bootgen.bif"
- 	the_ROM_image:
- 	{
+-PYTHON_DJANGO_VERSION = 5.1.12
++PYTHON_DJANGO_VERSION = 5.1.13
+ PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/f0/99/a951d93a27a5bc59fb96edbcdbc03fb9bfac51177f1bc0110888de85af3f
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/bb/57/ad9905d03a2ee39064ee7ba69f8e2790db4a7ffaef9c54f95e7a8f2cb0a1
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause, MIT (jquery, utils/archive.py), BSD-2-Clause (inlines.js)
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE \
+ 	django/contrib/gis/measure.py \
 -- 
-2.25.1
+2.51.0
 
 _______________________________________________
 buildroot mailing list
