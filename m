@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57779CAC5B0
-	for <buildroot@archiver.kernel.org>; Fri,  3 Oct 2025 12:00:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EF15CCD182
+	for <buildroot@archiver.kernel.org>; Fri,  3 Oct 2025 12:00:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB3BC40E3A;
-	Fri,  3 Oct 2025 12:00:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4299C40E84;
+	Fri,  3 Oct 2025 12:00:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WGEfGDbjNvcb; Fri,  3 Oct 2025 12:00:24 +0000 (UTC)
+ id MQfeMWDqesMR; Fri,  3 Oct 2025 12:00:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA9B040E80
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A71CF40E52
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DA9B040E80;
-	Fri,  3 Oct 2025 12:00:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id CF9FF91C
- for <buildroot@buildroot.org>; Fri,  3 Oct 2025 12:00:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A71CF40E52;
+	Fri,  3 Oct 2025 12:00:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 233A1226
+ for <buildroot@buildroot.org>; Fri,  3 Oct 2025 12:00:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CEDEF409EF
- for <buildroot@buildroot.org>; Fri,  3 Oct 2025 12:00:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1DFBE40E51
+ for <buildroot@buildroot.org>; Fri,  3 Oct 2025 12:00:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EKIYONj7t1yA for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5gAKVuIiCeir for <buildroot@buildroot.org>;
  Fri,  3 Oct 2025 12:00:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A5FF409DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7265340431
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6A5FF409DD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7265340431
  for <buildroot@buildroot.org>; Fri,  3 Oct 2025 12:00:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5AB0E867E7; Fri,  3 Oct 2025 12:00:03 +0000 (UTC)
+ id 644A786745; Fri,  3 Oct 2025 12:00:03 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 3 Oct 2025 13:57:32 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 66ef333884a93d8acea0286fcd9f6ee0b8e1c0f9
-X-Git-Newrev: b35771ee270521378b87363506f6e7807859cbaf
+X-Git-Oldrev: b35771ee270521378b87363506f6e7807859cbaf
+X-Git-Newrev: 789f5cdbbb81a1fccda26fd9e9dc00d2a0866a89
 X-Patchwork-Hint: ignore
-Message-Id: <20251003120003.5AB0E867E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/motion: bump version to 4.7.1
+Message-Id: <20251003120003.644A786745@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/intel-gmmlib: bump version to
+ 22.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,41 +66,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b35771ee270521378b87363506f6e7807859cbaf
+commit: https://git.buildroot.net/buildroot/commit/?id=789f5cdbbb81a1fccda26fd9e9dc00d2a0866a89
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Release notes:
-https://github.com/Motion-Project/motion/releases/tag/release-4.7.1
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/motion/motion.hash | 2 +-
- package/motion/motion.mk   | 2 +-
+ package/intel-gmmlib/intel-gmmlib.hash | 2 +-
+ package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/motion/motion.hash b/package/motion/motion.hash
-index 1d1a005e7a..4b5cec0a6f 100644
---- a/package/motion/motion.hash
-+++ b/package/motion/motion.hash
+diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
+index c4e90dd67f..aef463783c 100644
+--- a/package/intel-gmmlib/intel-gmmlib.hash
++++ b/package/intel-gmmlib/intel-gmmlib.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  657b7d8ee59f42cf06e00da04f0627f3ff42ff5344c9a1da33d16207c4451a03  motion-4.7.0.tar.gz
-+sha256  c11f68c7cea949227e57797b932f01432d8942ef5323c75063d19b951d0d4194  motion-4.7.1.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/motion/motion.mk b/package/motion/motion.mk
-index fc70349221..a405403b2b 100644
---- a/package/motion/motion.mk
-+++ b/package/motion/motion.mk
+ # Locally computed
+-sha256  9b8eac1891650021ded26b72585e7a2c702a3ba47565c968feabd14ab38d18f7  intel-gmmlib-22.8.1.tar.gz
++sha256  2e43e538a002574f45d480a24e02297c960963dc7914b7328791d9836832ff43  intel-gmmlib-22.8.2.tar.gz
+ sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
+diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
+index 18c8e48648..92569a106e 100644
+--- a/package/intel-gmmlib/intel-gmmlib.mk
++++ b/package/intel-gmmlib/intel-gmmlib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MOTION_VERSION = 4.7.0
-+MOTION_VERSION = 4.7.1
- MOTION_SITE = $(call github,Motion-Project,motion,release-$(MOTION_VERSION))
- MOTION_LICENSE = GPL-2.0
- MOTION_LICENSE_FILES = LICENSE
+-INTEL_GMMLIB_VERSION = 22.8.1
++INTEL_GMMLIB_VERSION = 22.8.2
+ INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
+ INTEL_GMMLIB_LICENSE = MIT
+ INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
