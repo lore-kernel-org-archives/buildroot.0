@@ -1,75 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D4FFCCA471
-	for <buildroot@archiver.kernel.org>; Fri,  3 Oct 2025 18:18:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8542CAC5B0
+	for <buildroot@archiver.kernel.org>; Fri,  3 Oct 2025 19:05:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 57521410F4;
-	Fri,  3 Oct 2025 18:18:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 76D6161464;
+	Fri,  3 Oct 2025 19:05:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vl2FwHk5umhP; Fri,  3 Oct 2025 18:18:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LyywwTv6kdeN; Fri,  3 Oct 2025 19:05:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 814AE410F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AECAD6115E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 814AE410F9;
-	Fri,  3 Oct 2025 18:18:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4DA3713D
- for <buildroot@buildroot.org>; Fri,  3 Oct 2025 18:18:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AECAD6115E;
+	Fri,  3 Oct 2025 19:05:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7CFCF13D
+ for <buildroot@buildroot.org>; Fri,  3 Oct 2025 19:05:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3383D4101E
- for <buildroot@buildroot.org>; Fri,  3 Oct 2025 18:18:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6EDF36115E
+ for <buildroot@buildroot.org>; Fri,  3 Oct 2025 19:05:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AYFa1ub4aieT for <buildroot@buildroot.org>;
- Fri,  3 Oct 2025 18:18:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 10224400E3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10224400E3
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 10224400E3
- for <buildroot@buildroot.org>; Fri,  3 Oct 2025 18:18:05 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 941B52003C6;
- Fri,  3 Oct 2025 20:18:02 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 03 Oct 2025 20:18:02 +0200
-MIME-Version: 1.0
-Date: Fri, 03 Oct 2025 20:18:02 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251003143803.648043-1-bernd@kuhls.net>
-References: <20251003143803.648043-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <7ae260e789d4ea3daed2bf0d39c2cd02@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1759515483;
- bh=jGRvRJ2hrgQfs/G7mp3KpSpA1LXI9BNjgJs/ymv8EL0=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=VFUW0Ykrb1ttlrHAx8uH8dII4nPr7tMyRYy5ko+EVSsd3pmamfKgvQpR+gndBtdn4
- kplGVzgnJaJ6FS0hhkejcTkgUAPK+784kDc44qrzw4soNFEBArDIH+zpD3CpvjxKHh
- vQkz9enHiAu+hFy9AXknEMbyk4MbkkUEaAXqVopAa7boY1HKfbF4RV2/uWwa3nio86
- bhqUJeyvEpGBltKtfQ2+EAWFQUUiUUpIR1dk3urGVY34Owu9KP85gaJK46FRgeBpXj
- FboJawS0iolvYvIVlvWvfZzXZkXC6MnRGMpX/tt3iKrIXPzyKV3YgyBuYnrKJ00XkK
- xvnE/50b0Sk+Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=VFUW0Ykr
-Subject: Re: [Buildroot] [PATCH 1/1] package/fetchmail: security bump
- version to 6.5.6
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QzWkjNYBJUVc for <buildroot@buildroot.org>;
+ Fri,  3 Oct 2025 19:05:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FED560878
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9FED560878
+ for <buildroot@buildroot.org>; Fri,  3 Oct 2025 19:05:30 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8EFE486801; Fri,  3 Oct 2025 19:05:30 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 3 Oct 2025 20:52:53 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7cb507b31c7eb815e0446ff8ba9bc45e83783072
+X-Git-Newrev: b62273acfac190d8a6af0022cae2a5c874140b14
+X-Patchwork-Hint: ignore
+Message-Id: <20251003190530.8EFE486801@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tvheadend: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,21 +59,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 03/10/2025 16:38, Bernd Kuhls wrote:
-> Release notes:
-> https://sourceforge.net/p/fetchmail/mailman/message/59241831/
-> 
-> CVE pending assignment by MITRE:
-> https://fetchmail.sourceforge.io/fetchmail-SA-2025-01.txt
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=b62273acfac190d8a6af0022cae2a5c874140b14
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/tvheadend/tvheadend.hash | 2 +-
+ package/tvheadend/tvheadend.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index bf1281f818..abe1ac11d9 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  287c875ed08aa9ad8e2b90c209d57ec300ac89b2dfbcefe060a103eaf24dd3f7  tvheadend-0af87f13f786046df7bb610f8a6b291c26af1b14.tar.gz
++sha256  44765f50b16325721e4e6938aa32bdd368d516c94e6985ea3ca1ef6c6bfe75c6  tvheadend-5fd594910abbff1091e11b606124905a1cc92bb6.tar.gz
+ sha256  0420f5d2e0df002e31320d9f58fc5454cbb8f53fa0ab1fc85afb8821c6b103e3  LICENSE.md
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index cd0bb68380..dd3e20c2be 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TVHEADEND_VERSION = 0af87f13f786046df7bb610f8a6b291c26af1b14
++TVHEADEND_VERSION = 5fd594910abbff1091e11b606124905a1cc92bb6
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPL-3.0+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
