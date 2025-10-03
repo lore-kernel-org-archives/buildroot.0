@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9688ECCA471
-	for <buildroot@archiver.kernel.org>; Fri,  3 Oct 2025 12:00:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73E9ECCD182
+	for <buildroot@archiver.kernel.org>; Fri,  3 Oct 2025 12:00:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0FB2E80E71;
-	Fri,  3 Oct 2025 12:00:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C5BC140E62;
+	Fri,  3 Oct 2025 12:00:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2aRcOVmpLviB; Fri,  3 Oct 2025 12:00:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dkLtcAf-R6vY; Fri,  3 Oct 2025 12:00:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05AFD80F28
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5764540E6D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 05AFD80F28;
-	Fri,  3 Oct 2025 12:00:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 117FE91C
- for <buildroot@buildroot.org>; Fri,  3 Oct 2025 12:00:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5764540E6D;
+	Fri,  3 Oct 2025 12:00:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4E0F6226
+ for <buildroot@buildroot.org>; Fri,  3 Oct 2025 12:00:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B0EF361193
- for <buildroot@buildroot.org>; Fri,  3 Oct 2025 12:00:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 351434018F
+ for <buildroot@buildroot.org>; Fri,  3 Oct 2025 12:00:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rVuhGiZJJ8SO for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VFJeFggGr0DW for <buildroot@buildroot.org>;
  Fri,  3 Oct 2025 12:00:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E5FB6077A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BB1A409BC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E5FB6077A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4BB1A409BC
  for <buildroot@buildroot.org>; Fri,  3 Oct 2025 12:00:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6C95A867E4; Fri,  3 Oct 2025 12:00:03 +0000 (UTC)
+ id 3A7C186745; Fri,  3 Oct 2025 12:00:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 3 Oct 2025 13:57:32 +0200
+Date: Fri, 3 Oct 2025 13:55:57 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 789f5cdbbb81a1fccda26fd9e9dc00d2a0866a89
-X-Git-Newrev: 91b9520909d1ddb68d7045c8c8d0f2c335fa3585
+X-Git-Oldrev: 130b35ddcf6370d73081eaf9fa49aeb576074552
+X-Git-Newrev: 11ab6b6314a4753f7649e79ddda7132532cda11b
 X-Patchwork-Hint: ignore
-Message-Id: <20251003120003.6C95A867E4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/intel-mediadriver: bump version to
- 25.4.0
+Message-Id: <20251003120003.3A7C186745@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/expat: bump to version 2.7.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,38 +65,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91b9520909d1ddb68d7045c8c8d0f2c335fa3585
+commit: https://git.buildroot.net/buildroot/commit/?id=11ab6b6314a4753f7649e79ddda7132532cda11b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Release notes:
+https://github.com/libexpat/libexpat/blob/R_2_7_3/expat/Changes
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/intel-mediadriver/intel-mediadriver.hash | 2 +-
- package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
+ package/expat/expat.hash | 2 +-
+ package/expat/expat.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index 5a8f5a9309..dab780f42c 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
+diff --git a/package/expat/expat.hash b/package/expat/expat.hash
+index 2346efbde5..9d99c38a45 100644
+--- a/package/expat/expat.hash
++++ b/package/expat/expat.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  fc8d552e47c32e2a636d394e8f0118e145ae34374d08a6b124957be02c46a9dc  intel-media-25.3.3.tar.gz
-+sha256  2821cab73a9f40ed3f835836f68102a63943170dbd7b2c34484f28d357ae9392  intel-media-25.4.0.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index abe86b2f8a..47c70eaace 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
+ # Locally calculated
+-sha256  21b778b34ec837c2ac285aef340f9fb5fa063a811b21ea4d2412a9702c88995c  expat-2.7.2.tar.xz
++sha256  71df8f40706a7bb0a80a5367079ea75d91da4f8c65c58ec59bcdfbf7decdab9f  expat-2.7.3.tar.xz
+ sha256  31b15de82aa19a845156169a17a5488bf597e561b2c318d159ed583139b25e87  COPYING
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index 02dda3b12c..07aba205cf 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
- 
--INTEL_MEDIADRIVER_VERSION = 25.3.3
-+INTEL_MEDIADRIVER_VERSION = 25.4.0
- INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
+-EXPAT_VERSION = 2.7.2
++EXPAT_VERSION = 2.7.3
+ EXPAT_SITE = https://github.com/libexpat/libexpat/releases/download/R_$(subst .,_,$(EXPAT_VERSION))
+ EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
+ EXPAT_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
