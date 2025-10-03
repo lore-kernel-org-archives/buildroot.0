@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A824ECAC5B0
-	for <buildroot@archiver.kernel.org>; Fri,  3 Oct 2025 15:01:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C48A9CAC5B0
+	for <buildroot@archiver.kernel.org>; Fri,  3 Oct 2025 17:13:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3E56481584;
-	Fri,  3 Oct 2025 15:01:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C8E0825C6;
+	Fri,  3 Oct 2025 17:13:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id StICmXyJNMzQ; Fri,  3 Oct 2025 15:01:31 +0000 (UTC)
+ id 2pOJdrelFzkI; Fri,  3 Oct 2025 17:13:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 656C8821DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3BBB825C7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 656C8821DC;
-	Fri,  3 Oct 2025 15:01:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B1DF2226
- for <buildroot@buildroot.org>; Fri,  3 Oct 2025 15:01:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F3BBB825C7;
+	Fri,  3 Oct 2025 17:13:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DBDAA91C
+ for <buildroot@buildroot.org>; Fri,  3 Oct 2025 17:13:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A3E014015A
- for <buildroot@buildroot.org>; Fri,  3 Oct 2025 15:01:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C249E825C6
+ for <buildroot@buildroot.org>; Fri,  3 Oct 2025 17:13:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e1echJunE6GX for <buildroot@buildroot.org>;
- Fri,  3 Oct 2025 15:01:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.117;
- helo=smtpdh17-2.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Yl65ZgjvdlQq for <buildroot@buildroot.org>;
+ Fri,  3 Oct 2025 17:13:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C5C6040029
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C5C6040029
-Received: from smtpdh17-2.aruba.it (smtpdh17-2.aruba.it [62.149.155.117])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C5C6040029
- for <buildroot@buildroot.org>; Fri,  3 Oct 2025 15:01:26 +0000 (UTC)
-Received: from localhost.localdomain ([212.103.203.10])
- by Aruba SMTP with ESMTPSA
- id 4hHfv18GXtfOn4hHfvrk2O; Fri, 03 Oct 2025 17:01:24 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 826F6825C7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 826F6825C7
+ for <buildroot@buildroot.org>; Fri,  3 Oct 2025 17:13:27 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 77243867E5; Fri,  3 Oct 2025 17:13:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri,  3 Oct 2025 17:01:22 +0200
-Message-ID: <20251003150122.633790-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfD3lSsS4PM/1RggYu8uirw+ETAldrSpDHgOefQHfwdsHVPle5/Issm8WiCSV62e9VD1OQRJF4Zuc9D9Z5eHRzdQIxmj8L9w/zABjYxTSuK29WOTkNb/j
- KKIhSBoA2E/H7KcPv5e0rXosp51dqh/IbYra4zRFrFpv8fvRX4i7FRtm9cukM1C4MGtKH8lt/EyfWbnOKA6IcC6A7uso8pLOYjw1nWkX6pNVmEPYxTUYOUwz
- ZBMxJDFGsewkYhhcUW5oR8l+of2E1BTfSTezxTGOLcvhXjpWWpq8LAf+YtwkwKhi
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1759503684; bh=Ou4CkbaAcIYUz8TQRcGWDB7r7mfkVjGlhiYIUZJIcUo=;
- h=From:To:Subject:Date:MIME-Version;
- b=SQnrDJwySfRKLaCWTrTnc963hNVQwfDBD4z8At6uLamtH4skH3ZG7kXSKbhQvxhzA
- 3b2M+caRfdC3D8nTobR963yrgyjOtagzzWotG6iRcannUL87nm7ykhp1BeXZ64ytvX
- Uml8IIMfHg5wgAEpPYjIqwunwME6MHiHguUHakr0SbL+DYz0ZT9r9kYUFa9ftWjACe
- AA+wk8gpxMeCiErYcE/G5rRzy+rViV+jfpouMgMkVRIuKivBupmHNaswiRDYo4c/H2
- MLjCMuDDsMi17+SNXOl2ARflwpMBHYVSGplwB2wpFHdQkCBWP5OEQjpDcL02ks+I5z
- mcnqNpW6IlggQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=SQnrDJwy
-Subject: [Buildroot] [PATCH] package/esp-hosted: drop
- BR2_PACKAGE_ESP_HOSTED_TARGET_ESP32 choice
+Date: Fri, 3 Oct 2025 19:12:45 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d1bd6aab49664be7def4b1e81b1155eb4d191c0a
+X-Git-Newrev: 6f984089c0ff103fca50617c9fa033eaadf61e51
+X-Patchwork-Hint: ignore
+Message-Id: <20251003171327.77243867E5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ghostscript: security bump to
+ v10.06.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,66 +58,196 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As pointed in this PR[0] ESP_SLAVE and CONFIG_TARGET_* became useless after
-commit [1] so let's drop the SoC Target choice. The SoC ID is automatically
-retrieved via SDIO commands, so no need to specify it.
+commit: https://git.buildroot.net/buildroot/commit/?id=6f984089c0ff103fca50617c9fa033eaadf61e51
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[0]: https://github.com/espressif/esp-hosted/pull/668
-[1]: https://github.com/espressif/esp-hosted/commit/b544b01e201bdef20c680a6902c1495e46dde1ff
+For release note, see:
+https://ghostscript.readthedocs.io/en/gs10.06.0/News.html
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+This fixes the following vulnerabilities:
+- CVE-2025-59798:
+    Artifex Ghostscript through 10.05.1 has a stack-based buffer overflow
+    in pdf_write_cmap in devices/vector/gdevpdtw.c.
+    https://www.cve.org/CVERecord?id=CVE-2025-59798
+
+- CVE-2025-59799:
+    Artifex Ghostscript through 10.05.1 has a stack-based buffer overflow
+    in pdfmark_coerce_dest in devices/vector/gdevpdfm.c via a large size
+    value.
+    https://www.cve.org/CVERecord?id=CVE-2025-59799
+
+- CVE-2025-59800:
+    In Artifex Ghostscript through 10.05.1, ocr_begin_page in
+    devices/gdevpdfocr.c has an integer overflow that leads to a heap-
+    based buffer overflow in ocr_line8.
+    https://www.cve.org/CVERecord?id=CVE-2025-59800
+
+- CVE-2025-59801:
+    In Artifex GhostXPS before 10.06.0, there is a stack-based buffer
+    overflow in xps_unpredict_tiff in xpstiff.c because the
+    samplesperpixel value is not checked.
+    https://www.cve.org/CVERecord?id=CVE-2025-59801
+
+Also remove patch that is now applied upstream, and add new patch from
+upstream to fix a compilation issue on 32bits platforms
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+[Julien:
+ - add link to release note in commit log
+ - fix URL in hash file comment
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/esp-hosted/Config.in     | 14 --------------
- package/esp-hosted/esp-hosted.mk |  6 ------
- 2 files changed, 20 deletions(-)
+ package/ghostscript/0001-Fix-32-bit-build.patch    | 63 ++++++++++++++++++++++
+ ...0001-Fix-compatibility-with-C23-compilers.patch | 36 -------------
+ package/ghostscript/ghostscript.hash               |  4 +-
+ package/ghostscript/ghostscript.mk                 |  2 +-
+ 4 files changed, 66 insertions(+), 39 deletions(-)
 
-diff --git a/package/esp-hosted/Config.in b/package/esp-hosted/Config.in
-index 5abab73b57..42e1afa8c5 100644
---- a/package/esp-hosted/Config.in
-+++ b/package/esp-hosted/Config.in
-@@ -28,18 +28,4 @@ config BR2_PACKAGE_ESP_HOSTED_SPI
+diff --git a/package/ghostscript/0001-Fix-32-bit-build.patch b/package/ghostscript/0001-Fix-32-bit-build.patch
+new file mode 100644
+index 0000000000..648e235d3b
+--- /dev/null
++++ b/package/ghostscript/0001-Fix-32-bit-build.patch
+@@ -0,0 +1,63 @@
++From 3c0be6e4fcffa63e4a5a1b0aec057cebc4d2562f Mon Sep 17 00:00:00 2001
++From: Ken Sharp <Ken.Sharp@artifex.com>
++Date: Wed, 10 Sep 2025 08:55:30 +0100
++Subject: [PATCH] Fix 32-bit build
++
++Bug #708824 "ghostscript 10.06.0 compilation failure on 32-bit archs"
++
++nbytes shiouldn't be an intptr_t, it doesn't get used for pointer
++arithmetic. Previously it was a uint, should be a int64_t, to fit with
++all the other devices.
++
++Checked other warnings, and found a (very minor) one in gdevdbit.c, fix
++that while we're here (signed/unsigned mismatch, we don't really care).
++
++Upstream: https://github.com/ArtifexSoftware/ghostpdl/commit/3c0be6e4fcffa63e4a5a1b0aec057cebc4d2562f
++
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ base/gdevdbit.c | 2 +-
++ base/gdevmpla.c | 6 +++---
++ 2 files changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/base/gdevdbit.c b/base/gdevdbit.c
++index e07cc3f3b8..1b5c69325b 100644
++--- a/base/gdevdbit.c
+++++ b/base/gdevdbit.c
++@@ -191,7 +191,7 @@ gx_default_copy_alpha_hl_color(gx_device * dev, const byte * data, int data_x,
++     fit_copy(dev, data, data_x, raster, id, x, y, width, height);
++     row_alpha = data;
++     out_raster = bitmap_raster(width * (size_t)byte_depth);
++-    if (check_64bit_multiply(out_raster, ncomps, &product) != 0)
+++    if (check_64bit_multiply(out_raster, ncomps, (int64_t *) &product) != 0)
++         return gs_note_error(gs_error_undefinedresult);
++     gb_buff = gs_alloc_bytes(mem, product, "copy_alpha_hl_color(gb_buff)");
++     if (gb_buff == 0) {
++diff --git a/base/gdevmpla.c b/base/gdevmpla.c
++index 2f0d522561..ffc5ff42e6 100644
++--- a/base/gdevmpla.c
+++++ b/base/gdevmpla.c
++@@ -1954,12 +1954,12 @@ mem_planar_strip_copy_rop2(gx_device * dev,
++         int i;
++         int j;
++         intptr_t chunky_sraster;
++-        intptr_t nbytes;
+++        int64_t nbytes;
++         byte **line_ptrs;
++         byte *sbuf, *buf;
++ 
++         chunky_sraster = sraster * (intptr_t)mdev->num_planar_planes;
++-        if (check_64bit_multiply(height, chunky_sraster, (size_t *)&nbytes) != 0)
+++        if (check_64bit_multiply(height, chunky_sraster, &nbytes) != 0)
++             return gs_note_error(gs_error_undefinedresult);
++         buf = gs_alloc_bytes(mdev->memory, nbytes, "mem_planar_strip_copy_rop(buf)");
++         if (buf == NULL) {
++@@ -2003,7 +2003,7 @@ mem_planar_strip_copy_rop2(gx_device * dev,
++         intptr_t i;
++         intptr_t chunky_t_raster;
++         int chunky_t_height;
++-        intptr_t nbytes;
+++        int64_t nbytes;
++         byte **line_ptrs;
++         byte *tbuf, *buf;
++         gx_strip_bitmap newtex;
+diff --git a/package/ghostscript/0001-Fix-compatibility-with-C23-compilers.patch b/package/ghostscript/0001-Fix-compatibility-with-C23-compilers.patch
+deleted file mode 100644
+index 0dfca9cfa2..0000000000
+--- a/package/ghostscript/0001-Fix-compatibility-with-C23-compilers.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From ae940946473ceb8c5353bc6e7f04673c6e60502d Mon Sep 17 00:00:00 2001
+-From: Alex Cherepanov <alex@coscript.biz>
+-Date: Thu, 3 Apr 2025 17:19:41 +0100
+-Subject: Bug 708160: Fix compatibility with C23 compilers
+-
+-Upstream: https://cgit.ghostscript.com/cgi-bin/cgit.cgi/ghostpdl.git/commit/?id=ae940946473ceb8c5353bc6e7f04673c6e60502d
+-[thomas: Only backport the bool typedef condition]
+-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+----
+- base/stdpre.h              |  6 ++++--
+- 1 files changed, 4 insertions(+), 2 deletions(-)
+-
+-diff --git a/base/stdpre.h b/base/stdpre.h
+-index dda30b6a4..2f9c84e0d 100644
+---- a/base/stdpre.h
+-+++ b/base/stdpre.h
+-@@ -1,4 +1,4 @@
+--/* Copyright (C) 2001-2023 Artifex Software, Inc.
+-+/* Copyright (C) 2001-2025 Artifex Software, Inc.
+-    All Rights Reserved.
+-
+-    This software is provided AS-IS with no warranty, either express or
+-@@ -341,7 +341,9 @@ typedef signed char schar;
+-  * and the MetroWerks C++ compiler insists that bool be equivalent to
+-  * unsigned char.
+-  */
+--#ifndef __cplusplus
+-+
+-+/* C23 has bool as a builtin type. */
+-+#if !defined(__cplusplus) && (!defined(__STDC_VERSION__) || __STDC_VERSION__ < 202311L)
+- #ifdef __BEOS__
+- typedef unsigned char bool;
+- #else
+---
+-cgit v1.2.3
+-
+diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
+index c434ac1f3a..e50113ecfe 100644
+--- a/package/ghostscript/ghostscript.hash
++++ b/package/ghostscript/ghostscript.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10051/SHA512SUMS
+-sha512  1a3f2b0f53db9a00a245df19ce8fdce0fbccc6fad47b64d14fc9058b494ab07c77e21bb073df8d4a2522b3ccb0df26735f8224a9e36c07367031ed2262fb26af  ghostscript-10.05.1.tar.xz
++# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10060/SHA512SUMS
++sha512  e9efa6a334cf34703f565f5043dd794452270415b34c2bea260e9dac6c72ebbcbedfa2e4cb9029841f8f582bbce91be8160e135a190081f3262bcf04417f80f1  ghostscript-10.06.0.tar.xz
  
- endchoice
+ # Hash for license file:
+ sha256  8ce064f423b7c24a011b6ebf9431b8bf9861a5255e47c84bfb23fc526d030a8b  LICENSE
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index c9d13f5545..1fc850ad20 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--choice
--	prompt "Target"
--	default BR2_PACKAGE_ESP_HOSTED_TARGET_ESP32
--	help
--	  Select which SoC Target driver is used for
--
--config BR2_PACKAGE_ESP_HOSTED_TARGET_ESP32
--	bool "ESP32"
--
--config BR2_PACKAGE_ESP_HOSTED_TARGET_ESP32C6
--	bool "ESP32C6"
--
--endchoice
--
- endif
-diff --git a/package/esp-hosted/esp-hosted.mk b/package/esp-hosted/esp-hosted.mk
-index 965d3a5cc6..74fab6602b 100644
---- a/package/esp-hosted/esp-hosted.mk
-+++ b/package/esp-hosted/esp-hosted.mk
-@@ -29,11 +29,5 @@ else
- ESP_HOSTED_MODULE_MAKE_OPTS = target=sdio
- endif
- 
--ifeq ($(BR2_PACKAGE_ESP_HOSTED_TARGET_ESP32),y)
--ESP_HOSTED_MODULE_MAKE_OPTS += ESP_SLAVE=CONFIG_TARGET_ESP32=y
--else
--ESP_HOSTED_MODULE_MAKE_OPTS += ESP_SLAVE=CONFIG_TARGET_ESP32C6=y
--endif
--
- $(eval $(kernel-module))
- $(eval $(generic-package))
--- 
-2.47.3
-
+-GHOSTSCRIPT_VERSION = 10.05.1
++GHOSTSCRIPT_VERSION = 10.06.0
+ GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
+ GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
+ GHOSTSCRIPT_LICENSE = AGPL-3.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
