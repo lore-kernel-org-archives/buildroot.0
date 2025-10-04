@@ -1,99 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B643CAC5B0
-	for <buildroot@archiver.kernel.org>; Sat,  4 Oct 2025 09:41:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 711C1CAC5BB
+	for <buildroot@archiver.kernel.org>; Sat,  4 Oct 2025 09:41:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 29E0B612D7;
-	Sat,  4 Oct 2025 09:41:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2EBEB40AF3;
+	Sat,  4 Oct 2025 09:41:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tzvmZqQbc4aJ; Sat,  4 Oct 2025 09:41:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H_HRd34k7j-F; Sat,  4 Oct 2025 09:41:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EAED60ACB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B2AC40B45
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2EAED60ACB;
-	Sat,  4 Oct 2025 09:41:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B8F14226
- for <buildroot@buildroot.org>; Sat,  4 Oct 2025 09:41:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B2AC40B45;
+	Sat,  4 Oct 2025 09:41:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7510C118
+ for <buildroot@buildroot.org>; Sat,  4 Oct 2025 09:41:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9EC114042C
- for <buildroot@buildroot.org>; Sat,  4 Oct 2025 09:41:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6767A834EF
+ for <buildroot@buildroot.org>; Sat,  4 Oct 2025 09:41:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gd1MIjo2MEBS for <buildroot@buildroot.org>;
- Sat,  4 Oct 2025 09:41:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VcxQTzmMv0f5 for <buildroot@buildroot.org>;
+ Sat,  4 Oct 2025 09:41:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62f; helo=mail-ej1-x62f.google.com;
+ client-ip=2a00:1450:4864:20::536; helo=mail-ed1-x536.google.com;
  envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 774664031F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 774664031F
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 774664031F
- for <buildroot@buildroot.org>; Sat,  4 Oct 2025 09:41:25 +0000 (UTC)
-Received: by mail-ej1-x62f.google.com with SMTP id
- a640c23a62f3a-b3da3b34950so265409666b.3
- for <buildroot@buildroot.org>; Sat, 04 Oct 2025 02:41:24 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4409982FF9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4409982FF9
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4409982FF9
+ for <buildroot@buildroot.org>; Sat,  4 Oct 2025 09:41:38 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id
+ 4fb4d7f45d1cf-62fca216e4aso7439819a12.0
+ for <buildroot@buildroot.org>; Sat, 04 Oct 2025 02:41:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1759570883; x=1760175683;
+ d=1e100.net; s=20230601; t=1759570897; x=1760175697;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=9kk5Mk66muRWvYjeu7YXRGAQ7HF/WnX6DGPtHJvUsKM=;
- b=xVI7FbBn7/HXYjUhXIndbyFZG67/F6xYqux0Aya8qUXzyn+5CQ0rnHqpc7h3GekTH1
- gPnghYGvA6qSM/W0aJOYhlaTEIbtE820irqQE6G1OAaipimZqjwMil2iZ2x+3xvyhj14
- yZ8LF7VDiDo/lbe8KQ0GiggYQmJNQlyTWxX931M4r54qsXzLpSRDoyswlMKG3YkhOhW6
- idw+zDAwYzqIWpSenZkt7OdXLUrcmQeh4LpyO/sTvBaq0WGtbNqcGcCD3NvqKg4E9Vam
- lW6opVWOsC4yDu5QiKMxYYlwO0TWSXt9WykcmpT2KCosJoA5a8+v4AoEpt5eJwU7nVZu
- SRyA==
-X-Gm-Message-State: AOJu0YyCkYeBSMLleCJilB6+SNxaoZYmNEyshl8WfVdo4uNt4Pj7kY5N
- hCpQO/WA2evlSLk+8o+ZejB5QHs/KQ0vr3g2VFl4DY8LbsQAV7MG7DW4cFjXX3i1rLjoZidl6zK
- X82MS
-X-Gm-Gg: ASbGncshTepe3LqViLyA88qrFTZZgnQziCVvQMjIAXuKGtwaRkyXWE6pMw+ha0/xW2k
- A/uyR/S6Cr2rx/flJ7MmxaRekHTvuej86JDrgslQbNP1gFKpKTTuqBygNL/539qgQ112NZjv5Tb
- Za6AdpMMjmfNhTJ7f2tdLkGnweLjvqNy8reusIvBJ4C/7uwZUxtlz11RTo4pLgWKJ9hrDpbVtl3
- rKlXZgD0bQhpHLopG6+eOWJlbcnWOG6TleEWnrUSDltv29WqQ/w2SqdWo8v8Dp+zlrltwOx4TtG
- 4Sw0BpAO+eOyY3cQYX7mDvV2TIv+2vvuL1sXvYSTPnSvEaJ0JJdC4JqXzjQp2Ev8peIEQUngWB2
- 5ntknobzHy6CYAU3qlh5c/EROudujK6AI3hWLKzCDriMGFlJwTBKJN+6gZd1F5Kr0lK0=
-X-Google-Smtp-Source: AGHT+IHHBX4RoJNQLuAXmJRyvs3oF1AVT5nxdwjhrYiUhM97FpD0NNTYJyWAgIEuTjAqAB5jal1Y1Q==
-X-Received: by 2002:a17:906:6a16:b0:b2b:a56f:5434 with SMTP id
- a640c23a62f3a-b49c038f68dmr757870566b.13.1759570882919; 
- Sat, 04 Oct 2025 02:41:22 -0700 (PDT)
-Received: from dragon.home ([109.136.97.112]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b4865e77427sm645760666b.36.2025.10.04.02.41.22
+ bh=bbrF2tkWpt/iBzjl64arYCD/+F78TMTDCgCHwoAXSGk=;
+ b=ieSzUMCNWUWlJPs9nulho0iA6nye3YoAbRzj/Ir/aBK61RzpJ3wM/RMGpPqMX+8oTp
+ ljafKpZ+lyfFRyL9GwW1XOg6RIZhNZLLN+IH+xDUMRR5IcDQnM6/iuQL84chPS9gRSBU
+ gz3hSoVTHbR/vs91s6KlJeIr3nHz2b6Su9DylfbCmAFVYZwlghpnwdmyKyFh49Yww+Iz
+ 37HhU+2VDHouUrBIB9RxxQP2PTrIp1BMaO5/y6Pb1x6W6MqBYEZ6TIUrlfZatKpFkfyA
+ 9VPl1NE3+NU4OfKQAy0xJGVtbXWstEh9pZbSsxECSRl7h6cd3Z45lVeQmXv2nvOyhLMJ
+ 8sdA==
+X-Gm-Message-State: AOJu0Yx8d4HBgu3JACNs1q90ZUSEJ5aYGfj9bnWunRs6R0WShDNhdgbs
+ 3I0DOsKZ8dASWC1MthEpe7VSSinquDE0DRf8ALpCXZBC6b21lhH9o9iKu5oHu7oKn3drCsV1uCa
+ Is22L
+X-Gm-Gg: ASbGncvcajUAchn0poCSBv5gPqs0F9SsekRD3EIGUtgQ+F8eC/clyw/P71Ff2YYqcVE
+ cmrLt5gk48971IXqG0fuhUFFJjRscW5jgnPiVIcCIKeUt9b9DC86Tt3vS6scQngNDqAl3qC7nSe
+ nwsL9an/4HSLsFyIhm+clGfQKgLD55pimZJ9TUcG1mFkDDpVlFLJE+KLOMbd/OGyEPkmHRmRrQ9
+ NY/hmyZylkgU1l+BQd2smtm3UPCzwlME4b+j06x6ZZ4FSPY0Jfd/4VCPxcVnoEE2th73Trs+2BR
+ RmYixl+l8ibrgF7IGhAo/Jtig3pWmPqW5/ZbNoKj3eISdbog0sG89XS+A0NlOdMe21T10Y3RHe0
+ fxdhFFyfQdIHZudrwciYQyd9juJuGz1txxbGtUx2rryThn8i294ZsqbAO8wpIvEU6bKoL+WgI/y
+ YMGf2wpQ==
+X-Google-Smtp-Source: AGHT+IFGkwjaSAz2h4rGj3KcCVHCY6cYCertiEAYsdx/FPigmt6WzMEDjoyc2AnRTBKxuI5kx+sZBw==
+X-Received: by 2002:a05:6402:1493:b0:633:14bb:dcb1 with SMTP id
+ 4fb4d7f45d1cf-637745aab90mr7889103a12.11.1759570896992; 
+ Sat, 04 Oct 2025 02:41:36 -0700 (PDT)
+Received: from dragon.home ([2a02:a03f:73a7:c001:1291:d1ff:fe92:3b5a])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-6376b3aa9f1sm5780199a12.8.2025.10.04.02.41.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 04 Oct 2025 02:41:22 -0700 (PDT)
+ Sat, 04 Oct 2025 02:41:36 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Sat,  4 Oct 2025 11:33:48 +0200
-Message-ID: <20251004093348.269213-1-titouan.christophe@mind.be>
+Date: Sat,  4 Oct 2025 11:41:28 +0200
+Message-ID: <20251004094128.270821-1-titouan.christophe@mind.be>
 X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1759570883; x=1760175683; darn=buildroot.org;
+ d=mind.be; s=google; t=1759570897; x=1760175697; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=9kk5Mk66muRWvYjeu7YXRGAQ7HF/WnX6DGPtHJvUsKM=;
- b=hB3EToPdviGsKdR33NayGYXQ3RL+jSKgXN9BfF2i//cDjEBwwrhLQ0isc7Sk7JxVU1
- x2rK+1xEDJts2h6g/r3gj+RdCpjIzE0sB7sVTgcWFDUj5QJod/If5eNHZV/diu524e7D
- PJp4xHNNi/dI8w7UtJcThGdGFcDHU94CbTWkeD/QglOkF7OqA7F0u0ZZUxv+eX9NNPNC
- H4M7e7GQ8VP/UVej1VFT8xXdDWgKAOMx1TaS3vxUYifcnmIDU9bN8+xI+WzoKtzTfcrZ
- C00U3Z36KQVpthdXRSHAG9n5UNN4MoHEQL88hgnCGMbmIapE9ayTstJmWTKgainWCOIG
- jjkw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=bbrF2tkWpt/iBzjl64arYCD/+F78TMTDCgCHwoAXSGk=;
+ b=TuvtW3WltqZFVguh4ksfVOLy6K/G8FLJ7RchBB5ZKHeL6OVi/wbVckhgQPwVBZgSRr
+ I3KqMK+sY538KoqVOIox/xdOHaDgM6qsc6hhuvL6BcIZ2B9XGo9p44fm/oq+RaZCnVmq
+ FrEjaAGOeH/YqAd2NBlWIl6gn4GcPMMHz42zpbEL3SITPkCdCQt8jdB8vHSBWIZiWQQt
+ LLXWgQ+Re42tERrCH4y3PKUt/kjMH+zXgL28tVShyp5zRxOyhsrgeDFk4GB900CQK5b0
+ 4szdsieCEpwatyRhoIBZ88KV00kEUwPUi11N0BSRmkC7pcPjGh9C8Ne7QeDgLLCiE+Oz
+ WHug==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=hB3EToPd
-Subject: [Buildroot] [PATCH v2] package/python-django: security bump to
- v5.2.7
+ header.a=rsa-sha256 header.s=google header.b=TuvtW3Wl
+Subject: [Buildroot] [PATCH v2 for 2025.02.x] package/python-django:
+ security bump to v5.1.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -144,15 +146,15 @@ Changes v1->v2:
  2 files changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 3ff4eb4e36..1ec80dc1c2 100644
+index 155e3af8ef..a525410582 100644
 --- a/package/python-django/python-django.hash
 +++ b/package/python-django/python-django.hash
 @@ -1,6 +1,6 @@
  # md5, sha256 from https://pypi.org/pypi/django/json
--md5  1f0327293cc3768903ce8cd390ec3f47  django-5.2.6.tar.gz
--sha256  da5e00372763193d73cecbf71084a3848458cecf4cee36b9a1e8d318d114a87b  django-5.2.6.tar.gz
-+md5  699a77ac347ca3484939762483dc4b08  django-5.2.7.tar.gz
-+sha256  e0f6f12e2551b1716a95a63a1366ca91bbcd7be059862c1b18f989b1da356cdd  django-5.2.7.tar.gz
+-md5  7f7a03e4f19ad7813d96f9fbbad65a5c  django-5.1.12.tar.gz
+-sha256  8a8991b1ec052ef6a44fefd1ef336ab8daa221287bcb91a4a17d5e1abec5bbcc  django-5.1.12.tar.gz
++md5  dad76d0dbdbc86402061182fc708a442  django-5.1.13.tar.gz
++sha256  543ff21679f15e80edfc01fe7ea35f8291b6d4ea589433882913626a7c1cf929  django-5.1.13.tar.gz
  # Locally computed sha256 checksums
  sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
  sha256  dcac1c86cb7ab491702bdb4c41be680fafde51536748cc8aaee3840eec53ed17  django/contrib/gis/measure.py
@@ -163,19 +165,19 @@ index 3ff4eb4e36..1ec80dc1c2 100644
 -sha256  1ce0483ad554cf135efec70ad2097e82ed72790194f17e1591821dc82c2416e0  django/utils/archive.py
 +sha256  9f37277d682cf06369041e60fb6fda5a85dfcf118d9176489087a3d40293f015  django/utils/archive.py
 diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index e3959f4192..139a15b13a 100644
+index 3026c304be..c2581f5f90 100644
 --- a/package/python-django/python-django.mk
 +++ b/package/python-django/python-django.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 5.2.6
-+PYTHON_DJANGO_VERSION = 5.2.7
+-PYTHON_DJANGO_VERSION = 5.1.12
++PYTHON_DJANGO_VERSION = 5.1.13
  PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
  # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/4c/8c/2a21594337250a171d45dda926caa96309d5136becd1f48017247f9cdea0
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/b1/96/bd84e2bb997994de8bcda47ae4560991084e86536541d7214393880f01a8
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/f0/99/a951d93a27a5bc59fb96edbcdbc03fb9bfac51177f1bc0110888de85af3f
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/bb/57/ad9905d03a2ee39064ee7ba69f8e2790db4a7ffaef9c54f95e7a8f2cb0a1
  PYTHON_DJANGO_LICENSE = BSD-3-Clause, MIT (jquery, utils/archive.py), BSD-2-Clause (inlines.js)
  PYTHON_DJANGO_LICENSE_FILES = LICENSE \
  	django/contrib/gis/measure.py \
