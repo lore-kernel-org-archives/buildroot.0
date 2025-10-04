@@ -1,74 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3140CAC5B0
-	for <buildroot@archiver.kernel.org>; Sat,  4 Oct 2025 13:26:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26528CAC5B0
+	for <buildroot@archiver.kernel.org>; Sat,  4 Oct 2025 15:12:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7B43182386;
-	Sat,  4 Oct 2025 13:26:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BF69C40A8D;
+	Sat,  4 Oct 2025 15:12:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y5S51iczsHFn; Sat,  4 Oct 2025 13:26:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0kNheXQ_7F1G; Sat,  4 Oct 2025 15:12:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7107482404
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB39A40ECB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7107482404;
-	Sat,  4 Oct 2025 13:26:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 24F6A226
- for <buildroot@buildroot.org>; Sat,  4 Oct 2025 13:26:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EB39A40ECB;
+	Sat,  4 Oct 2025 15:12:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id CA81F226
+ for <buildroot@buildroot.org>; Sat,  4 Oct 2025 15:12:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1352E60ACE
- for <buildroot@buildroot.org>; Sat,  4 Oct 2025 13:26:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B072940AF0
+ for <buildroot@buildroot.org>; Sat,  4 Oct 2025 15:12:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6C1iI3Ey47LB for <buildroot@buildroot.org>;
- Sat,  4 Oct 2025 13:26:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8472660ACD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8472660ACD
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8472660ACD
- for <buildroot@buildroot.org>; Sat,  4 Oct 2025 13:26:45 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a03c3.dip0.t-ipconnect.de [91.58.3.195])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id A5603A4C5D64
- for <buildroot@buildroot.org>; Sat,  4 Oct 2025 15:26:43 +0200 (CEST)
-Received: from [192.168.1.144] (port=51534 helo=bruckner.lan.fli4l)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1v52Hb-000000005zg-0pL9
- for buildroot@buildroot.org; Sat, 04 Oct 2025 13:26:43 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZABiDqwj6NCM for <buildroot@buildroot.org>;
+ Sat,  4 Oct 2025 15:12:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::62f; helo=mail-ej1-x62f.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AE0A540A8D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE0A540A8D
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
+ [IPv6:2a00:1450:4864:20::62f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AE0A540A8D
+ for <buildroot@buildroot.org>; Sat,  4 Oct 2025 15:12:46 +0000 (UTC)
+Received: by mail-ej1-x62f.google.com with SMTP id
+ a640c23a62f3a-b472842981fso463879266b.1
+ for <buildroot@buildroot.org>; Sat, 04 Oct 2025 08:12:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1759590764; x=1760195564;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=0qY1ZBN21hc3wB7Pi2eNWm1NpX5uVOgDT+gbGAWE8Vs=;
+ b=sM7o5LlyvgjTkwFapGyORc9Vlu1prjQdCedGB8fQAY/2Wr6phRrVcXvD7FE4I36Z3l
+ 8mWAFO4dn7n9YQcKYA269fJNJhsehazMFdBTDyGBJFOw1jsXmFDwTGWo47O49GUITMd6
+ C7yVGHcww8Rn1yAptAafhLjaU47CiKM+j9MCEL1arzeJos/Jh1T4HDvtoWPXgT8ad2Fi
+ A3kb6vfplCd0yr2lozpnSgYXoqY62sMnhBHjF31Fh+tqpuWUKpCx/YfER+o20WTKn9SA
+ nMi3G2X1e4WLYKFlny03GBeVvb64oEs9YRjJfD/jcSR8SUm/ICs3Yp4EudnqU+lFannz
+ QU1Q==
+X-Gm-Message-State: AOJu0YwJytNzQ/UFyXr3dSVpnp4xko7o1H7P3RFB0CzlGzboNkp2GY91
+ ah25m1815RhVr3TObV9NJaHJrucCGXDze8Q6Caq4kxvkFzAvwPOIK15Zp0I+IDbHWrvp6nC+ShR
+ x6fB+70I=
+X-Gm-Gg: ASbGncttHl13dihsAICJualS7zy0IWPu/OBdDw7aL6BAGB+92wGnlWYGKcjWEzeY9Gu
+ 365E/NQmzORzOZQphrGb223GZnqdjtlL3ssiYuH01UuqvJiaoiMNcZhI890Q52pztBGcvTcU2fr
+ mggzhEy5HvuSEh58fWNEhsWYWq1ocHmbeny0VT7/K77CamFlSxzQ5/GSh5ZXhjTJFDzTT1ymXp6
+ z79RXShib/Jh6K4YEoRhyHrTD1f2D28BS3mOyc8Xvt1Q9eDpNhPlqr9ypFhyAdWGTMVyQsWDq6t
+ gYb5nZ0WMxWMamaBV+J8ZHNUK4WJHbOjUkBnY6C1hR/L/EfTQbUPWjLydQqOWRefxa6XrwKg+oV
+ SgQl8qwVETdbURj9ti0RG8rvey7Ed+uHk/mV0vKoA91Q7zcL9pjrFSZbgd8FFk57If7ql544bbb
+ VLtw7oShUfCP3zXrC6jFXLcpz3A+9PZww415cQIBxaYzGATN/fENdKT+fu62ZT7cr4sZptu7z0H
+ d0seC7t5O7anx1ZzV9SICb6FA==
+X-Google-Smtp-Source: AGHT+IFMmNFLyvyUI3txY40UZ1y1xpMg4N6kEK4gl1yVcGvUpkMt+Np9pO/cenTCcoJDVV8JcXJ8qA==
+X-Received: by 2002:a17:907:da2:b0:b3c:e14c:e24 with SMTP id
+ a640c23a62f3a-b49c13757a6mr857241366b.13.1759590764095; 
+ Sat, 04 Oct 2025 08:12:44 -0700 (PDT)
+Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
+ (host-79-25-27-158.retail.telecomitalia.it. [79.25.27.158])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-b4869c4e613sm695949466b.81.2025.10.04.08.12.43
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 04 Oct 2025 08:12:43 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sat,  4 Oct 2025 15:26:43 +0200
-Message-ID: <20251004132643.2356456-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date: Sat,  4 Oct 2025 17:12:40 +0200
+Message-ID: <20251004151240.1509713-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1759584403;
- bh=1JAPC6fAoBV/FNlBsN8FTVflba21QidOqijQNF+QW5A=;
- h=From:To:Subject:Date:From;
- b=SwgXCKLWh225HIyPI4n895A2MkX2fsbyXzuYLGO+mZGBy48fPN/ihuZ2G/HqRrdFo
- kcfkprBEVG2bdSS40q5Y2XFigdZR+6IXWRAwgt0XOwmSRal4Rlxve86xjhvEEuACwE
- rp9sexUi+8GprMLJqrw3K0WDN5L6dC0iwzroH2H07/oP4sVEhuozu/++WPStFE8kaC
- Kwckka7FiEIF6QHL91YR7u4n0WTXLYw96ItExf5gTwsBVGQcdGhyboDVXV9OXfFuhw
- tfbvhmyteZmfNcT+V8IHzO7VXo8X4AQt7lMeH8DqXmvTbQYXj4tyyYb+kX7VbBD0rc
- oMwl1UFPTykwA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=amarulasolutions.com; s=google; t=1759590764; x=1760195564;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=0qY1ZBN21hc3wB7Pi2eNWm1NpX5uVOgDT+gbGAWE8Vs=;
+ b=WBTkIt4LASlqNnCsyhzeEe/2SunMtwZxQKNEeLdc8joLJYkV0KvxswztzSRNhiSlrQ
+ rF5pKMrmb0s1Pe65areLr6x02XimUlFpDfVDyq+XXMP8MXEizLbupTzBvYDE9XGt3X3T
+ m52VS/r0WtAUtUc75tx7bfFbBzluX3PeXMZJc=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=SwgXCKLW
-Subject: [Buildroot] [PATCH 1/1] package/libtheora: bump version to 1.2.0
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=WBTkIt4L
+Subject: [Buildroot] [PATCH 1/1] package/fcft: bump to version 3.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,147 +115,38 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Release notes:
-https://xiph.org/press/2025/theora-release-1.2/
-https://gitlab.xiph.org/xiph/theora/-/blob/v1.2.0/CHANGES?ref_type=tags
+https://codeberg.org/dnkl/fcft/src/branch/master/CHANGELOG.md#3-3-2
 
-Removed patch 0001 which is not needed anymore due to upstream commit:
-https://gitlab.xiph.org/xiph/theora/-/commit/14045376ee6897f20f6bb9815f246172da748e50
-
-Removed patch 0002 which is included in this release.
-
-Updated license hash due to upstream commit:
-https://gitlab.xiph.org/xiph/theora/-/commit/b68e2e53b30365f52204521d00b5db3d1cc439d5
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- .checkpackageignore                           |  1 -
- .../libtheora/0001-link-libtheoradec.patch    | 21 ---------
- package/libtheora/0002-fix-autoreconf.patch   | 46 -------------------
- package/libtheora/libtheora.hash              |  4 +-
- package/libtheora/libtheora.mk                |  2 +-
- 5 files changed, 3 insertions(+), 71 deletions(-)
- delete mode 100644 package/libtheora/0001-link-libtheoradec.patch
- delete mode 100644 package/libtheora/0002-fix-autoreconf.patch
+ package/fcft/fcft.hash | 2 +-
+ package/fcft/fcft.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 69877d1778..82ac385c9b 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -634,7 +634,6 @@ package/libsvg/0001-fix-expat-static-declaration.patch lib_patch.Upstream
- package/libsvg/0002-Fix-undefined-symbol-png_set_gray_1_2_4_to_8.patch lib_patch.Upstream
- package/libtalloc/0001-buildtools-wafsamba-add-disable-stack-protector-opti.patch lib_patch.Upstream
- package/libtelnet/0001-fix-compilation-without-zlib.patch lib_patch.Upstream
--package/libtheora/0001-link-libtheoradec.patch lib_patch.Upstream
- package/libtomcrypt/0001-fix-CVE-2019-17362.patch lib_patch.Upstream
- package/libtommath/0001-Build-test-bn_mp_set_double-c-on-more-platforms.patch lib_patch.Upstream
- package/libtorrent/0001-libtorrent.pc.in-add-Libs.Private.patch lib_patch.Upstream
-diff --git a/package/libtheora/0001-link-libtheoradec.patch b/package/libtheora/0001-link-libtheoradec.patch
-deleted file mode 100644
-index c38d32bbbc..0000000000
---- a/package/libtheora/0001-link-libtheoradec.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
--libtheoraenc.so needs to be linked to libtheoradec.so in order to avoid
--
--symbol 'th_comment_query_count': can't resolve symbol in lib '/usr/lib/libtheoraenc.so.1'
--
--when starting Freeswitch.
--
--Patch downloaded from
--http://www.sisyphus.ru/en/srpm/Sisyphus/libtheora/patches/0
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
----- libtheora/lib/Makefile.am
--+++ libtheora/lib/Makefile.am
--@@ -153,6 +153,7 @@ libtheoraenc_la_SOURCES = \
-- libtheoraenc_la_LDFLAGS = \
--   -version-info @THENC_LIB_CURRENT@:@THENC_LIB_REVISION@:@THENC_LIB_AGE@ \
--   @THEORAENC_LDFLAGS@ $(OGG_LIBS)
--+libtheoraenc_la_LIBADD = libtheoradec.la
-- 
-- libtheora_la_SOURCES = \
-- 	$(decoder_sources) \
-diff --git a/package/libtheora/0002-fix-autoreconf.patch b/package/libtheora/0002-fix-autoreconf.patch
-deleted file mode 100644
-index 27fc379ad4..0000000000
---- a/package/libtheora/0002-fix-autoreconf.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--Fix broken autoreconf
--
--Upstream: https://git.xiph.org/?p=theora.git;a=commitdiff;h=28cc6dbd9b2a141df94f60993256a5fca368fa54
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[Dario: make the patch to be applied with fuzz factor 0]
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
--
--
--From: Tim Terriberry <tterribe@xiph.org>
--Date: Fri, 20 May 2011 20:41:50 +0000 (+0000)
--Subject: Make autoreconf -i -f work.
--X-Git-Url: https://git.xiph.org/?p=theora.git;a=commitdiff_plain;h=28cc6dbd9b2a141df94f60993256a5fca368fa54
--
--Make autoreconf -i -f work.
--
--Patch from David Schleef.
--
--svn path=/trunk/theora/; revision=17990
-----
--
--diff --git a/Makefile.am b/Makefile.am
--index 89fd753..1783857 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -2,5 +2,7 @@
-- AUTOMAKE_OPTIONS = foreign 1.6 dist-zip dist-bzip2
-- 
--+ACLOCAL_AMFLAGS=-I m4
--+
-- if THEORA_ENABLE_EXAMPLES
-- EXAMPLES_DIR = examples
-- else
--diff --git a/configure.ac b/configure.ac
--index 1cbec1a..456b603 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -61,7 +61,7 @@ AC_LIBTOOL_WIN32_DLL
-- AM_PROG_LIBTOOL
-- 
-- dnl Add parameters for aclocal
---AC_SUBST(ACLOCAL_AMFLAGS, "-I m4")
--+AC_CONFIG_MACRO_DIR([m4])
-- 
-- dnl Check for doxygen
-- AC_CHECK_PROG(HAVE_DOXYGEN, doxygen, true, false)
-diff --git a/package/libtheora/libtheora.hash b/package/libtheora/libtheora.hash
-index 42ffa05045..c2d0ea002e 100644
---- a/package/libtheora/libtheora.hash
-+++ b/package/libtheora/libtheora.hash
-@@ -1,6 +1,6 @@
- # From http://downloads.xiph.org/releases/theora/SHA256SUMS
--sha256  f36da409947aa2b3dcc6af0a8c2e3144bc19db2ed547d64e9171c59c66561c61  libtheora-1.1.1.tar.xz
-+sha256  ebdf77a8f5c0a8f7a9e42323844fa09502b34eb1d1fece7b5f54da41fe2122ec  libtheora-1.2.0.tar.xz
- 
- # Locally calculated
- sha256  8417fad7da775735564e209484a2e011e0fa201e94f01fdbee6e4977e478e6fc  COPYING
--sha256  654a0238f789f4435c4818f50005b141d013c5a09a31d861efc1d0d67ba975a4  LICENSE
-+sha256  2c902950c73a63cd285dc0c36573de9c5fefe66d49312949c51d941f33e92932  LICENSE
-diff --git a/package/libtheora/libtheora.mk b/package/libtheora/libtheora.mk
-index f408e6cce6..289217e0a9 100644
---- a/package/libtheora/libtheora.mk
-+++ b/package/libtheora/libtheora.mk
+diff --git a/package/fcft/fcft.hash b/package/fcft/fcft.hash
+index d95111d4fa42..f5a499edcc45 100644
+--- a/package/fcft/fcft.hash
++++ b/package/fcft/fcft.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  f18bf79562e06d41741690cd1e07a02eb2600ae39eb5752eef8a698f603a482c  3.3.1.tar.gz
++sha256  79e52aaafc0b57fa2b68ed6127de13e98318050399a939691b8ca30d44d48591  3.3.2.tar.gz
+ sha256  d534a23a31500a0ac958d9634b84f532bd73ff1aca1bb8f7debbcbebc16ff39a  LICENSE
+diff --git a/package/fcft/fcft.mk b/package/fcft/fcft.mk
+index 5fe38b5bb24d..b9ce43b45455 100644
+--- a/package/fcft/fcft.mk
++++ b/package/fcft/fcft.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBTHEORA_VERSION = 1.1.1
-+LIBTHEORA_VERSION = 1.2.0
- LIBTHEORA_SOURCE = libtheora-$(LIBTHEORA_VERSION).tar.xz
- LIBTHEORA_SITE = http://downloads.xiph.org/releases/theora
- LIBTHEORA_INSTALL_STAGING = YES
+-FCFT_VERSION = 3.3.1
++FCFT_VERSION = 3.3.2
+ FCFT_SOURCE = $(FCFT_VERSION).tar.gz
+ FCFT_SITE = https://codeberg.org/dnkl/fcft/archive
+ FCFT_LICENSE = MIT
 -- 
-2.47.3
+2.43.0
 
 _______________________________________________
 buildroot mailing list
