@@ -1,73 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E546CCAC5B0
-	for <buildroot@archiver.kernel.org>; Sat,  4 Oct 2025 10:58:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53BF1CAC5BB
+	for <buildroot@archiver.kernel.org>; Sat,  4 Oct 2025 11:21:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 98A9641006;
-	Sat,  4 Oct 2025 10:58:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0EEA6608C3;
+	Sat,  4 Oct 2025 11:21:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id awpfjuSXe0wW; Sat,  4 Oct 2025 10:58:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XSF9E6u44EKk; Sat,  4 Oct 2025 11:21:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DACD740F15
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20C3060A83
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DACD740F15;
-	Sat,  4 Oct 2025 10:58:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id EADB6909
- for <buildroot@buildroot.org>; Sat,  4 Oct 2025 10:58:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 20C3060A83;
+	Sat,  4 Oct 2025 11:21:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D39C9909
+ for <buildroot@buildroot.org>; Sat,  4 Oct 2025 11:21:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DD1BF40F06
- for <buildroot@buildroot.org>; Sat,  4 Oct 2025 10:58:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C22018274F
+ for <buildroot@buildroot.org>; Sat,  4 Oct 2025 11:21:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n0iELNYwLRYf for <buildroot@buildroot.org>;
- Sat,  4 Oct 2025 10:58:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id K-OpXh0cnTbs for <buildroot@buildroot.org>;
+ Sat,  4 Oct 2025 11:21:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 02ED640EFB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02ED640EFB
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E367C802EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E367C802EE
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 02ED640EFB
- for <buildroot@buildroot.org>; Sat,  4 Oct 2025 10:58:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E367C802EE
+ for <buildroot@buildroot.org>; Sat,  4 Oct 2025 11:21:46 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a03c3.dip0.t-ipconnect.de [91.58.3.195])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id E9D6CA4C5B74
- for <buildroot@buildroot.org>; Sat,  4 Oct 2025 12:58:01 +0200 (CEST)
-Received: from [192.168.1.144] (port=37054 helo=bruckner.lan.fli4l)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 06D07A4C5D47
+ for <buildroot@buildroot.org>; Sat,  4 Oct 2025 13:21:45 +0200 (CEST)
+Received: from [192.168.1.144] (port=46702 helo=bruckner.lan.fli4l)
  by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1v4zxh-000000005OD-2U5Y
- for buildroot@buildroot.org; Sat, 04 Oct 2025 10:58:01 +0000
+ (envelope-from <bernd@kuhls.net>) id 1v50Ke-0000000013O-2sEb
+ for buildroot@buildroot.org; Sat, 04 Oct 2025 11:21:44 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat,  4 Oct 2025 12:58:01 +0200
-Message-ID: <20251004105801.380109-1-bernd@kuhls.net>
+Date: Sat,  4 Oct 2025 13:21:44 +0200
+Message-ID: <20251004112144.939391-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202506031021; t=1759575481;
- bh=DyXJYP3YLyfm+rZbR+U99ohI9QEORDkZoJg3+7MCqfc=;
+ s=kas202506031021; t=1759576905;
+ bh=TbO1U7GLCfWE9eBwXj8Qsntb8erAwK0gU4mv01V7WNs=;
  h=From:To:Subject:Date:From;
- b=kewuhJ/pcSdoM62/5HhPXntQpgNfYMsKq8ZBW7V2G5qu3ltZvEdJirN6koDQW639e
- CPyNOdFSiUK3f7R5pkngkfT5uIvGaSdy8ESpM/vm/jiEyn1mOvsc5ZIlyKVGGQDc3n
- oi9WfM84RvgMN7s5ubkS8ulgfyVxn1AQEHTmMmuVdeEYeSTDy3/YjHQvmTHSXNXJ37
- P0GD2cpG97O1XtjQkdh63RFO2Y8RX3+8dnFvF0xNYQKZiZIqEFE43Tcmb7mNirNH47
- f3yaAFbYovqb63F0bAo/0F4pqO6ZqSOe3kOCjk+hun4hg2Jq5oyXo9zKPJJpD3kuwj
- uzdbRIt6gECxA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=eEG1VquVvN8kthTta8HSaimseWwNBBbG+se2UJJyYTS1g0xNyVbFW9sD3lhuXC0xj
+ PF/5WL7xzX4vrxqTHamcCa830BxSda1Tzoq98P9aJdpCGawplysXW9d1E/bH1M6wzU
+ i0Iv2SMxnGdJBOoTVHrwF/cymB7Ivfb/T2QnK302SHrBesCHf2gijYXj/Agz3RNFao
+ 7Z8KiIjtlxmtL/13YsDTk+dL9p7c8iSqcB+xBA6AZB+nGdlY5xqzro7l385gSkfido
+ eXXSzY/tr9dMcTlTj4R46VuGrVJn/vVzwshjUe0+nVfps6ls0My+KMV9vCjaL3n695
+ Mv/0fQJEPFO7Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=kewuhJ/p
-Subject: [Buildroot] [PATCH 1/1] package/libao: bump version to 1.2.2
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=eEG1VquV
+Subject: [Buildroot] [PATCH 1/1] package/libdecor: bump version to 0.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,56 +85,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Added upstream patch to fix a missing include, autobuild did not record
-any build errors but Arch Linux provides the patch:
-https://gitlab.archlinux.org/archlinux/packaging/packages/libao/-/commit/bad3196d4e3030d31b01eb3bd41fff8afc8ca113
-
-Switched to gitlab tarball because the previous site does not provide a
-tarball for version 1.2.2 which was tagged in 2016:
-https://gitlab.xiph.org/xiph/libao/-/tags/1.2.2
-
-Added autoreconf due to usage of gitlab tarball which does not contain
-a configure script.
+Added optional support for gtk3 which was added upstream:
+https://gitlab.freedesktop.org/libdecor/libdecor/-/commit/e87dcfdaf83f332fa83b43c804fcf93c151ff0f5
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/libao/libao.hash | 6 ++----
- package/libao/libao.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/libdecor/libdecor.hash | 2 +-
+ package/libdecor/libdecor.mk   | 9 ++++++++-
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/package/libao/libao.hash b/package/libao/libao.hash
-index 91c6bd11a7..70e6b4987e 100644
---- a/package/libao/libao.hash
-+++ b/package/libao/libao.hash
-@@ -1,5 +1,3 @@
--# From http://downloads.xiph.org/releases/ao/SHA256SUMS.txt
--sha256  03ad231ad1f9d64b52474392d63c31197b0bc7bd416e58b1c10a329a5ed89caf  libao-1.2.0.tar.gz
--
--# Hash for license file:
-+# Locally computed
-+sha256  df8a6d0e238feeccb26a783e778716fb41a801536fe7b6fce068e313c0e2bf4d  libao-1.2.2.tar.gz
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/libao/libao.mk b/package/libao/libao.mk
-index 19a4c165c6..a9fd739ff3 100644
---- a/package/libao/libao.mk
-+++ b/package/libao/libao.mk
-@@ -4,13 +4,14 @@
+diff --git a/package/libdecor/libdecor.hash b/package/libdecor/libdecor.hash
+index 9e51e90593..7572663466 100644
+--- a/package/libdecor/libdecor.hash
++++ b/package/libdecor/libdecor.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  82adece5baeb6194292b0d1a91b4b3d10da41115f352a5e6c5844b20b88a0512  libdecor-0.1.1.tar.gz
++sha256  21a471e3f48088d3fd8ecc5999c45258a32198782c0157482f7ebe82de42f79c  libdecor-0.2.3.tar.gz
+ sha256  508a77d2e7b51d98adeed32648ad124b7b30241a8e70b2e72c99f92d8e5874d1  LICENSE
+diff --git a/package/libdecor/libdecor.mk b/package/libdecor/libdecor.mk
+index b965726292..d064c9e9ef 100644
+--- a/package/libdecor/libdecor.mk
++++ b/package/libdecor/libdecor.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBAO_VERSION = 1.2.0
--LIBAO_SITE = http://downloads.xiph.org/releases/ao
-+LIBAO_VERSION = 1.2.2
-+LIBAO_SITE = https://gitlab.xiph.org/xiph/libao/-/archive/$(LIBAO_VERSION)
- LIBAO_DEPENDENCIES = host-pkgconf
- LIBAO_INSTALL_STAGING = YES
- LIBAO_LICENSE = GPL-2.0+
- LIBAO_LICENSE_FILES = COPYING
- LIBAO_CPE_ID_VENDOR = xiph
-+LIBAO_AUTORECONF = YES
- LIBAO_CONF_OPTS = \
- 	--disable-esd \
- 	--disable-wmm \
+-LIBDECOR_VERSION = 0.1.1
++LIBDECOR_VERSION = 0.2.3
+ LIBDECOR_SITE = https://gitlab.freedesktop.org/libdecor/libdecor/-/archive/$(LIBDECOR_VERSION)
+ LIBDECOR_LICENSE = MIT
+ LIBDECOR_LICENSE_FILES = LICENSE
+@@ -19,4 +19,11 @@ else
+ LIBDECOR_CONF_OPTS += -Ddbus=disabled
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBGTK3),y)
++LIBDECOR_CONF_OPTS += -Dgtk=enabled
++LIBDECOR_DEPENDENCIES += libgtk3
++else
++LIBDECOR_CONF_OPTS += -Dgtk=disabled
++endif
++
+ $(eval $(meson-package))
 -- 
 2.47.3
 
