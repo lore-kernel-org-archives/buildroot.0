@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D905CAC5B8
-	for <buildroot@archiver.kernel.org>; Sun,  5 Oct 2025 08:27:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C3D3CAC5BB
+	for <buildroot@archiver.kernel.org>; Sun,  5 Oct 2025 08:27:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B913060D77;
-	Sun,  5 Oct 2025 08:27:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1128283F4E;
+	Sun,  5 Oct 2025 08:27:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JDfdMBio-bGe; Sun,  5 Oct 2025 08:27:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QAq1j1aJ2uWP; Sun,  5 Oct 2025 08:27:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC30560D79
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 193E983F52
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC30560D79;
-	Sun,  5 Oct 2025 08:27:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 193E983F52;
+	Sun,  5 Oct 2025 08:27:44 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4C79B226
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 08:27:16 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id AE43A909
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 08:27:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B97541167
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 08:27:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9479B4110F
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 08:27:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KX3x6QY3wVL0 for <buildroot@buildroot.org>;
- Sun,  5 Oct 2025 08:27:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C60340E59
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6C60340E59
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 08:27:15 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5AF4686749; Sun,  5 Oct 2025 08:27:15 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 5 Oct 2025 10:17:55 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0619c666ac80f47fd2870d1e87c6b5dba8b7f55b
-X-Git-Newrev: 7bbc66a39e6e18d5298564167b42e56b82c9360a
-X-Patchwork-Hint: ignore
-Message-Id: <20251005082715.5AF4686749@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-django: security bump to
+ id cUtszfpSKCNj for <buildroot@buildroot.org>;
+ Sun,  5 Oct 2025 08:27:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 749BB40E59
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 749BB40E59
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 749BB40E59
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 08:27:42 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 4A2E019F734;
+ Sun,  5 Oct 2025 10:27:36 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 05 Oct 2025 10:27:36 +0200
+MIME-Version: 1.0
+Date: Sun, 05 Oct 2025 10:27:36 +0200
+To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>, Oli
+ Vogt <oli.vogt.pub01@gmail.com>, Marcus Hoffmann <bubu@bubu1.eu>
+In-Reply-To: <20251004093348.269213-1-titouan.christophe@mind.be>
+References: <20251004093348.269213-1-titouan.christophe@mind.be>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <d4db5681a54b91431c058d6880c54f2c@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1759652860;
+ bh=W+SDUH4Id9IdN0XPh5/bRvb4OW3CiUJc956bpwtY83o=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=i95YTTj2gP7MN5Yhrmv0iDapuM6xKXlV2/HT/gKRYvVy4KDgEZYotcutb7+q5EV1a
+ slzjQ6jDgWt2coR57T2NzfdHUGo9eGt+G7OiB93Tl921SgcgQ7zxosxTtN4vqvYCxr
+ dimGH+uvjUswo3KtwLdQch1dFYeCGq9+y1NqsmJPZ2YFxlAfHuvdkL8814MO49XAjM
+ 8TwTyE41ItqVXU3R2mJ4KRuS3J6TDjb9xPBh8pJyilGWhr+9628sqVbPDIA8Ph768O
+ vW6bOTEmG52zfNP3QPcchrCxM2Q2NTva2tIAjlQnmVj6da6bpfV+oYvwlYdeSVJXRE
+ zcWa8CwXNz7iQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=i95YTTj2
+Subject: Re: [Buildroot] [PATCH v2] package/python-django: security bump to
  v5.2.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -60,81 +84,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7bbc66a39e6e18d5298564167b42e56b82c9360a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 04/10/2025 11:33, Titouan Christophe via buildroot wrote:
+> This fixes the following vulnerabilities:
+> - CVE-2025-59681:
+>     An issue was discovered in Django 4.2 before 4.2.25, 5.1 before
+>     5.1.13, and 5.2 before 5.2.7. QuerySet.annotate(), 
+> QuerySet.alias(),
+>     QuerySet.aggregate(), and QuerySet.extra() are subject to SQL
+>     injection in column aliases, when using a suitably crafted 
+> dictionary,
+>     with dictionary expansion, as the **kwargs passed to these methods 
+> (on
+>     MySQL and MariaDB).
+>     https://www.cve.org/CVERecord?id=CVE-2025-59681
+> 
+> - CVE-2025-59682:
+>     An issue was discovered in Django 4.2 before 4.2.25, 5.1 before
+>     5.1.13, and 5.2 before 5.2.7. The django.utils.archive.extract()
+>     function, used by the "startapp --template" and "startproject
+>     --template" commands, allows partial directory traversal via an
+>     archive with file paths sharing a common prefix with the target
+>     directory.
+>     https://www.cve.org/CVERecord?id=CVE-2025-59682
+> 
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 
-For release note, see:
-https://docs.djangoproject.com/en/5.2/releases/5.2.7/
-
-This fixes the following vulnerabilities:
-- CVE-2025-59681:
-    An issue was discovered in Django 4.2 before 4.2.25, 5.1 before
-    5.1.13, and 5.2 before 5.2.7. QuerySet.annotate(), QuerySet.alias(),
-    QuerySet.aggregate(), and QuerySet.extra() are subject to SQL
-    injection in column aliases, when using a suitably crafted dictionary,
-    with dictionary expansion, as the **kwargs passed to these methods (on
-    MySQL and MariaDB).
-    https://www.cve.org/CVERecord?id=CVE-2025-59681
-
-- CVE-2025-59682:
-    An issue was discovered in Django 4.2 before 4.2.25, 5.1 before
-    5.1.13, and 5.2 before 5.2.7. The django.utils.archive.extract()
-    function, used by the "startapp --template" and "startproject
-    --template" commands, allows partial directory traversal via an
-    archive with file paths sharing a common prefix with the target
-    directory.
-    https://www.cve.org/CVERecord?id=CVE-2025-59682
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-[Julien: add link to release note]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-django/python-django.hash | 6 +++---
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 3ff4eb4e36..1ec80dc1c2 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  1f0327293cc3768903ce8cd390ec3f47  django-5.2.6.tar.gz
--sha256  da5e00372763193d73cecbf71084a3848458cecf4cee36b9a1e8d318d114a87b  django-5.2.6.tar.gz
-+md5  699a77ac347ca3484939762483dc4b08  django-5.2.7.tar.gz
-+sha256  e0f6f12e2551b1716a95a63a1366ca91bbcd7be059862c1b18f989b1da356cdd  django-5.2.7.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
- sha256  dcac1c86cb7ab491702bdb4c41be680fafde51536748cc8aaee3840eec53ed17  django/contrib/gis/measure.py
-@@ -12,4 +12,4 @@ sha256  4ee0cbc51370afde358652a0f977972053729ed578b6a42f5e2a037d114f0b39  django
- sha256  73af2949bff9296cb0f816c3be19a4da4e95adc94c1f924796e8bad3f03f2f29  django/contrib/admin/static/admin/js/vendor/xregexp/LICENSE.txt
- sha256  d114faff3488c16c319b3235dc41f90239d3d63d9853733033d8f7535f5c0004  django/contrib/admin/static/admin/img/LICENSE
- sha256  54004c4b606964ebc163af16d04607c16e428f8a78a026fecb53f70c09f4a94f  django/dispatch/license.txt
--sha256  1ce0483ad554cf135efec70ad2097e82ed72790194f17e1591821dc82c2416e0  django/utils/archive.py
-+sha256  9f37277d682cf06369041e60fb6fda5a85dfcf118d9176489087a3d40293f015  django/utils/archive.py
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index e3959f4192..139a15b13a 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_DJANGO_VERSION = 5.2.6
-+PYTHON_DJANGO_VERSION = 5.2.7
- PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/4c/8c/2a21594337250a171d45dda926caa96309d5136becd1f48017247f9cdea0
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/b1/96/bd84e2bb997994de8bcda47ae4560991084e86536541d7214393880f01a8
- PYTHON_DJANGO_LICENSE = BSD-3-Clause, MIT (jquery, utils/archive.py), BSD-2-Clause (inlines.js)
- PYTHON_DJANGO_LICENSE_FILES = LICENSE \
- 	django/contrib/gis/measure.py \
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
