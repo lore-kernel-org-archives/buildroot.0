@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3D4BCAC5B8
-	for <buildroot@archiver.kernel.org>; Sun,  5 Oct 2025 17:33:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EFD8CAC5B8
+	for <buildroot@archiver.kernel.org>; Sun,  5 Oct 2025 17:33:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A5B660ED3;
-	Sun,  5 Oct 2025 17:33:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 377DA83B7B;
+	Sun,  5 Oct 2025 17:33:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WH2vxYOihLpD; Sun,  5 Oct 2025 17:33:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XtewGhrfgUgq; Sun,  5 Oct 2025 17:33:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE3DA60ED4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1425783B55
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE3DA60ED4;
-	Sun,  5 Oct 2025 17:33:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id B1A9D272
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 17:33:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1425783B55;
+	Sun,  5 Oct 2025 17:33:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4F6F6909
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 17:33:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 973FA60ED3
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 17:33:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 40C8B411EE
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 17:33:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9dHYv7gjxEAD for <buildroot@buildroot.org>;
- Sun,  5 Oct 2025 17:33:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3D1A60ECF
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E3D1A60ECF
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 17:33:25 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D2F978690B; Sun,  5 Oct 2025 17:33:25 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 5 Oct 2025 19:22:40 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4a85d73f706322b2aa0d712c864306e93ed3860e
-X-Git-Newrev: e1d608e0c81eb473164d794ee94a0f63d9326d0d
-X-Patchwork-Hint: ignore
-Message-Id: <20251005173325.D2F978690B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/harfbuzz: bump to version 12.1.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id L7VuI8IsJm2D for <buildroot@buildroot.org>;
+ Sun,  5 Oct 2025 17:33:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 789854100D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 789854100D
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 789854100D
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 17:33:44 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id B7B245FFB4;
+ Sun,  5 Oct 2025 19:33:39 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 05 Oct 2025 19:33:39 +0200
+MIME-Version: 1.0
+Date: Sun, 05 Oct 2025 19:33:39 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Giulio Benetti
+ <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20251003201501.2430547-1-bernd@kuhls.net>
+References: <20251003201501.2430547-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <b8fecd1916e3f122f10940294b30f92b@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1759685622;
+ bh=rNmIuKUdWruSRKg76AGyKBTjwWLeCJeB/jmBG3F+UHI=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=oUau1pUsyG+A4qywcMOwlAkMJTPLXtqAxn4UThCp4RbRt0mzdzjFxEx1IxfzOIf/T
+ NYuvbjNBzzIhhfRUJlbaFVHy6108sp41x88qk2pKuZpLSslpJnVyVyKKuyJmyI3IJk
+ V4idmHq1HZveoLfdPoki4qHvSdScDZdL3Vm68/H+ZDQVCiJSOUtuZwXUnNLncfPLm5
+ slr3i3nh1/soydPfBaY9YkldlSUEIy/kw9kE4M+7qMxWEKuIgzNGMDuaP8mr/H/0QD
+ 1WbL5rBgGOnCoHlJdCBNs6KEmPWgz1iwftkoBjj4v83KfGcAS1dTAbRJCEdmw45/Ca
+ 8CBI/ErD7wECQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=oUau1pUs
+Subject: Re: [Buildroot] [PATCH 1/1] package/harfbuzz: bump to version 12.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,48 +83,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1d608e0c81eb473164d794ee94a0f63d9326d0d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 03/10/2025 22:15, Bernd Kuhls wrote:
+> Release notes:
+> https://github.com/harfbuzz/harfbuzz/releases/tag/12.1.0
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Release notes:
-https://github.com/harfbuzz/harfbuzz/releases/tag/12.1.0
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/harfbuzz/harfbuzz.hash | 2 +-
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index a6c34d92a3..3b7be8c07b 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  972a60a8d274d49e70361da6920c3a73dfb0fb4387f6c6811906a47ba634d8a1  harfbuzz-11.5.1.tar.xz
-+sha256  e5c81b7f6e0b102dfb000cfa424538b8e896ab78a2f4b8a5ec8cae62ab43369e  harfbuzz-12.1.0.tar.xz
- sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 5c3666bf75..a21a7f4387 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HARFBUZZ_VERSION = 11.5.1
-+HARFBUZZ_VERSION = 12.1.0
- HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
