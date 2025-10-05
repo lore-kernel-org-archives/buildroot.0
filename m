@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7F8ECAC5BB
-	for <buildroot@archiver.kernel.org>; Sun,  5 Oct 2025 16:35:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF55BCAC5B8
+	for <buildroot@archiver.kernel.org>; Sun,  5 Oct 2025 16:35:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6017A818CA;
-	Sun,  5 Oct 2025 16:35:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 82D3781705;
+	Sun,  5 Oct 2025 16:35:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J5HDobPTWmNA; Sun,  5 Oct 2025 16:35:21 +0000 (UTC)
+ id TpQPJ4RxX1Fy; Sun,  5 Oct 2025 16:35:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B96F81747
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8692E817C0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5B96F81747;
-	Sun,  5 Oct 2025 16:35:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7853A909
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 16:35:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8692E817C0;
+	Sun,  5 Oct 2025 16:35:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 41854226
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 16:35:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5E95C4131E
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 16:35:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 27381817C0
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 16:35:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id amqu6Kfs6LUG for <buildroot@buildroot.org>;
- Sun,  5 Oct 2025 16:35:19 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58F344111F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 58F344111F
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 16:35:19 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 53022868E2; Sun,  5 Oct 2025 16:35:19 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 5 Oct 2025 18:23:40 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1a66cdf7b34328d2b2065bfd22f190c92318e499
-X-Git-Newrev: 38d49568da243b11620a58cb55420a9746653eef
-X-Patchwork-Hint: ignore
-Message-Id: <20251005163519.53022868E2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ruby: update to 3.4.6
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id U95ndrV_hxzn for <buildroot@buildroot.org>;
+ Sun,  5 Oct 2025 16:35:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 367B481705
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 367B481705
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 367B481705
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 16:35:43 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 50DF619F58A;
+ Sun,  5 Oct 2025 18:35:39 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 05 Oct 2025 18:35:39 +0200
+MIME-Version: 1.0
+Date: Sun, 05 Oct 2025 18:35:39 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Cc: buildroot@buildroot.org
+In-Reply-To: <aOJcQeRIGwDSpK01@waldemar-brodkorb.de>
+References: <aOJcQeRIGwDSpK01@waldemar-brodkorb.de>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <60d11d5e0ca5905d27b2524f68dd7c08@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1759682141;
+ bh=oQmi+iaLVJYsENzgsP94HODf0Yh66mqZ2sADZGXvC2A=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=XJ5XTT0n59HDSEstMzM2oSMaYXIaJWRNGANgyg4Vp1ZftcMBKAjLZB5aOW7v/MUhM
+ BsRuI2a655nAQCgkYN/7W+cHd1RurmGz+Aa83kfpV8TfmzfPPeAWAjrbtUU65+BY2q
+ lpF9bNS8x3pF4SKBJMEX4KR+GBbNOZmveFANPC/8QggM/JjQJ9wF7YUHK/0QAKJwhN
+ TOI2mVjz1L7aqhCxA1sY4XnbsTofWtHAlaq6PST8VOlll2D/5NXbySuYWjaoF1BmgC
+ m7AO7ohyChhOLQDuk63atCJZrx656yIcXJ3Q9baNRNk1P7Cl27qCK7+Q63DdTvdxA4
+ Vw5u/y6g29HlA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=XJ5XTT0n
+Subject: Re: [Buildroot] [PATCH] package/ruby: update to 3.4.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,52 +83,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38d49568da243b11620a58cb55420a9746653eef
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 05/10/2025 13:53, Waldemar Brodkorb wrote:
+> See here for changes:
+> https://github.com/ruby/ruby/releases/tag/v3_4_4
+> https://github.com/ruby/ruby/releases/tag/v3_4_5
+> https://github.com/ruby/ruby/releases/tag/v3_4_6
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-See here for changes:
-https://github.com/ruby/ruby/releases/tag/v3_4_4
-https://github.com/ruby/ruby/releases/tag/v3_4_5
-https://github.com/ruby/ruby/releases/tag/v3_4_6
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/ruby/ruby.hash | 4 ++--
- package/ruby/ruby.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index ec17b092a4..90faed4c32 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,5 +1,5 @@
--# https://www.ruby-lang.org/en/news/2025/04/14/ruby-3-4-3-released/
--sha512  b30aad675cdcc1bdfe9e5fffe9d1925db3b3ac854a5e34180c368bc6e66f73e29ba5d802fea249353b7d799c01384c58bdd763fd1b679303158baa7824b9c08e  ruby-3.4.3.tar.xz
-+# https://www.ruby-lang.org/en/news/2025/09/16/ruby-3-4-6-released/
-+sha512  29000b3396ab95fc2dc13d2d78441ff5c34258e5421115181c54b1b4d55d5c0d4f3d0c3cec6b32b9a1bb8de5c51b383fcad4369ec3fb244fd0ce182afbe79ba4  ruby-3.4.6.tar.xz
- 
- # License files, Locally calculated
- sha256  a2021e52d5d6adf7e3f45aab9d2b860ce03cdf6153776853e11d5668193eecfd  LEGAL
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index b06a728799..ffe42968b5 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- RUBY_VERSION_MAJOR = 3.4
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).3
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).6
- RUBY_VERSION_EXT = 3.4.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
