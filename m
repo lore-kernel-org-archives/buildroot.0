@@ -4,72 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF55BCAC5B8
-	for <buildroot@archiver.kernel.org>; Sun,  5 Oct 2025 16:35:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAC08CAC5BB
+	for <buildroot@archiver.kernel.org>; Sun,  5 Oct 2025 16:44:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 82D3781705;
-	Sun,  5 Oct 2025 16:35:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7792F80D06;
+	Sun,  5 Oct 2025 16:44:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TpQPJ4RxX1Fy; Sun,  5 Oct 2025 16:35:46 +0000 (UTC)
+ id LlPuwRPu-P0x; Sun,  5 Oct 2025 16:44:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8692E817C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8B2180C3C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8692E817C0;
-	Sun,  5 Oct 2025 16:35:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 41854226
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 16:35:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D8B2180C3C;
+	Sun,  5 Oct 2025 16:44:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 208EA272
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 16:44:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 27381817C0
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 16:35:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0679140A41
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 16:44:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U95ndrV_hxzn for <buildroot@buildroot.org>;
- Sun,  5 Oct 2025 16:35:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 367B481705
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 367B481705
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 367B481705
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 16:35:43 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 50DF619F58A;
- Sun,  5 Oct 2025 18:35:39 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 05 Oct 2025 18:35:39 +0200
-MIME-Version: 1.0
-Date: Sun, 05 Oct 2025 18:35:39 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Cc: buildroot@buildroot.org
-In-Reply-To: <aOJcQeRIGwDSpK01@waldemar-brodkorb.de>
-References: <aOJcQeRIGwDSpK01@waldemar-brodkorb.de>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <60d11d5e0ca5905d27b2524f68dd7c08@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1759682141;
- bh=oQmi+iaLVJYsENzgsP94HODf0Yh66mqZ2sADZGXvC2A=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=XJ5XTT0n59HDSEstMzM2oSMaYXIaJWRNGANgyg4Vp1ZftcMBKAjLZB5aOW7v/MUhM
- BsRuI2a655nAQCgkYN/7W+cHd1RurmGz+Aa83kfpV8TfmzfPPeAWAjrbtUU65+BY2q
- lpF9bNS8x3pF4SKBJMEX4KR+GBbNOZmveFANPC/8QggM/JjQJ9wF7YUHK/0QAKJwhN
- TOI2mVjz1L7aqhCxA1sY4XnbsTofWtHAlaq6PST8VOlll2D/5NXbySuYWjaoF1BmgC
- m7AO7ohyChhOLQDuk63atCJZrx656yIcXJ3Q9baNRNk1P7Cl27qCK7+Q63DdTvdxA4
- Vw5u/y6g29HlA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=XJ5XTT0n
-Subject: Re: [Buildroot] [PATCH] package/ruby: update to 3.4.6
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OW-mIiPlXG8J for <buildroot@buildroot.org>;
+ Sun,  5 Oct 2025 16:44:38 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4222C406C6
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4222C406C6
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 16:44:38 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3A970868EB; Sun,  5 Oct 2025 16:44:38 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 5 Oct 2025 18:39:24 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 38d49568da243b11620a58cb55420a9746653eef
+X-Git-Newrev: d44150c69e0189ae1d0bb2cdb60a0c5012a8425c
+X-Patchwork-Hint: ignore
+Message-Id: <20251005164438.3A970868EB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.126
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,20 +59,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 05/10/2025 13:53, Waldemar Brodkorb wrote:
-> See here for changes:
-> https://github.com/ruby/ruby/releases/tag/v3_4_4
-> https://github.com/ruby/ruby/releases/tag/v3_4_5
-> https://github.com/ruby/ruby/releases/tag/v3_4_6
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+commit: https://git.buildroot.net/buildroot/commit/?id=d44150c69e0189ae1d0bb2cdb60a0c5012a8425c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Release notes:
+https://lists.x.org/archives/xorg-announce/2025-October/003632.html
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libdrm/libdrm.hash | 6 +++---
+ package/libdrm/libdrm.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index 8e8f6eb663..67a66ece0d 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2025-June/003606.html
+-sha256  d4bae92797a50f81a93524762e0410a49cd84cfa0f997795bc0172ac8fb1d96a  libdrm-2.4.125.tar.xz
+-sha512  faad141f48a49915c0312eb635df76968f0f4d41bb6851be625a7ae0e24826e7283b5ec9ec3b09ead9a96297bf42221c411288f9b000c3dbc159ed8dde93a7e4  libdrm-2.4.125.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2025-October/003632.html
++sha256  6cab16d4d259b6abc9f485233863454114a3c307eca806679aad3edbe967bf42  libdrm-2.4.126.tar.xz
++sha512  7cf2e2904025165562f0bf56faa57f3c3cca6f739c2afc299952bcb7bb1dcb86554c8060a7dbe070f2100d036b0ece615e0a55d9df00885679ae30b7e6ef0f0b  libdrm-2.4.126.tar.xz
+ 
+ # Hash for license file
+ sha256  d0a616a9020dc0271e36e6dd4bad174b4e2c2a42636f13785f8e18dd5f85fd83  data/meson.build
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index c6a40c0f61..89a1a16eef 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDRM_VERSION = 2.4.125
++LIBDRM_VERSION = 2.4.126
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
+ LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
