@@ -4,67 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6042CAC5B8
-	for <buildroot@archiver.kernel.org>; Sun,  5 Oct 2025 11:53:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69A29CAC5BB
+	for <buildroot@archiver.kernel.org>; Sun,  5 Oct 2025 12:32:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2ADBF41261;
-	Sun,  5 Oct 2025 11:53:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 030DB40C89;
+	Sun,  5 Oct 2025 12:32:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z5waspNbzcVA; Sun,  5 Oct 2025 11:53:45 +0000 (UTC)
+ id dqWoj5yob39L; Sun,  5 Oct 2025 12:32:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDD994126D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04E7840C8D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BDD994126D;
-	Sun,  5 Oct 2025 11:53:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 04E7840C8D;
+	Sun,  5 Oct 2025 12:32:53 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 934B0909
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 11:53:44 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 18FC8272
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 12:32:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 78B704126D
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 11:53:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0AA2440C89
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 12:32:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CEXlbfmDK_zS for <buildroot@buildroot.org>;
- Sun,  5 Oct 2025 11:53:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
- envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CC81B41261
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC81B41261
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CC81B41261
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 11:53:40 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 5F4DB31E0B77; Sun, 05 Oct 2025 13:53:37 +0200 (CEST)
-Date: Sun, 5 Oct 2025 13:53:37 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+ id Covt70WIxwTe for <buildroot@buildroot.org>;
+ Sun,  5 Oct 2025 12:32:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9460140C8D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9460140C8D
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9460140C8D
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 12:32:49 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0845.dip0.t-ipconnect.de [91.58.8.69])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 08FACA4C5D9B
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 14:32:47 +0200 (CEST)
+Received: from [192.168.1.144] (port=44516 helo=bruckner.lan.fli4l)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1v5Nuw-000000006gK-2cc3
+ for buildroot@buildroot.org; Sun, 05 Oct 2025 12:32:46 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Message-ID: <aOJcQeRIGwDSpK01@waldemar-brodkorb.de>
+Date: Sun,  5 Oct 2025 14:32:46 +0200
+Message-ID: <20251005123246.1165560-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 6.12.43+deb13-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1759665217; bh=kab9LmPb2F6hJjH/bB4mcQblHTgroYy8Cx4LPc3tnJI=;
- h=Date:From:To:Subject:From;
- b=U1YwUK5DeDsRjnBap2P1e5dWNavp7lYEz2xvxISFx9Cxi8I+RK/nQCY8VqiHEGzd6
- 04sVBkjhYriiAjav+9h3NCoa5n5EMPX63LGfzMVmhFszYnGVGrpqFj7mixsOuMz3sq
- AlQRFad9nnfKc8hPgdILobUL5Jtmct1ULA3VjQYBcgJvqZPTZkEculL0ybL6SMxT22
- 3b/5UdEm5/B0ifLF9L9zLDzf1FXrs24bkFWNc85ojUFnL5A/+GuKOjzsGZa3REZ76t
- VTOBPMyuPA+nVybx4+Ggk7nQTmdI5OsOYuZg+N417doANwVflzkhRTSZs01+1tLhkB
- +NXWJ+rtWjcPQ==
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202506031021; t=1759667567;
+ bh=4zLnKVvk7lPhneA6kg9xbUFuMSAtGhobYa3gf0bHa2U=;
+ h=From:To:Subject:Date:From;
+ b=yAw8zDErZWsiLYr/oENWHaeHwUWhsAROSPDty+TVPkxqfeBOQPv3RC6qilfFhIdaP
+ 8gkZD4uvmsqVIDa24gZb1yZukztNbjoOLZiFpRcaT52Za7+vpoNJXCHm9OK4fitHwC
+ tbvzIyQPxUn3hd7D/ZYIBV3GL6xHL/xH4YT0grmrLsKqSmMPwKusYSoqDtfzBI2JPh
+ KLu/+K00ue6IYwPX8zkuPdVb0CdJBQ9WFEU/JglRbDSQdzNo21hdv2h3TSrMkXq80L
+ fJmPuPHE8wtz6dlqyreRsntMVTNtRY4u/GjaQhKS/FvXhiHwcCMWGgx86dMu/KsTs7
+ 15VCnrtOjqtlw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=U1YwUK5D
-Subject: [Buildroot] [PATCH] package/ruby: update to 3.4.6
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=yAw8zDEr
+Subject: [Buildroot] [PATCH 1/1] package/apr: link with -lm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,42 +85,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See here for changes:
-https://github.com/ruby/ruby/releases/tag/v3_4_4
-https://github.com/ruby/ruby/releases/tag/v3_4_5
-https://github.com/ruby/ruby/releases/tag/v3_4_6
+Fixes Apache runtime error:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+    /usr/bin/httpd: Relink `/usr/lib64/libapr-1.so.0' with `/lib64/libm.so.6' for IFUNC symbol `modf'
+
+caused by glibc bump to 2.42 with buildroot commit
+fb6256c0efbc93d242e9ae2aa2d3b4a2e7fd149c.
+
+Configure check of apr does not detect the need for -lm:
+    checking for library containing modf... none required
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/ruby/ruby.hash | 4 ++--
- package/ruby/ruby.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/apr/apr.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index ec17b092a4..90faed4c32 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,5 +1,5 @@
--# https://www.ruby-lang.org/en/news/2025/04/14/ruby-3-4-3-released/
--sha512  b30aad675cdcc1bdfe9e5fffe9d1925db3b3ac854a5e34180c368bc6e66f73e29ba5d802fea249353b7d799c01384c58bdd763fd1b679303158baa7824b9c08e  ruby-3.4.3.tar.xz
-+# https://www.ruby-lang.org/en/news/2025/09/16/ruby-3-4-6-released/
-+sha512  29000b3396ab95fc2dc13d2d78441ff5c34258e5421115181c54b1b4d55d5c0d4f3d0c3cec6b32b9a1bb8de5c51b383fcad4369ec3fb244fd0ce182afbe79ba4  ruby-3.4.6.tar.xz
+diff --git a/package/apr/apr.mk b/package/apr/apr.mk
+index 1c7553a501..98a7ece620 100644
+--- a/package/apr/apr.mk
++++ b/package/apr/apr.mk
+@@ -50,6 +50,10 @@ APR_CONF_ENV = \
+ 	apr_preload_done=yes
+ APR_CONFIG_SCRIPTS = apr-1-config
  
- # License files, Locally calculated
- sha256  a2021e52d5d6adf7e3f45aab9d2b860ce03cdf6153776853e11d5668193eecfd  LEGAL
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index b06a728799..ffe42968b5 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- RUBY_VERSION_MAJOR = 3.4
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).3
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).6
- RUBY_VERSION_EXT = 3.4.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
++ifeq ($(BR2_PACKAGE_GLIBC),y)
++APR_CONF_ENV += LIBS=-lm
++endif
++
+ # Doesn't even try to guess when cross compiling
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ APR_CONF_ENV += apr_cv_pthreads_lib="-lpthread"
 -- 
 2.47.3
 
