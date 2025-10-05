@@ -4,73 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C3D3CAC5BB
-	for <buildroot@archiver.kernel.org>; Sun,  5 Oct 2025 08:27:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE628CAC5B8
+	for <buildroot@archiver.kernel.org>; Sun,  5 Oct 2025 08:40:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1128283F4E;
-	Sun,  5 Oct 2025 08:27:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 67CEF83F52;
+	Sun,  5 Oct 2025 08:40:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QAq1j1aJ2uWP; Sun,  5 Oct 2025 08:27:44 +0000 (UTC)
+ id vf2PABhXXvoh; Sun,  5 Oct 2025 08:40:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 193E983F52
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87A5283EEC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 193E983F52;
-	Sun,  5 Oct 2025 08:27:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id AE43A909
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 08:27:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 87A5283EEC;
+	Sun,  5 Oct 2025 08:40:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6C01F226
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 08:40:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9479B4110F
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 08:27:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5E0114008F
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 08:40:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cUtszfpSKCNj for <buildroot@buildroot.org>;
- Sun,  5 Oct 2025 08:27:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 749BB40E59
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 749BB40E59
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 749BB40E59
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 08:27:42 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 4A2E019F734;
- Sun,  5 Oct 2025 10:27:36 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 05 Oct 2025 10:27:36 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7Y1y-8qFM0lS for <buildroot@buildroot.org>;
+ Sun,  5 Oct 2025 08:40:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 753FA40876
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 753FA40876
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 753FA40876
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 08:40:29 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c725.dip0.t-ipconnect.de [79.214.199.37])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 8490BA4C54DC;
+ Sun,  5 Oct 2025 10:40:27 +0200 (CEST)
+Received: from [192.168.1.144] (port=60074 helo=bruckner.lan.fli4l)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1v5KI6-000000006sZ-2ofZ;
+ Sun, 05 Oct 2025 08:40:27 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sun,  5 Oct 2025 10:40:26 +0200
+Message-ID: <20251005084026.1330948-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Sun, 05 Oct 2025 10:27:36 +0200
-To: Titouan Christophe <titouan.christophe@mind.be>
-Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>, Oli
- Vogt <oli.vogt.pub01@gmail.com>, Marcus Hoffmann <bubu@bubu1.eu>
-In-Reply-To: <20251004093348.269213-1-titouan.christophe@mind.be>
-References: <20251004093348.269213-1-titouan.christophe@mind.be>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <d4db5681a54b91431c058d6880c54f2c@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1759652860;
- bh=W+SDUH4Id9IdN0XPh5/bRvb4OW3CiUJc956bpwtY83o=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=i95YTTj2gP7MN5Yhrmv0iDapuM6xKXlV2/HT/gKRYvVy4KDgEZYotcutb7+q5EV1a
- slzjQ6jDgWt2coR57T2NzfdHUGo9eGt+G7OiB93Tl921SgcgQ7zxosxTtN4vqvYCxr
- dimGH+uvjUswo3KtwLdQch1dFYeCGq9+y1NqsmJPZ2YFxlAfHuvdkL8814MO49XAjM
- 8TwTyE41ItqVXU3R2mJ4KRuS3J6TDjb9xPBh8pJyilGWhr+9628sqVbPDIA8Ph768O
- vW6bOTEmG52zfNP3QPcchrCxM2Q2NTva2tIAjlQnmVj6da6bpfV+oYvwlYdeSVJXRE
- zcWa8CwXNz7iQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=i95YTTj2
-Subject: Re: [Buildroot] [PATCH v2] package/python-django: security bump to
- v5.2.7
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202506031021; t=1759653627;
+ bh=ITroE1Ik04Pk5HH6CDuq3OudgBczD8/lx9gn2bV8tLg=;
+ h=From:To:Cc:Subject:Date:From;
+ b=ntT1B2VbzijYaJGU1PzoM2KR33hqSxA96ThQdzl3m5x7fiEbPAIPpj/aasXe5Roso
+ VtOI37UJCFWdL3NeKQyQ6i8+Z/ZSsAJoRf1xGeAw0Y3iryVpeFxrxoXkiIpYuLAixF
+ wqmLwDM1WTL1nN9WMw6e27a6HHg++Ak/X6pDdLrYKKrxJFBAFV0HeJhzQfUfVlP3Uk
+ YxJOw4eQGqaAm/pafB2LkZk8kdEdw3wfPT/6rGyzI8OEt+/9UabaUtwW7bx636j1XY
+ GfsdiAud++LywGslwbkO66mbeU+s2JPJuGo0pOA/Y2/HZVVAaAPkuIJqBFEqIddDlG
+ FXRYGhIPEifiQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=ntT1B2Vb
+Subject: [Buildroot] [PATCH 1/1] package/python-emailproxy: bump version to
+ 2025.10.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,39 +81,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 04/10/2025 11:33, Titouan Christophe via buildroot wrote:
-> This fixes the following vulnerabilities:
-> - CVE-2025-59681:
->     An issue was discovered in Django 4.2 before 4.2.25, 5.1 before
->     5.1.13, and 5.2 before 5.2.7. QuerySet.annotate(), 
-> QuerySet.alias(),
->     QuerySet.aggregate(), and QuerySet.extra() are subject to SQL
->     injection in column aliases, when using a suitably crafted 
-> dictionary,
->     with dictionary expansion, as the **kwargs passed to these methods 
-> (on
->     MySQL and MariaDB).
->     https://www.cve.org/CVERecord?id=CVE-2025-59681
-> 
-> - CVE-2025-59682:
->     An issue was discovered in Django 4.2 before 4.2.25, 5.1 before
->     5.1.13, and 5.2 before 5.2.7. The django.utils.archive.extract()
->     function, used by the "startapp --template" and "startproject
->     --template" commands, allows partial directory traversal via an
->     archive with file paths sharing a common prefix with the target
->     directory.
->     https://www.cve.org/CVERecord?id=CVE-2025-59682
-> 
-> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Release notes: https://github.com/simonrob/email-oauth2-proxy/releases
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/python-emailproxy/python-emailproxy.hash | 4 ++--
+ package/python-emailproxy/python-emailproxy.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-emailproxy/python-emailproxy.hash b/package/python-emailproxy/python-emailproxy.hash
+index 3ba682e33b..6c534834ca 100644
+--- a/package/python-emailproxy/python-emailproxy.hash
++++ b/package/python-emailproxy/python-emailproxy.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/emailproxy/json
+-md5  12c7de8acd36329613c994a9b20385a2  emailproxy-2025.6.25.tar.gz
+-sha256  7737083d6339649ffb6149326f83258b537a580e9eb617e5d8343435eb55f261  emailproxy-2025.6.25.tar.gz
++md5  8cdcbe1f2e0956facf27cf2ed160e227  emailproxy-2025.10.4.tar.gz
++sha256  28efbc446df0319d9641b0b7a35440bae91863bf70471c8cedaafbefb1b50915  emailproxy-2025.10.4.tar.gz
+ # Locally computed sha256 checksums
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/python-emailproxy/python-emailproxy.mk b/package/python-emailproxy/python-emailproxy.mk
+index 01f0104e9a..603e58fe7c 100644
+--- a/package/python-emailproxy/python-emailproxy.mk
++++ b/package/python-emailproxy/python-emailproxy.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_EMAILPROXY_VERSION = 2025.6.25
++PYTHON_EMAILPROXY_VERSION = 2025.10.4
+ PYTHON_EMAILPROXY_SOURCE = emailproxy-$(PYTHON_EMAILPROXY_VERSION).tar.gz
+-PYTHON_EMAILPROXY_SITE = https://files.pythonhosted.org/packages/a4/85/c9266b2457f018783dc0149e123bad115e02d0bd01f7c2a5aa61715250f1
++PYTHON_EMAILPROXY_SITE = https://files.pythonhosted.org/packages/4f/0d/045028f891c4a83ea7d616a81f0b9af8d290316eb0c958d572b6445232f9
+ PYTHON_EMAILPROXY_SETUP_TYPE = setuptools
+ PYTHON_EMAILPROXY_LICENSE = Apache-2.0
+ PYTHON_EMAILPROXY_LICENSE_FILES = LICENSE
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
