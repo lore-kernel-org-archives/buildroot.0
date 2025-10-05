@@ -1,74 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC53DCAC5B8
-	for <buildroot@archiver.kernel.org>; Sun,  5 Oct 2025 20:38:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 708FDCAC5BB
+	for <buildroot@archiver.kernel.org>; Sun,  5 Oct 2025 21:13:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 69DC283D43;
-	Sun,  5 Oct 2025 20:38:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B6904155C;
+	Sun,  5 Oct 2025 21:13:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dmHQxKlD-O1w; Sun,  5 Oct 2025 20:37:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0FVDX0ltvfDH; Sun,  5 Oct 2025 21:13:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68F19830C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C00341557
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 68F19830C2;
-	Sun,  5 Oct 2025 20:37:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C00341557;
+	Sun,  5 Oct 2025 21:13:36 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 66970272
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 20:37:58 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 6ADB6226
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 21:13:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 586FF40BB1
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 20:37:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 517C240BB7
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 21:13:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RlcDbvoDftsh for <buildroot@buildroot.org>;
- Sun,  5 Oct 2025 20:37:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7D1CD40A29
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D1CD40A29
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7D1CD40A29
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 20:37:57 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id E778613F861;
- Sun,  5 Oct 2025 22:37:53 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 05 Oct 2025 22:37:53 +0200
-MIME-Version: 1.0
-Date: Sun, 05 Oct 2025 22:37:53 +0200
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250928200636.277674-1-ju.o@free.fr>
-References: <20250928200636.277674-1-ju.o@free.fr>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <516de677e5bc21b9b8f6d4bea234d0c1@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1759696675;
- bh=kYhlADDqlPCfq8AnJ2gD4O1Ryfj2CtvUJ6trQG0quAw=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=JOHX/Y+sb9PhhCT0ia3pgro+UjP0Fw4f7knEmBSbdB9q02DJThh9x0PC5966Mpyvk
- 6OUQMQo9JRfz5PS/BsdxABN7gBJVFkIxHwJ0qVh5DJchFNKyxfe8tb3cbW2GzxIEo9
- N8k5QIxLka0/PwmsQzX44ZDsTRefOYL9pHIhblUL1m5KNdqiDuvcimd050a6+YLbTV
- 1G6U1X6+BfRT2GDEHICC5X0Sf6Lh2WcJNiXBeuV4NiBWGchaz9MQFEV/WiCKqUaB0U
- 2H5hNtAO+DQlqvJaABc2a/Hdh8jD6tT9wOIZAtR3pK5AdfBd8NEeVBgMQrqfHAP3nn
- A1N9TwUq58zkQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=JOHX/Y+s
-Subject: Re: [Buildroot] [PATCH 1/1] package/vulkan-headers: needs C++
+ id eQofKOAPYrIQ for <buildroot@buildroot.org>;
+ Sun,  5 Oct 2025 21:13:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A192040102
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A192040102
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 21:13:34 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9271186964; Sun,  5 Oct 2025 21:13:34 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 5 Oct 2025 22:44:14 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7ec419fb9c07292dc28b87ccb0ed35b00437dd16
+X-Git-Newrev: e993272b324da933c7684670da07f388c4210201
+X-Patchwork-Hint: ignore
+Message-Id: <20251005211334.9271186964@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/beagleboneai: move to Linux 6.12.50
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,36 +59,58 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 28/09/2025 22:06, Julien Olivain via buildroot wrote:
-> Since Buildroot commit [1] "package/vulkan-{headers,loader,tools}:
-> bump to 1.4.317 release", the vulkan-headers package is failing at
-> configuration time with toolchains without C++ support, with error:
-> 
->     The C++ compiler
->       "/bin/false"
->     is not able to compile a simple test program.
-> 
-> This is due to upstream commit [2], which added CXX to the CMake
-> project file.
-> 
-> This commit fixes the issue by adding the C++ dependency.
-> 
-> Fixes:
-> https://autobuild.buildroot.org/results/10f63398940d52be9a8ee306daf4203ceca25eb8
-> 
-> [1] 
-> https://gitlab.com/buildroot.org/buildroot/-/commit/52664093dee0f280db191c391167848dc5b09745
-> [2] 
-> https://github.com/KhronosGroup/Vulkan-Headers/commit/85256c712ce9ee9755ae74faacc3e6a1d2c5eddf
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+commit: https://git.buildroot.net/buildroot/commit/?id=e993272b324da933c7684670da07f388c4210201
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master.
+And adjust the dtb path to the new subdir after commit 724ba6751532 ("ARM:
+dts: Move .dts files to vendor sub-directories") in v6.5.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ board/beagleboard/beagleboneai/patches/linux/linux.hash | 2 +-
+ configs/beagleboneai_defconfig                          | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/board/beagleboard/beagleboneai/patches/linux/linux.hash b/board/beagleboard/beagleboneai/patches/linux/linux.hash
+index ec1a3601b7..4ae61c9e4f 100644
+--- a/board/beagleboard/beagleboneai/patches/linux/linux.hash
++++ b/board/beagleboard/beagleboneai/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  c52bc1ffc396c11bce335c9ee5cd55fe4213cbc1fb4026ff62bb90c864c61f62  linux-5.10.217.tar.xz
++sha256  c435bd74d1c21fc5a950781a50d78bae2b93944144694843359948ad3afc72a5  linux-6.12.50.tar.xz
+diff --git a/configs/beagleboneai_defconfig b/configs/beagleboneai_defconfig
+index 5d269a1825..bf6d73a525 100644
+--- a/configs/beagleboneai_defconfig
++++ b/configs/beagleboneai_defconfig
+@@ -1,6 +1,6 @@
+ BR2_arm=y
+ BR2_cortex_a15=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/beagleboard/beagleboneai/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_SYSTEM_DHCP="eth0"
+@@ -9,10 +9,10 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beagleboard/beagleboneai/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.217"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.50"
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="am5729-beagleboneai"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/omap/am5729-beagleboneai"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
