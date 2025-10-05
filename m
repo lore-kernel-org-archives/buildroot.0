@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9811ECAC5BB
-	for <buildroot@archiver.kernel.org>; Sun,  5 Oct 2025 13:31:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F18B9CAC5BB
+	for <buildroot@archiver.kernel.org>; Sun,  5 Oct 2025 13:32:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 70DE340981;
-	Sun,  5 Oct 2025 13:31:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C631A411DD;
+	Sun,  5 Oct 2025 13:32:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5C8raL2QlVQH; Sun,  5 Oct 2025 13:31:22 +0000 (UTC)
+ id IFnSkNXr8sdm; Sun,  5 Oct 2025 13:32:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA40240719
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CEF940A49
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA40240719;
-	Sun,  5 Oct 2025 13:31:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9BD22226
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 13:31:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0CEF940A49;
+	Sun,  5 Oct 2025 13:32:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DB90E272
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 13:32:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 825D0400C4
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 13:31:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CD537411C9
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 13:32:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tT99o8oa8gm2 for <buildroot@buildroot.org>;
- Sun,  5 Oct 2025 13:31:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id przat4LBn2w8 for <buildroot@buildroot.org>;
+ Sun,  5 Oct 2025 13:32:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 72CE040965
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 72CE040965
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 72CE040965
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 13:31:19 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 852954357; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sun, 05 Oct 2025 13:31:14 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1v5OpV-00Gl9Y-2C;
- Sun, 05 Oct 2025 15:31:13 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23473409F8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 23473409F8
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 13:32:39 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1F3508685F; Sun,  5 Oct 2025 13:32:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: buildroot@buildroot.org,  Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-References: <20251004155057.1520336-1-dario.binacchi@amarulasolutions.com>
-Date: Sun, 05 Oct 2025 15:31:13 +0200
-In-Reply-To: <20251004155057.1520336-1-dario.binacchi@amarulasolutions.com>
- (Dario Binacchi's message of "Sat, 4 Oct 2025 17:50:57 +0200")
-Message-ID: <87qzvh3272.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=YbcvF8Z6HlIu6Aet4kfKJmn/ikaEZxm8E3fqhJFaUlG6qxTBR78SjnmoCvIjOEoQT6mDQVFV5N9cNx72ZMHCFR5iBLBEg/CqQBVPDQSE0STWNqDh0osAX+cV2JmJecDKIe3KuhGWJso9Ms5mBZx54r7/RZxrUJwGow5D/RVYFuLbA6ohoi/IA+4J0o0ILGh2HTykeIth/ybmwlZaO+akkR/C/hqBRK8f/ityFUmJE0ZGFk6/LXDMojOeE/NLsPIAx2B3VWMQGyCFEhTTHabk/lTSaV4mHTZORPT7wmQ8okSuTfr0npQdYZMUycZZjKZ3W6ToOOxUtNS0DYT4GthyvQ==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=pLxsSiylmIJqf1fs1/kUjElKEKvrohOtbCcg3xREPko=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=YbcvF8Z6
-Subject: Re: [Buildroot] [PATCH 1/1] package/fio: bump version to 3.41
+To: buildroot@buildroot.org
+Date: Sun, 5 Oct 2025 15:29:41 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 82912d4788b98a18e8fa10edb4b4af3d7890ea8c
+X-Git-Newrev: d73458b3a5d15d7058835cf296cb4e5a452b2b51
+X-Patchwork-Hint: ignore
+Message-Id: <20251005133239.1F3508685F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnupg2: bump to version 2.4.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,22 +58,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Dario" == Dario Binacchi <dario.binacchi@amarulasolutions.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d73458b3a5d15d7058835cf296cb4e5a452b2b51
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > For change log since 3.38, see:
- > https://git.kernel.dk/cgit/fio/log/?h=fio-3.41
+Release notes:
+https://lists.gnupg.org/pipermail/gnupg-announce/2025q3/000496.html
 
- > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gnupg2/gnupg2.hash | 4 ++--
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index 6a34f2a1ce..01060f897b 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,5 +1,5 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  2d510a1a7294f2f9ef3f2e280c93c3ad9b0cdb68  gnupg-2.4.7.tar.bz2
+-sha256  7b24706e4da7e0e3b06ca068231027401f238102c41c909631349dcc3b85eb46  gnupg-2.4.7.tar.bz2
++sha1  c704085aa7cc131a67edd0b7c0c90e5c35ee4adb  gnupg-2.4.8.tar.bz2
++sha256  b58c80d79b04d3243ff49c1c3fc6b5f83138eb3784689563bcdd060595318616  gnupg-2.4.8.tar.bz2
+ # Locally calculated
+ sha256  bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index d98829ca80..debf15ef63 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GNUPG2_VERSION = 2.4.7
++GNUPG2_VERSION = 2.4.8
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
