@@ -1,123 +1,121 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E026CAC5BB
-	for <buildroot@archiver.kernel.org>; Sun,  5 Oct 2025 13:25:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57BA2CAC5B8
+	for <buildroot@archiver.kernel.org>; Sun,  5 Oct 2025 13:25:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 51244608DF;
-	Sun,  5 Oct 2025 13:25:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 17675411BF;
+	Sun,  5 Oct 2025 13:25:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 97P_9WOeq6Eq; Sun,  5 Oct 2025 13:25:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HC7fjkC0jBAj; Sun,  5 Oct 2025 13:25:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D07D60DFF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6CB54118B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7D07D60DFF;
-	Sun,  5 Oct 2025 13:25:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0ECE2226
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 13:24:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A6CB54118B;
+	Sun,  5 Oct 2025 13:25:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5AA4E226
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 13:25:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 00C96608DF
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 13:24:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4C6A341187
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 13:25:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2D4aIAHISOv9 for <buildroot@buildroot.org>;
- Sun,  5 Oct 2025 13:24:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QxqNTJWidnDB for <buildroot@buildroot.org>;
+ Sun,  5 Oct 2025 13:24:59 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
  envelope-from=rgallaispou@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2DC8F60DF9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DC8F60DF9
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2DC8F60DF9
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 13:24:58 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-3f0ae439bc3so1941866f8f.1
- for <buildroot@buildroot.org>; Sun, 05 Oct 2025 06:24:57 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5F59C4118B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F59C4118B
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5F59C4118B
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 13:24:59 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-45b4d89217aso23045695e9.2
+ for <buildroot@buildroot.org>; Sun, 05 Oct 2025 06:24:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1759670696; x=1760275496;
- h=cc:to:content-transfer-encoding:mime-version:message-id:date
- :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=e6GFB9sJ39uGMzgI9ZZOjuQlhJaANMfkp9szhGfwG6w=;
- b=YpWgM75Lv3qFm6OAW1cZMitS6u7GGOAw+DRoSabthHNb1hfLtcGGDCu2AdW1Mp6QAo
- Vk/nEPSl43aNghdb/cQXvcDlwpBxlwHJ95s+ZvDVjPGhr+5vfAZE72BlnKCeiXzPny2t
- eiFLMZiy7jn9f8qNjxQgmDRFwALp11H3qkhC6ysQAtD/DTlT5RRvSl78Wq+CNBwGJi/X
- TKhw8sTn110Aab1uthVcHvA0MceN5SRfP3lMp3puLV3hhy6drJxsjrxG/3nHPBVocooI
- qXQ8gdDmJK/RUpGINkovtBwpwNyc3+85GndFGTMDT7YMCRINs1CRRpicN9pTJIsQNXGZ
- F8KA==
-X-Gm-Message-State: AOJu0YwANBkpwQjcPgDDY+9iPiWxzEPeTB+UidvSUvEcNEq1McjAsBBV
- CGioZJiBpas4vI67K9F2XP0EBM6dnTAGo5Bh3GOOUAA0dd0L5Ppg/iogIAJ65A==
-X-Gm-Gg: ASbGncshMPgfBbaj9K1wLzH0+o/xctUbbjdtRkJpMC1FCcpam7G1CNhA7EVY+eqhph1
- kZfneie2/xR9OXR3uv1rjMldxsN43yNub6iyj4xKNp8zVvy6Y9c/srnZil64iB57EoBD7PYZ5cA
- JxS4NUcJ3HubTvQUNAljOSR4D7cHZPvfRCy3c7x93iN0uLsc0A1ZLp2LdYDZAZAxRFRmmSQqyLA
- I/4FagzZdf7RhvwZ1C97O3CJ7la2P5LPQgpdA1K5Zv+IUL0RGAtWEhUtbGGu6ltsCZWYLjPNrO9
- bzLvLU0ajUzLIeRqk4DrmG1LxA5t5aMezxADSa/zu4jFYsd44W9GFNaBn1mrwkk0VR8NEkUcGCZ
- 9qGmnmJ4yUMQ5ZRW4z1ctJ/OD/A93b5mR8mdyf+A0Dq5GsuVSg00K8Knc9ZU=
-X-Google-Smtp-Source: AGHT+IEzYd6eoUmNwne+NQEFZT0bQBZqyzFcCPhbXMHpd+C8mYQ36dpX3s2FMnG+SC3W5bcbZ39gAg==
-X-Received: by 2002:a05:6000:2c11:b0:3ee:1296:d9e8 with SMTP id
- ffacd0b85a97d-4256714ca6cmr5180544f8f.17.1759670695762; 
- Sun, 05 Oct 2025 06:24:55 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1759670697; x=1760275497;
+ h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+ :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=r5uCGyBDPgl0cUknlS3s46gZOmqauroDDQDag7eLPe8=;
+ b=GWRUNpLNk0xNzzBVwdUVrxIE8z2TuCGaHzJpX2OeF9v6wBxhFloAKOmHaJrXOTWr3L
+ ty2kUafRz5bQrLlMWPo1rLRdg8NCnEtg/MYr7Q3w+lhu34XzQ82QRyL2iF6/fGUqb23l
+ T2J43K5ydaO32SA4pgg4KFONjKPtLsl4wE5MYatt9wHQZd7j7BHelG0ro0vbMqadS9Tt
+ XZ5aUfNbwo4y+llzK4/aXivS13nvJ63GyodNIG2Kv69MGMZfTWIbza6pinvGQzyTyYNd
+ izqMmXAORS0bUZ8n6vv4etVZR4u490CZbZwy17fJ4hwBp0PPL8t4O1IzybL4dIpR04dj
+ icww==
+X-Gm-Message-State: AOJu0YwJdwSQdGfT9KLySt8pivaqwmvjQyCTMlYHTte8nCK9FIdw1xIV
+ P+cZ7lu8Ku54WbdB3XDTohEDgEkTdqB/P3nGzRlwS+MCYyu2RKkfDRJt
+X-Gm-Gg: ASbGncvi5/Qr9BfJdsCV8SC6gR1fBZ+F6bTi9fIXB5fnrncPvhKaIdcWORKLH5s4Aw1
+ vREdyew2PJvsFxBIzJqxDkDLXG0ryC1BflJ7Q1p3OWpm51HKi+hZFNUsAGavjhxtD8uL1IOc5YZ
+ h0wTuD/ybAl1PlXcBS3AldS4RPUtnb3e76WduxDGK7MA6PhmdbfNPuE8cej5uhEAV+Z/UdWOGjX
+ FQXOc0Z3ehMwMUbbnzqYuKVGPdCoQZIfF4CVEiXlBNGeXOBlvIGI+CDaQr3xFRDUJLzN70o9L/o
+ 91qZM3s2oSUEpKNeao8KMP+Y5vRNDXR22fZx5NovW51KbBNf+heoO94s3WRbdowXAAKaPouVt23
+ UBrme2k+PvqwDzSE80zivDOPWgKktidwfkzRiOhAWQXyyrIqvaamaPhp5N6s=
+X-Google-Smtp-Source: AGHT+IE6cxIWEmcPkOBKhd4TZS/kaWH2YfH7iNSltyZrVAQ0fyC3afE80cWPv6BWBZpfJfhKKmnubg==
+X-Received: by 2002:a05:600d:4173:b0:46e:53cb:9e7f with SMTP id
+ 5b1f17b1804b1-46e7114424emr65124745e9.18.1759670697000; 
+ Sun, 05 Oct 2025 06:24:57 -0700 (PDT)
 Received: from localhost ([2001:861:3385:e20:2acd:89a8:83d9:4be5])
  by smtp.gmail.com with UTF8SMTPSA id
- ffacd0b85a97d-4255d8f017esm16882567f8f.47.2025.10.05.06.24.55
+ 5b1f17b1804b1-46e5c4ce4bbsm118265255e9.9.2025.10.05.06.24.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 05 Oct 2025 06:24:55 -0700 (PDT)
+ Sun, 05 Oct 2025 06:24:56 -0700 (PDT)
 From: Raphael Gallais-Pou <rgallaispou@gmail.com>
-Date: Sun, 05 Oct 2025 15:24:41 +0200
-Message-Id: <20251005-waffle-v1-0-4aab4f497a8a@gmail.com>
+Date: Sun, 05 Oct 2025 15:24:42 +0200
 MIME-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAJpx4mgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1NDAwNT3fLEtLScVF1jIzPT1MTElBTTVAMloOKCotS0zAqwQdGxtbUAk6C
- /hlgAAAA=
-X-Change-ID: 20251005-waffle-3265eaadd5e0
+Message-Id: <20251005-waffle-v1-1-4aab4f497a8a@gmail.com>
+References: <20251005-waffle-v1-0-4aab4f497a8a@gmail.com>
+In-Reply-To: <20251005-waffle-v1-0-4aab4f497a8a@gmail.com>
 To: buildroot@buildroot.org
 Cc: Romain Naour <romain.naour@gmail.com>, 
  Eric Le Bihan <eric.le.bihan.dev@free.fr>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1608; i=rgallaispou@gmail.com; 
+X-Developer-Signature: v=1; a=openpgp-sha256; l=687; i=rgallaispou@gmail.com; 
  h=from:subject:message-id;
- bh=0vn+Bty1SeOCBbK8CHFghsJztGfrmXPNcIj7r9OBeNo=; 
- b=owEBbQKS/ZANAwAKAechimjUEsK1AcsmYgBo4nGbxM1ejM4+N4Z2rMCoR7R9byPQUu3VDF9Pc
- fwMLlQCTi6JAjMEAAEKAB0WIQQgmXv2E+fvbV/9ui/nIYpo1BLCtQUCaOJxmwAKCRDnIYpo1BLC
- tVQGEACSlj9ASI5I3RwUQKbg6nVAbBauxJ/1ETkW1TfPJDuwUqjo4EYdRDCJ4hWHOmS5CXnMB0N
- TkpLHEKLBRSKkVm85pGNKEHdpW/WGn1/ypjew6GJ8j0RmrxORxIJL3Ma0YvNXTsWA1Lu80XzP70
- pNdeHt5C7Q+WvpVRmWIn/9ab2oYFVGm9NuAtCnMwG2gJyv00t95E/5wnJ1U2eMggqdV6Jbob5LQ
- 2xuwdgoCENyfCi3k+/eNHJwJ7Rg6JeS9DM4nxA8Xjn1Dafnv/b6wq4M7tYit5nDtz2SjWqTLEnU
- 7etaQbfC50Dp4iErtF3WuuC/tEVNF++KlPpchGQ5OpVCnfI269hsEu8k/7+pa7Pl5f7tXnpSW+1
- L1FcZRuGTrM747o1Hfngll7+cmoc7cTBFeW1VJBII2ReVvQ6sCAFH12XyxYdLbZ22/ys49CoojJ
- O4Q5Rg0pdBcSv42i+JKAWi7KbjbnTiJbX9getiKWhs/cLoAG0qPwa5qq6kRrBgOi/Y/6TemunCJ
- QDau+YEJsoV/bUK2x0YHImGG1SWChNbjRUASElnxfIk4EyFxNqd0emEhBdIi04+ULk4a/ADlEYX
- OFiFxmwWhIWzjA3YguYyVSb20/4r639gpAXXd0yO7KGFEjmJD2c97N7KVuuKdsuSR/iS3IEtC8F
- U947N5TEjIzvlzA==
+ bh=uNsIqJU7FaL9ZlkqUzTyPt8SIQAN97qLwYBtcS1JVxg=; 
+ b=owEBbQKS/ZANAwAKAechimjUEsK1AcsmYgBo4nGmCZ4lmH0Az1O37u/kRwV4Qb51nH+VEtZJ2
+ D0HnFFYbDeJAjMEAAEKAB0WIQQgmXv2E+fvbV/9ui/nIYpo1BLCtQUCaOJxpgAKCRDnIYpo1BLC
+ tTJ2D/4+nICyL0SYPNIUpPEXAUlItfEsjXwTdnNxJTqPUYvDMWAwu+0dmmM9wmNlxyPdYWYQDjN
+ QbXVX9Q18cwVydkli7poppV1QCJ1HyKCvdmWXlZaZJSODIvG0pyWAz2B+3c+kkJGhJxAHKKEsrS
+ Z1wnJGiDFj/fJ8uSKTBt7MA2uqygT4SQDJ3CvzUU6zirkgh9OstqBjbp2lz0iT9dnnSWOTbyeY5
+ Qo7t0U8OkDQfOYkYCJZJj+EH9PZY7RnqIip/uSvsXXgFPl5QtS39ocQbQGF+MBFRx6eFey6xMIB
+ CV388mvHQmuxeOPlKwatZDaFNX6aHUAXodX+g7afXR7s4RozzsEHncUNf+goYPPx6JdSRo4v6f1
+ UPfAi1Y/K3YcVk97lDyiriCNHLPabpV1w9r04QqQpsuohe01vNue8W1HqtLvsUlPgYuy18XKq48
+ EzJpL3zNKhMj/vDzm3JSSfgO0n85wg3UHq3XfwGcFWE8nbu2wup6KXpbrjbxnfE2lbrMR/WM7bV
+ KAcsFQA9PlAfY42cQdXIYZ09hFrEjpsVrzkjdzox3kWBZSEW3LyIDu2GOgp42YNLue9JaIZJTNi
+ 5BW41qeW1OF9avYko/1A1ZERFzv9XftRidVnnziuIDhAHhXLED/j0Ge+ln2aW/QTTQx/SMCWwkn
+ Js2YhWi/PPdPT0Q==
 X-Developer-Key: i=rgallaispou@gmail.com; a=openpgp;
  fpr=20997BF613E7EF6D5FFDBA2FE7218A68D412C2B5
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1759670696; x=1760275496; darn=buildroot.org;
- h=cc:to:content-transfer-encoding:mime-version:message-id:date
- :subject:from:from:to:cc:subject:date:message-id:reply-to;
- bh=e6GFB9sJ39uGMzgI9ZZOjuQlhJaANMfkp9szhGfwG6w=;
- b=F0Mm+GbO/BjwZTvUq2nnUeKfx9maclvy9byQMJv5/F6WrRIAEoa09AmwaUmn5PcRgk
- EfTuTbbd1qq0All6UWqN7HCEvZLqYpBR9fKA/N4r3mU4L8OdPNLlzE55E+YQS+AEBh+u
- zKe2vkb0PKAB+krd4tBgFKSHSmU3S3DVRdXJSyN4bTiaUpCt3+tu1JVRXH1d5fkNaLIu
- R7xPyvXsqDJsEIBGSfgAyoT9it6z8segL0sb8oKYaMlIMTV7gQlKbj+He8dtbwZMMOxK
- DmD9ftoGmUoQ/r2OE+xDoCKxXgPJG3dk/gtzhI0FMnXnLUTBmnarDisfErNYqKZgseyd
- BKTQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1759670697; x=1760275497; darn=buildroot.org;
+ h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+ :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=r5uCGyBDPgl0cUknlS3s46gZOmqauroDDQDag7eLPe8=;
+ b=W/wxzH2GBmr1eobGMIDceKp8JjegMbYI1TV3S+PCqtvyRGS+cV6gfDr2Q34/N/8oAf
+ boHMmkJ2oVQAAryRRfsL40yabFNnJQj8Hi/ZfPzbgCFG8N7PSGcXvAqhsOge0t33+PRT
+ W7TOssFrB4prjQ5UYtujvXPjtPL7nmDBRsIN5xNEbpQuU8pLvqkAadhWhxx1R4acl7F7
+ AIWcGMhWlbkliTrHIo7TqrATTJe5Vt9D5zZ00Lpri8HVImXOVpUEd1d/uLW6ElJgTa5R
+ MJlOr94O/UvxKHA+iuqAest1atK3X6THScM26NIMGP9O10LwzzR/apeTFO+36789CbpC
+ OB5Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=F0Mm+GbO
-Subject: [Buildroot] [PATCH 0/4] Update for package/waffle
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=W/wxzH2G
+Subject: [Buildroot] [PATCH 1/4] package/waffle: fix website reference
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -134,43 +132,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Several commit for a single package update:
-
-  * Website has changed
-  * Waffle has moved from cmake to meson
-  * Bump to latest version since old reference was over 4y old
-    (project isn't too lively, latest change is from a year ago)
-  * Use git download method since latest change isn't an official 
-  * Remove deprecated or already merged patches
-  * Fix default breaking pkg_config_path
-
-It is my first time updating a package, please to not hesitate to
-comment.  I initially thought about squashing all commits together, but
-since this is a pretty complexe update I preferred sending a series in
-order to ease readability and code review.
+http://www.waffle-gl.org yields "403 Forbidden".
+Switch to freedesktop.org subdomain.
 
 Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
 ---
-Raphael Gallais-Pou (4):
-      package/waffle: fix website reference
-      package/waffle: bump to 5f1f48287e806544d745e9a8f5aed47234c61292
-      package/waffle: remove patches
-      package/waffle: fix pkg_config_path value
+ package/waffle/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- ...rd-cflags-from-.pc-files-to-waffle-cflags.patch | 42 ---------------
- ...02-wayland-fix-build-against-version-1-20.patch | 59 ----------------------
- package/waffle/0003-drop-C-dependency.patch        | 46 -----------------
- package/waffle/Config.in                           |  2 +-
- package/waffle/waffle.hash                         |  4 +-
- package/waffle/waffle.mk                           | 39 +++++++-------
- 6 files changed, 22 insertions(+), 170 deletions(-)
----
-base-commit: 7bbc66a39e6e18d5298564167b42e56b82c9360a
-change-id: 20251005-waffle-3265eaadd5e0
+diff --git a/package/waffle/Config.in b/package/waffle/Config.in
+index 79cb4ca2ede65613f23a8c612623aa18524ad331..c8661e1a0b929538c5fad9d1d849b1197e51851a 100644
+--- a/package/waffle/Config.in
++++ b/package/waffle/Config.in
+@@ -44,4 +44,4 @@ config BR2_PACKAGE_WAFFLE
+ 	  [1] http://piglit.freedesktop.org
+ 	  [2] http://github.com/apitrace/apitrace#readme
+ 
+-	  http://www.waffle-gl.org
++	  https://waffle.freedesktop.org/
 
-Best regards,
 -- 
-Raphael Gallais-Pou <rgallaispou@gmail.com>
+2.51.0
 
 _______________________________________________
 buildroot mailing list
