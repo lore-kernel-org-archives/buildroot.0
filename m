@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8AE4CAC5B8
-	for <buildroot@archiver.kernel.org>; Sun,  5 Oct 2025 17:23:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3D4BCAC5B8
+	for <buildroot@archiver.kernel.org>; Sun,  5 Oct 2025 17:33:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8579783422;
-	Sun,  5 Oct 2025 17:23:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A5B660ED3;
+	Sun,  5 Oct 2025 17:33:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zNIGHeRBayxs; Sun,  5 Oct 2025 17:23:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WH2vxYOihLpD; Sun,  5 Oct 2025 17:33:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD4E7834DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE3DA60ED4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD4E7834DE;
-	Sun,  5 Oct 2025 17:23:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A11FD909
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 17:23:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE3DA60ED4;
+	Sun,  5 Oct 2025 17:33:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B1A9D272
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 17:33:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8166B40E3D
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 17:23:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 973FA60ED3
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 17:33:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8V6kDKzRlbx9 for <buildroot@buildroot.org>;
- Sun,  5 Oct 2025 17:23:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9dHYv7gjxEAD for <buildroot@buildroot.org>;
+ Sun,  5 Oct 2025 17:33:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF45240DD8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3D1A60ECF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AF45240DD8
- for <buildroot@buildroot.org>; Sun,  5 Oct 2025 17:23:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E3D1A60ECF
+ for <buildroot@buildroot.org>; Sun,  5 Oct 2025 17:33:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9E8DB868FA; Sun,  5 Oct 2025 17:23:12 +0000 (UTC)
+ id D2F978690B; Sun,  5 Oct 2025 17:33:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 5 Oct 2025 19:19:59 +0200
+Date: Sun, 5 Oct 2025 19:22:40 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a7ba7ee832c06a56e4d00cd629c6f9be16cf615e
-X-Git-Newrev: 4a85d73f706322b2aa0d712c864306e93ed3860e
+X-Git-Oldrev: 4a85d73f706322b2aa0d712c864306e93ed3860e
+X-Git-Newrev: e1d608e0c81eb473164d794ee94a0f63d9326d0d
 X-Patchwork-Hint: ignore
-Message-Id: <20251005172312.9E8DB868FA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fwts: bump to version 25.09.00
+Message-Id: <20251005173325.D2F978690B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/harfbuzz: bump to version 12.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,48 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a85d73f706322b2aa0d712c864306e93ed3860e
+commit: https://git.buildroot.net/buildroot/commit/?id=e1d608e0c81eb473164d794ee94a0f63d9326d0d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See release announce:
-https://lists.ubuntu.com/archives/fwts-devel/2025-September/014087.html
+Release notes:
+https://github.com/harfbuzz/harfbuzz/releases/tag/12.1.0
 
-The archive of this new version now includes a "fwts-25.09.00/" top
-directory. Therefore, this commit removes "FWTS_STRIP_COMPONENTS = 0".
-
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/fwts/fwts.hash | 2 +-
- package/fwts/fwts.mk   | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ package/harfbuzz/harfbuzz.hash | 2 +-
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fwts/fwts.hash b/package/fwts/fwts.hash
-index 9a4422069c..3f04288fb8 100644
---- a/package/fwts/fwts.hash
-+++ b/package/fwts/fwts.hash
-@@ -1,5 +1,5 @@
- # Hash from: https://fwts.ubuntu.com/release/SHA256SUMS
--sha256  19450b19cfd71a43d3716e4108d06db8b52f10801fb24bfb76f30dc0023d5142  fwts-V25.07.00.tar.gz
-+sha256  ecba21d367b1c7aea41b378ad8fd3d43706c0fa4033cc31b59f8152c9cc0d69e  fwts-V25.09.00.tar.gz
- 
- # Hash for license file
- sha256  77a5f0ea48e53ee8d67aecc7759cf468bcd340c1caca711ed4307b477a93fb47  debian/copyright
-diff --git a/package/fwts/fwts.mk b/package/fwts/fwts.mk
-index b3860c6fad..f8537fbcf5 100644
---- a/package/fwts/fwts.mk
-+++ b/package/fwts/fwts.mk
-@@ -4,10 +4,9 @@
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index a6c34d92a3..3b7be8c07b 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  972a60a8d274d49e70361da6920c3a73dfb0fb4387f6c6811906a47ba634d8a1  harfbuzz-11.5.1.tar.xz
++sha256  e5c81b7f6e0b102dfb000cfa424538b8e896ab78a2f4b8a5ec8cae62ab43369e  harfbuzz-12.1.0.tar.xz
+ sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 5c3666bf75..a21a7f4387 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FWTS_VERSION = 25.07.00
-+FWTS_VERSION = 25.09.00
- FWTS_SOURCE = fwts-V$(FWTS_VERSION).tar.gz
- FWTS_SITE = https://fwts.ubuntu.com/release
--FWTS_STRIP_COMPONENTS = 0
- FWTS_LICENSE = GPL-2.0, LGPL-2.1, Custom
- FWTS_LICENSE_FILES = debian/copyright
- FWTS_AUTORECONF = YES
+-HARFBUZZ_VERSION = 11.5.1
++HARFBUZZ_VERSION = 12.1.0
+ HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
