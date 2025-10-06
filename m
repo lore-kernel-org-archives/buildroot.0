@@ -1,105 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 007A0CCA470
-	for <buildroot@archiver.kernel.org>; Mon,  6 Oct 2025 16:51:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F1BFCAC5B8
+	for <buildroot@archiver.kernel.org>; Mon,  6 Oct 2025 19:24:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C1C2D613A0;
-	Mon,  6 Oct 2025 16:51:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BEA6541925;
+	Mon,  6 Oct 2025 19:24:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VFbjwxa8S9UY; Mon,  6 Oct 2025 16:51:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id A-_BVggH-NCU; Mon,  6 Oct 2025 19:24:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F412461398
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3C284191C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F412461398;
-	Mon,  6 Oct 2025 16:51:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A3C284191C;
+	Mon,  6 Oct 2025 19:24:52 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1600A909
- for <buildroot@buildroot.org>; Mon,  6 Oct 2025 16:51:07 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E58F272
+ for <buildroot@buildroot.org>; Mon,  6 Oct 2025 19:24:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F0F7A84102
- for <buildroot@buildroot.org>; Mon,  6 Oct 2025 16:51:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2D8088121C
+ for <buildroot@buildroot.org>; Mon,  6 Oct 2025 19:24:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KvuSa6LpwXHx for <buildroot@buildroot.org>;
- Mon,  6 Oct 2025 16:51:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::635; helo=mail-ej1-x635.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B344E84100
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B344E84100
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
- [IPv6:2a00:1450:4864:20::635])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B344E84100
- for <buildroot@buildroot.org>; Mon,  6 Oct 2025 16:51:05 +0000 (UTC)
-Received: by mail-ej1-x635.google.com with SMTP id
- a640c23a62f3a-b07e3a77b72so1031174866b.0
- for <buildroot@buildroot.org>; Mon, 06 Oct 2025 09:51:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1759769464; x=1760374264;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=/8ROcO3Y1EJeh/thEAGfBP1UceewNJDY15rPprGNLEE=;
- b=W+/BWHtwQfrcqO6tOe9IiaACc0O7bL21m5Mtpnio/vN6jvWL8dmONLD3EAbRIVgbcq
- F5VG0DPJowphMOHufzSO2+6q5HC5enGZkH/vsE6M2N4bPDhrg3rHrBsmDUOf4Jlgu1Wn
- 2tTRhGW6KnfCNt+d5GNiinB32MAlob+jjic5yj/BwHX2H56KTtbkGQOb/Z4d0GCy0rID
- 1LUyQbHu9P/6BRzZqdBK0/Wb39o5kUpAfVN0ke+rgOH2SdtEotXjl9tu7J+zcG5qL6Dy
- JLDD1bZ0yg+Jy1j5rUzdIx5mVF52lK+cp4eh4XU08UcHtsx76+nvbnczT18mZL9iwHko
- NeIw==
-X-Gm-Message-State: AOJu0Yz1OiRH4+m1NcJqjc7ShSNFF5b0zlp5nbKMq0g/atrcA4MENUjp
- yHbvC1Wua5EYd41rhixSoH+xfF6KEmNYOpOxdDXgkA8Lurg404dlQhcOzdazc9k/N4Xl/HuaafB
- /mL4b3q8=
-X-Gm-Gg: ASbGncvN5a1/ITyXzx5mLrNMh3osToAarcVOM9zQwkBkCzYc3cnXLv0VuIM82yvjgUg
- VlPuvGXCdEeFk3/ulqP2ZBFiy3g/ZO63qhMrj+610GtsgXmYWPlOQeXNt0coKZEtVZ/yuPfAFCM
- 1LLaBk3cQktOdWUppZDBn7tkyk/GVEumf1GhuR2jVaYLh2GqaG6TKtxXGQM2mihd5l0FV7kBMD7
- PYMku6+XUjQ+NNOPK/A1nohKNI0pPiBMXeDBqK0HcbskGWsq7SQC352M0WyxpMG2kl7IC2ro1XY
- HEqDudadrixiaYmatxDVftcpk+15/DQpAtDKWsgV98TWhOE0UgJk2XItugsCrCziG1NDyoCIjOP
- AwQjIYbZzBx6Jtsd7j+L6NVJ4Mib1e8bDWuOHbMdgjKig0U+Saxra6P1WccL3UJIbFqrLd5nHUY
- 3F8s/0IWDb8vbiC0KHky34oGOg+eOIkoUTXWxJgbWcK/qFB5twvRHyGiSdk81VhVPn326FtMbBO
- tTz4QqoBT+9104=
-X-Google-Smtp-Source: AGHT+IG3mCPirMYX6VpS9KUSCu5LWajoDuYbN/h5App5EhzeWZUi3klptoBKhu3gsYkCW+6Jj4Gm0Q==
-X-Received: by 2002:a17:907:8e07:b0:b3e:c99b:c77f with SMTP id
- a640c23a62f3a-b4f4310366cmr37205266b.24.1759769463668; 
- Mon, 06 Oct 2025 09:51:03 -0700 (PDT)
-Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
- (host-79-25-27-158.retail.telecomitalia.it. [79.25.27.158])
- by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-6376b3ab4b0sm10555497a12.5.2025.10.06.09.51.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 06 Oct 2025 09:51:03 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ id T3NjtcKSaYA4 for <buildroot@buildroot.org>;
+ Mon,  6 Oct 2025 19:24:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1298811C8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E1298811C8
+ for <buildroot@buildroot.org>; Mon,  6 Oct 2025 19:24:48 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CCDFC86989; Mon,  6 Oct 2025 19:24:48 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: David GOUARIN <dgouarin@gmail.com>, linux-amarula@amarulasolutions.com,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Mon,  6 Oct 2025 18:51:00 +0200
-Message-ID: <20251006165100.1888278-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1759769464; x=1760374264;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=/8ROcO3Y1EJeh/thEAGfBP1UceewNJDY15rPprGNLEE=;
- b=pNbvim9BTF2ntqqr/4eq15tBbtWVB3D21CkjWEL52VL2J2wZ3t7RpyMFHu6fHA2MNo
- Vn+CdNOIJl8EKxDBHcCaRFL5UWonvSJvYZ0xc5H/HQIzxjFNEh4aXKME7ybc029VKo6h
- QtzKGRlZkd9GCVttb9G3Kdzc0L2rQy/4AQLOg=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=pNbvim9B
-Subject: [Buildroot] [PATCH 1/1] package/freeradius-server: bump to version
- 3.2.8
+Date: Mon, 6 Oct 2025 21:13:32 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e993272b324da933c7684670da07f388c4210201
+X-Git-Newrev: 88f7fed5f2ce041be72c6f1576120b4b3b434298
+X-Patchwork-Hint: ignore
+Message-Id: <20251006192448.CCDFC86989@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/erlang: security bump to v26.2.5.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,48 +57,234 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============8432566617927214047=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://www.freeradius.org/release_notes/
+--===============8432566617927214047==
+Content-Type: text/plain
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=88f7fed5f2ce041be72c6f1576120b4b3b434298
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+See the release notes on
+https://github.com/erlang/otp/releases?q=OTP-26.&expanded=true
+
+Also, remove patch that is now applied upstream
+
+This fixes the following vulnerabilities:
+- CVE-2024-53846:
+    OTP is a set of Erlang libraries, which consists of the Erlang runtime
+    system, a number of ready-to-use components mainly written in Erlang,
+    and a set of design principles for Erlang programs. A regression was
+    introduced into the ssl application of OTP starting at OTP-25.3.2.8,
+    OTP-26.2, and OTP-27.0, resulting in a server or client verifying the
+    peer when incorrect extended key usage is presented (i.e., a server
+    will verify a client if they have server auth ext key usage and vice
+    versa).
+    https://www.cve.org/CVERecord?id=CVE-2024-53846
+
+- CVE-2025-4748:
+    Improper Limitation of a Pathname to a Restricted Directory ('Path
+    Traversal') vulnerability in Erlang OTP (stdlib modules) allows
+    Absolute Path Traversal, File Manipulation. This vulnerability is
+    associated with program files lib/stdlib/src/zip.erl and program
+    routines zip:unzip/1, zip:unzip/2, zip:extract/1, zip:extract/2 unless
+    the memory option is passed.  This issue affects OTP from OTP 17.0
+    until OTP 28.0.1, OTP 27.3.4.1 and OTP 26.2.5.13, corresponding to
+    stdlib from 2.0 until 7.0.1, 6.2.2.1 and 5.2.3.4.
+    https://www.cve.org/CVERecord?id=CVE-2025-4748
+
+- CVE-2025-26618:
+    Erlang is a programming language and runtime system for building
+    massively scalable soft real-time systems with requirements on high
+    availability. OTP is a set of Erlang libraries, which consists of the
+    Erlang runtime system, a number of ready-to-use components mainly
+    written in Erlang. Packet size is not verified properly for SFTP
+    packets. As a result when multiple SSH packets (conforming to max SSH
+    packet size) are received by ssh, they might be combined into an SFTP
+    packet which will exceed the max allowed packet size and potentially
+    cause large amount of memory to be allocated. Note that situation
+    described above can only happen for successfully authenticated users
+    after completing the SSH handshake. This issue has been patched in OTP
+    versions 27.2.4, 26.2.5.9, and 25.3.2.18. There are no known
+    workarounds for this vulnerability.
+    https://www.cve.org/CVERecord?id=CVE-2025-26618
+
+- CVE-2025-30211:
+    Erlang/OTP is a set of libraries for the Erlang programming language.
+    Prior to versions OTP-27.3.1, 26.2.5.10, and 25.3.2.19, a maliciously
+    formed KEX init message can result with high memory usage.
+    Implementation does not verify RFC specified limits on algorithm names
+    (64 characters) provided in KEX init message. Big KEX init packet may
+    lead to inefficient processing of the error data. As a result, large
+    amount of memory will be allocated for processing malicious data.
+    Versions OTP-27.3.1, OTP-26.2.5.10, and OTP-25.3.2.19 fix the issue.
+    Some workarounds are available. One may set option `parallel_login` to
+    `false` and/or reduce the `max_sessions` option.
+    https://www.cve.org/CVERecord?id=CVE-2025-30211
+
+- CVE-2025-32433:
+    Erlang/OTP is a set of libraries for the Erlang programming language.
+    Prior to versions OTP-27.3.3, OTP-26.2.5.11, and OTP-25.3.2.20, a SSH
+    server may allow an attacker to perform unauthenticated remote code
+    execution (RCE). By exploiting a flaw in SSH protocol message
+    handling, a malicious actor could gain unauthorized access to affected
+    systems and execute arbitrary commands without valid credentials. This
+    issue is patched in versions OTP-27.3.3, OTP-26.2.5.11, and
+    OTP-25.3.2.20. A temporary workaround involves disabling the SSH
+    server or to prevent access via firewall rules.
+    https://www.cve.org/CVERecord?id=CVE-2025-32433
+
+- CVE-2025-46712:
+    Erlang/OTP is a set of libraries for the Erlang programming language.
+    In versions prior to OTP-27.3.4 (for OTP-27), OTP-26.2.5.12 (for
+    OTP-26), and OTP-25.3.2.21 (for OTP-25), Erlang/OTP SSH fails to
+    enforce strict KEX handshake hardening measures by allowing optional
+    messages to be exchanged. This allows a Man-in-the-Middle attacker to
+    inject these messages in a connection during the handshake. This issue
+    has been patched in versions OTP-27.3.4 (for OTP-27), OTP-26.2.5.12
+    (for OTP-26), and OTP-25.3.2.21 (for OTP-25).
+    https://www.cve.org/CVERecord?id=CVE-2025-46712
+
+- CVE-2025-48038:
+    Allocation of Resources Without Limits or Throttling vulnerability in
+    Erlang OTP ssh (ssh_sftp modules) allows Excessive Allocation,
+    Resource Leak Exposure. This vulnerability is associated with program
+    files lib/ssh/src/ssh_sftpd.erl.  This issue affects OTP form OTP 17.0
+    until OTP 28.0.3, OTP 27.3.4.3 and 26.2.5.15 corresponding to ssh from
+    3.0.1 until 5.3.3, 5.2.11.3 and 5.1.4.12.
+    https://www.cve.org/CVERecord?id=CVE-2025-48038
+
+- CVE-2025-48039:
+    Allocation of Resources Without Limits or Throttling vulnerability in
+    Erlang OTP ssh (ssh_sftp modules) allows Excessive Allocation,
+    Resource Leak Exposure. This vulnerability is associated with program
+    files lib/ssh/src/ssh_sftpd.erl.  This issue affects OTP form OTP 17.0
+    until OTP 28.0.3, OTP 27.3.4.3 and 26.2.5.15 corresponding to ssh from
+    3.0.1 until 5.3.3, 5.2.11.3 and 5.1.4.12.
+    https://www.cve.org/CVERecord?id=CVE-2025-48039
+
+- CVE-2025-48040:
+    Uncontrolled Resource Consumption vulnerability in Erlang OTP ssh
+    (ssh_sftp modules) allows Excessive Allocation, Flooding. This
+    vulnerability is associated with program files
+    lib/ssh/src/ssh_sftpd.erl.  This issue affects OTP form OTP 17.0 until
+    OTP 28.0.3, OTP 27.3.4.3 and 26.2.5.15 corresponding to ssh from 3.0.1
+    until 5.3.3, 5.2.11.3 and 5.1.4.12.
+    https://www.cve.org/CVERecord?id=CVE-2025-48040
+
+- CVE-2025-48041:
+    Allocation of Resources Without Limits or Throttling vulnerability in
+    Erlang OTP ssh (ssh_sftp modules) allows Excessive Allocation,
+    Flooding. This vulnerability is associated with program files
+    lib/ssh/src/ssh_sftpd.erl.  This issue affects OTP form OTP 17.0 until
+    OTP 28.0.3, OTP 27.3.4.3 and 26.2.5.15 corresponding to ssh from 3.0.1
+    until 5.3.3, 5.2.11.3 and 5.1.4.12.
+    https://www.cve.org/CVERecord?id=CVE-2025-48041
+
+NB: Since Erlang is quite a "large" package, containing the language itself,
+some libraries, and some "applications", it's difficult to tell which CVEs
+are exactly affecting Buildroot, but it's a good idea to update anyway
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/freeradius-server/freeradius-server.hash | 4 ++--
- package/freeradius-server/freeradius-server.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...c_src-openssl_config.h-fix-build-without-.patch | 46 ----------------------
+ package/erlang/erlang.hash                         |  4 +-
+ package/erlang/erlang.mk                           |  2 +-
+ 3 files changed, 3 insertions(+), 49 deletions(-)
 
-diff --git a/package/freeradius-server/freeradius-server.hash b/package/freeradius-server/freeradius-server.hash
-index 2c0991a39913..b90aa4b65772 100644
---- a/package/freeradius-server/freeradius-server.hash
-+++ b/package/freeradius-server/freeradius-server.hash
-@@ -1,4 +1,4 @@
- # Locally computed, after checking
--# https://freeradius.org/ftp/pub/freeradius/freeradius-server-3.2.6.tar.bz2.sig
--sha256  18bbb2318448f13918897ae7a38b36afd3db7dd5c66f78ad24d2e0051269d9b2  freeradius-server-3.2.6.tar.bz2
-+# https://freeradius.org/ftp/pub/freeradius/freeradius-server-3.2.8.tar.bz2.sig
-+sha256  2c6483baeba65f939734473fafa31c4f727e8e139dd884563121412b6aba681b  freeradius-server-3.2.8.tar.bz2
- sha256  0a0e46014fc2efd5144a30359c0e6e1ea9fa3dd407d3318204150efd7b4caf6a  COPYRIGHT
-diff --git a/package/freeradius-server/freeradius-server.mk b/package/freeradius-server/freeradius-server.mk
-index 9bb5c3606ad3..946750f1a5d1 100644
---- a/package/freeradius-server/freeradius-server.mk
-+++ b/package/freeradius-server/freeradius-server.mk
+diff --git a/package/erlang/0001-lib-crypto-c_src-openssl_config.h-fix-build-without-.patch b/package/erlang/0001-lib-crypto-c_src-openssl_config.h-fix-build-without-.patch
+deleted file mode 100644
+index a17a43a95d..0000000000
+--- a/package/erlang/0001-lib-crypto-c_src-openssl_config.h-fix-build-without-.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-From 8c7d62662cf51902d759be0e8d3bfd96a3524b3c Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 8 Dec 2023 09:00:17 +0100
+-Subject: [PATCH] lib/crypto/c_src/openssl_config.h: fix build without DES
+-
+-Fix the following build failure without DES raised since version 24.2
+-and
+-https://github.com/erlang/otp/commit/abf7f84c2f77bb07dbdbb8a29b9d41f1f24c5f14:
+-
+-cipher.c:51:42: error: 'EVP_des_ede3_cbc' undeclared here (not in a function); did you mean 'SN_des_ede3_cbc'?
+-   51 |     {{"des_ede3_cbc"}, "des-ede3-cbc", {&EVP_des_ede3_cbc}, 0, 0},
+-      |                                          ^~~~~~~~~~~~~~~~
+-      |                                          SN_des_ede3_cbc
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/1aace0ee738f8ec4aa2c9a739fc7535c3b6bf884
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Upstream: https://github.com/erlang/otp/pull/7937
+----
+- lib/crypto/c_src/openssl_config.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/lib/crypto/c_src/openssl_config.h b/lib/crypto/c_src/openssl_config.h
+-index cb63f28369..f3904986c9 100644
+---- a/lib/crypto/c_src/openssl_config.h
+-+++ b/lib/crypto/c_src/openssl_config.h
+-@@ -218,7 +218,6 @@
+- 
+- #ifndef OPENSSL_NO_DES
+- # define HAVE_DES
+--#endif
+- 
+- #if OPENSSL_VERSION_NUMBER >= PACKED_OPENSSL_VERSION(0,9,7,'e')
+- # define HAVE_DES_ede3_cfb
+-@@ -227,6 +226,7 @@
+- #if OPENSSL_VERSION_NUMBER >= PACKED_OPENSSL_VERSION(0,9,7,'e')
+- # define HAVE_DES_ede3_cbc
+- #endif
+-+#endif
+- 
+- #ifndef OPENSSL_NO_DH
+- # define HAVE_DH
+--- 
+-2.42.0
+-
+diff --git a/package/erlang/erlang.hash b/package/erlang/erlang.hash
+index 9fc5a6eabf..7ff587e35c 100644
+--- a/package/erlang/erlang.hash
++++ b/package/erlang/erlang.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/erlang/otp/releases/download/OTP-26.0.2/SHA256.txt
+-sha256  47853ea9230643a0a31004433f07a71c1b92d6e0094534f629e3b75dbc62f193  otp_src_26.0.2.tar.gz
++# From https://github.com/erlang/otp/releases/download/OTP-26.2.5.15/SHA256.txt
++sha256  28e6d63d82927f132d56289dd3c428ef8bce6bf2283c8549aa0a7afca1a8fe3b  otp_src_26.2.5.15.tar.gz
+ 
+ # Hash for license file
+ sha256  809fa1ed21450f59827d1e9aec720bbc4b687434fa22283c6cb5dd82a47ab9c0  LICENSE.txt
+diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+index f9956d4468..59353742f0 100644
+--- a/package/erlang/erlang.mk
++++ b/package/erlang/erlang.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FREERADIUS_SERVER_VERSION = 3.2.6
-+FREERADIUS_SERVER_VERSION = 3.2.8
- FREERADIUS_SERVER_SOURCE = \
- 	freeradius-server-$(FREERADIUS_SERVER_VERSION).tar.bz2
- FREERADIUS_SERVER_SITE = https://freeradius.org/ftp/pub/freeradius
--- 
-2.43.0
+-ERLANG_VERSION = 26.0.2
++ERLANG_VERSION = 26.2.5.15
+ ERLANG_RELEASE = $(firstword $(subst ., ,$(ERLANG_VERSION)))
+ ERLANG_SITE = \
+ 	https://github.com/erlang/otp/releases/download/OTP-$(ERLANG_VERSION)
+
+--===============8432566617927214047==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8432566617927214047==--
