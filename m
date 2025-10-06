@@ -4,72 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6A18CCA476
-	for <buildroot@archiver.kernel.org>; Tue,  7 Oct 2025 13:08:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDB50CCA470
+	for <buildroot@archiver.kernel.org>; Tue,  7 Oct 2025 15:38:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 540EB845EC;
-	Tue,  7 Oct 2025 13:08:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC1AD8040E;
+	Tue,  7 Oct 2025 15:38:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yQQo-RJ0U3he; Tue,  7 Oct 2025 13:08:09 +0000 (UTC)
+ id Eb4YUbEWpuYJ; Tue,  7 Oct 2025 15:38:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 376B384310
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4136804C1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 376B384310;
-	Tue,  7 Oct 2025 13:08:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B5481226
- for <buildroot@buildroot.org>; Tue,  7 Oct 2025 13:08:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B4136804C1;
+	Tue,  7 Oct 2025 15:38:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6A9F1119
+ for <buildroot@buildroot.org>; Tue,  7 Oct 2025 15:38:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B292B413F8
- for <buildroot@buildroot.org>; Tue,  7 Oct 2025 13:08:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5BFA1804C1
+ for <buildroot@buildroot.org>; Tue,  7 Oct 2025 15:38:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TBeMbRlaYRsa for <buildroot@buildroot.org>;
- Tue,  7 Oct 2025 13:08:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VuKD0NEnQxpM for <buildroot@buildroot.org>;
+ Tue,  7 Oct 2025 15:38:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.56;
+ helo=smtpcmd0756.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E41E1413C9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E41E1413C9
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E41E1413C9
- for <buildroot@buildroot.org>; Tue,  7 Oct 2025 13:08:04 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1716461050; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Tue, 07 Oct 2025 13:08:00 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1v67Q7-004DDn-1W;
- Tue, 07 Oct 2025 15:07:59 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2E3668040E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E3668040E
+Received: from smtpcmd0756.aruba.it (smtpcmd0756.aruba.it [62.149.156.56])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2E3668040E
+ for <buildroot@buildroot.org>; Tue,  7 Oct 2025 15:38:23 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id 69ldvKuzrlGps69ldvorYb; Tue, 07 Oct 2025 17:38:21 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Tue,  7 Oct 2025 15:07:57 +0200
-Message-Id: <20251007130757.1004115-2-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20251007130757.1004115-1-peter@korsgaard.com>
-References: <20251007130757.1004115-1-peter@korsgaard.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Joseph Kogut <joseph.kogut@gmail.com>
+Date: Mon,  6 Oct 2025 21:33:47 +0200
+Message-ID: <20251006193347.3064754-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=uPJryTFjisF34HzxYU/G2GQ5NfW5xGZUuyBJ4/OiOgnNvETAKw1JroHnUE03lVecSrCS5ZMlvDdHr4XtvfpR6pg47n5wjyij5HPHDLtEbNc3GiNIjGG5yQQLbrggCOCvNoUAYdAtVdmCxsm8CSgNdCMl5sDc590acRaH+YYsknKkPcmORMauWYIJT5uXgyHA1xTMnIbK87fKn+LoTZoXfWU4ZX/hSKzkViSumcj2NIQ74pNz+RNf5jyE6ERHx4ZfdSQg7Apbu9jzb95EYTLVhIjI2dCEHwOyJLAh46YmAQfncf42slIN9uLkwVRikjlBuUwRo8Nk5eOdjUWvSBZotw==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=cTAfIB/qfwo5xrvM82MA0OTvZ5bBZ+5w2mCL+NrVg6g=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-CMAE-Envelope: MS4xfDlU7fK2gFKCbl0kuzgkk1KujEubjcyjUwtqORxbcl5v+AkWtDiJHLzFhFk5RC1LpIMICzvulrGCKYm7nGXM9KXRL0Rt4h8BfeWiTcNjYTFWWmeu8NQp
+ kzSNOrS0Qr9BZdpuELsFawntcxBoJsT1fAhAJLa3mrYc6+3ILvP1vxrUZ7TPMFjxv0+WuLSxjtCKDPxmIoQB8dcLcVRV1namj1QPP4GkOCLreJnjuXIbKbKY
+ 5d7AZ/hv4Inc12plu8GgAaZ2P6Nt6BlWg4GJ+2RAgQp82m85525xv/N9fVd9K5dDoVKydSCnfOLgI7HrZu3ZHw==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1759851501; bh=aZSq4UHbqdkSE3ewTF1I6djJYj4W7OtVzbsGfyZAaIQ=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=iwTrdMguRmp8wEQYjqAM6CoLf7ygX5slAttU0Bivr3YeY199D1wP20+YQ79ajXsPy
+ EgVC5m6uypDfzqSy1w8s1dBebPw05keTmLz3ULx4zANBdXA14nIXZ0ahJsks3OJfF0
+ LXtmemYBfFBkvEqyduZIsaJ1yylKCqXaDYv27qlWYgINYMERyfN6OIyXE8DfrJu4/a
+ mDwF+OOoGoiap7T+gcLE8HnasWeKfVPS85HmlWHBwf+3v6WfjsdNSso9fUIPtk/ndr
+ qlAdoMzVREkC2do5Ejrd1B9tMMSkzNMTgHqQdPJtA7H8vR6DXsHZJbuavAjLaBO8Iu
+ aMybMARFJwu7w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=uPJryTFj
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH 2/2] board/beagleboneai/post-build.sh: fix
- shellcheck issues
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=iwTrdMgu
+Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.117
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,39 +85,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-BOARD_DIR is not used, so drop it and quote $BINARIES_DIR to make shellcheck
-happy.
+For release note, see:
+https://hg-edge.mozilla.org/projects/nss/file/tip/doc/rst/releases/nss_3_117.rst
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- .checkpackageignore                          | 1 -
- board/beagleboard/beagleboneai/post-build.sh | 3 +--
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index a9d259a2f2..1c3bca481f 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -9,7 +9,6 @@ board/asus/tinker/post-build.sh Shellcheck
- board/atmel/flasher.sh Shellcheck
- board/beagleboard/beaglebone-qt5/patches/linux/0001-keep-jtag-clock-alive-for-debugger.patch lib_patch.Upstream
- board/beagleboard/beaglebone/post-build.sh Shellcheck
--board/beagleboard/beagleboneai/post-build.sh Shellcheck
- board/boundarydevices/common/post-build.sh Shellcheck
- board/boundarydevices/common/post-image.sh Shellcheck
- board/broadcom/northstar/post-image.sh Shellcheck
-diff --git a/board/beagleboard/beagleboneai/post-build.sh b/board/beagleboard/beagleboneai/post-build.sh
-index 384b4d8745..8d94a8f1e4 100755
---- a/board/beagleboard/beagleboneai/post-build.sh
-+++ b/board/beagleboard/beagleboneai/post-build.sh
-@@ -1,4 +1,3 @@
- #!/bin/sh
--BOARD_DIR="$(dirname $0)"
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index c839d58b80..cf339697ea 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_116_RTM/src/SHA256SUMS
+-sha256  3938611de4ad1e3b71f27f3cd5ea717a5b5f83bffc9cd427e6d929dc67f2bb73  nss-3.116.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_117_RTM/src/SHA256SUMS
++sha256  5786b523a2f2e9295ed10d711960d2e33cd620bb80d6288443eda43553a51996  nss-3.117.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index b0f15a6317..9b85e86ac6 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--cp board/beagleboard/beagleboneai/uEnv.txt $BINARIES_DIR/uEnv.txt
-+cp board/beagleboard/beagleboneai/uEnv.txt "$BINARIES_DIR/uEnv.txt"
+-LIBNSS_VERSION = 3.116
++LIBNSS_VERSION = 3.117
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 -- 
-2.39.5
+2.47.3
 
 _______________________________________________
 buildroot mailing list
