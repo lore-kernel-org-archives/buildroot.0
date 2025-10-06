@@ -1,51 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F1BFCAC5B8
-	for <buildroot@archiver.kernel.org>; Mon,  6 Oct 2025 19:24:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6026CCCA470
+	for <buildroot@archiver.kernel.org>; Mon,  6 Oct 2025 19:25:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BEA6541925;
-	Mon,  6 Oct 2025 19:24:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 229D061186;
+	Mon,  6 Oct 2025 19:25:23 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pFCaODUTIcqr; Mon,  6 Oct 2025 19:25:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEE1C611AB
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id EEE1C611AB;
+	Mon,  6 Oct 2025 19:25:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C4A09226
+ for <buildroot@buildroot.org>; Mon,  6 Oct 2025 19:25:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id AA8A441929
+ for <buildroot@buildroot.org>; Mon,  6 Oct 2025 19:25:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A-_BVggH-NCU; Mon,  6 Oct 2025 19:24:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3C284191C
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A3C284191C;
-	Mon,  6 Oct 2025 19:24:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3E58F272
- for <buildroot@buildroot.org>; Mon,  6 Oct 2025 19:24:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2D8088121C
- for <buildroot@buildroot.org>; Mon,  6 Oct 2025 19:24:51 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T3NjtcKSaYA4 for <buildroot@buildroot.org>;
- Mon,  6 Oct 2025 19:24:49 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1298811C8
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E1298811C8
- for <buildroot@buildroot.org>; Mon,  6 Oct 2025 19:24:48 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CCDFC86989; Mon,  6 Oct 2025 19:24:48 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 6 Oct 2025 21:13:32 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e993272b324da933c7684670da07f388c4210201
-X-Git-Newrev: 88f7fed5f2ce041be72c6f1576120b4b3b434298
-X-Patchwork-Hint: ignore
-Message-Id: <20251006192448.CCDFC86989@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/erlang: security bump to v26.2.5.15
+ id HssZUX-9LnDV for <buildroot@buildroot.org>;
+ Mon,  6 Oct 2025 19:25:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2A8E641927
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A8E641927
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2A8E641927
+ for <buildroot@buildroot.org>; Mon,  6 Oct 2025 19:25:17 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 4B05619F5AF;
+ Mon,  6 Oct 2025 21:25:13 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 06 Oct 2025 21:25:12 +0200
+MIME-Version: 1.0
+Date: Mon, 06 Oct 2025 21:25:12 +0200
+To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: buildroot@buildroot.org, Will Newton <will.newton@gmail.com>
+In-Reply-To: <20251006141551.483516-1-titouan.christophe@mind.be>
+References: <20251006141551.483516-1-titouan.christophe@mind.be>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <50559aa4ffddb96bee2812df1c075873@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1759778715;
+ bh=uTvU9i96KjTpJ3T5Dzo7HGnvC8P67zcLDr9ZjG6ahFQ=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=UBTcf4TYj7W1pGqkI8gaLNJQ77Yi6tKRwBZW4WbSt6MoP+9bsek3osys75YzVuYbq
+ ZnD/2b29o+1M2Sf6lqd4N+LutJsTxPZT1GRmhZxfb0IGIykD8FUr6pSVct0F4EBwjx
+ mdh8L1Y6kEny0iLVTXdo7SB+9e5s3ZWCkkbjhH6CRi40fho1g7vGQYBC65IhV0D2Hl
+ NA9OPiVuQ4h6OfpCnyDk57vqBfX05ixqfynYnEyaIUxyxmdKc+VY2HtvMPVqNgolRF
+ BuIndT6bhDpsWnKbF75VSe0yLy9rwcr9L8wUlxf1m5wpy3na/y2IX6QzvJrKItcfA4
+ jkwmHVxhtgGbA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=UBTcf4TY
+Subject: Re: [Buildroot] [PATCH] package/erlang: security bump to v26.2.5.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,232 +82,136 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8432566617927214047=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8432566617927214047==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=88f7fed5f2ce041be72c6f1576120b4b3b434298
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-See the release notes on
-https://github.com/erlang/otp/releases?q=OTP-26.&expanded=true
-
-Also, remove patch that is now applied upstream
-
-This fixes the following vulnerabilities:
-- CVE-2024-53846:
-    OTP is a set of Erlang libraries, which consists of the Erlang runtime
-    system, a number of ready-to-use components mainly written in Erlang,
-    and a set of design principles for Erlang programs. A regression was
-    introduced into the ssl application of OTP starting at OTP-25.3.2.8,
-    OTP-26.2, and OTP-27.0, resulting in a server or client verifying the
-    peer when incorrect extended key usage is presented (i.e., a server
-    will verify a client if they have server auth ext key usage and vice
-    versa).
-    https://www.cve.org/CVERecord?id=CVE-2024-53846
-
-- CVE-2025-4748:
-    Improper Limitation of a Pathname to a Restricted Directory ('Path
-    Traversal') vulnerability in Erlang OTP (stdlib modules) allows
-    Absolute Path Traversal, File Manipulation. This vulnerability is
-    associated with program files lib/stdlib/src/zip.erl and program
-    routines zip:unzip/1, zip:unzip/2, zip:extract/1, zip:extract/2 unless
-    the memory option is passed.  This issue affects OTP from OTP 17.0
-    until OTP 28.0.1, OTP 27.3.4.1 and OTP 26.2.5.13, corresponding to
-    stdlib from 2.0 until 7.0.1, 6.2.2.1 and 5.2.3.4.
-    https://www.cve.org/CVERecord?id=CVE-2025-4748
-
-- CVE-2025-26618:
-    Erlang is a programming language and runtime system for building
-    massively scalable soft real-time systems with requirements on high
-    availability. OTP is a set of Erlang libraries, which consists of the
-    Erlang runtime system, a number of ready-to-use components mainly
-    written in Erlang. Packet size is not verified properly for SFTP
-    packets. As a result when multiple SSH packets (conforming to max SSH
-    packet size) are received by ssh, they might be combined into an SFTP
-    packet which will exceed the max allowed packet size and potentially
-    cause large amount of memory to be allocated. Note that situation
-    described above can only happen for successfully authenticated users
-    after completing the SSH handshake. This issue has been patched in OTP
-    versions 27.2.4, 26.2.5.9, and 25.3.2.18. There are no known
-    workarounds for this vulnerability.
-    https://www.cve.org/CVERecord?id=CVE-2025-26618
-
-- CVE-2025-30211:
-    Erlang/OTP is a set of libraries for the Erlang programming language.
-    Prior to versions OTP-27.3.1, 26.2.5.10, and 25.3.2.19, a maliciously
-    formed KEX init message can result with high memory usage.
-    Implementation does not verify RFC specified limits on algorithm names
-    (64 characters) provided in KEX init message. Big KEX init packet may
-    lead to inefficient processing of the error data. As a result, large
-    amount of memory will be allocated for processing malicious data.
-    Versions OTP-27.3.1, OTP-26.2.5.10, and OTP-25.3.2.19 fix the issue.
-    Some workarounds are available. One may set option `parallel_login` to
-    `false` and/or reduce the `max_sessions` option.
-    https://www.cve.org/CVERecord?id=CVE-2025-30211
-
-- CVE-2025-32433:
-    Erlang/OTP is a set of libraries for the Erlang programming language.
-    Prior to versions OTP-27.3.3, OTP-26.2.5.11, and OTP-25.3.2.20, a SSH
-    server may allow an attacker to perform unauthenticated remote code
-    execution (RCE). By exploiting a flaw in SSH protocol message
-    handling, a malicious actor could gain unauthorized access to affected
-    systems and execute arbitrary commands without valid credentials. This
-    issue is patched in versions OTP-27.3.3, OTP-26.2.5.11, and
-    OTP-25.3.2.20. A temporary workaround involves disabling the SSH
-    server or to prevent access via firewall rules.
-    https://www.cve.org/CVERecord?id=CVE-2025-32433
-
-- CVE-2025-46712:
-    Erlang/OTP is a set of libraries for the Erlang programming language.
-    In versions prior to OTP-27.3.4 (for OTP-27), OTP-26.2.5.12 (for
-    OTP-26), and OTP-25.3.2.21 (for OTP-25), Erlang/OTP SSH fails to
-    enforce strict KEX handshake hardening measures by allowing optional
-    messages to be exchanged. This allows a Man-in-the-Middle attacker to
-    inject these messages in a connection during the handshake. This issue
-    has been patched in versions OTP-27.3.4 (for OTP-27), OTP-26.2.5.12
-    (for OTP-26), and OTP-25.3.2.21 (for OTP-25).
-    https://www.cve.org/CVERecord?id=CVE-2025-46712
-
-- CVE-2025-48038:
-    Allocation of Resources Without Limits or Throttling vulnerability in
-    Erlang OTP ssh (ssh_sftp modules) allows Excessive Allocation,
-    Resource Leak Exposure. This vulnerability is associated with program
-    files lib/ssh/src/ssh_sftpd.erl.  This issue affects OTP form OTP 17.0
-    until OTP 28.0.3, OTP 27.3.4.3 and 26.2.5.15 corresponding to ssh from
-    3.0.1 until 5.3.3, 5.2.11.3 and 5.1.4.12.
-    https://www.cve.org/CVERecord?id=CVE-2025-48038
-
-- CVE-2025-48039:
-    Allocation of Resources Without Limits or Throttling vulnerability in
-    Erlang OTP ssh (ssh_sftp modules) allows Excessive Allocation,
-    Resource Leak Exposure. This vulnerability is associated with program
-    files lib/ssh/src/ssh_sftpd.erl.  This issue affects OTP form OTP 17.0
-    until OTP 28.0.3, OTP 27.3.4.3 and 26.2.5.15 corresponding to ssh from
-    3.0.1 until 5.3.3, 5.2.11.3 and 5.1.4.12.
-    https://www.cve.org/CVERecord?id=CVE-2025-48039
-
-- CVE-2025-48040:
-    Uncontrolled Resource Consumption vulnerability in Erlang OTP ssh
-    (ssh_sftp modules) allows Excessive Allocation, Flooding. This
-    vulnerability is associated with program files
-    lib/ssh/src/ssh_sftpd.erl.  This issue affects OTP form OTP 17.0 until
-    OTP 28.0.3, OTP 27.3.4.3 and 26.2.5.15 corresponding to ssh from 3.0.1
-    until 5.3.3, 5.2.11.3 and 5.1.4.12.
-    https://www.cve.org/CVERecord?id=CVE-2025-48040
-
-- CVE-2025-48041:
-    Allocation of Resources Without Limits or Throttling vulnerability in
-    Erlang OTP ssh (ssh_sftp modules) allows Excessive Allocation,
-    Flooding. This vulnerability is associated with program files
-    lib/ssh/src/ssh_sftpd.erl.  This issue affects OTP form OTP 17.0 until
-    OTP 28.0.3, OTP 27.3.4.3 and 26.2.5.15 corresponding to ssh from 3.0.1
-    until 5.3.3, 5.2.11.3 and 5.1.4.12.
-    https://www.cve.org/CVERecord?id=CVE-2025-48041
-
-NB: Since Erlang is quite a "large" package, containing the language itself,
-some libraries, and some "applications", it's difficult to tell which CVEs
-are exactly affecting Buildroot, but it's a good idea to update anyway
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...c_src-openssl_config.h-fix-build-without-.patch | 46 ----------------------
- package/erlang/erlang.hash                         |  4 +-
- package/erlang/erlang.mk                           |  2 +-
- 3 files changed, 3 insertions(+), 49 deletions(-)
-
-diff --git a/package/erlang/0001-lib-crypto-c_src-openssl_config.h-fix-build-without-.patch b/package/erlang/0001-lib-crypto-c_src-openssl_config.h-fix-build-without-.patch
-deleted file mode 100644
-index a17a43a95d..0000000000
---- a/package/erlang/0001-lib-crypto-c_src-openssl_config.h-fix-build-without-.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 8c7d62662cf51902d759be0e8d3bfd96a3524b3c Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 8 Dec 2023 09:00:17 +0100
--Subject: [PATCH] lib/crypto/c_src/openssl_config.h: fix build without DES
--
--Fix the following build failure without DES raised since version 24.2
--and
--https://github.com/erlang/otp/commit/abf7f84c2f77bb07dbdbb8a29b9d41f1f24c5f14:
--
--cipher.c:51:42: error: 'EVP_des_ede3_cbc' undeclared here (not in a function); did you mean 'SN_des_ede3_cbc'?
--   51 |     {{"des_ede3_cbc"}, "des-ede3-cbc", {&EVP_des_ede3_cbc}, 0, 0},
--      |                                          ^~~~~~~~~~~~~~~~
--      |                                          SN_des_ede3_cbc
--
--Fixes:
-- - http://autobuild.buildroot.org/results/1aace0ee738f8ec4aa2c9a739fc7535c3b6bf884
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/erlang/otp/pull/7937
-----
-- lib/crypto/c_src/openssl_config.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/lib/crypto/c_src/openssl_config.h b/lib/crypto/c_src/openssl_config.h
--index cb63f28369..f3904986c9 100644
----- a/lib/crypto/c_src/openssl_config.h
--+++ b/lib/crypto/c_src/openssl_config.h
--@@ -218,7 +218,6 @@
-- 
-- #ifndef OPENSSL_NO_DES
-- # define HAVE_DES
---#endif
-- 
-- #if OPENSSL_VERSION_NUMBER >= PACKED_OPENSSL_VERSION(0,9,7,'e')
-- # define HAVE_DES_ede3_cfb
--@@ -227,6 +226,7 @@
-- #if OPENSSL_VERSION_NUMBER >= PACKED_OPENSSL_VERSION(0,9,7,'e')
-- # define HAVE_DES_ede3_cbc
-- #endif
--+#endif
-- 
-- #ifndef OPENSSL_NO_DH
-- # define HAVE_DH
---- 
--2.42.0
--
-diff --git a/package/erlang/erlang.hash b/package/erlang/erlang.hash
-index 9fc5a6eabf..7ff587e35c 100644
---- a/package/erlang/erlang.hash
-+++ b/package/erlang/erlang.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/erlang/otp/releases/download/OTP-26.0.2/SHA256.txt
--sha256  47853ea9230643a0a31004433f07a71c1b92d6e0094534f629e3b75dbc62f193  otp_src_26.0.2.tar.gz
-+# From https://github.com/erlang/otp/releases/download/OTP-26.2.5.15/SHA256.txt
-+sha256  28e6d63d82927f132d56289dd3c428ef8bce6bf2283c8549aa0a7afca1a8fe3b  otp_src_26.2.5.15.tar.gz
- 
- # Hash for license file
- sha256  809fa1ed21450f59827d1e9aec720bbc4b687434fa22283c6cb5dd82a47ab9c0  LICENSE.txt
-diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index f9956d4468..59353742f0 100644
---- a/package/erlang/erlang.mk
-+++ b/package/erlang/erlang.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ERLANG_VERSION = 26.0.2
-+ERLANG_VERSION = 26.2.5.15
- ERLANG_RELEASE = $(firstword $(subst ., ,$(ERLANG_VERSION)))
- ERLANG_SITE = \
- 	https://github.com/erlang/otp/releases/download/OTP-$(ERLANG_VERSION)
-
---===============8432566617927214047==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8432566617927214047==--
+T24gMDYvMTAvMjAyNSAxNjoxNSwgVGl0b3VhbiBDaHJpc3RvcGhlIHZpYSBidWlsZHJvb3Qgd3Jv
+dGU6Cj4gU2VlIHRoZSByZWxlYXNlIG5vdGVzIG9uCj4gaHR0cHM6Ly9naXRodWIuY29tL2VybGFu
+Zy9vdHAvcmVsZWFzZXM/cT1PVFAtMjYuJmV4cGFuZGVkPXRydWUKPiAKPiBBbHNvLCByZW1vdmUg
+cGF0Y2ggdGhhdCBpcyBub3cgYXBwbGllZCB1cHN0cmVhbQo+IAo+IFRoaXMgZml4ZXMgdGhlIGZv
+bGxvd2luZyB2dWxuZXJhYmlsaXRpZXM6Cj4gLSBDVkUtMjAyNC01Mzg0NjoKPiAgICAgT1RQIGlz
+IGEgc2V0IG9mIEVybGFuZyBsaWJyYXJpZXMsIHdoaWNoIGNvbnNpc3RzIG9mIHRoZSBFcmxhbmcg
+Cj4gcnVudGltZQo+ICAgICBzeXN0ZW0sIGEgbnVtYmVyIG9mIHJlYWR5LXRvLXVzZSBjb21wb25l
+bnRzIG1haW5seSB3cml0dGVuIGluIAo+IEVybGFuZywKPiAgICAgYW5kIGEgc2V0IG9mIGRlc2ln
+biBwcmluY2lwbGVzIGZvciBFcmxhbmcgcHJvZ3JhbXMuIEEgcmVncmVzc2lvbiAKPiB3YXMKPiAg
+ICAgaW50cm9kdWNlZCBpbnRvIHRoZSBzc2wgYXBwbGljYXRpb24gb2YgT1RQIHN0YXJ0aW5nIGF0
+IAo+IE9UUC0yNS4zLjIuOCwKPiAgICAgT1RQLTI2LjIsIGFuZCBPVFAtMjcuMCwgcmVzdWx0aW5n
+IGluIGEgc2VydmVyIG9yIGNsaWVudCB2ZXJpZnlpbmcgCj4gdGhlCj4gICAgIHBlZXIgd2hlbiBp
+bmNvcnJlY3QgZXh0ZW5kZWQga2V5IHVzYWdlIGlzIHByZXNlbnRlZCAoaS5lLiwgYSBzZXJ2ZXIK
+PiAgICAgd2lsbCB2ZXJpZnkgYSBjbGllbnQgaWYgdGhleSBoYXZlIHNlcnZlciBhdXRoIGV4dCBr
+ZXkgdXNhZ2UgYW5kIAo+IHZpY2UKPiAgICAgdmVyc2EpLgo+ICAgICBodHRwczovL3d3dy5jdmUu
+b3JnL0NWRVJlY29yZD9pZD1DVkUtMjAyNC01Mzg0Ngo+IAo+IC0gQ1ZFLTIwMjUtNDc0ODoKPiAg
+ICAgSW1wcm9wZXIgTGltaXRhdGlvbiBvZiBhIFBhdGhuYW1lIHRvIGEgUmVzdHJpY3RlZCBEaXJl
+Y3RvcnkgKCdQYXRoCj4gICAgIFRyYXZlcnNhbCcpIHZ1bG5lcmFiaWxpdHkgaW4gRXJsYW5nIE9U
+UCAoc3RkbGliIG1vZHVsZXMpIGFsbG93cwo+ICAgICBBYnNvbHV0ZSBQYXRoIFRyYXZlcnNhbCwg
+RmlsZSBNYW5pcHVsYXRpb24uIFRoaXMgdnVsbmVyYWJpbGl0eSBpcwo+ICAgICBhc3NvY2lhdGVk
+IHdpdGggcHJvZ3JhbSBmaWxlcyBsaWIvc3RkbGliL3NyYy96aXAuZXJsIGFuZCBwcm9ncmFtCj4g
+ICAgIHJvdXRpbmVzIHppcDp1bnppcC8xLCB6aXA6dW56aXAvMiwgemlwOmV4dHJhY3QvMSwgCj4g
+emlwOmV4dHJhY3QvMsKgdW5sZXNzCj4gICAgIHRoZSBtZW1vcnkgb3B0aW9uIGlzIHBhc3NlZC4g
+IFRoaXMgaXNzdWUgYWZmZWN0cyBPVFAgZnJvbSBPVFAgMTcuMAo+ICAgICB1bnRpbCBPVFDCoDI4
+LjAuMSwgT1RQwqAyNy4zLjQuMSBhbmQgT1RQwqAyNi4yLjUuMTMsIGNvcnJlc3BvbmRpbmcgdG8K
+PiAgICAgc3RkbGliIGZyb20gMi4wIHVudGlsIDcuMC4xLCA2LjIuMi4xIGFuZCA1LjIuMy40Lgo+
+ICAgICBodHRwczovL3d3dy5jdmUub3JnL0NWRVJlY29yZD9pZD1DVkUtMjAyNS00NzQ4Cj4gCj4g
+LSBDVkUtMjAyNS0yNjYxODoKPiAgICAgRXJsYW5nIGlzIGEgcHJvZ3JhbW1pbmcgbGFuZ3VhZ2Ug
+YW5kIHJ1bnRpbWUgc3lzdGVtIGZvciBidWlsZGluZwo+ICAgICBtYXNzaXZlbHkgc2NhbGFibGUg
+c29mdCByZWFsLXRpbWUgc3lzdGVtcyB3aXRoIHJlcXVpcmVtZW50cyBvbiBoaWdoCj4gICAgIGF2
+YWlsYWJpbGl0eS4gT1RQIGlzIGEgc2V0IG9mIEVybGFuZyBsaWJyYXJpZXMsIHdoaWNoIGNvbnNp
+c3RzIG9mIAo+IHRoZQo+ICAgICBFcmxhbmcgcnVudGltZSBzeXN0ZW0sIGEgbnVtYmVyIG9mIHJl
+YWR5LXRvLXVzZSBjb21wb25lbnRzIG1haW5seQo+ICAgICB3cml0dGVuIGluIEVybGFuZy4gUGFj
+a2V0IHNpemUgaXMgbm90IHZlcmlmaWVkIHByb3Blcmx5IGZvciBTRlRQCj4gICAgIHBhY2tldHMu
+IEFzIGEgcmVzdWx0IHdoZW4gbXVsdGlwbGUgU1NIIHBhY2tldHMgKGNvbmZvcm1pbmcgdG8gbWF4
+IAo+IFNTSAo+ICAgICBwYWNrZXQgc2l6ZSkgYXJlIHJlY2VpdmVkIGJ5IHNzaCwgdGhleSBtaWdo
+dCBiZSBjb21iaW5lZCBpbnRvIGFuIAo+IFNGVFAKPiAgICAgcGFja2V0IHdoaWNoIHdpbGwgZXhj
+ZWVkIHRoZSBtYXggYWxsb3dlZCBwYWNrZXQgc2l6ZSBhbmQgCj4gcG90ZW50aWFsbHkKPiAgICAg
+Y2F1c2UgbGFyZ2UgYW1vdW50IG9mIG1lbW9yeSB0byBiZSBhbGxvY2F0ZWQuIE5vdGUgdGhhdCBz
+aXR1YXRpb24KPiAgICAgZGVzY3JpYmVkIGFib3ZlIGNhbiBvbmx5IGhhcHBlbiBmb3Igc3VjY2Vz
+c2Z1bGx5IGF1dGhlbnRpY2F0ZWQgCj4gdXNlcnMKPiAgICAgYWZ0ZXIgY29tcGxldGluZyB0aGUg
+U1NIIGhhbmRzaGFrZS4gVGhpcyBpc3N1ZSBoYXMgYmVlbiBwYXRjaGVkIGluIAo+IE9UUAo+ICAg
+ICB2ZXJzaW9ucyAyNy4yLjQsIDI2LjIuNS45LCBhbmQgMjUuMy4yLjE4LiBUaGVyZSBhcmUgbm8g
+a25vd24KPiAgICAgd29ya2Fyb3VuZHMgZm9yIHRoaXMgdnVsbmVyYWJpbGl0eS4KPiAgICAgaHR0
+cHM6Ly93d3cuY3ZlLm9yZy9DVkVSZWNvcmQ/aWQ9Q1ZFLTIwMjUtMjY2MTgKPiAKPiAtIENWRS0y
+MDI1LTMwMjExOgo+ICAgICBFcmxhbmcvT1RQIGlzIGEgc2V0IG9mIGxpYnJhcmllcyBmb3IgdGhl
+IEVybGFuZyBwcm9ncmFtbWluZyAKPiBsYW5ndWFnZS4KPiAgICAgUHJpb3IgdG8gdmVyc2lvbnMg
+T1RQLTI3LjMuMSwgMjYuMi41LjEwLCBhbmQgMjUuMy4yLjE5LCBhIAo+IG1hbGljaW91c2x5Cj4g
+ICAgIGZvcm1lZCBLRVggaW5pdCBtZXNzYWdlIGNhbiByZXN1bHQgd2l0aCBoaWdoIG1lbW9yeSB1
+c2FnZS4KPiAgICAgSW1wbGVtZW50YXRpb24gZG9lcyBub3QgdmVyaWZ5IFJGQyBzcGVjaWZpZWQg
+bGltaXRzIG9uIGFsZ29yaXRobSAKPiBuYW1lcwo+ICAgICAoNjQgY2hhcmFjdGVycykgcHJvdmlk
+ZWQgaW4gS0VYIGluaXQgbWVzc2FnZS4gQmlnIEtFWCBpbml0IHBhY2tldCAKPiBtYXkKPiAgICAg
+bGVhZCB0byBpbmVmZmljaWVudCBwcm9jZXNzaW5nIG9mIHRoZSBlcnJvciBkYXRhLiBBcyBhIHJl
+c3VsdCwgCj4gbGFyZ2UKPiAgICAgYW1vdW50IG9mIG1lbW9yeSB3aWxsIGJlIGFsbG9jYXRlZCBm
+b3IgcHJvY2Vzc2luZyBtYWxpY2lvdXMgZGF0YS4KPiAgICAgVmVyc2lvbnMgT1RQLTI3LjMuMSwg
+T1RQLTI2LjIuNS4xMCwgYW5kIE9UUC0yNS4zLjIuMTkgZml4IHRoZSAKPiBpc3N1ZS4KPiAgICAg
+U29tZSB3b3JrYXJvdW5kcyBhcmUgYXZhaWxhYmxlLiBPbmUgbWF5IHNldCBvcHRpb24gYHBhcmFs
+bGVsX2xvZ2luYCAKPiB0bwo+ICAgICBgZmFsc2VgIGFuZC9vciByZWR1Y2UgdGhlIGBtYXhfc2Vz
+c2lvbnNgIG9wdGlvbi4KPiAgICAgaHR0cHM6Ly93d3cuY3ZlLm9yZy9DVkVSZWNvcmQ/aWQ9Q1ZF
+LTIwMjUtMzAyMTEKPiAKPiAtIENWRS0yMDI1LTMyNDMzOgo+ICAgICBFcmxhbmcvT1RQIGlzIGEg
+c2V0IG9mIGxpYnJhcmllcyBmb3IgdGhlIEVybGFuZyBwcm9ncmFtbWluZyAKPiBsYW5ndWFnZS4K
+PiAgICAgUHJpb3IgdG8gdmVyc2lvbnMgT1RQLTI3LjMuMywgT1RQLTI2LjIuNS4xMSwgYW5kIE9U
+UC0yNS4zLjIuMjAsIGEgCj4gU1NICj4gICAgIHNlcnZlciBtYXkgYWxsb3cgYW4gYXR0YWNrZXIg
+dG8gcGVyZm9ybSB1bmF1dGhlbnRpY2F0ZWQgcmVtb3RlIGNvZGUKPiAgICAgZXhlY3V0aW9uIChS
+Q0UpLiBCeSBleHBsb2l0aW5nIGEgZmxhdyBpbiBTU0ggcHJvdG9jb2wgbWVzc2FnZQo+ICAgICBo
+YW5kbGluZywgYSBtYWxpY2lvdXMgYWN0b3IgY291bGQgZ2FpbiB1bmF1dGhvcml6ZWQgYWNjZXNz
+IHRvIAo+IGFmZmVjdGVkCj4gICAgIHN5c3RlbXMgYW5kIGV4ZWN1dGUgYXJiaXRyYXJ5IGNvbW1h
+bmRzIHdpdGhvdXQgdmFsaWQgY3JlZGVudGlhbHMuIAo+IFRoaXMKPiAgICAgaXNzdWUgaXMgcGF0
+Y2hlZCBpbiB2ZXJzaW9ucyBPVFAtMjcuMy4zLCBPVFAtMjYuMi41LjExLCBhbmQKPiAgICAgT1RQ
+LTI1LjMuMi4yMC4gQSB0ZW1wb3Jhcnkgd29ya2Fyb3VuZCBpbnZvbHZlcyBkaXNhYmxpbmcgdGhl
+IFNTSAo+ICAgICBzZXJ2ZXIgb3IgdG8gcHJldmVudCBhY2Nlc3MgdmlhIGZpcmV3YWxsIHJ1bGVz
+Lgo+ICAgICBodHRwczovL3d3dy5jdmUub3JnL0NWRVJlY29yZD9pZD1DVkUtMjAyNS0zMjQzMwo+
+IAo+IC0gQ1ZFLTIwMjUtNDY3MTI6Cj4gICAgIEVybGFuZy9PVFAgaXMgYSBzZXQgb2YgbGlicmFy
+aWVzIGZvciB0aGUgRXJsYW5nIHByb2dyYW1taW5nIAo+IGxhbmd1YWdlLgo+ICAgICBJbiB2ZXJz
+aW9ucyBwcmlvciB0byBPVFAtMjcuMy40IChmb3IgT1RQLTI3KSwgT1RQLTI2LjIuNS4xMiAoZm9y
+Cj4gICAgIE9UUC0yNiksIGFuZCBPVFAtMjUuMy4yLjIxIChmb3IgT1RQLTI1KSwgRXJsYW5nL09U
+UCBTU0ggZmFpbHMgdG8KPiAgICAgZW5mb3JjZSBzdHJpY3QgS0VYIGhhbmRzaGFrZSBoYXJkZW5p
+bmcgbWVhc3VyZXMgYnkgYWxsb3dpbmcgCj4gb3B0aW9uYWwKPiAgICAgbWVzc2FnZXMgdG8gYmUg
+ZXhjaGFuZ2VkLiBUaGlzIGFsbG93cyBhIE1hbi1pbi10aGUtTWlkZGxlIGF0dGFja2VyIAo+IHRv
+Cj4gICAgIGluamVjdCB0aGVzZSBtZXNzYWdlcyBpbiBhIGNvbm5lY3Rpb24gZHVyaW5nIHRoZSBo
+YW5kc2hha2UuIFRoaXMgCj4gaXNzdWUKPiAgICAgaGFzIGJlZW4gcGF0Y2hlZCBpbiB2ZXJzaW9u
+cyBPVFAtMjcuMy40IChmb3IgT1RQLTI3KSwgT1RQLTI2LjIuNS4xMgo+ICAgICAoZm9yIE9UUC0y
+NiksIGFuZCBPVFAtMjUuMy4yLjIxIChmb3IgT1RQLTI1KS4KPiAgICAgaHR0cHM6Ly93d3cuY3Zl
+Lm9yZy9DVkVSZWNvcmQ/aWQ9Q1ZFLTIwMjUtNDY3MTIKPiAKPiAtIENWRS0yMDI1LTQ4MDM4Ogo+
+ICAgICBBbGxvY2F0aW9uIG9mIFJlc291cmNlcyBXaXRob3V0IExpbWl0cyBvciBUaHJvdHRsaW5n
+IHZ1bG5lcmFiaWxpdHkgCj4gaW4KPiAgICAgRXJsYW5nIE9UUCBzc2ggKHNzaF9zZnRwIG1vZHVs
+ZXMpIGFsbG93cyBFeGNlc3NpdmUgQWxsb2NhdGlvbiwKPiAgICAgUmVzb3VyY2UgTGVhayBFeHBv
+c3VyZS4gVGhpcyB2dWxuZXJhYmlsaXR5IGlzIGFzc29jaWF0ZWQgd2l0aCAKPiBwcm9ncmFtCj4g
+ICAgIGZpbGVzIGxpYi9zc2gvc3JjL3NzaF9zZnRwZC5lcmwuICBUaGlzIGlzc3VlIGFmZmVjdHMg
+T1RQIGZvcm0gT1RQIAo+IDE3LjAKPiAgICAgdW50aWwgT1RQIDI4LjAuMywgT1RQIDI3LjMuNC4z
+IGFuZCAyNi4yLjUuMTUgY29ycmVzcG9uZGluZyB0byBzc2ggCj4gZnJvbQo+ICAgICAzLjAuMSB1
+bnRpbCA1LjMuMywgNS4yLjExLjMgYW5kIDUuMS40LjEyLgo+ICAgICBodHRwczovL3d3dy5jdmUu
+b3JnL0NWRVJlY29yZD9pZD1DVkUtMjAyNS00ODAzOAo+IAo+IC0gQ1ZFLTIwMjUtNDgwMzk6Cj4g
+ICAgIEFsbG9jYXRpb24gb2YgUmVzb3VyY2VzIFdpdGhvdXQgTGltaXRzIG9yIFRocm90dGxpbmcg
+dnVsbmVyYWJpbGl0eSAKPiBpbgo+ICAgICBFcmxhbmcgT1RQIHNzaCAoc3NoX3NmdHAgbW9kdWxl
+cykgYWxsb3dzIEV4Y2Vzc2l2ZSBBbGxvY2F0aW9uLAo+ICAgICBSZXNvdXJjZSBMZWFrIEV4cG9z
+dXJlLiBUaGlzIHZ1bG5lcmFiaWxpdHkgaXMgYXNzb2NpYXRlZCB3aXRoIAo+IHByb2dyYW0KPiAg
+ICAgZmlsZXMgbGliL3NzaC9zcmMvc3NoX3NmdHBkLmVybC4gIFRoaXMgaXNzdWUgYWZmZWN0cyBP
+VFAgZm9ybSBPVFAgCj4gMTcuMAo+ICAgICB1bnRpbCBPVFAgMjguMC4zLCBPVFAgMjcuMy40LjMg
+YW5kIDI2LjIuNS4xNSBjb3JyZXNwb25kaW5nIHRvIHNzaCAKPiBmcm9tCj4gICAgIDMuMC4xIHVu
+dGlsIDUuMy4zLCA1LjIuMTEuMyBhbmQgNS4xLjQuMTIuCj4gICAgIGh0dHBzOi8vd3d3LmN2ZS5v
+cmcvQ1ZFUmVjb3JkP2lkPUNWRS0yMDI1LTQ4MDM5Cj4gCj4gLSBDVkUtMjAyNS00ODA0MDoKPiAg
+ICAgVW5jb250cm9sbGVkIFJlc291cmNlIENvbnN1bXB0aW9uIHZ1bG5lcmFiaWxpdHkgaW4gRXJs
+YW5nIE9UUCBzc2gKPiAgICAgKHNzaF9zZnRwIG1vZHVsZXMpIGFsbG93cyBFeGNlc3NpdmUgQWxs
+b2NhdGlvbiwgRmxvb2RpbmcuIFRoaXMKPiAgICAgdnVsbmVyYWJpbGl0eSBpcyBhc3NvY2lhdGVk
+IHdpdGggcHJvZ3JhbSBmaWxlcwo+ICAgICBsaWIvc3NoL3NyYy9zc2hfc2Z0cGQuZXJsLiAgVGhp
+cyBpc3N1ZSBhZmZlY3RzIE9UUCBmb3JtIE9UUCAxNy4wIAo+IHVudGlsCj4gICAgIE9UUCAyOC4w
+LjMsIE9UUCAyNy4zLjQuMyBhbmQgMjYuMi41LjE1IGNvcnJlc3BvbmRpbmcgdG8gc3NoIGZyb20g
+Cj4gMy4wLjEKPiAgICAgdW50aWwgNS4zLjMsIDUuMi4xMS4zIGFuZCA1LjEuNC4xMi4KPiAgICAg
+aHR0cHM6Ly93d3cuY3ZlLm9yZy9DVkVSZWNvcmQ/aWQ9Q1ZFLTIwMjUtNDgwNDAKPiAKPiAtIENW
+RS0yMDI1LTQ4MDQxOgo+ICAgICBBbGxvY2F0aW9uIG9mIFJlc291cmNlcyBXaXRob3V0IExpbWl0
+cyBvciBUaHJvdHRsaW5nIHZ1bG5lcmFiaWxpdHkgCj4gaW4KPiAgICAgRXJsYW5nIE9UUCBzc2gg
+KHNzaF9zZnRwIG1vZHVsZXMpIGFsbG93cyBFeGNlc3NpdmUgQWxsb2NhdGlvbiwKPiAgICAgRmxv
+b2RpbmcuIFRoaXMgdnVsbmVyYWJpbGl0eSBpcyBhc3NvY2lhdGVkIHdpdGggcHJvZ3JhbSBmaWxl
+cwo+ICAgICBsaWIvc3NoL3NyYy9zc2hfc2Z0cGQuZXJsLiAgVGhpcyBpc3N1ZSBhZmZlY3RzIE9U
+UCBmb3JtIE9UUCAxNy4wIAo+IHVudGlsCj4gICAgIE9UUCAyOC4wLjMsIE9UUCAyNy4zLjQuMyBh
+bmQgMjYuMi41LjE1IGNvcnJlc3BvbmRpbmcgdG8gc3NoIGZyb20gCj4gMy4wLjEKPiAgICAgdW50
+aWwgNS4zLjMsIDUuMi4xMS4zIGFuZCA1LjEuNC4xMi4KPiAgICAgaHR0cHM6Ly93d3cuY3ZlLm9y
+Zy9DVkVSZWNvcmQ/aWQ9Q1ZFLTIwMjUtNDgwNDEKPiAKPiBOQjogU2luY2UgRXJsYW5nIGlzIHF1
+aXRlIGEgImxhcmdlIiBwYWNrYWdlLCBjb250YWluaW5nIHRoZSBsYW5ndWFnZSAKPiBpdHNlbGYs
+Cj4gc29tZSBsaWJyYXJpZXMsIGFuZCBzb21lICJhcHBsaWNhdGlvbnMiLCBpdCdzIGRpZmZpY3Vs
+dCB0byB0ZWxsIHdoaWNoIAo+IENWRXMKPiBhcmUgZXhhY3RseSBhZmZlY3RpbmcgQnVpbGRyb290
+LCBidXQgaXQncyBhIGdvb2QgaWRlYSB0byB1cGRhdGUgYW55d2F5Cj4gCj4gU2lnbmVkLW9mZi1i
+eTogVGl0b3VhbiBDaHJpc3RvcGhlIDx0aXRvdWFuLmNocmlzdG9waGVAbWluZC5iZT4KCkFwcGxp
+ZWQgdG8gbWFzdGVyLCB0aGFua3MuCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5v
+cmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
+Cg==
