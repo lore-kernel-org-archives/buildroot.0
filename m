@@ -1,76 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8D01CCA470
-	for <buildroot@archiver.kernel.org>; Tue,  7 Oct 2025 19:09:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 683DECCA476
+	for <buildroot@archiver.kernel.org>; Tue,  7 Oct 2025 19:21:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD6AC40A20;
-	Tue,  7 Oct 2025 19:09:35 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VxrnLpKpqT90; Tue,  7 Oct 2025 19:09:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B827540A0C
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B827540A0C;
-	Tue,  7 Oct 2025 19:09:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7189E226
- for <buildroot@buildroot.org>; Tue,  7 Oct 2025 19:09:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 57C3660803
- for <buildroot@buildroot.org>; Tue,  7 Oct 2025 19:09:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D20760A64;
+	Tue,  7 Oct 2025 19:21:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vDyW-Y1qjcEZ for <buildroot@buildroot.org>;
- Tue,  7 Oct 2025 19:09:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5151860A3C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5151860A3C
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5151860A3C
- for <buildroot@buildroot.org>; Tue,  7 Oct 2025 19:09:30 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id C784213F880;
- Tue,  7 Oct 2025 21:09:26 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 07 Oct 2025 21:09:26 +0200
-MIME-Version: 1.0
-Date: Tue, 07 Oct 2025 21:09:26 +0200
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251007130757.1004115-1-peter@korsgaard.com>
-References: <20251007130757.1004115-1-peter@korsgaard.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <0b7d99b43da998961764069287cb7d7c@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1759864167;
- bh=+Mb4m9HtGtGfXtwAJ0MoKCFWCLWg6PSIUcn3KDzePDU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=CDNg8Cx124M8LgDzyDconxgG4OYfxtqxcdp0Jw5L1hr5lvf3hQCcyenF2uYhhluNT
- vDdnBFi+GccXgJKNWOnnqIUxLBZueTjjnFtbDiPPQMyCQZFvnjOF8miA16gf0F6fW8
- 8DMT62qSZ5M+55N+KqPWtQdIoVtB/tXiEpzUt6OE2RaEJQKeUpoTzCn/7TToGgLqdU
- fEoA1c1x4ZTcNmNqZv0vyhQs6oHZMJeV89cthj3pI5dXbT3o7wqs5fYV3jR7+L2j3/
- HTDMRhca3hz5omeV9/Xf/JDgdVewqG3i8VxgHJGvVCjGFg2Q2jDehGY4D2Y6x8wRgz
- zET14iy+7JFew==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=CDNg8Cx1
-Subject: Re: [Buildroot] [PATCH 1/2] configs/beagleboneai: switch to Bootlin
- glibc stable toolchain
+ id 45JQ4LmtuKzt; Tue,  7 Oct 2025 19:21:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 371A160A5D
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 371A160A5D;
+	Tue,  7 Oct 2025 19:21:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3562E226
+ for <buildroot@buildroot.org>; Tue,  7 Oct 2025 19:21:49 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 278374082D
+ for <buildroot@buildroot.org>; Tue,  7 Oct 2025 19:21:49 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yHsF4OhPpPqD for <buildroot@buildroot.org>;
+ Tue,  7 Oct 2025 19:21:48 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED11140819
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id ED11140819
+ for <buildroot@buildroot.org>; Tue,  7 Oct 2025 19:21:47 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E5BAA86A25; Tue,  7 Oct 2025 19:21:47 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 7 Oct 2025 21:17:07 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5f620e144d82d70c822f26219cbec4d45daa2c00
+X-Git-Newrev: 033fc7ca8f6417204f65f24644954dfa3ab71efc
+X-Patchwork-Hint: ignore
+Message-Id: <20251007192147.E5BAA86A25@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/4th: switch to https
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,15 +59,45 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 07/10/2025 15:07, Peter Korsgaard wrote:
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=033fc7ca8f6417204f65f24644954dfa3ab71efc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Series applied to master, thanks.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/4th/4th.mk    | 2 +-
+ package/4th/Config.in | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/4th/4th.mk b/package/4th/4th.mk
+index 276423b255..08b3dbdebc 100644
+--- a/package/4th/4th.mk
++++ b/package/4th/4th.mk
+@@ -6,7 +6,7 @@
+ 
+ 4TH_VERSION = 3.64.1
+ 4TH_SOURCE = 4th-$(4TH_VERSION)-unix.tar.gz
+-4TH_SITE = http://downloads.sourceforge.net/project/forth-4th/4th-$(4TH_VERSION)
++4TH_SITE = https://downloads.sourceforge.net/project/forth-4th/4th-$(4TH_VERSION)
+ 4TH_LICENSE = GPL-3.0+, LGPL-3.0+
+ # The COPYING file only contains the text of the LGPL-3.0, but the
+ # source code really contains parts under GPL-3.0+.
+diff --git a/package/4th/Config.in b/package/4th/Config.in
+index 4554664ab4..0463a4a087 100644
+--- a/package/4th/Config.in
++++ b/package/4th/Config.in
+@@ -5,4 +5,4 @@ config BR2_PACKAGE_4TH
+ 	  C-embeddable bytecode, standalone executables, but also
+ 	  works fine as a scripting language
+ 
+-	  http://thebeez.home.xs4all.nl/4tH/
++	  https://thebeez.home.xs4all.nl/4tH/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
