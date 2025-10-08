@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9A7ACCD183
-	for <buildroot@archiver.kernel.org>; Wed,  8 Oct 2025 16:23:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADB6FCAC5BB
+	for <buildroot@archiver.kernel.org>; Wed,  8 Oct 2025 16:23:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8BFD040B5F;
-	Wed,  8 Oct 2025 16:23:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6EA660EA4;
+	Wed,  8 Oct 2025 16:23:38 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P1T11ZCw5Foc; Wed,  8 Oct 2025 16:23:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A63360E7F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A63360E7F;
+	Wed,  8 Oct 2025 16:23:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1EA80D84
+ for <buildroot@buildroot.org>; Wed,  8 Oct 2025 16:23:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 04DBD40B5F
+ for <buildroot@buildroot.org>; Wed,  8 Oct 2025 16:23:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l7GRgjZ5ilTB; Wed,  8 Oct 2025 16:23:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF31240B60
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF31240B60;
-	Wed,  8 Oct 2025 16:23:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5AEEF9DA
- for <buildroot@buildroot.org>; Wed,  8 Oct 2025 16:23:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 41D25812CB
- for <buildroot@buildroot.org>; Wed,  8 Oct 2025 16:23:35 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LwXIOOR5WHOr for <buildroot@buildroot.org>;
+ id 9Vb1aJgCGgxP for <buildroot@buildroot.org>;
  Wed,  8 Oct 2025 16:23:33 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.146;
  helo=smtpweb146.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 150CF80F66
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 150CF80F66
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1552D40B62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1552D40B62
 Received: from smtpweb146.aruba.it (smtpweb146.aruba.it [62.149.158.146])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 150CF80F66
- for <buildroot@buildroot.org>; Wed,  8 Oct 2025 16:23:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1552D40B62
+ for <buildroot@buildroot.org>; Wed,  8 Oct 2025 16:23:31 +0000 (UTC)
 Received: from localhost.localdomain ([84.33.84.190])
  by Aruba SMTP with ESMTPSA
- id 6WwrvyUuj3rWi6Wwrve6nz; Wed, 08 Oct 2025 18:23:30 +0200
+ id 6WwrvyUuj3rWi6Wwsve6o7; Wed, 08 Oct 2025 18:23:30 +0200
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
 Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
  Christian Stewart <christian@aperture.us>,
  Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed,  8 Oct 2025 18:23:26 +0200
-Message-ID: <20251008162328.3569687-3-giulio.benetti@benettiengineering.com>
+Date: Wed,  8 Oct 2025 18:23:27 +0200
+Message-ID: <20251008162328.3569687-4-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251008162328.3569687-1-giulio.benetti@benettiengineering.com>
 References: <20251008162328.3569687-1-giulio.benetti@benettiengineering.com>
@@ -57,23 +57,22 @@ X-CMAE-Envelope: MS4xfFlVDbbvg+bPFUlgXQ3mw7gBLxD3lCQhAeExq1/JVU5EUbAcwb5R73K9/jK
  5kBD7jGR
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1759940610; bh=xJyI0ZB9ls9+9Xg1LxKq0JPJ+sg5f3hd30s/gmOeT08=;
+ t=1759940610; bh=p/oSP1BvQ/AYJB2hsWfS4itLE2uFPS0fnxr9ImYDPr0=;
  h=From:To:Subject:Date:MIME-Version;
- b=QsqqnGcdhtA6w0zIifQOnbVB0vfCLxY3pjUppSGI16BirxWGO0gk3zS8QfTO+1s1O
- h+WzyEuJgKsGU/hrdaipKJ11AcHBjNH03YGF++5DFFIVDnikbxSwwH1ybGk3dzeViy
- Ey/VxsQTK0a/ERQmvtZk7DgZzo9DCCrznctxz+M2cvAwf9r8PU2W/J8FNQHeVPsabZ
- PjGjM3goIxJkSCo3JWCnmXa0ESl2WwrAie4Ve0/zKckzAydRQHmT75JfxUocSWgMX6
- 8aUpmnnL+VdNgpP1/2GCNHYyD1C17IiQ3XkCJOl3mKpoExEgpFXPf2hGMkfOUhWdcL
- UHIJQVB0Fd6Yg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=FPAEzfxyS+BA6flYJZGxW8PvKEW2UeAMcwrg1/ddfpzyjwOaGVbrAo9n5bW56Q79T
+ xV14MRY3rQKSIJ0hibY5la4jqUGzr3VpMK46THxdE1lPdq6pE+lQiIjbr7x0lIc1Aq
+ nA7y1IKc09B+KdZuVffzlU0VW9rF540MiFsfLHsJ0sWnmlmWDllx3BDu8U50IgtQ8D
+ tAfQs0tTI6XTFOuKW8nJ+uzx5IkbNDMk3+4tsNrGbKmHtkX7VWsepJb4YW8gVJJeas
+ swKZD6+rjwcPxCCcZns+RiJfbu+TFYTUltdWL0Ghu5WsE2XHnGZHhvNOzd/XhMxrSa
+ ZCT3tZslr8EYg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=QsqqnGcd
-Subject: [Buildroot] [PATCH] package/rtl8812au-aircrack-ng: fix build with
- Linux 6.17
+ header.s=a1 header.b=FPAEzfxy
+Subject: [Buildroot] [PATCH] package/rtl8821au: bump to 2025-10-08 version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,80 +89,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add local patch pending upstream to fix build failure with Linux 6.17.
-
-Fixes:
-Still not occured
+This version allows to build with Linux 6.17
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- .../0003-Fix-build-for-kernel-6.17.patch      | 57 +++++++++++++++++++
- 1 file changed, 57 insertions(+)
- create mode 100644 package/rtl8812au-aircrack-ng/0003-Fix-build-for-kernel-6.17.patch
+ package/rtl8821au/rtl8821au.hash | 2 +-
+ package/rtl8821au/rtl8821au.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rtl8812au-aircrack-ng/0003-Fix-build-for-kernel-6.17.patch b/package/rtl8812au-aircrack-ng/0003-Fix-build-for-kernel-6.17.patch
-new file mode 100644
-index 0000000000..361615b945
---- /dev/null
-+++ b/package/rtl8812au-aircrack-ng/0003-Fix-build-for-kernel-6.17.patch
-@@ -0,0 +1,57 @@
-+From dfbeaa319808624c367200739a9a6f7fbc4b8281 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 8 Oct 2025 17:56:52 +0200
-+Subject: [PATCH] Fix build for kernel 6.17
-+
-+With commit:
-+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b74947b4f6ff7c122a1bb6eb38bb7ecfbb1d3820
-+set_wiphy_params() and set/get_tx_power() gain argument radio_idx to get
-+radio index. So let's add that argument according to linux version >=
-+6.17.
-+
-+Upstream: https://github.com/aircrack-ng/rtl8812au/pull/1238
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ os_dep/linux/ioctl_cfg80211.c | 11 +++++++++++
-+ 1 file changed, 11 insertions(+)
-+
-+diff --git a/os_dep/linux/ioctl_cfg80211.c b/os_dep/linux/ioctl_cfg80211.c
-+index ec47e95..3d834a4 100644
-+--- a/os_dep/linux/ioctl_cfg80211.c
-++++ b/os_dep/linux/ioctl_cfg80211.c
-+@@ -3365,7 +3365,12 @@ exit:
-+ 	return ret;
-+ }
-+ 
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
-++static int cfg80211_rtw_set_wiphy_params(struct wiphy *wiphy, int radio_idx,
-++					 u32 changed)
-++#else
-+ static int cfg80211_rtw_set_wiphy_params(struct wiphy *wiphy, u32 changed)
-++#endif
-+ {
-+ #if 0
-+ 	struct iwm_priv *iwm = wiphy_to_iwm(wiphy);
-+@@ -4267,6 +4272,9 @@ static int cfg80211_rtw_set_txpower(struct wiphy *wiphy,
-+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
-+ 	struct wireless_dev *wdev,
-+ #endif
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
-++	int radio_idx,
-++#endif
-+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 36)) || defined(COMPAT_KERNEL_RELEASE)
-+ 	enum nl80211_tx_power_setting type, int mbm)
-+ #else
-+@@ -4328,6 +4336,9 @@ static int cfg80211_rtw_get_txpower(struct wiphy *wiphy,
-+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
-+ 	struct wireless_dev *wdev,
-+ #endif
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
-++	int radio_idx,
-++#endif
-+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 14, 0))
-+ 	unsigned int link_id,
-+ #endif
-+-- 
-+2.47.3
-+
+diff --git a/package/rtl8821au/rtl8821au.hash b/package/rtl8821au/rtl8821au.hash
+index 2796c50791..29b4d46f8e 100644
+--- a/package/rtl8821au/rtl8821au.hash
++++ b/package/rtl8821au/rtl8821au.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  d8d11753f88d670be7489fd1d5d30718543f4994ccc5031609f4408a5586ef3c  rtl8821au-4d39880a41201ddb14b19f2e7273054bb812b32e.tar.gz
++sha256  fe9840003e9481cf9fce3a5ed3f5b985615f862abc1b8d51fe6de7da9e4943c9  rtl8821au-dfe6801adb9b3a5572260ab308d3b69522992814.tar.gz
+ sha256  640d90f6ee401241ff62834d0d1b33f83049e99b8bfdfa04ed1b0a1635dde3e7  LICENSE
+diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
+index afd520b467..734b427019 100644
+--- a/package/rtl8821au/rtl8821au.mk
++++ b/package/rtl8821au/rtl8821au.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RTL8821AU_VERSION = 4d39880a41201ddb14b19f2e7273054bb812b32e
++RTL8821AU_VERSION = dfe6801adb9b3a5572260ab308d3b69522992814
+ RTL8821AU_SITE = $(call github,benetti-engineering,rtl8821au,$(RTL8821AU_VERSION))
+ RTL8821AU_LICENSE = GPL-2.0
+ RTL8821AU_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
