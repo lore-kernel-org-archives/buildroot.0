@@ -4,76 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62B14CCA470
-	for <buildroot@archiver.kernel.org>; Wed,  8 Oct 2025 16:23:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35D62CCD183
+	for <buildroot@archiver.kernel.org>; Wed,  8 Oct 2025 16:38:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A47D260ECC;
-	Wed,  8 Oct 2025 16:23:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6395160EA5;
+	Wed,  8 Oct 2025 16:38:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WOHblJZhUv82; Wed,  8 Oct 2025 16:23:41 +0000 (UTC)
+ id W8AGxhsDMhWr; Wed,  8 Oct 2025 16:38:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CFAA60EBC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB30E60E89
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5CFAA60EBC;
-	Wed,  8 Oct 2025 16:23:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 051E6119
- for <buildroot@buildroot.org>; Wed,  8 Oct 2025 16:23:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB30E60E89;
+	Wed,  8 Oct 2025 16:38:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id EDA5B226
+ for <buildroot@buildroot.org>; Wed,  8 Oct 2025 16:38:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 613AF40B5F
- for <buildroot@buildroot.org>; Wed,  8 Oct 2025 16:23:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DF5F440A24
+ for <buildroot@buildroot.org>; Wed,  8 Oct 2025 16:38:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id STfnzQbwmTLl for <buildroot@buildroot.org>;
- Wed,  8 Oct 2025 16:23:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.146;
- helo=smtpweb146.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lAplOV6agDwh for <buildroot@buildroot.org>;
+ Wed,  8 Oct 2025 16:38:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=kory.maincent@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1549C40B60
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1549C40B60
-Received: from smtpweb146.aruba.it (smtpweb146.aruba.it [62.149.158.146])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1549C40B60
- for <buildroot@buildroot.org>; Wed,  8 Oct 2025 16:23:32 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id 6WwrvyUuj3rWi6Wwsve6oE; Wed, 08 Oct 2025 18:23:30 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DD28640943
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD28640943
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DD28640943
+ for <buildroot@buildroot.org>; Wed,  8 Oct 2025 16:38:50 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id BFBFC4E40F8C
+ for <buildroot@buildroot.org>; Wed,  8 Oct 2025 16:38:47 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 80AE6606E5;
+ Wed,  8 Oct 2025 16:38:47 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id AC294102F21A8; 
+ Wed,  8 Oct 2025 18:38:45 +0200 (CEST)
 To: buildroot@buildroot.org
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Christian Stewart <christian@aperture.us>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed,  8 Oct 2025 18:23:28 +0200
-Message-ID: <20251008162328.3569687-5-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251008162328.3569687-1-giulio.benetti@benettiengineering.com>
-References: <20251008162328.3569687-1-giulio.benetti@benettiengineering.com>
+Cc: Kory Maincent <kory.maincent@bootlin.com>, thomas.petazzoni@bootlin.com,
+ Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Wed,  8 Oct 2025 16:38:32 +0000
+Message-ID: <20251008163833.6795-1-kory.maincent@bootlin.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfFlVDbbvg+bPFUlgXQ3mw7gBLxD3lCQhAeExq1/JVU5EUbAcwb5R73K9/jK/MJFpgKdESFuvva7mJ79xlcJz3lgfkJAXeKGqvfqY92zPflms45CkZBHN
- 9t2tYoBnnXCx38oJtrB60E1MTiNisaZnks+wttmPKQJ67YjG59QDALYqsaxR+tnvHgsFpR2BBpeapw/3f8xrIB83QRogGPepx6EtSqknOu/Pv8MK5rfG6mnA
- hyD1e6CNW/RdVMA9RRHWsq5vGTnPAJaD/DOvSWuCG8JCM3WGJ1NOx51GU+Ms9QuCHXsu22uNq9UtEjfatZdpFVxDzPbehHCgwWa5ItOT/Kc7HpAQ8TCcWdym
- 5kBD7jGR
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1759940610; bh=W15MUVQo72z4QYzX0MgklRglooBQ8uUs6upw/dzV4YA=;
- h=From:To:Subject:Date:MIME-Version;
- b=CRtFFRD40eekGZa+t17ny0dVkkDRvGAEYlNMryzChX/s+ZzdrWThPTu2QUae7x/Wq
- x3IFONiQ9oAKYzr0uFaCenIcWdHVaQx/DC64OVuYGziwRosZF8Z4h7TIKKcspD1faD
- nJjdd91/8VhXjaDBcXpSw+PvDQhbEVuNnAakY8DRrHGmnEs2JjF5IqvD2JJjZmn25O
- OgF9RxIrEIkBuRIf9EaIYy5lVkExxqUE7kxwvppzkM4jK77q0uQNsjrvp+7RJXgF+x
- exhl5jTywX8g47FzoK+iUyGBimsXwwheCQx/fTCOZ/UMYrnlds/OK+S47WNmiGh4kA
- FO6exiO76mr3A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1759941526; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=tNZGEzbKWJ0auvF4lkCpcAyoPPaCVuxe//e0YUZLA1c=;
+ b=ZUbS8yThZCoiiMynY/3aNDcg+xJFW9w9U0Xrs66o+/408A0aLfogEdZOCvoK6e40ZCZpb7
+ 1kFOFBMyA0k1Kq3vXvzQDX9VORXiFc5pKuum8bBAkFm7758SvikIoK/JU3lL0oHqZtrr6H
+ f9gKz9H/PqxnT+ZKUuogSBheeRThz3Z3X4peUYaHZLtfZoniZIc4oy+HMIdNxTOwjYO+mC
+ B60pHY2MGbK8iVVZTAVkDt6+eC7tbWO6WRDIEoiByqgHSADkPkXRSppDV8saldJMUHlGIT
+ 7gQmSnczEuFpNgd6PsKtSZu1Tw9P00P60NZ5AJ4GuLMEiiClqc6WafuglEklFg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=CRtFFRD4
-Subject: [Buildroot] [PATCH] package/rtl8821cu: fix build failure with Linux
- 6.17
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=ZUbS8yTh
+Subject: [Buildroot] [PATCH v2] package/murata-cyw-fw: Bump to last revision
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,152 +82,237 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Kory Maincent via buildroot <buildroot@buildroot.org>
+Reply-To: Kory Maincent <kory.maincent@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-* Bump to version 2025-09-10
-* Drop upstreamed local patch
-* Add local patch to fix build with Linux 6.17
+Bump to last revision and install the newly added CYW43439 firmware.
+The brcmfmac4339-sdio.1CK.txt file has been removed from the firmware
+therefore the Kconfig option has been removed.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+The firmware files prefix have been changed from brcmfmac to cyfmac
+therefore the rename helpers have change.
+
+Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
 ---
- .../0001-Fix-build-for-kernel-6.16.patch      | 34 -----------
- .../0001-Fix-build-for-kernel-6.17.patch      | 57 +++++++++++++++++++
- package/rtl8821cu/rtl8821cu.hash              |  2 +-
- package/rtl8821cu/rtl8821cu.mk                |  2 +-
- 4 files changed, 59 insertions(+), 36 deletions(-)
- delete mode 100644 package/rtl8821cu/0001-Fix-build-for-kernel-6.16.patch
- create mode 100644 package/rtl8821cu/0001-Fix-build-for-kernel-6.17.patch
 
-diff --git a/package/rtl8821cu/0001-Fix-build-for-kernel-6.16.patch b/package/rtl8821cu/0001-Fix-build-for-kernel-6.16.patch
-deleted file mode 100644
-index 311d4fcd4c..0000000000
---- a/package/rtl8821cu/0001-Fix-build-for-kernel-6.16.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 13f85e370c265b782a801cd22f86cea6f6cda876 Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Mon, 8 Sep 2025 21:04:30 +0200
--Subject: [PATCH] Fix build for kernel 6.16
--
--With commit:
--https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=41cb08555c4164996d67c78b3bf1c658075b75f1
--from_timer() has been renamed to timer_container_of() so let's rename
--according to linux version >= 6.16.
--
--Upstream: https://github.com/morrownr/8821cu-20210916/pull/187
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- include/osdep_service_linux.h | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/include/osdep_service_linux.h b/include/osdep_service_linux.h
--index ed1e19b..c25f6a2 100644
----- a/include/osdep_service_linux.h
--+++ b/include/osdep_service_linux.h
--@@ -210,6 +210,10 @@ typedef void	*thread_context;
-- typedef void timer_hdl_return;
-- typedef void *timer_hdl_context;
-- 
--+#if (LINUX_VERSION_CODE > KERNEL_VERSION(6, 16, 0))
--+#define from_timer     timer_container_of
--+#endif
--+
-- #if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 5, 41))
-- 	typedef struct work_struct _workitem;
-- #else
---- 
--2.43.0
--
-diff --git a/package/rtl8821cu/0001-Fix-build-for-kernel-6.17.patch b/package/rtl8821cu/0001-Fix-build-for-kernel-6.17.patch
-new file mode 100644
-index 0000000000..73e55564ce
---- /dev/null
-+++ b/package/rtl8821cu/0001-Fix-build-for-kernel-6.17.patch
-@@ -0,0 +1,57 @@
-+From 9ebb828281a04ca5f46b7913201e1f884bc39962 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 8 Oct 2025 18:11:07 +0200
-+Subject: [PATCH] Fix build for kernel 6.17
+Changes in v2:
+- Expand commit message.
+- Add legacy config.
+---
+ Config.in.legacy                         | 14 ++++
+ package/murata-cyw-fw/Config.in          | 20 ++----
+ package/murata-cyw-fw/murata-cyw-fw.hash |  6 +-
+ package/murata-cyw-fw/murata-cyw-fw.mk   | 85 ++++++++++++------------
+ 4 files changed, 65 insertions(+), 60 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 2c5b389dc8..3548646f61 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,20 @@ endif
+ 
+ comment "Legacy options removed in 2025.11"
+ 
++config BR2_PACKAGE_MURATA_CYW_FW_CYW4339_1CK
++	bool "This firmware has been removed"
++	select BR2_LEGACY
++	help
++	  This firmware has been removed from Murata package
 +
-+With commit:
-+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b74947b4f6ff7c122a1bb6eb38bb7ecfbb1d3820
-+set_wiphy_params() and set/get_tx_power() gain argument radio_idx to get
-+radio index. So let's add that argument according to linux version >=
-+6.17.
++config BR2_PACKAGE_MURATA_CYW_FW_CYW4339_ZP
++	bool "BR2_PACKAGE_MURATA_CYW_FW_CYW4339_ZP has been renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_MURATA_CYW_FW_CYW4339
++	help
++	  The option has been renamed to
++	  BR2_PACKAGE_MURATA_CYW_FW_CYW4339
 +
-+Upstream: https://github.com/morrownr/8821cu-20210916/pull/191
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ os_dep/linux/ioctl_cfg80211.c | 11 +++++++++++
-+ 1 file changed, 11 insertions(+)
+ config BR2_PACKAGE_LIBBSON
+ 	bool "libbson has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/murata-cyw-fw/Config.in b/package/murata-cyw-fw/Config.in
+index 7530477511..8a2795e806 100644
+--- a/package/murata-cyw-fw/Config.in
++++ b/package/murata-cyw-fw/Config.in
+@@ -25,20 +25,9 @@ config BR2_PACKAGE_MURATA_CYW_FW_CYW43362
+ 	  Murata Wireless CYW43362 (SN8000) module firmware files.
+ 
+ config BR2_PACKAGE_MURATA_CYW_FW_CYW4339
+-	bool "CYW4339 (1CK/ZP)"
++	bool "CYW4339 (ZP)"
+ 	help
+-	  Murata Wireless CYW4339 (1CK/ZP) module firmware files.
+-
+-choice
+-	prompt "CYW4339 module" if BR2_PACKAGE_MURATA_CYW_FW_CYW4339
+-
+-config BR2_PACKAGE_MURATA_CYW_FW_CYW4339_1CK
+-	bool "1CK"
+-
+-config BR2_PACKAGE_MURATA_CYW_FW_CYW4339_ZP
+-	bool "ZP"
+-
+-endchoice
++	  Murata Wireless CYW4339 (ZP) module firmware files.
+ 
+ config BR2_PACKAGE_MURATA_CYW_FW_CYW43430
+ 	bool "CYW43430/CYW4343W/CYW43364 (1DX/1FX/1LN)"
+@@ -60,6 +49,11 @@ config BR2_PACKAGE_MURATA_CYW_FW_CYW43430_1LN
+ 
+ endchoice
+ 
++config BR2_PACKAGE_MURATA_CYW_FW_CYW43439
++	bool "CYW43439 (1YN)"
++	help
++	  Murata Wireless CYW43439 (1YN) module firmware files.
 +
-+diff --git a/os_dep/linux/ioctl_cfg80211.c b/os_dep/linux/ioctl_cfg80211.c
-+index 7961df0..e8372b1 100644
-+--- a/os_dep/linux/ioctl_cfg80211.c
-++++ b/os_dep/linux/ioctl_cfg80211.c
-+@@ -3603,7 +3603,12 @@ static void cfg80211_rtw_abort_scan(struct wiphy *wiphy,
-+ }
-+ #endif
-+ 
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
-++static int cfg80211_rtw_set_wiphy_params(struct wiphy *wiphy, int radio_idx,
-++					 u32 changed)
-++#else
-+ static int cfg80211_rtw_set_wiphy_params(struct wiphy *wiphy, u32 changed)
-++#endif
-+ {
-+ #if 0
-+ 	struct iwm_priv *iwm = wiphy_to_iwm(wiphy);
-+@@ -4588,6 +4593,9 @@ static int cfg80211_rtw_set_txpower(struct wiphy *wiphy,
-+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
-+ 	struct wireless_dev *wdev,
-+ #endif
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
-++	int radio_idx,
-++#endif
-+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 36)) || defined(COMPAT_KERNEL_RELEASE)
-+ 	enum nl80211_tx_power_setting type, int mbm)
-+ #else
-+@@ -4650,6 +4658,9 @@ static int cfg80211_rtw_get_txpower(struct wiphy *wiphy,
-+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
-+ 	struct wireless_dev *wdev,
-+ #endif
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
-++	int radio_idx,
-++#endif
-+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 14, 0))
-+ 	unsigned int link_id,
-+ #endif
-+-- 
-+2.47.3
-+
-diff --git a/package/rtl8821cu/rtl8821cu.hash b/package/rtl8821cu/rtl8821cu.hash
-index e7418b4cd0..ad59dfedfd 100644
---- a/package/rtl8821cu/rtl8821cu.hash
-+++ b/package/rtl8821cu/rtl8821cu.hash
-@@ -1,3 +1,3 @@
+ config BR2_PACKAGE_MURATA_CYW_FW_CYW43455
+ 	bool "CYW43455 (1HK/1LC/1MW)"
+ 	help
+diff --git a/package/murata-cyw-fw/murata-cyw-fw.hash b/package/murata-cyw-fw/murata-cyw-fw.hash
+index d3c23dca71..cf199929a6 100644
+--- a/package/murata-cyw-fw/murata-cyw-fw.hash
++++ b/package/murata-cyw-fw/murata-cyw-fw.hash
+@@ -1,5 +1,5 @@
  # Locally calculated
--sha256  6b4bf57959d14ad1a2637a0385876c6fb319d6e4951986bbba18de3c0e65bb86  rtl8821cu-d74134a1c68f59f2b80cdd6c6afb8c1a8a687cbf.tar.gz
-+sha256  9ec641bb8005ac6f8fb7f5e941bf07496f0c78618c61bce084e66cb94544cff4  rtl8821cu-07fa9cf0fa8b0c08920c359c725dfc250e91422b.tar.gz
- sha256  22cdb0a9cf492dbf05c5b27381a5c0e73ae0d4622427b522b0ba92b7495e5fb0  LICENSE
-diff --git a/package/rtl8821cu/rtl8821cu.mk b/package/rtl8821cu/rtl8821cu.mk
-index ac53b65fda..9010ec389b 100644
---- a/package/rtl8821cu/rtl8821cu.mk
-+++ b/package/rtl8821cu/rtl8821cu.mk
-@@ -4,7 +4,7 @@
+-sha256  c3ecf357786d6db6f3283c0ea36ec067b1728f801fd8871694aed1502a82e9bc  murata-cyw-fw-8d87950bfad28c65926695b7357bd8995b60016a.tar.gz
+-sha256  03c140ae04f9c2036678262d6457b9c4b4a9ebb523c5e681af6d57b97c11da37  cyw-fmac-nvram-d27f1bf105fa1e5b828e355793b88d4b66188411.tar.gz
+-sha256  8f23ebb9a262112b62ace1e1bedcdeb00523d9a45e8d48a829d4ca35db4f0280  cyw-bt-patch-748462f0b02ec4aeb500bedd60780ac51c37be31.tar.gz
++sha256  2b71cb2a9376d3dda36185f2afff294322f6d1b60dd26c534b5fbeeb6155ea14  murata-cyw-fw-35459425949f0fa7de0b5c9f0c8bc0560087e1de.tar.gz
++sha256  59b6f9c117023226ea7e614265a71dc3ed4991774298609fd9f516a5581d3cba  cyw-fmac-nvram-fd6587f8183b612ea52404c7a73aeb2698099587.tar.gz
++sha256  d80f8a03095f0a63284bbc83e6b878d41f94d402c569a49a1a8c8105983d7d34  cyw-bt-patch-83f8e16423c47e195f52a06fd68ac92a20a80a9f.tar.gz
+ sha256  3a892759b73e8b459f1a750954b316118b0061fd9d1868d11fa258c104ee7e0c  LICENCE.cypress
+diff --git a/package/murata-cyw-fw/murata-cyw-fw.mk b/package/murata-cyw-fw/murata-cyw-fw.mk
+index b99168b875..e482629e49 100644
+--- a/package/murata-cyw-fw/murata-cyw-fw.mk
++++ b/package/murata-cyw-fw/murata-cyw-fw.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--RTL8821CU_VERSION = d74134a1c68f59f2b80cdd6c6afb8c1a8a687cbf
-+RTL8821CU_VERSION = 07fa9cf0fa8b0c08920c359c725dfc250e91422b
- RTL8821CU_SITE = $(call github,morrownr,8821cu-20210916,$(RTL8821CU_VERSION))
- RTL8821CU_LICENSE = GPL-2.0
- RTL8821CU_LICENSE_FILES = LICENSE
+-MURATA_CYW_FW_VERSION = 8d87950bfad28c65926695b7357bd8995b60016a
+-MURATA_CYW_FW_VERSION_NVRAM = d27f1bf105fa1e5b828e355793b88d4b66188411
+-MURATA_CYW_FW_VERSION_BT_PATCH = 748462f0b02ec4aeb500bedd60780ac51c37be31
++MURATA_CYW_FW_VERSION = 35459425949f0fa7de0b5c9f0c8bc0560087e1de
++MURATA_CYW_FW_VERSION_NVRAM = fd6587f8183b612ea52404c7a73aeb2698099587
++MURATA_CYW_FW_VERSION_BT_PATCH = 83f8e16423c47e195f52a06fd68ac92a20a80a9f
+ MURATA_CYW_FW_SITE = $(call github,murata-wireless,cyw-fmac-fw,$(MURATA_CYW_FW_VERSION))
+ MURATA_CYW_FW_EXTRA_DOWNLOADS = \
+ 	$(call github,murata-wireless,cyw-fmac-nvram,$(MURATA_CYW_FW_VERSION_NVRAM))/cyw-fmac-nvram-$(MURATA_CYW_FW_VERSION_NVRAM).tar.gz \
+@@ -24,69 +24,66 @@ endef
+ MURATA_CYW_FW_POST_EXTRACT_HOOKS += MURATA_CYW_FW_EXTRACT_NVRAM_PATCH
+ 
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43012) += \
+-	brcmfmac43012-sdio.bin \
+-	brcmfmac43012-sdio.1LV.clm_blob \
+-	brcmfmac43012-sdio.1LV.txt \
+-	CYW43012C0.1LV.hcd
++	cyfmac43012-sdio.bin \
++	cyfmac43012-sdio.1LV.clm_blob \
++	cyfmac43012-sdio.1LV.txt \
++	BCM43012C0_003.001.015.0303.0267.1LV.sAnt.hcd
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43340) += \
+-	brcmfmac43340-sdio.bin \
+-	brcmfmac43340-sdio.1BW.txt \
++	cyfmac43340-sdio.bin \
++	cyfmac43340-sdio.1BW.txt \
+ 	CYW43341B0.1BW.hcd
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43362) += \
+-	brcmfmac43362-sdio.bin \
+-	brcmfmac43362-sdio.SN8000.txt
++	cyfmac43362-sdio.bin
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW4339) += \
+-	brcmfmac4339-sdio.bin
+-MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW4339_1CK) += \
+-	brcmfmac4339-sdio.1CK.txt
+-MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW4339_ZP) += \
+-	brcmfmac4339-sdio.ZP.txt \
++	cyfmac4339-sdio.bin \
+ 	CYW4335C0.ZP.hcd
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43430) += \
+-	brcmfmac43430-sdio.bin
++	cyfmac43430-sdio.bin
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43430_1DX) += \
+-	brcmfmac43430-sdio.1DX.clm_blob \
+-	brcmfmac43430-sdio.1DX.txt \
+-	CYW43430A1.1DX.hcd
++	cyfmac43430-sdio.1DX.clm_blob \
++	cyfmac43430-sdio.1DX.txt \
++	BCM43430A1_001.002.009.0159.0528.1DX.hcd
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43430_1FX) += \
+-	brcmfmac43430-sdio.1FX.clm_blob \
+-	brcmfmac43430-sdio.1FX.txt
++	cyfmac43430-sdio.1FX.clm_blob \
++	cyfmac43430-sdio.1FX.txt
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43430_1LN) += \
+-	brcmfmac43430-sdio.1LN.clm_blob \
+-	brcmfmac43430-sdio.1LN.txt
++	cyfmac43430-sdio.1LN.clm_blob
++MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43439) += \
++	cyfmac43439-sdio.bin \
++	cyfmac43439-sdio.1YN.clm_blob \
++	cyfmac43439-sdio.1YN.txt \
++	CYW4343A2_001.003.016.0031.0000.1YN.hcd
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43455) += \
+-	brcmfmac43455-sdio.bin
++	cyfmac43455-sdio.bin
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43455_1HK) += \
+-	brcmfmac43455-sdio.1HK.clm_blob \
+-	brcmfmac43455-sdio.1HK.txt
++	cyfmac43455-sdio.1HK.clm_blob
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43455_1LC) += \
+-	brcmfmac43455-sdio.1LC.clm_blob \
+-	brcmfmac43455-sdio.1LC.txt
++	cyfmac43455-sdio.1LC.clm_blob \
++	cyfmac43455-sdio.1LC.txt
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43455_1MW) += \
+-	brcmfmac43455-sdio.1MW.clm_blob \
+-	brcmfmac43455-sdio.1MW.txt \
+-	CYW4345C0.1MW.hcd
++	cyfmac43455-sdio.1MW.clm_blob \
++	cyfmac43455-sdio.1MW.txt \
++	BCM4345C0_003.001.025.0187.0366.1MW.hcd
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW4354) += \
+-	brcmfmac4354-sdio.bin \
+-	brcmfmac4354-sdio.1BB.clm_blob \
+-	brcmfmac4354-sdio.1BB.txt \
++	cyfmac4354-sdio.bin \
++	cyfmac4354-sdio.1BB.clm_blob \
+ 	CYW4350C0.1BB.hcd
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW4356) += \
+-	brcmfmac4356-pcie.bin \
+-	brcmfmac4356-pcie.1CX.clm_blob \
+-	brcmfmac4356-pcie.1CX.txt \
+-	CYW4354A2.1CX.hcd
++	cyfmac4356-pcie.bin \
++	cyfmac4356-pcie.1CX.clm_blob \
++	BCM4356A2_001.003.015.0112.0410.1CX.hcd
+ MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW4359) += \
+-	brcmfmac4359-pcie.bin \
+-	brcmfmac4359-pcie.1FD.clm_blob
++	cyfmac4359-pcie.bin \
++	cyfmac4359-sdio.bin
+ 
+ # Helper that assumes filename with model has two dots (CHIP.MODEL.EXT),
+-# but filename without model has only single dot (CHIP.EXT).
+-murata-cyw-fw-strip-model = $(shell echo -n $(1) | sed 's/\..*\./\./')
++# or a underscore with several dots (CHIP_MODEL.MODEL.MODEL.EXT), but
++# filename without model has only single dot (CHIP.EXT).
++murata-cyw-fw-strip-model = $(shell echo -n $(1) | sed -e 's/\..*\./\./' -e 's/_.*\./\./')
+ 
+ # Helper that strips model name and renames Bluetooth patch files to the ones
+ # expected by Linux kernel.
+-murata-cyw-fw-file-rename = $(call murata-cyw-fw-strip-model,$(patsubst CYW%,BCM%,$(f)))
++murata-cyw-fw-file-rename = $(call murata-cyw-fw-strip-model,$(patsubst CYW%,BCM%,$(patsubst cy%,brcm%,$(f))))
+ 
+ define MURATA_CYW_FW_INSTALL_TARGET_CMDS
+ 	$(foreach f,$(MURATA_CYW_FW_FILES_y), \
 -- 
-2.47.3
+2.43.0
 
 _______________________________________________
 buildroot mailing list
