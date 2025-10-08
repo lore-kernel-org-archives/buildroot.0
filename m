@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9736FCCA470
-	for <buildroot@archiver.kernel.org>; Wed,  8 Oct 2025 20:27:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7114CCD187
+	for <buildroot@archiver.kernel.org>; Wed,  8 Oct 2025 20:27:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3DD2A821DD;
+	by smtp3.osuosl.org (Postfix) with ESMTP id B1DCC60FD8;
 	Wed,  8 Oct 2025 20:27:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pymOt0Fletzw; Wed,  8 Oct 2025 20:27:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eN5eAKbEX06q; Wed,  8 Oct 2025 20:27:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FA45821D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD73D60FC6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9FA45821D9;
-	Wed,  8 Oct 2025 20:27:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 01614D84
- for <buildroot@buildroot.org>; Wed,  8 Oct 2025 20:27:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD73D60FC6;
+	Wed,  8 Oct 2025 20:27:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D29979DA
+ for <buildroot@buildroot.org>; Wed,  8 Oct 2025 20:27:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D777740CCC
- for <buildroot@buildroot.org>; Wed,  8 Oct 2025 20:27:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 266FC404AC
+ for <buildroot@buildroot.org>; Wed,  8 Oct 2025 20:27:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BTe0MhN4ECP7 for <buildroot@buildroot.org>;
+ id GVwgrgqw4F7k for <buildroot@buildroot.org>;
  Wed,  8 Oct 2025 20:27:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37468404AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46E0E40CC4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 37468404AC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 46E0E40CC4
  for <buildroot@buildroot.org>; Wed,  8 Oct 2025 20:27:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 256D386B59; Wed,  8 Oct 2025 20:27:53 +0000 (UTC)
+ id 3799B86B5D; Wed,  8 Oct 2025 20:27:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 8 Oct 2025 22:16:14 +0200
+Date: Wed, 8 Oct 2025 22:16:24 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0449bef9a0a62ea0cea661e7d7d9f20c0a4e3df8
-X-Git-Newrev: 3fdce2464744ad1b8a85ee37b6ef830806d81157
+X-Git-Oldrev: baa05d88cfc9862e60b3f9284e8ff7eeeab54458
+X-Git-Newrev: e7e8bdd812edef20626d250f24d16601f6b994da
 X-Patchwork-Hint: ignore
-Message-Id: <20251008202753.256D386B59@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/audit/S02auditd: fix SELinux label
- issues
+Message-Id: <20251008202753.3799B86B5D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/audit: bump to version 3.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,49 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3fdce2464744ad1b8a85ee37b6ef830806d81157
+commit: https://git.buildroot.net/buildroot/commit/?id=e7e8bdd812edef20626d250f24d16601f6b994da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-"mkdir -Z" tries to create the directory with the default type context
-and does not accept any parameter, leading to mkdir creating a
-directory by the name of "system_u:object_r:auditd_log_t" (or failing
-to, with a read-only rootfs). Use "--context=" instead to specify the
-context.
-
-Letting start-stop-daemon create the auditd PID file leads to an
-incorrect label, with type "initrc_runtime_t" instead of
-"auditd_runtime_t", which would prevent auditd from writing or
-deleting it. Auditd manages its own PID file and daemonizes by
-default, so simply drop the --background and --make-pidfile options
-from start-stop-daemon.
+This is a bugfix release, the commit log mentions multiple fixed
+memory leaks.
 
 Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/audit/S02auditd | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/audit/audit.hash | 2 +-
+ package/audit/audit.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/audit/S02auditd b/package/audit/S02auditd
-index f32f01714e..97c43bc66f 100644
---- a/package/audit/S02auditd
-+++ b/package/audit/S02auditd
-@@ -18,13 +18,13 @@ start(){
- 	# the directory with SELinux permissions if possible
- 	if command -v selabel_lookup >/dev/null 2>&1; then
- 		audit_log_selable="$(selabel_lookup -b file -k /var/log/audit | cut -d ' ' -f 3)"
--		mkdir -p /var/log/audit -Z "${audit_log_selable}"
-+		mkdir -p --context="${audit_log_selable}" /var/log/audit
- 	else
- 		mkdir -p /var/log/audit
- 	fi
+diff --git a/package/audit/audit.hash b/package/audit/audit.hash
+index 5743b3a13a..557ccd1f80 100644
+--- a/package/audit/audit.hash
++++ b/package/audit/audit.hash
+@@ -1,4 +1,4 @@
+ #Locally computed
+-sha256  c0b1792d1f0a88c6f1828710509cbb987059fc68712c97669ca90eae103d287d  audit-3.1.2.tar.gz
++sha256  660213bac2baebabfc32be4d84a4aeb94effbd3e076b1014b78678b4502cf6ba  audit-3.1.5.tar.gz
+ sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+ sha256  f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa  COPYING.LIB
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index c703acc559..eb0b74b098 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--	start-stop-daemon --start --background --make-pidfile \
--		--pidfile "${PIDFILE}" --exec "/usr/sbin/${DAEMON}"
-+	start-stop-daemon --start --pidfile "${PIDFILE}" \
-+		--exec "/usr/sbin/${DAEMON}"
- 	status=$?
- 	if [ "${status}" -eq 0 ]; then
- 		# Load the default rules
+-AUDIT_VERSION = 3.1.2
++AUDIT_VERSION = 3.1.5
+ AUDIT_SITE = http://people.redhat.com/sgrubb/audit
+ AUDIT_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+ AUDIT_LICENSE_FILES = COPYING COPYING.LIB
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
