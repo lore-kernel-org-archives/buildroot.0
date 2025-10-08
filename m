@@ -1,74 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A35FCAC5BB
-	for <buildroot@archiver.kernel.org>; Wed,  8 Oct 2025 19:51:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 525BCCAC5BB
+	for <buildroot@archiver.kernel.org>; Wed,  8 Oct 2025 20:27:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 689A480DC4;
-	Wed,  8 Oct 2025 19:51:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DBB1960FC9;
+	Wed,  8 Oct 2025 20:27:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9uLVNtMhNZ48; Wed,  8 Oct 2025 19:51:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pLs49pxgIAWc; Wed,  8 Oct 2025 20:27:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A8DA81F1F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B28360FC0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A8DA81F1F;
-	Wed,  8 Oct 2025 19:51:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8FC10226
- for <buildroot@buildroot.org>; Wed,  8 Oct 2025 19:51:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B28360FC0;
+	Wed,  8 Oct 2025 20:27:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id ED399226
+ for <buildroot@buildroot.org>; Wed,  8 Oct 2025 20:27:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 81DA4402A9
- for <buildroot@buildroot.org>; Wed,  8 Oct 2025 19:51:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D37B660FC0
+ for <buildroot@buildroot.org>; Wed,  8 Oct 2025 20:27:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v8ETOhpOVkiM for <buildroot@buildroot.org>;
- Wed,  8 Oct 2025 19:51:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 37A8140C6A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37A8140C6A
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 37A8140C6A
- for <buildroot@buildroot.org>; Wed,  8 Oct 2025 19:51:21 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 0865619F5B2;
- Wed,  8 Oct 2025 21:51:18 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 08 Oct 2025 21:51:18 +0200
-MIME-Version: 1.0
-Date: Wed, 08 Oct 2025 21:51:18 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251008151448.20137-1-bernd@kuhls.net>
-References: <20251008151448.20137-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <d26751ef8a94dd0c9acebe8c054b4163@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1759953080;
- bh=pEFpglYToL+G8yAMsb8lOIPQ71YnmjjJ/Xf6aVWrNmg=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Ca2UCMvcDL/YomSWis1af6nFacNe7E6R5jsEHJUncf/HGKOCfSk7LkuZ+vVjjzF98
- 5BxmdbsZARHh0ADdUJQzep4sWLnT+PMRNVDoh7YtF89ogWoBzuOqdvDKCUgCD1J8oU
- pue03JAghMMraXJapWW//oD5pgNz09C5d54cWjiGUySEu41ypZCiKx54adzNZyo3kO
- 6XTOEZgTGCtnnJ2ZM1UxkE+pqbom4d8KFyHuRQus+rLMCxnsVSnGLpvB8yDMh0+56e
- eJUGIkj7DZYyoTANQMSgm9QbyIktgmSjgTwaiIx7oXKQyRivrK7wXcu7/Rot0y7UiG
- KgZ/qSp/GUT/Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Ca2UCMvc
-Subject: Re: [Buildroot] [PATCH 1/1] package/clamav: bump version to 1.5.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id e127zERqH0_r for <buildroot@buildroot.org>;
+ Wed,  8 Oct 2025 20:27:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32F5E60FBE
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 32F5E60FBE
+ for <buildroot@buildroot.org>; Wed,  8 Oct 2025 20:27:53 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2E55286B5C; Wed,  8 Oct 2025 20:27:53 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 8 Oct 2025 22:16:19 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3fdce2464744ad1b8a85ee37b6ef830806d81157
+X-Git-Newrev: baa05d88cfc9862e60b3f9284e8ff7eeeab54458
+X-Patchwork-Hint: ignore
+Message-Id: <20251008202753.2E55286B5C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/audit/S02auditd: fix path for
+ default rules
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,31 +60,38 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=baa05d88cfc9862e60b3f9284e8ff7eeeab54458
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thank you for the patch.
+/etc/audit/audit.rules is the path used by augenrules,
+/etc/audit/rules.d/ should be used for snippets to be combined into
+that file using augenrules.
 
-On 08/10/2025 17:14, Bernd Kuhls wrote:
-> Release notes: https://blog.clamav.net/2025/10/clamav-150-released.html
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/audit/S02auditd | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This new version introduces build failures. See:
-https://gitlab.com/jolivain/buildroot/-/pipelines/2088905409
-
-For reference, the current version v1.4.3 is building fine. See:
-https://gitlab.com/jolivain/buildroot/-/pipelines/2088936819
-
-Could you have a look please?
-
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-
-Best regards,
-
-Julien.
+diff --git a/package/audit/S02auditd b/package/audit/S02auditd
+index 97c43bc66f..a660ca921a 100644
+--- a/package/audit/S02auditd
++++ b/package/audit/S02auditd
+@@ -28,7 +28,7 @@ start(){
+ 	status=$?
+ 	if [ "${status}" -eq 0 ]; then
+ 		# Load the default rules
+-		test -f /etc/audit/rules.d/audit.rules && /usr/sbin/auditctl -R /etc/audit/rules.d/audit.rules >/dev/null
++		test -f /etc/audit/audit.rules && /usr/sbin/auditctl -R /etc/audit/audit.rules >/dev/null
+ 		echo "OK"
+ 	else
+ 		echo "FAIL"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
