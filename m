@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4F74CAC5BB
-	for <buildroot@archiver.kernel.org>; Wed,  8 Oct 2025 19:22:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F370ACAC5BB
+	for <buildroot@archiver.kernel.org>; Wed,  8 Oct 2025 19:40:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7900880D41;
-	Wed,  8 Oct 2025 19:22:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A683980B51;
+	Wed,  8 Oct 2025 19:40:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LZgaDszuvrmx; Wed,  8 Oct 2025 19:22:25 +0000 (UTC)
+ id SsvsyYdLL2B0; Wed,  8 Oct 2025 19:40:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2412F80D46
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D50D680B58
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2412F80D46;
-	Wed,  8 Oct 2025 19:22:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id F0D71226
- for <buildroot@buildroot.org>; Wed,  8 Oct 2025 19:22:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D50D680B58;
+	Wed,  8 Oct 2025 19:40:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C0278226
+ for <buildroot@buildroot.org>; Wed,  8 Oct 2025 19:40:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E2374403B8
- for <buildroot@buildroot.org>; Wed,  8 Oct 2025 19:22:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B212A409EC
+ for <buildroot@buildroot.org>; Wed,  8 Oct 2025 19:40:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4gazsjhyUMpz for <buildroot@buildroot.org>;
- Wed,  8 Oct 2025 19:22:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C326F40360
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C326F40360
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C326F40360
- for <buildroot@buildroot.org>; Wed,  8 Oct 2025 19:22:22 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 2C622780331;
- Wed,  8 Oct 2025 21:22:19 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 08 Oct 2025 21:22:19 +0200
-MIME-Version: 1.0
-Date: Wed, 08 Oct 2025 21:22:19 +0200
-To: Adrian Perez de Castro <aperez@igalia.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251006083326.889345-1-aperez@igalia.com>
-References: <20251006083326.889345-1-aperez@igalia.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <90e0faee5b156ddea22fbe215a9d41d8@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1759951340;
- bh=HloYTOpGSJMNRPplFROcM5W9IM2gvWueuR4AE9TVveo=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=R+MxHG3p5vaqPzalWlfH1z82xVcE5iczXdCVsNncYSD8dGXmS965WJIk2xDYLonbf
- KznLJ/BT7WNI70jVkY5LGYxBLEmKNe6vpnh2ykCAavuLJ9h3N1FlvRpSFwNH9B+7/9
- LngGpApzFkOtCOzO9iTpb6Vi+TY3QA6InURf7FC2KTqg6bETa6hPP4SnsE37T6vlul
- 1RkLcHSGJ6XPFTqCZLyTdwZNW29bkUq6nlfPWhU/ZwkQa2NJ5UeYP4wZO/V035F7Rf
- n9ao6XGtHhOjSbcHdTpfDkmevqAQnFdL6HRanryPblFLipPyoWz2G350iTU0sI16RN
- gGvMBpNTi2Evg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=R+MxHG3p
-Subject: Re: [Buildroot] [PATCH] package/libwpe: bump to version 1.16.3
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eyZ3QHRa-Sql for <buildroot@buildroot.org>;
+ Wed,  8 Oct 2025 19:40:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 05EDC40990
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 05EDC40990
+ for <buildroot@buildroot.org>; Wed,  8 Oct 2025 19:40:15 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 00D5786B27; Wed,  8 Oct 2025 19:40:14 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 8 Oct 2025 21:32:17 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a91c709867c3504c9f6919638bbfa49bf0be4671
+X-Git-Newrev: 039459ffaf64f500075cd672a9166308b54d6a6a
+X-Patchwork-Hint: ignore
+Message-Id: <20251008194015.00D5786B27@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gawk: bump to version 5.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,20 +59,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 06/10/2025 10:33, Adrian Perez de Castro wrote:
-> The main fix is being able to compile with CMake 4.x.
-> 
-> Release notes:
-> https://wpewebkit.org/release/libwpe-1.16.3.html
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=039459ffaf64f500075cd672a9166308b54d6a6a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Release notes:
+https://cgit.git.savannah.gnu.org/cgit/gawk.git/tree/ChangeLog?h=gawk-5.3.2
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/gawk/gawk.hash | 4 ++--
+ package/gawk/gawk.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/gawk/gawk.hash b/package/gawk/gawk.hash
+index b029ab330d..b658359257 100644
+--- a/package/gawk/gawk.hash
++++ b/package/gawk/gawk.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/gawk/gawk-5.3.1.tar.xz.sig
++# https://ftp.gnu.org/gnu/gawk/gawk-5.3.2.tar.xz.sig
+ # Primary key fingerprint: D196 7C63 7887 1317 7D86  1ED7 DF59 7815 937E C0D2
+-sha256  694db764812a6236423d4ff40ceb7b6c4c441301b72ad502bb5c27e00cd56f78  gawk-5.3.1.tar.xz
++sha256  f8c3486509de705192138b00ef2c00bbbdd0e84c30d5c07d23fc73a9dc4cc9cc  gawk-5.3.2.tar.xz
+ # Locally calculated
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
+index fbb620be7d..40b0672da2 100644
+--- a/package/gawk/gawk.mk
++++ b/package/gawk/gawk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GAWK_VERSION = 5.3.1
++GAWK_VERSION = 5.3.2
+ GAWK_SOURCE = gawk-$(GAWK_VERSION).tar.xz
+ GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
+ GAWK_DEPENDENCIES = host-gawk
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
