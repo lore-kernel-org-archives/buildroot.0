@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE498CCA470
-	for <buildroot@archiver.kernel.org>; Wed,  8 Oct 2025 19:46:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AE78CCA470
+	for <buildroot@archiver.kernel.org>; Wed,  8 Oct 2025 19:46:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8CC77402F8;
-	Wed,  8 Oct 2025 19:46:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6958681ECC;
+	Wed,  8 Oct 2025 19:46:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zBMVGKXMLIiS; Wed,  8 Oct 2025 19:46:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dDV8YCl--KyH; Wed,  8 Oct 2025 19:46:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45A2E402B2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82CCA81ECD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 45A2E402B2;
-	Wed,  8 Oct 2025 19:46:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 82CCA81ECD;
+	Wed,  8 Oct 2025 19:46:30 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5E5359DA
- for <buildroot@buildroot.org>; Wed,  8 Oct 2025 19:46:08 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0ADD89DA
+ for <buildroot@buildroot.org>; Wed,  8 Oct 2025 19:46:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 50375402B2
- for <buildroot@buildroot.org>; Wed,  8 Oct 2025 19:46:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F066E404C1
+ for <buildroot@buildroot.org>; Wed,  8 Oct 2025 19:46:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rv96yMFamF5Y for <buildroot@buildroot.org>;
- Wed,  8 Oct 2025 19:46:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95C244024E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 95C244024E
- for <buildroot@buildroot.org>; Wed,  8 Oct 2025 19:46:07 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 838D786B34; Wed,  8 Oct 2025 19:46:07 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 8 Oct 2025 21:41:00 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 039459ffaf64f500075cd672a9166308b54d6a6a
-X-Git-Newrev: 0449bef9a0a62ea0cea661e7d7d9f20c0a4e3df8
-X-Patchwork-Hint: ignore
-Message-Id: <20251008194607.838D786B34@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fscryptctl: bump to version 1.2.0
+ id gRUEBc7FXAb9 for <buildroot@buildroot.org>;
+ Wed,  8 Oct 2025 19:46:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2EC22402F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EC22402F8
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2EC22402F8
+ for <buildroot@buildroot.org>; Wed,  8 Oct 2025 19:46:27 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 4331C2003A4;
+ Wed,  8 Oct 2025 21:46:24 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 08 Oct 2025 21:46:24 +0200
+MIME-Version: 1.0
+Date: Wed, 08 Oct 2025 21:46:24 +0200
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: buildroot@buildroot.org, linux-amarula@amarulasolutions.com
+In-Reply-To: <20251008191547.2160689-1-dario.binacchi@amarulasolutions.com>
+References: <20251008191547.2160689-1-dario.binacchi@amarulasolutions.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <6fcdc2e00a22f66001308d65378ffe2a@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1759952786;
+ bh=llyfbB2sKaBDxbQiMKZKbsCXLkJZrzqWbMd4XigI9+4=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=afkWTqdOGSMwad5iuxhhtLALWmy0gCHlbPitb6a6fDoQAG+WcFiJcP18d+0u/OHgB
+ PuBNoXPrPpcFhDLLil6cpdoYTGfv/0rFp/EIxQGFsz/lbQ9Q975iDp9/dPDf07fmxl
+ IoK9Y12rVG4JKXEusfiZtA78CndF29+q2GUDo2CJTsnnXMc0ych1CAWBkVdgQ5zL73
+ 0BAmiWMkGhYCWEzEfwp8uen3Ksin/oqrjDg33vxxwBZVvgi45HUu60F0LiQN9j5nmE
+ TtmXIQaGlL2b3Q2szixthULUaFZSAI74v0ZUY+sTjObyY0eNt3UWjCgPBXB9LcJUwm
+ F3R6uUN0KZkrg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=afkWTqdO
+Subject: Re: [Buildroot] [PATCH 1/1] package/fscryptctl: bump to version
+ 1.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,48 +83,19 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0449bef9a0a62ea0cea661e7d7d9f20c0a4e3df8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 08/10/2025 21:15, Dario Binacchi wrote:
+> Release notes:
+> https://github.com/google/fscryptctl/blob/master/NEWS.md#version-110
+> https://github.com/google/fscryptctl/blob/master/NEWS.md#version-120
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-Release notes since v1.0.0:
-https://github.com/google/fscryptctl/blob/v1.2.0/NEWS.md#version-120
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-[Julien: use tag in release notes URL]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/fscryptctl/fscryptctl.hash | 2 +-
- package/fscryptctl/fscryptctl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/fscryptctl/fscryptctl.hash b/package/fscryptctl/fscryptctl.hash
-index 0dcca6893e..fb6cc27326 100644
---- a/package/fscryptctl/fscryptctl.hash
-+++ b/package/fscryptctl/fscryptctl.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  3828d5ad9b93664b9fec0174fc5d8e96d7b021a7896da74efe18fabe5f01d638  fscryptctl-1.0.0.tar.gz
-+sha256  192e25733006b05592fd87038a3a51a014db22f462ce0b24d47c30e66d03ea2c  fscryptctl-1.2.0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/fscryptctl/fscryptctl.mk b/package/fscryptctl/fscryptctl.mk
-index 0546f67a1f..d235bf4540 100644
---- a/package/fscryptctl/fscryptctl.mk
-+++ b/package/fscryptctl/fscryptctl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FSCRYPTCTL_VERSION = 1.0.0
-+FSCRYPTCTL_VERSION = 1.2.0
- FSCRYPTCTL_SITE = $(call github,google,fscryptctl,v$(FSCRYPTCTL_VERSION))
- FSCRYPTCTL_LICENSE = Apache-2.0
- FSCRYPTCTL_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
