@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0254ECCA470
-	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 10:16:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADE9BCCD187
+	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 10:16:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CBD0261215;
-	Thu,  9 Oct 2025 10:16:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AEFB4611EE;
+	Thu,  9 Oct 2025 10:16:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ia1F5y7d4xJv; Thu,  9 Oct 2025 10:16:02 +0000 (UTC)
+ id IFsVbZcKJzKU; Thu,  9 Oct 2025 10:16:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DAA73611EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 030BA61217
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DAA73611EE;
-	Thu,  9 Oct 2025 10:16:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0853F21B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 030BA61217;
+	Thu,  9 Oct 2025 10:16:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1FE1221B
  for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:16:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 050396120F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 11EA340FAC
  for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:16:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fzUxXjgVK77u for <buildroot@buildroot.org>;
- Thu,  9 Oct 2025 10:16:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m0QjzyHoMex8 for <buildroot@buildroot.org>;
+ Thu,  9 Oct 2025 10:15:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10FA260FAA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CFEC240D61
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 10FA260FAA
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:16:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CFEC240D61
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:15:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0134F86E18; Thu,  9 Oct 2025 10:16:00 +0000 (UTC)
+ id CABC086E15; Thu,  9 Oct 2025 10:15:59 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 9 Oct 2025 08:31:15 +0200
+Date: Thu, 9 Oct 2025 08:27:27 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: dd1e3183df79669c10b9e720e6068de7b4b3e278
-X-Git-Newrev: 9f193731785830b967fd931a7a5f63b04d0b46ad
+X-Git-Oldrev: bdc7a67cac095e59cfd07cf9484746df58e54b26
+X-Git-Newrev: e7ae62f74791e8020bf625638c9adfc26ddf1ad8
 X-Patchwork-Hint: ignore
-Message-Id: <20251009101600.0134F86E18@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/expat: security
- bump to version 2.7.2
+Message-Id: <20251009101559.CABC086E15@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] DEVELOPERS: add Dario
+ Binacchi for empty
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,48 +66,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f193731785830b967fd931a7a5f63b04d0b46ad
+commit: https://git.buildroot.net/buildroot/commit/?id=e7ae62f74791e8020bf625638c9adfc26ddf1ad8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
-
-This bump includes the security fix for CVE-2025-59375.
-
-Release notes:
-https://github.com/libexpat/libexpat/blob/R_2_7_2/expat/Changes
-
-Fixes:
-https://www.cve.org/CVERecord?id=CVE-2025-59375
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 130b35ddcf6370d73081eaf9fa49aeb576074552)
+(cherry picked from commit 49974951907e9d115e556043efeae1334fddf90f)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/expat/expat.hash | 2 +-
- package/expat/expat.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index 87bbf86e1a..2346efbde5 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  354552544b8f99012e5062f7d570ec77f14b412a3ff5c7d8d0dae62c0d217c30  expat-2.7.1.tar.xz
-+sha256  21b778b34ec837c2ac285aef340f9fb5fa063a811b21ea4d2412a9702c88995c  expat-2.7.2.tar.xz
- sha256  31b15de82aa19a845156169a17a5488bf597e561b2c318d159ed583139b25e87  COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index 51b45b01bb..02dda3b12c 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXPAT_VERSION = 2.7.1
-+EXPAT_VERSION = 2.7.2
- EXPAT_SITE = https://github.com/libexpat/libexpat/releases/download/R_$(subst .,_,$(EXPAT_VERSION))
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
- EXPAT_INSTALL_STAGING = YES
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 79cf831eb9..13328c7474 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -788,6 +788,7 @@ F:	package/babeld/
+ F:	package/bc/
+ F:	package/cmocka/
+ F:	package/connman/
++F:	package/empty/
+ F:	package/iana-assignments/
+ F:	package/inih/
+ F:	package/sscep/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
