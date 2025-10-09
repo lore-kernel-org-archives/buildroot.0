@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EB43CCA470
-	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 09:56:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAB86CCD188
+	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 09:56:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 331D661288;
-	Thu,  9 Oct 2025 09:56:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF6A761311;
+	Thu,  9 Oct 2025 09:56:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y0l-4CaGvlMi; Thu,  9 Oct 2025 09:56:39 +0000 (UTC)
+ id eHN3GpjsU8i5; Thu,  9 Oct 2025 09:56:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F6AC612CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAB56611D1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F6AC612CE;
-	Thu,  9 Oct 2025 09:56:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AAB56611D1;
+	Thu,  9 Oct 2025 09:56:22 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A1254119
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 09:55:54 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 90F18119
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 09:55:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 40D2B40FBF
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 09:55:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EF15240FBB
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 09:55:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id twe9DAB90PcH for <buildroot@buildroot.org>;
- Thu,  9 Oct 2025 09:55:40 +0000 (UTC)
+ id ddgsWiHAefdW for <buildroot@buildroot.org>;
+ Thu,  9 Oct 2025 09:55:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04F1A40FA1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B04540FBF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 04F1A40FA1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6B04540FBF
  for <buildroot@buildroot.org>; Thu,  9 Oct 2025 09:55:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0302F86C36; Thu,  9 Oct 2025 09:55:40 +0000 (UTC)
+ id 6912A86C36; Thu,  9 Oct 2025 09:55:40 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 9 Oct 2025 08:32:22 +0200
+Date: Thu, 9 Oct 2025 08:44:50 +0200
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: 3755e9b68012d69ae4d24b3ff63d9c0c97cf26eb
-X-Git-Newrev: 1e6729bfbc12fdc278e6c8a74d42487a3c27dd71
+X-Git-Oldrev: 10b7de36b2843f8d9476bbe72b1aaa7b8a15bb08
+X-Git-Newrev: 84f762ef070072caf0af729d64a15cc39d29a5d4
 X-Patchwork-Hint: ignore
-Message-Id: <20251009095540.0302F86C36@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/ghostscript:
- security bump to v10.06.0
+Message-Id: <20251009095540.6912A86C36@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/ruby: update to
+ 3.4.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,190 +66,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e6729bfbc12fdc278e6c8a74d42487a3c27dd71
+commit: https://git.buildroot.net/buildroot/commit/?id=84f762ef070072caf0af729d64a15cc39d29a5d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-For release note, see:
-https://ghostscript.readthedocs.io/en/gs10.06.0/News.html
+See here for changes:
+https://github.com/ruby/ruby/releases/tag/v3_4_4
+https://github.com/ruby/ruby/releases/tag/v3_4_5
+https://github.com/ruby/ruby/releases/tag/v3_4_6
 
-This fixes the following vulnerabilities:
-- CVE-2025-59798:
-    Artifex Ghostscript through 10.05.1 has a stack-based buffer overflow
-    in pdf_write_cmap in devices/vector/gdevpdtw.c.
-    https://www.cve.org/CVERecord?id=CVE-2025-59798
-
-- CVE-2025-59799:
-    Artifex Ghostscript through 10.05.1 has a stack-based buffer overflow
-    in pdfmark_coerce_dest in devices/vector/gdevpdfm.c via a large size
-    value.
-    https://www.cve.org/CVERecord?id=CVE-2025-59799
-
-- CVE-2025-59800:
-    In Artifex Ghostscript through 10.05.1, ocr_begin_page in
-    devices/gdevpdfocr.c has an integer overflow that leads to a heap-
-    based buffer overflow in ocr_line8.
-    https://www.cve.org/CVERecord?id=CVE-2025-59800
-
-- CVE-2025-59801:
-    In Artifex GhostXPS before 10.06.0, there is a stack-based buffer
-    overflow in xps_unpredict_tiff in xpstiff.c because the
-    samplesperpixel value is not checked.
-    https://www.cve.org/CVERecord?id=CVE-2025-59801
-
-Also remove patch that is now applied upstream, and add new patch from
-upstream to fix a compilation issue on 32bits platforms
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-[Julien:
- - add link to release note in commit log
- - fix URL in hash file comment
-]
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 6f984089c0ff103fca50617c9fa033eaadf61e51)
+(cherry picked from commit 38d49568da243b11620a58cb55420a9746653eef)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/ghostscript/0001-Fix-32-bit-build.patch    | 63 ++++++++++++++++++++++
- ...0001-Fix-compatibility-with-C23-compilers.patch | 36 -------------
- package/ghostscript/ghostscript.hash               |  4 +-
- package/ghostscript/ghostscript.mk                 |  2 +-
- 4 files changed, 66 insertions(+), 39 deletions(-)
+ package/ruby/ruby.hash | 4 ++--
+ package/ruby/ruby.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ghostscript/0001-Fix-32-bit-build.patch b/package/ghostscript/0001-Fix-32-bit-build.patch
-new file mode 100644
-index 0000000000..648e235d3b
---- /dev/null
-+++ b/package/ghostscript/0001-Fix-32-bit-build.patch
-@@ -0,0 +1,63 @@
-+From 3c0be6e4fcffa63e4a5a1b0aec057cebc4d2562f Mon Sep 17 00:00:00 2001
-+From: Ken Sharp <Ken.Sharp@artifex.com>
-+Date: Wed, 10 Sep 2025 08:55:30 +0100
-+Subject: [PATCH] Fix 32-bit build
-+
-+Bug #708824 "ghostscript 10.06.0 compilation failure on 32-bit archs"
-+
-+nbytes shiouldn't be an intptr_t, it doesn't get used for pointer
-+arithmetic. Previously it was a uint, should be a int64_t, to fit with
-+all the other devices.
-+
-+Checked other warnings, and found a (very minor) one in gdevdbit.c, fix
-+that while we're here (signed/unsigned mismatch, we don't really care).
-+
-+Upstream: https://github.com/ArtifexSoftware/ghostpdl/commit/3c0be6e4fcffa63e4a5a1b0aec057cebc4d2562f
-+
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ base/gdevdbit.c | 2 +-
-+ base/gdevmpla.c | 6 +++---
-+ 2 files changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/base/gdevdbit.c b/base/gdevdbit.c
-+index e07cc3f3b8..1b5c69325b 100644
-+--- a/base/gdevdbit.c
-++++ b/base/gdevdbit.c
-+@@ -191,7 +191,7 @@ gx_default_copy_alpha_hl_color(gx_device * dev, const byte * data, int data_x,
-+     fit_copy(dev, data, data_x, raster, id, x, y, width, height);
-+     row_alpha = data;
-+     out_raster = bitmap_raster(width * (size_t)byte_depth);
-+-    if (check_64bit_multiply(out_raster, ncomps, &product) != 0)
-++    if (check_64bit_multiply(out_raster, ncomps, (int64_t *) &product) != 0)
-+         return gs_note_error(gs_error_undefinedresult);
-+     gb_buff = gs_alloc_bytes(mem, product, "copy_alpha_hl_color(gb_buff)");
-+     if (gb_buff == 0) {
-+diff --git a/base/gdevmpla.c b/base/gdevmpla.c
-+index 2f0d522561..ffc5ff42e6 100644
-+--- a/base/gdevmpla.c
-++++ b/base/gdevmpla.c
-+@@ -1954,12 +1954,12 @@ mem_planar_strip_copy_rop2(gx_device * dev,
-+         int i;
-+         int j;
-+         intptr_t chunky_sraster;
-+-        intptr_t nbytes;
-++        int64_t nbytes;
-+         byte **line_ptrs;
-+         byte *sbuf, *buf;
-+ 
-+         chunky_sraster = sraster * (intptr_t)mdev->num_planar_planes;
-+-        if (check_64bit_multiply(height, chunky_sraster, (size_t *)&nbytes) != 0)
-++        if (check_64bit_multiply(height, chunky_sraster, &nbytes) != 0)
-+             return gs_note_error(gs_error_undefinedresult);
-+         buf = gs_alloc_bytes(mdev->memory, nbytes, "mem_planar_strip_copy_rop(buf)");
-+         if (buf == NULL) {
-+@@ -2003,7 +2003,7 @@ mem_planar_strip_copy_rop2(gx_device * dev,
-+         intptr_t i;
-+         intptr_t chunky_t_raster;
-+         int chunky_t_height;
-+-        intptr_t nbytes;
-++        int64_t nbytes;
-+         byte **line_ptrs;
-+         byte *tbuf, *buf;
-+         gx_strip_bitmap newtex;
-diff --git a/package/ghostscript/0001-Fix-compatibility-with-C23-compilers.patch b/package/ghostscript/0001-Fix-compatibility-with-C23-compilers.patch
-deleted file mode 100644
-index 0dfca9cfa2..0000000000
---- a/package/ghostscript/0001-Fix-compatibility-with-C23-compilers.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From ae940946473ceb8c5353bc6e7f04673c6e60502d Mon Sep 17 00:00:00 2001
--From: Alex Cherepanov <alex@coscript.biz>
--Date: Thu, 3 Apr 2025 17:19:41 +0100
--Subject: Bug 708160: Fix compatibility with C23 compilers
--
--Upstream: https://cgit.ghostscript.com/cgi-bin/cgit.cgi/ghostpdl.git/commit/?id=ae940946473ceb8c5353bc6e7f04673c6e60502d
--[thomas: Only backport the bool typedef condition]
--Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-----
-- base/stdpre.h              |  6 ++++--
-- 1 files changed, 4 insertions(+), 2 deletions(-)
--
--diff --git a/base/stdpre.h b/base/stdpre.h
--index dda30b6a4..2f9c84e0d 100644
----- a/base/stdpre.h
--+++ b/base/stdpre.h
--@@ -1,4 +1,4 @@
---/* Copyright (C) 2001-2023 Artifex Software, Inc.
--+/* Copyright (C) 2001-2025 Artifex Software, Inc.
--    All Rights Reserved.
--
--    This software is provided AS-IS with no warranty, either express or
--@@ -341,7 +341,9 @@ typedef signed char schar;
--  * and the MetroWerks C++ compiler insists that bool be equivalent to
--  * unsigned char.
--  */
---#ifndef __cplusplus
--+
--+/* C23 has bool as a builtin type. */
--+#if !defined(__cplusplus) && (!defined(__STDC_VERSION__) || __STDC_VERSION__ < 202311L)
-- #ifdef __BEOS__
-- typedef unsigned char bool;
-- #else
----
--cgit v1.2.3
--
-diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
-index c434ac1f3a..e50113ecfe 100644
---- a/package/ghostscript/ghostscript.hash
-+++ b/package/ghostscript/ghostscript.hash
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index ec17b092a4..90faed4c32 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
 @@ -1,5 +1,5 @@
--# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10051/SHA512SUMS
--sha512  1a3f2b0f53db9a00a245df19ce8fdce0fbccc6fad47b64d14fc9058b494ab07c77e21bb073df8d4a2522b3ccb0df26735f8224a9e36c07367031ed2262fb26af  ghostscript-10.05.1.tar.xz
-+# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10060/SHA512SUMS
-+sha512  e9efa6a334cf34703f565f5043dd794452270415b34c2bea260e9dac6c72ebbcbedfa2e4cb9029841f8f582bbce91be8160e135a190081f3262bcf04417f80f1  ghostscript-10.06.0.tar.xz
+-# https://www.ruby-lang.org/en/news/2025/04/14/ruby-3-4-3-released/
+-sha512  b30aad675cdcc1bdfe9e5fffe9d1925db3b3ac854a5e34180c368bc6e66f73e29ba5d802fea249353b7d799c01384c58bdd763fd1b679303158baa7824b9c08e  ruby-3.4.3.tar.xz
++# https://www.ruby-lang.org/en/news/2025/09/16/ruby-3-4-6-released/
++sha512  29000b3396ab95fc2dc13d2d78441ff5c34258e5421115181c54b1b4d55d5c0d4f3d0c3cec6b32b9a1bb8de5c51b383fcad4369ec3fb244fd0ce182afbe79ba4  ruby-3.4.6.tar.xz
  
- # Hash for license file:
- sha256  8ce064f423b7c24a011b6ebf9431b8bf9861a5255e47c84bfb23fc526d030a8b  LICENSE
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index c9d13f5545..1fc850ad20 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -4,7 +4,7 @@
- #
+ # License files, Locally calculated
+ sha256  a2021e52d5d6adf7e3f45aab9d2b860ce03cdf6153776853e11d5668193eecfd  LEGAL
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index b06a728799..ffe42968b5 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--GHOSTSCRIPT_VERSION = 10.05.1
-+GHOSTSCRIPT_VERSION = 10.06.0
- GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
- GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
- GHOSTSCRIPT_LICENSE = AGPL-3.0
+ RUBY_VERSION_MAJOR = 3.4
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).3
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).6
+ RUBY_VERSION_EXT = 3.4.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
