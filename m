@@ -1,105 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 178C2CCD184
-	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 14:55:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BDEACCD185
+	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 14:55:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DAF9C60AE5;
-	Thu,  9 Oct 2025 14:55:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 52E934102A;
+	Thu,  9 Oct 2025 14:55:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vt368vBQyNxt; Thu,  9 Oct 2025 14:55:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OpUocnsIJrHI; Thu,  9 Oct 2025 14:55:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DD1560E56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 635144105D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0DD1560E56;
-	Thu,  9 Oct 2025 14:55:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 635144105D;
+	Thu,  9 Oct 2025 14:55:48 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 10C4F21B
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 14:55:46 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 267BC119
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 14:55:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 02D3C4113B
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 14:55:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D51840F28
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 14:55:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2s4UPmr5Uwlz for <buildroot@buildroot.org>;
- Thu,  9 Oct 2025 14:55:45 +0000 (UTC)
+ id Qyp6vTM24Y_6 for <buildroot@buildroot.org>;
+ Thu,  9 Oct 2025 14:55:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E7A5B4049F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7A5B4049F
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E7A5B4049F
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 14:55:44 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-46e6674caa5so6306245e9.0
- for <buildroot@buildroot.org>; Thu, 09 Oct 2025 07:55:44 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E0790410F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0790410F7
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E0790410F7
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 14:55:45 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-46e42deffa8so10158455e9.0
+ for <buildroot@buildroot.org>; Thu, 09 Oct 2025 07:55:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1760021743; x=1760626543;
+ d=1e100.net; s=20230601; t=1760021744; x=1760626544;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=8Mw1XEIxtpRKDDJ2kUFME4y+1vUKP3cRIlm5SJKKqLw=;
- b=f+zEf45Ofi8eeTkJaSVKcZv8MiMatU4+TTMkBvITAT9vKWXdpJkgvsCN3gdzxpwYdZ
- 66P0xOYwUpy5d8wBDld5FGwHXJMRUde5RTQVunGQGjex/LHxF+fRx53prxCht3IPvdA2
- cNHlnMcJ6DVy2gp/tixvT1oDpirtgceTVsT9xR4IyEXUIGU9pt++PwIqkOrCnW15sCOT
- Z/z2M5x6h679DbNNmHzgYMLHBIW6lG0XOTShGgNpcx6ETsNDZT/QOv4qBR0bAzdj46FD
- 34e383rpNjtw3FCWNxyFX01ZFdsPjZzz1wG51nwQx0hcUAUFOW7yYlPYeOjdLv129gPb
- sb2Q==
+ bh=gET5mRRI9rlqBby0GBh3fG61VcxTImvcSMom3HSsUqU=;
+ b=WLTsoFjC7l+0lHDcDPoUtfMQ7yyJIeFXk2C3PoALzFssJ1T6P9Sl36WnPf35QbTU1Y
+ 4E//LW+xbG8Ny/BYq8lVxWZlx/ulli4aVp5zXLyz84p/7ZiX678XRm4kTtd0XmmuudcQ
+ ct+nf+ohftWZURpt+s1XaH924G2iYAAMAiROisxzbnKhNge8QcNk/MHXnT8ZUimdxGTp
+ Vx8b3FBZw8VbNmeyFK6dTfm50Y+EhZGSOkd+5vU9ESgDa2/Jyem+xmd0j8BxmTS6fcXC
+ 6U48EjGsYlXAhxyac4PiqmEc9MPNkzSesrAylTkrm3urf7RZAyuWSjm4i6/ZqW4J41Aa
+ VoXA==
 X-Forwarded-Encrypted: i=1;
- AJvYcCXRs7PsSfXk7J+FrRHEcMMIMPqm1Kk5suebCAv+z8NZ4XWZlBVXch99n6U9EosouC65EG1Z6L8xQYM=@buildroot.org
-X-Gm-Message-State: AOJu0YyncIbbuTSo7TsfOS2WEHb/jGAPppVVwHtsCYA8bTUVJlPj0CQv
- cYc33uFts89oQIupa8LepnhBh+AS+wKZFy77U0HiosmsWpOwmpcfwGGnHxXD5D+3wcE=
-X-Gm-Gg: ASbGncuR0TytCVZkVfFF2YOj+thXcL3z6XZHQdsRFpVrYWCdpSCcjocuCJXfBMHdtCx
- wjJFF5Lo809LL9cGMW/iRCbrHH1clrcjZ8aibMPlQwm5KNKBSLsvDAFa75PNEpLTeNRKVZxEkub
- VtDRhSVZtGqCkNfayjyzjyblJq34Pc/zLDETzAJcqP/dDBvdPZd95BctUiDQIV/dRyOJ1owYErv
- VHBTf0zc5OjXLEi9bE4sX7AHiJfIMOhzP7eqt5D8MWFlqdbbqWCVsR5/nJFNvW122ttSv7fNFEd
- jVKIdAUIgRf9u25694u81E2wrEaoHJWa3etfcTF2m3R8JGrgSvhbXd65FU0pXMg70wzhtgnqDkv
- v27B/VhmNmQGt/5flChozi+r2lir6if4PAJAE3lYzPZy2HWL656nittaA7sjngQ==
-X-Google-Smtp-Source: AGHT+IE3gbb+LPqisPxq8TQyF3KgnV74jGDgiHLFzrqANb0hU2bE0MEmJ3T481V67V0lqkAowtu9bg==
-X-Received: by 2002:a05:600c:3543:b0:458:b8b0:6338 with SMTP id
- 5b1f17b1804b1-46fa9e98805mr59397275e9.6.1760021742894; 
- Thu, 09 Oct 2025 07:55:42 -0700 (PDT)
+ AJvYcCVuidcSsAWXd/LC0iL9A891CcVj9PDuNj6SMwDGvpGi4NvJxZwmJwGzSL5bcq/glMNVHm4T94WhEzk=@buildroot.org
+X-Gm-Message-State: AOJu0YyDUq9BBeyBAURo5aHaMNAOQsUFWDVMF+DBFUwcmoleXV2uaMm8
+ 5H10cpY3mN/P76lWiArJZHOaRrYKuNAiHo6bWNqStJgirYnOf0bWZZ09s543N8Np6Fk=
+X-Gm-Gg: ASbGnctYkA/nG0FSCdiDl6b6Q6318pf4pO+V+NVbuACEPNluxmqxjIa8Yf5UInQM0TY
+ kJbZkXuwgu55bM3DYIo8bQdE/0GZT7Ti6fjAnsQt9Txd0Swtzb9zdrlmmNl33/Ym91WC/Ym/uWU
+ M7RAMNa2kFM/d6bxhznXcKIQ+X6zlXaWRFBSpS7odRMZY4ojEU34mBx0gjR8fZubrIrLevwSBQ3
+ RNbGq/0KAtNaAZomLry1Kv0U7wFPg59zJ4cFNo5+xNIurm1B8kjNaRBngZCGSCz3KKmOu7wNrFm
+ nYUP/JPw3Iq9y2x5czlSVqUA7XVDQnE1yuaC/ECQmGud/1xaUrJHAWxS/TLtU/lMGeihnLfZlAX
+ +vlTqPyt4ITPiHAOwpu06lVBJ36LZSsS78czEnhEhNe6nYbg7T34=
+X-Google-Smtp-Source: AGHT+IF0ouwPFZ8Srvro77Y1vKE29fUUqBIY9dAyoyFGDVFak7WurjwFl2ImcQBk620wUI+8EfmNOQ==
+X-Received: by 2002:a05:6000:60f:b0:3ee:13b1:d6fb with SMTP id
+ ffacd0b85a97d-4266e7e1799mr5107094f8f.32.1760021743800; 
+ Thu, 09 Oct 2025 07:55:43 -0700 (PDT)
 Received: from arch ([79.132.232.153]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-46fab3e3520sm41512145e9.2.2025.10.09.07.55.42
+ ffacd0b85a97d-4255d8ab909sm34810177f8f.19.2025.10.09.07.55.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 09 Oct 2025 07:55:42 -0700 (PDT)
-To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+ Thu, 09 Oct 2025 07:55:43 -0700 (PDT)
+To: Titouan Christophe <titouan.christophe@mind.be>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu,  9 Oct 2025 16:55:41 +0200
-Message-ID: <20251009145542.483474-1-thomas.perale@mind.be>
+Date: Thu,  9 Oct 2025 16:55:43 +0200
+Message-ID: <20251009145543.483526-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250925-fix-pyopenssl-v1-1-dce0a1fc2644@bootlin.com>
-References: <20250925-fix-pyopenssl-v1-1-dce0a1fc2644@bootlin.com>
+In-Reply-To: <20251004094128.270821-1-titouan.christophe@mind.be>
+References: <20251004094128.270821-1-titouan.christophe@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1760021743; x=1760626543; darn=buildroot.org;
+ d=mind.be; s=google; t=1760021744; x=1760626544; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=8Mw1XEIxtpRKDDJ2kUFME4y+1vUKP3cRIlm5SJKKqLw=;
- b=cW21iq9NUr/zqAXojVgUCl71DiDrCVYPv5XV5hPZRM0i9t+TBj9gdUTiS/4PE63c1u
- jRWyIfMmlV5EUF06Bp+gX9Ta0mfyBZjx88Jfir0F4kFAsPZcjbHmH2NSYaKUyHu4YWAR
- rzRyFr/GV3KWrfhAfV7d0opeymk/S1jW2qSg/bsuPf7QapeKua3ap4hkzmMLWLwfH351
- 0GiDLgLhmaG74OhbX9QJznVB8+Sjw5SwdpHemY4NyQoJIAoQsD8Gxtwy5MY2sRA0+uo2
- wNs6sYkj3yoSxkBEpvEgCPeY4SQ+M92tyJZTme/XSS4SsWqiZibsk/srOeTPqEJwPT4l
- 01vA==
+ bh=gET5mRRI9rlqBby0GBh3fG61VcxTImvcSMom3HSsUqU=;
+ b=ZTSeYYKjYxQTNRlHmqkiSoJhdzifUiJzYzBMU0ldEIuG2TsYImY1epXqFG5EqvVnBm
+ yKNFUxcfX+NbE+phlPjMdmd5OcivwzgAbmcCWQVFc/fdOsSC5xDfNPcVTdxZgosIwilq
+ PvfbIyB2QLYxGaTSRfsvl3JwNjq8eR3/iLkSpj8TfJW3g992p2l7q4VnqrlJQYj/moFO
+ AJiLPBSnqsZNzRz2FbFOkH/xEPFO1EANn2wxbT62KLd2ZoDhNpGEQrF/cjfggcHzPesA
+ QcSInbv3XTHrhx8tV2fV5dCz+RQSdXB4uOHBxgdbJxHexg5tiexFFEQKF7f8RulCEYNP
+ UF2w==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=cW21iq9N
-Subject: Re: [Buildroot] [PATCH 2025.02.x] package/python-pyopenssl: add
- missing dependency for deprecation handling
+ header.a=rsa-sha256 header.s=google header.b=ZTSeYYKj
+Subject: Re: [Buildroot] [PATCH v2 for 2025.02.x] package/python-django:
+ security bump to v5.1.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,54 +113,88 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SW4gcmVwbHkgb2Y6Cj4gV2hlbiBjb21taXQgYmJkY2I3NWQ3ZjE5ICgicGFja2FnZS9weXRob24t
-cHlvcGVuc3NsOiBidW1wIHRvIHZlcnNpb24KPiAyNS4wLjAiKSBoYXMgYmVlbiBhZGRlZCwgaXQg
-aGFzIHNpbGVudGx5IGludHJvZHVjZWQgYSBuZXcgZGVwZW5kZW5jeSBvbgo+IHR5cGluZ19leHRl
-bnNpb25zIHRoYXQgaGFzIG5vdCBiZWVuIHBvcnRlZCBpbiB0aGUgY29ycmVzcG9uZGluZwo+IENv
-bmZpZy5pbiwgcmVzdWx0aW5nIGluIGZhaWx1cmVzIGF0IHJ1bnRpbWUgd2hlbiB0cnlpbmcgdG8g
-aW1wb3J0IHRoZQo+IG1vZHVsZToKPiAKPiBNb2R1bGVOb3RGb3VuZEVycm9yOiBObyBtb2R1bGUg
-bmFtZWQgJ3R5cGluZ19leHRlbnNpb25zJwo+IAo+IFRoZSB1cHN0cmVhbSBwcm9qZWN0IGhhcyBp
-bmRlZWQgaW50cm9kdWNlZCB0aGUgZm9sbG93aW5nIGRlcHJlY2F0aW9uCj4gaGFuZGxpbmcgc25p
-cHBldCB3aXRoIGNvbW1pdCAxYjJiMGVkMjE5ODYgKCJVc2UgdHlwZS1sZXZlbCBkZXByZWNhdGlv
-bnMKPiAoIzEzODkpIik6Cj4gCj4gICBpZiBzeXMudmVyc2lvbl9pbmZvID49ICgzLCAxMyk6Cj4g
-ICAgICAgZnJvbSB3YXJuaW5ncyBpbXBvcnQgZGVwcmVjYXRlZAo+ICAgZWxpZiBzeXMudmVyc2lv
-bl9pbmZvIDwgKDMsIDgpOgo+ICAgICAgIF9UID0gdHlwaW5nLlR5cGVWYXIoIlQiKQo+IAo+ICAg
-ICAgIGRlZiBkZXByZWNhdGVkKG1zZzogc3RyLCAqKmt3YXJnczogb2JqZWN0KSAtPiBDYWxsYWJs
-ZVtbX1RdLCBfVF06Cj4gICAgICAgICAgIHJldHVybiBsYW1iZGEgZjogZgo+ICAgZWxzZToKPiAg
-ICAgICBmcm9tIHR5cGluZ19leHRlbnNpb25zIGltcG9ydCBkZXByZWNhdGVkCj4gCj4gVGhpcyB0
-aGVuIGJyZWFrcyBzeXN0ZW1zIHdpdGggcHlvcGVuc3NsID49IDI1LjAuMCwgcHl0aG9uIDwgMy4x
-MywgcHl0aG9uCj4gPj0gMy44LCBhbmQgd2l0aG91dCB0eXBpbmdfZXh0ZW5zaW9ucy4KPiAKPiBG
-aXggdGhlIG1pc3NpbmcgZGVwZW5kZW5jeSBieSBhZGRpbmcgaXQgZXhwbGljaXRlbHkgaW4gcHlv
-cGVuc3NsCj4gQ29uZmlnLmluCj4gCj4gU2lnbmVkLW9mZi1ieTogQWxleGlzIExvdGhvcsOpIDxh
-bGV4aXMubG90aG9yZUBib290bGluLmNvbT4KCkFwcGxpZWQgdG8gMjAyNS4wMi54LiBUaGFua3MK
-Cj4gLS0tCj4gVGhlIHNwZWNpZmljIGJ1ZyBjb25kaXRpb25zIGRlc2NyaWJlZCBhYm92ZSBhcmUg
-b25seSBwcmVzZW50IGluIHRoZQo+IDIwMjUuMDIueCBicmFuY2g6IHB5dGhvbiBoYXMgYmVlbiB1
-cGRhdGVkIHRvIHZlcnNpb24gMy4xMyByaWdodCBhZnRlcgo+IHRoaXMgcmVsZWFzZSBicmFuY2gs
-IG1ha2luZyB0aGUgZml4IHVubmVlZGVkIG9uIHRoZSBvdGhlciByZWxlYXNlCj4gYnJhbmNoZXMg
-b3IgbWFzdGVyLgo+IC0tLQo+ICBwYWNrYWdlL3B5dGhvbi1weW9wZW5zc2wvQ29uZmlnLmluIHwg
-MSArCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQo+IAo+IGRpZmYgLS1naXQgYS9w
-YWNrYWdlL3B5dGhvbi1weW9wZW5zc2wvQ29uZmlnLmluIGIvcGFja2FnZS9weXRob24tcHlvcGVu
-c3NsL0NvbmZpZy5pbgo+IGluZGV4IDU2ZjM4ZjU4ODgxZmJmMmIwY2Y1OTQwNDgyMzhiM2MxMGNj
-NDA1NTAuLjE4NGFkM2M1ZjViYzE5MGQ5NTVkMzg2YjE4MTZmNjYwMWM0YTcyNGEgMTAwNjQ0Cj4g
-LS0tIGEvcGFja2FnZS9weXRob24tcHlvcGVuc3NsL0NvbmZpZy5pbgo+ICsrKyBiL3BhY2thZ2Uv
-cHl0aG9uLXB5b3BlbnNzbC9Db25maWcuaW4KPiBAQCAtMiw2ICsyLDcgQEAgY29uZmlnIEJSMl9Q
-QUNLQUdFX1BZVEhPTl9QWU9QRU5TU0wKPiAgCWJvb2wgInB5dGhvbi1weW9wZW5zc2wiCj4gIAlk
-ZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0hPU1RfUlVTVENfVEFSR0VUX0FSQ0hfU1VQUE9SVFMgIyBw
-eXRob24tY3J5cHRvZ3JhcGh5Cj4gIAlzZWxlY3QgQlIyX1BBQ0tBR0VfUFlUSE9OX0NSWVBUT0dS
-QVBIWSAjIHJ1bnRpbWUKPiArCXNlbGVjdCBCUjJfUEFDS0FHRV9QWVRIT05fVFlQSU5HX0VYVEVO
-U0lPTlMKPiAgCWhlbHAKPiAgCSAgUHl0aG9uIHdyYXBwZXIgbW9kdWxlIGFyb3VuZCB0aGUgT3Bl
-blNTTCBsaWJyYXJ5Lgo+ICAKPiAKPiAtLS0KPiBiYXNlLWNvbW1pdDogYzU1YmVkMjYzZDM4ZGRh
-MDIwNDg0NjUwY2Y3ZDA3ZTk0NzdhMGQ1Ygo+IGNoYW5nZS1pZDogMjAyNTA5MjUtZml4LXB5b3Bl
-bnNzbC01N2U4ZDhmMTA4ZGYKPiAKPiBCZXN0IHJlZ2FyZHMsCj4gLS0gCj4gQWxleGlzIExvdGhv
-csOpLCBCb290bGluCj4gRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZwo+IGh0
-dHBzOi8vYm9vdGxpbi5jb20KPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRy
-b290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
-aWxkcm9vdApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
-dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
-dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+In reply of:
+> This fixes the following vulnerabilities:
+> - CVE-2025-59681:
+>     An issue was discovered in Django 4.2 before 4.2.25, 5.1 before
+>     5.1.13, and 5.2 before 5.2.7. QuerySet.annotate(), QuerySet.alias(),
+>     QuerySet.aggregate(), and QuerySet.extra() are subject to SQL
+>     injection in column aliases, when using a suitably crafted dictionary,
+>     with dictionary expansion, as the **kwargs passed to these methods (on
+>     MySQL and MariaDB).
+>     https://www.cve.org/CVERecord?id=CVE-2025-59681
+> 
+> - CVE-2025-59682:
+>     An issue was discovered in Django 4.2 before 4.2.25, 5.1 before
+>     5.1.13, and 5.2 before 5.2.7. The django.utils.archive.extract()
+>     function, used by the "startapp --template" and "startproject
+>     --template" commands, allows partial directory traversal via an
+>     archive with file paths sharing a common prefix with the target
+>     directory.
+>     https://www.cve.org/CVERecord?id=CVE-2025-59682
+> 
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+
+Applied to 2025.02.x. Thanks
+
+> ---
+> Changes v1->v2:
+> - Update hash for utils/archive.py, because this file was updated as part
+>   of the CVE fix
+> ---
+>  package/python-django/python-django.hash | 6 +++---
+>  package/python-django/python-django.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+> index 155e3af8ef..a525410582 100644
+> --- a/package/python-django/python-django.hash
+> +++ b/package/python-django/python-django.hash
+> @@ -1,6 +1,6 @@
+>  # md5, sha256 from https://pypi.org/pypi/django/json
+> -md5  7f7a03e4f19ad7813d96f9fbbad65a5c  django-5.1.12.tar.gz
+> -sha256  8a8991b1ec052ef6a44fefd1ef336ab8daa221287bcb91a4a17d5e1abec5bbcc  django-5.1.12.tar.gz
+> +md5  dad76d0dbdbc86402061182fc708a442  django-5.1.13.tar.gz
+> +sha256  543ff21679f15e80edfc01fe7ea35f8291b6d4ea589433882913626a7c1cf929  django-5.1.13.tar.gz
+>  # Locally computed sha256 checksums
+>  sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+>  sha256  dcac1c86cb7ab491702bdb4c41be680fafde51536748cc8aaee3840eec53ed17  django/contrib/gis/measure.py
+> @@ -12,4 +12,4 @@ sha256  4ee0cbc51370afde358652a0f977972053729ed578b6a42f5e2a037d114f0b39  django
+>  sha256  73af2949bff9296cb0f816c3be19a4da4e95adc94c1f924796e8bad3f03f2f29  django/contrib/admin/static/admin/js/vendor/xregexp/LICENSE.txt
+>  sha256  d114faff3488c16c319b3235dc41f90239d3d63d9853733033d8f7535f5c0004  django/contrib/admin/static/admin/img/LICENSE
+>  sha256  54004c4b606964ebc163af16d04607c16e428f8a78a026fecb53f70c09f4a94f  django/dispatch/license.txt
+> -sha256  1ce0483ad554cf135efec70ad2097e82ed72790194f17e1591821dc82c2416e0  django/utils/archive.py
+> +sha256  9f37277d682cf06369041e60fb6fda5a85dfcf118d9176489087a3d40293f015  django/utils/archive.py
+> diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+> index 3026c304be..c2581f5f90 100644
+> --- a/package/python-django/python-django.mk
+> +++ b/package/python-django/python-django.mk
+> @@ -4,10 +4,10 @@
+>  #
+>  ################################################################################
+>  
+> -PYTHON_DJANGO_VERSION = 5.1.12
+> +PYTHON_DJANGO_VERSION = 5.1.13
+>  PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
+>  # The official Django site has an unpractical URL
+> -PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/f0/99/a951d93a27a5bc59fb96edbcdbc03fb9bfac51177f1bc0110888de85af3f
+> +PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/bb/57/ad9905d03a2ee39064ee7ba69f8e2790db4a7ffaef9c54f95e7a8f2cb0a1
+>  PYTHON_DJANGO_LICENSE = BSD-3-Clause, MIT (jquery, utils/archive.py), BSD-2-Clause (inlines.js)
+>  PYTHON_DJANGO_LICENSE_FILES = LICENSE \
+>  	django/contrib/gis/measure.py \
+> -- 
+> 2.51.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
