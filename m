@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20F28CCD18A
-	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 09:56:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1C40CCA470
+	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 10:06:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EAC4661375;
-	Thu,  9 Oct 2025 09:56:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8C2CC611FF;
+	Thu,  9 Oct 2025 10:06:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eq5tyFDm19bA; Thu,  9 Oct 2025 09:56:42 +0000 (UTC)
+ id M65kRHmHEtlP; Thu,  9 Oct 2025 10:06:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C65B6611D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D589A611ED
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C65B6611D8;
-	Thu,  9 Oct 2025 09:56:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4889F119
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 09:55:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D589A611ED;
+	Thu,  9 Oct 2025 10:06:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4153C21B
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:06:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C8C0440D63
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 09:55:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2F5A461200
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:06:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id euEUjoC5xKF7 for <buildroot@buildroot.org>;
- Thu,  9 Oct 2025 09:55:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1HJqfR6hLs8j for <buildroot@buildroot.org>;
+ Thu,  9 Oct 2025 10:06:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C003C40DAF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79B7A611DD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C003C40DAF
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 09:55:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 79B7A611DD
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:06:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AD7E986C36; Thu,  9 Oct 2025 09:55:39 +0000 (UTC)
+ id 69E2486D26; Thu,  9 Oct 2025 10:06:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 9 Oct 2025 08:28:25 +0200
-X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: 2aa666522c159d2d7052ae15aede06b2ede18497
-X-Git-Newrev: bc6d119ba22ca36e24bdb9fd990bf4197b07c56e
+Date: Thu, 9 Oct 2025 08:27:29 +0200
+X-Git-Refname: refs/heads/2025.05.x
+X-Git-Oldrev: e30402dcdcdeca10cddc6cbfd8aa22875b20e27c
+X-Git-Newrev: 56be7f593a59441aef7cf8778167db8fcb3b3ca6
 X-Patchwork-Hint: ignore
-Message-Id: <20251009095539.AD7E986C36@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/linux-firmware:
- fix license file for ath10k firmware
+Message-Id: <20251009100623.69E2486D26@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] DEVELOPERS: add Dario
+ Binacchi for empty
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,44 +66,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc6d119ba22ca36e24bdb9fd990bf4197b07c56e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=56be7f593a59441aef7cf8778167db8fcb3b3ca6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-The WHENCE file [1] indicates ath10k's license file is
-LICENSE.QualcommAtheros_ath10k license and not LICENCE.atheros_firmware.
-
-[1] https://gitlab.com/kernel-firmware/linux-firmware/-/blob/20250627/WHENCE#L3700
-
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-[Julien: add link to WHENCE file]
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 752fc349a05910a08b08467e2f28fd80f1c239a1)
+(cherry picked from commit 49974951907e9d115e556043efeae1334fddf90f)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/linux-firmware/linux-firmware.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 5b03aeb595..cfb02b02d7 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -262,14 +262,14 @@ LINUX_FIRMWARE_FILES += ath10k/QCA9377/hw1.0/board-2.bin \
- 			ath10k/QCA9377/hw1.0/firmware-5.bin \
- 			ath10k/QCA9377/hw1.0/firmware-6.bin \
- 			ath10k/QCA9377/hw1.0/firmware-sdio-5.bin
--LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.QualcommAtheros_ath10k
- endif
- 
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10K_QCA998X),y)
- LINUX_FIRMWARE_FILES += ath10k/QCA988X/hw2.0/board.bin \
- 			ath10k/QCA988X/hw2.0/firmware-4.bin \
- 			ath10k/QCA988X/hw2.0/firmware-5.bin
--LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.QualcommAtheros_ath10k
- endif
- 
- # sd8686 v8
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 079fc00bb7..cf2b259506 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -799,6 +799,7 @@ F:	package/babeld/
+ F:	package/bc/
+ F:	package/cmocka/
+ F:	package/connman/
++F:	package/empty/
+ F:	package/iana-assignments/
+ F:	package/inih/
+ F:	package/sscep/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
