@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2DA8CCD187
-	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 10:16:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C57FCCA470
+	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 10:16:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 919A76142C;
-	Thu,  9 Oct 2025 10:16:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A1AB6143F;
+	Thu,  9 Oct 2025 10:16:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x_LnEHqcCbuS; Thu,  9 Oct 2025 10:16:42 +0000 (UTC)
+ id N6Wf7IzHWa0V; Thu,  9 Oct 2025 10:16:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4921613F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59E3D613FC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D4921613F2;
-	Thu,  9 Oct 2025 10:16:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 59E3D613FC;
+	Thu,  9 Oct 2025 10:16:37 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5869921B
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:16:10 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5AA6A119
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:16:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A6A9B83C2A
+ by smtp1.osuosl.org (Postfix) with ESMTP id B3F0883C38
  for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:16:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JerJEB4aSjle for <buildroot@buildroot.org>;
+ id 1P7PJVuZHkyk for <buildroot@buildroot.org>;
  Thu,  9 Oct 2025 10:16:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4C2C83C41
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ABEA183C40
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B4C2C83C41
+ by smtp1.osuosl.org (Postfix) with ESMTP id ABEA183C40
  for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:16:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B2C3B86E15; Thu,  9 Oct 2025 10:16:00 +0000 (UTC)
+ id A9DF086E14; Thu,  9 Oct 2025 10:16:00 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 9 Oct 2025 08:50:28 +0200
+Date: Thu, 9 Oct 2025 08:47:40 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 58fff6a287411a7eeffcab4c634921be1559892b
-X-Git-Newrev: b461e9602ed24176c37ac0b8af837b832f70f338
+X-Git-Oldrev: f573757e26cba768a9379046ee67fba53b96a75c
+X-Git-Newrev: 58fff6a287411a7eeffcab4c634921be1559892b
 X-Patchwork-Hint: ignore
-Message-Id: <20251009101600.B2C3B86E15@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-pyopenssl:
- add missing dependency for deprecation handling
+Message-Id: <20251009101600.A9DF086E14@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] configs/beagleboneai:
+ move to Linux 6.12.50
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,72 +61,60 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2187399904609266456=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2187399904609266456==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=b461e9602ed24176c37ac0b8af837b832f70f338
+commit: https://git.buildroot.net/buildroot/commit/?id=58fff6a287411a7eeffcab4c634921be1559892b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-When commit bbdcb75d7f19 ("package/python-pyopenssl: bump to version
-25.0.0") has been added, it has silently introduced a new dependency on
-typing_extensions that has not been ported in the corresponding
-Config.in, resulting in failures at runtime when trying to import the
-module:
+And adjust the dtb path to the new subdir after commit 724ba6751532 ("ARM:
+dts: Move .dts files to vendor sub-directories") in v6.5.
 
-ModuleNotFoundError: No module named 'typing_extensions'
-
-The upstream project has indeed introduced the following deprecation
-handling snippet with commit 1b2b0ed21986 ("Use type-level deprecations
-(#1389)"):
-
-  if sys.version_info >= (3, 13):
-      from warnings import deprecated
-  elif sys.version_info < (3, 8):
-      _T = typing.TypeVar("T")
-
-      def deprecated(msg: str, **kwargs: object) -> Callable[[_T], _T]:
-          return lambda f: f
-  else:
-      from typing_extensions import deprecated
-
-This then breaks systems with pyopenssl >= 25.0.0, python < 3.13, python
->= 3.8, and without typing_extensions.
-
-Fix the missing dependency by adding it explicitely in pyopenssl
-Config.in
-
-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit e993272b324da933c7684670da07f388c4210201)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-pyopenssl/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ board/beagleboard/beagleboneai/patches/linux/linux.hash | 2 +-
+ configs/beagleboneai_defconfig                          | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyopenssl/Config.in b/package/python-pyopenssl/Config.in
-index 56f38f5888..184ad3c5f5 100644
---- a/package/python-pyopenssl/Config.in
-+++ b/package/python-pyopenssl/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_PYTHON_PYOPENSSL
- 	bool "python-pyopenssl"
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-cryptography
- 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
-+	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS
- 	help
- 	  Python wrapper module around the OpenSSL library.
- 
-
---===============2187399904609266456==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/board/beagleboard/beagleboneai/patches/linux/linux.hash b/board/beagleboard/beagleboneai/patches/linux/linux.hash
+index ec1a3601b7..4ae61c9e4f 100644
+--- a/board/beagleboard/beagleboneai/patches/linux/linux.hash
++++ b/board/beagleboard/beagleboneai/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  c52bc1ffc396c11bce335c9ee5cd55fe4213cbc1fb4026ff62bb90c864c61f62  linux-5.10.217.tar.xz
++sha256  c435bd74d1c21fc5a950781a50d78bae2b93944144694843359948ad3afc72a5  linux-6.12.50.tar.xz
+diff --git a/configs/beagleboneai_defconfig b/configs/beagleboneai_defconfig
+index 5d269a1825..bf6d73a525 100644
+--- a/configs/beagleboneai_defconfig
++++ b/configs/beagleboneai_defconfig
+@@ -1,6 +1,6 @@
+ BR2_arm=y
+ BR2_cortex_a15=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/beagleboard/beagleboneai/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_SYSTEM_DHCP="eth0"
+@@ -9,10 +9,10 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beagleboard/beagleboneai/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.217"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.50"
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="am5729-beagleboneai"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/omap/am5729-beagleboneai"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2187399904609266456==--
