@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A549CCD184
-	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 19:47:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E06EECCD184
+	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 19:49:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0F7A984150;
-	Thu,  9 Oct 2025 19:47:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A149540F87;
+	Thu,  9 Oct 2025 19:49:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WwZ7dxzME8fs; Thu,  9 Oct 2025 19:47:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YuBf0gswM4jW; Thu,  9 Oct 2025 19:49:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35D7084123
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C71AE40F05
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 35D7084123;
-	Thu,  9 Oct 2025 19:47:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9DD55119
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 19:47:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C71AE40F05;
+	Thu,  9 Oct 2025 19:49:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0A776119
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 19:49:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 842A541009
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 19:47:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0704361371
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 19:49:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mgFq0GuwcycA for <buildroot@buildroot.org>;
- Thu,  9 Oct 2025 19:47:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rOOklEsmznQq for <buildroot@buildroot.org>;
+ Thu,  9 Oct 2025 19:49:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF6E24068E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BF6E24068E
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 19:47:11 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A52F786E3C; Thu,  9 Oct 2025 19:47:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E963D60A85
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E963D60A85
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E963D60A85
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 19:49:20 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1947565259; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Thu, 09 Oct 2025 19:49:04 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1v6wdL-0087eQ-0r;
+ Thu, 09 Oct 2025 21:49:03 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 9 Oct 2025 21:44:59 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e7e8bdd812edef20626d250f24d16601f6b994da
-X-Git-Newrev: c90e226988db0e7874ba65de43ecaaa1512e5f88
-X-Patchwork-Hint: ignore
-Message-Id: <20251009194711.A52F786E3C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/paho-mqtt-c: bump version to 1.3.15
+To: =?utf-8?Q?Fl=C3=A1vio_Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>
+Cc: buildroot@buildroot.org
+References: <20251009193204.1951332-1-flavio.tapajos@newtesc.com.br>
+Date: Thu, 09 Oct 2025 21:49:03 +0200
+In-Reply-To: <20251009193204.1951332-1-flavio.tapajos@newtesc.com.br>
+ (=?utf-8?Q?=22Fl=C3=A1vio=09Tapaj=C3=B3s=22's?= message of "Thu, 9 Oct 2025
+ 16:32:04 -0300")
+Message-ID: <87v7knx3dc.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=asG3UQHWD75EFLKq8UCcXh/koz1rMhENlNYT1L8hOJf0LMdOCkn3Y50rzar7I80Oh+pxJBs1WOewAxMSmtePhpz+9WKP3DBfm7RoJGFPjozthxzPfgylcS2L0AaP2rYmO3tbFYa2kWpsv2boDtZTLHmA0xPDFZhvkt92ST0cYpyNSWr06H1JnAKubxGBhIgU4FFxDf49pxHJNV0sCT6SGzxFk3SydQVrEhi+40yIcWpyRTHN2ztqvBVpA1+n4B8JjOp1kj9ksFC27W2NT2X2Dmqs1y37rwkJjHfWhCG887305dS3KlfRgBbIMkhjOBlvGnRTfl4VGbPHPdIvKYfwHA==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=lqiCkB/VEic4QzmlOjjg1U6DFst0YNL7UTH5i3T9U6U=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=asG3UQHW
+Subject: Re: [Buildroot] [PATCH 1/1] package/rsyslog: bump version to
+ 8.2506.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,50 +82,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c90e226988db0e7874ba65de43ecaaa1512e5f88
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Release notes:
-https://github.com/eclipse-paho/paho.mqtt.c/releases/tag/v1.3.15
-
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/paho-mqtt-c/paho-mqtt-c.hash | 2 +-
- package/paho-mqtt-c/paho-mqtt-c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
-index 915897d082..8ca597c4f9 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.hash
-+++ b/package/paho-mqtt-c/paho-mqtt-c.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  7af7d906e60a696a80f1b7c2bd7d6eb164aaad908ff4c40c3332ac2006d07346  paho-mqtt-c-1.3.14.tar.gz
-+sha256  60ce2cfdc146fcb81c621cb8b45874d2eb1d4693105d048f60e31b8f3468be90  paho-mqtt-c-1.3.15.tar.gz
- sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
- sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
- sha256  bc0f3f447097eb82a29ad6c2f4929572bb548b6bd4c9e38fde1bf131a771b7a0  LICENSE
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
-index 0486d2ce80..acff7d5cc3 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.mk
-+++ b/package/paho-mqtt-c/paho-mqtt-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PAHO_MQTT_C_VERSION = 1.3.14
-+PAHO_MQTT_C_VERSION = 1.3.15
- PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
- PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
- PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIkZsw6F2aW8iID09IEZsw6F2aW8gVGFwYWrDs3MgPGZsYXZpby50YXBham9zQG5ld3Rl
+c2MuY29tLmJyPiB3cml0ZXM6CgogPiBSZWxlYXNlIGFubm91bmNlOgogPiBodHRwczovL3d3dy5y
+c3lzbG9nLmNvbS9yc3lzbG9nLTgtMjUwOC0wLTIwMjUtMDgtcmVsZWFzZS1hbm5vdW5jZW1lbnQv
+CgogPiBDaGFuZ2Vsb2c6CiA+IGh0dHBzOi8vZ2l0aHViLmNvbS9yc3lzbG9nL3JzeXNsb2cvYmxv
+Yi92OC4yNTA4LjAvQ2hhbmdlTG9nCgogPiBTaWduZWQtb2ZmLWJ5OiBGbMOhdmlvIFRhcGFqw7Nz
+IDxmbGF2aW8udGFwYWpvc0BuZXd0ZXNjLmNvbS5icj4KCkNvbW1pdHRlZCwgdGhhbmtzLgoKLS0g
+CkJ5ZSwgUGV0ZXIgS29yc2dhYXJkCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5v
+cmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
+Cg==
