@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82DB0CCA470
-	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 10:06:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4A06CCD187
+	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 10:06:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4256D61252;
-	Thu,  9 Oct 2025 10:06:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8CA8A611FF;
+	Thu,  9 Oct 2025 10:06:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 20GEQMslolPU; Thu,  9 Oct 2025 10:06:37 +0000 (UTC)
+ id aBa4pbEuqWEI; Thu,  9 Oct 2025 10:06:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0E756127F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8B0E61204
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A0E756127F;
-	Thu,  9 Oct 2025 10:06:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0991C119
+	by smtp3.osuosl.org (Postfix) with ESMTP id A8B0E61204;
+	Thu,  9 Oct 2025 10:06:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 28AA2119
  for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:06:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A5F6E611E9
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:06:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 004F440FA1
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:06:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4OVhcRs0lxME for <buildroot@buildroot.org>;
- Thu,  9 Oct 2025 10:06:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P8RlYxFpbGuG for <buildroot@buildroot.org>;
+ Thu,  9 Oct 2025 10:06:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B29C6611F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0EB7040FB9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B29C6611F4
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:06:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0EB7040FB9
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:06:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B0C5586D26; Thu,  9 Oct 2025 10:06:23 +0000 (UTC)
+ id 0CA4486D29; Thu,  9 Oct 2025 10:06:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 9 Oct 2025 08:32:20 +0200
+Date: Thu, 9 Oct 2025 08:44:16 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 29006c05d165df4edb7bca5cdb1232053b4c2ec2
-X-Git-Newrev: a722429b935337d9c7cb90e8db4bf1e74daaeac3
+X-Git-Oldrev: e15bcd8e5f121e22aef8274be6ef1e2c86a381e6
+X-Git-Newrev: 1109ab176e6c63a9c747473334a3388c3b516c8b
 X-Patchwork-Hint: ignore
-Message-Id: <20251009100623.B0C5586D26@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/ghostscript:
- security bump to v10.06.0
+Message-Id: <20251009100624.0CA4486D29@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/fastd: security
+ bump to version 23
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,190 +66,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a722429b935337d9c7cb90e8db4bf1e74daaeac3
+commit: https://git.buildroot.net/buildroot/commit/?id=1109ab176e6c63a9c747473334a3388c3b516c8b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-For release note, see:
-https://ghostscript.readthedocs.io/en/gs10.06.0/News.html
+This bump includes the security fix for CVE-2025-24356.
 
-This fixes the following vulnerabilities:
-- CVE-2025-59798:
-    Artifex Ghostscript through 10.05.1 has a stack-based buffer overflow
-    in pdf_write_cmap in devices/vector/gdevpdtw.c.
-    https://www.cve.org/CVERecord?id=CVE-2025-59798
+Fixes:
+https://www.cve.org/CVERecord?id=CVE-2025-24356.
 
-- CVE-2025-59799:
-    Artifex Ghostscript through 10.05.1 has a stack-based buffer overflow
-    in pdfmark_coerce_dest in devices/vector/gdevpdfm.c via a large size
-    value.
-    https://www.cve.org/CVERecord?id=CVE-2025-59799
+The COPYRIGHT file was renamed to LICENSE [1]. The hash file was updated
+because a date was removed [2] and the libmnl version was updated [3].
 
-- CVE-2025-59800:
-    In Artifex Ghostscript through 10.05.1, ocr_begin_page in
-    devices/gdevpdfocr.c has an integer overflow that leads to a heap-
-    based buffer overflow in ocr_line8.
-    https://www.cve.org/CVERecord?id=CVE-2025-59800
+Release notes:
+https://fastd.readthedocs.io/en/stable/releases/v23.html
 
-- CVE-2025-59801:
-    In Artifex GhostXPS before 10.06.0, there is a stack-based buffer
-    overflow in xps_unpredict_tiff in xpstiff.c because the
-    samplesperpixel value is not checked.
-    https://www.cve.org/CVERecord?id=CVE-2025-59801
-
-Also remove patch that is now applied upstream, and add new patch from
-upstream to fix a compilation issue on 32bits platforms
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-[Julien:
- - add link to release note in commit log
- - fix URL in hash file comment
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 6f984089c0ff103fca50617c9fa033eaadf61e51)
+[1] https://github.com/neocturne/fastd/commit/fa88c739b9afe053905bddc7fbb9c252e290c35d
+[2] https://github.com/neocturne/fastd/commit/318c944f40c90e048e370b2f75598bfcd79a1790
+[3] https://github.com/neocturne/fastd/commit/c08a3d59debddf5f99e442d9529a142f04549b50
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+[Peter: update FASTD_LICENSE_FILES]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 2b5bcfd626b3d861887518ab5fb99f96d62db7ac)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/ghostscript/0001-Fix-32-bit-build.patch    | 63 ++++++++++++++++++++++
- ...0001-Fix-compatibility-with-C23-compilers.patch | 36 -------------
- package/ghostscript/ghostscript.hash               |  4 +-
- package/ghostscript/ghostscript.mk                 |  2 +-
- 4 files changed, 66 insertions(+), 39 deletions(-)
+ package/fastd/fastd.hash | 4 ++--
+ package/fastd/fastd.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ghostscript/0001-Fix-32-bit-build.patch b/package/ghostscript/0001-Fix-32-bit-build.patch
-new file mode 100644
-index 0000000000..648e235d3b
---- /dev/null
-+++ b/package/ghostscript/0001-Fix-32-bit-build.patch
-@@ -0,0 +1,63 @@
-+From 3c0be6e4fcffa63e4a5a1b0aec057cebc4d2562f Mon Sep 17 00:00:00 2001
-+From: Ken Sharp <Ken.Sharp@artifex.com>
-+Date: Wed, 10 Sep 2025 08:55:30 +0100
-+Subject: [PATCH] Fix 32-bit build
-+
-+Bug #708824 "ghostscript 10.06.0 compilation failure on 32-bit archs"
-+
-+nbytes shiouldn't be an intptr_t, it doesn't get used for pointer
-+arithmetic. Previously it was a uint, should be a int64_t, to fit with
-+all the other devices.
-+
-+Checked other warnings, and found a (very minor) one in gdevdbit.c, fix
-+that while we're here (signed/unsigned mismatch, we don't really care).
-+
-+Upstream: https://github.com/ArtifexSoftware/ghostpdl/commit/3c0be6e4fcffa63e4a5a1b0aec057cebc4d2562f
-+
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ base/gdevdbit.c | 2 +-
-+ base/gdevmpla.c | 6 +++---
-+ 2 files changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/base/gdevdbit.c b/base/gdevdbit.c
-+index e07cc3f3b8..1b5c69325b 100644
-+--- a/base/gdevdbit.c
-++++ b/base/gdevdbit.c
-+@@ -191,7 +191,7 @@ gx_default_copy_alpha_hl_color(gx_device * dev, const byte * data, int data_x,
-+     fit_copy(dev, data, data_x, raster, id, x, y, width, height);
-+     row_alpha = data;
-+     out_raster = bitmap_raster(width * (size_t)byte_depth);
-+-    if (check_64bit_multiply(out_raster, ncomps, &product) != 0)
-++    if (check_64bit_multiply(out_raster, ncomps, (int64_t *) &product) != 0)
-+         return gs_note_error(gs_error_undefinedresult);
-+     gb_buff = gs_alloc_bytes(mem, product, "copy_alpha_hl_color(gb_buff)");
-+     if (gb_buff == 0) {
-+diff --git a/base/gdevmpla.c b/base/gdevmpla.c
-+index 2f0d522561..ffc5ff42e6 100644
-+--- a/base/gdevmpla.c
-++++ b/base/gdevmpla.c
-+@@ -1954,12 +1954,12 @@ mem_planar_strip_copy_rop2(gx_device * dev,
-+         int i;
-+         int j;
-+         intptr_t chunky_sraster;
-+-        intptr_t nbytes;
-++        int64_t nbytes;
-+         byte **line_ptrs;
-+         byte *sbuf, *buf;
-+ 
-+         chunky_sraster = sraster * (intptr_t)mdev->num_planar_planes;
-+-        if (check_64bit_multiply(height, chunky_sraster, (size_t *)&nbytes) != 0)
-++        if (check_64bit_multiply(height, chunky_sraster, &nbytes) != 0)
-+             return gs_note_error(gs_error_undefinedresult);
-+         buf = gs_alloc_bytes(mdev->memory, nbytes, "mem_planar_strip_copy_rop(buf)");
-+         if (buf == NULL) {
-+@@ -2003,7 +2003,7 @@ mem_planar_strip_copy_rop2(gx_device * dev,
-+         intptr_t i;
-+         intptr_t chunky_t_raster;
-+         int chunky_t_height;
-+-        intptr_t nbytes;
-++        int64_t nbytes;
-+         byte **line_ptrs;
-+         byte *tbuf, *buf;
-+         gx_strip_bitmap newtex;
-diff --git a/package/ghostscript/0001-Fix-compatibility-with-C23-compilers.patch b/package/ghostscript/0001-Fix-compatibility-with-C23-compilers.patch
-deleted file mode 100644
-index 0dfca9cfa2..0000000000
---- a/package/ghostscript/0001-Fix-compatibility-with-C23-compilers.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From ae940946473ceb8c5353bc6e7f04673c6e60502d Mon Sep 17 00:00:00 2001
--From: Alex Cherepanov <alex@coscript.biz>
--Date: Thu, 3 Apr 2025 17:19:41 +0100
--Subject: Bug 708160: Fix compatibility with C23 compilers
--
--Upstream: https://cgit.ghostscript.com/cgi-bin/cgit.cgi/ghostpdl.git/commit/?id=ae940946473ceb8c5353bc6e7f04673c6e60502d
--[thomas: Only backport the bool typedef condition]
--Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-----
-- base/stdpre.h              |  6 ++++--
-- 1 files changed, 4 insertions(+), 2 deletions(-)
--
--diff --git a/base/stdpre.h b/base/stdpre.h
--index dda30b6a4..2f9c84e0d 100644
----- a/base/stdpre.h
--+++ b/base/stdpre.h
--@@ -1,4 +1,4 @@
---/* Copyright (C) 2001-2023 Artifex Software, Inc.
--+/* Copyright (C) 2001-2025 Artifex Software, Inc.
--    All Rights Reserved.
--
--    This software is provided AS-IS with no warranty, either express or
--@@ -341,7 +341,9 @@ typedef signed char schar;
--  * and the MetroWerks C++ compiler insists that bool be equivalent to
--  * unsigned char.
--  */
---#ifndef __cplusplus
--+
--+/* C23 has bool as a builtin type. */
--+#if !defined(__cplusplus) && (!defined(__STDC_VERSION__) || __STDC_VERSION__ < 202311L)
-- #ifdef __BEOS__
-- typedef unsigned char bool;
-- #else
----
--cgit v1.2.3
--
-diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
-index c434ac1f3a..e50113ecfe 100644
---- a/package/ghostscript/ghostscript.hash
-+++ b/package/ghostscript/ghostscript.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10051/SHA512SUMS
--sha512  1a3f2b0f53db9a00a245df19ce8fdce0fbccc6fad47b64d14fc9058b494ab07c77e21bb073df8d4a2522b3ccb0df26735f8224a9e36c07367031ed2262fb26af  ghostscript-10.05.1.tar.xz
-+# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10060/SHA512SUMS
-+sha512  e9efa6a334cf34703f565f5043dd794452270415b34c2bea260e9dac6c72ebbcbedfa2e4cb9029841f8f582bbce91be8160e135a190081f3262bcf04417f80f1  ghostscript-10.06.0.tar.xz
- 
- # Hash for license file:
- sha256  8ce064f423b7c24a011b6ebf9431b8bf9861a5255e47c84bfb23fc526d030a8b  LICENSE
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index c9d13f5545..1fc850ad20 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/fastd/fastd.hash b/package/fastd/fastd.hash
+index 5f7f966533..a02b506c98 100644
+--- a/package/fastd/fastd.hash
++++ b/package/fastd/fastd.hash
+@@ -1,3 +1,3 @@
+ # computed locally
+-sha256  19750b88705d66811b7c21b672537909c19ae6b21350688cbd1a3a54d08a8951  fastd-22.tar.xz
+-sha256  adf08b42f1b890b89e998360a864cb4f8441a0a57c9e95e2ce1bfdfc24c49976  COPYRIGHT
++sha256  dcab54485c79dda22ce6308a2a48764d53977a518952facd1204ba21af1c86e0  fastd-23.tar.xz
++sha256  f229ee6df84971355f7d54d60b0302ca8a3b883d2dc41176e58e9da4aa7c1b05  LICENSE
+diff --git a/package/fastd/fastd.mk b/package/fastd/fastd.mk
+index 6c496cf9ef..4df0ce8210 100644
+--- a/package/fastd/fastd.mk
++++ b/package/fastd/fastd.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--GHOSTSCRIPT_VERSION = 10.05.1
-+GHOSTSCRIPT_VERSION = 10.06.0
- GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
- GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
- GHOSTSCRIPT_LICENSE = AGPL-3.0
+-FASTD_VERSION = 22
++FASTD_VERSION = 23
+ FASTD_SITE = https://github.com/NeoRaider/fastd/releases/download/v$(FASTD_VERSION)
+ FASTD_SOURCE = fastd-$(FASTD_VERSION).tar.xz
+ FASTD_LICENSE = BSD-2-Clause
+-FASTD_LICENSE_FILES = COPYRIGHT
++FASTD_LICENSE_FILES = LICENSE
+ FASTD_CPE_ID_VERSION = $(FASTD_VERSION).0
+ FASTD_DEPENDENCIES = host-bison host-pkgconf libuecc libsodium
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
