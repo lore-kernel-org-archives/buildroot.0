@@ -1,105 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D843CCD185
-	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 14:54:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 953DACCD187
+	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 14:54:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 668F880E64;
-	Thu,  9 Oct 2025 14:54:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 55A7E611F5;
+	Thu,  9 Oct 2025 14:54:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3luW0dpGbr78; Thu,  9 Oct 2025 14:54:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WE9G_Qy_KCyp; Thu,  9 Oct 2025 14:54:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A4F480E37
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94863612D6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7A4F480E37;
-	Thu,  9 Oct 2025 14:54:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id BE47B119
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 14:54:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 94863612D6;
+	Thu,  9 Oct 2025 14:54:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8464A21B
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 14:54:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AEEBA80E18
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 14:54:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7241741068
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 14:54:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jt0PbCOkPeZT for <buildroot@buildroot.org>;
- Thu,  9 Oct 2025 14:54:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id D8OM2D2Ar0AO for <buildroot@buildroot.org>;
+ Thu,  9 Oct 2025 14:54:42 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7888C80E1E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7888C80E1E
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7888C80E1E
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 14:54:40 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-3fa528f127fso820356f8f.1
- for <buildroot@buildroot.org>; Thu, 09 Oct 2025 07:54:40 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 73D0541060
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73D0541060
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 73D0541060
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 14:54:42 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-46b303f755aso8752595e9.1
+ for <buildroot@buildroot.org>; Thu, 09 Oct 2025 07:54:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1760021678; x=1760626478;
+ d=1e100.net; s=20230601; t=1760021680; x=1760626480;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=Wb6pjIKX88ESqN9ZD6M6FGRFKwZ6HSSs7qgbyrK9pjc=;
- b=QTZClLepoP05bI7sQq+C0G2VZDVtURMLs6HcPGkh5M6SAuQlM3MQ4mvhO4bzD+MV32
- obdKR1GXnJ3LyoDl1gUMdoZZJ3S+1lVkj18ztmjVt3uee3olV2LcNYQ6CzLH2pChC8FN
- sNz2dy88MkUkNSANbVlG16MAl85yhLkrvZSadF9rNIczaCfZqTD94g0fMMSacN74JxL5
- UlQ5DCByek8sNiijOZkwfNe3Q8hY4Ags4m780bE2MB1b+XXFH/iWUNFHC7fijywUbPby
- Y0SzkD1ladtChITYT7JOFezp1Rp2g9y7DGLt7FJ3h5gKaCsmlwX3u5N6nvmlBFas+QWC
- 9S1A==
+ bh=my6JwFgI/n+s6tWYq7cD/qloi6R5XdQiguJoF43kCnI=;
+ b=k+4oBPsxlVQLE0EXmctUUCfux8Z6rc3xad+QZMLcB85VCTgh3y3pC1eD+6dq1TYREG
+ 19/5HKllrjnHsYIo6nWwQP9pUfWZNVz7v9FFPKecttJg0AvZvm5o4rzBTueKtlf3AJZz
+ SunT/2S+SIK+eUaV3hzX0opFAKcLWBp8Y8Irp/6z5ourPmwSEQRKgW199muOV3EM+uZI
+ eyhU+l5tbW4LBFvnSLd9HkI9P42+n0sUEeJS3kZKX2J4GS/CT0lrK3gGqNuKUvEQ7tww
+ 3s3G8C2EfyoTAWE7LyPNc1DVeT2VoIc9FQ6CRb5VXhfit/nq7uo2GTvI+/FEyxHfw4mS
+ MJ7g==
 X-Forwarded-Encrypted: i=1;
- AJvYcCV7fVlF3qweGwCvpb1aNive37Eyy/vCQx0TdjmfZNv+jPaJLwYnwQ5wIjmkUCcZKOnGo42oEgUlrbs=@buildroot.org
-X-Gm-Message-State: AOJu0Yw4e+MWQpWjqVzZGln957Ki2roYImBz2bPOK/++1jxbpcRXth2C
- 8WG8pS7NWly3rJF3Dyp62CXRdoGBafUa6VxE4o5dQrFQQd9yiOjQaAqfE7IpvPxR1WM=
-X-Gm-Gg: ASbGncuQDJ3IlWPT0F9kCcRFGi4ATLGz+YH41yfHg5JOzstIyST70z+TXmHDKXvelIE
- 4zUUShPtFs+nuDcfLxaQiAofmP3TVIpDRH0Lhs31YLHT/cVuTAcXot/GVTl/tdsdDBF5AyEW52Z
- UNCfwZRy/3YpALGOajGIbckEELqMMQZ4K7uPaWdHfaC8tsLGlnS4wtl9dM+OgTg8OG0h8ViYpzE
- FvLiM2vNUb8VRetVmhNC+6xKkCQWSYtYooTHQVlK6FJPmf4pEwVNlqPshNvg61TsPz1uTousUKe
- wjiZCRvIfY8TzSdECZs/yt6/68pzMzfYvmD66SoOMy1PlLTuRRjm8ePRvCZFdM0PTZ9R2r5Z8Cn
- Az3/z5ZkVtaRO+GXiVmEg2XjvrYn61DMeiybUduo6
-X-Google-Smtp-Source: AGHT+IEhgIcegepZAELKNteySy5R+YsEdefP6B1fjXY1j3Mbf+n8BNaS2HlbhQSRfD6/sINdxo9ibQ==
-X-Received: by 2002:a05:6000:2891:b0:403:8633:b7e3 with SMTP id
- ffacd0b85a97d-4266e7d461emr5455999f8f.30.1760021678220; 
- Thu, 09 Oct 2025 07:54:38 -0700 (PDT)
+ AJvYcCWxM79NRABxWlgiOqS5KkrEYSRq05IxLmJYZ1ozXs+ymEQLIShSQKYAo+mP+fWkYAwOtqWHP8NOA1w=@buildroot.org
+X-Gm-Message-State: AOJu0YzENqralxGSyqK46d4RHfv0BjN2ZTpSR21zlOhmo2nIyWD4WBe0
+ eqzWASfggOb4W5EU8pRPU/UL3adeRW2YajUC1RYHlOGrC8Vds9dZtrrSNFUZk6GZsds=
+X-Gm-Gg: ASbGncsceGR8KOJv5M45yI/j6Ho954+/rLpxLJzJGREh0jrFSCyGsj5GFnvQ079wPSI
+ 8Z/GT6Hdzf9BRmLi395GK+vGMtMZiyeNnAELt9FDHS6/5M1rGbxwd0p+mO+WGEU9hEHIt4g23wI
+ Hxrv3hz84CugVM2EocGE1BZUjIipXTOJay0goQ9kcTADKzDfJAF2MC8c04R+FgENmOk23y67PfL
+ 4A6ZkE3xz1amcN/wDOEITpjrN/NgQKwRUcXBXztkMwXNhLqPpJZBclwV3wXJVUnkK0H6d/wbahW
+ BRbzj+Xgh8n4wJlKvpsyUKBLrNqXGY8GmFGAzOYqAB9jP6na4BZDrEybM+byYuWRTYSnetm1HVN
+ IV12P/CM3kH+hyW1KbMcjO6E4YpnmELeQUi0zORUA
+X-Google-Smtp-Source: AGHT+IGUvm4mXBtV0NtDwhJqVg6Vc+ygej+ZoIF2XC8/UsTH3NwhgsO5Rpnupj5lCmYXrWDyGp009A==
+X-Received: by 2002:a05:600c:3483:b0:46e:1b89:77e5 with SMTP id
+ 5b1f17b1804b1-46fa9a996cbmr54615115e9.12.1760021680371; 
+ Thu, 09 Oct 2025 07:54:40 -0700 (PDT)
 Received: from arch ([79.132.232.153]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4255d8ab8b0sm34942476f8f.18.2025.10.09.07.54.37
+ 5b1f17b1804b1-46fb32a84edsm11145545e9.4.2025.10.09.07.54.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 09 Oct 2025 07:54:37 -0700 (PDT)
-To: Julien Olivain <ju.o@free.fr>
+ Thu, 09 Oct 2025 07:54:40 -0700 (PDT)
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu,  9 Oct 2025 16:54:37 +0200
-Message-ID: <20251009145437.482013-1-thomas.perale@mind.be>
+Date: Thu,  9 Oct 2025 16:54:39 +0200
+Message-ID: <20251009145439.482124-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250929185006.865D2863E8@busybox.osuosl.org>
-References: <20250929185006.865D2863E8@busybox.osuosl.org>
+In-Reply-To: <20250929124955.1295473-2-dario.binacchi@amarulasolutions.com>
+References: <20250929124955.1295473-2-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1760021678; x=1760626478; darn=buildroot.org;
+ d=mind.be; s=google; t=1760021680; x=1760626480; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=Wb6pjIKX88ESqN9ZD6M6FGRFKwZ6HSSs7qgbyrK9pjc=;
- b=NH4zIG8fj7CBmwKazZy3RwplxtUhSa8LwCVKy49NgtEVHo68+8cyIamH1wyQKxOqE0
- cH4te9fBNrHSbOLkPnWNDMtG0U0pWU3MkgPg1DD2XJRWAW3BQ2Jl7e4AwyMtvbO+FqB1
- WhAeZSeonDOvMsZ4eKQhvwzh4AKz5s25iQ8oFgMQFUUw6JYTQJw+IpYbuUkgTYuLIvSv
- e9Rf/52lE/dZ1RN8pcUheIfglWaXfKKX+TTV9kEwbSPN9TM4xcOX3cR6z4aqYTYTySoL
- aXzqZMIFt4FJOQ5410YxJHia5eDWplBXJzbGpEF2DPyJ6OM9sml/t1D+Q5hFYO/7GPTV
- dH2w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=my6JwFgI/n+s6tWYq7cD/qloi6R5XdQiguJoF43kCnI=;
+ b=LlsdI+3ga2iDgYV4jy6SyXeMGzhB5Pl1wVTC/Pgy9f2Tgq9L1u1SFVB6dHWxFvir+H
+ KDndKWs7oRrsTGCHyBXs0HybT4b4dfq6zNXHSiWgGRvk+XL5mO8OkY4ZUN8fMRhMcIF3
+ /1kBCkNhL0qsKFpAKgGC143IqMYjuJZVUBsCQ940CCYUQly2/1a3M28MHKRy8EsLKdev
+ X5EjHsmg6UStWw43tA2UUb9TXWTQLYHPyfo0AxaAH2GF/Lz7aC21iIcUpaG1KV+HRv3a
+ R02Bzg6agRZVR+bnrVNM5tW5dNe/mJvCWtfOUTvXqS3CtO/bLSRIfrNIP4yvRhxpKq6l
+ iJ/Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=NH4zIG8f
-Subject: Re: [Buildroot] [git commit] board/zynq: correct zed board links
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=LlsdI+3g
+Subject: Re: [Buildroot] [PATCH 2/2] DEVELOPERS: add Dario Binacchi for empty
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,38 +118,29 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> commit: https://git.buildroot.net/buildroot/commit/?id=4e7f03314d8b777c7616e6bf5edf69c8aa015782
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> The web link www.zedboard.org is no longer valid as it routes to a generic
-> avnet.com boards link. Fix this issue by providing direct links to the Avnet
-> ZedBoard and Tria MicroZed boards.
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
-> Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
 Applied to 2025.02.x, 2025.05.x & 2025.08.x. Thanks
 
 > ---
->  board/zynq/readme.txt | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  DEVELOPERS | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/board/zynq/readme.txt b/board/zynq/readme.txt
-> index ed7509f2b5..225af4b9dc 100644
-> --- a/board/zynq/readme.txt
-> +++ b/board/zynq/readme.txt
-> @@ -43,7 +43,9 @@ References:
->     https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/ek-z7-zc706-g.html
->  
->   - Zedboard/Microzed information including schematics, reference designs, and
-> -   manuals are available from http://www.zedboard.org .
-> +   manuals are available from
-> +   https://www.avnet.com/americas/products/avnet-boards/avnet-board-families/zedboard/
-> +   https://www.tria-technologies.com/product/microzed/
->  
->  Support for other boards:
->  
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 71a9b1a15749..d3fdbb49a0e5 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -805,6 +805,7 @@ F:	package/babeld/
+>  F:	package/bc/
+>  F:	package/cmocka/
+>  F:	package/connman/
+> +F:	package/empty/
+>  F:	package/iana-assignments/
+>  F:	package/inih/
+>  F:	package/pocketpy/
+> -- 
+> 2.43.0
+> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot@buildroot.org
