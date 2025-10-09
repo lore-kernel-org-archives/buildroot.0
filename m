@@ -1,106 +1,106 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25126CCD184
-	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 14:55:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C9CCCCD187
+	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 14:55:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC839410B2;
-	Thu,  9 Oct 2025 14:55:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 24ADE83A73;
+	Thu,  9 Oct 2025 14:55:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9H1v1WFI_tZI; Thu,  9 Oct 2025 14:55:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p4PEE9aPzvDm; Thu,  9 Oct 2025 14:55:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB62B410C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21A8883104
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB62B410C6;
-	Thu,  9 Oct 2025 14:55:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id AF8A721B
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 14:54:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 21A8883104;
+	Thu,  9 Oct 2025 14:55:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 495BA119
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 14:54:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A0BFE612CD
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 14:54:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 465A641004
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 14:54:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KsJxnfTzk7W3 for <buildroot@buildroot.org>;
- Thu,  9 Oct 2025 14:54:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id s0-neXUe22ah for <buildroot@buildroot.org>;
+ Thu,  9 Oct 2025 14:54:53 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6D944612F7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D944612F7
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6D944612F7
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 14:54:52 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-46e52279279so7476645e9.3
- for <buildroot@buildroot.org>; Thu, 09 Oct 2025 07:54:52 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 622434049F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 622434049F
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 622434049F
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 14:54:53 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id
+ ffacd0b85a97d-3fa528f127fso820516f8f.1
+ for <buildroot@buildroot.org>; Thu, 09 Oct 2025 07:54:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1760021690; x=1760626490;
+ d=1e100.net; s=20230601; t=1760021691; x=1760626491;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=nUFrZNNGEzOT0pcFDwBcB38GbTOcEoEpt5GNMluvtZI=;
- b=TMhLIAhXW3Gf/ALVUg3n1U76EKC7XHrVIPG0NmykAf3TlREr1Y/4WwIBXeiwaTTcEY
- nqg2akWbXYe24W8+ZSs1glNr3NtxG2jDVQXaxI4BN6D3nZvdlGqpzqPEnYitDnuoIEMb
- hCMoLKQ/U6Zh0+TAiX1LIZNS8pTQXkW2cNiZhz3Cw4cNWvEH4QAi9clE2GIKFVUubWqJ
- NrWo6RuWOw4QXf3JZYo3oc+93nA3hWt4ScIuyptucVTtSsKiaH/WnxjxL/9YY/HFwj2S
- AL8t5BmAA+VXnNvRXEAKCaE8Gwy4RkS58oQDY74ba26qW/rtA+WBOHRYVc6V7BIRnZtR
- BrHw==
+ bh=+I6NurNYSZhueU9JZQPHzQYm8SzSvez1jB1lE5P7rgE=;
+ b=j4cn8N3v7V8cVsEFiScQtdXfLnCoqVtwyc2tmYHbdTzwBXB6rWq3MDR9brsy4dFnv2
+ aVsiwjhh9i/NBCIZaT6CUmiP8l/yR2JGaGOeiaR6B7kkoAOQa1SWourU6OgVFLmUSVt5
+ 0eB7CbChYK686M0NKjbjQM0oJ80/0puQVY+c/aa3aMLKzBOIE4cwukZOl7jnP6oDwNe2
+ ZytuHol2cg536WjxLnYBA2J3MWIh5lBvSVe781Vs+ihuogXYungmRWcyUS8lN740WLmK
+ xxkKmOtqEy9kNNPETNfn40B0iPTvj7sd7N91QDcZRwwiOJ2Zj66FjbHQCJd5MAZDB2wF
+ D+gQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCXwUPs62KppqamdjoSgVjrkytrsQ0wGVEijHfMUzi4hjTOEPaNw9Cnu5tAxMdtRfPuzZ+ehbpoHKq4=@buildroot.org
-X-Gm-Message-State: AOJu0YyaYW9PHI3aIect8tSnck+tuY1RpjzDK1akf+3qBxgOzWwIbgrr
- XpwTeShzoHViZCJie7J2jfMzZiqombiF0W8zpbXAnmtS/YXVi4NVaI5NKLW6xM+wBSFHRqh/wUv
- LRbPz
-X-Gm-Gg: ASbGncu/qjpnGORSy/mpqsJeZf8v7tydKXlvBFMHjEfx8QDtwa2Qn4hHEYLV9SfYvXd
- PmQT2/YlRkf9/ib89nYcxtOoVWXsIVmW8N6jE2snPAhJzKxVK2Mg/ZeCXfyN3mlVEenvIH7VrEw
- qy4FSPH+Y+0WLRQwNY86YWuHRHOVum55X2YQZpAREkHmadvK3ax7N1NW9YY80HXvdJTyHZXbetb
- 1XjaeW+zISuDhsHafZFbVpPD6SXx2ZdxwiGsukaEfWHBOPUzG9yxX3vtaCe9FzLVhTGcVvIIm5+
- a+fYLCJPYubCyrgD/MPzMOpLL0fJq/wZ52Yglr0X6dsuyw9wMCnjn2/wLtjRJjqfMerNdrvC4Z8
- daInsaUsGeZ3ag/CRnGJFFdssIi71M6yN5279LIPLABZkoQPQw/g=
-X-Google-Smtp-Source: AGHT+IGc63WO1q7Np9kZ26hSKQxIT3kr6KIOBv07sBntVw5fjGXD7Xgfshf3XW4aWAuqxr+ZybmwfQ==
-X-Received: by 2002:a05:600c:8b38:b0:45c:4470:271c with SMTP id
- 5b1f17b1804b1-46fa9af3682mr58107335e9.18.1760021690362; 
- Thu, 09 Oct 2025 07:54:50 -0700 (PDT)
+ AJvYcCXFZQgCQSyiLRaHpChH4+MRRR/ogLIqYEbDSKyCtu7IE/ejOBOwdfEdOtOBeqm26GEKAygQqdZWOME=@buildroot.org
+X-Gm-Message-State: AOJu0YyudL9xW9e0KMeunxAjUtOEi5TOAfLorRmCBSpNxSrtGEdEe8Y7
+ g98PLHyOFbyCaMpImvpe4+kscY6qlSPdjub+6RSggRXppvSIhZiADEs47fpalYhdFb6b5WW+lMj
+ zShgF
+X-Gm-Gg: ASbGncsyPjKIw0X9XqPuKNE23r0stEJTCtWS3jc5EYfI5Z2DY9mpQJTQ1w04iDqx6Ch
+ IKuVY6PxxBOAwsJIVkVQvFn90faAAHw6Ah0evDTuunjotUbJaaSG95tkEQE895EovPOxJr2WZeI
+ Qs3aZ6DE2JGAonuY51FQUGQT2IuimkJEf/XtUIuC4DiFnS9L8hbRp6u8KlMl/eqUtREIXMDZXiP
+ SkHinszYIVOaT96l2rKY2LS5xxIB/sz02Gr6QLL1KDxUMlXWRI+zP5LJuPxGj08O++Kn6wuOwcf
+ a56dzLbLXOUtJ83ganU8UQVtZ3QIZabi+MQ/ZWsC6yyQ9A6xRLa4qIMJGC2nNM/7N9+Y6+tzZW/
+ NuF3BnbRxPj4HkMna8uVgDzTqwnW3nsiZNl1CnbbI
+X-Google-Smtp-Source: AGHT+IEVVPk3HfrcgYPwA9sTmJvQgSa89tK/PvmfrJN9LiTEAX5EBsloRWhf2zuguJzZdc3PE6j/Yg==
+X-Received: by 2002:a05:6000:26c9:b0:425:57dd:58ca with SMTP id
+ ffacd0b85a97d-42666aa6384mr5034429f8f.8.1760021691360; 
+ Thu, 09 Oct 2025 07:54:51 -0700 (PDT)
 Received: from arch ([79.132.232.153]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4255d8e980dsm38443533f8f.36.2025.10.09.07.54.50
+ ffacd0b85a97d-4255d8a6bbesm35007985f8f.12.2025.10.09.07.54.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 09 Oct 2025 07:54:50 -0700 (PDT)
-To: Titouan Christophe <titouan.christophe@mind.be>
+ Thu, 09 Oct 2025 07:54:51 -0700 (PDT)
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu,  9 Oct 2025 16:54:49 +0200
-Message-ID: <20251009145449.482731-1-thomas.perale@mind.be>
+Date: Thu,  9 Oct 2025 16:54:50 +0200
+Message-ID: <20251009145450.482785-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251003125400.75799-1-titouan.christophe@mind.be>
-References: <20251003125400.75799-1-titouan.christophe@mind.be>
+In-Reply-To: <20251004100747.1412268-1-dario.binacchi@amarulasolutions.com>
+References: <20251004100747.1412268-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1760021690; x=1760626490; darn=buildroot.org;
+ d=mind.be; s=google; t=1760021691; x=1760626491; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=nUFrZNNGEzOT0pcFDwBcB38GbTOcEoEpt5GNMluvtZI=;
- b=R2pMWv9crTB5lPZskrjkm9zg9wyZvSQRc8R2ldHlKGA3fvTQrspDY+YUuKjoxcSHZE
- hea4oy+EaGUZqi4Bh8FOuTZ9eT8rNp2RVSKqfwOPwhMbyQBiTGCEQkgw1XHDEpAFciVo
- ua0taD6FhNy8+CGKcQbH4GUF5BnM/M/rlA9R+qBqYIxESVskHJQsKVDuHO51tY/z2cIl
- CikKoOiYu4DvtJcP71lG9HQ6gm2uAj5r4Xd5iMnc2+rkknabvVIMSf/Ynu2PAWz/PKJC
- nPYGlWKaWN0rioYt6d6KDBHog/jKb3PjaXjZyGDAwgYUTG3hhr61z2z2kH6AvOjVgPJZ
- WARw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=+I6NurNYSZhueU9JZQPHzQYm8SzSvez1jB1lE5P7rgE=;
+ b=OqJzSuDLPZBn643jEs495nIa9qc/aqdJwgWS31ED1X5gOLHLxtlSmikiIHWPLyh6v2
+ ywbj2H1uVD0xmUFTU7Wfkl8OzLD76xhOinobjU+EwXhEFMqAxco7kTYTbivsvLdOYm8W
+ DKATMidwStRI6mPhkcvlsg76nAf83P7m5zl79ihN93YVnFo3ASAHuRuLSWvRQfvii4KU
+ GnRVEqkLVsJ5mMPkmXGDYMvzSobVprm01ww1SovcJnTDJj4sRM9zZCYmuvrxGY49TUvk
+ Dgsj/WKT6J2rKvdI/0eWxaBJOm1mAaPaJ6UybZf8vWz6ToEvGp0UXPE+mM12HwDTi2fK
+ K4pQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=R2pMWv9c
-Subject: Re: [Buildroot] [PATCH] package/raptor: add patches for
- CVE-2024-57822, CVE-2024-57823
+ header.a=rsa-sha256 header.s=google header.b=OqJzSuDL
+Subject: Re: [Buildroot] [PATCH 1/1] package/fastd: security bump to version
+ 23
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,134 +120,54 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> This fixes the following vulnerabilities:
-> - CVE-2024-57822:
->     In Raptor RDF Syntax Library through 2.0.16, there is a heap-based
->     buffer over-read when parsing triples with the nquads parser in
->     raptor_ntriples_parse_term_internal().
->     https://www.cve.org/CVERecord?id=CVE-2024-57822
+> This bump includes the security fix for CVE-2025-24356.
 > 
-> - CVE-2024-57823:
->     In Raptor RDF Syntax Library through 2.0.16, there is an integer
->     underflow when normalizing a URI with the turtle parser in
->     raptor_uri_normalize_path().
->     https://www.cve.org/CVERecord?id=CVE-2024-57823
+> Fixes:
+> https://www.cve.org/CVERecord?id=CVE-2025-24356.
 > 
-> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+> The COPYRIGHT file was renamed to LICENSE [1]. The hash file was updated
+> because a date was removed [2] and the libmnl version was updated [3].
+> 
+> Release notes:
+> https://fastd.readthedocs.io/en/stable/releases/v23.html
+> 
+> [1] https://github.com/neocturne/fastd/commit/fa88c739b9afe053905bddc7fbb9c252e290c35d
+> [2] https://github.com/neocturne/fastd/commit/318c944f40c90e048e370b2f75598bfcd79a1790
+> [3] https://github.com/neocturne/fastd/commit/c08a3d59debddf5f99e442d9529a142f04549b50
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
 Applied to 2025.02.x, 2025.05.x & 2025.08.x. Thanks
 
 > ---
->  ...ad-buffer-overflow-in-ntriples-bnode.patch | 30 +++++++++++++
->  ...derflow-in-raptor_uri_normalize_path.patch | 43 +++++++++++++++++++
->  package/raptor/raptor.mk                      |  5 +++
->  3 files changed, 78 insertions(+)
->  create mode 100644 package/raptor/0003-Fix-Heap-read-buffer-overflow-in-ntriples-bnode.patch
->  create mode 100644 package/raptor/0004-Fix-integer-underflow-in-raptor_uri_normalize_path.patch
+>  package/fastd/fastd.hash | 4 ++--
+>  package/fastd/fastd.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/raptor/0003-Fix-Heap-read-buffer-overflow-in-ntriples-bnode.patch b/package/raptor/0003-Fix-Heap-read-buffer-overflow-in-ntriples-bnode.patch
-> new file mode 100644
-> index 0000000000..1242c7289c
-> --- /dev/null
-> +++ b/package/raptor/0003-Fix-Heap-read-buffer-overflow-in-ntriples-bnode.patch
-> @@ -0,0 +1,30 @@
-> +From ece2c79df43091686a538b8231cf387d84bfa60e Mon Sep 17 00:00:00 2001
-> +From: Dave Beckett <dave@dajobe.org>
-> +Date: Fri, 7 Feb 2025 11:38:34 -0800
-> +Subject: [PATCH] Fix Github issue 70 B) Heap read buffer overflow in ntriples
-> + bnode
-> +
-> +(raptor_ntriples_parse_term_internal): Only allow looking at the last
-> +character of a bnode ID only if bnode length >0
-> +
-> +CVE: CVE-2024-57822
-> +Upstream: https://github.com/dajobe/raptor/commit/ece2c79df43091686a538b8231cf387d84bfa60e
-> +
-> +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-> +---
-> + src/raptor_ntriples.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/src/raptor_ntriples.c b/src/raptor_ntriples.c
-> +index 3276e790..ecc4247c 100644
-> +--- a/src/raptor_ntriples.c
-> ++++ b/src/raptor_ntriples.c
-> +@@ -212,7 +212,7 @@ raptor_ntriples_parse_term_internal(raptor_world* world,
-> +             locator->column--;
-> +             locator->byte--;
-> +           }
-> +-          if(term_class == RAPTOR_TERM_CLASS_BNODEID && dest[-1] == '.') {
-> ++          if(term_class == RAPTOR_TERM_CLASS_BNODEID && position > 0 && dest[-1] == '.') {
-> +             /* If bnode id ended on '.' move back one */
-> +             dest--;
-> + 
-> diff --git a/package/raptor/0004-Fix-integer-underflow-in-raptor_uri_normalize_path.patch b/package/raptor/0004-Fix-integer-underflow-in-raptor_uri_normalize_path.patch
-> new file mode 100644
-> index 0000000000..55e8ab3f11
-> --- /dev/null
-> +++ b/package/raptor/0004-Fix-integer-underflow-in-raptor_uri_normalize_path.patch
-> @@ -0,0 +1,43 @@
-> +From da7a79976bd0314c23cce55d22495e7d29301c44 Mon Sep 17 00:00:00 2001
-> +From: Dave Beckett <dave@dajobe.org>
-> +Date: Thu, 6 Feb 2025 21:12:37 -0800
-> +Subject: [PATCH] Fix Github issue 70 A) Integer Underflow in
-> + raptor_uri_normalize_path()
-> +
-> +(raptor_uri_normalize_path): Return empty buffer if path gets to 0
-> +length
-> +
-> +CVE: CVE-2024-57823
-> +Upstream: https://github.com/dajobe/raptor/commit/da7a79976bd0314c23cce55d22495e7d29301c44
-> +
-> +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-> +---
-> + src/raptor_rfc2396.c | 8 ++++++++
-> + 1 file changed, 8 insertions(+)
-> +
-> +diff --git a/src/raptor_rfc2396.c b/src/raptor_rfc2396.c
-> +index 8cc364f4..f8ec5798 100644
-> +--- a/src/raptor_rfc2396.c
-> ++++ b/src/raptor_rfc2396.c
-> +@@ -351,6 +351,10 @@ raptor_uri_normalize_path(unsigned char* path_buffer, size_t path_len)
-> +           *dest++ = *s++;
-> +         *dest = '\0';
-> +         path_len -= len;
-> ++        if(path_len <= 0) {
-> ++          *path_buffer = '\0';
-> ++          return 0;
-> ++        }
-> + 
-> +         if(p && p < prev) {
-> +           /* We know the previous prev path component and we didn't do
-> +@@ -390,6 +394,10 @@ raptor_uri_normalize_path(unsigned char* path_buffer, size_t path_len)
-> +     /* Remove <component>/.. at the end of the path */
-> +     *prev = '\0';
-> +     path_len -= (s-prev);
-> ++    if(path_len <= 0) {
-> ++      *path_buffer = '\0';
-> ++      return 0;
-> ++    }
-> +   }
-> + 
-> + 
-> diff --git a/package/raptor/raptor.mk b/package/raptor/raptor.mk
-> index ec7643ce3d..1b850400f8 100644
-> --- a/package/raptor/raptor.mk
-> +++ b/package/raptor/raptor.mk
-> @@ -14,6 +14,11 @@ RAPTOR_CPE_ID_VENDOR = librdf
->  RAPTOR_CPE_ID_PRODUCT = raptor_rdf_syntax_library
->  RAPTOR_INSTALL_STAGING = YES
+> diff --git a/package/fastd/fastd.hash b/package/fastd/fastd.hash
+> index 5f7f9665336e..a02b506c98ea 100644
+> --- a/package/fastd/fastd.hash
+> +++ b/package/fastd/fastd.hash
+> @@ -1,3 +1,3 @@
+>  # computed locally
+> -sha256  19750b88705d66811b7c21b672537909c19ae6b21350688cbd1a3a54d08a8951  fastd-22.tar.xz
+> -sha256  adf08b42f1b890b89e998360a864cb4f8441a0a57c9e95e2ce1bfdfc24c49976  COPYRIGHT
+> +sha256  dcab54485c79dda22ce6308a2a48764d53977a518952facd1204ba21af1c86e0  fastd-23.tar.xz
+> +sha256  f229ee6df84971355f7d54d60b0302ca8a3b883d2dc41176e58e9da4aa7c1b05  LICENSE
+> diff --git a/package/fastd/fastd.mk b/package/fastd/fastd.mk
+> index 6c496cf9ef1a..e697ad0ca88a 100644
+> --- a/package/fastd/fastd.mk
+> +++ b/package/fastd/fastd.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
-> +# 0003-Fix-Heap-read-buffer-overflow-in-ntriples-bnode.patch
-> +RAPTOR_IGNORE_CVES += CVE-2024-57822
-> +# 0004-Fix-integer-underflow-in-raptor_uri_normalize_path.patch
-> +RAPTOR_IGNORE_CVES += CVE-2024-57823
-> +
->  # Flag is added to make sure the patch is applied for the configure.ac of raptor.
->  RAPTOR_AUTORECONF = YES
->  
+> -FASTD_VERSION = 22
+> +FASTD_VERSION = 23
+>  FASTD_SITE = https://github.com/NeoRaider/fastd/releases/download/v$(FASTD_VERSION)
+>  FASTD_SOURCE = fastd-$(FASTD_VERSION).tar.xz
+>  FASTD_LICENSE = BSD-2-Clause
 > -- 
-> 2.51.0
+> 2.43.0
 > 
 > _______________________________________________
 > buildroot mailing list
