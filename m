@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 778EBCCD188
-	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 10:06:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9844ECCD18C
+	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 10:06:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 47CEE611F8;
-	Thu,  9 Oct 2025 10:06:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 46E23611F5;
+	Thu,  9 Oct 2025 10:06:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZrrYnJsClm4Q; Thu,  9 Oct 2025 10:06:28 +0000 (UTC)
+ id Z_nWnlCmQ6tR; Thu,  9 Oct 2025 10:06:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31B4B61222
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 207C5611FD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 31B4B61222;
-	Thu,  9 Oct 2025 10:06:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 55EA89DB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 207C5611FD;
+	Thu,  9 Oct 2025 10:06:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 64A2821B
  for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:06:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 35ECA83C1E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4A38940FBF
  for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:06:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CKKzebCJ8jG0 for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KhLZFPtDzcdT for <buildroot@buildroot.org>;
  Thu,  9 Oct 2025 10:06:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 945CC83C12
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 736EF40D63
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 945CC83C12
+ by smtp2.osuosl.org (Postfix) with ESMTP id 736EF40D63
  for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:06:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 84FD586D2F; Thu,  9 Oct 2025 10:06:23 +0000 (UTC)
+ id 612CC86D25; Thu,  9 Oct 2025 10:06:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 9 Oct 2025 08:29:29 +0200
+Date: Thu, 9 Oct 2025 08:26:53 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 385b53590f584bf58b98a3fec50ca3b4d8de0929
-X-Git-Newrev: f04874c59a93bcb7f1c7e4afb092e81d17fc5961
+X-Git-Oldrev: 6d3a056eac566399f3dbe023daf80f839a6d4011
+X-Git-Newrev: e30402dcdcdeca10cddc6cbfd8aa22875b20e27c
 X-Patchwork-Hint: ignore
-Message-Id: <20251009100623.84FD586D2F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/luaossl: bump to
- version 20250929
+Message-Id: <20251009100623.612CC86D25@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] board/zynq: correct zed
+ board links
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,45 +66,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f04874c59a93bcb7f1c7e4afb092e81d17fc5961
+commit: https://git.buildroot.net/buildroot/commit/?id=e30402dcdcdeca10cddc6cbfd8aa22875b20e27c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-diff LICENSE:
--    2015-2019  Daurnimator <quae@daurnimator.com>
-+    2015-2025  Daurnimator <quae@daurnimator.com>
+The web link www.zedboard.org is no longer valid as it routes to a generic
+avnet.com boards link. Fix this issue by providing direct links to the Avnet
+ZedBoard and Tria MicroZed boards.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit cdb1407c0c6a9a7697e61419431cd4f1ccce08b8)
+(cherry picked from commit 4e7f03314d8b777c7616e6bf5edf69c8aa015782)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/luaossl/luaossl.hash | 4 ++--
- package/luaossl/luaossl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ board/zynq/readme.txt | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/luaossl/luaossl.hash b/package/luaossl/luaossl.hash
-index bf08fbd51e..734c916f5a 100644
---- a/package/luaossl/luaossl.hash
-+++ b/package/luaossl/luaossl.hash
-@@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256  d711c86f433def90f63cb6747fe0bebaac604b868de6a9a35e4da2bb4e0967be  luaossl-20220711-0.src.rock
--sha256  7bd585fba3ae52943e0915e4c8ca049acde9f1e5cea101ef6b294427c8f0ee7d  luaossl-rel-20220711/LICENSE
-+sha256  19cfc635dd804bde649a8db1ffae01e5fc0cdfac2630fb73c617fe6d8a0bfd30  luaossl-20250929-0.src.rock
-+sha256  421c26c8788c46fd59e4dbfe5bf8eab6c21e37ce3ca8cb44dfff5dc179098756  luaossl-rel-20250929/LICENSE
-diff --git a/package/luaossl/luaossl.mk b/package/luaossl/luaossl.mk
-index a6283a520e..079d1e0ca4 100644
---- a/package/luaossl/luaossl.mk
-+++ b/package/luaossl/luaossl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/zynq/readme.txt b/board/zynq/readme.txt
+index 54e01c9d8c..0b1cca3abb 100644
+--- a/board/zynq/readme.txt
++++ b/board/zynq/readme.txt
+@@ -43,7 +43,9 @@ References:
+    https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/ek-z7-zc706-g.html
  
--LUAOSSL_VERSION_UPSTREAM = 20220711
-+LUAOSSL_VERSION_UPSTREAM = 20250929
- LUAOSSL_VERSION = $(LUAOSSL_VERSION_UPSTREAM)-0
- LUAOSSL_SUBDIR = luaossl-rel-$(LUAOSSL_VERSION_UPSTREAM)
- LUAOSSL_LICENSE = MIT
+  - Zedboard/Microzed information including schematics, reference designs, and
+-   manuals are available from http://www.zedboard.org .
++   manuals are available from
++   https://www.avnet.com/americas/products/avnet-boards/avnet-board-families/zedboard/
++   https://www.tria-technologies.com/product/microzed/
+ 
+ Support for other boards:
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
