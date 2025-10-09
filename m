@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00EF9CCD188
-	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 10:06:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C7ABCCD187
+	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 10:06:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C76A16130C;
-	Thu,  9 Oct 2025 10:06:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 00B6161319;
+	Thu,  9 Oct 2025 10:06:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IkppRADXfm02; Thu,  9 Oct 2025 10:06:48 +0000 (UTC)
+ id q64DpZgwgVEg; Thu,  9 Oct 2025 10:06:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AACA61274
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1A7B6131B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0AACA61274;
-	Thu,  9 Oct 2025 10:06:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0FED3119
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:06:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A1A7B6131B;
+	Thu,  9 Oct 2025 10:06:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 03BC921B
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:06:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 64113611F8
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:06:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 54E4940FBB
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:06:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1LwSMkX9BPSS for <buildroot@buildroot.org>;
- Thu,  9 Oct 2025 10:06:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OIM9LjbO30QD for <buildroot@buildroot.org>;
+ Thu,  9 Oct 2025 10:06:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F28ED611FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2DEF40FA5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F28ED611FA
+ by smtp2.osuosl.org (Postfix) with ESMTP id D2DEF40FA5
  for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:06:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F0F3B86D25; Thu,  9 Oct 2025 10:06:23 +0000 (UTC)
+ id D0B0786D29; Thu,  9 Oct 2025 10:06:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 9 Oct 2025 08:41:35 +0200
+Date: Thu, 9 Oct 2025 08:37:52 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 31958f4823aad37ad29cfacbc380d3d1abb6ad93
-X-Git-Newrev: d3dbb9529cbc70432d27f07c5e482b1feada864e
+X-Git-Oldrev: 82dfc95024a1697988a05b9b63e705e1e72d1c75
+X-Git-Newrev: 8321038332eb3f685575616bbfcb0f469d06f704
 X-Patchwork-Hint: ignore
-Message-Id: <20251009100623.F0F3B86D25@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/python-django:
- security bump to v5.2.7
+Message-Id: <20251009100623.D0B0786D29@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/fetchmail: bump
+ version to 6.5.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,77 +66,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3dbb9529cbc70432d27f07c5e482b1feada864e
+commit: https://git.buildroot.net/buildroot/commit/?id=8321038332eb3f685575616bbfcb0f469d06f704
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-For release note, see:
-https://docs.djangoproject.com/en/5.2/releases/5.2.7/
+Release notes:
+https://sourceforge.net/p/fetchmail/mailman/message/59238340/
 
-This fixes the following vulnerabilities:
-- CVE-2025-59681:
-    An issue was discovered in Django 4.2 before 4.2.25, 5.1 before
-    5.1.13, and 5.2 before 5.2.7. QuerySet.annotate(), QuerySet.alias(),
-    QuerySet.aggregate(), and QuerySet.extra() are subject to SQL
-    injection in column aliases, when using a suitably crafted dictionary,
-    with dictionary expansion, as the **kwargs passed to these methods (on
-    MySQL and MariaDB).
-    https://www.cve.org/CVERecord?id=CVE-2025-59681
+The COPYING license file was updated in:
+https://sourceforge.net/p/fetchmail/git/ci/e6597cee1e5261e19106f0f47d11636dcf4161ed/
+https://sourceforge.net/p/fetchmail/git/ci/a408d51154616e992be6463b2e75c19f6115ec1a/
+This commit updates its hash accordingly.
 
-- CVE-2025-59682:
-    An issue was discovered in Django 4.2 before 4.2.25, 5.1 before
-    5.1.13, and 5.2 before 5.2.7. The django.utils.archive.extract()
-    function, used by the "startapp --template" and "startproject
-    --template" commands, allows partial directory traversal via an
-    archive with file paths sharing a common prefix with the target
-    directory.
-    https://www.cve.org/CVERecord?id=CVE-2025-59682
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-[Julien: add link to release note]
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien: fix COPYING license file hash]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 7bbc66a39e6e18d5298564167b42e56b82c9360a)
+(cherry picked from commit 8082b26a2be1669d9d55b19873d2b2b5e99c77b0)
+[Thomas: pick to include the 6.5.6 security bump]
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-django/python-django.hash | 6 +++---
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/fetchmail/fetchmail.hash | 6 +++---
+ package/fetchmail/fetchmail.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 3ff4eb4e36..1ec80dc1c2 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  1f0327293cc3768903ce8cd390ec3f47  django-5.2.6.tar.gz
--sha256  da5e00372763193d73cecbf71084a3848458cecf4cee36b9a1e8d318d114a87b  django-5.2.6.tar.gz
-+md5  699a77ac347ca3484939762483dc4b08  django-5.2.7.tar.gz
-+sha256  e0f6f12e2551b1716a95a63a1366ca91bbcd7be059862c1b18f989b1da356cdd  django-5.2.7.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
- sha256  dcac1c86cb7ab491702bdb4c41be680fafde51536748cc8aaee3840eec53ed17  django/contrib/gis/measure.py
-@@ -12,4 +12,4 @@ sha256  4ee0cbc51370afde358652a0f977972053729ed578b6a42f5e2a037d114f0b39  django
- sha256  73af2949bff9296cb0f816c3be19a4da4e95adc94c1f924796e8bad3f03f2f29  django/contrib/admin/static/admin/js/vendor/xregexp/LICENSE.txt
- sha256  d114faff3488c16c319b3235dc41f90239d3d63d9853733033d8f7535f5c0004  django/contrib/admin/static/admin/img/LICENSE
- sha256  54004c4b606964ebc163af16d04607c16e428f8a78a026fecb53f70c09f4a94f  django/dispatch/license.txt
--sha256  1ce0483ad554cf135efec70ad2097e82ed72790194f17e1591821dc82c2416e0  django/utils/archive.py
-+sha256  9f37277d682cf06369041e60fb6fda5a85dfcf118d9176489087a3d40293f015  django/utils/archive.py
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index e3959f4192..139a15b13a 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
+diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
+index 71c0756b15..c4b968a89a 100644
+--- a/package/fetchmail/fetchmail.hash
++++ b/package/fetchmail/fetchmail.hash
+@@ -1,4 +1,4 @@
+-# From https://sourceforge.net/p/fetchmail/mailman/message/59196377/
+-sha256  c859156e9bff841d4d984cb3fdcb8042b6b31789fc3387c2649baa95a88d698b  fetchmail-6.5.4.tar.xz
++# From https://sourceforge.net/p/fetchmail/mailman/message/59238340/
++sha256  f989b62729c76afbcd65ec43b9c477f2d990f0913da141ff8166aa4e2bf56025  fetchmail-6.5.5.tar.xz
+ # Locally computed:
+-sha256  e5768c44445cf051dd88e0cf8bfc16d81f7b1a7cc28f4e0204a4f8d81cd16977  COPYING
++sha256  a502ffd59034feee7e924b29500451b984992ae361bd8084736afc470f32135a  COPYING
+diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
+index 90345edf62..3eec63f071 100644
+--- a/package/fetchmail/fetchmail.mk
++++ b/package/fetchmail/fetchmail.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 5.2.6
-+PYTHON_DJANGO_VERSION = 5.2.7
- PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/4c/8c/2a21594337250a171d45dda926caa96309d5136becd1f48017247f9cdea0
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/b1/96/bd84e2bb997994de8bcda47ae4560991084e86536541d7214393880f01a8
- PYTHON_DJANGO_LICENSE = BSD-3-Clause, MIT (jquery, utils/archive.py), BSD-2-Clause (inlines.js)
- PYTHON_DJANGO_LICENSE_FILES = LICENSE \
- 	django/contrib/gis/measure.py \
+ FETCHMAIL_VERSION_MAJOR = 6.5
+-FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).4
++FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).5
+ FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
+ FETCHMAIL_SITE = https://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
+ FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
