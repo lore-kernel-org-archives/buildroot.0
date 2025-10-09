@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C2ADCCD187
-	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 10:16:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EE19CCD188
+	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 10:16:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BB52C61334;
-	Thu,  9 Oct 2025 10:16:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6C0D6132D;
+	Thu,  9 Oct 2025 10:16:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tVTPMDbiNK1F; Thu,  9 Oct 2025 10:16:19 +0000 (UTC)
+ id TDsNBftBvUJC; Thu,  9 Oct 2025 10:16:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2ED03612A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE31E6131A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2ED03612A9;
-	Thu,  9 Oct 2025 10:16:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2B619119
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:16:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DE31E6131A;
+	Thu,  9 Oct 2025 10:16:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E68921B
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:16:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C1BC683C2D
+ by smtp3.osuosl.org (Postfix) with ESMTP id A39116120F
  for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:16:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NpGJR8TyGotT for <buildroot@buildroot.org>;
- Thu,  9 Oct 2025 10:16:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sLTP68VRzk8Y for <buildroot@buildroot.org>;
+ Thu,  9 Oct 2025 10:16:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 466F583C30
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0072060F22
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 466F583C30
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:16:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0072060F22
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:15:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4487C86E15; Thu,  9 Oct 2025 10:16:00 +0000 (UTC)
+ id D364986E16; Thu,  9 Oct 2025 10:15:59 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 9 Oct 2025 08:39:54 +0200
+Date: Thu, 9 Oct 2025 08:27:40 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: ffbe744d564c24411d6a6a3e196b4df7bae07315
-X-Git-Newrev: f123088c84280fe8398420d6b049e0c390369528
+X-Git-Oldrev: e7ae62f74791e8020bf625638c9adfc26ddf1ad8
+X-Git-Newrev: 54b64f242f40ca283e4dd19f14df6a4a39a06afa
 X-Patchwork-Hint: ignore
-Message-Id: <20251009101600.4487C86E15@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/fetchmail: bump
- version to 6.5.4
+Message-Id: <20251009101559.D364986E16@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/linux-firmware:
+ add support for Intel 6E Ty architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,46 +66,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f123088c84280fe8398420d6b049e0c390369528
+commit: https://git.buildroot.net/buildroot/commit/?id=54b64f242f40ca283e4dd19f14df6a4a39a06afa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Release notes:
-https://sourceforge.net/p/fetchmail/mailman/message/59196377/
+Note:
+The first file matching the pattern "iwlwifi-ty-a0-gf-a0*" was
+introduced in commit [1], first included in version 20201022.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[1] https://gitlab.com/kernel-firmware/linux-firmware/-/commit/4f41e9d6437d03e7ce9279076107dd08f46656f3
+
+Signed-off-by: Alex McLain <alex@alexmclain.com>
+[Julien: add the note in commit log when the first
+  firmware was introduced
+]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 91967008a5d60475fe9a10293a47d3f740161fcb)
-[Thomas: pick to include the 6.5.6 security bump]
+(cherry picked from commit 4a51495d69da56eff157e4b51b2326ac320aabf4)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/fetchmail/fetchmail.hash | 4 ++--
- package/fetchmail/fetchmail.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/linux-firmware/linux-firmware.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
-index 2a67bc1e22..71c0756b15 100644
---- a/package/fetchmail/fetchmail.hash
-+++ b/package/fetchmail/fetchmail.hash
-@@ -1,4 +1,4 @@
--# From https://sourceforge.net/p/fetchmail/mailman/message/59193648/
--sha256  d74e893b78ef29ebef375ab7e726d2977140f8f1208f5905569395cbdae4c23d  fetchmail-6.5.3.tar.xz
-+# From https://sourceforge.net/p/fetchmail/mailman/message/59196377/
-+sha256  c859156e9bff841d4d984cb3fdcb8042b6b31789fc3387c2649baa95a88d698b  fetchmail-6.5.4.tar.xz
- # Locally computed:
- sha256  e5768c44445cf051dd88e0cf8bfc16d81f7b1a7cc28f4e0204a4f8d81cd16977  COPYING
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index e3fad2f4c4..90345edf62 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index fac5733ad4..6b3a4bee24 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -610,7 +610,7 @@ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
+ endif
  
- FETCHMAIL_VERSION_MAJOR = 6.5
--FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).3
-+FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).4
- FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
- FETCHMAIL_SITE = https://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
- FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6E),y)
+-LINUX_FIRMWARE_FILES += iwlwifi-so-a0-gf-a0*.{ucode,pnvm}
++LINUX_FIRMWARE_FILES += iwlwifi-{so,ty}-a0-gf-a0*.{ucode,pnvm}
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
+ endif
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
