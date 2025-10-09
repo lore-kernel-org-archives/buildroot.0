@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36E50CCD188
-	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 10:06:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 402E8CCA470
+	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 10:06:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F218261275;
-	Thu,  9 Oct 2025 10:06:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CFF506126B;
+	Thu,  9 Oct 2025 10:06:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q4jv6A1lfgMa; Thu,  9 Oct 2025 10:06:33 +0000 (UTC)
+ id DFPfDcvMbPsH; Thu,  9 Oct 2025 10:06:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE13061261
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B451561255
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CE13061261;
-	Thu,  9 Oct 2025 10:06:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1AC1F9DA
+	by smtp3.osuosl.org (Postfix) with ESMTP id B451561255;
+	Thu,  9 Oct 2025 10:06:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 20A959DB
  for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:06:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 48BF240611
+ by smtp3.osuosl.org (Postfix) with ESMTP id 65D6161200
  for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:06:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id toiRRaXLcBRu for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qVFiDHBHvc9a for <buildroot@buildroot.org>;
  Thu,  9 Oct 2025 10:06:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C39C40574
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91551611E9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8C39C40574
+ by smtp3.osuosl.org (Postfix) with ESMTP id 91551611E9
  for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:06:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7C5AA86D2A; Thu,  9 Oct 2025 10:06:23 +0000 (UTC)
+ id 8DA7B86D25; Thu,  9 Oct 2025 10:06:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 9 Oct 2025 08:28:23 +0200
+Date: Thu, 9 Oct 2025 08:30:20 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 8b4638d81ae23de725f8ba70414cb235cd857ac6
-X-Git-Newrev: 385b53590f584bf58b98a3fec50ca3b4d8de0929
+X-Git-Oldrev: f04874c59a93bcb7f1c7e4afb092e81d17fc5961
+X-Git-Newrev: 8af317f0b2155231234c198454ee972fd17c160a
 X-Patchwork-Hint: ignore
-Message-Id: <20251009100623.7C5AA86D2A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/linux-firmware:
- fix license file for ath10k firmware
+Message-Id: <20251009100623.8DA7B86D25@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/python-pip:
+ security bump to v25.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,44 +66,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=385b53590f584bf58b98a3fec50ca3b4d8de0929
+commit: https://git.buildroot.net/buildroot/commit/?id=8af317f0b2155231234c198454ee972fd17c160a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-The WHENCE file [1] indicates ath10k's license file is
-LICENSE.QualcommAtheros_ath10k license and not LICENCE.atheros_firmware.
+This fixes the following vulnerability:
+- CVE-2025-8869:
+    When extracting a tar archive pip may not check symbolic links point
+    into the extraction directory if the tarfile module doesn't implement
+    PEP 706. Note that upgrading pip to a "fixed" version for this
+    vulnerability doesn't fix all known vulnerabilities that are
+    remediated by using a Python version that implements PEP 706.  Note
+    that this is a vulnerability in pip's fallback implementation of tar
+    extraction for Python versions that don't implement PEP 706 and
+    therefore are not secure to all vulnerabilities in the Python
+    'tarfile' module. If you're using a Python version that implements PEP
+    706 then pip doesn't use the "vulnerable" fallback code.  Mitigations
+    include upgrading to a version of pip that includes the fix, upgrading
+    to a Python version that implements PEP 706 (Python >=3.9.17,
+    >=3.10.12, >=3.11.4, or >=3.12), applying the linked patch, or
+    inspecting source distributions (sdists) before installation as is
+    already a best-practice.
+    https://www.cve.org/CVERecord?id=CVE-2025-8869
 
-[1] https://gitlab.com/kernel-firmware/linux-firmware/-/blob/20250627/WHENCE#L3700
-
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-[Julien: add link to WHENCE file]
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 752fc349a05910a08b08467e2f28fd80f1c239a1)
+(cherry picked from commit 78d687d2d236ea69cbb8e4d2a67c485bdfe3fe61)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/linux-firmware/linux-firmware.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/python-pip/python-pip.hash | 4 ++--
+ package/python-pip/python-pip.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 9b478a9e12..4108d85255 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -257,14 +257,14 @@ LINUX_FIRMWARE_FILES += ath10k/QCA9377/hw1.0/board-2.bin \
- 			ath10k/QCA9377/hw1.0/firmware-5.bin \
- 			ath10k/QCA9377/hw1.0/firmware-6.bin \
- 			ath10k/QCA9377/hw1.0/firmware-sdio-5.bin
--LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.QualcommAtheros_ath10k
- endif
+diff --git a/package/python-pip/python-pip.hash b/package/python-pip/python-pip.hash
+index f6b11ee26a..ad70f0da7b 100644
+--- a/package/python-pip/python-pip.hash
++++ b/package/python-pip/python-pip.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pip/json
+-md5  c698f55e2015dc7dbb5b77c6df1cc88a  pip-25.0.tar.gz
+-sha256  8e0a97f7b4c47ae4a494560da84775e9e2f671d415d8d828e052efefb206b30b  pip-25.0.tar.gz
++md5  6d109857fa69274dacfc1d6528471eb5  pip-25.2.tar.gz
++sha256  578283f006390f85bb6282dffb876454593d637f5d1be494b5202ce4877e71f2  pip-25.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  634300a669d49aeae65b12c6c48c924c51a4cdf3d1ff086dc3456dc8bcaa2104  LICENSE.txt
+diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
+index 9ffc0b66ea..02d7da6fe9 100644
+--- a/package/python-pip/python-pip.mk
++++ b/package/python-pip/python-pip.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10K_QCA998X),y)
- LINUX_FIRMWARE_FILES += ath10k/QCA988X/hw2.0/board.bin \
- 			ath10k/QCA988X/hw2.0/firmware-4.bin \
- 			ath10k/QCA988X/hw2.0/firmware-5.bin
--LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.QualcommAtheros_ath10k
- endif
- 
- # sd8686 v8
+-PYTHON_PIP_VERSION = 25.0
++PYTHON_PIP_VERSION = 25.2
+ PYTHON_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
+-PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/47/3e/68beeeeb306ea20ffd30b3ed993f531d16cd884ec4f60c9b1e238f69f2af
++PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/20/16/650289cd3f43d5a2fadfd98c68bd1e1e7f2550a1a5326768cddfbcedb2c5
+ PYTHON_PIP_SETUP_TYPE = setuptools
+ PYTHON_PIP_LICENSE = MIT
+ PYTHON_PIP_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
