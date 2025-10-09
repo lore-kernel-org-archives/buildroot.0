@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94635CCD188
-	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 10:06:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A83DCCA470
+	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 10:06:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 67E76612D6;
-	Thu,  9 Oct 2025 10:06:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 215A961241;
+	Thu,  9 Oct 2025 10:06:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kcHm2ixBFUE1; Thu,  9 Oct 2025 10:06:43 +0000 (UTC)
+ id DRtXrLkyZu2Q; Thu,  9 Oct 2025 10:06:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A72BF612C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45B60612D1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A72BF612C2;
-	Thu,  9 Oct 2025 10:06:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1BE549DA
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:06:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 45B60612D1;
+	Thu,  9 Oct 2025 10:06:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 02B92119
+ for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:06:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C657940FB9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1798161206
  for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:06:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SFAvzghEwyiZ for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fvsUUR7wScyt for <buildroot@buildroot.org>;
  Thu,  9 Oct 2025 10:06:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EAEAC40FAC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1D84611F8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EAEAC40FAC
+ by smtp3.osuosl.org (Postfix) with ESMTP id E1D84611F8
  for <buildroot@buildroot.org>; Thu,  9 Oct 2025 10:06:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E8F3986D29; Thu,  9 Oct 2025 10:06:23 +0000 (UTC)
+ id E055D86D26; Thu,  9 Oct 2025 10:06:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 9 Oct 2025 08:41:13 +0200
+Date: Thu, 9 Oct 2025 08:40:44 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: d9a062a664ee64aeb47793f872348d2c6cdb45f3
-X-Git-Newrev: 31958f4823aad37ad29cfacbc380d3d1abb6ad93
+X-Git-Oldrev: eb03d9ea7170ba3f6aee12f0e0ba2cd61f2428df
+X-Git-Newrev: d9a062a664ee64aeb47793f872348d2c6cdb45f3
 X-Patchwork-Hint: ignore
-Message-Id: <20251009100623.E8F3986D29@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/intel-microcode:
- security bump version to 20250812
+Message-Id: <20251009100623.E055D86D26@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] board/versal/post-image:
+ remove unnecessary mkdir
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,61 +66,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31958f4823aad37ad29cfacbc380d3d1abb6ad93
+commit: https://git.buildroot.net/buildroot/commit/?id=d9a062a664ee64aeb47793f872348d2c6cdb45f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Release notes:
-https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20250812
+The board/versal/post-image.sh script has an unnecessary mkdir command:
+mkdir -p "${BINARIES_DIR}"
 
-CVE-2025-20109:
-https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01249.html
+This directory is created before calling the post image scripts,
+in [1].
 
-CVE-2025-22840:
-https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01308.html
+Just above the command, the script is making a symlink for the Linux DTB in
+the ${BINARIES_DIR}, so if the ${BINARIES_DIR} did not already exist with
+images inside, the script would fail regardless of whether this mkdir is
+executed or not.
 
-CVE-2025-22839:
-https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01310.html
+For this reason, remove the mkdir call from the script because it is not
+necessary.
 
-CVE-2025-22889:
-https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01311.html
+[1] https://gitlab.com/buildroot.org/buildroot/-/blob/2025.08/Makefile#L829
 
-CVE-2025-20053:
-https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01313.html
-
-CVE-2025-26403:
-https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01367.html
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+[Julien: add a link showing where the directory is created]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 0a748cddf68bace1ba91a80856aa7ff5f86b0673)
+(cherry picked from commit 018cf24c80090f1ef091ce1ac0d4a0a1dab3bec3)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/intel-microcode/intel-microcode.hash | 2 +-
- package/intel-microcode/intel-microcode.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ board/versal/post-image.sh | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
-index 9504f7a786..735b352d1f 100644
---- a/package/intel-microcode/intel-microcode.hash
-+++ b/package/intel-microcode/intel-microcode.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  041af7d2f5791a47c1e914abd7d6255de4d4fc61b0f8e49ada6ee7014bcc3614  intel-microcode-20250512.tar.gz
-+sha256  a8358422c68cc4d15c26db1ef682fbce332c3f46c4e087a79c132c437ec5f407  intel-microcode-20250812.tar.gz
- sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-index 1fd09e6a6d..2850dd01e4 100644
---- a/package/intel-microcode/intel-microcode.mk
-+++ b/package/intel-microcode/intel-microcode.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/versal/post-image.sh b/board/versal/post-image.sh
+index 22367d5028..6e59c57a3b 100755
+--- a/board/versal/post-image.sh
++++ b/board/versal/post-image.sh
+@@ -12,7 +12,6 @@ FIRST_DT=$(sed -nr \
  
--INTEL_MICROCODE_VERSION = 20250512
-+INTEL_MICROCODE_VERSION = 20250812
- INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
- INTEL_MICROCODE_LICENSE = PROPRIETARY
- INTEL_MICROCODE_LICENSE_FILES = license
+ BOARD_DIR="$(dirname "$0")"
+ 
+-mkdir -p "${BINARIES_DIR}"
+ cat <<-__HEADER_EOF > "${BINARIES_DIR}/bootgen.bif"
+ 	the_ROM_image:
+ 	{
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
