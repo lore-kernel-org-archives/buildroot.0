@@ -1,81 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5453ACCD185
-	for <buildroot@archiver.kernel.org>; Fri, 10 Oct 2025 19:32:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 259B2CCD18C
+	for <buildroot@archiver.kernel.org>; Fri, 10 Oct 2025 20:31:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 00D8081A15;
-	Fri, 10 Oct 2025 19:32:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB86A605CB;
+	Fri, 10 Oct 2025 20:31:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id emCZF1IfUat1; Fri, 10 Oct 2025 19:32:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5nla_1mNUWez; Fri, 10 Oct 2025 20:31:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 162AB819F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC424606EA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 162AB819F6;
-	Fri, 10 Oct 2025 19:32:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id AE00B31
- for <buildroot@buildroot.org>; Fri, 10 Oct 2025 19:32:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC424606EA;
+	Fri, 10 Oct 2025 20:31:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 83E9314B
+ for <buildroot@buildroot.org>; Fri, 10 Oct 2025 20:31:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 940A74011A
- for <buildroot@buildroot.org>; Fri, 10 Oct 2025 19:32:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 742B0606EA
+ for <buildroot@buildroot.org>; Fri, 10 Oct 2025 20:31:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4p_OkjFgDovq for <buildroot@buildroot.org>;
- Fri, 10 Oct 2025 19:32:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.148;
- helo=smtpdh19-1.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FKmO_n7aOPE6 for <buildroot@buildroot.org>;
+ Fri, 10 Oct 2025 20:31:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.217;
+ helo=smtpcmd01-g.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7E89F40116
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E89F40116
-Received: from smtpdh19-1.aruba.it (smtpdh19-1.aruba.it [62.149.155.148])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7E89F40116
- for <buildroot@buildroot.org>; Fri, 10 Oct 2025 19:32:21 +0000 (UTC)
-Received: from [192.168.50.220] ([84.33.84.190]) by Aruba SMTP with ESMTPSA
- id 7Iqgv9mMbvoVF7Iqhv8y3j; Fri, 10 Oct 2025 21:32:19 +0200
-Message-ID: <46cb2cf3-e3be-45d0-ab5f-53fbee9b263b@benettiengineering.com>
-Date: Fri, 10 Oct 2025 21:32:18 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org, Angelo Compagnucci
- <angelo.compagnucci@gmail.com>, Christian Stewart <christian@aperture.us>,
- Kris Bahnsen <kris@embeddedts.com>, Sergey Matyukevich <geomatsi@gmail.com>
-References: <20250908192435.214306-1-giulio.benetti@benettiengineering.com>
- <20250908192435.214306-5-giulio.benetti@benettiengineering.com>
- <e6e23b2657445822512e036a7f8876b8@free.fr>
-Content-Language: en-US
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C7208605CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7208605CB
+Received: from smtpcmd01-g.aruba.it (smtpcmd01-g.aruba.it [62.149.158.217])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C7208605CB
+ for <buildroot@buildroot.org>; Fri, 10 Oct 2025 20:31:40 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id 7Jm5v7x3mqmI77Jm6vBTD5; Fri, 10 Oct 2025 22:31:38 +0200
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <e6e23b2657445822512e036a7f8876b8@free.fr>
-X-CMAE-Envelope: MS4xfO8dTuR2El4UTjTur+nDfzWEQmfVMMVx1buT4QddGzUsTyWSGdlUX3qJ/3jO3d/O1uR10JMWf0/hjGG18qm91L/tsf7BoOHVLH5Vd7N/xwkVlUd/w+cy
- itzdUL+/CO9TnVkTaCYCfNKG80l1BdSKjv1anaehab8ML1TQVqJIpUGYva5M6e6S9Q2Zy6ddaHfUywOc2Jn4nagehoWYZckDD/6QHOAvUvl7bhTBjl/4gbHv
- HeQcyHtK7VFv2BtB4DmiPPMvs2ViIFLwCL60hGXD9YjrU/IDVUjzHaz+6TWpx85UlCESB4/dnukzeTOR54KZN6bVHTdgPeQ1FQQIaFJT3DeuM81amG9njN8f
- G6oJyP+Of5dQVD+j0ZRzArvi7DPtcg==
+To: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Kris Bahnsen <kris@embeddedTS.com>, Sergey Matyukevich <geomatsi@gmail.com>
+Date: Fri, 10 Oct 2025 22:31:37 +0200
+Message-ID: <20251010203137.1817176-2-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20251010203137.1817176-1-giulio.benetti@benettiengineering.com>
+References: <20251010203137.1817176-1-giulio.benetti@benettiengineering.com>
+MIME-Version: 1.0
+X-CMAE-Envelope: MS4xfGZgYORVC7YLm7rPDS80ISmXgW9sic72jrigOtyyxlOOf3IFKBy3Fd0U1HMpsdq2GJCj4aSvU2+fyQItbsYEuj/qsnwjOf77S0qSd20CBKvwziWoao8G
+ Ro2lqJHaZjpDXEzUZbsWIjLy/Zu2RJtlyOBlVqOCnA1bjIUdqORAVvMYDi+h4ur0DYE0ClFwDukPrq3OmpFji/ITRZlD7otdP7WUr1f7YEwH4HoMsolL68bB
+ Ifxu/dPEuH2wQIUM5iFORj23uxGZ3+alwle1s0Rn2PSI3dzF9Sjh2k7qPtErYJ3FFDjIyVmBzeZzwNA6zf5gvnNofdumVu1bZpvFyYQ+rEI=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1760124739; bh=kfSyS25VSACGj/aP2iYSzkz49Cy0n0wiczOSPvxbgy8=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=NmGdSKEyxsDT0UAM1sDCINXpeZEFNggF+Db6GmDgHF7c1BbfsrZJ6ZfYAg/wpwgz4
- kz2TcVyV0PMD0ZBH1ZG+d4ScbPTQOYchvjZqogasiHeIt9gdEpmxttCtHRRe12DxK5
- KtML3hPCJuekz7b8S8eMudGUjlwlmib/wTq/JGe7EjwLwOrWj24QbxfgB2tX97sWmT
- lpWkTM74vJkm+Z8LpkFzoxIPnhFV5QVj2UpsGVqQ5qkvOymauu1Xakl5AQcBcjKUf2
- Njts0TgpR27rFkFLynZgWUPMgeuKrYDoOk5hxigXIsSR2WWWk+nClun7U2Ig4Ec1/o
- y4bLiEdak66aQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ t=1760128298; bh=2xKpvs0cMFYw6WnOWN6zEUEON92M1fADFX0TPm52/us=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=XbY9ON3yiH77ODYXLWvV3Frmi1mrhPHrnF94r+kaxlaNhGE6a6ZnH/aJtBLcNvGAQ
+ lC23VQgMZCpjDNFu3YkI6tStsT7OuQYrwCIXY03umP4mJI98hhjmnNWr/3cIsYCSLb
+ LcVlM5OtzpxyCigo7xRG6gaiKMYv5LWxXWBmn2ylu4S4g5o9+svOB2YMGvSbzIV7bP
+ 2suCxriCH8v4dQzKbJoaMfY0D8OaqRI5V3fk0mO6/5Sf1WiVQobCstExkPgodmjpt5
+ p+N2kW9tSqFDjov/zhhqLCo2QqjEbkgDfS+i/PYPs5cVOkwy/9aMALll/+9Nd0v1JH
+ k49pi6IzVxZ1g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=NmGdSKEy
-Subject: Re: [Buildroot] [PATCH] package/wilc-driver: fix build failure with
- Linux 6.16
+ header.s=a1 header.b=XbY9ON3y
+Subject: [Buildroot] [PATCH] package/xr819-xradio: fix build failure with
+ Linux 6.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,57 +83,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Julien, Kris,
+Add a local patch pending upstream to fix build failure with Linux 6.17
 
-On 9/13/25 13:47, Julien Olivain wrote:
-> On 08/09/2025 21:24, Giulio Benetti wrote:
->> Add a local patch pending upstream to fix build failure with Linux 6.16
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> 
-> Applied to master, thanks.
-> 
-> This commit adds the fourteenth package patch to wilc-driver.
-> The package is currently at version linux4microchip-2021.10-1
-> and I see there is a newer tag:
-> https://github.com/embeddedTS/wilc3000-external-module/releases/tag/ 
-> linux4microchip-2024.04
-> 
-> Could we reduce a bit the number package patches by bumping
-> the package version?
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ .../0001-Fix-build-for-kernel-6.17.patch      | 80 +++++++++++++++++++
+ 1 file changed, 80 insertions(+)
+ create mode 100644 package/xr819-xradio/0001-Fix-build-for-kernel-6.17.patch
 
-Sorry for the very late reply.
-
-As pointed here:
-https://lore.kernel.org/buildroot/6b3b8dd5f1a4229c813d29b449a655cfcc74ab29.camel@embeddedTS.com/
-
-they have 2 different branches that reflect Microchip ones:
-1. 2021.10-with-community-patches => old kernel versions check but some 
-potential bug. I keep opening PR I know that will never be merged AFAICR
-2. 2024.04-with-community-patches => no old kernel versions check and it 
-had to be maintained, but last patch is from 31st July 2024 and only
-supports Linux 6.7
-
-On Linux Mainline there is no support for wilc3000(WiFi+BT), only for 
-wilc1000(WiFi only).
-
-So at this point I could take over 2021.10-with-community-patches on my
-company Github Benetti Engineering and keep patching for new Linux
-versions the same way I do for the other external drivers in Buildroot.
-
-@Kris: does it work it for you?
-
-Best regards
+diff --git a/package/xr819-xradio/0001-Fix-build-for-kernel-6.17.patch b/package/xr819-xradio/0001-Fix-build-for-kernel-6.17.patch
+new file mode 100644
+index 0000000000..e53352ec0e
+--- /dev/null
++++ b/package/xr819-xradio/0001-Fix-build-for-kernel-6.17.patch
+@@ -0,0 +1,80 @@
++From dbf3f744650e05a40fc3df6325fc657e5c23cece Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Fri, 10 Oct 2025 22:18:12 +0200
++Subject: [PATCH] Fix build for kernel 6.17
++
++With commit:
++https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b74947b4f6ff7c122a1bb6eb38bb7ecfbb1d3820
++set_rts_threshold() and config() gain argument radio_idx to get radio
++index. So let's add that argument according to Linux version >= 6.17.
++
++Upstream: https://github.com/fifteenhex/xradio/pull/28
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ sta.c | 12 ++++++++++--
++ sta.h | 12 ++++++++++--
++ 2 files changed, 20 insertions(+), 4 deletions(-)
++
++diff --git a/sta.c b/sta.c
++index 1203ce9..d769b81 100644
++--- a/sta.c
+++++ b/sta.c
++@@ -381,7 +381,11 @@ int xradio_change_interface(struct ieee80211_hw *dev,
++ 	return ret;
++ }
++ 
++-int xradio_config(struct ieee80211_hw *dev, u32 changed)
+++int xradio_config(struct ieee80211_hw *dev,
+++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
+++		  int radio_idx,
+++#endif
+++		  u32 changed)
++ {
++ 	int ret = 0;
++ 	struct xradio_common *hw_priv = dev->priv;
++@@ -796,7 +800,11 @@ void xradio_wep_key_work(struct work_struct *work)
++ 	wsm_unlock_tx(hw_priv);
++ }
++ 
++-int xradio_set_rts_threshold(struct ieee80211_hw *hw, u32 value)
+++int xradio_set_rts_threshold(struct ieee80211_hw *hw,
+++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
+++			     int radio_idx,
+++#endif
+++			     u32 value)
++ {
++ 	struct xradio_common *hw_priv = hw->priv;
++ 	int ret = 0;
++diff --git a/sta.h b/sta.h
++index 39a023a..de8f837 100644
++--- a/sta.h
+++++ b/sta.h
++@@ -42,7 +42,11 @@ int xradio_change_interface(struct ieee80211_hw *dev,
++                             struct ieee80211_vif *vif,
++                             enum nl80211_iftype new_type,
++                             bool p2p);
++-int xradio_config(struct ieee80211_hw *dev, u32 changed);
+++int xradio_config(struct ieee80211_hw *dev,
+++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
+++		  int radio_idx,
+++#endif
+++		  u32 changed);
++ int xradio_change_interface(struct ieee80211_hw *dev,
++                             struct ieee80211_vif *vif,
++                             enum nl80211_iftype new_type,
++@@ -65,7 +69,11 @@ int xradio_get_stats(struct ieee80211_hw *dev,
++ int xradio_get_tx_stats(struct ieee80211_hw *dev,
++ 			struct ieee80211_tx_queue_stats *stats);
++ */
++-int xradio_set_rts_threshold(struct ieee80211_hw *hw, u32 value);
+++int xradio_set_rts_threshold(struct ieee80211_hw *hw,
+++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
+++			     int radio_idx,
+++#endif
+++			     u32 value);
++ 
++ void xradio_flush(struct ieee80211_hw *hw, struct ieee80211_vif *vif, u32 queues, bool drop);
++ 
++-- 
++2.47.3
++
 -- 
-Giulio Benetti
-CEO&CTO@Benetti Engineering
-https://www.linkedin.com/company/benetti-engineering/
-https://www.linkedin.com/in/giulio-benetti-79975951/
+2.47.3
 
 _______________________________________________
 buildroot mailing list
