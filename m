@@ -4,74 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC381CCD185
-	for <buildroot@archiver.kernel.org>; Fri, 10 Oct 2025 16:23:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0A59CCD185
+	for <buildroot@archiver.kernel.org>; Fri, 10 Oct 2025 16:24:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BDE8B847EF;
-	Fri, 10 Oct 2025 16:23:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A537E801E9;
+	Fri, 10 Oct 2025 16:24:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b46l4Q7jwvNs; Fri, 10 Oct 2025 16:23:48 +0000 (UTC)
+ id DwIx_WPkdXhm; Fri, 10 Oct 2025 16:24:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CAC9847B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F2E2801EC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2CAC9847B9;
-	Fri, 10 Oct 2025 16:23:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1D38914B
- for <buildroot@buildroot.org>; Fri, 10 Oct 2025 16:23:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6F2E2801EC;
+	Fri, 10 Oct 2025 16:24:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C08F7226
+ for <buildroot@buildroot.org>; Fri, 10 Oct 2025 16:24:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0EED66151A
- for <buildroot@buildroot.org>; Fri, 10 Oct 2025 16:23:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A6730801E4
+ for <buildroot@buildroot.org>; Fri, 10 Oct 2025 16:24:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wDytRn-Xr8xM for <buildroot@buildroot.org>;
- Fri, 10 Oct 2025 16:23:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5AB0A61516
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AB0A61516
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5AB0A61516
- for <buildroot@buildroot.org>; Fri, 10 Oct 2025 16:23:45 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R7F8ZpfiqL_3 for <buildroot@buildroot.org>;
+ Fri, 10 Oct 2025 16:24:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 00A8F801CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00A8F801CF
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 00A8F801CF
+ for <buildroot@busybox.net>; Fri, 10 Oct 2025 16:24:50 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 368D8B00563;
- Fri, 10 Oct 2025 18:23:39 +0200 (CEST)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id BBC0B13F88D;
+ Fri, 10 Oct 2025 18:24:47 +0200 (CEST)
 Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
  via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 10 Oct 2025 18:23:39 +0200
+ with HTTP (HTTP/1.0 POST); Fri, 10 Oct 2025 18:24:47 +0200
 MIME-Version: 1.0
-Date: Fri, 10 Oct 2025 18:23:39 +0200
-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: buildroot@buildroot.org, Antoine Tenart <atenart@kernel.org>, Marcus
- Folkesson <marcus.folkesson@gmail.com>
-In-Reply-To: <20251009143216.2282077-2-fiona.klute@gmx.de>
-References: <20251009143216.2282077-1-fiona.klute@gmx.de>
- <20251009143216.2282077-2-fiona.klute@gmx.de>
+Date: Fri, 10 Oct 2025 18:24:47 +0200
+To: Francois Perrad <francois.perrad@gadz.org>
+Cc: buildroot@busybox.net
+In-Reply-To: <20251010122812.356563-1-francois.perrad@gadz.org>
+References: <20251010122812.356563-1-francois.perrad@gadz.org>
 User-Agent: Webmail Free/1.6.11
-Message-ID: <ca1946dfe3dca4a6cbd75724cdd146ad@free.fr>
+Message-ID: <026238c47f512601d97baa1d3842b686@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1760113422;
- bh=HnO9u20pJmf32WKzeWv3QwXFB5OfUuY6Qjch/74SP5g=;
+ d=free.fr; s=smtp-20201208; t=1760113489;
+ bh=6+v/LpjFfDBCfAWRUzgs4Ee7lxt/eoWgmsbzKRJ5SIQ=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=ceUyLzvT0EdseACT5uUm1A06Oab/cWmXEYT7ARZzZVhpvjI/4Y8X3keHjTouh5wFA
- dkqUDMGqN83MGKCvc6AsP73hEFqjyUFha6Bn8RvZAK7Z2RAW4SCipEUhJhT41QRTHl
- 2U7/bD47BpHsAVRc9iIwWsfc6N8Bm5dbMphijut2D7caSWrR0tinX02fJrrInBiMWq
- BAxmJsuR+Sp8wsygI7geYbcXVI0c/rrXqb7b8U+RzpCreZ5dMRaW6zTTOexhz1XcxE
- SzvaDHciijyELhnFwDEMv4tcyaN7IyMOkUxND2R4m3FpQByuczcXnQnyQDx+aW0zOc
- yrk0ldRpsQDtQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=ZNekzePCd+QLLrcU1ICMbGkT+L6PzmCXJd1vZ8AUHltgQ6Lhw8rQfVeFyBCFksLKo
+ 3N3zb2tj/hndnmyjbZe1zdh9hjCoG95g4GCXX3NY94dtB8NmOT6gpZIYLDXcWrge8R
+ 50ZghBqjuoFHMiKzbXFnkmBDV/tdugVRjYnTjex6UMAV2cy2auSBk2nLFKS3U7IqrW
+ 0+WxuhAPFcKAswnX792aSJdole8dP8MCiX9iwV2dZ8WzilkJWAJ+iY88rlE168rjG8
+ UwdXQH8BT8Eh6vPr3pBY3DXXf4ZyOue9RYaWi8e12uGX6A+5tuQGC95sxiSSHOMjap
+ qxdmlj8V/kKiw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ceUyLzvT
-Subject: Re: [Buildroot] [PATCH 1/4] package/selinux-python: install modules
- to site-packages dir
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ZNekzePC
+Subject: Re: [Buildroot] [PATCH] configs/olimex_a20_olinuxino_lime*: bump
+ Linux and U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,13 +88,10 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 09/10/2025 16:32, Fiona Klute via buildroot wrote:
-> /usr/lib/python$(PYTHON3_VERSION_MAJOR) is for the standard library,
-> additional modules like this should go to site-packages.
-> 
-> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+On 10/10/2025 14:28, Francois Perrad via buildroot wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Series applied to master, thanks.
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
