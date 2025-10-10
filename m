@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D04EECCD185
-	for <buildroot@archiver.kernel.org>; Fri, 10 Oct 2025 12:04:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61B46CCD185
+	for <buildroot@archiver.kernel.org>; Fri, 10 Oct 2025 12:04:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5C34882336;
-	Fri, 10 Oct 2025 12:04:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7A3FC84552;
+	Fri, 10 Oct 2025 12:04:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ofCz0M1eO5wU; Fri, 10 Oct 2025 12:04:18 +0000 (UTC)
+ id FQstMD1lrgE1; Fri, 10 Oct 2025 12:04:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 743AC83C46
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2570684183
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 743AC83C46;
-	Fri, 10 Oct 2025 12:04:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 83F90119
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2570684183;
+	Fri, 10 Oct 2025 12:04:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 92CEA226
  for <buildroot@buildroot.org>; Fri, 10 Oct 2025 12:04:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 75DC683C46
+ by smtp4.osuosl.org (Postfix) with ESMTP id 78846402AA
  for <buildroot@buildroot.org>; Fri, 10 Oct 2025 12:04:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8OMmuwwGyNLT for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v_VCDCxZNikW for <buildroot@buildroot.org>;
  Fri, 10 Oct 2025 12:04:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A01C08272C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B450240155
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A01C08272C
+ by smtp4.osuosl.org (Postfix) with ESMTP id B450240155
  for <buildroot@buildroot.org>; Fri, 10 Oct 2025 12:04:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9981B86F0D; Fri, 10 Oct 2025 12:04:16 +0000 (UTC)
+ id A430286F0F; Fri, 10 Oct 2025 12:04:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 10 Oct 2025 13:54:38 +0200
+Date: Fri, 10 Oct 2025 13:56:18 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7176f6b28751dfb5e1592caba7efb3f9da4d2685
-X-Git-Newrev: 46be3d810470e55a98e65d3f8e3fac00bcfe581f
+X-Git-Oldrev: 46be3d810470e55a98e65d3f8e3fac00bcfe581f
+X-Git-Newrev: 2343cad2be33b340e108b60196ce94c2e8c52e3b
 X-Patchwork-Hint: ignore
-Message-Id: <20251010120416.9981B86F0D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gsl: bump to version 2.8
+Message-Id: <20251010120416.A430286F0F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-aerich: bump to version
+ 0.9.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,41 +66,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46be3d810470e55a98e65d3f8e3fac00bcfe581f
+commit: https://git.buildroot.net/buildroot/commit/?id=2343cad2be33b340e108b60196ce94c2e8c52e3b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://cgit.git.savannah.gnu.org/cgit/gsl.git/tree/NEWS?h=release-2-8
+Drop pydantic/tomli-w runtime dependencies, add anyio runtime
+dependency.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Migrate from poetry to pdm-backend.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/gsl/gsl.hash | 2 +-
- package/gsl/gsl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-aerich/Config.in          | 4 +---
+ package/python-aerich/python-aerich.hash | 4 ++--
+ package/python-aerich/python-aerich.mk   | 7 ++++---
+ 3 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/package/gsl/gsl.hash b/package/gsl/gsl.hash
-index 153ae4131d..d6a3307e43 100644
---- a/package/gsl/gsl.hash
-+++ b/package/gsl/gsl.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  dcb0fbd43048832b757ff9942691a8dd70026d5da0ff85601e52687f6deeb34b  gsl-2.7.1.tar.gz
-+sha256  6a99eeed15632c6354895b1dd542ed5a855c0f15d9ad1326c6fe2b2c9e423190  gsl-2.8.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/gsl/gsl.mk b/package/gsl/gsl.mk
-index 575cb75462..f5d22caccf 100644
---- a/package/gsl/gsl.mk
-+++ b/package/gsl/gsl.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-aerich/Config.in b/package/python-aerich/Config.in
+index 4e7ea1117c..9b6d8f16c6 100644
+--- a/package/python-aerich/Config.in
++++ b/package/python-aerich/Config.in
+@@ -1,10 +1,8 @@
+ config BR2_PACKAGE_PYTHON_AERICH
+ 	bool "python-aerich"
+-	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-pydantic -> python-pydantic-core
++	select BR2_PACKAGE_PYTHON_ANYIO # runtime
+ 	select BR2_PACKAGE_PYTHON_ASYNCCLICK # runtime
+ 	select BR2_PACKAGE_PYTHON_DICTDIFFER # runtime
+-	select BR2_PACKAGE_PYTHON_PYDANTIC # runtime
+-	select BR2_PACKAGE_PYTHON_TOMLI_W # runtime
+ 	select BR2_PACKAGE_PYTHON_TORTOISE_ORM # runtime
+ 	help
+ 	  A database migrations tool for Tortoise ORM.
+diff --git a/package/python-aerich/python-aerich.hash b/package/python-aerich/python-aerich.hash
+index 6e44c241f3..7990532a2e 100644
+--- a/package/python-aerich/python-aerich.hash
++++ b/package/python-aerich/python-aerich.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aerich/json
+-md5  4d647c8f3829782f5770b7b120832f63  aerich-0.9.1.tar.gz
+-sha256  629afbef5902635c41f410dd05def984c02e05e62d8a2020210a29a4aae19001  aerich-0.9.1.tar.gz
++md5  e4c7fcf3593c22d58c372595ca3d2e6c  aerich-0.9.2.tar.gz
++sha256  02d58658714eebe396fe7bd9f9401db3a60a44dc885910ad3990920d0357317d  aerich-0.9.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  4cc00f0e33ac8e089b37d8a1474be441b26311bdc16fe035c75b51201515f617  LICENSE
+diff --git a/package/python-aerich/python-aerich.mk b/package/python-aerich/python-aerich.mk
+index c7417f3179..916279be78 100644
+--- a/package/python-aerich/python-aerich.mk
++++ b/package/python-aerich/python-aerich.mk
+@@ -4,11 +4,12 @@
  #
  ################################################################################
  
--GSL_VERSION = 2.7.1
-+GSL_VERSION = 2.8
- GSL_SITE = $(BR2_GNU_MIRROR)/gsl
- GSL_INSTALL_STAGING = YES
- GSL_LICENSE = GPL-3.0
+-PYTHON_AERICH_VERSION = 0.9.1
++PYTHON_AERICH_VERSION = 0.9.2
+ PYTHON_AERICH_SOURCE = aerich-$(PYTHON_AERICH_VERSION).tar.gz
+-PYTHON_AERICH_SITE = https://files.pythonhosted.org/packages/a5/98/75c6e3053a14a14ffe86e2435698b960abe0bf03c114e67f966d92ff19e7
+-PYTHON_AERICH_SETUP_TYPE = poetry
++PYTHON_AERICH_SITE = https://files.pythonhosted.org/packages/c4/60/5d3885f531fab2cecec67510e7b821efc403940ed9eefd034b2c21350f3c
++PYTHON_AERICH_SETUP_TYPE = pep517
+ PYTHON_AERICH_LICENSE = Apache-2.0
+ PYTHON_AERICH_LICENSE_FILES = LICENSE
++PYTHON_AERICH_DEPENDENCIES = host-python-pdm-backend
+ 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
