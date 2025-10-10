@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BE0CCCA476
-	for <buildroot@archiver.kernel.org>; Fri, 10 Oct 2025 17:06:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7B2FCCA476
+	for <buildroot@archiver.kernel.org>; Fri, 10 Oct 2025 17:06:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A50DD80F68;
-	Fri, 10 Oct 2025 17:06:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AF0C480F6A;
+	Fri, 10 Oct 2025 17:06:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eDXt2Y-OpT63; Fri, 10 Oct 2025 17:06:23 +0000 (UTC)
+ id enoQH2NfgLZ3; Fri, 10 Oct 2025 17:06:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DF0980EBD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 475A780F65
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0DF0980EBD;
-	Fri, 10 Oct 2025 17:06:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3A37A226
- for <buildroot@buildroot.org>; Fri, 10 Oct 2025 17:06:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 475A780F65;
+	Fri, 10 Oct 2025 17:06:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6D11F226
+ for <buildroot@buildroot.org>; Fri, 10 Oct 2025 17:06:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2B4B440471
- for <buildroot@buildroot.org>; Fri, 10 Oct 2025 17:06:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6A2F680F65
+ for <buildroot@buildroot.org>; Fri, 10 Oct 2025 17:06:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yDLh3YoDhU6r for <buildroot@buildroot.org>;
- Fri, 10 Oct 2025 17:06:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73F9840476
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 73F9840476
- for <buildroot@buildroot.org>; Fri, 10 Oct 2025 17:06:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 62CD286FB7; Fri, 10 Oct 2025 17:06:20 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 10 Oct 2025 19:03:21 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 762ddee71c0e5bbda72c11dc32898b5d9fd01ef8
-X-Git-Newrev: 6bf05cb6a4d0a3b5ac0d30f5e103ae81f10f2ee7
-X-Patchwork-Hint: ignore
-Message-Id: <20251010170620.62CD286FB7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mali-driver: bump to version
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 37mcy3NbWbqW for <buildroot@buildroot.org>;
+ Fri, 10 Oct 2025 17:06:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D29C980EA7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D29C980EA7
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D29C980EA7
+ for <buildroot@buildroot.org>; Fri, 10 Oct 2025 17:06:47 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id B3271B005A4;
+ Fri, 10 Oct 2025 19:06:44 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 10 Oct 2025 19:06:44 +0200
+MIME-Version: 1.0
+Date: Fri, 10 Oct 2025 19:06:44 +0200
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251004205800.582688-1-giulio.benetti@benettiengineering.com>
+References: <20251004205800.582688-1-giulio.benetti@benettiengineering.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <ca183c39cc8b7f9c1a58a99c23ea48f2@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1760116005;
+ bh=Bs5YPk4pzsryuhZVNYUJFv0YOst/STatVdAyngUVsnA=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=box0eeWUNEJxXRYVqwGZZtHTH8hjoMysnU8QjUyzjHpkdZumC8xRegCyNM7XDmC16
+ aPf/gu6BxMwEtIuf7e8xuTk4Zd4pzxSrz3owTarMJxo4AY9WU733T3QdSDMPY+9hVQ
+ +b1JFqQzQ2Bvsr2Af95W2LXkJwD3Thd3rT4y/n7Wq9sb+7ilePoFqTNdELtF2pZu+p
+ Gs7SOiI7J/Td8UvH38gHuiVokz/qGW55vJyYa94wxfkbYOiNAU70n5JykTj3Wp030I
+ lIDGV3No5DOoJB0yccsiqZoGZ+prwSzfPrFqUUGtfsLBx/pZq6f5KNZ4ceb4DTE4v9
+ Cwqzv0HpDEb9A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=box0eeWU
+Subject: Re: [Buildroot] [PATCH] package/mali-driver: bump to version
  2025-10-04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -60,49 +83,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6bf05cb6a4d0a3b5ac0d30f5e103ae81f10f2ee7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 04/10/2025 22:58, Giulio Benetti wrote:
+> This version builds up to Linux version 6.17.
+> 
+> Fixes:
+> still not happened
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-This version builds up to Linux version 6.17.
-
-Fixes:
-still not happened
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/mali-driver/mali-driver.hash | 2 +-
- package/mali-driver/mali-driver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/mali-driver/mali-driver.hash b/package/mali-driver/mali-driver.hash
-index bc406e270f..c6b027f1a3 100644
---- a/package/mali-driver/mali-driver.hash
-+++ b/package/mali-driver/mali-driver.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c1a9ad5dfa0d4b7978a1a6dd02d7eabd4bc65e7d6a06eda749cae720749a741c  mali-driver-4f5282b305cb0956fe2485c9e9dab0021d5538f6.tar.gz
-+sha256  bbfd78d3342fe8bdef5e37659740f69818aa1b3be3a75e5bb085223d87a2a1d4  mali-driver-ef3da788030833289040e4396bff010edcc2289b.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/mali-driver/mali-driver.mk b/package/mali-driver/mali-driver.mk
-index ccb56de81f..40ae03a1df 100644
---- a/package/mali-driver/mali-driver.mk
-+++ b/package/mali-driver/mali-driver.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MALI_DRIVER_VERSION = 4f5282b305cb0956fe2485c9e9dab0021d5538f6
-+MALI_DRIVER_VERSION = ef3da788030833289040e4396bff010edcc2289b
- MALI_DRIVER_SITE = $(call github,bootlin,mali-driver,$(MALI_DRIVER_VERSION))
- MALI_DRIVER_DEPENDENCIES = linux
- MALI_DRIVER_LICENSE = GPL-2.0
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
