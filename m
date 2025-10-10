@@ -1,52 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAB0FCCD185
-	for <buildroot@archiver.kernel.org>; Fri, 10 Oct 2025 11:40:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDDF5CCD185
+	for <buildroot@archiver.kernel.org>; Fri, 10 Oct 2025 11:42:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C3C482F6F;
-	Fri, 10 Oct 2025 11:40:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 956C2614C8;
+	Fri, 10 Oct 2025 11:42:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AaOlD_FSLaS0; Fri, 10 Oct 2025 11:40:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g6QSqbJgNGwd; Fri, 10 Oct 2025 11:42:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D9F682F9B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C8199614B5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6D9F682F9B;
-	Fri, 10 Oct 2025 11:40:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2CB7514B
- for <buildroot@buildroot.org>; Fri, 10 Oct 2025 11:40:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C8199614B5;
+	Fri, 10 Oct 2025 11:42:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 29369119
+ for <buildroot@buildroot.org>; Fri, 10 Oct 2025 11:42:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 135C582F6F
- for <buildroot@buildroot.org>; Fri, 10 Oct 2025 11:40:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1B01140AF7
+ for <buildroot@buildroot.org>; Fri, 10 Oct 2025 11:42:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u42fQ-juNF3S for <buildroot@buildroot.org>;
- Fri, 10 Oct 2025 11:40:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38E0182E14
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 38E0182E14
- for <buildroot@buildroot.org>; Fri, 10 Oct 2025 11:40:12 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 27E9F86E9E; Fri, 10 Oct 2025 11:40:12 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 10 Oct 2025 13:39:11 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 702220925fd426e1f5a28e8f76c46a654791a274
-X-Git-Newrev: 15df9ec173f0c25df7f14f65719107f744248d4d
-X-Patchwork-Hint: ignore
-Message-Id: <20251010114012.27E9F86E9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcurl: fix configure options for
- GnuTLS
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p_am0XOk_LhP for <buildroot@buildroot.org>;
+ Fri, 10 Oct 2025 11:42:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0D76740A02
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D76740A02
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0D76740A02
+ for <buildroot@buildroot.org>; Fri, 10 Oct 2025 11:41:59 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id F3C3219F576;
+ Fri, 10 Oct 2025 13:41:55 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 10 Oct 2025 13:41:55 +0200
+MIME-Version: 1.0
+Date: Fri, 10 Oct 2025 13:41:55 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251008210724.987021-1-bernd@kuhls.net>
+References: <20251008210724.987021-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <55a4900b8c199e999fd4a554eeedd1d2@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1760096517;
+ bh=kO6+Mn6O43K+vghrZuiHza5TMEumGGHUImnomMqHFw8=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=R5m1JMSnYJlD+KpbPAoso7Y2EncZfwQUyn0kvjiSUf9HDDauQQl9g3onjn/4dnNU4
+ Se/NejhIk2Igcj6mzS21w2KcgwasWRqoYOGOcoGHKVodeDc8HnH1b/9iRp6ouUoel9
+ rrM1E8ollzZ+txYi8TBNzYCk/Xz2k2/EeX/1q5DaCqcNOXxD1eMlooEO3Gaj+RzYad
+ kzyjjhPd9GajfbavYPYTxFxMID+el66Wxj8hqSUOilucXRHskQ4mIVx4MbrlFOoXq2
+ HmWuB7BPmnD8BAlPmVy/nGH9l2Rym+PgATda5PR0SVvZDLn4coijVe8hF24llgLnqH
+ PoSFeF4mh4hTw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=R5m1JMSn
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/libsoundtouch: bump version
+ to 2.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,46 +83,15 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15df9ec173f0c25df7f14f65719107f744248d4d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 08/10/2025 23:07, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Buildroot commit fb5fb06ee5a886df5036c5c5e6c4536f2bc8e1c1 bumped libcurl
-to 8.16.0 which includes commit
-https://github.com/curl/curl/commit/2f6524ce3c3a8231c62d1e0c8af509fe5b0228a0
-to limit the use of the configure option --with-ca-fallback to OpenSSL
-causing build errors with GnuTLS:
-
-configure: error: --with-ca-fallback only works with OpenSSL
-
-Fixes: https://autobuild.buildroot.net/results/64f/64fad87dddecda1e8ff6b0a9abc0b827b5136e4f/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Reviewed-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libcurl/libcurl.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 0aa88044bd..51b8c4d147 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -68,8 +68,7 @@ LIBCURL_CONF_OPTS += --without-openssl
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBCURL_GNUTLS),y)
--LIBCURL_CONF_OPTS += --with-gnutls=$(STAGING_DIR)/usr \
--	--with-ca-fallback
-+LIBCURL_CONF_OPTS += --with-gnutls=$(STAGING_DIR)/usr
- LIBCURL_DEPENDENCIES += gnutls
- else
- LIBCURL_CONF_OPTS += --without-gnutls
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
