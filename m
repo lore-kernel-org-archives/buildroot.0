@@ -1,89 +1,107 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1A69CCA476
-	for <buildroot@archiver.kernel.org>; Fri, 10 Oct 2025 12:54:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E3D6CCA476
+	for <buildroot@archiver.kernel.org>; Fri, 10 Oct 2025 13:23:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 95A3880CAD;
-	Fri, 10 Oct 2025 12:54:38 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IgtNBd9mVsLV; Fri, 10 Oct 2025 12:54:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9991080C4A
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9991080C4A;
-	Fri, 10 Oct 2025 12:54:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 32006226
- for <buildroot@buildroot.org>; Fri, 10 Oct 2025 12:54:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2ECFA412A4
- for <buildroot@buildroot.org>; Fri, 10 Oct 2025 12:54:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B26341159;
+	Fri, 10 Oct 2025 13:23:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0ctjyCAuParB for <buildroot@buildroot.org>;
- Fri, 10 Oct 2025 12:54:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.52;
- helo=mail-wm1-f52.google.com; envelope-from=thomas.devoogdt@gmail.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 10615412A1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10615412A1
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com
- [209.85.128.52])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 10615412A1
- for <buildroot@buildroot.org>; Fri, 10 Oct 2025 12:54:35 +0000 (UTC)
-Received: by mail-wm1-f52.google.com with SMTP id
- 5b1f17b1804b1-46e3a50bc0fso15962585e9.3
- for <buildroot@buildroot.org>; Fri, 10 Oct 2025 05:54:34 -0700 (PDT)
+ id kWs9I5nF0qDp; Fri, 10 Oct 2025 13:23:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 726A1411B3
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 726A1411B3;
+	Fri, 10 Oct 2025 13:23:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A340C119
+ for <buildroot@buildroot.org>; Fri, 10 Oct 2025 13:23:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 951A440CB0
+ for <buildroot@buildroot.org>; Fri, 10 Oct 2025 13:23:24 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N2tGqcAM-GLb for <buildroot@buildroot.org>;
+ Fri, 10 Oct 2025 13:23:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D814040A3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D814040A3B
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D814040A3B
+ for <buildroot@buildroot.org>; Fri, 10 Oct 2025 13:23:22 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-46e29d65728so12586675e9.3
+ for <buildroot@buildroot.org>; Fri, 10 Oct 2025 06:23:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1760100873; x=1760705673;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=3voFdsaTJSO3iieKFKJr9Xdp0Ze97jp5RkMZf/S63Rs=;
- b=WGXbLFgu2zO4RP144V/A4nhh19JXWyVgNyjYnA+72/aCojg2bss7wd1CIToE94+T1q
- EsFebuJGGOqUIUuQ4Uw5RSYh7BnIxHjqI25KIKFIkF+VpGvitfsSWzMdqoDtQ4IpFVBh
- F4PByGRKhOij2Nsi1dMNT9dQlfMY1e3gBkqdX/weHTmw8FgllXNDNyUOdDCyM2bO6sfW
- ieBGZyLp1SBMj8JiYAzAqTEaXjK8s/W3DA6x19t/s/d1L18s7Z91gXqxacZjKoeFS520
- VLMxVrGrUxAE7CvUfBGNGDKijFEghnlVrP4IeS2OWDzXJOIjRjubViskGGO7/jNv+6nD
- vgrw==
-X-Gm-Message-State: AOJu0YymZNTqfA7FuQq2KB152tty05IOr3Ruzi2g2tisLojbdAvm5Rtb
- xJ9HzWKZpwqbCUW4QJjApkxX5Eyd7pmo40/rlGHsRv1cn+VFQ/twtuiVVD7ANg==
-X-Gm-Gg: ASbGncs0mzj3GF262fw0aLcwX8T8EvZmNDrYwdQt/9kM0eDrLpjTWjZhkKN0rrPWWy0
- F+WIyWD1ZVYwGYwIKUnRqD4NYfEYMPGLedNzAqYJoDV7VcfQuIDFF1Dk/p0+K+vN34d/1g7exl1
- m1fMvtaqaNCAuV4GsDb4gGa39eh/ijupPAsRY2s+u51PA4fK/eitKwD2KbOSVTEGMDAIcT7ZCip
- 9eWe/2tGF6EvAlRgoIweBKVjjBtWj/hZ9L6dq6cJoXw4Y4gAbsnpo7840kd2uPXLrTsoIkcJjkN
- NI9HolmXbyRRWb2T85Xk7EbK5TQjNe5UQL0gu2MDP8zpGOG14VoxZT63qsK/4KWDsV+PDkJS064
- omRMDsXOnx+JPXUF0BiLQmxnIJeqO2EONUI6bhTYBjW+ntHVn/kAXvxdT1AEXg63fcR4i3oPaXx
- aK8DAgaxPhMT+xUV2wG9/bwAxYdC0naKwfMIRmXVZNOzBY7AL3tyYeTPWUjsdPIuUp
-X-Google-Smtp-Source: AGHT+IECmQzjwIOqnm9semGYIJATFwFEafv5V2v0mwvT7qMJtyQc041OuQ59af4bqgNaYekexrD92A==
-X-Received: by 2002:a05:600c:6383:b0:46e:32dd:1b1a with SMTP id
- 5b1f17b1804b1-46fa9a8f146mr79837465e9.7.1760100872823; 
- Fri, 10 Oct 2025 05:54:32 -0700 (PDT)
-Received: from KORLIN44614.barco.com
- ([2a02:a03f:eb6f:7900:f303:6e96:eed7:13e8])
- by smtp.googlemail.com with ESMTPSA id
- ffacd0b85a97d-426ce57d4bbsm4148108f8f.2.2025.10.10.05.54.32
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Oct 2025 05:54:32 -0700 (PDT)
-From: Thomas Devoogdt <thomas@devoogdt.com>
-To: buildroot@buildroot.org
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>
-Date: Fri, 10 Oct 2025 14:54:30 +0200
-Message-ID: <20251010125430.1253718-1-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.43.0
+ d=1e100.net; s=20230601; t=1760102600; x=1760707400;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=6wGtPcSjSzcBkFC14y0Dl0ZljkIGzOf4CYVPlZA5uig=;
+ b=n4b6VkiT+19ZfLGKEm7Uy9bW6/wN68uCFHnRKIX8TZrE8kqC6t9NX+s3y9ywSIkDIs
+ YrM84cYO9QXFaUVG5+qQ/5DnNknQ3LmZXiEXgJSpP53Zb6H9Nv69q4umm6ZW1j+iweqk
+ rG7xeMZ21irnpUe98fMUClUorWVy9EZLcWCCLjlT0RVQ0rFzoJd3SHLljf5HUKQg0PiQ
+ A4UGET7fc73390wMOvUkI2NmwhCNjgTxVsPn70mWmFjh7cNnHepuvgcYOdvJ/CTaiePW
+ e3AnczkoWuJ2Welstxt7VzaqG73AHKQIzPizqajzR0WrklfJaoDxAqvQcNsnlGtIe7mI
+ NB5w==
+X-Gm-Message-State: AOJu0Yw7L2r9bGqD78KX3lmJ6gt1PNfUp13MhtxsJmJn2ROQMJLNBqQ4
+ Td7dvkujy4KkluW+6LdcdE4IUfQnGyurH4giybEi8E9UqE0eZ+OzTIyYC4QgfJKyE378YLE/SdO
+ HPYSb
+X-Gm-Gg: ASbGnct0hb0bOC+R35/6L8Q9yi9pB4WPjhHE2CfCtwSCHSwi7qVjZoMZngaYJSjjSx4
+ WW2CY1OC5NJrdzgNdNH/e/yknCJvfttsU30Az3ZdhsR71lx2/hf2ZYjtF4+UpzD2wa6h5JXT4sU
+ aNLQgIcebVRaGbuidNX2c6+7cx8scGwzybGFj2zmPjxWc8/uWlvDe2Qwvak8ONYiDrSBVBHdi7/
+ 5ufy5NrxyH0H/tdGqhJhiwO/CqK2sLZaT2WPt0JLu2f3sRHWJxTwje5ZrSj1cZtmf4DAZaiBcO0
+ WF7bZmowvxOt5OJoU3ozngSNDPYWJVvUciTIFm4FW6VL9kKsjM9m4x39HO5kottptQiQFjBLnO8
+ sfD7qbV3V6l4l0dcfcHK5ORR/2alYo+oVJ4gtkJyAn6mIdWDX4FVgKaQkAyepUPR5xmjn9+4Ae2
+ /rpsx9UfZzAUydnAUU1n83Os819NKOZ2UgwBph
+X-Google-Smtp-Source: AGHT+IHJu26pGS4D/+WQ0wcIGr93O48aBovtXlRkl7UIkKspEWguJEdeQB0dIEM60mRN4Jnkfo7Zyw==
+X-Received: by 2002:a05:6000:4014:b0:3ec:e152:e2ce with SMTP id
+ ffacd0b85a97d-4266e7e0149mr7633987f8f.32.1760102600007; 
+ Fri, 10 Oct 2025 06:23:20 -0700 (PDT)
+Received: from ?IPV6:2a02:a03f:73a7:c001:1291:d1ff:fe92:3b5a?
+ ([2a02:a03f:73a7:c001:1291:d1ff:fe92:3b5a])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-426ce5d0011sm4176249f8f.31.2025.10.10.06.23.19
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 10 Oct 2025 06:23:19 -0700 (PDT)
+Message-ID: <6ee817c5-ced6-4b1c-840f-15d6e367c7a0@mind.be>
+Date: Fri, 10 Oct 2025 15:23:19 +0200
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=devoogdt.com
-Subject: [Buildroot] [PATCH v1] package/webkitgtk: bump to version 2.50.1
+User-Agent: Mozilla Thunderbird
+To: buildroot@buildroot.org
+References: <20251003135530.371676-1-bernd@kuhls.net>
+ <20251003135530.371676-3-bernd@kuhls.net>
+Content-Language: en-US
+In-Reply-To: <20251003135530.371676-3-bernd@kuhls.net>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1760102600; x=1760707400; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=6wGtPcSjSzcBkFC14y0Dl0ZljkIGzOf4CYVPlZA5uig=;
+ b=Tm/oFMqFHpDKU28S/88lwRZULT9a+RT/ARS6DqUVJxCHwhJkMCM3FltHQu4bvMBwf+
+ IZSvB72uYrFuKa/4NTd7owLfDM6EKd4hiR83X59N/esEKR4hzdIpnfiu2EI23aX2beqW
+ 3nrClznVP438PQ0sW1tnHKpmajBd39Neu86CUecjxSRTaZFPD6yuuGSaTg0onFgDNXNQ
+ OpavHZAxpqS7JCU2C5D9xRAdEWDyhLmBJavGb3IYq7zha/+84Iegq+Iko6z3Km05opCr
+ oGdiLKDjL4iraoDYqrLwOxrnPmxSFtTAUI8h9hbuN6LKPIYJlcHib4e4Z7W6xPDASRzr
+ xM9Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=Tm/oFMqF
+Subject: Re: [Buildroot] [PATCH 3/3] package/asterisk: bump version to 22.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,53 +113,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Hello Bernd and all,
 
-Release announce:
-https://webkitgtk.org/2025/09/17/webkitgtk2.50.0-released.html
-https://webkitgtk.org/2025/10/10/webkitgtk2.50.1-released.html
+Please also note that this is a security bump for CVE-2025-1131, see 
+https://github.com/asterisk/asterisk/security/advisories/GHSA-v9q8-9j8m-5xwp
 
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
----
- package/webkitgtk/webkitgtk.hash | 6 +++---
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index fde2439dd5..90304074ac 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,6 +1,6 @@
--# From https://www.webkitgtk.org/releases/webkitgtk-2.48.6.tar.xz.sums
--sha1  8f8e27722b29be5aba84322cf7252fe14afcec60  webkitgtk-2.48.6.tar.xz
--sha256  d9ac3034b7a39c2aaa567e6112b3124b158e591a74439e46974a031dd0e44e24  webkitgtk-2.48.6.tar.xz
-+# From https://www.webkitgtk.org/releases/webkitgtk-2.50.1.tar.xz.sums
-+sha1  b599be86497f57fc5b2eb8b5d60ff181fc651752  webkitgtk-2.50.1.tar.xz
-+sha256  33e912ee6e3cdb4b9803715f50686af85a60af47f1cf72a6acc6a2db1bb3d9fe  webkitgtk-2.50.1.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index cb66641e3d..0b6a1383ca 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.48.6
-+WEBKITGTK_VERSION = 2.50.1
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
--- 
-2.43.0
-
+On 3/10/25 15:55, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Acked-by: Titouan Christophe <titouan.christophe@mind.be>
+> ---
+>   package/asterisk/asterisk.hash | 2 +-
+>   package/asterisk/asterisk.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+> index f11ed08ef4..26175667c3 100644
+> --- a/package/asterisk/asterisk.hash
+> +++ b/package/asterisk/asterisk.hash
+> @@ -1,5 +1,5 @@
+>   # Locally computed
+> -sha256  4cc403c8885d4aed3956dfb75d315d3e5bcc129eb9cd47c156d3b12ecceed1ba  asterisk-22.3.0.tar.gz
+> +sha256  8a94650b6f348af1f1c9cce7ed3585d280f3a31b0d3820084a42b03712df95d5  asterisk-22.5.2.tar.gz
+>   
+>   # Locally computed
+>   sha256  58bb83cec4d431f48d006e455d821668450f8cf6b6c95f090def47062fa3a60c  pjproject-2.15.1.tar.bz2
+> diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+> index e7e802aa45..9a071fb8e0 100644
+> --- a/package/asterisk/asterisk.mk
+> +++ b/package/asterisk/asterisk.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -ASTERISK_VERSION = 22.3.0
+> +ASTERISK_VERSION = 22.5.2
+>   # Use the github mirror: it's an official mirror maintained by Digium, and
+>   # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+>   ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+Regards,
+Titouan
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
