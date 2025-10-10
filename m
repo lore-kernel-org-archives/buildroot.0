@@ -1,52 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AD2ECCD187
-	for <buildroot@archiver.kernel.org>; Fri, 10 Oct 2025 06:24:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E83D4CCA476
+	for <buildroot@archiver.kernel.org>; Fri, 10 Oct 2025 06:56:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BB6B7842ED;
-	Fri, 10 Oct 2025 06:24:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9AA0540EFD;
+	Fri, 10 Oct 2025 06:56:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qkWwEm3xexz4; Fri, 10 Oct 2025 06:24:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WqigYHf8ASkD; Fri, 10 Oct 2025 06:56:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6758842F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4AB240FC4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A6758842F0;
-	Fri, 10 Oct 2025 06:24:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 89AA7226
- for <buildroot@buildroot.org>; Fri, 10 Oct 2025 06:23:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B4AB240FC4;
+	Fri, 10 Oct 2025 06:56:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 27C0D119
+ for <buildroot@buildroot.org>; Fri, 10 Oct 2025 06:56:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1538660BED
- for <buildroot@buildroot.org>; Fri, 10 Oct 2025 06:23:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 12E9140857
+ for <buildroot@buildroot.org>; Fri, 10 Oct 2025 06:56:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9rfW0qrhjOWk for <buildroot@buildroot.org>;
- Fri, 10 Oct 2025 06:23:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A8B86141D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3A8B86141D
- for <buildroot@buildroot.org>; Fri, 10 Oct 2025 06:23:55 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 349DC86E8C; Fri, 10 Oct 2025 06:23:55 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fm79CLqeViM9 for <buildroot@buildroot.org>;
+ Fri, 10 Oct 2025 06:56:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::d2a; helo=mail-io1-xd2a.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 202444077C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 202444077C
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com
+ [IPv6:2607:f8b0:4864:20::d2a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 202444077C
+ for <buildroot@buildroot.org>; Fri, 10 Oct 2025 06:56:17 +0000 (UTC)
+Received: by mail-io1-xd2a.google.com with SMTP id
+ ca18e2360f4ac-92aee734585so67611339f.3
+ for <buildroot@buildroot.org>; Thu, 09 Oct 2025 23:56:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1760079376; x=1760684176;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=iqMHu8byt4kGhlOPWQTTEddYaHoYtvVwlRsQI8JjlZI=;
+ b=ZlMdOgQboqM1X3Gw0oUCPzmNURBuxkwBOw93C1XtreFj06ufOAn2ri3JOtn+a283k8
+ gnaqDOKUGU94QWzPUtCxrb6XKf/a5HHwU2dUYlVFBXKau7ZBif8jpT2gWCG5Rs2MnSAB
+ kAaYjOU8hvm3DoptI5H18YEM0SAYv+LjxmSTnOrEszpz6TINjOsJS1g5zC1ObaNzuHDI
+ gWpX5uQQzscDsIY6etzTxSSKeg7YS51CIZ/e8+BNc19fScl1XNm7VaKhM85pG7MnB2gr
+ 3vqTB6aRLwv/dJNvyWM+POpjqbjY82qWGifkThNS0Jqd6EvamoikUXAsd6jPWpIti8gC
+ PeHg==
+X-Gm-Message-State: AOJu0Yz5gUvXonn5fGtWoxedyjkCENd/3snr+GDeKcoSD9qtyWWp5xxg
+ aQQwQa8wi8gOHi7Cs5uKaZzPcidI9doPzM2zeaddvYcVuI9LZEkmeRr3jXRslA==
+X-Gm-Gg: ASbGncvEf1EMcvavD+scIjPvEz2Tb548fwK105lkR55uNYRIBP3tpAP6bIofV+jMVVW
+ DeElSt8W89+WBAYYUt78cgDkGwwu0hIsVh0llMN7UFiAODc7dF5XYEgRcIsUEQz3aOsYNPys9ah
+ eL7eoNGFxaEqIspWDSaxNsrTcbFeBzHeNYnkZSzJqMtWbyXZLlrlZR5/OwXdTCTvlmShHXaZGhz
+ eKVwyUBZO7awjG6llEOSGMj+e3e37EPRzasim/IRZB1u1NltQdQq7ndk+V/7lHh3ZLy54P83hYy
+ zfPKrYNKQP4YW39ikuU/qBImZrvpZJ0f5yu+PERBLXunz9f8gBU1JIHG9djjS1sKuFhoy1N5PUn
+ RjvUFoL52EH9ycfwD6DeJ1Jh5SFouhoNmccICff3qGqb2MUrxxuS7+GS9dRs5MkmVDzZ3XfZhKt
+ nmUdYCmQM6BDxPn08pvs4UcJifjFgPw91xPkyx
+X-Google-Smtp-Source: AGHT+IHR/vA2snMqm4xIxvVidCwMHK5PUn3kp7yyYU2iNTGHRxc+j1kvBxl1WZp+r34655Zru5f6Nw==
+X-Received: by 2002:a05:6602:13c9:b0:887:54d4:a8c8 with SMTP id
+ ca18e2360f4ac-93bd1987b63mr1203654539f.12.1760079375684; 
+ Thu, 09 Oct 2025 23:56:15 -0700 (PDT)
+Received: from james-x399.tailafd1a.ts.net (71-218-100-179.hlrn.qwest.net.
+ [71.218.100.179]) by smtp.gmail.com with ESMTPSA id
+ 8926c6da1cb9f-58f6d045275sm616090173.24.2025.10.09.23.56.15
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 09 Oct 2025 23:56:15 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 10 Oct 2025 08:19:29 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f0023ca18d0cb023fb03b91827f322515a8fc498
-X-Git-Newrev: fb13611e6414e01f5a34cc065913fb1adcdf775c
-X-Patchwork-Hint: ignore
-Message-Id: <20251010062355.349DC86E8C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/squid: add patch for CVE-2025-59362
+Date: Fri, 10 Oct 2025 00:56:06 -0600
+Message-ID: <20251010065606.3819391-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1760079376; x=1760684176; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=iqMHu8byt4kGhlOPWQTTEddYaHoYtvVwlRsQI8JjlZI=;
+ b=FfE8wtZKALgy/giG3J2XTacJAjFVt/uyuSl5bCT+aKW2hoYMj9JURZd8s1+2m7JWtY
+ vndmzA4jblaHsyyfWjkU5sfHQ72vFsyJycZ5sdqR3nlS8BJKJkRb8LqyjmOc9wI3oG+U
+ ErikiIhm53qBwnEdPs15J6/XZLKvjaYzq/0YdATiVNdTLpQM6yF0OyTFZVZSpoq3Yebk
+ K1nofcYQhVOSxJGWeVvRU1qj1DYmOH0jgz1zHjwWeOcfBW/PDarDVpNDKgfrdpd+O5nO
+ VB1CpCWaQEeF2IzkhF7Xc9m3mdc0ySUbD/WAIQ/Ss+upadpGL045vTMp4Vivu9jFHLYK
+ 39rQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=FfE8wtZK
+Subject: [Buildroot] [PATCH 1/1] package/python-aerich: bump to version 0.9.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,107 +107,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb13611e6414e01f5a34cc065913fb1adcdf775c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Drop pydantic/tomli-w runtime dependencies, add anyio runtime
+dependency.
 
-Fixes the following vulnerability:
+Migrate from poetry to pdm-backend.
 
-- CVE-2025-59362
-
-    Squid through 7.1 mishandles ASN.1 encoding of long SNMP OIDs. This
-    occurs in asn_build_objid in lib/snmplib/asn1.c.
-
-For more information, see:
-
-- https://nvd.nist.gov/vuln/detail/CVE-2025-59362
-- https://github.com/squid-cache/squid/commit/250a18e0a80694b919972a1836cdfe20f2e1baa0
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- ...0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch | 52 ++++++++++++++++++++++
- package/squid/squid.mk                             |  4 ++
- 2 files changed, 56 insertions(+)
+ package/python-aerich/Config.in          | 4 +---
+ package/python-aerich/python-aerich.hash | 4 ++--
+ package/python-aerich/python-aerich.mk   | 7 ++++---
+ 3 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/package/squid/0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch b/package/squid/0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch
-new file mode 100644
-index 0000000000..695ba0255e
---- /dev/null
-+++ b/package/squid/0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch
-@@ -0,0 +1,52 @@
-+From 0d89165ee6da10e6fa50c44998b3cd16d59400e9 Mon Sep 17 00:00:00 2001
-+From: Alex Rousskov <rousskov@measurement-factory.com>
-+Date: Sat, 30 Aug 2025 06:49:36 +0000
-+Subject: [PATCH] Fix ASN.1 encoding of long SNMP OIDs (#2149)
-+
-+Upstream: https://github.com/squid-cache/squid/commit/250a18e0a80694b919972a1836cdfe20f2e1baa0
-+CVE: CVE-2025-59362
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ lib/snmplib/asn1.c | 13 +++++++++++++
-+ 1 file changed, 13 insertions(+)
-+
-+diff --git a/lib/snmplib/asn1.c b/lib/snmplib/asn1.c
-+index 81f2051fbe7..2852c26b220 100644
-+--- a/lib/snmplib/asn1.c
-++++ b/lib/snmplib/asn1.c
-+@@ -735,6 +735,7 @@ asn_build_objid(u_char * data, int *datalength,
-+      * lastbyte ::= 0 7bitvalue
-+      */
-+     u_char buf[MAX_OID_LEN];
-++    u_char *bufEnd = buf + sizeof(buf);
-+     u_char *bp = buf;
-+     oid *op = objid;
-+     int asnlength;
-+@@ -753,6 +754,10 @@ asn_build_objid(u_char * data, int *datalength,
-+     while (objidlength-- > 0) {
-+         subid = *op++;
-+         if (subid < 127) {  /* off by one? */
-++            if (bp >= bufEnd) {
-++                snmp_set_api_error(SNMPERR_ASN_ENCODE);
-++                return (NULL);
-++            }
-+             *bp++ = subid;
-+         } else {
-+             mask = 0x7F;    /* handle subid == 0 case */
-+@@ -770,8 +775,16 @@ asn_build_objid(u_char * data, int *datalength,
-+                 /* fix a mask that got truncated above */
-+                 if (mask == 0x1E00000)
-+                     mask = 0xFE00000;
-++                if (bp >= bufEnd) {
-++                    snmp_set_api_error(SNMPERR_ASN_ENCODE);
-++                    return (NULL);
-++                }
-+                 *bp++ = (u_char) (((subid & mask) >> bits) | ASN_BIT8);
-+             }
-++            if (bp >= bufEnd) {
-++                snmp_set_api_error(SNMPERR_ASN_ENCODE);
-++                return (NULL);
-++            }
-+             *bp++ = (u_char) (subid & mask);
-+         }
-+     }
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index b021170d9b..d445f005b7 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -11,6 +11,10 @@ SQUID_LICENSE = GPL-2.0+
- SQUID_LICENSE_FILES = COPYING
- SQUID_CPE_ID_VENDOR = squid-cache
- SQUID_SELINUX_MODULES = apache squid
-+
-+# 0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch
-+SQUID_IGNORE_CVES += CVE-2025-59362
-+
- SQUID_DEPENDENCIES = libcap host-libcap libtool libxml2 host-pkgconf \
- 	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
- SQUID_CONF_ENV = \
+diff --git a/package/python-aerich/Config.in b/package/python-aerich/Config.in
+index 4e7ea1117c..9b6d8f16c6 100644
+--- a/package/python-aerich/Config.in
++++ b/package/python-aerich/Config.in
+@@ -1,10 +1,8 @@
+ config BR2_PACKAGE_PYTHON_AERICH
+ 	bool "python-aerich"
+-	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-pydantic -> python-pydantic-core
++	select BR2_PACKAGE_PYTHON_ANYIO # runtime
+ 	select BR2_PACKAGE_PYTHON_ASYNCCLICK # runtime
+ 	select BR2_PACKAGE_PYTHON_DICTDIFFER # runtime
+-	select BR2_PACKAGE_PYTHON_PYDANTIC # runtime
+-	select BR2_PACKAGE_PYTHON_TOMLI_W # runtime
+ 	select BR2_PACKAGE_PYTHON_TORTOISE_ORM # runtime
+ 	help
+ 	  A database migrations tool for Tortoise ORM.
+diff --git a/package/python-aerich/python-aerich.hash b/package/python-aerich/python-aerich.hash
+index 6e44c241f3..7990532a2e 100644
+--- a/package/python-aerich/python-aerich.hash
++++ b/package/python-aerich/python-aerich.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aerich/json
+-md5  4d647c8f3829782f5770b7b120832f63  aerich-0.9.1.tar.gz
+-sha256  629afbef5902635c41f410dd05def984c02e05e62d8a2020210a29a4aae19001  aerich-0.9.1.tar.gz
++md5  e4c7fcf3593c22d58c372595ca3d2e6c  aerich-0.9.2.tar.gz
++sha256  02d58658714eebe396fe7bd9f9401db3a60a44dc885910ad3990920d0357317d  aerich-0.9.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  4cc00f0e33ac8e089b37d8a1474be441b26311bdc16fe035c75b51201515f617  LICENSE
+diff --git a/package/python-aerich/python-aerich.mk b/package/python-aerich/python-aerich.mk
+index c7417f3179..916279be78 100644
+--- a/package/python-aerich/python-aerich.mk
++++ b/package/python-aerich/python-aerich.mk
+@@ -4,11 +4,12 @@
+ #
+ ################################################################################
+ 
+-PYTHON_AERICH_VERSION = 0.9.1
++PYTHON_AERICH_VERSION = 0.9.2
+ PYTHON_AERICH_SOURCE = aerich-$(PYTHON_AERICH_VERSION).tar.gz
+-PYTHON_AERICH_SITE = https://files.pythonhosted.org/packages/a5/98/75c6e3053a14a14ffe86e2435698b960abe0bf03c114e67f966d92ff19e7
+-PYTHON_AERICH_SETUP_TYPE = poetry
++PYTHON_AERICH_SITE = https://files.pythonhosted.org/packages/c4/60/5d3885f531fab2cecec67510e7b821efc403940ed9eefd034b2c21350f3c
++PYTHON_AERICH_SETUP_TYPE = pep517
+ PYTHON_AERICH_LICENSE = Apache-2.0
+ PYTHON_AERICH_LICENSE_FILES = LICENSE
++PYTHON_AERICH_DEPENDENCIES = host-python-pdm-backend
+ 
+ $(eval $(python-package))
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
