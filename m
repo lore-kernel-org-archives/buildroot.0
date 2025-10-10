@@ -1,75 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67AFBCCD184
-	for <buildroot@archiver.kernel.org>; Thu,  9 Oct 2025 21:36:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA2CACAC5BB
+	for <buildroot@archiver.kernel.org>; Fri, 10 Oct 2025 05:19:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19ED740DD0;
-	Thu,  9 Oct 2025 21:36:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5565F60DE6;
+	Fri, 10 Oct 2025 05:19:33 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UG-jjAefmPCD; Fri, 10 Oct 2025 05:19:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6154460F0E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6154460F0E;
+	Fri, 10 Oct 2025 05:19:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 70A3C119
+ for <buildroot@buildroot.org>; Fri, 10 Oct 2025 05:19:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 631054120A
+ for <buildroot@buildroot.org>; Fri, 10 Oct 2025 05:19:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u-8ddpbYIEuq; Thu,  9 Oct 2025 21:36:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DF0B40DD3
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DF0B40DD3;
-	Thu,  9 Oct 2025 21:36:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6D050119
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 21:36:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 648A084221
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 21:36:20 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WZQiOPfKd8vy for <buildroot@buildroot.org>;
- Thu,  9 Oct 2025 21:36:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.131;
- helo=smtpcmd04131.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 61201841F8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61201841F8
-Received: from smtpcmd04131.aruba.it (smtpcmd04131.aruba.it [62.149.158.131])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 61201841F8
- for <buildroot@buildroot.org>; Thu,  9 Oct 2025 21:36:16 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id 6yJ3vqxOicq1h6yJ3vU1Gc; Thu, 09 Oct 2025 23:36:14 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Cc: Christian Stewart <christian@aperture.us>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Thu,  9 Oct 2025 23:36:12 +0200
-Message-ID: <20251009213612.1143019-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.47.3
+ id sQxfBSOp-wdI for <buildroot@buildroot.org>;
+ Fri, 10 Oct 2025 05:19:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.124;
+ helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4413E41174
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4413E41174
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.124])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4413E41174
+ for <buildroot@buildroot.org>; Fri, 10 Oct 2025 05:19:28 +0000 (UTC)
+X-CSE-ConnectionGUID: fGOLiCt9QDiBsQV/WHTdBg==
+X-CSE-MsgGUID: vrqZnU7HRQe9pwCdfGacDw==
+Received: from unknown (HELO opfedv1rlp0g.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
+ 10 Oct 2025 07:19:26 +0200
+Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv1rlp0g.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Oct 2025 07:19:26 +0200
+Received: from yd-6wlzhs3 [x.x.x.x] by
+ OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.59;
+ Fri, 10 Oct 2025 07:19:24 +0200
+Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
+ Fri, 10 Oct 2025 07:19:24 +0200
+From: yann.morin@orange.com
+X-CSE-ConnectionGUID: tuSaPpwtS3+8CezOHypGrg==
+X-CSE-MsgGUID: 3X91k+niSJOpTvPfsSfR3g==
+X-IronPort-AV: E=Sophos;i="6.19,218,1754949600"; d="scan'208";a="343380378"
+Date: Fri, 10 Oct 2025 07:19:24 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+CC: <buildroot@buildroot.org>
+Message-ID: <aOiXXHg2kwmHaIea@yd-6wlzhs3>
+References: <20251009165624.3914222-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfFAFWEJGqMJY/Nt73KLH1JQO+fNKVQU8T9GT255XtFCFkF8amk8xzEnSgTg20iPCXF9IvE5Bj0fBd8ZBZmqdUOog9h6BXvBOOo+YIxPA8RvixKiS6lkn
- Fsp4KJxmAJodYKuQsqaKTRt9hly/RsZCrYYvFA7bO3wOBxbrdT7QUHFzM06TAs4wBcpXsh9p/4RC2Prt2MmzsAs/zIiUB0upb5LEUkVmmtEaXhE8pN3uQmsu
- zd1UfA9pDwh1ARVJt/xOpPn/5vB+fHq1xdIEitWODgsffVx6AoUxkLiZ5yCFg4bRal5A9EYQLHbEdnaH9JZSNA==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1760045774; bh=fzIersq24tLXJlfGv+2kroR/v1+hFzZuZg/vW+deOMY=;
- h=From:To:Subject:Date:MIME-Version;
- b=cD5nXBuyNKBpcpS0nByV/b2puxPKc/idxiQMLXhX6ddWsSM/PTkcRbFRK5SH95qtL
- 3KR14yCbnD6tHaQ3jHVQgohZUX1kvRx2GoMMqGfwN3fBr34IjEb1ocUORYsimv3L7F
- 6UuAC40SLhsybR6BfzWYZoMGKiYQm2mNoXA3x/BCjQ8MlVTBXWRRg1Iu4RV3dvrrng
- UMF1wu5oVVLpRmvjTD8K4jVZWiZHdrTs4SnjLgoF6238TzFly3AC3XX92HE3C1Joyx
- T8j/MRs8VNBVpxLRZ0baqp1brecmrtGgqnu9mmh32ZfCD/Cmd8idk5LsovvNrWq61K
- kuEcafbKxybuQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+Content-Disposition: inline
+In-Reply-To: <20251009165624.3914222-1-bernd@kuhls.net>
+X-Originating-IP: [10.115.26.50]
+X-ClientProxiedBy: OPE16NORMBX108.corporate.adroot.infra.ftgroup (10.115.27.5)
+ To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1760073569; x=1791609569;
+ h=date:to:cc:subject:message-id:references:mime-version:
+ in-reply-to:content-transfer-encoding:from;
+ bh=ApfzthZ/ZqEnLdgitL5g9ylEnQA9ffn/dyP+Pn76Ok8=;
+ b=s7zavronVZbeZXPMKPzNrFmgNR6onLBf7kL8LVsnLQCJ27eapxiLJjww
+ /fNbrnrjaktIw1m7xk5xrTGk90RtWRINPjZl2lQ8PhGAPuyDehwHeO8wU
+ AJR+HAL342O/H0bMHgfFuGBZHobB98Bzx7OilnTkdk448bCQn6HCXmAL8
+ 60yvMB3IOprfShqqza4ra48sQw90gbgYBRSpQAx6l2FPsL1hY64M5QOHw
+ NV7kUvcO2sdZw/EZBqGnW7RkoRpjSFMVOK1UIAkyLLpBrZOlos5eLb3H4
+ u6vLkKSI6ZKRcTSmM4GmpRdvF7v+hg9YYvJwiurEZYPzzwsWPIe0qhOGD
+ Q==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=orange.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=cD5nXBuy
-Subject: [Buildroot] [PATCH v2] package/rtl8821cu: fix build failure with
- Linux 6.17
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=s7zavron
+Subject: Re: [Buildroot] [PATCH 1/1] package/gpsd: remove -std=gnu++98 from
+ CFLAGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,91 +101,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-* Bump to version 2025-10-09
-* Drop upstreamed local patch
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
-V1->V2:
-* pending patch has already been upstream so align with upstream version
----
- .../0001-Fix-build-for-kernel-6.16.patch      | 34 -------------------
- package/rtl8821cu/rtl8821cu.hash              |  2 +-
- package/rtl8821cu/rtl8821cu.mk                |  2 +-
- 3 files changed, 2 insertions(+), 36 deletions(-)
- delete mode 100644 package/rtl8821cu/0001-Fix-build-for-kernel-6.16.patch
-
-diff --git a/package/rtl8821cu/0001-Fix-build-for-kernel-6.16.patch b/package/rtl8821cu/0001-Fix-build-for-kernel-6.16.patch
-deleted file mode 100644
-index 311d4fcd4c..0000000000
---- a/package/rtl8821cu/0001-Fix-build-for-kernel-6.16.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 13f85e370c265b782a801cd22f86cea6f6cda876 Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Mon, 8 Sep 2025 21:04:30 +0200
--Subject: [PATCH] Fix build for kernel 6.16
--
--With commit:
--https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=41cb08555c4164996d67c78b3bf1c658075b75f1
--from_timer() has been renamed to timer_container_of() so let's rename
--according to linux version >= 6.16.
--
--Upstream: https://github.com/morrownr/8821cu-20210916/pull/187
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- include/osdep_service_linux.h | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/include/osdep_service_linux.h b/include/osdep_service_linux.h
--index ed1e19b..c25f6a2 100644
----- a/include/osdep_service_linux.h
--+++ b/include/osdep_service_linux.h
--@@ -210,6 +210,10 @@ typedef void	*thread_context;
-- typedef void timer_hdl_return;
-- typedef void *timer_hdl_context;
-- 
--+#if (LINUX_VERSION_CODE > KERNEL_VERSION(6, 16, 0))
--+#define from_timer     timer_container_of
--+#endif
--+
-- #if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 5, 41))
-- 	typedef struct work_struct _workitem;
-- #else
---- 
--2.43.0
--
-diff --git a/package/rtl8821cu/rtl8821cu.hash b/package/rtl8821cu/rtl8821cu.hash
-index e7418b4cd0..b9869303de 100644
---- a/package/rtl8821cu/rtl8821cu.hash
-+++ b/package/rtl8821cu/rtl8821cu.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  6b4bf57959d14ad1a2637a0385876c6fb319d6e4951986bbba18de3c0e65bb86  rtl8821cu-d74134a1c68f59f2b80cdd6c6afb8c1a8a687cbf.tar.gz
-+sha256  3e7fc5b598b81006fb07a5a3534aa4288cb387ed531c71f3734e55e6cae729b0  rtl8821cu-3d1fcf4bc838542ceb03b0b4e9e40600720cf6ae.tar.gz
- sha256  22cdb0a9cf492dbf05c5b27381a5c0e73ae0d4622427b522b0ba92b7495e5fb0  LICENSE
-diff --git a/package/rtl8821cu/rtl8821cu.mk b/package/rtl8821cu/rtl8821cu.mk
-index ac53b65fda..e1ef396110 100644
---- a/package/rtl8821cu/rtl8821cu.mk
-+++ b/package/rtl8821cu/rtl8821cu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTL8821CU_VERSION = d74134a1c68f59f2b80cdd6c6afb8c1a8a687cbf
-+RTL8821CU_VERSION = 3d1fcf4bc838542ceb03b0b4e9e40600720cf6ae
- RTL8821CU_SITE = $(call github,morrownr,8821cu-20210916,$(RTL8821CU_VERSION))
- RTL8821CU_LICENSE = GPL-2.0
- RTL8821CU_LICENSE_FILES = LICENSE
--- 
-2.47.3
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+QmVybmQsIEFsbCwKCk9uIDIwMjUtMTAtMDkgMTg6NTYgKzAyMDAsIEJlcm5kIEt1aGxzIHNwYWtl
+IHRodXNseToKPiBJbiAyMDE2IGJ1aWxkcm9vdCBjb21taXQgYjRjMDUwZTlhZmVkN2E4ZGMzMDJl
+NmUxMDE0Y2M0ZmZiNTA4NTkwZCBhZGRlZAo+IC1zdGQ9Z251Kys5OCBhbHNvIHRvIENGTEFHUyBr
+bm93aW5nIHRoYXQgaXQgd2lsbCBjYXVzZSB3YXJuaW5nczoKPiBodHRwczovL2xpc3RzLm5vbmdu
+dS5vcmcvYXJjaGl2ZS9odG1sL2dwc2QtZGV2LzIwMTYtMDkvbXNnMDAwODIuaHRtbAo+ICdBbHRo
+b3VnaCB0aGlzIGxlYWRzIHRvIGxvdHMgb2Ygd2FybmluZ3Mgb24gZXZlcnkgY29tcGlsYXRpb24g
+d2l0aCBnY2M6Cj4gImNjMTogd2FybmluZzogY29tbWFuZCBsaW5lIG9wdGlvbiAnLXN0ZD1nbnUr
+Kzk4JyBpcyB2YWxpZCBmb3IgQysrL09iakMrKyBidXQgbm90IGZvciBDIicKPiBUaGVzZSB3YXJu
+aW5ncyBhcmUgc3RpbGwgcHJlc2VudCBidXQgY2F1c2UgYSBtaXNkZXRlY3Rpb24gaW4gY29uZmln
+dXJlCj4gICAgIENoZWNraW5nIGlmIHN0cmVycm9yX3IoKSByZXR1cm5zIGludC4uLiBubwo+IGJl
+Y2F1c2UgaGVyZSB3YXJuaW5ncyBhcmUgdHJlYXRlZCBhcyBlcnJvcnMsIHF1b3RpbmcgY29uZmln
+LmxvZzoKPiBjYzE6IGVycm9yOiBjb21tYW5kLWxpbmUgb3B0aW9uIMOi4oKsy5wtc3RkPWdudSsr
+OTjDouKCrOKEoiBpcyB2YWxpZCBmb3IgQysrL09iakMrKyBidXQgbm90IGZvciBDIFstV2Vycm9y
+XQo+IGNjMTogYWxsIHdhcm5pbmdzIGJlaW5nIHRyZWF0ZWQgYXMgZXJyb3JzCgpJJ20gbm90IHN1
+cmUgd2h5IHdlIG9ubHkgbm90aWNlIHRvZGF5LCB0aG91Z2g6IHRoZSB0b29sY2hhaW4gaXMgZ2Nj
+LTE0LAp3aGljaCBpcyBub3QgcmVhbGx5IG5ldywgYW5kIHRoZXJlIGlzIG9ubHkgdGhpcyBvbmUg
+c2luZ2xlIGZhaWx1cmUgaW4KdGhlIGF1dG9idWlsZGVycy4uLgoKPiBJbiAyMDE3IHVwc3RyZWFt
+IGNvbW1pdHRlZAo+IGh0dHBzOi8vZ2l0bGFiLmNvbS9ncHNkL2dwc2QvLS9jb21taXQvZDI4N2M3
+NmY0ZjJlMWZmZDI3NWRhNDFiODRmOWUwOGVhN2Y3NDM0NAo+IHdoaWNoIGFkZGVkICJzdGQ6OiIg
+bmFtZXNwYWNlIHByZWZpeGVzIGFuZCBmaXhlZCB0aGUgb3JpZ2luYWwgcHJvYmxlbS4KPiAtc3Rk
+PWdudSsrOTggYmVpbmcgcmVtb3ZlZCBmcm9tIENGTEFHUyBsZXRzIGNvbmZpZ3VyZSBjb3JyZWN0
+bHkgZGV0ZWN0Cj4gc3RyZXJyb3JfcigpOgo+ICAgICBDaGVja2luZyBpZiBzdHJlcnJvcl9yKCkg
+cmV0dXJucyBpbnQuLi4geWVzCgpBd2Vzb21lIHJlc2VhcmNoLCB0aGFua3MhIEkndmUgYmVlbiBz
+Y3JhdGNoaW5nIG15IGhlYWQgb24gdGhpcywgYnV0IEkKbWlzc2VkIHRoZSB1cHN0cmVhbSBjb21t
+aXQgZDI4N2M3NmY0ZjJlIHlvdSBzcG90dGVkLiDwn5GNCgpbLS1TTklQLS1dCj4gRml4ZXM6Cj4g
+aHR0cHM6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzLzUyZDc0N2QzM2Q3MTRlYTEw
+YjllN2VlMTBhZGVhZGQ5ZTQ1MTJjMmQvCj4gU2lnbmVkLW9mZi1ieTogQmVybmQgS3VobHMgPGJl
+cm5kQGt1aGxzLm5ldD4KClRlc3RlZC1ieTogWWFubiBFLiBNT1JJTiA8eWFubi5tb3JpbkBvcmFu
+Z2UuY29tPgpSZXZpZXdlZC1ieTogWWFubiBFLiBNT1JJTiA8eWFubi5tb3JpbkBvcmFuZ2UuY29t
+PgoKUmVnYXJkcywKWWFubiBFLiBNT1JJTi4KCj4gLS0tCj4gIHBhY2thZ2UvZ3BzZC9ncHNkLm1r
+IHwgMSAtCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGRlbGV0aW9uKC0pCj4gCj4gZGlmZiAtLWdpdCBh
+L3BhY2thZ2UvZ3BzZC9ncHNkLm1rIGIvcGFja2FnZS9ncHNkL2dwc2QubWsKPiBpbmRleCAxYjIw
+MjEwYzQ5Li5jNWM0ZGFkMjk2IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvZ3BzZC9ncHNkLm1rCj4g
+KysrIGIvcGFja2FnZS9ncHNkL2dwc2QubWsKPiBAQCAtMzcsNyArMzcsNiBAQCBlbmRpZgo+ICAj
+IEJ1aWxkIGxpYmdwc21tIGlmIHdlJ3ZlIGdvdCBDKysKPiAgaWZlcSAoJChCUjJfSU5TVEFMTF9M
+SUJTVERDUFApLHkpCj4gIEdQU0RfTERGTEFHUyArPSAtbHN0ZGMrKwo+IC1HUFNEX0NGTEFHUyAr
+PSAtc3RkPWdudSsrOTgKPiAgR1BTRF9DWFhGTEFHUyArPSAtc3RkPWdudSsrOTgKPiAgR1BTRF9T
+Q09OU19PUFRTICs9IGxpYmdwc21tPXllcwo+ICBlbHNlCj4gLS0gCj4gMi40Ny4zCj4gCgotLSAK
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF9fX19fX19fX19fXwouLS0t
+LS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS06ICAgICAgIF8gICAgOi0tLS0tLS0t
+LS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAgICBf
+Xy8gKSAgIHwgLyJcIEFTQ0lJIFJJQkJPTiB8CnwgICAgICAgICAgICAgICAgIHwgU29mdHdhcmUg
+IERlc2lnbmVyIHwgIF8vIC0gLycgICB8IFwgLyBDQU1QQUlHTiAgICAgfAp8ICszMyA2MzguNDEx
+LjI0NSAnLS0tLS0tLS0tLS0tLS0tLS0tLS06IChfICAgIGAtLSwgfCAgWCAgQUdBSU5TVCAgICAg
+IHwKfCB5YW5uLm1vcmluIChhdCkgb3JhbmdlLmNvbSAgICAgICAgICAgfF89IiAgICAsLS0nIHwg
+LyBcIEhUTUwgTUFJTCAgICB8CictLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LTpfX19fX18vX19fX186LS0tLS0tLS0tLS0tLS0tLS0tJwoKX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fDQpDZSBtZXNzYWdlIGV0IHNlcyBwaWVjZXMg
+am9pbnRlcyBwZXV2ZW50IGNvbnRlbmlyIGRlcyBpbmZvcm1hdGlvbnMgY29uZmlkZW50aWVsbGVz
+IG91IHByaXZpbGVnaWVlcyBldCBuZSBkb2l2ZW50IGRvbmMNCnBhcyBldHJlIGRpZmZ1c2VzLCBl
+eHBsb2l0ZXMgb3UgY29waWVzIHNhbnMgYXV0b3Jpc2F0aW9uLiBTaSB2b3VzIGF2ZXogcmVjdSBj
+ZSBtZXNzYWdlIHBhciBlcnJldXIsIHZldWlsbGV6IGxlIHNpZ25hbGVyDQphIGwnZXhwZWRpdGV1
+ciBldCBsZSBkZXRydWlyZSBhaW5zaSBxdWUgbGVzIHBpZWNlcyBqb2ludGVzLiBMZXMgbWVzc2Fn
+ZXMgZWxlY3Ryb25pcXVlcyBldGFudCBzdXNjZXB0aWJsZXMgZCdhbHRlcmF0aW9uLA0KT3Jhbmdl
+IGRlY2xpbmUgdG91dGUgcmVzcG9uc2FiaWxpdGUgc2kgY2UgbWVzc2FnZSBhIGV0ZSBhbHRlcmUs
+IGRlZm9ybWUgb3UgZmFsc2lmaWUuIE1lcmNpLg0KDQpUaGlzIG1lc3NhZ2UgYW5kIGl0cyBhdHRh
+Y2htZW50cyBtYXkgY29udGFpbiBjb25maWRlbnRpYWwgb3IgcHJpdmlsZWdlZCBpbmZvcm1hdGlv
+biB0aGF0IG1heSBiZSBwcm90ZWN0ZWQgYnkgbGF3Ow0KdGhleSBzaG91bGQgbm90IGJlIGRpc3Ry
+aWJ1dGVkLCB1c2VkIG9yIGNvcGllZCB3aXRob3V0IGF1dGhvcmlzYXRpb24uDQpJZiB5b3UgaGF2
+ZSByZWNlaXZlZCB0aGlzIGVtYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5kZXIg
+YW5kIGRlbGV0ZSB0aGlzIG1lc3NhZ2UgYW5kIGl0cyBhdHRhY2htZW50cy4NCkFzIGVtYWlscyBt
+YXkgYmUgYWx0ZXJlZCwgT3JhbmdlIGlzIG5vdCBsaWFibGUgZm9yIG1lc3NhZ2VzIHRoYXQgaGF2
+ZSBiZWVuIG1vZGlmaWVkLCBjaGFuZ2VkIG9yIGZhbHNpZmllZC4NClRoYW5rIHlvdS4KX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
+bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
+cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
