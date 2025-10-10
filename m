@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E732CCA476
-	for <buildroot@archiver.kernel.org>; Fri, 10 Oct 2025 06:24:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AD2ECCD187
+	for <buildroot@archiver.kernel.org>; Fri, 10 Oct 2025 06:24:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D45E1412CE;
-	Fri, 10 Oct 2025 06:23:59 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ps_MWJi3QNM9; Fri, 10 Oct 2025 06:23:59 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9293412C3
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E9293412C3;
-	Fri, 10 Oct 2025 06:23:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2DA7E226
- for <buildroot@buildroot.org>; Fri, 10 Oct 2025 06:23:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1F7B8842F0
- for <buildroot@buildroot.org>; Fri, 10 Oct 2025 06:23:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BB6B7842ED;
+	Fri, 10 Oct 2025 06:24:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3jCnuLcmjMOB for <buildroot@buildroot.org>;
+ id qkWwEm3xexz4; Fri, 10 Oct 2025 06:24:00 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6758842F0
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id A6758842F0;
+	Fri, 10 Oct 2025 06:24:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 89AA7226
+ for <buildroot@buildroot.org>; Fri, 10 Oct 2025 06:23:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1538660BED
+ for <buildroot@buildroot.org>; Fri, 10 Oct 2025 06:23:56 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9rfW0qrhjOWk for <buildroot@buildroot.org>;
  Fri, 10 Oct 2025 06:23:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BF42842ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A8B86141D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3BF42842ED
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3A8B86141D
  for <buildroot@buildroot.org>; Fri, 10 Oct 2025 06:23:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2B2D786E8B; Fri, 10 Oct 2025 06:23:55 +0000 (UTC)
+ id 349DC86E8C; Fri, 10 Oct 2025 06:23:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 10 Oct 2025 08:19:15 +0200
+Date: Fri, 10 Oct 2025 08:19:29 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ab2fc8d88fd117546442b7c10aac59498a7579ad
-X-Git-Newrev: f0023ca18d0cb023fb03b91827f322515a8fc498
+X-Git-Oldrev: f0023ca18d0cb023fb03b91827f322515a8fc498
+X-Git-Newrev: fb13611e6414e01f5a34cc065913fb1adcdf775c
 X-Patchwork-Hint: ignore
-Message-Id: <20251010062355.2B2D786E8B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gpsd: remove -std=gnu++98 from
- CFLAGS
+Message-Id: <20251010062355.349DC86E8C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/squid: add patch for CVE-2025-59362
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,119 +59,107 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3103951081659045708=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3103951081659045708==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=f0023ca18d0cb023fb03b91827f322515a8fc498
+commit: https://git.buildroot.net/buildroot/commit/?id=fb13611e6414e01f5a34cc065913fb1adcdf775c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In 2016 buildroot commit b4c050e9afed7a8dc302e6e1014cc4ffb508590d added
--std=gnu++98 also to CFLAGS knowing that it will cause warnings:
+Fixes the following vulnerability:
 
-https://lists.nongnu.org/archive/html/gpsd-dev/2016-09/msg00082.html
-'Although this leads to lots of warnings on every compilation with gcc:
-"cc1: warning: command line option '-std=gnu++98' is valid for C++/ObjC++ but not for C"'
+- CVE-2025-59362
 
-These warnings are still present but cause a misdetection in configure
+    Squid through 7.1 mishandles ASN.1 encoding of long SNMP OIDs. This
+    occurs in asn_build_objid in lib/snmplib/asn1.c.
 
-    Checking if strerror_r() returns int... no
+For more information, see:
 
-because here warnings are treated as errors, quoting config.log:
+- https://nvd.nist.gov/vuln/detail/CVE-2025-59362
+- https://github.com/squid-cache/squid/commit/250a18e0a80694b919972a1836cdfe20f2e1baa0
 
-cc1: error: command-line option â€˜-std=gnu++98â€™ is valid for C++/ObjC++ but not for C [-Werror]
-cc1: all warnings being treated as errors
-
-In 2017 upstream committed
-https://gitlab.com/gpsd/gpsd/-/commit/d287c76f4f2e1ffd275da41b84f9e08ea7f74344
-which added "std::" namespace prefixes and fixed the original problem.
-
--std=gnu++98 being removed from CFLAGS lets configure correctly detect
-strerror_r():
-
-    Checking if strerror_r() returns int... yes
-
-and no new build errors occur:
-
-                             arm-aarch64 [ 1/35]: OK
-                   bootlin-aarch64-glibc [ 2/35]: OK
-               bootlin-arcle-hs38-uclibc [ 3/35]: OK
-                    bootlin-armv5-uclibc [ 4/35]: OK
-                     bootlin-armv7-glibc [ 5/35]: OK
-                   bootlin-armv7m-uclibc [ 6/35]: SKIPPED
-                      bootlin-armv7-musl [ 7/35]: OK
-                bootlin-m68k-5208-uclibc [ 8/35]: SKIPPED
-               bootlin-m68k-68040-uclibc [ 9/35]: OK
-             bootlin-microblazeel-uclibc [10/35]: OK
-                bootlin-mipsel32r6-glibc [11/35]: OK
-                   bootlin-mipsel-uclibc [12/35]: OK
-                 bootlin-openrisc-uclibc [13/35]: OK
-        bootlin-powerpc64le-power8-glibc [14/35]: OK
-           bootlin-powerpc-e500mc-uclibc [15/35]: OK
-                   bootlin-riscv32-glibc [16/35]: OK
-                   bootlin-riscv64-glibc [17/35]: OK
-                    bootlin-riscv64-musl [18/35]: OK
-                 bootlin-s390x-z13-glibc [19/35]: OK
-                      bootlin-sh4-uclibc [20/35]: OK
-                   bootlin-sparc64-glibc [21/35]: OK
-                    bootlin-sparc-uclibc [22/35]: OK
-                    bootlin-x86-64-glibc [23/35]: OK
-                     bootlin-x86-64-musl [24/35]: OK
-                   bootlin-x86-64-uclibc [25/35]: OK
-                   bootlin-x86-i686-musl [26/35]: OK
-                   bootlin-xtensa-uclibc [27/35]: OK
-                            br-arm-basic [28/35]: SKIPPED
-                    br-arm-full-nothread [29/35]: SKIPPED
-                      br-arm-full-static [30/35]: SKIPPED
-                   br-i386-pentium4-full [31/35]: FAILED
-                      br-mips64-n64-full [32/35]: OK
-                 br-mips64r6-el-hf-glibc [33/35]: OK
-               br-powerpc-603e-basic-cpp [34/35]: SKIPPED
-               br-powerpc64-power7-glibc [35/35]: OK
-35 builds, 6 skipped, 1 build failed, 0 legal-info failed, 0 show-info failed
-
-The br-i386-pentium4-full error is not caused by gpsd:
-
-package/python3/python3.mk:324: *** Python3 doesn't work with uClibc and
-kernel headers < 5.1. Please use a different toolchain or unselect
-Python3..
-
-Fixes:
-https://autobuild.buildroot.org/results/52d747d33d714ea10b9e7ee10adeadd9e4512c2d/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Tested-by: Yann E. MORIN <yann.morin@orange.com>
-Reviewed-by: Yann E. MORIN <yann.morin@orange.com>
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gpsd/gpsd.mk | 1 -
- 1 file changed, 1 deletion(-)
+ ...0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch | 52 ++++++++++++++++++++++
+ package/squid/squid.mk                             |  4 ++
+ 2 files changed, 56 insertions(+)
 
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 1b20210c49..c5c4dad296 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -37,7 +37,6 @@ endif
- # Build libgpsmm if we've got C++
- ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
- GPSD_LDFLAGS += -lstdc++
--GPSD_CFLAGS += -std=gnu++98
- GPSD_CXXFLAGS += -std=gnu++98
- GPSD_SCONS_OPTS += libgpsmm=yes
- else
-
---===============3103951081659045708==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/squid/0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch b/package/squid/0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch
+new file mode 100644
+index 0000000000..695ba0255e
+--- /dev/null
++++ b/package/squid/0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch
+@@ -0,0 +1,52 @@
++From 0d89165ee6da10e6fa50c44998b3cd16d59400e9 Mon Sep 17 00:00:00 2001
++From: Alex Rousskov <rousskov@measurement-factory.com>
++Date: Sat, 30 Aug 2025 06:49:36 +0000
++Subject: [PATCH] Fix ASN.1 encoding of long SNMP OIDs (#2149)
++
++Upstream: https://github.com/squid-cache/squid/commit/250a18e0a80694b919972a1836cdfe20f2e1baa0
++CVE: CVE-2025-59362
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ lib/snmplib/asn1.c | 13 +++++++++++++
++ 1 file changed, 13 insertions(+)
++
++diff --git a/lib/snmplib/asn1.c b/lib/snmplib/asn1.c
++index 81f2051fbe7..2852c26b220 100644
++--- a/lib/snmplib/asn1.c
+++++ b/lib/snmplib/asn1.c
++@@ -735,6 +735,7 @@ asn_build_objid(u_char * data, int *datalength,
++      * lastbyte ::= 0 7bitvalue
++      */
++     u_char buf[MAX_OID_LEN];
+++    u_char *bufEnd = buf + sizeof(buf);
++     u_char *bp = buf;
++     oid *op = objid;
++     int asnlength;
++@@ -753,6 +754,10 @@ asn_build_objid(u_char * data, int *datalength,
++     while (objidlength-- > 0) {
++         subid = *op++;
++         if (subid < 127) {  /* off by one? */
+++            if (bp >= bufEnd) {
+++                snmp_set_api_error(SNMPERR_ASN_ENCODE);
+++                return (NULL);
+++            }
++             *bp++ = subid;
++         } else {
++             mask = 0x7F;    /* handle subid == 0 case */
++@@ -770,8 +775,16 @@ asn_build_objid(u_char * data, int *datalength,
++                 /* fix a mask that got truncated above */
++                 if (mask == 0x1E00000)
++                     mask = 0xFE00000;
+++                if (bp >= bufEnd) {
+++                    snmp_set_api_error(SNMPERR_ASN_ENCODE);
+++                    return (NULL);
+++                }
++                 *bp++ = (u_char) (((subid & mask) >> bits) | ASN_BIT8);
++             }
+++            if (bp >= bufEnd) {
+++                snmp_set_api_error(SNMPERR_ASN_ENCODE);
+++                return (NULL);
+++            }
++             *bp++ = (u_char) (subid & mask);
++         }
++     }
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index b021170d9b..d445f005b7 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -11,6 +11,10 @@ SQUID_LICENSE = GPL-2.0+
+ SQUID_LICENSE_FILES = COPYING
+ SQUID_CPE_ID_VENDOR = squid-cache
+ SQUID_SELINUX_MODULES = apache squid
++
++# 0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch
++SQUID_IGNORE_CVES += CVE-2025-59362
++
+ SQUID_DEPENDENCIES = libcap host-libcap libtool libxml2 host-pkgconf \
+ 	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
+ SQUID_CONF_ENV = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3103951081659045708==--
