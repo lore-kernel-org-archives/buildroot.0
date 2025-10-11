@@ -1,100 +1,98 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07B7DCCD184
-	for <buildroot@archiver.kernel.org>; Sat, 11 Oct 2025 03:19:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D400CCD184
+	for <buildroot@archiver.kernel.org>; Sat, 11 Oct 2025 08:57:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 67054608CE;
-	Sat, 11 Oct 2025 03:19:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CA5CF40567;
+	Sat, 11 Oct 2025 08:57:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a9lh8PDfyHtw; Sat, 11 Oct 2025 08:57:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28A6440558
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 28A6440558;
+	Sat, 11 Oct 2025 08:57:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 16315119
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 08:57:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0707E606D9
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 08:57:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DypUeAeB4K4q; Sat, 11 Oct 2025 03:19:47 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCE01608C3
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CCE01608C3;
-	Sat, 11 Oct 2025 03:19:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DA5723D
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 03:19:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0A8DD81772
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 03:19:45 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1eC-x6_Ciw-e for <buildroot@buildroot.org>;
- Sat, 11 Oct 2025 03:19:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
- envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F00358176A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F00358176A
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F00358176A
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 03:19:42 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-46e34052bb7so31081825e9.2
- for <buildroot@buildroot.org>; Fri, 10 Oct 2025 20:19:42 -0700 (PDT)
+ id RDMr9mgleH_Z for <buildroot@buildroot.org>;
+ Sat, 11 Oct 2025 08:57:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.219.47;
+ helo=mail-qv1-f47.google.com; envelope-from=thomas.devoogdt@gmail.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D99D3606A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D99D3606A9
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com
+ [209.85.219.47])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D99D3606A9
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 08:57:05 +0000 (UTC)
+Received: by mail-qv1-f47.google.com with SMTP id
+ 6a1803df08f44-7900f7f4ba9so30686916d6.0
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 01:57:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1760152781; x=1760757581;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1760173024; x=1760777824;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=PfgEEayDRmzBNCY7W8W9x+yw4h4aj7Fehr417pD/rDU=;
- b=rb98XpZe9lg2ixla8gxUeXNr9REecyrAkdOpJaK/iJH6sRrZS3/QgVTPO0DXsu4OtX
- 3XhsDcdYi8N3zXWfqf1iAQyvMzghyLuzoNAYHzDEfTc8zWPnSCwgAj4zOVQbnlJba4eg
- S0/SteEPfGfOIj+X1kNG4JHIHWgdHXwj1gjqpTPyAj7vLSBGwB8/GNnHRaoDM7XJ7g3T
- ivcssTu/IeHg8I1FO0mAFbXluygTcvdKdkW10cINLqcr/6IHI+zcBazkZaZeGYHeCtxL
- lbvE4rGBlsFpC+KednKz8RVhb/jUifFDfh8slem8T2ZlT7M88S+xKsScKojTlhTG8ER6
- s5ug==
-X-Gm-Message-State: AOJu0YyETTCnlYzNdUY7bZg2ZXL6DtHyVgjlVOK8OBsw+1WvkPcFrRbx
- 3ChdjgiIVuKuvu0a/2pCfohroKPLKaL3e2daxWg9a0/61w66vU3L2rLhUbQbwg==
-X-Gm-Gg: ASbGncvbVzjnik6/lWf4YcYMdq05fHIqo2B4+MIwtg3y8MX3dJARhLnx75JJkIoUbZT
- B5twP1TONOtj1Gv3lWw93SdlFvDgDYrmOyiWOpPSmrspPbbf8bjsVQG69tfT/HsuCU0ZTsf11Rl
- dmwK5QYuJpYH6iEUKnZs+15pXdTJkcCGmvSkcpvS5CVQ94NzwcEgOlDsm4571wuu0AYeFgiwdMc
- 7WHJJHhCStvLDmLY8gwiBL8qRMvM6mrOQg/ZoHoD4B6Y6awGqQQG+MjEWrkJqh3c03wWXLxHmdS
- BDSRdSj+znHZZs44pxQaVQQciofC7pDbe1FWSU1xoSiJ6M7o3hOlxe/cE/2wr0MP2fNE8ROzJj6
- 2Geevqokb3m/a+Xz4NCHxDZVdsDRcxMcXJNnIxzegyCED6eakQJdZU/x2vQI=
-X-Google-Smtp-Source: AGHT+IH9ss552XI3e33SrdzuZS2MJrCudWHWvz4fuBMz7oB98vKXWV7HSjzgJ1BWaPM5d/sFWyLDQQ==
-X-Received: by 2002:a05:600c:1c23:b0:45b:6b57:5308 with SMTP id
- 5b1f17b1804b1-46fa9a892a0mr93875665e9.7.1760152780475; 
- Fri, 10 Oct 2025 20:19:40 -0700 (PDT)
-Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-46fb49c3eeasm71533585e9.14.2025.10.10.20.19.40
+ bh=ibh02DOdcK4VHZ7E5voCoCdzvzB/zecRrAqusZ6XChs=;
+ b=F11VyQn3EmBW9M0IKP6eVAlgbHZY74KMqU3QQcrBJJS+7sv1Evv3YSnfRQA0t/RMq1
+ SXpZ2YI8t4hUjmOi9Z1eFhO5mQy/3OKFbs+BR1p+bNavcfUN08Qce0MB3wnKUKlE+y8M
+ UW/f7pKbzQosliitafHwX/L1yHDsJhn3t3k5hAftvuS2bjWFkQK4FdI0ybogl+UQzR9g
+ AjEDf5k2MnunctQA04q2g9FhKX0Mv+blUpb5Fta+0vCKsplKK9XeBy/O1iFyGX7ec/8A
+ 6GYf+6GKgYyPQzRI7VLrHQEeOuckEaQd9OQ+T9br+Iibgjzkhr2buk//sz0V0hEqCfze
+ z5QA==
+X-Gm-Message-State: AOJu0YxYI2kjRd2TAR46sWOrE7+nCK19u4Kqy0e+qynfTwLNV/P1lyim
+ nfUObSLeZ2VELFiexzeLieZXenf43wgFsj8OhNJWBHyL5AsF4qVzLa4QQQlkXvx8SsE=
+X-Gm-Gg: ASbGncvD7BhHrkieUw1nGUmbyn11Ivsof8NVfa0fofNxQ34aITeBoITNJ1cfOfQLX8M
+ XSSLrhn5EBx9IsQAoMJ650NgZ/JfmjSXjR/6PoZYkqqrwMPnTxg8Q8i69OoHlfAVCAnBEcXUTps
+ RomIY3XZoeI9IzlKUr+XoH1N4q0k5ADFCs/NuQhpF7FJgLGS0wBEuGgdVWfO9uBJqSzMXaNUK9P
+ nqFtMqcj2b3c28U/SgE4zdD3YAJrk4w59BB8ZZy7gKR+0CuH7zPJDM5uqV+AhykjaXZFg1MA16M
+ vegXl98Iux3U8YuBABU55QOBx8/k4DIO5pSNYiBR9fgqCF7p3R9HhJklHVAMSg802+WNMbGSPxm
+ 9DhA+tXXhIDrRamlbeelOjrcJ8cjLw2v2AJ4A0xO9ZJVCHPPSZHZWdO9Gxdxq8AD58icU8XkwiS
+ DdKPeYNRBvPJ7qGRKOjLt19NIOXodMclZNIp0/WEpH12PwOmZQr6uFHLfE1kffVo659vHd5eeaT
+ Q==
+X-Google-Smtp-Source: AGHT+IGjIcSmnQ4qbqZ9Q7thHv3OaKI9VCa0mRM6hXVmK22es6hs0Lw+oigSbvkT7ig/Fyw7wGo+BQ==
+X-Received: by 2002:a05:622a:1e14:b0:4b5:d932:15c5 with SMTP id
+ d75a77b69052e-4e6eacf99b3mr209012101cf.25.1760173024091; 
+ Sat, 11 Oct 2025 01:57:04 -0700 (PDT)
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com.
+ [209.85.219.42]) by smtp.gmail.com with ESMTPSA id
+ d75a77b69052e-4e706d5e59esm35124461cf.25.2025.10.11.01.57.03
  for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 Oct 2025 20:19:40 -0700 (PDT)
-Message-ID: <68e9cccc.050a0220.e5668.3095@mx.google.com>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 11 Oct 2025 01:57:03 -0700 (PDT)
+Received: by mail-qv1-f42.google.com with SMTP id
+ 6a1803df08f44-7900f7f4ba9so30686746d6.0
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 01:57:03 -0700 (PDT)
+X-Received: by 2002:a05:6214:20af:b0:7ee:aaf0:b759 with SMTP id
+ 6a1803df08f44-87b20ff9d6fmr209520296d6.7.1760173023436; Sat, 11 Oct 2025
+ 01:57:03 -0700 (PDT)
 MIME-Version: 1.0
-To: buildroot@buildroot.org
-From: Buildroot Notifications <buildroot.notifications@gmail.com>
-Date: Sat, 11 Oct 2025 03:19:40 -0000
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1760152781; x=1760757581; darn=buildroot.org;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :message-id:from:to:cc:subject:date:message-id:reply-to;
- bh=PfgEEayDRmzBNCY7W8W9x+yw4h4aj7Fehr417pD/rDU=;
- b=MdLZ8AEc+fB5ANqNy3DFbsVZsoQ+wAsJbyx+xTyH0rZ6JjF93i65/HLggMP2qtm/kf
- ZClfxchFTIAbegR0CNF4Qm6QgJmp6N6ve3EWRUbhrPaZMaa1P0eebcj352jxqkfI3ywp
- vMYA8nMLDqIKV0CR567tZ7m9zOv8/ebPYqyDUMCUYmQI4TSwyeyPPcvx0KgGUMQsrtDZ
- F7cG+Bhtuu+WIy5Qym+nAfEB4f7v6xCLke8kXyEGhVfNR9XL9Aq3emnPS+fASziIgRqG
- rgjLiVwLX/bp0Rrh7aUvbtt1rTV4n4AXST5m+gTjgd8wstJnEtc3b5ohVDIk82Z5k2Ap
- W0tg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=MdLZ8AEc
-Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2025-10-10
+References: <20250930080750.353542-1-thomas@devoogdt.com>
+In-Reply-To: <20250930080750.353542-1-thomas@devoogdt.com>
+From: Thomas Devoogdt <thomas@devoogdt.com>
+Date: Sat, 11 Oct 2025 10:56:53 +0200
+X-Gmail-Original-Message-ID: <CACXRmJitiNM=oBYeGc2C40vP=wRYaaYJjiGMN7siwTWJ=vWPwQ@mail.gmail.com>
+X-Gm-Features: AS18NWCeR34acK0rIQrVR1y05ld2bvzJ3p8o1nWTaRO3QjHoRX261oA7ihkpS6Y
+Message-ID: <CACXRmJitiNM=oBYeGc2C40vP=wRYaaYJjiGMN7siwTWJ=vWPwQ@mail.gmail.com>
+To: Thomas Devoogdt <thomas@devoogdt.com>
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=devoogdt.com
+Subject: Re: [Buildroot] [PATCH v5 1/3] package/pkg-cargo: add support to
+ bundle a custom Cargo.lock file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,256 +104,266 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Guillaume Chaye <guillaume.chaye@zeetim.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============7421840745692343016=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+--===============7421840745692343016==
+Content-Type: multipart/alternative; boundary="000000000000ce272f0640de37d9"
 
-Autobuild statistics for 2025-10-10
-===================================
+--000000000000ce272f0640de37d9
+Content-Type: text/plain; charset="UTF-8"
 
-      branch |  OK | NOK | TIM | TOT |
-  2025.02.x  |  8  |  3  |  0  | 11  |
-  2025.05.x  |  3  |  1  |  0  |  4  |
-  2025.08.x  |  2  |  8  |  0  | 10  |
-    master   | 46  | 86  |  2  | 134 |
-
-Classification of failures by reason for master
------------------------------------------------
-
-                    sdl-1.2.15 | 4 
-               bctoolbox-4.4.8 | 2 
-                  cmake-3.31.8 | 2 
- ibm-sw-tpm2-rev183-2024-03-27 | 2 
-libdbi-drivers-0bfae6c43134... | 2 
-libftdi1-v1.5-62-g5e67403c4... | 2 
-                 libgee-0.20.6 | 2 
-     libphidget-2.1.9.20190409 | 2 
-                  libsepol-3.9 | 2 
-                  linux-6.17.1 | 2 
-                 linux-headers | 2 
-               linux-pam-1.6.1 | 2 
-                    mpir-3.0.0 | 2 
-python-remi-2022.7.27-37-g1... | 2 
-                python3-3.13.7 | 2 
-                       unknown | 2 
-           at-spi2-core-2.50.0 | 1 
-                  axel-2.17.14 | 1 
-             berkeleydb-5.3.28 | 1 
-                     crun-1.22 | 1 
-                   cvs-1.12.13 | 1 
-                 dc3dd-7.2.641 | 1 
-  distribution-registry-v3.0.0 | 1 
-           dmraid-1.0.0.rc16-3 | 1 
-                   duma-2.5.21 | 1 
-               dvbsnoop-1.4.50 | 1 
-               dvdrw-tools-7.1 | 1 
-        edk2-edk2-stable202505 | 1 
-                enscript-1.6.6 | 1 
-                     fd-10.3.0 | 1 
-                    ficl-4.1.0 | 1 
-                      fio-3.41 | 1 
-firmware-utils-86739f2b3ae9... | 1 
-       freeradius-server-3.2.8 | 1 
-            gdk-pixbuf-2.42.12 | 1 
-           ghostscript-10.06.0 | 1 
-               graphene-1.10.8 | 1 
-                haveged-1.9.19 | 1 
-host-am335x-pru-package-5f3... | 1 
-       host-gcc-initial-14.3.0 | 1 
-    host-llvm-libunwind-20.1.8 | 1 
-    host-mender-artifact-4.1.0 | 1 
-            igh-ethercat-1.6.3 | 1 
-                  iozone-3.508 | 1 
-                  kexec-2.0.31 | 1 
-                   libcap-2.76 | 1 
-                libcurl-8.16.0 | 1 
-               libglib2-2.84.3 | 1 
-                libglvnd-1.4.0 | 1 
-             libgphoto2-2.5.27 | 1 
-                 libiconv-1.15 | 1 
-              libopenssl-3.6.0 | 1 
-                 libpng-1.6.50 | 1 
-                libshout-2.4.6 | 1 
-                   llvm-20.1.8 | 1 
-                    make-4.4.1 | 1 
-            micropython-1.22.2 | 1 
-                  nginx-1.26.3 | 1 
-                openssh-10.0p1 | 1 
-package/mender-update-modul... | 1 
-                  parsec-1.4.1 | 1 
-      passt-2025_06_11.0293c6f | 1 
-                   perl-5.40.2 | 1 
-              php-xdebug-3.3.1 | 1 
-                pipewire-1.2.8 | 1 
-                 procs-0.14.10 | 1 
-                    quota-4.09 | 1 
-               tcf-agent-1.8.0 | 1 
-uclibc-ng-test-132c6134d691... | 1 
-             util-linux-2.41.1 | 1 
+Hi all,
 
 
-Detail of failures for master
------------------------------
+I just see that I made a typo.
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-loongarch64  |      at-spi2-core-2.50.0       | NOK | https://autobuild.buildroot.org/results/6f6bd3a10ab317f2420a7470741b7e839f640ad8 |     
-    arc      |          axel-2.17.14          | NOK | https://autobuild.buildroot.org/results/a27fae12e916edb970c75abbcf1fa7bfa4158b8e |     
-    or1k     |        bctoolbox-4.4.8         | NOK | https://autobuild.buildroot.org/results/76f2256233da29552093852d947024023ce1adb7 | ORPH
-    m68k     |        bctoolbox-4.4.8         | NOK | https://autobuild.buildroot.org/results/b783524abc08ef4cbe7a7e4a8ff30e864de26edd | ORPH
-   armeb     |       berkeleydb-5.3.28        | NOK | https://autobuild.buildroot.org/results/34eaf55b694ce4c861f8443d3527a38c0eebf8e8 | ORPH
-  powerpc    |          cmake-3.31.8          | NOK | https://autobuild.buildroot.org/results/36fc149579ede0378da88cfbd6bc822a7de1edd1 |     
-  mips64el   |          cmake-3.31.8          | NOK | https://autobuild.buildroot.org/results/ac2452221ceccea63d8bc1da166adf5aec2a7b3b |     
- aarch64_be  |           crun-1.22            | NOK | https://autobuild.buildroot.org/results/7cedbf9f0c310b1910f4e69ef288081e50af189f |     
-  aarch64    |          cvs-1.12.13           | NOK | https://autobuild.buildroot.org/results/dc91d3553edae8f98876dcefb954afb9a8fb818d | ORPH
-   sparc     |         dc3dd-7.2.641          | NOK | https://autobuild.buildroot.org/results/2957cd34c6a46c44907339f61c25c098aca222e2 | ORPH
-    i686     |  distribution-registry-v3.0.0  | NOK | https://autobuild.buildroot.org/results/cb59287529a55362dc54a6a30fb73d1cc0db14f2 | ORPH
-   sh4aeb    |      dmraid-1.0.0.rc16-3       | NOK | https://autobuild.buildroot.org/results/bbb1b58f617774997aa1f9bc954a05dcd14f2283 | ORPH
-   sh4aeb    |          duma-2.5.21           | NOK | https://autobuild.buildroot.org/results/b3c743ad031cb92d90632d3a186006acc0cf2c2f | ORPH
-powerpc64le  |        dvbsnoop-1.4.50         | NOK | https://autobuild.buildroot.org/results/7fc05a48d267c5a27504159bd5f573cdd4a3fa42 |     
-  aarch64    |        dvdrw-tools-7.1         | NOK | https://autobuild.buildroot.org/results/7376bcfd7cf119ea190acf48666d3e13527d59fd |     
-    i486     |     edk2-edk2-stable202505     | NOK | https://autobuild.buildroot.org/results/5e79bc4368c01c37015678ff625accfe5eda3c41 |     
-    arc      |         enscript-1.6.6         | NOK | https://autobuild.buildroot.org/results/83dd57f513404b8e2bd2bac8682c9e108c8ad816 | ORPH
-powerpc64le  |           fd-10.3.0            | NOK | https://autobuild.buildroot.org/results/804f0f83952ee767ffe45d51f92adaf937086771 |     
-    m68k     |           ficl-4.1.0           | NOK | https://autobuild.buildroot.org/results/47eb31da39691a82a70302219eb7bd8b9851cb52 |     
-   armeb     |            fio-3.41            | NOK | https://autobuild.buildroot.org/results/87c8ec1bc6a1f738e766eddbe53283302fc413bb |     
-    arc      | firmware-utils-86739f2b3ae9... | NOK | https://autobuild.buildroot.org/results/5101538de1a210eab877ca2ea8e2ce4852c92530 |     
-    or1k     |    freeradius-server-3.2.8     | NOK | https://autobuild.buildroot.org/results/64b525a05429a4daeb35aca4db34094b6073d322 |     
-   xtensa    |       gdk-pixbuf-2.42.12       | NOK | https://autobuild.buildroot.org/results/42162da0c0e5cbfe88ae8b5cc93d49e5aa64266d | ORPH
-   armeb     |      ghostscript-10.06.0       | NOK | https://autobuild.buildroot.org/results/bdf92f1662b7ec947dc887c09694f41461c5f837 |     
-    sh4a     |        graphene-1.10.8         | NOK | https://autobuild.buildroot.org/results/cdf8a2ccf56fbe46b843f9b727e2523e61465b5a |     
-   x86_64    |         haveged-1.9.19         | NOK | https://autobuild.buildroot.org/results/2e125a110968a2343e6e7c58313ae8bb41ad99d3 |     
-    arm      | host-am335x-pru-package-5f3... | NOK | https://autobuild.buildroot.org/results/2017e8cef275b69387711214529fb82d1b3fbc93 |     
-    arm      |    host-gcc-initial-14.3.0     | NOK | https://autobuild.buildroot.org/results/6fe8bcb51b7d9da07c218652a3581d92023b4618 |     
-    arm      |   host-llvm-libunwind-20.1.8   | NOK | https://autobuild.buildroot.org/results/6c12258b2f50b4295515297ab4d2ebe16c2637be |     
-   mips64    |   host-mender-artifact-4.1.0   | NOK | https://autobuild.buildroot.org/results/cb1617078ffbd7201207487df529a9e9b77a1ad2 |     
-   xtensa    | ibm-sw-tpm2-rev183-2024-03-27  | NOK | https://autobuild.buildroot.org/results/48a2a7c52e2689a64f5505c3cb64bb0346fcb264 |     
-  powerpc    | ibm-sw-tpm2-rev183-2024-03-27  | NOK | https://autobuild.buildroot.org/results/6fbd850b733d8bb3e2534599ebb0c5dc464cf859 |     
-    sh4      |       igh-ethercat-1.6.3       | NOK | https://autobuild.buildroot.org/results/4cf22da9919861915ed809fcfb461f90e947ea67 |     
-    arc      |          iozone-3.508          | NOK | https://autobuild.buildroot.org/results/747d359fbf795316a23bfa67bb8c3ce6e65f7a9d |     
-   mipsel    |          kexec-2.0.31          | NOK | https://autobuild.buildroot.org/results/fb68fc0226847bf4a4946dbfe97abe3321bc60c2 |     
-    arc      |          libcap-2.76           | NOK | https://autobuild.buildroot.org/results/7dbb439cdbef96331151f44d1add9206724b2f0e |     
-    m68k     |         libcurl-8.16.0         | NOK | https://autobuild.buildroot.org/results/939cf4f12f3b52f7d5e68349206d7f7211437e41 |     
-    arc      | libdbi-drivers-0bfae6c43134... | NOK | https://autobuild.buildroot.org/results/0312fe4d5bfdc7ef7701c4eea8f68a080f3dd2bf |     
-    arm      | libdbi-drivers-0bfae6c43134... | NOK | https://autobuild.buildroot.org/results/c7175cafc3cd950f780ef61ea9426ff57a79ad2f |     
-    arc      | libftdi1-v1.5-62-g5e67403c4... | NOK | https://autobuild.buildroot.org/results/5341229dfedc8a4df2f06667298d7024977835f3 |     
-    i686     | libftdi1-v1.5-62-g5e67403c4... | NOK | https://autobuild.buildroot.org/results/fe72a7433a9af4c8a214a493a577510bde86864b |     
-powerpc64le  |         libgee-0.20.6          | NOK | https://autobuild.buildroot.org/results/a2d7a839f76ac9d27af9f8723eabf23cfbc6656d |     
-powerpc64le  |         libgee-0.20.6          | NOK | https://autobuild.buildroot.org/results/0a0567c365aed79fc794469f3336d2286d3d1328 |     
-    m68k     |        libglib2-2.84.3         | NOK | https://autobuild.buildroot.org/results/b26340cfa91c61a87d131249620575a8d2d026e0 |     
-    sh4      |         libglvnd-1.4.0         | NOK | https://autobuild.buildroot.org/results/4de11a7c83f497232b9c7015ed572aff1b258ffd | ORPH
-    arc      |       libgphoto2-2.5.27        | NOK | https://autobuild.buildroot.org/results/e7b96456822df34447bf4db01d695a985bc32c21 | ORPH
-   sparc     |         libiconv-1.15          | NOK | https://autobuild.buildroot.org/results/16395d8526ef73e7e04f6ce49095d1acbcdb4fd7 | ORPH
-  riscv64    |        libopenssl-3.6.0        | NOK | https://autobuild.buildroot.org/results/7e18eba0f597b26a6953deb880c6ea78fdae6380 | ORPH
-powerpc64le  |   libphidget-2.1.9.20190409    | NOK | https://autobuild.buildroot.org/results/0c102731a88347d926089b1a345d0bd1cdd6a282 |     
-powerpc64le  |   libphidget-2.1.9.20190409    | NOK | https://autobuild.buildroot.org/results/92f33171bd5de8177c71fb7590b6153096316961 |     
-  riscv64    |         libpng-1.6.50          | NOK | https://autobuild.buildroot.org/results/03bb5da8151ac3e922eb327690114ccdbcfea160 |     
-   xtensa    |          libsepol-3.9          | NOK | https://autobuild.buildroot.org/results/eefaf7904b47a542f1b468a72697ce80b0a66be2 |     
-   xtensa    |          libsepol-3.9          | NOK | https://autobuild.buildroot.org/results/900c5574a33d1eaa6bdc3d0d2bb9a8f6a8910d70 |     
-    m68k     |         libshout-2.4.6         | NOK | https://autobuild.buildroot.org/results/6d95bbb2b5bcabaf3ed7167dd377f4cfb480cab9 | ORPH
-   sh4aeb    |          linux-6.17.1          | NOK | https://autobuild.buildroot.org/results/7b6039527c034cbe41cc582c67039e6212aaab3e | ORPH
-   x86_64    |          linux-6.17.1          | NOK | https://autobuild.buildroot.org/results/fa3bb3d4d46ceebbb9b7080e235014dce63dff73 | ORPH
-   mipsel    |         linux-headers          | TIM | https://autobuild.buildroot.org/results/3725519a7750672dde9587517b5d02401c2556a8 |     
- aarch64_be  |         linux-headers          | TIM | https://autobuild.buildroot.org/results/2648d1d7b3d6e4c596b897161c4fe1d136a93ab6 |     
-  sparc64    |        linux-pam-1.6.1         | NOK | https://autobuild.buildroot.org/results/42134608e1329bc80c163637c2ac10d4a4f185a7 | ORPH
-  sparc64    |        linux-pam-1.6.1         | NOK | https://autobuild.buildroot.org/results/1021930d523b77bf2eeb38687e08e26a0cef7ce8 | ORPH
-    arm      |          llvm-20.1.8           | NOK | https://autobuild.buildroot.org/results/f0d54dc3f92cd587ced3eb0a34dca309088e53fc |     
-   x86_64    |           make-4.4.1           | NOK | https://autobuild.buildroot.org/results/950b8a3ac9437b1ab941b8ae66568b87b24c0fe3 | ORPH
-  mips64el   |       micropython-1.22.2       | NOK | https://autobuild.buildroot.org/results/b7c0359fc19b0f269733bed26d0cac5beaeb73c2 |     
-    arm      |           mpir-3.0.0           | NOK | https://autobuild.buildroot.org/results/c8deef957b6667fbe759a6345f4f9daf45b0e66c |     
-    mips     |           mpir-3.0.0           | NOK | https://autobuild.buildroot.org/results/29623ea00ff0822f34902ef14c35c99816e1d3a0 |     
-   sparc     |          nginx-1.26.3          | NOK | https://autobuild.buildroot.org/results/b4bd110c4f20fb42eed1386a456ff2a3179ef686 | ORPH
-loongarch64  |         openssh-10.0p1         | NOK | https://autobuild.buildroot.org/results/246eaeec0940c51f9dee0f3f7120e8debfa2fabe | ORPH
-  aarch64    | package/mender-update-modul... | NOK | https://autobuild.buildroot.org/results/271cf746924f94a4c582b235698730e39c564352 |     
-   s390x     |          parsec-1.4.1          | NOK | https://autobuild.buildroot.org/results/50669ed785f24078e8248e93d0866d22260fc671 |     
-  powerpc    |    passt-2025_06_11.0293c6f    | NOK | https://autobuild.buildroot.org/results/b4930373dad39eda3c54db7b06797a421b0ff863 | ORPH
-   sparc     |          perl-5.40.2           | NOK | https://autobuild.buildroot.org/results/f3e46904b2ab3b14b95f2567bc686b7943036d7d |     
-   s390x     |        php-xdebug-3.3.1        | NOK | https://autobuild.buildroot.org/results/4e4edde96821e2dfcd33121c43951b640c850415 |     
-    arc      |         pipewire-1.2.8         | NOK | https://autobuild.buildroot.org/results/0d48a5941e720a2bf9b19653aa090329f084e165 |     
-powerpc64le  |         procs-0.14.10          | NOK | https://autobuild.buildroot.org/results/1ecf3d7a847422c8be0b804cd03d6a5fea73e2dc |     
-    mips     | python-remi-2022.7.27-37-g1... | NOK | https://autobuild.buildroot.org/results/bf93e089e97bde5234cd8c20667ccbaf27b452a9 |     
-powerpc64le  | python-remi-2022.7.27-37-g1... | NOK | https://autobuild.buildroot.org/results/c4d83d310974f468f3bd10ada399bb23574f2692 |     
-  sparc64    |         python3-3.13.7         | NOK | https://autobuild.buildroot.org/results/8b21af3ba8f6960f8c993c9d98b8c0cefbb618ce |     
-  sparc64    |         python3-3.13.7         | NOK | https://autobuild.buildroot.org/results/e6236dac83497cec0a8312254ea6a6e2c85cde38 |     
-   x86_64    |           quota-4.09           | NOK | https://autobuild.buildroot.org/results/4eafa3c1282b3e66a7c98eee2acc4089cc57feb1 |     
-microblazeel |           sdl-1.2.15           | NOK | https://autobuild.buildroot.org/results/0bf4ca75ac8b0ca15a5ac42d9795f32748d37e48 | ORPH
- aarch64_be  |           sdl-1.2.15           | NOK | https://autobuild.buildroot.org/results/9b90d438c5736a0b9d12081a2c143902a2044c2b | ORPH
- aarch64_be  |           sdl-1.2.15           | NOK | https://autobuild.buildroot.org/results/f4aff765bf5b18ed390ae2bb826223552d2cae71 | ORPH
-    mips     |           sdl-1.2.15           | NOK | https://autobuild.buildroot.org/results/619b58f580b14b339eeef0123c2e2394c5f7158f | ORPH
- microblaze  |        tcf-agent-1.8.0         | NOK | https://autobuild.buildroot.org/results/014c423599492f8964efb0ce9b39fff8d376af49 |     
-powerpc64le  | uclibc-ng-test-132c6134d691... | NOK | https://autobuild.buildroot.org/results/a83161ea2136c665ad35a11835f864e34ab60bf2 |     
-   x86_64    |            unknown             | NOK | https://autobuild.buildroot.org/results/8063dc032e282f41498f35bbdca1c23dd9dc3a29 |     
-microblazeel |            unknown             | NOK | https://autobuild.buildroot.org/results/965b99146b5b8b78e4df1858a281e23b343b7806 |     
-  riscv64    |       util-linux-2.41.1        | NOK | https://autobuild.buildroot.org/results/5710f47d940607a2900765150c463964637eccb5 | ORPH
++ rm -f "${lockfile}"
+
+It's obviously not the new file that should be removed, but the the
+existing Cargo.lock file.
+
+I will push a new update when I have time, or take it into account when
+applying the patch. Thanks.
 
 
-Classification of failures by reason for 2025.08.x
---------------------------------------------------
+Kind regards
 
-             batman-adv-2024.4 | 1 
-             berkeleydb-5.3.28 | 1 
-                  cairo-1.18.4 | 1 
-               ebtables-2.0.11 | 1 
-                  kexec-2.0.31 | 1 
-             libgphoto2-2.5.27 | 1 
-            micropython-1.22.2 | 1 
-                 siproxd-0.8.3 | 1 
+Thomas Devoogdt
 
 
-Detail of failures for 2025.08.x
---------------------------------
+Op di 30 sep 2025, 10:07 schreef Thomas Devoogdt <thomas@devoogdt.com>:
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-powerpc64le  |       batman-adv-2024.4        | NOK | https://autobuild.buildroot.org/results/dca95e4463f6e91e11c4f55e93c21772ae2e3c72 |     
- aarch64_be  |       berkeleydb-5.3.28        | NOK | https://autobuild.buildroot.org/results/aa5e7cf6cea1011182ebb381d6f81fc96c138098 | ORPH
-   sparc     |          cairo-1.18.4          | NOK | https://autobuild.buildroot.org/results/55a2fede02856eea64e1f9eab4996a140735898f |     
-  sparc64    |        ebtables-2.0.11         | NOK | https://autobuild.buildroot.org/results/cafd0db30f2a3af4c33fe7c7698e7aa4e4a0c708 |     
-  powerpc    |          kexec-2.0.31          | NOK | https://autobuild.buildroot.org/results/7eedea3c63637bff9904ac020b9e7d5b9fa250c7 |     
-   sparc     |       libgphoto2-2.5.27        | NOK | https://autobuild.buildroot.org/results/8c35f9dd175b528583a6acb7418cec744f263151 | ORPH
-    m68k     |       micropython-1.22.2       | NOK | https://autobuild.buildroot.org/results/44b6b3fbca2086afd59897f74ec44ddf0bea22bb |     
-  mips64el   |         siproxd-0.8.3          | NOK | https://autobuild.buildroot.org/results/823fe757e5f92e2a2574eeb2ff37d83bca711d9b |     
+> E.g. https://github.com/lu-zero/cargo-c/releases/tag/v0.10.15
+>
+> Cargo-c releases a separate Cargo.lock file, but doesn't bundle
+> one in its normal .tar.gz code source target.
+>
+> We can't use extra downloads/patches/... as cargo is a vendored
+> package, which is done quite early in the chain.
+>
+> This patch allows us to define a custom Cargo.lock source.
+> Both a local bundled file and remote (only wget) file can be linked.
+>
+> Usage:
+>
+> <PKG>_CARGO_LOCK_FILE = <PKG>_PKGDIR/Cargo.lock
+>
+> <PKG>_CARGO_LOCK_FILE = https://.../Cargo.lock
+>
+> Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+> ---
+> Superseeds
+> https://patchwork.ozlabs.org/project/buildroot/patch/20250324173246.100112-1-guillaume.chaye@zeetim.com/.
+> v2
+> <https://patchwork.ozlabs.org/project/buildroot/patch/20250324173246.100112-1-guillaume.chaye@zeetim.com/.v2>:
+> no change
+> v3: no change
+> v4: no change
+> v4: no change
+> ---
+>  package/pkg-cargo.mk                |  5 +++++
+>  support/download/cargo-post-process | 14 +++++++++++++-
+>  2 files changed, 18 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
+> index 47a6353f25..626e5ea472 100644
+> --- a/package/pkg-cargo.mk
+> +++ b/package/pkg-cargo.mk
+> @@ -195,6 +195,11 @@ ifneq ($$($(2)_SUBDIR),)
+>  $(2)_DOWNLOAD_POST_PROCESS_OPTS += -m$$($(2)_SUBDIR)/Cargo.toml
+>  endif
+>
+> +# Allow to download a custom Cargo.lock file.
+> +ifneq ($$($(3)_CARGO_LOCK_FILE),)
+> +$(2)_DOWNLOAD_POST_PROCESS_OPTS += -l$$($(3)_CARGO_LOCK_FILE)
+> +endif
+> +
+>  # Because we append vendored info, we can't rely on the values being empty
+>  # once we eventually get into the generic-package infra. So, we duplicate
+>  # the heuristics here
+> diff --git a/support/download/cargo-post-process
+> b/support/download/cargo-post-process
+> index b0e59ad74d..7913724fe2 100755
+> --- a/support/download/cargo-post-process
+> +++ b/support/download/cargo-post-process
+> @@ -11,11 +11,12 @@ if [ "${BR_CARGO_MANIFEST_PATH}" ]; then
+>  fi
+>
+>  manifest=Cargo.toml
+> -while getopts "n:o:m:" OPT; do
+> +while getopts "n:o:m:l:" OPT; do
+>      case "${OPT}" in
+>      o)  output="${OPTARG}";;
+>      n)  base_name="${OPTARG}";;
+>      m)  manifest="${OPTARG}";;
+> +    l)  lockfile="${OPTARG}";;
+>      :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
+>      \?) error "unknown option '%s'\n" "${OPTARG}";;
+>      esac
+> @@ -31,6 +32,17 @@ post_process_unpack "${base_name}" "${output}"
+>  # Do the Cargo vendoring
+>  pushd "${base_name}" > /dev/null
+>
+> +# Copy the custom lockfile path if given
+> +# TODO: use --lockfile-path once stable
+> +if [ -n "${lockfile}" ] ; then
+> +    rm -f "${lockfile}"
+> +    if [ -f "${lockfile}" ] ; then
+> +        cp "${lockfile}" Cargo.lock
+> +    else
+> +        ${WGET} "${lockfile}" -O Cargo.lock
+> +    fi
+> +fi
+> +
+>  # Create the local .cargo/config.toml with vendor info
+>  mkdir -p .cargo/
+>  mkdir -p "${CARGO_HOME}"
+> --
+> 2.43.0
+>
+>
 
+--000000000000ce272f0640de37d9
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Classification of failures by reason for 2025.02.x
---------------------------------------------------
+<div dir=3D"auto"><div>Hi all,<div dir=3D"auto"><br></div><div dir=3D"auto"=
+><br></div><div dir=3D"auto">I just see that I made a typo.=C2=A0</div><div=
+ dir=3D"auto"><br></div><div dir=3D"auto">+    rm -f &quot;${lockfile}&quot=
+;</div><div dir=3D"auto"><br></div><div dir=3D"auto">It&#39;s obviously not=
+ the new file that should be removed, but the the existing Cargo.lock file.=
+=C2=A0</div><div dir=3D"auto"><br></div><div dir=3D"auto">I will push a new=
+ update when I have time, or take it into account when applying the patch. =
+Thanks.=C2=A0</div><div dir=3D"auto"><br></div><div dir=3D"auto"><br></div>=
+<div dir=3D"auto">Kind regards=C2=A0</div><div dir=3D"auto"><br></div><div =
+dir=3D"auto">Thomas Devoogdt=C2=A0</div><br><br><div class=3D"gmail_quote g=
+mail_quote_container"><div dir=3D"ltr" class=3D"gmail_attr">Op di 30 sep 20=
+25, 10:07 schreef Thomas Devoogdt &lt;<a href=3D"mailto:thomas@devoogdt.com=
+">thomas@devoogdt.com</a>&gt;:<br></div><blockquote class=3D"gmail_quote" s=
+tyle=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">E.g.=
+ <a href=3D"https://github.com/lu-zero/cargo-c/releases/tag/v0.10.15" rel=
+=3D"noreferrer noreferrer" target=3D"_blank">https://github.com/lu-zero/car=
+go-c/releases/tag/v0.10.15</a><br>
+<br>
+Cargo-c releases a separate Cargo.lock file, but doesn&#39;t bundle<br>
+one in its normal .tar.gz code source target.<br>
+<br>
+We can&#39;t use extra downloads/patches/... as cargo is a vendored<br>
+package, which is done quite early in the chain.<br>
+<br>
+This patch allows us to define a custom Cargo.lock source.<br>
+Both a local bundled file and remote (only wget) file can be linked.<br>
+<br>
+Usage:<br>
+<br>
+&lt;PKG&gt;_CARGO_LOCK_FILE =3D &lt;PKG&gt;_PKGDIR/Cargo.lock<br>
+<br>
+&lt;PKG&gt;_CARGO_LOCK_FILE =3D https://.../Cargo.lock<br>
+<br>
+Signed-off-by: Thomas Devoogdt &lt;<a href=3D"mailto:thomas@devoogdt.com" t=
+arget=3D"_blank" rel=3D"noreferrer">thomas@devoogdt.com</a>&gt;<br>
+---<br>
+Superseeds <a href=3D"https://patchwork.ozlabs.org/project/buildroot/patch/=
+20250324173246.100112-1-guillaume.chaye@zeetim.com/.v2" rel=3D"noreferrer n=
+oreferrer" target=3D"_blank">https://patchwork.ozlabs.org/project/buildroot=
+/patch/20250324173246.100112-1-guillaume.chaye@zeetim.com/.<br>
+v2</a>: no change<br>
+v3: no change<br>
+v4: no change<br>
+v4: no change<br>
+---<br>
+=C2=A0package/<a href=3D"http://pkg-cargo.mk" rel=3D"noreferrer noreferrer"=
+ target=3D"_blank">pkg-cargo.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 |=C2=A0 5 +++++<br>
+=C2=A0support/download/cargo-post-process | 14 +++++++++++++-<br>
+=C2=A02 files changed, 18 insertions(+), 1 deletion(-)<br>
+<br>
+diff --git a/package/<a href=3D"http://pkg-cargo.mk" rel=3D"noreferrer nore=
+ferrer" target=3D"_blank">pkg-cargo.mk</a> b/package/<a href=3D"http://pkg-=
+cargo.mk" rel=3D"noreferrer noreferrer" target=3D"_blank">pkg-cargo.mk</a><=
+br>
+index 47a6353f25..626e5ea472 100644<br>
+--- a/package/<a href=3D"http://pkg-cargo.mk" rel=3D"noreferrer noreferrer"=
+ target=3D"_blank">pkg-cargo.mk</a><br>
++++ b/package/<a href=3D"http://pkg-cargo.mk" rel=3D"noreferrer noreferrer"=
+ target=3D"_blank">pkg-cargo.mk</a><br>
+@@ -195,6 +195,11 @@ ifneq ($$($(2)_SUBDIR),)<br>
+=C2=A0$(2)_DOWNLOAD_POST_PROCESS_OPTS +=3D -m$$($(2)_SUBDIR)/Cargo.toml<br>
+=C2=A0endif<br>
+<br>
++# Allow to download a custom Cargo.lock file.<br>
++ifneq ($$($(3)_CARGO_LOCK_FILE),)<br>
++$(2)_DOWNLOAD_POST_PROCESS_OPTS +=3D -l$$($(3)_CARGO_LOCK_FILE)<br>
++endif<br>
++<br>
+=C2=A0# Because we append vendored info, we can&#39;t rely on the values be=
+ing empty<br>
+=C2=A0# once we eventually get into the generic-package infra. So, we dupli=
+cate<br>
+=C2=A0# the heuristics here<br>
+diff --git a/support/download/cargo-post-process b/support/download/cargo-p=
+ost-process<br>
+index b0e59ad74d..7913724fe2 100755<br>
+--- a/support/download/cargo-post-process<br>
++++ b/support/download/cargo-post-process<br>
+@@ -11,11 +11,12 @@ if [ &quot;${BR_CARGO_MANIFEST_PATH}&quot; ]; then<br>
+=C2=A0fi<br>
+<br>
+=C2=A0manifest=3DCargo.toml<br>
+-while getopts &quot;n:o:m:&quot; OPT; do<br>
++while getopts &quot;n:o:m:l:&quot; OPT; do<br>
+=C2=A0 =C2=A0 =C2=A0case &quot;${OPT}&quot; in<br>
+=C2=A0 =C2=A0 =C2=A0o)=C2=A0 output=3D&quot;${OPTARG}&quot;;;<br>
+=C2=A0 =C2=A0 =C2=A0n)=C2=A0 base_name=3D&quot;${OPTARG}&quot;;;<br>
+=C2=A0 =C2=A0 =C2=A0m)=C2=A0 manifest=3D&quot;${OPTARG}&quot;;;<br>
++=C2=A0 =C2=A0 l)=C2=A0 lockfile=3D&quot;${OPTARG}&quot;;;<br>
+=C2=A0 =C2=A0 =C2=A0:)=C2=A0 error &quot;option &#39;%s&#39; expects a mand=
+atory argument\n&quot; &quot;${OPTARG}&quot;;;<br>
+=C2=A0 =C2=A0 =C2=A0\?) error &quot;unknown option &#39;%s&#39;\n&quot; &qu=
+ot;${OPTARG}&quot;;;<br>
+=C2=A0 =C2=A0 =C2=A0esac<br>
+@@ -31,6 +32,17 @@ post_process_unpack &quot;${base_name}&quot; &quot;${out=
+put}&quot;<br>
+=C2=A0# Do the Cargo vendoring<br>
+=C2=A0pushd &quot;${base_name}&quot; &gt; /dev/null<br>
+<br>
++# Copy the custom lockfile path if given<br>
++# TODO: use --lockfile-path once stable<br>
++if [ -n &quot;${lockfile}&quot; ] ; then<br>
++=C2=A0 =C2=A0 rm -f &quot;${lockfile}&quot;<br>
++=C2=A0 =C2=A0 if [ -f &quot;${lockfile}&quot; ] ; then<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 cp &quot;${lockfile}&quot; Cargo.lock<br>
++=C2=A0 =C2=A0 else<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 ${WGET} &quot;${lockfile}&quot; -O Cargo.lock<=
+br>
++=C2=A0 =C2=A0 fi<br>
++fi<br>
++<br>
+=C2=A0# Create the local .cargo/config.toml with vendor info<br>
+=C2=A0mkdir -p .cargo/<br>
+=C2=A0mkdir -p &quot;${CARGO_HOME}&quot;<br>
+-- <br>
+2.43.0<br>
+<br>
+</blockquote></div></div></div>
 
-               bctoolbox-4.4.8 | 1 
-                libcurl-8.16.0 | 1 
-                 openal-1.22.0 | 1 
+--000000000000ce272f0640de37d9--
 
+--===============7421840745692343016==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-Detail of failures for 2025.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-microblazeel |        bctoolbox-4.4.8         | NOK | https://autobuild.buildroot.org/results/bec30b0bb8a59010d932388bb5bfaf2d8a75577f | ORPH
- aarch64_be  |         libcurl-8.16.0         | NOK | https://autobuild.buildroot.org/results/dcf02d14c00cb68efa52dad73a6e5f7909cce690 |     
-    arc      |         openal-1.22.0          | NOK | https://autobuild.buildroot.org/results/698cce8fd9d7ffe798aca489341d0704d8936a38 | ORPH
-
-
-Classification of failures by reason for 2025.05.x
---------------------------------------------------
-
-                openssh-10.0p1 | 1 
-
-
-Detail of failures for 2025.05.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    mips     |         openssh-10.0p1         | NOK | https://autobuild.buildroot.org/results/05aac406f140d6fc3c0636fec172e2101b4011dd | ORPH
-
-
-
--- 
-https://autobuild.buildroot.org
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7421840745692343016==--
