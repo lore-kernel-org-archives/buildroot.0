@@ -1,75 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3B4BCCA476
-	for <buildroot@archiver.kernel.org>; Sat, 11 Oct 2025 21:41:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4897BCCA476
+	for <buildroot@archiver.kernel.org>; Sat, 11 Oct 2025 21:47:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9B25760BE7;
-	Sat, 11 Oct 2025 21:41:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 06F7380C82;
+	Sat, 11 Oct 2025 21:47:24 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tCQx5TrKipHx; Sat, 11 Oct 2025 21:47:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DA118132B
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0DA118132B;
+	Sat, 11 Oct 2025 21:47:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1EE44BC
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 21:47:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 17AA960BE4
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 21:47:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZPhrNhgmXAFU; Sat, 11 Oct 2025 21:41:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BC4F608F9
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7BC4F608F9;
-	Sat, 11 Oct 2025 21:41:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3E42012B
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 21:40:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2FB7F40D0E
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 21:40:59 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 32j99DnrwxbL for <buildroot@buildroot.org>;
- Sat, 11 Oct 2025 21:40:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 27EA540D08
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27EA540D08
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 27EA540D08
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 21:40:57 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 7986A5FFA3;
- Sat, 11 Oct 2025 23:40:52 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 11 Oct 2025 23:40:52 +0200
-MIME-Version: 1.0
-Date: Sat, 11 Oct 2025 23:40:52 +0200
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Rahul Bedarkar <rahulbedarkar89@gmail.com>
-In-Reply-To: <20251011141549.2045266-1-dario.binacchi@amarulasolutions.com>
-References: <20251011141549.2045266-1-dario.binacchi@amarulasolutions.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <ee01b6f96b59cce4ded63bd7d57a7dd9@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1760218855;
- bh=wc+Xbe3kVYWVt/pxoiI/FjP64hEYMobxWYVnswHlTyc=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=X052vi+y5eZK0gzbALlU8hArqhBOR8Wrz96RVT+n6Tty4f+iJijkCom2ftn2QgD/0
- GSDyRY1l44oHtdWB0BmrzCGOCjk152B75AYjHK20+nKchF2L2n5lR4ZkCHSPqiV7/g
- LCb5GsByvwzlcVMDpd7Pt6KVwWnLhcJ8+tiDZw7BrWzY1zY2UEPxOP43/9yFQ0xpu5
- id5ilmwzro9ods0/Lge3U8YCOzeOueUC4scdhkjk4SXc1T7mZp8hwW5CL7Sibyfypf
- d5pObniqVfsVtsHbK3rbGZw0mqaN+0sAgyMmQWcrUImkzoBgWQJaN+h6x7k+biwQpG
- 19sLSbyK1euKw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=X052vi+y
-Subject: Re: [Buildroot] [PATCH 1/1] package/gssdp: bump to version 1.6.4
+ id 36I55FMJx4-r for <buildroot@buildroot.org>;
+ Sat, 11 Oct 2025 21:47:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4683660A89
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4683660A89
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 21:47:21 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 421FC87065; Sat, 11 Oct 2025 21:47:21 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 11 Oct 2025 23:46:03 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 18a4b8b193979c24aa98bfbb3090504ae2831d4c
+X-Git-Newrev: 7e43f888595bc20ce4b59334b5fb406473173f57
+X-Patchwork-Hint: ignore
+Message-Id: <20251011214721.421FC87065@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] CHANGES: update for 2025.05.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,20 +57,103 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 11/10/2025 16:15, Dario Binacchi wrote:
-> Release notes:
-> https://gitlab.gnome.org/GNOME/gssdp/-/blob/gssdp-1.6.4/NEWS
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=7e43f888595bc20ce4b59334b5fb406473173f57
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit b5092e8343d2065a73818178772c9df78b9015df)
+---
+ CHANGES | 68 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
+
+diff --git a/CHANGES b/CHANGES
+index cb5cd3368b..97fd0b3db8 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -99,6 +99,74 @@
+ 	Removed packages: libebur128, libolm, libwebsock,
+ 	python-dunamai, python-poetry-dynamic-versioning
+ 
++2025.05.3, released October 11, 2025
++
++    This is the final release on the 2025.05.x branch.
++
++    Important / security related fixes:
++
++    - atop: CVE-2025-31160
++    - civetweb: CVE-2025-55763
++    - cjson: CVE-2025-57052
++    - connman: CVE-2025-32366, CVE-2025-32743
++    - cups: CVE-2025-58060, CVE-2025-58364
++    - exiv2: CVE-2023-44398, CVE-2024-24826, CVE-2024-25112, CVE-2024-39695,
++             CVE-2025-26623, CVE-2025-54080, CVE-2025-55304
++    - expat: CVE-2025-59375
++    - fastd: CVE-2025-24356
++    - fetchmail: CVE number pending
++    - ghostscript: CVE-2025-59798, CVE-2025-59799, CVE-2025-59800,
++                   CVE-2025-59801
++    - imagemagick: CVE-2023-5341, CVE-2025-55004, CVE-2025-55005,
++                   CVE-2025-55160
++    - intel-microcode: CVE-2025-20053, CVE-2025-20109, CVE-2025-22839,
++                       CVE-2025-22840, CVE-2025-22889, CVE-2025-26403
++    - jasper: CVE-2023-51257, CVE-2025-8835
++    - libcurl: CVE-2025-10148, CVE-2025-9086
++    - libopenssl: CVE-2025-9230, CVE-2025-9231, CVE-2025-9232
++    - libssh: CVE-2025-8114, CVE-2025-8277
++    - lua: CVE-2014-5461
++    - opencv4: CVE-2025-53644
++    - pcre2: CVE-2025-58050
++    - poco: CVE-2025-6375
++    - postgresql: CVE-2025-8713, CVE-2025-8714, CVE-2025-8715
++    - python-django: CVE-2025-57833, CVE-2025-59681, CVE-2025-59682
++    - python-flask-cors: CVE-2024-6839, CVE-2024-6844, CVE-2024-6866
++    - python-pip: CVE-2025-8869
++    - raptor: CVE-2024-57822, CVE-2024-57823
++    - sqlite: CVE-2025-6965
++    - syslog-ng: CVE-2024-47619
++    - tiff: CVE-2024-13978, CVE-2025-8961, CVE-2025-9165
++    - udisks: CVE-2025-8067
++    - wireshark: CVE-2025-5601
++
++    Updated / fixed packages: asterisk, avrdude, boinc, boot-wrapper-aarch64,
++    cjson, cpp-httplib, cutekeyboard, docker-engine, ecryptfs-utils, fatcat,
++    fetchmail, firewalld, gnupg2, gnuplot, htpdate, iputils, jose, kodi,
++    libfreeimage, libopenssl, libselinux, libsemanage, libxkbcommon,
++    libxmlrpc, linux-firmware, linuxptp, llvm, lua-utf8, luaossl, luvi,
++    mariadb, mbpfan, micropython, modsecurity2, mosquitto, opencv4, openjpeg,
++    pango, php-lua, policycoreutils, python-aiohttp-session, python-certifi,
++    python-cryptography, python-flask-cors, python-pytz, python3, rtl_433,
++    ruby, samba4, sysprof, ti-k3-boot-firmware, tiff, tor, uclibc, upx,
++    webkitgtk, wlroots, x11r7, xilinx-embeddedsw, xilinx-prebuilt, zziplib
++
++    Removed package: netstat-nat
++
++    Boards updated / fixed: versal, ti_am62x_sk, qemu/{x86, x86_64},
++    zedboard, beagleboneai
++
++    Boards removed: roseapplepi, at91sam9260eknf, atmel_sama5d3xek
++
++    Test Improvements:
++
++    - TestSWIPL: increase timeout value
++    - TestOpenJdk: remove stime() function call
++    - test_hardening: update toolchain to aarch64 for checksec tests
++    - test_docker_compose: update kernel & VM CPU
++    - TestZfsUclibc: use internal backend for uClibc-ng toolchain
++    - GitTestBase: remove git daemon due to Gitlab-CI security settings
++
+ 2025.05.2, released September 09, 2025
+ 
+ 	Important / security related fixes:
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
