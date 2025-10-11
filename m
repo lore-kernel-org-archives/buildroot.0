@@ -1,104 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65D8DCCD184
-	for <buildroot@archiver.kernel.org>; Sat, 11 Oct 2025 14:13:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8E1ACCD184
+	for <buildroot@archiver.kernel.org>; Sat, 11 Oct 2025 14:15:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 05E068110D;
-	Sat, 11 Oct 2025 14:13:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 52A50408A2;
+	Sat, 11 Oct 2025 14:15:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oApA5pQTvDgu; Sat, 11 Oct 2025 14:13:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7jhtNHi0Agrs; Sat, 11 Oct 2025 14:15:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2066A81116
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D3464086E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2066A81116;
-	Sat, 11 Oct 2025 14:13:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 076CB119
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 14:13:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D3464086E;
+	Sat, 11 Oct 2025 14:15:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 24EF612B
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 14:15:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EBFF481116
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 14:13:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 15FB960675
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 14:15:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u8JV_9EgPtWd for <buildroot@buildroot.org>;
- Sat, 11 Oct 2025 14:13:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xRtECPTpZNJl for <buildroot@buildroot.org>;
+ Sat, 11 Oct 2025 14:15:55 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::630; helo=mail-ej1-x630.google.com;
+ client-ip=2a00:1450:4864:20::62d; helo=mail-ej1-x62d.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CA0D38110D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA0D38110D
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CA0D38110D
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 14:13:43 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id
- a640c23a62f3a-b3c2db014easo551600466b.0
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 07:13:43 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 177FF605AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 177FF605AA
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
+ [IPv6:2a00:1450:4864:20::62d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 177FF605AA
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 14:15:54 +0000 (UTC)
+Received: by mail-ej1-x62d.google.com with SMTP id
+ a640c23a62f3a-b463f986f80so659793766b.2
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 07:15:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1760192021; x=1760796821;
+ d=1e100.net; s=20230601; t=1760192153; x=1760796953;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=PD68dBVPBcd2oBsEHE3JfnsIV2EglClJ4VY78h+GkRc=;
- b=O3Wr9qcnJYgUKHQxQdEhUIURnt2T3e76D7uE3xkfD4g4FkHy6r5JArTthSfNMg1JF6
- watCGXLJnBWVCXg0NqtEZMVFXVnOYgpivXn/omxyXmhSYzwiyjFZJOFovKGh/WdRDTTg
- Squ6YO5HGeql2NhhcsAWQfflPsG0MjTfoWPc3jSU5bBty4idcmfCLysqigX14rUWHXD2
- ZzY1uZ9+G4TX8RnKEBt5hXT93P2Bv1K+de0GiYRUANJdZUIapJ740Q3opuR72tP1e+kE
- OTMOlHgEVHpUk12kDF+CK3iq3gD9Iitl135jxeE1CUv4cVBI5cEmdi7HpalnMlv8a712
- FZfw==
-X-Gm-Message-State: AOJu0YyJ+l1L9NLwB15fN8QGRGdpbvdW/fhEHTIPUZpHxg85mqXAfRwb
- kXs/vkPAFt256OztkYLIohnLMETGRtv/POX8VZPrMMox62cYq1nIA5VFbfTG7q/CVk2QHo/F2Bp
- UMjr4rfI=
-X-Gm-Gg: ASbGncu7YcdC897upPJX0s+czdn5unXykR8G+skt16mgEfB0+HsdJdX3ufqCNgf/Hw9
- VNjSQ/5yCA0D/Ny0dRinQWw1gZErWTY1iRc5BGjufLsYqVHdlRIbCqZW70kOYfo3SSprFGtZdFh
- fkRa1Ui51pw8Hd3RUDwE5cMuR1WNnCB6Ee9ISVeotDpfJ8hm7s/yLjtfuOlp0lnBdGUPcKSxSDQ
- VuwwHppMCabvLI+YsZ7IAohsZuDYs+J7FSIfRqwBi7l9c6tp+djty71wohWsHiNX3/xNcrq+CpE
- Gziec64ew3hjxvlvLYWKaodjc7pgZ3KIC4qn6glh+aIM7b7dOEgJp9NQ4ZdoxmLhr0TBlqFq4z5
- 6+nkOTfHKhnDWcjP2++mkZtK0NzIcQvVj7A+uAYgF3k4OJ3QjVSP8WNnzgNuk6cwqmYyKW6rXbe
- ECfKvw4fyyWYbxg+01Ae2OKhRIQjpMyu3jHxTVQ5bNJGw0YS+UMKQMb6zd+suGMnlgwSK7qy5db
- MTmhyCE3Rp4HEyWyDqx
-X-Google-Smtp-Source: AGHT+IEKcdCk0R8L+AU15LdpKsv8W8DIwJVkAGCZiaaQ9ObJTS3urLXQBtqIk+bTnETeF0HxCm0bbg==
-X-Received: by 2002:a17:907:3e8c:b0:b46:cc3b:65fd with SMTP id
- a640c23a62f3a-b50aa99e1ddmr1520168166b.29.1760192021363; 
- Sat, 11 Oct 2025 07:13:41 -0700 (PDT)
+ bh=IS1VVsO+DKvsjFZnQP+uI0dtkIf2J/Z0Dz6kanZaNQw=;
+ b=H7q+7GmP4ZOOezreOmpysPvgTwONpWMUplgdbS6BEciy6YASLyldXIqOzS5RZXFqQj
+ NdbLUcK2VCWJ7n7drv50/DXrh4p0mhcO74RhuP0o7C4oHKEN2NqSCSeHQwoFchH4AJom
+ UjaeTumXIsxwEzYz1eF8aTn+TVIWZTtuSut6Vsyy3Svek5XLJmslZYcif5w7Zfhof3Ni
+ yoEXbWOSMn3mwHdVRTaCLimTpu8tuNzgJw1MFor34IzkVlkhib9EX6PgG34JJj6YlU+N
+ DUFHbhnvcEzEuJFhRtG7xh/gLEg3ffPmqX3ZN7W408v54RELeqfV3CCfMldvfPHSCKq9
+ Oo4A==
+X-Gm-Message-State: AOJu0YyxCWDCHyaQUYiTy29OJ7WCLbhKLgvig799ur+bFocukdTOxtnf
+ h+nhELaSpeBfIDPJBytPgcu71nYhDUKvJgT3cKZO766HzrSqk4WK9nAIRpqlI+eNpIqXtYiFbqv
+ /szjZ6hc=
+X-Gm-Gg: ASbGncsZwQLe0wnOb1yAzn9TkPqdjSjCet0ECTp6gTXPqk7cpUs2XjAHxss3+1TFZrS
+ RL0MdltCNI7SyGzOQu+eVMVLQrXOVD0JbVckLNs3eEsd26EaGJrb6qqe/zlnWLGNfPpr6JCQx9B
+ gTktPG4bppl7JWBa18Kl3QyqFOczQVnj0F5H07KbzyX6YlGGRKril2EEieg7Y9XqRMV0GmXN1yN
+ FGiz2QMrVcPFzfLacg7HtUJVn/w7E7xB3UO1mqx4LC7qdfeO7ZlURrC5il3Ch6h/uPqAJUC0ov2
+ ojf/opbAZg0aIFA60EwCx5xMbkKunfJCYMKRbeVlN0ZFETKK9My9/yAk9qDJrcBoXNwkwrSVT3N
+ VUCL2f0u1oIjgtTqYjB7lHkFfqvEOQaUyEJTnz1qATx9NwHDvKR9yAr7YYDO8jLXDMs7RTHBiFF
+ OTfOWltjMsfYEopBv0b99xJxuzJWnnfPxMT7e9a4L9viGow0UC+njlHQ9/kw7qtWIz2VhJt/6uc
+ tYlq5H4YjqbVkvyWRT4
+X-Google-Smtp-Source: AGHT+IHaiPgSe0fZhNDcPS5DT3AFpCWO1bjtD/eJSkae3SsdhUZiPI8poLuK/aLFGFFMFBjDj+DwnQ==
+X-Received: by 2002:a17:906:c150:b0:b3e:6091:2c7d with SMTP id
+ a640c23a62f3a-b50aa89b304mr1719587966b.27.1760192152630; 
+ Sat, 11 Oct 2025 07:15:52 -0700 (PDT)
 Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
  (host-79-25-27-158.retail.telecomitalia.it. [79.25.27.158])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b55d61cbcb9sm498230866b.20.2025.10.11.07.13.40
+ a640c23a62f3a-b55d9a4054fsm491007966b.89.2025.10.11.07.15.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 11 Oct 2025 07:13:40 -0700 (PDT)
+ Sat, 11 Oct 2025 07:15:52 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Cc: linux-amarula@amarulasolutions.com,
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Rahul Bedarkar <rahulbedarkar89@gmail.com>,
  Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Sat, 11 Oct 2025 16:13:33 +0200
-Message-ID: <20251011141333.2044458-1-dario.binacchi@amarulasolutions.com>
+Date: Sat, 11 Oct 2025 16:15:49 +0200
+Message-ID: <20251011141549.2045266-1-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1760192021; x=1760796821;
+ d=amarulasolutions.com; s=google; t=1760192153; x=1760796953;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=PD68dBVPBcd2oBsEHE3JfnsIV2EglClJ4VY78h+GkRc=;
- b=Cjskw1SbCesInUxOy0UGJB6J311lDwKEOehRtlpPBw5wN8x43t24gFVLAiyKePgVTr
- CCsxrdk5LSItkx8AZ+ldpmTPK7mKiyc45x2F+0sqa/neVQsoLYYTdrWmgUpTz7JvUInu
- iq4HJRu1XLXFz8S+i0kZZgDv+QlY9rx54fNC8=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=IS1VVsO+DKvsjFZnQP+uI0dtkIf2J/Z0Dz6kanZaNQw=;
+ b=B0J/bTHhNkUoYIiQ/if9aKN4HfeGJEzq96TlgsW9fIR77eQoYFADmBRog8fTMSwMMm
+ TCgDDkyUDtV7BWwX30ZrGbmUz3WBpw++XONkbFusPsa9HXiHsctkSnLu0NjLCiUPTn7K
+ 1zio7Ljw1TI5nxbNMtjsI4ZVNuUeK6j6merWE=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=Cjskw1Sb
-Subject: [Buildroot] [PATCH 1/1] package/gnuchess: bump to version 6.3.0
+ header.a=rsa-sha256 header.s=google header.b=B0J/bTHh
+Subject: [Buildroot] [PATCH 1/1] package/gssdp: bump to version 1.6.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,36 +117,39 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Release notes:
-https://cgit.git.savannah.gnu.org/cgit/chess.git/tree/ChangeLog#n1
+https://gitlab.gnome.org/GNOME/gssdp/-/blob/gssdp-1.6.4/NEWS
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- package/gnuchess/gnuchess.hash | 2 +-
- package/gnuchess/gnuchess.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gssdp/gssdp.hash | 4 ++--
+ package/gssdp/gssdp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gnuchess/gnuchess.hash b/package/gnuchess/gnuchess.hash
-index 0248abcf71a5..f307ec249e6e 100644
---- a/package/gnuchess/gnuchess.hash
-+++ b/package/gnuchess/gnuchess.hash
-@@ -1,3 +1,3 @@
- # sha256 locally computed
--sha256  ddfcc20bdd756900a9ab6c42c7daf90a2893bf7f19ce347420ce36baebc41890  gnuchess-6.2.9.tar.gz
-+sha256  0b37bec2098c2ad695b7443e5d7944dc6dc8284f8d01fcc30bdb94dd033ca23a  gnuchess-6.3.0.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/gnuchess/gnuchess.mk b/package/gnuchess/gnuchess.mk
-index 630b3aefa74a..1b343acc997a 100644
---- a/package/gnuchess/gnuchess.mk
-+++ b/package/gnuchess/gnuchess.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/gssdp/gssdp.hash b/package/gssdp/gssdp.hash
+index 06bf51090f0c..eabbf6e7c714 100644
+--- a/package/gssdp/gssdp.hash
++++ b/package/gssdp/gssdp.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.gnome.org/sources/gssdp/1.6/gssdp-1.6.3.sha256sum:
+-sha256  2fedb5afdb22cf14d5498a39a773ca89788a250fcf70118783df821e1f3f3446  gssdp-1.6.3.tar.xz
++# Hash from: https://download.gnome.org/sources/gssdp/1.6/gssdp-1.6.4.sha256sum:
++sha256  ff97fdfb7f561d3e6813b4f6a2145259e7c2eff43cc0e63f3fd031d0b6266032  gssdp-1.6.4.tar.xz
+ 
+ # Hash for license file:
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
+index 3b446496ea23..d8c34760d37f 100644
+--- a/package/gssdp/gssdp.mk
++++ b/package/gssdp/gssdp.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--GNUCHESS_VERSION = 6.2.9
-+GNUCHESS_VERSION = 6.3.0
- GNUCHESS_SITE = $(BR2_GNU_MIRROR)/chess
- GNUCHESS_LICENSE = GPL-3.0+
- GNUCHESS_LICENSE_FILES = COPYING
+ GSSDP_VERSION_MAJOR = 1.6
+-GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).3
++GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).4
+ GSSDP_SOURCE = gssdp-$(GSSDP_VERSION).tar.xz
+ GSSDP_SITE = https://download.gnome.org/sources/gssdp/$(GSSDP_VERSION_MAJOR)
+ GSSDP_LICENSE = LGPL-2.1+
 -- 
 2.43.0
 
