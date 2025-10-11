@@ -1,77 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3B7FCCA476
-	for <buildroot@archiver.kernel.org>; Sat, 11 Oct 2025 18:13:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FBD6CCD184
+	for <buildroot@archiver.kernel.org>; Sat, 11 Oct 2025 19:34:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8424960B0C;
-	Sat, 11 Oct 2025 18:13:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3332C403A5;
+	Sat, 11 Oct 2025 19:34:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3MgngTUkINh7; Sat, 11 Oct 2025 18:12:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2jStVlYdH4Vz; Sat, 11 Oct 2025 19:34:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F259C60B02
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50328405A5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F259C60B02;
-	Sat, 11 Oct 2025 18:12:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 50328405A5;
+	Sat, 11 Oct 2025 19:34:20 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 59FCCBC
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 18:12:57 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 60789119
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 19:34:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 85C924071C
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 18:12:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 517AB40761;
+ Sat, 11 Oct 2025 19:34:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VMI833BQ8M3x for <buildroot@buildroot.org>;
- Sat, 11 Oct 2025 18:12:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2A39E40726
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A39E40726
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2A39E40726
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 18:12:55 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 22ABEB0051E;
- Sat, 11 Oct 2025 20:12:51 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 11 Oct 2025 20:12:51 +0200
+ id 8SGDhBdeXMTl; Sat, 11 Oct 2025 19:34:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
+ envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D04AB403F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D04AB403F8
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D04AB403F8
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 19:34:16 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-3f0134ccc0cso2240015f8f.1
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 12:34:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1760211254; x=1760816054;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=qW1204Jx1xULuujottHEEyZp/ITApkyV0848y/BRMe0=;
+ b=PS2DXvm9AIHuQVfAF67k8SsXJQtxabzhbxbvAwQjaeTBIMiJjy8FDaWu/2sbNF6AkU
+ iK2d/ArQ5CliHrvqvZfq+7CR6eu0A+B0HE0MeWU52MN2ILkC6jRZfSNblfzXwYeFI8mT
+ updT0HCykut2Vf1CmO2z5jvxzdl8D3OzyrV2rcNxaV75xURBsI1R2eTwhWcliHAlaEBD
+ gdTH/7s8vqRyCjWPpQpFZyRtCs2QiVssNZ4m0Fv62RWxwNjTJiPO7Bfs7qKX3CCDNzB2
+ YHrs/01U9RovtJPH01LVlqjW7XsdSPFvrez3HTe1BOJSXuwnH2Iy9zopOJQTBGhs6+RQ
+ xj3Q==
+X-Gm-Message-State: AOJu0Yyh9GvfvLzXnGk16N0e+8MkBedofIQhAN8iK8PotgYm6xwcfQa0
+ RYtogIMKdc7bOHEsfPLj7A0zoUR/oXtfx6mJk7u1numI6ZcQr/vcR4KIZGBFLg==
+X-Gm-Gg: ASbGncu1RyOFq+1H51OFpwJQqcw74R1pOodLd1NwLiXiNTAm+d78EA5ZbwP8fc+Rv5r
+ DYxjHM6P1gH6F0aSdBmZ6R6BdTQOzD1GwOPQxSo4cI8OrckxYJMeuy7nhuQdaJyMR4Men3S20rg
+ KQROR31lt6giOdO3E8UCBRgShNe6EE/ozxFmFUD8sFHAbMIXAqRepmDf31d+/cEdfFWIyGn3Mvo
+ CBRdH7l+VOLXHX0QHzQGtFL9ze8nd3UFA8AvOGSZQzt9k6mzKXVceVGGaOLQUgSk0QKjaDCu2ve
+ 1B0vZCxMT0mlPkIrnj0Yl/i+1CvAzCix+fsOoprOanr6twSa4n0HvL0vSx/aBhMPL9unCeGYRIr
+ ALD4h+FWx/QrFyF9xhhIR5OCeOFccgP59Ne4KPl1xknwmQiT+vnaSMR3rTwWHdyw=
+X-Google-Smtp-Source: AGHT+IHwoJiS+g2zq/iO9wP0gEtdF0jynMkyj35ZiIUFEK6El4jZvvUrp9mpQFaOzt1RGxSb3/m2/A==
+X-Received: by 2002:a05:6000:26d0:b0:425:8bf9:557d with SMTP id
+ ffacd0b85a97d-4266e8dd3c2mr10987115f8f.44.1760211254348; 
+ Sat, 11 Oct 2025 12:34:14 -0700 (PDT)
+Received: from ymorin.is-a-geek.org ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-426ce5e82dfsm10108895f8f.52.2025.10.11.12.34.12
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 11 Oct 2025 12:34:13 -0700 (PDT)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 11 Oct 2025 21:34:12 +0200
+Date: Sat, 11 Oct 2025 21:34:12 +0200
+To: buildroot@buildroot.org
+Message-ID: <aOqxNNXgt70DNu7R@landeda>
+References: <cover.1756717276.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
-Date: Sat, 11 Oct 2025 20:12:51 +0200
-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: buildroot@buildroot.org, Antoine Tenart <atenart@kernel.org>
-In-Reply-To: <20251010222122.1911651-2-fiona.klute@gmx.de>
-References: <20251010222122.1911651-1-fiona.klute@gmx.de>
- <20251010222122.1911651-2-fiona.klute@gmx.de>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <68c8664cd23b5f5fa1c386474d387052@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1760206373;
- bh=DMOpYggkOAxzUClvbPVBwxcGP9qmf9CF9q4b7ArCn4E=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=eZ8Jk8U7Ix+lOpjdfSZH/qmVDRVLax0BkW9NdT5xdWu1wBNxvlYl0Sg3+83wAg3e2
- cYMqqcSRGKmUPjxpOSyrc/F9NzlCu0ABWfGL398fn7lambFTauOF8RdQCyQHxoZeeO
- r2gYe4RJHAN0FbD2CxGvpz8GQAPS3Sn4ri1PQ6Jbo4YeMTmNwm/l4tY97DpPhPfU08
- QADcaUUAOrmbJlGAWUcE8TD3hnB+xDl0I5xzQT4lloOv3Z0rpbz831kDX2r8gQkVQC
- EDwZsTbrPk62obM8DDqBhhFE8X3RwJQXn4z+60SPYaJVLCEHBEYY+qrWyRgy+yzpML
- XQHxeDa3wE/YQ==
+Content-Disposition: inline
+In-Reply-To: <cover.1756717276.git.yann.morin.1998@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1760211254; x=1760816054; darn=buildroot.org;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=qW1204Jx1xULuujottHEEyZp/ITApkyV0848y/BRMe0=;
+ b=T3o7rfOLTPyuo+ItkSQ02MsiRH3biX/Z66xoRW7to6xPDAEhNcLQ73QQgwYUHX6ECK
+ JMRpS0Sa4xxKkOtqVAUkS2E3+/SPuJHhN5+ynDcLZTm0B50kHX4mSq1Wp7R1NF+S6+K2
+ veJ9EerFVziAtTXJ8PW9jImZ+Fkb7qWkSwsIgbKrsuxNd0EDoDkmeYxqkf3O2BnU5pW/
+ HLltQFoxiJicLiH8arqZV3kauIFAAcjKqi2Q8rca4aS0nTei8JYcpqXFyr1dzUkRzLVe
+ xotTqztby0UUsmvoSYB41KLoy2lHoo3mWJphPnvRN335vJ5cpkjB3SYHqIOOlLk1eyCl
+ oISA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
+ dmarc=fail (p=quarantine dis=none)
  header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=eZ8Jk8U7
-Subject: Re: [Buildroot] [PATCH 2/2] package/refpolicy: bump version to
- 2.20250923
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=T3o7rfOL
+Subject: Re: [Buildroot] [PATCH 00/18 v3] system: add support for merged-bin
+ (branch yem/merged-bin)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,36 +110,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: "Yann E. MORIN via buildroot" <buildroot@buildroot.org>
+Reply-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Edgar Bonet <bonet@grenoble.cnrs.fr>, Sen Hastings <sen@hastings.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>, Arnout Vandecappelle <arnout@mind.be>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Norbert Lange <nolange79@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 11/10/2025 00:21, Fiona Klute via buildroot wrote:
-> The update makes some warnings about unknown classes and permissions
-> during boot with current kernels go away.
-> 
-> Upstream changelogs [1, 2] list as "notable changes":
-> 
-> * Updates to support screen 5.0.
-> * Add labeling for bcachefs.
-> * Various systemd updates and fixes.
-> * Several updates and fixes for systemd
-> * Add new permissions and policy capabilities
-> * Drop reiserfs support (it was removed in kernel 6.13)
-> 
-> Plus a number of new modules.
-> 
-> [1] 
-> https://github.com/SELinuxProject/refpolicy/releases/tag/RELEASE_2_20250618
-> [2] 
-> https://github.com/SELinuxProject/refpolicy/releases/tag/RELEASE_2_20250923
-> 
-> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+Hello All,
 
-Applied to master, thanks.
+On 2025-09-01 11:01 +0200, Yann E. MORIN spake thusly:
+> This series introduces support for so-called merged-bin, where /usr/sbin
+> is merged with /usr/bin, as an extra step after merged-usr, now just
+> requested, but in the future required, by systemd.
+[--SNIP--]
+
+Ping? Any feedback on this series?
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
