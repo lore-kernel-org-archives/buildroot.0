@@ -4,101 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FBD6CCD184
-	for <buildroot@archiver.kernel.org>; Sat, 11 Oct 2025 19:34:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CB11CCD184
+	for <buildroot@archiver.kernel.org>; Sat, 11 Oct 2025 20:17:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3332C403A5;
-	Sat, 11 Oct 2025 19:34:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 001DC40895;
+	Sat, 11 Oct 2025 20:17:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2jStVlYdH4Vz; Sat, 11 Oct 2025 19:34:20 +0000 (UTC)
+ id HB_I39Os5BqO; Sat, 11 Oct 2025 20:17:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50328405A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30FCD40899
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 50328405A5;
-	Sat, 11 Oct 2025 19:34:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 60789119
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 19:34:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 30FCD40899;
+	Sat, 11 Oct 2025 20:17:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 39815119
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 20:17:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 517AB40761;
- Sat, 11 Oct 2025 19:34:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3636140899;
+ Sat, 11 Oct 2025 20:17:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8SGDhBdeXMTl; Sat, 11 Oct 2025 19:34:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jyZc-MhWE4L4; Sat, 11 Oct 2025 20:17:51 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D04AB403F8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D04AB403F8
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D04AB403F8
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 19:34:16 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-3f0134ccc0cso2240015f8f.1
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 12:34:16 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1DBB740895
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DBB740895
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1DBB740895
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 20:17:50 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-46e2e6a708fso19756655e9.0
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 13:17:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1760211254; x=1760816054;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=qW1204Jx1xULuujottHEEyZp/ITApkyV0848y/BRMe0=;
- b=PS2DXvm9AIHuQVfAF67k8SsXJQtxabzhbxbvAwQjaeTBIMiJjy8FDaWu/2sbNF6AkU
- iK2d/ArQ5CliHrvqvZfq+7CR6eu0A+B0HE0MeWU52MN2ILkC6jRZfSNblfzXwYeFI8mT
- updT0HCykut2Vf1CmO2z5jvxzdl8D3OzyrV2rcNxaV75xURBsI1R2eTwhWcliHAlaEBD
- gdTH/7s8vqRyCjWPpQpFZyRtCs2QiVssNZ4m0Fv62RWxwNjTJiPO7Bfs7qKX3CCDNzB2
- YHrs/01U9RovtJPH01LVlqjW7XsdSPFvrez3HTe1BOJSXuwnH2Iy9zopOJQTBGhs6+RQ
- xj3Q==
-X-Gm-Message-State: AOJu0Yyh9GvfvLzXnGk16N0e+8MkBedofIQhAN8iK8PotgYm6xwcfQa0
- RYtogIMKdc7bOHEsfPLj7A0zoUR/oXtfx6mJk7u1numI6ZcQr/vcR4KIZGBFLg==
-X-Gm-Gg: ASbGncu1RyOFq+1H51OFpwJQqcw74R1pOodLd1NwLiXiNTAm+d78EA5ZbwP8fc+Rv5r
- DYxjHM6P1gH6F0aSdBmZ6R6BdTQOzD1GwOPQxSo4cI8OrckxYJMeuy7nhuQdaJyMR4Men3S20rg
- KQROR31lt6giOdO3E8UCBRgShNe6EE/ozxFmFUD8sFHAbMIXAqRepmDf31d+/cEdfFWIyGn3Mvo
- CBRdH7l+VOLXHX0QHzQGtFL9ze8nd3UFA8AvOGSZQzt9k6mzKXVceVGGaOLQUgSk0QKjaDCu2ve
- 1B0vZCxMT0mlPkIrnj0Yl/i+1CvAzCix+fsOoprOanr6twSa4n0HvL0vSx/aBhMPL9unCeGYRIr
- ALD4h+FWx/QrFyF9xhhIR5OCeOFccgP59Ne4KPl1xknwmQiT+vnaSMR3rTwWHdyw=
-X-Google-Smtp-Source: AGHT+IHwoJiS+g2zq/iO9wP0gEtdF0jynMkyj35ZiIUFEK6El4jZvvUrp9mpQFaOzt1RGxSb3/m2/A==
-X-Received: by 2002:a05:6000:26d0:b0:425:8bf9:557d with SMTP id
- ffacd0b85a97d-4266e8dd3c2mr10987115f8f.44.1760211254348; 
- Sat, 11 Oct 2025 12:34:14 -0700 (PDT)
-Received: from ymorin.is-a-geek.org ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
+ d=1e100.net; s=20230601; t=1760213869; x=1760818669;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=B7t0j6pNx8PIMQfOs+ypcMrEEz6D+qYMNxn3vSicNic=;
+ b=fB879vWjpn1GujvOSKORSE1YUqOVRNbl+4ywvWRtMpyDHXaYgyy3XG2UAf83cvkefI
+ C0pO9yAEuMztwcpRp2Z5tI4+EcG/Y2A1iJC+XuWv25/SjCk1bQy1ylFIw8LefMABMlfg
+ /oD2tHRhsGSWW3MDt6U7OO8hDFM6RyCBQLF/JxWUR1mJkqKok15R06WzLpPDNelehmAS
+ xOUBXY4kJlPusH3XtmJlML5QKVxL4/fAQjg/UfYY5vKm2UabAfcXjT6KtdNLXVAm08bK
+ K2jMpk1hMBXHrjv5wlugmB7HFK1J3p1JMgUnpbueV4cyRwpPAJ4W+x3TFC6wXQyD5Icn
+ ygwQ==
+X-Gm-Message-State: AOJu0YzLlMfdeedFjQ1XygKxZ1OEoFn93noztUKmwqz51HQFx3+5HsVo
+ T4A4gYQA+Heq4xji/CJJHdglcXc6YE4qoNXqezexPNcdMeR+0dwtXKl9HYGpYQ==
+X-Gm-Gg: ASbGnctuPVahrIDmDb3MA6Fdxi3NOdPdBRZz+M220wRkSz4PDmQtt9Emrd/xHCxwFh3
+ 8baxehMSrwnHYiHNFuS8L4KIWUeJsL50SgCYaBXn85y8JTwslNojtTG2ALRCgjo/M14yyH1G/TR
+ jfoDA10rx+wDQZ3ivSlBLWmiDl2oxA5F828p+r/3KxWgCAMo6R+awYo4aJ4919l+UHAVCoLCc3X
+ 6OQllWecHZ4HHuuax0Qxj8MsgQkweywiMRoaQfx44CTNC9wHKrCT+ik10XEN2Lfx/biqvk7r1X4
+ DyM6dLhtM5JeiyhdO3Pj3rFVfr0hXriYhblNCtQ0P+XogqMTbjPGbWHy+RFTGQCSymmWLR3bo8/
+ Hm9qclUA+msrxtBi3NSYSmMppglWHWoXQK1df5bhi6iuoXJSJVGo8
+X-Google-Smtp-Source: AGHT+IH29XfvGaqmButUtbKygqULR0IlaahExf+Z1N4UjN02Kdc6RILA3dD2FRNf76go57Vl3fVq1g==
+X-Received: by 2002:a05:600d:8221:b0:46f:aa02:98b2 with SMTP id
+ 5b1f17b1804b1-46faa02ed74mr83045825e9.19.1760213868675; 
+ Sat, 11 Oct 2025 13:17:48 -0700 (PDT)
+Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-426ce5e82dfsm10108895f8f.52.2025.10.11.12.34.12
+ 5b1f17b1804b1-46fb49be017sm104591555e9.13.2025.10.11.13.17.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 11 Oct 2025 12:34:13 -0700 (PDT)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 11 Oct 2025 21:34:12 +0200
-Date: Sat, 11 Oct 2025 21:34:12 +0200
+ Sat, 11 Oct 2025 13:17:48 -0700 (PDT)
 To: buildroot@buildroot.org
-Message-ID: <aOqxNNXgt70DNu7R@landeda>
-References: <cover.1756717276.git.yann.morin.1998@free.fr>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Chris Packham <judge.packham@gmail.com>,
+ Romain Naour <romain.naour@gmail.com>
+Date: Sat, 11 Oct 2025 22:17:47 +0200
+Message-ID: <20251011201747.2005570-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <cover.1756717276.git.yann.morin.1998@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1760211254; x=1760816054; darn=buildroot.org;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
- :reply-to;
- bh=qW1204Jx1xULuujottHEEyZp/ITApkyV0848y/BRMe0=;
- b=T3o7rfOLTPyuo+ItkSQ02MsiRH3biX/Z66xoRW7to6xPDAEhNcLQ73QQgwYUHX6ECK
- JMRpS0Sa4xxKkOtqVAUkS2E3+/SPuJHhN5+ynDcLZTm0B50kHX4mSq1Wp7R1NF+S6+K2
- veJ9EerFVziAtTXJ8PW9jImZ+Fkb7qWkSwsIgbKrsuxNd0EDoDkmeYxqkf3O2BnU5pW/
- HLltQFoxiJicLiH8arqZV3kauIFAAcjKqi2Q8rca4aS0nTei8JYcpqXFyr1dzUkRzLVe
- xotTqztby0UUsmvoSYB41KLoy2lHoo3mWJphPnvRN335vJ5cpkjB3SYHqIOOlLk1eyCl
- oISA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1760213869; x=1760818669; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=B7t0j6pNx8PIMQfOs+ypcMrEEz6D+qYMNxn3vSicNic=;
+ b=YqSY+bg9mMSUvmSj2nJnmvceqdyBL/EeJ+x+NmY6FxKM0DIq3du+3PqLixeHdVHY1q
+ qFNXgdXkMhAbs5Lw/Cpa7SLSQHhFsTHZX9QQn5DeAJpb3+6NXdi9dplAzkxzzXirHHBm
+ zdCpbe5z1N33ZFVlRs83kTB9XeWSZfgGqe87veviq9vuHfy/9Oi1MJmEvYNDRboUCrYH
+ N0gZQBK8Ou5/ZHu1v1xVkuQCUOQuyuRXvsSMGZFvGk5GaDNg26f29Tyzz7FclsoJR8pB
+ Umy6D+ttfu5gaVJF5nLeLg7O+7Scfl01g6zjzS2mvkrO1hen0X4+wZkxpudk622gS7hq
+ yCFw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=fail (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=T3o7rfOL
-Subject: Re: [Buildroot] [PATCH 00/18 v3] system: add support for merged-bin
- (branch yem/merged-bin)
+ header.s=20230601 header.b=YqSY+bg9
+Subject: [Buildroot] [PATCH] package/micropython: fix passing multiple CFLAGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,36 +109,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: "Yann E. MORIN via buildroot" <buildroot@buildroot.org>
 Reply-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Edgar Bonet <bonet@grenoble.cnrs.fr>, Sen Hastings <sen@hastings.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Romain Naour <romain.naour@gmail.com>, Arnout Vandecappelle <arnout@mind.be>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Norbert Lange <nolange79@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello All,
+Before commit 50bc5aa17b32 (package/micropython: fix segfault at exit()
+with gcc >= 14), only architecture-specific CFLAGS were passed, and only
+one per arch. But 50bc5aa17b32 introduced a non-arch CFLAGS, for gcc
+versions, so when the build happens for an architecture for which there
+is a CFLAGS, and when gcc is 14 or newer, there are two CFLAGS added,
+causing build failures:
 
-On 2025-09-01 11:01 +0200, Yann E. MORIN spake thusly:
-> This series introduces support for so-called merged-bin, where /usr/sbin
-> is merged with /usr/bin, as an extra step after merged-usr, now just
-> requested, but in the future required, by systemd.
-[--SNIP--]
+    [...] /usr/bin/make [...] CFLAGS_EXTRA=-DMICROPY_GCREGS_SETJMP=1 -DMICROPY_NLR_SETJMP=1 [...]
+    /usr/bin/make: invalid option -- 'D'
+    /usr/bin/make: invalid option -- 'M'
+    Usage: make [options] [target] ...
 
-Ping? Any feedback on this series?
+The fix is simple enough: just quote the CFLAGS.
 
-Regards,
-Yann E. MORIN.
+Fixes: https://autobuild.buildroot.org/results/b18/b18d6fa9938c1267a771fdbcd8b4c3df812cd6b9/
+Fixes: 50bc5aa17b320d91809048d5ef6a110f8c0b9157
 
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Chris Packham <judge.packham@gmail.com>
+Cc: Romain Naour <romain.naour@gmail.com>
+---
+ package/micropython/micropython.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index 32b361db16..e1e1f88d51 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -42,7 +42,7 @@ MICROPYTHON_MAKE_OPTS += \
+ 	MICROPY_PY_BTREE=0 \
+ 	MICROPY_PY_USSL=0 \
+ 	CROSS_COMPILE=$(TARGET_CROSS) \
+-	CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS) \
++	CFLAGS_EXTRA="$(MICROPYTHON_CFLAGS)" \
+ 	LDFLAGS_EXTRA="$(TARGET_LDFLAGS)" \
+ 	CWARN=
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.51.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
