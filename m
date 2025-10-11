@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32CAACCA476
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB46FCCD184
 	for <buildroot@archiver.kernel.org>; Sat, 11 Oct 2025 21:51:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD83340AB1;
-	Sat, 11 Oct 2025 21:51:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B077F811E4;
+	Sat, 11 Oct 2025 21:51:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KL-LfwufkThP; Sat, 11 Oct 2025 21:51:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CMv2HqR_O6do; Sat, 11 Oct 2025 21:51:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6855A40A53
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B141D811CE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6855A40A53;
-	Sat, 11 Oct 2025 21:51:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2E1A3195
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 21:51:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B141D811CE;
+	Sat, 11 Oct 2025 21:51:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 75762BC
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 21:51:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2022440899
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 21:51:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 66DFF60BE4
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 21:51:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w0vW-pO2sQod for <buildroot@buildroot.org>;
- Sat, 11 Oct 2025 21:51:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4489740826
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4489740826
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 21:51:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2522F87072; Sat, 11 Oct 2025 21:51:20 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 11 Oct 2025 23:48:28 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: acecedc001185b0258f6c8d84f8827a3ebe382f4
-X-Git-Newrev: ab906018c98e5f0838b023fa886c6c52a1cc5cf6
-X-Patchwork-Hint: ignore
-Message-Id: <20251011215120.2522F87072@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/micropython: fix passing multiple
- CFLAGS
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NMauiR_EOM3X for <buildroot@buildroot.org>;
+ Sat, 11 Oct 2025 21:51:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B0CFF60BE1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0CFF60BE1
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B0CFF60BE1
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 21:51:22 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 31C4313F880;
+ Sat, 11 Oct 2025 23:51:18 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 11 Oct 2025 23:51:18 +0200
+MIME-Version: 1.0
+Date: Sat, 11 Oct 2025 23:51:18 +0200
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: buildroot@buildroot.org, Chris Packham <judge.packham@gmail.com>
+In-Reply-To: <20251011201803.2005973-1-yann.morin.1998@free.fr>
+References: <20251011201803.2005973-1-yann.morin.1998@free.fr>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <89bb99fb5adf0bcfb2d94d96521113e2@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1760219480;
+ bh=PRplPtCKy0pzdr/ZBlhh42/XeOI2eE6FL2dc49PQMc4=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Le3C22ypTmM/4IDo7LRkLinH4Z+cQI8bsFMLteXVGAC7smsHTlFAPWbRtyZoiTaUv
+ Gbi92NqjiSpEa0nPKbap5QiqzuOHmYAKu3eCaUo8eFbh7dZWPPjQ6fFyAX8oVyXhx6
+ QFzGS4+l+gjsDEao+6qL+5cPpLOXCoMVPpGKQny+bloVZyn28/B4XGNh4ZPamDcDL9
+ SyL/RVuFleGtKBNx3dJ5hJ2RmmoujI7dJOPSefp1xR57w4HuyUZNI+6ENF5OFQN2A9
+ CQ55//5413Jz/A0m8JYqw2fOgHRkIUcsvpvTex1Qp3tikT3RWuNPQadLfm/VKxTYIj
+ p1sUyGt8GTFlg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=Le3C22yp
+Subject: Re: [Buildroot] [PATCH] package/micropython: use append-assignment
+ in conditional code
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,53 +84,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab906018c98e5f0838b023fa886c6c52a1cc5cf6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 11/10/2025 22:18, Yann E. MORIN via buildroot wrote:
+> Since its inception in 9646e80fca28 (micropython: new package), the
+> ppc-specific CFLAGS are simply assigned, and since 9fd9f4e6752f
+> (package/micropython: define MICROPY_NLR_SETJMP for xtensa), the same
+> goes for the xtensa CFLAGS.
+> 
+> Although they are mutually exclusive (different archs) and that there 
+> is
+> no prior assignment, the customs are to use append assignment in
+> conditional blocks, to avoid accidentally overwriting a valure set
+> previously.
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Chris Packham <judge.packham@gmail.com>
 
-Before commit 50bc5aa17b32 (package/micropython: fix segfault at exit()
-with gcc >= 14), only architecture-specific CFLAGS were passed, and only
-one per arch. But 50bc5aa17b32 introduced a non-arch CFLAGS, for gcc
-versions, so when the build happens for an architecture for which there
-is a CFLAGS, and when gcc is 14 or newer, there are two CFLAGS added,
-causing build failures:
-
-    [...] /usr/bin/make [...] CFLAGS_EXTRA=-DMICROPY_GCREGS_SETJMP=1 -DMICROPY_NLR_SETJMP=1 [...]
-    /usr/bin/make: invalid option -- 'D'
-    /usr/bin/make: invalid option -- 'M'
-    Usage: make [options] [target] ...
-
-The fix is simple enough: just quote the CFLAGS.
-
-Fixes: https://autobuild.buildroot.org/results/b18/b18d6fa9938c1267a771fdbcd8b4c3df812cd6b9/
-Fixes: 50bc5aa17b320d91809048d5ef6a110f8c0b9157
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Chris Packham <judge.packham@gmail.com>
-Cc: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/micropython/micropython.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
-index 32b361db16..e1e1f88d51 100644
---- a/package/micropython/micropython.mk
-+++ b/package/micropython/micropython.mk
-@@ -42,7 +42,7 @@ MICROPYTHON_MAKE_OPTS += \
- 	MICROPY_PY_BTREE=0 \
- 	MICROPY_PY_USSL=0 \
- 	CROSS_COMPILE=$(TARGET_CROSS) \
--	CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS) \
-+	CFLAGS_EXTRA="$(MICROPYTHON_CFLAGS)" \
- 	LDFLAGS_EXTRA="$(TARGET_LDFLAGS)" \
- 	CWARN=
- 
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
