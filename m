@@ -4,101 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B44BFCCD184
-	for <buildroot@archiver.kernel.org>; Sat, 11 Oct 2025 09:36:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68FB4CCD184
+	for <buildroot@archiver.kernel.org>; Sat, 11 Oct 2025 09:40:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3106F810A3;
-	Sat, 11 Oct 2025 09:36:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 12B6780F4F;
+	Sat, 11 Oct 2025 09:40:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ni7GxRGG1zsY; Sat, 11 Oct 2025 09:36:12 +0000 (UTC)
+ id FuRkS4uQD7WT; Sat, 11 Oct 2025 09:40:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2971F81096
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A11BA80F52
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2971F81096;
-	Sat, 11 Oct 2025 09:36:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 86590BC
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 09:36:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A11BA80F52;
+	Sat, 11 Oct 2025 09:40:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 28E4FBC
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 09:39:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6A6A04055E
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 09:36:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1A5B46069F
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 09:39:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kg3CgZ2X2nrz for <buildroot@buildroot.org>;
- Sat, 11 Oct 2025 09:36:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ArM13sxW-5jS for <buildroot@buildroot.org>;
+ Sat, 11 Oct 2025 09:39:58 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::633; helo=mail-pl1-x633.google.com;
+ client-ip=2607:f8b0:4864:20::1036; helo=mail-pj1-x1036.google.com;
  envelope-from=nemaakhilesh@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9FE7740503
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FE7740503
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com
- [IPv6:2607:f8b0:4864:20::633])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9FE7740503
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 09:36:10 +0000 (UTC)
-Received: by mail-pl1-x633.google.com with SMTP id
- d9443c01a7336-2681660d604so32770395ad.0
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 02:36:10 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 539E86068C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 539E86068C
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com
+ [IPv6:2607:f8b0:4864:20::1036])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 539E86068C
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 09:39:58 +0000 (UTC)
+Received: by mail-pj1-x1036.google.com with SMTP id
+ 98e67ed59e1d1-3322e6360bbso2709724a91.0
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 02:39:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1760175370; x=1760780170;
+ d=1e100.net; s=20230601; t=1760175597; x=1760780397;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=XIrnWNb+6HMEOuOiPqEdg4G/8E8dxrMQkXAUBf0wMUw=;
- b=UNEhhd3dFkc0c3IMGSSPSYBVB12Mpszphp9J20dWYcYCG+HWnkp8CkgFqN7z4kLqrX
- x0zWcMfUQ39dQtLE95lBKvZ5WE1W2nKGsEDXBgMiQK1oafQMud6mFpqZmwnMjlfU942S
- 1kn5v5dcouk/WNkcQIOT3a01qWiUR06wxSL82fdRamLH5TN5J9a8VZ1L4BonoF+GPHE3
- gyBbL8y3og+HwuanimCucAvuLsxGCsTLHzJrI0w90EYkOdJKKQz96qbVV1hGYwnfYZIw
- AqGiPriyFmwcSkXOYTBrh/NjZaj2A85ealPh2QWWiVsgMxz3vLkLPn4Bt2CJtOWPfcpc
- bvkQ==
-X-Gm-Message-State: AOJu0YzKZiy1YB2/9Ub5HHTMmiDUC98SXrUHdTGzlXWCL1V9H3oQTEmt
- EBJHN98KnQF1b+NKFkMO0flza+bMeuP51oWo9Gsv8XARm/P60f1lh+DJB65+FTIg
-X-Gm-Gg: ASbGncv5Loc/8Gf5YBGglgZvZm0lYsFk1Pard/MvO1z3l0Zt92jHhW36KQCJeCLhtwF
- 9/6+CrGfQ9YXUjl76AUBdBY3A4lGSFnPf2y4K6t4o8Wkig6KG2pXZ8HcNtuaSvI2JSPm2boyhz0
- BveG/sxGCDHQlqHy2DGbih30P5/AM/ivfzNFVtTyUs5oneOxQ7MTldoyw6qFbTZ01ZT7SIqqC1u
- 4fGEi/5ZXNfbFp2FIt4+B5aqqU5XA3OGCsYUZp7QBYj7O+FAU57yy+JqBLoecYEyjaZrflKzlEr
- 32ekQQALHdkKly1DrKknnkvIDA/97GPNoknYXU0oyOQUJm14vwRwy2pdNNX2u+6h1HZbGP4kz21
- hcAzzIJm/26OaVhZEmEnYEao/csXOqey2qoj2RbKfYcFnFuX1/TV65Uq8wzsttQiUJLl/2Rycci
- 1dRaBRGMtpmH4z0fII8gDYuDxC68Md16lRquNh1Z4FyHJmGc9wq3kp1+at0VQTSZSE96LXcYSHA
- BusIQ==
-X-Google-Smtp-Source: AGHT+IFxdqQnoadfdkmRIl7dMHIizm38TLPd4dCsKMG1DdQONREjO3OuV1hyffCOzV4ekQd3AfBTqg==
-X-Received: by 2002:a17:903:37c7:b0:275:b1cf:6dd9 with SMTP id
- d9443c01a7336-290272f80dfmr189654905ad.52.1760175369651; 
- Sat, 11 Oct 2025 02:36:09 -0700 (PDT)
+ bh=EKeb/iGzDOWsByC12AQOiNclgkGRQFxlgv+9B6hX97I=;
+ b=sgOSig3N+PmoukSkEXZNxVb2tT1E4eNBF1qjkeVRHiR8iwkPAVzxFahnpM8HI/reiq
+ jxQKDdcTE0SUEtipQ1aPb/kYl4xbyT8TYzljrj9YgszvKv77zYnmpumMVgqw8FjOA0TC
+ aURgdBqZQh2Jtm4zv3wucFoDPwFk3+x45plD63rBY+olf54gwBWt411J/xUjLPjI6Qse
+ EAID5m/eZ4VA/9Os/l1vBwbvzdl6WUhZDaBWiM+c897ci4wdhVWuQvww9PiS8i88fHmV
+ q44rTTEjhB2hyLAawtgC8COmIXc10pyYngIJEUU1MTDuo+5BIaNhMdoSnatJH5tRhyW5
+ qRgg==
+X-Gm-Message-State: AOJu0YxS/IhGTGB0QmtH2fjx8beyL/k8eKCanSc9twqAhfEOg4LuNQTY
+ W6k6gDAaTJpb5zm0fmU5T1JfDVSHcjOjwzkuA1vSoJynXLPe2ccCztDd/UCTka3s
+X-Gm-Gg: ASbGnct1eoFEaU/h7sAYYqTQnlDU+N00mlNNJxFxKks0jRnO+P8tHj5DbeUMmVhJcRr
+ zM4aUll9bD6NoftnyoP2cUZuR3vqlim8YlmzhOE+oRjpK3Fh+kRi4LQVUvfdupv48iP0yvi8sup
+ eFfC7ujXFiA8T7EALP6NEUnOMFOQV7PTtlOunIbzGcMFwxjOwwr8cmVOYu2JAzhSUnyMPvUuh0p
+ 3gwU9XfAS75NkN7W2/k34geQGjjUbRKUOCJCkUMMiIaFwjw5ZQCZGLGzn+OcFrMacPe1IJqfbIF
+ Wr1yCP4JLRY7w/onfXi2flV+xO/XP6jQxvHddeov5IWud4y4QxZySHhSmmpms3x70aMbru0xJbT
+ aRsJpes2J1EiabM+WMNHTj8lzM+n4yrI6hdNfnG/bzk8yIQuSsORg4w1pZTi/Sre9JzFBAHYDlb
+ KYLoyi8wZggKK7sTP/975pXpuCXWKvWkA9rB+84oauKGn47RXwwUReiVldIHQ/W/Q3RSw=
+X-Google-Smtp-Source: AGHT+IEowp7KBd8DLiUujn0ky+sFd64Abtrp0ZxyjS0x7D53WVfZHGWKul/wrnIOhexR/PyjJAbplA==
+X-Received: by 2002:a17:90b:38cb:b0:32e:f1c:e796 with SMTP id
+ 98e67ed59e1d1-33b5138404dmr21397190a91.25.1760175597172; 
+ Sat, 11 Oct 2025 02:39:57 -0700 (PDT)
 Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
  [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-29034f32d6fsm79727615ad.96.2025.10.11.02.36.08
+ 98e67ed59e1d1-33b61a1d386sm5903867a91.5.2025.10.11.02.39.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 11 Oct 2025 02:36:09 -0700 (PDT)
+ Sat, 11 Oct 2025 02:39:56 -0700 (PDT)
 From: Akhilesh Nema <nemaakhilesh@gmail.com>
 To: buildroot@buildroot.org
-Cc: Kadambini Nema <kadambini.nema@gmail.com>,
- Akhilesh Nema <nemaakhilesh@gmail.com>
-Date: Sat, 11 Oct 2025 02:36:06 -0700
-Message-Id: <20251011093606.522412-1-nemaakhilesh@gmail.com>
+Cc: Akhilesh Nema <nemaakhilesh@gmail.com>
+Date: Sat, 11 Oct 2025 02:39:54 -0700
+Message-Id: <20251011093954.537713-1-nemaakhilesh@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1760175370; x=1760780170; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1760175597; x=1760780397; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=XIrnWNb+6HMEOuOiPqEdg4G/8E8dxrMQkXAUBf0wMUw=;
- b=AY6DoMbSfNnyz8YRsmD4Eh2VRzLVYakUJBgf0f0u18hHeBS5a3tVEX1KZ+E/aRB71o
- nEJnuP6du87E3UpArOUIaQYTN2Eciw1+SVC0p6mVKgxELDFWEKSWNHkX4615V8UFfuBS
- gtS1Oe8gzhXeQ1KdnNQNWtkB4JpkArBpl1+UP1XGMZuJgD0VwN9NiSnkKKNyooh2wxHq
- 9ebTY0mf+rRX48zscDM0Q86cQnJphieVuAlrdJEhC3EQnH+gae628+LQUwuDwgmT1N2r
- T5kZdwsNG/3TP9+BXnVi4AFJndY2Yd969qI80YmmNJRAfbbI3a5TlpeBzaDvv13ugBlh
- ua4A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=EKeb/iGzDOWsByC12AQOiNclgkGRQFxlgv+9B6hX97I=;
+ b=BBsrDTOUryHYb6DrzHMUhLLV7akLUaqboWtuxnnZzFjE0hdMMaS2E0YYRbBaPQ6gkl
+ eiu22YaMy7vHgGdM/szbGmFjEkwbWbpzqAqOOLmwYZm2pd1VTLNhcdLjBcwy2RQsi0QP
+ +F0C8q/Rq7t6kky6/YEO1PLLk5FwTJ7qJgAJxwBFe//zxyd1wc4Ge+Odk6E81RM9vlEC
+ h3RKEFYRwhN9NbNdWf0svg8Hggo/DBW1Ckfo16vMIwdt8WMYufnTF2XYfVBHYLnhzjFh
+ dcm3TlrkbIh8WHu95lSNnSPbIqvLeMmpv9N6BciXBQbjzfQr63gfNMeoiRbt3bD8Mzb3
+ 2bVw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=AY6DoMbS
-Subject: [Buildroot] [PATCH 1/1] package/ustreamer: bump version to 6.40
+ header.s=20230601 header.b=BBsrDTOU
+Subject: [Buildroot] [PATCH 1/1] package/hwdata: bump version to 0.400
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,37 +113,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
-https://github.com/pikvm/ustreamer/compare/v6.37...v6.40
+Release notes:
+https://github.com/vcrhonek/hwdata/releases/tag/v0.400
 
 Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 ---
- package/ustreamer/ustreamer.hash | 2 +-
- package/ustreamer/ustreamer.mk   | 2 +-
+ package/hwdata/hwdata.hash | 2 +-
+ package/hwdata/hwdata.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ustreamer/ustreamer.hash b/package/ustreamer/ustreamer.hash
-index 30c8735901..44e73f8b50 100644
---- a/package/ustreamer/ustreamer.hash
-+++ b/package/ustreamer/ustreamer.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  b134bd9e291d2e7222e135f9b1b22f89ebf7c78c9c22333a4046a21365f87b2e  ustreamer-6.37.tar.gz
-+sha256  576d40d14241945926876ec1b1dd164bc59a03076b325fc1dfa07094edae4b1b  ustreamer-6.40.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
-diff --git a/package/ustreamer/ustreamer.mk b/package/ustreamer/ustreamer.mk
-index abbeac2382..18f354d3dd 100644
---- a/package/ustreamer/ustreamer.mk
-+++ b/package/ustreamer/ustreamer.mk
+diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
+index db9a789dec..20760d53d5 100644
+--- a/package/hwdata/hwdata.hash
++++ b/package/hwdata/hwdata.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  74872355e14d5ddc48a0f63036227ffb5f7796a3012c6377ac1fc7432ffe2b41  hwdata-0.399.tar.gz
++sha256  05d96821aaae04be4e684eaf9ac22e08efe646321bc64be323b91b66e7e2095c  hwdata-0.400.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
+diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
+index ace30889f0..2fef94a595 100644
+--- a/package/hwdata/hwdata.mk
++++ b/package/hwdata/hwdata.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--USTREAMER_VERSION = 6.37
-+USTREAMER_VERSION = 6.40
- USTREAMER_SITE = $(call github,pikvm,ustreamer,v$(USTREAMER_VERSION))
- USTREAMER_LICENSE = GPL-3.0+
- USTREAMER_LICENSE_FILES = LICENSE
+-HWDATA_VERSION = 0.399
++HWDATA_VERSION = 0.400
+ HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
+ HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
+ HWDATA_LICENSE_FILES = COPYING LICENSE
 -- 
 2.25.1
 
