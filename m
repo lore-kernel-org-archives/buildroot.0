@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9359ECCD184
-	for <buildroot@archiver.kernel.org>; Sat, 11 Oct 2025 21:47:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C55CCCA476
+	for <buildroot@archiver.kernel.org>; Sat, 11 Oct 2025 21:47:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4EEBC405F0;
-	Sat, 11 Oct 2025 21:47:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B84FC81346;
+	Sat, 11 Oct 2025 21:47:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fEySMszbthP1; Sat, 11 Oct 2025 21:47:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NCvroeZNSKVK; Sat, 11 Oct 2025 21:47:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54864405FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB0038132E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 54864405FB;
-	Sat, 11 Oct 2025 21:47:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AB0038132E;
+	Sat, 11 Oct 2025 21:47:27 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 36858195
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 21:47:22 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 812B6BC
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 21:47:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1D355405FD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 28B79405F0
  for <buildroot@buildroot.org>; Sat, 11 Oct 2025 21:47:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jPvsgTWo3rnH for <buildroot@buildroot.org>;
+ id EP_BnUs-ePXR for <buildroot@buildroot.org>;
  Sat, 11 Oct 2025 21:47:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 300C8405F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 535D4405FB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 300C8405F0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 535D4405FB
  for <buildroot@buildroot.org>; Sat, 11 Oct 2025 21:47:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2126787063; Sat, 11 Oct 2025 21:47:21 +0000 (UTC)
+ id 3209B8704F; Sat, 11 Oct 2025 21:47:21 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 11 Oct 2025 23:46:00 +0200
+Date: Sat, 11 Oct 2025 23:46:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dba52585ab91e2f00350aad6c52c6e8b325aa9e7
-X-Git-Newrev: e5501d7b1a98c1e760f7569472d01491b21ffefa
+X-Git-Oldrev: e5501d7b1a98c1e760f7569472d01491b21ffefa
+X-Git-Newrev: 18a4b8b193979c24aa98bfbb3090504ae2831d4c
 X-Patchwork-Hint: ignore
-Message-Id: <20251011214721.2126787063@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/website/{download,
- news}.html: update for 2025.02.7, 2025.05.3 and 2025.08.1
+Message-Id: <20251011214721.3209B8704F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] CHANGES: update for 2025.02.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,183 +65,96 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5501d7b1a98c1e760f7569472d01491b21ffefa
+commit: https://git.buildroot.net/buildroot/commit/?id=18a4b8b193979c24aa98bfbb3090504ae2831d4c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit b65f78267e518df8fa8a5e970943f81573b7a9fa)
 ---
- docs/website/download.html | 36 ++++++++++++++--------------
- docs/website/news.html     | 58 ++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 76 insertions(+), 18 deletions(-)
+ CHANGES | 69 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 69 insertions(+)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 614a763951..5bb7cf6987 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -49,50 +49,50 @@
-           <th>2025.08.x</th>
-           <td>December 2025</td>
-           <td>
--            2025.08<br/>
--            <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.08/CHANGES">
-+            2025.08.1<br/>
-+            <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.08.1/CHANGES">
-               Changelog
-             </a>
-           </td>
-           <td>2025-09-07</td>
-           <td>
--            <a href="/downloads/buildroot-2025.08.tar.gz">
-+            <a href="/downloads/buildroot-2025.08.1.tar.gz">
-               <img src="images/zip.png" width="24" alt="">
-               .tar.gz
-             </a><br/>
--            <a href="/downloads/buildroot-2025.08.tar.gz.sign">[PGP sig]</a>
-+            <a href="/downloads/buildroot-2025.08.1.tar.gz.sign">[PGP sig]</a>
-           </td>
-           <td>
--            <a href="/downloads/buildroot-2025.08.tar.xz">
-+            <a href="/downloads/buildroot-2025.08.1.tar.xz">
-               <img src="images/package.png" width="24" alt="">
-               .tar.xz
-             </a><br/>
--            <a href="/downloads/buildroot-2025.08.tar.xz.sign">[PGP sig]</a>
-+            <a href="/downloads/buildroot-2025.08.1.tar.xz.sign">[PGP sig]</a>
-           </td>
-         </tr>
-           <th>Stable</th>
-           <th>2025.05.x</th>
-           <td>September 2025</td>
-           <td>
--            2025.05.2<br/>
--            <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.05.2/CHANGES">
-+            2025.05.3<br/>
-+            <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.05.3/CHANGES">
-               Changelog
-             </a>
-           </td>
-           <td>2025-09-09</td>
-           <td>
--            <a href="/downloads/buildroot-2025.05.2.tar.gz">
-+            <a href="/downloads/buildroot-2025.05.3.tar.gz">
-               <img src="images/zip.png" width="24" alt="">
-               .tar.gz
-             </a><br/>
--            <a href="/downloads/buildroot-2025.05.2.tar.gz.sign">[PGP sig]</a>
-+            <a href="/downloads/buildroot-2025.05.3.tar.gz.sign">[PGP sig]</a>
-           </td>
-           <td>
--            <a href="/downloads/buildroot-2025.05.2.tar.xz">
-+            <a href="/downloads/buildroot-2025.05.3.tar.xz">
-               <img src="images/package.png" width="24" alt="">
-               .tar.xz
-             </a><br/>
--            <a href="/downloads/buildroot-2025.05.2.tar.xz.sign">[PGP sig]</a>
-+            <a href="/downloads/buildroot-2025.05.3.tar.xz.sign">[PGP sig]</a>
-           </td>
-         </tr>
-         <tr>
-@@ -100,25 +100,25 @@
-           <th>2025.02.x</th>
-           <td>March 2028</td>
-           <td>
--            2025.02.6<br/>
--            <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.02.6/CHANGES">
-+            2025.02.7<br/>
-+            <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.02.7/CHANGES">
-               Changelog
-             </a>
-           </td>
-           <td>2025-09-09</td>
-           <td>
--            <a href="/downloads/buildroot-2025.02.6.tar.gz">
-+            <a href="/downloads/buildroot-2025.02.7.tar.gz">
-               <img src="images/zip.png" width="24" alt="">
-               .tar.gz
-             </a><br/>
--            <a href="/downloads/buildroot-2025.02.6.tar.gz.sign">[PGP sig]</a>
-+            <a href="/downloads/buildroot-2025.02.7.tar.gz.sign">[PGP sig]</a>
-           </td>
-           <td>
--            <a href="/downloads/buildroot-2025.02.6.tar.xz">
-+            <a href="/downloads/buildroot-2025.02.7.tar.xz">
-               <img src="images/package.png" width="24" alt="">
-               .tar.xz
-             </a><br/>
--            <a href="/downloads/buildroot-2025.02.6.tar.xz.sign">[PGP sig]</a>
-+            <a href="/downloads/buildroot-2025.02.7.tar.xz.sign">[PGP sig]</a>
-           </td>
-         </tr>
-       </table>
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 7276e15eca..dd290c33fc 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,64 @@
- <h2>News</h2>
- <ul class="timeline">
+diff --git a/CHANGES b/CHANGES
+index 0261a8cc47..cb5cd3368b 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -388,6 +388,75 @@
+ 	- netsnmp: unexpected header length in /proc/net/snmp...
+ 	  https://gitlab.com/buildroot.org/buildroot/-/issues/110
  
-+  <li class="timeline">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2025.02.7 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>11 October 2025</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2025.02.7 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2025.02.6 release. See the
-+	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.02.7/CHANGES">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="https://lore.kernel.org/buildroot/45aef3ee-9f95-4250-b2b0-dc291fad861b@rnout.be/T/#u">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2025.02.7.tar.xz">2025.02.7 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
++2025.02.7, released October 11, 2025
 +
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2025.05.3 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>11 October 2025</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2025.05.3 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2025.05.2 release. See the
-+	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.05.3/CHANGES">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="https://lore.kernel.org/buildroot/7bed9b2e-a9d3-476b-84d6-61134e2f726f@rnout.be/T/#u">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2025.05.3.tar.xz">2025.05.3 release</a>.
-+	  This is the last release of the 2025.05 stable series.</p>
-+      </div>
-+    </div>
-+  </li>
++    Important / security related fixes:
 +
-+  <li class="timeline">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2025.08.1 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>11 October 2025</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2025.08.1 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2025.08 release. See the
-+	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.08.1/CHANGES">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="https://lore.kernel.org/buildroot/891a8699-17da-4e43-a300-2a82c61e04c8@rnout.be/T/#u">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2025.08.1.tar.xz">2025.08.1 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
++    - asterisk: CVE-2024-42491
++    - atop: CVE-2025-31160
++    - civetweb: CVE-2025-55763
++    - cjson: CVE-2025-57052
++    - connman: CVE-2025-32366, CVE-2025-32743
++    - cups: CVE-2025-58060, CVE-2025-58364
++    - exiv2: CVE-2023-44398, CVE-2024-24826, CVE-2024-25112, CVE-2024-39695,
++             CVE-2025-26623, CVE-2025-54080, CVE-2025-55304
++    - expat: CVE-2025-59375
++    - fastd: CVE-2025-24356
++    - fetchmail: CVE-2025-61962
++    - ghostscript: CVE-2025-59798, CVE-2025-59799, CVE-2025-59800, CVE-2025-59801
++    - imagemagick: CVE-2023-5341, CVE-2025-55004, CVE-2025-55005, CVE-2025-55160
++    - intel-microcode: CVE-2025-20053, CVE-2025-20109, CVE-2025-22839,
++                       CVE-2025-22840, CVE-2025-22889, CVE-2025-26403
++    - jasper: CVE-2023-51257, CVE-2025-8835
++    - libcurl: CVE-2025-10148, CVE-2025-9086
++    - libopenssl: CVE-2025-9230, CVE-2025-9231, CVE-2025-9232
++    - libssh: CVE-2025-8114, CVE-2025-8277
++    - lua: CVE-2014-5461
++    - opencv4: CVE-2025-53644
++    - pcre2: CVE-2025-58050
++    - poco: CVE-2025-6375
++    - postgresql: CVE-2025-8713, CVE-2025-8714, CVE-2025-8715
++    - python-django: CVE-2025-57833, CVE-2025-59681, CVE-2025-59682
++    - python-flask-cors: CVE-2024-6839, CVE-2024-6844, CVE-2024-6866
++    - python-pip: CVE-2025-8869
++    - raptor: CVE-2024-57822, CVE-2024-57823
++    - sqlite: CVE-2025-6965
++    - syslog-ng: CVE-2024-47619
++    - tiff: CVE-2024-13978, CVE-2025-8961, CVE-2025-9165
++    - udisks: CVE-2025-8067
++    - webkitgtk: CVE-2025-24189, CVE-2025-31273, CVE-2025-31278, CVE-2025-43211,
++      CVE-2025-43212, CVE-2025-43216, CVE-2025-43227, CVE-2025-43228,
++      CVE-2025-43240, CVE-2025-43265, CVE-2025-6558
++    - wireshark: CVE-2025-5601
 +
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++    Updated / fixed packages: asterisk, atop, boinc, civetweb, cjson,
++    connman, cpp-httplib, cups, cutekeyboard, ecryptfs-utils, exiv2, expat,
++    fastd, fetchmail, ghostscript, gnupg2, gnuplot, htpdate, imagemagick,
++    intel-microcode, iputils, jasper, jose, kodi, libcurl, libopenssl,
++    libssh, libxkbcommon, libxmlrpc, linux-firmware, linux-headers,
++    linuxptp, llvm-project, lua, luaossl, luvi, mariadb, micropython,
++    modsecurity2, opencv4, opencv4-contrib, openjpeg, pango, pcre2, poco,
++    postgresql, python-certifi, python-cryptography, python-django,
++    python-flask-cors, python-pip, python-pyopenssl, python-pytz, raptor,
++    rtl_433, ruby, samba4, sqlite, syslog-ng, sysprof, tiff, tor, uclibc,
++    udisks, upx, webkitgtk, wireshark, wlroots, x11r7, zziplib
++
++    Removed package: netstat-nat
++
++    Boards updated / fixed: beagleboneai, qemu/{x86, x86_64}, ti_am62x_sk
++    versal, zedboard
++
++    Boards removed: roseapplepi, atmel_sama5d3xek, at91sam9260eknf
++
++    Test Improvements:
++
++    - TestSWIPL: increase timeout value
++    - TestOpenJdk: remove stime() function call
++    - test_hardening: update toolchain to aarch64 for checksec tests
++    - test_docker_compose: update kernel & VM CPU
++    - TestZfsUclibc: use internal backend for uClibc-ng toolchain
++    - GitTestBase: remove git daemon due to Gitlab-CI security settings
++
+ 2025.02.6, released September 09, 2025
+ 
+ 	Important / security related fixes:
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
