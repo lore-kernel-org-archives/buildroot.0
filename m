@@ -1,105 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8E1ACCD184
-	for <buildroot@archiver.kernel.org>; Sat, 11 Oct 2025 14:15:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D835CCA476
+	for <buildroot@archiver.kernel.org>; Sat, 11 Oct 2025 18:11:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 52A50408A2;
-	Sat, 11 Oct 2025 14:15:58 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7jhtNHi0Agrs; Sat, 11 Oct 2025 14:15:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D3464086E
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6D3464086E;
-	Sat, 11 Oct 2025 14:15:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 24EF612B
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 14:15:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 15FB960675
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 14:15:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93BCC60B13;
+	Sat, 11 Oct 2025 18:11:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xRtECPTpZNJl for <buildroot@buildroot.org>;
- Sat, 11 Oct 2025 14:15:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62d; helo=mail-ej1-x62d.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 177FF605AA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 177FF605AA
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 177FF605AA
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 14:15:54 +0000 (UTC)
-Received: by mail-ej1-x62d.google.com with SMTP id
- a640c23a62f3a-b463f986f80so659793766b.2
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 07:15:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1760192153; x=1760796953;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=IS1VVsO+DKvsjFZnQP+uI0dtkIf2J/Z0Dz6kanZaNQw=;
- b=H7q+7GmP4ZOOezreOmpysPvgTwONpWMUplgdbS6BEciy6YASLyldXIqOzS5RZXFqQj
- NdbLUcK2VCWJ7n7drv50/DXrh4p0mhcO74RhuP0o7C4oHKEN2NqSCSeHQwoFchH4AJom
- UjaeTumXIsxwEzYz1eF8aTn+TVIWZTtuSut6Vsyy3Svek5XLJmslZYcif5w7Zfhof3Ni
- yoEXbWOSMn3mwHdVRTaCLimTpu8tuNzgJw1MFor34IzkVlkhib9EX6PgG34JJj6YlU+N
- DUFHbhnvcEzEuJFhRtG7xh/gLEg3ffPmqX3ZN7W408v54RELeqfV3CCfMldvfPHSCKq9
- Oo4A==
-X-Gm-Message-State: AOJu0YyxCWDCHyaQUYiTy29OJ7WCLbhKLgvig799ur+bFocukdTOxtnf
- h+nhELaSpeBfIDPJBytPgcu71nYhDUKvJgT3cKZO766HzrSqk4WK9nAIRpqlI+eNpIqXtYiFbqv
- /szjZ6hc=
-X-Gm-Gg: ASbGncsZwQLe0wnOb1yAzn9TkPqdjSjCet0ECTp6gTXPqk7cpUs2XjAHxss3+1TFZrS
- RL0MdltCNI7SyGzOQu+eVMVLQrXOVD0JbVckLNs3eEsd26EaGJrb6qqe/zlnWLGNfPpr6JCQx9B
- gTktPG4bppl7JWBa18Kl3QyqFOczQVnj0F5H07KbzyX6YlGGRKril2EEieg7Y9XqRMV0GmXN1yN
- FGiz2QMrVcPFzfLacg7HtUJVn/w7E7xB3UO1mqx4LC7qdfeO7ZlURrC5il3Ch6h/uPqAJUC0ov2
- ojf/opbAZg0aIFA60EwCx5xMbkKunfJCYMKRbeVlN0ZFETKK9My9/yAk9qDJrcBoXNwkwrSVT3N
- VUCL2f0u1oIjgtTqYjB7lHkFfqvEOQaUyEJTnz1qATx9NwHDvKR9yAr7YYDO8jLXDMs7RTHBiFF
- OTfOWltjMsfYEopBv0b99xJxuzJWnnfPxMT7e9a4L9viGow0UC+njlHQ9/kw7qtWIz2VhJt/6uc
- tYlq5H4YjqbVkvyWRT4
-X-Google-Smtp-Source: AGHT+IHaiPgSe0fZhNDcPS5DT3AFpCWO1bjtD/eJSkae3SsdhUZiPI8poLuK/aLFGFFMFBjDj+DwnQ==
-X-Received: by 2002:a17:906:c150:b0:b3e:6091:2c7d with SMTP id
- a640c23a62f3a-b50aa89b304mr1719587966b.27.1760192152630; 
- Sat, 11 Oct 2025 07:15:52 -0700 (PDT)
-Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
- (host-79-25-27-158.retail.telecomitalia.it. [79.25.27.158])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b55d9a4054fsm491007966b.89.2025.10.11.07.15.51
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 11 Oct 2025 07:15:52 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Rahul Bedarkar <rahulbedarkar89@gmail.com>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Sat, 11 Oct 2025 16:15:49 +0200
-Message-ID: <20251011141549.2045266-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+ id SpDAGfRJpjTw; Sat, 11 Oct 2025 18:11:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 584EE60B01
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 584EE60B01;
+	Sat, 11 Oct 2025 18:11:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8E2EF119
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 18:11:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 73A9880C3D
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 18:11:10 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3gXD-dmgxwvB for <buildroot@buildroot.org>;
+ Sat, 11 Oct 2025 18:11:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0548180C34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0548180C34
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0548180C34
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 18:11:08 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 50FAA78034E;
+ Sat, 11 Oct 2025 20:11:02 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 11 Oct 2025 20:11:02 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1760192153; x=1760796953;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=IS1VVsO+DKvsjFZnQP+uI0dtkIf2J/Z0Dz6kanZaNQw=;
- b=B0J/bTHhNkUoYIiQ/if9aKN4HfeGJEzq96TlgsW9fIR77eQoYFADmBRog8fTMSwMMm
- TCgDDkyUDtV7BWwX30ZrGbmUz3WBpw++XONkbFusPsa9HXiHsctkSnLu0NjLCiUPTn7K
- 1zio7Ljw1TI5nxbNMtjsI4ZVNuUeK6j6merWE=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=B0J/bTHh
-Subject: [Buildroot] [PATCH 1/1] package/gssdp: bump to version 1.6.4
+Date: Sat, 11 Oct 2025 20:11:02 +0200
+To: Fiona Klute <fiona.klute@gmx.de>
+Cc: buildroot@buildroot.org, Antoine Tenart <atenart@kernel.org>
+In-Reply-To: <20251010222122.1911651-1-fiona.klute@gmx.de>
+References: <20251010222122.1911651-1-fiona.klute@gmx.de>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <f6a8556f0a959ef174579d5100063b9a@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1760206264;
+ bh=VrD79uT8R6tSvVpFjmNGr6Ml8VeTrc9qqrdTkyc/m5k=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=PJsUgN/Q/yIVdCW6WsDW2C/aVkZKlUe0DA9I0Ie9ZqVt0qGQRBsYRobYXV8mMBTEW
+ xJLu8zMJFNJBiSDiXLkVW6ncXAnECfCzZEWnFvdK2fsYEXmOucIDmOG6/veq0av0yh
+ EHg1WBsTKXMBVRsqWtquDDSOiiDwYLu+ag/GevoTsH27uUX8yLrP0AKBWV1IfuSFVP
+ OUPeX90zMeK5F5doJJCdpN1gbXh6zqVFCa1aoarepniZ3Z7DG5+FCwklCveJgQclHD
+ o2cHof+XcHAQKLVpiNXG9HBFFEcfhzIrIjwKvMV8TTBRKM29LThpaAVbuzF5AjhTS7
+ h/Gf+HeWuNUMg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=PJsUgN/Q
+Subject: Re: [Buildroot] [PATCH 1/2] package/refpolicy: add option to set
+ policy booleans
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,48 +82,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://gitlab.gnome.org/GNOME/gssdp/-/blob/gssdp-1.6.4/NEWS
+Hi Fiona,
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
- package/gssdp/gssdp.hash | 4 ++--
- package/gssdp/gssdp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Thanks for the patch. I have a comment, see below.
 
-diff --git a/package/gssdp/gssdp.hash b/package/gssdp/gssdp.hash
-index 06bf51090f0c..eabbf6e7c714 100644
---- a/package/gssdp/gssdp.hash
-+++ b/package/gssdp/gssdp.hash
-@@ -1,5 +1,5 @@
--# Hash from: https://download.gnome.org/sources/gssdp/1.6/gssdp-1.6.3.sha256sum:
--sha256  2fedb5afdb22cf14d5498a39a773ca89788a250fcf70118783df821e1f3f3446  gssdp-1.6.3.tar.xz
-+# Hash from: https://download.gnome.org/sources/gssdp/1.6/gssdp-1.6.4.sha256sum:
-+sha256  ff97fdfb7f561d3e6813b4f6a2145259e7c2eff43cc0e63f3fd031d0b6266032  gssdp-1.6.4.tar.xz
- 
- # Hash for license file:
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
-index 3b446496ea23..d8c34760d37f 100644
---- a/package/gssdp/gssdp.mk
-+++ b/package/gssdp/gssdp.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GSSDP_VERSION_MAJOR = 1.6
--GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).3
-+GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).4
- GSSDP_SOURCE = gssdp-$(GSSDP_VERSION).tar.xz
- GSSDP_SITE = https://download.gnome.org/sources/gssdp/$(GSSDP_VERSION_MAJOR)
- GSSDP_LICENSE = LGPL-2.1+
--- 
-2.43.0
+On 11/10/2025 00:21, Fiona Klute via buildroot wrote:
+> Policy booleans allow adjusting certain policy rules at runtime
+> (including whether changing policy booleans is allowed). The new
+> option allows setting their defaults at build time.
+> 
+> A monolithic policy (like built by package/refpolicy) does not support
+> persistent changes to policy booleans, so changing the defaults is
+> required to make changes across boots. Adjusting policy/booleans.conf
+> after "make conf" is intended for that purpose [1, 2].
+> 
+> [1] 
+> https://github.com/SELinuxProject/refpolicy/pull/355#issuecomment-792758725
+> [2] 
+> https://github.com/SELinuxProject/refpolicy/blob/4d97523c71603b12e92cf1b80cd0e01ac75bc067/README#L186-L191
+> 
+> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+> ---
+>  package/refpolicy/Config.in    | 13 +++++++++++++
+>  package/refpolicy/refpolicy.mk | 10 ++++++++++
+>  2 files changed, 23 insertions(+)
+> 
+[...]
+> diff --git a/package/refpolicy/refpolicy.mk 
+> b/package/refpolicy/refpolicy.mk
+> index 127faf793a..2b8a7c7e24 100644
+> --- a/package/refpolicy/refpolicy.mk
+> +++ b/package/refpolicy/refpolicy.mk
+> @@ -107,6 +107,15 @@ define REFPOLICY_CONFIGURE_ENABLEAUDIT
+>  endef
+>  endif
+> 
+> +# Override defaults for policy booleans. name=(true|false) will result
+> +# in the given value, just a name implies "true".
+> +define REFPOLICY_CONFIGURE_BOOLEANS
+> +	$(foreach b,$(call qstrip,$(BR2_REFPOLICY_SET_BOOLEANS)),
+> +		$(let name value rest,$(subst =, ,$(b)) true,
 
+This "$(let ...)" function was introduced in GNU Make 4.4.
+See:
+https://cgit.git.savannah.gnu.org/cgit/make.git/tree/NEWS?h=4.4#n107
+
+The Buildroot reference Docker image has GNU Make 4.3.
+This can be checked with "utils/docker-run make --version".
+
+So this construct is not working with GNU Make < 4.4.
+
+Buildroot checks to have at least GNU Make 3.81:
+https://gitlab.com/buildroot.org/buildroot/-/blob/2025.08/Makefile#L103
+I'm not sure how well this old GNU Make version is tested, though.
+
+Could you send an updated rewriting this macro without using
+this "let" function, please?
+
+I also suggest to extend the selinux runtime test with a new case:
+https://gitlab.com/buildroot.org/buildroot/-/blob/2025.08/support/testing/tests/core/test_selinux.py
+to check we can change a SELinux bool with this new
+BR2_REFPOLICY_SET_BOOLEANS config. Running such a test inside the
+Docker image would have detected the GNU Make version issue.
+
+> +			$(SED) "/^$(name) =/c\\$(name) = $(value)" 
+> $(@D)/policy/booleans.conf
+> +	))
+> +endef
+> +
+>  define REFPOLICY_CONFIGURE_CMDS
+>  	$(SED) "/OUTPUT_POLICY/c\OUTPUT_POLICY = $(REFPOLICY_POLICY_VERSION)" 
+> \
+>  		$(@D)/build.conf
+> @@ -119,6 +128,7 @@ define REFPOLICY_CONFIGURE_CMDS
+>  	$(REFPOLICY_MAKE) -C $(@D) bare conf
+>  	$(REFPOLICY_CONFIGURE_ENABLEAUDIT)
+>  	$(REFPOLICY_CONFIGURE_MODULES)
+> +	$(REFPOLICY_CONFIGURE_BOOLEANS)
+>  endef
+> 
+>  define REFPOLICY_BUILD_CMDS
+> --
+> 2.51.0
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
