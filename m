@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C55CCCA476
-	for <buildroot@archiver.kernel.org>; Sat, 11 Oct 2025 21:47:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 985D6CCD184
+	for <buildroot@archiver.kernel.org>; Sat, 11 Oct 2025 21:47:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B84FC81346;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 622E740D11;
 	Sat, 11 Oct 2025 21:47:28 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NCvroeZNSKVK; Sat, 11 Oct 2025 21:47:27 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB0038132E
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AB0038132E;
-	Sat, 11 Oct 2025 21:47:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 812B6BC
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 21:47:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 28B79405F0
- for <buildroot@buildroot.org>; Sat, 11 Oct 2025 21:47:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EP_BnUs-ePXR for <buildroot@buildroot.org>;
+ id mGbCotG6QLs9; Sat, 11 Oct 2025 21:47:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7A2840A1E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A7A2840A1E;
+	Sat, 11 Oct 2025 21:47:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4F789BC
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 21:47:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 346FE60A89
+ for <buildroot@buildroot.org>; Sat, 11 Oct 2025 21:47:22 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WXzQihyqei9Y for <buildroot@buildroot.org>;
  Sat, 11 Oct 2025 21:47:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 535D4405FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 78D6360BE1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 535D4405FB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 78D6360BE1
  for <buildroot@buildroot.org>; Sat, 11 Oct 2025 21:47:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3209B8704F; Sat, 11 Oct 2025 21:47:21 +0000 (UTC)
+ id 50D1387064; Sat, 11 Oct 2025 21:47:21 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 11 Oct 2025 23:46:02 +0200
+Date: Sat, 11 Oct 2025 23:46:05 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e5501d7b1a98c1e760f7569472d01491b21ffefa
-X-Git-Newrev: 18a4b8b193979c24aa98bfbb3090504ae2831d4c
+X-Git-Oldrev: 7e43f888595bc20ce4b59334b5fb406473173f57
+X-Git-Newrev: acecedc001185b0258f6c8d84f8827a3ebe382f4
 X-Patchwork-Hint: ignore
-Message-Id: <20251011214721.3209B8704F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] CHANGES: update for 2025.02.7
+Message-Id: <20251011214721.50D1387064@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] CHANGES: update for 2025.08.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,41 +65,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18a4b8b193979c24aa98bfbb3090504ae2831d4c
+commit: https://git.buildroot.net/buildroot/commit/?id=acecedc001185b0258f6c8d84f8827a3ebe382f4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit b65f78267e518df8fa8a5e970943f81573b7a9fa)
+(cherry picked from commit 8d941a2f5513f4aa1e4bfa431927488119eb5736)
 ---
- CHANGES | 69 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 69 insertions(+)
+ CHANGES | 56 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
 diff --git a/CHANGES b/CHANGES
-index 0261a8cc47..cb5cd3368b 100644
+index 97fd0b3db8..ce58f96059 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -388,6 +388,75 @@
- 	- netsnmp: unexpected header length in /proc/net/snmp...
- 	  https://gitlab.com/buildroot.org/buildroot/-/issues/110
- 
-+2025.02.7, released October 11, 2025
+@@ -1,3 +1,59 @@
++2025.08.1, released October 11, 2025
 +
 +    Important / security related fixes:
 +
-+    - asterisk: CVE-2024-42491
 +    - atop: CVE-2025-31160
 +    - civetweb: CVE-2025-55763
 +    - cjson: CVE-2025-57052
 +    - connman: CVE-2025-32366, CVE-2025-32743
 +    - cups: CVE-2025-58060, CVE-2025-58364
-+    - exiv2: CVE-2023-44398, CVE-2024-24826, CVE-2024-25112, CVE-2024-39695,
-+             CVE-2025-26623, CVE-2025-54080, CVE-2025-55304
 +    - expat: CVE-2025-59375
 +    - fastd: CVE-2025-24356
-+    - fetchmail: CVE-2025-61962
-+    - ghostscript: CVE-2025-59798, CVE-2025-59799, CVE-2025-59800, CVE-2025-59801
-+    - imagemagick: CVE-2023-5341, CVE-2025-55004, CVE-2025-55005, CVE-2025-55160
++    - fetchmail: CVE number pending
++    - ghostscript: CVE-2025-59798, CVE-2025-59799, CVE-2025-59800,
++                   CVE-2025-59801
 +    - intel-microcode: CVE-2025-20053, CVE-2025-20109, CVE-2025-22839,
 +                       CVE-2025-22840, CVE-2025-22889, CVE-2025-26403
 +    - jasper: CVE-2023-51257, CVE-2025-8835
@@ -112,49 +106,39 @@ index 0261a8cc47..cb5cd3368b 100644
 +    - poco: CVE-2025-6375
 +    - postgresql: CVE-2025-8713, CVE-2025-8714, CVE-2025-8715
 +    - python-django: CVE-2025-57833, CVE-2025-59681, CVE-2025-59682
-+    - python-flask-cors: CVE-2024-6839, CVE-2024-6844, CVE-2024-6866
 +    - python-pip: CVE-2025-8869
 +    - raptor: CVE-2024-57822, CVE-2024-57823
-+    - sqlite: CVE-2025-6965
 +    - syslog-ng: CVE-2024-47619
 +    - tiff: CVE-2024-13978, CVE-2025-8961, CVE-2025-9165
-+    - udisks: CVE-2025-8067
-+    - webkitgtk: CVE-2025-24189, CVE-2025-31273, CVE-2025-31278, CVE-2025-43211,
-+      CVE-2025-43212, CVE-2025-43216, CVE-2025-43227, CVE-2025-43228,
-+      CVE-2025-43240, CVE-2025-43265, CVE-2025-6558
-+    - wireshark: CVE-2025-5601
 +
-+    Updated / fixed packages: asterisk, atop, boinc, civetweb, cjson,
-+    connman, cpp-httplib, cups, cutekeyboard, ecryptfs-utils, exiv2, expat,
-+    fastd, fetchmail, ghostscript, gnupg2, gnuplot, htpdate, imagemagick,
-+    intel-microcode, iputils, jasper, jose, kodi, libcurl, libopenssl,
-+    libssh, libxkbcommon, libxmlrpc, linux-firmware, linux-headers,
-+    linuxptp, llvm-project, lua, luaossl, luvi, mariadb, micropython,
-+    modsecurity2, opencv4, opencv4-contrib, openjpeg, pango, pcre2, poco,
-+    postgresql, python-certifi, python-cryptography, python-django,
-+    python-flask-cors, python-pip, python-pyopenssl, python-pytz, raptor,
-+    rtl_433, ruby, samba4, sqlite, syslog-ng, sysprof, tiff, tor, uclibc,
-+    udisks, upx, webkitgtk, wireshark, wlroots, x11r7, zziplib
 +
-+    Removed package: netstat-nat
++    Updated / fixed packages: asterisk, boinc, boot-wrapper-aarch64, c-icap,
++    chocolate-doom, cjson, cpp-httplib, cutekeyboard, docker-engine, fatcat,
++    fluent-bit, gnupg2, gnuplot, htpdate, iputils, kodi, libfreeimage,
++    libopenssl, libselinux, libsemanage, libxkbcommon, libxmlrpc,
++    linux-firmware, linuxptp, llvm, luaossl, luvi, mariadb, mdio-tools,
++    modsecurity2, openjpeg, pango, php-lua, policycoreutils,
++    python-aiohttp-session, python-certifi, python-cryptography,
++    python-flask-cors, python-pytz, python-trove-classifiers,
++    python-typing-extensions, rtl8723bu, rtl8723ds, rtl8821cu, rtl8822cs,
++    rtl_433, ruby, samba4, sysprof, ti-k3-boot-firmware, tiff, tor, uboot,
++    uclibc, upx, vulkan-headers, webkitgtk, wilc-driver, wlroots, x11r7,
++    xilinx-embeddedsw, xilinx-prebuilt, xlib_xtrans, xr819-xradio, zziplib
 +
-+    Boards updated / fixed: beagleboneai, qemu/{x86, x86_64}, ti_am62x_sk
++    Boards updated / fixed: beagleboneai, loongarch64-efi, qemu (all),
 +    versal, zedboard
 +
-+    Boards removed: roseapplepi, atmel_sama5d3xek, at91sam9260eknf
++    Boards removed: at91sam9260eknf, atmel_sama5d3xek, roseapplepi
 +
 +    Test Improvements:
 +
-+    - TestSWIPL: increase timeout value
-+    - TestOpenJdk: remove stime() function call
-+    - test_hardening: update toolchain to aarch64 for checksec tests
 +    - test_docker_compose: update kernel & VM CPU
 +    - TestZfsUclibc: use internal backend for uClibc-ng toolchain
 +    - GitTestBase: remove git daemon due to Gitlab-CI security settings
 +
- 2025.02.6, released September 09, 2025
+ 2025.08, released September 7th, 2025
  
- 	Important / security related fixes:
+ 	Fixes all over the tree.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
