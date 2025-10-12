@@ -4,70 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA818CCD184
-	for <buildroot@archiver.kernel.org>; Sun, 12 Oct 2025 16:49:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04891CCD184
+	for <buildroot@archiver.kernel.org>; Sun, 12 Oct 2025 16:49:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 92505605D8;
-	Sun, 12 Oct 2025 16:49:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CEB20607B3;
+	Sun, 12 Oct 2025 16:49:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G68RUh_uzL_3; Sun, 12 Oct 2025 16:49:04 +0000 (UTC)
+ id uMLH6o9bdoVM; Sun, 12 Oct 2025 16:49:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8DC86061B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0442160634
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B8DC86061B;
-	Sun, 12 Oct 2025 16:49:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B2423BC
- for <buildroot@buildroot.org>; Sun, 12 Oct 2025 16:49:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0442160634;
+	Sun, 12 Oct 2025 16:49:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D9E722A8
+ for <buildroot@buildroot.org>; Sun, 12 Oct 2025 16:49:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8BE9B81083
- for <buildroot@buildroot.org>; Sun, 12 Oct 2025 16:49:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CBDAA40067
+ for <buildroot@buildroot.org>; Sun, 12 Oct 2025 16:49:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x-nrnerqxZ16 for <buildroot@buildroot.org>;
- Sun, 12 Oct 2025 16:49:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7Pg1XT7TSUWi for <buildroot@buildroot.org>;
+ Sun, 12 Oct 2025 16:49:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9F4738107D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F4738107D
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C33C140063
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C33C140063
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9F4738107D
- for <buildroot@buildroot.org>; Sun, 12 Oct 2025 16:49:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C33C140063
+ for <buildroot@buildroot.org>; Sun, 12 Oct 2025 16:49:24 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a02db.dip0.t-ipconnect.de [91.58.2.219])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id DECBFA4C63B2
- for <buildroot@buildroot.org>; Sun, 12 Oct 2025 18:48:58 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:58192)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id AC70FA4C63B2
+ for <buildroot@buildroot.org>; Sun, 12 Oct 2025 18:49:22 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:37926)
  by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1v7zFi-000000001wl-17bR
- for buildroot@buildroot.org; Sun, 12 Oct 2025 16:48:58 +0000
+ (envelope-from <bernd@kuhls.net>) id 1v7zG5-00000000218-4BD7
+ for buildroot@buildroot.org; Sun, 12 Oct 2025 16:49:22 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 12 Oct 2025 18:48:58 +0200
-Message-ID: <20251012164858.3447839-1-bernd@kuhls.net>
+Date: Sun, 12 Oct 2025 18:49:22 +0200
+Message-ID: <20251012164922.3447879-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: -
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202506031021; t=1760287738;
- bh=Xqu9A18yKOsAbzfhMKK5vJkJMbcC4WDU44sfxDWz0L8=;
+ s=kas202506031021; t=1760287762;
+ bh=jxni+VbwB0x+1rPpq9ytzUtlvguEwW2+caa1Z0AnxW0=;
  h=From:To:Subject:Date:From;
- b=Im6fpivZvInvpO+dpMHmvWuB0+RQVZWO5wNhce8iQ5LePUfxazaeAQGqe5hiZA3mq
- Xh9SNR1BipMgG5tlvBy5TxJl3Neckqo+20a/dz0qJRSsIx5ThgdaA4sD+fCT7I94ib
- zwu1AjbxbLr1dgRx+dyX+m4fh4DWNAareoAPnUlljFFRxrpfjYPNf0pNCNh5coYrby
- 99RjOEIONwREfnXSwaBB8O8S4RAg81/tHMvLdAUfO+EnpogBIZkTiupRA3ATNaoK8z
- Qg93VXykdqFsKs722wdDcbptGSHBlpmEnQqqScRoiVJte50HDltMYKtzdyZ1cjEgXu
- rNIqqzMZmjw6w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=R8962hqDHw9yyUQ9kvrTLEfQzzvtnai4RY3/Qmc8bJw0afOBQ3QiK3zoXnoGdjWsi
+ PutEo50IE3UU2plgq5xKY8+B4Anmh3bQcpyL5Ad/EK1dWL+dWp2dtmianPxqMagk4d
+ 8z1UC0MlCNnwt8cBSHL9YAa+4D1HYtOaak+PUuPt7OLL02QHnr2ZTtLGCNsk4U51ji
+ d/4yAmcMG84yu3VR/Bex50QwLt79XH8wuyR5zDzLt9GWP2qykpTmWylKg3BO0Y2Pz4
+ bhC4bh3Vqo0nTVAQcy6OrTy2hvcNGP9rX6hH4vMbdgh2Mr2bbajf8bq0EJV2smI7LI
+ dLzl3Ce45knCg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=Im6fpivZ
-Subject: [Buildroot] [PATCH 1/1] package/util-linux: bump version to 2.41.2
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=R8962hqD
+Subject: [Buildroot] [PATCH 1/1] package/coreutils: bump version to 9.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,39 +84,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://www.kernel.org/pub/linux/utils/util-linux/v2.41/v2.41.2-ReleaseNotes
+Removed patch which is included in this release.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/util-linux/util-linux.hash | 2 +-
- package/util-linux/util-linux.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...001-coreutils-mcel-port-to-uClibc-ng.patch | 35 -------------------
+ package/coreutils/coreutils.hash              |  2 +-
+ package/coreutils/coreutils.mk                |  2 +-
+ 3 files changed, 2 insertions(+), 37 deletions(-)
+ delete mode 100644 package/coreutils/0001-coreutils-mcel-port-to-uClibc-ng.patch
 
-diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
-index d1c2986ca6..af850c03d6 100644
---- a/package/util-linux/util-linux.hash
-+++ b/package/util-linux/util-linux.hash
-@@ -1,5 +1,5 @@
- # From https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.41/sha256sums.asc
--sha256  be9ad9a276f4305ab7dd2f5225c8be1ff54352f565ff4dede9628c1aaa7dec57  util-linux-2.41.1.tar.xz
-+sha256  6062a1d89b571a61932e6fc0211f36060c4183568b81ee866cf363bce9f6583e  util-linux-2.41.2.tar.xz
- # License files, locally calculated
- sha256  4c2db318192bda62f3f8fcf71488bb5e602ae4385eba281d711b46cc13a40bb3  README.licensing
- sha256  527f738966ca396cd5a68c1509390de2a780c6b614d9ee57f7544a6161938ed1  Documentation/licenses/COPYING.BSD-2-Clause
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 3098a81a72..555a1e74c0 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -8,7 +8,7 @@
- # util-linux-libs/util-linux-libs.mk needs to be updated accordingly as well.
+diff --git a/package/coreutils/0001-coreutils-mcel-port-to-uClibc-ng.patch b/package/coreutils/0001-coreutils-mcel-port-to-uClibc-ng.patch
+deleted file mode 100644
+index 7639509ff2..0000000000
+--- a/package/coreutils/0001-coreutils-mcel-port-to-uClibc-ng.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From c4e923a98f34fe5f5ec3b49543e90716ec2a45fc Mon Sep 17 00:00:00 2001
+-From: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
+-Date: Tue, 24 Sep 2024 18:08:31 +0200
+-Subject: [PATCH] coreutils: mcel: port to uClibc-ng
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Problem reported by Waldemar Brodkorb in:
+-https://lists.gnu.org/r/bug-gnulib/2024-08/msg00130.html
+-* lib/mcel.h (mcel_scan): Don't treat uClibc-ng like glibc.
+-
+-Upstream: https://git.savannah.gnu.org/cgit/gnulib.git/commit/?id=9765bc796b3e6ceaa7a10ba07c9c2f1e272a4249
+-Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
+----
+- lib/mcel.h | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/lib/mcel.h b/lib/mcel.h
+-index f6f006c..dca4d08 100644
+---- a/lib/mcel.h
+-+++ b/lib/mcel.h
+-@@ -221,7 +221,8 @@ mcel_scan (char const *p, char const *lim)
+- 
+-   /* An initial mbstate_t; initialization optimized for some platforms.
+-      For details about these and other platforms, see wchar.in.h.  */
+--#if defined __GLIBC__ && 2 < __GLIBC__ + (2 <= __GLIBC_MINOR__)
+-+#if (defined __GLIBC__ && 2 < __GLIBC__ + (2 <= __GLIBC_MINOR__) \
+-+	&& !defined __UCLIBC__)
+-   /* Although only a trivial optimization, it's worth it for GNU.  */
+-   mbstate_t mbs; mbs.__count = 0;
+- #elif (defined __FreeBSD__ || defined __DragonFly__ || defined __OpenBSD__ \
+--- 
+-2.39.2
+-
+diff --git a/package/coreutils/coreutils.hash b/package/coreutils/coreutils.hash
+index 3455c95c58..2c353f0f6d 100644
+--- a/package/coreutils/coreutils.hash
++++ b/package/coreutils/coreutils.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256  cd328edeac92f6a665de9f323c93b712af1858bc2e0d88f3f7100469470a1b8a  coreutils-9.5.tar.xz
++sha256  e6d4fd2d852c9141a1c2a18a13d146a0cd7e45195f72293a4e4c044ec6ccca15  coreutils-9.8.tar.xz
+ # Locally computed
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index a6d193b49e..be7569ed99 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- UTIL_LINUX_VERSION_MAJOR = 2.41
--UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).1
-+UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).2
- UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
- UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
- 
+-COREUTILS_VERSION = 9.5
++COREUTILS_VERSION = 9.8
+ COREUTILS_SITE = $(BR2_GNU_MIRROR)/coreutils
+ COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
+ COREUTILS_LICENSE = GPL-3.0+
 -- 
 2.47.3
 
