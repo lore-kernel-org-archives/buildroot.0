@@ -4,102 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD688CCD187
-	for <buildroot@archiver.kernel.org>; Sun, 12 Oct 2025 15:21:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FE8BCCD184
+	for <buildroot@archiver.kernel.org>; Sun, 12 Oct 2025 15:22:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5EA37607D9;
-	Sun, 12 Oct 2025 15:21:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A762607D9;
+	Sun, 12 Oct 2025 15:22:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gB-gSzfunQFM; Sun, 12 Oct 2025 15:21:13 +0000 (UTC)
+ id GlhcWYsdZHrK; Sun, 12 Oct 2025 15:22:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F40160DC0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B89E160DC5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5F40160DC0;
-	Sun, 12 Oct 2025 15:21:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 919F712B
- for <buildroot@buildroot.org>; Sun, 12 Oct 2025 15:21:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B89E160DC5;
+	Sun, 12 Oct 2025 15:22:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B656912B
+ for <buildroot@buildroot.org>; Sun, 12 Oct 2025 15:22:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7785160DC0
- for <buildroot@buildroot.org>; Sun, 12 Oct 2025 15:21:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A78D860DC5
+ for <buildroot@buildroot.org>; Sun, 12 Oct 2025 15:22:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gC7RxeMYEvzS for <buildroot@buildroot.org>;
- Sun, 12 Oct 2025 15:21:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62a; helo=mail-ej1-x62a.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C52E9607D9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C52E9607D9
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
- [IPv6:2a00:1450:4864:20::62a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C52E9607D9
- for <buildroot@buildroot.org>; Sun, 12 Oct 2025 15:21:07 +0000 (UTC)
-Received: by mail-ej1-x62a.google.com with SMTP id
- a640c23a62f3a-b3b27b50090so635963666b.0
- for <buildroot@buildroot.org>; Sun, 12 Oct 2025 08:21:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1760282465; x=1760887265;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=7iaLxileauK2XcfAPp2yQE0QOYc4uv4CLgWvWZiG+rU=;
- b=IfB0TuUz/tSiqxr5ypxWhE5DgPa/WAhVOCGBkl3ab+YcIJL1FQtpUfnuZWBiI7Kn0k
- mFx+guosu3YWYc4lhR9BXFX7xuJheFdH5W11C7tIm+2GdIuY/hKUUfpe0zFWKZIlSlSC
- s+QGyFvVnkxskoJCk9pQxHJCufzUAWmFn4xEncBktyT3uJNhdQJuAgGZZmnzfHvCG0G1
- Tjg7ZaCa/oy4mgbe0noh4S91S4FA4CJw0b8Ie7PtFrEIq2rn5ublH6h4+s9OQfKq+5+V
- 2uINlBe8b2IQhzvZXiXBSzHgOCcsym2MrCKzlQLqlq/3d4NIFN1w4eY1Tu4ZDTIHu1wG
- bc/g==
-X-Gm-Message-State: AOJu0YzDomtM/i4dzPIsyDf6Pt1d9bSauR98wYTkLmFDnXV8XowMIDci
- E/7HmUB/f/+ro2Wu3ietH7twKVI/489du050i7/IpILHSjZ2AJKt5oNa8ZfNZjWWyfRJrV79m0v
- wO4XAVug=
-X-Gm-Gg: ASbGncu5s3R6EK7w+EE7QBT/mQjl9yMlg6/rHfJwpnkuElW/7GgS4+tRDYCmSk7BTzL
- DaPhbHuJyHktxQ6+1Lov1SJiKHzlMz9g4GXuXofF3G2+hPnFlHaCIH4s+8LhwzBakqu2Ro7cxzb
- SPQ7LPGBpp1IzmT9nH3Gn1Z1OdhWI/YnpnthMxrH7JVDbsyciuGnMbgYfRByYi6DqhZnjBWRvx/
- H5ito7jYiBlcwkYeDgEr8ebu7mxzvlh4CdmGahzZzpqVr5Vt3x28KQ2YrriCQ1/2gnVAK82ozKh
- fOROvhR53SyU2bivR885cfIRPWLuSH5PL9b6Xjed0gLqjDyuo/DRWmQtLcNK1Dirn3oq3YbseAA
- jcpZ7ulphfaqZhGc50W1CjTcG8J+PBr5ZFsBnB/GOgR6bkFe+j2LaOlD7a3zAkzP+JgnSrJHors
- IIOJFA8cYJ3jcPPaVsJXWJTH2IHF2miwh0k2EcneOu27xd7tAsf3mGCSd14ZJeJBpQRv4ULnELh
- ZQL3CrOQQozoJ6nBrwp
-X-Google-Smtp-Source: AGHT+IHnzK4UHwWg5Bwx+fl8ElQMWXulHcu6GFXHbpGKblT+QyhpS3ZUyMk7hz1y7Hn4sucx21Dr+A==
-X-Received: by 2002:a17:906:ef05:b0:b4e:d6e3:1670 with SMTP id
- a640c23a62f3a-b50aa48ca83mr1972116166b.11.1760282465441; 
- Sun, 12 Oct 2025 08:21:05 -0700 (PDT)
-Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
- (host-79-25-27-158.retail.telecomitalia.it. [79.25.27.158])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b55d5cad896sm737406066b.1.2025.10.12.08.21.04
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 12 Oct 2025 08:21:05 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ id cvP300UUXESv for <buildroot@buildroot.org>;
+ Sun, 12 Oct 2025 15:22:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9F4E0607D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F4E0607D9
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9F4E0607D9
+ for <buildroot@buildroot.org>; Sun, 12 Oct 2025 15:22:19 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a02db.dip0.t-ipconnect.de [91.58.2.219])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 18D21A4C6766;
+ Sun, 12 Oct 2025 17:22:17 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:33670)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1v7xto-000000003hK-1HN0;
+ Sun, 12 Oct 2025 15:22:16 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Rahul Bedarkar <rahulbedarkar89@gmail.com>,
- linux-amarula@amarulasolutions.com,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Sun, 12 Oct 2025 17:20:40 +0200
-Message-ID: <20251012152040.2484426-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Cc: Thijs Vermeir <thijsvermeir@gmail.com>
+Date: Sun, 12 Oct 2025 17:22:16 +0200
+Message-ID: <20251012152216.92949-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1760282465; x=1760887265;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=7iaLxileauK2XcfAPp2yQE0QOYc4uv4CLgWvWZiG+rU=;
- b=pdMnL9mc1JvUTlkCjScRcrLJPZlUEXXBQMpIfj1YB/S/3Ouaivw64PK7QnbjzXOm80
- zGgIyuB86e9H39lIhaxXmCF55QwaiSnPNneeu/wv/BlHvlYmMy5Y2OexbH7IMI0Ygbhr
- UuBdGOn4KoMdiNur2OmWmLmv3I/mw2mEQvKn4=
+ d=kuhls.net; 
+ s=kas202506031021; t=1760282537;
+ bh=j2ViwGPfVjIDZJVnggZVjDNEPHs7uwXBfrOUYrNJ9v4=;
+ h=From:To:Cc:Subject:Date:From;
+ b=rw3F1t/ekunxpxK9hpJA9CCdpkPSzGvXChDk81kmXGI3xiluVpL5/jIBvyeNshIGS
+ +04QrJlJqbGd5wO/nJx6D+y5F6V8AV3sk3UUWO4agCfspj51eHrnaidrPxN/zkO+Pa
+ 6Q3PG90QXgJrj2lANELibEga419hsyyoqwJ/le3bEmE0uOjoCUU4xzqpOXK0CXca/k
+ WiKmr1ZiEmv1ZypVTvVkaO33aCGIUITBT0MCs6BldUTCESc3QoI1O7hHOtN0hTszxN
+ s7YDVM+jbWvYXLDNAiVm3ale1hMfRTfiU/b07JJlsd8nHeUdu8hq9acE57pkUDSrWe
+ 9nq6Fg9jrsnmg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=pdMnL9mc
-Subject: [Buildroot] [PATCH 1/1] package/gupnp-av: bump to version 0.14.4
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=rw3F1t/e
+Subject: [Buildroot] [PATCH 1/1] package/x265: bump version to 4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,129 +86,330 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The removed patch has been merged in version 0.14.2.
-
 Release notes:
-https://gitlab.gnome.org/GNOME/gupnp-av/-/blob/gupnp-av-0.14.2/NEWS
-https://gitlab.gnome.org/GNOME/gupnp-av/-/blob/gupnp-av-0.14.3/NEWS
-https://gitlab.gnome.org/GNOME/gupnp-av/-/blob/gupnp-av-0.14.4/NEWS
+4.1: https://mailman.videolan.org/pipermail/x265-devel/2024-November/014095.html
+4.0: https://mailman.videolan.org/pipermail/x265-devel/2024-September/013940.html
+3.6: https://mailman.videolan.org/pipermail/x265-devel/2024-April/013664.html
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Rebased patch 0001 and removed patch 0002 due to upstream commit
+https://bitbucket.org/multicoreware/x265_git/commits/4bf31dc15fb6d1f93d12ecf21fad5e695f0db5c0
+
+Added patches 0002 & 0003 to fix build with CMake 4.x.
+
+Added patch 0004 and adjusted _CONF_OPTS to fix non-NEON build.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .../gupnp-av/0001-libxml2.11-support.patch    | 41 -------------------
- ...ix-compatibility-with-libxml2-2-12-x.patch | 26 ------------
- package/gupnp-av/gupnp-av.hash                |  4 +-
- package/gupnp-av/gupnp-av.mk                  |  2 +-
- 4 files changed, 3 insertions(+), 70 deletions(-)
- delete mode 100644 package/gupnp-av/0001-libxml2.11-support.patch
- delete mode 100644 package/gupnp-av/0002-xml-Fix-compatibility-with-libxml2-2-12-x.patch
+Afaics this bump does not introduce new build errors but does not fix a
+build error already present in version 3.5:
+https://autobuild.buildroot.org/results/c27/c270ed8f9f1c643b249f2206d76d1261abfe9a88/
 
-diff --git a/package/gupnp-av/0001-libxml2.11-support.patch b/package/gupnp-av/0001-libxml2.11-support.patch
-deleted file mode 100644
-index 739a8d774bda..000000000000
---- a/package/gupnp-av/0001-libxml2.11-support.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From 4dbc4c1da2a033c497d84a1291c46f416a9cac51 Mon Sep 17 00:00:00 2001
--From: David Anes <david.anes@suse.com>
--Date: Thu, 4 May 2023 11:54:02 +0200
--Subject: use xmlReadMemory instead of xmlRecoverMemory, as it's been
-- deprecated in libxml2 2.11.0
--
--Since version 2.11.0, some private symbols have been removed.
--
--Downloaded from
--https://code.opensuse.org/package/gupnp-av/blob/master/f/gupnp-av-libxml2.11-support.patch
--
--Upstream: https://gitlab.gnome.org/GNOME/gupnp-av/-/issues/10
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
--Index: gupnp-av-0.14.1/libgupnp-av/gupnp-didl-lite-parser.c
--===================================================================
----- gupnp-av-0.14.1.orig/libgupnp-av/gupnp-didl-lite-parser.c
--+++ gupnp-av-0.14.1/libgupnp-av/gupnp-didl-lite-parser.c
--@@ -230,7 +230,7 @@ gupnp_didl_lite_parser_parse_didl_recurs
--         GUPnPAVXMLDoc *xml_doc = NULL;
--         gboolean       result;
-- 
---        doc = xmlRecoverMemory (didl, strlen (didl));
--+        doc = xmlReadMemory (didl, strlen (didl), NULL, NULL, XML_PARSE_RECOVER);
--         if (doc == NULL) {
--                 g_set_error (error,
--                              G_MARKUP_ERROR,
--Index: gupnp-av-0.14.1/libgupnp-av/gupnp-feature-list-parser.c
--===================================================================
----- gupnp-av-0.14.1.orig/libgupnp-av/gupnp-feature-list-parser.c
--+++ gupnp-av-0.14.1/libgupnp-av/gupnp-feature-list-parser.c
--@@ -114,7 +114,7 @@ gupnp_feature_list_parser_parse_text
--         xmlNode      *element;
--         GList        *feature_list = NULL;
-- 
---        doc = xmlRecoverMemory (text, strlen (text));
--+        doc = xmlReadMemory (text, strlen (text), NULL, NULL, XML_PARSE_RECOVER);
--         if (doc == NULL) {
--                 g_set_error (error,
--                              G_MARKUP_ERROR,
-diff --git a/package/gupnp-av/0002-xml-Fix-compatibility-with-libxml2-2-12-x.patch b/package/gupnp-av/0002-xml-Fix-compatibility-with-libxml2-2-12-x.patch
-deleted file mode 100644
-index 358098fbc480..000000000000
---- a/package/gupnp-av/0002-xml-Fix-compatibility-with-libxml2-2-12-x.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From 1e10a41fcef6ae0d3e89958db89bc22398f3b4f1 Mon Sep 17 00:00:00 2001
--From: Jens Georg <mail@jensge.org>
--Date: Sat, 25 Nov 2023 17:58:49 +0100
--Subject: [PATCH] xml: Fix compatibility with libxml2 2.12.x
--
--Upstream: https://gitlab.gnome.org/GNOME/gupnp-av/-/commit/1e10a41fcef6ae0d3e89958db89bc22398f3b4f1
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- libgupnp-av/xml-util.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/libgupnp-av/xml-util.h b/libgupnp-av/xml-util.h
--index e0e49f7..0bbe0f8 100644
----- a/libgupnp-av/xml-util.h
--+++ b/libgupnp-av/xml-util.h
--@@ -16,6 +16,7 @@
-- 
-- #include <glib.h>
-- #include <libxml/tree.h>
--+#include <libxml/parser.h>
-- #include <stdarg.h>
-- #include <glib-object.h>
-- 
---- 
--GitLab
--
-diff --git a/package/gupnp-av/gupnp-av.hash b/package/gupnp-av/gupnp-av.hash
-index c8ed0db2a485..27f974165ae2 100644
---- a/package/gupnp-av/gupnp-av.hash
-+++ b/package/gupnp-av/gupnp-av.hash
-@@ -1,5 +1,5 @@
--# Hash from: https://download.gnome.org/sources/gupnp-av/0.14/gupnp-av-0.14.1.sha256sum:
--sha256  b79ce0cc4b0c66d9c54bc22183a10e5709a0011d2af272025948efcab33a3e4f  gupnp-av-0.14.1.tar.xz
-+# Hash from: https://download.gnome.org/sources/gupnp-av/0.14/gupnp-av-0.14.4.sha256sum:
-+sha256  21d974b3275cb5dcf5b8aa1d9a3fc80e7edca706935f6fbd004c79787138f8c7  gupnp-av-0.14.4.tar.xz
+Quote:
+    /home/autobuild/autobuild/instance-11/output-1/host/lib/gcc/i686-buildroot-linux-musl/13.3.0/../../../../i686-buildroot-linux-musl/bin/ld: read-only segment has dynamic relocation
+
+ ...ists.txt-do-not-force-compiler-flags.patch | 42 ++++++-------
+ ...-error-with-latest-CMake-4.0-release.patch | 35 +++++++++++
+ ...s.txt-allow-setting-CPU_HAS_NEON-whe.patch | 40 -------------
+ ...-Fix-for-CMake-Build-Errors-in-MacOS.patch | 60 +++++++++++++++++++
+ ...n-undefined-symbols-in-armv6l-armv7l.patch | 28 +++++++++
+ package/x265/x265.hash                        |  4 +-
+ package/x265/x265.mk                          |  6 +-
+ 7 files changed, 146 insertions(+), 69 deletions(-)
+ create mode 100644 package/x265/0002-Fix-CMake-build-error-with-latest-CMake-4.0-release.patch
+ delete mode 100644 package/x265/0002-source-CMakeLists.txt-allow-setting-CPU_HAS_NEON-whe.patch
+ create mode 100644 package/x265/0003-Fix-for-CMake-Build-Errors-in-MacOS.patch
+ create mode 100644 package/x265/0004-Fix-neon-undefined-symbols-in-armv6l-armv7l.patch
+
+diff --git a/package/x265/0001-CMakeLists.txt-do-not-force-compiler-flags.patch b/package/x265/0001-CMakeLists.txt-do-not-force-compiler-flags.patch
+index af0e57f206..4a12c15ca4 100644
+--- a/package/x265/0001-CMakeLists.txt-do-not-force-compiler-flags.patch
++++ b/package/x265/0001-CMakeLists.txt-do-not-force-compiler-flags.patch
+@@ -21,43 +21,37 @@ Bernd Kuhls <bernd.kuhls@t-online.de>.
  
- # Hash for license file:
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gupnp-av/gupnp-av.mk b/package/gupnp-av/gupnp-av.mk
-index 3821c4e170c3..fdc4d7034321 100644
---- a/package/gupnp-av/gupnp-av.mk
-+++ b/package/gupnp-av/gupnp-av.mk
-@@ -5,7 +5,7 @@
+ Upstream: https://bitbucket.org/multicoreware/x265_git/pull-requests/26
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++[Bernd: rebased for 4.1]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+- source/CMakeLists.txt              | 10 +++-------
+- source/dynamicHDR10/CMakeLists.txt |  6 +++---
+- 2 files changed, 6 insertions(+), 10 deletions(-)
++ source/CMakeLists.txt              | 6 +++---
++ source/dynamicHDR10/CMakeLists.txt | 6 +++---
++ 2 files changed, 6 insertions(+), 6 deletions(-)
+ 
+ diff --git a/source/CMakeLists.txt b/source/CMakeLists.txt
+-index a407271b4..a34bf4d4f 100755
++index c14489ea6..fa331e8af 100755
+ --- a/source/CMakeLists.txt
+ +++ b/source/CMakeLists.txt
+-@@ -239,11 +239,7 @@ if(GCC)
+-         endif()
++@@ -270,14 +270,14 @@ if(GCC)
+      endif()
+      if(ARM AND CROSS_COMPILE_ARM)
+--        if(ARM64)
+--            set(ARM_ARGS -fPIC)
+--        else()
+--            set(ARM_ARGS -march=armv6 -mfloat-abi=soft -mfpu=vfp -marm -fPIC)
+--        endif()
+-+        set(ARM_ARGS -fPIC)
+          message(STATUS "cross compile arm")
++-		set(ARM_ARGS -march=armv6 -mfloat-abi=soft -mfpu=vfp -marm -fPIC)
+++		set(ARM_ARGS -fPIC)
+      elseif(ARM)
+-         if(ARM64)
+-@@ -252,10 +248,10 @@ if(GCC)
++         find_package(Neon)
++         if(CPU_HAS_NEON)
++-            set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=neon -marm -fPIC)
+++            set(ARM_ARGS -mfpu=neon -fPIC)
++             add_definitions(-DHAVE_NEON)
+          else()
+-             find_package(Neon)
+-             if(CPU_HAS_NEON)
+--                set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=neon -marm -fPIC)
+-+                set(ARM_ARGS -mfpu=neon -fPIC)
+-                 add_definitions(-DHAVE_NEON)
+-             else()
+--                set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=vfp -marm)
+-+	        set(ARM_ARGS -fPIC)
+-             endif()
++-            set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=vfp -marm)
+++            set(ARM_ARGS -fPIC)
+          endif()
+      endif()
++     if(ARM64)
+ diff --git a/source/dynamicHDR10/CMakeLists.txt b/source/dynamicHDR10/CMakeLists.txt
+-index 22fb79d44..2cea7c48a 100644
++index 4243338c6..62853a06b 100644
+ --- a/source/dynamicHDR10/CMakeLists.txt
+ +++ b/source/dynamicHDR10/CMakeLists.txt
+ @@ -43,14 +43,14 @@ if(GCC)
+diff --git a/package/x265/0002-Fix-CMake-build-error-with-latest-CMake-4.0-release.patch b/package/x265/0002-Fix-CMake-build-error-with-latest-CMake-4.0-release.patch
+new file mode 100644
+index 0000000000..95d7a7c7b2
+--- /dev/null
++++ b/package/x265/0002-Fix-CMake-build-error-with-latest-CMake-4.0-release.patch
+@@ -0,0 +1,35 @@
++From b354c009a60bcd6d7fc04014e200a1ee9c45c167 Mon Sep 17 00:00:00 2001
++From: yaswanthsastry <yaswanth.sastry@multicorewareinc.com>
++Date: Mon, 24 Feb 2025 17:07:03 +0530
++Subject: [PATCH] Fix CMake build error with latest CMake 4.0 release
++
++Upstream: https://bitbucket.org/multicoreware/x265_git/commits/b354c009a60bcd6d7fc04014e200a1ee9c45c167
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ source/CMakeLists.txt | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/source/CMakeLists.txt b/source/CMakeLists.txt
++index 37dbe1a87..4f5b3ed82 100755
++--- a/source/CMakeLists.txt
+++++ b/source/CMakeLists.txt
++@@ -7,13 +7,13 @@ if(NOT CMAKE_BUILD_TYPE)
++ endif()
++ message(STATUS "cmake version ${CMAKE_VERSION}")
++ if(POLICY CMP0025)
++-    cmake_policy(SET CMP0025 OLD) # report Apple's Clang as just Clang
+++    cmake_policy(SET CMP0025 NEW) # report Apple's Clang as just Clang
++ endif()
++ if(POLICY CMP0042)
++     cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
++ endif()
++ if(POLICY CMP0054)
++-    cmake_policy(SET CMP0054 OLD) # Only interpret if() arguments as variables or keywords when unquoted
+++    cmake_policy(SET CMP0054 NEW) # Only interpret if() arguments as variables or keywords when unquoted
++ endif()
++ 
++ project (x265)
++-- 
++2.51.0
++
+diff --git a/package/x265/0002-source-CMakeLists.txt-allow-setting-CPU_HAS_NEON-whe.patch b/package/x265/0002-source-CMakeLists.txt-allow-setting-CPU_HAS_NEON-whe.patch
+deleted file mode 100644
+index 51be8f2d02..0000000000
+--- a/package/x265/0002-source-CMakeLists.txt-allow-setting-CPU_HAS_NEON-whe.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 0088d29e7c75ea7f100a100aea4e2a797469427f Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Sat, 13 Jul 2024 10:10:54 +0200
+-Subject: [PATCH] source/CMakeLists.txt: allow setting CPU_HAS_NEON when
+- CROSS_COMPILE_ARM
+-
+-The logic in source/cmake/FindNeon.cmake is not appropriate for
+-cross-compilation scenarios, so in order to allow cross-compiling for
+-ARM, CROSS_COMPILE_ARM needs to be defined. However that currently
+-doesn't allow the enabling of NEON support, so let's allow the user to
+-manually set CPU_HAS_NEON in this case.
+-
+-Upstream: https://bitbucket.org/multicoreware/x265_git/pull-requests/26
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- source/CMakeLists.txt | 7 ++++++-
+- 1 file changed, 6 insertions(+), 1 deletion(-)
+-
+-diff --git a/source/CMakeLists.txt b/source/CMakeLists.txt
+-index a34bf4d4f..072bf62ab 100755
+---- a/source/CMakeLists.txt
+-+++ b/source/CMakeLists.txt
+-@@ -239,8 +239,13 @@ if(GCC)
+-         endif()
+-     endif()
+-     if(ARM AND CROSS_COMPILE_ARM)
+--        set(ARM_ARGS -fPIC)
+-         message(STATUS "cross compile arm")
+-+        if(CPU_HAS_NEON)
+-+          set(ARM_ARGS -mfpu=neon -fPIC)
+-+          add_definitions(-DHAVE_NEON)
+-+        else()
+-+	  set(ARM_ARGS -fPIC)
+-+	endif()
+-     elseif(ARM)
+-         if(ARM64)
+-             set(ARM_ARGS -fPIC)
+--- 
+-2.45.2
+-
+diff --git a/package/x265/0003-Fix-for-CMake-Build-Errors-in-MacOS.patch b/package/x265/0003-Fix-for-CMake-Build-Errors-in-MacOS.patch
+new file mode 100644
+index 0000000000..200ba15be4
+--- /dev/null
++++ b/package/x265/0003-Fix-for-CMake-Build-Errors-in-MacOS.patch
+@@ -0,0 +1,60 @@
++From 51ae8e922bcc4586ad4710812072289af91492a8 Mon Sep 17 00:00:00 2001
++From: yaswanthsastry <yaswanth.sastry@multicorewareinc.com>
++Date: Mon, 7 Apr 2025 11:27:36 +0530
++Subject: [PATCH] Fix for CMake Build Errors in MacOS
++
++Upstream: https://bitbucket.org/multicoreware/x265_git/commits/51ae8e922bcc4586ad4710812072289af91492a8
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ source/CMakeLists.txt | 15 +++++++--------
++ 1 file changed, 7 insertions(+), 8 deletions(-)
++
++diff --git a/source/CMakeLists.txt b/source/CMakeLists.txt
++index 4f5b3ed82..7183fd3ce 100755
++--- a/source/CMakeLists.txt
+++++ b/source/CMakeLists.txt
++@@ -6,18 +6,14 @@ if(NOT CMAKE_BUILD_TYPE)
++         FORCE)
++ endif()
++ message(STATUS "cmake version ${CMAKE_VERSION}")
++-if(POLICY CMP0025)
++-    cmake_policy(SET CMP0025 NEW) # report Apple's Clang as just Clang
++-endif()
+++
++ if(POLICY CMP0042)
++     cmake_policy(SET CMP0042 NEW) # MACOSX_RPATH
++ endif()
++-if(POLICY CMP0054)
++-    cmake_policy(SET CMP0054 NEW) # Only interpret if() arguments as variables or keywords when unquoted
++-endif()
+++
++ 
++ project (x265)
++-cmake_minimum_required (VERSION 2.8.8) # OBJECT libraries require 2.8.8
+++cmake_minimum_required (VERSION 2.8.8...3.10) # OBJECT libraries require 2.8.8
++ include(CheckIncludeFiles)
++ include(CheckFunctionExists)
++ include(CheckSymbolExists)
++@@ -168,7 +164,7 @@ if(APPLE)
++   add_definitions(-DMACOS=1)
++ endif()
++ 
++-if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+++if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang")
++     set(CLANG 1)
++ endif()
++ if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Intel")
++@@ -740,6 +736,9 @@ if((MSVC_IDE OR XCODE OR GCC) AND ENABLE_ASSEMBLY)
++     if(ARM OR CROSS_COMPILE_ARM)
++     # compile ARM arch asm files here
++         enable_language(ASM)
+++        if(APPLE)
+++            set(ARM_ARGS ${ARM_ARGS} -arch ${CMAKE_OSX_ARCHITECTURES})
+++        endif()
++         foreach(ASM ${ARM_ASMS})
++ 			set(ASM_SRC ${CMAKE_CURRENT_SOURCE_DIR}/common/arm/${ASM})
++             list(APPEND ASM_SRCS ${ASM_SRC})
++-- 
++2.51.0
++
+diff --git a/package/x265/0004-Fix-neon-undefined-symbols-in-armv6l-armv7l.patch b/package/x265/0004-Fix-neon-undefined-symbols-in-armv6l-armv7l.patch
+new file mode 100644
+index 0000000000..75f1d4c532
+--- /dev/null
++++ b/package/x265/0004-Fix-neon-undefined-symbols-in-armv6l-armv7l.patch
+@@ -0,0 +1,28 @@
++From ddb1933598736394b646cb0f78da4a4201ffc656 Mon Sep 17 00:00:00 2001
++From: Uthayakumar Muthu <uthayakumar.muthu@multicorewareinc.com>
++Date: Sun, 12 Jan 2025 13:17:21 +0530
++Subject: [PATCH] Fix neon undefined symbols in armv6l,armv7l
++
++Upstream: https://bitbucket.org/multicoreware/x265_git/commits/ddb1933598736394b646cb0f78da4a4201ffc656
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ source/common/cpu.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/source/common/cpu.cpp b/source/common/cpu.cpp
++index ae0907890..35c43deaf 100644
++--- a/source/common/cpu.cpp
+++++ b/source/common/cpu.cpp
++@@ -352,7 +352,7 @@ uint32_t cpu_detect(bool benableavx512)
++ {
++     int flags = 0;
++ 
++-#if HAVE_ARMV6
+++#if HAVE_ARMV6 && ENABLE_ASSEMBLY
++     flags |= X265_CPU_ARMV6;
++ 
++     // don't do this hack if compiled with -mfpu=neon
++-- 
++2.51.0
++
+diff --git a/package/x265/x265.hash b/package/x265/x265.hash
+index fb9a5b5910..640cd9ce0d 100644
+--- a/package/x265/x265.hash
++++ b/package/x265/x265.hash
+@@ -1,5 +1,3 @@
+-# From https://mailman.videolan.org/pipermail/x265-devel/2021-March/013257.html
+-md5  deb5df5cb2ec17bdbae6ac6bbc3b1eef  x265_3.5.tar.gz
+ # Locally generated
+-sha256  e70a3335cacacbba0b3a20ec6fecd6783932288ebc8163ad74bcc9606477cae8  x265_3.5.tar.gz
++sha256  a31699c6a89806b74b0151e5e6a7df65de4b49050482fe5ebf8a4379d7af8f29  x265_4.1.tar.gz
+ sha256  d8afb1bcc7a2cfc603683b168d6987ef0a48e59e0da3693bf55c5d33b67e2b49  COPYING
+diff --git a/package/x265/x265.mk b/package/x265/x265.mk
+index bd5180b24b..ad4285fb16 100644
+--- a/package/x265/x265.mk
++++ b/package/x265/x265.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- GUPNP_AV_VERSION_MAJOR = 0.14
--GUPNP_AV_VERSION = $(GUPNP_AV_VERSION_MAJOR).1
-+GUPNP_AV_VERSION = $(GUPNP_AV_VERSION_MAJOR).4
- GUPNP_AV_SOURCE = gupnp-av-$(GUPNP_AV_VERSION).tar.xz
- GUPNP_AV_SITE = https://download.gnome.org/sources/gupnp-av/$(GUPNP_AV_VERSION_MAJOR)
- GUPNP_AV_LICENSE = LGPL-2.1+
+-X265_VERSION = 3.5
++X265_VERSION = 4.1
+ X265_SOURCE = x265_$(X265_VERSION).tar.gz
+ X265_SITE = https://bitbucket.org/multicoreware/x265_git/downloads
+ X265_LICENSE = GPL-2.0+
+@@ -23,7 +23,9 @@ endif
+ ifeq ($(BR2_ARM_CPU_ARMV7A),y)
+ X265_CONF_OPTS += -DCROSS_COMPILE_ARM=1
+ ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
+-X265_CONF_OPTS += -DCPU_HAS_NEON=1
++X265_CONF_OPTS += -DENABLE_NEON=ON
++else
++X265_CONF_OPTS += -DENABLE_NEON=OFF
+ endif
+ endif
+ 
 -- 
-2.43.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
