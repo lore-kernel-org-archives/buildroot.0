@@ -1,78 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F994CCD187
-	for <buildroot@archiver.kernel.org>; Sun, 12 Oct 2025 21:32:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 613B3CCD187
+	for <buildroot@archiver.kernel.org>; Sun, 12 Oct 2025 22:30:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 21ADE605B7;
-	Sun, 12 Oct 2025 21:32:15 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qfFiBWjCozFo; Sun, 12 Oct 2025 21:32:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 876C9605A8
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 876C9605A8;
-	Sun, 12 Oct 2025 21:32:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 95E2312B
- for <buildroot@buildroot.org>; Sun, 12 Oct 2025 21:32:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7C5EB813F9
- for <buildroot@buildroot.org>; Sun, 12 Oct 2025 21:32:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0FFAC80E7E;
+	Sun, 12 Oct 2025 22:30:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vHcVUXaePKtC for <buildroot@buildroot.org>;
- Sun, 12 Oct 2025 21:32:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7E5DE813ED
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E5DE813ED
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7E5DE813ED
- for <buildroot@buildroot.org>; Sun, 12 Oct 2025 21:32:09 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a02db.dip0.t-ipconnect.de [91.58.2.219])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 7A1F7A4C671E;
- Sun, 12 Oct 2025 23:31:42 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:37338)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1v83fJ-000000000qb-3MYr;
- Sun, 12 Oct 2025 21:31:42 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id coxIJW2YIpkx; Sun, 12 Oct 2025 22:30:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 118B780E7F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 118B780E7F;
+	Sun, 12 Oct 2025 22:30:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A8406BC
+ for <buildroot@buildroot.org>; Sun, 12 Oct 2025 22:30:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8501A40AA6
+ for <buildroot@buildroot.org>; Sun, 12 Oct 2025 22:30:54 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EL6OmOmAX-0H for <buildroot@buildroot.org>;
+ Sun, 12 Oct 2025 22:30:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.41;
+ helo=smtpcmd0641.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9A1BC40A64
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A1BC40A64
+Received: from smtpcmd0641.aruba.it (smtpcmd0641.aruba.it [62.149.156.41])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9A1BC40A64
+ for <buildroot@buildroot.org>; Sun, 12 Oct 2025 22:30:51 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id 84aWvM6EgDCZr84aWvqi09; Mon, 13 Oct 2025 00:30:49 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Pierre-Jean Texier <texier.pj2@gmail.com>
-Date: Sun, 12 Oct 2025 23:31:41 +0200
-Message-ID: <20251012213141.3512892-3-bernd@kuhls.net>
+Cc: Sergey Matyukevich <geomatsi@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Mon, 13 Oct 2025 00:30:47 +0200
+Message-ID: <20251012223047.3323531-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251012213141.3512892-1-bernd@kuhls.net>
-References: <20251012213141.3512892-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1760304702;
- bh=UYI4eQj6iaqL3Kw4YtIjJE3s394djGXpUyVcEUF+uA0=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=XcscnPO20vQ2ZuqaJaniwZXj7+PBRtF+CxFPMHRyXS7Pb/LQbVQCHQd6vNMwNDLAu
- hMrLy/dPHCMCPDogqejSM8HtEhTlnyS+HGql9LMXiK2FczlWANJCE0CeiDMTpWJl4j
- 76OyEERXv6OXVX4dJHMTKvYTSEtxZEsVj1tq5uusgBjufd0TxsFYV3zBpKHvPO71Cc
- uakcBxMLL+8uTsYd+dBArNGVTSDbP+i3WGjmt5dKU/f9Mmgdg4An9onrGkmbRBEOZl
- 62XXJdRVz8UP3izSbN9nGbVSB8h4jCNy3cZEYj3mznRFxECCxFOyyqlBCk/lCG8XHQ
- f4ija+ytKd58w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-CMAE-Envelope: MS4xfHg2+PRUA+ltoPlAdqL7liJSclfpBEX+TiI+InnlcewQhf+dVV6BHSf2uWi8swhjJTTMlitTMrTtAHoJr6LBg2iOuwpwoMU7rlvM9LpRcBFcQ4PyG/hW
+ pcEGBdZePdDdP7b9TEjxvyskaAUjO0JEewjDvo8Gi0XVUKN6hbJLYhKloAVLJcfbMw2H/CWcL6TNSAskt1+ErcavYxnpujzHuhQGWK7v/WVomG/uUn/qpx0H
+ gETNp530KQuI7ePhPhWqHBy4VParBngfo1hVph4GGoKlpGGRcX6C9wZ73S+q9yI7Y2x4MjmAwqBUSgCCjI5uEw==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1760308249; bh=dCeYB6a0va+M67R8qzD5dW7YAV4SrPErX/Qy75oMxy0=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=MXdLdGOyrojOoa9w5V+ICE/pONADg4DVby3m3qwNRQ9ElXnTjy1jbG8OHmoqCX4Q7
+ nUT7+pZF1suuKQhyuYClkYuBSDKnmQeM+8taMBkNhE8c1xqLZVRocR7p/YHLcOosjT
+ zUF0WCqRp6nciiTZsfoXy2fiKoaOTg3YLYOSXEiLEGhyF9X3Oorm4kXrMD6zozVGN2
+ Wbar0DQ1hfz4tKHWjY9RO93sgIauiBvDrQEnkUQZZyr3Lu2c8M7U8KKyi/U5mKzxtn
+ vn7TIlGmuE7A8zXIbQ9a+dVJjrIsDAou6+6nveQ3/FCZ4VxhqKEoyLQEyNOFqCiIBC
+ Sd7zJBJHA4TOg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=XcscnPO2
-Subject: [Buildroot] [PATCH 3/3] package/libxslt: security bump version to
- 1.1.43
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=MXdLdGOy
+Subject: [Buildroot] [PATCH] package/xr819-xradio: bump to version 2025-10-11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,54 +85,125 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.43.news
+Drop upstreamed patch.
 
-Fixes CVE-2025-24855 & CVE-2024-55549.
-
-Switched _LICENSE_FILES to Copyright due to upstream commit
-https://gitlab.gnome.org/GNOME/libxslt/-/commit/29938a64f6449aceb3e97a9e8da10abe2e27a314
-in version 1.1.36 and the removal of COPYING in the 1.1.43 tarball,
-although COPYING did still exist in the 1.1.42 tarball.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/libxslt/libxslt.hash | 6 +++---
- package/libxslt/libxslt.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ .../0001-Fix-build-for-kernel-6.17.patch      | 80 -------------------
+ package/xr819-xradio/xr819-xradio.hash        |  2 +-
+ package/xr819-xradio/xr819-xradio.mk          |  2 +-
+ 3 files changed, 2 insertions(+), 82 deletions(-)
+ delete mode 100644 package/xr819-xradio/0001-Fix-build-for-kernel-6.17.patch
 
-diff --git a/package/libxslt/libxslt.hash b/package/libxslt/libxslt.hash
-index dd67940c8a..98c68eded1 100644
---- a/package/libxslt/libxslt.hash
-+++ b/package/libxslt/libxslt.hash
-@@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.42.sha256sum
--sha256  85ca62cac0d41fc77d3f6033da9df6fd73d20ea2fc18b0a3609ffb4110e1baeb  libxslt-1.1.42.tar.xz
-+# From https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.43.sha256sum
-+sha256  5a3d6b383ca5afc235b171118e90f5ff6aa27e9fea3303065231a6d403f0183a  libxslt-1.1.43.tar.xz
- 
- # Hash for license file:
--sha256  7e48e290b6bfccc2ec1b297023a1d77f2fd87417f71fbb9f50aabef40a851819  COPYING
-+sha256  7e48e290b6bfccc2ec1b297023a1d77f2fd87417f71fbb9f50aabef40a851819  Copyright
-diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-index b5bb22f9ae..e92b383b89 100644
---- a/package/libxslt/libxslt.mk
-+++ b/package/libxslt/libxslt.mk
-@@ -4,12 +4,12 @@
+diff --git a/package/xr819-xradio/0001-Fix-build-for-kernel-6.17.patch b/package/xr819-xradio/0001-Fix-build-for-kernel-6.17.patch
+deleted file mode 100644
+index e53352ec0e..0000000000
+--- a/package/xr819-xradio/0001-Fix-build-for-kernel-6.17.patch
++++ /dev/null
+@@ -1,80 +0,0 @@
+-From dbf3f744650e05a40fc3df6325fc657e5c23cece Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Date: Fri, 10 Oct 2025 22:18:12 +0200
+-Subject: [PATCH] Fix build for kernel 6.17
+-
+-With commit:
+-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b74947b4f6ff7c122a1bb6eb38bb7ecfbb1d3820
+-set_rts_threshold() and config() gain argument radio_idx to get radio
+-index. So let's add that argument according to Linux version >= 6.17.
+-
+-Upstream: https://github.com/fifteenhex/xradio/pull/28
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- sta.c | 12 ++++++++++--
+- sta.h | 12 ++++++++++--
+- 2 files changed, 20 insertions(+), 4 deletions(-)
+-
+-diff --git a/sta.c b/sta.c
+-index 1203ce9..d769b81 100644
+---- a/sta.c
+-+++ b/sta.c
+-@@ -381,7 +381,11 @@ int xradio_change_interface(struct ieee80211_hw *dev,
+- 	return ret;
+- }
+- 
+--int xradio_config(struct ieee80211_hw *dev, u32 changed)
+-+int xradio_config(struct ieee80211_hw *dev,
+-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
+-+		  int radio_idx,
+-+#endif
+-+		  u32 changed)
+- {
+- 	int ret = 0;
+- 	struct xradio_common *hw_priv = dev->priv;
+-@@ -796,7 +800,11 @@ void xradio_wep_key_work(struct work_struct *work)
+- 	wsm_unlock_tx(hw_priv);
+- }
+- 
+--int xradio_set_rts_threshold(struct ieee80211_hw *hw, u32 value)
+-+int xradio_set_rts_threshold(struct ieee80211_hw *hw,
+-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
+-+			     int radio_idx,
+-+#endif
+-+			     u32 value)
+- {
+- 	struct xradio_common *hw_priv = hw->priv;
+- 	int ret = 0;
+-diff --git a/sta.h b/sta.h
+-index 39a023a..de8f837 100644
+---- a/sta.h
+-+++ b/sta.h
+-@@ -42,7 +42,11 @@ int xradio_change_interface(struct ieee80211_hw *dev,
+-                             struct ieee80211_vif *vif,
+-                             enum nl80211_iftype new_type,
+-                             bool p2p);
+--int xradio_config(struct ieee80211_hw *dev, u32 changed);
+-+int xradio_config(struct ieee80211_hw *dev,
+-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
+-+		  int radio_idx,
+-+#endif
+-+		  u32 changed);
+- int xradio_change_interface(struct ieee80211_hw *dev,
+-                             struct ieee80211_vif *vif,
+-                             enum nl80211_iftype new_type,
+-@@ -65,7 +69,11 @@ int xradio_get_stats(struct ieee80211_hw *dev,
+- int xradio_get_tx_stats(struct ieee80211_hw *dev,
+- 			struct ieee80211_tx_queue_stats *stats);
+- */
+--int xradio_set_rts_threshold(struct ieee80211_hw *hw, u32 value);
+-+int xradio_set_rts_threshold(struct ieee80211_hw *hw,
+-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0))
+-+			     int radio_idx,
+-+#endif
+-+			     u32 value);
+- 
+- void xradio_flush(struct ieee80211_hw *hw, struct ieee80211_vif *vif, u32 queues, bool drop);
+- 
+--- 
+-2.47.3
+-
+diff --git a/package/xr819-xradio/xr819-xradio.hash b/package/xr819-xradio/xr819-xradio.hash
+index fe91d856ec..4032fa307a 100644
+--- a/package/xr819-xradio/xr819-xradio.hash
++++ b/package/xr819-xradio/xr819-xradio.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  c06dd87948b4a4c1bee070bbc3ce07b8711ec027e78ab9b83ea1c7350472105d  xr819-xradio-d766844ce8307e5902b3ab461f06bf8ad06891dd.tar.gz
++sha256  fce2819322e18d80abba84fa420a55ec6ccea61240fc1a3268880eb84584bea5  xr819-xradio-43992a7e7ed95ff815cf6d8ba81cef1085e50ab9.tar.gz
+ # Locally computed
+ sha256  db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73  LICENSE
+diff --git a/package/xr819-xradio/xr819-xradio.mk b/package/xr819-xradio/xr819-xradio.mk
+index 93fbdacb38..087536ebe7 100644
+--- a/package/xr819-xradio/xr819-xradio.mk
++++ b/package/xr819-xradio/xr819-xradio.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBXSLT_VERSION = 1.1.42
-+LIBXSLT_VERSION = 1.1.43
- LIBXSLT_SOURCE = libxslt-$(LIBXSLT_VERSION).tar.xz
- LIBXSLT_SITE = https://download.gnome.org/sources/libxslt/1.1
- LIBXSLT_INSTALL_STAGING = YES
- LIBXSLT_LICENSE = MIT
--LIBXSLT_LICENSE_FILES = COPYING
-+LIBXSLT_LICENSE_FILES = Copyright
- LIBXSLT_CPE_ID_VENDOR = xmlsoft
- 
- LIBXSLT_CONF_OPTS = \
+-XR819_XRADIO_VERSION = d766844ce8307e5902b3ab461f06bf8ad06891dd
++XR819_XRADIO_VERSION = 43992a7e7ed95ff815cf6d8ba81cef1085e50ab9
+ XR819_XRADIO_SITE = $(call github,fifteenhex,xradio,$(XR819_XRADIO_VERSION))
+ XR819_XRADIO_LICENSE = GPL-2.0
+ XR819_XRADIO_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
