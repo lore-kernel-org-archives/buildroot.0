@@ -1,74 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33F3BCCD187
-	for <buildroot@archiver.kernel.org>; Sun, 12 Oct 2025 17:10:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23A90CCD184
+	for <buildroot@archiver.kernel.org>; Sun, 12 Oct 2025 18:20:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 20CB0607B3;
-	Sun, 12 Oct 2025 17:10:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D15E9811C1;
+	Sun, 12 Oct 2025 18:20:26 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ognkClJXoxtf; Sun, 12 Oct 2025 18:20:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D74881199
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8D74881199;
+	Sun, 12 Oct 2025 18:20:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 00B99BC
+ for <buildroot@buildroot.org>; Sun, 12 Oct 2025 18:20:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E64A360901
+ for <buildroot@buildroot.org>; Sun, 12 Oct 2025 18:20:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WtBzodfwwmwc; Sun, 12 Oct 2025 17:10:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 782C5606B9
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 782C5606B9;
-	Sun, 12 Oct 2025 17:10:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E0AF712B
- for <buildroot@buildroot.org>; Sun, 12 Oct 2025 17:10:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D294240072
- for <buildroot@buildroot.org>; Sun, 12 Oct 2025 17:10:06 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FXI5Eyx2Ze_V for <buildroot@buildroot.org>;
- Sun, 12 Oct 2025 17:10:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F2C6F40093
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2C6F40093
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F2C6F40093
- for <buildroot@buildroot.org>; Sun, 12 Oct 2025 17:10:05 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id C58DD2003C1;
- Sun, 12 Oct 2025 19:10:01 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 12 Oct 2025 19:10:01 +0200
+ id Kr1xGbZE2Dl3 for <buildroot@buildroot.org>;
+ Sun, 12 Oct 2025 18:20:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 23077607DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23077607DE
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 23077607DE
+ for <buildroot@buildroot.org>; Sun, 12 Oct 2025 18:20:21 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a02db.dip0.t-ipconnect.de [91.58.2.219])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 6588AA4C6636;
+ Sun, 12 Oct 2025 20:20:17 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:45202)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1v80g4-000000000yp-2rZ4;
+ Sun, 12 Oct 2025 18:20:17 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sun, 12 Oct 2025 20:19:56 +0200
+Message-ID: <20251012182016.2711834-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Sun, 12 Oct 2025 19:10:01 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Thijs Vermeir <thijsvermeir@gmail.com>
-In-Reply-To: <20251012152216.92949-1-bernd@kuhls.net>
-References: <20251012152216.92949-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <c56e2e728fd94213ac1d6906584a27bd@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1760289003;
- bh=rClzQFOXlPOuWEQtGKh7nbnalQfpEruko1DfQS9NTxs=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=hDT8izFhA0eiNNgOj+VQRKV8vtd/FHltbxY7vSfi5hANv+sbD+ftXVWvKfCh0Ffik
- 3rvX6X5yuApIbrCwNmVqBRA2D9rPepsn/nO3ysowP0tWoxWrGIJOdg7x13EYFX/w48
- KvwXJ1wqmzWdvfV/5XVc3YB+CPhQYbYVkPCteYMJZ4f0dP4HQu2CUfMw4y3f0n2gXv
- 8Cnrim6Q/OWo6YNkNAm6MC2KJHPJd8XkFSrUxiLvTq3osDDwPhal5VKVhwOWBafPig
- Fd3NqXCcld3x+B4+x+G2Kq/rMSEhxQMZBjMt15HEHRH/gYdn5WqXe+HBySQ7luh2So
- CDo/NCt1jMREQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=hDT8izFh
-Subject: Re: [Buildroot] [PATCH 1/1] package/x265: bump version to 4.1
+X-Spamd-Bar: ++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202506031021; t=1760293217;
+ bh=zCeCUCuETjRejFK2WWjNwiAixXnZ/vsoLwC6OmJqQRg=;
+ h=From:To:Cc:Subject:Date:From;
+ b=tkWREfWHkTamYcIDqttdFH/aFH1InCJu7LtHzKqURT/bKzbgnsQvy6Y4DJcARYHVx
+ CtSNcVHxU9lvzUxlNbPrnnOL9LoqO9K2F2s9tY+qV5I46/MJIGG2UpF0mlm6FRq5yg
+ tqBTPHtSHhtUesLG8alNDxAKx6eNsxQUNXLvWv29jyJI59ddrvyf3aNMK08bLc02Qm
+ SeRyqPoTPmhM2OCuXsSipNSWO5+eUSA8R+8gq14Yp7J7pIXX6grT2rjZbDOBNFoMuv
+ tYU1+b5kuEV8eMH/Sq2BmhHb9GwuDU4vVBGeAl23slrVt77Z7GRjpUqyCN3kiH26XT
+ +mXdWI+LDtTbA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=tkWREfWH
+Subject: [Buildroot] [PATCH 01/21] package/python-aexpect: bump version to
+ 1.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,32 +81,133 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Cc: Attila Wagner <attila.wagner@onyxinsight.com>,
+ =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
+ Andrey Smirnov <andrew.smirnov@gmail.com>, Grzegorz Blach <grzegorz@blach.pl>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Bartosz Bilas <b.bilas@grinn-global.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 12/10/2025 17:22, Bernd Kuhls wrote:
-> Release notes:
-> 4.1: 
-> https://mailman.videolan.org/pipermail/x265-devel/2024-November/014095.html
-> 4.0: 
-> https://mailman.videolan.org/pipermail/x265-devel/2024-September/013940.html
-> 3.6: 
-> https://mailman.videolan.org/pipermail/x265-devel/2024-April/013664.html
-> 
-> Rebased patch 0001 and removed patch 0002 due to upstream commit
-> https://bitbucket.org/multicoreware/x265_git/commits/4bf31dc15fb6d1f93d12ecf21fad5e695f0db5c0
-> 
-> Added patches 0002 & 0003 to fix build with CMake 4.x.
-> 
-> Added patch 0004 and adjusted _CONF_OPTS to fix non-NEON build.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Removed patch which is included in this release.
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ .../0001-Drop-the-use-of-pipes.patch          | 70 -------------------
+ package/python-aexpect/python-aexpect.hash    |  4 +-
+ package/python-aexpect/python-aexpect.mk      |  4 +-
+ 3 files changed, 4 insertions(+), 74 deletions(-)
+ delete mode 100644 package/python-aexpect/0001-Drop-the-use-of-pipes.patch
+
+diff --git a/package/python-aexpect/0001-Drop-the-use-of-pipes.patch b/package/python-aexpect/0001-Drop-the-use-of-pipes.patch
+deleted file mode 100644
+index a952ddc8fb..0000000000
+--- a/package/python-aexpect/0001-Drop-the-use-of-pipes.patch
++++ /dev/null
+@@ -1,70 +0,0 @@
+-From 3753ad491bf5847a11a7f4baf3ecaa490e0e9111 Mon Sep 17 00:00:00 2001
+-From: Xu Han <xuhan@redhat.com>
+-Date: Wed, 31 Jan 2024 14:57:37 +0800
+-Subject: [PATCH] Drop the use of pipes
+-
+-`pipes` was deprecated since version 3.11 so let's replace the use
+-of that module with the alternatives.
+-
+-Signed-off-by: Xu Han <xuhan@redhat.com>
+-Upstream: https://github.com/avocado-framework/aexpect/commit/f2b888b1bd453a46820d38b62fd2b5db1228e4b7
+-[Romain: backport to 1.7.0]
+-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+----
+- aexpect/remote.py | 12 ++++++------
+- 1 file changed, 6 insertions(+), 6 deletions(-)
+-
+-diff --git a/aexpect/remote.py b/aexpect/remote.py
+-index d7e09ec..2bfd92a 100644
+---- a/aexpect/remote.py
+-+++ b/aexpect/remote.py
+-@@ -47,7 +47,7 @@ import logging
+- import time
+- import re
+- import os
+--import pipes
+-+import shlex
+- 
+- from aexpect.client import Expect
+- from aexpect.client import RemoteSession
+-@@ -217,8 +217,8 @@ def quote_path(path):
+-     :return: Shell escaped version
+-     """
+-     if isinstance(path, list):
+--        return ' '.join(map(pipes.quote, path))
+--    return pipes.quote(path)
+-+        return ' '.join(map(shlex.quote, path))
+-+    return shlex.quote(path)
+- 
+- 
+- def handle_prompts(session, username, password, prompt=PROMPT_LINUX,
+-@@ -621,7 +621,7 @@ def scp_to_remote(host, port, username, password, local_path, remote_path,
+-                 r"-o StrictHostKeyChecking=no "
+-                 fr"-o PreferredAuthentications=password {limit} "
+-                 fr"-P {port} {quote_path(local_path)} {username}@\[{host}\]:"
+--                fr"{pipes.quote(remote_path)}")
+-+                fr"{shlex.quote(remote_path)}")
+-     password_list = [password]
+-     return remote_scp(command, password_list,
+-                       log_filename, log_function, timeout)
+-@@ -664,7 +664,7 @@ def scp_from_remote(host, port, username, password, remote_path, local_path,
+-                 r"-o StrictHostKeyChecking=no "
+-                 fr"-o PreferredAuthentications=password {limit} "
+-                 fr"-P {port} {username}@\[{host}\]:{quote_path(remote_path)} "
+--                fr"{pipes.quote(local_path)}")
+-+                fr"{shlex.quote(local_path)}")
+-     password_list = [password]
+-     remote_scp(command, password_list,
+-                log_filename, log_function, timeout)
+-@@ -717,7 +717,7 @@ def scp_between_remotes(src, dst, port, s_passwd, d_passwd, s_name, d_name,
+-                 r"-o StrictHostKeyChecking=no "
+-                 fr"-o PreferredAuthentications=password {limit} -P {port}"
+-                 fr" {s_name}@\[{src}\]:{quote_path(s_path)} {d_name}@\[{dst}\]"
+--                fr":{pipes.quote(d_path)}")
+-+                fr":{shlex.quote(d_path)}")
+-     password_list = [s_passwd, d_passwd]
+-     return remote_scp(command, password_list,
+-                       log_filename, log_function, timeout)
+--- 
+-2.50.1
+-
+diff --git a/package/python-aexpect/python-aexpect.hash b/package/python-aexpect/python-aexpect.hash
+index ff30c765e3..8ca28a2e71 100644
+--- a/package/python-aexpect/python-aexpect.hash
++++ b/package/python-aexpect/python-aexpect.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aexpect/json
+-md5  bb05319c277cfe97114780579d251c30  aexpect-1.7.0.tar.gz
+-sha256  11bfeea78ef6147ac8f6e29c2a720bd332598383d88274cdca5e6413c2070d52  aexpect-1.7.0.tar.gz
++md5  46eb96cf409cd59c8d39ca5c092b734e  aexpect-1.8.0.tar.gz
++sha256  97b753e4b0aa08d455bd64d2486c97d6bf6a18a9b8c26315519ec61448400b78  aexpect-1.8.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  7be26abf35e531a226dc742d2379d42d372cb61f027a6e26477c0e2f1a03bfcb  LICENSE
+diff --git a/package/python-aexpect/python-aexpect.mk b/package/python-aexpect/python-aexpect.mk
+index 1cfcc9ffaf..066f8d0480 100644
+--- a/package/python-aexpect/python-aexpect.mk
++++ b/package/python-aexpect/python-aexpect.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_AEXPECT_VERSION = 1.7.0
++PYTHON_AEXPECT_VERSION = 1.8.0
+ PYTHON_AEXPECT_SOURCE = aexpect-$(PYTHON_AEXPECT_VERSION).tar.gz
+-PYTHON_AEXPECT_SITE = https://files.pythonhosted.org/packages/dd/32/738b5190adb5ed387d3e755885f646b714fbf9c22adbda7ff988db7ede49
++PYTHON_AEXPECT_SITE = https://files.pythonhosted.org/packages/a3/74/837acfcdb3187cb931aa2edc4979e64aa9954092e4fd36b1161f65d65fdb
+ PYTHON_AEXPECT_SETUP_TYPE = setuptools
+ PYTHON_AEXPECT_LICENSE = GPL-2.0+
+ PYTHON_AEXPECT_LICENSE_FILES = LICENSE
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
