@@ -1,105 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F151ECCD184
-	for <buildroot@archiver.kernel.org>; Mon, 13 Oct 2025 03:17:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C112CCD185
+	for <buildroot@archiver.kernel.org>; Mon, 13 Oct 2025 06:07:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C331F8227F;
-	Mon, 13 Oct 2025 03:17:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE571611A9;
+	Mon, 13 Oct 2025 06:07:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8I9E3OKpgiMg; Mon, 13 Oct 2025 03:17:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Q31I2_lRBEvw; Mon, 13 Oct 2025 06:07:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1452A82233
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35BF5611A1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1452A82233;
-	Mon, 13 Oct 2025 03:17:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 78EF72A8
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 03:17:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 35BF5611A1;
+	Mon, 13 Oct 2025 06:07:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D0FE32A8
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 06:07:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6B3D040A82
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 03:17:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C2F7A40F4F
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 06:07:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8TBtAVxg1SeG for <buildroot@buildroot.org>;
- Mon, 13 Oct 2025 03:17:14 +0000 (UTC)
+ id 23XRhwCvk-6Y for <buildroot@buildroot.org>;
+ Mon, 13 Oct 2025 06:07:17 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::1031; helo=mail-pj1-x1031.google.com;
- envelope-from=nemaakhilesh@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CCAD140A7D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CCAD140A7D
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com
- [IPv6:2607:f8b0:4864:20::1031])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CCAD140A7D
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 03:17:13 +0000 (UTC)
-Received: by mail-pj1-x1031.google.com with SMTP id
- 98e67ed59e1d1-33292adb180so3728046a91.3
- for <buildroot@buildroot.org>; Sun, 12 Oct 2025 20:17:13 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::232; helo=mail-lj1-x232.google.com;
+ envelope-from=pierre.ficheux@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B515F40F4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B515F40F4E
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com
+ [IPv6:2a00:1450:4864:20::232])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B515F40F4E
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 06:07:16 +0000 (UTC)
+Received: by mail-lj1-x232.google.com with SMTP id
+ 38308e7fff4ca-36453927ffaso34445401fa.2
+ for <buildroot@buildroot.org>; Sun, 12 Oct 2025 23:07:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1760325433; x=1760930233;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=rJ65+PpUN188bq+Ir08uzXmULNqT8eHrYu8EiETM7QU=;
- b=VPnLspq0cwH7tPrKG1Qy67DH90SXEkDbUb1ZGRxqwXOI6JT9PeUuXr9g9jtMN56u9q
- dtUHC3r29jm/WcBruB08Y0cKPcnCCejzLvsg5DUhqYT90zy6O3T4QtGBlxBj2yznAI70
- orzapwIfD0fjLYuLUVF6EAiaoZa2vVDTLe+Z1uteavJesvxzJ7XaBOwsy0yCDY/3KD0o
- 6gKbM7EyRn2hJfmahDex2FXkrd2/VY50v0x6RbFrqZgFnKcz5AdU6w3Yjb8fLo1vbA1u
- I8COplca0kJEd6IJcUbketxqal6o3JtEaKZ7k6QGZ1C7x71bmB6r+amhpTz9wLaa6yQY
- 6/tA==
-X-Gm-Message-State: AOJu0YyKiBabnR1ecj5dIWBUHV1I9uIoZsrQIrFRYQ7nqJF/tTJju0kL
- DfLrfW5jHYNkpkuAV/yTA4rDGIVZC15+5T1I1O/uLx1W4Nz+U1BqcZKv+xDSIwNr
-X-Gm-Gg: ASbGnctQUASGGfJNppCDUPOWuNDZsz/LEn9tmiM42/ro+ZH7DH94mJH1Qx6mNsUJg3T
- v0tYWk7T5yjmr9z2hxf6y5Yx8kYYZY5SsTL5AwqTZcVjU3tROygOaxj3CjX8dscRJciNZPkQOut
- qdWp15+OmdtThGDpX5J3RgxSbChDjGq/RAfvtdgS5FbpMqvBkS6fg95+oY/7A/Qcp2uoGXdvts7
- bDP4uZE61oi+YfqDVYMPYjnoLOSKqPuKukc/QbB9PBFkG60cG3Pm2khVXEqVLA2cOmw2IRSJ38M
- YAzDpO8UrOJZ/JLM6rCphBZ+v8urzhrvMMaD7MRO1qLEeQ0cfECMAgTyMR6OZJrsx/yS8FobXL7
- W2PS+ZK4eom6ncwce/yhs0XGLKBOcWgzW5/OXWGVNgWQ11ACsrGbwAZ8tthEeQFQFV4s8mJnm6t
- QsLo/HAqaakHCrcV+mQ/RK3LUNsOWfqgK1kKiBU8FcN1C5T2GChMKLYdzA
-X-Google-Smtp-Source: AGHT+IF0PXClz6GhASwfNgnQAhv3k7nqWAcV2au53tyXmWk0TYDe2PGUupfSJQV7dmlmCm4lf3bYtw==
-X-Received: by 2002:a17:90b:1b42:b0:330:a228:d32 with SMTP id
- 98e67ed59e1d1-33b5111891emr26807197a91.10.1760325432719; 
- Sun, 12 Oct 2025 20:17:12 -0700 (PDT)
-Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
- [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- 98e67ed59e1d1-33b61ac8d7fsm10195647a91.21.2025.10.12.20.17.11
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 12 Oct 2025 20:17:12 -0700 (PDT)
-From: Akhilesh Nema <nemaakhilesh@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 12 Oct 2025 20:14:51 -0700
-Message-Id: <20251013031453.566526-7-nemaakhilesh@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20251013031453.566526-1-nemaakhilesh@gmail.com>
-References: <20251013031453.566526-1-nemaakhilesh@gmail.com>
+ d=1e100.net; s=20230601; t=1760335634; x=1760940434;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=SEfE4jJhY521oBp1AxjKhHMZ2KKYcwioKORotK1QCWI=;
+ b=xSXINcmF0kAMIIAuVBYXYnJtaCQShEwAh7pDm8RKjSaE2X0nOSDDGnGDZ+0gPZ921A
+ E9A2z1LBlBiOYwsByp/ml3rRNtagt2vmrT+GbFEPQTe9t9+7QskEdGqNGUvhK5eYQIXj
+ HOYTXg1lC07bqTKdZ3RhbMkPZp85w2XPXM/3Ghspclq+T4yJokuEuJe7Us87mDPPEVke
+ J/rV43BNz1U2B2dfQ/V3u9SC6YpmiVZzHDSNvL9bMPTEBUbq2ygo33NRcvF8vgKSlFYB
+ u6egFtQF/6nSeFvCYjvdlfxD63u/qgHhpLFKVXJOpBG3236vWCp6W8o4uEif2Vj7ff9i
+ 7KEQ==
+X-Gm-Message-State: AOJu0Yzxl19RwJAVSCED3f5FP5IBDB57o1pNN/UM6w/3XLwOfmTHPWKW
+ xCmOIejaTVIcrHTvY/5tzrTK8qzjQ+8Fu4yIoRCLos7apBfwarWIZ7oU+H1lmppF9xwKK/vbxKU
+ 4og41I9pi+MG6lQ24nRzTNG8UhuGzYnXH/ZYKsO5gezEyfRZLhoaba/0=
+X-Gm-Gg: ASbGncs69YDUnp9RpkeABDdtxq+GwZkBuHe/u2dRp/BpdDRYsBU8VeNzB35wqOlA9Al
+ ydudlKSZ1dXBc87jXRv+W3gg32pT/OAS41/2uVRnxd3RH2CLPwYYC0uM+dldh3DsyHcv7+li1IP
+ hmmsne/hL2T+Ph2Ekodp4o99zQKCsFoS6KJfcFYK3HkQGF70ueSy4XwqONm4WZaO7uk8FjKDxfG
+ zAKx0J/HF5VyZetbSWx+95MZnyv/wUysidnR/sQTRA6iNthTAny9pKmEs8=
+X-Google-Smtp-Source: AGHT+IFOqzUEqg28WeK6zG7H7nwetKcC0mHQENDdojcjdFzFQJYdo0hwvpVJDPJJo7oDyORj6sgVSSFxII0ed2a3Qrw=
+X-Received: by 2002:a05:651c:1b8d:b0:376:2802:84c5 with SMTP id
+ 38308e7fff4ca-37628028b6dmr25500981fa.46.1760335633283; Sun, 12 Oct 2025
+ 23:07:13 -0700 (PDT)
 MIME-Version: 1.0
+Date: Mon, 13 Oct 2025 08:07:02 +0200
+X-Gm-Features: AS18NWDeLOZbSHXYSY0THUqQ2im2VuMB_A7_pmhaku2S5YYr-YYfRIlmb-HnlGo
+Message-ID: <CAFc1U0tQYsSWe1=EtduNZogzNTtJHGr4eX3pjnYro5zJeArniA@mail.gmail.com>
+To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1760325433; x=1760930233; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=rJ65+PpUN188bq+Ir08uzXmULNqT8eHrYu8EiETM7QU=;
- b=eaOgf+wDdutxJv0sGosYf+gO42hK30wjrlwlOrS3I18hdPfE9ERza7R0qGUDblDOuK
- C4Lyp8jsfRxopZeQ+6UBkru7gTZhssKni0BXrhXbs+RqQwsxnf6xYRa035rygmSH5eMy
- RdDlCBk9Kwfhum4keXjMl1eSihqjhjO2W2WqDvL0jfJT0QYt44m6/ohO9lFD2HMQfENj
- 3QYaJfgdV59ivcBlu4WdIQURj5VnDzUbhyHcRUbV6vmxH7QJ5+L3po9VCkV3LImhYgvT
- U5QQe+KQreiyb0/D+dl+aMNWROUGR0UIz1+VHmUKyV1ZQ6lY5l+xh8/qOc/E5vnnRNB6
- tS5w==
+ d=smile.fr; s=google; t=1760335634; x=1760940434; darn=buildroot.org;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=SEfE4jJhY521oBp1AxjKhHMZ2KKYcwioKORotK1QCWI=;
+ b=Cd/ZLTD6nnQxNiAoMASmFrYv5Pv4fZyluF57XCx9h9veVLHdI3jR4kl2Tl+cN52H1r
+ 03GlPPn+/vS4jxcL1B/ibj6nSnIhE23zmADTZQ19k+q61Yduew/Yu7TuPVN82XKWGKxI
+ Szj3ywF29kiHAKO5K5se3s+Zh1Fvl/E9URIog=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=eaOgf+wD
-Subject: [Buildroot] [PATCH 7/9] package/qoriq-ddr-phy-binary: bump version
- to lf-6.12.34-2.1.0
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=Cd/ZLTD6
+Subject: [Buildroot] PocketBeagle2 support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,47 +95,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Vladimir Oltean <olteanv@gmail.com>, Akhilesh Nema <nemaakhilesh@gmail.com>,
- Brandon Maier <brandon.maier@collins.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Pierre FICHEUX via buildroot <buildroot@buildroot.org>
+Reply-To: Pierre FICHEUX <pierre.ficheux@smile.fr>
+Content-Type: multipart/mixed; boundary="===============0368870395823042094=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-No change.
+--===============0368870395823042094==
+Content-Type: multipart/alternative; boundary="0000000000001b906706410414b3"
 
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
----
- package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash | 2 +-
- package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+--0000000000001b906706410414b3
+Content-Type: text/plain; charset="UTF-8"
 
-diff --git a/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash b/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash
-index 439d8e3a8f..6ae08a3152 100644
---- a/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash
-+++ b/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  0837d5752a89ae7b9779cceac4aa758aad89688154a6a110a53fe16cbe6adca4  qoriq-ddr-phy-binary-lf-6.12.20-2.0.0.tar.gz
-+sha256  d5a5a9b7f25295e9e41c8e7c18a1986d1b59ebe519113ed6b45ede51639da92f  qoriq-ddr-phy-binary-lf-6.12.34-2.1.0.tar.gz
- sha256  e7e5f4949f7ac9f9a5d4d68b8f835f3ddc93ad47b594a11de699d90b9175413f  NXP-Binary-EULA.txt
-diff --git a/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.mk b/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.mk
-index 665b653d20..04cedbbe00 100644
---- a/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.mk
-+++ b/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--QORIQ_DDR_PHY_BINARY_VERSION = lf-6.12.20-2.0.0
-+QORIQ_DDR_PHY_BINARY_VERSION = lf-6.12.34-2.1.0
- QORIQ_DDR_PHY_BINARY_SITE = $(call github,nxp-qoriq,ddr-phy-binary,$(QORIQ_DDR_PHY_BINARY_VERSION))
- QORIQ_DDR_PHY_BINARY_LICENSE = NXP Binary EULA
- QORIQ_DDR_PHY_BINARY_LICENSE_FILES = NXP-Binary-EULA.txt
+Hi all,
+
+Are you considering any BR support for PB2 ? I saw the following link but
+it's old:
+
+https://github.com/mixaz/buildroot-pocketbeagle
+
+
+Thx
+
+
 -- 
-2.25.1
+
+Pierre FICHEUX -/- CTO Smile ECS, France -\- pierre.ficheux@smile.fr
+                             http://www.smile.fr
+                             https://smile.eu/fr/offres/embarque-iot
+I would love to change the world, but they won't give me the source code
+
+--0000000000001b906706410414b3
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><div class=3D"gmail_default" style=3D"font-family:ari=
+al,sans-serif">Hi all,</div><div class=3D"gmail_default" style=3D"font-fami=
+ly:arial,sans-serif"><br></div><div class=3D"gmail_default" style=3D"font-f=
+amily:arial,sans-serif">Are you considering any BR support for PB2 ? I saw =
+the following link but it&#39;s old:=C2=A0</div><div class=3D"gmail_default=
+" style=3D"font-family:arial,sans-serif"><br></div><div class=3D"gmail_defa=
+ult" style=3D"font-family:arial,sans-serif"><a href=3D"https://github.com/m=
+ixaz/buildroot-pocketbeagle">https://github.com/mixaz/buildroot-pocketbeagl=
+e</a></div><div class=3D"gmail_default" style=3D"font-family:arial,sans-ser=
+if"><br></div><div class=3D"gmail_default" style=3D"font-family:arial,sans-=
+serif"><br></div><div class=3D"gmail_default" style=3D"font-family:arial,sa=
+ns-serif">Thx</div><br clear=3D"all"></div><div><br></div><span class=3D"gm=
+ail_signature_prefix">-- </span><br><div dir=3D"ltr" class=3D"gmail_signatu=
+re" data-smartmail=3D"gmail_signature"><div dir=3D"ltr"><pre style=3D"margi=
+n-top:0px;margin-bottom:0px;padding:0px;font-size:12px;color:rgb(51,51,51);=
+white-space:pre-wrap!important">Pierre FICHEUX -/- CTO Smile ECS, France -\=
+- <a href=3D"mailto:pierre.ficheux@smile.fr" style=3D"color:rgb(1,134,186)"=
+ target=3D"_blank">pierre.ficheux@smile.fr</a>
+                             <a href=3D"http://www.smile.fr/" style=3D"colo=
+r:rgb(1,134,186)" target=3D"_blank">http://www.smile.fr</a>
+                             <a href=3D"https://smile.eu/fr/offres/embarque=
+-iot" style=3D"color:rgb(1,134,186)" target=3D"_blank">https://smile.eu/fr/=
+offres/embarque-iot</a>
+I would love to change the world, but they won&#39;t give me the source cod=
+e</pre></div></div></div>
+
+--0000000000001b906706410414b3--
+
+--===============0368870395823042094==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0368870395823042094==--
