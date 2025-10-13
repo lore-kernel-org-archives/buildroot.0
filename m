@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFD7DCCD185
-	for <buildroot@archiver.kernel.org>; Mon, 13 Oct 2025 18:01:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A219CCD183
+	for <buildroot@archiver.kernel.org>; Mon, 13 Oct 2025 18:01:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE246613FA;
-	Mon, 13 Oct 2025 18:01:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3D77360B7C;
+	Mon, 13 Oct 2025 18:01:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RHnIwk1sijSN; Mon, 13 Oct 2025 18:01:35 +0000 (UTC)
+ id pj30HniUH-Ag; Mon, 13 Oct 2025 18:01:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26F8661399
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F49B61373
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 26F8661399;
-	Mon, 13 Oct 2025 18:01:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 49C28BC
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 18:01:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F49B61373;
+	Mon, 13 Oct 2025 18:01:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A3803294
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 18:01:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3BA7740416
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 18:01:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 95C0140A26
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 18:01:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BkCrU1tjTD-2 for <buildroot@buildroot.org>;
- Mon, 13 Oct 2025 18:01:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eYMW8X7ScxbR for <buildroot@buildroot.org>;
+ Mon, 13 Oct 2025 18:01:45 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3D285403FE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D285403FE
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8BC99406AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8BC99406AE
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3D285403FE
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 18:01:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8BC99406AE
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 18:01:45 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a02db.dip0.t-ipconnect.de [91.58.2.219])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id E594AA4C6A17;
- Mon, 13 Oct 2025 19:55:18 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 02399A4C6A18;
+ Mon, 13 Oct 2025 19:55:19 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:43350)
  by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1v8MlR-000000005Im-41Yu;
+ (envelope-from <bernd@kuhls.net>) id 1v8MlS-000000005Im-0lB4;
  Mon, 13 Oct 2025 17:55:18 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 13 Oct 2025 19:55:08 +0200
-Message-ID: <20251013175513.86276-31-bernd@kuhls.net>
+Date: Mon, 13 Oct 2025 19:55:10 +0200
+Message-ID: <20251013175513.86276-33-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251013175513.86276-1-bernd@kuhls.net>
 References: <20251013175513.86276-1-bernd@kuhls.net>
@@ -54,22 +54,23 @@ MIME-Version: 1.0
 X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202506031021; t=1760378118;
- bh=9vmwqNtp4ivEGPtVAa2FsNySLBOhPLxr+142ropYjME=;
+ s=kas202506031021; t=1760378119;
+ bh=1faYO4knIrG8P2JIBfk5fhStOUCUAecH+R8UFhvetAY=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=olQ5MrO9Dx7qKI5FYmdl7YcqoLv6kTfRMG2COSWX56CiA3uZwvY52tU57WWBDpYpf
- GKVStop/tU7vnynhSw2GFIbCGfrS/hNQAD/pxYP11aQGYXERv40CMpuHfysfWuYxFy
- wO2NZYidt8Anld5nMzJy8e+5ncR8VbD6bH39b9g+t97D4sE8usb5GQRO7ZsKFhiCb3
- a9Zd9dDD+HSuCFLqBwHsjuphw29HXGITePERZV6xm0Uj1uHrueUndCTQi3B5wrjdVu
- 9ChbsyKbnKc74++rM0ZBhJOKT1gU2HSpuSbSeiskBYvVuN0OofV/chjDQw+R0yyy6h
- KmHvbfC4cm4HA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=xKXRPBoz4TyThT9XCjXKFM4bLlnJ5wrCwBRTjlhhbEurAYkeleOjMScenjA1H0GoF
+ kOmYGRJmk2QcjrlhMzFeGQNqGO6igz7mM3kvRgFxnqSF7DHZkvkG/LsRTlCB+h5I17
+ HC8Ru9+5RUKrKFW4FAA82u/PpqxzkaEzE507IAmcn/sSM5EMa+RjcwoSYixFSjfUXX
+ yHEmlNbfMi09/WGAa8WhGHpye6S6o6qu5L9KAR+9RpualX3B/yt0XjV5WtEIrvU19o
+ 0JSoui2H9cv/WJw/gWrWO/+e1SM9CbMaa9GAHmfs92ADOrmjrsWew82PA7ruEpEgZY
+ 8Wgs8wF21QiQQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=olQ5MrO9
-Subject: [Buildroot] [PATCH 31/36] package/python-spidev: bump version to 3.8
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=xKXRPBoz
+Subject: [Buildroot] [PATCH 33/36] package/python-sqliteschema: bump version
+ to 2.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -102,38 +103,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-spidev/python-spidev.hash | 4 ++--
- package/python-spidev/python-spidev.mk   | 4 ++--
+ package/python-sqliteschema/python-sqliteschema.hash | 4 ++--
+ package/python-sqliteschema/python-sqliteschema.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-spidev/python-spidev.hash b/package/python-spidev/python-spidev.hash
-index 77f7ce4039..166a36faba 100644
---- a/package/python-spidev/python-spidev.hash
-+++ b/package/python-spidev/python-spidev.hash
+diff --git a/package/python-sqliteschema/python-sqliteschema.hash b/package/python-sqliteschema/python-sqliteschema.hash
+index 7fe8ee925d..f235662313 100644
+--- a/package/python-sqliteschema/python-sqliteschema.hash
++++ b/package/python-sqliteschema/python-sqliteschema.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/spidev/json
--md5  3074b983c687b1ec3a80833a7508642d  spidev-3.7.tar.gz
--sha256  ce628a5ff489f45132679879bff5f455a66abf9751af01843850155b06ae92f0  spidev-3.7.tar.gz
-+md5  1c44b18936bfb8d519f11ef9fe15fc73  spidev-3.8.tar.gz
-+sha256  2bc02fb8c6312d519ebf1f4331067427c0921d3f77b8bcaf05189a2e8b8382c0  spidev-3.8.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/sqliteschema/json
+-md5  b7fd543b82ad709f70cdc06c4ec8639a  sqliteschema-2.0.0.tar.gz
+-sha256  fe6cedddf10de8934ec1ace8319340a2256667e4a1a36f3da4fd1c0956124dc8  sqliteschema-2.0.0.tar.gz
++md5  909372921bf08a9215b3d1a09a7f29df  sqliteschema-2.0.1.tar.gz
++sha256  d70a02d80f5c09d321632213bf957467909593fd462e5a37df66244ab6304c33  sqliteschema-2.0.1.tar.gz
  # Locally computed sha256 checksums
- sha256  510129bc8174c0fa81fa6d653691d1bd5d3555f7f38979ec45b5fc5bbff5377b  LICENSE
-diff --git a/package/python-spidev/python-spidev.mk b/package/python-spidev/python-spidev.mk
-index e93871c745..2f7f7f23fc 100644
---- a/package/python-spidev/python-spidev.mk
-+++ b/package/python-spidev/python-spidev.mk
+ sha256  7588265082eed5e9f4afd5090c57e610b740ec547b16aaaab739ba07c5eefb15  LICENSE
+diff --git a/package/python-sqliteschema/python-sqliteschema.mk b/package/python-sqliteschema/python-sqliteschema.mk
+index 4b224048f9..93d50d1aea 100644
+--- a/package/python-sqliteschema/python-sqliteschema.mk
++++ b/package/python-sqliteschema/python-sqliteschema.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SPIDEV_VERSION = 3.7
-+PYTHON_SPIDEV_VERSION = 3.8
- PYTHON_SPIDEV_SOURCE = spidev-$(PYTHON_SPIDEV_VERSION).tar.gz
--PYTHON_SPIDEV_SITE = https://files.pythonhosted.org/packages/b5/99/dd50af8200e224ce9412ad01cdbeeb5b39b2d61acd72138f2b92c4a6d619
-+PYTHON_SPIDEV_SITE = https://files.pythonhosted.org/packages/67/87/039b6eeea781598015b538691bc174cc0bf77df9d4d2d3b8bf9245c0de8c
- PYTHON_SPIDEV_SETUP_TYPE = setuptools
- PYTHON_SPIDEV_LICENSE = MIT
- PYTHON_SPIDEV_LICENSE_FILES = LICENSE
+-PYTHON_SQLITESCHEMA_VERSION = 2.0.0
++PYTHON_SQLITESCHEMA_VERSION = 2.0.1
+ PYTHON_SQLITESCHEMA_SOURCE = sqliteschema-$(PYTHON_SQLITESCHEMA_VERSION).tar.gz
+-PYTHON_SQLITESCHEMA_SITE = https://files.pythonhosted.org/packages/29/e7/4482eebf6d8ff7923bb3fd0e9239d3e634f67125cfda3001c88506b939b9
++PYTHON_SQLITESCHEMA_SITE = https://files.pythonhosted.org/packages/90/ad/0d7010b15899d25ee832b89d0d79b501c4d0c7d0d03c06e84c1cd1383326
+ PYTHON_SQLITESCHEMA_SETUP_TYPE = setuptools
+ PYTHON_SQLITESCHEMA_LICENSE = MIT
+ PYTHON_SQLITESCHEMA_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
