@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BF57CCD18D
-	for <buildroot@archiver.kernel.org>; Mon, 13 Oct 2025 17:59:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3444CCD183
+	for <buildroot@archiver.kernel.org>; Mon, 13 Oct 2025 17:59:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E152361426;
-	Mon, 13 Oct 2025 17:59:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tENSD72_hI8y; Mon, 13 Oct 2025 17:59:10 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 670E1613C2
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 670E1613C2;
-	Mon, 13 Oct 2025 17:59:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5E087294
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 17:59:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 50536831A5
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 17:59:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9553081103;
+	Mon, 13 Oct 2025 17:59:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h7R3w4X7ceqR for <buildroot@buildroot.org>;
- Mon, 13 Oct 2025 17:59:08 +0000 (UTC)
+ id B1qm8xYfGbJU; Mon, 13 Oct 2025 17:59:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9CD32831A5
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9CD32831A5;
+	Mon, 13 Oct 2025 17:59:22 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id F0E00294
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 17:59:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E1C3061443
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 17:59:20 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u5j3FB943r_A for <buildroot@buildroot.org>;
+ Mon, 13 Oct 2025 17:59:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3ED7481103
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3ED7481103
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DEED56141D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DEED56141D
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3ED7481103
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 17:59:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DEED56141D
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 17:59:19 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a02db.dip0.t-ipconnect.de [91.58.2.219])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 50341A4C6A0B;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 6BF44A4C6A0C;
  Mon, 13 Oct 2025 19:55:17 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:43350)
  by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1v8MlQ-000000005Im-28n1;
+ (envelope-from <bernd@kuhls.net>) id 1v8MlQ-000000005Im-1XaX;
  Mon, 13 Oct 2025 17:55:16 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 13 Oct 2025 19:54:58 +0200
-Message-ID: <20251013175513.86276-21-bernd@kuhls.net>
+Date: Mon, 13 Oct 2025 19:54:57 +0200
+Message-ID: <20251013175513.86276-20-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251013175513.86276-1-bernd@kuhls.net>
 References: <20251013175513.86276-1-bernd@kuhls.net>
@@ -55,22 +55,22 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202506031021; t=1760378117;
- bh=4BN9h0OItOci+YV6B5Eb9oxkRVPzy5IVhlZHrnMl5W8=;
+ bh=AhRTCc3mgAJWA/zua0t4VJX8HlM1ywQXK80HQ2/M654=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=mOmaGjZgLfvs+Xf6gOONG1KFVGoklw1SqP0pVOBbEqoinTk9tNeTheC5BiB73+ZPo
- 6OBoLWr8WdtRJUV7y+DuAOBb5h9wAl6mBG177y2F2+dv90zaAyp+hY6/QS0L2+NwN3
- 3QFOKqmwnyuubx21WgV1h1kM7K6a55Z+I1Hu6FwPX5cEbSXdPPtuGuOBXSKR+RgTdC
- 2sp1AE69GuVlll5NG8h3Xy12n+Lm2RHxNbuIR2vVutFI6U0U7iS7sMJXbuuPTxNoLH
- rs4nuzkAFxyO1SY/+IkM+e4LBY6nQXD0iomnjXLZPpfL46iarVRt1Q9yDx3D2B+uzb
- Pn1Fk4aMtZoww==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=Ime7CxfR8eHcdFBasdTBg+nUBhVCATmSYROOEDahgfQtUtjXQOCKjGah7tg7IBPxR
+ NqP08pOmQlatw+HZme1oin7jFF4SB6a5Ghl0Oe+8EQ0tSm5D9BRZpHZ6obXRtYW59P
+ wM0EaklwbaWsfr6cZUGvfnybxAn28wYMJFpMurTRxQDnOoAPAePdtg6qfhXvhW3H29
+ fQVfteTvW29itEwVLV/+uY+pIMzRs1J+GTXSms8ZFD3D2J0RkV6WtoTSRuxwynw5+p
+ 7gsf/ZvIJD7pC5cjnK40nLJX5cjz2D9tr5BqUOjPAb5FbevLWwhbxEpyTwAyuyEppt
+ nvnzR+jeBMXsw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=mOmaGjZg
-Subject: [Buildroot] [PATCH 21/36] package/python-pyudev: bump version to
- 0.24.4
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=Ime7CxfR
+Subject: [Buildroot] [PATCH 20/36] package/python-pythran: bump version to
+ 0.18.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,38 +103,39 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-pyudev/python-pyudev.hash | 4 ++--
- package/python-pyudev/python-pyudev.mk   | 4 ++--
+ package/python-pythran/python-pythran.hash | 4 ++--
+ package/python-pythran/python-pythran.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyudev/python-pyudev.hash b/package/python-pyudev/python-pyudev.hash
-index e9596b7b43..799499a2ac 100644
---- a/package/python-pyudev/python-pyudev.hash
-+++ b/package/python-pyudev/python-pyudev.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyudev/json
--md5  07bbe9111308d2509645705b8321c416  pyudev-0.24.3.tar.gz
--sha256  2e945427a21674893bb97632401db62139d91cea1ee96137cc7b07ad22198fc7  pyudev-0.24.3.tar.gz
-+md5  2d2e6f68b60c3bf3ffc2b7c8df8d18ac  pyudev-0.24.4.tar.gz
-+sha256  e788bb983700b1a84efc2e88862b0a51af2a995d5b86bc9997546505cf7b36bc  pyudev-0.24.4.tar.gz
+diff --git a/package/python-pythran/python-pythran.hash b/package/python-pythran/python-pythran.hash
+index b72acfbe47..b0a0b04258 100644
+--- a/package/python-pythran/python-pythran.hash
++++ b/package/python-pythran/python-pythran.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/pythran/json
+-md5  b754bc4c5cf37c4f0c4a3ae38009e799  pythran-0.17.0.tar.gz
+-sha256  3b77d6d970a6cf5b448facc7d4f6229c3e73909ac27ea2480c843afdadbad0fb  pythran-0.17.0.tar.gz
++md5  829c5cba97e1339556251b631f4faeca  pythran-0.18.0.tar.gz
++sha256  5c003e8cbedf6dbb68c2869c49fc110ce8b5e8982993078a4a819f1dadc4fc6a  pythran-0.18.0.tar.gz
  # Locally computed sha256 checksums
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
-diff --git a/package/python-pyudev/python-pyudev.mk b/package/python-pyudev/python-pyudev.mk
-index fa11ce5040..a83fe70a48 100644
---- a/package/python-pyudev/python-pyudev.mk
-+++ b/package/python-pyudev/python-pyudev.mk
+ sha256  0be9f14c66a9a3cb66d5263a6495437862ce0c9cdf60d4a6c36d1e51b1244c6e  LICENSE
+ sha256  e1c0ed0a99e4462016d79d835f1f479b78c4d4a07fe66598e97f449503ffd178  docs/LICENSE.rst
+diff --git a/package/python-pythran/python-pythran.mk b/package/python-pythran/python-pythran.mk
+index b9b1faee85..358b0c9ec1 100644
+--- a/package/python-pythran/python-pythran.mk
++++ b/package/python-pythran/python-pythran.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYUDEV_VERSION = 0.24.3
-+PYTHON_PYUDEV_VERSION = 0.24.4
- PYTHON_PYUDEV_SOURCE = pyudev-$(PYTHON_PYUDEV_VERSION).tar.gz
--PYTHON_PYUDEV_SITE = https://files.pythonhosted.org/packages/c4/5c/6cc034da13830e3da123ccf9a30910bc868fa16670362f004e4b788d0df1
-+PYTHON_PYUDEV_SITE = https://files.pythonhosted.org/packages/5e/1d/8bdbf651de1002e8b58fbe817bee22b1e8bfcdd24341d42c3238ce9a75f4
- PYTHON_PYUDEV_LICENSE = LGPL-2.1+
- PYTHON_PYUDEV_LICENSE_FILES = COPYING
- PYTHON_PYUDEV_SETUP_TYPE = setuptools
+-PYTHON_PYTHRAN_VERSION = 0.17.0
++PYTHON_PYTHRAN_VERSION = 0.18.0
+ PYTHON_PYTHRAN_SOURCE = pythran-$(PYTHON_PYTHRAN_VERSION).tar.gz
+-PYTHON_PYTHRAN_SITE = https://files.pythonhosted.org/packages/34/2d/4ac363a2eecd68c372b058d1b95a5f262c70776e107619cdcb5a4b68e1a3
++PYTHON_PYTHRAN_SITE = https://files.pythonhosted.org/packages/94/0a/95a72f09f25dae48f41e367959075ed4c7a0ff02dd3f54eec111501d648a
+ PYTHON_PYTHRAN_SETUP_TYPE = setuptools
+ PYTHON_PYTHRAN_LICENSE = BSD-3-Clause
+ PYTHON_PYTHRAN_LICENSE_FILES = LICENSE docs/LICENSE.rst
 -- 
 2.47.3
 
