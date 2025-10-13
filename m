@@ -4,68 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25652CCD183
-	for <buildroot@archiver.kernel.org>; Mon, 13 Oct 2025 12:04:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69AF7CCD183
+	for <buildroot@archiver.kernel.org>; Mon, 13 Oct 2025 12:41:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DCF22412E9;
-	Mon, 13 Oct 2025 12:04:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E8D1341099;
+	Mon, 13 Oct 2025 12:41:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MYkXSZxH6piH; Mon, 13 Oct 2025 12:04:09 +0000 (UTC)
+ id gWsebzMh6BRf; Mon, 13 Oct 2025 12:41:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 197CA412EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1930F40DE4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 197CA412EC;
-	Mon, 13 Oct 2025 12:04:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7F3B42A8
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 12:04:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1930F40DE4;
+	Mon, 13 Oct 2025 12:41:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D639FBC
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 12:41:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 710DC4130D
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 12:04:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C7D14813E7
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 12:41:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YEpS7ZVCBtan for <buildroot@buildroot.org>;
- Mon, 13 Oct 2025 12:04:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6EC0E4130B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6EC0E4130B
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6EC0E4130B
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 12:04:06 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 6BD5FB978C7F; Mon, 13 Oct 2025 14:04:03 +0200 (CEST)
-Message-ID: <fff6d814-bebb-4fbb-b525-f2c31bc7776a@rnout.be>
-Date: Mon, 13 Oct 2025 14:04:01 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kG_9uN3gKSRE for <buildroot@buildroot.org>;
+ Mon, 13 Oct 2025 12:41:36 +0000 (UTC)
+X-Greylist: delayed 379 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 13 Oct 2025 12:41:35 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C1F0380CF8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1F0380CF8
+Received-SPF: Neutral (mailfrom) identity=mailfrom; client-ip=54.37.254.54;
+ helo=kmf2.trabucayre.com; envelope-from=gwenj@trabucayre.com;
+ receiver=<UNKNOWN> 
+Received: from kmf2.trabucayre.com (ns3108948.ip-54-37-254.eu [54.37.254.54])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C1F0380CF8
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 12:41:35 +0000 (UTC)
+Received: from kmf3.. (localhost [IPv6:::1])
+ by kmf2.trabucayre.com (Postfix) with ESMTP id 046EA160225;
+ Mon, 13 Oct 2025 12:35:12 +0000 (UTC)
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+To: buildroot@buildroot.org
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Date: Mon, 13 Oct 2025 12:35:10 +0000
+Message-Id: <20251013123510.956091-1-gwenj@trabucayre.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Titouan Christophe <titouan.christophe@mind.be>, buildroot@buildroot.org
-References: <20251013111851.47129-1-titouan.christophe@mind.be>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <20251013111851.47129-1-titouan.christophe@mind.be>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1760357044; h=from:subject:date:message-id:to:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=lowta5KgI/0BYu+l+5WZw3VP9Qd+LGey3hPjWuSbYDI=;
- b=fiX5aNOpHV30/xXuOk0wfFo2/o3fSgi4j7xmerMrCU4adahaGvTzC4k6wIGWF+bzFv0dp9
- DSM92Dj/z4W3/2cdtd+VU1nLfGvy9/Ed9DAkzjH9DLoNqXezjF1ew+1um88RnVYpauLkZ9
- N6zxhUHUPqaf45ljOP4PViSqVOQQnljX6ozEWj1D73rh67ukxmoiKczaPmNB8/AIIJlkR/
- awzbKGOH1G9q7DqhJijn7Yw4HWUw+VBDOddIBN/0Lh+MMJv6/ACS1fmrNK/BXvY/9r5onV
- bWhC2XoiocJJAuLFeKPtbM+p+xjjfnp6bUC+6+6kBBQpBdtcPQutnyTeHcxHaQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=fiX5aNOp
-Subject: Re: [Buildroot] [PATCH] docs/website/download.html: fix latest
- releases dates
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=trabucayre.com
+Subject: [Buildroot] [PATCH] package/python-markdown: bump version to 3.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,77 +64,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ package/python-markdown/python-markdown.hash | 4 ++--
+ package/python-markdown/python-markdown.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On 13/10/2025 13:18, Titouan Christophe wrote:
-> The website download page was updated for the latest releases of
-> 2025.{02,05,08} in [1], but the column "Latest release date" wasn't
-> updated.
-> 
-> Moreover, indicate that 2025.05.3 is the EOL stable release.
-> 
-> [1] e5501d7b1a98c1e760f7569472d01491b21ffefa
-> 
-> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-
-  Applied to master, thanks.
-
-  Thank you for fixing my mistakes!
-
-  Regards,
-  Arnout
-
-> ---
->   docs/website/download.html | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/docs/website/download.html b/docs/website/download.html
-> index 5bb7cf6987..d5b849ca9a 100644
-> --- a/docs/website/download.html
-> +++ b/docs/website/download.html
-> @@ -54,7 +54,7 @@
->                 Changelog
->               </a>
->             </td>
-> -          <td>2025-09-07</td>
-> +          <td>2025-10-11</td>
->             <td>
->               <a href="/downloads/buildroot-2025.08.1.tar.gz">
->                 <img src="images/zip.png" width="24" alt="">
-> @@ -70,7 +70,7 @@
->               <a href="/downloads/buildroot-2025.08.1.tar.xz.sign">[PGP sig]</a>
->             </td>
->           </tr>
-> -          <th>Stable</th>
-> +          <th>Stable (EOL)</th>
->             <th>2025.05.x</th>
->             <td>September 2025</td>
->             <td>
-> @@ -79,7 +79,7 @@
->                 Changelog
->               </a>
->             </td>
-> -          <td>2025-09-09</td>
-> +          <td>2025-10-11</td>
->             <td>
->               <a href="/downloads/buildroot-2025.05.3.tar.gz">
->                 <img src="images/zip.png" width="24" alt="">
-> @@ -105,7 +105,7 @@
->                 Changelog
->               </a>
->             </td>
-> -          <td>2025-09-09</td>
-> +          <td>2025-10-11</td>
->             <td>
->               <a href="/downloads/buildroot-2025.02.7.tar.gz">
->                 <img src="images/zip.png" width="24" alt="">
+diff --git a/package/python-markdown/python-markdown.hash b/package/python-markdown/python-markdown.hash
+index 9a452bb4f7..25725b3c8e 100644
+--- a/package/python-markdown/python-markdown.hash
++++ b/package/python-markdown/python-markdown.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/markdown/json
+-md5  de4cdc6db368c7386f733d6dd8c858b1  markdown-3.7.tar.gz
+-sha256  2ae2471477cfd02dbbf038d5d9bc226d40def84b4fe2986e49b59b6b472bbed2  markdown-3.7.tar.gz
++md5  46aaa9fe3d42144f185368e819b7e720  markdown-3.9.tar.gz
++sha256  d2900fe1782bd33bdbbd56859defef70c2e78fc46668f8eb9df3128138f2cb6a  markdown-3.9.tar.gz
+ # Locally computed sha256 checksums
+ sha256  7ba4eb6d10b32b2d11dce13821340351cdbbb30ba8ccc67841db2ffd86e79aca  LICENSE.md
+diff --git a/package/python-markdown/python-markdown.mk b/package/python-markdown/python-markdown.mk
+index 4cacee24f8..6fcdd6b830 100644
+--- a/package/python-markdown/python-markdown.mk
++++ b/package/python-markdown/python-markdown.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_MARKDOWN_VERSION = 3.7
++PYTHON_MARKDOWN_VERSION = 3.9
+ PYTHON_MARKDOWN_SOURCE = markdown-$(PYTHON_MARKDOWN_VERSION).tar.gz
+-PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/54/28/3af612670f82f4c056911fbbbb42760255801b3068c48de792d354ff4472
++PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/8d/37/02347f6d6d8279247a5837082ebc26fc0d5aaeaf75aa013fcbb433c777ab
+ PYTHON_MARKDOWN_LICENSE = BSD-3-Clause
+ PYTHON_MARKDOWN_LICENSE_FILES = LICENSE.md
+ PYTHON_MARKDOWN_SETUP_TYPE = setuptools
+-- 
+2.51.0
 
 _______________________________________________
 buildroot mailing list
