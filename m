@@ -1,73 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A07F9CCD185
-	for <buildroot@archiver.kernel.org>; Mon, 13 Oct 2025 18:40:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08EFDCCD185
+	for <buildroot@archiver.kernel.org>; Mon, 13 Oct 2025 18:42:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2571260E51;
-	Mon, 13 Oct 2025 18:40:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A59F882F32;
+	Mon, 13 Oct 2025 18:42:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vst5lBypNz_C; Mon, 13 Oct 2025 18:40:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ff5jsBg7l1uc; Mon, 13 Oct 2025 18:42:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB9AF60E09
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4FA8E82F6F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB9AF60E09;
-	Mon, 13 Oct 2025 18:40:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D07451C9
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 18:40:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4FA8E82F6F;
+	Mon, 13 Oct 2025 18:42:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 49D62BC
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 18:42:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BEDEC60E09
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 18:40:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3A8E660E09
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 18:42:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id asUvqdLzeWSh for <buildroot@buildroot.org>;
- Mon, 13 Oct 2025 18:40:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C0C6F60DFE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0C6F60DFE
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C0C6F60DFE
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 18:40:12 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a02db.dip0.t-ipconnect.de [91.58.2.219])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id DFE28A4C6876
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 20:40:10 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:57148)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1v8NSs-000000004tL-1Df3
- for buildroot@buildroot.org; Mon, 13 Oct 2025 18:40:10 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id uyxZiLsrg1RK for <buildroot@buildroot.org>;
+ Mon, 13 Oct 2025 18:42:10 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0963860DFE
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0963860DFE
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 18:42:10 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 048EF870C7; Mon, 13 Oct 2025 18:42:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 13 Oct 2025 20:40:10 +0200
-Message-ID: <20251013184010.3540072-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: +++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1760380810;
- bh=TbMyp2Zvas9rzRoCyAbSKFXAJ2uUwukZ1bTQhdQT1A0=;
- h=From:To:Subject:Date:From;
- b=rxLLJlyeMYrZ0ldtdBfWlL4IFTwpF/umW8j9a7sbo5eo6C8KHt1HR5QUyIzquTW8E
- jiy2zAyUqvVzn6VeuHen8626/z5ev9D3L6w6U7F+/pZDPYMtDw+ojgEiknLXXXN3gV
- wZbEzHjwzGZLWE0rz7ikE/YTcfkjOpXWa5hbXocxZMcUYT14nf8NA9SpXBVryI0ece
- +Gs6tACDFRYaEDaeA3Pg/0ajgLRXvPlR32D8vxXRvC+uo1RUu+G1wHdCKM1JbYLXLD
- z0Zd+uqogLVIKO/NdPTim8x2aY8d8AtkfSAHBTe9c6j8uMceMY/Y28gdqdGPxluHpi
- IuF2XH37ZGuGw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=rxLLJlye
-Subject: [Buildroot] [PATCH 1/1] package/libunibreak: bump version to 6.1
+Date: Mon, 13 Oct 2025 20:37:34 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f32e6aa226ccbc9a53a47c736a13e57bcc78dc67
+X-Git-Newrev: bd47e35e57de58d8fc0faac42167a531d7c29242
+X-Patchwork-Hint: ignore
+Message-Id: <20251013184210.048EF870C7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/redis: security bump to v8.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,46 +57,97 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/adah1972/libunibreak/releases/tag/libunibreak_6_1
-https://github.com/adah1972/libunibreak/releases/tag/libunibreak_6_0
+commit: https://git.buildroot.net/buildroot/commit/?id=bd47e35e57de58d8fc0faac42167a531d7c29242
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+See the release notes:
+https://github.com/redis/redis/blob/8.2.2/00-RELEASENOTES
+
+This fixes the following vulnerabilities (in the Lua scripting engine):
+- CVE-2025-46817:
+    Redis is an open source, in-memory database that persists on disk.
+    Versions 8.2.1 and below allow an authenticated user to use a
+    specially crafted Lua script to cause an integer overflow and
+    potentially lead to remote code execution The problem exists in all
+    versions of Redis with Lua scripting. This issue is fixed in version
+    8.2.2.
+    https://www.cve.org/CVERecord?id=CVE-2025-46817
+
+- CVE-2025-46818:
+    Redis is an open source, in-memory database that persists on disk.
+    Versions 8.2.1 and below allow an authenticated user to use a
+    specially crafted Lua script to manipulate different LUA objects and
+    potentially run their own code in the context of another user. The
+    problem exists in all versions of Redis with LUA scripting. This issue
+    is fixed in version 8.2.2. A workaround to mitigate the problem
+    without patching the redis-server executable is to prevent users from
+    executing LUA scripts. This can be done using ACL to block a script by
+    restricting both the EVAL and FUNCTION command families.
+    https://www.cve.org/CVERecord?id=CVE-2025-46818
+
+- CVE-2025-46819:
+    Redis is an open source, in-memory database that persists on disk.
+    Versions 8.2.1 and below allow an authenticated user to use a
+    specially crafted LUA script to read out-of-bound data or crash the
+    server and subsequent denial of service. The problem exists in all
+    versions of Redis with Lua scripting. This issue is fixed in version
+    8.2.2. To workaround this issue without patching the redis-server
+    executable is to prevent users from executing Lua scripts. This can be
+    done using ACL to block a script by restricting both the EVAL and
+    FUNCTION command families.
+    https://www.cve.org/CVERecord?id=CVE-2025-46819
+
+- CVE-2025-49844:
+    Redis is an open source, in-memory database that persists on disk.
+    Versions 8.2.1 and below allow an authenticated user to use a
+    specially crafted Lua script to manipulate the garbage collector,
+    trigger a use-after-free and potentially lead to remote code
+    execution. The problem exists in all versions of Redis with Lua
+    scripting. This issue is fixed in version 8.2.2. To workaround this
+    issue without patching the redis-server executable is to prevent users
+    from executing Lua scripts. This can be done using ACL to restrict
+    EVAL and EVALSHA commands.
+    https://www.cve.org/CVERecord?id=CVE-2025-49844
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libunibreak/libunibreak.hash | 2 +-
- package/libunibreak/libunibreak.mk   | 2 +-
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libunibreak/libunibreak.hash b/package/libunibreak/libunibreak.hash
-index bb85f21cdc..8f1e7d292a 100644
---- a/package/libunibreak/libunibreak.hash
-+++ b/package/libunibreak/libunibreak.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  dd1a92d4c5646aa0e457ff41d89812ec5243863be6c20bbcb5ee380f3dd78377  libunibreak-5.1.tar.gz
-+sha256  cc4de0099cf7ff05005ceabff4afed4c582a736abc38033e70fdac86335ce93f  libunibreak-6.1.tar.gz
- sha256  0c57e2ec42ece17791a75d2f9b2f8e0663181be008667a507f765b3ef22522db  LICENCE
-diff --git a/package/libunibreak/libunibreak.mk b/package/libunibreak/libunibreak.mk
-index fa52116c1f..de3ea0fefc 100644
---- a/package/libunibreak/libunibreak.mk
-+++ b/package/libunibreak/libunibreak.mk
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 74fadfa8c0..beda6bc48c 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  e2c1cb9dd4180a35b943b85dfc7dcdd42566cdbceca37d0d0b14c21731582d3e  redis-8.2.1.tar.gz
++sha256  4e340e8e822a82114b6fb0f7ca581b749fa876e31e36e9fbcb75416bec9d0608  redis-8.2.2.tar.gz
+ 
+ # Locally calculated
+ sha256  4a0e416b9537688f30dfe69ddaceb2ca64d96b7df02a0a6760d376890ddc4e40  LICENSE.txt
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index f2d7d43b7a..fbad637aff 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUNIBREAK_VERSION = 5.1
-+LIBUNIBREAK_VERSION = 6.1
- LIBUNIBREAK_SITE = https://github.com/adah1972/libunibreak/releases/download/libunibreak_$(subst .,_,$(LIBUNIBREAK_VERSION))
- LIBUNIBREAK_INSTALL_STAGING = YES
- LIBUNIBREAK_LICENSE = Zlib
--- 
-2.47.3
-
+-REDIS_VERSION = 8.2.1
++REDIS_VERSION = 8.2.2
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = \
+ 	AGPL-3.0 or SSPL-1.0 or RSAL-2.0 (core); \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
