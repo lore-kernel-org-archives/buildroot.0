@@ -4,73 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9642ECCD183
-	for <buildroot@archiver.kernel.org>; Mon, 13 Oct 2025 18:01:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B51DDCCD183
+	for <buildroot@archiver.kernel.org>; Mon, 13 Oct 2025 18:01:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 68A396146F;
-	Mon, 13 Oct 2025 18:01:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8709C60B7C;
+	Mon, 13 Oct 2025 18:01:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zs8_MNBh-FBI; Mon, 13 Oct 2025 18:01:00 +0000 (UTC)
+ id IGIuFbFnpPSV; Mon, 13 Oct 2025 18:01:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8153561393
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8DF76136C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8153561393;
-	Mon, 13 Oct 2025 18:01:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4FE6FBC
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 18:00:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B8DF76136C;
+	Mon, 13 Oct 2025 18:01:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6D70BBC
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 18:01:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 358D1613C3
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 18:00:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5F35F403D2
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 18:01:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jkVfrv3yX7tn for <buildroot@buildroot.org>;
- Mon, 13 Oct 2025 18:00:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kBBEWdytcDeQ for <buildroot@buildroot.org>;
+ Mon, 13 Oct 2025 18:01:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 306C660B7C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 306C660B7C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5F210403A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F210403A2
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 306C660B7C
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 18:00:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5F210403A2
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 18:01:09 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a02db.dip0.t-ipconnect.de [91.58.2.219])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 84E8BA4C6A15;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 9C0D9A4C6A14;
  Mon, 13 Oct 2025 19:55:18 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:43350)
  by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1v8MlR-000000005Im-2DFu;
- Mon, 13 Oct 2025 17:55:17 +0000
+ (envelope-from <bernd@kuhls.net>) id 1v8MlR-000000005Im-3R5q;
+ Mon, 13 Oct 2025 17:55:18 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 13 Oct 2025 19:55:05 +0200
-Message-ID: <20251013175513.86276-28-bernd@kuhls.net>
+Date: Mon, 13 Oct 2025 19:55:07 +0200
+Message-ID: <20251013175513.86276-30-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251013175513.86276-1-bernd@kuhls.net>
 References: <20251013175513.86276-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202506031021; t=1760378118;
- bh=91OyB1GWJsZ/vPQ+3tbaNDyRWFa/9gAFFvfGe3eQZrQ=;
+ bh=KwBBZzpu4TLwsdXaTKiKdAgt/aFN4Dp6ugSNP/DPyzU=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=DUTsG/XKOpn+5u3LIir4EAr3Y/YtQzXxBIAEar42DpdSAbz10OvcMfdWI4Eeud6qQ
- 1xPwQNJHsbl8vLsYtXeyDWq2aJDVKKZUwM8j/VBQQSospBfqzGty3aVCclcdptnIvF
- owNO10fle0iU+Avlti3pXFACXsovKMMIp1KNyHkHpakRg9mJOw+J2TlTbXnZDglAFH
- OVpeDgDL07TmxwwHJFbAirkxYNwUFZB3OHWwd43isdoi/zY0tBN5kIN+/eZeohlw+7
- YikdggyC7bh+XPG3vzbj4b0nlx75Pyg1PGgcfypM0+HSOYM0PU5H+uuCZfFF/+5VVS
- eTHHZHddUQfcA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=CVSiDU0V9Ip/zlykyY5Fa4zBNwzTqlg5MK5u5pTFUe86bCwSU6v6J8q6LsAqwVJnn
+ XaoVfJtV0NNEPnclLRDTf3Ov1Ss0a2ALUHhXESq23nIXrYUAQFDNe/VRrh5wnZvN2A
+ tWcRWUOi2HTzBwHrTpgaZn+LmzuqGODV2UA3ca2XzN8gXgQXRejnyhoBQbLsdtc7cq
+ Q9L1E1yyelCcHH1XM+S3pyiJCX3dsft3KV3mwcpo+na5lsLo6X0eAvIaEjSJxl8oMv
+ QgWsmaJxoSIvRN1GmBcQtPOIo9SYi/kGqwTLlBfGNmWraOKxh5ItJr0IrK429Gj7QY
+ wgMMP0cYZ6jIg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=DUTsG/XK
-Subject: [Buildroot] [PATCH 28/36] package/python-setproctitle: bump version
- to 1.3.7
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=CVSiDU0V
+Subject: [Buildroot] [PATCH 30/36] package/python-simplesqlite: bump version
+ to 1.5.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,48 +101,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Updated license file name and hash due to upstream commits:
-https://github.com/dvarrazzo/py-setproctitle/commit/9950f38639e8bbda8d208bd4b8ec0531821e26a8
-https://github.com/dvarrazzo/py-setproctitle/commit/11d5ba71f0dc2bee2deb32ad17ac577101d404cd
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-setproctitle/python-setproctitle.hash | 6 +++---
- package/python-setproctitle/python-setproctitle.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-simplesqlite/python-simplesqlite.hash | 4 ++--
+ package/python-simplesqlite/python-simplesqlite.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-setproctitle/python-setproctitle.hash b/package/python-setproctitle/python-setproctitle.hash
-index 0076b0268f..3520520df8 100644
---- a/package/python-setproctitle/python-setproctitle.hash
-+++ b/package/python-setproctitle/python-setproctitle.hash
+diff --git a/package/python-simplesqlite/python-simplesqlite.hash b/package/python-simplesqlite/python-simplesqlite.hash
+index a17f20ff97..71c5fbf0a9 100644
+--- a/package/python-simplesqlite/python-simplesqlite.hash
++++ b/package/python-simplesqlite/python-simplesqlite.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/setproctitle/json
--md5  9971bff3c4dc79e31565f1f79adb97af  setproctitle-1.3.4.tar.gz
--sha256  3b40d32a3e1f04e94231ed6dfee0da9e43b4f9c6b5450d53e6dd7754c34e0c50  setproctitle-1.3.4.tar.gz
-+md5  422cd04321b1aa0f4b56d51d10ae5bb8  setproctitle-1.3.7.tar.gz
-+sha256  bc2bc917691c1537d5b9bca1468437176809c7e11e5694ca79a9ca12345dcb9e  setproctitle-1.3.7.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/simplesqlite/json
+-md5  a80e1e92454eac4c33c684c9f2a7f4a8  simplesqlite-1.5.3.tar.gz
+-sha256  b0841881422107fc1bd26f8393e6a114b0fc54dc9bb74282556dd6e055ed06c5  simplesqlite-1.5.3.tar.gz
++md5  4daaf3678d4d20589d917043881951fb  simplesqlite-1.5.4.tar.gz
++sha256  7007d2abed75f2f9b0f1e544a9af2b6d0bd341d8b5519446708e6595ea092d4c  simplesqlite-1.5.4.tar.gz
  # Locally computed sha256 checksums
--sha256  4ace14d0836da75079088cfc5cef6f2ddc8ce16f600609b36ee1bf10f8101f61  COPYRIGHT
-+sha256  4bb8a954b08857aaecf1da3ecd722ab810d3899f2ab386052bbe27f5ff24a02a  LICENSE
-diff --git a/package/python-setproctitle/python-setproctitle.mk b/package/python-setproctitle/python-setproctitle.mk
-index 6698000eb2..7821eb5225 100644
---- a/package/python-setproctitle/python-setproctitle.mk
-+++ b/package/python-setproctitle/python-setproctitle.mk
-@@ -4,11 +4,11 @@
+ sha256  130a35b917df1951aefbf366120491d5124045a87ded123f20ded21521f4e3a2  LICENSE
+diff --git a/package/python-simplesqlite/python-simplesqlite.mk b/package/python-simplesqlite/python-simplesqlite.mk
+index 81399b9941..bf08426310 100644
+--- a/package/python-simplesqlite/python-simplesqlite.mk
++++ b/package/python-simplesqlite/python-simplesqlite.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SETPROCTITLE_VERSION = 1.3.4
-+PYTHON_SETPROCTITLE_VERSION = 1.3.7
- PYTHON_SETPROCTITLE_SOURCE = setproctitle-$(PYTHON_SETPROCTITLE_VERSION).tar.gz
--PYTHON_SETPROCTITLE_SITE = https://files.pythonhosted.org/packages/ae/4e/b09341b19b9ceb8b4c67298ab4a08ef7a4abdd3016c7bb152e9b6379031d
-+PYTHON_SETPROCTITLE_SITE = https://files.pythonhosted.org/packages/8d/48/49393a96a2eef1ab418b17475fb92b8fcfad83d099e678751b05472e69de
- PYTHON_SETPROCTITLE_LICENSE = BSD-3-Clause
--PYTHON_SETPROCTITLE_LICENSE_FILES = COPYRIGHT
-+PYTHON_SETPROCTITLE_LICENSE_FILES = LICENSE
- PYTHON_SETPROCTITLE_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
+-PYTHON_SIMPLESQLITE_VERSION = 1.5.3
++PYTHON_SIMPLESQLITE_VERSION = 1.5.4
+ PYTHON_SIMPLESQLITE_SOURCE = simplesqlite-$(PYTHON_SIMPLESQLITE_VERSION).tar.gz
+-PYTHON_SIMPLESQLITE_SITE = https://files.pythonhosted.org/packages/59/a8/c8f4af95618dda725d91a081476036656fbf3660bb6f1728d1a5d088d6cc
++PYTHON_SIMPLESQLITE_SITE = https://files.pythonhosted.org/packages/1a/73/94ee1a1711ca04c7269f2d32472d10ad8cdc85ebf32c42e1cfc6924d39d8
+ PYTHON_SIMPLESQLITE_SETUP_TYPE = setuptools
+ PYTHON_SIMPLESQLITE_LICENSE = MIT
+ PYTHON_SIMPLESQLITE_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
