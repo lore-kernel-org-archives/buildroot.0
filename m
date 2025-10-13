@@ -4,72 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 362C0CCD183
-	for <buildroot@archiver.kernel.org>; Mon, 13 Oct 2025 17:55:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13D3CCCD18D
+	for <buildroot@archiver.kernel.org>; Mon, 13 Oct 2025 17:55:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D1EFD608E0;
-	Mon, 13 Oct 2025 17:55:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D415F61323;
+	Mon, 13 Oct 2025 17:55:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kzkR0E3LRQrG; Mon, 13 Oct 2025 17:55:21 +0000 (UTC)
+ id 8E5vb_YUi9Xq; Mon, 13 Oct 2025 17:55:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C73BB60768
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1EFF61303
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C73BB60768;
-	Mon, 13 Oct 2025 17:55:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 78A60294
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 17:55:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F1EFF61303;
+	Mon, 13 Oct 2025 17:55:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8CD74294
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 17:55:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7583841433
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 17:55:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7360A40A2F
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 17:55:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VHHWY2bom6Mg for <buildroot@buildroot.org>;
- Mon, 13 Oct 2025 17:55:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Lu_J1leYvMkS for <buildroot@buildroot.org>;
+ Mon, 13 Oct 2025 17:55:31 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A99C64142C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A99C64142C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F081740A26
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F081740A26
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A99C64142C
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 17:55:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F081740A26
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 17:55:30 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a02db.dip0.t-ipconnect.de [91.58.2.219])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id AB6E3A4C69F9;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id A91DEA4C69F6;
  Mon, 13 Oct 2025 19:55:14 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:43350)
  by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1v8MlN-000000005Im-2Upb;
+ (envelope-from <bernd@kuhls.net>) id 1v8MlN-000000005Im-37LJ;
  Mon, 13 Oct 2025 17:55:14 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 13 Oct 2025 19:54:38 +0200
-Message-ID: <20251013175513.86276-1-bernd@kuhls.net>
+Date: Mon, 13 Oct 2025 19:54:39 +0200
+Message-ID: <20251013175513.86276-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20251013175513.86276-1-bernd@kuhls.net>
+References: <20251013175513.86276-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202506031021; t=1760378114;
- bh=hRNKDyK67N0QzsvgXo01x8l/ICmg+nGzH9e/Yn/OhVk=;
- h=From:To:Cc:Subject:Date:From;
- b=ik80P2OAzAzt/99ZeqIngyQS+6Tjns5uHCBOg2T6dZnB8wsBYVqdB7N/qFe7MU2hn
- saP/opMzP2ye3LtIC5QOz725k8H8zP2Xu677mb0bkKZEyxUVYsx1nVn1cqEzyevKHp
- Zm7hPsgtux6nP0/36Y6z1PN7kemKgfWmNoS6btojhNLwH6DDovciYkZos4qXdyCMxb
- GkmCYYdmrdAI2Z2Ifzkw5u7Wegvcma+CIYr8GNiGyLIP58xgA58Gs4yDRy3QB2KLpR
- VIochgcCSt1Pw7bd+jds7db+0Eju9NpfgOOUg8S+IZDeN8w4GCMpD11XiAzKCIBoX4
- /pEnIIYPzqKOw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=EKQeySYJvF0rYCaMtNff66qOdXs38Zuq/3PKwp4yOfk=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=unqQovhxJNvG5lKrE1zby5I1x0jM6GO/iwH8+lVL2EkUXUx77Hisfu8lb8ad3i3bw
+ 8jfWbfWErwi3QfY/qjYN60cO5qEwctHWFTiffQmj/9aaslsJXumtYGFzZ49TbJK0FW
+ En/5zqYeY3Y/SgBdYGaWTKkDl92Jo2l5iZzkQOplwCfgTPS0Q4l2sg/IFK5xNd+FJd
+ 2VrFtsMI/qS99BlXYOqWdYVu4BJMY8ZqZPufYTjtTAcG2mc7Kr03gr3XTjXpvC/uz2
+ tOeBj9CDa71Ajj97vRmnnGgY/TX4CUA0JZbCm76Jezkqo2LjjoZFEmuFtbwXbm/F2x
+ mCw1t7rO25jQQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=ik80P2OA
-Subject: [Buildroot] [PATCH 01/36] package/python-parso: bump version to
- 0.8.5
+ header.s=kas202506031021 header.b=unqQovhx
+Subject: [Buildroot] [PATCH 02/36] package/python-pathvalidate: bump version
+ to 3.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -102,39 +104,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-parso/python-parso.hash | 4 ++--
- package/python-parso/python-parso.mk   | 4 ++--
+ package/python-pathvalidate/python-pathvalidate.hash | 4 ++--
+ package/python-pathvalidate/python-pathvalidate.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-parso/python-parso.hash b/package/python-parso/python-parso.hash
-index 83224a28bf..d0c8b3861a 100644
---- a/package/python-parso/python-parso.hash
-+++ b/package/python-parso/python-parso.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/parso/json
--md5  f83b2e4164f6589ccae39b16c30ed5de  parso-0.8.4.tar.gz
--sha256  eb3a7b58240fb99099a345571deecc0f9540ea5f4dd2fe14c2a99d6b281ab92d  parso-0.8.4.tar.gz
-+md5  e0b327d04ff11e429737465f2716c232  parso-0.8.5.tar.gz
-+sha256  034d7354a9a018bdce352f48b2a8a450f05e9d6ee85db84764e9b6bd96dafe5a  parso-0.8.5.tar.gz
+diff --git a/package/python-pathvalidate/python-pathvalidate.hash b/package/python-pathvalidate/python-pathvalidate.hash
+index 9793217fcb..c9cde9d906 100644
+--- a/package/python-pathvalidate/python-pathvalidate.hash
++++ b/package/python-pathvalidate/python-pathvalidate.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pathvalidate/json
+-md5  9b6599a16c5e3ea7b6dcad5ca7dc337e  pathvalidate-3.2.3.tar.gz
+-sha256  59b5b9278e30382d6d213497623043ebe63f10e29055be4419a9c04c721739cb  pathvalidate-3.2.3.tar.gz
++md5  eb93289da5c87fc28af52e8536f417bc  pathvalidate-3.3.1.tar.gz
++sha256  b18c07212bfead624345bb8e1d6141cdcf15a39736994ea0b94035ad2b1ba177  pathvalidate-3.3.1.tar.gz
  # Locally computed sha256 checksums
- sha256  fa67973073753d17624caf8684d5ee816d70c89d912c5bca7ca0f08e7b150edb  LICENSE.txt
- sha256  9c1e620a5cf8e74fe81c1fd4c55e9cc0b189fc04e677cfc7ef915de746c3f59e  docs/_themes/flask/LICENSE
-diff --git a/package/python-parso/python-parso.mk b/package/python-parso/python-parso.mk
-index 65d10ebfc0..1cbc1f1e89 100644
---- a/package/python-parso/python-parso.mk
-+++ b/package/python-parso/python-parso.mk
+ sha256  130a35b917df1951aefbf366120491d5124045a87ded123f20ded21521f4e3a2  LICENSE
+diff --git a/package/python-pathvalidate/python-pathvalidate.mk b/package/python-pathvalidate/python-pathvalidate.mk
+index f666e07fb8..5d5baa5731 100644
+--- a/package/python-pathvalidate/python-pathvalidate.mk
++++ b/package/python-pathvalidate/python-pathvalidate.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PARSO_VERSION = 0.8.4
-+PYTHON_PARSO_VERSION = 0.8.5
- PYTHON_PARSO_SOURCE = parso-$(PYTHON_PARSO_VERSION).tar.gz
--PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/66/94/68e2e17afaa9169cf6412ab0f28623903be73d1b32e208d9e8e541bb086d
-+PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/d4/de/53e0bcf53d13e005bd8c92e7855142494f41171b34c2536b86187474184d
- PYTHON_PARSO_SETUP_TYPE = setuptools
- PYTHON_PARSO_LICENSE = MIT, Python-2.0, BSD-3-Clause (flask theme)
- PYTHON_PARSO_LICENSE_FILES = LICENSE.txt docs/_themes/flask/LICENSE test/normalizer_issue_files/LICENSE
+-PYTHON_PATHVALIDATE_VERSION = 3.2.3
++PYTHON_PATHVALIDATE_VERSION = 3.3.1
+ PYTHON_PATHVALIDATE_SOURCE = pathvalidate-$(PYTHON_PATHVALIDATE_VERSION).tar.gz
+-PYTHON_PATHVALIDATE_SITE = https://files.pythonhosted.org/packages/92/87/c7a2f51cc62df0495acb0ed2533a7c74cc895e569a1b020ee5f6e9fa4e21
++PYTHON_PATHVALIDATE_SITE = https://files.pythonhosted.org/packages/fa/2a/52a8da6fe965dea6192eb716b357558e103aea0a1e9a8352ad575a8406ca
+ PYTHON_PATHVALIDATE_SETUP_TYPE = setuptools
+ PYTHON_PATHVALIDATE_LICENSE = MIT
+ PYTHON_PATHVALIDATE_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
