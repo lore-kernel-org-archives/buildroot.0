@@ -1,77 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F475CCD183
-	for <buildroot@archiver.kernel.org>; Mon, 13 Oct 2025 19:48:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EDDCCCD185
+	for <buildroot@archiver.kernel.org>; Mon, 13 Oct 2025 19:54:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 374C541269;
-	Mon, 13 Oct 2025 19:48:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D49080E95;
+	Mon, 13 Oct 2025 19:54:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NOE3SqS-nwwU; Mon, 13 Oct 2025 19:48:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kLUcC68nn5jm; Mon, 13 Oct 2025 19:54:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AD4741276
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A67480E0E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3AD4741276;
-	Mon, 13 Oct 2025 19:48:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 55F3C294
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 19:48:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3A67480E0E;
+	Mon, 13 Oct 2025 19:54:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C03DC294
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 19:54:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3BFEC41276
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 19:48:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A6B8D80E0E
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 19:54:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KraejUJhYwK6 for <buildroot@buildroot.org>;
- Mon, 13 Oct 2025 19:48:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 16E3941269
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16E3941269
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 16E3941269
- for <buildroot@buildroot.org>; Mon, 13 Oct 2025 19:48:18 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 9064BB0055E;
- Mon, 13 Oct 2025 21:48:12 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 13 Oct 2025 21:48:12 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iDbAOYWkD9fu for <buildroot@buildroot.org>;
+ Mon, 13 Oct 2025 19:54:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.97.179.56;
+ helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3233F80DBB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3233F80DBB
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3233F80DBB
+ for <buildroot@buildroot.org>; Mon, 13 Oct 2025 19:54:40 +0000 (UTC)
+Received: from 81-197-150-176.elisa-laajakaista.fi ([81.197.150.176]
+ helo=momiji) by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+ id 1v8Oct-0095VC-33; Mon, 13 Oct 2025 21:54:35 +0200
+Received: from localhost (momiji [local])
+ by momiji (OpenSMTPD) with ESMTPA id 50bd3c03;
+ Mon, 13 Oct 2025 19:54:34 +0000 (UTC)
+Date: Mon, 13 Oct 2025 22:54:34 +0300
+Message-ID: <20251013225434.GI1422726@igalia.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org
+In-Reply-To: <87v7li9no5.fsf@dell.be.48ers.dk>
+References: <20250916122005.30652-1-thomas@devoogdt.com>
+ <87v7li9no5.fsf@dell.be.48ers.dk>
 MIME-Version: 1.0
-Date: Mon, 13 Oct 2025 21:48:12 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Pierre-Jean Texier <texier.pj2@gmail.com>
-In-Reply-To: <20251012213141.3512892-2-bernd@kuhls.net>
-References: <20251012213141.3512892-1-bernd@kuhls.net>
- <20251012213141.3512892-2-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <0b0b35f53322a4b66ccb201b18ca1e95@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1760384895;
- bh=87MY18qXJL82LyrXmV2MLKuzSuPiVSYPfZwROxZ8EEU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=QDdmfFN7Y5sole/NZFtZBpJpU2dqQCEn+OGla5XnPmMwbERZfSGVW1t9rgRXhvrkJ
- OIMBxT6SdILKaAW1WMp1c9bsV9pf/SwAymVEEWfMJRNw3lky0tzBiCtBfvkp+ncf0X
- xvkt+2uYCnNWirn7+ewb+iiUgellpTKBGljzeJXyzBj6zyeI3X1eqW+8aZS9ExIhxx
- Vqi5DP/puvJAlJAY8AiKMEgw1wpPAcekJ7N9/EZLGnwfs0JBWgGgeeJYVxux93rx+W
- C4T8ps2iyQ/kFG5ktyDyS4y6U4mv+jOQbnoNKcUjd72JL4fzT60r6igeAwRv/6fgsr
- w63UYfVtnPUiw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
+ From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=ObnI9x/kBL1rUQIPJjDRO568lZgs0g9Fk5gA7lCnXH0=; b=XPEwjypInjQgUtl0WRRRK3WJze
+ Q4QeLifoApfA/fD/sIRHwiVwjO5xjGlnciVynQxTs23+CN20ifMEm7Ss2dCgi/lkGV8T0hZkDxydr
+ G1PWePBkZjt5+MIfUzh3O1RgfmdhCbstVqRtT6ViBVmPeB4JDxvtoh+gDM8wSMBz3UdfRSCcz2mNO
+ iAHJtEumGKz1YCfIZjDqotfrJPuiLohv+4rzJDu0eTD8O+79eEzaKKeHmcsmNuSg9MTd2hw1xWm7R
+ cWnNGYAwlcrGItq8fH+MkzokY9SaXLSPYMcz68I8LiAW4+QuFnx5g28X5B/TBusNy9wsf4CmbcUTU
+ Iw7X6VUA==;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=igalia.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=QDdmfFN7
-Subject: Re: [Buildroot] [PATCH 2/3] package/libxml2: bump version to 2.15.0
+ unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
+ header.s=20170329 header.b=XPEwjypI
+Subject: Re: [Buildroot] [PATCH v1] package/webkitgtk: bump to version 2.48.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,159 +84,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: multipart/mixed; boundary="===============0599464600829587978=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Bernd,
 
-THanks for the patch.
+--===============0599464600829587978==
+Content-Type: multipart/signed; boundary="dlow6z2/hIIOJEo0"; micalg="pgp-sha256"; protocol="application/pgp-signature"
 
-On 12/10/2025 23:31, Bernd Kuhls wrote:
-> Removed all patches because they are included in this release, although
-> with different commits than mentioned in our patch files:
-> 
-> 0001: 
-> https://gitlab.gnome.org/GNOME/libxml2/-/commit/acbbeef9f5dcdcc901c5f3fa14d583ef8cfd22f0
-> 0002: 
-> https://gitlab.gnome.org/GNOME/libxml2/-/commit/f7ebc65f05bffded58d1e1b2138eb124c2e44f21
-> 0003: 
-> https://gitlab.gnome.org/GNOME/libxml2/-/commit/c24909ba2601848825b49a60f988222da3019667
-> 0004: 
-> https://gitlab.gnome.org/GNOME/libxml2/-/commit/c340e419505cf4bf1d9ed7019a87cc00ec200434
-> 
-> Updated license hash due to upstream commit:
-> https://gitlab.gnome.org/GNOME/libxml2/-/commit/4bd66d4549b2e8925a752e0daac3a189d2fec8f7
-> 
-> Removed python3 bindings due to their pending removal in 2.16:
-> https://download.gnome.org/sources/libxml2/2.15/libxml2-2.15.0.news
-> which prevents us from adding a dependency on host-doxygen due to
-> upstream commit
-> https://gitlab.gnome.org/GNOME/libxml2/-/commit/bbe5827c94cc9b0e393ff3e6eef6dec2376317e2
-> "Doxygen will also be required to build the Python bindings."
-> 
-> Removed lzma support due to upstream removal:
-> https://gitlab.gnome.org/GNOME/libxml2/-/commit/1763281cd65ded4067ddf123eb7358690c214b0b
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  ...ix-integer-overflow-in-xmlBuildQName.patch |  59 ------
->  ...emory-safety-issues-in-xmlSchematron.patch | 186 ------------------
->  ...ull-pointer-dereference-leading-to-D.patch |  70 -------
->  ...uffer-overflows-of-interactive-shell.patch | 103 ----------
->  package/libxml2/libxml2.hash                  |   6 +-
->  package/libxml2/libxml2.mk                    |  39 +---
->  6 files changed, 6 insertions(+), 457 deletions(-)
->  delete mode 100644 
-> package/libxml2/0001-tree-Fix-integer-overflow-in-xmlBuildQName.patch
->  delete mode 100644 
-> package/libxml2/0002-schematron-Fix-memory-safety-issues-in-xmlSchematron.patch
->  delete mode 100644 
-> package/libxml2/0003-Schematron-Fix-null-pointer-dereference-leading-to-D.patch
->  delete mode 100644 
-> package/libxml2/0004-fix-potential-buffer-overflows-of-interactive-shell.patch
-[...]
-> diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-> index 36cdd5a63d..09c5fcc163 100644
-> --- a/package/libxml2/libxml2.mk
-> +++ b/package/libxml2/libxml2.mk
-> @@ -4,8 +4,8 @@
->  #
->  
-> ################################################################################
-> 
-> -LIBXML2_VERSION_MAJOR = 2.13
-> -LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).8
-> +LIBXML2_VERSION_MAJOR = 2.15
-> +LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).0
 
-This new version introduces build failures. See:
-https://gitlab.com/jolivain/buildroot/-/pipelines/2097179479
+--dlow6z2/hIIOJEo0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: base64
 
-For reference, the v2.13.0 build correctly:
-https://gitlab.com/jolivain/buildroot/-/pipelines/2097205593
+SGkgYWxsLAoKT24gVHVlLCAxNiBTZXAgMjAyNSAyMTo1NjoyNiArMDIwMCBQZXRlciBLb3JzZ2Fh
+cmQgPHBldGVyQGtvcnNnYWFyZC5jb20+IHdyb3RlOgo+ID4+Pj4+ICJUaG9tYXMiID09IFRob21h
+cyBEZXZvb2dkdCA8dGhvbWFzQGRldm9vZ2R0LmNvbT4gd3JpdGVzOgo+IAo+ICA+IEZpeGVzIGEg
+bnVtYmVyIG9mIGNyYXNoZXMuIFJlbGVhc2Ugbm90ZXM6Cj4gID4gIC0gaHR0cHM6Ly93ZWJraXRn
+dGsub3JnLzIwMjUvMDcvMzAvd2Via2l0Z3RrMi40OC40LXJlbGVhc2VkLmh0bWwKPiAgPiAgLSBo
+dHRwczovL3dlYmtpdGd0ay5vcmcvMjAyNS8wOC8wMS93ZWJraXRndGsyLjQ4LjUtcmVsZWFzZWQu
+aHRtbAo+ICA+ICAtIGh0dHBzOi8vd2Via2l0Z3RrLm9yZy8yMDI1LzA5LzAzL3dlYmtpdGd0azIu
+NDguNi1yZWxlYXNlZC5odG1sCj4gCj4gID4gQW5kIGJyaW5ncyBzb21lIHNlY3VyaXR5IGZpeGVz
+LiBTZWN1cml0eSBhZHZpc29yeToKPiAKPiAgPiAgLSBodHRwczovL3dlYmtpdGd0ay5vcmcvc2Vj
+dXJpdHkvV1NBLTIwMjUtMDAwNS5odG1sCj4gCj4gID4gU2lnbmVkLW9mZi1ieTogVGhvbWFzIERl
+dm9vZ2R0IDx0aG9tYXNAZGV2b29nZHQuY29tPgo+IAo+IENvbW1pdHRlZCBhZnRlciBtYXJraW5n
+IGl0IGFzIGEgc2VjdXJpdHkgYnVtcCwgdGhhbmtzLgo+IAo+IFdoYXQgYWJvdXQgd3Bld2Via2l0
+PwoKTXkgcGxhbiB0byB1cGRhdGUgaXQgdG8gMi41MC4xIHdoaWNoIEkgaGF2ZSBqdXN0IHJlbGVh
+c2VkIHRvZGF5IFsxXS4KIAoKQ2hlZXJzLArigJRBZHJpw6FuCgotLS0KWzFdIGh0dHBzOi8vd3Bl
+d2Via2l0Lm9yZy9yZWxlYXNlL3dwZXdlYmtpdC0yLjUwLjEuaHRtbAo=
 
-This is likely due to:
-https://gitlab.gnome.org/GNOME/libxml2/-/commit/f070acc56400410a3ad27f4df313526749364962
+--dlow6z2/hIIOJEo0
+Content-Type: application/pgp-signature; name="signature.asc"
 
-libxml2 enables by default --with-modules, which requires dlopen(), 
-which
-cannot build in static builds.
+-----BEGIN PGP SIGNATURE-----
 
-Maybe the same comment applies for pthread support.
+iF0EABEIAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCaO1Y+gAKCRCRxVnb5MkS
+O4ZuAJ9ZgEVRide/QUU4HjTdyJsBCRxihQCdGZmFXih8AMGWlhg9UZhJy5/6Smw=
+=faBO
+-----END PGP SIGNATURE-----
 
-Could you have a look please?
+--dlow6z2/hIIOJEo0--
 
->  LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
->  LIBXML2_SITE = \
->  	https://download.gnome.org/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
-> @@ -15,18 +15,6 @@ LIBXML2_LICENSE_FILES = Copyright
->  LIBXML2_CPE_ID_VENDOR = xmlsoft
->  LIBXML2_CONFIG_SCRIPTS = xml2-config
-> 
-> -#0001-tree-Fix-integer-overflow-in-xmlBuildQName.patch
-> -LIBXML2_IGNORE_CVES += CVE-2025-6021
-> -
-> -#0002-schematron-Fix-memory-safety-issues-in-xmlSchematron.patch
-> -LIBXML2_IGNORE_CVES += CVE-2025-49794 CVE-2025-49796
-> -
-> -#0003-Schematron-Fix-null-pointer-dereference-leading-to-D.patch
-> -LIBXML2_IGNORE_CVES += CVE-2025-49795
-> -
-> -# 0004-fix-potential-buffer-overflows-of-interactive-shell.patch
-> -LIBXML2_IGNORE_CVES += CVE-2025-6170
-> -
->  # relocation truncated to fit: R_68K_GOT16O
->  ifeq ($(BR2_m68k_cf),y)
->  LIBXML2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mxgot"
-> @@ -37,21 +25,7 @@ LIBXML2_CONF_OPTS = --with-http --with-gnu-ld 
-> --without-debug
->  HOST_LIBXML2_DEPENDENCIES = host-pkgconf
->  LIBXML2_DEPENDENCIES = host-pkgconf
-> 
-> -HOST_LIBXML2_CONF_OPTS = --without-zlib --without-lzma
-> -
-> -ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> -LIBXML2_DEPENDENCIES += python3
-> -LIBXML2_CONF_OPTS += --with-python
-> -else
-> -LIBXML2_CONF_OPTS += --without-python
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_HOST_PYTHON3),y)
-> -HOST_LIBXML2_DEPENDENCIES += host-python3
-> -HOST_LIBXML2_CONF_OPTS += --with-python
-> -else
-> -HOST_LIBXML2_CONF_OPTS += --without-python
-> -endif
-> +HOST_LIBXML2_CONF_OPTS = --without-zlib
-> 
->  ifeq ($(BR2_PACKAGE_ICU),y)
->  LIBXML2_DEPENDENCIES += icu
-> @@ -67,13 +41,6 @@ else
->  LIBXML2_CONF_OPTS += --without-zlib
->  endif
-> 
-> -ifeq ($(BR2_PACKAGE_XZ),y)
-> -LIBXML2_DEPENDENCIES += xz
-> -LIBXML2_CONF_OPTS += --with-lzma
-> -else
-> -LIBXML2_CONF_OPTS += --without-lzma
-> -endif
-> -
->  LIBXML2_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-> 
->  ifeq ($(BR2_ENABLE_LOCALE)$(BR2_PACKAGE_LIBICONV),y)
-> --
-> 2.47.3
+--===============0599464600829587978==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0599464600829587978==--
