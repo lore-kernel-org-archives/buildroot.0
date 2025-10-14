@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04341CCD184
-	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 20:29:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79694CCD190
+	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 20:29:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C8A006115E;
-	Tue, 14 Oct 2025 20:29:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 441FC61370;
+	Tue, 14 Oct 2025 20:29:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZcEuYtFEDO4b; Tue, 14 Oct 2025 20:29:46 +0000 (UTC)
+ id ZGPjpB8nXnUW; Tue, 14 Oct 2025 20:29:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60CBE610C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E247061340
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 60CBE610C4;
-	Tue, 14 Oct 2025 20:29:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2DB7EBC
+	by smtp3.osuosl.org (Postfix) with ESMTP id E247061340;
+	Tue, 14 Oct 2025 20:29:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E6BA1C9
  for <buildroot@buildroot.org>; Tue, 14 Oct 2025 20:29:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BFA914120B
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 20:29:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 21CE94051F
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 20:29:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g4CRMB1bHUd9 for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XJdydewATS86 for <buildroot@buildroot.org>;
  Tue, 14 Oct 2025 20:29:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FED8411C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF417401C2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1FED8411C4
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 20:29:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EF417401C2
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 20:29:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1E736870E7; Tue, 14 Oct 2025 20:29:37 +0000 (UTC)
+ id DF187870FD; Tue, 14 Oct 2025 20:29:36 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 14 Oct 2025 22:10:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e302e09a52d9ac721ef40b7297bb4c43dabac725
-X-Git-Newrev: e4e257ff24be62b7d2568b420a40a74fd11f3653
+X-Git-Oldrev: d1888e39153bea005f2b1ec6b23649e87ce8269c
+X-Git-Newrev: 9b911805207b425b444954ba2f3f9d0e1c39246d
 X-Patchwork-Hint: ignore
-Message-Id: <20251014202937.1E736870E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-grpc-requests: bump version
- to 0.1.21
+Message-Id: <20251014202936.DF187870FD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-flatbuffers: bump version
+ to 25.9.23
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,44 +66,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4e257ff24be62b7d2568b420a40a74fd11f3653
+commit: https://git.buildroot.net/buildroot/commit/?id=9b911805207b425b444954ba2f3f9d0e1c39246d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-grpc-requests/python-grpc-requests.hash | 4 ++--
- package/python-grpc-requests/python-grpc-requests.mk   | 4 ++--
+ package/python-flatbuffers/python-flatbuffers.hash | 4 ++--
+ package/python-flatbuffers/python-flatbuffers.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-grpc-requests/python-grpc-requests.hash b/package/python-grpc-requests/python-grpc-requests.hash
-index aeb5336a4c..6933b3d4c9 100644
---- a/package/python-grpc-requests/python-grpc-requests.hash
-+++ b/package/python-grpc-requests/python-grpc-requests.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/grpc-requests/json
--md5  6d63bed1f4a80fc3e59191ce69903d31  grpc_requests-0.1.20.tar.gz
--sha256  a76744d781c5a7bf3abde8dc778d24c4e17deb39d173d85096ff3caee3d15250  grpc_requests-0.1.20.tar.gz
-+md5  e933897ca5e3ad723b17e2e46a957f84  grpc_requests-0.1.21.tar.gz
-+sha256  9525bcbc5439f334b39248b9bd867313631e74530cfde1aaf43e76be0298bf20  grpc_requests-0.1.21.tar.gz
- # Locally computed sha256 checksums
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/python-grpc-requests/python-grpc-requests.mk b/package/python-grpc-requests/python-grpc-requests.mk
-index 7fecdf5a3c..1830c4dbab 100644
---- a/package/python-grpc-requests/python-grpc-requests.mk
-+++ b/package/python-grpc-requests/python-grpc-requests.mk
+diff --git a/package/python-flatbuffers/python-flatbuffers.hash b/package/python-flatbuffers/python-flatbuffers.hash
+index ccc754f9be..1d046fb3f4 100644
+--- a/package/python-flatbuffers/python-flatbuffers.hash
++++ b/package/python-flatbuffers/python-flatbuffers.hash
+@@ -1,3 +1,3 @@
+ # md5, sha256 from https://pypi.org/pypi/flatbuffers/json
+-md5  3391732d344155cc070892fae5f7166c  flatbuffers-2.0.7.tar.gz
+-sha256  0ae7d69c5b82bf41962ca5fde9cc43033bc9501311d975fd5a25e8a7d29c1245  flatbuffers-2.0.7.tar.gz
++md5  a0f1d5a1ae9f0a99b38c15041f2e1739  flatbuffers-25.9.23.tar.gz
++sha256  676f9fa62750bb50cf531b42a0a2a118ad8f7f797a511eda12881c016f093b12  flatbuffers-25.9.23.tar.gz
+diff --git a/package/python-flatbuffers/python-flatbuffers.mk b/package/python-flatbuffers/python-flatbuffers.mk
+index 65f3d0955c..8b9c06df52 100644
+--- a/package/python-flatbuffers/python-flatbuffers.mk
++++ b/package/python-flatbuffers/python-flatbuffers.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_GRPC_REQUESTS_VERSION = 0.1.20
-+PYTHON_GRPC_REQUESTS_VERSION = 0.1.21
- PYTHON_GRPC_REQUESTS_SOURCE = grpc_requests-$(PYTHON_GRPC_REQUESTS_VERSION).tar.gz
--PYTHON_GRPC_REQUESTS_SITE = https://files.pythonhosted.org/packages/92/84/f5a3874a6e10448d8c198253d2c79f7b34a23fb4a96b78a648dc468913a6
-+PYTHON_GRPC_REQUESTS_SITE = https://files.pythonhosted.org/packages/97/58/7e2be40bad0964f7d6f1c11f72be941c19575ab426c10e1b97e17aa1e42f
- PYTHON_GRPC_REQUESTS_SETUP_TYPE = setuptools
- PYTHON_GRPC_REQUESTS_LICENSE = Apache-2.0
- PYTHON_GRPC_REQUESTS_LICENSE_FILES = LICENSE
+-PYTHON_FLATBUFFERS_VERSION = 2.0.7
++PYTHON_FLATBUFFERS_VERSION = 25.9.23
+ PYTHON_FLATBUFFERS_SOURCE = flatbuffers-$(PYTHON_FLATBUFFERS_VERSION).tar.gz
+-PYTHON_FLATBUFFERS_SITE = https://files.pythonhosted.org/packages/d1/90/0532e737a11e1dc50e9e352c3ccc97338cb75991f83279c2edbc9234e022
++PYTHON_FLATBUFFERS_SITE = https://files.pythonhosted.org/packages/9d/1f/3ee70b0a55137442038f2a33469cc5fddd7e0ad2abf83d7497c18a2b6923
+ PYTHON_FLATBUFFERS_LICENSE = Apache-2.0
+ PYTHON_FLATBUFFERS_SETUP_TYPE = setuptools
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
