@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 268CECCD190
-	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 18:52:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 067B0CCD190
+	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 18:52:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EFF6C40D52;
-	Tue, 14 Oct 2025 18:52:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D07ED6131F;
+	Tue, 14 Oct 2025 18:52:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3CnAv7C35fX7; Tue, 14 Oct 2025 18:52:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VuyozlHpcKB1; Tue, 14 Oct 2025 18:52:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 125044103D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45F89612FF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 125044103D;
-	Tue, 14 Oct 2025 18:52:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id EB040294
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 18:52:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 45F89612FF;
+	Tue, 14 Oct 2025 18:52:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4D583BC
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 18:52:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DCA0283E10
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 18:52:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 33EA083E10
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 18:52:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id evBzrdIgBm9O for <buildroot@buildroot.org>;
- Tue, 14 Oct 2025 18:52:32 +0000 (UTC)
+ id dijxveksUldV for <buildroot@buildroot.org>;
+ Tue, 14 Oct 2025 18:52:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DAFB883E05
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DAFB883E05
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2A3CD83E05
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A3CD83E05
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DAFB883E05
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 18:52:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2A3CD83E05
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 18:52:44 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a02db.dip0.t-ipconnect.de [91.58.2.219])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 7E5F7A4C6C38;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 9E2E7A4C6C39;
  Tue, 14 Oct 2025 20:51:14 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:49012)
  by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1v8k77-000000003qG-1Z8E;
+ (envelope-from <bernd@kuhls.net>) id 1v8k77-000000003qG-1qWs;
  Tue, 14 Oct 2025 18:51:13 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue, 14 Oct 2025 20:51:06 +0200
-Message-ID: <20251014185113.3583315-7-bernd@kuhls.net>
+Date: Tue, 14 Oct 2025 20:51:07 +0200
+Message-ID: <20251014185113.3583315-8-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251014185113.3583315-1-bernd@kuhls.net>
 References: <20251014185113.3583315-1-bernd@kuhls.net>
@@ -55,22 +55,22 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202506031021; t=1760467874;
- bh=Vw8gNACnUF0t1ZnqxF821mSgLcYRTxp7k6lvMtw2E20=;
+ bh=9zRvZ0IkDAi8Pagl07G6LSiAWGaHYCLSZZBmhswhwXs=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=ydiQxKpe2Z+ObQxscq7FRM9QqCVN3jh3Z6wB3z9McxwqkqdGEWWxQ0iQ5GQOe4zfF
- bW59DByOMfdJK1y+G74D9OjnVPrMY6Zg4TSGh46j1R1Vy3imKXzSqJSYn3KuhknFQp
- mvRFheVt9WByiKuqiNOs1hMfx98xz0wC5JBZ1xmG8IE0Rje+zUjScZFmQS0wRrYHsN
- xisIj6zb5sO5HFgCxjrz+8sbcQA9YrSnkc28M2r0vOnodnqrRMFMYu7SoJ4SoU+oHv
- UKzTuWva/pAOeeKZoF/BpWYbb5KH5usPq7rDOP4Wp+oFJa16IF+g3BWGMHc9FhigaM
- rGDlXAG6wykmg==
+ b=QQI2l2wwxfkafUyt6RO1xbXqlp3YkZvDhxHePMfgWZe7J5SITqwlq6AmWxTOYKNR1
+ e0vGvOGTl0Xz1Btz2RGpXF0TUfcsmLEE+zagLJw8iRXg+duudj40SpiRCc4x2XSAD1
+ rR/jdt90nB1ZeGqFl7QeGqQ/kZFkbM+FMowcFc+YHzD+X2phSBe7lUcxaEHg3oqqt+
+ 8IVflWUHgMQmtduIyw97MVTQnjgzHeJGyW8bYX6nCd//S8NsSSwFUTcE4MfPAb3N4e
+ /W+E+/giy5bigSHQarqS4Z8p4OZn/EW7kOj8pEDp5LCDuLM7UhdKK+FZ8k2gyaeRS2
+ WiQWvJOY/flWg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=ydiQxKpe
-Subject: [Buildroot] [PATCH 07/14] package/python-websockets: bump version
- to 15.0.1
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=QQI2l2ww
+Subject: [Buildroot] [PATCH 08/14] package/python-wrapt: bump version to
+ 1.17.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,38 +93,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-websockets/python-websockets.hash | 4 ++--
- package/python-websockets/python-websockets.mk   | 4 ++--
+ package/python-wrapt/python-wrapt.hash | 4 ++--
+ package/python-wrapt/python-wrapt.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-websockets/python-websockets.hash b/package/python-websockets/python-websockets.hash
-index 3279977431..13659d2634 100644
---- a/package/python-websockets/python-websockets.hash
-+++ b/package/python-websockets/python-websockets.hash
+diff --git a/package/python-wrapt/python-wrapt.hash b/package/python-wrapt/python-wrapt.hash
+index 199de265a5..ae1fb94a2b 100644
+--- a/package/python-wrapt/python-wrapt.hash
++++ b/package/python-wrapt/python-wrapt.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/websockets/json
--md5  753a523e3de5b0f32927e590b910dfde  websockets-15.0.tar.gz
--sha256  ca36151289a15b39d8d683fd8b7abbe26fc50be311066c5f8dcf3cb8cee107ab  websockets-15.0.tar.gz
-+md5  08f8a430c20d75ffe44faafb95f6f7cc  websockets-15.0.1.tar.gz
-+sha256  82544de02076bafba038ce055ee6412d68da13ab47f0c60cab827346de828dee  websockets-15.0.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/wrapt/json
+-md5  f4db93e73e5c70a59955f0ec162d585d  wrapt-1.17.2.tar.gz
+-sha256  41388e9d4d1522446fe79d3213196bd9e3b301a336965b9e27ca2788ebd122f3  wrapt-1.17.2.tar.gz
++md5  5e7d9b1296ef5dc87339acc951a52d18  wrapt-1.17.3.tar.gz
++sha256  f66eb08feaa410fe4eebd17f2a2c8e2e46d3476e9f8c783daa8e09e0faa666d0  wrapt-1.17.3.tar.gz
  # Locally computed sha256 checksums
- sha256  3d6a0c050d8bec52fabad502e45fb25bd02bcadbd70dea34d447b6a0ff4e6da8  LICENSE
-diff --git a/package/python-websockets/python-websockets.mk b/package/python-websockets/python-websockets.mk
-index a39c7580ef..cdac2485ab 100644
---- a/package/python-websockets/python-websockets.mk
-+++ b/package/python-websockets/python-websockets.mk
+ sha256  5974efbbc8b626b2050810d63c3a907ee21c92bf64b3740fc623ad05eb3448ab  LICENSE
+diff --git a/package/python-wrapt/python-wrapt.mk b/package/python-wrapt/python-wrapt.mk
+index 9048f7010e..d1871a7e2e 100644
+--- a/package/python-wrapt/python-wrapt.mk
++++ b/package/python-wrapt/python-wrapt.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WEBSOCKETS_VERSION = 15.0
-+PYTHON_WEBSOCKETS_VERSION = 15.0.1
- PYTHON_WEBSOCKETS_SOURCE = websockets-$(PYTHON_WEBSOCKETS_VERSION).tar.gz
--PYTHON_WEBSOCKETS_SITE = https://files.pythonhosted.org/packages/2e/7a/8bc4d15af7ff30f7ba34f9a172063bfcee9f5001d7cef04bee800a658f33
-+PYTHON_WEBSOCKETS_SITE = https://files.pythonhosted.org/packages/21/e6/26d09fab466b7ca9c7737474c52be4f76a40301b08362eb2dbc19dcc16c1
- PYTHON_WEBSOCKETS_SETUP_TYPE = setuptools
- PYTHON_WEBSOCKETS_LICENSE = BSD-3-Clause
- PYTHON_WEBSOCKETS_LICENSE_FILES = LICENSE
+-PYTHON_WRAPT_VERSION = 1.17.2
++PYTHON_WRAPT_VERSION = 1.17.3
+ PYTHON_WRAPT_SOURCE = wrapt-$(PYTHON_WRAPT_VERSION).tar.gz
+-PYTHON_WRAPT_SITE = https://files.pythonhosted.org/packages/c3/fc/e91cc220803d7bc4db93fb02facd8461c37364151b8494762cc88b0fbcef
++PYTHON_WRAPT_SITE = https://files.pythonhosted.org/packages/95/8f/aeb76c5b46e273670962298c23e7ddde79916cb74db802131d49a85e4b7d
+ PYTHON_WRAPT_SETUP_TYPE = setuptools
+ PYTHON_WRAPT_LICENSE = BSD-2-Clause
+ PYTHON_WRAPT_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
