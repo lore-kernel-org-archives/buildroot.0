@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E87C9CCD18E
-	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 22:00:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD767CCD190
+	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 22:00:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6FF8F60F25;
-	Tue, 14 Oct 2025 22:00:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 53B1D60EF2;
+	Tue, 14 Oct 2025 22:00:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Wt4puQh--xwG; Tue, 14 Oct 2025 22:00:05 +0000 (UTC)
+ id aVAV3gF5dXuB; Tue, 14 Oct 2025 22:00:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F6C060F42
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 512DE60F94
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F6C060F42;
-	Tue, 14 Oct 2025 22:00:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F2292747
+	by smtp3.osuosl.org (Postfix) with ESMTP id 512DE60F94;
+	Tue, 14 Oct 2025 22:00:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1249A2748
  for <buildroot@buildroot.org>; Tue, 14 Oct 2025 22:00:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E3697811EA
+ by smtp3.osuosl.org (Postfix) with ESMTP id E2D8360EDF
  for <buildroot@buildroot.org>; Tue, 14 Oct 2025 22:00:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VU8zmW1A-YXh for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Mxhdw8GUtldX for <buildroot@buildroot.org>;
  Tue, 14 Oct 2025 22:00:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4A30811C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 020C560E9D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E4A30811C3
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 22:00:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 020C560E9D
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 22:00:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D2CC4870FC; Tue, 14 Oct 2025 22:00:00 +0000 (UTC)
+ id E6B3587103; Tue, 14 Oct 2025 22:00:00 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 14 Oct 2025 23:58:06 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e747a6497987a4cec8d1c041c98062620a47cee6
-X-Git-Newrev: 086bd1dd48d6772ff1a17e8a41f2c01940595905
+X-Git-Oldrev: c75521b3d2e259424ee5f10105172eadcccaa57c
+X-Git-Newrev: dbfb4aeefcc29ad330a96859937c2018e7a357c2
 X-Patchwork-Hint: ignore
-Message-Id: <20251014220000.D2CC4870FC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-parso: bump version to 0.8.5
+Message-Id: <20251014220000.E6B3587103@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pbr: bump version to 7.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,45 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=086bd1dd48d6772ff1a17e8a41f2c01940595905
+commit: https://git.buildroot.net/buildroot/commit/?id=dbfb4aeefcc29ad330a96859937c2018e7a357c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-parso/python-parso.hash | 4 ++--
- package/python-parso/python-parso.mk   | 4 ++--
+ package/python-pbr/python-pbr.hash | 4 ++--
+ package/python-pbr/python-pbr.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-parso/python-parso.hash b/package/python-parso/python-parso.hash
-index 83224a28bf..d0c8b3861a 100644
---- a/package/python-parso/python-parso.hash
-+++ b/package/python-parso/python-parso.hash
+diff --git a/package/python-pbr/python-pbr.hash b/package/python-pbr/python-pbr.hash
+index 02db9aca02..58503eaf11 100644
+--- a/package/python-pbr/python-pbr.hash
++++ b/package/python-pbr/python-pbr.hash
 @@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/parso/json
--md5  f83b2e4164f6589ccae39b16c30ed5de  parso-0.8.4.tar.gz
--sha256  eb3a7b58240fb99099a345571deecc0f9540ea5f4dd2fe14c2a99d6b281ab92d  parso-0.8.4.tar.gz
-+md5  e0b327d04ff11e429737465f2716c232  parso-0.8.5.tar.gz
-+sha256  034d7354a9a018bdce352f48b2a8a450f05e9d6ee85db84764e9b6bd96dafe5a  parso-0.8.5.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pbr/json
+-md5  06361b83d178fb62dcd1b4ba9a9b418c  pbr-6.1.0.tar.gz
+-sha256  788183e382e3d1d7707db08978239965e8b9e4e5ed42669bf4758186734d5f24  pbr-6.1.0.tar.gz
++md5  64cd498740ec05994ef0592c73c351c5  pbr-7.0.1.tar.gz
++sha256  3ecbcb11d2b8551588ec816b3756b1eb4394186c3b689b17e04850dfc20f7e57  pbr-7.0.1.tar.gz
  # Locally computed sha256 checksums
- sha256  fa67973073753d17624caf8684d5ee816d70c89d912c5bca7ca0f08e7b150edb  LICENSE.txt
- sha256  9c1e620a5cf8e74fe81c1fd4c55e9cc0b189fc04e677cfc7ef915de746c3f59e  docs/_themes/flask/LICENSE
-diff --git a/package/python-parso/python-parso.mk b/package/python-parso/python-parso.mk
-index 65d10ebfc0..1cbc1f1e89 100644
---- a/package/python-parso/python-parso.mk
-+++ b/package/python-parso/python-parso.mk
+ sha256  5df2a0d87d6c562f0ea11c688ac52532aa28d744cabc7994ff0537f64b3b3320  LICENSE
+ sha256  eb4a8c8791f6caab1cf36df26db2b6f4e2ddda52657b060ff7f02abc63910aef  pbr/tests/testpackage/LICENSE.txt
+diff --git a/package/python-pbr/python-pbr.mk b/package/python-pbr/python-pbr.mk
+index 993e748a2b..ec530ded04 100644
+--- a/package/python-pbr/python-pbr.mk
++++ b/package/python-pbr/python-pbr.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PARSO_VERSION = 0.8.4
-+PYTHON_PARSO_VERSION = 0.8.5
- PYTHON_PARSO_SOURCE = parso-$(PYTHON_PARSO_VERSION).tar.gz
--PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/66/94/68e2e17afaa9169cf6412ab0f28623903be73d1b32e208d9e8e541bb086d
-+PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/d4/de/53e0bcf53d13e005bd8c92e7855142494f41171b34c2536b86187474184d
- PYTHON_PARSO_SETUP_TYPE = setuptools
- PYTHON_PARSO_LICENSE = MIT, Python-2.0, BSD-3-Clause (flask theme)
- PYTHON_PARSO_LICENSE_FILES = LICENSE.txt docs/_themes/flask/LICENSE test/normalizer_issue_files/LICENSE
+-PYTHON_PBR_VERSION = 6.1.0
++PYTHON_PBR_VERSION = 7.0.1
+ PYTHON_PBR_SOURCE = pbr-$(PYTHON_PBR_VERSION).tar.gz
+-PYTHON_PBR_SITE = https://files.pythonhosted.org/packages/b2/35/80cf8f6a4f34017a7fe28242dc45161a1baa55c41563c354d8147e8358b2
++PYTHON_PBR_SITE = https://files.pythonhosted.org/packages/ad/8d/23253ab92d4731eb34383a69b39568ca63a1685bec1e9946e91a32fc87ad
+ PYTHON_PBR_SETUP_TYPE = setuptools
+ PYTHON_PBR_LICENSE = Apache-2.0 (module), BSD-3-Clause (test package)
+ PYTHON_PBR_LICENSE_FILES = LICENSE pbr/tests/testpackage/LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
