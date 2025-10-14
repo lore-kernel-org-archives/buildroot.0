@@ -4,66 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BF07CCD193
-	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 16:11:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E90A1CCD193
+	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 16:13:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 09E1F611DF;
-	Tue, 14 Oct 2025 16:11:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ACA2760F17;
+	Tue, 14 Oct 2025 16:13:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y0TpEXWWHX9q; Tue, 14 Oct 2025 16:11:38 +0000 (UTC)
+ id LDoNFyfI7fwk; Tue, 14 Oct 2025 16:13:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33D4760F3F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D96DB60F3F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 33D4760F3F;
-	Tue, 14 Oct 2025 16:11:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id EFA26BC
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 16:11:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D96DB60F3F;
+	Tue, 14 Oct 2025 16:13:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 39F1FBC
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 16:13:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E0D16404C3
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 16:11:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2BB5682F06
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 16:13:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1Ho9JrZv0Cps for <buildroot@buildroot.org>;
- Tue, 14 Oct 2025 16:11:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id t7UU1V64qXN8 for <buildroot@buildroot.org>;
+ Tue, 14 Oct 2025 16:13:51 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
  helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org ED3DB4049F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED3DB4049F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A5073812C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5073812C7
 Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp2.osuosl.org (Postfix) with ESMTPS id ED3DB4049F
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 16:11:35 +0000 (UTC)
-Received: from framework-OT.fritz.box (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A5073812C7
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 16:13:50 +0000 (UTC)
+Received: from [192.168.178.91] (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
  key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
  (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 53E882C89163;
- Tue, 14 Oct 2025 18:11:33 +0200 (CEST)
-To: buildroot@buildroot.org
-Date: Tue, 14 Oct 2025 18:11:33 +0200
-Message-ID: <20251014161134.2592291-1-buildroot@bubu1.eu>
-X-Mailer: git-send-email 2.51.0
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 123D12C89163;
+ Tue, 14 Oct 2025 18:13:48 +0200 (CEST)
+Message-ID: <97d70f60-4403-4305-b26b-3be499e7c6c5@bubu1.eu>
+Date: Tue, 14 Oct 2025 18:13:48 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Vincent Fazio <vfazio@xes-inc.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+References: <20251014142954.2579135-1-buildroot@bubu1.eu>
+ <PH1P110MB1603E98157823E32754215B79FEBA@PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM>
+Content-Language: en-US
+In-Reply-To: <PH1P110MB1603E98157823E32754215B79FEBA@PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=bubu1.eu; s=bubu; 
- t=1760458293; bh=uJRtWYlBhrlb307fJ/AfS1K31XXNvAKV6DXsN3ONgBg=;
- h=From:To:Cc:Subject:Date;
- b=TsO3i1umKCJoQrgks2Qfy8cmL7rojibSZsZZ+FliXyXTd2TLndOm/FIbwQVi2Re2z
- rpqKl9aaJpwVZnE0vLtHK1TF3Xo/4Ntsg4xj2KbwI4ckkP98qDahXVjrj0vjryJERw
- zXWhIppBNT8swYqRBkJ2vWd9H7v6IN2mB1Pwkaz51BYIQe2SKGE/gs8gyu7s+YJ4k9
- j04AwDudo9u7ZEDmBobM4PFPfYJ68oEfpUJsii+n7F3BBriwZ+Fzo4aCE2PciSrf5P
- IHSey0fM5RSBKojAubZFBabHzFFyNKYV1hzxVI+32TUMSZHAvXz6EzVqjVj/WLiCOU
- q4NNhQGtNS+/w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ t=1760458428; bh=v1zL6KM52uAve6d5Dmw7AOvIBzCzQFEywLVCkxExnW0=;
+ h=Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=YoNgF1Lpm8e9dCgMnPX59zkS8TodEWttSDtmMUsrki4Ebf6d36Om7/g9Kg5z3yvw+
+ DTz5ywNbWC/5w4vaqCARFyKq4ZePFWTUh0TCOLdHzRagAiiZSU4mt9EAG2+TQyHkBL
+ 8g921R3Vr0iIhSKOnQ5h0Uy3ZmT6KJRc4CDUCEx6cGbCUWxWCtK/hEqU7GU385QSaU
+ ZI8GUqCRKw04wIhXZEiiOQL0TaAawTnHJk+/iGWWd24/v/8MI4+j9W6FjovksmbnAq
+ SN1CUyF1bojziONmV3v/3IthCazjDXV8UnvDcWqEbQ2sh1GsPhVXHLSAQG72AZzDsH
+ wOSHhOQNHMrAA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
- header.a=rsa-sha256 header.s=bubu header.b=TsO3i1um
-Subject: [Buildroot] [PATCH] package/python-trio: bump to 0.31.0
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
+ header.s=bubu header.b=YoNgF1Lp
+Subject: Re: [Buildroot] [External] - [PATCH] package/python-anyio: bump to
+ 4.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,52 +85,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
 Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog: https://trio.readthedocs.io/en/latest/history.html#trio-0-31-0-2025-09-09
+Hi Vincent,
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
----
- package/python-trio/python-trio.hash | 4 ++--
- package/python-trio/python-trio.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On 10/14/25 17:46, Vincent Fazio wrote:
+> Apologies to Marcus and James for getting this twice, the last email had a Reply-to and I didn't see the list was excluded from my response
+> 
 
-diff --git a/package/python-trio/python-trio.hash b/package/python-trio/python-trio.hash
-index 0dd367a236..35f582311a 100644
---- a/package/python-trio/python-trio.hash
-+++ b/package/python-trio/python-trio.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/trio/json
--md5  e6d930a02a7ddf370083b9c9efa39e85  trio-0.28.0.tar.gz
--sha256  4e547896fe9e8a5658e54e4c7c5fa1db748cbbbaa7c965e7d40505b928c73c05  trio-0.28.0.tar.gz
-+md5  26bb7f0669385e47347e4d8177552653  trio-0.31.0.tar.gz
-+sha256  f71d551ccaa79d0cb73017a33ef3264fde8335728eb4c6391451fe5d253a9d5b  trio-0.31.0.tar.gz
- # Locally computed sha256 checksums
- sha256  418d025e1284311f2690263e6efa6bf51585e5741818ece63e5862487e505bb9  LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.APACHE2
-diff --git a/package/python-trio/python-trio.mk b/package/python-trio/python-trio.mk
-index f298619fe4..8d8720be36 100644
---- a/package/python-trio/python-trio.mk
-+++ b/package/python-trio/python-trio.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_TRIO_VERSION = 0.28.0
-+PYTHON_TRIO_VERSION = 0.31.0
- PYTHON_TRIO_SOURCE = trio-$(PYTHON_TRIO_VERSION).tar.gz
--PYTHON_TRIO_SITE = https://files.pythonhosted.org/packages/b3/73/57efab729506a8d4b89814f1e356ec8f3369de0ed4fd7e7616974d09646d
-+PYTHON_TRIO_SITE = https://files.pythonhosted.org/packages/76/8f/c6e36dd11201e2a565977d8b13f0b027ba4593c1a80bed5185489178e257
- PYTHON_TRIO_SETUP_TYPE = setuptools
- PYTHON_TRIO_LICENSE = Apache-2.0 or MIT
- PYTHON_TRIO_LICENSE_FILES = LICENSE LICENSE.APACHE2 LICENSE.MIT
--- 
-2.51.0
+[...]
 
+>> -PYTHON_ANYIO_VERSION = 4.10.0
+>> +PYTHON_ANYIO_VERSION = 4.11.0
+> 
+> Just as a heads up, if anyio 4.11 is being used with trio as the backend, it requires trio 0.31:
+> https://github.com/agronholm/anyio/commit/b2c933cd5540b4e703d0ee204ec6b64641dd180f
+> 
+> I don't think the bump to trio 0.31 has been submitted to the ML yet?
+
+Thanks for the heads up, I've sent that now:
+https://patchwork.ozlabs.org/project/buildroot/patch/20251014161134.2592291-1-buildroot@bubu1.eu/
+
+> 
+> -Vincent
+> 
+> 
+
+Marcus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
