@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20543CCD184
-	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 18:46:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8893CCCD193
+	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 18:46:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5EF5612EB;
-	Tue, 14 Oct 2025 18:46:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5CE2E83DF5;
+	Tue, 14 Oct 2025 18:46:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lv080k0oBSIV; Tue, 14 Oct 2025 18:46:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TETw_jeulLmI; Tue, 14 Oct 2025 18:46:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBC8A612FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 616BE83E02
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BBC8A612FE;
-	Tue, 14 Oct 2025 18:46:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 616BE83E02;
+	Tue, 14 Oct 2025 18:46:07 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F8FF294
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 18:45:56 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D506294
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 18:45:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 89493612F5
+ by smtp3.osuosl.org (Postfix) with ESMTP id C8AB5612FC
  for <buildroot@buildroot.org>; Tue, 14 Oct 2025 18:45:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r5kPe0VeNz69 for <buildroot@buildroot.org>;
+ id 9afC1iURAtfu for <buildroot@buildroot.org>;
  Tue, 14 Oct 2025 18:45:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30E8F612FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0731612F2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 30E8F612FE
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 18:45:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F0731612F2
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 18:45:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2F787870C5; Tue, 14 Oct 2025 18:45:51 +0000 (UTC)
+ id E167E870FC; Tue, 14 Oct 2025 18:45:50 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 14 Oct 2025 20:44:13 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e4aec355ffb92f7666788986dffcc4c732a0561d
-X-Git-Newrev: 17d0d7d85edd73bed4c34ed64306a35269813775
+X-Git-Oldrev: 04cee5ed8abf868de165061cdd3744778ce21f0b
+X-Git-Newrev: f98a4ca3a2eb801585dc3e50c812833c0aee4630
 X-Patchwork-Hint: ignore
-Message-Id: <20251014184551.2F787870C5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-channels: bump version to
- 4.3.1
+Message-Id: <20251014184550.E167E870FC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-bitarray: bump version to
+ 3.7.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,44 +66,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17d0d7d85edd73bed4c34ed64306a35269813775
+commit: https://git.buildroot.net/buildroot/commit/?id=f98a4ca3a2eb801585dc3e50c812833c0aee4630
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Changelog:
+https://github.com/ilanschnell/bitarray/blob/3.7.2/CHANGE_LOG
+
+Updated license hash due to copyright year bump:
+https://github.com/ilanschnell/bitarray/commit/0d64d33960344c5e718b78f26d8124ab6626b3a2
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-channels/python-channels.hash | 4 ++--
- package/python-channels/python-channels.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-bitarray/python-bitarray.hash | 6 +++---
+ package/python-bitarray/python-bitarray.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-channels/python-channels.hash b/package/python-channels/python-channels.hash
-index 0d849f9a57..8b402cdcd2 100644
---- a/package/python-channels/python-channels.hash
-+++ b/package/python-channels/python-channels.hash
+diff --git a/package/python-bitarray/python-bitarray.hash b/package/python-bitarray/python-bitarray.hash
+index 1a75424e02..bcde731b60 100644
+--- a/package/python-bitarray/python-bitarray.hash
++++ b/package/python-bitarray/python-bitarray.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/channels/json
--md5  172a3c580efc46ff3cbfacd59084356a  channels-4.2.0.tar.gz
--sha256  d9e707487431ba5dbce9af982970dab3b0efd786580fadb99e45dca5e39fdd59  channels-4.2.0.tar.gz
-+md5  f1c7e533a0afa026b61dd3cf228dbd18  channels-4.3.1.tar.gz
-+sha256  97413ffd674542db08e16a9ef09cd86ec0113e5f8125fbd33cf0854adcf27cdb  channels-4.3.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/bitarray/json
+-md5  2a23854c5c9c777625996456c9c88883  bitarray-3.0.0.tar.gz
+-sha256  a2083dc20f0d828a7cdf7a16b20dae56aab0f43dc4f347a3b3039f6577992b03  bitarray-3.0.0.tar.gz
++md5  043d05ace953a31bee06a00f2c6c3a3d  bitarray-3.7.2.tar.gz
++sha256  27a59bb7c64c0d094057a3536e15fdd693f8520771ee75d9344b82d0a5ade2d0  bitarray-3.7.2.tar.gz
  # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-channels/python-channels.mk b/package/python-channels/python-channels.mk
-index 83584b469b..cafabf2676 100644
---- a/package/python-channels/python-channels.mk
-+++ b/package/python-channels/python-channels.mk
+-sha256  6b5e04f6e0462e1b97be833f9d65e66cd5eceb3283f4a6f532261087d0ab1233  LICENSE
++sha256  a554c25090ad5a5ea8ad35629dacffbb4d887234b011550218a5a1f9090e5274  LICENSE
+diff --git a/package/python-bitarray/python-bitarray.mk b/package/python-bitarray/python-bitarray.mk
+index 5f47976a41..1aec908619 100644
+--- a/package/python-bitarray/python-bitarray.mk
++++ b/package/python-bitarray/python-bitarray.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CHANNELS_VERSION = 4.2.0
-+PYTHON_CHANNELS_VERSION = 4.3.1
- PYTHON_CHANNELS_SOURCE = channels-$(PYTHON_CHANNELS_VERSION).tar.gz
--PYTHON_CHANNELS_SITE = https://files.pythonhosted.org/packages/96/e2/10d949dca9eb8a85c5735efefe3309033419e7d4f4193a70f6ede58b2951
-+PYTHON_CHANNELS_SITE = https://files.pythonhosted.org/packages/12/a0/46450fcf9e56af18a6b0440ba49db6635419bb7bc84142c35f4143b1a66c
- PYTHON_CHANNELS_SETUP_TYPE = setuptools
- PYTHON_CHANNELS_LICENSE = BSD-3-Clause
- PYTHON_CHANNELS_LICENSE_FILES = LICENSE
+-PYTHON_BITARRAY_VERSION = 3.0.0
++PYTHON_BITARRAY_VERSION = 3.7.2
+ PYTHON_BITARRAY_SOURCE = bitarray-$(PYTHON_BITARRAY_VERSION).tar.gz
+-PYTHON_BITARRAY_SITE = https://files.pythonhosted.org/packages/85/62/dcfac53d22ef7e904ed10a8e710a36391d2d6753c34c869b51bfc5e4ad54
++PYTHON_BITARRAY_SITE = https://files.pythonhosted.org/packages/e8/c1/644ea86b6f1a0864f656a3b3ee5bf8c29daa895cb3233942315fe065ea3a
+ PYTHON_BITARRAY_SETUP_TYPE = setuptools
+ PYTHON_BITARRAY_LICENSE = Python-2.0
+ PYTHON_BITARRAY_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
