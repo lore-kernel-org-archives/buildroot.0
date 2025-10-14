@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE430CCD18E
-	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 20:30:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAA34CCD18E
+	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 20:30:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B3C0C61584;
-	Tue, 14 Oct 2025 20:30:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 629F061595;
+	Tue, 14 Oct 2025 20:30:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HWm9V2TJ4iGl; Tue, 14 Oct 2025 20:30:06 +0000 (UTC)
+ id 659FQCNqa6nq; Tue, 14 Oct 2025 20:30:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64E5561555
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABC9761583
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 64E5561555;
-	Tue, 14 Oct 2025 20:30:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ABC9761583;
+	Tue, 14 Oct 2025 20:30:07 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 39A8B1C9
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 20:29:44 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 47C80BC
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 20:29:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 58C7F40042
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6DC91401C2
  for <buildroot@buildroot.org>; Tue, 14 Oct 2025 20:29:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o_ocwI-egJN4 for <buildroot@buildroot.org>;
+ id nNrYEN-zBZTK for <buildroot@buildroot.org>;
  Tue, 14 Oct 2025 20:29:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6CBBC4049C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 647CA40441
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6CBBC4049C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 647CA40441
  for <buildroot@buildroot.org>; Tue, 14 Oct 2025 20:29:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6B06B870E7; Tue, 14 Oct 2025 20:29:37 +0000 (UTC)
+ id 62EDC870FD; Tue, 14 Oct 2025 20:29:37 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 14 Oct 2025 22:10:27 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 70e29b930e173c119f8d0c1f7b851e1f157855bf
-X-Git-Newrev: 765b1c5dbec1a97d84159a8a4aaf8b1150abb49b
+X-Git-Oldrev: 6e223d30a8d2772782ae7321cc8af28f3b47f816
+X-Git-Newrev: 70e29b930e173c119f8d0c1f7b851e1f157855bf
 X-Patchwork-Hint: ignore
-Message-Id: <20251014202937.6B06B870E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-multidict: bump version to
- 6.7.0
+Message-Id: <20251014202937.62EDC870FD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-mistune: bump version to
+ 3.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,44 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=765b1c5dbec1a97d84159a8a4aaf8b1150abb49b
+commit: https://git.buildroot.net/buildroot/commit/?id=70e29b930e173c119f8d0c1f7b851e1f157855bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-multidict/python-multidict.hash | 4 ++--
- package/python-multidict/python-multidict.mk   | 4 ++--
+ package/python-mistune/python-mistune.hash | 4 ++--
+ package/python-mistune/python-mistune.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-multidict/python-multidict.hash b/package/python-multidict/python-multidict.hash
-index 8a07c29cc6..cade81514b 100644
---- a/package/python-multidict/python-multidict.hash
-+++ b/package/python-multidict/python-multidict.hash
+diff --git a/package/python-mistune/python-mistune.hash b/package/python-mistune/python-mistune.hash
+index 7f119f4a58..c790096af8 100644
+--- a/package/python-mistune/python-mistune.hash
++++ b/package/python-mistune/python-mistune.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/multidict/json
--md5  479587db63b5fe7f74a921b51bdbd371  multidict-6.6.4.tar.gz
--sha256  d2d4e4787672911b48350df02ed3fa3fffdc2f2e8ca06dd6afdf34189b76a9dd  multidict-6.6.4.tar.gz
-+md5  cba8e65b4c65d889395672fd62de5183  multidict-6.7.0.tar.gz
-+sha256  c6e99d9a65ca282e578dfea819cfa9c0a62b2499d8677392e09feaf305e9e6f5  multidict-6.7.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/mistune/json
+-md5  fb1f89ef8e8e0313d69ac82cb7c1627b  mistune-3.1.0.tar.gz
+-sha256  dbcac2f78292b9dc066cd03b7a3a26b62d85f8159f2ea5fd28e55df79908d667  mistune-3.1.0.tar.gz
++md5  47bd96502dcf22434a329b1814769480  mistune-3.1.4.tar.gz
++sha256  b5a7f801d389f724ec702840c11d8fc48f2b33519102fc7ee739e8177b672164  mistune-3.1.4.tar.gz
  # Locally computed sha256 checksums
- sha256  93d11a968e2f0f36373c40811ff6d20e173f58c3cab5884cd6617bbfd795492a  LICENSE
-diff --git a/package/python-multidict/python-multidict.mk b/package/python-multidict/python-multidict.mk
-index 551fbd0ac0..4de38b9ab6 100644
---- a/package/python-multidict/python-multidict.mk
-+++ b/package/python-multidict/python-multidict.mk
+ sha256  539013fd8e19f744f8bf0e27a532bbff54cd689ecef7a800f56ae5dc824be870  LICENSE
+diff --git a/package/python-mistune/python-mistune.mk b/package/python-mistune/python-mistune.mk
+index 80c1ac83e2..b5ec61e3a3 100644
+--- a/package/python-mistune/python-mistune.mk
++++ b/package/python-mistune/python-mistune.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MULTIDICT_VERSION = 6.6.4
-+PYTHON_MULTIDICT_VERSION = 6.7.0
- PYTHON_MULTIDICT_SOURCE = multidict-$(PYTHON_MULTIDICT_VERSION).tar.gz
--PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/69/7f/0652e6ed47ab288e3756ea9c0df8b14950781184d4bd7883f4d87dd41245
-+PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/80/1e/5492c365f222f907de1039b91f922b93fa4f764c713ee858d235495d8f50
- PYTHON_MULTIDICT_SETUP_TYPE = setuptools
- PYTHON_MULTIDICT_LICENSE = Apache-2.0
- PYTHON_MULTIDICT_LICENSE_FILES = LICENSE
+-PYTHON_MISTUNE_VERSION = 3.1.0
++PYTHON_MISTUNE_VERSION = 3.1.4
+ PYTHON_MISTUNE_SOURCE = mistune-$(PYTHON_MISTUNE_VERSION).tar.gz
+-PYTHON_MISTUNE_SITE = https://files.pythonhosted.org/packages/79/6e/96fc7cb3288666c5de2c396eb0e338dc95f7a8e4920e43e38783a22d0084
++PYTHON_MISTUNE_SITE = https://files.pythonhosted.org/packages/d7/02/a7fb8b21d4d55ac93cdcde9d3638da5dd0ebdd3a4fed76c7725e10b81cbe
+ PYTHON_MISTUNE_LICENSE = BSD-3-Clause
+ PYTHON_MISTUNE_LICENSE_FILES = LICENSE
+ PYTHON_MISTUNE_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
