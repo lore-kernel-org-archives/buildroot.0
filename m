@@ -4,76 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B3ADCCD184
-	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 11:01:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BA78CCD184
+	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 11:12:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 881D541684;
-	Tue, 14 Oct 2025 11:01:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D493A416AD;
+	Tue, 14 Oct 2025 11:12:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BQxR35emIAV5; Tue, 14 Oct 2025 11:01:23 +0000 (UTC)
+ id PAbcR-pWuFNe; Tue, 14 Oct 2025 11:12:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EA0641680
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE969416C8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8EA0641680;
-	Tue, 14 Oct 2025 11:01:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id EED4A1C9
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 11:01:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE969416C8;
+	Tue, 14 Oct 2025 11:12:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3A7D11C9
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 11:12:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D55DA40D33
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 11:01:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2C45A416C8
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 11:12:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0NB-D1lRem44 for <buildroot@buildroot.org>;
- Tue, 14 Oct 2025 11:01:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.97.179.56;
- helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4E4B6400C0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E4B6400C0
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4E4B6400C0
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 11:01:11 +0000 (UTC)
-Received: from 91-153-34-249.elisa-laajakaista.fi ([91.153.34.249] helo=kodama)
- by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
- id 1v8cmC-009MkO-C2; Tue, 14 Oct 2025 13:01:08 +0200
-Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id 68fbd298;
- Tue, 14 Oct 2025 11:01:07 +0000 (UTC)
-Date: Tue, 14 Oct 2025 14:01:03 +0300
-Message-ID: <20251014140103.GF3402529@igalia.com>
-From: Adrian Perez de Castro <aperez@igalia.com>
-To: Julien Olivain <ju.o@free.fr>
-Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>, buildroot@buildroot.org
-In-Reply-To: <952c26d08945d7c798264805f7ae3cd9@free.fr>
-References: <20250921181748.416113-1-raphael.pavlidis@gmail.com>
- <952c26d08945d7c798264805f7ae3cd9@free.fr>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lihLhqKp3rP9 for <buildroot@buildroot.org>;
+ Tue, 14 Oct 2025 11:12:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E56E0416AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E56E0416AD
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E56E0416AD
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 11:12:25 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-46b303f755aso45246375e9.1
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 04:12:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1760440343; x=1761045143;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=RWkypqwUS795YtMqNmI0YOfh4+7EZe+uhAXk8pHx+28=;
+ b=k3WkkicmiCTaiNq9DWJRTvaTGV4eP+ZkAbDl3pn4kOgUpZvTgRaVatHBwrddsj+gsd
+ RbooNfDEUFGQ2vUaEymaPHIT9TwCcYRP2TqlSYXnRIoyzgUM0kGNRhrAf6Rj6Ji4DPA5
+ w19ZmZ8KGcTtNx/oVYRajI+1syST551/iaO6ohD/00M6uCGuYYKzzKKJPauo9g550VTL
+ 4GmlO5/pgH6+bKgz9k40Gu9k/HwUyeL3ZOPJO+H+P50VFPBa937TIMcCTti8eMnDc7FX
+ /VVRFs5GsLVvbhfGa5uXiqcio5tjSJ8IDEoOoJvKt7wHBogafP+Iy3mD3F/TOqZbSROM
+ hB7Q==
+X-Gm-Message-State: AOJu0YzSv5vYy7oPQNRqhxcVS2Jw2CV9+q1i1CYcJ1GIbv1kYgc4vz01
+ mIwsj1ZOca7jLmTKRBegSLOZt9tn8cM/Gm+lIlGrNS5epogsf7ab2VyR1O6HLXSC04/ZXwBsYcY
+ e9CHJ
+X-Gm-Gg: ASbGnct2O4Da/kzSxkRXvYyPwFcTruThmu+n0sg/rBtlfaUL3YhmnuuWQPWYK/7TSFD
+ WCOLMVfo2waDg003vyBH/P7DKZu+NWD8VzELGWF4ZbWBeg022iHHa4sXstw1TwKdaZG9elZSRjm
+ 9XV0hRdOyzFIWjeXS+V8W05M25ZhXM+3DXid26wFMnS9p4tX9dR0PLWyLBtmb/owxZ/b3FImv2j
+ XbzapHaKtUb0g8UwToJpxaKLm4UEngV6CTvoJBIoAFV2921p+cfdvK5EXuKCTPP3AXUHnTKbhP9
+ IhduUCfJL51o7l6GCldTHnW4k6fWsmvyC/fxvSttMi5Wod26BnwqOPg0fYlxTeshqJdjxBLaVTB
+ c6dQlS8nwS+GVTE9oyQNFY9IcGqCYyRyz+32MYpRrOo7cIYglL0iXBv0RmMObQ90AN27pt//6dO
+ m+u2Fr3SN7r+lSnzXTy1e1zsfMl6PGSWD43kE=
+X-Google-Smtp-Source: AGHT+IGrr202ZZRkeQMb+cT9ZqK2M0PKDrGUbpbDrXrBWb3VildiNpZk4ONShaehVCchlD9uDe8bXw==
+X-Received: by 2002:a05:600c:3f1b:b0:46d:5189:3583 with SMTP id
+ 5b1f17b1804b1-46fa9a20793mr173467705e9.0.1760440343444; 
+ Tue, 14 Oct 2025 04:12:23 -0700 (PDT)
+Received: from dragon.local.essensium.com
+ (ip-94-140-185-241.reverse.destiny.be. [94.140.185.241])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-46fb32a84edsm127112145e9.4.2025.10.14.04.12.22
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 14 Oct 2025 04:12:23 -0700 (PDT)
+To: buildroot@buildroot.org
+Cc: Daniel Price <daniel.price@gmail.com>,
+ Titouan Christophe <titouan.christophe@mind.be>
+Date: Tue, 14 Oct 2025 13:11:59 +0200
+Message-ID: <20251014111159.73073-1-titouan.christophe@mind.be>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=igalia.com; 
- s=20170329; h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
- From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=ovAqlUT/TGK66W3sL6KHAweo5HH+etpq8a2XDHZoQ0c=; b=gXMep3jojgyyxms9aU8nWu8FQ8
- RtMfyr7bwea3XC2OygZliO9V0v+t60whYYhCBZTCYgSKZJf/pDy4N53geUS/rrY/J7tfk0s1/EtBC
- R6T+4HI7SehDw55JIyKcnHPyPENz83dpAJunq3OKGwjK/b7goTvfKgPWm2whK6l89Xp0FTpdJlipX
- O9Dpv7aMLj+LzOwI1x6L5BxVELf60Cq3MDNfAiDXGF0NVo7qgT5Kfg8+ePVrNmgqvRFOGNYBuJ/6j
- Mv9v8KoSN/XRLGEHsrHLhieo8vq8ZXiBYLHxGEmsp6r421lg7ML1seEyJsTxW+Nup+HB8gx040fY+
- kg19lV5Q==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=igalia.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
- header.s=20170329 header.b=gXMep3jo
-Subject: Re: [Buildroot] [PATCH v1 1/2] package/wlroots: bump to version
- 0.19.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1760440343; x=1761045143; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=RWkypqwUS795YtMqNmI0YOfh4+7EZe+uhAXk8pHx+28=;
+ b=fCp6zkMxTz7yia83PEqftgvseV0Hus8aV2QTg6bs7GBwUeTQXypGnJyLQhD51gLp6L
+ dvmJK7YUy3yYFa2Q92TD79AI7NKs8dq0xRV3EO+INrGB7rrUl1IXfEOzFCr6aL/SgxMM
+ oLxpR21otII8ZUzw0syJtfCKho0RcerkAL3T/FOdeKrVo0K/ehmKR0zvT5+HNLd6LfDE
+ nwR4pTZOq3oN5gxEmagjb8p02mtzugsVtAuwsm8DNspndmVlEJ/bKG9oOGtHslsoEx7w
+ +dKErt9PktOXa78ln4WvjUgnMSIvVa58xQD0ckD70Q1GcsAEB5/2UH9eWmBQcUfcjF8R
+ vBHg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=fCp6zkMx
+Subject: [Buildroot] [PATCH for 2025.02.x] package/redis: security bump to
+ v7.2.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,73 +110,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============2330175186916918516=="
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+See the release notes:
+https://github.com/redis/redis/blob/7.2.11/00-RELEASENOTES
 
---===============2330175186916918516==
-Content-Type: multipart/signed; boundary="h3f8BTpCZVIMVj6x"; micalg="pgp-sha256"; protocol="application/pgp-signature"
+This fixes the following vulnerabilities (in the Lua scripting engine):
+- CVE-2025-46817:
+    Redis is an open source, in-memory database that persists on disk.
+    Versions 8.2.1 and below allow an authenticated user to use a
+    specially crafted Lua script to cause an integer overflow and
+    potentially lead to remote code execution The problem exists in all
+    versions of Redis with Lua scripting. This issue is fixed in version
+    8.2.2.
+    https://www.cve.org/CVERecord?id=CVE-2025-46817
 
+- CVE-2025-46818:
+    Redis is an open source, in-memory database that persists on disk.
+    Versions 8.2.1 and below allow an authenticated user to use a
+    specially crafted Lua script to manipulate different LUA objects and
+    potentially run their own code in the context of another user. The
+    problem exists in all versions of Redis with LUA scripting. This issue
+    is fixed in version 8.2.2. A workaround to mitigate the problem
+    without patching the redis-server executable is to prevent users from
+    executing LUA scripts. This can be done using ACL to block a script by
+    restricting both the EVAL and FUNCTION command families.
+    https://www.cve.org/CVERecord?id=CVE-2025-46818
 
---h3f8BTpCZVIMVj6x
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: base64
+- CVE-2025-46819:
+    Redis is an open source, in-memory database that persists on disk.
+    Versions 8.2.1 and below allow an authenticated user to use a
+    specially crafted LUA script to read out-of-bound data or crash the
+    server and subsequent denial of service. The problem exists in all
+    versions of Redis with Lua scripting. This issue is fixed in version
+    8.2.2. To workaround this issue without patching the redis-server
+    executable is to prevent users from executing Lua scripts. This can be
+    done using ACL to block a script by restricting both the EVAL and
+    FUNCTION command families.
+    https://www.cve.org/CVERecord?id=CVE-2025-46819
 
-SGVsbG8gUmFwaGFlbCBhbmQgSnVsaWVuLAoKT24gVHVlLCAyMyBTZXAgMjAyNSAyMjoxNjoxOCAr
-MDIwMCBKdWxpZW4gT2xpdmFpbiB2aWEgYnVpbGRyb290IDxidWlsZHJvb3RAYnVpbGRyb290Lm9y
-Zz4gd3JvdGU6CiAKPiBUaGFua3MgZm9yIHRoZSBwYXRjaC4KPiAKPiBPbiAyMS8wOS8yMDI1IDIw
-OjE3LCBSYXBoYWVsIFBhdmxpZGlzIHdyb3RlOgo+ID4gQ2hhbmdlbG9nOgo+ID4gaHR0cHM6Ly9n
-aXRsYWIuZnJlZWRlc2t0b3Aub3JnL3dscm9vdHMvd2xyb290cy8tL3JlbGVhc2VzLzAuMTkuMAo+
-ID4gU2lnbmVkLW9mZi1ieTogUmFwaGFlbCBQYXZsaWRpcyA8cmFwaGFlbC5wYXZsaWRpc0BnbWFp
-bC5jb20+Cj4gPiAtLS0KPiA+ICBwYWNrYWdlL3dscm9vdHMvd2xyb290cy5oYXNoIHwgNCArKy0t
-Cj4gPiAgcGFja2FnZS93bHJvb3RzL3dscm9vdHMubWsgICB8IDIgKy0KPiA+ICAyIGZpbGVzIGNo
-YW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKPiA+IAo+IFsuLi5dCj4gPiBk
-aWZmIC0tZ2l0IGEvcGFja2FnZS93bHJvb3RzL3dscm9vdHMubWsgYi9wYWNrYWdlL3dscm9vdHMv
-d2xyb290cy5tawo+ID4gaW5kZXggODFmNzZmY2RjNy4uNjg5NjYyZjUzNiAxMDA2NDQKPiA+IC0t
-LSBhL3BhY2thZ2Uvd2xyb290cy93bHJvb3RzLm1rCj4gPiArKysgYi9wYWNrYWdlL3dscm9vdHMv
-d2xyb290cy5tawo+ID4gQEAgLTQsNyArNCw3IEBACj4gPiAgIwo+ID4gIAo+ID4gIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMKPiA+IAo+ID4gLVdMUk9PVFNfVkVSU0lPTiA9IDAuMTguMgo+ID4gK1dM
-Uk9PVFNfVkVSU0lPTiA9IDAuMTkuMAo+IAo+IFVwZGF0aW5nIHdscm9vdHMgdG8gMC4xOS4wIGJy
-ZWFrcyBjYWdlIDAuMi4wIGR1ZSB0byB0aGUgYnJlYWtpbmcgY2hhbmdlcyAKPiBkZXNjcmliZWQK
-PiBpbiB0aGUgcmVsZWFzZSBub3RlLgo+IAo+IENvdWxkIHlvdSBhbHNvIHNlbmQgYSBwYXRjaCB0
-aGF0IGJ1bXBzIGNhZ2UgdG8KPiB2MC4yLjAtMTUtZzJlNTkzZmU1YThhMjE4NmE1NThjZWI0MTQ2
-NzQ3NzVlNGJhNWQyYjEKPiBvciBncmVhdGVyLCBwbGVhc2U/IChubyBuZWVkIHRvIHJlc2VuZCB0
-aGlzIHNlcmllcykKCk9yLCBldmVuIGJldHRlciwgdXBkYXRlIHRvIENhZ2UgMC4yLjEsIHdoaWNo
-IGNhbiBiZSBidWlsdCBhZ2FpbnN0Cndscm9vdHMgMC4xOS54LCBhcyBwZXIgdGhlIHJlbGVhc2Ug
-bm90ZXM6CgogIGh0dHBzOi8vZ2l0aHViLmNvbS9jYWdlLWtpb3NrL2NhZ2UvcmVsZWFzZXMvdGFn
-L3YwLjIuMQogCj4gPiAgV0xST09UU19TSVRFID0gCj4gPiBodHRwczovL2dpdGxhYi5mcmVlZGVz
-a3RvcC5vcmcvd2xyb290cy93bHJvb3RzLy0vcmVsZWFzZXMvJChXTFJPT1RTX1ZFUlNJT04pL2Rv
-d25sb2Fkcwo+ID4gIFdMUk9PVFNfTElDRU5TRSA9IE1JVAo+ID4gIFdMUk9PVFNfTElDRU5TRV9G
-SUxFUyA9IExJQ0VOU0UKPiA+IC0tCj4gPiAyLjUxLjAKPiAKPiBCZXN0IHJlZ2FyZHMsCj4gCj4g
-SnVsaWVuLgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-Cj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0
-cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cj4gCgpD
-aGVlcnMsCuKAlEFkcmnDoW4K
+- CVE-2025-49844:
+    Redis is an open source, in-memory database that persists on disk.
+    Versions 8.2.1 and below allow an authenticated user to use a
+    specially crafted Lua script to manipulate the garbage collector,
+    trigger a use-after-free and potentially lead to remote code
+    execution. The problem exists in all versions of Redis with Lua
+    scripting. This issue is fixed in version 8.2.2. To workaround this
+    issue without patching the redis-server executable is to prevent users
+    from executing Lua scripts. This can be done using ACL to restrict
+    EVAL and EVALSHA commands.
+    https://www.cve.org/CVERecord?id=CVE-2025-49844
 
---h3f8BTpCZVIMVj6x
-Content-Type: application/pgp-signature; name="signature.asc"
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+---
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
------BEGIN PGP SIGNATURE-----
-
-iF0EABEIAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCaO4tbwAKCRCRxVnb5MkS
-Oy8lAJ900eJy0TSJksjaR8M1n2ZQye1QYQCffrpxN/mRYxjouOdDvomxmIiWnY0=
-=89CR
------END PGP SIGNATURE-----
-
---h3f8BTpCZVIMVj6x--
-
---===============2330175186916918516==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 630f6b6d76..aa3253335e 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  e576ad54bc53770649c556933ecd555b975e3dac422e46356102436a437b43c7  redis-7.2.10.tar.gz
++sha256  2f9886eca68d30114ad6a01da65631f8007d802fd3e6c9fac711251e6390323d  redis-7.2.11.tar.gz
+ 
+ # Locally calculated
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index a2d4fbe138..cd9736663b 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-REDIS_VERSION = 7.2.10
++REDIS_VERSION = 7.2.11
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
+-- 
+2.51.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2330175186916918516==--
