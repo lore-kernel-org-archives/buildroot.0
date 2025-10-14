@@ -1,103 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98A56CCD18E
-	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 19:18:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE108CCD18E
+	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 19:34:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6D72B413C8;
-	Tue, 14 Oct 2025 19:18:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 997FF600BB;
+	Tue, 14 Oct 2025 19:34:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id isMbWqMjBEug; Tue, 14 Oct 2025 19:18:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vS1cwpHw_arm; Tue, 14 Oct 2025 19:34:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1A7A413CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A430B60A9A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B1A7A413CB;
-	Tue, 14 Oct 2025 19:18:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id D10B44C4
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 19:18:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A430B60A9A;
+	Tue, 14 Oct 2025 19:34:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7C03D4C4
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 19:34:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C375941341
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 19:18:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 62544411E5
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 19:34:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P_MNtjvF00tM for <buildroot@buildroot.org>;
- Tue, 14 Oct 2025 19:18:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
- envelope-from=maxime.leroys@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E277841360
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E277841360
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E277841360
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 19:18:39 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-3ecde0be34eso119665f8f.1
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 12:18:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1760469518; x=1761074318;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=KrBKyK+FD2Ayt5N/hXgKT+cXjHD3gxMT/jAvuqC3Ecs=;
- b=eKgvfWnuC8JMLaNjrBILEp89FtZOPb2XfSLZrpNDVweJJ9UL9mv11KGStw1TpP+UN/
- s1ByC5nNzrOgGDwlkqy52uBo3NblImFAySXhFwv3z7ETz7UHTvYuGl2rGYS0gShe/8/x
- ZOKyoEotcuIXgCdHVGsbDVw7HLo5HUeiE9UAF+X7ZJwXu1qO56LRxN90WmrZyPxxesZU
- dJNbMxRi8pn43xsuzJVc9iJ8nsbkYG4SwL96uB1zM8AB688A1LBmPK8HhIETQtVCsD74
- hjxXTZcfZIfnuK8pEvW0TE7oCeg1aeYzo9EWRpPbsvcg5l9p2Od8poTULxv3Ilygnskh
- rM2A==
-X-Gm-Message-State: AOJu0YxOWEln/OtJMm9OFKEXIJDJEkGXd+xvCkIw8Md0Xtaj31TQdCco
- tfixOUD1166c89guRVgaMqNMUIwZj1Np4PGWQp5BGQrs9N4ZfzXfxMNFtJ7zcQ==
-X-Gm-Gg: ASbGncvNNWvqSllT/WjaqhcOXmttldyJaUcZQNr8IasZ3J5t2zIdkbfOZ/A0asPvZzq
- AFaQl2wnkXLBs+Q7V2whOy9vUSZl6/XPYKzf0Txi7PnyZeeaGpzSOsrGmdskEQQjXXqL8H80r2a
- vBUxpbhCcB777tpkJqMd2uy39jKvYJ71v8n/1Ry4wcQgJK+qvuMc7Lpol0GjgeNaOHOuLA0utmY
- DD2ee5YSucdBMLyM0tLqNXAvdbEIan6LcIdKZqB1D0XL+k8YnMajmUmKAPMAvZapjznngwyrXIF
- FyQKU7K5pNvkPPIIdZV/Mn9PglC3NDH7EYhr/IUmEBPQFx4OhbcVKv6ZdF/LKK/HJXu3FUp1Nva
- Dr3tmhacTVFffrF6LKfvBMQ7eWKD3r66Y8RJYAoOuhjEu
-X-Google-Smtp-Source: AGHT+IGZtdjfkpb8h4wepk4sEuVrDaDKZ1uG0HNPnfEgCqw7ufRFhe46ZpGYgjAkEr3ipePKQjsPBQ==
-X-Received: by 2002:a05:6000:2483:b0:425:70cb:9ba8 with SMTP id
- ffacd0b85a97d-42666a9f3aemr16808057f8f.1.1760469517787; 
- Tue, 14 Oct 2025 12:18:37 -0700 (PDT)
-Received: from freepad.. ([2a01:e0a:6f:bdf0:5505:2845:5a50:c0c0])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-426d0d9050bsm23343262f8f.13.2025.10.14.12.18.37
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 Oct 2025 12:18:37 -0700 (PDT)
-From: Maxime Leroy <maxime@leroys.fr>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hcyPd_WacucA for <buildroot@buildroot.org>;
+ Tue, 14 Oct 2025 19:34:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 56BF940545
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56BF940545
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 56BF940545
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 19:34:26 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a02db.dip0.t-ipconnect.de [91.58.2.219])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 723EBA4C69DA;
+ Tue, 14 Oct 2025 21:34:24 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:44606)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1v8kmt-000000002wO-2i76;
+ Tue, 14 Oct 2025 19:34:24 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Maxime Leroy <maxime@leroys.fr>
-Date: Tue, 14 Oct 2025 21:18:28 +0200
-Message-ID: <20251014191828.442802-3-maxime@leroys.fr>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251014191828.442802-1-maxime@leroys.fr>
-References: <20251014191828.442802-1-maxime@leroys.fr>
+Date: Tue, 14 Oct 2025 21:34:23 +0200
+Message-ID: <20251014193423.4036610-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1760469518; x=1761074318; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
- :message-id:reply-to;
- bh=KrBKyK+FD2Ayt5N/hXgKT+cXjHD3gxMT/jAvuqC3Ecs=;
- b=kFKDK6X/3yWZzlJsyB15180Mja3DxKrGHXh0KItlm98Iy17NmQHZoHo3ufLw+Q9ghc
- sb66/WHJvqBHhjln183YJNvhIZK42rF6QIvt02GURrZUI0jXkq1Xh866gOLLXXBzpK7w
- NPQDCDOUZNUisWYOGmKSr36aMujuqZwBKa3MoKS4nsFnHYiDymkZkXy52LcNzFJMChaL
- V/UWqYx0ur7PYbqx7d0PCCsPq17vH8e+oiwTfpdieEHTyy07E9pykG84lTcFLsDosEQK
- piDanNFzE6dP3L4jDKU3ITz8Su0M0vJF3lGidtYn5KxonBa25ikKLxHPtdEHE9zF7Sqx
- 0YgA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=leroys.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=kFKDK6X/
-Subject: [Buildroot] [PATCH 2/2] package/grout: bump to 0.13.0 version
+ d=kuhls.net; 
+ s=kas202506031021; t=1760470464;
+ bh=KK4Xm7YKBwR01MpF7YfovyVkDZ0iIryn8y/qT9Rx0RQ=;
+ h=From:To:Cc:Subject:Date:From;
+ b=oG1a9pT3MWlCE/4+lomxvZ3Dc7wUfH0s5G/qOCd1/1XCSoRbm1AR26ri/Rs70t8Z/
+ D9SU9VraeosW3L+dOLzJf3Flgj2VLk7dQ3U2xSmyVY2QmrlwEDyQwKbSOpX72+n7IM
+ G95OiLmuZy0Nz5+a+hwalzNOjLI8UI3O63Fp1JWckCk5n0bf9U0bJxA51MlIt4DC1l
+ LXjoNQseoniPlDapol5eQUnC6x9JTybp0pRClKjcqO3FDVhBNpH4NGZhEPXrfRsXuM
+ WzwVOgMgwHki00Xu4ntPEVBBaZvAeFtzdXU33k2RHx/N8LnWONd61d4xfAzgakihIq
+ y/ZK6rnHeYhaQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=oG1a9pT3
+Subject: [Buildroot] [PATCH 1/1] package/python-webpy: bump version to 0.70
+ and add upstream commit to fix CVE-2025-3818
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,45 +80,112 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See the release note of the new versions:
-https://github.com/DPDK/grout/releases/tag/v0.13.0
-https://github.com/DPDK/grout/releases/tag/v0.12.0
+Release notes: https://github.com/webpy/webpy/releases/tag/webpy-0.70
 
-Signed-off-by: Maxime Leroy <maxime@leroys.fr>
+Switched _SITE to github because version 0.70 was not released to
+pypi.org: https://pypi.org/project/web.py/#history
+
+Added upstream commit to fix CVE-2025-3818.
+
+This bump includes
+https://github.com/webpy/webpy/commit/f7540bef650bce7227af796728136d41e44cdd0e
+which removes the deprecated cgi module which was removed in Python 3.13
+and causes build errors since buildroot bumped python3 to 3.13.2 with
+commit d63e207eb869063f82c867658676c2903beb08cb.
+
+Fixes:
+https://autobuild.buildroot.net/results/5a7/5a7382250d33ddfd49de2c7996fb54aaf20dd62c/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/grout/grout.hash | 2 +-
- package/grout/grout.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-Address-CVE-2025-3818.patch          | 42 +++++++++++++++++++
+ package/python-webpy/python-webpy.hash        |  5 +--
+ package/python-webpy/python-webpy.mk          |  5 +--
+ 3 files changed, 46 insertions(+), 6 deletions(-)
+ create mode 100644 package/python-webpy/0001-Address-CVE-2025-3818.patch
 
-diff --git a/package/grout/grout.hash b/package/grout/grout.hash
-index 0c036b05f6..248c375710 100644
---- a/package/grout/grout.hash
-+++ b/package/grout/grout.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  7bd7caecc3451aea3462a86c31d2ee953a9b7789975b5522dd5f09204558f99d  grout-0.11.0.tar.gz
-+sha256  6d1ba4fda3fec6cbc5d4f4d48fe2435fabd36b27540a439a01a44361f6998971  grout-0.13.0.tar.gz
- sha256  1e412aae8da58b718c78b3d7a52eb547004384d4347e4746a22ca6af7522930c  licenses/BSD-3-clause.txt
-diff --git a/package/grout/grout.mk b/package/grout/grout.mk
-index 5abf265f19..07ea585a01 100644
---- a/package/grout/grout.mk
-+++ b/package/grout/grout.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-webpy/0001-Address-CVE-2025-3818.patch b/package/python-webpy/0001-Address-CVE-2025-3818.patch
+new file mode 100644
+index 0000000000..d8373cbac6
+--- /dev/null
++++ b/package/python-webpy/0001-Address-CVE-2025-3818.patch
+@@ -0,0 +1,42 @@
++From 3ba1b40e5a828a26a1df1b49cdc87395f3274c81 Mon Sep 17 00:00:00 2001
++From: Mek <michael.karpeles@gmail.com>
++Date: Wed, 7 May 2025 15:14:44 -0400
++Subject: [PATCH] Address CVE-2025-3818 (#807)
++
++* Address CVE-2025-3818
++
++Co-authored-by: Scott Barnes <scottreidbarnes@gmail.com>
++
++Upstream: https://github.com/webpy/webpy/commit/3ba1b40e5a828a26a1df1b49cdc87395f3274c81
++
++Fixes CVE-2025-3818: https://github.com/advisories/GHSA-9g47-36rw-gjh2
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ web/db.py | 10 +++++++++-
++ 1 file changed, 9 insertions(+), 1 deletion(-)
++
++diff --git a/web/db.py b/web/db.py
++index 5284f8d0..ba3e12c5 100644
++--- a/web/db.py
+++++ b/web/db.py
++@@ -1198,10 +1198,18 @@ def _process_insert_query(self, query, tablename, seqname):
++                 seqname = None
++ 
++         if seqname:
++-            query += "; SELECT currval('%s')" % seqname
+++            query += self.get_sequence_query(seqname)
++ 
++         return query
++ 
+++    def get_sequence_query(self, seqname):
+++        import re
+++        # Ensure the sequence name is valid
+++        if not re.match(r'^[a-zA-Z_][a-zA-Z0-9_$]*$', seqname):
+++            raise ValueError(f"Invalid sequence name: {seqname}")
+++        return SQLQuery("; SELECT currval(%s)", seqname)
+++
+++
++     def _get_all_sequences(self):
++         """Query postgres to find names of all sequences used in this database."""
++         if self._sequences is None:
+diff --git a/package/python-webpy/python-webpy.hash b/package/python-webpy/python-webpy.hash
+index 540771a244..0fb39170c7 100644
+--- a/package/python-webpy/python-webpy.hash
++++ b/package/python-webpy/python-webpy.hash
+@@ -1,3 +1,2 @@
+-# md5, sha256 from https://pypi.org/pypi/web.py/json
+-md5  cd2c0296ceffa1acb96ae5315214eb42  web.py-0.62.tar.gz
+-sha256  5ce684caa240654cae5950da8b4b7bc178812031e08f990518d072bd44ab525e  web.py-0.62.tar.gz
++# Locally computed
++sha256  eee36e423b5e85463145159d94735e3c3a4c1c8078555042d8139348350b0022  python-webpy-0.70.tar.gz
+diff --git a/package/python-webpy/python-webpy.mk b/package/python-webpy/python-webpy.mk
+index 06d4ae039b..62b2331c08 100644
+--- a/package/python-webpy/python-webpy.mk
++++ b/package/python-webpy/python-webpy.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--GROUT_VERSION = 0.11.0
-+GROUT_VERSION = 0.13.0
- GROUT_SITE = $(call github,DPDK,grout,v$(GROUT_VERSION))
- GROUT_LICENSE = BSD-3-Clause
- GROUT_LICENSE_FILES = licenses/BSD-3-clause.txt
+-PYTHON_WEBPY_VERSION = 0.62
+-PYTHON_WEBPY_SOURCE = web.py-$(PYTHON_WEBPY_VERSION).tar.gz
+-PYTHON_WEBPY_SITE = https://files.pythonhosted.org/packages/cd/6e/338a060bb5b52ee8229bdada422eaa5f71b13f8d33467f37f870ed2cae4b
++PYTHON_WEBPY_VERSION = 0.70
++PYTHON_WEBPY_SITE = $(call github,webpy,webpy,webpy-$(PYTHON_WEBPY_VERSION))
+ PYTHON_WEBPY_SETUP_TYPE = setuptools
+ PYTHON_WEBPY_LICENSE = Public Domain
+ 
 -- 
-2.43.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
