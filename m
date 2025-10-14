@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3125BCCD184
-	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 20:30:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FFAACCD18E
+	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 20:30:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A475161599;
-	Tue, 14 Oct 2025 20:30:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B0288615A9;
+	Tue, 14 Oct 2025 20:30:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k6xstWfUx3on; Tue, 14 Oct 2025 20:30:09 +0000 (UTC)
+ id 1KfdL29pazPa; Tue, 14 Oct 2025 20:30:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FA3261579
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E47276159A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5FA3261579;
-	Tue, 14 Oct 2025 20:30:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E47276159A;
+	Tue, 14 Oct 2025 20:30:10 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4C5D7BC
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 20:29:46 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5CF641C9
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 20:29:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 80A7740441
+ by smtp2.osuosl.org (Postfix) with ESMTP id E49234049C
  for <buildroot@buildroot.org>; Tue, 14 Oct 2025 20:29:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CbJQ8U4di4w7 for <buildroot@buildroot.org>;
+ id VZI6XojpQZY3 for <buildroot@buildroot.org>;
  Tue, 14 Oct 2025 20:29:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D7C54034E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53C2B4041F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2D7C54034E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 53C2B4041F
  for <buildroot@buildroot.org>; Tue, 14 Oct 2025 20:29:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0C89787100; Tue, 14 Oct 2025 20:29:37 +0000 (UTC)
+ id 5218F870E7; Tue, 14 Oct 2025 20:29:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 14 Oct 2025 22:10:26 +0200
+Date: Tue, 14 Oct 2025 22:10:27 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6c03908f2a77413271bd73d31b9d1272abbcb028
-X-Git-Newrev: bdd02a191ac97f67291035fd73e6b0859a7c1637
+X-Git-Oldrev: 2510757e5e6debeab28569c8dad97af67671ecfa
+X-Git-Newrev: 94ba02943827d5e36e69f9cef7bbeec3ed0773c0
 X-Patchwork-Hint: ignore
-Message-Id: <20251014202937.0C89787100@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-googleapis-common-protos:
- bump version to 1.70.0
+Message-Id: <20251014202937.5218F870E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-mako: bump version to 1.3.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,44 +65,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bdd02a191ac97f67291035fd73e6b0859a7c1637
+commit: https://git.buildroot.net/buildroot/commit/?id=94ba02943827d5e36e69f9cef7bbeec3ed0773c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Release notes:
+https://github.com/sqlalchemy/mako/releases/tag/rel_1_3_10
+https://github.com/sqlalchemy/mako/releases/tag/rel_1_3_9
+
+Update license hash due to copyright year bump:
+https://github.com/sqlalchemy/mako/commit/798abe413d936f9741d9091c7c814f2e6faa5a26
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../python-googleapis-common-protos.hash                              | 4 ++--
- .../python-googleapis-common-protos.mk                                | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-mako/python-mako.hash | 6 +++---
+ package/python-mako/python-mako.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-googleapis-common-protos/python-googleapis-common-protos.hash b/package/python-googleapis-common-protos/python-googleapis-common-protos.hash
-index ccea86c1a7..a00b871bb8 100644
---- a/package/python-googleapis-common-protos/python-googleapis-common-protos.hash
-+++ b/package/python-googleapis-common-protos/python-googleapis-common-protos.hash
+diff --git a/package/python-mako/python-mako.hash b/package/python-mako/python-mako.hash
+index 580c90da35..b6706aa1ad 100644
+--- a/package/python-mako/python-mako.hash
++++ b/package/python-mako/python-mako.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/googleapis-common-protos/json
--md5  28ba393a6c206bbd55efba7b68f65622  googleapis_common_protos-1.66.0.tar.gz
--sha256  c3e7b33d15fdca5374cc0a7346dd92ffa847425cc4ea941d970f13680052ec8c  googleapis_common_protos-1.66.0.tar.gz
-+md5  fca59b82ad99d5dc1da6a94e5ec6e819  googleapis_common_protos-1.70.0.tar.gz
-+sha256  0e1b44e0ea153e6594f9f394fef15193a68aaaea2d843f83e2742717ca753257  googleapis_common_protos-1.70.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/mako/json
+-md5  8e6f349493b5c545795e4f6451e070dd  mako-1.3.8.tar.gz
+-sha256  577b97e414580d3e088d47c2dbbe9594aa7a5146ed2875d4dfa9075af2dd3cc8  mako-1.3.8.tar.gz
++md5  c9dfb2bf42827459dd505c60f2262a7c  mako-1.3.10.tar.gz
++sha256  99579a6f39583fa7e5630a28c3c1f440e4e97a414b80372649c0ce338da2ea28  mako-1.3.10.tar.gz
  # Locally computed sha256 checksums
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-googleapis-common-protos/python-googleapis-common-protos.mk b/package/python-googleapis-common-protos/python-googleapis-common-protos.mk
-index c1a1174e26..6afd1ea740 100644
---- a/package/python-googleapis-common-protos/python-googleapis-common-protos.mk
-+++ b/package/python-googleapis-common-protos/python-googleapis-common-protos.mk
+-sha256  15627b36b38d0729cdd686df9abf606503d99d624b2f5ec5cb254a75d5afa891  LICENSE
++sha256  68d7064e53e3ffa8e9f420a9e604bd2e2059d9c330492fa6ebd4eb3d48111689  LICENSE
+diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
+index 19cd2fc6f1..1dc59f002c 100644
+--- a/package/python-mako/python-mako.mk
++++ b/package/python-mako/python-mako.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_GOOGLEAPIS_COMMON_PROTOS_VERSION = 1.66.0
-+PYTHON_GOOGLEAPIS_COMMON_PROTOS_VERSION = 1.70.0
- PYTHON_GOOGLEAPIS_COMMON_PROTOS_SOURCE = googleapis_common_protos-$(PYTHON_GOOGLEAPIS_COMMON_PROTOS_VERSION).tar.gz
--PYTHON_GOOGLEAPIS_COMMON_PROTOS_SITE = https://files.pythonhosted.org/packages/ff/a7/8e9cccdb1c49870de6faea2a2764fa23f627dd290633103540209f03524c
-+PYTHON_GOOGLEAPIS_COMMON_PROTOS_SITE = https://files.pythonhosted.org/packages/39/24/33db22342cf4a2ea27c9955e6713140fedd51e8b141b5ce5260897020f1a
- PYTHON_GOOGLEAPIS_COMMON_PROTOS_SETUP_TYPE = setuptools
- PYTHON_GOOGLEAPIS_COMMON_PROTOS_LICENSE = Apache-2.0
- PYTHON_GOOGLEAPIS_COMMON_PROTOS_LICENSE_FILES = LICENSE
+-PYTHON_MAKO_VERSION = 1.3.8
++PYTHON_MAKO_VERSION = 1.3.10
+ PYTHON_MAKO_SOURCE = mako-$(PYTHON_MAKO_VERSION).tar.gz
+-PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/5f/d9/8518279534ed7dace1795d5a47e49d5299dd0994eed1053996402a8902f9
++PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/9e/38/bd5b78a920a64d708fe6bc8e0a2c075e1389d53bef8413725c63ba041535
+ PYTHON_MAKO_SETUP_TYPE = setuptools
+ PYTHON_MAKO_LICENSE = MIT
+ PYTHON_MAKO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
