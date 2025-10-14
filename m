@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8F50CCD190
-	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 18:46:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F5A8CCD195
+	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 18:46:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE7EE41595;
-	Tue, 14 Oct 2025 18:46:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0072D61306;
+	Tue, 14 Oct 2025 18:46:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sLamp4sPhvUf; Tue, 14 Oct 2025 18:46:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rFCOlEP-UQwz; Tue, 14 Oct 2025 18:46:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D308541582
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E66D6131F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D308541582;
-	Tue, 14 Oct 2025 18:46:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E66D6131F;
+	Tue, 14 Oct 2025 18:46:17 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 10508294
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 18:46:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 114CC294
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 18:46:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3D9A661306
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6A50C612EB
  for <buildroot@buildroot.org>; Tue, 14 Oct 2025 18:45:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 30L3b7uDB0RU for <buildroot@buildroot.org>;
+ id XpTIlyx03AK7 for <buildroot@buildroot.org>;
  Tue, 14 Oct 2025 18:45:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 49DF761305
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 627906130B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 49DF761305
+ by smtp3.osuosl.org (Postfix) with ESMTP id 627906130B
  for <buildroot@buildroot.org>; Tue, 14 Oct 2025 18:45:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 486EF870C5; Tue, 14 Oct 2025 18:45:51 +0000 (UTC)
+ id 610BD870C5; Tue, 14 Oct 2025 18:45:51 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 14 Oct 2025 20:44:13 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fd46a9af3af3765b68b1ed18fe8874771926ca1e
-X-Git-Newrev: a9d699def28946a8a3d8e4d3eb78576c12c87f53
+X-Git-Oldrev: 853e3609c148452e3daa66f301638d8474c138ef
+X-Git-Newrev: b550f7145072d987960e16c670dc28518b9f517c
 X-Patchwork-Hint: ignore
-Message-Id: <20251014184551.486EF870C5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-daphne: bump version to
- 4.2.1
+Message-Id: <20251014184551.610BD870C5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-email-validator: bump
+ version to 2.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,44 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9d699def28946a8a3d8e4d3eb78576c12c87f53
+commit: https://git.buildroot.net/buildroot/commit/?id=b550f7145072d987960e16c670dc28518b9f517c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-daphne/python-daphne.hash | 4 ++--
- package/python-daphne/python-daphne.mk   | 4 ++--
+ package/python-email-validator/python-email-validator.hash | 4 ++--
+ package/python-email-validator/python-email-validator.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-daphne/python-daphne.hash b/package/python-daphne/python-daphne.hash
-index 194b73a0e4..e0619c6463 100644
---- a/package/python-daphne/python-daphne.hash
-+++ b/package/python-daphne/python-daphne.hash
+diff --git a/package/python-email-validator/python-email-validator.hash b/package/python-email-validator/python-email-validator.hash
+index f7a7ed8a33..16fb9518f9 100644
+--- a/package/python-email-validator/python-email-validator.hash
++++ b/package/python-email-validator/python-email-validator.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/daphne/json
--md5  6a00ce30210105fcd0f756d4dc5505f9  daphne-4.1.2.tar.gz
--sha256  fcbcace38eb86624ae247c7ffdc8ac12f155d7d19eafac4247381896d6f33761  daphne-4.1.2.tar.gz
-+md5  10ce77cd61e3b048bac7fe4539800f37  daphne-4.2.1.tar.gz
-+sha256  5f898e700a1fda7addf1541d7c328606415e96a7bd768405f0463c312fcb31b3  daphne-4.2.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/email-validator/json
+-md5  593073eca56ac1e947d47b9b314f2f11  email_validator-2.2.0.tar.gz
+-sha256  cb690f344c617a714f22e66ae771445a1ceb46821152df8e165c5f9a364582b7  email_validator-2.2.0.tar.gz
++md5  379aa34f196a66e16c5c0dd0c2abb2da  email_validator-2.3.0.tar.gz
++sha256  9fc05c37f2f6cf439ff414f8fc46d917929974a82244c20eb10231ba60c54426  email_validator-2.3.0.tar.gz
  # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-daphne/python-daphne.mk b/package/python-daphne/python-daphne.mk
-index 097a195821..69f5a9f466 100644
---- a/package/python-daphne/python-daphne.mk
-+++ b/package/python-daphne/python-daphne.mk
+ sha256  672179752e109134a3fb2bdd0780b29fdb7a03974f0f586a13aead5129562d4c  LICENSE
+diff --git a/package/python-email-validator/python-email-validator.mk b/package/python-email-validator/python-email-validator.mk
+index 35881c13a3..e54387869b 100644
+--- a/package/python-email-validator/python-email-validator.mk
++++ b/package/python-email-validator/python-email-validator.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DAPHNE_VERSION = 4.1.2
-+PYTHON_DAPHNE_VERSION = 4.2.1
- PYTHON_DAPHNE_SOURCE = daphne-$(PYTHON_DAPHNE_VERSION).tar.gz
--PYTHON_DAPHNE_SITE = https://files.pythonhosted.org/packages/1a/c1/aedf180beb12395835cba791ce7239b8880009d9d37564d72b7590cde605
-+PYTHON_DAPHNE_SITE = https://files.pythonhosted.org/packages/cd/9d/322b605fdc03b963cf2d33943321c8f4405e8d82e698bf49d1eed1ca40c4
- PYTHON_DAPHNE_SETUP_TYPE = setuptools
- # https://github.com/django/daphne/blob/master/LICENSE
- PYTHON_DAPHNE_LICENSE = BSD-3-Clause
+-PYTHON_EMAIL_VALIDATOR_VERSION = 2.2.0
++PYTHON_EMAIL_VALIDATOR_VERSION = 2.3.0
+ PYTHON_EMAIL_VALIDATOR_SOURCE = email_validator-$(PYTHON_EMAIL_VALIDATOR_VERSION).tar.gz
+-PYTHON_EMAIL_VALIDATOR_SITE = https://files.pythonhosted.org/packages/48/ce/13508a1ec3f8bb981ae4ca79ea40384becc868bfae97fd1c942bb3a001b1
++PYTHON_EMAIL_VALIDATOR_SITE = https://files.pythonhosted.org/packages/f5/22/900cb125c76b7aaa450ce02fd727f452243f2e91a61af068b40adba60ea9
+ PYTHON_EMAIL_VALIDATOR_SETUP_TYPE = setuptools
+ PYTHON_EMAIL_VALIDATOR_LICENSE = Unlicense
+ PYTHON_EMAIL_VALIDATOR_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
