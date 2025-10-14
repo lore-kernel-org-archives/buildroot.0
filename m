@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90E6DCCD184
-	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 22:00:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E87C9CCD18E
+	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 22:00:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 36F014119B;
-	Tue, 14 Oct 2025 22:00:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6FF8F60F25;
+	Tue, 14 Oct 2025 22:00:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q4v6PqixHzeU; Tue, 14 Oct 2025 22:00:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Wt4puQh--xwG; Tue, 14 Oct 2025 22:00:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 500D14118A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F6C060F42
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 500D14118A;
-	Tue, 14 Oct 2025 22:00:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 090CD1479
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F6C060F42;
+	Tue, 14 Oct 2025 22:00:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F2292747
  for <buildroot@buildroot.org>; Tue, 14 Oct 2025 22:00:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F32CD41189
+ by smtp1.osuosl.org (Postfix) with ESMTP id E3697811EA
  for <buildroot@buildroot.org>; Tue, 14 Oct 2025 22:00:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yt0cYaIQCVBe for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VU8zmW1A-YXh for <buildroot@buildroot.org>;
  Tue, 14 Oct 2025 22:00:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41E5C41181
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4A30811C3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 41E5C41181
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 22:00:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E4A30811C3
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 22:00:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3E97087100; Tue, 14 Oct 2025 22:00:01 +0000 (UTC)
+ id D2CC4870FC; Tue, 14 Oct 2025 22:00:00 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 14 Oct 2025 23:58:06 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 506bc1326c57b4c77feccbe3d2f98e3f6f1cb42e
-X-Git-Newrev: 8e4bb46045f8ee65ab06b36e66719604c01cdaf7
+X-Git-Oldrev: e747a6497987a4cec8d1c041c98062620a47cee6
+X-Git-Newrev: 086bd1dd48d6772ff1a17e8a41f2c01940595905
 X-Patchwork-Hint: ignore
-Message-Id: <20251014220001.3E97087100@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-proto-plus: bump version to
- 1.26.1
+Message-Id: <20251014220000.D2CC4870FC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-parso: bump version to 0.8.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,44 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e4bb46045f8ee65ab06b36e66719604c01cdaf7
+commit: https://git.buildroot.net/buildroot/commit/?id=086bd1dd48d6772ff1a17e8a41f2c01940595905
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-proto-plus/python-proto-plus.hash | 4 ++--
- package/python-proto-plus/python-proto-plus.mk   | 4 ++--
+ package/python-parso/python-parso.hash | 4 ++--
+ package/python-parso/python-parso.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-proto-plus/python-proto-plus.hash b/package/python-proto-plus/python-proto-plus.hash
-index fc8c1ad2f4..b55ac8bca0 100644
---- a/package/python-proto-plus/python-proto-plus.hash
-+++ b/package/python-proto-plus/python-proto-plus.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/proto-plus/json
--md5  12eab5f7e789e1153cd0dab5018bda09  proto_plus-1.26.0.tar.gz
--sha256  6e93d5f5ca267b54300880fff156b6a3386b3fa3f43b1da62e680fc0c586ef22  proto_plus-1.26.0.tar.gz
-+md5  631b92558563874de67630333450e08f  proto_plus-1.26.1.tar.gz
-+sha256  21a515a4c4c0088a773899e23c7bbade3d18f9c66c73edd4c7ee3816bc96a012  proto_plus-1.26.1.tar.gz
+diff --git a/package/python-parso/python-parso.hash b/package/python-parso/python-parso.hash
+index 83224a28bf..d0c8b3861a 100644
+--- a/package/python-parso/python-parso.hash
++++ b/package/python-parso/python-parso.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/parso/json
+-md5  f83b2e4164f6589ccae39b16c30ed5de  parso-0.8.4.tar.gz
+-sha256  eb3a7b58240fb99099a345571deecc0f9540ea5f4dd2fe14c2a99d6b281ab92d  parso-0.8.4.tar.gz
++md5  e0b327d04ff11e429737465f2716c232  parso-0.8.5.tar.gz
++sha256  034d7354a9a018bdce352f48b2a8a450f05e9d6ee85db84764e9b6bd96dafe5a  parso-0.8.5.tar.gz
  # Locally computed sha256 checksums
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-proto-plus/python-proto-plus.mk b/package/python-proto-plus/python-proto-plus.mk
-index 1fe4fa3431..b024e9952f 100644
---- a/package/python-proto-plus/python-proto-plus.mk
-+++ b/package/python-proto-plus/python-proto-plus.mk
+ sha256  fa67973073753d17624caf8684d5ee816d70c89d912c5bca7ca0f08e7b150edb  LICENSE.txt
+ sha256  9c1e620a5cf8e74fe81c1fd4c55e9cc0b189fc04e677cfc7ef915de746c3f59e  docs/_themes/flask/LICENSE
+diff --git a/package/python-parso/python-parso.mk b/package/python-parso/python-parso.mk
+index 65d10ebfc0..1cbc1f1e89 100644
+--- a/package/python-parso/python-parso.mk
++++ b/package/python-parso/python-parso.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PROTO_PLUS_VERSION = 1.26.0
-+PYTHON_PROTO_PLUS_VERSION = 1.26.1
- PYTHON_PROTO_PLUS_SOURCE = proto_plus-$(PYTHON_PROTO_PLUS_VERSION).tar.gz
--PYTHON_PROTO_PLUS_SITE = https://files.pythonhosted.org/packages/26/79/a5c6cbb42268cfd3ddc652dc526889044a8798c688a03ff58e5e92b743c8
-+PYTHON_PROTO_PLUS_SITE = https://files.pythonhosted.org/packages/f4/ac/87285f15f7cce6d4a008f33f1757fb5a13611ea8914eb58c3d0d26243468
- PYTHON_PROTO_PLUS_SETUP_TYPE = setuptools
- PYTHON_PROTO_PLUS_LICENSE = Apache-2.0
- PYTHON_PROTO_PLUS_LICENSE_FILES = LICENSE
+-PYTHON_PARSO_VERSION = 0.8.4
++PYTHON_PARSO_VERSION = 0.8.5
+ PYTHON_PARSO_SOURCE = parso-$(PYTHON_PARSO_VERSION).tar.gz
+-PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/66/94/68e2e17afaa9169cf6412ab0f28623903be73d1b32e208d9e8e541bb086d
++PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/d4/de/53e0bcf53d13e005bd8c92e7855142494f41171b34c2536b86187474184d
+ PYTHON_PARSO_SETUP_TYPE = setuptools
+ PYTHON_PARSO_LICENSE = MIT, Python-2.0, BSD-3-Clause (flask theme)
+ PYTHON_PARSO_LICENSE_FILES = LICENSE.txt docs/_themes/flask/LICENSE test/normalizer_issue_files/LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
