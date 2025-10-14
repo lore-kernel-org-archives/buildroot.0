@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9F97CCD190
-	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 22:00:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0ED83CCD184
+	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 22:00:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF53061387;
-	Tue, 14 Oct 2025 22:00:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DBA83613A1;
+	Tue, 14 Oct 2025 22:00:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P_RvZjKXzjY0; Tue, 14 Oct 2025 22:00:35 +0000 (UTC)
+ id EMcah-NvQ3Pg; Tue, 14 Oct 2025 22:00:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CAC5161391
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58BCB61313
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CAC5161391;
-	Tue, 14 Oct 2025 22:00:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 58BCB61313;
+	Tue, 14 Oct 2025 22:00:36 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D36901C9
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 22:00:16 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C9A771C9
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 22:00:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3972040709
+ by smtp2.osuosl.org (Postfix) with ESMTP id 47F1B40723
  for <buildroot@buildroot.org>; Tue, 14 Oct 2025 22:00:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4dCsFRZK-boJ for <buildroot@buildroot.org>;
+ id PiF6ePptUJVc for <buildroot@buildroot.org>;
  Tue, 14 Oct 2025 22:00:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89BED40744
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC7CE4079E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 89BED40744
+ by smtp2.osuosl.org (Postfix) with ESMTP id AC7CE4079E
  for <buildroot@buildroot.org>; Tue, 14 Oct 2025 22:00:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 87CAF87103; Tue, 14 Oct 2025 22:00:02 +0000 (UTC)
+ id A9FCB87103; Tue, 14 Oct 2025 22:00:02 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 14 Oct 2025 23:58:06 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2ab5af64c0ffe67f597c085c0ef9442ae3e347d3
-X-Git-Newrev: 8ac6128afb845fec55a4d352cab7e2e28446ab26
+X-Git-Oldrev: 400cbb1f480cf5a44aca678b6959f53f89c12540
+X-Git-Newrev: bdb107998ed4fcbcf52d3a4afaf9043f4abb92c8
 X-Patchwork-Hint: ignore
-Message-Id: <20251014220002.87CAF87103@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-sqlalchemy: bump version to
- 2.0.44
+Message-Id: <20251014220002.A9FCB87103@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-telnetlib3: bump version to
+ 2.0.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,44 +66,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ac6128afb845fec55a4d352cab7e2e28446ab26
+commit: https://git.buildroot.net/buildroot/commit/?id=bdb107998ed4fcbcf52d3a4afaf9043f4abb92c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Updated license hash due to upstream commit
+https://github.com/jquast/telnetlib3/commit/b7dfcb60672c0cdca6c69941a21fab119f96f1f2
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-sqlalchemy/python-sqlalchemy.hash | 4 ++--
- package/python-sqlalchemy/python-sqlalchemy.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-telnetlib3/python-telnetlib3.hash | 6 +++---
+ package/python-telnetlib3/python-telnetlib3.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-sqlalchemy/python-sqlalchemy.hash b/package/python-sqlalchemy/python-sqlalchemy.hash
-index 8c688914aa..6b7351f6ce 100644
---- a/package/python-sqlalchemy/python-sqlalchemy.hash
-+++ b/package/python-sqlalchemy/python-sqlalchemy.hash
+diff --git a/package/python-telnetlib3/python-telnetlib3.hash b/package/python-telnetlib3/python-telnetlib3.hash
+index db18889b8f..135b985625 100644
+--- a/package/python-telnetlib3/python-telnetlib3.hash
++++ b/package/python-telnetlib3/python-telnetlib3.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/sqlalchemy/json
--md5  a006c045b1a5610dba083ab3ae5dd991  sqlalchemy-2.0.43.tar.gz
--sha256  788bfcef6787a7764169cfe9859fe425bf44559619e1d9f56f5bddf2ebf6f417  sqlalchemy-2.0.43.tar.gz
-+md5  7659edd862c2b507f9fc4b466d319a4d  sqlalchemy-2.0.44.tar.gz
-+sha256  0ae7454e1ab1d780aee69fd2aae7d6b8670a581d8847f2d1e0f7ddfbf47e5a22  sqlalchemy-2.0.44.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/telnetlib3/json
+-md5  2dfac7e10ed63c408da50ea712415f87  telnetlib3-2.0.4.tar.gz
+-sha256  dbcbc16456a0e03a62431be7cfefff00515ab2f4ce2afbaf0d3a0e51a98c948d  telnetlib3-2.0.4.tar.gz
++md5  effe967417ede0c7dadcc3ccd3263d5f  telnetlib3-2.0.8.tar.gz
++sha256  08a2a7a3a6790f89617442b7d491da8b531d87706fffd6a33eeff57ac440b752  telnetlib3-2.0.8.tar.gz
  # Locally computed sha256 checksums
- sha256  9821720b58d4a565b61321007a8ad43ab6991a3959e66cd5db4dd9eae69c7dfc  LICENSE
-diff --git a/package/python-sqlalchemy/python-sqlalchemy.mk b/package/python-sqlalchemy/python-sqlalchemy.mk
-index 733d27ae69..0a7371188e 100644
---- a/package/python-sqlalchemy/python-sqlalchemy.mk
-+++ b/package/python-sqlalchemy/python-sqlalchemy.mk
+-sha256  caaf4ac82c4363d4874a49b50af15797618f6aee5bf42218697cdcb41c391ca5  LICENSE.txt
++sha256  df4b9fddd41b5811d9ba61952c7513ab3b0ca1d00efe611d19c51eda756f5dd1  LICENSE.txt
+diff --git a/package/python-telnetlib3/python-telnetlib3.mk b/package/python-telnetlib3/python-telnetlib3.mk
+index e68533af5c..d8968d4f15 100644
+--- a/package/python-telnetlib3/python-telnetlib3.mk
++++ b/package/python-telnetlib3/python-telnetlib3.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SQLALCHEMY_VERSION = 2.0.43
-+PYTHON_SQLALCHEMY_VERSION = 2.0.44
- PYTHON_SQLALCHEMY_SOURCE = sqlalchemy-$(PYTHON_SQLALCHEMY_VERSION).tar.gz
--PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/d7/bc/d59b5d97d27229b0e009bd9098cd81af71c2fa5549c580a0a67b9bed0496
-+PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/f0/f2/840d7b9496825333f532d2e3976b8eadbf52034178aac53630d09fe6e1ef
- PYTHON_SQLALCHEMY_SETUP_TYPE = setuptools
- PYTHON_SQLALCHEMY_LICENSE = MIT
- PYTHON_SQLALCHEMY_LICENSE_FILES = LICENSE
+-PYTHON_TELNETLIB3_VERSION = 2.0.4
++PYTHON_TELNETLIB3_VERSION = 2.0.8
+ PYTHON_TELNETLIB3_SOURCE = telnetlib3-$(PYTHON_TELNETLIB3_VERSION).tar.gz
+-PYTHON_TELNETLIB3_SITE = https://files.pythonhosted.org/packages/ef/af/0fadfddd1764e627f4ba9c7381caaf121795ed459a1cc3d0fbb89a187954
++PYTHON_TELNETLIB3_SITE = https://files.pythonhosted.org/packages/b7/12/305101cfdec4863c088e520cbb698b08ebd3396904ecfe0062612db77c66
+ PYTHON_TELNETLIB3_SETUP_TYPE = setuptools
+ PYTHON_TELNETLIB3_LICENSE = ISC
+ PYTHON_TELNETLIB3_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
