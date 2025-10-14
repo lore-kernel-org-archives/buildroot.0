@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAA34CCD18E
-	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 20:30:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3125BCCD184
+	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 20:30:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 629F061595;
+	by smtp3.osuosl.org (Postfix) with ESMTP id A475161599;
 	Tue, 14 Oct 2025 20:30:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 659FQCNqa6nq; Tue, 14 Oct 2025 20:30:08 +0000 (UTC)
+ id k6xstWfUx3on; Tue, 14 Oct 2025 20:30:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABC9761583
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FA3261579
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABC9761583;
-	Tue, 14 Oct 2025 20:30:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5FA3261579;
+	Tue, 14 Oct 2025 20:30:09 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 47C80BC
- for <buildroot@buildroot.org>; Tue, 14 Oct 2025 20:29:45 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4C5D7BC
+ for <buildroot@buildroot.org>; Tue, 14 Oct 2025 20:29:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6DC91401C2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 80A7740441
  for <buildroot@buildroot.org>; Tue, 14 Oct 2025 20:29:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nNrYEN-zBZTK for <buildroot@buildroot.org>;
+ id CbJQ8U4di4w7 for <buildroot@buildroot.org>;
  Tue, 14 Oct 2025 20:29:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 647CA40441
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D7C54034E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 647CA40441
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2D7C54034E
  for <buildroot@buildroot.org>; Tue, 14 Oct 2025 20:29:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 62EDC870FD; Tue, 14 Oct 2025 20:29:37 +0000 (UTC)
+ id 0C89787100; Tue, 14 Oct 2025 20:29:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 14 Oct 2025 22:10:27 +0200
+Date: Tue, 14 Oct 2025 22:10:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6e223d30a8d2772782ae7321cc8af28f3b47f816
-X-Git-Newrev: 70e29b930e173c119f8d0c1f7b851e1f157855bf
+X-Git-Oldrev: 6c03908f2a77413271bd73d31b9d1272abbcb028
+X-Git-Newrev: bdd02a191ac97f67291035fd73e6b0859a7c1637
 X-Patchwork-Hint: ignore
-Message-Id: <20251014202937.62EDC870FD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-mistune: bump version to
- 3.1.4
+Message-Id: <20251014202937.0C89787100@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-googleapis-common-protos:
+ bump version to 1.70.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,44 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70e29b930e173c119f8d0c1f7b851e1f157855bf
+commit: https://git.buildroot.net/buildroot/commit/?id=bdd02a191ac97f67291035fd73e6b0859a7c1637
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-mistune/python-mistune.hash | 4 ++--
- package/python-mistune/python-mistune.mk   | 4 ++--
+ .../python-googleapis-common-protos.hash                              | 4 ++--
+ .../python-googleapis-common-protos.mk                                | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-mistune/python-mistune.hash b/package/python-mistune/python-mistune.hash
-index 7f119f4a58..c790096af8 100644
---- a/package/python-mistune/python-mistune.hash
-+++ b/package/python-mistune/python-mistune.hash
+diff --git a/package/python-googleapis-common-protos/python-googleapis-common-protos.hash b/package/python-googleapis-common-protos/python-googleapis-common-protos.hash
+index ccea86c1a7..a00b871bb8 100644
+--- a/package/python-googleapis-common-protos/python-googleapis-common-protos.hash
++++ b/package/python-googleapis-common-protos/python-googleapis-common-protos.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/mistune/json
--md5  fb1f89ef8e8e0313d69ac82cb7c1627b  mistune-3.1.0.tar.gz
--sha256  dbcac2f78292b9dc066cd03b7a3a26b62d85f8159f2ea5fd28e55df79908d667  mistune-3.1.0.tar.gz
-+md5  47bd96502dcf22434a329b1814769480  mistune-3.1.4.tar.gz
-+sha256  b5a7f801d389f724ec702840c11d8fc48f2b33519102fc7ee739e8177b672164  mistune-3.1.4.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/googleapis-common-protos/json
+-md5  28ba393a6c206bbd55efba7b68f65622  googleapis_common_protos-1.66.0.tar.gz
+-sha256  c3e7b33d15fdca5374cc0a7346dd92ffa847425cc4ea941d970f13680052ec8c  googleapis_common_protos-1.66.0.tar.gz
++md5  fca59b82ad99d5dc1da6a94e5ec6e819  googleapis_common_protos-1.70.0.tar.gz
++sha256  0e1b44e0ea153e6594f9f394fef15193a68aaaea2d843f83e2742717ca753257  googleapis_common_protos-1.70.0.tar.gz
  # Locally computed sha256 checksums
- sha256  539013fd8e19f744f8bf0e27a532bbff54cd689ecef7a800f56ae5dc824be870  LICENSE
-diff --git a/package/python-mistune/python-mistune.mk b/package/python-mistune/python-mistune.mk
-index 80c1ac83e2..b5ec61e3a3 100644
---- a/package/python-mistune/python-mistune.mk
-+++ b/package/python-mistune/python-mistune.mk
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-googleapis-common-protos/python-googleapis-common-protos.mk b/package/python-googleapis-common-protos/python-googleapis-common-protos.mk
+index c1a1174e26..6afd1ea740 100644
+--- a/package/python-googleapis-common-protos/python-googleapis-common-protos.mk
++++ b/package/python-googleapis-common-protos/python-googleapis-common-protos.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MISTUNE_VERSION = 3.1.0
-+PYTHON_MISTUNE_VERSION = 3.1.4
- PYTHON_MISTUNE_SOURCE = mistune-$(PYTHON_MISTUNE_VERSION).tar.gz
--PYTHON_MISTUNE_SITE = https://files.pythonhosted.org/packages/79/6e/96fc7cb3288666c5de2c396eb0e338dc95f7a8e4920e43e38783a22d0084
-+PYTHON_MISTUNE_SITE = https://files.pythonhosted.org/packages/d7/02/a7fb8b21d4d55ac93cdcde9d3638da5dd0ebdd3a4fed76c7725e10b81cbe
- PYTHON_MISTUNE_LICENSE = BSD-3-Clause
- PYTHON_MISTUNE_LICENSE_FILES = LICENSE
- PYTHON_MISTUNE_SETUP_TYPE = setuptools
+-PYTHON_GOOGLEAPIS_COMMON_PROTOS_VERSION = 1.66.0
++PYTHON_GOOGLEAPIS_COMMON_PROTOS_VERSION = 1.70.0
+ PYTHON_GOOGLEAPIS_COMMON_PROTOS_SOURCE = googleapis_common_protos-$(PYTHON_GOOGLEAPIS_COMMON_PROTOS_VERSION).tar.gz
+-PYTHON_GOOGLEAPIS_COMMON_PROTOS_SITE = https://files.pythonhosted.org/packages/ff/a7/8e9cccdb1c49870de6faea2a2764fa23f627dd290633103540209f03524c
++PYTHON_GOOGLEAPIS_COMMON_PROTOS_SITE = https://files.pythonhosted.org/packages/39/24/33db22342cf4a2ea27c9955e6713140fedd51e8b141b5ce5260897020f1a
+ PYTHON_GOOGLEAPIS_COMMON_PROTOS_SETUP_TYPE = setuptools
+ PYTHON_GOOGLEAPIS_COMMON_PROTOS_LICENSE = Apache-2.0
+ PYTHON_GOOGLEAPIS_COMMON_PROTOS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
