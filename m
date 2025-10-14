@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45B17CCD18E
-	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 20:30:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F15B5CCD184
+	for <buildroot@archiver.kernel.org>; Tue, 14 Oct 2025 20:30:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3D96614FC;
-	Tue, 14 Oct 2025 20:30:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C0F0961551;
+	Tue, 14 Oct 2025 20:30:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NkdqrYqgXC_4; Tue, 14 Oct 2025 20:29:59 +0000 (UTC)
+ id 0Oox9UnhiVfD; Tue, 14 Oct 2025 20:30:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E0726147B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A23BF612A2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E0726147B;
-	Tue, 14 Oct 2025 20:29:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 26307BC
+	by smtp3.osuosl.org (Postfix) with ESMTP id A23BF612A2;
+	Tue, 14 Oct 2025 20:30:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E15721C9
  for <buildroot@buildroot.org>; Tue, 14 Oct 2025 20:29:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2EF0D411DE
+ by smtp2.osuosl.org (Postfix) with ESMTP id D858D40144
  for <buildroot@buildroot.org>; Tue, 14 Oct 2025 20:29:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5ncEX9iATU8f for <buildroot@buildroot.org>;
- Tue, 14 Oct 2025 20:29:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w6du3DU9k9_b for <buildroot@buildroot.org>;
+ Tue, 14 Oct 2025 20:29:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7525C411E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FF2F40373
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7525C411E3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2FF2F40373
  for <buildroot@buildroot.org>; Tue, 14 Oct 2025 20:29:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 73AEC870FE; Tue, 14 Oct 2025 20:29:37 +0000 (UTC)
+ id 2E566870FD; Tue, 14 Oct 2025 20:29:37 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 14 Oct 2025 22:10:27 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 765b1c5dbec1a97d84159a8a4aaf8b1150abb49b
-X-Git-Newrev: 1617498a20fdb5e194a8f0a454f391924738b690
+X-Git-Oldrev: d3523439f2a230759c4ecdf8c2819e7c7fda83e3
+X-Git-Newrev: 9c015e6018017ac6eff97873ead100f726465eb2
 X-Patchwork-Hint: ignore
-Message-Id: <20251014202937.73AEC870FE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-mypy: bump version to 1.18.2
+Message-Id: <20251014202937.2E566870FD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-hiredis: bump version to
+ 3.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +66,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1617498a20fdb5e194a8f0a454f391924738b690
+commit: https://git.buildroot.net/buildroot/commit/?id=9c015e6018017ac6eff97873ead100f726465eb2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-mypy/python-mypy.hash | 4 ++--
- package/python-mypy/python-mypy.mk   | 4 ++--
+ package/python-hiredis/python-hiredis.hash | 4 ++--
+ package/python-hiredis/python-hiredis.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-mypy/python-mypy.hash b/package/python-mypy/python-mypy.hash
-index ff49a92b18..9f1656ddce 100644
---- a/package/python-mypy/python-mypy.hash
-+++ b/package/python-mypy/python-mypy.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/mypy/json
--md5  fb9ff268550456e6d100a21e02fc6574  mypy-1.18.1.tar.gz
--sha256  9e988c64ad3ac5987f43f5154f884747faf62141b7f842e87465b45299eea5a9  mypy-1.18.1.tar.gz
-+md5  9ea329f0a99bb98554683680b988c5ea  mypy-1.18.2.tar.gz
-+sha256  06a398102a5f203d7477b2923dda3634c36727fa5c237d8f859ef90c42a9924b  mypy-1.18.2.tar.gz
+diff --git a/package/python-hiredis/python-hiredis.hash b/package/python-hiredis/python-hiredis.hash
+index 07b0d96582..e0215cb389 100644
+--- a/package/python-hiredis/python-hiredis.hash
++++ b/package/python-hiredis/python-hiredis.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/hiredis/json
+-md5  56a3997b44753c11a0cdb2dc4aa50352  hiredis-3.1.0.tar.gz
+-sha256  51d40ac3611091020d7dea6b05ed62cb152bff595fa4f931e7b6479d777acf7c  hiredis-3.1.0.tar.gz
++md5  3bef98b3714e3944e452a158c7d61f39  hiredis-3.2.1.tar.gz
++sha256  5a5f64479bf04dd829fe7029fad0ea043eac4023abc6e946668cbbec3493a78d  hiredis-3.2.1.tar.gz
  # Locally computed sha256 checksums
- sha256  de341f6e031d021aab9eb27bdf713cc6fb844dee832ef3bcd4688bff5517220b  LICENSE
-diff --git a/package/python-mypy/python-mypy.mk b/package/python-mypy/python-mypy.mk
-index 6127975756..ba07ef5b9c 100644
---- a/package/python-mypy/python-mypy.mk
-+++ b/package/python-mypy/python-mypy.mk
+ sha256  3256b5b77e98aa34ff31a4d2c2c10f7f177b0f3058753a6044430a168987353b  LICENSE
+ sha256  dca05ce8fc87a8261783b4aed0deef8becc9350b6aa770bc714d0c1833b896eb  vendor/hiredis/COPYING
+diff --git a/package/python-hiredis/python-hiredis.mk b/package/python-hiredis/python-hiredis.mk
+index b938650caf..6b365b8dc4 100644
+--- a/package/python-hiredis/python-hiredis.mk
++++ b/package/python-hiredis/python-hiredis.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MYPY_VERSION = 1.18.1
-+PYTHON_MYPY_VERSION = 1.18.2
- PYTHON_MYPY_SOURCE = mypy-$(PYTHON_MYPY_VERSION).tar.gz
--PYTHON_MYPY_SITE = https://files.pythonhosted.org/packages/14/a3/931e09fc02d7ba96da65266884da4e4a8806adcdb8a57faaacc6edf1d538
-+PYTHON_MYPY_SITE = https://files.pythonhosted.org/packages/c0/77/8f0d0001ffad290cef2f7f216f96c814866248a0b92a722365ed54648e7e
- PYTHON_MYPY_SETUP_TYPE = setuptools
- PYTHON_MYPY_LICENSE = Apache-2.0, Python-2.0.1
- PYTHON_MYPY_LICENSE_FILES = LICENSE
+-PYTHON_HIREDIS_VERSION = 3.1.0
++PYTHON_HIREDIS_VERSION = 3.2.1
+ PYTHON_HIREDIS_SOURCE = hiredis-$(PYTHON_HIREDIS_VERSION).tar.gz
+-PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/38/e5/789cfa8993ced0061a6ef7ea758302ef5cf3439629bf0d39c85a6ede4641
++PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/f7/08/24b72f425b75e1de7442fb1740f69ca66d5820b9f9c0e2511ff9aadab3b7
+ PYTHON_HIREDIS_SETUP_TYPE = setuptools
+ PYTHON_HIREDIS_LICENSE = MIT, BSD-3-Clause
+ PYTHON_HIREDIS_LICENSE_FILES = LICENSE vendor/hiredis/COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
