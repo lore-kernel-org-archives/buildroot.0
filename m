@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40A4ACCD185
-	for <buildroot@archiver.kernel.org>; Wed, 15 Oct 2025 19:57:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D0F9CCD193
+	for <buildroot@archiver.kernel.org>; Wed, 15 Oct 2025 19:59:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DCE4D614D6;
-	Wed, 15 Oct 2025 19:57:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4094761654;
+	Wed, 15 Oct 2025 19:59:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FEOIR_3TwxHH; Wed, 15 Oct 2025 19:57:56 +0000 (UTC)
+ id x7TVX34F3njn; Wed, 15 Oct 2025 19:59:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 871AD6150D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 542CD61682
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 871AD6150D;
-	Wed, 15 Oct 2025 19:57:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 372171C9
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 19:57:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 542CD61682;
+	Wed, 15 Oct 2025 19:59:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 22A87968
+ for <buildroot@buildroot.org>; Wed, 15 Oct 2025 19:59:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1F23B41084
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 19:57:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 09ADF4014E
+ for <buildroot@buildroot.org>; Wed, 15 Oct 2025 19:59:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OkYlvch_iHOg for <buildroot@buildroot.org>;
- Wed, 15 Oct 2025 19:57:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WjcVjAR2tJRW for <buildroot@buildroot.org>;
+ Wed, 15 Oct 2025 19:59:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49ACE41081
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E0A3400F1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 49ACE41081
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 19:57:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2E0A3400F1
+ for <buildroot@buildroot.org>; Wed, 15 Oct 2025 19:59:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 31A6B8711D; Wed, 15 Oct 2025 19:57:54 +0000 (UTC)
+ id 1C60587123; Wed, 15 Oct 2025 19:59:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 15 Oct 2025 21:56:56 +0200
+Date: Wed, 15 Oct 2025 21:58:10 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d16c812b7e0d9e18ee5ac9211482ac719fd4f77e
-X-Git-Newrev: 98fe2238af0eb4260504680534ae46887caa07cc
+X-Git-Oldrev: 98fe2238af0eb4260504680534ae46887caa07cc
+X-Git-Newrev: f3eeb0c19a73410a3a1f26233506b5ca8a43d76a
 X-Patchwork-Hint: ignore
-Message-Id: <20251015195754.31A6B8711D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lesstif: remove package
+Message-Id: <20251015195937.1C60587123@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/samba4: security bump version to
+ 4.22.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,143 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98fe2238af0eb4260504680534ae46887caa07cc
+commit: https://git.buildroot.net/buildroot/commit/?id=f3eeb0c19a73410a3a1f26233506b5ca8a43d76a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-lesstif received its last release in 2009, the homepage was last
-updated in 2013: https://lesstif.sourceforge.net
+Release notes: https://www.samba.org/samba/history/samba-4.22.5.html
 
-The last update on the project trackers was in 2015:
-https://sourceforge.net/projects/lesstif/support
-
-Debian removed lesstif in 2013:
-https://wiki.debian.org/lesstif2motifTransition
-
-The package is causing build errors since the default version of gcc was
-bumped to 14.x with buildroot commit 1e1fafa1f0f5069418e92f702c2a66db6408a634:
-
-CutPaste.c:1031:25: error: assignment to 'long int *' from incompatible
- pointer type 'char *' [-Wincompatible-pointer-types]
-
-Instead of fixing an unmaintained package we remove it from buildroot,
-no other package depends on it.
-
-Fixes:
-https://autobuild.buildroot.net/results/798/798ccab7b69754fb9b73b84e31d91bece8e7a2b4/
+Fixes CVE-2025-9640 & CVE-2025-10230.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- Config.in.legacy             |  6 ++++++
- package/Config.in            |  1 -
- package/lesstif/Config.in    | 11 -----------
- package/lesstif/lesstif.hash |  3 ---
- package/lesstif/lesstif.mk   | 42 ------------------------------------------
- 5 files changed, 6 insertions(+), 57 deletions(-)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index f3558c0f3a..53c35fae49 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index f0e19d8741..0668a9e8db 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.22.4.tar.asc
+-sha256  a41a828848abdf5e942c900ca178597e18aab7b61d3c06a9b5ba43661988010b  samba-4.22.4.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.22.5.tar.asc
++sha256  d8566a15d3dbfc0b777d1e8fbb2eee988a024ca9c786dcac65dd10347307400d  samba-4.22.5.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index c1d1b0b160..688d5177bc 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "Legacy options removed in 2025.11"
- 
-+config BR2_PACKAGE_LESSTIF
-+	bool "lesstif has been removed"
-+	select BR2_LEGACY
-+	help
-+	  lesstif is unmaintained and has been removed
-+
- config BR2_KERNEL_HEADERS_6_16
- 	bool "kernel headers version 6.16.x are no longer supported"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index e9906b066e..1ae92409c4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1740,7 +1740,6 @@ menu "Graphics"
- 	source "package/lcms2/Config.in"
- 	source "package/lensfun/Config.in"
- 	source "package/leptonica/Config.in"
--	source "package/lesstif/Config.in"
- 	source "package/libart/Config.in"
- 	source "package/libavif/Config.in"
- 	source "package/libdecor/Config.in"
-diff --git a/package/lesstif/Config.in b/package/lesstif/Config.in
-deleted file mode 100644
-index 654ee6f1a0..0000000000
---- a/package/lesstif/Config.in
-+++ /dev/null
-@@ -1,11 +0,0 @@
--config BR2_PACKAGE_LESSTIF
--	bool "lesstif"
--	depends on BR2_USE_MMU # fork()
--	depends on BR2_PACKAGE_XORG7
--	select BR2_PACKAGE_XLIB_LIBXT
--	select BR2_PACKAGE_XLIB_LIBXEXT
--	select BR2_PACKAGE_FREETYPE
--	help
--	  lesstif is the Hungry Programmers' version of OSF/Motif
--
--	  http://lesstif.sourceforge.net/
-diff --git a/package/lesstif/lesstif.hash b/package/lesstif/lesstif.hash
-deleted file mode 100644
-index 31a394dbbc..0000000000
---- a/package/lesstif/lesstif.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally computed:
--sha256  eb4aa38858c29a4a3bcf605cfe7d91ca41f4522d78d770f69721e6e3a4ecf7e3  lesstif-0.95.2.tar.bz2
--sha256  94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23  COPYING.LIB
-diff --git a/package/lesstif/lesstif.mk b/package/lesstif/lesstif.mk
-deleted file mode 100644
-index 378c594e3b..0000000000
---- a/package/lesstif/lesstif.mk
-+++ /dev/null
-@@ -1,42 +0,0 @@
--################################################################################
--#
--# lesstif
--#
--################################################################################
--
--LESSTIF_VERSION = 0.95.2
--LESSTIF_SOURCE = lesstif-$(LESSTIF_VERSION).tar.bz2
--LESSTIF_SITE = http://downloads.sourceforge.net/project/lesstif/lesstif/$(LESSTIF_VERSION)
--LESSTIF_INSTALL_STAGING = YES
--LESSTIF_DEPENDENCIES = \
--	xlib_libXt \
--	xlib_libXext \
--	freetype
--LESSTIF_LICENSE = LGPL-2.0+
--LESSTIF_LICENSE_FILES = COPYING.LIB
--LESSTIF_CONF_OPTS = \
--	--with-gnu-ld \
--	--with-freetype-config=$(STAGING_DIR)/usr/bin/freetype-config \
--	--enable-production=yes \
--	--enable-build-tests=no \
--	--no-recursion
--
--# Reduces the buggy makefile to the smallest possible (and working) thing
--define LESSTIF_NOMAN2HTML
--	echo "all:" > $(@D)/doc/Makefile
--	echo "" >> $(@D)/doc/Makefile
--	echo "install:" >> $(@D)/doc/Makefile
--	echo "" >> $(@D)/doc/Makefile
--	echo "clean:" >> $(@D)/doc/Makefile
--endef
--
--# Prevents to copy ac_find_motif.m4 on target, it would else
--# be created at $(TARGET_DIR)/$(HOST_DIR)/share/aclocal/ac_find_motif.m4
--define LESSTIF_FIXACLOCAL
--	sed -i -e "/install-data-am: install-aclocalDATA/d" $(@D)/scripts/autoconf/Makefile
--endef
--
--LESSTIF_POST_CONFIGURE_HOOKS += LESSTIF_NOMAN2HTML
--LESSTIF_POST_CONFIGURE_HOOKS += LESSTIF_FIXACLOCAL
--
--$(eval $(autotools-package))
+-SAMBA4_VERSION = 4.22.4
++SAMBA4_VERSION = 4.22.5
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
