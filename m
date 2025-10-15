@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D0F9CCD193
-	for <buildroot@archiver.kernel.org>; Wed, 15 Oct 2025 19:59:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F5D0CCD185
+	for <buildroot@archiver.kernel.org>; Wed, 15 Oct 2025 20:04:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4094761654;
-	Wed, 15 Oct 2025 19:59:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 90670403D8;
+	Wed, 15 Oct 2025 20:04:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x7TVX34F3njn; Wed, 15 Oct 2025 19:59:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WVh12fasw2yV; Wed, 15 Oct 2025 20:04:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 542CD61682
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D598E4038F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 542CD61682;
-	Wed, 15 Oct 2025 19:59:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 22A87968
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 19:59:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D598E4038F;
+	Wed, 15 Oct 2025 20:04:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1D8E81C9
+ for <buildroot@buildroot.org>; Wed, 15 Oct 2025 20:04:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 09ADF4014E
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 19:59:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0F64E4038F
+ for <buildroot@buildroot.org>; Wed, 15 Oct 2025 20:04:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WjcVjAR2tJRW for <buildroot@buildroot.org>;
- Wed, 15 Oct 2025 19:59:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 36KM10MrQYwo for <buildroot@buildroot.org>;
+ Wed, 15 Oct 2025 20:04:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E0A3400F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 522B240388
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2E0A3400F1
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 19:59:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 522B240388
+ for <buildroot@buildroot.org>; Wed, 15 Oct 2025 20:04:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1C60587123; Wed, 15 Oct 2025 19:59:37 +0000 (UTC)
+ id 3963987130; Wed, 15 Oct 2025 20:04:45 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 15 Oct 2025 21:58:10 +0200
+Date: Wed, 15 Oct 2025 21:59:37 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 98fe2238af0eb4260504680534ae46887caa07cc
-X-Git-Newrev: f3eeb0c19a73410a3a1f26233506b5ca8a43d76a
+X-Git-Oldrev: f3eeb0c19a73410a3a1f26233506b5ca8a43d76a
+X-Git-Newrev: d05e2f785de6e0e51590160e002d1fd6e143d403
 X-Patchwork-Hint: ignore
-Message-Id: <20251015195937.1C60587123@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/samba4: security bump version to
- 4.22.5
+Message-Id: <20251015200445.3963987130@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-webpy: bump version to 0.70
+ and add upstream commit to fix CVE-2025-3818
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,44 +66,107 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3eeb0c19a73410a3a1f26233506b5ca8a43d76a
+commit: https://git.buildroot.net/buildroot/commit/?id=d05e2f785de6e0e51590160e002d1fd6e143d403
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://www.samba.org/samba/history/samba-4.22.5.html
+Release notes: https://github.com/webpy/webpy/releases/tag/webpy-0.70
 
-Fixes CVE-2025-9640 & CVE-2025-10230.
+Switched _SITE to github because version 0.70 was not released to
+pypi.org: https://pypi.org/project/web.py/#history
+
+Added upstream commit to fix CVE-2025-3818.
+
+This bump includes
+https://github.com/webpy/webpy/commit/f7540bef650bce7227af796728136d41e44cdd0e
+which removes the deprecated cgi module which was removed in Python 3.13
+and causes build errors since buildroot bumped python3 to 3.13.2 with
+commit d63e207eb869063f82c867658676c2903beb08cb.
+
+Fixes:
+https://autobuild.buildroot.net/results/5a7/5a7382250d33ddfd49de2c7996fb54aaf20dd62c/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../python-webpy/0001-Address-CVE-2025-3818.patch  | 42 ++++++++++++++++++++++
+ package/python-webpy/python-webpy.hash             |  5 ++-
+ package/python-webpy/python-webpy.mk               |  5 ++-
+ 3 files changed, 46 insertions(+), 6 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index f0e19d8741..0668a9e8db 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.22.4.tar.asc
--sha256  a41a828848abdf5e942c900ca178597e18aab7b61d3c06a9b5ba43661988010b  samba-4.22.4.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.22.5.tar.asc
-+sha256  d8566a15d3dbfc0b777d1e8fbb2eee988a024ca9c786dcac65dd10347307400d  samba-4.22.5.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index c1d1b0b160..688d5177bc 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-webpy/0001-Address-CVE-2025-3818.patch b/package/python-webpy/0001-Address-CVE-2025-3818.patch
+new file mode 100644
+index 0000000000..d8373cbac6
+--- /dev/null
++++ b/package/python-webpy/0001-Address-CVE-2025-3818.patch
+@@ -0,0 +1,42 @@
++From 3ba1b40e5a828a26a1df1b49cdc87395f3274c81 Mon Sep 17 00:00:00 2001
++From: Mek <michael.karpeles@gmail.com>
++Date: Wed, 7 May 2025 15:14:44 -0400
++Subject: [PATCH] Address CVE-2025-3818 (#807)
++
++* Address CVE-2025-3818
++
++Co-authored-by: Scott Barnes <scottreidbarnes@gmail.com>
++
++Upstream: https://github.com/webpy/webpy/commit/3ba1b40e5a828a26a1df1b49cdc87395f3274c81
++
++Fixes CVE-2025-3818: https://github.com/advisories/GHSA-9g47-36rw-gjh2
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ web/db.py | 10 +++++++++-
++ 1 file changed, 9 insertions(+), 1 deletion(-)
++
++diff --git a/web/db.py b/web/db.py
++index 5284f8d0..ba3e12c5 100644
++--- a/web/db.py
+++++ b/web/db.py
++@@ -1198,10 +1198,18 @@ def _process_insert_query(self, query, tablename, seqname):
++                 seqname = None
++ 
++         if seqname:
++-            query += "; SELECT currval('%s')" % seqname
+++            query += self.get_sequence_query(seqname)
++ 
++         return query
++ 
+++    def get_sequence_query(self, seqname):
+++        import re
+++        # Ensure the sequence name is valid
+++        if not re.match(r'^[a-zA-Z_][a-zA-Z0-9_$]*$', seqname):
+++            raise ValueError(f"Invalid sequence name: {seqname}")
+++        return SQLQuery("; SELECT currval(%s)", seqname)
+++
+++
++     def _get_all_sequences(self):
++         """Query postgres to find names of all sequences used in this database."""
++         if self._sequences is None:
+diff --git a/package/python-webpy/python-webpy.hash b/package/python-webpy/python-webpy.hash
+index 540771a244..0fb39170c7 100644
+--- a/package/python-webpy/python-webpy.hash
++++ b/package/python-webpy/python-webpy.hash
+@@ -1,3 +1,2 @@
+-# md5, sha256 from https://pypi.org/pypi/web.py/json
+-md5  cd2c0296ceffa1acb96ae5315214eb42  web.py-0.62.tar.gz
+-sha256  5ce684caa240654cae5950da8b4b7bc178812031e08f990518d072bd44ab525e  web.py-0.62.tar.gz
++# Locally computed
++sha256  eee36e423b5e85463145159d94735e3c3a4c1c8078555042d8139348350b0022  python-webpy-0.70.tar.gz
+diff --git a/package/python-webpy/python-webpy.mk b/package/python-webpy/python-webpy.mk
+index 06d4ae039b..62b2331c08 100644
+--- a/package/python-webpy/python-webpy.mk
++++ b/package/python-webpy/python-webpy.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.22.4
-+SAMBA4_VERSION = 4.22.5
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-PYTHON_WEBPY_VERSION = 0.62
+-PYTHON_WEBPY_SOURCE = web.py-$(PYTHON_WEBPY_VERSION).tar.gz
+-PYTHON_WEBPY_SITE = https://files.pythonhosted.org/packages/cd/6e/338a060bb5b52ee8229bdada422eaa5f71b13f8d33467f37f870ed2cae4b
++PYTHON_WEBPY_VERSION = 0.70
++PYTHON_WEBPY_SITE = $(call github,webpy,webpy,webpy-$(PYTHON_WEBPY_VERSION))
+ PYTHON_WEBPY_SETUP_TYPE = setuptools
+ PYTHON_WEBPY_LICENSE = Public Domain
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
