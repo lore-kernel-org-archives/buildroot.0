@@ -1,75 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47FECCCD18E
-	for <buildroot@archiver.kernel.org>; Wed, 15 Oct 2025 06:09:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 706F2CCD185
+	for <buildroot@archiver.kernel.org>; Wed, 15 Oct 2025 06:10:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C155441487;
-	Wed, 15 Oct 2025 06:09:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 35E8481250;
+	Wed, 15 Oct 2025 06:10:07 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a0vW8JFvWSsC; Wed, 15 Oct 2025 06:10:06 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E294812B5
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4E294812B5;
+	Wed, 15 Oct 2025 06:10:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4F5431BA
+ for <buildroot@buildroot.org>; Wed, 15 Oct 2025 06:10:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 40C914145B
+ for <buildroot@buildroot.org>; Wed, 15 Oct 2025 06:10:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hZiUCz36QPSH; Wed, 15 Oct 2025 06:09:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0777541410
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0777541410;
-	Wed, 15 Oct 2025 06:09:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 64A5C1BA
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 06:09:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4AC4F4082A
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 06:09:47 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6Yq9DOC1WIWt for <buildroot@buildroot.org>;
- Wed, 15 Oct 2025 06:09:46 +0000 (UTC)
+ id zQ3NaQlM9diP for <buildroot@buildroot.org>;
+ Wed, 15 Oct 2025 06:10:04 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
  helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 40917400BA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40917400BA
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4506A41488
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4506A41488
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 40917400BA
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 06:09:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4506A41488
+ for <buildroot@buildroot.org>; Wed, 15 Oct 2025 06:10:04 +0000 (UTC)
 Feedback-ID: 21632:4007:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1889822302; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1785533010; 
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 15 Oct 2025 06:09:41 +0000 (UTC)
+ Wed, 15 Oct 2025 06:09:59 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1v8uhg-003P2A-04;
- Wed, 15 Oct 2025 08:09:40 +0200
+ (envelope-from <peter@korsgaard.com>) id 1v8uhy-003PBE-2U;
+ Wed, 15 Oct 2025 08:09:58 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bernd Kuhls <bernd@kuhls.net>
 References: <20251014185113.3583315-1-bernd@kuhls.net>
- <20251014185113.3583315-4-bernd@kuhls.net>
-Date: Wed, 15 Oct 2025 08:09:39 +0200
-In-Reply-To: <20251014185113.3583315-4-bernd@kuhls.net> (Bernd Kuhls's message
- of "Tue, 14 Oct 2025 20:51:03 +0200")
-Message-ID: <87qzv4vgpo.fsf@dell.be.48ers.dk>
+ <20251014185113.3583315-5-bernd@kuhls.net>
+Date: Wed, 15 Oct 2025 08:09:58 +0200
+In-Reply-To: <20251014185113.3583315-5-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Tue, 14 Oct 2025 20:51:04 +0200")
+Message-ID: <87ms5svgp5.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=PM1eVvmO68lMe4Ykc3nF9IrAKOPtp4C5HCBOYacZ0L8pZVtHT1I3ENWbdlrsvjpgZZu3tdeot318fRqXmcmgV5vVejWQrxdLUgA6IyS1PdvJnOCMotZ0IAZDeGcXSPQo9rq18NDdXOa3fO0yAmjxZu67h9TlLXTLd+qPOmyYpIj6Rq+2o5A+KmjqlEjnqg3opnnTK+OFtoXJcuNPZLENGE57ZGWwkPp8M2DNEPwKCDwQr6A/RG1SCrCoPp+/7w+4EFMMsYJTbBnJ00kRaYSOhmK4SuDKGxDIjDg5HgRQiiMkLI0XiQNoNgNEkJJncZiNiqhIP8ZuxEDSlz1o7BR7/A==;
+ b=NM/Lf5icpUIoBpXqxP/zTssyJZnpG4ByuxbsPYn5FWiSDc+z6PIjKZ/gIBrT27Mt8lxBh3H5yigrbdhKcrnVRABVFVTlPUGAPlXiEfwbaCBeqobNr1buOwAbJRMcGIC6CNjBWOlSsWFRFwAmI40RyfELz8mxl40ffEOmTGm4E5o0my97WvbFw/qRUS98/DgvDlO+sTC6KtaJroqCsNXpZ6n2NSDXyQnHbuVRmgSAXyKTmJuJI5sUdm1xGXC8JNc8xmzduqognA92t7r6t2IzUHHF9n/5nVC5Q1F6DvtwZUoeDOPJfj6x23cFmPzp/JFIx2Kfgq8rUTOHsFgYxiivdg==;
  s=purelymail2; d=purelymail.com; v=1;
- bh=sdGhs1cAsTLPksdUx2i7FOp2Fdx4VzUZ9WNp9qLhNxk=;
+ bh=mvbMtCqNHwxxusACPm50zm2Y1vhN+6n3E4d3RH6t1L0=;
  h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=PM1eVvmO
-Subject: Re: [Buildroot] [PATCH 04/14] package/python-validators: bump
- version to 0.35.0
+ header.a=rsa-sha256 header.s=purelymail2 header.b=NM/Lf5ic
+Subject: Re: [Buildroot] [PATCH 05/14] package/python-wcwidth: bump version
+ to 0.2.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,9 +91,6 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
-
- > Updated license hash due to copyright year bump:
- > https://github.com/python-validators/validators/commit/6d8a1abcdf2d92e113b1707bbf372bde4d48e3a5
 
  > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
