@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62523CCD185
-	for <buildroot@archiver.kernel.org>; Wed, 15 Oct 2025 20:06:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A313CCD193
+	for <buildroot@archiver.kernel.org>; Wed, 15 Oct 2025 20:06:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 29485606B0;
-	Wed, 15 Oct 2025 20:06:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BFC366167A;
+	Wed, 15 Oct 2025 20:06:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vDyfaC_WZa6m; Wed, 15 Oct 2025 20:06:21 +0000 (UTC)
+ id g9Z0EoIcLW2I; Wed, 15 Oct 2025 20:06:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58FE46060A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C4CE6060A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 58FE46060A;
-	Wed, 15 Oct 2025 20:06:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id DE4341C9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7C4CE6060A;
+	Wed, 15 Oct 2025 20:06:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id EBD97FC8
  for <buildroot@buildroot.org>; Wed, 15 Oct 2025 20:06:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C3B7C41881
+ by smtp1.osuosl.org (Postfix) with ESMTP id DDC2C80B69
  for <buildroot@buildroot.org>; Wed, 15 Oct 2025 20:06:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xt3BazFCaJJT for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rvvCTxo3QYjG for <buildroot@buildroot.org>;
  Wed, 15 Oct 2025 20:06:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3CCC413AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09DE680D57
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F3CCC413AC
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 20:06:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 09DE680D57
+ for <buildroot@buildroot.org>; Wed, 15 Oct 2025 20:06:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F09C38713E; Wed, 15 Oct 2025 20:06:18 +0000 (UTC)
+ id 0561C87140; Wed, 15 Oct 2025 20:06:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 15 Oct 2025 22:04:44 +0200
+Date: Wed, 15 Oct 2025 22:05:14 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d05e2f785de6e0e51590160e002d1fd6e143d403
-X-Git-Newrev: 6b3c1f1b0fd55031862e5a3d08bc6159a9e1f5a9
+X-Git-Oldrev: 6b3c1f1b0fd55031862e5a3d08bc6159a9e1f5a9
+X-Git-Newrev: 31ced13e5df5469f1aeca3f8f2d4da1dc4096a78
 X-Patchwork-Hint: ignore
-Message-Id: <20251015200618.F09C38713E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libecoli: bump version to 0.8.0
+Message-Id: <20251015200619.0561C87140@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/grout: bump to 0.13.0 version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,40 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b3c1f1b0fd55031862e5a3d08bc6159a9e1f5a9
+commit: https://git.buildroot.net/buildroot/commit/?id=31ced13e5df5469f1aeca3f8f2d4da1dc4096a78
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This new version is required to compile grout v0.13.0.
+See the release note of the new versions:
+https://github.com/DPDK/grout/releases/tag/v0.13.0
+https://github.com/DPDK/grout/releases/tag/v0.12.0
 
 Signed-off-by: Maxime Leroy <maxime@leroys.fr>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/libecoli/libecoli.hash | 2 +-
- package/libecoli/libecoli.mk   | 2 +-
+ package/grout/grout.hash | 2 +-
+ package/grout/grout.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libecoli/libecoli.hash b/package/libecoli/libecoli.hash
-index f973b6f254..e200b796bf 100644
---- a/package/libecoli/libecoli.hash
-+++ b/package/libecoli/libecoli.hash
+diff --git a/package/grout/grout.hash b/package/grout/grout.hash
+index 0c036b05f6..248c375710 100644
+--- a/package/grout/grout.hash
++++ b/package/grout/grout.hash
 @@ -1,3 +1,3 @@
  # Locally computed:
--sha256  bc9ca742f32dc7787146de4cbc3997b28356adaf219049304bbc3368d25b7395  libecoli-0.5.0.tar.gz
-+sha256  ac71cd336d7e19921ed1a0ae35ab14433792c7151d23abe92b247c6e36813246  libecoli-0.8.0.tar.gz
- sha256  e58bf9ec962bee9b3e37abcaa0bc0ec940b05efdc1d1a5a4d9e2fdbcc08b7bdd  LICENSE
-diff --git a/package/libecoli/libecoli.mk b/package/libecoli/libecoli.mk
-index f989e7b9cd..ad4fa62914 100644
---- a/package/libecoli/libecoli.mk
-+++ b/package/libecoli/libecoli.mk
+-sha256  7bd7caecc3451aea3462a86c31d2ee953a9b7789975b5522dd5f09204558f99d  grout-0.11.0.tar.gz
++sha256  6d1ba4fda3fec6cbc5d4f4d48fe2435fabd36b27540a439a01a44361f6998971  grout-0.13.0.tar.gz
+ sha256  1e412aae8da58b718c78b3d7a52eb547004384d4347e4746a22ca6af7522930c  licenses/BSD-3-clause.txt
+diff --git a/package/grout/grout.mk b/package/grout/grout.mk
+index 5abf265f19..07ea585a01 100644
+--- a/package/grout/grout.mk
++++ b/package/grout/grout.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBECOLI_VERSION = 0.5.0
-+LIBECOLI_VERSION = 0.8.0
- LIBECOLI_SITE = $(call github,rjarry,libecoli,v$(LIBECOLI_VERSION))
- LIBECOLI_INSTALL_STAGING = YES
- LIBECOLI_LICENSE = BSD-3-Clause
+-GROUT_VERSION = 0.11.0
++GROUT_VERSION = 0.13.0
+ GROUT_SITE = $(call github,DPDK,grout,v$(GROUT_VERSION))
+ GROUT_LICENSE = BSD-3-Clause
+ GROUT_LICENSE_FILES = licenses/BSD-3-clause.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
