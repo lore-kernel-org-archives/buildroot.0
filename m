@@ -4,72 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E750CCD193
-	for <buildroot@archiver.kernel.org>; Wed, 15 Oct 2025 19:31:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40A4ACCD185
+	for <buildroot@archiver.kernel.org>; Wed, 15 Oct 2025 19:57:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5FA960E09;
-	Wed, 15 Oct 2025 19:31:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DCE4D614D6;
+	Wed, 15 Oct 2025 19:57:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5oyERn_XloIY; Wed, 15 Oct 2025 19:31:26 +0000 (UTC)
+ id FEOIR_3TwxHH; Wed, 15 Oct 2025 19:57:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 029A260E1F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 871AD6150D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 029A260E1F;
-	Wed, 15 Oct 2025 19:31:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 44BCD1C9
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 19:31:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 871AD6150D;
+	Wed, 15 Oct 2025 19:57:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 372171C9
+ for <buildroot@buildroot.org>; Wed, 15 Oct 2025 19:57:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 36CC240098
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 19:31:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1F23B41084
+ for <buildroot@buildroot.org>; Wed, 15 Oct 2025 19:57:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L_qAFN3mjJh6 for <buildroot@buildroot.org>;
- Wed, 15 Oct 2025 19:31:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EA54640095
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA54640095
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EA54640095
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 19:31:23 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0643.dip0.t-ipconnect.de [91.58.6.67])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 0FF65A4C6E97;
- Wed, 15 Oct 2025 21:31:22 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:43866)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1v97DV-000000004cJ-2fuo;
- Wed, 15 Oct 2025 19:31:21 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OkYlvch_iHOg for <buildroot@buildroot.org>;
+ Wed, 15 Oct 2025 19:57:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49ACE41081
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 49ACE41081
+ for <buildroot@buildroot.org>; Wed, 15 Oct 2025 19:57:54 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 31A6B8711D; Wed, 15 Oct 2025 19:57:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Wed, 15 Oct 2025 21:31:21 +0200
-Message-ID: <20251015193121.1386613-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: ++++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1760556682;
- bh=izYyqArvO1bjC3+3nhPCIF+gZndnS4cROz0X9kGC6AQ=;
- h=From:To:Cc:Subject:Date:From;
- b=aNb4hqdZhQeKdBrQA9lB3cTM19EFldraZpFfrPKiJCDT1rYAC+OoxKA191LxGHlxg
- zuwd5GACNaVQkfNpBkdrrYRTeu8z8KrueFfDlZRj80LLubMz4FDYt7Z2pq2i374KD8
- V2ROskMMgS+benDcD/Uwvl16fEcmX2yBUYiK+FjoZ1zJkxiUEWdPC+p6ZEBAwYuhw8
- LMTZmSWXAiDLDXrRA1+snNPgiCyeU7ErdeaYqbErfnS72TNknSLQkOv8YMez8x5hiA
- U9RHkLXLcAMsRLqZ4PdI+Iq4J9tt4dUIDK750IBeiRsYRLJRjHLuYTLqBLMowJg8/y
- UZKQGdF7L439g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=aNb4hqdZ
-Subject: [Buildroot] [PATCH 1/1] package/nvme: bump version to 2.15
+Date: Wed, 15 Oct 2025 21:56:56 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d16c812b7e0d9e18ee5ac9211482ac719fd4f77e
+X-Git-Newrev: 98fe2238af0eb4260504680534ae46887caa07cc
+X-Patchwork-Hint: ignore
+Message-Id: <20251015195754.31A6B8711D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lesstif: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,94 +57,151 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Switched build system to meson and added dependency to libnvme:
-https://github.com/linux-nvme/nvme-cli/releases/tag/v2.0-rc0
+commit: https://git.buildroot.net/buildroot/commit/?id=98fe2238af0eb4260504680534ae46887caa07cc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+lesstif received its last release in 2009, the homepage was last
+updated in 2013: https://lesstif.sourceforge.net
+
+The last update on the project trackers was in 2015:
+https://sourceforge.net/projects/lesstif/support
+
+Debian removed lesstif in 2013:
+https://wiki.debian.org/lesstif2motifTransition
+
+The package is causing build errors since the default version of gcc was
+bumped to 14.x with buildroot commit 1e1fafa1f0f5069418e92f702c2a66db6408a634:
+
+CutPaste.c:1031:25: error: assignment to 'long int *' from incompatible
+ pointer type 'char *' [-Wincompatible-pointer-types]
+
+Instead of fixing an unmaintained package we remove it from buildroot,
+no other package depends on it.
+
+Fixes:
+https://autobuild.buildroot.net/results/798/798ccab7b69754fb9b73b84e31d91bece8e7a2b4/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/nvme/Config.in |  2 ++
- package/nvme/nvme.hash |  2 +-
- package/nvme/nvme.mk   | 34 +++++++---------------------------
- 3 files changed, 10 insertions(+), 28 deletions(-)
+ Config.in.legacy             |  6 ++++++
+ package/Config.in            |  1 -
+ package/lesstif/Config.in    | 11 -----------
+ package/lesstif/lesstif.hash |  3 ---
+ package/lesstif/lesstif.mk   | 42 ------------------------------------------
+ 5 files changed, 6 insertions(+), 57 deletions(-)
 
-diff --git a/package/nvme/Config.in b/package/nvme/Config.in
-index dd8655fa1a..16b8726144 100644
---- a/package/nvme/Config.in
-+++ b/package/nvme/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_NVME
- 	bool "nvme"
-+	depends on BR2_USE_MMU # libnvme
-+	select BR2_PACKAGE_LIBNVME
- 	help
- 	  NVME utility, a utility for interacting with standard NVM
- 	  Express (optimized PCI Express SSD interface) devices.
-diff --git a/package/nvme/nvme.hash b/package/nvme/nvme.hash
-index a7ce51ca74..c6fb9c9aa8 100644
---- a/package/nvme/nvme.hash
-+++ b/package/nvme/nvme.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  a75270e65a4a7a6add48f748ba216d8f68d78f90f8cb77e88e9753b74d527991  nvme-1.12.tar.gz
-+sha256  93282c426f22dd1ea6d172dec8af043c4e9ff80189becfbbb5378fe1ca0a74ad  nvme-2.15.tar.gz
- sha256  a45d0bb572ed792ed34627a72621834b3ba92aab6e2cc4e04301dee7a728d753  LICENSE
-diff --git a/package/nvme/nvme.mk b/package/nvme/nvme.mk
-index 53f9dff753..9f2b086d2a 100644
---- a/package/nvme/nvme.mk
-+++ b/package/nvme/nvme.mk
-@@ -4,37 +4,17 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index f3558c0f3a..53c35fae49 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
  
--NVME_VERSION = 1.12
-+NVME_VERSION = 2.15
- NVME_SITE = $(call github,linux-nvme,nvme-cli,v$(NVME_VERSION))
- NVME_LICENSE = GPL-2.0+
- NVME_LICENSE_FILES = LICENSE
-+NVME_DEPENDENCIES = libnvme
+ comment "Legacy options removed in 2025.11"
  
--# Yes, LIBUUID=0 means libuuid support enabled.
--# LIBUUID=1 means libuuid support disabled.
--ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
--NVME_DEPENDENCIES += util-linux
--NVME_MAKE_OPTS += LIBUUID=0
-+ifeq ($(BR2_PACKAGE_JSON_C),y)
-+NVME_CONF_OPTS += -Djson-c=enabled
-+NVME_DEPENDENCIES += json-c
- else
--NVME_MAKE_OPTS += LIBUUID=1
-+NVME_CONF_OPTS += -Djson-c=disabled
- endif
- 
--# Yes, HAVE_SYSTEMD=0 means systemd support enabled.
--# HAVE_SYSTEMD=1 means systemd support disabled.
--ifeq ($(BR2_PACKAGE_SYSTEMD),y)
--NVME_DEPENDENCIES += systemd
--NVME_MAKE_OPTS += HAVE_SYSTEMD=0
--else
--NVME_MAKE_OPTS += HAVE_SYSTEMD=1
--endif
++config BR2_PACKAGE_LESSTIF
++	bool "lesstif has been removed"
++	select BR2_LEGACY
++	help
++	  lesstif is unmaintained and has been removed
++
+ config BR2_KERNEL_HEADERS_6_16
+ 	bool "kernel headers version 6.16.x are no longer supported"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index e9906b066e..1ae92409c4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1740,7 +1740,6 @@ menu "Graphics"
+ 	source "package/lcms2/Config.in"
+ 	source "package/lensfun/Config.in"
+ 	source "package/leptonica/Config.in"
+-	source "package/lesstif/Config.in"
+ 	source "package/libart/Config.in"
+ 	source "package/libavif/Config.in"
+ 	source "package/libdecor/Config.in"
+diff --git a/package/lesstif/Config.in b/package/lesstif/Config.in
+deleted file mode 100644
+index 654ee6f1a0..0000000000
+--- a/package/lesstif/Config.in
++++ /dev/null
+@@ -1,11 +0,0 @@
+-config BR2_PACKAGE_LESSTIF
+-	bool "lesstif"
+-	depends on BR2_USE_MMU # fork()
+-	depends on BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_XLIB_LIBXT
+-	select BR2_PACKAGE_XLIB_LIBXEXT
+-	select BR2_PACKAGE_FREETYPE
+-	help
+-	  lesstif is the Hungry Programmers' version of OSF/Motif
 -
--define NVME_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
--		$(NVME_MAKE_OPTS) -C $(@D)
+-	  http://lesstif.sourceforge.net/
+diff --git a/package/lesstif/lesstif.hash b/package/lesstif/lesstif.hash
+deleted file mode 100644
+index 31a394dbbc..0000000000
+--- a/package/lesstif/lesstif.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed:
+-sha256  eb4aa38858c29a4a3bcf605cfe7d91ca41f4522d78d770f69721e6e3a4ecf7e3  lesstif-0.95.2.tar.bz2
+-sha256  94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23  COPYING.LIB
+diff --git a/package/lesstif/lesstif.mk b/package/lesstif/lesstif.mk
+deleted file mode 100644
+index 378c594e3b..0000000000
+--- a/package/lesstif/lesstif.mk
++++ /dev/null
+@@ -1,42 +0,0 @@
+-################################################################################
+-#
+-# lesstif
+-#
+-################################################################################
+-
+-LESSTIF_VERSION = 0.95.2
+-LESSTIF_SOURCE = lesstif-$(LESSTIF_VERSION).tar.bz2
+-LESSTIF_SITE = http://downloads.sourceforge.net/project/lesstif/lesstif/$(LESSTIF_VERSION)
+-LESSTIF_INSTALL_STAGING = YES
+-LESSTIF_DEPENDENCIES = \
+-	xlib_libXt \
+-	xlib_libXext \
+-	freetype
+-LESSTIF_LICENSE = LGPL-2.0+
+-LESSTIF_LICENSE_FILES = COPYING.LIB
+-LESSTIF_CONF_OPTS = \
+-	--with-gnu-ld \
+-	--with-freetype-config=$(STAGING_DIR)/usr/bin/freetype-config \
+-	--enable-production=yes \
+-	--enable-build-tests=no \
+-	--no-recursion
+-
+-# Reduces the buggy makefile to the smallest possible (and working) thing
+-define LESSTIF_NOMAN2HTML
+-	echo "all:" > $(@D)/doc/Makefile
+-	echo "" >> $(@D)/doc/Makefile
+-	echo "install:" >> $(@D)/doc/Makefile
+-	echo "" >> $(@D)/doc/Makefile
+-	echo "clean:" >> $(@D)/doc/Makefile
 -endef
 -
--define NVME_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(NVME_MAKE_OPTS) -C $(@D) \
--		DESTDIR=$(TARGET_DIR) PREFIX=/usr install-bin
+-# Prevents to copy ac_find_motif.m4 on target, it would else
+-# be created at $(TARGET_DIR)/$(HOST_DIR)/share/aclocal/ac_find_motif.m4
+-define LESSTIF_FIXACLOCAL
+-	sed -i -e "/install-data-am: install-aclocalDATA/d" $(@D)/scripts/autoconf/Makefile
 -endef
 -
--$(eval $(generic-package))
-+$(eval $(meson-package))
--- 
-2.47.3
-
+-LESSTIF_POST_CONFIGURE_HOOKS += LESSTIF_NOMAN2HTML
+-LESSTIF_POST_CONFIGURE_HOOKS += LESSTIF_FIXACLOCAL
+-
+-$(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
