@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B00D4CCD185
-	for <buildroot@archiver.kernel.org>; Wed, 15 Oct 2025 07:17:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13E9DCCD18E
+	for <buildroot@archiver.kernel.org>; Wed, 15 Oct 2025 07:17:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 80826840E2;
-	Wed, 15 Oct 2025 07:17:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DC29784075;
+	Wed, 15 Oct 2025 07:17:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UOuOnwkx-XpR; Wed, 15 Oct 2025 07:17:30 +0000 (UTC)
+ id ihzygcDpcmAj; Wed, 15 Oct 2025 07:17:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F32D84051
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 492C7840F6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5F32D84051;
-	Wed, 15 Oct 2025 07:17:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 492C7840F6;
+	Wed, 15 Oct 2025 07:17:32 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id F27C01BA
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 07:17:11 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 6B5371C9
+ for <buildroot@buildroot.org>; Wed, 15 Oct 2025 07:17:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6BA4C40856
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9D5E941400
  for <buildroot@buildroot.org>; Wed, 15 Oct 2025 07:17:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ISUcNY3I-nQ5 for <buildroot@buildroot.org>;
+ id UNfP0BsEcMjG for <buildroot@buildroot.org>;
  Wed, 15 Oct 2025 07:17:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 257AE4143E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 352C041444
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 257AE4143E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 352C041444
  for <buildroot@buildroot.org>; Wed, 15 Oct 2025 07:17:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2370F870FF; Wed, 15 Oct 2025 07:17:00 +0000 (UTC)
+ id 332E78710B; Wed, 15 Oct 2025 07:17:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 15 Oct 2025 09:03:22 +0200
+Date: Wed, 15 Oct 2025 09:05:30 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 532d5561f48b6c430e7414ba5eacccf9b6c1bd22
-X-Git-Newrev: 687934c0dcffa7a2a0c07d925159096c3532c056
+X-Git-Oldrev: 8111bdcab1854815fedfbc5ac822758cb107541a
+X-Git-Newrev: 675993944c181fc028f2cc65b665ade6f108317a
 X-Patchwork-Hint: ignore
-Message-Id: <20251015071700.2370F870FF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ipset: bump to version 7.24
+Message-Id: <20251015071700.332E78710B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/isl: bump to version 0.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,43 +64,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=687934c0dcffa7a2a0c07d925159096c3532c056
+commit: https://git.buildroot.net/buildroot/commit/?id=675993944c181fc028f2cc65b665ade6f108317a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://ipset.netfilter.org/changelog.html
+https://groups.google.com/g/isl-announce/c/8lpal5tZdgU
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ipset/ipset.hash | 4 ++--
- package/ipset/ipset.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/isl/isl.hash | 2 +-
+ package/isl/isl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ipset/ipset.hash b/package/ipset/ipset.hash
-index 7be4b368c2..e5b91b2d80 100644
---- a/package/ipset/ipset.hash
-+++ b/package/ipset/ipset.hash
-@@ -1,4 +1,4 @@
--# From https://ipset.netfilter.org/ipset-7.23.tar.bz2.sha512sum.txt
--sha512  5a43c790abf157a55db5a9a22cb5f28a225f5c7969beda81566a2259aa82c9d852979eb805b11b4347f47c6a0c2cc4de6f14e4733bee5b562844422a45fb9dab  ipset-7.23.tar.bz2
-+# From https://ipset.netfilter.org/ipset-7.24.tar.bz2.sha512sum.txt
-+sha512  18ccb49bd38083f0556b11e1d17f43791c52a2b094c9a500b6f770796b17e8e70c3860a628eac2252eb672b1fc9de734d3a0e0823d61dd9be7b4188adc6dd214  ipset-7.24.tar.bz2
- # Locally calculated
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
-index ba53c1f8bd..861a8684f4 100644
---- a/package/ipset/ipset.mk
-+++ b/package/ipset/ipset.mk
+diff --git a/package/isl/isl.hash b/package/isl/isl.hash
+index 1f8c998235..abffd78831 100644
+--- a/package/isl/isl.hash
++++ b/package/isl/isl.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  a0b5cb06d24f9fa9e77b55fabbe9a3c94a336190345c2555f9915bb38e976504  isl-0.26.tar.xz
++sha256  6d8babb59e7b672e8cb7870e874f3f7b813b6e00e6af3f8b04f7579965643d5c  isl-0.27.tar.xz
+ sha256  3a2c398103f6bca0f50a9a9465deca9230b370b0212af5fdf31ed88a36215c30  LICENSE
+diff --git a/package/isl/isl.mk b/package/isl/isl.mk
+index 42830a2689..122367e665 100644
+--- a/package/isl/isl.mk
++++ b/package/isl/isl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPSET_VERSION = 7.23
-+IPSET_VERSION = 7.24
- IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
- IPSET_SITE = http://ipset.netfilter.org
- IPSET_DEPENDENCIES = libmnl host-pkgconf
+-ISL_VERSION = 0.26
++ISL_VERSION = 0.27
+ ISL_SOURCE = isl-$(ISL_VERSION).tar.xz
+ ISL_SITE = https://libisl.sourceforge.io
+ ISL_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
