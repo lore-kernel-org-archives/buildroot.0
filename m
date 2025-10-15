@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50667CCD185
-	for <buildroot@archiver.kernel.org>; Wed, 15 Oct 2025 07:17:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFDCACCD190
+	for <buildroot@archiver.kernel.org>; Wed, 15 Oct 2025 07:17:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 236684132D;
-	Wed, 15 Oct 2025 07:17:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7EB19840C8;
+	Wed, 15 Oct 2025 07:17:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7dn5SLbEIffq; Wed, 15 Oct 2025 07:17:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TzlEAIWMpsrl; Wed, 15 Oct 2025 07:17:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46A0B4132F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82BD5840C2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 46A0B4132F;
-	Wed, 15 Oct 2025 07:17:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 82BD5840C2;
+	Wed, 15 Oct 2025 07:17:21 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id AC4301BA
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 07:17:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B09761C9
+ for <buildroot@buildroot.org>; Wed, 15 Oct 2025 07:17:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 00457408FA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 277E040860
  for <buildroot@buildroot.org>; Wed, 15 Oct 2025 07:17:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zd1_FZ4IukIe for <buildroot@buildroot.org>;
- Wed, 15 Oct 2025 07:17:00 +0000 (UTC)
+ id fRGqYJDHdnbR for <buildroot@buildroot.org>;
+ Wed, 15 Oct 2025 07:17:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0813841439
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D6FD41441
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0813841439
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2D6FD41441
  for <buildroot@buildroot.org>; Wed, 15 Oct 2025 07:17:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0422B8710B; Wed, 15 Oct 2025 07:17:00 +0000 (UTC)
+ id 2B6ED8710A; Wed, 15 Oct 2025 07:17:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 15 Oct 2025 08:57:47 +0200
+Date: Wed, 15 Oct 2025 09:04:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3f42b0f53657bb61cb3ffe91e5112c3b720ccfce
-X-Git-Newrev: 585c288ab5a2961febaf5297c96016eba5cdf8a6
+X-Git-Oldrev: 687934c0dcffa7a2a0c07d925159096c3532c056
+X-Git-Newrev: 8111bdcab1854815fedfbc5ac822758cb107541a
 X-Patchwork-Hint: ignore
-Message-Id: <20251015071700.0422B8710B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyasn1-modules: bump
- version to 0.4.2
+Message-Id: <20251015071700.2B6ED8710A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iptraf-ng: security bump to
+ version 1.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=585c288ab5a2961febaf5297c96016eba5cdf8a6
+commit: https://git.buildroot.net/buildroot/commit/?id=8111bdcab1854815fedfbc5ac822758cb107541a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+This bump includes the security fix for CVE-2024-52949.
+
+Fixes:
+https://www.cve.org/CVERecord?id=CVE-2024-52949.
+
+Release notes:
+https://github.com/iptraf-ng/iptraf-ng/releases/tag/v1.2.2
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pyasn1-modules/python-pyasn1-modules.hash | 4 ++--
- package/python-pyasn1-modules/python-pyasn1-modules.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/iptraf-ng/iptraf-ng.hash | 2 +-
+ package/iptraf-ng/iptraf-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-pyasn1-modules/python-pyasn1-modules.hash b/package/python-pyasn1-modules/python-pyasn1-modules.hash
-index fd7b732791..7d45c7c9af 100644
---- a/package/python-pyasn1-modules/python-pyasn1-modules.hash
-+++ b/package/python-pyasn1-modules/python-pyasn1-modules.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyasn1-modules/json
--md5  2cb6c7001ac5caa2ead3ad2d28c9a43e  pyasn1_modules-0.4.1.tar.gz
--sha256  c28e2dbf9c06ad61c71a075c7e0f9fd0f1b0bb2d2ad4377f240d33ac2ab60a7c  pyasn1_modules-0.4.1.tar.gz
-+md5  799696cd892940f63904dcd9b0fa96bf  pyasn1_modules-0.4.2.tar.gz
-+sha256  677091de870a80aae844b1ca6134f54652fa2c8c5a52aa396440ac3106e941e6  pyasn1_modules-0.4.2.tar.gz
- # Locally computed sha256 checksums
- sha256  2aad5fc00f705c4a1addb83eed10a6a75d286a3779f0cf8519d87e62bc4735fd  LICENSE.txt
-diff --git a/package/python-pyasn1-modules/python-pyasn1-modules.mk b/package/python-pyasn1-modules/python-pyasn1-modules.mk
-index 7087d5c44d..4398e1350e 100644
---- a/package/python-pyasn1-modules/python-pyasn1-modules.mk
-+++ b/package/python-pyasn1-modules/python-pyasn1-modules.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/iptraf-ng/iptraf-ng.hash b/package/iptraf-ng/iptraf-ng.hash
+index 314d5cee29..cadb436de1 100644
+--- a/package/iptraf-ng/iptraf-ng.hash
++++ b/package/iptraf-ng/iptraf-ng.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  9f5cef584065420dea1ba32c86126aede1fa9bd25b0f8362b0f9fd9754f00870  iptraf-ng-1.2.1.tar.gz
++sha256  75fd653745ea0705995c25e6c07b34252ecc2563c6a91b007a3a8c26f29cc252  iptraf-ng-1.2.2.tar.gz
+ sha256  4e49bef38f621aac4a870da4b30011c7b7abc7256b218daec1c425b08448ae1e  LICENSE
+diff --git a/package/iptraf-ng/iptraf-ng.mk b/package/iptraf-ng/iptraf-ng.mk
+index 044630be41..1558bd1cd6 100644
+--- a/package/iptraf-ng/iptraf-ng.mk
++++ b/package/iptraf-ng/iptraf-ng.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYASN1_MODULES_VERSION = 0.4.1
-+PYTHON_PYASN1_MODULES_VERSION = 0.4.2
- PYTHON_PYASN1_MODULES_SOURCE = pyasn1_modules-$(PYTHON_PYASN1_MODULES_VERSION).tar.gz
--PYTHON_PYASN1_MODULES_SITE = https://files.pythonhosted.org/packages/1d/67/6afbf0d507f73c32d21084a79946bfcfca5fbc62a72057e9c23797a737c9
-+PYTHON_PYASN1_MODULES_SITE = https://files.pythonhosted.org/packages/e9/e6/78ebbb10a8c8e4b61a59249394a4a594c1a7af95593dc933a349c8d00964
- PYTHON_PYASN1_MODULES_SETUP_TYPE = setuptools
- PYTHON_PYASN1_MODULES_LICENSE = BSD-2-Clause
- PYTHON_PYASN1_MODULES_LICENSE_FILES = LICENSE.txt
+-IPTRAF_NG_VERSION = 1.2.1
++IPTRAF_NG_VERSION = 1.2.2
+ IPTRAF_NG_SITE = $(call github,iptraf-ng,iptraf-ng,v$(IPTRAF_NG_VERSION))
+ IPTRAF_NG_LICENSE = GPL-2.0+
+ IPTRAF_NG_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
