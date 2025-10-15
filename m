@@ -1,104 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 672F6CCD185
-	for <buildroot@archiver.kernel.org>; Wed, 15 Oct 2025 17:28:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C2E5CCD195
+	for <buildroot@archiver.kernel.org>; Wed, 15 Oct 2025 19:05:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 10EE184371;
-	Wed, 15 Oct 2025 17:28:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2330F60690;
+	Wed, 15 Oct 2025 19:05:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1sAeTid6KpZ3; Wed, 15 Oct 2025 17:28:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id daVSaEeyZLg4; Wed, 15 Oct 2025 19:05:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 179F984372
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF7C260648
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 179F984372;
-	Wed, 15 Oct 2025 17:28:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF7C260648;
+	Wed, 15 Oct 2025 19:05:26 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id B74461BA
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 17:28:35 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4415E781
+ for <buildroot@buildroot.org>; Wed, 15 Oct 2025 19:05:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9A28C84372
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 17:28:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2A43483C04
+ for <buildroot@buildroot.org>; Wed, 15 Oct 2025 19:05:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c-zSIkhDm9DX for <buildroot@buildroot.org>;
- Wed, 15 Oct 2025 17:28:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.10;
- helo=mout.kundenserver.de; envelope-from=paguilar@paguilar.org;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C042584371
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C042584371
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C042584371
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 17:28:33 +0000 (UTC)
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from uxmal ([81.56.223.94]) by mrelayeu.kundenserver.de (mreue108
- [212.227.17.173]) with ESMTPSA (Nemesis) id 1MMoT4-1uqJzf0kMu-00SUwy; Wed, 15
- Oct 2025 19:28:31 +0200
-From: Pedro Aguilar <paguilar@paguilar.org>
+ id g-ZDhuIWkkt2 for <buildroot@buildroot.org>;
+ Wed, 15 Oct 2025 19:05:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 981D18234F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 981D18234F
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 981D18234F
+ for <buildroot@buildroot.org>; Wed, 15 Oct 2025 19:05:22 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0643.dip0.t-ipconnect.de [91.58.6.67])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id B258AA4C6CA1
+ for <buildroot@buildroot.org>; Wed, 15 Oct 2025 21:05:19 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:51144)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1v96oJ-0000000006n-0m2j
+ for buildroot@buildroot.org; Wed, 15 Oct 2025 19:05:19 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Pedro Aguilar <paguilar@paguilar.org>
-Date: Wed, 15 Oct 2025 19:27:54 +0200
-Message-Id: <20251015172754.11737-1-paguilar@paguilar.org>
-X-Mailer: git-send-email 2.34.1
+Date: Wed, 15 Oct 2025 21:05:19 +0200
+Message-ID: <20251015190519.1073379-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:4/Bz0ftlxthAqNrQmxvBzGWHaKx/HnDwovptFDR6CHAH5z2BX4M
- JV2FX3yw7d5fb8XwM2ZuTAsvBiyeh54kn2p95GUA1Si3br7i0bnbispuiHpjf69QRP6xa/5
- 5Q6uf6m6k0PpNTL3utqkyrkIrI0+yrGw+n8CAoo+hmW+/dWVNw9TLvBHy6VlzxPe1bRr8Vy
- ACaSa9ZzlJtUK1a5cT3ag==
-UI-OutboundReport: notjunk:1;M01:P0:PQSOUxP7RME=;p22Ywabr03adOjNy/kWq8G7zpK5
- UIqI+y6s/t354yB6DSNuxnEls9mvfvI3faZ+oseNNYP+Gt0FsQc7+BUul5cfaSUw2d5lGI1Gj
- a7rOP4fJhA81euejLviXi+htLm6k9gc6TtvdCgV6augCeZ1F6ex6816Z+J6sHGgP2haXBQIn0
- pm3fEU5n0xiqmNrPPWuMGtLRGlmMmp3RIxn8ewvInaWXmpfF3kkhKWHIkeSt1U82LRknVYDt+
- W11qhtq+hh8CUIcKue2QEHNwMBEHeZhyKLAzTCvv0pJtSr/ndtBWKiqRFOpVYnwv4QMypXhAE
- DXCzuNaDrdf7l81Y6aoGlrcRWhlmOn0/ruevCnDsP6/rYX6ABPEsDXa0bsLpqrqoTeKsGXr++
- DidoN/XUZwB6vv40C29WHZILQdO2mzL3MhWxg+U8/WMMj2fGJ2c3g5cQzl5/PY1owUP/q2mHi
- j6qwhqg/AzqCjHGjBLHYHimqkJshZSAVm3YJIeHFM0ZnHNUbXX1uuzwZjzh7F0h4pzgj0JhgW
- bg8RI21kyVw5V5Hykg3KArLwKROaVP+DosGJb7WTtrn3W/qyZ2l7DQfsGS7UejyFoTbKY6Hw5
- n+PYWcb2rZeivoRBB04ns6ehP9J3EnaHBrmOuI9rwfQLNP8oceWG1C2SV4cPK15/Yp4H6BrjB
- DEnYeBiXTWBWzpVZOSSyuHDwy/q6BwJBopX1baXWwWJgrIgLHaUGsPAoFgwgO2PF3mK70EMKy
- j9c6H6mg7KqFs2x7tZLZQ6PRtRI0mpwDf4cXGvxJalMa55KLQseTYZ3PXuzLQ/PHqD6fM47sY
- n67yJwNMVbYTsQMQKnqmSVMM2bHADoj3W+aVjmjKJ9mW5SmSu2ESBgrP02jGY8bjWcNF+fOkW
- uLOoByr+2Tv0/g7vlIgNULc7NLpMN1pSgyrXg9x1utc8zE4dqGvMFosOR9gqtKucFCeOjmrpk
- tZHVMQyetF+Z6ADPmQRcb+gUE8APBMkw40RbswvZNjwdRZ9CW3J6s5jYvKNiAUjcUOHbdJLTC
- Avdkhtxpbzo2zGYVGi2gFR3EmDIYIgUg9kGyC924vw2NygT6Hn7L1O4QGakC6iG2ALYN4mnSw
- Q3KwL90ifTg8Ppp0lw4T57+p2NLCVMXLNcjcgcZak78mjYpf2+8QaKi45paQYsEuMhBtM9ovK
- p38DD07iI67dHx1ief0UL7z/PUfVN9blTuqfYuoXe+4fnjTlN7vIILkhppiXD4ticddQquvIC
- 8lvAT63Q2lRFurcTREMEHKs4D3msG3sUefe+73QPR+RqQHN8ygCK7NBc9gNC1wvTFfrwB0Lcl
- 8xFYHIAZ+aASjdFM+ciq0BzWhZf4fnFceRMNDVeUdrFBhfAGz19S21n4gyfaIN42/ztSFK2/T
- 2Thyg1rxpXbcDhMHA1D3qqY+5s4FhVaUJz1amYFc1tkUqcyhuPIE8o1e8vnmUBUAAgJLUDWXo
- qmIbjDA4YSys8ygj1sYbHoKLsGbg+tKxnK9OOZxHxdsAGjDrajMyNHjk3yS0wXqZBgibjNQdp
- GPOZ1V4aMDvOluW48lu2dFUhGiHcQtHrSkK5ZHozqIOjmweGIiW0hYpNhEp4T4iEHyFhCrOIY
- zLPNDdu15yCZBI0PwqsMU4WmXt4K7RjJGtlyjjWrpPzQhJU3vzAbzXZ9D73ogZjJmZSzeXUxh
- EzWGKVMRme0a0IvaMNX+EVz6P2IWdosoYTYCyypHSUVoj8YIIS0Wpi2v0jZRKerpk=
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=paguilar.org; 
- s=s1-ionos; t=1760549311; x=1761154111; i=paguilar@paguilar.org;
- bh=WNXpzxJsC7NXMk1KZux4OkZtuIl4v+6mfT3GrsZ3tCM=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
- MIME-Version:Content-Transfer-Encoding:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=lnZfis9wgM8wi71YGqqC+xzRJRYV7i99noIWkQEXPqdjJ+QJ6q1SJp83kVS4ObkQ
- Furf84gfBY2ii0bfYcdyUYb2WmKsgZpn1SlDkdb1P1O0k/qrrHCKGs4YPINK+Ps9s
- bXuO40DGN8Q8twyDlZensgoiv+Y8fLvjMZ1lwPbGnQqv1VbBoSJMkALJHlWfmwB2B
- PDTR5QEOBEYHVfIlbXVhJxzUMhWwNovilxv5ubulNO5nuUzpIKz04BSkxF50og4Ky
- WAY2hwqngSGnW17MrTMcaBDDu9PLoGag9x6NAUJk0mxFgUOKuNZZUMMIHJ08y3Z5U
- OL+WCbbmoPdM9/9aEw==
+ d=kuhls.net; 
+ s=kas202506031021; t=1760555119;
+ bh=tKo5Q7j3dp/2WUmoGnfrDZ82Y6b40JXYggDaIAgp+Ag=;
+ h=From:To:Subject:Date:From;
+ b=op5jwrdvgDkWJOo0PVwwe6KybAggL/ukQZtk7WUUbWUMRp1yqDjsdCd2eu+IRE2qB
+ kJ0bo2JlEwRZba36tDCdZX3inGs5Lic1ZlybjzLyyRDaBzbHtNa9yuJXVzD4dHMGLH
+ hOM/vUFlUZhK22FngDxO2mw0VIDa4AWokPq7FvEmkDMBo8h5lrlzYqEcXl1+ZpzAF/
+ 9xOuSpP6HLEENlp2YB/0kMslfus2oEAVZBPEJfm0vqj8V4EkvpIHzFzdbCbWGMrYx1
+ BF5o8z+4HWBEktyAIX3DQ16LfMe9C9MyzaRE7hZVELl+vRLZsXG7pWO1ltPPw59DE3
+ TtllmAkWIkS7Q==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=paguilar.org
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=paguilar.org header.i=paguilar@paguilar.org
- header.a=rsa-sha256 header.s=s1-ionos header.b=lnZfis9w
-Subject: [Buildroot] [PATCH 1/1] packages/libunistring: bump to version 1.4.1
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=op5jwrdv
+Subject: [Buildroot] [PATCH 1/1] package/lesstif: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,43 +85,144 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://savannah.gnu.org/projects/libunistring/
+lesstif received its last release in 2009, the homepage was last
+updated in 2013: https://lesstif.sourceforge.net
 
-Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+The last update on the project trackers was in 2015:
+https://sourceforge.net/projects/lesstif/support
+
+Debian removed lesstif in 2013:
+https://wiki.debian.org/lesstif2motifTransition
+
+The package is causing build errors since the default version of gcc was
+bumped to 14.x with buildroot commit 1e1fafa1f0f5069418e92f702c2a66db6408a634:
+
+CutPaste.c:1031:25: error: assignment to 'long int *' from incompatible
+ pointer type 'char *' [-Wincompatible-pointer-types]
+
+Instead of fixing an unmaintained package we remove it from buildroot,
+no other package depends on it.
+
+Fixes:
+https://autobuild.buildroot.net/results/798/798ccab7b69754fb9b73b84e31d91bece8e7a2b4/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/libunistring/libunistring.hash | 6 +++---
- package/libunistring/libunistring.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ Config.in.legacy             |  6 ++++++
+ package/Config.in            |  1 -
+ package/lesstif/Config.in    | 11 ----------
+ package/lesstif/lesstif.hash |  3 ---
+ package/lesstif/lesstif.mk   | 42 ------------------------------------
+ 5 files changed, 6 insertions(+), 57 deletions(-)
+ delete mode 100644 package/lesstif/Config.in
+ delete mode 100644 package/lesstif/lesstif.hash
+ delete mode 100644 package/lesstif/lesstif.mk
 
-diff --git a/package/libunistring/libunistring.hash b/package/libunistring/libunistring.hash
-index e7fbc85414..f86b6f94b0 100644
---- a/package/libunistring/libunistring.hash
-+++ b/package/libunistring/libunistring.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/libunistring/libunistring-1.3.tar.xz.sig
--sha256  f245786c831d25150f3dfb4317cda1acc5e3f79a5da4ad073ddca58886569527  libunistring-1.3.tar.xz
-+# https://ftp.gnu.org/gnu/libunistring/libunistring-1.4.1.tar.xz.sig
-+sha256  67d88430892527861903788868c77802a217b0959990f7449f2976126a307763  libunistring-1.4.1.tar.xz
- # Locally calculated
--sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-+sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
- sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LIB
-diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
-index fc785c28a5..1abbfde6da 100644
---- a/package/libunistring/libunistring.mk
-+++ b/package/libunistring/libunistring.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index f3558c0f3a..ced3bab9c7 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
  
--LIBUNISTRING_VERSION = 1.3
-+LIBUNISTRING_VERSION = 1.4.1
- LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
- LIBUNISTRING_SOURCE = libunistring-$(LIBUNISTRING_VERSION).tar.xz
- LIBUNISTRING_INSTALL_STAGING = YES
+ comment "Legacy options removed in 2025.11"
+ 
++config BR2_PACKAGE_LESSTIF
++	bool "lesstif has been removed"
++	select BR2_LEGACY
++	help
++	  lesstif is unmaintained and has been removed
++
+ config BR2_KERNEL_HEADERS_6_16
+ 	bool "kernel headers version 6.16.x are no longer supported"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index e9906b066e..1ae92409c4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1740,7 +1740,6 @@ menu "Graphics"
+ 	source "package/lcms2/Config.in"
+ 	source "package/lensfun/Config.in"
+ 	source "package/leptonica/Config.in"
+-	source "package/lesstif/Config.in"
+ 	source "package/libart/Config.in"
+ 	source "package/libavif/Config.in"
+ 	source "package/libdecor/Config.in"
+diff --git a/package/lesstif/Config.in b/package/lesstif/Config.in
+deleted file mode 100644
+index 654ee6f1a0..0000000000
+--- a/package/lesstif/Config.in
++++ /dev/null
+@@ -1,11 +0,0 @@
+-config BR2_PACKAGE_LESSTIF
+-	bool "lesstif"
+-	depends on BR2_USE_MMU # fork()
+-	depends on BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_XLIB_LIBXT
+-	select BR2_PACKAGE_XLIB_LIBXEXT
+-	select BR2_PACKAGE_FREETYPE
+-	help
+-	  lesstif is the Hungry Programmers' version of OSF/Motif
+-
+-	  http://lesstif.sourceforge.net/
+diff --git a/package/lesstif/lesstif.hash b/package/lesstif/lesstif.hash
+deleted file mode 100644
+index 31a394dbbc..0000000000
+--- a/package/lesstif/lesstif.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed:
+-sha256  eb4aa38858c29a4a3bcf605cfe7d91ca41f4522d78d770f69721e6e3a4ecf7e3  lesstif-0.95.2.tar.bz2
+-sha256  94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23  COPYING.LIB
+diff --git a/package/lesstif/lesstif.mk b/package/lesstif/lesstif.mk
+deleted file mode 100644
+index 378c594e3b..0000000000
+--- a/package/lesstif/lesstif.mk
++++ /dev/null
+@@ -1,42 +0,0 @@
+-################################################################################
+-#
+-# lesstif
+-#
+-################################################################################
+-
+-LESSTIF_VERSION = 0.95.2
+-LESSTIF_SOURCE = lesstif-$(LESSTIF_VERSION).tar.bz2
+-LESSTIF_SITE = http://downloads.sourceforge.net/project/lesstif/lesstif/$(LESSTIF_VERSION)
+-LESSTIF_INSTALL_STAGING = YES
+-LESSTIF_DEPENDENCIES = \
+-	xlib_libXt \
+-	xlib_libXext \
+-	freetype
+-LESSTIF_LICENSE = LGPL-2.0+
+-LESSTIF_LICENSE_FILES = COPYING.LIB
+-LESSTIF_CONF_OPTS = \
+-	--with-gnu-ld \
+-	--with-freetype-config=$(STAGING_DIR)/usr/bin/freetype-config \
+-	--enable-production=yes \
+-	--enable-build-tests=no \
+-	--no-recursion
+-
+-# Reduces the buggy makefile to the smallest possible (and working) thing
+-define LESSTIF_NOMAN2HTML
+-	echo "all:" > $(@D)/doc/Makefile
+-	echo "" >> $(@D)/doc/Makefile
+-	echo "install:" >> $(@D)/doc/Makefile
+-	echo "" >> $(@D)/doc/Makefile
+-	echo "clean:" >> $(@D)/doc/Makefile
+-endef
+-
+-# Prevents to copy ac_find_motif.m4 on target, it would else
+-# be created at $(TARGET_DIR)/$(HOST_DIR)/share/aclocal/ac_find_motif.m4
+-define LESSTIF_FIXACLOCAL
+-	sed -i -e "/install-data-am: install-aclocalDATA/d" $(@D)/scripts/autoconf/Makefile
+-endef
+-
+-LESSTIF_POST_CONFIGURE_HOOKS += LESSTIF_NOMAN2HTML
+-LESSTIF_POST_CONFIGURE_HOOKS += LESSTIF_FIXACLOCAL
+-
+-$(eval $(autotools-package))
 -- 
-2.34.1
+2.47.3
 
 _______________________________________________
 buildroot mailing list
