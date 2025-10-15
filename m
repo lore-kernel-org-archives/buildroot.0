@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 655FACCD190
-	for <buildroot@archiver.kernel.org>; Wed, 15 Oct 2025 07:17:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5542FCCD18E
+	for <buildroot@archiver.kernel.org>; Wed, 15 Oct 2025 07:17:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 064E68407D;
-	Wed, 15 Oct 2025 07:17:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1FCB88406B;
+	Wed, 15 Oct 2025 07:17:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nOQ4pRpDm3ow; Wed, 15 Oct 2025 07:17:09 +0000 (UTC)
+ id AGyr-7dc-9tT; Wed, 15 Oct 2025 07:17:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E590784080
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9941D84088
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E590784080;
-	Wed, 15 Oct 2025 07:17:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 861A0939
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9941D84088;
+	Wed, 15 Oct 2025 07:17:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D3D8B1BA
  for <buildroot@buildroot.org>; Wed, 15 Oct 2025 07:17:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9B5B284040
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9B15E613AF
  for <buildroot@buildroot.org>; Wed, 15 Oct 2025 07:17:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mpuq3nIVTRTr for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id c1iBmihUYOPA for <buildroot@buildroot.org>;
  Wed, 15 Oct 2025 07:16:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1C2A84042
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC407614B8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C1C2A84042
+ by smtp3.osuosl.org (Postfix) with ESMTP id DC407614B8
  for <buildroot@buildroot.org>; Wed, 15 Oct 2025 07:16:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B234487110; Wed, 15 Oct 2025 07:16:59 +0000 (UTC)
+ id CE0248710B; Wed, 15 Oct 2025 07:16:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 15 Oct 2025 08:10:51 +0200
+Date: Wed, 15 Oct 2025 08:41:50 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9e3fc9ea1030fb70b96baa54c4555c988277f832
-X-Git-Newrev: d8cc0d0927778851c84ed59ee4a56355d39b0c31
+X-Git-Oldrev: 7a71637b28ecf39678149f31f541e397a50dc041
+X-Git-Newrev: 1519659b42323ee0dccd3b4642258b756a968396
 X-Patchwork-Hint: ignore
-Message-Id: <20251015071659.B234487110@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-wcwidth: bump version to
- 0.2.14
+Message-Id: <20251015071659.CE0248710B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-wrapt: bump version to
+ 1.17.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8cc0d0927778851c84ed59ee4a56355d39b0c31
+commit: https://git.buildroot.net/buildroot/commit/?id=1519659b42323ee0dccd3b4642258b756a968396
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-wcwidth/python-wcwidth.hash | 4 ++--
- package/python-wcwidth/python-wcwidth.mk   | 4 ++--
+ package/python-wrapt/python-wrapt.hash | 4 ++--
+ package/python-wrapt/python-wrapt.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-wcwidth/python-wcwidth.hash b/package/python-wcwidth/python-wcwidth.hash
-index 7883ef44de..8c43b3729c 100644
---- a/package/python-wcwidth/python-wcwidth.hash
-+++ b/package/python-wcwidth/python-wcwidth.hash
+diff --git a/package/python-wrapt/python-wrapt.hash b/package/python-wrapt/python-wrapt.hash
+index 199de265a5..ae1fb94a2b 100644
+--- a/package/python-wrapt/python-wrapt.hash
++++ b/package/python-wrapt/python-wrapt.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/wcwidth/json
--md5  5ce8dd9e6993dae268142feb1e605cd8  wcwidth-0.2.13.tar.gz
--sha256  72ea0c06399eb286d978fdedb6923a9eb47e1c486ce63e9b4e64fc18303972b5  wcwidth-0.2.13.tar.gz
-+md5  c179ab1aff6e3b48ac9617cf19f580d4  wcwidth-0.2.14.tar.gz
-+sha256  4d478375d31bc5395a3c55c40ccdf3354688364cd61c4f6adacaa9215d0b3605  wcwidth-0.2.14.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/wrapt/json
+-md5  f4db93e73e5c70a59955f0ec162d585d  wrapt-1.17.2.tar.gz
+-sha256  41388e9d4d1522446fe79d3213196bd9e3b301a336965b9e27ca2788ebd122f3  wrapt-1.17.2.tar.gz
++md5  5e7d9b1296ef5dc87339acc951a52d18  wrapt-1.17.3.tar.gz
++sha256  f66eb08feaa410fe4eebd17f2a2c8e2e46d3476e9f8c783daa8e09e0faa666d0  wrapt-1.17.3.tar.gz
  # Locally computed sha256 checksums
- sha256  70b98a95a2144eb70af8017fa8c6d95ce247e40867436e8bc649e137fe13d21a  LICENSE
-diff --git a/package/python-wcwidth/python-wcwidth.mk b/package/python-wcwidth/python-wcwidth.mk
-index 75199974fa..15b5f495e8 100644
---- a/package/python-wcwidth/python-wcwidth.mk
-+++ b/package/python-wcwidth/python-wcwidth.mk
+ sha256  5974efbbc8b626b2050810d63c3a907ee21c92bf64b3740fc623ad05eb3448ab  LICENSE
+diff --git a/package/python-wrapt/python-wrapt.mk b/package/python-wrapt/python-wrapt.mk
+index 9048f7010e..d1871a7e2e 100644
+--- a/package/python-wrapt/python-wrapt.mk
++++ b/package/python-wrapt/python-wrapt.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WCWIDTH_VERSION = 0.2.13
-+PYTHON_WCWIDTH_VERSION = 0.2.14
- PYTHON_WCWIDTH_SOURCE = wcwidth-$(PYTHON_WCWIDTH_VERSION).tar.gz
--PYTHON_WCWIDTH_SITE = https://files.pythonhosted.org/packages/6c/63/53559446a878410fc5a5974feb13d31d78d752eb18aeba59c7fef1af7598
-+PYTHON_WCWIDTH_SITE = https://files.pythonhosted.org/packages/24/30/6b0809f4510673dc723187aeaf24c7f5459922d01e2f794277a3dfb90345
- PYTHON_WCWIDTH_SETUP_TYPE = setuptools
- PYTHON_WCWIDTH_LICENSE = MIT
- PYTHON_WCWIDTH_LICENSE_FILES = LICENSE
+-PYTHON_WRAPT_VERSION = 1.17.2
++PYTHON_WRAPT_VERSION = 1.17.3
+ PYTHON_WRAPT_SOURCE = wrapt-$(PYTHON_WRAPT_VERSION).tar.gz
+-PYTHON_WRAPT_SITE = https://files.pythonhosted.org/packages/c3/fc/e91cc220803d7bc4db93fb02facd8461c37364151b8494762cc88b0fbcef
++PYTHON_WRAPT_SITE = https://files.pythonhosted.org/packages/95/8f/aeb76c5b46e273670962298c23e7ddde79916cb74db802131d49a85e4b7d
+ PYTHON_WRAPT_SETUP_TYPE = setuptools
+ PYTHON_WRAPT_LICENSE = BSD-2-Clause
+ PYTHON_WRAPT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
