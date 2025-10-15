@@ -1,80 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D12FECCD193
-	for <buildroot@archiver.kernel.org>; Wed, 15 Oct 2025 11:32:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29FB7CCD193
+	for <buildroot@archiver.kernel.org>; Wed, 15 Oct 2025 12:02:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D3E1841A9;
-	Wed, 15 Oct 2025 11:32:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D9656614AB;
+	Wed, 15 Oct 2025 12:02:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rSkQLIrZj5Jd; Wed, 15 Oct 2025 11:32:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ymzqtq7jLqfu; Wed, 15 Oct 2025 12:02:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5845C841A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DAF7614C5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5845C841A1;
-	Wed, 15 Oct 2025 11:32:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8A8F51C9
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 11:32:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0DAF7614C5;
+	Wed, 15 Oct 2025 12:02:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DF0181C9
+ for <buildroot@buildroot.org>; Wed, 15 Oct 2025 12:02:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7108E841A1
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 11:32:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C533A40AF5
+ for <buildroot@buildroot.org>; Wed, 15 Oct 2025 12:02:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9nVHd_XnBY0C for <buildroot@buildroot.org>;
- Wed, 15 Oct 2025 11:32:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=147.173.1.68;
- helo=mailgw-out1.grenoble.cnrs.fr; envelope-from=bonet@grenoble.cnrs.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1A15383F62
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A15383F62
-Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
- [147.173.1.68])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1A15383F62
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 11:32:09 +0000 (UTC)
-Received: from [IPV6:2a01:e0a:12:eba0:c5bc:1bbb:3ad6:c156] (unknown
- [IPv6:2a01:e0a:12:eba0:c5bc:1bbb:3ad6:c156])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PHx_1GRCRY3g for <buildroot@buildroot.org>;
+ Wed, 15 Oct 2025 12:02:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E7A14409EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7A14409EB
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E7A14409EB
+ for <buildroot@buildroot.org>; Wed, 15 Oct 2025 12:02:41 +0000 (UTC)
+Received: from framework-OT.fritz.box (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
  (No client certificate requested)
- by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id 83899C10CD
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 13:32:06 +0200 (CEST)
-Message-ID: <e3b0c6c4-dbb5-4c15-97e0-ada5f245fd68@grenoble.cnrs.fr>
-Date: Wed, 15 Oct 2025 13:32:05 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id BD7D82C80CE5;
+ Wed, 15 Oct 2025 14:02:39 +0200 (CEST)
 To: buildroot@buildroot.org
-References: <23d1f4ad-241a-4fe1-9db0-08bffa4775b6@iwave-global.com>
- <45b0422f-620c-4db5-9a35-423466de2db5@iwave-global.com>
- <584f433e-3ace-4493-a073-7cb92eae6d08@gmx.de>
- <3ac2065a-8ac7-4a59-9889-51fce1eae53d@iwave-global.com>
-Content-Language: en-US
-In-Reply-To: <3ac2065a-8ac7-4a59-9889-51fce1eae53d@iwave-global.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=grenoble.cnrs.fr; 
- s=202106-grenoble.cnrs.fr; t=1760527926;
- bh=6QOYP8/wD+yD7CK0jDSmupKED0N94rc5yc1SiOogmFk=;
- h=Date:Subject:To:References:From:In-Reply-To:From;
- b=X+n91gX+2IxlpCaGIFaTNekYuUxmg2yvo8SWocuWBTrkLHuT9d3Ykb4zk+w4RnMhn
- 2bygHbY9gemrs9cfAllIuR/DjKAEHXMpyb2wBCZh7Aa8sS0alKsVbXqBo8uwbpfHFU
- 8MWyso2Cjk5H1ZwA/aIPjH0UzQq0+rNtwVa94uXIN39YeUUjUkS0YPzPqr3MuPNSwE
- RVQ1aqV/1QJRy4Z1hZuXDJSvlVsPOBqVJjxC3OIRKhWudBpAtLT5JlYl0HN+VyY5Lk
- 3MBWLoJXnUkJLLhfGqUGh6XIcBuDXrsBHBaGAJ4GdO0QW28T8sBCuYkGxx7nDmxFMT
- RRIH9Ur3dxtKw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+Date: Wed, 15 Oct 2025 14:02:39 +0200
+Message-ID: <20251015120240.2793382-1-buildroot@bubu1.eu>
+X-Mailer: git-send-email 2.51.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=bubu1.eu; s=bubu; 
+ t=1760529759; bh=TNuROR1aETPm1AOkf+P8AvWUKuJsUj2E89ScVKC9Xgg=;
+ h=From:To:Cc:Subject:Date;
+ b=qezEl32N3eEuKjXYyQYpojeLA6B4TGYneO/jwo2MNYR5r9AnCH3SrK/IXyCDfJBNz
+ nK1m9NUjsweHJh7maB66lXPsCCPgxhDY8C921+Q/2vmxV4I2vqUzzoNnjvsYiORyiA
+ mjKtK4UqHD+T7CZ08QjMx1sUzlQ3sezON64qZHYl/CGDAQ+JmeNM4/k8I22KXcCTVt
+ y2vhpNpmUGU2q6WQhdMVeTBeeTbEFvpMuvSQKLYT0luh9EnCUaOvbNo0lV3MRe3PFh
+ URL39zNv+tx5iP++MzWFsMmuBkiPLW51sAX6lGoHIdrAm75BygcOdJGWbpjWHjOupo
+ dsT2rvb9PU5Gg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=grenoble.cnrs.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
- header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=X+n91gX+
-Subject: Re: [Buildroot] Implementation Procedure for i.MX93 Custom Board
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
+ header.a=rsa-sha256 header.s=bubu header.b=qezEl32N
+Subject: [Buildroot] [PATCH] package/python-asgiref: bump to 3.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,19 +75,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Edgar Bonet via buildroot <buildroot@buildroot.org>
-Reply-To: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RXNha2tpYW1tYWwgTSB3cm90ZToKPiBJdCBzZWVtcyB0aGUgTlhQIFdpLUZpIGRyaXZlciAobW9h
-bC5rbykgaXNu4oCZdCBiZWluZyBidWlsdAoKRG8geW91IG1lYW4gdGhpcz8gaHR0cHM6Ly9naXRo
-dWIuY29tL254cC1pbXgvbXdpZmlleAoKSWYgc28sIGFmdGVyIOKAmG1ha2UgZnJlZXNjYWxlX2lt
-eDkzZXZrX2RlZmNvbmZpZ+KAmSwgdHJ5IOKAmG1ha2UgbmNvbmZpZ+KAmSAob3IKbWVudWNvbmZp
-ZyksIGFuZCBzZWxlY3QgVGFyZ2V0IHBhY2thZ2VzIC8gSGFyZHdhcmUgaGFuZGxpbmcgLwpueHAt
-bXdpZmlleC4KClJlZ2FyZHMsCgpFZGdhci4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
-b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
-ZHJvb3QK
+CHANGELOG: https://github.com/django/asgiref/blob/2138f0317d79cedd065571447ae0a7571989550e/CHANGELOG.txt#L1-L13
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+---
+ package/python-asgiref/python-asgiref.hash | 4 ++--
+ package/python-asgiref/python-asgiref.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-asgiref/python-asgiref.hash b/package/python-asgiref/python-asgiref.hash
+index e7cda89f4d..4605835abb 100644
+--- a/package/python-asgiref/python-asgiref.hash
++++ b/package/python-asgiref/python-asgiref.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/asgiref/json
+-md5  f4151a69f1fc33dd69c237515bbf9c92  asgiref-3.9.1.tar.gz
+-sha256  a5ab6582236218e5ef1648f242fd9f10626cfd4de8dc377db215d5d5098e3142  asgiref-3.9.1.tar.gz
++md5  6799fce19314e0aaeb789a6d0f6d45fa  asgiref-3.10.0.tar.gz
++sha256  d89f2d8cd8b56dada7d52fa7dc8075baa08fb836560710d38c292a7a3f78c04e  asgiref-3.10.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-asgiref/python-asgiref.mk b/package/python-asgiref/python-asgiref.mk
+index 22cb1077db..3bd9c8f937 100644
+--- a/package/python-asgiref/python-asgiref.mk
++++ b/package/python-asgiref/python-asgiref.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_ASGIREF_VERSION = 3.9.1
++PYTHON_ASGIREF_VERSION = 3.10.0
+ PYTHON_ASGIREF_SOURCE = asgiref-$(PYTHON_ASGIREF_VERSION).tar.gz
+-PYTHON_ASGIREF_SITE = https://files.pythonhosted.org/packages/90/61/0aa957eec22ff70b830b22ff91f825e70e1ef732c06666a805730f28b36b
++PYTHON_ASGIREF_SITE = https://files.pythonhosted.org/packages/46/08/4dfec9b90758a59acc6be32ac82e98d1fbfc321cb5cfa410436dbacf821c
+ PYTHON_ASGIREF_SETUP_TYPE = setuptools
+ PYTHON_ASGIREF_LICENSE = BSD-3-Clause
+ PYTHON_ASGIREF_LICENSE_FILES = LICENSE
+-- 
+2.51.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
