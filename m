@@ -1,95 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AB8CCCD194
-	for <buildroot@archiver.kernel.org>; Thu, 16 Oct 2025 05:52:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E875CCD183
+	for <buildroot@archiver.kernel.org>; Thu, 16 Oct 2025 08:33:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1367241B8D;
-	Thu, 16 Oct 2025 05:52:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B9FD08467C;
+	Thu, 16 Oct 2025 08:33:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id taMCT_ufcofF; Thu, 16 Oct 2025 05:52:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Rk-qa3RbCWi8; Thu, 16 Oct 2025 08:33:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B31341B92
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B95078467E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1B31341B92;
-	Thu, 16 Oct 2025 05:52:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5AEEF968
- for <buildroot@buildroot.org>; Thu, 16 Oct 2025 05:52:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B95078467E;
+	Thu, 16 Oct 2025 08:33:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1FF7693E
+ for <buildroot@buildroot.org>; Thu, 16 Oct 2025 08:33:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4CA66416D1
- for <buildroot@buildroot.org>; Thu, 16 Oct 2025 05:52:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 11C7A8467E
+ for <buildroot@buildroot.org>; Thu, 16 Oct 2025 08:33:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UTsXfUacz-Z0 for <buildroot@buildroot.org>;
- Thu, 16 Oct 2025 05:52:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::233; helo=mail-lj1-x233.google.com;
- envelope-from=pierre.ficheux@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DEBA1403AD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DEBA1403AD
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com
- [IPv6:2a00:1450:4864:20::233])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DEBA1403AD
- for <buildroot@buildroot.org>; Thu, 16 Oct 2025 05:52:11 +0000 (UTC)
-Received: by mail-lj1-x233.google.com with SMTP id
- 38308e7fff4ca-36453927ffaso2704201fa.2
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 22:52:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1760593929; x=1761198729;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=lrpwShz8t01LAtkeDuj0/FvtMEbxo1nNzb9hCrMC9j0=;
- b=su3lv4xHBqy7geE4J7pC5zcKdy7oChCfJ5z/607BAWqk7VPGKlUVVTs1lRlz0ony7M
- Lk2Aq6NCf29YprzdmShEx13CG1vuqsO0kXt3Lff2SNM+ElkOATgXg02DMIRgHS5IZNh/
- yaH9i7VO3la3N86IEarOIUXNOOFyX2ZFjWnRTwiZ6MqmqbCxL3BMcWe3XcfwtbAMu+pi
- MSwfBmFZcWeOSF56jUvG0njfY4I4yULfUr+FJH17PNS+4Ls4xiK52zbQylhxa8RZliI3
- F3DS6p96plokPl1nOzLVSIo6EPsZiVibYVnnPbgnUeo8IUHgcKSZNQN8k9zVlDvPRKEt
- jfhA==
-X-Gm-Message-State: AOJu0YyEwA/JP2UjwjFk/oTICJ50We2+6FFHMpWz2mUhVCRFu7l1NR4n
- kKGh1uzvr0udXrAJ/LGh4SNF+jnHRxdcbdF1YvnS5q1OMJIswES7UiWiWzEbEYPL9gsrT/ET1eY
- r6lSAVVP1F9xxEZlh+dPN8K8d5sNneeNn3AoowXSq/w==
-X-Gm-Gg: ASbGncuB3j7k9sRQwzbvbz2AMG11Flu3dmZCe+TDoYu98nI5f1b0ZKXQ5c8Csl+FH2d
- TlcE4WAUf3wBopfO0nfnCKW89vxZfTwVPGH8zmsiobxkV34SaXKKWTs9eRBM3oY/KbYxzz6UXUK
- dYgKSIuN6o1ajDeNxhKgntITdHLSZFDKcDHgSqxv92YNCA103Egm6JodTmzRUPg0Jhp743NEE70
- FvLxH7FwlAdSSEpuOvbkow/SEuEdpilP0UJSdd4Jv+CLgZi++lerR37jVa+NXi+6s3wYOcOtXrR
- DK9OsPajmopwfcHv
-X-Google-Smtp-Source: AGHT+IGfnuVVmPXfMb5VbTjhd1IEy2vEXJZrqq2jeeosCFOPIBNH0r12CnJvtg0EzdrVoO4Kho617yOIUCf83wB0z1o=
-X-Received: by 2002:a05:651c:19a0:b0:336:9232:fb9a with SMTP id
- 38308e7fff4ca-37609e93234mr84592111fa.29.1760593929445; Wed, 15 Oct 2025
- 22:52:09 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jA-4HdiXmHET for <buildroot@buildroot.org>;
+ Thu, 16 Oct 2025 08:33:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DDD688467C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDD688467C
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DDD688467C
+ for <buildroot@buildroot.org>; Thu, 16 Oct 2025 08:33:32 +0000 (UTC)
+Received: from [192.168.109.49] (ip-185-104-138-122.ptr.icomera.net
+ [185.104.138.122])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 7B5352C800DC;
+ Thu, 16 Oct 2025 10:33:27 +0200 (CEST)
+Message-ID: <1ec508e4-44f9-4c53-b69e-4959bad7e426@bubu1.eu>
+Date: Thu, 16 Oct 2025 10:32:31 +0200
 MIME-Version: 1.0
-References: <CAFc1U0tQYsSWe1=EtduNZogzNTtJHGr4eX3pjnYro5zJeArniA@mail.gmail.com>
- <81b9aa9b-4904-4296-96a8-81de83f8575c@rnout.be>
- <CAFc1U0tCdwSN1AMQsV41e1j=TqPhFQLZ40e4peUZ46O_MD-7xQ@mail.gmail.com>
-In-Reply-To: <CAFc1U0tCdwSN1AMQsV41e1j=TqPhFQLZ40e4peUZ46O_MD-7xQ@mail.gmail.com>
-Date: Thu, 16 Oct 2025 07:51:49 +0200
-X-Gm-Features: AS18NWA8XpH0u8CZg7cF7Ya19f9N5i1Hh6a2Ha8DEXd7sHe-EwL6mz-_vCJz2ZQ
-Message-ID: <CAFc1U0sQMsnrc2oXYFwWptdEevpKDf6z5iCdPBG0tVR8qsmhnw@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@rnout.be>
-Cc: buildroot@buildroot.org
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1760593929; x=1761198729; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=lrpwShz8t01LAtkeDuj0/FvtMEbxo1nNzb9hCrMC9j0=;
- b=Ik1WaLLhCcMW0qeu5AdNQIl7T+ivbAsHTR10X4Lajz9KeLvjuSlG8B0cGqIcwWM+5x
- jPJNeze5SBFJKn5oYBG3cyKR6GRX8NiRJlZaBeHfVwEa+L5jzKCzAq3IXicf4Xssbo9z
- eC34pNOFg+DpXzF8JdwcDBYb+ZMq852J/HrTU=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+User-Agent: Mozilla Thunderbird
+To: buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Marcus Hoffmann <bubu@bubu1.eu>
+References: <20250226123415.2518118-1-buildroot@bubu1.eu>
+Content-Language: en-US
+In-Reply-To: <20250226123415.2518118-1-buildroot@bubu1.eu>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=bubu1.eu; s=bubu; 
+ t=1760603609; bh=4EcYvQKaWkV/MjP8Xq3koscr3Na8jtEeyMOOPZ4ytGk=;
+ h=Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=WN+m0U+LYqcAS5y7c5TYhxa8HsSC4SuSU5i/O1I/jqBvHn3wQvDlbWuQiQRSoQ4yt
+ 497vAvdUu92LXue396DtA9DQ2AGOxUmp6JSvyNMElIyNaw1sWllOb6lSR8ts4YRPlB
+ 2dSn3sbTpSPwJTB/8VGSC1+TQ5UudOPMt3Qu08uMnFZs06UwmEMRZAED+MmXJqn8fb
+ pktduO7VERdqo5xi6PmS6ADzIkojgt46Bjj+XL9jUmZsTSvjt2Vy5pqQlPXBQ6dgB2
+ 7Fqq1bwKf7ob28eBPIp50ZiL8urE1QnqmdqO1BZcU0XpoqFs7FROckwLEQ0tRELPKE
+ xrRDpm2uTmZZQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=Ik1WaLLh
-Subject: Re: [Buildroot] PocketBeagle2 support
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
+ header.s=bubu header.b=WN+m0U+L
+Subject: Re: [Buildroot] [PATCH v3] package/python-diskcache: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,164 +83,167 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Pierre FICHEUX via buildroot <buildroot@buildroot.org>
-Reply-To: Pierre FICHEUX <pierre.ficheux@smile.fr>
-Content-Type: multipart/mixed; boundary="===============0756766197128235933=="
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0756766197128235933==
-Content-Type: multipart/alternative; boundary="000000000000c236b206414037a2"
+Hi,
 
---000000000000c236b206414037a2
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On 2/26/25 13:34, Marcus Hoffmann via buildroot wrote:
+> The package imports itself in setup.py to get the package-name and
+> version number. This doesn't work during the buildroot build, so we
+> replace this by the hardcoded package-name and the version number stored
+> in buildroot.
+> 
+> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 
-So it's ARM64 not ARM...
+I wanted to ask if there's anything I can do to help getting this 
+reviewed/merged. This has unfortunately been setting for almost 8 months 
+now, while later python packages I submitted have long been merged.
 
-Le jeu. 16 oct. 2025 =C3=A0 07:37, Pierre FICHEUX <pierre.ficheux@smile.fr>=
- a
-=C3=A9crit :
+> ---
+> 
+> Changes v2: remove accidentally commited .swp file
+> Chanegs v3: fix python-diskcache.mk lint errors
+> 
+>   DEVELOPERS                                    |  3 +++
+>   package/Config.in                             |  1 +
+>   package/python-diskcache/Config.in            |  8 ++++++++
+>   .../python-diskcache/python-diskcache.hash    |  5 +++++
+>   package/python-diskcache/python-diskcache.mk  | 20 +++++++++++++++++++
+>   .../tests/package/sample_python_diskcache.py  |  9 +++++++++
+>   .../tests/package/test_python_diskcache.py    | 12 +++++++++++
+>   7 files changed, 58 insertions(+)
+>   create mode 100644 package/python-diskcache/Config.in
+>   create mode 100644 package/python-diskcache/python-diskcache.hash
+>   create mode 100644 package/python-diskcache/python-diskcache.mk
+>   create mode 100644 support/testing/tests/package/sample_python_diskcache.py
+>   create mode 100644 support/testing/tests/package/test_python_diskcache.py
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index c07837e431..6676f2cf31 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2257,13 +2257,16 @@ N:	Marcus Hoffmann <bubu@bubu1.eu>
+>   F:	package/nethogs/
+>   F:	package/pico-sdk/
+>   F:	package/picotool/
+> +F:	package/python-diskcache/
+>   F:	package/python-immutabledict/
+>   F:	package/python-jc/
+>   F:	package/python-ruamel-yaml-clib/
+>   F:	package/python-waitress/
+> +F:	support/testing/tests/package/test_python_diskcache.py
+>   F:	support/testing/tests/package/test_python_fastapi.py
+>   F:	support/testing/tests/package/test_python_ruamel_yaml.py
+>   F:	support/testing/tests/package/test_python_waitress.py
+> +F:	support/testing/tests/package/sample_python_diskcache.py
+>   F:	support/testing/tests/package/sample_python_fastapi.py
+>   F:	support/testing/tests/package/sample_python_ruamel_yaml.py
+>   
+> diff --git a/package/Config.in b/package/Config.in
+> index 4a81a62ec4..7e9ba87e30 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1084,6 +1084,7 @@ menu "External python modules"
+>   	source "package/python-dictdiffer/Config.in"
+>   	source "package/python-dicttoxml/Config.in"
+>   	source "package/python-dicttoxml2/Config.in"
+> +	source "package/python-diskcache/Config.in"
+>   	source "package/python-distro/Config.in"
+>   	source "package/python-django/Config.in"
+>   	source "package/python-django-enumfields/Config.in"
+> diff --git a/package/python-diskcache/Config.in b/package/python-diskcache/Config.in
+> new file mode 100644
+> index 0000000000..4bf6c57406
+> --- /dev/null
+> +++ b/package/python-diskcache/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_DISKCACHE
+> +	bool "python-diskcache"
+> +	select BR2_PACKAGE_PYTHON3_SQLITE # runtime
+> +	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
+> +	help
+> +	  Disk Cache -- Disk and file backed persistent cache.
+> +
+> +	  http://www.grantjenks.com/docs/diskcache/
+> diff --git a/package/python-diskcache/python-diskcache.hash b/package/python-diskcache/python-diskcache.hash
+> new file mode 100644
+> index 0000000000..4befb40a4e
+> --- /dev/null
+> +++ b/package/python-diskcache/python-diskcache.hash
+> @@ -0,0 +1,5 @@
+> +# md5, sha256 from https://pypi.org/pypi/diskcache/json
+> +md5  d92b4afa944bb70ed38c84a622f7abb5  diskcache-5.6.3.tar.gz
+> +sha256  2c3a3fa2743d8535d832ec61c2054a1641f41775aa7c556758a109941e33e4fc  diskcache-5.6.3.tar.gz
+> +# Locally computed sha256 checksums
+> +sha256  583546baa3fd93607d845126570677a401f508e228b5044fefbc3949af179672  LICENSE
+> diff --git a/package/python-diskcache/python-diskcache.mk b/package/python-diskcache/python-diskcache.mk
+> new file mode 100644
+> index 0000000000..327d076779
+> --- /dev/null
+> +++ b/package/python-diskcache/python-diskcache.mk
+> @@ -0,0 +1,20 @@
+> +################################################################################
+> +#
+> +# python-diskcache
+> +#
+> +################################################################################
+> +
+> +PYTHON_DISKCACHE_VERSION = 5.6.3
+> +PYTHON_DISKCACHE_SOURCE = diskcache-$(PYTHON_DISKCACHE_VERSION).tar.gz
+> +PYTHON_DISKCACHE_SITE = https://files.pythonhosted.org/packages/3f/21/1c1ffc1a039ddcc459db43cc108658f32c57d271d7289a2794e401d0fdb6
+> +PYTHON_DISKCACHE_SETUP_TYPE = setuptools
+> +PYTHON_DISKCACHE_LICENSE = Apache-2.0
+> +PYTHON_DISKCACHE_LICENSE_FILES = LICENSE
+> +
+> +define PYTHON_DISKCACHE_REMOVE_SELF_IMPORT
+> +	sed -i -e '/import diskcache/d' -e 's/diskcache.__title__/"diskcache"/' -e 's/diskcache.__version__/"$(PYTHON_DISKCACHE_VERSION)"/' $(@D)/setup.py
+> +endef
+> +
+> +PYTHON_DISKCACHE_POST_PATCH_HOOKS += PYTHON_DISKCACHE_REMOVE_SELF_IMPORT
+> +
+> +$(eval $(python-package))
+> diff --git a/support/testing/tests/package/sample_python_diskcache.py b/support/testing/tests/package/sample_python_diskcache.py
+> new file mode 100644
+> index 0000000000..8ba34daf6e
+> --- /dev/null
+> +++ b/support/testing/tests/package/sample_python_diskcache.py
+> @@ -0,0 +1,9 @@
+> +from diskcache import Cache
+> +
+> +cache = Cache()
+> +
+> +cache['test'] = 123
+> +assert cache['test'] == 123
+> +del cache['test']
+> +assert 'test' not in cache
+> +cache.close()
+> diff --git a/support/testing/tests/package/test_python_diskcache.py b/support/testing/tests/package/test_python_diskcache.py
+> new file mode 100644
+> index 0000000000..d8618c1681
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_python_diskcache.py
+> @@ -0,0 +1,12 @@
+> +from tests.package.test_python import TestPythonPackageBase
+> +
+> +
+> +class TestPythonPy3DiskCache(TestPythonPackageBase):
+> +    __test__ = True
+> +    config = TestPythonPackageBase.config + \
+> +        """
+> +        BR2_PACKAGE_PYTHON3=y
+> +        BR2_PACKAGE_PYTHON_DISKCACHE=y
+> +        """
+> +    sample_scripts = ["tests/package/sample_python_diskcache.py"]
+> +    timeout = 10
 
-> Hi,
->
-> The PB2 uses an AM6254 SoC, different from the AM335x.
->
-> Do you think it could work ?
->
->
->
-> Le mer. 15 oct. 2025 =C3=A0 21:50, Arnout Vandecappelle <arnout@rnout.be>=
- a
-> =C3=A9crit :
->
->>
->>
->> On 13/10/2025 08:07, Pierre FICHEUX via buildroot wrote:
->> > Hi all,
->> >
->> > Are you considering any BR support for PB2 ? I saw the following link
->> but it's old:
->> >
->> > https://github.com/mixaz/buildroot-pocketbeagle
->>   I expect that the pocketbeagle can use the same config as the
->> beaglebone_defconfig, just add ti/omap/am335x-pocketbeagle.dts to
->> BR2_LINUX_KERNEL_INTREE_DTS_NAME.
->>
->>   If that works, we'd welcome a patch. Make sure you also update
->> board/beagleboard/beaglebone/readme.txt
->>
->>   Regards,
->>   Arnout
->>
->
->
-> --
->
-> Pierre FICHEUX -/- CTO Smile ECS, France -\- pierre.ficheux@smile.fr
->                              http://www.smile.fr
->                              https://smile.eu/fr/offres/embarque-iot
-> I would love to change the world, but they won't give me the source code
->
->
 
---=20
-
-Pierre FICHEUX -/- CTO Smile ECS, France -\- pierre.ficheux@smile.fr
-                             http://www.smile.fr
-                             https://smile.eu/fr/offres/embarque-iot
-I would love to change the world, but they won't give me the source code
-
---000000000000c236b206414037a2
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div class=3D"gmail_default" style=3D"font-family:arial,sa=
-ns-serif">So it&#39;s ARM64 not ARM...</div></div><br><div class=3D"gmail_q=
-uote gmail_quote_container"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0j=
-eu. 16 oct. 2025 =C3=A0=C2=A007:37, Pierre FICHEUX &lt;<a href=3D"mailto:pi=
-erre.ficheux@smile.fr">pierre.ficheux@smile.fr</a>&gt; a =C3=A9crit=C2=A0:<=
-br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8e=
-x;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div dir=3D"ltr"=
-><div class=3D"gmail_default" style=3D"font-family:arial,sans-serif">Hi,</d=
-iv><div class=3D"gmail_default" style=3D"font-family:arial,sans-serif"><br>=
-</div><div class=3D"gmail_default"><span style=3D"font-family:arial,sans-se=
-rif">The PB2 uses an AM6254=C2=A0SoC</span><font color=3D"#474747" face=3D"=
-Arial, sans-serif"><span style=3D"font-size:14px">, different=C2=A0from the=
- AM335x.=C2=A0</span></font></div><div class=3D"gmail_default"><font color=
-=3D"#474747" face=3D"Arial, sans-serif"><span style=3D"font-size:14px"><br>=
-</span></font></div><div class=3D"gmail_default"><font color=3D"#474747" fa=
-ce=3D"Arial, sans-serif"><span style=3D"font-size:14px">Do you think it cou=
-ld work ?</span></font></div><div class=3D"gmail_default"><font color=3D"#4=
-74747" face=3D"Arial, sans-serif"><span style=3D"font-size:14px"><br></span=
-></font></div><div class=3D"gmail_default"><font color=3D"#474747" face=3D"=
-Arial, sans-serif"><span style=3D"font-size:14px"><br></span></font></div><=
-/div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">L=
-e=C2=A0mer. 15 oct. 2025 =C3=A0=C2=A021:50, Arnout Vandecappelle &lt;<a hre=
-f=3D"mailto:arnout@rnout.be" target=3D"_blank">arnout@rnout.be</a>&gt; a =
-=C3=A9crit=C2=A0:<br></div><blockquote class=3D"gmail_quote" style=3D"margi=
-n:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex=
-"><br>
-<br>
-On 13/10/2025 08:07, Pierre FICHEUX via buildroot wrote:<br>
-&gt; Hi all,<br>
-&gt; <br>
-&gt; Are you considering any BR support for PB2 ? I saw the following link =
-but it&#39;s old:<br>
-&gt; <br>
-&gt; <a href=3D"https://github.com/mixaz/buildroot-pocketbeagle" rel=3D"nor=
-eferrer" target=3D"_blank">https://github.com/mixaz/buildroot-pocketbeagle<=
-/a><br>
-=C2=A0 I expect that the pocketbeagle can use the same config as the <br>
-beaglebone_defconfig, just add ti/omap/am335x-pocketbeagle.dts to <br>
-BR2_LINUX_KERNEL_INTREE_DTS_NAME.<br>
-<br>
-=C2=A0 If that works, we&#39;d welcome a patch. Make sure you also update <=
-br>
-board/beagleboard/beaglebone/readme.txt<br>
-<br>
-=C2=A0 Regards,<br>
-=C2=A0 Arnout<br>
-</blockquote></div><div><br clear=3D"all"></div><div><br></div><span class=
-=3D"gmail_signature_prefix">-- </span><br><div dir=3D"ltr" class=3D"gmail_s=
-ignature"><div dir=3D"ltr"><pre style=3D"margin-top:0px;margin-bottom:0px;p=
-adding:0px;font-size:12px;color:rgb(51,51,51);white-space:pre-wrap">Pierre =
-FICHEUX -/- CTO Smile ECS, France -\- <a href=3D"mailto:pierre.ficheux@smil=
-e.fr" style=3D"color:rgb(1,134,186)" target=3D"_blank">pierre.ficheux@smile=
-.fr</a>
-                             <a href=3D"http://www.smile.fr/" style=3D"colo=
-r:rgb(1,134,186)" target=3D"_blank">http://www.smile.fr</a>
-                             <a href=3D"https://smile.eu/fr/offres/embarque=
--iot" style=3D"color:rgb(1,134,186)" target=3D"_blank">https://smile.eu/fr/=
-offres/embarque-iot</a>
-I would love to change the world, but they won&#39;t give me the source cod=
-e</pre></div></div>
-</blockquote></div><div><br clear=3D"all"></div><div><br></div><span class=
-=3D"gmail_signature_prefix">-- </span><br><div dir=3D"ltr" class=3D"gmail_s=
-ignature"><div dir=3D"ltr"><pre style=3D"margin-top:0px;margin-bottom:0px;p=
-adding:0px;font-size:12px;color:rgb(51,51,51);white-space:pre-wrap">Pierre =
-FICHEUX -/- CTO Smile ECS, France -\- <a href=3D"mailto:pierre.ficheux@smil=
-e.fr" style=3D"color:rgb(1,134,186)" target=3D"_blank">pierre.ficheux@smile=
-.fr</a>
-                             <a href=3D"http://www.smile.fr/" style=3D"colo=
-r:rgb(1,134,186)" target=3D"_blank">http://www.smile.fr</a>
-                             <a href=3D"https://smile.eu/fr/offres/embarque=
--iot" style=3D"color:rgb(1,134,186)" target=3D"_blank">https://smile.eu/fr/=
-offres/embarque-iot</a>
-I would love to change the world, but they won&#39;t give me the source cod=
-e</pre></div></div>
-
---000000000000c236b206414037a2--
-
---===============0756766197128235933==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Marcus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0756766197128235933==--
