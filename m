@@ -4,73 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86B78CCD199
-	for <buildroot@archiver.kernel.org>; Thu, 16 Oct 2025 20:02:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D02B8CCD183
+	for <buildroot@archiver.kernel.org>; Thu, 16 Oct 2025 20:16:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5200080DCB;
-	Thu, 16 Oct 2025 20:02:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8602580DE7;
+	Thu, 16 Oct 2025 20:16:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FCm6NBMgXnTc; Thu, 16 Oct 2025 20:02:50 +0000 (UTC)
+ id O6N_xLIBbauc; Thu, 16 Oct 2025 20:16:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41E0580DC2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0B0180DE9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 41E0580DC2;
-	Thu, 16 Oct 2025 20:02:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 63EACD8
- for <buildroot@buildroot.org>; Thu, 16 Oct 2025 20:02:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E0B0180DE9;
+	Thu, 16 Oct 2025 20:16:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id CE8BA968
+ for <buildroot@buildroot.org>; Thu, 16 Oct 2025 20:16:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4A3F160819
- for <buildroot@buildroot.org>; Thu, 16 Oct 2025 20:02:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B52CA80DE9
+ for <buildroot@buildroot.org>; Thu, 16 Oct 2025 20:16:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2Ba5_gymFMdd for <buildroot@buildroot.org>;
- Thu, 16 Oct 2025 20:02:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5319660814
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5319660814
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5319660814
- for <buildroot@buildroot.org>; Thu, 16 Oct 2025 20:02:48 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 78BE213F89A;
- Thu, 16 Oct 2025 22:02:45 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 16 Oct 2025 22:02:45 +0200
-MIME-Version: 1.0
-Date: Thu, 16 Oct 2025 22:02:45 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251014211145.120019-1-bernd@kuhls.net>
-References: <20251014211145.120019-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <744deffb6f378241efa96d8a530dc6a1@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1760644966;
- bh=OhmUVb+9Q8PzDNln7Axgc+yfh2D+qbi9k4q8vrs1IVE=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=UAZAbe21KZ6rBzAmfYBO2ECPHVlRz6rvbJ8ANCyBbOshuR705sva5BfjuHIWyX6++
- /67GbKaJWY+dUhVGmP7Qy1elJe66OJZqG1BB/KOvXMROtBVBrVZHQlN0sH+XwFukCd
- 0sut8H3TFOiFim3kLbVH2T3TJEaNsO27wI0J/MSCKs5ClUYiMns5zt4ejxmp8k9bV1
- KNnsxTtJMR3jK4D+sUOxbPsIjBz+VPz4ewCf+x6uZA3qC0RYgm+dfX6WXk3I6UvyVT
- YtOgs418re04Q1z2i/1BMwMJPWtWX4wc+3+66GynUg56oNQVGMD8RCZldGlwnjsFks
- SKEwtIzvH9WyA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=UAZAbe21
-Subject: Re: [Buildroot] [PATCH 1/1] package/libsodium: bump version to
- 1.0.20
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DXyLzakrYET7 for <buildroot@buildroot.org>;
+ Thu, 16 Oct 2025 20:16:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0766D80DE7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0766D80DE7
+ for <buildroot@buildroot.org>; Thu, 16 Oct 2025 20:16:01 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EBA4B87358; Thu, 16 Oct 2025 20:16:00 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 16 Oct 2025 22:10:13 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 773dbbf5c1cd63c49ae3f3b890966a0df0985203
+X-Git-Newrev: 6b5a9e76837ae3ea99b32a1ce330361c6fc09503
+X-Patchwork-Hint: ignore
+Message-Id: <20251016201600.EBA4B87358@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-anyio: bump to 4.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,27 +59,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 14/10/2025 23:11, Bernd Kuhls wrote:
-> Release notes:
-> https://github.com/jedisct1/libsodium/releases/tag/1.0.19-RELEASE
-> https://github.com/jedisct1/libsodium/releases/tag/1.0.20-RELEASE
-> 
-> Updated license hash due to copyright year bumps:
-> https://github.com/jedisct1/libsodium/commits/1.0.20-RELEASE/LICENSE
-> (1.0.18 was released in 2019.)
-> 
-> Needed to fix build error with python-pynacl 1.6.0, currently under
-> review: 
-> https://patchwork.ozlabs.org/project/buildroot/patch/20251013175513.86276-17-bernd@kuhls.net/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=6b5a9e76837ae3ea99b32a1ce330361c6fc09503
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Release Notes: https://github.com/agronholm/anyio/releases/tag/4.11.0
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/python-anyio/python-anyio.hash | 4 ++--
+ package/python-anyio/python-anyio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-anyio/python-anyio.hash b/package/python-anyio/python-anyio.hash
+index 297188db48..f93986fb9d 100644
+--- a/package/python-anyio/python-anyio.hash
++++ b/package/python-anyio/python-anyio.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/anyio/json
+-md5  cb471a6d2338e026d7ba9eed50cf8fff  anyio-4.10.0.tar.gz
+-sha256  3f3fae35c96039744587aa5b8371e7e8e603c0702999535961dd336026973ba6  anyio-4.10.0.tar.gz
++md5  9bbd9262979f576a9023389e48204037  anyio-4.11.0.tar.gz
++sha256  82a8d0b81e318cc5ce71a5f1f8b5c4e63619620b63141ef8c995fa0db95a57c4  anyio-4.11.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  5361ac9dc58f2ef5fd2e9b09c68297c17f04950909bbc8023bdb82eacf22c2b0  LICENSE
+diff --git a/package/python-anyio/python-anyio.mk b/package/python-anyio/python-anyio.mk
+index 122900f3c7..431eb5f286 100644
+--- a/package/python-anyio/python-anyio.mk
++++ b/package/python-anyio/python-anyio.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_ANYIO_VERSION = 4.10.0
++PYTHON_ANYIO_VERSION = 4.11.0
+ PYTHON_ANYIO_SOURCE = anyio-$(PYTHON_ANYIO_VERSION).tar.gz
+-PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/f1/b4/636b3b65173d3ce9a38ef5f0522789614e590dab6a8d505340a4efe4c567
++PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/c6/78/7d432127c41b50bccba979505f272c16cbcadcc33645d5fa3a738110ae75
+ PYTHON_ANYIO_SETUP_TYPE = setuptools
+ PYTHON_ANYIO_LICENSE = MIT
+ PYTHON_ANYIO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
