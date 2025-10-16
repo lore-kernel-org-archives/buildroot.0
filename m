@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67FE4CCF9E2
-	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:41:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DF96CCD1AB
+	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:41:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E03C40D6A;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6504461430;
+	Wed, 22 Oct 2025 16:41:59 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ekNV0BIMIgxM; Wed, 22 Oct 2025 16:41:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 953956143E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 953956143E;
 	Wed, 22 Oct 2025 16:41:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D32A43F
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:41:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8417B40C46
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:41:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j4qa_eeLsvK7; Wed, 22 Oct 2025 16:41:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C62640D82
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6C62640D82;
-	Wed, 22 Oct 2025 16:41:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 13627EC3
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:41:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A9D2383DBF
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:41:31 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1eTIaH45fZ_i for <buildroot@buildroot.org>;
- Wed, 22 Oct 2025 16:41:31 +0000 (UTC)
+ id WjkWIn5CPa5b for <buildroot@buildroot.org>;
+ Wed, 22 Oct 2025 16:41:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B699883DD2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F27D640AE4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B699883DD2
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:41:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F27D640AE4
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:41:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B45188615A; Wed, 22 Oct 2025 16:41:30 +0000 (UTC)
+ id DE82387731; Wed, 22 Oct 2025 16:41:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 22 Oct 2025 18:39:03 +0200
+Date: Thu, 16 Oct 2025 09:57:28 +0200
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: 37ce0c6c4a4e46fefaf8b44b37def625b991078e
-X-Git-Newrev: 4c51aefc6bfd204c21c690e3f715a1df4e7f029a
+X-Git-Oldrev: f015c3882a0f41d09e417327523f2d92c2dab391
+X-Git-Newrev: be6504cecb25f28a4697495009c55a8a4fbd26cc
 X-Patchwork-Hint: ignore
-Message-Id: <20251022164130.B45188615A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/ebtables: disable
- sparc64 target
+Message-Id: <20251022164129.DE82387731@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x]
+ board/beagleboneai/post-build.sh: fix shellcheck issues
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,65 +58,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c51aefc6bfd204c21c690e3f715a1df4e7f029a
+commit: https://git.buildroot.net/buildroot/commit/?id=be6504cecb25f28a4697495009c55a8a4fbd26cc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-Commit c5d6cde7b627 ("package/ebtables: remove KERNEL_64_USERSPACE_32
-workaround") fixed build with GCC 14 for when Buildroot
-BR2_KERNEL_64_USERLAND_32 is enabled. However, ebtables configure script
-enables its own KERNEL_64_USERSPACE_32 macro unconditionally for sparc64
-target, which triggers a similar build failure. See [1].
+BOARD_DIR is not used, so drop it and quote $BINARIES_DIR to make shellcheck
+happy.
 
-Disable sparc64 target for ebtables and its reverse dependency to avoid
-build failure.
-
-Fixes:
-https://autobuild.buildroot.net/results/9a2510e0038cd13db8c3aac0122ea7a0f834fcd2/
-
-[1] https://git.netfilter.org/ebtables/tree/configure.ac?h=ebtables-2.0.11#n20
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-[Julien: add link to upstream script enabling KERNEL_64_USERSPACE_32]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 0549ed0ed1ce7b0b107ac7bd50ccf0496cf8172f)
+(cherry picked from commit 5f620e144d82d70c822f26219cbec4d45daa2c00)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/ebtables/Config.in | 1 +
- package/libvirt/Config.in  | 1 +
- 2 files changed, 2 insertions(+)
+ .checkpackageignore                          | 1 -
+ board/beagleboard/beagleboneai/post-build.sh | 3 +--
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/ebtables/Config.in b/package/ebtables/Config.in
-index ce5f67bc61..83337feec6 100644
---- a/package/ebtables/Config.in
-+++ b/package/ebtables/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_EBTABLES
- 	depends on BR2_USE_MMU # fork()
- 	# https://lore.kernel.org/all/20210518181730.13436-1-patrickdepinguin@gmail.com/
- 	depends on !BR2_KERNEL_64_USERLAND_32
-+	depends on !BR2_sparc64 # int-conversion error
- 	help
- 	  Ethernet bridge frame table administration
+diff --git a/.checkpackageignore b/.checkpackageignore
+index b8e7ca7c9b..c8aa8ee8ff 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -9,7 +9,6 @@ board/asus/tinker/post-build.sh Shellcheck
+ board/atmel/flasher.sh Shellcheck
+ board/beagleboard/beaglebone-qt5/patches/linux/0001-keep-jtag-clock-alive-for-debugger.patch lib_patch.Upstream
+ board/beagleboard/beaglebone/post-build.sh Shellcheck
+-board/beagleboard/beagleboneai/post-build.sh Shellcheck
+ board/boundarydevices/common/post-build.sh Shellcheck
+ board/boundarydevices/common/post-image.sh Shellcheck
+ board/broadcom/northstar/post-image.sh Shellcheck
+diff --git a/board/beagleboard/beagleboneai/post-build.sh b/board/beagleboard/beagleboneai/post-build.sh
+index 384b4d8745..8d94a8f1e4 100755
+--- a/board/beagleboard/beagleboneai/post-build.sh
++++ b/board/beagleboard/beagleboneai/post-build.sh
+@@ -1,4 +1,3 @@
+ #!/bin/sh
+-BOARD_DIR="$(dirname $0)"
  
-diff --git a/package/libvirt/Config.in b/package/libvirt/Config.in
-index c55ab429eb..5664f69dd8 100644
---- a/package/libvirt/Config.in
-+++ b/package/libvirt/Config.in
-@@ -46,6 +46,7 @@ config BR2_PACKAGE_LIBVIRT_DAEMON
- 	default y
- 	depends on BR2_INSTALL_LIBSTDCPP # nmap
- 	depends on !BR2_KERNEL_64_USERLAND_32 # ebtables
-+	depends on !BR2_sparc64 # ebtables
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS # radvd -> libbsd
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	select BR2_PACKAGE_DNSMASQ
+-cp board/beagleboard/beagleboneai/uEnv.txt $BINARIES_DIR/uEnv.txt
++cp board/beagleboard/beagleboneai/uEnv.txt "$BINARIES_DIR/uEnv.txt"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
