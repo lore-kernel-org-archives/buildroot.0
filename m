@@ -4,98 +4,182 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E749ACCD185
-	for <buildroot@archiver.kernel.org>; Thu, 16 Oct 2025 03:24:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5666CCD194
+	for <buildroot@archiver.kernel.org>; Thu, 16 Oct 2025 05:37:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9483D40F27;
-	Thu, 16 Oct 2025 03:24:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 70050405C0;
+	Thu, 16 Oct 2025 05:37:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7xa2kb48UKrO; Thu, 16 Oct 2025 03:24:10 +0000 (UTC)
+ id qB78kZ1Ep10w; Thu, 16 Oct 2025 05:37:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C8904170F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58908405E1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C8904170F;
-	Thu, 16 Oct 2025 03:24:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 58908405E1;
+	Thu, 16 Oct 2025 05:37:52 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id E37EA968
- for <buildroot@buildroot.org>; Thu, 16 Oct 2025 03:24:08 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 24D2C968
+ for <buildroot@buildroot.org>; Thu, 16 Oct 2025 05:37:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CA17B40BBE
- for <buildroot@buildroot.org>; Thu, 16 Oct 2025 03:24:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0B61C405C0
+ for <buildroot@buildroot.org>; Thu, 16 Oct 2025 05:37:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w9_xEET1Nz5o for <buildroot@buildroot.org>;
- Thu, 16 Oct 2025 03:24:07 +0000 (UTC)
+ id wya70-NvMZOh for <buildroot@buildroot.org>;
+ Thu, 16 Oct 2025 05:37:49 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
- envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4FCFD40BAB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FCFD40BAB
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4FCFD40BAB
- for <buildroot@buildroot.org>; Thu, 16 Oct 2025 03:24:07 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id
- ffacd0b85a97d-426ff694c1fso89883f8f.2
- for <buildroot@buildroot.org>; Wed, 15 Oct 2025 20:24:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1760585045; x=1761189845;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=to+pjQfyzfNMYHUH8u0hP0HUACQxE2+EAAG1R3Cp/DA=;
- b=m0S/168KsuPAWaaTvTqwSsGQwMqN0GndJIxz37UqLAJdWUnv8GIO7fFOrrRZB2PcPo
- pTx74wPTTCSr0bSHMI6rLX1bIYvJEHX4Ro6Rj7w8X90Y2vZlSFzvnIHbbrB/DxPQJYjO
- L/6ZjQZypQhbDzbjaUErAXNze3zI1KZ5Q3l4RHQyn2Skl8ptVhVCbnGHWFrtX9qBzXwJ
- /G8zis4u0yEcVXtVICaVZP241tGlFJ2jTlcfzicVjJGYSQnzebcxVrQ4dZsFeQOvP3O5
- 9hl0KXHac2FjnvhS6IiIx9vSYj9BZIlYkgXYCfUbFmCAh98+bA5nF0Dw6+Z2NcNSeJWc
- BGlQ==
-X-Gm-Message-State: AOJu0YzcV61v41u4WdmZOjZhZRtk/2enqznPkyUo0HDKS2I06fQmbw12
- Sr5mDX3IW1hd/ogKa2sKvgBI5GDJge1BlaSYPPpxISDgYo6adPQoet3i63bwWg==
-X-Gm-Gg: ASbGncvSqI4JOnDo4vz3ZJOAAZEE0WJE2WprKsWWMa0r1pDQKq3L4HHnAA5PHnEDgAv
- Osz8JlScb0VEzo0x71JnSXi0ZgamBSQ/hThiGvkZKf6gYM2NUr2PCiLHRZWCXg+l0GwP32/soV9
- TWfwJpvrGhe01qT9vMwaY8+XUMZqxDUFPtNs0LaP/vzW5AdQAKXUafiGFLHh7HCdZ/MaIKfK2ui
- 74j41Bu4cvivsjXVxqYJXpco1Ry0s8LHVTRd+4vxTTaEp/ildo2/6kwkf4KtQDpy8M+oE96E+zQ
- 65Q47NDdvyQ/HKktGFLIXggMnxJkNKkpvx0MFX4M6dwoRbxMgFx7Y9aP/cpvqXM5RQkGMnQUucm
- osYPA1WCqkDpBMGlSoxLb3SFIoPeLMZgtsZE1i+fT32eys8EZqKqtsS7KC5nOOIfpC+v5LYUUmQ
- coUPqrOGw=
-X-Google-Smtp-Source: AGHT+IGgr3VQihsuF67/ZgJB5Sz4U6rlT65AOkrrsiwpjI92j0ORfdU+2Qm3sqzt1kOZ3xiM3GrhNA==
-X-Received: by 2002:a05:6000:420a:b0:3ec:1154:7dec with SMTP id
- ffacd0b85a97d-4266e6c9755mr18611072f8f.25.1760585044609; 
- Wed, 15 Oct 2025 20:24:04 -0700 (PDT)
-Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-426ce5cfe74sm31623569f8f.35.2025.10.15.20.24.04
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 15 Oct 2025 20:24:04 -0700 (PDT)
-Message-ID: <68f06554.df0a0220.122d07.68bd@mx.google.com>
+ client-ip=2a01:111:f403:c409::1;
+ helo=ma0pr01cu009.outbound.protection.outlook.com;
+ envelope-from=esakkiammal.murugan@iwave-global.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9EA244059E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EA244059E
+Received: from MA0PR01CU009.outbound.protection.outlook.com
+ (mail-southindiaazlp170100001.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c409::1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9EA244059E
+ for <buildroot@buildroot.org>; Thu, 16 Oct 2025 05:37:48 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=OEsyk1PiAhpRKMgaJo6NPzpMTZkCnIgPaKyBZbOIB0o8pkMovqp8w1L2VDnRp9Q76x0taucULSle9TgQw34OfGJAikOKVs7mTL25wynqvYaMZN+Rgc85bTdHsFqgjreo7nnraEbpJeH4jHlNtxBJR5UYzZA4RDCmQqhiveQwiInCtdKMtqSGwLi7/Fx+YPhfwFViMtl0lvBJxSM2RVqRCyho3h7Ux2qwCr0dAhCi6yQ6VGINQTcZ1F+ac35UqPOwvI+orlu1VghGNzptBOPl2eAzqIb+odmKHiJ/mEtpjSn6pKxJAw7V70BHIb0LGZSAmVTuBO0YHoNiO0uC743wKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BwGLqjKYB0arJCwBdRnU5UqDMdOf0ccrkcDnvSMwW/I=;
+ b=TJKLlC0FP44QYEymoa+36hrRwmOa9FfHveoPbwYXZQcNlAkJ7U116kjbMQPTTOMeu8Y/avHWQ0N9Oahni0KNJuMETp9woH0nGNrAM9LmV6QKn6Su+MOiSGYneiNoyypnPVoiKtNFbd3GvOQx/Q89nIPu7wdLHfwz/jOA0Be2g6s7W0ho71evoRN1eMm4EGQvK1M6aZcKuGm53bU0xflf61Xl8xkwbgY17dgf20MZF11UjLJkEWmH7zRmFQ2tjXa0VxCNdHN+ltFNZImASuk0gmB6847/qKbFKu9bd0eehyPoXGBoMG70EE0pARyhjzEltr1z4dj/E6rMb8p9XUM7bw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=iwave-global.com; dmarc=pass action=none
+ header.from=iwave-global.com; dkim=pass header.d=iwave-global.com; arc=none
+Received: from MA0P287MB2448.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:122::11)
+ by PN0P287MB0264.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:e7::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9228.12; Thu, 16 Oct
+ 2025 05:37:40 +0000
+Received: from MA0P287MB2448.INDP287.PROD.OUTLOOK.COM
+ ([fe80::fafd:97ba:ad13:4c1e]) by MA0P287MB2448.INDP287.PROD.OUTLOOK.COM
+ ([fe80::fafd:97ba:ad13:4c1e%5]) with mapi id 15.20.9228.012; Thu, 16 Oct 2025
+ 05:37:40 +0000
+Message-ID: <5eb375f3-d026-4592-81f4-462548717d61@iwave-global.com>
+Date: Thu, 16 Oct 2025 11:07:38 +0530
+User-Agent: Mozilla Thunderbird
+To: Fiona Klute <fiona.klute@gmx.de>, buildroot@buildroot.org
+References: <23d1f4ad-241a-4fe1-9db0-08bffa4775b6@iwave-global.com>
+ <45b0422f-620c-4db5-9a35-423466de2db5@iwave-global.com>
+ <584f433e-3ace-4493-a073-7cb92eae6d08@gmx.de>
+ <3ac2065a-8ac7-4a59-9889-51fce1eae53d@iwave-global.com>
+Content-Language: en-US
+In-Reply-To: <3ac2065a-8ac7-4a59-9889-51fce1eae53d@iwave-global.com>
+X-ClientProxiedBy: MA1P287CA0018.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a00:35::27) To MA0P287MB2448.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a01:122::11)
 MIME-Version: 1.0
-To: buildroot@buildroot.org
-From: Buildroot Notifications <buildroot.notifications@gmail.com>
-Date: Thu, 16 Oct 2025 03:24:04 -0000
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MA0P287MB2448:EE_|PN0P287MB0264:EE_
+X-MS-Office365-Filtering-Correlation-Id: a25eccd6-865e-49c1-a830-08de0c761efc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+ ARA:13230040|376014|1800799024|366016|8096899003|13003099007; 
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?TXQxbHZhRkI0QVliUjZ3WEE0SS9OQkFqRDRhTWt1UXVCVlc4YVBIeFMrcGVy?=
+ =?utf-8?B?VFJTb3lkYXRjVTJrckJkam01TktiZ3U3QzM4OHpubG5vNVliOE01bzZHZXZo?=
+ =?utf-8?B?R0xtTVFzakQ2M3hTTmtMQmdXN20yaGdVNXdQMDdxSE5jckhSNitCQURoSEhK?=
+ =?utf-8?B?TWhZY2pndkJ6N1dTZVljKzN3K1BqSEdzWklieVMxUzZKaTk0MEMvSkNGQS9Q?=
+ =?utf-8?B?blpxeVViczRWNzg1TW1UYlhRckhPOG9BUHNLNkQrcjlmOE9VTTlpUHVIYXVB?=
+ =?utf-8?B?UHFmamRPNzU5TFJuKy9rb0dsMXFIaWk0U3g5cTZValFXeitFUzB1NlJhcXBO?=
+ =?utf-8?B?eEt4cTY4RHh6NVE1TG05S0hEODJzNU5nSGx6NHprUW55eElLS3lrN1U5TXdl?=
+ =?utf-8?B?akQ0K1NlK21zQ2NNdC9XamQ3azEzRGFzRHU2MzFtSWpaSmpObTVucE04eEZq?=
+ =?utf-8?B?TVNTd2JaVnhYYko4MTc1b1JYWGYvQzFGclQ5T3J4QXRFYXZIZytkV2pwNW44?=
+ =?utf-8?B?b3dnaHJIemJ0b3RLZitkUll1WU1zeXJSVDd5cFRSUEdZc202dEIzaUFJVzZp?=
+ =?utf-8?B?bVZDMEMyQ0s4RldiNElmd2lyc3p5UTA3UTZzLzE1WjdydEE4elpNbkZ2eUJM?=
+ =?utf-8?B?bU1RZnlGM2xOVW0vZG1La3JuMXFvOXVtbE5zdS9JY29Pb2hoa2Fnb3FMWUtM?=
+ =?utf-8?B?YTRmeFdPYTByeXB2S1BxcWRrN0R0KytRMlp0ak0zZzlJd2t1bkd2eDE0eTlD?=
+ =?utf-8?B?ZnZnTkdIK2RldjhUQUpMSk5qeGdVYngrajRVeHV4czBlTlBaK3ZFTmdDN0tE?=
+ =?utf-8?B?U25QeTVFVW1HTThNU1lRZTVkZWZRWFc2TlduVE5pM1Vtb3MvcGdjNlFGMndw?=
+ =?utf-8?B?YnR1eTd5YmFGSHJ2R0RNMm5ITy9XWWtZK2tvWmJHUEhDSWk2bGh4Wm9Ub2xI?=
+ =?utf-8?B?eUpYL2l3MVJMZVBGaHpxMTBUNTBodi9aQUV3UEllRGpjZFpmMHpaVmJ5Yjcw?=
+ =?utf-8?B?NnY5WXVvTGdOKytGNGN4ZzhDNVRvcXY1MFRJUDhvcng0SVdhVi90cUJ5RXl3?=
+ =?utf-8?B?UDdLdFZIZHVrNnAvb2h6cy9nekpYVnUyVGFGaEJ4MkYzOFlicjd5UDFTR3NC?=
+ =?utf-8?B?bWdNWTRjdXFPS1ZUSmdGa3FQYlFteHJubWxUb2RYd2ZEZGdJemljRUM3cmNX?=
+ =?utf-8?B?RVVGcytqMEsvNFprdndaeUo0OUF3WncrYjBKU0dpWG1PRlAzeVJZTEJ2d1Ar?=
+ =?utf-8?B?TFR1WkZmS2ZXTEtTWmpweHp2a2NLMlYzbE03amY4Z3BSS0tLQi96RjFOUkt4?=
+ =?utf-8?B?akZmeHdkelR6bURza1dZUUZzWEpodFdMdVJHU296T0ZXSzdhR0JFN0d5cmEr?=
+ =?utf-8?B?K3VvWXlFTTlpSTZPQk1qTTA0cUd1ZXVqaHA5RTNrc2dZeDlVK2VJQUhWanRi?=
+ =?utf-8?B?UU5UeW1kZUowcVgwUGRVbjFCQXJqQXNXeEQ5dWw0Zm9PLzQvVjFiaDJrSHVv?=
+ =?utf-8?B?WHFLT3VYOFFKKy9uQmZ4QXBVMmRheU9YcEtsZEJPU3BwYU5Zc2xacW5uY2JT?=
+ =?utf-8?B?M003dllDMlU5TUd3dVdjWGswSnBTYTl6WnJOYUV3VXhpMWo3ZmZWTEFMVkNV?=
+ =?utf-8?B?QU95eXFVUXMyNWIyUVpPT01rZHBYUVVXWW10aGxXc044NG1LTXJmMGFYd0Rm?=
+ =?utf-8?B?WFg4QXhKM2VCZ2FabW5DVXhqWm5BUGVMTDZydjFJVVdEYmZUSWFUNGdWWEIy?=
+ =?utf-8?B?YmhhTnRCUXRMMjVLYUcxaDJ3UTNnakhtY1hINm1GKzlseDlZRlVqNGFIbjU4?=
+ =?utf-8?B?bDFqbXJORGZkUmh2RzNqOUc3SDBMN3VRTU9rV2lENm53aWdOR0JwSGlHUXVE?=
+ =?utf-8?B?Mmp6VGRoZ2NkRWlBdjhEeXdRZkZzVFNRZUpCZENaSk95cC9EV05rb1pIOUlO?=
+ =?utf-8?Q?1flYtLtSnYFCmdEeo2RNT466qlaoCRRA?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:MA0P287MB2448.INDP287.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230040)(376014)(1800799024)(366016)(8096899003)(13003099007); DIR:OUT;
+ SFP:1102; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bXVNb0NYZmUrbXpuMFZYUkRXYkh2UHh6S0d6aE55eUJlZkJtU2hUYStURkha?=
+ =?utf-8?B?MWFTbmFtUnBOMnBIY3A4bXhuVXB1U3pZeHlkcU5DMnZ6KzlXZUI4Sk1iSXpJ?=
+ =?utf-8?B?bXpoc3JyUjR4elN2RTdoMlVadGxwYnBlQzl0OVFRc295dTV4b1Zwdi9Nci9X?=
+ =?utf-8?B?QitEOW5YT2FCd0ZKaUdBRTVvQVhEWUMrYzdSdU00MWxIN1VXSFpzRTlJTHQr?=
+ =?utf-8?B?M1NxSlhrZWc4UDRDbkVVYXl6Zy9aenZwd0FURElyTWszN3QyVGk2TGEzOXlw?=
+ =?utf-8?B?Y2xIc3FhMHdNQWhaZGVRWEZhTUY0b1U5dndkaWg2NElpVUZ3Y0hVSWZWMnhN?=
+ =?utf-8?B?bTRRbStqbjJvZm96d0NpUnBRY3c5WmVWWDhXVllYOWpKR2lBN3BSVUhQdnVj?=
+ =?utf-8?B?OGdtUURucTc5RTR2Rm1ESCtFWkliTHlmYmVQNTFEeGNFSjN1VE9IdEhaS2JJ?=
+ =?utf-8?B?cWNYZDZSK1N4UnN1QWpWTmFVTlRBeDROYlZwZTJHYjUxdXdxZU03SjhFN2Jh?=
+ =?utf-8?B?NERkV1A2OE8ralBNUTF0eXN1NCtnR3htZjh4dE5NdVlJSmRBNlhHTDdRZXkx?=
+ =?utf-8?B?UHNMdmNqb0tHM2Z6S3pCV2c4UE4ycWRUN3RPNHB0Q29iVlJxV210TDZXVnNC?=
+ =?utf-8?B?Mmk4SS85T0x3VzR5YTNsdmxpNFY0ZGdkZWhEa3BWcFhuaDVkem5tK3pGNXpP?=
+ =?utf-8?B?dGtPQVkvNUp4MzBINVRWVkREeTRRRW1JV1gzUCt3cDFhMVhWM2U0MEpGTHBJ?=
+ =?utf-8?B?aW5kVFptdElLMWZUakpaSFFDYnlYMG04WkF6THlYVTcvQ3RMOXJ2QVRyd25J?=
+ =?utf-8?B?UnR2VW10MGoxOXhXL2sxdncvNlR4NmRLQm5lOHJlWkFmUm5ZSlNkdFhFbFZ3?=
+ =?utf-8?B?RjJpeFNKdlpSdzE4RUpCaUtUVitGa1FreHZHNHcrTzdCUkNwZFBkckRtNEI4?=
+ =?utf-8?B?MHZlZytpWGdJRXdsb2NoMHVPUzVjQldMQ3UvcG9Dek8wT2VUekVpSXNPM3li?=
+ =?utf-8?B?Y1hxTEFFaG1Zd1I4Z0kyVHBjanpPU2ZyeGgreURGSHdyc3d6Y1drUnFEaTNl?=
+ =?utf-8?B?cTc0WEFwZDc3QjRFZ3AxNmxNNUVPSmtjRVNUVGpyMjFiS1hLZThadnV0eUNj?=
+ =?utf-8?B?anJXSHVRN1BUaDFiNHFXNDN1U2N0dkZHUjFubDJWNlRRc0lEL1Y3ZWhFd3RV?=
+ =?utf-8?B?VUNzcGlhZ3R4bzM1Y2lpYTUrOHBoMkpwUlU0L1FQMmNpekpkS3F3Y0c5d0lP?=
+ =?utf-8?B?T1ZGdC96ZVBzTTR0RGhoM01LSWsvdFljdTV5aGtSUGt2QmZWbjVtWFZka0s0?=
+ =?utf-8?B?OSsvYW9rY3Z0NzBSK3VLb0QyT2t1aFJIZm1DYjlKRnNCRVgvRFRyeWx1SFRX?=
+ =?utf-8?B?YUVCa1NGN2YxcnNqL1VweldRLzlKZGFVT0FiSG9hMGpHNE40cEFXZXU4ekFi?=
+ =?utf-8?B?d1lDS1VQMlpnVFY0NWRwZ3dWT0Vvc1M4KzhJSnVRb0RYTGxGNkhnUEc2VVJ2?=
+ =?utf-8?B?L0hRT2ZOaDFWR1R5SDhEL094eHp3dk9pQ3RqREszdkRYV0xYeFBFaStmOXhM?=
+ =?utf-8?B?MGZuMEJOZnRmS0s0emFFVTZQajZNdkh0dzkwd2huZWxDRDBXdlBJVi8yNzFr?=
+ =?utf-8?B?TG5LUEZrRWVoM1JkZkQxb2Y0SFNYTDdacW5KbVV3a0RBM2FuV3p0R0xRZG9D?=
+ =?utf-8?B?cTlDbUdpSTk5WVJkbnYyRlhoMFNmSzE0dWZsY0U5QllsSlY4Rk5rZzhOY1pV?=
+ =?utf-8?B?RDRyanZGVzdUWEhla3dUMyt3cjlRWUpkUU5qcDRYQjI5bmxSV3d2c1VYVUNP?=
+ =?utf-8?B?OHVzWlh6MUVQMDc4V3lKd2J0bFR1T29icGxUV3Z1Y3FCUXp2WVVNNHVPU3JH?=
+ =?utf-8?B?c2hoVFZvTy96dTFVaFFEUFhicWU5VmVkcW9xY0hsa1F5QlZDWlI3RlN3d1N5?=
+ =?utf-8?B?YlZXd0l0RERoZS9hdURYc2RtS1pNOHJNQVl2Zys5anFDbk0rRWRWcXRaNy9P?=
+ =?utf-8?B?bW5RbXluQW9PeE5pTkhidE55VHVvSmtpNno4VTF0cEFSTUpwS2VTZFpXOWEz?=
+ =?utf-8?B?a1FhT3pqVm51TXBsVngzeHJZSkVCZHpQZWlHekl4S2hRRy9lejh6U2RlN0Jz?=
+ =?utf-8?B?TENnb0RuaTZZNTJTUTdRWnFpSkM3M1phWDc3VXF3WDhGNlVJVHlUaXRsR1Jx?=
+ =?utf-8?Q?yiNxT+rImZM+dXf7Vl+eM8I=3D?=
+X-OriginatorOrg: iwave-global.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a25eccd6-865e-49c1-a830-08de0c761efc
+X-MS-Exchange-CrossTenant-AuthSource: MA0P287MB2448.INDP287.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2025 05:37:40.0346 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 507ae903-cc48-4d6e-bdb6-35278120a345
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: V0ldgDSTYD92qwgcLKxrVzkO+7azP36qKIgrQ20Ntz4SVlX22Lvy8teEwGRwBV/OoX5DbUX+vnnXRVEEuv8PDCylQ/7pfuBR4ttD2F9qsi9oj7ZHRxIh+aKnQ3TUF+nq
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN0P287MB0264
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1760585045; x=1761189845; darn=buildroot.org;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :message-id:from:to:cc:subject:date:message-id:reply-to;
- bh=to+pjQfyzfNMYHUH8u0hP0HUACQxE2+EAAG1R3Cp/DA=;
- b=i0uOZyKdp0la4DYxcWlXFC46oKcP09b++iuj2hmk5sWKBV+llKcTWvyvZ0eR8plE33
- YjbjHscJH2UUJjm0WE/wKZYlfu9zD+J+GfTKXmvXUX0VRI38HaBvKUSj2LQJ3/S4Lc10
- GBieQxQLvHfhCOWVHG1IGxDhds0SxNugl6Jir5rhtN1g1uiI76P9XDkNyRMzfp3kTnfu
- 9re1yYOPRvoEohdGMzOxiB9/BFAHIzVE5zuZTFcB+/wZ0NoAlXzfkEsk7HC3Aofu2IYq
- 2sDJznoUpw2ZhiigRLKVrKLiq16ACUZCsi7cEXNR9QW3VSaEEFqXilmnGirHfZBgGjrC
- U7ag==
+ d=iwave-global.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BwGLqjKYB0arJCwBdRnU5UqDMdOf0ccrkcDnvSMwW/I=;
+ b=HnAwpwfAiUC+q3CIfAd1UdDbJ5K5Xb7FUIicrjfI3KKOU74MyaT6NVR1ClvWf5AqqtmmicXtRtsK2m7lNzCaNyfTyehVu//fnVUi2nLaVRD7CaRD54UWrki7b+ukN2renICjuRNm0x/SjQn3jqdWkEosTkKA4T2ZmB83aGrYyGtoCETnAviYKK9UO/jrNVvzUOa4u69vqnuuhC/iJq+FCwZsvEAngNg9qgg1b42Dpe072Uj2Rk4TZtnhbJpx9FmVPxpRdz9F1zCBeubeWHKkOpRNL7ZD2zoB1tNDC44VtiJAi4TIqtP/JRkFInEuGY6Ojtk5I3C91kprStaQmVza4g==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=iwave-global.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=i0uOZyKd
-Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2025-10-15
+ unprotected) header.d=iwave-global.com header.i=@iwave-global.com
+ header.a=rsa-sha256 header.s=selector1 header.b=HnAwpwfA
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=iwave-global.com;
+Subject: Re: [Buildroot] Implementation Procedure for i.MX93 Custom Board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,236 +191,369 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Esakkiammal M via buildroot <buildroot@buildroot.org>
+Reply-To: Esakkiammal M <esakkiammal.murugan@iwave-global.com>
+Content-Type: multipart/mixed; boundary="===============5718138633982159027=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+--===============5718138633982159027==
+Content-Type: multipart/alternative;
+ boundary="------------INtxJRjIqIQFayvkWxr8qz6B"
+Content-Language: en-US
+
+--------------INtxJRjIqIQFayvkWxr8qz6B
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
 Hello,
 
-Autobuild statistics for 2025-10-15
-===================================
-
-      branch |  OK | NOK | TIM | TOT |
-  2025.02.x  |  6  |  5  |  0  | 11  |
-  2025.05.x  |  4  |  5  |  0  |  9  |
-  2025.08.x  |  3  |  6  |  0  |  9  |
-    master   | 40  | 74  |  2  | 116 |
-
-Classification of failures by reason for master
------------------------------------------------
-
-               bctoolbox-4.4.8 | 3 
-               iproute2-6.17.0 | 3 
-                   perl-5.40.2 | 3 
-             dahdi-linux-3.3.0 | 2 
-                 dc3dd-7.2.641 | 2 
-                enscript-1.6.6 | 2 
-               graphene-1.10.8 | 2 
-    host-llvm-libunwind-20.1.8 | 2 
-            igd2-for-linux-2.2 | 2 
-                  iozone-3.508 | 2 
-          linux-5.10.162-cip24 | 2 
-                  linux-6.17.2 | 2 
-                 linux-headers | 2 
-                    mpir-3.0.0 | 2 
-                openssh-10.2p1 | 2 
-procrank_linux-21c30ab4514a... | 2 
-        s6-linux-utils-2.6.2.1 | 2 
-                  sdl2-2.32.10 | 2 
-          aardvark-dns-v1.16.0 | 1 
-                 agentpp-4.6.1 | 1 
-               asterisk-22.3.0 | 1 
-             berkeleydb-5.3.28 | 1 
-               dvbsnoop-1.4.50 | 1 
-                    eza-0.23.3 | 1 
-                     fd-10.3.0 | 1 
-                      fio-3.41 | 1 
-       freeradius-server-3.2.8 | 1 
-  gobject-introspection-1.84.0 | 1 
-                 host-gdb-15.2 | 1 
-httping-a1c5fdcf289cf7d1d82... | 1 
-                 lcdproc-0.5.9 | 1 
-                lesstif-0.95.2 | 1 
-libdbi-drivers-0bfae6c43134... | 1 
-libdill-32d0e8b733416208e04... | 1 
-libesmtp-v1.1.0-14-g335ee8d... | 1 
-               libglib2-2.84.3 | 1 
-             libgphoto2-2.5.27 | 1 
-                 libiconv-1.15 | 1 
-              libopenssl-3.6.0 | 1 
-     libphidget-2.1.9.20190409 | 1 
-                  libsepol-3.9 | 1 
-                  libsvg-0.1.4 | 1 
-               libtheora-1.2.0 | 1 
-                  libva-2.22.0 | 1 
-                 lockdev-1.0.3 | 1 
-       matchbox-keyboard-0.1.1 | 1 
-                    olsr-0.9.8 | 1 
-      passt-2025_06_11.0293c6f | 1 
-                     pound-4.8 | 1 
-                python3-3.13.7 | 1 
-                 rtptools-1.22 | 1 
-         s6-networking-2.7.0.4 | 1 
-                    sdl-1.2.15 | 1 
-uclibc-ng-test-132c6134d691... | 1 
-                  vsftpd-3.0.5 | 1 
+I have enabled the MWIFIEX Wi-Fi driver in Buildroot for my platform. 
+During validation, I observed that the driver fails to initialize the 
+firmware properly. Please find the log details and observations below.
 
 
-Detail of failures for master
------------------------------
+Steps Performed
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   armeb     |      aardvark-dns-v1.16.0      | NOK | https://autobuild.buildroot.org/results/9491218eacf80e116848257f008f52e54b3d921d | ORPH
-  powerpc    |         agentpp-4.6.1          | NOK | https://autobuild.buildroot.org/results/a2b869bf24b0f2f10b0ec7e26b9af73559b70934 |     
-loongarch64  |        asterisk-22.3.0         | NOK | https://autobuild.buildroot.org/results/dd49d4633cfa1ea0c998f87a7527618639b3786f |     
-   mips64    |        bctoolbox-4.4.8         | NOK | https://autobuild.buildroot.org/results/c8dbb9ef8c0f3823258a1f50cf048a8890df87b1 | ORPH
-   s390x     |        bctoolbox-4.4.8         | NOK | https://autobuild.buildroot.org/results/f475ea19bb103e33a572b93dee99eda0beaac552 | ORPH
-loongarch64  |        bctoolbox-4.4.8         | NOK | https://autobuild.buildroot.org/results/d71383f5c9ac9ee24cfbe18fc5b6c0c0d4d0350b | ORPH
-   x86_64    |       berkeleydb-5.3.28        | NOK | https://autobuild.buildroot.org/results/536c12e621ced4dd20e910243d5dcb01c8004e05 | ORPH
-  aarch64    |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/d7a3e20fe46ea58365f9b88d7e2d50f84ab5120f | ORPH
-   arceb     |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/acf5a8b1fba6540724239ce9e49691c93eb50676 | ORPH
-powerpc64le  |         dc3dd-7.2.641          | NOK | https://autobuild.buildroot.org/results/caf571d795e550868b2591377e8d42845fb6fec5 | ORPH
-powerpc64le  |         dc3dd-7.2.641          | NOK | https://autobuild.buildroot.org/results/4ee4e39ccf4656345bcd28fcb9a31c2169c0e890 | ORPH
-    arm      |        dvbsnoop-1.4.50         | NOK | https://autobuild.buildroot.org/results/f3b5d4430df3b3c81fe6e354008489b4a709284c |     
- aarch64_be  |         enscript-1.6.6         | NOK | https://autobuild.buildroot.org/results/ece0da5039a74cce04db394d4e6cd6688e5cdb62 | ORPH
-  sparc64    |         enscript-1.6.6         | NOK | https://autobuild.buildroot.org/results/8c4be4038ae7dc0a77ddc065b730234cb462048c | ORPH
-  powerpc    |           eza-0.23.3           | NOK | https://autobuild.buildroot.org/results/30cc35813bc0375f9010b596037e8c6621775fbf |     
-   x86_64    |           fd-10.3.0            | NOK | https://autobuild.buildroot.org/results/7e80af1085564a1eef54d2c690954a786f972926 |     
-  mips64el   |            fio-3.41            | NOK | https://autobuild.buildroot.org/results/19a34b3535d4d39904d209c780b3574a2c45722a |     
-   x86_64    |    freeradius-server-3.2.8     | NOK | https://autobuild.buildroot.org/results/4c198cab14cf8d3962180b7cba70b3f80da5c7d8 |     
-  aarch64    |  gobject-introspection-1.84.0  | NOK | https://autobuild.buildroot.org/results/d174a170c8ac1ec668988a9ff102a2dcfd5bcf36 | ORPH
-    sh4a     |        graphene-1.10.8         | NOK | https://autobuild.buildroot.org/results/155ea2a9fbda84fae01ee0a95494349164254326 |     
-   sh4aeb    |        graphene-1.10.8         | NOK | https://autobuild.buildroot.org/results/ddc3f52fd9c296a633c11b741a06ab01b3a160d7 |     
-   mipsel    |         host-gdb-15.2          | NOK | https://autobuild.buildroot.org/results/af4191fea89de544841dd90fb7cf4095cef587ef | ORPH
-   armeb     |   host-llvm-libunwind-20.1.8   | NOK | https://autobuild.buildroot.org/results/70a74805c4415a50674b992bcec6b3b9d01a4de6 |     
-    arm      |   host-llvm-libunwind-20.1.8   | NOK | https://autobuild.buildroot.org/results/a02ff3dcfe23078b1c74137d226f1ec9411f2fea |     
- microblaze  | httping-a1c5fdcf289cf7d1d82... | NOK | https://autobuild.buildroot.org/results/7402bcb1633bcdbd437c9974bd33a3c65fc81238 |     
-  powerpc    |       igd2-for-linux-2.2       | NOK | https://autobuild.buildroot.org/results/bcc904fc06ad6ea8de825a4edd658c1ae37ac16c |     
-  mips64el   |       igd2-for-linux-2.2       | NOK | https://autobuild.buildroot.org/results/33be64232b4fb4916c26f759ab0d58afa8f30d1e |     
-    arc      |          iozone-3.508          | NOK | https://autobuild.buildroot.org/results/5ef74d547ee95c89fb839001c10fac8bd23cf298 |     
-   sparc     |          iozone-3.508          | NOK | https://autobuild.buildroot.org/results/f9acd07b8f8deb9aaac7795e0ddb5ff5a37865a8 |     
-   s390x     |        iproute2-6.17.0         | NOK | https://autobuild.buildroot.org/results/82ec7da13e4e360a6a9bf899a675f2f49ea467f7 |     
-    arc      |        iproute2-6.17.0         | NOK | https://autobuild.buildroot.org/results/dee92cdd10749444964473310ca5810bc56b1bc6 |     
-  aarch64    |        iproute2-6.17.0         | NOK | https://autobuild.buildroot.org/results/bdcadb0cb4d5a7347df699b38e54e62504921639 |     
-   x86_64    |         lcdproc-0.5.9          | NOK | https://autobuild.buildroot.org/results/d1cbfbd6c99567b561079a80f98492e97f3a1847 | ORPH
-  aarch64    |         lesstif-0.95.2         | NOK | https://autobuild.buildroot.org/results/73c011313e5a9c0e40b31e1dddc484dfa1275b47 |     
-    or1k     | libdbi-drivers-0bfae6c43134... | NOK | https://autobuild.buildroot.org/results/66ed7157651f4f467be14e18b34e419f43291fda |     
-  aarch64    | libdill-32d0e8b733416208e04... | NOK | https://autobuild.buildroot.org/results/9b967e0352c0d51334378573c7602adc795a6b51 |     
-loongarch64  | libesmtp-v1.1.0-14-g335ee8d... | NOK | https://autobuild.buildroot.org/results/d122bb08dcc25bd2846c560c0b6ba656a7075212 | ORPH
-    arc      |        libglib2-2.84.3         | NOK | https://autobuild.buildroot.org/results/e3309ab2116f43c018a0c0fe80959ce093281832 |     
-    mips     |       libgphoto2-2.5.27        | NOK | https://autobuild.buildroot.org/results/3679e00d5f4be0c391f9349fbefa224792d360fd | ORPH
-   xtensa    |         libiconv-1.15          | NOK | https://autobuild.buildroot.org/results/7bdff487f048e1062cbe304a34f65be9503da5cf | ORPH
-  riscv64    |        libopenssl-3.6.0        | NOK | https://autobuild.buildroot.org/results/7d5b5d648ca8c588f0b81c1e943fa2beee7ebeca | ORPH
-  sparc64    |   libphidget-2.1.9.20190409    | NOK | https://autobuild.buildroot.org/results/80d3d1ab3865b4aeee9ae6c6d700666529bcdfbf |     
-   xtensa    |          libsepol-3.9          | NOK | https://autobuild.buildroot.org/results/4dca884dd1d4ca9e34abf1d9aa6ab1bce64ed354 |     
- powerpc64   |          libsvg-0.1.4          | NOK | https://autobuild.buildroot.org/results/a35e225cd9597fe6732eb89e3811457cb24394e8 |     
-   armeb     |        libtheora-1.2.0         | NOK | https://autobuild.buildroot.org/results/deb925342e12a0f51529df03c7cbb9e1043ff9e4 | ORPH
-    or1k     |          libva-2.22.0          | NOK | https://autobuild.buildroot.org/results/1cf8e1e6d1e688278f873e7ce22df003e020217f |     
-   s390x     |      linux-5.10.162-cip24      | NOK | https://autobuild.buildroot.org/results/bdaaf6767f8c239bbf22e4619b2d6944ef951b2e | ORPH
-    i686     |      linux-5.10.162-cip24      | NOK | https://autobuild.buildroot.org/results/78ca77854cc51fe79acb371210b2d889c531a1f0 | ORPH
-   mipsel    |          linux-6.17.2          | NOK | https://autobuild.buildroot.org/results/0ea186645b2ff31d148ef500de0dc24cb39c6ef8 | ORPH
-    i686     |          linux-6.17.2          | NOK | https://autobuild.buildroot.org/results/ac49fc99abbe887853724ffdd0e2eb22f58c28a7 | ORPH
-   mipsel    |         linux-headers          | TIM | https://autobuild.buildroot.org/results/46d35621cebcac56804aeb1fb0edf4f2631101cc |     
-   sh4eb     |         linux-headers          | TIM | https://autobuild.buildroot.org/results/f11847b24c37e6bcedd42af3c0874dd0573fc47a |     
-  powerpc    |         lockdev-1.0.3          | NOK | https://autobuild.buildroot.org/results/79d7aee2eb263378bbf2f87184c017958ff776e0 | ORPH
- aarch64_be  |    matchbox-keyboard-0.1.1     | NOK | https://autobuild.buildroot.org/results/e522516e5d0f502a951a0c06b7785076e0c3c01c | ORPH
-    mips     |           mpir-3.0.0           | NOK | https://autobuild.buildroot.org/results/4e52998218280ae5493b47b2ab228bcbee904884 |     
-  mips64el   |           mpir-3.0.0           | NOK | https://autobuild.buildroot.org/results/66c1b1633e29621ba0670ecd45b3ce98879a27a6 |     
-powerpc64le  |           olsr-0.9.8           | NOK | https://autobuild.buildroot.org/results/f9ae5116e7ee043529cf91ae817e553a3a9262a8 | ORPH
-loongarch64  |         openssh-10.2p1         | NOK | https://autobuild.buildroot.org/results/75876c18c5c651705049b478431bedb7211df3ec | ORPH
-powerpc64le  |         openssh-10.2p1         | NOK | https://autobuild.buildroot.org/results/59ac9706bb273950b703d1ae3d2bf8d21c103867 | ORPH
-    i686     |    passt-2025_06_11.0293c6f    | NOK | https://autobuild.buildroot.org/results/8a3542f3b6e7887cc1ec305d6c360c8047d2d739 | ORPH
-   armeb     |          perl-5.40.2           | NOK | https://autobuild.buildroot.org/results/69b87352473d159421abcc380774106b9adcaa7b |     
-  mips64el   |          perl-5.40.2           | NOK | https://autobuild.buildroot.org/results/f7a1f21bdb70a03684b7b8b02b119421d056eda0 |     
-   xtensa    |          perl-5.40.2           | NOK | https://autobuild.buildroot.org/results/fb154d1145926d1e07e2c808f16b3e9cae87ad66 |     
-   mips64    |           pound-4.8            | NOK | https://autobuild.buildroot.org/results/ac28bb4fad5110baf76f185885ec9bf4027fd10b | ORPH
-    arm      | procrank_linux-21c30ab4514a... | NOK | https://autobuild.buildroot.org/results/ee4e9fa1f2716a2850aa8deb4bd2603499ddef0e | ORPH
-    or1k     | procrank_linux-21c30ab4514a... | NOK | https://autobuild.buildroot.org/results/e1fd7a367779307cb11220a2eb39c6f62e5e3742 | ORPH
-  sparc64    |         python3-3.13.7         | NOK | https://autobuild.buildroot.org/results/9d71300d0f393d781a6f4c3c1105c237c19cbd6f |     
-    i686     |         rtptools-1.22          | NOK | https://autobuild.buildroot.org/results/3529e932012ed7ad45e1178f1f1e7f60715506bd | ORPH
-    m68k     |     s6-linux-utils-2.6.2.1     | NOK | https://autobuild.buildroot.org/results/a89802e1f143be22047cfdbb02c4487e0a6389ad |     
-   arceb     |     s6-linux-utils-2.6.2.1     | NOK | https://autobuild.buildroot.org/results/ee9d78231ee8d0901858f43fcc4071cb6792ad7d |     
-loongarch64  |     s6-networking-2.7.0.4      | NOK | https://autobuild.buildroot.org/results/ddd59fa174deb1fe69fa97ff6030da10797082ce |     
-loongarch64  |           sdl-1.2.15           | NOK | https://autobuild.buildroot.org/results/3b0819504983f13731e6f2b3d9bff9ef889e4aef | ORPH
-  powerpc    |          sdl2-2.32.10          | NOK | https://autobuild.buildroot.org/results/807f665a3277524c315647c8025e29aeca49d5d5 |     
-  powerpc    |          sdl2-2.32.10          | NOK | https://autobuild.buildroot.org/results/4cfba211566186ba779ed8f5adeba6c821da09da |     
-loongarch64  | uclibc-ng-test-132c6134d691... | NOK | https://autobuild.buildroot.org/results/d86652af729a4b55738135cd84f0ccb469bb782f |     
- powerpc64   |          vsftpd-3.0.5          | NOK | https://autobuild.buildroot.org/results/405ab6a51d51bd3a483718a7d596fd54a5621a15 | ORPH
+Enabled MWIFIEX configuration in Buildroot.
+
+Loaded the driver using the command:
 
 
-Classification of failures by reason for 2025.08.x
---------------------------------------------------
-
-                  libbpf-1.5.0 | 1 
-libftdi1-v1.5-62-g5e67403c4... | 1 
-                 logsurfer-1.8 | 1 
-                openssh-10.0p1 | 1 
-                   perl-5.40.2 | 1 
-                       unknown | 1 
+modprobe moal mod_para=nxp/wifi_mod_para.conf
 
 
-Detail of failures for 2025.08.x
---------------------------------
+# modprobe moal mod_para=nxp/wifi_mod_para.conf
+[   28.293486] mlan: loading out-of-tree module taints kernel.
+[   28.332881] wlan: Loading MWLAN driver
+[   28.336987] wlan: Register to Bus Driver...
+[   28.341369] vendor=0x0471 device=0x0205 class=0 function=1
+[   28.346989] Attach moal handle ops, card interface type: 0x109
+[   28.352833] rps set to 0 from module param
+[   28.359963] SDIW612: init module param from usr cfg
+[   28.364906] card_type: SDIW612, config block: 0
+[   28.369439] cfg80211_wext=0xf
+[   28.372405] max_vir_bss=1
+[   28.375018] cal_data_cfg=none
+[   28.377984] ps_mode = 1
+[   28.380435] auto_ds = 1
+[   28.382879] host_mlme=enable
+[   28.385765] fw_name=nxp/sduart_nw61x_v1.bin.se
+[   28.390227] SDIO: max_segs=128 max_seg_size=65535
+[   28.394921] rx_work=1 cpu_num=2
+[   28.398063] Enable moal_recv_amsdu_packet
+[   28.402098] Attach mlan adapter operations.card_type is 0x109.
+[   28.408248] wlan: Enable TX SG mode
+[   28.411751] wlan: Enable RX SG mode
+[   28.416394] Request firmware: nxp/sduart_nw61x_v1.bin.se
+[   28.642440] Wlan: FW download over, firmwarelen=1065364 downloaded 953164
+[   34.648319] Fail to poll firmware status: firmwarestat=0x0
+[   34.653811] FW failed to be active in time!
+[   34.657996] wlan_dnld_fw fail ret=0xffffffff
+[   34.662266] WLAN: Fail download FW with nowwait: 0
+[   34.667216] SDIO Func0 (0x0-0x9): 43 03 02 02 03 00 00 02 03 00
+[   34.673318] SDIO Func1 (0x10-0x17): 00 00 00 00 00 00 00 00
+[   34.679151] SDIO Func1: (0x8) 00 (0x58) 00 (0x5c) 0d (0x5d) 00 (0x60) 
+01 (0x61) 00 (0x62) 00 (0x64) 10 (0x65) 01 (0x66) 00 (0x68) 00 (0x69) 00 
+(0x6a) 00
+[   34.693708] SDIO Func1 (0xe8-0xff): 00 00 00 00 4c 8b 0e 00 24 14 70 
+c8 ab 37 80 00 00 00 00 00 01 00 00 00
+[   34.803809] SDIO Func1 (0xe8-0xff): 00 00 00 00 4c 8b 0e 00 24 14 70 
+c8 ab 37 80 00 00 00 00 00 01 00 00 00
+[   34.813727] woal_request_fw failed
+[   34.817132] Firmware Init Failed
+[   34.824576] Free module params
+[   34.827631] woal_add_card failed
+[   34.831003] wlan_sdio: probe of mmc2:0001:1 failed with error -1
+[   34.837160] wlan: Register to Bus Driver Done
+[   34.841535] wlan: Driver loaded successfully
+#
+# connmanctl
+Error getting VPN connections: The name net.connman.vpn was not provided 
+by any .service files
+connmanctl> [   62.608517] cfg80211: failed to load regulatory.db
+enable wifi
+wifi is not available
+connmanctl> exit
+# ls /lib/firmware/nxp/
+helper_uart_3000000.bin  sduart_nw61x_v1.bin.se uartuart_n61x_v1.bin.se
+sd_w61x_v1.bin.se        uartspi_n61x_v1.bin.se wifi_mod_para.conf
+#
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    or1k     |          libbpf-1.5.0          | NOK | https://autobuild.buildroot.org/results/cbb3da642b344e342b6b08b376d78f7b5e6602a6 |     
-   sparc     | libftdi1-v1.5-62-g5e67403c4... | NOK | https://autobuild.buildroot.org/results/775e567b4e4f2757237989d29da99fe4bcf01abc |     
-   arceb     |         logsurfer-1.8          | NOK | https://autobuild.buildroot.org/results/b6ce0cb405ac4bf8913dd5b40b230871015a3142 |     
-   mips64    |         openssh-10.0p1         | NOK | https://autobuild.buildroot.org/results/19e1f033a47113393544321a27f9348c6ac1bad7 | ORPH
-   mips64    |          perl-5.40.2           | NOK | https://autobuild.buildroot.org/results/709d1ca101f83679f8e78c5e6aad872204b882f7 |     
-powerpc64le  |            unknown             | NOK | https://autobuild.buildroot.org/results/6e47d5ef61ff79c5601b12f95d3a361482d26bda |     
+Could you please help me identify the reason for the firmware activation 
+failure and guide me on how to resolve it?
 
 
-Classification of failures by reason for 2025.02.x
---------------------------------------------------
+Thanks & Regards,
 
-             bmap-writer-1.0.2 | 1 
-host-binutils-arc-2023.09-r... | 1 
-              host-swipl-9.2.8 | 1 
-               syslog-ng-4.8.3 | 1 
-                tealdeer-1.6.1 | 1 
+Esakkiammal M
 
 
-Detail of failures for 2025.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   xtensa    |       bmap-writer-1.0.2        | NOK | https://autobuild.buildroot.org/results/f67744793285b6fea3b35e0143693b84ae78001b |     
-    arc      | host-binutils-arc-2023.09-r... | NOK | https://autobuild.buildroot.org/results/f1a885fcf9b66813ca7fae0dbe7157623cfb0854 |     
-  aarch64    |        host-swipl-9.2.8        | NOK | https://autobuild.buildroot.org/results/ed5be9289e6960e3584eabaf9193481542e3dd4b |     
- aarch64_be  |        syslog-ng-4.8.3         | NOK | https://autobuild.buildroot.org/results/7370bbb2377b9e55e1bfac271c407f41896c76f4 |     
-    i686     |         tealdeer-1.6.1         | NOK | https://autobuild.buildroot.org/results/f8988964fc30d76a809f5f7a6bdc5b9f4e5ce4c6 |     
+------------------------------------------------------------------------
 
 
-Classification of failures by reason for 2025.05.x
---------------------------------------------------
+On 15/10/25 16:38, Esakkiammal M wrote:
+>
+> Hello,
+>
+> My kernel and U-Boot are working fine under Yocto on this custom 
+> board. The hardware includes Wi-Fi 6, Bluetooth 5.3, and IEEE 802.15.4.
+>
+> I’m now testing the same setup in Buildroot, but when I try to load 
+> the Wi-Fi driver using:
+>
+> modprobe moal mod_para=nxp/wifi_mod_para.conf
+>
+> I get this error:
+>
+> modprobe: module moal not found in modules.dep
+>
+> It seems the NXP Wi-Fi driver (moal.ko) isn’t being built or included 
+> in my Buildroot image. Could you please suggest the recommended way to 
+> integrate the nxp-modwifi driver or any patches required to enable it 
+> in Buildroot?
+>
+>
+> Thanks & Regards,
+>
+> Esakkiammal M
+>
+> ------------------------------------------------------------------------
+>
+>
+> On 15/10/25 16:30, Fiona Klute wrote:
+>> Hi Esakkiammal!
+>> Am 15.10.25 um 11:56 schrieb Esakkiammal M via buildroot:
+>>> Hello,
+>>>
+>>> I have implemented support for our i.MX93 custom board by referring 
+>>> to the i.MX93 EVK configuration.
+>>>
+>>> git clone https://github.com/buildroot/buildroot.git
+>>> git switch 2025.02.x
+>>>
+>>> make freescale_imx93evk_defconfig
+>>> make
+>>>
+>>> Can you tell how port WiFi and BT for imx93 custom board.
+>>
+>> It's impossible to give a definitive answer without knowing the 
+>> details of your board, but in general:
+>>
+>> 1. If you have a custom board, you may need a custom DTS that 
+>> correctly describes your board (instead of the default one) for all 
+>> hardware to be detected correctly.
+>>
+>> 2. Make sure the kernel drivers for any additional hardware are 
+>> enabled in the kernel config you use.
+>>
+>> 3. The defconfigs are intentionally minimal. You'll need to add the 
+>> target packages to support what you want to do with wifi and BT:
+>>
+>> * any firmware needed for the devices on your board
+>> * wpa_supplicant or iwd or hostapd, maybe NetworkManager too 
+>> (depending on how you want to use wifi)
+>> * bluez5-utils (probably) for BT
+>>
+>> Some of those packages have optional components that you may or may 
+>> not need.
+>>
+>> Best regards,
+>> Fiona
+>>
+--------------INtxJRjIqIQFayvkWxr8qz6B
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-                libcurl-8.16.0 | 2 
-               asterisk-22.3.0 | 1 
-host-binutils-arc-2023.09-r... | 1 
-                  libsvg-0.1.4 | 1 
+<!DOCTYPE html><html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  </head>
+  <body>
+    <p>Hello,</p>
+    <p>I have enabled the MWIFIEX Wi-Fi driver in Buildroot for my
+      platform. During validation, I observed that the driver fails to
+      initialize the firmware properly. Please find the log details and
+      observations below.<br>
+      <br>
+      <br>
+      Steps Performed<br>
+      <br>
+      Enabled MWIFIEX configuration in Buildroot.<br>
+      <br>
+      Loaded the driver using the command:<br>
+      <br>
+      <br>
+      modprobe moal mod_para=nxp/wifi_mod_para.conf<br>
+      <br>
+      <br>
+      # modprobe moal mod_para=nxp/wifi_mod_para.conf<br>
+      [&nbsp;&nbsp; 28.293486] mlan: loading out-of-tree module taints kernel.<br>
+      [&nbsp;&nbsp; 28.332881] wlan: Loading MWLAN driver<br>
+      [&nbsp;&nbsp; 28.336987] wlan: Register to Bus Driver...<br>
+      [&nbsp;&nbsp; 28.341369] vendor=0x0471 device=0x0205 class=0 function=1<br>
+      [&nbsp;&nbsp; 28.346989] Attach moal handle ops, card interface type: 0x109<br>
+      [&nbsp;&nbsp; 28.352833] rps set to 0 from module param<br>
+      [&nbsp;&nbsp; 28.359963] SDIW612: init module param from usr cfg<br>
+      [&nbsp;&nbsp; 28.364906] card_type: SDIW612, config block: 0<br>
+      [&nbsp;&nbsp; 28.369439] cfg80211_wext=0xf<br>
+      [&nbsp;&nbsp; 28.372405] max_vir_bss=1<br>
+      [&nbsp;&nbsp; 28.375018] cal_data_cfg=none<br>
+      [&nbsp;&nbsp; 28.377984] ps_mode = 1<br>
+      [&nbsp;&nbsp; 28.380435] auto_ds = 1<br>
+      [&nbsp;&nbsp; 28.382879] host_mlme=enable<br>
+      [&nbsp;&nbsp; 28.385765] fw_name=nxp/sduart_nw61x_v1.bin.se<br>
+      [&nbsp;&nbsp; 28.390227] SDIO: max_segs=128 max_seg_size=65535<br>
+      [&nbsp;&nbsp; 28.394921] rx_work=1 cpu_num=2<br>
+      [&nbsp;&nbsp; 28.398063] Enable moal_recv_amsdu_packet<br>
+      [&nbsp;&nbsp; 28.402098] Attach mlan adapter operations.card_type is 0x109.<br>
+      [&nbsp;&nbsp; 28.408248] wlan: Enable TX SG mode<br>
+      [&nbsp;&nbsp; 28.411751] wlan: Enable RX SG mode<br>
+      [&nbsp;&nbsp; 28.416394] Request firmware: nxp/sduart_nw61x_v1.bin.se<br>
+      [&nbsp;&nbsp; 28.642440] Wlan: FW download over, firmwarelen=1065364
+      downloaded 953164<br>
+      [&nbsp;&nbsp; 34.648319] Fail to poll firmware status: firmwarestat=0x0<br>
+      [&nbsp;&nbsp; 34.653811] FW failed to be active in time!<br>
+      [&nbsp;&nbsp; 34.657996] wlan_dnld_fw fail ret=0xffffffff<br>
+      [&nbsp;&nbsp; 34.662266] WLAN: Fail download FW with nowwait: 0<br>
+      [&nbsp;&nbsp; 34.667216] SDIO Func0 (0x0-0x9): 43 03 02 02 03 00 00 02 03 00
+      <br>
+      [&nbsp;&nbsp; 34.673318] SDIO Func1 (0x10-0x17): 00 00 00 00 00 00 00 00 <br>
+      [&nbsp;&nbsp; 34.679151] SDIO Func1: (0x8) 00 (0x58) 00 (0x5c) 0d (0x5d) 00
+      (0x60) 01 (0x61) 00 (0x62) 00 (0x64) 10 (0x65) 01 (0x66) 00 (0x68)
+      00 (0x69) 00 (0x6a) 00 <br>
+      [&nbsp;&nbsp; 34.693708] SDIO Func1 (0xe8-0xff): 00 00 00 00 4c 8b 0e 00 24
+      14 70 c8 ab 37 80 00 00 00 00 00 01 00 00 00 <br>
+      [&nbsp;&nbsp; 34.803809] SDIO Func1 (0xe8-0xff): 00 00 00 00 4c 8b 0e 00 24
+      14 70 c8 ab 37 80 00 00 00 00 00 01 00 00 00 <br>
+      [&nbsp;&nbsp; 34.813727] woal_request_fw failed<br>
+      [&nbsp;&nbsp; 34.817132] Firmware Init Failed<br>
+      [&nbsp;&nbsp; 34.824576] Free module params<br>
+      [&nbsp;&nbsp; 34.827631] woal_add_card failed<br>
+      [&nbsp;&nbsp; 34.831003] wlan_sdio: probe of mmc2:0001:1 failed with error
+      -1<br>
+      [&nbsp;&nbsp; 34.837160] wlan: Register to Bus Driver Done<br>
+      [&nbsp;&nbsp; 34.841535] wlan: Driver loaded successfully<br>
+      # <br>
+      # connmanctl<br>
+      Error getting VPN connections: The name net.connman.vpn was not
+      provided by any .service files<br>
+      connmanctl&gt; [&nbsp;&nbsp; 62.608517] cfg80211: failed to load
+      regulatory.db<br>
+      enable wifi<br>
+      wifi is not available<br>
+      connmanctl&gt; exit<br>
+      # ls /lib/firmware/nxp/<br>
+      helper_uart_3000000.bin&nbsp; sduart_nw61x_v1.bin.se&nbsp;&nbsp;
+      uartuart_n61x_v1.bin.se<br>
+      sd_w61x_v1.bin.se&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; uartspi_n61x_v1.bin.se&nbsp;&nbsp;
+      wifi_mod_para.conf<br>
+      # <br>
+      <br>
+      Could you please help me identify the reason for the firmware
+      activation failure and guide me on how to resolve it?<br>
+      <br>
+      <br>
+    </p>
+    <p><span data-teams="true"> Thanks &amp; Regards,<br>
+      </span> </p>
+    <p><span data-teams="true">Esakkiammal M</span></p>
+    <p><br>
+    </p>
+    <hr width="100%" size="2">
+    <p><br>
+    </p>
+    <div class="moz-cite-prefix">On 15/10/25 16:38, Esakkiammal M wrote:<br>
+    </div>
+    <blockquote type="cite" cite="mid:3ac2065a-8ac7-4a59-9889-51fce1eae53d@iwave-global.com">
+      
+      <p>Hello,</p>
+      <p>My kernel and U-Boot are working fine under Yocto on this
+        custom board. The hardware includes Wi-Fi 6, Bluetooth 5.3, and
+        IEEE 802.15.4.<br>
+        <br>
+        I’m now testing the same setup in Buildroot, but when I try to
+        load the Wi-Fi driver using:<br>
+        <br>
+        modprobe moal mod_para=nxp/wifi_mod_para.conf<br>
+        <br>
+        I get this error:<br>
+        <br>
+        modprobe: module moal not found in modules.dep<br>
+        <br>
+        It seems the NXP Wi-Fi driver (moal.ko) isn’t being built or
+        included in my Buildroot image. Could you please suggest the
+        recommended way to integrate the nxp-modwifi driver or any
+        patches required to enable it in Buildroot?</p>
+      <p>&nbsp;<br>
+      </p>
+      <p><span data-teams="true"> Thanks &amp; Regards,<br>
+        </span> </p>
+      <p><span data-teams="true">Esakkiammal M</span></p>
+      <p><span data-teams="true"></span></p>
+      <hr width="100%" size="2">
+      <p><span data-teams="true"><br>
+        </span></p>
+      <div class="moz-cite-prefix">On 15/10/25 16:30, Fiona Klute wrote:<br>
+      </div>
+      <blockquote type="cite" cite="mid:584f433e-3ace-4493-a073-7cb92eae6d08@gmx.de">Hi
+        Esakkiammal! <br>
+        Am 15.10.25 um 11:56 schrieb Esakkiammal M via buildroot: <br>
+        <blockquote type="cite">Hello, <br>
+          <br>
+          I have implemented support for our i.MX93 custom board by
+          referring to the i.MX93 EVK configuration. <br>
+          <br>
+          git clone <a class="moz-txt-link-freetext" href="https://github.com/buildroot/buildroot.git" moz-do-not-send="true">https://github.com/buildroot/buildroot.git</a>
+          <br>
+          git switch 2025.02.x <br>
+          <br>
+          make freescale_imx93evk_defconfig <br>
+          make <br>
+          <br>
+          Can you tell how port WiFi and BT for imx93 custom board. <br>
+        </blockquote>
+        <br>
+        It's impossible to give a definitive answer without knowing the
+        details of your board, but in general: <br>
+        <br>
+        1. If you have a custom board, you may need a custom DTS that
+        correctly describes your board (instead of the default one) for
+        all hardware to be detected correctly. <br>
+        <br>
+        2. Make sure the kernel drivers for any additional hardware are
+        enabled in the kernel config you use. <br>
+        <br>
+        3. The defconfigs are intentionally minimal. You'll need to add
+        the target packages to support what you want to do with wifi and
+        BT: <br>
+        <br>
+        * any firmware needed for the devices on your board <br>
+        * wpa_supplicant or iwd or hostapd, maybe NetworkManager too
+        (depending on how you want to use wifi) <br>
+        * bluez5-utils (probably) for BT <br>
+        <br>
+        Some of those packages have optional components that you may or
+        may not need. <br>
+        <br>
+        Best regards, <br>
+        Fiona <br>
+        <br>
+      </blockquote>
+    </blockquote>
+  </body>
+</html>
 
+--------------INtxJRjIqIQFayvkWxr8qz6B--
 
-Detail of failures for 2025.05.x
---------------------------------
+--===============5718138633982159027==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  aarch64    |        asterisk-22.3.0         | NOK | https://autobuild.buildroot.org/results/d0c85e37849e7ed4846f704a09dbb1fe7d383185 |     
-    arc      | host-binutils-arc-2023.09-r... | NOK | https://autobuild.buildroot.org/results/4693a3be53676cfd08a16f0120427b0a79976b2b |     
-    sh4      |         libcurl-8.16.0         | NOK | https://autobuild.buildroot.org/results/3cf2f527cdcb04405d344a5cd478e063640a786e |     
-  sparc64    |         libcurl-8.16.0         | NOK | https://autobuild.buildroot.org/results/e02d4c04278248d7d69716bd0ee2f56e430284e8 |     
-  powerpc    |          libsvg-0.1.4          | NOK | https://autobuild.buildroot.org/results/b6b0772f4d9b54ac6a75fe2e5f6563ea20d97137 |     
-
-
-
--- 
-https://autobuild.buildroot.org
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5718138633982159027==--
