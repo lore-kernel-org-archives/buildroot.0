@@ -4,72 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8CC1CCD183
-	for <buildroot@archiver.kernel.org>; Thu, 16 Oct 2025 17:40:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCCF4CCD183
+	for <buildroot@archiver.kernel.org>; Thu, 16 Oct 2025 17:51:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ADFA940559;
-	Thu, 16 Oct 2025 17:40:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF79C4056F;
+	Thu, 16 Oct 2025 17:51:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kOjbsniK__O0; Thu, 16 Oct 2025 17:40:30 +0000 (UTC)
+ id jpKBX7dqLnem; Thu, 16 Oct 2025 17:51:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A15D840534
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9E1640571
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A15D840534;
-	Thu, 16 Oct 2025 17:40:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 303A7D8
- for <buildroot@buildroot.org>; Thu, 16 Oct 2025 17:40:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D9E1640571;
+	Thu, 16 Oct 2025 17:51:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 932E8968
+ for <buildroot@buildroot.org>; Thu, 16 Oct 2025 17:51:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 163CD40534
- for <buildroot@buildroot.org>; Thu, 16 Oct 2025 17:40:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CB37A40215
+ for <buildroot@buildroot.org>; Thu, 16 Oct 2025 17:51:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UBZYHU7kcPEj for <buildroot@buildroot.org>;
- Thu, 16 Oct 2025 17:40:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7937340532
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7937340532
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7937340532
- for <buildroot@buildroot.org>; Thu, 16 Oct 2025 17:40:26 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0643.dip0.t-ipconnect.de [91.58.6.67])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id DBF36A4C6EF9
- for <buildroot@buildroot.org>; Thu, 16 Oct 2025 19:40:22 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:42810)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1v9Rxe-000000001TC-0D8N
- for buildroot@buildroot.org; Thu, 16 Oct 2025 17:40:22 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5y1pFHBh4yYC for <buildroot@buildroot.org>;
+ Thu, 16 Oct 2025 17:51:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D2CF040206
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2CF040206
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D2CF040206
+ for <buildroot@buildroot.org>; Thu, 16 Oct 2025 17:51:06 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-47112a73785so7457895e9.3
+ for <buildroot@buildroot.org>; Thu, 16 Oct 2025 10:51:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1760637064; x=1761241864;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=RtJ6G7D2KRSx2MoBI5IdvxwzzvVrWrIT0wEDC+gV2+c=;
+ b=Tm3YUSZXsj19E6TdGmRJaIeZ6n9GQ+4njDjedtAtEj11SRuGXSFh+hYmP9WF70Vdv5
+ 6NbgrQSyEVerlnhO92klVUQjavkanHiPgM3SsaISTQE1Y5Vkc6Uk+wpmOGPtXBircTmI
+ puwKqks5efvoqlk4fqN+7b+dNM/XRwziaAzBBbXH5E2XbgdZPVzv3qkO2jK6QnGyA84H
+ 7D6ExVUD55PV5KCUurtBv3CgweuYOs14X/R3uVX5c7/KIPCibYZn+bAYijGzB3fCq2Ol
+ vJ74BdYxZWr0HcFimYaKmA7a09BdbHIN2l/1fFa9o8pehpva7IqN0xgGAnMSxkI+OLuR
+ d3+g==
+X-Gm-Message-State: AOJu0Yw/l3sb6+yoJGt8OsCw0mn8S8Dfo+CPmsCcCQjqy9jYeKEi4J12
+ RIcPzqRCK1gFNHsGKH/oSsVjiXxmlHKV/7MGQ4PAxSMu4UAUeXcGt9S3oWsCFy0dM62F9prQ3L4
+ bflgCo4k=
+X-Gm-Gg: ASbGncvuxsiuSI9wUPaSUwqz5vDeFhTYf4iVhOoHS8TuUjzU4ub9X773rOM/lf01fd2
+ pfaGGeVyKvA0kA2pkl1en5yV9k3y2QtjFo/JrdFhYXobN3Ityf77oyfIfgfYGLMdCYFeyzP74Kl
+ GR+1y8XXqPJdSD/plJ8Ohx46QW2pO46E4X8RE7OmFotH++KtvMYuyw0Ymyf76H4R41Z2OfY3mk0
+ WWk3rjKc98Ip9lA0JheADTud++Ha7O/4I0gH2c8OTgGZTqRygtMqinhD+b0zLxtj0iuL7TFz9AH
+ x8Mq9WCH/W2Bc84wP+kO0mUzi3vO0mW/LRUkz4ZPvzu4NqJp7jyn2FAz9NSWcuKcPB7vRrPwc7a
+ K0gG635Gq+3ndxCSgsn0XvqaToixFfFjZmM1CHLGACPoGMN14/HdKm51KUIP4w0WRra9RwwLio0
+ wtnzYCl69bTrr+i7ogVORl886DxLMymYQoZvXJ3tahG5Zw1ysMd/HPm3RVh4zW
+X-Google-Smtp-Source: AGHT+IFUgmEk0cpX5aUfFbyklgU4U470g5Ec//EjMyg/22o/9ERKpKrZSXq3YunTIppwAYx59BKZeA==
+X-Received: by 2002:a05:600c:3e07:b0:471:13fc:e356 with SMTP id
+ 5b1f17b1804b1-471178760f8mr6918695e9.3.1760637064493; 
+ Thu, 16 Oct 2025 10:51:04 -0700 (PDT)
+Received: from dario-ThinkPad-P14s-Gen-5.. ([2.196.42.252])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-471144239bdsm60863255e9.3.2025.10.16.10.51.03
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 16 Oct 2025 10:51:04 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Thu, 16 Oct 2025 19:40:21 +0200
-Message-ID: <20251016174022.53662-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date: Thu, 16 Oct 2025 19:51:01 +0200
+Message-ID: <20251016175101.165492-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1760636422;
- bh=Qjux/R0a+Y64u/J+PURsJbKOJaJqp8M7XMbJuVx2sE0=;
- h=From:To:Subject:Date:From;
- b=pFg55UyaWPnAPMHko+vdEWVmP6SxMUi1/7vYS1lYW91+OuHO3jD4CmpI9BDImaNqQ
- xPyqaJEP2guRXhN+otew0wK2mjGMbmsWlweMXkE3zPRtcbz3wwsrbF+3Z0HeXg36xM
- +819adtEdIEYqEDSHwfaNzNpiGgLTQGyx8b6ohzavkW/PxTkRhYKlnrIC9o5V6Lt6C
- hf7hXKbMr8jZZJ4qgctbpXPaMWlJEUHRJZKy4PEC/iwu5QnHY9kg5yAraL3UdnbmIf
- 6LYGtn0EXuJDo1TQVNnmH/hsZWGfFitP3CRiz4UGvXqAqR6oLu1pjegWf+pGxdm9Ag
- bQgjNZ5qX7LXA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=amarulasolutions.com; s=google; t=1760637064; x=1761241864;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=RtJ6G7D2KRSx2MoBI5IdvxwzzvVrWrIT0wEDC+gV2+c=;
+ b=XXDdD0I5vZ5Gix66KUIfgjGsfepguEDp+rcVIVRyUUsWnP1DIlgtF8ta+X3TFMklSK
+ +uKEEX80CPVw/lHivH/76uZ7E2Ztwf2na/CaaV00W+1CxkBpDOTa9A6CDDdZCyWl5PY+
+ GYJjZjDKh0b2PdwUkboBvqX+gcGkb9+7HvS+4=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=pFg55Uya
-Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 6.{1, 6, 12,
- 17}.x series
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=XXDdD0I5
+Subject: [Buildroot] [PATCH 1/1] package/iwd: bump to version 3.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,64 +112,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 8 ++++----
- package/linux-headers/Config.in.host | 8 ++++----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+Release notes:
+https://git.kernel.org/pub/scm/network/wireless/iwd.git/tree/ChangeLog?h=3.10
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 1c48c1c41a..90a0ccd0c5 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -141,7 +141,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+ package/iwd/iwd.hash | 2 +-
+ package/iwd/iwd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
+index 22e5ac33359b..7ad2fb382d9e 100644
+--- a/package/iwd/iwd.hash
++++ b/package/iwd/iwd.hash
+@@ -1,5 +1,5 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/network/wireless/sha256sums.asc
+-sha256  0cd7dc9b32b9d6809a4a5e5d063b5c5fd279f5ad3a0bf03d7799da66df5cad45  iwd-3.9.tar.xz
++sha256  640bff22540e1714f71772a83123aff6f810b7eb9d7d6df1e10fb2695beb5115  iwd-3.10.tar.xz
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.17.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.17.3" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index de40c6b7b6..3bdc4cd9b2 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,8 +1,8 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  fdebcb065065f5c1b8dc68a6fb59cda50cdddbf9103d207c2196d55ea764f57f  linux-6.17.2.tar.xz
--sha256  b4850cf670a032c70f38b713a27d62046c5f747caf028c5f50b18f98606a9eb1  linux-6.12.52.tar.xz
--sha256  04c470e130d659ef05217ac695422c28d817d19daa50643fe28b945e6ab646c7  linux-6.6.111.tar.xz
--sha256  c29387aeee085fbcbd91236224b9df805063bac43615e75cea2c6b29604a5c73  linux-6.1.155.tar.xz
-+sha256  3ecc8619d8a5b5f675224d2f52c71d1fc09bc3f9c019d8bd82d0581e03689499  linux-6.17.3.tar.xz
-+sha256  663507accae673afcf4e210b4ae8d4352e61d926202e5da3f04bf71ca1d2c0b5  linux-6.12.53.tar.xz
-+sha256  6c7d92bf316a56e91de41cb60da1f63d94a4f8aafaef6a13055df0c291138a22  linux-6.6.112.tar.xz
-+sha256  d4bb148b204e5aed38690489736961cdaf925fe7b35cf1f56c47ad7a09a0228e  linux-6.1.156.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  348d6faada05fd4684450cd7c4e666c3c98cdb96f2309b1520c9a92a378c267e  linux-5.15.194.tar.xz
- sha256  131e75eb14da6fd683b3882bcd856085cfca47cc1aa89cd2deb1b48d22d29d9f  linux-5.10.245.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 75de52e94a..3fbad38e6e 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -461,10 +461,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.4.300"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.10.245"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.194"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.155"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.111"	if BR2_KERNEL_HEADERS_6_6
--	default "6.12.52"	if BR2_KERNEL_HEADERS_6_12
--	default "6.17.2"	if BR2_KERNEL_HEADERS_6_17
-+	default "6.1.156"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.112"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.12.53"	if BR2_KERNEL_HEADERS_6_12
-+	default "6.17.3"	if BR2_KERNEL_HEADERS_6_17
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+ # License files
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
+diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+index 138bc307dd11..a150a3048b36 100644
+--- a/package/iwd/iwd.mk
++++ b/package/iwd/iwd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IWD_VERSION = 3.9
++IWD_VERSION = 3.10
+ IWD_SOURCE = iwd-$(IWD_VERSION).tar.xz
+ IWD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/wireless
+ IWD_LICENSE = LGPL-2.1+
 -- 
-2.47.3
+2.43.0
 
 _______________________________________________
 buildroot mailing list
