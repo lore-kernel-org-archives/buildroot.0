@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D02B8CCD183
-	for <buildroot@archiver.kernel.org>; Thu, 16 Oct 2025 20:16:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66B25CCD199
+	for <buildroot@archiver.kernel.org>; Thu, 16 Oct 2025 20:16:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8602580DE7;
-	Thu, 16 Oct 2025 20:16:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4091040644;
+	Thu, 16 Oct 2025 20:16:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O6N_xLIBbauc; Thu, 16 Oct 2025 20:16:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LGINrMIPjCyv; Thu, 16 Oct 2025 20:16:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0B0180DE9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0430940626
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E0B0180DE9;
-	Thu, 16 Oct 2025 20:16:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id CE8BA968
- for <buildroot@buildroot.org>; Thu, 16 Oct 2025 20:16:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0430940626;
+	Thu, 16 Oct 2025 20:16:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C525C968
+ for <buildroot@buildroot.org>; Thu, 16 Oct 2025 20:16:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B52CA80DE9
+ by smtp2.osuosl.org (Postfix) with ESMTP id B62EA40350
  for <buildroot@buildroot.org>; Thu, 16 Oct 2025 20:16:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DXyLzakrYET7 for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PAi5FTaI2Abw for <buildroot@buildroot.org>;
  Thu, 16 Oct 2025 20:16:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0766D80DE7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 014FF4035C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0766D80DE7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 014FF4035C
  for <buildroot@buildroot.org>; Thu, 16 Oct 2025 20:16:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EBA4B87358; Thu, 16 Oct 2025 20:16:00 +0000 (UTC)
+ id E333087357; Thu, 16 Oct 2025 20:16:00 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 16 Oct 2025 22:10:13 +0200
+Date: Thu, 16 Oct 2025 22:08:35 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 773dbbf5c1cd63c49ae3f3b890966a0df0985203
-X-Git-Newrev: 6b5a9e76837ae3ea99b32a1ce330361c6fc09503
+X-Git-Oldrev: f6dc1f580de87aedce5a5a31facf46d04ed02878
+X-Git-Newrev: 773dbbf5c1cd63c49ae3f3b890966a0df0985203
 X-Patchwork-Hint: ignore
-Message-Id: <20251016201600.EBA4B87358@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-anyio: bump to 4.11.0
+Message-Id: <20251016201600.E333087357@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-trio: bump to 0.31.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,46 +65,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b5a9e76837ae3ea99b32a1ce330361c6fc09503
+commit: https://git.buildroot.net/buildroot/commit/?id=773dbbf5c1cd63c49ae3f3b890966a0df0985203
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release Notes: https://github.com/agronholm/anyio/releases/tag/4.11.0
+Changelog: https://trio.readthedocs.io/en/latest/history.html#trio-0-31-0-2025-09-09
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-anyio/python-anyio.hash | 4 ++--
- package/python-anyio/python-anyio.mk   | 4 ++--
+ package/python-trio/python-trio.hash | 4 ++--
+ package/python-trio/python-trio.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-anyio/python-anyio.hash b/package/python-anyio/python-anyio.hash
-index 297188db48..f93986fb9d 100644
---- a/package/python-anyio/python-anyio.hash
-+++ b/package/python-anyio/python-anyio.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/anyio/json
--md5  cb471a6d2338e026d7ba9eed50cf8fff  anyio-4.10.0.tar.gz
--sha256  3f3fae35c96039744587aa5b8371e7e8e603c0702999535961dd336026973ba6  anyio-4.10.0.tar.gz
-+md5  9bbd9262979f576a9023389e48204037  anyio-4.11.0.tar.gz
-+sha256  82a8d0b81e318cc5ce71a5f1f8b5c4e63619620b63141ef8c995fa0db95a57c4  anyio-4.11.0.tar.gz
+diff --git a/package/python-trio/python-trio.hash b/package/python-trio/python-trio.hash
+index 0dd367a236..35f582311a 100644
+--- a/package/python-trio/python-trio.hash
++++ b/package/python-trio/python-trio.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/trio/json
+-md5  e6d930a02a7ddf370083b9c9efa39e85  trio-0.28.0.tar.gz
+-sha256  4e547896fe9e8a5658e54e4c7c5fa1db748cbbbaa7c965e7d40505b928c73c05  trio-0.28.0.tar.gz
++md5  26bb7f0669385e47347e4d8177552653  trio-0.31.0.tar.gz
++sha256  f71d551ccaa79d0cb73017a33ef3264fde8335728eb4c6391451fe5d253a9d5b  trio-0.31.0.tar.gz
  # Locally computed sha256 checksums
- sha256  5361ac9dc58f2ef5fd2e9b09c68297c17f04950909bbc8023bdb82eacf22c2b0  LICENSE
-diff --git a/package/python-anyio/python-anyio.mk b/package/python-anyio/python-anyio.mk
-index 122900f3c7..431eb5f286 100644
---- a/package/python-anyio/python-anyio.mk
-+++ b/package/python-anyio/python-anyio.mk
+ sha256  418d025e1284311f2690263e6efa6bf51585e5741818ece63e5862487e505bb9  LICENSE
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.APACHE2
+diff --git a/package/python-trio/python-trio.mk b/package/python-trio/python-trio.mk
+index f298619fe4..8d8720be36 100644
+--- a/package/python-trio/python-trio.mk
++++ b/package/python-trio/python-trio.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ANYIO_VERSION = 4.10.0
-+PYTHON_ANYIO_VERSION = 4.11.0
- PYTHON_ANYIO_SOURCE = anyio-$(PYTHON_ANYIO_VERSION).tar.gz
--PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/f1/b4/636b3b65173d3ce9a38ef5f0522789614e590dab6a8d505340a4efe4c567
-+PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/c6/78/7d432127c41b50bccba979505f272c16cbcadcc33645d5fa3a738110ae75
- PYTHON_ANYIO_SETUP_TYPE = setuptools
- PYTHON_ANYIO_LICENSE = MIT
- PYTHON_ANYIO_LICENSE_FILES = LICENSE
+-PYTHON_TRIO_VERSION = 0.28.0
++PYTHON_TRIO_VERSION = 0.31.0
+ PYTHON_TRIO_SOURCE = trio-$(PYTHON_TRIO_VERSION).tar.gz
+-PYTHON_TRIO_SITE = https://files.pythonhosted.org/packages/b3/73/57efab729506a8d4b89814f1e356ec8f3369de0ed4fd7e7616974d09646d
++PYTHON_TRIO_SITE = https://files.pythonhosted.org/packages/76/8f/c6e36dd11201e2a565977d8b13f0b027ba4593c1a80bed5185489178e257
+ PYTHON_TRIO_SETUP_TYPE = setuptools
+ PYTHON_TRIO_LICENSE = Apache-2.0 or MIT
+ PYTHON_TRIO_LICENSE_FILES = LICENSE LICENSE.APACHE2 LICENSE.MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
