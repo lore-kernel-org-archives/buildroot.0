@@ -1,76 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B686CCD199
-	for <buildroot@archiver.kernel.org>; Fri, 17 Oct 2025 20:45:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF6EACCD195
+	for <buildroot@archiver.kernel.org>; Fri, 17 Oct 2025 21:49:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15773612E0;
-	Fri, 17 Oct 2025 20:45:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9BFFE8230B;
+	Fri, 17 Oct 2025 21:49:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4C8XE_k6lW5k; Fri, 17 Oct 2025 20:45:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9c8qNBsEy9-J; Fri, 17 Oct 2025 21:49:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90C7261295
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 098C8822F8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 90C7261295;
-	Fri, 17 Oct 2025 20:45:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 379A5D8
- for <buildroot@buildroot.org>; Fri, 17 Oct 2025 20:45:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 098C8822F8;
+	Fri, 17 Oct 2025 21:49:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4D6F4D8
+ for <buildroot@buildroot.org>; Fri, 17 Oct 2025 21:49:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 28C1261295
- for <buildroot@buildroot.org>; Fri, 17 Oct 2025 20:45:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3448C406D7
+ for <buildroot@buildroot.org>; Fri, 17 Oct 2025 21:49:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r-l9C4n8zDU5 for <buildroot@buildroot.org>;
- Fri, 17 Oct 2025 20:45:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A0D9360F65
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0D9360F65
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A0D9360F65
- for <buildroot@buildroot.org>; Fri, 17 Oct 2025 20:45:00 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id F3352B0055E;
- Fri, 17 Oct 2025 22:44:54 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 17 Oct 2025 22:44:54 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id td4pMRfaKo_N for <buildroot@buildroot.org>;
+ Fri, 17 Oct 2025 21:49:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D38FE400AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D38FE400AB
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D38FE400AB
+ for <buildroot@buildroot.org>; Fri, 17 Oct 2025 21:49:52 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0643.dip0.t-ipconnect.de [91.58.6.67])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 3FF5AA4C0F8D;
+ Fri, 17 Oct 2025 23:49:50 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:59078)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1v9sKb-000000002NE-3Xeb;
+ Fri, 17 Oct 2025 21:49:49 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Cc: David GOUARIN <dgouarin@gmail.com>
+Date: Fri, 17 Oct 2025 23:49:49 +0200
+Message-ID: <20251017214949.3857613-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Fri, 17 Oct 2025 22:44:54 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Romain Naour <romain.naour@gmail.com>
-In-Reply-To: <20251016182500.3396840-1-bernd@kuhls.net>
-References: <20251016182500.3396840-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <3b40a516c53f1bd8e702615f1bcfb967@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1760733898;
- bh=IpA2i03En6XFPdLQPQM4IrQ98ONCW+wkPnvMnr5+aJQ=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Umk+ynoleNkNXEOGrPct2uyrw+Ifxq2C0u24y0AiKutyKuOTY2qb7RPNdJIqpL1k0
- R7sDIg1DET5qm8yMGnhVSsQ2+UI//VAVnXK0+OYayhY7munJb9ZBTNIcpIr1jhJmi6
- na/qUDyXdqXcICiaSaHTIGfPjZYYGderSKD/eh10OjGMBMkYdiVuM01sxmJkuNrpCt
- BcEq8tH+R2Ay3a87912dpWeeuagCtUWojOgRUPxLY/VLVFNDEINRAHFasHUwuabvqI
- qugLZS4zKgo7ENoKjqs/4tEb/9is9rGGKfJCo1aS32kzAu4ug0eWwaI2aCq6COL94e
- n2CtckmIb3O5Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202506031021; t=1760737790;
+ bh=7TlmizNXNj/aKdN4/b5BQYu8gcVQS4ah9moEpArPG6k=;
+ h=From:To:Cc:Subject:Date:From;
+ b=a2nr2g4W+zlt2bd+nx2VJfhyPBMSwWEs89HA4KAUo0p9QEzVIyMq1Xp4tAWGhcyk7
+ NU+pRlI7tMexBR3i3NOn7RDpJ4w8ww60+D2RBJSh1oZF7I0usMLdqe4reOlckJ2BTZ
+ rOqGLPCfb3+Y13Ihy0ecwsdb4IgZs8BKKV5MKhkkJMlxHOKWLr5b/33EYqK3UOYl2A
+ XGeSSly6AGfib8LnDeMSrvneSvqiFjd6Yhmp1SgwNBsZuelNa1O1b2s6iaRkovhiKV
+ EvTWdSrrqENiMr6qkfkL93rTx2IX3aJSyKlKajO6l6UfhDgglHq9YqRjGq5fsOKkDy
+ VftMzZ3Rpw5mw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=Umk+ynol
-Subject: Re: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 25.2.5
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=a2nr2g4W
+Subject: [Buildroot] [PATCH 1/1] package/freeradius-server: requires RC4
+ support in openssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,20 +82,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 16/10/2025 20:25, Bernd Kuhls wrote:
-> Release notes:
-> https://lists.freedesktop.org/archives/mesa-announce/2025-October/000823.html
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Fixes:
+https://autobuild.buildroot.net/results/5a5/5a57a82800fb7a47731198effc15bd7044133c4d/
 
-Applied to master, thanks.
+    src/modules/rlm_mschap/rlm_mschap.c:1016:54: error: implicit
+    declaration of function 'EVP_rc4'; did you mean 'EVP_md4'?
+
+The oldest build error found with a quick search appeared back in July
+2024 with freeradius-server 3.2.3 so a backport should be considered:
+https://autobuild.buildroot.net/results/e2d/e2d77a52f81b0fea1081417c5c80f7991e27810a/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/freeradius-server/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/freeradius-server/Config.in b/package/freeradius-server/Config.in
+index e99778ea49..40401f57c7 100644
+--- a/package/freeradius-server/Config.in
++++ b/package/freeradius-server/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_FREERADIUS_SERVER
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4 if BR2_PACKAGE_LIBOPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4 if BR2_PACKAGE_LIBOPENSSL
+ 	select BR2_PACKAGE_LIBTALLOC
+ 	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
