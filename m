@@ -1,100 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6C0BCCD195
-	for <buildroot@archiver.kernel.org>; Fri, 17 Oct 2025 18:58:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B04EFCCD199
+	for <buildroot@archiver.kernel.org>; Fri, 17 Oct 2025 19:06:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2957240B72;
-	Fri, 17 Oct 2025 18:58:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7542861250;
+	Fri, 17 Oct 2025 19:06:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id poOQqHEqmn4S; Fri, 17 Oct 2025 18:58:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jxtQZBOg1s96; Fri, 17 Oct 2025 19:06:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47B0640B73
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2BF26126A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 47B0640B73;
-	Fri, 17 Oct 2025 18:58:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 144FD43F
- for <buildroot@buildroot.org>; Fri, 17 Oct 2025 18:58:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A2BF26126A;
+	Fri, 17 Oct 2025 19:06:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 817E643F
+ for <buildroot@buildroot.org>; Fri, 17 Oct 2025 19:06:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0689B81D24
- for <buildroot@buildroot.org>; Fri, 17 Oct 2025 18:58:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7377861250
+ for <buildroot@buildroot.org>; Fri, 17 Oct 2025 19:06:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pMoPa2_QBPB4 for <buildroot@buildroot.org>;
- Fri, 17 Oct 2025 18:58:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6mFX2QfDX5-I for <buildroot@buildroot.org>;
+ Fri, 17 Oct 2025 19:06:10 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::534; helo=mail-ed1-x534.google.com;
+ client-ip=2a00:1450:4864:20::532; helo=mail-ed1-x532.google.com;
  envelope-from=raphael.pavlidis@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E92FD81CC3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E92FD81CC3
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
- [IPv6:2a00:1450:4864:20::534])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E92FD81CC3
- for <buildroot@buildroot.org>; Fri, 17 Oct 2025 18:58:13 +0000 (UTC)
-Received: by mail-ed1-x534.google.com with SMTP id
- 4fb4d7f45d1cf-63c21467e5bso2643238a12.0
- for <buildroot@buildroot.org>; Fri, 17 Oct 2025 11:58:13 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 62D4A6126A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62D4A6126A
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
+ [IPv6:2a00:1450:4864:20::532])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 62D4A6126A
+ for <buildroot@buildroot.org>; Fri, 17 Oct 2025 19:06:10 +0000 (UTC)
+Received: by mail-ed1-x532.google.com with SMTP id
+ 4fb4d7f45d1cf-63c0eb94ac3so3749074a12.2
+ for <buildroot@buildroot.org>; Fri, 17 Oct 2025 12:06:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1760727492; x=1761332292;
+ d=1e100.net; s=20230601; t=1760727968; x=1761332768;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=LzUrKRHclm23D+GLnNIa3uPqkmb90RdcjGbwCNbirvg=;
- b=IYqXjFJazrzEYp+CYGUb+xbBv1GH/8CQRFL/03JTK5pyKlQmsFaw+QUUpzKqQ8dwIP
- N+9HRvZrYnxwSZaUyI67M+mQrXcisTUVP2MaUjKucqVNLdwmKLc4oomOHg5h8O9hxdJk
- sGfBM0jlNf+6dPNMSHODcBWUP4ryP8p6hWTf1d/Szy32w7UJ66OUCDN0NIKgDa7GToSi
- AAhZFPOFokHI9G8ouE2STaE/vfLFe2uVgWXlOXACIL1Iy1+gNKgwgETLvQDMFLeRqRRB
- kMEhB+N2ihIbDd0rKBgrpXxLmkh4Fo/JsmYrzQrPESH4vqUiYuPcv/qjUWQojHYd8b4g
- Nt6Q==
-X-Gm-Message-State: AOJu0YzKsmC5p6bUvhdeCyYuuym4mFDOEYtyECw3HGKy90kM1ZcYerK/
- WGHXtJfj+aCL94l40BNIQpH3LxzqlCAx4JtcJSZa5d19eE53wis1lQUPm7ZfNg==
-X-Gm-Gg: ASbGncsj6l3r38TH1bMacm9IVzjY1zwDumMgSw5UuBxNUMFskYaMbAFVmoFVKu7Ezj6
- BqjJ40nEpJEfBvR5Taip5Sjo6YtqeMiJMbHhFs00wPvcOzvSetUbkV0bV/MjO4B7OKj8d3Tp8aV
- dy2z7thQEYRmHXoFCQIEkAYLCixXPTeVTa5HyssOlS64/BP3/Bu79BxUQTxwzWQoTfhTTMnG06p
- TzYtiJy+EvnY6NOlmldBJIA/qcxWp3sDvURf7AtultQ8iSxMj+qDYyS7Gd97P+cVdICbMy91iVg
- S0SCSZrqOiyMKpapIAx0j+NpVLVg5TXOlxmtqlQaHZj45MstkL+QEhB5mljGfStKnAdbPe39j5Y
- fy3SzQ9cd86IrB6CtzYWWKax6ffOHTslYoeRpiRw/bGKPn8KAJxf558WJEuisbj/ngw==
-X-Google-Smtp-Source: AGHT+IGTp7iVHP9XPfkuLsURT01DxiL5S49xdfVc3MqSiW23Op0pUjd8BTN5yG9SUrcwA1VLHdI6UQ==
-X-Received: by 2002:a17:907:786:b0:b3f:cc6d:e0a8 with SMTP id
- a640c23a62f3a-b647235f3ebmr570080066b.17.1760727491842; 
- Fri, 17 Oct 2025 11:58:11 -0700 (PDT)
+ bh=fl+V/49XRpTFZg1lCw0bWOQBh/8EdDxPNN9hHa49sws=;
+ b=KesD8hME4khZV8tS8c7JASEItvZcTgg8NTZdXbuWZDjPggMylmCO1SFhXgIGEwT/Ao
+ Cu3tNr4a3ja11Hxs1p1+6aQke2Nv1ct4O4J1G0nm1v8TCOs3n//2AerJGwm+fg5/Xxxm
+ lBR/h67uTWfZLqzeIYvrxx9gPsJV5/AfUtbzqGodTnUAsu3SRynuWVDgajfd7J6qgLPj
+ N8klxSLMdztyDcdz+pTiAPAcwoG14fuy0uIeiyJTq5JVGwZJ/GL6cqO6egUdqC0Bc6T2
+ NuD7ZN/8fqqnGH8wYUHtomZh8YpuBjr5g+J5piHEGWpn8ZvvXoPzIc8Z04GN8pPzPfV6
+ ycCQ==
+X-Gm-Message-State: AOJu0YyyZoLJCdPalkdlrGgS4rSwLfU/Wm0DBRIKvoQCEEaELCU+iGxt
+ 9TlsE0PRRzg/d3+J2orMmhgFGp4KLf3rhPca5vVtb7/8UqDmU2U/t6mZPqROYg==
+X-Gm-Gg: ASbGnctm1+c5BT52RPpCCDpgbcG19LpwffydDwb7WMu22ENZFjRpl4qGc4k3DguRiHN
+ XaATGsCzkAQ0TLXENZjTHND9gds6M/kM88hN9s61vkhDYwtTphu2mLV6y1Z2J4kbvBrvfYi6bCj
+ ZGNeVu2dLP8QJG2c13jvia227qEce42e84euSF8UsKADEoPOgzp0/C3xlBUJJDA00qb05cbgFGk
+ aaeamtS1gpQEtgqV3ZelZCiLif1Cn1vuf8z5m5bQrRPIC3kbgyUcbIojReqz1VQRSZW+Z+KCabi
+ USVqa6njx3tNYOd1hqLnIolsQkfUgX5m1AB1TVxGxU6HNvACzXYHN+Q8+J/MYgyrUMASW7McYzW
+ 0izRIGV4zRDL9fG7zEunteubbf+F4ucCvulEJfqmofu+Q2A2uewQFVT3bN3Qhj47XC8Yk7NeP03
+ PR
+X-Google-Smtp-Source: AGHT+IE+uIvS/gdTqt4B8LWH+OwQTr6XfBrprQBULWIvvoJKe47ujhym59x31v/cUwCY/Zw+Wgs6Hg==
+X-Received: by 2002:a17:906:c144:b0:b04:3e43:eccc with SMTP id
+ a640c23a62f3a-b64739502dcmr589954666b.40.1760727967979; 
+ Fri, 17 Oct 2025 12:06:07 -0700 (PDT)
 Received: from LinkMed ([2a02:8070:2483:7e00::f6da])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b65e8393778sm43274266b.24.2025.10.17.11.58.11
+ a640c23a62f3a-b65eb036846sm42670066b.54.2025.10.17.12.06.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 17 Oct 2025 11:58:11 -0700 (PDT)
+ Fri, 17 Oct 2025 12:06:07 -0700 (PDT)
 From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 To: buildroot@buildroot.org
 Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-Date: Fri, 17 Oct 2025 20:56:26 +0000
-Message-ID: <20251017205626.438525-1-raphael.pavlidis@gmail.com>
+Date: Fri, 17 Oct 2025 21:04:30 +0000
+Message-ID: <20251017210430.496962-1-raphael.pavlidis@gmail.com>
 X-Mailer: git-send-email 2.51.1.dirty
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1760727492; x=1761332292; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1760727968; x=1761332768; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=LzUrKRHclm23D+GLnNIa3uPqkmb90RdcjGbwCNbirvg=;
- b=CNY7i59Sg8l831UAeD18YTE5YqFV1APSICAFRA4enh3OGEbNyhkT1M5FiKNZ5g5lt3
- OoGUuZkGTDJkr4QxsH47LDTIrFqTsTSfvJkHNSl/2niHTP9cot/zFt8St6IY5bcBAo4Q
- ziqYAa0W7X8qUr3BfWISLT3g6v1Vz2QSbrgTZw/yOUpKJg5OPNtqZknZTG0pEIvNxhV1
- HtLj26dHZ//lQdgoFLVSKTAE3tJU/zs0066XDGXOAaobo8ECNJvyCV825F4BXpBcqoZQ
- ATEBIaqxpmOKnuY7xmDftvJEqpBPkOPvPmnj7ygnJUAnkqJRyfS89REZ/CaPCvS3fQir
- yj7A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=fl+V/49XRpTFZg1lCw0bWOQBh/8EdDxPNN9hHa49sws=;
+ b=EGV55ubRGed/HCZhLfOmvyIvRnkA8NEIH5pYeqzY1hkJA+E9yExempt/qj2SHEZdGX
+ vcEDOFGTfEF68GYuSX6RG/4gLYRReQYYQtpttAlkHZNZNndV7gXYosbpqpTq2xuGLVfx
+ 4ufhZXLcE52x2h5FIDxZ3DNoeorn81YlC3tBLv8TzX7R77t8CvBdDqlTMp1Y3K6IHppP
+ 9+10k+c/q46kI43LGXvsiAu5tqXIhVquPRrk8mTJKK+8b4w2cAAr+W9p5zC0VAo/e/OL
+ z5huDYNI9ZLCd7BZRyMsMclhnNqk77x+fR8z+4mnMRDms09h5dKxCk/Ok/dlylvLbX0Z
+ /hTw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=CNY7i59S
-Subject: [Buildroot] [PATCH v1 1/1] package/slirp: bump to version 4.9.1
+ header.a=rsa-sha256 header.s=20230601 header.b=EGV55ubR
+Subject: [Buildroot] [PATCH v1 1/1] package/podman: bump to version 5.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,36 +113,37 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Changelog:
-https://gitlab.freedesktop.org/slirp/libslirp/-/releases/v4.9.0
-https://gitlab.freedesktop.org/slirp/libslirp/-/releases/v4.9.1
+https://github.com/containers/podman/releases/tag/v5.6.0
+https://github.com/containers/podman/releases/tag/v5.6.1
+https://github.com/containers/podman/releases/tag/v5.6.2
 Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 ---
- package/slirp/slirp.hash | 2 +-
- package/slirp/slirp.mk   | 2 +-
+ package/podman/podman.hash | 2 +-
+ package/podman/podman.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/slirp/slirp.hash b/package/slirp/slirp.hash
-index 930e6aca58..bd07074bb4 100644
---- a/package/slirp/slirp.hash
-+++ b/package/slirp/slirp.hash
+diff --git a/package/podman/podman.hash b/package/podman/podman.hash
+index b5802dd305..e52a353aa7 100644
+--- a/package/podman/podman.hash
++++ b/package/podman/podman.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  1c2e3d30e41a055ed41f9d0b3234d0d143bc28f5ad84bb101413f830844df757  libslirp-v4.8.0.tar.bz2
-+sha256  3caff6e2de445f4995629d4929c55419f661b2b1d14f12481e155a71c1e8f811  libslirp-v4.9.1.tar.bz2
- sha256  b28aecf4796a6a22054167f0a976de13d9db335669d37afd2dc7ea4c335e1e13  COPYRIGHT
-diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
-index 6d44df8d7e..950ad53ea8 100644
---- a/package/slirp/slirp.mk
-+++ b/package/slirp/slirp.mk
+ # Locally computed
+-sha256  a2cd66e33e1cabe34d11543c3fa68f9ebe7fcadbde578231d28745aa0f48a21d  podman-v5.5.2-git4-go2.tar.gz
++sha256  1a35d0030bb8dff31cf45d16d98cddfbf9ceeb2835c82d95b4eacd5a26e482af  podman-v5.6.2-git4-go2.tar.gz
+ sha256  62fb8a3a9621dc2388174caaabe9c2317b694bb9a1d46c98bcf5655b68f51be3  LICENSE
+diff --git a/package/podman/podman.mk b/package/podman/podman.mk
+index fc9a989bf0..71eb26b496 100644
+--- a/package/podman/podman.mk
++++ b/package/podman/podman.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SLIRP_VERSION = 4.8.0
-+SLIRP_VERSION = 4.9.1
- SLIRP_SOURCE = libslirp-v$(SLIRP_VERSION).tar.bz2
- SLIRP_SITE = https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v$(SLIRP_VERSION)
- SLIRP_LICENSE = BSD-3-Clause
+-PODMAN_VERSION = v5.5.2
++PODMAN_VERSION = v5.6.2
+ PODMAN_SITE = https://github.com/containers/podman
+ PODMAN_SITE_METHOD = git
+ 
 -- 
 2.51.1.dirty
 
