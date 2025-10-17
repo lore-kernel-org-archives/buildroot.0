@@ -1,76 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 959C8CCD184
-	for <buildroot@archiver.kernel.org>; Fri, 17 Oct 2025 07:43:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E3FDCCD195
+	for <buildroot@archiver.kernel.org>; Fri, 17 Oct 2025 08:09:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7959060BE1;
-	Fri, 17 Oct 2025 07:43:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 14C5D809A8;
+	Fri, 17 Oct 2025 08:09:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AeqbHSpEC1dm; Fri, 17 Oct 2025 07:43:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id laye_jI_Y-Hb; Fri, 17 Oct 2025 08:09:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92EAE60B2E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 357EC809AF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 92EAE60B2E;
-	Fri, 17 Oct 2025 07:43:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6DC97D8
- for <buildroot@buildroot.org>; Fri, 17 Oct 2025 07:43:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 357EC809AF;
+	Fri, 17 Oct 2025 08:09:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5EB371EB1
+ for <buildroot@buildroot.org>; Fri, 17 Oct 2025 08:09:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5FF2840806
- for <buildroot@buildroot.org>; Fri, 17 Oct 2025 07:43:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5BD4C809AF
+ for <buildroot@buildroot.org>; Fri, 17 Oct 2025 08:09:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fsAttaMK3TI3 for <buildroot@buildroot.org>;
- Fri, 17 Oct 2025 07:42:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=alexis.lothore@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5E1BB407E9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E1BB407E9
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5E1BB407E9
- for <buildroot@buildroot.org>; Fri, 17 Oct 2025 07:42:59 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id 1E2F3C041DC
- for <buildroot@buildroot.org>; Fri, 17 Oct 2025 07:42:36 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 64CF0606DB;
- Fri, 17 Oct 2025 07:42:55 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 88AD6102F231D; 
- Fri, 17 Oct 2025 09:42:54 +0200 (CEST)
-Date: Fri, 17 Oct 2025 09:42:46 +0200
-MIME-Version: 1.0
-Message-Id: <20251017-python-scp-v1-1-b45644fa9afb@bootlin.com>
-References: <20251017-python-scp-v1-0-b45644fa9afb@bootlin.com>
-In-Reply-To: <20251017-python-scp-v1-0-b45644fa9afb@bootlin.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aOy-J7mmzBWB for <buildroot@buildroot.org>;
+ Fri, 17 Oct 2025 08:09:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 71FA6809A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71FA6809A8
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 71FA6809A8
+ for <buildroot@buildroot.org>; Fri, 17 Oct 2025 08:09:21 +0000 (UTC)
+Received: from framework-OT (unknown [93.240.174.20])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 3C20A2C8398D;
+ Fri, 17 Oct 2025 10:09:19 +0200 (CEST)
 To: buildroot@buildroot.org
-X-Mailer: b4 0.14.2
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1760686974; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=ByUzlhtDz3JjOIQQKRiykfCM1jabNJJVJ/su+3gGyDM=;
- b=BibD9jOHKAjj8L2K/j9J571PNimoUsmfvzNQ5EtiFmJLrgmulu+xQiXOtglsofs+sT8BjZ
- hhNzGKAHhDHjKfLPsWjxN3+e661nqEKdZVPKQaIoWJj/eyx2pL5AjnNvvSgpH0VRuvimrl
- QWyeOqRK9pEJWrGZeLD+zOnnXAnXLUKUaP56Gx2ZK9pwD+C3hf93IfizLtZlujYc3VbXhg
- HxkaG+dQvy3wfZGq/mKM0TDmGdgV2Q+8pTMqzkCN9fnMVg6T+BwAK2IwyIbZikJzDqhkWP
- 5/hSbCvWRQi3UNlkFgeJoDCbXYHRgtFlHII2uaHYj0/dFAT2OjNP7J15iSpmBQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+Date: Fri, 17 Oct 2025 10:09:19 +0200
+Message-ID: <20251017080920.28339-1-buildroot@bubu1.eu>
+X-Mailer: git-send-email 2.51.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=bubu1.eu; s=bubu; 
+ t=1760688559; bh=5Q4fQCRb3N+zmoOp2joc/6lzlTGrbKMWuYtl65iEE2A=;
+ h=From:To:Cc:Subject:Date;
+ b=hdcW0H+LiFj3UXqbK/lrc8k705d9NMxn7jjificY8ROpZgKBKMM1uWcSEGxtf8mQu
+ EE+RtT7C5xsQus14QUQv1gEhjDAtZogrOd5JUi4bldAnQZFmJF1R9skv00JZiKvyoy
+ 3+UpW2d+xZmhHXUi89EzEwno1uBvodoaM6tEr2ZZ0enMr3R+8ax2eziLEwTjvtzld3
+ guWs+S/xH4uqRbimwHKLqJOamX6M1l0aqfdW8QeN2hykBvwaN4Dl3ui52hZRdlSG0m
+ R4BSsh/16a0DfPE489uiuqZ6e4RrlPVlJ04VJQqBbT6tXaXXzLD4C4g2Hf9Z+54wYc
+ H6TdHe0ylcwCw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=BibD9jOH
-Subject: [Buildroot] [PATCH 1/2] package/python-scp: new package
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
+ header.a=rsa-sha256 header.s=bubu header.b=hdcW0H+L
+Subject: [Buildroot] [PATCH] package/python-uvloop: bump to v0.22.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,74 +75,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Alexis_Lothor=C3=A9_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ James Hilliard <james.hilliard1@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QWRkIHB5dGhvbi1zY3AgYXMgYSBuZXcgcGFja2FnZS4gcHl0aG9uLXNjcCBhbGxvd3MgdG8gc2Vu
-ZCBhbmQgcmVjZWl2ZXMKZmlsZXMgaW4gcHl0aG9uIHRocm91Z2ggdGhlIHNjcDEgcHJvdG9jb2ws
-IG9uIHRvcCBvZiBwYXJhbWlrby4KClNpZ25lZC1vZmYtYnk6IEFsZXhpcyBMb3Rob3LDqSA8YWxl
-eGlzLmxvdGhvcmVAYm9vdGxpbi5jb20+Ci0tLQogREVWRUxPUEVSUyAgICAgICAgICAgICAgICAg
-ICAgICAgICB8ICAzICsrKwogcGFja2FnZS9Db25maWcuaW4gICAgICAgICAgICAgICAgICB8ICAx
-ICsKIHBhY2thZ2UvcHl0aG9uLXNjcC9Db25maWcuaW4gICAgICAgfCAgNyArKysrKysrCiBwYWNr
-YWdlL3B5dGhvbi1zY3AvcHl0aG9uLXNjcC5oYXNoIHwgIDUgKysrKysKIHBhY2thZ2UvcHl0aG9u
-LXNjcC9weXRob24tc2NwLm1rICAgfCAxNCArKysrKysrKysrKysrKwogNSBmaWxlcyBjaGFuZ2Vk
-LCAzMCBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvREVWRUxPUEVSUyBiL0RFVkVMT1BFUlMK
-aW5kZXggODRjYThjNzZkYzUyZDIzYTY0ZWRjNDNkYWI5MTkyNGU4NTA5ZDhkNS4uZDA2NjRlODcy
-M2NkMjIyM2Y1MTgwY2E1ZWUzMTFkYzc4YjAzNzZiZCAxMDA2NDQKLS0tIGEvREVWRUxPUEVSUwor
-KysgYi9ERVZFTE9QRVJTCkBAIC0xNDgsNiArMTQ4LDkgQEAgRjoJY29uZmlncy9jdWJpZWJvYXJk
-Ml9kZWZjb25maWcKIE46CUFsZXhleSBMdWt5YW5jaHVrIDxza2lmQHNraWYtd2ViLnJ1PgogRjoJ
-cGFja2FnZS96YWJiaXgvCiAKK046IAlBbGV4aXMgTG90aG9yw6kgPGFsZXhpcy5sb3Rob3JlQGJv
-b3RsaW4uY29tPgorRjogCXBhY2thZ2UvcHl0aG9uLXNjcAorCiBOOglBbGlzdGFpciBGcmFuY2lz
-IDxhbGlzdGFpckBhbGlzdGFpcjIzLm1lPgogRjoJYm9hcmQvc2lmaXZlLwogRjoJYm9vdC9vcGVu
-c2JpLwpkaWZmIC0tZ2l0IGEvcGFja2FnZS9Db25maWcuaW4gYi9wYWNrYWdlL0NvbmZpZy5pbgpp
-bmRleCAxYWU5MjQwOWM0YmQxMWJiYmJhZmQwZjlmODI4N2U1NjAxNjAzNTY4Li4zNTYxZWM4MTQ3
-NmEzMGU5MjRiYWYwMjc2ZWM4NmRhNTExOWVhNDU3IDEwMDY0NAotLS0gYS9wYWNrYWdlL0NvbmZp
-Zy5pbgorKysgYi9wYWNrYWdlL0NvbmZpZy5pbgpAQCAtMTM4Myw2ICsxMzgzLDcgQEAgbWVudSAi
-RXh0ZXJuYWwgcHl0aG9uIG1vZHVsZXMiCiAJc291cmNlICJwYWNrYWdlL3B5dGhvbi1zY2FweS9D
-b25maWcuaW4iCiAJc291cmNlICJwYWNrYWdlL3B5dGhvbi1zY2hlZHVsZS9Db25maWcuaW4iCiAJ
-c291cmNlICJwYWNrYWdlL3B5dGhvbi1zY2lweS9Db25maWcuaW4iCisJc291cmNlICJwYWNrYWdl
-L3B5dGhvbi1zY3AvQ29uZmlnLmluIgogCXNvdXJjZSAicGFja2FnZS9weXRob24tc2RidXMvQ29u
-ZmlnLmluIgogCXNvdXJjZSAicGFja2FnZS9weXRob24tc2RidXMtbW9kZW1tYW5hZ2VyL0NvbmZp
-Zy5pbiIKIAlzb3VyY2UgInBhY2thZ2UvcHl0aG9uLXNkYnVzLW5ldHdvcmttYW5hZ2VyL0NvbmZp
-Zy5pbiIKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uLXNjcC9Db25maWcuaW4gYi9wYWNrYWdl
-L3B5dGhvbi1zY3AvQ29uZmlnLmluCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAw
-MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAuLjFkYjBlOTEwZjRiMjA0MWFjNjM4NzFh
-NjZiMDczODJiNmMxYzRjODcKLS0tIC9kZXYvbnVsbAorKysgYi9wYWNrYWdlL3B5dGhvbi1zY3Av
-Q29uZmlnLmluCkBAIC0wLDAgKzEsNyBAQAorY29uZmlnIEJSMl9QQUNLQUdFX1BZVEhPTl9TQ1AK
-Kwlib29sICJweXRob24tc2NwIgorCXNlbGVjdCBCUjJfUEFDS0FHRV9QWVRIT05fUEFSQU1JS08g
-IyBydW50aW1lCisJaGVscAorCSAgc2NwIG1vZHVsZSBmb3IgcGFyYW1pa28uCisKKwkgIGh0dHBz
-Oi8vZ2l0aHViLmNvbS9qYmFyZGluL3NjcC5weQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9weXRob24t
-c2NwL3B5dGhvbi1zY3AuaGFzaCBiL3BhY2thZ2UvcHl0aG9uLXNjcC9weXRob24tc2NwLmhhc2gK
-bmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw
-MDAwMDAwMDAwMC4uNGVjNGU2YTQxYTRkNDQzMzExODk0MTdlMzM2MDIzYWRlNjM3YzA5ZQotLS0g
-L2Rldi9udWxsCisrKyBiL3BhY2thZ2UvcHl0aG9uLXNjcC9weXRob24tc2NwLmhhc2gKQEAgLTAs
-MCArMSw1IEBACisjIG1kNSwgc2hhMjU2IGZyb20gaHR0cHM6Ly9weXBpLm9yZy9weXBpL3NjcC9q
-c29uCittZDUgIDU0YzBlM2I2Y2M1MjYyMGNlM2E4MTM2MmZhOGJiMjlkICBzY3AtMC4xNS4wLnRh
-ci5negorc2hhMjU2ICBmMWIyMmU5OTMyMTIzY2NmMTdlZWJmMTllMDk1M2M2ZTkxNDhmNTg5Zjkz
-ZDkxYjg3Mjk0MWE2OTYzMDVjODNmICBzY3AtMC4xNS4wLnRhci5negorIyBMb2NhbGx5IGNvbXB1
-dGVkIHNoYTI1NiBjaGVja3N1bXMKK3NoYTI1NiAgMjQ1NWNmMGZjNzhlMTM3NzJiZjEwZWY1ZjIw
-OWU3ZWI4NjI1NzA2ZDY3MWIyZjQyMGNjOGFkZDM3ZDU0OGMxYyAgTElDRU5TRS50eHQKZGlmZiAt
-LWdpdCBhL3BhY2thZ2UvcHl0aG9uLXNjcC9weXRob24tc2NwLm1rIGIvcGFja2FnZS9weXRob24t
-c2NwL3B5dGhvbi1zY3AubWsKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMDAw
-MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMC4uZDIyM2IxNjI5MDc2MGE5Yzc4YjViYjU4ZGQ0
-ZDRhZjIxYjQ5YTQzYQotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2UvcHl0aG9uLXNjcC9weXRo
-b24tc2NwLm1rCkBAIC0wLDAgKzEsMTQgQEAKKyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCisjCisj
-IHB5dGhvbi1zY3AKKyMKKyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCisKK1BZVEhPTl9TQ1BfVkVS
-U0lPTiA9IDAuMTUuMAorUFlUSE9OX1NDUF9TT1VSQ0UgPSBzY3AtJChQWVRIT05fU0NQX1ZFUlNJ
-T04pLnRhci5negorUFlUSE9OX1NDUF9TSVRFID0gaHR0cHM6Ly9maWxlcy5weXRob25ob3N0ZWQu
-b3JnL3BhY2thZ2VzL2Q2LzFjL2QyMTNlMWM2NjUxZDBiZDM3NjM2YjIxYjFiYTliODk1ZjI3NmU4
-MDU3Zjg4MmM5Zjk0NDkzMWU0ZjAwMgorUFlUSE9OX1NDUF9TRVRVUF9UWVBFID0gc2V0dXB0b29s
-cworUFlUSE9OX1NDUF9MSUNFTlNFID0gTEdQTC0yLjErCitQWVRIT05fU0NQX0xJQ0VOU0VfRklM
-RVMgPSBMSUNFTlNFLnR4dAorCiskKGV2YWwgJChweXRob24tcGFja2FnZSkpCgotLSAKMi41MS4w
-CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJv
-b3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVp
-bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Changelog: https://github.com/MagicStack/uvloop/releases/tag/v0.22.0
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+---
+ package/python-uvloop/python-uvloop.hash | 7 +++----
+ package/python-uvloop/python-uvloop.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/package/python-uvloop/python-uvloop.hash b/package/python-uvloop/python-uvloop.hash
+index 24111e759b..e6eb188739 100644
+--- a/package/python-uvloop/python-uvloop.hash
++++ b/package/python-uvloop/python-uvloop.hash
+@@ -1,6 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/uvloop/json
+-md5  adedf20cf065ff49a96813b783ec1d29  uvloop-0.21.0.tar.gz
+-sha256  3bf12b0fda68447806a7ad847bfa591613177275d35b6724b1ee573faa3704e3  uvloop-0.21.0.tar.gz
++md5  3fdd58ac1b7c2a520ed05e3151a64515  uvloop-0.22.1.tar.gz
++sha256  6c84bae345b9147082b17371e3dd5d42775bddce91f885499017f4607fdaf39f  uvloop-0.22.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256  377025287798f9dcd819e1f826fa5fc5e2f382528691ab0528c5cf8c8c282c27  LICENSE-APACHE
+-sha256  6dd4c399f26de043d77a2ad7e31db4cb5bf08ea8368b0a42d6e158635cc8ab62  LICENSE-MIT
++sha256  16de0c32b265cb7d46a6d3bd614f259dd4d693a5e26b3407b04aae8d73041f0c  vendor/libuv/LICENSE
+diff --git a/package/python-uvloop/python-uvloop.mk b/package/python-uvloop/python-uvloop.mk
+index fbdf74769e..419ee33062 100644
+--- a/package/python-uvloop/python-uvloop.mk
++++ b/package/python-uvloop/python-uvloop.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_UVLOOP_VERSION = 0.21.0
++PYTHON_UVLOOP_VERSION = 0.22.1
+ PYTHON_UVLOOP_SOURCE = uvloop-$(PYTHON_UVLOOP_VERSION).tar.gz
+-PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/af/c0/854216d09d33c543f12a44b393c402e89a920b1a0a7dc634c42de91b9cf6
++PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/06/f0/18d39dbd1971d6d62c4629cc7fa67f74821b0dc1f5a77af43719de7936a7
+ PYTHON_UVLOOP_SETUP_TYPE = setuptools
+ PYTHON_UVLOOP_LICENSE = Apache-2.0, MIT
+ PYTHON_UVLOOP_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+-- 
+2.51.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
