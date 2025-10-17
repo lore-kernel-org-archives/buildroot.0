@@ -1,67 +1,112 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 419E7CCD195
-	for <buildroot@archiver.kernel.org>; Fri, 17 Oct 2025 10:41:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31558CCD195
+	for <buildroot@archiver.kernel.org>; Fri, 17 Oct 2025 11:21:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E67D060B55;
-	Fri, 17 Oct 2025 10:41:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D690780C13;
+	Fri, 17 Oct 2025 11:21:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NPdA9zxmPzre; Fri, 17 Oct 2025 10:41:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MdZneQ2uK1Yn; Fri, 17 Oct 2025 11:21:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A3B060BB4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EBF380C14
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A3B060BB4;
-	Fri, 17 Oct 2025 10:41:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 23C17EC
- for <buildroot@buildroot.org>; Fri, 17 Oct 2025 10:41:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0EBF380C14;
+	Fri, 17 Oct 2025 11:21:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B6C10972
+ for <buildroot@buildroot.org>; Fri, 17 Oct 2025 11:21:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2123240090
- for <buildroot@buildroot.org>; Fri, 17 Oct 2025 10:41:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A7A6740937
+ for <buildroot@buildroot.org>; Fri, 17 Oct 2025 11:21:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i0CR0U_Z5BIU for <buildroot@buildroot.org>;
- Fri, 17 Oct 2025 10:41:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1948340078
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1948340078
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1948340078
- for <buildroot@buildroot.org>; Fri, 17 Oct 2025 10:41:25 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 1ED1131E0A93; Fri, 17 Oct 2025 12:41:22 +0200 (CEST)
-Date: Fri, 17 Oct 2025 12:41:22 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: buildroot@buildroot.org
-Message-ID: <aPIdUmM7-mXwZvou@waldemar-brodkorb.de>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fDvacXuGawb7 for <buildroot@buildroot.org>;
+ Fri, 17 Oct 2025 11:21:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::631; helo=mail-ej1-x631.google.com;
+ envelope-from=bartosz.bilas@grinn-global.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DA260407A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA260407A2
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DA260407A2
+ for <buildroot@buildroot.org>; Fri, 17 Oct 2025 11:20:59 +0000 (UTC)
+Received: by mail-ej1-x631.google.com with SMTP id
+ a640c23a62f3a-b3e234fcd4bso303384466b.3
+ for <buildroot@buildroot.org>; Fri, 17 Oct 2025 04:20:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1760700057; x=1761304857;
+ h=content-transfer-encoding:in-reply-to:content-language:references
+ :cc:to:subject:user-agent:mime-version:date:message-id:from
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=QRDi8xwMKKebqdCmRYqz1Xnk+17bxUIxl6ytykABbUQ=;
+ b=lDPQfAS7GGyHjk3Y0FId/2Mudq5IPOjjfnnQcmSkuyX8HeSmYtFLwD5EWezin2PH+L
+ BG1oPmYm4Bhy/mfMteLEerunz9JgtV8XTCf0W1CWlEfLb9KNdpJxGWOfql/37hL4bZt3
+ 2Ova5hTFdNS456sDRNNgHicDgIFLqmSFpmBUxtTCAJTY7107Ei/6BQ9h8a23zI+MSZhq
+ jI1nb/AWJyr/P0Xcau5uNiPSFVPADlWain/NoXMhOiKvykx53MDO17ty7ljvFJQblzS4
+ hfclLsX2zLlMPpuT+uuKZOhM4YUHuv+an57F87nEfh7d3QQPm4ZMg1uArYUCATklp8mF
+ d9AQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUv7AerXlMzRUCN7P40ps5usjkjQ8d4seVlooWQT/3STmMQEzKSje4FIop+FaRJ4neFmJSkeFwcmv0=@buildroot.org
+X-Gm-Message-State: AOJu0YxcDLEZ+O6N27ORmQ8WfbyLchaMUPgJ26J2q6hKNt76e21G85Y7
+ ayIrosYcNROLV3qUwl6C9r8KrVvv4EepoC9H/5alk0gIn+B8scMGn4Q2kP+iRxLrIsSH
+X-Gm-Gg: ASbGncuC0tT12bQFXiRZKqMjQiNWNTmrtY9qiZJavDHKHnp5abEGZz5vuUq2LrwPVHJ
+ ah2juc1McbIQynZTqLExMD084UUS8ENIQgrAWe2vdQhbiv24ipYjpw4qu5rEwFy+cuS0e5J27D3
+ c08ne6Q87fE8TXXf3oB53OoAa/sRFpbPIbNV2Ksf7Dz0WAUd7xlX+STvkCKIekyNaie7I/Ggjmw
+ 1dn9O9Wf1I60zFVG9lPGdLtWPmP1HT6Agq8zhRseQZ5hgAq7+Fp5UIl8RYsqj58AR/YeMc6oAJv
+ e4WGc4XiUbphIww27EXlpfna3OOJ1zbN8R/Ka//HKJA4E0k/Y2HSgfje7AGnfDSStRQqJXgC+Q2
+ ZUk6Zft3ChIaHZ90uRFSaOjQ9OlpzUYxGTLVqgNGVPYbBYYr0zMGABioV+eYtPXlAj77elTLtcO
+ hd/rH4YEv/KcdVa0i/X6Pf/b8AG+clMG+zWQ==
+X-Google-Smtp-Source: AGHT+IF3M+vdvPmS42a3U6lZhuXyXUvUVUGl0v2gWDhE3+q+RcF5oG40NcTyt8bJfvpP3l9Oeu6mJQ==
+X-Received: by 2002:a17:907:8691:b0:b3c:6093:679b with SMTP id
+ a640c23a62f3a-b6473952198mr344675666b.36.1760700056211; 
+ Fri, 17 Oct 2025 04:20:56 -0700 (PDT)
+Received: from [192.168.10.54] (ip-194.4.60.197.edial.pl. [194.4.60.197])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-b5cba06a5b3sm798412966b.29.2025.10.17.04.20.55
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 17 Oct 2025 04:20:55 -0700 (PDT)
+From: Bartosz Bilas <bartosz.bilas@grinn-global.com>
+X-Google-Original-From: Bartosz Bilas <b.bilas@grinn-global.com>
+Message-ID: <96b063f0-7e79-4783-9f99-581809183f1f@grinn-global.com>
+Date: Fri, 17 Oct 2025 13:20:54 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 6.12.43+deb13-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1760697683; bh=fm3vTyrLzefPrrK0JueTaxncVMxxtR4SpE1DfST1ulc=;
- h=Date:From:To:Subject:From;
- b=vCYfOpqUGwgoSQdCEPQ1AZRTg3b6UrNwE5E9/gVixpcxMjDJ8nUJgOIptITiwe977
- 0ns9ciGI1I6OxpvWmyP+ebcqFnPp+TW74mXgbzA8KB+gbSbrfkfGqUP+IleOZOVHD4
- iRhdTXRh5cdNv4npxbH2NhdbzsW14p6DtdlZi8CZZ1c+AXGSl3LGUHXG4EjF0OClnL
- AyQcAEHOipxVEqcv2EEec6OgFtr9qUeiO2PaAZr/aOiCZOiytgJbgU++PTpEEgnXoL
- BFJaOSdumf4GZRf03B76Eq9edrb6zEr5S8ufoU/r3gKSwtlSHLpQEQwyj4STvzIdB3
- LWz3wx4d/V9Ow==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=openadk.org header.i=@openadk.org
- header.a=rsa-sha256 header.s=2022 header.b=vCYfOpqU
-Subject: [Buildroot] [PATCH v2 6/6] package/thunderbird: new package
+User-Agent: Mozilla Thunderbird
+To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+References: <20251012182016.2711834-1-bernd@kuhls.net>
+ <20251012182016.2711834-21-bernd@kuhls.net>
+Content-Language: en-US
+In-Reply-To: <20251012182016.2711834-21-bernd@kuhls.net>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=grinn-global-com.20230601.gappssmtp.com; s=20230601; t=1760700057;
+ x=1761304857; darn=buildroot.org; 
+ h=content-transfer-encoding:in-reply-to:content-language:references
+ :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
+ :cc:subject:date:message-id:reply-to;
+ bh=QRDi8xwMKKebqdCmRYqz1Xnk+17bxUIxl6ytykABbUQ=;
+ b=RVedXOE52mAFzcjgU9rfVfhRSpgYRqGmBRg0FuzpcyBpl8XhHH02ZkCTljYRKyUEhL
+ SVFKND1djwavL0waW4VXjFMsLFu/+F8TrZnqYXfshboZLjGDScl1kFGrIbKiLTSgIVJd
+ AYJAdLj7lNNJ2aJLokAPr9PUROk12gKWz/luSNT0/u9SgpVLsE7WWip+dJ4SVdtzc8KO
+ lwt4cEJf67YrG1uRrBbSxWr35uTzlnhzivIwTgUr4KoObtIDlAHPpF0l6gOfK1ohcT3J
+ 0+ZVRIrmYCHtdsExFboLz/8bupWIKTn7fu62DztTEQZKqwRXoc3h2hXy2mPDJkfkXAuH
+ BMgA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=grinn-global.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=grinn-global-com.20230601.gappssmtp.com
+ header.i=@grinn-global-com.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=RVedXOE5
+Subject: Re: [Buildroot] [PATCH 21/21] package/python-esptool: bump version
+ to 5.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -73,216 +118,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Attila Wagner <attila.wagner@onyxinsight.com>,
+ =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>,
+ Andrey Smirnov <andrew.smirnov@gmail.com>, Grzegorz Blach <grzegorz@blach.pl>,
+ James Hilliard <james.hilliard1@gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Popular mail client.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- DEVELOPERS                           |  1 +
- package/Config.in                    |  1 +
- package/thunderbird/Config.in        | 54 +++++++++++++++++
- package/thunderbird/thunderbird.hash |  3 +
- package/thunderbird/thunderbird.mk   | 88 ++++++++++++++++++++++++++++
- 5 files changed, 147 insertions(+)
- create mode 100644 package/thunderbird/Config.in
- create mode 100644 package/thunderbird/thunderbird.hash
- create mode 100644 package/thunderbird/thunderbird.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0b257748f3..bad3289f6f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3406,6 +3406,7 @@ F:	package/libaom/
- F:	package/libjwt/
- F:	package/mksh/
- F:	package/ruby/
-+F:	package/thunderbird/
- F:	package/uclibc/
- F:	package/uclibc-ng-test/
- F:	package/zabbix/
-diff --git a/package/Config.in b/package/Config.in
-index 7528d6d891..269be56971 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2386,6 +2386,7 @@ menu "Mail"
- 	source "package/libesmtp/Config.in"
- 	source "package/msmtp/Config.in"
- 	source "package/mutt/Config.in"
-+	source "package/thunderbird/Config.in"
- endmenu
- 
- menu "Miscellaneous"
-diff --git a/package/thunderbird/Config.in b/package/thunderbird/Config.in
-new file mode 100644
-index 0000000000..c4efafbf65
---- /dev/null
-+++ b/package/thunderbird/Config.in
-@@ -0,0 +1,54 @@
-+config BR2_PACKAGE_THUNDERBIRD
-+	bool "thunderbird"
-+	depends on BR2_aarch64 || BR2_x86_64
-+	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_USE_WCHAR # glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-+	depends on BR2_USE_MMU # glib2
-+	depends on BR2_INSTALL_LIBSTDCPP # pango
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	select BR2_PACKAGE_ALSA_LIB
-+	select BR2_PACKAGE_DAV1D
-+	select BR2_PACKAGE_DBUS_GLIB
-+	select BR2_PACKAGE_FONTCONFIG
-+	select BR2_PACKAGE_HARFBUZZ
-+	select BR2_PACKAGE_HOST_NODEJS
-+	select BR2_PACKAGE_HOST_NODEJS_SRC
-+	select BR2_PACKAGE_HOST_PYTHON3
-+	select BR2_PACKAGE_HOST_PYTHON3_BZIP2
-+	select BR2_PACKAGE_HOST_PYTHON3_CURSES
-+	select BR2_PACKAGE_HOST_PYTHON3_SQLITE
-+	select BR2_PACKAGE_HOST_PYTHON3_SSL
-+	select BR2_PACKAGE_LIBFFI
-+	select BR2_PACKAGE_ICU
-+	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_LIBAOM
-+	select BR2_PACKAGE_LIBGTK3
-+	select BR2_PACKAGE_LIBNSPR
-+	select BR2_PACKAGE_LIBNSS
-+	select BR2_PACKAGE_LIBVPX
-+	select BR2_PACKAGE_PANGO
-+	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
-+	select BR2_PACKAGE_XLIB_LIBXCURSOR
-+	select BR2_PACKAGE_XLIB_LIBXDAMAGE
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XLIB_LIBICE
-+	select BR2_PACKAGE_XLIB_LIBSM
-+	help
-+	  Popular mail client.
-+
-+	  https://www.thunderbird.net
-+
-+comment "thunderbird needs a toolchain w/ wchar, threads, C++"
-+	depends on BR2_PACKAGE_XORG7 && BR2_USE_MMU
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+
-+comment "thunderbird needs an OpenGL (GLX) provider"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/thunderbird/thunderbird.hash b/package/thunderbird/thunderbird.hash
-new file mode 100644
-index 0000000000..05c5d12f4c
---- /dev/null
-+++ b/package/thunderbird/thunderbird.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  b0eb946d9e6d4b2adbfad0893a5c79caa11203a3906b0b5f26f0ccc4c9b28ff0  thunderbird-140.4.0esr.source.tar.xz
-+sha256  d10965daab0b819bef778c629a94cdd094ffb4ede37239b3d263884a574352c0  toolkit/content/license.html
-diff --git a/package/thunderbird/thunderbird.mk b/package/thunderbird/thunderbird.mk
-new file mode 100644
-index 0000000000..2567b0865d
---- /dev/null
-+++ b/package/thunderbird/thunderbird.mk
-@@ -0,0 +1,88 @@
-+################################################################################
-+#
-+# thunderbird
-+#
-+################################################################################
-+
-+THUNDERBIRD_VERSION = 140.4.0esr
-+THUNDERBIRD_SOURCE = thunderbird-$(THUNDERBIRD_VERSION).source.tar.xz
-+THUNDERBIRD_SITE = https://ftp.mozilla.org/pub/thunderbird/releases/$(THUNDERBIRD_VERSION)/source
-+THUNDERBIRD_LICENSE = MPL-2.0
-+THUNDERBIRD_LICENSE_FILES = toolkit/content/license.html
-+THUNDERBIRD_DEPENDENCIES = \
-+	host-nodejs \
-+	host-cbindgen \
-+	host-clang \
-+	host-nasm \
-+	alsa-lib \
-+	dbus-glib \
-+	fontconfig \
-+	harfbuzz \
-+	jpeg \
-+	libgtk3 \
-+	libnspr \
-+	libnss \
-+	libvpx \
-+	pango \
-+	pixman \
-+	zlib \
-+	xlib_libXcomposite \
-+	xlib_libXcursor \
-+	xlib_libXdamage \
-+	xlib_libXrandr \
-+	xlib_libICE \
-+	xlib_libSM
-+
-+THUNDERBIRD_CONF_OPTS = \
-+	--enable-application=comm/mail \
-+      	--enable-official-branding \
-+	--enable-hardening \
-+	--disable-audio-backends \
-+	--disable-webrtc \
-+	--disable-printing \
-+	--without-wasm-sandboxed-libraries \
-+	--disable-profiling \
-+	--disable-pulseaudio \
-+	--disable-crashreporter \
-+	--disable-tests \
-+	--with-system-ffi \
-+	--with-system-icu \
-+	--with-system-jpeg \
-+	--with-system-libvpx \
-+	--with-system-nspr \
-+	--with-system-nss \
-+	--with-system-pixman \
-+	--with-system-zlib \
-+	--with-clang-path=$(HOST_DIR)/bin/clang
-+
-+# build directory can't be the directory where configure are there, so..
-+define THUNDERBIRD_CONFIGURE_CMDS
-+	(mkdir -p $(@D)/build; cd $(@D)/build; rm -rf config.cache; \
-+		PATH=$(BR_PATH) \
-+		CC="$(TARGET_CC)" \
-+		CFLAGS="$(TARGET_CFLAGS)" \
-+		CROSS_COMPILE=1 \
-+		../configure \
-+		--target=$(GNU_TARGET_NAME) \
-+		--with-toolchain-prefix=$(GNU_TARGET_NAME)- \
-+		--prefix=/usr \
-+		$(THUNDERBIRD_CONF_OPTS) \
-+	)
-+endef
-+
-+define THUNDERBIRD_BUILD_CMDS
-+	$(MAKE) -C $(@D)/build \
-+		CC="$(TARGET_CC)" \
-+		CFLAGS="$(TARGET_CFLAGS)" \
-+		all
-+endef
-+
-+define THUNDERBIRD_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D)/build \
-+		DESTDIR=$(TARGET_DIR) \
-+		CC="$(TARGET_CC)" \
-+		CFLAGS="$(TARGET_CFLAGS)" \
-+		install
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.47.3
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgQmVybmQsCgpJdCB3b24ndCB3b3JrIHdpdGhvdXQgdGhlIG5ldyByZXF1aXJlZCBydW50aW1l
+IGRlcGVuZGVuY2llcy4gU2VlIApodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3Qv
+YnVpbGRyb290L2xpc3QvP3Nlcmllcz00NjY5NDAKCkJlc3QgcmVnYXJkcwpCYXJ0b3N6IEJpxYJh
+cwoKT24gMTAvMTIvMjUgMjA6MjAsIEJlcm5kIEt1aGxzIHdyb3RlOgo+IFNpZ25lZC1vZmYtYnk6
+IEJlcm5kIEt1aGxzPGJlcm5kQGt1aGxzLm5ldD4KPiAtLS0KPiAgIHBhY2thZ2UvcHl0aG9uLWVz
+cHRvb2wvcHl0aG9uLWVzcHRvb2wuaGFzaCB8IDQgKystLQo+ICAgcGFja2FnZS9weXRob24tZXNw
+dG9vbC9weXRob24tZXNwdG9vbC5tayAgIHwgNCArKy0tCj4gICAyIGZpbGVzIGNoYW5nZWQsIDQg
+aW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKPgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3B5
+dGhvbi1lc3B0b29sL3B5dGhvbi1lc3B0b29sLmhhc2ggYi9wYWNrYWdlL3B5dGhvbi1lc3B0b29s
+L3B5dGhvbi1lc3B0b29sLmhhc2gKPiBpbmRleCA2ZWFiNzkwOTAxLi5hZjUxN2UwODQ0IDEwMDY0
+NAo+IC0tLSBhL3BhY2thZ2UvcHl0aG9uLWVzcHRvb2wvcHl0aG9uLWVzcHRvb2wuaGFzaAo+ICsr
+KyBiL3BhY2thZ2UvcHl0aG9uLWVzcHRvb2wvcHl0aG9uLWVzcHRvb2wuaGFzaAo+IEBAIC0xLDUg
+KzEsNSBAQAo+ICAgIyBtZDUsIHNoYTI1NiBmcm9taHR0cHM6Ly9weXBpLm9yZy9weXBpL2VzcHRv
+b2wvanNvbgo+IC1tZDUgIGM3ZDQxZDRjODlmZmEwZmEwYTlkNDkwNDM5MzU4YjI3ICBlc3B0b29s
+LTQuOC4xLnRhci5nego+IC1zaGEyNTYgIGRjNGVmMjZiNjU5ZTFhOGRjYjAxOTE0N2MwZWE2ZDk0
+OTgwYjM0ZGU5OWZiZTA5MTIxYzc5NDFjOGIyNTQ1MzEgIGVzcHRvb2wtNC44LjEudGFyLmd6Cj4g
+K21kNSAgZmM5Y2VhNDkxMGVjZmI2ZmJiYjI5NDJlNDRjODM1YmQgIGVzcHRvb2wtNS4xLjAudGFy
+Lmd6Cj4gK3NoYTI1NiAgMmVhOWJjZDdlYjI2M2QzODBhNGZlMDE3MDg1NmExMGU0YzY1ZTNmMzhj
+NzU3ZWJkYzczNTg0YzhkZDgzMjJkYSAgZXNwdG9vbC01LjEuMC50YXIuZ3oKPiAgICMgTG9jYWxs
+eSBjb21wdXRlZCBzaGEyNTYgY2hlY2tzdW1zCj4gICBzaGEyNTYgIDgxNzdmOTc1MTMyMTM1MjZk
+ZjJjZjYxODRkOGZmOTg2YzY3NWFmYjUxNGQ0ZTY4YTQwNDAxMDUyMWI4ODA2NDMgIExJQ0VOU0UK
+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9weXRob24tZXNwdG9vbC9weXRob24tZXNwdG9vbC5tayBi
+L3BhY2thZ2UvcHl0aG9uLWVzcHRvb2wvcHl0aG9uLWVzcHRvb2wubWsKPiBpbmRleCBhNDkyMmMx
+ZTViLi5lZGE5ZDAyNGM2IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvcHl0aG9uLWVzcHRvb2wvcHl0
+aG9uLWVzcHRvb2wubWsKPiArKysgYi9wYWNrYWdlL3B5dGhvbi1lc3B0b29sL3B5dGhvbi1lc3B0
+b29sLm1rCj4gQEAgLTQsOSArNCw5IEBACj4gICAjCj4gICAjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+Iwo+ICAgCj4gLVBZVEhPTl9FU1BUT09MX1ZFUlNJT04gPSA0LjguMQo+ICtQWVRIT05fRVNQVE9P
+TF9WRVJTSU9OID0gNS4xLjAKPiAgIFBZVEhPTl9FU1BUT09MX1NPVVJDRSA9IGVzcHRvb2wtJChQ
+WVRIT05fRVNQVE9PTF9WRVJTSU9OKS50YXIuZ3oKPiAtUFlUSE9OX0VTUFRPT0xfU0lURSA9aHR0
+cHM6Ly9maWxlcy5weXRob25ob3N0ZWQub3JnL3BhY2thZ2VzLzVjLzZiLzNjZTliYjdmMzZiZGVm
+M2Q2YWU3MTY0NmExZDNiN2Q1OTgyNmE0NzhmM2VkOGE3ODNhOTNhMmY4ZjUzNwo+ICtQWVRIT05f
+RVNQVE9PTF9TSVRFID1odHRwczovL2ZpbGVzLnB5dGhvbmhvc3RlZC5vcmcvcGFja2FnZXMvYzIv
+MDMvZDdkNzlhNzdkZDc4N2RiZTYwMjk4MDljNWY4MWFkODg5MTIzNDBhMTMxYzg4MDc1MTg5ZjQw
+ZGYzYWJhCj4gICBQWVRIT05fRVNQVE9PTF9TRVRVUF9UWVBFID0gc2V0dXB0b29scwo+ICAgUFlU
+SE9OX0VTUFRPT0xfTElDRU5TRSA9IEdQTC0yLjArCj4gICBQWVRIT05fRVNQVE9PTF9MSUNFTlNF
+X0ZJTEVTID0gTElDRU5TRQotLSAKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
+ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
