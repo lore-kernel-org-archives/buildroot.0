@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D55A8CCD1A4
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29D7BCCD195
 	for <buildroot@archiver.kernel.org>; Fri, 17 Oct 2025 16:33:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 533B58187F;
-	Fri, 17 Oct 2025 16:33:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E4D0D40B68;
+	Fri, 17 Oct 2025 16:33:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OONTVkS7bSOz; Fri, 17 Oct 2025 16:33:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zG3yYSIT1pJ9; Fri, 17 Oct 2025 16:33:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7293809A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0016B40B69
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C7293809A4;
-	Fri, 17 Oct 2025 16:33:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7D12AD8
- for <buildroot@buildroot.org>; Fri, 17 Oct 2025 16:33:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0016B40B69;
+	Fri, 17 Oct 2025 16:33:36 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 84D6A972
+ for <buildroot@buildroot.org>; Fri, 17 Oct 2025 16:33:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 63BBB809A4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6A37140B21
  for <buildroot@buildroot.org>; Fri, 17 Oct 2025 16:33:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ujFO8gLRj5LT for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id spety-vRouzK for <buildroot@buildroot.org>;
  Fri, 17 Oct 2025 16:33:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B038B80991
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94EBA40BAB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B038B80991
+ by smtp2.osuosl.org (Postfix) with ESMTP id 94EBA40BAB
  for <buildroot@buildroot.org>; Fri, 17 Oct 2025 16:33:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9EA8A83933; Fri, 17 Oct 2025 16:33:29 +0000 (UTC)
+ id 7B69B873E4; Fri, 17 Oct 2025 16:33:29 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 17 Oct 2025 18:28:54 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 960cbf71ae35b74ba43944d32c34dcb026eac74e
-X-Git-Newrev: 6d0251c9d57cff04dbd43b2cb4aa0876e7978d03
+X-Git-Oldrev: 884626ede203c6a055fbbdab0cc0219fc5ae2cbf
+X-Git-Newrev: 2d0451030fb4aea04138a95edbd71049c5b9b1e9
 X-Patchwork-Hint: ignore
-Message-Id: <20251017163329.9EA8A83933@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-lmdb: bump version to 1.7.5
+Message-Id: <20251017163329.7B69B873E4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pyudev: bump version to
+ 0.24.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,64 +66,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d0251c9d57cff04dbd43b2cb4aa0876e7978d03
+commit: https://git.buildroot.net/buildroot/commit/?id=2d0451030fb4aea04138a95edbd71049c5b9b1e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added dependencies to python-cffi & python-patch-ng due to upstream
-commit:
-https://github.com/jnwatson/py-lmdb/commit/3f6f458df64fdbf4a2dbc5ec0aa407b640ef00e2
+Rebased patch 0001 due to upstream commit:
+https://github.com/pyudev/pyudev/commit/6d760e7eefb8ad1df55e69067ccd7d023a1e9be5
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-lmdb/Config.in        | 2 ++
- package/python-lmdb/python-lmdb.hash | 4 ++--
- package/python-lmdb/python-lmdb.mk   | 5 +++--
- 3 files changed, 7 insertions(+), 4 deletions(-)
+ ...001-Workaround-finding-libudev-on-systems-without-ldconf.patch | 8 +++++---
+ package/python-pyudev/python-pyudev.hash                          | 4 ++--
+ package/python-pyudev/python-pyudev.mk                            | 4 ++--
+ 3 files changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-lmdb/Config.in b/package/python-lmdb/Config.in
-index b63af96ec4..a94badbe76 100644
---- a/package/python-lmdb/Config.in
-+++ b/package/python-lmdb/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_PYTHON_LMDB
- 	bool "python-lmdb"
-+	select BR2_PACKAGE_PYTHON_CFFI # runtime
-+	select BR2_PACKAGE_PYTHON_PATCH_NG # runtime
- 	help
- 	  Universal Python binding for the LMDB 'Lightning' Database.
- 
-diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
-index f729c197f8..525c434f2a 100644
---- a/package/python-lmdb/python-lmdb.hash
-+++ b/package/python-lmdb/python-lmdb.hash
+diff --git a/package/python-pyudev/0001-Workaround-finding-libudev-on-systems-without-ldconf.patch b/package/python-pyudev/0001-Workaround-finding-libudev-on-systems-without-ldconf.patch
+index 26f1ef6390..f8c9497de3 100644
+--- a/package/python-pyudev/0001-Workaround-finding-libudev-on-systems-without-ldconf.patch
++++ b/package/python-pyudev/0001-Workaround-finding-libudev-on-systems-without-ldconf.patch
+@@ -15,6 +15,8 @@ Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+ [Fabrice: Use %-formatting instead of f-string for python 2]
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Bernd: rebased for version 0.24.4]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+  src/pyudev/_ctypeslib/utils.py | 8 ++++----
+  1 file changed, 4 insertions(+), 4 deletions(-)
+@@ -23,7 +25,7 @@ diff --git a/src/pyudev/_ctypeslib/utils.py b/src/pyudev/_ctypeslib/utils.py
+ index 9dffb3c..aa9942f 100644
+ --- a/src/pyudev/_ctypeslib/utils.py
+ +++ b/src/pyudev/_ctypeslib/utils.py
+-@@ -28,7 +28,7 @@
++@@ -24,7 +24,7 @@
+  """
+  
+  # isort: STDLIB
+@@ -32,7 +34,7 @@ index 9dffb3c..aa9942f 100644
+  from ctypes.util import find_library
+  
+  
+-@@ -50,10 +50,10 @@ def load_ctypes_library(name, signatures, error_checkers):
++@@ -46,10 +46,10 @@ def load_ctypes_library(name, signatures, error_checkers):
+      :rtype: ctypes.CDLL
+      :raises ImportError: if the library is not found
+      """
+@@ -41,7 +43,7 @@ index 9dffb3c..aa9942f 100644
+ +    try:
+ +        lib = cdll.LoadLibrary('lib%s.so' % name)
+ +    except OSError:
+-         raise ImportError("No library named %s" % name)
++         raise ImportError(f"No library named {name}")
+ -    lib = CDLL(library_name, use_errno=True)
+      # Add function signatures
+      for funcname, signature in signatures.items():
+diff --git a/package/python-pyudev/python-pyudev.hash b/package/python-pyudev/python-pyudev.hash
+index e9596b7b43..799499a2ac 100644
+--- a/package/python-pyudev/python-pyudev.hash
++++ b/package/python-pyudev/python-pyudev.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/lmdb/json
--md5  f9d67b42a6d708ec1cfc860f67e20387  lmdb-1.6.2.tar.gz
--sha256  d28e3fa59935ff688858760ec52f202ecb8c1089a3f68d1f162ea3078d151e73  lmdb-1.6.2.tar.gz
-+md5  0996b2df3b8019b76ce1fa37913e41f0  lmdb-1.7.5.tar.gz
-+sha256  f0604751762cb097059d5412444c4057b95f386c7ed958363cf63f453e5108da  lmdb-1.7.5.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pyudev/json
+-md5  07bbe9111308d2509645705b8321c416  pyudev-0.24.3.tar.gz
+-sha256  2e945427a21674893bb97632401db62139d91cea1ee96137cc7b07ad22198fc7  pyudev-0.24.3.tar.gz
++md5  2d2e6f68b60c3bf3ffc2b7c8df8d18ac  pyudev-0.24.4.tar.gz
++sha256  e788bb983700b1a84efc2e88862b0a51af2a995d5b86bc9997546505cf7b36bc  pyudev-0.24.4.tar.gz
  # Locally computed sha256 checksums
- sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
-index 1648ed7054..3f92ef066f 100644
---- a/package/python-lmdb/python-lmdb.mk
-+++ b/package/python-lmdb/python-lmdb.mk
-@@ -4,11 +4,12 @@
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/python-pyudev/python-pyudev.mk b/package/python-pyudev/python-pyudev.mk
+index fa11ce5040..a83fe70a48 100644
+--- a/package/python-pyudev/python-pyudev.mk
++++ b/package/python-pyudev/python-pyudev.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_LMDB_VERSION = 1.6.2
-+PYTHON_LMDB_VERSION = 1.7.5
- PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
--PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/71/54/fb1d5918406a72fcf46fbfaece7c0349d88cd8685f5443a142ddd7dac05b
-+PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/c7/a3/3756f2c6adba4a1413dba55e6c81a20b38a868656517308533e33cb59e1c
- PYTHON_LMDB_LICENSE = OLDAP-2.8
- PYTHON_LMDB_LICENSE_FILES = LICENSE
-+PYTHON_LMDB_DEPENDENCIES = host-python-cffi host-python-patch-ng
- PYTHON_LMDB_CPE_ID_VENDOR = py-lmdb_project
- PYTHON_LMDB_CPE_ID_PRODUCT = py-lmdb
- PYTHON_LMDB_SETUP_TYPE = setuptools
+-PYTHON_PYUDEV_VERSION = 0.24.3
++PYTHON_PYUDEV_VERSION = 0.24.4
+ PYTHON_PYUDEV_SOURCE = pyudev-$(PYTHON_PYUDEV_VERSION).tar.gz
+-PYTHON_PYUDEV_SITE = https://files.pythonhosted.org/packages/c4/5c/6cc034da13830e3da123ccf9a30910bc868fa16670362f004e4b788d0df1
++PYTHON_PYUDEV_SITE = https://files.pythonhosted.org/packages/5e/1d/8bdbf651de1002e8b58fbe817bee22b1e8bfcdd24341d42c3238ce9a75f4
+ PYTHON_PYUDEV_LICENSE = LGPL-2.1+
+ PYTHON_PYUDEV_LICENSE_FILES = COPYING
+ PYTHON_PYUDEV_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
