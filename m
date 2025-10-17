@@ -1,78 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED961CCD199
-	for <buildroot@archiver.kernel.org>; Fri, 17 Oct 2025 17:59:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB5DCCCD199
+	for <buildroot@archiver.kernel.org>; Fri, 17 Oct 2025 18:19:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8924440C15;
-	Fri, 17 Oct 2025 17:59:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4003961200;
+	Fri, 17 Oct 2025 18:19:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bZqIU8ZDr0PL; Fri, 17 Oct 2025 17:59:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id duYiGMraMnN9; Fri, 17 Oct 2025 18:19:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E22740C11
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5486611F5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9E22740C11;
-	Fri, 17 Oct 2025 17:59:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 98436D8
- for <buildroot@buildroot.org>; Fri, 17 Oct 2025 17:59:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C5486611F5;
+	Fri, 17 Oct 2025 18:19:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 77C8D43F
+ for <buildroot@buildroot.org>; Fri, 17 Oct 2025 18:19:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 898E780E62
- for <buildroot@buildroot.org>; Fri, 17 Oct 2025 17:59:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 69470818E6
+ for <buildroot@buildroot.org>; Fri, 17 Oct 2025 18:19:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4HcqeeiKhS1Z for <buildroot@buildroot.org>;
- Fri, 17 Oct 2025 17:59:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D4C2780E2D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4C2780E2D
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D4C2780E2D
- for <buildroot@buildroot.org>; Fri, 17 Oct 2025 17:59:33 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0643.dip0.t-ipconnect.de [91.58.6.67])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 3E212A4C0F2B;
- Fri, 17 Oct 2025 19:59:31 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:50656)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1v9oji-000000004QX-3Qda;
- Fri, 17 Oct 2025 17:59:30 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id JMZdiNqMrCbA for <buildroot@buildroot.org>;
+ Fri, 17 Oct 2025 18:19:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::535; helo=mail-ed1-x535.google.com;
+ envelope-from=raphael.pavlidis@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4F103816F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F103816F8
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4F103816F8
+ for <buildroot@buildroot.org>; Fri, 17 Oct 2025 18:19:53 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id
+ 4fb4d7f45d1cf-63c11011e01so3363331a12.2
+ for <buildroot@buildroot.org>; Fri, 17 Oct 2025 11:19:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1760725191; x=1761329991;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=eDRlPGXYRLApK6TwIcwEpYKKdXmwEOv80lAE3pnVx1I=;
+ b=kZDb+gI4zBMzQr53DDNljKN5F8R8R9n5SjWj91+QIvhYZl0MMX4zpKknmTncsp4tRP
+ OVgugqmlsUK+yjOxOBkfT6UOwhZqzQMn4Khr1XEswtwscvSsMSc/VGadb5liKkjXQZ7r
+ Cej0ElLkTYbIoHTGq1ir+LiAdO2ZNlVrVv9+oTe3iCbqPQ4NhxMbJsF+Dd4qlIHJ/dTS
+ L45i+njkjRo2dIsG3izIqjX+XBmjBsmEwA44bzAmbeqv0YMN3Yb/ZhtBNDxbEzpgTO2+
+ 9Wt2dytCp9reSDwDECLuF5NG6cuD1yjyJggDifLps29JoRugnBBRJm+iKOWBxgEHCOWQ
+ ct5g==
+X-Gm-Message-State: AOJu0Yzrke7UJWhpmCjuSZhokiDBKRPENPqiM6XltmBigOmjhYMp4sJ7
+ Ou9w1RbcyQQ2ZiM4eVesJTpKytyLfMfABtaqQtrlSOJRHV9f3ra8xTHaavX43AyW
+X-Gm-Gg: ASbGncthVvra6WE5M8sYT7urwdaLKIwkLyIdtED4nj6LSzvDQz+t+NJGVk1oRZB/uvN
+ HEo1a2DPmpJuQ8pb1lkuRTDSEBzaGr6I6x19be/au8dtjP8OdhrHzE8JK7iV5Gr8YrCln/GJ72O
+ /idXX0wtxbbGXR7lCGpiH40NfjrGWVvqIBzWJWxV3+N13Y+Ffe53c+PkT+Acu+6HSvBtUBkXJ3L
+ 6hbvhsPZ+sPqte002ah1raL6qHJhekLrcS6TiGeAl9zM83IcJKJ2235yTpuhk7yjPEi/XQ+BEwv
+ R3+5jsQP5UBOL2swQEuMbNz+HB4SQDNswkffW/9vAVOgkRxPnIaRku7BoOA1m06q++KmQ0468Xx
+ qbINFySrIYINIHSiRSOhj0nM/K+4an1TaM6OVMOAXn0pKRYDoyjfht7p6JTVC5CVILbRRNF8BBF
+ Tw
+X-Google-Smtp-Source: AGHT+IEQlsmKnFdZ7fVRzk1hNUm2Ik/ciHDXs+cbKxfTga2bNsDRiumwqWuzs5aL2sv1l0oHtkjkHA==
+X-Received: by 2002:a05:6402:144e:b0:63c:2d6:f471 with SMTP id
+ 4fb4d7f45d1cf-63c1f6e047cmr4815382a12.26.1760725190932; 
+ Fri, 17 Oct 2025 11:19:50 -0700 (PDT)
+Received: from LinkMed ([2a02:8070:2483:7e00::f6da])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-63c4945efebsm291455a12.32.2025.10.17.11.19.50
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 17 Oct 2025 11:19:50 -0700 (PDT)
+From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 To: buildroot@buildroot.org
-Cc: Baxiche Su <baxiche@gmail.com>, Jesse Van Gavere <jesseevg@gmail.com>,
- Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 17 Oct 2025 19:59:30 +0200
-Message-ID: <20251017175930.3369733-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Cc: Adrian Perez de Castro <aperez@igalia.com>,
+ Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Date: Fri, 17 Oct 2025 20:18:05 +0000
+Message-ID: <20251017201805.317401-1-raphael.pavlidis@gmail.com>
+X-Mailer: git-send-email 2.51.1.dirty
 MIME-Version: 1.0
-X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1760723971;
- bh=eHHMgxhVTAFKR0zoeasjU/TD7RnK5BDL2BtUX6KL+Hs=;
- h=From:To:Cc:Subject:Date:From;
- b=GmApFIklV3EiuHfTV0dVLPTpZs2kbTuWzREDLFNNOgh5BrbcvVWZwtSSv/6GaXqfp
- I7Blir4AZ711V84s93fsYf2EUvOwGQuZPbSpK0GRgl3IZnfTO5STufZUT1AytVARr4
- LtxSQe0ZtV3T8Fh54rqkKMwp8GXJ3i4pTWIPBy1sSab9tJNHa27DrraBR80jmFKiqD
- oTMFLKJBUtZ8T9uFrrSE2C4NKOP8lrL69bwz7IkzR4iS5Wee7mvWimI2QGU3JDe3g7
- PzojvwCTQY56+syjNqi/mG+p1pyCRqRgpIrf0DdnwB+FybMJluDRtMYPVv/16KZ85Q
- yyZbY/UuUnJvg==
+ d=gmail.com; s=20230601; t=1760725191; x=1761329991; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=eDRlPGXYRLApK6TwIcwEpYKKdXmwEOv80lAE3pnVx1I=;
+ b=I7AdIzPG5FOvW/b4tPENy5Ofs24cRxJH5QOCrXj6T7qZo/ciThJ0Tl1xT4pZ6MbPes
+ ua4TegQEBVy15/Wl2oS4Dq+bLX+jHMmdc0DBpeJTZCOeTsE/eJ/tratrJBTQ6VxHaS6g
+ OLL77SKE/bbS0vjevcnwwasrClMWtrTn96m6Z7La6NvL82ouszizvdt2/OZINk8IpuhX
+ CeNgxLaY3chgJ0UAUkBZ5CNIgsghFUui8L3dOHYcw7ilSwFX3qZgb5BFToifVJoa8Sq8
+ FafeIFlL2Mt90x5OqrMXhme8a5pJ8zWH6tgsOGuZBZkHp/ivJ4QH2a4cNa85S0RtBbym
+ YpgQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=GmApFIkl
-Subject: [Buildroot] [PATCH 1/1] package/qt6/qt6multimedia: add dependency
- to qt6svg for examples
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=I7AdIzPG
+Subject: [Buildroot] [PATCH v1 1/1] package/cage: bump to version 0.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,37 +114,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit 553c55e9bd3cfa05cb84fa4cdfc5d25d51c3486b added the
-qt6multimedia package including an option to build examples which
-contains a dependency to qt6svg without selecting the package in
-Config.in.
-
-Fixes:
-https://autobuild.buildroot.org/results/c94670cf255a1a6975e99d7b22a159f7fdc6f850/
-
-    Makefile:578: *** qt6svg is in the dependency chain of qt6multimedia
-    that has added it to its _DEPENDENCIES variable without selecting it
-    or depending on it from Config.in.  Stop.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Changelog:
+https://github.com/cage-kiosk/cage/releases/tag/v0.2.1
+Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 ---
- package/qt6/qt6multimedia/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/cage/cage.hash | 2 +-
+ package/cage/cage.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt6/qt6multimedia/Config.in b/package/qt6/qt6multimedia/Config.in
-index f64f60a004..8cdd95f3e8 100644
---- a/package/qt6/qt6multimedia/Config.in
-+++ b/package/qt6/qt6multimedia/Config.in
-@@ -25,6 +25,7 @@ config BR2_PACKAGE_QT6MULTIMEDIA_ALSA
+diff --git a/package/cage/cage.hash b/package/cage/cage.hash
+index 4d376c322d..018404a2c5 100644
+--- a/package/cage/cage.hash
++++ b/package/cage/cage.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  6b72e034c78c55432ad815e651ead8bd732ccc2087b08c666a68b865ba72ceff  cage-v0.2.0-15-g2e593fe5a8a2186a558ceb414674775e4ba5d2b1-git4.tar.gz
++sha256  9603ba1a130696dd39793ffab68397db504b378a733c09c0b86a5ebe3d6fe58d  cage-v0.2.1-git4.tar.gz
  
- config BR2_PACKAGE_QT6MULTIMEDIA_EXAMPLES
- 	bool "examples"
-+	select BR2_PACKAGE_QT6SVG
- 	help
- 	  This option enables the Qt6 Multimedia examples.
+ # Hashes for license files:
+ sha256  e117104073335dbaf78596fb1bedf89dda63c71f60f0b665947b2d369c77ecee  LICENSE
+diff --git a/package/cage/cage.mk b/package/cage/cage.mk
+index 7f8fff4833..9b5778449b 100644
+--- a/package/cage/cage.mk
++++ b/package/cage/cage.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-CAGE_VERSION = v0.2.0-15-g2e593fe5a8a2186a558ceb414674775e4ba5d2b1
++CAGE_VERSION = v0.2.1
+ CAGE_SITE = https://github.com/cage-kiosk/cage.git
+ CAGE_SITE_METHOD = git
+ CAGE_LICENSE = MIT
 -- 
-2.47.3
+2.51.1.dirty
 
 _______________________________________________
 buildroot mailing list
