@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03332CCD195
-	for <buildroot@archiver.kernel.org>; Sat, 18 Oct 2025 16:29:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FBB3CCD193
+	for <buildroot@archiver.kernel.org>; Sat, 18 Oct 2025 16:29:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A9E3180FFF;
-	Sat, 18 Oct 2025 16:29:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D17B181158;
+	Sat, 18 Oct 2025 16:29:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pswWDD-QdAAN; Sat, 18 Oct 2025 16:29:38 +0000 (UTC)
+ id ds_lGhGLVpu2; Sat, 18 Oct 2025 16:29:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CEE5181098
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F20A38175A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CEE5181098;
-	Sat, 18 Oct 2025 16:29:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 27DED43F
- for <buildroot@buildroot.org>; Sat, 18 Oct 2025 16:29:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F20A38175A;
+	Sat, 18 Oct 2025 16:29:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 284D81CD
+ for <buildroot@buildroot.org>; Sat, 18 Oct 2025 16:29:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1F53F60B60
- for <buildroot@buildroot.org>; Sat, 18 Oct 2025 16:29:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0E1DA408D0
+ for <buildroot@buildroot.org>; Sat, 18 Oct 2025 16:29:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V-KqnvpIl9Ee for <buildroot@buildroot.org>;
- Sat, 18 Oct 2025 16:29:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 728D560B62
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 728D560B62
- for <buildroot@buildroot.org>; Sat, 18 Oct 2025 16:29:37 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 60F90874A8; Sat, 18 Oct 2025 16:29:37 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 18 Oct 2025 18:18:06 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7410161d2b431616f5b28bc169e4241ae3ca9331
-X-Git-Newrev: 23db2ff030e165fb82c760c68e9a4055fa8438a6
-X-Patchwork-Hint: ignore
-Message-Id: <20251018162937.60F90874A8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cage: bump to version 0.2.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id s5_CWowwX340 for <buildroot@buildroot.org>;
+ Sat, 18 Oct 2025 16:29:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4C56B40059
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C56B40059
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4C56B40059
+ for <buildroot@buildroot.org>; Sat, 18 Oct 2025 16:29:54 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 9826C2003DA;
+ Sat, 18 Oct 2025 18:29:49 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 18 Oct 2025 18:29:49 +0200
+MIME-Version: 1.0
+Date: Sat, 18 Oct 2025 18:29:49 +0200
+To: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Cc: buildroot@buildroot.org, Adrian Perez de Castro <aperez@igalia.com>
+In-Reply-To: <20251017201805.317401-1-raphael.pavlidis@gmail.com>
+References: <20251017201805.317401-1-raphael.pavlidis@gmail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <4626f999441889d09c09d798afa9c214@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1760804991;
+ bh=YW9AwLjsh70TstovIzt9UDeQOiUtH3XH348xkhqudCk=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=BFixX+ynXn9bys3PwcZ/LZtrUIJs1qSJsA139lC9GrmfSaiG6Jno8Ll2gdifelVqE
+ QCcckVBgN3r2hXNqzofh4p1jHxDSQMwdX1GdliLqFi5Y6QlO+w96IqRmMdG1upbN7x
+ SorslBjIggTiWGOn/VVVLgskdm1OQ/UdMamLHbS6lNO2qcR7Oq+M6JJ5n5JYossNwB
+ M4otXZ0vuUNUWlI2ax0znE/jVPG3kwSDqAbQ/MdNR6uRvFWQXOgceQ8SlsuAmZVo4h
+ liyzxDIzNASErTm3lhrqj2s8SSGUpKGLv1CZMStzrBO7Xnk1jNmflLKq6ZKbZzLasu
+ vrx7oDLW1PGrw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=BFixX+yn
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/cage: bump to version 0.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,49 +82,17 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23db2ff030e165fb82c760c68e9a4055fa8438a6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 17/10/2025 22:18, Raphael Pavlidis wrote:
+> Changelog:
+> https://github.com/cage-kiosk/cage/releases/tag/v0.2.1
+> Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 
-Changelog:
-https://github.com/cage-kiosk/cage/releases/tag/v0.2.1
-
-Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/cage/cage.hash | 2 +-
- package/cage/cage.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/cage/cage.hash b/package/cage/cage.hash
-index 4d376c322d..018404a2c5 100644
---- a/package/cage/cage.hash
-+++ b/package/cage/cage.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  6b72e034c78c55432ad815e651ead8bd732ccc2087b08c666a68b865ba72ceff  cage-v0.2.0-15-g2e593fe5a8a2186a558ceb414674775e4ba5d2b1-git4.tar.gz
-+sha256  9603ba1a130696dd39793ffab68397db504b378a733c09c0b86a5ebe3d6fe58d  cage-v0.2.1-git4.tar.gz
- 
- # Hashes for license files:
- sha256  e117104073335dbaf78596fb1bedf89dda63c71f60f0b665947b2d369c77ecee  LICENSE
-diff --git a/package/cage/cage.mk b/package/cage/cage.mk
-index 7f8fff4833..9b5778449b 100644
---- a/package/cage/cage.mk
-+++ b/package/cage/cage.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CAGE_VERSION = v0.2.0-15-g2e593fe5a8a2186a558ceb414674775e4ba5d2b1
-+CAGE_VERSION = v0.2.1
- CAGE_SITE = https://github.com/cage-kiosk/cage.git
- CAGE_SITE_METHOD = git
- CAGE_LICENSE = MIT
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
