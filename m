@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B29AFCCD184
-	for <buildroot@archiver.kernel.org>; Sat, 18 Oct 2025 10:52:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C148CCD184
+	for <buildroot@archiver.kernel.org>; Sat, 18 Oct 2025 10:53:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 876FF60BB1;
-	Sat, 18 Oct 2025 10:52:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5356E40EF5;
+	Sat, 18 Oct 2025 10:53:26 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZGUCxkyp2po6; Sat, 18 Oct 2025 10:53:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BFFC40EE2
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4BFFC40EE2;
+	Sat, 18 Oct 2025 10:53:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5C01B43F
+ for <buildroot@buildroot.org>; Sat, 18 Oct 2025 10:53:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 416E860D6A
+ for <buildroot@buildroot.org>; Sat, 18 Oct 2025 10:53:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XazdyGeKrRms; Sat, 18 Oct 2025 10:52:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0940D60D7C
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0940D60D7C;
-	Sat, 18 Oct 2025 10:52:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3A1291CD
- for <buildroot@buildroot.org>; Sat, 18 Oct 2025 10:52:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1CFAC40691
- for <buildroot@buildroot.org>; Sat, 18 Oct 2025 10:52:46 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fzmtCRxIqaMx for <buildroot@buildroot.org>;
- Sat, 18 Oct 2025 10:52:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A8C240F0F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6A8C240F0F
- for <buildroot@buildroot.org>; Sat, 18 Oct 2025 10:52:42 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5C30C872E9; Sat, 18 Oct 2025 10:52:42 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 18 Oct 2025 12:48:54 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 11cb3d3328bfe6c393d0302263e486f4dcfeeced
-X-Git-Newrev: 5905101c80abba800622f4ef0cd06e1d64ac48fc
-X-Patchwork-Hint: ignore
-Message-Id: <20251018105242.5C30C872E9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-sdbus: bump to 0.14.1.post0
+ id id75ZaB5Zv4P for <buildroot@buildroot.org>;
+ Sat, 18 Oct 2025 10:53:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4000560BB1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4000560BB1
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4000560BB1
+ for <buildroot@buildroot.org>; Sat, 18 Oct 2025 10:53:20 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id A5A722003CC;
+ Sat, 18 Oct 2025 12:53:17 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 18 Oct 2025 12:53:17 +0200
+MIME-Version: 1.0
+Date: Sat, 18 Oct 2025 12:53:17 +0200
+To: Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: buildroot@buildroot.org
+In-Reply-To: <471b9ed3-c6f1-4c6c-a596-87867d63c272@bubu1.eu>
+References: <20251015095641.2677817-1-buildroot@bubu1.eu>
+ <471b9ed3-c6f1-4c6c-a596-87867d63c272@bubu1.eu>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <5fba2564b8c97eb0869e6ec292d4e169@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1760784798;
+ bh=9Yyy9bzZqlePMsApiLOcsWs8qySI/Zpr8ivsBuKRWoc=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=KwvnxqIyAQgLC+p7e8HvD2gp3Xob/WOLIa0LwlO9NcSOYGeE56c8AgXLaNCnC2Fik
+ n40Qd7OTJACvpibKjMUhGdNt4HwfA8H8XsU4boC4Z3QhUZK0iHcjGSwrqkAsYLwBWA
+ LbJ9W4bWI2jLFwYOfK6XYxcOcqZZK4z2HqabD2pmNh5WDsJd5MV1NepdeQDzKqEDmi
+ Dg0oaqm0tYR15GHv6Dzba4OvdqO93YPYvblblxXF9jaDrVbxvjucnylAALeJSSGfVX
+ xYfktZnonkugl61kwikSEchnhz7Od7a4MV55sCncdM5njsYG1OvzOn8YkkOQFyOXhe
+ MOnyFWw3Vw/vg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=KwvnxqIy
+Subject: Re: [Buildroot] [PATCH] package/python-starlette: bump to 0.48.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,52 +83,21 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5905101c80abba800622f4ef0cd06e1d64ac48fc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 15/10/2025 12:07, Marcus Hoffmann via buildroot wrote:
+> Forgot the signoff.
+> 
+> On 10/15/25 11:56, Marcus Hoffmann via buildroot wrote:
+>> Release Notes: https://github.com/Kludex/starlette/releases/tag/0.48.0
+>> Github namespace changed, so change the link in Config.in.
+> 
+> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 
-Changes: https://github.com/python-sdbus/python-sdbus/releases/tag/0.14.1
-
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-sdbus/python-sdbus.hash | 4 ++--
- package/python-sdbus/python-sdbus.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-sdbus/python-sdbus.hash b/package/python-sdbus/python-sdbus.hash
-index 544262d48f..bb3834dfb4 100644
---- a/package/python-sdbus/python-sdbus.hash
-+++ b/package/python-sdbus/python-sdbus.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/sdbus/json
--md5  69a256ea1c25105461a3955ac68e3ea7  sdbus-0.14.0.tar.gz
--sha256  41d61b76cc05a9ea41d10d70a11e9f9a86ed95f40f713630c5e18340e0e4c76f  sdbus-0.14.0.tar.gz
-+md5  48ba3d23852b3d3f4f0623194f637872  sdbus-0.14.1.post0.tar.gz
-+sha256  ae3915ab3e3f0a116632e1e5876df992b9529e82b0b492006eb22f8791ed6deb  sdbus-0.14.1.post0.tar.gz
- # Locally computed sha256 checksums
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/python-sdbus/python-sdbus.mk b/package/python-sdbus/python-sdbus.mk
-index 560a5f02ae..9a72b23776 100644
---- a/package/python-sdbus/python-sdbus.mk
-+++ b/package/python-sdbus/python-sdbus.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_SDBUS_VERSION = 0.14.0
-+PYTHON_SDBUS_VERSION = 0.14.1.post0
- PYTHON_SDBUS_SOURCE = sdbus-$(PYTHON_SDBUS_VERSION).tar.gz
--PYTHON_SDBUS_SITE = https://files.pythonhosted.org/packages/17/9a/1dc010428fa1f444809d9aa1adb3ce231dae891b5f33635d8f4d7a8e33fd
-+PYTHON_SDBUS_SITE = https://files.pythonhosted.org/packages/b9/4f/549089131ba4ba5379517655cdcbfe3925fd1cc0eafd93aac5f73c2a6d40
- PYTHON_SDBUS_SETUP_TYPE = setuptools
- PYTHON_SDBUS_LICENSE = LGPL-2.1+
- PYTHON_SDBUS_LICENSE_FILES = COPYING
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
