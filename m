@@ -4,73 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3D85CCD195
-	for <buildroot@archiver.kernel.org>; Sat, 18 Oct 2025 15:59:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29851CCD193
+	for <buildroot@archiver.kernel.org>; Sat, 18 Oct 2025 16:12:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B5DD816E0;
-	Sat, 18 Oct 2025 15:59:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EDA27836E1;
+	Sat, 18 Oct 2025 16:12:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0kujpfxNTV_A; Sat, 18 Oct 2025 15:59:23 +0000 (UTC)
+ id 9SeCfq5iIYU0; Sat, 18 Oct 2025 16:12:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 412C4816D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3088D83657
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 412C4816D3;
-	Sat, 18 Oct 2025 15:59:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4B8F7D8
- for <buildroot@buildroot.org>; Sat, 18 Oct 2025 15:59:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3088D83657;
+	Sat, 18 Oct 2025 16:12:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 315A41CD
+ for <buildroot@buildroot.org>; Sat, 18 Oct 2025 16:12:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3245D60BD5
- for <buildroot@buildroot.org>; Sat, 18 Oct 2025 15:59:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0CDBF4070C
+ for <buildroot@buildroot.org>; Sat, 18 Oct 2025 16:12:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RAhWpSSLK0Qa for <buildroot@buildroot.org>;
- Sat, 18 Oct 2025 15:59:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DwRzpEr3VlPE for <buildroot@buildroot.org>;
+ Sat, 18 Oct 2025 16:12:34 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
  helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0F81560B1E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F81560B1E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0C73F40654
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C73F40654
 Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0F81560B1E
- for <buildroot@buildroot.org>; Sat, 18 Oct 2025 15:59:20 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0C73F40654
+ for <buildroot@buildroot.org>; Sat, 18 Oct 2025 16:12:33 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
  (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 4D0B713F88F;
- Sat, 18 Oct 2025 17:59:15 +0200 (CEST)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 4A60E13F88F;
+ Sat, 18 Oct 2025 18:12:30 +0200 (CEST)
 Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
  via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 18 Oct 2025 17:59:15 +0200
+ with HTTP (HTTP/1.0 POST); Sat, 18 Oct 2025 18:12:30 +0200
 MIME-Version: 1.0
-Date: Sat, 18 Oct 2025 17:59:15 +0200
-To: Raphael Gallais-Pou <rgallaispou@gmail.com>
-Cc: buildroot@buildroot.org, Romain Naour <romain.naour@gmail.com>, Eric Le
- Bihan <eric.le.bihan.dev@free.fr>
-In-Reply-To: <20251005-waffle-v1-1-4aab4f497a8a@gmail.com>
-References: <20251005-waffle-v1-0-4aab4f497a8a@gmail.com>
- <20251005-waffle-v1-1-4aab4f497a8a@gmail.com>
+Date: Sat, 18 Oct 2025 18:12:30 +0200
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: buildroot@buildroot.org, Maksim Kiselev <bigunclemax@gmail.com>
+In-Reply-To: <20251017172621.296710-1-dario.binacchi@amarulasolutions.com>
+References: <20251017172621.296710-1-dario.binacchi@amarulasolutions.com>
 User-Agent: Webmail Free/1.6.11
-Message-ID: <deb2e73feb27f480ad3dbb1e70939021@free.fr>
+Message-ID: <ab2727f76a9af8ea51c4726060c1079e@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1760803158;
- bh=mRL/HVdCG7s27UCw5oIdGiF7ExZLYdXlXssK6lzNK+Q=;
+ d=free.fr; s=smtp-20201208; t=1760803952;
+ bh=w96bFY114Bc4Pp0F+1XH7Z/CC9livkiuqo1T9CRG1PE=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=haIjYwGREVOaTegAfsnYlo2qXV+cr/o/LAZEHj21j7qQ2SvPEm3z1AykC5DqtTTTy
- EuHeRF6FaQnOAc77B0103crVx7vj6+ZZXLY8yG6Gm+M64waJIYsjkqAZkNXJvSkx0k
- yJqOKHU2SZ+t7l6/YjdL0o746vHg7qUnegmFsa4UG6CFeXv54yMDM+6dWRo6hwLGlg
- gZDl5t7N6SO/nmBDbeqklJh2ea7Dmwk6jGViPmzbXHoBouSc/QjHRR6e82dAha4InV
- y/6gcA7raSQwSYAr+Zkt4+Pp6cfJ7YoJEmCsq+R7n1CUC+U8+KwNDYERpdldHLP6OM
- 8HC973jtaOdHg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=PJVGzfAUrAmRfEghdQ36JvIWS9AfOzZr0OFfRhVE7OLG/rCXlDKWwiO3jGdPNVlhx
+ vXLZpg1nxIPJ0qXbROjvGFAEmtTVQ1xx4EBZMTwAQw4GbL75lSA6QBaHQc/gJvPUX9
+ cGfhjYhjbfy8vgyxNPeIdB8/GiBmZL6klLNB0b9Vk6eVsLXdYIXN9lirRKJAtSFuV3
+ DOhVXb2YmIueesZdgb4vRtE8N3bFzKlGm1J3ShABLXi1R2nWR3DVvY/tZjNrJk4bw3
+ kowcGfz3pgRUYAAVLjbKITp5Vyi73Wkg0AsGrI8epte2MlCVLibFJMFBVhePWqu3hB
+ bUPgctjUMFc0Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=haIjYwGR
-Subject: Re: [Buildroot] [PATCH 1/4] package/waffle: fix website reference
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=PJVGzfAU
+Subject: Re: [Buildroot] [PATCH 1/2] package/ledmon: add upstream patch to
+ fix build w/ gcc-14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,38 +83,26 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Raphael,
-
-On 05/10/2025 15:24, Raphael Gallais-Pou wrote:
-> http://www.waffle-gl.org yields "403 Forbidden".
-> Switch to freedesktop.org subdomain.
-> 
-> Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
-
-I applied this series on master. Thanks.
-
-I did few minor changes.
-- I squashed patches related to the bump altogether
-- I changed _VERSION to use "git describe --abbrev=40" format
-- I removed .checkpackageignore entries to fix check-package errors
-
-See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/106b3d43a44fb126d4bd7ff6828110e85e3eca22
-
-While reviewing and testing this patch, I've seen that the only
-waffle user package is piglit, which did not received any update
-since 2020 and no longer build. In case you are interested to update
-it, please send a patch.
-
-Best regards,
-
-Julien.
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gMTcvMTAvMjAyNSAxOToyNiwgRGFyaW8gQmluYWNjaGkgd3JvdGU6Cj4gQWRkIGFuIHVwc3Ry
+ZWFtIHBhdGNoIHRvIGZpeCBhIGJ1aWxkIGlzc3VlIHJlbGF0ZWQgdG8gdWludDY0X3Q6Cj4gCj4g
+dXRpbHMuYzogSW4gZnVuY3Rpb24g4oCYZ2V0X3VpbnQ2NOKAmToKPiB1dGlscy5jOjExODoxODog
+ZXJyb3I6IHBhc3NpbmcgYXJndW1lbnQgMSBvZiDigJhzdHJfdG91bOKAmSBmcm9tIAo+IGluY29t
+cGF0aWJsZSBwb2ludGVyIHR5cGUgWy1XaW5jb21wYXRpYmxlLXBvaW50ZXItdHlwZXNdCj4gICAx
+MTggfCAgICAgICAgIHN0cl90b3VsKCZkZWZ2YWwsIHAsIE5VTEwsIDE2KTsKPiAgICAgICB8ICAg
+ICAgICAgICAgICAgICAgXn5+fn5+fgo+ICAgICAgIHwgICAgICAgICAgICAgICAgICB8Cj4gICAg
+ICAgfCAgICAgICAgICAgICAgICAgIHVpbnQ2NF90ICoge2FrYSBsb25nIGxvbmcgdW5zaWduZWQg
+aW50ICp9Cj4gSW4gZmlsZSBpbmNsdWRlZCBmcm9tIHV0aWxzLmM6NDg6Cj4gdXRpbHMuaDo0MTI6
+Mjk6IG5vdGU6IGV4cGVjdGVkIOKAmGxvbmcgdW5zaWduZWQgaW50ICrigJkgYnV0IGFyZ3VtZW50
+IGlzIG9mIAo+IHR5cGUg4oCYdWludDY0X3QgKuKAmSB7YWthIOKAmGxvbmcgbG9uZyB1bnNpZ25l
+ZCBpbnQgKuKAmX0KPiAKPiBGaXhlczoKPiAKPiAgIAo+IGh0dHBzOi8vYXV0b2J1aWxkLmJ1aWxk
+cm9vdC5vcmcvcmVzdWx0cy81MWFmMWQ3YmY3MTA2MWYyMmQ0OTIxMzk1MWE1ZjZhOTU2NTcxMGMz
+Lwo+IAo+IFNpZ25lZC1vZmYtYnk6IERhcmlvIEJpbmFjY2hpIDxkYXJpby5iaW5hY2NoaUBhbWFy
+dWxhc29sdXRpb25zLmNvbT4KClNlcmllcyBhcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgpfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFp
+bGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290
+Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
