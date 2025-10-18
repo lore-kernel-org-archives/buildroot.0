@@ -1,75 +1,110 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C41B2CCD195
-	for <buildroot@archiver.kernel.org>; Sat, 18 Oct 2025 16:59:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25632CCD195
+	for <buildroot@archiver.kernel.org>; Sat, 18 Oct 2025 17:08:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5CE8140EBB;
-	Sat, 18 Oct 2025 16:59:44 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jzDmt2ZVaonf; Sat, 18 Oct 2025 16:59:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB44440B53
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB44440B53;
-	Sat, 18 Oct 2025 16:59:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2E80E1CD
- for <buildroot@buildroot.org>; Sat, 18 Oct 2025 16:59:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1473A80C86
- for <buildroot@buildroot.org>; Sat, 18 Oct 2025 16:59:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC1B782AAA;
+	Sat, 18 Oct 2025 17:08:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7KyUEgBEOKrN for <buildroot@buildroot.org>;
- Sat, 18 Oct 2025 16:59:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BAB0380CF6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BAB0380CF6
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BAB0380CF6
- for <buildroot@buildroot.org>; Sat, 18 Oct 2025 16:59:38 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a021f.dip0.t-ipconnect.de [91.58.2.31])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 241F0A4C0CD9
- for <buildroot@buildroot.org>; Sat, 18 Oct 2025 18:59:36 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:52658)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1vAAHI-000000003HU-0m3v
- for buildroot@buildroot.org; Sat, 18 Oct 2025 16:59:35 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Sat, 18 Oct 2025 18:59:35 +0200
-Message-ID: <20251018165935.1092067-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+ id pAMikDFL-Lot; Sat, 18 Oct 2025 17:08:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9BEA82AC3
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C9BEA82AC3;
+	Sat, 18 Oct 2025 17:08:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B28C71CD
+ for <buildroot@buildroot.org>; Sat, 18 Oct 2025 17:08:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B00BA4090B
+ for <buildroot@buildroot.org>; Sat, 18 Oct 2025 17:08:08 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qIRSJf4dBi2h for <buildroot@buildroot.org>;
+ Sat, 18 Oct 2025 17:08:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ envelope-from=rgallaispou@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8AD9640904
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8AD9640904
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8AD9640904
+ for <buildroot@buildroot.org>; Sat, 18 Oct 2025 17:08:07 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-47112a73785so22223615e9.3
+ for <buildroot@buildroot.org>; Sat, 18 Oct 2025 10:08:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1760807285; x=1761412085;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=sGPkRqn/P4/pvmzbk37lHVve7QIMdEE7wDq8EIV6nxg=;
+ b=GdA4ixD3YgepyBLlIcO8sWNE56J2O8qbvLthFrSLzJnKjmv6lbpSRFGGZzkyHXtJRS
+ QlgyNhBqiNRHCyAcYtJtR98K8DKgRstU8xB3IAn4F6eVEPjdDajTV/5w1O2RyFy8nHXx
+ z/00502ikiqTrikKwDbFP6iadRXTxpDegubWx3R6BF5pGDFQ4ppe8zd4IW2KJKHNkw53
+ 5yw93gRWVOPLDLgapjWUVjg+scdcS/elNt0v12yN9RBEqV3q0zzx4rxii9cTwIKZMpSz
+ ZWodXHrAmZQKHP/cT97AMZELNwNRIK2ShsbdmoDL7X1uoTQA9rJNIaWjY3zETShCrFpv
+ 6X8A==
+X-Gm-Message-State: AOJu0YxVzH//YhtXq0rhfT6fI2nadRF3rKP4ekBJ91CvRBrhfnnPqd/y
+ gnZgz414SfVghHhSzVdov7IRMq4hpxdV6Ly+NUNob3Z69wTf3fLg3j9/
+X-Gm-Gg: ASbGncsP2JSXuOcJ6vrHKUpzngSQego9ZVZMhXfnTbMF6/2qe3yQfHepZ/sxjZxesvs
+ hiPbzrF6GTx6RoFCt5b5cztU+RykUiBcPenCh4IF4MiERikuiLqYjR7+51J9TyQq6sIFZ8eBk/Z
+ Ae3n3SUrP0uWZHcAya+obL5Hbs1N6S6MYgd+hu1oU+2G3rXIAe9dgsJXSFLeo0yb3wPFpcq/uX8
+ 3aAUPbA/z2xXqgAKLBw9cG+G+TjlD+eD7dS7zsVqrifka9rUse/r+bsjBobTIr5ru4Z4e40KdlO
+ MyV/sTTntA0yEZSXU5UyoveheYcun2t1v6RYCmF1t+QP9pV4ZS3EFXJuZa3XL75cShcpbr5zNJg
+ 9Pf/hu2/wInSWciETRfekqdYdKHcVC/8TxeC5DwrxXF4orG9s6VSHvxPqt7XiUIW0nYIu50W8GH
+ HrJ2xcH1STKsmpz50CZ+ZOcnY90HRVykCFtNGLM+jyIl7Nympxdj15IKgIcBur1wKTE1A=
+X-Google-Smtp-Source: AGHT+IHC0ZbDY70wu6ttDG8A2Zbmzpy6CztgwcnuHIw00snFLpJlqJee0pYYX7QBqUx7jB2U75heMA==
+X-Received: by 2002:a05:600c:4fd4:b0:456:1b6f:c888 with SMTP id
+ 5b1f17b1804b1-471179123a2mr52485595e9.23.1760807285199; 
+ Sat, 18 Oct 2025 10:08:05 -0700 (PDT)
+Received: from ?IPV6:2001:861:3385:e20:6384:4cf:52c5:3194?
+ ([2001:861:3385:e20:6384:4cf:52c5:3194])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-47154d3843csm54477215e9.11.2025.10.18.10.08.04
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 18 Oct 2025 10:08:04 -0700 (PDT)
+Message-ID: <e4ead0fc-2f26-4ae7-be17-0c0ad4f43d86@gmail.com>
+Date: Sat, 18 Oct 2025 19:08:03 +0200
 MIME-Version: 1.0
-X-Spamd-Bar: /
+User-Agent: Mozilla Thunderbird
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org, Romain Naour <romain.naour@gmail.com>,
+ Eric Le Bihan <eric.le.bihan.dev@free.fr>
+References: <20251005-waffle-v1-0-4aab4f497a8a@gmail.com>
+ <20251005-waffle-v1-1-4aab4f497a8a@gmail.com>
+ <deb2e73feb27f480ad3dbb1e70939021@free.fr>
+Content-Language: en-US, fr
+From: =?UTF-8?Q?Rapha=C3=ABl_Gallais-Pou?= <rgallaispou@gmail.com>
+In-Reply-To: <deb2e73feb27f480ad3dbb1e70939021@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1760806776;
- bh=1qElngBXGAfIve8WPCP7ydXXMdlQLb0bUjw40iggHC4=;
- h=From:To:Subject:Date:From;
- b=hYS9bixH0Ge/CZcvkWmUYjEAVLhwrN8OTac2VQzhE14RCznvfvO7izQdjYO/zvNbz
- ZIGmn+15azyvLEgvK9Sdb5Dd76+xd+NrCBgzNnScLSAQJMEmHBkH7DgFwHHnlFSgoP
- EvcmNP+02CCrgIUAc1funLcejK79x6MVcyZTqLaIU5KmCfZD9D+quMUQfTzsLARJcK
- DZV0Nsjj05o5zzwC/leTwFyrSf3Gk0DRYJ+wrioCiGcqU0XO5XaRMS48lD/RDkLEsy
- QB1a1x45d6U94ZqUQJ9vSZdYLzwNzqh34Zu4UAsirdErCOeX1zKe+WSKJcnS0YFz0n
- Cgm/3SLfFDkzQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20230601; t=1760807285; x=1761412085; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=sGPkRqn/P4/pvmzbk37lHVve7QIMdEE7wDq8EIV6nxg=;
+ b=OBQrDl649KjsCOm8d3wUwVVLNngr8WRfWyitNPcnAJdzZvjdW3+8fmiX1PoUdy8pMm
+ FUU2v7SfqhoMjvnTQJmcgqVRFwHo6uW4cTokJaoTK3szwhpj8Ao9iohMQ3cskngyQ+7h
+ 3K5FfEHDWNOQ9i3xb6G7SiL6Crh4yd/TG9A98hSOAmvFAXTsfODeIvEQdsWMCZUBuoxR
+ EEihjVQm71fzgLndqv/7aGZDx60LtVcugeztOkYPUIBv2wEzO/J6WmPhDIIpOvDGyX7l
+ Ch317C1QZxZWWKGcOI0m2qS/a0Osm6JLSlIF34COJXh8T2FIxMPplanGyxj2wHpyrfFc
+ PbRQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=hYS9bixH
-Subject: [Buildroot] [PATCH 1/1] package/mjpg-streamer: fix build with gcc
- >= 14
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=OBQrDl64
+Subject: Re: [Buildroot] [PATCH 1/4] package/waffle: fix website reference
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,64 +116,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-https://autobuild.buildroot.net/results/3a5/3a5674e4e7bb3f2894575191af24598e2a696912/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- ...-output_viewer-fix-build-with-gcc-14.patch | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/mjpg-streamer/0003-output_viewer-fix-build-with-gcc-14.patch
-
-diff --git a/package/mjpg-streamer/0003-output_viewer-fix-build-with-gcc-14.patch b/package/mjpg-streamer/0003-output_viewer-fix-build-with-gcc-14.patch
-new file mode 100644
-index 0000000000..74c26ec3ea
---- /dev/null
-+++ b/package/mjpg-streamer/0003-output_viewer-fix-build-with-gcc-14.patch
-@@ -0,0 +1,34 @@
-+From c0656c6a538739635441b165b4f1ba7c22c68b1d Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Sat, 18 Oct 2025 18:54:36 +0200
-+Subject: [PATCH] output_viewer: fix build with gcc >= 14
-+
-+Fixes build error found by buildroot autobuilders:
-+
-+output_viewer.c:125:32: error: assignment to 'boolean (*)(struct jpeg_decompress_struct *)'
-+from incompatible pointer type 'int (*)(struct jpeg_decompress_struct *)'
-+[-Wincompatible-pointer-types]
-+
-+Upstream: https://github.com/jacksonliam/mjpg-streamer/pull/420
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ .../plugins/output_viewer/output_viewer.c                       | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/mjpg-streamer-experimental/plugins/output_viewer/output_viewer.c b/mjpg-streamer-experimental/plugins/output_viewer/output_viewer.c
-+index dd6c55b..c50f701 100644
-+--- a/mjpg-streamer-experimental/plugins/output_viewer/output_viewer.c
-++++ b/mjpg-streamer-experimental/plugins/output_viewer/output_viewer.c
-+@@ -86,7 +86,7 @@ static void init_source(j_decompress_ptr cinfo)
-+     return;
-+ }
-+ 
-+-static int fill_input_buffer(j_decompress_ptr cinfo)
-++static boolean fill_input_buffer(j_decompress_ptr cinfo)
-+ {
-+     my_source_mgr * src = (my_source_mgr *) cinfo->src;
-+ 
-+-- 
-+2.47.3
-+
--- 
-2.47.3
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpMZSAxOC8xMC8yMDI1IMOgIDE3OjU5LCBKdWxpZW4gT2xpdmFpbiBhIMOpY3JpdMKgOgo+IEhp
+IFJhcGhhZWwsCj4gCj4gT24gMDUvMTAvMjAyNSAxNToyNCwgUmFwaGFlbCBHYWxsYWlzLVBvdSB3
+cm90ZToKPj4gaHR0cDovL3d3dy53YWZmbGUtZ2wub3JnIHlpZWxkcyAiNDAzIEZvcmJpZGRlbiIu
+Cj4+IFN3aXRjaCB0byBmcmVlZGVza3RvcC5vcmcgc3ViZG9tYWluLgo+Pgo+PiBTaWduZWQtb2Zm
+LWJ5OiBSYXBoYWVsIEdhbGxhaXMtUG91IDxyZ2FsbGFpc3BvdUBnbWFpbC5jb20+Cj4gCj4gSSBh
+cHBsaWVkIHRoaXMgc2VyaWVzIG9uIG1hc3Rlci4gVGhhbmtzLgo+IAo+IEkgZGlkIGZldyBtaW5v
+ciBjaGFuZ2VzLgo+IC0gSSBzcXVhc2hlZCBwYXRjaGVzIHJlbGF0ZWQgdG8gdGhlIGJ1bXAgYWx0
+b2dldGhlcgo+IC0gSSBjaGFuZ2VkIF9WRVJTSU9OIHRvIHVzZSAiZ2l0IGRlc2NyaWJlIC0tYWJi
+cmV2PTQwIiBmb3JtYXQKPiAtIEkgcmVtb3ZlZCAuY2hlY2twYWNrYWdlaWdub3JlIGVudHJpZXMg
+dG8gZml4IGNoZWNrLXBhY2thZ2UgZXJyb3JzCj4gCj4gU2VlOgo+IGh0dHBzOi8vZ2l0bGFiLmNv
+bS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tLyAKPiBjb21taXQvMTA2YjNkNDNhNDRmYjEyNmQ0
+YmQ3ZmY2ODI4MTEwZTg1ZTNlY2EyMgo+IAo+IFdoaWxlIHJldmlld2luZyBhbmQgdGVzdGluZyB0
+aGlzIHBhdGNoLCBJJ3ZlIHNlZW4gdGhhdCB0aGUgb25seQo+IHdhZmZsZSB1c2VyIHBhY2thZ2Ug
+aXMgcGlnbGl0LCB3aGljaCBkaWQgbm90IHJlY2VpdmVkIGFueSB1cGRhdGUKPiBzaW5jZSAyMDIw
+IGFuZCBubyBsb25nZXIgYnVpbGQuIEluIGNhc2UgeW91IGFyZSBpbnRlcmVzdGVkIHRvIHVwZGF0
+ZQo+IGl0LCBwbGVhc2Ugc2VuZCBhIHBhdGNoLgoKVGhhbmtzIGZvciBhbGwgb2YgdGhhdC4KClll
+cyBpbmRlZWQsIGl0IHdhcyB3aGlsZSB1cGRhdGluZyBQaWdsaXQgdGhhdCBJIGZvdW5kIG91dCBm
+b3IgV2FmZmxlLgpQYXRjaGVzIGFyZSBpbmNvbWluZy4gOikKCkJlc3QgcmVnYXJkcywKUmFwaGHD
+q2w+Cj4gQmVzdCByZWdhcmRzLAo+IAo+IEp1bGllbi4KCl9fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290
+QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGlu
+Zm8vYnVpbGRyb290Cg==
