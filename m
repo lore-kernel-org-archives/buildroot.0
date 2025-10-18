@@ -1,76 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1FFACCD193
-	for <buildroot@archiver.kernel.org>; Sat, 18 Oct 2025 19:27:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E613CCD193
+	for <buildroot@archiver.kernel.org>; Sat, 18 Oct 2025 19:43:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5964B40A04;
-	Sat, 18 Oct 2025 19:27:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3957F60DC3;
+	Sat, 18 Oct 2025 19:43:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2iDx7uT0kLvf; Sat, 18 Oct 2025 19:27:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PG9hNUMallLN; Sat, 18 Oct 2025 19:43:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B90240A33
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D28260E2D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B90240A33;
-	Sat, 18 Oct 2025 19:27:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8B6CCD8
- for <buildroot@buildroot.org>; Sat, 18 Oct 2025 19:27:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3D28260E2D;
+	Sat, 18 Oct 2025 19:43:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3CADE1CD
+ for <buildroot@buildroot.org>; Sat, 18 Oct 2025 19:43:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 70E684002D
- for <buildroot@buildroot.org>; Sat, 18 Oct 2025 19:27:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 22F2940AD9
+ for <buildroot@buildroot.org>; Sat, 18 Oct 2025 19:43:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cE1xTriyJDRU for <buildroot@buildroot.org>;
- Sat, 18 Oct 2025 19:27:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C9EE240F78
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9EE240F78
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C9EE240F78
- for <buildroot@buildroot.org>; Sat, 18 Oct 2025 19:27:33 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a021f.dip0.t-ipconnect.de [91.58.2.31])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 11C48A4C0EA6;
- Sat, 18 Oct 2025 21:27:30 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:47044)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1vACaQ-000000003qQ-0Mfu;
- Sat, 18 Oct 2025 19:27:29 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Cc: Petr Vorel <petr.vorel@gmail.com>
-Date: Sat, 18 Oct 2025 21:27:29 +0200
-Message-ID: <20251018192729.3113082-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+ id q8g_O-cPNyfT for <buildroot@buildroot.org>;
+ Sat, 18 Oct 2025 19:43:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0A5C740A56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A5C740A56
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0A5C740A56
+ for <buildroot@buildroot.org>; Sat, 18 Oct 2025 19:43:30 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-04.galae.net (Postfix) with ESMTPS id 7F915C09A1F
+ for <buildroot@buildroot.org>; Sat, 18 Oct 2025 19:43:08 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id C5CC86069D
+ for <buildroot@buildroot.org>; Sat, 18 Oct 2025 19:43:27 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id C6487102F237E; 
+ Sat, 18 Oct 2025 21:43:22 +0200 (CEST)
+To: Buildroot List <buildroot@buildroot.org>
+Cc: romain.gantois@bootlin.com, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 18 Oct 2025 21:42:58 +0200
+Message-ID: <20251018194314.114284-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1760815650;
- bh=7ZDTcIo1Hl3VcVzPqX/Z8RcDQt+hGmCutgRuGDEzM3k=;
- h=From:To:Cc:Subject:Date:From;
- b=VjzvP445H1mWHRxobLUnOXOBAekHYFLghixV2u8v70YkkN6XKDygjgisKymaFpAaX
- xdPqX4Storun2GwVjkiqiw82jwyOYEWhM47PU2JAJ6yX4vcCY7l0aVwWFBkEU3X/UA
- bmbASbBr5P75Vv1sNhBgSJ5jYBWivCa/OSqNnSiwGUkkG4ofe0F4nLaZDqlSrYo2el
- DuIJtqwlw/mjWAaYJU30d8kI5GbhdhEz1Tl1bLiJTLMoBbGooOznC9MxXgMU2XwB7T
- cdrkt+EQSFpp8l2AG8PrG6RQne+NAwshjNLA4rrOMeCdE8FgIHd+xp9ewpSfMb8s+m
- igeyBFY57r15Q==
+ d=bootlin.com; s=dkim; 
+ t=1760816603; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=CVRa8MSBP8dLSGmeLy1LGsp8xCR5FvvDbyxS4+Jt8mo=;
+ b=HYXcFrHYaBqdH4HDS53xXperr9PAG3dAy3JOKO3sm2U+GmzVqOjPGTyUFHwSEQxttfWkd+
+ SM0h9C7qo4ScOSUy1Z0NtYCf0I12/RnSfpQgzoBg8FxIqtnSwfbCwwQEblu7PCa+28QKSh
+ UeELkqJHUR/HcqBpO27ced3dztjHcLbwHSs3/5zk9lYXvSTVej+XaRzQ59+qUZMC2RVuzS
+ HfRHNNXRMIU+/w6ycu5IDcx59zMLWzwRWpRiS8CZ2LZIMWv4CaAp/E+rHWwE4j3vlDfUl7
+ GDB5k2B49BhvyKAjpUtj7sVmqbCozqI+sLzoEe5dYb17G6ET1C/XWtjYyxwzDA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=VjzvP445
-Subject: [Buildroot] [PATCH 1/1] package/iproute2: add upstream patch to fix
- musl/uclibc build
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=HYXcFrHY
+Subject: [Buildroot] [PATCH 00/11] Add support for building Snagboot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,71 +81,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit 532d5561f48b6c430e7414ba5eacccf9b6c1bd22 bumped
-iproute2 to version 6.17.0 which added lib/bridge.c:
-https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/log/lib/bridge.c?h=v6.17.0
-and causes build errors on musl & uclibc toolchains.
+Hello,
 
-Added upstream patch to fix the problem.
+Snagboot <https://github.com/bootlin/snagboot/> is an open-source and
+platform-agnostic tool to recover and reflash embedded platforms,
+replacing vendor-specific tools by a single unified tool.
 
-Fixes:
-https://autobuild.buildroot.net/results/951/951e4198b2ba109fd9c746fe2e6316a29085aeeb/
+This patch series aims at allowing to build Snagboot for the host as
+part of a Buildroot build, so that a Buildroot user can use Snagboot
+after the build to recover/reflash an embedded platform.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- ...ridge-avoid-redefinition-of-in6_addr.patch | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 package/iproute2/0001-lib-bridge-avoid-redefinition-of-in6_addr.patch
+Snagboot requires a number of dependencies, which is why we are adding
+python-crccheck, python-fs and python-pyfatfs as new packages, and
+also enabling host variants for the existing python-tftpy,
+python-pyusb, python-xmodem and python-appdirs packages.
 
-diff --git a/package/iproute2/0001-lib-bridge-avoid-redefinition-of-in6_addr.patch b/package/iproute2/0001-lib-bridge-avoid-redefinition-of-in6_addr.patch
-new file mode 100644
-index 0000000000..c684b030a8
---- /dev/null
-+++ b/package/iproute2/0001-lib-bridge-avoid-redefinition-of-in6_addr.patch
-@@ -0,0 +1,36 @@
-+From 7119f3736f689ab396ca4193ac593938affd55fa Mon Sep 17 00:00:00 2001
-+From: Yureka <yureka@cyberchaos.dev>
-+Date: Sun, 12 Oct 2025 14:39:47 +0200
-+Subject: lib: bridge: avoid redefinition of in6_addr
-+
-+On musl libc, which does not use the kernel definitions of in6_addr, including
-+the libc headers after the kernel (UAPI) headers would cause a redefinition
-+error. The opposite order avoids the redefinition.
-+
-+Fixes: 9e89d5b94d749f37525cd8778311e1c9f28f172a
-+Signed-off-by: Yureka <yureka@cyberchaos.dev>
-+
-+Upstream: https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/commit/?id=7119f3736f689ab396ca4193ac593938affd55fa
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ lib/bridge.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/lib/bridge.c b/lib/bridge.c
-+index 5386aa017..104f5858b 100644
-+--- a/lib/bridge.c
-++++ b/lib/bridge.c
-+@@ -2,8 +2,8 @@
-+ 
-+ #include <net/if.h>
-+ 
-+-#include "bridge.h"
-+ #include "utils.h"
-++#include "bridge.h"
-+ 
-+ void bridge_print_vlan_flags(__u16 flags)
-+ {
-+-- 
-+cgit 1.2.3-korg
-+
+Since we're adding so many host Python packages, we thought it would
+be a good idea to test them, but our runtime testing infrastructure
+wasn't really convenient to test host packages. The first two patches
+therefore propose some improvements to the testing infrastructure,
+which are then use by the remaining patches to make sure we at least
+minimally test that host Python packages work.
+
+Let me know what you think!
+
+Thomas
+
+Thomas Petazzoni (11):
+  support/testing/infra: improve run_cmd_on_host() to show stdout/stderr
+  support/testing/infra/basetest.py: add BRHostPkgTest class
+  package/python-crccheck: new package
+  support/testing/tests/package/test_python_serial.py: new test case
+  package/python-tftpy: add host variant
+  package/python-pyusb: enable host variant
+  package/python-xmodem: add host variant
+  package/python-appdirs: add host variant
+  package/python-fs: new package
+  package/python-pyfatfs: new package
+  package/snagboot: new package
+
+ DEVELOPERS                                    | 11 ++++
+ package/Config.in.host                        |  1 +
+ package/python-appdirs/python-appdirs.mk      |  1 +
+ package/python-crccheck/python-crccheck.hash  |  4 ++
+ package/python-crccheck/python-crccheck.mk    | 15 ++++++
+ package/python-fs/python-fs.hash              |  5 ++
+ package/python-fs/python-fs.mk                | 15 ++++++
+ ...oject.toml-relax-version-constraints.patch | 45 ++++++++++++++++
+ package/python-pyfatfs/python-pyfatfs.hash    |  4 ++
+ package/python-pyfatfs/python-pyfatfs.mk      | 17 ++++++
+ package/python-pyusb/python-pyusb.mk          |  2 +
+ package/python-tftpy/python-tftpy.mk          |  1 +
+ package/python-xmodem/python-xmodem.mk        |  1 +
+ package/snagboot/Config.in.host               |  8 +++
+ package/snagboot/snagboot.hash                |  3 ++
+ package/snagboot/snagboot.mk                  | 29 ++++++++++
+ support/testing/infra/__init__.py             | 19 +++++--
+ support/testing/infra/basetest.py             | 22 ++++++++
+ .../tests/package/test_python_crccheck.py     | 10 ++++
+ .../testing/tests/package/test_python_fs.py   |  9 ++++
+ .../tests/package/test_python_pyfatfs.py      | 53 +++++++++++++++++++
+ .../tests/package/test_python_pyusb.py        |  9 ++++
+ .../tests/package/test_python_serial.py       | 12 +++++
+ .../tests/package/test_python_tftpy.py        |  9 ++++
+ .../tests/package/test_python_xmodem.py       |  9 ++++
+ .../testing/tests/package/test_snagboot.py    | 16 ++++++
+ 26 files changed, 325 insertions(+), 5 deletions(-)
+ create mode 100644 package/python-crccheck/python-crccheck.hash
+ create mode 100644 package/python-crccheck/python-crccheck.mk
+ create mode 100644 package/python-fs/python-fs.hash
+ create mode 100644 package/python-fs/python-fs.mk
+ create mode 100644 package/python-pyfatfs/0001-pyproject.toml-relax-version-constraints.patch
+ create mode 100644 package/python-pyfatfs/python-pyfatfs.hash
+ create mode 100644 package/python-pyfatfs/python-pyfatfs.mk
+ create mode 100644 package/snagboot/Config.in.host
+ create mode 100644 package/snagboot/snagboot.hash
+ create mode 100644 package/snagboot/snagboot.mk
+ create mode 100644 support/testing/tests/package/test_python_crccheck.py
+ create mode 100644 support/testing/tests/package/test_python_fs.py
+ create mode 100644 support/testing/tests/package/test_python_pyfatfs.py
+ create mode 100644 support/testing/tests/package/test_python_pyusb.py
+ create mode 100644 support/testing/tests/package/test_python_serial.py
+ create mode 100644 support/testing/tests/package/test_python_xmodem.py
+ create mode 100644 support/testing/tests/package/test_snagboot.py
+
 -- 
-2.47.3
+2.51.0
 
 _______________________________________________
 buildroot mailing list
