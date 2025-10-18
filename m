@@ -4,71 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3A42CCD195
-	for <buildroot@archiver.kernel.org>; Sat, 18 Oct 2025 19:46:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9F6FCCD195
+	for <buildroot@archiver.kernel.org>; Sat, 18 Oct 2025 19:52:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 979A960E2D;
-	Sat, 18 Oct 2025 19:46:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 94A316062F;
+	Sat, 18 Oct 2025 19:52:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZP7nKU2-Us4h; Sat, 18 Oct 2025 19:46:25 +0000 (UTC)
+ id USseTaZnxcvI; Sat, 18 Oct 2025 19:52:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A747660E39
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8BBA606F4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A747660E39;
-	Sat, 18 Oct 2025 19:46:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B8BBA606F4;
+	Sat, 18 Oct 2025 19:52:27 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9D70AD8
- for <buildroot@buildroot.org>; Sat, 18 Oct 2025 19:46:24 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B9DEC1CD
+ for <buildroot@buildroot.org>; Sat, 18 Oct 2025 19:52:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8EA6240FC2
- for <buildroot@buildroot.org>; Sat, 18 Oct 2025 19:46:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DC6CE401BA
+ for <buildroot@buildroot.org>; Sat, 18 Oct 2025 19:52:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LNN-JbWZzqHV for <buildroot@buildroot.org>;
- Sat, 18 Oct 2025 19:46:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 885BB40FA0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 885BB40FA0
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 885BB40FA0
- for <buildroot@buildroot.org>; Sat, 18 Oct 2025 19:46:23 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a021f.dip0.t-ipconnect.de [91.58.2.31])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 3C06CA4C00D7
- for <buildroot@buildroot.org>; Sat, 18 Oct 2025 21:46:21 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:34054)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1vACsf-000000007AZ-0zeI
- for buildroot@buildroot.org; Sat, 18 Oct 2025 19:46:20 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Sat, 18 Oct 2025 21:46:20 +0200
-Message-ID: <20251018194620.3446578-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+ id rxJxdp0oEZgr for <buildroot@buildroot.org>;
+ Sat, 18 Oct 2025 19:52:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::630; helo=mail-ej1-x630.google.com;
+ envelope-from=petr.vorel@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E3D8F40FDC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3D8F40FDC
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E3D8F40FDC
+ for <buildroot@buildroot.org>; Sat, 18 Oct 2025 19:52:22 +0000 (UTC)
+Received: by mail-ej1-x630.google.com with SMTP id
+ a640c23a62f3a-b3d196b7eeeso547152566b.0
+ for <buildroot@buildroot.org>; Sat, 18 Oct 2025 12:52:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1760817141; x=1761421941;
+ h=in-reply-to:content-disposition:mime-version:references:reply-to
+ :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=h8EnKt99Z7Pg+SRJj+2SxsNFKm1n6j9CjVDVLnTefns=;
+ b=XA2CM25hlyTYRiyc4id4DQlEjbpjWW1t5dC6zuBVD5AdaN/nxcLIWCfCTT88EYyxIy
+ MQmBN9IO2F5hNGBsTHgDcPyh8NwjYw+QU69RPEqiXLHQqt/X84QpmNAiJ76WICaT+ag9
+ hCd3d/sS/61CmVe6GKlywG4HJQ7/syKIL/Tjy7mOmdt55SWSeCnPF0W1V9aW3JF1HmaI
+ lN4VEQQ0QDqlivNBPcF8P0Bdd+PBcNuY8f2kz0PDuX0RKHXGfA+XfatrPNecps4184nw
+ c/QF8Pv5F6LIpiUQkVN5oMr6B0FdiwYNgYtxu+D2M9SRwT46xbIq5S1zB82e2tbeXdhm
+ R27Q==
+X-Gm-Message-State: AOJu0Yz7A38qFKAxlpH5BnuDRGr8XH1rQ7T2aDXBuZKuCcDjNXmSaSty
+ J8o05wvsNA8GAKIeNRc1ze9iaR2V2Unz7IbmNfhxBHUrCuwlHJwp32w6
+X-Gm-Gg: ASbGncufNgfGyLA4nEx90HqUA4yVe8Rem8pFIV/qAY9mgzgw6RcNB09L53kCFsYT85N
+ pJfFDpZ1LeTwdnaj9bZJXpunrfFkP2yz0wTSq5YJ9Dt+VdE2IMGqjpLGtuG4OFyz+KNt1/B2QK8
+ Yhml5Ii47/2wm1mA1c/ZDZ3IKSsY9vYd9DCzbbfLfZKh9X8FbOHxzDkdWjr50UGYXiD6chuPIaO
+ RCkz+f7EJW3KFyPQ49z0MfiBKoJe82GccQKx+Po8n7Zwf4Gq/MwfSc9xVOnf+vBZNutuZBnXHpE
+ wkiKMLyPSxOh7qkCKVll0p43P0RGwQidmkTZou7w2aH2wVi9eUZTmmr8RGo57dR/CJgs1BlqR8w
+ dkzdlUE7mM92Vuc64Y9BD7pUAZc3VUbHXkX/zCIXF+YAIu03Rq7xgO8KMNbF8dYYW2QqfUEPJM+
+ TRAwC6EXzfOeqL83A=
+X-Google-Smtp-Source: AGHT+IFakcnTnyb5uMy4HSo8BVEmCW2N2IntH72P0RpCOELWjHl2ybQ0Hna8yOI+gFRfIn5rFKua6w==
+X-Received: by 2002:a17:907:7f1e:b0:b4e:fc90:47a8 with SMTP id
+ a640c23a62f3a-b647254f626mr926042966b.4.1760817140752; 
+ Sat, 18 Oct 2025 12:52:20 -0700 (PDT)
+Received: from pevik (gw1.ms-free.net. [185.243.124.10])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-b65eb526098sm315687566b.62.2025.10.18.12.52.20
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 18 Oct 2025 12:52:20 -0700 (PDT)
+Date: Sat, 18 Oct 2025 21:52:18 +0200
+From: Petr Vorel <petr.vorel@gmail.com>
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+Message-ID: <20251018195218.GA375409@pevik>
+References: <20251018192729.3113082-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+Content-Disposition: inline
+In-Reply-To: <20251018192729.3113082-1-bernd@kuhls.net>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1760816781;
- bh=sErry/5FECLJCUfLo7pkJ/d86wjUSAOc+npA3TGf6yY=;
- h=From:To:Subject:Date:From;
- b=MIwbZCnIj7ZBKZfnOU7fxsx69c1vZ6p7IrXrEWTbuBUNniU0JXIScgHeQAc5/RiNm
- T6rvsRuTTXs/DJcsWg0b2NgKKSZJfSbVfCAljLWcdO2D1SIuyDyrQqm/DXe3rc6dMh
- QHq4UBin+3BO38lZY32maEx1fgnw2LpHU0NDhEUB9cA9/LfX43xymzZP+Si2qxq61U
- TN+LnYYILBK7RV3J26tDXN1spGk0f1B/+tqyLuIO4IJgF1WW6eiZF54jutODcjzSup
- kHUPgDZXCmIUzbwtWvAcRvX/X0CPxBpwrc+RHYp7E3MkLEwb8oE83sWxArzPcUkgyY
- gj/AkCXI+5Vzg==
+ d=gmail.com; s=20230601; t=1760817141; x=1761421941; darn=buildroot.org;
+ h=in-reply-to:content-disposition:mime-version:references:reply-to
+ :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=h8EnKt99Z7Pg+SRJj+2SxsNFKm1n6j9CjVDVLnTefns=;
+ b=Mnh5scliC3L+YBywePV4vT5x1dLQ//raJ3W1nFxhuX9F5bTu6EbHvbwDKgUXqjIZCP
+ 7gm3uESPQPVb/GxeHMhLN0za50opNQgzznGIdKUdV4ALUGtkdqLFL1eM2i+7SQA6waWH
+ AkZRzbjf0gXo1Fv8c1tEO6If9aSx/3W6OoW4M29rbQ5RVdq/njKB86MS+32SrkD3kse9
+ ZGA/gpEY1WScOpod4kfYRz4K0i1873SNTb6ExsGc9n56j+H+AiVuOzOx9x2rWA7bkNou
+ E961SwZx9BmV3d7r3lJM7N2/jP9Xh4VaO9km95a6lU+Dn9QMh59tMRDsRoPI+o9k1JyX
+ Sy2w==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=MIwbZCnI
-Subject: [Buildroot] [PATCH 1/1] package/pound: bump version to 4.17
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Mnh5scli
+Subject: Re: [Buildroot] [PATCH 1/1] package/iproute2: add upstream patch to
+ fix musl/uclibc build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,177 +111,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Reply-To: Petr Vorel <petr.vorel@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Removed patch 0001, upstream committed a different fix:
-https://github.com/graygnuorg/pound/pull/17#issuecomment-1757235640
+Hi Bernd,
 
-Removed "--with-owner" and "--with-group" configure options:
-https://github.com/graygnuorg/pound/commit/6537e9c97bce1f84254ada0104f72264406a1d0d
+> Buildroot commit 532d5561f48b6c430e7414ba5eacccf9b6c1bd22 bumped
+> iproute2 to version 6.17.0 which added lib/bridge.c:
+> https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/log/lib/bridge.c?h=v6.17.0
+> and causes build errors on musl & uclibc toolchains.
 
-Added optional dependency to libxcrypt for glibc needed due to commit:
-https://github.com/graygnuorg/pound/commit/32c32b248fe99650f3949b7ee7502a2ff5335f24
+> Added upstream patch to fix the problem.
 
-Updated pcre-related configure options due to commit:
-https://github.com/graygnuorg/pound/commit/a3d2b9e0d41c2d5c0487dba0ea5d5178cdfae9c7
+> Fixes:
+> https://autobuild.buildroot.net/results/951/951e4198b2ba109fd9c746fe2e6316a29085aeeb/
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/pound/0001-include-limits.h.patch | 75 -----------------------
- package/pound/Config.in                   |  1 +
- package/pound/pound.hash                  |  2 +-
- package/pound/pound.mk                    | 16 +++--
- 4 files changed, 9 insertions(+), 85 deletions(-)
- delete mode 100644 package/pound/0001-include-limits.h.patch
+Thanks for backporting the fix!
 
-diff --git a/package/pound/0001-include-limits.h.patch b/package/pound/0001-include-limits.h.patch
-deleted file mode 100644
-index 8f188af07c..0000000000
---- a/package/pound/0001-include-limits.h.patch
-+++ /dev/null
-@@ -1,75 +0,0 @@
--From a0374d946e55129b36ba1e0024e1d94675a8f044 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 17 Sep 2023 22:01:21 +0200
--Subject: [PATCH] include limits.h
--
--Include limits.h to avoid the following build failure:
--
--poundctl.c: In function 'oi_getn':
--poundctl.c:232:29: error: 'INT_MAX' undeclared (first use in this function)
--  232 |   if (errno || n < 0 || n > INT_MAX)
--      |                             ^~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/4edfffcd5d4383c57947d97139331e0bf2cb6155
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/graygnuorg/pound/pull/17
-----
-- src/config.c   | 1 +
-- src/poundctl.c | 1 +
-- src/svc.c      | 1 +
-- src/tmpl.c     | 1 +
-- 4 files changed, 4 insertions(+)
--
--diff --git a/src/config.c b/src/config.c
--index b7e3150..12f5cfa 100644
----- a/src/config.c
--+++ b/src/config.c
--@@ -21,6 +21,7 @@
-- #include "extern.h"
-- #include <openssl/x509v3.h>
-- #include <assert.h>
--+#include <limits.h>
-- 
-- 
-- /*
--diff --git a/src/poundctl.c b/src/poundctl.c
--index bd1459f..7fa18c8 100644
----- a/src/poundctl.c
--+++ b/src/poundctl.c
--@@ -19,6 +19,7 @@
-- #include "pound.h"
-- #include "json.h"
-- #include <assert.h>
--+#include <limits.h>
-- 
-- char *conf_name = POUND_CONF;
-- char *socket_name;
--diff --git a/src/svc.c b/src/svc.c
--index 6e810a6..457f1e0 100644
----- a/src/svc.c
--+++ b/src/svc.c
--@@ -20,6 +20,7 @@
-- #include "pound.h"
-- #include "extern.h"
-- #include "json.h"
--+#include <limits.h>
-- 
-- /*
--  * basic hashing function, based on fmv
--diff --git a/src/tmpl.c b/src/tmpl.c
--index 2efa72f..0e5b65d 100644
----- a/src/tmpl.c
--+++ b/src/tmpl.c
--@@ -26,6 +26,7 @@
-- 
-- #include "pound.h"
-- #include <assert.h>
--+#include <limits.h>
-- #include "json.h"
-- 
-- static void
---- 
--2.40.1
--
-diff --git a/package/pound/Config.in b/package/pound/Config.in
-index aa0f103273..9a42af2cc9 100644
---- a/package/pound/Config.in
-+++ b/package/pound/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_POUND
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- 	help
-diff --git a/package/pound/pound.hash b/package/pound/pound.hash
-index c5b08891be..020e5cb605 100644
---- a/package/pound/pound.hash
-+++ b/package/pound/pound.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  f1a041e060124941b090ad2d4fec5a72be37a5f8a50f0e0ca821dcbbe4b5925b  pound-4.8.tar.gz
-+sha256  b8759d94546027f0090dbb51455e2ff12ad2f95fe34edc4559a5a1dc07639a2e  pound-4.17.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/pound/pound.mk b/package/pound/pound.mk
-index 7bd7eaef2a..6ed2fc656d 100644
---- a/package/pound/pound.mk
-+++ b/package/pound/pound.mk
-@@ -4,28 +4,26 @@
- #
- ################################################################################
- 
--POUND_VERSION = 4.8
-+POUND_VERSION = 4.17
- POUND_SITE = https://github.com/graygnuorg/pound/releases/download/v$(POUND_VERSION)
- POUND_LICENSE = GPL-3.0+
- POUND_LICENSE_FILES = COPYING
- POUND_DEPENDENCIES = openssl host-openssl
- 
--# Force owner/group to us, otherwise it will try proxy:proxy by
--# default.
--POUND_CONF_OPTS = \
--	--with-owner=$(shell id -un) \
--	--with-group=$(shell id -gn)
-+ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
-+POUND_DEPENDENCIES += libxcrypt
-+endif
- 
- ifeq ($(BR2_PACKAGE_PCRE2),y)
--POUND_CONF_OPTS += --enable-pcreposix=pcre2
-+POUND_CONF_OPTS += --enable-pcre=2
- POUND_CONF_ENV += \
- 	ac_cv_path_PCRE2_CONFIG=$(STAGING_DIR)/usr/bin/pcre2-config
- POUND_DEPENDENCIES += pcre2
- else ifeq ($(BR2_PACKAGE_PCRE),y)
--POUND_CONF_OPTS += --enable-pcreposix=pcre1
-+POUND_CONF_OPTS += --enable-pcre=1
- POUND_DEPENDENCIES += pcre
- else
--POUND_CONF_OPTS += --disable-pcreposix
-+POUND_CONF_OPTS += --disable-pcre
- endif
- 
- $(eval $(autotools-package))
--- 
-2.47.3
-
+Kind regards,
+Petr
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
