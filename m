@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55733CCD184
-	for <buildroot@archiver.kernel.org>; Sun, 19 Oct 2025 10:52:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FEA1CCD184
+	for <buildroot@archiver.kernel.org>; Sun, 19 Oct 2025 10:52:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E741B83F0D;
-	Sun, 19 Oct 2025 10:52:35 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sgFFZzOH2Fbw; Sun, 19 Oct 2025 10:52:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C37A83F50
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1C37A83F50;
-	Sun, 19 Oct 2025 10:52:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D5C571CC
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 10:52:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B34E760E76
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 10:52:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 267C960F2B;
+	Sun, 19 Oct 2025 10:52:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y0h_Oc_ps2SL for <buildroot@buildroot.org>;
- Sun, 19 Oct 2025 10:52:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD97360C2B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DD97360C2B
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 10:52:32 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CCAF7874FB; Sun, 19 Oct 2025 10:52:32 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 19 Oct 2025 11:05:51 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 187becc56107da519c81a2f84f8d15bcf7025baa
-X-Git-Newrev: 74214bd80e2dac711c0f7aafadf90a5e40b12dc2
-X-Patchwork-Hint: ignore
-Message-Id: <20251019105232.CCAF7874FB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/liburiparser: bump version to 0.9.9
+ id qxj9DEFq23A8; Sun, 19 Oct 2025 10:52:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57CA8610D3
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 57CA8610D3;
+	Sun, 19 Oct 2025 10:52:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 443EF43F
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 10:52:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 417B6409D8
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 10:52:50 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M6vdqbmCh0ET for <buildroot@buildroot.org>;
+ Sun, 19 Oct 2025 10:52:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 77FF1400C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77FF1400C1
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 77FF1400C1
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 10:52:49 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id D80782003DD;
+ Sun, 19 Oct 2025 12:52:45 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 19 Oct 2025 12:52:45 +0200
+MIME-Version: 1.0
+Date: Sun, 19 Oct 2025 12:52:45 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251013184504.3610364-1-bernd@kuhls.net>
+References: <20251013184504.3610364-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <8025a13222345b5d1442eea3e870e6a8@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1760871167;
+ bh=rr+Gxl4yvqOIlg7q91PZZGcZOswJFUmxcXfBBnQSCfw=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=AbPgpAQ45oAp6By08tuCsQzYcOJUI1Hl4Rwt47rFqXNaVSl2FnZTJSxX8Wzv3QxlJ
+ ls7O4ov1aDtXMfr/peE19g+zcRYM4jBBdFzhsRZWxkjPwY7v1Xrgt0HxLc4vwIlD0M
+ 5uIzMayxscBr+RFc/xEWpep5eVF2fdeAOMYwXvKDU7g3sDsJP7+SV8vxj0k9remonf
+ UrS78Zd9BD5Tx9ZB9l7DcT8lp5/8UJ17NRAM+6VvG+r2V/I5WrPLogg2Eh5VzDq2I7
+ YTTJ3wcN6I7PX54hQVvnPoOiZ0EKm29IzTN8XrpxVhjWB+3MNCMcP80ko2CYZi/TzL
+ vRyOHWcd6LlXQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=AbPgpAQ4
+Subject: Re: [Buildroot] [PATCH 1/1] package/liburiparser: bump version to
+ 0.9.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,56 +83,21 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74214bd80e2dac711c0f7aafadf90a5e40b12dc2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 13/10/2025 20:45, Bernd Kuhls wrote:
+> Changelog:
+> https://github.com/uriparser/uriparser/blob/uriparser-0.9.9/ChangeLog
+> 
+> Renamed license file due to upstream commit:
+> https://github.com/uriparser/uriparser/commit/460ff9e573b4b2bc3a3114d91e95c885d8745458
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Changelog:
-https://github.com/uriparser/uriparser/blob/uriparser-0.9.9/ChangeLog
-
-Renamed license file due to upstream commit:
-https://github.com/uriparser/uriparser/commit/460ff9e573b4b2bc3a3114d91e95c885d8745458
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/liburiparser/liburiparser.hash | 4 ++--
- package/liburiparser/liburiparser.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/liburiparser/liburiparser.hash b/package/liburiparser/liburiparser.hash
-index f2e3317897..bed9c8ee9b 100644
---- a/package/liburiparser/liburiparser.hash
-+++ b/package/liburiparser/liburiparser.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  1d71c054837ea32a31e462bce5a1af272379ecf511e33448e88100b87ff73b2e  uriparser-0.9.8.tar.xz
--sha256  287f09e6546a9610f949f89e8fb937cacfeabd7bfaa8c8a0c18312193bf04ad3  COPYING
-+sha256  85645df1bb220a3867c42f8adeba4f6a4b2fdc1563e91ad7d9f92d14d3dd377d  uriparser-0.9.9.tar.xz
-+sha256  287f09e6546a9610f949f89e8fb937cacfeabd7bfaa8c8a0c18312193bf04ad3  COPYING.BSD-3-Clause
-diff --git a/package/liburiparser/liburiparser.mk b/package/liburiparser/liburiparser.mk
-index b0ba8c387b..66ec72409c 100644
---- a/package/liburiparser/liburiparser.mk
-+++ b/package/liburiparser/liburiparser.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--LIBURIPARSER_VERSION = 0.9.8
-+LIBURIPARSER_VERSION = 0.9.9
- LIBURIPARSER_SOURCE = uriparser-$(LIBURIPARSER_VERSION).tar.xz
- LIBURIPARSER_SITE = https://github.com/uriparser/uriparser/releases/download/uriparser-$(LIBURIPARSER_VERSION)
- LIBURIPARSER_LICENSE = BSD-3-Clause
--LIBURIPARSER_LICENSE_FILES = COPYING
-+LIBURIPARSER_LICENSE_FILES = COPYING.BSD-3-Clause
- LIBURIPARSER_CPE_ID_VENDOR = uriparser_project
- LIBURIPARSER_CPE_ID_PRODUCT = uriparser
- LIBURIPARSER_INSTALL_STAGING = YES
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
