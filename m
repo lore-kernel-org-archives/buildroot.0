@@ -1,52 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83DE1CCD184
-	for <buildroot@archiver.kernel.org>; Sun, 19 Oct 2025 16:12:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67AA0CCD195
+	for <buildroot@archiver.kernel.org>; Sun, 19 Oct 2025 16:12:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4AB8360073;
-	Sun, 19 Oct 2025 16:12:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 12B6A40A32;
+	Sun, 19 Oct 2025 16:12:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KeVYTiaRQkfa; Sun, 19 Oct 2025 16:12:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DrJb-AQ4bAHH; Sun, 19 Oct 2025 16:12:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AC7060594
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADE0340935
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6AC7060594;
-	Sun, 19 Oct 2025 16:12:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id B629E43F
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 16:12:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ADE0340935;
+	Sun, 19 Oct 2025 16:12:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 90D2D177
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 16:12:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 98FF083DC4
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 16:12:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 830F4404A3
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 16:12:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jD9-EVPKoaUc for <buildroot@buildroot.org>;
- Sun, 19 Oct 2025 16:12:24 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDB8383DA0
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DDB8383DA0
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 16:12:23 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D7147875A9; Sun, 19 Oct 2025 16:12:23 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 19 Oct 2025 17:47:42 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 675bb8337da0787620d01d712aab4e28946a6f1d
-X-Git-Newrev: 43be25a237c43739916602140683be16228d258b
-X-Patchwork-Hint: ignore
-Message-Id: <20251019161223.D7147875A9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/stm32f746_disco_sd: bump Linux to
- 5.15.194 and U-Boot to 2025.10
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AkbKi_5MTTvn for <buildroot@buildroot.org>;
+ Sun, 19 Oct 2025 16:12:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9AE524005A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9AE524005A
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9AE524005A
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 16:12:38 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 85B37B0053D;
+ Sun, 19 Oct 2025 18:12:35 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 19 Oct 2025 18:12:35 +0200
+MIME-Version: 1.0
+Date: Sun, 19 Oct 2025 18:12:35 +0200
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251018162444.1188691-1-dario.binacchi@amarulasolutions.com>
+References: <20251018162444.1188691-1-dario.binacchi@amarulasolutions.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <eb3a3359442e6f190b274492fc5f396e@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1760890356;
+ bh=o25fluiE7TSyQwjnvlTyvZjT07F2f6kmZvHjReYRec0=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=AqASyP2i+3+2TYt+tMutEfljWHdn3HnEnQO5NZNevaOner99I0+oPpGAoxSM30u++
+ 7Dp8KuYAhhxS86XYZX5gRnvoZumg0R/aZEnhPUmxtQ3vzmRgiIQ+UmsC+Nzs2OFR86
+ K8Jpt97VpzklWyej9EJx+fEqYuvyEs6Ys6Gx2zCTBobehXH0qSY5kaJ1bT2OcgpSTQ
+ B4eQ/aoXgy5HmljiRpC0eEkJSu7a8IMxeHP3Phb08dqkHeT5NvKs7ursQSIEARXWSr
+ hCtT29/m/uswMWruI6Zbwr10acmwmQEzJwHKdbsKBeU7vfXIHVsbDWBsC0gciz2JKS
+ O8EXA2t72CYwA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=AqASyP2i
+Subject: Re: [Buildroot] [PATCH 1/1] configs/stm32f746_disco_sd: bump Linux
+ to 5.15.194 and U-Boot to 2025.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,64 +83,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43be25a237c43739916602140683be16228d258b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 18/10/2025 18:24, Dario Binacchi wrote:
+> The patch bumps the Linux kernel to version 5.15.194 and U-Boot to
+> version 2025.10.
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-The patch bumps the Linux kernel to version 5.15.194 and U-Boot to
-version 2025.10.
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- board/stmicroelectronics/stm32f746-disco/patches/linux/linux.hash | 2 +-
- board/stmicroelectronics/stm32f746-disco/patches/uboot/uboot.hash | 2 +-
- configs/stm32f746_disco_sd_defconfig                              | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/board/stmicroelectronics/stm32f746-disco/patches/linux/linux.hash b/board/stmicroelectronics/stm32f746-disco/patches/linux/linux.hash
-index 68e85f8a21..27549bda93 100644
---- a/board/stmicroelectronics/stm32f746-disco/patches/linux/linux.hash
-+++ b/board/stmicroelectronics/stm32f746-disco/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  9c4efdd7ee550d524c017b5dae27725374526311e983661850cd880af671cb2a  linux-5.15.186.tar.xz
-+sha256  348d6faada05fd4684450cd7c4e666c3c98cdb96f2309b1520c9a92a378c267e  linux-5.15.194.tar.xz
-diff --git a/board/stmicroelectronics/stm32f746-disco/patches/uboot/uboot.hash b/board/stmicroelectronics/stm32f746-disco/patches/uboot/uboot.hash
-index 440526977b..98a5c53aaf 100644
---- a/board/stmicroelectronics/stm32f746-disco/patches/uboot/uboot.hash
-+++ b/board/stmicroelectronics/stm32f746-disco/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  0f933f6c5a426895bf306e93e6ac53c60870e4b54cda56d95211bec99e63bec7  u-boot-2025.07.tar.bz2
-+sha256  b4f032848e56cc8f213ad59f9132c084dbbb632bc29176d024e58220e0efdf4a  u-boot-2025.10.tar.bz2
-diff --git a/configs/stm32f746_disco_sd_defconfig b/configs/stm32f746_disco_sd_defconfig
-index af1ba0549a..cd2123b992 100644
---- a/configs/stm32f746_disco_sd_defconfig
-+++ b/configs/stm32f746_disco_sd_defconfig
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/stm32f746-disco/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.186"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.194"
- BR2_LINUX_KERNEL_DEFCONFIG="stm32"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/stm32f746-disco/linux.fragment"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32f746-disco"
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_PACKAGE_HOST_GENIMAGE=y
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
