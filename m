@@ -4,71 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2763DCCD184
-	for <buildroot@archiver.kernel.org>; Sun, 19 Oct 2025 19:32:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C364ACCD195
+	for <buildroot@archiver.kernel.org>; Sun, 19 Oct 2025 19:32:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F18FF84061;
-	Sun, 19 Oct 2025 19:32:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 929838405E;
+	Sun, 19 Oct 2025 19:32:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5bFA6FTW5OGq; Sun, 19 Oct 2025 19:32:36 +0000 (UTC)
+ id F8eeySHZMQLn; Sun, 19 Oct 2025 19:32:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCD2684035
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 130C68403F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DCD2684035;
-	Sun, 19 Oct 2025 19:32:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 52AA143F
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 19:32:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 130C68403F;
+	Sun, 19 Oct 2025 19:32:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 78E3043F
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 19:32:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3809C60E57
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 19:32:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6AA9B611C6
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 19:32:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WqFDRM6K0ArF for <buildroot@buildroot.org>;
- Sun, 19 Oct 2025 19:32:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6122B6114B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6122B6114B
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6122B6114B
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 19:32:33 +0000 (UTC)
+ id 8VbGeLHvU6Tv for <buildroot@buildroot.org>;
+ Sun, 19 Oct 2025 19:32:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 700836114B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 700836114B
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 700836114B
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 19:32:50 +0000 (UTC)
 Received: from webmail.free.fr (unknown [172.20.246.1])
  (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 057562003D0;
- Sun, 19 Oct 2025 21:32:28 +0200 (CEST)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id A438478034E;
+ Sun, 19 Oct 2025 21:32:47 +0200 (CEST)
 Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
  via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 19 Oct 2025 21:32:28 +0200
+ with HTTP (HTTP/1.0 POST); Sun, 19 Oct 2025 21:32:47 +0200
 MIME-Version: 1.0
-Date: Sun, 19 Oct 2025 21:32:28 +0200
+Date: Sun, 19 Oct 2025 21:32:47 +0200
 To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: buildroot@buildroot.org, Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-In-Reply-To: <20251016182815.166644-1-dario.binacchi@amarulasolutions.com>
-References: <20251016182815.166644-1-dario.binacchi@amarulasolutions.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251016182956.167483-1-dario.binacchi@amarulasolutions.com>
+References: <20251016182956.167483-1-dario.binacchi@amarulasolutions.com>
 User-Agent: Webmail Free/1.6.11
-Message-ID: <56e649a46112b30fbac21404e4160195@free.fr>
+Message-ID: <ec5d7c2a08d25c68a8b998eb0023bd3d@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1760902351;
- bh=0d25MOXHDZ4IQCcQAjK0HnbI4246Cv4SLAp1m816J7M=;
+ d=free.fr; s=smtp-20201208; t=1760902368;
+ bh=r8MDC5ltUcHqbPgvIxvhdmeudeuR0+bHO5VTuEVfalE=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=FOSBEbj19mlcdqoyF9/4ECDyt14h1d72egw0MRUblviwD893sQf1q7D2cvxdVwFor
- SIa86VYX9BVZdq+cpOwHHtUXw94nfWKl2QxTtmIPzvqs7G3E+FZgN7Ed0AnR0/P8Ro
- QqT7r9QwzR3G3mUZ6JJQ8YTgIjo9Uf0WVbepJnYHJeJ8xdma7Moi7Rqgrbk/4PHhAU
- tC0KhCByGcWH3wIwf45+qKf8+HL0cXUgfyKhNxR/lrUi6s8X5o6KHCkstPYIvA/KTa
- CPVItK7tniL4pi0G1MYFFMx0o+XxKelcF53DQjCnz6nZIUhwukFgeEbSXOpchUFFDl
- 9gzDPrY0sj3yQ==
+ b=OLxVanSJ+U5YzI2LdHUz21kX8DGR7jdNpARQFi750a31IYoxHIsQk06eHwuQ3IZSI
+ bWM/y8jYpA+f9WdIXzDyneE6Ty0ziq+oSi2u59uURrVeSXHnu14cAdDCq1xwaParFi
+ apGhtjEe2KTxKd7vVt3BrnVzwn3FZ+JwZKogko2SnNV2s6/C8Dlyan84Y4XGH45bpL
+ iFT3k+KU7+NOsO8BtHrhDKvf9WfT+2nckC3LBBoQTGxzE0utNhcNRF9AoohZme/nHS
+ 71BsgZlc2xxvPQi0CS2QwFFQhAdbfAE3cX086Nxo1llcznX1rhDi2CvhXBKy4397wp
+ 2TT5Q7yYhncvg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=FOSBEbj1
-Subject: Re: [Buildroot] [PATCH 1/1] package/jimtcl: bump to version 0.83
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=OLxVanSJ
+Subject: Re: [Buildroot] [PATCH 1/1] package/jitterentropy-library: bump to
+ version 3.6.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,10 +88,13 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 16/10/2025 20:28, Dario Binacchi wrote:
-> Release notes since 0.81:
-> https://jim.tcl-lang.org/home/doc/www/www/articles/jim-release-0-82/
-> https://jim.tcl-lang.org/home/doc/www/www/articles/jim-release-0-83/
+On 16/10/2025 20:29, Dario Binacchi wrote:
+> Release notes:
+> https://github.com/smuellerDD/jitterentropy-library/releases/tag/v3.6.2
+> https://github.com/smuellerDD/jitterentropy-library/releases/tag/v3.6.3
+> 
+> Update file hash due to update license dates:
+> https://github.com/smuellerDD/jitterentropy-library/commit/92d3c68cea4b82f229a2407cfe45303fcb62c05d
 > 
 > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
