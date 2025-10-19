@@ -1,74 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D0CFCCD183
-	for <buildroot@archiver.kernel.org>; Sun, 19 Oct 2025 10:49:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E22FFCCD183
+	for <buildroot@archiver.kernel.org>; Sun, 19 Oct 2025 10:49:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D165761113;
-	Sun, 19 Oct 2025 10:49:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8E4478234E;
+	Sun, 19 Oct 2025 10:49:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cXnyqJir4xvR; Sun, 19 Oct 2025 10:49:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZfC7hOuaO_ju; Sun, 19 Oct 2025 10:49:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ADD336110F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C301E8235A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ADD336110F;
-	Sun, 19 Oct 2025 10:49:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7DF1E1CC
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 10:49:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C301E8235A;
+	Sun, 19 Oct 2025 10:49:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2BCB71CC
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 10:49:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7B7BB4046A
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 10:49:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 11FED8234E
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 10:49:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mrt7kXVpoW0D for <buildroot@buildroot.org>;
- Sun, 19 Oct 2025 10:49:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8987B400C1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8987B400C1
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8987B400C1
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 10:49:17 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 6CFC6B0051B;
- Sun, 19 Oct 2025 12:49:14 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 19 Oct 2025 12:49:14 +0200
-MIME-Version: 1.0
-Date: Sun, 19 Oct 2025 12:49:14 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251013184010.3540072-1-bernd@kuhls.net>
-References: <20251013184010.3540072-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <992cc3c6ea892622b104199cf1560d2b@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1760870955;
- bh=RjKM/hNCQBXdzcd9F5MxUwBeav5hyWePS4k/6P5nKVg=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=mG/gl2NFeE7qgLUP1kFAMP7Q0dIHLvT9pv+4Y4ZwNbevMugHSgr0T3MC/uWkH3Vrr
- SW4NVp3F8RyDzRI1RW/bAn/TDfAi7tz0kAJHDPfkitezOCwJS2s/KLBPVpRZfP2CI5
- eNOlumm4TRNKwutzDq9Af6IWdWYEg7GnV2yBD3CX1NRBTYvCE+em989NBc6bGnzUxs
- Bvgrc0MijlFnkOzCAeGipRP6fC3uC9PQvVnpT5evqu/WJ80bFm72L8kw/KDanjHWL+
- +VYkMjFA6RmkT9jF9P34ovN3KWXSWRS1rufBrG4vMK7Xt6tqwoBtB5pUxuyqWwSjkH
- gJbWaSma7qKXA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=mG/gl2NF
-Subject: Re: [Buildroot] [PATCH 1/1] package/libunibreak: bump version to 6.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SclGS90ROf7f for <buildroot@buildroot.org>;
+ Sun, 19 Oct 2025 10:49:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42ADB82341
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 42ADB82341
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 10:49:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3C6CD874ED; Sun, 19 Oct 2025 10:49:37 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 19 Oct 2025 11:05:00 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 05f010717dc23542f9cc111892b14dca52b94283
+X-Git-Newrev: 187becc56107da519c81a2f84f8d15bcf7025baa
+X-Patchwork-Hint: ignore
+Message-Id: <20251019104937.3C6CD874ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libunibreak: bump version to 6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,19 +59,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 13/10/2025 20:40, Bernd Kuhls wrote:
-> Release notes:
-> https://github.com/adah1972/libunibreak/releases/tag/libunibreak_6_1
-> https://github.com/adah1972/libunibreak/releases/tag/libunibreak_6_0
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=187becc56107da519c81a2f84f8d15bcf7025baa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Release notes:
+https://github.com/adah1972/libunibreak/releases/tag/libunibreak_6_1
+https://github.com/adah1972/libunibreak/releases/tag/libunibreak_6_0
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libunibreak/libunibreak.hash | 2 +-
+ package/libunibreak/libunibreak.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libunibreak/libunibreak.hash b/package/libunibreak/libunibreak.hash
+index bb85f21cdc..8f1e7d292a 100644
+--- a/package/libunibreak/libunibreak.hash
++++ b/package/libunibreak/libunibreak.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  dd1a92d4c5646aa0e457ff41d89812ec5243863be6c20bbcb5ee380f3dd78377  libunibreak-5.1.tar.gz
++sha256  cc4de0099cf7ff05005ceabff4afed4c582a736abc38033e70fdac86335ce93f  libunibreak-6.1.tar.gz
+ sha256  0c57e2ec42ece17791a75d2f9b2f8e0663181be008667a507f765b3ef22522db  LICENCE
+diff --git a/package/libunibreak/libunibreak.mk b/package/libunibreak/libunibreak.mk
+index fa52116c1f..de3ea0fefc 100644
+--- a/package/libunibreak/libunibreak.mk
++++ b/package/libunibreak/libunibreak.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUNIBREAK_VERSION = 5.1
++LIBUNIBREAK_VERSION = 6.1
+ LIBUNIBREAK_SITE = https://github.com/adah1972/libunibreak/releases/download/libunibreak_$(subst .,_,$(LIBUNIBREAK_VERSION))
+ LIBUNIBREAK_INSTALL_STAGING = YES
+ LIBUNIBREAK_LICENSE = Zlib
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
