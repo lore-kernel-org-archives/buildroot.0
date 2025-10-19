@@ -1,52 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 123B3CCD1A2
-	for <buildroot@archiver.kernel.org>; Sun, 19 Oct 2025 19:31:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAE23CCD195
+	for <buildroot@archiver.kernel.org>; Sun, 19 Oct 2025 19:31:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D78284136D;
-	Sun, 19 Oct 2025 19:31:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id emGgZg7zDubE; Sun, 19 Oct 2025 19:31:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB4FE4136A
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB4FE4136A;
-	Sun, 19 Oct 2025 19:31:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9C42F43F
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 19:31:05 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A43C28402D
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 19:31:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C34A28403B;
+	Sun, 19 Oct 2025 19:31:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2-k1au5Jj-El for <buildroot@buildroot.org>;
- Sun, 19 Oct 2025 19:31:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBFFF8402F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CBFFF8402F
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 19:31:02 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C94E38182E; Sun, 19 Oct 2025 19:31:02 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 19 Oct 2025 21:27:23 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 283821fc31c4890f141111cbc5994e36703c91eb
-X-Git-Newrev: 52101ad09260c1874065b165167424794815ad14
-X-Patchwork-Hint: ignore
-Message-Id: <20251019193102.C94E38182E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/jitterentropy-library: bump to
- version 3.6.3
+ id pCzpC3K4jXOG; Sun, 19 Oct 2025 19:31:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4667584030
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4667584030;
+	Sun, 19 Oct 2025 19:31:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BDE9C43F
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 19:31:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id AFE6640C64
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 19:31:22 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id plPq2SQsxGc1 for <buildroot@buildroot.org>;
+ Sun, 19 Oct 2025 19:31:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E68C740A8B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E68C740A8B
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E68C740A8B
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 19:31:21 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id DCBC1780503;
+ Sun, 19 Oct 2025 21:31:17 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 19 Oct 2025 21:31:17 +0200
+MIME-Version: 1.0
+Date: Sun, 19 Oct 2025 21:31:17 +0200
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: buildroot@buildroot.org, linux-amarula@amarulasolutions.com
+In-Reply-To: <20251013201846.3834135-1-dario.binacchi@amarulasolutions.com>
+References: <20251013201846.3834135-1-dario.binacchi@amarulasolutions.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <adf0a27909035bf5df8570aa9f12ff4a@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1760902280;
+ bh=x5R3/IpQsqRMesL8A57hZpiYiOxKzdXTMa0dE9vGytU=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=grhYmOUEFKZ8rSo9CTZY2evj6kgJyvD8lS5tBptJDi+aFNuGxwwoeHD1K0L0aSr9K
+ FitWtNdQ3t6lzOStWHz0NN0BUm9Ned1SbvghsLvTOA3DC1cwBOauVjSSUi9YCWW5AJ
+ nvAyBmE4pUvD0riSu95gbtT/Mp6HwLVzLJrEZiw02CLSyC/txwBpuedl1Kco6bkbV1
+ gH7I6ZcmE6jBF6pS4IF2do7A6ohXfvii+mS78qv4jpIGBg8jUbDJgNau6qXZ1I5vyg
+ ZQBGW3kiHVy7F1gYJM+6H9i35vsn22FodbTUFgyYmgzB7Ws6VK8T/WbA3ElZ3/ATqU
+ Vydt3y1ON+DxA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=grhYmOUE
+Subject: Re: [Buildroot] [PATCH 1/1] package/highway: bump to version 1.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,54 +82,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52101ad09260c1874065b165167424794815ad14
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 13/10/2025 22:18, Dario Binacchi wrote:
+> Release notes:
+> https://github.com/google/highway/releases/tag/1.3.0
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-Release notes:
-https://github.com/smuellerDD/jitterentropy-library/releases/tag/v3.6.2
-https://github.com/smuellerDD/jitterentropy-library/releases/tag/v3.6.3
-
-Update file hash due to update license dates:
-https://github.com/smuellerDD/jitterentropy-library/commit/92d3c68cea4b82f229a2407cfe45303fcb62c05d
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/jitterentropy-library/jitterentropy-library.hash | 4 ++--
- package/jitterentropy-library/jitterentropy-library.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/jitterentropy-library/jitterentropy-library.hash b/package/jitterentropy-library/jitterentropy-library.hash
-index feb15f0fca..91ce4d98fc 100644
---- a/package/jitterentropy-library/jitterentropy-library.hash
-+++ b/package/jitterentropy-library/jitterentropy-library.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  ddd23429cb6bdabbfeafd2b6aaabfbf1959dd7288887334dfec5ff099a2e9f3e  jitterentropy-library-3.6.1.tar.xz
--sha256  adbfea86223ce2c1f410353054fbbe8d7936dd900ff0d373301c959300c2214c  LICENSE
-+sha256  9dd50f94387efadd05a10f25f3224fb959b125cb8e9c188356a74944034f0ee5  jitterentropy-library-3.6.3.tar.xz
-+sha256  088d208b9d22530691f1e9406a85dd7f6f5a42e3cf23d3d6df6582408e3840f7  LICENSE
- sha256  13aa749a5b0a454917a944ed8fffc530b784f5ead522b1aacaf4ec8aa55a6239  LICENSE.bsd
- sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  LICENSE.gplv2
-diff --git a/package/jitterentropy-library/jitterentropy-library.mk b/package/jitterentropy-library/jitterentropy-library.mk
-index 28a0f7da61..f1ef36d3b3 100644
---- a/package/jitterentropy-library/jitterentropy-library.mk
-+++ b/package/jitterentropy-library/jitterentropy-library.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JITTERENTROPY_LIBRARY_VERSION = 3.6.1
-+JITTERENTROPY_LIBRARY_VERSION = 3.6.3
- JITTERENTROPY_LIBRARY_SOURCE = \
- 	jitterentropy-library-$(JITTERENTROPY_LIBRARY_VERSION).tar.xz
- JITTERENTROPY_LIBRARY_SITE = http://www.chronox.de/jent/releases/$(JITTERENTROPY_LIBRARY_VERSION)
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
