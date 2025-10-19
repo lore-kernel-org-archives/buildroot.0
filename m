@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0CBBCCD183
-	for <buildroot@archiver.kernel.org>; Sun, 19 Oct 2025 15:46:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAE42CCD183
+	for <buildroot@archiver.kernel.org>; Sun, 19 Oct 2025 15:47:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 56B2C61135;
-	Sun, 19 Oct 2025 15:46:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6ED236115D;
+	Sun, 19 Oct 2025 15:47:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f73qQywM0orU; Sun, 19 Oct 2025 15:46:09 +0000 (UTC)
+ id Dx_j3m3g6cRz; Sun, 19 Oct 2025 15:46:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8359461136
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C33AC6113B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8359461136;
-	Sun, 19 Oct 2025 15:46:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1A3C243F
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 15:46:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C33AC6113B;
+	Sun, 19 Oct 2025 15:46:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9CEEA1CC
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 15:46:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F15E641257
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 15:46:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8EC2E41257
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 15:46:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FpIDsu6aOLeY for <buildroot@buildroot.org>;
- Sun, 19 Oct 2025 15:46:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D8F64123B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4D8F64123B
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 15:46:07 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 47CC58759F; Sun, 19 Oct 2025 15:46:07 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 19 Oct 2025 17:20:04 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cccc8976a80222f48b2ba97e8ce0867b9d8f6d16
-X-Git-Newrev: 675bb8337da0787620d01d712aab4e28946a6f1d
-X-Patchwork-Hint: ignore
-Message-Id: <20251019154607.47CC58759F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/stm32f429_disco_xip: bump Linux to
- 6.1.155
+ id JxMXSH92TLaE for <buildroot@buildroot.org>;
+ Sun, 19 Oct 2025 15:46:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 96D764123B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96D764123B
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 96D764123B
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 15:46:56 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 72E3719F5C2;
+ Sun, 19 Oct 2025 17:46:52 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 19 Oct 2025 17:46:52 +0200
+MIME-Version: 1.0
+Date: Sun, 19 Oct 2025 17:46:52 +0200
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: buildroot@buildroot.org, Christophe Priouzeau
+ <christophe.priouzeau@foss.st.com>
+In-Reply-To: <20251013202335.3835882-1-dario.binacchi@amarulasolutions.com>
+References: <20251013202335.3835882-1-dario.binacchi@amarulasolutions.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <a6ba019c1d839d140f241539ed3dfc5c@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1760888814;
+ bh=wae1yncco27Iuh1nloS8JJtZfHmMtd9MeXYa8owRm7g=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=dI8nyIyDU2kPn8bo+Vkvn4RJuAtTSlWejHpkQfBAJS/2X759djUgGrP9wc4qSd0Iq
+ IJh8M1BmaNukaSJG1GTG4iImZPUuAve8jg4M1eY5jI1hOslz7Q9VJ2tbnDUGS3SwDW
+ CtEOa3DFbswxyoCemXMDOWpXjQrF4t9HUQxWAvkDFnNYkEC+tSISUcfKslprryn5KN
+ hgLkE6cTjML67KaqU/hutoy00y+jI9jGFMsRGw07djgphcq4KJRUU8KrInyJkBwAWL
+ kNIUA13wg3n7BXoN80R00/kFtkWRYu7TFWtvP9S8ulvu2qsHM7wIFqwDTxsL+eV1i3
+ EdPXkSI/+Kx6Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=dI8nyIyD
+Subject: Re: [Buildroot] [PATCH 1/1] configs/stm32f429_disco_xip: bump Linux
+ to 6.1.155
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,47 +84,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=675bb8337da0787620d01d712aab4e28946a6f1d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Dario,
 
-The patch bumps the Linux kernel to version 6.1.155. The size of
-xipImage has increased by only 1126 bytes (1673444 bytes compared to
-1672318 in version 6.1.143).
+On 13/10/2025 22:23, Dario Binacchi wrote:
+> The patch bumps the Linux kernel to version 6.1.155. The size of
+> xipImage has increased by only 1126 bytes (1673444 bytes compared to
+> 1672318 in version 6.1.143).
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash | 2 +-
- configs/stm32f429_disco_xip_defconfig                             | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash b/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
-index a5f5f9d209..6450f4b2d4 100644
---- a/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
-+++ b/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  e25bdac4d77e6b1079f899e2ecb24c7e850f295e735ea7b5654b900d85c03b0a  linux-6.1.143.tar.xz
-+sha256  c29387aeee085fbcbd91236224b9df805063bac43615e75cea2c6b29604a5c73  linux-6.1.155.tar.xz
-diff --git a/configs/stm32f429_disco_xip_defconfig b/configs/stm32f429_disco_xip_defconfig
-index 087308abde..c22b6e1135 100644
---- a/configs/stm32f429_disco_xip_defconfig
-+++ b/configs/stm32f429_disco_xip_defconfig
-@@ -8,7 +8,7 @@ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.143"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.155"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32f429-disco/linux.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+Could you consider a followup patch switching this defconfig to
+use an external Bootlin glibc stable toolchain, please?
+
+See for example:
+https://gitlab.com/buildroot.org/buildroot/-/commit/9f9ec04c73f0b59eff324c1f23ac036dada3a185
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
