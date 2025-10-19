@@ -1,51 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B807CCD183
-	for <buildroot@archiver.kernel.org>; Sun, 19 Oct 2025 11:06:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C99BCCD184
+	for <buildroot@archiver.kernel.org>; Sun, 19 Oct 2025 11:06:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1892060FB7;
-	Sun, 19 Oct 2025 11:06:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0457483F65;
+	Sun, 19 Oct 2025 11:06:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LgUrclUqPzjK; Sun, 19 Oct 2025 11:06:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id byItPALZAIdq; Sun, 19 Oct 2025 11:06:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40B3F610D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7226083F5A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 40B3F610D3;
-	Sun, 19 Oct 2025 11:06:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7226083F5A;
+	Sun, 19 Oct 2025 11:06:56 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5E0961CC
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 11:06:46 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 7C23543F
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 11:06:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3C331610D3
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 11:06:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E09161113
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 11:06:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uf4vRkorrUY3 for <buildroot@buildroot.org>;
- Sun, 19 Oct 2025 11:06:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C79960FB7
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6C79960FB7
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 11:06:45 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 672448750A; Sun, 19 Oct 2025 11:06:45 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 19 Oct 2025 11:07:15 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c8ab370b080d99ae5b0795fe8643c1e32511de7f
-X-Git-Newrev: d0ce0acfcf7bf1cdd546fa1de0524e64823a342d
-X-Patchwork-Hint: ignore
-Message-Id: <20251019110645.672448750A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/utfcpp: bump version to 4.0.8
+ id NgvV9Jbpcex9 for <buildroot@buildroot.org>;
+ Sun, 19 Oct 2025 11:06:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A2A32610D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2A32610D3
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A2A32610D3
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 11:06:54 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id D0FC219F5C3;
+ Sun, 19 Oct 2025 13:06:50 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 19 Oct 2025 13:06:50 +0200
+MIME-Version: 1.0
+Date: Sun, 19 Oct 2025 13:06:50 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251013185001.3619271-1-bernd@kuhls.net>
+References: <20251013185001.3619271-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <b1b049a38804c7e426821e9d7e72c9c7@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1760872012;
+ bh=NJLzFyhgzNGn2haS9lhYKmCIgtcmRNJSvj3oLqOUWg4=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=CC421TkmsuenY1YYp6NzP+LG+NRbZpDRFL9zlCjs95kGpU+33mxImV+CV8zllQ0kt
+ s0KBvIbFMqzYJSIMDh7GAwu+fLxXsoPax0wmfxdtl7qBBlfJ6nCkYldCPqAZ61Z/Hd
+ k8AahEWU5Z+BLWy57iTr4e/7dmpzT5/o0N7jJjY40yTP3D6NoJPMXzUh+m8WPJ764K
+ M1MhhrVtIitcZXYymrFDIR87uXP7ER8N9oJmQhgWrMp+4M/Z+oClzkLQMQtt7+XGAP
+ Sdj5322zqDAeVJ7fymSPbekqo84bj9Z52R9rCM1tipc/8GwFuELcGFwzDORAgteg22
+ uxNyKzuPydoaQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=CC421Tkm
+Subject: Re: [Buildroot] [PATCH 1/1] package/utfcpp: bump version to 4.0.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,46 +82,17 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0ce0acfcf7bf1cdd546fa1de0524e64823a342d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 13/10/2025 20:50, Bernd Kuhls wrote:
+> Release notes: https://github.com/nemtrif/utfcpp/releases/tag/v4.0.8
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Release notes: https://github.com/nemtrif/utfcpp/releases/tag/v4.0.8
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/utfcpp/utfcpp.hash | 2 +-
- package/utfcpp/utfcpp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/utfcpp/utfcpp.hash b/package/utfcpp/utfcpp.hash
-index 65b3ad2a88..d995899165 100644
---- a/package/utfcpp/utfcpp.hash
-+++ b/package/utfcpp/utfcpp.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  6920a6a5d6a04b9a89b2a89af7132f8acefd46e0c2a7b190350539e9213816c0  utfcpp-4.0.6.tar.gz
-+sha256  f808b26d8c3a59def27fea207182ece77a8930bd121a69f80d328ecf3cfef925  utfcpp-4.0.8.tar.gz
- sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE
-diff --git a/package/utfcpp/utfcpp.mk b/package/utfcpp/utfcpp.mk
-index 3a4613841e..d3d7896813 100644
---- a/package/utfcpp/utfcpp.mk
-+++ b/package/utfcpp/utfcpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UTFCPP_VERSION = 4.0.6
-+UTFCPP_VERSION = 4.0.8
- UTFCPP_SITE = $(call github,nemtrif,utfcpp,v$(UTFCPP_VERSION))
- UTFCPP_LICENSE = BSL-1.0
- UTFCPP_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
