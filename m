@@ -1,51 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27A7CCCD183
-	for <buildroot@archiver.kernel.org>; Sun, 19 Oct 2025 10:41:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 542CACCD183
+	for <buildroot@archiver.kernel.org>; Sun, 19 Oct 2025 10:42:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B83FF83E93;
-	Sun, 19 Oct 2025 10:41:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E312361113;
+	Sun, 19 Oct 2025 10:42:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4h4B4bT0QOX8; Sun, 19 Oct 2025 10:41:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TGVQid_8WgRm; Sun, 19 Oct 2025 10:42:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E820683E94
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C3196110D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E820683E94;
-	Sun, 19 Oct 2025 10:41:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 76DA643F
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 10:41:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C3196110D;
+	Sun, 19 Oct 2025 10:42:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9D3CD1CC
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 10:41:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5766A83E94
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 10:41:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8310D6110D
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 10:41:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8MykSuw5Lt0h for <buildroot@buildroot.org>;
- Sun, 19 Oct 2025 10:41:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D24B83E93
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9D24B83E93
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 10:41:44 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 89BA7874CE; Sun, 19 Oct 2025 10:41:44 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 19 Oct 2025 11:03:36 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: efbbf91958c31b3360f2cd4e893315aba8dd782c
-X-Git-Newrev: 6ef8b51f4fab0166f0d2469ba156ad8ad599daa7
-X-Patchwork-Hint: ignore
-Message-Id: <20251019104144.89BA7874CE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/stellarium: bump version to 25.3
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yrAt2vVYeQf4 for <buildroot@buildroot.org>;
+ Sun, 19 Oct 2025 10:41:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AF1CE60AEE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF1CE60AEE
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AF1CE60AEE
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 10:41:58 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 4827D780331;
+ Sun, 19 Oct 2025 12:41:55 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 19 Oct 2025 12:41:55 +0200
+MIME-Version: 1.0
+Date: Sun, 19 Oct 2025 12:41:55 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251013181031.289433-1-bernd@kuhls.net>
+References: <20251013181031.289433-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <ed50eebc4d80f80138544e2049a32e00@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1760870516;
+ bh=Gly1L61ba7yYXR4qVblPNXLag8admZuoQkPvv0hDK6w=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=ESLFA8dP51+vG1fywYGWnXWjtKZXuZTru74X+QoH9wkAZLxk/3phy5uiLKk+BJIR9
+ pnC1jeg6equxBtdL5T69GYZJfQAyl/S8JqBjPb1ekjoAm94xBdGbeIN/qGsaeojPie
+ GVfSuskbhSooHdhNGGfJMUx2N4L21iFiwUmkSR7KG8iLBtEF6hC341euVMsCanMoji
+ avj4DprKG3MLxb2AvsVWHGcIh59hBYn2z7mHviWeB7cXhnrGBOgT729U/0Zk6QjJNS
+ 8fc4TvuzZXOg0zCHmKtVkB1CIuIpFlPLh2u2tzgxZeuy7F0rJ/B03l1l0gy5sHXv9b
+ 4nVjN8Ua7Y4yA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ESLFA8dP
+Subject: Re: [Buildroot] [PATCH 1/1] package/stellarium: bump version to 25.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,48 +82,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ef8b51f4fab0166f0d2469ba156ad8ad599daa7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 13/10/2025 20:10, Bernd Kuhls wrote:
+> Release notes:
+> https://stellarium.org/release/2025/09/29/stellarium-25.3.html
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Release notes:
-https://stellarium.org/release/2025/09/29/stellarium-25.3.html
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/stellarium/stellarium.hash | 2 +-
- package/stellarium/stellarium.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/stellarium/stellarium.hash b/package/stellarium/stellarium.hash
-index e4e832699b..6c8e2a850d 100644
---- a/package/stellarium/stellarium.hash
-+++ b/package/stellarium/stellarium.hash
-@@ -1,4 +1,4 @@
- # From https://github.com/Stellarium/stellarium/releases
--sha256  5423334212a6d0daa006d44e1bc039cc212fbc990358c7b6636a7a2aac67434f  stellarium-25.2.tar.xz
-+sha256  1cdebfa04220656a956270425e06c6c522579c07d61c3440f6b11ac3f09f6db5  stellarium-25.3.tar.xz
- # Locally computed
- sha256  3aeeb5bb98bf7041ab82cffe15efa28ac58ee2bdf162b71301f5c192be631259  COPYING
-diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
-index f342652a4d..ec792bf20a 100644
---- a/package/stellarium/stellarium.mk
-+++ b/package/stellarium/stellarium.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STELLARIUM_VERSION = 25.2
-+STELLARIUM_VERSION = 25.3
- STELLARIUM_SOURCE = stellarium-$(STELLARIUM_VERSION).tar.xz
- STELLARIUM_SITE = https://github.com/Stellarium/stellarium/releases/download/v$(STELLARIUM_VERSION)
- STELLARIUM_LICENSE = GPL-2.0+
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
