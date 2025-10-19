@@ -4,73 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A78DDCCD195
-	for <buildroot@archiver.kernel.org>; Sun, 19 Oct 2025 19:08:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21641CCD184
+	for <buildroot@archiver.kernel.org>; Sun, 19 Oct 2025 19:31:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2FCBC81401;
-	Sun, 19 Oct 2025 19:08:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CEEA18402F;
+	Sun, 19 Oct 2025 19:31:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RmgYu9hO66Oi; Sun, 19 Oct 2025 19:08:53 +0000 (UTC)
+ id JzTyvAtRIkMl; Sun, 19 Oct 2025 19:31:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8A1D812D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9004B84030
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D8A1D812D0;
-	Sun, 19 Oct 2025 19:08:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9004B84030;
+	Sun, 19 Oct 2025 19:31:05 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A66521CD
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 19:08:51 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 289E61CD
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 19:31:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9891741107
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 19:08:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 19A534134A
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 19:31:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LSoouIdpznv2 for <buildroot@buildroot.org>;
- Sun, 19 Oct 2025 19:08:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CC362410EB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC362410EB
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CC362410EB
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 19:08:50 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id DC65C78034E;
- Sun, 19 Oct 2025 21:08:43 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 19 Oct 2025 21:08:43 +0200
-MIME-Version: 1.0
-Date: Sun, 19 Oct 2025 21:08:43 +0200
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Rahul Bedarkar <rahulbedarkar89@gmail.com>,
- linux-amarula@amarulasolutions.com
-In-Reply-To: <20251013201723.3833289-1-dario.binacchi@amarulasolutions.com>
-References: <20251013201723.3833289-1-dario.binacchi@amarulasolutions.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <2c375c14e1a2f8bce818ed370115739c@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1760900928;
- bh=bF+bpUD7ZM2Fed3M/TK5fPO54QIE//uj/xJruGTsjbc=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=JACqlnb/V67HWG/byYnMFbKwEfW+1Rzke79si9OmHt5X+bqg7vPBvkFCE+p9RR6H2
- WVYGXo14SfZPZgseRgMyuoXBAiGl5SwJGQuGJY6PKXe7wJPkgeHw94uFpMmncIIamf
- p7ao+zha00I12DY5Is9ZdRXQehSmB8RdyUor1+IuWfo2Pq2uMi9HcQz9vYPt6Sa8Gb
- sz2Tl/CKVcwsJ8G5NyWR1kM6b8bMrmWmrUX6vuiK9hk+NjV2ygymXex4W4EWmMkozZ
- w5QnBZYgEvyUmLWeykgV3fqIo1wlXejqKC9VZkA3Gbya4fOC3/vTT15e9kASogt5JG
- iJoyOn8SMppDg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=JACqlnb/
-Subject: Re: [Buildroot] [PATCH 1/1] package/gupnp: bump to version 1.6.9
+ id sow2x2NCdm1f for <buildroot@buildroot.org>;
+ Sun, 19 Oct 2025 19:31:02 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC4D441346
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id CC4D441346
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 19:31:02 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BCEB48764B; Sun, 19 Oct 2025 19:31:02 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 19 Oct 2025 21:13:57 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9a31b3d220c81e9dc394db8812c64d8dae44f39d
+X-Git-Newrev: 283821fc31c4890f141111cbc5994e36703c91eb
+X-Patchwork-Hint: ignore
+Message-Id: <20251019193102.BCEB48764B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/jimtcl: bump to version 0.83
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,22 +59,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 13/10/2025 22:17, Dario Binacchi wrote:
-> The removed patch has been merged in version 1.6.7.
-> 
-> Release notes:
-> https://gitlab.gnome.org/GNOME/gupnp/-/blob/gupnp-1.6.7/NEWS
-> https://gitlab.gnome.org/GNOME/gupnp/-/blob/gupnp-1.6.8/NEWS
-> https://gitlab.gnome.org/GNOME/gupnp/-/blob/gupnp-1.6.9/NEWS
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=283821fc31c4890f141111cbc5994e36703c91eb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Release notes since 0.81:
+https://jim.tcl-lang.org/home/doc/www/www/articles/jim-release-0-82/
+https://jim.tcl-lang.org/home/doc/www/www/articles/jim-release-0-83/
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/jimtcl/jimtcl.hash | 2 +-
+ package/jimtcl/jimtcl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/jimtcl/jimtcl.hash b/package/jimtcl/jimtcl.hash
+index d4174a3da6..906d2ccc23 100644
+--- a/package/jimtcl/jimtcl.hash
++++ b/package/jimtcl/jimtcl.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  ab7eb3680ba0d16f4a9eb1e05b7fcbb7d23438e25185462c55cd032a1954a985  jimtcl-0.81.tar.gz
++sha256  6f2df00009f5ac4ad654c1ae1d2f8ed18191de38d1f5a88a54ea99cc16936686  jimtcl-0.83.tar.gz
+ sha256  419f1146334e57fb258d6c957d1f94d43455ec0d24b1b54c4447e5f61a353950  LICENSE
+diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
+index 3d68ca8f64..f2d59265ad 100644
+--- a/package/jimtcl/jimtcl.mk
++++ b/package/jimtcl/jimtcl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JIMTCL_VERSION = 0.81
++JIMTCL_VERSION = 0.83
+ JIMTCL_SITE = $(call github,msteveb,jimtcl,$(JIMTCL_VERSION))
+ JIMTCL_INSTALL_STAGING = YES
+ JIMTCL_LICENSE = BSD-2-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
