@@ -1,52 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 975A0CCD183
-	for <buildroot@archiver.kernel.org>; Sun, 19 Oct 2025 13:39:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0488ACCD183
+	for <buildroot@archiver.kernel.org>; Sun, 19 Oct 2025 13:39:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A11461134;
-	Sun, 19 Oct 2025 13:39:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AF31E837AD;
+	Sun, 19 Oct 2025 13:39:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8i1p3mWZTFa2; Sun, 19 Oct 2025 13:39:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VDvt-WaGib2L; Sun, 19 Oct 2025 13:39:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6F0F61126
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D03F183837
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A6F0F61126;
-	Sun, 19 Oct 2025 13:39:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D03F183837;
+	Sun, 19 Oct 2025 13:39:55 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A059543F
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 13:39:33 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B32731CC
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 13:39:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8C94F41249
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 13:39:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 993F341249
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 13:39:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1FqSodbUk59r for <buildroot@buildroot.org>;
- Sun, 19 Oct 2025 13:39:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87A98411E2
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 87A98411E2
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 13:39:32 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 75F9587554; Sun, 19 Oct 2025 13:39:32 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 19 Oct 2025 14:32:14 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 99c5c21b14e86ef53520868a6bee672d6e249c3b
-X-Git-Newrev: bd5934cd7e6bea10c0ce5d854e1e57962489c9ac
-X-Patchwork-Hint: ignore
-Message-Id: <20251019133932.75F9587554@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/siproxd: Add upstream patch to fix
- build with gcc >= 14
+ id w1NgCQO-J5UF for <buildroot@buildroot.org>;
+ Sun, 19 Oct 2025 13:39:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A40F1411E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A40F1411E2
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A40F1411E2
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 13:39:52 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 044F1B00565;
+ Sun, 19 Oct 2025 15:39:47 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 19 Oct 2025 15:39:47 +0200
+MIME-Version: 1.0
+Date: Sun, 19 Oct 2025 15:39:47 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Alexander Dahl <post@lespocky.de>
+In-Reply-To: <20251018135626.788605-1-bernd@kuhls.net>
+References: <20251018135626.788605-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <de3f42ad8262b32e59fd6ab710037a6b@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1760881190;
+ bh=T9uivfV2c6A47iSiqDJOD5hNjEgQweR8muVArHHdwII=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=LKtfa83tTDuhJf8y4pAXAXE85LDRpCMyRoIrnMqgcPuue9ApK933wcTtVZSqSQ3+5
+ V+fHZ5cc49LnT12bTr7RpQMlsPVH56/dg/k5NTIuGU8tuqKqRPBTAUtqFs0YxLYfF+
+ JO5Rck+OjPo+n73dd7RyKeAbS4ohYFHHVTNNr1toxR4arfsDS5BWfKYhrkEUFqc5x8
+ eaYSf6oMW/gOuKn1BFSMJPkY6vpd7HXZcFLebJJ9/5y0yB44MU1zZk6FmnBNlRZDMP
+ HLHNb1AxU6g1LwgtjaSl+dteTVRKZJ2ImOkY0OrmM1236ucd7jYshNSk/eIW2BE5wx
+ OcklUqIs4dKkQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=LKtfa83t
+Subject: Re: [Buildroot] [PATCH 1/1] package/siproxd: Add upstream patch to
+ fix build with gcc >= 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,106 +83,19 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5599910297185109518=="
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5599910297185109518==
-Content-Type: text/plain
+On 18/10/2025 15:56, Bernd Kuhls wrote:
+> Fixes:
+> https://autobuild.buildroot.net/results/679/679fe86eea2001aed2baf066abf3ae43b38567b5/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd5934cd7e6bea10c0ce5d854e1e57962489c9ac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-https://autobuild.buildroot.net/results/679/679fe86eea2001aed2baf066abf3ae43b38567b5/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .../siproxd/0001-Fix-compilation-on-gcc-14.patch   | 50 ++++++++++++++++++++++
- package/siproxd/siproxd.mk                         |  2 +
- 2 files changed, 52 insertions(+)
-
-diff --git a/package/siproxd/0001-Fix-compilation-on-gcc-14.patch b/package/siproxd/0001-Fix-compilation-on-gcc-14.patch
-new file mode 100644
-index 0000000000..0a55969703
---- /dev/null
-+++ b/package/siproxd/0001-Fix-compilation-on-gcc-14.patch
-@@ -0,0 +1,50 @@
-+From 985c2cd198213b250c61d8c6621af52e318c4c12 Mon Sep 17 00:00:00 2001
-+From: crumpled-acronym <60061744+crumpled-acronym@users.noreply.github.com>
-+Date: Mon, 30 Jun 2025 12:32:02 +0200
-+Subject: [PATCH] Fix compilation on gcc >= 14
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+`./configure` fails for gcc >= 14 with the following error
-+
-+```
-+checking "libosip prefix"...
-+checking for osip_init in -losip2... yes
-+checking for parser_init in -losipparser2... yes
-+checking libosip2 version > 3.0.0... *** ERROR: libosip2-3.x.x is required!
-+```
-+
-+which in fact is caused by the test program in `ACX_CHECK_LIBOSIP_VERSION` function in `acinclude.m4` due to
-+
-+```
-+conftest.c:4:3: error: return type defaults to ‘int’ [-Wimplicit-int]
-+    4 | main() {
-+      | ^~~~
-+```
-+
-+This patch fixes the issue!
-+
-+Upstream: https://github.com/hb9xar/siproxd/commit/985c2cd198213b250c61d8c6621af52e318c4c12
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ acinclude.m4 | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/acinclude.m4 b/acinclude.m4
-+index 6fa4828..8164246 100644
-+--- a/acinclude.m4
-++++ b/acinclude.m4
-+@@ -340,7 +340,7 @@ dnl pointer to the structure (bad)
-+ AC_COMPILE_IFELSE(
-+ [AC_LANG_SOURCE([
-+   #include <osipparser2/osip_parser.h>
-+-  main() {
-++  int main() {
-+   osip_message_t t;
-+   int  e;
-+   e=t.contacts.nb_elt;
-+-- 
-+2.47.3
-+
-diff --git a/package/siproxd/siproxd.mk b/package/siproxd/siproxd.mk
-index 228f0855a6..faabb68a24 100644
---- a/package/siproxd/siproxd.mk
-+++ b/package/siproxd/siproxd.mk
-@@ -12,6 +12,8 @@ SIPROXD_LICENSE_FILES = COPYING
- 
- SIPROXD_DEPENDENCIES = libosip2 libtool sqlite
- 
-+# 0001-Fix-compilation-on-gcc-14.patch
-+SIPROXD_AUTORECONF = YES
- SIPROXD_CONF_OPTS = --without-included-ltdl
- 
- $(eval $(autotools-package))
-
---===============5599910297185109518==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5599910297185109518==--
