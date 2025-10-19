@@ -4,73 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D94ADCCD183
-	for <buildroot@archiver.kernel.org>; Sun, 19 Oct 2025 11:41:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B2C0CCD183
+	for <buildroot@archiver.kernel.org>; Sun, 19 Oct 2025 12:05:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2B03E83E25;
-	Sun, 19 Oct 2025 11:41:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4862B83DC2;
+	Sun, 19 Oct 2025 12:05:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jqh9Ha-kXl7o; Sun, 19 Oct 2025 11:41:26 +0000 (UTC)
+ id Inf9Q1nbdUng; Sun, 19 Oct 2025 12:05:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6128B83D3C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C89083DDD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6128B83D3C;
-	Sun, 19 Oct 2025 11:41:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7DE6243F
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 11:41:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6C89083DDD;
+	Sun, 19 Oct 2025 12:05:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id F330E43F
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 12:05:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 646FC83D3C
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 11:41:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DA93D41280
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 12:05:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rLpfjgs1Welo for <buildroot@buildroot.org>;
- Sun, 19 Oct 2025 11:41:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A90AF83D29
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A90AF83D29
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A90AF83D29
- for <buildroot@buildroot.org>; Sun, 19 Oct 2025 11:41:24 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 5246219F57B;
- Sun, 19 Oct 2025 13:41:21 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 19 Oct 2025 13:41:21 +0200
-MIME-Version: 1.0
-Date: Sun, 19 Oct 2025 13:41:21 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251016182528.3396891-1-bernd@kuhls.net>
-References: <20251016182528.3396891-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <28d0b1d69c854fffdef899f9a59032dc@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1760874082;
- bh=wOLow3i8HYQP9o/78VZ4Ug20Rmor9wZmwvNbObf8gyc=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Xsn6JY9fo9/CdRVbQlgLGUJzPbaEk6/JTfaAuyOc+xtfg0KEeLDDZJW7UqSLdBQgc
- EeN0FzxV9ZHbLhzABu0nQtQ0rSgXA+l7TnKYnio8SM/CTb2DaaIjL61uB1+IwjC6CK
- a54bomlLcueo0o+IjsSiX6ji5OBQtCqMsfU/KJPk6ORMgujz6FUH9IHv4Av2q7Si4z
- VqU1tCuvTLrscOc6g/g6y4oDy5dLzDlPVD8S1RHYu049RO3EJq+eX89UBc5k91OqP5
- E4bfvpB/PSnCGVzjILBQ9Ly0ll/px1YrCpDqcuLsrFhHGTnvVo8frrJrOqRpUpFRvw
- u1kFkWwb9UghQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=Xsn6JY9f
-Subject: Re: [Buildroot] [PATCH 1/2] package/intel-mediadriver: bump version
- to 25.4.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GoCEz3iY36t5 for <buildroot@buildroot.org>;
+ Sun, 19 Oct 2025 12:05:18 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24E9C4128D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 24E9C4128D
+ for <buildroot@buildroot.org>; Sun, 19 Oct 2025 12:05:18 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 139F08753A; Sun, 19 Oct 2025 12:05:18 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 19 Oct 2025 14:04:03 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 57e632de2fa5d407c2bfae17d08d3dbed2abceb8
+X-Git-Newrev: 622e8683ae12f2cf933717f6781ebcd282cdb353
+X-Patchwork-Hint: ignore
+Message-Id: <20251019120518.139F08753A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/samba4: bump version to 4.23.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,15 +59,85 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 16/10/2025 20:25, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=622e8683ae12f2cf933717f6781ebcd282cdb353
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Series applied to master, thanks.
+Release notes:
+https://www.samba.org/samba/history/samba-4.23.0.html
+https://www.samba.org/samba/history/samba-4.23.1.html
+https://www.samba.org/samba/history/samba-4.23.2.html
+
+Rebased patch 0001 due to upstream commit:
+https://gitlab.com/samba-team/samba/-/commit/7a4c8d6f84cabfe9d27fcb795a4030de93a1b8cb#8e3d715f2e6eade6c52748fd46ba94a12e2cec4e
+
+Note: the release notes for 4.23.2 mention it includes security
+fixes. Those were already included in the previous samba4 version
+4.22.5 in Buildroot.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .../0001-build-find-pre-built-heimdal-build-tools-in-case-of-.patch | 6 +++---
+ package/samba4/samba4.hash                                          | 4 ++--
+ package/samba4/samba4.mk                                            | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/samba4/0001-build-find-pre-built-heimdal-build-tools-in-case-of-.patch b/package/samba4/0001-build-find-pre-built-heimdal-build-tools-in-case-of-.patch
+index 8d223e38a0..b8dd012d41 100644
+--- a/package/samba4/0001-build-find-pre-built-heimdal-build-tools-in-case-of-.patch
++++ b/package/samba4/0001-build-find-pre-built-heimdal-build-tools-in-case-of-.patch
+@@ -33,7 +33,7 @@ BUG: https://bugzilla.samba.org/show_bug.cgi?id=14164
+ 
+ Signed-off-by: Uri Simchoni <uri@samba.org>
+ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+-[Bernd: rebased for version 4.11.13, 4.17.7, 4.20.3 & 4.22.1]
++[Bernd: rebased for version 4.23.1]
+ ---
+  wscript_configure_embedded_heimdal | 11 +++++++++++
+  wscript_configure_system_heimdal   | 11 -----------
+@@ -43,10 +43,10 @@ diff --git a/wscript_configure_embedded_heimdal b/wscript_configure_embedded_hei
+ index 8c55ae2..4fdae80 100644
+ --- a/wscript_configure_embedded_heimdal
+ +++ b/wscript_configure_embedded_heimdal
+-@@ -15,3 +15,14 @@
+- conf.define('HAVE_CLIENT_GSS_C_CHANNEL_BOUND_FLAG', 1)
++@@ -16,3 +16,14 @@
+  
+  conf.define('HAVE_KRB5_INIT_CREDS_STEP', 1)
++ conf.define('HAVE_GSS_KEY_VALUE_SET_DESC', 1)
+ +
+ +def check_system_heimdal_binary(name):
+ +    if conf.LIB_MAY_BE_BUNDLED(name):
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 0668a9e8db..462c3c919b 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.22.5.tar.asc
+-sha256  d8566a15d3dbfc0b777d1e8fbb2eee988a024ca9c786dcac65dd10347307400d  samba-4.22.5.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.23.2.tar.asc
++sha256  2de330647e1486683597e261285d04a9b7514ab5c7da27711736e22c7f2b9c2e  samba-4.23.2.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 688d5177bc..fb2aab01c6 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.22.5
++SAMBA4_VERSION = 4.23.2
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
