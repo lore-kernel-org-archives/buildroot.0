@@ -1,73 +1,106 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46F72CCD1A2
-	for <buildroot@archiver.kernel.org>; Mon, 20 Oct 2025 20:38:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49758CCD19F
+	for <buildroot@archiver.kernel.org>; Mon, 20 Oct 2025 22:54:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0BD2D41886;
-	Mon, 20 Oct 2025 20:38:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BCB6480373;
+	Mon, 20 Oct 2025 22:54:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MTKi12bkTWGI; Mon, 20 Oct 2025 20:38:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zZdDsD2341yU; Mon, 20 Oct 2025 22:54:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E1B3418B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A1EF8036D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1E1B3418B6;
-	Mon, 20 Oct 2025 20:38:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D2B89277
- for <buildroot@buildroot.org>; Mon, 20 Oct 2025 20:38:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4A1EF8036D;
+	Mon, 20 Oct 2025 22:54:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7226E70A
+ for <buildroot@buildroot.org>; Mon, 20 Oct 2025 22:54:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B95174177A
- for <buildroot@buildroot.org>; Mon, 20 Oct 2025 20:38:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5844640A22
+ for <buildroot@buildroot.org>; Mon, 20 Oct 2025 22:54:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Co7AtI5y4kuP for <buildroot@buildroot.org>;
- Mon, 20 Oct 2025 20:38:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B8F77415C3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8F77415C3
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B8F77415C3
- for <buildroot@buildroot.org>; Mon, 20 Oct 2025 20:38:21 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a021f.dip0.t-ipconnect.de [91.58.2.31])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id CB510A4C1ECE
- for <buildroot@buildroot.org>; Mon, 20 Oct 2025 22:38:19 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:51206)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1vAwe3-0000000071B-3mta
- for buildroot@buildroot.org; Mon, 20 Oct 2025 20:38:19 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id SCpEvRrJIqM9 for <buildroot@buildroot.org>;
+ Mon, 20 Oct 2025 22:54:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::12f; helo=mail-il1-x12f.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AF5AA40A1F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF5AA40A1F
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com
+ [IPv6:2607:f8b0:4864:20::12f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AF5AA40A1F
+ for <buildroot@buildroot.org>; Mon, 20 Oct 2025 22:54:31 +0000 (UTC)
+Received: by mail-il1-x12f.google.com with SMTP id
+ e9e14a558f8ab-424da17e309so52738705ab.2
+ for <buildroot@buildroot.org>; Mon, 20 Oct 2025 15:54:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1761000870; x=1761605670;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=dlP4Y7nfp2LB+6pLs4hxNOvCv0ql4YFgSthc93ULe30=;
+ b=mEnYs8zUHN8vhfhdj+KZhpjyWwZybi+aHulevjpL7JK6JnZ7VurW2Q/SbRolgPtKda
+ hfxX2EcUupOXueReRqdHq09PkYZAN+xPOeiuVFLPLuAld+NrArztDvoHtAMaxgdXLHmS
+ c2jcut/Lvx7qyMcBYc/wmYgNtX8c71+bkGMxIXsyvNXFQl7x+49QR1vGSFjFvCbhM0Jw
+ vNr71Lze8iSbNjzJo3s9F/IBfSIbVTOTxPCeZtFZWX2d0oyIr9zQbpY0b+WbGcQLvAWv
+ Gmwj8c2ko6E5cy7HGd+pVx9ICqBWhbKjZgAwZQ4NMAq/2ELcOWubSgP4YGTi0/sCmAg2
+ ZZ4Q==
+X-Gm-Message-State: AOJu0YzJRjPuq3Fgw+sq3YEyUtZ3stIhcGaWPWgRK++jQN2vzeQh+FcP
+ BUmyw7FDOhcyZBXwTXp3tEJA6cSmTO/V37GJLQisFLuFt7sZNLA7leuZuz+Ue5b3coA=
+X-Gm-Gg: ASbGnctdN2QHAud66FK60jMOBuXvWYIkHWWACPiuzFKH6CYGqiT/p+AEJKWtMa0ig2+
+ 1yqFVaXx5lf7TvWO+jTqbZHolo+eMjhMyuuCM4Pc58s8RrnzGhFXTcox6bMRRhJG5hndIaBY+T+
+ f6vBNlKYQ/tIWrPWxtojOngI5CbKV3ORA74r0O0WnfHFqBJl+AH4BPIW3HS79vJ1YhKs70ZbEs3
+ Blb6c5VojiJVvCITPsVxsq2buT8e5ZRjff5cAHAUqLAYcgyKWehhhNt5E5tT6Fpk3TTpYv1Lcpr
+ 3gRJ/kHcfncf4oCHOOhnwo62rmRYvWFoFnD7yekLyk6FBWhEQxxypYoz3T0YhbBO/kAR1lumYZI
+ LRSSjv4SzvlltBMl5sXbrPB3XDn5/lxIocSqR25boeS4LvQuSA6rP03zG4HtKMVaeZVpYEPmelW
+ woJBil78auYNHnKpalZMINp+tyPd/VqmND3M6KK+zQlsituR+SGyil85AaH544twFZD70LMe0=
+X-Google-Smtp-Source: AGHT+IGcFPUaMqhES2lehi2ynZB0ZocamcLlESGFw+huiDHEkU48B8TWlxzlxggasleiAFK+Ih9Wjg==
+X-Received: by 2002:a05:6e02:2183:b0:42d:8b1c:5740 with SMTP id
+ e9e14a558f8ab-430c5208341mr30075805ab.5.1761000870365; 
+ Mon, 20 Oct 2025 15:54:30 -0700 (PDT)
+Received: from james-x399.tailafd1a.ts.net (71-218-100-179.hlrn.qwest.net.
+ [71.218.100.179]) by smtp.gmail.com with ESMTPSA id
+ 8926c6da1cb9f-5a8a9630bf1sm3457282173.17.2025.10.20.15.54.29
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 20 Oct 2025 15:54:30 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 20 Oct 2025 22:38:19 +0200
-Message-ID: <20251020203819.2778541-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Cc: Christian Stewart <christian@aperture.us>,
+ James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 20 Oct 2025 16:54:24 -0600
+Message-ID: <20251020225424.98853-2-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20251020225424.98853-1-james.hilliard1@gmail.com>
+References: <20251020225424.98853-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1760992699;
- bh=6N3gpda0wyB75m2p/yJLRl/P7uFgoj/rfK+poet6PCc=;
- h=From:To:Subject:Date:From;
- b=Z2POR6Mb0+zR5D9gjdB6ilSz/0x9+o19p+9dXDfa4kLdbaRu/2xLQ0Gc2kqo7Hspq
- YFrff4Nf1Oy8OusIWh+bsAbXcS5tGxNNZ+0WWclmoRgjpZG39LSLYwky7Zf3Q2eGJB
- VAAuy3NOzGC868ALTDcE6L1jVUQ6l7dU21X3RZvbnLxBe1U6DYLyc33FnfEAPQihG9
- rPbxwXQrQ06EGW79954/fFqOz6rvosS3qaVDajJMqydIhBS+FkXDIGcoFABmJNj+Cw
- ljQtbDXmOQEnkKVBSlSd234jGBRo/UzpjQFaqHENc9vhApVJeKaMIbbt4Oyuxx+AoU
- 8W+4O/RLKXQyw==
+ d=gmail.com; s=20230601; t=1761000870; x=1761605670; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=dlP4Y7nfp2LB+6pLs4hxNOvCv0ql4YFgSthc93ULe30=;
+ b=e9AW3J9jdk0HhgPCOLDhJififySDXZoIkdWUsmbOriTgYiAWy5ZaPzBULeVfCFFrCt
+ u4kXghcgksm4Grh1u++tGoHG7GCv0h8kW1qtML64Ugr5Kve3acUERRav2YmiKiO53CDC
+ s10DxRu8fDnY7dQvsM2h/0otaEKZ4xXmfwmgQAWcfuZyUZqCnh+aH0L5JJvjRxkseYOG
+ EoLzECmzLx2ENR2ybAr3vMJNA4POi1Kli4IP7SJYdrBHMhZG4NkcpZaXintulYfLAOJ7
+ Vw4nJG+d6bN8ryfgrSED/7YhZJjB3XjAOFZ07QyQwvTXgR7lmZkJ/8bbvbJRefUEJ48z
+ XJ7w==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=Z2POR6Mb
-Subject: [Buildroot] [PATCH 1/1] package/unixodbc: bump version to 2.3.14
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=e9AW3J9j
+Subject: [Buildroot] [PATCH v2 2/2] package/tailscale: bump to version 1.88.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,100 +117,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/lurcher/unixODBC/releases/tag/v2.3.13
-https://github.com/lurcher/unixODBC/releases/tag/v2.3.14
-
-Removed patch which is included in this release.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- ...r-Fix-incompatible-pointer-to-intege.patch | 49 -------------------
- package/unixodbc/unixodbc.hash                |  2 +-
- package/unixodbc/unixodbc.mk                  |  2 +-
- 3 files changed, 2 insertions(+), 51 deletions(-)
- delete mode 100644 package/unixodbc/0001-PostgreSQL-driver-Fix-incompatible-pointer-to-intege.patch
+ package/tailscale/tailscale.hash | 2 +-
+ package/tailscale/tailscale.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/unixodbc/0001-PostgreSQL-driver-Fix-incompatible-pointer-to-intege.patch b/package/unixodbc/0001-PostgreSQL-driver-Fix-incompatible-pointer-to-intege.patch
-deleted file mode 100644
-index 8efe6dae4e..0000000000
---- a/package/unixodbc/0001-PostgreSQL-driver-Fix-incompatible-pointer-to-intege.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From 45f501e1be2db6b017cc242c79bfb9de32b332a1 Mon Sep 17 00:00:00 2001
--From: Florian Weimer <fweimer@redhat.com>
--Date: Mon, 29 Jan 2024 08:27:29 +0100
--Subject: [PATCH] PostgreSQL driver: Fix incompatible pointer-to-integer types
--
--These result in out-of-bounds stack writes on 64-bit architectures
--(caller has 4 bytes, callee writes 8 bytes), and seem to have gone
--unnoticed on little-endian architectures (although big-endian
--architectures must be broken).
--
--This change is required to avoid a build failure with GCC 14.
--
--Upstream: https://github.com/lurcher/unixODBC/commit/45f501e1be2db6b017cc242c79bfb9de32b332a1
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- Drivers/Postgre7.1/info.c | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/Drivers/Postgre7.1/info.c b/Drivers/Postgre7.1/info.c
--index 63ac91f..2216ecd 100644
----- a/Drivers/Postgre7.1/info.c
--+++ b/Drivers/Postgre7.1/info.c
--@@ -1779,14 +1779,14 @@ char *table_name;
-- char index_name[MAX_INFO_STRING];
-- short fields_vector[8];
-- char isunique[10], isclustered[10];
---SDWORD index_name_len, fields_vector_len;
--+SQLLEN index_name_len, fields_vector_len;
-- TupleNode *row;
-- int i;
-- HSTMT hcol_stmt;
-- StatementClass *col_stmt, *indx_stmt;
-- char column_name[MAX_INFO_STRING], relhasrules[MAX_INFO_STRING];
-- char **column_names = 0;
---Int4 column_name_len;
--+SQLLEN column_name_len;
-- int total_columns = 0;
-- char error = TRUE;
-- ConnInfo *ci;
--@@ -2136,7 +2136,7 @@ HSTMT htbl_stmt;
-- StatementClass *tbl_stmt;
-- char tables_query[STD_STATEMENT_LEN];
-- char attname[MAX_INFO_STRING];
---SDWORD attname_len;
--+SQLLEN attname_len;
-- char pktab[MAX_TABLE_LEN + 1];
-- Int2 result_cols;
-- 
-diff --git a/package/unixodbc/unixodbc.hash b/package/unixodbc/unixodbc.hash
-index 6262dab5ae..e81448adbd 100644
---- a/package/unixodbc/unixodbc.hash
-+++ b/package/unixodbc/unixodbc.hash
-@@ -1,4 +1,4 @@
+diff --git a/package/tailscale/tailscale.hash b/package/tailscale/tailscale.hash
+index e2d600f03e..444412f8f4 100644
+--- a/package/tailscale/tailscale.hash
++++ b/package/tailscale/tailscale.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256  f210501445ce21bf607ba51ef8c125e10e22dffdffec377646462df5f01915ec  unixODBC-2.3.12.tar.gz
-+sha256  4e2814de3e01fc30b0b9f75e83bb5aba91ab0384ee951286504bb70205524771  unixODBC-2.3.14.tar.gz
- sha256  a6b9aa1e9bfade121164c06fd975e9b913a8e38bf33d25ff967dfa3ed07d12f8  COPYING
- sha256  1e594f4c7fd6d099eca4bd1340b39d871ce0298331d8ebd4b68935548ee45cf4  exe/COPYING
-diff --git a/package/unixodbc/unixodbc.mk b/package/unixodbc/unixodbc.mk
-index 302b964a44..47c08a39eb 100644
---- a/package/unixodbc/unixodbc.mk
-+++ b/package/unixodbc/unixodbc.mk
+-sha256  4830cd822a838d5d44fd5eeebd07a2aacaf0255fb3fb7d3852d57659f54e51bc  tailscale-1.78.1-go2.tar.gz
++sha256  98b51e95e84378ab280c5a8706508d493ab9152a0215f00f0f69e3ea2673ea0f  tailscale-1.88.3-go2.tar.gz
+ sha256  d1ee1c7947d4b2c1963ea214d5324f1d4c89f2f1d0f0224889b4dfb868dad725  LICENSE
+diff --git a/package/tailscale/tailscale.mk b/package/tailscale/tailscale.mk
+index 3c6c7bce1e..141a5b98d6 100644
+--- a/package/tailscale/tailscale.mk
++++ b/package/tailscale/tailscale.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UNIXODBC_VERSION = 2.3.12
-+UNIXODBC_VERSION = 2.3.14
- UNIXODBC_SOURCE = unixODBC-$(UNIXODBC_VERSION).tar.gz
- UNIXODBC_SITE = http://www.unixodbc.org
- UNIXODBC_INSTALL_STAGING = YES
+-TAILSCALE_VERSION = 1.78.1
++TAILSCALE_VERSION = 1.88.3
+ TAILSCALE_SITE = $(call github,tailscale,tailscale,v$(TAILSCALE_VERSION))
+ TAILSCALE_LICENSE = BSD-3-Clause
+ TAILSCALE_LICENSE_FILES = LICENSE
 -- 
-2.47.3
+2.43.0
 
 _______________________________________________
 buildroot mailing list
