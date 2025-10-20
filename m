@@ -1,68 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98BEACCD199
-	for <buildroot@archiver.kernel.org>; Mon, 20 Oct 2025 04:52:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5D2ACCD193
+	for <buildroot@archiver.kernel.org>; Mon, 20 Oct 2025 07:18:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1291A8417C;
-	Mon, 20 Oct 2025 04:52:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 400E961348;
+	Mon, 20 Oct 2025 07:18:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AVaoqCV29fQC; Mon, 20 Oct 2025 04:52:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g1tFx86LMixD; Mon, 20 Oct 2025 07:18:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04DDE84180
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C415B6131D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 04DDE84180;
-	Mon, 20 Oct 2025 04:52:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C415B6131D;
+	Mon, 20 Oct 2025 07:18:02 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0B6A01CD
- for <buildroot@buildroot.org>; Mon, 20 Oct 2025 04:52:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 60FEC177
+ for <buildroot@buildroot.org>; Mon, 20 Oct 2025 07:18:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E608C40614
- for <buildroot@buildroot.org>; Mon, 20 Oct 2025 04:52:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 49ECE4082A
+ for <buildroot@buildroot.org>; Mon, 20 Oct 2025 07:18:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D-uqlMsOofWL for <buildroot@buildroot.org>;
- Mon, 20 Oct 2025 04:52:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6A335401C1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A335401C1
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6A335401C1
- for <buildroot@buildroot.org>; Mon, 20 Oct 2025 04:52:42 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id BC49631E0AB7; Mon, 20 Oct 2025 06:52:37 +0200 (CEST)
-Date: Mon, 20 Oct 2025 06:52:37 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: buildroot@buildroot.org
-Message-ID: <aPXAFU-a1sl_aHck@waldemar-brodkorb.de>
+ id aaWvvawtfSjT for <buildroot@buildroot.org>;
+ Mon, 20 Oct 2025 07:18:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=romain.gantois@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 504E1402F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 504E1402F2
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 504E1402F2
+ for <buildroot@buildroot.org>; Mon, 20 Oct 2025 07:17:59 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 06E621A152B
+ for <buildroot@buildroot.org>; Mon, 20 Oct 2025 07:17:57 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id D28A2606D5
+ for <buildroot@buildroot.org>; Mon, 20 Oct 2025 07:17:56 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 341FF102F238E; 
+ Mon, 20 Oct 2025 09:17:49 +0200 (CEST)
+To: Buildroot List <buildroot@buildroot.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 20 Oct 2025 09:17:49 +0200
+Message-ID: <22876007.EfDdHjke4D@fw-rgant>
+In-Reply-To: <20251018194314.114284-12-thomas.petazzoni@bootlin.com>
+References: <20251018194314.114284-1-thomas.petazzoni@bootlin.com>
+ <20251018194314.114284-12-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 6.12.43+deb13-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1760935957; bh=/OpH4W2DGkpf151Pc2jJzBQxcwaPlzA30d//hhWWpLE=;
- h=Date:From:To:Subject:From;
- b=suY7SY9Vukw6opY3hZijHxssMB0ABKbUSnzTFmM/JDnUpci4P9KCgzp9+PrZzVYdA
- b1RZsXAARPbf8y9/0CthzhtNktJlM8U4hAdaixUlZKhGFKNa6s80If2CMRqvQ0Sfx5
- YXPI8iZoRwUculY4W2+dA9qqRyiXY9QJ4bGIwGBklAPBLrFxsW/LZg39iurSZNRbXt
- I2ryJh9DCOu9ZcPX55ZRPAeDZSa4x2fEi1vYwz/HjO9xoeFwfpLRg3gdd9cqnV1gT5
- OHNrTRvcHxn0cyx08ak8JVMmB7RkkAKgiH1AHwYGnomAx6h3qugz7q3z5b+SbhVMYW
- doau7yXzYT+9w==
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1760944672; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ in-reply-to:references; bh=Im30jemSVkwItOvCnvf8qPqbHmZ2HAgjoQ8mnsP8oQ4=;
+ b=jPR5gB5PJYeE1FWn7bWS4RXx8eqlXbK27JuWbcwyM8Tqci9x6vO0N8jUZUTq4J3NU25aQb
+ GIjUetRoh51Xg8FBfzKiW42xEE1fKpQyxmPtxbZIMVqu4O4s+2eqoIAlcuoFvJTotjVuEd
+ kq5v12FNlSe5hkrNpf5rqDOPzHlsZgpaMKm4BIfDlAl2dUbdSUEeyjWH5NCqSmbEQLMA21
+ u1OXILsvM+y6OYWjFtLIeGXtz3zAE32ByNmtjYt7vMFc3m0ALtztfkc9alXYbqJL4nqY25
+ VCexrHUGvSgULpTqurwXSuubGdBuRdQnNroW+QYS24UHp3MFmyQWPZUThoTVfA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=suY7SY9V
-Subject: [Buildroot] [PATCH] package/libpam-pkcs11: new package
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=jPR5gB5P
+Subject: Re: [Buildroot] [PATCH 11/11] package/snagboot: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -74,111 +84,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Romain Gantois via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Gantois <romain.gantois@bootlin.com>
+Content-Type: multipart/mixed; boundary="===============8313074465456792305=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The Linux-PAM login module for X.509 certificate based user login.
+--===============8313074465456792305==
+Content-Type: multipart/signed; boundary="nextPart7867956.EvYhyI6sBW";
+ micalg="pgp-sha512"; protocol="application/pgp-signature"
 
-https://github.com/OpenSC/pam_pkcs11
+--nextPart7867956.EvYhyI6sBW
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
+From: Romain Gantois <romain.gantois@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 11/11] package/snagboot: new package
+Date: Mon, 20 Oct 2025 09:17:49 +0200
+Message-ID: <22876007.EfDdHjke4D@fw-rgant>
+In-Reply-To: <20251018194314.114284-12-thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/libpam-pkcs11/Config.in          | 18 ++++++++++++++++++
- package/libpam-pkcs11/libpam-pkcs11.hash |  2 ++
- package/libpam-pkcs11/libpam-pkcs11.mk   | 18 ++++++++++++++++++
- 5 files changed, 40 insertions(+)
- create mode 100755 package/libpam-pkcs11/Config.in
- create mode 100755 package/libpam-pkcs11/libpam-pkcs11.hash
- create mode 100755 package/libpam-pkcs11/libpam-pkcs11.mk
+Hi Thomas,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 66199a5b72..8f3ef4fc38 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3407,6 +3407,7 @@ F:	package/asterisk/
- F:	package/evilwm/
- F:	package/fbv/
- F:	package/libjwt/
-+F:	package/libpam-pkcs11/
- F:	package/mksh/
- F:	package/ruby/
- F:	package/uclibc/
-diff --git a/package/Config.in b/package/Config.in
-index 161d61728b..42b9acb807 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2286,6 +2286,7 @@ menu "Other"
- if BR2_PACKAGE_LINUX_PAM
- comment "linux-pam plugins"
- 	source "package/libpam-nfc/Config.in"
-+	source "package/libpam-pkcs11/Config.in"
- 	source "package/libpam-radius-auth/Config.in"
- 	source "package/libpam-tacplus/Config.in"
- endif
-diff --git a/package/libpam-pkcs11/Config.in b/package/libpam-pkcs11/Config.in
-new file mode 100755
-index 0000000000..6678c48ab9
---- /dev/null
-+++ b/package/libpam-pkcs11/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_LIBPAM_PKCS11
-+	bool "libpam-pkcs11"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # pcsc-lite -> fork()
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pcsc-lite -> _Atomic keyword
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-+	select BR2_PACKAGE_PCSC_LITE
-+	help
-+	  The Linux-PAM login module for X.509 certificate based user login.
-+
-+	  https://github.com/OpenSC/pam_pkcs11
-+
-+comment "libpam-pkcs11 needs a toolchain w/ threads, dynamic library, gcc >= 4.9"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/libpam-pkcs11/libpam-pkcs11.hash b/package/libpam-pkcs11/libpam-pkcs11.hash
-new file mode 100755
-index 0000000000..9ab133f51b
---- /dev/null
-+++ b/package/libpam-pkcs11/libpam-pkcs11.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 8a853f4e6e136ceecdcffad798570e3d6af2fde08e975656b2dc931989c35aff  pam_pkcs11-0.6.13.tar.gz
-diff --git a/package/libpam-pkcs11/libpam-pkcs11.mk b/package/libpam-pkcs11/libpam-pkcs11.mk
-new file mode 100755
-index 0000000000..9947e58e1a
---- /dev/null
-+++ b/package/libpam-pkcs11/libpam-pkcs11.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# libpam-pkcs11
-+#
-+################################################################################
-+
-+LIBPAM_PKCS11_VERSION = 0.6.13
-+LIBPAM_PKCS11_SOURCE = pam_pkcs11-$(LIBPAM_PKCS11_VERSION).tar.gz
-+LIBPAM_PKCS11_SITE = https://github.com/OpenSC/pam_pkcs11/archive/refs/tags
-+
-+LIBPAM_PKCS11_AUTORECONF = YES
-+
-+LIBPAM_PKCS11_CONF_OPTS += --libdir=/lib
-+LIBPAM_PKCS11_CONF_OPTS += --without-docbook
-+LIBPAM_PKCS11_CONF_OPTS += --without-ldap
-+LIBPAM_PKCS11_DEPENDENCIES = openssl pcsc-lite linux-pam
-+
-+$(eval $(autotools-package))
+On Saturday, 18 October 2025 21:43:09 CEST Thomas Petazzoni wrote:
+> This commit adds a package for Snagboot, the open-source
+...
+
+> +
+> +# We do not install the dependencies for the snagfactory GUI
+> +define SNAGBOOT_REMOVE_SNAGFACTORY
+> +	$(RM) $(HOST_DIR)/bin/snagfactory
+> +endef
+
+Only the "gui" variant of the Snagboot package provides Snagfactory, the base 
+version doesn't, so is this removal really necessary?
+
+Thanks!
+
 -- 
-2.47.3
+Romain Gantois, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+--nextPart7867956.EvYhyI6sBW
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEIcCsAScRrtr7W0x0KCYAIARzeA4FAmj14h0ACgkQKCYAIARz
+eA6DrA//Wvg/Z8YQsnKhBW5xXGesBQqmZFP7up4NA2N74pql7GsFDGqKgSLwyUA4
+hbhJfTN8G/sPwBoe3U0OnBScLdCT24vQkqgjjXbKa1fZBfwyHOmmypWOWdEx83/G
+/g1oFG+5Qd1PfDwORSaaYnwDhnJEDrc9yRn4smt1zybPEPgPWnSg/A4nd7pHHUc9
+g6S82+eoR30F5XhjP4Xkj086YnxmZnlcN2x7cLfokvV06rmt+tdHmdReL31t1Npa
+2bQ3tQGIB/lA8d9Z7DplNYisssuyHCsaGVa8AAi4gwiwbE9l7vhUTGWOWu3TAhgx
+k9zH/6GMARF3T5zUViOaNdd/C3tvklYKAlgXBJkKR1SdquzLwA3r3Kn9B2+f8IpR
+eSnrkHS9cOmyR2yd1g7BX8oVwL16OggqYbrfqr5xpam80wFdPjbbBJYQj2kJPPSs
+rpUz3Voslg0WUVQ6sJjwALhkdF65XWn6HLqw0j7T+PnKqLNrBG/YtODreOA3x+el
+WfotnD0vJxCIMvLlvSOw65oFmshdMFFfVJzFUaMUzBqsQ9I+LOtTKsQ0+EDyh6OZ
+N36xcb9ZYgZqL+YMX1rgRXToaLKMbpLJb1f057o2D6xFhi3WaX57oDommg/mNStW
+R+T50o4nc028VgfXpFSrPyHPGtnWzvhpIN6QGqBg6jGJ/vPnUsk=
+=6rQz
+-----END PGP SIGNATURE-----
+
+--nextPart7867956.EvYhyI6sBW--
+
+
+
+
+--===============8313074465456792305==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8313074465456792305==--
+
+
+
