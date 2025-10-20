@@ -1,101 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 702E7CCD199
-	for <buildroot@archiver.kernel.org>; Mon, 20 Oct 2025 16:51:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5AC9CCD199
+	for <buildroot@archiver.kernel.org>; Mon, 20 Oct 2025 16:52:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2B95D84586;
-	Mon, 20 Oct 2025 16:51:03 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x9QivSGUWpEh; Mon, 20 Oct 2025 16:51:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C5BD84592
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C5BD84592;
-	Mon, 20 Oct 2025 16:51:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1ED5D43F
- for <buildroot@buildroot.org>; Mon, 20 Oct 2025 16:51:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 056A961538
- for <buildroot@buildroot.org>; Mon, 20 Oct 2025 16:51:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4C8EB614F7;
+	Mon, 20 Oct 2025 16:52:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dwXYLqoWIwSh for <buildroot@buildroot.org>;
- Mon, 20 Oct 2025 16:51:00 +0000 (UTC)
+ id 8QGMwLIwedoZ; Mon, 20 Oct 2025 16:52:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8206A6150F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8206A6150F;
+	Mon, 20 Oct 2025 16:52:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id F2C4443F
+ for <buildroot@buildroot.org>; Mon, 20 Oct 2025 16:52:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id EA10941441
+ for <buildroot@buildroot.org>; Mon, 20 Oct 2025 16:52:55 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GeEnoj2YrMYw for <buildroot@buildroot.org>;
+ Mon, 20 Oct 2025 16:52:55 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62f; helo=mail-ej1-x62f.google.com;
+ client-ip=2a00:1450:4864:20::635; helo=mail-ej1-x635.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1817661531
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1817661531
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1817661531
- for <buildroot@buildroot.org>; Mon, 20 Oct 2025 16:50:59 +0000 (UTC)
-Received: by mail-ej1-x62f.google.com with SMTP id
- a640c23a62f3a-b3e9d633b78so150173366b.1
- for <buildroot@buildroot.org>; Mon, 20 Oct 2025 09:50:59 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0DEEB4141B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0DEEB4141B
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0DEEB4141B
+ for <buildroot@buildroot.org>; Mon, 20 Oct 2025 16:52:54 +0000 (UTC)
+Received: by mail-ej1-x635.google.com with SMTP id
+ a640c23a62f3a-b3c2c748bc8so582984066b.2
+ for <buildroot@buildroot.org>; Mon, 20 Oct 2025 09:52:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1760979058; x=1761583858;
+ d=1e100.net; s=20230601; t=1760979173; x=1761583973;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=n7Fpk+Lr0IQIFb5RX2U179W+uplSwEUpwgIF47CIeSM=;
- b=qypX+bafo4Zw/mzNi092Q5lIeLp2ISkTmXTeWYd2utSOgr4C+BsSluo597PljET/o/
- /wesQvvJY1qf+zFTveN06xWDriH40zI+PyUMzn2XfafBIz4E7ruU2DCdyj+YJX6GbpxI
- rJBN68AvRZiFYrUMLPzuB/usr6AoK7CVEUnTq1zcX4AD7ZGHGksUaxVv3tU1RkijxWaY
- yVF7AVehLBICH6LFAbu1fIuvfyK1EPdTqvsC+9m4yv4H+4z3D1ghlACL6MltSfHbLnJc
- 6pQexohQcXGl9nvOSZzbMjNm7L8sZ6Qm+1VVKEdeS+HsqjaCSZH8ZdVVbZ0/NMKtIcgL
- YQjQ==
-X-Gm-Message-State: AOJu0Yzf+tAQf5Brw+ExbyFrbL90qWxFjNWWUjVB5RZmot6yccW3Itq+
- YrJYl+2ybYWsRVN46vz3r7Hw+0SkpMKfszTrJzCu5Y0J56xMtgfFDCm59mbaJVCuhTrUlFC8Gpt
- jAiGK
-X-Gm-Gg: ASbGncvMQYRau59lRY7lTgWGi/w95Qns7QvHBuCHg6auduNvLAR1mOYiIICRH9/ncDh
- RQwYUa4wTn7GXUVqZ/O7yMu0Ox5eq2H4cMp1mZGQnSJJpO/cI2Ehtl5hSahVsFiBf7Q97eth9X6
- fr0xL09fVVNJwc+Ls+C8CQvBvavDOQAGXPrZWS42nIMY+s5JAVPvJEzXw6oEktUsNpEjpDw5yzn
- FPEOa91KQPTUo5wNm6Y+TIsyjnTRe++zh4PJMKrszAzWYUeToFvwwK14arIKTHiZFxT6JBJvX4i
- Z2mBs0xOC3FwsoVwUDDtiCoXN/f9cZWe3K2HOdV972ZAKR/vtQoFlai/qeza2BDhP5giCM+2I0f
- NBsHHFzTX8VdARHUeJ8hK1uLV/ofcttlJtwSK8JWuR+WhzY1ssnKLi1JATMgb3/3EfGoSNDws/D
- nOBrOae99ni3TBEXImcvfI3eIAIwnrFubm5Qg3gs8=
-X-Google-Smtp-Source: AGHT+IHcJ+Bdi/DSYFntg5kEIwaYmwSRmrYdIBDox3PvZ6TFDY9i7EJtOxgX/2OAUl6ibz/oZH9o0w==
-X-Received: by 2002:a17:907:c086:b0:b5f:c3df:dedc with SMTP id
- a640c23a62f3a-b6051dc3619mr2055338866b.2.1760979058000; 
- Mon, 20 Oct 2025 09:50:58 -0700 (PDT)
+ bh=EjwPSMfsHpsxoQWuMq1k79jYPsLHHWo4fYC0jiIrmM4=;
+ b=T3+PRAcZUMjK4E3OionybZl/7hhVFlLH0Gb044OlSalj24TEolxAJyx9L4jaH2d4Nv
+ g7TMpo5YZidNwmIt7vR/o7sVGoU7fUCJNzqxL9m47l8PHZOrRz6Vyn8xp26pqwb/ZZf2
+ GokmDWn7JNn0wON4QOdFdrmoABOyVMoHrO+VoEx33mDDIgU6m9WTq0m5bIV7xlqOqfSH
+ kRgqtOJId9RnITmxZs4EaQ3E9itmej5S0Xkd/5/eWJBpXUpyEla3hZbcPHeg8tjpHdyg
+ 3xIPYt5w0FDBnsrOS1ThSy77pq0s7ueEo5OYo/B+tzSaQah6UOtJacPKlu9Z09HMYSy6
+ g8UA==
+X-Gm-Message-State: AOJu0YwyNLC+wZbPbiswUxZVv1wUvxdTGsFQB4HSwc3oNg+VTcwv2iZI
+ rQ+2ZTFifnylf9Cz4xH1/xDZQObS7zaI3/nna81lF3+ylQ/TuR1Pc/FuZfRo6vd05v5YOceJ/GX
+ NNI82
+X-Gm-Gg: ASbGncsIR5Ra7hbCGyYgLQ8PCuag/Blw+9h+QnRjNQsMZ0vJqXQjq7WGF2FnnN/50Xo
+ vD0+RpGqkb17elbWu0+4tMlYZLn1t724mAeXOkKh5z9SNbyB05cLJ1gV7yY01F1V+5+hG4MCuzb
+ SLwTRBrjys/Cf7xLnsqDL67iOn50rnHleWNhcowFcaxkveQlAQkf4jOIF2YWsPRT/DpOpU7mmGG
+ ioGVk3+kGv4ARIaPBi2lDtvaWl3HQvR10Zkf+MT8Xz1JSUWVJgeWpIEqp+flcwRz5Nk/x6h9gJG
+ JKneSO6/NZDRAqV4EjraRyq+yK6kMrXTHzEiQbkXWIGDlmnY6IoQE9v5jav2+o9AqEtE+9MqjzZ
+ VA8jJskDDmzHkZm8kKasFGPFloBUxaU4PMQWldQkj2GYDEi25R2Bq4vd2hOZeriyuG42kU8E2gH
+ iVDjAYsOTym6LwVABaB201txmKCmEFhEp5rdaOs5o=
+X-Google-Smtp-Source: AGHT+IHs3bemg0aodEXJNp3rAA8LVNmsCbKSt9/UsLQ6fv77mclw8szuPrkCn9ldqZZe0D8J2kR+HA==
+X-Received: by 2002:a17:906:fd8b:b0:b3c:1bfc:c552 with SMTP id
+ a640c23a62f3a-b6475ff39b7mr1363363066b.42.1760979172811; 
+ Mon, 20 Oct 2025 09:52:52 -0700 (PDT)
 Received: from dario-ThinkPad-P14s-Gen-5.. ([2.196.40.130])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b65ebe4a5ecsm838391366b.81.2025.10.20.09.50.57
+ a640c23a62f3a-b65eb0365e1sm836484366b.48.2025.10.20.09.52.52
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 20 Oct 2025 09:50:57 -0700 (PDT)
+ Mon, 20 Oct 2025 09:52:52 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
 Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Mon, 20 Oct 2025 18:50:50 +0200
-Message-ID: <20251020165050.1712817-1-dario.binacchi@amarulasolutions.com>
+Date: Mon, 20 Oct 2025 18:52:49 +0200
+Message-ID: <20251020165249.1714204-1-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1760979058; x=1761583858;
+ d=amarulasolutions.com; s=google; t=1760979173; x=1761583973;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=n7Fpk+Lr0IQIFb5RX2U179W+uplSwEUpwgIF47CIeSM=;
- b=eGeXv9t22sr5C2l7CAi2Bbz0qzWlXhNm2NgVruOaLPUpHZfY5dm0Z77w1YtMXLFMSe
- IU1o67WH3PWgRMSp6t0W++BilXUVMs+pcVYsAzew3UFmWHS7M2XXDm3RBLco0Yre6Iws
- I0KZFvT3DFehJ3rStW1i04ctOSe+S9TGs9Bns=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=EjwPSMfsHpsxoQWuMq1k79jYPsLHHWo4fYC0jiIrmM4=;
+ b=b9TMJnY7c7ccfZ0dTPcfqZ2s1tIHqQfI7AZpQxP423KST/FDTkdIkE2/jQ06/lCVg6
+ 6tc679tWfSdCHpg4kxvbH/c0iI7fSV/2HL5AV+bgR3kNfjVIZqcwUFTsH25VDw0Zr3kX
+ 86M+Tc1NGeNW2u8Zua/kCeOyZHboJ/PAQqTVs=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=eGeXv9t2
-Subject: [Buildroot] [PATCH 1/1] package/libbsd: bump version to 0.12.2
+ header.a=rsa-sha256 header.s=google header.b=b9TMJnY7
+Subject: [Buildroot] [PATCH 1/1] package/pocketpy: bump to version 2.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,49 +113,36 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Release notes:
-https://archive.hadrons.org/software/libbsd/libbsd-0.11.8.announce
-https://archive.hadrons.org/software/libbsd/libbsd-0.12.0.announce
-https://archive.hadrons.org/software/libbsd/libbsd-0.12.1.announce
-https://archive.hadrons.org/software/libbsd/libbsd-0.12.2.announce
-
-Update hash of license file, which has changed due to:
-- Copyright year updates.
-- Switch arc4random(3bsd) man page from OpenBSD to NetBSD. This gets
-  rid of the last BSD-4-clause licensed file in the project.
-- Remove written-by attribution.
+https://github.com/pocketpy/pocketpy/releases/tag/v2.1.3
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- package/libbsd/libbsd.hash | 6 +++---
- package/libbsd/libbsd.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/pocketpy/pocketpy.hash | 2 +-
+ package/pocketpy/pocketpy.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libbsd/libbsd.hash b/package/libbsd/libbsd.hash
-index 8b1af4475838..7d3ada6e6ad4 100644
---- a/package/libbsd/libbsd.hash
-+++ b/package/libbsd/libbsd.hash
-@@ -1,5 +1,5 @@
- # From https://archive.hadrons.org/software/libbsd/libbsd-0.11.7.announce
--sha256  9baa186059ebbf25c06308e9f991fda31f7183c0f24931826d83aa6abd8a0261  libbsd-0.11.7.tar.xz
--sha512  51fda4724f41dd8a4628afd58c21236a7588d9045e337e06eeabf83805a9aaaa53705441ca901ad11f1c65f18e881523bdc97721a7d3d6a5cced27f2450d09a2  libbsd-0.11.7.tar.xz
-+sha256  b88cc9163d0c652aaf39a99991d974ddba1c3a9711db8f1b5838af2a14731014  libbsd-0.12.2.tar.xz
-+sha512  ce43e4f0486d5f00d4a8119ee863eaaa2f968cae4aa3d622976bb31ad601dfc565afacef7ebade5eba33fff1c329b5296c6387c008d1e1805d878431038f8b21  libbsd-0.12.2.tar.xz
- # Locally computed
--sha256  7aab3a07716d31ca72e66c1073ef8a0fa0be0daa5df7c3b2cc0c668589142336  COPYING
-+sha256  978426553ab7b9cfb4503d98e578a77b8c3142c099100aa9791fd21be5a95f97  COPYING
-diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
-index 27937c46116e..497212d2fff8 100644
---- a/package/libbsd/libbsd.mk
-+++ b/package/libbsd/libbsd.mk
+diff --git a/package/pocketpy/pocketpy.hash b/package/pocketpy/pocketpy.hash
+index 4032fda442f8..0c96bf2a55c5 100644
+--- a/package/pocketpy/pocketpy.hash
++++ b/package/pocketpy/pocketpy.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  34976a5eb099869b134d93bd4c801cb330bb17466f2b1f4543a5217034a867cd  pocketpy-2.1.1.tar.gz
++sha256  7e2afd6eafcf72c5797492107558e4b1d6407dccd66e7da4a62b1054eddd2ce3  pocketpy-2.1.3.tar.gz
+ sha256  9dab6fe9086f93847540387be578edc94b6b280004db5ed7c850ccf8f086fd66  LICENSE
+diff --git a/package/pocketpy/pocketpy.mk b/package/pocketpy/pocketpy.mk
+index 74e6b4910deb..d20e1e0e205e 100644
+--- a/package/pocketpy/pocketpy.mk
++++ b/package/pocketpy/pocketpy.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBBSD_VERSION = 0.11.7
-+LIBBSD_VERSION = 0.12.2
- LIBBSD_SOURCE = libbsd-$(LIBBSD_VERSION).tar.xz
- LIBBSD_SITE = https://libbsd.freedesktop.org/releases
- LIBBSD_LICENSE = BSD-2-Clause, BSD-3-Clause, BSD-4-Clause, BSD-5-Clause, \
+-POCKETPY_VERSION = 2.1.1
++POCKETPY_VERSION = 2.1.3
+ POCKETPY_SITE = $(call github,pocketpy,pocketpy,v$(POCKETPY_VERSION))
+ POCKETPY_LICENSE = MIT
+ POCKETPY_LICENSE_FILES = LICENSE
 -- 
 2.43.0
 
