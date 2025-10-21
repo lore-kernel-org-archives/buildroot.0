@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 468CDCCD1AF
-	for <buildroot@archiver.kernel.org>; Tue, 21 Oct 2025 20:13:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C22C4CCD1AF
+	for <buildroot@archiver.kernel.org>; Tue, 21 Oct 2025 20:13:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1446E80A50;
-	Tue, 21 Oct 2025 20:13:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C02B08238D;
+	Tue, 21 Oct 2025 20:13:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X9r0R2CtXItl; Tue, 21 Oct 2025 20:13:16 +0000 (UTC)
+ id uPwtdSvFUBmb; Tue, 21 Oct 2025 20:13:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BB15810F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 504B581442
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3BB15810F2;
-	Tue, 21 Oct 2025 20:13:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 09BC4277
+	by smtp1.osuosl.org (Postfix) with ESMTP id 504B581442;
+	Tue, 21 Oct 2025 20:13:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 14D52D8A
  for <buildroot@buildroot.org>; Tue, 21 Oct 2025 20:13:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DBE6260BFF
- for <buildroot@buildroot.org>; Tue, 21 Oct 2025 20:13:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 068C540CED
+ for <buildroot@buildroot.org>; Tue, 21 Oct 2025 20:13:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fe9Y8CacVUhh for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sDkgMNJs_gAc for <buildroot@buildroot.org>;
  Tue, 21 Oct 2025 20:13:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F96260BF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39F3F40CD7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3F96260BF2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 39F3F40CD7
  for <buildroot@buildroot.org>; Tue, 21 Oct 2025 20:13:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2FB6A876FF; Tue, 21 Oct 2025 20:13:14 +0000 (UTC)
+ id 27744876FE; Tue, 21 Oct 2025 20:13:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 21 Oct 2025 22:06:53 +0200
+Date: Tue, 21 Oct 2025 22:05:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 246f2eca20b26f0c35ffc7eee72edf690815608d
-X-Git-Newrev: 6471977d83da9b49794d86753f9d321c48533bde
+X-Git-Oldrev: c9dca7f4c34d6573f007122eeabaac8d0b7fd732
+X-Git-Newrev: 246f2eca20b26f0c35ffc7eee72edf690815608d
 X-Patchwork-Hint: ignore
-Message-Id: <20251021201314.2FB6A876FF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xerces: bump to v3.3.0
+Message-Id: <20251021201314.27744876FE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xerces: security bump to v3.2.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6471977d83da9b49794d86753f9d321c48533bde
+commit: https://git.buildroot.net/buildroot/commit/?id=246f2eca20b26f0c35ffc7eee72edf690815608d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 See the release notes:
-https://issues.apache.org/jira/secure/ReleaseNote.jspa?version=12355023&projectId=10510
+https://issues.apache.org/jira/secure/ReleaseNote.jspa?version=12352411&projectId=10510
+
+Also update the download site to https
+
+This fixes the following vulnerability:
+- CVE-2024-23807:
+    The Apache Xerces C++ XML parser on versions 3.0.0 before 3.2.5
+    contains a use-after-free error triggered during the scanning of
+    external DTDs.  Users are recommended to upgrade to version 3.2.5
+    which fixes the issue, or mitigate the issue by disabling DTD
+    processing. This can be accomplished via the DOM using a standard
+    parser feature, or via SAX using the XERCES_DISABLE_DTD environment
+    variable.  This issue has been disclosed before as CVE-2018-1311, but
+    unfortunately that advisory incorrectly stated the issue would be
+    fixed in version 3.2.3 or 3.2.4.
+    https://www.cve.org/CVERecord?id=CVE-2024-23807
 
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
  package/xerces/xerces.hash | 4 ++--
- package/xerces/xerces.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/xerces/xerces.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/package/xerces/xerces.hash b/package/xerces/xerces.hash
-index 52c22ee826..871089346f 100644
+index e6b5b922d2..52c22ee826 100644
 --- a/package/xerces/xerces.hash
 +++ b/package/xerces/xerces.hash
 @@ -1,5 +1,5 @@
--# From https://archive.apache.org/dist/xerces/c/3/sources/xerces-c-3.2.5.tar.gz.sha256
--sha256  545cfcce6c4e755207bd1f27e319241e50e37c0c27250f11cda116018f1ef0f5  xerces-c-3.2.5.tar.gz
-+# From https://archive.apache.org/dist/xerces/c/3/sources/xerces-c-3.3.0.tar.gz.sha256
-+sha256  9555f1d06f82987fbb4658862705515740414fd34b4db6ad2ed76a2dc08d3bde  xerces-c-3.3.0.tar.gz
+-# From http://www.apache.org/dist/xerces/c/3/sources/xerces-c-3.2.4.tar.xz.sha256
+-sha256  075bc57940da0f9be6dd183c550c8ce0b9833e4550dc382048377a1a5e3b2bd9  xerces-c-3.2.4.tar.xz
++# From https://archive.apache.org/dist/xerces/c/3/sources/xerces-c-3.2.5.tar.gz.sha256
++sha256  545cfcce6c4e755207bd1f27e319241e50e37c0c27250f11cda116018f1ef0f5  xerces-c-3.2.5.tar.gz
  
  # Hash for license file
  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
 diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
-index 7734cff0d2..198f15aa3a 100644
+index 08efa6fb5c..7734cff0d2 100644
 --- a/package/xerces/xerces.mk
 +++ b/package/xerces/xerces.mk
-@@ -4,7 +4,7 @@
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XERCES_VERSION = 3.2.5
-+XERCES_VERSION = 3.3.0
- XERCES_SOURCE = xerces-c-$(XERCES_VERSION).tar.gz
- XERCES_SITE = https://archive.apache.org/dist/xerces/c/3/sources
+-XERCES_VERSION = 3.2.4
+-XERCES_SOURCE = xerces-c-$(XERCES_VERSION).tar.xz
+-XERCES_SITE = http://archive.apache.org/dist/xerces/c/3/sources
++XERCES_VERSION = 3.2.5
++XERCES_SOURCE = xerces-c-$(XERCES_VERSION).tar.gz
++XERCES_SITE = https://archive.apache.org/dist/xerces/c/3/sources
  XERCES_LICENSE = Apache-2.0
+ XERCES_LICENSE_FILES = LICENSE
+ XERCES_CPE_ID_VENDOR = apache
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
