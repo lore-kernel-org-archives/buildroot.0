@@ -4,102 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33E1CCCD1AA
-	for <buildroot@archiver.kernel.org>; Tue, 21 Oct 2025 12:04:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC281CCD1AA
+	for <buildroot@archiver.kernel.org>; Tue, 21 Oct 2025 12:05:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 060B260AB6;
-	Tue, 21 Oct 2025 12:04:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5893B60A7C;
+	Tue, 21 Oct 2025 12:05:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BSI3pDECgBT9; Tue, 21 Oct 2025 12:04:10 +0000 (UTC)
+ id taIWfNEi6Iap; Tue, 21 Oct 2025 12:05:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F13A260A97
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AA9B606D9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F13A260A97;
-	Tue, 21 Oct 2025 12:04:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 00F2770A
- for <buildroot@buildroot.org>; Tue, 21 Oct 2025 12:04:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4AA9B606D9;
+	Tue, 21 Oct 2025 12:05:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2333870A
+ for <buildroot@buildroot.org>; Tue, 21 Oct 2025 12:05:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DB3BA60A8C
- for <buildroot@buildroot.org>; Tue, 21 Oct 2025 12:04:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 14DFD40464
+ for <buildroot@buildroot.org>; Tue, 21 Oct 2025 12:05:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VsBSDRo6yA7Q for <buildroot@buildroot.org>;
- Tue, 21 Oct 2025 12:04:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
- envelope-from=maxime.leroys@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D1F1760AA4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1F1760AA4
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D1F1760AA4
- for <buildroot@buildroot.org>; Tue, 21 Oct 2025 12:04:06 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-46b303f755aso58524695e9.1
- for <buildroot@buildroot.org>; Tue, 21 Oct 2025 05:04:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1761048245; x=1761653045;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=JTdoNCFFOC+LwTNESUKV64HLtKopKPIiyUv5xRP26WE=;
- b=KFH5BAkjf+gInI2E7DUB8CzJZ3PNS1YCxhEMsH+WhPNUJAOwE2EYmWOn7ctrkvmVKF
- 9uUzLrBt+0IDzoDR4t6vS4ivoQgvIgNUda/qIebIs/DjYtS7yw4M6mqteCGVcN/Qt9dn
- jq5BRQjlk/mmVS7nzueqKNAdi7CYg/R9mTIciuhjHXBeCquOGeZB+5892pNX8ayB52C+
- gR+EoGY1MPiiZmg5/3tIl1kxV/9fWEibohgJ6lyPfQaJ4D9xMgSzcEQiuujbwKZJALni
- Mh/SDXJYbPA3kQUyi5snGuNd6tCtIizCqp2SXPOiLA23HqugAWvkeKCiNO0BaNH2Aa10
- 4jqA==
-X-Gm-Message-State: AOJu0YwZ3W7Oo6QEAsMOqXm6IaDplz4M2ooxo2zn00yJZlMnUQ/TUIaM
- 8lgQhguyI9UI0fWunlIEXr/h3JHV2hxuBO3Xdw+No66DQeNt5fvYNmJkpl5cvQ==
-X-Gm-Gg: ASbGncsJBsNmeSf1/zK5wQUJSKTGRFR7o69k1SFb54qdy7WEe+TnNMKRsyoRoxThF+u
- T8pv5CYJWEu6TyU1lwKe62/lbIup850zqZumqNE6TfK9EQ9zEM3kSgjU1EB5KlokGSa3PF/DkHH
- iSTqBPi0jMkAlZK6/9EmZIeGTJpgh5RSU5KD+ERtdLDZc6Qc1Ty8AmDM+aXTwiKg6S8T5qkcs9q
- oHAFuW9sSOLedfuCWoAhw6DJG6eZbp5bLOBK25xOUQfDy1RZSQzjg+gNWIl9S8HIqacMAY1hsdT
- gA20DAn4Mq3YCNPjnJkv78i1nDCc2dFtOSC2ZUI+lpnLhDwRx9Qg0AcOMBHIbiLI8BCivieAEVb
- ln2nRkq4vaiMxmeFOOCQIiUmLMc1tLB8GId+yO1KbLE+Y5PiIdD5MgMDwfQv7KPPFq+p+K28Fjz
- jEZQ==
-X-Google-Smtp-Source: AGHT+IFjTJhcNLZTd4melG1oZSmJSnBwmrxkYV6c1imi7DE93mB6aurHsubmfUkSCDP1uQr6G7wgFg==
-X-Received: by 2002:a05:600c:3b03:b0:46e:330a:1762 with SMTP id
- 5b1f17b1804b1-471179079dfmr135252415e9.22.1761048244675; 
- Tue, 21 Oct 2025 05:04:04 -0700 (PDT)
-Received: from freepad.. ([2a01:e0a:6f:bdf0:7dc:f6df:77e5:8474])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-471529598c9sm192462405e9.5.2025.10.21.05.04.04
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 21 Oct 2025 05:04:04 -0700 (PDT)
-From: Maxime Leroy <maxime@leroys.fr>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h4VW0gihJtCj for <buildroot@buildroot.org>;
+ Tue, 21 Oct 2025 12:05:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CBF7140367
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBF7140367
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CBF7140367
+ for <buildroot@buildroot.org>; Tue, 21 Oct 2025 12:05:48 +0000 (UTC)
+Received: from framework-OT.fritz.box (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id A00CF2C84551;
+ Tue, 21 Oct 2025 14:05:46 +0200 (CEST)
 To: buildroot@buildroot.org
-Cc: Vincent Jardin <vjardin@free.fr>,
-	Maxime Leroy <maxime@leroys.fr>
-Date: Tue, 21 Oct 2025 14:03:42 +0200
-Message-ID: <20251021120342.483933-6-maxime@leroys.fr>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251021120342.483933-1-maxime@leroys.fr>
-References: <20251021120342.483933-1-maxime@leroys.fr>
+Date: Tue, 21 Oct 2025 14:05:47 +0200
+Message-ID: <20251021120548.1534100-1-buildroot@bubu1.eu>
+X-Mailer: git-send-email 2.51.1.dirty
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1761048245; x=1761653045; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
- :message-id:reply-to;
- bh=JTdoNCFFOC+LwTNESUKV64HLtKopKPIiyUv5xRP26WE=;
- b=jswiZ8Vd+OhV1KjKmcsKXQApLG92XKJtdqHUNR+ThvdOancYg0JZLYzIK3qmBBjPAu
- ikwssF1wv4Y0PtZ9fE9wQOdLGf4rQG7v7dKl/ACT358FSe/aMzjgI13lbhTJv+LBW9RN
- wd1nNNaEGzQMJ677oSgIhrWUOn3GKa1ADVa3zs0gGV7L97RUdijF3E3cKBaOaPHWj2Ar
- 6DzWWlhylBrH1k8/n/QJTZRPvUFetPQIYrcpZCuFlhVzbd3a1FMCzZKGVqJ73iqWlzx9
- Zspdc73D+wCAXFbOcQxm2TfaRYO8kHFC2Gk5l4A+LC1sOXqs3eHUWC43TNanXV8xvkyP
- lbxw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=leroys.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=jswiZ8Vd
-Subject: [Buildroot] [PATCH 5/5] package/dpdk: make apps selectable
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=bubu1.eu; s=bubu; 
+ t=1761048346; bh=PeTqTDebwQROIJkPk1bEEau1NhIGiRjMJyEUNx9ltAM=;
+ h=From:To:Cc:Subject:Date;
+ b=c3YmMVIa6fAm8yeCzZcO8wVsZW6pF8zIbcvBwqavsw0OIVot4sHbnp7ZkJjNs/6/x
+ CJUvk8285p49W/EXeIfQtqFz4R8LtWHJtrzip81PHAv/RxI07Z5oQc5XLagSfCbAWh
+ rTvzYza5maYSlomvBP9SH865G8+OpeKRVhkNI89jT1YMa+QJ2Rn0VJdy7w55+p8VWE
+ u3MJslqGjA4krzVlnP0vrw8fmsmHBIkf48T9fNi0pSU9W3ws7P0LnQg/KeEFl67//8
+ PJd3W+f/4N7MRIw3YSbVeEJuAOmWYChgQjylnu2ZmM+tzyGI8OSUvzRX4+9I2feNeD
+ ZiHzxxi965A0A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
+ header.a=rsa-sha256 header.s=bubu header.b=c3YmMVIa
+Subject: [Buildroot] [PATCH v5] package/python-diskcache: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,70 +75,176 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Marcus Hoffmann <bubu@bubu1.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add BR2_PACKAGE_DPDK_APPS_LIST to control which DPDK applications are
-built:
-  - empty : use DPDK defaults
-  - none  : disable all apps (-Ddisable_apps='*')
-  - list  : pass to -Denable_apps= (comma-separated)
+The package imports itself in setup.py to get the package-name and
+version number. Dping this during the buildroot build would require
+buisling host-python with sqlite support, which we are currently not set
+up for. It also seems wasteful for just extracting the version number
+and package name, so instead we replace the import by using a hardcoded
+package-name and the version number stored in buildroot.
 
-Signed-off-by: Maxime Leroy <maxime@leroys.fr>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 ---
- package/dpdk/Config.in | 14 ++++++++++++++
- package/dpdk/dpdk.mk   |  9 +++++++++
- 2 files changed, 23 insertions(+)
+Changes:
+v2: remove accidentally commited .swp file
+v3: fix python-diskcache.mk lint errors
+v4: Rebase on current master
+v5: split sed line, expand commit message on why we need to edit the
+    setup.py
 
-diff --git a/package/dpdk/Config.in b/package/dpdk/Config.in
-index e311611548..feea71a4c3 100644
---- a/package/dpdk/Config.in
-+++ b/package/dpdk/Config.in
-@@ -78,6 +78,20 @@ config BR2_PACKAGE_DPDK_LIBS_LIST
- 	    find lib -mindepth 2 -maxdepth 2 -type f -name meson.build \
- 	      -printf '%h\n' | xargs -n1 basename | sort -u
- 
-+config BR2_PACKAGE_DPDK_APPS_LIST
-+	string "Comma-separated applications (e.g. pdump,dumpcap)"
+---
+ DEVELOPERS                                    |  3 +++
+ package/Config.in                             |  1 +
+ package/python-diskcache/Config.in            |  8 +++++++
+ .../python-diskcache/python-diskcache.hash    |  5 ++++
+ package/python-diskcache/python-diskcache.mk  | 23 +++++++++++++++++++
+ .../tests/package/sample_python_diskcache.py  |  9 ++++++++
+ .../tests/package/test_python_diskcache.py    | 12 ++++++++++
+ 7 files changed, 61 insertions(+)
+ create mode 100644 package/python-diskcache/Config.in
+ create mode 100644 package/python-diskcache/python-diskcache.hash
+ create mode 100644 package/python-diskcache/python-diskcache.mk
+ create mode 100644 support/testing/tests/package/sample_python_diskcache.py
+ create mode 100644 support/testing/tests/package/test_python_diskcache.py
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 66199a5b72..15266b4583 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2272,6 +2272,7 @@ F:	package/pico-sdk/
+ F:	package/picotool/
+ F:	package/python-apscheduler/
+ F:	package/python-crc/
++F:	package/python-diskcache/
+ F:	package/python-django/
+ F:	package/python-immutabledict/
+ F:	package/python-jc/
+@@ -2287,6 +2288,7 @@ F:	package/python-waitress/
+ F:	package/python-whitenoise/
+ F:	support/testing/tests/package/test_python_apscheduler.py
+ F:	support/testing/tests/package/test_python_crc.py
++F:	support/testing/tests/package/test_python_diskcache.py
+ F:	support/testing/tests/package/test_python_django.py
+ F:	support/testing/tests/package/test_python_fastapi.py
+ F:	support/testing/tests/package/test_python_pydantic.py
+@@ -2298,6 +2300,7 @@ F:	support/testing/tests/package/test_python_waitress.py
+ F:	support/testing/tests/package/test_python_whitenoise.py
+ F:	support/testing/tests/package/sample_python_apscheduler.py
+ F:	support/testing/tests/package/sample_python_crc.py
++F:	support/testing/tests/package/sample_python_diskcache.py
+ F:	support/testing/tests/package/sample_python_django.py
+ F:	support/testing/tests/package/sample_python_fastapi.py
+ F:	support/testing/tests/package/sample_python_pydantic.py
+diff --git a/package/Config.in b/package/Config.in
+index 161d61728b..d8d5007186 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1089,6 +1089,7 @@ menu "External python modules"
+ 	source "package/python-dictdiffer/Config.in"
+ 	source "package/python-dicttoxml/Config.in"
+ 	source "package/python-dicttoxml2/Config.in"
++	source "package/python-diskcache/Config.in"
+ 	source "package/python-distro/Config.in"
+ 	source "package/python-django/Config.in"
+ 	source "package/python-django-enumfields/Config.in"
+diff --git a/package/python-diskcache/Config.in b/package/python-diskcache/Config.in
+new file mode 100644
+index 0000000000..4bf6c57406
+--- /dev/null
++++ b/package/python-diskcache/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_DISKCACHE
++	bool "python-diskcache"
++	select BR2_PACKAGE_PYTHON3_SQLITE # runtime
++	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
 +	help
-+	  Controls which DPDK applications are built.
++	  Disk Cache -- Disk and file backed persistent cache.
 +
-+	  Values:
-+	    (empty): use DPDK defaults
-+	    none   : build no apps
-+	    list   : e.g. "pdump,dumpcap"
++	  http://www.grantjenks.com/docs/diskcache/
+diff --git a/package/python-diskcache/python-diskcache.hash b/package/python-diskcache/python-diskcache.hash
+new file mode 100644
+index 0000000000..4befb40a4e
+--- /dev/null
++++ b/package/python-diskcache/python-diskcache.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/diskcache/json
++md5  d92b4afa944bb70ed38c84a622f7abb5  diskcache-5.6.3.tar.gz
++sha256  2c3a3fa2743d8535d832ec61c2054a1641f41775aa7c556758a109941e33e4fc  diskcache-5.6.3.tar.gz
++# Locally computed sha256 checksums
++sha256  583546baa3fd93607d845126570677a401f508e228b5044fefbc3949af179672  LICENSE
+diff --git a/package/python-diskcache/python-diskcache.mk b/package/python-diskcache/python-diskcache.mk
+new file mode 100644
+index 0000000000..930c70ba07
+--- /dev/null
++++ b/package/python-diskcache/python-diskcache.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# python-diskcache
++#
++################################################################################
 +
-+	  To list all applications found in the DPDK source tree:
-+	    find app -mindepth 2 -maxdepth 2 -type f -name meson.build \
-+	      -printf '%h\n' | xargs -n1 basename | sort -u
++PYTHON_DISKCACHE_VERSION = 5.6.3
++PYTHON_DISKCACHE_SOURCE = diskcache-$(PYTHON_DISKCACHE_VERSION).tar.gz
++PYTHON_DISKCACHE_SITE = https://files.pythonhosted.org/packages/3f/21/1c1ffc1a039ddcc459db43cc108658f32c57d271d7289a2794e401d0fdb6
++PYTHON_DISKCACHE_SETUP_TYPE = setuptools
++PYTHON_DISKCACHE_LICENSE = Apache-2.0
++PYTHON_DISKCACHE_LICENSE_FILES = LICENSE
 +
- endif
- 
- comment "dpdk needs a glibc toolchain w/ threads, gcc >= 4.9, headers >= 4.19"
-diff --git a/package/dpdk/dpdk.mk b/package/dpdk/dpdk.mk
-index e54668ca2d..8bef616cb3 100644
---- a/package/dpdk/dpdk.mk
-+++ b/package/dpdk/dpdk.mk
-@@ -65,6 +65,15 @@ ifneq ($(DPDK_LIBS),)
-   endif
- endif
- 
-+DPDK_APPS := $(call qstrip,$(BR2_PACKAGE_DPDK_APPS_LIST))
-+ifneq ($(DPDK_APPS),)
-+  ifeq ($(DPDK_APPS),none)
-+    DPDK_CONF_OPTS += -Ddisable_apps='*'
-+  else
-+    DPDK_CONF_OPTS += -Denable_apps='$(DPDK_APPS)'
-+  endif
-+endif
++define PYTHON_DISKCACHE_REMOVE_SELF_IMPORT
++	sed -i -e '/import diskcache/d' \
++			-e 's/diskcache.__title__/"diskcache"/' \
++			-e 's/diskcache.__version__/"$(PYTHON_DISKCACHE_VERSION)"/' \
++			$(@D)/setup.py
++endef
 +
- ifeq ($(BR2_PACKAGE_DPDK_TESTS),y)
- DPDK_CONF_OPTS += -Dtests=true
- else
++PYTHON_DISKCACHE_POST_PATCH_HOOKS += PYTHON_DISKCACHE_REMOVE_SELF_IMPORT
++
++$(eval $(python-package))
+diff --git a/support/testing/tests/package/sample_python_diskcache.py b/support/testing/tests/package/sample_python_diskcache.py
+new file mode 100644
+index 0000000000..8ba34daf6e
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_diskcache.py
+@@ -0,0 +1,9 @@
++from diskcache import Cache
++
++cache = Cache()
++
++cache['test'] = 123
++assert cache['test'] == 123
++del cache['test']
++assert 'test' not in cache
++cache.close()
+diff --git a/support/testing/tests/package/test_python_diskcache.py b/support/testing/tests/package/test_python_diskcache.py
+new file mode 100644
+index 0000000000..d8618c1681
+--- /dev/null
++++ b/support/testing/tests/package/test_python_diskcache.py
+@@ -0,0 +1,12 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy3DiskCache(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_DISKCACHE=y
++        """
++    sample_scripts = ["tests/package/sample_python_diskcache.py"]
++    timeout = 10
 -- 
-2.43.0
+2.51.1.dirty
 
 _______________________________________________
 buildroot mailing list
