@@ -1,106 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 024EECCD184
-	for <buildroot@archiver.kernel.org>; Tue, 21 Oct 2025 05:59:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4417CCCD1A7
+	for <buildroot@archiver.kernel.org>; Tue, 21 Oct 2025 06:31:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B80DE6072F;
-	Tue, 21 Oct 2025 05:59:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7BF6B80BC2;
+	Tue, 21 Oct 2025 06:30:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Envfc_4_1eIG; Tue, 21 Oct 2025 05:59:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3hbZMQk5uvrh; Tue, 21 Oct 2025 06:30:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 040E7606CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 464F080BC1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 040E7606CE;
-	Tue, 21 Oct 2025 05:59:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 139C770A
- for <buildroot@buildroot.org>; Tue, 21 Oct 2025 05:59:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 464F080BC1;
+	Tue, 21 Oct 2025 06:30:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 41D9643F
+ for <buildroot@buildroot.org>; Tue, 21 Oct 2025 06:30:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 05B56401C1
- for <buildroot@buildroot.org>; Tue, 21 Oct 2025 05:59:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 26EB94055E
+ for <buildroot@buildroot.org>; Tue, 21 Oct 2025 06:30:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lxq5b38tIOnh for <buildroot@buildroot.org>;
- Tue, 21 Oct 2025 05:59:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d30; helo=mail-io1-xd30.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5911240199
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5911240199
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
- [IPv6:2607:f8b0:4864:20::d30])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5911240199
- for <buildroot@buildroot.org>; Tue, 21 Oct 2025 05:59:42 +0000 (UTC)
-Received: by mail-io1-xd30.google.com with SMTP id
- ca18e2360f4ac-93e830d84d6so333803539f.3
- for <buildroot@buildroot.org>; Mon, 20 Oct 2025 22:59:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1761026381; x=1761631181;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=dlP4Y7nfp2LB+6pLs4hxNOvCv0ql4YFgSthc93ULe30=;
- b=hM5fFlSlwc0mDhqDaPYUrNitU7TFfq0SnX3lhROz4/3a/5y/8JgqqZLWavbCrA4i7c
- 8Y6PKAQGXpiL3xto8TeJ9jNCzd/I9neWJYdCcYIQ+Wrh/km8Nr0vq9hgiKTG4ZHoJbSI
- UwNCm5xtrdiUTuk+4emib43+a3rD4AwqTRPgSOsUNDvSvj6oI6WjKatHTr6YnKTnRZsZ
- mM8eefawcIenQNjGp62bAEaqAIV9J3jtuX61Lc4S054DDSmZ2qDYGxTHDDog6jMFkNue
- DHScO1iewkHmgjDFyGxdAgnpgLC4uEXHuIVtV2JOzCfW07H474pSxu1bTWf5B/nKaLGG
- fdRw==
-X-Gm-Message-State: AOJu0Yw1tk6aCQYikrKtQJLVNGbekKaL1XsKOaDsThvK5tOQZEJHOQNW
- CFPWyDNMu+uNKV/x0kKO1ZmqOxvkbSUPLgX/0Tj0NpO//aydr/LA2mWHkU3PMAWuE1s=
-X-Gm-Gg: ASbGnctH7uzI0g1s/UoWsabRVzN84/vUlcqr+OxhwOW5jXn8IoVnxT4eVB+zS1gJZUr
- AnVmefiX0HRYxoNYSnGwtSv4JdRkO9v1UQG8gbrl1QGIVNycU/goOe5W2IO3O7azXTcCRQhLjLk
- utsIu5crFBmUtNsfC6qA870kW9VnaFtfTl1pmZCvcMWXS/XeMxujzPJRNFK46vl7fKZbZs+9wXK
- Y1kTMo3yEpf85hQMetJoDPNXMYaWoCrjNIGBX5BUvG3qkqkU1FverTNMVnm1TwtkpmNoq1//9ll
- TmxU++Yejh8PzGmHF1tjfg2tFk5dX2gx7XunZL/RMFOulUHPx/wWKGpAQsGzgiLeLNBcI9rBOYd
- feUa42dWxJkvsPnaAJcfJeHLQHKDwqjwZU8HSUPwB3awz0XT04gzvjpZaJ1go18hSWUrsLb4t9c
- lLh217fLUx4AotKchX4NZgubLQXkR2uzRcoPpr/15ZQyviljdiAzmKKPZY0N6hFMIDJ8QsoHw=
-X-Google-Smtp-Source: AGHT+IHzSg7lpUwcUi8wP+kNJULac/FLT1AzBpKbt6iMlWwm0DAVC3pF30ieAot1FfF2MjeOwCtUcg==
-X-Received: by 2002:a05:6602:3fd3:b0:93e:8bec:6a87 with SMTP id
- ca18e2360f4ac-93e8bec7596mr524059739f.1.1761026380864; 
- Mon, 20 Oct 2025 22:59:40 -0700 (PDT)
-Received: from james-x399.tailafd1a.ts.net (71-218-100-179.hlrn.qwest.net.
- [71.218.100.179]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-5a8a973ea52sm3727109173.41.2025.10.20.22.59.40
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 20 Oct 2025 22:59:40 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Cc: Christian Stewart <christian@aperture.us>,
- James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 20 Oct 2025 23:59:31 -0600
-Message-ID: <20251021055931.532861-3-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251021055931.532861-1-james.hilliard1@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JM-X4bccQIyX for <buildroot@buildroot.org>;
+ Tue, 21 Oct 2025 06:30:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.122;
+ helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CF3254055A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF3254055A
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.122])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CF3254055A
+ for <buildroot@buildroot.org>; Tue, 21 Oct 2025 06:30:53 +0000 (UTC)
+X-CSE-ConnectionGUID: J8EimJQUSOSUOad/hP2iXQ==
+X-CSE-MsgGUID: qDJihhaBQtaTlyJ/veY6IA==
+Received: from unknown (HELO opfedv3rlp0b.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
+ 21 Oct 2025 08:30:50 +0200
+Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv3rlp0b.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 21 Oct 2025 08:30:50 +0200
+Received: from yd-6wlzhs3 [x.x.x.x] by
+ OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.59;
+ Tue, 21 Oct 2025 08:30:49 +0200
+Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
+ Tue, 21 Oct 2025 08:30:48 +0200
+From: yann.morin@orange.com
+X-CSE-ConnectionGUID: JfZqv7nQTnGhQKJU8L6dCA==
+X-CSE-MsgGUID: dxDn1izpSMyeXtHmzNbVsQ==
+X-IronPort-AV: E=Sophos;i="6.19,244,1754949600"; d="scan'208";a="348040575"
+Date: Tue, 21 Oct 2025 08:30:48 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+CC: <buildroot@buildroot.org>, Christian Stewart <christian@aperture.us>
+Message-ID: <aPcomAvNjlDA4o9R@yd-6wlzhs3>
 References: <20251021055931.532861-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20251021055931.532861-1-james.hilliard1@gmail.com>
+X-Originating-IP: [10.115.26.50]
+X-ClientProxiedBy: OPE16NORMBX406.corporate.adroot.infra.ftgroup
+ (10.115.27.15) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1761026381; x=1761631181; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=dlP4Y7nfp2LB+6pLs4hxNOvCv0ql4YFgSthc93ULe30=;
- b=gIcu5LXr8ImQBq0o8gVrTXqQzAvZ7wIUp8laSUqGmETui9PzqVKukbdiALYuFJm6Kd
- Vw0ExBTGzlsDwDzIqs/d2M4jzflx4lHVBqPjrE8aGk7dDXg9o4HKfddNZXK338WTuaks
- ngnjBZeN/3mZajG5fgiqsNl4mfTGpkdFIq8CaF4J3/2noYnCCbwo8lQ9qVTqYhtVgNLg
- jFr0yD5q9poOIRHPQ9S/RGD1tPrsOnzpAFGzODZqSrvIGZCsPbusZpe1EiaggycK3/FQ
- 6jLSj/ugUBnddnatB6B9o0mbqx/JEq81iAFyqDYD3LRXSFzAcL1Bt7vBCFiUttCLK2LZ
- qpdw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1761028254; x=1792564254;
+ h=date:to:cc:subject:message-id:references:mime-version:
+ in-reply-to:content-transfer-encoding:from;
+ bh=X72tV/i0MLqFbg3E+Rtbz7JoJA6it6jPoXn2yRDxB50=;
+ b=dlw5KiLaW3k0YF0k6xPQO5QxSTSvyfODDxootaD1KJ6s31UYBzeta4nR
+ qyCNG+3jiLDwNA40Dvv1LtJbwrIOjOXBwwHuWRFBYKvUqaesR7pO/N2ri
+ M+WbUSw+G/z5HKI7sPQUilYfvkCIox5ZryIoudFDSl9vvpA+7uUEh2BJV
+ wAV+91Zbq9VHSkYMUGUerEm40Wjvi9XSQWVrOA4Vs7NS5YaDAJjeSZ1d2
+ qSZTWIVL6QVjMn/6dnWkFlBowX6IQUFGeq8RKoMJc/HbgxrzTBUgqE7uv
+ Qw7tHVq5ip36C3FUK1vk9r0QkE+aoUNS7Z9WAjjRVabG331y2n/8Fki/b
+ w==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ header.from=orange.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=gIcu5LXr
-Subject: [Buildroot] [PATCH v3 3/3] package/tailscale: bump to version 1.88.3
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=dlw5KiLa
+Subject: Re: [Buildroot] [PATCH v3 1/3] package/pkg-golang.mk: use golang
+ toolchain default GOPROXY
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,37 +106,82 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/tailscale/tailscale.hash | 2 +-
- package/tailscale/tailscale.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+James, All,
 
-diff --git a/package/tailscale/tailscale.hash b/package/tailscale/tailscale.hash
-index e2d600f03e..444412f8f4 100644
---- a/package/tailscale/tailscale.hash
-+++ b/package/tailscale/tailscale.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  4830cd822a838d5d44fd5eeebd07a2aacaf0255fb3fb7d3852d57659f54e51bc  tailscale-1.78.1-go2.tar.gz
-+sha256  98b51e95e84378ab280c5a8706508d493ab9152a0215f00f0f69e3ea2673ea0f  tailscale-1.88.3-go2.tar.gz
- sha256  d1ee1c7947d4b2c1963ea214d5324f1d4c89f2f1d0f0224889b4dfb868dad725  LICENSE
-diff --git a/package/tailscale/tailscale.mk b/package/tailscale/tailscale.mk
-index 3c6c7bce1e..141a5b98d6 100644
---- a/package/tailscale/tailscale.mk
-+++ b/package/tailscale/tailscale.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TAILSCALE_VERSION = 1.78.1
-+TAILSCALE_VERSION = 1.88.3
- TAILSCALE_SITE = $(call github,tailscale,tailscale,v$(TAILSCALE_VERSION))
- TAILSCALE_LICENSE = BSD-3-Clause
- TAILSCALE_LICENSE_FILES = LICENSE
+Thanks for the quick respin (while the discussion was still on-going in
+a previous thread...)
+
+I was expecting that the order of patches would be the reverse:
+  - first, make it configurable, keeping the current default
+  - second change the default.
+
+If you first make it configurable and the patch is reverted, then the
+default patch would _technically_ have to be reverted too.
+
+With the ordering you propose, if the secod patch turns out to have an
+issue and is reverted, then the first patch would still be applied
+because it would not be _technically_ needed to revert it, and thus
+people would be forced to use a proxy.
+
+On 2025-10-20 23:59 -0600, James Hilliard spake thusly:
+> This change sets the default GOPROXY value to match Go's built-in
+> default of "https://proxy.golang.org,direct" which provides several
+> benefits:
+> 
+> - Avoid package breakages due to missing module sources
+
+As has been discussed in a previous thread, this is not always true, and
+has been proven to be false in certain circumstances.
+
+> - Better alignment with upstream Go toolchain defaults
+> - Faster downloads via the proxy compared to direct Git clones
+> - Maintains reproducible builds through Go's module checksum validation
+
+We already have this feature in Buildroot, where all the sources
+archives are hash-checked already, so I'd argue that dependeing on the
+backend tooling (go in this case) is superfluous from the point of view
+of Buildroot.
+
+[--SNIP--]
+> -	GOPROXY=direct \
+> +	GOPROXY="https://proxy.golang.org,direct" \
+
+So what happens if the archive cached in the goproxy does not match the
+one expected by the being-veondred package? Would go fallback to direct,
+or does it immediately abort the vendoring?
+
+If the go vendoring fallbacks to the next item in the list when it can't
+fownload from a previous one for whatever reason, such as missing in the
+proxy [0] or not matching hashes, then I would argue that "direct"
+should be the first in the list (to fetch from upstream preferentially,
+and only fallback to a goproxy only for those mnisbehaving packages...
+
+[0] but then, if it is missing from the goproxy, why wouldn't it caches
+the archive it is missing?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.43.0
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
 
+____________________________________________________________________________________________________________
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
