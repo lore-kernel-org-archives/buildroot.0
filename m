@@ -4,101 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5596FCCD1A7
-	for <buildroot@archiver.kernel.org>; Tue, 21 Oct 2025 16:23:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81194CCD1A7
+	for <buildroot@archiver.kernel.org>; Tue, 21 Oct 2025 16:28:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1ADA660AFB;
-	Tue, 21 Oct 2025 16:23:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 40B216060D;
+	Tue, 21 Oct 2025 16:28:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BPXr8U2Rx83X; Tue, 21 Oct 2025 16:23:48 +0000 (UTC)
+ id hgABRuwsqU_Y; Tue, 21 Oct 2025 16:28:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43869606A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63F8F605F9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 43869606A8;
-	Tue, 21 Oct 2025 16:23:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 412B3277
- for <buildroot@buildroot.org>; Tue, 21 Oct 2025 16:23:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 63F8F605F9;
+	Tue, 21 Oct 2025 16:28:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 537C243F
+ for <buildroot@buildroot.org>; Tue, 21 Oct 2025 16:28:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 10D8B406D3
- for <buildroot@buildroot.org>; Tue, 21 Oct 2025 16:23:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3A02A81154
+ for <buildroot@buildroot.org>; Tue, 21 Oct 2025 16:28:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FtPuwRy-Mk52 for <buildroot@buildroot.org>;
- Tue, 21 Oct 2025 16:23:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::631; helo=mail-ej1-x631.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 13A11406CD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13A11406CD
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
- [IPv6:2a00:1450:4864:20::631])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 13A11406CD
- for <buildroot@buildroot.org>; Tue, 21 Oct 2025 16:23:43 +0000 (UTC)
-Received: by mail-ej1-x631.google.com with SMTP id
- a640c23a62f3a-b4736e043f9so980776166b.0
- for <buildroot@buildroot.org>; Tue, 21 Oct 2025 09:23:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1761063822; x=1761668622;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=XyX5as4zGgo6TrxyUSQ/ZjULettJ4srsYZz672t/la0=;
- b=d70t26zExdJcNOIHIyF+tamU8WUMbK9+ATqSeSbShVMWBwn1TkoS12Yw4g09QC//4X
- Jv7C352hHEi4fGKVTdd7w9QCGpRMgQpPtZCXTyIhI1Tnc9rgCCDimFWCYQG+d00H+ip9
- Yt0iM8sjIBdJH/QcHZmjxRXqPYYfgtAf23xJQyi+7xnV1K4C9i2O7fV17xZKZYjMdgDl
- hJOYWHIhoE8J23CnxgWHETcma50pjJIn224knWfO0WIM78AOz+4X0pyEbNFKyzzyglc0
- qIWpijUaGtnLLfvH2CEcllfrIzKgc6xiF+cc3TkMVPVCQsg34WBwtuCs8VmAWAbvYGT0
- hpnA==
-X-Gm-Message-State: AOJu0Yxpq8imSQra8NdGiT2eQL27UL9f4zl3xeFk5ceFUKTK+An6pemV
- mVHSY4oFqrsDyRyvxMqhd3A6cYod0MFsf6DNRARlUd4U/DcLOFPsMIMBDMd9ovuzMeM68x7Bu39
- znQWs/hg=
-X-Gm-Gg: ASbGnct6DCrwxyEPsPqmG6y0IwQHhAcnIKL6yCI4upUWjXAq2svKnkWyLeAm7GI+i9o
- zdCEKzh2NQf5VJoXmYhqus/UIMy0ReCpnJTAah3lR7ezp0HTwoi6EU9yFXZ2GX8O0xrnSdMwCbt
- DAGC0kkn8A72EwGBXtlvrYxA22xj2xTZDSqjzOEKj0oRXZvBZ99kQ+jEPglKdTwgN0QWmzoHZEv
- NpPgHKchQ56WVvHNuTyv7hoY9XQcDofCPvBuZVUn3bQyG9Hh3TBIryi4eBScv2cattly0QvtxUv
- LlWoADXBCQYEULhjp++yEpVJZsu+NdFrLndAEW3Oa+UIw5nw9KoXyWeEsyb7oVnOLRv3zDpGblq
- +1TYThTEGqTS2HHYplOS8g9oRlKNOCDB8Y/H8+mHRiDL/74TcImu7IVqsMdz8QTktrIDgIzoz9p
- ojgJPYyxE/E04B4g==
-X-Google-Smtp-Source: AGHT+IFx0guT55EzF9FwZegNIugXaH0mFnL//f12x9oR1vByoToWuJXSbbT20pF7YCMdUtEzhyIqWg==
-X-Received: by 2002:a17:907:3ea6:b0:b49:a362:323b with SMTP id
- a640c23a62f3a-b646f15a130mr2151725066b.0.1761063821669; 
- Tue, 21 Oct 2025 09:23:41 -0700 (PDT)
-Received: from dragon.home ([2a02:a03f:73a7:c001:1291:d1ff:fe92:3b5a])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b65ebb49a83sm1115285666b.72.2025.10.21.09.23.41
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 21 Oct 2025 09:23:41 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nBLfcQ0ngoqP for <buildroot@buildroot.org>;
+ Tue, 21 Oct 2025 16:27:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3837A80DE8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3837A80DE8
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3837A80DE8
+ for <buildroot@buildroot.org>; Tue, 21 Oct 2025 16:27:58 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:7427:ac55:2702:f075])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 67AD56012D;
+ Tue, 21 Oct 2025 18:27:54 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Tue, 21 Oct 2025 18:23:30 +0200
-Message-ID: <20251021162330.106028-2-titouan.christophe@mind.be>
+Cc: Julien Olivain <ju.o@free.fr>,
+ =?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Date: Tue, 21 Oct 2025 18:27:46 +0200
+Message-ID: <20251021162746.121353-1-ju.o@free.fr>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251021162330.106028-1-titouan.christophe@mind.be>
-References: <20251021162330.106028-1-titouan.christophe@mind.be>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1761063822; x=1761668622; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
- :reply-to;
- bh=XyX5as4zGgo6TrxyUSQ/ZjULettJ4srsYZz672t/la0=;
- b=S6NrTZLSoUfQeGie6oZw0im1kYT0gO0HPfL9TibCVWG7D2uUuKE0To5/8luEWbQVS0
- 30k7p6tm6XX37Tk+SA8W702Ty4Pnb1m9UeOHtcyFSSUMapZ70RgtRDwkfl9mt31dDnuv
- WQplve5T+DVVJiJNKImnxwOhDjaOHXmyjnW0ddYgONxXgm8E7OsR8uasYgMIu5rvr+9c
- RsKROdA5kjhJB5fHOgGStCChKP4A905IZED9v7NTScgmOVac0J1GQCL08gQIZe1orMBY
- /mFXjYnIwXYjc0SQqcf4QA8PXvZJwzAM3bfWjqmzXw+Ot/m4OHR0RDrq1rimBslNmKAg
- VHOw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1761064076;
+ bh=TiZwUTCvb6EFHlRgwP02KLQ1pTzO36tNKdMCS2U1Feo=;
+ h=From:To:Cc:Subject:Date:From;
+ b=j+n0PBqh1pdt8rCERFoopFt6x/RAgxLVaor9rUhWbVnUa1sCFaoWzhrKRSZsA6UUl
+ aGug1spEH3Nk5pqmk5OaZiJRqdwoUcdMfuEEbdWTHRmIwHWRu9km9PCutHKBUk5+34
+ cADt702NRl1CPDWCtswIVqrSYOe+V4CSH5j2D+QsLe/nY61OAKE26cPOoyeJIQycld
+ l6MQLASNglWffMuRZx7XLCoihdwEaC+8bbBBhFw+wHvYtdOcPiVR7Dc2YL3gSyPoPB
+ 8czaQ0vFnBEaG/9NCwiZRszJqpHu+BhFS7XxateV27SnRYjawprGPUp20PvBaKgi6h
+ r4Sc6Kb4zRq9w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=S6NrTZLS
-Subject: [Buildroot] [PATCH 2/2] package/xerces: bump to v3.3.0
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=j+n0PBqh
+Subject: [Buildroot] [PATCH 1/1] support/testing: python-scp: fix test
+ sample script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,51 +77,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See the release notes:
-https://issues.apache.org/jira/secure/ReleaseNote.jspa?version=12355023&projectId=10510
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
----
- package/xerces/xerces.hash | 4 ++--
- package/xerces/xerces.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/xerces/xerces.hash b/package/xerces/xerces.hash
-index 52c22ee826..871089346f 100644
---- a/package/xerces/xerces.hash
-+++ b/package/xerces/xerces.hash
-@@ -1,5 +1,5 @@
--# From https://archive.apache.org/dist/xerces/c/3/sources/xerces-c-3.2.5.tar.gz.sha256
--sha256  545cfcce6c4e755207bd1f27e319241e50e37c0c27250f11cda116018f1ef0f5  xerces-c-3.2.5.tar.gz
-+# From https://archive.apache.org/dist/xerces/c/3/sources/xerces-c-3.3.0.tar.gz.sha256
-+sha256  9555f1d06f82987fbb4658862705515740414fd34b4db6ad2ed76a2dc08d3bde  xerces-c-3.3.0.tar.gz
- 
- # Hash for license file
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
-index 7734cff0d2..198f15aa3a 100644
---- a/package/xerces/xerces.mk
-+++ b/package/xerces/xerces.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XERCES_VERSION = 3.2.5
-+XERCES_VERSION = 3.3.0
- XERCES_SOURCE = xerces-c-$(XERCES_VERSION).tar.gz
- XERCES_SITE = https://archive.apache.org/dist/xerces/c/3/sources
- XERCES_LICENSE = Apache-2.0
--- 
-2.51.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+V2hlbiB0aGUgdGVzdCB3YXMgaW50cm9kdWNlZCBpbiBbMV0sIGEgY29tcGFyaXNvbiBvZiB0aGUg
+c291cmNlIGFuZAp0aGUgZGVzdGluYXRpb24gZmlsZSB3YXMgYWRkZWQsIHdpdGggYSB0eXBvICh0
+aGUgbWV0aG9kICIuY21wIiBuYW1lIGlzCm1pc3NpbmcpLgoKVGhlIHRlc3QgaXMgZmFpbGluZyB3
+aXRoIGVycm9yIHN1Y2ggYXMgaW4gWzJdOgoKICAgIFRyYWNlYmFjayAobW9zdCByZWNlbnQgY2Fs
+bCBsYXN0KToKICAgICAgRmlsZSAiL3Jvb3Qvc2FtcGxlX3B5dGhvbl9zY3AucHkiLCBsaW5lIDE1
+LCBpbiA8bW9kdWxlPgogICAgICAgIGFzc2VydCBmaWxlY21wKCIvZXRjL2hvc3RuYW1lIiwgIi90
+bXAvaG9zdG5hbWUiKQogICAgICAgICAgICAgICB+fn5+fn5+Xl5eXl5eXl5eXl5eXl5eXl5eXl5e
+Xl5eXl5eXl5eXl5eXgogICAgVHlwZUVycm9yOiAnbW9kdWxlJyBvYmplY3QgaXMgbm90IGNhbGxh
+YmxlCgpUaGlzIGNvbW1pdCBmaXhlcyB0aGF0LgoKWzFdIGh0dHBzOi8vZ2l0bGFiLmNvbS9idWls
+ZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2NvbW1pdC83NDcwNTg3Y2ZhOWEyNGQzYzQ5YWRjMGZiNmNj
+NjA1MTI5MDdmMzFhClsyXSBodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJv
+b3QvLS9qb2JzLzExNzgxMzc4NTEwCgpDYzogQWxleGlzIExvdGhvcsOpIDxhbGV4aXMubG90aG9y
+ZUBib290bGluLmNvbT4KU2lnbmVkLW9mZi1ieTogSnVsaWVuIE9saXZhaW4gPGp1Lm9AZnJlZS5m
+cj4KLS0tCiBzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS9zYW1wbGVfcHl0aG9uX3NjcC5w
+eSB8IDIgKy0KIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQoK
+ZGlmZiAtLWdpdCBhL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3NhbXBsZV9weXRob25f
+c2NwLnB5IGIvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2Uvc2FtcGxlX3B5dGhvbl9zY3Au
+cHkKaW5kZXggYzk4NmEyN2YwYi4uNWRmM2FlMjRkOCAxMDA2NDQKLS0tIGEvc3VwcG9ydC90ZXN0
+aW5nL3Rlc3RzL3BhY2thZ2Uvc2FtcGxlX3B5dGhvbl9zY3AucHkKKysrIGIvc3VwcG9ydC90ZXN0
+aW5nL3Rlc3RzL3BhY2thZ2Uvc2FtcGxlX3B5dGhvbl9zY3AucHkKQEAgLTEyLDQgKzEyLDQgQEAg
+c3NoX2NsaWVudC5jb25uZWN0KCcxMjcuMC4wLjEnLCB1c2VybmFtZT0ncm9vdCcpCiBzY3BfY2xp
+ZW50ID0gU0NQQ2xpZW50KHNzaF9jbGllbnQuZ2V0X3RyYW5zcG9ydCgpKQogc2NwX2NsaWVudC5n
+ZXQoIi9ldGMvaG9zdG5hbWUiLCAiL3RtcC9ob3N0bmFtZSIpCiAKLWFzc2VydCBmaWxlY21wKCIv
+ZXRjL2hvc3RuYW1lIiwgIi90bXAvaG9zdG5hbWUiKQorYXNzZXJ0IGZpbGVjbXAuY21wKCIvZXRj
+L2hvc3RuYW1lIiwgIi90bXAvaG9zdG5hbWUiKQotLSAKMi41MS4wCgpfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1
+aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFu
+L2xpc3RpbmZvL2J1aWxkcm9vdAo=
