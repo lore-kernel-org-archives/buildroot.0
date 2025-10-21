@@ -1,70 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 812F5CCD1A5
-	for <buildroot@archiver.kernel.org>; Tue, 21 Oct 2025 08:39:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D9ACCCD1A5
+	for <buildroot@archiver.kernel.org>; Tue, 21 Oct 2025 09:04:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36F5960859;
-	Tue, 21 Oct 2025 08:39:47 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D8TZpAPnx5_4; Tue, 21 Oct 2025 08:39:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2E2160877
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C2E2160877;
-	Tue, 21 Oct 2025 08:39:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6B05C277
- for <buildroot@buildroot.org>; Tue, 21 Oct 2025 08:39:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5C7014059C
- for <buildroot@buildroot.org>; Tue, 21 Oct 2025 08:39:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DBC624047D;
+	Tue, 21 Oct 2025 09:04:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8GFLGAUhA9lT for <buildroot@buildroot.org>;
- Tue, 21 Oct 2025 08:39:43 +0000 (UTC)
+ id qZXlpMLf-e-d; Tue, 21 Oct 2025 09:04:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0F52405C8
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id E0F52405C8;
+	Tue, 21 Oct 2025 09:04:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5464470A
+ for <buildroot@buildroot.org>; Tue, 21 Oct 2025 09:04:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 39B78608AE
+ for <buildroot@buildroot.org>; Tue, 21 Oct 2025 09:04:24 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N74aEHaDb--5 for <buildroot@buildroot.org>;
+ Tue, 21 Oct 2025 09:04:23 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
  helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D323C4054F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D323C4054F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4E1AC60879
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E1AC60879
 Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D323C4054F
- for <buildroot@buildroot.org>; Tue, 21 Oct 2025 08:39:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4E1AC60879
+ for <buildroot@buildroot.org>; Tue, 21 Oct 2025 09:04:23 +0000 (UTC)
 Received: from framework-OT.fritz.box (unknown [212.37.174.96])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
  (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id A7CAB2C80CE3;
- Tue, 21 Oct 2025 10:39:40 +0200 (CEST)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id F14F32C80CE3;
+ Tue, 21 Oct 2025 11:04:20 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Tue, 21 Oct 2025 10:39:41 +0200
-Message-ID: <20251021083942.726874-1-buildroot@bubu1.eu>
+Date: Tue, 21 Oct 2025 11:04:21 +0200
+Message-ID: <20251021090422.736371-1-buildroot@bubu1.eu>
 X-Mailer: git-send-email 2.51.1.dirty
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=bubu1.eu; s=bubu; 
- t=1761035980; bh=d2W9QurVjvQU5g/+2vyN9bwoaypdJ5JETzIEtW34fUk=;
+ t=1761037461; bh=TsHGfRVBI+30BseHR+3lH9dAQEmYRhoUyJ58xNdkPf4=;
  h=From:To:Cc:Subject:Date;
- b=rlQrDa+a4QSPQpxnu8xgD/iNMQbMw5KgrlLTC2mOzfsApxtNndD5dO18DqqHBJn89
- 3KEtMd0620GazAoqTObxdFo1Sus8i7g4OrmuXW70N+LRLzZ5ab89utCAjGMwGGfs4Q
- utCWE9uTwxRhCxVlGEi01/M+t5QQ8N2GuN4/TWpugqbKSN29c7jBpZuzyjSu88ofDX
- nA6Grfz7LWQz2bpTOOTigUil5MpPiGwFagedTcopm/a2n8fxaDFAsRi8AB6capzI8C
- YlhKaDy5jdBVPemrnbxC8OwN8dOCp2YQ/m/raD4iMRBewRbWxH2j1z0+pSXMKQRVg9
- MLozc5I4xCXZA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=fim6utQ87QdLWnUfdbJ8pPGSqUVKCkFxd07bXM6EWM2LYYl9tvHU6Pb9wxQGwQWwl
+ 4TnT2zLxJlu8cWSNM9BDSwzUGDqe9I88O+KMci22eCcFVkBLMNctRTMGa7/xIv0tb8
+ sTPiWf2o/ezDPZED1deZMsxoc2UC7E2LTmPJ5Laq/BvTRJuoXybTvhgyUcoAqUkYh5
+ qWijZ0gG2FIjmMcXGtkg/4NlhGj5bdUyvGFhT1PAo4me0ECbAjLMFG8ZaIkdmrHc41
+ M9QwtXYJzezeA7kZCSv7rWns80aYbQrZHdH1uEXQSK5P2YTj4NOgMocSV7Ic80v6Tj
+ 6isjFAtJ4t/ww==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=rlQrDa+a
-Subject: [Buildroot] [PATCH] package/python-fastapi: bump to 0.119.1
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
+ header.a=rsa-sha256 header.s=bubu header.b=fim6utQ8
+Subject: [Buildroot] [PATCH] package/python-uvicorn: bump to 0.38.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,42 +83,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changes: https://github.com/fastapi/fastapi/releases/tag/0.119.1
+Officially supports python 3.14 now:
+https://uvicorn.dev/release-notes/#0380-october-18-2025
+
+LICENSE.md file changed due revert of copyright holder name:
+https://github.com/Kludex/uvicorn/commit/ce79f95d065c053b36449f67b3b2cefee5ecf167
+
+Both uvicorn and starlette are currently undergoing some discussions
+around the copyright holder (but not the license):
+https://github.com/Kludex/starlette/issues/3042
+
+The LICENSE.md file will very likely be updated again soon.
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 ---
- package/python-fastapi/python-fastapi.hash | 4 ++--
- package/python-fastapi/python-fastapi.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-uvicorn/python-uvicorn.hash | 6 +++---
+ package/python-uvicorn/python-uvicorn.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-fastapi/python-fastapi.hash b/package/python-fastapi/python-fastapi.hash
-index c4bbaccc33..34bfe22c87 100644
---- a/package/python-fastapi/python-fastapi.hash
-+++ b/package/python-fastapi/python-fastapi.hash
+diff --git a/package/python-uvicorn/python-uvicorn.hash b/package/python-uvicorn/python-uvicorn.hash
+index 0200c61321..dd8c2bbabe 100644
+--- a/package/python-uvicorn/python-uvicorn.hash
++++ b/package/python-uvicorn/python-uvicorn.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/fastapi/json
--md5  8fcc33a9c143b2e7462064825e190ed7  fastapi-0.119.0.tar.gz
--sha256  451082403a2c1f0b99c6bd57c09110ed5463856804c8078d38e5a1f1035dbbb7  fastapi-0.119.0.tar.gz
-+md5  5d539db8065d3579430ed00577e8a86b  fastapi-0.119.1.tar.gz
-+sha256  a5e3426edce3fe221af4e1992c6d79011b247e3b03cc57999d697fe76cbf8ae0  fastapi-0.119.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/uvicorn/json
+-md5  21c0c2aa9aa90950e4bdda1ab365f0b9  uvicorn-0.37.0.tar.gz
+-sha256  4115c8add6d3fd536c8ee77f0e14a7fd2ebba939fed9b02583a97f80648f9e13  uvicorn-0.37.0.tar.gz
++md5  ee4fbbe43a1e58e6624adb2763161bee  uvicorn-0.38.0.tar.gz
++sha256  fd97093bdd120a2609fc0d3afe931d4d4ad688b6e75f0f929fde1bc36fe0e91d  uvicorn-0.38.0.tar.gz
  # Locally computed sha256 checksums
- sha256  4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e  LICENSE
-diff --git a/package/python-fastapi/python-fastapi.mk b/package/python-fastapi/python-fastapi.mk
-index a0d6412339..4a067494a7 100644
---- a/package/python-fastapi/python-fastapi.mk
-+++ b/package/python-fastapi/python-fastapi.mk
+-sha256  6e40f231fbf861db5bb27f728c47340c69eea8bb864f624f49df892fa02adfaf  LICENSE.md
++sha256  efe1acf3e62fb99c288b0ec73e5a773b7268ef4320fe757ea994214e4b63c371  LICENSE.md
+diff --git a/package/python-uvicorn/python-uvicorn.mk b/package/python-uvicorn/python-uvicorn.mk
+index dfb80cafae..ba27cd8052 100644
+--- a/package/python-uvicorn/python-uvicorn.mk
++++ b/package/python-uvicorn/python-uvicorn.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FASTAPI_VERSION = 0.119.0
-+PYTHON_FASTAPI_VERSION = 0.119.1
- PYTHON_FASTAPI_SOURCE = fastapi-$(PYTHON_FASTAPI_VERSION).tar.gz
--PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/0a/f9/5c5bcce82a7997cc0eb8c47b7800f862f6b56adc40486ed246e5010d443b
-+PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/a6/f4/152127681182e6413e7a89684c434e19e7414ed7ac0c632999c3c6980640
- PYTHON_FASTAPI_SETUP_TYPE = pep517
- PYTHON_FASTAPI_LICENSE = MIT
- PYTHON_FASTAPI_LICENSE_FILES = LICENSE
+-PYTHON_UVICORN_VERSION = 0.37.0
++PYTHON_UVICORN_VERSION = 0.38.0
+ PYTHON_UVICORN_SOURCE = uvicorn-$(PYTHON_UVICORN_VERSION).tar.gz
+-PYTHON_UVICORN_SITE = https://files.pythonhosted.org/packages/71/57/1616c8274c3442d802621abf5deb230771c7a0fec9414cb6763900eb3868
++PYTHON_UVICORN_SITE = https://files.pythonhosted.org/packages/cb/ce/f06b84e2697fef4688ca63bdb2fdf113ca0a3be33f94488f2cadb690b0cf
+ PYTHON_UVICORN_SETUP_TYPE = hatch
+ PYTHON_UVICORN_LICENSE = BSD-3-Clause
+ PYTHON_UVICORN_LICENSE_FILES = LICENSE.md
 -- 
 2.51.1.dirty
 
