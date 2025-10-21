@@ -1,69 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC281CCD1AA
-	for <buildroot@archiver.kernel.org>; Tue, 21 Oct 2025 12:05:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAFB5CCD184
+	for <buildroot@archiver.kernel.org>; Tue, 21 Oct 2025 12:07:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5893B60A7C;
-	Tue, 21 Oct 2025 12:05:59 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id taIWfNEi6Iap; Tue, 21 Oct 2025 12:05:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AA9B606D9
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4AA9B606D9;
-	Tue, 21 Oct 2025 12:05:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2333870A
- for <buildroot@buildroot.org>; Tue, 21 Oct 2025 12:05:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 14DFD40464
- for <buildroot@buildroot.org>; Tue, 21 Oct 2025 12:05:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6E413402E9;
+	Tue, 21 Oct 2025 12:07:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h4VW0gihJtCj for <buildroot@buildroot.org>;
- Tue, 21 Oct 2025 12:05:49 +0000 (UTC)
+ id mNG6k4N-19kx; Tue, 21 Oct 2025 12:07:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77A68402EC
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 77A68402EC;
+	Tue, 21 Oct 2025 12:07:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 975A543F
+ for <buildroot@buildroot.org>; Tue, 21 Oct 2025 12:07:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E7026069E
+ for <buildroot@buildroot.org>; Tue, 21 Oct 2025 12:07:44 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zH9yh0jpP3g6 for <buildroot@buildroot.org>;
+ Tue, 21 Oct 2025 12:07:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
  helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CBF7140367
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBF7140367
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 63A3E6068D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63A3E6068D
 Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CBF7140367
- for <buildroot@buildroot.org>; Tue, 21 Oct 2025 12:05:48 +0000 (UTC)
-Received: from framework-OT.fritz.box (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 63A3E6068D
+ for <buildroot@buildroot.org>; Tue, 21 Oct 2025 12:07:43 +0000 (UTC)
+Received: from [192.168.178.91] (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
  key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
  (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id A00CF2C84551;
- Tue, 21 Oct 2025 14:05:46 +0200 (CEST)
-To: buildroot@buildroot.org
-Date: Tue, 21 Oct 2025 14:05:47 +0200
-Message-ID: <20251021120548.1534100-1-buildroot@bubu1.eu>
-X-Mailer: git-send-email 2.51.1.dirty
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 347D52C84551;
+ Tue, 21 Oct 2025 14:07:41 +0200 (CEST)
+Message-ID: <932c78f7-947b-480a-84a3-41a87dda3fd8@bubu1.eu>
+Date: Tue, 21 Oct 2025 14:07:42 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20251021093500.744569-1-buildroot@bubu1.eu>
+ <20251021121609.2a9d08be@windsurf>
+ <4b8956d4-d402-46d6-a20b-0c380b032598@bubu1.eu>
+ <20251021134103.6f1e6693@windsurf>
+Content-Language: en-US
+In-Reply-To: <20251021134103.6f1e6693@windsurf>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=bubu1.eu; s=bubu; 
- t=1761048346; bh=PeTqTDebwQROIJkPk1bEEau1NhIGiRjMJyEUNx9ltAM=;
- h=From:To:Cc:Subject:Date;
- b=c3YmMVIa6fAm8yeCzZcO8wVsZW6pF8zIbcvBwqavsw0OIVot4sHbnp7ZkJjNs/6/x
- CJUvk8285p49W/EXeIfQtqFz4R8LtWHJtrzip81PHAv/RxI07Z5oQc5XLagSfCbAWh
- rTvzYza5maYSlomvBP9SH865G8+OpeKRVhkNI89jT1YMa+QJ2Rn0VJdy7w55+p8VWE
- u3MJslqGjA4krzVlnP0vrw8fmsmHBIkf48T9fNi0pSU9W3ws7P0LnQg/KeEFl67//8
- PJd3W+f/4N7MRIw3YSbVeEJuAOmWYChgQjylnu2ZmM+tzyGI8OSUvzRX4+9I2feNeD
- ZiHzxxi965A0A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ t=1761048461; bh=amK9kYPEewOwEg7yw8jyByy+0pzN3deF0pTD9tKneSE=;
+ h=Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=oeEf8JgGl2cKuA2W8RswJnAniJR7xufizn+v3h4k8ztfOkznnGlAWQPLL0t/CDFI7
+ RCzBpgC67Nb2B4YA6IjhXrdmGKxX64p7lakutHS/BQPbtTeC71iPxA3FGlKBwINehV
+ oro5vKkqqmqdXNLD0VkOxxTE9KnK6F4adef3h6nMykUEQ7xTnDpJE4Gxg1XTdzlGxa
+ J6HTI3AEFQTTNyc1aGPicZv/86dGXA45haFvNWoVokJcEoH3RWRWqtP+rSI8hOeIFl
+ MSnnFeKhcuqSC9LeB6SfV7hIGb63NhhI94acYq9JXymozkSwFD4hjjyctEOEopSWnA
+ LSpde7IXvRoSw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
- header.a=rsa-sha256 header.s=bubu header.b=c3YmMVIa
-Subject: [Buildroot] [PATCH v5] package/python-diskcache: new package
+ header.a=rsa-sha256 header.s=bubu header.b=oeEf8JgG
+Subject: Re: [Buildroot] [PATCH v2] package/python-diskcache: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,175 +83,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
 Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Marcus Hoffmann <bubu@bubu1.eu>
-Content-Type: text/plain; charset="us-ascii"
+Cc: James Hilliard <james.hilliard1@gmail.com>, Marcus Hoffmann <bubu@bubu1.eu>,
+ buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The package imports itself in setup.py to get the package-name and
-version number. Dping this during the buildroot build would require
-buisling host-python with sqlite support, which we are currently not set
-up for. It also seems wasteful for just extracting the version number
-and package name, so instead we replace the import by using a hardcoded
-package-name and the version number stored in buildroot.
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
----
-Changes:
-v2: remove accidentally commited .swp file
-v3: fix python-diskcache.mk lint errors
-v4: Rebase on current master
-v5: split sed line, expand commit message on why we need to edit the
-    setup.py
 
----
- DEVELOPERS                                    |  3 +++
- package/Config.in                             |  1 +
- package/python-diskcache/Config.in            |  8 +++++++
- .../python-diskcache/python-diskcache.hash    |  5 ++++
- package/python-diskcache/python-diskcache.mk  | 23 +++++++++++++++++++
- .../tests/package/sample_python_diskcache.py  |  9 ++++++++
- .../tests/package/test_python_diskcache.py    | 12 ++++++++++
- 7 files changed, 61 insertions(+)
- create mode 100644 package/python-diskcache/Config.in
- create mode 100644 package/python-diskcache/python-diskcache.hash
- create mode 100644 package/python-diskcache/python-diskcache.mk
- create mode 100644 support/testing/tests/package/sample_python_diskcache.py
- create mode 100644 support/testing/tests/package/test_python_diskcache.py
+On 10/21/25 13:41, Thomas Petazzoni wrote:
+> On Tue, 21 Oct 2025 13:31:14 +0200
+> Marcus Hoffmann <buildroot@bubu1.eu> wrote:
+> 
+>> This was, unfortunately, a very common pattern in setup.py builds but
+>> it's going away with projects switching to declarative build definitions
+>> via pyproject.toml. (Which diskcache hasn't done yet, but I assume will
+>> do eventually, maintenance is a bit slow currently). setup.py is just a
+>> python script and python allows importing modules from $CWD, even if
+>> they are not installed. That's how that works in general.
+>>
+>> Now I was confused why past me claimed that the same doesn't work inside
+>> the buildroot build and the reason for that is that host-python3 doesn't
+>> build with sqlite support, so the diskcache import (at build-time) fails.
+>>
+>> Perhaps a less hacky, but also more wasteful, approach to solving this
+>> is enforcing host-python sqlite support is built when diskcache is
+>> selected. I just tested that and it works, unsure what approach to chose
+>> now. WDYT?
+> 
+> Sounds "meh" to me, because important diskcache during the build is
+> actually... useless, it's just used to retrieve the version number,
+> which certainly could be done another way. Having to build host-sqlite,
+> and sqlite support in host-python just for the sake of doing this seems
+> really wasteful, and is generally not a approach that would work well:
+> imagine something more complex than diskcache, that has more
+> dependencies. It means we would have not only to package these
+> dependencies for the target, but also for the host, just for the sake
+> of being able to retrieve <foo>.version? Seems not very efficient to me.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 66199a5b72..15266b4583 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2272,6 +2272,7 @@ F:	package/pico-sdk/
- F:	package/picotool/
- F:	package/python-apscheduler/
- F:	package/python-crc/
-+F:	package/python-diskcache/
- F:	package/python-django/
- F:	package/python-immutabledict/
- F:	package/python-jc/
-@@ -2287,6 +2288,7 @@ F:	package/python-waitress/
- F:	package/python-whitenoise/
- F:	support/testing/tests/package/test_python_apscheduler.py
- F:	support/testing/tests/package/test_python_crc.py
-+F:	support/testing/tests/package/test_python_diskcache.py
- F:	support/testing/tests/package/test_python_django.py
- F:	support/testing/tests/package/test_python_fastapi.py
- F:	support/testing/tests/package/test_python_pydantic.py
-@@ -2298,6 +2300,7 @@ F:	support/testing/tests/package/test_python_waitress.py
- F:	support/testing/tests/package/test_python_whitenoise.py
- F:	support/testing/tests/package/sample_python_apscheduler.py
- F:	support/testing/tests/package/sample_python_crc.py
-+F:	support/testing/tests/package/sample_python_diskcache.py
- F:	support/testing/tests/package/sample_python_django.py
- F:	support/testing/tests/package/sample_python_fastapi.py
- F:	support/testing/tests/package/sample_python_pydantic.py
-diff --git a/package/Config.in b/package/Config.in
-index 161d61728b..d8d5007186 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1089,6 +1089,7 @@ menu "External python modules"
- 	source "package/python-dictdiffer/Config.in"
- 	source "package/python-dicttoxml/Config.in"
- 	source "package/python-dicttoxml2/Config.in"
-+	source "package/python-diskcache/Config.in"
- 	source "package/python-distro/Config.in"
- 	source "package/python-django/Config.in"
- 	source "package/python-django-enumfields/Config.in"
-diff --git a/package/python-diskcache/Config.in b/package/python-diskcache/Config.in
-new file mode 100644
-index 0000000000..4bf6c57406
---- /dev/null
-+++ b/package/python-diskcache/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_DISKCACHE
-+	bool "python-diskcache"
-+	select BR2_PACKAGE_PYTHON3_SQLITE # runtime
-+	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
-+	help
-+	  Disk Cache -- Disk and file backed persistent cache.
-+
-+	  http://www.grantjenks.com/docs/diskcache/
-diff --git a/package/python-diskcache/python-diskcache.hash b/package/python-diskcache/python-diskcache.hash
-new file mode 100644
-index 0000000000..4befb40a4e
---- /dev/null
-+++ b/package/python-diskcache/python-diskcache.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/diskcache/json
-+md5  d92b4afa944bb70ed38c84a622f7abb5  diskcache-5.6.3.tar.gz
-+sha256  2c3a3fa2743d8535d832ec61c2054a1641f41775aa7c556758a109941e33e4fc  diskcache-5.6.3.tar.gz
-+# Locally computed sha256 checksums
-+sha256  583546baa3fd93607d845126570677a401f508e228b5044fefbc3949af179672  LICENSE
-diff --git a/package/python-diskcache/python-diskcache.mk b/package/python-diskcache/python-diskcache.mk
-new file mode 100644
-index 0000000000..930c70ba07
---- /dev/null
-+++ b/package/python-diskcache/python-diskcache.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# python-diskcache
-+#
-+################################################################################
-+
-+PYTHON_DISKCACHE_VERSION = 5.6.3
-+PYTHON_DISKCACHE_SOURCE = diskcache-$(PYTHON_DISKCACHE_VERSION).tar.gz
-+PYTHON_DISKCACHE_SITE = https://files.pythonhosted.org/packages/3f/21/1c1ffc1a039ddcc459db43cc108658f32c57d271d7289a2794e401d0fdb6
-+PYTHON_DISKCACHE_SETUP_TYPE = setuptools
-+PYTHON_DISKCACHE_LICENSE = Apache-2.0
-+PYTHON_DISKCACHE_LICENSE_FILES = LICENSE
-+
-+define PYTHON_DISKCACHE_REMOVE_SELF_IMPORT
-+	sed -i -e '/import diskcache/d' \
-+			-e 's/diskcache.__title__/"diskcache"/' \
-+			-e 's/diskcache.__version__/"$(PYTHON_DISKCACHE_VERSION)"/' \
-+			$(@D)/setup.py
-+endef
-+
-+PYTHON_DISKCACHE_POST_PATCH_HOOKS += PYTHON_DISKCACHE_REMOVE_SELF_IMPORT
-+
-+$(eval $(python-package))
-diff --git a/support/testing/tests/package/sample_python_diskcache.py b/support/testing/tests/package/sample_python_diskcache.py
-new file mode 100644
-index 0000000000..8ba34daf6e
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_diskcache.py
-@@ -0,0 +1,9 @@
-+from diskcache import Cache
-+
-+cache = Cache()
-+
-+cache['test'] = 123
-+assert cache['test'] == 123
-+del cache['test']
-+assert 'test' not in cache
-+cache.close()
-diff --git a/support/testing/tests/package/test_python_diskcache.py b/support/testing/tests/package/test_python_diskcache.py
-new file mode 100644
-index 0000000000..d8618c1681
---- /dev/null
-+++ b/support/testing/tests/package/test_python_diskcache.py
-@@ -0,0 +1,12 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy3DiskCache(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_DISKCACHE=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_diskcache.py"]
-+    timeout = 10
--- 
-2.51.1.dirty
+Alright, I sent a new version that keeps the current approach and just 
+explains why we do that in a bit more detail.
+Like I said, I expect the package to switch to not using setup.py 
+eventually as well, which makes this problem go away then.
 
+> 
+> Thomas
+
+Marcus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
