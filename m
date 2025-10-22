@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C774ACCD1AB
-	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:37:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97348CCD1AB
+	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:37:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9DADB613D4;
-	Wed, 22 Oct 2025 16:37:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6BA1F613C2;
+	Wed, 22 Oct 2025 16:37:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TdtGcxDYkjsL; Wed, 22 Oct 2025 16:37:01 +0000 (UTC)
+ id gB8EL6sxjCSS; Wed, 22 Oct 2025 16:37:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D48A61395
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 811806125B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8D48A61395;
-	Wed, 22 Oct 2025 16:37:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 811806125B;
+	Wed, 22 Oct 2025 16:37:04 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1AA1FDE
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:50 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 624F343F
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 99C8C4115A
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0E33441014
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VQ1LYTkETPUF for <buildroot@buildroot.org>;
- Wed, 22 Oct 2025 16:36:36 +0000 (UTC)
+ id JpDrwAzSqwzx for <buildroot@buildroot.org>;
+ Wed, 22 Oct 2025 16:36:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12B8B4118F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C78D04114D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 12B8B4118F
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C78D04114D
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 10B7987722; Wed, 22 Oct 2025 16:36:35 +0000 (UTC)
+ id C58C087722; Wed, 22 Oct 2025 16:36:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 22 Oct 2025 18:35:52 +0200
+Date: Wed, 22 Oct 2025 18:35:43 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 8b2b392f9d2d681244596ed540fc6389b608df93
-X-Git-Newrev: 00f3ab0c75255150827ee1dba1ad9fd5f40b24c0
+X-Git-Oldrev: eb8e5161f9c399f78d830e8239069f97977c1388
+X-Git-Newrev: de8924dc6c5ececb7ca356abe086945393280a98
 X-Patchwork-Hint: ignore
-Message-Id: <20251022163635.10B7987722@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/micropython: use
- append-assignment in conditional code
+Message-Id: <20251022163634.C58C087722@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/selinux-python:
+ install modules to site-packages dir
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,47 +66,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00f3ab0c75255150827ee1dba1ad9fd5f40b24c0
+commit: https://git.buildroot.net/buildroot/commit/?id=de8924dc6c5ececb7ca356abe086945393280a98
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Since its inception in 9646e80fca28 (micropython: new package), the
-ppc-specific CFLAGS are simply assigned, and since 9fd9f4e6752f
-(package/micropython: define MICROPY_NLR_SETJMP for xtensa), the same
-goes for the xtensa CFLAGS.
+/usr/lib/python$(PYTHON3_VERSION_MAJOR) is for the standard library,
+additional modules like this should go to site-packages.
 
-Although they are mutually exclusive (different archs) and that there is
-no prior assignment, the customs are to use append assignment in
-conditional blocks, to avoid accidentally overwriting a valure set
-previously.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Chris Packham <judge.packham@gmail.com>
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit be4fb117bc7dc078c2097fe0eae6bbbfab0c465b)
+(cherry picked from commit 43b8f57afdc145eadf114eb089c9c6aa1162cdb9)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/micropython/micropython.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/selinux-python/selinux-python.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
-index e1e1f88d51..826247069e 100644
---- a/package/micropython/micropython.mk
-+++ b/package/micropython/micropython.mk
-@@ -21,12 +21,12 @@ MICROPYTHON_IGNORE_CVES += CVE-2024-8947
- # Use fallback implementation for exception handling on architectures that don't
- # have explicit support.
- ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb),)
--MICROPYTHON_CFLAGS = -DMICROPY_GCREGS_SETJMP=1
-+MICROPYTHON_CFLAGS += -DMICROPY_GCREGS_SETJMP=1
- endif
+diff --git a/package/selinux-python/selinux-python.mk b/package/selinux-python/selinux-python.mk
+index 3ea461b37e..d29e21cc9b 100644
+--- a/package/selinux-python/selinux-python.mk
++++ b/package/selinux-python/selinux-python.mk
+@@ -14,7 +14,7 @@ SELINUX_PYTHON_MAKE_OPTS += \
+ 	$(TARGET_CONFIGURE_OPTS) \
+ 	ARCH="$(BR2_ARCH)" \
+ 	LIBDIR="$(STAGING_DIR)/usr/lib" \
+-	PYTHONLIBDIR="usr/lib/python$(PYTHON3_VERSION_MAJOR)"
++	PYTHONLIBDIR="usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages"
  
- # xtensa has problems with nlr_push, use setjmp based implementation instead
- ifeq ($(BR2_xtensa),y)
--MICROPYTHON_CFLAGS = -DMICROPY_NLR_SETJMP=1
-+MICROPYTHON_CFLAGS += -DMICROPY_NLR_SETJMP=1
- endif
- 
- # https://github.com/micropython/micropython/issues/14115
+ ifeq ($(BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW),y)
+ SELINUX_PYTHON_DEPENDENCIES += checkpolicy
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
