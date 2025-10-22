@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EE39CCF9E1
-	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:37:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C5F3CCD1BB
+	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:37:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B2D8A40F9C;
-	Wed, 22 Oct 2025 16:37:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 70BC340B59;
+	Wed, 22 Oct 2025 16:37:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jajjwQRQOuy8; Wed, 22 Oct 2025 16:37:17 +0000 (UTC)
+ id xrYxjBeRhhES; Wed, 22 Oct 2025 16:37:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8F2D40E00
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3CC940E7F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B8F2D40E00;
-	Wed, 22 Oct 2025 16:36:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1C6CF43F
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D3CC940E7F;
+	Wed, 22 Oct 2025 16:36:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id AACD143F
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5547183F6F
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6DAF24111C
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9y0DPy9kmQEu for <buildroot@buildroot.org>;
- Wed, 22 Oct 2025 16:36:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZQudxY5-ZbQv for <buildroot@buildroot.org>;
+ Wed, 22 Oct 2025 16:36:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 23F7083F31
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7865F40F99
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 23F7083F31
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7865F40F99
  for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0C80A866C6; Wed, 22 Oct 2025 16:36:34 +0000 (UTC)
+ id 75EB9866C6; Wed, 22 Oct 2025 16:36:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 16 Oct 2025 09:54:38 +0200
+Date: Wed, 22 Oct 2025 18:35:33 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 0bb49547c347ecd0181cdb1ee5de9b591cb9d5c7
-X-Git-Newrev: b3a9d0f3e15564401bb35aef80444df26012cd26
+X-Git-Oldrev: d0dac818c50e4fa0f0ab123dbd1719d751d35e73
+X-Git-Newrev: 875b7a90e70a3c2210ff7f4f2ae202ac008d40ba
 X-Patchwork-Hint: ignore
-Message-Id: <20251022163634.0C80A866C6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/erlang: security
- bump to v26.2.5.15
+Message-Id: <20251022163634.75EB9866C6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/zip: add patch
+ for CVE-2018-13410
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,236 +58,122 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1460979609164662143=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1460979609164662143==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=b3a9d0f3e15564401bb35aef80444df26012cd26
+commit: https://git.buildroot.net/buildroot/commit/?id=875b7a90e70a3c2210ff7f4f2ae202ac008d40ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-See the release notes on
-https://github.com/erlang/otp/releases?q=OTP-26.&expanded=true
+Fixes the following vulnerability:
 
-Also, remove patch that is now applied upstream
+- CVE-2018-13410
 
-This fixes the following vulnerabilities:
-- CVE-2024-53846:
-    OTP is a set of Erlang libraries, which consists of the Erlang runtime
-    system, a number of ready-to-use components mainly written in Erlang,
-    and a set of design principles for Erlang programs. A regression was
-    introduced into the ssl application of OTP starting at OTP-25.3.2.8,
-    OTP-26.2, and OTP-27.0, resulting in a server or client verifying the
-    peer when incorrect extended key usage is presented (i.e., a server
-    will verify a client if they have server auth ext key usage and vice
-    versa).
-    https://www.cve.org/CVERecord?id=CVE-2024-53846
+    Info-ZIP Zip 3.0, when the -T and -TT command-line options are used,
+    allows attackers to cause a denial of service (invalid free and
+    application crash) or possibly have unspecified other impact because
+    of an off-by-one error. NOTE: it is unclear whether there are
+    realistic scenarios in which an untrusted party controls the -TT
+    value, given that the entire purpose of -TT is execution of
+    arbitrary commands
 
-- CVE-2025-4748:
-    Improper Limitation of a Pathname to a Restricted Directory ('Path
-    Traversal') vulnerability in Erlang OTP (stdlib modules) allows
-    Absolute Path Traversal, File Manipulation. This vulnerability is
-    associated with program files lib/stdlib/src/zip.erl and program
-    routines zip:unzip/1, zip:unzip/2, zip:extract/1, zip:extract/2 unless
-    the memory option is passed.  This issue affects OTP from OTP 17.0
-    until OTP 28.0.1, OTP 27.3.4.1 and OTP 26.2.5.13, corresponding to
-    stdlib from 2.0 until 7.0.1, 6.2.2.1 and 5.2.3.4.
-    https://www.cve.org/CVERecord?id=CVE-2025-4748
+For more information, see:
+  - https://nvd.nist.gov//vuln/detail/CVE-2018-13410
 
-- CVE-2025-26618:
-    Erlang is a programming language and runtime system for building
-    massively scalable soft real-time systems with requirements on high
-    availability. OTP is a set of Erlang libraries, which consists of the
-    Erlang runtime system, a number of ready-to-use components mainly
-    written in Erlang. Packet size is not verified properly for SFTP
-    packets. As a result when multiple SSH packets (conforming to max SSH
-    packet size) are received by ssh, they might be combined into an SFTP
-    packet which will exceed the max allowed packet size and potentially
-    cause large amount of memory to be allocated. Note that situation
-    described above can only happen for successfully authenticated users
-    after completing the SSH handshake. This issue has been patched in OTP
-    versions 27.2.4, 26.2.5.9, and 25.3.2.18. There are no known
-    workarounds for this vulnerability.
-    https://www.cve.org/CVERecord?id=CVE-2025-26618
+This patch also includes the patch 0009 which address a buffer overflow
+when passing unicode characters that doesn't have a CVE assigned.
 
-- CVE-2025-30211:
-    Erlang/OTP is a set of libraries for the Erlang programming language.
-    Prior to versions OTP-27.3.1, 26.2.5.10, and 25.3.2.19, a maliciously
-    formed KEX init message can result with high memory usage.
-    Implementation does not verify RFC specified limits on algorithm names
-    (64 characters) provided in KEX init message. Big KEX init packet may
-    lead to inefficient processing of the error data. As a result, large
-    amount of memory will be allocated for processing malicious data.
-    Versions OTP-27.3.1, OTP-26.2.5.10, and OTP-25.3.2.19 fix the issue.
-    Some workarounds are available. One may set option `parallel_login` to
-    `false` and/or reduce the `max_sessions` option.
-    https://www.cve.org/CVERecord?id=CVE-2025-30211
+Tested with `./support/testing/run-tests -d dl -o output_folder -k tests.package.test_zip`
 
-- CVE-2025-32433:
-    Erlang/OTP is a set of libraries for the Erlang programming language.
-    Prior to versions OTP-27.3.3, OTP-26.2.5.11, and OTP-25.3.2.20, a SSH
-    server may allow an attacker to perform unauthenticated remote code
-    execution (RCE). By exploiting a flaw in SSH protocol message
-    handling, a malicious actor could gain unauthorized access to affected
-    systems and execute arbitrary commands without valid credentials. This
-    issue is patched in versions OTP-27.3.3, OTP-26.2.5.11, and
-    OTP-25.3.2.20. A temporary workaround involves disabling the SSH
-    server or to prevent access via firewall rules.
-    https://www.cve.org/CVERecord?id=CVE-2025-32433
-
-- CVE-2025-46712:
-    Erlang/OTP is a set of libraries for the Erlang programming language.
-    In versions prior to OTP-27.3.4 (for OTP-27), OTP-26.2.5.12 (for
-    OTP-26), and OTP-25.3.2.21 (for OTP-25), Erlang/OTP SSH fails to
-    enforce strict KEX handshake hardening measures by allowing optional
-    messages to be exchanged. This allows a Man-in-the-Middle attacker to
-    inject these messages in a connection during the handshake. This issue
-    has been patched in versions OTP-27.3.4 (for OTP-27), OTP-26.2.5.12
-    (for OTP-26), and OTP-25.3.2.21 (for OTP-25).
-    https://www.cve.org/CVERecord?id=CVE-2025-46712
-
-- CVE-2025-48038:
-    Allocation of Resources Without Limits or Throttling vulnerability in
-    Erlang OTP ssh (ssh_sftp modules) allows Excessive Allocation,
-    Resource Leak Exposure. This vulnerability is associated with program
-    files lib/ssh/src/ssh_sftpd.erl.  This issue affects OTP form OTP 17.0
-    until OTP 28.0.3, OTP 27.3.4.3 and 26.2.5.15 corresponding to ssh from
-    3.0.1 until 5.3.3, 5.2.11.3 and 5.1.4.12.
-    https://www.cve.org/CVERecord?id=CVE-2025-48038
-
-- CVE-2025-48039:
-    Allocation of Resources Without Limits or Throttling vulnerability in
-    Erlang OTP ssh (ssh_sftp modules) allows Excessive Allocation,
-    Resource Leak Exposure. This vulnerability is associated with program
-    files lib/ssh/src/ssh_sftpd.erl.  This issue affects OTP form OTP 17.0
-    until OTP 28.0.3, OTP 27.3.4.3 and 26.2.5.15 corresponding to ssh from
-    3.0.1 until 5.3.3, 5.2.11.3 and 5.1.4.12.
-    https://www.cve.org/CVERecord?id=CVE-2025-48039
-
-- CVE-2025-48040:
-    Uncontrolled Resource Consumption vulnerability in Erlang OTP ssh
-    (ssh_sftp modules) allows Excessive Allocation, Flooding. This
-    vulnerability is associated with program files
-    lib/ssh/src/ssh_sftpd.erl.  This issue affects OTP form OTP 17.0 until
-    OTP 28.0.3, OTP 27.3.4.3 and 26.2.5.15 corresponding to ssh from 3.0.1
-    until 5.3.3, 5.2.11.3 and 5.1.4.12.
-    https://www.cve.org/CVERecord?id=CVE-2025-48040
-
-- CVE-2025-48041:
-    Allocation of Resources Without Limits or Throttling vulnerability in
-    Erlang OTP ssh (ssh_sftp modules) allows Excessive Allocation,
-    Flooding. This vulnerability is associated with program files
-    lib/ssh/src/ssh_sftpd.erl.  This issue affects OTP form OTP 17.0 until
-    OTP 28.0.3, OTP 27.3.4.3 and 26.2.5.15 corresponding to ssh from 3.0.1
-    until 5.3.3, 5.2.11.3 and 5.1.4.12.
-    https://www.cve.org/CVERecord?id=CVE-2025-48041
-
-NB: Since Erlang is quite a "large" package, containing the language itself,
-some libraries, and some "applications", it's difficult to tell which CVEs
-are exactly affecting Buildroot, but it's a good idea to update anyway
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 88f7fed5f2ce041be72c6f1576120b4b3b434298)
+(cherry picked from commit 7cb0419b92f5f35ca830e8c60d8080dd17f1dfb5)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...c_src-openssl_config.h-fix-build-without-.patch | 46 ----------------------
- package/erlang/erlang.hash                         |  4 +-
- package/erlang/erlang.mk                           |  2 +-
- 3 files changed, 3 insertions(+), 49 deletions(-)
+ .../0009-buffer-overflow-unicode-filename.patch    | 23 ++++++++++++++++++++
+ .../zip/0010-buffer-overflow-cve-2018-13410.patch  | 25 ++++++++++++++++++++++
+ package/zip/zip.mk                                 |  3 +++
+ 3 files changed, 51 insertions(+)
 
-diff --git a/package/erlang/0001-lib-crypto-c_src-openssl_config.h-fix-build-without-.patch b/package/erlang/0001-lib-crypto-c_src-openssl_config.h-fix-build-without-.patch
-deleted file mode 100644
-index a17a43a95d..0000000000
---- a/package/erlang/0001-lib-crypto-c_src-openssl_config.h-fix-build-without-.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 8c7d62662cf51902d759be0e8d3bfd96a3524b3c Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 8 Dec 2023 09:00:17 +0100
--Subject: [PATCH] lib/crypto/c_src/openssl_config.h: fix build without DES
--
--Fix the following build failure without DES raised since version 24.2
--and
--https://github.com/erlang/otp/commit/abf7f84c2f77bb07dbdbb8a29b9d41f1f24c5f14:
--
--cipher.c:51:42: error: 'EVP_des_ede3_cbc' undeclared here (not in a function); did you mean 'SN_des_ede3_cbc'?
--   51 |     {{"des_ede3_cbc"}, "des-ede3-cbc", {&EVP_des_ede3_cbc}, 0, 0},
--      |                                          ^~~~~~~~~~~~~~~~
--      |                                          SN_des_ede3_cbc
--
--Fixes:
-- - http://autobuild.buildroot.org/results/1aace0ee738f8ec4aa2c9a739fc7535c3b6bf884
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/erlang/otp/pull/7937
-----
-- lib/crypto/c_src/openssl_config.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/lib/crypto/c_src/openssl_config.h b/lib/crypto/c_src/openssl_config.h
--index cb63f28369..f3904986c9 100644
----- a/lib/crypto/c_src/openssl_config.h
--+++ b/lib/crypto/c_src/openssl_config.h
--@@ -218,7 +218,6 @@
-- 
-- #ifndef OPENSSL_NO_DES
-- # define HAVE_DES
---#endif
-- 
-- #if OPENSSL_VERSION_NUMBER >= PACKED_OPENSSL_VERSION(0,9,7,'e')
-- # define HAVE_DES_ede3_cfb
--@@ -227,6 +226,7 @@
-- #if OPENSSL_VERSION_NUMBER >= PACKED_OPENSSL_VERSION(0,9,7,'e')
-- # define HAVE_DES_ede3_cbc
-- #endif
--+#endif
-- 
-- #ifndef OPENSSL_NO_DH
-- # define HAVE_DH
---- 
--2.42.0
--
-diff --git a/package/erlang/erlang.hash b/package/erlang/erlang.hash
-index 9fc5a6eabf..7ff587e35c 100644
---- a/package/erlang/erlang.hash
-+++ b/package/erlang/erlang.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/erlang/otp/releases/download/OTP-26.0.2/SHA256.txt
--sha256  47853ea9230643a0a31004433f07a71c1b92d6e0094534f629e3b75dbc62f193  otp_src_26.0.2.tar.gz
-+# From https://github.com/erlang/otp/releases/download/OTP-26.2.5.15/SHA256.txt
-+sha256  28e6d63d82927f132d56289dd3c428ef8bce6bf2283c8549aa0a7afca1a8fe3b  otp_src_26.2.5.15.tar.gz
+diff --git a/package/zip/0009-buffer-overflow-unicode-filename.patch b/package/zip/0009-buffer-overflow-unicode-filename.patch
+new file mode 100644
+index 0000000000..860b453735
+--- /dev/null
++++ b/package/zip/0009-buffer-overflow-unicode-filename.patch
+@@ -0,0 +1,23 @@
++From: Shengjing Zhu <shengjing.zhu@canonical.com>
++Subject: Fix buffer overflow when filename contains unicode characters
++Bug-Debian: https://bugs.debian.org/1077054
++Bug-Debian: https://bugs.debian.org/1093629
++Bug-Ubuntu: https://launchpad.net/bugs/2062535
++Forwarded: https://sourceforge.net/p/infozip/bugs/81/
++Origin: https://src.fedoraproject.org/rpms/zip/raw/f41/f/buffer_overflow.patch
++
++Upstream: https://sources.debian.org/src/zip/3.0-15/debian/patches/14-buffer-overflow-unicode-filename.patch
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++diff -Nura a/fileio.c b/fileio.c
++--- a/fileio.c
+++++ b/fileio.c
++@@ -3502,7 +3502,7 @@
++   if ((wc_string = (wchar_t *)malloc((wsize + 1) * sizeof(wchar_t))) == NULL) {
++     ZIPERR(ZE_MEM, "local_to_wide_string");
++   }
++-  wsize = mbstowcs(wc_string, local_string, strlen(local_string) + 1);
+++  wsize = mbstowcs(wc_string, local_string, wsize + 1);
++   wc_string[wsize] = (wchar_t) 0;
++ 
++   /* in case wchar_t is not zwchar */
+diff --git a/package/zip/0010-buffer-overflow-cve-2018-13410.patch b/package/zip/0010-buffer-overflow-cve-2018-13410.patch
+new file mode 100644
+index 0000000000..399ab37bc5
+--- /dev/null
++++ b/package/zip/0010-buffer-overflow-cve-2018-13410.patch
+@@ -0,0 +1,25 @@
++From: Florent 'Skia' Jacquet <florent.jacquet@canonical.com>
++Subject: Fix buffer overflow when using '-T -TT'
++Bug-Debian: https://bugs.debian.org/1093629
++Bug-Ubuntu: https://launchpad.net/bugs/2093024
++Forwarded: https://sourceforge.net/p/infozip/bugs/81/
++
++strlen(unzip_path) + strlen(zipname) + " " + "'" + "'" + '\0'
++The additional space required in the `cmd` buffer is 4, not 3.
++
++CVE: CVE-2018-13410
++Upstream: https://sources.debian.org/src/zip/3.0-15/debian/patches/15-buffer-overflow-cve-2018-13410.patch
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++diff -Nura a/zip.c b/zip.c
++--- a/zip.c
+++++ b/zip.c
++@@ -1437,7 +1437,7 @@
++     /* Replace first {} with archive name.  If no {} append name to string. */
++     here = strstr(unzip_path, "{}");
++ 
++-    if ((cmd = malloc(strlen(unzip_path) + strlen(zipname) + 3)) == NULL) {
+++    if ((cmd = malloc(strlen(unzip_path) + strlen(zipname) + 4)) == NULL) {
++       ziperr(ZE_MEM, "building command string for testing archive");
++     }
++ 
+diff --git a/package/zip/zip.mk b/package/zip/zip.mk
+index 0457ba9414..0a66c146bf 100644
+--- a/package/zip/zip.mk
++++ b/package/zip/zip.mk
+@@ -12,6 +12,9 @@ ZIP_LICENSE = Info-ZIP
+ ZIP_LICENSE_FILES = LICENSE
+ ZIP_CPE_ID_VENDOR = info-zip_project
  
- # Hash for license file
- sha256  809fa1ed21450f59827d1e9aec720bbc4b687434fa22283c6cb5dd82a47ab9c0  LICENSE.txt
-diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index f9956d4468..59353742f0 100644
---- a/package/erlang/erlang.mk
-+++ b/package/erlang/erlang.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ERLANG_VERSION = 26.0.2
-+ERLANG_VERSION = 26.2.5.15
- ERLANG_RELEASE = $(firstword $(subst ., ,$(ERLANG_VERSION)))
- ERLANG_SITE = \
- 	https://github.com/erlang/otp/releases/download/OTP-$(ERLANG_VERSION)
-
---===============1460979609164662143==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
++# 0010-buffer-overflow-cve-2018-13410.patch
++ZIP_IGNORE_CVES += CVE-2018-13410
++
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
+ ZIP_DEPENDENCIES += bzip2
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1460979609164662143==--
