@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8C37CCD1AB
-	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:43:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE3EDCCD1BB
+	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:43:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 92282614DF;
+	by smtp4.osuosl.org (Postfix) with ESMTP id A6DEC40D15;
+	Wed, 22 Oct 2025 16:43:27 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dPPh4EdjnJxT; Wed, 22 Oct 2025 16:43:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDC2B40ABF
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BDC2B40ABF;
 	Wed, 22 Oct 2025 16:43:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 808D943F
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:43:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 67468614E5
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:43:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N-NbJX4ZowfA; Wed, 22 Oct 2025 16:43:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF837614E9
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF837614E9;
-	Wed, 22 Oct 2025 16:43:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4330343F
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:43:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 29C9A83DD1
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:43:22 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VVIzZu-oRUsy for <buildroot@buildroot.org>;
- Wed, 22 Oct 2025 16:43:21 +0000 (UTC)
+ id aU3bGj1YKkv4 for <buildroot@buildroot.org>;
+ Wed, 22 Oct 2025 16:43:23 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2895483DB0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2895483DB0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1D066614DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D066614DE
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2895483DB0
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:43:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1D066614DE
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:43:23 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id CD79FB97918D; Wed, 22 Oct 2025 18:43:18 +0200 (CEST)
-To: Baruch Siach <baruch@tkos.co.il>
+ with ESMTPSA id 1B9D0B979192; Wed, 22 Oct 2025 18:43:21 +0200 (CEST)
+To: Thomas Perale <thomas.perale@mind.be>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Wed, 22 Oct 2025 18:43:18 +0200
-Message-ID: <20251022164318.286387-1-arnout@rnout.be>
+Date: Wed, 22 Oct 2025 18:43:19 +0200
+Message-ID: <20251022164319.286436-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <d1296ef3586d2a3df9e52f36d7e1ce41ac33a2c9.1759990432.git.baruch@tkos.co.il>
-References: <d1296ef3586d2a3df9e52f36d7e1ce41ac33a2c9.1759990432.git.baruch@tkos.co.il>
+In-Reply-To: <20251009191708.3411-1-thomas.perale@mind.be>
+References: <20251009191708.3411-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1761151398; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1761151401; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=RW+++ykzIwqeA6AAxxbbK7uXxX3J/rGCvY+Z5pmVqNU=;
- b=GQRCWrm48UR5cF+c2bNm8agniCbH48KUmWOqYieT2yEg7ICu59RVj/9CJQnDTM8Id0Pitk
- Rlam/ye+tCdy44ngF8BgUmvukNY1kxK1fwcBThbq+ZS8EgLiiBy0gR07kHhC1a5b6wdGwd
- j7FkB3zQE80eRzOy9XlOMWf2WaxPH0sHuE2baLM9P1wx8uxbni7bvEHoY/qHyv6qdfzG+G
- nrGOF0lCYmJoHeGAPfHI+XVGKVvowvPzHlYXWs2t/kCbigo+H3ZPbOsWs+F0KjyhGSP++x
- dgSq8HRmsMYi34XNFR73ciYit3FHDzGPQtIoYOczcrwrt5up90AQT87J7jzLsQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=6zM4dE2roSBfMzz6exDkMpmoPJ7KW/jSbW5ZCPHe0Yo=;
+ b=WSPt5eJST0nBFeXQPEhi/WZkV9vw/OAhqgoiDh+x7finZbVKDvr1N63nAb0uo1kTUeDl5e
+ KUSueg8nAurW7wWCYh5O+pP//inzMkybz2eL4dWoEjx97fJ5733vPPRmBuo7yvZvOTFIhA
+ U68igT9tXvZpcE7oJdWwXvBT1xOuzo/ioK6OalBqpDJLBPF5IJzwvN8KEid2zZ+8AEHfen
+ zf8P7f04MrYumgNNYgmkXal0fpYcLidVr/RQ0azXuNXQiqhsOkoq+XkRgMVDd3QJXiGD6d
+ SIjmQ/h122OxsqmDzszjlTt3nVnySjuTxAwAxfwGCtfJcg1d7bE9QA3LJH/HwA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=GQRCWrm4
-Subject: Re: [Buildroot] [PATCH] package/sexpect: bump to version 2.3.15
+ header.a=rsa-sha256 header.s=dkim header.b=WSPt5eJS
+Subject: Re: [Buildroot] [PATCH] package/squid: add patch for CVE-2025-59362
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,118 +84,101 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Drop upstream patch.
+> Fixes the following vulnerability:
 > 
-> Main change in this release is cmake 4 build fix.
+> - CVE-2025-59362
 > 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>     Squid through 7.1 mishandles ASN.1 encoding of long SNMP OIDs. This
+>     occurs in asn_build_objid in lib/snmplib/asn1.c.
+> 
+> For more information, see:
+> 
+> - https://nvd.nist.gov/vuln/detail/CVE-2025-59362
+> - https://github.com/squid-cache/squid/commit/250a18e0a80694b919972a1836cdfe20f2e1baa0
+> 
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x and 2025.08.x. Thanks
 
 > ---
->  ...1-Unconditionally-define-_GNU_SOURCE.patch | 69 -------------------
->  package/sexpect/sexpect.hash                  |  2 +-
->  package/sexpect/sexpect.mk                    |  2 +-
->  3 files changed, 2 insertions(+), 71 deletions(-)
->  delete mode 100644 package/sexpect/0001-Unconditionally-define-_GNU_SOURCE.patch
+>  ...Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch | 52 +++++++++++++++++++
+>  package/squid/squid.mk                        |  4 ++
+>  2 files changed, 56 insertions(+)
+>  create mode 100644 package/squid/0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch
 > 
-> diff --git a/package/sexpect/0001-Unconditionally-define-_GNU_SOURCE.patch b/package/sexpect/0001-Unconditionally-define-_GNU_SOURCE.patch
-> deleted file mode 100644
-> index bb8b60f0c0d9..000000000000
-> --- a/package/sexpect/0001-Unconditionally-define-_GNU_SOURCE.patch
-> +++ /dev/null
-> @@ -1,69 +0,0 @@
-> -From 7ef4ef027c5064502bba23869aed9d1595a4e301 Mon Sep 17 00:00:00 2001
-> -Message-ID: <7ef4ef027c5064502bba23869aed9d1595a4e301.1732873390.git.baruch@tkos.co.il>
-> -From: Baruch Siach <baruch@tkos.co.il>
-> -Date: Fri, 29 Nov 2024 11:36:16 +0200
-> -Subject: [PATCH] Unconditionally define _GNU_SOURCE
-> -
-> -uClibc also uses _GNU_SOURCE to expose glibc compatible API extensions.
-> -But toolchain built with uClibc don't define __gnu_linux__. This leads
-> -to implicit declaration warnings at build time. With GCC 14 these
-> -warnings become errors by default.
-> -
-> -For example:
-> -
-> -.../sexpect-2.3.14/server.c: In function 'expect_exact':
-> -.../sexpect-2.3.14/server.c:630:17: error: implicit declaration of function 'strcasestr'; did you mean 'strcasecmp'?
-> -  [-Wimplicit-function-declaration]
-> -  630 |         found = strcasestr(g.expbuf, g.conn.pass.pattern);
-> -      |                 ^~~~~~~~~~
-> -      |                 strcasecmp
-> -
-> -Define _GNU_SOURCE unconditionally to fix the build.
-> -
-> -Upstream: https://github.com/clarkwang/sexpect/pull/40
-> -Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ----
-> - main.c   | 2 --
-> - pty.c    | 2 --
-> - server.c | 2 --
-> - 3 files changed, 6 deletions(-)
-> -
-> -diff --git a/main.c b/main.c
-> -index 886050a887c1..2bc7c867e297 100644
-> ---- a/main.c
-> -+++ b/main.c
-> -@@ -1,7 +1,5 @@
-> - 
-> --#if defined(__gnu_linux__) || defined(__CYGWIN__)
-> - #define _GNU_SOURCE
-> --#endif
-> - 
-> - #include <fcntl.h>
-> - #include <limits.h>
-> -diff --git a/pty.c b/pty.c
-> -index bf4f6e99805e..f90325d87c77 100644
-> ---- a/pty.c
-> -+++ b/pty.c
-> -@@ -1,7 +1,5 @@
-> - 
-> --#if defined(__gnu_linux__) || defined(__CYGWIN__)
-> - #define _GNU_SOURCE
-> --#endif
-> - 
-> - #include <string.h>
-> - #include <stdio.h>
-> -diff --git a/server.c b/server.c
-> -index c7e41e0a7dc4..308852f08089 100644
-> ---- a/server.c
-> -+++ b/server.c
-> -@@ -1,7 +1,5 @@
-> - 
-> --#if defined(__gnu_linux__) || defined(__CYGWIN__)
-> - #define _GNU_SOURCE
-> --#endif
-> - 
-> - #include <assert.h>
-> - #include <fcntl.h>
-> --- 
-> -2.45.2
-> -
-> diff --git a/package/sexpect/sexpect.hash b/package/sexpect/sexpect.hash
-> index d5121176269e..ce1232de82fe 100644
-> --- a/package/sexpect/sexpect.hash
-> +++ b/package/sexpect/sexpect.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  f6801c8b979d56eec54aedd7ede06e2342f382cee291beea88b52869186c557c  sexpect-2.3.14.tar.gz
-> +sha256  44f5711aa99f3ccf9c4b0edfcd9a7d25fa64b442574624ce451713d1532c1a7e  sexpect-2.3.15.tar.gz
->  sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
-> diff --git a/package/sexpect/sexpect.mk b/package/sexpect/sexpect.mk
-> index 7b878600e41f..bbc84c1ca6ec 100644
-> --- a/package/sexpect/sexpect.mk
-> +++ b/package/sexpect/sexpect.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -SEXPECT_VERSION = 2.3.14
-> +SEXPECT_VERSION = 2.3.15
->  SEXPECT_SITE = $(call github,clarkwang,sexpect,v$(SEXPECT_VERSION))
->  SEXPECT_LICENSE = GPL-3.0
->  SEXPECT_LICENSE_FILES = LICENSE
+> diff --git a/package/squid/0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch b/package/squid/0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch
+> new file mode 100644
+> index 0000000000..695ba0255e
+> --- /dev/null
+> +++ b/package/squid/0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch
+> @@ -0,0 +1,52 @@
+> +From 0d89165ee6da10e6fa50c44998b3cd16d59400e9 Mon Sep 17 00:00:00 2001
+> +From: Alex Rousskov <rousskov@measurement-factory.com>
+> +Date: Sat, 30 Aug 2025 06:49:36 +0000
+> +Subject: [PATCH] Fix ASN.1 encoding of long SNMP OIDs (#2149)
+> +
+> +Upstream: https://github.com/squid-cache/squid/commit/250a18e0a80694b919972a1836cdfe20f2e1baa0
+> +CVE: CVE-2025-59362
+> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> +---
+> + lib/snmplib/asn1.c | 13 +++++++++++++
+> + 1 file changed, 13 insertions(+)
+> +
+> +diff --git a/lib/snmplib/asn1.c b/lib/snmplib/asn1.c
+> +index 81f2051fbe7..2852c26b220 100644
+> +--- a/lib/snmplib/asn1.c
+> ++++ b/lib/snmplib/asn1.c
+> +@@ -735,6 +735,7 @@ asn_build_objid(u_char * data, int *datalength,
+> +      * lastbyte ::= 0 7bitvalue
+> +      */
+> +     u_char buf[MAX_OID_LEN];
+> ++    u_char *bufEnd = buf + sizeof(buf);
+> +     u_char *bp = buf;
+> +     oid *op = objid;
+> +     int asnlength;
+> +@@ -753,6 +754,10 @@ asn_build_objid(u_char * data, int *datalength,
+> +     while (objidlength-- > 0) {
+> +         subid = *op++;
+> +         if (subid < 127) {  /* off by one? */
+> ++            if (bp >= bufEnd) {
+> ++                snmp_set_api_error(SNMPERR_ASN_ENCODE);
+> ++                return (NULL);
+> ++            }
+> +             *bp++ = subid;
+> +         } else {
+> +             mask = 0x7F;    /* handle subid == 0 case */
+> +@@ -770,8 +775,16 @@ asn_build_objid(u_char * data, int *datalength,
+> +                 /* fix a mask that got truncated above */
+> +                 if (mask == 0x1E00000)
+> +                     mask = 0xFE00000;
+> ++                if (bp >= bufEnd) {
+> ++                    snmp_set_api_error(SNMPERR_ASN_ENCODE);
+> ++                    return (NULL);
+> ++                }
+> +                 *bp++ = (u_char) (((subid & mask) >> bits) | ASN_BIT8);
+> +             }
+> ++            if (bp >= bufEnd) {
+> ++                snmp_set_api_error(SNMPERR_ASN_ENCODE);
+> ++                return (NULL);
+> ++            }
+> +             *bp++ = (u_char) (subid & mask);
+> +         }
+> +     }
+> diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+> index b021170d9b..d445f005b7 100644
+> --- a/package/squid/squid.mk
+> +++ b/package/squid/squid.mk
+> @@ -11,6 +11,10 @@ SQUID_LICENSE = GPL-2.0+
+>  SQUID_LICENSE_FILES = COPYING
+>  SQUID_CPE_ID_VENDOR = squid-cache
+>  SQUID_SELINUX_MODULES = apache squid
+> +
+> +# 0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch
+> +SQUID_IGNORE_CVES += CVE-2025-59362
+> +
+>  SQUID_DEPENDENCIES = libcap host-libcap libtool libxml2 host-pkgconf \
+>  	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
+>  SQUID_CONF_ENV = \
 > -- 
 > 2.51.0
 > 
