@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE3EDCCD1BB
-	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:43:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3DA3CCD1BB
+	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:43:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A6DEC40D15;
-	Wed, 22 Oct 2025 16:43:27 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dPPh4EdjnJxT; Wed, 22 Oct 2025 16:43:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDC2B40ABF
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BDC2B40ABF;
-	Wed, 22 Oct 2025 16:43:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 808D943F
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:43:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 67468614E5
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:43:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BFD04614FB;
+	Wed, 22 Oct 2025 16:43:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aU3bGj1YKkv4 for <buildroot@buildroot.org>;
- Wed, 22 Oct 2025 16:43:23 +0000 (UTC)
+ id tbYKSjsirIfI; Wed, 22 Oct 2025 16:43:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE78E614ED
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id CE78E614ED;
+	Wed, 22 Oct 2025 16:43:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id F3DE143F
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:43:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id DAC4540ABF
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:43:25 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v1rkNNjOY0tp for <buildroot@buildroot.org>;
+ Wed, 22 Oct 2025 16:43:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1D066614DE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D066614DE
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DDA0B40785
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DDA0B40785
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1D066614DE
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:43:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DDA0B40785
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:43:24 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 1B9D0B979192; Wed, 22 Oct 2025 18:43:21 +0200 (CEST)
+ with ESMTPSA id E8A53B979194; Wed, 22 Oct 2025 18:43:22 +0200 (CEST)
 To: Thomas Perale <thomas.perale@mind.be>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Wed, 22 Oct 2025 18:43:19 +0200
-Message-ID: <20251022164319.286436-1-arnout@rnout.be>
+Date: Wed, 22 Oct 2025 18:43:22 +0200
+Message-ID: <20251022164322.286485-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251009191708.3411-1-thomas.perale@mind.be>
-References: <20251009191708.3411-1-thomas.perale@mind.be>
+In-Reply-To: <20251009203425.126975-1-thomas.perale@mind.be>
+References: <20251009203425.126975-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1761151401; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1761151403; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=6zM4dE2roSBfMzz6exDkMpmoPJ7KW/jSbW5ZCPHe0Yo=;
- b=WSPt5eJST0nBFeXQPEhi/WZkV9vw/OAhqgoiDh+x7finZbVKDvr1N63nAb0uo1kTUeDl5e
- KUSueg8nAurW7wWCYh5O+pP//inzMkybz2eL4dWoEjx97fJ5733vPPRmBuo7yvZvOTFIhA
- U68igT9tXvZpcE7oJdWwXvBT1xOuzo/ioK6OalBqpDJLBPF5IJzwvN8KEid2zZ+8AEHfen
- zf8P7f04MrYumgNNYgmkXal0fpYcLidVr/RQ0azXuNXQiqhsOkoq+XkRgMVDd3QJXiGD6d
- SIjmQ/h122OxsqmDzszjlTt3nVnySjuTxAwAxfwGCtfJcg1d7bE9QA3LJH/HwA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=1TKJrw8/Kx1occdgvaBSq4MjoCDwiYlRfl4KyZvBNF8=;
+ b=gKaq88Fg1TJrUZ7Q0TXwwgl8I2/2TU68hsazh0PkKg/UC+htkNMpFVFP5+brxUrF2+M5PR
+ LGDAX0mwd4CU4I8lNNvCwjc+vUp64kkr8iWfGwz/HVyzXJfoaN7L1Usvm6ukN+VSmLis4o
+ Zs9kr6uVdN4oyJy8Tj78kPPjM5qp29El0HuOp8kb8+vFuAnE8EzY6sTQKjCldyfOYAcVXe
+ Tegzs+05seV8NLdGzTEucMr5pmRDjfRIbuR5Da3i/NvjIgCs4gmfyI29ixDs/7V3SP0YsZ
+ dPEoqW8bToGrxGnqWgpVV/TohauA945kEjCLuIaxeT+9t9w3uuzDwmN9ZfcEDA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=WSPt5eJS
-Subject: Re: [Buildroot] [PATCH] package/squid: add patch for CVE-2025-59362
+ header.a=rsa-sha256 header.s=dkim header.b=gKaq88Fg
+Subject: Re: [Buildroot] [PATCH] package/suricata: security bump to v6.0.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,101 +84,91 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Fixes the following vulnerability:
+> The v6.0.20 is the last patch level version bump of suricata version 6.
+> This version is now EOL since July 2024 and other new vulnerabilities
+> apply to this package.
 > 
-> - CVE-2025-59362
+> For more details on the version bump, see:
+>   - https://suricata.io/2024/06/27/suricata-7-0-6-and-6-0-20-released/
+>   - https://github.com/OISF/suricata/releases/tag/suricata-6.0.20
 > 
->     Squid through 7.1 mishandles ASN.1 encoding of long SNMP OIDs. This
->     occurs in asn_build_objid in lib/snmplib/asn1.c.
+> Fixes the following vulnerabilities:
+> 
+> - CVE-2024-37151
+> 
+>     Mishandling of multiple fragmented packets using the same IP ID
+>     value can lead to packet reassembly failure, which can lead to
+>     policy bypass. When using af-packet, enable `defrag` to reduce the
+>     scope of the problem.
 > 
 > For more information, see:
+>   - https://nvd.nist.gov/vuln/detail/CVE-2024-37151
 > 
-> - https://nvd.nist.gov/vuln/detail/CVE-2025-59362
-> - https://github.com/squid-cache/squid/commit/250a18e0a80694b919972a1836cdfe20f2e1baa0
+> - CVE-2024-38535
+> 
+>     Suricata can run out of memory when parsing crafted HTTP/2 traffic.
+> 
+> For more information, see:
+>   - https://nvd.nist.gov/vuln/detail/CVE-2024-38535
 > 
 > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x and 2025.08.x. Thanks
 
 > ---
->  ...Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch | 52 +++++++++++++++++++
->  package/squid/squid.mk                        |  4 ++
->  2 files changed, 56 insertions(+)
->  create mode 100644 package/squid/0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch
+> Newest version is 8.0.1. The following CVEs still apply to the version
+> 6.0.20:
 > 
-> diff --git a/package/squid/0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch b/package/squid/0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch
-> new file mode 100644
-> index 0000000000..695ba0255e
-> --- /dev/null
-> +++ b/package/squid/0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch
-> @@ -0,0 +1,52 @@
-> +From 0d89165ee6da10e6fa50c44998b3cd16d59400e9 Mon Sep 17 00:00:00 2001
-> +From: Alex Rousskov <rousskov@measurement-factory.com>
-> +Date: Sat, 30 Aug 2025 06:49:36 +0000
-> +Subject: [PATCH] Fix ASN.1 encoding of long SNMP OIDs (#2149)
-> +
-> +Upstream: https://github.com/squid-cache/squid/commit/250a18e0a80694b919972a1836cdfe20f2e1baa0
-> +CVE: CVE-2025-59362
-> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> +---
-> + lib/snmplib/asn1.c | 13 +++++++++++++
-> + 1 file changed, 13 insertions(+)
-> +
-> +diff --git a/lib/snmplib/asn1.c b/lib/snmplib/asn1.c
-> +index 81f2051fbe7..2852c26b220 100644
-> +--- a/lib/snmplib/asn1.c
-> ++++ b/lib/snmplib/asn1.c
-> +@@ -735,6 +735,7 @@ asn_build_objid(u_char * data, int *datalength,
-> +      * lastbyte ::= 0 7bitvalue
-> +      */
-> +     u_char buf[MAX_OID_LEN];
-> ++    u_char *bufEnd = buf + sizeof(buf);
-> +     u_char *bp = buf;
-> +     oid *op = objid;
-> +     int asnlength;
-> +@@ -753,6 +754,10 @@ asn_build_objid(u_char * data, int *datalength,
-> +     while (objidlength-- > 0) {
-> +         subid = *op++;
-> +         if (subid < 127) {  /* off by one? */
-> ++            if (bp >= bufEnd) {
-> ++                snmp_set_api_error(SNMPERR_ASN_ENCODE);
-> ++                return (NULL);
-> ++            }
-> +             *bp++ = subid;
-> +         } else {
-> +             mask = 0x7F;    /* handle subid == 0 case */
-> +@@ -770,8 +775,16 @@ asn_build_objid(u_char * data, int *datalength,
-> +                 /* fix a mask that got truncated above */
-> +                 if (mask == 0x1E00000)
-> +                     mask = 0xFE00000;
-> ++                if (bp >= bufEnd) {
-> ++                    snmp_set_api_error(SNMPERR_ASN_ENCODE);
-> ++                    return (NULL);
-> ++                }
-> +                 *bp++ = (u_char) (((subid & mask) >> bits) | ASN_BIT8);
-> +             }
-> ++            if (bp >= bufEnd) {
-> ++                snmp_set_api_error(SNMPERR_ASN_ENCODE);
-> ++                return (NULL);
-> ++            }
-> +             *bp++ = (u_char) (subid & mask);
-> +         }
-> +     }
-> diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-> index b021170d9b..d445f005b7 100644
-> --- a/package/squid/squid.mk
-> +++ b/package/squid/squid.mk
-> @@ -11,6 +11,10 @@ SQUID_LICENSE = GPL-2.0+
->  SQUID_LICENSE_FILES = COPYING
->  SQUID_CPE_ID_VENDOR = squid-cache
->  SQUID_SELINUX_MODULES = apache squid
-> +
-> +# 0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch
-> +SQUID_IGNORE_CVES += CVE-2025-59362
-> +
->  SQUID_DEPENDENCIES = libcap host-libcap libtool libxml2 host-pkgconf \
->  	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
->  SQUID_CONF_ENV = \
+> - CVE-2024-38534
+> - CVE-2024-38536
+> - CVE-2024-45795
+> - CVE-2024-45796
+> - CVE-2024-47187
+> - CVE-2024-47188
+> - CVE-2024-47522
+> - CVE-2024-55605
+> - CVE-2024-55626
+> - CVE-2024-55627
+> - CVE-2024-55628
+> - CVE-2024-55629
+> - CVE-2025-29915
+> - CVE-2025-29916
+> - CVE-2025-29917
+> - CVE-2025-29918
+> - CVE-2025-53538
+> - CVE-2025-59147
+> 
+> If someone that uses Suricata wants to bump it to be able to test it
+> properly.
+> ---
+>  package/suricata/suricata.hash | 2 +-
+>  package/suricata/suricata.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/suricata/suricata.hash b/package/suricata/suricata.hash
+> index 58ab0d93b0..ea5ba01dc0 100644
+> --- a/package/suricata/suricata.hash
+> +++ b/package/suricata/suricata.hash
+> @@ -1,5 +1,5 @@
+>  # Locally computed:
+> -sha256  98c812faef466d337f107f13ae37843f1c719942b93832d70f1a2fd7ee1b5c2c  suricata-6.0.19.tar.gz
+> +sha256  c1515754924b618914fcb3cb98873af49996b920f2389a1998f89604f227a807  suricata-6.0.20.tar.gz
+>  
+>  # Hash for license files:
+>  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
+> index e60ed2fce8..8840853054 100644
+> --- a/package/suricata/suricata.mk
+> +++ b/package/suricata/suricata.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -SURICATA_VERSION = 6.0.19
+> +SURICATA_VERSION = 6.0.20
+>  SURICATA_SITE = https://www.openinfosecfoundation.org/download
+>  SURICATA_LICENSE = GPL-2.0
+>  SURICATA_LICENSE_FILES = COPYING LICENSE
 > -- 
 > 2.51.0
 > 
