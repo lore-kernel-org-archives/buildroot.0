@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12DC1CCD1BB
-	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:36:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53AD1CCD1AB
+	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:36:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D138561385;
-	Wed, 22 Oct 2025 16:36:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 229EC6134F;
+	Wed, 22 Oct 2025 16:36:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ehAcbWxbsjr8; Wed, 22 Oct 2025 16:36:53 +0000 (UTC)
+ id vu4DKGBuaGsK; Wed, 22 Oct 2025 16:36:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0C0E61371
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91AE7612FC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D0C0E61371;
-	Wed, 22 Oct 2025 16:36:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 91AE7612FC;
+	Wed, 22 Oct 2025 16:36:56 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2046F43F
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:43 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 199E243F
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BFBB84112A
+ by smtp2.osuosl.org (Postfix) with ESMTP id E5CD641186
  for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R1lWorCzZDi2 for <buildroot@buildroot.org>;
+ id xUOzsGkdzlX1 for <buildroot@buildroot.org>;
  Wed, 22 Oct 2025 16:36:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F32FC41186
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BCDD041135
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F32FC41186
+ by smtp2.osuosl.org (Postfix) with ESMTP id BCDD041135
  for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F11CD866C6; Wed, 22 Oct 2025 16:36:34 +0000 (UTC)
+ id BAEA487676; Wed, 22 Oct 2025 16:36:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 22 Oct 2025 18:35:49 +0200
+Date: Wed, 22 Oct 2025 18:35:41 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: f6efae6a39c3dd90d3431108950c089fb71dc912
-X-Git-Newrev: f03637d2be9ab7aaf09efd48a147841c559dab7b
+X-Git-Oldrev: ee767287ca25a9b2ec49ad3e228c143c9fb88c99
+X-Git-Newrev: eb8e5161f9c399f78d830e8239069f97977c1388
 X-Patchwork-Hint: ignore
-Message-Id: <20251022163634.F11CD866C6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/ebtables: disable
- sparc64 target
+Message-Id: <20251022163634.BAEA487676@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/sexpect: bump to
+ version 2.3.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,57 +66,120 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f03637d2be9ab7aaf09efd48a147841c559dab7b
+commit: https://git.buildroot.net/buildroot/commit/?id=eb8e5161f9c399f78d830e8239069f97977c1388
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Commit c5d6cde7b627 ("package/ebtables: remove KERNEL_64_USERSPACE_32
-workaround") fixed build with GCC 14 for when Buildroot
-BR2_KERNEL_64_USERLAND_32 is enabled. However, ebtables configure script
-enables its own KERNEL_64_USERSPACE_32 macro unconditionally for sparc64
-target, which triggers a similar build failure. See [1].
+Drop upstream patch.
 
-Disable sparc64 target for ebtables and its reverse dependency to avoid
-build failure.
-
-Fixes:
-https://autobuild.buildroot.net/results/9a2510e0038cd13db8c3aac0122ea7a0f834fcd2/
-
-[1] https://git.netfilter.org/ebtables/tree/configure.ac?h=ebtables-2.0.11#n20
+Main change in this release is cmake 4 build fix.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-[Julien: add link to upstream script enabling KERNEL_64_USERSPACE_32]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 0549ed0ed1ce7b0b107ac7bd50ccf0496cf8172f)
+(cherry picked from commit 7176f6b28751dfb5e1592caba7efb3f9da4d2685)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/ebtables/Config.in | 1 +
- package/libvirt/Config.in  | 1 +
- 2 files changed, 2 insertions(+)
+ .../0001-Unconditionally-define-_GNU_SOURCE.patch  | 69 ----------------------
+ package/sexpect/sexpect.hash                       |  2 +-
+ package/sexpect/sexpect.mk                         |  2 +-
+ 3 files changed, 2 insertions(+), 71 deletions(-)
 
-diff --git a/package/ebtables/Config.in b/package/ebtables/Config.in
-index ce5f67bc61..83337feec6 100644
---- a/package/ebtables/Config.in
-+++ b/package/ebtables/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_EBTABLES
- 	depends on BR2_USE_MMU # fork()
- 	# https://lore.kernel.org/all/20210518181730.13436-1-patrickdepinguin@gmail.com/
- 	depends on !BR2_KERNEL_64_USERLAND_32
-+	depends on !BR2_sparc64 # int-conversion error
- 	help
- 	  Ethernet bridge frame table administration
+diff --git a/package/sexpect/0001-Unconditionally-define-_GNU_SOURCE.patch b/package/sexpect/0001-Unconditionally-define-_GNU_SOURCE.patch
+deleted file mode 100644
+index bb8b60f0c0..0000000000
+--- a/package/sexpect/0001-Unconditionally-define-_GNU_SOURCE.patch
++++ /dev/null
+@@ -1,69 +0,0 @@
+-From 7ef4ef027c5064502bba23869aed9d1595a4e301 Mon Sep 17 00:00:00 2001
+-Message-ID: <7ef4ef027c5064502bba23869aed9d1595a4e301.1732873390.git.baruch@tkos.co.il>
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Fri, 29 Nov 2024 11:36:16 +0200
+-Subject: [PATCH] Unconditionally define _GNU_SOURCE
+-
+-uClibc also uses _GNU_SOURCE to expose glibc compatible API extensions.
+-But toolchain built with uClibc don't define __gnu_linux__. This leads
+-to implicit declaration warnings at build time. With GCC 14 these
+-warnings become errors by default.
+-
+-For example:
+-
+-.../sexpect-2.3.14/server.c: In function 'expect_exact':
+-.../sexpect-2.3.14/server.c:630:17: error: implicit declaration of function 'strcasestr'; did you mean 'strcasecmp'?
+-  [-Wimplicit-function-declaration]
+-  630 |         found = strcasestr(g.expbuf, g.conn.pass.pattern);
+-      |                 ^~~~~~~~~~
+-      |                 strcasecmp
+-
+-Define _GNU_SOURCE unconditionally to fix the build.
+-
+-Upstream: https://github.com/clarkwang/sexpect/pull/40
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+- main.c   | 2 --
+- pty.c    | 2 --
+- server.c | 2 --
+- 3 files changed, 6 deletions(-)
+-
+-diff --git a/main.c b/main.c
+-index 886050a887c1..2bc7c867e297 100644
+---- a/main.c
+-+++ b/main.c
+-@@ -1,7 +1,5 @@
+- 
+--#if defined(__gnu_linux__) || defined(__CYGWIN__)
+- #define _GNU_SOURCE
+--#endif
+- 
+- #include <fcntl.h>
+- #include <limits.h>
+-diff --git a/pty.c b/pty.c
+-index bf4f6e99805e..f90325d87c77 100644
+---- a/pty.c
+-+++ b/pty.c
+-@@ -1,7 +1,5 @@
+- 
+--#if defined(__gnu_linux__) || defined(__CYGWIN__)
+- #define _GNU_SOURCE
+--#endif
+- 
+- #include <string.h>
+- #include <stdio.h>
+-diff --git a/server.c b/server.c
+-index c7e41e0a7dc4..308852f08089 100644
+---- a/server.c
+-+++ b/server.c
+-@@ -1,7 +1,5 @@
+- 
+--#if defined(__gnu_linux__) || defined(__CYGWIN__)
+- #define _GNU_SOURCE
+--#endif
+- 
+- #include <assert.h>
+- #include <fcntl.h>
+--- 
+-2.45.2
+-
+diff --git a/package/sexpect/sexpect.hash b/package/sexpect/sexpect.hash
+index d512117626..ce1232de82 100644
+--- a/package/sexpect/sexpect.hash
++++ b/package/sexpect/sexpect.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  f6801c8b979d56eec54aedd7ede06e2342f382cee291beea88b52869186c557c  sexpect-2.3.14.tar.gz
++sha256  44f5711aa99f3ccf9c4b0edfcd9a7d25fa64b442574624ce451713d1532c1a7e  sexpect-2.3.15.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
+diff --git a/package/sexpect/sexpect.mk b/package/sexpect/sexpect.mk
+index 7b878600e4..bbc84c1ca6 100644
+--- a/package/sexpect/sexpect.mk
++++ b/package/sexpect/sexpect.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-diff --git a/package/libvirt/Config.in b/package/libvirt/Config.in
-index c55ab429eb..5664f69dd8 100644
---- a/package/libvirt/Config.in
-+++ b/package/libvirt/Config.in
-@@ -46,6 +46,7 @@ config BR2_PACKAGE_LIBVIRT_DAEMON
- 	default y
- 	depends on BR2_INSTALL_LIBSTDCPP # nmap
- 	depends on !BR2_KERNEL_64_USERLAND_32 # ebtables
-+	depends on !BR2_sparc64 # ebtables
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS # radvd -> libbsd
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	select BR2_PACKAGE_DNSMASQ
+-SEXPECT_VERSION = 2.3.14
++SEXPECT_VERSION = 2.3.15
+ SEXPECT_SITE = $(call github,clarkwang,sexpect,v$(SEXPECT_VERSION))
+ SEXPECT_LICENSE = GPL-3.0
+ SEXPECT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
