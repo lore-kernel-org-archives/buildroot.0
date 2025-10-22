@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AF40CCD1BB
-	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:36:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 968B5CCD1BB
+	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:36:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3AE36123C;
-	Wed, 22 Oct 2025 16:36:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 559406133E;
+	Wed, 22 Oct 2025 16:36:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YLWckhqaIMh6; Wed, 22 Oct 2025 16:36:38 +0000 (UTC)
+ id sOCSV_6XpMZu; Wed, 22 Oct 2025 16:36:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F19546125B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2820661229
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F19546125B;
-	Wed, 22 Oct 2025 16:36:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7C6F2DE
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2820661229;
+	Wed, 22 Oct 2025 16:36:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3814D43F
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6350F6123C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6B127411BE
  for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8WMvDbHnDbQ2 for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XVJuRd9v2b1U for <buildroot@buildroot.org>;
  Wed, 22 Oct 2025 16:36:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2695D611FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7927641113
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2695D611FB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7927641113
  for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 21E3187722; Wed, 22 Oct 2025 16:36:34 +0000 (UTC)
+ id 68EFF87730; Wed, 22 Oct 2025 16:36:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 16 Oct 2025 09:57:25 +0200
+Date: Wed, 22 Oct 2025 18:35:32 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: b1fae077837f699b2ab6eded621dc69c1a655a6a
-X-Git-Newrev: e65662bce43a8c87db894251ba75552ba8190617
+X-Git-Oldrev: 64044fdfa5cb0ea3493544b3a24bd11bf6ebde54
+X-Git-Newrev: d0dac818c50e4fa0f0ab123dbd1719d751d35e73
 X-Patchwork-Hint: ignore
-Message-Id: <20251022163634.21E3187722@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- board/beagleboneai/post-build.sh: fix shellcheck issues
+Message-Id: <20251022163634.68EFF87730@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/audit: bump to
+ version 3.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,51 +58,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e65662bce43a8c87db894251ba75552ba8190617
+commit: https://git.buildroot.net/buildroot/commit/?id=d0dac818c50e4fa0f0ab123dbd1719d751d35e73
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-BOARD_DIR is not used, so drop it and quote $BINARIES_DIR to make shellcheck
-happy.
+This is a bugfix release, the commit log mentions multiple fixed
+memory leaks.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 5f620e144d82d70c822f26219cbec4d45daa2c00)
+(cherry picked from commit e7e8bdd812edef20626d250f24d16601f6b994da)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .checkpackageignore                          | 1 -
- board/beagleboard/beagleboneai/post-build.sh | 3 +--
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ package/audit/audit.hash | 2 +-
+ package/audit/audit.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 482c109229..c74bbbc1d7 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -9,7 +9,6 @@ board/asus/tinker/post-build.sh Shellcheck
- board/atmel/flasher.sh Shellcheck
- board/beagleboard/beaglebone-qt5/patches/linux/0001-keep-jtag-clock-alive-for-debugger.patch lib_patch.Upstream
- board/beagleboard/beaglebone/post-build.sh Shellcheck
--board/beagleboard/beagleboneai/post-build.sh Shellcheck
- board/boundarydevices/common/post-build.sh Shellcheck
- board/boundarydevices/common/post-image.sh Shellcheck
- board/broadcom/northstar/post-image.sh Shellcheck
-diff --git a/board/beagleboard/beagleboneai/post-build.sh b/board/beagleboard/beagleboneai/post-build.sh
-index 384b4d8745..8d94a8f1e4 100755
---- a/board/beagleboard/beagleboneai/post-build.sh
-+++ b/board/beagleboard/beagleboneai/post-build.sh
-@@ -1,4 +1,3 @@
- #!/bin/sh
--BOARD_DIR="$(dirname $0)"
+diff --git a/package/audit/audit.hash b/package/audit/audit.hash
+index 5743b3a13a..557ccd1f80 100644
+--- a/package/audit/audit.hash
++++ b/package/audit/audit.hash
+@@ -1,4 +1,4 @@
+ #Locally computed
+-sha256  c0b1792d1f0a88c6f1828710509cbb987059fc68712c97669ca90eae103d287d  audit-3.1.2.tar.gz
++sha256  660213bac2baebabfc32be4d84a4aeb94effbd3e076b1014b78678b4502cf6ba  audit-3.1.5.tar.gz
+ sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+ sha256  f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa  COPYING.LIB
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index c703acc559..eb0b74b098 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--cp board/beagleboard/beagleboneai/uEnv.txt $BINARIES_DIR/uEnv.txt
-+cp board/beagleboard/beagleboneai/uEnv.txt "$BINARIES_DIR/uEnv.txt"
+-AUDIT_VERSION = 3.1.2
++AUDIT_VERSION = 3.1.5
+ AUDIT_SITE = http://people.redhat.com/sgrubb/audit
+ AUDIT_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+ AUDIT_LICENSE_FILES = COPYING COPYING.LIB
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
