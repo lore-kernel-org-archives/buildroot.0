@@ -1,51 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44758CCD1BF
-	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 19:58:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4092ACCD1AB
+	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 19:58:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0EE31613F0;
-	Wed, 22 Oct 2025 19:58:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0983F8407C;
+	Wed, 22 Oct 2025 19:58:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8OZcx_MHBZFx; Wed, 22 Oct 2025 19:58:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZPfcTzqTZNoN; Wed, 22 Oct 2025 19:58:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AB60613DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42AF483F80
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2AB60613DF;
-	Wed, 22 Oct 2025 19:58:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9540B43F
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 19:58:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 42AF483F80;
+	Wed, 22 Oct 2025 19:58:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C0CEA43F
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 19:58:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7BEDF4068B
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 19:58:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BDAA483F80
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 19:58:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OYxJ_vWsQFOM for <buildroot@buildroot.org>;
- Wed, 22 Oct 2025 19:58:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0F4540637
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B0F4540637
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 19:58:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9D70487754; Wed, 22 Oct 2025 19:58:00 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 22 Oct 2025 21:56:28 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 00a38ca066f26bd9fb0a595523d6d42011dac316
-X-Git-Newrev: 54c6c0125ac024bf5e99fc33e13d01bf58116a0a
-X-Patchwork-Hint: ignore
-Message-Id: <20251022195800.9D70487754@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgtk3: bump to version 3.24.51
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Q-m1s0L3Ziua for <buildroot@buildroot.org>;
+ Wed, 22 Oct 2025 19:58:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C869F81AC4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C869F81AC4
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C869F81AC4
+ for <buildroot@busybox.net>; Wed, 22 Oct 2025 19:58:40 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 34B15780331;
+ Wed, 22 Oct 2025 21:58:37 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 22 Oct 2025 21:58:37 +0200
+MIME-Version: 1.0
+Date: Wed, 22 Oct 2025 21:58:37 +0200
+To: Francois Perrad <francois.perrad@gadz.org>
+Cc: buildroot@busybox.net
+In-Reply-To: <20251022133908.230789-1-francois.perrad@gadz.org>
+References: <20251022133908.230789-1-francois.perrad@gadz.org>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <13f069842ef0da7bfe74fdc5a3b70615@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1761163118;
+ bh=2+98AxVyLWhgPOP9VZIjpVo+bpF1es32NZ/4YX07Xjw=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=XT6izUruFATVRweAzEyHxfmZu8oZdz/MBTebvaBhCTgMY6DdlenSlQlDnP3NlNk6x
+ wrjajZU2tFwE2Z7bOwcFgHI2TJbz7dKQ6IU/u0Q40SlIe5BZzNhPUqDJBueR0EDDCe
+ qYaQBohuEZ4BlyYcf0piWKdkKeMEDF77Hjbbr1Bik6uNsKQUPojJc48TtD6hdPIkBH
+ hc35yFN2v38ynERBZ/9/0iHIUY9KSiwkBVt/ccHLHMGTKMfmDjOPa626FgXnQ/r/T5
+ tRfVpiQNEb6LWncnYX7gajKNqyFM0d1igO70zow3KXL9FRISGEG3TVgHdWeNu8efPw
+ gX1f4m7RBqu0Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=XT6izUru
+Subject: Re: [Buildroot] [PATCH] package/at-spi2-core: bump to version 2.58.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,58 +82,15 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=54c6c0125ac024bf5e99fc33e13d01bf58116a0a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 22/10/2025 15:39, Francois Perrad via buildroot wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-For release notes since version 3.24.43, see:
-https://gitlab.gnome.org/GNOME/gtk/-/blob/3.24.51/NEWS
-
-Note: the "+" in the project name and source archive was removed
-upstream. This commit updates _SOURCE and _SITE accordingly.
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[Julien: add link to release notes]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libgtk3/libgtk3.hash | 4 ++--
- package/libgtk3/libgtk3.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index 6a682a7412..5394bb10cc 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
-@@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.43.sha256sum
--sha256  7e04f0648515034b806b74ae5d774d87cffb1a2a96c468cb5be476d51bf2f3c7  gtk+-3.24.43.tar.xz
-+# From https://download.gnome.org/sources/gtk/3.24/gtk-3.24.51.sha256sum
-+sha256  0013877c6bd23c2dbe42ad7c70a053d0e449be66736574e37867c49c5f905a4f  gtk-3.24.51.tar.xz
- 
- # Hash for license file:
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index d6d7c64a54..be24869d3d 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -5,9 +5,9 @@
- ################################################################################
- 
- LIBGTK3_VERSION_MAJOR = 3.24
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).43
--LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
--LIBGTK3_SITE = https://download.gnome.org/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).51
-+LIBGTK3_SOURCE = gtk-$(LIBGTK3_VERSION).tar.xz
-+LIBGTK3_SITE = https://download.gnome.org/sources/gtk/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPL-2.0+
- LIBGTK3_LICENSE_FILES = COPYING
- LIBGTK3_CPE_ID_VENDOR = gnome
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
