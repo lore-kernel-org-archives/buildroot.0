@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C5F3CCD1BB
-	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:37:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32ACBCCD1BC
+	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:37:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 70BC340B59;
-	Wed, 22 Oct 2025 16:37:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E7B4240143;
+	Wed, 22 Oct 2025 16:37:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xrYxjBeRhhES; Wed, 22 Oct 2025 16:37:20 +0000 (UTC)
+ id 1JqnyUuZyPU4; Wed, 22 Oct 2025 16:37:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3CC940E7F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76FC240E52
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D3CC940E7F;
-	Wed, 22 Oct 2025 16:36:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 76FC240E52;
+	Wed, 22 Oct 2025 16:36:54 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id AACD143F
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:41 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F390DE
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6DAF24111C
+ by smtp2.osuosl.org (Postfix) with ESMTP id C764F4116B
  for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZQudxY5-ZbQv for <buildroot@buildroot.org>;
- Wed, 22 Oct 2025 16:36:34 +0000 (UTC)
+ id H01S0biHFka0 for <buildroot@buildroot.org>;
+ Wed, 22 Oct 2025 16:36:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7865F40F99
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08E054118A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7865F40F99
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 08E054118A
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 75EB9866C6; Wed, 22 Oct 2025 16:36:34 +0000 (UTC)
+ id 06F0287676; Wed, 22 Oct 2025 16:36:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 22 Oct 2025 18:35:33 +0200
+Date: Wed, 22 Oct 2025 18:35:50 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: d0dac818c50e4fa0f0ab123dbd1719d751d35e73
-X-Git-Newrev: 875b7a90e70a3c2210ff7f4f2ae202ac008d40ba
+X-Git-Oldrev: f03637d2be9ab7aaf09efd48a147841c559dab7b
+X-Git-Newrev: 8b2b392f9d2d681244596ed540fc6389b608df93
 X-Patchwork-Hint: ignore
-Message-Id: <20251022163634.75EB9866C6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/zip: add patch
- for CVE-2018-13410
+Message-Id: <20251022163635.06F0287676@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/micropython: fix
+ passing multiple CFLAGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,113 +66,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=875b7a90e70a3c2210ff7f4f2ae202ac008d40ba
+commit: https://git.buildroot.net/buildroot/commit/?id=8b2b392f9d2d681244596ed540fc6389b608df93
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fixes the following vulnerability:
+Before commit 50bc5aa17b32 (package/micropython: fix segfault at exit()
+with gcc >= 14), only architecture-specific CFLAGS were passed, and only
+one per arch. But 50bc5aa17b32 introduced a non-arch CFLAGS, for gcc
+versions, so when the build happens for an architecture for which there
+is a CFLAGS, and when gcc is 14 or newer, there are two CFLAGS added,
+causing build failures:
 
-- CVE-2018-13410
+    [...] /usr/bin/make [...] CFLAGS_EXTRA=-DMICROPY_GCREGS_SETJMP=1 -DMICROPY_NLR_SETJMP=1 [...]
+    /usr/bin/make: invalid option -- 'D'
+    /usr/bin/make: invalid option -- 'M'
+    Usage: make [options] [target] ...
 
-    Info-ZIP Zip 3.0, when the -T and -TT command-line options are used,
-    allows attackers to cause a denial of service (invalid free and
-    application crash) or possibly have unspecified other impact because
-    of an off-by-one error. NOTE: it is unclear whether there are
-    realistic scenarios in which an untrusted party controls the -TT
-    value, given that the entire purpose of -TT is execution of
-    arbitrary commands
+The fix is simple enough: just quote the CFLAGS.
 
-For more information, see:
-  - https://nvd.nist.gov//vuln/detail/CVE-2018-13410
+Fixes: https://autobuild.buildroot.org/results/b18/b18d6fa9938c1267a771fdbcd8b4c3df812cd6b9/
+Fixes: 50bc5aa17b320d91809048d5ef6a110f8c0b9157
 
-This patch also includes the patch 0009 which address a buffer overflow
-when passing unicode characters that doesn't have a CVE assigned.
-
-Tested with `./support/testing/run-tests -d dl -o output_folder -k tests.package.test_zip`
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Chris Packham <judge.packham@gmail.com>
+Cc: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 7cb0419b92f5f35ca830e8c60d8080dd17f1dfb5)
+(cherry picked from commit ab906018c98e5f0838b023fa886c6c52a1cc5cf6)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../0009-buffer-overflow-unicode-filename.patch    | 23 ++++++++++++++++++++
- .../zip/0010-buffer-overflow-cve-2018-13410.patch  | 25 ++++++++++++++++++++++
- package/zip/zip.mk                                 |  3 +++
- 3 files changed, 51 insertions(+)
+ package/micropython/micropython.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/zip/0009-buffer-overflow-unicode-filename.patch b/package/zip/0009-buffer-overflow-unicode-filename.patch
-new file mode 100644
-index 0000000000..860b453735
---- /dev/null
-+++ b/package/zip/0009-buffer-overflow-unicode-filename.patch
-@@ -0,0 +1,23 @@
-+From: Shengjing Zhu <shengjing.zhu@canonical.com>
-+Subject: Fix buffer overflow when filename contains unicode characters
-+Bug-Debian: https://bugs.debian.org/1077054
-+Bug-Debian: https://bugs.debian.org/1093629
-+Bug-Ubuntu: https://launchpad.net/bugs/2062535
-+Forwarded: https://sourceforge.net/p/infozip/bugs/81/
-+Origin: https://src.fedoraproject.org/rpms/zip/raw/f41/f/buffer_overflow.patch
-+
-+Upstream: https://sources.debian.org/src/zip/3.0-15/debian/patches/14-buffer-overflow-unicode-filename.patch
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+diff -Nura a/fileio.c b/fileio.c
-+--- a/fileio.c
-++++ b/fileio.c
-+@@ -3502,7 +3502,7 @@
-+   if ((wc_string = (wchar_t *)malloc((wsize + 1) * sizeof(wchar_t))) == NULL) {
-+     ZIPERR(ZE_MEM, "local_to_wide_string");
-+   }
-+-  wsize = mbstowcs(wc_string, local_string, strlen(local_string) + 1);
-++  wsize = mbstowcs(wc_string, local_string, wsize + 1);
-+   wc_string[wsize] = (wchar_t) 0;
-+ 
-+   /* in case wchar_t is not zwchar */
-diff --git a/package/zip/0010-buffer-overflow-cve-2018-13410.patch b/package/zip/0010-buffer-overflow-cve-2018-13410.patch
-new file mode 100644
-index 0000000000..399ab37bc5
---- /dev/null
-+++ b/package/zip/0010-buffer-overflow-cve-2018-13410.patch
-@@ -0,0 +1,25 @@
-+From: Florent 'Skia' Jacquet <florent.jacquet@canonical.com>
-+Subject: Fix buffer overflow when using '-T -TT'
-+Bug-Debian: https://bugs.debian.org/1093629
-+Bug-Ubuntu: https://launchpad.net/bugs/2093024
-+Forwarded: https://sourceforge.net/p/infozip/bugs/81/
-+
-+strlen(unzip_path) + strlen(zipname) + " " + "'" + "'" + '\0'
-+The additional space required in the `cmd` buffer is 4, not 3.
-+
-+CVE: CVE-2018-13410
-+Upstream: https://sources.debian.org/src/zip/3.0-15/debian/patches/15-buffer-overflow-cve-2018-13410.patch
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+diff -Nura a/zip.c b/zip.c
-+--- a/zip.c
-++++ b/zip.c
-+@@ -1437,7 +1437,7 @@
-+     /* Replace first {} with archive name.  If no {} append name to string. */
-+     here = strstr(unzip_path, "{}");
-+ 
-+-    if ((cmd = malloc(strlen(unzip_path) + strlen(zipname) + 3)) == NULL) {
-++    if ((cmd = malloc(strlen(unzip_path) + strlen(zipname) + 4)) == NULL) {
-+       ziperr(ZE_MEM, "building command string for testing archive");
-+     }
-+ 
-diff --git a/package/zip/zip.mk b/package/zip/zip.mk
-index 0457ba9414..0a66c146bf 100644
---- a/package/zip/zip.mk
-+++ b/package/zip/zip.mk
-@@ -12,6 +12,9 @@ ZIP_LICENSE = Info-ZIP
- ZIP_LICENSE_FILES = LICENSE
- ZIP_CPE_ID_VENDOR = info-zip_project
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index 32b361db16..e1e1f88d51 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -42,7 +42,7 @@ MICROPYTHON_MAKE_OPTS += \
+ 	MICROPY_PY_BTREE=0 \
+ 	MICROPY_PY_USSL=0 \
+ 	CROSS_COMPILE=$(TARGET_CROSS) \
+-	CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS) \
++	CFLAGS_EXTRA="$(MICROPYTHON_CFLAGS)" \
+ 	LDFLAGS_EXTRA="$(TARGET_LDFLAGS)" \
+ 	CWARN=
  
-+# 0010-buffer-overflow-cve-2018-13410.patch
-+ZIP_IGNORE_CVES += CVE-2018-13410
-+
- ifeq ($(BR2_PACKAGE_BZIP2),y)
- ZIP_DEPENDENCIES += bzip2
- endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
