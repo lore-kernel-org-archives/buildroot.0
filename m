@@ -4,102 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45A4ACCD1AB
-	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:35:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCDB8CCD1AB
+	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:36:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1920C60B54;
-	Wed, 22 Oct 2025 16:35:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D69761310;
+	Wed, 22 Oct 2025 16:36:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F---mdrKSpyA; Wed, 22 Oct 2025 16:35:07 +0000 (UTC)
+ id rKMMXew05Qbb; Wed, 22 Oct 2025 16:36:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5696F60B91
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 785C96125B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5696F60B91;
-	Wed, 22 Oct 2025 16:35:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 785C96125B;
+	Wed, 22 Oct 2025 16:36:35 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 24B2843F
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:35:06 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id E0004DE
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1695460B91
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:35:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C6C0B6121A
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2bf4NzTYNNwr for <buildroot@buildroot.org>;
- Wed, 22 Oct 2025 16:35:04 +0000 (UTC)
+ id cTUmuVwMo3A1 for <buildroot@buildroot.org>;
+ Wed, 22 Oct 2025 16:36:33 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62e; helo=mail-ej1-x62e.google.com;
+ client-ip=2a00:1450:4864:20::62c; helo=mail-ej1-x62c.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5E43360A58
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E43360A58
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
- [IPv6:2a00:1450:4864:20::62e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5E43360A58
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:35:04 +0000 (UTC)
-Received: by mail-ej1-x62e.google.com with SMTP id
- a640c23a62f3a-afcb7ae6ed0so1369803166b.3
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 09:35:04 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D3BEE61205
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3BEE61205
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
+ [IPv6:2a00:1450:4864:20::62c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D3BEE61205
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:32 +0000 (UTC)
+Received: by mail-ej1-x62c.google.com with SMTP id
+ a640c23a62f3a-b626a4cd9d6so1401495666b.3
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 09:36:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1761150902; x=1761755702;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=mIvmfEV5dg7zkzlhfBSogVnIO9lKvjPbV1XUnLHsZ6w=;
- b=Zb/ibebz4wNki9PdM2EP6phA4wEtfD1gjWbV81Um+RzMwQrMPcgUCOlMDAYd+xJxW4
- DVqDFlWyIRWITOjUnDay3cOgngHHPXETxdCPi57gci8vYr/FsL1hN+h94Y4R/Ihn119P
- XAk6EfWEdM79MvDgLAtTYSz4TznTQF6gjVSdbkSAjtaIeDz6bud5Os5M+HJgfKQInLzF
- F4QgDLDicxJje0L3NQk3QeA9/ipnolDkyJSuQDZDH51t8fY4lDBDDRJqFlu8vfl4v1wU
- pf2ImpE2hq5XqcmRg219oQkm8jKrAZbqCSwnOBfv6kAJ1yMLYdoDg9Q7gZ3MQokYFUkY
- SCjQ==
-X-Gm-Message-State: AOJu0YwBsEE53AgKGpj7/UUoLyf0ex27MxMnbTb7eDcfMgjuDuNe/dbV
- 815+WCmyvWX3FrGIF2dlvTkVLoU78wQDD6PUII9Gkc9fXkTockWCiJIbbc5bQBCDu/C0GklbiYJ
- xqHQz
-X-Gm-Gg: ASbGncvYdpTUot6O8IQVCJcQAcNd7d+qOEul+b5gAFvfaU2EwPJ0p/y2Ojf5ElRq8z1
- tQONqE5sgyHTAQCZ1CO+kBcRNIQgVCIylinq8/nxCAgW6Az9lSsh54OSjrvDEWjMYuSSh46Caja
- MJhNgBiCUDDhtewDUC7YmPiRDQM0l7gGCE/M981DyYytY5mD/xcdTkVexwqk3lkDrZqtSJ9yffK
- 0A2SPRu4glyPVI8dUbQEHUg5pjH3uBcDFYVIGEJiM6XyUsIrzKwWYBk0RRkgS+HTKjudYIrbzSg
- IwMy85HD02rEtiT7k0q91/j12Q4D+n7PnVdEhYXzNlh3wi88i0mT545ueIZSVuAoFVjxZwao5xh
- Po4JKXKjrRjnWwShA+NjAyM7NX2ybGiJmIRXvPQtCwoIsc1vt26f78TtaZgF4gwB5fy7bQTAn6R
- a01S/9NSoMjZG3d0W6bODCD9Y9LiIR4VUu/79clQ==
-X-Google-Smtp-Source: AGHT+IHdSvE1idqtxCrXdzQK1Wngmpxh/Zys/hu7FFht31i7g6kLCCB8bRfXX15RpAHE1r6HD0cz3Q==
-X-Received: by 2002:a17:906:c14b:b0:b3b:ff00:5d4 with SMTP id
- a640c23a62f3a-b647403a5bfmr2312149766b.5.1761150901834; 
- Wed, 22 Oct 2025 09:35:01 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1761150990; x=1761755790;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=wKKT0WVhtjr+6hH4cc5PAOmsJiYuPjeamlMBFhjBeAs=;
+ b=uaAA5ljK6FR/JbPN/sdCfva6hxP44t5wHLiPAkbOsgmSbrRwv5kqbrWWp6jsyQIYmP
+ OPbaZUQBmbocGDkg+2NhOWPAoXBPi1jl7ayFwummhuer14Y9l9AQC4668dg6IfXPChHk
+ VkCb1oqBKv1ZJ3nlQw+wAa49Avqx7dm4ZpB9pLPqHfW/admARjyPVDnpy+rGLDAuPtjJ
+ 0QNQUYLhusXTAAHBkX6uxSOohdNes0Tgc8TjysC035C1A+IWZbiOo6AQV0gpkezUY3Fc
+ 7xHNjJEl/xXAmYuyYTYgWaB+/IlfgsE5FA8bpQvPQiFOOYPQVbxbwsGvbz21j1405khA
+ Bidw==
+X-Gm-Message-State: AOJu0YzcWJaG1ZA722tdROI41A3s59S4gZwtHMXZ7M//oP3FQN7+XHHa
+ Tt57SoA1yzhfB3vi8s1zxyGtK6GwbFi7oKb2SivqESSVAmh8rpTLI9EhDnPtLniOgUogDth2oVp
+ 8jJ+w
+X-Gm-Gg: ASbGncsPLq50JPKPg5cMj5jXisuFaWNmHGhyWd/WE+YMdVytKu5uRczrUPMLylUrsTG
+ rxMFHlOuzv0gsoUvQJE53iI7Ll9Nf5Hy25tD6wDNmNImQozDkRhznYrw7on7lQILgkx4B6tBim8
+ o4HCU7MFMgM/vyHVSzxbWnGHhIOELonUjT+swD1bJmH8NviYUc+DiSmd9Po3nVUsQzctpdAsj4Q
+ qE/Glco4e8aykudxdGzelhg0s6HvRSOHUWZLHH4PoK9bs0joWkfI2ekSMhEzC7/0zWsDqk+ZgQO
+ ywC8b/aoj1BE82xgA1XcVPA4OVQEeNskrbedR+YXgDwt5nYHpkvoJrBlBwJYNaDTQDkoOr94r5k
+ cRH6T0MgSDzBZWn75nQ4NhA9J2loHykXvm/WbPft2HxTE37dy0oery5RX0O0QUJc78vNwEn0jY9
+ j5VY5gqtxWFZCG0z1O5+59Xyb5ihurzGByPFWUHV0a/bfNbTDv
+X-Google-Smtp-Source: AGHT+IHXHOCgVe6pVuEtsMTlhITX6wSsKnw9UWAzaiYRo3F19n9UXWt8+fMQokPLFPmrO2uy/n/VOg==
+X-Received: by 2002:a17:907:6e87:b0:b3c:193:820e with SMTP id
+ a640c23a62f3a-b6472c619c0mr2626557666b.13.1761150990600; 
+ Wed, 22 Oct 2025 09:36:30 -0700 (PDT)
 Received: from dario-ThinkPad-P14s-Gen-5.. ([2.196.42.39])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b6d3501ed5esm190988166b.70.2025.10.22.09.35.01
+ a640c23a62f3a-b65e7da25c9sm1402905666b.11.2025.10.22.09.36.29
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 22 Oct 2025 09:35:01 -0700 (PDT)
+ Wed, 22 Oct 2025 09:36:30 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+Cc: Murat Demirten <mdemirten@yh.com.tr>,
  Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Wed, 22 Oct 2025 18:34:57 +0200
-Message-ID: <20251022163457.19215-2-dario.binacchi@amarulasolutions.com>
+Date: Wed, 22 Oct 2025 18:36:27 +0200
+Message-ID: <20251022163627.20002-1-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251022163457.19215-1-dario.binacchi@amarulasolutions.com>
-References: <20251022163457.19215-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1761150902; x=1761755702;
+ d=amarulasolutions.com; s=google; t=1761150990; x=1761755790;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=mIvmfEV5dg7zkzlhfBSogVnIO9lKvjPbV1XUnLHsZ6w=;
- b=ZJa+EyoU9DmajMt72k2HkJgVc+AcFOC6Q02hz/ByJw5ae5ilq+daA4L51Ioq15ZD2c
- h9ZCqVlwFgibpqIp4BCxWLXg1To3DmmGvi2bdFf8kPDRieTUfhE5BL4Vs1TLv6gEx8in
- 2SM9jPVEZusLPB28SEphHTPlArGokvQqq/VsI=
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=wKKT0WVhtjr+6hH4cc5PAOmsJiYuPjeamlMBFhjBeAs=;
+ b=QclLMBIuhcDrOVm40v5iMJtV+8MxCiEUCYh8XMNPUm2FuGCzI2pKjle3iUSZEZorzS
+ jjou1viHZLd9Vxf1tbtswvARvSfTlCArPUNDlOkp/YR/AbuAT/f880KDFiyIrHBu2A+J
+ FvPdrmB0Go4K8rlODAGT67tJTyjML6GOZd65E=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=ZJa+EyoU
-Subject: [Buildroot] [PATCH 2/2] package/libglib2: bump to version 2.86.1
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=QclLMBIu
+Subject: [Buildroot] [PATCH 1/1] package/libgeotiff: bump to version 1.7.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,40 +114,36 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Release notes:
-https://gitlab.gnome.org/GNOME/glib/-/releases
+https://github.com/OSGeo/libgeotiff/releases/tag/1.7.4
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- package/libglib2/libglib2.hash | 4 ++--
- package/libglib2/libglib2.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libgeotiff/libgeotiff.hash | 2 +-
+ package/libgeotiff/libgeotiff.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index 129849b21b9f..e4b9a7c5ae5b 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
-@@ -1,4 +1,4 @@
--# https://download.gnome.org/sources/glib/2.84/glib-2.84.4.sha256sum
--sha256  8a9ea10943c36fc117e253f80c91e477b673525ae45762942858aef57631bb90  glib-2.84.4.tar.xz
-+# https://download.gnome.org/sources/glib/2.86/glib-2.86.1.sha256sum
-+sha256  119d1708ca022556d6d2989ee90ad1b82bd9c0d1667e066944a6d0020e2d5e57  glib-2.86.1.tar.xz
- # License files, locally calculated
- sha256  fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb  COPYING
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 3382790bb330..0957d946bc0f 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/libgeotiff/libgeotiff.hash b/package/libgeotiff/libgeotiff.hash
+index 3165994bfddf..e81f15ea0dbc 100644
+--- a/package/libgeotiff/libgeotiff.hash
++++ b/package/libgeotiff/libgeotiff.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  ba23a3a35980ed3de916e125c739251f8e3266be07540200125a307d7cf5a704  libgeotiff-1.7.3.tar.gz
++sha256  c598d04fdf2ba25c4352844dafa81dde3f7fd968daa7ad131228cd91e9d3dc47  libgeotiff-1.7.4.tar.gz
+ sha256  a822a731a7ac4ba7d8f18fa0dc29db2e68a5dcfc315b46e4a4c8956720d55d93  LICENSE
+diff --git a/package/libgeotiff/libgeotiff.mk b/package/libgeotiff/libgeotiff.mk
+index 126d61cb1ae8..f6f7832d60d5 100644
+--- a/package/libgeotiff/libgeotiff.mk
++++ b/package/libgeotiff/libgeotiff.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGLIB2_VERSION_MAJOR = 2.84
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).4
-+LIBGLIB2_VERSION_MAJOR = 2.86
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).1
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = https://download.gnome.org/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPL-2.1+
+-LIBGEOTIFF_VERSION = 1.7.3
++LIBGEOTIFF_VERSION = 1.7.4
+ LIBGEOTIFF_SITE = http://download.osgeo.org/geotiff/libgeotiff
+ LIBGEOTIFF_LICENSE = MIT, public domain
+ LIBGEOTIFF_LICENSE_FILES = LICENSE
 -- 
 2.43.0
 
