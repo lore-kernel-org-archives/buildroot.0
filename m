@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52EE9CCD1AB
-	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:36:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1DA6CCD1AB
+	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:36:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 22D4A61355;
-	Wed, 22 Oct 2025 16:36:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A7812612BE;
+	Wed, 22 Oct 2025 16:36:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UWtzFPO9jx4x; Wed, 22 Oct 2025 16:36:43 +0000 (UTC)
+ id 1o1H89s0wt3c; Wed, 22 Oct 2025 16:36:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9641961336
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F27761371
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9641961336;
-	Wed, 22 Oct 2025 16:36:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0B44CDE
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9F27761371;
+	Wed, 22 Oct 2025 16:36:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5C23643F
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ECCC283F8C
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1F4E241130
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sC6CN4d7Tq-z for <buildroot@buildroot.org>;
- Wed, 22 Oct 2025 16:36:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Cd86TFz-gqe2 for <buildroot@buildroot.org>;
+ Wed, 22 Oct 2025 16:36:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6322583F71
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9970E4111C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6322583F71
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9970E4111C
  for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:36:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5303087722; Wed, 22 Oct 2025 16:36:34 +0000 (UTC)
+ id 97711866C6; Wed, 22 Oct 2025 16:36:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 22 Oct 2025 18:35:28 +0200
+Date: Wed, 22 Oct 2025 18:35:37 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 11f8c9225bbb667b638c1d347ace1b1109f0dd5b
-X-Git-Newrev: 176c0dd14175b711302052c29940ff001eb3b5d6
+X-Git-Oldrev: 5a489da1aa524be8583a23a6f59eb7b33cfdfe80
+X-Git-Newrev: d88b247633f826a5eb392dd28639eb3b860d4335
 X-Patchwork-Hint: ignore
-Message-Id: <20251022163634.5303087722@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/audit/S02auditd:
- fix SELinux label issues
+Message-Id: <20251022163634.97711866C6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/squid: add patch
+ for CVE-2025-59362
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,51 +66,103 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=176c0dd14175b711302052c29940ff001eb3b5d6
+commit: https://git.buildroot.net/buildroot/commit/?id=d88b247633f826a5eb392dd28639eb3b860d4335
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-"mkdir -Z" tries to create the directory with the default type context
-and does not accept any parameter, leading to mkdir creating a
-directory by the name of "system_u:object_r:auditd_log_t" (or failing
-to, with a read-only rootfs). Use "--context=" instead to specify the
-context.
+Fixes the following vulnerability:
 
-Letting start-stop-daemon create the auditd PID file leads to an
-incorrect label, with type "initrc_runtime_t" instead of
-"auditd_runtime_t", which would prevent auditd from writing or
-deleting it. Auditd manages its own PID file and daemonizes by
-default, so simply drop the --background and --make-pidfile options
-from start-stop-daemon.
+- CVE-2025-59362
 
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 3fdce2464744ad1b8a85ee37b6ef830806d81157)
+    Squid through 7.1 mishandles ASN.1 encoding of long SNMP OIDs. This
+    occurs in asn_build_objid in lib/snmplib/asn1.c.
+
+For more information, see:
+
+- https://nvd.nist.gov/vuln/detail/CVE-2025-59362
+- https://github.com/squid-cache/squid/commit/250a18e0a80694b919972a1836cdfe20f2e1baa0
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit fb13611e6414e01f5a34cc065913fb1adcdf775c)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/audit/S02auditd | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ ...0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch | 52 ++++++++++++++++++++++
+ package/squid/squid.mk                             |  4 ++
+ 2 files changed, 56 insertions(+)
 
-diff --git a/package/audit/S02auditd b/package/audit/S02auditd
-index f32f01714e..97c43bc66f 100644
---- a/package/audit/S02auditd
-+++ b/package/audit/S02auditd
-@@ -18,13 +18,13 @@ start(){
- 	# the directory with SELinux permissions if possible
- 	if command -v selabel_lookup >/dev/null 2>&1; then
- 		audit_log_selable="$(selabel_lookup -b file -k /var/log/audit | cut -d ' ' -f 3)"
--		mkdir -p /var/log/audit -Z "${audit_log_selable}"
-+		mkdir -p --context="${audit_log_selable}" /var/log/audit
- 	else
- 		mkdir -p /var/log/audit
- 	fi
- 
--	start-stop-daemon --start --background --make-pidfile \
--		--pidfile "${PIDFILE}" --exec "/usr/sbin/${DAEMON}"
-+	start-stop-daemon --start --pidfile "${PIDFILE}" \
-+		--exec "/usr/sbin/${DAEMON}"
- 	status=$?
- 	if [ "${status}" -eq 0 ]; then
- 		# Load the default rules
+diff --git a/package/squid/0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch b/package/squid/0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch
+new file mode 100644
+index 0000000000..695ba0255e
+--- /dev/null
++++ b/package/squid/0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch
+@@ -0,0 +1,52 @@
++From 0d89165ee6da10e6fa50c44998b3cd16d59400e9 Mon Sep 17 00:00:00 2001
++From: Alex Rousskov <rousskov@measurement-factory.com>
++Date: Sat, 30 Aug 2025 06:49:36 +0000
++Subject: [PATCH] Fix ASN.1 encoding of long SNMP OIDs (#2149)
++
++Upstream: https://github.com/squid-cache/squid/commit/250a18e0a80694b919972a1836cdfe20f2e1baa0
++CVE: CVE-2025-59362
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ lib/snmplib/asn1.c | 13 +++++++++++++
++ 1 file changed, 13 insertions(+)
++
++diff --git a/lib/snmplib/asn1.c b/lib/snmplib/asn1.c
++index 81f2051fbe7..2852c26b220 100644
++--- a/lib/snmplib/asn1.c
+++++ b/lib/snmplib/asn1.c
++@@ -735,6 +735,7 @@ asn_build_objid(u_char * data, int *datalength,
++      * lastbyte ::= 0 7bitvalue
++      */
++     u_char buf[MAX_OID_LEN];
+++    u_char *bufEnd = buf + sizeof(buf);
++     u_char *bp = buf;
++     oid *op = objid;
++     int asnlength;
++@@ -753,6 +754,10 @@ asn_build_objid(u_char * data, int *datalength,
++     while (objidlength-- > 0) {
++         subid = *op++;
++         if (subid < 127) {  /* off by one? */
+++            if (bp >= bufEnd) {
+++                snmp_set_api_error(SNMPERR_ASN_ENCODE);
+++                return (NULL);
+++            }
++             *bp++ = subid;
++         } else {
++             mask = 0x7F;    /* handle subid == 0 case */
++@@ -770,8 +775,16 @@ asn_build_objid(u_char * data, int *datalength,
++                 /* fix a mask that got truncated above */
++                 if (mask == 0x1E00000)
++                     mask = 0xFE00000;
+++                if (bp >= bufEnd) {
+++                    snmp_set_api_error(SNMPERR_ASN_ENCODE);
+++                    return (NULL);
+++                }
++                 *bp++ = (u_char) (((subid & mask) >> bits) | ASN_BIT8);
++             }
+++            if (bp >= bufEnd) {
+++                snmp_set_api_error(SNMPERR_ASN_ENCODE);
+++                return (NULL);
+++            }
++             *bp++ = (u_char) (subid & mask);
++         }
++     }
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index b021170d9b..d445f005b7 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -11,6 +11,10 @@ SQUID_LICENSE = GPL-2.0+
+ SQUID_LICENSE_FILES = COPYING
+ SQUID_CPE_ID_VENDOR = squid-cache
+ SQUID_SELINUX_MODULES = apache squid
++
++# 0001-Fix-ASN-1-encoding-of-long-SNMP-OIDs.patch
++SQUID_IGNORE_CVES += CVE-2025-59362
++
+ SQUID_DEPENDENCIES = libcap host-libcap libtool libxml2 host-pkgconf \
+ 	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
+ SQUID_CONF_ENV = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
