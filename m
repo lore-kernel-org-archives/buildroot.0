@@ -1,71 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B17A5CCD1AB
-	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:43:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B923ECCD1AB
+	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:44:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C45B40D15;
-	Wed, 22 Oct 2025 16:43:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 91B3C6122E;
+	Wed, 22 Oct 2025 16:44:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UJUOX3CXXV47; Wed, 22 Oct 2025 16:43:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6EcqsdYiG9rL; Wed, 22 Oct 2025 16:44:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A044040D3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF3AF613B0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A044040D3B;
-	Wed, 22 Oct 2025 16:43:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id CE4FB70A
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:43:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF3AF613B0;
+	Wed, 22 Oct 2025 16:44:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E94943F
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:44:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C092340D47
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:43:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 248336122E
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:44:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0Iz5KTDzYxIx for <buildroot@buildroot.org>;
- Wed, 22 Oct 2025 16:43:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8KSiDYwv7-dm for <buildroot@buildroot.org>;
+ Wed, 22 Oct 2025 16:43:59 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BF19B40C91
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF19B40C91
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 27388613B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27388613B0
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BF19B40C91
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:43:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 27388613B0
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:43:59 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id D3BC6B97918D; Wed, 22 Oct 2025 18:43:33 +0200 (CEST)
-To: Bernd Kuhls <bernd@kuhls.net>
+ with ESMTPSA id 2103FB97918D; Wed, 22 Oct 2025 18:43:57 +0200 (CEST)
+To: Fiona Klute <fiona.klute@gmx.de>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Wed, 22 Oct 2025 18:43:32 +0200
-Message-ID: <20251022164333.286814-1-arnout@rnout.be>
+Date: Wed, 22 Oct 2025 18:43:55 +0200
+Message-ID: <20251022164355.287011-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251012085858.3442695-1-bernd@kuhls.net>
-References: <20251012085858.3442695-1-bernd@kuhls.net>
+In-Reply-To: <20251010222122.1911651-2-fiona.klute@gmx.de>
+References: <20251010222122.1911651-2-fiona.klute@gmx.de>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1761151414; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1761151437; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=O0ohAOnLxCKEOU8hzEjCsDPwxCMu3qohmtB8raWiLJU=;
- b=EA2UEW8szjCg1ApC2fgKBteE0Azt3adUgIHysxt7NsYPLxjK22/Z3wbFP1rDOEGtr/WGxS
- ttCdE6MGlnlUQ6L6lglwW+/BVAe5O2uTM7ItZ9tUT1AqVLbf8I2Nv8gUlGRxHjdZtKx02D
- mw8ls7doNRbiIDZGa+ujFIG6MufsOLS/S35ZsZtOOKM58rJBi9lIWq0T2ELpks0b3VHiiH
- Ud/bkLTWL4MR4WD6AfDs6122LtcsD/km8lXLzXOkmpXW2haiFAx8TX+EvNPhkKbsGdTtrN
- mUC1pJHZpznTmQwIL0J4f0hNJRg5L4lO14ircifWMkptU4HFc2dKRqdUoq7+2Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=aCTok2X9RoWgbJrcTBpxNJh8K8lvFIGCkQvSG+L3JLQ=;
+ b=mmEdEdZhQbQiiWzBm86QgQmrYlod6XdsfOwoR6mW2AAfVUVgEB8d+rr32KSYxvdubeULJj
+ 0bvCnoE73JtUHTDsOJTiUAiU3Cwwbez+Ox9fyknixCa/SHoy5KZBkW5rqqENR7+0w7mGNQ
+ 5oOB75EhAvAaAeGkY9hpNZez2Fk4vm/yHnSvFRmKTI5NjljhPARCkgpnBVBq0dPE/X18WX
+ bVChqlYYFD6w16jblF2YU44se+Vt44sBPSir/dTidXIwUzyiJmT9KoKqANv7vC4zETysXI
+ PPBVRUH0cRLAVvayjSV5hdP0UtfYroUVMzxkF53udkhN66nz3YfDVw2ba1jcEQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=EA2UEW8s
-Subject: Re: [Buildroot] [PATCH 1/1] package/wireless-regdb: bump version to
- 2025.10.07
+ header.a=rsa-sha256 header.s=dkim header.b=mmEdEdZh
+Subject: Re: [Buildroot] [PATCH 2/2] package/refpolicy: bump version to
+ 2.20250923
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,44 +85,61 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Release notes:
-> https://lists.infradead.org/pipermail/wireless-regdb/2025-October/001796.html
-> https://lists.infradead.org/pipermail/wireless-regdb/2025-July/001775.html
+> The update makes some warnings about unknown classes and permissions
+> during boot with current kernels go away.
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Upstream changelogs [1, 2] list as "notable changes":
+> 
+> * Updates to support screen 5.0.
+> * Add labeling for bcachefs.
+> * Various systemd updates and fixes.
+> * Several updates and fixes for systemd
+> * Add new permissions and policy capabilities
+> * Drop reiserfs support (it was removed in kernel 6.13)
+> 
+> Plus a number of new modules.
+> 
+> [1] https://github.com/SELinuxProject/refpolicy/releases/tag/RELEASE_2_20250618
+> [2] https://github.com/SELinuxProject/refpolicy/releases/tag/RELEASE_2_20250923
+> 
+> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 
-Applied to 2025.02.x and 2025.08.x. Thanks
+Applied to 2025.08.x. Thanks
 
 > ---
->  package/wireless-regdb/wireless-regdb.hash | 2 +-
->  package/wireless-regdb/wireless-regdb.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> The SELinux tests (tests.core.test_selinux.*,
+> tests.init.test_systemd_selinux.*) passed.
 > 
-> diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-> index cb915c4415..4b2c67965f 100644
-> --- a/package/wireless-regdb/wireless-regdb.hash
-> +++ b/package/wireless-regdb/wireless-regdb.hash
-> @@ -1,4 +1,4 @@
->  # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
-> -sha256  57f8e7721cf5a880c13ae0c202edbb21092a060d45f9e9c59bcd2a8272bfa456  wireless-regdb-2025.02.20.tar.xz
-> +sha256  d4c872a44154604c869f5851f7d21d818d492835d370af7f58de8847973801c3  wireless-regdb-2025.10.07.tar.xz
+>  package/refpolicy/refpolicy.hash | 3 +--
+>  package/refpolicy/refpolicy.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/refpolicy/refpolicy.hash b/package/refpolicy/refpolicy.hash
+> index 76bbf482ae..761ac919f7 100644
+> --- a/package/refpolicy/refpolicy.hash
+> +++ b/package/refpolicy/refpolicy.hash
+> @@ -1,5 +1,4 @@
+>  # From https://github.com/SELinuxProject/refpolicy/releases
+> -sha256  d2487c49420e8710e999b18bbe699fbff033fe5adc5127e3f0c7dafaa9b4d209  refpolicy-2.20250213.tar.bz2
+> -
+> +sha256  e5b435c934048d01ca4415a1f2670a51e113f26f5d01ad4227c98fbe8dea8d5b  refpolicy-2.20250923.tar.bz2
 >  # Locally computed
->  sha256  678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
-> diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-> index 999a986de2..055238be5e 100644
-> --- a/package/wireless-regdb/wireless-regdb.mk
-> +++ b/package/wireless-regdb/wireless-regdb.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -WIRELESS_REGDB_VERSION = 2025.02.20
-> +WIRELESS_REGDB_VERSION = 2025.10.07
->  WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
->  WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
->  WIRELESS_REGDB_LICENSE = ISC
+>  sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
+> diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
+> index 2b8a7c7e24..7619496db0 100644
+> --- a/package/refpolicy/refpolicy.mk
+> +++ b/package/refpolicy/refpolicy.mk
+> @@ -23,7 +23,7 @@ REFPOLICY_SITE = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL))
+>  REFPOLICY_SITE_METHOD = git
+>  BR_NO_CHECK_HASH_FOR += $(REFPOLICY_SOURCE)
+>  else
+> -REFPOLICY_VERSION = 2.20250213
+> +REFPOLICY_VERSION = 2.20250923
+>  REFPOLICY_SOURCE = refpolicy-$(REFPOLICY_VERSION).tar.bz2
+>  REFPOLICY_SITE = https://github.com/SELinuxProject/refpolicy/releases/download/RELEASE_$(subst .,_,$(REFPOLICY_VERSION))
+>  endif
 > -- 
-> 2.47.3
+> 2.51.0
 > 
 > _______________________________________________
 > buildroot mailing list
