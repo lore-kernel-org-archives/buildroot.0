@@ -1,84 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02568CCD1A5
-	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 00:07:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3C5ACCD1BC
+	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 00:07:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A960A403D3;
-	Wed, 22 Oct 2025 00:07:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B0C1160DD5;
+	Wed, 22 Oct 2025 00:07:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WnbHtfMfyrOS; Wed, 22 Oct 2025 00:07:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Pw9lCzsHZDWy; Wed, 22 Oct 2025 00:07:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDF43403D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D362260DD7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BDF43403D4;
-	Wed, 22 Oct 2025 00:07:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F56670A
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 00:07:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D362260DD7;
+	Wed, 22 Oct 2025 00:07:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 540AD70A
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 00:07:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 05ECF40DA9
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 00:07:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5178560DD7
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 00:07:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yv705O03lEl3 for <buildroot@buildroot.org>;
- Wed, 22 Oct 2025 00:07:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u1Kb23XxrAox for <buildroot@buildroot.org>;
+ Wed, 22 Oct 2025 00:07:36 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::62f; helo=mail-pl1-x62f.google.com;
+ client-ip=2607:f8b0:4864:20::533; helo=mail-pg1-x533.google.com;
  envelope-from=joseph.kogut@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 027F940DAC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 027F940DAC
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com
- [IPv6:2607:f8b0:4864:20::62f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 027F940DAC
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 00:07:33 +0000 (UTC)
-Received: by mail-pl1-x62f.google.com with SMTP id
- d9443c01a7336-290deb0e643so48074465ad.2
- for <buildroot@buildroot.org>; Tue, 21 Oct 2025 17:07:33 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 71D3660DD5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71D3660DD5
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com
+ [IPv6:2607:f8b0:4864:20::533])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 71D3660DD5
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 00:07:36 +0000 (UTC)
+Received: by mail-pg1-x533.google.com with SMTP id
+ 41be03b00d2f7-b633b54d05dso4282580a12.2
+ for <buildroot@buildroot.org>; Tue, 21 Oct 2025 17:07:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1761091653; x=1761696453;
- h=cc:to:content-transfer-encoding:mime-version:message-id:date
- :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=YUHPlW5M0Sp4gvjA2fazXt9vWyz2Ek3gqVqzYEjxwNY=;
- b=QeSC6og+qPLRanNeyO/+tibC3KaQKHxbcecKxgklxlsSmsFuCu/OQMz+CgWUaMBsCa
- K3/mHBS7lEc6o/5yyxKd5M5t3Z9/ebBNO7P/PVDc77VhygBeUpby9FaLh1QR1yPNmZrn
- 4nye2lobl/1iyxJH7ghErf8JbuxBBlVQSJCOBYP7SrbFiomqox0IKay3qIt26+MWyxqA
- MzNRGajZ21Y9cbLJ/r/3ZAusp/tIpP3y3JOcC67q4yGi9HN9nBh4XEbWMZ3mSJRlRiFt
- VZ92pDgVuKiVstLabvcKsJZXcSHMdNTUJpyYh6GV0Qjajhcm9mN7jJFwYtuAFa5M7Bi9
- kZhw==
-X-Gm-Message-State: AOJu0Yw8PjIh6/Jjl1fRIXciUdxJVolSzz0zsy3zvt0z9WwlmpwiD+K8
- R5sgbDvkqtOblrmOMtENImkHQQWF8LtN6cFEXmVTDhwHXZN0E4MkeTToCygROJB1
-X-Gm-Gg: ASbGncscsGsWvWvZ2BfuWhnSews9qIb/9yEKQI2OFm2vQEJvPG+I76m+MJa9GSN476t
- UZ3T9pbf5bOgQLtZkxW2E5xlUPxNbzqHO8JGRh0hfCBqEFRGz0kVVNh5SP9od1ALCNLkOkr8St7
- 352aDMGV/ezShWezondn08kW5SUgJdO+o7+6IPglaR3KIzMI73qzODOsfwHiP5GFhaMtR6DkjTb
- OOy8iJNHAqVG1tPscD0rM4w3Fq8mH6HvveuMzf8kmIvAsBnfXvkeYN5byCApuuktkyrbbHj1jzo
- p3wX+YCnhVRhZCJObfx7ZlhD2p9V9RYu/0vNvwPreyjq46TgAopDrkfHnb5V9VlTMMUNPqbVep8
- sUILrzjkD4OIWMBX7FpIEZMxly9+HCY9NXg86NCYNE4qH3yPMYkit0mJVskOArjbMtDErUNm4c+
- FM/UTeAkkAnpo=
-X-Google-Smtp-Source: AGHT+IG/gvpvsgQgsb/CtRYV2UV1BUAxYpPsEQQ41RJtqFKCgucG67dBlUM9E4HVlUH1F9kPsi2AgQ==
-X-Received: by 2002:a17:902:f78b:b0:290:ab61:6a4f with SMTP id
- d9443c01a7336-290c9cb367fmr214856545ad.15.1761091653251; 
- Tue, 21 Oct 2025 17:07:33 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1761091655; x=1761696455;
+ h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+ :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=SDF/vZfkCZWgCffQjwjMhWQqRdJLyKGCydse/r5RdXc=;
+ b=cOGk/qmTb05HXgarzJJv+T9JrvL7Hb7sGSPodin6U+7URpXwNN8Floh3pAe7LcypkJ
+ F1F/Ht4I6eR4eFR5MsuRumpmsc8PG8+/kKzl9s013zd/7zDYQfvGRiCOTW3UdmnAVp4K
+ /okUya50sStIK5eRCj4YX5Jua8TBdjUmrqoedUA4XcmGFtX7VbLtZhRNJxzz15qXHnUE
+ 9yjimXPWZMk1LzVkkTf+ZkKldX9pngyKMx/Ap/77VF/J9qhYUAanFiz9zMzl8+pZ6/wQ
+ 36FsYcgDIZ8CHSewWX2lgoutkxrFCwppSFvvkGO6Sk+G2gWW/dq8w+Y6+/fk+VqFqoQQ
+ 0dzA==
+X-Gm-Message-State: AOJu0Yy12/KPVkAKDFZhiKkYLI4jhldzrlpF+O/+4VDUXLoQFyu4YLCr
+ /oAaZHGcOsV8Ay7pw/lN0ikNblhBcG4LvaU67sWYNMH2rCeieiB4GxKs
+X-Gm-Gg: ASbGncvRX0C+RFSoetHt8Jj6ricvuMQSWz+i+SbigZ1IWkY0/c1ZsfylHaVVaVuO1+r
+ kp8FFxnZz+YFhYmfyomS/WWa6kyfc3/zaMDFGmuMA9AWJK0QgH62tFAjz6t0GYP/DsIHNE/o4b7
+ Bn6toBLyK8XPCksQ/Q8dLil+BAbdHWqsTNcPc25iIRywRU0gRc5YPuFQMieTtHi1nd+GjHRDNav
+ hWWm8bFdmTtPd2tlAo/0xr6LpZlUpWnJmh/00aFmx+Qv230Kan5msNGL0jrzwxwu7yDgZTdlgTo
+ j8d+fJczCvmexzyRtqjLpVILQ7s+f31KDyGxG3udjDg8ccMC/TsnVoXcWhUhTWm+eZrTQdHphf4
+ NlYvrknTf3cM9ymmi487pe+kZ645wOAKyGm7x3+PR4AlGRSt9MVERNIcUMFMjGIFSSw1urc0MwW
+ kd
+X-Google-Smtp-Source: AGHT+IFl4hEe87/GaPjmMPAa641D+YRYgAj6WwZFiqJhKzWaWt++lyVh41KAxcd9VcioJGzV+S7AOQ==
+X-Received: by 2002:a17:903:46c8:b0:24b:1589:5054 with SMTP id
+ d9443c01a7336-290c9cc3da9mr210572285ad.23.1761091655279; 
+ Tue, 21 Oct 2025 17:07:35 -0700 (PDT)
 Received: from wash.local ([50.46.184.91]) by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-2924721b6cfsm121350075ad.107.2025.10.21.17.07.32
+ d9443c01a7336-2924721b6cfsm121350075ad.107.2025.10.21.17.07.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 21 Oct 2025 17:07:32 -0700 (PDT)
+ Tue, 21 Oct 2025 17:07:34 -0700 (PDT)
 From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Tue, 21 Oct 2025 17:07:31 -0700
-Message-Id: <20251021-virglrenderer-v2-v2-0-d3ea6ff07489@gmail.com>
+Date: Tue, 21 Oct 2025 17:07:33 -0700
 MIME-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAEMg+GgC/12OOw6DMBAFr4JcZyPbwg5JlXtEFLbZwEr8tCZWI
- sTdYygpp5g3bxURmTCKR7EKxkSRpjGDvhQidG5sEajJLLTURkmtIBG3PePYICND0uBLfbceXaW
- UFVmbGd/0PSZfdWbvIoJnN4ZuHzr7u9JRXCb+HSeS2sWjJ62qTr3PHBdGN0BSIMHcjDYuVKW0+
- GwHR/01TIOot237A+44C/fZAAAA
-X-Change-ID: 20251021-virglrenderer-v2-b4296bea8116
+Message-Id: <20251021-virglrenderer-v2-v2-2-d3ea6ff07489@gmail.com>
+References: <20251021-virglrenderer-v2-v2-0-d3ea6ff07489@gmail.com>
+In-Reply-To: <20251021-virglrenderer-v2-v2-0-d3ea6ff07489@gmail.com>
 To: buildroot@buildroot.org
 Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, 
  Romain Naour <romain.naour@gmail.com>, 
@@ -86,23 +83,24 @@ Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
  Joseph Kogut <joseph.kogut@gmail.com>
 X-Mailer: b4 0.14.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1761091653; x=1761696453; darn=buildroot.org;
- h=cc:to:content-transfer-encoding:mime-version:message-id:date
- :subject:from:from:to:cc:subject:date:message-id:reply-to;
- bh=YUHPlW5M0Sp4gvjA2fazXt9vWyz2Ek3gqVqzYEjxwNY=;
- b=ESkw9vjx5FEFpNeW6yzgctgVPhJ3P6MrG6A8n00fl1qAfEqcfUE0e2VTVJciP9LHqk
- h2i6eijfTZtXeN6jgV3Rwn5vwtyvKqMk1kf1MOBB8YyGKBMxll2Omjd+WoWXuJQ38SwI
- AVl7Se9FqCXRmccBlVam5KLJRkjjd/FQ/8yBD34NPEEDseiWYLV+2YoO+pyqI7DcRzth
- NAy6k7NYYgyXtP3wXsgqZXxxdwSrewsf/0SJG6opzVImHkaOjjiORzW/DPzCl6zdgzcz
- QSsH5LAswvVcin+fXoZlZva+q8qvmLLlx+LOWE/v8uE+LLc4+tOOroaICEqNAfh5Dd0v
- rblA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1761091655; x=1761696455; darn=buildroot.org;
+ h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+ :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=SDF/vZfkCZWgCffQjwjMhWQqRdJLyKGCydse/r5RdXc=;
+ b=hl3pCc9r66v+8ioFrZYTAVQg3SP7NHkNsFCf2RJdLdLvUZSs/fwQfJflhyTJjMjArC
+ iqvexKJKPzf9FYKU75lZk/ZMf1GERPY7bnvLHhVhuWV4fehdjUfRqwKqQOyRCcuNF+yP
+ lzfnMILuKaAd87WRQAUKhvw7rZWrv+0mvgbijyuptNy3ztbKdpv8R4zBZwJK0zhKjht0
+ WMSbaO7uG3C8kHVA5RJ70TXWm05X+2nmMNgJqeVD8neJ1fTj0/i1ZA1YnBFoUwyIWoax
+ eHpOov3y0CFi3f/jp+SX32w9JbCFgTdQ7IKheJxJWMblSO/GcQRpZpDZ0XKOAlvPyrKx
+ zWjw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=ESkw9vjx
-Subject: [Buildroot] [PATCH v2 0/2] package/qemu: add virglrenderer support
+ header.a=rsa-sha256 header.s=20230601 header.b=hl3pCc9r
+Subject: [Buildroot] [PATCH v2 2/2] package/qemu: add virglrenderer support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,66 +112,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8sCgpUaGlzIHBhdGNoIHNlcmllcyBhZGRzIHN1cHBvcnQgZm9yIGJ1aWxkaW5nIHRoZSB2
-aXJnbHJlbmRlcmVyIGxpYnJhcnkgaW4KYnVpbGRyb290LgoKVmlyZ2xyZW5kZXJlciBpcyBhIHVz
-ZXJzcGFjZSBsaWJyYXJ5IHVzZWQgdG8gaW1wbGVtZW50IDNkIHJlbmRlcmluZwp1c2luZyB0aGUg
-dmlydGlvLWdwdSBwcm90b2NvbC4gSXQncyBjb21tb25seSB1c2VkIGluIGNvbmp1bmN0aW9uIHdp
-dGgKcWVtdSwgbWVzYSwgYW5kIHRoZSBrZXJuZWwncyBEUk0gc3Vic3lzdGVtIHRvIHByb3ZpZGUg
-YWNjZWxlcmF0ZWQKcmVuZGVyaW5nIGZvciB2aXJ0dWFsIG1hY2hpbmVzLiBWaXJnbHJlbmRlcmVy
-IGFkZGl0aW9uYWxseSBmYWNpbGl0YXRlcwpWdWxrYW4gcGFzc3Rocm91Z2ggdXNpbmcgdGhlIFZl
-bnVzIHByb3RvY29sLgoKVGhlIGZpcnN0IHBhdGNoIGFkZHMgdGhlIG5ldyB2aXJnbHJlbmRlcmVy
-IHBhY2thZ2UuCgpUaGUgc2Vjb25kIHBhdGNoIGFkZHMgYW4gT3BlbkdMIGNvbmZpZyBmb3IgcWVt
-dSwgYW5kIGEgdmlyZ2xyZW5kZXJlcgpjb25maWcgdGhhdCBzZWxlY3RzIGl0LCBhcyB2aXJnbC92
-ZW51cyBjdXJyZW50bHkgcmVxdWlyZSBhIEdMCmFjY2VsZXJhdGVkIGRpc3BsYXkgZnJvbnRlbmQu
-IEFuIG9wdGlvbmFsIGNvbmZpZyBmb3IgZW5hYmxpbmcgdmVudXMgb24KdmlyZ2xyZW5kZXJlciBl
-bmFibGVzIHZ1bGthbiBwYXNzdGhyb3VnaC4KClRlc3RlZCB3aXRoIGxsYW1hLWJlbmNoIHJ1bm5p
-bmcgd2l0aCB0aGUgdnVsa2FuIGJhY2tlbmQgaW4gYSBuZXN0ZWQgVk0uCkFzIHNlZW4gYmVsb3cs
-IHRoZSBuZXN0ZWQgZ3Vlc3QgaXMgc2VuZGluZyBjb21tYW5kcyB0byB0aGUgaG9zdCB0aHJvdWdo
-CnZpcnRpby1ncHUgdHdpY2UuCgogICAgICAgICMgbGxhbWEtYmVuY2ggLW0gbGxhbWEtMi03Yi5R
-NF8wLmdndWYgLW5nbCAxMDAKICAgICAgICBnZ21sX3Z1bGthbjogRm91bmQgMSBWdWxrYW4gZGV2
-aWNlczoKICAgICAgICBnZ21sX3Z1bGthbjogMCA9IFZpcnRpby1HUFUgVmVudXMgKFZpcnRpby1H
-UFUgVmVudXMgKEFNRCBSYWRlb24gUlggNjkwMCBYVCAoUkFEViBOQVZJMjEpKSkgKHZlbnVzKSB8
-IHVtYTogMCB8IGZwMTY6IDEgfCB3YXJwIHNpemU6IDY0IHwgc2hhcmVkIG1lbW9yeTogNjU1MzYg
-fCBpbnQgZG90OiAxIHwgbWF0cml4IGNvcmVzOiBub25lCiAgICAgICAgfCBtb2RlbCAgICAgICAg
-ICAgICAgICAgICAgICAgICAgfCAgICAgICBzaXplIHwgICAgIHBhcmFtcyB8IGJhY2tlbmQgICAg
-fCBuZ2wgfCAgICAgICAgICAgIHRlc3QgfCAgICAgICAgICAgICAgICAgIHQvcyB8CiAgICAgICAg
-fCAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0gfCAtLS0tLS0tLS06IHwgLS0tLS0tLS0t
-OiB8IC0tLS0tLS0tLS0gfCAtLTogfCAtLS0tLS0tLS0tLS0tLTogfCAtLS0tLS0tLS0tLS0tLS0t
-LS0tOiB8CiAgICAgICAgfCBsbGFtYSA3QiBRNF8wICAgICAgICAgICAgICAgICAgfCAgIDMuNTYg
-R2lCIHwgICAgIDYuNzQgQiB8IFZ1bGthbiAgICAgfCAxMDAgfCAgICAgICAgICAgcHA1MTIgfCAg
-ICAgIDEyMjAuOTkgwrEgMTAuMTIgfAogICAgICAgIHwgbGxhbWEgN0IgUTRfMCAgICAgICAgICAg
-ICAgICAgIHwgICAzLjU2IEdpQiB8ICAgICA2Ljc0IEIgfCBWdWxrYW4gICAgIHwgMTAwIHwgICAg
-ICAgICAgIHRnMTI4IHwgICAgICAgICA4Mi4yNCDCsSAxLjAwIHwKCiAgICAgICAgYnVpbGQ6IHVu
-a25vd24gKDApCgpNb3JlIGluZm9ybWF0aW9uIGFib3V0IHRoZSBiZW5jaG1hcmsgYW5kIHJlc3Vs
-dHMgZnJvbSBvdGhlciBoYXJkd2FyZSBvbgp0aGUgbGxhbWEuY3BwIEdpdEh1YiBkaXNjdXNzaW9u
-IGhlcmVbMF0uCgpGZWVkYmFjayB3ZWxjb21lLgoKWzBdIGh0dHBzOi8vZ2l0aHViLmNvbS9nZ21s
-LW9yZy9sbGFtYS5jcHAvZGlzY3Vzc2lvbnMvMTA4NzkKClNpZ25lZC1vZmYtYnk6IEpvc2VwaCBL
-b2d1dCA8am9zZXBoLmtvZ3V0QGdtYWlsLmNvbT4KLS0tCkNoYW5nZXMgaW4gdjI6Ci0gUmViYXNl
-IG9udG8gbmV4dCAocHl0aG9uLWdsc2xhbmcgcGF0Y2ggbWVyZ2VkKQotIEJ1bXAgdmVyc2lvbiB0
-byB2MS4yLjAKLSBSZW1vdmUgaGlkZGVuIGNvbmZpZ3MgZm9yIHZpcmdscmVuZGVyZXIgdkRSTSBi
-YWNrZW5kcyBbUm9tYWluXQotIEZpeGVkIHR5cG8gaW4gcWVtdS9Db25maWcuaW4gW1JvbWFpbl0K
-LSBTcGxpdCB1cCBjb25maWdzIGZvciBxZW11IE9wZW5HTCBhbmQgdmlyZ2xyZW5kZXJlciBzdXBw
-b3J0IFtSb21haW5dCi0gTW9yZSBkZXRhaWxlZCBxZW11IGNvbmZpZyBoZWxwIG1lc3NhZ2VzCi0g
-TGluayB0byB2MTogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvci8yMDI1MDYxOC12aXJnbHJlbmRl
-cmVyLXVwc3RyZWFtLXYxLTAtNTc1MjVhYzg0MDZlQGdtYWlsLmNvbQoKLS0tCkpvc2VwaCBLb2d1
-dCAoMik6CiAgICAgIHBhY2thZ2UvdmlyZ2xyZW5kZXJlcjogbmV3IHBhY2thZ2UKICAgICAgcGFj
-a2FnZS9xZW11OiBhZGQgdmlyZ2xyZW5kZXJlciBzdXBwb3J0CgogREVWRUxPUEVSUyAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICB8ICAxICsKIHBhY2thZ2UvQ29uZmlnLmluICAgICAgICAg
-ICAgICAgICAgICAgICAgfCAgMSArCiBwYWNrYWdlL3FlbXUvQ29uZmlnLmluICAgICAgICAgICAg
-ICAgICAgIHwgMjcgKysrKysrKysrKysrKysrKysrKysrKysrCiBwYWNrYWdlL3FlbXUvcWVtdS5t
-ayAgICAgICAgICAgICAgICAgICAgIHwgMTUgKysrKysrKysrKysrLQogcGFja2FnZS92aXJnbHJl
-bmRlcmVyL0NvbmZpZy5pbiAgICAgICAgICB8IDMzICsrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrCiBwYWNrYWdlL3ZpcmdscmVuZGVyZXIvdmlyZ2xyZW5kZXJlci5oYXNoIHwgIDUgKysrKysK
-IHBhY2thZ2UvdmlyZ2xyZW5kZXJlci92aXJnbHJlbmRlcmVyLm1rICAgfCAzNiArKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKwogNyBmaWxlcyBjaGFuZ2VkLCAxMTcgaW5zZXJ0aW9ucygr
-KSwgMSBkZWxldGlvbigtKQotLS0KYmFzZS1jb21taXQ6IGFhNmI5Yzk3OWRmYjRhM2E1NTEwOWQ4
-MTljYWM2NjkyNGNkZTU5MTMKY2hhbmdlLWlkOiAyMDI1MTAyMS12aXJnbHJlbmRlcmVyLXYyLWI0
-Mjk2YmVhODExNgoKQmVzdCByZWdhcmRzLAotLSAKSm9zZXBoIEtvZ3V0IDxqb3NlcGgua29ndXRA
-Z21haWwuY29tPgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczov
-L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Add optional virglrenderer support, along with enabling OpenGL when
+necessary.
+
+https://www.qemu.org/docs/master/system/devices/virtio-gpu.html#virtio-gpu-virglrenderer
+
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+---
+ package/qemu/Config.in | 27 +++++++++++++++++++++++++++
+ package/qemu/qemu.mk   | 15 ++++++++++++++-
+ 2 files changed, 41 insertions(+), 1 deletion(-)
+
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index ff7423bc4c..e86dcf57db 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -100,6 +100,33 @@ config BR2_PACKAGE_QEMU_SDL
+ 	  Say 'y' to enable the SDL frontend, that is, a graphical
+ 	  window presenting the VM's display.
+ 
++comment "OpenGL and virglrenderer need an OpenGL and/or OpenGL EGL backend"
++	depends on !(BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL)
++
++config BR2_PACKAGE_QEMU_OPENGL
++	bool "Enable OpenGL"
++	depends on BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL # libepoxy
++	help
++	  Say 'y' to enable OpenGL accelerated display frontend support.
++	  This is necessary to efficiently display frames rendered in a
++	  guest on the host.
++
++	  Run qemu with `-display sdl,gl=on`
++
++config BR2_PACKAGE_QEMU_VIRGLRENDERER
++	bool "Enable virglrenderer"
++	depends on BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL # virglrenderer
++	select BR2_PACKAGE_OPENGL
++	select BR2_PACKAGE_VIRGLRENDERER
++	help
++	  Say 'y' to enable virglrenderer, enabling GL and Vulkan
++	  passthrough from the host to the guest through virtio-gpu.
++	  This enables the guest to have accelerated GL and/or Vulkan.
++
++	  Run qemu with `-device virtio-gpu-gl`
++
++	  https://www.qemu.org/docs/master/system/devices/virtio-gpu.html#virtio-gpu-virglrenderer
++
+ config BR2_PACKAGE_QEMU_FDT
+ 	bool "Enable FDT"
+ 	select BR2_PACKAGE_DTC
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index fdc8591e54..05267de5e7 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -261,6 +261,20 @@ else
+ QEMU_OPTS += --disable-usb-redir
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QEMU_OPENGL),y)
++QEMU_OPTS += --enable-opengl
++QEMU_DEPENDENCIES += libepoxy
++else
++QEMU_OPTS += --disable-opengl
++endif
++
++ifeq ($(BR2_PACKAGE_QEMU_VIRGLRENDERER),y)
++QEMU_OPTS += --enable-virglrenderer
++QEMU_DEPENDENCIES += virglrenderer
++else
++QEMU_OPTS += --disable-virglrenderer
++endif
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ QEMU_OPTS += --static
+ endif
+@@ -310,7 +324,6 @@ define QEMU_CONFIGURE_CMDS
+ 			--disable-membarrier \
+ 			--disable-mpath \
+ 			--disable-netmap \
+-			--disable-opengl \
+ 			--disable-oss \
+ 			--disable-pa \
+ 			--disable-plugins \
+
+-- 
+2.51.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
