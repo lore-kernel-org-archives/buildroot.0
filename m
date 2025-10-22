@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE07ECCD1BC
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD556CCD1AB
 	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:43:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A701F6147D;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 964C840C65;
 	Wed, 22 Oct 2025 16:43:14 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b8AWpQnMojuG; Wed, 22 Oct 2025 16:43:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FE0861481
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3FE0861481;
-	Wed, 22 Oct 2025 16:43:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7ED4470A
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:43:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6FE4240CAE
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:43:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GpO9Dl4jfiSS for <buildroot@buildroot.org>;
- Wed, 22 Oct 2025 16:43:07 +0000 (UTC)
+ id dqxPy0FoG6eS; Wed, 22 Oct 2025 16:43:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A08FF40C80
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A08FF40C80;
+	Wed, 22 Oct 2025 16:43:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 15C0770A
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:43:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id F08C040C80
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:43:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id obXDURNF4uBJ for <buildroot@buildroot.org>;
+ Wed, 22 Oct 2025 16:43:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CB15640C89
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB15640C89
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 00C7640C90
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00C7640C90
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CB15640C89
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:43:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 00C7640C90
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:43:08 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 9D593B97918D; Wed, 22 Oct 2025 18:43:03 +0200 (CEST)
-To: Baruch Siach <baruch@tkos.co.il>
+ with ESMTPSA id CABFCB979192; Wed, 22 Oct 2025 18:43:06 +0200 (CEST)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Wed, 22 Oct 2025 18:43:02 +0200
-Message-ID: <20251022164302.286060-1-arnout@rnout.be>
+Date: Wed, 22 Oct 2025 18:43:05 +0200
+Message-ID: <20251022164305.286138-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <5ff528f1f4822ab5d2d0ea102bc7c44281026e14.1759924403.git.baruch@tkos.co.il>
-References: <5ff528f1f4822ab5d2d0ea102bc7c44281026e14.1759924403.git.baruch@tkos.co.il>
+In-Reply-To: <20251008151504.20176-1-bernd@kuhls.net>
+References: <20251008151504.20176-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1761151385; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1761151387; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=MiP/oDrZokecioVF3nzfmCanpXosuJgDqSyIcLM87dc=;
- b=hveL1WaIsxO6zb96okXB5TOKAhoT8RxuMg1vMLmG/wOxxUJeKbfXxI90i3u7pcosJ+rj0v
- AkWPPcXiKyfN7ApSpHIWR14u8vW6dnctpw8eE6zIdEFT376nLHt9bTb4gn4resrAP3rHda
- DApPL5pog19hEuF9rFSbr5Ci7fpgDUG7uu6CljtH0N7rMXaEFxrUcGx0pC6uO+W45kFx/H
- BXyE6GJsDJYhgrsTpJP+3y3WJHioB29Yjc/xNkTmbI0TLZP3IoFJw0mnNYMpb3+cxmKvgQ
- w6W46nsCTQphqybGvIeA35j5bqg3TzC5gP4GaHQmaanoad7W3Uj0EYzjhQs7LQ==
+ bh=fHz2M7WfqpRyzYO+SuSrX3XbMrP7sACztT/fIdBkzpI=;
+ b=aUCszxUx/RRQlTXvW73VVin7ai5bhxdYiYEF1kls18Qub150oywRBZj61NHB3a4uCNpXMu
+ ekazs6nDxD0z7Gi3cJ9rDzAZi7yhZPxM3j6q0pCsP0P7ipzu/qfQPVowMR68DBz+PEYnPU
+ KLG5yE/hXH6UYgmWcE0qT9WAUv3O3YCqAE9DghycXNchwaI15Bc4KpM0he1i507sHJvHgm
+ 7/bkQIv9R6ohGX8F38kOe6b49+YDMBENsu1M+j29DvRaTPjCHOpZqL6lgWtBQ9FQeyL1vu
+ sTUjxZEgtSFasBJvKInEs7RsIPbOQNgYX/40vRlc+Jc5DQ15V1zLAG0HN0QSmg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=hveL1WaI
-Subject: Re: [Buildroot] [PATCH] package/ebtables: disable sparc64 target
+ header.a=rsa-sha256 header.s=dkim header.b=aUCszxUx
+Subject: Re: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.4.8.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,53 +84,45 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Commit c5d6cde7b627 ("package/ebtables: remove KERNEL_64_USERSPACE_32
-> workaround") fixed build with GCC 14 for when Buildroot
-> BR2_KERNEL_64_USERLAND_32 is enabled. However, ebtables configure script
-> enables its own KERNEL_64_USERSPACE_32 macro unconditionally for sparc64
-> target, which triggers a similar build failure.
+> Release notes:
+> https://gitlab.torproject.org/tpo/core/tor/-/raw/release-0.4.8/ReleaseNotes
+> https://forum.torproject.org/t/stable-release-0-4-8-19/20648
 > 
-> Disable sparc64 target for ebtables and its reverse dependency to avoid
-> build failure.
-> 
-> Fixes:
-> https://autobuild.buildroot.net/results/9a2510e0038cd13db8c3aac0122ea7a0f834fcd2/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x and 2025.08.x. Thanks
 
 > ---
->  package/ebtables/Config.in | 1 +
->  package/libvirt/Config.in  | 1 +
->  2 files changed, 2 insertions(+)
+>  package/tor/tor.hash | 4 ++--
+>  package/tor/tor.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/ebtables/Config.in b/package/ebtables/Config.in
-> index ce5f67bc61f9..83337feec6c6 100644
-> --- a/package/ebtables/Config.in
-> +++ b/package/ebtables/Config.in
-> @@ -3,6 +3,7 @@ config BR2_PACKAGE_EBTABLES
->  	depends on BR2_USE_MMU # fork()
->  	# https://lore.kernel.org/all/20210518181730.13436-1-patrickdepinguin@gmail.com/
->  	depends on !BR2_KERNEL_64_USERLAND_32
-> +	depends on !BR2_sparc64 # int-conversion error
->  	help
->  	  Ethernet bridge frame table administration
+> diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+> index 95a3a26eb7..ca2d49fb19 100644
+> --- a/package/tor/tor.hash
+> +++ b/package/tor/tor.hash
+> @@ -1,4 +1,4 @@
+> -# From https://dist.torproject.org/tor-0.4.8.18.tar.gz.sha256sum
+> -sha256  4aea6c109d4eff4ea2bafb905a7e6b0a965d14fe856214b02fcd9046b4d93af8  tor-0.4.8.18.tar.gz
+> +# From https://dist.torproject.org/tor-0.4.8.19.tar.gz.sha256sum
+> +sha256  3cb649a1d33ba6a65f109d224534e93aaf0a6de84a5b1cb4b054bfa06bb74f5a  tor-0.4.8.19.tar.gz
+>  # Locally computed
+>  sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
+> diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+> index f9ff4fbca6..208e71ae51 100644
+> --- a/package/tor/tor.mk
+> +++ b/package/tor/tor.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
-> diff --git a/package/libvirt/Config.in b/package/libvirt/Config.in
-> index c55ab429ebc3..5664f69dd8d6 100644
-> --- a/package/libvirt/Config.in
-> +++ b/package/libvirt/Config.in
-> @@ -46,6 +46,7 @@ config BR2_PACKAGE_LIBVIRT_DAEMON
->  	default y
->  	depends on BR2_INSTALL_LIBSTDCPP # nmap
->  	depends on !BR2_KERNEL_64_USERLAND_32 # ebtables
-> +	depends on !BR2_sparc64 # ebtables
->  	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS # radvd -> libbsd
->  	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->  	select BR2_PACKAGE_DNSMASQ
+> -TOR_VERSION = 0.4.8.18
+> +TOR_VERSION = 0.4.8.19
+>  TOR_SITE = https://dist.torproject.org
+>  TOR_LICENSE = BSD-3-Clause
+>  TOR_LICENSE_FILES = LICENSE
 > -- 
-> 2.51.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
