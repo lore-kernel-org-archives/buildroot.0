@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1EE8CCD1AB
-	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:42:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07C12CCD1BB
+	for <buildroot@archiver.kernel.org>; Wed, 22 Oct 2025 16:42:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 952EF6147A;
-	Wed, 22 Oct 2025 16:42:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D7B3A40DA6;
+	Wed, 22 Oct 2025 16:42:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PNo0Qkq18JsV; Wed, 22 Oct 2025 16:42:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KJ4N06Zg1M6i; Wed, 22 Oct 2025 16:42:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DAE861462
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10A9B40DA8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7DAE861462;
-	Wed, 22 Oct 2025 16:42:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1268743F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 10A9B40DA8;
+	Wed, 22 Oct 2025 16:42:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5C229DE
  for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:41:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CFF2D40BED
- for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:41:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F29C483DCF
+ for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:41:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xpy87FJjTTCv for <buildroot@buildroot.org>;
- Wed, 22 Oct 2025 16:41:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EYzih6Ez6CWH for <buildroot@buildroot.org>;
+ Wed, 22 Oct 2025 16:41:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAD0F40FE5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1EC7883DC5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DAD0F40FE5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1EC7883DC5
  for <buildroot@buildroot.org>; Wed, 22 Oct 2025 16:41:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D8E7887038; Wed, 22 Oct 2025 16:41:30 +0000 (UTC)
+ id 1CC1D8615A; Wed, 22 Oct 2025 16:41:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 22 Oct 2025 18:39:09 +0200
+Date: Wed, 22 Oct 2025 18:38:40 +0200
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: 01302c25c5ad39dfbe2c582942f46a4162b3ab69
-X-Git-Newrev: da15ea2766009e31f0825c54e013965df3390f96
+X-Git-Oldrev: 10af6326d83c6739efb78171a493e87fde411982
+X-Git-Newrev: b80d90654ada6e573b406e284b55cb44ece3a2de
 X-Patchwork-Hint: ignore
-Message-Id: <20251022164130.D8E7887038@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/wireless-regdb:
- bump version to 2025.10.07
+Message-Id: <20251022164130.1CC1D8615A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/audit/S02auditd:
+ fix SELinux label issues
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,45 +66,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da15ea2766009e31f0825c54e013965df3390f96
+commit: https://git.buildroot.net/buildroot/commit/?id=b80d90654ada6e573b406e284b55cb44ece3a2de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-Release notes:
-https://lists.infradead.org/pipermail/wireless-regdb/2025-October/001796.html
-https://lists.infradead.org/pipermail/wireless-regdb/2025-July/001775.html
+"mkdir -Z" tries to create the directory with the default type context
+and does not accept any parameter, leading to mkdir creating a
+directory by the name of "system_u:object_r:auditd_log_t" (or failing
+to, with a read-only rootfs). Use "--context=" instead to specify the
+context.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Letting start-stop-daemon create the auditd PID file leads to an
+incorrect label, with type "initrc_runtime_t" instead of
+"auditd_runtime_t", which would prevent auditd from writing or
+deleting it. Auditd manages its own PID file and daemonizes by
+default, so simply drop the --background and --make-pidfile options
+from start-stop-daemon.
+
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 3322cfeffaf73502636dba0aa282f08d04166afc)
+(cherry picked from commit 3fdce2464744ad1b8a85ee37b6ef830806d81157)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/audit/S02auditd | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index cb915c4415..4b2c67965f 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256  57f8e7721cf5a880c13ae0c202edbb21092a060d45f9e9c59bcd2a8272bfa456  wireless-regdb-2025.02.20.tar.xz
-+sha256  d4c872a44154604c869f5851f7d21d818d492835d370af7f58de8847973801c3  wireless-regdb-2025.10.07.tar.xz
- # Locally computed
- sha256  678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 999a986de2..055238be5e 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/audit/S02auditd b/package/audit/S02auditd
+index f32f01714e..97c43bc66f 100644
+--- a/package/audit/S02auditd
++++ b/package/audit/S02auditd
+@@ -18,13 +18,13 @@ start(){
+ 	# the directory with SELinux permissions if possible
+ 	if command -v selabel_lookup >/dev/null 2>&1; then
+ 		audit_log_selable="$(selabel_lookup -b file -k /var/log/audit | cut -d ' ' -f 3)"
+-		mkdir -p /var/log/audit -Z "${audit_log_selable}"
++		mkdir -p --context="${audit_log_selable}" /var/log/audit
+ 	else
+ 		mkdir -p /var/log/audit
+ 	fi
  
--WIRELESS_REGDB_VERSION = 2025.02.20
-+WIRELESS_REGDB_VERSION = 2025.10.07
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+-	start-stop-daemon --start --background --make-pidfile \
+-		--pidfile "${PIDFILE}" --exec "/usr/sbin/${DAEMON}"
++	start-stop-daemon --start --pidfile "${PIDFILE}" \
++		--exec "/usr/sbin/${DAEMON}"
+ 	status=$?
+ 	if [ "${status}" -eq 0 ]; then
+ 		# Load the default rules
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
