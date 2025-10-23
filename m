@@ -4,70 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10C8DCCD193
-	for <buildroot@archiver.kernel.org>; Thu, 23 Oct 2025 21:10:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF685CCD193
+	for <buildroot@archiver.kernel.org>; Thu, 23 Oct 2025 21:13:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C794641196;
-	Thu, 23 Oct 2025 21:10:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 93889411A9;
+	Thu, 23 Oct 2025 21:13:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id he1NtQCNZq4c; Thu, 23 Oct 2025 21:10:11 +0000 (UTC)
+ id bddw2NmEFkDE; Thu, 23 Oct 2025 21:13:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE7AF41255
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EDD64124B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BE7AF41255;
-	Thu, 23 Oct 2025 21:10:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id AE1E119D
- for <buildroot@buildroot.org>; Thu, 23 Oct 2025 21:10:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8EDD64124B;
+	Thu, 23 Oct 2025 21:13:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 950DA19D
+ for <buildroot@buildroot.org>; Thu, 23 Oct 2025 21:13:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 93FFC41255
- for <buildroot@buildroot.org>; Thu, 23 Oct 2025 21:10:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 86F3742112
+ for <buildroot@buildroot.org>; Thu, 23 Oct 2025 21:13:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0hFHDFTfYFfh for <buildroot@buildroot.org>;
- Thu, 23 Oct 2025 21:10:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 87F1241196
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87F1241196
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 87F1241196
- for <buildroot@buildroot.org>; Thu, 23 Oct 2025 21:10:08 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 5AD8B19F576;
- Thu, 23 Oct 2025 23:10:04 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 23 Oct 2025 23:10:04 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u5awxGv-Wh-F for <buildroot@buildroot.org>;
+ Thu, 23 Oct 2025 21:13:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::135; helo=mail-il1-x135.google.com;
+ envelope-from=joseph.kogut@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 842C242000
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 842C242000
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com
+ [IPv6:2607:f8b0:4864:20::135])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 842C242000
+ for <buildroot@buildroot.org>; Thu, 23 Oct 2025 21:13:53 +0000 (UTC)
+Received: by mail-il1-x135.google.com with SMTP id
+ e9e14a558f8ab-430ae09ea23so5622615ab.0
+ for <buildroot@buildroot.org>; Thu, 23 Oct 2025 14:13:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1761254032; x=1761858832;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=n+Ebo3dBzdzpk+H9TqsAKeh6DwZ+hpc0906aaWHxjgA=;
+ b=obW1rrsIO/slq+dVYrWDAuhP2Z60UB1NjXPd/gQ6CTCvIRPH3EEdKM37FAKroQ5I2R
+ +9ThHjtpNucw17+UXUetkd+d1QLqJVAm/b2lzdQ5iVYJHlPSS9wq/KbegEcnUnyGuqsk
+ 2KHTcykbH2h7i0E4VjwO0sEiAg/qvkAUMlqJ5vpYKmT0BTR4Q7tRDFDuPzyuB/tluqWm
+ 22AxBkt0gFe8jYAEQi42VCfWMAhSVZJnitCQUOEM/vXmQ1zbB8+L1cQQanTeuY0nqpdf
+ YRuiNc1u44ZtAUPGz4bGBOMt6iSwUBZJWEOgtaBxo/2HL+5c2QRxewhl3gRlY6Q3Ow6p
+ IHvA==
+X-Gm-Message-State: AOJu0YxXAV0cIFnnhaTpM9YG4DVJNLQpE5DRCFvgfjOE/e5LH97kSnDE
+ z4maQ8APNK06CXOcibmqluGt/lLmMT4AtrgoZgzkc2PB3Xsj3ruP1IIdAWRX99/p6eVpDXAw0AP
+ qEXzzeOUWHpPOCEOXEkkn1k7+HfRZuPmSJQ==
+X-Gm-Gg: ASbGncub0SJUaQ0H9JCGrfdbMF/W70Zjn8ZRnSPBViB+IxfR8haMWm1tegmBwM/bv7i
+ ouvbcfSqNqoSscf+2h5f21/iZ/MWsYskN4n2JOS80hIqavatuU/9sUI1o2HeXk0L0dWjwtbi+xL
+ h6a0FwoCxnxFKbXGDNkmTgNLlOxU+5XJ3M43kePRB0wisWgzMm2Bqp1d6oCThIc60aRgMGp5esq
+ F9z7n6Xgv1v3DgmOnaeagE67POtHAApCFUx8N+iqG1Uk6NBrR4BVvWxURc=
+X-Google-Smtp-Source: AGHT+IFGeLZjhqkP5td5Dps8r6qc9j9Au9KhIRYvYIJadCT+G0uhV4pmVUSGy7CRGWQowrZWh1u1x/6I80YMi2YIkck=
+X-Received: by 2002:a05:6e02:216e:b0:430:ab21:8c4d with SMTP id
+ e9e14a558f8ab-430c5232bd3mr354299895ab.11.1761254032151; Thu, 23 Oct 2025
+ 14:13:52 -0700 (PDT)
 MIME-Version: 1.0
-Date: Thu, 23 Oct 2025 23:10:04 +0200
-To: Joseph Kogut <joseph.kogut@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251022-llama-cpp-v2-1-c41a43382093@gmail.com>
 References: <20251022-llama-cpp-v2-1-c41a43382093@gmail.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <1f466c852ee75191814e2e2f4f38610e@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1761253805;
- bh=qyavW8nfVYogBU7F3kfOqCRATcW0CbGH6Hg/jaTM+Zk=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=JbLCjKLg4GLh707Ll/UHY+BM8xQ2FC7/Xe9PxpqncnH71FG6K5+/upUwdWA5InW62
- UtXzPrGSHe8U267IaSBM3eM2gGUzSKDPyGwYhmDiFRi5lv4lNy35ShGhOdggE9ePcC
- owhmzD2qi4Vgh6p0gzI27OGyh4ze58Ep9WglaKQwi3mCVNmlC3HzzAjWXW5DDvND2b
- dl/9Ob5ilzPE4UKaWaQtYSmNZbnjjMdh2g0Cc4Cc2aiX/xjjHgxneQTVUG+CCJ7uQD
- wv15XQmaIO2hrbxcL+SN5sT1ZoX6Gh4jtWIGDjGl1+grNQGqn8oKujzFguokkvRiFe
- 7Tq6ZUieLlngg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=JbLCjKLg
+ <1f466c852ee75191814e2e2f4f38610e@free.fr>
+In-Reply-To: <1f466c852ee75191814e2e2f4f38610e@free.fr>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Thu, 23 Oct 2025 14:13:16 -0700
+X-Gm-Features: AWmQ_bkeqot6HnCTdyL4LKASlLJBvQV3k5HX0kC4OygYX3XFzqxH2vBft0KJ2KM
+Message-ID: <CAMWSM7hUTYJUJM5rgemsbQRN0j0Y8R8X32bns2ipQzZMYAg2-A@mail.gmail.com>
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1761254032; x=1761858832; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=n+Ebo3dBzdzpk+H9TqsAKeh6DwZ+hpc0906aaWHxjgA=;
+ b=JvYlClA3jVVZVybmTob1RdDd5+BehrMRWjcOHiX1F9Yl404/06HR2QwJnkv95C0evJ
+ MJqsXOmR0YIko0y6FrMOoOv1gTsMa8mvinyiK3P29lqumdGmFHJjv5DL9PKkxGqn0qw6
+ Z4zNHu1zOYxcfscKCYkTEVb+Ks7S0e5RfNqrQ/tY9RdU5U903WiApZ89hRxH65VGqIcT
+ EUmFS/Vn6/p3zcHHvsAqaxjZ8jxJDMYLNort6aECsNVqBdWHZCBhEgZTAZbztGLYjZMp
+ IOQBai1UNk3APgnId+Cv+JK6CVXrvgeh08yHAzWEtkA0A27MqBbqTQqFyha6Wy0wFtlE
+ kOPQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=JvYlClA3
 Subject: Re: [Buildroot] [PATCH v2] package/llama-cpp: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -80,233 +104,125 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Joseph,
-
-Thanks for this patch. I have few comments, see below.
-
-On 22/10/2025 19:35, Joseph Kogut wrote:
-> Add a package for llama.cpp, a C/C++ LLM inference library, used in
-> popular projects like Ollama, RamaLama, and more.
-> 
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> ---
-[...]
-> diff --git a/package/llama-cpp/Config.in b/package/llama-cpp/Config.in
-> new file mode 100644
-> index 0000000000..5bba0067cf
-> --- /dev/null
-> +++ b/package/llama-cpp/Config.in
-> @@ -0,0 +1,36 @@
-
-For restricting this package to some architectures, could you
-use the "standard" _ARCH_SUPPORTS pattern, at the beginning of the
-file, please?  Like:
-
-config BR2_PACKAGE_LLAMA_CPP_ARCH_SUPPORTS
-	bool
-	default y
-	depends on !BR2_s390x
-	depends on !BR2_riscv
-
-> +config BR2_PACKAGE_LLAMA_CPP
-> +	bool "llama.cpp"
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
-
-I don't think this libc restriction is needed. This package could build
-correctly with uClibc too. It will just need to select libexecinfo
-when uclibc is used.
-
-Then, the dependency on the newly introduced _ARCH_SUPPORTS
-needs to be added.
-
-I think this package will likely also depends on having a toolchain
-with C++.
-
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9
-> +	depends on !BR2_s390x
-> +	depends on !BR2_riscv
-
-Those dependencies on architectures could be removed, with the
-_ARCH_SUPPORTS.
-
-> +	help
-> +	  LLM inference in C/C++
-
-In Buildroot help strings, we usually add the upstream homepage url.
-
-With those comments, the block should become:
-
-config BR2_PACKAGE_LLAMA_CPP
-	bool "llama.cpp"
-	depends on BR2_PACKAGE_LLAMA_CPP_ARCH_SUPPORTS
-	depends on BR2_INSTALL_LIBSTDCPP
-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9
-	select BR2_PACKAGE_LIBEXECINFO if BR2_TOOLCHAIN_USES_UCLIBC
-	help
-	  LLM inference in C/C++
-
-	  https://github.com/ggml-org/llama.cpp
-
-> +
-> +comment "llama-cpp needs glibc or musl toolchain w/ c++, gcc >= 9"
-> +	depends on !BR2_INSTALL_LIBSTDCPP \
-> +		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_9 \
-> +		|| (!BR2_TOOLCHAIN_USES_GLIBC && !BR2_TOOLCHAIN_USES_MUSL)
-
-To keep a correct indentation in Kconfig, this comment should be
-moved at the end of the Config.in file. Please also adjust the
-condition accordingly (i.e. remove conditions on libc).
-
-> +
-> +if BR2_PACKAGE_LLAMA_CPP
-> +
-> +config BR2_PACKAGE_LLAMA_CPP_TOOLS
-> +	bool "Enable tools"
-> +	help
-> +	  Build CLI tools like llama-cli, llama-bench, etc.
-> +
-> +config BR2_PACKAGE_LLAMA_CPP_SERVER
-> +	bool "Enable server"
-> +	help
-> +	  Build OpenAI API-compatible web server, llama-server.
-> +
-> +config BR2_PACKAGE_LLAMA_CPP_VULKAN
-> +	bool "Vulkan support"
-> +	depends on BR2_INSTALL_LIBSTDCPP # vulkan-loader
-
-This dependency should not be needed here, since we'll have it
-in BR2_PACKAGE_LLAMA_CPP.
-
-> +	depends on !BR2_STATIC_LIBS # vulkan-loader
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # vulkan-loader
-> +	select BR2_PACKAGE_VULKAN_HEADERS
-> +	select BR2_PACKAGE_VULKAN_LOADER
-> +	help
-> +	  Enable Vulkan backend for GPU acceleration.
-> +endif
-[...]
-> diff --git a/package/llama-cpp/llama-cpp.mk 
-> b/package/llama-cpp/llama-cpp.mk
-> new file mode 100644
-> index 0000000000..92dde059d2
-> --- /dev/null
-> +++ b/package/llama-cpp/llama-cpp.mk
-> @@ -0,0 +1,43 @@
-> +################################################################################
-> +#
-> +# llama.cpp
-> +#
-> +################################################################################
-> +
-> +LLAMA_CPP_VERSION = 6818
-> +LLAMA_CPP_SOURCE = b$(LLAMA_CPP_VERSION).tar.gz
-> +LLAMA_CPP_SITE = 
-> https://github.com/ggml-org/llama.cpp/archive/refs/tags
-> +LLAMA_CPP_LICENSE = MIT
-> +LLAMA_CPP_LICENSE_FILES = LICENSE
-> +LLAMA_CPP_INSTALL_STAGING = YES
-> +LLAMA_CPP_CONF_OPTS = \
-> +	-DLLAMA_BUILD_TESTS=OFF \
-> +	-DLLAMA_BUILD_EXAMPLES=OFF \
-> +	-DLLAMA_FATAL_WARNINGS=OFF
-> +
-> +ifeq ($(BR2_PACKAGE_CURL),y)
-
-In Buildroot, the symbol for cURL is BR2_PACKAGE_LIBCURL.
-So this line should become:
-
-ifeq ($(BR2_PACKAGE_LIBCURL),y)
-
-This can be detected by the check command:
-utils/check-symbols
-
-> +LLAMA_CPP_CONF_OPTS += -DLLAMA_CURL=ON
-> +LLAMA_CPP_DEPENDENCIES += libcurl
-> +else
-> +LLAMA_CPP_CONF_OPTS += -DLLAMA_CURL=OFF
-> +endif
-
-Here, you could add the dependency for libexecinfo, to support uclibc.
-
-ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
-LLAMA_CPP_DEPENDENCIES += libexecinfo
-LLAMA_CPP_LDFLAGS += -lexecinfo
-endif
-
-> +
-> +ifeq ($(BR2_PACKAGE_LLAMA_CPP_TOOLS),y)
-> +LLAMA_CPP_CONF_OPTS += -DLLAMA_BUILD_TOOLS=ON
-
-Here, you should handle the case which disable the tools,
-adding:
-
-else
-LAMA_CPP_CONF_OPTS += -DLLAMA_BUILD_TOOLS=OFF
-
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LLAMA_CPP_SERVER),y)
-> +LLAMA_CPP_CONF_OPTS += -DLLAMA_BUILD_SERVER=ON
-
-Same comment for the _SERVER, adding:
-
-else
-LLAMA_CPP_CONF_OPTS += -DLLAMA_BUILD_SERVER=OFF
-
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LLAMA_CPP_VULKAN),y)
-> +LLAMA_CPP_DEPENDENCIES += vulkan-loader
-> +LLAMA_CPP_CONF_OPTS += -DGGML_VULKAN=ON
-
-Same comment. Adding here:
-
-else
-LLAMA_CPP_CONF_OPTS += -DGGML_VULKAN=OFF
-
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_OPENBLAS),y)
-> +LLAMA_CPP_DEPENDENCIES += openblas
-> +LLAMA_CPP_CONF_OPTS += -DGGML_BLAS=ON -DGGML_BLAS_VENDOR=OpenBLAS
-
-Same comment. Adding here:
-
-else
-LLAMA_CPP_CONF_OPTS += -DGGML_BLAS=OFF
-
-> +endif
-
-Finally, for handling the libexecinfo for uclibc, we need
-to pass the ldflags:
-
-LLAMA_CPP_CONF_OPTS += \
-        -DCMAKE_EXE_LINKER_FLAGS="$(LLAMA_CPP_LDFLAGS)"
-
-> +
-> +$(eval $(cmake-package))
-> 
-> ---
-> base-commit: f23c810176305604c54b79611d885547f4e45c23
-> change-id: 20250618-llama-cpp-d3fc28b4562f
-> 
-> Best regards,
-> --
-> Joseph Kogut <joseph.kogut@gmail.com>
-
-Could you send an updated patch including those changes, please?
-
-Best regards,
-
-Julien.
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gSnVsaWVuLAoKT24gVGh1LCBPY3QgMjMsIDIwMjUgYXQgMjoxMOKAr1BNIEp1bGllbiBP
+bGl2YWluIDxqdS5vQGZyZWUuZnI+IHdyb3RlOgo+Cj4gSGkgSm9zZXBoLAo+Cj4gVGhhbmtzIGZv
+ciB0aGlzIHBhdGNoLiBJIGhhdmUgZmV3IGNvbW1lbnRzLCBzZWUgYmVsb3cuCj4KPiBPbiAyMi8x
+MC8yMDI1IDE5OjM1LCBKb3NlcGggS29ndXQgd3JvdGU6Cj4gPiBBZGQgYSBwYWNrYWdlIGZvciBs
+bGFtYS5jcHAsIGEgQy9DKysgTExNIGluZmVyZW5jZSBsaWJyYXJ5LCB1c2VkIGluCj4gPiBwb3B1
+bGFyIHByb2plY3RzIGxpa2UgT2xsYW1hLCBSYW1hTGFtYSwgYW5kIG1vcmUuCj4gPgo+ID4gU2ln
+bmVkLW9mZi1ieTogSm9zZXBoIEtvZ3V0IDxqb3NlcGgua29ndXRAZ21haWwuY29tPgo+ID4gLS0t
+Cj4gWy4uLl0KPiA+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xsYW1hLWNwcC9Db25maWcuaW4gYi9w
+YWNrYWdlL2xsYW1hLWNwcC9Db25maWcuaW4KPiA+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBp
+bmRleCAwMDAwMDAwMDAwLi41YmJhMDA2N2NmCj4gPiAtLS0gL2Rldi9udWxsCj4gPiArKysgYi9w
+YWNrYWdlL2xsYW1hLWNwcC9Db25maWcuaW4KPiA+IEBAIC0wLDAgKzEsMzYgQEAKPgo+IEZvciBy
+ZXN0cmljdGluZyB0aGlzIHBhY2thZ2UgdG8gc29tZSBhcmNoaXRlY3R1cmVzLCBjb3VsZCB5b3UK
+PiB1c2UgdGhlICJzdGFuZGFyZCIgX0FSQ0hfU1VQUE9SVFMgcGF0dGVybiwgYXQgdGhlIGJlZ2lu
+bmluZyBvZiB0aGUKPiBmaWxlLCBwbGVhc2U/ICBMaWtlOgo+Cj4gY29uZmlnIEJSMl9QQUNLQUdF
+X0xMQU1BX0NQUF9BUkNIX1NVUFBPUlRTCj4gICAgICAgICBib29sCj4gICAgICAgICBkZWZhdWx0
+IHkKPiAgICAgICAgIGRlcGVuZHMgb24gIUJSMl9zMzkweAo+ICAgICAgICAgZGVwZW5kcyBvbiAh
+QlIyX3Jpc2N2Cj4KPiA+ICtjb25maWcgQlIyX1BBQ0tBR0VfTExBTUFfQ1BQCj4gPiArICAgICBi
+b29sICJsbGFtYS5jcHAiCj4gPiArICAgICBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fVVNFU19H
+TElCQyB8fCBCUjJfVE9PTENIQUlOX1VTRVNfTVVTTAo+Cj4gSSBkb24ndCB0aGluayB0aGlzIGxp
+YmMgcmVzdHJpY3Rpb24gaXMgbmVlZGVkLiBUaGlzIHBhY2thZ2UgY291bGQgYnVpbGQKPiBjb3Jy
+ZWN0bHkgd2l0aCB1Q2xpYmMgdG9vLiBJdCB3aWxsIGp1c3QgbmVlZCB0byBzZWxlY3QgbGliZXhl
+Y2luZm8KPiB3aGVuIHVjbGliYyBpcyB1c2VkLgo+Cj4gVGhlbiwgdGhlIGRlcGVuZGVuY3kgb24g
+dGhlIG5ld2x5IGludHJvZHVjZWQgX0FSQ0hfU1VQUE9SVFMKPiBuZWVkcyB0byBiZSBhZGRlZC4K
+Pgo+IEkgdGhpbmsgdGhpcyBwYWNrYWdlIHdpbGwgbGlrZWx5IGFsc28gZGVwZW5kcyBvbiBoYXZp
+bmcgYSB0b29sY2hhaW4KPiB3aXRoIEMrKy4KPgo+ID4gKyAgICAgZGVwZW5kcyBvbiBCUjJfVE9P
+TENIQUlOX0dDQ19BVF9MRUFTVF85Cj4gPiArICAgICBkZXBlbmRzIG9uICFCUjJfczM5MHgKPiA+
+ICsgICAgIGRlcGVuZHMgb24gIUJSMl9yaXNjdgo+Cj4gVGhvc2UgZGVwZW5kZW5jaWVzIG9uIGFy
+Y2hpdGVjdHVyZXMgY291bGQgYmUgcmVtb3ZlZCwgd2l0aCB0aGUKPiBfQVJDSF9TVVBQT1JUUy4K
+Pgo+ID4gKyAgICAgaGVscAo+ID4gKyAgICAgICBMTE0gaW5mZXJlbmNlIGluIEMvQysrCj4KPiBJ
+biBCdWlsZHJvb3QgaGVscCBzdHJpbmdzLCB3ZSB1c3VhbGx5IGFkZCB0aGUgdXBzdHJlYW0gaG9t
+ZXBhZ2UgdXJsLgo+Cj4gV2l0aCB0aG9zZSBjb21tZW50cywgdGhlIGJsb2NrIHNob3VsZCBiZWNv
+bWU6Cj4KPiBjb25maWcgQlIyX1BBQ0tBR0VfTExBTUFfQ1BQCj4gICAgICAgICBib29sICJsbGFt
+YS5jcHAiCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0xMQU1BX0NQUF9BUkNIX1NV
+UFBPUlRTCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9JTlNUQUxMX0xJQlNURENQUAo+ICAgICAg
+ICAgZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0dDQ19BVF9MRUFTVF85Cj4gICAgICAgICBzZWxl
+Y3QgQlIyX1BBQ0tBR0VfTElCRVhFQ0lORk8gaWYgQlIyX1RPT0xDSEFJTl9VU0VTX1VDTElCQwo+
+ICAgICAgICAgaGVscAo+ICAgICAgICAgICBMTE0gaW5mZXJlbmNlIGluIEMvQysrCj4KPiAgICAg
+ICAgICAgaHR0cHM6Ly9naXRodWIuY29tL2dnbWwtb3JnL2xsYW1hLmNwcAo+Cj4gPiArCj4gPiAr
+Y29tbWVudCAibGxhbWEtY3BwIG5lZWRzIGdsaWJjIG9yIG11c2wgdG9vbGNoYWluIHcvIGMrKywg
+Z2NjID49IDkiCj4gPiArICAgICBkZXBlbmRzIG9uICFCUjJfSU5TVEFMTF9MSUJTVERDUFAgXAo+
+ID4gKyAgICAgICAgICAgICB8fCAhQlIyX1RPT0xDSEFJTl9HQ0NfQVRfTEVBU1RfOSBcCj4gPiAr
+ICAgICAgICAgICAgIHx8ICghQlIyX1RPT0xDSEFJTl9VU0VTX0dMSUJDICYmICFCUjJfVE9PTENI
+QUlOX1VTRVNfTVVTTCkKPgo+IFRvIGtlZXAgYSBjb3JyZWN0IGluZGVudGF0aW9uIGluIEtjb25m
+aWcsIHRoaXMgY29tbWVudCBzaG91bGQgYmUKPiBtb3ZlZCBhdCB0aGUgZW5kIG9mIHRoZSBDb25m
+aWcuaW4gZmlsZS4gUGxlYXNlIGFsc28gYWRqdXN0IHRoZQo+IGNvbmRpdGlvbiBhY2NvcmRpbmds
+eSAoaS5lLiByZW1vdmUgY29uZGl0aW9ucyBvbiBsaWJjKS4KPgo+ID4gKwo+ID4gK2lmIEJSMl9Q
+QUNLQUdFX0xMQU1BX0NQUAo+ID4gKwo+ID4gK2NvbmZpZyBCUjJfUEFDS0FHRV9MTEFNQV9DUFBf
+VE9PTFMKPiA+ICsgICAgIGJvb2wgIkVuYWJsZSB0b29scyIKPiA+ICsgICAgIGhlbHAKPiA+ICsg
+ICAgICAgQnVpbGQgQ0xJIHRvb2xzIGxpa2UgbGxhbWEtY2xpLCBsbGFtYS1iZW5jaCwgZXRjLgo+
+ID4gKwo+ID4gK2NvbmZpZyBCUjJfUEFDS0FHRV9MTEFNQV9DUFBfU0VSVkVSCj4gPiArICAgICBi
+b29sICJFbmFibGUgc2VydmVyIgo+ID4gKyAgICAgaGVscAo+ID4gKyAgICAgICBCdWlsZCBPcGVu
+QUkgQVBJLWNvbXBhdGlibGUgd2ViIHNlcnZlciwgbGxhbWEtc2VydmVyLgo+ID4gKwo+ID4gK2Nv
+bmZpZyBCUjJfUEFDS0FHRV9MTEFNQV9DUFBfVlVMS0FOCj4gPiArICAgICBib29sICJWdWxrYW4g
+c3VwcG9ydCIKPiA+ICsgICAgIGRlcGVuZHMgb24gQlIyX0lOU1RBTExfTElCU1REQ1BQICMgdnVs
+a2FuLWxvYWRlcgo+Cj4gVGhpcyBkZXBlbmRlbmN5IHNob3VsZCBub3QgYmUgbmVlZGVkIGhlcmUs
+IHNpbmNlIHdlJ2xsIGhhdmUgaXQKPiBpbiBCUjJfUEFDS0FHRV9MTEFNQV9DUFAuCj4KPiA+ICsg
+ICAgIGRlcGVuZHMgb24gIUJSMl9TVEFUSUNfTElCUyAjIHZ1bGthbi1sb2FkZXIKPiA+ICsgICAg
+IGRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUyAjIHZ1bGthbi1sb2FkZXIKPiA+
+ICsgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9WVUxLQU5fSEVBREVSUwo+ID4gKyAgICAgc2VsZWN0
+IEJSMl9QQUNLQUdFX1ZVTEtBTl9MT0FERVIKPiA+ICsgICAgIGhlbHAKPiA+ICsgICAgICAgRW5h
+YmxlIFZ1bGthbiBiYWNrZW5kIGZvciBHUFUgYWNjZWxlcmF0aW9uLgo+ID4gK2VuZGlmCj4gWy4u
+Ll0KPiA+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xsYW1hLWNwcC9sbGFtYS1jcHAubWsKPiA+IGIv
+cGFja2FnZS9sbGFtYS1jcHAvbGxhbWEtY3BwLm1rCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+
+ID4gaW5kZXggMDAwMDAwMDAwMC4uOTJkZGUwNTlkMgo+ID4gLS0tIC9kZXYvbnVsbAo+ID4gKysr
+IGIvcGFja2FnZS9sbGFtYS1jcHAvbGxhbWEtY3BwLm1rCj4gPiBAQCAtMCwwICsxLDQzIEBACj4g
+PiArIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiA+ICsjCj4gPiArIyBsbGFtYS5jcHAKPiA+ICsj
+Cj4gPiArIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiA+ICsKPiA+ICtMTEFNQV9DUFBfVkVSU0lP
+TiA9IDY4MTgKPiA+ICtMTEFNQV9DUFBfU09VUkNFID0gYiQoTExBTUFfQ1BQX1ZFUlNJT04pLnRh
+ci5nego+ID4gK0xMQU1BX0NQUF9TSVRFID0KPiA+IGh0dHBzOi8vZ2l0aHViLmNvbS9nZ21sLW9y
+Zy9sbGFtYS5jcHAvYXJjaGl2ZS9yZWZzL3RhZ3MKPiA+ICtMTEFNQV9DUFBfTElDRU5TRSA9IE1J
+VAo+ID4gK0xMQU1BX0NQUF9MSUNFTlNFX0ZJTEVTID0gTElDRU5TRQo+ID4gK0xMQU1BX0NQUF9J
+TlNUQUxMX1NUQUdJTkcgPSBZRVMKPiA+ICtMTEFNQV9DUFBfQ09ORl9PUFRTID0gXAo+ID4gKyAg
+ICAgLURMTEFNQV9CVUlMRF9URVNUUz1PRkYgXAo+ID4gKyAgICAgLURMTEFNQV9CVUlMRF9FWEFN
+UExFUz1PRkYgXAo+ID4gKyAgICAgLURMTEFNQV9GQVRBTF9XQVJOSU5HUz1PRkYKPiA+ICsKPiA+
+ICtpZmVxICgkKEJSMl9QQUNLQUdFX0NVUkwpLHkpCj4KPiBJbiBCdWlsZHJvb3QsIHRoZSBzeW1i
+b2wgZm9yIGNVUkwgaXMgQlIyX1BBQ0tBR0VfTElCQ1VSTC4KPiBTbyB0aGlzIGxpbmUgc2hvdWxk
+IGJlY29tZToKPgo+IGlmZXEgKCQoQlIyX1BBQ0tBR0VfTElCQ1VSTCkseSkKPgo+IFRoaXMgY2Fu
+IGJlIGRldGVjdGVkIGJ5IHRoZSBjaGVjayBjb21tYW5kOgo+IHV0aWxzL2NoZWNrLXN5bWJvbHMK
+Pgo+ID4gK0xMQU1BX0NQUF9DT05GX09QVFMgKz0gLURMTEFNQV9DVVJMPU9OCj4gPiArTExBTUFf
+Q1BQX0RFUEVOREVOQ0lFUyArPSBsaWJjdXJsCj4gPiArZWxzZQo+ID4gK0xMQU1BX0NQUF9DT05G
+X09QVFMgKz0gLURMTEFNQV9DVVJMPU9GRgo+ID4gK2VuZGlmCj4KPiBIZXJlLCB5b3UgY291bGQg
+YWRkIHRoZSBkZXBlbmRlbmN5IGZvciBsaWJleGVjaW5mbywgdG8gc3VwcG9ydCB1Y2xpYmMuCj4K
+PiBpZmVxICgkKEJSMl9QQUNLQUdFX0xJQkVYRUNJTkZPKSx5KQo+IExMQU1BX0NQUF9ERVBFTkRF
+TkNJRVMgKz0gbGliZXhlY2luZm8KPiBMTEFNQV9DUFBfTERGTEFHUyArPSAtbGV4ZWNpbmZvCj4g
+ZW5kaWYKPgo+ID4gKwo+ID4gK2lmZXEgKCQoQlIyX1BBQ0tBR0VfTExBTUFfQ1BQX1RPT0xTKSx5
+KQo+ID4gK0xMQU1BX0NQUF9DT05GX09QVFMgKz0gLURMTEFNQV9CVUlMRF9UT09MUz1PTgo+Cj4g
+SGVyZSwgeW91IHNob3VsZCBoYW5kbGUgdGhlIGNhc2Ugd2hpY2ggZGlzYWJsZSB0aGUgdG9vbHMs
+Cj4gYWRkaW5nOgo+Cj4gZWxzZQo+IExBTUFfQ1BQX0NPTkZfT1BUUyArPSAtRExMQU1BX0JVSUxE
+X1RPT0xTPU9GRgo+Cj4gPiArZW5kaWYKPiA+ICsKPiA+ICtpZmVxICgkKEJSMl9QQUNLQUdFX0xM
+QU1BX0NQUF9TRVJWRVIpLHkpCj4gPiArTExBTUFfQ1BQX0NPTkZfT1BUUyArPSAtRExMQU1BX0JV
+SUxEX1NFUlZFUj1PTgo+Cj4gU2FtZSBjb21tZW50IGZvciB0aGUgX1NFUlZFUiwgYWRkaW5nOgo+
+Cj4gZWxzZQo+IExMQU1BX0NQUF9DT05GX09QVFMgKz0gLURMTEFNQV9CVUlMRF9TRVJWRVI9T0ZG
+Cj4KPiA+ICtlbmRpZgo+ID4gKwo+ID4gK2lmZXEgKCQoQlIyX1BBQ0tBR0VfTExBTUFfQ1BQX1ZV
+TEtBTikseSkKPiA+ICtMTEFNQV9DUFBfREVQRU5ERU5DSUVTICs9IHZ1bGthbi1sb2FkZXIKPiA+
+ICtMTEFNQV9DUFBfQ09ORl9PUFRTICs9IC1ER0dNTF9WVUxLQU49T04KPgo+IFNhbWUgY29tbWVu
+dC4gQWRkaW5nIGhlcmU6Cj4KPiBlbHNlCj4gTExBTUFfQ1BQX0NPTkZfT1BUUyArPSAtREdHTUxf
+VlVMS0FOPU9GRgo+Cj4gPiArZW5kaWYKPiA+ICsKPiA+ICtpZmVxICgkKEJSMl9QQUNLQUdFX09Q
+RU5CTEFTKSx5KQo+ID4gK0xMQU1BX0NQUF9ERVBFTkRFTkNJRVMgKz0gb3BlbmJsYXMKPiA+ICtM
+TEFNQV9DUFBfQ09ORl9PUFRTICs9IC1ER0dNTF9CTEFTPU9OIC1ER0dNTF9CTEFTX1ZFTkRPUj1P
+cGVuQkxBUwo+Cj4gU2FtZSBjb21tZW50LiBBZGRpbmcgaGVyZToKPgo+IGVsc2UKPiBMTEFNQV9D
+UFBfQ09ORl9PUFRTICs9IC1ER0dNTF9CTEFTPU9GRgo+Cj4gPiArZW5kaWYKPgo+IEZpbmFsbHks
+IGZvciBoYW5kbGluZyB0aGUgbGliZXhlY2luZm8gZm9yIHVjbGliYywgd2UgbmVlZAo+IHRvIHBh
+c3MgdGhlIGxkZmxhZ3M6Cj4KPiBMTEFNQV9DUFBfQ09ORl9PUFRTICs9IFwKPiAgICAgICAgIC1E
+Q01BS0VfRVhFX0xJTktFUl9GTEFHUz0iJChMTEFNQV9DUFBfTERGTEFHUykiCj4KPiA+ICsKPiA+
+ICskKGV2YWwgJChjbWFrZS1wYWNrYWdlKSkKPiA+Cj4gPiAtLS0KPiA+IGJhc2UtY29tbWl0OiBm
+MjNjODEwMTc2MzA1NjA0YzU0Yjc5NjExZDg4NTU0N2Y0ZTQ1YzIzCj4gPiBjaGFuZ2UtaWQ6IDIw
+MjUwNjE4LWxsYW1hLWNwcC1kM2ZjMjhiNDU2MmYKPiA+Cj4gPiBCZXN0IHJlZ2FyZHMsCj4gPiAt
+LQo+ID4gSm9zZXBoIEtvZ3V0IDxqb3NlcGgua29ndXRAZ21haWwuY29tPgo+Cj4gQ291bGQgeW91
+IHNlbmQgYW4gdXBkYXRlZCBwYXRjaCBpbmNsdWRpbmcgdGhvc2UgY2hhbmdlcywgcGxlYXNlPwo+
+CgpBYnNvbHV0ZWx5LCB0aGFuayB5b3UgZm9yIHRha2luZyB0aGUgdGltZSB0byBnaXZlIHN1Y2gg
+YSB0aG9yb3VnaCBhbmQKd2VsbCBleHBsYWluZWQgcmV2aWV3LiBJJ2xsIGZvbGxvdyB1cC4KCj4g
+QmVzdCByZWdhcmRzLAo+Cj4gSnVsaWVuLgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
+b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
+cm9vdAo=
