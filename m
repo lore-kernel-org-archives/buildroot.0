@@ -4,72 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1A87CCD193
-	for <buildroot@archiver.kernel.org>; Thu, 23 Oct 2025 19:34:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10CB7CCF9E3
+	for <buildroot@archiver.kernel.org>; Thu, 23 Oct 2025 19:57:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 613C083D44;
-	Thu, 23 Oct 2025 19:34:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B9297849FE;
+	Thu, 23 Oct 2025 19:57:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RkTkPG0-UCZV; Thu, 23 Oct 2025 19:34:44 +0000 (UTC)
+ id nGKkP4hxQmzu; Thu, 23 Oct 2025 19:57:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3363B83D27
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C068E849F8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3363B83D27;
-	Thu, 23 Oct 2025 19:34:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 502A8129
- for <buildroot@buildroot.org>; Thu, 23 Oct 2025 19:34:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C068E849F8;
+	Thu, 23 Oct 2025 19:57:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5E43F43F
+ for <buildroot@buildroot.org>; Thu, 23 Oct 2025 19:57:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 415DA83CFB
- for <buildroot@buildroot.org>; Thu, 23 Oct 2025 19:34:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 50931849F8
+ for <buildroot@buildroot.org>; Thu, 23 Oct 2025 19:57:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 74CqDkCxLHDR for <buildroot@buildroot.org>;
- Thu, 23 Oct 2025 19:34:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A654883C30
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A654883C30
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A654883C30
- for <buildroot@buildroot.org>; Thu, 23 Oct 2025 19:34:40 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 157585FFB1;
- Thu, 23 Oct 2025 21:34:35 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 23 Oct 2025 21:34:35 +0200
-MIME-Version: 1.0
-Date: Thu, 23 Oct 2025 21:34:35 +0200
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: buildroot@buildroot.org, Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-In-Reply-To: <20251016182815.166644-1-dario.binacchi@amarulasolutions.com>
-References: <20251016182815.166644-1-dario.binacchi@amarulasolutions.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <bab47fa0025d538a3a6d7edbb98a5833@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1761248078;
- bh=r/PLYgiMSbKWDICOP69kuFaqpb/rLO2Ranxn+XKc874=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=DehAbbSnUGvDLfg1qUa79FNkHX15o9HFoPrZOcMA5ZKkx4kmw48WEYZiW4qUiT89U
- +LStVdRE3JlB6eYIHtsnaD5Z/doIeJ1Tn9WPwFnbUuloRLCgIPlU6bQoUjGNKJL96J
- pHpE2wC/99FYDvfZF73c7tUpHBFXVnY2GflrmUV8mmbIkBCArsi0S7HAi95P+97eek
- IAYnoVHY/AGl3H2GHGnZFkace25gSzRiRaspc7rgvOev8k9noiwlc1mk98YM+arSOT
- ZmaN5PnA3HXYHu26tMtu3Afqh8jnAps15s8PXtzYE5bvPwFb/CphzyXRBPI2Ppm5K+
- aJEB2YuI1oJ3A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=DehAbbSn
-Subject: Re: [Buildroot] [PATCH 1/1] package/jimtcl: bump to version 0.83
+ id dJtIdg5YeiA9 for <buildroot@buildroot.org>;
+ Thu, 23 Oct 2025 19:56:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 872FE849F6
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 872FE849F6
+ for <buildroot@buildroot.org>; Thu, 23 Oct 2025 19:56:59 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8065C877A9; Thu, 23 Oct 2025 19:56:59 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 23 Oct 2025 21:38:28 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b3a3316bf0af5516319484916cf5bc2032d37758
+X-Git-Newrev: dea4f02bbb24b2125df6f4aa7a4b301a2316ef06
+X-Patchwork-Hint: ignore
+Message-Id: <20251023195659.8065C877A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/i2pd: bump version to 2.58.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,30 +59,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Dario,
+commit: https://git.buildroot.net/buildroot/commit/?id=dea4f02bbb24b2125df6f4aa7a4b301a2316ef06
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 16/10/2025 20:28, Dario Binacchi wrote:
-> Release notes since 0.81:
-> https://jim.tcl-lang.org/home/doc/www/www/articles/jim-release-0-82/
-> https://jim.tcl-lang.org/home/doc/www/www/articles/jim-release-0-83/
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Changelog: https://github.com/PurpleI2P/i2pd/blob/2.58.0/ChangeLog
 
-This bump seems to break openocd:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/11768045827
+Needed for bump of libminiupnpc to version 2.3.3:
+https://github.com/PurpleI2P/i2pd/blob/openssl/ChangeLog#L176
 
-Could you have a look if we should update openocd to a newer commit
-or if we should backport an upstream patch?
-There was no release since 0.12.0 (2023-01-14).
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/i2pd/i2pd.hash | 6 +++---
+ package/i2pd/i2pd.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Best regards,
-
-Julien.
+diff --git a/package/i2pd/i2pd.hash b/package/i2pd/i2pd.hash
+index cc099a94ff..a539a4dd1a 100644
+--- a/package/i2pd/i2pd.hash
++++ b/package/i2pd/i2pd.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/PurpleI2P/i2pd/releases/download/2.50.2/SHA512SUMS
+-sha512  7df7a578711a959feee4326060829cf87c0d1669e473934549cb59d868a7aef7300ecd2d7a6b92a2295aa7e97964cc16d0e44a334db917e22b0b59573a9052de  i2pd-2.50.2.tar.gz
++# From https://github.com/PurpleI2P/i2pd/releases/download/2.58.0/SHA512SUMS
++sha512  d5d87a04ff5f8481516c00b07dd46726dfb3f0de67f4932874a0655b4adfa448a434056a131d727dd79a2f3ee1f6cc9aef5dc176a0b5ab546d8e94b6c0b38ee5  i2pd-2.58.0.tar.gz
+ # Locally computed:
+-sha256  e32cc0171ce3301afa67d83f61598f29af7efdf8218dfb66cc1a72224474ec2c  LICENSE
++sha256  5ec428c65b0bc8680e08daa75aa060fe72b5b3c3b89082ac02031e0f2d3d0039  LICENSE
+diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
+index 402931c655..3681e6006e 100644
+--- a/package/i2pd/i2pd.mk
++++ b/package/i2pd/i2pd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-I2PD_VERSION = 2.50.2
++I2PD_VERSION = 2.58.0
+ I2PD_SITE = $(call github,PurpleI2P,i2pd,$(I2PD_VERSION))
+ I2PD_LICENSE = BSD-3-Clause
+ I2PD_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
