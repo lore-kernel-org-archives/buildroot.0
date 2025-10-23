@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69C6ACCF9E6
-	for <buildroot@archiver.kernel.org>; Thu, 23 Oct 2025 19:57:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2518CCF9E3
+	for <buildroot@archiver.kernel.org>; Thu, 23 Oct 2025 19:57:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4BB98849FD;
-	Thu, 23 Oct 2025 19:57:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C99F4849FF;
+	Thu, 23 Oct 2025 19:57:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6gp7odlzVC1R; Thu, 23 Oct 2025 19:57:04 +0000 (UTC)
+ id 32doRbG84ZaP; Thu, 23 Oct 2025 19:57:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3D3E849FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8FDD849FB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F3D3E849FA;
-	Thu, 23 Oct 2025 19:57:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8FDD849FB;
+	Thu, 23 Oct 2025 19:57:30 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 817C170A
- for <buildroot@buildroot.org>; Thu, 23 Oct 2025 19:57:00 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 9E5EE19D
+ for <buildroot@buildroot.org>; Thu, 23 Oct 2025 19:57:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5F14361B8A
- for <buildroot@buildroot.org>; Thu, 23 Oct 2025 19:57:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9085660E24
+ for <buildroot@buildroot.org>; Thu, 23 Oct 2025 19:57:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ya5p8Zumtl7b for <buildroot@buildroot.org>;
- Thu, 23 Oct 2025 19:56:59 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A367D61B89
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A367D61B89
- for <buildroot@buildroot.org>; Thu, 23 Oct 2025 19:56:59 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 93F15877AC; Thu, 23 Oct 2025 19:56:59 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 23 Oct 2025 21:40:40 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7d95c34d64505214d56e452abc1f3502323266af
-X-Git-Newrev: d1193da9a8ae92048152e015e9efd013f323de6b
-X-Patchwork-Hint: ignore
-Message-Id: <20251023195659.93F15877AC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/transmission: add upstream patch
- to build with libminiupnpc >= 2.2.8
+ id FzddcqeJC6L0 for <buildroot@buildroot.org>;
+ Thu, 23 Oct 2025 19:57:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C5D0E60D56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5D0E60D56
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C5D0E60D56
+ for <buildroot@buildroot.org>; Thu, 23 Oct 2025 19:57:28 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 6956719F59C;
+ Thu, 23 Oct 2025 21:57:24 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 23 Oct 2025 21:57:24 +0200
+MIME-Version: 1.0
+Date: Thu, 23 Oct 2025 21:57:24 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In-Reply-To: <20251020203428.2751864-1-bernd@kuhls.net>
+References: <20251020203428.2751864-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <7ea04f939fac66de403e15f169e7743a@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1761249446;
+ bh=1I282vK54yuD/DjJvY+CBitcpjq7kmszdcihnOtqxJo=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=hAMZg2JjlId8oTq7w+sDhPYW9YNfQdTa3wk0mzL/pMWx2pHAI7ugG5qm6tlPCRcYA
+ 0V4y977RYzcPYKdDM0Htgvl9ZdzPAsLnPh86freU65WIxrETfTP1nPCXYbsRfKJPBp
+ IRV43NabHmhLIUvZgJhit1gpXASy7H/Y3DPeJ1IcsCx1727HmwgvocNp0zbru5rtZC
+ g6Crr279Fxo4ee9aVTGOqr6LwC22qUigym/I7XY5lZOgQolj7U7w5gAf4Vf/bupZHI
+ 8ojbvPtp0TidhqONuNGHr9CwQx+oqsZwg9+t3D5M7HQkVvtStauH5g6hzRxKxNht0K
+ ZfTO2IOK7xEIg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=hAMZg2Jj
+Subject: Re: [Buildroot] [PATCH 1/4] package/i2pd: bump version to 2.58.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,66 +83,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1193da9a8ae92048152e015e9efd013f323de6b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 20/10/2025 22:34, Bernd Kuhls wrote:
+> Changelog: https://github.com/PurpleI2P/i2pd/blob/2.58.0/ChangeLog
+> 
+> Needed for bump of libminiupnpc to version 2.3.3:
+> https://github.com/PurpleI2P/i2pd/blob/openssl/ChangeLog#L176
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .../0001-bump-miniupnpc-to-2.2.8.patch             | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
-
-diff --git a/package/transmission/0001-bump-miniupnpc-to-2.2.8.patch b/package/transmission/0001-bump-miniupnpc-to-2.2.8.patch
-new file mode 100644
-index 0000000000..f8fab5024f
---- /dev/null
-+++ b/package/transmission/0001-bump-miniupnpc-to-2.2.8.patch
-@@ -0,0 +1,39 @@
-+From febfe49ca3ecab1a7142ecb34012c1f0b2bcdee8 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?C=C5=93ur?= <coeur@gmx.fr>
-+Date: Sat, 15 Jun 2024 07:24:06 +0800
-+Subject: [PATCH] bump miniupnpc to 2.2.8 (#6907)
-+
-+* bump miniupnpc to 2.2.8
-+
-+* Avoid build error "ln: include/miniupnpc/.: Operation not permitted"
-+
-+Upstream: https://github.com/transmission/transmission/commit/febfe49ca3ecab1a7142ecb34012c1f0b2bcdee8
-+
-+[Bernd: rebased for version 4.0.6]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ Transmission.xcodeproj/project.pbxproj  | 2 +-
-+ libtransmission/port-forwarding-upnp.cc | 9 +++++++--
-+ third-party/miniupnp                    | 2 +-
-+ 3 files changed, 9 insertions(+), 4 deletions(-)
-+
-+diff --git a/libtransmission/port-forwarding-upnp.cc b/libtransmission/port-forwarding-upnp.cc
-+index 6d7bbc7f7c2..a4146e0df13 100644
-+--- a/libtransmission/port-forwarding-upnp.cc
-++++ b/libtransmission/port-forwarding-upnp.cc
-+@@ -261,8 +261,13 @@ tr_port_forwarding_state tr_upnpPulse(
-+ 
-+         FreeUPNPUrls(&handle->urls);
-+         auto lanaddr = std::array<char, TR_ADDRSTRLEN>{};
-+-        if (UPNP_GetValidIGD(devlist, &handle->urls, &handle->data, std::data(lanaddr), std::size(lanaddr) - 1) ==
-+-            UPNP_IGD_VALID_CONNECTED)
-++        if (
-++#if (MINIUPNPC_API_VERSION >= 18)
-++            UPNP_GetValidIGD(devlist, &handle->urls, &handle->data, std::data(lanaddr), std::size(lanaddr) - 1, nullptr, 0)
-++#else
-++            UPNP_GetValidIGD(devlist, &handle->urls, &handle->data, std::data(lanaddr), std::size(lanaddr) - 1)
-++#endif
-++            == UPNP_IGD_VALID_CONNECTED)
-+         {
-+             tr_logAddInfo(fmt::format(_("Found Internet Gateway Device '{url}'"), fmt::arg("url", handle->urls.controlURL)));
-+             tr_logAddInfo(fmt::format(_("Local Address is '{address}'"), fmt::arg("address", lanaddr.data())));
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
