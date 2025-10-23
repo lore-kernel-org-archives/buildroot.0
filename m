@@ -1,77 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 515F6CCD1BC
-	for <buildroot@archiver.kernel.org>; Thu, 23 Oct 2025 13:06:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DA16CCD1BE
+	for <buildroot@archiver.kernel.org>; Thu, 23 Oct 2025 13:50:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E49D941072;
-	Thu, 23 Oct 2025 13:06:27 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bAGgI4ZKmr78; Thu, 23 Oct 2025 13:06:27 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A18641175
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0A18641175;
-	Thu, 23 Oct 2025 13:06:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 948FE70A
- for <buildroot@buildroot.org>; Thu, 23 Oct 2025 13:06:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 919ED8476B
- for <buildroot@buildroot.org>; Thu, 23 Oct 2025 13:06:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C440845D7;
+	Thu, 23 Oct 2025 13:50:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W_59Gg57zg5F for <buildroot@buildroot.org>;
- Thu, 23 Oct 2025 13:06:22 +0000 (UTC)
-X-Greylist: delayed 428 seconds by postgrey-1.37 at util1.osuosl.org;
- Thu, 23 Oct 2025 13:06:20 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E29E484766
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E29E484766
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=159.226.251.21;
- helo=cstnet.cn; envelope-from=gongzl.oerv@isrc.iscas.ac.cn;
- receiver=<UNKNOWN> 
-Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E29E484766
- for <buildroot@buildroot.org>; Thu, 23 Oct 2025 13:06:19 +0000 (UTC)
-Received: from lapac71h.localdomain (unknown [124.236.175.99])
- by APP-01 (Coremail) with SMTP id qwCowAAnfqCJJvpot7QEFQ--.38691S2;
- Thu, 23 Oct 2025 20:59:03 +0800 (CST)
-From: Gong Zhile <gongzl.oerv@isrc.iscas.ac.cn>
-To: buildroot@buildroot.org
-Cc: Gong Zhile <gongzl.oerv@isrc.iscas.ac.cn>
-Date: Thu, 23 Oct 2025 20:58:47 +0800
-Message-ID: <20251023125847.7008-1-gongzl.oerv@isrc.iscas.ac.cn>
-X-Mailer: git-send-email 2.47.3
+ id MinBSinQAg5G; Thu, 23 Oct 2025 13:50:20 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43CC3845D4
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 43CC3845D4;
+	Thu, 23 Oct 2025 13:50:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DC63070A
+ for <buildroot@buildroot.org>; Thu, 23 Oct 2025 13:50:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C239341188
+ for <buildroot@buildroot.org>; Thu, 23 Oct 2025 13:50:18 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id i2aVgfUr8SJL for <buildroot@buildroot.org>;
+ Thu, 23 Oct 2025 13:50:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::52f; helo=mail-ed1-x52f.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9C7C941123
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C7C941123
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
+ [IPv6:2a00:1450:4864:20::52f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9C7C941123
+ for <buildroot@buildroot.org>; Thu, 23 Oct 2025 13:50:17 +0000 (UTC)
+Received: by mail-ed1-x52f.google.com with SMTP id
+ 4fb4d7f45d1cf-63e076e24f2so1783240a12.3
+ for <buildroot@buildroot.org>; Thu, 23 Oct 2025 06:50:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1761227415; x=1761832215;
+ h=content-transfer-encoding:subject:from:cc:to:content-language
+ :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+ :cc:subject:date:message-id:reply-to;
+ bh=EIJQvctgA4OXxH5q9oMz9QX4jq5b1fvhk5T2XB2J4Pg=;
+ b=OGGvagnaNp1RS3NdzY2O39xDciKPx4+0piysMmvoXHBfa8yKAFkQiwCUvhO+bChZgH
+ n2xX05JQZWCzn/egCFbOOxONWxwq76mx0O0CZ9s6DQy/fZOpXLfoIWh6Vx1mhwhMD0Vb
+ +6vwqqg8xd7U1tmJ5skd6LJDVJmk94dkokyRXnN8IkizEm887KvM3nihDcSxPcZa8swC
+ I0OehLeM27mCQzTtA/OLf6DuL4E4EvE2zi2ZkGu+t7x+LUFvN65+P42rhNrNuc91mzIC
+ edqKMw1laTFwgc0FsIIaxV5b76MYsYMX0hp2bpKk4y+QPamDYtsN8a9Z+gJmb7OT1dSK
+ 7Ltw==
+X-Gm-Message-State: AOJu0Yw6j50kokz40XoufvQB2iToLmBWWGk0pDndAXeSmsgEQzJWryb8
+ EuHs2IRHY92EKK4XJwFj5z3EoPgAevr5NmqBj8hJP1HYwDSUcDSo4QGp6QIegjmcAxt5dlmnQ36
+ L759MIpM=
+X-Gm-Gg: ASbGncv09DHfRxnVLZjC0gEhdGkYH0KquOBKcK9PnoqLGAhtI9JSqdR1pVLZli1/fOD
+ 2ZGZfnyI/wN4PziNQhFnd4yyB0An25rMIgiRIwztjJTh7jMBjW4xVAviBgIPm0dgCXnEBkPAJWG
+ zWlXwVbfPPlkDKh33koZIbH4R1+hO/ueuenCqqKCdLZ1UM9rSqEeEs4lljtvxlcoV1s5sPKcV8t
+ x++SEPcPMch08JcAVjTxdFCUAQBw8gsJaFStIsUwyoXfXIxA1MyiBQA89GamEYXe4FnXcrnQo/Z
+ cN7r7kuGY176xX52NdntTYYh0iEaMDsyqlNbE20vtmtNFCz23KBKZOlG7XSkvgRHcqICtcsJ4xV
+ QstGRlhdC+5C+2xMiYCxyMGY9FmwRlXNVM4h7VSCmUgjy1jgtZGVYN1/cIPVDMO212ju9q0Q8OS
+ NshOhgVuVDqv8hQZoaFJ52GfmYiME=
+X-Google-Smtp-Source: AGHT+IFaePGPltCcY/UW0HWFfdF5vtxU2Hw6tWMYJ9hcbLOBr06Re+KN+VI2dZSvVUkjWlggzFODSA==
+X-Received: by 2002:a17:906:4fc4:b0:b3a:b22e:dd35 with SMTP id
+ a640c23a62f3a-b6471d45a69mr2875352766b.2.1761227414922; 
+ Thu, 23 Oct 2025 06:50:14 -0700 (PDT)
+Received: from [192.168.129.33] ([109.136.97.112])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-63e3f322cf3sm1708481a12.29.2025.10.23.06.50.14
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 23 Oct 2025 06:50:14 -0700 (PDT)
+Message-ID: <34229503-5bda-4427-9dea-17ea1dd4a688@mind.be>
+Date: Thu, 23 Oct 2025 15:49:23 +0200
 MIME-Version: 1.0
-X-CM-TRANSID: qwCowAAnfqCJJvpot7QEFQ--.38691S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZw18tF4rtFWkKF1DGF1fXrb_yoWrJw17pF
- n8GFW5KrWkGF4xKa93tr48Xa1Svwn3AryFy34SqrW8WF18Zas7ArZFkFZYyrWDZr10yw1Y
- vF1DWrWkG3s5Xw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
- 9KBjDU0xBIdaVrnRJUUUyv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
- rVWUJVWUGwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
- 1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r1j
- 6r4UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
- 4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
- I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
- 4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
- rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
- vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jrv_JF1lIxkGc2Ij64vIr41lIxAIcVC0I7IY
- x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
- xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAF
- wI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbrMaUUUUUU==
-X-Originating-IP: [124.236.175.99]
-X-CM-SenderInfo: pjrqw6noorv2ny6l223fol2u1dvotugofq/
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=isrc.iscas.ac.cn
-Subject: [Buildroot] [PATCH] package/libsolv: add upstream patch to fix musl
- build
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: nvd@nist.gov
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1761227415; x=1761832215; darn=buildroot.org;
+ h=content-transfer-encoding:subject:from:cc:to:content-language
+ :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=EIJQvctgA4OXxH5q9oMz9QX4jq5b1fvhk5T2XB2J4Pg=;
+ b=AcuTyrzDVPP7G1aIMq2prf8SjYzsgU93bmcKv8jpV1EnjeLXi3oJldQUHRJWC4HtE6
+ /EdJKJzQKhKvjNLsZuzVkg3c+/U/PCA1RkyQODLf9nLkGqDOBxmL9+WGocjINEEw0mFO
+ 3NlXgOekVUAS4VppgJEunD4UvxPrn267K2pPG5qn7Rf2xUsFPJV4knNtSSr2Nv6aHki/
+ Z9vtc8del2nyN7x+xvqkWgBaG7WF3MN5++7RNbh1YDSbmWnZHP2Lnw/UQd2e8KoAyP08
+ QtJxxleVGjmaHJa+u9HbXRF6YXNjCy45gF8NBqoM+ofuBeRzajakFKL/zwxgF1GePPvM
+ ATEg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=AcuTyrzD
+Subject: [Buildroot] Corrections to Known Affected Software Configurations
+ in NVD CVE entries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,114 +111,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-After the introduction of qsort_r in musl, building libsolv with musl fails with
-unmatched qsort_r function signature. The commit adds the recently upstreamed
-patch to fix it.
-
-Original PR: https://github.com/openSUSE/libsolv/pull/600
-
-Fixes: http://autobuild.buildroot.org/results/ab06e97bef898b2c53b906afb2a4b8ee6841bacb
-
-Signed-off-by: Gong Zhile <gongzl.oerv@isrc.iscas.ac.cn>
----
- ..._r-preprocessor-for-musl-and-FreeBSD.patch | 79 +++++++++++++++++++
- 1 file changed, 79 insertions(+)
- create mode 100644 package/libsolv/0001-Fix-qsort_r-preprocessor-for-musl-and-FreeBSD.patch
-
-diff --git a/package/libsolv/0001-Fix-qsort_r-preprocessor-for-musl-and-FreeBSD.patch b/package/libsolv/0001-Fix-qsort_r-preprocessor-for-musl-and-FreeBSD.patch
-new file mode 100644
-index 00000000..8c1677fc
---- /dev/null
-+++ b/package/libsolv/0001-Fix-qsort_r-preprocessor-for-musl-and-FreeBSD.patch
-@@ -0,0 +1,79 @@
-+From 2d0718a4f2001c857d9af24398c68d676a98a3ca Mon Sep 17 00:00:00 2001
-+From: Gong Zhile <gongzl.oerv@isrc.iscas.ac.cn>
-+Date: Wed, 22 Oct 2025 18:14:30 +0800
-+Subject: [PATCH] Fix qsort_r preprocessor for musl and FreeBSD
-+
-+The original mentioned qsort_r signature difference now only exists in DragonFly
-+BSD & MacOS. However, the preprocessor also broke the compliation on musl+linux
-+and FreeBSD, leading the compilation error on buildroot.
-+
-+musl: https://git.musl-libc.org/cgit/musl/commit/?id=b76f37fd5625d038141b52184956fb4b7838e9a5
-+freebsd, dragonfly, macos: QSORT(3)
-+
-+FreeBSD and musl use the same GNU-like signature.
-+
-+Signed-off-by: Gong Zhile <gongzl.oerv@isrc.iscas.ac.cn>
-+---
-+ src/util.c | 35 +++++++++++++++++++----------------
-+ 1 file changed, 19 insertions(+), 16 deletions(-)
-+
-+diff --git a/src/util.c b/src/util.c
-+index 72426e09..a60ed3da 100644
-+--- a/src/util.c
-++++ b/src/util.c
-+@@ -154,26 +154,14 @@ solv_setcloexec(int fd, int state)
-+   #endif
-+ }
-+ 
-+-/* bsd's qsort_r has different arguments, so we define our
-++#if defined(HAVE_QSORT_R) || defined(HAVE___QSORT_R)
-++#if (defined(__APPLE__) || defined(__DragonFly__)) && defined(HAVE_QSORT_R)
-++
-++/* MacOS and DragonFly have qsort_r with different arguments, so we define our
-+    own version in case we need to do some clever mapping
-+ 
-+    see also: http://sources.redhat.com/ml/libc-alpha/2008-12/msg00003.html
-+  */
-+-#if (defined(__GLIBC__) || defined(__NEWLIB__)) && (defined(HAVE_QSORT_R) || defined(HAVE___QSORT_R))
-+-
-+-void
-+-solv_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *, void *), void *compard)
-+-{
-+-# if defined(HAVE_QSORT_R)
-+-  qsort_r(base, nmemb, size, compar, compard);
-+-# else
-+-  /* backported for SLE10-SP2 */
-+-  __qsort_r(base, nmemb, size, compar, compard);
-+-# endif
-+-
-+-}
-+-
-+-#elif defined(HAVE_QSORT_R) /* not glibc, but has qsort_r() */
-+ 
-+ struct solv_sort_data {
-+   int (*compar)(const void *, const void *, void *);
-+@@ -196,6 +184,21 @@ solv_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, con
-+   qsort_r(base, nmemb, size, &d, solv_sort_helper);
-+ }
-+ 
-++#else
-++
-++void
-++solv_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *, void *), void *compard)
-++{
-++# if defined(HAVE_QSORT_R)
-++  qsort_r(base, nmemb, size, compar, compard);
-++# else
-++  /* backported for SLE10-SP2 */
-++  __qsort_r(base, nmemb, size, compar, compard);
-++# endif
-++
-++}
-++
-++#endif
-+ #else /* not glibc and no qsort_r() */
-+ /* use own version of qsort if none available */
-+ #include "qsort_r.c"
-+-- 
-+2.47.3
-+
--- 
-2.47.3
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RGVhciBOVkQgbWFpbnRlbmFuY2UgdGVhbSwKCldoaWxlIHdvcmtpbmcgb24gdGhlIEJ1aWxkcm9v
+dCAoaHR0cHM6Ly9idWlsZHJvb3Qub3JnLykgTG9uZy1UZXJtIApTdXBwb3J0IGJyYW5jaGVzLCBJ
+IGNhbWUgYWNyb3NzIGEgZmV3IENWRSBlbnRyaWVzIGZyb20geW91ciBkYXRhYmFzZSAKd2hlcmUg
+dGhlIEtub3duIEFmZmVjdGVkIFNvZnR3YXJlIENvbmZpZ3VyYXRpb24gYXJlIGluY29tcGxldGUg
+b3IgCmluYWNjdXJhdGUuIENvbnNlcXVlbnRseSwgb3VyIGF1dG9tYXRlZCBhbmFseXNpcyBpbmNv
+cnJlY3RseSBtYXJrcyBzb21lIApwYWNrYWdlcyBhcyBhZmZlY3RlZCBieSBDVkVzLCB3aGlsZSB0
+aGV5IGFyZW4ndC4KCkNvdWxkIHlvdSBwbGVhc2UgdXBkYXRlIHRoZW0gd2l0aCB0aGUgZm9sbG93
+aW5nIGluZm9ybWF0aW9uOgoKLSBodHRwczovL252ZC5uaXN0Lmdvdi92dWxuL2RldGFpbC9DVkUt
+MjAyNS00NDc4OiBhcyBpbmRpY2F0ZWQgb24gdGhlIAp1cHN0cmVhbSBjb2RlIHJlcG9zaXRvcnkg
+CihodHRwczovL2dpdGh1Yi5jb20vRnJlZVJEUC9GcmVlUkRQL3B1bGwvMTE1NzMjaXNzdWVjb21t
+ZW50LTI5MDQxNjA1MjQpLCAKdGhlIGlzc3VlIG9ubHkgYWZmZWN0cyBmcmVlcmRwPj0zLjAuCiDC
+oCDCoCA9PiBDb3VsZCB5b3UgcGxlYXNlIGluZGljYXRlIHRoYXQgaXQgYWZmZWN0cyAKYGNwZToy
+LjM6YTpmcmVlcmRwOmZyZWVyZHA6KjoqOio6KjoqOio6KjoqYCBzdGFydGluZyBmcm9tIHZlcnNp
+b24gMy4wID8KCi0gaHR0cHM6Ly9udmQubmlzdC5nb3YvdnVsbi9kZXRhaWwvQ1ZFLTIwMjUtNTMx
+ODogdGhlIEN1cnJlbnQgCkRlc2NyaXB0aW9uIHRleHQgb2YgdGhlIENWRSBpbmRpY2F0ZXMgdGhh
+dCB0aGUgaXNzdWUgYWZmZWN0cyBsaWJzc2ggCjwwLjExLjIsIGJ1dCB0aGlzIGlzIG5vdCByZWZs
+ZWN0ZWQgaW4gdGhlIEtub3duIFNvZnR3YXJlIENvbmZpZ3VyYXRpb24gCnNlY3Rpb24uCiDCoCDC
+oCA9PiBDb3VsZCB5b3UgcGxlYXNlIGluZGljYXRlIHRoYXQgaXQgYWZmZWN0cyAKYGNwZToyLjM6
+YTpsaWJzc2g6bGlic3NoOio6KjoqOio6KjoqOio6KmAgdXAgdG8gKGV4Y2x1ZGluZykgdmVyc2lv
+biAwLjExLjIgPwoKLSBodHRwczovL252ZC5uaXN0Lmdvdi92dWxuL2RldGFpbC9DVkUtMjAyMS0z
+MTY5MzogdGhlIEN1cnJlbnQgCkRlc2NyaXB0aW9uIHRleHQgb2YgdGhlIENWRSBpbmRpY2F0ZXMg
+dGhhdCAiVk13YXJlIGluZm9ybWF0aW9uLCAKcHJldmlvdXNseSBjb25uZWN0ZWQgdG8gdGhpcyBD
+VkUgSUQgYmVjYXVzZSBvZiBhIHR5cG8sIGlzIGF0IApDVkUtMjAyMi0zMTY5MyIuIEluZGVlZCwg
+dGhpcyBDVkUgaXMgcmVsYXRlZCB0byBhIFdvcmRwcmVzcyBQbHVnaW4sIGJ1dCAKdGhlIEtub3du
+IEFmZmVjdGVkIFNvZnR3YXJlIENvbmZpZ3VyYXRpb24gbWVudGlvbnMgVk1XYXJlIHRvb2xzCiDC
+oCDCoCA9PiBDb3VsZCB5b3UgcGxlYXNlIHJlbW92ZSB0aGUgS25vd24gQWZmZWN0ZWQgU29mdHdh
+cmUgCkNvbmZpZ3VyYXRpb24gYGNwZToyLjM6YTp2bXdhcmU6dG9vbHM6KjoqOio6Kjp3aW5kb3dz
+Oio6KjoqYCA/CgotIGh0dHBzOi8vbnZkLm5pc3QuZ292L3Z1bG4vZGV0YWlsL0NWRS0yMDIzLTIy
+NzQ1OiB0aGUgdXBzdHJlYW0gY29tbWl0IAp0aGF0IGZpeGVzIHRoZSBpc3N1ZSwgcmVmZXJlbmNl
+ZCBvbiB0aGUgQ1ZFIHBhZ2UgCihodHRwczovL2dpdGh1Yi5jb20vdHBtMi1zb2Z0d2FyZS90cG0y
+LXRzcy9jb21taXQvMzA2NDkwYzhkODQ4YzM2N2ZhYTJkOWRmODFmNWU2OWRhYjQ2ZmZiNSkgCmhh
+cyBhbHNvIGJlZW4gYmFja3BvcnRlZCB0byB0aGUgMy4yIGJyYW5jaCAoc2VlIApodHRwczovL2dp
+dGh1Yi5jb20vdHBtMi1zb2Z0d2FyZS90cG0yLXRzcy9jb21taXQvN2FiNDI5NTMyMTZhZGVjMDQ2
+ZDAwMGE1ZTMwODVmM2VlNWU5Y2FiZiksIAphbmQgdGhlcmVmb3JlIHRwbTItdHNzIDMuMi4yIGlz
+IG5vIGxvbmdlciBhZmZlY3RlZCAoc2VlIGFsc28gCmh0dHBzOi8vZ2l0aHViLmNvbS90cG0yLXNv
+ZnR3YXJlL3RwbTItdHNzL3JlbGVhc2VzL3RhZy8zLjIuMikKIMKgIMKgID0+IENvdWxkIHlvdSBw
+bGVhc2UgcmVmbGVjdCB0aGF0IGluIHRoZSBLbm93biBBZmZlY3RlZCBTb2Z0d2FyZSAKQ29uZmln
+dXJhdGlvbiA/CgpUaGFuayB5b3UgaW4gYWR2YW5jZSwgYW5kIGhhdmUgYSBnb29kIGRheSAhCgpU
+aXRvdWFuIENocmlzdG9waGUKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
+aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
