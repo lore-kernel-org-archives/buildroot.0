@@ -4,95 +4,110 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF685CCD193
-	for <buildroot@archiver.kernel.org>; Thu, 23 Oct 2025 21:13:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED263CCD1BF
+	for <buildroot@archiver.kernel.org>; Thu, 23 Oct 2025 23:36:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 93889411A9;
-	Thu, 23 Oct 2025 21:13:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A32374049A;
+	Thu, 23 Oct 2025 23:36:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bddw2NmEFkDE; Thu, 23 Oct 2025 21:13:55 +0000 (UTC)
+ id Lr5VUQ4dg_w7; Thu, 23 Oct 2025 23:36:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EDD64124B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F6734049B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8EDD64124B;
-	Thu, 23 Oct 2025 21:13:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 950DA19D
- for <buildroot@buildroot.org>; Thu, 23 Oct 2025 21:13:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F6734049B;
+	Thu, 23 Oct 2025 23:36:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6C0EA43F
+ for <buildroot@buildroot.org>; Thu, 23 Oct 2025 23:36:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 86F3742112
- for <buildroot@buildroot.org>; Thu, 23 Oct 2025 21:13:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5E05381AAD
+ for <buildroot@buildroot.org>; Thu, 23 Oct 2025 23:36:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u5awxGv-Wh-F for <buildroot@buildroot.org>;
- Thu, 23 Oct 2025 21:13:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZVCDrjKON1S8 for <buildroot@buildroot.org>;
+ Thu, 23 Oct 2025 23:36:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::135; helo=mail-il1-x135.google.com;
+ client-ip=2607:f8b0:4864:20::432; helo=mail-pf1-x432.google.com;
  envelope-from=joseph.kogut@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 842C242000
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 842C242000
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com
- [IPv6:2607:f8b0:4864:20::135])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 842C242000
- for <buildroot@buildroot.org>; Thu, 23 Oct 2025 21:13:53 +0000 (UTC)
-Received: by mail-il1-x135.google.com with SMTP id
- e9e14a558f8ab-430ae09ea23so5622615ab.0
- for <buildroot@buildroot.org>; Thu, 23 Oct 2025 14:13:53 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4CB2E81A95
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CB2E81A95
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com
+ [IPv6:2607:f8b0:4864:20::432])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4CB2E81A95
+ for <buildroot@buildroot.org>; Thu, 23 Oct 2025 23:36:49 +0000 (UTC)
+Received: by mail-pf1-x432.google.com with SMTP id
+ d2e1a72fcca58-78118e163e5so2426947b3a.0
+ for <buildroot@buildroot.org>; Thu, 23 Oct 2025 16:36:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1761254032; x=1761858832;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=n+Ebo3dBzdzpk+H9TqsAKeh6DwZ+hpc0906aaWHxjgA=;
- b=obW1rrsIO/slq+dVYrWDAuhP2Z60UB1NjXPd/gQ6CTCvIRPH3EEdKM37FAKroQ5I2R
- +9ThHjtpNucw17+UXUetkd+d1QLqJVAm/b2lzdQ5iVYJHlPSS9wq/KbegEcnUnyGuqsk
- 2KHTcykbH2h7i0E4VjwO0sEiAg/qvkAUMlqJ5vpYKmT0BTR4Q7tRDFDuPzyuB/tluqWm
- 22AxBkt0gFe8jYAEQi42VCfWMAhSVZJnitCQUOEM/vXmQ1zbB8+L1cQQanTeuY0nqpdf
- YRuiNc1u44ZtAUPGz4bGBOMt6iSwUBZJWEOgtaBxo/2HL+5c2QRxewhl3gRlY6Q3Ow6p
- IHvA==
-X-Gm-Message-State: AOJu0YxXAV0cIFnnhaTpM9YG4DVJNLQpE5DRCFvgfjOE/e5LH97kSnDE
- z4maQ8APNK06CXOcibmqluGt/lLmMT4AtrgoZgzkc2PB3Xsj3ruP1IIdAWRX99/p6eVpDXAw0AP
- qEXzzeOUWHpPOCEOXEkkn1k7+HfRZuPmSJQ==
-X-Gm-Gg: ASbGncub0SJUaQ0H9JCGrfdbMF/W70Zjn8ZRnSPBViB+IxfR8haMWm1tegmBwM/bv7i
- ouvbcfSqNqoSscf+2h5f21/iZ/MWsYskN4n2JOS80hIqavatuU/9sUI1o2HeXk0L0dWjwtbi+xL
- h6a0FwoCxnxFKbXGDNkmTgNLlOxU+5XJ3M43kePRB0wisWgzMm2Bqp1d6oCThIc60aRgMGp5esq
- F9z7n6Xgv1v3DgmOnaeagE67POtHAApCFUx8N+iqG1Uk6NBrR4BVvWxURc=
-X-Google-Smtp-Source: AGHT+IFGeLZjhqkP5td5Dps8r6qc9j9Au9KhIRYvYIJadCT+G0uhV4pmVUSGy7CRGWQowrZWh1u1x/6I80YMi2YIkck=
-X-Received: by 2002:a05:6e02:216e:b0:430:ab21:8c4d with SMTP id
- e9e14a558f8ab-430c5232bd3mr354299895ab.11.1761254032151; Thu, 23 Oct 2025
- 14:13:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20251022-llama-cpp-v2-1-c41a43382093@gmail.com>
- <1f466c852ee75191814e2e2f4f38610e@free.fr>
-In-Reply-To: <1f466c852ee75191814e2e2f4f38610e@free.fr>
+ d=1e100.net; s=20230601; t=1761262609; x=1761867409;
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=ErpXjw5sbZFaj2yt4nsIRPgl60pukttOc+FRpmk7RFQ=;
+ b=OJ99TVdLovanIbiV2yjvO1oqC+DKA8fbSlEo8JZFVvJ9TGHQMRCe6OcBV0GZfC7wOf
+ pLB87RUzAaxpHEYuevxyAHNleaOER0a6IHlZ1n049vbVkp82HudHiUYPzF2NHqL3Mu3r
+ MUy87o5V+kzhq4xv2T4xxzLAxJTetxFGkTjRaoee45cQc/ZmdK/amynCBxeEHdVwQWuB
+ Bxx+uShXcsq+ArNrzNrBy2bqGJXsgFfFxIg9DajSkt7E0Tdc1E1VnFtQvf3q6oU6RvTO
+ jZ7aWyqTpWZLg5ymyQ2A0xjdXnak4SSLdP0DLJiiUIbBaIFbLW9sp2TyX7VyLqXai+g5
+ DwQA==
+X-Gm-Message-State: AOJu0YyojbWx8+P+b4Bu2mdWeSOSfdG4NHrX6IdDl9wEYShSQ3942Y+f
+ xgzAMrREHvbnz0ndNz6icygaDy94bTQ1uL0LG/Z9La+WRMYi3BFSdRUuop0L/g==
+X-Gm-Gg: ASbGncv/gWnMegthmgyoJ8KPBixz8LTz+O3QfEX8cOzCt9qvBLUMwcMZXswLCYd3rRr
+ nWR2U5P3EVpqvhQu1gx3yWlBSaIw1ZbxEl/hHjWq1BvMrAuKbtlBHShxiCxBDWH7pUTC4hDP4pP
+ DmbS4qgeCqc5WTatUMBhG18apROPxSqemI+6gZyqq8I3ooOLTkq8fYt1b6hyRxaGpa+cRHWhpFd
+ 79RAut5AMPZK4uBAgqINqJ6gEiBqi5RkAJ9fmbYwV3J6m8Hl4TrTbw2aODMvG9zCUGNbSG8B4b7
+ vIOXevNVGR9wlqjzTQF3aaFiT3UvSZmXFhlTxZLbcGll93W1bDYfofUuR76UvjKoAwDmd0bpnXx
+ dqol9PVGZ3x/I3UMmCnhC/EzdsfarWoT55U5OyIy0uWhDppBL+nTaRXciWiRFBIVSpDxXlFdRIa
+ vB
+X-Google-Smtp-Source: AGHT+IFUrLmorDULztfNvdhLmsbA1zUe+VhfLyfmuzmZh58lzMopdx7b9iOjP6k+gWDzQ1DvfgldRg==
+X-Received: by 2002:a05:6a20:258a:b0:32d:b741:a201 with SMTP id
+ adf61e73a8af0-33db4ee554fmr778527637.20.1761262608957; 
+ Thu, 23 Oct 2025 16:36:48 -0700 (PDT)
+Received: from wash.local ([50.46.184.91]) by smtp.gmail.com with ESMTPSA id
+ 41be03b00d2f7-b6cf4c05489sm3236604a12.10.2025.10.23.16.36.48
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 23 Oct 2025 16:36:48 -0700 (PDT)
 From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Thu, 23 Oct 2025 14:13:16 -0700
-X-Gm-Features: AWmQ_bkeqot6HnCTdyL4LKASlLJBvQV3k5HX0kC4OygYX3XFzqxH2vBft0KJ2KM
-Message-ID: <CAMWSM7hUTYJUJM5rgemsbQRN0j0Y8R8X32bns2ipQzZMYAg2-A@mail.gmail.com>
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org
+Date: Thu, 23 Oct 2025 16:36:34 -0700
+MIME-Version: 1.0
+Message-Id: <20251023-concurrent-test-pkg-v2-1-959ad443d49b@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAG8+mgC/21OSwrCMBS8iry1kSTVQl0JggdwK13k89IGbVJeY
+ lFK727atcxqhvnNkJA8JjjvZiCcfPIxFCL3OzC9Ch0ybwsHyeWJ16JhJgbzJsKQWcaU2fjsmKu
+ UrW1luNBHKMmR0PnP1vqA++0KbRG1Ssg0qWD6tXBQKSOt7t6nHOm7XZjEllnXBJfy79okWIHDp
+ rZOFJe+dIPyr4OJA7TLsvwAJyHc89QAAAA=
+X-Change-ID: 20250619-concurrent-test-pkg-f3ad6d3c01b4
+To: buildroot@buildroot.org
+Cc: Joseph Kogut <joseph.kogut@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1761262608; l=14675;
+ i=joseph.kogut@gmail.com; s=20251022; h=from:subject:message-id;
+ bh=V6XbLfzhdN9d1OLfRpCcl/kVuslr8IuiFpHudtKrTTs=;
+ b=o/d+gAu9AsvDrEbweCsL9iQ7N4++/oJRNeGEl+ytA9e4iUv5vxX2NGqV+/dB5BT3N/ybpjuIe
+ wM8nXnpXw8iCaoNsY2rLia/DDibkIoEPSlGgPNDfbUfXY+eGcXPB24S
+X-Developer-Key: i=joseph.kogut@gmail.com; a=ed25519;
+ pk=pkWqHIjgowoQ51cQZTl6aTwJnXIFThap40f4w8cEsxw=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1761254032; x=1761858832; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=n+Ebo3dBzdzpk+H9TqsAKeh6DwZ+hpc0906aaWHxjgA=;
- b=JvYlClA3jVVZVybmTob1RdDd5+BehrMRWjcOHiX1F9Yl404/06HR2QwJnkv95C0evJ
- MJqsXOmR0YIko0y6FrMOoOv1gTsMa8mvinyiK3P29lqumdGmFHJjv5DL9PKkxGqn0qw6
- Z4zNHu1zOYxcfscKCYkTEVb+Ks7S0e5RfNqrQ/tY9RdU5U903WiApZ89hRxH65VGqIcT
- EUmFS/Vn6/p3zcHHvsAqaxjZ8jxJDMYLNort6aECsNVqBdWHZCBhEgZTAZbztGLYjZMp
- IOQBai1UNk3APgnId+Cv+JK6CVXrvgeh08yHAzWEtkA0A27MqBbqTQqFyha6Wy0wFtlE
- kOPQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1761262609; x=1761867409; darn=buildroot.org;
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=ErpXjw5sbZFaj2yt4nsIRPgl60pukttOc+FRpmk7RFQ=;
+ b=XM0Nc2MDOIMLAe+ircOBa+jyzCQ7QZiAjR/vnlm5lZ3h5n1HPiZufMW+diI28tdpaU
+ 1lCLF4wOqKW1as0QgNLtTAoRQ/B26tLn5Qe1ywqkyoaNR7xdVcV49x/mD225Vp+qO6rD
+ JEmrOBOyx0WuU9FMFZbPSZIocj6DgW+Ty3B0I3m4p0Spxcr3JKFmtJGjcSWm+0NFyhSw
+ 0RocOuMDOLLPuYuENZ3F6QfuJv79wIj4XURExLsmdu8Z5xe5b6NyrANlANB+R89+/men
+ c1ZJNyJ3ukXU32bJ/+tmjLecfTmnQI+KFlb4ddtwowfgPscw2vd1SfBJPa4QKsxxxklW
+ 5nkg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=JvYlClA3
-Subject: Re: [Buildroot] [PATCH v2] package/llama-cpp: new package
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=XM0Nc2MD
+Subject: [Buildroot] [PATCH RFC v2] utils/test-pkg: add concurrency parameter
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -104,125 +119,403 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSnVsaWVuLAoKT24gVGh1LCBPY3QgMjMsIDIwMjUgYXQgMjoxMOKAr1BNIEp1bGllbiBP
-bGl2YWluIDxqdS5vQGZyZWUuZnI+IHdyb3RlOgo+Cj4gSGkgSm9zZXBoLAo+Cj4gVGhhbmtzIGZv
-ciB0aGlzIHBhdGNoLiBJIGhhdmUgZmV3IGNvbW1lbnRzLCBzZWUgYmVsb3cuCj4KPiBPbiAyMi8x
-MC8yMDI1IDE5OjM1LCBKb3NlcGggS29ndXQgd3JvdGU6Cj4gPiBBZGQgYSBwYWNrYWdlIGZvciBs
-bGFtYS5jcHAsIGEgQy9DKysgTExNIGluZmVyZW5jZSBsaWJyYXJ5LCB1c2VkIGluCj4gPiBwb3B1
-bGFyIHByb2plY3RzIGxpa2UgT2xsYW1hLCBSYW1hTGFtYSwgYW5kIG1vcmUuCj4gPgo+ID4gU2ln
-bmVkLW9mZi1ieTogSm9zZXBoIEtvZ3V0IDxqb3NlcGgua29ndXRAZ21haWwuY29tPgo+ID4gLS0t
-Cj4gWy4uLl0KPiA+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xsYW1hLWNwcC9Db25maWcuaW4gYi9w
-YWNrYWdlL2xsYW1hLWNwcC9Db25maWcuaW4KPiA+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBp
-bmRleCAwMDAwMDAwMDAwLi41YmJhMDA2N2NmCj4gPiAtLS0gL2Rldi9udWxsCj4gPiArKysgYi9w
-YWNrYWdlL2xsYW1hLWNwcC9Db25maWcuaW4KPiA+IEBAIC0wLDAgKzEsMzYgQEAKPgo+IEZvciBy
-ZXN0cmljdGluZyB0aGlzIHBhY2thZ2UgdG8gc29tZSBhcmNoaXRlY3R1cmVzLCBjb3VsZCB5b3UK
-PiB1c2UgdGhlICJzdGFuZGFyZCIgX0FSQ0hfU1VQUE9SVFMgcGF0dGVybiwgYXQgdGhlIGJlZ2lu
-bmluZyBvZiB0aGUKPiBmaWxlLCBwbGVhc2U/ICBMaWtlOgo+Cj4gY29uZmlnIEJSMl9QQUNLQUdF
-X0xMQU1BX0NQUF9BUkNIX1NVUFBPUlRTCj4gICAgICAgICBib29sCj4gICAgICAgICBkZWZhdWx0
-IHkKPiAgICAgICAgIGRlcGVuZHMgb24gIUJSMl9zMzkweAo+ICAgICAgICAgZGVwZW5kcyBvbiAh
-QlIyX3Jpc2N2Cj4KPiA+ICtjb25maWcgQlIyX1BBQ0tBR0VfTExBTUFfQ1BQCj4gPiArICAgICBi
-b29sICJsbGFtYS5jcHAiCj4gPiArICAgICBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fVVNFU19H
-TElCQyB8fCBCUjJfVE9PTENIQUlOX1VTRVNfTVVTTAo+Cj4gSSBkb24ndCB0aGluayB0aGlzIGxp
-YmMgcmVzdHJpY3Rpb24gaXMgbmVlZGVkLiBUaGlzIHBhY2thZ2UgY291bGQgYnVpbGQKPiBjb3Jy
-ZWN0bHkgd2l0aCB1Q2xpYmMgdG9vLiBJdCB3aWxsIGp1c3QgbmVlZCB0byBzZWxlY3QgbGliZXhl
-Y2luZm8KPiB3aGVuIHVjbGliYyBpcyB1c2VkLgo+Cj4gVGhlbiwgdGhlIGRlcGVuZGVuY3kgb24g
-dGhlIG5ld2x5IGludHJvZHVjZWQgX0FSQ0hfU1VQUE9SVFMKPiBuZWVkcyB0byBiZSBhZGRlZC4K
-Pgo+IEkgdGhpbmsgdGhpcyBwYWNrYWdlIHdpbGwgbGlrZWx5IGFsc28gZGVwZW5kcyBvbiBoYXZp
-bmcgYSB0b29sY2hhaW4KPiB3aXRoIEMrKy4KPgo+ID4gKyAgICAgZGVwZW5kcyBvbiBCUjJfVE9P
-TENIQUlOX0dDQ19BVF9MRUFTVF85Cj4gPiArICAgICBkZXBlbmRzIG9uICFCUjJfczM5MHgKPiA+
-ICsgICAgIGRlcGVuZHMgb24gIUJSMl9yaXNjdgo+Cj4gVGhvc2UgZGVwZW5kZW5jaWVzIG9uIGFy
-Y2hpdGVjdHVyZXMgY291bGQgYmUgcmVtb3ZlZCwgd2l0aCB0aGUKPiBfQVJDSF9TVVBQT1JUUy4K
-Pgo+ID4gKyAgICAgaGVscAo+ID4gKyAgICAgICBMTE0gaW5mZXJlbmNlIGluIEMvQysrCj4KPiBJ
-biBCdWlsZHJvb3QgaGVscCBzdHJpbmdzLCB3ZSB1c3VhbGx5IGFkZCB0aGUgdXBzdHJlYW0gaG9t
-ZXBhZ2UgdXJsLgo+Cj4gV2l0aCB0aG9zZSBjb21tZW50cywgdGhlIGJsb2NrIHNob3VsZCBiZWNv
-bWU6Cj4KPiBjb25maWcgQlIyX1BBQ0tBR0VfTExBTUFfQ1BQCj4gICAgICAgICBib29sICJsbGFt
-YS5jcHAiCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0xMQU1BX0NQUF9BUkNIX1NV
-UFBPUlRTCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9JTlNUQUxMX0xJQlNURENQUAo+ICAgICAg
-ICAgZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0dDQ19BVF9MRUFTVF85Cj4gICAgICAgICBzZWxl
-Y3QgQlIyX1BBQ0tBR0VfTElCRVhFQ0lORk8gaWYgQlIyX1RPT0xDSEFJTl9VU0VTX1VDTElCQwo+
-ICAgICAgICAgaGVscAo+ICAgICAgICAgICBMTE0gaW5mZXJlbmNlIGluIEMvQysrCj4KPiAgICAg
-ICAgICAgaHR0cHM6Ly9naXRodWIuY29tL2dnbWwtb3JnL2xsYW1hLmNwcAo+Cj4gPiArCj4gPiAr
-Y29tbWVudCAibGxhbWEtY3BwIG5lZWRzIGdsaWJjIG9yIG11c2wgdG9vbGNoYWluIHcvIGMrKywg
-Z2NjID49IDkiCj4gPiArICAgICBkZXBlbmRzIG9uICFCUjJfSU5TVEFMTF9MSUJTVERDUFAgXAo+
-ID4gKyAgICAgICAgICAgICB8fCAhQlIyX1RPT0xDSEFJTl9HQ0NfQVRfTEVBU1RfOSBcCj4gPiAr
-ICAgICAgICAgICAgIHx8ICghQlIyX1RPT0xDSEFJTl9VU0VTX0dMSUJDICYmICFCUjJfVE9PTENI
-QUlOX1VTRVNfTVVTTCkKPgo+IFRvIGtlZXAgYSBjb3JyZWN0IGluZGVudGF0aW9uIGluIEtjb25m
-aWcsIHRoaXMgY29tbWVudCBzaG91bGQgYmUKPiBtb3ZlZCBhdCB0aGUgZW5kIG9mIHRoZSBDb25m
-aWcuaW4gZmlsZS4gUGxlYXNlIGFsc28gYWRqdXN0IHRoZQo+IGNvbmRpdGlvbiBhY2NvcmRpbmds
-eSAoaS5lLiByZW1vdmUgY29uZGl0aW9ucyBvbiBsaWJjKS4KPgo+ID4gKwo+ID4gK2lmIEJSMl9Q
-QUNLQUdFX0xMQU1BX0NQUAo+ID4gKwo+ID4gK2NvbmZpZyBCUjJfUEFDS0FHRV9MTEFNQV9DUFBf
-VE9PTFMKPiA+ICsgICAgIGJvb2wgIkVuYWJsZSB0b29scyIKPiA+ICsgICAgIGhlbHAKPiA+ICsg
-ICAgICAgQnVpbGQgQ0xJIHRvb2xzIGxpa2UgbGxhbWEtY2xpLCBsbGFtYS1iZW5jaCwgZXRjLgo+
-ID4gKwo+ID4gK2NvbmZpZyBCUjJfUEFDS0FHRV9MTEFNQV9DUFBfU0VSVkVSCj4gPiArICAgICBi
-b29sICJFbmFibGUgc2VydmVyIgo+ID4gKyAgICAgaGVscAo+ID4gKyAgICAgICBCdWlsZCBPcGVu
-QUkgQVBJLWNvbXBhdGlibGUgd2ViIHNlcnZlciwgbGxhbWEtc2VydmVyLgo+ID4gKwo+ID4gK2Nv
-bmZpZyBCUjJfUEFDS0FHRV9MTEFNQV9DUFBfVlVMS0FOCj4gPiArICAgICBib29sICJWdWxrYW4g
-c3VwcG9ydCIKPiA+ICsgICAgIGRlcGVuZHMgb24gQlIyX0lOU1RBTExfTElCU1REQ1BQICMgdnVs
-a2FuLWxvYWRlcgo+Cj4gVGhpcyBkZXBlbmRlbmN5IHNob3VsZCBub3QgYmUgbmVlZGVkIGhlcmUs
-IHNpbmNlIHdlJ2xsIGhhdmUgaXQKPiBpbiBCUjJfUEFDS0FHRV9MTEFNQV9DUFAuCj4KPiA+ICsg
-ICAgIGRlcGVuZHMgb24gIUJSMl9TVEFUSUNfTElCUyAjIHZ1bGthbi1sb2FkZXIKPiA+ICsgICAg
-IGRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUyAjIHZ1bGthbi1sb2FkZXIKPiA+
-ICsgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9WVUxLQU5fSEVBREVSUwo+ID4gKyAgICAgc2VsZWN0
-IEJSMl9QQUNLQUdFX1ZVTEtBTl9MT0FERVIKPiA+ICsgICAgIGhlbHAKPiA+ICsgICAgICAgRW5h
-YmxlIFZ1bGthbiBiYWNrZW5kIGZvciBHUFUgYWNjZWxlcmF0aW9uLgo+ID4gK2VuZGlmCj4gWy4u
-Ll0KPiA+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xsYW1hLWNwcC9sbGFtYS1jcHAubWsKPiA+IGIv
-cGFja2FnZS9sbGFtYS1jcHAvbGxhbWEtY3BwLm1rCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+
-ID4gaW5kZXggMDAwMDAwMDAwMC4uOTJkZGUwNTlkMgo+ID4gLS0tIC9kZXYvbnVsbAo+ID4gKysr
-IGIvcGFja2FnZS9sbGFtYS1jcHAvbGxhbWEtY3BwLm1rCj4gPiBAQCAtMCwwICsxLDQzIEBACj4g
-PiArIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiA+ICsjCj4gPiArIyBsbGFtYS5jcHAKPiA+ICsj
-Cj4gPiArIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiA+ICsKPiA+ICtMTEFNQV9DUFBfVkVSU0lP
-TiA9IDY4MTgKPiA+ICtMTEFNQV9DUFBfU09VUkNFID0gYiQoTExBTUFfQ1BQX1ZFUlNJT04pLnRh
-ci5nego+ID4gK0xMQU1BX0NQUF9TSVRFID0KPiA+IGh0dHBzOi8vZ2l0aHViLmNvbS9nZ21sLW9y
-Zy9sbGFtYS5jcHAvYXJjaGl2ZS9yZWZzL3RhZ3MKPiA+ICtMTEFNQV9DUFBfTElDRU5TRSA9IE1J
-VAo+ID4gK0xMQU1BX0NQUF9MSUNFTlNFX0ZJTEVTID0gTElDRU5TRQo+ID4gK0xMQU1BX0NQUF9J
-TlNUQUxMX1NUQUdJTkcgPSBZRVMKPiA+ICtMTEFNQV9DUFBfQ09ORl9PUFRTID0gXAo+ID4gKyAg
-ICAgLURMTEFNQV9CVUlMRF9URVNUUz1PRkYgXAo+ID4gKyAgICAgLURMTEFNQV9CVUlMRF9FWEFN
-UExFUz1PRkYgXAo+ID4gKyAgICAgLURMTEFNQV9GQVRBTF9XQVJOSU5HUz1PRkYKPiA+ICsKPiA+
-ICtpZmVxICgkKEJSMl9QQUNLQUdFX0NVUkwpLHkpCj4KPiBJbiBCdWlsZHJvb3QsIHRoZSBzeW1i
-b2wgZm9yIGNVUkwgaXMgQlIyX1BBQ0tBR0VfTElCQ1VSTC4KPiBTbyB0aGlzIGxpbmUgc2hvdWxk
-IGJlY29tZToKPgo+IGlmZXEgKCQoQlIyX1BBQ0tBR0VfTElCQ1VSTCkseSkKPgo+IFRoaXMgY2Fu
-IGJlIGRldGVjdGVkIGJ5IHRoZSBjaGVjayBjb21tYW5kOgo+IHV0aWxzL2NoZWNrLXN5bWJvbHMK
-Pgo+ID4gK0xMQU1BX0NQUF9DT05GX09QVFMgKz0gLURMTEFNQV9DVVJMPU9OCj4gPiArTExBTUFf
-Q1BQX0RFUEVOREVOQ0lFUyArPSBsaWJjdXJsCj4gPiArZWxzZQo+ID4gK0xMQU1BX0NQUF9DT05G
-X09QVFMgKz0gLURMTEFNQV9DVVJMPU9GRgo+ID4gK2VuZGlmCj4KPiBIZXJlLCB5b3UgY291bGQg
-YWRkIHRoZSBkZXBlbmRlbmN5IGZvciBsaWJleGVjaW5mbywgdG8gc3VwcG9ydCB1Y2xpYmMuCj4K
-PiBpZmVxICgkKEJSMl9QQUNLQUdFX0xJQkVYRUNJTkZPKSx5KQo+IExMQU1BX0NQUF9ERVBFTkRF
-TkNJRVMgKz0gbGliZXhlY2luZm8KPiBMTEFNQV9DUFBfTERGTEFHUyArPSAtbGV4ZWNpbmZvCj4g
-ZW5kaWYKPgo+ID4gKwo+ID4gK2lmZXEgKCQoQlIyX1BBQ0tBR0VfTExBTUFfQ1BQX1RPT0xTKSx5
-KQo+ID4gK0xMQU1BX0NQUF9DT05GX09QVFMgKz0gLURMTEFNQV9CVUlMRF9UT09MUz1PTgo+Cj4g
-SGVyZSwgeW91IHNob3VsZCBoYW5kbGUgdGhlIGNhc2Ugd2hpY2ggZGlzYWJsZSB0aGUgdG9vbHMs
-Cj4gYWRkaW5nOgo+Cj4gZWxzZQo+IExBTUFfQ1BQX0NPTkZfT1BUUyArPSAtRExMQU1BX0JVSUxE
-X1RPT0xTPU9GRgo+Cj4gPiArZW5kaWYKPiA+ICsKPiA+ICtpZmVxICgkKEJSMl9QQUNLQUdFX0xM
-QU1BX0NQUF9TRVJWRVIpLHkpCj4gPiArTExBTUFfQ1BQX0NPTkZfT1BUUyArPSAtRExMQU1BX0JV
-SUxEX1NFUlZFUj1PTgo+Cj4gU2FtZSBjb21tZW50IGZvciB0aGUgX1NFUlZFUiwgYWRkaW5nOgo+
-Cj4gZWxzZQo+IExMQU1BX0NQUF9DT05GX09QVFMgKz0gLURMTEFNQV9CVUlMRF9TRVJWRVI9T0ZG
-Cj4KPiA+ICtlbmRpZgo+ID4gKwo+ID4gK2lmZXEgKCQoQlIyX1BBQ0tBR0VfTExBTUFfQ1BQX1ZV
-TEtBTikseSkKPiA+ICtMTEFNQV9DUFBfREVQRU5ERU5DSUVTICs9IHZ1bGthbi1sb2FkZXIKPiA+
-ICtMTEFNQV9DUFBfQ09ORl9PUFRTICs9IC1ER0dNTF9WVUxLQU49T04KPgo+IFNhbWUgY29tbWVu
-dC4gQWRkaW5nIGhlcmU6Cj4KPiBlbHNlCj4gTExBTUFfQ1BQX0NPTkZfT1BUUyArPSAtREdHTUxf
-VlVMS0FOPU9GRgo+Cj4gPiArZW5kaWYKPiA+ICsKPiA+ICtpZmVxICgkKEJSMl9QQUNLQUdFX09Q
-RU5CTEFTKSx5KQo+ID4gK0xMQU1BX0NQUF9ERVBFTkRFTkNJRVMgKz0gb3BlbmJsYXMKPiA+ICtM
-TEFNQV9DUFBfQ09ORl9PUFRTICs9IC1ER0dNTF9CTEFTPU9OIC1ER0dNTF9CTEFTX1ZFTkRPUj1P
-cGVuQkxBUwo+Cj4gU2FtZSBjb21tZW50LiBBZGRpbmcgaGVyZToKPgo+IGVsc2UKPiBMTEFNQV9D
-UFBfQ09ORl9PUFRTICs9IC1ER0dNTF9CTEFTPU9GRgo+Cj4gPiArZW5kaWYKPgo+IEZpbmFsbHks
-IGZvciBoYW5kbGluZyB0aGUgbGliZXhlY2luZm8gZm9yIHVjbGliYywgd2UgbmVlZAo+IHRvIHBh
-c3MgdGhlIGxkZmxhZ3M6Cj4KPiBMTEFNQV9DUFBfQ09ORl9PUFRTICs9IFwKPiAgICAgICAgIC1E
-Q01BS0VfRVhFX0xJTktFUl9GTEFHUz0iJChMTEFNQV9DUFBfTERGTEFHUykiCj4KPiA+ICsKPiA+
-ICskKGV2YWwgJChjbWFrZS1wYWNrYWdlKSkKPiA+Cj4gPiAtLS0KPiA+IGJhc2UtY29tbWl0OiBm
-MjNjODEwMTc2MzA1NjA0YzU0Yjc5NjExZDg4NTU0N2Y0ZTQ1YzIzCj4gPiBjaGFuZ2UtaWQ6IDIw
-MjUwNjE4LWxsYW1hLWNwcC1kM2ZjMjhiNDU2MmYKPiA+Cj4gPiBCZXN0IHJlZ2FyZHMsCj4gPiAt
-LQo+ID4gSm9zZXBoIEtvZ3V0IDxqb3NlcGgua29ndXRAZ21haWwuY29tPgo+Cj4gQ291bGQgeW91
-IHNlbmQgYW4gdXBkYXRlZCBwYXRjaCBpbmNsdWRpbmcgdGhvc2UgY2hhbmdlcywgcGxlYXNlPwo+
-CgpBYnNvbHV0ZWx5LCB0aGFuayB5b3UgZm9yIHRha2luZyB0aGUgdGltZSB0byBnaXZlIHN1Y2gg
-YSB0aG9yb3VnaCBhbmQKd2VsbCBleHBsYWluZWQgcmV2aWV3LiBJJ2xsIGZvbGxvdyB1cC4KCj4g
-QmVzdCByZWdhcmRzLAo+Cj4gSnVsaWVuLgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
-b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
-cm9vdAo=
+Builds run by test-pkg are often not CPU limited, and so running
+multiple builds concurrently has the potential to speed things up quite
+a lot.
+
+Add a concurrency parameter to the script that allows for multiple
+builds to run concurrently. The default is the current behavior, running
+a single build at a time. If -C|--concurrent=0 is specified, the number of
+concurrent builds is set to the output of $(nproc) to match the number
+of logical CPUs.
+
+$ time bash utils/test-pkg -c sdl2.config -p sdl2 -C1
+
+                    bootlin-armv5-uclibc [1/6]: OK
+                     bootlin-armv7-glibc [2/6]: OK
+                   bootlin-armv7m-uclibc [3/6]: SKIPPED
+                     bootlin-x86-64-musl [4/6]: OK
+                      br-arm-full-static [5/6]: SKIPPED
+                             arm-aarch64 [6/6]: OK
+
+6 builds, 2 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+
+real    2m32.979s
+user    6m15.356s
+sys     0m30.878s
+
+$ time bash utils/test-pkg -c sdl2.config -p sdl2 -C0
+
+                    bootlin-armv5-uclibc [1/6]: OK
+                     bootlin-armv7-glibc [2/6]: OK
+                   bootlin-armv7m-uclibc [3/6]: SKIPPED
+                     bootlin-x86-64-musl [4/6]: OK
+                      br-arm-full-static [5/6]: SKIPPED
+                             arm-aarch64 [6/6]: OK
+
+6 builds, 2 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+
+real    0m41.704s
+user    6m40.802s
+sys     0m29.976s
+
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+---
+I'm labeling this an RFC for now, as this script may need some more
+testing to ensure there aren't any bugs with rendering, job cleanup, or
+problems with terminfo dependencies that aren't widely supported.
+
+The patch appears to behave as intended in my testing, and it speeds up
+package testing quite a lot. The commit description shows the results
+testing sdl2, and I've pasted another result below from building the
+llama-cpp package I've recently submitted.
+
+$ time utils/test-pkg -c llama-cpp.config -a -p llama-cpp
+                             arm-aarch64 [ 1/40]: OK
+                   bootlin-aarch64-glibc [ 2/40]: OK
+               bootlin-arcle-hs38-uclibc [ 3/40]: SKIPPED
+                    bootlin-armv5-uclibc [ 4/40]: SKIPPED
+                     bootlin-armv7-glibc [ 5/40]: OK
+                      bootlin-armv7-musl [ 6/40]: OK
+                   bootlin-armv7m-uclibc [ 7/40]: SKIPPED
+                bootlin-m68k-5208-uclibc [ 8/40]: SKIPPED
+               bootlin-m68k-68040-uclibc [ 9/40]: SKIPPED
+             bootlin-microblazeel-uclibc [10/40]: SKIPPED
+                   bootlin-mipsel-uclibc [11/40]: SKIPPED
+                bootlin-mipsel32r6-glibc [12/40]: OK
+                 bootlin-openrisc-uclibc [13/40]: SKIPPED
+           bootlin-powerpc-e500mc-uclibc [14/40]: SKIPPED
+        bootlin-powerpc64le-power8-glibc [15/40]: OK
+                   bootlin-riscv32-glibc [16/40]: SKIPPED
+                   bootlin-riscv64-glibc [17/40]: SKIPPED
+                    bootlin-riscv64-musl [18/40]: SKIPPED
+                 bootlin-s390x-z13-glibc [19/40]: SKIPPED
+                      bootlin-sh4-uclibc [20/40]: SKIPPED
+                    bootlin-sparc-uclibc [21/40]: SKIPPED
+                   bootlin-sparc64-glibc [22/40]: OK
+                    bootlin-x86-64-glibc [23/40]: OK
+                     bootlin-x86-64-musl [24/40]: OK
+                   bootlin-x86-64-uclibc [25/40]: SKIPPED
+                   bootlin-x86-i686-musl [26/40]: OK
+                   bootlin-xtensa-uclibc [27/40]: SKIPPED
+                            br-arm-basic [28/40]: SKIPPED
+                    br-arm-full-nothread [29/40]: SKIPPED
+                      br-arm-full-static [30/40]: SKIPPED
+                   br-i386-pentium4-full [31/40]: SKIPPED
+                      br-mips64-n64-full [32/40]: SKIPPED
+                 br-mips64r6-el-hf-glibc [33/40]: OK
+               br-powerpc-603e-basic-cpp [34/40]: SKIPPED
+               br-powerpc64-power7-glibc [35/40]: OK
+                       linaro-aarch64-be [36/40]: SKIPPED
+                          linaro-aarch64 [37/40]: SKIPPED
+                              linaro-arm [38/40]: SKIPPED
+                           sourcery-mips [39/40]: SKIPPED
+                         sourcery-mips64 [40/40]: SKIPPED
+40 builds, 28 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+
+real    15m30.117s
+user    37m47.514s
+sys     1m24.012s
+
+$ time utils/test-pkg -c llama-cpp.config -a -p llama-cpp -C0
+
+                             arm-aarch64 [ 1/40]: OK
+                   bootlin-aarch64-glibc [ 2/40]: OK
+               bootlin-arcle-hs38-uclibc [ 3/40]: SKIPPED
+                    bootlin-armv5-uclibc [ 4/40]: SKIPPED
+                     bootlin-armv7-glibc [ 5/40]: OK
+                      bootlin-armv7-musl [ 6/40]: OK
+                   bootlin-armv7m-uclibc [ 7/40]: SKIPPED
+                bootlin-m68k-5208-uclibc [ 8/40]: SKIPPED
+               bootlin-m68k-68040-uclibc [ 9/40]: SKIPPED
+             bootlin-microblazeel-uclibc [10/40]: SKIPPED
+                   bootlin-mipsel-uclibc [11/40]: SKIPPED
+                bootlin-mipsel32r6-glibc [12/40]: OK
+                 bootlin-openrisc-uclibc [13/40]: SKIPPED
+           bootlin-powerpc-e500mc-uclibc [14/40]: SKIPPED
+        bootlin-powerpc64le-power8-glibc [15/40]: OK
+                   bootlin-riscv32-glibc [16/40]: SKIPPED
+                   bootlin-riscv64-glibc [17/40]: SKIPPED
+                    bootlin-riscv64-musl [18/40]: SKIPPED
+                 bootlin-s390x-z13-glibc [19/40]: SKIPPED
+                      bootlin-sh4-uclibc [20/40]: SKIPPED
+                    bootlin-sparc-uclibc [21/40]: SKIPPED
+                   bootlin-sparc64-glibc [22/40]: OK
+                    bootlin-x86-64-glibc [23/40]: OK
+                     bootlin-x86-64-musl [24/40]: OK
+                   bootlin-x86-64-uclibc [25/40]: SKIPPED
+                   bootlin-x86-i686-musl [26/40]: OK
+                   bootlin-xtensa-uclibc [27/40]: SKIPPED
+                            br-arm-basic [28/40]: SKIPPED
+                    br-arm-full-nothread [29/40]: SKIPPED
+                      br-arm-full-static [30/40]: SKIPPED
+                   br-i386-pentium4-full [31/40]: SKIPPED
+                      br-mips64-n64-full [32/40]: SKIPPED
+                 br-mips64r6-el-hf-glibc [33/40]: OK
+               br-powerpc-603e-basic-cpp [34/40]: SKIPPED
+               br-powerpc64-power7-glibc [35/40]: OK
+                       linaro-aarch64-be [36/40]: SKIPPED
+                          linaro-aarch64 [37/40]: SKIPPED
+                              linaro-arm [38/40]: SKIPPED
+                           sourcery-mips [39/40]: SKIPPED
+                         sourcery-mips64 [40/40]: SKIPPED
+
+40 builds, 28 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+
+real    2m32.778s
+user    54m8.452s
+sys     1m44.897s
+
+This test was performed on a 16-core Ryzen 9 9950X, and the
+all-toolchain build was ~6x faster compared to the same serial run. The
+improvement would be greater with a build that launches more jobs (fewer
+skips).
+
+As always, feedback is very welcome.
+---
+Changes in v2:
+- Rebase on origin/master
+- Properly restore cursor on interrupt
+- Properly terminate running jobs on interrupt
+- Add animated spinner for running builds
+- Simplify status updates
+- Link to v1: https://lore.kernel.org/r/20251022-concurrent-test-pkg-v1-1-1fe96df1102b@gmail.com
+---
+ utils/test-pkg | 146 ++++++++++++++++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 125 insertions(+), 21 deletions(-)
+
+diff --git a/utils/test-pkg b/utils/test-pkg
+index cea7ace7cb..3ece0b661d 100755
+--- a/utils/test-pkg
++++ b/utils/test-pkg
+@@ -3,27 +3,48 @@ set -e
+ 
+ TOOLCHAINS_CSV='support/config-fragments/autobuild/toolchain-configs.csv'
+ TEMP_CONF=""
+-abort=0
++
++# associative array tracking running build jobs by PID
++declare -a running
++
++# offet for end of output
++end_offs=0
++
++restore_cursor() {
++    tput cnorm
++    tput rc
++    tput cud "$((end_offs + 1))"
++    printf '\n'
++}
+ 
+ do_abort() {
+-    abort=1
++    restore_cursor
++    do_clean
+ }
+ 
+ do_clean() {
+     if [ -n "${TEMP_CONF}" ]; then
+         rm -f "${TEMP_CONF}"
+     fi
++
++    # Terminate any running jobs
++    for pid in "${running[@]}"; do
++        if kill -0 "${pid}" 2>/dev/null; then
++            kill -TERM "${pid}" 2>/dev/null || true
++        fi
++    done
+ }
+ 
+ main() {
+     local o O opts
+-    local cfg dir pkg random toolchains_csv toolchain all number mode prepare_only
++    local cfg dir pkg random toolchains_csv toolchain all number mode prepare_only \
++	    concurrency
+     local ret nb nb_skip nb_fail nb_legal nb_show nb_tc build_dir keep
+     local -a toolchains
+     local pkg_br_name
+ 
+-    o='hakc:d:n:p:r:t:T:'
+-    O='help,all,keep,prepare-only,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:,toolchain-name:'
++    o='hakc:d:n:p:r:t:C:'
++    O='help,all,keep,prepare-only,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:,toolchain-name:,concurrency:'
+     opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
+     eval set -- "${opts}"
+ 
+@@ -33,6 +54,7 @@ main() {
+     number=0
+     mode=0
+     prepare_only=0
++    concurrency=1
+     toolchains_csv="${TOOLCHAINS_CSV}"
+     while [ ${#} -gt 0 ]; do
+         case "${1}" in
+@@ -69,6 +91,9 @@ main() {
+         (-T|--toolchain-name)
+             toolchain_name="${2}"; shift 2
+             ;;
++        (-C|--concurrency)
++            concurrency="${2}"; shift 2
++            ;;
+         (--)
+             shift; break
+             ;;
+@@ -88,6 +113,13 @@ main() {
+     if [ ! -e "${cfg}" ]; then
+         printf "error: %s: no such file\n" "${cfg}" >&2; exit 1
+     fi
++    if [ "${concurrency}" -eq 0 ] 2>/dev/null; then
++        concurrency=$(nproc)
++    fi
++
++    if ! [ "${concurrency}" -gt 0 ] 2>/dev/null; then
++        printf "error: concurrency must be an integer\n" >&2; exit 1
++    fi
+     if [ -z "${dir}" ]; then
+         dir="${HOME}/br-test-pkg"
+     fi
+@@ -137,31 +169,100 @@ main() {
+     nb_fail=0
+     nb_legal=0
+     nb_show=0
+-    for toolchainconfig in "${toolchains[@]}"; do
+-        : $((nb++))
+-        toolchain="$(basename "${toolchainconfig}" .config)"
+-        build_dir="${dir}/${toolchain}"
+-        printf "%40s [%*d/%d]: " "${toolchain}" ${#nb_tc} "${nb}" "${nb_tc}"
+-        build_one "${build_dir}" "${toolchainconfig}" "${cfg}" "${pkg}" "${prepare_only}" && ret=0 || ret=${?}
+-        case ${ret} in
+-        (0) printf "OK\n";;
+-        (1) : $((nb_skip++)); printf "SKIPPED\n";;
+-        (2) : $((nb_fail++)); printf "FAILED\n";;
+-        (3) : $((nb_legal++)); printf "FAILED\n";;
+-        (4) : $((nb_show++)); printf "FAILED\n";;
+-        esac
+ 
+-        if [ "${abort}" -eq 1 ]; then
+-            return 1
+-        fi
++    tput civis
++
++    # Allocate lines for all toolchains up front to avoid scroll-invalidating
++    # the saved cursor
++    for ((i = 0; i < nb_tc; i++)); do printf '\n'; done
++    tput cuu "${nb_tc}"
++    tput sc
++
++    declare -A pid_to_idx
++    declare -a display_order
++
++    spinc='/-\|'
++    spini=0
++    while (( nb < nb_tc || ${#running[@]} > 0)); do
++        while (( nb < nb_tc && ${#running[@]} < concurrency )); do
++            toolchainconfig=${toolchains[$nb]}
++            toolchain="$(basename "${toolchainconfig}" .config)"
++            build_dir="${dir}/${toolchain}"
++
++            build_one \
++                "${build_dir}" \
++                "${toolchainconfig}" \
++                "${cfg}" \
++                "${pkg}" \
++                "${prepare_only}" &
++
++            pid=$!; pid_to_idx[${pid}]=${nb}
++            running+=( "$pid" )
++            slot=${#display_order[@]}
++            display_order+=( "$nb" )
++            end_offs=${#display_order[@]}
++            nb=$((nb + 1))
++        done
++
++        for i in "${!running[@]}"; do
++            pid="${running[${i}]}"
++            idx="${pid_to_idx[$pid]}"
++            toolchainconfig=${toolchains[$idx]}
++            toolchain="$(basename "${toolchainconfig}" .config)"
++
++            if ! kill -0 "${pid}" 2>/dev/null; then
++                wait "${pid}" && ret=0 || ret=${?}
++                case "${ret}" in
++                (0) stat="OK";;
++                (1) : $((nb_skip++)); stat="SKIPPED";;
++                (2) : $((nb_fail++)); stat="FAILED";;
++                (3) : $((nb_legal++)); stat="FAILED";;
++                (4) : $((nb_show++)); stat="FAILED";;
++                esac
++
++                unset 'running[i]'
++            else
++                stat="${spinc:$spini:1}"
++            fi
++
++            # Find the line to print the status on for this PID
++            for slot in "${!display_order[@]}"; do
++                if [[ ${display_order[$slot]} -eq ${idx} ]]; then
++                    break
++                fi
++            done
++
++            update_line "$slot" "%40s [%*d/%d]: %s" \
++                "${toolchain}" \
++                "${#nb_tc}" \
++                "$((idx + 1))" \
++                "${nb_tc}" \
++                "${stat}"
++        done
++
++        running=( "${running[@]}" )
++        spini=$(((spini+1) % ${#spinc}))
++        sleep 0.1
+     done
+ 
++    restore_cursor
++    printf '\n'
+     printf "%d builds, %d skipped, %d build failed, %d legal-info failed, %d show-info failed\n" \
+         "${nb}" "${nb_skip}" "${nb_fail}" "${nb_legal}" "${nb_show}"
+ 
+     return $((nb_fail + nb_legal))
+ }
+ 
++update_line() {
++    local slot=$1; shift
++    tput rc
++    tput cud "$((slot + 1))"
++    fmt=$1; shift
++
++    # shellcheck disable=SC2059
++    printf -- "\033[K${fmt}" "$@"
++}
++
+ build_one() {
+     local dir="${1}"
+     local toolchainconfig="${2}"
+@@ -288,6 +389,9 @@ Options:
+     -r N, --random N
+         Limit the tests to the N randomly selected toolchains.
+ 
++    -C N, --concurrency N
++        Run N builds concurrently. If N is 0, match the number of logical CPUs.
++
+     -t CSVFILE, --toolchains-csv CSVFILE
+         CSV file containing the paths to config fragments of toolchains to
+         try. If not specified, the toolchains in ${TOOLCHAINS_CSV} will be
+
+---
+base-commit: 6144b0f4b73bea810809f09d23bbe76b4979bc13
+change-id: 20250619-concurrent-test-pkg-f3ad6d3c01b4
+
+Best regards,
+-- 
+Joseph Kogut <joseph.kogut@gmail.com>
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
