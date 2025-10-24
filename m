@@ -4,77 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07F22CCF9E0
-	for <buildroot@archiver.kernel.org>; Fri, 24 Oct 2025 18:19:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E120DCCD1BF
+	for <buildroot@archiver.kernel.org>; Fri, 24 Oct 2025 19:02:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B4CB060BA9;
-	Fri, 24 Oct 2025 18:19:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9A2576085D;
+	Fri, 24 Oct 2025 19:02:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5RqN0Vn3BOf6; Fri, 24 Oct 2025 18:19:42 +0000 (UTC)
+ id jpCprZySDqez; Fri, 24 Oct 2025 19:02:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C02FB60D8E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBAA2608C6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C02FB60D8E;
-	Fri, 24 Oct 2025 18:19:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E389D129
- for <buildroot@buildroot.org>; Fri, 24 Oct 2025 18:19:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BBAA2608C6;
+	Fri, 24 Oct 2025 19:02:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DB5AE19D
+ for <buildroot@buildroot.org>; Fri, 24 Oct 2025 19:02:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C922D40B7F
- for <buildroot@buildroot.org>; Fri, 24 Oct 2025 18:19:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CD3DF845DC
+ for <buildroot@buildroot.org>; Fri, 24 Oct 2025 19:02:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4q11eLM8MaBJ for <buildroot@buildroot.org>;
- Fri, 24 Oct 2025 18:19:40 +0000 (UTC)
-X-Greylist: delayed 513 seconds by postgrey-1.37 at util1.osuosl.org;
- Fri, 24 Oct 2025 18:19:39 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8BCE640B76
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BCE640B76
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=147.173.1.68;
- helo=mailgw-out1.grenoble.cnrs.fr;
- envelope-from=edgar.bonet-orozco@neel.cnrs.fr; receiver=<UNKNOWN> 
-Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
- [147.173.1.68])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8BCE640B76
- for <buildroot@buildroot.org>; Fri, 24 Oct 2025 18:19:39 +0000 (UTC)
-Received: from z-store.grenoble.cnrs.fr (z-store.grenoble.cnrs.fr
- [147.173.1.131])
- by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTP id 8A319BFA43;
- Fri, 24 Oct 2025 20:10:59 +0200 (CEST)
-Date: Fri, 24 Oct 2025 20:10:59 +0200 (CEST)
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: buildroot <buildroot@buildroot.org>
-Message-ID: <1991401195.3393030.1761329459094.JavaMail.zimbra@neel.cnrs.fr>
-In-Reply-To: <20251022162926.16175-1-dario.binacchi@amarulasolutions.com>
-References: <20251022162926.16175-1-dario.binacchi@amarulasolutions.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 795CzWtqWgmw for <buildroot@buildroot.org>;
+ Fri, 24 Oct 2025 19:02:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::532; helo=mail-ed1-x532.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 865CF845D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 865CF845D9
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
+ [IPv6:2a00:1450:4864:20::532])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 865CF845D9
+ for <buildroot@buildroot.org>; Fri, 24 Oct 2025 19:02:32 +0000 (UTC)
+Received: by mail-ed1-x532.google.com with SMTP id
+ 4fb4d7f45d1cf-63d6ee383bdso5235666a12.2
+ for <buildroot@buildroot.org>; Fri, 24 Oct 2025 12:02:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1761332550; x=1761937350;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=J2KaUDFzaQH6LKa3D29oyGiFJlrMh+pez5c7I1CA2x8=;
+ b=RxnccKuEmkKlDGGPj1sooYfym58Tc3MdmG9/o5GPfygThWpjtizXl0qqi9vN48SwJm
+ OmRe1JP2qFcw9G7RRL304yEpE7plQA2Q3BRnEIeccsBRxbmRpqhktP2eduFMiL10tlFa
+ LN1rKoeac8WUgF4OmDcKZJzzOs1tkMBTPV8X3wX3PxgLkZ9xc1qHrrBWUKaMdOEO3Zpo
+ qVBR8lFTtpnoTy2ifVLOtj6EZzYhGmcOe2gg84eh+TmPz4KAbPm4DWdWOiiYCQhd2ye1
+ B2EFN8A/tnMvk9eMypLjIhm0gijmSWm6VuVCqskJNIUtsOY6zqp3sGGo7358h5ibkuue
+ SPEg==
+X-Gm-Message-State: AOJu0YzsTCfGjAhi/9ijDKk0ktogjeWe1GY7Bo5cKpvByqwZXZ7FaerS
+ 5Xwc4lZpYJvSlJ3ZbEnradMWp1jonkm3DcLMKcgAPbAVeAnWNGozHFxiSjPT7mEPkFiRnKEYsxt
+ j0YGR
+X-Gm-Gg: ASbGncuY63AXO1GzR1pF3vo4czeqc3azpPkgOxm/eDaM9oNKl0Doh0OmmWKVTC98Ujq
+ pHhMzZWWCui/HgrwesIclJOZkhRXF54JBuwAVbqP1KtVW+LUqMPM9jZQM5qEXu9M3WQqQuBcWhm
+ WhSbTlivSjgajiMZ/E6rZje/JmcOXTmjlsIzUOkobh+bFyfodPTmspp6wCjj4Dg+SK4bbOQjONg
+ dTfLTOh3iFVZtSt2rezy7Z7JjapEO3DSYexSh9esO1jksf3ogdeg8f7QyGUbXFqF8pLMqj8w31C
+ vcpUFzD4XBEGdZhX01NRSiH9jOV9DrJlBPVCd/jFbQV+fkBzfuOMFveWgvPJ1wTDIESvyXD8inS
+ bRbsNSLoF/qYfyjXpwLdGckWgbPlByEdPgVtdmMEUL7HLsR6agTuMjdPC4gchbial0y0X1mx45I
+ EDxSka07eMMGKc5hoScF9DUsY5NB25um75AkFgIoqXS0JdEkMorw==
+X-Google-Smtp-Source: AGHT+IHoI1aH8XsexbOeDpkLnmPbnciZ91nDFTLr7wnx9oGlAR5Ra5en+gX7ZnGx6qlNkalLaDs49g==
+X-Received: by 2002:a17:907:1b15:b0:b6d:505e:3da1 with SMTP id
+ a640c23a62f3a-b6d505e7df8mr760097666b.7.1761332549964; 
+ Fri, 24 Oct 2025 12:02:29 -0700 (PDT)
+Received: from dario-ThinkPad-P14s-Gen-5.. ([2.196.42.239])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-b6d72ece282sm228573866b.48.2025.10.24.12.02.28
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 24 Oct 2025 12:02:29 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: buildroot@buildroot.org
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date: Fri, 24 Oct 2025 21:02:26 +0200
+Message-ID: <20251024190226.1011446-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Originating-IP: [147.173.1.128]
-X-Mailer: Zimbra 10.1.10_GA_4785 (ZimbraWebClient - FF140
- (Linux)/10.1.10_GA_4785)
-Thread-Topic: package/libgpiod: bump to version 2.2.2
-Thread-Index: fnjwRIzVN4a7wUTp+9lXJYts89v1pA==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=grenoble.cnrs.fr; 
- s=202106-grenoble.cnrs.fr; t=1761329459;
- bh=3U34/x4Mg4EOElFIjwedtL3p0ZEtOHH3mG8ycu6s/eo=;
- h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
- b=alA6Q6mOQ/i6uL34XDHFEkgyBsP92qFURHsYny9t32KN+GmbLdKz2VOhMhJUHCBww
- 7i2rEFnGUrYEZGH92lWxaIcmZNS9jNnJ0AKttbc4HFP6JEvd+DjXJY8JXAWn8TFN9y
- ury5R5dGwABrvsJ92tSyA/k2dpZj/2fXfj56DUEXMJ9gAZdCFeRL+eY5583m2U45E1
- GV3Sr3fru2w20XcjaVmKqWd9LrCnNT6Y5Rbx2pvuXnjGlLWPhKqVzUo71kIDAoE+VQ
- +eHgioPgFO5Ob8uxpc2lq/STqJpziTmzEqNGMccPk0+icgkeV+yxUFiNGyszYdUjOI
- NPqPFABodY5oA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=grenoble.cnrs.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
- header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=alA6Q6mO
-Subject: Re: [Buildroot] [PATCH 1/1] package/libgpiod: bump to version 2.2.2
+ d=amarulasolutions.com; s=google; t=1761332550; x=1761937350;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=J2KaUDFzaQH6LKa3D29oyGiFJlrMh+pez5c7I1CA2x8=;
+ b=oFrFMtalzAGaehVanae6gonkgKr2p9wcORNoZKMOYsEILFT3DG1JzyRmnNrrgd5O7W
+ uE2GgCZvT3beBH1boHSiRfjbNcA3KuSdjVSjlzslIP+b4fZ6ys+Wa1cg9obW9b3xrjww
+ 9hEoYXMLUX1wzzAyIcuqgYbMe/x8gshZbpC08=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=oFrFMtal
+Subject: [Buildroot] [PATCH 1/1] package/openocd: bump to version
+ 88b9bd396d5a1f83c49fa1b28745fd7feaca2b2e
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,126 +108,141 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Edgar Bonet via buildroot <buildroot@buildroot.org>
-Reply-To: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhlcmUgaXMgYWxyZWFkeSBhIGJ1aWxkcm9vdCBwYWNrYWdlIHByb3ZpZGluZyBsaWJncGlvZCAy
-LjIuMi4KSXQncyBuYW1lZCDigJxsaWJncGlvZDLigJ0uIEl0J3MgYSBkaWZmZXJlbnQgcGFja2Fn
-ZSBiZWNhdXNlIHRoZQp2ZXJzaW9ucyAxIGFuZCAyIG9mIHRoZSBsaWJyYXJ5IGFyZSBzbyBkaWZm
-ZXJlbnQsIHRoZXkgY2FuIGJlIGNvbnNpZGVyZWQKbGlrZSBkaWZmZXJlbnQgbGlicmFyaWVzLgoK
-UmVnYXJkcywKCkVkZ2FyIEJvbmV0LgoKLS0tLS0gT24gT2N0IDIyLCAyMDI1LCBhdCA1OjI5IFBN
-LCBEYXJpbyBCaW5hY2NoaSBkYXJpby5iaW5hY2NoaUBhbWFydWxhc29sdXRpb25zLmNvbSB3cm90
-ZToKCj4gVGhlIHJlbW92ZWQgcGF0Y2ggaGFzIGJlZW4gbWVyZ2VkIGluIHZlcnNpb24gMi4wLgo+
-IAo+IFVwZGF0ZSBsaWNlbnNlIGZpbGUgaGFzaCBkdWUgdG86Cj4gLSByZWxpY2Vuc2UgQysrIGJp
-bmRpbmdzIHVuZGVyIExHUEwtMi4xLW9yLWxhdGVyCj4gLSBtYWtlIHRoZSBwcm9qZWN0IFJFVVNF
-LWNvbXBsaWFudAo+IAo+IFJlbGVhc2Ugbm90ZXM6Cj4gaHR0cHM6Ly9naXQua2VybmVsLm9yZy9w
-dWIvc2NtL2xpYnMvbGliZ3Bpb2QvbGliZ3Bpb2QuZ2l0L3RyZWUvTkVXUwo+IAo+IFNpZ25lZC1v
-ZmYtYnk6IERhcmlvIEJpbmFjY2hpIDxkYXJpby5iaW5hY2NoaUBhbWFydWxhc29sdXRpb25zLmNv
-bT4KPiAtLS0KPiAuY2hlY2twYWNrYWdlaWdub3JlICAgICAgICAgICAgICAgICAgICAgICAgICAg
-fCAgMSAtCj4gLi4ubmZpZ3VyZS1zd2l0Y2gtZm9yLWJ1aWxkaW5nLWV4YW1wbGVzLnBhdGNoIHwg
-OTEgLS0tLS0tLS0tLS0tLS0tLS0tLQo+IHBhY2thZ2UvbGliZ3Bpb2QvbGliZ3Bpb2QuaGFzaCAg
-ICAgICAgICAgICAgICB8ICA0ICstCj4gcGFja2FnZS9saWJncGlvZC9saWJncGlvZC5tayAgICAg
-ICAgICAgICAgICAgIHwgIDIgKy0KPiA0IGZpbGVzIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwg
-OTUgZGVsZXRpb25zKC0pCj4gZGVsZXRlIG1vZGUgMTAwNjQ0Cj4gcGFja2FnZS9saWJncGlvZC8w
-MDAxLWJ1aWxkLWFkZC1hLWNvbmZpZ3VyZS1zd2l0Y2gtZm9yLWJ1aWxkaW5nLWV4YW1wbGVzLnBh
-dGNoCj4gCj4gZGlmZiAtLWdpdCBhLy5jaGVja3BhY2thZ2VpZ25vcmUgYi8uY2hlY2twYWNrYWdl
-aWdub3JlCj4gaW5kZXggZThjOTdjMmQ2M2RjLi45MGQxMTdkZGRmM2MgMTAwNjQ0Cj4gLS0tIGEv
-LmNoZWNrcGFja2FnZWlnbm9yZQo+ICsrKyBiLy5jaGVja3BhY2thZ2VpZ25vcmUKPiBAQCAtNTYy
-LDcgKzU2Miw2IEBACj4gcGFja2FnZS9saWJmdGRpLzAwMDItbGliZnRkaS5wYy1yZXF1aXJlcy1s
-aWJ1c2ItZml4LXN0YXRpYy1idWlsZC5wYXRjaAo+IGxpYl9wYXRjaAo+IHBhY2thZ2UvbGliZnVz
-ZS8wMDAxLWZpeC1hYXJjaDY0LWJ1aWxkLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQo+IHBhY2th
-Z2UvbGliZnVzZS8wMDAyLXV0aWwtdWxvY2ttZ3Jfc2VydmVyLWMtY29uZGl0aW9uYWxseS1kZWZp
-bmUtY2xvc2Vmcm9tLWZpeC1nbGliYy0yLTM0LnBhdGNoCj4gbGliX3BhdGNoLlVwc3RyZWFtCj4g
-cGFja2FnZS9saWJnY3J5cHQvMDAwMS1jb25maWd1cmUuYWMtYWRkLWFuLW9wdGlvbi10by1kaXNh
-YmxlLXRlc3RzLnBhdGNoCj4gbGliX3BhdGNoLlVwc3RyZWFtCj4gLXBhY2thZ2UvbGliZ3Bpb2Qv
-MDAwMS1idWlsZC1hZGQtYS1jb25maWd1cmUtc3dpdGNoLWZvci1idWlsZGluZy1leGFtcGxlcy5w
-YXRjaAo+IGxpYl9wYXRjaC5VcHN0cmVhbQo+IHBhY2thZ2UvbGliZ3NtLzAwMDEtTWlzYy1maXhl
-cy1mcm9tLUFyY2hsaW51eC5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0KPiBwYWNrYWdlL2xpYmd0
-azIvMDAwMS1yZWR1Y2UtZGVwZW5kZW5jaWVzLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQo+IHBh
-Y2thZ2UvbGliZ3RrMy8wMDAxLVJlbW92ZS1HZGstZGVwZW5kZW5jeS1mcm9tLWd0ay1lbmNvZGUt
-c3ltYm9saWMtc3ZnLnBhdGNoCj4gbGliX3BhdGNoLlVwc3RyZWFtCj4gZGlmZiAtLWdpdAo+IGEv
-cGFja2FnZS9saWJncGlvZC8wMDAxLWJ1aWxkLWFkZC1hLWNvbmZpZ3VyZS1zd2l0Y2gtZm9yLWJ1
-aWxkaW5nLWV4YW1wbGVzLnBhdGNoCj4gYi9wYWNrYWdlL2xpYmdwaW9kLzAwMDEtYnVpbGQtYWRk
-LWEtY29uZmlndXJlLXN3aXRjaC1mb3ItYnVpbGRpbmctZXhhbXBsZXMucGF0Y2gKPiBkZWxldGVk
-IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCBmMWE4NTNhNmY4NjMuLjAwMDAwMDAwMDAwMAo+IC0t
-LQo+IGEvcGFja2FnZS9saWJncGlvZC8wMDAxLWJ1aWxkLWFkZC1hLWNvbmZpZ3VyZS1zd2l0Y2gt
-Zm9yLWJ1aWxkaW5nLWV4YW1wbGVzLnBhdGNoCj4gKysrIC9kZXYvbnVsbAo+IEBAIC0xLDkxICsw
-LDAgQEAKPiAtRnJvbSA1ZTllNzIyM2EzNjMzZWU4MmI1NTdkMjFiMWYxOGFhMTViZWNkNDUwIE1v
-biBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+IC1Gcm9tOiBCYXJ0b3N6IEdvbGFzemV3c2tpIDxiZ29s
-YXN6ZXdza2lAYmF5bGlicmUuY29tPgo+IC1EYXRlOiBNb24sIDcgRGVjIDIwMjAgMjA6Mzg6MzAg
-KzAxMDAKPiAtU3ViamVjdDogYnVpbGQ6IGFkZCBhIGNvbmZpZ3VyZSBzd2l0Y2ggZm9yIGJ1aWxk
-aW5nIGV4YW1wbGVzCj4gLQo+IC1FeGFtcGxlIGNvZGUgZm9yIGJpbmRpbmdzIGlzIGN1cnJlbnRs
-eSBhbHdheXMgYnVpbHQgaWYgYmluZGluZ3MgYXJlCj4gLWVuYWJsZWQuIE1ha2UgaXQgY29uZGl0
-aW9uYWwgd2l0aCBhIG5ldyBjb25maWd1cmUgc3dpdGNoLgo+IC0KPiAtU2lnbmVkLW9mZi1ieTog
-QmFydG9zeiBHb2xhc3pld3NraSA8YmdvbGFzemV3c2tpQGJheWxpYnJlLmNvbT4KPiAtUmV2aWV3
-ZWQtYnk6IEFuZHkgU2hldmNoZW5rbyA8YW5kcml5LnNoZXZjaGVua29AbGludXguaW50ZWwuY29t
-Pgo+IC1bUmV0cmlldmVkIGZyb206Cj4gLWh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9s
-aWJzL2xpYmdwaW9kL2xpYmdwaW9kLmdpdC9jb21taXQvP2lkPTVlOWU3MjIzYTM2MzNlZTgyYjU1
-N2QyMWIxZjE4YWExNWJlY2Q0NTBdCj4gLVNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUg
-PGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgo+IC0tLS0KPiAtIGJpbmRpbmdzL2N4eC9NYWtl
-ZmlsZS5hbSAgICB8ICA4ICsrKysrKystCj4gLSBiaW5kaW5ncy9weXRob24vTWFrZWZpbGUuYW0g
-fCAxMCArKysrKysrKy0tCj4gLSBjb25maWd1cmUuYWMgICAgICAgICAgICAgICAgfCAgNiArKysr
-KysKPiAtIDMgZmlsZXMgY2hhbmdlZCwgMjEgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkK
-PiAtCj4gLWRpZmYgLS1naXQgYS9iaW5kaW5ncy9jeHgvTWFrZWZpbGUuYW0gYi9iaW5kaW5ncy9j
-eHgvTWFrZWZpbGUuYW0KPiAtaW5kZXggNWM0MGNlYi4uODc0NjNiMCAxMDA2NDQKPiAtLS0tIGEv
-YmluZGluZ3MvY3h4L01ha2VmaWxlLmFtCj4gLSsrKyBiL2JpbmRpbmdzL2N4eC9NYWtlZmlsZS5h
-bQo+IC1AQCAtMTgsMTAgKzE4LDE2IEBAIGluY2x1ZGVfSEVBREVSUyA9IGdwaW9kLmhwcAo+IC0g
-cGtnY29uZmlnZGlyID0gJChsaWJkaXIpL3BrZ2NvbmZpZwo+IC0gcGtnY29uZmlnX0RBVEEgPSBs
-aWJncGlvZGN4eC5wYwo+IC0KPiAtLVNVQkRJUlMgPSAuIGV4YW1wbGVzCj4gLStTVUJESVJTID0g
-Lgo+IC0KPiAtIGlmIFdJVEhfVEVTVFMKPiAtCj4gLSBTVUJESVJTICs9IHRlc3RzCj4gLQo+IC0g
-ZW5kaWYKPiAtKwo+IC0raWYgV0lUSF9FWEFNUExFUwo+IC0rCj4gLStTVUJESVJTICs9IGV4YW1w
-bGVzCj4gLSsKPiAtK2VuZGlmCj4gLWRpZmYgLS1naXQgYS9iaW5kaW5ncy9weXRob24vTWFrZWZp
-bGUuYW0gYi9iaW5kaW5ncy9weXRob24vTWFrZWZpbGUuYW0KPiAtaW5kZXggMTI0ZjE1Mi4uNTQw
-M2JjYiAxMDA2NDQKPiAtLS0tIGEvYmluZGluZ3MvcHl0aG9uL01ha2VmaWxlLmFtCj4gLSsrKyBi
-L2JpbmRpbmdzL3B5dGhvbi9NYWtlZmlsZS5hbQo+IC1AQCAtNiw4ICs2LDYgQEAKPiAtICMgQ29w
-eXJpZ2h0IChDKSAyMDE3LTIwMTggQmFydG9zeiBHb2xhc3pld3NraSA8YmFydGVrZ29sYUBnbWFp
-bC5jb20+Cj4gLSAjCj4gLQo+IC0tU1VCRElSUyA9IC4gZXhhbXBsZXMKPiAtLQo+IC0gcHlleGVj
-X0xUTElCUkFSSUVTID0gZ3Bpb2QubGEKPiAtCj4gLSBncGlvZF9sYV9TT1VSQ0VTID0gZ3Bpb2Rt
-b2R1bGUuYwo+IC1AQCAtMTcsOCArMTUsMTYgQEAgZ3Bpb2RfbGFfQ0ZMQUdTICs9IC1XYWxsIC1X
-ZXh0cmEgLWcgLXN0ZD1nbnU4OQo+ICQoUFlUSE9OX0NQUEZMQUdTKQo+IC0gZ3Bpb2RfbGFfTERG
-TEFHUyA9IC1tb2R1bGUgLWF2b2lkLXZlcnNpb24KPiAtIGdwaW9kX2xhX0xJQkFERCA9ICQodG9w
-X2J1aWxkZGlyKS9saWIvbGliZ3Bpb2QubGEgJChQWVRIT05fTElCUykKPiAtCj4gLStTVUJESVJT
-ID0gLgo+IC0rCj4gLSBpZiBXSVRIX1RFU1RTCj4gLQo+IC0gU1VCRElSUyArPSB0ZXN0cwo+IC0K
-PiAtIGVuZGlmCj4gLSsKPiAtK2lmIFdJVEhfRVhBTVBMRVMKPiAtKwo+IC0rU1VCRElSUyArPSBl
-eGFtcGxlcwo+IC0rCj4gLStlbmRpZgo+IC1kaWZmIC0tZ2l0IGEvY29uZmlndXJlLmFjIGIvY29u
-ZmlndXJlLmFjCj4gLWluZGV4IDU3Yzk5YTguLjkwYTYzMjQgMTAwNjQ0Cj4gLS0tLSBhL2NvbmZp
-Z3VyZS5hYwo+IC0rKysgYi9jb25maWd1cmUuYWMKPiAtQEAgLTE2NCw2ICsxNjQsMTIgQEAgdGhl
-bgo+IC0gCWZpCj4gLSBmaQo+IC0KPiAtK0FDX0FSR19FTkFCTEUoW2V4YW1wbGVzXSwKPiAtKwlb
-QVNfSEVMUF9TVFJJTkcoWy0tZW5hYmxlLWV4YW1wbGVzXSwgW2VuYWJsZSBidWlsZGluZyBjb2Rl
-Cj4gZXhhbXBsZXNbZGVmYXVsdD1ub11dKV0sCj4gLSsJW2lmIHRlc3QgIngkZW5hYmxldmFsIiA9
-IHh5ZXM7IHRoZW4gd2l0aF9leGFtcGxlcz10cnVlOyBmaV0sCj4gLSsJW3dpdGhfZXhhbXBsZXM9
-ZmFsc2VdKQo+IC0rQU1fQ09ORElUSU9OQUwoW1dJVEhfRVhBTVBMRVNdLCBbdGVzdCAieCR3aXRo
-X2V4YW1wbGVzIiA9IHh0cnVlXSkKPiAtKwo+IC0gQUNfQVJHX0VOQUJMRShbYmluZGluZ3MtY3h4
-XSwKPiAtIAlbQUNfSEVMUF9TVFJJTkcoWy0tZW5hYmxlLWJpbmRpbmdzLWN4eF0sCj4gLSAJCVtl
-bmFibGUgQysrIGJpbmRpbmdzIFtkZWZhdWx0PW5vXV0pXSwKPiAtLS0KPiAtY2dpdCAxLjIuMy0x
-LmVsNwo+IC0KPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJncGlvZC9saWJncGlvZC5oYXNoIGIv
-cGFja2FnZS9saWJncGlvZC9saWJncGlvZC5oYXNoCj4gaW5kZXggOTY5ZmY0YjhmYWIyLi4yNGJj
-ZmFmYzZjNzMgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9saWJncGlvZC9saWJncGlvZC5oYXNoCj4g
-KysrIGIvcGFja2FnZS9saWJncGlvZC9saWJncGlvZC5oYXNoCj4gQEAgLTEsNCArMSw0IEBACj4g
-IyBGcm9tIGh0dHBzOi8vd3d3Lmtlcm5lbC5vcmcvcHViL3NvZnR3YXJlL2xpYnMvbGliZ3Bpb2Qv
-c2hhMjU2c3Vtcy5hc2MKPiAtc2hhMjU2ICBhZTI4MGY2OTdiZjAzNWExZmI3ODBjOTk3MmU1Yzgx
-ZDBkMjcxMmI3YWI2MTI0ZmIzZmJhMjQ2MTlkYWE3MmJjCj4gbGliZ3Bpb2QtMS42LjUudGFyLnh6
-Cj4gK3NoYTI1NiAgN2UzYmZmMDIwOWQ3NWZiY2EyZTlmY2ZmMWZkNWYwN2NjNThiNTQzZTEyOWUw
-OGI2ZDRiYjFlNGE1NmNmZWMwZAo+IGxpYmdwaW9kLTIuMi4yLnRhci54ego+ICMgSGFzaCBmb3Ig
-bGljZW5zZSBmaWxlCj4gLXNoYTI1NiAgY2U2NGQ1ZjdiNDllYTZkODBmZGI2ZDRjZGVlNjgzOWQx
-YTk0Mjc0Zjc0OTNkYzc5N2MzYjU1YjY1ZWM4ZTllZAo+IENPUFlJTkcKPiArc2hhMjU2ICBmNjQ2
-YWQ1MTU5ZWZiNTFjMTEzMGE0YjQzYzMxZjA3NTk3NTBiMWUyNTRkMmFjZjUxMGYzNjhlZTJlMjA4
-NWMzCj4gQ09QWUlORwo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYmdwaW9kL2xpYmdwaW9kLm1r
-IGIvcGFja2FnZS9saWJncGlvZC9saWJncGlvZC5tawo+IGluZGV4IGY2Njk2NDNiMzk0MS4uMWRl
-ZTA5Yzc3ZGI2IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvbGliZ3Bpb2QvbGliZ3Bpb2QubWsKPiAr
-KysgYi9wYWNrYWdlL2xpYmdwaW9kL2xpYmdwaW9kLm1rCj4gQEAgLTYsNyArNiw3IEBACj4gCj4g
-IyBCZSBjYXJlZnVsIHdoZW4gYnVtcGluZyB2ZXJzaW9ucy4KPiAjIERlcGVuZGVuY3kgb24ga2Vy
-bmVsIGhlYWRlciB2ZXJzaW9ucyBtYXkgY2hhbmdlLgo+IC1MSUJHUElPRF9WRVJTSU9OID0gMS42
-LjUKPiArTElCR1BJT0RfVkVSU0lPTiA9IDIuMi4yCj4gTElCR1BJT0RfU09VUkNFID0gbGliZ3Bp
-b2QtJChMSUJHUElPRF9WRVJTSU9OKS50YXIueHoKPiBMSUJHUElPRF9TSVRFID0gaHR0cHM6Ly93
-d3cua2VybmVsLm9yZy9wdWIvc29mdHdhcmUvbGlicy9saWJncGlvZAo+IExJQkdQSU9EX0xJQ0VO
-U0UgPSBMR1BMLTIuMSsKPiAtLQo+IDIuNDMuMAo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxk
-cm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
-aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+The error reported by autobuild could have been fixed by backporting
+commit [1], but this would not have fully fixed the issue. Other build
+errors related to libgiod appeared, which would have required a large
+backporting effort. This made it more reasonable to bump the package to
+the most recent commit, since no new version had been released despite
+many commits since January 2023.
+
+Update LICENSES/license-rules.txt hash due to:
+- Add dual/CC-BY-4.0
+- Drop SPDX tag 'GPL-2.0' and use 'GPL-2.0-only'
+
+Update LICENSES/preferred/GFDL-1.2.txt hash due to:
+- Replace the obsolete address of the FSF in the GFDL-1.2
+
+Fixes:
+https://autobuild.buildroot.org/results/4f79a456d6e88e33be2a279e5288debd1f27c183
+
+[1] https://sourceforge.net/p/openocd/code/ci/95603fae18f81eebdafc5b318e70f9e2cdefab9e
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+ ...01-configure-enable-build-on-uclinux.patch | 19 ++++++++++---------
+ package/openocd/openocd.hash                  |  8 ++++----
+ package/openocd/openocd.mk                    | 12 ++++++++----
+ 3 files changed, 22 insertions(+), 17 deletions(-)
+
+diff --git a/package/openocd/0001-configure-enable-build-on-uclinux.patch b/package/openocd/0001-configure-enable-build-on-uclinux.patch
+index d5f1e3295823..a80a910abc0f 100644
+--- a/package/openocd/0001-configure-enable-build-on-uclinux.patch
++++ b/package/openocd/0001-configure-enable-build-on-uclinux.patch
+@@ -4,25 +4,26 @@ Date: Thu, 17 Aug 2017 06:30:31 +0200
+ Subject: [PATCH] configure: enable build on uclinux
+ 
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[Dario: make the patch to be applied with fuzz factor 0]
++[Dario: make the patch to be applied to
++ openocd-88b9bd396d5a1f83c49fa1b28745fd7feaca2b2e]
+ Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ ---
+  configure.ac | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+ diff --git a/configure.ac b/configure.ac
+-index eee42d4240f8..b0445f92e0b5 100644
++index 6efcf24f257b..7cc2d9a136ee 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -342,7 +342,7 @@ AC_ARG_ENABLE([xlnx_pcie_xvc],
+-   [build_xlnx_pcie_xvc=$enableval], [build_xlnx_pcie_xvc=no])
++@@ -367,7 +367,7 @@ AC_ARG_ENABLE([gw16012],
++ can_build_rshim=no
+  
+  AS_CASE([$host_os],
+--  [linux*], [],
+-+  [linux*|uclinux*], [],
+-   [
+-     AS_IF([test "x$build_sysfsgpio" = "xyes"], [
+-       AC_MSG_ERROR([sysfsgpio is only available on linux])
++-  [linux*], [
+++  [linux*|uclinux*], [
++     is_linux=yes
++     can_build_rshim=yes
++   ],
+ -- 
+ 2.43.0
+ 
+diff --git a/package/openocd/openocd.hash b/package/openocd/openocd.hash
+index 938711d86c0f..52e9acfb882d 100644
+--- a/package/openocd/openocd.hash
++++ b/package/openocd/openocd.hash
+@@ -1,15 +1,15 @@
+ # From http://sourceforge.net/projects/openocd/files/openocd/0.12.0/
+-sha256  af254788be98861f2bd9103fe6e60a774ec96a8c374744eef9197f6043075afa  openocd-0.12.0.tar.bz2
++sha256  a3aab64cc28ae7ac38b2794173f59f96ad4dc261e00aba362ad6ebbd741dd139  openocd-88b9bd396d5a1f83c49fa1b28745fd7feaca2b2e-git4.tar.gz
+ sha256  1b8f7e37ee5afbbf95c2a4d62b12b25232e29538692663b434318503a9a88419  COPYING
+ sha256  034da732b4f3079b8783fff756613c1cff89dec5ac80c5cdd90532b7539922a1  LICENSES/exceptions/eCos-exception-2.0
+-sha256  0a37155eb8bc0cb94477a0cae4f030e39da9317374e8a9f597e9229fd09aff78  LICENSES/license-rules.txt
++sha256  405b1becc5e999efe12116634c308287774a5401efdaca06a8370926e3686cc1  LICENSES/license-rules.txt
+ sha256  f3ba76203a7b6993db31f987559cc4c621ae1ff78119ced2a669756c2c5fd3b1  LICENSES/preferred/BSD-1-Clause
+ sha256  6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd  LICENSES/preferred/BSD-2-Clause
+ sha256  1483f15e9fddc73b5df0acab1c42d21ecd0bf6ade8a79179fb90c09f13d03dcd  LICENSES/preferred/BSD-2-Clause-Views
+ sha256  7a83b1aeb460458db9a4bd521d7f237c45b1650f6e60ea5ffc71e49472454de3  LICENSES/preferred/BSD-3-Clause
+ sha256  5cf024f6e3611d5c6fb98748d1a0ad99b8cf9ffe46f2d60fa10c299cd29e0a75  LICENSES/preferred/BSD-Source-Code
+-sha256  f35396f4095619f986736ca5e2976b313d381463a35c921c9ae677cc7eb83e28  LICENSES/preferred/GFDL-1.2
++sha256  b984d86747c3ea68cca62477716de626a5d6e96f00f64fe13649e28fde81b47e  LICENSES/preferred/GFDL-1.2
+ sha256  76515be2d7334a1a038f775238c9a4c2b37e19514248e5eea0434cdfee526f9d  LICENSES/preferred/gfdl-1.2.texi.readme
+-sha256  7d35bc44da7bb763022e3c2c32cfc0125dd222060bc50992420599d8e65f6c0a  LICENSES/preferred/GPL-2.0
++sha256  8b57184d532ff63b57776f33b6f3b50020295da3c7ba3a63fb2f26e4968cde3a  LICENSES/preferred/GPL-2.0
+ sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  LICENSES/preferred/MIT
+ sha256  9a41b56594cd89743ca72f188318c9871661847074dd16497ae0c695fe3ab9c9  LICENSES/stand-alone/GPL-3.0
+diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
+index a563cc6a9e31..b9b7719fc840 100644
+--- a/package/openocd/openocd.mk
++++ b/package/openocd/openocd.mk
+@@ -4,9 +4,11 @@
+ #
+ ################################################################################
+ 
+-OPENOCD_VERSION = 0.12.0
+-OPENOCD_SOURCE = openocd-$(OPENOCD_VERSION).tar.bz2
+-OPENOCD_SITE = http://sourceforge.net/projects/openocd/files/openocd/$(OPENOCD_VERSION)
++OPENOCD_VERSION = 88b9bd396d5a1f83c49fa1b28745fd7feaca2b2e
++OPENOCD_SITE = https://git.code.sf.net/p/openocd/code
++OPENOCD_SITE_METHOD = git
++OPENOCD_GIT_SUBMODULES = YES
++
+ OPENOCD_LICENSE = \
+ 	BSD-1-clause, \
+ 	BSD-2-clause, \
+@@ -45,6 +47,7 @@ OPENOCD_CONF_OPTS = \
+ 	--includedir=$(STAGING_DIR)/usr/include \
+ 	--disable-doxygen-html \
+ 	--disable-internal-jimtcl \
++	--enable-internal-libjaylink \
+ 	--disable-shared \
+ 	--enable-dummy \
+ 	--disable-werror
+@@ -133,7 +136,8 @@ HOST_OPENOCD_CONF_OPTS = \
+ 	--disable-internal-jimtcl \
+ 	--disable-shared \
+ 	--enable-dummy \
+-	--disable-werror
++	--disable-werror \
++	--enable-internal-libjaylink
+ 
+ HOST_OPENOCD_DEPENDENCIES = host-jimtcl host-libftdi host-libusb host-libusb-compat
+ 
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
