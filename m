@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E79CCCCF9E9
-	for <buildroot@archiver.kernel.org>; Fri, 24 Oct 2025 21:03:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E4CCCCD1BF
+	for <buildroot@archiver.kernel.org>; Fri, 24 Oct 2025 21:03:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A6EBB84732;
-	Fri, 24 Oct 2025 21:03:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8TC5tPRQLRR8; Fri, 24 Oct 2025 21:03:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D5B08472C
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9D5B08472C;
-	Fri, 24 Oct 2025 21:03:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DF35129
- for <buildroot@buildroot.org>; Fri, 24 Oct 2025 21:03:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F415440838
- for <buildroot@buildroot.org>; Fri, 24 Oct 2025 21:03:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 359F040AF2;
+	Fri, 24 Oct 2025 21:03:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p8scOle9Kqs8 for <buildroot@buildroot.org>;
+ id FL7Ly2nIaNmw; Fri, 24 Oct 2025 21:03:20 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04B3740A78
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 04B3740A78;
+	Fri, 24 Oct 2025 21:03:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7C4E5129
+ for <buildroot@buildroot.org>; Fri, 24 Oct 2025 21:03:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6EB6440A87
+ for <buildroot@buildroot.org>; Fri, 24 Oct 2025 21:03:15 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XM7Bkcf6oi79 for <buildroot@buildroot.org>;
  Fri, 24 Oct 2025 21:03:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE160408D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B95B440A56
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DE160408D6
+ by smtp2.osuosl.org (Postfix) with ESMTP id B95B440A56
  for <buildroot@buildroot.org>; Fri, 24 Oct 2025 21:03:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BB4E187814; Fri, 24 Oct 2025 21:03:12 +0000 (UTC)
+ id A8825877CE; Fri, 24 Oct 2025 21:03:12 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 24 Oct 2025 22:59:00 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f17bd1bd1aa0b55badd84d6f40f441aba3db29c9
-X-Git-Newrev: 879c9f0fc60ca3036c1ec115904d9441bf9e72a2
+X-Git-Oldrev: 9cfcd906cff299ef83b48681e50bcef9df124ad4
+X-Git-Newrev: cdd1c5ca55620a4bdd1574d41fc5538d50f7359a
 X-Patchwork-Hint: ignore
-Message-Id: <20251024210312.BB4E187814@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/shairport-sync: security bump
- version to 4.3.7
+Message-Id: <20251024210312.A8825877CE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/poppler: security bump to v25.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,212 +65,206 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=879c9f0fc60ca3036c1ec115904d9441bf9e72a2
+commit: https://git.buildroot.net/buildroot/commit/?id=cdd1c5ca55620a4bdd1574d41fc5538d50f7359a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop all the patches (already in version).  Works on Pi 4b and 0W.
+This contains many bug and security fixes since v22.12.0.
+See the release notes: https://poppler.freedesktop.org/releases.html
 
-https://github.com/mikebrady/shairport-sync/releases/tag/4.3.7
+In addition:
+- Drop patch that has been applied upstream
+- Update a few cmake configuration options that changed upstream
 
-Since version 3.3.9, two versions were marked upstream as including
-security fixes. No CVE are referenced in those release notes.
-https://github.com/mikebrady/shairport-sync/releases/tag/4.3
-https://github.com/mikebrady/shairport-sync/releases/tag/4.3.1
+There is currently a build failure when enabling gpgme, so disable it
+unconditionally for now.
 
-Signed-off-by: Trammell Hudson <hudson@trmm.net>
-[Julien: mark the commit as "security" in commit log title]
+Finally, this fixes the following vulnerabilities:
+- CVE-2024-6239:
+    A flaw was found in the Poppler's Pdfinfo utility. This issue occurs
+    when using -dests parameter with pdfinfo utility. By using certain
+    malformed input files, an attacker could cause the utility to crash,
+    leading to a denial of service.
+    https://www.cve.org/CVERecord?id=CVE-2024-6239
+
+- CVE-2024-56378:
+    libpoppler.so in Poppler through 24.12.0 has an out-of-bounds read
+    vulnerability within the JBIG2Bitmap::combine function in
+    JBIG2Stream.cc.
+    https://www.cve.org/CVERecord?id=CVE-2024-56378
+
+- CVE-2025-32364:
+    A floating-point exception in the PSStack::roll function of Poppler
+    before 25.04.0 can cause an application to crash when handling
+    malformed inputs associated with INT_MIN.
+    https://www.cve.org/CVERecord?id=CVE-2025-32364
+
+- CVE-2025-32365:
+    Poppler before 25.04.0 allows crafted input files to trigger out-of-
+    bounds reads in the JBIG2Bitmap::combine function in JBIG2Stream.cc
+    because of a misplaced isOk check.
+    https://www.cve.org/CVERecord?id=CVE-2025-32365
+
+- CVE-2025-43903:
+    NSSCryptoSignBackend.cc in Poppler before 25.04.0 does not verify the
+    adbe.pkcs7.sha1 signatures on documents, resulting in potential
+    signature forgeries.
+    https://www.cve.org/CVERecord?id=CVE-2025-43903
+
+- CVE-2025-50420:
+    An issue in the pdfseparate utility of freedesktop poppler v25.04.0
+    allows attackers to cause an infinite recursion via supplying a
+    crafted PDF file. This can lead to a Denial of Service (DoS).
+    https://www.cve.org/CVERecord?id=CVE-2025-50420
+
+- CVE-2025-52886:
+    Poppler is a PDF rendering library. Versions prior to 25.06.0 use
+    `std::atomic_int` for reference counting. Because `std::atomic_int` is
+    only 32 bits, it is possible to overflow the reference count and
+    trigger a use-after-free. Version 25.06.0 patches the issue.
+    https://www.cve.org/CVERecord?id=CVE-2025-52886
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+[Julien: mark commit as "security" in commit log title]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...figure.ac-find-sndfile-through-pkg-config.patch |  45 ---------
- .../0002-mbedtls-add-support-to-mbedtls3.patch     | 105 ---------------------
- package/shairport-sync/shairport-sync.hash         |   2 +-
- package/shairport-sync/shairport-sync.mk           |   2 +-
- 4 files changed, 2 insertions(+), 152 deletions(-)
+ ...ineItem-open-Fix-crash-on-malformed-files.patch | 45 ----------------------
+ package/poppler/poppler.hash                       |  4 +-
+ package/poppler/poppler.mk                         | 24 +++++++-----
+ 3 files changed, 17 insertions(+), 56 deletions(-)
 
-diff --git a/package/shairport-sync/0001-configure.ac-find-sndfile-through-pkg-config.patch b/package/shairport-sync/0001-configure.ac-find-sndfile-through-pkg-config.patch
+diff --git a/package/poppler/0001-OutlineItem-open-Fix-crash-on-malformed-files.patch b/package/poppler/0001-OutlineItem-open-Fix-crash-on-malformed-files.patch
 deleted file mode 100644
-index b593703a2a..0000000000
---- a/package/shairport-sync/0001-configure.ac-find-sndfile-through-pkg-config.patch
+index 478759e0cc..0000000000
+--- a/package/poppler/0001-OutlineItem-open-Fix-crash-on-malformed-files.patch
 +++ /dev/null
 @@ -1,45 +0,0 @@
--From 900b1827c55cc6020b3242640075174c2e6b12a5 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 4 Aug 2021 22:16:40 +0200
--Subject: [PATCH] configure.ac: find sndfile through pkg-config
+-From e5cc11e0b5b867f4705fd28ff1b981c1224be1cd Mon Sep 17 00:00:00 2001
+-From: Albert Astals Cid <aacid@kde.org>
+-Date: Wed, 17 May 2023 22:42:05 +0200
+-Subject: [PATCH] OutlineItem::open: Fix crash on malformed files
 -
--Find sndfile through pkg-config to retrieve sndfile dependencies such as
--flac and avoid the following static build failure:
+-Fixes #1399
 -
--/tmp/instance-3/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/10.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: /tmp/instance-3/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libsndfile.a(libsndfile_la-flac.o): in function `flac_byterate':
--flac.c:(.text+0xfc): undefined reference to `FLAC__StreamDecoderErrorStatusString'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/92ed30a6855ca11800b779718822bcba4a69c9a3
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/mikebrady/shairport-sync/pull/1263
--[Dario: make the patch to be applied with fuzz factor 0]
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+-Upstream: https://gitlab.freedesktop.org/poppler/poppler/-/commit/591235c8b6c65a2eee88991b9ae73490fd9afdfe
+-[Thomas: backported to fix CVE-2023-34872]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ----
-- configure.ac | 9 ++++++++-
-- 1 file changed, 8 insertions(+), 1 deletion(-)
+- poppler/Outline.cc | 10 +++++++---
+- 1 file changed, 7 insertions(+), 3 deletions(-)
 -
--diff --git a/configure.ac b/configure.ac
--index f77087c5..9b982c51 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -303,7 +303,14 @@
-- AC_ARG_WITH(convolution, [AS_HELP_STRING([--with-convolution],[choose audio DSP convolution support])])
-- if test "x$with_convolution" = "xyes" ; then
--   AC_DEFINE([CONFIG_CONVOLUTION], 1, [Include audio DSP convolution support.])
---  AC_CHECK_LIB([sndfile], [sf_open], , AC_MSG_ERROR(Convolution support requires the sndfile library -- libsndfile1-dev suggested!))
--+  if  test "x${with_pkg_config}" = xyes ; then
--+    PKG_CHECK_MODULES(
--+      [sndfile], [sndfile],
--+      [CFLAGS="${sndfile_CFLAGS} ${CFLAGS}"
--+      LIBS="${sndfile_LIBS} ${LIBS}"], AC_MSG_ERROR(Convolution support requires the sndfile library -- libsndfile1-dev suggested!))
--+  else
--+    AC_CHECK_LIB([sndfile], [sf_open], , AC_MSG_ERROR(Convolution support requires the sndfile library -- libsndfile1-dev suggested!))
--+  fi
-- fi
-- AM_CONDITIONAL([USE_CONVOLUTION], [test "x$with_convolution" = "xyes"])
+-diff --git a/poppler/Outline.cc b/poppler/Outline.cc
+-index cbb6cb49..4c68be99 100644
+---- a/poppler/Outline.cc
+-+++ b/poppler/Outline.cc
+-@@ -14,7 +14,7 @@
+- // under GPL version 2 or later
+- //
+- // Copyright (C) 2005 Marco Pesenti Gritti <mpg@redhat.com>
+--// Copyright (C) 2008, 2016-2019, 2021 Albert Astals Cid <aacid@kde.org>
+-+// Copyright (C) 2008, 2016-2019, 2021, 2023 Albert Astals Cid <aacid@kde.org>
+- // Copyright (C) 2009 Nick Jones <nick.jones@network-box.com>
+- // Copyright (C) 2016 Jason Crain <jason@aquaticape.us>
+- // Copyright (C) 2017 Adrian Johnson <ajohnson@redneon.com>
+-@@ -483,8 +483,12 @@ void OutlineItem::open()
+- {
+-     if (!kids) {
+-         Object itemDict = xref->fetch(ref);
+--        const Object &firstRef = itemDict.dictLookupNF("First");
+--        kids = readItemList(this, &firstRef, xref, doc);
+-+        if (itemDict.isDict()) {
+-+            const Object &firstRef = itemDict.dictLookupNF("First");
+-+            kids = readItemList(this, &firstRef, xref, doc);
+-+        } else {
+-+            kids = new std::vector<OutlineItem *>();
+-+        }
+-     }
+- }
 - 
 --- 
--2.30.2
+-2.41.0
 -
-diff --git a/package/shairport-sync/0002-mbedtls-add-support-to-mbedtls3.patch b/package/shairport-sync/0002-mbedtls-add-support-to-mbedtls3.patch
-deleted file mode 100644
-index e0e8ea53de..0000000000
---- a/package/shairport-sync/0002-mbedtls-add-support-to-mbedtls3.patch
-+++ /dev/null
-@@ -1,105 +0,0 @@
--From d73b585c6f6d9136ae7a04243a54d734fa57d779 Mon Sep 17 00:00:00 2001
--From: Seo Suchan <tjtncks@gmail.com>
--Date: Thu, 9 May 2024 19:10:59 +0900
--Subject: [PATCH] mbedtls: add support to mbedtls3
--
--Signed-off-by: Seo Suchan <tjtncks@gmail.com>
--Upstream: https://github.com/mikebrady/shairport-sync/commit/d73b585c6f6d9136ae7a04243a54d734fa57d779
--[thomas: backport the line numbers]
--Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-----
-- common.c | 30 ++++++++++++++++++++++++++----
-- player.c |  1 -
-- player.h |  1 -
-- 3 files changed, 26 insertions(+), 6 deletions(-)
--
--diff --git a/common.c b/common.c
--index 4dc75bc7f..0e2a07243 100644
----- a/common.c
--+++ b/common.c
--@@ -77,6 +77,12 @@
-- #include <mbedtls/md.h>
-- #include <mbedtls/version.h>
-- #include <mbedtls/x509.h>
--+
--+#if MBEDTLS_VERSION_MAJOR == 3
--+#define MBEDTLS_PRIVATE_V3_ONLY(_q) MBEDTLS_PRIVATE(_q)
--+#else
--+#define MBEDTLS_PRIVATE_V3_ONLY(_q) _q
--+#endif
-- #endif
-- 
-- #ifdef CONFIG_LIBDAEMON
--@@ -691,8 +697,14 @@ uint8_t *rsa_apply(uint8_t *input, int inlen, int *outlen, int mode) {
-- 
--   mbedtls_pk_init(&pkctx);
-- 
--+#if MBEDTLS_VERSION_MAJOR == 3
--   rc = mbedtls_pk_parse_key(&pkctx, (unsigned char *)super_secret_key, sizeof(super_secret_key),
--+                            NULL, 0, mbedtls_ctr_drbg_random, &ctr_drbg);
--+#else
--+  rc = mbedtls_pk_parse_key(&pkctx, (unsigned char *)super_secret_key, sizeof(super_secret_key), 
--                             NULL, 0);
--+
--+#endif
--   if (rc != 0)
--     debug(1, "Error %d reading the private key.", rc);
-- 
--@@ -701,19 +713,29 @@ uint8_t *rsa_apply(uint8_t *input, int inlen, int *outlen, int mode) {
-- 
--   switch (mode) {
--   case RSA_MODE_AUTH:
---    mbedtls_rsa_set_padding(trsa, MBEDTLS_RSA_PKCS_V15, MBEDTLS_MD_NONE);
---    outbuf = malloc(trsa->len);
--+    mbedtls_rsa_set_padding(trsa, MBEDTLS_RSA_PKCS_V15, MBEDTLS_MD_NONE);    
--+    outbuf = malloc(trsa->MBEDTLS_PRIVATE_V3_ONLY(len));
--+#if MBEDTLS_VERSION_MAJOR == 3
--+    rc = mbedtls_rsa_pkcs1_encrypt(trsa, mbedtls_ctr_drbg_random, &ctr_drbg,
--+                                   inlen, input, outbuf);
--+#else
--     rc = mbedtls_rsa_pkcs1_encrypt(trsa, mbedtls_ctr_drbg_random, &ctr_drbg, MBEDTLS_RSA_PRIVATE,
--                                    inlen, input, outbuf);
--+#endif
--     if (rc != 0)
--       debug(1, "mbedtls_pk_encrypt error %d.", rc);
---    *outlen = trsa->len;
--+    *outlen = trsa->MBEDTLS_PRIVATE_V3_ONLY(len);
--     break;
--   case RSA_MODE_KEY:
--     mbedtls_rsa_set_padding(trsa, MBEDTLS_RSA_PKCS_V21, MBEDTLS_MD_SHA1);
---    outbuf = malloc(trsa->len);
--+    outbuf = malloc(trsa->MBEDTLS_PRIVATE_V3_ONLY(len));
--+#if MBEDTLS_VERSION_MAJOR == 3
--+    rc = mbedtls_rsa_pkcs1_decrypt(trsa, mbedtls_ctr_drbg_random, &ctr_drbg,
--+                                   &olen, input, outbuf, trsa->MBEDTLS_PRIVATE_V3_ONLY(len));
--+#else
--     rc = mbedtls_rsa_pkcs1_decrypt(trsa, mbedtls_ctr_drbg_random, &ctr_drbg, MBEDTLS_RSA_PRIVATE,
--                                    &olen, input, outbuf, trsa->len);
--+#endif
--     if (rc != 0)
--       debug(1, "mbedtls_pk_decrypt error %d.", rc);
--     *outlen = olen;
--diff --git a/player.c b/player.c
--index 8c1752722..d023d269c 100644
----- a/player.c
--+++ b/player.c
--@@ -47,7 +47,6 @@
-- 
-- #ifdef CONFIG_MBEDTLS
-- #include <mbedtls/aes.h>
---#include <mbedtls/havege.h>
-- #endif
-- 
-- #ifdef CONFIG_POLARSSL
--diff --git a/player.h b/player.h
--index 11435bf91..b35eb7652 100644
----- a/player.h
--+++ b/player.h
--@@ -9,7 +9,6 @@
-- 
-- #ifdef CONFIG_MBEDTLS
-- #include <mbedtls/aes.h>
---#include <mbedtls/havege.h>
-- #endif
-- 
-- #ifdef CONFIG_POLARSSL
-diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
-index 331866a379..dc7c7eee5b 100644
---- a/package/shairport-sync/shairport-sync.hash
-+++ b/package/shairport-sync/shairport-sync.hash
+diff --git a/package/poppler/poppler.hash b/package/poppler/poppler.hash
+index bb07b2ee6a..34f8bcd58f 100644
+--- a/package/poppler/poppler.hash
++++ b/package/poppler/poppler.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  17990cb2620551caa07a1c3b371889e55803071eaada04e958c356547a7e1795  shairport-sync-3.3.9.tar.gz
-+sha256  a1242d100b61fe1fffbbf706e919ed51d6a341c9fb8293fb42046e32ae2b3338  shairport-sync-4.3.7.tar.gz
- sha256  1daaa904985807b7f9f2fa91f6b19f3faadf8df4e813f7451a691f89a6965e3f  LICENSES
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index 5d01ab042e..493eefbd6f 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -4,7 +4,7 @@
+-# Locally calculated
+-sha256  d9aa9cacdfbd0f8e98fc2b3bb008e645597ed480685757c3e7bc74b4278d15c0  poppler-22.12.0.tar.xz
++# Locally calculated after verifying GPG signature
++sha256  6b5e9bb64dabb15787a14db1675291c7afaf9387438cc93a4fb7f6aec4ee6fe0  poppler-25.10.0.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index 776fb4d566..08214d38b4 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -4,15 +4,13 @@
  #
  ################################################################################
  
--SHAIRPORT_SYNC_VERSION = 3.3.9
-+SHAIRPORT_SYNC_VERSION = 4.3.7
- SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+-POPPLER_VERSION = 22.12.0
++POPPLER_VERSION = 25.10.0
+ POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
+ POPPLER_SITE = https://poppler.freedesktop.org
+ POPPLER_DEPENDENCIES = fontconfig host-pkgconf
+ POPPLER_LICENSE = GPL-2.0+
+ POPPLER_LICENSE_FILES = COPYING
+ POPPLER_CPE_ID_VENDOR = freedesktop
+-# 0001-OutlineItem-open-Fix-crash-on-malformed-files.patch
+-POPPLER_IGNORE_CVES += CVE-2023-34872
+ POPPLER_INSTALL_STAGING = YES
  
- SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
+ POPPLER_CONF_OPTS = \
+@@ -24,6 +22,7 @@ POPPLER_CONF_OPTS = \
+ 	-DBUILD_MANUAL_TESTS=OFF \
+ 	-DENABLE_GTK_DOC=OFF \
+ 	-DENABLE_QT6=OFF \
++	-DENABLE_GPGME=OFF \
+ 	-DRUN_GPERF_IF_PRESENT=OFF
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+@@ -98,9 +97,9 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ POPPLER_DEPENDENCIES += zlib
+-POPPLER_CONF_OPTS += -DENABLE_ZLIB=ON
++POPPLER_CONF_OPTS += -DENABLE_ZLIB_UNCOMPRESS=ON
+ else
+-POPPLER_CONF_OPTS += -DENABLE_ZLIB=OFF
++POPPLER_CONF_OPTS += -DENABLE_ZLIB_UNCOMPRESS=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_CAIRO),y)
+@@ -112,9 +111,9 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_TIFF),y)
+ POPPLER_DEPENDENCIES += tiff
+-POPPLER_CONF_OPTS += -DWITH_TIFF=ON
++POPPLER_CONF_OPTS += -DENABLE_LIBTIFF=ON
+ else
+-POPPLER_CONF_OPTS += -DWITH_TIFF=OFF
++POPPLER_CONF_OPTS += -DENABLE_LIBTIFF=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
+@@ -126,9 +125,16 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBNSS),y)
+ POPPLER_DEPENDENCIES += libnss
+-POPPLER_CONF_OPTS += -DWITH_NSS3=ON
++POPPLER_CONF_OPTS += -DENABLE_NSS3=ON
+ else
+-POPPLER_CONF_OPTS += -DWITH_NSS3=OFF
++POPPLER_CONF_OPTS += -DENABLE_NSS3=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_LCMS2),y)
++POPPLER_DEPENDENCIES += lcms2
++POPPLER_CONF_OPTS += -DENABLE_LCMS=ON
++else
++POPPLER_CONF_OPTS += -DENABLE_LCMS=OFF
+ endif
+ 
+ ifeq ($(BR2_SOFT_FLOAT),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
