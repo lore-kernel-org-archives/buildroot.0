@@ -4,75 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A286BCCF9E9
-	for <buildroot@archiver.kernel.org>; Sat, 25 Oct 2025 19:06:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E20C1CCD1BF
+	for <buildroot@archiver.kernel.org>; Sat, 25 Oct 2025 21:10:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 540C58128D;
-	Sat, 25 Oct 2025 19:06:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6EC8A812E7;
+	Sat, 25 Oct 2025 21:10:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id inAYK6fzfY1A; Sat, 25 Oct 2025 19:06:15 +0000 (UTC)
+ id 24NPnWYVE3mR; Sat, 25 Oct 2025 21:10:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 399D08126E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94943812AB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 399D08126E;
-	Sat, 25 Oct 2025 19:06:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id AE76FD7
- for <buildroot@buildroot.org>; Sat, 25 Oct 2025 19:06:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 94943812AB;
+	Sat, 25 Oct 2025 21:10:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 165F8976
+ for <buildroot@buildroot.org>; Sat, 25 Oct 2025 21:10:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8C79740A0D;
- Sat, 25 Oct 2025 19:06:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0809C4052B
+ for <buildroot@buildroot.org>; Sat, 25 Oct 2025 21:10:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UuF9uwpiyjW0; Sat, 25 Oct 2025 19:06:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=216.184.2.64;
- helo=mx1a.swcp.com; envelope-from=hudson@swcp.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 97FB440A0B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97FB440A0B
-Received: from mx1a.swcp.com (mx1a.swcp.com [216.184.2.64])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 97FB440A0B
- for <buildroot@buildroot.org>; Sat, 25 Oct 2025 19:06:12 +0000 (UTC)
-Received: from ame3.swcp.com (ame3.swcp.com [216.184.2.120])
- by mx1a.swcp.com (8.14.4/8.14.4/Debian-4) with ESMTP id 59PJ6BDK004494
- for <buildroot@buildroot.org>; Sat, 25 Oct 2025 13:06:11 -0600
-Received-SPF: pass (ame3.swcp.com: domain of hudson@swcp.com designates
- 216.184.2.83 as permitted sender) receiver=ame3.swcp.com;
- client-ip=216.184.2.83; helo=hachi.swcp.com; envelope-from=hudson@swcp.com;
- x-software=spfmilter 2.001 http://www.acme.com/software/spfmilter/ with
- libspf2-1.2.10; 
-DKIM-Filter: OpenDKIM Filter v2.10.3 ame3.swcp.com 59PJ6AAU054971
-Received: from hachi.swcp.com (hachi.swcp.com [216.184.2.83])
- by ame3.swcp.com (8.17.2/8.17.1) with ESMTPS id 59PJ6AAU054971
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT)
- for <buildroot@buildroot.org>; Sat, 25 Oct 2025 13:06:11 -0600 (MDT)
- (envelope-from hudson@swcp.com)
-Received: from hachi.swcp.com (localhost [127.0.0.1])
- by hachi.swcp.com (8.17.1.9/8.17.1.9/Debian-2+deb12u2) with ESMTP id
- 59PJ6Agx3612875
- for <buildroot@buildroot.org>; Sat, 25 Oct 2025 13:06:10 -0600
-Received: (from hudson@localhost)
- by hachi.swcp.com (8.17.1.9/8.17.1.9/Submit) id 59PJ6A4d3612874
- for buildroot@buildroot.org; Sat, 25 Oct 2025 13:06:10 -0600
-Date: Sat, 25 Oct 2025 13:06:10 -0600
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P0slLggJTN74 for <buildroot@buildroot.org>;
+ Sat, 25 Oct 2025 21:10:48 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 051FA404CA
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 051FA404CA
+ for <buildroot@buildroot.org>; Sat, 25 Oct 2025 21:10:48 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E7460878A2; Sat, 25 Oct 2025 21:10:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Message-ID: <aP0fooArqo5kwOnV@hachi.swcp.com>
-References: <aP0fWpti-9PiGKxn@hachi.swcp.com> <aP0fg9gNzZ0xspy0@hachi.swcp.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <aP0fg9gNzZ0xspy0@hachi.swcp.com>
-X-Scanned-By: MIMEDefang 2.86
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.6.4
- (ame3.swcp.com [216.184.2.127]); Sat, 25 Oct 2025 13:06:11 -0600 (MDT)
-X-Virus-Scanned: clamav-milter 1.2.1 at ame3
-X-Virus-Status: Clean
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=fail (p=quarantine dis=none)
- header.from=trmm.net
-Subject: [Buildroot] [PATCH 2/2] package/shairport-sync: Add support for
- AirPlay2
+Date: Sat, 25 Oct 2025 22:37:21 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f683ffcbe1f92290c8df78be06379998f3cef689
+X-Git-Newrev: d388edb7b017223663cfd5e27f78086918c75593
+X-Patchwork-Hint: ignore
+Message-Id: <20251025211047.E7460878A2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-fastapi: bump to 0.119.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,67 +57,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Trammell Hudson via buildroot <buildroot@buildroot.org>
-Reply-To: Trammell Hudson <hudson@trmm.net>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch adds the dependencies necessary to enable the newer version
-of shairplay-sync support for the AirPlay2 protocol.
+commit: https://git.buildroot.net/buildroot/commit/?id=d388edb7b017223663cfd5e27f78086918c75593
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Trammell Hudson <hudson@trmm.net>
+Changes: https://github.com/fastapi/fastapi/releases/tag/0.119.1
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/shairport-sync/Config.in         | 15 +++++++++++++++
- package/shairport-sync/shairport-sync.mk |  5 +++++
- 2 files changed, 20 insertions(+)
+ package/python-fastapi/python-fastapi.hash | 4 ++--
+ package/python-fastapi/python-fastapi.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/shairport-sync/Config.in b/package/shairport-sync/Config.in
-index 528767ba9c..fddba4a439 100644
---- a/package/shairport-sync/Config.in
-+++ b/package/shairport-sync/Config.in
-@@ -26,6 +26,21 @@ config BR2_PACKAGE_SHAIRPORT_SYNC_CONVOLUTION
- 	help
- 	  Enable audio DSP convolution support.
+diff --git a/package/python-fastapi/python-fastapi.hash b/package/python-fastapi/python-fastapi.hash
+index c4bbaccc33..34bfe22c87 100644
+--- a/package/python-fastapi/python-fastapi.hash
++++ b/package/python-fastapi/python-fastapi.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/fastapi/json
+-md5  8fcc33a9c143b2e7462064825e190ed7  fastapi-0.119.0.tar.gz
+-sha256  451082403a2c1f0b99c6bd57c09110ed5463856804c8078d38e5a1f1035dbbb7  fastapi-0.119.0.tar.gz
++md5  5d539db8065d3579430ed00577e8a86b  fastapi-0.119.1.tar.gz
++sha256  a5e3426edce3fe221af4e1992c6d79011b247e3b03cc57999d697fe76cbf8ae0  fastapi-0.119.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e  LICENSE
+diff --git a/package/python-fastapi/python-fastapi.mk b/package/python-fastapi/python-fastapi.mk
+index a0d6412339..4a067494a7 100644
+--- a/package/python-fastapi/python-fastapi.mk
++++ b/package/python-fastapi/python-fastapi.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_SHAIRPORT_SYNC_AIRPLAY2
-+	bool "AirPlay2 support"
-+	select BR2_PACKAGE_NQPTP
-+	select BR2_PACKAGE_LIBPLIST
-+	select BR2_PACKAGE_LIBSODIUM
-+	select BR2_PACKAGE_LIBGCRYPT
-+	select BR2_PACKAGE_FFMPEG
-+	select BR2_PACKAGE_FFMPEG_GPL
-+	select BR2_PACKAGE_FFMPEG_NONFREE
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	help
-+	  Enable support for the more modern AirPlay2 protocol.
-+	  This will also require ffmpeg and many other libraries.
-+
- config BR2_PACKAGE_SHAIRPORT_SYNC_DBUS
- 	bool "dbus support"
- 	depends on BR2_USE_WCHAR # libglib2
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index 493eefbd6f..fa0858a85b 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -53,6 +53,11 @@ else
- SHAIRPORT_SYNC_CONF_OPTS += --without-convolution
- endif
- 
-+ifeq ($(BR2_PACKAGE_SHAIRPORT_SYNC_AIRPLAY2),y)
-+SHAIRPORT_SYNC_DEPENDENCIES += libplist libsodium libgcrypt ffmpeg util-linux
-+SHAIRPORT_SYNC_CONF_OPTS += --with-airplay-2
-+endif
-+
- ifeq ($(BR2_PACKAGE_SHAIRPORT_SYNC_DBUS),y)
- SHAIRPORT_SYNC_DEPENDENCIES += libglib2
- SHAIRPORT_SYNC_CONF_OPTS += --with-dbus-interface --with-mpris-interface
--- 
-2.25.1
-
+-PYTHON_FASTAPI_VERSION = 0.119.0
++PYTHON_FASTAPI_VERSION = 0.119.1
+ PYTHON_FASTAPI_SOURCE = fastapi-$(PYTHON_FASTAPI_VERSION).tar.gz
+-PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/0a/f9/5c5bcce82a7997cc0eb8c47b7800f862f6b56adc40486ed246e5010d443b
++PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/a6/f4/152127681182e6413e7a89684c434e19e7414ed7ac0c632999c3c6980640
+ PYTHON_FASTAPI_SETUP_TYPE = pep517
+ PYTHON_FASTAPI_LICENSE = MIT
+ PYTHON_FASTAPI_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
