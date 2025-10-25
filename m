@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0E7DCCD1BF
-	for <buildroot@archiver.kernel.org>; Sat, 25 Oct 2025 17:16:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64947CCF9EB
+	for <buildroot@archiver.kernel.org>; Sat, 25 Oct 2025 17:16:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1FAC981200;
-	Sat, 25 Oct 2025 17:16:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 56BA9811EE;
+	Sat, 25 Oct 2025 17:16:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q88sOx06HF21; Sat, 25 Oct 2025 17:16:25 +0000 (UTC)
+ id JYF-l9n0zYeg; Sat, 25 Oct 2025 17:16:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D4F9811F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 173C181208
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D4F9811F7;
-	Sat, 25 Oct 2025 17:16:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id A2120D7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 173C181208;
+	Sat, 25 Oct 2025 17:16:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A4E5CDA1
  for <buildroot@buildroot.org>; Sat, 25 Oct 2025 17:16:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9C1164046B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8B3F740310
  for <buildroot@buildroot.org>; Sat, 25 Oct 2025 17:16:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 60lAhkaaILIF for <buildroot@buildroot.org>;
- Sat, 25 Oct 2025 17:16:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nVgENSshNu66 for <buildroot@buildroot.org>;
+ Sat, 25 Oct 2025 17:16:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC66A4033D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA6F040296
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EC66A4033D
+ by smtp2.osuosl.org (Postfix) with ESMTP id DA6F040296
  for <buildroot@buildroot.org>; Sat, 25 Oct 2025 17:16:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E7FC6877E2; Sat, 25 Oct 2025 17:16:22 +0000 (UTC)
+ id D5650877DC; Sat, 25 Oct 2025 17:16:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 25 Oct 2025 19:09:26 +0200
+Date: Sat, 25 Oct 2025 19:05:40 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 01e71aa9f6a7f6a3d7e54a666809bb7e44c49098
-X-Git-Newrev: bb2e03c03cf45823f2ecfe56f0d39017ed1e2d7e
+X-Git-Oldrev: 968cf34ad6f811c96d7ecedfd1aa774d6cde6ce3
+X-Git-Newrev: b102f46c1beca9291021e8abc48347b8e6b56df2
 X-Patchwork-Hint: ignore
-Message-Id: <20251025171622.E7FC6877E2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libevdev: bump to version 1.13.5
+Message-Id: <20251025171622.D5650877DC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgeotiff: bump to version 1.7.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,49 +65,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb2e03c03cf45823f2ecfe56f0d39017ed1e2d7e
+commit: https://git.buildroot.net/buildroot/commit/?id=b102f46c1beca9291021e8abc48347b8e6b56df2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes since 1.13.2:
-https://lists.freedesktop.org/archives/input-tools/2024-May/001588.html
-https://lists.freedesktop.org/archives/input-tools/2024-September/001589.html
-https://lists.freedesktop.org/archives/input-tools/2025-March/001592.html
-https://lists.freedesktop.org/archives/input-tools/2025-October/001593.html
+Release notes:
+https://github.com/OSGeo/libgeotiff/releases/tag/1.7.4
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libevdev/libevdev.hash | 6 +++---
- package/libevdev/libevdev.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libgeotiff/libgeotiff.hash | 2 +-
+ package/libgeotiff/libgeotiff.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
-index acaedfad56..3fe609d78a 100644
---- a/package/libevdev/libevdev.hash
-+++ b/package/libevdev/libevdev.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/input-tools/2023-May/001585.html
--sha256  06a77bf2ac5c993305882bc1641017f5bec1592d6d1b64787bad492ab34f2f36  libevdev-1.13.1.tar.xz
--sha512  9b75bad4bc13948854c8dff7a7a46aca6c06d1410ccb000f881bf76055ccac040595c3b24fb1a574be875b5c262eb86820b9ec3383752641bc2047135e5a412f  libevdev-1.13.1.tar.xz
-+# From https://lists.freedesktop.org/archives/input-tools/2025-October/001593.html
-+sha256  89918ae7b7c13936e6482604a77a2bfbbb74544c5d039fde01c3fa1bdf639987  libevdev-1.13.5.tar.xz
-+sha512  2ca066235c9d6729e965e2df1df192285b3d41a20aeb2bc4eb21d14dc469198d5270d1cd900dee0b6cf1bdf9efd3c47ec310bfbd9e4965b3bcc3ef440efba604  libevdev-1.13.5.tar.xz
- 
- # Hash for license files:
- sha256  6f13de7ce28e4948ba95170e0723ee1254c1978ce1f127af82aeca597b567cb9  COPYING
-diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-index b0cf6c9ba8..24bd1609da 100644
---- a/package/libevdev/libevdev.mk
-+++ b/package/libevdev/libevdev.mk
+diff --git a/package/libgeotiff/libgeotiff.hash b/package/libgeotiff/libgeotiff.hash
+index 3165994bfd..e81f15ea0d 100644
+--- a/package/libgeotiff/libgeotiff.hash
++++ b/package/libgeotiff/libgeotiff.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  ba23a3a35980ed3de916e125c739251f8e3266be07540200125a307d7cf5a704  libgeotiff-1.7.3.tar.gz
++sha256  c598d04fdf2ba25c4352844dafa81dde3f7fd968daa7ad131228cd91e9d3dc47  libgeotiff-1.7.4.tar.gz
+ sha256  a822a731a7ac4ba7d8f18fa0dc29db2e68a5dcfc315b46e4a4c8956720d55d93  LICENSE
+diff --git a/package/libgeotiff/libgeotiff.mk b/package/libgeotiff/libgeotiff.mk
+index 126d61cb1a..f6f7832d60 100644
+--- a/package/libgeotiff/libgeotiff.mk
++++ b/package/libgeotiff/libgeotiff.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBEVDEV_VERSION = 1.13.1
-+LIBEVDEV_VERSION = 1.13.5
- LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
- LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
- LIBEVDEV_LICENSE = MIT
+-LIBGEOTIFF_VERSION = 1.7.3
++LIBGEOTIFF_VERSION = 1.7.4
+ LIBGEOTIFF_SITE = http://download.osgeo.org/geotiff/libgeotiff
+ LIBGEOTIFF_LICENSE = MIT, public domain
+ LIBGEOTIFF_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
