@@ -4,70 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55C92CCF9E3
-	for <buildroot@archiver.kernel.org>; Sat, 25 Oct 2025 07:08:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D404FCCF9E3
+	for <buildroot@archiver.kernel.org>; Sat, 25 Oct 2025 09:33:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B08860657;
-	Sat, 25 Oct 2025 07:08:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A94E60669;
+	Sat, 25 Oct 2025 09:33:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ptNSxcRueaCp; Sat, 25 Oct 2025 07:08:19 +0000 (UTC)
+ id lRvBYU3ZjQuD; Sat, 25 Oct 2025 09:33:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47482606C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F35360662
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 47482606C7;
-	Sat, 25 Oct 2025 07:08:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4A9EDD7
- for <buildroot@buildroot.org>; Sat, 25 Oct 2025 07:08:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F35360662;
+	Sat, 25 Oct 2025 09:33:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3AEFFD7
+ for <buildroot@buildroot.org>; Sat, 25 Oct 2025 09:33:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 30F3F400B1
- for <buildroot@buildroot.org>; Sat, 25 Oct 2025 07:08:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2166760662
+ for <buildroot@buildroot.org>; Sat, 25 Oct 2025 09:33:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oj5pR0hQY2Uo for <buildroot@buildroot.org>;
- Sat, 25 Oct 2025 07:08:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2F82140077
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F82140077
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2F82140077
- for <buildroot@buildroot.org>; Sat, 25 Oct 2025 07:08:17 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6cf49.dip0.t-ipconnect.de [79.214.207.73])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 61DBBA4C33E8
- for <buildroot@buildroot.org>; Sat, 25 Oct 2025 09:08:15 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:45460)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1vCYNr-000000001EQ-0ugh
- for buildroot@buildroot.org; Sat, 25 Oct 2025 07:08:15 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 11kmGAfmSXwp for <buildroot@buildroot.org>;
+ Sat, 25 Oct 2025 09:33:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 257B86065F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 257B86065F
+ for <buildroot@buildroot.org>; Sat, 25 Oct 2025 09:33:41 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1BF75876CE; Sat, 25 Oct 2025 09:33:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 25 Oct 2025 09:08:14 +0200
-Message-ID: <20251025070814.3338524-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: ++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1761376095;
- bh=BoVrAcltRz97GCFGOZMmbKJ9Pjy9OUhnjUF9d3jphsU=;
- h=From:To:Subject:Date:From;
- b=R6Ct/dBDnJILsGHbC4mZZQavM7POQVKjuh/+LccjHVZRCc34khVr66hoc4llEtLa6
- 1DOYFHDSyaSNP9FUsKgb2hr1GhMit17MEV6rva+wafDJTJpLT8Pvv1K2gIKw2/G4iE
- G9Aw5E7yfG/rdHOIGwHSjgIqEZOghRL+s3Rm7czFYUT4LAb83BVutTkICknpKdxYjL
- IV5lWi+VpnqDehqqiIyTH+MhaZTFLMqRpq1Dla2evd7DP4Svjcfe1N9a1h07JyCzax
- PuK8comRceP0lOoEH0t6K0txVHcN1ggOnDsV9YAEIvm4zUSIpy10C23hfHv2G27gne
- r/7BZsH1XY4Mg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=R6Ct/dBD
-Subject: [Buildroot] [PATCH 1/1] package/fetchmail: bump version to 6.5.7
+Date: Sat, 25 Oct 2025 11:21:55 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c555b6565f2747047603dc8022f81b7ea14b4890
+X-Git-Newrev: 12b6b87d59ce1b9b5c21eea44bbb401ee8b9a210
+X-Patchwork-Hint: ignore
+Message-Id: <20251025093341.1BF75876CE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pocketpy: bump to version 2.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,47 +57,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=12b6b87d59ce1b9b5c21eea44bbb401ee8b9a210
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Release notes:
-https://sourceforge.net/p/fetchmail/mailman/message/59248304/
+https://github.com/pocketpy/pocketpy/releases/tag/v2.1.3
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/fetchmail/fetchmail.hash | 4 ++--
- package/fetchmail/fetchmail.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pocketpy/pocketpy.hash | 2 +-
+ package/pocketpy/pocketpy.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
-index 9408aacacc..56aa4befda 100644
---- a/package/fetchmail/fetchmail.hash
-+++ b/package/fetchmail/fetchmail.hash
-@@ -1,4 +1,4 @@
--# From https://sourceforge.net/p/fetchmail/mailman/message/59241831/
--sha256  ec10e0e0eaa417313559379ede76c74614766d838b39470b66474863aa690dab  fetchmail-6.5.6.tar.xz
-+# From https://sourceforge.net/p/fetchmail/mailman/message/59248304/
-+sha256  73eb6b1d421b5986866ad4a6b777c1140a39005298c63bf847de537976cbfbdb  fetchmail-6.5.7.tar.xz
- # Locally computed:
- sha256  a502ffd59034feee7e924b29500451b984992ae361bd8084736afc470f32135a  COPYING
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index e7539c5d98..7e49760cac 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/pocketpy/pocketpy.hash b/package/pocketpy/pocketpy.hash
+index 4032fda442..0c96bf2a55 100644
+--- a/package/pocketpy/pocketpy.hash
++++ b/package/pocketpy/pocketpy.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  34976a5eb099869b134d93bd4c801cb330bb17466f2b1f4543a5217034a867cd  pocketpy-2.1.1.tar.gz
++sha256  7e2afd6eafcf72c5797492107558e4b1d6407dccd66e7da4a62b1054eddd2ce3  pocketpy-2.1.3.tar.gz
+ sha256  9dab6fe9086f93847540387be578edc94b6b280004db5ed7c850ccf8f086fd66  LICENSE
+diff --git a/package/pocketpy/pocketpy.mk b/package/pocketpy/pocketpy.mk
+index 74e6b4910d..d20e1e0e20 100644
+--- a/package/pocketpy/pocketpy.mk
++++ b/package/pocketpy/pocketpy.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- FETCHMAIL_VERSION_MAJOR = 6.5
--FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).6
-+FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).7
- FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
- FETCHMAIL_SITE = https://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
- FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
--- 
-2.47.3
-
+-POCKETPY_VERSION = 2.1.1
++POCKETPY_VERSION = 2.1.3
+ POCKETPY_SITE = $(call github,pocketpy,pocketpy,v$(POCKETPY_VERSION))
+ POCKETPY_LICENSE = MIT
+ POCKETPY_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
