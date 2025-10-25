@@ -4,73 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2F3FCCF9E5
-	for <buildroot@archiver.kernel.org>; Sat, 25 Oct 2025 21:12:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36B0CCCF9E5
+	for <buildroot@archiver.kernel.org>; Sat, 25 Oct 2025 22:07:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CBF82812F7;
-	Sat, 25 Oct 2025 21:12:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DCB3D81332;
+	Sat, 25 Oct 2025 22:07:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XDjKzTYWfmzJ; Sat, 25 Oct 2025 21:12:38 +0000 (UTC)
+ id v64m4NKRJs-T; Sat, 25 Oct 2025 22:07:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCD8C812EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 174F081334
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DCD8C812EB;
-	Sat, 25 Oct 2025 21:12:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 68824DA1
- for <buildroot@buildroot.org>; Sat, 25 Oct 2025 21:12:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 174F081334;
+	Sat, 25 Oct 2025 22:07:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2284C976
+ for <buildroot@buildroot.org>; Sat, 25 Oct 2025 22:07:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4E30F6064B
- for <buildroot@buildroot.org>; Sat, 25 Oct 2025 21:12:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1822C402B8
+ for <buildroot@buildroot.org>; Sat, 25 Oct 2025 22:07:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 703PgtNoPOV3 for <buildroot@buildroot.org>;
- Sat, 25 Oct 2025 21:12:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 70FC460648
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70FC460648
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 70FC460648
- for <buildroot@buildroot.org>; Sat, 25 Oct 2025 21:12:36 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 307355FFB4;
- Sat, 25 Oct 2025 23:12:31 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 25 Oct 2025 23:12:31 +0200
-MIME-Version: 1.0
-Date: Sat, 25 Oct 2025 23:12:31 +0200
-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>,
- Marcus Hoffmann <bubu@bubu1.eu>
-In-Reply-To: <20251021092301.741971-1-buildroot@bubu1.eu>
-References: <20251021092301.741971-1-buildroot@bubu1.eu>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <d027382a51cce3f7cbe2671c5f1e064c@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1761426754;
- bh=nPcd1u2geKypKkmNUA9lX7ytlY7vgUPM4f7CBUtG/No=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=SIzVWbWQKrrryAg8Ed6EXV8QSSYDVJPaWvhCaFwaIpRLMG3lyadHdgB6pKYZUuZa7
- QDqpEhJKPfWYr+P8at4Kmn/ttvM+qebolpoKPDufEWXwSlXz8O0DE7iYhFUJPA/8ZH
- GAAfT9r4qIBaFiTEFgtheMUuqAqISR1RtB4MiXMAe6b/7uwSUfcPKjFp8qYRbNax3h
- igEFkdZJdo/4GfniS2feDOT52B0A5Uq6oSIydyyh65QyAzYg6O8gV762OG3dakVPNp
- 6r8c0mV37jal39IpHfyQZe5cl2iYwS1oTN5QpmNFRy+8QG0ooiPPIaDT4nQ2CIieQg
- Zqdlqx82M2XkA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=SIzVWbWQ
-Subject: Re: [Buildroot] [PATCH] package/python-pydantic: bump to 2.12.3
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XL4wW9obtU9f for <buildroot@buildroot.org>;
+ Sat, 25 Oct 2025 22:07:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 705D740245
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 705D740245
+ for <buildroot@buildroot.org>; Sat, 25 Oct 2025 22:07:40 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6B44F878CF; Sat, 25 Oct 2025 22:07:40 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 26 Oct 2025 00:06:23 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0268d7deeccc4bdfe0a334c2e480cd2fb9e2f1dc
+X-Git-Newrev: 2335d37b14bc60d2600cf4f1af68ec9b0ae891fc
+X-Patchwork-Hint: ignore
+Message-Id: <20251025220740.6B44F878CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libucontext: bump version to 1.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,18 +59,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 21/10/2025 11:23, Marcus Hoffmann via buildroot wrote:
-> Pydantic 2.12 bugfix release. Changes:
-> https://github.com/pydantic/pydantic/releases/tag/v2.12.3
-> 
-> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+commit: https://git.buildroot.net/buildroot/commit/?id=2335d37b14bc60d2600cf4f1af68ec9b0ae891fc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Changelog:
+https://github.com/kaniini/libucontext/blob/libucontext-1.3.3/NEWS
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libucontext/libucontext.hash | 2 +-
+ package/libucontext/libucontext.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libucontext/libucontext.hash b/package/libucontext/libucontext.hash
+index a8e1e23e36..dc6ef3dfb1 100644
+--- a/package/libucontext/libucontext.hash
++++ b/package/libucontext/libucontext.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  937fba9d0beebd7cf957b79979b19fe3a29bb9c4bfd25e869477d7154bbf8fd3  libucontext-1.2.tar.gz
++sha256  06fca63bc00a236ea7e2ce4fe984d7203b1f9ea046f5c8c815d280da4ea281e3  libucontext-1.3.3.tar.gz
+ # License files, locally calculated
+ sha256  ecf4be354bbb6ccebdf150d1a8f2b3caeb10cf7c8a580f278a30799372f9e037  LICENSE
+diff --git a/package/libucontext/libucontext.mk b/package/libucontext/libucontext.mk
+index 75c4f9b9e4..64ffa2ec37 100644
+--- a/package/libucontext/libucontext.mk
++++ b/package/libucontext/libucontext.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUCONTEXT_VERSION = 1.2
++LIBUCONTEXT_VERSION = 1.3.3
+ LIBUCONTEXT_SITE = $(call github,kaniini,libucontext,libucontext-$(LIBUCONTEXT_VERSION))
+ LIBUCONTEXT_LICENSE = ISC
+ LIBUCONTEXT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
