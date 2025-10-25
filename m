@@ -1,108 +1,155 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC3AFCCF9E3
-	for <buildroot@archiver.kernel.org>; Sat, 25 Oct 2025 12:30:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 936ABCCD1BF
+	for <buildroot@archiver.kernel.org>; Sat, 25 Oct 2025 13:47:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B1B64606C0;
-	Sat, 25 Oct 2025 12:30:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3BAF240405;
+	Sat, 25 Oct 2025 13:47:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zbBzl2hvlXO4; Sat, 25 Oct 2025 12:30:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1Y0Xoyjm8vHU; Sat, 25 Oct 2025 13:47:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A728B60703
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2806940460
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A728B60703;
-	Sat, 25 Oct 2025 12:30:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8F32F43F
- for <buildroot@buildroot.org>; Sat, 25 Oct 2025 12:30:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2806940460;
+	Sat, 25 Oct 2025 13:47:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2A11DD7
+ for <buildroot@buildroot.org>; Sat, 25 Oct 2025 13:47:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8CF0C8119C
- for <buildroot@buildroot.org>; Sat, 25 Oct 2025 12:30:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 10A1D40460
+ for <buildroot@buildroot.org>; Sat, 25 Oct 2025 13:47:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xxd6oxwVNSh7 for <buildroot@buildroot.org>;
- Sat, 25 Oct 2025 12:30:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fmGptwVyuXdd for <buildroot@buildroot.org>;
+ Sat, 25 Oct 2025 13:47:07 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62e; helo=mail-ej1-x62e.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 24D938118D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24D938118D
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
- [IPv6:2a00:1450:4864:20::62e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 24D938118D
- for <buildroot@buildroot.org>; Sat, 25 Oct 2025 12:30:41 +0000 (UTC)
-Received: by mail-ej1-x62e.google.com with SMTP id
- a640c23a62f3a-b4736e043f9so570985266b.0
- for <buildroot@buildroot.org>; Sat, 25 Oct 2025 05:30:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1761395440; x=1762000240;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=okJu4RnZ6Hqv+j++SvaiESpKpbGQgBoB9Sh7Z+gTOBk=;
- b=b5CujjwHm2KvcTEesWLpX/anK5f1o/UjmQBGfZrDzVidE0JWzoYIKfQws66X/xlx52
- ORPuNDyVRtZluOUfc4GYK/FUyl7pewrirk3VBvxG1Qe4IiLldbZCTDvqiraVR6zUnLwJ
- NRrfmyr1nhTTPGkvDAieGyn9dfmrxpKk7UW1SODXblqDWYksOsHU/9nY2FgyLaK+m82t
- u4sLLrxCzrhOPSRqFl7t0IX2o3ta7Ft4aPn3BzprZXSARzJrmVxTRuPSsF57WNzm6AyT
- u5JR6ce2IEZ3+dne4bdr3xMIuHBuW9/iRpMm1FLyTidTfV7LfsoGqxhp3bztEGHkWStj
- XH+Q==
-X-Gm-Message-State: AOJu0YzdNRr7DFQdm8ESkrNtMKWt7aMp4/cnfPLHmdT+cXWUdduaCICf
- 1Kv61XrbN8oiPw7UxlgoKQo/Y2evVeM5UqGzTM/5geY2pBcqkSffoSat/pQnZ6+2Qtldr4pYIO/
- TwPCm
-X-Gm-Gg: ASbGncsHeuS2IJisAX3052AxSaHZ7a79CXkyUOxFLrcfESE8X/uvaoHLo0E9Qu3TPHL
- s1hjmL4/qwPAUo1WD/JuLMjNissgZVVn7XSeLzHqRB558ffBYwasfojJz7/uC51ERJj+1q4YtYg
- ZMKjNp8xn1HGq3sxk7oqn6QFF/LznkidMDLACHh9WaDssDs/wdZA0ytMBtTAySQMHlRl/aocMMn
- j/fAD7F7E57IQb85LkZYHK8zP40aDVEO+e/W08wMuX9FmInDyzqBaLUj2ENOeeQBVKEtdPBT7mL
- 7XIR2aPPX/Gb3FWAbFVEr7dFjzV8ci2+JAyS2uusHAYnCW3XjhMBIy0MbToHR8OmQ92gFrfnp3Q
- AFQB7X7m3pm03Civc3Ff9YGCV8Dz+CMWedXu1Idvhdhm0GiL3oyFRyVXU3ZGFKFphIZ63rVpRRK
- CRWMbRFeKekHNGfqjn2RGAhc3lCaEiVIBoqJEXydzFww0TOn24wRs71G4DfRW2uCXT6vxmu4Th4
- gToNve78nwBTydQPXctz7bgx4Z2U7GZhRJW92Hb6IP0Wb0iqsH3DkI=
-X-Google-Smtp-Source: AGHT+IHn4/YtRDtlWXp4XVa4mnq9WePJ2NAeuyl8NixHP51rTXVEjFlt164yLOVSuagj491QpXLO5g==
-X-Received: by 2002:a17:907:1c0f:b0:b6d:6ab3:5d02 with SMTP id
- a640c23a62f3a-b6d6ab3656bmr670367966b.64.1761395439934; 
- Sat, 25 Oct 2025 05:30:39 -0700 (PDT)
-Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
- (host-79-25-27-158.retail.telecomitalia.it. [79.25.27.158])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b6d853386casm190416566b.15.2025.10.25.05.30.39
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 25 Oct 2025 05:30:39 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sat, 25 Oct 2025 14:30:35 +0200
-Message-ID: <20251025123035.1136084-2-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251025123035.1136084-1-dario.binacchi@amarulasolutions.com>
-References: <20251025123035.1136084-1-dario.binacchi@amarulasolutions.com>
+ client-ip=2a01:111:f403:c000::1;
+ helo=byapr05cu005.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 21C7D40405
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21C7D40405
+Received: from BYAPR05CU005.outbound.protection.outlook.com
+ (mail-westusazlp170100001.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c000::1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 21C7D40405
+ for <buildroot@buildroot.org>; Sat, 25 Oct 2025 13:47:06 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=IDwhHxHCLPIm2JU/yA44zjf1bXxyB78tqqNegY6szuxroT0rBqvbe+B0roEfNR7ejtJ5EvPbUkQUsHt96zGQjUL0IuOijIJ9P5NHgGJYJqm64cJsu7BIyktk5TfvD4usNW46TZjwkkwi4/2ioFHmMWeWn6asiz4b3S+3qQR/pPJYxxi3lZAQtomOPfm9JcX9y+V0S/C6RWiFhFkCgBszOGPX8id0m/nZeQZOzRjXkzXu+Npb8OHWsA2xJC6Q7dtAVosI99iHRjTISiWryi/RDCaXDqz8oDYtrsD7XsoyIbxaT7t5kfyqeKd8EjXqMzVDnL2RgYkt3jjvHwTXubFBCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pgruinJ98BHIOrICiDSjsw1k29Lsg255tfNt0Q3TpcM=;
+ b=S/hwAZ8Qew0SkOGuzJw87uK2pEyvyDlKPnnXoUBxhrMfZXzIfs9iLbzrmf2QmHL/ODFH+adcbAB8h2N4XoXqa0mcGvKoPiDUoYeIdldfZA3NJTERr9WRpstrYdG2h7ar3jRW8W2UeVOfHoe78PnRubJ1Z5sN3k+nvYoxSEMB/vj6jll7IvoPbIqR1apBgDfhJgCBHlUilpaVsq9V0IaxfyQHwDTpxoqSNer3gbzQNXrLfpeoMWa/iT3hH0QXs0w4OeLHHQZ+WxLArj/486eGNlBDMZNTxuX/FL4vR658tMcZQyeXEiKesLFvBGYDeT9t+3p/mF0ZSxPMddLavU/5mQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+Received: from BL1PR13CA0394.namprd13.prod.outlook.com (2603:10b6:208:2c2::9)
+ by IA0PR12MB8748.namprd12.prod.outlook.com (2603:10b6:208:482::17)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.15; Sat, 25 Oct
+ 2025 13:47:01 +0000
+Received: from BL02EPF0001A0F9.namprd03.prod.outlook.com
+ (2603:10b6:208:2c2:cafe::16) by BL1PR13CA0394.outlook.office365.com
+ (2603:10b6:208:2c2::9) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9253.12 via Frontend Transport; Sat,
+ 25 Oct 2025 13:47:01 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ BL02EPF0001A0F9.mail.protection.outlook.com (10.167.242.100) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9275.10 via Frontend Transport; Sat, 25 Oct 2025 13:46:59 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.17; Sat, 25 Oct
+ 2025 06:46:59 -0700
+Received: from satlexmb07.amd.com (10.181.42.216) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sat, 25 Oct
+ 2025 08:46:59 -0500
+Received: from xirengwts09.xilinx.com (10.180.168.240) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
+ Transport; Sat, 25 Oct 2025 06:46:58 -0700
+To: <buildroot@buildroot.org>
+Date: Sat, 25 Oct 2025 14:46:55 +0100
+Message-ID: <20251025134655.1068839-1-neal.frager@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0001A0F9:EE_|IA0PR12MB8748:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9888ec3e-8e4b-4b37-30eb-08de13ccf8b8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+ ARA:13230040|82310400026|36860700013|1800799024|7416014|376014|41080700001; 
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?Q223ix9oW8LO6dFs1dJNBofxCkOe3+O6jjvb3oS+6cZth9Oap6RXKWP+RbOc?=
+ =?us-ascii?Q?C+DoTgMw3R0byjdqfK8EY76QY2uKAlp7Ml5ZvEeRZb1JsOALap+slaw6nHsv?=
+ =?us-ascii?Q?Xn+OcigJuXUW6W22Y+3yn5CLgZtVVwPLlQ8ZxqzeCrT26/aViiNKnJE1SmGo?=
+ =?us-ascii?Q?pvdIHvNMAOfa7JwD9QV6b5BQ+a4e5dIlAeuM9l0MNzMRIZop11jKvEmPJ5W5?=
+ =?us-ascii?Q?VHCFeRWYn5kyLacl2NG/C6LV/5cS3eRb9cD4MbKhWC3WSy9DOf+BIQm2Q3YH?=
+ =?us-ascii?Q?D2YDRGuxhGpQgNg0wdEolV0xDCmv50tYJUl/dmopfwDlDpdnY8CCbGkTt0HF?=
+ =?us-ascii?Q?wc/Q63gje+eDu6/IIXTwwsUSN5y0wF8NQOOCfBL671MTc9lOlZJco14pSCun?=
+ =?us-ascii?Q?jtr8YVGVJeseHuun1wQ3o9R8PbqKl+m6drhnq7t8JU9EcAIR/gmIg9vlMsN4?=
+ =?us-ascii?Q?27nxKRVNfM7knk1FQqb2dqm8QrhkSuVwfYpwG7evKyj8niq00xFmN6ipY6Wt?=
+ =?us-ascii?Q?09IxK5B2T6QhXX680PwiwHjlhkf4ESIyE6OFBHEpMtbraBZtY3ixKEkK2vW3?=
+ =?us-ascii?Q?fQKSvibfVUeR2nr/yv1/DZsPx0fX7hgkd5Vcf4dQW1JTB6c8bEzKrgiS+7gt?=
+ =?us-ascii?Q?Otnt9/knnfb5MI34F+O9EBH5Z0QyFT9yHctEeZUuRG/cReH7x8Av1gy4nvPI?=
+ =?us-ascii?Q?cbxp33WjmtGrHFrmwCEMPODuBagyILw7OMWrMzd9UcKkRjsCx5K8JXcIERh/?=
+ =?us-ascii?Q?GW+CEzf5mrL6imn9uq1rJfgYrNFPdRyQ+eUTYGJtLKFN8fQVwAYkQLtP35ag?=
+ =?us-ascii?Q?1Mp+MmxZnrN5bP71rcd2Qs8J3J5U18eHvTSyOOqMnyZxsCpR0FrMNBa68vlu?=
+ =?us-ascii?Q?EpZYPHuBC5+o1eTjz0ur1X9+rlA0LJgWgqxqR/iJa/UmPy5E+SqsNuA1K/2z?=
+ =?us-ascii?Q?Qaz9ww2jySxSlTaiVWnSlai718Grpo7p9Kd+y9D8BP1f5J6l4vzt7BiJCpCW?=
+ =?us-ascii?Q?MR+GN/PHDeK299UrOdjO7NXlU5+fZ8rNoV7Bh9UGtYJTMzcIQe3DKrlJTzGN?=
+ =?us-ascii?Q?PbAejKXcLrFFcuURTTONwy3lOaKYQdJfxKOhWS6H6+kOkH0tXXCoX1hmwxai?=
+ =?us-ascii?Q?cf2JXco4tKuvEcRfgU2oLSQbF3sYKzyjqridCnbTNsbf21z5X3GrvtyY6gUR?=
+ =?us-ascii?Q?nf8Fbo7KTsJ8VC4h7E4xzKBWj+/pRAY6gljCdrfrSjCIPplF6VzGTiZdn0S8?=
+ =?us-ascii?Q?BICZ1itYyhrpHz7VlZNdwciG+c2fhr2asntJBJxdq7idlW/3Xquh3dl+t9FQ?=
+ =?us-ascii?Q?f7O3TEtyx0DxVUPviYfLFDhH2aGtS4ZIDf4NoAUZSH4NVfVMR8W3SqZ6hb+X?=
+ =?us-ascii?Q?MFxGF+ZJMXLZJjNiYRyzy1wBd0yc9xidCUEIC6vc2nShzI5d1TcOpOQwn2SP?=
+ =?us-ascii?Q?dWeWYjS2rangdaQbkPOgiRzREYZegOsuv5aesVVI1E09cXxNutK3Oe02b1cg?=
+ =?us-ascii?Q?tRBqIlfmrj/RJEzmAlpe3WXyoDEVfNbRjq/YqiLiP8a4hNmx1RchMu8n8n0l?=
+ =?us-ascii?Q?svV4hjNfpovR0M/XsD4epOc/KMBATDe9ZvXA6dTC?=
+X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:CAL; SFV:NSPM; H:satlexmb07.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230040)(82310400026)(36860700013)(1800799024)(7416014)(376014)(41080700001);
+ DIR:OUT; SFP:1101; 
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2025 13:46:59.9777 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9888ec3e-8e4b-4b37-30eb-08de13ccf8b8
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
+ Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0001A0F9.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8748
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1761395440; x=1762000240;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=okJu4RnZ6Hqv+j++SvaiESpKpbGQgBoB9Sh7Z+gTOBk=;
- b=QBObN/Sg2LB3kZOJCov/n84OFzxEAISvezqCa3Xfvn43ZG6BqygrcmgQZR6XQVy+s6
- xlhXBZlJ0hK7aC7X+jMtJRTnSwPmAn5eTa9sOiwzcsmb3f3SIzJnOl+u3lKuv9aGSSky
- MCqF+MCCN2y1GT6+isIg4KLxc1k9hNvuIsxZA=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=QBObN/Sg
-Subject: [Buildroot] [PATCH v2 2/2] package/openocd: bump to version
- 88b9bd396d5a1f83c49fa1b28745fd7feaca2b2e
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pgruinJ98BHIOrICiDSjsw1k29Lsg255tfNt0Q3TpcM=;
+ b=RGpIw4X/dmICBpJ15tN/Tp0ioqH7azq5+odzKMm9LZTL2owmLtcVOySIH+5/y1nWvYMpfmMyMrrk+WRAwrrnqnefKYyFlFPKg5LHv5nDFBXfM6HcW5rygaB3bdbVTgqN8rl2sFmLUQVioAtpHiSLyFlupJrJ5kIVzh+swz1/fl8=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=amd.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=RGpIw4X/
+Subject: [Buildroot] [PATCH v1 1/1] boot/xilinx-prebuilt: add local versal
+ xsa support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,157 +161,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
+Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
+ yann.morin@orange.com, brandon.maier@collins.com, ju.o@free.fr,
+ Neal Frager <neal.frager@amd.com>, thomas.petazzoni@bootlin.com,
+ romain.naour@smile.fr, michal.simek@amd.com, romain.naour@gmail.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The error reported by autobuild could have been fixed by backporting
-commit [1], but this would not have fully fixed the issue. Other build
-errors related to libgiod appeared, which would have required a large
-backporting effort. This made it more reasonable to bump the package to
-the most recent commit, since no new version had been released despite
-many commits since January 2023.
+Most of the time, users will be running Vivado on their local host machine,
+and will generate a XSA (Xilinx Shell Archive) locally.
 
-Update LICENSES/license-rules.txt hash due to:
-- Add dual/CC-BY-4.0
-- Drop SPDX tag 'GPL-2.0' and use 'GPL-2.0-only'
+Instead of requiring users to create a https:// location for their XSA file,
+this patch improves ease of use by allowing users to work directly with the
+XSA file on their local machine.
 
-Update LICENSES/preferred/GFDL-1.2.txt hash due to:
-- Replace the obsolete address of the FSF in the GFDL-1.2
+BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA_LOCATION can thus be defined as either
+a local location or a https:// location for the XSA file.
 
-Fixes:
-https://autobuild.buildroot.org/results/4f79a456d6e88e33be2a279e5288debd1f27c183
+In either case, a hash for the XSA file needs to be added to the
+boot/xilinx-prebuilt/xilinx-prebuilt.hash when using this option.
 
-[1] https://sourceforge.net/p/openocd/code/ci/95603fae18f81eebdafc5b318e70f9e2cdefab9e
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
+ boot/xilinx-prebuilt/xilinx-prebuilt.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Changes v1 -> v2:
- - Drop --enable-internal-libjaylink  in the configuration options
- - Add libjaylink dependency in case of JLINK SEGGER support.
- 
- ...01-configure-enable-build-on-uclinux.patch | 19 ++++++++++---------
- package/openocd/Config.in                     |  2 +-
- package/openocd/openocd.hash                  |  8 ++++----
- package/openocd/openocd.mk                    | 11 +++++++----
- 4 files changed, 22 insertions(+), 18 deletions(-)
-
-diff --git a/package/openocd/0001-configure-enable-build-on-uclinux.patch b/package/openocd/0001-configure-enable-build-on-uclinux.patch
-index d5f1e3295823..a80a910abc0f 100644
---- a/package/openocd/0001-configure-enable-build-on-uclinux.patch
-+++ b/package/openocd/0001-configure-enable-build-on-uclinux.patch
-@@ -4,25 +4,26 @@ Date: Thu, 17 Aug 2017 06:30:31 +0200
- Subject: [PATCH] configure: enable build on uclinux
- 
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[Dario: make the patch to be applied with fuzz factor 0]
-+[Dario: make the patch to be applied to
-+ openocd-88b9bd396d5a1f83c49fa1b28745fd7feaca2b2e]
- Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
- ---
-  configure.ac | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/configure.ac b/configure.ac
--index eee42d4240f8..b0445f92e0b5 100644
-+index 6efcf24f257b..7cc2d9a136ee 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -342,7 +342,7 @@ AC_ARG_ENABLE([xlnx_pcie_xvc],
--   [build_xlnx_pcie_xvc=$enableval], [build_xlnx_pcie_xvc=no])
-+@@ -367,7 +367,7 @@ AC_ARG_ENABLE([gw16012],
-+ can_build_rshim=no
-  
-  AS_CASE([$host_os],
---  [linux*], [],
--+  [linux*|uclinux*], [],
--   [
--     AS_IF([test "x$build_sysfsgpio" = "xyes"], [
--       AC_MSG_ERROR([sysfsgpio is only available on linux])
-+-  [linux*], [
-++  [linux*|uclinux*], [
-+     is_linux=yes
-+     can_build_rshim=yes
-+   ],
- -- 
- 2.43.0
- 
-diff --git a/package/openocd/Config.in b/package/openocd/Config.in
-index a7e068f10db6..ea67f6757562 100644
---- a/package/openocd/Config.in
-+++ b/package/openocd/Config.in
-@@ -71,7 +71,7 @@ config BR2_PACKAGE_OPENOCD_JLINK
- 	bool "Segger J-Link JTAG Programmer"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
--	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_LIBJAYLINK
- 	help
- 	  Segger J-Link JTAG Programmer and clone such as Atmel
- 	  SAM-ICE
-diff --git a/package/openocd/openocd.hash b/package/openocd/openocd.hash
-index 938711d86c0f..52e9acfb882d 100644
---- a/package/openocd/openocd.hash
-+++ b/package/openocd/openocd.hash
-@@ -1,15 +1,15 @@
- # From http://sourceforge.net/projects/openocd/files/openocd/0.12.0/
--sha256  af254788be98861f2bd9103fe6e60a774ec96a8c374744eef9197f6043075afa  openocd-0.12.0.tar.bz2
-+sha256  a3aab64cc28ae7ac38b2794173f59f96ad4dc261e00aba362ad6ebbd741dd139  openocd-88b9bd396d5a1f83c49fa1b28745fd7feaca2b2e-git4.tar.gz
- sha256  1b8f7e37ee5afbbf95c2a4d62b12b25232e29538692663b434318503a9a88419  COPYING
- sha256  034da732b4f3079b8783fff756613c1cff89dec5ac80c5cdd90532b7539922a1  LICENSES/exceptions/eCos-exception-2.0
--sha256  0a37155eb8bc0cb94477a0cae4f030e39da9317374e8a9f597e9229fd09aff78  LICENSES/license-rules.txt
-+sha256  405b1becc5e999efe12116634c308287774a5401efdaca06a8370926e3686cc1  LICENSES/license-rules.txt
- sha256  f3ba76203a7b6993db31f987559cc4c621ae1ff78119ced2a669756c2c5fd3b1  LICENSES/preferred/BSD-1-Clause
- sha256  6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd  LICENSES/preferred/BSD-2-Clause
- sha256  1483f15e9fddc73b5df0acab1c42d21ecd0bf6ade8a79179fb90c09f13d03dcd  LICENSES/preferred/BSD-2-Clause-Views
- sha256  7a83b1aeb460458db9a4bd521d7f237c45b1650f6e60ea5ffc71e49472454de3  LICENSES/preferred/BSD-3-Clause
- sha256  5cf024f6e3611d5c6fb98748d1a0ad99b8cf9ffe46f2d60fa10c299cd29e0a75  LICENSES/preferred/BSD-Source-Code
--sha256  f35396f4095619f986736ca5e2976b313d381463a35c921c9ae677cc7eb83e28  LICENSES/preferred/GFDL-1.2
-+sha256  b984d86747c3ea68cca62477716de626a5d6e96f00f64fe13649e28fde81b47e  LICENSES/preferred/GFDL-1.2
- sha256  76515be2d7334a1a038f775238c9a4c2b37e19514248e5eea0434cdfee526f9d  LICENSES/preferred/gfdl-1.2.texi.readme
--sha256  7d35bc44da7bb763022e3c2c32cfc0125dd222060bc50992420599d8e65f6c0a  LICENSES/preferred/GPL-2.0
-+sha256  8b57184d532ff63b57776f33b6f3b50020295da3c7ba3a63fb2f26e4968cde3a  LICENSES/preferred/GPL-2.0
- sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  LICENSES/preferred/MIT
- sha256  9a41b56594cd89743ca72f188318c9871661847074dd16497ae0c695fe3ab9c9  LICENSES/stand-alone/GPL-3.0
-diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
-index a563cc6a9e31..3e4393275cda 100644
---- a/package/openocd/openocd.mk
-+++ b/package/openocd/openocd.mk
-@@ -4,9 +4,11 @@
- #
- ################################################################################
- 
--OPENOCD_VERSION = 0.12.0
--OPENOCD_SOURCE = openocd-$(OPENOCD_VERSION).tar.bz2
--OPENOCD_SITE = http://sourceforge.net/projects/openocd/files/openocd/$(OPENOCD_VERSION)
-+OPENOCD_VERSION = 88b9bd396d5a1f83c49fa1b28745fd7feaca2b2e
-+OPENOCD_SITE = https://git.code.sf.net/p/openocd/code
-+OPENOCD_SITE_METHOD = git
-+OPENOCD_GIT_SUBMODULES = YES
-+
- OPENOCD_LICENSE = \
- 	BSD-1-clause, \
- 	BSD-2-clause, \
-@@ -56,6 +58,7 @@ OPENOCD_DEPENDENCIES = \
- 	host-pkgconf \
- 	jimtcl \
- 	$(if $(BR2_PACKAGE_LIBFTDI1),libftdi1) \
-+	$(if $(BR2_PACKAGE_LIBJAYLINK), libjaylink) \
- 	$(if $(BR2_PACKAGE_LIBUSB),libusb) \
- 	$(if $(BR2_PACKAGE_LIBUSB_COMPAT),libusb-compat) \
- 	$(if $(BR2_PACKAGE_HIDAPI),hidapi)
-@@ -135,7 +138,7 @@ HOST_OPENOCD_CONF_OPTS = \
- 	--enable-dummy \
- 	--disable-werror
- 
--HOST_OPENOCD_DEPENDENCIES = host-jimtcl host-libftdi host-libusb host-libusb-compat
-+HOST_OPENOCD_DEPENDENCIES = host-jimtcl host-libftdi host-libjaylink host-libusb host-libusb-compat
- 
- # Avoid documentation rebuild. On PowerPC64(le), we patch the
- # configure script. Due to this, the version.texi files gets
+diff --git a/boot/xilinx-prebuilt/xilinx-prebuilt.mk b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
+index 95b656cdde..a7ec9abff5 100644
+--- a/boot/xilinx-prebuilt/xilinx-prebuilt.mk
++++ b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
+@@ -10,6 +10,9 @@ ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA),y)
+ XILINX_PREBUILT_FILE = $(call qstrip,$(BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA_LOCATION))
+ XILINX_PREBUILT_SITE = $(patsubst %/,%,$(dir $(XILINX_PREBUILT_FILE)))
+ XILINX_PREBUILT_SOURCE = $(notdir $(XILINX_PREBUILT_FILE))
++ifeq ($(findstring ://,$(XILINX_PREBUILT_FILE)),)
++XILINX_PREBUILT_SITE_METHOD = file
++endif
+ define XILINX_PREBUILT_EXTRACT_CMDS
+ 	$(UNZIP) $(XILINX_PREBUILT_DL_DIR)/$(XILINX_PREBUILT_SOURCE) -d $(@D)
+ endef
 -- 
-2.43.0
+2.25.1
 
 _______________________________________________
 buildroot mailing list
