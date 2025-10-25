@@ -1,74 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5445FCCD1BF
-	for <buildroot@archiver.kernel.org>; Sat, 25 Oct 2025 12:21:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C75C3CCF9E3
+	for <buildroot@archiver.kernel.org>; Sat, 25 Oct 2025 12:30:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A5F960673;
-	Sat, 25 Oct 2025 12:21:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7DFA240819;
+	Sat, 25 Oct 2025 12:30:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4IpWtSWoiChS; Sat, 25 Oct 2025 12:21:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WxR2sWnwBnNa; Sat, 25 Oct 2025 12:30:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A07E606C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EF7A4087B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8A07E606C0;
-	Sat, 25 Oct 2025 12:21:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5DA1343F
- for <buildroot@buildroot.org>; Sat, 25 Oct 2025 12:21:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8EF7A4087B;
+	Sat, 25 Oct 2025 12:30:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id ACCD8976
+ for <buildroot@buildroot.org>; Sat, 25 Oct 2025 12:30:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3390C8119B
- for <buildroot@buildroot.org>; Sat, 25 Oct 2025 12:21:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9DA878119C
+ for <buildroot@buildroot.org>; Sat, 25 Oct 2025 12:30:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7jIck1lwTQmN for <buildroot@buildroot.org>;
- Sat, 25 Oct 2025 12:21:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8AD858119A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AD858119A
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8AD858119A
- for <buildroot@buildroot.org>; Sat, 25 Oct 2025 12:21:00 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6cf49.dip0.t-ipconnect.de [79.214.207.73])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 154CAA4C4805;
- Sat, 25 Oct 2025 14:20:58 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:33494)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1vCdGT-0000000057J-2eGV;
- Sat, 25 Oct 2025 12:20:57 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id YwmicOBcRQBf for <buildroot@buildroot.org>;
+ Sat, 25 Oct 2025 12:30:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::62e; helo=mail-ej1-x62e.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 655EA8116E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 655EA8116E
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
+ [IPv6:2a00:1450:4864:20::62e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 655EA8116E
+ for <buildroot@buildroot.org>; Sat, 25 Oct 2025 12:30:41 +0000 (UTC)
+Received: by mail-ej1-x62e.google.com with SMTP id
+ a640c23a62f3a-b3e7cc84b82so313618766b.0
+ for <buildroot@buildroot.org>; Sat, 25 Oct 2025 05:30:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1761395439; x=1762000239;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=OBKDq/xsGIyNaGWes/sqqkA8Scm5Pj94ujLA+wAYZnc=;
+ b=ogZL54ueF0l8NihrEdl3c32BijxeFwEr4PSj/KCbL1/fKoSQRoq+rsnpmBNex81t7b
+ RaLRNb/dcm4KtvxbJSmvsedEQv6aafFJLqcrQVNfOYGQy9VGWZcvQ9n++a2WD4YergId
+ SHl2XbXHr3Xotvjshl6VXvZQW3wIb4uXlm9d8TGrW4YXDeKFSFu/aCexDUIJ/vSiSdlV
+ CgJI+n3mIh4Wb6tBMPFBLDOKlhuGQMXqQGtaPvi3xphTkRxmo2dRdrOQJ6EmqlghRoqc
+ JKwU3uXeh7hqld7kttU5xuXCU2YGhQASDx4+WSDKaZFdVPqsNSiCPU18QWgcWN+ZXkIQ
+ /bEA==
+X-Gm-Message-State: AOJu0Yxw1URDl/YQry8a6kRjzPeE6ZfxHh50WMblfU0ep+sZjBcNgMGM
+ UXrN/eSZHkkef5EXnFwxRgtuR+97OmPZMRri3sUpGAFWEqzT5MJ2G3GMRk8rNFZAUultmx64zv5
+ kVPj5
+X-Gm-Gg: ASbGncu0+IPWRPcjAdiEwFMs6YRk5a2Gnu2GOhH2U1lXoRvi0mILCfYTzhCZU4NNkQ3
+ F3OWGmyRV5dug0LcAhgyAsA95BRyxNsYrsjR5imQP5415F6eGqtHiHKVUen1EkiBbIHbGAvtu3k
+ Y7lU7+24640mzQB218sP/41C+T1nGDuMM3V9URTktiBOcFHshj+10bucPZsFT7Vhk2Mwv9vdO/Z
+ novPMyzGpupXODY+G/nTYHyH9V+aMILd2FJrE4Zou3NSM4lg4SVmIh2fXoafs7a9R61qoMTBSBF
+ gue2j+98chSWxLDQj8ClopeKBj6bnxmH9GUVQMkwidvL1beuZ9Nb2P328oM3zOI8ihau97PFDpG
+ KnKa9C2i/Tt40551CH/D9mcpwJaj53H/pfkEuwfOPVf+etvMLWaqmhMzeWtkxPZDNMGrJlHGF7Z
+ 8Cwyk6yQjDxSZnQrsBVLkMj6LrF+YXEylDDEqiI19iHvCiplEa1WbY5uhCfl9M4BoPs0f2zW4k3
+ DpEFj/DRYgdpVlCkVwC9/9cSmjp0cwQdhWZ8UMExEccIzCg6GWcys4ZFIOsdbn5IQ==
+X-Google-Smtp-Source: AGHT+IETyfSSs1NXPoVI101nSqbdsWeE9HqSB0E0DyLJQn2QENiUTVplP5HXdv7qk/uYFUGRpp9KLQ==
+X-Received: by 2002:a17:907:bb49:b0:b4b:4f7:7a51 with SMTP id
+ a640c23a62f3a-b6475706fc2mr3760349566b.62.1761395438851; 
+ Sat, 25 Oct 2025 05:30:38 -0700 (PDT)
+Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
+ (host-79-25-27-158.retail.telecomitalia.it. [79.25.27.158])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-b6d853386casm190416566b.15.2025.10.25.05.30.38
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 25 Oct 2025 05:30:38 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Cc: Lionel Orry <lionel.orry@gmail.com>
-Date: Sat, 25 Oct 2025 14:20:57 +0200
-Message-ID: <20251025122057.3264648-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Sat, 25 Oct 2025 14:30:34 +0200
+Message-ID: <20251025123035.1136084-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Spamd-Bar: -
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1761394858;
- bh=5YtGxCienenu0P3fWYu7oeztvfztumCzMaJBSx2mxPg=;
- h=From:To:Cc:Subject:Date:From;
- b=F3vGLPwTZOrU8YUsrgmEgltGQBRbB2SpuruJ7z3Bc/nUwWvX2yEHIm4NPYq8Ul2ln
- dv3bnMU67iBFsgSFQVsJXWK/DKuNuJz1g0M/j6aEULJ8MnXYeaPgdpG8Z1gwCZ7nGg
- dVgyQjZNIwXaAOW1ZRPCbNaOIkAhoCSjnkfWftin50+HJVWbHgNyLF+dKqhDaj42Mk
- 9bd2GC6b0eZ585+1mSOJQmCnsBlx9weESTzDvk02FMeqPnRcMhwsXeHN6TK6PC8+qf
- Ff+6c5xMbQzAUFUAPmAl8rOV5GlzBJa/NxZ25T6uZ+A1BoK/hgKMDfFpHAXJeAQFIF
- t8NCbT0HLnxqg==
+ d=amarulasolutions.com; s=google; t=1761395439; x=1762000239;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=OBKDq/xsGIyNaGWes/sqqkA8Scm5Pj94ujLA+wAYZnc=;
+ b=L7FoQgpnvFrrSBrj/yWCvtKYvSIP1Hs3HwBm+KzwhNd3LFBheCC54j5+9mm0i+Xr++
+ x85Xdxws4FoSVwvxXObPoOmQno1+kEmtOvQ+CobwSmaBus6/hvTZbcSSveHxRxtWi1jA
+ TuxalMTzQM9Rv02y01t0z3lyTVDN+7Ke7HrmM=
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=F3vGLPwT
-Subject: [Buildroot] [PATCH 1/1] package/mongrel2: remove package
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=L7FoQgpn
+Subject: [Buildroot] [PATCH v2 1/2] package/libjaylink: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,386 +115,99 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-mongrel2 is incompatible with MbedTLS 3.6 and was removed from Debian
-stable/testing:
-https://tracker.debian.org/pkg/mongrel2
-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1075866
+It is a shared library written in C to access SEGGER J-Link and
+compatible devices.
 
-Upstream report from 2023 exists:
-https://github.com/mongrel2/mongrel2/issues/359
-but went unanswered, the last upstream commit was in Dec 2021:
-https://github.com/mongrel2/mongrel2/commits/master/
+https://gitlab.zapb.de/libjaylink/libjaylink
 
-Since no other package uses mongrel2 we can safely remove this
-unmaintained package.
-
-Fixes:
-https://autobuild.buildroot.net/results/6c1/6c17827d21135886b1f4822174a4a963ca6325bf/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- .checkpackageignore                           |  2 -
- Config.in.legacy                              |  6 ++
- DEVELOPERS                                    |  3 -
- package/Config.in                             |  1 -
- package/mongrel2/0001-Do-not-run-tests.patch  | 45 -----------
- ...-Fix-Makefiles-for-cross-compilation.patch | 78 -------------------
- .../0003-fix-build-with-gcc-4.8.patch         | 62 ---------------
- package/mongrel2/Config.in                    | 33 --------
- package/mongrel2/mongrel2.hash                |  6 --
- package/mongrel2/mongrel2.mk                  | 26 -------
- 10 files changed, 6 insertions(+), 256 deletions(-)
- delete mode 100644 package/mongrel2/0001-Do-not-run-tests.patch
- delete mode 100644 package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch
- delete mode 100644 package/mongrel2/0003-fix-build-with-gcc-4.8.patch
- delete mode 100644 package/mongrel2/Config.in
- delete mode 100644 package/mongrel2/mongrel2.hash
- delete mode 100644 package/mongrel2/mongrel2.mk
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index e8c97c2d63..d1212dc3e2 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -710,8 +710,6 @@ package/mini-snmpd/0001-linux.c-fix-musl-build.patch lib_patch.Upstream
- package/minidlna/S60minidlnad Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/minissdpd/S50minissdpd Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/modem-manager/S44modem-manager Shellcheck lib_sysv.Variables
--package/mongrel2/0001-Do-not-run-tests.patch lib_patch.Upstream
--package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch lib_patch.Upstream
- package/monit/0001-Do-not-force-building-a-statically-linked-binary.patch lib_patch.Upstream
- package/mono-gtksharp3/0001-Fixes-MONO_PROFILE_ENTER_LEAVE-undeclared.patch lib_patch.Upstream
- package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch lib_patch.Upstream
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 53c35fae49..bfee5df53a 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2025.11"
- 
-+config BR2_PACKAGE_MONGREL2
-+	bool "mongrel2 has been removed"
-+	select BR2_LEGACY
-+	help
-+	  mongrel2 is incompatible with MbedTLS 3.6 and has been removed
-+
- config BR2_PACKAGE_LESSTIF
- 	bool "lesstif has been removed"
- 	select BR2_LEGACY
+Added in v2
+
+ DEVELOPERS                         |  1 +
+ package/Config.in                  |  1 +
+ package/libjaylink/Config.in       | 10 ++++++++++
+ package/libjaylink/libjaylink.hash |  3 +++
+ package/libjaylink/libjaylink.mk   | 16 ++++++++++++++++
+ 5 files changed, 31 insertions(+)
+ create mode 100644 package/libjaylink/Config.in
+ create mode 100644 package/libjaylink/libjaylink.hash
+ create mode 100644 package/libjaylink/libjaylink.mk
+
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 66199a5b72..8dda3b94b5 100644
+index 66199a5b72cb..a87b81a9574b 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2135,9 +2135,6 @@ F:	package/python-gunicorn/
- F:	support/testing/tests/package/sample_python_flask.py
- F:	support/testing/tests/package/test_python_flask.py
- 
--N:	Lionel Orry <lionel.orry@gmail.com>
--F:	package/mongrel2/
--
- N:	Lothar Felten <lothar.felten@gmail.com>
- F:	board/bananapi/bananapi-m2-ultra/
- F:	board/beagleboard/beaglebone/
+@@ -812,6 +812,7 @@ F:	package/empty/
+ F:	package/iana-assignments/
+ F:	package/inih/
+ F:	package/less/
++F:	package/libjaylink/
+ F:	package/pocketpy/
+ F:	package/sscep/
+ F:	package/tinyinit/
 diff --git a/package/Config.in b/package/Config.in
-index 161d61728b..bf199d918b 100644
+index 161d61728bf1..b8f83fac755e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2565,7 +2565,6 @@ endif
- 	source "package/minissdpd/Config.in"
- 	source "package/mjpg-streamer/Config.in"
- 	source "package/modem-manager/Config.in"
--	source "package/mongrel2/Config.in"
- 	source "package/mosh/Config.in"
- 	source "package/mosquitto/Config.in"
- 	source "package/mrouted/Config.in"
-diff --git a/package/mongrel2/0001-Do-not-run-tests.patch b/package/mongrel2/0001-Do-not-run-tests.patch
-deleted file mode 100644
-index 3b72aef3c5..0000000000
---- a/package/mongrel2/0001-Do-not-run-tests.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--From 3cbef2195533f357c8a80c2840108662461273b7 Mon Sep 17 00:00:00 2001
--From: Lionel Orry <lionel.orry@gmail.com>
--Date: Wed, 27 Mar 2013 14:48:19 +0100
--Subject: [PATCH] Do not run tests.
--
--This patch is specific to cross-compiled environments and avoids running
--the tests on the host. It is not meant to be applied upstream.
--
--Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
--[Dario: make the patch to be applied with fuzz factor 0]
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-----
-- Makefile            | 2 +-
-- tools/m2sh/Makefile | 2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index 7dc4089..ca72630 100644
----- a/Makefile
--+++ b/Makefile
--@@ -18,7 +18,7 @@
-- TESTS=$(patsubst %.c,%,${TEST_SRC})
-- MAKEOPTS=OPTFLAGS="${CFLAGS} ${NOEXTCFLAGS} ${OPTFLAGS}" LDFLAGS="${LDFLAGS}" LIBS="${LIBS}" DESTDIR="${DESTDIR}" PREFIX="${PREFIX}"
-- 
---all: bin/mongrel2 tests m2sh procer
--+all: bin/mongrel2 m2sh procer filters config_modules
-- 
-- ${OBJECTS_NOEXT}: CFLAGS += ${NOEXTCFLAGS}
-- ${OBJECTS}: | builddirs
--diff --git a/tools/m2sh/Makefile b/tools/m2sh/Makefile
--index b50d8a0..334e4da 100644
----- a/tools/m2sh/Makefile
--+++ b/tools/m2sh/Makefile
--@@ -12,7 +12,7 @@
-- 
-- $(RAGEL_OBJECTS): CFLAGS += -Wno-unused-const-variable -Wimplicit-fallthrough=0 -Wno-unused-parameter
-- 
---all: ../lemon/lemon tests build/m2sh
--+all: ../lemon/lemon build/m2sh
-- 
-- dev: CFLAGS=-g -Wall -Wextra -Isrc -I../../src $(OPTFLAGS)
-- dev: all
---- 
--1.8.1.4
--
-diff --git a/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch b/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch
-deleted file mode 100644
-index 1961f128ed..0000000000
---- a/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch
-+++ /dev/null
-@@ -1,78 +0,0 @@
--From 298356c44a7df2b34c4e307c531d2010e2cb4b79 Mon Sep 17 00:00:00 2001
--From: Lionel Orry <lionel.orry@gmail.com>
--Date: Wed, 27 Mar 2013 15:56:56 +0100
--Subject: [PATCH] Fix Makefiles for cross-compilation
--
--The CFLAGS handling in mongrel2 is really messy and it is hard to make
--it behave correctly with cross-compiling environments. This patch
--restricts the Makefiles syntax to GNU Make, but help cross-compiling.
--
--This is not meant to be applied upstream.
--
--Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
--[Fabrice: refresh for 1.12.2]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- Makefile                      | 2 +-
-- tools/config_modules/Makefile | 2 +-
-- tools/filters/Makefile        | 2 +-
-- tools/m2sh/Makefile           | 2 +-
-- tools/procer/Makefile         | 2 +-
-- 5 files changed, 5 insertions(+), 5 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index 4e89c33..2f549a8 100644
----- a/Makefile
--+++ b/Makefile
--@@ -1,5 +1,5 @@
-- CFLAGS?=-g -O2
---CFLAGS += -Wall -Wextra -Wno-implicit-fallthrough -Wno-unused-const-variable -I./src -DNDEBUG -D_FILE_OFFSET_BITS=64 -pthread
--+override CFLAGS += -Wall -Wextra -Wno-implicit-fallthrough -Wno-unused-const-variable -I./src -DNDEBUG -D_FILE_OFFSET_BITS=64 -pthread
-- CFLAGS += ${OPTFLAGS}
-- LIBS+=-lzmq -ldl -lsqlite3 -lmbedtls -lmbedx509 -lmbedcrypto
-- PREFIX?=/usr/local
--diff --git a/tools/config_modules/Makefile b/tools/config_modules/Makefile
--index c2680d1..ada3169 100644
----- a/tools/config_modules/Makefile
--+++ b/tools/config_modules/Makefile
--@@ -1,5 +1,5 @@
-- PREFIX?=/usr/local
---CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
--+override CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
-- LDFLAGS=$(OPTLIBS)
-- 
-- MONGO_SRC = mongo-c-driver/src/bson.c \
--diff --git a/tools/filters/Makefile b/tools/filters/Makefile
--index 6505ad5..a968ef6 100644
----- a/tools/filters/Makefile
--+++ b/tools/filters/Makefile
--@@ -1,5 +1,5 @@
-- PREFIX?=/usr/local
---CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -g -fPIC -shared -nostartfiles -L../../build
--+override CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -g -fPIC -shared -nostartfiles -L../../build
-- LDFLAGS=$(OPTLIBS)
-- 
-- all: null.so rewrite.so sendfile.so
--diff --git a/tools/m2sh/Makefile b/tools/m2sh/Makefile
--index b50d8a0..cc00062 100644
----- a/tools/m2sh/Makefile
--+++ b/tools/m2sh/Makefile
--@@ -1,4 +1,4 @@
---CFLAGS=-DNDEBUG -DNO_LINENOS -pthread -g -I../../src -Isrc -Wall $(OPTFLAGS)
--+override CFLAGS=-DNDEBUG -DNO_LINENOS -pthread -g -I../../src -Isrc -Wall $(OPTFLAGS)
-- LIBS=-lzmq -lsqlite3 ../../build/libm2.a $(OPTLIBS)
-- 
-- PREFIX?=/usr/local
--diff --git a/tools/procer/Makefile b/tools/procer/Makefile
--index bb9aa31..d377f7f 100644
----- a/tools/procer/Makefile
--+++ b/tools/procer/Makefile
--@@ -1,4 +1,4 @@
---CFLAGS=-DNDEBUG -pthread -g -I../../src -Wall $(OPTFLAGS)
--+override CFLAGS=-DNDEBUG -pthread -g -I../../src -Wall $(OPTFLAGS)
-- PREFIX?=/usr/local
-- LIBS?=-lzmq 
-- SOURCES=$(wildcard *.c)
---- 
--2.27.0
--
-diff --git a/package/mongrel2/0003-fix-build-with-gcc-4.8.patch b/package/mongrel2/0003-fix-build-with-gcc-4.8.patch
-deleted file mode 100644
-index 996cd3246b..0000000000
---- a/package/mongrel2/0003-fix-build-with-gcc-4.8.patch
-+++ /dev/null
-@@ -1,62 +0,0 @@
--From cc2dd3995dc9a9e6f0e705e11e791f3f3c7d7326 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 18 Jan 2022 22:41:36 +0100
--Subject: [PATCH] fix build with gcc 4.8
--
--Drop "-Wno-unused-const-variable -Wimplicit-fallthrough=0" as
--"-Wno-implicit-fallthrough -Wno-unused-const-variable" is already set in
--CFLAGS. This will avoid the following build failure with gcc 4.8 raised
--since version 1.13.0 and
--https://github.com/mongrel2/mongrel2/commit/725209578599bd7784753d86aee34f6441ff78a5:
--
--arm-none-linux-gnueabi-gcc: error: unrecognized command line option '-Wimplicit-fallthrough=0'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/de324b733e09057c87352220069fe65f6e535eb8
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/mongrel2/mongrel2/pull/354
--[Dario: make the patch to be applied with fuzz factor 0]
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-----
-- Makefile            | 1 -
-- tools/m2sh/Makefile | 4 ++--
-- 2 files changed, 2 insertions(+), 3 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index f6627ed..fb8d028 100644
----- a/Makefile
--+++ b/Makefile
--@@ -22,7 +22,6 @@ all: bin/mongrel2 tests m2sh procer
-- 
-- ${OBJECTS_NOEXT}: CFLAGS += ${NOEXTCFLAGS}
-- ${OBJECTS}: | builddirs
---$(RAGEL_OBJECTS): CFLAGS += -Wno-unused-const-variable -Wimplicit-fallthrough=0
-- 
-- .PHONY: builddirs
-- builddirs:
--diff --git a/tools/m2sh/Makefile b/tools/m2sh/Makefile
--index 83e7ae4..86364af 100644
----- a/tools/m2sh/Makefile
--+++ b/tools/m2sh/Makefile
--@@ -10,7 +10,7 @@
-- LIB_OBJ=$(filter-out src/m2sh.o,${OBJECTS})
-- RAGEL_OBJECTS=src/lexer.o src/cli.o
-- 
---$(RAGEL_OBJECTS): CFLAGS += -Wno-unused-const-variable -Wimplicit-fallthrough=0 -Wno-unused-parameter
--+$(RAGEL_OBJECTS): CFLAGS += -Wno-unused-parameter
-- 
-- all: ../lemon/lemon build/m2sh
-- 
--@@ -20,7 +20,7 @@
-- install: build/m2sh
-- 	install build/m2sh ${DESTDIR}${PREFIX}/bin
-- 
---src/parser.o: CFLAGS += -Wno-unused-const-variable -Wno-unused-parameter
--+src/parser.o: CFLAGS += -Wno-unused-parameter
-- 
-- build/libm2sh.a: ${LIB_OBJ}
-- 	mkdir -p build
---- 
--2.34.1
--
-diff --git a/package/mongrel2/Config.in b/package/mongrel2/Config.in
-deleted file mode 100644
-index 60fee6f96d..0000000000
---- a/package/mongrel2/Config.in
-+++ /dev/null
-@@ -1,33 +0,0 @@
--# mongrel2 uses {get,make,swap}context() functions, which are
--# available in glibc for all architectures and in uClibc only for a
--# subset of the architectures
--config BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
--	bool
--	default y if BR2_TOOLCHAIN_USES_GLIBC
--	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
--		(BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || BR2_sparc || BR2_x86_64)
--
--comment "mongrel2 needs a uClibc or glibc toolchain w/ C++, threads, dynamic library"
--	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
--		!BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
--
--config BR2_PACKAGE_MONGREL2
--	bool "mongrel2"
--	depends on BR2_INSTALL_LIBSTDCPP # zeromq
--	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
--	depends on !BR2_STATIC_LIBS # uses dlopen()
--	depends on BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
--	select BR2_PACKAGE_MBEDTLS
--	select BR2_PACKAGE_SQLITE
--	select BR2_PACKAGE_ZEROMQ
--	help
--	  Mongrel2 is an application, language, and network architecture
--	  agnostic web server that focuses on web applications using
--	  modern browser technologies.
--
--	  Mongrel2 supports 17 languages and platforms, HTTP, Flash
--	  sockets, WebSockets, Long Polling, and many ways to deploy
--	  and hack on it.
--
--	  http://www.mongrel2.org
-diff --git a/package/mongrel2/mongrel2.hash b/package/mongrel2/mongrel2.hash
-deleted file mode 100644
-index f4f094ea03..0000000000
---- a/package/mongrel2/mongrel2.hash
-+++ /dev/null
-@@ -1,6 +0,0 @@
--# From https://mongrel2.org
--sha1  6057f9cbfae41e2cdef1e0f715df3c1a4d3a1884  mongrel2-v1.13.0.tar.bz2
--
--# Locally computed
--sha256  b6f1f50c9f65b605342d8792b1cc8a1c151105339030313b9825b6a68d400c10  mongrel2-v1.13.0.tar.bz2
--sha256  eb6e2a2baa637d06f6aa762886fbc8939934eb5fdb0b3a5b3882f2a61e9a4357  LICENSE
-diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
-deleted file mode 100644
-index 07914ad0fe..0000000000
---- a/package/mongrel2/mongrel2.mk
-+++ /dev/null
-@@ -1,26 +0,0 @@
--################################################################################
--#
--# mongrel2
--#
--################################################################################
--
--MONGREL2_VERSION = 1.13.0
--MONGREL2_SOURCE = mongrel2-v$(MONGREL2_VERSION).tar.bz2
--# Do not use the github helper here, the generated tarball is *NOT* the same
--# as the one uploaded by upstream for the release.
--MONGREL2_SITE = https://github.com/mongrel2/mongrel2/releases/download/v$(MONGREL2_VERSION)
--MONGREL2_LICENSE = BSD-3-Clause
--MONGREL2_LICENSE_FILES = LICENSE
--MONGREL2_DEPENDENCIES = mbedtls sqlite zeromq
--
--define MONGREL2_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
--		PREFIX=/usr all
--endef
--
--define MONGREL2_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
--		PREFIX=/usr DESTDIR=$(TARGET_DIR) install
--endef
--
--$(eval $(generic-package))
+@@ -534,6 +534,7 @@ endmenu
+ 	source "package/lcdproc/Config.in"
+ 	source "package/ledmon/Config.in"
+ 	source "package/libiec61850/Config.in"
++	source "package/libjaylink/Config.in"
+ 	source "package/libmanette/Config.in"
+ 	source "package/libubootenv/Config.in"
+ 	source "package/libuio/Config.in"
+diff --git a/package/libjaylink/Config.in b/package/libjaylink/Config.in
+new file mode 100644
+index 000000000000..87b219eca68f
+--- /dev/null
++++ b/package/libjaylink/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_LIBJAYLINK
++	bool "libjaylink"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
++	select BR2_PACKAGE_LIBUSB
++	help
++	  libjaylink is a shared library written in C to access
++	  SEGGER J-Link and compatible devices.
++
++	  https://gitlab.zapb.de/libjaylink/libjaylink
+diff --git a/package/libjaylink/libjaylink.hash b/package/libjaylink/libjaylink.hash
+new file mode 100644
+index 000000000000..569480416113
+--- /dev/null
++++ b/package/libjaylink/libjaylink.hash
+@@ -0,0 +1,3 @@
++# locally computed
++sha256  5557d623934a4bbc053c11f9a181375d7abeb76af910696d9e3d9b1de3bf6987  libjaylink-0.4.0.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/libjaylink/libjaylink.mk b/package/libjaylink/libjaylink.mk
+new file mode 100644
+index 000000000000..64df09c86a73
+--- /dev/null
++++ b/package/libjaylink/libjaylink.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# libjaylink
++#
++################################################################################
++
++LIBJAYLINK_VERSION = 0.4.0
++LIBJAYLINK_SITE = https://gitlab.zapb.de/libjaylink/libjaylink/-/archive/$(LIBJAYLINK_VERSION)
++LIBJAYLINK_LICENSE = LGPL-2.1+
++LIBJAYLINK_LICENSE_FILES = COPYING
++LIBJAYLINK_INSTALL_STAGING = YES
++LIBJAYLINK_DEPENDENCIES = host-pkgconf libusb
++HOST_LIBJAYLINK_DEPENDENCIES = host-pkgconf host-libusb
++
++$(eval $(meson-package))
++$(eval $(host-meson-package))
 -- 
-2.47.3
+2.43.0
 
 _______________________________________________
 buildroot mailing list
