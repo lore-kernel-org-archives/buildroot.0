@@ -4,71 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90AE0CCF9E5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Oct 2025 13:29:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1EA1CCD1A5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Oct 2025 13:36:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 66B7B405FF;
-	Sun, 26 Oct 2025 13:29:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 427B940F5F;
+	Sun, 26 Oct 2025 13:36:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VUmh4yeBFdyU; Sun, 26 Oct 2025 13:29:04 +0000 (UTC)
+ id KlY-TDXr8MXh; Sun, 26 Oct 2025 13:36:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86D8B40620
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DDF840F60
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 86D8B40620;
-	Sun, 26 Oct 2025 13:29:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id BE1D815F
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 13:29:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3DDF840F60;
+	Sun, 26 Oct 2025 13:36:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CD84315F
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 13:36:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B010B8100A
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 13:29:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B6659403AD
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 13:36:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ruc56djKoNhX for <buildroot@buildroot.org>;
- Sun, 26 Oct 2025 13:29:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B12F781004
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B12F781004
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B12F781004
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 13:29:01 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xEUYaBqdEB8F for <buildroot@buildroot.org>;
+ Sun, 26 Oct 2025 13:36:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A08D240084
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A08D240084
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A08D240084
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 13:36:11 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:7427:ac55:2702:f075])
  (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id A1AEF19F54D;
- Sun, 26 Oct 2025 14:28:58 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 26 Oct 2025 14:28:58 +0100
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id EF61C5FFAF;
+ Sun, 26 Oct 2025 14:36:06 +0100 (CET)
+To: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>,
+	Bernd Kuhls <bernd@kuhls.net>
+Date: Sun, 26 Oct 2025 14:35:51 +0100
+Message-ID: <20251026133551.583220-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.51.1
 MIME-Version: 1.0
-Date: Sun, 26 Oct 2025 14:28:58 +0100
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251024212958.4091720-1-giulio.benetti@benettiengineering.com>
-References: <20251024212958.4091720-1-giulio.benetti@benettiengineering.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <cef371b428d879283640a6c5174d9706@free.fr>
-X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1761485339;
- bh=ZxovZKUyEgounXX4swo46DL9ffCL8NzOqcbx4Qsc678=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=cUO7e66DZcGWdDtJx125maxHLTfuQzijEu1ghd7HP/2UOrstLoL116/q0efOJ2FQD
- U1mdCg9jlESt238o1e2ygCGQJO6tZ+z4EQAgjpAF+bdgb6yl91nayp5jhiYJZ2Eg1w
- qEhRKUpcj/ISB7wdbvQSUf81op5hlbKACnRoVbBvbeGGannOfKdN+nA9zTFA43BNKf
- hvPy4Cl2WeH126KiBuG8KXYndqdj1/Tc6LGKC6rru5v0RJIsU8qv4hcx240qgWKHTC
- VrA2myNflwaYsCTK9H2/xWdT7bMIpW4yXYJ38KNuAaR9Egje4pAX61jL/h1YgqEqsb
- 3IyGO1eTL6mQw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1761485769;
+ bh=vzxlm4My8oJcUU60vhvLj3mAHMz/UTl8HLhibw/kKL4=;
+ h=From:To:Cc:Subject:Date:From;
+ b=a8L6C3Yu5FniNICD9P/LCYmVPyoGUz+8ExSPLdJEa5NvY7wUmPVh4BLPtlmspgm3g
+ aqx64PNLeOQOzSRhSzRBvVR7CepQlblps5DoqGiJXcwt8Vw6GunRPqYErC8wY+sIti
+ Vqx0RLcU05op4IXM8wDo05MUxOEQ0oJg9FSdCC7uLHsPLtj67+p0Tl143jyejRLxZe
+ IVM7mCU0M5/+x2L5ZX7YJkhlRKrPVjz+tf9GIJ7Yy/VfNWuDoaqsQO8GoxmFZmUblP
+ U+UYbdoLdcpTRRBYsDGKp2lleu31Vf7iRzEzPwDes/Bf9xGYWtmAL6BB3Om2cFoHT1
+ D1FNVjtgizfhQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=cUO7e66D
-Subject: Re: [Buildroot] [PATCH] package/liblo: bump to version 0.34
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=a8L6C3Yu
+Subject: [Buildroot] [PATCH 1/1] support/testing: package: bitcoin: replace
+ deprecated wallet rpc calls
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,20 +79,86 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 24/10/2025 23:29, Giulio Benetti wrote:
-> Drop upstreamed local patch
-> 
-> Release Notes:
-> https://sourceforge.net/p/liblo/git/ci/master/tree/NEWS
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+The getunconfirmedbalance rpc call was marked as deprecated
+in [1] (included in v0.19.0, released on 2019-11-08) and removed
+in [2] (included in v30.0, released on 2025-10-09).
 
-Applied to master, thanks.
+This commit replaces the old getbalance/getunconfirmedbalance rpc
+calls with the new call getbalances (plural) returning a json
+object containing all the data.
+
+This commit is needed before updating bitcoin to v30.0.
+
+[1] https://github.com/bitcoin/bitcoin/commit/facfb4111d14a3b06c46690a2cca7ca91cea8a96
+[2] https://github.com/bitcoin/bitcoin/commit/c3fe85e2d6dd4f251a62a99fd891b0fa370f9712
+
+Cc: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Patch tested with:
+bitcoin v28.0, current Buildroot version, in:
+https://gitlab.com/jolivain/buildroot/-/jobs/11855409507
+
+bitcoin v30.0, with Bernd patch from:
+https://patchwork.ozlabs.org/project/buildroot/patch/20251020200539.2656292-1-bernd@kuhls.net/
+in:
+https://gitlab.com/jolivain/buildroot/-/jobs/11855410715
+---
+ support/testing/tests/package/test_bitcoin.py | 25 ++++++++++++-------
+ 1 file changed, 16 insertions(+), 9 deletions(-)
+
+diff --git a/support/testing/tests/package/test_bitcoin.py b/support/testing/tests/package/test_bitcoin.py
+index 1f00345a12..a942504af4 100644
+--- a/support/testing/tests/package/test_bitcoin.py
++++ b/support/testing/tests/package/test_bitcoin.py
+@@ -1,3 +1,4 @@
++import json
+ import os
+ import time
+ 
+@@ -47,19 +48,25 @@ class TestBitcoin(infra.basetest.BRTest):
+         self.create_btc_wallet(wallet_name)
+         return self.gen_btc_address(wallet_name)
+ 
+-    def get_wallet_balance(self, wallet):
+-        """Return the (confirmed) balance of a wallet."""
+-        cmd = f"{self.cli_cmd} -rpcwallet={wallet} getbalance"
++    def get_wallet_balances(self, wallet):
++        """Return the balances of a wallet."""
++        cmd = f"{self.cli_cmd} -rpcwallet={wallet} getbalances"
+         out, ret = self.emulator.run(cmd)
+         self.assertEqual(ret, 0)
+-        return float(out[0])
++        balances = json.loads("".join(out))
++        return balances
++
++    def get_wallet_balance(self, wallet):
++        """Return the (confirmed) balance of a wallet."""
++        balances = self.get_wallet_balances(wallet)
++        balance = balances["mine"]["trusted"]
++        return balance
+ 
+     def get_wallet_unconfirmed_balance(self, wallet):
+-        """Return the unconfirmed balance of a wallet."""
+-        cmd = f"{self.cli_cmd} -rpcwallet={wallet} getunconfirmedbalance"
+-        out, ret = self.emulator.run(cmd)
+-        self.assertEqual(ret, 0)
+-        return float(out[0])
++        """Return the untrusted pending (unconfirmed) balance of a wallet."""
++        balances = self.get_wallet_balances(wallet)
++        untrusted_balance = balances["mine"]["untrusted_pending"]
++        return untrusted_balance
+ 
+     def get_block_count(self):
+         """Returns the height of the most-work fully-validated chain."""
+-- 
+2.51.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
