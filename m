@@ -1,74 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDA0ACCF9E5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Oct 2025 18:15:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44F2ECCF9E5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Oct 2025 18:15:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BFB9A6101E;
-	Sun, 26 Oct 2025 18:15:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C20540FA0;
+	Sun, 26 Oct 2025 18:15:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g0F4pvo6kzhk; Sun, 26 Oct 2025 18:15:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VtJupeJ-C1Lk; Sun, 26 Oct 2025 18:15:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 321386100E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 474AD40F94
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 321386100E;
-	Sun, 26 Oct 2025 18:15:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9487125B
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 18:15:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 474AD40F94;
+	Sun, 26 Oct 2025 18:15:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5E358D7
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 18:15:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7AD0783705
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 18:15:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 444C240F94
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 18:15:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qQg1EdOJONEu for <buildroot@buildroot.org>;
- Sun, 26 Oct 2025 18:15:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A7AB0836F6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7AB0836F6
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A7AB0836F6
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 18:15:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Qx0uUqLEbMHV for <buildroot@buildroot.org>;
+ Sun, 26 Oct 2025 18:15:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 68B7040F90
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68B7040F90
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 68B7040F90
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 18:15:47 +0000 (UTC)
 Received: from webmail.free.fr (unknown [172.20.246.1])
  (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 6B28113F899;
- Sun, 26 Oct 2025 19:15:03 +0100 (CET)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 19A9678035B;
+ Sun, 26 Oct 2025 19:15:44 +0100 (CET)
 Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
  via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 26 Oct 2025 19:15:03 +0100
+ with HTTP (HTTP/1.0 POST); Sun, 26 Oct 2025 19:15:44 +0100
 MIME-Version: 1.0
-Date: Sun, 26 Oct 2025 19:15:03 +0100
+Date: Sun, 26 Oct 2025 19:15:44 +0100
 To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Dominik Michael Rauh <dmrauh@posteo.de>
-In-Reply-To: <20251025104943.1597513-1-bernd@kuhls.net>
-References: <20251025104943.1597513-1-bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251026102925.1361128-1-bernd@kuhls.net>
+References: <20251026102925.1361128-1-bernd@kuhls.net>
 User-Agent: Webmail Free/1.6.11
-Message-ID: <d7adb6ca5cdf00b3eb1754bac415f623@free.fr>
+Message-ID: <c7f5655aba3890681a7cc81f01548744@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1761502505;
- bh=JHJ7pUKn0oxthw58OlpYhuOk+4Xp2CSJWYeZHwIl/Ak=;
+ d=free.fr; s=smtp-20201208; t=1761502545;
+ bh=0bLTZqMVriy5ZqfXGZaTye2JBBuFpT0qK8+F9h9606A=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=gA6eg1DlpXdsujGJg8OsgmXjOXRgnu9wQaYpjBveXtbLxT1ph8cucX2YBJCByMSLj
- 61US2CWn30+/He54RSCFarH2lvh0op925auxLFS8c2WFx5uBPlAB5GwPu7L2OoCr8f
- c52LjoukBPeOpPwG98LhXNrSmf5ShuPYdeUVyvP+OrofNxCfxfofz1kZXqwK1FxFXS
- bSfpMnfOf2CvqVT97GxcLiamRl1oUnaBqWneTejL9Ykt4dYLzIwtkgxuJUB2oCFGV8
- B5ZBYR9n9rybZwT+A5IACVWHCc30pfWhZT8uqiLsJT+nM2+Q3WJEJ5z7G9axtv20es
- nOGNpkkDNTHBA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=eMw1Vis0vsdDEFA/xaVVsYSiymOX+XTRqig3tolwK0Um3a8KQIHTIjRyzkrIu3Cd9
+ eSlYA0Kxj52BV/AlnJztbvZhuxlP0jWPNnydVwNvD48gWPxriqrHIv8kD9cg0Z8/Co
+ 2qF8ScHRR/jmza/20PtTPqMpZIrfh7jdAX0X9W2dPMeOHO3nKxinf3OAyVSg5JOgf+
+ 5hbfti/Hlh0/rO/FwfLZ+hPcDjxQe60uwHIKEy8aLPw7nrztXMtcLwOPm96eH6201Z
+ Y2hHyaTNbchOb/t6pLcnx9RV6q/b3Fk2Pn2C93raGLRrVVBshGoGOy3D8bGiDu26eH
+ EaPkxS0P/U88g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=gA6eg1Dl
-Subject: Re: [Buildroot] [PATCH 1/1] package/gdal: bump version to 3.11.4
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=eMw1Vis0
+Subject: Re: [Buildroot] [PATCH 1/1] package/elfutils: bump version to 0.194
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,8 +87,11 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 25/10/2025 12:49, Bernd Kuhls wrote:
-> Release notes: https://github.com/OSGeo/gdal/blob/v3.11.4/NEWS.md
+On 26/10/2025 11:29, Bernd Kuhls wrote:
+> Removed patch which is included in this release.
+> 
+> Release notes:
+> https://sourceware.org/git/?p=elfutils.git;a=blob;f=NEWS;h=922a15cce7163b2bee605a26132d833dc0c29074;hb=eb7f17d5016a75c6fdb6431aff1c1804d8c290e4
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
