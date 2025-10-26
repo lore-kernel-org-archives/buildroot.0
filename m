@@ -1,74 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27EFACCF9E9
-	for <buildroot@archiver.kernel.org>; Sun, 26 Oct 2025 21:18:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91247CCF9E5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Oct 2025 21:55:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D681441044;
-	Sun, 26 Oct 2025 21:18:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 40D6283C3C;
+	Sun, 26 Oct 2025 21:55:42 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3gfOZ2Tpcd42; Sun, 26 Oct 2025 21:55:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF50383C2C
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id AF50383C2C;
+	Sun, 26 Oct 2025 21:55:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2A1A615F
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 21:55:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 100B14110B
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 21:55:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jMaOqZ5KZrPo; Sun, 26 Oct 2025 21:18:24 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC69F407E7
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AC69F407E7;
-	Sun, 26 Oct 2025 21:18:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6B9AA43F
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 21:18:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 68B0A610A1
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 21:18:23 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cH0aLeIJNzf9 for <buildroot@buildroot.org>;
- Sun, 26 Oct 2025 21:18:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BECBA6109E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BECBA6109E
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BECBA6109E
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 21:18:21 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a04a9.dip0.t-ipconnect.de [91.58.4.169])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 86D42A4C49DE
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 22:18:17 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:42010)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1vD881-000000000sE-1kXj
- for buildroot@buildroot.org; Sun, 26 Oct 2025 21:18:17 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id EqIwaz5Gpk71 for <buildroot@buildroot.org>;
+ Sun, 26 Oct 2025 21:55:38 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 218194111C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 218194111C
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 21:55:38 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1005187654; Sun, 26 Oct 2025 21:55:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 26 Oct 2025 22:18:17 +0100
-Message-ID: <20251026211817.2695263-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: /
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1761513497;
- bh=98QZnrnKqGHRjMdXHjgQppIhHKvpe2aZO1phhH8Dcd4=;
- h=From:To:Subject:Date:From;
- b=uS7fWJoHsuuW/8+Oz5D9iTHGQz74Unly2NbXB4LJTULdnyjZW4IJMcNsLALAHDvfz
- fX8M63cMOFGIWjBC8KV5v2lodJWorkOKwcE+1WZYLxLgTUx0EqP4I4Fym4Dt3vdl19
- toDTEsjaPQeoa7pwUJf71mOAxTeluqqeykQGhC1mZIGiApMj4aNEjxvMxQXKwbVLeE
- P9AT2W6YiTAjZleK0WIr72l3MnGBH/YanHcr0z6izsrgoRgahJqrwSQwNMlYLV1fnn
- wYUVzRKX0WtO9aVxtZn4JzqqISiPGBawjEr7tBPBoKkTX9Xj84lO0n2rJFnNjv2PE0
- N7ksfD+gOCa6Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=uS7fWJoH
-Subject: [Buildroot] [PATCH 1/1] package/libheif: needs threads
+Date: Sun, 26 Oct 2025 22:51:50 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 625daed19ce7518d53e456f434f3a2a209d5ec44
+X-Git-Newrev: 1d994f0761ea5ad58b4008d1292941438fc51b72
+X-Patchwork-Hint: ignore
+Message-Id: <20251026215538.1005187654@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/armadillo: bump to version 15.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,90 +57,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit accb006d9b62079b56bc1f1388b558a60dde277a bumped libheif
-to version 1.20.1 which includes several commits unconditionally depen-
-ding on std::mutex which requires a toolchain with threads:
+commit: https://git.buildroot.net/buildroot/commit/?id=1d994f0761ea5ad58b4008d1292941438fc51b72
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/strukturag/libheif/commit/14f956726c79747fc1fb8c041ed767c1632704eb
-https://github.com/strukturag/libheif/commit/6bb8cdaa8a7ba78066c899c3791546b80051c70a
+Release notes:
+https://arma.sourceforge.net/docs.html#changelog
 
-Added dependency to BR2_TOOLCHAIN_HAS_THREADS to Config.in, removed
-configure options handling non-threaded toolchains and adjusted a
-Config.in comment of the only dependee kodi-imagedecoder-heif.
-
-Fixes:
-https://autobuild.buildroot.net/results/28b/28bf68147382dada33cbf9b299396dfdee3fbbe6/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/kodi-imagedecoder-heif/Config.in | 2 +-
- package/libheif/Config.in                | 6 ++++--
- package/libheif/libheif.mk               | 7 -------
- 3 files changed, 5 insertions(+), 10 deletions(-)
+ package/armadillo/armadillo.hash | 2 +-
+ package/armadillo/armadillo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-imagedecoder-heif/Config.in b/package/kodi-imagedecoder-heif/Config.in
-index d0950385a0..f41b164ff4 100644
---- a/package/kodi-imagedecoder-heif/Config.in
-+++ b/package/kodi-imagedecoder-heif/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_KODI_IMAGEDECODER_HEIF
- 	bool "kodi-imagedecoder-heif"
- 	depends on BR2_INSTALL_LIBSTDCPP # libde265, libheif, tinyxml2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libde265
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libde265, libheif
- 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730 # libheif
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libheif
- 	select BR2_PACKAGE_LIBDE265
-diff --git a/package/libheif/Config.in b/package/libheif/Config.in
-index 1452cf2718..0ae86a07f4 100644
---- a/package/libheif/Config.in
-+++ b/package/libheif/Config.in
-@@ -3,11 +3,13 @@ config BR2_PACKAGE_LIBHEIF
- 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  libheif is an HEIF and AVIF file format decoder and encoder.
+diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
+index f3c847372e..5bf5157e7f 100644
+--- a/package/armadillo/armadillo.hash
++++ b/package/armadillo/armadillo.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  9f55ec10f0a91fb6479ab4ed2b37a52445aee917706a238d170b5220c022fe43  armadillo-15.0.3.tar.xz
++sha256  2f71c0661fc4a46e2dd56b7651cf3bb5928b499a4b10df31efc1a4241edf0043  armadillo-15.2.0.tar.xz
+ # License files, locally calculated
+ sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index 3f9eee407b..359c83ef5f 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  https://github.com/strukturag/libheif
- 
--comment "libheif needs a toolchain w/ C++, gcc >= 4.8"
-+comment "libheif needs a toolchain w/ C++, threads, gcc >= 4.8"
- 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
-index 13e8295b0e..d82ec6a0ec 100644
---- a/package/libheif/libheif.mk
-+++ b/package/libheif/libheif.mk
-@@ -72,17 +72,10 @@ else
- LIBHEIF_CONF_OPTS += -DWITH_X265=OFF
- endif
- 
--ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
--LIBHEIF_CONF_OPTS += -DENABLE_MULTITHREADING_SUPPORT=ON
- ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_64735),y)
- LIBHEIF_CONF_OPTS += -DENABLE_PARALLEL_TILE_DECODING=OFF
- else
- LIBHEIF_CONF_OPTS += -DENABLE_PARALLEL_TILE_DECODING=ON
- endif
--else
--LIBHEIF_CONF_OPTS += \
--	-DENABLE_MULTITHREADING_SUPPORT=OFF \
--	-DENABLE_PARALLEL_TILE_DECODING=OFF
--endif
- 
- $(eval $(cmake-package))
--- 
-2.47.3
-
+-ARMADILLO_VERSION = 15.0.3
++ARMADILLO_VERSION = 15.2.0
+ ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
+ ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
+ ARMADILLO_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
