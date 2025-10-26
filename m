@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A60BDCCF9E5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Oct 2025 15:24:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6ADB3CCD1A5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Oct 2025 15:25:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0FAFA40D3E;
-	Sun, 26 Oct 2025 15:24:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3884040DB2;
+	Sun, 26 Oct 2025 15:25:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LPx7poceNmmt; Sun, 26 Oct 2025 15:24:51 +0000 (UTC)
+ id rwJtv-SK2fqw; Sun, 26 Oct 2025 15:25:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB9FA40D36
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D898540D48
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BB9FA40D36;
-	Sun, 26 Oct 2025 15:24:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id CD5D125B
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 15:24:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D898540D48;
+	Sun, 26 Oct 2025 15:25:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6113ED7
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 15:25:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B5259404A6
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 15:24:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5DB2960A7F
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 15:25:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CXLbnnDoUzzl for <buildroot@buildroot.org>;
- Sun, 26 Oct 2025 15:24:47 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 931E240084
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 931E240084
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 15:24:47 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8DC5B87912; Sun, 26 Oct 2025 15:24:47 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 26 Oct 2025 16:23:12 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5440d2a5baa157269e28d65753f7f5f0b66ba9ca
-X-Git-Newrev: 6ad92d4a5dc6b5f0d8de072622dabe2e804bf8e4
-X-Patchwork-Hint: ignore
-Message-Id: <20251026152447.8DC5B87912@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libdbi-drivers: fix build with gcc
- >= 14.x
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GJiC-Ti6XoGY for <buildroot@buildroot.org>;
+ Sun, 26 Oct 2025 15:25:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 553C960A45
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 553C960A45
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 553C960A45
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 15:25:01 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 110CF19F5A5;
+ Sun, 26 Oct 2025 16:24:57 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 26 Oct 2025 16:24:57 +0100
+MIME-Version: 1.0
+Date: Sun, 26 Oct 2025 16:24:57 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, =?UTF-8?Q?Herv=C3=A9_Codina?=
+ <herve.codina@bootlin.com>
+In-Reply-To: <20251025120712.3262343-1-bernd@kuhls.net>
+References: <20251025120712.3262343-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <8d195747771655d04d0dcfad57491f4d@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1761492300;
+ bh=45pFt1jlHgpZyXQBsRJrYvuOe/t8ZpZq1mMHKDK5Taw=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Ti2cn6BxZv7vRddXyyGGUySC4U26fCf29Ic/VKpJOVvqfz1iq32Wq0msXx7r7lRJT
+ Cvq56cJjHnLeh698fpw9FXnOhCLnTqd3PNJo21F+euSAKxIBlhcC7aOhnMdu69Ud0J
+ kYOFZAXBo58KYVpzCOE5n54IAhTOjeyueQurG3nNCE0qecNMGKQwvhYVeeUWiNLMeb
+ CJrEHfP05vXtntHXh8MTX2wnm7kIILiGpKcy9e/Nh0Rr/65OjRVH5dJoJm8v6AukkO
+ W6tE1PFiGLB61geUI2HHMSOYwKFJg9gENJw+mT0Y6D/QNJpTa+q4PpH/RYqRDAadEY
+ wezA2PD6rBkww==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Ti2cn6Bx
+Subject: Re: [Buildroot] [PATCH 1/1] package/libdbi-drivers: fix build with
+ gcc >= 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,75 +84,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ad92d4a5dc6b5f0d8de072622dabe2e804bf8e4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 25/10/2025 14:07, Bernd Kuhls wrote:
+> Fixes:
+> https://autobuild.buildroot.net/results/d30/d3068de2f477d68823c4b7e537f120edf03338bb/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Fixes:
-https://autobuild.buildroot.net/results/d30/d3068de2f477d68823c4b7e537f120edf03338bb/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .../libdbi-drivers/0001-libdbi-drivers-c99.patch   | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
-
-diff --git a/package/libdbi-drivers/0001-libdbi-drivers-c99.patch b/package/libdbi-drivers/0001-libdbi-drivers-c99.patch
-new file mode 100644
-index 0000000000..46b43c8653
---- /dev/null
-+++ b/package/libdbi-drivers/0001-libdbi-drivers-c99.patch
-@@ -0,0 +1,45 @@
-+Fix type errors in the cgreen with constraints facility.
-+
-+Upstream: https://sourceforge.net/p/libdbi-drivers/bugs/28/
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+[Bernd: rebased for git tree used by buildroot]
-+
-+diff --git a/tests/cgreen/src/constraint.c b/tests/cgreen/src/constraint.c
-+index c19c0ddd41a7bfa7..95673dd3e222a3cf 100644
-+--- a/tests/cgreen/src/constraint.c
-++++ b/tests/cgreen/src/constraint.c
-+@@ -22,8 +22,7 @@ static double unbox_double(intptr_t box);
-+ static double as_double(intptr_t box);
-+ 
-+ static int compare_using_matcher(Constraint *constraint, intptr_t actual);
-+-static void test_with_matcher(Constraint *constraint, const char *function, const char* matcher_name, intptr_t actual, const char *test_file, int test_line, TestReporter *reporter);
-+-
-++static void test_with_matcher(Constraint *constraint, const char *function, intptr_t matcher_function, const char *test_file, int test_line, TestReporter *reporter);
-+ 
-+ void destroy_constraint(void *abstract) {
-+     Constraint *constraint = (Constraint *)abstract;
-+@@ -164,11 +163,11 @@
-+ }
-+ 
-+ static int compare_using_matcher(Constraint *constraint, intptr_t actual) {
-+-	int (*matches)(const void*) = (void *)(intptr_t)constraint->expected;
-+-    return matches((void *)actual);
-++	int (*matches)(const void*) = (int (*)(const void*)) constraint->expected;
-++    return matches((const void *)actual);
-+ }
-+ 
-+-static void test_with_matcher(Constraint *constraint, const char *function, const char* matcher_name, intptr_t matcher_function, const char *test_file, int test_line, TestReporter *reporter) {
-++static void test_with_matcher(Constraint *constraint, const char *function, intptr_t matcher_function, const char *test_file, int test_line, TestReporter *reporter) {
-+     (*reporter->assert_true)(
-+             reporter,
-+             test_file,
-+@@ -176,7 +175,7 @@ static void test_with_matcher(Constraint *constraint, const char *function, cons
-+             (*constraint->compare)(constraint, matcher_function),
-+             "Wanted parameter [%s] to match [%s] in function [%s]",
-+             constraint->parameter,
-+-            matcher_name,
-++            constraint->name,
-+             function);
-+ }
-+ 
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
