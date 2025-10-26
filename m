@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFA36CCF9E5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Oct 2025 14:39:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A60BDCCF9E5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Oct 2025 15:24:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 79A1D406FB;
-	Sun, 26 Oct 2025 14:39:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0FAFA40D3E;
+	Sun, 26 Oct 2025 15:24:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cgzbfrXm_MD1; Sun, 26 Oct 2025 14:39:22 +0000 (UTC)
+ id LPx7poceNmmt; Sun, 26 Oct 2025 15:24:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 900AF406FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB9FA40D36
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 900AF406FC;
-	Sun, 26 Oct 2025 14:39:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8B32625B
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 14:39:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BB9FA40D36;
+	Sun, 26 Oct 2025 15:24:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CD5D125B
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 15:24:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 713CB811E1
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 14:39:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B5259404A6
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 15:24:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PbAF4NbHJ4Ky for <buildroot@buildroot.org>;
- Sun, 26 Oct 2025 14:39:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 58F6A81128
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58F6A81128
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 58F6A81128
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 14:39:19 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a04a9.dip0.t-ipconnect.de [91.58.4.169])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id D61BDA4C4029;
- Sun, 26 Oct 2025 15:39:16 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:54808)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1vD1ts-000000006Nl-3Rlg;
- Sun, 26 Oct 2025 14:39:16 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CXLbnnDoUzzl for <buildroot@buildroot.org>;
+ Sun, 26 Oct 2025 15:24:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 931E240084
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 931E240084
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 15:24:47 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8DC5B87912; Sun, 26 Oct 2025 15:24:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sun, 26 Oct 2025 15:39:16 +0100
-Message-ID: <20251026143916.3901096-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: ++++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1761489556;
- bh=OmGifn74oaVIwSCl299pjcR13ut8DBDMoWpAXySG5xc=;
- h=From:To:Cc:Subject:Date:From;
- b=IOLD5VsD6hAAFhXHujF7pRBLQ181b2L2rL5IGuTE20Rwg+DkZ6Krqcwcy/JAbG84x
- Ok3kZbiE9WgHxDApLNvM5N0Wizzk6DLAEkbkz0/PHIDGTyei68JptsPNPGGxciy6+7
- O7A5B9Ci6UQTdL/hpNEJ7ZlFHrq44stIMqnM3MeOCK2aJHdsKvybTjrt8syObZbkdr
- Gdm5Ncb+n0RUn087GopxQzai45ejOpSG/u4ixtN0N1Ttv6ffLzf3YBnkaKm8cOk/BK
- fysZL2YlQ5fo2lyIX8gcq8N0d7KFTvvvVuxF+7a1x7ZTAcZOiIcwm6DwVW/1HU2cZq
- VleF+Rm3F3o3w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=IOLD5VsD
-Subject: [Buildroot] [PATCH 1/1] package/libdill: fix build with gcc-15.x
+Date: Sun, 26 Oct 2025 16:23:12 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5440d2a5baa157269e28d65753f7f5f0b66ba9ca
+X-Git-Newrev: 6ad92d4a5dc6b5f0d8de072622dabe2e804bf8e4
+X-Patchwork-Hint: ignore
+Message-Id: <20251026152447.8DC5B87912@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libdbi-drivers: fix build with gcc
+ >= 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,56 +58,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Updated project URL: https://github.com/sustrik/libdill/pull/228
-
-Adding -std=gnu17 was recommended in upstream PR:
-https://github.com/sustrik/libdill/issues/229#issuecomment-2865524080
+commit: https://git.buildroot.net/buildroot/commit/?id=6ad92d4a5dc6b5f0d8de072622dabe2e804bf8e4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
-https://autobuild.buildroot.net/results/1a5/1a5e9d7df6c83a921cae39b4dc4b601be4d18e36/
+https://autobuild.buildroot.net/results/d30/d3068de2f477d68823c4b7e537f120edf03338bb/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libdill/Config.in  | 2 +-
- package/libdill/libdill.mk | 7 +++++++
- 2 files changed, 8 insertions(+), 1 deletion(-)
+ .../libdbi-drivers/0001-libdbi-drivers-c99.patch   | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/package/libdill/Config.in b/package/libdill/Config.in
-index 2376fc9698..ec649c6600 100644
---- a/package/libdill/Config.in
-+++ b/package/libdill/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_LIBDILL
- 	  Libdill is a C library that makes writing structured
- 	  concurrent programs easy.
- 
--	  http://libdill.org
-+	  https://sustrik.github.io/libdill/
-diff --git a/package/libdill/libdill.mk b/package/libdill/libdill.mk
-index 9dda81d085..e68ee819ec 100644
---- a/package/libdill/libdill.mk
-+++ b/package/libdill/libdill.mk
-@@ -12,6 +12,13 @@ LIBDILL_INSTALL_STAGING = YES
- # Fetched from Github, with no configure script
- LIBDILL_AUTORECONF = YES
- 
-+# gcc-15 defaults to -std=gnu23 which introduces build failures.
-+# We force "-std=gnu17" for gcc version supporting it. Earlier gcc
-+# versions will work, since they are using the older standard.
-+ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_8),y)
-+LIBDILL_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=gnu17"
-+endif
+diff --git a/package/libdbi-drivers/0001-libdbi-drivers-c99.patch b/package/libdbi-drivers/0001-libdbi-drivers-c99.patch
+new file mode 100644
+index 0000000000..46b43c8653
+--- /dev/null
++++ b/package/libdbi-drivers/0001-libdbi-drivers-c99.patch
+@@ -0,0 +1,45 @@
++Fix type errors in the cgreen with constraints facility.
 +
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- LIBDILL_CONF_OPTS += --enable-threads
- else
--- 
-2.47.3
-
++Upstream: https://sourceforge.net/p/libdbi-drivers/bugs/28/
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++[Bernd: rebased for git tree used by buildroot]
++
++diff --git a/tests/cgreen/src/constraint.c b/tests/cgreen/src/constraint.c
++index c19c0ddd41a7bfa7..95673dd3e222a3cf 100644
++--- a/tests/cgreen/src/constraint.c
+++++ b/tests/cgreen/src/constraint.c
++@@ -22,8 +22,7 @@ static double unbox_double(intptr_t box);
++ static double as_double(intptr_t box);
++ 
++ static int compare_using_matcher(Constraint *constraint, intptr_t actual);
++-static void test_with_matcher(Constraint *constraint, const char *function, const char* matcher_name, intptr_t actual, const char *test_file, int test_line, TestReporter *reporter);
++-
+++static void test_with_matcher(Constraint *constraint, const char *function, intptr_t matcher_function, const char *test_file, int test_line, TestReporter *reporter);
++ 
++ void destroy_constraint(void *abstract) {
++     Constraint *constraint = (Constraint *)abstract;
++@@ -164,11 +163,11 @@
++ }
++ 
++ static int compare_using_matcher(Constraint *constraint, intptr_t actual) {
++-	int (*matches)(const void*) = (void *)(intptr_t)constraint->expected;
++-    return matches((void *)actual);
+++	int (*matches)(const void*) = (int (*)(const void*)) constraint->expected;
+++    return matches((const void *)actual);
++ }
++ 
++-static void test_with_matcher(Constraint *constraint, const char *function, const char* matcher_name, intptr_t matcher_function, const char *test_file, int test_line, TestReporter *reporter) {
+++static void test_with_matcher(Constraint *constraint, const char *function, intptr_t matcher_function, const char *test_file, int test_line, TestReporter *reporter) {
++     (*reporter->assert_true)(
++             reporter,
++             test_file,
++@@ -176,7 +175,7 @@ static void test_with_matcher(Constraint *constraint, const char *function, cons
++             (*constraint->compare)(constraint, matcher_function),
++             "Wanted parameter [%s] to match [%s] in function [%s]",
++             constraint->parameter,
++-            matcher_name,
+++            constraint->name,
++             function);
++ }
++ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
