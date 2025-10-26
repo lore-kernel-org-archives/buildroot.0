@@ -1,51 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02EA1CCF9ED
-	for <buildroot@archiver.kernel.org>; Sun, 26 Oct 2025 18:14:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0F92CCF9E9
+	for <buildroot@archiver.kernel.org>; Sun, 26 Oct 2025 18:14:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C679F81372;
-	Sun, 26 Oct 2025 18:14:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C124340F96;
+	Sun, 26 Oct 2025 18:14:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m_-KWEYBxgdp; Sun, 26 Oct 2025 18:14:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id d7E55lbll-kx; Sun, 26 Oct 2025 18:14:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C11DF81351
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F00EC40F93
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C11DF81351;
-	Sun, 26 Oct 2025 18:14:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6930925B
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 18:14:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F00EC40F93;
+	Sun, 26 Oct 2025 18:14:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BB7ABD7
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 18:14:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4F7C06100E
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 18:14:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id ACAF640F8F
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 18:14:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JOsPYE_2bTaG for <buildroot@buildroot.org>;
- Sun, 26 Oct 2025 18:14:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64FC76100D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 64FC76100D
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 18:14:32 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 55AA48760C; Sun, 26 Oct 2025 18:14:32 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 26 Oct 2025 18:59:18 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5740cfdd5c870388b7846ec0b279edb7f3d0e2f0
-X-Git-Newrev: 625daed19ce7518d53e456f434f3a2a209d5ec44
-X-Patchwork-Hint: ignore
-Message-Id: <20251026181432.55AA48760C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/elfutils: bump version to 0.194
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zCT9I77qJRiu for <buildroot@buildroot.org>;
+ Sun, 26 Oct 2025 18:14:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1246740F93
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1246740F93
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1246740F93
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 18:14:47 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 9AB255FFAF;
+ Sun, 26 Oct 2025 19:14:44 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 26 Oct 2025 19:14:44 +0100
+MIME-Version: 1.0
+Date: Sun, 26 Oct 2025 19:14:44 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251025070814.3338524-1-bernd@kuhls.net>
+References: <20251025070814.3338524-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <78a2fc57ddc961ef4d4c5d4e39ec2a2d@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1761502485;
+ bh=lR3VDkt7rae1jcBhFMWyfOujjYrDFm83UG2bj4MZ/Io=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=XMwhE9xKDG2rmMFHCWyoUR/71xiLVXNX+o/wQGl4H448NyNSRZUY2/iPMuqk6Ud27
+ 3PWA7MlkblW1lHnz7DgAY6Q0ZykTo6iiLBvK0Um/NItVi8wbXOxIeR6sn083+57v2j
+ sIl5DxMcrq3CpWDSNY1AVYel6/SvKXPSZOGj7ZO/2dyJvSPXfnUJ4AjBV2PWy3OpMs
+ hoK0VCiF+Fdyt4I16UBKECHgocnZBpBE+fcPMnOUXsng6O+KdApYG0hIo22xPqzvGi
+ nxviRBaiV90YSeOIVWlSmhIK3eiAvjh9oLKqo10sfBrEkww+4IcIwUcrRT1WG9ajRY
+ 4i6dALQcGHfGw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=XMwhE9xK
+Subject: Re: [Buildroot] [PATCH 1/1] package/fetchmail: bump version to 6.5.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,112 +82,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=625daed19ce7518d53e456f434f3a2a209d5ec44
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 25/10/2025 09:08, Bernd Kuhls wrote:
+> Release notes:
+> https://sourceforge.net/p/fetchmail/mailman/message/59248304/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Removed patch which is included in this release.
-
-Release notes:
-https://sourceware.org/git/?p=elfutils.git;a=blob;f=NEWS;h=922a15cce7163b2bee605a26132d833dc0c29074;hb=eb7f17d5016a75c6fdb6431aff1c1804d8c290e4
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...30-backends-guard-asm-perf_regs.h-include.patch | 53 ----------------------
- package/elfutils/elfutils.hash                     |  4 +-
- package/elfutils/elfutils.mk                       |  2 +-
- 3 files changed, 3 insertions(+), 56 deletions(-)
-
-diff --git a/package/elfutils/0003-PR32930-backends-guard-asm-perf_regs.h-include.patch b/package/elfutils/0003-PR32930-backends-guard-asm-perf_regs.h-include.patch
-deleted file mode 100644
-index 76c604510b..0000000000
---- a/package/elfutils/0003-PR32930-backends-guard-asm-perf_regs.h-include.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From d05241ce690018548857199bd34d7734c7164679 Mon Sep 17 00:00:00 2001
--From: Serhei Makarov <serhei@serhei.io>
--Date: Mon, 5 May 2025 12:08:55 -0400
--Subject: [PATCH] PR32930 backends/: guard asm/perf_regs.h include
--
--asm/perf_regs.h is an arch-specific linux include, not present on
--architectures like hppa and m68k that lack perf_events support.
--
--Only one place we need to fix; others already guard the include by
--architecture, or use architecture-independent headers (e.g.
--linux/perf_events.h).
--
--* backends/libebl_PERF_FLAGS.h: Only include asm/perf_regs.h on
--  architectures where we use it.
--
--Signed-off-by: Serhei Makarov <serhei@serhei.io>
--Upstream: d05241ce690018548857199bd34d7734c7164679
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- backends/libebl_PERF_FLAGS.h | 8 ++++++--
-- 1 file changed, 6 insertions(+), 2 deletions(-)
--
--diff --git a/backends/libebl_PERF_FLAGS.h b/backends/libebl_PERF_FLAGS.h
--index 2ed45f0f..51c20ea6 100644
----- a/backends/libebl_PERF_FLAGS.h
--+++ b/backends/libebl_PERF_FLAGS.h
--@@ -32,8 +32,12 @@
-- #define _LIBEBL_PERF_FLAGS_H 1
-- 
-- #if defined(__linux__)
--+/* XXX Need to exclude __linux__ arches without perf_regs.h. */
--+#if defined(__x86_64__) || defined(__i386__)
--+/* || defined(other_architecture)... */
-- # include <asm/perf_regs.h>
-- #endif
--+#endif
-- 
-- #if defined(_ASM_X86_PERF_REGS_H)
-- /* See the code in x86_initreg_sample.c for list of required regs and
--@@ -49,8 +53,8 @@
--    see the code in tools/perf/util/intel-pt.c intel_pt_add_gp_regs()
--    and note how regs are added in the same order as the perf_regs.h enum.  */
-- #else
---/* Since asm/perf_regs.h gives the register layout for a different arch,
---   we can't unwind x86_64 frames.  */
--+/* Since asm/perf_regs.h is absent, or gives the register layout for a
--+   different arch, we can't unwind i386 and x86_64 frames. */
-- #define PERF_FRAME_REGISTERS_I386 0
-- #define PERF_FRAME_REGISTERS_X86_64 0
-- #endif
---- 
--2.50.1
--
-diff --git a/package/elfutils/elfutils.hash b/package/elfutils/elfutils.hash
-index 8a132f3a1c..933420d1dd 100644
---- a/package/elfutils/elfutils.hash
-+++ b/package/elfutils/elfutils.hash
-@@ -1,5 +1,5 @@
--# From https://sourceware.org/elfutils/ftp/0.193/sha512.sum
--sha512  557e328e3de0d2a69d09c15a9333f705f3233584e2c6a7d3ce855d06a12dc129e69168d6be64082803630397bd64e1660a8b5324d4f162d17922e10ddb367d76  elfutils-0.193.tar.bz2
-+# From https://sourceware.org/elfutils/ftp/0.194/sha512.sum
-+sha512  5d00502f61b92643bf61dc61da4ddded36c423466388d992bcd388c5208761b8ed9db1a01492c085cd0984eef30c08f895a8e307e78e0df8df40b56ae35b78a5  elfutils-0.194.tar.bz2
- # Locally calculated
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING-GPLV2
-diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-index 712e69570b..554a60003f 100644
---- a/package/elfutils/elfutils.mk
-+++ b/package/elfutils/elfutils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ELFUTILS_VERSION = 0.193
-+ELFUTILS_VERSION = 0.194
- ELFUTILS_SOURCE = elfutils-$(ELFUTILS_VERSION).tar.bz2
- ELFUTILS_SITE = https://sourceware.org/elfutils/ftp/$(ELFUTILS_VERSION)
- ELFUTILS_INSTALL_STAGING = YES
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
