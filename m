@@ -4,104 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83739CCF9E5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Oct 2025 13:12:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71D2ECCD1A5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Oct 2025 13:27:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 50F5640C95;
-	Sun, 26 Oct 2025 13:12:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 29863402D3;
+	Sun, 26 Oct 2025 13:27:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wINuuLdi84rX; Sun, 26 Oct 2025 13:12:50 +0000 (UTC)
+ id Fqa9D9CWr8tG; Sun, 26 Oct 2025 13:27:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBBD840AE9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 486FC402DA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DBBD840AE9;
-	Sun, 26 Oct 2025 13:12:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B09C715F
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 13:12:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 486FC402DA;
+	Sun, 26 Oct 2025 13:27:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9C95E15F
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 13:27:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AD57360899
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 13:12:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 830A9402DA
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 13:27:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y-KCvtS1YoKp for <buildroot@buildroot.org>;
- Sun, 26 Oct 2025 13:12:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1uWdTEJbWe8r for <buildroot@buildroot.org>;
+ Sun, 26 Oct 2025 13:27:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62a; helo=mail-ej1-x62a.google.com;
- envelope-from=shirokovalexs@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A8E7160896
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8E7160896
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
- [IPv6:2a00:1450:4864:20::62a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A8E7160896
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 13:12:45 +0000 (UTC)
-Received: by mail-ej1-x62a.google.com with SMTP id
- a640c23a62f3a-b3d196b7eeeso797931066b.0
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 06:12:45 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::629; helo=mail-ej1-x629.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 71DEC402D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71DEC402D3
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 71DEC402D3
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 13:27:39 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id
+ a640c23a62f3a-b6d5b756284so780456466b.1
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 06:27:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1761484363; x=1762089163;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=XE3521wTC1t0OYfrtwOy+yYHzm/XeMd5TsLBxxtkw+M=;
- b=UyzVRIaDAIQocBa2NPZ3lscv8FGl6UmFOMqgeoXKdLzdzWjgpe6NqRFX76+ooeBrBP
- t/nCx8lv7/r3yqNfEr6aY7bzGnxq5kCODxuTONvN/s3m69TT5jDdmk/UXos2R4ANs+GJ
- 2fYHUIhduJ5tOWTDyilCTS3sQw2bunIKc+faEeQOKNnQDqQcZp29bbFg/e1YylE5e5Lw
- KImRmAe1YWNdWXXetqeANDGuyL0mXisBIDCPVyX2uxsI/DnP3iRnahV9SrOTVd7SijUD
- 7apQ3ZnB+sIirmlzuewzf3uzrdyJWLHaDl4OxCxa//YCjxk1hfVKsP+6aEUMnvpT63ep
- xSkg==
-X-Gm-Message-State: AOJu0YzsiRdsZC0bAnk7L1T97R6dC6MTCC72sJIFeyLhAZAXGH07ZYNk
- mUu1P5Gl1NrSmkDOOK08SgZJgMdG9LCjWtv25/duVHk3H5E0VTBMlihKX0/Q
-X-Gm-Gg: ASbGncuWp6Z85gAyrdpHnfvSDlxmFAsCPMhKm000B5fh/OfRW1xIfNqBvAcJhaqCoqN
- Oha+HA2fZ92NMEwl1NMViu2UltEYHrDQfbxKbix2gi03ElFHcUXB54SiMUbC+RqpIGU9G+AJKvD
- 2eAERlBu2E+fyjRDS32KCRH1ZEI95omu6AkirKheulOYdUYOuD34pxYjnoh7c3mCwjPSHwUD0CQ
- FbvLgPfyzlTmIgkxgTnFT6qVcezRVgl++h9Rs3Ii09c28BXbvO4qMSQ7uBlCQZiNGqtOUp0d138
- k4pC6OmSWTfxfqbxikUnpobvaJmlGNc2cTb3g0TFMYPSnPOkznCiKrtBHFbulgRhydk0uacISuU
- Qt2hnbb90QbqSJiSvKlroItIoxQqk0BZtDQL1ylhm/aIP+UbSb87+//L3r0F2gxHa/vfTg+hm6P
- wjHTjU1L6u/qKvnLI=
-X-Google-Smtp-Source: AGHT+IHurhi6RcFQGcSs+lKMvWPyTc2A3TLbksZ2gsL07LqB8em2PhHr1uVR8bLnzA+gszPqXrtsZQ==
-X-Received: by 2002:a17:907:c06:b0:b3c:bd91:28a4 with SMTP id
- a640c23a62f3a-b6473045139mr4054935266b.28.1761484363139; 
- Sun, 26 Oct 2025 06:12:43 -0700 (PDT)
-Received: from devhost1.play.pl ([2a02:a319:a1e0:eb00:92eb:221f:6fb6:f3ab])
+ d=1e100.net; s=20230601; t=1761485257; x=1762090057;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=6jWsfRxeRy3favVab6FZ/OcsT1JDsVXqWhEujdNqROg=;
+ b=HDz2mgYjSrfaIZL5z81FdsJPrRNIU4PJbLa35SvwYxnWoXnvQGsGitOp101zjLXemc
+ uwcvhNh8K+GC6HUtzySasgmwOCvviD2g4waROH97P+IODdNcpN+4dADLoWCyyY3ymolq
+ f8R1+VQqmGyLfZ1d5S9vCZLwo5xvOUuWUfAlPzaBCLMnt5aephe3ZMN9NyGwesgnZ5fx
+ QIgYBvVo4anakvnUhVn8MZyBCPdmoetEJ/2quha2mr9evi7n7etEh0mXa3KmuHM3vB2v
+ PeC5BY49npY3accMyn5HFZtfKZaRojXgZ0dGDD+oj7PglTT73JPJCmWrvNe9Rcub7oHp
+ 6pRA==
+X-Gm-Message-State: AOJu0Yyp8CsjIa1p4Jza3HSEeTsPMkbzcqleWO2/yyzD4n52Sr8gVRHZ
+ mcx9nqZEopY9Vv1wEY/3t/1SvSkcjh6nWq83xgrhtHtSvo58fcRt2XKmR2nz0Nkjazi+WfUFJCR
+ +FZMP
+X-Gm-Gg: ASbGncuAnimoSfzIagwUZBSARkmHDUaG8z1z8wRjOhHzEtuLH9TCg7fKMLH8UAHeHI5
+ WKaMpyMmy0kt67tHMSGhpeanjHW2eLzJqlmcs9s8HtVcwyXTkYoYewfsPQKZgJ/5FmjVj8CplLd
+ oEWjmfX6j8hPfR5ZV1UEDXTkOKgzMV3rp7N+uxxQlgIGuXli/7MAQrGghtqVD4mCCPFzWMcV4Dv
+ UMv632xd80LM0UUBEG5McMwP3EeeGVoNkIaTehLWb8dcBgWSqM9CM2gYxgqAOqyUT4cC1XkqH0I
+ Ak1+/vc6xZ4Iwmlxt7+Sl+lhuB1XufO5g3h29lo+p7fa+PGnCXRyRRK6FThxG1WRa3PSlmFyOpq
+ /91BKnc/vXlnxzUigtZV91p5tZsgoshkB9rmrpCC/MsXmaWFUCC6FDyPoFXGZBpqTZVBzfSNBN3
+ 2jzRs1tRnpfuwJpUGvHh8mrafRaojGkkM5mKx9X3z6Zatcd152sfPBpRlH9rNtiVgMGQ3ckPJ9m
+ kQ9UwY+cxdhkDIFSDtH3ACwkGjudv7Mx6enSdV6
+X-Google-Smtp-Source: AGHT+IFxDU9XHzt1yfS6UPUgRkiOmGQfmCXU3+6wut/V/d12W7sRgGLYllO/kPt+sLxBoyF1Ecwf6w==
+X-Received: by 2002:a17:907:9691:b0:b50:9863:dbe0 with SMTP id
+ a640c23a62f3a-b6473b52655mr3886174566b.37.1761485257052; 
+ Sun, 26 Oct 2025 06:27:37 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
+ (host-82-58-41-5.retail.telecomitalia.it. [82.58.41.5])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b6da1e2226fsm67902266b.20.2025.10.26.06.12.42
+ a640c23a62f3a-b6d85369675sm462311266b.28.2025.10.26.06.27.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 26 Oct 2025 06:12:42 -0700 (PDT)
-From: Alexander Shirokov <shirokovalexs@gmail.com>
+ Sun, 26 Oct 2025 06:27:36 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Cc: elmehdi.younes@smile.fr,
-	Alexander Shirokov <shirokovalexs@gmail.com>
-Date: Sun, 26 Oct 2025 14:09:51 +0100
-Message-ID: <20251026131233.183426-3-shirokovalexs@gmail.com>
-X-Mailer: git-send-email 2.51.1
-In-Reply-To: <20251026131233.183426-1-shirokovalexs@gmail.com>
-References: <20250812192941.3477597-2-shirokovalexs@gmail.com>
- <20251026131233.183426-1-shirokovalexs@gmail.com>
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date: Sun, 26 Oct 2025 14:27:31 +0100
+Message-ID: <20251026132731.156268-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1761484363; x=1762089163; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=XE3521wTC1t0OYfrtwOy+yYHzm/XeMd5TsLBxxtkw+M=;
- b=dLujLmACdWDZ+YVflGJSqKGoQJmIhYWw+AloIEeitX5PU8MTTRzk+jtKYz46/jScFK
- DOmyJgSsSN3k3a/D6Zh+eFwQ886cdeDc49QLy76+ygDvO15gyaVzrqhuCGmv6sjEQ6Bc
- QtS42o+/joi849fpwXM5DDAngMpMrpY9/Pm4m7whrT0M7WUCJaL32IcaIH/0jyy0zrgV
- 1HrEFCwt1JAMmEc9XiDzcYWjDxCJDjFTFyjIqqOTL/aZMS65yfqArUtFRibaN0sZO6YJ
- z1ZGsGddgkA4LGwUgoHIyyzUW/RwVjLVjQCTzKowEx6sPXtDdGbJTvlDq1QefdQNn1Ms
- NgCA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=amarulasolutions.com; s=google; t=1761485257; x=1762090057;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=6jWsfRxeRy3favVab6FZ/OcsT1JDsVXqWhEujdNqROg=;
+ b=OFAafMaxpBoo1WtYkcj/is0W7ydt+dbwa5lB7ACyfsKyKssHrCNxYdZpMHuMdfz3XT
+ lg0tyTi2ysy5QrCqjqmcEwKZTvXgcfD91GZMySl9zNUiPYXk4oNvgUV5rTxLZ5sKlgJ2
+ z43UhgdoCjWzse2w0Mr5lwtJVz9eJ5PjQUbNE=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=dLujLmAC
-Subject: [Buildroot] [v7, 2/2] package/uutils-coreutils: new tests
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=OFAafMax
+Subject: [Buildroot] [PATCH 1/1] package/armadillo: bump to version 15.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,64 +114,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add a small set of tests for uutils-coreutils to ensure that the binary
-is present and executable.
+Release notes:
+https://arma.sourceforge.net/docs.html#changelog
 
-Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- support/testing/tests/package/test_rust.py | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/armadillo/armadillo.hash | 2 +-
+ package/armadillo/armadillo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/package/test_rust.py b/support/testing/tests/package/test_rust.py
-index 763125ca20..ec263df6b5 100644
---- a/support/testing/tests/package/test_rust.py
-+++ b/support/testing/tests/package/test_rust.py
-@@ -28,11 +28,14 @@ class TestRustBin(TestRustBase):
-         # BR2_TARGET_ROOTFS_TAR is not set
-         BR2_PACKAGE_HOST_RUSTC=y
-         BR2_PACKAGE_RIPGREP=y
-+        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+        BR2_PACKAGE_UUTILS_COREUTILS=y
-         """
+diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
+index f3c847372e80..5bf5157e7fcb 100644
+--- a/package/armadillo/armadillo.hash
++++ b/package/armadillo/armadillo.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  9f55ec10f0a91fb6479ab4ed2b37a52445aee917706a238d170b5220c022fe43  armadillo-15.0.3.tar.xz
++sha256  2f71c0661fc4a46e2dd56b7651cf3bb5928b499a4b10df31efc1a4241edf0043  armadillo-15.2.0.tar.xz
+ # License files, locally calculated
+ sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index 3f9eee407b74..359c83ef5fc3 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-     def test_run(self):
-         self.login()
-         self.assertRunOk("rg Buildroot /etc/issue")
-+        self.assertRunOk("coreutils --help")
- 
- 
- class TestRust(TestRustBase):
-@@ -50,11 +53,14 @@ class TestRust(TestRustBase):
-         BR2_PACKAGE_HOST_RUSTC=y
-         BR2_PACKAGE_HOST_RUST=y
-         BR2_PACKAGE_RIPGREP=y
-+        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+        BR2_PACKAGE_UUTILS_COREUTILS=y
-         """
- 
-     def test_run(self):
-         self.login()
-         self.assertRunOk("rg Buildroot /etc/issue")
-+        self.assertRunOk("coreutils --help")
- 
- 
- class TestRustVendoring(infra.basetest.BRConfigTest):
-@@ -71,6 +77,8 @@ class TestRustVendoring(infra.basetest.BRConfigTest):
-         BR2_PACKAGE_PYTHON3=y
-         BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
-         BR2_BACKUP_SITE=""
-+        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+        BR2_PACKAGE_UUTILS_COREUTILS=y
-         """
- 
-     def setUp(self):
-@@ -96,3 +104,4 @@ class TestRustVendoring(infra.basetest.BRConfigTest):
-     def test_run(self):
-         self.check_download("ripgrep")
-         self.check_download("python-cryptography")
-+        self.check_download("uutils-coreutils")
+-ARMADILLO_VERSION = 15.0.3
++ARMADILLO_VERSION = 15.2.0
+ ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
+ ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
+ ARMADILLO_INSTALL_STAGING = YES
 -- 
-2.51.1
+2.43.0
 
 _______________________________________________
 buildroot mailing list
