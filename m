@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 825E9CCD1A5
-	for <buildroot@archiver.kernel.org>; Sun, 26 Oct 2025 13:28:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90AE0CCF9E5
+	for <buildroot@archiver.kernel.org>; Sun, 26 Oct 2025 13:29:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 51A1E40485;
-	Sun, 26 Oct 2025 13:28:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 66B7B405FF;
+	Sun, 26 Oct 2025 13:29:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id joOYBvuUHroL; Sun, 26 Oct 2025 13:28:49 +0000 (UTC)
+ id VUmh4yeBFdyU; Sun, 26 Oct 2025 13:29:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E31240488
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86D8B40620
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E31240488;
-	Sun, 26 Oct 2025 13:28:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8AA8BD7
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 13:28:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 86D8B40620;
+	Sun, 26 Oct 2025 13:29:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id BE1D815F
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 13:29:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7C04F60EFB
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 13:28:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B010B8100A
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 13:29:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z8E1ttAfcwJQ for <buildroot@buildroot.org>;
- Sun, 26 Oct 2025 13:28:47 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1E0260A6E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C1E0260A6E
- for <buildroot@buildroot.org>; Sun, 26 Oct 2025 13:28:47 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B147D878E3; Sun, 26 Oct 2025 13:28:47 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 26 Oct 2025 14:22:42 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2cc346e763341f3abf88096701b3deb0889c43bb
-X-Git-Newrev: b7d96a1381e6cd82aa717b34ff7270d6a230187b
-X-Patchwork-Hint: ignore
-Message-Id: <20251026132847.B147D878E3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/liblo: bump to version 0.34
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ruc56djKoNhX for <buildroot@buildroot.org>;
+ Sun, 26 Oct 2025 13:29:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B12F781004
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B12F781004
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B12F781004
+ for <buildroot@buildroot.org>; Sun, 26 Oct 2025 13:29:01 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id A1AEF19F54D;
+ Sun, 26 Oct 2025 14:28:58 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 26 Oct 2025 14:28:58 +0100
+MIME-Version: 1.0
+Date: Sun, 26 Oct 2025 14:28:58 +0100
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251024212958.4091720-1-giulio.benetti@benettiengineering.com>
+References: <20251024212958.4091720-1-giulio.benetti@benettiengineering.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <cef371b428d879283640a6c5174d9706@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1761485339;
+ bh=ZxovZKUyEgounXX4swo46DL9ffCL8NzOqcbx4Qsc678=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=cUO7e66DZcGWdDtJx125maxHLTfuQzijEu1ghd7HP/2UOrstLoL116/q0efOJ2FQD
+ U1mdCg9jlESt238o1e2ygCGQJO6tZ+z4EQAgjpAF+bdgb6yl91nayp5jhiYJZ2Eg1w
+ qEhRKUpcj/ISB7wdbvQSUf81op5hlbKACnRoVbBvbeGGannOfKdN+nA9zTFA43BNKf
+ hvPy4Cl2WeH126KiBuG8KXYndqdj1/Tc6LGKC6rru5v0RJIsU8qv4hcx240qgWKHTC
+ VrA2myNflwaYsCTK9H2/xWdT7bMIpW4yXYJ38KNuAaR9Egje4pAX61jL/h1YgqEqsb
+ 3IyGO1eTL6mQw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=cUO7e66D
+Subject: Re: [Buildroot] [PATCH] package/liblo: bump to version 0.34
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,98 +82,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7d96a1381e6cd82aa717b34ff7270d6a230187b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 24/10/2025 23:29, Giulio Benetti wrote:
+> Drop upstreamed local patch
+> 
+> Release Notes:
+> https://sourceforge.net/p/liblo/git/ci/master/tree/NEWS
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Drop upstreamed local patch
-
-Release Notes:
-https://sourceforge.net/p/liblo/git/ci/master/tree/NEWS
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Julien: reorder hashes in hash file]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...ver.c-fix-build-failure-as-static-library.patch | 34 ----------------------
- package/liblo/liblo.hash                           |  8 ++---
- package/liblo/liblo.mk                             |  2 +-
- 3 files changed, 5 insertions(+), 39 deletions(-)
-
-diff --git a/package/liblo/0001-server.c-fix-build-failure-as-static-library.patch b/package/liblo/0001-server.c-fix-build-failure-as-static-library.patch
-deleted file mode 100644
-index caeee536a0..0000000000
---- a/package/liblo/0001-server.c-fix-build-failure-as-static-library.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 74b228c74c7821dbe16d7730040030eed2f01a28 Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Mon, 7 Jul 2025 22:58:10 +0200
--Subject: [PATCH] server.c: fix build failure as static library
--
--As static library strncpy() can't determine precise maximum characters
--because strlen() is variable, so to fix build failure let's convert 3
--lines into one by using strdup() that does the same as the actual code.
--
--Upstream: https://sourceforge.net/p/liblo/patches/9/
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- src/server.c | 5 +----
-- 1 file changed, 1 insertion(+), 4 deletions(-)
--
--diff --git a/src/server.c b/src/server.c
--index 130f6d5..1236279 100644
----- a/src/server.c
--+++ b/src/server.c
--@@ -2062,10 +2062,7 @@ static void dispatch_method(lo_server s, const char *path,
--                     char *tmp;
--                     char *sec;
-- 
---                    int tmplen = (int) strlen(it->path + len) + 1;
---                    tmp = (char*) malloc(strlen(it->path + len) + 1);
---                    strncpy(tmp, it->path + len, tmplen);
---                    tmp[tmplen-1]=0;
--+                    tmp = strdup(it->path + len);
--                     sec = strchr(tmp, '/');
--                     if (sec)
--                         *sec = '\0';
---- 
--2.39.5
--
-diff --git a/package/liblo/liblo.hash b/package/liblo/liblo.hash
-index a87b6233dd..cab192b421 100644
---- a/package/liblo/liblo.hash
-+++ b/package/liblo/liblo.hash
-@@ -1,7 +1,7 @@
--# From http://sourceforge.net/projects/liblo/files/liblo/0.32/
--sha1  e660cf3f630f9255a626102b4ff5082114ebd8a1  liblo-0.32.tar.gz
--md5  a93a7a9da084e6a0937bde6fc324a52a  liblo-0.32.tar.gz
-+# From http://sourceforge.net/projects/liblo/files/liblo/0.34/
-+md5  14a65154e8f2609f558ce2648f1c99ef  liblo-0.34.tar.gz
-+sha1  0bcc3f30a4cdd2f41fe6c20c48f92bcaeaa8e6bc  liblo-0.34.tar.gz
- 
- # Locally computed
--sha256  5df05f2a0395fc5ac90f6b538b8c82bb21941406fd1a70a765c7336a47d70208  liblo-0.32.tar.gz
-+sha256  69aa0cd365dba5ea7799b850a7da659ad303e6074bbd67f4ab84e4d6f5f6c3a4  liblo-0.34.tar.gz
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
-diff --git a/package/liblo/liblo.mk b/package/liblo/liblo.mk
-index c47e06c0a3..ab30feab81 100644
---- a/package/liblo/liblo.mk
-+++ b/package/liblo/liblo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBLO_VERSION = 0.32
-+LIBLO_VERSION = 0.34
- LIBLO_SITE = http://downloads.sourceforge.net/project/liblo/liblo/$(LIBLO_VERSION)
- 
- LIBLO_LICENSE = LGPL-2.1+
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
