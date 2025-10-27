@@ -1,73 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1607CCCF9E5
-	for <buildroot@archiver.kernel.org>; Mon, 27 Oct 2025 01:42:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77376CCF9E9
+	for <buildroot@archiver.kernel.org>; Mon, 27 Oct 2025 01:42:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C2DE2611C8;
-	Mon, 27 Oct 2025 01:42:13 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id anIk4V2Qqe3n; Mon, 27 Oct 2025 01:42:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BF83611AA
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8BF83611AA;
-	Mon, 27 Oct 2025 01:42:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id C732825B
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 01:42:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ACE2941256
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 01:42:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A87DF4125F;
+	Mon, 27 Oct 2025 01:42:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hRbA2O_OIc7W for <buildroot@buildroot.org>;
- Mon, 27 Oct 2025 01:42:09 +0000 (UTC)
+ id Vu13CEYGIHUs; Mon, 27 Oct 2025 01:42:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBC7641256
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id CBC7641256;
+	Mon, 27 Oct 2025 01:42:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DD44CD7
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 01:42:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id CEE1541256
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 01:42:13 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MVqCn7ujftpl for <buildroot@buildroot.org>;
+ Mon, 27 Oct 2025 01:42:13 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=172.105.4.254;
  helo=tor.source.kernel.org; envelope-from=jarkko@kernel.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E16FB4124E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E16FB4124E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DB8814124E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB8814124E
 Received: from tor.source.kernel.org (tor.source.kernel.org [172.105.4.254])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E16FB4124E
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 01:42:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DB8814124E
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 01:42:12 +0000 (UTC)
 Received: from smtp.kernel.org (transwarp.subspace.kernel.org [100.75.92.58])
- by tor.source.kernel.org (Postfix) with ESMTP id DA758602E8
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 01:42:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30314C4CEE7;
- Mon, 27 Oct 2025 01:42:07 +0000 (UTC)
+ by tor.source.kernel.org (Postfix) with ESMTP id E4784602E8
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 01:42:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38350C4CEE7;
+ Mon, 27 Oct 2025 01:42:11 +0000 (UTC)
 To: buildroot@buildroot.org
 Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Date: Mon, 27 Oct 2025 03:41:57 +0200
-Message-Id: <20251027014158.865598-2-jarkko@kernel.org>
+Date: Mon, 27 Oct 2025 03:41:58 +0200
+Message-Id: <20251027014158.865598-3-jarkko@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20251027014158.865598-1-jarkko@kernel.org>
 References: <20251027014158.865598-1-jarkko@kernel.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=kernel.org; s=k20201202; t=1761529327;
- bh=0+ISEFq85geOYeieofELFzTf15lX4VC0R8heLOosCI8=;
+ d=kernel.org; s=k20201202; t=1761529331;
+ bh=rgGvy2niZ3BH5FUfozQhFzUZkCjgMYlMHdkdfrNa2Ew=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=Woiie0iZKOzRYFj0jo+HvIzTOyDKvpYLk3L16Z6b3PlhAryvvK3/fC5ZYIfQjt9dg
- Uzbk+CKrWBvYd8/MFKcQixHLnMG8TNXyJ9scia13qKY3C/YlTSaDBMxKJQHpUQXaBs
- gEBDqx70DyRQQgnONkuOoThQrVLtYUhA4xZiLxlMF1HN3k9m+B0dEN9eG5lqfnS0Y9
- NAWdEFQ70T3ZNPtOn3w+uZC6TqI7/4mzOOM/2KhyZZLsLJ1v+/aNsuhBR+9xars3iT
- 9PFtxWi4jcIKKeusVGRXO2hBMBXY0mbY4yxz4iBxfKk1/Z5dKDPS3E5knrpg0iuwO8
- VZG+kQ7kQ6qrw==
+ b=QLVNmN/M56A4kjKK+sqKA5F5Gbp36K5JjFat3x0htJRkitNGwLnnZAoqZmOf/Hx8d
+ 1s9jA1rsZIsovhuhXv+dnJwDpQUv83U5Mz3pU6DiR3Lrr3lmWFwuotTWUTZb3jeTJN
+ 9NLUoAgI6lIZubMe3g4jiFe396fWaayw+LLKZqEh4yOuXkw7mREKzqNdcQArJvX8Ux
+ zWYdks8F3VL+ZZyCrhJYD1Znx3sRfVUh7eiKCHF38g5xYzJXW97Yor4HNOgpUyY5H6
+ 1EQVs+ODYHi5S4qbtGnB8KipaZzD+XUm34071R1MzC2j2Q3BTRE/xFm/6JOZbY11Mq
+ 31jV1iUIm/BVA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=kernel.org
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256
- header.s=k20201202 header.b=Woiie0iZ
-Subject: [Buildroot] [PATCH 1/2] package/libtpms: bump version to 0.10.1
+ dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org
+ header.a=rsa-sha256 header.s=k20201202 header.b=QLVNmN/M
+Subject: [Buildroot] [PATCH 2/2] package/swtpm: bump version to 0.10.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,31 +90,31 @@ https://github.com/stefanberger/swtpm/releases/tag/v0.10.1
 
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
- package/libtpms/libtpms.hash | 1 +
- package/libtpms/libtpms.mk   | 2 +-
+ package/swtpm/swtpm.hash | 1 +
+ package/swtpm/swtpm.mk   | 2 +-
  2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/libtpms/libtpms.hash b/package/libtpms/libtpms.hash
-index 1026aaa4f4..66f3131e47 100644
---- a/package/libtpms/libtpms.hash
-+++ b/package/libtpms/libtpms.hash
+diff --git a/package/swtpm/swtpm.hash b/package/swtpm/swtpm.hash
+index 934d3b6ee0..fe7f646ec2 100644
+--- a/package/swtpm/swtpm.hash
++++ b/package/swtpm/swtpm.hash
 @@ -1,2 +1,3 @@
- sha256  2807466f1563ebe45fdd12dd26e501e8a0c4fbb99c7c428fbb508789efd221c0  libtpms-0.9.6.tar.gz
-+sha256  ebc24f3191d90f6cf0b4d4200cd876db4bd224b3c565708bbea0a82ee275e0fb  libtpms-0.10.1.tar.gz
- sha256  82f1e6bae374bb6a9d4f4596767fd33e499718d560de140fd9f3d402cc5e41fb  LICENSE
-diff --git a/package/libtpms/libtpms.mk b/package/libtpms/libtpms.mk
-index 19d7cef89f..6e5708202e 100644
---- a/package/libtpms/libtpms.mk
-+++ b/package/libtpms/libtpms.mk
+ sha256  b281b4e8c39f68e1928675f788abc70072e4081152e129144359a8c5c304c06b  swtpm-0.8.2.tar.gz
++sha256  f8da11cadfed27e26d26c5f58a7b8f2d14d684e691927348906b5891f525c684  swtpm-0.10.1.tar.gz
+ sha256  19d27d6e96d07022e5e688f75c974f1ceb9aae9e90e0fccae68666d02099cc4b  LICENSE
+diff --git a/package/swtpm/swtpm.mk b/package/swtpm/swtpm.mk
+index 598d56cf1d..25377f5771 100644
+--- a/package/swtpm/swtpm.mk
++++ b/package/swtpm/swtpm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBTPMS_VERSION = 0.9.6
-+LIBTPMS_VERSION = 0.10.1
- LIBTPMS_SITE = $(call github,stefanberger,libtpms,v$(LIBTPMS_VERSION))
- LIBTPMS_LICENSE = BSD-4-Clause
- LIBTPMS_LICENSE_FILES = LICENSE
+-SWTPM_VERSION = 0.8.2
++SWTPM_VERSION = 0.10.1
+ SWTPM_SITE = $(call github,stefanberger,swtpm,v$(SWTPM_VERSION))
+ SWTPM_LICENSE = BSD-4-Clause
+ SWTPM_LICENSE_FILES = LICENSE
 -- 
 2.39.5
 
