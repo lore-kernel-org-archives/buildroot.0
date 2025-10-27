@@ -4,184 +4,192 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84354CCF9EA
-	for <buildroot@archiver.kernel.org>; Mon, 27 Oct 2025 09:35:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF0BBCCF9E5
+	for <buildroot@archiver.kernel.org>; Mon, 27 Oct 2025 11:46:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 43E8261294;
-	Mon, 27 Oct 2025 09:35:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6522E612AF;
+	Mon, 27 Oct 2025 11:46:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FY93EWUlmsaI; Mon, 27 Oct 2025 09:35:11 +0000 (UTC)
+ id KzirpUt7Fwqx; Mon, 27 Oct 2025 11:46:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE7AD61290
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2440612A1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE7AD61290;
-	Mon, 27 Oct 2025 09:35:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 961A415F
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 09:35:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C2440612A1;
+	Mon, 27 Oct 2025 11:46:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2A7D4976
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 11:45:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7B4914122E
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 09:35:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 11219612A1
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 11:45:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mchD7xv0pyJ8 for <buildroot@buildroot.org>;
- Mon, 27 Oct 2025 09:35:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MZzEFtc8BeLi for <buildroot@buildroot.org>;
+ Mon, 27 Oct 2025 11:45:58 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:c409::2;
- helo=ma0pr01cu012.outbound.protection.outlook.com;
- envelope-from=esakkiammal.murugan@iwave-global.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3A21A41228
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A21A41228
-Received: from MA0PR01CU012.outbound.protection.outlook.com
- (mail-southindiaazlp170110002.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c409::2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3A21A41228
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 09:35:07 +0000 (UTC)
+ client-ip=2a01:111:f403:c101::7;
+ helo=bl0pr03cu003.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7E4DE6129D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E4DE6129D
+Received: from BL0PR03CU003.outbound.protection.outlook.com
+ (mail-eastusazlp170120007.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c101::7])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7E4DE6129D
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 11:45:56 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ZbTAnjE/jrV7ajXJQ9+HgAWgEl7egsAoF7rT8TE6XEfxekh1BLpIWSbg7v6MYIKQ1//fyN50THoCzpFyP4EWQD5UskSokcVLIhapPF4ElRxJrjxk9iesyg7PnCtsENvBLjVYlU9+SnmEYKpZT8TscGXgFtgcSRGE3A2aqC/KDeJ0LH8owcs0qNoofaamXMkLKMNh0voMpNxoJcmF2JWZZ1aeKjfjPd/IfQqF9Cv+jPQ1vyeeCzjTfu28tgXDQKWxVAFQq3epQJQ1PqIWm8ED1hiE+OXSagR2MmAVmY6NmHf7Fo/o6SnOLBjc0b+4SDvqvBZ7dJrjM6USTD2+mJ67sg==
+ b=vtkJ7dYJnWr45qhTZuXeUuJ2rVRd5LJZ53UDG580YvuHcfJbaQ775maFr7c2ftnzy+nmzNA8YXgl/oTGElVfOioMaRjuBJlJtYnjJHlFU/t2QvEmvoGAuS5OBLK01U39JJpduO0VIZ/qiVGZ7aJjdLaiLHMG34dVTQZ5BnEHKN2rxU1fWiAXN9JSSoAvckIi479LYrs5fzY4GE8OCgWj2bfGh/YcZPH8HZSZ2FlstOy/qRYOJwbOR2KYBScSSYbtOTP2hnoraNMWnEGc+tF35bVWfObw+yJDN45GlUCLIV3CqSDTzDDtKBo6kIMghnR0DaRH5bdhqkUjuQqGFYGOgA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KaKXDH0P/tBxDhGPHq/RFVhV49BCSgcJtw2PA9z3hUs=;
- b=MNV4rjpPdsXYvF+WVvfYi1FFxWAScjOWEaLWcfsX1PmDIrynaGg9NepW2Q0evaiUVTinzkD/J/1dB+tG34R8Qw5HFBFSq7x1lyZAzExiYKTJs84nLKUFbm1l8+j2zisSmSN0pGSVAEPPeG/497yJl9ZRB0Z8ecsA5kZQ9ros4Ou31C8ZtedKriS/2+gtxh/9minVVXBrmCgsMBxBXP2cwJzVq634EV/r2Lw1roqKGFzKrF3SYPcmsAC9RPpcKQGuiBCLCY7F1v0XP8jBeJRgXk7dv4/zuY20y4HwX7n+k+PKk+2frYtViOfnKGkFdNFV3LRanr/UArBg4JYoZGd3oA==
+ bh=vvPWitdRJvJWYLIw2ocnoUuB5bUwR7fh1ZJv7JQ8Q68=;
+ b=f2H0WzSj8hJo/pmSB5i6WsOWCnm7J/gmZ/O+VtDxlSwL6n8Ci0SCJ+VZizh44CfRRo6BHkYfGZtfo8w+gAoedtUfJIRll28j5sqgNaOY/6cro3tkyfqL8kPZgbvGnYe0Rp3M1NiHNtBRV77vxrLIwyXVPZ4bfCWegPY5m8UnyHb+ijCILz1v8st/MJZLe3GIB3Qa5NXNnfXy7TaqZGIB/aSgUWtmpWdfNAwZuzHM2CAPSdXnEbUJKxSjn09+nkNktWhkT9f3ybU+yMXkJcn+onAWIrhfeMwwfmUqz9tCbV/1jxgthknmB9MNqg8rSmoZA8LE35MaLRnZIJLhzBRD7w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=iwave-global.com; dmarc=pass action=none
- header.from=iwave-global.com; dkim=pass header.d=iwave-global.com; arc=none
-Received: from MA0P287MB2448.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:122::11)
- by MA0P287MB2103.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:102::10)
- with Microsoft SMTP Server (version=TLS1_2,
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+Received: from SA1PR12MB5615.namprd12.prod.outlook.com (2603:10b6:806:229::17)
+ by DM6PR12MB4481.namprd12.prod.outlook.com (2603:10b6:5:2af::11) with
+ Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.18; Mon, 27 Oct
- 2025 09:35:00 +0000
-Received: from MA0P287MB2448.INDP287.PROD.OUTLOOK.COM
- ([fe80::fafd:97ba:ad13:4c1e]) by MA0P287MB2448.INDP287.PROD.OUTLOOK.COM
- ([fe80::fafd:97ba:ad13:4c1e%5]) with mapi id 15.20.9253.017; Mon, 27 Oct 2025
- 09:35:00 +0000
-Message-ID: <438a57da-d01d-41ee-8f11-0bb2ec522350@iwave-global.com>
-Date: Mon, 27 Oct 2025 15:04:59 +0530
-User-Agent: Mozilla Thunderbird
-To: Fiona Klute <fiona.klute@gmx.de>, buildroot@buildroot.org
-References: <23d1f4ad-241a-4fe1-9db0-08bffa4775b6@iwave-global.com>
- <45b0422f-620c-4db5-9a35-423466de2db5@iwave-global.com>
- <584f433e-3ace-4493-a073-7cb92eae6d08@gmx.de>
- <3ac2065a-8ac7-4a59-9889-51fce1eae53d@iwave-global.com>
- <5eb375f3-d026-4592-81f4-462548717d61@iwave-global.com>
- <a08cca53-7d11-4101-ac6f-b34de963d870@iwave-global.com>
- <68a237a6-6e79-42b9-a3b5-52194d42e782@iwave-global.com>
+ 2025 11:45:53 +0000
+Received: from SA1PR12MB5615.namprd12.prod.outlook.com
+ ([fe80::7557:587c:4ec:1913]) by SA1PR12MB5615.namprd12.prod.outlook.com
+ ([fe80::7557:587c:4ec:1913%6]) with mapi id 15.20.9253.017; Mon, 27 Oct 2025
+ 11:45:53 +0000
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>, "buildroot@buildroot.org"
+ <buildroot@buildroot.org>
+Thread-Topic: [PATCH v1 1/1] boot/xilinx-prebuilt: add local versal xsa support
+Thread-Index: AQHcRbXY0JHQpMLUxkeD5w8DfqbO2LTVu8uAgAAmbtA=
+Date: Mon, 27 Oct 2025 11:45:52 +0000
+Message-ID: <SA1PR12MB5615F83A12AD092C2590B6E7F0FCA@SA1PR12MB5615.namprd12.prod.outlook.com>
+References: <20251025134655.1068839-1-neal.frager@amd.com>
+ <DDSZVS4QNIJ7.3TPH8C5KHSOF2@bootlin.com>
+In-Reply-To: <DDSZVS4QNIJ7.3TPH8C5KHSOF2@bootlin.com>
+Accept-Language: en-US
 Content-Language: en-US
-In-Reply-To: <68a237a6-6e79-42b9-a3b5-52194d42e782@iwave-global.com>
-X-ClientProxiedBy: MA5PR01CA0105.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:1d1::14) To MA0P287MB2448.INDP287.PROD.OUTLOOK.COM
- (2603:1096:a01:122::11)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Enabled=True;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SetDate=2025-10-27T11:42:50.0000000Z;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Name=AMD
+ Internal Distribution
+ Only; MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_ContentBits=3;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Method=Standard
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR12MB5615:EE_|DM6PR12MB4481:EE_
+x-ms-office365-filtering-correlation-id: 81ef2963-e7a0-481f-9a07-08de154e6217
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+ ARA:13230040|376014|7416014|366016|1800799024|38070700021|41080700001; 
+x-microsoft-antispam-message-info: =?utf-8?B?d0VsMFlISnBOcDBHTElqSlkvQXJLT3AyUGU4MUQzZW9NMVB5enlsMDhGSGdo?=
+ =?utf-8?B?R1ZITC9icmtTdzBOVUVKNTd4Uk1pWGxlMVp0ZEJFYVBReEwza0dkQnkzMnJE?=
+ =?utf-8?B?M0NpbEp1azFqZk8vWWtBTE5DZXZUTjQyU295dGRMdjJOZEhSSGJZckw4Y3ZZ?=
+ =?utf-8?B?bHV4V3Fla3RwdjB6RE9oZWlJMVlvOHhEcm92T2w4R25zZTRMTHFaS2xTbkYr?=
+ =?utf-8?B?WjBZekZqYmNwcUhCSGJMMWRLK3dEdHh2NGY2d0pmb3RYV05IN2dOajdsUHVt?=
+ =?utf-8?B?Zkc2bUpabFFjWXRuam9BeGVqQkQ2VXV5emZSd1cxNjNBUndDOTNjSEdDbHlu?=
+ =?utf-8?B?SWJ2ejRhUTZpeUEwTkk5UjRwd1pJaCt0Vm1VUE93RFZ2ZmtSQ0hxRGdiR0lW?=
+ =?utf-8?B?QjMwZUthTitteXBUbVZSU1FXL3NUVU1lb1VjYVhXN01NcmlpazlRWFFBRnQ4?=
+ =?utf-8?B?Mk93UzdDUTZhaHUxaGlkdnc3WlNQOUdWT0Y3R0M0SWRDbmQrL2ZldHkxYkxu?=
+ =?utf-8?B?TVZXQjRMbkUzbmFFK2puNSsrUlpxelZZMTFtakZZT0hKWnNQblNjc0RXZ0la?=
+ =?utf-8?B?MWFpSkhhNVBFQ2x2SjdzZEYvYmNsWG1FNkYvSjFyZlVaYm1mb3RUTkV5NDRN?=
+ =?utf-8?B?Z2d3czdCZ2ZtazcvOWxJb0k4Mzc4Tkg2SU9PcDlvS3BYcnFwQWJ2Vlk5N1cr?=
+ =?utf-8?B?ZzFLdUxRVlpNQ2k3cTAvWlNPZmE2R1N2SkVTMWIrUi94SXMxdDZ6a3AyZkp2?=
+ =?utf-8?B?cEhJZXgwZzFiL3M4R1JBRmU2REtiTXVXNFRtMVFWYS9HYUlJU25HcHg4L3Uv?=
+ =?utf-8?B?RmZ2L25XVVdIaXBpMkdHMEZrRWphdFRDYkR2TEJpTVoyRDRMdVhoeVBNMXdw?=
+ =?utf-8?B?dVFGVmFPc2w0UHZMRklPTjRwUk1QeDFMTnFaQVNJdk1BdWIyNHJLdktYb2o3?=
+ =?utf-8?B?VHQ3U2tPYjd3UGdnMjRSUjFGZ3hScGwrMGhYZHpHMkVCM092QjNrZ1hwOEZJ?=
+ =?utf-8?B?ejF1MHo3Y3cxK2czTHlTa3Y4MkhNSFI4NUVaWStDcWJYZ09zNmU2eGlsQVVr?=
+ =?utf-8?B?TkdFZWhpeVlWRGJ3ZWFyYXBkVjB2bWM3SFhQVFpXaG5OTjFRWkZQcDlzTEhS?=
+ =?utf-8?B?b3FqcGROKzM1bjhWZktrZlZXaGtXOEEvdXJKOHBTZ3EzbytJOXNNd0l2UTZi?=
+ =?utf-8?B?enJ0MkpnOWhxaDVjTmYzcjk4VUhhcEtFdXI4eGJlUXRoS04zVU9UbEFSQS9I?=
+ =?utf-8?B?c0ovaTJxZys4RVZ0ZDRvcGtVM3hBZkZaMk8wTGdPcUg1RjE2a2ZXc043T1JZ?=
+ =?utf-8?B?OTRHdnlyUStMcjJrUVFhdW43V2lEb01XQ0JNMXdLZFM1N3pjUmpHTkx1TlZa?=
+ =?utf-8?B?dGdPdGJDUW9BeExFOEt5Sk1EOEhTS2JweTc4LzhwZ0FZdmdyWWdmeUdTVGV5?=
+ =?utf-8?B?UXVXTnNkTkw3TVpoUHM1M2dNa0oxYStnRXVCSkxYUFdmSFZIQWFEL2xhM3o5?=
+ =?utf-8?B?Qisybmo3SjdwZGdJakhQYWI4UzFlSXNpNkw1ZjRNa2FVR3J5dm1Kb2hpWGt2?=
+ =?utf-8?B?Z0ovNWxzUG0wY3QySWFVZ2RNM3Q2Y3czWGRvV3R5cHJ0VVhvT0JnbG4vV09S?=
+ =?utf-8?B?WGU3MU1XMUlwQ2RHMWs0NWMrZFpDTVp3aWc4eHNqM3lXUU01QlFzWmsveGJo?=
+ =?utf-8?B?RDBobTVPS2FGQzZiQkdyNEk3bFEvVEswQTkzdmZTK2hxQmpzMVdJMGRjVmJm?=
+ =?utf-8?B?RTNWSzJOYlpyeWx4UlZlY3FlSFBzNVhvdUZGTXpCeTNlcWlyMDBUV1l5R0ha?=
+ =?utf-8?B?MnQ5QnAyQ3FUdTM3VXp6Ukt0QzJScGpuek5WQTU1VUtVN2VOaVowTGhxaTRH?=
+ =?utf-8?B?SXNQNVBKdjZkUTZxdi83YlJCZ3hOZkVNYURJcXJTUm8zWk5NQnhDZDZLNU91?=
+ =?utf-8?B?a0ZRUkNrRlUzaXF0ZDhMdDdIbE9DTUhrSGRlb01pMzhucURsZXFkenU0MTlH?=
+ =?utf-8?B?eHlGT085cG9xRFJGVWN0Ni9KWEsycGFiaUlhMUN4Zm5rNkZrei9tcW1mUDJD?=
+ =?utf-8?B?WGtlbkVvb2pCNE1uRUhtcUhTQlNnM2NhYTA4MDJmM1ZkUGl3cVpVMnM2SlU0?=
+ =?utf-8?Q?9wQk=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:SA1PR12MB5615.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230040)(376014)(7416014)(366016)(1800799024)(38070700021)(41080700001);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?d2Y1b3lQWnVubXoyVWpvMEVjU0s0QWg5LzFSOEozNlpjcjhCTnFza3NKV0VH?=
+ =?utf-8?B?OFZNZkNidlQ5bHhGd1JPOGQ1dFFVMlBJTmZsNzJmVS9oUnpra2ZJY29EaUEr?=
+ =?utf-8?B?cDJqM0RVamE1NFVQWVk4MnBhUHQrajlRVWVaQ3hBN1MvNUlBdFVPZlBUVkdm?=
+ =?utf-8?B?RURYcXdCb1RjbHJiWmV1aGs3Q1ByTHdMRGNWNDRtWlNtVUY4NmFVWllaVzFV?=
+ =?utf-8?B?YTBYcWlTU1V1M0xnODRjRENoZTNFYlQwRHAwT0xvdG9tVEZadzRLMXBLeG8y?=
+ =?utf-8?B?aXAyTkJXVlZwSm9DUFZIenUrVkFSOSttVlFSTjlmWHJkTWN1YUJMbUZZUkha?=
+ =?utf-8?B?SnM4LytTVUlFZDBSZGQreDdoVmRvUnhoS2tXWGk0enpoVTdJUGRxUHNWQ2Jk?=
+ =?utf-8?B?RnRiVG5pK0REdkRBYThkWTVBMS9lRXR6WlVjT0dxNWNnRzNHOUFYZXpvL2t0?=
+ =?utf-8?B?cWh0Zm4zM285MC83TStIYlRCQXZFOUVGSWFTZVJyNHU3TjY1Qm9QaTd3dlpU?=
+ =?utf-8?B?SmJiaVBaV0tvWUNLOHJaVUpqWFVmZm5iNzZ2ejdISTRBdkxQYTJ0WDR1MHg3?=
+ =?utf-8?B?OHlwVWsvRVY1eUJwdnNUUjR4NXBsNlc0RTlYTyt2N0dRUEo5Tnp5UzBxbHh4?=
+ =?utf-8?B?ZEpvL1ZFaUd0OXExNkZrOFJmb2xsSlEvTFF4ODE0VEhma05pd1ZvUnhrVnly?=
+ =?utf-8?B?UUJXSW1zNEh1alBaR0gwZTI2NUNXenJzY1V5NklGZTNQNmMxZ0ViMHlTZm16?=
+ =?utf-8?B?ZHBVWDJjT3oyTlNNVllsMnZwYjdaV1YwVVZuZFI1eGMzK2tYQmhJa25uQ1NZ?=
+ =?utf-8?B?VE95ZUhPZ01XZVBvdGFEY3YyVDdBMEFWUTYxK0o0YXQzcFR0Y3k1YkQya3Ex?=
+ =?utf-8?B?WjAxYmtPdHNMeXdIWjlsRmRwdVc5azBIYWc0ejRJeEcyKzVBc0VCbU5rUDdL?=
+ =?utf-8?B?UnNhcUNzSGhyb21RZlpNVnQ5TkxpUmFRcVYrdW1KNTAvajhnR0VxQ0pFWXZZ?=
+ =?utf-8?B?Tk5nR1RQK3dzR3daNjRnZmFZOFBnR0w1YVBrS1FLQ0ZQT3RNenlHQlZkak5m?=
+ =?utf-8?B?Z1N2emhPQndicWdjQ1hrSlRqUFRXMmJDaWYrZEpZSERGMklVQlFHZ01oUStW?=
+ =?utf-8?B?eWI0NVZGUkk3blQzc1NWYVgzVmhpdWxYU29WdDk0Z1ZLUS8vKzRqK2lyUXRO?=
+ =?utf-8?B?VTNvUys0ZERvcE9hUHhMenpXSFUxWEVzT29xdjVtUnQ3U0Q1amhYenBraCtq?=
+ =?utf-8?B?WkRPWHBGMTZTQkVZMkg1aXNlTDFJTk1ockEydHFCdWdBRnpyREdscEIvdkZu?=
+ =?utf-8?B?UDJuMEtjRFdUd3JVVkF0M1pUUS92eXpyU0xGc3hzNlJwVjJXTHcreG9TSWRz?=
+ =?utf-8?B?ckt1UU8wR2l5RWM0TmJ1aEp4SmVQYTRxaDF2ZjhiN3RhNzUzeWlydUU1S1VO?=
+ =?utf-8?B?N09vbU5xRkNFUHdTa1lrNERNZjI0NnRxSGwrYUc0MkhPVnhycnhubGVXYTF0?=
+ =?utf-8?B?YWJjK3pmKzhUekc3RTNVTVJzZVhONFdmYlppS3RSMGNLUmV3WVNIK0NselNE?=
+ =?utf-8?B?ckNBS3RDNWhRYUpyRGE5L1hUc21ZUGEyWjlucFJLWEJPeHhoQ1dFMXgwMHQ3?=
+ =?utf-8?B?YXkvNWQ1cXRneWlGN2dyaVg4azJ2K2JHZEJMSUxuTXpZdDVyVVZYYUsrMTdN?=
+ =?utf-8?B?MGQzbjMxRkxRdVN1aTN0MHg3YU5UclhSS1F0bnA4ZWpzRk9OUHhmbE5DWWZQ?=
+ =?utf-8?B?a2R4R3FBQnhMNnhUSURScHRJMnpuWUIvM2Z6bkhSdi80ZUtsSjZDZmh2M2hl?=
+ =?utf-8?B?QnBxeFRFSVZMWWx2WTBRNEs2bEdkaW12dzZHUjg2Qit4RFU2NDFZSng2MTZw?=
+ =?utf-8?B?UmV3bXcwYWFIUXptY1F4UytjVWxMVlI3YmVhYWt0a21jdWRWRlBoR0dtdVNG?=
+ =?utf-8?B?cGFUYkd6WndhcDlwM3NqYUluNzlydjhDbkVwWUVQSGhQUG0xamZTL0g2clNm?=
+ =?utf-8?B?K3N0R0MxWEI0ZGhjQkFSWXZia2ZtWTJ4dTMvYlU1MG9YKzV2YXVxZEtwQzgx?=
+ =?utf-8?B?ZkpTZE1aQWdYVTRPeW9RRFNoZTFtbVlvS05vakhuTVJZTzRoTERrTGUzWlZi?=
+ =?utf-8?Q?I9/w=3D?=
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MA0P287MB2448:EE_|MA0P287MB2103:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9590de17-4a2f-4178-3af8-08de153c197d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
- ARA:13230040|376014|366016|1800799024|8096899003|13003099007; 
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?RzZBaW92RDU3YXdGSHp5NFpCYXMxc2xuMDUveEwybVVIRE13SjZYZ0xCYkJo?=
- =?utf-8?B?bGc3czJlSlFmQjNHQktFbTZud3pVWkwrVFZsZkp6cnhmekIwdGs0ZExyY0Zt?=
- =?utf-8?B?dHhaek1HVUc0bGRXaXJUc2JiaGdXRGtrZE12Zkx1SDJabm5xcGp6a0doVDVP?=
- =?utf-8?B?V0U0dTYwSVhEeUoxd0xiT2pjWkpjd3A4elk0bDN1SG9xaG5tSGFEc1lvUS9Z?=
- =?utf-8?B?LzFlcHpXbHFoVWt3Q2lTKzJQNElBUVJ4VjZRY1dwWkNzTzl6OENqR2N0b1Zl?=
- =?utf-8?B?ODlZbVViZVlzRHNDeThsVzRldXJlQ0c2Zy9qK3NTN3NrZ2ZzakVQeHN2ZjBK?=
- =?utf-8?B?R252UW9NcmRUV05zQ2VpMTkyaWswR0Y3L3duMHZaQXZIektFWkowcnFqL0pU?=
- =?utf-8?B?Sys0dzZMMzMxdVV5NFl0UGFMWVR2WnZjSzJJNllRcFgwNloyUStCcWExTzU2?=
- =?utf-8?B?a2tVeThJYlBMMzAyaTUrUVcycGhGRHNCdmxBRXBGTCszMDgzTkJqWVArR1NJ?=
- =?utf-8?B?eDUybHpxTVZOcVNyT1FrSFAwZUpOZGg5akZEY2RONlN1bDZxbWo1Yk1jbjgz?=
- =?utf-8?B?TnpvaVVSM2c3WmVZYUJQajFFcEN3QUMxaFZqdVpyOHU1aWV1YjdaU1Avd2hR?=
- =?utf-8?B?VVZrMFRPTWlaS2FxZ1lEZHRPMmlZMGpYWkdvSHllWW0zY21wRjNrVzU3R2xG?=
- =?utf-8?B?ME15WGx0aEtHK0JMRnk0Vm5LcFFQbzlSNVR0MkVDbTllcUdvM1JTTm1GemF6?=
- =?utf-8?B?eDB6a0FrRk9LTlRuN1N6d3dyUVI3R2JKMCt5Q2tXWmdkbFhONEg1ZlpVSHRv?=
- =?utf-8?B?QVJtNVRSY1RnLzJqcFdYNlk0Z2wyMG1oTEtORm1PcndXemZCd1J0a2thS2VS?=
- =?utf-8?B?a1Q2ZlF1ZVhJS2RhRGVweWg4WFRldGozYUJmaFltWFZUZEdSMHpudjQwNWc5?=
- =?utf-8?B?NTNaTStFbVFFTm1EWEhRbm9DS3YyZWFSTFV0WnI3NEk0RXdvYnZpYjEvWFZX?=
- =?utf-8?B?VmJYZWdUUDVSTmFUSUtDdVJzVmo3aCtObGQ0MlgvbTQ3aTZQUnJmVWRyQUFG?=
- =?utf-8?B?THZyNlUrblByb1d1ZTFrTEJsVEwvcXFKbXV3WnNvS2NKYjQwdUpPdSthTlNH?=
- =?utf-8?B?SzdkL0NaSDNGblRuUW9PaThDU1dlNW5DUWlIWUZTV1Q4SVlxWDVWUnozMHE5?=
- =?utf-8?B?S2RhS2RTUGxxM1JPVW5DNGJGT2RSWlk2RXZNcXd6aG44OFVLRHFzK2J2alJX?=
- =?utf-8?B?QXdBaGRKRUZoUlhOOUJUZUJ1dEIwcXZ4UmoyMUtycWI1Z0pGM1pTdzdtd0pH?=
- =?utf-8?B?Ym84OFJCS3VGTGpSRmZ0dmx3bzg4MHh6VjFtMHZZNm5JNVV1ZndhcExqZC9M?=
- =?utf-8?B?UHZYQ0h0czhPeTh3NTkzSmJDSjBLQlU4RjVSRmo4YTVYUks2OGFXTHR1T1I5?=
- =?utf-8?B?TG1zYjM0KzNXaVZkd3diR0hLY005TVdJVEk3LzhTRCtNMkNHa1BLRjNPUFo4?=
- =?utf-8?B?ZnJBVHVSVnYxM3hlR3RndkR2U3lZdzdrUlpFSmR4TXB3d0RPZVNpS1JSQWVT?=
- =?utf-8?B?UEE1S01aOWFoeFhSdHNFaGFrTmc4WEZNNDJFSzlaWUY5MGxScVdqYW1NYnk3?=
- =?utf-8?B?OEo4M0hsY1pqT1J5MURLenFTaDlxNVlOK2J6dDE2WjBMTXJkUWtDWEFmREt1?=
- =?utf-8?B?RVAyTENEaTVtcUpORms4WkpRdjBYMFV2d0tvd0tsazlVVzRlSVNHRlpwRWZB?=
- =?utf-8?B?ZTNKSml1eHNlSmVoYTBYVldLcFJPZXN4Y3NsWUxjTVN6QzFBUFdtMlE5VDNk?=
- =?utf-8?B?aEdVa25RbTd3dUVKSmhicFZodDVhTWJoOXhVbW8rQjI5ajJvekU1T2JSU2FV?=
- =?utf-8?B?akJIVThOYXEwZE5jMUtEczdyOHdyeFZsNkpnVlVoQlBkbXc9PQ==?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:MA0P287MB2448.INDP287.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230040)(376014)(366016)(1800799024)(8096899003)(13003099007); DIR:OUT;
- SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NzUvaitNaEpoR0Y3dEUyRE5zYWVPZ1UyQ2R1NUFOZ0NQTkltblc2VEFsQ0Nw?=
- =?utf-8?B?b0NFbzdldUZFcmcrNEdhcldUazlVa1dQVlpoUkgzZXk0RDI0S0dwTndCRFo0?=
- =?utf-8?B?dWFQVG9qR1pPRHMwZTBlbmRwY3lNSW94L0h6QmpveVlIUytaenBxOExRTk0r?=
- =?utf-8?B?NDMwRmoxbDk1Tkt6L2ZSNmNaOUo4MGZpbG1XbytpQmE3bFdJcldvcWtYQjRp?=
- =?utf-8?B?Z2JaZTZtSVFLd2VycXhSaEZqa2xVSEVDV1ZhRnR1Uy9vV1NqRHNNNHNycnNm?=
- =?utf-8?B?Z1ArWUVOcTY1YlJ5RlZxSitPQnhzeU5hT3lIcUxDMDNaNi8vZ3BJMEE4dmgv?=
- =?utf-8?B?Y0dSb0hKUC8xLzFuam1VU0FEUVdLY043RDdMWU8xMWpIYUFaWnBqbEhWbkpi?=
- =?utf-8?B?YmhMVXB4Vjk1djg4QkE3L2JCdzE3NnN5QWFLVVZyTkRoWHB2VGFydlMxcmRh?=
- =?utf-8?B?SVVXcS8zSmdWbGtQYVoyVWJEbFNrSlhBdEx6SXBaTUpwT0JrRkRkU0pTd0ZC?=
- =?utf-8?B?Qmg5MWVvaVVraERTZWpMcjNkbE1oc09IYi9udkd1ZnpqbnRicXg0aENsbWlw?=
- =?utf-8?B?MS9aemRCazUwNjdmdUR3b3hlYlkwYitZYTZvaE56YmEveENGRm1jY2VYVmtF?=
- =?utf-8?B?b1RuSis4RlAwTWwzK3dqUytHdXdha0p6NmF1VzBQRlhYVThPM1NRTFNhZGFz?=
- =?utf-8?B?aFJxMnArS3VYTVI4Sy9kWmhDbU16Vmx0WmZmWDQxZktHbitrYjkwc0xFajJj?=
- =?utf-8?B?ZmpuYTE2V3Y2NjlGYkRNVjFJakVnL01DRW9UdTN6VWhyY0hoKzUzZ2c1VHJv?=
- =?utf-8?B?aU1zL2xHME9xS0JQN21OeVlKNFN0TTE1VHJ6cCtQNTBxRkJrT2QvK2Vrd2dm?=
- =?utf-8?B?ZW91NUR5OTkva3d1VTBHWm0wcTJQSFpNcWhzTFBucEw1VXJIMXoyNDE4ei9w?=
- =?utf-8?B?b29DR0tGa3h3MG92VEZiVEtNRlh2TzBsdTk3Y0cvSkcwak1KWjNkcTVrWXhk?=
- =?utf-8?B?NWRrTFR5TXNsVU9hWVM2MzlITEp5Q2ZSZDc3Y1loVm9FOTYvQTBsVFVkZjV3?=
- =?utf-8?B?Y2IvRVRwZnExSWhXVWpMUjRpNmtsOGZLK1llczRsTjB4V0w2SlJmT3VvL1V3?=
- =?utf-8?B?cnR3UWZYQTE0NnJVRUx3cXp2MklsWGtGNTdncGRDaEhMYVNWd2ZRaytnZjRI?=
- =?utf-8?B?QUJIdmtEM1BIWlpJT25wWVJXZWIrZmZsZWVOU3k1QVA1eGhiR05rQUdLSGRn?=
- =?utf-8?B?dkszaVk3RkhjSVNsTGphM3VPRTBpdjlIV1RyVStZOXNscEljMEdISExuRU5x?=
- =?utf-8?B?bHJNVWlmNXdoaElZSHZ5aTBZNjZEbjNOd3FFdjU4SHdIMlBLUGUxZVZFWU5B?=
- =?utf-8?B?a25Jb0pxZktEcFV0NFV3bUt3d21ob2UydS82R0Q3MlVrOXR2MGhMcy80U1N3?=
- =?utf-8?B?bWR2dGp3SUgvVVhXMDZVM2p6S2EvSFVyRVUwdHZkNE5jRDFPUE81SkEzRUcx?=
- =?utf-8?B?YjY4bXRWVEN1L29ESGpLVlp4cmJjY1F3U1pkSjdpWXVKWlpOMUFPcC80cVlC?=
- =?utf-8?B?L2JaR1AwMVZxekFCS0ZFZ09NWERCQzRSVmZYQWFBSGw5SXNDbjJuOVBRUlU0?=
- =?utf-8?B?SWZ1bjlQd01YTkZJalVVQy9DRnVXbWt0OGdhZ3hGMzZ3RmpPbWZqS1VCaVVE?=
- =?utf-8?B?akpOMnRjaDJnQmJMWWQxN2VRTG83TnFaaFhEaHQ2SXpIdk92SjlrTmIvak1U?=
- =?utf-8?B?S2x5NitPU09mT3dFNVozaVNJNHArMENldkN1MmtHWDhIdnRaaXFZcXVpV2FS?=
- =?utf-8?B?QTRjcS9jTno4NytRR2tXOXEzV3Y1bjZQcmMwdjVJQzZLSXVCMEJWMWxnSkww?=
- =?utf-8?B?aGdvK0Q5Nk1HMXkzVFNScWJNZkFIUVhIdDZTdmVuR3RjbTAyVjFxRUR5Qzll?=
- =?utf-8?B?UE5YaUpnU1lGajJyMEY1MmhCWU5WY05EWkljMHd1WDFuTVBJSlZrdWV2Znpr?=
- =?utf-8?B?YWw0d1EwR2FxV3dCNEt4TXQ3UkgvMnhHVHFwbm9nRTdzcW1hMXZHL1d2Q1JH?=
- =?utf-8?B?SEJXamp4QVJUemRKR0dabzZCMS8xSlJUOUdpbW4vcGNaTnBjT3JqeWw5ZFdn?=
- =?utf-8?B?Y0NLUWwrNVJZemE1eWRpZHpiRzdSZDJRQlF0ZzJMaldHeUZ2ZXRYc0tjcEVG?=
- =?utf-8?Q?ArMzflR6dgcnsbF8WHcYYAM=3D?=
-X-OriginatorOrg: iwave-global.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9590de17-4a2f-4178-3af8-08de153c197d
-X-MS-Exchange-CrossTenant-AuthSource: MA0P287MB2448.INDP287.PROD.OUTLOOK.COM
+X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2025 09:35:00.4633 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 507ae903-cc48-4d6e-bdb6-35278120a345
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wRRyDLAAemJbOaa1G65tV7I3Alxt8eeHdJCD+Bqk7pB2BZS3bRYfCsY0ZC4ms9PZ4ldj/RsNWo0Ws3VCb7HHVoPcgtgldK3uaDHJijiv5FwXeZLi2MFtdhZTkb6vAFSM
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA0P287MB2103
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR12MB5615.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 81ef2963-e7a0-481f-9a07-08de154e6217
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Oct 2025 11:45:53.0159 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: A5URGh600B73o8XZN0AV9l1plELZ/J+bwC68ou1T94i6b7TCAOovL/jOW0lZ/WPP
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4481
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=iwave-global.com; s=selector1;
+ d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KaKXDH0P/tBxDhGPHq/RFVhV49BCSgcJtw2PA9z3hUs=;
- b=Mx4g8N346hWQ2TjLF5xG54nr6aYznzGT9JgNu4WMCJ+NjHYUCiOeAnBZN6d0p/evJkdKIkCOVVkwGPx44VT/RNqgi5BezCL1obZlWfbVAkQlOzRbCXU312Gre27K+XuiFFVg/eWMa57sXH1T/cgDX5vl3/5mv1OdwIoSqosLzoTJGjMvJWPZklFfw7tHqoc2r9TXkeBPPqHvqfILj9kYUqUny7dSqdVDuUfA+0EbT75BXYUXtR3X3QB+7vpfh1m7nJisLrry7kYLyDUwodrJGkuSfTZ2fmZdRSLKjnvdt6fV66HIs5AY4CgQ7jkq2+Om8yhgy5eRlqbCNxpFGmiCkA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=vvPWitdRJvJWYLIw2ocnoUuB5bUwR7fh1ZJv7JQ8Q68=;
+ b=Zlqn2tziTG1aTL1c9oQb1xQhFRP8OCrdnXaUQtmYFVerBtMJGlKe7P4oUvAVaxRgu6VxX8WRxS6kiQfNwgSJjq08dJ4qBMdchibI7NnwP8cBQnNqmzRYqS9JR5GLkd65jrAwNnq+5sApmYELhjjzwrexn0CFqr/sK8ksjCv+uIE=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=iwave-global.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=iwave-global.com header.i=@iwave-global.com
- header.a=rsa-sha256 header.s=selector1 header.b=Mx4g8N34
+ header.from=amd.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=Zlqn2tzi
 X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=iwave-global.com;
-Subject: Re: [Buildroot] Implementation Procedure for i.MX93 Custom Board
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Subject: Re: [Buildroot] [PATCH v1 1/1] boot/xilinx-prebuilt: add local
+ versal xsa support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -193,509 +201,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Esakkiammal M via buildroot <buildroot@buildroot.org>
-Reply-To: Esakkiammal M <esakkiammal.murugan@iwave-global.com>
-Content-Type: multipart/mixed; boundary="===============1073893447586481201=="
+From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
+Reply-To: "Frager, Neal" <neal.frager@amd.com>
+Cc: "Erkiaga Elorza, Ibai" <ibai.erkiaga-elorza@amd.com>,
+ "yann.morin@orange.com" <yann.morin@orange.com>,
+ "brandon.maier@collins.com" <brandon.maier@collins.com>,
+ "ju.o@free.fr" <ju.o@free.fr>,
+ "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
+ "romain.naour@smile.fr" <romain.naour@smile.fr>, "Simek,
+ Michal" <michal.simek@amd.com>,
+ "romain.naour@gmail.com" <romain.naour@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1073893447586481201==
-Content-Type: multipart/alternative;
- boundary="------------IzRvWcc0qm0ZY00WSsb9lxFf"
-Content-Language: en-US
+[AMD Official Use Only - AMD Internal Distribution Only]
 
---------------IzRvWcc0qm0ZY00WSsb9lxFf
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Hello Luca,
 
-Hello,
-
-While validation camera ov5604 in build root kernel.
-
-Please let us known the solution of below issue in build root.
-
-# gst-launch-1.0 v4l2src device=/dev/video0 ! 
-video/x-raw,width=1920,height=1080
-  ! waylandsink
-WARNING: erroneous pipeline: no element "waylandsink"
-
-Thanks & Regards,
-
-Esakkiammal M
-
-
-------------------------------------------------------------------------
-
-
-On 23/10/25 15:59, Esakkiammal M wrote:
+> Most of the time, users will be running Vivado on their local host machine,
+> and will generate a XSA (Xilinx Shell Archive) locally.
 >
-> Hello,
+> Instead of requiring users to create a https:// location for their XSA file,
+> this patch improves ease of use by allowing users to work directly with the
+> XSA file on their local machine.
 >
-> WiFi firmware issue is resolved but while validation open network like 
-> without password it is connecting with password like WPA2 and WPA3 not 
-> working.
+> BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA_LOCATION can thus be defined as either
+> a local location or a https:// location for the XSA file.
 >
-> connmanctl> connect 
-> wifi_10322c69d5fa_4e65686127732053323420556c747261_managed_p
-> Agent RequestInput 
-> wifi_10322c69d5fa_4e65686127732053323420556c747261_managed_psk
->   Passphrase = [ Type=psk, Requirement=mandatory ]
-> Passphrase? 12345678
-> Agent ReportError 
-> wifi_10322c69d5fa_4e65686127732053323420556c747261_managed_psk
->   invalid-key
+> In either case, a hash for the XSA file needs to be added to the
+> boot/xilinx-prebuilt/xilinx-prebuilt.hash when using this option.
 >
-> Kindly let us know the solution of this issue.
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> ---
+>  boot/xilinx-prebuilt/xilinx-prebuilt.mk | 3 +++
+>  1 file changed, 3 insertions(+)
 >
-> Thanks & Regards,
->
-> Esakkiammal M
->
-> ------------------------------------------------------------------------
->
->
-> On 23/10/25 10:59, Esakkiammal M wrote:
->>
->> Hello,
->>
->> Kindly tell me the solution for this issue in build root wifi porting.
->>
->> Thanks & Regards,
->>
->> Esakkiammal M
->>
->> ------------------------------------------------------------------------
->> On 16/10/25 11:07, Esakkiammal M wrote:
->>>
->>> Hello,
->>>
->>> I have enabled the MWIFIEX Wi-Fi driver in Buildroot for my 
->>> platform. During validation, I observed that the driver fails to 
->>> initialize the firmware properly. Please find the log details and 
->>> observations below.
->>>
->>>
->>> Steps Performed
->>>
->>> Enabled MWIFIEX configuration in Buildroot.
->>>
->>> Loaded the driver using the command:
->>>
->>>
->>> modprobe moal mod_para=nxp/wifi_mod_para.conf
->>>
->>>
->>> # modprobe moal mod_para=nxp/wifi_mod_para.conf
->>> [   28.293486] mlan: loading out-of-tree module taints kernel.
->>> [   28.332881] wlan: Loading MWLAN driver
->>> [   28.336987] wlan: Register to Bus Driver...
->>> [   28.341369] vendor=0x0471 device=0x0205 class=0 function=1
->>> [   28.346989] Attach moal handle ops, card interface type: 0x109
->>> [   28.352833] rps set to 0 from module param
->>> [   28.359963] SDIW612: init module param from usr cfg
->>> [   28.364906] card_type: SDIW612, config block: 0
->>> [   28.369439] cfg80211_wext=0xf
->>> [   28.372405] max_vir_bss=1
->>> [   28.375018] cal_data_cfg=none
->>> [   28.377984] ps_mode = 1
->>> [   28.380435] auto_ds = 1
->>> [   28.382879] host_mlme=enable
->>> [   28.385765] fw_name=nxp/sduart_nw61x_v1.bin.se
->>> [   28.390227] SDIO: max_segs=128 max_seg_size=65535
->>> [   28.394921] rx_work=1 cpu_num=2
->>> [   28.398063] Enable moal_recv_amsdu_packet
->>> [   28.402098] Attach mlan adapter operations.card_type is 0x109.
->>> [   28.408248] wlan: Enable TX SG mode
->>> [   28.411751] wlan: Enable RX SG mode
->>> [   28.416394] Request firmware: nxp/sduart_nw61x_v1.bin.se
->>> [   28.642440] Wlan: FW download over, firmwarelen=1065364 
->>> downloaded 953164
->>> [   34.648319] Fail to poll firmware status: firmwarestat=0x0
->>> [   34.653811] FW failed to be active in time!
->>> [   34.657996] wlan_dnld_fw fail ret=0xffffffff
->>> [   34.662266] WLAN: Fail download FW with nowwait: 0
->>> [   34.667216] SDIO Func0 (0x0-0x9): 43 03 02 02 03 00 00 02 03 00
->>> [   34.673318] SDIO Func1 (0x10-0x17): 00 00 00 00 00 00 00 00
->>> [   34.679151] SDIO Func1: (0x8) 00 (0x58) 00 (0x5c) 0d (0x5d) 00 
->>> (0x60) 01 (0x61) 00 (0x62) 00 (0x64) 10 (0x65) 01 (0x66) 00 (0x68) 
->>> 00 (0x69) 00 (0x6a) 00
->>> [   34.693708] SDIO Func1 (0xe8-0xff): 00 00 00 00 4c 8b 0e 00 24 14 
->>> 70 c8 ab 37 80 00 00 00 00 00 01 00 00 00
->>> [   34.803809] SDIO Func1 (0xe8-0xff): 00 00 00 00 4c 8b 0e 00 24 14 
->>> 70 c8 ab 37 80 00 00 00 00 00 01 00 00 00
->>> [   34.813727] woal_request_fw failed
->>> [   34.817132] Firmware Init Failed
->>> [   34.824576] Free module params
->>> [   34.827631] woal_add_card failed
->>> [   34.831003] wlan_sdio: probe of mmc2:0001:1 failed with error -1
->>> [   34.837160] wlan: Register to Bus Driver Done
->>> [   34.841535] wlan: Driver loaded successfully
->>> #
->>> # connmanctl
->>> Error getting VPN connections: The name net.connman.vpn was not 
->>> provided by any .service files
->>> connmanctl> [   62.608517] cfg80211: failed to load regulatory.db
->>> enable wifi
->>> wifi is not available
->>> connmanctl> exit
->>> # ls /lib/firmware/nxp/
->>> helper_uart_3000000.bin  sduart_nw61x_v1.bin.se uartuart_n61x_v1.bin.se
->>> sd_w61x_v1.bin.se        uartspi_n61x_v1.bin.se wifi_mod_para.conf
->>> #
->>>
->>> Could you please help me identify the reason for the firmware 
->>> activation failure and guide me on how to resolve it?
->>>
->>>
->>> Thanks & Regards,
->>>
->>> Esakkiammal M
->>>
->>>
->>> ------------------------------------------------------------------------
->>>
->>>
->>> On 15/10/25 16:38, Esakkiammal M wrote:
->>>>
->>>> Hello,
->>>>
->>>> My kernel and U-Boot are working fine under Yocto on this custom 
->>>> board. The hardware includes Wi-Fi 6, Bluetooth 5.3, and IEEE 802.15.4.
->>>>
->>>> I’m now testing the same setup in Buildroot, but when I try to load 
->>>> the Wi-Fi driver using:
->>>>
->>>> modprobe moal mod_para=nxp/wifi_mod_para.conf
->>>>
->>>> I get this error:
->>>>
->>>> modprobe: module moal not found in modules.dep
->>>>
->>>> It seems the NXP Wi-Fi driver (moal.ko) isn’t being built or 
->>>> included in my Buildroot image. Could you please suggest the 
->>>> recommended way to integrate the nxp-modwifi driver or any patches 
->>>> required to enable it in Buildroot?
->>>>
->>>>
->>>> Thanks & Regards,
->>>>
->>>> Esakkiammal M
->>>>
->>>> ------------------------------------------------------------------------
->>>>
->>>>
->>>> On 15/10/25 16:30, Fiona Klute wrote:
->>>>> Hi Esakkiammal!
->>>>> Am 15.10.25 um 11:56 schrieb Esakkiammal M via buildroot:
->>>>>> Hello,
->>>>>>
->>>>>> I have implemented support for our i.MX93 custom board by 
->>>>>> referring to the i.MX93 EVK configuration.
->>>>>>
->>>>>> git clone https://github.com/buildroot/buildroot.git
->>>>>> git switch 2025.02.x
->>>>>>
->>>>>> make freescale_imx93evk_defconfig
->>>>>> make
->>>>>>
->>>>>> Can you tell how port WiFi and BT for imx93 custom board.
->>>>>
->>>>> It's impossible to give a definitive answer without knowing the 
->>>>> details of your board, but in general:
->>>>>
->>>>> 1. If you have a custom board, you may need a custom DTS that 
->>>>> correctly describes your board (instead of the default one) for 
->>>>> all hardware to be detected correctly.
->>>>>
->>>>> 2. Make sure the kernel drivers for any additional hardware are 
->>>>> enabled in the kernel config you use.
->>>>>
->>>>> 3. The defconfigs are intentionally minimal. You'll need to add 
->>>>> the target packages to support what you want to do with wifi and BT:
->>>>>
->>>>> * any firmware needed for the devices on your board
->>>>> * wpa_supplicant or iwd or hostapd, maybe NetworkManager too 
->>>>> (depending on how you want to use wifi)
->>>>> * bluez5-utils (probably) for BT
->>>>>
->>>>> Some of those packages have optional components that you may or 
->>>>> may not need.
->>>>>
->>>>> Best regards,
->>>>> Fiona
->>>>>
---------------IzRvWcc0qm0ZY00WSsb9lxFf
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+> diff --git a/boot/xilinx-prebuilt/xilinx-prebuilt.mk b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
+> index 95b656cdde..a7ec9abff5 100644
+> --- a/boot/xilinx-prebuilt/xilinx-prebuilt.mk
+> +++ b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
+> @@ -10,6 +10,9 @@ ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA),y)
+>  XILINX_PREBUILT_FILE = $(call qstrip,$(BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA_LOCATION))
+>  XILINX_PREBUILT_SITE = $(patsubst %/,%,$(dir $(XILINX_PREBUILT_FILE)))
+>  XILINX_PREBUILT_SOURCE = $(notdir $(XILINX_PREBUILT_FILE))
+> +ifeq ($(findstring ://,$(XILINX_PREBUILT_FILE)),)
+> +XILINX_PREBUILT_SITE_METHOD = file
+> +endif
 
-<!DOCTYPE html><html><head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  </head>
-  <body>
-    <p>Hello,<br>
-    </p>
-    <p>While validation camera ov5604 in build root kernel.</p>
-    <p>Please let us known the solution of below issue in build root.</p>
-    <p># gst-launch-1.0 v4l2src device=/dev/video0 !
-      video/x-raw,width=1920,height=1080<br>
-      &nbsp;! waylandsink<br>
-      WARNING: erroneous pipeline: no element &quot;waylandsink&quot;<br>
-      <br>
-    </p>
-    <p><span data-teams="true"> Thanks &amp; Regards,<br>
-      </span> </p>
-    <p><span data-teams="true">Esakkiammal M</span></p>
-    <p><br>
-    </p>
-    <hr width="100%" size="2">
-    <p><br>
-    </p>
-    <p></p>
-    <div class="moz-cite-prefix">On 23/10/25 15:59, Esakkiammal M wrote:<br>
-    </div>
-    <blockquote type="cite" cite="mid:68a237a6-6e79-42b9-a3b5-52194d42e782@iwave-global.com">
-      
-      <p>Hello,<br>
-        <br>
-        WiFi firmware issue is resolved but while validation open
-        network like without password it is connecting with password
-        like WPA2 and WPA3 not working.<br>
-        <br>
-      </p>
-      <p>connmanctl&gt; connect
-        wifi_10322c69d5fa_4e65686127732053323420556c747261_managed_p <br>
-        Agent RequestInput
-        wifi_10322c69d5fa_4e65686127732053323420556c747261_managed_psk<br>
-        &nbsp; Passphrase = [ Type=psk, Requirement=mandatory ]<br>
-        Passphrase? 12345678<br>
-        Agent ReportError
-        wifi_10322c69d5fa_4e65686127732053323420556c747261_managed_psk<br>
-        &nbsp; invalid-key<br>
-      </p>
-      <p>Kindly let us know the solution of this issue.<br>
-      </p>
-      <p><span data-teams="true"> Thanks &amp; Regards,<br>
-        </span> </p>
-      <p><span data-teams="true">Esakkiammal M</span></p>
-      <p><span data-teams="true"></span></p>
-      <hr width="100%" size="2">
-      <p><span data-teams="true"><br>
-        </span></p>
-      <div class="moz-cite-prefix">On 23/10/25 10:59, Esakkiammal M
-        wrote:<br>
-      </div>
-      <blockquote type="cite" cite="mid:a08cca53-7d11-4101-ac6f-b34de963d870@iwave-global.com">
-        <p>Hello,</p>
-        <p>Kindly tell me the solution for this issue in build root wifi
-          porting.<br>
-          <br>
-        </p>
-        <p><span data-teams="true"> Thanks &amp; Regards,<br>
-          </span> </p>
-        <p><span data-teams="true">Esakkiammal M</span></p>
-        <hr width="100%" size="2">
-        <div class="moz-cite-prefix">On 16/10/25 11:07, Esakkiammal M
-          wrote:<br>
-        </div>
-        <blockquote type="cite" cite="mid:5eb375f3-d026-4592-81f4-462548717d61@iwave-global.com">
-          <p>Hello,</p>
-          <p>I have enabled the MWIFIEX Wi-Fi driver in Buildroot for my
-            platform. During validation, I observed that the driver
-            fails to initialize the firmware properly. Please find the
-            log details and observations below.<br>
-            <br>
-            <br>
-            Steps Performed<br>
-            <br>
-            Enabled MWIFIEX configuration in Buildroot.<br>
-            <br>
-            Loaded the driver using the command:<br>
-            <br>
-            <br>
-            modprobe moal mod_para=nxp/wifi_mod_para.conf<br>
-            <br>
-            <br>
-            # modprobe moal mod_para=nxp/wifi_mod_para.conf<br>
-            [&nbsp;&nbsp; 28.293486] mlan: loading out-of-tree module taints
-            kernel.<br>
-            [&nbsp;&nbsp; 28.332881] wlan: Loading MWLAN driver<br>
-            [&nbsp;&nbsp; 28.336987] wlan: Register to Bus Driver...<br>
-            [&nbsp;&nbsp; 28.341369] vendor=0x0471 device=0x0205 class=0
-            function=1<br>
-            [&nbsp;&nbsp; 28.346989] Attach moal handle ops, card interface type:
-            0x109<br>
-            [&nbsp;&nbsp; 28.352833] rps set to 0 from module param<br>
-            [&nbsp;&nbsp; 28.359963] SDIW612: init module param from usr cfg<br>
-            [&nbsp;&nbsp; 28.364906] card_type: SDIW612, config block: 0<br>
-            [&nbsp;&nbsp; 28.369439] cfg80211_wext=0xf<br>
-            [&nbsp;&nbsp; 28.372405] max_vir_bss=1<br>
-            [&nbsp;&nbsp; 28.375018] cal_data_cfg=none<br>
-            [&nbsp;&nbsp; 28.377984] ps_mode = 1<br>
-            [&nbsp;&nbsp; 28.380435] auto_ds = 1<br>
-            [&nbsp;&nbsp; 28.382879] host_mlme=enable<br>
-            [&nbsp;&nbsp; 28.385765] fw_name=nxp/sduart_nw61x_v1.bin.se<br>
-            [&nbsp;&nbsp; 28.390227] SDIO: max_segs=128 max_seg_size=65535<br>
-            [&nbsp;&nbsp; 28.394921] rx_work=1 cpu_num=2<br>
-            [&nbsp;&nbsp; 28.398063] Enable moal_recv_amsdu_packet<br>
-            [&nbsp;&nbsp; 28.402098] Attach mlan adapter operations.card_type is
-            0x109.<br>
-            [&nbsp;&nbsp; 28.408248] wlan: Enable TX SG mode<br>
-            [&nbsp;&nbsp; 28.411751] wlan: Enable RX SG mode<br>
-            [&nbsp;&nbsp; 28.416394] Request firmware: nxp/sduart_nw61x_v1.bin.se<br>
-            [&nbsp;&nbsp; 28.642440] Wlan: FW download over, firmwarelen=1065364
-            downloaded 953164<br>
-            [&nbsp;&nbsp; 34.648319] Fail to poll firmware status:
-            firmwarestat=0x0<br>
-            [&nbsp;&nbsp; 34.653811] FW failed to be active in time!<br>
-            [&nbsp;&nbsp; 34.657996] wlan_dnld_fw fail ret=0xffffffff<br>
-            [&nbsp;&nbsp; 34.662266] WLAN: Fail download FW with nowwait: 0<br>
-            [&nbsp;&nbsp; 34.667216] SDIO Func0 (0x0-0x9): 43 03 02 02 03 00 00 02
-            03 00 <br>
-            [&nbsp;&nbsp; 34.673318] SDIO Func1 (0x10-0x17): 00 00 00 00 00 00 00
-            00 <br>
-            [&nbsp;&nbsp; 34.679151] SDIO Func1: (0x8) 00 (0x58) 00 (0x5c) 0d
-            (0x5d) 00 (0x60) 01 (0x61) 00 (0x62) 00 (0x64) 10 (0x65) 01
-            (0x66) 00 (0x68) 00 (0x69) 00 (0x6a) 00 <br>
-            [&nbsp;&nbsp; 34.693708] SDIO Func1 (0xe8-0xff): 00 00 00 00 4c 8b 0e
-            00 24 14 70 c8 ab 37 80 00 00 00 00 00 01 00 00 00 <br>
-            [&nbsp;&nbsp; 34.803809] SDIO Func1 (0xe8-0xff): 00 00 00 00 4c 8b 0e
-            00 24 14 70 c8 ab 37 80 00 00 00 00 00 01 00 00 00 <br>
-            [&nbsp;&nbsp; 34.813727] woal_request_fw failed<br>
-            [&nbsp;&nbsp; 34.817132] Firmware Init Failed<br>
-            [&nbsp;&nbsp; 34.824576] Free module params<br>
-            [&nbsp;&nbsp; 34.827631] woal_add_card failed<br>
-            [&nbsp;&nbsp; 34.831003] wlan_sdio: probe of mmc2:0001:1 failed with
-            error -1<br>
-            [&nbsp;&nbsp; 34.837160] wlan: Register to Bus Driver Done<br>
-            [&nbsp;&nbsp; 34.841535] wlan: Driver loaded successfully<br>
-            # <br>
-            # connmanctl<br>
-            Error getting VPN connections: The name net.connman.vpn was
-            not provided by any .service files<br>
-            connmanctl&gt; [&nbsp;&nbsp; 62.608517] cfg80211: failed to load
-            regulatory.db<br>
-            enable wifi<br>
-            wifi is not available<br>
-            connmanctl&gt; exit<br>
-            # ls /lib/firmware/nxp/<br>
-            helper_uart_3000000.bin&nbsp; sduart_nw61x_v1.bin.se&nbsp;&nbsp;
-            uartuart_n61x_v1.bin.se<br>
-            sd_w61x_v1.bin.se&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; uartspi_n61x_v1.bin.se&nbsp;&nbsp;
-            wifi_mod_para.conf<br>
-            # <br>
-            <br>
-            Could you please help me identify the reason for the
-            firmware activation failure and guide me on how to resolve
-            it?<br>
-            <br>
-            <br>
-          </p>
-          <p><span data-teams="true"> Thanks &amp; Regards,<br>
-            </span> </p>
-          <p><span data-teams="true">Esakkiammal M</span></p>
-          <p><br>
-          </p>
-          <hr width="100%" size="2">
-          <p><br>
-          </p>
-          <div class="moz-cite-prefix">On 15/10/25 16:38, Esakkiammal M
-            wrote:<br>
-          </div>
-          <blockquote type="cite" cite="mid:3ac2065a-8ac7-4a59-9889-51fce1eae53d@iwave-global.com">
-            <p>Hello,</p>
-            <p>My kernel and U-Boot are working fine under Yocto on this
-              custom board. The hardware includes Wi-Fi 6, Bluetooth
-              5.3, and IEEE 802.15.4.<br>
-              <br>
-              I’m now testing the same setup in Buildroot, but when I
-              try to load the Wi-Fi driver using:<br>
-              <br>
-              modprobe moal mod_para=nxp/wifi_mod_para.conf<br>
-              <br>
-              I get this error:<br>
-              <br>
-              modprobe: module moal not found in modules.dep<br>
-              <br>
-              It seems the NXP Wi-Fi driver (moal.ko) isn’t being built
-              or included in my Buildroot image. Could you please
-              suggest the recommended way to integrate the nxp-modwifi
-              driver or any patches required to enable it in Buildroot?</p>
-            <p>&nbsp;<br>
-            </p>
-            <p><span data-teams="true"> Thanks &amp; Regards,<br>
-              </span> </p>
-            <p><span data-teams="true">Esakkiammal M</span></p>
-            <p><span data-teams="true"></span></p>
-            <hr width="100%" size="2">
-            <p><span data-teams="true"><br>
-              </span></p>
-            <div class="moz-cite-prefix">On 15/10/25 16:30, Fiona Klute
-              wrote:<br>
-            </div>
-            <blockquote type="cite" cite="mid:584f433e-3ace-4493-a073-7cb92eae6d08@gmx.de">Hi
-              Esakkiammal! <br>
-              Am 15.10.25 um 11:56 schrieb Esakkiammal M via buildroot:
-              <br>
-              <blockquote type="cite">Hello, <br>
-                <br>
-                I have implemented support for our i.MX93 custom board
-                by referring to the i.MX93 EVK configuration. <br>
-                <br>
-                git clone <a class="moz-txt-link-freetext" href="https://github.com/buildroot/buildroot.git" moz-do-not-send="true">https://github.com/buildroot/buildroot.git</a>
-                <br>
-                git switch 2025.02.x <br>
-                <br>
-                make freescale_imx93evk_defconfig <br>
-                make <br>
-                <br>
-                Can you tell how port WiFi and BT for imx93 custom
-                board. <br>
-              </blockquote>
-              <br>
-              It's impossible to give a definitive answer without
-              knowing the details of your board, but in general: <br>
-              <br>
-              1. If you have a custom board, you may need a custom DTS
-              that correctly describes your board (instead of the
-              default one) for all hardware to be detected correctly. <br>
-              <br>
-              2. Make sure the kernel drivers for any additional
-              hardware are enabled in the kernel config you use. <br>
-              <br>
-              3. The defconfigs are intentionally minimal. You'll need
-              to add the target packages to support what you want to do
-              with wifi and BT: <br>
-              <br>
-              * any firmware needed for the devices on your board <br>
-              * wpa_supplicant or iwd or hostapd, maybe NetworkManager
-              too (depending on how you want to use wifi) <br>
-              * bluez5-utils (probably) for BT <br>
-              <br>
-              Some of those packages have optional components that you
-              may or may not need. <br>
-              <br>
-              Best regards, <br>
-              Fiona <br>
-              <br>
-            </blockquote>
-          </blockquote>
-        </blockquote>
-      </blockquote>
-    </blockquote>
-  </body>
-</html>
+> According to the BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA_LOCATION help text,
+> using a local file is already supported by using the file:// URL prefix.
 
---------------IzRvWcc0qm0ZY00WSsb9lxFf--
+Yes, you are right!
 
---===============1073893447586481201==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+> Can you elaborate on which use case you are adding now? I think you are
+> just making it a bit easier and cleaner to do the same thing as before by
+> using a path instead of a URL, but I may be wrong.
 
+Yes, you are correct.
+
+> Also, updating the Config.in help text should part of this patch.
+
+I will update the help text in v2.
+
+Best regards,
+Neal Frager
+AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1073893447586481201==--
