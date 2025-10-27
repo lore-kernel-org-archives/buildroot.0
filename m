@@ -1,72 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77376CCF9E9
-	for <buildroot@archiver.kernel.org>; Mon, 27 Oct 2025 01:42:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04A1CCCF9E5
+	for <buildroot@archiver.kernel.org>; Mon, 27 Oct 2025 03:54:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A87DF4125F;
-	Mon, 27 Oct 2025 01:42:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7F9F5611F8;
+	Mon, 27 Oct 2025 03:54:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vu13CEYGIHUs; Mon, 27 Oct 2025 01:42:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JD3loYs1tyvq; Mon, 27 Oct 2025 03:54:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBC7641256
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26F83611F0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CBC7641256;
-	Mon, 27 Oct 2025 01:42:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id DD44CD7
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 01:42:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 26F83611F0;
+	Mon, 27 Oct 2025 03:54:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 97D47D7
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 03:53:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CEE1541256
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 01:42:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7A385611F0
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 03:53:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MVqCn7ujftpl for <buildroot@buildroot.org>;
- Mon, 27 Oct 2025 01:42:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=172.105.4.254;
- helo=tor.source.kernel.org; envelope-from=jarkko@kernel.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WPnGHjPp1IXA for <buildroot@buildroot.org>;
+ Mon, 27 Oct 2025 03:53:57 +0000 (UTC)
+X-Greylist: delayed 1255 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 27 Oct 2025 03:53:56 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19E45611EF
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=60.248.80.70;
+ helo=atcsqr.andestech.com; envelope-from=ycliang@andestech.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DB8814124E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB8814124E
-Received: from tor.source.kernel.org (tor.source.kernel.org [172.105.4.254])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DB8814124E
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 01:42:12 +0000 (UTC)
-Received: from smtp.kernel.org (transwarp.subspace.kernel.org [100.75.92.58])
- by tor.source.kernel.org (Postfix) with ESMTP id E4784602E8
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 01:42:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38350C4CEE7;
- Mon, 27 Oct 2025 01:42:11 +0000 (UTC)
-To: buildroot@buildroot.org
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Date: Mon, 27 Oct 2025 03:41:58 +0200
-Message-Id: <20251027014158.865598-3-jarkko@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20251027014158.865598-1-jarkko@kernel.org>
-References: <20251027014158.865598-1-jarkko@kernel.org>
+Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net
+ [60.248.80.70])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 19E45611EF
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 03:53:56 +0000 (UTC)
+Received: from Atcsqr.andestech.com (localhost [127.0.0.2] (may be forged))
+ by Atcsqr.andestech.com with ESMTP id 59R3X8fX065480
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 11:33:08 +0800 (+08)
+ (envelope-from ycliang@andestech.com)
+Received: from mail.andestech.com (ATCPCS34.andestech.com [10.0.1.134])
+ by Atcsqr.andestech.com with ESMTPS id 59R3WssM065327
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK)
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 11:32:54 +0800 (+08)
+ (envelope-from ycliang@andestech.com)
+Received: from swlinux02.andestech.com (10.0.15.183) by ATCPCS34.andestech.com
+ (10.0.1.134) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 27 Oct
+ 2025 11:32:54 +0800
+To: <buildroot@buildroot.org>
+CC: <tim609@andestech.com>, Leo Yu-Chi Liang <ycliang@andestech.com>
+Date: Mon, 27 Oct 2025 11:32:38 +0800
+Message-ID: <20251027033242.1797230-1-ycliang@andestech.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=kernel.org; s=k20201202; t=1761529331;
- bh=rgGvy2niZ3BH5FUfozQhFzUZkCjgMYlMHdkdfrNa2Ew=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=QLVNmN/M56A4kjKK+sqKA5F5Gbp36K5JjFat3x0htJRkitNGwLnnZAoqZmOf/Hx8d
- 1s9jA1rsZIsovhuhXv+dnJwDpQUv83U5Mz3pU6DiR3Lrr3lmWFwuotTWUTZb3jeTJN
- 9NLUoAgI6lIZubMe3g4jiFe396fWaayw+LLKZqEh4yOuXkw7mREKzqNdcQArJvX8Ux
- zWYdks8F3VL+ZZyCrhJYD1Znx3sRfVUh7eiKCHF38g5xYzJXW97Yor4HNOgpUyY5H6
- 1EQVs+ODYHi5S4qbtGnB8KipaZzD+XUm34071R1MzC2j2Q3BTRE/xFm/6JOZbY11Mq
- 31jV1iUIm/BVA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=kernel.org
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org
- header.a=rsa-sha256 header.s=k20201202 header.b=QLVNmN/M
-Subject: [Buildroot] [PATCH 2/2] package/swtpm: bump version to 0.10.1
+X-Originating-IP: [10.0.15.183]
+X-ClientProxiedBy: ATCPCS33.andestech.com (10.0.1.100) To
+ ATCPCS34.andestech.com (10.0.1.134)
+X-DKIM-Results: atcpcs34.andestech.com; dkim=none;
+X-DNSRBL: 
+X-MAIL: Atcsqr.andestech.com 59R3X8fX065480
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org; dmarc=permerror
+ header.from=andestech.com
+Subject: [Buildroot] [PATCH 0/4] Make andes_ae350_45_defconfig more properly
+ maintained
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,45 +79,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Jarkko Sakkinen via buildroot <buildroot@buildroot.org>
-Reply-To: Jarkko Sakkinen <jarkko@kernel.org>
+From: Leo Yu-Chi Liang via buildroot <buildroot@buildroot.org>
+Reply-To: Leo Yu-Chi Liang <ycliang@andestech.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/stefanberger/swtpm/releases/tag/v0.10.1
+There are some warning when building with andes_ae350_45_defconfig.
+1. Tarball source should be a tag instead of branch
+2. Lack of "Upstream" tag in the patch files
+3. Post-build script does not pass Shellcheck
+4. Missing hash files for some packages
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
- package/swtpm/swtpm.hash | 1 +
- package/swtpm/swtpm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+Fix them by
 
-diff --git a/package/swtpm/swtpm.hash b/package/swtpm/swtpm.hash
-index 934d3b6ee0..fe7f646ec2 100644
---- a/package/swtpm/swtpm.hash
-+++ b/package/swtpm/swtpm.hash
-@@ -1,2 +1,3 @@
- sha256  b281b4e8c39f68e1928675f788abc70072e4081152e129144359a8c5c304c06b  swtpm-0.8.2.tar.gz
-+sha256  f8da11cadfed27e26d26c5f58a7b8f2d14d684e691927348906b5891f525c684  swtpm-0.10.1.tar.gz
- sha256  19d27d6e96d07022e5e688f75c974f1ceb9aae9e90e0fccae68666d02099cc4b  LICENSE
-diff --git a/package/swtpm/swtpm.mk b/package/swtpm/swtpm.mk
-index 598d56cf1d..25377f5771 100644
---- a/package/swtpm/swtpm.mk
-+++ b/package/swtpm/swtpm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SWTPM_VERSION = 0.8.2
-+SWTPM_VERSION = 0.10.1
- SWTPM_SITE = $(call github,stefanberger,swtpm,v$(SWTPM_VERSION))
- SWTPM_LICENSE = BSD-4-Clause
- SWTPM_LICENSE_FILES = LICENSE
+1. Modify the source to a tag
+2. Update u-boot and opensbi version to remove the patch files
+3. Fix the post-build script
+4. Add hash files for u-boot, opensbi, and kernel
+
+Leo Yu-Chi Liang (4):
+  configs/andes_ae350_45_defconfig: Fix post-build.sh Shellcheck error
+  configs/andes_ae350_45_defconfig: Fix linux tarball source
+  configs/andes_ae350_45_defconfig: bump to opensbi v1.5
+  configs/andes_ae350_45_defconfig: bump to uboot v2024.10
+
+ .../patches/linux-headers/linux-headers.hash  |  2 +
+ board/andes/ae350/patches/linux/linux.hash    |  2 +
+ .../andes/ae350/patches/opensbi/opensbi.hash  |  2 +
+ ...-Support-DTS-of-ftsdc010-driver-for-.patch | 38 -----------------
+ ...-tree-blob-address-at-8-byte-boundar.patch | 42 -------------------
+ board/andes/ae350/patches/uboot/uboot.hash    |  2 +
+ board/andes/ae350/post-build.sh               |  4 +-
+ configs/andes_ae350_45_defconfig              | 12 +++---
+ 8 files changed, 16 insertions(+), 88 deletions(-)
+ create mode 100644 board/andes/ae350/patches/linux-headers/linux-headers.hash
+ create mode 100644 board/andes/ae350/patches/linux/linux.hash
+ create mode 100644 board/andes/ae350/patches/opensbi/opensbi.hash
+ delete mode 100644 board/andes/ae350/patches/uboot/0001-mmc-ftsdc010_mci-Support-DTS-of-ftsdc010-driver-for-.patch
+ delete mode 100644 board/andes/ae350/patches/uboot/0002-spl-Align-device-tree-blob-address-at-8-byte-boundar.patch
+ create mode 100644 board/andes/ae350/patches/uboot/uboot.hash
+
 -- 
-2.39.5
+2.34.1
 
 _______________________________________________
 buildroot mailing list
