@@ -1,195 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF0BBCCF9E5
-	for <buildroot@archiver.kernel.org>; Mon, 27 Oct 2025 11:46:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82F94CCF9EA
+	for <buildroot@archiver.kernel.org>; Mon, 27 Oct 2025 13:15:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6522E612AF;
-	Mon, 27 Oct 2025 11:46:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3350483E29;
+	Mon, 27 Oct 2025 13:15:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KzirpUt7Fwqx; Mon, 27 Oct 2025 11:46:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ycje27LjMwpT; Mon, 27 Oct 2025 13:15:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2440612A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1847083E9D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C2440612A1;
-	Mon, 27 Oct 2025 11:46:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2A7D4976
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 11:45:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1847083E9D;
+	Mon, 27 Oct 2025 13:15:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1974615F
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 13:15:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 11219612A1
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 11:45:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0AFBF40850
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 13:15:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MZzEFtc8BeLi for <buildroot@buildroot.org>;
- Mon, 27 Oct 2025 11:45:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Dc7Lp33Pdo7l for <buildroot@buildroot.org>;
+ Mon, 27 Oct 2025 13:15:53 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:c101::7;
- helo=bl0pr03cu003.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7E4DE6129D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E4DE6129D
-Received: from BL0PR03CU003.outbound.protection.outlook.com
- (mail-eastusazlp170120007.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c101::7])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7E4DE6129D
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 11:45:56 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vtkJ7dYJnWr45qhTZuXeUuJ2rVRd5LJZ53UDG580YvuHcfJbaQ775maFr7c2ftnzy+nmzNA8YXgl/oTGElVfOioMaRjuBJlJtYnjJHlFU/t2QvEmvoGAuS5OBLK01U39JJpduO0VIZ/qiVGZ7aJjdLaiLHMG34dVTQZ5BnEHKN2rxU1fWiAXN9JSSoAvckIi479LYrs5fzY4GE8OCgWj2bfGh/YcZPH8HZSZ2FlstOy/qRYOJwbOR2KYBScSSYbtOTP2hnoraNMWnEGc+tF35bVWfObw+yJDN45GlUCLIV3CqSDTzDDtKBo6kIMghnR0DaRH5bdhqkUjuQqGFYGOgA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vvPWitdRJvJWYLIw2ocnoUuB5bUwR7fh1ZJv7JQ8Q68=;
- b=f2H0WzSj8hJo/pmSB5i6WsOWCnm7J/gmZ/O+VtDxlSwL6n8Ci0SCJ+VZizh44CfRRo6BHkYfGZtfo8w+gAoedtUfJIRll28j5sqgNaOY/6cro3tkyfqL8kPZgbvGnYe0Rp3M1NiHNtBRV77vxrLIwyXVPZ4bfCWegPY5m8UnyHb+ijCILz1v8st/MJZLe3GIB3Qa5NXNnfXy7TaqZGIB/aSgUWtmpWdfNAwZuzHM2CAPSdXnEbUJKxSjn09+nkNktWhkT9f3ybU+yMXkJcn+onAWIrhfeMwwfmUqz9tCbV/1jxgthknmB9MNqg8rSmoZA8LE35MaLRnZIJLhzBRD7w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from SA1PR12MB5615.namprd12.prod.outlook.com (2603:10b6:806:229::17)
- by DM6PR12MB4481.namprd12.prod.outlook.com (2603:10b6:5:2af::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.18; Mon, 27 Oct
- 2025 11:45:53 +0000
-Received: from SA1PR12MB5615.namprd12.prod.outlook.com
- ([fe80::7557:587c:4ec:1913]) by SA1PR12MB5615.namprd12.prod.outlook.com
- ([fe80::7557:587c:4ec:1913%6]) with mapi id 15.20.9253.017; Mon, 27 Oct 2025
- 11:45:53 +0000
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>, "buildroot@buildroot.org"
- <buildroot@buildroot.org>
-Thread-Topic: [PATCH v1 1/1] boot/xilinx-prebuilt: add local versal xsa support
-Thread-Index: AQHcRbXY0JHQpMLUxkeD5w8DfqbO2LTVu8uAgAAmbtA=
-Date: Mon, 27 Oct 2025 11:45:52 +0000
-Message-ID: <SA1PR12MB5615F83A12AD092C2590B6E7F0FCA@SA1PR12MB5615.namprd12.prod.outlook.com>
-References: <20251025134655.1068839-1-neal.frager@amd.com>
- <DDSZVS4QNIJ7.3TPH8C5KHSOF2@bootlin.com>
-In-Reply-To: <DDSZVS4QNIJ7.3TPH8C5KHSOF2@bootlin.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Enabled=True;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SetDate=2025-10-27T11:42:50.0000000Z;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Name=AMD
- Internal Distribution
- Only; MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_ContentBits=3;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Method=Standard
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR12MB5615:EE_|DM6PR12MB4481:EE_
-x-ms-office365-filtering-correlation-id: 81ef2963-e7a0-481f-9a07-08de154e6217
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
- ARA:13230040|376014|7416014|366016|1800799024|38070700021|41080700001; 
-x-microsoft-antispam-message-info: =?utf-8?B?d0VsMFlISnBOcDBHTElqSlkvQXJLT3AyUGU4MUQzZW9NMVB5enlsMDhGSGdo?=
- =?utf-8?B?R1ZITC9icmtTdzBOVUVKNTd4Uk1pWGxlMVp0ZEJFYVBReEwza0dkQnkzMnJE?=
- =?utf-8?B?M0NpbEp1azFqZk8vWWtBTE5DZXZUTjQyU295dGRMdjJOZEhSSGJZckw4Y3ZZ?=
- =?utf-8?B?bHV4V3Fla3RwdjB6RE9oZWlJMVlvOHhEcm92T2w4R25zZTRMTHFaS2xTbkYr?=
- =?utf-8?B?WjBZekZqYmNwcUhCSGJMMWRLK3dEdHh2NGY2d0pmb3RYV05IN2dOajdsUHVt?=
- =?utf-8?B?Zkc2bUpabFFjWXRuam9BeGVqQkQ2VXV5emZSd1cxNjNBUndDOTNjSEdDbHlu?=
- =?utf-8?B?SWJ2ejRhUTZpeUEwTkk5UjRwd1pJaCt0Vm1VUE93RFZ2ZmtSQ0hxRGdiR0lW?=
- =?utf-8?B?QjMwZUthTitteXBUbVZSU1FXL3NUVU1lb1VjYVhXN01NcmlpazlRWFFBRnQ4?=
- =?utf-8?B?Mk93UzdDUTZhaHUxaGlkdnc3WlNQOUdWT0Y3R0M0SWRDbmQrL2ZldHkxYkxu?=
- =?utf-8?B?TVZXQjRMbkUzbmFFK2puNSsrUlpxelZZMTFtakZZT0hKWnNQblNjc0RXZ0la?=
- =?utf-8?B?MWFpSkhhNVBFQ2x2SjdzZEYvYmNsWG1FNkYvSjFyZlVaYm1mb3RUTkV5NDRN?=
- =?utf-8?B?Z2d3czdCZ2ZtazcvOWxJb0k4Mzc4Tkg2SU9PcDlvS3BYcnFwQWJ2Vlk5N1cr?=
- =?utf-8?B?ZzFLdUxRVlpNQ2k3cTAvWlNPZmE2R1N2SkVTMWIrUi94SXMxdDZ6a3AyZkp2?=
- =?utf-8?B?cEhJZXgwZzFiL3M4R1JBRmU2REtiTXVXNFRtMVFWYS9HYUlJU25HcHg4L3Uv?=
- =?utf-8?B?RmZ2L25XVVdIaXBpMkdHMEZrRWphdFRDYkR2TEJpTVoyRDRMdVhoeVBNMXdw?=
- =?utf-8?B?dVFGVmFPc2w0UHZMRklPTjRwUk1QeDFMTnFaQVNJdk1BdWIyNHJLdktYb2o3?=
- =?utf-8?B?VHQ3U2tPYjd3UGdnMjRSUjFGZ3hScGwrMGhYZHpHMkVCM092QjNrZ1hwOEZJ?=
- =?utf-8?B?ejF1MHo3Y3cxK2czTHlTa3Y4MkhNSFI4NUVaWStDcWJYZ09zNmU2eGlsQVVr?=
- =?utf-8?B?TkdFZWhpeVlWRGJ3ZWFyYXBkVjB2bWM3SFhQVFpXaG5OTjFRWkZQcDlzTEhS?=
- =?utf-8?B?b3FqcGROKzM1bjhWZktrZlZXaGtXOEEvdXJKOHBTZ3EzbytJOXNNd0l2UTZi?=
- =?utf-8?B?enJ0MkpnOWhxaDVjTmYzcjk4VUhhcEtFdXI4eGJlUXRoS04zVU9UbEFSQS9I?=
- =?utf-8?B?c0ovaTJxZys4RVZ0ZDRvcGtVM3hBZkZaMk8wTGdPcUg1RjE2a2ZXc043T1JZ?=
- =?utf-8?B?OTRHdnlyUStMcjJrUVFhdW43V2lEb01XQ0JNMXdLZFM1N3pjUmpHTkx1TlZa?=
- =?utf-8?B?dGdPdGJDUW9BeExFOEt5Sk1EOEhTS2JweTc4LzhwZ0FZdmdyWWdmeUdTVGV5?=
- =?utf-8?B?UXVXTnNkTkw3TVpoUHM1M2dNa0oxYStnRXVCSkxYUFdmSFZIQWFEL2xhM3o5?=
- =?utf-8?B?Qisybmo3SjdwZGdJakhQYWI4UzFlSXNpNkw1ZjRNa2FVR3J5dm1Kb2hpWGt2?=
- =?utf-8?B?Z0ovNWxzUG0wY3QySWFVZ2RNM3Q2Y3czWGRvV3R5cHJ0VVhvT0JnbG4vV09S?=
- =?utf-8?B?WGU3MU1XMUlwQ2RHMWs0NWMrZFpDTVp3aWc4eHNqM3lXUU01QlFzWmsveGJo?=
- =?utf-8?B?RDBobTVPS2FGQzZiQkdyNEk3bFEvVEswQTkzdmZTK2hxQmpzMVdJMGRjVmJm?=
- =?utf-8?B?RTNWSzJOYlpyeWx4UlZlY3FlSFBzNVhvdUZGTXpCeTNlcWlyMDBUV1l5R0ha?=
- =?utf-8?B?MnQ5QnAyQ3FUdTM3VXp6Ukt0QzJScGpuek5WQTU1VUtVN2VOaVowTGhxaTRH?=
- =?utf-8?B?SXNQNVBKdjZkUTZxdi83YlJCZ3hOZkVNYURJcXJTUm8zWk5NQnhDZDZLNU91?=
- =?utf-8?B?a0ZRUkNrRlUzaXF0ZDhMdDdIbE9DTUhrSGRlb01pMzhucURsZXFkenU0MTlH?=
- =?utf-8?B?eHlGT085cG9xRFJGVWN0Ni9KWEsycGFiaUlhMUN4Zm5rNkZrei9tcW1mUDJD?=
- =?utf-8?B?WGtlbkVvb2pCNE1uRUhtcUhTQlNnM2NhYTA4MDJmM1ZkUGl3cVpVMnM2SlU0?=
- =?utf-8?Q?9wQk=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:SA1PR12MB5615.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(376014)(7416014)(366016)(1800799024)(38070700021)(41080700001);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?d2Y1b3lQWnVubXoyVWpvMEVjU0s0QWg5LzFSOEozNlpjcjhCTnFza3NKV0VH?=
- =?utf-8?B?OFZNZkNidlQ5bHhGd1JPOGQ1dFFVMlBJTmZsNzJmVS9oUnpra2ZJY29EaUEr?=
- =?utf-8?B?cDJqM0RVamE1NFVQWVk4MnBhUHQrajlRVWVaQ3hBN1MvNUlBdFVPZlBUVkdm?=
- =?utf-8?B?RURYcXdCb1RjbHJiWmV1aGs3Q1ByTHdMRGNWNDRtWlNtVUY4NmFVWllaVzFV?=
- =?utf-8?B?YTBYcWlTU1V1M0xnODRjRENoZTNFYlQwRHAwT0xvdG9tVEZadzRLMXBLeG8y?=
- =?utf-8?B?aXAyTkJXVlZwSm9DUFZIenUrVkFSOSttVlFSTjlmWHJkTWN1YUJMbUZZUkha?=
- =?utf-8?B?SnM4LytTVUlFZDBSZGQreDdoVmRvUnhoS2tXWGk0enpoVTdJUGRxUHNWQ2Jk?=
- =?utf-8?B?RnRiVG5pK0REdkRBYThkWTVBMS9lRXR6WlVjT0dxNWNnRzNHOUFYZXpvL2t0?=
- =?utf-8?B?cWh0Zm4zM285MC83TStIYlRCQXZFOUVGSWFTZVJyNHU3TjY1Qm9QaTd3dlpU?=
- =?utf-8?B?SmJiaVBaV0tvWUNLOHJaVUpqWFVmZm5iNzZ2ejdISTRBdkxQYTJ0WDR1MHg3?=
- =?utf-8?B?OHlwVWsvRVY1eUJwdnNUUjR4NXBsNlc0RTlYTyt2N0dRUEo5Tnp5UzBxbHh4?=
- =?utf-8?B?ZEpvL1ZFaUd0OXExNkZrOFJmb2xsSlEvTFF4ODE0VEhma05pd1ZvUnhrVnly?=
- =?utf-8?B?UUJXSW1zNEh1alBaR0gwZTI2NUNXenJzY1V5NklGZTNQNmMxZ0ViMHlTZm16?=
- =?utf-8?B?ZHBVWDJjT3oyTlNNVllsMnZwYjdaV1YwVVZuZFI1eGMzK2tYQmhJa25uQ1NZ?=
- =?utf-8?B?VE95ZUhPZ01XZVBvdGFEY3YyVDdBMEFWUTYxK0o0YXQzcFR0Y3k1YkQya3Ex?=
- =?utf-8?B?WjAxYmtPdHNMeXdIWjlsRmRwdVc5azBIYWc0ejRJeEcyKzVBc0VCbU5rUDdL?=
- =?utf-8?B?UnNhcUNzSGhyb21RZlpNVnQ5TkxpUmFRcVYrdW1KNTAvajhnR0VxQ0pFWXZZ?=
- =?utf-8?B?Tk5nR1RQK3dzR3daNjRnZmFZOFBnR0w1YVBrS1FLQ0ZQT3RNenlHQlZkak5m?=
- =?utf-8?B?Z1N2emhPQndicWdjQ1hrSlRqUFRXMmJDaWYrZEpZSERGMklVQlFHZ01oUStW?=
- =?utf-8?B?eWI0NVZGUkk3blQzc1NWYVgzVmhpdWxYU29WdDk0Z1ZLUS8vKzRqK2lyUXRO?=
- =?utf-8?B?VTNvUys0ZERvcE9hUHhMenpXSFUxWEVzT29xdjVtUnQ3U0Q1amhYenBraCtq?=
- =?utf-8?B?WkRPWHBGMTZTQkVZMkg1aXNlTDFJTk1ockEydHFCdWdBRnpyREdscEIvdkZu?=
- =?utf-8?B?UDJuMEtjRFdUd3JVVkF0M1pUUS92eXpyU0xGc3hzNlJwVjJXTHcreG9TSWRz?=
- =?utf-8?B?ckt1UU8wR2l5RWM0TmJ1aEp4SmVQYTRxaDF2ZjhiN3RhNzUzeWlydUU1S1VO?=
- =?utf-8?B?N09vbU5xRkNFUHdTa1lrNERNZjI0NnRxSGwrYUc0MkhPVnhycnhubGVXYTF0?=
- =?utf-8?B?YWJjK3pmKzhUekc3RTNVTVJzZVhONFdmYlppS3RSMGNLUmV3WVNIK0NselNE?=
- =?utf-8?B?ckNBS3RDNWhRYUpyRGE5L1hUc21ZUGEyWjlucFJLWEJPeHhoQ1dFMXgwMHQ3?=
- =?utf-8?B?YXkvNWQ1cXRneWlGN2dyaVg4azJ2K2JHZEJMSUxuTXpZdDVyVVZYYUsrMTdN?=
- =?utf-8?B?MGQzbjMxRkxRdVN1aTN0MHg3YU5UclhSS1F0bnA4ZWpzRk9OUHhmbE5DWWZQ?=
- =?utf-8?B?a2R4R3FBQnhMNnhUSURScHRJMnpuWUIvM2Z6bkhSdi80ZUtsSjZDZmh2M2hl?=
- =?utf-8?B?QnBxeFRFSVZMWWx2WTBRNEs2bEdkaW12dzZHUjg2Qit4RFU2NDFZSng2MTZw?=
- =?utf-8?B?UmV3bXcwYWFIUXptY1F4UytjVWxMVlI3YmVhYWt0a21jdWRWRlBoR0dtdVNG?=
- =?utf-8?B?cGFUYkd6WndhcDlwM3NqYUluNzlydjhDbkVwWUVQSGhQUG0xamZTL0g2clNm?=
- =?utf-8?B?K3N0R0MxWEI0ZGhjQkFSWXZia2ZtWTJ4dTMvYlU1MG9YKzV2YXVxZEtwQzgx?=
- =?utf-8?B?ZkpTZE1aQWdYVTRPeW9RRFNoZTFtbVlvS05vakhuTVJZTzRoTERrTGUzWlZi?=
- =?utf-8?Q?I9/w=3D?=
+ client-ip=2a00:1450:4864:20::62e; helo=mail-ej1-x62e.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 16C5D40530
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16C5D40530
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
+ [IPv6:2a00:1450:4864:20::62e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 16C5D40530
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 13:15:52 +0000 (UTC)
+Received: by mail-ej1-x62e.google.com with SMTP id
+ a640c23a62f3a-b3e9d633b78so1060102266b.1
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 06:15:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1761570950; x=1762175750;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=JqZbJqCoNHowlJIHMCQC6aWBKOQbGrf1kIndOSP4B2s=;
+ b=mvkRQOqcYeXQlw3jOu1YGubbgq994cLTwKWGlHxMd14zGbcwO+si5/UIj/cptsTsbO
+ E1B7YtpaDoKfBZ4F3tp+nZCZ0PbKJoRnSQWR3CXV+DirUU2QmHqnSv5wexA+Zb8lqkrI
+ AAvI4JgE32UDs+ywxEmHO72QdHiZ5PlU8Oxzz8x/zjOQnJbabvOlkk7kJmbrTqap2Dir
+ KrIg+Jlb71Urslpq80qU+0Z0i7MUjLW00n3BNcZfnqVktC05rk9N0H4hve656qRsM3Xk
+ 3xWSKL+uJxvJqL8Hany7ve8gRXL3QPE+dyxFqvzqcA0dNTsogvCAMgcGqRqoszrgrC06
+ DiSg==
+X-Gm-Message-State: AOJu0YyDOXGpBv+m44JkC37q8nufF9FX1KaV/WQ7rJVZ1dJmNsITVscD
+ nJvhJGwIQ4US/MNksM09C2leH/vhYgaviMJJNuVwfvhdgrxTd9ygSXd3bVU8+LEpb31ZmU4MKMn
+ hD/75m/Q=
+X-Gm-Gg: ASbGnctBXo2UYyP92pBVrzVnx9e8Rv5P8eoXKcPN0NXJeQMLo/9McsWzRhAUbc+3eQ2
+ YYuLGfBfLx/pED+tUj876jgZNxFwqX1W5/Zj2r1qNTfIwEOBJQYqOt1Z8zaTuIHZ3CKdPARN42r
+ uQExfRth8sHLwglOCKTCuUqeAksBfe30EPrvfr3+nmqLUpW6K0cSRYtkQ/we/xznZY8PM514ZG/
+ 07wGdy7UQW3FUGtZXkqAQFVnF/bg8ZnaJbgarhG59t/bG/gw8SfcIcVSMIZDfS72ghym9o53uaX
+ iA6da6dGVwl991aqcanAXL4o0Iamk6MzK5Ez/ON7Nyelz0wrAws25y/BfWXxQT4y7tv6/0gWUVk
+ zXuKNDKTfouXWJYFDSdBxKdbzOFn4Z2Hqg2ai8CuFL+X2lJ70nQ6mt6fqCP/m2sAWT9EgVgZOrt
+ DJEvNv6rCzzzF56Q==
+X-Google-Smtp-Source: AGHT+IGpi7SqtH/mYj2NPSZ/rtzJHrfAfzbojV3t3FVBQVwsA2o+WvIOkvrmzKax0VEyco5orqgU4w==
+X-Received: by 2002:a17:907:6d15:b0:b50:9f92:fde0 with SMTP id
+ a640c23a62f3a-b6db9d91055mr850366b.29.1761570949650; 
+ Mon, 27 Oct 2025 06:15:49 -0700 (PDT)
+Received: from dragon.home ([2a02:a03f:73a7:c001:1291:d1ff:fe92:3b5a])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-b6d8548eda6sm749529966b.75.2025.10.27.06.15.49
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 27 Oct 2025 06:15:49 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Mon, 27 Oct 2025 14:15:39 +0100
+Message-ID: <20251027131539.11774-1-titouan.christophe@mind.be>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR12MB5615.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 81ef2963-e7a0-481f-9a07-08de154e6217
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Oct 2025 11:45:53.0159 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: A5URGh600B73o8XZN0AV9l1plELZ/J+bwC68ou1T94i6b7TCAOovL/jOW0lZ/WPP
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4481
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vvPWitdRJvJWYLIw2ocnoUuB5bUwR7fh1ZJv7JQ8Q68=;
- b=Zlqn2tziTG1aTL1c9oQb1xQhFRP8OCrdnXaUQtmYFVerBtMJGlKe7P4oUvAVaxRgu6VxX8WRxS6kiQfNwgSJjq08dJ4qBMdchibI7NnwP8cBQnNqmzRYqS9JR5GLkd65jrAwNnq+5sApmYELhjjzwrexn0CFqr/sK8ksjCv+uIE=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=mind.be; s=google; t=1761570950; x=1762175750; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=JqZbJqCoNHowlJIHMCQC6aWBKOQbGrf1kIndOSP4B2s=;
+ b=L7iJc8FLte37SZMOaNYpuUSS4ZoEx43XfC51kLiN5d66uVmUxTzArJAkOfJTNy7ZO6
+ +PUxV/jVWEi3kBCwWWDeQazGuC4HKYYO1CP59MJyWBWRXB/WBSAjaPYVafEkQpHdFTBS
+ EH1VTRWEP5nGMUVxGNOCbSl7hr5baS+K/Sqd9lNZ3EJi8S9e052Svr7vuEz91+NMPJLs
+ Rojpd/rbbfD4phivyWOnWBDdnmHX6MeUsuu0aBS1GFoYEmEPUmzmbZLUuwKA6wjaGyfb
+ JaysdKgkfQZac51pJ+Ln5xVTkRlAJqoFF4zBWxH5O8N0A2+ORVtGcnMOtZd1Q/Hp2mqz
+ JvsQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=Zlqn2tzi
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH v1 1/1] boot/xilinx-prebuilt: add local
- versal xsa support
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=L7iJc8FL
+Subject: [Buildroot] [PATCH] package/hostapd: add patches for CVE-2025-24912
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -201,73 +107,219 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Cc: "Erkiaga Elorza, Ibai" <ibai.erkiaga-elorza@amd.com>,
- "yann.morin@orange.com" <yann.morin@orange.com>,
- "brandon.maier@collins.com" <brandon.maier@collins.com>,
- "ju.o@free.fr" <ju.o@free.fr>,
- "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
- "romain.naour@smile.fr" <romain.naour@smile.fr>, "Simek,
- Michal" <michal.simek@amd.com>,
- "romain.naour@gmail.com" <romain.naour@gmail.com>
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: Sergey Matyukevich <geomatsi@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-[AMD Official Use Only - AMD Internal Distribution Only]
+See https://jvn.jp/en/jp/JVN19358384/
 
-Hello Luca,
+This fixes the following vulnerability:
+- CVE-2025-24912:
+    hostapd fails to process crafted RADIUS packets properly. When hostapd
+    authenticates wi-fi devices with RADIUS authentication, an attacker in
+    the position between the hostapd and the RADIUS server may inject
+    crafted RADIUS packets and force RADIUS authentications to fail.
+    https://www.cve.org/CVERecord?id=CVE-2025-24912
 
-> Most of the time, users will be running Vivado on their local host machine,
-> and will generate a XSA (Xilinx Shell Archive) locally.
->
-> Instead of requiring users to create a https:// location for their XSA file,
-> this patch improves ease of use by allowing users to work directly with the
-> XSA file on their local machine.
->
-> BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA_LOCATION can thus be defined as either
-> a local location or a https:// location for the XSA file.
->
-> In either case, a hash for the XSA file needs to be added to the
-> boot/xilinx-prebuilt/xilinx-prebuilt.hash when using this option.
->
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
-> ---
->  boot/xilinx-prebuilt/xilinx-prebuilt.mk | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/boot/xilinx-prebuilt/xilinx-prebuilt.mk b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-> index 95b656cdde..a7ec9abff5 100644
-> --- a/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-> +++ b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-> @@ -10,6 +10,9 @@ ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA),y)
->  XILINX_PREBUILT_FILE = $(call qstrip,$(BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA_LOCATION))
->  XILINX_PREBUILT_SITE = $(patsubst %/,%,$(dir $(XILINX_PREBUILT_FILE)))
->  XILINX_PREBUILT_SOURCE = $(notdir $(XILINX_PREBUILT_FILE))
-> +ifeq ($(findstring ://,$(XILINX_PREBUILT_FILE)),)
-> +XILINX_PREBUILT_SITE_METHOD = file
-> +endif
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+---
+ ...est-only-when-accepting-the-response.patch | 82 +++++++++++++++++++
+ ...-RADIUS-Fix-pending-request-dropping.patch | 74 +++++++++++++++++
+ package/hostapd/hostapd.mk                    |  4 +
+ 3 files changed, 160 insertions(+)
+ create mode 100644 package/hostapd/0001-RADIUS-Drop-pending-request-only-when-accepting-the-response.patch
+ create mode 100644 package/hostapd/0002-RADIUS-Fix-pending-request-dropping.patch
 
-> According to the BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA_LOCATION help text,
-> using a local file is already supported by using the file:// URL prefix.
+diff --git a/package/hostapd/0001-RADIUS-Drop-pending-request-only-when-accepting-the-response.patch b/package/hostapd/0001-RADIUS-Drop-pending-request-only-when-accepting-the-response.patch
+new file mode 100644
+index 0000000000..fb86d1303d
+--- /dev/null
++++ b/package/hostapd/0001-RADIUS-Drop-pending-request-only-when-accepting-the-response.patch
+@@ -0,0 +1,82 @@
++From 726432d7622cc0088ac353d073b59628b590ea44 Mon Sep 17 00:00:00 2001
++From: Jouni Malinen <j@w1.fi>
++Date: Sat, 25 Jan 2025 11:21:16 +0200
++Subject: RADIUS: Drop pending request only when accepting the response
++
++The case of an invalid authenticator in a RADIUS response could imply
++that the response is not from the correct RADIUS server and as such,
++such a response should be discarded without changing internal state for
++the pending request. The case of an unknown response (RADIUS_RX_UNKNOWN)
++is somewhat more complex since it could have been indicated before
++validating the authenticator. In any case, it seems better to change the
++state for the pending request only when we have fully accepted the
++response.
++
++Allowing the internal state of pending RADIUS request to change based on
++responses that are not fully validation could have allow at least a
++theoretical DoS attack if an attacker were to have means for injecting
++RADIUS messages to the network using the IP address of the real RADIUS
++server and being able to do so more quickly than the real server and
++with the matching identifier from the request header (i.e., either by
++flooding 256 responses quickly or by having means to capture the RADIUS
++request). These should not really be realistic options in a properly
++protected deployment, but nevertheless it is good to be more careful in
++processing RADIUS responses.
++
++Remove a pending RADIUS request from the internal list only when having
++fully accepted a matching RADIUS response, i.e., after one of the
++registered handlers has confirmed that the authenticator is valid and
++processing of the response has succeeded.
++
++Upstream: https://git.w1.fi/cgit/hostap/commit/?id=726432d7622cc0088ac353d073b59628b590ea44
++CVE: CVE-2025-24912
++
++Signed-off-by: Jouni Malinen <j@w1.fi>
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ src/radius/radius_client.c | 15 +++++++--------
++ 1 file changed, 7 insertions(+), 8 deletions(-)
++
++diff --git a/src/radius/radius_client.c b/src/radius/radius_client.c
++index 2a7f36170..7909b29a7 100644
++--- a/src/radius/radius_client.c
+++++ b/src/radius/radius_client.c
++@@ -1259,13 +1259,6 @@ static void radius_client_receive(int sock, void *eloop_ctx, void *sock_ctx)
++ 		       roundtrip / 100, roundtrip % 100);
++ 	rconf->round_trip_time = roundtrip;
++ 
++-	/* Remove ACKed RADIUS packet from retransmit list */
++-	if (prev_req)
++-		prev_req->next = req->next;
++-	else
++-		radius->msgs = req->next;
++-	radius->num_msgs--;
++-
++ 	for (i = 0; i < num_handlers; i++) {
++ 		RadiusRxResult res;
++ 		res = handlers[i].handler(msg, req->msg, req->shared_secret,
++@@ -1276,6 +1269,13 @@ static void radius_client_receive(int sock, void *eloop_ctx, void *sock_ctx)
++ 			radius_msg_free(msg);
++ 			/* fall through */
++ 		case RADIUS_RX_QUEUED:
+++			/* Remove ACKed RADIUS packet from retransmit list */
+++			if (prev_req)
+++				prev_req->next = req->next;
+++			else
+++				radius->msgs = req->next;
+++			radius->num_msgs--;
+++
++ 			radius_client_msg_free(req);
++ 			return;
++ 		case RADIUS_RX_INVALID_AUTHENTICATOR:
++@@ -1297,7 +1297,6 @@ static void radius_client_receive(int sock, void *eloop_ctx, void *sock_ctx)
++ 		       msg_type, hdr->code, hdr->identifier,
++ 		       invalid_authenticator ? " [INVALID AUTHENTICATOR]" :
++ 		       "");
++-	radius_client_msg_free(req);
++ 
++  fail:
++ 	radius_msg_free(msg);
++-- 
++cgit v1.2.3
++
+diff --git a/package/hostapd/0002-RADIUS-Fix-pending-request-dropping.patch b/package/hostapd/0002-RADIUS-Fix-pending-request-dropping.patch
+new file mode 100644
+index 0000000000..474f40da0c
+--- /dev/null
++++ b/package/hostapd/0002-RADIUS-Fix-pending-request-dropping.patch
+@@ -0,0 +1,74 @@
++From 339a334551ca911187cc870f4f97ef08e11db109 Mon Sep 17 00:00:00 2001
++From: Jouni Malinen <quic_jouni@quicinc.com>
++Date: Wed, 5 Feb 2025 19:23:39 +0200
++Subject: RADIUS: Fix pending request dropping
++
++A recent change to this moved the place where the processed RADIUS
++request was removed from the pending list to happen after the message
++handler had been called. This did not take into account possibility of
++the handler adding a new pending request in the list and the prev_req
++pointer not necessarily pointing to the correct entry anymore. As such,
++some of the pending requests could have been lost and that would result
++in not being able to process responses to those requests and also, to a
++memory leak.
++
++Fix this by determining prev_req at the point when the pending request
++is being removed, i.e., after the handler function has already added a
++new entry.
++
++Fixes: 726432d7622c ("RADIUS: Drop pending request only when accepting the response")
++
++Upstream: https://git.w1.fi/cgit/hostap/commit/?id=339a334551ca911187cc870f4f97ef08e11db109
++CVE: CVE-2025-24912
++
++Signed-off-by: Jouni Malinen <quic_jouni@quicinc.com>
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ src/radius/radius_client.c | 10 +++++++---
++ 1 file changed, 7 insertions(+), 3 deletions(-)
++
++diff --git a/src/radius/radius_client.c b/src/radius/radius_client.c
++index 7909b29a7..d4faa7936 100644
++--- a/src/radius/radius_client.c
+++++ b/src/radius/radius_client.c
++@@ -1099,7 +1099,7 @@ static void radius_client_receive(int sock, void *eloop_ctx, void *sock_ctx)
++ 	struct radius_hdr *hdr;
++ 	struct radius_rx_handler *handlers;
++ 	size_t num_handlers, i;
++-	struct radius_msg_list *req, *prev_req;
+++	struct radius_msg_list *req, *prev_req, *r;
++ 	struct os_reltime now;
++ 	struct hostapd_radius_server *rconf;
++ 	int invalid_authenticator = 0;
++@@ -1224,7 +1224,6 @@ static void radius_client_receive(int sock, void *eloop_ctx, void *sock_ctx)
++ 		break;
++ 	}
++ 
++-	prev_req = NULL;
++ 	req = radius->msgs;
++ 	while (req) {
++ 		/* TODO: also match by src addr:port of the packet when using
++@@ -1236,7 +1235,6 @@ static void radius_client_receive(int sock, void *eloop_ctx, void *sock_ctx)
++ 		    hdr->identifier)
++ 			break;
++ 
++-		prev_req = req;
++ 		req = req->next;
++ 	}
++ 
++@@ -1270,6 +1268,12 @@ static void radius_client_receive(int sock, void *eloop_ctx, void *sock_ctx)
++ 			/* fall through */
++ 		case RADIUS_RX_QUEUED:
++ 			/* Remove ACKed RADIUS packet from retransmit list */
+++			prev_req = NULL;
+++			for (r = radius->msgs; r; r = r->next) {
+++				if (r == req)
+++					break;
+++				prev_req = r;
+++			}
++ 			if (prev_req)
++ 				prev_req->next = req->next;
++ 			else
++-- 
++cgit v1.2.3
++
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index 3eda1c7e83..d83b574fad 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -16,6 +16,10 @@ HOSTAPD_LICENSE_FILES = README
+ HOSTAPD_CPE_ID_VENDOR = w1.fi
+ HOSTAPD_SELINUX_MODULES = hostapd
+ 
++# 0001-RADIUS-Drop-pending-request-only-when-accepting-the-response.patch
++# 0002-RADIUS-Fix-pending-request-dropping.patch
++HOSTAPD_IGNORE_CVES += CVE-2025-24912
++
+ HOSTAPD_CONFIG_ENABLE = \
+ 	CONFIG_INTERNAL_LIBTOMMATH \
+ 	CONFIG_DEBUG_FILE \
+-- 
+2.51.0
 
-Yes, you are right!
-
-> Can you elaborate on which use case you are adding now? I think you are
-> just making it a bit easier and cleaner to do the same thing as before by
-> using a path instead of a URL, but I may be wrong.
-
-Yes, you are correct.
-
-> Also, updating the Config.in help text should part of this patch.
-
-I will update the help text in v2.
-
-Best regards,
-Neal Frager
-AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
