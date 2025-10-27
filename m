@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AF33CCF9E5
-	for <buildroot@archiver.kernel.org>; Mon, 27 Oct 2025 22:22:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3837DCCF9EA
+	for <buildroot@archiver.kernel.org>; Mon, 27 Oct 2025 22:22:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFF9E61455;
-	Mon, 27 Oct 2025 22:22:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0A9EC4159D;
+	Mon, 27 Oct 2025 22:22:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5bjmyQJNCGUh; Mon, 27 Oct 2025 22:22:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KZKfhjjuXXgw; Mon, 27 Oct 2025 22:22:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 189EE61456
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C4B141638
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 189EE61456;
-	Mon, 27 Oct 2025 22:22:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 67F25939
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0C4B141638;
+	Mon, 27 Oct 2025 22:22:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6BC3B976
  for <buildroot@buildroot.org>; Mon, 27 Oct 2025 22:22:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4E67861456
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4E71841598
  for <buildroot@buildroot.org>; Mon, 27 Oct 2025 22:22:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9l51BCo8JjfX for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id C-r3xzvorb0e for <buildroot@buildroot.org>;
  Mon, 27 Oct 2025 22:22:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8438A61455
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B1DD40DD7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8438A61455
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8B1DD40DD7
  for <buildroot@buildroot.org>; Mon, 27 Oct 2025 22:22:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 727038795A; Mon, 27 Oct 2025 22:22:05 +0000 (UTC)
+ id 7BF398794C; Mon, 27 Oct 2025 22:22:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 27 Oct 2025 22:57:09 +0100
+Date: Mon, 27 Oct 2025 22:57:13 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8448784798495a3bbfa0ede225f917f135d0fa33
-X-Git-Newrev: 1a25f0c37283ad0db34cb85b237a8f8a12243758
+X-Git-Oldrev: 1a25f0c37283ad0db34cb85b237a8f8a12243758
+X-Git-Newrev: 3b3b2d1b727596085e5993da559eb8e17e2c5727
 X-Patchwork-Hint: ignore
-Message-Id: <20251027222205.727038795A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mbedtls: security bump to v3.6.5
+Message-Id: <20251027222205.7BF398794C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/imagemagick: security bump to
+ v7.1.2-8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,63 +66,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a25f0c37283ad0db34cb85b237a8f8a12243758
+commit: https://git.buildroot.net/buildroot/commit/?id=3b3b2d1b727596085e5993da559eb8e17e2c5727
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 For more details on the version bump, see:
- - https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.5
+  - https://github.com/ImageMagick/ImageMagick/compare/7.1.2-3...7.1.2-8
 
-Fixes the following vulnerabilities:
+Fixes the following vulnerability:
 
-- CVE-2025-54764
+- CVE-2025-62171
 
-    Mbed TLS before 3.6.5 allows a local timing attack against certain
-    RSA operations, and direct calls to mbedtls_mpi_mod_inv or
-    mbedtls_mpi_gcd.
+    ImageMagick is an open source software suite for displaying,
+    converting, and editing raster image files. In ImageMagick versions
+    prior to 7.1.2-7 and 6.9.13-32, an integer overflow vulnerability
+    exists in the BMP decoder on 32-bit systems. The vulnerability
+    occurs in coders/bmp.c when calculating the extent value by
+    multiplying image columns by bits per pixel. On 32-bit systems with
+    size_t of 4 bytes, a malicious BMP file with specific dimensions can
+    cause this multiplication to overflow and wrap to zero. The overflow
+    check added to address CVE-2025-57803 is placed after the overflow
+    occurs, making it ineffective. A specially crafted 58-byte BMP file
+    with width set to 536,870,912 and 32 bits per pixel can trigger this
+    overflow, causing the bytes_per_line calculation to become zero.
+    This vulnerability only affects 32-bit builds of ImageMagick where
+    default resource limits for width, height, and area have been
+    manually increased beyond their defaults. 64-bit systems with size_t
+    of 8 bytes are not vulnerable, and systems using default ImageMagick
+    resource limits are not vulnerable. The vulnerability is fixed in
+    versions 7.1.2-7 and 6.9.13-32.
 
 For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-54764
-  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2025-10-ssbleed-mstep/
-
-- CVE-2025-59438
-
-    Mbed TLS through 3.6.4 has an Observable Timing Discrepancy.
-
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-59438
-  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2025-10-invalid-padding-error/
+  - https://nvd.nist.gov/vuln/detail/CVE-2025-62171
+  - https://github.com/ImageMagick/ImageMagick/security/advisories/GHSA-9pp9-cfwx-54rm
+  - https://github.com/ImageMagick/ImageMagick/commit/cea1693e2ded51b4cc91c70c54096cbed1691c00
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/mbedtls/mbedtls.hash | 4 ++--
- package/mbedtls/mbedtls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index 8b82313c07..b86c66af3e 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.4:
--sha256  ec35b18a6c593cf98c3e30db8b98ff93e8940a8c4e690e66b41dfc011d678110  mbedtls-3.6.4.tar.bz2
-+# From https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.5:
-+sha256  4a11f1777bb95bf4ad96721cac945a26e04bf19f57d905f241fe77ebeddf46d8  mbedtls-3.6.5.tar.bz2
- # Locally calculated
- sha256  9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b  LICENSE
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index b46bbe888a..c1aa9f0850 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index f260a0e0fb..3dbea6d8bc 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b16415e8694a2e15e5282d64fc7b358f309ff3a514a90eb5da268676c772de3d  imagemagick-7.1.2-3.tar.gz
++sha256  acf76a9dafbd18f4dd7b24c45ca10c77e31289fc28e4da0ce5cc3929fd0aef16  imagemagick-7.1.2-8.tar.gz
+ sha256  a556c5292c87c9a6ac795c80669b0c3660f9f729de8c476bf2b10f83ab1b34ec  LICENSE
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 30cacc7f1a..4e6a810631 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MBEDTLS_VERSION = 3.6.4
-+MBEDTLS_VERSION = 3.6.5
- MBEDTLS_SITE = https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-$(MBEDTLS_VERSION)
- MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION).tar.bz2
- MBEDTLS_CONF_OPTS = \
+-IMAGEMAGICK_VERSION = 7.1.2-3
++IMAGEMAGICK_VERSION = 7.1.2-8
+ IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
+ IMAGEMAGICK_LICENSE = Apache-2.0
+ IMAGEMAGICK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
