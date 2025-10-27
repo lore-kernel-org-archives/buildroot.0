@@ -4,73 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60E05CCF9E5
-	for <buildroot@archiver.kernel.org>; Mon, 27 Oct 2025 18:26:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58618CCF9E0
+	for <buildroot@archiver.kernel.org>; Mon, 27 Oct 2025 18:27:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2491241201;
-	Mon, 27 Oct 2025 18:26:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 260B740A2F;
+	Mon, 27 Oct 2025 18:27:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nqoNlPiGs_AM; Mon, 27 Oct 2025 18:26:34 +0000 (UTC)
+ id Dr1rt6mLte4I; Mon, 27 Oct 2025 18:27:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F4F341498
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F23140A3A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F4F341498;
-	Mon, 27 Oct 2025 18:26:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3D8D543F
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 18:26:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4F23140A3A;
+	Mon, 27 Oct 2025 18:27:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D8312939
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 18:27:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2378241201
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 18:26:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BDA4B40A3A
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 18:27:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2ctBECGvcN8F for <buildroot@buildroot.org>;
- Mon, 27 Oct 2025 18:26:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 154C941498
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 154C941498
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 154C941498
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 18:26:31 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a04a9.dip0.t-ipconnect.de [91.58.4.169])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 62B52A4C508F
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 19:26:15 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:36978)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1vDRv5-000000008Kr-1EFD
- for buildroot@buildroot.org; Mon, 27 Oct 2025 18:26:15 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id 4TzwJ47-eTQy for <buildroot@buildroot.org>;
+ Mon, 27 Oct 2025 18:27:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::632; helo=mail-ej1-x632.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6E42840A0D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E42840A0D
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6E42840A0D
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 18:27:40 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id
+ a640c23a62f3a-b3e9d633b78so1147665766b.1
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 11:27:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1761589658; x=1762194458;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=JOmXY3HNC3bS0T5NoAr9oBVJiIz3OfJfi5N/Yjf7lpI=;
+ b=K6m4AFyF4Jn7K8eNHKzzD/nPiKCaa8BAZh+T+sWZUx6M2EA1owv+VlNccOI+xbCW/m
+ iZw54hl21/O0/D/oyLe+xWdlhDMa/KvMLgT2uFefMkvBLSEbQPOFe36VMQ1eAnKFLapj
+ 9h3IHL7T8db7CuZnNn+wI9HXLUogCmbFoqhKM96NtR5Ufzed8FeL7eJnv+eTUvVAZrda
+ 4IwgHlzQ8/4jh+wk2ms+WXQHeodwSSQhe2j4cS934D52+nVxI0pFj/nJ5B/vfH7Ibj4V
+ Ykt7jZ1qw74oy/HqobpYhPLlUZGzgBQEwjP3v7zpnAtzLP7D52FviSEN7LqMMd7lTkfN
+ PZpA==
+X-Gm-Message-State: AOJu0YxfWcQrpGfqZJybcIzzoXZTOKzYRNrdU8N2Vn+qA1AJFFEi7RUK
+ W3AQ/Kjm82QcbTy4ifTt3PLpvIBcvb2JVY1pSAWaq8Cm4L8Z/ijDGMRT3eAFXcNSPisI3tQi+V0
+ LOq+Q
+X-Gm-Gg: ASbGncuKxBHGv++wARAysl/9/9Q8Vj7DDbTH8pD5cf3OH8+OVfJlIPedWtNCmd81t6Y
+ IEPngXR5IoRtbytqLJ5kRehLo/RNipBWL6a24S9g2FyJIsxS1Hz2dxu69Fo7hKkdqqTb5wJwSOH
+ r/O9xvLERitLzETlE7/Pnx4xo2zsvWuNx9mKe86epojTwhlyh2W6dH5PACGsO0f3QARhrKB3e8L
+ 80N53QSupE32ix+5eHlG9HfxWMVs61sZKW2UEXtz+tIfTMtDCyPhs4kYxdBpIGuOpAr0Q5Q66XQ
+ aybyO1lRbdAnCQ49OvDrKt8NfY+9/F1GL2OCefKRygZfpbQ3bCufqliA3+xAL2QuBbj3n85+T2Y
+ tWI4ILK9Co5nunNbs0kIYdIc0dbQVooFeJFFJH9mpOFtSyQ2OB1++vaIvvji4izN9aWsn5FFw+G
+ U2xrUk85i7RL1SfVQrhCK4MQGw8icdDDydrACBx9v914vKOu1zbYbAQ0zVlcYqiQql/WvCySSbR
+ IbkEaSjUmJ0/pzt6kcqs/ClT7cF+hyzxxAXXbaNd+yJ
+X-Google-Smtp-Source: AGHT+IGiilmnPal9zgw0CrUQUGTSuScMLoUz1tC6C0XNzUtnJ40pTnIT8NMj5bI5nW8wkGatF1BxOQ==
+X-Received: by 2002:a17:907:7e82:b0:b6d:5fbf:8c63 with SMTP id
+ a640c23a62f3a-b6dbbf43cc1mr51569166b.15.1761589657940; 
+ Mon, 27 Oct 2025 11:27:37 -0700 (PDT)
+Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
+ (host-82-50-34-170.retail.telecomitalia.it. [82.50.34.170])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-b6d8548ed8fsm847300866b.73.2025.10.27.11.27.37
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 27 Oct 2025 11:27:37 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Mon, 27 Oct 2025 19:26:14 +0100
-Message-ID: <20251027182614.719429-2-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251027182614.719429-1-bernd@kuhls.net>
-References: <20251027182614.719429-1-bernd@kuhls.net>
+Cc: David Pierret <david.pierret@smile.fr>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date: Mon, 27 Oct 2025 19:27:34 +0100
+Message-ID: <20251027182734.2504579-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1761589575;
- bh=cHFCel3yVCdZgmltqdTWA8x5c1XSSlnWv8DXqLWbYaw=;
- h=From:To:Subject:Date:In-Reply-To:From;
- b=1DiWx21CsXQXpw0xY+FgphZZYZ+ZvHJKwhxf+txYLnpxWDkQNBMAnJG3DoSqykq9M
- n1iwnmn24ziPqjXUK73HJsxSbJ+9iD4Ey+eiNVzDpjFyxoRC9zB03+iotbE/q0u2wj
- usP5wOjWYQmr2bMtOgxZTrPGYN9vcbnEokoOHXY/EX/uXc89ykHGPiDoyg9E/AACwz
- BSXpYW3kdhkwE/ZGATWI14bC7S9rW9GVghRe0uTYpMGBAOIHbSjdnZ+jxaVhu8z8sU
- LJ3Ds0KP88KBrnhf+piycEwTXeEPgsRrzzxCGfeMXeBK/Kokc0H1bhPuPYBX3HMD/d
- oLfEHaisJXogw==
+ d=amarulasolutions.com; s=google; t=1761589658; x=1762194458;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=JOmXY3HNC3bS0T5NoAr9oBVJiIz3OfJfi5N/Yjf7lpI=;
+ b=HLHdDKC4W2dBZ7MQ0T7ZFoXn8VsGtnHITCAJVY/E95+T2WljFGfvb6gVsnYrSTdlqo
+ GbXgF80/JqodLfkK9TAUgkmNhykGMtu9eLzZAU9Mt0Rdp3+hxLKu14EFAYfU5ChrF1no
+ IahhRLBEIgLKevX3HHyTDIC7yFhxPLc0hImA8=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=1DiWx21C
-Subject: [Buildroot] [PATCH 2/2] package/ntpsec: bump version to 1.2.4
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=HLHdDKC4
+Subject: [Buildroot] [PATCH 1/1] package/bat: bump to version 0.26.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,105 +115,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://gitlab.com/NTPsec/ntpsec/-/blob/NTPsec_1_2_4/NEWS.adoc?ref_type=tags
+Changelog:
+https://github.com/sharkdp/bat/blob/v0.26.0/CHANGELOG.md
 
-Move env variable declarations from _CONF_OPTS to _CONF_ENV to fix a
-configure error caused by updated waf scripts included in this release.
-
-Added build fix for gcc >= 14.x.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- ...lock_gpsd-add-build-fix-for-gcc-14.x.patch | 32 +++++++++++++++++++
- package/ntpsec/ntpsec.hash                    |  2 +-
- package/ntpsec/ntpsec.mk                      | 10 +++---
- 3 files changed, 39 insertions(+), 5 deletions(-)
- create mode 100644 package/ntpsec/0003-refclock_gpsd-add-build-fix-for-gcc-14.x.patch
+ package/bat/bat.hash | 2 +-
+ package/bat/bat.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ntpsec/0003-refclock_gpsd-add-build-fix-for-gcc-14.x.patch b/package/ntpsec/0003-refclock_gpsd-add-build-fix-for-gcc-14.x.patch
-new file mode 100644
-index 0000000000..a0ab783d00
---- /dev/null
-+++ b/package/ntpsec/0003-refclock_gpsd-add-build-fix-for-gcc-14.x.patch
-@@ -0,0 +1,32 @@
-+From 328ff13ec573fc53dcdfa9845b17290992f8e7fc Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Mon, 27 Oct 2025 19:18:13 +0100
-+Subject: [PATCH] refclock_gpsd: add build fix for gcc => 14.x
-+
-+../../ntpd/refclock_gpsd.c:2076:14: error: implicit declaration of
-+ function 'strptime'; did you mean 'strftime'?
-+ [-Wimplicit-function-declaration]
-+
-+Upstream: https://gitlab.com/NTPsec/ntpsec/-/merge_requests/1484
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ ntpd/refclock_gpsd.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/ntpd/refclock_gpsd.c b/ntpd/refclock_gpsd.c
-+index 9ea969ed6..1dfec3103 100644
-+--- a/ntpd/refclock_gpsd.c
-++++ b/ntpd/refclock_gpsd.c
-+@@ -59,6 +59,8 @@
-+  */
-+ 
-+ 
-++#define _XOPEN_SOURCE 700
-++#define _BSD_SOURCE
-+ #include "config.h"
-+ #include "ntp.h"
-+ #include "ntp_types.h"
-+-- 
-+2.47.3
-+
-diff --git a/package/ntpsec/ntpsec.hash b/package/ntpsec/ntpsec.hash
-index a3802c11ba..40c06d6926 100644
---- a/package/ntpsec/ntpsec.hash
-+++ b/package/ntpsec/ntpsec.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  a9ec4416688a1c1c88833f3f6acc35518e3d63409af372eec010455002b33050  ntpsec-NTPsec_1_2_3.tar.bz2
-+sha256  3abc1b057a252d214ef2e76aa375fe0d81432c626e75304b17850d68eee0c54f  ntpsec-NTPsec_1_2_4.tar.bz2
- sha256  074e6e32c86a4c0ef8b3ed25b721ca23aca83df277cd88106ef7177c354615ff  LICENSES/Apache-2.0.txt
- sha256  991d8a58e0b4be84a174a9bd333a8ca33807a0c1ce6d23a2e25a21f7ece482d0  LICENSES/Beerware.txt
- sha256  899261d6eb6c922cf8f051225411f27b738ba0014be18c2eaf6afbf30d421bb1  LICENSES/BSD-2-Clause.txt
-diff --git a/package/ntpsec/ntpsec.mk b/package/ntpsec/ntpsec.mk
-index 3acf7745cf..d48bc5baa9 100644
---- a/package/ntpsec/ntpsec.mk
-+++ b/package/ntpsec/ntpsec.mk
+diff --git a/package/bat/bat.hash b/package/bat/bat.hash
+index a860a73c606b..532ccd98a480 100644
+--- a/package/bat/bat.hash
++++ b/package/bat/bat.hash
+@@ -1,4 +1,4 @@
+ # Locally generated
+-sha256  fe5d567728c240209e59a641ab41c53420b9e3a61bda43647880fd44c7fc7e75  bat-0.25.0-cargo4.tar.gz
++sha256  e62f9f1b14090044db860727a3c6bcb0d5b840f866ccaea4298518eeeb807a72  bat-0.26.0-cargo4.tar.gz
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE-APACHE
+ sha256  dccda9eb9533f5c65624a1106536c6cfde46008d58e60b3faf154e8b9fd5b46e  LICENSE-MIT
+diff --git a/package/bat/bat.mk b/package/bat/bat.mk
+index 7e89d361af06..8084e6c2c3c1 100644
+--- a/package/bat/bat.mk
++++ b/package/bat/bat.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NTPSEC_VERSION = 1.2.3
-+NTPSEC_VERSION = 1.2.4
- NTPSEC_SOURCE = ntpsec-NTPsec_$(subst .,_,$(NTPSEC_VERSION)).tar.bz2
- NTPSEC_SITE = https://gitlab.com/NTPsec/ntpsec/-/archive/NTPsec_$(subst .,_,$(NTPSEC_VERSION))
- NTPSEC_LICENSE = Apache-2.0, \
-@@ -37,13 +37,15 @@ NTPSEC_DEPENDENCIES = \
- 	libcap \
- 	openssl
- 
-+NTPSEC_CONF_ENV = \
-+	CC="$(HOSTCC)" \
-+	CFLAGS="$(HOST_CFLAGS)" \
-+	PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python3-config"
-+
- # CC="$(HOSTCC)" is strange but needed to build some host tools, the
- # cross-compiler will properly be used to build target code thanks to
- # --cross-compiler
- NTPSEC_CONF_OPTS = \
--	CC="$(HOSTCC)" \
--	CFLAGS="$(HOST_CFLAGS)" \
--	PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python3-config" \
- 	--libdir=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/ntp \
- 	--cross-compiler="$(TARGET_CC)" \
- 	--cross-cflags="$(TARGET_CFLAGS) -std=gnu99" \
+-BAT_VERSION = 0.25.0
++BAT_VERSION = 0.26.0
+ BAT_SITE = $(call github,sharkdp,bat,v$(BAT_VERSION))
+ BAT_LICENSE = Apache-2.0 or MIT
+ BAT_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
 -- 
-2.47.3
+2.43.0
 
 _______________________________________________
 buildroot mailing list
