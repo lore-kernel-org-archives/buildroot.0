@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CD8BCCF9EB
-	for <buildroot@archiver.kernel.org>; Mon, 27 Oct 2025 22:09:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 835CFCCF9E5
+	for <buildroot@archiver.kernel.org>; Mon, 27 Oct 2025 22:09:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4823082965;
-	Mon, 27 Oct 2025 22:09:23 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pCacrrDFqmIa; Mon, 27 Oct 2025 22:09:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09E2682893
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 09E2682893;
-	Mon, 27 Oct 2025 22:09:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4812843F
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 22:09:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3943041682
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 22:09:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 533B2416BA;
+	Mon, 27 Oct 2025 22:09:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tfLXQ0OYDM-t for <buildroot@buildroot.org>;
- Mon, 27 Oct 2025 22:09:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 824A24167F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 824A24167F
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 22:09:18 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7A9F78794D; Mon, 27 Oct 2025 22:09:18 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 27 Oct 2025 22:20:09 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8282aaf094d526499085445e33295aa960e39c1c
-X-Git-Newrev: 0515f1e7834b1bb6a744735f7783c5b75c3abd74
-X-Patchwork-Hint: ignore
-Message-Id: <20251027220918.7A9F78794D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/cubieboard1: bump Linux to 6.12.52
- and U-Boot to 2025.10
+ id d7EvZyBo7gXT; Mon, 27 Oct 2025 22:09:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27DCD41682
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 27DCD41682;
+	Mon, 27 Oct 2025 22:09:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id BD89443F
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 22:09:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BA92583843
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 22:09:41 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AFaJMhDThhqD for <buildroot@buildroot.org>;
+ Mon, 27 Oct 2025 22:09:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B07FE836CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B07FE836CE
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B07FE836CE
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 22:09:40 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 73BA678035E;
+ Mon, 27 Oct 2025 23:09:35 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 27 Oct 2025 23:09:35 +0100
+MIME-Version: 1.0
+Date: Mon, 27 Oct 2025 23:09:35 +0100
+To: Scott Fan <fancp2007@gmail.com>
+Cc: buildroot@buildroot.org, Gero Schwaericke <gero.schwaericke@posteo.de>
+In-Reply-To: <20251013145721.1236674-1-fancp2007@gmail.com>
+References: <20251013145721.1236674-1-fancp2007@gmail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <0b3a9c48d8a7f1d968cf570669addada@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1761602977;
+ bh=xYKptrBIS9fKRtpZujj66Fh1H+z/TdBcJ3sdHcpI0MQ=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Y5sZRtF7TUQOMamLrkAxzQwHe5Fe1bX4DTXqDVGj595kAmDnHA6mnHODzD5tNgwGa
+ Q48aq9CfXRXeqT3ULk5L+I8qnOzjbJK+San8OHz92/M4VyV+7tG1WdLkQqzvQbmoZU
+ xzj0rRt0eNVl6VZZEJ1+rCCB4mAQrb6EBfLDQm2l3Yj7SVz75bPvwA8OtD8Wc+zki5
+ nOtZkAg1iVDoaMcZ6RCQp3T0nJz7ecyF6i/y0GlDVQXB0jmgXeLt8ooz0y8aRQ4890
+ c9QSU1j+vDxW7xqDv5puvI+qQvC/jKkDt4ved4YRHqxnmjR9+jgz4yRx90MmzGxSGo
+ HCYoRSBl4IIlQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=Y5sZRtF7
+Subject: Re: [Buildroot] [PATCH 1/2] configs/cubieboard1: bump Linux to
+ 6.12.52 and U-Boot to 2025.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,61 +84,15 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0515f1e7834b1bb6a744735f7783c5b75c3abd74
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 13/10/2025 16:57, Scott Fan wrote:
+> Signed-off-by: Scott Fan <fancp2007@gmail.com>
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- board/cubietech/cubieboard1/patches/linux/linux.hash | 2 +-
- board/cubietech/cubieboard1/patches/uboot/uboot.hash | 2 +-
- configs/cubieboard1_defconfig                        | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/board/cubietech/cubieboard1/patches/linux/linux.hash b/board/cubietech/cubieboard1/patches/linux/linux.hash
-index 823f6a55a3..9ef8b4af9c 100644
---- a/board/cubietech/cubieboard1/patches/linux/linux.hash
-+++ b/board/cubietech/cubieboard1/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  4804528a29cd20309a0b41c30e5aeffc35fa21ee3358f4a706d4586d003bc1fb  linux-6.12.42.tar.xz
-+sha256  b4850cf670a032c70f38b713a27d62046c5f747caf028c5f50b18f98606a9eb1  linux-6.12.52.tar.xz
-diff --git a/board/cubietech/cubieboard1/patches/uboot/uboot.hash b/board/cubietech/cubieboard1/patches/uboot/uboot.hash
-index 440526977b..98a5c53aaf 100644
---- a/board/cubietech/cubieboard1/patches/uboot/uboot.hash
-+++ b/board/cubietech/cubieboard1/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  0f933f6c5a426895bf306e93e6ac53c60870e4b54cda56d95211bec99e63bec7  u-boot-2025.07.tar.bz2
-+sha256  b4f032848e56cc8f213ad59f9132c084dbbb632bc29176d024e58220e0efdf4a  u-boot-2025.10.tar.bz2
-diff --git a/configs/cubieboard1_defconfig b/configs/cubieboard1_defconfig
-index 8a25129311..7948ab3b19 100644
---- a/configs/cubieboard1_defconfig
-+++ b/configs/cubieboard1_defconfig
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/cubietech/cubieboard1/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.52"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun4i-a10-cubieboard"
-@@ -18,7 +18,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Cubieboard"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
