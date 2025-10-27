@@ -1,74 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 599CCCCF9EA
-	for <buildroot@archiver.kernel.org>; Mon, 27 Oct 2025 21:13:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0E1CCCF9E5
+	for <buildroot@archiver.kernel.org>; Mon, 27 Oct 2025 21:19:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 21C156141D;
-	Mon, 27 Oct 2025 21:13:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5F05A83FC5;
+	Mon, 27 Oct 2025 21:19:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4VQl4TjebyLu; Mon, 27 Oct 2025 21:13:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YSBYyf2-UTgr; Mon, 27 Oct 2025 21:19:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB8B761419
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A0CC83F00
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EB8B761419;
-	Mon, 27 Oct 2025 21:13:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id C3108939
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 21:13:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3A0CC83F00;
+	Mon, 27 Oct 2025 21:19:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2602243F
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 21:19:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A877E61419
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 21:13:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0FBE2413E0
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 21:19:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YVJJxWRSwiR8 for <buildroot@buildroot.org>;
- Mon, 27 Oct 2025 21:13:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CA33F61418
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA33F61418
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CA33F61418
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 21:13:09 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a04a9.dip0.t-ipconnect.de [91.58.4.169])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id C8BF3A4C4776
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 22:13:06 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:57326)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1vDUWY-000000004AR-2uIS
- for buildroot@buildroot.org; Mon, 27 Oct 2025 21:13:06 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FgEHzXcX3d40 for <buildroot@buildroot.org>;
+ Mon, 27 Oct 2025 21:19:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0EFE41318
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D0EFE41318
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 21:19:09 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BF40787917; Mon, 27 Oct 2025 21:19:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 27 Oct 2025 22:13:06 +0100
-Message-ID: <20251027211306.2888666-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: /
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1761599586;
- bh=kqc2QBCRy6DnNrSRBy2PW2J60c9hBf13HgjjDhStNT8=;
- h=From:To:Subject:Date:From;
- b=k0Ypq9L19xA51FL9yqNuEQdq2h2tXz2VD8JEla0PwPvQKjctQiIzJ1RXgYYtyUxL1
- 4gXnLg8DyeuzMEF+9aymvsQS85EyvAkfUzcgBNiXIF+fIILDEYWWeq2Pu9e2PU36jm
- WDq3bc829jRvjgGZ9dywxuLde7Fbw3noidhSnK7qjVsKcIhzp1VROpFH+Ujpv7b75l
- tr2wc4Cg8t8usLQpvr/W9WPydW5VSc24/CXykXVYAqjR0WkOasDcqbxrA/tkH5Ci6t
- JdaAudDn/YK6ReRk2cYGxw2z19cnaA/IxQ45B2SgK4FytEd0mQsY2GydVxbGdAyVw4
- +oBPnQHqbFacQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=k0Ypq9L1
-Subject: [Buildroot] [PATCH 1/1] package/ntpsec: bump version to 1.2.4
+Date: Mon, 27 Oct 2025 22:10:39 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 50954cc5e00e8ba1ad0768c9f45aabd8a2897eff
+X-Git-Newrev: 8282aaf094d526499085445e33295aa960e39c1c
+X-Patchwork-Hint: ignore
+Message-Id: <20251027211909.BF40787917@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/hostapd: add patches for
+ CVE-2025-24912
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,178 +58,218 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://gitlab.com/NTPsec/ntpsec/-/blob/NTPsec_1_2_4/NEWS.adoc?ref_type=tags
+commit: https://git.buildroot.net/buildroot/commit/?id=8282aaf094d526499085445e33295aa960e39c1c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot commit a5327724686a1ba719d37caff5986f241993b500 added patch
-0003 although it should have been 0002 => renumbered.
+See https://jvn.jp/en/jp/JVN19358384/
 
-Added upstream commit as 0003 for partial build fix with gcc 14.x
+This fixes the following vulnerability:
+- CVE-2025-24912:
+    hostapd fails to process crafted RADIUS packets properly. When hostapd
+    authenticates wi-fi devices with RADIUS authentication, an attacker in
+    the position between the hostapd and the RADIUS server may inject
+    crafted RADIUS packets and force RADIUS authentications to fail.
+    https://www.cve.org/CVERecord?id=CVE-2025-24912
 
-Added another patch to fix build with gcc >= 14.x for
-BR2_PACKAGE_NTPSEC_REFCLOCK_ALL=y
-
-Move env variable declarations from _CONF_OPTS to _CONF_ENV to fix a
-configure error caused by updated waf scripts included in this release.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...t.patch => 0002-disable-PIE-support.patch} |  0
- ...psd.c-Add-missing-time.h-for-strptim.patch | 47 +++++++++++++++++++
- ...lock_gpsd-add-build-fix-for-gcc-14.x.patch | 32 +++++++++++++
- package/ntpsec/ntpsec.hash                    |  2 +-
- package/ntpsec/ntpsec.mk                      | 10 ++--
- 5 files changed, 86 insertions(+), 5 deletions(-)
- rename package/ntpsec/{0003-disable-PIE-support.patch => 0002-disable-PIE-support.patch} (100%)
- create mode 100644 package/ntpsec/0003-ntpd-refclock_gpsd.c-Add-missing-time.h-for-strptim.patch
- create mode 100644 package/ntpsec/0004-refclock_gpsd-add-build-fix-for-gcc-14.x.patch
+ ...-request-only-when-accepting-the-response.patch | 82 ++++++++++++++++++++++
+ .../0002-RADIUS-Fix-pending-request-dropping.patch | 74 +++++++++++++++++++
+ package/hostapd/hostapd.mk                         |  4 ++
+ 3 files changed, 160 insertions(+)
 
-diff --git a/package/ntpsec/0003-disable-PIE-support.patch b/package/ntpsec/0002-disable-PIE-support.patch
-similarity index 100%
-rename from package/ntpsec/0003-disable-PIE-support.patch
-rename to package/ntpsec/0002-disable-PIE-support.patch
-diff --git a/package/ntpsec/0003-ntpd-refclock_gpsd.c-Add-missing-time.h-for-strptim.patch b/package/ntpsec/0003-ntpd-refclock_gpsd.c-Add-missing-time.h-for-strptim.patch
+diff --git a/package/hostapd/0001-RADIUS-Drop-pending-request-only-when-accepting-the-response.patch b/package/hostapd/0001-RADIUS-Drop-pending-request-only-when-accepting-the-response.patch
 new file mode 100644
-index 0000000000..0a2ae6a259
+index 0000000000..fb86d1303d
 --- /dev/null
-+++ b/package/ntpsec/0003-ntpd-refclock_gpsd.c-Add-missing-time.h-for-strptim.patch
-@@ -0,0 +1,47 @@
-+From 904983bf9465017753c6f5b602fc9c98458615f7 Mon Sep 17 00:00:00 2001
-+From: "Gary E. Miller" <gem@rellim.com>
-+Date: Mon, 27 Oct 2025 12:35:35 -0700
-+Subject: [PATCH] ntpd/refclock_gpsd.c: Add missing time.h for strptime()
++++ b/package/hostapd/0001-RADIUS-Drop-pending-request-only-when-accepting-the-response.patch
+@@ -0,0 +1,82 @@
++From 726432d7622cc0088ac353d073b59628b590ea44 Mon Sep 17 00:00:00 2001
++From: Jouni Malinen <j@w1.fi>
++Date: Sat, 25 Jan 2025 11:21:16 +0200
++Subject: RADIUS: Drop pending request only when accepting the response
 +
-+Upstream: https://gitlab.com/NTPsec/ntpsec/-/commit/5137c155d8895cfc50fb577ee720b3b23589c662
++The case of an invalid authenticator in a RADIUS response could imply
++that the response is not from the correct RADIUS server and as such,
++such a response should be discarded without changing internal state for
++the pending request. The case of an unknown response (RADIUS_RX_UNKNOWN)
++is somewhat more complex since it could have been indicated before
++validating the authenticator. In any case, it seems better to change the
++state for the pending request only when we have fully accepted the
++response.
 +
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++Allowing the internal state of pending RADIUS request to change based on
++responses that are not fully validation could have allow at least a
++theoretical DoS attack if an attacker were to have means for injecting
++RADIUS messages to the network using the IP address of the real RADIUS
++server and being able to do so more quickly than the real server and
++with the matching identifier from the request header (i.e., either by
++flooding 256 responses quickly or by having means to capture the RADIUS
++request). These should not really be realistic options in a properly
++protected deployment, but nevertheless it is good to be more careful in
++processing RADIUS responses.
++
++Remove a pending RADIUS request from the internal list only when having
++fully accepted a matching RADIUS response, i.e., after one of the
++registered handlers has confirmed that the authenticator is valid and
++processing of the response has succeeded.
++
++Upstream: https://git.w1.fi/cgit/hostap/commit/?id=726432d7622cc0088ac353d073b59628b590ea44
++CVE: CVE-2025-24912
++
++Signed-off-by: Jouni Malinen <j@w1.fi>
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 +---
-+ ntpd/refclock_gpsd.c | 14 +++++++-------
-+ 1 file changed, 7 insertions(+), 7 deletions(-)
++ src/radius/radius_client.c | 15 +++++++--------
++ 1 file changed, 7 insertions(+), 8 deletions(-)
 +
-+diff --git a/ntpd/refclock_gpsd.c b/ntpd/refclock_gpsd.c
-+index 1dfec3103..0a2987d84 100644
-+--- a/ntpd/refclock_gpsd.c
-++++ b/ntpd/refclock_gpsd.c
-+@@ -100,20 +100,20 @@ typedef unsigned long int json_uint;
-+  * header stuff we need
-+  */
++diff --git a/src/radius/radius_client.c b/src/radius/radius_client.c
++index 2a7f36170..7909b29a7 100644
++--- a/src/radius/radius_client.c
+++++ b/src/radius/radius_client.c
++@@ -1259,13 +1259,6 @@ static void radius_client_receive(int sock, void *eloop_ctx, void *sock_ctx)
++ 		       roundtrip / 100, roundtrip % 100);
++ 	rconf->round_trip_time = roundtrip;
 + 
-+-#include <netdb.h>
-+-#include <unistd.h>
-+-#include <fcntl.h>
-+-#include <string.h>
-+ #include <ctype.h>
-++#include <fcntl.h>
-+ #include <math.h>
-++#include <netdb.h>
-++#include <string.h>
-++#include <time.h>         // for strptime()
-++#include <unistd.h>
-+ 
-+-#include <sys/types.h>
-++#include <sys/select.h>
-+ #include <sys/socket.h>
-+ #include <sys/stat.h>
-++#include <sys/types.h>
-+ #include <netinet/tcp.h>
-+ 
-+-#include <sys/select.h>
++-	/* Remove ACKed RADIUS packet from retransmit list */
++-	if (prev_req)
++-		prev_req->next = req->next;
++-	else
++-		radius->msgs = req->next;
++-	radius->num_msgs--;
 +-
-+ #include "ntpd.h"
-+ #include "ntp_io.h"
-+ #include "ntp_refclock.h"
++ 	for (i = 0; i < num_handlers; i++) {
++ 		RadiusRxResult res;
++ 		res = handlers[i].handler(msg, req->msg, req->shared_secret,
++@@ -1276,6 +1269,13 @@ static void radius_client_receive(int sock, void *eloop_ctx, void *sock_ctx)
++ 			radius_msg_free(msg);
++ 			/* fall through */
++ 		case RADIUS_RX_QUEUED:
+++			/* Remove ACKed RADIUS packet from retransmit list */
+++			if (prev_req)
+++				prev_req->next = req->next;
+++			else
+++				radius->msgs = req->next;
+++			radius->num_msgs--;
+++
++ 			radius_client_msg_free(req);
++ 			return;
++ 		case RADIUS_RX_INVALID_AUTHENTICATOR:
++@@ -1297,7 +1297,6 @@ static void radius_client_receive(int sock, void *eloop_ctx, void *sock_ctx)
++ 		       msg_type, hdr->code, hdr->identifier,
++ 		       invalid_authenticator ? " [INVALID AUTHENTICATOR]" :
++ 		       "");
++-	radius_client_msg_free(req);
++ 
++  fail:
++ 	radius_msg_free(msg);
 +-- 
-+2.47.3
++cgit v1.2.3
 +
-diff --git a/package/ntpsec/0004-refclock_gpsd-add-build-fix-for-gcc-14.x.patch b/package/ntpsec/0004-refclock_gpsd-add-build-fix-for-gcc-14.x.patch
+diff --git a/package/hostapd/0002-RADIUS-Fix-pending-request-dropping.patch b/package/hostapd/0002-RADIUS-Fix-pending-request-dropping.patch
 new file mode 100644
-index 0000000000..821a34e966
+index 0000000000..474f40da0c
 --- /dev/null
-+++ b/package/ntpsec/0004-refclock_gpsd-add-build-fix-for-gcc-14.x.patch
-@@ -0,0 +1,32 @@
-+From 55c230d61ece7213506f1dccac76c21aefbade9e Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Mon, 27 Oct 2025 19:18:13 +0100
-+Subject: [PATCH] refclock_gpsd: add build fix for gcc => 14.x
++++ b/package/hostapd/0002-RADIUS-Fix-pending-request-dropping.patch
+@@ -0,0 +1,74 @@
++From 339a334551ca911187cc870f4f97ef08e11db109 Mon Sep 17 00:00:00 2001
++From: Jouni Malinen <quic_jouni@quicinc.com>
++Date: Wed, 5 Feb 2025 19:23:39 +0200
++Subject: RADIUS: Fix pending request dropping
 +
-+../../ntpd/refclock_gpsd.c:2076:14: error: implicit declaration of
-+ function 'strptime'; did you mean 'strftime'?
-+ [-Wimplicit-function-declaration]
++A recent change to this moved the place where the processed RADIUS
++request was removed from the pending list to happen after the message
++handler had been called. This did not take into account possibility of
++the handler adding a new pending request in the list and the prev_req
++pointer not necessarily pointing to the correct entry anymore. As such,
++some of the pending requests could have been lost and that would result
++in not being able to process responses to those requests and also, to a
++memory leak.
 +
-+Upstream: https://gitlab.com/NTPsec/ntpsec/-/merge_requests/1484
++Fix this by determining prev_req at the point when the pending request
++is being removed, i.e., after the handler function has already added a
++new entry.
 +
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++Fixes: 726432d7622c ("RADIUS: Drop pending request only when accepting the response")
++
++Upstream: https://git.w1.fi/cgit/hostap/commit/?id=339a334551ca911187cc870f4f97ef08e11db109
++CVE: CVE-2025-24912
++
++Signed-off-by: Jouni Malinen <quic_jouni@quicinc.com>
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 +---
-+ ntpd/refclock_gpsd.c | 2 ++
-+ 1 file changed, 2 insertions(+)
++ src/radius/radius_client.c | 10 +++++++---
++ 1 file changed, 7 insertions(+), 3 deletions(-)
 +
-+diff --git a/ntpd/refclock_gpsd.c b/ntpd/refclock_gpsd.c
-+index a4a6f7095..a3995896a 100644
-+--- a/ntpd/refclock_gpsd.c
-++++ b/ntpd/refclock_gpsd.c
-+@@ -59,6 +59,8 @@
-+  */
++diff --git a/src/radius/radius_client.c b/src/radius/radius_client.c
++index 7909b29a7..d4faa7936 100644
++--- a/src/radius/radius_client.c
+++++ b/src/radius/radius_client.c
++@@ -1099,7 +1099,7 @@ static void radius_client_receive(int sock, void *eloop_ctx, void *sock_ctx)
++ 	struct radius_hdr *hdr;
++ 	struct radius_rx_handler *handlers;
++ 	size_t num_handlers, i;
++-	struct radius_msg_list *req, *prev_req;
+++	struct radius_msg_list *req, *prev_req, *r;
++ 	struct os_reltime now;
++ 	struct hostapd_radius_server *rconf;
++ 	int invalid_authenticator = 0;
++@@ -1224,7 +1224,6 @@ static void radius_client_receive(int sock, void *eloop_ctx, void *sock_ctx)
++ 		break;
++ 	}
 + 
++-	prev_req = NULL;
++ 	req = radius->msgs;
++ 	while (req) {
++ 		/* TODO: also match by src addr:port of the packet when using
++@@ -1236,7 +1235,6 @@ static void radius_client_receive(int sock, void *eloop_ctx, void *sock_ctx)
++ 		    hdr->identifier)
++ 			break;
 + 
-++#define _XOPEN_SOURCE
-++#define _DEFAULT_SOURCE
-+ #include "config.h"
-+ #include "ntp.h"
-+ #include "ntp_types.h"
++-		prev_req = req;
++ 		req = req->next;
++ 	}
++ 
++@@ -1270,6 +1268,12 @@ static void radius_client_receive(int sock, void *eloop_ctx, void *sock_ctx)
++ 			/* fall through */
++ 		case RADIUS_RX_QUEUED:
++ 			/* Remove ACKed RADIUS packet from retransmit list */
+++			prev_req = NULL;
+++			for (r = radius->msgs; r; r = r->next) {
+++				if (r == req)
+++					break;
+++				prev_req = r;
+++			}
++ 			if (prev_req)
++ 				prev_req->next = req->next;
++ 			else
 +-- 
-+2.47.3
++cgit v1.2.3
 +
-diff --git a/package/ntpsec/ntpsec.hash b/package/ntpsec/ntpsec.hash
-index a3802c11ba..40c06d6926 100644
---- a/package/ntpsec/ntpsec.hash
-+++ b/package/ntpsec/ntpsec.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  a9ec4416688a1c1c88833f3f6acc35518e3d63409af372eec010455002b33050  ntpsec-NTPsec_1_2_3.tar.bz2
-+sha256  3abc1b057a252d214ef2e76aa375fe0d81432c626e75304b17850d68eee0c54f  ntpsec-NTPsec_1_2_4.tar.bz2
- sha256  074e6e32c86a4c0ef8b3ed25b721ca23aca83df277cd88106ef7177c354615ff  LICENSES/Apache-2.0.txt
- sha256  991d8a58e0b4be84a174a9bd333a8ca33807a0c1ce6d23a2e25a21f7ece482d0  LICENSES/Beerware.txt
- sha256  899261d6eb6c922cf8f051225411f27b738ba0014be18c2eaf6afbf30d421bb1  LICENSES/BSD-2-Clause.txt
-diff --git a/package/ntpsec/ntpsec.mk b/package/ntpsec/ntpsec.mk
-index 3acf7745cf..d48bc5baa9 100644
---- a/package/ntpsec/ntpsec.mk
-+++ b/package/ntpsec/ntpsec.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index 3eda1c7e83..d83b574fad 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -16,6 +16,10 @@ HOSTAPD_LICENSE_FILES = README
+ HOSTAPD_CPE_ID_VENDOR = w1.fi
+ HOSTAPD_SELINUX_MODULES = hostapd
  
--NTPSEC_VERSION = 1.2.3
-+NTPSEC_VERSION = 1.2.4
- NTPSEC_SOURCE = ntpsec-NTPsec_$(subst .,_,$(NTPSEC_VERSION)).tar.bz2
- NTPSEC_SITE = https://gitlab.com/NTPsec/ntpsec/-/archive/NTPsec_$(subst .,_,$(NTPSEC_VERSION))
- NTPSEC_LICENSE = Apache-2.0, \
-@@ -37,13 +37,15 @@ NTPSEC_DEPENDENCIES = \
- 	libcap \
- 	openssl
- 
-+NTPSEC_CONF_ENV = \
-+	CC="$(HOSTCC)" \
-+	CFLAGS="$(HOST_CFLAGS)" \
-+	PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python3-config"
++# 0001-RADIUS-Drop-pending-request-only-when-accepting-the-response.patch
++# 0002-RADIUS-Fix-pending-request-dropping.patch
++HOSTAPD_IGNORE_CVES += CVE-2025-24912
 +
- # CC="$(HOSTCC)" is strange but needed to build some host tools, the
- # cross-compiler will properly be used to build target code thanks to
- # --cross-compiler
- NTPSEC_CONF_OPTS = \
--	CC="$(HOSTCC)" \
--	CFLAGS="$(HOST_CFLAGS)" \
--	PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python3-config" \
- 	--libdir=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/ntp \
- 	--cross-compiler="$(TARGET_CC)" \
- 	--cross-cflags="$(TARGET_CFLAGS) -std=gnu99" \
--- 
-2.47.3
-
+ HOSTAPD_CONFIG_ENABLE = \
+ 	CONFIG_INTERNAL_LIBTOMMATH \
+ 	CONFIG_DEBUG_FILE \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
