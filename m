@@ -1,48 +1,48 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DD54CCF9EB
-	for <buildroot@archiver.kernel.org>; Mon, 27 Oct 2025 03:54:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAC16CCF9E5
+	for <buildroot@archiver.kernel.org>; Mon, 27 Oct 2025 03:54:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E8E1C412E1;
-	Mon, 27 Oct 2025 03:54:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D0A7611F4;
+	Mon, 27 Oct 2025 03:54:10 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SjLUb65BTrCD; Mon, 27 Oct 2025 03:54:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20A90611F2
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 20A90611F2;
+	Mon, 27 Oct 2025 03:54:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 67DA125B
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 03:54:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4E522412E4
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 03:54:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i4sOLAhnbVrF; Mon, 27 Oct 2025 03:54:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 264B1412E4
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 264B1412E4;
-	Mon, 27 Oct 2025 03:54:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E2C9BD7
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 03:54:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D531740AFA
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 03:54:03 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DgGYb0gmtuPG for <buildroot@buildroot.org>;
- Mon, 27 Oct 2025 03:54:03 +0000 (UTC)
+ id GatEXhemYuq3 for <buildroot@buildroot.org>;
+ Mon, 27 Oct 2025 03:54:05 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=60.248.80.70;
  helo=atcsqr.andestech.com; envelope-from=ycliang@andestech.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96BEC406A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C650412E2
 Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net
  [60.248.80.70])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 96BEC406A6
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 03:54:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1C650412E2
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 03:54:04 +0000 (UTC)
 Received: from Atcsqr.andestech.com (localhost [127.0.0.2] (may be forged))
- by Atcsqr.andestech.com with ESMTP id 59R3XCDW065552
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 11:33:12 +0800 (+08)
+ by Atcsqr.andestech.com with ESMTP id 59R3XEko065553
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 11:33:14 +0800 (+08)
  (envelope-from ycliang@andestech.com)
 Received: from mail.andestech.com (ATCPCS34.andestech.com [10.0.1.134])
- by Atcsqr.andestech.com with ESMTPS id 59R3WtqP065330
+ by Atcsqr.andestech.com with ESMTPS id 59R3WtWV065331
  (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK)
  for <buildroot@buildroot.org>; Mon, 27 Oct 2025 11:32:55 +0800 (+08)
  (envelope-from ycliang@andestech.com)
@@ -52,8 +52,8 @@ Received: from swlinux02.andestech.com (10.0.15.183) by ATCPCS34.andestech.com
  2025 11:32:55 +0800
 To: <buildroot@buildroot.org>
 CC: <tim609@andestech.com>, Leo Yu-Chi Liang <ycliang@andestech.com>
-Date: Mon, 27 Oct 2025 11:32:41 +0800
-Message-ID: <20251027033242.1797230-4-ycliang@andestech.com>
+Date: Mon, 27 Oct 2025 11:32:42 +0800
+Message-ID: <20251027033242.1797230-5-ycliang@andestech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251027033242.1797230-1-ycliang@andestech.com>
 References: <20251027033242.1797230-1-ycliang@andestech.com>
@@ -63,11 +63,11 @@ X-ClientProxiedBy: ATCPCS33.andestech.com (10.0.1.100) To
  ATCPCS34.andestech.com (10.0.1.134)
 X-DKIM-Results: atcpcs34.andestech.com; dkim=none;
 X-DNSRBL: 
-X-MAIL: Atcsqr.andestech.com 59R3XCDW065552
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org; dmarc=permerror
+X-MAIL: Atcsqr.andestech.com 59R3XEko065553
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org; dmarc=permerror
  header.from=andestech.com
-Subject: [Buildroot] [PATCH 3/4] configs/andes_ae350_45_defconfig: bump to
- opensbi v1.5
+Subject: [Buildroot] [PATCH 4/4] configs/andes_ae350_45_defconfig: bump to
+ uboot v2024.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,40 +86,135 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This bumps opensbi to v1.5 and add proper hash file.
+This bumps uboot to v2024.10, removes unnecessary patches,
+and add proper hash file.
 
 Signed-off-by: Leo Yu-Chi Liang <ycliang@andestech.com>
 ---
- board/andes/ae350/patches/opensbi/opensbi.hash | 2 ++
- configs/andes_ae350_45_defconfig               | 6 +++---
- 2 files changed, 5 insertions(+), 3 deletions(-)
- create mode 100644 board/andes/ae350/patches/opensbi/opensbi.hash
+ ...-Support-DTS-of-ftsdc010-driver-for-.patch | 38 -----------------
+ ...-tree-blob-address-at-8-byte-boundar.patch | 42 -------------------
+ board/andes/ae350/patches/uboot/uboot.hash    |  2 +
+ configs/andes_ae350_45_defconfig              |  4 +-
+ 4 files changed, 4 insertions(+), 82 deletions(-)
+ delete mode 100644 board/andes/ae350/patches/uboot/0001-mmc-ftsdc010_mci-Support-DTS-of-ftsdc010-driver-for-.patch
+ delete mode 100644 board/andes/ae350/patches/uboot/0002-spl-Align-device-tree-blob-address-at-8-byte-boundar.patch
+ create mode 100644 board/andes/ae350/patches/uboot/uboot.hash
 
-diff --git a/board/andes/ae350/patches/opensbi/opensbi.hash b/board/andes/ae350/patches/opensbi/opensbi.hash
+diff --git a/board/andes/ae350/patches/uboot/0001-mmc-ftsdc010_mci-Support-DTS-of-ftsdc010-driver-for-.patch b/board/andes/ae350/patches/uboot/0001-mmc-ftsdc010_mci-Support-DTS-of-ftsdc010-driver-for-.patch
+deleted file mode 100644
+index be89a1563f..0000000000
+--- a/board/andes/ae350/patches/uboot/0001-mmc-ftsdc010_mci-Support-DTS-of-ftsdc010-driver-for-.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 16aad5594e08550295ea3c12c1c9ed6f64774748 Mon Sep 17 00:00:00 2001
+-From: Rick Chen <rick@andestech.com>
+-Date: Tue, 29 Mar 2022 13:41:10 +0800
+-Subject: [PATCH] mmc: ftsdc010_mci: Support DTS of ftsdc010 driver for
+- generic dma
+-
+-The ftsdc010 driver has been implemented for generic dma in Linux
+-kernel. And its compatible is andestech,atfsdc010g to distinguish
+-the legacy andestech,atfsdc010 which is not for generic dma.
+-
+-Althought the ftsdc010_mci driver in U-Boot does not use dma, but
+-it still can work well with the mmc node for generic dma. So add
+-the compatible string to support it.
+-
+-Signed-off-by: Rick Chen <rick@andestech.com>
+-
+-Upstream-Status: Pending
+-
+-Signed-off-by: Yu Chien Peter Lin <peterlin@andestech.com>
+----
+- drivers/mmc/ftsdc010_mci.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/drivers/mmc/ftsdc010_mci.c b/drivers/mmc/ftsdc010_mci.c
+-index 570d54cf9d..65b1d447a8 100644
+---- a/drivers/mmc/ftsdc010_mci.c
+-+++ b/drivers/mmc/ftsdc010_mci.c
+-@@ -460,6 +460,7 @@ int ftsdc010_mmc_bind(struct udevice *dev)
+- 
+- static const struct udevice_id ftsdc010_mmc_ids[] = {
+- 	{ .compatible = "andestech,atfsdc010" },
+-+	{ .compatible = "andestech,atfsdc010g" },
+- 	{ }
+- };
+- 
+--- 
+-2.34.1
+-
+diff --git a/board/andes/ae350/patches/uboot/0002-spl-Align-device-tree-blob-address-at-8-byte-boundar.patch b/board/andes/ae350/patches/uboot/0002-spl-Align-device-tree-blob-address-at-8-byte-boundar.patch
+deleted file mode 100644
+index 5080554ca1..0000000000
+--- a/board/andes/ae350/patches/uboot/0002-spl-Align-device-tree-blob-address-at-8-byte-boundar.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From 933ad8a59f7fd9b2088badc3e97167d750a40b5a Mon Sep 17 00:00:00 2001
+-From: Bin Meng <bmeng.cn@gmail.com>
+-Date: Mon, 12 Jul 2021 11:52:31 +0800
+-Subject: [PATCH] spl: Align device tree blob address at 8-byte boundary
+-
+-Since libfdt v1.6.1, a new requirement on the device tree address via:
+-
+-  commit 5e735860c478 ("libfdt: Check for 8-byte address alignment in fdt_ro_probe_()")
+-
+-must be met that the device tree must be loaded in to memory at an
+-8-byte aligned address.
+-
+-Signed-off-by: Bin Meng <bmeng.cn@gmail.com>
+-
+-This patch was imported from U-boot patchwork:
+-https://patchwork.ozlabs.org/project/uboot/patch/20210712035231.26475-1-bmeng.cn@gmail.com/
+-
+-Signed-off-by: Yu Chien Peter Lin <peterlin@andestech.com>
+----
+- common/spl/spl_fit.c | 6 ++++++
+- 1 file changed, 6 insertions(+)
+-
+-diff --git a/common/spl/spl_fit.c b/common/spl/spl_fit.c
+-index a35be529..a76ad14a 100644
+---- a/common/spl/spl_fit.c
+-+++ b/common/spl/spl_fit.c
+-@@ -382,6 +382,12 @@ static int spl_fit_append_fdt(struct spl_image_info *spl_image,
+- 	 */
+- 	image_info.load_addr = spl_image->load_addr + spl_image->size;
+- 
+-+	/*
+-+	 * Since libfdt v1.6.1, the device tree must be loaded in to memory
+-+	 * at an 8-byte aligned address.
+-+	 */
+-+	image_info.load_addr = roundup(image_info.load_addr, 8);
+-+
+- 	/* Figure out which device tree the board wants to use */
+- 	node = spl_fit_get_image_node(ctx, FIT_FDT_PROP, index++);
+- 	if (node < 0) {
+--- 
+-2.34.1
+-
+diff --git a/board/andes/ae350/patches/uboot/uboot.hash b/board/andes/ae350/patches/uboot/uboot.hash
 new file mode 100644
-index 0000000000..05c150a514
+index 0000000000..904fa56c02
 --- /dev/null
-+++ b/board/andes/ae350/patches/opensbi/opensbi.hash
++++ b/board/andes/ae350/patches/uboot/uboot.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256  9880485672a3a2c48a81d373df6707517b568402f2d3f9eecbfa9d83f8e6f22f  opensbi-1.5.tar.gz
++sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
 diff --git a/configs/andes_ae350_45_defconfig b/configs/andes_ae350_45_defconfig
-index c02c4d7c61..6e0559659b 100644
+index 6e0559659b..dfe2f2646c 100644
 --- a/configs/andes_ae350_45_defconfig
 +++ b/configs/andes_ae350_45_defconfig
-@@ -17,9 +17,9 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_OPENSBI=y
--BR2_TARGET_OPENSBI_CUSTOM_TARBALL=y
--BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION="$(call github,riscv,opensbi,22f38ee6c658a660083aa45c4ec6c72f66a17260)/opensbi-22f38ee6c658a660083aa45c4ec6c72f66a17260.tar.gz"
--BR2_TARGET_OPENSBI_PLAT="andes/ae350"
-+BR2_TARGET_OPENSBI_CUSTOM_VERSION=y
-+BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.5"
-+BR2_TARGET_OPENSBI_PLAT="generic"
+@@ -23,8 +23,8 @@ BR2_TARGET_OPENSBI_PLAT="generic"
  # BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG is not set
  BR2_TARGET_UBOOT=y
  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,u-boot,u-boot,a5dfa3b8a0f7ad555495bad1386613d2de4ba619)/u-boot-a5dfa3b8a0f7ad555495bad1386613d2de4ba619.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="ae350_rv64_spl_xip"
+ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/andes/ae350/uboot.config.fragment"
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 -- 
 2.34.1
 
