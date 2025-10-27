@@ -1,76 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 835CFCCF9E5
-	for <buildroot@archiver.kernel.org>; Mon, 27 Oct 2025 22:09:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AF33CCF9E5
+	for <buildroot@archiver.kernel.org>; Mon, 27 Oct 2025 22:22:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 533B2416BA;
-	Mon, 27 Oct 2025 22:09:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EFF9E61455;
+	Mon, 27 Oct 2025 22:22:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d7EvZyBo7gXT; Mon, 27 Oct 2025 22:09:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5bjmyQJNCGUh; Mon, 27 Oct 2025 22:22:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27DCD41682
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 189EE61456
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 27DCD41682;
-	Mon, 27 Oct 2025 22:09:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id BD89443F
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 22:09:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 189EE61456;
+	Mon, 27 Oct 2025 22:22:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 67F25939
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 22:22:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BA92583843
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 22:09:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4E67861456
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 22:22:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AFaJMhDThhqD for <buildroot@buildroot.org>;
- Mon, 27 Oct 2025 22:09:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B07FE836CE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B07FE836CE
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B07FE836CE
- for <buildroot@buildroot.org>; Mon, 27 Oct 2025 22:09:40 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 73BA678035E;
- Mon, 27 Oct 2025 23:09:35 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 27 Oct 2025 23:09:35 +0100
-MIME-Version: 1.0
-Date: Mon, 27 Oct 2025 23:09:35 +0100
-To: Scott Fan <fancp2007@gmail.com>
-Cc: buildroot@buildroot.org, Gero Schwaericke <gero.schwaericke@posteo.de>
-In-Reply-To: <20251013145721.1236674-1-fancp2007@gmail.com>
-References: <20251013145721.1236674-1-fancp2007@gmail.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <0b3a9c48d8a7f1d968cf570669addada@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1761602977;
- bh=xYKptrBIS9fKRtpZujj66Fh1H+z/TdBcJ3sdHcpI0MQ=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Y5sZRtF7TUQOMamLrkAxzQwHe5Fe1bX4DTXqDVGj595kAmDnHA6mnHODzD5tNgwGa
- Q48aq9CfXRXeqT3ULk5L+I8qnOzjbJK+San8OHz92/M4VyV+7tG1WdLkQqzvQbmoZU
- xzj0rRt0eNVl6VZZEJ1+rCCB4mAQrb6EBfLDQm2l3Yj7SVz75bPvwA8OtD8Wc+zki5
- nOtZkAg1iVDoaMcZ6RCQp3T0nJz7ecyF6i/y0GlDVQXB0jmgXeLt8ooz0y8aRQ4890
- c9QSU1j+vDxW7xqDv5puvI+qQvC/jKkDt4ved4YRHqxnmjR9+jgz4yRx90MmzGxSGo
- HCYoRSBl4IIlQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=Y5sZRtF7
-Subject: Re: [Buildroot] [PATCH 1/2] configs/cubieboard1: bump Linux to
- 6.12.52 and U-Boot to 2025.10
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9l51BCo8JjfX for <buildroot@buildroot.org>;
+ Mon, 27 Oct 2025 22:22:05 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8438A61455
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8438A61455
+ for <buildroot@buildroot.org>; Mon, 27 Oct 2025 22:22:05 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 727038795A; Mon, 27 Oct 2025 22:22:05 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 27 Oct 2025 22:57:09 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8448784798495a3bbfa0ede225f917f135d0fa33
+X-Git-Newrev: 1a25f0c37283ad0db34cb85b237a8f8a12243758
+X-Patchwork-Hint: ignore
+Message-Id: <20251027222205.727038795A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mbedtls: security bump to v3.6.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,15 +59,69 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 13/10/2025 16:57, Scott Fan wrote:
-> Signed-off-by: Scott Fan <fancp2007@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=1a25f0c37283ad0db34cb85b237a8f8a12243758
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Series applied to master, thanks.
+For more details on the version bump, see:
+ - https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.5
+
+Fixes the following vulnerabilities:
+
+- CVE-2025-54764
+
+    Mbed TLS before 3.6.5 allows a local timing attack against certain
+    RSA operations, and direct calls to mbedtls_mpi_mod_inv or
+    mbedtls_mpi_gcd.
+
+For more information, see:
+  - https://nvd.nist.gov/vuln/detail/CVE-2025-54764
+  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2025-10-ssbleed-mstep/
+
+- CVE-2025-59438
+
+    Mbed TLS through 3.6.4 has an Observable Timing Discrepancy.
+
+For more information, see:
+  - https://nvd.nist.gov/vuln/detail/CVE-2025-59438
+  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2025-10-invalid-padding-error/
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/mbedtls/mbedtls.hash | 4 ++--
+ package/mbedtls/mbedtls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index 8b82313c07..b86c66af3e 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.4:
+-sha256  ec35b18a6c593cf98c3e30db8b98ff93e8940a8c4e690e66b41dfc011d678110  mbedtls-3.6.4.tar.bz2
++# From https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.5:
++sha256  4a11f1777bb95bf4ad96721cac945a26e04bf19f57d905f241fe77ebeddf46d8  mbedtls-3.6.5.tar.bz2
+ # Locally calculated
+ sha256  9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b  LICENSE
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index b46bbe888a..c1aa9f0850 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MBEDTLS_VERSION = 3.6.4
++MBEDTLS_VERSION = 3.6.5
+ MBEDTLS_SITE = https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-$(MBEDTLS_VERSION)
+ MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION).tar.bz2
+ MBEDTLS_CONF_OPTS = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
