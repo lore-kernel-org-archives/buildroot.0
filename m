@@ -4,72 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE370CCF9EB
-	for <buildroot@archiver.kernel.org>; Wed, 29 Oct 2025 21:34:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B85F2CCF9EB
+	for <buildroot@archiver.kernel.org>; Wed, 29 Oct 2025 21:34:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8AFB761107;
-	Wed, 29 Oct 2025 21:34:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A0236110F;
+	Wed, 29 Oct 2025 21:34:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KNj6mxt25zvi; Wed, 29 Oct 2025 21:34:05 +0000 (UTC)
+ id YIcDMkO26bWz; Wed, 29 Oct 2025 21:34:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A5F16110F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6D9061108
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9A5F16110F;
-	Wed, 29 Oct 2025 21:34:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id DF12C2A3
- for <buildroot@buildroot.org>; Wed, 29 Oct 2025 21:34:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C6D9061108;
+	Wed, 29 Oct 2025 21:34:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 60CD32A3
+ for <buildroot@buildroot.org>; Wed, 29 Oct 2025 21:34:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C16A040E29
- for <buildroot@buildroot.org>; Wed, 29 Oct 2025 21:34:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 46AF861109
+ for <buildroot@buildroot.org>; Wed, 29 Oct 2025 21:34:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HmZNo-EqqGcH for <buildroot@buildroot.org>;
- Wed, 29 Oct 2025 21:34:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KYPrpzP2gxSY for <buildroot@buildroot.org>;
+ Wed, 29 Oct 2025 21:34:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
  helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F184140DA8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F184140DA8
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F184140DA8
- for <buildroot@buildroot.org>; Wed, 29 Oct 2025 21:33:59 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 90C5161108
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90C5161108
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 90C5161108
+ for <buildroot@buildroot.org>; Wed, 29 Oct 2025 21:34:53 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
  (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 2971F780375;
- Wed, 29 Oct 2025 22:33:52 +0100 (CET)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 4C0E9780375;
+ Wed, 29 Oct 2025 22:34:50 +0100 (CET)
 Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
  via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 29 Oct 2025 22:33:52 +0100
+ with HTTP (HTTP/1.0 POST); Wed, 29 Oct 2025 22:34:49 +0100
 MIME-Version: 1.0
-Date: Wed, 29 Oct 2025 22:33:52 +0100
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: buildroot@buildroot.org, David Pierret <david.pierret@smile.fr>, Romain
- Naour <romain.naour@gmail.com>
-In-Reply-To: <20251029160515.464421-1-dario.binacchi@amarulasolutions.com>
-References: <20251029160515.464421-1-dario.binacchi@amarulasolutions.com>
+Date: Wed, 29 Oct 2025 22:34:49 +0100
+To: Andreas Ziegler <br025@umbiko.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251028054928.60012-1-br025@umbiko.net>
+References: <20251028054928.60012-1-br025@umbiko.net>
 User-Agent: Webmail Free/1.6.11
-Message-ID: <4eab74f6581ee7e101ab457581e03b0e@free.fr>
+Message-ID: <bf9ee6393802db08eafa4ca0780a3cbe@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1761773636;
- bh=BoGD7Wq/VEr3aH5xNyE/KgipTmv56P4m5JkhWJflS8I=;
+ d=free.fr; s=smtp-20201208; t=1761773691;
+ bh=HVA7azYKD/zKy6hbOHtK/1QSjV0gBA19rtgu5zCnKbM=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=rb5Kbjgvs6XwXnGxRnyprvv3EIG9287fqTsbZTzfjbPicQmhFXWBOWghZ3OUPxHt4
- A/amVxpBXAlv/Fe7iiEP2ABz3ExMaMFjHWP0nEQuAvjtM9L0OllbDLb1sMpfrlwZUl
- LTo4EbEWtZYjhfMGuyjGEBt1gSHNVWHq35Nd2uVUf9m03OlnkWHVs8FG4cqLKsSp2m
- Q3bfBUKKZTfo1PQ5xpB1vNyNi+kImTdqwtn/baNVYcpqqgNRb4mgRofHmyvlZTSPEd
- StH+TXsEvWqQT7C9G05u0NHqujXLASDeFm9e62gaXSvBmZczhIOQ8Dkvc1XDZ100zL
- ebXS0uDxBjk8g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=Y6pNmwmBuAkPg+vRQ7p/BAbq4NjYS9LI6mBWAVuVJWyf3y4Gq3xtbHHMfbnkeyy+x
+ UehuE3Kv80K6nqIuJLcDIRofiiBatwLgenfHqLCZzibvUDzjdoS8+8XTqu0z8VFjRo
+ bjyRMi0sOiRuPm+BgqKfQO8HRikyIq47AG5tj6n9nJPU2ucy3jzcZl5akvwRaWnHY5
+ fEtCnS+sD1skUyTsY8l0Nt3pON6XG/iOSciMUfaw5ZcV2HI2GV4yVk376mrgItcADt
+ WckIZLynUydVQqDax0mL6tcaEWl1/nsQKZqfCv3xOtEuw/3vq5UFvSV8xHecQo193I
+ w/vm0lr+3na5A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=rb5Kbjgv
-Subject: Re: [Buildroot] [PATCH 1/1] package/bcc: bump version to 0.35.0
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Y6pNmwmB
+Subject: Re: [Buildroot] [PATCH 1/1] package/mpd: update to version 0.24.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,11 +87,16 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 29/10/2025 17:05, Dario Binacchi wrote:
-> Release notes:
-> https://github.com/iovisor/bcc/blob/v0.35.0/debian/changelog
+On 28/10/2025 06:49, Andreas Ziegler wrote:
+> Version 0.24.6 change log:
 > 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> * decoder
+>   - ffmpeg: handle "*.opus" files
+>   - mpg123: another workaround for libmpg123 ID3 corruption bug
+>   - opus: fix seeking in files with large OpusTags
+>   - opus, vorbis: remove METADATA_BLOCK_PICTURE size limit
+> 
+> Signed-off-by: Andreas Ziegler <br025@umbiko.net>
 
 Applied to master, thanks.
 _______________________________________________
