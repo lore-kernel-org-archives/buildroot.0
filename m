@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACCE5CCF9EE
-	for <buildroot@archiver.kernel.org>; Wed, 29 Oct 2025 21:33:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE370CCF9EB
+	for <buildroot@archiver.kernel.org>; Wed, 29 Oct 2025 21:34:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6418E40DA8;
-	Wed, 29 Oct 2025 21:33:39 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NbipWTVUHzhb; Wed, 29 Oct 2025 21:33:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 849E740DAA
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 849E740DAA;
-	Wed, 29 Oct 2025 21:33:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1077B2A3
- for <buildroot@buildroot.org>; Wed, 29 Oct 2025 21:33:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EDC9C61105
- for <buildroot@buildroot.org>; Wed, 29 Oct 2025 21:33:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8AFB761107;
+	Wed, 29 Oct 2025 21:34:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yumStXpFUCoH for <buildroot@buildroot.org>;
- Wed, 29 Oct 2025 21:33:36 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44AE761101
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 44AE761101
- for <buildroot@buildroot.org>; Wed, 29 Oct 2025 21:33:36 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 340998799D; Wed, 29 Oct 2025 21:33:36 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 29 Oct 2025 21:31:32 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 03f35bc63ba01ede5e78900cd98e5217b7e8d70b
-X-Git-Newrev: 58641412791a35e45f09ea41558c60deaea8246a
-X-Patchwork-Hint: ignore
-Message-Id: <20251029213336.340998799D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bcc: bump version to 0.35.0
+ id KNj6mxt25zvi; Wed, 29 Oct 2025 21:34:05 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A5F16110F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9A5F16110F;
+	Wed, 29 Oct 2025 21:34:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DF12C2A3
+ for <buildroot@buildroot.org>; Wed, 29 Oct 2025 21:34:04 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C16A040E29
+ for <buildroot@buildroot.org>; Wed, 29 Oct 2025 21:34:04 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HmZNo-EqqGcH for <buildroot@buildroot.org>;
+ Wed, 29 Oct 2025 21:34:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F184140DA8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F184140DA8
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F184140DA8
+ for <buildroot@buildroot.org>; Wed, 29 Oct 2025 21:33:59 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 2971F780375;
+ Wed, 29 Oct 2025 22:33:52 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 29 Oct 2025 22:33:52 +0100
+MIME-Version: 1.0
+Date: Wed, 29 Oct 2025 22:33:52 +0100
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: buildroot@buildroot.org, David Pierret <david.pierret@smile.fr>, Romain
+ Naour <romain.naour@gmail.com>
+In-Reply-To: <20251029160515.464421-1-dario.binacchi@amarulasolutions.com>
+References: <20251029160515.464421-1-dario.binacchi@amarulasolutions.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <4eab74f6581ee7e101ab457581e03b0e@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1761773636;
+ bh=BoGD7Wq/VEr3aH5xNyE/KgipTmv56P4m5JkhWJflS8I=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=rb5Kbjgvs6XwXnGxRnyprvv3EIG9287fqTsbZTzfjbPicQmhFXWBOWghZ3OUPxHt4
+ A/amVxpBXAlv/Fe7iiEP2ABz3ExMaMFjHWP0nEQuAvjtM9L0OllbDLb1sMpfrlwZUl
+ LTo4EbEWtZYjhfMGuyjGEBt1gSHNVWHq35Nd2uVUf9m03OlnkWHVs8FG4cqLKsSp2m
+ Q3bfBUKKZTfo1PQ5xpB1vNyNi+kImTdqwtn/baNVYcpqqgNRb4mgRofHmyvlZTSPEd
+ StH+TXsEvWqQT7C9G05u0NHqujXLASDeFm9e62gaXSvBmZczhIOQ8Dkvc1XDZ100zL
+ ebXS0uDxBjk8g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=rb5Kbjgv
+Subject: Re: [Buildroot] [PATCH 1/1] package/bcc: bump version to 0.35.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,47 +83,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58641412791a35e45f09ea41558c60deaea8246a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 29/10/2025 17:05, Dario Binacchi wrote:
+> Release notes:
+> https://github.com/iovisor/bcc/blob/v0.35.0/debian/changelog
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-Release notes:
-https://github.com/iovisor/bcc/blob/v0.35.0/debian/changelog
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/bcc/bcc.hash | 2 +-
- package/bcc/bcc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/bcc/bcc.hash b/package/bcc/bcc.hash
-index e053d7c367..5e2c79f7b4 100644
---- a/package/bcc/bcc.hash
-+++ b/package/bcc/bcc.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256  58e634b8dcddf1f8f358e6e4e5182ad57999c3ab17cc913e0bf86af157089544  bcc-v0.34.0-git4.tar.gz
-+sha256  66c588bf5dfcd557a9f14f7e21a7b4dfdfcc4a574fd4b9897037059f046a6558  bcc-v0.35.0-git4.tar.gz
- sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE.txt
-diff --git a/package/bcc/bcc.mk b/package/bcc/bcc.mk
-index f33fbcbd38..f113761c2f 100644
---- a/package/bcc/bcc.mk
-+++ b/package/bcc/bcc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BCC_VERSION = v0.34.0
-+BCC_VERSION = v0.35.0
- BCC_SITE = https://github.com/iovisor/bcc
- BCC_SITE_METHOD = git
- BCC_GIT_SUBMODULES = YES
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
