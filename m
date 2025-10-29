@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A14BFCCF9EE
-	for <buildroot@archiver.kernel.org>; Wed, 29 Oct 2025 22:00:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07B01CCF9EB
+	for <buildroot@archiver.kernel.org>; Wed, 29 Oct 2025 22:01:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 56F4A6111A;
-	Wed, 29 Oct 2025 22:00:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C956561122;
+	Wed, 29 Oct 2025 22:01:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zfciXSsHGiee; Wed, 29 Oct 2025 22:00:18 +0000 (UTC)
+ id FoOY4l8oNE1I; Wed, 29 Oct 2025 22:01:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85B706112D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0C9261125
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 85B706112D;
-	Wed, 29 Oct 2025 22:00:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2456F2A3
- for <buildroot@buildroot.org>; Wed, 29 Oct 2025 22:00:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F0C9261125;
+	Wed, 29 Oct 2025 22:01:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id EB136708
+ for <buildroot@buildroot.org>; Wed, 29 Oct 2025 22:01:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1648C40F07
- for <buildroot@buildroot.org>; Wed, 29 Oct 2025 22:00:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DC40961125
+ for <buildroot@buildroot.org>; Wed, 29 Oct 2025 22:01:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id liWPQiONQ2c5 for <buildroot@buildroot.org>;
- Wed, 29 Oct 2025 22:00:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB7DC40EE6
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BB7DC40EE6
- for <buildroot@buildroot.org>; Wed, 29 Oct 2025 22:00:14 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A964D879D2; Wed, 29 Oct 2025 22:00:14 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 29 Oct 2025 22:48:00 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 789d1952d22d17f239158a8a2afd96166be451c2
-X-Git-Newrev: b4c9596dbfd3bbf6ae84aaabc84fec03a7232cb4
-X-Patchwork-Hint: ignore
-Message-Id: <20251029220014.A964D879D2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libtpms: bump version to 0.10.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wWeBrULWra8T for <buildroot@buildroot.org>;
+ Wed, 29 Oct 2025 22:01:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0E29061122
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E29061122
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0E29061122
+ for <buildroot@buildroot.org>; Wed, 29 Oct 2025 22:01:43 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 62B975FFA3;
+ Wed, 29 Oct 2025 23:01:40 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 29 Oct 2025 23:01:40 +0100
+MIME-Version: 1.0
+Date: Wed, 29 Oct 2025 23:01:40 +0100
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251027014158.865598-2-jarkko@kernel.org>
+References: <20251027014158.865598-1-jarkko@kernel.org>
+ <20251027014158.865598-2-jarkko@kernel.org>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <0a46f6327af1851fe9090896d02d78ae@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1761775301;
+ bh=E3r3MbVOOz9FZjLhn6E3pkeeuFAQi8BL89WhcPQAYOs=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=MMsk3h+XlfsdqZLtN/e27Tj4ixbuGbcxz6v8QlMfx/KjKKYCgy93bs6pydCnSkroL
+ mVKtXTg8ImWw288VfGb6h+Phk/83sWlh6qCtmZWuAVbeEbbbhvjx2NdfZ6Vb+AVdk2
+ F5lB8kR0wtf4OHbqol8wO9htpgdyBA1EzZIidqxPnwvk50MoVaT+3nnafvA4IL34Qq
+ sniZp/FdojJiYEZnUEHAnwqdkmRiTwAuApsPPpZjKaUSrEodN5U4YHK8YXwgguSU8l
+ EAE6MmgOyMkfUnhely0zMFOccTUjs/oK9Amna5wNxBnZkZPQcOVLf3zavlD5YMX42l
+ XFiGLLsyBTHRw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=MMsk3h+X
+Subject: Re: [Buildroot] [PATCH 1/2] package/libtpms: bump version to 0.10.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,50 +83,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b4c9596dbfd3bbf6ae84aaabc84fec03a7232cb4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 27/10/2025 02:41, Jarkko Sakkinen via buildroot wrote:
+> Release notes:
+> https://github.com/stefanberger/swtpm/releases/tag/v0.10.1
+> 
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Release notes:
-https://github.com/stefanberger/libtpms/releases/tag/v0.10.1
+Series applied to master, thanks.
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-[Julien:
- - remove old hash entry
- - fix release note url in commit log
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libtpms/libtpms.hash | 2 +-
- package/libtpms/libtpms.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+For info, I fixed the release note link in this patch commit log,
+and I also removed the old hash entries. See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/b4c9596dbfd3bbf6ae84aaabc84fec03a7232cb4
+https://gitlab.com/buildroot.org/buildroot/-/commit/2b449935c2e8e19a03a8962f49493a76ccca11f9
 
-diff --git a/package/libtpms/libtpms.hash b/package/libtpms/libtpms.hash
-index 1026aaa4f4..f10364f36e 100644
---- a/package/libtpms/libtpms.hash
-+++ b/package/libtpms/libtpms.hash
-@@ -1,2 +1,2 @@
--sha256  2807466f1563ebe45fdd12dd26e501e8a0c4fbb99c7c428fbb508789efd221c0  libtpms-0.9.6.tar.gz
-+sha256  ebc24f3191d90f6cf0b4d4200cd876db4bd224b3c565708bbea0a82ee275e0fb  libtpms-0.10.1.tar.gz
- sha256  82f1e6bae374bb6a9d4f4596767fd33e499718d560de140fd9f3d402cc5e41fb  LICENSE
-diff --git a/package/libtpms/libtpms.mk b/package/libtpms/libtpms.mk
-index 19d7cef89f..6e5708202e 100644
---- a/package/libtpms/libtpms.mk
-+++ b/package/libtpms/libtpms.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBTPMS_VERSION = 0.9.6
-+LIBTPMS_VERSION = 0.10.1
- LIBTPMS_SITE = $(call github,stefanberger,libtpms,v$(LIBTPMS_VERSION))
- LIBTPMS_LICENSE = BSD-4-Clause
- LIBTPMS_LICENSE_FILES = LICENSE
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
