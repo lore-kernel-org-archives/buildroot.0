@@ -1,75 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0480CCF9EB
-	for <buildroot@archiver.kernel.org>; Wed, 29 Oct 2025 20:57:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84A30CCF9EB
+	for <buildroot@archiver.kernel.org>; Wed, 29 Oct 2025 21:02:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 50CED406B3;
-	Wed, 29 Oct 2025 20:57:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 33F6F83419;
+	Wed, 29 Oct 2025 21:02:37 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6fnM77I1nMsP; Wed, 29 Oct 2025 21:02:36 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3560883422
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3560883422;
+	Wed, 29 Oct 2025 21:02:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 91D252A3
+ for <buildroot@buildroot.org>; Wed, 29 Oct 2025 21:02:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 779304086D
+ for <buildroot@buildroot.org>; Wed, 29 Oct 2025 21:02:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2HvDYi3EfmRu; Wed, 29 Oct 2025 20:57:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0AD16406E5
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0AD16406E5;
-	Wed, 29 Oct 2025 20:57:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B599A2A2
- for <buildroot@buildroot.org>; Wed, 29 Oct 2025 20:57:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A4789409FD
- for <buildroot@buildroot.org>; Wed, 29 Oct 2025 20:57:26 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yR7G96lqmfZX for <buildroot@buildroot.org>;
- Wed, 29 Oct 2025 20:57:25 +0000 (UTC)
+ id ILa08p1OTWCw for <buildroot@buildroot.org>;
+ Wed, 29 Oct 2025 21:02:33 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1A5D74097F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A5D74097F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6D2E440713
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D2E440713
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1A5D74097F
- for <buildroot@buildroot.org>; Wed, 29 Oct 2025 20:57:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6D2E440713
+ for <buildroot@buildroot.org>; Wed, 29 Oct 2025 21:02:33 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0cb2.dip0.t-ipconnect.de [91.58.12.178])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 186FDA4C57F1;
- Wed, 29 Oct 2025 21:57:21 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:46296)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id CC738A4C511D;
+ Wed, 29 Oct 2025 22:02:30 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:49418)
  by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1vEDEO-000000001yW-3pXN;
- Wed, 29 Oct 2025 20:57:20 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vEDJO-000000002rv-2nEd;
+ Wed, 29 Oct 2025 21:02:30 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
 Cc: Pierre-Jean Texier <texier.pj2@gmail.com>
-Date: Wed, 29 Oct 2025 21:57:20 +0100
-Message-ID: <20251029205720.1785984-1-bernd@kuhls.net>
+Date: Wed, 29 Oct 2025 22:02:29 +0100
+Message-ID: <20251029210230.1841049-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202506031021; t=1761771441;
- bh=/Y7GNhGgYKfLdcn0udgjDxF1izi+Kg0XDuQXUyhgzkg=;
+ s=kas202506031021; t=1761771750;
+ bh=f6hGub5OJ0vbrUPsPE72yK58PsY+FmmETx2xce2RiOU=;
  h=From:To:Cc:Subject:Date:From;
- b=dXve5nCr7rQBWhCr+bETsXetM6ifZO+NwM9GV145yrsOgQfu3KioPNfLDAuZXfv88
- T3dUr5ThT37AaxYF1a41dBQ24Z/MvvU7ny6ulve2n+pHkoz4Mbhy9okDwgG2kJe86/
- Hm0V+R+HfNjx3OZ3bHV5m6lE/XYtoR9u3J1kmB+dZDeOQMrTHs0zSDekK4ytEjBdbt
- 7Iw+E0mT5XulvfZRYto3yuk6Y+34eMj3xQr3tQg3R87cSpReNAJuhFnPqvJSAnK+0d
- GTjL0uON8LyNd8qhk1qMeRgmp/dP7lqBa1RGdTD07TekkSCUvmrTBZ82UM21gCFE3h
- LMZqe6eNoSMVQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=I8w8uKivNGR3HcVpcHhnIuxOvVL/UYe+buxwPmlyCeIEMUbQOuRUc/X6qCko+ehM3
+ CnMYbUbS32vb1WVaFmh3nFdH+SPeR8EI6R2sOK5DsEw1yU2unCvGTPxo3E7p8twyVA
+ 4P8E4oqh47eHjGJrHjSkbXeQV057o4vQLsrb685P+SligqSeNEwOeNKdcPBHLC2Imi
+ lBCx8FlqKr2aRzMm/FwL9m6ZN/t7p35VUaXfc2fWZ9+53Tz3uflGNHEVEcN7mVbeeW
+ jrj9CGCZ8J/sriAxKSiqRP/AnNyixjoxf570p/NmNydXDGAQl2Rsonj2UP6rXDzRua
+ 7aeCSciFUcwhg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=dXve5nCr
-Subject: [Buildroot] [PATCH 1/1] package/libxml2: fix build of packages
+ header.s=kas202506031021 header.b=I8w8uKiv
+Subject: [Buildroot] [PATCH v2 1/2] package/libxml2: fix build of packages
  detecting libxml2 using libxml2-config.cmake
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -88,8 +88,12 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Fixes build error seen with libiio:
+
 mips64el-buildroot-linux-gnu-gcc: ERROR: unsafe header/library path used
  in cross-compilation: '-I/usr/include/libxml2'
+
+caused by bump of libxml2 to 2.15.0 with buildroot commit
+d81922c1ef8825f10b802984d9721412a1a1a377.
 
 Upstream acknowledged the problem and waits for a fix
 https://gitlab.gnome.org/GNOME/libxml2/-/issues/898#note_2453923
@@ -100,6 +104,8 @@ https://autobuild.buildroot.net/results/fde/fde40a3d6ac58f568e49419e5176db5a62a0
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
+v2: added comment about buildroot commit causing the problem
+
  ...-installation-directories-in-libxml2.patch | 85 +++++++++++++++++++
  package/libxml2/libxml2.mk                    |  2 +
  2 files changed, 87 insertions(+)
@@ -197,7 +203,7 @@ index 0000000000..75232b6f00
 +2.47.3
 +
 diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index b60d173343..35d373e130 100644
+index bf83ec2041..de0ec42eca 100644
 --- a/package/libxml2/libxml2.mk
 +++ b/package/libxml2/libxml2.mk
 @@ -14,6 +14,8 @@ LIBXML2_LICENSE = MIT
