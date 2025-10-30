@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EBF5CCF9F0
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:10:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69FA0CCF9F8
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:10:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5897D83F89;
-	Thu, 30 Oct 2025 08:10:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 00DB081374;
+	Thu, 30 Oct 2025 08:10:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5IAT-PLZD2fr; Thu, 30 Oct 2025 08:10:46 +0000 (UTC)
+ id Hh1ObKoYC5Ku; Thu, 30 Oct 2025 08:10:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7392C83F98
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5E9E83F79
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7392C83F98;
-	Thu, 30 Oct 2025 08:10:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 17D2C160
+	by smtp1.osuosl.org (Postfix) with ESMTP id E5E9E83F79;
+	Thu, 30 Oct 2025 08:10:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 25E28707
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:10:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 284B96138F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3236A4115F
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:10:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X9uydDINyg-g for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KOZ9oxsXwnZ1 for <buildroot@buildroot.org>;
  Thu, 30 Oct 2025 08:10:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D4CE612E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6724341155
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7D4CE612E8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6724341155
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:10:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 79046879EF; Thu, 30 Oct 2025 08:10:39 +0000 (UTC)
+ id 653FD86065; Thu, 30 Oct 2025 08:10:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 30 Oct 2025 08:56:00 +0100
+Date: Thu, 30 Oct 2025 08:55:58 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: d184a3a098794a02185e1fb6f1efae7dc67781b8
-X-Git-Newrev: 3ceed3ad011a5763464b76e2f91c18e99f13b1f7
+X-Git-Oldrev: 95c4ddcfb5f8ce88187c68d8eaa856dfbbafb17e
+X-Git-Newrev: ff54fd9c756bce8106a99796402e691118fbcf89
 X-Patchwork-Hint: ignore
-Message-Id: <20251030081039.79046879EF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- package/freeradius-server: requires RC4 support in openssl
+Message-Id: <20251030081039.653FD86065@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/ledmon: add
+ upstream patch to fix build w/ gcc-14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,45 +61,98 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8267106358596758201=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ceed3ad011a5763464b76e2f91c18e99f13b1f7
+--===============8267106358596758201==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=ff54fd9c756bce8106a99796402e691118fbcf89
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
+Add an upstream patch to fix a build issue related to uint64_t:
+
+utils.c: In function ‘get_uint64’:
+utils.c:118:18: error: passing argument 1 of ‘str_toul’ from incompatible pointer type [-Wincompatible-pointer-types]
+  118 |         str_toul(&defval, p, NULL, 16);
+      |                  ^~~~~~~
+      |                  |
+      |                  uint64_t * {aka long long unsigned int *}
+In file included from utils.c:48:
+utils.h:412:29: note: expected ‘long unsigned int *’ but argument is of type ‘uint64_t *’ {aka ‘long long unsigned int *’}
+
 Fixes:
-https://autobuild.buildroot.net/results/5a5/5a57a82800fb7a47731198effc15bd7044133c4d/
 
-    src/modules/rlm_mschap/rlm_mschap.c:1016:54: error: implicit
-    declaration of function 'EVP_rc4'; did you mean 'EVP_md4'?
+  https://autobuild.buildroot.org/results/51af1d7bf71061f22d49213951a5f6a9565710c3/
 
-The oldest build error found with a quick search appeared back in July
-2024 with freeradius-server 3.2.3 so a backport should be considered:
-https://autobuild.buildroot.net/results/e2d/e2d77a52f81b0fea1081417c5c80f7991e27810a/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 99c5c21b14e86ef53520868a6bee672d6e249c3b)
+(cherry picked from commit c8923662cc7e1f0a1d30d0926f979c21d36aa9df)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/freeradius-server/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/ledmon/0003-Correct-get_uint64.patch | 43 ++++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/package/freeradius-server/Config.in b/package/freeradius-server/Config.in
-index e99778ea49..40401f57c7 100644
---- a/package/freeradius-server/Config.in
-+++ b/package/freeradius-server/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_FREERADIUS_SERVER
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4 if BR2_PACKAGE_LIBOPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4 if BR2_PACKAGE_LIBOPENSSL
- 	select BR2_PACKAGE_LIBTALLOC
- 	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
- 	help
+diff --git a/package/ledmon/0003-Correct-get_uint64.patch b/package/ledmon/0003-Correct-get_uint64.patch
+new file mode 100644
+index 0000000000..2db4c04a6e
+--- /dev/null
++++ b/package/ledmon/0003-Correct-get_uint64.patch
+@@ -0,0 +1,43 @@
++From ed747ac3540cb38797f56533f9f51f5627e6b994 Mon Sep 17 00:00:00 2001
++From: Tony Asleson <tasleson@redhat.com>
++Date: Wed, 21 Aug 2024 12:27:28 -0500
++Subject: [PATCH] Correct get_uint64
++
++For large integer values, the existing implementation will be
++incorrect.
++
++The current implementation of converting strings to integer values
++uses a signed integer for the intermediate conversion and performs
++a range check. Since any value in an unsigned 64-bit integer is valid,
++the range check seems unnecessary. To mimic the same code path, we would
++need a larger integer type.
++
++Signed-off-by: Tony Asleson <tasleson@redhat.com>
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Upstream: https://github.com/intel/ledmon/commit/ed747ac3540cb38797f56533f9f51f5627e6b994
++---
++ src/lib/utils.c | 8 ++++++--
++ 1 file changed, 6 insertions(+), 2 deletions(-)
++
++diff --git a/src/lib/utils.c b/src/lib/utils.c
++index a7936c69b242..a6ee29ba7f22 100644
++--- a/src/lib/utils.c
+++++ b/src/lib/utils.c
++@@ -98,8 +98,12 @@ uint64_t get_uint64(const char *path, uint64_t defval, const char *name)
++ 	if (!p)
++ 		return defval;
++ 
++-	str_toul(&defval, p, NULL, 16);
++-	return defval;
+++	errno = 0;
+++	uint64_t t = strtoull(p, NULL, 16);
+++
+++	if (errno)
+++		return defval;
+++	return t;
++ }
++ 
++ int get_int(const char *path, int defval, const char *name)
++-- 
++2.43.0
++
+
+--===============8267106358596758201==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8267106358596758201==--
