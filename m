@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C073ECCF9F8
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:22:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68AD8CCF9FA
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:22:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 99E4D84064;
-	Thu, 30 Oct 2025 08:22:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3BD714118F;
+	Thu, 30 Oct 2025 08:22:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fxc0MzCnL41e; Thu, 30 Oct 2025 08:22:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CcZxfdEgJ6t1; Thu, 30 Oct 2025 08:22:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0ACFA84088
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61AC54110C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0ACFA84088;
-	Thu, 30 Oct 2025 08:22:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 61AC54110C;
+	Thu, 30 Oct 2025 08:22:58 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 577A0160
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:45 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 66C0B160
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 10869613A6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 19908613A9
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PyvM9gDj87JL for <buildroot@buildroot.org>;
- Thu, 30 Oct 2025 08:22:30 +0000 (UTC)
+ id 5Vp_E8lRRTBm for <buildroot@buildroot.org>;
+ Thu, 30 Oct 2025 08:22:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CEEA613AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4B45613A0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0CEEA613AB
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B4B45613A0
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0B55D87A0C; Thu, 30 Oct 2025 08:22:29 +0000 (UTC)
+ id B346D879C2; Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 30 Oct 2025 09:18:09 +0100
+Date: Thu, 30 Oct 2025 09:18:01 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: 6d6f8da1b307bbb0c6c87c5a518aa4fd5f0caf08
-X-Git-Newrev: 920d4cde8acaf46b425e732ec806b1f59a1eb975
+X-Git-Oldrev: c2b863bdb17284fc35c5188292d8491cef5c285b
+X-Git-Newrev: ca7421d0b8129f93144e75dd21be0a67e9851f5c
 X-Patchwork-Hint: ignore
-Message-Id: <20251030082229.0B55D87A0C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/dante: security
- bump version to 1.4.4
+Message-Id: <20251030082228.B346D879C2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] DEVELOPERS: add Dario
+ Binacchi for less
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,53 +66,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=920d4cde8acaf46b425e732ec806b1f59a1eb975
+commit: https://git.buildroot.net/buildroot/commit/?id=ca7421d0b8129f93144e75dd21be0a67e9851f5c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-Changelog: http://www.inet.no/dante/announce-1.4.4
-
-Fixes CVE-2024-54662: https://www.inet.no/dante/advisory-2024-12-16.txt
-
-Needed for bump of libminiupnpc to version 2.3.3.
-
-Updated license hash due to copyright year bump:
-https://github.com/notpeter/dante/commit/53727f08eec6cae55c4ed6efb88c3d688839f2cb
-(commit taken from unofficial mirror)
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 7d95c34d64505214d56e452abc1f3502323266af)
+(cherry picked from commit 3a0a221d57db01e67ebcf651c9d644dd490432d0)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/dante/dante.hash | 4 ++--
- package/dante/dante.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/dante/dante.hash b/package/dante/dante.hash
-index a76018fdb6..c9d86608d9 100644
---- a/package/dante/dante.hash
-+++ b/package/dante/dante.hash
-@@ -1,5 +1,5 @@
- # From https://www.inet.no/dante/download.html
--sha256  418a065fe1a4b8ace8fbf77c2da269a98f376e7115902e76cda7e741e4846a5d  dante-1.4.3.tar.gz
-+sha256  1973c7732f1f9f0a4c0ccf2c1ce462c7c25060b25643ea90f9b98f53a813faec  dante-1.4.4.tar.gz
- 
- # Hash for license file
--sha256  05e2db26147a8575005f090aada119ea6cb40a4382164929d647f00abef3bdfd  LICENSE
-+sha256  49034b51407f6e51a07aed87c3c00c0889294348cd5e99d78d6b6f62746ff3fc  LICENSE
-diff --git a/package/dante/dante.mk b/package/dante/dante.mk
-index bae46c5a71..2f4e75d1e5 100644
---- a/package/dante/dante.mk
-+++ b/package/dante/dante.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DANTE_VERSION = 1.4.3
-+DANTE_VERSION = 1.4.4
- DANTE_SITE = http://www.inet.no/dante/files
- DANTE_LICENSE = BSD-3-Clause
- DANTE_LICENSE_FILES = LICENSE
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2235f35443..2a428601e2 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -802,6 +802,7 @@ F:	package/connman/
+ F:	package/empty/
+ F:	package/iana-assignments/
+ F:	package/inih/
++F:	package/less/
+ F:	package/pocketpy/
+ F:	package/sscep/
+ F:	package/tinyinit/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
