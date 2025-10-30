@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECEFCCCF9F8
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:11:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74840CCF9FC
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:11:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C1F9B84045;
-	Thu, 30 Oct 2025 08:11:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 03F4A8405A;
+	Thu, 30 Oct 2025 08:11:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pCMkD2NkOyy7; Thu, 30 Oct 2025 08:11:08 +0000 (UTC)
+ id zeKwqUw3b8Qj; Thu, 30 Oct 2025 08:11:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D289784047
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E78F284046
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D289784047;
-	Thu, 30 Oct 2025 08:11:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DFC5160
+	by smtp1.osuosl.org (Postfix) with ESMTP id E78F284046;
+	Thu, 30 Oct 2025 08:11:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D30CC160
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:10:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 562844115F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4449F61381
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:10:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 645gocMur6vP for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xyuk_wX6W6CI for <buildroot@buildroot.org>;
  Thu, 30 Oct 2025 08:10:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FE2D41158
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1104F6138C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9FE2D41158
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1104F6138C
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:10:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9E1C0842C6; Thu, 30 Oct 2025 08:10:40 +0000 (UTC)
+ id 0F57086065; Thu, 30 Oct 2025 08:10:40 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 30 Oct 2025 08:56:30 +0100
+Date: Thu, 30 Oct 2025 08:56:15 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 75bcd1ebd60b474d155e2a835da09d927566f367
-X-Git-Newrev: 50bd2c21ab05fbb8110cc71b805191ca511f8ff7
+X-Git-Oldrev: baa6aaddf9123e3b1282f636faf8283f5ceedc99
+X-Git-Newrev: b48933eb673122aa7cbd8b5f10f9374f8bd6b3f7
 X-Patchwork-Hint: ignore
-Message-Id: <20251030081040.9E1C0842C6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libdbi-drivers:
- fix build with gcc >= 14.x
+Message-Id: <20251030081040.0F57086065@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libgtk3: bump to
+ version 3.24.51
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,71 +66,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50bd2c21ab05fbb8110cc71b805191ca511f8ff7
+commit: https://git.buildroot.net/buildroot/commit/?id=b48933eb673122aa7cbd8b5f10f9374f8bd6b3f7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fixes:
-https://autobuild.buildroot.net/results/d30/d3068de2f477d68823c4b7e537f120edf03338bb/
+For release notes since version 3.24.43, see:
+https://gitlab.gnome.org/GNOME/gtk/-/blob/3.24.51/NEWS
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Note: the "+" in the project name and source archive was removed
+upstream. This commit updates _SOURCE and _SITE accordingly.
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[Julien: add link to release notes]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 6ad92d4a5dc6b5f0d8de072622dabe2e804bf8e4)
+(cherry picked from commit 54c6c0125ac024bf5e99fc33e13d01bf58116a0a)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../libdbi-drivers/0001-libdbi-drivers-c99.patch   | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ package/libgtk3/libgtk3.hash | 4 ++--
+ package/libgtk3/libgtk3.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libdbi-drivers/0001-libdbi-drivers-c99.patch b/package/libdbi-drivers/0001-libdbi-drivers-c99.patch
-new file mode 100644
-index 0000000000..46b43c8653
---- /dev/null
-+++ b/package/libdbi-drivers/0001-libdbi-drivers-c99.patch
-@@ -0,0 +1,45 @@
-+Fix type errors in the cgreen with constraints facility.
-+
-+Upstream: https://sourceforge.net/p/libdbi-drivers/bugs/28/
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+[Bernd: rebased for git tree used by buildroot]
-+
-+diff --git a/tests/cgreen/src/constraint.c b/tests/cgreen/src/constraint.c
-+index c19c0ddd41a7bfa7..95673dd3e222a3cf 100644
-+--- a/tests/cgreen/src/constraint.c
-++++ b/tests/cgreen/src/constraint.c
-+@@ -22,8 +22,7 @@ static double unbox_double(intptr_t box);
-+ static double as_double(intptr_t box);
-+ 
-+ static int compare_using_matcher(Constraint *constraint, intptr_t actual);
-+-static void test_with_matcher(Constraint *constraint, const char *function, const char* matcher_name, intptr_t actual, const char *test_file, int test_line, TestReporter *reporter);
-+-
-++static void test_with_matcher(Constraint *constraint, const char *function, intptr_t matcher_function, const char *test_file, int test_line, TestReporter *reporter);
-+ 
-+ void destroy_constraint(void *abstract) {
-+     Constraint *constraint = (Constraint *)abstract;
-+@@ -164,11 +163,11 @@
-+ }
-+ 
-+ static int compare_using_matcher(Constraint *constraint, intptr_t actual) {
-+-	int (*matches)(const void*) = (void *)(intptr_t)constraint->expected;
-+-    return matches((void *)actual);
-++	int (*matches)(const void*) = (int (*)(const void*)) constraint->expected;
-++    return matches((const void *)actual);
-+ }
-+ 
-+-static void test_with_matcher(Constraint *constraint, const char *function, const char* matcher_name, intptr_t matcher_function, const char *test_file, int test_line, TestReporter *reporter) {
-++static void test_with_matcher(Constraint *constraint, const char *function, intptr_t matcher_function, const char *test_file, int test_line, TestReporter *reporter) {
-+     (*reporter->assert_true)(
-+             reporter,
-+             test_file,
-+@@ -176,7 +175,7 @@ static void test_with_matcher(Constraint *constraint, const char *function, cons
-+             (*constraint->compare)(constraint, matcher_function),
-+             "Wanted parameter [%s] to match [%s] in function [%s]",
-+             constraint->parameter,
-+-            matcher_name,
-++            constraint->name,
-+             function);
-+ }
-+ 
+diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+index 6a682a7412..5394bb10cc 100644
+--- a/package/libgtk3/libgtk3.hash
++++ b/package/libgtk3/libgtk3.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.43.sha256sum
+-sha256  7e04f0648515034b806b74ae5d774d87cffb1a2a96c468cb5be476d51bf2f3c7  gtk+-3.24.43.tar.xz
++# From https://download.gnome.org/sources/gtk/3.24/gtk-3.24.51.sha256sum
++sha256  0013877c6bd23c2dbe42ad7c70a053d0e449be66736574e37867c49c5f905a4f  gtk-3.24.51.tar.xz
+ 
+ # Hash for license file:
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index d6d7c64a54..be24869d3d 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -5,9 +5,9 @@
+ ################################################################################
+ 
+ LIBGTK3_VERSION_MAJOR = 3.24
+-LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).43
+-LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+-LIBGTK3_SITE = https://download.gnome.org/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
++LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).51
++LIBGTK3_SOURCE = gtk-$(LIBGTK3_VERSION).tar.xz
++LIBGTK3_SITE = https://download.gnome.org/sources/gtk/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPL-2.0+
+ LIBGTK3_LICENSE_FILES = COPYING
+ LIBGTK3_CPE_ID_VENDOR = gnome
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
