@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AA4DCCF9F0
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 21:02:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B0DECCF9E3
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 21:02:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F1EBD843AA;
+	by smtp4.osuosl.org (Postfix) with ESMTP id C76D2411C6;
+	Thu, 30 Oct 2025 21:02:47 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id S1TfZVhV7lbD; Thu, 30 Oct 2025 21:02:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F0C5A41156
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id F0C5A41156;
 	Thu, 30 Oct 2025 21:02:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9C75D707
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 21:02:43 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7F49D843B0
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 21:02:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GiOGWRfkfJhf; Thu, 30 Oct 2025 21:02:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F19CA843AC
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F19CA843AC;
-	Thu, 30 Oct 2025 21:02:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 95A03CD
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 21:02:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 87FFE40E0E
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 21:02:43 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Iqk74Q5_-fj8 for <buildroot@buildroot.org>;
+ id q9IflBX6m79Y for <buildroot@buildroot.org>;
  Thu, 30 Oct 2025 21:02:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB982401C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0B3B843AA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AB982401C2
+ by smtp1.osuosl.org (Postfix) with ESMTP id C0B3B843AA
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 21:02:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A7EBD82AEC; Thu, 30 Oct 2025 21:02:42 +0000 (UTC)
+ id B0F6082AEE; Thu, 30 Oct 2025 21:02:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 30 Oct 2025 21:10:41 +0100
+Date: Thu, 30 Oct 2025 21:10:44 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9468f1c099221461abaf5ab152788e692119b8dd
-X-Git-Newrev: d03cfe515bf3ef9519bbf03dfb9a58a3e843f27c
+X-Git-Oldrev: d03cfe515bf3ef9519bbf03dfb9a58a3e843f27c
+X-Git-Newrev: 875b4f204cc13d1f0b491a9a00614db8e4c5846d
 X-Patchwork-Hint: ignore
-Message-Id: <20251030210242.A7EBD82AEC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-crccheck: new package
+Message-Id: <20251030210242.B0F6082AEE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ support/testing/tests/package/test_python_serial.py: new test case
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,94 +66,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d03cfe515bf3ef9519bbf03dfb9a58a3e843f27c
+commit: https://git.buildroot.net/buildroot/commit/?id=875b4f204cc13d1f0b491a9a00614db8e4c5846d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit adds a new host only package for the crccheck Python
-module, which is a dependency of Snagboot.
-
-Homepage on PyPi: https://pypi.org/project/crccheck/
-
-This commit also adds a very basic test case that allows to verify
-that the Python module can be imported and that some minimal
-functionality works.
+This quickly tests that the host-python-serial package at least
+minimally works.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                                            |  2 ++
- package/python-crccheck/python-crccheck.hash          |  4 ++++
- package/python-crccheck/python-crccheck.mk            | 15 +++++++++++++++
- support/testing/tests/package/test_python_crccheck.py | 10 ++++++++++
- 4 files changed, 31 insertions(+)
+ DEVELOPERS                                          |  1 +
+ support/testing/tests/package/test_python_serial.py | 12 ++++++++++++
+ 2 files changed, 13 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 337b2c7ba3..29aa132a78 100644
+index 29aa132a78..ed6c673cc4 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -3255,6 +3255,7 @@ F:	package/pkg-autotools.mk
- F:	package/pkg-generic.mk
- F:	package/python3/
- F:	package/python-augeas/
-+F:	package/python-crccheck/
- F:	package/python-flask-expects-json/
- F:	package/python-git/
- F:	package/python-qrcode/
-@@ -3284,6 +3285,7 @@ F:	support/testing/tests/package/sample_python_git.py
- F:	support/testing/tests/package/sample_python_unittest_xml_reporting.py
- F:	support/testing/tests/package/test_nodejs.py
- F:	support/testing/tests/package/test_python_augeas.py
-+F:	support/testing/tests/package/test_python_crccheck.py
+@@ -3289,6 +3289,7 @@ F:	support/testing/tests/package/test_python_crccheck.py
  F:	support/testing/tests/package/test_python_flask.py
  F:	support/testing/tests/package/test_python_flask_expects_json.py
  F:	support/testing/tests/package/test_python_git.py
-diff --git a/package/python-crccheck/python-crccheck.hash b/package/python-crccheck/python-crccheck.hash
++F:	support/testing/tests/package/test_python_serial.py
+ F:	support/testing/tests/package/test_python_unittest_xml_reporting.py
+ F:	support/testing/tests/toolchain/test_external_arm.py
+ F:	toolchain/
+diff --git a/support/testing/tests/package/test_python_serial.py b/support/testing/tests/package/test_python_serial.py
 new file mode 100644
-index 0000000000..3fb58a7299
+index 0000000000..c4b05a10fb
 --- /dev/null
-+++ b/package/python-crccheck/python-crccheck.hash
-@@ -0,0 +1,4 @@
-+# From https://pypi.org/project/crccheck/#crccheck-1.3.1.tar.gz
-+sha256  1544c0110bf0a697d875d4f29dc40d7079f9d4d402a9317383f55f90ca72563a  crccheck-1.3.1.tar.gz
-+# Locally calculated
-+sha256  1237ab8ea60caa782d77d9d2ac0cdccd765475e3848b0b91b5751d3f299e9d31  LICENSE.txt
-diff --git a/package/python-crccheck/python-crccheck.mk b/package/python-crccheck/python-crccheck.mk
-new file mode 100644
-index 0000000000..32c1341d32
---- /dev/null
-+++ b/package/python-crccheck/python-crccheck.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-crccheck
-+#
-+################################################################################
-+
-+PYTHON_CRCCHECK_VERSION = 1.3.1
-+PYTHON_CRCCHECK_SOURCE = crccheck-$(PYTHON_CRCCHECK_VERSION).tar.gz
-+PYTHON_CRCCHECK_SITE = https://files.pythonhosted.org/packages/3c/d1/a943f4f1ca899917cc3fe1cb89d59348edd1b407503e4b02608e8d6b421e
-+PYTHON_CRCCHECK_LICENSE = MIT
-+PYTHON_CRCCHECK_LICENSE_FILES = LICENSE.txt
-+PYTHON_CRCCHECK_SETUP_TYPE = setuptools
-+HOST_PYTHON_CRCCHECK_DEPENDENCIES = host-python-setuptools-scm
-+
-+$(eval $(host-python-package))
-diff --git a/support/testing/tests/package/test_python_crccheck.py b/support/testing/tests/package/test_python_crccheck.py
-new file mode 100644
-index 0000000000..d51bdc7c9f
---- /dev/null
-+++ b/support/testing/tests/package/test_python_crccheck.py
-@@ -0,0 +1,10 @@
++++ b/support/testing/tests/package/test_python_serial.py
+@@ -0,0 +1,12 @@
 +import infra.basetest
 +
 +
-+class TestHostPythonCrccheck(infra.basetest.BRHostPkgTest):
-+    hostpkgs = ["host-python-crccheck"]
++class TestHostPythonSerial(infra.basetest.BRHostPkgTest):
++    hostpkgs = ["host-python-serial"]
 +
 +    def test_run(self):
-+        cmd = ["host/bin/python3", "-c", "import crccheck; print(crccheck.crc.Crc32.calc(bytearray.fromhex('DEADBEEF')))"]
-+        res = infra.run_cmd_on_host(self.builddir, cmd)
-+        self.assertEqual(res.strip(), "2090640218")
++        cmd = ["host/bin/python3", "-c", "import serial"]
++        infra.run_cmd_on_host(self.builddir, cmd)
++
++        cmd = ["host/bin/python3", "-m", "serial.tools.list_ports"]
++        infra.run_cmd_on_host(self.builddir, cmd)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
