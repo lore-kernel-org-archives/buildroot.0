@@ -1,76 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B56F3CCF9E3
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 21:42:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C51FCCF9F0
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 21:42:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A61084410;
-	Thu, 30 Oct 2025 21:42:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0302E41537;
+	Thu, 30 Oct 2025 21:42:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K1LghoD6BKXG; Thu, 30 Oct 2025 21:42:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id whZi_gJGiuN3; Thu, 30 Oct 2025 21:42:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16BBB84405
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E38841558
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 16BBB84405;
-	Thu, 30 Oct 2025 21:42:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1E38841558;
+	Thu, 30 Oct 2025 21:42:51 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 63C30160
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 21:42:37 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 63D4E160
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 21:42:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 49FBD6156E
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 21:42:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5AD9261560
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 21:42:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id or-Xo1YBVE_H for <buildroot@buildroot.org>;
- Thu, 30 Oct 2025 21:42:36 +0000 (UTC)
+ id DJ35akbv-v1S for <buildroot@buildroot.org>;
+ Thu, 30 Oct 2025 21:42:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 42D5B614D2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42D5B614D2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 57530614D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57530614D2
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 42D5B614D2
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 21:42:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 57530614D2
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 21:42:48 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0cb2.dip0.t-ipconnect.de [91.58.12.178])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 0285FA4C5B44
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 22EF9A4C5B45
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 22:41:57 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:41906)
  by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1vEaP6-000000004EC-3fhM
+ (envelope-from <bernd@kuhls.net>) id 1vEaP6-000000004EC-4AXC
  for buildroot@buildroot.org; Thu, 30 Oct 2025 21:41:56 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 30 Oct 2025 22:41:55 +0100
-Message-ID: <20251030214156.1307743-4-bernd@kuhls.net>
+Date: Thu, 30 Oct 2025 22:41:56 +0100
+Message-ID: <20251030214156.1307743-5-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251030214156.1307743-1-bernd@kuhls.net>
 References: <20251030214156.1307743-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202506031021; t=1761860517;
- bh=HJTvtypkg+7X+iChhqC4uE5YeOnSZ54HvQUeK8DODqs=;
+ bh=pNsFumuO7meC7D96bujIpFVr4mAJ3w30v8VipxGw8rQ=;
  h=From:To:Subject:Date:In-Reply-To:From;
- b=ir+w3LZ5CgNnfVWyh2l0DE3WIWcqcxk0IRuFm77OPkd3XsAz6AD/i0slgX9/G+iTF
- zmAxusUvw1XI5xp8cVecDJCtLe/TbV2V66aZyWveyodL6Gc52/7RY3dcYQVsLrsHt0
- 4PQ/55WNj8jIu7XL2DhA4sdDFfnZbvN+nhtTFa3iVP76+dx4Pnji8QWA8z2p5Ty86e
- JGos5h06Bq4jfNh8NEEQdMaucEUpIMIrwdKx8IhkLauPiOItz0yW/cYyNdtcvAw0EG
- 5AXb4k02g/DkvgQKkwyfod4qG0d1JcNE+d3F7Yll8q3NgT8S8WYnN9/R+SfhgG5B0k
- QroqiAdrDCEVg==
+ b=gLSatgamyhTrUsMO9yRGFIcFNGo/tn4buXM3cnXaN/EFoJwY92QbXYC8SHNgV26VZ
+ 59C0qZgoAhzsLcSTY0+CWMSF2ElbK2aIQtEkLOc/GJPsVzDzt/shteceu/GotRO/PJ
+ u6ll8aN8c6HfoG9Sdq6CU6V4NWtqoNWVq4JQ7yeTXdmkziPo0V5foalq0ygkbtl/JH
+ 99OLagxrhIuLndVUx+htbNf3trpkOk93ncdh0syZbEd5iiD4kDIaXUZ7PWHXBtiAr1
+ grKIhxAromRb3ZOtjAR8kSxiQpgDlywn3DzW5DspLui+5YQUAsaLQWR9Ho7Q95v1+U
+ QIwUrHWv8PZdw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=ir+w3LZ5
-Subject: [Buildroot] [PATCH 4/5] package/bind: add optional dependency to
- jemalloc
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=gLSatgam
+Subject: [Buildroot] [PATCH 5/5] package/bind: security bump version to
+ 9.18.41
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,32 +87,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Added upstream in version 9.18.0:
-https://gitlab.isc.org/isc-projects/bind9/-/commit/7f1c525625675e7e5e0953a78adefe9e21fc1462
+Release notes:
+https://ftp.isc.org/isc/bind9/9.18.41/doc/arm/html/notes.html
+
+Changelog:
+https://ftp.isc.org/isc/bind9/9.18.41/doc/arm/html/changelog.html
+
+Fixes CVE-2025-8677, CVE-2025-40778 & CVE-2025-40780.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/bind/bind.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 50247bcf37..d601e87b75 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.18.33/bind-9.18.33.tar.xz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.18.41/bind-9.18.41.tar.xz.asc
+ # with key D99CCEAF879747014F038D63182E23579462EFAA
+-sha256  fb373fac5ebbc41c645160afd5a9fb451918f6c0e69ab1d9474154e2b515de40  bind-9.18.33.tar.xz
++sha256  6ddc1d981511c4da0b203b0513af131e5d15e5f1c261145736fe1f35dd1fe79d  bind-9.18.41.tar.xz
+ sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
 diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 64cf2fa9fb..c4d9047c4e 100644
+index c4d9047c4e..8b336ab781 100644
 --- a/package/bind/bind.mk
 +++ b/package/bind/bind.mk
-@@ -49,6 +49,13 @@ else
- BIND_CONF_OPTS += --without-zlib
- endif
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_JEMALLOC),y)
-+BIND_CONF_OPTS += --with-jemalloc
-+BIND_DEPENDENCIES += jemalloc
-+else
-+BIND_CONF_OPTS += --without-jemalloc
-+endif
-+
- ifeq ($(BR2_PACKAGE_JSON_C),y)
- BIND_CONF_OPTS += --with-json-c
- BIND_DEPENDENCIES += json-c
+-BIND_VERSION = 9.18.33
++BIND_VERSION = 9.18.41
+ BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_INSTALL_STAGING = YES
 -- 
 2.47.3
 
