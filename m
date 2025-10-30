@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42969CCF9F0
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:11:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6743CCCF9F8
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:11:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 188C14115D;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C06884037;
+	Thu, 30 Oct 2025 08:11:17 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id C49Rn4VpVP-F; Thu, 30 Oct 2025 08:11:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35D7D84067
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 35D7D84067;
 	Thu, 30 Oct 2025 08:11:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 138DA2A3
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:10:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5DEDA41159
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:10:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q5ZGxejJ2L5U; Thu, 30 Oct 2025 08:11:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E0E64115F
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E0E64115F;
-	Thu, 30 Oct 2025 08:11:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id F17742A3
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:10:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 80E4E61007
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:10:41 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OGLKsceyvw7G for <buildroot@buildroot.org>;
+ id my0wxQxyo8Ef for <buildroot@buildroot.org>;
  Thu, 30 Oct 2025 08:10:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CA0261354
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C31D4115B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9CA0261354
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:10:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1C31D4115B
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:10:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8EEBE879F0; Thu, 30 Oct 2025 08:10:39 +0000 (UTC)
+ id 1A40D8140F; Thu, 30 Oct 2025 08:10:40 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 30 Oct 2025 08:56:02 +0100
+Date: Thu, 30 Oct 2025 08:56:16 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 0e52b27fb736badca1ae443862e81f0d4b5f8a5b
-X-Git-Newrev: 9843276c79d900cbfe65bd6e1da9a0fda6dc2ed9
+X-Git-Oldrev: b48933eb673122aa7cbd8b5f10f9374f8bd6b3f7
+X-Git-Newrev: 0e7daa2717f9d2ad902697102128d02b7df97ffd
 X-Patchwork-Hint: ignore
-Message-Id: <20251030081039.8EEBE879F0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/mjpg-streamer:
- fix build with gcc >= 14
+Message-Id: <20251030081040.1A40D8140F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libglib2: add
+ patch for CVE-2025-7039
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,99 +61,105 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4698788113884789185=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4698788113884789185==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=9843276c79d900cbfe65bd6e1da9a0fda6dc2ed9
+commit: https://git.buildroot.net/buildroot/commit/?id=0e7daa2717f9d2ad902697102128d02b7df97ffd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-When mjpg-streamer is built with gcc >= 14 using libjpeg (rather than
-jpeg-turbo), and with SDL is enabled (to enable the output_viewer),
-the compilation can fail with error:
+Backport upstream patch, that was released in GLib 2.84.4 [1],
+such that we can apply it onto GLib 2.82 in Buildroot LTS
 
-    output_viewer.c:125:32: error: assignment to ‘boolean (*)(struct jpeg_decompress_struct *)’ from incompatible pointer type ‘int (*)(struct jpeg_decompress_struct *)’ [-Wincompatible-pointer-types]
+This fixes the following vulnerability:
+- CVE-2025-7039:
+    A flaw was found in glib. An integer overflow during temporary file
+    creation leads to an out-of-bounds memory access, allowing an attacker
+    to potentially perform path traversal or access private temporary file
+    content by creating symbolic links. This vulnerability allows a local
+    attacker to manipulate file paths and access unauthorized data. The
+    core issue stems from insufficient validation of file path lengths
+    during temporary file operations.
+    https://www.cve.org/CVERecord?id=CVE-2025-7039
 
-The issue can be reproduced with the commands:
+[1] https://gitlab.gnome.org/GNOME/glib/-/releases/2.84.4
 
-    cat >.config <<EOF
-    BR2_aarch64=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-    BR2_PACKAGE_LIBJPEG=y
-    BR2_PACKAGE_MJPG_STREAMER=y
-    BR2_PACKAGE_SDL=y
-    EOF
-    make olddefconfig
-    make mjpg-streamer
-
-This commit adds a patch to fix this issue.
-
-Fixes:
-https://autobuild.buildroot.net/results/3a5/3a5674e4e7bb3f2894575191af24598e2a696912/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien: add commands to reproduce the issue]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit af4eef1e0f7610573802273abbe8518a2f5b4a61)
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+(cherry picked from commit 3252f45279b0104785c45e121a432a3335779a08)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../0003-output_viewer-fix-build-with-gcc-14.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ ...ls-fix-computation-of-temporary-file-name.patch | 46 ++++++++++++++++++++++
+ package/libglib2/libglib2.mk                       |  3 ++
+ 2 files changed, 49 insertions(+)
 
-diff --git a/package/mjpg-streamer/0003-output_viewer-fix-build-with-gcc-14.patch b/package/mjpg-streamer/0003-output_viewer-fix-build-with-gcc-14.patch
+diff --git a/package/libglib2/0002-gfileutils-fix-computation-of-temporary-file-name.patch b/package/libglib2/0002-gfileutils-fix-computation-of-temporary-file-name.patch
 new file mode 100644
-index 0000000000..74c26ec3ea
+index 0000000000..a297361ceb
 --- /dev/null
-+++ b/package/mjpg-streamer/0003-output_viewer-fix-build-with-gcc-14.patch
-@@ -0,0 +1,34 @@
-+From c0656c6a538739635441b165b4f1ba7c22c68b1d Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Sat, 18 Oct 2025 18:54:36 +0200
-+Subject: [PATCH] output_viewer: fix build with gcc >= 14
++++ b/package/libglib2/0002-gfileutils-fix-computation-of-temporary-file-name.patch
+@@ -0,0 +1,46 @@
++From 61e963284889ddb4544e6f1d5261c16120f6fcc3 Mon Sep 17 00:00:00 2001
++From: Michael Catanzaro <mcatanzaro@redhat.com>
++Date: Tue, 1 Jul 2025 10:58:07 -0500
++Subject: [PATCH] gfileutils: fix computation of temporary file name
 +
-+Fixes build error found by buildroot autobuilders:
++We need to ensure that the value we use to index into the letters array
++is always positive.
 +
-+output_viewer.c:125:32: error: assignment to 'boolean (*)(struct jpeg_decompress_struct *)'
-+from incompatible pointer type 'int (*)(struct jpeg_decompress_struct *)'
-+[-Wincompatible-pointer-types]
++Fixes #3716
 +
-+Upstream: https://github.com/jacksonliam/mjpg-streamer/pull/420
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++CVE: CVE-2025-7039
++Upstream: https://gitlab.gnome.org/GNOME/glib/-/merge_requests/4674
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 +---
-+ .../plugins/output_viewer/output_viewer.c                       | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ glib/gfileutils.c | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
 +
-+diff --git a/mjpg-streamer-experimental/plugins/output_viewer/output_viewer.c b/mjpg-streamer-experimental/plugins/output_viewer/output_viewer.c
-+index dd6c55b..c50f701 100644
-+--- a/mjpg-streamer-experimental/plugins/output_viewer/output_viewer.c
-++++ b/mjpg-streamer-experimental/plugins/output_viewer/output_viewer.c
-+@@ -86,7 +86,7 @@ static void init_source(j_decompress_ptr cinfo)
-+     return;
-+ }
++diff --git a/glib/gfileutils.c b/glib/gfileutils.c
++index c7d3339d1c..286b1b154f 100644
++--- a/glib/gfileutils.c
+++++ b/glib/gfileutils.c
++@@ -1538,9 +1538,9 @@ get_tmp_file (gchar            *tmpl,
++   static const char letters[] =
++     "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
++   static const int NLETTERS = sizeof (letters) - 1;
++-  gint64 value;
++-  gint64 now_us;
++-  static int counter = 0;
+++  guint64 value;
+++  guint64 now_us;
+++  static guint counter = 0;
 + 
-+-static int fill_input_buffer(j_decompress_ptr cinfo)
-++static boolean fill_input_buffer(j_decompress_ptr cinfo)
-+ {
-+     my_source_mgr * src = (my_source_mgr *) cinfo->src;
++   g_return_val_if_fail (tmpl != NULL, -1);
 + 
++@@ -1559,7 +1559,7 @@ get_tmp_file (gchar            *tmpl,
++ 
++   for (count = 0; count < 100; value += 7777, ++count)
++     {
++-      gint64 v = value;
+++      guint64 v = value;
++ 
++       /* Fill in the random bits.  */
++       XXXXXX[0] = letters[v % NLETTERS];
 +-- 
-+2.47.3
++GitLab
 +
-
---===============4698788113884789185==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index b8c853b752..e0ef652593 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -25,6 +25,9 @@ endif
+ # 0001-gstring-Fix-overflow-check-when-expanding-the-string.patch
+ LIBGLIB2_IGNORE_CVES += CVE-2025-6052
+ 
++# 0002-gfileutils-fix-computation-of-temporary-file-name.patch
++LIBGLIB2_IGNORE_CVES += CVE-2025-7039
++
+ HOST_LIBGLIB2_CONF_OPTS = \
+ 	-Ddtrace=false \
+ 	-Dglib_debug=disabled \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4698788113884789185==--
