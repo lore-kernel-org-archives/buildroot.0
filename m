@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29469CCF9FA
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:22:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24B23CCF9F8
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:22:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A876F83FF8;
-	Thu, 30 Oct 2025 08:22:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EFB7A41020;
+	Thu, 30 Oct 2025 08:22:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JuDEkdAN9hT7; Thu, 30 Oct 2025 08:22:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id i4sgCHSX1Pty; Thu, 30 Oct 2025 08:22:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96B0683FFE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17C544117A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 96B0683FFE;
-	Thu, 30 Oct 2025 08:22:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 17C544117A;
+	Thu, 30 Oct 2025 08:22:43 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 12E0B2A3
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:31 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 11A752A3
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 71BAF613C0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8E4D4613C4
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v7O8u2dFtj1H for <buildroot@buildroot.org>;
+ id U9Zh6KePelOA for <buildroot@buildroot.org>;
  Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B9AC61382
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66B836138C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4B9AC61382
+ by smtp3.osuosl.org (Postfix) with ESMTP id 66B836138C
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 49787879C2; Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
+ id 64F79879C2; Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 30 Oct 2025 09:17:48 +0100
+Date: Thu, 30 Oct 2025 09:17:51 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: 03587fbb4469177f8de08654ce85ee3384640b69
-X-Git-Newrev: 9127f0dacbf0ddd6d32e19922d4d1d536e132d5b
+X-Git-Oldrev: f2a0e39e682ea7d27d1884e26a815783973a8717
+X-Git-Newrev: 496ea30a6f11cbc27b14b47ad0c1c8082580762b
 X-Patchwork-Hint: ignore
-Message-Id: <20251030082228.49787879C2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x]
- package/freeradius-server: requires RC4 support in openssl
+Message-Id: <20251030082228.64F79879C2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/cmake: bump
+ version to 3.31.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,39 +66,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9127f0dacbf0ddd6d32e19922d4d1d536e132d5b
+commit: https://git.buildroot.net/buildroot/commit/?id=496ea30a6f11cbc27b14b47ad0c1c8082580762b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
+Fixes build error with libcurl 8.16.0 introduced by buildroot commit
+fb5fb06ee5a886df5036c5c5e6c4536f2bc8e1c1
+
 Fixes:
-https://autobuild.buildroot.net/results/5a5/5a57a82800fb7a47731198effc15bd7044133c4d/
-
-    src/modules/rlm_mschap/rlm_mschap.c:1016:54: error: implicit
-    declaration of function 'EVP_rc4'; did you mean 'EVP_md4'?
-
-The oldest build error found with a quick search appeared back in July
-2024 with freeradius-server 3.2.3 so a backport should be considered:
-https://autobuild.buildroot.net/results/e2d/e2d77a52f81b0fea1081417c5c80f7991e27810a/
+https://autobuild.buildroot.net/results/92b/92b1ed36e750d9ad756793814f9d1133bda0e013/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 99c5c21b14e86ef53520868a6bee672d6e249c3b)
+(cherry picked from commit 33159bb6ccfd3ba465cf17af25ded2d612b85781)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/freeradius-server/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/cmake/cmake.hash | 4 ++--
+ package/cmake/cmake.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/freeradius-server/Config.in b/package/freeradius-server/Config.in
-index e99778ea49..40401f57c7 100644
---- a/package/freeradius-server/Config.in
-+++ b/package/freeradius-server/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_FREERADIUS_SERVER
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4 if BR2_PACKAGE_LIBOPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4 if BR2_PACKAGE_LIBOPENSSL
- 	select BR2_PACKAGE_LIBTALLOC
- 	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
- 	help
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index 6101fe16f0..cbca2fc355 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,5 +1,5 @@
+-# From https://cmake.org/files/v3.31/cmake-3.31.8-SHA-256.txt
+-sha256  e3cde3ca83dc2d3212105326b8f1b565116be808394384007e7ef1c253af6caa  cmake-3.31.8.tar.gz
++# From https://cmake.org/files/v3.31/cmake-3.31.9-SHA-256.txt
++sha256  5d4fdec04247ca8a8e8f63692f0d0f1e9d6d082a2bdd008dff8ab3ba7215aa83  cmake-3.31.9.tar.gz
+ 
+ # Locally calculated
+ sha256  0676e30827684487aa0ea8f72f01e9460a6320fa34a2888df0ad1dd3e8a06eb8  Copyright.txt
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 1eb4da90ad..8f3a54be5a 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please also update BR2_HOST_CMAKE_AT_LEAST_X_Y
+ CMAKE_VERSION_MAJOR = 3.31
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).8
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).9
+ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3-Clause
+ CMAKE_LICENSE_FILES = Copyright.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
