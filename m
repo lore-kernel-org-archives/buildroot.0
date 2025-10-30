@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00C54CCF9FC
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:22:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C073ECCF9F8
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:22:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC87683FC2;
-	Thu, 30 Oct 2025 08:22:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 99E4D84064;
+	Thu, 30 Oct 2025 08:22:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T1wH4XQyF6th; Thu, 30 Oct 2025 08:22:56 +0000 (UTC)
+ id Fxc0MzCnL41e; Thu, 30 Oct 2025 08:22:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D451584064
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0ACFA84088
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D451584064;
-	Thu, 30 Oct 2025 08:22:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0ACFA84088;
+	Thu, 30 Oct 2025 08:22:57 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 33C76160
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:44 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 577A0160
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E723A613A3
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 10869613A6
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HldJ4HaN2fEy for <buildroot@buildroot.org>;
+ id PyvM9gDj87JL for <buildroot@buildroot.org>;
  Thu, 30 Oct 2025 08:22:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7883613A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CEEA613AB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E7883613A9
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0CEEA613AB
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E587F87A0D; Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
+ id 0B55D87A0C; Thu, 30 Oct 2025 08:22:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 30 Oct 2025 09:18:07 +0100
+Date: Thu, 30 Oct 2025 09:18:09 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: 5bec02afe46c6725060b961353056725ed3ff1bf
-X-Git-Newrev: c809e8d8828dbdbb5276bc82d31468035508c6f7
+X-Git-Oldrev: 6d6f8da1b307bbb0c6c87c5a518aa4fd5f0caf08
+X-Git-Newrev: 920d4cde8acaf46b425e732ec806b1f59a1eb975
 X-Patchwork-Hint: ignore
-Message-Id: <20251030082228.E587F87A0D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/libgtk3: bump to
- version 3.24.51
+Message-Id: <20251030082229.0B55D87A0C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/dante: security
+ bump version to 1.4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,54 +66,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c809e8d8828dbdbb5276bc82d31468035508c6f7
+commit: https://git.buildroot.net/buildroot/commit/?id=920d4cde8acaf46b425e732ec806b1f59a1eb975
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-For release notes since version 3.24.43, see:
-https://gitlab.gnome.org/GNOME/gtk/-/blob/3.24.51/NEWS
+Changelog: http://www.inet.no/dante/announce-1.4.4
 
-Note: the "+" in the project name and source archive was removed
-upstream. This commit updates _SOURCE and _SITE accordingly.
+Fixes CVE-2024-54662: https://www.inet.no/dante/advisory-2024-12-16.txt
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[Julien: add link to release notes]
+Needed for bump of libminiupnpc to version 2.3.3.
+
+Updated license hash due to copyright year bump:
+https://github.com/notpeter/dante/commit/53727f08eec6cae55c4ed6efb88c3d688839f2cb
+(commit taken from unofficial mirror)
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 54c6c0125ac024bf5e99fc33e13d01bf58116a0a)
+(cherry picked from commit 7d95c34d64505214d56e452abc1f3502323266af)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libgtk3/libgtk3.hash | 4 ++--
- package/libgtk3/libgtk3.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/dante/dante.hash | 4 ++--
+ package/dante/dante.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index 6a682a7412..5394bb10cc 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
+diff --git a/package/dante/dante.hash b/package/dante/dante.hash
+index a76018fdb6..c9d86608d9 100644
+--- a/package/dante/dante.hash
++++ b/package/dante/dante.hash
 @@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.43.sha256sum
--sha256  7e04f0648515034b806b74ae5d774d87cffb1a2a96c468cb5be476d51bf2f3c7  gtk+-3.24.43.tar.xz
-+# From https://download.gnome.org/sources/gtk/3.24/gtk-3.24.51.sha256sum
-+sha256  0013877c6bd23c2dbe42ad7c70a053d0e449be66736574e37867c49c5f905a4f  gtk-3.24.51.tar.xz
+ # From https://www.inet.no/dante/download.html
+-sha256  418a065fe1a4b8ace8fbf77c2da269a98f376e7115902e76cda7e741e4846a5d  dante-1.4.3.tar.gz
++sha256  1973c7732f1f9f0a4c0ccf2c1ce462c7c25060b25643ea90f9b98f53a813faec  dante-1.4.4.tar.gz
  
- # Hash for license file:
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index d6d7c64a54..be24869d3d 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -5,9 +5,9 @@
+ # Hash for license file
+-sha256  05e2db26147a8575005f090aada119ea6cb40a4382164929d647f00abef3bdfd  LICENSE
++sha256  49034b51407f6e51a07aed87c3c00c0889294348cd5e99d78d6b6f62746ff3fc  LICENSE
+diff --git a/package/dante/dante.mk b/package/dante/dante.mk
+index bae46c5a71..2f4e75d1e5 100644
+--- a/package/dante/dante.mk
++++ b/package/dante/dante.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBGTK3_VERSION_MAJOR = 3.24
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).43
--LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
--LIBGTK3_SITE = https://download.gnome.org/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).51
-+LIBGTK3_SOURCE = gtk-$(LIBGTK3_VERSION).tar.xz
-+LIBGTK3_SITE = https://download.gnome.org/sources/gtk/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPL-2.0+
- LIBGTK3_LICENSE_FILES = COPYING
- LIBGTK3_CPE_ID_VENDOR = gnome
+-DANTE_VERSION = 1.4.3
++DANTE_VERSION = 1.4.4
+ DANTE_SITE = http://www.inet.no/dante/files
+ DANTE_LICENSE = BSD-3-Clause
+ DANTE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
