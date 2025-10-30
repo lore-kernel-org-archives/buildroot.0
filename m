@@ -4,104 +4,105 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7D8BCCF9F8
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:23:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75800CCF9F0
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:23:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9EDF58118A;
-	Thu, 30 Oct 2025 08:23:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4D963811AA;
+	Thu, 30 Oct 2025 08:23:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vvOhcs7LfdkV; Thu, 30 Oct 2025 08:23:54 +0000 (UTC)
+ id js9MDdQKVXCy; Thu, 30 Oct 2025 08:23:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC459810E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 581398117F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BC459810E1;
-	Thu, 30 Oct 2025 08:23:53 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2788A2A3
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 581398117F;
+	Thu, 30 Oct 2025 08:23:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C1CFD160
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 178BD40793
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B36D041131
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5NfX4r3tu6Jo for <buildroot@buildroot.org>;
- Thu, 30 Oct 2025 08:23:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NExfP6qL6tdc for <buildroot@buildroot.org>;
+ Thu, 30 Oct 2025 08:23:51 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0407D40748
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0407D40748
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0407D40748
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:47 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-47114a40161so8294065e9.3
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 01:23:47 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CE20B40FFE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE20B40FFE
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CE20B40FFE
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:50 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-4710022571cso8640735e9.3
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 01:23:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1761812626; x=1762417426;
+ d=1e100.net; s=20230601; t=1761812629; x=1762417429;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=62vbd/NqtVbvydyL5Hud1qCHqQt7Qjh6bhh3BM68J7A=;
- b=LyIMedaLRoFnS6GUagmDEeiSU2XvMDDc2VbCWLm2iqh1MTAKcOKEqQWudZfjKoMk+H
- 92lTwgjqtUezP31dk18HpG4Ar25NXkWTDAI3weQ/lTnuzVaISz6w8YtXgl+oKFOOxmFU
- coZAYjy8l6ItrSsqjedpfAcYaj5dzyeQ9te62dPckAmOgsDFVOYS5ufT2SOKoXV+7I+4
- t8BQOdQfcvvPFiweUmZwQoqe/0YF0QRDBsIw2KHCfymRmXeo1BKe2G+SuxLOuSkq2Eba
- FzeTQE1cOdauyqRH5oaax58t8hYwtRAXPHa/Bu85R/bXGDo9zMGRKzsWXwn8ARIUFTYc
- MuwQ==
+ bh=bpobCUCWnWLvJYpvl69C727N0FIHQY0ASSgvsJ3QmBI=;
+ b=D9lt8JJUqR7uv6MWsLte/ZcSkCHxru5UUMzK4HybStTgOLvZqxCpWe0j8+PdQNoY7e
+ jkpRPuN+inXPrD3o1Tvv0NXEdX201K0cINLUIgSvzd2g0p0WdEnffb0ImEwYqRE6hzJJ
+ P+WV5c71/8xnfLs7hTDjcQ4IOTPAZMxgQMcDnU4IZ6nK8LDOnBiYlfOSDfFWa8RgM/DG
+ L4nQ21x7hRuxcvSPllYq9R8fdiSeMoBaZ0x3wACwoVffmuOuXMwGMYE0V9ie7MNnMdQc
+ DrOiW+NWfgoXAY8sAEI7IPnsHKdJEQ7lWSTJKAfLSFW60an4xELLQiFXXY7i7eLv/aR+
+ MBiw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUdPi9ikqIE0GdbFai1PB20GX9pZEcmr/OW4WdxTVAlCY0NUGFN0h1XS8gN4nx3gAhKhPJmln5Jz2g=@buildroot.org
-X-Gm-Message-State: AOJu0YyCWNlBZN7IzMiAbNeehhmWsGgJYLVlYsmylH4HIKQMCM3pxj7F
- JET2/Hpcmqhavc0yR2Va11kVQcGW0ltrd0i12m04ZpDdE5qFfL4+zeXn4ElYg9gMWqA=
-X-Gm-Gg: ASbGnctlmLcXcg42+WV0ne4gL5+Tng7lVlqUuEGnLhgGnAN1+T/0ojhNVm5OzD5rhfx
- PLnEFkI75SLoBfy6+7W12+gwYrhGsKJyZrFF5Dbm1P4hQ9UUY+GiY90oIKmvmb25sc9fQ0zHJFk
- EmqPQA90bdvkcHIvnzSmndpUJNSh0EKYyvEa4xkNwJbSJ8EUhIVLUv4XKzb0AlzXoNpytLvXkpg
- JX9pkOaDZXMlJyzCaWFK+UiSYECYxmi1EqNjZ5jkOvw0fvxbvFyd0gipVvBHguU8PdVFMJng/fY
- fIgb66Vu5d//cV5Qf4OWN9AfGPrto1scwvgMVwOvCRHmXFczxaT8A/AE1lobsbbejmXIZazBxza
- UusPNlvl8L50TN9shHetNTeDKWesO7//mbHxqcMXke3uv+grAPWogrVRr/ifHz/ukfuEi6fYiHV
- b2cOG2nxZ6z+P7daDYfDAh09eZFA==
-X-Google-Smtp-Source: AGHT+IHm3MRsVczcMfDUitGdohIBl8PbdvbA6tQLE97PrWG4E4lVvOELEMkCq5jjXnLylHOel1+9uA==
-X-Received: by 2002:a05:600c:46ce:b0:471:15c1:45b9 with SMTP id
- 5b1f17b1804b1-4771e3b84c0mr61097865e9.29.1761812625925; 
- Thu, 30 Oct 2025 01:23:45 -0700 (PDT)
+ AJvYcCXHK5Pg2/ZeWgYhJ6gcGW3cdnRbNOLsKvWjxo0ZVih3rTmLqR/uMmeP0/BIkw69l7OJ3Lktnq8iAQI=@buildroot.org
+X-Gm-Message-State: AOJu0Yzao5pPvrq9SrED4LUWQazlr778kP2CoaJLvEDx37BH9MQk0fzG
+ 6inimmFqb3HYyPTwGgJiGghouBfI0ipq0wWN63cDy6YoFgUPoZIv9NDFuBlpwnID0z7r1YQwddy
+ mtMip
+X-Gm-Gg: ASbGncsxXtrzym51+NJCs3VeYY5edPCBgVU6VeNl6h4hiHzqRlt6Erej3qiJR+/5rMU
+ Re5sgA5Tp1neVfJzKVnb5xUU7wSW0bVuX0kCSrrh0CcfWaCoPRhk6aflMxFgsMQquAhfdQYnotD
+ Zw1cml1NVhtxZAHo8pHkyEnZcVaqA18GOqcnTlZ0Of0U+/uR6+FmBOpvb3UN91/MDt/DCJfnC/N
+ FUCxDrAHN5ybgf6hP9ARbPsP3myjcDzF1r360PbeDMX5AlIMoySd4hY0PA8ZnFGq1VpFY/q4018
+ 3DXlKAvXsvgBv4S+2kIE1QjzVQXwa5fX+C6BbmwYBsHfezJkBZJm0oxmryBNqoO8VokTtuYMJM8
+ AjZumI8ghqc6r4NXR62mw8huW+bcx0+va0QVRC/PTqcY5in5F3b6LtzJhg6whmtLtIo3dzdr6/l
+ 1xxgud4pVzEGuuFsJPH3oRxnuS+QNib9foXv+4
+X-Google-Smtp-Source: AGHT+IHNJZ621C9nW0CnYUUC03P/u9SLIALGEUIzEcxMAge7FYlmLX4WWru+1Z3eV+qAUalnQDWScQ==
+X-Received: by 2002:a05:600c:a42:b0:471:11a3:a6a9 with SMTP id
+ 5b1f17b1804b1-4772685b67dmr16838965e9.37.1761812628733; 
+ Thu, 30 Oct 2025 01:23:48 -0700 (PDT)
 Received: from arch (77.109.92.202.static.edpnet.net. [77.109.92.202])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-477289b0dbesm27065225e9.5.2025.10.30.01.23.45
+ ffacd0b85a97d-429952d3532sm31465410f8f.20.2025.10.30.01.23.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 30 Oct 2025 01:23:45 -0700 (PDT)
-To: Titouan Christophe <titouan.christophe@mind.be>
+ Thu, 30 Oct 2025 01:23:48 -0700 (PDT)
+To: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 30 Oct 2025 09:23:45 +0100
-Message-ID: <20251030082345.34928-1-thomas.perale@mind.be>
+Date: Thu, 30 Oct 2025 09:23:46 +0100
+Message-ID: <20251030082347.35031-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251021141020.55010-1-titouan.christophe@mind.be>
-References: <20251021141020.55010-1-titouan.christophe@mind.be>
+In-Reply-To: <20251021165126.168606-1-vincent.stehle@arm.com>
+References: <20251021165126.168606-1-vincent.stehle@arm.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1761812626; x=1762417426; darn=buildroot.org;
+ d=mind.be; s=google; t=1761812629; x=1762417429; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=62vbd/NqtVbvydyL5Hud1qCHqQt7Qjh6bhh3BM68J7A=;
- b=g5jmUDEvLXKQtDXZhnLVJQ7zzASsg4AssgSmMpeGGeWRFjYTdLMFg4fyPNfMkDX02i
- k2vTa0kYZCVDbSG4XuesVcxnPZBwzMM44G96Ue21kz2hv//WuVcvbGqImV/vkUBohb6i
- MpMxocnIos+Ohy08FJfy6xwJMoJ1Ivq7yZhDUY7WSlg5RyExcNzOLXhB8qxFb3UZzp27
- vacI9WK0wVsgl3WWISTAWdDRm1R6QvOgL9UXl9wgAjGUlTJniCfaxd8yOzhl+GHdWfMD
- OGxlAvIekNRcpuQkmNGPE3x8F3WXptHuTE1s5WKUBn2GwmnUDYft8TN1Y9pKjkAagqGR
- TogA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=bpobCUCWnWLvJYpvl69C727N0FIHQY0ASSgvsJ3QmBI=;
+ b=NuvicK4dkX3ORNT3DOEYAek2hTFRkm4aWMJ2Icc2Hp0GqQoJi9f+DjV8UdyVemRwmP
+ rKhGen1uzRM6jyNKz1kxslbg1k1A+5XXP/hPipQNhVRTiY2f/9sPbZ6ZeBufyL8eHHSV
+ sEDhrVYbv/OvQIfRAvFLrpE8rml7WoHw6+3mz82XsYaHoAnk71Wa73aV3lLRwpM7GfDY
+ boZGdkYgF09j9QbkqM+i85n6O9HLtbD7l/n+x5JEYsRyYXpmJrorYRK2SHBM+Rkx5/1f
+ rnk7DcPz0/JNASEXed3lLXO9N1mm4EwzNYKCFEgePlqgzxd+g/7n68/qRInmNg54ykPQ
+ IFog==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=g5jmUDEv
-Subject: Re: [Buildroot] [PATCH] package/libvips: security bump to v8.17.2
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=NuvicK4d
+Subject: Re: [Buildroot] [PATCH v2] utils/brmake: filter output for parallel
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,269 +116,56 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In reply of:
-> See the many release notes: https://github.com/libvips/libvips/releases
-> 
-> Along that version bump:
-> - Change source code archive compression from .gz to .xz as this the
->   new upstream delivery format
-> - Switch from autotools to meson build system (see upstream commit
->   https://github.com/libvips/libvips/commit/538aa2a8415e10e5c30e4e8671ab5387ca4869fb)
-> - Update the LICENSE file (see upstream commit
->   https://github.com/libvips/libvips/commit/057703938e76083f78760d64ece983dcf7be65ff)
-> 
-> This fixes the following vulnerabilities:
-> - CVE-2025-29769:
->     libvips is a demand-driven, horizontally threaded image processing
->     library.  The heifsave operation could incorrectly determine the
->     presence of an alpha channel in an input when it was not possible to
->     determine the colour interpretation, known internally within libvips
->     as "multiband". There aren't many ways to create a "multiband" input,
->     but it is possible with a well-crafted TIFF image. If a "multiband"
->     TIFF input image had 4 channels and HEIF-based output was requested,
->     this led to libvips creating a 3 channel HEIF image without an alpha
->     channel but then attempting to write 4 channels of data. This caused a
->     heap buffer overflow, which could crash the process. This
->     vulnerability is fixed in 8.16.1.
->     https://www.cve.org/CVERecord?id=CVE-2025-29769
-> 
-> - CVE-2025-59933:
->     libvips is a demand-driven, horizontally threaded image processing
->     library. For versions 8.17.1 and below, when libvips is compiled with
->     support for PDF input via poppler, the pdfload operation is affected
->     by a buffer read overflow when parsing the header of a crafted PDF
->     with a page that defines a width but not a height. Those using libvips
->     compiled without support for PDF input are unaffected as well as
->     thosewith support for PDF input via PDFium. This issue is fixed in
->     version 8.17.2. A workaround for those affected is to block the
->     VipsForeignLoadPdf operation via vips_operation_block_set, which is
->     available in most language bindings, or to set VIPS_BLOCK_UNTRUSTED
->     environment variable at runtime, which will block all untrusted
->     loaders including PDF input via poppler.
->     https://www.cve.org/CVERecord?id=CVE-2025-59933
-> 
-> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-
-Applied to 2025.02.x & 2025.08.x. Thanks
-
-> ---
->  package/libvips/libvips.hash |  6 +--
->  package/libvips/libvips.mk   | 90 ++++++++++++++++--------------------
->  2 files changed, 43 insertions(+), 53 deletions(-)
-> 
-> diff --git a/package/libvips/libvips.hash b/package/libvips/libvips.hash
-> index 1ba242d1cf..dd7510ecb2 100644
-> --- a/package/libvips/libvips.hash
-> +++ b/package/libvips/libvips.hash
-> @@ -1,3 +1,3 @@
-> -# Locally calculated
-> -sha256  2468088d958e0e2de1be2991ff8940bf45664a826c0dad12342e1804e2805a6e  vips-8.10.6.tar.gz
-> -sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-> +# From https://github.com/libvips/libvips/releases/download/v8.17.2/vips-8.17.2.tar.xz.sha256sum
-> +sha256  57ea0ec4f30ea04748c9e8eec5415e7c9ac7cafe6822e4788fc110376a1d224a  vips-8.17.2.tar.xz
-> +sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE
-> diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
-> index 8eb1f0964e..35f9f1475a 100644
-> --- a/package/libvips/libvips.mk
-> +++ b/package/libvips/libvips.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -LIBVIPS_VERSION = 8.10.6
-> -LIBVIPS_SOURCE = vips-$(LIBVIPS_VERSION).tar.gz
-> +LIBVIPS_VERSION = 8.17.2
-> +LIBVIPS_SOURCE = vips-$(LIBVIPS_VERSION).tar.xz
->  LIBVIPS_SITE = https://github.com/libvips/libvips/releases/download/v$(LIBVIPS_VERSION)
->  LIBVIPS_LICENSE = LGPL-2.1+
->  LIBVIPS_LICENSE_FILES = COPYING
-> @@ -22,135 +22,125 @@ LIBVIPS_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) $(LIBVIPS_CXXFLAGS)" \
->  	LIBS=$(TARGET_NLS_LIBS)
->  
->  LIBVIPS_CONF_OPTS = \
-> -	--without-dmalloc \
-> -	--without-gsf \
-> -	--without-OpenEXR \
-> -	--without-openslide \
-> -	--without-cfitsio \
-> -	--without-pangoft2 \
-> -	--without-x
-> +	-Dopenexr=disabled \
-> +	-Dopenslide=disabled \
-> +	-Dcfitsio=disabled \
-> +	-Dpangocairo=disabled
->  LIBVIPS_INSTALL_STAGING = YES
->  LIBVIPS_DEPENDENCIES = \
->  	host-pkgconf expat libglib2 \
->  	$(TARGET_NLS_DEPENDENCIES)
->  
-> -ifeq ($(BR2_PACKAGE_GIFLIB),y)
-> -LIBVIPS_CONF_OPTS += --with-giflib
-> -LIBVIPS_DEPENDENCIES += giflib
-> -else
-> -LIBVIPS_CONF_OPTS += --without-giflib
-> -endif
-> -
->  ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-> -LIBVIPS_CONF_OPTS += --enable-introspection
-> +LIBVIPS_CONF_OPTS += -Dintrospection=enabled
->  LIBVIPS_DEPENDENCIES += gobject-introspection
->  else
-> -LIBVIPS_CONF_OPTS += --disable-introspection
-> +LIBVIPS_CONF_OPTS += -Dintrospection=disabled
->  endif
->  
->  ifeq ($(BR2_PACKAGE_IMAGEMAGICK),y)
->  LIBVIPS_CONF_OPTS += \
-> -	--with-magick \
-> -	--with-magickpackage=MagickCore
-> +	-Dmagick=enabled \
-> +	-Dmagick-package=MagickCore
->  LIBVIPS_DEPENDENCIES += imagemagick
->  else ifeq ($(BR2_PACKAGE_GRAPHICSMAGICK),y)
->  LIBVIPS_CONF_OPTS += \
-> -	--with-magick \
-> -	--with-magickpackage=GraphicsMagick
-> +	-Dmagick=enabled \
-> +	-Dmagick-package=GraphicsMagick
->  LIBVIPS_DEPENDENCIES += graphicsmagick
->  else
-> -LIBVIPS_CONF_OPTS += --without-magick
-> +LIBVIPS_CONF_OPTS += -Dmagick=disabled
->  endif
->  
->  ifeq ($(BR2_PACKAGE_JPEG),y)
-> -LIBVIPS_CONF_OPTS += --with-jpeg
-> +LIBVIPS_CONF_OPTS += -Djpeg=enabled
->  LIBVIPS_DEPENDENCIES += jpeg
->  else
-> -LIBVIPS_CONF_OPTS += --without-jpeg
-> +LIBVIPS_CONF_OPTS += -Djpeg=disabled
->  endif
->  
->  ifeq ($(BR2_PACKAGE_LCMS2),y)
-> -LIBVIPS_CONF_OPTS += --with-lcms
-> +LIBVIPS_CONF_OPTS += -Dlcms=enabled
->  LIBVIPS_DEPENDENCIES += lcms2
->  else
-> -LIBVIPS_CONF_OPTS += --without-lcms
-> +LIBVIPS_CONF_OPTS += -Dlcms=disabled
->  endif
->  
->  ifeq ($(BR2_PACKAGE_LIBPNG),y)
-> -LIBVIPS_CONF_OPTS += --with-png
-> +LIBVIPS_CONF_OPTS += -Dpng=enabled
->  LIBVIPS_DEPENDENCIES += libpng
->  else
-> -LIBVIPS_CONF_OPTS += --without-png
-> +LIBVIPS_CONF_OPTS += -Dpng=disabled
->  endif
->  
->  ifeq ($(BR2_PACKAGE_LIBRSVG),y)
-> -LIBVIPS_CONF_OPTS += --with-rsvg
-> +LIBVIPS_CONF_OPTS += -Drsvg=enabled
->  LIBVIPS_DEPENDENCIES += librsvg
->  else
-> -LIBVIPS_CONF_OPTS += --without-rsvg
-> +LIBVIPS_CONF_OPTS += -Drsvg=disabled
->  endif
->  
->  ifeq ($(BR2_PACKAGE_MATIO),y)
-> -LIBVIPS_CONF_OPTS += --with-matio
-> +LIBVIPS_CONF_OPTS += -Dmatio=enabled
->  LIBVIPS_DEPENDENCIES += matio
->  else
-> -LIBVIPS_CONF_OPTS += --without-matio
-> +LIBVIPS_CONF_OPTS += -Dmatio=disabled
->  endif
->  
->  ifeq ($(BR2_PACKAGE_ORC),y)
-> -LIBVIPS_CONF_OPTS += --with-orc
-> +LIBVIPS_CONF_OPTS += -Dorc=enabled
->  LIBVIPS_DEPENDENCIES += orc
->  else
-> -LIBVIPS_CONF_OPTS += --without-orc
-> +LIBVIPS_CONF_OPTS += -Dorc=disabled
->  endif
->  
->  ifeq ($(BR2_PACKAGE_POPPLER),y)
-> -LIBVIPS_CONF_OPTS += --with-poppler
-> +LIBVIPS_CONF_OPTS += -Dpoppler=enabled
->  LIBVIPS_DEPENDENCIES += poppler
->  else
-> -LIBVIPS_CONF_OPTS += --without-poppler
-> +LIBVIPS_CONF_OPTS += -Dpoppler=disabled
->  endif
->  
->  ifeq ($(BR2_PACKAGE_TIFF),y)
-> -LIBVIPS_CONF_OPTS += --with-tiff
-> +LIBVIPS_CONF_OPTS += -Dtiff=enabled
->  LIBVIPS_DEPENDENCIES += tiff
->  else
-> -LIBVIPS_CONF_OPTS += --without-tiff
-> +LIBVIPS_CONF_OPTS += -Dtiff=disabled
->  endif
->  
->  ifeq ($(BR2_PACKAGE_FFTW_DOUBLE),y)
-> -LIBVIPS_CONF_OPTS += --with-fftw
-> +LIBVIPS_CONF_OPTS += -Dfftw=enabled
->  LIBVIPS_DEPENDENCIES += fftw-double
->  else
-> -LIBVIPS_CONF_OPTS += --without-fftw
-> +LIBVIPS_CONF_OPTS += -Dfftw=disabled
->  endif
->  
->  ifeq ($(BR2_PACKAGE_LIBEXIF),y)
-> -LIBVIPS_CONF_OPTS += --with-libexif
-> +LIBVIPS_CONF_OPTS += -Dexif=enabled
->  LIBVIPS_DEPENDENCIES += libexif
->  else
-> -LIBVIPS_CONF_OPTS += --without-libexif
-> +LIBVIPS_CONF_OPTS += -Dexif=disabled
->  endif
->  
->  ifeq ($(BR2_PACKAGE_LIBHEIF),y)
-> -LIBVIPS_CONF_OPTS += --with-heif
-> +LIBVIPS_CONF_OPTS += -Dheif=enabled
->  LIBVIPS_DEPENDENCIES += libheif
->  else
-> -LIBVIPS_CONF_OPTS += --without-heif
-> +LIBVIPS_CONF_OPTS += -Dheif=disabled
->  endif
->  
->  ifeq ($(BR2_PACKAGE_WEBP_DEMUX)$(BR2_PACKAGE_WEBP_MUX),yy)
-> -LIBVIPS_CONF_OPTS += --with-libwebp
-> +LIBVIPS_CONF_OPTS += -Dwebp=enabled
->  LIBVIPS_DEPENDENCIES += webp
->  else
-> -LIBVIPS_CONF_OPTS += --without-libwebp
-> +LIBVIPS_CONF_OPTS += -Dwebp=disabled
->  endif
->  
->  ifeq ($(BR2_PACKAGE_ZLIB),y)
-> -LIBVIPS_CONF_OPTS += --with-zlib
-> +LIBVIPS_CONF_OPTS += -Dzlib=enabled
->  LIBVIPS_DEPENDENCIES += zlib
->  else
-> -LIBVIPS_CONF_OPTS += --without-zlib
-> +LIBVIPS_CONF_OPTS += -Dzlib=disabled
->  endif
->  
-> -$(eval $(autotools-package))
-> +$(eval $(meson-package))
-> -- 
-> 2.51.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SW4gcmVwbHkgb2Y6Cj4gV2hlbiBidWlsZGluZyBpbiBwYXJhbGxlbCB3aXRoIHBlci1wYWNrYWdl
+IGRpcmVjdG9yaWVzCj4gKEJSMl9QRVJfUEFDS0FHRV9ESVJFQ1RPUklFUz15KSwgYnJtYWtlIG91
+dHB1dCBpcyBvZnRlbiBnYXJibGVkOgo+IAo+ICAgMjAyNS0xMC0wOFQxODozOToxMCA+Pj4gaG9z
+dC1kdGMgMS43LjIgQnVpbGRpbmcKPiAgIDIwMjUtMTAtMDhUMTg6Mzk6MTEgY2hlY2tpbmcgZm9y
+IHN0ZGludC5oLi4uID4+PiBob3N0LWR0YyAxLjcuMiBJbnN0YWxsaW5nIHRvIGhvc3QgZGlyZWN0
+b3J5Cj4gICAyMDI1LTEwLTA4VDE4OjM5OjEyIGNoZWNraW5nIGZvciBsaW1pdHMuaC4uLiA+Pj4g
+aG9zdC1nbXAgNi4zLjAgSW5zdGFsbGluZyB0byBob3N0IGRpcmVjdG9yeQo+IAo+IFJlbW92ZSB0
+aGUgc3B1cmlvdXMgc3RyaW5nIGJldHdlZW4gdGhlIHRpbWVzdGFtcCBhbmQgdGhlICI+Pj4iIG1h
+cmtlciB0bwo+IGZpeCB0aGlzLgo+IFdlIG5lZWQgc29tZSBleHRyYSBjYXJlIHRvIHByZXNlcnZl
+IHRoZSBwcmVjZWRpbmcgInRlcm0gYm9sZCIgc3BlY2lhbAo+IGNoYXJhY3RlcnMgc2VxdWVuY2Uu
+Cj4gCj4gV2UgYWxzbyBwcmV2ZW50IGdyZXAgYW5kIHNlZCB0byBidWZmZXIgdGhlaXIgb3V0cHV0
+IHRvbyBtdWNoLiBUaGlzIGxlYWRzIHRvCj4gbW9yZSBmcmVxdWVudCBvdXRwdXQgZXZlbiB3aGVu
+IHdlIG1pZ2h0IG5vdCBiZSBjb25uZWN0ZWQgdG8gYSB0ZXJtaW5hbDsgZm9yCj4gZXhhbXBsZTog
+d2hlbiBicm1ha2UncyBvdXRwdXQgaXMgcGlwZWQgdG8gYW5vdGhlciBwcm9ncmFtIG9yIHdoZW4g
+cnVubmluZwo+IGluIENJLgo+IAo+IFJldmlld2VkLWJ5OiBNYXJjdXMgSG9mZm1hbm4gPGJ1aWxk
+cm9vdEBidWJ1MS5ldT4KPiBTaWduZWQtb2ZmLWJ5OiBWaW5jZW50IFN0ZWhsw6kgPHZpbmNlbnQu
+c3RlaGxlQGFybS5jb20+Cj4gQ2M6IFlhbm4gRS4gTU9SSU4gPHlhbm4ubW9yaW4uMTk5OEBmcmVl
+LmZyPgoKQXBwbGllZCB0byAyMDI1LjAyLnggJiAyMDI1LjA4LnguIFRoYW5rcwoKPiAtLS0KPiAK
+PiBDaGFuZ2VzIHYxIC0+IHYyOgo+ICAgLSBBZGQgdGhlIGAtLXVuYnVmZmVyZWQnIG9wdGlvbiB0
+byBzZWQgIChzdWdnZXN0ZWQgYnkgTWFyY3VzKQo+ICAgLSBFeHBsYWluIGJ1ZmZlcmluZyBhIGJp
+dCBtb3JlIGluIHRoZSBjb21taXQgbWVzc2FnZSAgKHN1Z2dlc3RlZCBieSBNYXJjdXMpCj4gCj4g
+SGkgTWFyY3VzLAo+IAo+IFRoYW5rcyBhZ2FpbiBmb3IgeW91ciBpbnRlcmVzdCBpbiB0aGlzIHBh
+dGNoLgo+IEkgaGF2ZSBhZGRlZCB5b3VyIHJldmlld2VkLWJ5OyBwbGVhc2UgbGV0IHVzIGtub3cg
+aWYgeW91ciB0ZXN0ZWQtYnkgY291bGQKPiBiZSBhZGRlZCB0byB0aGlzIHYyIGFzIHdlbGwuCj4g
+Cj4gRGVhciBZYW5uLAo+IAo+IFRoYW5rIHlvdSBmb3IgeW91ciBpbnRlcmVzdCBhbmQgZm9yIHNo
+YXJpbmcgeW91ciBicm1ha2UgcmV3cml0ZS4KPiBUbyBiZSBob25lc3QsIEkgZmVlbCBtb3JlIGNv
+bWZvcnRhYmxlIHdpdGgganVzdCB0aGlzIGNvdXBsZSBvZiBtb2RpZmllZAo+IGxpbmVzLCB3aGlj
+aCBJIHRoaW5rIGFyZSB3ZWxsIHVuZGVyc3Rvb2Qgbm93IGFmdGVyIHRoZSBkaXNjdXNzaW9uIHdp
+dGgKPiBNYXJjdXMsIHRoYW4gd2l0aCB0aGUgbG9uZ2VyIGJhc2ggdmVyc2lvbiB1c2luZyBtb3Jl
+ICJhZHZhbmNlZCIgbWVjaGFuaXNtcywKPiBsaWtlIHNpZ25hbHMgYW5kIGNvcHJvY2Vzc2VzLiBJ
+IHRoaW5rIEkgd2lsbCBub3QgZGFyZSB0byBzdWJtaXQgdGhpcyBtb3JlCj4gY29tcGxleCB2ZXJz
+aW9uLi4uCj4gCj4gQmVzdCByZWdhcmRzLAo+IAo+IFZpbmNlbnQuCj4gCj4gCj4gIHV0aWxzL2Jy
+bWFrZSB8IDMgKystCj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDEgZGVsZXRp
+b24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvdXRpbHMvYnJtYWtlIGIvdXRpbHMvYnJtYWtlCj4gaW5k
+ZXggYTRiOWU3ZmE3MS4uYzI5ZTU2YTliYyAxMDA3NTUKPiAtLS0gYS91dGlscy9icm1ha2UKPiAr
+KysgYi91dGlscy9icm1ha2UKPiBAQCAtMTIsNyArMTIsOCBAQCBtYWluKCkgewo+ICAgICAgICAg
+ICAgICAgcHJpbnRmICIlKCVZLSVtLSVkVCVIOiVNOiVTKVQgJXNcbiIgLTEgIiR7bGluZX0iCj4g
+ICAgICAgICAgIGRvbmUgXAo+ICAgICAgICAgICB8dGVlIC1hIGJyLmxvZyBcCj4gLSAgICAgICAg
+IHxncmVwIC0tY29sb3VyPW5ldmVyIC1FICc+Pj4nCj4gKyAgICAgICAgIHxncmVwIC0tbGluZS1i
+dWZmZXJlZCAtLWNvbG91cj1uZXZlciAtRSAnPj4+JyBcCj4gKyAgICAgICAgIHxzZWQgLS11bmJ1
+ZmZlcmVkIC1FICdzL14oWzAtOVQ6LV17MTl9KSBbWzpwcmludDpdXSooLio+Pj4gKS9cMSBcMi8n
+Cj4gICAgICAgICApCj4gICAgICByZXQ9JHs/fQo+ICAKPiAtLSAKPiAyLjUxLjAKPiAKPiBfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBt
+YWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVp
+bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdApfX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxk
+cm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
+c3RpbmZvL2J1aWxkcm9vdAo=
