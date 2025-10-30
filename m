@@ -1,108 +1,107 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0C00CCF9F8
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:23:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 022B7CCF9F8
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:23:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9B5FB83F79;
-	Thu, 30 Oct 2025 08:23:49 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z967kqKoqYZu; Thu, 30 Oct 2025 08:23:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B867E83FA9
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B867E83FA9;
-	Thu, 30 Oct 2025 08:23:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id DB3C0160
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CCC254105A
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CCFB24105A;
+	Thu, 30 Oct 2025 08:23:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ot6v93b3ceVu for <buildroot@buildroot.org>;
- Thu, 30 Oct 2025 08:23:47 +0000 (UTC)
+ id JaRFZCGZ8l2a; Thu, 30 Oct 2025 08:23:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8E6840FFE
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id B8E6840FFE;
+	Thu, 30 Oct 2025 08:23:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1F588160
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0643183FA9
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:48 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LnAIuC-YiP5D for <buildroot@buildroot.org>;
+ Thu, 30 Oct 2025 08:23:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ client-ip=2a00:1450:4864:20::631; helo=mail-ej1-x631.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5B7BB40FFE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B7BB40FFE
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5B7BB40FFE
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:46 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-429a0d1c31aso460088f8f.1
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 01:23:46 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CB4EF83F79
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB4EF83F79
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CB4EF83F79
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:45 +0000 (UTC)
+Received: by mail-ej1-x631.google.com with SMTP id
+ a640c23a62f3a-b70406feed3so212786166b.3
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 01:23:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1761812624; x=1762417424;
+ d=1e100.net; s=20230601; t=1761812623; x=1762417423;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=zuOMht3WMGJUOQUASvTibu8SKNcnB1NWvNG85cwuL/w=;
- b=NToHFNXVlj2l1CxLiw+KGCWIkHXfHrltuMfh4qF0fsRKVy1kHvnTI8lIde/sTvdwj2
- gDoGDRYLpa45i26Kgl3x+RO7HfKmVa7lhCh/ZHQ1YR3a1/8C0dffkNH1J/iB4Fjig65D
- krnLSRZQnFnVOSRAvniDpdEole9MTzU5O7r9agTPI8yEZlAbGxew0fq9eCxQQHEBlXd+
- O0EWZcLw7l0KROKwn5LA8iTrUgO3QeYNZwzWkRaF3bjinhldKd86ATx0iDCz566C44j5
- +QEopN1HgKJTguPM7Bagv/u8OxviITi7l7oxrNT9nuxeOxRnQ6i2vynYBdBkdQQY62uu
- jrVg==
+ bh=mZernarRK6DWQNraIbM36/AVH4XjKbMb7HzCS86gI1M=;
+ b=Zqy7W8vWXQ/cQKBUppYORz55ECPEJDA8nFgPhmvp5lwZ79L74rJIZJXEu06tF8w8rI
+ /DSH4BC3eh9abI/RHQYvQeG/4tBCNV3CwP7Jfs0wCIk17kUA1rf3epeTKoDyus7gGOve
+ o2dnAY8nnLixVSR6/sAddrR2vyW2AKmi6Qpdiq7jvcHwtIlX9qgHsNnCiJAQOTNaLMpb
+ llpJzIUl59jdjMDnyiMyvYJnvHyaKq6dzg3uO8uCrg2rs8f2SyfLExxEt8rVUJXJxrDq
+ RAakGUbvotQZb9v3VUa+YkAg9FgyJvRleChHplSgZPpIS1wmqOw6dgH7raC/IlQgbGqY
+ mmQg==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVAip6Qj8Rb30UKmiZrePi8vus6zpCgAZRzq4mieW2PTCzqUJgCGivbiUsHp7tHCkF8EbrAzNtIBz4=@buildroot.org
-X-Gm-Message-State: AOJu0YwmlvxqIbERMPVPQQgPWUcf0k/xm651469PAdR8wow38s7qE/Of
- +SUh+k0aFfkNn5D+TeAUNytvmVVJaEfZ3mGDvRvXZ/O85RN1g987sKyNxSDfJ3wuqWc=
-X-Gm-Gg: ASbGnctiXsOJmsGU3IIIxzhbp0nSeCVW8MypKZYCb6l8lSl7e3+V6TRPKnlBvTj90Kx
- DSSMwiAyVcemVg7g+zbObqYMZfkxXieiMOUeymMVCOduqc/eFJf8DfwB3ThBTkQiA3AIc8fAqP9
- 2LH2qege+sPEVgg9edy4hlsrwolEoIqabaU2E0M4TOZjZVQBRuu9/q4U/f2YExjOCFwSBJQZfap
- FLGeYTv14YksDq0h/+Dw23RjsgqbxExtEWuxlr7FgTs20rqdTBmpbuRpN2crbDd4ySP1LDtKU9w
- Z+xOjYtkv6qa0NSHthN+/Wf9iUqJToR4szkrUSLBHT3vibnqdiOannwwo1/h7bKU/DPmUtGT2Af
- OaC/tjHpF9/u419yWluNYmRTWYecPbM67HOcMcNuPwsHrj/7Ji0muf4RGxKz2vZr6nzcvGebftf
- +uxzVkCdxF5WYa53N4I/3nUelLVdin2vvjum93
-X-Google-Smtp-Source: AGHT+IHzfkLgr3LtiscHRwCYQ9jHgc2UQVjXdZvrE1mye5jeh5iKQa6a7BNigpCLYDDQIEQdcdbdOw==
-X-Received: by 2002:a05:6000:2890:b0:427:537:39e0 with SMTP id
- ffacd0b85a97d-429b4c56b39mr1858061f8f.14.1761812624312; 
- Thu, 30 Oct 2025 01:23:44 -0700 (PDT)
+ AJvYcCXwInrkDtD1JoMDAY4p22J7m/OLeNRqToQjRSIKeS8+u8IGp/3+L6S3Na5TNXEjQuSLcX6WcI962TQ=@buildroot.org
+X-Gm-Message-State: AOJu0YyUCnFwYqySvfsudWAr58l9YijHE8cuWHI25mPPYbNMd20AQdTY
+ gj779aW1NxmuprzPAGvuWTgbdZnJyNnYbsDCTSpUqL539InPqOlZtw8jBBGLZuBrnDU=
+X-Gm-Gg: ASbGncvf6EXqcbTA8R2eXzy1bplaJFJ/TTaNt4Au81Db1axKAFWpH+e5Di2BkiaMFNz
+ Bv0toLDJTdY+OL3CvmCnL/M/GIOLxGXvhWCiq5Sbzqvnn6ODfJ4s7QSnvaCJ4ZJDRFNYjSyHH05
+ TYKAlR81hHx+AyS1HI9lP0AbtotYzuLwq0a+qNifyHzBlyUdIw2tZQWh50RzZUUuNyIGycjLxzB
+ PWpsgA6wnfhpRctvJ0w743xOv9mIrtXGEjWKK/vGgNEujCLHqwdQ3OX9WU17AQPlZCgBXFb/cIj
+ Cto8bun4WaOasJKp7FHHQUDjKoEHua4h1EPbRzwFz6V9oqK5kx+dsQsE+IWrOIOcgtoQ1VsDnjX
+ 2Ms5NommFM7aVGuq8MshcVd6zi0ZvF/VzHuzsvUGQKu2tik5ez8yqLrwXNuJN64T/Bqi2bd9yBt
+ 5fPd57lwb/dMIHHzpOKgzNO2XwpA==
+X-Google-Smtp-Source: AGHT+IExR0Y7kjyCaB7fr1hSaopbD79PjgTLbSPuJwfexiaUhH3jlHDVO7zpyPFKgBg4V4oo/GhsSg==
+X-Received: by 2002:a17:907:3e8b:b0:b60:18d5:42a8 with SMTP id
+ a640c23a62f3a-b7053ea06f5mr214861066b.55.1761812623445; 
+ Thu, 30 Oct 2025 01:23:43 -0700 (PDT)
 Received: from arch (77.109.92.202.static.edpnet.net. [77.109.92.202])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4772899991asm25905315e9.3.2025.10.30.01.23.44
+ 4fb4d7f45d1cf-63e8036cdd4sm14156068a12.22.2025.10.30.01.23.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 30 Oct 2025 01:23:44 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
+ Thu, 30 Oct 2025 01:23:43 -0700 (PDT)
+To: Titouan Christophe <titouan.christophe@mind.be>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 30 Oct 2025 09:23:43 +0100
-Message-ID: <20251030082343.34814-1-thomas.perale@mind.be>
+Date: Thu, 30 Oct 2025 09:23:42 +0100
+Message-ID: <20251030082342.34760-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251020203428.2751864-2-bernd@kuhls.net>
-References: <20251020203428.2751864-2-bernd@kuhls.net>
+In-Reply-To: <20251016115601.228048-1-titouan.christophe@mind.be>
+References: <20251016115601.228048-1-titouan.christophe@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1761812624; x=1762417424; darn=buildroot.org;
+ d=mind.be; s=google; t=1761812623; x=1762417423; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=zuOMht3WMGJUOQUASvTibu8SKNcnB1NWvNG85cwuL/w=;
- b=UuOp8NC4dXkxlnFplTdecUs3yaturTlrET1HNUkvNbRkhIZUl9uY5KDiu4gz6Vg2r2
- nAFco7YUciGmzdFSqqEIxqpejee0E6DaVEgAifmq2Qgs3rKBKDJOi5CrPXulxNfZz7Ze
- SPO8+u1OXT0/9EpecJCC/TJZ4uudY9wiqCyETWbqwfCA/F6bzItZwKBoicEfWX6/g9Wz
- 55/D9YVL16/GDStVDMAmRq1HoBc7AHW+mV/3E4bCqBIZq0qw5CkN1RdJeiNf7m0fcvpA
- IcoaNniVrAhwlBEZYjDixi7/zMIvCzyLiaHuMQr8JVeWWSWPLNH7KTyobJMmmLff9knk
- NIIw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=mZernarRK6DWQNraIbM36/AVH4XjKbMb7HzCS86gI1M=;
+ b=fspdMQ153mBoMIe1U+Onx5DZYwQpgrjpYB/+MYXpLnUTW/8q84xE0bdvZ85QxR7EzV
+ P4Hc5JCVm6IqVYxlltxFMEYu2D0Rw5Lpj5zBFWz40fPUhf+u0tUDRDCghLTiqvjeStFD
+ 9vrQd+z6qb4pBWft0wpLJb3CBGXxM2kQwZGe/h9/6SY4dlHL9N+Qw2zDUQBDIGTUBHLh
+ WHiULEoATHp1gbK0C9v43wpVXpeTy3XyMNrfO9jY67XcGj9/bbeDjaD7pb87yyItcWp9
+ PmA2Hz2d6sRTr1rdLfKMMFLvpIkTmHdm5zqTFi1mjiaPbHr4JmQ9hwGnxUvWJJ2VWu0u
+ QDJQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=UuOp8NC4
-Subject: Re: [Buildroot] [PATCH 2/4] package/dante: security bump version to
- 1.4.4
+ header.s=google header.b=fspdMQ15
+Subject: Re: [Buildroot] [PATCH] package/poppler: bump to v25.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,52 +121,207 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Changelog: http://www.inet.no/dante/announce-1.4.4
+> This contains many bug and security fixes since v22.12.0.
+> See the release notes: https://poppler.freedesktop.org/releases.html
 > 
-> Fixes CVE-2024-54662: https://www.inet.no/dante/advisory-2024-12-16.txt
+> In addition:
+> - Drop patch that has been applied upstream
+> - Update a few cmake configuration options that changed upstream
 > 
-> Needed for bump of libminiupnpc to version 2.3.3.
+> There is currently a build failure when enabling gpgme, so disable it
+> unconditionally for now.
 > 
-> Updated license hash due to copyright year bump:
-> https://github.com/notpeter/dante/commit/53727f08eec6cae55c4ed6efb88c3d688839f2cb
-> (commit taken from unofficial mirror)
+> Finally, this fixes the following vulnerabilities:
+> - CVE-2024-6239:
+>     A flaw was found in the Poppler's Pdfinfo utility. This issue occurs
+>     when using -dests parameter with pdfinfo utility. By using certain
+>     malformed input files, an attacker could cause the utility to crash,
+>     leading to a denial of service.
+>     https://www.cve.org/CVERecord?id=CVE-2024-6239
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> - CVE-2024-56378:
+>     libpoppler.so in Poppler through 24.12.0 has an out-of-bounds read
+>     vulnerability within the JBIG2Bitmap::combine function in
+>     JBIG2Stream.cc.
+>     https://www.cve.org/CVERecord?id=CVE-2024-56378
+> 
+> - CVE-2025-32364:
+>     A floating-point exception in the PSStack::roll function of Poppler
+>     before 25.04.0 can cause an application to crash when handling
+>     malformed inputs associated with INT_MIN.
+>     https://www.cve.org/CVERecord?id=CVE-2025-32364
+> 
+> - CVE-2025-32365:
+>     Poppler before 25.04.0 allows crafted input files to trigger out-of-
+>     bounds reads in the JBIG2Bitmap::combine function in JBIG2Stream.cc
+>     because of a misplaced isOk check.
+>     https://www.cve.org/CVERecord?id=CVE-2025-32365
+> 
+> - CVE-2025-43903:
+>     NSSCryptoSignBackend.cc in Poppler before 25.04.0 does not verify the
+>     adbe.pkcs7.sha1 signatures on documents, resulting in potential
+>     signature forgeries.
+>     https://www.cve.org/CVERecord?id=CVE-2025-43903
+> 
+> - CVE-2025-50420:
+>     An issue in the pdfseparate utility of freedesktop poppler v25.04.0
+>     allows attackers to cause an infinite recursion via supplying a
+>     crafted PDF file. This can lead to a Denial of Service (DoS).
+>     https://www.cve.org/CVERecord?id=CVE-2025-50420
+> 
+> - CVE-2025-52886:
+>     Poppler is a PDF rendering library. Versions prior to 25.06.0 use
+>     `std::atomic_int` for reference counting. Because `std::atomic_int` is
+>     only 32 bits, it is possible to overflow the reference count and
+>     trigger a use-after-free. Version 25.06.0 patches the issue.
+>     https://www.cve.org/CVERecord?id=CVE-2025-52886
+> 
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 
 Applied to 2025.02.x & 2025.08.x. Thanks
 
 > ---
->  package/dante/dante.hash | 4 ++--
->  package/dante/dante.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  ...em-open-Fix-crash-on-malformed-files.patch | 45 -------------------
+>  package/poppler/poppler.hash                  |  4 +-
+>  package/poppler/poppler.mk                    | 24 ++++++----
+>  3 files changed, 17 insertions(+), 56 deletions(-)
+>  delete mode 100644 package/poppler/0001-OutlineItem-open-Fix-crash-on-malformed-files.patch
 > 
-> diff --git a/package/dante/dante.hash b/package/dante/dante.hash
-> index a76018fdb6..c9d86608d9 100644
-> --- a/package/dante/dante.hash
-> +++ b/package/dante/dante.hash
-> @@ -1,5 +1,5 @@
->  # From https://www.inet.no/dante/download.html
-> -sha256  418a065fe1a4b8ace8fbf77c2da269a98f376e7115902e76cda7e741e4846a5d  dante-1.4.3.tar.gz
-> +sha256  1973c7732f1f9f0a4c0ccf2c1ce462c7c25060b25643ea90f9b98f53a813faec  dante-1.4.4.tar.gz
->  
->  # Hash for license file
-> -sha256  05e2db26147a8575005f090aada119ea6cb40a4382164929d647f00abef3bdfd  LICENSE
-> +sha256  49034b51407f6e51a07aed87c3c00c0889294348cd5e99d78d6b6f62746ff3fc  LICENSE
-> diff --git a/package/dante/dante.mk b/package/dante/dante.mk
-> index bae46c5a71..2f4e75d1e5 100644
-> --- a/package/dante/dante.mk
-> +++ b/package/dante/dante.mk
-> @@ -4,7 +4,7 @@
+> diff --git a/package/poppler/0001-OutlineItem-open-Fix-crash-on-malformed-files.patch b/package/poppler/0001-OutlineItem-open-Fix-crash-on-malformed-files.patch
+> deleted file mode 100644
+> index 478759e0cc..0000000000
+> --- a/package/poppler/0001-OutlineItem-open-Fix-crash-on-malformed-files.patch
+> +++ /dev/null
+> @@ -1,45 +0,0 @@
+> -From e5cc11e0b5b867f4705fd28ff1b981c1224be1cd Mon Sep 17 00:00:00 2001
+> -From: Albert Astals Cid <aacid@kde.org>
+> -Date: Wed, 17 May 2023 22:42:05 +0200
+> -Subject: [PATCH] OutlineItem::open: Fix crash on malformed files
+> -
+> -Fixes #1399
+> -
+> -Upstream: https://gitlab.freedesktop.org/poppler/poppler/-/commit/591235c8b6c65a2eee88991b9ae73490fd9afdfe
+> -[Thomas: backported to fix CVE-2023-34872]
+> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ----
+> - poppler/Outline.cc | 10 +++++++---
+> - 1 file changed, 7 insertions(+), 3 deletions(-)
+> -
+> -diff --git a/poppler/Outline.cc b/poppler/Outline.cc
+> -index cbb6cb49..4c68be99 100644
+> ---- a/poppler/Outline.cc
+> -+++ b/poppler/Outline.cc
+> -@@ -14,7 +14,7 @@
+> - // under GPL version 2 or later
+> - //
+> - // Copyright (C) 2005 Marco Pesenti Gritti <mpg@redhat.com>
+> --// Copyright (C) 2008, 2016-2019, 2021 Albert Astals Cid <aacid@kde.org>
+> -+// Copyright (C) 2008, 2016-2019, 2021, 2023 Albert Astals Cid <aacid@kde.org>
+> - // Copyright (C) 2009 Nick Jones <nick.jones@network-box.com>
+> - // Copyright (C) 2016 Jason Crain <jason@aquaticape.us>
+> - // Copyright (C) 2017 Adrian Johnson <ajohnson@redneon.com>
+> -@@ -483,8 +483,12 @@ void OutlineItem::open()
+> - {
+> -     if (!kids) {
+> -         Object itemDict = xref->fetch(ref);
+> --        const Object &firstRef = itemDict.dictLookupNF("First");
+> --        kids = readItemList(this, &firstRef, xref, doc);
+> -+        if (itemDict.isDict()) {
+> -+            const Object &firstRef = itemDict.dictLookupNF("First");
+> -+            kids = readItemList(this, &firstRef, xref, doc);
+> -+        } else {
+> -+            kids = new std::vector<OutlineItem *>();
+> -+        }
+> -     }
+> - }
+> - 
+> --- 
+> -2.41.0
+> -
+> diff --git a/package/poppler/poppler.hash b/package/poppler/poppler.hash
+> index bb07b2ee6a..34f8bcd58f 100644
+> --- a/package/poppler/poppler.hash
+> +++ b/package/poppler/poppler.hash
+> @@ -1,3 +1,3 @@
+> -# Locally calculated
+> -sha256  d9aa9cacdfbd0f8e98fc2b3bb008e645597ed480685757c3e7bc74b4278d15c0  poppler-22.12.0.tar.xz
+> +# Locally calculated after verifying GPG signature
+> +sha256  6b5e9bb64dabb15787a14db1675291c7afaf9387438cc93a4fb7f6aec4ee6fe0  poppler-25.10.0.tar.xz
+>  sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+> diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+> index 776fb4d566..08214d38b4 100644
+> --- a/package/poppler/poppler.mk
+> +++ b/package/poppler/poppler.mk
+> @@ -4,15 +4,13 @@
 >  #
 >  ################################################################################
 >  
-> -DANTE_VERSION = 1.4.3
-> +DANTE_VERSION = 1.4.4
->  DANTE_SITE = http://www.inet.no/dante/files
->  DANTE_LICENSE = BSD-3-Clause
->  DANTE_LICENSE_FILES = LICENSE
+> -POPPLER_VERSION = 22.12.0
+> +POPPLER_VERSION = 25.10.0
+>  POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
+>  POPPLER_SITE = https://poppler.freedesktop.org
+>  POPPLER_DEPENDENCIES = fontconfig host-pkgconf
+>  POPPLER_LICENSE = GPL-2.0+
+>  POPPLER_LICENSE_FILES = COPYING
+>  POPPLER_CPE_ID_VENDOR = freedesktop
+> -# 0001-OutlineItem-open-Fix-crash-on-malformed-files.patch
+> -POPPLER_IGNORE_CVES += CVE-2023-34872
+>  POPPLER_INSTALL_STAGING = YES
+>  
+>  POPPLER_CONF_OPTS = \
+> @@ -24,6 +22,7 @@ POPPLER_CONF_OPTS = \
+>  	-DBUILD_MANUAL_TESTS=OFF \
+>  	-DENABLE_GTK_DOC=OFF \
+>  	-DENABLE_QT6=OFF \
+> +	-DENABLE_GPGME=OFF \
+>  	-DRUN_GPERF_IF_PRESENT=OFF
+>  
+>  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> @@ -98,9 +97,9 @@ endif
+>  
+>  ifeq ($(BR2_PACKAGE_ZLIB),y)
+>  POPPLER_DEPENDENCIES += zlib
+> -POPPLER_CONF_OPTS += -DENABLE_ZLIB=ON
+> +POPPLER_CONF_OPTS += -DENABLE_ZLIB_UNCOMPRESS=ON
+>  else
+> -POPPLER_CONF_OPTS += -DENABLE_ZLIB=OFF
+> +POPPLER_CONF_OPTS += -DENABLE_ZLIB_UNCOMPRESS=OFF
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_CAIRO),y)
+> @@ -112,9 +111,9 @@ endif
+>  
+>  ifeq ($(BR2_PACKAGE_TIFF),y)
+>  POPPLER_DEPENDENCIES += tiff
+> -POPPLER_CONF_OPTS += -DWITH_TIFF=ON
+> +POPPLER_CONF_OPTS += -DENABLE_LIBTIFF=ON
+>  else
+> -POPPLER_CONF_OPTS += -DWITH_TIFF=OFF
+> +POPPLER_CONF_OPTS += -DENABLE_LIBTIFF=OFF
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
+> @@ -126,9 +125,16 @@ endif
+>  
+>  ifeq ($(BR2_PACKAGE_LIBNSS),y)
+>  POPPLER_DEPENDENCIES += libnss
+> -POPPLER_CONF_OPTS += -DWITH_NSS3=ON
+> +POPPLER_CONF_OPTS += -DENABLE_NSS3=ON
+>  else
+> -POPPLER_CONF_OPTS += -DWITH_NSS3=OFF
+> +POPPLER_CONF_OPTS += -DENABLE_NSS3=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LCMS2),y)
+> +POPPLER_DEPENDENCIES += lcms2
+> +POPPLER_CONF_OPTS += -DENABLE_LCMS=ON
+> +else
+> +POPPLER_CONF_OPTS += -DENABLE_LCMS=OFF
+>  endif
+>  
+>  ifeq ($(BR2_SOFT_FLOAT),y)
 > -- 
-> 2.47.3
+> 2.51.0
 > 
 > _______________________________________________
 > buildroot mailing list
