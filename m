@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD9A9CCF9F8
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:23:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3428CCF9FA
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:23:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B3E274105A;
-	Thu, 30 Oct 2025 08:23:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B87D9840C3;
+	Thu, 30 Oct 2025 08:23:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lCtDzzpx9peG; Thu, 30 Oct 2025 08:23:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eyr6hGAS5oyi; Thu, 30 Oct 2025 08:23:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2FE9411C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4E5484113
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2FE9411C6;
-	Thu, 30 Oct 2025 08:23:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C4E5484113;
+	Thu, 30 Oct 2025 08:23:06 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2923D2A3
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:52 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 341A5160
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DDA3C613B0
+ by smtp3.osuosl.org (Postfix) with ESMTP id E8809613B2
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KV0PwG1Ecmpq for <buildroot@buildroot.org>;
- Thu, 30 Oct 2025 08:22:31 +0000 (UTC)
+ id vn8ENw5mmuBd for <buildroot@buildroot.org>;
+ Thu, 30 Oct 2025 08:22:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C675613BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCCC361360
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5C675613BB
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DCCC361360
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5B01187A0D; Thu, 30 Oct 2025 08:22:29 +0000 (UTC)
+ id DB2B687A0C; Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 30 Oct 2025 09:18:19 +0100
+Date: Thu, 30 Oct 2025 09:18:06 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: c75b49ad5cc692bc568092ec6ea006773ddb0767
-X-Git-Newrev: 3356a881d446f2cb429a7694c0915ff735941ca3
+X-Git-Oldrev: c3ba44ebf37669e906ceac00bc4588ddbe8529b2
+X-Git-Newrev: 5bec02afe46c6725060b961353056725ed3ff1bf
 X-Patchwork-Hint: ignore
-Message-Id: <20251030082229.5B01187A0D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/libgphoto2: fix
- build with gcc >= 14
+Message-Id: <20251030082228.DB2B687A0C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/xerces: security
+ bump to v3.2.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,79 +66,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3356a881d446f2cb429a7694c0915ff735941ca3
+commit: https://git.buildroot.net/buildroot/commit/?id=5bec02afe46c6725060b961353056725ed3ff1bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-The commit adds a backported upstream patch to fix the following build
-failure:
+See the release notes:
+https://issues.apache.org/jira/secure/ReleaseNote.jspa?version=12352411&projectId=10510
 
-ptp2/ptp-pack.c:3168:31: note: earlier argument should specify number of elements, later size of each element
-ptp2/chdk.c: In function 'yuv_live_to_jpeg':
-ptp2/chdk.c:1203:41: error: passing argument 3 of 'jpeg_mem_dest' from incompatible pointer type [-Wincompatible-pointer-types]
- 1203 |         jpeg_mem_dest (&cinfo, &outbuf, &outlen);
-      |                                         ^~~~~~~
-      |                                         |
-      |                                         uint64_t * {aka long long unsigned int *}
-In file included from ptp2/chdk.c:31:
-/home/autobuild/autobuild/instance-0/output-1/per-package/libgphoto2/host/armeb-buildroot-linux-gnueabi/sysroot/usr/include/jpeglib.h:989:43: note: expected 'long unsigned int *' but argument is of type 'uint64_t *' {aka 'long long unsigned int *'}
-  989 |                            unsigned long *outsize);
+Also update the download site to https
 
-Fixes:
-- https://autobuild.buildroot.org/results/db742e301a401c9f4bdf3c7e8cfde9f0ba1c4558
+This fixes the following vulnerability:
+- CVE-2024-23807:
+    The Apache Xerces C++ XML parser on versions 3.0.0 before 3.2.5
+    contains a use-after-free error triggered during the scanning of
+    external DTDs.  Users are recommended to upgrade to version 3.2.5
+    which fixes the issue, or mitigate the issue by disabling DTD
+    processing. This can be accomplished via the DOM using a standard
+    parser feature, or via SAX using the XERCES_DISABLE_DTD environment
+    variable.  This issue has been disclosed before as CVE-2018-1311, but
+    unfortunately that advisory incorrectly stated the issue would be
+    fixed in version 3.2.3 or 3.2.4.
+    https://www.cve.org/CVERecord?id=CVE-2024-23807
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit ebd07998d0b3f5e748aba7a9aabbd7df879bc1a8)
+(cherry picked from commit 246f2eca20b26f0c35ffc7eee72edf690815608d)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...n-length-with-jpeg-jeaders.-fixes-https-g.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ package/xerces/xerces.hash | 4 ++--
+ package/xerces/xerces.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libgphoto2/0001-align-outlen-length-with-jpeg-jeaders.-fixes-https-g.patch b/package/libgphoto2/0001-align-outlen-length-with-jpeg-jeaders.-fixes-https-g.patch
-new file mode 100644
-index 0000000000..910c9b125a
---- /dev/null
-+++ b/package/libgphoto2/0001-align-outlen-length-with-jpeg-jeaders.-fixes-https-g.patch
-@@ -0,0 +1,39 @@
-+From 721f7f8c3ec8058d504607873e4c317aac0c99c5 Mon Sep 17 00:00:00 2001
-+From: Marcus Meissner <marcus@jet.franken.de>
-+Date: Mon, 4 Dec 2023 13:26:08 +0100
-+Subject: [PATCH] align outlen length with jpeg jeaders. fixes
-+ https://github.com/gphoto/libgphoto2/issues/941
-+
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Upstream: https://github.com/gphoto/libgphoto2/commit/721f7f8c3ec8058d504607873e4c317aac0c99c5
-+---
-+ camlibs/ptp2/chdk.c | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/camlibs/ptp2/chdk.c b/camlibs/ptp2/chdk.c
-+index e1d898f37811..e775ea1d4bbb 100644
-+--- a/camlibs/ptp2/chdk.c
-++++ b/camlibs/ptp2/chdk.c
-+@@ -1150,7 +1150,7 @@ static void yuv_live_to_jpeg(unsigned char *p_yuv,
-+ 	struct		jpeg_error_mgr jerr;
-+ 	JSAMPROW	row_ptr[1];
-+ 	uint8_t		*outbuf = NULL, *tmprowbuf = NULL;
-+-	uint64_t	outlen = 0;
-++	unsigned long	outlen = 0;
-+ 	unsigned int	row_inc;
-+ 	int		sshift, dshift, xshift, skip;
-+ 
-+@@ -1161,8 +1161,8 @@ static void yuv_live_to_jpeg(unsigned char *p_yuv,
-+ 		sshift = 6;
-+ 		dshift = (width/height > 2) ? 6 : 12;
-+ 		xshift = 4;
-+-	/* Digic 6 cameras: 8 bit per element UYVY,
-+-	 * 4 bytes used to encode 2 pixels, need 6 bytes raw YUV data for jpeg encoding */
-++		/* Digic 6 cameras: 8 bit per element UYVY,
-++		 * 4 bytes used to encode 2 pixels, need 6 bytes raw YUV data for jpeg encoding */
-+ 	} else {
-+ 		row_inc = buf_width*2;
-+ 		sshift = 4;
-+-- 
-+2.43.0
-+
+diff --git a/package/xerces/xerces.hash b/package/xerces/xerces.hash
+index e6b5b922d2..52c22ee826 100644
+--- a/package/xerces/xerces.hash
++++ b/package/xerces/xerces.hash
+@@ -1,5 +1,5 @@
+-# From http://www.apache.org/dist/xerces/c/3/sources/xerces-c-3.2.4.tar.xz.sha256
+-sha256  075bc57940da0f9be6dd183c550c8ce0b9833e4550dc382048377a1a5e3b2bd9  xerces-c-3.2.4.tar.xz
++# From https://archive.apache.org/dist/xerces/c/3/sources/xerces-c-3.2.5.tar.gz.sha256
++sha256  545cfcce6c4e755207bd1f27e319241e50e37c0c27250f11cda116018f1ef0f5  xerces-c-3.2.5.tar.gz
+ 
+ # Hash for license file
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
+index 08efa6fb5c..7734cff0d2 100644
+--- a/package/xerces/xerces.mk
++++ b/package/xerces/xerces.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-XERCES_VERSION = 3.2.4
+-XERCES_SOURCE = xerces-c-$(XERCES_VERSION).tar.xz
+-XERCES_SITE = http://archive.apache.org/dist/xerces/c/3/sources
++XERCES_VERSION = 3.2.5
++XERCES_SOURCE = xerces-c-$(XERCES_VERSION).tar.gz
++XERCES_SITE = https://archive.apache.org/dist/xerces/c/3/sources
+ XERCES_LICENSE = Apache-2.0
+ XERCES_LICENSE_FILES = LICENSE
+ XERCES_CPE_ID_VENDOR = apache
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
