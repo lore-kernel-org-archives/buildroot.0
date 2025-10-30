@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AFA7CCF9F0
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:22:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A11BCCF9FA
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:22:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C041584070;
-	Thu, 30 Oct 2025 08:22:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1515B83F79;
+	Thu, 30 Oct 2025 08:22:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yi4qarqUWknw; Thu, 30 Oct 2025 08:22:52 +0000 (UTC)
+ id dKx8YZXqyRxN; Thu, 30 Oct 2025 08:22:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D15348404E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2FC68403F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D15348404E;
-	Thu, 30 Oct 2025 08:22:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E2FC68403F;
+	Thu, 30 Oct 2025 08:22:52 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 16A632A3
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:41 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0B6F42A3
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BD21D6139F
+ by smtp3.osuosl.org (Postfix) with ESMTP id DBC8F61391
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tzn4ELM9iTPH for <buildroot@buildroot.org>;
- Thu, 30 Oct 2025 08:22:29 +0000 (UTC)
+ id wW5BolnEyHlp for <buildroot@buildroot.org>;
+ Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8187F61391
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 547E161383
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8187F61391
+ by smtp3.osuosl.org (Postfix) with ESMTP id 547E161383
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 800E2879C2; Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
+ id 52F8587A0C; Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 30 Oct 2025 09:17:55 +0100
+Date: Thu, 30 Oct 2025 09:17:49 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: d92856dec960cbc2367343081bd162903cb8e9ea
-X-Git-Newrev: bd01dadd2e56e63a12f44a1582e4e8c1bdc234ca
+X-Git-Oldrev: 9127f0dacbf0ddd6d32e19922d4d1d536e132d5b
+X-Git-Newrev: 6827af4384b9576557b65fb48db2d84d7b830bfa
 X-Patchwork-Hint: ignore
-Message-Id: <20251030082228.800E2879C2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x]
- configs/stm32f429_disco_xip: bump Linux to 6.1.155
+Message-Id: <20251030082228.52F8587A0C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/siproxd: Add
+ upstream patch to fix build with gcc >= 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,49 +61,107 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4686443233420649423=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd01dadd2e56e63a12f44a1582e4e8c1bdc234ca
+--===============4686443233420649423==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=6827af4384b9576557b65fb48db2d84d7b830bfa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-The patch bumps the Linux kernel to version 6.1.155. The size of
-xipImage has increased by only 1126 bytes (1673444 bytes compared to
-1672318 in version 6.1.143).
+Fixes:
+https://autobuild.buildroot.net/results/679/679fe86eea2001aed2baf066abf3ae43b38567b5/
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 675bb8337da0787620d01d712aab4e28946a6f1d)
+(cherry picked from commit bd5934cd7e6bea10c0ce5d854e1e57962489c9ac)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash | 2 +-
- configs/stm32f429_disco_xip_defconfig                             | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../siproxd/0001-Fix-compilation-on-gcc-14.patch   | 50 ++++++++++++++++++++++
+ package/siproxd/siproxd.mk                         |  2 +
+ 2 files changed, 52 insertions(+)
 
-diff --git a/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash b/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
-index a5f5f9d209..6450f4b2d4 100644
---- a/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
-+++ b/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  e25bdac4d77e6b1079f899e2ecb24c7e850f295e735ea7b5654b900d85c03b0a  linux-6.1.143.tar.xz
-+sha256  c29387aeee085fbcbd91236224b9df805063bac43615e75cea2c6b29604a5c73  linux-6.1.155.tar.xz
-diff --git a/configs/stm32f429_disco_xip_defconfig b/configs/stm32f429_disco_xip_defconfig
-index 087308abde..c22b6e1135 100644
---- a/configs/stm32f429_disco_xip_defconfig
-+++ b/configs/stm32f429_disco_xip_defconfig
-@@ -8,7 +8,7 @@ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.143"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.155"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32f429-disco/linux.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+diff --git a/package/siproxd/0001-Fix-compilation-on-gcc-14.patch b/package/siproxd/0001-Fix-compilation-on-gcc-14.patch
+new file mode 100644
+index 0000000000..0a55969703
+--- /dev/null
++++ b/package/siproxd/0001-Fix-compilation-on-gcc-14.patch
+@@ -0,0 +1,50 @@
++From 985c2cd198213b250c61d8c6621af52e318c4c12 Mon Sep 17 00:00:00 2001
++From: crumpled-acronym <60061744+crumpled-acronym@users.noreply.github.com>
++Date: Mon, 30 Jun 2025 12:32:02 +0200
++Subject: [PATCH] Fix compilation on gcc >= 14
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++`./configure` fails for gcc >= 14 with the following error
++
++```
++checking "libosip prefix"...
++checking for osip_init in -losip2... yes
++checking for parser_init in -losipparser2... yes
++checking libosip2 version > 3.0.0... *** ERROR: libosip2-3.x.x is required!
++```
++
++which in fact is caused by the test program in `ACX_CHECK_LIBOSIP_VERSION` function in `acinclude.m4` due to
++
++```
++conftest.c:4:3: error: return type defaults to ‘int’ [-Wimplicit-int]
++    4 | main() {
++      | ^~~~
++```
++
++This patch fixes the issue!
++
++Upstream: https://github.com/hb9xar/siproxd/commit/985c2cd198213b250c61d8c6621af52e318c4c12
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ acinclude.m4 | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/acinclude.m4 b/acinclude.m4
++index 6fa4828..8164246 100644
++--- a/acinclude.m4
+++++ b/acinclude.m4
++@@ -340,7 +340,7 @@ dnl pointer to the structure (bad)
++ AC_COMPILE_IFELSE(
++ [AC_LANG_SOURCE([
++   #include <osipparser2/osip_parser.h>
++-  main() {
+++  int main() {
++   osip_message_t t;
++   int  e;
++   e=t.contacts.nb_elt;
++-- 
++2.47.3
++
+diff --git a/package/siproxd/siproxd.mk b/package/siproxd/siproxd.mk
+index 228f0855a6..faabb68a24 100644
+--- a/package/siproxd/siproxd.mk
++++ b/package/siproxd/siproxd.mk
+@@ -12,6 +12,8 @@ SIPROXD_LICENSE_FILES = COPYING
+ 
+ SIPROXD_DEPENDENCIES = libosip2 libtool sqlite
+ 
++# 0001-Fix-compilation-on-gcc-14.patch
++SIPROXD_AUTORECONF = YES
+ SIPROXD_CONF_OPTS = --without-included-ltdl
+ 
+ $(eval $(autotools-package))
+
+--===============4686443233420649423==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4686443233420649423==--
