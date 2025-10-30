@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 855D7CCF9FC
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:23:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB018CCF9F8
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:23:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 483F2840BD;
-	Thu, 30 Oct 2025 08:23:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A0E06411BE;
+	Thu, 30 Oct 2025 08:23:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t6SIu12L4vz2; Thu, 30 Oct 2025 08:23:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5_dJqhffSFqc; Thu, 30 Oct 2025 08:23:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38B0E84113
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E01244109A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 38B0E84113;
-	Thu, 30 Oct 2025 08:23:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E01244109A;
+	Thu, 30 Oct 2025 08:23:12 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 832DF2A3
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:56 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0B9C7160
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 34042613BB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6AD0761325
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id otZS7hdBXKvo for <buildroot@buildroot.org>;
+ id 3zkQW995BvIx for <buildroot@buildroot.org>;
  Thu, 30 Oct 2025 08:22:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F37E761381
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16A95613AF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F37E761381
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 16A95613AF
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F0B7D879C2; Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
+ id 1477287A0D; Thu, 30 Oct 2025 08:22:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 30 Oct 2025 09:18:08 +0100
+Date: Thu, 30 Oct 2025 09:18:11 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: c809e8d8828dbdbb5276bc82d31468035508c6f7
-X-Git-Newrev: 6d6f8da1b307bbb0c6c87c5a518aa4fd5f0caf08
+X-Git-Oldrev: 920d4cde8acaf46b425e732ec806b1f59a1eb975
+X-Git-Newrev: 43e3ef8088301999e08952d1b760cb6bb7f47446
 X-Patchwork-Hint: ignore
-Message-Id: <20251030082228.F0B7D879C2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/libglib2:
- security bump to version 2.84.4
+Message-Id: <20251030082229.1477287A0D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/freerdp: ignore
+ CVE-2025-4478
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,50 +66,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d6f8da1b307bbb0c6c87c5a518aa4fd5f0caf08
+commit: https://git.buildroot.net/buildroot/commit/?id=43e3ef8088301999e08952d1b760cb6bb7f47446
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-This bump includes the security fix for CVE-2025-7039.
-
-Fixes:
-https://www.cve.org/CVERecord?id=CVE-2025-7039
-
-Release notes:
-https://gitlab.gnome.org/GNOME/glib/-/releases/2.84.4
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 3252f45279b0104785c45e121a432a3335779a08)
+(cherry picked from commit f741e8f6e6dfdbf5ec204aae0530f42e3b909b79)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libglib2/libglib2.hash | 4 ++--
- package/libglib2/libglib2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/freerdp/freerdp.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index 9ed0b204ee..129849b21b 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
-@@ -1,4 +1,4 @@
--# https://download.gnome.org/sources/glib/2.84/glib-2.84.3.sha256sum
--sha256  aa4f87c3225bf57ca85f320888f7484901a17934ca37023c3bd8435a72db863e  glib-2.84.3.tar.xz
-+# https://download.gnome.org/sources/glib/2.84/glib-2.84.4.sha256sum
-+sha256  8a9ea10943c36fc117e253f80c91e477b673525ae45762942858aef57631bb90  glib-2.84.4.tar.xz
- # License files, locally calculated
- sha256  fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb  COPYING
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 7eda9742c1..3382790bb3 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 3a1ba61621..391b9a4675 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -13,6 +13,10 @@ FREERDP_LICENSE = Apache-2.0
+ FREERDP_LICENSE_FILES = LICENSE
+ FREERDP_CPE_ID_VENDOR = freerdp
  
- LIBGLIB2_VERSION_MAJOR = 2.84
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).3
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).4
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = https://download.gnome.org/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPL-2.1+
++# As explained on https://github.com/FreeRDP/FreeRDP/pull/11573#issuecomment-2904160524,
++# the affected code is new with 3.x, was not there on 2.x
++FREERDP_IGNORE_CVES += CVE-2025-4478
++
+ FREERDP_INSTALL_STAGING = YES
+ 
+ FREERDP_CONF_OPTS = -DWITH_MANPAGES=OFF -Wno-dev -DWITH_GSTREAMER_0_10=OFF
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
