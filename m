@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69FA0CCF9F8
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:10:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFA22CCF9F0
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:10:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 00DB081374;
-	Thu, 30 Oct 2025 08:10:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B57A183FAA;
+	Thu, 30 Oct 2025 08:10:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Hh1ObKoYC5Ku; Thu, 30 Oct 2025 08:10:48 +0000 (UTC)
+ id 6z40MwCUxdu4; Thu, 30 Oct 2025 08:10:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5E9E83F79
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B16CD83FB1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E5E9E83F79;
-	Thu, 30 Oct 2025 08:10:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B16CD83FB1;
+	Thu, 30 Oct 2025 08:10:50 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 25E28707
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:10:41 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 02D8F2A3
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:10:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3236A4115F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4E47641155
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:10:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KOZ9oxsXwnZ1 for <buildroot@buildroot.org>;
+ id fR3DMlwwjWoX for <buildroot@buildroot.org>;
  Thu, 30 Oct 2025 08:10:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6724341155
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 872A441156
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6724341155
+ by smtp4.osuosl.org (Postfix) with ESMTP id 872A441156
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:10:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 653FD86065; Thu, 30 Oct 2025 08:10:39 +0000 (UTC)
+ id 8535086065; Thu, 30 Oct 2025 08:10:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 30 Oct 2025 08:55:58 +0100
+Date: Thu, 30 Oct 2025 08:56:01 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 95c4ddcfb5f8ce88187c68d8eaa856dfbbafb17e
-X-Git-Newrev: ff54fd9c756bce8106a99796402e691118fbcf89
+X-Git-Oldrev: 3ceed3ad011a5763464b76e2f91c18e99f13b1f7
+X-Git-Newrev: 0e52b27fb736badca1ae443862e81f0d4b5f8a5b
 X-Patchwork-Hint: ignore
-Message-Id: <20251030081039.653FD86065@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/ledmon: add
- upstream patch to fix build w/ gcc-14
+Message-Id: <20251030081039.8535086065@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/siproxd: Add
+ upstream patch to fix build with gcc >= 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,90 +61,99 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8267106358596758201=="
+Content-Type: multipart/mixed; boundary="===============4232225929602495954=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8267106358596758201==
+--===============4232225929602495954==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff54fd9c756bce8106a99796402e691118fbcf89
+commit: https://git.buildroot.net/buildroot/commit/?id=0e52b27fb736badca1ae443862e81f0d4b5f8a5b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Add an upstream patch to fix a build issue related to uint64_t:
-
-utils.c: In function ‘get_uint64’:
-utils.c:118:18: error: passing argument 1 of ‘str_toul’ from incompatible pointer type [-Wincompatible-pointer-types]
-  118 |         str_toul(&defval, p, NULL, 16);
-      |                  ^~~~~~~
-      |                  |
-      |                  uint64_t * {aka long long unsigned int *}
-In file included from utils.c:48:
-utils.h:412:29: note: expected ‘long unsigned int *’ but argument is of type ‘uint64_t *’ {aka ‘long long unsigned int *’}
-
 Fixes:
+https://autobuild.buildroot.net/results/679/679fe86eea2001aed2baf066abf3ae43b38567b5/
 
-  https://autobuild.buildroot.org/results/51af1d7bf71061f22d49213951a5f6a9565710c3/
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit c8923662cc7e1f0a1d30d0926f979c21d36aa9df)
+(cherry picked from commit bd5934cd7e6bea10c0ce5d854e1e57962489c9ac)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/ledmon/0003-Correct-get_uint64.patch | 43 ++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ .../siproxd/0001-Fix-compilation-on-gcc-14.patch   | 50 ++++++++++++++++++++++
+ package/siproxd/siproxd.mk                         |  2 +
+ 2 files changed, 52 insertions(+)
 
-diff --git a/package/ledmon/0003-Correct-get_uint64.patch b/package/ledmon/0003-Correct-get_uint64.patch
+diff --git a/package/siproxd/0001-Fix-compilation-on-gcc-14.patch b/package/siproxd/0001-Fix-compilation-on-gcc-14.patch
 new file mode 100644
-index 0000000000..2db4c04a6e
+index 0000000000..0a55969703
 --- /dev/null
-+++ b/package/ledmon/0003-Correct-get_uint64.patch
-@@ -0,0 +1,43 @@
-+From ed747ac3540cb38797f56533f9f51f5627e6b994 Mon Sep 17 00:00:00 2001
-+From: Tony Asleson <tasleson@redhat.com>
-+Date: Wed, 21 Aug 2024 12:27:28 -0500
-+Subject: [PATCH] Correct get_uint64
++++ b/package/siproxd/0001-Fix-compilation-on-gcc-14.patch
+@@ -0,0 +1,50 @@
++From 985c2cd198213b250c61d8c6621af52e318c4c12 Mon Sep 17 00:00:00 2001
++From: crumpled-acronym <60061744+crumpled-acronym@users.noreply.github.com>
++Date: Mon, 30 Jun 2025 12:32:02 +0200
++Subject: [PATCH] Fix compilation on gcc >= 14
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+For large integer values, the existing implementation will be
-+incorrect.
++`./configure` fails for gcc >= 14 with the following error
 +
-+The current implementation of converting strings to integer values
-+uses a signed integer for the intermediate conversion and performs
-+a range check. Since any value in an unsigned 64-bit integer is valid,
-+the range check seems unnecessary. To mimic the same code path, we would
-+need a larger integer type.
++```
++checking "libosip prefix"...
++checking for osip_init in -losip2... yes
++checking for parser_init in -losipparser2... yes
++checking libosip2 version > 3.0.0... *** ERROR: libosip2-3.x.x is required!
++```
 +
-+Signed-off-by: Tony Asleson <tasleson@redhat.com>
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Upstream: https://github.com/intel/ledmon/commit/ed747ac3540cb38797f56533f9f51f5627e6b994
++which in fact is caused by the test program in `ACX_CHECK_LIBOSIP_VERSION` function in `acinclude.m4` due to
++
++```
++conftest.c:4:3: error: return type defaults to ‘int’ [-Wimplicit-int]
++    4 | main() {
++      | ^~~~
++```
++
++This patch fixes the issue!
++
++Upstream: https://github.com/hb9xar/siproxd/commit/985c2cd198213b250c61d8c6621af52e318c4c12
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ src/lib/utils.c | 8 ++++++--
-+ 1 file changed, 6 insertions(+), 2 deletions(-)
++ acinclude.m4 | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/src/lib/utils.c b/src/lib/utils.c
-+index a7936c69b242..a6ee29ba7f22 100644
-+--- a/src/lib/utils.c
-++++ b/src/lib/utils.c
-+@@ -98,8 +98,12 @@ uint64_t get_uint64(const char *path, uint64_t defval, const char *name)
-+ 	if (!p)
-+ 		return defval;
-+ 
-+-	str_toul(&defval, p, NULL, 16);
-+-	return defval;
-++	errno = 0;
-++	uint64_t t = strtoull(p, NULL, 16);
-++
-++	if (errno)
-++		return defval;
-++	return t;
-+ }
-+ 
-+ int get_int(const char *path, int defval, const char *name)
++diff --git a/acinclude.m4 b/acinclude.m4
++index 6fa4828..8164246 100644
++--- a/acinclude.m4
+++++ b/acinclude.m4
++@@ -340,7 +340,7 @@ dnl pointer to the structure (bad)
++ AC_COMPILE_IFELSE(
++ [AC_LANG_SOURCE([
++   #include <osipparser2/osip_parser.h>
++-  main() {
+++  int main() {
++   osip_message_t t;
++   int  e;
++   e=t.contacts.nb_elt;
 +-- 
-+2.43.0
++2.47.3
 +
+diff --git a/package/siproxd/siproxd.mk b/package/siproxd/siproxd.mk
+index 228f0855a6..faabb68a24 100644
+--- a/package/siproxd/siproxd.mk
++++ b/package/siproxd/siproxd.mk
+@@ -12,6 +12,8 @@ SIPROXD_LICENSE_FILES = COPYING
+ 
+ SIPROXD_DEPENDENCIES = libosip2 libtool sqlite
+ 
++# 0001-Fix-compilation-on-gcc-14.patch
++SIPROXD_AUTORECONF = YES
+ SIPROXD_CONF_OPTS = --without-included-ltdl
+ 
+ $(eval $(autotools-package))
 
---===============8267106358596758201==
+--===============4232225929602495954==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -155,4 +164,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8267106358596758201==--
+--===============4232225929602495954==--
