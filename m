@@ -1,106 +1,107 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0FFBCCF9F0
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:24:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F383CCF9F8
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:24:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 894D3411D4;
-	Thu, 30 Oct 2025 08:24:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 24A4E83BB5;
+	Thu, 30 Oct 2025 08:24:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ciJIteaxgKPJ; Thu, 30 Oct 2025 08:24:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iVFo7h8IO17T; Thu, 30 Oct 2025 08:24:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2A7241201
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C14583B99
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F2A7241201;
-	Thu, 30 Oct 2025 08:24:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8245B2A3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0C14583B99;
+	Thu, 30 Oct 2025 08:24:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id CAE2B160
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:24:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 74543407CF
+ by smtp1.osuosl.org (Postfix) with ESMTP id B00D581544
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:24:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4NLSYTDcm4Rb for <buildroot@buildroot.org>;
- Thu, 30 Oct 2025 08:24:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2S-DIgcVbDw3 for <buildroot@buildroot.org>;
+ Thu, 30 Oct 2025 08:24:02 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D126640748
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D126640748
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D126640748
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:24:00 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id
- ffacd0b85a97d-3f0ae439b56so425099f8f.3
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 01:24:00 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ADD698153D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ADD698153D
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ADD698153D
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:24:01 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id
+ ffacd0b85a97d-3ee64bc6b85so768314f8f.3
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 01:24:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1761812639; x=1762417439;
+ d=1e100.net; s=20230601; t=1761812640; x=1762417440;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=v/oyIsl+I7c6axJH2RhA84U0v3/+zobkWtuAvHJw+vY=;
- b=D/kNLsDrdnA+m7w/kXfJpuRw/jEHiudBRaXagOMz2v7B84Nfj6WKPAGNu7yTwRc191
- EHxQCDFTt4rryUpdnodmssjecwGtUm0NQjs4HMrLly5XOm21/xFX+t3g5uv0NRbXl7mk
- WaK4IendW7noF+oh5WVbTQYoStL0SiWs2qVdATaa45vB3hVc/TGSDhxKsw4iq19m2d5T
- 2j5YhnPkrOt1s75gm2Q0TlImzzIPjBX6fJNbjtLiFYOE8/kAu1RKq7YOiCcEx6o8Bw8K
- saCmTmHuaQvkaUW8oMwREH8IXDD+qXrDs0fZJIb/nAV5/lQ1l4SUU8iV9a+jR7NJHhRE
- J92A==
+ bh=gYX32lpT4SUqhNDXsCnhaxp8Nj0C/9jCiyhM+GTl7n0=;
+ b=QSJgHXyT3D8sIQqUIBcbCyBKPvMphgFX7y0DjMGglSSYEHFR1nm/NKlHww52aT/HlU
+ uBT+sxkjkBz0BSbPv1Le1Rd8cWLmcWMS1PPj5ZdBtWWV2PlXe81ZDqijZT67KIK/TVcB
+ hA3GcII1JSh+rMyhVXkR9UAilfP3ltvb8xjkIkNgpNaLnFR2DGgWV1UblElcSxXkNH2h
+ dfmf4XbkY4aeyuoDHrvt705oJxWkWs3lzlKELgAgJPpx3E1sUNwXuL94qBTh4Gfadjoe
+ AEmOEEOuSCygPoI/XCeuDm7VsMDc46Zyvibf/b+jlfir/TxFe45byvcWYgjWFe5Zvceu
+ 0n0w==
 X-Forwarded-Encrypted: i=1;
- AJvYcCWEm7fWIZpouh+ChkMBIujWyzp+iHXwXw5paCY/uxptHopVHSEMvs0P230jC5TK6iMwMn7Pgog+4Zg=@buildroot.org
-X-Gm-Message-State: AOJu0YxE41nadU38UFS8wzHRz09DQ31sBqNb4VOKF1Bc8aOP+sLS28Me
- uwzb3HpiDDDjxBgI6MrzldLYQ8uHQmkAOzPd+wF/CKEak+ws+tbRWaZFrpYBfjERez8=
-X-Gm-Gg: ASbGncuLy2y7y2L1TkffYChj6TiU/TnjTEG+qzCrjFzMM7qbqTT/NqnGkJVw78UM/7b
- ibZxnIFSEgFJ26P8ZEhfidw02pQBWSULBFiGh3+gb0WzhSHqU7y33WNUJfwRFheaWlqW/rg8yYO
- b57d3LoLFYNM47WmiRGmw2WNqMEx84Wn2WLRcysIwe4XnS/XU/ygAY5g+RP6+v2bfroV9051ZXb
- h9LDcKdK5H8vRXf86dEopi8iuiclJPhC3EW1cGs6VAZ97gwlHOaB+ZJ+2rXPm6ZZdsA9RHQwhQS
- +0hW7XsSCh7XtvG8gXMu0eOQO9PpjWee3i8P75tQyWDg5qz+eOOnoie78Tc9y0HCgbccX8HJbJt
- bmE378lbDUau5GXPDASNCESniMi50d4BMyEKfEr8t3vpOnXV/y/vlRr/0p2ky6R/rLe+sVE2+rQ
- VGsfTDt8SxfO1Q1MvluV03jE/bgg==
-X-Google-Smtp-Source: AGHT+IEoAaQG6f2SYXDoqYp/A2BzKxAP+giSb0GMEZgt68kx/DWFc9T3dNDgrLKnENcZvUgmPvWZ4Q==
-X-Received: by 2002:a05:6000:240f:b0:427:a27:3a6c with SMTP id
- ffacd0b85a97d-429aefda93bmr4538057f8f.63.1761812638647; 
- Thu, 30 Oct 2025 01:23:58 -0700 (PDT)
+ AJvYcCUYCO7SfvawcikxUaPFlaij3pq8DAOKpPOphFe1Jy8Uy8xOKRTWC8He5CH8Q9A56gKRDzBTX6bk/eQ=@buildroot.org
+X-Gm-Message-State: AOJu0YwKiN9mS+ZuQPwCzhnVqdueNPFtdb/lzo9tx0VTniEtXKkJRA4h
+ SZqpNOh1s7hYS0Rq9s9ip7QA9A1RMZW5/tT8xlXuvEOA/hw0n5jg4xgqWwMxUeG+IeY=
+X-Gm-Gg: ASbGncsQGK0kV3hSH+kewtDlw5yrpKqKfQ+atpwJ84MTIvqkRukDe+mgMlYqw6WI3uM
+ PVbYcvdCjb1WpshiSnNbS1q48s46jMiOQQj70lcrlTCkFIXDYZefONAwML08jt2JS2JI4CanZSB
+ peCt8bXacG2eqbmk4l2xy3quQhH5KO3a+uLOpepw6NxXelECAMH2HxwndxIWZQQTHVj425WFNWr
+ 7nfDCsG7ZASD76zyIN3xNqWanYnFh09xBFPtHLpp58LAO896kAxqi6P1AaIY/7rf0nHpWHYsC1J
+ /LDmTu/9Vj/vDu8F1laus3V/LThsN1Xam5sC26K/0/8s9wrpXZTCs1pgONDRJc5CBgowZrwqBmR
+ VDllweOZ4gYPNSuhEqWCQqCQG5M4N5kotuCCj+BgP17IyPibWqYknr5qdlc6jDJpXk9K4EvoBRd
+ oRnhNtvGcorsjrEW7s0rBHHiODL5wV7Ocf2M4l
+X-Google-Smtp-Source: AGHT+IHf0SAEH44tvIZPkga3vNy02jD5loQO20fWYK6/Po7ncP1EwTiHZJ42SizOphsUMSDxD0orew==
+X-Received: by 2002:a05:6000:2c04:b0:427:7ad:cdac with SMTP id
+ ffacd0b85a97d-429b4c89fc8mr1957171f8f.20.1761812639639; 
+ Thu, 30 Oct 2025 01:23:59 -0700 (PDT)
 Received: from arch (77.109.92.202.static.edpnet.net. [77.109.92.202])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-429952cb7e8sm31035496f8f.19.2025.10.30.01.23.58
+ ffacd0b85a97d-429952b7b43sm30933523f8f.6.2025.10.30.01.23.59
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 30 Oct 2025 01:23:58 -0700 (PDT)
+ Thu, 30 Oct 2025 01:23:59 -0700 (PDT)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 30 Oct 2025 09:23:57 +0100
-Message-ID: <20251030082357.35609-1-thomas.perale@mind.be>
+Date: Thu, 30 Oct 2025 09:23:58 +0100
+Message-ID: <20251030082358.35663-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251025164835.3551555-1-bernd@kuhls.net>
-References: <20251025164835.3551555-1-bernd@kuhls.net>
+In-Reply-To: <20251026082757.252631-1-bernd@kuhls.net>
+References: <20251026082757.252631-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1761812639; x=1762417439; darn=buildroot.org;
+ d=mind.be; s=google; t=1761812640; x=1762417440; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=v/oyIsl+I7c6axJH2RhA84U0v3/+zobkWtuAvHJw+vY=;
- b=D5JtYcrQhUpWbjWNwehuvVTH7oSyFUAHRdgAGB9kCoO7lg/ckzv3R0X+hIg6gteu03
- S9sKDJoIusrBCm4qypBZ9ID99+VCIVa0yrZhBOLoyWW7XCzqI6llFH1xh8GhROuBonNJ
- +Dd7djmT1l6G4KacYlKe+dZIjPq0UtJdibKYCbaA2VNGMMDwNtcHzYrkWYwmc2ltJVWe
- 7RpKpfDPA38ZZ2k61CJrfGQXuFySWW9uEh24uxivDRVJy0EtAskzUQWujSebrmOjqP1L
- hSLwLK5ArtITXAJNC3lqySEET4Tzfcpp2wYytAVTZDKuHDm4tEw0nqMQKS0XzpdMaORI
- tFww==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=gYX32lpT4SUqhNDXsCnhaxp8Nj0C/9jCiyhM+GTl7n0=;
+ b=MsJDd6XjCCPzuHdH0nkPfVfdqlle9JUfzqyGlsDNXZwy8O5+WELj+shnK4TfaYzl0w
+ hPkg5aU950EGMLDimy173Cuc80HpGLKxPkuPZTQKHoJclHdXDlWAD2V3TsmG8YPwu6RH
+ 2kbMp65G/dD52qZEBanUM389AiJDQRv2mRq2L3ltYuLM+hEFe4agqPQEr6HJwnTQLIg7
+ Xx5FBhaqcTqRcQNlbRDgOYWz7520Hib9lpAB4JN8EAaUWsKFUIkcyKbjNWIFmYY/uT0i
+ tAgOaoj/D1Y2rRdkMvasCCxvbW1Iag0lABVTshEvrVXUGOaPVYcNk4j85iDDKG4GJ6wI
+ /Hbg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=D5JtYcrQ
-Subject: Re: [Buildroot] [PATCH 1/1] package/sqlite: bump version to 3.50.4
+ header.a=rsa-sha256 header.s=google header.b=MsJDd6Xj
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/libsolv: add upstream patch
+ to fix musl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,531 +121,115 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> This commit includes reverts of the last attempt to bump sqlite:
-> git revert --no-edit c4c282f8ec 014174f00d 835b5659ea db481210e9 296744b0f4 939244b828 f0a272ef14 274c36578f
+> After the introduction of qsort_r in musl, building libsolv with musl fails with
+> unmatched qsort_r function signature. The commit adds the recently upstreamed
+> patch to fix it.
 > 
-> and the following new changes:
+> Original PR: https://github.com/openSUSE/libsolv/pull/600
 > 
-> The autoconf-based configure script until version 3.48.0 enabled rtree
-> support by default:
-> https://github.com/sqlite/sqlite/blob/version-3.48.0/autoconf/configure.ac#L180
+> Fixes: http://autobuild.buildroot.org/results/ab06e97bef898b2c53b906afb2a4b8ee6841bacb
 > 
-> while the autosetup-based needs -DSQLITE_ENABLE_RTREE
-> https://github.com/sqlite/sqlite/blob/version-3.50.4/autosetup/sqlite-config.tcl#L763
-> 
-> Added Config.in option for RTREE support and enabled it for gdal to
-> provide a needed dependency:
-> https://github.com/OSGeo/gdal/blob/v3.11.4/cmake/helpers/CheckDependentLibraries.cmake#L277
-> 
-> Added upstream patch to fix forced addition of rpath and added
-> configure option --disable-rpath to target build.
-> 
-> Added configure option --soname=legacy to fix wrong library name which
-> breaks linking of kodi:
-> https://github.com/LibreELEC/LibreELEC.tv/commit/7f2281bd7cc59425e754ac9d720071688f75580f
-> 
-> Added configure option --disable-shared for static builds.
-> 
-> Added build fixes for BR2_m68k_cf.
-> 
-> Removed SQLITE_CONF_OPTS and readline support from host build to avoid
-> dependencies.
-> 
+> Signed-off-by: Gong Zhile <gongzl.oerv@isrc.iscas.ac.cn>
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x & 2025.08.x. Thanks
 
 > ---
-> For easier review please check:
-> https://patchwork.ozlabs.org/project/buildroot/patch/20251025164706.3551408-1-bernd@kuhls.net/
+> v2: added Upstream: tag in patch file
 > 
->  package/gdal/Config.in                        |   1 +
->  package/sqlite/0001-disable-rpath.patch       |  59 +++++++++
->  ...vert-upstream-commits-causing-build-.patch |  48 -------
->  ...o-avoid-32-bit-integer-overflow-in-t.patch |  36 -----
->  ...se-error-if-too-many-aggregate-terms.patch | 123 ------------------
->  package/sqlite/Config.in                      |   6 +
->  package/sqlite/sqlite.hash                    |   2 +-
->  package/sqlite/sqlite.mk                      | 104 ++++++++++-----
->  8 files changed, 142 insertions(+), 237 deletions(-)
->  create mode 100644 package/sqlite/0001-disable-rpath.patch
->  delete mode 100644 package/sqlite/0001-sqlite3.pc.in-revert-upstream-commits-causing-build-.patch
->  delete mode 100644 package/sqlite/0002-Add-a-typecast-to-avoid-32-bit-integer-overflow-in-t.patch
->  delete mode 100644 package/sqlite/0003-Raise-error-if-too-many-aggregate-terms.patch
+>  ..._r-preprocessor-for-musl-and-FreeBSD.patch | 83 +++++++++++++++++++
+>  1 file changed, 83 insertions(+)
+>  create mode 100644 package/libsolv/0001-Fix-qsort_r-preprocessor-for-musl-and-FreeBSD.patch
 > 
-> diff --git a/package/gdal/Config.in b/package/gdal/Config.in
-> index 6ee088ce0c..c1bbf58fc7 100644
-> --- a/package/gdal/Config.in
-> +++ b/package/gdal/Config.in
-> @@ -14,6 +14,7 @@ config BR2_PACKAGE_GDAL
->  	select BR2_PACKAGE_LIBPNG
->  	select BR2_PACKAGE_PROJ
->  	select BR2_PACKAGE_QHULL
-> +	select BR2_PACKAGE_SQLITE_ENABLE_RTREE if BR2_PACKAGE_SQLITE
->  	select BR2_PACKAGE_ZLIB
->  	help
->  	  GDAL is a translator library for raster and vector geospatial
-> diff --git a/package/sqlite/0001-disable-rpath.patch b/package/sqlite/0001-disable-rpath.patch
+> diff --git a/package/libsolv/0001-Fix-qsort_r-preprocessor-for-musl-and-FreeBSD.patch b/package/libsolv/0001-Fix-qsort_r-preprocessor-for-musl-and-FreeBSD.patch
 > new file mode 100644
-> index 0000000000..6eb20488b0
+> index 0000000000..04a4312db4
 > --- /dev/null
-> +++ b/package/sqlite/0001-disable-rpath.patch
-> @@ -0,0 +1,59 @@
-> +Add the --disable-rpath configure script flag to address
+> +++ b/package/libsolv/0001-Fix-qsort_r-preprocessor-for-musl-and-FreeBSD.patch
+> @@ -0,0 +1,83 @@
+> +From 2d0718a4f2001c857d9af24398c68d676a98a3ca Mon Sep 17 00:00:00 2001
+> +From: Gong Zhile <gongzl.oerv@isrc.iscas.ac.cn>
+> +Date: Wed, 22 Oct 2025 18:14:30 +0800
+> +Subject: [PATCH] Fix qsort_r preprocessor for musl and FreeBSD
 > +
-> +Upstream: https://sqlite.org/src/info/a59d9bb25e
+> +The original mentioned qsort_r signature difference now only exists in DragonFly
+> +BSD & MacOS. However, the preprocessor also broke the compliation on musl+linux
+> +and FreeBSD, leading the compilation error on buildroot.
 > +
+> +musl: https://git.musl-libc.org/cgit/musl/commit/?id=b76f37fd5625d038141b52184956fb4b7838e9a5
+> +freebsd, dragonfly, macos: QSORT(3)
+> +
+> +FreeBSD and musl use the same GNU-like signature.
+> +
+> +Upstream: https://github.com/openSUSE/libsolv/commit/2d0718a4f2001c857d9af24398c68d676a98a3ca
+> +
+> +Signed-off-by: Gong Zhile <gongzl.oerv@isrc.iscas.ac.cn>
+> +[Bernd: added Upstream: tag]
 > +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> +---
+> + src/util.c | 35 +++++++++++++++++++----------------
+> + 1 file changed, 19 insertions(+), 16 deletions(-)
 > +
-> +Index: autosetup/sqlite-config.tcl
-> +==================================================================
-> +--- a/autosetup/sqlite-config.tcl
-> ++++ b/autosetup/sqlite-config.tcl
-> +@@ -334,12 +334,12 @@
-> +         # canonical build!
-> +         static-shell=1
-> +           => {Link the sqlite3 shell app against the DLL instead of embedding sqlite3.c}
-> +       }
-> +       {canonical autoconf} {
-> +-        # A potential TODO without a current use case:
-> +-        #rpath=1 => {Disable use of the rpath linker flag}
-> ++        rpath=1 => {Disable use of the rpath linker flag}
+> +diff --git a/src/util.c b/src/util.c
+> +index 72426e09..a60ed3da 100644
+> +--- a/src/util.c
+> ++++ b/src/util.c
+> +@@ -154,26 +154,14 @@ solv_setcloexec(int fd, int state)
+> +   #endif
+> + }
+> + 
+> +-/* bsd's qsort_r has different arguments, so we define our
+> ++#if defined(HAVE_QSORT_R) || defined(HAVE___QSORT_R)
+> ++#if (defined(__APPLE__) || defined(__DragonFly__)) && defined(HAVE_QSORT_R)
 > ++
-> +         # soname: https://sqlite.org/src/forumpost/5a3b44f510df8ded
-> +         soname:=legacy
-> +           => {SONAME for libsqlite3.so. "none", or not using this flag, sets no
-> +               soname. "legacy" sets it to its historical value of
-> +               libsqlite3.so.0.  A value matching the glob "libsqlite3.*" sets
-> +@@ -2138,25 +2138,25 @@
+> ++/* MacOS and DragonFly have qsort_r with different arguments, so we define our
+> +    own version in case we need to do some clever mapping
+> + 
+> +    see also: http://sources.redhat.com/ml/libc-alpha/2008-12/msg00003.html
+> +  */
+> +-#if (defined(__GLIBC__) || defined(__NEWLIB__)) && (defined(HAVE_QSORT_R) || defined(HAVE___QSORT_R))
+> +-
+> +-void
+> +-solv_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *, void *), void *compard)
+> +-{
+> +-# if defined(HAVE_QSORT_R)
+> +-  qsort_r(base, nmemb, size, compar, compard);
+> +-# else
+> +-  /* backported for SLE10-SP2 */
+> +-  __qsort_r(base, nmemb, size, compar, compard);
+> +-# endif
+> +-
+> +-}
+> +-
+> +-#elif defined(HAVE_QSORT_R) /* not glibc, but has qsort_r() */
+> + 
+> + struct solv_sort_data {
+> +   int (*compar)(const void *, const void *, void *);
+> +@@ -196,6 +184,21 @@ solv_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, con
+> +   qsort_r(base, nmemb, size, &d, solv_sort_helper);
 > + }
 > + 
-> + ########################################################################
-> + # Handle the --enable/disable-rpath flag.
-> + proc sqlite-handle-rpath {} {
-> +-  proj-check-rpath
-> +   # autosetup/cc-shared.tcl sets the rpath flag definition in
-> +   # [get-define SH_LINKRPATH], but it does so on a per-platform basis
-> +   # rather than as a compiler check. Though we should do a proper
-> +   # compiler check (as proj-check-rpath does), we may want to consider
-> +   # adopting its approach of clearing the rpath flags for environments
-> +   # for which sqlite-env-is-unix-on-windows returns a non-empty
-> +   # string.
-> + 
-> +-#  if {[proj-opt-truthy rpath]} {
-> +-#    proj-check-rpath
-> +-#  } else {
-> +-#    msg-result "Disabling use of rpath."
-> +-#    define LDFLAGS_RPATH ""
-> +-#  }
-> ++  # https://sqlite.org/forum/forumpost/13cac3b56516f849
-> ++  if {[proj-opt-truthy rpath]} {
-> ++    proj-check-rpath
-> ++  } else {
-> ++    msg-result "Disabling use of rpath."
-> ++    define LDFLAGS_RPATH ""
-> ++  }
-> + }
-> + 
-> + ########################################################################
-> + # If the --dump-defines configure flag is provided then emit a list of
-> + # all [define] values to config.defines.txt, else do nothing.
+> ++#else
+> ++
+> ++void
+> ++solv_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *, void *), void *compard)
+> ++{
+> ++# if defined(HAVE_QSORT_R)
+> ++  qsort_r(base, nmemb, size, compar, compard);
+> ++# else
+> ++  /* backported for SLE10-SP2 */
+> ++  __qsort_r(base, nmemb, size, compar, compard);
+> ++# endif
+> ++
+> ++}
+> ++
+> ++#endif
+> + #else /* not glibc and no qsort_r() */
+> + /* use own version of qsort if none available */
+> + #include "qsort_r.c"
+> +-- 
+> +2.47.3
 > +
-> diff --git a/package/sqlite/0001-sqlite3.pc.in-revert-upstream-commits-causing-build-.patch b/package/sqlite/0001-sqlite3.pc.in-revert-upstream-commits-causing-build-.patch
-> deleted file mode 100644
-> index f35c8b8ddd..0000000000
-> --- a/package/sqlite/0001-sqlite3.pc.in-revert-upstream-commits-causing-build-.patch
-> +++ /dev/null
-> @@ -1,48 +0,0 @@
-> -From f70123a40193c2056755117aa291582f42db5f35 Mon Sep 17 00:00:00 2001
-> -From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> -Date: Sun, 13 Apr 2025 17:47:53 +0200
-> -Subject: [PATCH] sqlite3.pc.in: revert upstream commits causing build issues
-> -
-> -This reverts upstream commit a2d88f6a03c9ebde3d037b0e297f47216c685381
-> -and a number of following commits related to the same commit. The
-> -sqlite build system is indeed upstream not based on autoconf, but the
-> -project "generates" an "autoconf-based amalgamation":
-> -
-> -  https://www3.sqlite.org/src/dir?ci=tip&name=autoconf
-> -
-> -Unfortunately commit a2d88f6a03c9ebde3d037b0e297f47216c685381 broke
-> -the build with the autoconf amalgamation because while @LIBS@ gets
-> -replaced by the autoconf machinery, @LDFLAGS_*@ do not, causing build
-> -failures such as:
-> -
-> -output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/13.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: cannot find @LDFLAGS_MATH@: No such file or directory
-> -output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/13.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: cannot find @LDFLAGS_ZLIB@: No such file or directory
-> -output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/13.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: cannot find @LDFLAGS_ICU@: No such file or directory
-> -
-> -This issue has been reported at
-> -https://sqlite.org/forum/info/e40b9b424a, and upstream says that the
-> -issue has been fixed in the amalgamation script by basically doing the
-> -same as what this commit does:
-> -
-> -  https://sqlite.org/src/info/fe47154799bfe
-> -
-> -Upstream: https://sqlite.org/forum/info/e40b9b424a
-> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ----
-> - sqlite3.pc.in | 2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
-> -
-> -diff --git a/sqlite3.pc.in b/sqlite3.pc.in
-> -index a9f941b1e4..3799671e61 100644
-> ---- a/sqlite3.pc.in
-> -+++ b/sqlite3.pc.in
-> -@@ -9,5 +9,5 @@ Name: SQLite
-> - Description: SQL database engine
-> - Version: @PACKAGE_VERSION@
-> - Libs: -L${libdir} -lsqlite3
-> --Libs.private: @LDFLAGS_MATH@ @LDFLAGS_ZLIB@ @LDFLAGS_ICU@
-> -+Libs.private: @LIBS@
-> - Cflags: -I${includedir}
-> --- 
-> -2.49.0
-> -
-> diff --git a/package/sqlite/0002-Add-a-typecast-to-avoid-32-bit-integer-overflow-in-t.patch b/package/sqlite/0002-Add-a-typecast-to-avoid-32-bit-integer-overflow-in-t.patch
-> deleted file mode 100644
-> index cb8b39b1be..0000000000
-> --- a/package/sqlite/0002-Add-a-typecast-to-avoid-32-bit-integer-overflow-in-t.patch
-> +++ /dev/null
-> @@ -1,36 +0,0 @@
-> -From 1cbb088f4be95e7a02627f64de60653ef2b13ab5 Mon Sep 17 00:00:00 2001
-> -From: drh <>
-> -Date: Sun, 16 Feb 2025 10:57:25 +0000
-> -Subject: [PATCH] Add a typecast to avoid 32-bit integer overflow in the
-> - concat_ws() function with an enormous separator values and many arguments.
-> -
-> -Fixes the following CVE:
-> -  - CVE-2025-29087: In SQLite 3.44.0 through 3.49.0 before 3.49.1,
-> -                    the concat_ws() SQL function can cause memory to be
-> -                    written beyond the end of a malloc-allocated buffer.
-> -
-> -For more info see https://nvd.nist.gov/vuln/detail/CVE-2025-29087
-> -
-> -Upstream: https://sqlite.org/src/info/498e3f1cf57f164f
-> -
-> -Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-> ----
-> - sqlite3.c | 2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
-> -
-> -diff --git a/sqlite3.c b/sqlite3.c
-> -index 80433f6..8a43734 100644
-> ---- a/sqlite3.c
-> -+++ b/sqlite3.c
-> -@@ -130954,7 +130954,7 @@ static void concatFuncCore(
-> -   for(i=0; i<argc; i++){
-> -     n += sqlite3_value_bytes(argv[i]);
-> -   }
-> --  n += (argc-1)*nSep;
-> -+  n += (argc-1)*(i64)nSep;
-> -   z = sqlite3_malloc64(n+1);
-> -   if( z==0 ){
-> -     sqlite3_result_error_nomem(context);
-> --- 
-> -2.49.0
-> -
-> diff --git a/package/sqlite/0003-Raise-error-if-too-many-aggregate-terms.patch b/package/sqlite/0003-Raise-error-if-too-many-aggregate-terms.patch
-> deleted file mode 100644
-> index 43be545b83..0000000000
-> --- a/package/sqlite/0003-Raise-error-if-too-many-aggregate-terms.patch
-> +++ /dev/null
-> @@ -1,123 +0,0 @@
-> -From 1cbb088f4be95e7a02627f64de60653ef2b13ab5 Mon Sep 17 00:00:00 2001
-> -From: drh <>
-> -Date: Sun, 16 Feb 2025 10:57:25 +0000
-> -Subject: [PATCH] Raise an error right away if the number of aggregate terms in a query exceeds the maximum number of columns. 
-> -
-> -CVE: CVE-2025-6965
-> -
-> -For more info see https://nvd.nist.gov/vuln/detail/CVE-2025-6965
-> -
-> -Upstream: https://www.sqlite.org/src/vinfo/5508b56fd24016c13981ec280ecdd833007c9d8dd595edb295b984c2b487b5c8
-> -
-> -[Titouan: adapt to sqlite3 "amalgamation" source code]
-> -Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-> ----
-> - sqlite3.c | 2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
-> -
-> -diff --git a/sqlite3.c b/sqlite3.c
-> -index 80433f6..8a43734 100644
-> ---- a/sqlite3.c	2025-09-03 13:04:29.799853238 +0200
-> -+++ b/sqlite3.c	2025-09-03 13:47:54.274155427 +0200
-> -@@ -20,7 +20,7 @@
-> - ** The content in this amalgamation comes from Fossil check-in
-> - ** d2fe6b05f38d9d7cd78c5d252e99ac59f1ae with changes in files:
-> - **
-> --**    
-> -+**
-> - */
-> - #ifndef SQLITE_AMALGAMATION
-> - #define SQLITE_CORE 1
-> -@@ -15258,6 +15258,14 @@
-> - #define SMALLEST_INT64 (((i64)-1) - LARGEST_INT64)
-> - 
-> - /*
-> -+** Macro SMXV(n) return the maximum value that can be held in variable n,
-> -+** assuming n is a signed integer type.  UMXV(n) is similar for unsigned
-> -+** integer types.
-> -+*/
-> -+#define SMXV(n) ((((i64)1)<<(sizeof(n)*8-1))-1)
-> -+#define UMXV(n) ((((i64)1)<<(sizeof(n)*8))-1)
-> -+
-> -+/*
-> - ** Round up a number to the next larger multiple of 8.  This is used
-> - ** to force 8-byte alignment on 64-bit architectures.
-> - **
-> -@@ -19046,7 +19054,7 @@
-> -                           ** from source tables rather than from accumulators */
-> -   u8 useSortingIdx;       /* In direct mode, reference the sorting index rather
-> -                           ** than the source table */
-> --  u16 nSortingColumn;     /* Number of columns in the sorting index */
-> -+  u32 nSortingColumn;     /* Number of columns in the sorting index */
-> -   int sortingIdx;         /* Cursor number of the sorting index */
-> -   int sortingIdxPTab;     /* Cursor number of pseudo-table */
-> -   int iFirstReg;          /* First register in range for aCol[] and aFunc[] */
-> -@@ -19055,8 +19063,8 @@
-> -     Table *pTab;             /* Source table */
-> -     Expr *pCExpr;            /* The original expression */
-> -     int iTable;              /* Cursor number of the source table */
-> --    i16 iColumn;             /* Column number within the source table */
-> --    i16 iSorterColumn;       /* Column number in the sorting index */
-> -+    int iColumn;             /* Column number within the source table */
-> -+    int iSorterColumn;       /* Column number in the sorting index */
-> -   } *aCol;
-> -   int nColumn;            /* Number of used entries in aCol[] */
-> -   int nAccumulator;       /* Number of columns that show through to the output.
-> -@@ -116445,7 +116453,9 @@
-> - ){
-> -   struct AggInfo_col *pCol;
-> -   int k;
-> -+  int mxTerm = pParse->db->aLimit[SQLITE_LIMIT_COLUMN];
-> - 
-> -+  assert( mxTerm <= SMXV(i16) );
-> -   assert( pAggInfo->iFirstReg==0 );
-> -   pCol = pAggInfo->aCol;
-> -   for(k=0; k<pAggInfo->nColumn; k++, pCol++){
-> -@@ -116463,6 +116473,10 @@
-> -     assert( pParse->db->mallocFailed );
-> -     return;
-> -   }
-> -+  if( k>mxTerm ){
-> -+    sqlite3ErrorMsg(pParse, "more than %d aggregate terms", mxTerm);
-> -+    k = mxTerm;
-> -+  }
-> -   pCol = &pAggInfo->aCol[k];
-> -   assert( ExprUseYTab(pExpr) );
-> -   pCol->pTab = pExpr->y.pTab;
-> -@@ -116496,6 +116510,7 @@
-> -   if( pExpr->op==TK_COLUMN ){
-> -     pExpr->op = TK_AGG_COLUMN;
-> -   }
-> -+  assert( k <= SMXV(pExpr->iAgg) );
-> -   pExpr->iAgg = (i16)k;
-> - }
-> - 
-> -@@ -116580,13 +116595,19 @@
-> -         ** function that is already in the pAggInfo structure
-> -         */
-> -         struct AggInfo_func *pItem = pAggInfo->aFunc;
-> -+        int mxTerm = pParse->db->aLimit[SQLITE_LIMIT_COLUMN];
-> -+        assert( mxTerm <= SMXV(i16) );
-> -         for(i=0; i<pAggInfo->nFunc; i++, pItem++){
-> -           if( NEVER(pItem->pFExpr==pExpr) ) break;
-> -           if( sqlite3ExprCompare(0, pItem->pFExpr, pExpr, -1)==0 ){
-> -             break;
-> -           }
-> -         }
-> --        if( i>=pAggInfo->nFunc ){
-> -+        if( i>mxTerm ){
-> -+          sqlite3ErrorMsg(pParse, "more than %d aggregate terms", mxTerm);
-> -+          i = mxTerm;
-> -+          assert( i<pAggInfo->nFunc );
-> -+        }else if( i>=pAggInfo->nFunc ){
-> -           /* pExpr is original.  Make a new entry in pAggInfo->aFunc[]
-> -           */
-> -           u8 enc = ENC(pParse->db);
-> -@@ -116640,6 +116661,7 @@
-> -         */
-> -         assert( !ExprHasProperty(pExpr, EP_TokenOnly|EP_Reduced) );
-> -         ExprSetVVAProperty(pExpr, EP_NoReduce);
-> -+        assert( i <= SMXV(pExpr->iAgg) );
-> -         pExpr->iAgg = (i16)i;
-> -         pExpr->pAggInfo = pAggInfo;
-> -         return WRC_Prune;
-> diff --git a/package/sqlite/Config.in b/package/sqlite/Config.in
-> index 12fb8b9415..c649267040 100644
-> --- a/package/sqlite/Config.in
-> +++ b/package/sqlite/Config.in
-> @@ -30,6 +30,12 @@ config BR2_PACKAGE_SQLITE_ENABLE_FTS3
->  	  http://www.sqlite.org/amalgamation.html), version 3 of the
->  	  full-text search engine is added to the build automatically.
->  
-> +config BR2_PACKAGE_SQLITE_ENABLE_RTREE
-> +	bool "Enable the RTREE extension for SQLite"
-> +	help
-> +	  When this option is defined in the amalgamation, the RTREE
-> +	  extension is added to the build automatically.
-> +
->  config BR2_PACKAGE_SQLITE_ENABLE_UNLOCK_NOTIFY
->  	bool "Enable sqlite3_unlock_notify() interface"
->  	help
-> diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-> index 5b933fba8f..2ade5afe03 100644
-> --- a/package/sqlite/sqlite.hash
-> +++ b/package/sqlite/sqlite.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  ac992f7fca3989de7ed1fe99c16363f848794c8c32a158dafd4eb927a2e02fd5  sqlite-autoconf-3480000.tar.gz
-> +sha256  a3db587a1b92ee5ddac2f66b3edb41b26f9c867275782d46c3a088977d6a5b18  sqlite-autoconf-3500400.tar.gz
->  sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
-> diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-> index 29ebb0365d..667ee8d70e 100644
-> --- a/package/sqlite/sqlite.mk
-> +++ b/package/sqlite/sqlite.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -SQLITE_VERSION = 3.48.0
-> -SQLITE_TAR_VERSION = 3480000
-> +SQLITE_VERSION = 3.50.4
-> +SQLITE_TAR_VERSION = 3500400
->  SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
->  SQLITE_SITE = https://www.sqlite.org/2025
->  SQLITE_LICENSE = blessing
-> @@ -13,11 +13,6 @@ SQLITE_LICENSE_FILES = tea/license.terms
->  SQLITE_CPE_ID_VENDOR = sqlite
->  SQLITE_INSTALL_STAGING = YES
->  
-> -# 0002-Add-a-typecast-to-avoid-32-bit-integer-overflow-in-t.patch
-> -SQLITE_IGNORE_CVES = CVE-2025-29087 CVE-2025-3277
-> -# 0003-Raise-error-if-too-many-aggregate-terms.patch
-> -SQLITE_IGNORE_CVES += CVE-2025-6965
-> -
->  ifeq ($(BR2_PACKAGE_SQLITE_STAT4),y)
->  SQLITE_CFLAGS += -DSQLITE_ENABLE_STAT4
->  endif
-> @@ -26,8 +21,8 @@ ifeq ($(BR2_PACKAGE_SQLITE_ENABLE_COLUMN_METADATA),y)
->  SQLITE_CFLAGS += -DSQLITE_ENABLE_COLUMN_METADATA
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_SQLITE_ENABLE_FTS3),y)
-> -SQLITE_CFLAGS += -DSQLITE_ENABLE_FTS3
-> +ifeq ($(BR2_PACKAGE_SQLITE_ENABLE_RTREE),y)
-> +SQLITE_CFLAGS += -DSQLITE_ENABLE_RTREE
->  endif
->  
->  ifeq ($(BR2_PACKAGE_SQLITE_ENABLE_UNLOCK_NOTIFY),y)
-> @@ -46,35 +41,86 @@ endif
->  # Work around using -O0
->  ifeq ($(BR2_microblaze):$(BR2_TOOLCHAIN_GCC_AT_LEAST_5),y:)
->  SQLITE_CFLAGS += $(TARGET_CFLAGS) -O0
-> +else ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_104028),y)
-> +SQLITE_CFLAGS += $(TARGET_CFLAGS) -O0
->  else
->  # fallback to standard -O3 when -Ofast is present to avoid -ffast-math
->  SQLITE_CFLAGS += $(subst -Ofast,-O3,$(TARGET_CFLAGS))
->  endif
->  
-> -SQLITE_CONF_ENV = CFLAGS="$(SQLITE_CFLAGS)"
-> -
-> -ifeq ($(BR2_STATIC_LIBS),y)
-> -SQLITE_CONF_OPTS += --enable-dynamic-extensions=no
-> +ifeq ($(BR2_PACKAGE_NCURSES)$(BR2_PACKAGE_READLINE),yy)
-> +SQLITE_DEPENDENCIES += ncurses readline
-> +SQLITE_CFLAGS  += -DHAVE_READLINE=1
-> +SQLITE_LDFLAGS += -lreadline -lncurses
-> +else ifeq ($(BR2_PACKAGE_NCURSES)$(BR2_PACKAGE_LIBEDIT),yy)
-> +SQLITE_DEPENDENCIES += ncurses libedit
-> +SQLITE_CFLAGS  += -DHAVE_EDITLINE=1
-> +SQLITE_LDFLAGS += -ledit -lncurses
->  else
-> -SQLITE_CONF_OPTS += --disable-static-shell
-> +SQLITE_CONF_OPTS += --disable-readline
->  endif
->  
-> -ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-> -SQLITE_CONF_OPTS += --enable-threadsafe
-> -else
-> -SQLITE_CONF_OPTS += --disable-threadsafe
-> -SQLITE_CFLAGS += -DSQLITE_THREADSAFE=0
-> +ifeq ($(BR2_PACKAGE_SQLITE_ENABLE_FTS3),y)
-> +SQLITE_CONF_OPTS += --fts3
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_NCURSES)$(BR2_PACKAGE_READLINE),yy)
-> -SQLITE_DEPENDENCIES += ncurses readline
-> -SQLITE_CONF_OPTS += --disable-editline --enable-readline
-> -else ifeq ($(BR2_PACKAGE_LIBEDIT),y)
-> -SQLITE_DEPENDENCIES += libedit
-> -SQLITE_CONF_OPTS += --enable-editline --disable-readline
-> -else
-> -SQLITE_CONF_OPTS += --disable-editline --disable-readline
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +SQLITE_CONF_OPTS += --disable-shared
->  endif
->  
-> -$(eval $(autotools-package))
-> -$(eval $(host-autotools-package))
-> +SQLITE_CONF_ENV = CFLAGS="$(SQLITE_CFLAGS)" LDFLAGS="$(SQLITE_LDFLAGS)"
-> +
-> +# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101971
-> +define SQLITE_FIX_MAKEFILE
-> +	chmod +w $(@D)/Makefile
-> +	sed -i "s/-fPIC//" $(@D)/Makefile
-> +endef
-> +
-> +define SQLITE_CONFIGURE_CMDS
-> +	(cd $(@D); $(TARGET_CONFIGURE_OPTS) \
-> +		$(if $(BR2_INSTALL_LIBSTDCPP),,CXX=false) \
-> +		$(SQLITE_CONF_ENV) ./configure \
-> +		--prefix=/usr \
-> +		--host="$(GNU_TARGET_NAME)" \
-> +		--build="$(GNU_HOST_NAME)" \
-> +		--sysroot="$(STAGING_DIR)" \
-> +		--disable-rpath \
-> +		--soname=legacy \
-> +		$(SQLITE_CONF_OPTS) \
-> +	)
-> +	$(if $(BR2_m68k_cf),$(SQLITE_FIX_MAKEFILE))
-> +endef
-> +
-> +define SQLITE_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-> +endef
-> +
-> +define SQLITE_INSTALL_STAGING_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR="$(STAGING_DIR)" -C $(@D) install
-> +endef
-> +
-> +define SQLITE_INSTALL_TARGET_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
-> +endef
-> +
-> +define HOST_SQLITE_CONFIGURE_CMDS
-> +	(cd $(@D); $(HOST_CONFIGURE_OPTS) \
-> +		./configure \
-> +		--prefix=/usr \
-> +		--host="$(GNU_HOST_NAME)" \
-> +		--build="$(GNU_HOST_NAME)" \
-> +		--sysroot="$(HOST_DIR)" \
-> +		--disable-readline \
-> +	)
-> +endef
-> +
-> +define HOST_SQLITE_BUILD_CMDS
-> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
-> +endef
-> +
-> +define HOST_SQLITE_INSTALL_CMDS
-> +	$(HOST_MAKE_ENV) $(MAKE) DESTDIR="$(HOST_DIR)" -C $(@D) install
-> +endef
-> +
-> +$(eval $(generic-package))
-> +$(eval $(host-generic-package))
 > -- 
 > 2.47.3
 > 
