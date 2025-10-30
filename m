@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F655CCF9F0
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:22:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E6F1CCF9FA
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:22:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 60AC183FB4;
-	Thu, 30 Oct 2025 08:22:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 08A9A40D05;
+	Thu, 30 Oct 2025 08:22:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MgLiKjfD2kyH; Thu, 30 Oct 2025 08:22:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ocQJCnFGC5IX; Thu, 30 Oct 2025 08:22:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3912783FA6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 151EE4105D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3912783FA6;
-	Thu, 30 Oct 2025 08:22:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 07265160
+	by smtp4.osuosl.org (Postfix) with ESMTP id 151EE4105D;
+	Thu, 30 Oct 2025 08:22:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 15F8F2A3
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EDD3540793
+ by smtp3.osuosl.org (Postfix) with ESMTP id D7943613A5
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CfYRgZwnpNvQ for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3T9Qq3BgJsbZ for <buildroot@buildroot.org>;
  Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 139B540748
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C57561360
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 139B540748
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1C57561360
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0313987A0E; Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
+ id 19B1C87A0C; Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 30 Oct 2025 09:17:40 +0100
+Date: Thu, 30 Oct 2025 09:17:42 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: cf4a9f884b30925c2cf9ed184f7c02016876b891
-X-Git-Newrev: bf505dde9597bdae48069a1af94ceb6843a1aed4
+X-Git-Oldrev: 62037e4e9e702c6bbc255f6225e67fe6b8722376
+X-Git-Newrev: 8a43e7c911159747ecf84246f155873c8414fa11
 X-Patchwork-Hint: ignore
-Message-Id: <20251030082228.0313987A0E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/samba4: security
- bump version to 4.22.5
+Message-Id: <20251030082228.19B1C87A0C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] configs/beaglebone: bump
+ Linux to 6.12.34-ti-arm32-r12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,46 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf505dde9597bdae48069a1af94ceb6843a1aed4
+commit: https://git.buildroot.net/buildroot/commit/?id=8a43e7c911159747ecf84246f155873c8414fa11
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-Release notes: https://www.samba.org/samba/history/samba-4.22.5.html
+The patch bumps the Linux kernel to version 6.12.34-ti-arm32-r12
 
-Fixes CVE-2025-9640 & CVE-2025-10230.
+Tested on beaglebone black.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit f3eeb0c19a73410a3a1f26233506b5ca8a43d76a)
+(cherry picked from commit 98a3491d1c74f4f13c38288fce8478b5b7e864ae)
+[thomas: only linux bump]
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ board/beagleboard/beaglebone/patches/linux/linux.hash | 2 +-
+ configs/beaglebone_defconfig                          | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index f0e19d8741..0668a9e8db 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.22.4.tar.asc
--sha256  a41a828848abdf5e942c900ca178597e18aab7b61d3c06a9b5ba43661988010b  samba-4.22.4.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.22.5.tar.asc
-+sha256  d8566a15d3dbfc0b777d1e8fbb2eee988a024ca9c786dcac65dd10347307400d  samba-4.22.5.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index c1d1b0b160..688d5177bc 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.22.4
-+SAMBA4_VERSION = 4.22.5
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+diff --git a/board/beagleboard/beaglebone/patches/linux/linux.hash b/board/beagleboard/beaglebone/patches/linux/linux.hash
+index f2c09d9872..e70a999129 100644
+--- a/board/beagleboard/beaglebone/patches/linux/linux.hash
++++ b/board/beagleboard/beaglebone/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  3654ca31003d90d20b195b23f8d60b78fcffbf0fd7fed6116c22719e20ac933d  linux-6.12.23-ti-arm32-r11.tar.gz
++sha256  1db327d0743e97ec725fefe05065a6fb779abe3063845fc3b551a4a716247c0a  linux-6.12.34-ti-arm32-r12.tar.gz
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index bb63fda375..ae661c2f14 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beagleboard/beaglebone/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.12.23-ti-arm32-r11)/linux-6.12.23-ti-arm32-r11.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.12.34-ti-arm32-r12)/linux-6.12.34-ti-arm32-r12.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bb.org"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/omap/am335x-evm ti/omap/am335x-bone ti/omap/am335x-boneblack ti/omap/am335x-bonegreen ti/omap/am335x-evmsk ti/omap/am335x-boneblue ti/omap/am335x-boneblack-wireless ti/omap/am335x-bonegreen-wireless"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
