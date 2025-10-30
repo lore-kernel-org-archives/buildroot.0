@@ -1,75 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DC5FCCF9F0
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 20:27:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7CC8CCF9E3
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 20:27:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D2E1984348;
-	Thu, 30 Oct 2025 20:27:31 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id huOoX7o8orih; Thu, 30 Oct 2025 20:27:30 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8ADF48434D
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8ADF48434D;
-	Thu, 30 Oct 2025 20:27:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 61EBDCD
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 20:27:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 47FD640AE1
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 20:27:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 80DCE40BA6;
+	Thu, 30 Oct 2025 20:27:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yNAGXVuFeE3r for <buildroot@buildroot.org>;
- Thu, 30 Oct 2025 20:27:26 +0000 (UTC)
+ id axOngWyaxDPB; Thu, 30 Oct 2025 20:27:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 929D740C8C
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 929D740C8C;
+	Thu, 30 Oct 2025 20:27:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 33C412A3
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 20:27:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2569A40BA6
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 20:27:39 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SkjG8vcieyBq for <buildroot@buildroot.org>;
+ Thu, 30 Oct 2025 20:27:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D535840A4C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D535840A4C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 230AB40B8F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 230AB40B8F
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D535840A4C
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 20:27:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 230AB40B8F
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 20:27:38 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0cb2.dip0.t-ipconnect.de [91.58.12.178])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 7895AA4C5B21
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 971E3A4C5B23
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 21:26:47 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:37826)
  by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1vEZEN-000000007vc-0swQ
+ (envelope-from <bernd@kuhls.net>) id 1vEZEN-000000007vc-2EaN
  for buildroot@buildroot.org; Thu, 30 Oct 2025 20:26:47 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 30 Oct 2025 21:26:45 +0100
-Message-ID: <20251030202646.1825077-4-bernd@kuhls.net>
+Date: Thu, 30 Oct 2025 21:26:46 +0100
+Message-ID: <20251030202646.1825077-5-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251030202646.1825077-1-bernd@kuhls.net>
 References: <20251030202646.1825077-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202506031021; t=1761856007;
- bh=VxwuSlnDsd3zgkoyeABnhoY11YGuoC6OSxkmFb6BlTs=;
+ bh=vjqyLW+3Gv2zD5dvD2fhs4qcIbWa0AUTI7WwW+ACYUo=;
  h=From:To:Subject:Date:In-Reply-To:From;
- b=kpQqXk7exyWEb67aeCAHZ0OVXIsz0Pyto6bro6brSkMFBNipm22iM0yjzTh3qJVVF
- Y5Oq7jvAQAONhubr7tqpHJCITLhxLABaJCwduM5sKckK2x0vA2P8wlB4X84NWItLGc
- QpbQzeCrSgzykRlvTK5miX5eDPPSovMyeLe2iFD5YvpD1dDXjb1dwxDQ+e/UJvsx7F
- YZ/4IFtxyZZyyBS0MY5EXjpuXEDXjPlmoy+MEMxA6CLsi+OiPyWHZrN+ICdxrpBNbd
- DhE1/JRZChZNj6s5iPelbTkXERbIF74j3kATtpycBo44FBlOiV+hH6Sm5T0zaQaOcV
- QVIxoxOqG+XDQ==
+ b=lcM0f1feaMQaEX7RRnOw1bczs7lG962CzyqOy7+EjsnGuTOqikM5bDWVqyKviHZub
+ 9KelgFlFBar2q0UmEATsBHCQFH2c4gfVehN6KZdf2JWNNgZnljBiq6vS/ZtHsq5Rvi
+ tEDoTshIkwgOS91YbZc0qsEOZg7vjZ9rC7YZBf2GfZ3c9TKaKYq1lvkidRV+LCTI5h
+ aUb2pSHUP6RRb3hxpilsZyQ4+PTxfP2csWyEI5i14irod16LCeDtNmwcPcMSKAWrhi
+ ikJUYrlAxT8fZojrsVablciQ/71pV8lYc32iUALx1SF7XSrv2nZ43XXnXfs6mLY+xX
+ 5T9Hg+5KityIQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=kpQqXk7e
-Subject: [Buildroot] [PATCH 3/4] package/mongrel2: remove package
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=lcM0f1fe
+Subject: [Buildroot] [PATCH 4/4] package/procrank_linux: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,381 +86,108 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-mongrel2 is incompatible with MbedTLS 3.6 and was removed from Debian
-stable/testing:
-https://tracker.debian.org/pkg/mongrel2
-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1075866
+The package is causing build errors with newer gcc versions:
 
-Upstream report from 2023 exists:
-https://github.com/mongrel2/mongrel2/issues/359
-but went unanswered, the last upstream commit was in Dec 2021:
-https://github.com/mongrel2/mongrel2/commits/master/
+procrank.c:381:9: error: implicit declaration of function 'asprintf';
+ did you mean 'vsprintf'? [-Wimplicit-function-declaration]
 
-Since no other package uses mongrel2 we can safely remove this
-unmaintained package.
+The latest upstream commit dates back to 2018 and no open issues/
+bug reports are present so the projects seems unmaintained.
+
+Instead of fixing build errors for such a project which is not used by
+any other package we remove it from buildroot.
 
 Fixes:
-https://autobuild.buildroot.net/results/6c1/6c17827d21135886b1f4822174a4a963ca6325bf/
+https://autobuild.buildroot.net/results/f2b/f2b41d27cf32808783b582e8ad714fb653c05713/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .checkpackageignore                           |  2 -
- Config.in.legacy                              |  6 ++
- DEVELOPERS                                    |  3 -
- package/Config.in                             |  1 -
- package/mongrel2/0001-Do-not-run-tests.patch  | 45 -----------
- ...-Fix-Makefiles-for-cross-compilation.patch | 78 -------------------
- .../0003-fix-build-with-gcc-4.8.patch         | 62 ---------------
- package/mongrel2/Config.in                    | 33 --------
- package/mongrel2/mongrel2.hash                |  6 --
- package/mongrel2/mongrel2.mk                  | 26 -------
- 10 files changed, 6 insertions(+), 256 deletions(-)
- delete mode 100644 package/mongrel2/0001-Do-not-run-tests.patch
- delete mode 100644 package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch
- delete mode 100644 package/mongrel2/0003-fix-build-with-gcc-4.8.patch
- delete mode 100644 package/mongrel2/Config.in
- delete mode 100644 package/mongrel2/mongrel2.hash
- delete mode 100644 package/mongrel2/mongrel2.mk
+ Config.in.legacy                           |  6 ++++++
+ package/Config.in                          |  1 -
+ package/procrank_linux/Config.in           |  7 -------
+ package/procrank_linux/procrank_linux.hash |  3 ---
+ package/procrank_linux/procrank_linux.mk   | 22 ----------------------
+ 5 files changed, 6 insertions(+), 33 deletions(-)
+ delete mode 100644 package/procrank_linux/Config.in
+ delete mode 100644 package/procrank_linux/procrank_linux.hash
+ delete mode 100644 package/procrank_linux/procrank_linux.mk
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 70d978a9e1..ce0feaafc8 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -708,8 +708,6 @@ package/mini-snmpd/0001-linux.c-fix-musl-build.patch lib_patch.Upstream
- package/minidlna/S60minidlnad Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/minissdpd/S50minissdpd Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/modem-manager/S44modem-manager Shellcheck lib_sysv.Variables
--package/mongrel2/0001-Do-not-run-tests.patch lib_patch.Upstream
--package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch lib_patch.Upstream
- package/monit/0001-Do-not-force-building-a-statically-linked-binary.patch lib_patch.Upstream
- package/mono-gtksharp3/0001-Fixes-MONO_PROFILE_ENTER_LEAVE-undeclared.patch lib_patch.Upstream
- package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch lib_patch.Upstream
 diff --git a/Config.in.legacy b/Config.in.legacy
-index a8aecad01b..38d89045b1 100644
+index 38d89045b1..7ed758e365 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2025.11"
  
-+config BR2_PACKAGE_MONGREL2
-+	bool "mongrel2 has been removed"
++config BR2_PACKAGE_PROCRANK_LINUX
++	bool "procrank_linux has been removed"
 +	select BR2_LEGACY
 +	help
-+	  mongrel2 is incompatible with MbedTLS 3.6 and has been removed
++	  procrank_linux is unmaintained and has been removed
 +
- config BR2_PACKAGE_EXPECT
- 	bool "expect has been removed"
+ config BR2_PACKAGE_MONGREL2
+ 	bool "mongrel2 has been removed"
  	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f5c8b832f8..096421b6f6 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2137,9 +2137,6 @@ F:	package/python-gunicorn/
- F:	support/testing/tests/package/sample_python_flask.py
- F:	support/testing/tests/package/test_python_flask.py
- 
--N:	Lionel Orry <lionel.orry@gmail.com>
--F:	package/mongrel2/
--
- N:	Lothar Felten <lothar.felten@gmail.com>
- F:	board/bananapi/bananapi-m2-ultra/
- F:	board/beagleboard/beaglebone/
 diff --git a/package/Config.in b/package/Config.in
-index 023fc8d31c..598b457c72 100644
+index 598b457c72..45f63d0fc5 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2564,7 +2564,6 @@ endif
- 	source "package/minissdpd/Config.in"
- 	source "package/mjpg-streamer/Config.in"
- 	source "package/modem-manager/Config.in"
--	source "package/mongrel2/Config.in"
- 	source "package/mosh/Config.in"
- 	source "package/mosquitto/Config.in"
- 	source "package/mrouted/Config.in"
-diff --git a/package/mongrel2/0001-Do-not-run-tests.patch b/package/mongrel2/0001-Do-not-run-tests.patch
+@@ -2895,7 +2895,6 @@ menu "System tools"
+ 	source "package/polkit/Config.in"
+ 	source "package/powerpc-utils/Config.in"
+ 	source "package/procps-ng/Config.in"
+-	source "package/procrank_linux/Config.in"
+ 	source "package/procs/Config.in"
+ 	source "package/psmisc/Config.in"
+ 	source "package/pwgen/Config.in"
+diff --git a/package/procrank_linux/Config.in b/package/procrank_linux/Config.in
 deleted file mode 100644
-index 3b72aef3c5..0000000000
---- a/package/mongrel2/0001-Do-not-run-tests.patch
+index 59d462b6d4..0000000000
+--- a/package/procrank_linux/Config.in
 +++ /dev/null
-@@ -1,45 +0,0 @@
--From 3cbef2195533f357c8a80c2840108662461273b7 Mon Sep 17 00:00:00 2001
--From: Lionel Orry <lionel.orry@gmail.com>
--Date: Wed, 27 Mar 2013 14:48:19 +0100
--Subject: [PATCH] Do not run tests.
--
--This patch is specific to cross-compiled environments and avoids running
--the tests on the host. It is not meant to be applied upstream.
--
--Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
--[Dario: make the patch to be applied with fuzz factor 0]
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-----
-- Makefile            | 2 +-
-- tools/m2sh/Makefile | 2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index 7dc4089..ca72630 100644
----- a/Makefile
--+++ b/Makefile
--@@ -18,7 +18,7 @@
-- TESTS=$(patsubst %.c,%,${TEST_SRC})
-- MAKEOPTS=OPTFLAGS="${CFLAGS} ${NOEXTCFLAGS} ${OPTFLAGS}" LDFLAGS="${LDFLAGS}" LIBS="${LIBS}" DESTDIR="${DESTDIR}" PREFIX="${PREFIX}"
-- 
---all: bin/mongrel2 tests m2sh procer
--+all: bin/mongrel2 m2sh procer filters config_modules
-- 
-- ${OBJECTS_NOEXT}: CFLAGS += ${NOEXTCFLAGS}
-- ${OBJECTS}: | builddirs
--diff --git a/tools/m2sh/Makefile b/tools/m2sh/Makefile
--index b50d8a0..334e4da 100644
----- a/tools/m2sh/Makefile
--+++ b/tools/m2sh/Makefile
--@@ -12,7 +12,7 @@
-- 
-- $(RAGEL_OBJECTS): CFLAGS += -Wno-unused-const-variable -Wimplicit-fallthrough=0 -Wno-unused-parameter
-- 
---all: ../lemon/lemon tests build/m2sh
--+all: ../lemon/lemon build/m2sh
-- 
-- dev: CFLAGS=-g -Wall -Wextra -Isrc -I../../src $(OPTFLAGS)
-- dev: all
---- 
--1.8.1.4
--
-diff --git a/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch b/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch
-deleted file mode 100644
-index 1961f128ed..0000000000
---- a/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch
-+++ /dev/null
-@@ -1,78 +0,0 @@
--From 298356c44a7df2b34c4e307c531d2010e2cb4b79 Mon Sep 17 00:00:00 2001
--From: Lionel Orry <lionel.orry@gmail.com>
--Date: Wed, 27 Mar 2013 15:56:56 +0100
--Subject: [PATCH] Fix Makefiles for cross-compilation
--
--The CFLAGS handling in mongrel2 is really messy and it is hard to make
--it behave correctly with cross-compiling environments. This patch
--restricts the Makefiles syntax to GNU Make, but help cross-compiling.
--
--This is not meant to be applied upstream.
--
--Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
--[Fabrice: refresh for 1.12.2]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- Makefile                      | 2 +-
-- tools/config_modules/Makefile | 2 +-
-- tools/filters/Makefile        | 2 +-
-- tools/m2sh/Makefile           | 2 +-
-- tools/procer/Makefile         | 2 +-
-- 5 files changed, 5 insertions(+), 5 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index 4e89c33..2f549a8 100644
----- a/Makefile
--+++ b/Makefile
--@@ -1,5 +1,5 @@
-- CFLAGS?=-g -O2
---CFLAGS += -Wall -Wextra -Wno-implicit-fallthrough -Wno-unused-const-variable -I./src -DNDEBUG -D_FILE_OFFSET_BITS=64 -pthread
--+override CFLAGS += -Wall -Wextra -Wno-implicit-fallthrough -Wno-unused-const-variable -I./src -DNDEBUG -D_FILE_OFFSET_BITS=64 -pthread
-- CFLAGS += ${OPTFLAGS}
-- LIBS+=-lzmq -ldl -lsqlite3 -lmbedtls -lmbedx509 -lmbedcrypto
-- PREFIX?=/usr/local
--diff --git a/tools/config_modules/Makefile b/tools/config_modules/Makefile
--index c2680d1..ada3169 100644
----- a/tools/config_modules/Makefile
--+++ b/tools/config_modules/Makefile
--@@ -1,5 +1,5 @@
-- PREFIX?=/usr/local
---CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
--+override CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
-- LDFLAGS=$(OPTLIBS)
-- 
-- MONGO_SRC = mongo-c-driver/src/bson.c \
--diff --git a/tools/filters/Makefile b/tools/filters/Makefile
--index 6505ad5..a968ef6 100644
----- a/tools/filters/Makefile
--+++ b/tools/filters/Makefile
--@@ -1,5 +1,5 @@
-- PREFIX?=/usr/local
---CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -g -fPIC -shared -nostartfiles -L../../build
--+override CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -g -fPIC -shared -nostartfiles -L../../build
-- LDFLAGS=$(OPTLIBS)
-- 
-- all: null.so rewrite.so sendfile.so
--diff --git a/tools/m2sh/Makefile b/tools/m2sh/Makefile
--index b50d8a0..cc00062 100644
----- a/tools/m2sh/Makefile
--+++ b/tools/m2sh/Makefile
--@@ -1,4 +1,4 @@
---CFLAGS=-DNDEBUG -DNO_LINENOS -pthread -g -I../../src -Isrc -Wall $(OPTFLAGS)
--+override CFLAGS=-DNDEBUG -DNO_LINENOS -pthread -g -I../../src -Isrc -Wall $(OPTFLAGS)
-- LIBS=-lzmq -lsqlite3 ../../build/libm2.a $(OPTLIBS)
-- 
-- PREFIX?=/usr/local
--diff --git a/tools/procer/Makefile b/tools/procer/Makefile
--index bb9aa31..d377f7f 100644
----- a/tools/procer/Makefile
--+++ b/tools/procer/Makefile
--@@ -1,4 +1,4 @@
---CFLAGS=-DNDEBUG -pthread -g -I../../src -Wall $(OPTFLAGS)
--+override CFLAGS=-DNDEBUG -pthread -g -I../../src -Wall $(OPTFLAGS)
-- PREFIX?=/usr/local
-- LIBS?=-lzmq 
-- SOURCES=$(wildcard *.c)
---- 
--2.27.0
--
-diff --git a/package/mongrel2/0003-fix-build-with-gcc-4.8.patch b/package/mongrel2/0003-fix-build-with-gcc-4.8.patch
-deleted file mode 100644
-index 996cd3246b..0000000000
---- a/package/mongrel2/0003-fix-build-with-gcc-4.8.patch
-+++ /dev/null
-@@ -1,62 +0,0 @@
--From cc2dd3995dc9a9e6f0e705e11e791f3f3c7d7326 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 18 Jan 2022 22:41:36 +0100
--Subject: [PATCH] fix build with gcc 4.8
--
--Drop "-Wno-unused-const-variable -Wimplicit-fallthrough=0" as
--"-Wno-implicit-fallthrough -Wno-unused-const-variable" is already set in
--CFLAGS. This will avoid the following build failure with gcc 4.8 raised
--since version 1.13.0 and
--https://github.com/mongrel2/mongrel2/commit/725209578599bd7784753d86aee34f6441ff78a5:
--
--arm-none-linux-gnueabi-gcc: error: unrecognized command line option '-Wimplicit-fallthrough=0'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/de324b733e09057c87352220069fe65f6e535eb8
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/mongrel2/mongrel2/pull/354
--[Dario: make the patch to be applied with fuzz factor 0]
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-----
-- Makefile            | 1 -
-- tools/m2sh/Makefile | 4 ++--
-- 2 files changed, 2 insertions(+), 3 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index f6627ed..fb8d028 100644
----- a/Makefile
--+++ b/Makefile
--@@ -22,7 +22,6 @@ all: bin/mongrel2 tests m2sh procer
-- 
-- ${OBJECTS_NOEXT}: CFLAGS += ${NOEXTCFLAGS}
-- ${OBJECTS}: | builddirs
---$(RAGEL_OBJECTS): CFLAGS += -Wno-unused-const-variable -Wimplicit-fallthrough=0
-- 
-- .PHONY: builddirs
-- builddirs:
--diff --git a/tools/m2sh/Makefile b/tools/m2sh/Makefile
--index 83e7ae4..86364af 100644
----- a/tools/m2sh/Makefile
--+++ b/tools/m2sh/Makefile
--@@ -10,7 +10,7 @@
-- LIB_OBJ=$(filter-out src/m2sh.o,${OBJECTS})
-- RAGEL_OBJECTS=src/lexer.o src/cli.o
-- 
---$(RAGEL_OBJECTS): CFLAGS += -Wno-unused-const-variable -Wimplicit-fallthrough=0 -Wno-unused-parameter
--+$(RAGEL_OBJECTS): CFLAGS += -Wno-unused-parameter
-- 
-- all: ../lemon/lemon build/m2sh
-- 
--@@ -20,7 +20,7 @@
-- install: build/m2sh
-- 	install build/m2sh ${DESTDIR}${PREFIX}/bin
-- 
---src/parser.o: CFLAGS += -Wno-unused-const-variable -Wno-unused-parameter
--+src/parser.o: CFLAGS += -Wno-unused-parameter
-- 
-- build/libm2sh.a: ${LIB_OBJ}
-- 	mkdir -p build
---- 
--2.34.1
--
-diff --git a/package/mongrel2/Config.in b/package/mongrel2/Config.in
-deleted file mode 100644
-index 60fee6f96d..0000000000
---- a/package/mongrel2/Config.in
-+++ /dev/null
-@@ -1,33 +0,0 @@
--# mongrel2 uses {get,make,swap}context() functions, which are
--# available in glibc for all architectures and in uClibc only for a
--# subset of the architectures
--config BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
--	bool
--	default y if BR2_TOOLCHAIN_USES_GLIBC
--	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
--		(BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || BR2_sparc || BR2_x86_64)
--
--comment "mongrel2 needs a uClibc or glibc toolchain w/ C++, threads, dynamic library"
--	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
--		!BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
--
--config BR2_PACKAGE_MONGREL2
--	bool "mongrel2"
--	depends on BR2_INSTALL_LIBSTDCPP # zeromq
--	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
--	depends on !BR2_STATIC_LIBS # uses dlopen()
--	depends on BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
--	select BR2_PACKAGE_MBEDTLS
--	select BR2_PACKAGE_SQLITE
--	select BR2_PACKAGE_ZEROMQ
+@@ -1,7 +0,0 @@
+-config BR2_PACKAGE_PROCRANK_LINUX
+-	bool "procrank_linux"
 -	help
--	  Mongrel2 is an application, language, and network architecture
--	  agnostic web server that focuses on web applications using
--	  modern browser technologies.
+-	  procrank is a tool commonly used by Android platform
+-	  developers to find out how much memory is really being used.
 -
--	  Mongrel2 supports 17 languages and platforms, HTTP, Flash
--	  sockets, WebSockets, Long Polling, and many ways to deploy
--	  and hack on it.
--
--	  http://www.mongrel2.org
-diff --git a/package/mongrel2/mongrel2.hash b/package/mongrel2/mongrel2.hash
+-	  https://github.com/csimmonds/procrank_linux
+diff --git a/package/procrank_linux/procrank_linux.hash b/package/procrank_linux/procrank_linux.hash
 deleted file mode 100644
-index f4f094ea03..0000000000
---- a/package/mongrel2/mongrel2.hash
+index cc9c403a0e..0000000000
+--- a/package/procrank_linux/procrank_linux.hash
 +++ /dev/null
-@@ -1,6 +0,0 @@
--# From https://mongrel2.org
--sha1  6057f9cbfae41e2cdef1e0f715df3c1a4d3a1884  mongrel2-v1.13.0.tar.bz2
--
--# Locally computed
--sha256  b6f1f50c9f65b605342d8792b1cc8a1c151105339030313b9825b6a68d400c10  mongrel2-v1.13.0.tar.bz2
--sha256  eb6e2a2baa637d06f6aa762886fbc8939934eb5fdb0b3a5b3882f2a61e9a4357  LICENSE
-diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
+@@ -1,3 +0,0 @@
+-# Locally calculated
+-sha256  1c3592b549b6793b29ab561568f493d0edbfe288ea2aed59afa689eaa26b5d9e  procrank_linux-21c30ab4514a5b15ac6e813e21bee0d3d714cb08.tar.gz
+-sha256  38751245389e1e23f73e6f5384b5cbe7fa972cc4410c5adc9c04b082a0b9561a  NOTICE
+diff --git a/package/procrank_linux/procrank_linux.mk b/package/procrank_linux/procrank_linux.mk
 deleted file mode 100644
-index 07914ad0fe..0000000000
---- a/package/mongrel2/mongrel2.mk
+index 415a4e41b7..0000000000
+--- a/package/procrank_linux/procrank_linux.mk
 +++ /dev/null
-@@ -1,26 +0,0 @@
+@@ -1,22 +0,0 @@
 -################################################################################
 -#
--# mongrel2
+-# procrank_linux
 -#
 -################################################################################
 -
--MONGREL2_VERSION = 1.13.0
--MONGREL2_SOURCE = mongrel2-v$(MONGREL2_VERSION).tar.bz2
--# Do not use the github helper here, the generated tarball is *NOT* the same
--# as the one uploaded by upstream for the release.
--MONGREL2_SITE = https://github.com/mongrel2/mongrel2/releases/download/v$(MONGREL2_VERSION)
--MONGREL2_LICENSE = BSD-3-Clause
--MONGREL2_LICENSE_FILES = LICENSE
--MONGREL2_DEPENDENCIES = mbedtls sqlite zeromq
+-PROCRANK_LINUX_VERSION = 21c30ab4514a5b15ac6e813e21bee0d3d714cb08
+-PROCRANK_LINUX_SITE = $(call github,csimmonds,procrank_linux,$(PROCRANK_LINUX_VERSION))
+-PROCRANK_LINUX_LICENSE = Apache-2.0
+-PROCRANK_LINUX_LICENSE_FILES = NOTICE
 -
--define MONGREL2_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
--		PREFIX=/usr all
+-define PROCRANK_LINUX_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CROSS_COMPILE="$(TARGET_CROSS)" \
+-		LOCAL_CFLAGS="$(TARGET_CFLAGS)"
 -endef
 -
--define MONGREL2_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
--		PREFIX=/usr DESTDIR=$(TARGET_DIR) install
+-define PROCRANK_LINUX_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0755 -D $(@D)/procrank \
+-		$(TARGET_DIR)/usr/bin/procrank
 -endef
 -
 -$(eval $(generic-package))
