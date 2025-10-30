@@ -4,63 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A48ECCF9F0
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 12:02:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F8F0CCF9E3
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 12:02:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 37AE78403B;
-	Thu, 30 Oct 2025 12:02:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 556C8840D9;
+	Thu, 30 Oct 2025 12:02:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id svLV1BP4-URv; Thu, 30 Oct 2025 12:02:11 +0000 (UTC)
+ id jTeh9OzFcFh8; Thu, 30 Oct 2025 12:02:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 536D28408A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A11A840DA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 536D28408A;
-	Thu, 30 Oct 2025 12:02:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1EF91160
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 12:02:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5A11A840DA;
+	Thu, 30 Oct 2025 12:02:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 725CBCD
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 12:02:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 04C734123C
+ by smtp4.osuosl.org (Postfix) with ESMTP id CBB8A4123C
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 12:02:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yDEgJ1ttMB6R for <buildroot@buildroot.org>;
- Thu, 30 Oct 2025 12:02:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:4f8:1c0c:5073::1; helo=mail.heine.tech;
- envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C9CDC41056
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9CDC41056
-Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C9CDC41056
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 12:02:05 +0000 (UTC)
+ id g5IQ0ZbCy3gN for <buildroot@buildroot.org>;
+ Thu, 30 Oct 2025 12:02:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=195.201.24.99;
+ helo=mail.heine.tech; envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DE8E641238
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE8E641238
+Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DE8E641238
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 12:02:06 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 144141814B9; Thu, 30 Oct 2025 13:01:59 +0100 (CET)
+ with ESMTPSA id EA56D1814BA; Thu, 30 Oct 2025 13:02:03 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Thu, 30 Oct 2025 13:01:29 +0100
-Message-ID: <20251030120150.2458324-1-buildroot@heine.tech>
+Date: Thu, 30 Oct 2025 13:01:30 +0100
+Message-ID: <20251030120150.2458324-2-buildroot@heine.tech>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20251030120150.2458324-1-buildroot@heine.tech>
+References: <20251030120150.2458324-1-buildroot@heine.tech>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=heine.tech; s=dkim; 
- t=1761825721; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=v/LGnk2XfzCOXFhzKOIa5aIR5hjPLAoYJeT2bAbNhTA=;
- b=g1W2p1ELTqdueFqyNJaQ7DSS7jsun4F/y6I18sAjo5RmDr7IEMRAf9zu0sBYoLKdaoUIOI
- W1vlTBIEN/1Zef1RevZUPVlLZjSAWnqRNjrrrvvVGtxflqVrSecxWM6wDuarblPjL3GBif
- wuCSICSzYXBQYpHnL5nYVxWkCcP0lkQ=
+ t=1761825724; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding:in-reply-to:references;
+ bh=qiVwaJ7NfFayplViavgnLsIOD1MjZbd/WurZsOjPhIs=;
+ b=h9zvvon78F2iqveIgf21Bo4/Lv89qE5EiJ0kI85AENzl8VPovuQJKBTZTZsfVkgzQRSNjU
+ VGn8Xi2ziTXRakZqPx4brsqZKxM89/5h5JaVwM30lOuRvLKHEk7yE5Em1joWAZF+w+F5uQ
+ 1yegm10TCLamy2KZqBd17Tb0oq4jWKE=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=heine.tech
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
- header.s=dkim header.b=g1W2p1EL
-Subject: [Buildroot] [PATCH 1/4] package/libabseil-cpp: bump to version
- 20250814.1
+ dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
+ header.a=rsa-sha256 header.s=dkim header.b=h9zvvon7
+Subject: [Buildroot] [PATCH 2/4] package/{|python-}protobuf: bump to version
+ 33.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -74,74 +75,89 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
 Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- enforce C++17 as this is required since 20250512
+- set BUILD_LIBUPB=ON as disabling it is currently broken (see [0])
+- python-protobuf increased its major version to 6 due to breaking changes in v30
 
-Release Notes:
-https://github.com/abseil/abseil-cpp/releases/tag/20250814.1
-https://github.com/abseil/abseil-cpp/releases/tag/20250814.0
-https://github.com/abseil/abseil-cpp/releases/tag/20250512.0
+Changelogs:
+v30.0: https://github.com/protocolbuffers/protobuf/releases/tag/v30.0
+v31.0: https://github.com/protocolbuffers/protobuf/releases/tag/v31.0
+v32.0: https://github.com/protocolbuffers/protobuf/releases/tag/v32.0
+v33.0: https://github.com/protocolbuffers/protobuf/releases/tag/v33.0
+
+[0] https://github.com/protocolbuffers/protobuf/issues/20538
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- package/libabseil-cpp/Config.in          | 2 +-
- package/libabseil-cpp/libabseil-cpp.hash | 2 +-
- package/libabseil-cpp/libabseil-cpp.mk   | 6 +++---
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/protobuf/protobuf.hash               | 2 +-
+ package/protobuf/protobuf.mk                 | 4 ++--
+ package/python-protobuf/python-protobuf.hash | 4 ++--
+ package/python-protobuf/python-protobuf.mk   | 4 ++--
+ 4 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/libabseil-cpp/Config.in b/package/libabseil-cpp/Config.in
-index 7b65ec40d0..6bbe9518b2 100644
---- a/package/libabseil-cpp/Config.in
-+++ b/package/libabseil-cpp/Config.in
-@@ -18,7 +18,7 @@ config BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- config BR2_PACKAGE_LIBABSEIL_CPP
- 	bool "libabseil-cpp"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++14
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS # uses dlfcn.h
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
-diff --git a/package/libabseil-cpp/libabseil-cpp.hash b/package/libabseil-cpp/libabseil-cpp.hash
-index 701801a7c4..e1b8763e2a 100644
---- a/package/libabseil-cpp/libabseil-cpp.hash
-+++ b/package/libabseil-cpp/libabseil-cpp.hash
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index 98159ad897..e5527b5e64 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  16242f394245627e508ec6bb296b433c90f8d914f73b9c026fddb905e27276e8  libabseil-cpp-20250127.0.tar.gz
-+sha256  1692f77d1739bacf3f94337188b78583cf09bab7e420d2dc6c5605a4f86785a1  libabseil-cpp-20250814.1.tar.gz
- sha256  c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747  LICENSE
-diff --git a/package/libabseil-cpp/libabseil-cpp.mk b/package/libabseil-cpp/libabseil-cpp.mk
-index 34d62c4dd1..fe97c1c2f3 100644
---- a/package/libabseil-cpp/libabseil-cpp.mk
-+++ b/package/libabseil-cpp/libabseil-cpp.mk
-@@ -4,19 +4,19 @@
- #
+ # Locally calculated
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+-sha256  008a11cc56f9b96679b4c285fd05f46d317d685be3ab524b2a310be0fbad987e  protobuf-29.3.tar.gz
++sha256  cbc536064706b628dcfe507bef386ef3e2214d563657612296f1781aa155ee07  protobuf-33.0.tar.gz
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 4540443702..1380b4e130 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,7 +7,7 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works and to update its hash,
+ # as they share the same version/site variables.
+-PROTOBUF_VERSION = 29.3
++PROTOBUF_VERSION = 33.0
+ PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+ PROTOBUF_LICENSE_FILES = LICENSE
+@@ -34,7 +34,7 @@ HOST_PROTOBUF_CONF_OPTS = \
+ 	-Dprotobuf_ALLOW_CCACHE=ON \
+ 	-Dprotobuf_BUILD_CONFORMANCE=OFF \
+ 	-Dprotobuf_BUILD_LIBPROTOC=ON \
+-	-Dprotobuf_BUILD_LIBUPB=OFF \
++	-Dprotobuf_BUILD_LIBUPB=ON \
+ 	-Dprotobuf_BUILD_PROTOBUF_BINARIES=ON \
+ 	-Dprotobuf_BUILD_PROTOC_BINARIES=ON \
+ 	-Dprotobuf_BUILD_TESTS=OFF \
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index 1e1833980c..4ed8708828 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/protobuf/json
+-md5  26ee22a630b0dbfce4de03adc5600fbc  protobuf-5.29.3.tar.gz
+-sha256  5da0f41edaf117bde316404bad1a486cb4ededf8e4a54891296f648e8e076620  protobuf-5.29.3.tar.gz
++md5  17cc8fd38e074404a0f814396965deed  protobuf-6.33.0.tar.gz
++sha256  140303d5c8d2037730c548f8c7b93b20bb1dc301be280c378b82b8894589c954  protobuf-6.33.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
+index 898a133d37..d4bbd4001f 100644
+--- a/package/python-protobuf/python-protobuf.mk
++++ b/package/python-protobuf/python-protobuf.mk
+@@ -5,8 +5,8 @@
  ################################################################################
  
--LIBABSEIL_CPP_VERSION = 20250127.0
-+LIBABSEIL_CPP_VERSION = 20250814.1
- LIBABSEIL_CPP_SITE = $(call github,abseil,abseil-cpp,$(LIBABSEIL_CPP_VERSION))
- LIBABSEIL_CPP_LICENSE = Apache-2.0
- LIBABSEIL_CPP_LICENSE_FILES = LICENSE
- LIBABSEIL_CPP_INSTALL_STAGING = YES
- 
- LIBABSEIL_CPP_CONF_OPTS = \
--	-DCMAKE_CXX_STANDARD=14 \
-+	-DCMAKE_CXX_STANDARD=17 \
- 	-DABSL_ENABLE_INSTALL=ON \
- 	-DABSL_USE_GOOGLETEST_HEAD=OFF
- 
- HOST_LIBABSEIL_CPP_CONF_OPTS = \
--	-DCMAKE_CXX_STANDARD=14 \
-+	-DCMAKE_CXX_STANDARD=17 \
- 	-DABSL_ENABLE_INSTALL=ON \
- 	-DABSL_USE_GOOGLETEST_HEAD=OFF
- 
+ PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
+-PYTHON_PROTOBUF_SOURCE = protobuf-5.$(PYTHON_PROTOBUF_VERSION).tar.gz
+-PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/f7/d1/e0a911544ca9993e0f17ce6d3cc0932752356c1b0a834397f28e63479344
++PYTHON_PROTOBUF_SOURCE = protobuf-6.$(PYTHON_PROTOBUF_VERSION).tar.gz
++PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/19/ff/64a6c8f420818bb873713988ca5492cba3a7946be57e027ac63495157d97
+ PYTHON_PROTOBUF_LICENSE = BSD-3-Clause
+ PYTHON_PROTOBUF_LICENSE_FILES = LICENSE
+ PYTHON_PROTOBUF_DEPENDENCIES = host-protobuf
 -- 
 2.43.0
 
