@@ -1,107 +1,106 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE217CCF9FA
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:24:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEFEDCCF9FC
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:24:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 938C141159;
-	Thu, 30 Oct 2025 08:24:01 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1i07rr-EDHnk; Thu, 30 Oct 2025 08:24:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B14DB411A8
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B14DB411A8;
-	Thu, 30 Oct 2025 08:24:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9C78D2A3
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 833A28108E
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 953DE812CF;
+	Thu, 30 Oct 2025 08:24:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IS1unUQTz9R3 for <buildroot@buildroot.org>;
- Thu, 30 Oct 2025 08:23:52 +0000 (UTC)
+ id Abc5xA_hbqir; Thu, 30 Oct 2025 08:24:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B837281544
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B837281544;
+	Thu, 30 Oct 2025 08:24:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id F151F160
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id EC44C81141
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:54 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NL71x9JN7GqZ for <buildroot@buildroot.org>;
+ Thu, 30 Oct 2025 08:23:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7445A80D13
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7445A80D13
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7445A80D13
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:52 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-475ca9237c2so4207225e9.3
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 01:23:52 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 495ED810CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 495ED810CB
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 495ED810CB
+ for <buildroot@busybox.net>; Thu, 30 Oct 2025 08:23:53 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-42966ce6dbdso506189f8f.0
+ for <buildroot@busybox.net>; Thu, 30 Oct 2025 01:23:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1761812630; x=1762417430;
+ d=1e100.net; s=20230601; t=1761812631; x=1762417431;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=+2ESk455kPZi7V7UMu/zinnG7/xej3oUxZKWxLbrLps=;
- b=R0VprvBYs603p604NKLs8VeVu+qn2gwnjC2oz6y6Tk8yHBqwytwYxPWJkf2tHZZcYD
- kpXVTWE4/tqn+nj8tAecmNrN3yaYqCPjBn2APjnRNlBgh7gyh+CIlL00bVb7AhGwvLqf
- iJt8Kf9+vGHC1JYkqq5dj/SSaJ1cAqn+bBuBen8e7YRZgCu7EmCmcCuYFpDvtULfLSQl
- Q1Yg524ikqsIAprEvnY0bCVrD5VAVmbi1mq85pCdHwMdbb0x/KgNTkRUk77UkGUVvTxL
- /QFriTIf+HQOZh9AaTI2AkQsFkf60K94ArNTwz7TWp21P6abXBAWfr4dYjrsscv6cYFv
- oqpg==
+ bh=/7ByEMxdQB+HiWVc8EGsv3a87GFo7wyiR1YqBfHxtQ8=;
+ b=Htzuapb5YQroag+kkVj7tepPoSXrk2hx0dpt/KoXecrGvfRPsGhqns/SeeMizo6GS5
+ OyvBa9JH/Hc6ZicWHupJ3IsHJxsieAjdbHRcFa7jwZv35SGoMXF3Xx08G4/kHxGdR+OY
+ BO6w1iADO7kdtijWz+cCjBEs0fn0skyS300/r3rhMphG+NVwL83RUz/5g1anXazqFMpN
+ hkptUV1CN9ltp3N+KvLM5+yRFnPjC+JB4Rsi1Ap6oi7078JJSFjerMc1TLNbjncXSIOF
+ fT3f1/8cOqnE4i+00s0LrENyhYCwOhpCTXwWe5EkLSPwm3pRrjWDby206R3K4fUCHUv2
+ 0BPw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUV9P25me3jbf4OF9TzZ8H0whlCcMYe+taYQKKECJMlCZaRqV8/clJXRbbAYPLZfWfgEtrc3oxCtqY=@buildroot.org
-X-Gm-Message-State: AOJu0YyU++3rVRXCww+aIDIenM+T/D52obn0gfd0kTMOaDGV8/BNPgid
- cW0pCS6rzJrJQpRiNjzzxeAaR6cPsSiNwCWy0E9rni4pt0ncPlmSZ3KT+c+Au6zGhYM=
-X-Gm-Gg: ASbGnctRmTVifY4tRRo8ilmHPuiFJZKmhEGQYt/7yBhNEnfVuk0mwh6OJAWDe8Smcc8
- aGZ4FwDrb3hLvzqg+5cteUOlfrTcON326ziSdq1n6VR7NQfOTXwNC5iKecN6S33QhZHuJOyBTst
- P45hyTuWeDdlfYt4vqy8HO9RTZ8p2onWR0MlKdfgYCf6PEuZiRxjPHX80vOCChr7q1nEwTHM9+n
- 1fl5hz+w/W/u5tX/qbcgDlFHy6Adv46JTtXG5m90xse2lUtEq948kBJunx5xCNZQswVWIbnD0je
- gEGarAHqcg2my0hdFrbQ+ct0AA/M3JRoJVzF0CkLaKHksGucpwFd1BzOwZmS/1JQTYwsPzUILuy
- exd7XiC/5pNR91vPeOdf+xScoGV3mNowc3gIl4HidrvoUcUDMXqTzkWBD/UGqzEp1OS0YaX0HTD
- ZBalQLFqnO3ID4PDEkwQnZQxYVIQ==
-X-Google-Smtp-Source: AGHT+IGcK6fcms0yCUedVPDMcHgRLCCQET43IUN6qZG+p2/bZ5jAsfYFwb4Vs4LSVfvVAaGifXWlXw==
-X-Received: by 2002:a05:600c:46cc:b0:477:bb0:751b with SMTP id
- 5b1f17b1804b1-4771e1e0589mr45806865e9.27.1761812630452; 
- Thu, 30 Oct 2025 01:23:50 -0700 (PDT)
+ AJvYcCXdcmgNLweTmZ0SnJ7PAwE/YURqW91uuJIc/Rl3eYdMbCTW2bLvc0vzpA+ZAmEDg9KgKdvEQxCgyAM=@busybox.net
+X-Gm-Message-State: AOJu0YwwYQ9fRxNKcHYs15TDmorN8AAQxxrmUwTN7QhLe7dBljQkVfop
+ 78FyEVhy3LrMxE6qBxwCAubxsGgMFayx4pW4b+CAjoKBA5FvQkNAIQNS7usy/moMDgk=
+X-Gm-Gg: ASbGncu6uL18yDNVY5kXeqludvTCMrdiVlVsYs1/59qx2czr5VNof6j5VTTe9Iz9267
+ 4+QWSBTCYngozdlyAJ2b53VVQSewYdZP2S5XYP/TicqufIEhLT4QKksLYjluMN523a0d+Q8N7Ma
+ CFp3ys9TvVnG4+e/WhNa+UIDDSFtWxEr30PHCKMlcbbmLyvJitgKl1qbuBYbXoGccHvpFJ56+zM
+ 0E8uuWNWpbXe24UJST/zYAfruc0okzu4Au30/N7FzuK38m+zt/r5VY64GkvaSUhITf50s3bVOd/
+ BCVEfG75eHSWGa/T2YXzuZMh2Ci52v0hnBLvlz42XzR86M+wE6yeUYDSfFi5tI3Q2gykI6BpKF8
+ X8pxcwIwj0UbcvLT3LWKeEuDayZJLgo5XCC026WX933Y0bP5yMKhuwVU79r20ZejxuadFt1nWTc
+ 3MkMmuOXOPumTaI634+zpeixaEKcXEMdHHEKXE
+X-Google-Smtp-Source: AGHT+IFEc51RKrWM+260Wrr4Kqly7o+0Re3TadelPuj0R8fQ/SSmRMpNOcDdddVfy/8IDSz7m6PpTg==
+X-Received: by 2002:a05:6000:260f:b0:429:b8c7:1817 with SMTP id
+ ffacd0b85a97d-429b8c71e1fmr667059f8f.30.1761812631193; 
+ Thu, 30 Oct 2025 01:23:51 -0700 (PDT)
 Received: from arch (77.109.92.202.static.edpnet.net. [77.109.92.202])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-429ba92da9esm546610f8f.25.2025.10.30.01.23.50
+ ffacd0b85a97d-429952df682sm30503647f8f.43.2025.10.30.01.23.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Thu, 30 Oct 2025 01:23:50 -0700 (PDT)
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: Francois Perrad <francois.perrad@gadz.org>
 Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Thu, 30 Oct 2025 09:23:49 +0100
-Message-ID: <20251030082349.35142-1-thomas.perale@mind.be>
+	buildroot@busybox.net
+Date: Thu, 30 Oct 2025 09:23:50 +0100
+Message-ID: <20251030082350.35191-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251022163104.17325-1-dario.binacchi@amarulasolutions.com>
-References: <20251022163104.17325-1-dario.binacchi@amarulasolutions.com>
+In-Reply-To: <20251022133946.230811-1-francois.perrad@gadz.org>
+References: <20251022133946.230811-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1761812630; x=1762417430; darn=buildroot.org;
+ d=mind.be; s=google; t=1761812631; x=1762417431; darn=busybox.net;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=+2ESk455kPZi7V7UMu/zinnG7/xej3oUxZKWxLbrLps=;
- b=eKNXgom+YkLiFW2An4HKDn7CR+/1IhdZok1A3NesXsP4z+RgO8xd0+ChYwJOgiSOMO
- ZGWJnvSkaYHcRIEPo5u9WMVQUipyWx6lGUWytjr2Sd4nDyPkFqrLQvRQlhOSkPhv95gx
- NGoZAgu9c4emsuvIVMNBjpxnsBncyS3uJqo4Wd6SCpkfOoovAsdFB3ElA4rQlHNDD/DT
- B2iX6Rmohf1NRJ2Tj4s789yQWUCMoUeglgVZ75xG+nEpEuSXqMi5KVXQhGJG5rhBU/CT
- 2Nux29pDlM/279jaKaEZukMyI3vVWXRAA1API+7idePo+HhGON6P4TN8/zudVNCdAiQt
- oexg==
+ bh=/7ByEMxdQB+HiWVc8EGsv3a87GFo7wyiR1YqBfHxtQ8=;
+ b=ZNc7jVidhbBHuKACLZKSPuaqYNlJbH8n+UZCqL02BSDK8CTpzlWjg0h5cOxbyqAtlA
+ 17gdWP1c3f1PLbW0+EXaINbms/Vw4tpEd8MugbFfnvQuxx+Wmpyt5hDTq+SBXb4RP5hF
+ UpBvxcEb5bPRrcgrFOTmfYRTWtDeetrDDKyiswdrIzouDudlOFg3Nru2E8c3v33kW6T/
+ JEibAmyrvitCFl5BVKZr5QWBvsRgZAFPTA5RwWe6RbAJFm1dKAsEMSU91WARoh6RfwzH
+ eX6sCsJbe0qF8DBLFoFrHCw3lEHEQ+ndhl8s5HxyGHDUnhKv0vxJbyfCkM2jxiaSf01q
+ qFiw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=eKNXgom+
-Subject: Re: [Buildroot] [PATCH 1/3] package/libgphoto2: fix build with gcc
- >= 14
+ header.a=rsa-sha256 header.s=google header.b=ZNc7jVid
+Subject: Re: [Buildroot] [PATCH] package/libgtk3: bump to version 3.24.51
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -121,77 +120,44 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> The commit adds a backported upstream patch to fix the following build
-> failure:
-> 
-> ptp2/ptp-pack.c:3168:31: note: earlier argument should specify number of elements, later size of each element
-> ptp2/chdk.c: In function 'yuv_live_to_jpeg':
-> ptp2/chdk.c:1203:41: error: passing argument 3 of 'jpeg_mem_dest' from incompatible pointer type [-Wincompatible-pointer-types]
->  1203 |         jpeg_mem_dest (&cinfo, &outbuf, &outlen);
->       |                                         ^~~~~~~
->       |                                         |
->       |                                         uint64_t * {aka long long unsigned int *}
-> In file included from ptp2/chdk.c:31:
-> /home/autobuild/autobuild/instance-0/output-1/per-package/libgphoto2/host/armeb-buildroot-linux-gnueabi/sysroot/usr/include/jpeglib.h:989:43: note: expected 'long unsigned int *' but argument is of type 'uint64_t *' {aka 'long long unsigned int *'}
->   989 |                            unsigned long *outsize);
-> 
-> Fixes:
-> - https://autobuild.buildroot.org/results/db742e301a401c9f4bdf3c7e8cfde9f0ba1c4558
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
 Applied to 2025.02.x & 2025.08.x. Thanks
 
 > ---
->  ...gth-with-jpeg-jeaders.-fixes-https-g.patch | 39 +++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 package/libgphoto2/0001-align-outlen-length-with-jpeg-jeaders.-fixes-https-g.patch
+>  package/libgtk3/libgtk3.hash | 4 ++--
+>  package/libgtk3/libgtk3.mk   | 6 +++---
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 > 
-> diff --git a/package/libgphoto2/0001-align-outlen-length-with-jpeg-jeaders.-fixes-https-g.patch b/package/libgphoto2/0001-align-outlen-length-with-jpeg-jeaders.-fixes-https-g.patch
-> new file mode 100644
-> index 000000000000..910c9b125add
-> --- /dev/null
-> +++ b/package/libgphoto2/0001-align-outlen-length-with-jpeg-jeaders.-fixes-https-g.patch
-> @@ -0,0 +1,39 @@
-> +From 721f7f8c3ec8058d504607873e4c317aac0c99c5 Mon Sep 17 00:00:00 2001
-> +From: Marcus Meissner <marcus@jet.franken.de>
-> +Date: Mon, 4 Dec 2023 13:26:08 +0100
-> +Subject: [PATCH] align outlen length with jpeg jeaders. fixes
-> + https://github.com/gphoto/libgphoto2/issues/941
-> +
-> +Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> +Upstream: https://github.com/gphoto/libgphoto2/commit/721f7f8c3ec8058d504607873e4c317aac0c99c5
-> +---
-> + camlibs/ptp2/chdk.c | 6 +++---
-> + 1 file changed, 3 insertions(+), 3 deletions(-)
-> +
-> +diff --git a/camlibs/ptp2/chdk.c b/camlibs/ptp2/chdk.c
-> +index e1d898f37811..e775ea1d4bbb 100644
-> +--- a/camlibs/ptp2/chdk.c
-> ++++ b/camlibs/ptp2/chdk.c
-> +@@ -1150,7 +1150,7 @@ static void yuv_live_to_jpeg(unsigned char *p_yuv,
-> + 	struct		jpeg_error_mgr jerr;
-> + 	JSAMPROW	row_ptr[1];
-> + 	uint8_t		*outbuf = NULL, *tmprowbuf = NULL;
-> +-	uint64_t	outlen = 0;
-> ++	unsigned long	outlen = 0;
-> + 	unsigned int	row_inc;
-> + 	int		sshift, dshift, xshift, skip;
-> + 
-> +@@ -1161,8 +1161,8 @@ static void yuv_live_to_jpeg(unsigned char *p_yuv,
-> + 		sshift = 6;
-> + 		dshift = (width/height > 2) ? 6 : 12;
-> + 		xshift = 4;
-> +-	/* Digic 6 cameras: 8 bit per element UYVY,
-> +-	 * 4 bytes used to encode 2 pixels, need 6 bytes raw YUV data for jpeg encoding */
-> ++		/* Digic 6 cameras: 8 bit per element UYVY,
-> ++		 * 4 bytes used to encode 2 pixels, need 6 bytes raw YUV data for jpeg encoding */
-> + 	} else {
-> + 		row_inc = buf_width*2;
-> + 		sshift = 4;
-> +-- 
-> +2.43.0
-> +
+> diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+> index 6a682a741..5394bb10c 100644
+> --- a/package/libgtk3/libgtk3.hash
+> +++ b/package/libgtk3/libgtk3.hash
+> @@ -1,5 +1,5 @@
+> -# From https://download.gnome.org/sources/gtk+/3.24/gtk+-3.24.43.sha256sum
+> -sha256  7e04f0648515034b806b74ae5d774d87cffb1a2a96c468cb5be476d51bf2f3c7  gtk+-3.24.43.tar.xz
+> +# From https://download.gnome.org/sources/gtk/3.24/gtk-3.24.51.sha256sum
+> +sha256  0013877c6bd23c2dbe42ad7c70a053d0e449be66736574e37867c49c5f905a4f  gtk-3.24.51.tar.xz
+>  
+>  # Hash for license file:
+>  sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+> diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+> index d6d7c64a5..be24869d3 100644
+> --- a/package/libgtk3/libgtk3.mk
+> +++ b/package/libgtk3/libgtk3.mk
+> @@ -5,9 +5,9 @@
+>  ################################################################################
+>  
+>  LIBGTK3_VERSION_MAJOR = 3.24
+> -LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).43
+> -LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+> -LIBGTK3_SITE = https://download.gnome.org/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+> +LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).51
+> +LIBGTK3_SOURCE = gtk-$(LIBGTK3_VERSION).tar.xz
+> +LIBGTK3_SITE = https://download.gnome.org/sources/gtk/$(LIBGTK3_VERSION_MAJOR)
+>  LIBGTK3_LICENSE = LGPL-2.0+
+>  LIBGTK3_LICENSE_FILES = COPYING
+>  LIBGTK3_CPE_ID_VENDOR = gnome
 > -- 
 > 2.43.0
 > 
