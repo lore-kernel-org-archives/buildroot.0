@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E2ACCCF9FC
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:22:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11F87CCF9F0
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:22:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2F8C683F79;
-	Thu, 30 Oct 2025 08:22:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CD53682862;
+	Thu, 30 Oct 2025 08:22:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qnRCMSoa2jRZ; Thu, 30 Oct 2025 08:22:36 +0000 (UTC)
+ id OFQdmG6bmdEw; Thu, 30 Oct 2025 08:22:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41B3D83F46
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B2F083F46
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 41B3D83F46;
-	Thu, 30 Oct 2025 08:22:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 32A36160
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8B2F083F46;
+	Thu, 30 Oct 2025 08:22:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A40492A3
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2461040B95
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9650D829FE
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1iDa9pito9wg for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DtsfniLxyTmg for <buildroot@buildroot.org>;
  Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E15740C90
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E994B82862
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5E15740C90
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E994B82862
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:22:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5C13E87A0D; Thu, 30 Oct 2025 08:22:28 +0000 (UTC)
+ id D72FD879C2; Thu, 30 Oct 2025 08:22:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 30 Oct 2025 09:17:50 +0100
+Date: Thu, 30 Oct 2025 09:17:36 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: 6827af4384b9576557b65fb48db2d84d7b830bfa
-X-Git-Newrev: f2a0e39e682ea7d27d1884e26a815783973a8717
+X-Git-Oldrev: bfa3bc6fc479c9079a19e57db9fafc5f168cf71b
+X-Git-Newrev: 026d492b3ea35c3e5d1551eec95cde8b65a6aa75
 X-Patchwork-Hint: ignore
-Message-Id: <20251030082228.5C13E87A0D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/mjpg-streamer:
- fix build with gcc >= 14
+Message-Id: <20251030082227.D72FD879C2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/modsecurity2:
+ security bump to v2.9.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,91 +61,78 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2991846871315335910=="
+Content-Type: multipart/mixed; boundary="===============6297883989789458154=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2991846871315335910==
+--===============6297883989789458154==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2a0e39e682ea7d27d1884e26a815783973a8717
+commit: https://git.buildroot.net/buildroot/commit/?id=026d492b3ea35c3e5d1551eec95cde8b65a6aa75
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-When mjpg-streamer is built with gcc >= 14 using libjpeg (rather than
-jpeg-turbo), and with SDL is enabled (to enable the output_viewer),
-the compilation can fail with error:
+See the release notes:
+- https://github.com/owasp-modsecurity/ModSecurity/releases/tag/v2.9.11
+- https://github.com/owasp-modsecurity/ModSecurity/releases/tag/v2.9.12
 
-    output_viewer.c:125:32: error: assignment to ‘boolean (*)(struct jpeg_decompress_struct *)’ from incompatible pointer type ‘int (*)(struct jpeg_decompress_struct *)’ [-Wincompatible-pointer-types]
+This fixes the following vulnerabilities:
+- CVE-2025-52891:
+    ModSecurity is an open source, cross platform web application firewall
+    (WAF) engine for Apache, IIS and Nginx. In versions 2.9.8 to before
+    2.9.11, an empty XML tag can cause a segmentation fault. If
+    SecParseXmlIntoArgs is set to On or OnlyArgs, and the request type is
+    application/xml, and at least one XML tag is empty (eg <foo></foo>),
+    then a segmentation fault occurs. This issue has been patched in
+    version 2.9.11. A workaround involves setting SecParseXmlIntoArgs to
+    Off.
+    https://www.cve.org/CVERecord?id=CVE-2025-52891
 
-The issue can be reproduced with the commands:
+- CVE-2025-54571:
+    ModSecurity is an open source, cross platform web application firewall
+    (WAF) engine for Apache, IIS and Nginx. In versions 2.9.11 and below,
+    an attacker can override the HTTP response’s Content-Type, which could
+    lead to several issues depending on the HTTP scenario. For example, we
+    have demonstrated the potential for XSS and arbitrary script source
+    code disclosure in the latest version of mod_security2. This issue is
+    fixed in version 2.9.12.
+    https://www.cve.org/CVERecord?id=CVE-2025-54571
 
-    cat >.config <<EOF
-    BR2_aarch64=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-    BR2_PACKAGE_LIBJPEG=y
-    BR2_PACKAGE_MJPG_STREAMER=y
-    BR2_PACKAGE_SDL=y
-    EOF
-    make olddefconfig
-    make mjpg-streamer
-
-This commit adds a patch to fix this issue.
-
-Fixes:
-https://autobuild.buildroot.net/results/3a5/3a5674e4e7bb3f2894575191af24598e2a696912/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien: add commands to reproduce the issue]
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit af4eef1e0f7610573802273abbe8518a2f5b4a61)
+(cherry picked from commit 684462bbe8aee3bd888a4f161041424cf0aee71d)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../0003-output_viewer-fix-build-with-gcc-14.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ package/modsecurity2/modsecurity2.hash | 4 ++--
+ package/modsecurity2/modsecurity2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mjpg-streamer/0003-output_viewer-fix-build-with-gcc-14.patch b/package/mjpg-streamer/0003-output_viewer-fix-build-with-gcc-14.patch
-new file mode 100644
-index 0000000000..74c26ec3ea
---- /dev/null
-+++ b/package/mjpg-streamer/0003-output_viewer-fix-build-with-gcc-14.patch
-@@ -0,0 +1,34 @@
-+From c0656c6a538739635441b165b4f1ba7c22c68b1d Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Sat, 18 Oct 2025 18:54:36 +0200
-+Subject: [PATCH] output_viewer: fix build with gcc >= 14
-+
-+Fixes build error found by buildroot autobuilders:
-+
-+output_viewer.c:125:32: error: assignment to 'boolean (*)(struct jpeg_decompress_struct *)'
-+from incompatible pointer type 'int (*)(struct jpeg_decompress_struct *)'
-+[-Wincompatible-pointer-types]
-+
-+Upstream: https://github.com/jacksonliam/mjpg-streamer/pull/420
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ .../plugins/output_viewer/output_viewer.c                       | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/mjpg-streamer-experimental/plugins/output_viewer/output_viewer.c b/mjpg-streamer-experimental/plugins/output_viewer/output_viewer.c
-+index dd6c55b..c50f701 100644
-+--- a/mjpg-streamer-experimental/plugins/output_viewer/output_viewer.c
-++++ b/mjpg-streamer-experimental/plugins/output_viewer/output_viewer.c
-+@@ -86,7 +86,7 @@ static void init_source(j_decompress_ptr cinfo)
-+     return;
-+ }
-+ 
-+-static int fill_input_buffer(j_decompress_ptr cinfo)
-++static boolean fill_input_buffer(j_decompress_ptr cinfo)
-+ {
-+     my_source_mgr * src = (my_source_mgr *) cinfo->src;
-+ 
-+-- 
-+2.47.3
-+
+diff --git a/package/modsecurity2/modsecurity2.hash b/package/modsecurity2/modsecurity2.hash
+index 186e13d766..3e6019d043 100644
+--- a/package/modsecurity2/modsecurity2.hash
++++ b/package/modsecurity2/modsecurity2.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/owasp-modsecurity/ModSecurity/releases/download/v2.9.10/modsecurity-v2.9.10.tar.gz.sha256
+-sha256  081cda52975494139922fa4b54f474fed8a6db4b7f586cb0d3aeec635f7a4d53  modsecurity-v2.9.10.tar.gz
++# From https://github.com/owasp-modsecurity/ModSecurity/releases/download/v2.9.12/modsecurity-v2.9.12.tar.gz.sha256
++sha256  79ada8693303be3490201397344bf66900a45f07ae328bf6cf01ca99e5d135fa  modsecurity-v2.9.12.tar.gz
+ 
+ # Locally computed
+ sha256  2c564f5a67e49e74c80e5a7dcacd1904e7408f1fd6a95218b38c04f012d94cb9  LICENSE
+diff --git a/package/modsecurity2/modsecurity2.mk b/package/modsecurity2/modsecurity2.mk
+index 402ba6317b..0754d5c907 100644
+--- a/package/modsecurity2/modsecurity2.mk
++++ b/package/modsecurity2/modsecurity2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MODSECURITY2_VERSION = 2.9.10
++MODSECURITY2_VERSION = 2.9.12
+ MODSECURITY2_SOURCE = modsecurity-v$(MODSECURITY2_VERSION).tar.gz
+ MODSECURITY2_SITE = https://github.com/owasp-modsecurity/ModSecurity/releases/download/v$(MODSECURITY2_VERSION)
+ MODSECURITY2_LICENSE = Apache-2.0
 
---===============2991846871315335910==
+--===============6297883989789458154==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -156,4 +143,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============2991846871315335910==--
+--===============6297883989789458154==--
