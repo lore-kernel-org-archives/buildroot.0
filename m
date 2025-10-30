@@ -1,76 +1,99 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C51FCCF9F0
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 21:42:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 794D6CCF9F0
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 23:37:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0302E41537;
-	Thu, 30 Oct 2025 21:42:52 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id whZi_gJGiuN3; Thu, 30 Oct 2025 21:42:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E38841558
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1E38841558;
-	Thu, 30 Oct 2025 21:42:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 63D4E160
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 21:42:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5AD9261560
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 21:42:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E32B613A0;
+	Thu, 30 Oct 2025 23:37:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DJ35akbv-v1S for <buildroot@buildroot.org>;
- Thu, 30 Oct 2025 21:42:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 57530614D2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57530614D2
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 57530614D2
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 21:42:48 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0cb2.dip0.t-ipconnect.de [91.58.12.178])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 22EF9A4C5B45
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 22:41:57 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:41906)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1vEaP6-000000004EC-4AXC
- for buildroot@buildroot.org; Thu, 30 Oct 2025 21:41:56 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Thu, 30 Oct 2025 22:41:56 +0100
-Message-ID: <20251030214156.1307743-5-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251030214156.1307743-1-bernd@kuhls.net>
-References: <20251030214156.1307743-1-bernd@kuhls.net>
+ id blsvDtJUyhmk; Thu, 30 Oct 2025 23:37:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24C76611E1
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 24C76611E1;
+	Thu, 30 Oct 2025 23:37:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 80FEE707
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 23:37:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 727424061A
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 23:37:41 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id i68p06ZtcbAU for <buildroot@buildroot.org>;
+ Thu, 30 Oct 2025 23:37:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::112a; helo=mail-yw1-x112a.google.com;
+ envelope-from=nemaakhilesh@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 86C8B400FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86C8B400FE
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com
+ [IPv6:2607:f8b0:4864:20::112a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 86C8B400FE
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 23:37:40 +0000 (UTC)
+Received: by mail-yw1-x112a.google.com with SMTP id
+ 00721157ae682-784826b775aso20511607b3.2
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 16:37:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1761867459; x=1762472259;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Wmv5MUXF1OVlCIswEQcYyT77QBwbJ7KdMFORw/Zysxo=;
+ b=Vv52a19XDy6N6m3/+CadkfG/mIxEVN5jz5FlVRKM3sC3WH/coRxm2YcMdl4bXMB6zj
+ uaE9oMWWav+kI9gHBONZB1oTURwZq9Uq708YAJJbh7QLmN06QhGiEU/93YBI6HOgCKZA
+ 7TCLQkDOSQ+I7uK/kZYL7ubqjAJhNiq0JFdtKwq8XRT84QmlfJSWo62B0vdB4dZOHGaN
+ ZTdxbAPzmDubWiGygYxLgbWKLUAlUwwMd1IkxruXMj4nWQPPwlkACsD2strBBuoc7p93
+ l7hcqoPEX9q1U4bEjmXyvyS8qtGewskUTK7HT8x0H5vqpY+OEX95DjJgjKyMgY0CSu+q
+ gO3g==
+X-Gm-Message-State: AOJu0YwRB9ShhAA+bX4gSNvv8ZwDvWl1XE8zILGO/x0lebJaD2G65ec9
+ 018+HXJ7wrG3MNQS7g10uGmtpTBP1ROSNfZGUtz2Zo0omYV5dYRbIL6RWcfV0NvF7mMLE30YCbR
+ rDvQksUyrAdC5LyGkr8qToPQsTd8f3AJe9Q==
+X-Gm-Gg: ASbGncvg+l1q00rfR+/kCbbXLp5HcXbvv7bnJWXav3TR1q8Y6d4jFVEmtygYteZN3Dq
+ yGEwUCemk5IHJ956eyNXAkXLsjcqP9JpKT9qOE0738t5wlimeFM19EEmOvNIa2/SHTjN0cVi0Vg
+ XEEr+a4I4xtym62OsIBd+OFbVESGKCFCsWn1Jzr3+WCc7Idb2mTdLR0eHhj/D0C7GUHMvNfQOA0
+ zPo0K/fthDCA2fRUoxsHPD6gkEwgcm6rrpg3LaN9PyzYs4CRx3/ci5A94PBvYbCINN3NYR+G0dV
+ PGga/Ycl5VVh43NodoZ2nL+w8aU=
+X-Google-Smtp-Source: AGHT+IHNBlyueB5KMobAVH429cYV57izgnYBwBWlBEtJjK73qbayRUGgneLfQRBDgWa81ZtoL8yfQ9iZo5r58fUqpdU=
+X-Received: by 2002:a05:690c:690a:b0:785:b16a:9bc6 with SMTP id
+ 00721157ae682-786483e8a28mr12098847b3.4.1761867459070; Thu, 30 Oct 2025
+ 16:37:39 -0700 (PDT)
 MIME-Version: 1.0
-X-Spamd-Bar: +
+References: <20251030202646.1825077-1-bernd@kuhls.net>
+ <20251030202646.1825077-3-bernd@kuhls.net>
+In-Reply-To: <20251030202646.1825077-3-bernd@kuhls.net>
+From: Akhilesh Nema <nemaakhilesh@gmail.com>
+Date: Thu, 30 Oct 2025 16:37:12 -0700
+X-Gm-Features: AWmQ_blJf70g5QvOo72MVtxxig5VRr2bnHEHHlCZXsuoFG4qq2sQj3m9yvBbVf4
+Message-ID: <CAMV0Ro_8cErOj0+GPHc9bpQ3vnKiXhNc6iKfHXfztVmOBNmnew@mail.gmail.com>
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1761860517;
- bh=pNsFumuO7meC7D96bujIpFVr4mAJ3w30v8VipxGw8rQ=;
- h=From:To:Subject:Date:In-Reply-To:From;
- b=gLSatgamyhTrUsMO9yRGFIcFNGo/tn4buXM3cnXaN/EFoJwY92QbXYC8SHNgV26VZ
- 59C0qZgoAhzsLcSTY0+CWMSF2ElbK2aIQtEkLOc/GJPsVzDzt/shteceu/GotRO/PJ
- u6ll8aN8c6HfoG9Sdq6CU6V4NWtqoNWVq4JQ7yeTXdmkziPo0V5foalq0ygkbtl/JH
- 99OLagxrhIuLndVUx+htbNf3trpkOk93ncdh0syZbEd5iiD4kDIaXUZ7PWHXBtiAr1
- grKIhxAromRb3ZOtjAR8kSxiQpgDlywn3DzW5DspLui+5YQUAsaLQWR9Ho7Q95v1+U
- QIwUrHWv8PZdw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1761867459; x=1762472259; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=Wmv5MUXF1OVlCIswEQcYyT77QBwbJ7KdMFORw/Zysxo=;
+ b=WaK4hk4EUWYNjQiGC7xSSymOraMfoYRL5BVxfKo3Mrd0ajehzJcOvI6G/rjt9p8mvf
+ EmbWCFaqaMojwBywCubX7DrCvtkuJZGjyptkmAuVs7ZnRaYt0Wt3A1CM0zCrxAwuwi0Z
+ 9GczhD8T7oanolzQ4k/wM5XR7ezjebB04T6WzfJDwG4QTQxpGSVNWRn6rlhfMK5KuTAO
+ 7sZX5fbrH7PvXeZCehpIoqL9PLOt3Al20LTDFXUTwwkmKFQFXh5ku/sq0BuuFaD5u0SS
+ fpIL77FvGmJPRb8AEsU31yRh9FE7CGkXIleZPdEeP/RZReSZ/ILFNOP3KMXKzzDSvN0X
+ gJ0g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=gLSatgam
-Subject: [Buildroot] [PATCH 5/5] package/bind: security bump version to
- 9.18.41
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=WaK4hk4E
+Subject: Re: [Buildroot] [PATCH 2/4] package/expect: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,53 +105,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8234442023360960047=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://ftp.isc.org/isc/bind9/9.18.41/doc/arm/html/notes.html
+--===============8234442023360960047==
+Content-Type: multipart/alternative; boundary="0000000000000a0e4d064268bca5"
 
-Changelog:
-https://ftp.isc.org/isc/bind9/9.18.41/doc/arm/html/changelog.html
+--0000000000000a0e4d064268bca5
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Fixes CVE-2025-8677, CVE-2025-40778 & CVE-2025-40780.
+Hi Bernd,
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Thu, Oct 30, 2025 at 1:27=E2=80=AFPM Bernd Kuhls <bernd@kuhls.net> wrote=
+:
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 50247bcf37..d601e87b75 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.18.33/bind-9.18.33.tar.xz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.18.41/bind-9.18.41.tar.xz.asc
- # with key D99CCEAF879747014F038D63182E23579462EFAA
--sha256  fb373fac5ebbc41c645160afd5a9fb451918f6c0e69ab1d9474154e2b515de40  bind-9.18.33.tar.xz
-+sha256  6ddc1d981511c4da0b203b0513af131e5d15e5f1c261145736fe1f35dd1fe79d  bind-9.18.41.tar.xz
- sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index c4d9047c4e..8b336ab781 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.18.33
-+BIND_VERSION = 9.18.41
- BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_INSTALL_STAGING = YES
--- 
-2.47.3
+> Package is unmaintained and causes build errors with gcc >=3D 14.x:
+> https://sourceforge.net/p/expect/bugs/107
+>
+> Fixes:
+>
+> https://autobuild.buildroot.net/results/425/425dadaa4a75eae93313511728394=
+02a197749a5/
+>
+> Expect is still used on legacy systems for automation and testing, and
+removing it would create overhead for users to maintain it in their
+external trees.
+
+Thanks
+Akhilesh
+
+--0000000000000a0e4d064268bca5
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Hi Bernd,</div><div dir=3D"ltr"><br></div><div class=
+=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Thu, Oct 30, 2025=
+ at 1:27=E2=80=AFPM Bernd Kuhls &lt;<a href=3D"mailto:bernd@kuhls.net" targ=
+et=3D"_blank">bernd@kuhls.net</a>&gt; wrote:<br></div><blockquote class=3D"=
+gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(20=
+4,204,204);padding-left:1ex">Package is unmaintained and causes build error=
+s with gcc &gt;=3D 14.x:<br>
+<a href=3D"https://sourceforge.net/p/expect/bugs/107" rel=3D"noreferrer" ta=
+rget=3D"_blank">https://sourceforge.net/p/expect/bugs/107</a><br>
+<br>
+Fixes:<br>
+<a href=3D"https://autobuild.buildroot.net/results/425/425dadaa4a75eae93313=
+51172839402a197749a5/" rel=3D"noreferrer" target=3D"_blank">https://autobui=
+ld.buildroot.net/results/425/425dadaa4a75eae9331351172839402a197749a5/</a><=
+br><br></blockquote><div>Expect is still used on legacy systems for automat=
+ion and testing, and removing it would create overhead for users to maintai=
+n it in their external trees.</div><div><br></div><div>Thanks</div><div>Akh=
+ilesh</div></div>
+</div>
+
+--0000000000000a0e4d064268bca5--
+
+--===============8234442023360960047==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8234442023360960047==--
