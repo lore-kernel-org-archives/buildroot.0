@@ -4,104 +4,103 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F383CCF9F8
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:24:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29935CCF9FA
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:24:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 24A4E83BB5;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2917683C5F;
 	Thu, 30 Oct 2025 08:24:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iVFo7h8IO17T; Thu, 30 Oct 2025 08:24:14 +0000 (UTC)
+ id TlzZmxvXpiw6; Thu, 30 Oct 2025 08:24:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C14583B99
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 864538232F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0C14583B99;
-	Thu, 30 Oct 2025 08:24:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id CAE2B160
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:24:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B00D581544
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:24:02 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2S-DIgcVbDw3 for <buildroot@buildroot.org>;
- Thu, 30 Oct 2025 08:24:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ADD698153D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ADD698153D
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id ADD698153D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 864538232F;
+	Thu, 30 Oct 2025 08:24:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3B15F160
  for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:24:01 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id
- ffacd0b85a97d-3ee64bc6b85so768314f8f.3
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 01:24:01 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2BF0E6128B
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:24:01 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zRysvYdsmwMo for <buildroot@buildroot.org>;
+ Thu, 30 Oct 2025 08:23:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D974161325
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D974161325
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D974161325
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:58 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-42557c5cedcso427396f8f.0
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 01:23:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1761812640; x=1762417440;
+ d=1e100.net; s=20230601; t=1761812637; x=1762417437;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=gYX32lpT4SUqhNDXsCnhaxp8Nj0C/9jCiyhM+GTl7n0=;
- b=QSJgHXyT3D8sIQqUIBcbCyBKPvMphgFX7y0DjMGglSSYEHFR1nm/NKlHww52aT/HlU
- uBT+sxkjkBz0BSbPv1Le1Rd8cWLmcWMS1PPj5ZdBtWWV2PlXe81ZDqijZT67KIK/TVcB
- hA3GcII1JSh+rMyhVXkR9UAilfP3ltvb8xjkIkNgpNaLnFR2DGgWV1UblElcSxXkNH2h
- dfmf4XbkY4aeyuoDHrvt705oJxWkWs3lzlKELgAgJPpx3E1sUNwXuL94qBTh4Gfadjoe
- AEmOEEOuSCygPoI/XCeuDm7VsMDc46Zyvibf/b+jlfir/TxFe45byvcWYgjWFe5Zvceu
- 0n0w==
+ bh=QCQtbJIn0wkYXCVfpOwibCc+uelP1WaeYyJhftFQlXM=;
+ b=Lzn0yWTRYUwH0nhG93iLuQMEso0e2xRXFZWoDGhziUzVaPwBOoF8io/HvgsSgKKY6u
+ dBVIo/bzjtA3wOEceCGhzG8Mwx039W9rGmLn6/iYr9wewDHWDXdSMw90eZTbDQVes/Kl
+ 6toXjxG4DLdt9knXS6I2OkdKODMNpQnWdHad6vDG4NNWFs7PafBz9PBLZVInNmOlesIm
+ PMCltItVCvDBtWoQwvqLFMgkoK807Ppo1ScV4r+MG3h5hA94H8xm7oy+/FMQrZGrB5lt
+ Ny1+CrBCcDtkxJ4iTwIfzcbs9df+oCxT9PvFDOFiFwAsAjMolasBJZYt3wam4IGpS9TY
+ x8tQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUYCO7SfvawcikxUaPFlaij3pq8DAOKpPOphFe1Jy8Uy8xOKRTWC8He5CH8Q9A56gKRDzBTX6bk/eQ=@buildroot.org
-X-Gm-Message-State: AOJu0YwKiN9mS+ZuQPwCzhnVqdueNPFtdb/lzo9tx0VTniEtXKkJRA4h
- SZqpNOh1s7hYS0Rq9s9ip7QA9A1RMZW5/tT8xlXuvEOA/hw0n5jg4xgqWwMxUeG+IeY=
-X-Gm-Gg: ASbGncsQGK0kV3hSH+kewtDlw5yrpKqKfQ+atpwJ84MTIvqkRukDe+mgMlYqw6WI3uM
- PVbYcvdCjb1WpshiSnNbS1q48s46jMiOQQj70lcrlTCkFIXDYZefONAwML08jt2JS2JI4CanZSB
- peCt8bXacG2eqbmk4l2xy3quQhH5KO3a+uLOpepw6NxXelECAMH2HxwndxIWZQQTHVj425WFNWr
- 7nfDCsG7ZASD76zyIN3xNqWanYnFh09xBFPtHLpp58LAO896kAxqi6P1AaIY/7rf0nHpWHYsC1J
- /LDmTu/9Vj/vDu8F1laus3V/LThsN1Xam5sC26K/0/8s9wrpXZTCs1pgONDRJc5CBgowZrwqBmR
- VDllweOZ4gYPNSuhEqWCQqCQG5M4N5kotuCCj+BgP17IyPibWqYknr5qdlc6jDJpXk9K4EvoBRd
- oRnhNtvGcorsjrEW7s0rBHHiODL5wV7Ocf2M4l
-X-Google-Smtp-Source: AGHT+IHf0SAEH44tvIZPkga3vNy02jD5loQO20fWYK6/Po7ncP1EwTiHZJ42SizOphsUMSDxD0orew==
-X-Received: by 2002:a05:6000:2c04:b0:427:7ad:cdac with SMTP id
- ffacd0b85a97d-429b4c89fc8mr1957171f8f.20.1761812639639; 
- Thu, 30 Oct 2025 01:23:59 -0700 (PDT)
+ AJvYcCX/+yMbKX251w5PXs2CUfpbF5z0HRd1y83F2mo+erRtBZKy/Q9LFkaYNh5jE7yxoymhlDEZTg8AICY=@buildroot.org
+X-Gm-Message-State: AOJu0Yzb72acYfWS5S7Jnhx8M1KHfLIlP6jVn7eaj3tKkpDq1Wws4AEE
+ Qi8+hypGZZjIixLVLKv/VERwzX1V1q8mBzoABcFdhShi+HbpuAiGA1G4mCoVvSRdzc8=
+X-Gm-Gg: ASbGnctqrZiHjNxFaNkfx6NXgw8BKL9zruUg0e+RRmgI+Y1w+xF5YX6U2Yz9pTROScz
+ /ifLfYYD5LNuQ3wKzyE3+YMCre09+eAsXP0+9WOffSVsiSVd4ZwpCuUgDzyqSBTIJwtxmjfDk3o
+ BfoHSVLHlnBpLO/xMBuMFRSLf+Kb5w9NPBLiUgCo8ep5wDuNrzQUJ7FKzjImO+k1/b9HDDsVU9b
+ k6xNEFeHgy8VRFWAZPvTkw7X1REFUfG4DfzWirXkkkZxLFiH5bwuQNvqUNIb9HsO/J4PqvrgV2O
+ pyjWsA81/E6bwskYFn9b5GMUp/V0MNEnU0DCkEsOEY4qDAy+t9Cn8X9tHdTMnq4jJYUCzNPoyWf
+ v0BgbK2JeZojPsM/09/2dKyfYkAMz+WE/W7MKhCmmZznf0wmC7swpDiMiTdcpsprymNPF8LT+4I
+ GGL7VKYUMyS037yQJy0Gcn+cENt6ahNU+9OGdD2swIJ95xHgA=
+X-Google-Smtp-Source: AGHT+IH0FIu7i6AigIwhQkY/6HiKQokEUrVCBH0J6dfh+Bjvgm6x8rDEE5dRlsDsWip/o/3OezMhWw==
+X-Received: by 2002:a5d:64c5:0:b0:426:d80c:2759 with SMTP id
+ ffacd0b85a97d-429aef82f47mr4863131f8f.25.1761812636671; 
+ Thu, 30 Oct 2025 01:23:56 -0700 (PDT)
 Received: from arch (77.109.92.202.static.edpnet.net. [77.109.92.202])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-429952b7b43sm30933523f8f.6.2025.10.30.01.23.59
+ ffacd0b85a97d-429952cbc16sm29782504f8f.15.2025.10.30.01.23.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 30 Oct 2025 01:23:59 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
+ Thu, 30 Oct 2025 01:23:56 -0700 (PDT)
+To: Titouan Christophe <titouan.christophe@mind.be>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 30 Oct 2025 09:23:58 +0100
-Message-ID: <20251030082358.35663-1-thomas.perale@mind.be>
+Date: Thu, 30 Oct 2025 09:23:55 +0100
+Message-ID: <20251030082355.35501-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251026082757.252631-1-bernd@kuhls.net>
-References: <20251026082757.252631-1-bernd@kuhls.net>
+In-Reply-To: <20251024100443.108427-1-titouan.christophe@mind.be>
+References: <20251024100443.108427-1-titouan.christophe@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1761812640; x=1762417440; darn=buildroot.org;
+ d=mind.be; s=google; t=1761812637; x=1762417437; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=gYX32lpT4SUqhNDXsCnhaxp8Nj0C/9jCiyhM+GTl7n0=;
- b=MsJDd6XjCCPzuHdH0nkPfVfdqlle9JUfzqyGlsDNXZwy8O5+WELj+shnK4TfaYzl0w
- hPkg5aU950EGMLDimy173Cuc80HpGLKxPkuPZTQKHoJclHdXDlWAD2V3TsmG8YPwu6RH
- 2kbMp65G/dD52qZEBanUM389AiJDQRv2mRq2L3ltYuLM+hEFe4agqPQEr6HJwnTQLIg7
- Xx5FBhaqcTqRcQNlbRDgOYWz7520Hib9lpAB4JN8EAaUWsKFUIkcyKbjNWIFmYY/uT0i
- tAgOaoj/D1Y2rRdkMvasCCxvbW1Iag0lABVTshEvrVXUGOaPVYcNk4j85iDDKG4GJ6wI
- /Hbg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=QCQtbJIn0wkYXCVfpOwibCc+uelP1WaeYyJhftFQlXM=;
+ b=aJsPqQTYpfPfnjNTEBGYxICze/yt1aZXbHKS/6slLt2Uk4KTnK4coOGal7lbUOTAlR
+ zaHSFAmXNMe/ehmdcgd8mbAlcqQ/lk+NDIfnSKzLfME2/8bNJGzVSRiEu0VOW09Gt31C
+ CeyJJlm4nnJ1PHiLeLFSMtfd3DzWT80kmUAzh+ROYO6cOzn0MqF9NoaxSczl1p+gsPCR
+ WGcunJ4bc987JPblPwwp4QBWcOGWqbA3Pjn2F9yz6HhDuJ7xOTQ4NxyAYGHjrUTj/y/s
+ h+BQ1+YyKKJBlRE33xIId6JiDav5xV7IVqqyVmJ7ZTtrhrFbqQ5Z26e+Jcwpj1JXN8yj
+ V+Pg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=MsJDd6Xj
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/libsolv: add upstream patch
- to fix musl build
+ header.a=rsa-sha256 header.s=google header.b=aJsPqQTY
+Subject: Re: [Buildroot] [PATCH] package/netdata: security bump to v1.37.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -121,117 +120,831 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> After the introduction of qsort_r in musl, building libsolv with musl fails with
-> unmatched qsort_r function signature. The commit adds the recently upstreamed
-> patch to fix it.
+> Do not bump to a more recent version, as the build system has
+> fundamentally changed.
 > 
-> Original PR: https://github.com/openSUSE/libsolv/pull/600
+> See the release notes:
+> - https://github.com/netdata/netdata/releases/tag/1.34.0
+> - https://github.com/netdata/netdata/releases/tag/v1.34.1
+> - https://github.com/netdata/netdata/releases/tag/v1.35.0
+> - https://github.com/netdata/netdata/releases/tag/v1.35.1
+> - https://github.com/netdata/netdata/releases/tag/v1.36.0
+> - https://github.com/netdata/netdata/releases/tag/v1.36.1
+> - https://github.com/netdata/netdata/releases/tag/v1.37.0
+> - https://github.com/netdata/netdata/releases/tag/v1.37.1
 > 
-> Fixes: http://autobuild.buildroot.org/results/ab06e97bef898b2c53b906afb2a4b8ee6841bacb
+> In addition, add upstream patch to fix cross-compilation.
 > 
-> Signed-off-by: Gong Zhile <gongzl.oerv@isrc.iscas.ac.cn>
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> This fixes the following vulnerabilities:
+> - CVE-2023-22496:
+>     Netdata is an open source option for real-time infrastructure
+>     monitoring and troubleshooting. An attacker with the ability to
+>     establish a streaming connection can execute arbitrary commands on the
+>     targeted Netdata agent. When an alert is triggered, the function
+>     `health_alarm_execute` is called. This function performs different
+>     checks and then enqueues a command by calling `spawn_enq_cmd`. This
+>     command is populated with several arguments that are not sanitized.
+>     One of them is the `registry_hostname` of the node for which the alert
+>     is raised. By providing a specially crafted `registry_hostname` as
+>     part of the health data that is streamed to a Netdata (parent) agent,
+>     an attacker can execute arbitrary commands at the remote host as a
+>     side-effect of the raised alert. Note that the commands are executed
+>     as the user running the Netdata Agent. This user is usually named
+>     `netdata`. The ability to run arbitrary commands may allow an attacker
+>     to escalate privileges by escalating other vulnerabilities in the
+>     system, as that user. The problem has been fixed in: Netdata agent
+>     v1.37 (stable) and Netdata agent v1.36.0-409 (nightly). As a
+>     workaround, streaming is not enabled by default. If you have
+>     previously enabled this, it can be disabled. Limiting access to the
+>     port on the recipient Agent to trusted child connections may mitigate
+>     the impact of this vulnerability.
+>     https://www.cve.org/CVERecord?id=CVE-2023-22496
+> 
+> - CVE-2023-22497:
+>     Netdata is an open source option for real-time infrastructure
+>     monitoring and troubleshooting. Each Netdata Agent has an
+>     automatically generated MACHINE GUID. It is generated when the agent
+>     first starts and it is saved to disk, so that it will persist across
+>     restarts and reboots. Anyone who has access to a Netdata Agent has
+>     access to its MACHINE_GUID. Streaming is a feature that allows a
+>     Netdata Agent to act as parent for other Netdata Agents (children),
+>     offloading children from various functions (increased data retention,
+>     ML, health monitoring, etc) that can now be handled by the parent
+>     Agent. Configuration is done via `stream.conf`. On the parent side,
+>     users configure in `stream.conf` an API key (any random UUID can do)
+>     to provide common configuration for all children using this API key
+>     and per MACHINE GUID configuration to customize the configuration for
+>     each child. The way this was implemented, allowed an attacker to use a
+>     valid MACHINE_GUID as an API key. This affects all users who expose
+>     their Netdata Agents (children) to non-trusted users and they also
+>     expose to the same users Netdata Agent parents that aggregate data
+>     from all these children. The problem has been fixed in: Netdata agent
+>     v1.37 (stable) and Netdata agent v1.36.0-409 (nightly). As a
+>     workaround, do not enable streaming by default. If you have previously
+>     enabled this, it can be disabled. Limiting access to the port on the
+>     recipient Agent to trusted child connections may mitigate the impact
+>     of this vulnerability.
+>     https://www.cve.org/CVERecord?id=CVE-2023-22497
+> 
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 
 Applied to 2025.02.x & 2025.08.x. Thanks
 
 > ---
-> v2: added Upstream: tag in patch file
+>  .../0001-libjudy-remove-JudyLTablesGen.patch  | 707 ++++++++++++++++++
+>  package/netdata/netdata.hash                  |   4 +-
+>  package/netdata/netdata.mk                    |   3 +-
+>  3 files changed, 711 insertions(+), 3 deletions(-)
+>  create mode 100644 package/netdata/0001-libjudy-remove-JudyLTablesGen.patch
 > 
->  ..._r-preprocessor-for-musl-and-FreeBSD.patch | 83 +++++++++++++++++++
->  1 file changed, 83 insertions(+)
->  create mode 100644 package/libsolv/0001-Fix-qsort_r-preprocessor-for-musl-and-FreeBSD.patch
-> 
-> diff --git a/package/libsolv/0001-Fix-qsort_r-preprocessor-for-musl-and-FreeBSD.patch b/package/libsolv/0001-Fix-qsort_r-preprocessor-for-musl-and-FreeBSD.patch
+> diff --git a/package/netdata/0001-libjudy-remove-JudyLTablesGen.patch b/package/netdata/0001-libjudy-remove-JudyLTablesGen.patch
 > new file mode 100644
-> index 0000000000..04a4312db4
+> index 0000000000..b04f61721a
 > --- /dev/null
-> +++ b/package/libsolv/0001-Fix-qsort_r-preprocessor-for-musl-and-FreeBSD.patch
-> @@ -0,0 +1,83 @@
-> +From 2d0718a4f2001c857d9af24398c68d676a98a3ca Mon Sep 17 00:00:00 2001
-> +From: Gong Zhile <gongzl.oerv@isrc.iscas.ac.cn>
-> +Date: Wed, 22 Oct 2025 18:14:30 +0800
-> +Subject: [PATCH] Fix qsort_r preprocessor for musl and FreeBSD
+> +++ b/package/netdata/0001-libjudy-remove-JudyLTablesGen.patch
+> @@ -0,0 +1,707 @@
+> +From 4241f557597013dcdf959b688730888b4370660c Mon Sep 17 00:00:00 2001
+> +From: mochaaP <git@mochaa.ws>
+> +Date: Sat, 29 Apr 2023 14:52:02 +0800
+> +Subject: [PATCH] libjudy: remove JudyLTablesGen
 > +
-> +The original mentioned qsort_r signature difference now only exists in DragonFly
-> +BSD & MacOS. However, the preprocessor also broke the compliation on musl+linux
-> +and FreeBSD, leading the compilation error on buildroot.
+> +JudyLTablesGen could be replaced with a pregenerated file
+> +with 32-bit / 64-bit specific macros. Fixes #14185
 > +
-> +musl: https://git.musl-libc.org/cgit/musl/commit/?id=b76f37fd5625d038141b52184956fb4b7838e9a5
-> +freebsd, dragonfly, macos: QSORT(3)
+> +Upstream: https://github.com/netdata/netdata/pull/14984
 > +
-> +FreeBSD and musl use the same GNU-like signature.
-> +
-> +Upstream: https://github.com/openSUSE/libsolv/commit/2d0718a4f2001c857d9af24398c68d676a98a3ca
-> +
-> +Signed-off-by: Gong Zhile <gongzl.oerv@isrc.iscas.ac.cn>
-> +[Bernd: added Upstream: tag]
-> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> +[Titouan: adapt to netdata v1.37.1]
+> +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 > +---
-> + src/util.c | 35 +++++++++++++++++++----------------
-> + 1 file changed, 19 insertions(+), 16 deletions(-)
+> + Makefile.am                                   |  17 +-
+> + libnetdata/libjudy/src/JudyL/JudyLTables.c    | 338 ++++++++++++++++++
+> + libnetdata/libjudy/src/JudyL/JudyLTablesGen.c | 296 ---------------
+> + 3 files changed, 339 insertions(+), 312 deletions(-)
+> + create mode 100644 libnetdata/libjudy/src/JudyL/JudyLTables.c
+> + delete mode 100644 libnetdata/libjudy/src/JudyL/JudyLTablesGen.c
 > +
-> +diff --git a/src/util.c b/src/util.c
-> +index 72426e09..a60ed3da 100644
-> +--- a/src/util.c
-> ++++ b/src/util.c
-> +@@ -154,26 +154,14 @@ solv_setcloexec(int fd, int state)
-> +   #endif
-> + }
+> +diff --git a/Makefile.am b/Makefile.am
+> +index 5e16052..750d86e 100644
+> +--- a/Makefile.am
+> ++++ b/Makefile.am
+> +@@ -504,15 +504,10 @@ libjudy_a_SOURCES = libnetdata/libjudy/src/Judy.h \
+> +     libnetdata/libjudy/src/JudyL/JudyLNextEmpty.c \
+> +     libnetdata/libjudy/src/JudyL/JudyLPrev.c \
+> +     libnetdata/libjudy/src/JudyL/JudyLPrevEmpty.c \
+> ++    libnetdata/libjudy/src/JudyL/JudyLTables.c \
+> +     libnetdata/libjudy/src/JudyHS/JudyHS.c \
+> +     $(NULL)
 > + 
-> +-/* bsd's qsort_r has different arguments, so we define our
-> ++#if defined(HAVE_QSORT_R) || defined(HAVE___QSORT_R)
-> ++#if (defined(__APPLE__) || defined(__DragonFly__)) && defined(HAVE_QSORT_R)
+> +-nodist_libjudy_a_SOURCES = JudyLTables.c
+> +-
+> +-BUILT_SOURCES += JudyLTables.c
+> +-
+> +-CLEANFILES += JudyLTables.c
+> +-
+> + libjudy_a_CFLAGS = $(LIBJUDY_CFLAGS) -DJUDYL -I$(abs_top_srcdir)/libnetdata/libjudy/src -I$(abs_top_srcdir)/libnetdata/libjudy/src/JudyCommon -Wno-sign-compare -Wno-implicit-fallthrough
+> + 
+> + libnetdata/libjudy/src/JudyL/libjudy_a-JudyLPrev.$(OBJEXT) : CFLAGS += -DJUDYPREV
+> +@@ -522,16 +517,6 @@ libnetdata/libjudy/src/JudyL/libjudy_a-JudyLNextEmpty.$(OBJEXT) : CFLAGS += -DJU
+> + libnetdata/libjudy/src/JudyL/libjudy_a-JudyLByCount.$(OBJEXT) : CFLAGS +=  -DNOSMARTJBB -DNOSMARTJBU -DNOSMARTJLB
+> + libnetdata/libjudy/src/JudyL/libjudy_a-j__udyLGet.$(OBJEXT) : CFLAGS +=  -DJUDYGETINLINE
+> + 
+> +-noinst_PROGRAMS = judyltablesgen
+> +-
+> +-judyltablesgen_SOURCES = libnetdata/libjudy/src/JudyL/JudyLTablesGen.c
+> +-judyltablesgen_CFLAGS = $(LIBJUDY_CFLAGS) -DJUDYL -I$(abs_top_srcdir)/libnetdata/libjudy/src -I$(abs_top_srcdir)/libnetdata/libjudy/src/JudyCommon -Wno-sign-compare -Wno-implicit-fallthrough
+> +-
+> +-$(builddir)/judyltablesgen$(EXEEXT) : CFLAGS += -Wno-format -Wno-format-security
+> +-
+> +-JudyLTables.c: $(abs_top_srcdir)/libnetdata/libjudy/src/JudyL/JudyLTablesGen.c $(builddir)/judyltablesgen$(EXEEXT)
+> +-	$(builddir)/judyltablesgen$(EXEEXT)
+> +-
+> + libjudy_a-JudyLTables.$(OBJEXT) : CFLAGS += -I$(abs_top_srcdir)/libnetdata/libjudy/src/JudyL
+> + 
+> + if ENABLE_DBENGINE
+> +diff --git a/libnetdata/libjudy/src/JudyL/JudyLTables.c b/libnetdata/libjudy/src/JudyL/JudyLTables.c
+> +new file mode 100644
+> +index 0000000..21c9749
+> +--- /dev/null
+> ++++ b/libnetdata/libjudy/src/JudyL/JudyLTables.c
+> +@@ -0,0 +1,338 @@
+> ++// @(#) From generation tool: $Revision: 4.37 $ $Source: /judy/src/JudyCommon/JudyTables.c $
+> ++// Pregenerated and modified by hand. Do not overwrite!
 > ++
-> ++/* MacOS and DragonFly have qsort_r with different arguments, so we define our
-> +    own version in case we need to do some clever mapping
-> + 
-> +    see also: http://sources.redhat.com/ml/libc-alpha/2008-12/msg00003.html
-> +  */
-> +-#if (defined(__GLIBC__) || defined(__NEWLIB__)) && (defined(HAVE_QSORT_R) || defined(HAVE___QSORT_R))
-> +-
-> +-void
-> +-solv_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *, void *), void *compard)
-> +-{
-> +-# if defined(HAVE_QSORT_R)
-> +-  qsort_r(base, nmemb, size, compar, compard);
-> +-# else
-> +-  /* backported for SLE10-SP2 */
-> +-  __qsort_r(base, nmemb, size, compar, compard);
-> +-# endif
-> +-
-> +-}
-> +-
-> +-#elif defined(HAVE_QSORT_R) /* not glibc, but has qsort_r() */
-> + 
-> + struct solv_sort_data {
-> +   int (*compar)(const void *, const void *, void *);
-> +@@ -196,6 +184,21 @@ solv_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, con
-> +   qsort_r(base, nmemb, size, &d, solv_sort_helper);
-> + }
-> + 
-> ++#else
+> ++#include "JudyL.h"
+> ++// Leave the malloc() sizes readable in the binary (via strings(1)):
+> ++#ifdef JU_64BIT
+> ++const char * JudyLMallocSizes = "JudyLMallocSizes = 3, 5, 7, 11, 15, 23, 32, 47, 64, Leaf1 = 13";
+> ++#else // JU_32BIT
+> ++const char * JudyLMallocSizes = "JudyLMallocSizes = 3, 5, 7, 11, 15, 23, 32, 47, 64, Leaf1 = 25";
+> ++#endif // JU_64BIT
 > ++
-> ++void
-> ++solv_sort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *, void *), void *compard)
+> ++#ifdef JU_64BIT
+> ++//	object uses 64 words
+> ++//	cJU_BITSPERSUBEXPB = 32
+> ++const uint8_t
+> ++j__L_BranchBJPPopToWords[cJU_BITSPERSUBEXPB + 1] =
 > ++{
-> ++# if defined(HAVE_QSORT_R)
-> ++  qsort_r(base, nmemb, size, compar, compard);
-> ++# else
-> ++  /* backported for SLE10-SP2 */
-> ++  __qsort_r(base, nmemb, size, compar, compard);
-> ++# endif
+> ++	 0,
+> ++	 3,  5,  7, 11, 11, 15, 15, 23,
+> ++	23, 23, 23, 32, 32, 32, 32, 32,
+> ++	47, 47, 47, 47, 47, 47, 47, 64,
+> ++	64, 64, 64, 64, 64, 64, 64, 64
+> ++};
 > ++
-> ++}
+> ++//	object uses 15 words
+> ++//	cJL_LEAF1_MAXPOP1 = 13
+> ++const uint8_t
+> ++j__L_Leaf1PopToWords[cJL_LEAF1_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 3,  3,  5,  5,  7,  7, 11, 11,
+> ++	11, 15, 15, 15, 15
+> ++};
+> ++const uint8_t
+> ++j__L_Leaf1Offset[cJL_LEAF1_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 1,  1,  1,  1,  1,  1,  2,  2,
+> ++	 2,  2,  2,  2,  2
+> ++};
 > ++
-> ++#endif
-> + #else /* not glibc and no qsort_r() */
-> + /* use own version of qsort if none available */
-> + #include "qsort_r.c"
+> ++//	object uses 64 words
+> ++//	cJL_LEAF2_MAXPOP1 = 51
+> ++const uint8_t
+> ++j__L_Leaf2PopToWords[cJL_LEAF2_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 3,  3,  5,  5,  7, 11, 11, 11,
+> ++	15, 15, 15, 15, 23, 23, 23, 23,
+> ++	23, 23, 32, 32, 32, 32, 32, 32,
+> ++	32, 47, 47, 47, 47, 47, 47, 47,
+> ++	47, 47, 47, 47, 47, 64, 64, 64,
+> ++	64, 64, 64, 64, 64, 64, 64, 64,
+> ++	64, 64, 64
+> ++};
+> ++const uint8_t
+> ++j__L_Leaf2Offset[cJL_LEAF2_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 1,  1,  1,  1,  2,  3,  3,  3,
+> ++	 3,  3,  3,  3,  5,  5,  5,  5,
+> ++	 5,  5,  7,  7,  7,  7,  7,  7,
+> ++	 7, 10, 10, 10, 10, 10, 10, 10,
+> ++	10, 10, 10, 10, 10, 13, 13, 13,
+> ++	13, 13, 13, 13, 13, 13, 13, 13,
+> ++	13, 13, 13
+> ++};
+> ++
+> ++//	object uses 64 words
+> ++//	cJL_LEAF3_MAXPOP1 = 46
+> ++const uint8_t
+> ++j__L_Leaf3PopToWords[cJL_LEAF3_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 3,  3,  5,  7,  7, 11, 11, 11,
+> ++	15, 15, 23, 23, 23, 23, 23, 23,
+> ++	32, 32, 32, 32, 32, 32, 32, 47,
+> ++	47, 47, 47, 47, 47, 47, 47, 47,
+> ++	47, 47, 64, 64, 64, 64, 64, 64,
+> ++	64, 64, 64, 64, 64, 64
+> ++};
+> ++const uint8_t
+> ++j__L_Leaf3Offset[cJL_LEAF3_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 1,  1,  2,  2,  2,  3,  3,  3,
+> ++	 4,  4,  6,  6,  6,  6,  6,  6,
+> ++	 9,  9,  9,  9,  9,  9,  9, 13,
+> ++	13, 13, 13, 13, 13, 13, 13, 13,
+> ++	13, 13, 18, 18, 18, 18, 18, 18,
+> ++	18, 18, 18, 18, 18, 18
+> ++};
+> ++
+> ++//	object uses 63 words
+> ++//	cJL_LEAF4_MAXPOP1 = 42
+> ++const uint8_t
+> ++j__L_Leaf4PopToWords[cJL_LEAF4_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 3,  3,  5,  7, 11, 11, 11, 15,
+> ++	15, 15, 23, 23, 23, 23, 23, 32,
+> ++	32, 32, 32, 32, 32, 47, 47, 47,
+> ++	47, 47, 47, 47, 47, 47, 47, 63,
+> ++	63, 63, 63, 63, 63, 63, 63, 63,
+> ++	63, 63
+> ++};
+> ++const uint8_t
+> ++j__L_Leaf4Offset[cJL_LEAF4_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 1,  1,  2,  2,  4,  4,  4,  5,
+> ++	 5,  5,  8,  8,  8,  8,  8, 11,
+> ++	11, 11, 11, 11, 11, 16, 16, 16,
+> ++	16, 16, 16, 16, 16, 16, 16, 21,
+> ++	21, 21, 21, 21, 21, 21, 21, 21,
+> ++	21, 21
+> ++};
+> ++
+> ++//	object uses 64 words
+> ++//	cJL_LEAF5_MAXPOP1 = 39
+> ++const uint8_t
+> ++j__L_Leaf5PopToWords[cJL_LEAF5_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 3,  5,  5,  7, 11, 11, 15, 15,
+> ++	15, 23, 23, 23, 23, 23, 32, 32,
+> ++	32, 32, 32, 47, 47, 47, 47, 47,
+> ++	47, 47, 47, 47, 64, 64, 64, 64,
+> ++	64, 64, 64, 64, 64, 64, 64
+> ++};
+> ++const uint8_t
+> ++j__L_Leaf5Offset[cJL_LEAF5_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 2,  2,  2,  3,  4,  4,  6,  6,
+> ++	 6,  9,  9,  9,  9,  9, 12, 12,
+> ++	12, 12, 12, 18, 18, 18, 18, 18,
+> ++	18, 18, 18, 18, 25, 25, 25, 25,
+> ++	25, 25, 25, 25, 25, 25, 25
+> ++};
+> ++
+> ++//	object uses 63 words
+> ++//	cJL_LEAF6_MAXPOP1 = 36
+> ++const uint8_t
+> ++j__L_Leaf6PopToWords[cJL_LEAF6_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 3,  5,  7,  7, 11, 11, 15, 15,
+> ++	23, 23, 23, 23, 23, 32, 32, 32,
+> ++	32, 32, 47, 47, 47, 47, 47, 47,
+> ++	47, 47, 63, 63, 63, 63, 63, 63,
+> ++	63, 63, 63, 63
+> ++};
+> ++const uint8_t
+> ++j__L_Leaf6Offset[cJL_LEAF6_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 1,  3,  3,  3,  5,  5,  6,  6,
+> ++	10, 10, 10, 10, 10, 14, 14, 14,
+> ++	14, 14, 20, 20, 20, 20, 20, 20,
+> ++	20, 20, 27, 27, 27, 27, 27, 27,
+> ++	27, 27, 27, 27
+> ++};
+> ++
+> ++//	object uses 64 words
+> ++//	cJL_LEAF7_MAXPOP1 = 34
+> ++const uint8_t
+> ++j__L_Leaf7PopToWords[cJL_LEAF7_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 3,  5,  7, 11, 11, 15, 15, 15,
+> ++	23, 23, 23, 23, 32, 32, 32, 32,
+> ++	32, 47, 47, 47, 47, 47, 47, 47,
+> ++	47, 64, 64, 64, 64, 64, 64, 64,
+> ++	64, 64
+> ++};
+> ++const uint8_t
+> ++j__L_Leaf7Offset[cJL_LEAF7_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 1,  3,  3,  5,  5,  7,  7,  7,
+> ++	11, 11, 11, 11, 15, 15, 15, 15,
+> ++	15, 22, 22, 22, 22, 22, 22, 22,
+> ++	22, 30, 30, 30, 30, 30, 30, 30,
+> ++	30, 30
+> ++};
+> ++
+> ++//	object uses 63 words
+> ++//	cJL_LEAFW_MAXPOP1 = 31
+> ++const uint8_t
+> ++j__L_LeafWPopToWords[cJL_LEAFW_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 3,  5,  7, 11, 11, 15, 15, 23,
+> ++	23, 23, 23, 32, 32, 32, 32, 47,
+> ++	47, 47, 47, 47, 47, 47, 47, 63,
+> ++	63, 63, 63, 63, 63, 63, 63
+> ++};
+> ++const uint8_t
+> ++j__L_LeafWOffset[cJL_LEAFW_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 2,  3,  4,  6,  6,  8,  8, 12,
+> ++	12, 12, 12, 16, 16, 16, 16, 24,
+> ++	24, 24, 24, 24, 24, 24, 24, 32,
+> ++	32, 32, 32, 32, 32, 32, 32
+> ++};
+> ++
+> ++//	object uses 64 words
+> ++//	cJU_BITSPERSUBEXPL = 64
+> ++const uint8_t
+> ++j__L_LeafVPopToWords[cJU_BITSPERSUBEXPL + 1] =
+> ++{
+> ++	 0,
+> ++	 3,  3,  3,  5,  5,  7,  7, 11,
+> ++	11, 11, 11, 15, 15, 15, 15, 23,
+> ++	23, 23, 23, 23, 23, 23, 23, 32,
+> ++	32, 32, 32, 32, 32, 32, 32, 32,
+> ++	47, 47, 47, 47, 47, 47, 47, 47,
+> ++	47, 47, 47, 47, 47, 47, 47, 64,
+> ++	64, 64, 64, 64, 64, 64, 64, 64,
+> ++	64, 64, 64, 64, 64, 64, 64, 64
+> ++};
+> ++#else // JU_32BIT
+> ++//	object uses 64 words
+> ++//	cJU_BITSPERSUBEXPB = 32
+> ++const uint8_t
+> ++j__L_BranchBJPPopToWords[cJU_BITSPERSUBEXPB + 1] =
+> ++{
+> ++	 0,
+> ++	 3,  5,  7, 11, 11, 15, 15, 23,
+> ++	23, 23, 23, 32, 32, 32, 32, 32,
+> ++	47, 47, 47, 47, 47, 47, 47, 64,
+> ++	64, 64, 64, 64, 64, 64, 64, 64
+> ++};
+> ++
+> ++//	object uses 32 words
+> ++//	cJL_LEAF1_MAXPOP1 = 25
+> ++const uint8_t
+> ++j__L_Leaf1PopToWords[cJL_LEAF1_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 3,  3,  5,  5,  7, 11, 11, 11,
+> ++	15, 15, 15, 15, 23, 23, 23, 23,
+> ++	23, 23, 32, 32, 32, 32, 32, 32,
+> ++	32
+> ++};
+> ++const uint8_t
+> ++j__L_Leaf1Offset[cJL_LEAF1_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 1,  1,  1,  1,  2,  3,  3,  3,
+> ++	 3,  3,  3,  3,  5,  5,  5,  5,
+> ++	 5,  5,  7,  7,  7,  7,  7,  7,
+> ++	 7
+> ++};
+> ++
+> ++//	object uses 63 words
+> ++//	cJL_LEAF2_MAXPOP1 = 42
+> ++const uint8_t
+> ++j__L_Leaf2PopToWords[cJL_LEAF2_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 3,  3,  5,  7, 11, 11, 11, 15,
+> ++	15, 15, 23, 23, 23, 23, 23, 32,
+> ++	32, 32, 32, 32, 32, 47, 47, 47,
+> ++	47, 47, 47, 47, 47, 47, 47, 63,
+> ++	63, 63, 63, 63, 63, 63, 63, 63,
+> ++	63, 63
+> ++};
+> ++const uint8_t
+> ++j__L_Leaf2Offset[cJL_LEAF2_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 1,  1,  2,  2,  4,  4,  4,  5,
+> ++	 5,  5,  8,  8,  8,  8,  8, 11,
+> ++	11, 11, 11, 11, 11, 16, 16, 16,
+> ++	16, 16, 16, 16, 16, 16, 16, 21,
+> ++	21, 21, 21, 21, 21, 21, 21, 21,
+> ++	21, 21
+> ++};
+> ++
+> ++//	object uses 63 words
+> ++//	cJL_LEAF3_MAXPOP1 = 36
+> ++const uint8_t
+> ++j__L_Leaf3PopToWords[cJL_LEAF3_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 3,  5,  7,  7, 11, 11, 15, 15,
+> ++	23, 23, 23, 23, 23, 32, 32, 32,
+> ++	32, 32, 47, 47, 47, 47, 47, 47,
+> ++	47, 47, 63, 63, 63, 63, 63, 63,
+> ++	63, 63, 63, 63
+> ++};
+> ++const uint8_t
+> ++j__L_Leaf3Offset[cJL_LEAF3_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 1,  3,  3,  3,  5,  5,  6,  6,
+> ++	10, 10, 10, 10, 10, 14, 14, 14,
+> ++	14, 14, 20, 20, 20, 20, 20, 20,
+> ++	20, 20, 27, 27, 27, 27, 27, 27,
+> ++	27, 27, 27, 27
+> ++};
+> ++
+> ++//	object uses 63 words
+> ++//	cJL_LEAFW_MAXPOP1 = 31
+> ++const uint8_t
+> ++j__L_LeafWPopToWords[cJL_LEAFW_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 3,  5,  7, 11, 11, 15, 15, 23,
+> ++	23, 23, 23, 32, 32, 32, 32, 47,
+> ++	47, 47, 47, 47, 47, 47, 47, 63,
+> ++	63, 63, 63, 63, 63, 63, 63
+> ++};
+> ++const uint8_t
+> ++j__L_LeafWOffset[cJL_LEAFW_MAXPOP1 + 1] =
+> ++{
+> ++	 0,
+> ++	 2,  3,  4,  6,  6,  8,  8, 12,
+> ++	12, 12, 12, 16, 16, 16, 16, 24,
+> ++	24, 24, 24, 24, 24, 24, 24, 32,
+> ++	32, 32, 32, 32, 32, 32, 32
+> ++};
+> ++
+> ++//	object uses 32 words
+> ++//	cJU_BITSPERSUBEXPL = 32
+> ++const uint8_t
+> ++j__L_LeafVPopToWords[cJU_BITSPERSUBEXPL + 1] =
+> ++{
+> ++	 0,
+> ++	 3,  3,  3,  5,  5,  7,  7, 11,
+> ++	11, 11, 11, 15, 15, 15, 15, 23,
+> ++	23, 23, 23, 23, 23, 23, 23, 32,
+> ++	32, 32, 32, 32, 32, 32, 32, 32
+> ++};
+> ++#endif // JU_64BIT
+> +diff --git a/libnetdata/libjudy/src/JudyL/JudyLTablesGen.c b/libnetdata/libjudy/src/JudyL/JudyLTablesGen.c
+> +deleted file mode 100644
+> +index cb8b13f..0000000
+> +--- a/libnetdata/libjudy/src/JudyL/JudyLTablesGen.c
+> ++++ /dev/null
+> +@@ -1,296 +0,0 @@
+> +-// Copyright (C) 2000 - 2002 Hewlett-Packard Company
+> +-//
+> +-// This program is free software; you can redistribute it and/or modify it
+> +-// under the term of the GNU Lesser General Public License as published by the
+> +-// Free Software Foundation; either version 2 of the License, or (at your
+> +-// option) any later version.
+> +-//
+> +-// This program is distributed in the hope that it will be useful, but WITHOUT
+> +-// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+> +-// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
+> +-// for more details.
+> +-//
+> +-// You should have received a copy of the GNU Lesser General Public License
+> +-// along with this program; if not, write to the Free Software Foundation,
+> +-// Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+> +-// _________________
+> +-
+> +-// @(#) $Revision: 4.37 $ $Source: /judy/src/JudyCommon/JudyTables.c $
+> +-
+> +-#ifndef JU_WIN
+> +-#include <unistd.h>		// unavailable on win_*.
+> +-#endif
+> +-
+> +-#include <stdlib.h>
+> +-#include <stdio.h>
+> +-
+> +-#if (! (defined(JUDY1) || defined(JUDYL)))
+> +-#error:  One of -DJUDY1 or -DJUDYL must be specified.
+> +-#endif
+> +-
+> +-#define	TERMINATOR 999		// terminator for Alloc tables
+> +-
+> +-#define BPW sizeof(Word_t)	// define bytes per word
+> +-
+> +-#ifdef JUDY1
+> +-#include "Judy1.h"
+> +-#else
+> +-#include "JudyL.h"
+> +-#endif
+> +-    
+> +-FILE *fd;
+> +-
+> +-// Definitions come from header files Judy1.h and JudyL.h:
+> +-
+> +-int AllocSizes[] = ALLOCSIZES;
+> +-
+> +-#define	ROUNDUP(BYTES,BPW,OFFSETW) \
+> +-	((((BYTES) + (BPW) - 1) / (BPW)) + (OFFSETW))
+> +-
+> +-
+> +-// ****************************************************************************
+> +-// G E N   T A B L E
+> +-//
+> +-// Note:  "const" is required for newer compilers.
+> +-
+> +-FUNCTION void GenTable(
+> +-    const char * TableName,	// name of table string
+> +-    const char * TableSize,	// dimentioned size string
+> +-    int		 IndexBytes,	// bytes per Index
+> +-    int		 LeafSize,	// number elements in object
+> +-    int		 ValueBytes,	// bytes per Value
+> +-    int		 OffsetWords)	// 1 for LEAFW
+> +-{
+> +-    int *	 PAllocSizes = AllocSizes;
+> +-    int		 OWord;
+> +-    int		 CurWord;
+> +-    int		 IWord;
+> +-    int		 ii;
+> +-    int		 BytesOfIndex;
+> +-    int		 BytesOfObject;
+> +-    int		 Index;
+> +-    int		 LastWords;
+> +-    int		 Words [1000] = { 0 };
+> +-    int		 Offset[1000] = { 0 };
+> +-    int		 MaxWords;
+> +-
+> +-    MaxWords  =	ROUNDUP((IndexBytes + ValueBytes) * LeafSize, BPW, OffsetWords);
+> +-    Words[0]  = 0;
+> +-    Offset[0] = 0;
+> +-    CurWord   = TERMINATOR;
+> +-
+> +-// Walk through all number of Indexes in table:
+> +-
+> +-    for (Index = 1; /* null */; ++Index)
+> +-    {
+> +-
+> +-// Calculate byte required for next size:
+> +-
+> +-	BytesOfIndex  = IndexBytes * Index;
+> +-	BytesOfObject = (IndexBytes + ValueBytes) * Index;
+> +-
+> +-// Round up and calculate words required for next size:
+> +-
+> +-        OWord =	ROUNDUP(BytesOfObject, BPW, OffsetWords);
+> +-        IWord =	ROUNDUP(BytesOfIndex,  BPW, OffsetWords);
+> +-
+> +-// Root-level leaves of population of 1 and 2 do not have the 1 word offset:
+> +-
+> +-// Save minimum value of offset:
+> +-
+> +-        Offset[Index] = IWord;
+> +-
+> +-// Round up to next available size of words:
+> +-
+> +-	while (OWord > *PAllocSizes) PAllocSizes++;
+> +-
+> +-        if (Index == LeafSize)
+> +-        {
+> +-	    CurWord = Words[Index] = OWord;
+> +-            break;
+> +-        }
+> +-//      end of available sizes ?
+> +-
+> +-	if (*PAllocSizes == TERMINATOR)
+> +-        {
+> +-            fprintf(stderr, "BUG, in %sPopToWords, sizes not big enough for object\n", TableName);
+> +-	    exit(1);
+> +-        }
+> +-
+> +-// Save words required and last word:
+> +-
+> +-        if (*PAllocSizes < MaxWords) { CurWord = Words[Index] = *PAllocSizes; }
+> +-        else                         { CurWord = Words[Index] = MaxWords; }
+> +-
+> +-    } // for each index
+> +-
+> +-    LastWords = TERMINATOR;
+> +-
+> +-// Round up to largest size in each group of malloc sizes:
+> +-
+> +-    for (ii = LeafSize; ii > 0; ii--)
+> +-    {
+> +-        if (LastWords > (Words[ii] - ii)) LastWords = Offset[ii];
+> +-        else                              Offset[ii] = LastWords;
+> +-    }
+> +-
+> +-// Print the PopToWords[] table:
+> +-
+> +-    fprintf(fd,"\n//\tobject uses %d words\n", CurWord);
+> +-    fprintf(fd,"//\t%s = %d\n", TableSize, LeafSize);
+> +-
+> +-    fprintf(fd,"const uint8_t\n");
+> +-    fprintf(fd,"%sPopToWords[%s + 1] =\n", TableName, TableSize);
+> +-    fprintf(fd,"{\n\t 0,");
+> +-
+> +-    for (ii = 1; ii <= LeafSize; ii++)
+> +-    {
+> +-
+> +-// 8 columns per line, starting with 1:
+> +-
+> +-	if ((ii % 8) == 1) fprintf(fd,"\n\t");
+> +-
+> +-	fprintf(fd,"%2d", Words[ii]);
+> +-
+> +-// If not last number place comma:
+> +-
+> +-	if (ii != LeafSize) fprintf(fd,", ");
+> +-    }
+> +-    fprintf(fd,"\n};\n");
+> +-
+> +-// Print the Offset table if needed:
+> +-
+> +-    if (! ValueBytes) return;
+> +-
+> +-    fprintf(fd,"const uint8_t\n");
+> +-    fprintf(fd,"%sOffset[%s + 1] =\n", TableName, TableSize);
+> +-    fprintf(fd,"{\n");
+> +-    fprintf(fd,"\t 0,");
+> +-
+> +-    for (ii = 1; ii <= LeafSize; ii++)
+> +-    {
+> +-        if ((ii % 8) == 1) fprintf(fd,"\n\t");
+> +-
+> +-	fprintf(fd,"%2d", Offset[ii]);
+> +-
+> +-	if (ii != LeafSize) fprintf(fd,", ");
+> +-    }
+> +-    fprintf(fd,"\n};\n");
+> +-
+> +-} // GenTable()
+> +-
+> +-
+> +-// ****************************************************************************
+> +-// M A I N
+> +-
+> +-FUNCTION int main()
+> +-{
+> +-    int ii;
+> +-
+> +-#ifdef JUDY1
+> +-    char *fname = "Judy1Tables.c";
+> +-#else
+> +-    char *fname = "JudyLTables.c";
+> +-#endif
+> +-
+> +-    if ((fd = fopen(fname, "w")) == NULL){
+> +-	perror("FATAL ERROR: could not write to Judy[1L]Tables.c file\n");
+> +-	return (-1);
+> +-    }
+> +-
+> +-
+> +-    fprintf(fd,"// @(#) From generation tool: $Revision: 4.37 $ $Source: /judy/src/JudyCommon/JudyTables.c $\n");
+> +-    fprintf(fd,"//\n\n");
+> +-
+> +-
+> +-// ================================ Judy1 =================================
+> +-#ifdef JUDY1
+> +-
+> +-    fprintf(fd,"#include \"Judy1.h\"\n");
+> +-
+> +-    fprintf(fd,"// Leave the malloc() sizes readable in the binary (via "
+> +-	   "strings(1)):\n");
+> +-    fprintf(fd,"const char * Judy1MallocSizes = \"Judy1MallocSizes =");
+> +-
+> +-    for (ii = 0; AllocSizes[ii] != TERMINATOR; ii++)
+> +-	fprintf(fd," %d,", AllocSizes[ii]);
+> +-
+> +-#ifndef JU_64BIT
+> +-    fprintf(fd," Leaf1 = %d\";\n\n", cJ1_LEAF1_MAXPOP1);
+> +-#else
+> +-    fprintf(fd,"\";\n\n");			// no Leaf1 in this case.
+> +-#endif
+> +-
+> +-// ================================ 32 bit ================================
+> +-#ifndef JU_64BIT
+> +-
+> +-    GenTable("j__1_BranchBJP","cJU_BITSPERSUBEXPB", 8, cJU_BITSPERSUBEXPB,0,0);
+> +-
+> +-    GenTable("j__1_Leaf1", "cJ1_LEAF1_MAXPOP1", 1, cJ1_LEAF1_MAXPOP1, 0, 0);
+> +-    GenTable("j__1_Leaf2", "cJ1_LEAF2_MAXPOP1", 2, cJ1_LEAF2_MAXPOP1, 0, 0);
+> +-    GenTable("j__1_Leaf3", "cJ1_LEAF3_MAXPOP1", 3, cJ1_LEAF3_MAXPOP1, 0, 0);
+> +-    GenTable("j__1_LeafW", "cJ1_LEAFW_MAXPOP1", 4, cJ1_LEAFW_MAXPOP1, 0, 1);
+> +-
+> +-#endif
+> +-
+> +-// ================================ 64 bit ================================
+> +-#ifdef JU_64BIT
+> +-    GenTable("j__1_BranchBJP","cJU_BITSPERSUBEXPB",16, cJU_BITSPERSUBEXPB,0,0);
+> +-
+> +-    GenTable("j__1_Leaf2", "cJ1_LEAF2_MAXPOP1", 2, cJ1_LEAF2_MAXPOP1, 0, 0);
+> +-    GenTable("j__1_Leaf3", "cJ1_LEAF3_MAXPOP1", 3, cJ1_LEAF3_MAXPOP1, 0, 0);
+> +-    GenTable("j__1_Leaf4", "cJ1_LEAF4_MAXPOP1", 4, cJ1_LEAF4_MAXPOP1, 0, 0);
+> +-    GenTable("j__1_Leaf5", "cJ1_LEAF5_MAXPOP1", 5, cJ1_LEAF5_MAXPOP1, 0, 0);
+> +-    GenTable("j__1_Leaf6", "cJ1_LEAF6_MAXPOP1", 6, cJ1_LEAF6_MAXPOP1, 0, 0);
+> +-    GenTable("j__1_Leaf7", "cJ1_LEAF7_MAXPOP1", 7, cJ1_LEAF7_MAXPOP1, 0, 0);
+> +-    GenTable("j__1_LeafW", "cJ1_LEAFW_MAXPOP1", 8, cJ1_LEAFW_MAXPOP1, 0, 1);
+> +-#endif
+> +-#endif // JUDY1
+> +-
+> +-
+> +-// ================================ JudyL =================================
+> +-#ifdef JUDYL
+> +-
+> +-    fprintf(fd,"#include \"JudyL.h\"\n");
+> +-
+> +-    fprintf(fd,"// Leave the malloc() sizes readable in the binary (via "
+> +-	   "strings(1)):\n");
+> +-    fprintf(fd,"const char * JudyLMallocSizes = \"JudyLMallocSizes =");
+> +-
+> +-    for (ii = 0; AllocSizes[ii] != TERMINATOR; ii++)
+> +-	fprintf(fd," %d,", AllocSizes[ii]);
+> +-
+> +-    fprintf(fd," Leaf1 = %ld\";\n\n", (Word_t)cJL_LEAF1_MAXPOP1);
+> +-
+> +-#ifndef JU_64BIT
+> +-// ================================ 32 bit ================================
+> +-    GenTable("j__L_BranchBJP","cJU_BITSPERSUBEXPB", 8, cJU_BITSPERSUBEXPB, 0,0);
+> +-
+> +-    GenTable("j__L_Leaf1", "cJL_LEAF1_MAXPOP1",  1, cJL_LEAF1_MAXPOP1, BPW,0);
+> +-    GenTable("j__L_Leaf2", "cJL_LEAF2_MAXPOP1",  2, cJL_LEAF2_MAXPOP1, BPW,0);
+> +-    GenTable("j__L_Leaf3", "cJL_LEAF3_MAXPOP1",  3, cJL_LEAF3_MAXPOP1, BPW,0);
+> +-    GenTable("j__L_LeafW", "cJL_LEAFW_MAXPOP1",  4, cJL_LEAFW_MAXPOP1, BPW,1);
+> +-    GenTable("j__L_LeafV", "cJU_BITSPERSUBEXPL", 4, cJU_BITSPERSUBEXPL,  0,0);
+> +-#endif // 32 BIT
+> +-
+> +-#ifdef JU_64BIT
+> +-// ================================ 64 bit ================================
+> +-    GenTable("j__L_BranchBJP","cJU_BITSPERSUBEXPB",16, cJU_BITSPERSUBEXPB, 0,0);
+> +-
+> +-    GenTable("j__L_Leaf1", "cJL_LEAF1_MAXPOP1",  1, cJL_LEAF1_MAXPOP1,  BPW,0);
+> +-    GenTable("j__L_Leaf2", "cJL_LEAF2_MAXPOP1",  2, cJL_LEAF2_MAXPOP1,  BPW,0);
+> +-    GenTable("j__L_Leaf3", "cJL_LEAF3_MAXPOP1",  3, cJL_LEAF3_MAXPOP1,  BPW,0);
+> +-    GenTable("j__L_Leaf4", "cJL_LEAF4_MAXPOP1",  4, cJL_LEAF4_MAXPOP1,  BPW,0);
+> +-    GenTable("j__L_Leaf5", "cJL_LEAF5_MAXPOP1",  5, cJL_LEAF5_MAXPOP1,  BPW,0);
+> +-    GenTable("j__L_Leaf6", "cJL_LEAF6_MAXPOP1",  6, cJL_LEAF6_MAXPOP1,  BPW,0);
+> +-    GenTable("j__L_Leaf7", "cJL_LEAF7_MAXPOP1",  7, cJL_LEAF7_MAXPOP1,  BPW,0);
+> +-    GenTable("j__L_LeafW", "cJL_LEAFW_MAXPOP1",  8, cJL_LEAFW_MAXPOP1,  BPW,1);
+> +-    GenTable("j__L_LeafV", "cJU_BITSPERSUBEXPL", 8, cJU_BITSPERSUBEXPL, 0,0);
+> +-#endif // 64 BIT
+> +-
+> +-#endif // JUDYL
+> +-    fclose(fd);
+> +-
+> +-    return(0);
+> +-
+> +-} // main()
 > +-- 
-> +2.47.3
+> +2.51.0
 > +
+> diff --git a/package/netdata/netdata.hash b/package/netdata/netdata.hash
+> index bc33a8b8a1..df80453f3a 100644
+> --- a/package/netdata/netdata.hash
+> +++ b/package/netdata/netdata.hash
+> @@ -1,5 +1,5 @@
+> -# From https://github.com/netdata/netdata/releases/download/v1.33.1/sha256sums.txt
+> -sha256  20ba8695d87187787b27128ac3aab9b09aa29ca6b508c48542e0f7d50ec9322b  netdata-v1.33.1.tar.gz
+> +# From https://github.com/netdata/netdata/releases/download/v1.37.1/sha256sums.txt
+> +sha256  2caa042d43ca61007a61294a5ececa037d83a1973bd38032233760341eb1706b  netdata-v1.37.1.tar.gz
+>  
+>  # Locally calculated
+>  sha256  0e5fd9d833efe9b79f784d1903281554af82d1b4261af67d35455728e5572aa6  LICENSE
+> diff --git a/package/netdata/netdata.mk b/package/netdata/netdata.mk
+> index 4bc573df59..ac3f829f0a 100644
+> --- a/package/netdata/netdata.mk
+> +++ b/package/netdata/netdata.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -NETDATA_VERSION = 1.33.1
+> +NETDATA_VERSION = 1.37.1
+>  NETDATA_SOURCE = netdata-v$(NETDATA_VERSION).tar.gz
+>  NETDATA_SITE = \
+>  	https://github.com/netdata/netdata/releases/download/v$(NETDATA_VERSION)
+> @@ -18,6 +18,7 @@ NETDATA_CONF_OPTS = \
+>  	--disable-ml \
+>  	--disable-unit-tests
+>  NETDATA_DEPENDENCIES = libuv util-linux zlib
+> +NETDATA_AUTORECONF = YES
+>  
+>  # ac_cv_prog_cc_c99 is required for BR2_USE_WCHAR=n because the C99 test
+>  # provided by autoconf relies on wchar_t.
 > -- 
-> 2.47.3
+> 2.51.0
 > 
 > _______________________________________________
 > buildroot mailing list
