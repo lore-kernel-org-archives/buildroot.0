@@ -1,77 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 808FDCCF9E3
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 21:03:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0E00CCF9F0
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 21:42:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 577AD41189;
-	Thu, 30 Oct 2025 21:03:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9514484404;
+	Thu, 30 Oct 2025 21:42:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JrRLk_0VVr_C; Thu, 30 Oct 2025 21:03:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RPQGrAPFGS1N; Thu, 30 Oct 2025 21:42:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70FD14155B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C93F284401
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 70FD14155B;
-	Thu, 30 Oct 2025 21:03:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C93F284401;
+	Thu, 30 Oct 2025 21:42:01 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 63ECA2A3
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 21:03:35 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 7507D2A3
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 21:42:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 554BF61545
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 21:03:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5A8B26155F
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 21:42:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LI4kTZsn9pO6 for <buildroot@buildroot.org>;
- Thu, 30 Oct 2025 21:03:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 49B4461506
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 49B4461506
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 49B4461506
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 21:03:33 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 6949B780372;
- Thu, 30 Oct 2025 22:03:28 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 30 Oct 2025 22:03:28 +0100
+ id a2fWHYbdpJoS for <buildroot@buildroot.org>;
+ Thu, 30 Oct 2025 21:41:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A28FD6155E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A28FD6155E
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A28FD6155E
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 21:41:59 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0cb2.dip0.t-ipconnect.de [91.58.12.178])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id A7342A4C5B38
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 22:41:56 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:41906)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1vEaP6-000000004EC-2QnI
+ for buildroot@buildroot.org; Thu, 30 Oct 2025 21:41:56 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Thu, 30 Oct 2025 22:41:52 +0100
+Message-ID: <20251030214156.1307743-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Thu, 30 Oct 2025 22:03:28 +0100
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Buildroot List <buildroot@buildroot.org>, romain.gantois@bootlin.com,
- Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
-In-Reply-To: <20251018194314.114284-2-thomas.petazzoni@bootlin.com>
-References: <20251018194314.114284-1-thomas.petazzoni@bootlin.com>
- <20251018194314.114284-2-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <4d822fe939a5278ba17b08b6a1ca6fca@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1761858211;
- bh=yjebUlZKmgYjwxuqGBM8QjiXZJ0ExiC1weIOrodza2A=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=G7LWePAf7/nL1ftdmWrblvhSVpwgAtghdknPCf8v4YRuMEv+e/i2NJbyz3D78ylck
- S+D53HQZrZFgd7z523+D63AbiBBIQuWfc6XrkNK/XY6Yb69jSWyFvfZCPZ5KYnssCK
- ayeMXfORmeB4sCooAsrpqnVNh93wwTL066D9X/ZzEWLJ3Bwk3WsI/p1fLuRPTjK/gi
- hspXahKxwCp2geKumjhjO6Hq1zhTHzPhIQjcPzMhzc2UMd6r8xlXnZjkLMxBNFCZRH
- 2hy7tZdS9qoiCDwgld26dF85V0lgnaktGgzvpiBUv5k7NwmkdctimHpFg4/zYrGI1m
- dSS/qVLXt+pwA==
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202506031021; t=1761860516;
+ bh=rxSVNlIsUnaUVVdkkAhjXLSLgQ8d/Jt51Xc1vBu0T5E=;
+ h=From:To:Subject:Date:From;
+ b=uyF0/TIePl9seYI9+aMsMLzK29Lbfh+7qmU92cdnMeLui4YFYb7yLdh5USCXuOJFe
+ UPuPd4bxVXSpB0esNNJe7psqq4kL/xvyLv0vbVMjCi8ORpVAtLwg/c55atk7qE51rT
+ 2fm027wetodm+mjspF5UZYo0wkzc2hXlsrccsr/eguGl59L0H8ileS4whbivFPpElr
+ ZlkFNIUGRSO2lsbGaor5L8U9UFijpYs1mEl1ekPd+RktnoEiyAilVlHgh86B/ZmQJr
+ liRt6dM8eCB+rg7IxDMuJMewPsZhCqFqf3oIlVh8ZXR/LAuX5TPmsQWOJ4YhswU56p
+ b4pOk9DSf5sjw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=G7LWePAf
-Subject: Re: [Buildroot] [PATCH 01/11] support/testing/infra: improve
- run_cmd_on_host() to show stdout/stderr
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=uyF0/TIe
+Subject: [Buildroot] [PATCH 1/5] package/bind: drop unrecognized option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,23 +79,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 18/10/2025 21:42, Thomas Petazzoni via buildroot wrote:
-> When run_cmd_on_host() runs a command that fails, we only get an
-> exception with no details to debug what happened. Let's improve that
-> by catching the exception, and printing the command output. This
-> requires redirecting stderr to stdout (instead of /dev/null) and
-> asking to get the output in text format.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Buildroot commits 7b43e248180ad3b3dd1804687bc4457f29a88137 and
+8adeaec8afacbc680edebae91524f6144926ac92 removed the possibility for
+static builds but forgot to remove some related _CONF_OPTS.
 
-Series applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/bind/bind.mk | 10 ----------
+ 1 file changed, 10 deletions(-)
+
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 350f6c6fbe..11730b6e7e 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -109,16 +109,6 @@ else
+ BIND_CONF_OPTS += --with-readline=no
+ endif
+ 
+-ifeq ($(BR2_STATIC_LIBS),y)
+-BIND_CONF_OPTS += \
+-	--without-dlopen \
+-	--without-libtool
+-else
+-BIND_CONF_OPTS += \
+-	--with-dlopen \
+-	--with-libtool
+-endif
+-
+ define BIND_TARGET_REMOVE_SERVER
+ 	rm -rf $(addprefix $(TARGET_DIR)/usr/sbin/, $(BIND_TARGET_SERVER_SBIN))
+ endef
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
