@@ -1,106 +1,107 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F13BCCF9F8
-	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:24:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48AD2CCF9FA
+	for <buildroot@archiver.kernel.org>; Thu, 30 Oct 2025 08:24:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D458481766;
-	Thu, 30 Oct 2025 08:24:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2155E411C6;
+	Thu, 30 Oct 2025 08:24:05 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eX1pXnyzK6DG; Thu, 30 Oct 2025 08:24:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4547B411D3
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4547B411D3;
+	Thu, 30 Oct 2025 08:24:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C11A2160
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B2EBD810E1
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V_7pQV2quP4m; Thu, 30 Oct 2025 08:24:03 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE41B81544
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DE41B81544;
-	Thu, 30 Oct 2025 08:24:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 25C69160
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1742561360
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:55 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WJ-E6n51w0G9 for <buildroot@buildroot.org>;
- Thu, 30 Oct 2025 08:23:54 +0000 (UTC)
+ id kGjKKN12jGYT for <buildroot@buildroot.org>;
+ Thu, 30 Oct 2025 08:23:55 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
+ client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0EDA76128B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EDA76128B
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0EDA76128B
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:53 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id
- ffacd0b85a97d-3f0ae439b56so425039f8f.3
- for <buildroot@buildroot.org>; Thu, 30 Oct 2025 01:23:53 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7F3AC810DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F3AC810DE
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7F3AC810DE
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 08:23:55 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id
+ ffacd0b85a97d-3ee130237a8so496446f8f.0
+ for <buildroot@buildroot.org>; Thu, 30 Oct 2025 01:23:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1761812632; x=1762417432;
+ d=1e100.net; s=20230601; t=1761812633; x=1762417433;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=9ZGXabmmVkz9qBGIA8NKeU6Pfv221E6QnCpo7R9CxeE=;
- b=oeoQaWo/A8RT903zShUTio0tjYp+TK9qq8yTPFkJTMBTxvOhllnCAwjx79da/eplqT
- 25AoF8Qk+XgCckgdHe0hvJX8vleRshnhlM48avfHkIizXYhlFHNpFDfbpqVfOtF74Lea
- dxujpaKJwdXEDXH0bXCbzH1IpcClU8AyraALH3ueB5mYu/6ZOvZLlY0mCpbOO2eqPKAA
- S2kS3rrd56Sv32z1Juv0DLci42bTb//256s706Qc/tnmFlJso1qIq7H8Bl1qSk5NSzZZ
- SKkwnfkrj1Dyq+K1qITAlZvSQVwJ8lk1K71X5FoaXcfhnk/zjwe10Bb6X9tKzq8oxsGS
- 3/wg==
+ bh=5YWdGQb+kqzQuNOpl/ti3KyYjTknLoEinoahn/v4Nf4=;
+ b=mSN6xdUZOdxPLkh+52eDcucdZZA+lmwfXtr/kn6xndIe9Zqyqx+lpGpI3QfEm10Goq
+ qShtxRV4gq3rf4GhXDKdeemf2rB8QAGihjDDji/6o9VA0SZFkuJXmhRQHGUHrZCkFIlD
+ Z1RvbOhnves1BhdTNTW+XQTZTYop4HpCwlVpw2LGpCIqawaRUuuk9KoIvEtNXXjkKJvk
+ opMb3z/YjhAsANQswgLQLdn74w1yov7DSMS5nx+g+pfvyFpEEspEnVaStFaxc25WXLJc
+ Lspm+GhD+Rxfcu4F0rXWxMfz7zvSzumEaMzhALfRO5IQnk+6dgT8ovp2haY1/MJgRZUf
+ TeQA==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUqprfH2kePiv11R3139oJdK3pb7+L40Zn16PGNcNThCt2duMszuAH1yHlM08ShqDA0sEauiWOFXfg=@buildroot.org
-X-Gm-Message-State: AOJu0YwTFw+Uy+n4R/H5TysRGXEWcFJ7L9pGf8VNE7RHNXYoCZ9Szpyt
- 5WIGDambWraKBALDXcMUY6Z/iSFSChuwe0omiII0reqhOyYQGeYjQrxfryMrtK5l3IA=
-X-Gm-Gg: ASbGncvkUiwnBlEuRfIXLDRg8XTX86VUGFsDt99AlZJy56a4Q/4WPRTOSL/QXjUnkG/
- K3ret4g5A+QLIuIFcbShz9VR8gATlLFC55MWJLngmHLWIPJgeIgMy7REJ8AujcEiZEvom2MTkJz
- sfZa4cdyezuejWsVwXKETN4oe178hFuT1iCUfnguETaFZ4/NrvA/0iRXEGL5fMXqbeM0tTmz2TX
- CzOJRv/vvF7hETT73+wgsYCd6NKfuXccUsu0Icd+om65jB8juIA0DQsdqeVOBT9U/N/pcjpAHW0
- k85KRFipsQUl+nGCfVZna8ipSxERMzVNChgnFZcR8Eg+SZRbRq1i4CEyTkcOpLhHVozXDp+vzos
- /9xZPZBco27mBYoJIlh4yG0Z9OgmufEWk9OBMg/wAWz7tcLweeu8q1y5l9a+NF2Sa+nTHL3p6GQ
- eWNVq0+TOcBVekOqzxCPPlSramSGhwf6pbzHlO
-X-Google-Smtp-Source: AGHT+IGqyJSQHwl0DNwbeBtS2sRcD4i3UTTI+B5gFsgRdP4zmeG2lZaLUTvQ5ExQc+3gcI8Z0cIu2g==
-X-Received: by 2002:a05:6000:2386:b0:425:6866:ede8 with SMTP id
- ffacd0b85a97d-429aef77d5amr4277123f8f.8.1761812632023; 
- Thu, 30 Oct 2025 01:23:52 -0700 (PDT)
+ AJvYcCVcJXKc+GPQxbUWyGtir4Zk6cixPc/19cXQ9ptjkrIsvFnOXCHd97fieTUNMPWReLLisMfILQWt0Wk=@buildroot.org
+X-Gm-Message-State: AOJu0YxSSHmD9Z1XMBFVFGIxt/LIGWKRmMcRG2Epj+TtTHCXH92/y5eo
+ sp81Hwn9CnrQekU6oqD/RcnkZRuN8FQR4SFqAxmNU14N/aOG0jnx8xmz7rZvPZ3Mozk=
+X-Gm-Gg: ASbGncshgZ41dSBBb8Y0QtvxqUJZ9CCULm+ogt2sdnkGEpK+bwzYDxANRP5RsacyScz
+ m1paHxLLXYDNcIUuVvclCGfPOtwEFZHqVWwqWDYRz3cGy559rl36IyvHzt7WhV7AG5WpBZWuOhc
+ sxGNHrrFvQJ5Ii1iPaUbqrP88ZxlZQtcc56rGalXgsgdFpArOMThZTjBuke1KxFb2u5FFWMpS4/
+ cneyXFI1RuqYwO0zp28uo0rX1EHAZvtO3eOPvllsAA3yeD904pnOJdJcQthH+eBFjng9xj6Bb/L
+ JC3UjwZatsquPsV709MtT4k4VpeeG69aQ8Jf3a6CYqWc7Ny5QJK9osUSEOBPz+De0DKudBttFmH
+ bBsGylU1NS3TUrScJ1Ru9rB/yGrfwBFleCKBAC6xr/8LqwC27jFm1esJzeo+3SvKrofikxOv9SQ
+ 3cnDP4UfUpKUm2uUrIylxMLE9SXg==
+X-Google-Smtp-Source: AGHT+IHUiWr2vu7n9M0scfZ6vAfoUlRa0VGXIiDIHaLzDm87lTM9LVpyxEP7cU17Oq/0wQSzUiJ3wQ==
+X-Received: by 2002:a05:6000:2088:b0:427:4a2:5124 with SMTP id
+ ffacd0b85a97d-429aed36034mr4037201f8f.0.1761812633620; 
+ Thu, 30 Oct 2025 01:23:53 -0700 (PDT)
 Received: from arch (77.109.92.202.static.edpnet.net. [77.109.92.202])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-429ba445463sm863512f8f.10.2025.10.30.01.23.51
+ ffacd0b85a97d-429952da12dsm31055945f8f.29.2025.10.30.01.23.53
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 30 Oct 2025 01:23:51 -0700 (PDT)
+ Thu, 30 Oct 2025 01:23:53 -0700 (PDT)
 To: Titouan Christophe <titouan.christophe@mind.be>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 30 Oct 2025 09:23:51 +0100
-Message-ID: <20251030082351.35240-1-thomas.perale@mind.be>
+Date: Thu, 30 Oct 2025 09:23:53 +0100
+Message-ID: <20251030082353.35341-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251023140527.544948-2-titouan.christophe@mind.be>
-References: <20251023140527.544948-2-titouan.christophe@mind.be>
+In-Reply-To: <20251023140527.544948-4-titouan.christophe@mind.be>
+References: <20251023140527.544948-4-titouan.christophe@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1761812632; x=1762417432; darn=buildroot.org;
+ d=mind.be; s=google; t=1761812633; x=1762417433; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=9ZGXabmmVkz9qBGIA8NKeU6Pfv221E6QnCpo7R9CxeE=;
- b=UUC21fxkyh5SWVgq04UiVFp2HzFWb985LURSoXlvidhAXsrU56GWcVupWqy1G9pcZo
- 27lb4eY3B+VmJgbpGoRZFWDUZOjnFUmpUgqawbyPFCIt7AVrXXaT1tsqAXYy7/ho4pC+
- l9JW3AC6veNpIqI6LAlBoMIrRDVsGeG07EcBoevmTsAV6vMITN0i5wrTIrL2zxIX+Ns+
- J0szVIdZFX1iRof/4QKMfvR/8bUqNgoxw0tUeZw4TzqzkLk45FsT/1DztvJj2WETAYdO
- tyc2ttbNI4qLcL3PgpZyzX/aFGo8+04WwQ07+oKNZo0MZ8beowi7S88FcN8VceZp7qIp
- NghA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=5YWdGQb+kqzQuNOpl/ti3KyYjTknLoEinoahn/v4Nf4=;
+ b=TLzGDwhYWr190PrMa4eeo7kxE+28cN75ITwHLOvhStHxCTlcwpGk0DKiXik6Ffm7cE
+ WAAbGjSOmOzTeIA0K332WEl67/PQ5a4LDLh708mhkIyrlmS3TqmE8DdX3W5NMpxEQcxU
+ VVUfM7SdYreEDscfNqkFfVgHj1WP4kwRwaFsUPJBKK9g/QVhvsGoBDYOUzMngSv2XJxe
+ Es8/WI3JueMVaeWMukSTD2OUbW81p8zctwIgUbsuw5dGqiIlM5wkh2dN2K/1PX99ejGM
+ 7fewjmv4Lm0U8NqXygXLfb5oWCX7iuEGdW6HGBENiaGhC1no/3MJ6yp5qaD2cUiwL7yO
+ XukQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=UUC21fxk
-Subject: Re: [Buildroot] [PATCH 1/4] package/freerdp: ignore CVE-2025-4478
+ header.a=rsa-sha256 header.s=google header.b=TLzGDwhY
+Subject: Re: [Buildroot] [PATCH 3/4] package/openvmtools: ignore
+ CVE-2021-31693
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,24 +126,24 @@ In reply of:
 Applied to 2025.02.x & 2025.08.x. Thanks
 
 > ---
->  package/freerdp/freerdp.mk | 4 ++++
+>  package/openvmtools/openvmtools.mk | 4 ++++
 >  1 file changed, 4 insertions(+)
 > 
-> diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-> index 3a1ba61621..391b9a4675 100644
-> --- a/package/freerdp/freerdp.mk
-> +++ b/package/freerdp/freerdp.mk
-> @@ -13,6 +13,10 @@ FREERDP_LICENSE = Apache-2.0
->  FREERDP_LICENSE_FILES = LICENSE
->  FREERDP_CPE_ID_VENDOR = freerdp
+> diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
+> index 0f5c86fe6d..58876c877a 100644
+> --- a/package/openvmtools/openvmtools.mk
+> +++ b/package/openvmtools/openvmtools.mk
+> @@ -13,6 +13,10 @@ OPENVMTOOLS_LICENSE_FILES = COPYING
+>  OPENVMTOOLS_CPE_ID_VENDOR = vmware
+>  OPENVMTOOLS_CPE_ID_PRODUCT = tools
 >  
-> +# As explained on https://github.com/FreeRDP/FreeRDP/pull/11573#issuecomment-2904160524,
-> +# the affected code is new with 3.x, was not there on 2.x
-> +FREERDP_IGNORE_CVES += CVE-2025-4478
+> +# This CVE affects a Wordpress plugin. VMware information,
+> +# previously connected to this CVE ID because of a typo, is at CVE-2022-31693
+> +OPENVMTOOLS_IGNORE_CVES += CVE-2021-31693
 > +
->  FREERDP_INSTALL_STAGING = YES
+>  # 0013-Properly-check-authorization-on-incoming-guestOps-re.patch
+>  OPENVMTOOLS_IGNORE_CVES += CVE-2022-31676
 >  
->  FREERDP_CONF_OPTS = -DWITH_MANPAGES=OFF -Wno-dev -DWITH_GSTREAMER_0_10=OFF
 > -- 
 > 2.51.0
 > 
