@@ -1,75 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE372CCF9FE
-	for <buildroot@archiver.kernel.org>; Fri, 31 Oct 2025 22:23:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A25ECCF9FE
+	for <buildroot@archiver.kernel.org>; Fri, 31 Oct 2025 22:30:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A3EB241FA1;
-	Fri, 31 Oct 2025 22:23:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8DB69842E5;
+	Fri, 31 Oct 2025 22:30:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8MZRLr-bH0kj; Fri, 31 Oct 2025 22:23:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GozRxkvpSazv; Fri, 31 Oct 2025 22:30:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB42E41FA2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01A9A8413B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB42E41FA2;
-	Fri, 31 Oct 2025 22:23:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id F05F1CD
- for <buildroot@buildroot.org>; Fri, 31 Oct 2025 22:23:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 01A9A8413B;
+	Fri, 31 Oct 2025 22:30:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D2AC7CD
+ for <buildroot@buildroot.org>; Fri, 31 Oct 2025 22:30:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E212D41BBF
- for <buildroot@buildroot.org>; Fri, 31 Oct 2025 22:23:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C458D40CFC
+ for <buildroot@buildroot.org>; Fri, 31 Oct 2025 22:30:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DNkRWjHGzRyq for <buildroot@buildroot.org>;
- Fri, 31 Oct 2025 22:23:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AF28D40CE7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF28D40CE7
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AF28D40CE7
- for <buildroot@buildroot.org>; Fri, 31 Oct 2025 22:23:22 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 0D6495FFC0;
- Fri, 31 Oct 2025 23:23:17 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 31 Oct 2025 23:23:17 +0100
-MIME-Version: 1.0
-Date: Fri, 31 Oct 2025 23:23:17 +0100
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: buildroot@buildroot.org, Mario Lang <mlang@blind.guru>
-In-Reply-To: <20251031101023.2343092-1-dario.binacchi@amarulasolutions.com>
-References: <20251031101023.2343092-1-dario.binacchi@amarulasolutions.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <489ff7a65f545472e739333f5ecd14ff@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1761949400;
- bh=/J/l0N/rtP/So2OXWeLmHePnSyWrskKx/nZty4V3d08=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Fi1QakqSztSh/Ul475QiIEQ1I+cVomMAueYkHdhaTBxhE8V/2jIWMs7mbG+sxBtjM
- kUFedJHCWqWTrCEVCD53Z+ZAzJMCul8jjfu4TwPuLpd8oWMKVwB2fE7CcMF9w2OIM9
- FRgjLP/OTzl0mEGjVI+mr5rMSV3fWngklcwiQebreH4xHDSEB3oYNongQ6v3M63buw
- WGRWGnH5auRdIRqs3gmSlWcYD7CXJwoN0D2zAM8r/9lUVbqrOE/PqYVO4KIon/JH9C
- W8YHAsoHjwioK3jXgljg8cAZtbCxneHAqagjF/mBypdPKetXJcPXZT/S2kNkJXOo0g
- KdFvkukiUHiNQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=Fi1QakqS
-Subject: Re: [Buildroot] [PATCH 1/1] package/brltty: bump to version 6.8
+ id s1j8-Oh6rjvA for <buildroot@buildroot.org>;
+ Fri, 31 Oct 2025 22:30:02 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1415640CE7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1415640CE7
+ for <buildroot@buildroot.org>; Fri, 31 Oct 2025 22:30:02 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 03FE183683; Fri, 31 Oct 2025 22:30:02 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 31 Oct 2025 23:23:39 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6427fb66c41e88ff7d9382e2cada7c6b76293bfb
+X-Git-Newrev: 188f556e085a5eb7d338cc01627d8f9c80785442
+X-Patchwork-Hint: ignore
+Message-Id: <20251031223002.03FE183683@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bdwgc: bump to version 8.2.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,62 +59,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 31/10/2025 11:10, Dario Binacchi wrote:
-> The added patch fix the following build error:
-> 
-> /usr/bin/install -c -d ../../../lib
-> buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-gcc -shared   
-> -Wl,-export-dynamic -o ../../../lib/libbrlttyxfv.so screen.o -ltinfo
-> buildroot/output/host/lib/gcc/arm-buildroot-linux-gnueabihf/14.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: 
-> cannot find -ltinfo: No such file or directory
-> collect2: error: ld returned 1 exit status
-> 
-> git format-patch -M -n -s -o outgoing origin/master
-> Update README hash:
-> - v6.8:
->   - Update the copyright from 2024 to 2025.
-> - v6.7:
->   - Update the supported braille devices lists.
->   - Add support for the HIMS eMotion.
->   - Add support for HT's Activator Pro models.
->   - Add support for the KGS Next Touch 40.
->   - Change the copyright from 2023 to 2024.
->   - Document that HT's Basic Braille Plus models are supported.
-> 
-> Release notes:
-> https://github.com/brltty/brltty/blob/BRLTTY-6.8/Documents/ChangeLog
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> ---
-[...]
-> diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
-> index 22d58ebd00e3..e3105e53f1a3 100644
-> --- a/package/brltty/brltty.mk
-> +++ b/package/brltty/brltty.mk
-> @@ -4,7 +4,7 @@
->  #
->  
-> ################################################################################
-> 
-> -BRLTTY_VERSION = 6.6
-> +BRLTTY_VERSION = 6.8
+commit: https://git.buildroot.net/buildroot/commit/?id=188f556e085a5eb7d338cc01627d8f9c80785442
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This new version is consistently failing when ncurses is not present. 
-See:
-https://gitlab.com/jolivain/buildroot/-/pipelines/2133265664
-Is this a new mandatory dependency?
+Release notes:
+https://github.com/ivmai/bdwgc/releases/tag/v8.2.10
 
-Could you update this patch, so the package can build with
-"test-pkg -a" please?
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/bdwgc/bdwgc.hash | 2 +-
+ package/bdwgc/bdwgc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Best regards,
-
-Julien.
+diff --git a/package/bdwgc/bdwgc.hash b/package/bdwgc/bdwgc.hash
+index 8705c0f87b..d38b2bb1b5 100644
+--- a/package/bdwgc/bdwgc.hash
++++ b/package/bdwgc/bdwgc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  7649020621cb26325e1fb5c8742590d92fb48ce5c259b502faf7d9fb5dabb160  gc-8.2.8.tar.gz
++sha256  832cf4f7cf676b59582ed3b1bbd90a8d0e0ddbc3b11cb3b2096c5177ce39cc47  gc-8.2.10.tar.gz
+ sha256  a9b077aeb4e9e1aaf9742119d8023ef26f52f445cdc3f60d390bf59e1647f54a  README.QUICK
+diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+index ca2fbdb1d4..0700ee7bf5 100644
+--- a/package/bdwgc/bdwgc.mk
++++ b/package/bdwgc/bdwgc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BDWGC_VERSION = 8.2.8
++BDWGC_VERSION = 8.2.10
+ BDWGC_SOURCE = gc-$(BDWGC_VERSION).tar.gz
+ BDWGC_SITE = https://github.com/ivmai/bdwgc/releases/download/v$(BDWGC_VERSION)
+ BDWGC_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
