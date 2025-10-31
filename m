@@ -1,73 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3102CCF9F8
-	for <buildroot@archiver.kernel.org>; Fri, 31 Oct 2025 22:23:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE372CCF9FE
+	for <buildroot@archiver.kernel.org>; Fri, 31 Oct 2025 22:23:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 861FF84B1C;
-	Fri, 31 Oct 2025 22:23:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A3EB241FA1;
+	Fri, 31 Oct 2025 22:23:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 17pl11PKgT-b; Fri, 31 Oct 2025 22:23:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8MZRLr-bH0kj; Fri, 31 Oct 2025 22:23:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFE0084B1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB42E41FA2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AFE0084B1D;
-	Fri, 31 Oct 2025 22:23:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CB42E41FA2;
+	Fri, 31 Oct 2025 22:23:24 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 70747CD
- for <buildroot@buildroot.org>; Fri, 31 Oct 2025 22:23:17 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id F05F1CD
+ for <buildroot@buildroot.org>; Fri, 31 Oct 2025 22:23:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 574D641C1B
- for <buildroot@buildroot.org>; Fri, 31 Oct 2025 22:23:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E212D41BBF
+ for <buildroot@buildroot.org>; Fri, 31 Oct 2025 22:23:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zXsibUKEV5Mq for <buildroot@buildroot.org>;
- Fri, 31 Oct 2025 22:23:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4BF8A40CE7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BF8A40CE7
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4BF8A40CE7
- for <buildroot@buildroot.org>; Fri, 31 Oct 2025 22:23:16 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b624.dip0.t-ipconnect.de [84.161.182.36])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id D6C88A4C5AF0
- for <buildroot@buildroot.org>; Fri, 31 Oct 2025 23:23:13 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:59608)
- by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vExWb-000000008Bd-3raV
- for buildroot@buildroot.org; Fri, 31 Oct 2025 22:23:13 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Fri, 31 Oct 2025 23:23:13 +0100
-Message-ID: <20251031222313.2654912-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+ id DNkRWjHGzRyq for <buildroot@buildroot.org>;
+ Fri, 31 Oct 2025 22:23:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AF28D40CE7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF28D40CE7
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AF28D40CE7
+ for <buildroot@buildroot.org>; Fri, 31 Oct 2025 22:23:22 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 0D6495FFC0;
+ Fri, 31 Oct 2025 23:23:17 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 31 Oct 2025 23:23:17 +0100
 MIME-Version: 1.0
-X-Spamd-Bar: ++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1761949393;
- bh=quFNsktu2ApYCo+qGMRPYYIvgk3RAc9hEWkXWEBubbE=;
- h=From:To:Subject:Date:From;
- b=g2FMBngURT5z68AQMlMM4j9tiicQevxV5mhNL1G6SMPrlDUhAzWOKHVxdSvwoEA4f
- PZkJ04+upr6PCiUvgk7wFuWfV/LxPk0JuBIz7nQsz9uliE1b6p0QsJrX+v1yWNVRz4
- FouzUD2LUK8eVESkTNN7jXTU5o8AThqC2NYgbdHNbIJZRvBk7k+qMcZN57iY1+R7At
- xwDwypc3SKc227/xrFbHa5nKjdNTF+AJxtpfbrXkXQXac5O+aYW/weSwDmFq928j72
- eiVwsSKLSPRnbmRU/km8Xnnup3IYJCKi82dZA05VyMLj1LMYINNSENIt+7rpMZbs2+
- s4ruvTevQj+4Q==
+Date: Fri, 31 Oct 2025 23:23:17 +0100
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: buildroot@buildroot.org, Mario Lang <mlang@blind.guru>
+In-Reply-To: <20251031101023.2343092-1-dario.binacchi@amarulasolutions.com>
+References: <20251031101023.2343092-1-dario.binacchi@amarulasolutions.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <489ff7a65f545472e739333f5ecd14ff@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1761949400;
+ bh=/J/l0N/rtP/So2OXWeLmHePnSyWrskKx/nZty4V3d08=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Fi1QakqSztSh/Ul475QiIEQ1I+cVomMAueYkHdhaTBxhE8V/2jIWMs7mbG+sxBtjM
+ kUFedJHCWqWTrCEVCD53Z+ZAzJMCul8jjfu4TwPuLpd8oWMKVwB2fE7CcMF9w2OIM9
+ FRgjLP/OTzl0mEGjVI+mr5rMSV3fWngklcwiQebreH4xHDSEB3oYNongQ6v3M63buw
+ WGRWGnH5auRdIRqs3gmSlWcYD7CXJwoN0D2zAM8r/9lUVbqrOE/PqYVO4KIon/JH9C
+ W8YHAsoHjwioK3jXgljg8cAZtbCxneHAqagjF/mBypdPKetXJcPXZT/S2kNkJXOo0g
+ KdFvkukiUHiNQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=g2FMBngU
-Subject: [Buildroot] [PATCH 1/1] package/fetchmail: bump version to 6.6.0
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=Fi1QakqS
+Subject: Re: [Buildroot] [PATCH 1/1] package/brltty: bump to version 6.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,49 +81,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://sourceforge.net/p/fetchmail/mailman/message/59252134/
+On 31/10/2025 11:10, Dario Binacchi wrote:
+> The added patch fix the following build error:
+> 
+> /usr/bin/install -c -d ../../../lib
+> buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-gcc -shared   
+> -Wl,-export-dynamic -o ../../../lib/libbrlttyxfv.so screen.o -ltinfo
+> buildroot/output/host/lib/gcc/arm-buildroot-linux-gnueabihf/14.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: 
+> cannot find -ltinfo: No such file or directory
+> collect2: error: ld returned 1 exit status
+> 
+> git format-patch -M -n -s -o outgoing origin/master
+> Update README hash:
+> - v6.8:
+>   - Update the copyright from 2024 to 2025.
+> - v6.7:
+>   - Update the supported braille devices lists.
+>   - Add support for the HIMS eMotion.
+>   - Add support for HT's Activator Pro models.
+>   - Add support for the KGS Next Touch 40.
+>   - Change the copyright from 2023 to 2024.
+>   - Document that HT's Basic Braille Plus models are supported.
+> 
+> Release notes:
+> https://github.com/brltty/brltty/blob/BRLTTY-6.8/Documents/ChangeLog
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> ---
+[...]
+> diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
+> index 22d58ebd00e3..e3105e53f1a3 100644
+> --- a/package/brltty/brltty.mk
+> +++ b/package/brltty/brltty.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  
+> ################################################################################
+> 
+> -BRLTTY_VERSION = 6.6
+> +BRLTTY_VERSION = 6.8
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/fetchmail/fetchmail.hash | 4 ++--
- package/fetchmail/fetchmail.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+This new version is consistently failing when ncurses is not present. 
+See:
+https://gitlab.com/jolivain/buildroot/-/pipelines/2133265664
+Is this a new mandatory dependency?
 
-diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
-index 56aa4befda..5438dc26c9 100644
---- a/package/fetchmail/fetchmail.hash
-+++ b/package/fetchmail/fetchmail.hash
-@@ -1,4 +1,4 @@
--# From https://sourceforge.net/p/fetchmail/mailman/message/59248304/
--sha256  73eb6b1d421b5986866ad4a6b777c1140a39005298c63bf847de537976cbfbdb  fetchmail-6.5.7.tar.xz
-+# From https://sourceforge.net/p/fetchmail/mailman/message/59252134/
-+sha256  7b9c19e6683e827d556751aa5db5d44b961e87be8b3087535b4909ba1b59321c  fetchmail-6.6.0.tar.xz
- # Locally computed:
- sha256  a502ffd59034feee7e924b29500451b984992ae361bd8084736afc470f32135a  COPYING
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index 7e49760cac..4aac0408c6 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--FETCHMAIL_VERSION_MAJOR = 6.5
--FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).7
-+FETCHMAIL_VERSION_MAJOR = 6.6
-+FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).0
- FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
- FETCHMAIL_SITE = https://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
- FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
--- 
-2.47.3
+Could you update this patch, so the package can build with
+"test-pkg -a" please?
 
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
