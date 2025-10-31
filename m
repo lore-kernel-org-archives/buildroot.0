@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4046FCCF9F8
-	for <buildroot@archiver.kernel.org>; Fri, 31 Oct 2025 20:35:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 837F9CCF9F8
+	for <buildroot@archiver.kernel.org>; Fri, 31 Oct 2025 20:35:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4533941B5B;
-	Fri, 31 Oct 2025 20:35:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B7EB241C66;
+	Fri, 31 Oct 2025 20:35:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L02yPM7aEY8R; Fri, 31 Oct 2025 20:35:16 +0000 (UTC)
+ id BJ-gYO3lUd-S; Fri, 31 Oct 2025 20:35:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 179F8418C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2820641978
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 179F8418C2;
-	Fri, 31 Oct 2025 20:35:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8ED2BCD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2820641978;
+	Fri, 31 Oct 2025 20:35:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9D77A931
  for <buildroot@buildroot.org>; Fri, 31 Oct 2025 20:35:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8BD43418C2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 831E841955
  for <buildroot@buildroot.org>; Fri, 31 Oct 2025 20:35:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gXCcGd-9RgbU for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RS_UpwSSmQqQ for <buildroot@buildroot.org>;
  Fri, 31 Oct 2025 20:35:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CCAB4187E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7EA3E4187A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6CCAB4187E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7EA3E4187A
  for <buildroot@buildroot.org>; Fri, 31 Oct 2025 20:35:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 687D9835CC; Fri, 31 Oct 2025 20:35:13 +0000 (UTC)
+ id 7A0F3835D3; Fri, 31 Oct 2025 20:35:13 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 31 Oct 2025 19:21:25 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 636b2a8503f437dfe91ce0c01638c69458342a96
-X-Git-Newrev: 9c0f6d2379b67a65e78359118cb7d2025b13d85f
+X-Git-Oldrev: 6a20a930fd7a10aecd2b217a643a60a748eb986f
+X-Git-Newrev: 4a2202244b8e8f444398cb40f29054ad6ce9b0bb
 X-Patchwork-Hint: ignore
-Message-Id: <20251031203513.687D9835CC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bind: drop unrecognized options
+Message-Id: <20251031203513.7A0F3835D3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bind: add optional dependency to
+ jemalloc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,58 +66,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c0f6d2379b67a65e78359118cb7d2025b13d85f
+commit: https://git.buildroot.net/buildroot/commit/?id=4a2202244b8e8f444398cb40f29054ad6ce9b0bb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot commit c9515c8b63bc9bc84b52b731c2c72031acd240d2 bumped bind to
-9.18.28 which removed dnssec-keymgr:
-https://gitlab.isc.org/isc-projects/bind9/-/blob/v9.18.28/doc/notes/notes-9.18.0.rst?ref_type=tags&plain=1#L187
-
-but forgot to remove the configure option --with-python
-https://gitlab.isc.org/isc-projects/bind9/-/commit/98b3b93791777218c04a67ddaef22619162249f7
-https://gitlab.isc.org/isc-projects/bind9/-/commit/305ca032a0d3afd779b2b97bb36971e1072f0453
-
-Configure option --enable-epoll was also removed upstream in 9.18.16:
-https://gitlab.isc.org/isc-projects/bind9/-/commit/6b6076c882a00028197b04a827f6cf8e7a5369de
-
-Configure option --enable-backtrace was also removed upstream in 9.18.0:
-https://gitlab.isc.org/isc-projects/bind9/-/commit/e847591867cfe542c9e52d6176e0a2bb6e2ca875
+Added upstream in version 9.18.0:
+https://gitlab.isc.org/isc-projects/bind9/-/commit/7f1c525625675e7e5e0953a78adefe9e21fc1462
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/bind/bind.mk | 10 ----------
- 1 file changed, 10 deletions(-)
+ package/bind/bind.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 11730b6e7e..d137245ef9 100644
+index 64cf2fa9fb..c4d9047c4e 100644
 --- a/package/bind/bind.mk
 +++ b/package/bind/bind.mk
-@@ -30,9 +30,7 @@ BIND_AUTORECONF = YES
- BIND_CONF_OPTS = \
- 	--without-cmocka \
- 	--without-lmdb \
--	--enable-epoll \
- 	--disable-doh \
--	--disable-backtrace \
- 	--disable-static \
- 	--with-openssl=$(STAGING_DIR)/usr
- 
-@@ -95,14 +93,6 @@ else
- BIND_CONF_OPTS += --with-libxml2=no
+@@ -49,6 +49,13 @@ else
+ BIND_CONF_OPTS += --without-zlib
  endif
  
--# Used by dnssec-keymgr
--ifeq ($(BR2_PACKAGE_PYTHON_PLY),y)
--BIND_DEPENDENCIES += host-python-ply
--BIND_CONF_OPTS += --with-python=$(HOST_DIR)/bin/python
--else
--BIND_CONF_OPTS += --with-python=no
--endif
--
- ifeq ($(BR2_PACKAGE_READLINE),y)
- BIND_DEPENDENCIES += readline
- else
++ifeq ($(BR2_PACKAGE_JEMALLOC),y)
++BIND_CONF_OPTS += --with-jemalloc
++BIND_DEPENDENCIES += jemalloc
++else
++BIND_CONF_OPTS += --without-jemalloc
++endif
++
+ ifeq ($(BR2_PACKAGE_JSON_C),y)
+ BIND_CONF_OPTS += --with-json-c
+ BIND_DEPENDENCIES += json-c
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
