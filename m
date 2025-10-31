@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 837F9CCF9F8
-	for <buildroot@archiver.kernel.org>; Fri, 31 Oct 2025 20:35:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AFC8CCFA02
+	for <buildroot@archiver.kernel.org>; Fri, 31 Oct 2025 20:35:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7EB241C66;
-	Fri, 31 Oct 2025 20:35:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 84F7B41CA0;
+	Fri, 31 Oct 2025 20:35:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BJ-gYO3lUd-S; Fri, 31 Oct 2025 20:35:18 +0000 (UTC)
+ id UkMsNKvp4zx7; Fri, 31 Oct 2025 20:35:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2820641978
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4504241B55
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2820641978;
-	Fri, 31 Oct 2025 20:35:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9D77A931
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4504241B55;
+	Fri, 31 Oct 2025 20:35:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A49691166
  for <buildroot@buildroot.org>; Fri, 31 Oct 2025 20:35:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 831E841955
+ by smtp1.osuosl.org (Postfix) with ESMTP id 95DDA84A34
  for <buildroot@buildroot.org>; Fri, 31 Oct 2025 20:35:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RS_UpwSSmQqQ for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QmC0CdlQPq-H for <buildroot@buildroot.org>;
  Fri, 31 Oct 2025 20:35:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7EA3E4187A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7490684A32
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7EA3E4187A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7490684A32
  for <buildroot@buildroot.org>; Fri, 31 Oct 2025 20:35:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7A0F3835D3; Fri, 31 Oct 2025 20:35:13 +0000 (UTC)
+ id 70DDD835D0; Fri, 31 Oct 2025 20:35:13 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 31 Oct 2025 19:21:25 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6a20a930fd7a10aecd2b217a643a60a748eb986f
-X-Git-Newrev: 4a2202244b8e8f444398cb40f29054ad6ce9b0bb
+X-Git-Oldrev: 9c0f6d2379b67a65e78359118cb7d2025b13d85f
+X-Git-Newrev: 6a20a930fd7a10aecd2b217a643a60a748eb986f
 X-Patchwork-Hint: ignore
-Message-Id: <20251031203513.7A0F3835D3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bind: add optional dependency to
- jemalloc
+Message-Id: <20251031203513.70DDD835D0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bind: enable parallel builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,36 +65,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a2202244b8e8f444398cb40f29054ad6ce9b0bb
+commit: https://git.buildroot.net/buildroot/commit/?id=6a20a930fd7a10aecd2b217a643a60a748eb986f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added upstream in version 9.18.0:
-https://gitlab.isc.org/isc-projects/bind9/-/commit/7f1c525625675e7e5e0953a78adefe9e21fc1462
+Buildroot commit e4749b826c04cda213768332f67ffb82f06105b2 disabled
+parallel builds back in 2016. Nearly 10 years and a "Complete rewrite
+[of] the BIND 9 build system" later
+
+https://gitlab.isc.org/isc-projects/bind9/-/commit/978c7b2e89aa37a7ddfe2f6b6ba12ce73dd04528
+
+we enable parallel builds again, make -j1000 finished without problems.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/bind/bind.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/bind/bind.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 64cf2fa9fb..c4d9047c4e 100644
+index d137245ef9..64cf2fa9fb 100644
 --- a/package/bind/bind.mk
 +++ b/package/bind/bind.mk
-@@ -49,6 +49,13 @@ else
- BIND_CONF_OPTS += --without-zlib
- endif
- 
-+ifeq ($(BR2_PACKAGE_JEMALLOC),y)
-+BIND_CONF_OPTS += --with-jemalloc
-+BIND_DEPENDENCIES += jemalloc
-+else
-+BIND_CONF_OPTS += --without-jemalloc
-+endif
-+
- ifeq ($(BR2_PACKAGE_JSON_C),y)
- BIND_CONF_OPTS += --with-json-c
- BIND_DEPENDENCIES += json-c
+@@ -7,8 +7,6 @@
+ BIND_VERSION = 9.18.33
+ BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+-# bind does not support parallel builds.
+-BIND_MAKE = $(MAKE1)
+ BIND_INSTALL_STAGING = YES
+ BIND_LICENSE = MPL-2.0
+ BIND_LICENSE_FILES = COPYRIGHT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
