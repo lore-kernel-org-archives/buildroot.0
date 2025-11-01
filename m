@@ -1,76 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 390FACCFA02
-	for <buildroot@archiver.kernel.org>; Sat,  1 Nov 2025 17:28:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36005CCFA02
+	for <buildroot@archiver.kernel.org>; Sat,  1 Nov 2025 17:58:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E70118471E;
-	Sat,  1 Nov 2025 17:28:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB93760DF1;
+	Sat,  1 Nov 2025 17:58:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aaAXy3NWttHq; Sat,  1 Nov 2025 17:28:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2zakkrhPvsxu; Sat,  1 Nov 2025 17:58:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B7AA84708
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0ECF660E92
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B7AA84708;
-	Sat,  1 Nov 2025 17:28:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 207A62A3
- for <buildroot@buildroot.org>; Sat,  1 Nov 2025 17:28:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0ECF660E92;
+	Sat,  1 Nov 2025 17:58:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4C1D32A3
+ for <buildroot@buildroot.org>; Sat,  1 Nov 2025 17:58:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0738F4044B
- for <buildroot@buildroot.org>; Sat,  1 Nov 2025 17:28:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3D8A141854
+ for <buildroot@buildroot.org>; Sat,  1 Nov 2025 17:58:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sg5IKepDye5J for <buildroot@buildroot.org>;
- Sat,  1 Nov 2025 17:28:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2CF414013E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CF414013E
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2CF414013E
- for <buildroot@buildroot.org>; Sat,  1 Nov 2025 17:28:01 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id DDAD513F854;
- Sat,  1 Nov 2025 18:27:56 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 01 Nov 2025 18:27:56 +0100
-MIME-Version: 1.0
-Date: Sat, 01 Nov 2025 18:27:56 +0100
-To: Leo Yu-Chi Liang <ycliang@andestech.com>
-Cc: buildroot@buildroot.org, tim609@andestech.com
-In-Reply-To: <20251027033242.1797230-2-ycliang@andestech.com>
-References: <20251027033242.1797230-1-ycliang@andestech.com>
- <20251027033242.1797230-2-ycliang@andestech.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <516d3dfa293491e5289d50f0b4616462@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1762018079;
- bh=djHZJqZrwZXv9Xd5emNlHlcv5vMNImInae6wkZXvAvE=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=EhKQSiP+uxkSe+YLJOImvRn6ilCNLodJEzQ4jjuUOMSFFGoyTubefuNfEWy2A7v1j
- PHU3JSF/OGWxuFLqLWWVyie69kDAE96K3z0lIAMdZsQezb/xfT2J8aFixJZ/+w5hlr
- gqQMB6vWQHkXTMjJLBmqqUMb0oIpumrVaMG4DU2nYxoDYtUuBaJaZGM5tDUCkNCduG
- 3dJWfkFaHtgL/CHaw5Tid6cgkTym4ItQwADHha6aoaZFZ4d0ls2ymmIsFosUTzbCNm
- INQ3SSTvjbPhz77DWpXkyFEtN7YqbjhKx6ghq+BTyq3kdS4sm3ZASqF6Q9qxXWLUyB
- pWicbMC97eUbQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=EhKQSiP+
-Subject: Re: [Buildroot] [PATCH 1/4] configs/andes_ae350_45_defconfig: Fix
- post-build.sh Shellcheck error
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hHsWARf5fQYh for <buildroot@buildroot.org>;
+ Sat,  1 Nov 2025 17:58:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A7BA4184E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8A7BA4184E
+ for <buildroot@buildroot.org>; Sat,  1 Nov 2025 17:58:21 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 793398379A; Sat,  1 Nov 2025 17:58:21 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 1 Nov 2025 18:39:03 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7504f85c8432e155233b3000cd1bb78a8704ada1
+X-Git-Newrev: c59b11535ba37e84cf1e9440a2c8bad3b5874aed
+X-Patchwork-Hint: ignore
+Message-Id: <20251101175821.793398379A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/spdlog: bump to version 1.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,24 +59,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 27/10/2025 04:32, Leo Yu-Chi Liang via buildroot wrote:
-> Add quotation mark to fix Shellcheck error.
-> 
-> Signed-off-by: Leo Yu-Chi Liang <ycliang@andestech.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=c59b11535ba37e84cf1e9440a2c8bad3b5874aed
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I applied this patch only, with a small fixup. See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/7504f85c8432e155233b3000cd1bb78a8704ada1
+Release Notes: https://github.com/gabime/spdlog/releases/tag/v1.16.0
 
-I skipped other patches of the series since there is comments.
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/spdlog/spdlog.hash | 2 +-
+ package/spdlog/spdlog.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Best regards,
-
-Julien.
+diff --git a/package/spdlog/spdlog.hash b/package/spdlog/spdlog.hash
+index 6803ab5168..947acb0dfc 100644
+--- a/package/spdlog/spdlog.hash
++++ b/package/spdlog/spdlog.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  15a04e69c222eb6c01094b5c7ff8a249b36bb22788d72519646fb85feb267e67  spdlog-1.15.3.tar.gz
++sha256  8741753e488a78dd0d0024c980e1fb5b5c85888447e309d9cb9d949bdb52aa3e  spdlog-1.16.0.tar.gz
+ sha256  4ccecab18d1ff0b61174fe3d6c430541625d3ddb865b0d5887db296f883c76e7  LICENSE
+diff --git a/package/spdlog/spdlog.mk b/package/spdlog/spdlog.mk
+index 598f937dbd..245feac801 100644
+--- a/package/spdlog/spdlog.mk
++++ b/package/spdlog/spdlog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SPDLOG_VERSION = 1.15.3
++SPDLOG_VERSION = 1.16.0
+ SPDLOG_SITE = $(call github,gabime,spdlog,v$(SPDLOG_VERSION))
+ SPDLOG_LICENSE = MIT
+ SPDLOG_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
