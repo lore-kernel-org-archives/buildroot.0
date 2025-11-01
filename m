@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFEB4CCFA02
-	for <buildroot@archiver.kernel.org>; Sat,  1 Nov 2025 19:44:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEC07CCFA00
+	for <buildroot@archiver.kernel.org>; Sat,  1 Nov 2025 19:45:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 60A7C6128F;
-	Sat,  1 Nov 2025 19:44:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A2BF761321;
+	Sat,  1 Nov 2025 19:45:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ld8uNsKAco0T; Sat,  1 Nov 2025 19:44:37 +0000 (UTC)
+ id QT4EQWQ0FRPz; Sat,  1 Nov 2025 19:45:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86811612F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 264AC6130A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 86811612F4;
-	Sat,  1 Nov 2025 19:44:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9EB3793D
- for <buildroot@buildroot.org>; Sat,  1 Nov 2025 19:44:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 264AC6130A;
+	Sat,  1 Nov 2025 19:45:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id DD11B2A3
+ for <buildroot@buildroot.org>; Sat,  1 Nov 2025 19:45:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 901C7612F9
- for <buildroot@buildroot.org>; Sat,  1 Nov 2025 19:44:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CEE4F4100C
+ for <buildroot@buildroot.org>; Sat,  1 Nov 2025 19:45:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FV9aXXbV1CMd for <buildroot@buildroot.org>;
- Sat,  1 Nov 2025 19:44:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E8F0612F4
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7E8F0612F4
- for <buildroot@buildroot.org>; Sat,  1 Nov 2025 19:44:34 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 78B0383861; Sat,  1 Nov 2025 19:44:34 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 1 Nov 2025 20:30:24 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e87154cf3e6419536947bf37b62f3c4b04954ae7
-X-Git-Newrev: 514b64d70a64a4c1ef663cdbd8d59433eeff051c
-X-Patchwork-Hint: ignore
-Message-Id: <20251101194434.78B0383861@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-markdown: bump version to
- 3.9
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Qheus6CIwv8P for <buildroot@buildroot.org>;
+ Sat,  1 Nov 2025 19:45:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E96D14105D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E96D14105D
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E96D14105D
+ for <buildroot@buildroot.org>; Sat,  1 Nov 2025 19:45:09 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 49ED613F854;
+ Sat,  1 Nov 2025 20:45:05 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 01 Nov 2025 20:45:05 +0100
+MIME-Version: 1.0
+Date: Sat, 01 Nov 2025 20:45:05 +0100
+To: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Cc: buildroot@buildroot.org, Gwenhael Goavec-Merou
+ <gwenhael.goavec-merou@trabucayre.com>
+In-Reply-To: <20251013123510.956091-1-gwenj@trabucayre.com>
+References: <20251013123510.956091-1-gwenj@trabucayre.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <0072f5bf19ad18feb649add6e0acddea@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1762026307;
+ bh=pLRA31r1ZN/bs9lnipiaM0IJNgl6FQckOz2IVkyHCa4=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=j3XcUcbvk8WxmqFwDREnTOvS1kDbvU5QwaWp7uAhnTDpDacKHLJ34YPd/iF7Dcrx/
+ FpIvLP/1hFjG4+tzO1eJ6TAeJllCUdqp9V01q8ETWkvZN27SzcfMWzT2s1QTN9aO4S
+ 88EB4ZUNrpZBpWRPqOJ9weMCudO5KYHU7PvWvagCDcy1rtjLr6qrcl/gw1CvXRI51s
+ RY12XuEGVSXpkJrWzN4aIpTYfauv/JG7Ac0CTTm1c+BbwxVBa9/DHEFp3ysJmWQBFz
+ CTEkvsEM18oXQXj8iqAlR+VD1xw9nc7yS4GRftMNJv3gf3YlFFxh5pVy0arxOZcj5b
+ HNi6DFNybpmlA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=j3XcUcbv
+Subject: Re: [Buildroot] [PATCH] package/python-markdown: bump version to 3.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,50 +83,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=514b64d70a64a4c1ef663cdbd8d59433eeff051c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 13/10/2025 14:35, Gwenhael Goavec-Merou wrote:
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> 
+> Signed-off-by: Gwenhael Goavec-Merou 
+> <gwenhael.goavec-merou@trabucayre.com>
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-markdown/python-markdown.hash | 4 ++--
- package/python-markdown/python-markdown.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-markdown/python-markdown.hash b/package/python-markdown/python-markdown.hash
-index 9a452bb4f7..25725b3c8e 100644
---- a/package/python-markdown/python-markdown.hash
-+++ b/package/python-markdown/python-markdown.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/markdown/json
--md5  de4cdc6db368c7386f733d6dd8c858b1  markdown-3.7.tar.gz
--sha256  2ae2471477cfd02dbbf038d5d9bc226d40def84b4fe2986e49b59b6b472bbed2  markdown-3.7.tar.gz
-+md5  46aaa9fe3d42144f185368e819b7e720  markdown-3.9.tar.gz
-+sha256  d2900fe1782bd33bdbbd56859defef70c2e78fc46668f8eb9df3128138f2cb6a  markdown-3.9.tar.gz
- # Locally computed sha256 checksums
- sha256  7ba4eb6d10b32b2d11dce13821340351cdbbb30ba8ccc67841db2ffd86e79aca  LICENSE.md
-diff --git a/package/python-markdown/python-markdown.mk b/package/python-markdown/python-markdown.mk
-index 4cacee24f8..6fcdd6b830 100644
---- a/package/python-markdown/python-markdown.mk
-+++ b/package/python-markdown/python-markdown.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_MARKDOWN_VERSION = 3.7
-+PYTHON_MARKDOWN_VERSION = 3.9
- PYTHON_MARKDOWN_SOURCE = markdown-$(PYTHON_MARKDOWN_VERSION).tar.gz
--PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/54/28/3af612670f82f4c056911fbbbb42760255801b3068c48de792d354ff4472
-+PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/8d/37/02347f6d6d8279247a5837082ebc26fc0d5aaeaf75aa013fcbb433c777ab
- PYTHON_MARKDOWN_LICENSE = BSD-3-Clause
- PYTHON_MARKDOWN_LICENSE_FILES = LICENSE.md
- PYTHON_MARKDOWN_SETUP_TYPE = setuptools
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
