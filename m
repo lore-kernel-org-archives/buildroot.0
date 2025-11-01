@@ -1,52 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD9C1CCF9F0
-	for <buildroot@archiver.kernel.org>; Sat,  1 Nov 2025 09:38:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16D4FCCF9F0
+	for <buildroot@archiver.kernel.org>; Sat,  1 Nov 2025 09:38:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 12ECD418FD;
-	Sat,  1 Nov 2025 09:38:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C52FD6125E;
+	Sat,  1 Nov 2025 09:38:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PPj9sZW0UtCR; Sat,  1 Nov 2025 09:38:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N19sa0iiysOG; Sat,  1 Nov 2025 09:38:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 906A841880
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E60DE6127A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 906A841880;
-	Sat,  1 Nov 2025 09:38:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 642C72A3
- for <buildroot@buildroot.org>; Sat,  1 Nov 2025 09:38:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E60DE6127A;
+	Sat,  1 Nov 2025 09:38:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D47BA964
+ for <buildroot@buildroot.org>; Sat,  1 Nov 2025 09:38:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 562C441857
- for <buildroot@buildroot.org>; Sat,  1 Nov 2025 09:38:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C6A7D40F09
+ for <buildroot@buildroot.org>; Sat,  1 Nov 2025 09:38:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id onMuaPVtX7dz for <buildroot@buildroot.org>;
- Sat,  1 Nov 2025 09:38:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3570B41854
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3570B41854
- for <buildroot@buildroot.org>; Sat,  1 Nov 2025 09:38:11 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2D19A82D9A; Sat,  1 Nov 2025 09:38:11 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 1 Nov 2025 10:36:26 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 188f556e085a5eb7d338cc01627d8f9c80785442
-X-Git-Newrev: 42790e76e534c68d156040c6f58b2eb3d9f029e2
-X-Patchwork-Hint: ignore
-Message-Id: <20251101093811.2D19A82D9A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libxml2: fix build of packages
- detecting libxml2 using libxml2-config.cmake
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nJLY05ac3Aa6 for <buildroot@buildroot.org>;
+ Sat,  1 Nov 2025 09:38:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AD2614086F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD2614086F
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AD2614086F
+ for <buildroot@buildroot.org>; Sat,  1 Nov 2025 09:38:40 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 2B85560128;
+ Sat,  1 Nov 2025 10:38:36 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 01 Nov 2025 10:38:36 +0100
+MIME-Version: 1.0
+Date: Sat, 01 Nov 2025 10:38:36 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Pierre-Jean Texier <texier.pj2@gmail.com>
+In-Reply-To: <20251029210230.1841049-1-bernd@kuhls.net>
+References: <20251029210230.1841049-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <eb255f44a3af8c944a1d57be62459f50@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1761989918;
+ bh=G/CTQODBW6FKBBgSP8ywGKyQi8HRMIiEzA0Ka6GqdlM=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=QPwig9F6QgtjN/NPwRuhU2Jk6ZCn6ZN6yaR5vjz+cqhSJpVx8aBkezKD6Hm+jtVPM
+ Z1WyxRUFUwl5R2ihGAHNlTdawScN935NXj4Y4dDPGmI/6fL0ZLJIJZOIx/UGzWpbkD
+ 7Bkm8EXQUC5MGfGM2kzSTWwIQ67p85QF79t0CpGksPQKmKaDvsRHewu440RJl2VLxy
+ 5N/7nJ0AQpbopSQ9oIkQtsnQn3omejXsKmeCGXVGkh9Pjc6M3AyAYKhylRguO55l9c
+ RyHJEhpCD3VxiYjUyWUIa2upx7iochERVAUfOWI7cQc+JHgXvlCIw+HfOLuzI5gIGk
+ dtz+ALIn5n4yg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=QPwig9F6
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/libxml2: fix build of
+ packages detecting libxml2 using libxml2-config.cmake
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,141 +83,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42790e76e534c68d156040c6f58b2eb3d9f029e2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 29/10/2025 22:02, Bernd Kuhls wrote:
+> Fixes build error seen with libiio:
+> 
+> mips64el-buildroot-linux-gnu-gcc: ERROR: unsafe header/library path 
+> used
+>  in cross-compilation: '-I/usr/include/libxml2'
+> 
+> caused by bump of libxml2 to 2.15.0 with buildroot commit
+> d81922c1ef8825f10b802984d9721412a1a1a377.
+> 
+> Upstream acknowledged the problem and waits for a fix
+> https://gitlab.gnome.org/GNOME/libxml2/-/issues/898#note_2453923
+> so we revert the offending commit for now.
+> 
+> Fixes:
+> https://autobuild.buildroot.net/results/fde/fde40a3d6ac58f568e49419e5176db5a62a0a4d9/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Fixes build error seen with libiio:
-
-mips64el-buildroot-linux-gnu-gcc: ERROR: unsafe header/library path used
- in cross-compilation: '-I/usr/include/libxml2'
-
-caused by bump of libxml2 to 2.15.0 with buildroot commit
-d81922c1ef8825f10b802984d9721412a1a1a377.
-
-Upstream acknowledged the problem and waits for a fix
-https://gitlab.gnome.org/GNOME/libxml2/-/issues/898#note_2453923
-so we revert the offending commit for now.
-
-Fixes:
-https://autobuild.buildroot.net/results/fde/fde40a3d6ac58f568e49419e5176db5a62a0a4d9/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...e-Fix-installation-directories-in-libxml2.patch | 85 ++++++++++++++++++++++
- package/libxml2/libxml2.mk                         |  2 +
- 2 files changed, 87 insertions(+)
-
-diff --git a/package/libxml2/0001-Revert-cmake-Fix-installation-directories-in-libxml2.patch b/package/libxml2/0001-Revert-cmake-Fix-installation-directories-in-libxml2.patch
-new file mode 100644
-index 0000000000..75232b6f00
---- /dev/null
-+++ b/package/libxml2/0001-Revert-cmake-Fix-installation-directories-in-libxml2.patch
-@@ -0,0 +1,85 @@
-+From 81992efb40b37cc893c55575a83cdd1cec1fde2a Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Wed, 29 Oct 2025 21:45:09 +0100
-+Subject: [PATCH] Revert "cmake: Fix installation directories in
-+ libxml2-config.cmake"
-+
-+This reverts commit 75dde50b20215a2a3a445b62f36a67c8ed337cab.
-+
-+Upstream: https://gitlab.gnome.org/GNOME/libxml2/-/issues/898#note_2452864
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ configure.ac            | 11 -----------
-+ libxml2-config.cmake.in | 11 +++++++----
-+ meson.build             |  3 ---
-+ 3 files changed, 7 insertions(+), 18 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 4eb629bb..150e06eb 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1006,17 +1006,6 @@ AC_SUBST(XML_PRIVATE_LIBS)
-+ AC_SUBST(XML_PRIVATE_CFLAGS)
-+ AC_SUBST(XML_INCLUDEDIR)
-+ 
-+-# for libxml2-config.cmake.in
-+-AX_RECURSIVE_EVAL(["$bindir"], [INSTALL_BINDIR])
-+-AX_RECURSIVE_EVAL(["$includedir"], [INSTALL_INCLUDEDIR])
-+-AX_RECURSIVE_EVAL(["$libdir"], [INSTALL_LIBDIR])
-+-AC_SUBST(INSTALL_BINDIR)
-+-AC_SUBST(INSTALL_INCLUDEDIR)
-+-AC_SUBST(INSTALL_LIBDIR)
-+-AM_SUBST_NOTMAKE(INSTALL_BINDIR)
-+-AM_SUBST_NOTMAKE(INSTALL_INCLUDEDIR)
-+-AM_SUBST_NOTMAKE(INSTALL_LIBDIR)
-+-
-+ AX_RECURSIVE_EVAL(["$sysconfdir"], [XML_SYSCONFDIR])
-+ AC_DEFINE_UNQUOTED([XML_SYSCONFDIR], ["$XML_SYSCONFDIR"],
-+                    [System configuration directory (/etc)])
-+diff --git a/libxml2-config.cmake.in b/libxml2-config.cmake.in
-+index ff6433fa..b775cfee 100644
-+--- a/libxml2-config.cmake.in
-++++ b/libxml2-config.cmake.in
-+@@ -24,17 +24,20 @@
-+ #   LibXml2::LibXml2          - the LibXml2 library
-+ #   LibXml2::xmllint          - the xmllint command-line executable
-+ 
-++get_filename_component(_libxml2_rootdir ${CMAKE_CURRENT_LIST_DIR}/../../../ ABSOLUTE)
-++
-+ set(LIBXML2_VERSION_MAJOR  @LIBXML_MAJOR_VERSION@)
-+ set(LIBXML2_VERSION_MINOR  @LIBXML_MINOR_VERSION@)
-+ set(LIBXML2_VERSION_MICRO  @LIBXML_MICRO_VERSION@)
-+ set(LIBXML2_VERSION_STRING "@VERSION@")
-+ set(LIBXML2_DEFINITIONS    "@XML_CFLAGS@")
-+-set(LIBXML2_INCLUDE_DIR    @INSTALL_INCLUDEDIR@/libxml2)
-+-set(LIBXML2_LIBRARY_DIR    @INSTALL_LIBDIR@)
-++set(LIBXML2_INSTALL_PREFIX ${_libxml2_rootdir})
-++set(LIBXML2_INCLUDE_DIR    ${_libxml2_rootdir}/include/libxml2)
-++set(LIBXML2_LIBRARY_DIR    ${_libxml2_rootdir}/lib)
-+ 
-+ find_library(LIBXML2_LIBRARY NAMES xml2 HINTS ${LIBXML2_LIBRARY_DIR} NO_DEFAULT_PATH)
-+-find_program(LIBXML2_XMLCATALOG_EXECUTABLE NAMES xmlcatalog HINTS @INSTALL_BINDIR@ NO_DEFAULT_PATH)
-+-find_program(LIBXML2_XMLLINT_EXECUTABLE NAMES xmllint HINTS @INSTALL_BINDIR@ NO_DEFAULT_PATH)
-++find_program(LIBXML2_XMLCATALOG_EXECUTABLE NAMES xmlcatalog HINTS ${_libxml2_rootdir}/bin NO_DEFAULT_PATH)
-++find_program(LIBXML2_XMLLINT_EXECUTABLE NAMES xmllint HINTS ${_libxml2_rootdir}/bin NO_DEFAULT_PATH)
-+ 
-+ set(LIBXML2_LIBRARIES ${LIBXML2_LIBRARY})
-+ set(LIBXML2_INCLUDE_DIRS ${LIBXML2_INCLUDE_DIR})
-+diff --git a/meson.build b/meson.build
-+index 31c73b62..8728852c 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -577,9 +577,6 @@ config_cmake = configuration_data()
-+ config_cmake.set('LIBXML_MAJOR_VERSION', v_maj)
-+ config_cmake.set('LIBXML_MINOR_VERSION', v_min)
-+ config_cmake.set('LIBXML_MICRO_VERSION', v_mic)
-+-config_cmake.set('INSTALL_BINDIR', dir_bin)
-+-config_cmake.set('INSTALL_INCLUDEDIR', dir_include)
-+-config_cmake.set('INSTALL_LIBDIR', dir_lib)
-+ config_cmake.set('VERSION', meson.project_version())
-+ config_cmake.set10('BUILD_SHARED_LIBS',
-+                    get_option('default_library') != 'static')
-+-- 
-+2.47.3
-+
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index bf83ec2041..de0ec42eca 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -14,6 +14,8 @@ LIBXML2_LICENSE = MIT
- LIBXML2_LICENSE_FILES = Copyright
- LIBXML2_CPE_ID_VENDOR = xmlsoft
- LIBXML2_CONFIG_SCRIPTS = xml2-config
-+# 0001-Revert-cmake-Fix-installation-directories-in-libxml2.patch
-+LIBXML2_AUTORECONF = YES
- 
- # relocation truncated to fit: R_68K_GOT16O
- ifeq ($(BR2_m68k_cf),y)
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
