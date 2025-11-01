@@ -1,75 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 797B4CCFA00
-	for <buildroot@archiver.kernel.org>; Sat,  1 Nov 2025 19:47:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0524BCCFA00
+	for <buildroot@archiver.kernel.org>; Sat,  1 Nov 2025 19:48:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4B85861304;
-	Sat,  1 Nov 2025 19:47:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C8F3E84374;
+	Sat,  1 Nov 2025 19:48:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z8Qy8EJ--89n; Sat,  1 Nov 2025 19:47:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TT-wmaORdFSq; Sat,  1 Nov 2025 19:48:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3389612F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DEBD384428
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B3389612F5;
-	Sat,  1 Nov 2025 19:47:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id E2D882A3
- for <buildroot@buildroot.org>; Sat,  1 Nov 2025 19:47:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DEBD384428;
+	Sat,  1 Nov 2025 19:48:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C23E293D
+ for <buildroot@buildroot.org>; Sat,  1 Nov 2025 19:48:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D4884612F5
- for <buildroot@buildroot.org>; Sat,  1 Nov 2025 19:47:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B472384428
+ for <buildroot@buildroot.org>; Sat,  1 Nov 2025 19:48:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2KelfPWom4hY for <buildroot@buildroot.org>;
- Sat,  1 Nov 2025 19:47:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0B20F612F4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B20F612F4
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0B20F612F4
- for <buildroot@buildroot.org>; Sat,  1 Nov 2025 19:47:27 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 6515E19F5BA;
- Sat,  1 Nov 2025 20:47:24 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 01 Nov 2025 20:47:24 +0100
-MIME-Version: 1.0
-Date: Sat, 01 Nov 2025 20:47:24 +0100
-To: =?UTF-8?Q?Fl=C3=A1vio_Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251101181519.129751-1-flavio.tapajos@newtesc.com.br>
-References: <20251101181519.129751-1-flavio.tapajos@newtesc.com.br>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <d7b1b7ea43ff7d0439ea30f66f3bf767@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1762026445;
- bh=3+kKNugHNk4xi7EskKHGVXRAs8CTDKuD090PTFyX0SA=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=O+s+0f7RALwJot14aEG3q4oMWPDOgdnG/9yXyfU/2GsmcF/uyQ9b/NScrBT39hbJF
- pnq9aB1VR5kSHMhOSQbHNsirDlEo/asng+Wrf8m52kg0sh4n0EMj/DKtNNQ1nqJQQR
- 9L/jDZrW1f9rrY5jmq/IYzRcYgasafWKHUc7icaF566iYsEo6ePA2cfBV5IvFt+19D
- sHaFa40b+DUuUsE1y4BvU77dzinWX9XxFop0M1Rh202EHutInnciwKA6aIXfP/ZWA6
- xGel1x66qVE6yNofdyJn0sh0TwdHBiq/kWHgOH774v4yqxwlKm5UQAoZvsCXC6sIHG
- JOZrP5uFy8mZA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=O+s+0f7R
-Subject: Re: [Buildroot] [PATCH 1/1] package/rsyslog: bump version to
- 8.2510.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YBejp480c4IJ for <buildroot@buildroot.org>;
+ Sat,  1 Nov 2025 19:48:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA06B84374
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DA06B84374
+ for <buildroot@buildroot.org>; Sat,  1 Nov 2025 19:48:09 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C8BF583882; Sat,  1 Nov 2025 19:48:09 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 1 Nov 2025 20:46:26 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f11681ccd19f007b360593105d07a44afaac387d
+X-Git-Newrev: 0afdca366fc72a289f7ebcea319ca9976858537a
+X-Patchwork-Hint: ignore
+Message-Id: <20251101194809.C8BF583882@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rsyslog: bump version to 8.2510.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,16 +59,64 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============4381999480556947289=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMDEvMTEvMjAyNSAxOToxNSwgRmzDoXZpbyBUYXBhasOzcyB3cm90ZToKPiBSZWxlYXNlIGFu
-bm91bmNlOgo+IGh0dHBzOi8vd3d3LnJzeXNsb2cuY29tL3JzeXNsb2ctOC0yNTEwLTAtMjAyNS0x
-MC1yZWxlYXNlZC8KPiAKPiBDaGFuZ2Vsb2c6Cj4gaHR0cHM6Ly9naXRodWIuY29tL3JzeXNsb2cv
-cnN5c2xvZy9ibG9iL3Y4LjI1MTAuMC9DaGFuZ2VMb2cKPiAKPiBTaWduZWQtb2ZmLWJ5OiBGbMOh
-dmlvIFRhcGFqw7NzIDxmbGF2aW8udGFwYWpvc0BuZXd0ZXNjLmNvbS5icj4KCkFwcGxpZWQgdG8g
-bWFzdGVyLCB0aGFua3MuCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
-cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+--===============4381999480556947289==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=0afdca366fc72a289f7ebcea319ca9976858537a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Release announce:
+https://www.rsyslog.com/rsyslog-8-2510-0-2025-10-released/
+
+Changelog:
+https://github.com/rsyslog/rsyslog/blob/v8.2510.0/ChangeLog
+
+Signed-off-by: Flávio Tapajós <flavio.tapajos@newtesc.com.br>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/rsyslog/rsyslog.hash | 2 +-
+ package/rsyslog/rsyslog.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/rsyslog/rsyslog.hash b/package/rsyslog/rsyslog.hash
+index 546682c9f7..13a84b206f 100644
+--- a/package/rsyslog/rsyslog.hash
++++ b/package/rsyslog/rsyslog.hash
+@@ -1,5 +1,5 @@
+ # From http://www.rsyslog.com/downloads/download-v8-stable/
+-sha256  c89b1e74d36d0ca4a95b74a1abe36ed0b1faac8b7c8be471a8415cfa776206fd  rsyslog-8.2508.0.tar.gz
++sha256  a70a9834186859539a6a4d1c7b3f68c23897e805829b764a45e92cb0cc95e66a  rsyslog-8.2510.0.tar.gz
+ 
+ # Locally calculated
+ sha256  054b3a047d9232376a46b87356b19b0c0c2924cb5e6911ab96a01fc4b515f083  COPYING
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index 77059c9bb8..69128afbac 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RSYSLOG_VERSION = 8.2508.0
++RSYSLOG_VERSION = 8.2510.0
+ RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
+ RSYSLOG_LICENSE = GPL-3.0, LGPL-3.0, Apache-2.0
+ RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
+
+--===============4381999480556947289==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4381999480556947289==--
