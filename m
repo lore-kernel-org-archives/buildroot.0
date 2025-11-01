@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10EDDCCFA00
-	for <buildroot@archiver.kernel.org>; Sat,  1 Nov 2025 17:26:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 390FACCFA02
+	for <buildroot@archiver.kernel.org>; Sat,  1 Nov 2025 17:28:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BEE94610B6;
-	Sat,  1 Nov 2025 17:26:56 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w1ZZTnydI5NV; Sat,  1 Nov 2025 17:26:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E88EB61168
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E88EB61168;
-	Sat,  1 Nov 2025 17:26:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B61142A3
- for <buildroot@buildroot.org>; Sat,  1 Nov 2025 17:26:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9BF0F84708
- for <buildroot@buildroot.org>; Sat,  1 Nov 2025 17:26:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E70118471E;
+	Sat,  1 Nov 2025 17:28:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CRw6T_K-yx5F for <buildroot@buildroot.org>;
- Sat,  1 Nov 2025 17:26:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE938846FC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EE938846FC
- for <buildroot@buildroot.org>; Sat,  1 Nov 2025 17:26:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DA1578375D; Sat,  1 Nov 2025 17:26:53 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 1 Nov 2025 18:24:35 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7b79f01e42f7df916384b70028d63741dd01abc9
-X-Git-Newrev: 7504f85c8432e155233b3000cd1bb78a8704ada1
-X-Patchwork-Hint: ignore
-Message-Id: <20251101172653.DA1578375D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/andes_ae350_45_defconfig: Fix
+ id aaAXy3NWttHq; Sat,  1 Nov 2025 17:28:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B7AA84708
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1B7AA84708;
+	Sat,  1 Nov 2025 17:28:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 207A62A3
+ for <buildroot@buildroot.org>; Sat,  1 Nov 2025 17:28:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0738F4044B
+ for <buildroot@buildroot.org>; Sat,  1 Nov 2025 17:28:02 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sg5IKepDye5J for <buildroot@buildroot.org>;
+ Sat,  1 Nov 2025 17:28:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2CF414013E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CF414013E
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2CF414013E
+ for <buildroot@buildroot.org>; Sat,  1 Nov 2025 17:28:01 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id DDAD513F854;
+ Sat,  1 Nov 2025 18:27:56 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 01 Nov 2025 18:27:56 +0100
+MIME-Version: 1.0
+Date: Sat, 01 Nov 2025 18:27:56 +0100
+To: Leo Yu-Chi Liang <ycliang@andestech.com>
+Cc: buildroot@buildroot.org, tim609@andestech.com
+In-Reply-To: <20251027033242.1797230-2-ycliang@andestech.com>
+References: <20251027033242.1797230-1-ycliang@andestech.com>
+ <20251027033242.1797230-2-ycliang@andestech.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <516d3dfa293491e5289d50f0b4616462@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1762018079;
+ bh=djHZJqZrwZXv9Xd5emNlHlcv5vMNImInae6wkZXvAvE=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=EhKQSiP+uxkSe+YLJOImvRn6ilCNLodJEzQ4jjuUOMSFFGoyTubefuNfEWy2A7v1j
+ PHU3JSF/OGWxuFLqLWWVyie69kDAE96K3z0lIAMdZsQezb/xfT2J8aFixJZ/+w5hlr
+ gqQMB6vWQHkXTMjJLBmqqUMb0oIpumrVaMG4DU2nYxoDYtUuBaJaZGM5tDUCkNCduG
+ 3dJWfkFaHtgL/CHaw5Tid6cgkTym4ItQwADHha6aoaZFZ4d0ls2ymmIsFosUTzbCNm
+ INQ3SSTvjbPhz77DWpXkyFEtN7YqbjhKx6ghq+BTyq3kdS4sm3ZASqF6Q9qxXWLUyB
+ pWicbMC97eUbQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=EhKQSiP+
+Subject: Re: [Buildroot] [PATCH 1/4] configs/andes_ae350_45_defconfig: Fix
  post-build.sh Shellcheck error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -60,48 +84,24 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7504f85c8432e155233b3000cd1bb78a8704ada1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 27/10/2025 04:32, Leo Yu-Chi Liang via buildroot wrote:
+> Add quotation mark to fix Shellcheck error.
+> 
+> Signed-off-by: Leo Yu-Chi Liang <ycliang@andestech.com>
 
-Add quotation mark to fix Shellcheck error.
+I applied this patch only, with a small fixup. See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/7504f85c8432e155233b3000cd1bb78a8704ada1
 
-Signed-off-by: Leo Yu-Chi Liang <ycliang@andestech.com>
-Reviewed-by: Vincent Jardin <vjardin@free.fr>
-[Julien: remove .checkpackageignore entry to fix check-package error]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .checkpackageignore             | 1 -
- board/andes/ae350/post-build.sh | 4 ++--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+I skipped other patches of the series since there is comments.
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index e8c97c2d63..f146382d34 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1,7 +1,6 @@
- board/amarula/vyasa/post-build.sh Shellcheck
- board/andes/ae350/patches/uboot/0001-mmc-ftsdc010_mci-Support-DTS-of-ftsdc010-driver-for-.patch lib_patch.Upstream
- board/andes/ae350/patches/uboot/0002-spl-Align-device-tree-blob-address-at-8-byte-boundar.patch lib_patch.Upstream
--board/andes/ae350/post-build.sh Shellcheck
- board/arcturus/aarch64-ucls1012a/post-build.sh Shellcheck
- board/arcturus/aarch64-ucls1012a/post-image.sh Shellcheck
- board/aspeed/common/post-image.sh Shellcheck
-diff --git a/board/andes/ae350/post-build.sh b/board/andes/ae350/post-build.sh
-index 84187a064b..e1669c2bcd 100755
---- a/board/andes/ae350/post-build.sh
-+++ b/board/andes/ae350/post-build.sh
-@@ -1,3 +1,3 @@
- #!/bin/sh
--cp $BINARIES_DIR/Image $TARGET_DIR/boot
--cp $BINARIES_DIR/ae350_ax45mp.dtb $TARGET_DIR/boot
-+cp "$BINARIES_DIR"/Image "$TARGET_DIR"/boot
-+cp "$BINARIES_DIR"/ae350_ax45mp.dtb "$TARGET_DIR"/boot
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
