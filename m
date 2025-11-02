@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9929ACCF9E3
-	for <buildroot@archiver.kernel.org>; Sun,  2 Nov 2025 17:03:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 380D9CCF9E3
+	for <buildroot@archiver.kernel.org>; Sun,  2 Nov 2025 17:03:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5408360611;
-	Sun,  2 Nov 2025 17:03:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C9376F5C3;
+	Sun,  2 Nov 2025 17:03:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TjfxNUIVccGo; Sun,  2 Nov 2025 17:03:15 +0000 (UTC)
+ id TeO2IwjHzfWG; Sun,  2 Nov 2025 17:03:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39B5F6132B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C2CB61130
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 39B5F6132B;
-	Sun,  2 Nov 2025 17:03:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B606E7B1
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 17:03:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4C2CB61130;
+	Sun,  2 Nov 2025 17:03:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5CF792A3
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 17:03:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A7F316132B
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 17:03:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 434A642672
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 17:03:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RipxnffFGFc3 for <buildroot@buildroot.org>;
- Sun,  2 Nov 2025 17:03:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D8DC60611
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8D8DC60611
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 17:03:11 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7B212839BA; Sun,  2 Nov 2025 17:03:11 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 2 Nov 2025 17:47:16 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8930ede00fd4e76a007af5b85c22e0b90a913fc8
-X-Git-Newrev: a185c81e946487ed6399863795046aa40bef2ce5
-X-Patchwork-Hint: ignore
-Message-Id: <20251102170311.7B212839BA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libiconv: bump version to 1.18
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a0LWlpUBkDp3 for <buildroot@buildroot.org>;
+ Sun,  2 Nov 2025 17:03:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8913A4266F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8913A4266F
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8913A4266F
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 17:03:29 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 41F962003DA;
+ Sun,  2 Nov 2025 18:03:26 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 02 Nov 2025 18:03:25 +0100
+MIME-Version: 1.0
+Date: Sun, 02 Nov 2025 18:03:25 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251026102229.1323577-1-bernd@kuhls.net>
+References: <20251026102229.1323577-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <0c015a3486fa8670803765087c503281@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1762103007;
+ bh=lz+LytL2Z0rHZ28Xs73r4XLgEixb1oxUcexQoFg85bk=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=HV7u0ijP3z7hmza5fzL7kucAa9vBkQe/AXcLvGXiGoULJKbZo/g3hlgfjOt+lC6GA
+ KDy962vxFD8aI7OpnfD4+HGKX3cNVpL6UhjSuYNajCUAAUrOMmPbKdYq5fQbMsim5U
+ NYtmUG9Eb69uICmJ20T01pyyemvi/eWHvE0b7f5DwuPxWfzY1FQrNMZJkv1RmBxaT4
+ ydPuhwAMEjX7KKXUdUIfS8jUZfjycwcYSdkbhln5oUW3s7Lpy0zfe1vbzvCx9mYs+c
+ SgVjIaw62tZuW+8xbOQBAl1z1jPKhFYO3TAH27pbsL7EjqL8gMajL+5M2xj6Sxg8HQ
+ DTY8xCpb0lx2Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=HV7u0ijP
+Subject: Re: [Buildroot] [PATCH 1/2] package/libiconv: fix build with gcc
+ 15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,186 +83,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a185c81e946487ed6399863795046aa40bef2ce5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 26/10/2025 11:22, Bernd Kuhls wrote:
+> Fixes:
+> https://autobuild.buildroot.net/results/387/3875466a80e57dfd96911a2166e496cf7d41bb69/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Removed patch 0001 which is included in this release.
-
-Updated license hash and _LICENSE due to switch to LGPL-2.1+:
-https://savannah.gnu.org/news/?id=10139
-https://gitweb.git.savannah.gnu.org/gitweb/?p=libiconv.git;a=commitdiff;h=3acb1179dd057fa37b733eb2827822f95d1e31c3
-
-Our libtool patch does not apply due to the shipped file being patched
-upstream:
-https://gitweb.git.savannah.gnu.org/gitweb/?p=libiconv.git;a=commitdiff;h=2f2b617f0334cd8b4313bcd84ce6a49713a7d848
-
-* build-aux/ltmain.sh: Update from libtool-2.5.4, with modifications:
-2017-07-15  Bruno Haible  <bruno@clisp.org>
-Allow building statically linked binaries, through
-LDFLAGS="-static". Apply patch from
-<https://lists.gnu.org/archive/html/bug-libtool/2017-07/msg00000.html>.
-* build-aux/ltmain.sh (func_mode_help, func_mode_link): In the
-link mode, accept option '-static-uninstalled-libs' in place of
-'-static', and make '-static' an equivalent of '-all-static'.
-* libcharset/build-aux/ltmain.sh: Likewise.
-
-Added 0001-libtool.patch as rebased version of
-support/libtool/buildroot-libtool-v2.4.4.patch
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...-function-declaration-without-a-prototype.patch | 34 -------------
- package/libiconv/0001-libtool.patch                | 57 ++++++++++++++++++++++
- package/libiconv/libiconv.hash                     |  4 +-
- package/libiconv/libiconv.mk                       |  8 ++-
- 4 files changed, 65 insertions(+), 38 deletions(-)
-
-diff --git a/package/libiconv/0001-Fix-a-clang-warning-a-function-declaration-without-a-prototype.patch b/package/libiconv/0001-Fix-a-clang-warning-a-function-declaration-without-a-prototype.patch
-deleted file mode 100644
-index f859f7e014..0000000000
---- a/package/libiconv/0001-Fix-a-clang-warning-a-function-declaration-without-a-prototype.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From: Bruno Haible <bruno@clisp.org>
--Date: Sun, 29 Jan 2023 19:07:21 +0000 (+0100)
--Subject: Fix a clang warning "a function declaration without a prototype...".
--X-Git-Tag: v1.18~57
--X-Git-Url: https://gitweb.git.savannah.gnu.org/gitweb/?p=libiconv.git;a=commitdiff_plain;h=e46dee2f581c1167137bcd045e114e96a9f00483
--
--Fix a clang warning "a function declaration without a prototype...".
--
--* lib/loop_wchar.h (mbrtowc): Don't declare. Drop portability to BeOS.
--
--Upstream: https://gitweb.git.savannah.gnu.org/gitweb/?p=libiconv.git;a=commitdiff;h=e46dee2f581c1167137bcd045e114e96a9f00483
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
--
--diff --git a/lib/loop_wchar.h b/lib/loop_wchar.h
--index b3edc29..9eb508e 100644
----- a/lib/loop_wchar.h
--+++ b/lib/loop_wchar.h
--@@ -1,5 +1,5 @@
-- /*
--- * Copyright (C) 2000-2002, 2005-2006, 2008-2009, 2011 Free Software Foundation, Inc.
--+ * Copyright (C) 2000-2002, 2005-2006, 2008-2009, 2011, 2023 Free Software Foundation, Inc.
--  * This file is part of the GNU LIBICONV Library.
--  *
--  * The GNU LIBICONV Library is free software; you can redistribute it
--@@ -36,7 +36,6 @@
-- # include <wchar.h>
-- # define BUF_SIZE 64  /* assume MB_LEN_MAX <= 64 */
--   /* Some systems, like BeOS, have multibyte encodings but lack mbstate_t.  */
---  extern size_t mbrtowc ();
-- # ifdef mbstate_t
-- #  define mbrtowc(pwc, s, n, ps) (mbrtowc)(pwc, s, n, 0)
-- #  define mbsinit(ps) 1
-diff --git a/package/libiconv/0001-libtool.patch b/package/libiconv/0001-libtool.patch
-new file mode 100644
-index 0000000000..7c72781b4e
---- /dev/null
-+++ b/package/libiconv/0001-libtool.patch
-@@ -0,0 +1,57 @@
-+Libtool fixes for cross-compilation, many past contributors/authors.
-+Update based on libtool-2.4.4, useful for 2.4.3 as well but not 2.4.2.
-+
-+Upstream: Not applicable (Buildroot specific)
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+[Bernd: rebased for version 1.18]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+
-+--- a/build-aux/ltmain.sh	2014-12-16 09:51:23.068441045 -0300
-++++ b/build-aux/ltmain.sh	2014-12-16 09:57:10.509430339 -0300
-+@@ -2687,8 +2687,8 @@
-+ 	# was found and let the user know that the "--tag" command
-+ 	# line option must be used.
-+ 	if test -z "$tagname"; then
-+-	  func_echo "unable to infer tagged configuration"
-+-	  func_fatal_error "specify a tag with '--tag'"
-++	  func_echo "defaulting to \`CC'"
-++	  func_echo "if this is not correct, specify a tag with \`--tag'"
-+ #	else
-+ #	  func_verbose "using $tagname tagged configuration"
-+ 	fi
-+@@ -4277,8 +4277,12 @@
-+ 	  # At present, this check doesn't affect windows .dll's that
-+ 	  # are installed into $libdir/../bin (currently, that works fine)
-+ 	  # but it's something to keep an eye on.
-+-	  test "$inst_prefix_dir" = "$destdir" && \
-+-	    func_fatal_error "error: cannot install '$file' to a directory not ending in $libdir"
-++
-++	  #
-++	  # This breaks install into our staging area.  -PB
-++	  #
-++	  #test "$inst_prefix_dir" = "$destdir" && \
-++	  #  func_fatal_error "error: cannot install '$file' to a directory not ending in $libdir"
-+ 
-+ 	  if test -n "$inst_prefix_dir"; then
-+ 	    # Stick the inst_prefix_dir data into the link command.
-+@@ -8112,7 +8112,7 @@
-+ 	  *)
-+ 	    if test no = "$installed"; then
-+ 	      func_append notinst_deplibs " $lib"
-+-	      need_relink=yes
-++	      need_relink=no
-+ 	    fi
-+ 	    ;;
-+ 	  esac
-+@@ -10710,6 +10710,10 @@
-+ 	    # Replace all uninstalled libtool libraries with the installed ones
-+ 	    newdependency_libs=
-+ 	    for deplib in $dependency_libs; do
-++	      # Replacing uninstalled with installed can easily break crosscompilation,
-++	      # since the installed path is generally the wrong architecture.  -CL
-++	      newdependency_libs="$newdependency_libs $deplib"
-++	      continue
-+ 	      case $deplib in
-+ 	      *.la)
-+ 		func_basename "$deplib"
-diff --git a/package/libiconv/libiconv.hash b/package/libiconv/libiconv.hash
-index e3a6125e25..9fa38c567b 100644
---- a/package/libiconv/libiconv.hash
-+++ b/package/libiconv/libiconv.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--sha256  ccf536620a45458d26ba83887a983b96827001e92a13847b45e4925cc8913178  libiconv-1.15.tar.gz
-+sha256  3b08f5f4f9b4eb82f151a7040bfd6fe6c6fb922efe4b1659c66ea933276965e8  libiconv-1.18.tar.gz
- 
- # Hash for license files:
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
--sha256  56bdea73b6145ef6ac5259b3da390b981d840c24cb03b8e1cbc678de7ecfa18d  COPYING.LIB
-+sha256  20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95  COPYING.LIB
-diff --git a/package/libiconv/libiconv.mk b/package/libiconv/libiconv.mk
-index 40763a92f8..a102ff18a4 100644
---- a/package/libiconv/libiconv.mk
-+++ b/package/libiconv/libiconv.mk
-@@ -4,12 +4,16 @@
- #
- ################################################################################
- 
--LIBICONV_VERSION = 1.15
-+LIBICONV_VERSION = 1.18
- LIBICONV_SITE = $(BR2_GNU_MIRROR)/libiconv
- LIBICONV_INSTALL_STAGING = YES
--LIBICONV_LICENSE = GPL-3.0+ (iconv program), LGPL-2.0+ (library)
-+LIBICONV_LICENSE = GPL-3.0+ (iconv program), LGPL-2.1+ (library)
- LIBICONV_LICENSE_FILES = COPYING COPYING.LIB
- 
-+# libiconv uses a patched version of libtool 2.5.4
-+# we use a package-specific patch instead
-+LIBICONV_LIBTOOL_PATCH = NO
-+
- ifeq ($(BR2_PACKAGE_LIBICONV_EXTRA_ENCODINGS),y)
- LIBICONV_CONF_OPTS += --enable-extra-encodings
- endif
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
