@@ -1,75 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC495CCFA02
-	for <buildroot@archiver.kernel.org>; Sun,  2 Nov 2025 13:10:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8103DCCFA02
+	for <buildroot@archiver.kernel.org>; Sun,  2 Nov 2025 13:38:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B9055615DC;
-	Sun,  2 Nov 2025 13:10:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C3E542610;
+	Sun,  2 Nov 2025 13:38:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ufPuLySrYplm; Sun,  2 Nov 2025 13:10:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id I71JdXkcUJoP; Sun,  2 Nov 2025 13:37:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA8B3615DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D81442613
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DA8B3615DF;
-	Sun,  2 Nov 2025 13:10:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 70073436
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 13:10:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2D81442613;
+	Sun,  2 Nov 2025 13:37:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8BDE3222
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 13:37:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5602185233
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 13:10:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7E3A442613
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 13:37:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KwvDD0q6bmUL for <buildroot@buildroot.org>;
- Sun,  2 Nov 2025 13:10:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 98C06851FC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98C06851FC
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 98C06851FC
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 13:10:47 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id C74A213F8B5;
- Sun,  2 Nov 2025 14:10:44 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 02 Nov 2025 14:10:44 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V6oyRF14aYcT for <buildroot@buildroot.org>;
+ Sun,  2 Nov 2025 13:37:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E565D42610
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E565D42610
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E565D42610
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 13:37:56 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c274.dip0.t-ipconnect.de [79.214.194.116])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 5CFB6A4C5EDC;
+ Sun,  2 Nov 2025 14:37:53 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:58248)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99)
+ (envelope-from <bernd@kuhls.net>) id 1vFYHJ-0000000025N-1OQT;
+ Sun, 02 Nov 2025 13:37:53 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Cc: Simon Dawson <spdawson@gmail.com>
+Date: Sun,  2 Nov 2025 14:37:51 +0100
+Message-ID: <20251102133752.2690402-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Sun, 02 Nov 2025 14:10:44 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251102082843.4443-1-bernd@kuhls.net>
-References: <20251102082843.4443-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <bd9c32f18dcd4b12171287ea924a6837@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1762089045;
- bh=Z9fhXGPwvvS2tI+1CdnYOgGF8kK5lfjjH/yJBUWR/F4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=LiZHF2ITUEtThtelc/Aa8pgUai3aV38mXCj80Wjklhodf47nSLJtVLTgBbtGdc3kW
- PUEy7vDFxiSxsTLgmJfifCMHOLDC3O1eiX9i/oz2jLnOU6XLwZidiCTSYetM2dauW6
- xcLs3S6bzC5OxTa/lenLSbrYsSsu090cHku1YWuZdz0o9rxuai7HfHDZZSosn76xCt
- +a3M0uVBlYmifWE1qYzDWPtsrGAn2SGtVZpM/fOwk2AG7hUK8tlJjFYHsPW3vl0jsY
- 0x9NU7BrJMPdYZiLHOx4L+PpzLz0k+UKaDV5n02QXeuc0H4NejnffPDvjAtj1/ty2Y
- Z5NVQDutW7Yyw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=LiZHF2IT
-Subject: Re: [Buildroot] [PATCH 1/1] package/kodi-peripheral-joystick: bump
- version to 21.1.23-Omega
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202506031021; t=1762090673;
+ bh=X/jNbjyMPESAAQCOopPHkkt8joxcdE0FTbOZG9m9FJU=;
+ h=From:To:Cc:Subject:Date:From;
+ b=vfqpST2kwv86UaTEp79T9BJBMFe5rySKVvGN4Nsw7DxhoBUHh0XEvep93xHSFqdvI
+ WmrSgcpBuIpGiQuUchfAIJDPV/C6rWGH0UGrR+hJ3umpMOw379onclP17M2lCMrE4l
+ FM64Qae+sxvCixjxqT2uZb1dT41vpIcGO1jrZkCtd70jomVG/wtNFSl1e4zUPPiws2
+ XlyxLcYdc9IxmImnPsZ8en1qGL0EYUTeK1yHGeWeR5FiwqSo0momLVMpJLN/xbt1B8
+ mO5LgcvyCRZ3KIhd1rli0FciNiegUN9O3F2565zHaMc8X9dOBH8Af5lQaAD66df2zR
+ qn4ISITzEZQeQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=vfqpST2k
+Subject: [Buildroot] [PATCH 1/2] package/vlc: fix build with newer versions
+ of live555
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,17 +82,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 02/11/2025 09:28, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Needed to prevent build errors with upcoming bump of live555.
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ ...5-fix-build-with-versions-2024.11.28.patch | 47 +++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 package/vlc/0011-live555-fix-build-with-versions-2024.11.28.patch
+
+diff --git a/package/vlc/0011-live555-fix-build-with-versions-2024.11.28.patch b/package/vlc/0011-live555-fix-build-with-versions-2024.11.28.patch
+new file mode 100644
+index 0000000000..9708f680c9
+--- /dev/null
++++ b/package/vlc/0011-live555-fix-build-with-versions-2024.11.28.patch
+@@ -0,0 +1,47 @@
++From 8befcbfa834b809602db24c9ba7456d8cfc25cdb Mon Sep 17 00:00:00 2001
++From: Florian Albrechtskirchinger <falbrechtskirchinger@gmail.com>
++Date: Sun, 2 Mar 2025 08:30:43 +0100
++Subject: [PATCH] live555: fix build with versions >= 2024.11.28
++
++In the 2024.11.28 release (version 1732752000), live555 introduced
++`EventLoopWatchVariable` as a typedef for `std::atomic<char>`, replacing
++direct use of `char` in earlier versions. Add a conditional typedef to
++define it as `char` for older versions, and update `event_rtsp` and
++`event_data` to use `EventLoopWatchVariable`.
++
++Upstream: https://code.videolan.org/videolan/vlc/-/commit/8befcbfa834b809602db24c9ba7456d8cfc25cdb
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ modules/access/live555.cpp | 8 ++++++--
++ 1 file changed, 6 insertions(+), 2 deletions(-)
++
++diff --git a/modules/access/live555.cpp b/modules/access/live555.cpp
++index 461766661e49..cacea3c46952 100644
++--- a/modules/access/live555.cpp
+++++ b/modules/access/live555.cpp
++@@ -194,6 +194,10 @@ class RTSPClientVlc;
++ #define CAP_SUBSESSION_PAUSE    (1 << 3)
++ #define CAPS_DEFAULT            CAP_RATE_CONTROL
++ 
+++#if LIVEMEDIA_LIBRARY_VERSION_INT < 1732752000 // 2024.11.28
+++typedef char EventLoopWatchVariable;
+++#endif
+++
++ struct demux_sys_t
++ {
++     char            *p_sdp;    /* XXX mallocated */
++@@ -232,8 +236,8 @@ struct demux_sys_t
++     bool             b_no_data;     /* if we never received any data */
++     int              i_no_data_ti;  /* consecutive number of TaskInterrupt */
++ 
++-    char             event_rtsp;
++-    char             event_data;
+++    EventLoopWatchVariable event_rtsp;
+++    EventLoopWatchVariable event_data;
++ 
++     bool             b_get_param;   /* Does the server support GET_PARAMETER */
++     bool             b_paused;      /* Are we paused? */
++-- 
++GitLab
++
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
