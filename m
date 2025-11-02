@@ -1,75 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8181FCCFA02
-	for <buildroot@archiver.kernel.org>; Sun,  2 Nov 2025 13:07:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D185CCCF9E3
+	for <buildroot@archiver.kernel.org>; Sun,  2 Nov 2025 13:10:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 589E06F560;
-	Sun,  2 Nov 2025 13:07:08 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jXHF8LTlC8cN; Sun,  2 Nov 2025 13:07:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C4DB6F538
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C4DB6F538;
-	Sun,  2 Nov 2025 13:07:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7E97F222
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 13:07:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 704F7852AB
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 13:07:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 933988515C;
+	Sun,  2 Nov 2025 13:10:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id chDbfiDq6-_X for <buildroot@buildroot.org>;
- Sun,  2 Nov 2025 13:07:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6BED4852A9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6BED4852A9
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6BED4852A9
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 13:07:03 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 858D1B00576;
- Sun,  2 Nov 2025 14:07:00 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 02 Nov 2025 14:07:00 +0100
-MIME-Version: 1.0
-Date: Sun, 02 Nov 2025 14:07:00 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251102111011.1390948-1-bernd@kuhls.net>
-References: <20251102111011.1390948-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <0f7180e1b11f63cd3b2d1adf836f45b3@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1762088821;
- bh=XXgusXDIfmFzkwihLLJHzag1tEVRoJR1uzX8ST1PbE0=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=YDamLdnFjuYvWYw3L+4ws/8KdtFEvyfYzEd2XwL5KNqmZSEbVhxXUgvr1aT0xS9Fh
- lU81ePU5jFWV/0B0Uw3WOzP9WGsO73x/0yX702QXUZvsZHA0CkB4QAAT4OfkP3MOti
- QefWsJnw5fO/zmuDmbgY2WqliMNFJD2KjdZPGYQCBXHvkG3t077VEUKBE5ES0dAn3c
- 5AZ3bAIIrA2m0rKZMAAn5+p0WYr6WULlllkrt2bfxw9iFczfZhfavh88MYx4ydu2NX
- wBpE8144iP+Mnon0/QX4N77P3gn17Blsu3XjJlzbF+JGf1a9uRQpBofi1ccpT+Hvc7
- IUx3wmltECcMw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=YDamLdnF
-Subject: Re: [Buildroot] [PATCH 1/2] package/live555: switch _SITE to
- videolan.org
+ id ChF47qje4U1u; Sun,  2 Nov 2025 13:10:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF2BE851DF
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id BF2BE851DF;
+	Sun,  2 Nov 2025 13:10:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DFCE222
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 13:10:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id F23CA615DF
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 13:10:37 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GMPzzCkTX1uh for <buildroot@buildroot.org>;
+ Sun,  2 Nov 2025 13:10:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E36BE615DC
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E36BE615DC
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 13:10:36 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CC2B2839DF; Sun,  2 Nov 2025 13:10:36 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 2 Nov 2025 14:08:34 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: da133c05c30e2fbed7eb74b9d942c7ccb72d9681
+X-Git-Newrev: 6957b5c624491be611df2541b2b9c5d4c17c1808
+X-Patchwork-Hint: ignore
+Message-Id: <20251102131036.CC2B2839DF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-peripheral-joystick: bump
+ version to 21.1.23-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,21 +60,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 02/11/2025 12:10, Bernd Kuhls wrote:
-> Upstream site http://www.live555.com/liveMedia/public/ removes older
-> versions, use videolan.org instead.
-> 
-> Fixes:
-> https://autobuild.buildroot.net/results/7af/7af41a2774ba3ed7049e06fe290d3233e772ab19/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=6957b5c624491be611df2541b2b9c5d4c17c1808
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I applied this patch (only) to master. Thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash | 2 +-
+ package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+index 7249bc6136..3be4eef39b 100644
+--- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
++++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  deb7fb41408ff06989b8fa2db7bd5bea210756a1f2f8a9037cc12f6518fddd94  kodi-peripheral-joystick-21.1.22-Omega.tar.gz
++sha256  7392c30a9e49b0cd219cdca14f5b20ffce9f4a52c349c2cdf37cb603dd21f516  kodi-peripheral-joystick-21.1.23-Omega.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
+index c6af2280f2..698b918266 100644
+--- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
++++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PERIPHERAL_JOYSTICK_VERSION = 21.1.22-Omega
++KODI_PERIPHERAL_JOYSTICK_VERSION = 21.1.23-Omega
+ KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
+ KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
+ KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
