@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C5BECCFA02
-	for <buildroot@archiver.kernel.org>; Sun,  2 Nov 2025 18:26:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1D44CCF9E3
+	for <buildroot@archiver.kernel.org>; Sun,  2 Nov 2025 18:27:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3C3B94178A;
-	Sun,  2 Nov 2025 18:26:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6B0A4614A4;
+	Sun,  2 Nov 2025 18:27:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cuU5yZl-GNLH; Sun,  2 Nov 2025 18:26:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H-m8Yh4L0KFV; Sun,  2 Nov 2025 18:27:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EC8C417A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE46F61156
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5EC8C417A7;
-	Sun,  2 Nov 2025 18:26:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 38174222
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 18:26:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DE46F61156;
+	Sun,  2 Nov 2025 18:27:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 87723436
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 18:27:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 29DFF85059
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 18:26:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 78BCB61156
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 18:27:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EhUYH7dZNd6f for <buildroot@buildroot.org>;
- Sun,  2 Nov 2025 18:26:30 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 745EC85054
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 745EC85054
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 18:26:30 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6C42C83A60; Sun,  2 Nov 2025 18:26:30 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 2 Nov 2025 19:02:15 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a185c81e946487ed6399863795046aa40bef2ce5
-X-Git-Newrev: 67844aad3accafb20bc069721888cb2a479a191b
-X-Patchwork-Hint: ignore
-Message-Id: <20251102182630.6C42C83A60@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dpdk: bump to 24.11.3 version
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ndc5VDYBpU6S for <buildroot@buildroot.org>;
+ Sun,  2 Nov 2025 18:27:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8579560FBF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8579560FBF
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8579560FBF
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 18:27:22 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id ABC7B13F879;
+ Sun,  2 Nov 2025 19:27:18 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 02 Nov 2025 19:27:18 +0100
+MIME-Version: 1.0
+Date: Sun, 02 Nov 2025 19:27:18 +0100
+To: Maxime Leroy <maxime@leroys.fr>
+Cc: buildroot@buildroot.org, Vincent Jardin <vjardin@free.fr>
+In-Reply-To: <20251021120342.483933-2-maxime@leroys.fr>
+References: <20251021120342.483933-1-maxime@leroys.fr>
+ <20251021120342.483933-2-maxime@leroys.fr>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <4bfbb3adfd09ca1998bc4e196410cc99@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1762108040;
+ bh=aQor6fga38YcHxvMY3KWOyajMa/U0sU+WLMi6Aj0c1E=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=XAGDOx0MVuibVaF1cBwKB8AE1ak3cPYjLz813hhcZYy+0JkIn3BEZ+70hTxXFES5j
+ VOPzMsPNmFlgw2iLsgcENi1XstXX8L0ftrjVezqqSkc6ThfQE10PsHBwmm2eeFOX2L
+ mIEYFq+jyaKTrDhtTCn4znGeWHEYgQfW/yzl3qyLS0z+O8xVxspojvxp+NFpSpZYo0
+ hv81Wf1NQ68FZhrM2VHC/UlXyJ0zH7226gtpdTTrWwnhg3ZLDax8AmV8T9wu51mYdI
+ P6d2WPDfXJqjODczCY3hOrYSQQKXXmW23UDCD4ImsF7DAYiBX7pnBzpbLd2LtEX4Kz
+ VuofnCjm7c4bg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=XAGDOx0M
+Subject: Re: [Buildroot] [PATCH 1/5] package/dpdk: bump to 24.11.3 version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,50 +83,24 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67844aad3accafb20bc069721888cb2a479a191b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 21/10/2025 14:03, Maxime Leroy wrote:
+> See the release note of the new versions:
+> - https://doc.dpdk.org/guides-24.11/rel_notes/release_24_11.html#id1
+> - https://doc.dpdk.org/guides-24.11/rel_notes/release_24_11.html#id5
+> 
+> Signed-off-by: Maxime Leroy <maxime@leroys.fr>
 
-See the release note of the new versions:
-- https://doc.dpdk.org/guides-24.11/rel_notes/release_24_11.html#id1
-- https://doc.dpdk.org/guides-24.11/rel_notes/release_24_11.html#id5
+I applied this version bump (only) on master.
+I'll do more tests with the other patches of this series.
 
-Signed-off-by: Maxime Leroy <maxime@leroys.fr>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/dpdk/dpdk.hash | 2 +-
- package/dpdk/dpdk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks.  Best regards,
 
-diff --git a/package/dpdk/dpdk.hash b/package/dpdk/dpdk.hash
-index e9a22736b0..5c9fd7c087 100644
---- a/package/dpdk/dpdk.hash
-+++ b/package/dpdk/dpdk.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  bcae7d42c449fc456dfb279feabcbe0599a29bebb2fe2905761e187339d96b8e  dpdk-24.11.1.tar.xz
-+sha256  d5ae4cfaef05d6aa491af643d61b83d840e53ced96f9c9f60fda986313ed84b2  dpdk-24.11.3.tar.xz
- sha256  9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  license/bsd-3-clause.txt
- sha256  e19808bccd90c238fac06da2fc3683e094c64f7ba647e9d86f03a98cf5f2ce05  license/exceptions.txt
- sha256  6c54c4d44faf3cba829b3d0c21c6955953e758767018fd7244f809b01d4f4845  license/mit.txt
-diff --git a/package/dpdk/dpdk.mk b/package/dpdk/dpdk.mk
-index 0cbdc67e87..1c7eada937 100644
---- a/package/dpdk/dpdk.mk
-+++ b/package/dpdk/dpdk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DPDK_VERSION = 24.11.1
-+DPDK_VERSION = 24.11.3
- DPDK_SOURCE = dpdk-$(DPDK_VERSION).tar.xz
- DPDK_SITE = https://fast.dpdk.org/rel
- DPDK_LICENSE = \
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
