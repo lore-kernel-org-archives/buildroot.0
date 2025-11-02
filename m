@@ -1,74 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E69DCCF9E3
-	for <buildroot@archiver.kernel.org>; Sun,  2 Nov 2025 18:47:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D06CFCCFA02
+	for <buildroot@archiver.kernel.org>; Sun,  2 Nov 2025 18:54:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1EA0E41FFC;
-	Sun,  2 Nov 2025 18:47:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7DDBB84EA0;
+	Sun,  2 Nov 2025 18:54:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GC_hucaAMrXN; Sun,  2 Nov 2025 18:47:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M7xVeZomXV3e; Sun,  2 Nov 2025 18:54:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2809D41FE8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 73D0084F31
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2809D41FE8;
-	Sun,  2 Nov 2025 18:47:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6CB64436
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 18:47:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 73D0084F31;
+	Sun,  2 Nov 2025 18:54:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0A3EF2A3
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 18:54:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4FFFF403B2
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 18:47:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F152684F31
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 18:54:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id um24-vc6MiFU for <buildroot@buildroot.org>;
- Sun,  2 Nov 2025 18:47:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2B9014036F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B9014036F
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2B9014036F
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 18:47:56 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 7780E13F88F;
- Sun,  2 Nov 2025 19:47:52 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 02 Nov 2025 19:47:52 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YBdmUghei-sP for <buildroot@buildroot.org>;
+ Sun,  2 Nov 2025 18:54:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::62a; helo=mail-ej1-x62a.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7012484EA0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7012484EA0
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
+ [IPv6:2a00:1450:4864:20::62a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7012484EA0
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 18:54:16 +0000 (UTC)
+Received: by mail-ej1-x62a.google.com with SMTP id
+ a640c23a62f3a-b3d196b7eeeso755196866b.0
+ for <buildroot@buildroot.org>; Sun, 02 Nov 2025 10:54:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1762109654; x=1762714454;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=K+KdoFAoQ/m9RRk+cZQxWOCld3GsMltilyt2AJhNt5s=;
+ b=SXYLlNkDbHbe02EgyiS19jtavvUpztdJUDMuZhOL9c0cvGfk5pliOBkxWomPttxr0e
+ E9uU1k5fkxgVCW3Zj3htUgpPHiRGTBuVmHXi3rqylwYHWLWMCG3BcuT6CxV6hFUw6Iem
+ ezFUpMaxTK+Kpvqf6tjDObS2opvH2r4HzdOlY9RboiyKJTXNVggAdm4WN7JqXuUKFMLV
+ Sw5Dk5jt2+FGQOrkzaD6HZpChQI/DU9ea5Akr9R8r76Z6/wQOG+Zi5JkLRSvro3jqFQ/
+ II/MkTqIOWO/rOOkElcq73ymsptPSQ2JsqGyt2QtyMAHBWFvr4d0NwSI6gxp79RUgJWd
+ 56aA==
+X-Gm-Message-State: AOJu0YxBuN8nyAk9/iQsOpEk5gmQivziSr8EMSbPCC51DQr9zkbuBrSh
+ iBOyIGaLNCY8dOFNuwvGrjEGwKYTKl7qn7IKcOaXsxpsp/eQtw1FJkKr6p0JPuGjBiKxqfN82j+
+ pY4Qy
+X-Gm-Gg: ASbGnctKG/EUnAC6+aDlkSOrOw2HdKhjH2KtunYLODiSJokgUEgfFij1X3mUpwZv8Gb
+ QPm48C8EvXhCtRWOjeMrm0IEnI+iN+GWLLGGzDwDg9CwQ9dU2U8SeqNyQkVZW61S0cSEEjNLBSp
+ 81YMA9Po028Obd7m48Kfd7KHJiNpYxsqyBYH4pR3TykBfIrdXksTHa0qgYC73mYaeAFIcOoc/oa
+ VtsJdv5AmncW5ZnlBK9kYXgdvhFdLGBBN5wDaqoSR6ihluW5+Xoq99iqao0PWjuOGDXmrCIfgnt
+ oNiDomYjMw53nMGdSNJc1OilALFuK0NFnZ+IuC8tE4Hz1RZdOibo+PF1f3cfqxZREfIwW+7Xq3C
+ jJoeAca5PTaC7eMUTr9nEKFlHtADHGMKxLQYVO21+LP6zJfE18vfW9ew0wJzv1Hn96ODW5bDz4V
+ ynm93/Da/cEYlMJ7/Y+lOfBh9gEv8mjpYtjIBCEt/zrE/JMDXqeok5lrGRwKYsyAbE1cttNsyIg
+ cloOw==
+X-Google-Smtp-Source: AGHT+IEsUgEFvdMOFoeMVJnbORC0hrIOA/+y102eJL+MJUQGTdyWYjpRcXgX/Ol7XZPevyRxXkW95A==
+X-Received: by 2002:a17:906:811:b0:b70:aac5:c163 with SMTP id
+ a640c23a62f3a-b70aac5c773mr256485466b.24.1762109653850; 
+ Sun, 02 Nov 2025 10:54:13 -0800 (PST)
+Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
+ ([87.13.6.75]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-b70776a327esm808441366b.0.2025.11.02.10.54.13
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 02 Nov 2025 10:54:13 -0800 (PST)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: buildroot@buildroot.org
+Cc: Mario Lang <mlang@blind.guru>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date: Sun,  2 Nov 2025 19:54:09 +0100
+Message-ID: <20251102185409.1169454-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Date: Sun, 02 Nov 2025 19:47:52 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251012164922.3447879-1-bernd@kuhls.net>
-References: <20251012164922.3447879-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <125aa51c421ad58a7cf8a936c906d9ac@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1762109273;
- bh=rWV4sYx72UCGDBSorLimlT0WXLH5VnBayTqx8LvN6P4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=SdLzfdR4gTh8kbldgPhBNIFKq7+M53dfmo/7QF+goTT8SpX2IDAGsGXOWOno1K/NR
- Y0CVkGWBWJCnRp8aNqGqd5O2gMDRvGB/i0ZJjoK2FonkFQEtmR2KBIFkc4CXiDHulA
- tznNEa3SO4pqs0POGn+SovB0yJwcXJzagA98t//RRsOb+xgzJ3gQxfqj7e+X9iImYP
- nNV2KetTnjBeabcyc9v5GYslx5iHFOUUHEnj80TxP0EAngUaSNswkvTkmb6pK7uil4
- x38eX5lusMiRydcF7kbK9PpNt+aVZuXvLJj1hX0nnvRelb552Ybyo+55GT6BH+njI1
- tyLF4n0ZSwR2w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=SdLzfdR4
-Subject: Re: [Buildroot] [PATCH 1/1] package/coreutils: bump version to 9.8
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1762109654; x=1762714454;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=K+KdoFAoQ/m9RRk+cZQxWOCld3GsMltilyt2AJhNt5s=;
+ b=aRyzxKBdCel7M2MlWXWypNMv8BsfGB8+kG5uIgK0Ad//Sr0+NuBP2eKIDL6LAlSYlk
+ uh3q7hwF28B37Y8/gPfwOQdteNioLRlgfs+emvGRullBXXsvP50PppZJ2oFfLGHccqAB
+ ijyEJERXlaNzO2D6es3Dn8KqwS46BqMDmSv5k=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=aRyzxKBd
+Subject: [Buildroot] [PATCH v2] package/brltty: bump to version 6.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,121 +109,173 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Bernd,
+Commit [1] has made ncurses a requirement for building the package.
 
-Thanks for the patch.
+The added patch fix the following build error:
 
-It introduces few build failures. See:
-https://gitlab.com/jolivain/buildroot/-/pipelines/2135499293
+/usr/bin/install -c -d ../../../lib
+buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-gcc -shared   -Wl,-export-dynamic -o ../../../lib/libbrlttyxfv.so screen.o -ltinfo
+buildroot/output/host/lib/gcc/arm-buildroot-linux-gnueabihf/14.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: cannot find -ltinfo: No such file or directory
+collect2: error: ld returned 1 exit status
 
-It might be needed to add "--disable-year2038" in _CONF_OPTS with this 
-version.
+git format-patch -M -n -s -o outgoing origin/master
+Update README hash:
+- v6.8:
+  - Update the copyright from 2024 to 2025.
+- v6.7:
+  - Update the supported braille devices lists.
+  - Add support for the HIMS eMotion.
+  - Add support for HT's Activator Pro models.
+  - Add support for the KGS Next Touch 40.
+  - Change the copyright from 2023 to 2024.
+  - Document that HT's Basic Braille Plus models are supported.
 
-Could you also add release notes or announces, since v9.5 please?
+Release notes:
+https://github.com/brltty/brltty/blob/BRLTTY-6.8/Documents/ChangeLog
 
-On 12/10/2025 18:49, Bernd Kuhls wrote:
-> Removed patch which is included in this release.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  ...001-coreutils-mcel-port-to-uClibc-ng.patch | 35 -------------------
->  package/coreutils/coreutils.hash              |  2 +-
->  package/coreutils/coreutils.mk                |  2 +-
->  3 files changed, 2 insertions(+), 37 deletions(-)
->  delete mode 100644 
-> package/coreutils/0001-coreutils-mcel-port-to-uClibc-ng.patch
-> 
-> diff --git 
-> a/package/coreutils/0001-coreutils-mcel-port-to-uClibc-ng.patch 
-> b/package/coreutils/0001-coreutils-mcel-port-to-uClibc-ng.patch
-> deleted file mode 100644
-> index 7639509ff2..0000000000
-> --- a/package/coreutils/0001-coreutils-mcel-port-to-uClibc-ng.patch
-> +++ /dev/null
-> @@ -1,35 +0,0 @@
-> -From c4e923a98f34fe5f5ec3b49543e90716ec2a45fc Mon Sep 17 00:00:00 2001
-> -From: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
-> -Date: Tue, 24 Sep 2024 18:08:31 +0200
-> -Subject: [PATCH] coreutils: mcel: port to uClibc-ng
-> -MIME-Version: 1.0
-> -Content-Type: text/plain; charset=UTF-8
-> -Content-Transfer-Encoding: 8bit
-> -
-> -Problem reported by Waldemar Brodkorb in:
-> -https://lists.gnu.org/r/bug-gnulib/2024-08/msg00130.html
-> -* lib/mcel.h (mcel_scan): Don't treat uClibc-ng like glibc.
-> -
-> -Upstream: 
-> https://git.savannah.gnu.org/cgit/gnulib.git/commit/?id=9765bc796b3e6ceaa7a10ba07c9c2f1e272a4249
-> -Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
-> ----
-> - lib/mcel.h | 3 ++-
-> - 1 file changed, 2 insertions(+), 1 deletion(-)
-> -
-> -diff --git a/lib/mcel.h b/lib/mcel.h
-> -index f6f006c..dca4d08 100644
-> ---- a/lib/mcel.h
-> -+++ b/lib/mcel.h
-> -@@ -221,7 +221,8 @@ mcel_scan (char const *p, char const *lim)
-> -
-> -   /* An initial mbstate_t; initialization optimized for some 
-> platforms.
-> -      For details about these and other platforms, see wchar.in.h.  */
-> --#if defined __GLIBC__ && 2 < __GLIBC__ + (2 <= __GLIBC_MINOR__)
-> -+#if (defined __GLIBC__ && 2 < __GLIBC__ + (2 <= __GLIBC_MINOR__) \
-> -+	&& !defined __UCLIBC__)
-> -   /* Although only a trivial optimization, it's worth it for GNU.  */
-> -   mbstate_t mbs; mbs.__count = 0;
-> - #elif (defined __FreeBSD__ || defined __DragonFly__ || defined 
-> __OpenBSD__ \
-> ---
-> -2.39.2
-> -
-> diff --git a/package/coreutils/coreutils.hash 
-> b/package/coreutils/coreutils.hash
-> index 3455c95c58..2c353f0f6d 100644
-> --- a/package/coreutils/coreutils.hash
-> +++ b/package/coreutils/coreutils.hash
-> @@ -1,4 +1,4 @@
->  # Locally calculated after checking pgp signature
-> -sha256  
-> cd328edeac92f6a665de9f323c93b712af1858bc2e0d88f3f7100469470a1b8a  
-> coreutils-9.5.tar.xz
-> +sha256  
-> e6d4fd2d852c9141a1c2a18a13d146a0cd7e45195f72293a4e4c044ec6ccca15  
-> coreutils-9.8.tar.xz
->  # Locally computed
->  sha256  
-> 3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  
-> COPYING
-> diff --git a/package/coreutils/coreutils.mk 
-> b/package/coreutils/coreutils.mk
-> index a6d193b49e..be7569ed99 100644
-> --- a/package/coreutils/coreutils.mk
-> +++ b/package/coreutils/coreutils.mk
-> @@ -4,7 +4,7 @@
->  #
->  
-> ################################################################################
-> 
-> -COREUTILS_VERSION = 9.5
-> +COREUTILS_VERSION = 9.8
->  COREUTILS_SITE = $(BR2_GNU_MIRROR)/coreutils
->  COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
->  COREUTILS_LICENSE = GPL-3.0+
-> --
-> 2.47.3
+[1] https://github.com/brltty/brltty/commit/8f7d65569ef77eec8b8e4b97e68cb5689cf57ef9
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
 
-Best regards,
+Changes v1 -> v2:
+- Set ncurses as a requirement for building the package.
 
-Julien.
+ ...k-fv-driver-with-ltinfo-only-if-avai.patch | 58 +++++++++++++++++++
+ package/brltty/Config.in                      |  1 +
+ package/brltty/brltty.hash                    |  4 +-
+ package/brltty/brltty.mk                      |  9 ++-
+ 4 files changed, 67 insertions(+), 5 deletions(-)
+ create mode 100644 package/brltty/0002-configure.ac-link-fv-driver-with-ltinfo-only-if-avai.patch
+
+diff --git a/package/brltty/0002-configure.ac-link-fv-driver-with-ltinfo-only-if-avai.patch b/package/brltty/0002-configure.ac-link-fv-driver-with-ltinfo-only-if-avai.patch
+new file mode 100644
+index 000000000000..121237ee4987
+--- /dev/null
++++ b/package/brltty/0002-configure.ac-link-fv-driver-with-ltinfo-only-if-avai.patch
+@@ -0,0 +1,58 @@
++From a4f55ee941fdc94511c72c1831dedcf5bea7935d Mon Sep 17 00:00:00 2001
++From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Date: Thu, 30 Oct 2025 16:52:53 +0100
++Subject: [PATCH] configure.ac: link fv driver with -ltinfo only if available
++
++During the brltty bump to version 6.8 in Buildroot, the build failed on
++systems without libtinfo:
++
++  /usr/bin/ld: cannot find -ltinfo: No such file or directory
++
++Link libtinfo only if the library is present.
++
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Upstream: https://github.com/brltty/brltty/pull/503
++---
++ configure.ac | 11 +++++++++--
++ 1 file changed, 9 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 68c9c6d1b7f5..5c931f71b79a 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -813,6 +813,7 @@ BRLTTY_ARG_ENABLE(
++ ])
++ AC_SUBST(fuzzer_libs)
++ 
+++have_tinfo="no"
++ brltty_curses_libs_save="${LIBS}"
++ BRLTTY_PACKAGE_CHOOSE([curses],
++    [ncursesw ncursesw/ncurses.h],
++@@ -823,8 +824,10 @@ BRLTTY_PACKAGE_CHOOSE([curses],
++    [pdcurses curses.h])
++ if test -n "${curses_package}"
++ then
++-   AC_CHECK_LIB([tinfo], [intrflush])
+++   AC_CHECK_LIB([tinfo], [intrflush],
+++                [have_tinfo="yes"])
++ fi
+++
++ curses_libs="${LIBS%${brltty_curses_libs_save}}"
++ LIBS="${brltty_curses_libs_save}"
++ AC_SUBST([curses_libs])
++@@ -1882,7 +1885,11 @@ in
++       ;;
++ esac
++ 
++-BRLTTY_SCREEN_DRIVER([fv], [FileViewer], [-ltinfo])
+++if test "${have_tinfo}" = "yes"; then
+++   BRLTTY_SCREEN_DRIVER([fv], [FileViewer], [-ltinfo])
+++else
+++   BRLTTY_SCREEN_DRIVER([fv], [FileViewer])
+++fi
++ 
++ all_brltty_pty=""
++ install_brltty_pty=""
++-- 
++2.43.0
++
+diff --git a/package/brltty/Config.in b/package/brltty/Config.in
+index 3527df616138..70708df6c17e 100644
+--- a/package/brltty/Config.in
++++ b/package/brltty/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_BRLTTY
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HID if BR2_PACKAGE_BLUEZ5_UTILS && BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18 # runtime
+ 	help
+ 	  A daemon providing access to the Linux console for a blind
+diff --git a/package/brltty/brltty.hash b/package/brltty/brltty.hash
+index 9b707fc1c29f..9b75e0023fc1 100644
+--- a/package/brltty/brltty.hash
++++ b/package/brltty/brltty.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  ab11cfc5fbd7ef0ec876ffea7e131e424b2fd004b6158064e1a2e46412825529  brltty-6.6.tar.xz
++sha256  9f3c6dc2b65059d20f60836e8f9ebc58d8e518d6a8f8fee33e1d1e50ab43c3bc  brltty-6.8.tar.xz
+ sha256  d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  LICENSE-LGPL
+-sha256  72740317768530c60046c591160d4552afb3ac49657b04c7b8452c1bbe7b834e  README
++sha256  a9a8b3eef5f3e2b4716912a4ed60eca78a3f561515ed17ebe80348f2f033b395  README
+diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
+index 22d58ebd00e3..5e24288cbb95 100644
+--- a/package/brltty/brltty.mk
++++ b/package/brltty/brltty.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BRLTTY_VERSION = 6.6
++BRLTTY_VERSION = 6.8
+ BRLTTY_SOURCE = brltty-$(BRLTTY_VERSION).tar.xz
+ BRLTTY_SITE = http://brltty.com/archive
+ BRLTTY_INSTALL_STAGING_OPTS = INSTALL_ROOT=$(STAGING_DIR) install
+@@ -17,6 +17,7 @@ BRLTTY_DEPENDENCIES = \
+ 	host-autoconf \
+ 	host-gawk \
+ 	host-pkgconf \
++	ncurses \
+ 	$(if $(BR2_PACKAGE_AT_SPI2_CORE),at-spi2-core)
+ 
+ BRLTTY_CONF_ENV = \
+@@ -37,8 +38,10 @@ BRLTTY_CONF_OPTS = \
+ 	--without-theta
+ 
+ # Autoreconf is needed because we're patching configure.ac in
+-# 0001-Fix-linking-error-on-mips64el. However, a plain autoreconf doesn't work,
+-# because this package is only autoconf-based.
++# 0001-Fix-linking-error-on-mips64el and
++# 0002-configure.ac-link-fv-driver-with-ltinfo-only-if-avai.
++# However, a plain autoreconf doesn't work, because this package
++# is only autoconf-based.
+ define BRLTTY_AUTOCONF
+ 	cd $(BRLTTY_SRCDIR) && $(AUTOCONF)
+ endef
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
