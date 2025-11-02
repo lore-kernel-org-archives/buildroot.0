@@ -4,74 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05DC9CCF9E3
-	for <buildroot@archiver.kernel.org>; Sun,  2 Nov 2025 19:45:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49CF0CCF9E3
+	for <buildroot@archiver.kernel.org>; Sun,  2 Nov 2025 19:47:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C907484CC3;
-	Sun,  2 Nov 2025 19:45:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1DCE784F90;
+	Sun,  2 Nov 2025 19:47:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kfSMtQL4Bhew; Sun,  2 Nov 2025 19:45:40 +0000 (UTC)
+ id AS3-ZISMu-zJ; Sun,  2 Nov 2025 19:47:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0822584BD6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 145888508A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0822584BD6;
-	Sun,  2 Nov 2025 19:45:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E7EA8436
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 19:45:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 145888508A;
+	Sun,  2 Nov 2025 19:47:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2F3247B1
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 19:47:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DA41184BD6
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 19:45:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1571B41404
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 19:47:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JvdmRRj0yTnl for <buildroot@buildroot.org>;
- Sun,  2 Nov 2025 19:45:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ukHfsDPP8bc6 for <buildroot@buildroot.org>;
+ Sun,  2 Nov 2025 19:47:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D12FE84BD5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D12FE84BD5
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D12FE84BD5
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 19:45:37 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 578924757; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sun, 02 Nov 2025 19:45:31 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1vFe13-000uJD-1T;
- Sun, 02 Nov 2025 20:45:29 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EFCA41401
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4EFCA41401
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 19:47:04 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 47FA783AA7; Sun,  2 Nov 2025 19:47:04 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Devoogdt <thomas@devoogdt.com>
-Cc: buildroot@buildroot.org,  Adrian Perez de Castro <aperez@igalia.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>
-References: <20251025143512.78812-1-thomas@devoogdt.com>
- <20251025143512.78812-2-thomas@devoogdt.com>
-Date: Sun, 02 Nov 2025 20:45:29 +0100
-In-Reply-To: <20251025143512.78812-2-thomas@devoogdt.com> (Thomas Devoogdt's
- message of "Sat, 25 Oct 2025 16:35:12 +0200")
-Message-ID: <87ecqg9q1y.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=ZCvP8w8c2OhKnWMR6hfGLNkbfKwOegpPvRlB5dKJrP0L8hMcHuQjp1wQyFtXXnSsDsIK1tx9DJhKdbMXwEt25DfO8bR0wIXubQ81UkbSndWh/fYZPnT5kgPJ7hoF/IBSJaTKDg+nyKSM/dujl/BkPCVsn1Lyt6OrOgVZkWeor4F/ky1H6jSoMfKh6SsEyvh5ijCeZ9yrkSRf4r7Ln08tzM4bUYDBOmSfun3m6PdwqrJ3brQKA3JuKYCdXdvu2Nskoj39XzKib125as58dbu5DwArqSxWwXkVzJN94idk9ZmuTtNNjBXKj3NyKJurwyoDNM6adb2mujB66ee4OLTuzQ==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=gvFUozl9alGHxAvhsQVuepsxTTQXFx/ciPO6KiSCTs8=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=ZCvP8w8c
-Subject: Re: [Buildroot] [PATCH v1] package/webkitgtk: disable internal
- ccache configuration
+To: buildroot@buildroot.org
+Date: Sun, 2 Nov 2025 20:29:45 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 67844aad3accafb20bc069721888cb2a479a191b
+X-Git-Newrev: 07ab60acd97a53ef212a0a04e166f44d56d79ff1
+X-Patchwork-Hint: ignore
+Message-Id: <20251102194704.47FA783AA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ramspeed: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,26 +58,142 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Devoogdt <thomas@devoogdt.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=07ab60acd97a53ef212a0a04e166f44d56d79ff1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Thomas Devoogdt <thomas.devoogdt@barco.com>
- > WebKit's auto-configured ccache results in 100% cache misses.
- > Disable WebKit's internal ccache setup [1] since Buildroot
- > already manages the ccache in toolchain/toolchain-wrapper.c.
+The download location is gone and even though the package is available
+on a Github repository [0], it has not been updated for 7 years now.
+Drop the package.
 
- > [1] https://github.com/WebKit/WebKit/blob/webkitgtk-2.50.1/Source/cmake/WebKitCCache.cmake
+[0] https://github.com/cruvolo/ramspeed
 
- > Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+See buildroot commit 0951e3fc24492267675f2bb81f65cd0ff5bb758e for the
+removal of the ramsmp package which is the SMP version of ramspeed.
 
-Committed, thanks.
+Fixes:
+https://autobuild.buildroot.net/results/d40/d404da1c3a7cd8628d2b2e9e519d629626d28593/
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Config.in.legacy               |  7 +++++++
+ package/Config.in              |  1 -
+ package/ramspeed/Config.in     | 11 -----------
+ package/ramspeed/Makefile      | 14 --------------
+ package/ramspeed/ramspeed.hash |  3 ---
+ package/ramspeed/ramspeed.mk   | 22 ----------------------
+ 6 files changed, 7 insertions(+), 51 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 53c35fae49..26391bec23 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2025.11"
+ 
++config BR2_PACKAGE_RAMSPEED
++	bool "ramspeed has been removed"
++	select BR2_LEGACY
++	help
++	  The ramspeed package was removed as it is not maintained
++	  anymore and the upstream repo is gone.
++
+ config BR2_PACKAGE_LESSTIF
+ 	bool "lesstif has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 851bc35bc1..47d56f813a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -142,7 +142,6 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/ptm2human/Config.in"
+ 	source "package/pv/Config.in"
+ 	source "package/racehound/Config.in"
+-	source "package/ramspeed/Config.in"
+ 	source "package/rt-tests/Config.in"
+ 	source "package/rwmem/Config.in"
+ 	source "package/sentry-native/Config.in"
+diff --git a/package/ramspeed/Config.in b/package/ramspeed/Config.in
+deleted file mode 100644
+index bd0438ffe1..0000000000
+--- a/package/ramspeed/Config.in
++++ /dev/null
+@@ -1,11 +0,0 @@
+-comment "ramspeed needs a toolchain not affected by GCC bug 43744"
+-	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_43744
+-
+-config BR2_PACKAGE_RAMSPEED
+-	bool "ramspeed"
+-	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_43744
+-	help
+-	  RAMspeed is a free open source command line utility
+-	  to measure cache and memory performance.
+-
+-	  http://alasir.com/software/ramspeed/
+diff --git a/package/ramspeed/Makefile b/package/ramspeed/Makefile
+deleted file mode 100644
+index f4a4de6a1e..0000000000
+--- a/package/ramspeed/Makefile
++++ /dev/null
+@@ -1,14 +0,0 @@
+-
+-all: generic
+-
+-generic: ramspeed.c fltmem.c fltmark.c intmem.c intmark.c
+-	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o ramspeed
+-
+-i386: ramspeed.c i386/*.s i386/cpuinfo/*.s
+-	$(CC) $(CFLAGS) -DI386_ASM $(LDFLAGS) $^ -o ramspeed
+-
+-x86_64: ramspeed.c amd64/*.s
+-	$(CC) $(CFLAGS) -DAMD64_ASM $(LDFLAGS) $^ -o ramspeed
+-
+-clean:
+-	rm -f *.o ramspeed
+diff --git a/package/ramspeed/ramspeed.hash b/package/ramspeed/ramspeed.hash
+deleted file mode 100644
+index 5a6bfe3eb2..0000000000
+--- a/package/ramspeed/ramspeed.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed
+-sha256  f84e2e42b2b6b221ef9b586f6ae63d863db4ff21858e0ce7c84622a7c9522950  ramspeed-2.6.0.tar.gz
+-sha256  2c308cffbab01762f8f6b11725725a227080746ef865f2756c9c9e1591dddaad  LICENCE
+diff --git a/package/ramspeed/ramspeed.mk b/package/ramspeed/ramspeed.mk
+deleted file mode 100644
+index 7dc4faae7c..0000000000
+--- a/package/ramspeed/ramspeed.mk
++++ /dev/null
+@@ -1,22 +0,0 @@
+-################################################################################
+-#
+-# ramspeed
+-#
+-################################################################################
+-
+-RAMSPEED_VERSION = 2.6.0
+-RAMSPEED_SITE = http://www.alasir.com/software/ramspeed
+-RAMSPEED_ARCH = $(if $(BR2_i386),i386)$(if $(BR2_x86_64),x86_64)
+-RAMSPEED_LICENSE = Alasir License
+-RAMSPEED_LICENSE_FILES = LICENCE
+-
+-define RAMSPEED_BUILD_CMDS
+-	cp -f package/ramspeed/Makefile $(@D)
+-	$(TARGET_CONFIGURE_OPTS) make -C $(@D) $(RAMSPEED_ARCH)
+-endef
+-
+-define RAMSPEED_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0755 -D $(@D)/ramspeed $(TARGET_DIR)/usr/bin/ramspeed
+-endef
+-
+-$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
