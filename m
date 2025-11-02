@@ -4,72 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A0C1CCFA03
-	for <buildroot@archiver.kernel.org>; Sun,  2 Nov 2025 11:55:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA08DCCFA02
+	for <buildroot@archiver.kernel.org>; Sun,  2 Nov 2025 12:30:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2D39E8527C;
-	Sun,  2 Nov 2025 11:55:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8438884A35;
+	Sun,  2 Nov 2025 12:30:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jYeUtdVckVi8; Sun,  2 Nov 2025 11:55:37 +0000 (UTC)
+ id UkxW3AtMqDQl; Sun,  2 Nov 2025 12:30:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C27284C7E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C33784A43
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9C27284C7E;
-	Sun,  2 Nov 2025 11:55:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 481802A3
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 11:55:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9C33784A43;
+	Sun,  2 Nov 2025 12:30:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7F897222
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 12:30:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3A3D184C7E
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 11:55:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7182084A30
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 12:30:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0BgzxuN3r8-p for <buildroot@buildroot.org>;
- Sun,  2 Nov 2025 11:55:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 68EA584C4E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68EA584C4E
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 68EA584C4E
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 11:55:36 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id B230219F522;
- Sun,  2 Nov 2025 12:55:33 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 02 Nov 2025 12:55:33 +0100
+ id wUw8tkhckMXp for <buildroot@buildroot.org>;
+ Sun,  2 Nov 2025 12:30:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 88CCE84A35
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88CCE84A35
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 88CCE84A35
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 12:30:02 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c274.dip0.t-ipconnect.de [79.214.194.116])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id CB8A7A4C5F22
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 13:29:59 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:36956)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99)
+ (envelope-from <bernd@kuhls.net>) id 1vFXDb-000000007AK-3WVX
+ for buildroot@buildroot.org; Sun, 02 Nov 2025 12:29:59 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sun,  2 Nov 2025 13:29:59 +0100
+Message-ID: <20251102122959.1716666-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Sun, 02 Nov 2025 12:55:33 +0100
-To: Pedro Aguilar <paguilar@paguilar.org>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251102105005.109179-1-paguilar@paguilar.org>
-References: <20251102105005.109179-1-paguilar@paguilar.org>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <f138fd9dd45964ee58fce520f03c6a3d@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1762084534;
- bh=xKpbIsv6Kov83OXuNHL/yx+HlxiP3UMn8VOK8w+Um4k=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=VT9ArniJ3sFZgE6ntL6sSi55E09XPs6uf7A3gBZzFG+Sv6M+MDsobp0z/rVlPb5TZ
- e2frzO1xXTyUAGlvEq3eGAKcC1gj6AHFza9KpxWCPCE9bXVqJ0xrcp7WGcPAPnOxdj
- Qr7E8oJI+oQCMfF7odgTH1RxYiFYe7KmwcZIsTHnqbFrDcvBrv6QCRr++nEbcMuFZV
- V7yIaCZk83J7FoAwzEQuLVDrxtXe2pIKZKtcs907MjPMuj+x75mPWGnuyW+Ud08kvb
- MUxPVCgXpGc2HshuCvUUF/9ko79aW2luq8nwrinhDA8jUUqV3t6bKWAj3Oo7GU4a0C
- boOdmIPP4u0HA==
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202506031021; t=1762086599;
+ bh=DLP4GAq99WrblhTjLzLoRyr2U0boXdNV4jkCMyfn8aw=;
+ h=From:To:Subject:Date:From;
+ b=rfd3y5lodG5FWH3T69AbAlNVw2JyGopJZwAzazheC74rSQCfyXXBfrlqxw2rwSIBw
+ xRw9ZjygDcbd+eh2lIwHhpQ3zltegJCkbZd7gQezN7CYJeTob0ulZ5o339cShE/hRp
+ m7WLlFHin+WwUk3K3X+kwUMF5cFaeJrz+8n1baYwsehPy73NPKJ3NRaQN21j9pS6U/
+ 0d9yKc/rXrKZyGasMlr5RhHHEUOy2FBW1PLpo3COeFEjcSBac488qnc3a6z8fUqHgP
+ /HJeczHZlVmmYFSvuXlgwv3uwgE1ZJteN4XvsojyWTV3k/s5b+GWG29l94fxu79CNJ
+ 4vfhYMHPJUtZw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=VT9ArniJ
-Subject: Re: [Buildroot] [PATCH 1/1] packages/libunistring: bump to version
- 1.4.1
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=rfd3y5lo
+Subject: [Buildroot] [PATCH 1/1] package/util-linux: Remove -lpthread from
+ uuid.pc for non-threaded builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,19 +80,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 02/11/2025 11:50, Pedro Aguilar wrote:
-> https://savannah.gnu.org/projects/libunistring/
-> 
-> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+Buildroot commit 31af509b4f4fe52f67bd9109b8732a55b8f9cd2d bumped
+util-linux from version 2.40.2 to 2.41.1.
 
-Applied to master, thanks.
+Upstream release 2.40.3 contains
+https://github.com/util-linux/util-linux/commit/e143539d30fd18afb3ba6d3c6e50a260d4219895
+which unconditionally adds -lpthread to uuid.pc causing build errors for
+other packages using non-threaded toolchains like erofs-utils.
+
+Upstream was notified:
+https://github.com/util-linux/util-linux/issues/3210#issuecomment-3477915953
+
+Fixes:
+https://autobuild.buildroot.net/results/582/5827995db2a805e0c8a04fde8498eff6f28aa6d8/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/util-linux/util-linux.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 555a1e74c0..5b58154c09 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -37,6 +37,13 @@ UTIL_LINUX_LICENSE_FILES = README.licensing \
+ 
+ UTIL_LINUX_CPE_ID_VENDOR = kernel
+ 
++define UTIL_LINUX_POST_EXTRACT_FIXUP
++	$(SED) 's/-lpthread//' $(@D)/libuuid/uuid.pc.in
++endef
++ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++UTIL_LINUX_POST_EXTRACT_HOOKS += UTIL_LINUX_POST_EXTRACT_FIXUP
++endif
++
+ UTIL_LINUX_INSTALL_STAGING = YES
+ UTIL_LINUX_DEPENDENCIES = \
+ 	host-pkgconf \
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
