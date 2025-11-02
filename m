@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FBC6CCFA02
-	for <buildroot@archiver.kernel.org>; Sun,  2 Nov 2025 16:05:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FCAECCF9E3
+	for <buildroot@archiver.kernel.org>; Sun,  2 Nov 2025 16:05:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 97DFE6F592;
-	Sun,  2 Nov 2025 16:05:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 09F64426E9;
+	Sun,  2 Nov 2025 16:05:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7mSBoVdZFvju; Sun,  2 Nov 2025 16:05:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lbs6nCMKu7WA; Sun,  2 Nov 2025 16:05:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 608736F580
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CCE16426E5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 608736F580;
-	Sun,  2 Nov 2025 16:05:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id AB76F222
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 16:05:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CCE16426E5;
+	Sun,  2 Nov 2025 16:05:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id ABFEC222
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 16:05:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A5E9884AF4
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 16:05:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 90E4C426D8
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 16:05:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dqSzcZ_mcVOY for <buildroot@buildroot.org>;
- Sun,  2 Nov 2025 16:05:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B516D84AF2
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B516D84AF2
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 16:05:05 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8BAD983A20; Sun,  2 Nov 2025 16:05:05 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 2 Nov 2025 16:58:03 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 821c2ab16f42bed52baec3876c4156284186a44a
-X-Git-Newrev: d5ef3c3ecbfea9104d6317204c6df9676f4e424a
-X-Patchwork-Hint: ignore
-Message-Id: <20251102160505.8BAD983A20@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/live555: bump version to 2025.10.13
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id S5NlLB1TX6jF for <buildroot@buildroot.org>;
+ Sun,  2 Nov 2025 16:05:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9527C426E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9527C426E9
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9527C426E9
+ for <buildroot@buildroot.org>; Sun,  2 Nov 2025 16:05:24 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 196E578050B;
+ Sun,  2 Nov 2025 17:05:19 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 02 Nov 2025 17:05:19 +0100
+MIME-Version: 1.0
+Date: Sun, 02 Nov 2025 17:05:19 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Simon Dawson <spdawson@gmail.com>
+In-Reply-To: <20251102133752.2690402-1-bernd@kuhls.net>
+References: <20251102133752.2690402-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <f5669f2f7e0ec80b5c7dc97ac78fbb06@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1762099522;
+ bh=PE7WtXG5DEagxdxQG3QQ2u5+susf84drYDabC7eZOKA=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=GwI6rkTdDOL8AlSp9nXkUBov0HAz464upaGdDWzme4xcl5xgok7X3KwvENcMFDF6l
+ 3j90ZD612ob8Iqsv4fDFQxqfo2NVasLK0iFNub20zsiftqfx9edUk1KiAJDTWXwYBR
+ l7JWTvrOuufl8lIJjGItnNwf1K0J++Y5b2iGO/77h0wIpwWqKiegYedfZz0xZIrEpf
+ a8TBBLFetQCyOcfuIsZxIriVHasE9w29Y4EB4fq62/8QMB8SJX8h6pN7JtMmqxQMVX
+ v38dmkEUEXxEut7EcJpjC851r3h3hhE8OO+KFHLjxAKlf/xncOgGmZkRRDCiEcRsUR
+ 1JeQrahF+hFPg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=GwI6rkTd
+Subject: Re: [Buildroot] [PATCH 1/2] package/vlc: fix build with newer
+ versions of live555
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,71 +83,17 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5ef3c3ecbfea9104d6317204c6df9676f4e424a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 02/11/2025 14:37, Bernd Kuhls wrote:
+> Needed to prevent build errors with upcoming bump of live555.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Added -std=c++20 to enable std::atomic_flag::test which was introduced
-in gcc 11.1:
-https://gcc.gnu.org/onlinedocs/libstdc++/manual/status.html#status.iso.2020
-(see P1135R6)
-
-For older compilers -DNO_STD_LIB=1 can be used to enable a code path
-without std::atomic_flag::test, copied from:
-https://github.com/DragonFlyBSD/DeltaPorts/commit/cfc388e6a6bf011e28f0cbebaeae74d2bb516a02
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/live555/live555.hash | 6 +++---
- package/live555/live555.mk   | 9 ++++++++-
- 2 files changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/package/live555/live555.hash b/package/live555/live555.hash
-index d4fa93d029..f0a56bda32 100644
---- a/package/live555/live555.hash
-+++ b/package/live555/live555.hash
-@@ -1,5 +1,5 @@
--# From http://www.live555.com/liveMedia/public/live555-latest-md5.txt
--md5  3c1992b0e9b871bcad7491a3da541781  live.2021.05.03.tar.gz
-+# From http://www.live555.com/liveMedia/public/live555-latest-sha1.txt
-+sha1  483146b15c5fdb973b88fc318f2772f022253563  live.2025.10.13.tar.gz
- # Locally generated
--sha256  ae73241f9cc4ab740d60737c0438d62a7635af3822de5d84acf275793de42029  live.2021.05.03.tar.gz
-+sha256  44eb6ae4ae02ef68a5028d9fc8b70c45b9ba45c058f846b68bc4d32c74355f49  live.2025.10.13.tar.gz
- sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING.LESSER
-diff --git a/package/live555/live555.mk b/package/live555/live555.mk
-index 1e1531ee53..6d12d1c17c 100644
---- a/package/live555/live555.mk
-+++ b/package/live555/live555.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIVE555_VERSION = 2021.05.03
-+LIVE555_VERSION = 2025.10.13
- LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
- # upstream site removes older versions, use videolan.org instead
- LIVE555_SITE = https://download.videolan.org/contrib/live555
-@@ -29,6 +29,13 @@ LIVE555_LIBRARY_LINK = $(TARGET_CC) -o
- LIVE555_CFLAGS += -fPIC
- endif
- 
-+# "struct std::atomic_flag" has no member named "test"
-+ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_11),y)
-+LIVE555_CFLAGS += -std=c++20
-+else
-+LIVE555_CFLAGS += -DNO_STD_LIB=1
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIVE555_DEPENDENCIES += host-pkgconf openssl
- LIVE555_CONSOLE_LIBS = `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
