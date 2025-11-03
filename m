@@ -4,67 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61CF9CCFA03
-	for <buildroot@archiver.kernel.org>; Mon,  3 Nov 2025 09:00:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13C0BCCFA05
+	for <buildroot@archiver.kernel.org>; Mon,  3 Nov 2025 11:02:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0BC5384269;
-	Mon,  3 Nov 2025 09:00:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B2D0C846B3;
+	Mon,  3 Nov 2025 11:02:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TtdGWN3IykmO; Mon,  3 Nov 2025 09:00:48 +0000 (UTC)
+ id xmvtavzqigAC; Mon,  3 Nov 2025 11:02:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04A998426D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7097846BB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 04A998426D;
-	Mon,  3 Nov 2025 09:00:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6D8F01A6
- for <buildroot@buildroot.org>; Mon,  3 Nov 2025 09:00:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7097846BB;
+	Mon,  3 Nov 2025 11:02:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 164641A6
+ for <buildroot@buildroot.org>; Mon,  3 Nov 2025 11:02:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5419184264
- for <buildroot@buildroot.org>; Mon,  3 Nov 2025 09:00:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F063B413AC
+ for <buildroot@buildroot.org>; Mon,  3 Nov 2025 11:02:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nw2EFMejWRG4 for <buildroot@buildroot.org>;
- Mon,  3 Nov 2025 09:00:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
- envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EAF058424D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EAF058424D
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EAF058424D
- for <buildroot@buildroot.org>; Mon,  3 Nov 2025 09:00:42 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id B85CE31E0B9B; Mon, 03 Nov 2025 10:00:37 +0100 (CET)
-Date: Mon, 3 Nov 2025 10:00:37 +0100
-From: Waldemar Brodkorb <wbx@openadk.org>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FfR-CpOkEptP for <buildroot@buildroot.org>;
+ Mon,  3 Nov 2025 11:02:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.140.110.172;
+ helo=foss.arm.com; envelope-from=vincent.stehle@arm.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CA17841282
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA17841282
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+ by smtp4.osuosl.org (Postfix) with ESMTP id CA17841282
+ for <buildroot@buildroot.org>; Mon,  3 Nov 2025 11:02:15 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+ by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 971C41D13;
+ Mon,  3 Nov 2025 03:02:06 -0800 (PST)
+Received: from debian (MacBookPro.nice.arm.com [10.34.124.26])
+ by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B581D3F63F;
+ Mon,  3 Nov 2025 03:02:13 -0800 (PST)
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
 To: buildroot@buildroot.org
-Message-ID: <aQhvNVC-JHBnPfLK@waldemar-brodkorb.de>
+Cc: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>,
+ Julien Olivain <ju.o@free.fr>
+Date: Mon,  3 Nov 2025 12:02:11 +0100
+Message-ID: <20251103110211.1092844-1-vincent.stehle@arm.com>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 6.12.43+deb13-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1762160437; bh=GYVfiEf/DaKFVDjnm2OJkV4flTe3SViUx/n428t7L3s=;
- h=Date:From:To:Subject:From;
- b=bQH/7x6uQukfG/qkFSHUwkIMjQ0fW0QF3YXePwYXUtosx7p0QCvKOhZr4bUjVC6TT
- 8DC3MK3ymFom5n+IPjKzlDJkvIUu20StEQ34nABOHlh8UrfALOMzrrT2so8GEXCoyC
- ThaohQGdkRmySWyuZKBwca+phWVoC6UageI0ZpHBoPw2RGIAmqdBHaL+UmL/FhZQaZ
- qLOgw7cF0kr81a+WEdj6lvNRjexejNIhoqlbOVabbCEqMXaQqF+ab6bYC/HgFR86vV
- CBrgXv/X/lSftzvdtj4MzQVxOJRh8OqTmNK5DliGGA65DYrViUsU2snV4/EXyVdBY5
- P1uy5R36BG37Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=bQH/7x6u
-Subject: [Buildroot] [PATCH v2] package/libpam-pkcs11: new package
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=arm.com
+Subject: [Buildroot] [PATCH] support/testing: test_xen: more robust network
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,120 +65,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The Linux-PAM login module for X.509 certificate based user login.
-
-https://github.com/OpenSC/pam_pkcs11
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
-v1->v2:
-  - fix check-package warnings (Julien)
-  - add LICENSE information and hash (Julien)
----
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/libpam-pkcs11/Config.in          | 19 +++++++++++++++++++
- package/libpam-pkcs11/libpam-pkcs11.hash |  3 +++
- package/libpam-pkcs11/libpam-pkcs11.mk   | 21 +++++++++++++++++++++
- 5 files changed, 45 insertions(+)
- create mode 100644 package/libpam-pkcs11/Config.in
- create mode 100644 package/libpam-pkcs11/libpam-pkcs11.hash
- create mode 100644 package/libpam-pkcs11/libpam-pkcs11.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7c2967f41d..b14c6e3875 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3421,6 +3421,7 @@ F:	package/asterisk/
- F:	package/evilwm/
- F:	package/fbv/
- F:	package/libjwt/
-+F:	package/libpam-pkcs11/
- F:	package/mksh/
- F:	package/ruby/
- F:	package/uclibc/
-diff --git a/package/Config.in b/package/Config.in
-index 47d56f813a..930f368058 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2285,6 +2285,7 @@ menu "Other"
- if BR2_PACKAGE_LINUX_PAM
- comment "linux-pam plugins"
- 	source "package/libpam-nfc/Config.in"
-+	source "package/libpam-pkcs11/Config.in"
- 	source "package/libpam-radius-auth/Config.in"
- 	source "package/libpam-tacplus/Config.in"
- endif
-diff --git a/package/libpam-pkcs11/Config.in b/package/libpam-pkcs11/Config.in
-new file mode 100644
-index 0000000000..8db34090b2
---- /dev/null
-+++ b/package/libpam-pkcs11/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_LIBPAM_PKCS11
-+	bool "libpam-pkcs11"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # pcsc-lite -> fork()
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pcsc-lite -> _Atomic keyword
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-+	select BR2_PACKAGE_PCSC_LITE
-+	help
-+	  The Linux-PAM login module for X.509 certificate
-+	  based user login.
-+
-+	  https://github.com/OpenSC/pam_pkcs11
-+
-+comment "libpam-pkcs11 needs a toolchain w/ threads, dynamic library, gcc >= 4.9"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/libpam-pkcs11/libpam-pkcs11.hash b/package/libpam-pkcs11/libpam-pkcs11.hash
-new file mode 100644
-index 0000000000..95747afc08
---- /dev/null
-+++ b/package/libpam-pkcs11/libpam-pkcs11.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  8a853f4e6e136ceecdcffad798570e3d6af2fde08e975656b2dc931989c35aff  pam_pkcs11-0.6.13.tar.gz
-+sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
-diff --git a/package/libpam-pkcs11/libpam-pkcs11.mk b/package/libpam-pkcs11/libpam-pkcs11.mk
-new file mode 100644
-index 0000000000..4bad47f69a
---- /dev/null
-+++ b/package/libpam-pkcs11/libpam-pkcs11.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# libpam-pkcs11
-+#
-+################################################################################
-+
-+LIBPAM_PKCS11_VERSION = 0.6.13
-+LIBPAM_PKCS11_SOURCE = pam_pkcs11-$(LIBPAM_PKCS11_VERSION).tar.gz
-+LIBPAM_PKCS11_SITE = https://github.com/OpenSC/pam_pkcs11/archive/refs/tags
-+LIBPAM_PKCS11_LICENSE = LGPL-2.1
-+LIBPAM_PKCS11_LICENSE_FILES = COPYING
-+
-+LIBPAM_PKCS11_AUTORECONF = YES
-+
-+LIBPAM_PKCS11_CONF_OPTS = \
-+	--libdir=/lib \
-+	--without-docbook \
-+	--without-ldap
-+LIBPAM_PKCS11_DEPENDENCIES = linux-pam openssl pcsc-lite
-+
-+$(eval $(autotools-package))
--- 
-2.47.3
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhlIHRlc3QgdGVzdHMucGFja2FnZS50ZXN0X3hlbi5UZXN0WGVuQXJtdjcgaGFzIGJlY29tZSB1
+bnN0YWJsZSBhZnRlcgpjb21taXQgMjRmZjI1ODkwNWRmICgic3VwcG9ydC90ZXN0aW5nOiB0ZXN0
+X3hlbjogYWRkIG5ldHdvcmtpbmciKSwKbGVhZGluZyB0byBhIH41MCUgY2hhbmNlIG9mIGZhaWx1
+cmUgb24gZ2l0bGFiIENJLgoKVGhpcyBzZWVtcyB0byBoYXBwZW4gb25seSB3aXRoIDMyYiAobm90
+IHdpdGggdGhlIDY0YiBUZXN0WGVuQWFyY2g2NCksCm9ubHkgd2l0aCBRZW11IDwgOS4xLCBhbmQg
+d2hlbiB0aGlzIGhhcHBlbnMgdGhlIHRlc3Qgd2lsbCBoYW5nIGR1cmluZyBhCnN0ZXAgaW52b2x2
+aW5nIHRoZSBzaW11bGF0ZWQgbmV0d29yayBhbmQgdGhlIGRvbTEgKERIQ1Agb3IgcGluZykuCgpU
+aGUgcm9vdCBjYXVzZSBpcyBzdXNwZWN0ZWQgdG8gYmUgYSBidWcgaW4gdGhlIHZpcnRpby1uZXQg
+aGFyZHdhcmUKZW11bGF0aW9uIG9mIHRoZSBxZW11IHZlcnNpb24gNy4yLjE1IGluY2x1ZGVkIGlu
+IHRoZSBCdWlsZHJvb3QgZG9ja2VyCmltYWdlLgoKQXMgYSB3b3JrYXJvdW5kLCByZW1vdmUgYWxs
+IG5ldHdvcmsgaW50ZXJhY3Rpb25zIGJldHdlZW4gZG9tMSBhbmQgdGhlCnNpbXVsYXRlZCBuZXR3
+b3JrOgotIEluc3RlYWQgb2YgdGhlIGdhdGV3YXksIHBpbmcgZG9tMCBmcm9tIGRvbTEuCi0gSW5z
+dGVhZCBvZiB1c2luZyBESENQLCBjb25maWd1cmUgdGhlIG5ldHdvcmsgd2l0aCBmaXhlZCBJUCBh
+ZGRyZXNzZXMsCiAgc28gdGhhdCB3ZSBrbm93IHRoZSBJUCBhZGRyZXNzIG9mIHRoZSBkb20wLgoK
+QSBwb3NzaWJsZSBzb2x1dGlvbiBjb3VsZCBoYXZlIGJlZW4gdG8gY29tcGlsZSBhIGhvc3QtcWVt
+dSB3aXRoaW4gdGhlCnRlc3QsIGJ5IGFkZGluZyBCUjJfUEFDS0FHRV9IT1NUX1FFTVU9eSBhbmQK
+QlIyX1BBQ0tBR0VfSE9TVF9RRU1VX1NZU1RFTV9NT0RFPXkgaW4gdGhlIHRlc3QgY29uZmlndXJh
+dGlvbi4KVGhpcyB3b3VsZCBoYXZlIHVzZWQgdGhlIGN1cnJlbnQgQnVpbGRyb290IHZlcnNpb24g
+KDEwLjEuMCkgbm90IGFmZmVjdGVkCmJ5IHRoaXMgaXNzdWUsIGJ1dCB0aGlzIHdvdWxkIGFsc28g
+aGF2ZSBzaWduaWZpY2FudGx5IGluY3JlYXNlZCB0aGUgdGVzdApjb21waWxhdGlvbiB0aW1lLgoK
+U2luY2UgdGhlIERIQ1AgaXMgbm90IHJlYWxseSBuZWVkZWQgaGVyZSB0byB0ZXN0IHRoZSBYZW4g
+bmV0d29ya2luZwpjYXBhYmlsaXR5LCB0aGlzIGlzIHdoeSB0aGUgbmV0d29yayBjb25maWd1cmF0
+aW9uIHNpbXBsaWZpY2F0aW9uIHdhcwpwcmVmZXJyZWQgaGVyZS4KCkFmdGVyIHRob3NlIGNoYW5n
+ZXMgYm90aCBYZW4gdGVzdHMgYXJlIHN0YWJsZSBvbiBDSSBhbmQgbG9jYWxseS4KCkZpeGVzOiBo
+dHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9qb2JzLzExODcxNDU0
+NjQ4ClNpZ25lZC1vZmYtYnk6IFZpbmNlbnQgU3RlaGzDqSA8dmluY2VudC5zdGVobGVAYXJtLmNv
+bT4KQ2M6IEp1bGllbiBPbGl2YWluIDxqdS5vQGZyZWUuZnI+Ci0tLQogc3VwcG9ydC90ZXN0aW5n
+L3Rlc3RzL3BhY2thZ2UvdGVzdF94ZW4ucHkgfCAzNCArKysrKysrKysrKystLS0tLS0tLS0tLQog
+MSBmaWxlIGNoYW5nZWQsIDE4IGluc2VydGlvbnMoKyksIDE2IGRlbGV0aW9ucygtKQoKZGlmZiAt
+LWdpdCBhL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfeGVuLnB5IGIvc3VwcG9y
+dC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF94ZW4ucHkKaW5kZXggNTExMzYzYmU0MC4uNmYy
+ZGEwNWQzYSAxMDA2NDQKLS0tIGEvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF94
+ZW4ucHkKKysrIGIvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF94ZW4ucHkKQEAg
+LTUxLDE3ICs1MSwyMSBAQCBjbGFzcyBUZXN0WGVuQmFzZShpbmZyYS5iYXNldGVzdC5CUlRlc3Qp
+OgogCiAgICAgICAgIEhlcmUgaXMgdGhlIG5ldHdvcmsgc2V0dXAgd2UgdXNlIGluIHRoZSB0ZXN0
+OgogCi0gICAgICAgICAgICAgICAgICAgIDogICAgICAgICBkb20wICAgICAgICA6ICAgZG9tMSAg
+IDoKLSAgICAgICAgICAgICAgICAgICAgOiAgICAgICAgICAgICAgICAgICAgIDogICAgICAgICAg
+OgotICAgICAgICAgICAgICAgICAgICA6ICAgICAgICBicjAgICAgICAgICAgOiAgICAgICAgICA6
+Ci0gICAgICAgICAgICAgICAgICAgIDogICAgICAxMC4wLjIueCAgICAgICA6ICAgICAgICAgIDoK
+LSAgICAgICAgICAgICBndyAgICAgOiAgICAgICAgIHwgICAgICAgICAgIDogICAgICAgICAgOgot
+ICAgICAgICAgIDEwLjAuMi4yIC06LSBldGgwIC0tKy0tIHZpZjEuMCAtOi0tIGV0aDAgICA6Ci0g
+ICAgICAgICAgICAgICAgICAgIDogICAgICAgICAgICAgICAgICAgICA6IDEwLjAuMi55IDoKLQot
+ICAgICAgICBUaGUgVk1zIGdldCB0aGVpciBJUCBhZGRyZXNzZXMgd2l0aCBESENQLgotICAgICAg
+ICBXZSBjcmVhdGUgYSBicmlkZ2UgaW4gZG9tMCwgd2hpY2ggYWxsb3dzIGRvbTEgdG8gcmVhY2gg
+dGhlIGdhdGV3YXkuCisgICAgICAgICAgICAgICAgICAgIDogICAgICAgZG9tMCAgICAgICAgICA6
+ICAgZG9tMSAgICA6CisgICAgICAgICAgICAgICAgICAgIDogICAgICAgICAgICAgICAgICAgICA6
+ICAgICAgICAgICA6CisgICAgICAgICAgICAgICAgICAgIDogICAgICAgIGJyMCAgICAgICAgICA6
+ICAgICAgICAgICA6CisgICAgICAgICAgICAgICAgICAgIDogICAgIDEwLjAuMi40MiAgICAgICA6
+ICAgICAgICAgICA6CisgICAgICAgICAgICAgZ3cgICAgIDogICAgICAgICB8ICAgICAgICAgICA6
+ICAgICAgICAgICA6CisgICAgICAgICAgMTAuMC4yLjIgLTotIGV0aDAgLS0rLS0gdmlmMS4wIC06
+LS0gZXRoMCAgICA6CisgICAgICAgICAgICAgICAgICAgIDogICAgICAgICAgICAgICAgICAgICA6
+IDEwLjAuMi40MyA6CisKKyAgICAgICAgVGhlIFZNcyB1c2Ugc3RhdGljIElQIGFkZHJlc3Nlcy4K
+KyAgICAgICAgV2UgY3JlYXRlIGEgYnJpZGdlIGluIGRvbTAsIHdoaWNoIGFsbG93cyBkb20wIHRv
+IHJlYWNoIHRoZSBnYXRld2F5LgogICAgICAgICB2aWYxLjAgaXMgYWRkZWQgdG8gdGhlIGJyaWRn
+ZSBhdXRvbWF0aWNhbGx5IHdoZW4gZG9tMSBpcyBjcmVhdGVkLgorCisgICAgICAgIFRoZXJlIGlz
+IGEgc3RhYmlsaXR5IGlzc3VlIGZvciBBcm12NyB3aXRoIFFlbXUgPCA5LjEsIHdoaWNoIG1ha2Vz
+IHRoZQorICAgICAgICBkb20xIC0+IGd3IGNvbm5lY3Rpb24gdW5yZWxpYWJsZS4gQXMgYSB3b3Jr
+YXJvdW5kLCB3ZSBpbnRlcmFjdCBvbmx5IHdpdGgKKyAgICAgICAgZG9tMCBmcm9tIGRvbTEgKGhl
+bmNlIHRoZSBmaXhlZCBJUCBhZGRyZXNzZXMpLgogICAgICAgICAiIiIKIAogICAgICAgICAjIEJv
+b3QgdGhlIGVtdWxhdG9yLgpAQCAtODcsOCArOTEsNyBAQCBjbGFzcyBUZXN0WGVuQmFzZShpbmZy
+YS5iYXNldGVzdC5CUlRlc3QpOgogCiAgICAgICAgICMgQnJpbmcgdXAgdGhlIG5ldHdvcmsgaW4g
+dGhlIGRvbTAuCiAgICAgICAgIHNlbGYuYXNzZXJ0UnVuT2soImlmY29uZmlnIGV0aDAgdXAiKQot
+ICAgICAgICBzZWxmLmFzc2VydFJ1bk9rKCJpZmNvbmZpZyBicjAgdXAiKQotICAgICAgICBzZWxm
+LmFzc2VydFJ1bk9rKCJ1ZGhjcGMgLWkgYnIwIikKKyAgICAgICAgc2VsZi5hc3NlcnRSdW5Paygi
+aWZjb25maWcgYnIwIDEwLjAuMi40MiIpCiAgICAgICAgIHNlbGYuYXNzZXJ0UnVuT2soImlmY29u
+ZmlnIC1hIikKIAogICAgICAgICAjIFZlcmlmeSB0aGF0IHdlIGNhbiBwaW5nIHRoZSBnYXRld2F5
+LgpAQCAtMTAzLDEyICsxMDYsMTEgQEAgY2xhc3MgVGVzdFhlbkJhc2UoaW5mcmEuYmFzZXRlc3Qu
+QlJUZXN0KToKICAgICAgICAgc2VsZi5hc3NlcnROb3RFcXVhbCh1dWlkLCBkb20wX3V1aWQsICJV
+bmV4cGVjdGVkIGRvbTAgVVVJRCIpCiAKICAgICAgICAgIyBCcmluZyB1cCB0aGUgbmV0d29yayBp
+biB0aGUgZG9tMS4KLSAgICAgICAgc2VsZi5hc3NlcnRSdW5PaygiaWZjb25maWcgZXRoMCB1cCIp
+Ci0gICAgICAgIHNlbGYuYXNzZXJ0UnVuT2soInVkaGNwYyAtaSBldGgwIikKKyAgICAgICAgc2Vs
+Zi5hc3NlcnRSdW5PaygiaWZjb25maWcgZXRoMCAxMC4wLjIuNDMiKQogICAgICAgICBzZWxmLmFz
+c2VydFJ1bk9rKCJpZmNvbmZpZyAtYSIpCiAKLSAgICAgICAgIyBWZXJpZnkgdGhhdCB3ZSBjYW4g
+cGluZyB0aGUgZ2F0ZXdheS4KLSAgICAgICAgc2VsZi5hc3NlcnRSdW5PaygicGluZyAtYyAzIC1B
+IDEwLjAuMi4yIikKKyAgICAgICAgIyBWZXJpZnkgdGhhdCB3ZSBjYW4gcGluZyB0aGUgZG9tMC4K
+KyAgICAgICAgc2VsZi5hc3NlcnRSdW5PaygicGluZyAtYyAzIC1BIDEwLjAuMi40MiIpCiAKICAg
+ICAgICAgIyBEZXRhY2ggZnJvbSBkb20xJ3MgY29uc29sZSB3aXRoIENUUkwtXS4KICAgICAgICAg
+IyBkb20xIGlzIHN0aWxsIHJ1bm5pbmcgaW4gdGhlIGJhY2tncm91bmQgYWZ0ZXIgdGhhdC4KLS0g
+CjIuNTEuMAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
+c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
