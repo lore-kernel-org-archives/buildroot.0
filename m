@@ -4,71 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6ED8CCFA00
-	for <buildroot@archiver.kernel.org>; Sun,  2 Nov 2025 22:49:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C15F8CCF9F8
+	for <buildroot@archiver.kernel.org>; Mon,  3 Nov 2025 07:34:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A1B9583CBF;
-	Sun,  2 Nov 2025 22:49:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4AA6D83F02;
+	Mon,  3 Nov 2025 07:34:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kKziTjOUIJcp; Sun,  2 Nov 2025 22:49:40 +0000 (UTC)
+ id b_6UWlBevtTl; Mon,  3 Nov 2025 07:34:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C986D83D20
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7598083E52
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C986D83D20;
-	Sun,  2 Nov 2025 22:49:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7598083E52;
+	Mon,  3 Nov 2025 07:34:32 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D3E38436
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 22:49:39 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 15E30222
+ for <buildroot@buildroot.org>; Mon,  3 Nov 2025 07:34:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D05F260B3B
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 22:49:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EFF5B60E42
+ for <buildroot@buildroot.org>; Mon,  3 Nov 2025 07:34:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3HQGQj3rEarQ for <buildroot@buildroot.org>;
- Sun,  2 Nov 2025 22:49:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D19CB60B3A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D19CB60B3A
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D19CB60B3A
- for <buildroot@buildroot.org>; Sun,  2 Nov 2025 22:49:38 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 3791D2003C3;
- Sun,  2 Nov 2025 23:49:33 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 02 Nov 2025 23:49:33 +0100
+ id UtCmdbk3H4pk for <buildroot@buildroot.org>;
+ Mon,  3 Nov 2025 07:34:30 +0000 (UTC)
+X-Greylist: delayed 434 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 03 Nov 2025 07:34:29 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2AC0660E40
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AC0660E40
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=207.54.77.50;
+ helo=esa3.hc555-34.eu.iphmx.com;
+ envelope-from=vladimir.kondratiev@mobileye.com; receiver=<UNKNOWN> 
+Received: from esa3.hc555-34.eu.iphmx.com (esa3.hc555-34.eu.iphmx.com
+ [207.54.77.50])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2AC0660E40
+ for <buildroot@buildroot.org>; Mon,  3 Nov 2025 07:34:28 +0000 (UTC)
+X-CSE-ConnectionGUID: C9rcYIXzTqyu0oE6bOOsoA==
+X-CSE-MsgGUID: W1XP+u57QQChTgL6bOpAnA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from unknown (HELO ces02_data.me-corp.lan) ([146.255.191.134])
+ by esa3.hc555-34.eu.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 03 Nov 2025 09:27:12 +0200
+X-CSE-ConnectionGUID: S9ER0t1jRT2Si5RDfJ7xKw==
+X-CSE-MsgGUID: 0RDgphKzTzuI2mJ+QIiHIg==
+Received: from unknown (HELO epgd071.me-corp.lan) ([10.154.54.6])
+ by ces02_data.me-corp.lan with SMTP; 03 Nov 2025 09:27:27 +0200
+Received: by epgd071.me-corp.lan (sSMTP sendmail emulation);
+ Mon, 03 Nov 2025 09:27:11 +0200
+To: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>,
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+Date: Mon,  3 Nov 2025 09:27:00 +0200
+Message-ID: <20251103072700.968500-1-vladimir.kondratiev@mobileye.com>
 MIME-Version: 1.0
-Date: Sun, 02 Nov 2025 23:49:33 +0100
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: buildroot@buildroot.org, Mario Lang <mlang@blind.guru>
-In-Reply-To: <20251102185409.1169454-1-dario.binacchi@amarulasolutions.com>
-References: <20251102185409.1169454-1-dario.binacchi@amarulasolutions.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <d898031d897e94e1c199be918623d40f@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1762123775;
- bh=Eqf30UmBEgV0B9MjPb79ABOjJ0Q1LuSoOr9gF3Uf9v4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=S1e3WEBu+96CP8jMc5AbLjAw9Tu1bs6m1hHNNZpiJ5izwwjjgQpF6AVq6hTtdKXag
- UCAGcoQJNCc5r+p7k1kljP55tkMbHurOvPQS/A9XImp0vOWByMmigiBRLDPG1a8qCX
- E0Tpy4bvrcFa32/O/f7f1uj3PSC7QdwJU+Qn+GVDRj1sbuO18yR58ubrPE8sJ23MeC
- Wc1auBxqoDlUOUcZSqpxfshCkwdDdwLMA1TVmN+f7WxeLyjBwBkXnc2pogwDnBF7z/
- hTQYV8bzYy4A2DF6r/NnWLxh4TuwvzdO72G01gOERwnoJBW3ptM6O6dWSD7K4ZSXkh
- RWtiFaXFCeuKw==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+ d=mobileye.com; i=@mobileye.com; q=dns/txt; s=MoEyIP;
+ t=1762155269; x=1793691269;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=DhClWTPDaXuPZtQCnKYyFNHZ/4uKuh7Fo+Zmui8KhFo=;
+ b=OSippAN1Jd3ytfIhzXbhqQcLJ7q05oY2FsykZFDy40sVWml/KBj7JE/P
+ ASn/OGOloLPk0wXbUbIHuezmB59B3SKsB3F3iOgQ7lpPnZ8kbATz4GB9X
+ GIA9uIAzLlmNoqVQKyehADA1Ll6OKxurGqCe2Xx2Tesg4jZRTRMHw1uBP
+ 3Jn9JeLBe122TOthXkRYLT77VvFpuy2wG0zR15CTL4i0+PQDmLSJuWPCl
+ nJwOxWyl9c3sZ/SJVKY1lk3VdYBGCcPfVv2hwpfPHJYqPy0D768Q9NDG7
+ 3AJ69hWyIzKwCvg2uAqvDzoqTh6noElDkLGGF6dhL29E86tjgWm/gul3l
+ g==;
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=S1e3WEBu
-Subject: Re: [Buildroot] [PATCH v2] package/brltty: bump to version 6.8
+ header.from=mobileye.com
+Subject: [Buildroot] [PATCH 1/1] package/kexec: enable on risc-v
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,56 +87,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Vladimir Kondratiev via buildroot <buildroot@buildroot.org>
+Reply-To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Dario,
+Starting from version 2.0.32, kexec has support for the
+risc-v architecture
 
-Thanks for this v2!
+Signed-off-by: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+---
+ package/kexec/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-On 02/11/2025 19:54, Dario Binacchi wrote:
-> Commit [1] has made ncurses a requirement for building the package.
-> 
-> The added patch fix the following build error:
-> 
-> /usr/bin/install -c -d ../../../lib
-> buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-gcc -shared   
-> -Wl,-export-dynamic -o ../../../lib/libbrlttyxfv.so screen.o -ltinfo
-> buildroot/output/host/lib/gcc/arm-buildroot-linux-gnueabihf/14.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: 
-> cannot find -ltinfo: No such file or directory
-> collect2: error: ld returned 1 exit status
-> 
-> git format-patch -M -n -s -o outgoing origin/master
-> Update README hash:
-> - v6.8:
->   - Update the copyright from 2024 to 2025.
-> - v6.7:
->   - Update the supported braille devices lists.
->   - Add support for the HIMS eMotion.
->   - Add support for HT's Activator Pro models.
->   - Add support for the KGS Next Touch 40.
->   - Change the copyright from 2023 to 2024.
->   - Document that HT's Basic Braille Plus models are supported.
-> 
-> Release notes:
-> https://github.com/brltty/brltty/blob/BRLTTY-6.8/Documents/ChangeLog
-> 
-> [1] 
-> https://github.com/brltty/brltty/commit/8f7d65569ef77eec8b8e4b97e68cb5689cf57ef9
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+diff --git a/package/kexec/Config.in b/package/kexec/Config.in
+index 2e3efb5a2acc..dce0831bf2e4 100644
+--- a/package/kexec/Config.in
++++ b/package/kexec/Config.in
+@@ -5,7 +5,8 @@ config BR2_PACKAGE_KEXEC_ARCH_SUPPORTS
+ 		BR2_loongarch64 || \
+ 		BR2_mips || BR2_mips64 || BR2_mipsel || BR2_mips64el || \
+ 		BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
+-		BR2_sh4 || BR2_sh4a || BR2_aarch64 || BR2_s390x || BR2_m68k
++		BR2_sh4 || BR2_sh4a || BR2_aarch64 || BR2_s390x || BR2_m68k || \
++		BR2_riscv
+ 
+ config BR2_PACKAGE_KEXEC
+ 	bool "kexec"
+-- 
+2.43.0
 
-This version still fail to compile with uclibc toolchains. See:
-https://gitlab.com/jolivain/buildroot/-/pipelines/2135626184
-
-Could you have a look, please?
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
