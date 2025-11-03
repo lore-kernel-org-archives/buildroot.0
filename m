@@ -1,81 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C15F8CCF9F8
-	for <buildroot@archiver.kernel.org>; Mon,  3 Nov 2025 07:34:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C79A9CCFA03
+	for <buildroot@archiver.kernel.org>; Mon,  3 Nov 2025 08:29:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4AA6D83F02;
-	Mon,  3 Nov 2025 07:34:33 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b_6UWlBevtTl; Mon,  3 Nov 2025 07:34:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7598083E52
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7598083E52;
-	Mon,  3 Nov 2025 07:34:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 15E30222
- for <buildroot@buildroot.org>; Mon,  3 Nov 2025 07:34:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EFF5B60E42
- for <buildroot@buildroot.org>; Mon,  3 Nov 2025 07:34:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 81D7860E74;
+	Mon,  3 Nov 2025 08:29:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UtCmdbk3H4pk for <buildroot@buildroot.org>;
- Mon,  3 Nov 2025 07:34:30 +0000 (UTC)
-X-Greylist: delayed 434 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 03 Nov 2025 07:34:29 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2AC0660E40
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AC0660E40
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=207.54.77.50;
- helo=esa3.hc555-34.eu.iphmx.com;
- envelope-from=vladimir.kondratiev@mobileye.com; receiver=<UNKNOWN> 
-Received: from esa3.hc555-34.eu.iphmx.com (esa3.hc555-34.eu.iphmx.com
- [207.54.77.50])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2AC0660E40
- for <buildroot@buildroot.org>; Mon,  3 Nov 2025 07:34:28 +0000 (UTC)
-X-CSE-ConnectionGUID: C9rcYIXzTqyu0oE6bOOsoA==
-X-CSE-MsgGUID: W1XP+u57QQChTgL6bOpAnA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from unknown (HELO ces02_data.me-corp.lan) ([146.255.191.134])
- by esa3.hc555-34.eu.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 03 Nov 2025 09:27:12 +0200
-X-CSE-ConnectionGUID: S9ER0t1jRT2Si5RDfJ7xKw==
-X-CSE-MsgGUID: 0RDgphKzTzuI2mJ+QIiHIg==
-Received: from unknown (HELO epgd071.me-corp.lan) ([10.154.54.6])
- by ces02_data.me-corp.lan with SMTP; 03 Nov 2025 09:27:27 +0200
-Received: by epgd071.me-corp.lan (sSMTP sendmail emulation);
- Mon, 03 Nov 2025 09:27:11 +0200
+ id iyeVwbOEyJvC; Mon,  3 Nov 2025 08:29:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACF0F60E66
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id ACF0F60E66;
+	Mon,  3 Nov 2025 08:29:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 16C06222
+ for <buildroot@buildroot.org>; Mon,  3 Nov 2025 08:29:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 08C684215A
+ for <buildroot@buildroot.org>; Mon,  3 Nov 2025 08:29:45 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8gfnNFxQasTG for <buildroot@buildroot.org>;
+ Mon,  3 Nov 2025 08:29:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 80B864192E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80B864192E
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 80B864192E
+ for <buildroot@buildroot.org>; Mon,  3 Nov 2025 08:29:43 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 2035031866; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Mon, 03 Nov 2025 08:29:39 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1vFpwX-001XDD-1T;
+ Mon, 03 Nov 2025 09:29:37 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>,
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
-Date: Mon,  3 Nov 2025 09:27:00 +0200
-Message-ID: <20251103072700.968500-1-vladimir.kondratiev@mobileye.com>
+Date: Mon,  3 Nov 2025 09:29:29 +0100
+Message-Id: <20251103082930.365967-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=mobileye.com; i=@mobileye.com; q=dns/txt; s=MoEyIP;
- t=1762155269; x=1793691269;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=DhClWTPDaXuPZtQCnKYyFNHZ/4uKuh7Fo+Zmui8KhFo=;
- b=OSippAN1Jd3ytfIhzXbhqQcLJ7q05oY2FsykZFDy40sVWml/KBj7JE/P
- ASn/OGOloLPk0wXbUbIHuezmB59B3SKsB3F3iOgQ7lpPnZ8kbATz4GB9X
- GIA9uIAzLlmNoqVQKyehADA1Ll6OKxurGqCe2Xx2Tesg4jZRTRMHw1uBP
- 3Jn9JeLBe122TOthXkRYLT77VvFpuy2wG0zR15CTL4i0+PQDmLSJuWPCl
- nJwOxWyl9c3sZ/SJVKY1lk3VdYBGCcPfVv2hwpfPHJYqPy0D768Q9NDG7
- 3AJ69hWyIzKwCvg2uAqvDzoqTh6noElDkLGGF6dhL29E86tjgWm/gul3l
- g==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mobileye.com
-Subject: [Buildroot] [PATCH 1/1] package/kexec: enable on risc-v
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=dU+eeIA68YMqDC8YwaKs1asCjqRsT3p/VTh5TO39n8DZAkSlXEdWZtGtjGavOKRLMYTbQ1HkA8uc2S+oIIy1tpSih9w629FTlA5bkXJsYNISftlOPx215HfY7/hxZmmrCh8gXqpd03Bn2lNvJ988MMzsNUYQhoqiAUV7qfjSefkqSGcHoAX/7RntXBzqXl2lpIAr2BqIRDjxxcvNOW5CUq4/HRfsAe5RdvuLL4LomwkT9P7YuqJsyc0bANEAYkK95zQd0nfmWVQ1oxJrXyNzB5HC8GzEc+PYbtkbfjyoNdZqa8wETl/K2XpMiSrhEElG47vrjN+TFYN0PqSTD/afwA==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=zhg5EOR5aRmnxfcngAvInc16qsrU6l3M4E4RQsV70nc=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=dU+eeIA6
+X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
+Subject: [Buildroot] [PATCH] package/pkg-download.mk: fix 'dereferencing'
+ typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,37 +79,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Vladimir Kondratiev via buildroot <buildroot@buildroot.org>
-Reply-To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Starting from version 2.0.32, kexec has support for the
-risc-v architecture
-
-Signed-off-by: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kexec/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/pkg-download.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/kexec/Config.in b/package/kexec/Config.in
-index 2e3efb5a2acc..dce0831bf2e4 100644
---- a/package/kexec/Config.in
-+++ b/package/kexec/Config.in
-@@ -5,7 +5,8 @@ config BR2_PACKAGE_KEXEC_ARCH_SUPPORTS
- 		BR2_loongarch64 || \
- 		BR2_mips || BR2_mips64 || BR2_mipsel || BR2_mips64el || \
- 		BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
--		BR2_sh4 || BR2_sh4a || BR2_aarch64 || BR2_s390x || BR2_m68k
-+		BR2_sh4 || BR2_sh4a || BR2_aarch64 || BR2_s390x || BR2_m68k || \
-+		BR2_riscv
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index fa1e06537e..ef268f5c83 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -27,7 +27,7 @@ else
+ BR2_DL_DIR = $(DL_DIR)
+ endif
  
- config BR2_PACKAGE_KEXEC
- 	bool "kexec"
+-# ensure it exists and a absolute path, derefrecing symlinks
++# ensure it exists and a absolute path, dereferencing symlinks
+ DL_DIR := $(shell mkdir -p $(DL_DIR) && cd $(DL_DIR) >/dev/null && pwd -P)
+ 
+ #
 -- 
-2.43.0
+2.39.5
 
 _______________________________________________
 buildroot mailing list
