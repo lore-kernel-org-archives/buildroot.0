@@ -4,100 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A0A5CCF9E3
-	for <buildroot@archiver.kernel.org>; Tue,  4 Nov 2025 14:44:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0EB8CCF9E3
+	for <buildroot@archiver.kernel.org>; Tue,  4 Nov 2025 17:53:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4D5428221C;
-	Tue,  4 Nov 2025 14:44:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5647B80D8D;
+	Tue,  4 Nov 2025 17:53:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j4lT1wssj9oI; Tue,  4 Nov 2025 14:44:09 +0000 (UTC)
+ id lUzJbgRUbCVM; Tue,  4 Nov 2025 17:53:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D185F82216
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7630B81EAD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D185F82216;
-	Tue,  4 Nov 2025 14:44:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 05D1B462
- for <buildroot@buildroot.org>; Tue,  4 Nov 2025 14:44:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7630B81EAD;
+	Tue,  4 Nov 2025 17:53:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A79AE222
+ for <buildroot@buildroot.org>; Tue,  4 Nov 2025 17:53:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EBED740D64
- for <buildroot@buildroot.org>; Tue,  4 Nov 2025 14:44:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 912AB81EAD
+ for <buildroot@buildroot.org>; Tue,  4 Nov 2025 17:53:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G6sN8kLTJ2vu for <buildroot@buildroot.org>;
- Tue,  4 Nov 2025 14:44:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::535; helo=mail-ed1-x535.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7719640D65
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7719640D65
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
- [IPv6:2a00:1450:4864:20::535])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7719640D65
- for <buildroot@buildroot.org>; Tue,  4 Nov 2025 14:44:07 +0000 (UTC)
-Received: by mail-ed1-x535.google.com with SMTP id
- 4fb4d7f45d1cf-640c3940649so3439555a12.1
- for <buildroot@buildroot.org>; Tue, 04 Nov 2025 06:44:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1762267445; x=1762872245;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=dWeaHg4lnQtCwljv60ee6L+E/dJ+PSNQmoOxesrbK0g=;
- b=s+UJxxHJfXdr3LYu36RVfDnHo6ndxQTVAfCHMG1JkfWAPRCu5K6IPjuOOwKI6MG+Sp
- OnYqDRmJYYBhqvmpttkMniEMTaTvUS5zVvSB4mZzb6V3O8fG3yxMxKP/zGNA3b51YN6D
- 0vBbY7u2SoEUEaQtIvEsK1vOco/KZ9ScNJwvEiRoV+gAFT7Og1wSzYPmx+X17KtmpSFO
- +fqkHsWGmdsTKwDemg1HJlBzTvC36EdInWTzsoj7JoZgH/THtHeLbIWLknYYndixBFj9
- 30GGCdYy3+qFpdOugrUR9rf1hHakYsqndvDeK2bZpYsa/ibiJrPglAFofBaOub14Av51
- 90tg==
-X-Gm-Message-State: AOJu0YyQpxOJ6+zakWj6r4B8c95Ik2XAgNNWdzxBkYDOONx0L3xzoctF
- WLTvKpRMjC6WgWJZoSLblnZ0scdn1bAoTzx/BKit4QkYTA4+mTcNIBNJBbU6du6Khqj/msoaPqz
- igTN0
-X-Gm-Gg: ASbGncvTYN8JOaip6fC2hdKr5v0F1L6SymWBCtCn3lUOQUBDWWPSmIKXbFNRA01OhPP
- 2PGYrXfqCUScH5F6pjVyVknhYiCjtkXI1zBoXd/WAqcg6GQAS+FYMIrSCTzO1fU9BM599C/MMDE
- /MEkLm3xQJ9mfPwLKnmBkPdoq+Od1GdwLJj4Ccjj4+74t3p45A1hEz08/ikgl7PCh590OXl63vx
- hQeS0qO95ymAOW1U/F6Ehys2Ng+pBFAYwBFc4LlgHVAurvQB5+g18gMT9IsbVaOtMLSbmkn4UeG
- 5OqewroTeM822nN1Jg6nMuCy0apTv8z88zxgY7nC+BqCtwpwAWWPu95PCJvCiYoH1IJqJxdwcKR
- +eENTbsSIBPnVezHijxN3AAcqtXg14u1uMWYktc+LOOmfnhn6uheLmFwqLelTbnDYKEf+joSC9e
- ocyQo4OEDFG6heJs5dEYWpV5CyJ3UKjEMsmTIi
-X-Google-Smtp-Source: AGHT+IFLE2stROv0o8dny5CbRMkLb55uPysvV4cwZWjZt5Xv+cWECWjbi1kF1csQZIQmcEsIsJA+3Q==
-X-Received: by 2002:a17:907:86a7:b0:b6d:4f1d:8c9b with SMTP id
- a640c23a62f3a-b70701c3c7amr1683538166b.28.1762267444792; 
- Tue, 04 Nov 2025 06:44:04 -0800 (PST)
-Received: from localhost.localdomain ([2001:b07:6474:ebbf:9d18:fb9c:93d1:73b5])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b723fe3b899sm226683466b.66.2025.11.04.06.44.03
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 04 Nov 2025 06:44:04 -0800 (PST)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PjP3uddU_zLP for <buildroot@buildroot.org>;
+ Tue,  4 Nov 2025 17:53:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.57;
+ helo=smtpcmd0757.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5041580D8D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5041580D8D
+Received: from smtpcmd0757.aruba.it (smtpcmd0757.aruba.it [62.149.156.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5041580D8D
+ for <buildroot@buildroot.org>; Tue,  4 Nov 2025 17:53:22 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id GLDbvIL1NlGpsGLDbvWyK1; Tue, 04 Nov 2025 18:53:20 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- Michael Trimarchi <michael@amarulasolutions.com>
-Date: Tue,  4 Nov 2025 15:44:00 +0100
-Message-ID: <20251104144400.1242876-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Tue,  4 Nov 2025 18:48:35 +0100
+Message-ID: <20251104174835.1697415-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1762267445; x=1762872245;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=dWeaHg4lnQtCwljv60ee6L+E/dJ+PSNQmoOxesrbK0g=;
- b=LugsOesKfrET2c0IWboyJZsFBwJAYYap3i07iddemgJtHnfnFnVZcI84bgaglSPWfU
- jZxILQ+PF4cqvUtbZXrVPLZFQBpM33UA7p5QQN0/II8A5GN6YQouMpAz+WoTY0WC9qRy
- UnksFAwbFElT91XuZ3vL8bZueR3fsfBddPZxE=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-CMAE-Envelope: MS4xfLCOpjrxmPQMICJPdXDtRsJKtl6eFLO9VeYH6n97KptAMDmT1qqyrAXWev35PvfZkETb7z4wm4klL12udRx13rx4HGcfAv2hEId3WsXkvsYdzbLBoZma
+ DO/8Ofsq9nR2oWIAz/tw58E6GRMja/h+2eeLB6XFREvDIaqcKYzLM/WsOXt40/DUcwKo5L3NAqDmvIjKhDKYDKgfpJ1J53cROCE2Q0rW9x6hQZDPYQS+DNnQ
+ X1VwWm1tWvR42b7BK8Xcg7q+Y9KkaCccCvmnub53mGI=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1762278800; bh=5i/l/PqDWjkIIlTARSBat1xov6fRzZlEJHfo8t96tj4=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=Skf5c8i5B5GVhlyZbsDX1Hq5SjxVmouqUwKlvLOV5x6Z7Gk0o7DaMSheO9kDKs1tw
+ UgOkVRK8dOkk7yL3TasNKCww2DWakYV/HaXBVw4LoRHuzIP/TTRO2jeTFyDQgPPT7t
+ ijvXvB/Rpbff2FloWBDibfvUfsW9Nlj83tvY6nFxYYbNTVgdY9ooobCJG/+TbfRr2R
+ DWGqVigsnSjO21YcB2NDnEGFbO1Z6Jf78QQ2ceZAjrz+nSRDGk/V01N0RwdmngVsCW
+ g82vTAe+rzAcOsWG7THm1sRGqojeM3GCI1nR2gtuGLMKFMksvoG7MhfvMRD205MzjO
+ so6EWb4V74Mdw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=LugsOesK
-Subject: [Buildroot] [PATCH 1/1] configs/imx6ulz_bsh_smm_m2: bump Linux to
- 6.12.56 and U-Boot to 2025.10
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=Skf5c8i5
+Subject: [Buildroot] [PATCH] package/libnvme: bump to version 1.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,56 +84,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The patch bumps the Linux kernel to version 6.12.56 and U-Boot to
-version 2025.10.
+For release note, see:
+https://github.com/linux-nvme/libnvme/releases/tag/v1.16
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash | 2 +-
- board/bsh/imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash | 2 +-
- configs/imx6ulz_bsh_smm_m2_defconfig                  | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/libnvme/libnvme.hash | 2 +-
+ package/libnvme/libnvme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash b/board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash
-index 32ed4d2a08d8..75072f26f71e 100644
---- a/board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash
-+++ b/board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  4a168aed2de5a81aadd90ba2b153860a98d99bfc34651936e17f18e54f01ba8c  linux-6.12.36.tar.xz
-+sha256  55432b2af352f7bf3053c348d8549df2f2deeaa4a361c65d638c2f3b2ca7ec96  linux-6.12.56.tar.xz
-diff --git a/board/bsh/imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash b/board/bsh/imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash
-index 440526977bd9..98a5c53aaf97 100644
---- a/board/bsh/imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash
-+++ b/board/bsh/imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  0f933f6c5a426895bf306e93e6ac53c60870e4b54cda56d95211bec99e63bec7  u-boot-2025.07.tar.bz2
-+sha256  b4f032848e56cc8f213ad59f9132c084dbbb632bc29176d024e58220e0efdf4a  u-boot-2025.10.tar.bz2
-diff --git a/configs/imx6ulz_bsh_smm_m2_defconfig b/configs/imx6ulz_bsh_smm_m2_defconfig
-index 5aa41b6438ca..9ced7c51ec55 100644
---- a/configs/imx6ulz_bsh_smm_m2_defconfig
-+++ b/configs/imx6ulz_bsh_smm_m2_defconfig
-@@ -9,7 +9,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/bsh/imx6ulz-bsh-smm-m2/post-build.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.36"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.56"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/bsh/imx6ulz-bsh-smm-m2/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -28,7 +28,7 @@ BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6ulz_smm_m2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+diff --git a/package/libnvme/libnvme.hash b/package/libnvme/libnvme.hash
+index a57a5b3958..66dedbbe8f 100644
+--- a/package/libnvme/libnvme.hash
++++ b/package/libnvme/libnvme.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated sha256 checksums
+-sha256  c21cd9379390bdc52c9d9569a241274f8115fc247b76a5d922d639f48c8174a2  libnvme-1.15.tar.gz
++sha256  5bb24139a113f350708fe54073e799f454d509218758060c398144b91811d176  libnvme-1.16.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libnvme/libnvme.mk b/package/libnvme/libnvme.mk
+index b576feb1ab..238b7041da 100644
+--- a/package/libnvme/libnvme.mk
++++ b/package/libnvme/libnvme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNVME_VERSION = 1.15
++LIBNVME_VERSION = 1.16
+ LIBNVME_SITE = $(call github,linux-nvme,libnvme,v$(LIBNVME_VERSION))
+ LIBNVME_LICENSE = LGPL-2.1
+ LIBNVME_LICENSE_FILES = COPYING
 -- 
-2.43.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
