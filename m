@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 492CBCEACEF
-	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 20:08:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3CCFCEBF91
+	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 20:08:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E2F3841531;
-	Mon, 17 Nov 2025 20:08:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5371641539;
+	Mon, 17 Nov 2025 20:08:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dqxlnhCCEZZN; Mon, 17 Nov 2025 20:08:19 +0000 (UTC)
+ id D28mMe6f42li; Mon, 17 Nov 2025 20:08:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3613414DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 654FC414E0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F3613414DE;
-	Mon, 17 Nov 2025 20:08:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1042E158
+	by smtp4.osuosl.org (Postfix) with ESMTP id 654FC414E0;
+	Mon, 17 Nov 2025 20:08:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D1571158
  for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:08:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6EEE561438
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2119083D71
  for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:07:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B2bWqs8XRp4U for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DdaBCcqWMuKt for <buildroot@buildroot.org>;
  Mon, 17 Nov 2025 20:07:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8ED7D6143E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6794D83DC3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8ED7D6143E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6794D83DC3
  for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:07:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8D3518405F; Mon, 17 Nov 2025 20:07:53 +0000 (UTC)
+ id 65B8A81E81; Mon, 17 Nov 2025 20:07:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 15 Nov 2025 17:39:05 +0100
+Date: Wed, 5 Nov 2025 17:07:55 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: f44bc9776ea46c959a82d8161a1504cd18470955
-X-Git-Newrev: 14929eed311c01f1b797f2916e804a6070448df9
+X-Git-Oldrev: 25b2b2bfdbca952c06d550eb70bf28cae9fde9f7
+X-Git-Newrev: 13c7a9f2ffd347dc48c222994cc99a5cb32052a6
 X-Patchwork-Hint: ignore
-Message-Id: <20251117200753.8D3518405F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/pkg-generic.mk:
- Set <pkg>_CPE_ID_UPDATE to NA by default
+Message-Id: <20251117200753.65B8A81E81@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/webkitgtk:
+ disable internal ccache configuration
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,45 +66,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14929eed311c01f1b797f2916e804a6070448df9
+commit: https://git.buildroot.net/buildroot/commit/?id=13c7a9f2ffd347dc48c222994cc99a5cb32052a6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-The commit [1] set the default value of '<pkg>_CPE_ID_UPDATE' to not use
-a wildcard by default. But instead of setting the value to '-' it set it
-to an empty value instead.
+WebKit's auto-configured ccache results in 100% cache misses.
+Disable WebKit's internal ccache setup [1] since Buildroot
+already manages the ccache in toolchain/toolchain-wrapper.c.
 
-According to document [2] section 6.1.2.1.1 the 'Not Attributed' value
-bind to an hyphen ('-') and the blank statement bind to the 'Any' ('*').
+[1] https://github.com/WebKit/WebKit/blob/webkitgtk-2.50.1/Source/cmake/WebKitCCache.cmake
 
-Because the CPE matching function was incorrect using a blank statement
-worked to remove the false positives but this is not correct according
-to the CPE documentation.
-
-[1] 53a8616460 package/pkg-generic.mk: use more sensible default value for <pkg>_CPE_ID_UPDATE
-[2] https://nvlpubs.nist.gov/nistpubs/Legacy/IR/nistir7695.pdf
-
-Fixes: 53a8616460e5730abe703ca5a46bae0039d548aa.
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Acked-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8430ca7c28456fd94d855270c61d2511eec28c38)
+(cherry picked from commit 37d270262585709225a865c7a9ad6d7cd9008f39)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/pkg-generic.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/webkitgtk/webkitgtk.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index cf55101265..0a1e29a04e 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -727,6 +727,8 @@ ifeq ($$($(2)_CPE_ID_VALID),YES)
-  ifndef $(2)_CPE_ID_UPDATE
-   ifdef $(3)_CPE_ID_UPDATE
-    $(2)_CPE_ID_UPDATE = $$($(3)_CPE_ID_UPDATE)
-+  else
-+   $(2)_CPE_ID_UPDATE = -
-   endif
-  endif
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index cb66641e3d..80854c0d7b 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -19,6 +19,10 @@ WEBKITGTK_DEPENDENCIES = host-ruby host-python3 host-gperf host-unifdef \
  
+ WEBKITGTK_CMAKE_BACKEND = ninja
+ 
++# Buildroot adds support for ccache through its
++# toolchain-wrapper, so tell webkitgtk not to mess with it.
++WEBKITGTK_CONF_ENV = WK_USE_CCACHE=NO
++
+ WEBKITGTK_CONF_OPTS = \
+ 	-DENABLE_API_TESTS=OFF \
+ 	-DENABLE_DOCUMENTATION=OFF \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
