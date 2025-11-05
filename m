@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B80FCEACEF
-	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 20:07:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13E17CE8D6B
+	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 20:07:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD4BE6144F;
-	Mon, 17 Nov 2025 20:07:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DE0AA4143F;
+	Mon, 17 Nov 2025 20:07:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id msI3tdJ3iuY6; Mon, 17 Nov 2025 20:07:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aRxOQpDv6V76; Mon, 17 Nov 2025 20:07:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02B9261411
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 232644143B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 02B9261411;
-	Mon, 17 Nov 2025 20:07:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D0EC21BA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 232644143B;
+	Mon, 17 Nov 2025 20:07:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D6CB92D3
  for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:07:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C3AAA408C5
+ by smtp1.osuosl.org (Postfix) with ESMTP id BDD7183E1E
  for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:07:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DGXnnvyURIw3 for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PSVvMvw8bhch for <buildroot@buildroot.org>;
  Mon, 17 Nov 2025 20:07:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE7EA408BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D787D8349A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AE7EA408BA
+ by smtp1.osuosl.org (Postfix) with ESMTP id D787D8349A
  for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:07:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9BA01849B1; Mon, 17 Nov 2025 20:07:52 +0000 (UTC)
+ id D5F8781E81; Mon, 17 Nov 2025 20:07:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 5 Nov 2025 16:43:50 +0100
+Date: Wed, 5 Nov 2025 16:49:43 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: bae9c933bf262288477c9785c1255c30a4181857
-X-Git-Newrev: 60b2e562056db31b5f13a259edb95e545792be3d
+X-Git-Oldrev: ab3680b89ddc2afd62e96313313f98d670b3aa87
+X-Git-Newrev: cff6724a9ab14b8fca5ced499ed6e517b48376a7
 X-Patchwork-Hint: ignore
-Message-Id: <20251117200752.9BA01849B1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] configs/cubieboard1: bump
- Linux to 6.12.52
+Message-Id: <20251117200752.D5F8781E81@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/bind: drop
+ unrecognized option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,40 +66,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60b2e562056db31b5f13a259edb95e545792be3d
+commit: https://git.buildroot.net/buildroot/commit/?id=cff6724a9ab14b8fca5ced499ed6e517b48376a7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Buildroot commits 7b43e248180ad3b3dd1804687bc4457f29a88137 and
+8adeaec8afacbc680edebae91524f6144926ac92 removed the possibility for
+static builds but forgot to remove some related _CONF_OPTS.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 0515f1e7834b1bb6a744735f7783c5b75c3abd74)
-[thomas: only linux]
+(cherry picked from commit 636b2a8503f437dfe91ce0c01638c69458342a96)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- board/cubietech/cubieboard1/patches/linux/linux.hash | 2 +-
- configs/cubieboard1_defconfig                        | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/bind/bind.mk | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/board/cubietech/cubieboard1/patches/linux/linux.hash b/board/cubietech/cubieboard1/patches/linux/linux.hash
-index 1213da86b1..9ef8b4af9c 100644
---- a/board/cubietech/cubieboard1/patches/linux/linux.hash
-+++ b/board/cubietech/cubieboard1/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  643142c1b5991560dd12f950825cc19e4497b95b82641918ecff1177f4130c1d  linux-6.12.24.tar.xz
-+sha256  b4850cf670a032c70f38b713a27d62046c5f747caf028c5f50b18f98606a9eb1  linux-6.12.52.tar.xz
-diff --git a/configs/cubieboard1_defconfig b/configs/cubieboard1_defconfig
-index 9f3ad65386..9f3c58cc7d 100644
---- a/configs/cubieboard1_defconfig
-+++ b/configs/cubieboard1_defconfig
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/cubietech/cubieboard1/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.24"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.52"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun4i-a10-cubieboard"
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 350f6c6fbe..11730b6e7e 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -109,16 +109,6 @@ else
+ BIND_CONF_OPTS += --with-readline=no
+ endif
+ 
+-ifeq ($(BR2_STATIC_LIBS),y)
+-BIND_CONF_OPTS += \
+-	--without-dlopen \
+-	--without-libtool
+-else
+-BIND_CONF_OPTS += \
+-	--with-dlopen \
+-	--with-libtool
+-endif
+-
+ define BIND_TARGET_REMOVE_SERVER
+ 	rm -rf $(addprefix $(TARGET_DIR)/usr/sbin/, $(BIND_TARGET_SERVER_SBIN))
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
