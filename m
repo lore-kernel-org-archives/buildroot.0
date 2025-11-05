@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D2E8CCFA0D
-	for <buildroot@archiver.kernel.org>; Wed,  5 Nov 2025 22:29:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 706EBCCFA1A
+	for <buildroot@archiver.kernel.org>; Wed,  5 Nov 2025 22:29:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D3D68412E7;
-	Wed,  5 Nov 2025 22:29:56 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mHaCLtMg9U53; Wed,  5 Nov 2025 22:29:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C280F412D9
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C280F412D9;
-	Wed,  5 Nov 2025 22:29:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id BD12BB00
- for <buildroot@buildroot.org>; Wed,  5 Nov 2025 22:29:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A40F780F87
- for <buildroot@buildroot.org>; Wed,  5 Nov 2025 22:29:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D44780E93;
+	Wed,  5 Nov 2025 22:29:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NP8SinvRdtjS for <buildroot@buildroot.org>;
+ id 1w5CTgF88wtr; Wed,  5 Nov 2025 22:29:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A9BA840D3
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5A9BA840D3;
+	Wed,  5 Nov 2025 22:29:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 14B4CB00
+ for <buildroot@buildroot.org>; Wed,  5 Nov 2025 22:29:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7EB09411D5
+ for <buildroot@buildroot.org>; Wed,  5 Nov 2025 22:29:50 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Azm97S9eDnt2 for <buildroot@buildroot.org>;
  Wed,  5 Nov 2025 22:29:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07D4180E92
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCC8A4122D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 07D4180E92
- for <buildroot@buildroot.org>; Wed,  5 Nov 2025 22:29:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DCC8A4122D
+ for <buildroot@buildroot.org>; Wed,  5 Nov 2025 22:29:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 060B283D2C; Wed,  5 Nov 2025 22:29:50 +0000 (UTC)
+ id B31F9828BC; Wed,  5 Nov 2025 22:29:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 5 Nov 2025 23:10:25 +0100
+Date: Wed, 5 Nov 2025 23:10:10 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bb0fd62f30ffefb7baebdbd86f518b7cf241224c
-X-Git-Newrev: 18107d6353c8c43774b2031aeead1ce37818ccb9
+X-Git-Oldrev: 4c57c030daaefe429b0a1b331c21266e2e1e500d
+X-Git-Newrev: 9bc1453856511e8f89733e2e14b289709035c257
 X-Patchwork-Hint: ignore
-Message-Id: <20251105222950.060B283D2C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kmod: adjust paths for merged-bin
+Message-Id: <20251105222949.B31F9828BC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts: prepare for a more
+ complex check for merged directories
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,47 +66,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18107d6353c8c43774b2031aeead1ce37818ccb9
+commit: https://git.buildroot.net/buildroot/commit/?id=9bc1453856511e8f89733e2e14b289709035c257
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- package/kmod/kmod.mk | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ support/scripts/check-merged-usr.sh | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index dfdd17b955..cbf89bca9d 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -68,16 +68,24 @@ ifeq ($(BR2_PACKAGE_KMOD_TOOLS),y)
- KMOD_LICENSE += , GPL-2.0+ (tools)
- KMOD_LICENSE_FILES += COPYING
+diff --git a/support/scripts/check-merged-usr.sh b/support/scripts/check-merged-usr.sh
+index ed0c58e9b7..ac676185dd 100755
+--- a/support/scripts/check-merged-usr.sh
++++ b/support/scripts/check-merged-usr.sh
+@@ -26,7 +26,7 @@ root="${1}"
+ # each of them.
+ #
  
--# /sbin is really /usr/sbin with merged /usr, so adjust relative symlink
-+# /sbin is really /usr/sbin with merged /usr, and /usr/sbin is
-+# really /usr/bin with merged-bin, so adjust relative symlink
- ifeq ($(BR2_ROOTFS_MERGED_USR),y)
-+ifeq ($(BR2_ROOTFS_MERGED_BIN),y)
-+KMOD_BIN_PATH = kmod
-+KMOD_SBIN_DIR = bin
-+else
- KMOD_BIN_PATH = ../bin/kmod
-+KMOD_SBIN_DIR = sbin
-+endif
- else
- KMOD_BIN_PATH = ../usr/bin/kmod
-+KMOD_SBIN_DIR = sbin
- endif
+-test_merged() {
++is_valid_merged() {
+ 	local root="${1}"
+ 	local dir1="${2}"
+ 	local dir2="${3}"
+@@ -35,9 +35,17 @@ test_merged() {
+ 	inode1="$(stat -c '%i' "${root}${dir1}/." 2>/dev/null)"
+ 	inode2="$(stat -c '%i' "${root}${dir2}/." 2>/dev/null)"
  
- define KMOD_INSTALL_TOOLS
- 	for i in depmod insmod lsmod modinfo modprobe rmmod; do \
--		ln -sf $(KMOD_BIN_PATH) $(TARGET_DIR)/sbin/$$i; \
-+		ln -sf $(KMOD_BIN_PATH) $(TARGET_DIR)/$(KMOD_SBIN_DIR)/$$i; \
- 	done
- endef
+-	test -z "${inode1}" || \
+-		test "${inode1}" = "${inode2}" || \
+-			printf '%s\n' "${dir1}"
++	test -z "${inode1}" || test "${inode1}" = "${inode2}"
++}
++
++test_merged() {
++	local root="${1}"
++	local dir1="${2}"
++	local dir2="${3}"
++
++	if ! is_valid_merged "${root}" "${dir1}" "${dir2}"; then
++		printf '%s\n' "${dir1}"
++	fi
+ }
  
+ test_merged "${root}" "/lib" "/usr/lib"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
