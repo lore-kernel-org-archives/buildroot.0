@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0E26CE8D6B
-	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 19:51:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 708CACEACEF
+	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 19:51:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 731B8412DC;
-	Mon, 17 Nov 2025 19:51:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F3D4411C8;
+	Mon, 17 Nov 2025 19:51:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Iypja_Vdvtt5; Mon, 17 Nov 2025 19:51:39 +0000 (UTC)
+ id kQmRBD_8qo_P; Mon, 17 Nov 2025 19:51:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C0EA412B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33476412E2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6C0EA412B0;
-	Mon, 17 Nov 2025 19:51:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 214822D3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 33476412E2;
+	Mon, 17 Nov 2025 19:51:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 29CC537B
  for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 492F9408D4
+ by smtp1.osuosl.org (Postfix) with ESMTP id 54B0283BA9
  for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ab-Sll6Z0-Mt for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tY47dvZ0vgBR for <buildroot@buildroot.org>;
  Mon, 17 Nov 2025 19:51:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31A324002C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C0DC83C39
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 31A324002C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5C0DC83C39
  for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2F774848E2; Mon, 17 Nov 2025 19:51:26 +0000 (UTC)
+ id 5A6F884169; Mon, 17 Nov 2025 19:51:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 5 Nov 2025 16:47:52 +0100
+Date: Wed, 5 Nov 2025 16:49:49 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 54c2f3cc87fb7f05ef45b76ea2960ed7fbf331f8
-X-Git-Newrev: fb89372001f5a0e88dc7475e19cb7cbfa4463090
+X-Git-Oldrev: e5c76dd5664eb09487657fc717a894b8d827fc69
+X-Git-Newrev: fffe687520bdd98770bc280e37e8a1b3fadd5371
 X-Patchwork-Hint: ignore
-Message-Id: <20251117195126.2F774848E2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/imagemagick:
- security bump to v7.1.2-8
+Message-Id: <20251117195126.5A6F884169@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/bind: drop
+ unrecognized options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,71 +66,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb89372001f5a0e88dc7475e19cb7cbfa4463090
+commit: https://git.buildroot.net/buildroot/commit/?id=fffe687520bdd98770bc280e37e8a1b3fadd5371
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-For more details on the version bump, see:
-  - https://github.com/ImageMagick/ImageMagick/compare/7.1.2-3...7.1.2-8
+Buildroot commit c9515c8b63bc9bc84b52b731c2c72031acd240d2 bumped bind to
+9.18.28 which removed dnssec-keymgr:
+https://gitlab.isc.org/isc-projects/bind9/-/blob/v9.18.28/doc/notes/notes-9.18.0.rst?ref_type=tags&plain=1#L187
 
-Fixes the following vulnerability:
+but forgot to remove the configure option --with-python
+https://gitlab.isc.org/isc-projects/bind9/-/commit/98b3b93791777218c04a67ddaef22619162249f7
+https://gitlab.isc.org/isc-projects/bind9/-/commit/305ca032a0d3afd779b2b97bb36971e1072f0453
 
-- CVE-2025-62171
+Configure option --enable-epoll was also removed upstream in 9.18.16:
+https://gitlab.isc.org/isc-projects/bind9/-/commit/6b6076c882a00028197b04a827f6cf8e7a5369de
 
-    ImageMagick is an open source software suite for displaying,
-    converting, and editing raster image files. In ImageMagick versions
-    prior to 7.1.2-7 and 6.9.13-32, an integer overflow vulnerability
-    exists in the BMP decoder on 32-bit systems. The vulnerability
-    occurs in coders/bmp.c when calculating the extent value by
-    multiplying image columns by bits per pixel. On 32-bit systems with
-    size_t of 4 bytes, a malicious BMP file with specific dimensions can
-    cause this multiplication to overflow and wrap to zero. The overflow
-    check added to address CVE-2025-57803 is placed after the overflow
-    occurs, making it ineffective. A specially crafted 58-byte BMP file
-    with width set to 536,870,912 and 32 bits per pixel can trigger this
-    overflow, causing the bytes_per_line calculation to become zero.
-    This vulnerability only affects 32-bit builds of ImageMagick where
-    default resource limits for width, height, and area have been
-    manually increased beyond their defaults. 64-bit systems with size_t
-    of 8 bytes are not vulnerable, and systems using default ImageMagick
-    resource limits are not vulnerable. The vulnerability is fixed in
-    versions 7.1.2-7 and 6.9.13-32.
+Configure option --enable-backtrace was also removed upstream in 9.18.0:
+https://gitlab.isc.org/isc-projects/bind9/-/commit/e847591867cfe542c9e52d6176e0a2bb6e2ca875
 
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-62171
-  - https://github.com/ImageMagick/ImageMagick/security/advisories/GHSA-9pp9-cfwx-54rm
-  - https://github.com/ImageMagick/ImageMagick/commit/cea1693e2ded51b4cc91c70c54096cbed1691c00
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 3b3b2d1b727596085e5993da559eb8e17e2c5727)
+(cherry picked from commit 9c0f6d2379b67a65e78359118cb7d2025b13d85f)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/bind/bind.mk | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index f260a0e0fb..3dbea6d8bc 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  b16415e8694a2e15e5282d64fc7b358f309ff3a514a90eb5da268676c772de3d  imagemagick-7.1.2-3.tar.gz
-+sha256  acf76a9dafbd18f4dd7b24c45ca10c77e31289fc28e4da0ce5cc3929fd0aef16  imagemagick-7.1.2-8.tar.gz
- sha256  a556c5292c87c9a6ac795c80669b0c3660f9f729de8c476bf2b10f83ab1b34ec  LICENSE
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 30cacc7f1a..4e6a810631 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 11730b6e7e..d137245ef9 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -30,9 +30,7 @@ BIND_AUTORECONF = YES
+ BIND_CONF_OPTS = \
+ 	--without-cmocka \
+ 	--without-lmdb \
+-	--enable-epoll \
+ 	--disable-doh \
+-	--disable-backtrace \
+ 	--disable-static \
+ 	--with-openssl=$(STAGING_DIR)/usr
  
--IMAGEMAGICK_VERSION = 7.1.2-3
-+IMAGEMAGICK_VERSION = 7.1.2-8
- IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
- IMAGEMAGICK_LICENSE = Apache-2.0
- IMAGEMAGICK_LICENSE_FILES = LICENSE
+@@ -95,14 +93,6 @@ else
+ BIND_CONF_OPTS += --with-libxml2=no
+ endif
+ 
+-# Used by dnssec-keymgr
+-ifeq ($(BR2_PACKAGE_PYTHON_PLY),y)
+-BIND_DEPENDENCIES += host-python-ply
+-BIND_CONF_OPTS += --with-python=$(HOST_DIR)/bin/python
+-else
+-BIND_CONF_OPTS += --with-python=no
+-endif
+-
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+ BIND_DEPENDENCIES += readline
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
