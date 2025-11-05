@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CA9CCCFA19
-	for <buildroot@archiver.kernel.org>; Wed,  5 Nov 2025 22:29:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEE6FCCF9F8
+	for <buildroot@archiver.kernel.org>; Wed,  5 Nov 2025 22:29:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 25D4381EB2;
-	Wed,  5 Nov 2025 22:29:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37A92412BE;
+	Wed,  5 Nov 2025 22:29:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0dMEZeg0rpQ7; Wed,  5 Nov 2025 22:29:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GjBadl8JAPFg; Wed,  5 Nov 2025 22:29:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55E5680E85
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B69D412D4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 55E5680E85;
-	Wed,  5 Nov 2025 22:29:53 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 95C66B00
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5B69D412D4;
+	Wed,  5 Nov 2025 22:29:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B21A5462
  for <buildroot@buildroot.org>; Wed,  5 Nov 2025 22:29:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7C9B041050
+ by smtp3.osuosl.org (Postfix) with ESMTP id 98A08613D7
  for <buildroot@buildroot.org>; Wed,  5 Nov 2025 22:29:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ho2loYCeTxbm for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gOcc_6uytX8A for <buildroot@buildroot.org>;
  Wed,  5 Nov 2025 22:29:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC59B408C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBA36611AD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AC59B408C9
+ by smtp3.osuosl.org (Postfix) with ESMTP id DBA36611AD
  for <buildroot@buildroot.org>; Wed,  5 Nov 2025 22:29:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9C04783D96; Wed,  5 Nov 2025 22:29:49 +0000 (UTC)
+ id B93FE83D2C; Wed,  5 Nov 2025 22:29:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 5 Nov 2025 23:10:06 +0100
+Date: Wed, 5 Nov 2025 23:10:12 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5578468ae1f523f3e69cdc88c6f32b5a71090eb8
-X-Git-Newrev: c519334742781ff8556a2c782518d935bd411208
+X-Git-Oldrev: 9bc1453856511e8f89733e2e14b289709035c257
+X-Git-Newrev: 74b29f34ba1a807e2a213f8deaec20a8bb253a87
 X-Patchwork-Hint: ignore
-Message-Id: <20251105222949.9C04783D96@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] system: drop superfluous negative
- condition for default PATH
+Message-Id: <20251105222949.B93FE83D2C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts: also exit in error on
+ improperly merged-usr
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,34 +66,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c519334742781ff8556a2c782518d935bd411208
+commit: https://git.buildroot.net/buildroot/commit/?id=74b29f34ba1a807e2a213f8deaec20a8bb253a87
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Kconfig applies the default values in the order they are defined, and
-stops at the first which condition is met. In this case, the two
-conditions are mutually exclusive, so we can drop the second one. This
-also makes it obvious there actually is a default value.
-
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Acked-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- system/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/scripts/check-merged-usr.sh | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/system/Config.in b/system/Config.in
-index 1bc8b61f11..b24004c533 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -535,7 +535,7 @@ endif # BR2_ROOTFS_SKELETON_DEFAULT
- config BR2_SYSTEM_DEFAULT_PATH
- 	string "Set the system's default PATH"
- 	default "/usr/bin:/usr/sbin" if BR2_ROOTFS_MERGED_USR
--	default "/bin:/sbin:/usr/bin:/usr/sbin" if !BR2_ROOTFS_MERGED_USR
-+	default "/bin:/sbin:/usr/bin:/usr/sbin"
- 	help
- 	  Sets the system's default PATH. It is being used in
- 	  /etc/profile in the skeleton-init-common package and by some
+diff --git a/support/scripts/check-merged-usr.sh b/support/scripts/check-merged-usr.sh
+index ac676185dd..6d31c81c21 100755
+--- a/support/scripts/check-merged-usr.sh
++++ b/support/scripts/check-merged-usr.sh
+@@ -14,6 +14,9 @@
+ #   $1:     the root directory (skeleton, overlay) to check
+ # Output:
+ #   stdout: the list of non-compliant paths (empty if compliant).
++# Exit code:
++#   0:      in case of success (stdout will be empty)
++#   !0:     if any path is improperly merged
+ #
+ 
+ # The directory to check for merged-usr
+@@ -45,9 +48,13 @@ test_merged() {
+ 
+ 	if ! is_valid_merged "${root}" "${dir1}" "${dir2}"; then
+ 		printf '%s\n' "${dir1}"
++		is_success=false
+ 	fi
+ }
+ 
++is_success=true
+ test_merged "${root}" "/lib" "/usr/lib"
+ test_merged "${root}" "/bin" "/usr/bin"
+ test_merged "${root}" "/sbin" "/usr/sbin"
++
++${is_success}
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
