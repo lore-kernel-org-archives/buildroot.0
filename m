@@ -1,58 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA100CCFA0D
-	for <buildroot@archiver.kernel.org>; Wed,  5 Nov 2025 18:57:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB8A5CCF9F8
+	for <buildroot@archiver.kernel.org>; Wed,  5 Nov 2025 19:49:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C33860A54;
-	Wed,  5 Nov 2025 18:57:12 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KY-pHVnA3Gw3; Wed,  5 Nov 2025 18:57:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E36C660B9E
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E36C660B9E;
-	Wed,  5 Nov 2025 18:57:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 750A3B00
- for <buildroot@buildroot.org>; Wed,  5 Nov 2025 18:57:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 65E6340BDD
- for <buildroot@buildroot.org>; Wed,  5 Nov 2025 18:57:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 565034123F;
+	Wed,  5 Nov 2025 19:49:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xpuKutqJCMew for <buildroot@buildroot.org>;
- Wed,  5 Nov 2025 18:57:09 +0000 (UTC)
+ id d9dYjWMqkFFL; Wed,  5 Nov 2025 19:49:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8099341232
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8099341232;
+	Wed,  5 Nov 2025 19:49:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6CBD34C6
+ for <buildroot@buildroot.org>; Wed,  5 Nov 2025 19:49:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6A05383E03
+ for <buildroot@buildroot.org>; Wed,  5 Nov 2025 19:49:10 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id L-_-_0ywUSOb for <buildroot@buildroot.org>;
+ Wed,  5 Nov 2025 19:49:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
  helo=ciao.gmane.io; envelope-from=gclub-buildroot@m.gmane-mx.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5F9CC40BDC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F9CC40BDC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 99CC7844AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99CC7844AC
 Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5F9CC40BDC
- for <buildroot@uclibc.org>; Wed,  5 Nov 2025 18:57:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 99CC7844AC
+ for <buildroot@uclibc.org>; Wed,  5 Nov 2025 19:49:09 +0000 (UTC)
 Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1vGigs-0001hw-Mh
- for buildroot@uclibc.org; Wed, 05 Nov 2025 19:57:06 +0100
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1vGjVD-0001kW-5i
+ for buildroot@uclibc.org; Wed, 05 Nov 2025 20:49:07 +0100
 X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
 From: Bernd Kuhls <bernd@kuhls.net>
-Date: Wed, 05 Nov 2025 19:56:40 +0100
-Message-ID: <pan$58bca$abfacec3$1d2c9e22$598e7f88@ID-313208.user.individual.net>
-References: <690ad065.5d0a0220.31ae0d.7dd8__29282.5266647682$1762316413$gmane$org@mx.google.com>
+Date: Wed, 05 Nov 2025 20:48:52 +0100
+Message-ID: <pan$c940$43b55e84$38b9a512$5ad699e5@ID-313208.user.individual.net>
+References: <20251104174835.1697415-1-giulio.benetti@benettiengineering.com>
+ <34c88dbb0a815bd29db6c764fac4b6d8__21982.3607987323$1762287750$gmane$org@free.fr>
 Mime-Version: 1.0
 User-Agent: Pan/0.162 (Pokrosvk)
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=kuhls.net
-Subject: Re: [Buildroot] [autobuild.buildroot.org] Daily results for
- 2025-11-04
+Subject: Re: [Buildroot] [PATCH] package/libnvme: bump to version 1.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,27 +69,20 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Wed, 05 Nov 2025 04:19:49 -0000 schrieb Buildroot Notifications:
+Am Tue, 04 Nov 2025 21:22:07 +0100 schrieb Julien Olivain via buildroot:
 
->  powerpc64   |      libsoundtouch-2.4.0       | NOK | https://
-autobuild.buildroot.org/results/16788317badcfdb3d1973dc3f1bb89ea05d3fe10 
-|     
+> On 04/11/2025 18:48, Giulio Benetti wrote:
+>> For release note, see:
+>> https://github.com/linux-nvme/libnvme/releases/tag/v1.16
+>> 
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> 
+> Applied to master, thanks.
 
 Hi,
 
-I cannot reproduce the build error:
-
-ERROR: while checking hashes from package/libsoundtouch/libsoundtouch.hash
-ERROR: soundtouch-2.4.0.tar.gz has wrong sha256 hash:
-ERROR: expected: 
-3dda3c9ab1e287f15028c010a66ab7145fa855dfa62763538f341e70b4d10abd
-ERROR: got     : 
-8f9fd11a2962a5db0876a5d04041d700ab727f77055c0d5b1b9c228a8bcbc434
-
-$ wget -q https://www.surina.net/soundtouch/soundtouch-2.4.0.tar.gz
-$ sha256sum soundtouch-2.4.0.tar.gz 
-3dda3c9ab1e287f15028c010a66ab7145fa855dfa62763538f341e70b4d10abd  
-soundtouch-2.4.0.tar.gz
+this bump causes build errors, reported upstream:
+https://github.com/linux-nvme/libnvme/issues/1089
 
 Regards, Bernd
 
