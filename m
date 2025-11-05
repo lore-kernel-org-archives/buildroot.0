@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43B09CEBF91
-	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 20:08:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8D24CEACEF
+	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 20:08:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 16F1341503;
-	Mon, 17 Nov 2025 20:08:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 96BDD41522;
+	Mon, 17 Nov 2025 20:08:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZrDqhMD5Ja4t; Mon, 17 Nov 2025 20:08:15 +0000 (UTC)
+ id WP_M8zPnNhcb; Mon, 17 Nov 2025 20:08:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2892E414FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B053414EA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2892E414FA;
-	Mon, 17 Nov 2025 20:08:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B52E5158
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:08:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9B053414EA;
+	Mon, 17 Nov 2025 20:08:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E42F158
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:08:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E2F7A83DA7
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:07:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4A47E6143D
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:07:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RN147Td5J6qL for <buildroot@buildroot.org>;
- Mon, 17 Nov 2025 20:07:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id b6RLt_SIF6cO for <buildroot@buildroot.org>;
+ Mon, 17 Nov 2025 20:07:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1BD183D13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FB2861438
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E1BD183D13
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:07:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3FB2861438
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:07:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E030B84000; Mon, 17 Nov 2025 20:07:52 +0000 (UTC)
+ id 3E2D581015; Mon, 17 Nov 2025 20:07:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 5 Nov 2025 16:49:53 +0100
+Date: Wed, 5 Nov 2025 17:02:40 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: cff6724a9ab14b8fca5ced499ed6e517b48376a7
-X-Git-Newrev: e28f5f0f374efcd70aa1a57a2cbb093f47611b06
+X-Git-Oldrev: be8da88137e83ec4e96e7b7525f78927c7043276
+X-Git-Newrev: ae9d0cb8b3f32904821a9f9f6da45e55ed10427c
 X-Patchwork-Hint: ignore
-Message-Id: <20251117200752.E030B84000@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/bind: drop
- unrecognized options
+Message-Id: <20251117200753.3E2D581015@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/libiconv: fix
+ build with gcc 15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,60 +66,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e28f5f0f374efcd70aa1a57a2cbb093f47611b06
+commit: https://git.buildroot.net/buildroot/commit/?id=ae9d0cb8b3f32904821a9f9f6da45e55ed10427c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-Buildroot commit c9515c8b63bc9bc84b52b731c2c72031acd240d2 bumped bind to
-9.18.28 which removed dnssec-keymgr:
-https://gitlab.isc.org/isc-projects/bind9/-/blob/v9.18.28/doc/notes/notes-9.18.0.rst?ref_type=tags&plain=1#L187
-
-but forgot to remove the configure option --with-python
-https://gitlab.isc.org/isc-projects/bind9/-/commit/98b3b93791777218c04a67ddaef22619162249f7
-https://gitlab.isc.org/isc-projects/bind9/-/commit/305ca032a0d3afd779b2b97bb36971e1072f0453
-
-Configure option --enable-epoll was also removed upstream in 9.18.16:
-https://gitlab.isc.org/isc-projects/bind9/-/commit/6b6076c882a00028197b04a827f6cf8e7a5369de
-
-Configure option --enable-backtrace was also removed upstream in 9.18.0:
-https://gitlab.isc.org/isc-projects/bind9/-/commit/e847591867cfe542c9e52d6176e0a2bb6e2ca875
+Fixes:
+https://autobuild.buildroot.net/results/387/3875466a80e57dfd96911a2166e496cf7d41bb69/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 9c0f6d2379b67a65e78359118cb7d2025b13d85f)
+(cherry picked from commit 8930ede00fd4e76a007af5b85c22e0b90a913fc8)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/bind/bind.mk | 10 ----------
- 1 file changed, 10 deletions(-)
+ ...-function-declaration-without-a-prototype.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 11730b6e7e..d137245ef9 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -30,9 +30,7 @@ BIND_AUTORECONF = YES
- BIND_CONF_OPTS = \
- 	--without-cmocka \
- 	--without-lmdb \
--	--enable-epoll \
- 	--disable-doh \
--	--disable-backtrace \
- 	--disable-static \
- 	--with-openssl=$(STAGING_DIR)/usr
- 
-@@ -95,14 +93,6 @@ else
- BIND_CONF_OPTS += --with-libxml2=no
- endif
- 
--# Used by dnssec-keymgr
--ifeq ($(BR2_PACKAGE_PYTHON_PLY),y)
--BIND_DEPENDENCIES += host-python-ply
--BIND_CONF_OPTS += --with-python=$(HOST_DIR)/bin/python
--else
--BIND_CONF_OPTS += --with-python=no
--endif
--
- ifeq ($(BR2_PACKAGE_READLINE),y)
- BIND_DEPENDENCIES += readline
- else
+diff --git a/package/libiconv/0001-Fix-a-clang-warning-a-function-declaration-without-a-prototype.patch b/package/libiconv/0001-Fix-a-clang-warning-a-function-declaration-without-a-prototype.patch
+new file mode 100644
+index 0000000000..f859f7e014
+--- /dev/null
++++ b/package/libiconv/0001-Fix-a-clang-warning-a-function-declaration-without-a-prototype.patch
+@@ -0,0 +1,34 @@
++From: Bruno Haible <bruno@clisp.org>
++Date: Sun, 29 Jan 2023 19:07:21 +0000 (+0100)
++Subject: Fix a clang warning "a function declaration without a prototype...".
++X-Git-Tag: v1.18~57
++X-Git-Url: https://gitweb.git.savannah.gnu.org/gitweb/?p=libiconv.git;a=commitdiff_plain;h=e46dee2f581c1167137bcd045e114e96a9f00483
++
++Fix a clang warning "a function declaration without a prototype...".
++
++* lib/loop_wchar.h (mbrtowc): Don't declare. Drop portability to BeOS.
++
++Upstream: https://gitweb.git.savannah.gnu.org/gitweb/?p=libiconv.git;a=commitdiff;h=e46dee2f581c1167137bcd045e114e96a9f00483
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++
++diff --git a/lib/loop_wchar.h b/lib/loop_wchar.h
++index b3edc29..9eb508e 100644
++--- a/lib/loop_wchar.h
+++++ b/lib/loop_wchar.h
++@@ -1,5 +1,5 @@
++ /*
++- * Copyright (C) 2000-2002, 2005-2006, 2008-2009, 2011 Free Software Foundation, Inc.
+++ * Copyright (C) 2000-2002, 2005-2006, 2008-2009, 2011, 2023 Free Software Foundation, Inc.
++  * This file is part of the GNU LIBICONV Library.
++  *
++  * The GNU LIBICONV Library is free software; you can redistribute it
++@@ -36,7 +36,6 @@
++ # include <wchar.h>
++ # define BUF_SIZE 64  /* assume MB_LEN_MAX <= 64 */
++   /* Some systems, like BeOS, have multibyte encodings but lack mbstate_t.  */
++-  extern size_t mbrtowc ();
++ # ifdef mbstate_t
++ #  define mbrtowc(pwc, s, n, ps) (mbrtowc)(pwc, s, n, 0)
++ #  define mbsinit(ps) 1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
