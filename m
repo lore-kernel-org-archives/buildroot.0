@@ -1,75 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B35DCCF9F8
-	for <buildroot@archiver.kernel.org>; Wed,  5 Nov 2025 18:17:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95120CCFA1B
+	for <buildroot@archiver.kernel.org>; Wed,  5 Nov 2025 18:51:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 27E6B8290B;
-	Wed,  5 Nov 2025 18:17:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 42BB4613A3;
+	Wed,  5 Nov 2025 18:51:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3yoCTuekjGAc; Wed,  5 Nov 2025 18:17:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mN0vDTfatPTa; Wed,  5 Nov 2025 18:51:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59BD584434
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EAB461147
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 59BD584434;
-	Wed,  5 Nov 2025 18:17:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 22579B00
- for <buildroot@buildroot.org>; Wed,  5 Nov 2025 18:17:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4EAB461147;
+	Wed,  5 Nov 2025 18:51:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id AC3E8462
+ for <buildroot@buildroot.org>; Wed,  5 Nov 2025 18:51:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B60C34121A
- for <buildroot@buildroot.org>; Wed,  5 Nov 2025 18:17:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9DDFE40EE0
+ for <buildroot@buildroot.org>; Wed,  5 Nov 2025 18:51:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IQOxZstP_mEL for <buildroot@buildroot.org>;
- Wed,  5 Nov 2025 18:17:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bjzgVeClP0T3 for <buildroot@buildroot.org>;
+ Wed,  5 Nov 2025 18:51:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3749B40304
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3749B40304
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4861C40A18
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4861C40A18
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3749B40304
- for <buildroot@buildroot.org>; Wed,  5 Nov 2025 18:17:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4861C40A18
+ for <buildroot@buildroot.org>; Wed,  5 Nov 2025 18:51:52 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0d15.dip0.t-ipconnect.de [91.58.13.21])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 86128A4C0C4D
- for <buildroot@buildroot.org>; Wed,  5 Nov 2025 19:17:42 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:46594)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id F2677A4C0F46;
+ Wed,  5 Nov 2025 19:51:49 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:36282)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vGi4j-000000000fY-44iK
- for buildroot@buildroot.org; Wed, 05 Nov 2025 18:17:42 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vGibl-000000006mh-2f1P;
+ Wed, 05 Nov 2025 18:51:49 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed,  5 Nov 2025 19:17:41 +0100
-Message-ID: <20251105181741.1333777-1-bernd@kuhls.net>
+Cc: Laurent Vivier <laurent@vivier.eu>
+Date: Wed,  5 Nov 2025 19:51:49 +0100
+Message-ID: <20251105185149.1601939-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202506031021; t=1762366662;
- bh=upBOZqJsw3vPYrbmUNZmpL2i0R2aGP+npj5dU7HvS4M=;
- h=From:To:Subject:Date:From;
- b=HYIB33tjGdB3zhCISV2FsGtVRUGJ38+VsGqy+6zBYnsA8R/+kA8Nrq62N93Yn665p
- 67JFT/zbHk3H8kn+9w66y2B1vA0sb3cIBrMob6lQpd3NmTBAn6HFRq2QrKi6zF4xcx
- HmUPb0e+JgbQsidfkD0rUOZBajawspUwcu9e9AXZo9WRCc17E9SDmTHmJpvdRTXJA7
- MrNLKUH7cOsHMoQshXv8cf3HAiXl0qFqlpIZOGh+GtlSIbwPBbkULEDUfke4i+HP4b
- qVxg65qAXc/iZpQYDdnrCgZupCRc5nvkWtuF+/8L1RaxYxc6m6FUYhLdsnI+nnsnNf
- 77rSb8uzGaVXg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ s=kas202506031021; t=1762368710;
+ bh=09In0m3l5YPobtD0sHsOa6F9Qvt410flXiQy2wvnoeM=;
+ h=From:To:Cc:Subject:Date:From;
+ b=JwmebEkgAfCK2uH2a6gcLvMBouIBNOOUTGBdmqbymQh/+kJCkiVSWszYOAdFioMac
+ Roqd4gP6CsfUnwa2RKhM/EQ0+tBpnrf5uKUiRKWsMjLd4J1zrqJ1As2j1wGDPYba7s
+ ZIzxmnaJitgJgiBTBZ6L9BKc/Bg/8Ro7Jyb56tVqamY01lOL/BRUinNzuN/oVpgGr8
+ CnGo7Fc7m5pwMP8+J49AbxwcyF92qu9fdBbev0L3IXhDbIj4yEKHnQqllR5bWFjsnF
+ ARMP3zJYoFfT9ngQYpgt7v7/Wj1LM9mETIDKRL85nSD+ClHnoEDy2Ful/oUPK1yP26
+ TFczyCtiuTn9g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=HYIB33tj
-Subject: [Buildroot] [PATCH 1/1] package/uboot-tools: add dependency to
- gnutls for mkeficapsule
+ header.s=kas202506031021 header.b=JwmebEkg
+Subject: [Buildroot] [PATCH 1/1] package/nvme: needs dynamic library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,45 +86,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit 14a0169714cd5c35be40faadc066412f144bc1a6 added gnutls
-as dependency to BR2_PACKAGE_UBOOT_TOOLS_MKEFICAPSULE in uboot-tools.mk
-without adding the dependency and its reverse dependencies to the
-Config.in causing a build error:
+Buildroot commit f75faf43506e5090857eb4a9d876d430ff34a972 bumped nvme
+from 1.12 to 2.15 which depends on dynamic library:
 
-Makefile:578: *** gnutls is in the dependency chain of uboot-tools that
- has added it to its _DEPENDENCIES variable without selecting it or
- depending on it from Config.in.  Stop.
+../libnvme-wrap.c:8:10: fatal error: dlfcn.h: No such file or directory
+    8 | #include <dlfcn.h>
 
 Fixes:
-https://autobuild.buildroot.net/results/39d/39db5ae9aad95e4976c3d8a40aca95b26568f8ea/
+https://autobuild.buildroot.net/results/5bc/5bccbbd7ad4ce4a6898f6bcfd0a92c09e61324ca/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/uboot-tools/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/nvme/Config.in      | 5 +++++
+ package/petitboot/Config.in | 2 +-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
-index e8bbf3a16e..1e9129d223 100644
---- a/package/uboot-tools/Config.in
-+++ b/package/uboot-tools/Config.in
-@@ -68,12 +68,17 @@ config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE
- 
- config BR2_PACKAGE_UBOOT_TOOLS_MKEFICAPSULE
- 	bool "mkeficapsule"
-+	depends on !BR2_STATIC_LIBS # gnutls
-+	depends on BR2_USE_WCHAR # gnutls
+diff --git a/package/nvme/Config.in b/package/nvme/Config.in
+index 16b8726144..a27ddf50a9 100644
+--- a/package/nvme/Config.in
++++ b/package/nvme/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_NVME
+ 	bool "nvme"
++	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	depends on BR2_USE_MMU # libnvme
+ 	select BR2_PACKAGE_LIBNVME
  	help
- 	  Install the mkeficapsule tool on the target system
+@@ -7,3 +8,7 @@ config BR2_PACKAGE_NVME
+ 	  Express (optimized PCI Express SSD interface) devices.
  
- 	  The mkeficapsule tool from Das U-Boot bootloader, which allows
- 	  generation of UEFI capsule binaries.
- 
-+comment "mkeficapsule https support needs a toolchain w/ wchar, dynamic library"
-+	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
+ 	  https://github.com/linux-nvme/nvme-cli
 +
- config BR2_PACKAGE_UBOOT_TOOLS_MKENVIMAGE
- 	bool "mkenvimage"
- 	help
++comment "nvme needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++	depends on BR2_USE_MMU
+diff --git a/package/petitboot/Config.in b/package/petitboot/Config.in
+index 50d5a4da70..76cbbe9c6d 100644
+--- a/package/petitboot/Config.in
++++ b/package/petitboot/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_PETITBOOT
+ 	depends on BR2_PACKAGE_KEXEC_ARCH_SUPPORTS || BR2_PACKAGE_KEXEC_LITE_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU # lvm2, agetty
+ 	depends on BR2_USE_WCHAR # elfutils, kexec-lite
+-	depends on !BR2_STATIC_LIBS # elfutils, kexec-lite, lvm2
++	depends on !BR2_STATIC_LIBS # elfutils, kexec-lite, lvm2, nvme
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils, kexec-lite, lvm2
+ 	depends on BR2_PACKAGE_HAS_UDEV
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 || !BR2_PACKAGE_KEXEC_ARCH_SUPPORTS # kexec
 -- 
 2.47.3
 
