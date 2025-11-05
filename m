@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10C76CCF9F8
-	for <buildroot@archiver.kernel.org>; Wed,  5 Nov 2025 20:50:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9821CCF9F8
+	for <buildroot@archiver.kernel.org>; Wed,  5 Nov 2025 20:50:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BA93D613F9;
-	Wed,  5 Nov 2025 20:50:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OBDkkxcFRm8B; Wed,  5 Nov 2025 20:50:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30A9A60F5C
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 30A9A60F5C;
-	Wed,  5 Nov 2025 20:50:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 46B5F4C6
- for <buildroot@buildroot.org>; Wed,  5 Nov 2025 20:50:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 38BEC83F5E
- for <buildroot@buildroot.org>; Wed,  5 Nov 2025 20:50:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 967A8840A9;
+	Wed,  5 Nov 2025 20:50:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g0CSFDmJHswf for <buildroot@buildroot.org>;
- Wed,  5 Nov 2025 20:50:13 +0000 (UTC)
+ id iJ-CeazMMh3j; Wed,  5 Nov 2025 20:50:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A49C8453C
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3A49C8453C;
+	Wed,  5 Nov 2025 20:50:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9C18D4C6
+ for <buildroot@buildroot.org>; Wed,  5 Nov 2025 20:50:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 82A034100D
+ for <buildroot@buildroot.org>; Wed,  5 Nov 2025 20:50:26 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id F5UiL85im1QS for <buildroot@buildroot.org>;
+ Wed,  5 Nov 2025 20:50:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BD60A80893
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD60A80893
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 09E7140FC2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09E7140FC2
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BD60A80893
- for <buildroot@buildroot.org>; Wed,  5 Nov 2025 20:50:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 09E7140FC2
+ for <buildroot@buildroot.org>; Wed,  5 Nov 2025 20:50:24 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0d15.dip0.t-ipconnect.de [91.58.13.21])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id D4C5EA4C1087
- for <buildroot@buildroot.org>; Wed,  5 Nov 2025 21:48:22 +0100 (CET)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 24E1EA4C108B
+ for <buildroot@buildroot.org>; Wed,  5 Nov 2025 21:48:23 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:51230)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vGkQY-000000001uY-1ohC
+ (envelope-from <bernd@kuhls.net>) id 1vGkQY-000000001uY-2bDw
  for buildroot@buildroot.org; Wed, 05 Nov 2025 20:48:22 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed,  5 Nov 2025 21:48:12 +0100
-Message-ID: <20251105204818.2096762-10-bernd@kuhls.net>
+Date: Wed,  5 Nov 2025 21:48:13 +0100
+Message-ID: <20251105204818.2096762-11-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251105204818.2096762-1-bernd@kuhls.net>
 References: <20251105204818.2096762-1-bernd@kuhls.net>
@@ -54,22 +54,22 @@ MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202506031021; t=1762375702;
- bh=mBi047AyYt2t27bla8KlAHexul4ZMHUii5HvWEaOCLg=;
+ s=kas202506031021; t=1762375703;
+ bh=OaQB47VFWfDkHtd+K89+QxH/z78cv2AzACOKImI+R8g=;
  h=From:To:Subject:Date:In-Reply-To:From;
- b=tqdK55RdjsYUjdYbVcNibtxLePmFRK6vBBUp48n0k8FCfRZd/DBLjpz86RWAh9pNn
- tNDCg7O5ivLwZwSLYkHIM+V1H60hurRWsVhnradfDIkyyOhx846yoSionJZE7ZpgU3
- 50HHOF58V/0kCwjfO7XHT1YmIqz7yhrX8e58nip2lNop1kzVBJNJ68ew0PJoZ02BR+
- nqYFT1HQ91pC6+5D7O92nNmYYfHP2eKz5itJrPTDQZ8Cz0vCEtzadSfCfnrw6HwXdW
- /KgxcuiKQcvJipsWs3OjoEv6zu0Yr/RjhPfjCDQN8w7uQAjvngcuaB6YpGWAju5Lgc
- m9RPfCkhoIy0Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=IwM56tlPbiHLrsIQUkczeOmBwKQ8tuFLwxceGUmyNX7uePcvJRbQcSD13ZJ2PbIkg
+ ZUQyLOUwOa7YFkwFd8Hw3Fqf6FtPgo6gw6T9+qfCxlA1X/oduq9OzB9gnTznZf57aq
+ 0SM2g28KsMw64iDxvamrhkNxd5KkZnl1z1WhdKPHrwdta3YDlfYzAlB6VtEo5/WgI4
+ H3w8ke0ujACQNmSu2s46w1ra1dej5k2ABSEIOWNEQwr46GiGqXjOceWPJoEaql/h1E
+ b95UdTwx/2N4r/tI58pf1nkwfBg5AuyUMmPf6IOvUNJyEplEKm7wvxbcIYQnMh7ImX
+ poOxeyozwXsiA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=tqdK55Rd
-Subject: [Buildroot] [PATCH v2 09/12] package/expect: remove package
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=IwM56tlP
+Subject: [Buildroot] [PATCH v2 10/12] package/mongrel2: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,287 +86,384 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Package is unmaintained and causes build errors with gcc >= 14.x:
-https://sourceforge.net/p/expect/bugs/107
+mongrel2 is incompatible with MbedTLS 3.6 and was removed from Debian
+stable/testing:
+https://tracker.debian.org/pkg/mongrel2
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1075866
+
+Upstream report from 2023 exists:
+https://github.com/mongrel2/mongrel2/issues/359
+but went unanswered, the last upstream commit was in Dec 2021:
+https://github.com/mongrel2/mongrel2/commits/master/
+
+Since no other package uses mongrel2 we can safely remove this
+unmaintained package.
 
 Fixes:
-https://autobuild.buildroot.net/results/425/425dadaa4a75eae9331351172839402a197749a5/
+https://autobuild.buildroot.net/results/6c1/6c17827d21135886b1f4822174a4a963ca6325bf/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .checkpackageignore                           |   2 -
- Config.in.legacy                              |   6 +
- package/Config.in                             |   1 -
- .../0001-enable-cross-compilation.patch       | 120 ------------------
- .../0002-allow-tcl-build-directory.patch      |  34 -----
- package/expect/Config.in                      |   7 -
- package/expect/expect.hash                    |   4 -
- package/expect/expect.mk                      |  21 ---
- 8 files changed, 6 insertions(+), 189 deletions(-)
- delete mode 100644 package/expect/0001-enable-cross-compilation.patch
- delete mode 100644 package/expect/0002-allow-tcl-build-directory.patch
- delete mode 100644 package/expect/Config.in
- delete mode 100644 package/expect/expect.hash
- delete mode 100644 package/expect/expect.mk
+ .checkpackageignore                           |  2 -
+ Config.in.legacy                              |  6 ++
+ DEVELOPERS                                    |  3 -
+ package/Config.in                             |  1 -
+ package/mongrel2/0001-Do-not-run-tests.patch  | 45 -----------
+ ...-Fix-Makefiles-for-cross-compilation.patch | 78 -------------------
+ .../0003-fix-build-with-gcc-4.8.patch         | 62 ---------------
+ package/mongrel2/Config.in                    | 33 --------
+ package/mongrel2/mongrel2.hash                |  6 --
+ package/mongrel2/mongrel2.mk                  | 26 -------
+ 10 files changed, 6 insertions(+), 256 deletions(-)
+ delete mode 100644 package/mongrel2/0001-Do-not-run-tests.patch
+ delete mode 100644 package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch
+ delete mode 100644 package/mongrel2/0003-fix-build-with-gcc-4.8.patch
+ delete mode 100644 package/mongrel2/Config.in
+ delete mode 100644 package/mongrel2/mongrel2.hash
+ delete mode 100644 package/mongrel2/mongrel2.mk
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index ecfd5a7554..e3f8345581 100644
+index e3f8345581..41310d1895 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -364,8 +364,6 @@ package/exim/0001-Build-buildconfig-for-the-host.patch lib_patch.Upstream
- package/exim/0002-Don-t-make-backup-copies-of-installed-files.patch lib_patch.Upstream
- package/exim/0003-Skip-version-check-and-symlink-installation.patch lib_patch.Upstream
- package/exim/S86exim lib_sysv.Indent lib_sysv.Variables
--package/expect/0001-enable-cross-compilation.patch lib_patch.Upstream
--package/expect/0002-allow-tcl-build-directory.patch lib_patch.Upstream
- package/fail2ban/S60fail2ban Shellcheck lib_sysv.Variables
- package/fakedate/fakedate Shellcheck
- package/falcosecurity-libs/0001-cmake-Permit-setting-GRPC_CPP_PLUGIN.patch lib_patch.Upstream
+@@ -703,8 +703,6 @@ package/mini-snmpd/0001-linux.c-fix-musl-build.patch lib_patch.Upstream
+ package/minidlna/S60minidlnad Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/minissdpd/S50minissdpd Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/modem-manager/S44modem-manager Shellcheck lib_sysv.Variables
+-package/mongrel2/0001-Do-not-run-tests.patch lib_patch.Upstream
+-package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch lib_patch.Upstream
+ package/monit/0001-Do-not-force-building-a-statically-linked-binary.patch lib_patch.Upstream
+ package/mono-gtksharp3/0001-Fixes-MONO_PROFILE_ENTER_LEAVE-undeclared.patch lib_patch.Upstream
+ package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch lib_patch.Upstream
 diff --git a/Config.in.legacy b/Config.in.legacy
-index ce135a0c26..8961bf6fab 100644
+index 8961bf6fab..df57ff95a3 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2025.11"
  
-+config BR2_PACKAGE_EXPECT
-+	bool "expect has been removed"
++config BR2_PACKAGE_MONGREL2
++	bool "mongrel2 has been removed"
 +	select BR2_LEGACY
 +	help
-+	  expect is unmaintained and has been removed
++	  mongrel2 is incompatible with MbedTLS 3.6 and has been removed
 +
- config BR2_PACKAGE_BCTOOLBOX
- 	bool "bctoolbox has been removed"
+ config BR2_PACKAGE_EXPECT
+ 	bool "expect has been removed"
  	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b9e7a32ea5..a1576de92d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2136,9 +2136,6 @@ F:	package/python-gunicorn/
+ F:	support/testing/tests/package/sample_python_flask.py
+ F:	support/testing/tests/package/test_python_flask.py
+ 
+-N:	Lionel Orry <lionel.orry@gmail.com>
+-F:	package/mongrel2/
+-
+ N:	Lothar Felten <lothar.felten@gmail.com>
+ F:	board/bananapi/bananapi-m2-ultra/
+ F:	board/beagleboard/beaglebone/
 diff --git a/package/Config.in b/package/Config.in
-index 6ff8d93bc5..f07265f731 100644
+index f07265f731..b74b577f8a 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1524,7 +1524,6 @@ endif
- 	source "package/tcl/Config.in"
- if BR2_PACKAGE_TCL
- menu "Tcl libraries/modules"
--	source "package/expect/Config.in"
- 	source "package/tcllib/Config.in"
- endmenu
- endif
-diff --git a/package/expect/0001-enable-cross-compilation.patch b/package/expect/0001-enable-cross-compilation.patch
+@@ -2558,7 +2558,6 @@ endif
+ 	source "package/minissdpd/Config.in"
+ 	source "package/mjpg-streamer/Config.in"
+ 	source "package/modem-manager/Config.in"
+-	source "package/mongrel2/Config.in"
+ 	source "package/mosh/Config.in"
+ 	source "package/mosquitto/Config.in"
+ 	source "package/mrouted/Config.in"
+diff --git a/package/mongrel2/0001-Do-not-run-tests.patch b/package/mongrel2/0001-Do-not-run-tests.patch
 deleted file mode 100644
-index fd31a01f11..0000000000
---- a/package/expect/0001-enable-cross-compilation.patch
+index 3b72aef3c5..0000000000
+--- a/package/mongrel2/0001-Do-not-run-tests.patch
 +++ /dev/null
-@@ -1,120 +0,0 @@
--From: Andrew Ruder <andrew.ruder@elecsyscorp.com>
--Subject: [PATCH] enable cross compilation for expect
+@@ -1,45 +0,0 @@
+-From 3cbef2195533f357c8a80c2840108662461273b7 Mon Sep 17 00:00:00 2001
+-From: Lionel Orry <lionel.orry@gmail.com>
+-Date: Wed, 27 Mar 2013 14:48:19 +0100
+-Subject: [PATCH] Do not run tests.
 -
--This patch was created by running ./configure on a modern Linux machine
--and inserting the results into the cross compilation section of
--each AC_MSG_CHECKING that bombed out with an error.
+-This patch is specific to cross-compiled environments and avoids running
+-the tests on the host. It is not meant to be applied upstream.
 -
--Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
+-Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
+-[Dario: make the patch to be applied with fuzz factor 0]
+-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ----
+- Makefile            | 2 +-
+- tools/m2sh/Makefile | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
 -
--Index: expect-5.45/configure.in
--===================================================================
----- expect-5.45.orig/configure.in	2013-11-14 07:59:58.732100595 -0600
--+++ expect-5.45/configure.in	2013-11-14 07:59:58.732100595 -0600
--@@ -481,7 +481,7 @@
-- ,
-- 	AC_MSG_RESULT(no)
-- ,
---	AC_MSG_ERROR([Expect can't be cross compiled])
--+	AC_MSG_RESULT(no)
-- )
+-diff --git a/Makefile b/Makefile
+-index 7dc4089..ca72630 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -18,7 +18,7 @@
+- TESTS=$(patsubst %.c,%,${TEST_SRC})
+- MAKEOPTS=OPTFLAGS="${CFLAGS} ${NOEXTCFLAGS} ${OPTFLAGS}" LDFLAGS="${LDFLAGS}" LIBS="${LIBS}" DESTDIR="${DESTDIR}" PREFIX="${PREFIX}"
 - 
-- AC_MSG_CHECKING([if any value exists for WNOHANG])
--@@ -506,7 +506,8 @@
-- 	AC_MSG_RESULT(no)
-- 	AC_DEFINE(WNOHANG_BACKUP_VALUE, 1)
-- ,
---	AC_MSG_ERROR([Expect can't be cross compiled])
--+	AC_MSG_RESULT(yes)
--+	AC_DEFINE(WNOHANG_BACKUP_VALUE, 1)
-- )
+--all: bin/mongrel2 tests m2sh procer
+-+all: bin/mongrel2 m2sh procer filters config_modules
 - 
-- #
--@@ -574,7 +575,7 @@
-- 	AC_DEFINE(REARM_SIG)
-- ,
-- 	AC_MSG_RESULT(no)
---, AC_MSG_WARN([Expect can't be cross compiled])
--+, AC_MSG_RESULT(no)
-- )
+- ${OBJECTS_NOEXT}: CFLAGS += ${NOEXTCFLAGS}
+- ${OBJECTS}: | builddirs
+-diff --git a/tools/m2sh/Makefile b/tools/m2sh/Makefile
+-index b50d8a0..334e4da 100644
+---- a/tools/m2sh/Makefile
+-+++ b/tools/m2sh/Makefile
+-@@ -12,7 +12,7 @@
 - 
-- # HPUX7 has trouble with the big cat so split it
--@@ -725,7 +726,7 @@
-- ,
--         AC_MSG_RESULT(no)
-- ,
---	AC_MSG_ERROR([Expect can't be cross compiled])
--+	AC_MSG_RESULT(no)
-- )
+- $(RAGEL_OBJECTS): CFLAGS += -Wno-unused-const-variable -Wimplicit-fallthrough=0 -Wno-unused-parameter
 - 
-- # mach systems have include files for unimplemented features
--@@ -749,7 +750,9 @@
-- ,
--         AC_MSG_RESULT(no)
-- ,
---	AC_MSG_ERROR([Expect can't be cross compiled])
--+    AC_DEFINE(HAVE_TERMIO)
--+    PTY_TYPE=termios
--+	AC_MSG_RESULT(yes)
-- )
+--all: ../lemon/lemon tests build/m2sh
+-+all: ../lemon/lemon build/m2sh
 - 
--   # now check for the new style ttys (not yet posix)
--@@ -771,7 +774,9 @@
--   ,
--         AC_MSG_RESULT(no)
--   ,
---	AC_MSG_ERROR([Expect can't be cross compiled])
--+        AC_DEFINE(HAVE_TERMIOS)
--+        PTY_TYPE=termios
--+        AC_MSG_RESULT(yes)
--   )
-- fi
-- 
--@@ -794,7 +799,7 @@
-- ,
-- 	AC_MSG_RESULT(no)
-- ,
---	AC_MSG_ERROR([Expect can't be cross compiled])
--+	AC_MSG_RESULT(no)
-- )
-- 
-- AC_MSG_CHECKING([if TIOCGWINSZ in termios.h])
--@@ -816,7 +821,7 @@
-- ,
-- 	AC_MSG_RESULT(no)
-- ,
---	AC_MSG_ERROR([Expect can't be cross compiled])
--+	AC_MSG_RESULT(no)
-- )
-- 
-- # finally check for Cray style ttys
--@@ -837,7 +842,7 @@
-- ,
-- 	AC_MSG_RESULT(no)
-- ,
---	AC_MSG_ERROR([Expect can't be cross compiled])
--+	AC_MSG_RESULT(no)
-- )
-- 
-- #
--@@ -869,7 +874,9 @@
-- AC_HAVE_FUNCS(getpty)
-- 
-- # following test sets SETPGRP_VOID if setpgrp takes 0 args, else takes 2
---AC_FUNC_SETPGRP
--+cat >>expect_cf.h <<\_ACEOF
--+#define SETPGRP_VOID 1
--+_ACEOF
-- 
-- #
-- # check for timezones
--@@ -889,7 +896,7 @@
-- 	AC_MSG_RESULT(yes),
-- 	AC_MSG_RESULT(no)
-- ,
---	AC_MSG_ERROR([Expect can't be cross compiled])
--+	AC_MSG_RESULT(yes)
-- )
-- 
-- 
-diff --git a/package/expect/0002-allow-tcl-build-directory.patch b/package/expect/0002-allow-tcl-build-directory.patch
+- dev: CFLAGS=-g -Wall -Wextra -Isrc -I../../src $(OPTFLAGS)
+- dev: all
+--- 
+-1.8.1.4
+-
+diff --git a/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch b/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch
 deleted file mode 100644
-index 83ede7acb6..0000000000
---- a/package/expect/0002-allow-tcl-build-directory.patch
+index 1961f128ed..0000000000
+--- a/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch
 +++ /dev/null
-@@ -1,34 +0,0 @@
--From: Andrew Ruder <andrew.ruder@elecsyscorp.com>
--Subject: [PATCH] Allow tcl build directory for linking
+@@ -1,78 +0,0 @@
+-From 298356c44a7df2b34c4e307c531d2010e2cb4b79 Mon Sep 17 00:00:00 2001
+-From: Lionel Orry <lionel.orry@gmail.com>
+-Date: Wed, 27 Mar 2013 15:56:56 +0100
+-Subject: [PATCH] Fix Makefiles for cross-compilation
 -
--Some small changes to use TCL_BUILD_LIB_SPEC instead of TCL_LIB_SPEC for
--linking against tcl directly out of its build directory.
+-The CFLAGS handling in mongrel2 is really messy and it is hard to make
+-it behave correctly with cross-compiling environments. This patch
+-restricts the Makefiles syntax to GNU Make, but help cross-compiling.
 -
--Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
+-This is not meant to be applied upstream.
+-
+-Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
+-[Fabrice: refresh for 1.12.2]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ----
+- Makefile                      | 2 +-
+- tools/config_modules/Makefile | 2 +-
+- tools/filters/Makefile        | 2 +-
+- tools/m2sh/Makefile           | 2 +-
+- tools/procer/Makefile         | 2 +-
+- 5 files changed, 5 insertions(+), 5 deletions(-)
 -
--Index: expect-5.45/Makefile.in
--===================================================================
----- expect-5.45.orig/Makefile.in	2013-11-14 07:59:58.732100595 -0600
--+++ expect-5.45/Makefile.in	2013-11-14 07:59:58.732100595 -0600
--@@ -393,7 +393,7 @@
-- 		@LDFLAGS_DEFAULT@ \
-- 		-o expect exp_main_exp.o \
-- 		@EXP_BUILD_LIB_SPEC@ \
---		@TCL_LIB_SPEC@ \
--+		@TCL_BUILD_LIB_SPEC@ \
-- 		@TCL_DL_LIBS@ @PKG_LIBS@ @MATH_LIBS@ \
-- 		@TCL_CC_SEARCH_FLAGS@ \
-- 		@EXP_CC_SEARCH_FLAGS@
--Index: expect-5.45/tclconfig/tcl.m4
--===================================================================
----- expect-5.45.orig/tclconfig/tcl.m4	2010-11-09 13:42:10.000000000 -0600
--+++ expect-5.45/tclconfig/tcl.m4	2013-11-14 08:02:08.424100580 -0600
--@@ -412,6 +412,7 @@
--     AC_SUBST(TCL_LIB_FILE)
--     AC_SUBST(TCL_LIB_FLAG)
--     AC_SUBST(TCL_LIB_SPEC)
--+    AC_SUBST(TCL_BUILD_LIB_SPEC)
+-diff --git a/Makefile b/Makefile
+-index 4e89c33..2f549a8 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -1,5 +1,5 @@
+- CFLAGS?=-g -O2
+--CFLAGS += -Wall -Wextra -Wno-implicit-fallthrough -Wno-unused-const-variable -I./src -DNDEBUG -D_FILE_OFFSET_BITS=64 -pthread
+-+override CFLAGS += -Wall -Wextra -Wno-implicit-fallthrough -Wno-unused-const-variable -I./src -DNDEBUG -D_FILE_OFFSET_BITS=64 -pthread
+- CFLAGS += ${OPTFLAGS}
+- LIBS+=-lzmq -ldl -lsqlite3 -lmbedtls -lmbedx509 -lmbedcrypto
+- PREFIX?=/usr/local
+-diff --git a/tools/config_modules/Makefile b/tools/config_modules/Makefile
+-index c2680d1..ada3169 100644
+---- a/tools/config_modules/Makefile
+-+++ b/tools/config_modules/Makefile
+-@@ -1,5 +1,5 @@
+- PREFIX?=/usr/local
+--CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
+-+override CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
+- LDFLAGS=$(OPTLIBS)
 - 
--     AC_SUBST(TCL_STUB_LIB_FILE)
--     AC_SUBST(TCL_STUB_LIB_FLAG)
-diff --git a/package/expect/Config.in b/package/expect/Config.in
+- MONGO_SRC = mongo-c-driver/src/bson.c \
+-diff --git a/tools/filters/Makefile b/tools/filters/Makefile
+-index 6505ad5..a968ef6 100644
+---- a/tools/filters/Makefile
+-+++ b/tools/filters/Makefile
+-@@ -1,5 +1,5 @@
+- PREFIX?=/usr/local
+--CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -g -fPIC -shared -nostartfiles -L../../build
+-+override CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -g -fPIC -shared -nostartfiles -L../../build
+- LDFLAGS=$(OPTLIBS)
+- 
+- all: null.so rewrite.so sendfile.so
+-diff --git a/tools/m2sh/Makefile b/tools/m2sh/Makefile
+-index b50d8a0..cc00062 100644
+---- a/tools/m2sh/Makefile
+-+++ b/tools/m2sh/Makefile
+-@@ -1,4 +1,4 @@
+--CFLAGS=-DNDEBUG -DNO_LINENOS -pthread -g -I../../src -Isrc -Wall $(OPTFLAGS)
+-+override CFLAGS=-DNDEBUG -DNO_LINENOS -pthread -g -I../../src -Isrc -Wall $(OPTFLAGS)
+- LIBS=-lzmq -lsqlite3 ../../build/libm2.a $(OPTLIBS)
+- 
+- PREFIX?=/usr/local
+-diff --git a/tools/procer/Makefile b/tools/procer/Makefile
+-index bb9aa31..d377f7f 100644
+---- a/tools/procer/Makefile
+-+++ b/tools/procer/Makefile
+-@@ -1,4 +1,4 @@
+--CFLAGS=-DNDEBUG -pthread -g -I../../src -Wall $(OPTFLAGS)
+-+override CFLAGS=-DNDEBUG -pthread -g -I../../src -Wall $(OPTFLAGS)
+- PREFIX?=/usr/local
+- LIBS?=-lzmq 
+- SOURCES=$(wildcard *.c)
+--- 
+-2.27.0
+-
+diff --git a/package/mongrel2/0003-fix-build-with-gcc-4.8.patch b/package/mongrel2/0003-fix-build-with-gcc-4.8.patch
 deleted file mode 100644
-index 67dfe643b2..0000000000
---- a/package/expect/Config.in
+index 996cd3246b..0000000000
+--- a/package/mongrel2/0003-fix-build-with-gcc-4.8.patch
 +++ /dev/null
-@@ -1,7 +0,0 @@
--config BR2_PACKAGE_EXPECT
--	bool "expect"
+@@ -1,62 +0,0 @@
+-From cc2dd3995dc9a9e6f0e705e11e791f3f3c7d7326 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 18 Jan 2022 22:41:36 +0100
+-Subject: [PATCH] fix build with gcc 4.8
+-
+-Drop "-Wno-unused-const-variable -Wimplicit-fallthrough=0" as
+-"-Wno-implicit-fallthrough -Wno-unused-const-variable" is already set in
+-CFLAGS. This will avoid the following build failure with gcc 4.8 raised
+-since version 1.13.0 and
+-https://github.com/mongrel2/mongrel2/commit/725209578599bd7784753d86aee34f6441ff78a5:
+-
+-arm-none-linux-gnueabi-gcc: error: unrecognized command line option '-Wimplicit-fallthrough=0'
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/de324b733e09057c87352220069fe65f6e535eb8
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Upstream: https://github.com/mongrel2/mongrel2/pull/354
+-[Dario: make the patch to be applied with fuzz factor 0]
+-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+----
+- Makefile            | 1 -
+- tools/m2sh/Makefile | 4 ++--
+- 2 files changed, 2 insertions(+), 3 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index f6627ed..fb8d028 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -22,7 +22,6 @@ all: bin/mongrel2 tests m2sh procer
+- 
+- ${OBJECTS_NOEXT}: CFLAGS += ${NOEXTCFLAGS}
+- ${OBJECTS}: | builddirs
+--$(RAGEL_OBJECTS): CFLAGS += -Wno-unused-const-variable -Wimplicit-fallthrough=0
+- 
+- .PHONY: builddirs
+- builddirs:
+-diff --git a/tools/m2sh/Makefile b/tools/m2sh/Makefile
+-index 83e7ae4..86364af 100644
+---- a/tools/m2sh/Makefile
+-+++ b/tools/m2sh/Makefile
+-@@ -10,7 +10,7 @@
+- LIB_OBJ=$(filter-out src/m2sh.o,${OBJECTS})
+- RAGEL_OBJECTS=src/lexer.o src/cli.o
+- 
+--$(RAGEL_OBJECTS): CFLAGS += -Wno-unused-const-variable -Wimplicit-fallthrough=0 -Wno-unused-parameter
+-+$(RAGEL_OBJECTS): CFLAGS += -Wno-unused-parameter
+- 
+- all: ../lemon/lemon build/m2sh
+- 
+-@@ -20,7 +20,7 @@
+- install: build/m2sh
+- 	install build/m2sh ${DESTDIR}${PREFIX}/bin
+- 
+--src/parser.o: CFLAGS += -Wno-unused-const-variable -Wno-unused-parameter
+-+src/parser.o: CFLAGS += -Wno-unused-parameter
+- 
+- build/libm2sh.a: ${LIB_OBJ}
+- 	mkdir -p build
+--- 
+-2.34.1
+-
+diff --git a/package/mongrel2/Config.in b/package/mongrel2/Config.in
+deleted file mode 100644
+index 60fee6f96d..0000000000
+--- a/package/mongrel2/Config.in
++++ /dev/null
+@@ -1,33 +0,0 @@
+-# mongrel2 uses {get,make,swap}context() functions, which are
+-# available in glibc for all architectures and in uClibc only for a
+-# subset of the architectures
+-config BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
+-	bool
+-	default y if BR2_TOOLCHAIN_USES_GLIBC
+-	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
+-		(BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || BR2_sparc || BR2_x86_64)
+-
+-comment "mongrel2 needs a uClibc or glibc toolchain w/ C++, threads, dynamic library"
+-	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
+-		!BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
+-
+-config BR2_PACKAGE_MONGREL2
+-	bool "mongrel2"
+-	depends on BR2_INSTALL_LIBSTDCPP # zeromq
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
+-	depends on !BR2_STATIC_LIBS # uses dlopen()
+-	depends on BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
+-	select BR2_PACKAGE_MBEDTLS
+-	select BR2_PACKAGE_SQLITE
+-	select BR2_PACKAGE_ZEROMQ
 -	help
--	  Expect is a tool for automating interactive applications
--	  such as telnet, ftp, passwd, fsck, rlogin, ssh, tip, etc.
+-	  Mongrel2 is an application, language, and network architecture
+-	  agnostic web server that focuses on web applications using
+-	  modern browser technologies.
 -
--	  https://core.tcl.tk/expect/
-diff --git a/package/expect/expect.hash b/package/expect/expect.hash
+-	  Mongrel2 supports 17 languages and platforms, HTTP, Flash
+-	  sockets, WebSockets, Long Polling, and many ways to deploy
+-	  and hack on it.
+-
+-	  http://www.mongrel2.org
+diff --git a/package/mongrel2/mongrel2.hash b/package/mongrel2/mongrel2.hash
 deleted file mode 100644
-index c4815abb07..0000000000
---- a/package/expect/expect.hash
+index f4f094ea03..0000000000
+--- a/package/mongrel2/mongrel2.hash
 +++ /dev/null
-@@ -1,4 +0,0 @@
--# From https://sourceforge.net/projects/expect/files/Expect/5.45.4/expect5.45.4.tar.gz.SHA256
--sha256  49a7da83b0bdd9f46d04a04deec19c7767bb9a323e40c4781f89caf760b92c34  expect5.45.4.tar.gz
--# Locally calculated
--sha256  b2415b17dc8d9a287f4509047ef5ac3436baef7ba7c50faef5222dcdf61a2bab  README
-diff --git a/package/expect/expect.mk b/package/expect/expect.mk
+@@ -1,6 +0,0 @@
+-# From https://mongrel2.org
+-sha1  6057f9cbfae41e2cdef1e0f715df3c1a4d3a1884  mongrel2-v1.13.0.tar.bz2
+-
+-# Locally computed
+-sha256  b6f1f50c9f65b605342d8792b1cc8a1c151105339030313b9825b6a68d400c10  mongrel2-v1.13.0.tar.bz2
+-sha256  eb6e2a2baa637d06f6aa762886fbc8939934eb5fdb0b3a5b3882f2a61e9a4357  LICENSE
+diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
 deleted file mode 100644
-index 44bf74af46..0000000000
---- a/package/expect/expect.mk
+index 07914ad0fe..0000000000
+--- a/package/mongrel2/mongrel2.mk
 +++ /dev/null
-@@ -1,21 +0,0 @@
+@@ -1,26 +0,0 @@
 -################################################################################
 -#
--# expect
+-# mongrel2
 -#
 -################################################################################
 -
--EXPECT_VERSION = 5.45.4
--EXPECT_SITE = https://sourceforge.net/projects/expect/files/Expect/$(EXPECT_VERSION)
--EXPECT_SOURCE = expect$(EXPECT_VERSION).tar.gz
--EXPECT_LICENSE = Public domain
--EXPECT_LICENSE_FILES = README
+-MONGREL2_VERSION = 1.13.0
+-MONGREL2_SOURCE = mongrel2-v$(MONGREL2_VERSION).tar.bz2
+-# Do not use the github helper here, the generated tarball is *NOT* the same
+-# as the one uploaded by upstream for the release.
+-MONGREL2_SITE = https://github.com/mongrel2/mongrel2/releases/download/v$(MONGREL2_VERSION)
+-MONGREL2_LICENSE = BSD-3-Clause
+-MONGREL2_LICENSE_FILES = LICENSE
+-MONGREL2_DEPENDENCIES = mbedtls sqlite zeromq
 -
--# 0001-enable-cross-compilation.patch
--EXPECT_AUTORECONF = YES
--EXPECT_DEPENDENCIES = tcl
--EXPECT_CONF_OPTS = --with-tcl=$(BUILD_DIR)/tcl-$(TCL_VERSION)/unix
+-define MONGREL2_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+-		PREFIX=/usr all
+-endef
 -
--# Since we don't want examples installed
--EXPECT_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-binaries
+-define MONGREL2_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+-		PREFIX=/usr DESTDIR=$(TARGET_DIR) install
+-endef
 -
--$(eval $(autotools-package))
+-$(eval $(generic-package))
 -- 
 2.47.3
 
