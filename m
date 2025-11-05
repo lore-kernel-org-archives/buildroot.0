@@ -4,73 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 761A9CCFA0D
-	for <buildroot@archiver.kernel.org>; Wed,  5 Nov 2025 19:55:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39DD8CCF9F8
+	for <buildroot@archiver.kernel.org>; Wed,  5 Nov 2025 20:02:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 217674100C;
-	Wed,  5 Nov 2025 19:55:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C6BA34118C;
+	Wed,  5 Nov 2025 20:02:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uarfsXqNONSz; Wed,  5 Nov 2025 19:55:54 +0000 (UTC)
+ id nhXHCZxIKPNk; Wed,  5 Nov 2025 20:02:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A1C34114E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E54F0411A3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3A1C34114E;
-	Wed,  5 Nov 2025 19:55:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 972F44C6
- for <buildroot@buildroot.org>; Wed,  5 Nov 2025 19:55:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E54F0411A3;
+	Wed,  5 Nov 2025 20:02:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5EF4BB00
+ for <buildroot@buildroot.org>; Wed,  5 Nov 2025 20:02:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 88C5B842C1
- for <buildroot@buildroot.org>; Wed,  5 Nov 2025 19:55:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 50FCC411AB
+ for <buildroot@buildroot.org>; Wed,  5 Nov 2025 20:02:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L8byw1A-4Nl4 for <buildroot@buildroot.org>;
- Wed,  5 Nov 2025 19:55:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E9B4B842B8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9B4B842B8
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E9B4B842B8
- for <buildroot@buildroot.org>; Wed,  5 Nov 2025 19:55:51 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 8C9ED2003AE;
- Wed,  5 Nov 2025 20:55:47 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 05 Nov 2025 20:55:47 +0100
-MIME-Version: 1.0
-Date: Wed, 05 Nov 2025 20:55:47 +0100
-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: buildroot@buildroot.org, Abelino Romo <abelino.romo@gmail.com>
-In-Reply-To: <20251105113208.3223645-1-fiona.klute@gmx.de>
-References: <20251105113208.3223645-1-fiona.klute@gmx.de>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <c6e4543c11969eb44f8526a06896a82d@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1762372549;
- bh=ppeDIFwl7ZRgNkErwQAhorvICtKVGO57FBJQq9MKphY=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=TTa5s7OsYtYe05rw+5LqUA6ndTcC8I4Mb7ub5/u7j7FRassZBhfxgOecCVFqAhvE2
- pkP3kV7gIOjR4vewL7xs8VJVsdqaY6b6RzPEgyj+VwYl+86MzrM0ZZMBGsdWflh9AZ
- 1qTfUCwgb4uLxHAI97hYIqTe75tyGOuG60RMsEdVInQhBeabm6Q1V+5RK2jpUnR4IN
- vasRkjxL0PAbW0prJX+HnOfsuLrrUOt4tHTtdSv7AR2NdZaQsAYdEjP5zl0RCO4Ij+
- tMOnMj/DXHZNDwAqOSWXCg5GwJTaPUf2MqPFEe+f3K8fqM2tZ1XXrOBJShgJucDeQ7
- zV5GmPEqheNvg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=TTa5s7Os
-Subject: Re: [Buildroot] [PATCH v4 1/1] package/tpm2-tss: bump version to
- 4.1.3
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id APguXuQjrLUt for <buildroot@buildroot.org>;
+ Wed,  5 Nov 2025 20:02:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC0B24118C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id AC0B24118C
+ for <buildroot@buildroot.org>; Wed,  5 Nov 2025 20:02:04 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9513A83D2B; Wed,  5 Nov 2025 20:02:04 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 5 Nov 2025 21:01:20 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 04533b70e6dd908dcaaa275b47de55fed0b9908d
+X-Git-Newrev: 7762233ce28ca3ef8b50c97046affaa0631e7c46
+X-Patchwork-Hint: ignore
+Message-Id: <20251105200204.9513A83D2B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kexec: enable on risc-v
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,48 +59,41 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 05/11/2025 12:32, Fiona Klute via buildroot wrote:
-> From: Abelino Romo <abelino.romo@gmail.com>
-> 
-> On v3.2.2, testing with an Infineon SLB9673 resulted in the following
-> error when attempting to read from a previously written NV index.
-> Upgrading to the latest release, v4.1.3, resolves the issue:
-> 
-> ```shell
-> ~# tpm2_nvread 0x1900001
-> WARN: Reading full size of the NV index
-> ERROR:esys:../tpm2-tss-3.2.2/src/tss2-esys/esys_iutil.c:1096:esys_GetResourceObject() 
-> Error: Esys handle does not exist (70018).
-> ERROR: Esys_SequenceComplete(0x70018) - esapi:The ESYS_TR resource 
-> object is bad
-> ERROR: Failed to get shandle
-> ERROR: Failed to read NVRAM area at index 0x1900001
-> ERROR: Unable to run tpm2_nvread
-> ```
-> 
-> Between v3.2.2 and v4.1.3, the most notable update is v4.1.0 [1], which
-> includes a fix for CVE-2024-29040, along with 40+ bug fixes and 10+ new
-> features. Bumping to v4.1.3 adds access to these improvements and
-> addresses the NV index read issue.
-> 
-> [1] https://github.com/tpm2-software/tpm2-tss/releases/tag/4.1.0
-> 
-> Signed-off-by: Abelino Romo <abelino.romo@gmail.com>
-> [Fiona: rebase for package/tpm2-tss changes]
-> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+commit: https://git.buildroot.net/buildroot/commit/?id=7762233ce28ca3ef8b50c97046affaa0631e7c46
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master.
-For info, I added the mention "security" in the commit title and added a 
-link to the CVE.
+Starting from version 2.0.32, kexec has support for the
+risc-v architecture. The support was added in upstream commit [1].
 
-Best regards,
+[1] https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/commit/?id=b3fd54b022fe5ba09ebff184d4d22466672946cf
 
-Julien.
+Signed-off-by: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
+[Julien: add link to upstream commit adding support]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/kexec/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/kexec/Config.in b/package/kexec/Config.in
+index 2e3efb5a2a..dce0831bf2 100644
+--- a/package/kexec/Config.in
++++ b/package/kexec/Config.in
+@@ -5,7 +5,8 @@ config BR2_PACKAGE_KEXEC_ARCH_SUPPORTS
+ 		BR2_loongarch64 || \
+ 		BR2_mips || BR2_mips64 || BR2_mipsel || BR2_mips64el || \
+ 		BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
+-		BR2_sh4 || BR2_sh4a || BR2_aarch64 || BR2_s390x || BR2_m68k
++		BR2_sh4 || BR2_sh4a || BR2_aarch64 || BR2_s390x || BR2_m68k || \
++		BR2_riscv
+ 
+ config BR2_PACKAGE_KEXEC
+ 	bool "kexec"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
