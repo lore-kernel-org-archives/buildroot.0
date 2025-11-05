@@ -1,58 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99763CCF9F8
-	for <buildroot@archiver.kernel.org>; Sat,  1 Nov 2025 11:24:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 664ABCCFA0D
+	for <buildroot@archiver.kernel.org>; Wed,  5 Nov 2025 16:49:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C44E41C24;
-	Sat,  1 Nov 2025 11:24:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 07316841AD;
+	Wed,  5 Nov 2025 16:49:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IZz8Y48ey_Le; Sat,  1 Nov 2025 11:24:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BL9Fp58E-eC4; Wed,  5 Nov 2025 16:49:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7830041B99
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42D4F841AE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7830041B99;
-	Sat,  1 Nov 2025 11:24:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 027B72A3
- for <buildroot@buildroot.org>; Sat,  1 Nov 2025 11:24:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 42D4F841AE;
+	Wed,  5 Nov 2025 16:49:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 37DC8222
+ for <buildroot@buildroot.org>; Wed,  5 Nov 2025 16:49:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E823241B99
- for <buildroot@buildroot.org>; Sat,  1 Nov 2025 11:24:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1ED0E411BB
+ for <buildroot@buildroot.org>; Wed,  5 Nov 2025 16:49:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9EXYGvErCnqX for <buildroot@buildroot.org>;
- Sat,  1 Nov 2025 11:24:12 +0000 (UTC)
+ id 2ERn4QjszppR for <buildroot@buildroot.org>;
+ Wed,  5 Nov 2025 16:49:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
  helo=ciao.gmane.io; envelope-from=gclub-buildroot@m.gmane-mx.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D658441B98
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D658441B98
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9CBE7411B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CBE7411B0
 Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D658441B98
- for <buildroot@uclibc.org>; Sat,  1 Nov 2025 11:24:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9CBE7411B0
+ for <buildroot@uclibc.org>; Wed,  5 Nov 2025 16:49:08 +0000 (UTC)
 Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1vF9iL-00041r-19
- for buildroot@uclibc.org; Sat, 01 Nov 2025 12:24:09 +0100
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1vGgh0-00035t-3m
+ for buildroot@uclibc.org; Wed, 05 Nov 2025 17:49:06 +0100
 X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
 From: Bernd Kuhls <bernd@kuhls.net>
-Date: Sat, 01 Nov 2025 12:23:38 +0100
-Message-ID: <pan$26c2d$d0cb410d$266a8aeb$5ac9feac@ID-313208.user.individual.net>
-References: <20250829074509.77782-1-thomas.perale@mind.be>
- <20250829074509.77782-2-thomas.perale__12087.02362362$1756453561$gmane$org@mind.be>
+Date: Wed, 05 Nov 2025 17:48:07 +0100
+Message-ID: <pan$15e11$ea930012$f9315774$e00e23d9@ID-313208.user.individual.net>
+References: <690ad065.5d0a0220.31ae0d.7dd8__29282.5266647682$1762316413$gmane$org@mx.google.com>
 Mime-Version: 1.0
 User-Agent: Pan/0.162 (Pokrosvk)
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=kuhls.net
-Subject: Re: [Buildroot] [PATCH v2 2/2] package/softether: remove package
+Subject: Re: [Buildroot] [autobuild.buildroot.org] Daily results for
+ 2025-11-04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,14 +69,22 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Fri, 29 Aug 2025 09:45:07 +0200 schrieb Thomas Perale via buildroot:
+Am Wed, 05 Nov 2025 04:19:49 -0000 schrieb Buildroot Notifications:
 
-> Due to the increasing number of patches applied for this package and the
-> lack of updates to fix the build issues as well as updating the version
-> to newer release. This patch removes softether from buildroot package
-> list.
+>   mips64el   |          libcap-2.77           | NOK | https://autobuild.buildroot.org/results/47d70c6521b473a0a2672e2605e398940a484e8a |     
 
-Acked-by: Bernd Kuhls <bernd@kuhls.net>
+Hi,
+
+I cannot reproduce the build error:
+
+/usr/bin/ld: cannot find -lc: No such file or directory
+
+The error only occurs on one autobuilder (fedora-asahi-remix-mac-mini-m1):
+https://autobuild.buildroot.net/?reason=libcap-2.77
+
+My x86_64 machine runs Debian Trixie.
+
+Regards, Bernd
 
 _______________________________________________
 buildroot mailing list
