@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F0D4CCFA13
-	for <buildroot@archiver.kernel.org>; Thu,  6 Nov 2025 20:48:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E322CCFA05
+	for <buildroot@archiver.kernel.org>; Thu,  6 Nov 2025 20:51:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0995240849;
-	Thu,  6 Nov 2025 20:48:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B5F246077D;
+	Thu,  6 Nov 2025 20:51:32 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bMczhKPSDB6v; Thu,  6 Nov 2025 20:51:31 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A619460783
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A619460783;
+	Thu,  6 Nov 2025 20:51:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8B65F93E
+ for <buildroot@buildroot.org>; Thu,  6 Nov 2025 20:51:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7D4A940439
+ for <buildroot@buildroot.org>; Thu,  6 Nov 2025 20:51:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Tdq08ozPrh6a; Thu,  6 Nov 2025 20:48:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA6F941127
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EA6F941127;
-	Thu,  6 Nov 2025 20:47:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3162893E
- for <buildroot@buildroot.org>; Thu,  6 Nov 2025 20:47:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 23A9884514
- for <buildroot@buildroot.org>; Thu,  6 Nov 2025 20:47:58 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zx0n3xTG2Jqw for <buildroot@buildroot.org>;
- Thu,  6 Nov 2025 20:47:57 +0000 (UTC)
+ id bNqfEKVa35Kl for <buildroot@buildroot.org>;
+ Thu,  6 Nov 2025 20:51:28 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0BAB084488
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0BAB084488
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 38D994041D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38D994041D
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0BAB084488
- for <buildroot@buildroot.org>; Thu,  6 Nov 2025 20:47:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 38D994041D
+ for <buildroot@buildroot.org>; Thu,  6 Nov 2025 20:51:28 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0d15.dip0.t-ipconnect.de [91.58.13.21])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 30AFDA4C1F7B;
- Thu,  6 Nov 2025 21:45:28 +0100 (CET)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 437C8A4C0F34;
+ Thu,  6 Nov 2025 21:51:26 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:46844)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vH6rH-0000000007X-3BM3;
- Thu, 06 Nov 2025 20:45:27 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vH6rH-0000000007X-3sse;
+ Thu, 06 Nov 2025 20:45:28 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu,  6 Nov 2025 21:45:19 +0100
-Message-ID: <20251106204522.3273683-13-bernd@kuhls.net>
+Date: Thu,  6 Nov 2025 21:45:20 +0100
+Message-ID: <20251106204522.3273683-14-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251106204522.3273683-1-bernd@kuhls.net>
 References: <20251106204522.3273683-1-bernd@kuhls.net>
@@ -54,22 +54,23 @@ MIME-Version: 1.0
 X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202506031021; t=1762461928;
- bh=EiqDLaVe+xfeTNzbFcHD3n7GvCL6DUVAM+wyAz+7Pys=;
+ s=kas202506031021; t=1762462286;
+ bh=2K265v64KztkZdx+uOwV1z1cnJHzFot7VjuPkJFQ93I=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=tA1FkGGOC/I1e6hpBAC+59N+/rXu6ZJZuG4hWDSCRfgoRopQ1ea1OQAqg3CeFsik/
- QGU9W+zv1xl0cAO4PpAuk6WKzxxHzAjMqF6n1lEQCOuCt0SCeWxo8GWzbdtrmylr/n
- lOUff79rB5egI4kDnojuNKgujw7Uw2G9DWBNfi+YBWLKjVh6Go7Y3lJykncTErM7qF
- HMqjexupIA66xygSsfgqdDkVR2W1O6tM+mKwE7EOFJH/Eoqh3KNPAqmwIW6rgH0Q2D
- Nq0OZX0ad/Bk6eE0pj3EChE/j1u0dUUzzjM7xj5MnYSsH4vCETZPI45kY4nJ+Jb1xU
- WlT+STYm2n3Qw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=dsE4HfLzNH9jgTDcf/Xv68AQjl84QFUhkJiwNBPJ6mKmRbknBBdNVk6u1tYtI48dI
+ khwnxWgWKOcqGVbV/JtNxtdatHUtKWlTJeSUUZxZoOlW+lgO16FsA3QnvD4dJiGjpA
+ i13qA8tY7pwRLwQZUBO57DRE+MqRX1NKZYF55uC71ZY/GbaGtR0SVdgYTbRQ7NHVkk
+ CH7jhYpma7ZnWpYI8xZKdhRmEguwA7wDVGlrkRvFovYQ9tPyLA+G9pqTQzh0eX5eIz
+ DkXJHIs6pnWGX8K7koWbNSXl5eL0nO/DnZ8UsVqKjk7TlxbSEU9z3Y722T4p9hYckH
+ kMBggKFRzRhQQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=tA1FkGGO
-Subject: [Buildroot] [PATCH v3 12/14] package/dvbsnoop: remove package
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=dsE4HfLz
+Subject: [Buildroot] [PATCH v3 13/14] package/xscreensaver: bump version to
+ 6.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,179 +91,195 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The package is causing build errors with newer gcc versions:
+Added two patches from Debian to fix configure errors.
 
-sectables.c:331:22: error: initialization of 'void (*)(void)' from
- incompatible pointer type 'void (*)(unsigned char *, int)'
- [-Wincompatible-pointer-types]
-  331 |      {  0x00, 0x00,  section_PAT        },
+Switched from libgtk2 to libgtk3 and adjusted dependencies.
+Added dependency to libxcrypt.
 
-and many more.
+Fixed broken include path for gl.h, inspired by Gentoo:
+https://gitweb.gentoo.org/repo/gentoo.git/tree/x11-misc/xscreensaver/xscreensaver-6.12-r2.ebuild#n172
 
-The latest release dates back to 2007, the latest change in the CVS-
-based source repository[1] (downloaded as dvbsnoop.zip) is also from
-2007. No newer or maintained forks were found.
-
-State of upstream ticket system[2]:
-
-  Bugs: last update 2012
-  Support Requests: No open tickets found.
-  Patches: last update 2010
-  Feature Requests: 1 from 2021, the rest 2012 and older
-
-Instead of fixing build errors for an unmaintained project which is not
-used by any other package we remove it from buildroot.
-
-Fixes:
-https://autobuild.buildroot.net/results/ea6/ea6786248b9ecf0eb1c1c1f7cdd0202462b75e00/
-
-[1] https://sourceforge.net/p/dvbsnoop/cvs/
-[2] https://sourceforge.net/p/dvbsnoop/_list/tickets
+Removed dependency to gdk-pixbuf-xlib, not needed since version 6.05:
+https://gitweb.gentoo.org/repo/gentoo.git/commit/x11-misc/xscreensaver?id=3d6bc3a216196c795de6e0932f74055548beb9bb
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .checkpackageignore                      |  1 -
- Config.in.legacy                         |  6 ++++++
- DEVELOPERS                               |  1 -
- package/Config.in                        |  1 -
- package/dvbsnoop/0001-musl-types-h.patch | 15 ---------------
- package/dvbsnoop/Config.in               | 21 ---------------------
- package/dvbsnoop/dvbsnoop.hash           |  3 ---
- package/dvbsnoop/dvbsnoop.mk             | 12 ------------
- 8 files changed, 6 insertions(+), 54 deletions(-)
- delete mode 100644 package/dvbsnoop/0001-musl-types-h.patch
- delete mode 100644 package/dvbsnoop/Config.in
- delete mode 100644 package/dvbsnoop/dvbsnoop.hash
- delete mode 100644 package/dvbsnoop/dvbsnoop.mk
+ .../0001-allow_unrecognized_conf_opts.patch   | 28 +++++++++++++++
+ .../0002-configure_allow_warnings.patch       | 35 +++++++++++++++++++
+ package/xscreensaver/Config.in                | 18 +++++-----
+ package/xscreensaver/xscreensaver.hash        |  2 +-
+ package/xscreensaver/xscreensaver.mk          | 14 ++++++--
+ 5 files changed, 85 insertions(+), 12 deletions(-)
+ create mode 100644 package/xscreensaver/0001-allow_unrecognized_conf_opts.patch
+ create mode 100644 package/xscreensaver/0002-configure_allow_warnings.patch
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index a6a6da598d..68882f3061 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -333,7 +333,6 @@ package/dt/0002-dt-default-source-define.patch lib_patch.Upstream
- package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch lib_patch.Upstream
- package/dvblast/0001-missing-lm.patch lib_patch.Upstream
- package/dvblast/0002-fix-int-types.patch lib_patch.Upstream
--package/dvbsnoop/0001-musl-types-h.patch lib_patch.Upstream
- package/dvdrw-tools/0001-limits.h.patch lib_patch.Upstream
- package/dvdrw-tools/0002-Include-sysmacros.h-to-compile-with-newer-gcc.patch lib_patch.Upstream
- package/earlyoom/0001-main.c-fix-build-with-kernel-4.3.patch lib_patch.Upstream
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 1d94504cce..daef67ef84 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2025.11"
- 
-+config BR2_PACKAGE_DVBSNOOP
-+	bool "dvbsnoop has been removed"
-+	select BR2_LEGACY
-+	help
-+	  dvbsnoop is unmaintained and has been removed
+diff --git a/package/xscreensaver/0001-allow_unrecognized_conf_opts.patch b/package/xscreensaver/0001-allow_unrecognized_conf_opts.patch
+new file mode 100644
+index 0000000000..d9e9367d05
+--- /dev/null
++++ b/package/xscreensaver/0001-allow_unrecognized_conf_opts.patch
+@@ -0,0 +1,28 @@
++Description: Allow unrecognized configure options
++ Fix an oddity in upstream-generated configure.
++ Our dh_auto_configure will add several unrecognized options.
++Forwarded: not-needed
++Author: Tormod Volden <debian.tormod@gmail.com>
 +
- config BR2_PACKAGE_PROCRANK_LINUX
- 	bool "procrank_linux has been removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a1576de92d..426e327ded 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -582,7 +582,6 @@ F:	package/jailhouse/
- F:	package/sunxi-boards/
++Downloaded from
++https://sources.debian.org/data/main/x/xscreensaver/6.09%2Bdfsg1-1/debian/patches/94_allow_unrecognized_conf_opts.patch
++
++Upstream: not applicable
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++
++Index: xscreensaver-git/configure
++===================================================================
++--- xscreensaver-git.orig/configure
+++++ xscreensaver-git/configure
++@@ -2856,8 +2856,8 @@ echo "current directory: `pwd`"
++ echo "command line was: $0 $@"
++ 
++ if ! test -z "$ac_unrecognized_opts" ; then
++-  echo "" >&2
++-  exit 2
+++  echo "ignored options $ac_unrecognized_opts" >&2
+++  #exit 2
++ fi
++ 
++ ###############################################################################
+diff --git a/package/xscreensaver/0002-configure_allow_warnings.patch b/package/xscreensaver/0002-configure_allow_warnings.patch
+new file mode 100644
+index 0000000000..bd9a47207f
+--- /dev/null
++++ b/package/xscreensaver/0002-configure_allow_warnings.patch
+@@ -0,0 +1,35 @@
++Description: Allow warnings from configure
++ Since 6.03 the original configure script returns non-zero if a
++ warning about configuration options versus detected capabilities
++ has been issued, presumably to increase awareness of the warnings.
++ To allow building on all architectures, while relying on the
++ resulting HAVE_XX flags as usual, return with success at the end
++ of the script.
++Forwarded: not-needed
++Author: Tormod Volden <debian.tormod@gmail.com>
++
++Downloaded from
++https://sources.debian.org/src/xscreensaver/6.09%2Bdfsg1-1/debian/patches/100_configure_allow_warnings.patch
++
++Upstream: not applicable
++
++[Bernd: s/Debian/buildroot]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++
++Index: xscreensaver-git/configure
++===================================================================
++--- xscreensaver-git.orig/configure
+++++ xscreensaver-git/configure
++@@ -23273,5 +23273,11 @@ echo "             Extra Fonts:   ${FONT
++ echo "             App Defaults:  ${APPDEFAULTS}/$addir_err"
++ echo ""
++ 
++-exit $CONF_STATUS
+++if test "$CONF_STATUS" != 0; then
+++	echo ""
+++	echo "Warning: Buildroot build will proceed regardless of above warnings"
+++	echo ""
+++fi
+++
+++exit 0
++ 
+diff --git a/package/xscreensaver/Config.in b/package/xscreensaver/Config.in
+index ba259274d1..2bed8f4765 100644
+--- a/package/xscreensaver/Config.in
++++ b/package/xscreensaver/Config.in
+@@ -2,16 +2,17 @@ config BR2_PACKAGE_XSCREENSAVER
+ 	bool "xscreensaver"
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_PACKAGE_HAS_LIBGL # libglu
+-	depends on BR2_INSTALL_LIBSTDCPP # libgtk2 -> pango
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # gdk-pixbuf, libgtk2 -> glib2
+-	depends on BR2_USE_WCHAR # gdk-pixbuf, libgtk2 -> glib2
+-	depends on BR2_USE_MMU # gdk-pixbuf, libgtk2 -> glib2
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgtk2 -> pango -> harfbuzz
++	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS # libgtk3
++	depends on BR2_USE_WCHAR # libgtk3, libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk3, libglib2
++	depends on BR2_USE_MMU # libgtk3, libglib2
++	depends on BR2_INSTALL_LIBSTDCPP # libgtk3
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk3
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgtk3
+ 	select BR2_PACKAGE_GDK_PIXBUF
+-	select BR2_PACKAGE_GDK_PIXBUF_XLIB
+ 	select BR2_PACKAGE_LIBGLU
+-	select BR2_PACKAGE_LIBGTK2
++	select BR2_PACKAGE_LIBGTK3
++	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_LIBXML2
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_XLIB_LIBX11
+@@ -31,6 +32,7 @@ config BR2_PACKAGE_XSCREENSAVER
  
- N:	Carsten Schoenert <c.schoenert@gmail.com>
--F:	package/dvbsnoop/
- F:	package/libdvbsi/
- F:	package/libsvg/
- F:	package/libsvg-cairo/
-diff --git a/package/Config.in b/package/Config.in
-index d1887891df..ec30c238aa 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -495,7 +495,6 @@ endmenu
- 	source "package/dtbocfg/Config.in"
- 	source "package/dtv-scan-tables/Config.in"
- 	source "package/dump1090/Config.in"
--	source "package/dvbsnoop/Config.in"
- 	source "package/edid-decode/Config.in"
- 	source "package/edk2-non-osi/Config.in"
- 	source "package/edk2-platforms/Config.in"
-diff --git a/package/dvbsnoop/0001-musl-types-h.patch b/package/dvbsnoop/0001-musl-types-h.patch
-deleted file mode 100644
-index 1149df0d07..0000000000
---- a/package/dvbsnoop/0001-musl-types-h.patch
-+++ /dev/null
-@@ -1,15 +0,0 @@
--Fix musl build
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -uNr dvbsnoop-1.4.50.org/src/misc/helper.h dvbsnoop-1.4.50/src/misc/helper.h
----- dvbsnoop-1.4.50.org/src/misc/helper.h	2006-01-02 20:04:56.000000000 +0100
--+++ dvbsnoop-1.4.50/src/misc/helper.h	2016-01-24 14:35:02.000000000 +0100
--@@ -16,6 +16,7 @@
-- #ifndef __HELPER_H
-- #define __HELPER_H
-- 
--+#include <sys/types.h>
-- 
-- u_long outBit_Sx (int verbosity, const char *text, u_char *buf, int startbit, int bitlen);
-- u_long outBit_Sx_NL (int verbosity, const char *text, u_char *buf, int startbit, int bitlen);
-diff --git a/package/dvbsnoop/Config.in b/package/dvbsnoop/Config.in
-deleted file mode 100644
-index fb63fa4e8b..0000000000
---- a/package/dvbsnoop/Config.in
-+++ /dev/null
-@@ -1,21 +0,0 @@
--config BR2_PACKAGE_DVBSNOOP
--	bool "dvbsnoop"
--	help
--	  Dvbsnoop is just a simple tool to analyze, view or debug a
--	  transport stream (TS), program elementary stream (PES) or even
--	  a program stream (PS). Dvbsnoop is trying to get input mostly
--	  direct from a frontend (satellite or cable tuner inside a
--	  set-top box for example) via DVB APIv3 to view into a TS, or a
--	  demux to view PES or PS (also mostly inside the set-top box or
--	  even PCI Card or USB Plug) but also from a file (recorded TS).
--	  Dvbsnoop is working well on SD transport streams but may have
--	  some limited functionality on HD transport streams
--	  (DVB-{C,S,T}2 because of missing knowledge how to handle it.
--
--	  Dvbsnoop itself doesn't do the tuning on the frontend, this
--	  has to be done by external helpers or manually driver call.
--	  The dvbsnoop tool was written while developing the software
--	  Neutrino on the set-top box DBox2.
--
--	  http://dvbsnoop.sourceforge.net
--	  http://en.wikipedia.org/wiki/DBox2
-diff --git a/package/dvbsnoop/dvbsnoop.hash b/package/dvbsnoop/dvbsnoop.hash
-deleted file mode 100644
-index 0d88afe154..0000000000
---- a/package/dvbsnoop/dvbsnoop.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally computed:
--sha256  7658498b26a5d2a0242e81f0cfafa0e43a2bec56f8674e7ac197dfc310866ec6  dvbsnoop-1.4.50.tar.gz
--sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/dvbsnoop/dvbsnoop.mk b/package/dvbsnoop/dvbsnoop.mk
-deleted file mode 100644
-index fdc483d22c..0000000000
---- a/package/dvbsnoop/dvbsnoop.mk
-+++ /dev/null
-@@ -1,12 +0,0 @@
--################################################################################
--#
--# dvbsnoop
--#
--################################################################################
--
--DVBSNOOP_VERSION = 1.4.50
--DVBSNOOP_SITE = http://downloads.sourceforge.net/project/dvbsnoop/dvbsnoop/dvbsnoop-$(DVBSNOOP_VERSION)
--DVBSNOOP_LICENSE = GPL-2.0
--DVBSNOOP_LICENSE_FILES = COPYING
--
--$(eval $(autotools-package))
+ comment "xscreensaver needs a toolchain w/ wchar, C++, threads, gcc >= 4.9, OpenGL backend"
+ 	depends on BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+diff --git a/package/xscreensaver/xscreensaver.hash b/package/xscreensaver/xscreensaver.hash
+index 27ef7d8f00..b8a27a0515 100644
+--- a/package/xscreensaver/xscreensaver.hash
++++ b/package/xscreensaver/xscreensaver.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  328d51797352acf58ca5bab49e76fbf26034e7cad785f651ea11ce7b43fba25a  xscreensaver-6.03.tar.gz
++sha256  4ff6798217e3bbbc3c7336beeda7e83eafbf03301ac29b2236da66a0f1317643  xscreensaver-6.12.tar.gz
+ sha256  8a03451ba5c4c9af669b53e47e50c38c149b9e152d3d627809b962da7b760bbd  hacks/screenhack.h
+ sha256  56db580415bb313a4a82c5e08f106304904d15d42faf8e6ab14b34e14e2087a5  hacks/glx/chessmodels.h
+diff --git a/package/xscreensaver/xscreensaver.mk b/package/xscreensaver/xscreensaver.mk
+index 466d309940..d11f66d9d7 100644
+--- a/package/xscreensaver/xscreensaver.mk
++++ b/package/xscreensaver/xscreensaver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XSCREENSAVER_VERSION = 6.03
++XSCREENSAVER_VERSION = 6.12
+ XSCREENSAVER_SITE = https://www.jwz.org/xscreensaver
+ 
+ # N.B. GPL-2.0+ code (in the hacks/glx subdirectory) is not currently built.
+@@ -13,13 +13,17 @@ XSCREENSAVER_LICENSE_FILES = hacks/screenhack.h hacks/glx/chessmodels.h
+ XSCREENSAVER_CPE_ID_VALID = YES
+ XSCREENSAVER_SELINUX_MODULES = xdg xscreensaver xserver
+ 
++define XSCREENSAVER_FIX_INCLUDE_GL
++	$(SED) 's/OpenGL\/gl.h/GL\/gl.h/' $(@D)/driver/subprocs.c
++endef
++XSCREENSAVER_POST_EXTRACT_HOOKS = XSCREENSAVER_FIX_INCLUDE_GL
++
+ XSCREENSAVER_DEPENDENCIES = \
+ 	gdk-pixbuf \
+-	gdk-pixbuf-xlib \
+ 	jpeg \
+ 	libgl \
+ 	libglu \
+-	libgtk2 \
++	libgtk3 \
+ 	libxml2 \
+ 	xlib_libX11 \
+ 	xlib_libXft \
+@@ -42,6 +46,10 @@ else
+ XSCREENSAVER_CONF_OPTS += --with-png=no
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
++XSCREENSAVER_DEPENDENCIES += libxcrypt
++endif
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ XSCREENSAVER_CONF_OPTS += --with-systemd=yes
+ XSCREENSAVER_DEPENDENCIES += systemd
 -- 
 2.47.3
 
