@@ -1,70 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAA37CCF9F8
-	for <buildroot@archiver.kernel.org>; Thu,  6 Nov 2025 10:13:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3459FCCFA05
+	for <buildroot@archiver.kernel.org>; Thu,  6 Nov 2025 12:42:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 825F260073;
-	Thu,  6 Nov 2025 10:13:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7F18A41405;
+	Thu,  6 Nov 2025 12:42:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Etwfvg5O4wIe; Thu,  6 Nov 2025 10:13:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SZ37Wd2Ct1cK; Thu,  6 Nov 2025 12:42:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ADF4861208
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5098640F5E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ADF4861208;
-	Thu,  6 Nov 2025 10:13:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 76B661CD
- for <buildroot@buildroot.org>; Thu,  6 Nov 2025 10:13:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5098640F5E;
+	Thu,  6 Nov 2025 12:42:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3B4AC462
+ for <buildroot@buildroot.org>; Thu,  6 Nov 2025 12:42:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 68EA541241
- for <buildroot@buildroot.org>; Thu,  6 Nov 2025 10:13:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37D5C40F5E
+ for <buildroot@buildroot.org>; Thu,  6 Nov 2025 12:42:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZyGJViNfloAT for <buildroot@buildroot.org>;
- Thu,  6 Nov 2025 10:13:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=60.248.80.70;
- helo=atcsqr.andestech.com; envelope-from=ycliang@andestech.com;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DBA440D04
-Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net
- [60.248.80.70])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3DBA440D04
- for <buildroot@buildroot.org>; Thu,  6 Nov 2025 10:13:05 +0000 (UTC)
-Received: from mail.andestech.com (ATCPCS34.andestech.com [10.0.1.134])
- by Atcsqr.andestech.com with ESMTPS id 5A6AD2N4012394
- (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
- Thu, 6 Nov 2025 18:13:02 +0800 (+08)
- (envelope-from ycliang@andestech.com)
-Received: from swlinux02.andestech.com (10.0.15.183) by ATCPCS34.andestech.com
- (10.0.1.134) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 6 Nov
- 2025 18:13:02 +0800
-To: <buildroot@buildroot.org>
-CC: <tim609@andestech.com>, <ju.o@free.fr>, <vjardin@free.fr>, "Leo Yu-Chi
- Liang" <ycliang@andestech.com>
-Date: Thu, 6 Nov 2025 18:07:54 +0800
-Message-ID: <20251106100754.1863177-6-ycliang@andestech.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251106100754.1863177-1-ycliang@andestech.com>
-References: <20251106100754.1863177-1-ycliang@andestech.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ak8egymCpqiZ for <buildroot@buildroot.org>;
+ Thu,  6 Nov 2025 12:42:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::231; helo=mail-oi1-x231.google.com;
+ envelope-from=rustamabd@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4083F40F0F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4083F40F0F
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com
+ [IPv6:2607:f8b0:4864:20::231])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4083F40F0F
+ for <buildroot@buildroot.org>; Thu,  6 Nov 2025 12:42:10 +0000 (UTC)
+Received: by mail-oi1-x231.google.com with SMTP id
+ 5614622812f47-44fe45e430aso373138b6e.1
+ for <buildroot@buildroot.org>; Thu, 06 Nov 2025 04:42:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1762432929; x=1763037729;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=ppmXG61PeQaZKJMjeYRwhWIGxmpBI8jgw5KvR/4ITlw=;
+ b=u2lJTG4XMLDETlZHw1QNMXuIS/7JzcmNqrhF9Us9jUw+roGyEMKDY9ygxLZT+OT+y3
+ /SPGX8mapmvmpsURTVGJHTK4BEBtaVSN1vpARoDQEgoP4TIr0YDEmcL4hVn7BSAx0mIa
+ /rS+BltJJKZ/xjK7OZ44VXsU6tcgUPcwwHnPO/2rgcfTQ3+TtNI+wmA2Mt7+XPArvbQI
+ psrohTZNADc4xwg7rIwazsaHPgIA/6ZkT/Fjt2lYcNztwpnAm2guICC6xMhPnd1xk+WS
+ qVaPar7Mnrf6TlwM+6WPXJwoVXzVqXw59YbazafvczSMsvGur4iM8yraeUCpw7dUfQhs
+ ZGmQ==
+X-Gm-Message-State: AOJu0YzzxfrX3heL4Juh0iR6rMEjlLHkIVPD3VkYr4wDVWYJd9UXKtum
+ Jov+BIyGMWpCU/QMXOc/mBfHsKE4kscX8TPQwAV2UabTWwV1ZeBX3YUhPtxilMG7kRVnWp1cbEL
+ lmAMT0BulKXrB/ucSySDZs3TRyLM1EAg7nhlH3v4=
+X-Gm-Gg: ASbGnct3LbO3XS7Vbdxrp/nJP+ZNBRNYckxFn/4ovyGodwZOsp9Jn+THbs98+huGB0b
+ CMaJGPcCg2jIreuquC9VM/TAPMSbSWDpc0MHYxFK9ZypJZi34YxA14unzP+KS6++U+9Uw9wHcA0
+ mS0MhnKXmzU69xTk+6tAwcEO+dyE0Nf/wswnBHtyDiOYznWjcWmQp5yPr8HULFNruWs1Vcw1e8y
+ gg2VyR670M2NF3iE5JadcLmPP0lQbjgBImqJziIedhLgQMEhfiMlNBy7t4gDwCLuZrCUCDqWcDw
+ 3gb1/x2BnngdOsx7rgqI2EYiXHnEb96eG1CbwcdbOKd/OoR+C3RrdSSM+GyQKzHfikFpAMimqjL
+ Ki4q/us8Y0jZSZS6Tr+9tySDb0WQ=
+X-Google-Smtp-Source: AGHT+IEvwwxPf+wpS/b9B6z2ErBi4zIQrO1FQA0e8fCL6waH+KkV2BUte5FOY2pAcaD56jI2x/oVEwJlWO33oxbJR4M=
+X-Received: by 2002:a05:6808:1a11:b0:44e:4d0e:f028 with SMTP id
+ 5614622812f47-44fed49de7bmr3636995b6e.49.1762432928946; Thu, 06 Nov 2025
+ 04:42:08 -0800 (PST)
 MIME-Version: 1.0
-X-Originating-IP: [10.0.15.183]
-X-ClientProxiedBy: ATCPCS33.andestech.com (10.0.1.100) To
- ATCPCS34.andestech.com (10.0.1.134)
-X-DKIM-Results: atcpcs34.andestech.com; dkim=none;
-X-DNSRBL: 
-X-MAIL: Atcsqr.andestech.com 5A6AD2N4012394
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org; dmarc=permerror
- header.from=andestech.com
-Subject: [Buildroot] [PATCH v2 5/5] configs/andes_ae350_45_defconfig: move
- to external Bootlin stable toolchain
+From: Rustam <rustamabd@gmail.com>
+Date: Thu, 6 Nov 2025 13:41:58 +0100
+X-Gm-Features: AWmQ_bmzseeeIJ51a3Iy2XuJCGgfY9wlp2B56NGx3xOwock8tPL-uMBU-1BJAFI
+Message-ID: <CAPzS6u_Lu2jE3PzbmOc1gRzA0uLjxmiR60fwy5eEwRDK92ya2A@mail.gmail.com>
+To: buildroot@buildroot.org
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1762432929; x=1763037729; darn=buildroot.org;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=ppmXG61PeQaZKJMjeYRwhWIGxmpBI8jgw5KvR/4ITlw=;
+ b=OuHYFgOX1hMXTyGyWp7WN4EN4HC+REvhBJIpsyWOq7vUWt7yx0RP6yRwIlE1BJ/XOx
+ RGR53w5KQwoOok0vJBPzFB7cZ0wRSir2O1rBlNYIO7L+AHf8W2xjEDiVgpYC9/ibAzA6
+ VkRz0Zww38xI+bgnSdIs27T1B3i8bt0D9z5qt3PemlRZXROHwQwHvV87OJLZI89g6rLY
+ c/diuBbR++/2wMZ/KNeBKsAeLGQIaPJGD3kZZEP22GMrmjzBEyUFfjjwxgZba+IQMsHN
+ kDBaJV7btQNH8rpufA+B0B2huyvJOJaYqNXGPRG4Jk80YaOPHxydvW2t6/7WWXsNrWmz
+ AAlg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=OuHYFgOX
+Subject: [Buildroot] Kernel headers with an external toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,40 +100,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Leo Yu-Chi Liang via buildroot <buildroot@buildroot.org>
-Reply-To: Leo Yu-Chi Liang <ycliang@andestech.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2501645123861431610=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This moves the andes_ae350_45_defconfig to the Bootlin glibc stable external toolchain
-as per[1].
+--===============2501645123861431610==
+Content-Type: multipart/alternative; boundary="000000000000aba46d0642ec6491"
 
-[1]: https://elinux.org/Buildroot:DeveloperDaysELCE2024#Rules_for_defconfigs
+--000000000000aba46d0642ec6491
+Content-Type: text/plain; charset="UTF-8"
 
-Signed-off-by: Leo Yu-Chi Liang <ycliang@andestech.com>
----
- configs/andes_ae350_45_defconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+When using an external toolchain, I get linux kernel headers from the
+toolchain in the SDK.
 
-diff --git a/configs/andes_ae350_45_defconfig b/configs/andes_ae350_45_defconfig
-index d8fe4c0a17..e75e713158 100644
---- a/configs/andes_ae350_45_defconfig
-+++ b/configs/andes_ae350_45_defconfig
-@@ -1,6 +1,7 @@
- BR2_riscv=y
- BR2_RISCV_ISA_RVC=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_0=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_LP64D_GLIBC_STABLE=y
- BR2_GLOBAL_PATCH_DIR="board/andes/ae350/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
--- 
-2.34.1
+In case of the official ARM toolchain (from
+https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads), we get
+4.20 headers, which causes issues when the actual kernel is 6.12.
+
+BR2_arm=y
+BR2_cortex_a9=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
+
+Question: how to get the actual kernel headers in combination with an
+external toolchain?
+
+I tried BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y, that had no effect.
+
+I could live with just copying the current headers onto the toolchain,
+overwriting existing files, but the toolchain is built before the kernel.
+So how to do it properly?
+
+--000000000000aba46d0642ec6491
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><div>When using an external toolchain, I =
+get linux kernel headers from the toolchain in the SDK.</div><div><br></div=
+><div>In case of the official ARM toolchain (from <a href=3D"https://develo=
+per.arm.com/downloads/-/arm-gnu-toolchain-downloads">https://developer.arm.=
+com/downloads/-/arm-gnu-toolchain-downloads</a>), we get 4.20 headers, whic=
+h causes issues when the actual kernel is 6.12.</div><div><br></div><div>BR=
+2_arm=3Dy</div><div>BR2_cortex_a9=3Dy</div><div>BR2_TOOLCHAIN_EXTERNAL=3Dy<=
+/div><div>BR2_LINUX_KERNEL=3Dy</div><div>BR2_LINUX_KERNEL_CUSTOM_VERSION=3D=
+y</div><div>BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE=3D&quot;6.12.47&quot;</di=
+v><div><br></div><div>Question: how to get the actual kernel headers in com=
+bination with an external toolchain?</div><div><br></div><div>I tried BR2_P=
+ACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=3Dy, that had no effect.</div><div><b=
+r></div><div>I could live with just copying the current headers onto the to=
+olchain, overwriting existing files, but the toolchain is built before the =
+kernel. So how to do it properly?</div></div></div>
+
+--000000000000aba46d0642ec6491--
+
+--===============2501645123861431610==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2501645123861431610==--
