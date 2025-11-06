@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F3C1CCFA13
-	for <buildroot@archiver.kernel.org>; Thu,  6 Nov 2025 19:42:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6EC2CCFA05
+	for <buildroot@archiver.kernel.org>; Thu,  6 Nov 2025 19:43:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 43E3F4112E;
-	Thu,  6 Nov 2025 19:42:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 583DA606AE;
+	Thu,  6 Nov 2025 19:43:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6_ARS_O70Gzm; Thu,  6 Nov 2025 19:42:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g0pZyrZH4Uym; Thu,  6 Nov 2025 19:43:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6ABD641131
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86103606A3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6ABD641131;
-	Thu,  6 Nov 2025 19:42:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 460CB1CD
- for <buildroot@buildroot.org>; Thu,  6 Nov 2025 19:42:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 86103606A3;
+	Thu,  6 Nov 2025 19:43:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5815593E
+ for <buildroot@buildroot.org>; Thu,  6 Nov 2025 19:43:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 38395401E1
- for <buildroot@buildroot.org>; Thu,  6 Nov 2025 19:42:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3DB20606A3
+ for <buildroot@buildroot.org>; Thu,  6 Nov 2025 19:43:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A570olHIP3QM for <buildroot@buildroot.org>;
- Thu,  6 Nov 2025 19:42:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 598B0401DA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 598B0401DA
- for <buildroot@buildroot.org>; Thu,  6 Nov 2025 19:42:55 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 46E5C83EFD; Thu,  6 Nov 2025 19:42:55 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 6 Nov 2025 20:37:53 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 10bf2e6629827e338947c189e88ef5bf32ec4dda
-X-Git-Newrev: 9d7a0d07cd18751749a0b2c325a8bbcf538e23ed
-X-Patchwork-Hint: ignore
-Message-Id: <20251106194255.46E5C83EFD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libnvme: fix build error
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4uvdbX6fM-0G for <buildroot@buildroot.org>;
+ Thu,  6 Nov 2025 19:43:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8848F60681
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8848F60681
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8848F60681
+ for <buildroot@buildroot.org>; Thu,  6 Nov 2025 19:43:08 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 96DE719F5BA;
+ Thu,  6 Nov 2025 20:43:04 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 06 Nov 2025 20:43:04 +0100
+MIME-Version: 1.0
+Date: Thu, 06 Nov 2025 20:43:04 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Giulio Benetti
+ <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20251106183101.2197897-1-bernd@kuhls.net>
+References: <20251106183101.2197897-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <8903b03636045e5fc2b64ffe9196356f@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1762458186;
+ bh=YJInsge5b1w845HMKTWv/0hcF9+3lZOgDGc4PZNw9l8=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=ZAZRLOJPFmCLc7PASpmz5fBFq50GHrUgf5x4/iYp4BqzXT2Ruj2POoUB7wXO0tQlB
+ iY9A17TsRWY/8bpYR6KagOhqmXbWivaJpAOpHx6qtTO9c+uLWTHAl51i9QFn24gy5s
+ 5ijr86G6ZFneVEkitg3yB4+4ZR8rPlGBEDxZG5/yNFe5g/tv3dflPb2xYY6llDdnmA
+ aKP49icI/2J9CaTMzhsMiFSIP1jqgNSGODM/Lke6Q7PdfCgk+ov4cHDBF1a2sN6ItL
+ 7nGQrsb8qb7H8ThLESuXYTCLc5FtJThPWBjy5iL59NwOx0Wdw48TuDKp+GtjMKVCY6
+ 16ZVhT6zNcJiQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ZAZRLOJP
+Subject: Re: [Buildroot] [PATCH 1/1] package/libnvme: fix build error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,62 +83,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d7a0d07cd18751749a0b2c325a8bbcf538e23ed
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 06/11/2025 19:31, Bernd Kuhls wrote:
+> Added upstream patch to fix build error caused by version bump to 1.16
+> by buildroot commit 12500fb060997a0c76daa72521615038c8514d25.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Added upstream patch to fix build error caused by version bump to 1.16
-by buildroot commit 12500fb060997a0c76daa72521615038c8514d25.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...reaking-cross-builds-with-OpenSSL-enabled.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
-
-diff --git a/package/libnvme/0001-build-avoid-breaking-cross-builds-with-OpenSSL-enabled.patch b/package/libnvme/0001-build-avoid-breaking-cross-builds-with-OpenSSL-enabled.patch
-new file mode 100644
-index 0000000000..7cf91fd98e
---- /dev/null
-+++ b/package/libnvme/0001-build-avoid-breaking-cross-builds-with-OpenSSL-enabled.patch
-@@ -0,0 +1,31 @@
-+From 82066e5f46d743e7a7cf396be7f95e577084b93e Mon Sep 17 00:00:00 2001
-+From: Daniel Wagner <wagi@kernel.org>
-+Date: Thu, 6 Nov 2025 08:10:27 +0100
-+Subject: [PATCH] build: avoid breaking cross builds with OpenSSL enabled
-+
-+The OpenSSL sanity check wants to be executed, thus we should only try
-+this if it's possible. Since this is just a warning, we can just skip it
-+if it is not possible.
-+
-+Signed-off-by: Daniel Wagner <wagi@kernel.org>
-+
-+Upstream: https://github.com/linux-nvme/libnvme/pull/1090
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ meson.build | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/meson.build b/meson.build
-+index dce5c68e..6d1f5204 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -252,7 +252,7 @@ else
-+   conf.set('fallthrough', 'do {} while (0) /* fallthrough */')
-+ endif
-+ 
-+-if openssl_dep.found()
-++if openssl_dep.found() and meson.can_run_host_binaries()
-+   if openssl_dep.type_name() != 'internal'
-+     # Check for a bug in the EVP_PKEY_CTX_add1_hkdf_info implementation
-+     res = cc.run(
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
