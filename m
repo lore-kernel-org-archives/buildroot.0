@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C1BECCFA05
-	for <buildroot@archiver.kernel.org>; Thu,  6 Nov 2025 20:47:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EBBCCCFA13
+	for <buildroot@archiver.kernel.org>; Thu,  6 Nov 2025 20:47:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 15EE8410B8;
-	Thu,  6 Nov 2025 20:47:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4952C410EE;
+	Thu,  6 Nov 2025 20:47:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4b2KtxyfRQ9K; Thu,  6 Nov 2025 20:47:11 +0000 (UTC)
+ id Mlhd6lwoc-WB; Thu,  6 Nov 2025 20:47:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 151FA410EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 318DD41195
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 151FA410EE;
-	Thu,  6 Nov 2025 20:47:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 087C2961
- for <buildroot@buildroot.org>; Thu,  6 Nov 2025 20:47:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 318DD41195;
+	Thu,  6 Nov 2025 20:47:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1BD6293E
+ for <buildroot@buildroot.org>; Thu,  6 Nov 2025 20:47:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E394340272
- for <buildroot@buildroot.org>; Thu,  6 Nov 2025 20:47:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 018B060826
+ for <buildroot@buildroot.org>; Thu,  6 Nov 2025 20:47:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZGRvkJ1lf07p for <buildroot@buildroot.org>;
- Thu,  6 Nov 2025 20:47:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KLWguFBewc-s for <buildroot@buildroot.org>;
+ Thu,  6 Nov 2025 20:47:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9C3D240268
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C3D240268
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CC41C607FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC41C607FE
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9C3D240268
- for <buildroot@buildroot.org>; Thu,  6 Nov 2025 20:47:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CC41C607FE
+ for <buildroot@buildroot.org>; Thu,  6 Nov 2025 20:47:19 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0d15.dip0.t-ipconnect.de [91.58.13.21])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 69DDEA4C1F57;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 983C4A4C1F68;
  Thu,  6 Nov 2025 21:45:27 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:46844)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vH6rH-0000000007X-00dN;
+ (envelope-from <bernd@kuhls.net>) id 1vH6rH-0000000007X-0jVF;
  Thu, 06 Nov 2025 20:45:27 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu,  6 Nov 2025 21:45:15 +0100
-Message-ID: <20251106204522.3273683-9-bernd@kuhls.net>
+Date: Thu,  6 Nov 2025 21:45:16 +0100
+Message-ID: <20251106204522.3273683-10-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251106204522.3273683-1-bernd@kuhls.net>
 References: <20251106204522.3273683-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: /
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202506031021; t=1762461927;
- bh=RtmGV5hQ+jQ/08fqrGJqxME9QApbLpk2ys5J6b46dY0=;
+ bh=WngbSgj3lFaTgjwAjfM38JOku+pdmy8e5WzPhhDS228=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=QZzH+mFaGSjeJd2jFgVtcFDqS5QK96rf7LpKw2aFQHAuqBlc7m+aY7KTNJZpulMdm
- 8WCzsI5hAen1eJ6wMxrz9VYlsDNjM/aw+W5cfQFqeeaEpg7bOkMPYrntrRmrqiqolF
- TR1PLA2d9/wq9XaH1ug2F2QyEq2EMU+KYYr00POAgqPZ71xytSPm5Lj2sydm0zbnHx
- PzG6yckdBcV38hBNmfpciijDMV99lQWiCSfPrB/dimA6jSUbM/OsR2lQOCmu33t0cD
- kNvpaKmGGvDR5V82LIO0eMCW7IQBZraqD6GrYyQ7a5DQS49Onp0UdEsg3qxoncl2Ux
- ORoz4VkAZ9R/A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=T8fES91K6Yj+fJBjwBPwhrSMN5Fjg/c0y6XePypl1Cj89RNlknQNurv+jWjh8g0zH
+ 1V6zwoNGN0RHqqrRW/YlRPxlaAR96IqA71F7DOsId/7uXqubqLrPBaT2awErsip5GR
+ SDE4tBz5W51T4pio/0moWMIKSPArjar+maakrG0wh811hDl/GUCqGxRyzeFJndFmRa
+ wZEowsV6qNI6/BxnY1XgTLNGB86ouVsqrk0gfsKsOGEW0o+qgXxb8jOi9UN4QAZXti
+ 0XEyAXHwzxQ8Aar4bG+V5ZGyhcjCFf8v8hKHxJVhha4Z6SqauOwYV7+lp81WqVWpDG
+ GunJLZy7Q3J9A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=QZzH+mFa
-Subject: [Buildroot] [PATCH v3 08/14] package/bctoolbox: remove package
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=T8fES91K
+Subject: [Buildroot] [PATCH v3 09/14] package/expect: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,142 +85,296 @@ Cc: Simon Dawson <spdawson@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Carsten Schoenert <c.schoenert@gmail.com>, Lionel Orry <lionel.orry@gmail.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RnJvbTogVGhvbWFzIFBldGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBib290bGluLmNvbT4KCmJj
-dG9vbGJveCB3YXMgb25seSBuZWVkZWQgYXMgYSBkZXBlbmRlbmN5IG9mIGxpbnBob25lLCBhcyBp
-cyBhbnl3YXkKYnVuZGxlZCBpbiBtb3JlIHJlY2VudCB2ZXJzaW9ucyBvZiBsaW5waG9uZSwgbWFr
-aW5nIGEgc2VwYXJhdGUgcGFja2FnZQp1bm5uZWNlc3NhcnkuCgpTaWduZWQtb2ZmLWJ5OiBUaG9t
-YXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPgpTaWduZWQtb2ZmLWJ5
-OiBCZXJuZCBLdWhscyA8YmVybmRAa3VobHMubmV0PgotLS0KIC5jaGVja3BhY2thZ2VpZ25vcmUg
-ICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxIC0KIENvbmZpZy5pbi5sZWdhY3kgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICB8ICA4ICsrKysKIHBhY2thZ2UvQ29uZmlnLmluICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICB8ICAxIC0KIC4uLjEtRml4LUxpYnMucHJpdmF0ZS1mbGFn
-cy1mb3ItbWJlZHRscy5wYXRjaCB8IDM3IC0tLS0tLS0tLS0tLS0tLS0KIHBhY2thZ2UvYmN0b29s
-Ym94L0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICB8IDE5IC0tLS0tLS0tLQogcGFja2FnZS9i
-Y3Rvb2xib3gvYmN0b29sYm94Lmhhc2ggICAgICAgICAgICAgIHwgIDMgLS0KIHBhY2thZ2UvYmN0
-b29sYm94L2JjdG9vbGJveC5tayAgICAgICAgICAgICAgICB8IDQyIC0tLS0tLS0tLS0tLS0tLS0t
-LS0KIDcgZmlsZXMgY2hhbmdlZCwgOCBpbnNlcnRpb25zKCspLCAxMDMgZGVsZXRpb25zKC0pCiBk
-ZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9iY3Rvb2xib3gvMDAwMS1GaXgtTGlicy5wcml2YXRl
-LWZsYWdzLWZvci1tYmVkdGxzLnBhdGNoCiBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9iY3Rv
-b2xib3gvQ29uZmlnLmluCiBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9iY3Rvb2xib3gvYmN0
-b29sYm94Lmhhc2gKIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2JjdG9vbGJveC9iY3Rvb2xi
-b3gubWsKCmRpZmYgLS1naXQgYS8uY2hlY2twYWNrYWdlaWdub3JlIGIvLmNoZWNrcGFja2FnZWln
-bm9yZQppbmRleCBhZmM5ZDQxMmVjLi43MTNiOWQ5YTA3IDEwMDY0NAotLS0gYS8uY2hlY2twYWNr
-YWdlaWdub3JlCisrKyBiLy5jaGVja3BhY2thZ2VpZ25vcmUKQEAgLTIyOSw3ICsyMjksNiBAQCBw
-YWNrYWdlL2Jhc2gvMDAwMi1wYXJzZS55LWZpeC1jb21waWxhdGlvbi1mb3Itbm9uLW11bHRpYnl0
-ZS1idWlsZHMucGF0Y2ggbGliX3BhdAogcGFja2FnZS9iYy8wMDAxLWJjLXVzZS1NQUtFSU5GTy12
-YXJpYWJsZS1mb3ItZG9jcy5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0KIHBhY2thZ2UvYmMvMDAw
-Mi1ub3RpY2UtcmVhZC1hbmQtd3JpdGUtZXJyb3JzLW9uLWlucHV0LWFuZC1vdXRwdXQucGF0Y2gg
-bGliX3BhdGNoLlVwc3RyZWFtCiBwYWNrYWdlL2JjYWNoZS10b29scy8wMDAxLURvbi10LWlubGlu
-ZS1jcmM2NC1mb3ItZ2NjLTUtY29tcGF0YWJpbGl0eS5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0K
-LXBhY2thZ2UvYmN0b29sYm94LzAwMDEtRml4LUxpYnMucHJpdmF0ZS1mbGFncy1mb3ItbWJlZHRs
-cy5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0KIHBhY2thZ2UvYmN1c2RrLzAwMDItZWliZC1maXgt
-ZW5kbGVzcy1yZWN1cnNpb24td2hlbi11c2luZy1VU0ItYmFja2VuZHMucGF0Y2ggbGliX3BhdGNo
-LlVwc3RyZWFtCiBwYWNrYWdlL2JlYXJzc2wvMDAwMS1GaXgtbWlzc2luZy1vYmpkaXItZGVwZW5k
-ZW5jeS5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0KIHBhY2thZ2UvYmVuZWpzb24vMDAwMS1jLXN0
-ZC5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0KZGlmZiAtLWdpdCBhL0NvbmZpZy5pbi5sZWdhY3kg
-Yi9Db25maWcuaW4ubGVnYWN5CmluZGV4IDE1ODExY2VhMTYuLmNlMTM1YTBjMjYgMTAwNjQ0Ci0t
-LSBhL0NvbmZpZy5pbi5sZWdhY3kKKysrIGIvQ29uZmlnLmluLmxlZ2FjeQpAQCAtMTQ2LDYgKzE0
-NiwxNCBAQCBlbmRpZgogCiBjb21tZW50ICJMZWdhY3kgb3B0aW9ucyByZW1vdmVkIGluIDIwMjUu
-MTEiCiAKK2NvbmZpZyBCUjJfUEFDS0FHRV9CQ1RPT0xCT1gKKwlib29sICJiY3Rvb2xib3ggaGFz
-IGJlZW4gcmVtb3ZlZCIKKwlzZWxlY3QgQlIyX0xFR0FDWQorCWhlbHAKKwkgIFRoaXMgcGFja2Fn
-ZSBoYXMgYmVlbiByZW1vdmVkIGFzIHBhcnQgb2YgdGhlIGxpbnBob25lCisJICByZW1vdmFsLiBJ
-biBhZGRpdGlvbiwgbmV3ZXIgdmVyc2lvbiBvZiBsaW5waG9uZSBkaXJlY3RseQorCSAgYnVuZGxl
-IGJjdG9vbGJveCBtYWtpbmcgYSBzZXBhcmF0ZSBwYWNrYWdlIHVubmVjZXNzYXJ5LgorCiBjb25m
-aWcgQlIyX1BBQ0tBR0VfT1JUUAogCWJvb2wgIm9ydHAgaGFzIGJlZW4gcmVtb3ZlZCIKIAlzZWxl
-Y3QgQlIyX0xFR0FDWQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9Db25maWcuaW4gYi9wYWNrYWdlL0Nv
-bmZpZy5pbgppbmRleCAyZjYwMzg4YjliLi42ZmY4ZDkzYmM1IDEwMDY0NAotLS0gYS9wYWNrYWdl
-L0NvbmZpZy5pbgorKysgYi9wYWNrYWdlL0NvbmZpZy5pbgpAQCAtMjE2Myw3ICsyMTYzLDYgQEAg
-bWVudSAiT3RoZXIiCiAJc291cmNlICJwYWNrYWdlL2F0Zi9Db25maWcuaW4iCiAJc291cmNlICJw
-YWNrYWdlL2F2cm8tYy9Db25maWcuaW4iCiAJc291cmNlICJwYWNrYWdlL2Jhc3UvQ29uZmlnLmlu
-IgotCXNvdXJjZSAicGFja2FnZS9iY3Rvb2xib3gvQ29uZmlnLmluIgogCXNvdXJjZSAicGFja2Fn
-ZS9iZHdnYy9Db25maWcuaW4iCiAJc291cmNlICJwYWNrYWdlL2Jvb3N0L0NvbmZpZy5pbiIKIAlz
-b3VyY2UgInBhY2thZ2UvYy1jYXBucHJvdG8vQ29uZmlnLmluIgpkaWZmIC0tZ2l0IGEvcGFja2Fn
-ZS9iY3Rvb2xib3gvMDAwMS1GaXgtTGlicy5wcml2YXRlLWZsYWdzLWZvci1tYmVkdGxzLnBhdGNo
-IGIvcGFja2FnZS9iY3Rvb2xib3gvMDAwMS1GaXgtTGlicy5wcml2YXRlLWZsYWdzLWZvci1tYmVk
-dGxzLnBhdGNoCmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAzNDIwNDJkNTljLi4wMDAw
-MDAwMDAwCi0tLSBhL3BhY2thZ2UvYmN0b29sYm94LzAwMDEtRml4LUxpYnMucHJpdmF0ZS1mbGFn
-cy1mb3ItbWJlZHRscy5wYXRjaAorKysgL2Rldi9udWxsCkBAIC0xLDM3ICswLDAgQEAKLUZyb20g
-YjdmMTRhODAwYmJkYWQxOTNmNDU2OTViYzViOGM1MTczZjM4ODJiYSBNb24gU2VwIDE3IDAwOjAw
-OjAwIDIwMDEKLUZyb206IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21haWwu
-Y29tPgotRGF0ZTogU3VuLCAxMCBGZWIgMjAxOSAxNzo1MTowNSArMDEwMAotU3ViamVjdDogW1BB
-VENIXSBDTWFrZUxpc3RzLnR4dDogZml4IG1iZWR0bHMgbGlicmFyaWVzIGluIGJjdG9vbGJveC5w
-YwotTUlNRS1WZXJzaW9uOiAxLjAKLUNvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD1V
-VEYtOAotQ29udGVudC1UcmFuc2Zlci1FbmNvZGluZzogOGJpdAotCi1iY3Rvb2xib3gucGMgc2hv
-dWxkIG5vdCBjb250YWluIHRoZSBmdWxsIGxpYnJhcmllcyBwYXRoLCBwYXRoIHNob3VsZCBiZQot
-Z2l2ZW4gYnkgLUwgYW5kIGxpYnJhcnkgbmFtZXMgYnkgLWwKLVNvIHNlbnQgYmFjayB0aGUgZml4
-IGFscmVhZHkgc3VnZ2VzdGVkIGJ5IErDtnJnIEtyYXVzZSBpbgotaHR0cHM6Ly9naXRodWIuY29t
-L0JlbGxlZG9ubmVDb21tdW5pY2F0aW9ucy9iY3Rvb2xib3gvcHVsbC80Ci0KLVNpZ25lZC1vZmYt
-Ynk6IErDtnJnIEtyYXVzZSA8am9lcmcua3JhdXNlQGVtYmVkZGVkLnJvY2tzPgotU2lnbmVkLW9m
-Zi1ieTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+Ci1bVXBz
-dHJlYW0gc3RhdHVzOgotaHR0cHM6Ly9naXRodWIuY29tL0JlbGxlZG9ubmVDb21tdW5pY2F0aW9u
-cy9iY3Rvb2xib3gvcHVsbC83XQotLS0tCi0gQ01ha2VMaXN0cy50eHQgfCA1ICsrLS0tCi0gMSBm
-aWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKLQotZGlmZiAtLWdp
-dCBhL0NNYWtlTGlzdHMudHh0IGIvQ01ha2VMaXN0cy50eHQKLWluZGV4IDI5ZjNlYjYuLmIyZjI2
-YzIgMTAwNjQ0Ci0tLS0gYS9DTWFrZUxpc3RzLnR4dAotKysrIGIvQ01ha2VMaXN0cy50eHQKLUBA
-IC0xMDEsOSArMTAxLDggQEAgZWxzZSgpCi0gZW5kaWYoKQotIAotIGlmKE1CRURUTFNfRk9VTkQp
-Ci0tCWdldF9maWxlbmFtZV9jb21wb25lbnQobWJlZHRsc19saWJyYXJ5X3BhdGggIiR7TUJFRFRM
-U19MSUJSQVJJRVN9IiBQQVRIKQotLQlzdHJpbmcoUkVQTEFDRSAiOyIgIiAiIE1CRURUTFNfTElC
-UkFSSUVTX1NUUiAiJHtNQkVEVExTX0xJQlJBUklFU30iKQotLQlzZXQoTElCU19QUklWQVRFICIk
-e0xJQlNfUFJJVkFURX0gJHtNQkVEVExTX0xJQlJBUklFU19TVFJ9IikKLSsJZ2V0X2ZpbGVuYW1l
-X2NvbXBvbmVudChtYmVkdGxzX2xpYnJhcnlfcGF0aCAiJHtNQkVEVExTX0xJQlJBUll9IiBQQVRI
-KQotKwlzZXQoTElCU19QUklWQVRFICIke0xJQlNfUFJJVkFURX0gLUwke21iZWR0bHNfbGlicmFy
-eV9wYXRofSAtbG1iZWR0bHMgLWxtYmVkY3J5cHRvIC1sbWJlZHg1MDkiKQotIGVuZGlmKCkKLSBp
-ZihQT0xBUlNTTF9GT1VORCkKLSAJZ2V0X2ZpbGVuYW1lX2NvbXBvbmVudChwb2xhcnNzbF9saWJy
-YXJ5X3BhdGggIiR7UE9MQVJTU0xfTElCUkFSSUVTfSIgUEFUSCkKZGlmZiAtLWdpdCBhL3BhY2th
-Z2UvYmN0b29sYm94L0NvbmZpZy5pbiBiL3BhY2thZ2UvYmN0b29sYm94L0NvbmZpZy5pbgpkZWxl
-dGVkIGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMWNmMmI3ZTIzNi4uMDAwMDAwMDAwMAotLS0gYS9w
-YWNrYWdlL2JjdG9vbGJveC9Db25maWcuaW4KKysrIC9kZXYvbnVsbApAQCAtMSwxOSArMCwwIEBA
-Ci1jb25maWcgQlIyX1BBQ0tBR0VfQkNUT09MQk9YCi0JYm9vbCAiYmN0b29sYm94IgotCWRlcGVu
-ZHMgb24gQlIyX0lOU1RBTExfTElCU1REQ1BQCi0JZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hB
-U19USFJFQURTCi0JZGVwZW5kcyBvbiAhQlIyX1RPT0xDSEFJTl9IQVNfR0NDX0JVR182NDczNSAj
-IGV4Y2VwdGlvbl9wdHIKLQlzZWxlY3QgQlIyX1BBQ0tBR0VfTElCSUNPTlYgaWYgIUJSMl9FTkFC
-TEVfTE9DQUxFCi0JaGVscAotCSAgVXRpbGl0aWVzIGxpYnJhcnkgdXNlZCBieSBCZWxsZWRvbm5l
-IENvbW11bmljYXRpb25zCi0JICBzb2Z0d2FyZXMgbGlrZSBiZWxsZS1zaXAsIG1lZGlhc3RyZWFt
-ZXIyIGFuZCBsaW5waG9uZS4KLQotCSAgU2VsZWN0IEJSMl9QQUNLQUdFX01CRURUTFMgZm9yIGNy
-eXB0byBzdXBwb3J0LgotCi0JICBodHRwczovL2dpdGh1Yi5jb20vQmVsbGVkb25uZUNvbW11bmlj
-YXRpb25zL2JjdG9vbGJveAotCi1jb21tZW50ICJiY3Rvb2xib3ggbmVlZHMgYSB0b29sY2hhaW4g
-dy8gQysrLCB0aHJlYWRzIgotCWRlcGVuZHMgb24gIUJSMl9JTlNUQUxMX0xJQlNURENQUCB8fCAh
-QlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUwotCi1jb21tZW50ICJiY3Rvb2xib3ggbmVlZHMgYSB0
-b29sY2hhaW4gbm90IGFmZmVjdGVkIGJ5IEdDQyBidWcgNjQ3MzUiCi0JZGVwZW5kcyBvbiBCUjJf
-VE9PTENIQUlOX0hBU19HQ0NfQlVHXzY0NzM1CmRpZmYgLS1naXQgYS9wYWNrYWdlL2JjdG9vbGJv
-eC9iY3Rvb2xib3guaGFzaCBiL3BhY2thZ2UvYmN0b29sYm94L2JjdG9vbGJveC5oYXNoCmRlbGV0
-ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRleCA5YjFmOWU4MjFkLi4wMDAwMDAwMDAwCi0tLSBhL3Bh
-Y2thZ2UvYmN0b29sYm94L2JjdG9vbGJveC5oYXNoCisrKyAvZGV2L251bGwKQEAgLTEsMyArMCww
-IEBACi0jIExvY2FsbHkgY2FsY3VsYXRlZAotc2hhMjU2ICA0NDZiNjBlODFhNzliMTFlODIxMmM0
-NGUzMTJhZWIwY2U0NmU5ZWNmMDI2OWEzNWM0OTJlY2RjYTNlNzQyOGMzICBiY3Rvb2xib3gtNC40
-LjgudGFyLmd6Ci1zaGEyNTYgIDFiMzc4MmNjYWQ3Yjg2MTQxMDBjZGEzMGQzZmFmNDJmYzM5ZjJl
-OTc5MzI5MDhjNTQzMDA1MDUzYjY1NGNhNjggIExJQ0VOU0UudHh0CmRpZmYgLS1naXQgYS9wYWNr
-YWdlL2JjdG9vbGJveC9iY3Rvb2xib3gubWsgYi9wYWNrYWdlL2JjdG9vbGJveC9iY3Rvb2xib3gu
-bWsKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IGFjOTM2MTAyNmYuLjAwMDAwMDAwMDAK
-LS0tIGEvcGFja2FnZS9iY3Rvb2xib3gvYmN0b29sYm94Lm1rCisrKyAvZGV2L251bGwKQEAgLTEs
-NDIgKzAsMCBAQAotIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKLSMKLSMgYmN0b29sYm94Ci0jCi0j
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIwotCi1CQ1RPT0xCT1hfVkVSU0lPTiA9IDQuNC44Ci1CQ1RP
-T0xCT1hfU0lURSA9ICQoY2FsbCBnaXRodWIsQmVsbGVkb25uZUNvbW11bmljYXRpb25zLGJjdG9v
-bGJveCwkKEJDVE9PTEJPWF9WRVJTSU9OKSkKLUJDVE9PTEJPWF9MSUNFTlNFID0gR1BMLTMuMCsK
-LUJDVE9PTEJPWF9MSUNFTlNFX0ZJTEVTID0gTElDRU5TRS50eHQKLUJDVE9PTEJPWF9JTlNUQUxM
-X1NUQUdJTkcgPSBZRVMKLQotIyBTZXQgQ01BS0VfU0tJUF9SUEFUSCB0byBwcmV2ZW50IGJjdG9v
-bGJveCBmcm9tIGFkZGluZyB0aGUgcnBhdGggdG8KLSMgc2hhcmVkIGxpYnJhcnkuCi1CQ1RPT0xC
-T1hfQ09ORl9PUFRTID0gXAotCS1ERU5BQkxFX1BPTEFSU1NMPU9GRiBcCi0JLURFTkFCTEVfU1RS
-SUNUPU9GRiBcCi0JLURFTkFCTEVfVEVTVFNfQ09NUE9ORU5UPU9GRiBcCi0JLURFTkFCTEVfVEVT
-VFM9T0ZGIFwKLQktRENNQUtFX1NLSVBfUlBBVEg9T04KLQotaWZlcSAoJChCUjJfUEFDS0FHRV9M
-SUJJQ09OVikseSkKLUJDVE9PTEJPWF9ERVBFTkRFTkNJRVMgKz0gbGliaWNvbnYKLUJDVE9PTEJP
-WF9DT05GX09QVFMgKz0gLURDTUFLRV9DWFhfRkxBR1M9IiQoVEFSR0VUX0NYWEZMQUdTKSAtbGlj
-b252IgotZW5kaWYKLQotaWZlcSAoJChCUjJfUEFDS0FHRV9NQkVEVExTKSx5KQotQkNUT09MQk9Y
-X0RFUEVOREVOQ0lFUyArPSBtYmVkdGxzCi1CQ1RPT0xCT1hfQ09ORl9PUFRTICs9IC1ERU5BQkxF
-X01CRURUTFM9T04KLWVsc2UKLUJDVE9PTEJPWF9DT05GX09QVFMgKz0gLURFTkFCTEVfTUJFRFRM
-Uz1PRkYKLWVuZGlmCi0KLWlmZXEgKCQoQlIyX1NUQVRJQ19MSUJTKSx5KQotQkNUT09MQk9YX0NP
-TkZfT1BUUyArPSAtREVOQUJMRV9TSEFSRUQ9T0ZGIC1ERU5BQkxFX1NUQVRJQz1PTgotZWxzZSBp
-ZmVxICgkKEJSMl9TSEFSRURfU1RBVElDX0xJQlMpLHkpCi1CQ1RPT0xCT1hfQ09ORl9PUFRTICs9
-IC1ERU5BQkxFX1NIQVJFRD1PTiAtREVOQUJMRV9TVEFUSUM9T04KLWVsc2UgaWZlcSAoJChCUjJf
-U0hBUkVEX0xJQlMpLHkpCi1CQ1RPT0xCT1hfQ09ORl9PUFRTICs9IC1ERU5BQkxFX1NIQVJFRD1P
-TiAtREVOQUJMRV9TVEFUSUM9T0ZGCi1lbmRpZgotCi0kKGV2YWwgJChjbWFrZS1wYWNrYWdlKSkK
-LS0gCjIuNDcuMwoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczov
-L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Package is unmaintained and causes build errors with gcc >= 14.x:
+https://sourceforge.net/p/expect/bugs/107
+
+Fixes:
+https://autobuild.buildroot.net/results/425/425dadaa4a75eae9331351172839402a197749a5/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ .checkpackageignore                           |   2 -
+ Config.in.legacy                              |   6 +
+ package/Config.in                             |   1 -
+ .../0001-enable-cross-compilation.patch       | 120 ------------------
+ .../0002-allow-tcl-build-directory.patch      |  34 -----
+ package/expect/Config.in                      |   7 -
+ package/expect/expect.hash                    |   4 -
+ package/expect/expect.mk                      |  21 ---
+ 8 files changed, 6 insertions(+), 189 deletions(-)
+ delete mode 100644 package/expect/0001-enable-cross-compilation.patch
+ delete mode 100644 package/expect/0002-allow-tcl-build-directory.patch
+ delete mode 100644 package/expect/Config.in
+ delete mode 100644 package/expect/expect.hash
+ delete mode 100644 package/expect/expect.mk
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 713b9d9a07..f1a089aac5 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -361,8 +361,6 @@ package/exim/0001-Build-buildconfig-for-the-host.patch lib_patch.Upstream
+ package/exim/0002-Don-t-make-backup-copies-of-installed-files.patch lib_patch.Upstream
+ package/exim/0003-Skip-version-check-and-symlink-installation.patch lib_patch.Upstream
+ package/exim/S86exim lib_sysv.Indent lib_sysv.Variables
+-package/expect/0001-enable-cross-compilation.patch lib_patch.Upstream
+-package/expect/0002-allow-tcl-build-directory.patch lib_patch.Upstream
+ package/fail2ban/S60fail2ban Shellcheck lib_sysv.Variables
+ package/fakedate/fakedate Shellcheck
+ package/falcosecurity-libs/0001-cmake-Permit-setting-GRPC_CPP_PLUGIN.patch lib_patch.Upstream
+diff --git a/Config.in.legacy b/Config.in.legacy
+index ce135a0c26..8961bf6fab 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
+ 
+ comment "Legacy options removed in 2025.11"
+ 
++config BR2_PACKAGE_EXPECT
++	bool "expect has been removed"
++	select BR2_LEGACY
++	help
++	  expect is unmaintained and has been removed
++
+ config BR2_PACKAGE_BCTOOLBOX
+ 	bool "bctoolbox has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 6ff8d93bc5..f07265f731 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1524,7 +1524,6 @@ endif
+ 	source "package/tcl/Config.in"
+ if BR2_PACKAGE_TCL
+ menu "Tcl libraries/modules"
+-	source "package/expect/Config.in"
+ 	source "package/tcllib/Config.in"
+ endmenu
+ endif
+diff --git a/package/expect/0001-enable-cross-compilation.patch b/package/expect/0001-enable-cross-compilation.patch
+deleted file mode 100644
+index fd31a01f11..0000000000
+--- a/package/expect/0001-enable-cross-compilation.patch
++++ /dev/null
+@@ -1,120 +0,0 @@
+-From: Andrew Ruder <andrew.ruder@elecsyscorp.com>
+-Subject: [PATCH] enable cross compilation for expect
+-
+-This patch was created by running ./configure on a modern Linux machine
+-and inserting the results into the cross compilation section of
+-each AC_MSG_CHECKING that bombed out with an error.
+-
+-Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
+----
+-
+-Index: expect-5.45/configure.in
+-===================================================================
+---- expect-5.45.orig/configure.in	2013-11-14 07:59:58.732100595 -0600
+-+++ expect-5.45/configure.in	2013-11-14 07:59:58.732100595 -0600
+-@@ -481,7 +481,7 @@
+- ,
+- 	AC_MSG_RESULT(no)
+- ,
+--	AC_MSG_ERROR([Expect can't be cross compiled])
+-+	AC_MSG_RESULT(no)
+- )
+- 
+- AC_MSG_CHECKING([if any value exists for WNOHANG])
+-@@ -506,7 +506,8 @@
+- 	AC_MSG_RESULT(no)
+- 	AC_DEFINE(WNOHANG_BACKUP_VALUE, 1)
+- ,
+--	AC_MSG_ERROR([Expect can't be cross compiled])
+-+	AC_MSG_RESULT(yes)
+-+	AC_DEFINE(WNOHANG_BACKUP_VALUE, 1)
+- )
+- 
+- #
+-@@ -574,7 +575,7 @@
+- 	AC_DEFINE(REARM_SIG)
+- ,
+- 	AC_MSG_RESULT(no)
+--, AC_MSG_WARN([Expect can't be cross compiled])
+-+, AC_MSG_RESULT(no)
+- )
+- 
+- # HPUX7 has trouble with the big cat so split it
+-@@ -725,7 +726,7 @@
+- ,
+-         AC_MSG_RESULT(no)
+- ,
+--	AC_MSG_ERROR([Expect can't be cross compiled])
+-+	AC_MSG_RESULT(no)
+- )
+- 
+- # mach systems have include files for unimplemented features
+-@@ -749,7 +750,9 @@
+- ,
+-         AC_MSG_RESULT(no)
+- ,
+--	AC_MSG_ERROR([Expect can't be cross compiled])
+-+    AC_DEFINE(HAVE_TERMIO)
+-+    PTY_TYPE=termios
+-+	AC_MSG_RESULT(yes)
+- )
+- 
+-   # now check for the new style ttys (not yet posix)
+-@@ -771,7 +774,9 @@
+-   ,
+-         AC_MSG_RESULT(no)
+-   ,
+--	AC_MSG_ERROR([Expect can't be cross compiled])
+-+        AC_DEFINE(HAVE_TERMIOS)
+-+        PTY_TYPE=termios
+-+        AC_MSG_RESULT(yes)
+-   )
+- fi
+- 
+-@@ -794,7 +799,7 @@
+- ,
+- 	AC_MSG_RESULT(no)
+- ,
+--	AC_MSG_ERROR([Expect can't be cross compiled])
+-+	AC_MSG_RESULT(no)
+- )
+- 
+- AC_MSG_CHECKING([if TIOCGWINSZ in termios.h])
+-@@ -816,7 +821,7 @@
+- ,
+- 	AC_MSG_RESULT(no)
+- ,
+--	AC_MSG_ERROR([Expect can't be cross compiled])
+-+	AC_MSG_RESULT(no)
+- )
+- 
+- # finally check for Cray style ttys
+-@@ -837,7 +842,7 @@
+- ,
+- 	AC_MSG_RESULT(no)
+- ,
+--	AC_MSG_ERROR([Expect can't be cross compiled])
+-+	AC_MSG_RESULT(no)
+- )
+- 
+- #
+-@@ -869,7 +874,9 @@
+- AC_HAVE_FUNCS(getpty)
+- 
+- # following test sets SETPGRP_VOID if setpgrp takes 0 args, else takes 2
+--AC_FUNC_SETPGRP
+-+cat >>expect_cf.h <<\_ACEOF
+-+#define SETPGRP_VOID 1
+-+_ACEOF
+- 
+- #
+- # check for timezones
+-@@ -889,7 +896,7 @@
+- 	AC_MSG_RESULT(yes),
+- 	AC_MSG_RESULT(no)
+- ,
+--	AC_MSG_ERROR([Expect can't be cross compiled])
+-+	AC_MSG_RESULT(yes)
+- )
+- 
+- 
+diff --git a/package/expect/0002-allow-tcl-build-directory.patch b/package/expect/0002-allow-tcl-build-directory.patch
+deleted file mode 100644
+index 83ede7acb6..0000000000
+--- a/package/expect/0002-allow-tcl-build-directory.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From: Andrew Ruder <andrew.ruder@elecsyscorp.com>
+-Subject: [PATCH] Allow tcl build directory for linking
+-
+-Some small changes to use TCL_BUILD_LIB_SPEC instead of TCL_LIB_SPEC for
+-linking against tcl directly out of its build directory.
+-
+-Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
+----
+-
+-Index: expect-5.45/Makefile.in
+-===================================================================
+---- expect-5.45.orig/Makefile.in	2013-11-14 07:59:58.732100595 -0600
+-+++ expect-5.45/Makefile.in	2013-11-14 07:59:58.732100595 -0600
+-@@ -393,7 +393,7 @@
+- 		@LDFLAGS_DEFAULT@ \
+- 		-o expect exp_main_exp.o \
+- 		@EXP_BUILD_LIB_SPEC@ \
+--		@TCL_LIB_SPEC@ \
+-+		@TCL_BUILD_LIB_SPEC@ \
+- 		@TCL_DL_LIBS@ @PKG_LIBS@ @MATH_LIBS@ \
+- 		@TCL_CC_SEARCH_FLAGS@ \
+- 		@EXP_CC_SEARCH_FLAGS@
+-Index: expect-5.45/tclconfig/tcl.m4
+-===================================================================
+---- expect-5.45.orig/tclconfig/tcl.m4	2010-11-09 13:42:10.000000000 -0600
+-+++ expect-5.45/tclconfig/tcl.m4	2013-11-14 08:02:08.424100580 -0600
+-@@ -412,6 +412,7 @@
+-     AC_SUBST(TCL_LIB_FILE)
+-     AC_SUBST(TCL_LIB_FLAG)
+-     AC_SUBST(TCL_LIB_SPEC)
+-+    AC_SUBST(TCL_BUILD_LIB_SPEC)
+- 
+-     AC_SUBST(TCL_STUB_LIB_FILE)
+-     AC_SUBST(TCL_STUB_LIB_FLAG)
+diff --git a/package/expect/Config.in b/package/expect/Config.in
+deleted file mode 100644
+index 67dfe643b2..0000000000
+--- a/package/expect/Config.in
++++ /dev/null
+@@ -1,7 +0,0 @@
+-config BR2_PACKAGE_EXPECT
+-	bool "expect"
+-	help
+-	  Expect is a tool for automating interactive applications
+-	  such as telnet, ftp, passwd, fsck, rlogin, ssh, tip, etc.
+-
+-	  https://core.tcl.tk/expect/
+diff --git a/package/expect/expect.hash b/package/expect/expect.hash
+deleted file mode 100644
+index c4815abb07..0000000000
+--- a/package/expect/expect.hash
++++ /dev/null
+@@ -1,4 +0,0 @@
+-# From https://sourceforge.net/projects/expect/files/Expect/5.45.4/expect5.45.4.tar.gz.SHA256
+-sha256  49a7da83b0bdd9f46d04a04deec19c7767bb9a323e40c4781f89caf760b92c34  expect5.45.4.tar.gz
+-# Locally calculated
+-sha256  b2415b17dc8d9a287f4509047ef5ac3436baef7ba7c50faef5222dcdf61a2bab  README
+diff --git a/package/expect/expect.mk b/package/expect/expect.mk
+deleted file mode 100644
+index 44bf74af46..0000000000
+--- a/package/expect/expect.mk
++++ /dev/null
+@@ -1,21 +0,0 @@
+-################################################################################
+-#
+-# expect
+-#
+-################################################################################
+-
+-EXPECT_VERSION = 5.45.4
+-EXPECT_SITE = https://sourceforge.net/projects/expect/files/Expect/$(EXPECT_VERSION)
+-EXPECT_SOURCE = expect$(EXPECT_VERSION).tar.gz
+-EXPECT_LICENSE = Public domain
+-EXPECT_LICENSE_FILES = README
+-
+-# 0001-enable-cross-compilation.patch
+-EXPECT_AUTORECONF = YES
+-EXPECT_DEPENDENCIES = tcl
+-EXPECT_CONF_OPTS = --with-tcl=$(BUILD_DIR)/tcl-$(TCL_VERSION)/unix
+-
+-# Since we don't want examples installed
+-EXPECT_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-binaries
+-
+-$(eval $(autotools-package))
+-- 
+2.47.3
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
