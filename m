@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46070CCFA05
-	for <buildroot@archiver.kernel.org>; Thu,  6 Nov 2025 20:47:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F0D4CCFA13
+	for <buildroot@archiver.kernel.org>; Thu,  6 Nov 2025 20:48:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E63CF4083C;
-	Thu,  6 Nov 2025 20:47:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0995240849;
+	Thu,  6 Nov 2025 20:48:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mfrkqnCQUc4T; Thu,  6 Nov 2025 20:47:48 +0000 (UTC)
+ id Tdq08ozPrh6a; Thu,  6 Nov 2025 20:48:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 754994120A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA6F941127
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 754994120A;
-	Thu,  6 Nov 2025 20:47:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EA6F941127;
+	Thu,  6 Nov 2025 20:47:59 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 29A49961
- for <buildroot@buildroot.org>; Thu,  6 Nov 2025 20:47:46 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 3162893E
+ for <buildroot@buildroot.org>; Thu,  6 Nov 2025 20:47:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1BAD984514
- for <buildroot@buildroot.org>; Thu,  6 Nov 2025 20:47:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 23A9884514
+ for <buildroot@buildroot.org>; Thu,  6 Nov 2025 20:47:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YknkFsve_kGK for <buildroot@buildroot.org>;
- Thu,  6 Nov 2025 20:47:44 +0000 (UTC)
+ id zx0n3xTG2Jqw for <buildroot@buildroot.org>;
+ Thu,  6 Nov 2025 20:47:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 862B884488
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 862B884488
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0BAB084488
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0BAB084488
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 862B884488
- for <buildroot@buildroot.org>; Thu,  6 Nov 2025 20:47:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0BAB084488
+ for <buildroot@buildroot.org>; Thu,  6 Nov 2025 20:47:56 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0d15.dip0.t-ipconnect.de [91.58.13.21])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id E15D8A4C1F77;
- Thu,  6 Nov 2025 21:45:27 +0100 (CET)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 30AFDA4C1F7B;
+ Thu,  6 Nov 2025 21:45:28 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:46844)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vH6rH-0000000007X-1YGh;
+ (envelope-from <bernd@kuhls.net>) id 1vH6rH-0000000007X-3BM3;
  Thu, 06 Nov 2025 20:45:27 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu,  6 Nov 2025 21:45:17 +0100
-Message-ID: <20251106204522.3273683-11-bernd@kuhls.net>
+Date: Thu,  6 Nov 2025 21:45:19 +0100
+Message-ID: <20251106204522.3273683-13-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251106204522.3273683-1-bernd@kuhls.net>
 References: <20251106204522.3273683-1-bernd@kuhls.net>
@@ -54,22 +54,22 @@ MIME-Version: 1.0
 X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202506031021; t=1762461927;
- bh=+uNrUm/8x89kLVHqBfxRx8EZDd0e0j2sPmOJsB3p0/g=;
+ s=kas202506031021; t=1762461928;
+ bh=EiqDLaVe+xfeTNzbFcHD3n7GvCL6DUVAM+wyAz+7Pys=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=WxVAC6fpOcjfqnPcvefqQbhbxRSUNX+UWpbkbIbzoi3AbG63DecXBIuF+kBI0SYUj
- n7Q2stkGwLHt3ws9L3bhQnzQ1wEkKbB0tCnQYHWPTu9zAYKdOZjjXNPtPWAsCLSM5W
- qjd/gKA/fGHFslEpEuc1luxL9WtNAHhYoy/iPVxqq67EgAn8IJXbbqp9S8dmutvvks
- 5OMO4a3ia+Zl/3S/PUeOgYSy91I4ajaWmencxQ2fwerxFZik7SBrePZPGyXTF25XIz
- zfG1Pv/V35ta+mgVG3/Pb2mqECku1dmr9ZVX67VU6PswYBI/lyHnlOh9l9TM6iUsYM
- MSLIWt2fls0SA==
+ b=tA1FkGGOC/I1e6hpBAC+59N+/rXu6ZJZuG4hWDSCRfgoRopQ1ea1OQAqg3CeFsik/
+ QGU9W+zv1xl0cAO4PpAuk6WKzxxHzAjMqF6n1lEQCOuCt0SCeWxo8GWzbdtrmylr/n
+ lOUff79rB5egI4kDnojuNKgujw7Uw2G9DWBNfi+YBWLKjVh6Go7Y3lJykncTErM7qF
+ HMqjexupIA66xygSsfgqdDkVR2W1O6tM+mKwE7EOFJH/Eoqh3KNPAqmwIW6rgH0Q2D
+ Nq0OZX0ad/Bk6eE0pj3EChE/j1u0dUUzzjM7xj5MnYSsH4vCETZPI45kY4nJ+Jb1xU
+ WlT+STYm2n3Qw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=WxVAC6fp
-Subject: [Buildroot] [PATCH v3 10/14] package/mongrel2: remove package
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=tA1FkGGO
+Subject: [Buildroot] [PATCH v3 12/14] package/dvbsnoop: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,384 +90,179 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-mongrel2 is incompatible with MbedTLS 3.6 and was removed from Debian
-stable/testing:
-https://tracker.debian.org/pkg/mongrel2
-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1075866
+The package is causing build errors with newer gcc versions:
 
-Upstream report from 2023 exists:
-https://github.com/mongrel2/mongrel2/issues/359
-but went unanswered, the last upstream commit was in Dec 2021:
-https://github.com/mongrel2/mongrel2/commits/master/
+sectables.c:331:22: error: initialization of 'void (*)(void)' from
+ incompatible pointer type 'void (*)(unsigned char *, int)'
+ [-Wincompatible-pointer-types]
+  331 |      {  0x00, 0x00,  section_PAT        },
 
-Since no other package uses mongrel2 we can safely remove this
-unmaintained package.
+and many more.
+
+The latest release dates back to 2007, the latest change in the CVS-
+based source repository[1] (downloaded as dvbsnoop.zip) is also from
+2007. No newer or maintained forks were found.
+
+State of upstream ticket system[2]:
+
+  Bugs: last update 2012
+  Support Requests: No open tickets found.
+  Patches: last update 2010
+  Feature Requests: 1 from 2021, the rest 2012 and older
+
+Instead of fixing build errors for an unmaintained project which is not
+used by any other package we remove it from buildroot.
 
 Fixes:
-https://autobuild.buildroot.net/results/6c1/6c17827d21135886b1f4822174a4a963ca6325bf/
+https://autobuild.buildroot.net/results/ea6/ea6786248b9ecf0eb1c1c1f7cdd0202462b75e00/
+
+[1] https://sourceforge.net/p/dvbsnoop/cvs/
+[2] https://sourceforge.net/p/dvbsnoop/_list/tickets
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .checkpackageignore                           |  2 -
- Config.in.legacy                              |  6 ++
- DEVELOPERS                                    |  3 -
- package/Config.in                             |  1 -
- package/mongrel2/0001-Do-not-run-tests.patch  | 45 -----------
- ...-Fix-Makefiles-for-cross-compilation.patch | 78 -------------------
- .../0003-fix-build-with-gcc-4.8.patch         | 62 ---------------
- package/mongrel2/Config.in                    | 33 --------
- package/mongrel2/mongrel2.hash                |  6 --
- package/mongrel2/mongrel2.mk                  | 26 -------
- 10 files changed, 6 insertions(+), 256 deletions(-)
- delete mode 100644 package/mongrel2/0001-Do-not-run-tests.patch
- delete mode 100644 package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch
- delete mode 100644 package/mongrel2/0003-fix-build-with-gcc-4.8.patch
- delete mode 100644 package/mongrel2/Config.in
- delete mode 100644 package/mongrel2/mongrel2.hash
- delete mode 100644 package/mongrel2/mongrel2.mk
+ .checkpackageignore                      |  1 -
+ Config.in.legacy                         |  6 ++++++
+ DEVELOPERS                               |  1 -
+ package/Config.in                        |  1 -
+ package/dvbsnoop/0001-musl-types-h.patch | 15 ---------------
+ package/dvbsnoop/Config.in               | 21 ---------------------
+ package/dvbsnoop/dvbsnoop.hash           |  3 ---
+ package/dvbsnoop/dvbsnoop.mk             | 12 ------------
+ 8 files changed, 6 insertions(+), 54 deletions(-)
+ delete mode 100644 package/dvbsnoop/0001-musl-types-h.patch
+ delete mode 100644 package/dvbsnoop/Config.in
+ delete mode 100644 package/dvbsnoop/dvbsnoop.hash
+ delete mode 100644 package/dvbsnoop/dvbsnoop.mk
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index f1a089aac5..a6a6da598d 100644
+index a6a6da598d..68882f3061 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -700,8 +700,6 @@ package/mini-snmpd/0001-linux.c-fix-musl-build.patch lib_patch.Upstream
- package/minidlna/S60minidlnad Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/minissdpd/S50minissdpd Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/modem-manager/S44modem-manager Shellcheck lib_sysv.Variables
--package/mongrel2/0001-Do-not-run-tests.patch lib_patch.Upstream
--package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch lib_patch.Upstream
- package/monit/0001-Do-not-force-building-a-statically-linked-binary.patch lib_patch.Upstream
- package/mono-gtksharp3/0001-Fixes-MONO_PROFILE_ENTER_LEAVE-undeclared.patch lib_patch.Upstream
- package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch lib_patch.Upstream
+@@ -333,7 +333,6 @@ package/dt/0002-dt-default-source-define.patch lib_patch.Upstream
+ package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch lib_patch.Upstream
+ package/dvblast/0001-missing-lm.patch lib_patch.Upstream
+ package/dvblast/0002-fix-int-types.patch lib_patch.Upstream
+-package/dvbsnoop/0001-musl-types-h.patch lib_patch.Upstream
+ package/dvdrw-tools/0001-limits.h.patch lib_patch.Upstream
+ package/dvdrw-tools/0002-Include-sysmacros.h-to-compile-with-newer-gcc.patch lib_patch.Upstream
+ package/earlyoom/0001-main.c-fix-build-with-kernel-4.3.patch lib_patch.Upstream
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 8961bf6fab..df57ff95a3 100644
+index 1d94504cce..daef67ef84 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2025.11"
  
-+config BR2_PACKAGE_MONGREL2
-+	bool "mongrel2 has been removed"
++config BR2_PACKAGE_DVBSNOOP
++	bool "dvbsnoop has been removed"
 +	select BR2_LEGACY
 +	help
-+	  mongrel2 is incompatible with MbedTLS 3.6 and has been removed
++	  dvbsnoop is unmaintained and has been removed
 +
- config BR2_PACKAGE_EXPECT
- 	bool "expect has been removed"
+ config BR2_PACKAGE_PROCRANK_LINUX
+ 	bool "procrank_linux has been removed"
  	select BR2_LEGACY
 diff --git a/DEVELOPERS b/DEVELOPERS
-index b9e7a32ea5..a1576de92d 100644
+index a1576de92d..426e327ded 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2136,9 +2136,6 @@ F:	package/python-gunicorn/
- F:	support/testing/tests/package/sample_python_flask.py
- F:	support/testing/tests/package/test_python_flask.py
+@@ -582,7 +582,6 @@ F:	package/jailhouse/
+ F:	package/sunxi-boards/
  
--N:	Lionel Orry <lionel.orry@gmail.com>
--F:	package/mongrel2/
--
- N:	Lothar Felten <lothar.felten@gmail.com>
- F:	board/bananapi/bananapi-m2-ultra/
- F:	board/beagleboard/beaglebone/
+ N:	Carsten Schoenert <c.schoenert@gmail.com>
+-F:	package/dvbsnoop/
+ F:	package/libdvbsi/
+ F:	package/libsvg/
+ F:	package/libsvg-cairo/
 diff --git a/package/Config.in b/package/Config.in
-index f07265f731..b74b577f8a 100644
+index d1887891df..ec30c238aa 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2558,7 +2558,6 @@ endif
- 	source "package/minissdpd/Config.in"
- 	source "package/mjpg-streamer/Config.in"
- 	source "package/modem-manager/Config.in"
--	source "package/mongrel2/Config.in"
- 	source "package/mosh/Config.in"
- 	source "package/mosquitto/Config.in"
- 	source "package/mrouted/Config.in"
-diff --git a/package/mongrel2/0001-Do-not-run-tests.patch b/package/mongrel2/0001-Do-not-run-tests.patch
+@@ -495,7 +495,6 @@ endmenu
+ 	source "package/dtbocfg/Config.in"
+ 	source "package/dtv-scan-tables/Config.in"
+ 	source "package/dump1090/Config.in"
+-	source "package/dvbsnoop/Config.in"
+ 	source "package/edid-decode/Config.in"
+ 	source "package/edk2-non-osi/Config.in"
+ 	source "package/edk2-platforms/Config.in"
+diff --git a/package/dvbsnoop/0001-musl-types-h.patch b/package/dvbsnoop/0001-musl-types-h.patch
 deleted file mode 100644
-index 3b72aef3c5..0000000000
---- a/package/mongrel2/0001-Do-not-run-tests.patch
+index 1149df0d07..0000000000
+--- a/package/dvbsnoop/0001-musl-types-h.patch
 +++ /dev/null
-@@ -1,45 +0,0 @@
--From 3cbef2195533f357c8a80c2840108662461273b7 Mon Sep 17 00:00:00 2001
--From: Lionel Orry <lionel.orry@gmail.com>
--Date: Wed, 27 Mar 2013 14:48:19 +0100
--Subject: [PATCH] Do not run tests.
+@@ -1,15 +0,0 @@
+-Fix musl build
 -
--This patch is specific to cross-compiled environments and avoids running
--the tests on the host. It is not meant to be applied upstream.
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 -
--Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
--[Dario: make the patch to be applied with fuzz factor 0]
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-----
-- Makefile            | 2 +-
-- tools/m2sh/Makefile | 2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index 7dc4089..ca72630 100644
----- a/Makefile
--+++ b/Makefile
--@@ -18,7 +18,7 @@
-- TESTS=$(patsubst %.c,%,${TEST_SRC})
-- MAKEOPTS=OPTFLAGS="${CFLAGS} ${NOEXTCFLAGS} ${OPTFLAGS}" LDFLAGS="${LDFLAGS}" LIBS="${LIBS}" DESTDIR="${DESTDIR}" PREFIX="${PREFIX}"
+-diff -uNr dvbsnoop-1.4.50.org/src/misc/helper.h dvbsnoop-1.4.50/src/misc/helper.h
+---- dvbsnoop-1.4.50.org/src/misc/helper.h	2006-01-02 20:04:56.000000000 +0100
+-+++ dvbsnoop-1.4.50/src/misc/helper.h	2016-01-24 14:35:02.000000000 +0100
+-@@ -16,6 +16,7 @@
+- #ifndef __HELPER_H
+- #define __HELPER_H
 - 
---all: bin/mongrel2 tests m2sh procer
--+all: bin/mongrel2 m2sh procer filters config_modules
+-+#include <sys/types.h>
 - 
-- ${OBJECTS_NOEXT}: CFLAGS += ${NOEXTCFLAGS}
-- ${OBJECTS}: | builddirs
--diff --git a/tools/m2sh/Makefile b/tools/m2sh/Makefile
--index b50d8a0..334e4da 100644
----- a/tools/m2sh/Makefile
--+++ b/tools/m2sh/Makefile
--@@ -12,7 +12,7 @@
-- 
-- $(RAGEL_OBJECTS): CFLAGS += -Wno-unused-const-variable -Wimplicit-fallthrough=0 -Wno-unused-parameter
-- 
---all: ../lemon/lemon tests build/m2sh
--+all: ../lemon/lemon build/m2sh
-- 
-- dev: CFLAGS=-g -Wall -Wextra -Isrc -I../../src $(OPTFLAGS)
-- dev: all
---- 
--1.8.1.4
--
-diff --git a/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch b/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch
+- u_long outBit_Sx (int verbosity, const char *text, u_char *buf, int startbit, int bitlen);
+- u_long outBit_Sx_NL (int verbosity, const char *text, u_char *buf, int startbit, int bitlen);
+diff --git a/package/dvbsnoop/Config.in b/package/dvbsnoop/Config.in
 deleted file mode 100644
-index 1961f128ed..0000000000
---- a/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch
+index fb63fa4e8b..0000000000
+--- a/package/dvbsnoop/Config.in
 +++ /dev/null
-@@ -1,78 +0,0 @@
--From 298356c44a7df2b34c4e307c531d2010e2cb4b79 Mon Sep 17 00:00:00 2001
--From: Lionel Orry <lionel.orry@gmail.com>
--Date: Wed, 27 Mar 2013 15:56:56 +0100
--Subject: [PATCH] Fix Makefiles for cross-compilation
--
--The CFLAGS handling in mongrel2 is really messy and it is hard to make
--it behave correctly with cross-compiling environments. This patch
--restricts the Makefiles syntax to GNU Make, but help cross-compiling.
--
--This is not meant to be applied upstream.
--
--Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
--[Fabrice: refresh for 1.12.2]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- Makefile                      | 2 +-
-- tools/config_modules/Makefile | 2 +-
-- tools/filters/Makefile        | 2 +-
-- tools/m2sh/Makefile           | 2 +-
-- tools/procer/Makefile         | 2 +-
-- 5 files changed, 5 insertions(+), 5 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index 4e89c33..2f549a8 100644
----- a/Makefile
--+++ b/Makefile
--@@ -1,5 +1,5 @@
-- CFLAGS?=-g -O2
---CFLAGS += -Wall -Wextra -Wno-implicit-fallthrough -Wno-unused-const-variable -I./src -DNDEBUG -D_FILE_OFFSET_BITS=64 -pthread
--+override CFLAGS += -Wall -Wextra -Wno-implicit-fallthrough -Wno-unused-const-variable -I./src -DNDEBUG -D_FILE_OFFSET_BITS=64 -pthread
-- CFLAGS += ${OPTFLAGS}
-- LIBS+=-lzmq -ldl -lsqlite3 -lmbedtls -lmbedx509 -lmbedcrypto
-- PREFIX?=/usr/local
--diff --git a/tools/config_modules/Makefile b/tools/config_modules/Makefile
--index c2680d1..ada3169 100644
----- a/tools/config_modules/Makefile
--+++ b/tools/config_modules/Makefile
--@@ -1,5 +1,5 @@
-- PREFIX?=/usr/local
---CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
--+override CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
-- LDFLAGS=$(OPTLIBS)
-- 
-- MONGO_SRC = mongo-c-driver/src/bson.c \
--diff --git a/tools/filters/Makefile b/tools/filters/Makefile
--index 6505ad5..a968ef6 100644
----- a/tools/filters/Makefile
--+++ b/tools/filters/Makefile
--@@ -1,5 +1,5 @@
-- PREFIX?=/usr/local
---CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -g -fPIC -shared -nostartfiles -L../../build
--+override CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -g -fPIC -shared -nostartfiles -L../../build
-- LDFLAGS=$(OPTLIBS)
-- 
-- all: null.so rewrite.so sendfile.so
--diff --git a/tools/m2sh/Makefile b/tools/m2sh/Makefile
--index b50d8a0..cc00062 100644
----- a/tools/m2sh/Makefile
--+++ b/tools/m2sh/Makefile
--@@ -1,4 +1,4 @@
---CFLAGS=-DNDEBUG -DNO_LINENOS -pthread -g -I../../src -Isrc -Wall $(OPTFLAGS)
--+override CFLAGS=-DNDEBUG -DNO_LINENOS -pthread -g -I../../src -Isrc -Wall $(OPTFLAGS)
-- LIBS=-lzmq -lsqlite3 ../../build/libm2.a $(OPTLIBS)
-- 
-- PREFIX?=/usr/local
--diff --git a/tools/procer/Makefile b/tools/procer/Makefile
--index bb9aa31..d377f7f 100644
----- a/tools/procer/Makefile
--+++ b/tools/procer/Makefile
--@@ -1,4 +1,4 @@
---CFLAGS=-DNDEBUG -pthread -g -I../../src -Wall $(OPTFLAGS)
--+override CFLAGS=-DNDEBUG -pthread -g -I../../src -Wall $(OPTFLAGS)
-- PREFIX?=/usr/local
-- LIBS?=-lzmq 
-- SOURCES=$(wildcard *.c)
---- 
--2.27.0
--
-diff --git a/package/mongrel2/0003-fix-build-with-gcc-4.8.patch b/package/mongrel2/0003-fix-build-with-gcc-4.8.patch
-deleted file mode 100644
-index 996cd3246b..0000000000
---- a/package/mongrel2/0003-fix-build-with-gcc-4.8.patch
-+++ /dev/null
-@@ -1,62 +0,0 @@
--From cc2dd3995dc9a9e6f0e705e11e791f3f3c7d7326 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 18 Jan 2022 22:41:36 +0100
--Subject: [PATCH] fix build with gcc 4.8
--
--Drop "-Wno-unused-const-variable -Wimplicit-fallthrough=0" as
--"-Wno-implicit-fallthrough -Wno-unused-const-variable" is already set in
--CFLAGS. This will avoid the following build failure with gcc 4.8 raised
--since version 1.13.0 and
--https://github.com/mongrel2/mongrel2/commit/725209578599bd7784753d86aee34f6441ff78a5:
--
--arm-none-linux-gnueabi-gcc: error: unrecognized command line option '-Wimplicit-fallthrough=0'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/de324b733e09057c87352220069fe65f6e535eb8
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/mongrel2/mongrel2/pull/354
--[Dario: make the patch to be applied with fuzz factor 0]
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-----
-- Makefile            | 1 -
-- tools/m2sh/Makefile | 4 ++--
-- 2 files changed, 2 insertions(+), 3 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index f6627ed..fb8d028 100644
----- a/Makefile
--+++ b/Makefile
--@@ -22,7 +22,6 @@ all: bin/mongrel2 tests m2sh procer
-- 
-- ${OBJECTS_NOEXT}: CFLAGS += ${NOEXTCFLAGS}
-- ${OBJECTS}: | builddirs
---$(RAGEL_OBJECTS): CFLAGS += -Wno-unused-const-variable -Wimplicit-fallthrough=0
-- 
-- .PHONY: builddirs
-- builddirs:
--diff --git a/tools/m2sh/Makefile b/tools/m2sh/Makefile
--index 83e7ae4..86364af 100644
----- a/tools/m2sh/Makefile
--+++ b/tools/m2sh/Makefile
--@@ -10,7 +10,7 @@
-- LIB_OBJ=$(filter-out src/m2sh.o,${OBJECTS})
-- RAGEL_OBJECTS=src/lexer.o src/cli.o
-- 
---$(RAGEL_OBJECTS): CFLAGS += -Wno-unused-const-variable -Wimplicit-fallthrough=0 -Wno-unused-parameter
--+$(RAGEL_OBJECTS): CFLAGS += -Wno-unused-parameter
-- 
-- all: ../lemon/lemon build/m2sh
-- 
--@@ -20,7 +20,7 @@
-- install: build/m2sh
-- 	install build/m2sh ${DESTDIR}${PREFIX}/bin
-- 
---src/parser.o: CFLAGS += -Wno-unused-const-variable -Wno-unused-parameter
--+src/parser.o: CFLAGS += -Wno-unused-parameter
-- 
-- build/libm2sh.a: ${LIB_OBJ}
-- 	mkdir -p build
---- 
--2.34.1
--
-diff --git a/package/mongrel2/Config.in b/package/mongrel2/Config.in
-deleted file mode 100644
-index 60fee6f96d..0000000000
---- a/package/mongrel2/Config.in
-+++ /dev/null
-@@ -1,33 +0,0 @@
--# mongrel2 uses {get,make,swap}context() functions, which are
--# available in glibc for all architectures and in uClibc only for a
--# subset of the architectures
--config BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
--	bool
--	default y if BR2_TOOLCHAIN_USES_GLIBC
--	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
--		(BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || BR2_sparc || BR2_x86_64)
--
--comment "mongrel2 needs a uClibc or glibc toolchain w/ C++, threads, dynamic library"
--	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
--		!BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
--
--config BR2_PACKAGE_MONGREL2
--	bool "mongrel2"
--	depends on BR2_INSTALL_LIBSTDCPP # zeromq
--	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
--	depends on !BR2_STATIC_LIBS # uses dlopen()
--	depends on BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
--	select BR2_PACKAGE_MBEDTLS
--	select BR2_PACKAGE_SQLITE
--	select BR2_PACKAGE_ZEROMQ
+@@ -1,21 +0,0 @@
+-config BR2_PACKAGE_DVBSNOOP
+-	bool "dvbsnoop"
 -	help
--	  Mongrel2 is an application, language, and network architecture
--	  agnostic web server that focuses on web applications using
--	  modern browser technologies.
+-	  Dvbsnoop is just a simple tool to analyze, view or debug a
+-	  transport stream (TS), program elementary stream (PES) or even
+-	  a program stream (PS). Dvbsnoop is trying to get input mostly
+-	  direct from a frontend (satellite or cable tuner inside a
+-	  set-top box for example) via DVB APIv3 to view into a TS, or a
+-	  demux to view PES or PS (also mostly inside the set-top box or
+-	  even PCI Card or USB Plug) but also from a file (recorded TS).
+-	  Dvbsnoop is working well on SD transport streams but may have
+-	  some limited functionality on HD transport streams
+-	  (DVB-{C,S,T}2 because of missing knowledge how to handle it.
 -
--	  Mongrel2 supports 17 languages and platforms, HTTP, Flash
--	  sockets, WebSockets, Long Polling, and many ways to deploy
--	  and hack on it.
+-	  Dvbsnoop itself doesn't do the tuning on the frontend, this
+-	  has to be done by external helpers or manually driver call.
+-	  The dvbsnoop tool was written while developing the software
+-	  Neutrino on the set-top box DBox2.
 -
--	  http://www.mongrel2.org
-diff --git a/package/mongrel2/mongrel2.hash b/package/mongrel2/mongrel2.hash
+-	  http://dvbsnoop.sourceforge.net
+-	  http://en.wikipedia.org/wiki/DBox2
+diff --git a/package/dvbsnoop/dvbsnoop.hash b/package/dvbsnoop/dvbsnoop.hash
 deleted file mode 100644
-index f4f094ea03..0000000000
---- a/package/mongrel2/mongrel2.hash
+index 0d88afe154..0000000000
+--- a/package/dvbsnoop/dvbsnoop.hash
 +++ /dev/null
-@@ -1,6 +0,0 @@
--# From https://mongrel2.org
--sha1  6057f9cbfae41e2cdef1e0f715df3c1a4d3a1884  mongrel2-v1.13.0.tar.bz2
--
--# Locally computed
--sha256  b6f1f50c9f65b605342d8792b1cc8a1c151105339030313b9825b6a68d400c10  mongrel2-v1.13.0.tar.bz2
--sha256  eb6e2a2baa637d06f6aa762886fbc8939934eb5fdb0b3a5b3882f2a61e9a4357  LICENSE
-diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
+@@ -1,3 +0,0 @@
+-# Locally computed:
+-sha256  7658498b26a5d2a0242e81f0cfafa0e43a2bec56f8674e7ac197dfc310866ec6  dvbsnoop-1.4.50.tar.gz
+-sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/dvbsnoop/dvbsnoop.mk b/package/dvbsnoop/dvbsnoop.mk
 deleted file mode 100644
-index 07914ad0fe..0000000000
---- a/package/mongrel2/mongrel2.mk
+index fdc483d22c..0000000000
+--- a/package/dvbsnoop/dvbsnoop.mk
 +++ /dev/null
-@@ -1,26 +0,0 @@
+@@ -1,12 +0,0 @@
 -################################################################################
 -#
--# mongrel2
+-# dvbsnoop
 -#
 -################################################################################
 -
--MONGREL2_VERSION = 1.13.0
--MONGREL2_SOURCE = mongrel2-v$(MONGREL2_VERSION).tar.bz2
--# Do not use the github helper here, the generated tarball is *NOT* the same
--# as the one uploaded by upstream for the release.
--MONGREL2_SITE = https://github.com/mongrel2/mongrel2/releases/download/v$(MONGREL2_VERSION)
--MONGREL2_LICENSE = BSD-3-Clause
--MONGREL2_LICENSE_FILES = LICENSE
--MONGREL2_DEPENDENCIES = mbedtls sqlite zeromq
+-DVBSNOOP_VERSION = 1.4.50
+-DVBSNOOP_SITE = http://downloads.sourceforge.net/project/dvbsnoop/dvbsnoop/dvbsnoop-$(DVBSNOOP_VERSION)
+-DVBSNOOP_LICENSE = GPL-2.0
+-DVBSNOOP_LICENSE_FILES = COPYING
 -
--define MONGREL2_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
--		PREFIX=/usr all
--endef
--
--define MONGREL2_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
--		PREFIX=/usr DESTDIR=$(TARGET_DIR) install
--endef
--
--$(eval $(generic-package))
+-$(eval $(autotools-package))
 -- 
 2.47.3
 
