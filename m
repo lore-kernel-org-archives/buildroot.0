@@ -4,70 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4B91CCFA05
-	for <buildroot@archiver.kernel.org>; Fri,  7 Nov 2025 17:11:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F7C6CCFA05
+	for <buildroot@archiver.kernel.org>; Fri,  7 Nov 2025 17:26:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DACD64078C;
-	Fri,  7 Nov 2025 17:11:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 981DE41497;
+	Fri,  7 Nov 2025 17:26:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 70H5L_SL1CqF; Fri,  7 Nov 2025 17:11:10 +0000 (UTC)
+ id QxGVODVFs_EX; Fri,  7 Nov 2025 17:26:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01D0B4040F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 792A640858
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01D0B4040F;
-	Fri,  7 Nov 2025 17:11:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id F3EF393E
- for <buildroot@buildroot.org>; Fri,  7 Nov 2025 17:11:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 792A640858;
+	Fri,  7 Nov 2025 17:26:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 32E2593E
+ for <buildroot@buildroot.org>; Fri,  7 Nov 2025 17:26:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E2B696060A
- for <buildroot@buildroot.org>; Fri,  7 Nov 2025 17:11:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 24F6640782
+ for <buildroot@buildroot.org>; Fri,  7 Nov 2025 17:26:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BUTtdOBYCea3 for <buildroot@buildroot.org>;
- Fri,  7 Nov 2025 17:11:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 499D060605
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 499D060605
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 499D060605
- for <buildroot@buildroot.org>; Fri,  7 Nov 2025 17:11:04 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id B0D49B00576;
- Fri,  7 Nov 2025 18:10:59 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 07 Nov 2025 18:10:54 +0100
-MIME-Version: 1.0
-Date: Fri, 07 Nov 2025 18:10:54 +0100
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qoU6BXlhqGTW for <buildroot@buildroot.org>;
+ Fri,  7 Nov 2025 17:26:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.132;
+ helo=smtpcmd12132.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0E6EF40858
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E6EF40858
+Received: from smtpcmd12132.aruba.it (smtpcmd12132.aruba.it [62.149.156.132])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0E6EF40858
+ for <buildroot@buildroot.org>; Fri,  7 Nov 2025 17:26:31 +0000 (UTC)
+Received: from smtpclient.apple ([84.33.84.190]) by Aruba SMTP with ESMTPSA
+ id HQEEvf8CgP2aDHQEFvLjks; Fri, 07 Nov 2025 18:26:28 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Fri, 7 Nov 2025 18:26:26 +0100
+Message-Id: <85B04EF3-5C0C-4948-B183-50AE134CD191@benettiengineering.com>
+References: <d77e0f618c15fb0b25ddc422e6bb4f7c@free.fr>
 Cc: buildroot@buildroot.org, Marek Belisko <marek.belisko@open-nandra.com>
-In-Reply-To: <20251106221646.977086-1-giulio.benetti@benettiengineering.com>
-References: <20251106221646.977086-1-giulio.benetti@benettiengineering.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <d77e0f618c15fb0b25ddc422e6bb4f7c@free.fr>
-X-Sender: ju.o@free.fr
+In-Reply-To: <d77e0f618c15fb0b25ddc422e6bb4f7c@free.fr>
+To: Julien Olivain <ju.o@free.fr>
+X-Mailer: iPhone Mail (23B85)
+X-CMAE-Envelope: MS4xfHAkLZiB/vl0mheULBavNcSWPuZY3vuPvA6SJIHprzg1oTNW5QEPHi+uSsyFdtwrrEX8KnjyhamjiPUuuj2iEnDz8dPZhJXzCVPARZ5rIEm4Doqyjmoy
+ Hs0qJbzgblcTC6H2NolvTHpFZ33Gxc5X1/T/S0KPbNSDTtbA4tWQrnHEsWqpv1sx8d6JMh1hVQxD6gxCen50PA861+81B3SjdZcXEgnqpt2jtxraSPWcRPy8
+ AvAglXSYTnvMbDt460E5zKqbk9BfiI5/5w7xyIMFGqtAmqjUdXtzF5UYjW7AzX+V
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1762535462;
- bh=UfJ3d4ocCQYf3QJFk3eYyXlrAc9nEjtT+gOZU6LVXsA=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=kWh3/eYrQKHXvfCaRnw+s8behiY8hnBXfX0EGN5mgA0IDOqEyZ62MOr34/0SRgK1i
- TfJu/bBp/LiJ21XkF/IWtJP+NpeIdd3B9kkCqHrqUtb6Ssy5v8ZZKlXFfk+Kn0Fgjm
- z/7qJdO5bA4BVRBZepZfGJdjWDOWrjEKCEnMH1CfBYw9x62BYDbOVV/m8T+cXMndUa
- aXZVzRnxZRIuq78j5lSVaE6dCpTCRRSIqE6NLPsv/Y+AuFI5lE1L7PLW0lJukVItVW
- DxTap0SSFwXuKB2IFNewd2D9DM9n4WokMjNvusU3tJr9Ge3nRK07UuSjWcp+Qcx2Sd
- RoZAH/jfdgWUg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=kWh3/eYr
+ d=aruba.it; s=a1; 
+ t=1762536389; bh=vtQn7Onew+MncKkbOw1uYk8zo5XICGkRa2jEBfiQNQ0=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=jcsEVepT5LLRFqJrb8z2gAEkmr6r3/mejype3LrJLK8RyZVdl61uo06QUO4839s3Q
+ pobBDTU3fy9vyAG0VKYwbYXce2xHf3BzAmfNyTffZP/09hinoRhWLqrjk2s4lA0FSD
+ wVrYZ6m+yOtMJ1a3Y+2eZk9xSUUW1SnhDfZ04SNCwDQLhXxP9nA90e4xPcAKfnUUGP
+ 9EVj3y4Xg8Rt0o5WDMSy2DrS2jDODEiE+P1VSJRlOVvYoELvy8EkYF4OSP96NJz2yE
+ M/jSNqXTEHbTdSwc8S1lmi5x27QO9nmzmxchl4deH+yvPvKdxDCbaQgteZ5K62rUS+
+ qtdZovnHjRDZg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=jcsEVepT
 Subject: Re: [Buildroot] [PATCH] package/udisks: security bump to version
  2.11.0
 X-BeenThere: buildroot@buildroot.org
@@ -81,33 +81,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Giulio,
-
-On 06/11/2025 23:16, Giulio Benetti wrote:
-> Release notes:
-> https://github.com/storaged-project/udisks/releases/tag/udisks-2.11.0
-
-This commit title is marked as "security bump". I don't see any 
-reference about
-security fixes in this release notes. Could you provide a reference 
-please?
-(or confirm it is a copy-paste error from the last commit).
-
-> Let's also add support for ATA SMART according to libblockdev package.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-
-Best regards,
-
-Julien.
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Cj4gSWwgZ2lvcm5vIDcgbm92IDIwMjUsIGFsbGUgb3JlIDE4OjExLCBKdWxpZW4gT2xpdmFpbiA8
+anUub0BmcmVlLmZyPiBoYSBzY3JpdHRvOgo+IAo+IO+7v0hpIEdpdWxpbywKPiAKPj4gT24gMDYv
+MTEvMjAyNSAyMzoxNiwgR2l1bGlvIEJlbmV0dGkgd3JvdGU6Cj4+IFJlbGVhc2Ugbm90ZXM6Cj4+
+IGh0dHBzOi8vZ2l0aHViLmNvbS9zdG9yYWdlZC1wcm9qZWN0L3VkaXNrcy9yZWxlYXNlcy90YWcv
+dWRpc2tzLTIuMTEuMAo+IAo+IFRoaXMgY29tbWl0IHRpdGxlIGlzIG1hcmtlZCBhcyAic2VjdXJp
+dHkgYnVtcCIuIEkgZG9uJ3Qgc2VlIGFueSByZWZlcmVuY2UgYWJvdXQKPiBzZWN1cml0eSBmaXhl
+cyBpbiB0aGlzIHJlbGVhc2Ugbm90ZXMuIENvdWxkIHlvdSBwcm92aWRlIGEgcmVmZXJlbmNlIHBs
+ZWFzZT8KPiAob3IgY29uZmlybSBpdCBpcyBhIGNvcHktcGFzdGUgZXJyb3IgZnJvbSB0aGUgbGFz
+dCBjb21taXQpLgoKUGFyZG9uLCBpdOKAmXMgZXhhY3RseSBhIGNvcHktcGFzdGUgZXJyb3IgZnJv
+bSB0aGUgbGFzdCBjb21taXQuIFRoaXMgaXMgbm90IGEgc2VjdXJpdHkgYnVtcC4KRG8geW91IG1p
+bmQgcmV3b3JkaW5nIHdoaWxlIGFwcGx5aW5nPwpPdGhlcndpc2UgSSBjYW4gc2VuZCBhIHYyIHdp
+dGggbm8gcHJvYmxlbXMuCgpCZXN0IHJlZ2FyZHMKR2l1bGlvCgo+IAo+PiBMZXQncyBhbHNvIGFk
+ZCBzdXBwb3J0IGZvciBBVEEgU01BUlQgYWNjb3JkaW5nIHRvIGxpYmJsb2NrZGV2IHBhY2thZ2Uu
+Cj4+IFNpZ25lZC1vZmYtYnk6IEdpdWxpbyBCZW5ldHRpIDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRp
+ZW5naW5lZXJpbmcuY29tPgo+IAo+IEJlc3QgcmVnYXJkcywKPiAKPiBKdWxpZW4uCgpfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGlu
+ZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
+Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
