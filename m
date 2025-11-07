@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4587CCCF9F8
-	for <buildroot@archiver.kernel.org>; Fri,  7 Nov 2025 21:18:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3DCACCF9F8
+	for <buildroot@archiver.kernel.org>; Fri,  7 Nov 2025 21:19:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F18C840263;
-	Fri,  7 Nov 2025 21:18:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7115E40776;
+	Fri,  7 Nov 2025 21:19:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xv-wzSHGVnws; Fri,  7 Nov 2025 21:18:45 +0000 (UTC)
+ id I8U4GqZ15a4f; Fri,  7 Nov 2025 21:19:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 039604027E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7D1840263
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 039604027E;
-	Fri,  7 Nov 2025 21:18:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1ABE81CD
- for <buildroot@buildroot.org>; Fri,  7 Nov 2025 21:18:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C7D1840263;
+	Fri,  7 Nov 2025 21:19:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 906742B8
+ for <buildroot@buildroot.org>; Fri,  7 Nov 2025 21:19:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 00665605EC
- for <buildroot@buildroot.org>; Fri,  7 Nov 2025 21:18:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 76C666069A
+ for <buildroot@buildroot.org>; Fri,  7 Nov 2025 21:19:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s3COCDQ1ec_M for <buildroot@buildroot.org>;
- Fri,  7 Nov 2025 21:18:41 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97AA8605E0
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 97AA8605E0
- for <buildroot@buildroot.org>; Fri,  7 Nov 2025 21:18:41 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8FFB183A86; Fri,  7 Nov 2025 21:18:41 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 7 Nov 2025 21:54:46 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 872f694a955b3fb6e775678183a73299e02d7419
-X-Git-Newrev: 2ebc6abccf2a4b83bc7b31379bdc952f16177269
-X-Patchwork-Hint: ignore
-Message-Id: <20251107211841.8FFB183A86@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/intel-mediadriver: bump version to
- 25.4.3
+ id QFSqksuUSU_K for <buildroot@buildroot.org>;
+ Fri,  7 Nov 2025 21:19:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C12E060698
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C12E060698
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C12E060698
+ for <buildroot@buildroot.org>; Fri,  7 Nov 2025 21:19:25 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id EAC9B2003A4;
+ Fri,  7 Nov 2025 22:19:21 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 07 Nov 2025 22:19:21 +0100
+MIME-Version: 1.0
+Date: Fri, 07 Nov 2025 22:19:21 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251106213716.2451283-1-bernd@kuhls.net>
+References: <20251106213716.2451283-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <9ae4f369bf30c44bdf8713b4cad552db@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1762550363;
+ bh=7wjuVodaIp/oItlV886QkyFGcESj4P0ll+BlAirTJ4o=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=ZroiqHXqaQdmV+WMIo+JNqFIWuzT3UWTHEvZGhg2TZseyKVCOuBpxXpR5ty7jSDAN
+ 5RMqE4WqiiJeY2DrR5WuyIgt6+nPtDKDmOV4U5FqkL8IzjaFvhjqMWzkvTTgpleL7U
+ we5TW4FCuwh4PPu2sNbzT78e2w4gvMLwzJiz75e9EpvoZQVzsFB4x8Jh8ZA9/2A0ip
+ GoXlPr08xuA8krs3pI56h05kZ+pwOMy0oNp1jUkWVKyUCp8NXgBHltbMTRkqhDkf5Q
+ za+j12xXwWt+5HjkE9Ddby0xbjm6Fikm+qhtNCQSYJOmoozPEcoqlayj3Mc+EchrGR
+ cpMz9jJa127HA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=ZroiqHXq
+Subject: Re: [Buildroot] [PATCH 1/2] package/intel-mediadriver: bump version
+ to 25.4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,44 +84,15 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ebc6abccf2a4b83bc7b31379bdc952f16177269
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 06/11/2025 22:37, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/intel-mediadriver/intel-mediadriver.hash | 2 +-
- package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index 700411b036..3e24b3ef8d 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  1f04e3b6c9d53b8e3e4f1762191ee60bfd12ffece5a541295fe2ee244b776c1e  intel-media-25.4.2.tar.gz
-+sha256  796a44747f75cd957960fc27070c351ed9a3fc585feb699fd7906f3d7d0e4268  intel-media-25.4.3.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index b85442f017..c0bf2f3e3c 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
- 
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
- 
--INTEL_MEDIADRIVER_VERSION = 25.4.2
-+INTEL_MEDIADRIVER_VERSION = 25.4.3
- INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
