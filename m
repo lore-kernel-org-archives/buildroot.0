@@ -1,51 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11B1BCCFA18
-	for <buildroot@archiver.kernel.org>; Sat,  8 Nov 2025 10:17:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1A9CCCFA18
+	for <buildroot@archiver.kernel.org>; Sat,  8 Nov 2025 10:17:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D3F566071B;
-	Sat,  8 Nov 2025 10:17:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B6F43407B5;
+	Sat,  8 Nov 2025 10:17:29 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cDCiLk9-u3Rq; Sat,  8 Nov 2025 10:17:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5ECE40718
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id E5ECE40718;
+	Sat,  8 Nov 2025 10:17:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B139525D
+ for <buildroot@buildroot.org>; Sat,  8 Nov 2025 10:17:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A25F160760
+ for <buildroot@buildroot.org>; Sat,  8 Nov 2025 10:17:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5ns5TWRX2zC8; Sat,  8 Nov 2025 10:16:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA0B06075D
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA0B06075D;
-	Sat,  8 Nov 2025 10:16:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0BD7725D
- for <buildroot@buildroot.org>; Sat,  8 Nov 2025 10:16:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E6CF440231
- for <buildroot@buildroot.org>; Sat,  8 Nov 2025 10:16:55 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rbSBH6xOMg9w for <buildroot@buildroot.org>;
- Sat,  8 Nov 2025 10:16:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96A464025E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 96A464025E
- for <buildroot@buildroot.org>; Sat,  8 Nov 2025 10:16:51 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 85D6883F2A; Sat,  8 Nov 2025 10:16:51 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 7 Nov 2025 23:27:05 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f8bf78911576672443a8d11eaf99bed4d383acef
-X-Git-Newrev: 62185b79350ae825849853fcb4baf0923ff89fdd
-X-Patchwork-Hint: ignore
-Message-Id: <20251108101651.85D6883F2A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fmt: bump to version 12.1.0
+ id b2JbPVcn0bEn for <buildroot@buildroot.org>;
+ Sat,  8 Nov 2025 10:17:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 947696071B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 947696071B
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 947696071B
+ for <buildroot@buildroot.org>; Sat,  8 Nov 2025 10:17:25 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id A11F0B0051B;
+ Sat,  8 Nov 2025 11:17:20 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 08 Nov 2025 11:17:20 +0100
+MIME-Version: 1.0
+Date: Sat, 08 Nov 2025 11:17:20 +0100
+To: Michael Nosthoff <buildroot@heine.tech>
+Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In-Reply-To: <20251103115220.2911208-2-buildroot@heine.tech>
+References: <20251103115220.2911208-2-buildroot@heine.tech>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <d908548d14e6da856360a6a6fad99948@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1762597042;
+ bh=2iWFLTBwK8wDwt2dLStbNudE5v7gRuvUfuvSk4rtau8=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=blKeXPcaWYSNxhUYPTqSXkzishualzEy0/Qaha/CWVZvLZiKWb3hsO9VBcgLL1Czu
+ FYtLFRYSbvdr4WncVgY2DLMmvVEkzEBw3631NdMkApB1ivFCah1xdCZytzPDjNl6IE
+ y0APVsRHqdbDv8cSyT4diSiDW9GsOiy+rjNqjNGe1A6vSwVI3zje89JzMAy4WbmL1B
+ 9NtMfTLRuJAHNgAtSXs4uvlJGxUlLMK+RdOmYv7i89i6kz3CeZKoe/iV4Bv23stj0J
+ 7fm8LyTvvV3s3FqaXEw5tHkeygAU6p8QM54XIGd0EpduCRy+mcT1DhX/P8HoYC6Ps3
+ u4hOdoS85u73A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=blKeXPca
+Subject: Re: [Buildroot] [PATCH 1/2] package/gerbera: bump to version 2.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,49 +82,25 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62185b79350ae825849853fcb4baf0923ff89fdd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 03/11/2025 12:52, Michael Nosthoff via buildroot wrote:
+> - new dependencies on icu and jsoncpp
+> - fixes most deprecations of fmt >= 12
+> 
+> - add upstream patch which fixes another deprecation of fmt >=12
+> 
+> Release Notes:
+> https://github.com/gerbera/gerbera/releases/tag/v2.5.0
+> https://github.com/gerbera/gerbera/releases/tag/v2.6.0
+> https://github.com/gerbera/gerbera/releases/tag/v2.6.1
+> 
+> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 
-Release Notes:
-
-https://github.com/fmtlib/fmt/releases/tag/12.1.0
-https://github.com/fmtlib/fmt/releases/tag/12.0.0
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/fmt/fmt.hash | 2 +-
- package/fmt/fmt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
-index 29b2b13c66..76bdd3171b 100644
---- a/package/fmt/fmt.hash
-+++ b/package/fmt/fmt.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  203eb4e8aa0d746c62d8f903df58e0419e3751591bb53ff971096eaa0ebd4ec3  fmt-11.2.0.zip
-+sha256  695fd197fa5aff8fc67b5f2bbc110490a875cdf7a41686ac8512fb480fa8ada7  fmt-12.1.0.zip
- sha256  07580f2a3b35709ce703d523f447b242f6dfec7582a8c0df102c7fa2849375f8  LICENSE
-diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
-index dfb6fd3942..7d11cfddc3 100644
---- a/package/fmt/fmt.mk
-+++ b/package/fmt/fmt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FMT_VERSION = 11.2.0
-+FMT_VERSION = 12.1.0
- FMT_SITE = https://github.com/fmtlib/fmt/releases/download/$(FMT_VERSION)
- FMT_SOURCE = fmt-$(FMT_VERSION).zip
- FMT_LICENSE = MIT with exception
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
