@@ -1,51 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94C4ACCFA18
-	for <buildroot@archiver.kernel.org>; Sat,  8 Nov 2025 10:29:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 819DFCCFA18
+	for <buildroot@archiver.kernel.org>; Sat,  8 Nov 2025 10:29:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15DD760774;
-	Sat,  8 Nov 2025 10:29:20 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qV-eZlQIkWnu; Sat,  8 Nov 2025 10:29:19 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36A236076B
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36A236076B;
-	Sat,  8 Nov 2025 10:29:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 68D311CD
- for <buildroot@buildroot.org>; Sat,  8 Nov 2025 10:29:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 664AB407F8
- for <buildroot@buildroot.org>; Sat,  8 Nov 2025 10:29:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4F08840818;
+	Sat,  8 Nov 2025 10:29:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eg8XA_bBoEIK for <buildroot@buildroot.org>;
- Sat,  8 Nov 2025 10:29:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77A69407F6
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 77A69407F6
- for <buildroot@buildroot.org>; Sat,  8 Nov 2025 10:29:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 71D5683F50; Sat,  8 Nov 2025 10:29:17 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 8 Nov 2025 11:26:50 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 62185b79350ae825849853fcb4baf0923ff89fdd
-X-Git-Newrev: 582ee9c2fdcc864a86e8726c0594b27791e52b6a
-X-Patchwork-Hint: ignore
-Message-Id: <20251108102917.71D5683F50@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libnvme: bump version to 1.16.1
+ id GVhWTXRmYfwN; Sat,  8 Nov 2025 10:29:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4373D407F8
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4373D407F8;
+	Sat,  8 Nov 2025 10:29:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AFBBF1CD
+ for <buildroot@buildroot.org>; Sat,  8 Nov 2025 10:29:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A1733805F6
+ for <buildroot@buildroot.org>; Sat,  8 Nov 2025 10:29:33 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uOf6gTlA5CEn for <buildroot@buildroot.org>;
+ Sat,  8 Nov 2025 10:29:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6F3F7805D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F3F7805D0
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6F3F7805D0
+ for <buildroot@buildroot.org>; Sat,  8 Nov 2025 10:29:32 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 7679A13F854;
+ Sat,  8 Nov 2025 11:29:27 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 08 Nov 2025 11:29:27 +0100
+MIME-Version: 1.0
+Date: Sat, 08 Nov 2025 11:29:27 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Giulio Benetti
+ <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20251108082053.12487-1-bernd@kuhls.net>
+References: <20251108082053.12487-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <2e2b73ef49e05612134bd66caf8a7172@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1762597769;
+ bh=zHxyirMVUeM/7HFtH3gxLN4cnqTtlMyspFIrQNi0xu0=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=sm6VSOF7U9vhSE5xecM/lorfEAGVcseinKamO4PXp9ZV2QUTUcqNv9o/TWxHUZdpo
+ nwQzrRCSnBSsR/muJ5tWX2J02o+3TfeXwHNtHsWEjsoF9Y7OP+MILdniu/qwENvWWt
+ /3+ttjwMAvNWMmVB6fwCdUafxWwZCJA8mp1QxOan+En4BfFiVUIJpw0EViANn+iH0U
+ eQAWr6tWqTq+ACJTcBBHDTPL/Yy7k+e81ha2mMxYCu1nYYYTowQuD3cZ7I5DOq4My1
+ INXQAfb80m+xPB8IcFFfOwPq7u+dcN/D5xsjjTxAHSyFe+EaxIH+ES3PGyw91dGiH5
+ ZAbfc1MjF51ig==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=sm6VSOF7
+Subject: Re: [Buildroot] [PATCH 1/1] package/libnvme: bump version to 1.16.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,87 +84,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=582ee9c2fdcc864a86e8726c0594b27791e52b6a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 08/11/2025 09:20, Bernd Kuhls wrote:
+> Release notes:
+> https://github.com/linux-nvme/libnvme/releases/tag/v1.16.1
+> 
+> Removed patch which is included in this release.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Release notes:
-https://github.com/linux-nvme/libnvme/releases/tag/v1.16.1
-
-Removed patch which is included in this release.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...reaking-cross-builds-with-OpenSSL-enabled.patch | 31 ----------------------
- package/libnvme/libnvme.hash                       |  2 +-
- package/libnvme/libnvme.mk                         |  2 +-
- 3 files changed, 2 insertions(+), 33 deletions(-)
-
-diff --git a/package/libnvme/0001-build-avoid-breaking-cross-builds-with-OpenSSL-enabled.patch b/package/libnvme/0001-build-avoid-breaking-cross-builds-with-OpenSSL-enabled.patch
-deleted file mode 100644
-index 7cf91fd98e..0000000000
---- a/package/libnvme/0001-build-avoid-breaking-cross-builds-with-OpenSSL-enabled.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 82066e5f46d743e7a7cf396be7f95e577084b93e Mon Sep 17 00:00:00 2001
--From: Daniel Wagner <wagi@kernel.org>
--Date: Thu, 6 Nov 2025 08:10:27 +0100
--Subject: [PATCH] build: avoid breaking cross builds with OpenSSL enabled
--
--The OpenSSL sanity check wants to be executed, thus we should only try
--this if it's possible. Since this is just a warning, we can just skip it
--if it is not possible.
--
--Signed-off-by: Daniel Wagner <wagi@kernel.org>
--
--Upstream: https://github.com/linux-nvme/libnvme/pull/1090
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- meson.build | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/meson.build b/meson.build
--index dce5c68e..6d1f5204 100644
----- a/meson.build
--+++ b/meson.build
--@@ -252,7 +252,7 @@ else
--   conf.set('fallthrough', 'do {} while (0) /* fallthrough */')
-- endif
-- 
---if openssl_dep.found()
--+if openssl_dep.found() and meson.can_run_host_binaries()
--   if openssl_dep.type_name() != 'internal'
--     # Check for a bug in the EVP_PKEY_CTX_add1_hkdf_info implementation
--     res = cc.run(
-diff --git a/package/libnvme/libnvme.hash b/package/libnvme/libnvme.hash
-index 66dedbbe8f..29071da1bf 100644
---- a/package/libnvme/libnvme.hash
-+++ b/package/libnvme/libnvme.hash
-@@ -1,3 +1,3 @@
- # Locally calculated sha256 checksums
--sha256  5bb24139a113f350708fe54073e799f454d509218758060c398144b91811d176  libnvme-1.16.tar.gz
-+sha256  ce1d9d393feb84c4e82ca096db2bdb7dd4a5fd1997d711cc1904796944f2c579  libnvme-1.16.1.tar.gz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libnvme/libnvme.mk b/package/libnvme/libnvme.mk
-index 238b7041da..f9bc0be371 100644
---- a/package/libnvme/libnvme.mk
-+++ b/package/libnvme/libnvme.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNVME_VERSION = 1.16
-+LIBNVME_VERSION = 1.16.1
- LIBNVME_SITE = $(call github,linux-nvme,libnvme,v$(LIBNVME_VERSION))
- LIBNVME_LICENSE = LGPL-2.1
- LIBNVME_LICENSE_FILES = COPYING
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
