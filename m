@@ -1,74 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84C17CCFA13
-	for <buildroot@archiver.kernel.org>; Sat,  8 Nov 2025 11:25:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FAB1CCFA13
+	for <buildroot@archiver.kernel.org>; Sat,  8 Nov 2025 19:38:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4F71081200;
-	Sat,  8 Nov 2025 11:25:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1A513605A5;
+	Sat,  8 Nov 2025 19:38:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ilHyhmFRNVxr; Sat,  8 Nov 2025 11:25:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yy8dqTmyuzjB; Sat,  8 Nov 2025 19:38:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0251F80EEF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 351EA605B1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0251F80EEF;
-	Sat,  8 Nov 2025 11:25:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 753C125D
- for <buildroot@buildroot.org>; Sat,  8 Nov 2025 11:25:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 351EA605B1;
+	Sat,  8 Nov 2025 19:38:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 693D72CD
+ for <buildroot@buildroot.org>; Sat,  8 Nov 2025 19:38:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 66DEB407BD
- for <buildroot@buildroot.org>; Sat,  8 Nov 2025 11:25:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 500CB4009E
+ for <buildroot@buildroot.org>; Sat,  8 Nov 2025 19:38:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WRGnBhBzyaM2 for <buildroot@buildroot.org>;
- Sat,  8 Nov 2025 11:25:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 79F5A407BB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79F5A407BB
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 79F5A407BB
- for <buildroot@buildroot.org>; Sat,  8 Nov 2025 11:25:35 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1bd38.dip0.t-ipconnect.de [84.161.189.56])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id D0010A4C3869
- for <buildroot@buildroot.org>; Sat,  8 Nov 2025 12:25:32 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:45566)
- by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vHh4W-000000007zr-1lnr
- for buildroot@buildroot.org; Sat, 08 Nov 2025 11:25:32 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3-5hlWmFGr36 for <buildroot@buildroot.org>;
+ Sat,  8 Nov 2025 19:38:05 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 35D4940073
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 35D4940073
+ for <buildroot@buildroot.org>; Sat,  8 Nov 2025 19:38:05 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 301AB84016; Sat,  8 Nov 2025 19:38:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat,  8 Nov 2025 12:25:32 +0100
-Message-ID: <20251108112532.786294-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: /
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1762601132;
- bh=IdF5NvgKdp8EUzkkYGwkg/b7SC8PeVVC4wFIHQXPqgc=;
- h=From:To:Subject:Date:From;
- b=c8mXdvcGiQ6d3kPtpgdvupIkxkL/JOHGpTHFZpMsEI9ysE2yyNcvB16Se4DRlRjm+
- HLwaYWykCz6OuqZKsrcrpCpsYlp8mjSSBHia+SafbK5GwJxzD9kJ/URcqO0w9hYLN8
- tzRwgbdd08ju655quDKM6Lqb+GxjTkNcjF4asmV7Os1h2aK+MqY8I0OoL7DKH5g0vu
- IBi1P5iIORr/PmKr0In/yT+0nCroO5bE3k2a4cou3Z7YXT5oIcSVWDzQb2zy9kcNoM
- WgMDFPp+2yvwUuhdCKzgEO8m1T0v3Fu6H5Cj5OBhe6iP/I0w1JhzvcBgJrZGU13ha0
- Tj25kY0LA5ohA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=c8mXdvcG
-Subject: [Buildroot] [PATCH v2 1/1] package/coreutils: bump version to 9.8
+Date: Sat, 8 Nov 2025 17:00:49 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 566bb2bb76acadd9225b281f39bf030d28b2020b
+X-Git-Newrev: 7085d1c48b55b2ff85e82be35a8a6a22755e9758
+X-Patchwork-Hint: ignore
+Message-Id: <20251108193805.301AB84016@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/coreutils: bump version to 9.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,10 +57,16 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
+
+commit: https://git.buildroot.net/buildroot/commit/?id=7085d1c48b55b2ff85e82be35a8a6a22755e9758
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
 https://lists.gnu.org/archive/html/coreutils-announce/2025-01/msg00000.html
@@ -108,17 +91,12 @@ BR2_TIME_BITS_64=y), tar will be Y2038 compliant.
 [1] https://www.gnu.org/software/gnulib/manual/html_node/Avoiding-the-year-2038-problem.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
-v2:
-- added release notes (Julien)
-- added tarball hashes provided by upstream
-- added --disable-year2038 to _CONF_OPTS (Julien)
-
- ...001-coreutils-mcel-port-to-uClibc-ng.patch | 35 -------------------
- package/coreutils/coreutils.hash              |  5 +--
- package/coreutils/coreutils.mk                |  6 +++-
+ .../0001-coreutils-mcel-port-to-uClibc-ng.patch    | 35 ----------------------
+ package/coreutils/coreutils.hash                   |  5 ++--
+ package/coreutils/coreutils.mk                     |  6 +++-
  3 files changed, 8 insertions(+), 38 deletions(-)
- delete mode 100644 package/coreutils/0001-coreutils-mcel-port-to-uClibc-ng.patch
 
 diff --git a/package/coreutils/0001-coreutils-mcel-port-to-uClibc-ng.patch b/package/coreutils/0001-coreutils-mcel-port-to-uClibc-ng.patch
 deleted file mode 100644
@@ -197,9 +175,6 @@ index 60772c9e7b..b764cb5843 100644
  	$(if $(BR2_TOOLCHAIN_USES_MUSL),--with-included-regex)
  
  ifeq ($(BR2_PACKAGE_COREUTILS_INDIVIDUAL_BINARIES),y)
--- 
-2.47.3
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
