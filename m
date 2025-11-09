@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57EDACCF9F8
-	for <buildroot@archiver.kernel.org>; Sun,  9 Nov 2025 22:37:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10AB7CCFA1A
+	for <buildroot@archiver.kernel.org>; Sun,  9 Nov 2025 22:39:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF982404B1;
-	Sun,  9 Nov 2025 22:37:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D520840650;
+	Sun,  9 Nov 2025 22:39:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Go3amN8w17qC; Sun,  9 Nov 2025 22:37:19 +0000 (UTC)
+ id ig035rRDCOdF; Sun,  9 Nov 2025 22:39:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15D7240644
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 091F540657
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 15D7240644;
-	Sun,  9 Nov 2025 22:37:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id DEBE0FA
- for <buildroot@buildroot.org>; Sun,  9 Nov 2025 22:37:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 091F540657;
+	Sun,  9 Nov 2025 22:39:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5237EFA
+ for <buildroot@buildroot.org>; Sun,  9 Nov 2025 22:39:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C57BB404B1
- for <buildroot@buildroot.org>; Sun,  9 Nov 2025 22:37:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 38DCA40412
+ for <buildroot@buildroot.org>; Sun,  9 Nov 2025 22:39:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t673NrG-Eu91 for <buildroot@buildroot.org>;
- Sun,  9 Nov 2025 22:37:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A29140644
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1A29140644
- for <buildroot@buildroot.org>; Sun,  9 Nov 2025 22:37:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 00D148427B; Sun,  9 Nov 2025 22:37:16 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 9 Nov 2025 23:33:46 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 860dd9610d12ef85e8df8786d1c800d2b84d67f8
-X-Git-Newrev: d8b0fdb71ebfc9f2bdf843b3c1f19e305f24b20d
-X-Patchwork-Hint: ignore
-Message-Id: <20251109223717.00D148427B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/makedumpfile: bump version to 1.7.8
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QotFB5R3a1Rq for <buildroot@buildroot.org>;
+ Sun,  9 Nov 2025 22:39:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5381240416
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5381240416
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5381240416
+ for <buildroot@buildroot.org>; Sun,  9 Nov 2025 22:39:02 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id F293D19F57B;
+ Sun,  9 Nov 2025 23:38:58 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 09 Nov 2025 23:38:58 +0100
+MIME-Version: 1.0
+Date: Sun, 09 Nov 2025 23:38:58 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Alexander Egorenkov <egorenar-dev@posteo.net>
+In-Reply-To: <20251109094038.2098652-1-bernd@kuhls.net>
+References: <20251109094038.2098652-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <9c13b5baade723e283a1658844f259ab@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1762727941;
+ bh=uctNStrSzL7pgho2fqUCLNocImP2Az7DX88EjLWO3eU=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=FFfGQdYFIhRis6zVecAzK7Vyo+RRm158KNNDHG8kyddF0AV0AGyw45jD0ymEaGkPT
+ 207m0S+Twb/xsqrhLSvM3+yYRip6qz8MhK7wVrAYw7rM7LfwUOdjL6J1GgL0y5y6XG
+ pHTGK1l+IEcTc/8gAVBidhCCNgk9NEiaRz14LgNMcPHsdghQ/yQPTPoc9w+55SPyLj
+ DJGugpR2EpwXS+J92CEr6EmI30SqcFr9H6pVvk4sL5/8p4lrDyMtcR22BAkb5lghSR
+ 2A0i+Zx/q9o5Mo3aMlUl7ZZxZI6Dx5pMZRD1zaCzX+ssq1C8s0ZKB7UbEsKlTf4OiD
+ JLSRIX4GUHMcQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=FFfGQdYF
+Subject: Re: [Buildroot] [PATCH 1/1] package/makedumpfile: bump version to
+ 1.7.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,53 +83,23 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8b0fdb71ebfc9f2bdf843b3c1f19e305f24b20d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 09/11/2025 10:40, Bernd Kuhls wrote:
+> Release notes:
+> https://lists.infradead.org/pipermail/kexec/2025-October/034120.html
+> https://lists.infradead.org/pipermail/kexec/2025-April/032607.html
+> https://lists.infradead.org/pipermail/kexec/2024-October/030984.html
+> 
+> Switched to github helper due to upstream not providing tarballs 
+> anymore.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Release notes:
-https://lists.infradead.org/pipermail/kexec/2025-October/034120.html
-https://lists.infradead.org/pipermail/kexec/2025-April/032607.html
-https://lists.infradead.org/pipermail/kexec/2024-October/030984.html
-
-Switched to github helper due to upstream not providing tarballs anymore.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/makedumpfile/makedumpfile.hash | 2 +-
- package/makedumpfile/makedumpfile.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/makedumpfile/makedumpfile.hash b/package/makedumpfile/makedumpfile.hash
-index 9083ced423..99a92c2dec 100644
---- a/package/makedumpfile/makedumpfile.hash
-+++ b/package/makedumpfile/makedumpfile.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  0c53f1e5e11e75e4896197df795bee63b3d46b8821fbc3368f7a240861b543b5  makedumpfile-1.7.5.tar.gz
-+sha256  b54e88bef256c589eb4adce17bc856da898a762626fe54f76a77a7f22ad9a844  makedumpfile-1.7.8.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/makedumpfile/makedumpfile.mk b/package/makedumpfile/makedumpfile.mk
-index 5fa1331910..af510598ad 100644
---- a/package/makedumpfile/makedumpfile.mk
-+++ b/package/makedumpfile/makedumpfile.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--MAKEDUMPFILE_VERSION = 1.7.5
--MAKEDUMPFILE_SITE = https://github.com/makedumpfile/makedumpfile/releases/download/$(MAKEDUMPFILE_VERSION)
-+MAKEDUMPFILE_VERSION = 1.7.8
-+MAKEDUMPFILE_SITE = $(call github,makedumpfile,makedumpfile,$(MAKEDUMPFILE_VERSION))
- MAKEDUMPFILE_DEPENDENCIES = bzip2 elfutils xz zlib
- MAKEDUMPFILE_LICENSE = GPL-2.0
- MAKEDUMPFILE_LICENSE_FILES = COPYING
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
