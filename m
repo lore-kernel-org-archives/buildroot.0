@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48D62CCFA1A
-	for <buildroot@archiver.kernel.org>; Sun,  9 Nov 2025 21:44:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9349ECCFA1A
+	for <buildroot@archiver.kernel.org>; Sun,  9 Nov 2025 21:45:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0CF9580BAE;
-	Sun,  9 Nov 2025 21:44:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 693C240713;
+	Sun,  9 Nov 2025 21:45:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zhmtZDuLTKQQ; Sun,  9 Nov 2025 21:44:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 99Qu-_RLtTj6; Sun,  9 Nov 2025 21:45:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5CB080B03
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76B3F4059C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C5CB080B03;
-	Sun,  9 Nov 2025 21:44:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5FEFB25D
- for <buildroot@buildroot.org>; Sun,  9 Nov 2025 21:44:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 76B3F4059C;
+	Sun,  9 Nov 2025 21:45:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C5DF125D
+ for <buildroot@buildroot.org>; Sun,  9 Nov 2025 21:45:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4F6526087C
- for <buildroot@buildroot.org>; Sun,  9 Nov 2025 21:44:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AC26B6087D
+ for <buildroot@buildroot.org>; Sun,  9 Nov 2025 21:45:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wBwx5SN2VxXh for <buildroot@buildroot.org>;
- Sun,  9 Nov 2025 21:44:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D389A6087B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D389A6087B
- for <buildroot@buildroot.org>; Sun,  9 Nov 2025 21:44:26 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C1F3E8426E; Sun,  9 Nov 2025 21:44:26 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 9 Nov 2025 21:54:20 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 473c9400a0c7be14e7eb8ba617697a76286915b3
-X-Git-Newrev: 2fdbc4faea912ac4dab829d0611ac089817fa14a
-X-Patchwork-Hint: ignore
-Message-Id: <20251109214426.C1F3E8426E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cpp-httplib: bump to version 0.27.0
+ id 4BpLC8B-AIsS for <buildroot@buildroot.org>;
+ Sun,  9 Nov 2025 21:45:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AED8B6087B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AED8B6087B
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AED8B6087B
+ for <buildroot@buildroot.org>; Sun,  9 Nov 2025 21:45:00 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id ED8DC780371;
+ Sun,  9 Nov 2025 22:44:55 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 09 Nov 2025 22:44:55 +0100
+MIME-Version: 1.0
+Date: Sun, 09 Nov 2025 22:44:55 +0100
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: buildroot@buildroot.org, Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
+In-Reply-To: <20251109103017.499981-1-dario.binacchi@amarulasolutions.com>
+References: <20251109103017.499981-1-dario.binacchi@amarulasolutions.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <a27e0443784d4e179059f4a1f5e71164@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1762724698;
+ bh=4tJhYZBJwnkapxMPOkCES9Bxe6e5myXWoPnN0IlrwoU=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=BQVReG0xml+j5mgajNeiHeQvlafRmSUWjdOZh2l0q7S5XsBpN9+a4JdIPdFYT8Lip
+ M+biOPNwWztRPRnJpsP29gFnwpPMI1UERxYgP8eKtkUIPFj4ZKkox0zM+VfGS3Ztu4
+ ND1QRxxbUD7d7ysNjnzJguoJ4OMHyIckDMa/Ybg7PfraO+MhnIKAh19kPI2EgxKZKH
+ DkvyWUMIQJOSJ9Fjzje9d5kVST9xaYCInEu+3G4Pym3EdLFXIG/uOAyPcD3kzomJ43
+ JrLyAseMoXFMV3JpjyhvRtAuFJWdmgC07YEEGUrOAw9JU2FpJT2WnJPdrLtNmKXHKP
+ TJA1iOk7BViJQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=BQVReG0x
+Subject: Re: [Buildroot] [PATCH 1/1] package/cpp-httplib: bump to version
+ 0.27.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,47 +83,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fdbc4faea912ac4dab829d0611ac089817fa14a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 09/11/2025 11:30, Dario Binacchi wrote:
+> For release notes since 0.25.0, see:
+> https://github.com/yhirose/cpp-httplib/releases
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-For release notes since 0.25.0, see:
-https://github.com/yhirose/cpp-httplib/releases
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/cpp-httplib/cpp-httplib.hash | 2 +-
- package/cpp-httplib/cpp-httplib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/cpp-httplib/cpp-httplib.hash b/package/cpp-httplib/cpp-httplib.hash
-index 89f9ae5540..904bca6d02 100644
---- a/package/cpp-httplib/cpp-httplib.hash
-+++ b/package/cpp-httplib/cpp-httplib.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  ac7c59fa72325d4cb9f73af266312d82632ac35a5c4c8a1be620c1f946ec9cea  cpp-httplib-0.25.0.tar.gz
-+sha256  cc57615af359efda816122dcfca37bcbb9f1591396f50a1fd1ad70bbe6050581  cpp-httplib-0.27.0.tar.gz
- sha256  4b45cbe16d7b71b89ae6127e26e0d90a029198ca5e958ad8e3d0b8bbed364d8b  LICENSE
-diff --git a/package/cpp-httplib/cpp-httplib.mk b/package/cpp-httplib/cpp-httplib.mk
-index 3f63e3a865..62255180f4 100644
---- a/package/cpp-httplib/cpp-httplib.mk
-+++ b/package/cpp-httplib/cpp-httplib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CPP_HTTPLIB_VERSION = 0.25.0
-+CPP_HTTPLIB_VERSION = 0.27.0
- CPP_HTTPLIB_SITE = $(call github,yhirose,cpp-httplib,v$(CPP_HTTPLIB_VERSION))
- CPP_HTTPLIB_LICENSE = MIT
- CPP_HTTPLIB_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
