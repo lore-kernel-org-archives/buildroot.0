@@ -1,104 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C1ACCCF9E3
-	for <buildroot@archiver.kernel.org>; Mon, 10 Nov 2025 08:47:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B4C3CCF9E3
+	for <buildroot@archiver.kernel.org>; Mon, 10 Nov 2025 09:40:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DAE26608FE;
-	Mon, 10 Nov 2025 08:47:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2F482407EA;
+	Mon, 10 Nov 2025 09:40:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cFXNtrdcMzfm; Mon, 10 Nov 2025 08:47:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sRnD7tAUkBKw; Mon, 10 Nov 2025 09:40:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEDB8608EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F378406EF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AEDB8608EB;
-	Mon, 10 Nov 2025 08:47:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id F16331CD
- for <buildroot@buildroot.org>; Mon, 10 Nov 2025 08:47:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F378406EF;
+	Mon, 10 Nov 2025 09:40:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 603711CD
+ for <buildroot@buildroot.org>; Mon, 10 Nov 2025 09:40:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D7990608F0
- for <buildroot@buildroot.org>; Mon, 10 Nov 2025 08:47:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 466FB40748
+ for <buildroot@buildroot.org>; Mon, 10 Nov 2025 09:40:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Tcgtq6pyvHq2 for <buildroot@buildroot.org>;
- Mon, 10 Nov 2025 08:47:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pQ_Gmm1XU6ix for <buildroot@buildroot.org>;
+ Mon, 10 Nov 2025 09:40:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::631; helo=mail-pl1-x631.google.com;
+ client-ip=2607:f8b0:4864:20::102f; helo=mail-pj1-x102f.google.com;
  envelope-from=nemaakhilesh@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8762D608EB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8762D608EB
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com
- [IPv6:2607:f8b0:4864:20::631])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8762D608EB
- for <buildroot@buildroot.org>; Mon, 10 Nov 2025 08:47:39 +0000 (UTC)
-Received: by mail-pl1-x631.google.com with SMTP id
- d9443c01a7336-297e264528aso15890575ad.2
- for <buildroot@buildroot.org>; Mon, 10 Nov 2025 00:47:39 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D216640679
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D216640679
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com
+ [IPv6:2607:f8b0:4864:20::102f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D216640679
+ for <buildroot@buildroot.org>; Mon, 10 Nov 2025 09:40:11 +0000 (UTC)
+Received: by mail-pj1-x102f.google.com with SMTP id
+ 98e67ed59e1d1-3436a97f092so2397702a91.3
+ for <buildroot@buildroot.org>; Mon, 10 Nov 2025 01:40:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1762764458; x=1763369258;
+ d=1e100.net; s=20230601; t=1762767611; x=1763372411;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=R8gxg2OXHvq3vHLAc3ScsrLAdFTMLUQrtmtAu3vtBpo=;
- b=kYvlI55+jNsf3XbDvVqMH6OWk3vdrTh/x7bf4zZepD0oxjTf04Kyn6xcJpEnp2rbG9
- ZaTMXxl5IMol7AfqNb5C/38arBB2ufQHcPYvn5/zqgEj6BsU1NB2Bx03yz2jj1AieHbI
- rN81aCzGCdfdhzf1Hkuk5zH9vuwMAXv1XLQ8M8iTzH4o00Y/dPtCxqfG/aHdIg4iI1KH
- COMRGmXi1dIU2N78klepkG5Cfacce4wSIjJP5bGCk2LjcDWtEwARAQ5Z76vkcVozTppO
- 9KseDKBR5Sf1uMtPzXOzLdnFh68JdO15A2S+dWUUinWWlTyU8SyK+agHrIXKWfOTh6TX
- tXEw==
-X-Gm-Message-State: AOJu0YyIaG+wVcN6idjvRNhTuFs2I5LwVOsROy0Yfwd8kkIh+ORiZi/E
- QCbk2353WvEZKcCm1FzaZE8kT00ZtRoRxkh2mfXIUQdkj99expPVCZNBVx9hNqaX
-X-Gm-Gg: ASbGnctWtZX8c5t3B7HM4hCrECBJqS/lP+y4zbKGQAaUbUHpX6M5zT3w5G3K0I0fDyi
- ZXY1CTRobxToGCUoEV3adXBE0VPxAkGhZiaaMQqV8WkSl6iHOf94HDgK/IqkNM6Kx2qILgEQNoB
- oTmrgoi3S2GBUntd+asR74qETV9UQF2vObrwJuDBc9J1wupmj4t1oJujOC0CQi5zQQl9HIP05C9
- +fMai2SgzST1gPPWNe2YjO5hNJmjxymQHj+536YX5OB6dQRRSWZGg7PvIPsNQtPi/klR2cvBIvi
- q2n6ZaytlUmemAV5s6+8q7M9pCWNnt1ouhiCtTUgrm4z22j0Rub/q6J9kCt/BZkivmSX001VV7K
- iaoJDOxN+sVL3cOmQv8t5qYswWd17ZdL+lyEMoc3mfadwTQHgePq/t0cL+DpAXSMRmZ2VBSflSg
- sd+H5zMDgcmlkzyr3y0MKZLfaMzcd5EIBojDvfsZeK57c4thaeWNXE4JTpsSc=
-X-Google-Smtp-Source: AGHT+IHJkOijlqxJVfYjmE/KgQX6E1nhCdb9pBEtnqCiTdTPwJZpjcs7tnCF7KA1lRqb9bstKHy3lw==
-X-Received: by 2002:a17:902:e80e:b0:295:987d:f7ef with SMTP id
- d9443c01a7336-297e56191b3mr92847375ad.10.1762764458417; 
- Mon, 10 Nov 2025 00:47:38 -0800 (PST)
+ bh=aAH4FtZ3+xJpoWtuskTNTRiJVq7IK0rm5JGIPQKMfig=;
+ b=QzcX9RDOSgq96J5vvWD1Fo23bQzxzueZyfRXHtPPkGmGmDSwIuXXqpJB43/1KfouUe
+ iW7DrQF/2Dd/q425qGM2eT+GnPdMcMBnNzcSf9lVNNJ1LVy0EDFZaJnLkb5USuZusAYt
+ ImT9nUSYurkuZohsnvT7vT45LCOovOeMsQh+ipxDupHSpNdI0FvILFQH4AramZ27LMli
+ JfsVi0mQ6Eqssrp3OEjkvx+FYlkd75146RGxnab4FYpOo6GBmI+0v9VhQrcFx7VcAREO
+ bGPu9uU3qH807fARhGcoOr8pa9F6DEMOYmWvfd3EPpM5pcg5oZ6+oxzDbWpLN3tiIEH2
+ pNJA==
+X-Gm-Message-State: AOJu0YwbqxmpcvREFPACGpt73URoclKcvm6BjL/aShKCK4kkq36pMtw6
+ RI+5P9cfnkTNJEMzTa4yg5awo1M8B4E9U+8AK9xCwFZtd4cWN+bK38Z6gYJ2w833
+X-Gm-Gg: ASbGncv7709p785iX54knUXwYK5bC9ulawFhIzfzofTJszJsLKZDFekSVLmQo3vw+zq
+ mzM7tKgtOCVW1RHxmdzZCdp94uheP8HFd/TnEbPM10EJaX9v8kHnVwCkC++bOH2xEhug+FNr3Oe
+ F+fTGA3a34LKqUF8TaPIW/fYGPaHHqeu3Rl6vj0haLuh+KxiDxAxRPZiVM08tFt3CN0xnUXTKRI
+ TPQKqUMvkrZfFSIni9pabq/LvqmmzX+sBE7H6VFoERoPB1/6JdmoNQqIdpMnSH/LALrLNMxL2zB
+ PAnNVry2LaRO/VxyEpPRjG8jZW5CqjoJKZ09SJwWfyLEYiALkAhp57wmarKnVCePmT6T43DVLKW
+ c2FkUCNYUKFf8iQeeON5wULkFjFi0AdFPEXf/PpllfzEjMfy0a2D4VxZ6uHDprD8xb7BlUK6M/2
+ w3/GnuCGS8MvqCiKu3C9XYQg1oxkb0eGLFwv4FoY888LIoQZv9Inc7KURQXcI=
+X-Google-Smtp-Source: AGHT+IH1Znoy7ru1dxpnAFNnX9QGgKveLnNsMGxokBU1N9pYAjzPLDf92bpIBEpH5x1WcUVDfoGSXg==
+X-Received: by 2002:a17:90b:3d8a:b0:32b:65e6:ec48 with SMTP id
+ 98e67ed59e1d1-3436cb229e8mr8718729a91.8.1762767610851; 
+ Mon, 10 Nov 2025 01:40:10 -0800 (PST)
 Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
  [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-29651c9c310sm139028365ad.87.2025.11.10.00.47.37
+ d2e1a72fcca58-7b0cc17a252sm11490237b3a.41.2025.11.10.01.40.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 10 Nov 2025 00:47:37 -0800 (PST)
+ Mon, 10 Nov 2025 01:40:10 -0800 (PST)
 From: Akhilesh Nema <nemaakhilesh@gmail.com>
 To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Akhilesh Nema <nemaakhilesh@gmail.com>
-Date: Mon, 10 Nov 2025 00:47:35 -0800
-Message-Id: <20251110084735.431109-1-nemaakhilesh@gmail.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>,
+	Akhilesh Nema <nemaakhilesh@gmail.com>
+Date: Mon, 10 Nov 2025 01:40:07 -0800
+Message-Id: <20251110094007.434279-1-nemaakhilesh@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1762764458; x=1763369258; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1762767611; x=1763372411; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=R8gxg2OXHvq3vHLAc3ScsrLAdFTMLUQrtmtAu3vtBpo=;
- b=mMFHvfqkK0Eypf5mvamGh+mRPMvdlf74jZxqTErTwblrWKW0WOWsGaFJxsY2eLZdp0
- tmktkefMbUVyE2bnlIPlSdhKmZz8C7KG76OgB5PKzqIBzoHwpgGFLL9YTTS5w6Ejivco
- yyHtf9BEdCAtsoCYkyXHQIYPo1dPjB+u7K30WIJUbAdRggsT6lEqivXR6LGplGfKqOwG
- xJy1r7edWbjw0AzSbw9K4fDS+g1yS9H+gZDzXQKqiMsXD2pktEKELZcYq/DlGaaAWdOb
- +9CjSfWlNoUIT/7Zn6EnceJNAZ+rDj2sWTjKXUu5gmE27R3oj15MYIVhkeOGAPs5R58e
- 7DZg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=aAH4FtZ3+xJpoWtuskTNTRiJVq7IK0rm5JGIPQKMfig=;
+ b=cSJxpq8gDkt6eOUaV9vr4lFlGrcXq6cGeheQYZUBYU+DhX+MxTjBwipZzdHnSzvP4C
+ TDfFiql8O3JeMMV4RXFhH6opyELahW89xFFEtrseSxOA47b1O8z3k7DaqeNKkfbSkZmK
+ WKRFUrorEPP5vfwGoVHvmxb4i5vSH6kHfPMD5AW5dXfYUvL6iya4FouivWey3DotgCiV
+ Pz+ivtZZPaWO8GOGBENKMJAwd5Jis3j1kza7AKgEkazud+wPg44XSHA5mToGJVBiZ3XQ
+ YlGtDb/2U+nfb/sQe+L6jL5D5GTzsZemIu25NJBdeeI5NVYgmiJGmvtzt4of0pFF3ODJ
+ n6Xw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=mMFHvfqk
-Subject: [Buildroot] [PATCH 1/1] package/liblinear: bump version to 2.49
+ header.s=20230601 header.b=cSJxpq8g
+Subject: [Buildroot] [PATCH 1/1] package/pppd: Add an option to
+ enable/disable CBCP support.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,37 +115,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
-https://github.com/cjlin1/liblinear/compare/v248...v249
+Adds BR2_PACKAGE_PPPD_CBCP option.
+https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-cbcp/.
 
 Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 ---
- package/liblinear/liblinear.hash | 2 +-
- package/liblinear/liblinear.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pppd/Config.in | 7 +++++++
+ package/pppd/pppd.mk   | 6 ++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/package/liblinear/liblinear.hash b/package/liblinear/liblinear.hash
-index 01c7254df6..3a98c64a07 100644
---- a/package/liblinear/liblinear.hash
-+++ b/package/liblinear/liblinear.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  72ea3853a9fb430b49c3196177d8acdffd2dadb5901832ee323465792087e8cc  liblinear-2.48.tar.gz
-+sha256  166ca3c741b2207a74978cdb55077261be43b1e58e55f2b4c4f40e6ec1d8a347  liblinear-2.49.tar.gz
- sha256  684e76f565a31ab057790c612bdacc2ee542f8a90b69f922377a92334771488c  COPYRIGHT
-diff --git a/package/liblinear/liblinear.mk b/package/liblinear/liblinear.mk
-index fb3dfdd38c..d3ef578aa1 100644
---- a/package/liblinear/liblinear.mk
-+++ b/package/liblinear/liblinear.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pppd/Config.in b/package/pppd/Config.in
+index 88c2180a9b..8c12557549 100644
+--- a/package/pppd/Config.in
++++ b/package/pppd/Config.in
+@@ -19,6 +19,13 @@ config BR2_PACKAGE_PPPD_FILTER
+ 	  the pppd active-filter and pass-filter options
+ 	  are available.
  
--LIBLINEAR_VERSION = 2.48
-+LIBLINEAR_VERSION = 2.49
- LIBLINEAR_SITE = https://www.csie.ntu.edu.tw/~cjlin/liblinear/oldfiles
- LIBLINEAR_LICENSE = BSD-3-Clause
- LIBLINEAR_LICENSE_FILES = COPYRIGHT
++config BR2_PACKAGE_PPPD_CBCP
++	bool "CBCP (Callback Control Protocol)"
++	default n
++	help
++	  Enable Callback Control Protocol (CBCP) support in pppd.
++	  https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-cbcp/.
++
+ endif
+ 
+ comment "pppd needs a toolchain w/ dynamic library"
+diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
+index 8d80675d15..1cc5dc7f4f 100644
+--- a/package/pppd/pppd.mk
++++ b/package/pppd/pppd.mk
+@@ -53,4 +53,10 @@ else
+ PPPD_CONF_OPTS += --disable-systemd
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PPPD_CBCP),y)
++PPPD_CONF_OPTS += --enable-cbcp
++else
++PPPD_CONF_OPTS += --disable-cbcp
++endif
++
+ $(eval $(autotools-package))
 -- 
 2.25.1
 
