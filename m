@@ -1,51 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3553FCCF9E3
-	for <buildroot@archiver.kernel.org>; Mon, 10 Nov 2025 19:08:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FBF4CCF9E3
+	for <buildroot@archiver.kernel.org>; Mon, 10 Nov 2025 19:09:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 008A74088D;
-	Mon, 10 Nov 2025 19:08:08 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gjycEho43SUn; Mon, 10 Nov 2025 19:08:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 076B140835
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 076B140835;
-	Mon, 10 Nov 2025 19:08:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3F95325D
- for <buildroot@buildroot.org>; Mon, 10 Nov 2025 19:07:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 26CED814E2
- for <buildroot@buildroot.org>; Mon, 10 Nov 2025 19:07:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 06B1481498;
+	Mon, 10 Nov 2025 19:09:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6wP07F_H8U9E for <buildroot@buildroot.org>;
- Mon, 10 Nov 2025 19:07:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61A1881495
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 61A1881495
- for <buildroot@buildroot.org>; Mon, 10 Nov 2025 19:07:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 53211842E5; Mon, 10 Nov 2025 19:07:53 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 10 Nov 2025 19:25:28 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d0f2fcf4f7441405e05a06b0a69d4397c4807497
-X-Git-Newrev: 94cc48508333c95511dddfc8e6f041d062759d99
-X-Patchwork-Hint: ignore
-Message-Id: <20251110190753.53211842E5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/liblinear: bump version to 2.49
+ id rHgTK9UaWXn1; Mon, 10 Nov 2025 19:09:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1071A814C4
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1071A814C4;
+	Mon, 10 Nov 2025 19:09:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A4CBB25D
+ for <buildroot@buildroot.org>; Mon, 10 Nov 2025 19:09:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A1AE360A9D
+ for <buildroot@buildroot.org>; Mon, 10 Nov 2025 19:09:05 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QkZeQMF5VNQF for <buildroot@buildroot.org>;
+ Mon, 10 Nov 2025 19:09:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E581B6058D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E581B6058D
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E581B6058D
+ for <buildroot@buildroot.org>; Mon, 10 Nov 2025 19:09:04 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 9EA4819F5A5;
+ Mon, 10 Nov 2025 20:09:00 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 10 Nov 2025 20:09:00 +0100
+MIME-Version: 1.0
+Date: Mon, 10 Nov 2025 20:09:00 +0100
+To: Akhilesh Nema <nemaakhilesh@gmail.com>
+Cc: buildroot@buildroot.org, Kadambini Nema <kadambini.nema@gmail.com>
+In-Reply-To: <20251110052407.172087-1-nemaakhilesh@gmail.com>
+References: <20251110052407.172087-1-nemaakhilesh@gmail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <4018ac2f3260bb21a42902c066f7c9c9@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1762801742;
+ bh=qT/GoF7g5PUA8VEr2Vj36gLOtqEDRRlmCMatBh6Q4z8=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=EDPIOu+z5dh5KVcZB5FBCY99C9dVuvoum0zAFOu73h9y+XXVl3jGmXb1mm2KX3GPz
+ TC6QdxcbHutaVgjEcDAQRId7BVPP30YLNGUbHznShekCsDqKrCGMmcdLlTQpLR48B3
+ b8feD5SAiAVQAC/PdkvsFNYhTnI3nZNIFqgt6/8QssIo3QiK1b6f+LwtARGUbgAwAj
+ yAEBhP3vVN/8S825rE9W5J/krOI+7zqWnyON8u2ZDgHsVjqN/lNHrmptU6jDBEJAZC
+ +LVcfGPNEYUi2fBCDEnOosTbusrbDfvCI1IEAIPNiJsE0Fqz3z/ffxaPHS+0Evl6Jy
+ GLoj3UzSsnvwA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=EDPIOu+z
+Subject: Re: [Buildroot] [PATCH 1/1] package/ustreamer: bump version to 6.41
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,47 +82,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94cc48508333c95511dddfc8e6f041d062759d99
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 10/11/2025 06:24, Akhilesh Nema wrote:
+> Changelog:
+> https://github.com/pikvm/ustreamer/compare/v6.40...v6.41
+> 
+> Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 
-Changelog:
-https://github.com/cjlin1/liblinear/compare/v248...v249
-
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/liblinear/liblinear.hash | 2 +-
- package/liblinear/liblinear.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/liblinear/liblinear.hash b/package/liblinear/liblinear.hash
-index 01c7254df6..3a98c64a07 100644
---- a/package/liblinear/liblinear.hash
-+++ b/package/liblinear/liblinear.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  72ea3853a9fb430b49c3196177d8acdffd2dadb5901832ee323465792087e8cc  liblinear-2.48.tar.gz
-+sha256  166ca3c741b2207a74978cdb55077261be43b1e58e55f2b4c4f40e6ec1d8a347  liblinear-2.49.tar.gz
- sha256  684e76f565a31ab057790c612bdacc2ee542f8a90b69f922377a92334771488c  COPYRIGHT
-diff --git a/package/liblinear/liblinear.mk b/package/liblinear/liblinear.mk
-index fb3dfdd38c..d3ef578aa1 100644
---- a/package/liblinear/liblinear.mk
-+++ b/package/liblinear/liblinear.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBLINEAR_VERSION = 2.48
-+LIBLINEAR_VERSION = 2.49
- LIBLINEAR_SITE = https://www.csie.ntu.edu.tw/~cjlin/liblinear/oldfiles
- LIBLINEAR_LICENSE = BSD-3-Clause
- LIBLINEAR_LICENSE_FILES = COPYRIGHT
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
