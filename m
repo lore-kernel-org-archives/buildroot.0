@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D580CD1297
-	for <buildroot@archiver.kernel.org>; Mon, 10 Nov 2025 19:08:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D59FCCD13CF
+	for <buildroot@archiver.kernel.org>; Mon, 10 Nov 2025 19:08:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A30D8179A;
-	Mon, 10 Nov 2025 19:07:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 84DD7817B5;
+	Mon, 10 Nov 2025 19:08:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lcFf_c43Ekbk; Mon, 10 Nov 2025 19:07:57 +0000 (UTC)
+ id bxbDr2PvSbbT; Mon, 10 Nov 2025 19:08:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 085BD81498
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E82C8817AF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 085BD81498;
-	Mon, 10 Nov 2025 19:07:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1038B2CD
+	by smtp1.osuosl.org (Postfix) with ESMTP id E82C8817AF;
+	Mon, 10 Nov 2025 19:07:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4518125D
  for <buildroot@buildroot.org>; Mon, 10 Nov 2025 19:07:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EA52360AB4
- for <buildroot@buildroot.org>; Mon, 10 Nov 2025 19:07:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2C9F4814C5
+ for <buildroot@buildroot.org>; Mon, 10 Nov 2025 19:07:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BNyvqTGeqMBg for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Qce3boOM27Ip for <buildroot@buildroot.org>;
  Mon, 10 Nov 2025 19:07:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36B4C60A9D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70DE681498
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 36B4C60A9D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 70DE681498
  for <buildroot@buildroot.org>; Mon, 10 Nov 2025 19:07:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 32E88843A6; Mon, 10 Nov 2025 19:07:53 +0000 (UTC)
+ id 628F0843A6; Mon, 10 Nov 2025 19:07:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 10 Nov 2025 19:25:00 +0100
+Date: Mon, 10 Nov 2025 19:26:48 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b032843bb49755d7534c94dc4770a10199da4209
-X-Git-Newrev: be0de7f087887034450f69737fc36d6df48a2ecf
+X-Git-Oldrev: e61c5385c226b9964519fd6bcb0cd386b62c9f12
+X-Git-Newrev: 561c2e8fdcd04d35e609abe4852ba22cacaa0e81
 X-Patchwork-Hint: ignore
-Message-Id: <20251110190753.32E88843A6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nmap: bump to version 7.98
+Message-Id: <20251110190753.628F0843A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/hwdata: bump version to 0.401
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,48 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be0de7f087887034450f69737fc36d6df48a2ecf
+commit: https://git.buildroot.net/buildroot/commit/?id=561c2e8fdcd04d35e609abe4852ba22cacaa0e81
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://nmap.org/changelog.html#7.98
-
-Note: It includes a fix for CVE-2025-43715, which impacts Windows-based systems.
+Release notes:
+https://github.com/vcrhonek/hwdata/releases/tag/v0.401
 
 Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/nmap/nmap.hash | 6 +++---
- package/nmap/nmap.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/hwdata/hwdata.hash | 2 +-
+ package/hwdata/hwdata.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
-index e9bce1a01f..9303ff613e 100644
---- a/package/nmap/nmap.hash
-+++ b/package/nmap/nmap.hash
-@@ -1,6 +1,6 @@
--# From https://nmap.org/dist/sigs/nmap-7.97.tar.bz2.digest.txt (lowercase)
--sha256  af98f27925c670c257dd96a9ddf2724e06cb79b2fd1e0d08c9206316be1645c0  nmap-7.97.tar.bz2
--sha512  050241744c311f5fc16297e1698aded2a9fdc78eb7a0954d1c70f7713ef6e1b07f3fcbf28a6a53f43785b1ae710aadf10237d1d0bd8855c6b3c423da4d35961c  nmap-7.97.tar.bz2
-+# From https://nmap.org/dist/sigs/nmap-7.98.tar.bz2.digest.txt (lowercase)
-+sha256  ce847313eaae9e5c9f21708e42d2ab7b56c7e0eb8803729a3092f58886d897e6  nmap-7.98.tar.bz2
-+sha512  14e13689d1276f70efc8c905e8eb0a15970f4312c2ef86d8d97e9df11319735e7f7cd73f728f69cf43d27a078ef5ac1e0f39cd119d8cb9262060c42606c6cab3  nmap-7.98.tar.bz2
- 
+diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
+index 20760d53d5..b96c36648e 100644
+--- a/package/hwdata/hwdata.hash
++++ b/package/hwdata/hwdata.hash
+@@ -1,4 +1,4 @@
  # Locally calculated
- sha256  9d9a9a763c0e6145172cfe7d8483e23b38ce60b6c79a82e4894242917bdae6d3  LICENSE
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index a944627b38..629a00f30e 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
+-sha256  05d96821aaae04be4e684eaf9ac22e08efe646321bc64be323b91b66e7e2095c  hwdata-0.400.tar.gz
++sha256  e9ff93b9807cc014ed8f7f5cb5dc2c31e714058c82ddc59b7355f5c57c9b759e  hwdata-0.401.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
+diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
+index 2fef94a595..f826faf94e 100644
+--- a/package/hwdata/hwdata.mk
++++ b/package/hwdata/hwdata.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NMAP_VERSION = 7.97
-+NMAP_VERSION = 7.98
- NMAP_SITE = https://nmap.org/dist
- NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
- NMAP_DEPENDENCIES = liblinear libpcap
+-HWDATA_VERSION = 0.400
++HWDATA_VERSION = 0.401
+ HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
+ HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
+ HWDATA_LICENSE_FILES = COPYING LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
