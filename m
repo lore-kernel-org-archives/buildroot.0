@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B545CCFA13
-	for <buildroot@archiver.kernel.org>; Mon, 10 Nov 2025 23:03:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66B00CCFA13
+	for <buildroot@archiver.kernel.org>; Mon, 10 Nov 2025 23:04:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6128810A5;
-	Mon, 10 Nov 2025 23:03:57 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kUb09hUUSQmm; Mon, 10 Nov 2025 23:03:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EAC2D810FA
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EAC2D810FA;
-	Mon, 10 Nov 2025 23:03:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D774B31C
- for <buildroot@buildroot.org>; Mon, 10 Nov 2025 23:03:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BEE0160AA5
- for <buildroot@buildroot.org>; Mon, 10 Nov 2025 23:03:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 71DC860AF4;
+	Mon, 10 Nov 2025 23:04:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kUWf5no5UkkY for <buildroot@buildroot.org>;
- Mon, 10 Nov 2025 23:03:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B956160A7B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B956160A7B
- for <buildroot@buildroot.org>; Mon, 10 Nov 2025 23:03:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A6EAC83D59; Mon, 10 Nov 2025 23:03:53 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 10 Nov 2025 22:48:22 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b3b7faaf2adc46d49140a0c4ab24d18f4648b5c4
-X-Git-Newrev: fd36d329f180436cc0e1a68c38ef9299424316cf
-X-Patchwork-Hint: ignore
-Message-Id: <20251110230353.A6EAC83D59@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libxcrypt: bump version to 4.5.2
+ id jxfSGJBAHL6C; Mon, 10 Nov 2025 23:04:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02CEE60AE8
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 02CEE60AE8;
+	Mon, 10 Nov 2025 23:04:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1A3ABFA
+ for <buildroot@buildroot.org>; Mon, 10 Nov 2025 23:04:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0046B810FA
+ for <buildroot@buildroot.org>; Mon, 10 Nov 2025 23:04:24 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id snLzzUYIdPdq for <buildroot@buildroot.org>;
+ Mon, 10 Nov 2025 23:04:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CD64D810A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD64D810A5
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CD64D810A5
+ for <buildroot@buildroot.org>; Mon, 10 Nov 2025 23:04:22 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id D5A09B0051E;
+ Tue, 11 Nov 2025 00:04:17 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 11 Nov 2025 00:04:17 +0100
+MIME-Version: 1.0
+Date: Tue, 11 Nov 2025 00:04:17 +0100
+To: Akhilesh Nema <nemaakhilesh@gmail.com>
+Cc: buildroot@buildroot.org, Guillaume William Brs
+ <guillaume.bressaix@gmail.com>
+In-Reply-To: <20251110214111.5096-1-nemaakhilesh@gmail.com>
+References: <20251110214111.5096-1-nemaakhilesh@gmail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <25849f2abd7bdcf6e26c4e484ee63a82@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1762815860;
+ bh=RujQVI1wBgbZfHFUYJ1zthRbuqUtcAe9+Gsn4sDmeHg=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Vxe1o5+Qjy8Ceifdac7QTl6LlZzdOcWVJFu3QuMsqu94Jcw4AGFEOW6I43KnQZEU0
+ byZ6/XVPrSzUVa4r2NDeAudgrzausbrl5C3/gDXFn9ekRGxp7FXJzKbIiYHEAZzeGB
+ ZvsYZlMbJZURJqcdj4l4t4/9W/AJD3sBH20Wh/RneD1Csr1hFUb8k6zSOArDWTAkFM
+ CDvw64dgX1SwothZ486WUXNP+0jqpYyxCT8uiZs8wtNTpMrTeXxQcQwkfIeXDnBE5/
+ SbJnwI2EoaQkphW84ZFsEWNzielmMvYS2vuHBgbaDGeHeEacFY2tAyVL2IVWbM5881
+ fuOpjLrIq5VRA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Vxe1o5+Q
+Subject: Re: [Buildroot] [PATCH 1/1] package/libxcrypt: bump version to 4.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,50 +83,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fd36d329f180436cc0e1a68c38ef9299424316cf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 10/11/2025 22:41, Akhilesh Nema wrote:
+> Release notes:
+> https://github.com/besser82/libxcrypt/releases/tag/v4.5.2
+> 
+> Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 
-Release notes:
-https://github.com/besser82/libxcrypt/releases/tag/v4.5.2
-
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libxcrypt/libxcrypt.hash | 4 ++--
- package/libxcrypt/libxcrypt.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/libxcrypt/libxcrypt.hash b/package/libxcrypt/libxcrypt.hash
-index af46fbb11e..7ec9140957 100644
---- a/package/libxcrypt/libxcrypt.hash
-+++ b/package/libxcrypt/libxcrypt.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/besser82/libxcrypt/releases/download/v4.5.1/libxcrypt-4.5.1.tar.xz.sha256sum
--sha256  e9b46a62397c15372935f6a75dc3929c62161f2620be7b7f57f03d69102c1a86  libxcrypt-4.5.1.tar.xz
-+# From https://github.com/besser82/libxcrypt/releases/download/v4.5.2/libxcrypt-4.5.2.tar.xz.sha256sum
-+sha256  71513a31c01a428bccd5367a32fd95f115d6dac50fb5b60c779d5c7942aec071  libxcrypt-4.5.2.tar.xz
- 
- # Locally calculated
- sha256  9144e66d8140feb84f0e4e344906ac425378896320032e0248567ef195cf0135  LICENSING
-diff --git a/package/libxcrypt/libxcrypt.mk b/package/libxcrypt/libxcrypt.mk
-index cb4924e0ff..ae7ecf5540 100644
---- a/package/libxcrypt/libxcrypt.mk
-+++ b/package/libxcrypt/libxcrypt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBXCRYPT_VERSION = 4.5.1
-+LIBXCRYPT_VERSION = 4.5.2
- LIBXCRYPT_SITE = https://github.com/besser82/libxcrypt/releases/download/v$(LIBXCRYPT_VERSION)
- LIBXCRYPT_SOURCE = libxcrypt-$(LIBXCRYPT_VERSION).tar.xz
- LIBXCRYPT_LICENSE = LGPL-2.1+
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
