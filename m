@@ -1,74 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 181F4CD37AB
-	for <buildroot@archiver.kernel.org>; Wed, 12 Nov 2025 19:37:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A635CD37B2
+	for <buildroot@archiver.kernel.org>; Wed, 12 Nov 2025 19:39:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5C0B940B6A;
-	Wed, 12 Nov 2025 19:37:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C75E80A08;
+	Wed, 12 Nov 2025 19:39:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y7ui3PHeysSK; Wed, 12 Nov 2025 19:37:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BRIoGtD3JXyk; Wed, 12 Nov 2025 19:39:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A124F40AF8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7236780A83
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A124F40AF8;
-	Wed, 12 Nov 2025 19:37:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7222F230
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 19:37:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7236780A83;
+	Wed, 12 Nov 2025 19:39:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 85E57230
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 19:39:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 63E034006D
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 19:37:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6CBC480A83
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 19:39:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vXg__6v0vUe8 for <buildroot@buildroot.org>;
- Wed, 12 Nov 2025 19:37:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Lanot0-uEzwL for <buildroot@buildroot.org>;
+ Wed, 12 Nov 2025 19:39:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5315C40055
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5315C40055
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5315C40055
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 19:37:13 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 166512700; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 12 Nov 2025 19:37:09 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1vJGeS-00HYWv-0C;
- Wed, 12 Nov 2025 20:37:08 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C053980A08
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C053980A08
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 19:39:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BAFE98442D; Wed, 12 Nov 2025 19:39:43 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-References: <20251109082208.744230-1-bernd@kuhls.net>
-Date: Wed, 12 Nov 2025 20:37:08 +0100
-In-Reply-To: <20251109082208.744230-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Sun, 9 Nov 2025 09:22:08 +0100")
-Message-ID: <87ldkbrqjf.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=VxU8MO2R2l+2WZYboZV8C10N6cWKGsK7lJFzyi7otceVhCrNYelQsZQestjbtM2TiQ1qNsm8Bnk+JqzlKcS8ZdrUeHHdP8QvHIACNRW56iHsMOIkHV7DhnHdDsT+KZ5vYJ1I7oW8k4/j4CKUc/1rfgeeaebvMTWUl9oJAkZ/Ymf7GH97PKJAs5VDQ1LuEaI/t0KHVkQe6ySnag5YPKIkYUQpOyhNRa81dl3I3sHeg7dnyu31NbBwZetmTNiGdzjg3OIVjsCJn7+Mt2VkUItiL5pBD6GnupMMEi3OvB9w2FBZRUuCUUUPM1RNZ5s2EsMIAenHROLwjFm3/xX7wPXROg==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=idKhdkyd6H5uMpnrF99U8NGQ+x+VjD1qcYllMdKCf6E=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=VxU8MO2R
-Subject: Re: [Buildroot] [PATCH 1/1] package/libudfread: needs threads
+To: buildroot@buildroot.org
+Date: Wed, 12 Nov 2025 20:35:20 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d2afa96009857e96736285444afba071d8615986
+X-Git-Newrev: 7fbd14776311f8b8767e7a98a1e1f62836f1e288
+X-Patchwork-Hint: ignore
+Message-Id: <20251112193943.BAFE98442D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libudfread: needs threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,47 +58,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7fbd14776311f8b8767e7a98a1e1f62836f1e288
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This patch fixes the build for non-threaded toolchains occuring since the
- > bump to 1.2.0 by buildroot commit 537555a37f53360020a11df8065450d88e9d107c
- > and the switch of the build system to meson.
+This patch fixes the build for non-threaded toolchains occurring since the
+bump to 1.2.0 by buildroot commit 537555a37f53360020a11df8065450d88e9d107c
+and the switch of the build system to meson.
 
- > libudfread uses
+libudfread uses
 
- > dependency('threads', required: false)
- > https://code.videolan.org/videolan/libudfread/-/blob/1.2.0/meson.build?ref_type=tags#L66
+dependency('threads', required: false)
+https://code.videolan.org/videolan/libudfread/-/blob/1.2.0/meson.build?ref_type=tags#L66
 
- > which falsely detects threads support:
+which falsely detects threads support:
 
- > Run-time dependency threads found: YES
+Run-time dependency threads found: YES
 
- > although the toolchain lacks threads support:
+although the toolchain lacks threads support:
 
- > $ grep THREADS .config | grep =
- > BR2_PTHREADS_NONE=y
+$ grep THREADS .config | grep =
+BR2_PTHREADS_NONE=y
 
- > There is an open Meson bug report discussing this problem:
- > https://github.com/mesonbuild/meson/issues/553#issuecomment-421562520
+There is an open Meson bug report discussing this problem:
+https://github.com/mesonbuild/meson/issues/553#issuecomment-421562520
 
- > The only dependees of libudfread, kodi and libbluray, depend on thread
- > support themselves so we require threads support for libudfread as well
- > to fix the build error.
+The only dependees of libudfread, kodi and libbluray, depend on thread
+support themselves so we require threads support for libudfread as well
+to fix the build error.
 
- > Fixes:
- > https://autobuild.buildroot.net/results/839/839d1b879187454ba9064845451f2c2ff398a663/
+Fixes:
+https://autobuild.buildroot.net/results/839/839d1b879187454ba9064845451f2c2ff398a663/
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libudfread/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libudfread/Config.in b/package/libudfread/Config.in
+index c1f3f23af9..803bfee0f5 100644
+--- a/package/libudfread/Config.in
++++ b/package/libudfread/Config.in
+@@ -1,10 +1,10 @@
+ config BR2_PACKAGE_LIBUDFREAD
+ 	bool "libudfread"
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  UDF reader
+ 
+ 	  https://code.videolan.org/videolan/libudfread
+ 
+ comment "libudfread needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_SYNC_4 && !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
