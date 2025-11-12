@@ -4,98 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2043CD342F
-	for <buildroot@archiver.kernel.org>; Wed, 12 Nov 2025 17:43:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48AF0CD3438
+	for <buildroot@archiver.kernel.org>; Wed, 12 Nov 2025 18:44:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8EAFF83155;
-	Wed, 12 Nov 2025 17:43:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3BB1482324;
+	Wed, 12 Nov 2025 18:44:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wTHLZPEaKCGn; Wed, 12 Nov 2025 17:43:53 +0000 (UTC)
+ id Pdaa7USYBsFF; Wed, 12 Nov 2025 18:44:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A036E830A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8F4A8231C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A036E830A8;
-	Wed, 12 Nov 2025 17:43:53 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 74CFF230
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 17:43:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8F4A8231C;
+	Wed, 12 Nov 2025 18:44:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 230891C3
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 18:44:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 62638406B0
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 17:43:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1528840B0C
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 18:44:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nN6v1l10QynT for <buildroot@buildroot.org>;
- Wed, 12 Nov 2025 17:43:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::12e; helo=mail-lf1-x12e.google.com;
- envelope-from=rustamabd@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3FC4D40663
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FC4D40663
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com
- [IPv6:2a00:1450:4864:20::12e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3FC4D40663
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 17:43:51 +0000 (UTC)
-Received: by mail-lf1-x12e.google.com with SMTP id
- 2adb3069b0e04-59457f79859so1236081e87.2
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 09:43:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1762969429; x=1763574229;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=osNzubo4QsTVBil7DojsB+P7LZJ6MwFMKnjiaUI3dww=;
- b=tjdt798Lp4ulmmTfk9ddYPoiioW3QeJuIXoVF84SpT62+6zTE+TUXYDjjBgOaIpLzm
- Mhr3kIXeeTTIr6WaM+I8CKIql652QD79qcjO1Ogfpg/DaWOJrh1FedxCFOy5lPbJxpNB
- wipwdS9MYFvMTDiwI1ajBx3SYMCgBc7y57r5aguBV3cJv59XRAUDT3mCBhxN/A7wJBF3
- 3xvI4RfjsKSno+iY1WRMwzq0DL4bcGWP7AWSDglwm7qygft8rn0gceEV/4/0XYh1yUNf
- 4Z1ZAQWToTLgWvZjWSVcjx1gFD+lRi6mbewlZl9JdGP+XvE2l2h0fKboDUMlAb29puTs
- Iiow==
-X-Gm-Message-State: AOJu0YwrXkJoLRB2QSzZjPL0VsdTnZYCIyjUxm3aYHBKGHyLh1nI3dWx
- VfNY6TZr2mMZc0Zq5NgPGQbhqqSSXZYZeooKCkvku6JpR2meWhmFpGz85SZCkxpMOJA=
-X-Gm-Gg: ASbGncsTwSWhxWMM0Q2P+BvxpzLLsVt8dkCbIvAyaKDKDSK8qWvzlA8rmHxzBbt9m8O
- p8PnCAnmjITQfGOmyTPzpr9NKrbqp49gWoi8aoylePGEj4JbV4J6YDn1utfKoxSmNW+p+RU07oQ
- OC+BE3basmzZQWKX71i6RdKqGAz8+ThHIEw6iT4QlhRlvxkPRhnk/3RNmOGw/TJLkVm8jqlvFKr
- SNRRImTOyTD52X3RMNfDN091CZfEKAjDWkc/6UTwSuKyqAjAPTK9RBu2FBdByWqOR1NeEo9LmrE
- WYr38c2d7sTImUnQElLt2rO6t9/YE0xcB8xW9RWtToAO99TaGPI7UDJA7eyAiFNszYDHug2MItE
- dXPrRR3aLih8wOddcq3cOiVygfH19hYV4oQM5o0GJAKyVw4hzZhDZecMyHgckZ3xXouQ2g0ZIJP
- Gqb5fT9aOnEaFUOy6z29HVDuKdkTiFbeDwgInt3436kHXYRdG31FEpzU79fkRhCpPSUp1l
-X-Google-Smtp-Source: AGHT+IGafFUeqNdeTNWkbH6kSr/bwWbOkW2IDZisrx9N4p9Q/wpKVLjJI8rxwx9Zs/KWFJKg5OObWg==
-X-Received: by 2002:a05:6512:acd:b0:594:314d:ac53 with SMTP id
- 2adb3069b0e04-59576df8ecemr1344680e87.23.1762969428550; 
- Wed, 12 Nov 2025 09:43:48 -0800 (PST)
-Received: from rustyx.org ([2a01:4f9:3080:1414::a54])
- by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-5957abdba80sm758314e87.58.2025.11.12.09.43.45
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 12 Nov 2025 09:43:46 -0800 (PST)
-From: Rustam Abdullaev <rustamabd@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BbZWx05LWsi5 for <buildroot@buildroot.org>;
+ Wed, 12 Nov 2025 18:44:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1193540B0B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1193540B0B
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1193540B0B
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 18:44:01 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1bd38.dip0.t-ipconnect.de [84.161.189.56])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id D858AA4C4E18
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 19:43:57 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:43568)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99)
+ (envelope-from <bernd@kuhls.net>) id 1vJFoz-000000003d0-25Kg
+ for buildroot@buildroot.org; Wed, 12 Nov 2025 18:43:57 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed, 12 Nov 2025 17:43:33 +0000
-Message-Id: <20251112174333.3755973-1-rustamabd@gmail.com>
-X-Mailer: git-send-email 2.39.5
+Date: Wed, 12 Nov 2025 19:43:57 +0100
+Message-ID: <20251112184357.3358550-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
+X-Spamd-Bar: +++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1762969429; x=1763574229; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=osNzubo4QsTVBil7DojsB+P7LZJ6MwFMKnjiaUI3dww=;
- b=lQ8j56TcNls6cDYTlCwul+LkWmj/HlQTNz7apkhodekEfpegVWwjeHJWfXeUgGMTn0
- Ga7UPK5nczPk3iKzHhW4WULlMAlYcU4oBKTMDv+alD/ZHqiz/u5ntRdpIDzSyjZykof1
- QE6TSzChh+uYXpEgvu5SpncKFCtVk93TtTL3DC0PJG3ETObR6UJztGyNLIxVyUrHxBmP
- fRmS98kxaQH9HTG5s07xITJ6k4P+7DpKkVuZSRdTRxYdY1tjjE1VwTZySlYzSvbTJno3
- 20faB7sDvTy/hIrsSwc/1ODW9l5SKiko636WXCQFrY78bA/7ovLAN/UifEwNqrj87YRj
- 7xIw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=kuhls.net; 
+ s=kas202506031021; t=1762973037;
+ bh=f4dKy/ku2PjGHnadezIyYUy6iTL6+bOfS6Ia+SVnzoE=;
+ h=From:To:Subject:Date:From;
+ b=YFOw7k+PF2tBcTbRydyuiynVOhtEiWxn+qg72pKie7lmAOvjbz8TY82+y0T3TKxfn
+ xVpD8/JkKD3IktmyjzKHJ+VwPsauX2OD3P5TEMmSG5RWRctWdCnZPw6FnWKuTtt8V9
+ AwkrUcoJfG7V2jg74rYlPl2rWjvCtktpwOaIpi2QsxDZOsKL4kYl6FdVm/IkjrxvXb
+ qA/3E5lgo6dlh0ubqcDJBp4gSE8p7GCq6x4mh2Zf7WFxlNcK45mj/DHUWodHR2DEgN
+ YKkv3QgIHCIMhMZ57hFww1HcHjQZ84ttXPHj8hr/otYx5p3l6hMD9Xo8DVIJuUe1Tf
+ m7uBDXTPOkM6Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=lQ8j56Tc
-Subject: [Buildroot] [PATCH 1/1] toolchain/toolchain-external: introduce
- BR2_TOOLCHAIN_EXTERNAL_UPDATE_LINUX_HEADERS
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=YFOw7k+P
+Subject: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.4.8.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,149 +80,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This change makes it possible to update kernel headers in the external
-toolchain with the headers from the current kernel.
+Release notes:
+https://gitlab.torproject.org/tpo/core/tor/-/raw/release-0.4.8/ReleaseNotes
+https://forum.torproject.org/t/stable-release-0-4-8-20/20781
 
-It is important to have matching kernel headers when building packages
-that make use of kernel features such as seccomp, as they depend on
-system call definitions in linux/unistd.h. A typical example of this is
-openssh - building it with the official ARM GNU toolchain and kernel 6.x
-results in a non-working sshd.
-
-Signed-off-by: Rustam Abdullaev <rustamabd@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/linux-headers/linux-headers.mk               |  3 ++-
- toolchain/Config.in                                  |  6 ++++++
- toolchain/helpers.mk                                 |  4 +---
- toolchain/toolchain-buildroot/Config.in              |  2 --
- toolchain/toolchain-external/Config.in               |  9 +++++++++
- .../toolchain-external/pkg-toolchain-external.mk     | 12 +++++++++++-
- 6 files changed, 29 insertions(+), 7 deletions(-)
+ package/tor/tor.hash | 4 ++--
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-index e2a0b7a7c9..d738bd3e9b 100644
---- a/package/linux-headers/linux-headers.mk
-+++ b/package/linux-headers/linux-headers.mk
-@@ -5,7 +5,8 @@
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index ca2d49fb19..bf88d14578 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,4 +1,4 @@
+-# From https://dist.torproject.org/tor-0.4.8.19.tar.gz.sha256sum
+-sha256  3cb649a1d33ba6a65f109d224534e93aaf0a6de84a5b1cb4b054bfa06bb74f5a  tor-0.4.8.19.tar.gz
++# From https://dist.torproject.org/tor-0.4.8.20.tar.gz.sha256sum
++sha256  1bb22328cdd1ee948647bfced571efa78c12fc5064187b41d5254085b5282fa7  tor-0.4.8.20.tar.gz
+ # Locally computed
+ sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 208e71ae51..513cac9f0f 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # This package is used to provide Linux kernel headers for the
--# internal toolchain backend.
-+# internal toolchain backend and for external toolchains that need
-+# updated kernel headers.
- 
- # Set variables depending on whether we are using headers from a kernel
- # build or a standalone header package.
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index b3cbec8377..c02d77c08e 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -69,6 +69,12 @@ source "toolchain/toolchain-external/Config.in"
- # so put it here instead
- source "package/gdb/Config.in.host"
- 
-+# Linux headers can be used by both internal and external toolchains
-+if BR2_TOOLCHAIN_BUILDROOT || BR2_TOOLCHAIN_EXTERNAL_UPDATE_LINUX_HEADERS
-+source "package/linux-headers/Config.in.host"
-+source "package/linux-headers/Config.in"
-+endif
-+
- comment "Toolchain Generic Options"
- 
- # https://sourceware.org/bugzilla/show_bug.cgi?id=27597
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 08ee6060b0..b5cf2b7971 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -165,11 +165,9 @@ copy_toolchain_sysroot = \
- # $2: sysroot directory
- # $3: kernel version string, in the form: X.Y
- # $4: test to do for the latest kernel version, 'strict' or 'loose'
--#     always 'strict' if this is not the latest version.
- #
- check_kernel_headers_version = \
--	if ! support/scripts/check-kernel-headers.sh $(1) $(2) $(3) \
--		$(if $(BR2_TOOLCHAIN_HEADERS_LATEST),$(4),strict); \
-+	if ! support/scripts/check-kernel-headers.sh $(1) $(2) $(3) $(4) ; \
- 	then \
- 		exit 1; \
- 	fi
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 64f7892f98..ebebe263db 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -104,8 +104,6 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
- 	default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
- 	default "musl"	 if BR2_TOOLCHAIN_BUILDROOT_MUSL
- 
--source "package/linux-headers/Config.in.host"
--source "package/linux-headers/Config.in"
- source "package/musl/Config.in"
- source "package/uclibc/Config.in"
- source "package/glibc/Config.in"
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index c1c159cb8e..d364f92a95 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -157,4 +157,13 @@ config BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
- 	  Copy the gdbserver provided by the external toolchain to the
- 	  target.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_UPDATE_LINUX_HEADERS
-+	bool "Update kernel headers"
-+	select BR2_PACKAGE_LINUX_HEADERS
-+	help
-+	  Select this option to update the kernel headers in the
-+	  external toolchain with headers from the kernel being built.
-+	  This is useful when the external toolchain has older kernel
-+	  headers than the kernel being built.
-+
- endif # BR2_TOOLCHAIN_EXTERNAL
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index c37f3500d9..6527601773 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -557,19 +557,29 @@ $(2)_POST_EXTRACT_HOOKS += \
- 	TOOLCHAIN_EXTERNAL_MOVE
- endif
- 
-+ifeq ($$(BR2_PACKAGE_LINUX_HEADERS),y)
-+$(2)_DEPENDENCIES += linux-headers
-+endif
-+
- # Checks for an already installed toolchain: check the toolchain
- # location, check that it is usable, and then verify that it
- # matches the configuration provided in Buildroot: ABI, C++ support,
- # kernel headers version, type of C library and all C library features.
-+# Also updates the kernel headers in the toolchain, if requested.
- define $(2)_CONFIGURE_CMDS
- 	$$(Q)$$(call check_cross_compiler_exists,$$(TOOLCHAIN_EXTERNAL_CC))
- 	$$(Q)$$(call check_unusable_toolchain,$$(TOOLCHAIN_EXTERNAL_CC),"$$(TOOLCHAIN_EXTERNAL_CFLAGS)")
- 	$$(Q)SYSROOT_DIR="$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC))" ; \
-+	if test "$$(BR2_PACKAGE_LINUX_HEADERS)" = "y" ; then \
-+		echo "Updating kernel headers in the external toolchain..." ; \
-+		rsync -a $$(STAGING_DIR)/usr/include/ \
-+			$$$${SYSROOT_DIR}/usr/include/ ; \
-+	fi ; \
- 	$$(call check_kernel_headers_version,\
- 		$$(BUILD_DIR),\
- 		$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC)),\
- 		$$(call qstrip,$$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)),\
--		$$(if $$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM),loose,strict)); \
-+		$$(if $$(or $$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM),$$(BR2_PACKAGE_LINUX_HEADERS)),loose,strict)); \
- 	$$(call check_gcc_version,$$(TOOLCHAIN_EXTERNAL_CC),\
- 		$$(call qstrip,$$(BR2_TOOLCHAIN_GCC_AT_LEAST))); \
- 	if test "$$(BR2_arm)" = "y" ; then \
+-TOR_VERSION = 0.4.8.19
++TOR_VERSION = 0.4.8.20
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
 -- 
-2.39.5
+2.47.3
 
 _______________________________________________
 buildroot mailing list
