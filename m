@@ -1,102 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B004CCD4849
-	for <buildroot@archiver.kernel.org>; Wed, 12 Nov 2025 21:07:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB75ECD484D
+	for <buildroot@archiver.kernel.org>; Wed, 12 Nov 2025 21:33:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B09840A65;
-	Wed, 12 Nov 2025 21:07:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9C0DA82EC7;
+	Wed, 12 Nov 2025 21:33:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bnnEDFaDTU2e; Wed, 12 Nov 2025 21:07:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bJMocozkRHee; Wed, 12 Nov 2025 21:33:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 816BF40A76
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA95182B5E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 816BF40A76;
-	Wed, 12 Nov 2025 21:07:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3403E158
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 21:07:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CA95182B5E;
+	Wed, 12 Nov 2025 21:33:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6B9B3158
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 21:33:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2521740098
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 21:07:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5694E82B5E
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 21:33:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UGemUEAH374a for <buildroot@buildroot.org>;
- Wed, 12 Nov 2025 21:07:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 34BB94004A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34BB94004A
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 34BB94004A
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 21:07:11 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id
- ffacd0b85a97d-42b2a0c18caso76462f8f.1
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 13:07:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1762981630; x=1763586430;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=DrMkg7lpsqh7Fnsos2oWxKYF7ZF2U+sTpTUtJMmp2YQ=;
- b=QXftocVH5L7FyO2eoBv46/pfWp4BxiqnctFsHHF5j1JZ9o1W8Jj6+tbNyGO5jWEbTh
- jZFRlMxbBOYi3YmKcjOP7X+xwRxFc24ihKJwclBqgfNh82yV+VlEe72M3E8IOB/0NhG+
- q90M//sD/H3kZxtMazJ8hBaGajLMpy1qbjK+57vm/iNVa/+8U++Pd70Lx3NndxvKPzqd
- R6sDL13uqsCrAvliwPJKFC69ORLXDv8FmpvxWsye8nZTaIGRX8rZ6lcuNCCtyXUv2yei
- Lzx2xrVZqrMzeXaMRQeN2t0VAR15knNjOvLkMM2Xrjln9A6PV/TtXcqWjfIy2sJDojfC
- OEfw==
-X-Gm-Message-State: AOJu0YwJERtuyScEBThiQhuyAEKDug6Z2U2RMeEKdf2IEly9665QbeyG
- 9I12g7wK5w7NBagdiioXDg8iBkAgd4VxQP5WONiTI4LecJjCifCilV2WtxJrWl4YzkuLXezvPrt
- rZhwIQ7s=
-X-Gm-Gg: ASbGnctqXrL52vXKL7jfxQZu9MKePlLoi6LnYNVTqleMtXxI8OeoRoSxrFY++fmvi5y
- 3HSLms8jbaREqNxO2bcFoD3HMu/f/jSUunScS7bwpNIPaEZ/lXu7mw4rmH6WISZFYsC8T+P5P/b
- EXGutEuO+/asqmdwv/LD1bHKA5L7ru5nZzN0BRtbjDm04VOGiXVgJC1KGK7Z/zevHuVnY8gR7bO
- fzEpHb18kQrY4LN4LO1iLvvDcEjh9tygqghDWRwmpBCMoZ4GGm9VUjRvFGaJ6WDn/QWrlF6YAOL
- 2FedzbJGqnIUz0aVGbHxuDzNn/O4jsfiy4/aAe9+KyJ7L5qkJx8GjDpQZ8g5fGlhktWaoXdRh6m
- BW73ITwOOC6P8Yx+Vz7Ul6XIAXZx0+bYdyVBJhBIg9Q/OJi7PKUXL7WRMtRJQv3tlqJcYOVsNax
- Vt6m+MClWcGYNOTsxAo/JTRQA03g==
-X-Google-Smtp-Source: AGHT+IGVQ2B7XNjVyr7pI3JDB8UnDNZGZ4nJnkoZOgPEJ+1KkWg6TTneu6+E+k1sPN0jGqO9LhNMrg==
-X-Received: by 2002:a05:6000:22c9:b0:42b:2a41:f1a with SMTP id
- ffacd0b85a97d-42b4bba566dmr4770496f8f.26.1762981629854; 
- Wed, 12 Nov 2025 13:07:09 -0800 (PST)
-Received: from arch (77.109.92.201.static.edpnet.net. [77.109.92.201])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-42abe63e131sm36623434f8f.20.2025.11.12.13.07.09
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 12 Nov 2025 13:07:09 -0800 (PST)
-To: buildroot@buildroot.org
-Date: Wed, 12 Nov 2025 22:07:09 +0100
-Message-ID: <20251112210709.161454-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.51.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FdXOUKJes5Vz for <buildroot@buildroot.org>;
+ Wed, 12 Nov 2025 21:33:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C7BA682B08
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7BA682B08
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C7BA682B08
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 21:33:49 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1146416014; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Wed, 12 Nov 2025 21:33:43 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1vJITG-000wHS-0S;
+ Wed, 12 Nov 2025 22:33:42 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org,  Simon Dawson <spdawson@gmail.com>,  Thomas
+ Petazzoni <thomas.petazzoni@bootlin.com>,  Carsten Schoenert
+ <c.schoenert@gmail.com>,  Lionel Orry <lionel.orry@gmail.com>,  Fabrice
+ Fontaine <fontaine.fabrice@gmail.com>
+References: <20251106204522.3273683-1-bernd@kuhls.net>
+ <20251106204522.3273683-2-bernd@kuhls.net>
+Date: Wed, 12 Nov 2025 22:33:41 +0100
+In-Reply-To: <20251106204522.3273683-2-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Thu, 6 Nov 2025 21:45:08 +0100")
+Message-ID: <87ikffq6kq.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1762981630; x=1763586430; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:from:to:cc:subject:date:message-id:reply-to;
- bh=DrMkg7lpsqh7Fnsos2oWxKYF7ZF2U+sTpTUtJMmp2YQ=;
- b=Qcc0Ha0frbloWD10Gk9zHsNM4SFeNkV0Am3M2NfPJ3RvvLZE1ZRV4XyyrPFO+z16up
- IHootAGy/74OGAXztREqtOBdzMVzFFnfjgKjOFDZEjoqpuXx3xQWnSI1Sa5kBEucn/EY
- vLy4vd6y4bCHggt1DoIQy0kK4vnizEzi1ZytarTP5FXcS7uf2TRMmdPuhqAgg7bpySUe
- j7kiv7QR0O0HcPdNu3TrEC3NELvOfkx7golxiVYdpBqs92ZBbubaQiocZ3wULoL0Ejuy
- vEvUavFQivqs85U8ugY10yM5osAXaM1u2BWCkQhErrfZldZ/DlbG+ZMpaaKhRGJadyGT
- i7Jw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Qcc0Ha0f
-Subject: [Buildroot] [2025.02.x,
- PATCH] package/tpm2-tss: security bump to v3.2.3
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=DB34E7OXZZ7xgTyDQ+mWEtO7oTdkJFHGyWFzztYkaFFBskCpzRS6Tpdo61sREbvO9o74yoYgt1UHkiP8ZU6qoAFVkgITG1d+ZUSMTiICu6wjLHxgOblThD8Wrc2sodADd+AN0rHLA8GNWPwN+MCTKHwWsq1+BGT2GIGVCbosBS7LKF/ZL7p/A5E8xasQqqLDyq6nLW82RV7XSi8ZS5EGV85sF8d5TzjMAChDj1Wg4gnRdu0k8fo/uWtqucd8eP4agi30QqI3gl3cp47tf8mIxu3R3Quup3iqh4y/tVZ1HWNhu4P+SX2DqVuNE1ziCgitp6bLlqdJ2N1lzaSwnQ8B9g==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=IdLK3qBJOb/fF6cGOSE/MwNwL+CUXKg6Exu6jjESQ3I=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=DB34E7OX
+Subject: Re: [Buildroot] [PATCH v3 01/14] package/asterisk: fix build caused
+ by libjwt bump
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,63 +85,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For more information about the release, see:
- - https://github.com/tpm2-software/tpm2-tss/releases/tag/3.2.3
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
-Fixes the following vulnerability:
+ > From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > In commit 770f9154978c40ce5b7718174108b37c5310869d, libjwt was bumped
+ > from 1.17.2 to 3.2.0, which is a big bump. And the libjwt website
+ > states "Version 3 of LibJWT is a complete overhaul of the code. Please
+ > see documentation for usage."
 
-- CVE-2024-29040
+ > And indeed, this version bump breaks the build of Asterisk:
 
-The JSON Quote Info returned by Fapi_Quote has to be deserialized by
-Fapi_VerifyQuote to the TPM Structure `TPMS_ATTEST`. For the field
-`TPM2_GENERATED magic` of this structure any number can be used in the
-JSON structure. The verifier can receive a state which does not
-represent the actual, possibly malicious state of the device under test.
-The malicious device might get access to data it shouldn't, or can use
-services it shouldn't be able to.
+ > res_stir_shaken/attestation.c: In function 'pack_payload':
+ > res_stir_shaken/attestation.c:357:9: error: implicit declaration of
+ > function 'jwt_add_grants_json' [-Wimplicit-function-declaration]
+ >   357 |         jwt_add_grants_json(jwt, payload_str);
+ >       |         ^~~~~~~~~~~~~~~~~~~
+ > In file included from /home/autobuild/autobuild/instance-11/output-1/build/asterisk-22.3.0/include/asterisk/module.h:39,
+ >                  from res_stir_shaken/attestation.c:24:
+ > res_stir_shaken/attestation.c: In function '_dtor_jwt':
+ > res_stir_shaken/attestation.c:367:38: error: implicit declaration of function 'jwt_free'; did you mean 'jwks_free'? [-Wimplicit-function-declaration]
+ >   367 |         RAII_VAR(jwt_t *, jwt, NULL, jwt_free);
+ >       |                                      ^~~~~~~~
 
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/cve-2024-29040
-  - https://github.com/tpm2-software/tpm2-tss/security/advisories/GHSA-837m-jw3m-h9p6
+ > To fix this, let's use the bundled version of libjwt in Asterisk,
+ > since even Asterisk master hasn't been fixed to be compatible with
+ > libjwt 3.x.
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- package/tpm2-tss/tpm2-tss.hash | 2 +-
- package/tpm2-tss/tpm2-tss.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Of course, this raises the question of whether the separate libjwt
+ > package should be removed, as it is anyway only used by Asterisk.
 
-diff --git a/package/tpm2-tss/tpm2-tss.hash b/package/tpm2-tss/tpm2-tss.hash
-index c9fa4e6ae0..d8730ba0e1 100644
---- a/package/tpm2-tss/tpm2-tss.hash
-+++ b/package/tpm2-tss/tpm2-tss.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  ba9e52117f254f357ff502e7d60fce652b3bfb26327d236bbf5ab634235e40f1  tpm2-tss-3.2.2.tar.gz
-+sha256  6279a9a1983ea6ffe41925067b7f0de3a6ed95020a30e7c97d80fa2754259534  tpm2-tss-3.2.3.tar.gz
- sha256  18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
-diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-index 81a1a0e59b..095b57baea 100644
---- a/package/tpm2-tss/tpm2-tss.mk
-+++ b/package/tpm2-tss/tpm2-tss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TPM2_TSS_VERSION = 3.2.2
-+TPM2_TSS_VERSION = 3.2.3
- TPM2_TSS_SITE = https://github.com/tpm2-software/tpm2-tss/releases/download/$(TPM2_TSS_VERSION)
- TPM2_TSS_LICENSE = BSD-2-Clause
- TPM2_TSS_LICENSE_FILES = LICENSE
+ > Fixes:
+
+ >   http://autobuild.buildroot.net/results/2d39791c65c5b71b0533d4b2bce5f073f5919552/
+
+ > Cc: Waldemar Brodkorb <wbx@openadk.org>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > [Bernd: Added libopenssl dependency needed by bundled libjwt]
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+
+Committed, thanks.
+
+It does look like the host-asterisk workaround for menuselect isn't
+working anymore as the directory gets cleaned:
+
+https://autobuild.buildroot.net/results/660/660d89e1264510f73f1486f9807dbefcbe73850c/build-end.log
+
 -- 
-2.51.0
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
