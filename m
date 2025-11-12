@@ -4,71 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77B82CD3443
-	for <buildroot@archiver.kernel.org>; Wed, 12 Nov 2025 19:13:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24063CD3438
+	for <buildroot@archiver.kernel.org>; Wed, 12 Nov 2025 19:25:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 617EF82EE1;
-	Wed, 12 Nov 2025 19:13:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D230382C7D;
+	Wed, 12 Nov 2025 19:25:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t1YsOFxmjWVT; Wed, 12 Nov 2025 19:13:04 +0000 (UTC)
+ id hK9b9v22DAFG; Wed, 12 Nov 2025 19:25:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1D5C82E9C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0887C82C99
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E1D5C82E9C;
-	Wed, 12 Nov 2025 19:13:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A0825230
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 19:13:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0887C82C99;
+	Wed, 12 Nov 2025 19:25:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3D922230
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 19:25:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 86B8740072
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 19:13:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2F57A60E20
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 19:25:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k4lWaw9YA3fl for <buildroot@buildroot.org>;
- Wed, 12 Nov 2025 19:13:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7A5F64002C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A5F64002C
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7A5F64002C
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 19:13:00 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1bd38.dip0.t-ipconnect.de [84.161.189.56])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 3B5F6A4C5A96
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 20:12:58 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:52600)
- by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vJGH3-000000000PU-3Ug4
- for buildroot@buildroot.org; Wed, 12 Nov 2025 19:12:57 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Wed, 12 Nov 2025 20:12:57 +0100
-Message-ID: <20251112191257.3727401-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qR5oSBadJUXW for <buildroot@buildroot.org>;
+ Wed, 12 Nov 2025 19:25:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A675360E1C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A675360E1C
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A675360E1C
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 19:25:26 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -523007921; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Wed, 12 Nov 2025 19:25:24 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1vJGT4-00HXAu-34;
+ Wed, 12 Nov 2025 20:25:22 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Francois Perrad via buildroot <buildroot@buildroot.org>
+References: <20251112093116.481902-1-francois.perrad@gadz.org>
+Date: Wed, 12 Nov 2025 20:25:22 +0100
+In-Reply-To: <20251112093116.481902-1-francois.perrad@gadz.org> (Francois
+ Perrad via buildroot's message of "Wed, 12 Nov 2025 10:31:16 +0100")
+Message-ID: <877bvvt5nh.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1762974778;
- bh=BA/590pUd/QQeDJOgJK5CPgOi1DvZLCE1516qiKTQV0=;
- h=From:To:Subject:Date:From;
- b=zbHyYrIvPb+4vDr+G1C9hGy1dbGtWGIdwHgeqNXuGpJWxz8Yd6bmkmdOqjK/OWraP
- 4ad5VcfymebPLVMWFn88ZQQkKhJKSV3tDITR8lPn7LrWYSEY4cP3yyCaI1Hd4igLOd
- /P8/HtIWFHG2L5z1zl95iSly94P43G4Sm/J3BoKTmwBX+TbmhIMAFFqWo2emXrsqaM
- +CdR6lirKFsDjn+Z+XLfWJg/CDJ957/74NaVk7muiOytzAGYdGbp6Glitysb6SemOC
- 3JEJSATBTd0nfR8v5GHBNhXif/zNbB8/TEnH7GDLMcsLcC6mC4rxQ7UfD2ICwUga5h
- wvdGDU0SFIAXw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=jUXGPv2L7aYekJT+cyJDDpTfs6a7Z/rnSKpOf1TuhNNY/FD0khj7Rq5DZ8WHzetGNzs7h4E7i4K6k3RX0j5EVM7GQBm/qO/QigOZSnrCdGta/9CbQ+kbnpa9Oi/W1ucIxh58/zjinuXyng6omuY2KQb7UhnNQiqDd2zdATm6YlKAIL085xi/3+Ffc6HwTA/jR1zDDm88JlPZLsBBGeLzofbL6kQoYO7hMT9zihDz4h4DSHGuks75TRsWNdq/X7nO9OxUzSKuMAIzVT4iPbeeR3kFvbqRKxkuPT45addGGzCMALYXSmWd/9MqgBPKp6ZOb2ulk33KNMxaPg1FlAihVA==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=e1lYfs0KqYYYlL49APvBmBpvV6a+oyLekCPQftElHYI=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=zbHyYrIv
-Subject: [Buildroot] [PATCH 1/1] package/sqlite: bump version to 3.51.0
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=jUXGPv2L
+Subject: Re: [Buildroot] [PATCH] package/kbd: bump to version 2.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,115 +79,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://sqlite.org/releaselog/3_51_0.html
+>>>>> "Francois" == Francois Perrad via buildroot <buildroot@buildroot.org> writes:
 
-Removed patch which is included in this release.
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/sqlite/0001-disable-rpath.patch | 59 -------------------------
- package/sqlite/sqlite.hash              |  2 +-
- package/sqlite/sqlite.mk                |  4 +-
- 3 files changed, 3 insertions(+), 62 deletions(-)
- delete mode 100644 package/sqlite/0001-disable-rpath.patch
+Committed, thanks.
 
-diff --git a/package/sqlite/0001-disable-rpath.patch b/package/sqlite/0001-disable-rpath.patch
-deleted file mode 100644
-index 6eb20488b0..0000000000
---- a/package/sqlite/0001-disable-rpath.patch
-+++ /dev/null
-@@ -1,59 +0,0 @@
--Add the --disable-rpath configure script flag to address
--
--Upstream: https://sqlite.org/src/info/a59d9bb25e
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
--
--Index: autosetup/sqlite-config.tcl
--==================================================================
----- a/autosetup/sqlite-config.tcl
--+++ b/autosetup/sqlite-config.tcl
--@@ -334,12 +334,12 @@
--         # canonical build!
--         static-shell=1
--           => {Link the sqlite3 shell app against the DLL instead of embedding sqlite3.c}
--       }
--       {canonical autoconf} {
---        # A potential TODO without a current use case:
---        #rpath=1 => {Disable use of the rpath linker flag}
--+        rpath=1 => {Disable use of the rpath linker flag}
--+
--         # soname: https://sqlite.org/src/forumpost/5a3b44f510df8ded
--         soname:=legacy
--           => {SONAME for libsqlite3.so. "none", or not using this flag, sets no
--               soname. "legacy" sets it to its historical value of
--               libsqlite3.so.0.  A value matching the glob "libsqlite3.*" sets
--@@ -2138,25 +2138,25 @@
-- }
-- 
-- ########################################################################
-- # Handle the --enable/disable-rpath flag.
-- proc sqlite-handle-rpath {} {
---  proj-check-rpath
--   # autosetup/cc-shared.tcl sets the rpath flag definition in
--   # [get-define SH_LINKRPATH], but it does so on a per-platform basis
--   # rather than as a compiler check. Though we should do a proper
--   # compiler check (as proj-check-rpath does), we may want to consider
--   # adopting its approach of clearing the rpath flags for environments
--   # for which sqlite-env-is-unix-on-windows returns a non-empty
--   # string.
-- 
---#  if {[proj-opt-truthy rpath]} {
---#    proj-check-rpath
---#  } else {
---#    msg-result "Disabling use of rpath."
---#    define LDFLAGS_RPATH ""
---#  }
--+  # https://sqlite.org/forum/forumpost/13cac3b56516f849
--+  if {[proj-opt-truthy rpath]} {
--+    proj-check-rpath
--+  } else {
--+    msg-result "Disabling use of rpath."
--+    define LDFLAGS_RPATH ""
--+  }
-- }
-- 
-- ########################################################################
-- # If the --dump-defines configure flag is provided then emit a list of
-- # all [define] values to config.defines.txt, else do nothing.
--
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 2ade5afe03..e33c87f34e 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  a3db587a1b92ee5ddac2f66b3edb41b26f9c867275782d46c3a088977d6a5b18  sqlite-autoconf-3500400.tar.gz
-+sha256  42e26dfdd96aa2e6b1b1be5c88b0887f9959093f650d693cb02eb9c36d146ca5  sqlite-autoconf-3510000.tar.gz
- sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 667ee8d70e..13ae9d9281 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+> ---
+ >  package/kbd/kbd.hash | 2 +-
+ >  package/kbd/kbd.mk   | 2 +-
+ >  2 files changed, 2 insertions(+), 2 deletions(-)
+
+ > diff --git a/package/kbd/kbd.hash b/package/kbd/kbd.hash
+ > index 25866751f..d46a60a80 100644
+ > --- a/package/kbd/kbd.hash
+ > +++ b/package/kbd/kbd.hash
+ > @@ -1,4 +1,4 @@
+ >  # From https://www.kernel.org/pub/linux/utils/kbd/sha256sums.asc
+ > -sha256  519f8d087aecca7e0a33cd084bef92c066eb19731666653dcc70c9d71aa40926  kbd-2.6.4.tar.xz
+ > +sha256  fb3197f17a99eb44d22a3a1a71f755f9622dd963e66acfdea1a45120951b02ed  kbd-2.9.0.tar.xz
+ >  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ >  sha256  5a16340fe773f422144b436df90319114a2884933c56e9be6fad642e59be5e1f  CREDITS
+ > diff --git a/package/kbd/kbd.mk b/package/kbd/kbd.mk
+ > index 953adccd0..8008a9b3b 100644
+ > --- a/package/kbd/kbd.mk
+ > +++ b/package/kbd/kbd.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
  
--SQLITE_VERSION = 3.50.4
--SQLITE_TAR_VERSION = 3500400
-+SQLITE_VERSION = 3.51.0
-+SQLITE_TAR_VERSION = 3510000
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
- SQLITE_SITE = https://www.sqlite.org/2025
- SQLITE_LICENSE = blessing
--- 
-2.47.3
+ > -KBD_VERSION = 2.6.4
+ > +KBD_VERSION = 2.9.0
+ >  KBD_SOURCE = kbd-$(KBD_VERSION).tar.xz
+ >  KBD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kbd
+ >  KBD_CONF_OPTS = \
+ > -- 
 
+ > 2.43.0
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot@buildroot.org
+ > https://lists.buildroot.org/mailman/listinfo/buildroot
+
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
