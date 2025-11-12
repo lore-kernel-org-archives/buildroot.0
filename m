@@ -1,74 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BFC3CD484D
-	for <buildroot@archiver.kernel.org>; Wed, 12 Nov 2025 21:35:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38D58CD484F
+	for <buildroot@archiver.kernel.org>; Wed, 12 Nov 2025 21:42:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E9D2F40AFB;
-	Wed, 12 Nov 2025 21:35:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0B18B8230F;
+	Wed, 12 Nov 2025 21:42:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xJ7Cv-lXL5yQ; Wed, 12 Nov 2025 21:35:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ACfvqvBXL2a3; Wed, 12 Nov 2025 21:42:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05E2040B02
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B6A682311
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 05E2040B02;
-	Wed, 12 Nov 2025 21:35:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2656D158
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 21:35:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1B6A682311;
+	Wed, 12 Nov 2025 21:42:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 722E6158
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 21:42:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2387540B02
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 21:35:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 55202608A2
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 21:42:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iMI_rQlyFefB for <buildroot@buildroot.org>;
- Wed, 12 Nov 2025 21:35:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lkHO4m_XByrv for <buildroot@buildroot.org>;
+ Wed, 12 Nov 2025 21:42:31 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 188B440AFB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 188B440AFB
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 188B440AFB
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 21:35:32 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -478704422; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 12 Nov 2025 21:35:31 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1vJIV0-000wTc-1O;
- Wed, 12 Nov 2025 22:35:30 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6C7560888
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A6C7560888
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 21:42:31 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 94CF6844C9; Wed, 12 Nov 2025 21:42:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Perale via buildroot <buildroot@buildroot.org>
-Cc: Thomas Perale <thomas.perale@mind.be>
-References: <20251112210641.161073-1-thomas.perale@mind.be>
-Date: Wed, 12 Nov 2025 22:35:30 +0100
-In-Reply-To: <20251112210641.161073-1-thomas.perale@mind.be> (Thomas Perale
- via buildroot's message of "Wed, 12 Nov 2025 22:06:41 +0100")
-Message-ID: <87ecq3q6hp.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=jybKmxj+OIooMb2c1fT3oQJ1Oe3frqfh52D6b4QwuUhH65gssIP77GdBiGj+1sumxnUMj2B+WJ+1iA3JLF6Itag+xtKBxvuzlebydGKcTFEuAptViBlFf1cglovjm+m6kFkxaoEM3fbjNvi0uYzf44g1ecIPcmo8ThSC3s8xEuzLePAlyWaeixqiqPhfzpqwbRHZ6gToAHTPDkZ558GW/+qB0QwiogO7U9hCcxgE3mjHGST41axGR9hAAGbiXGQN3YDZ+u+9yxUwYFFN6xA9plXzVxaPm5JxTVRovEy0bdpoRJGBgr3JTWOFvGXmikmhUWNC0xF1Up8azJou440yaA==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=tOQ5nl9YzqpU+KctZBjhfabzMJdsI6SY+/pMqBGAWx4=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=jybKmxj+
-Subject: Re: [Buildroot] [PATCH] package/tpm2-tss: security bump to v3.2.3
+To: buildroot@buildroot.org
+Date: Wed, 12 Nov 2025 21:42:42 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5d8c1af6a562cf1d0b28f03240ce098f59151464
+X-Git-Newrev: 02fd1d2b9347131ee2ceaae80d1cd5f6e962f09a
+X-Patchwork-Hint: ignore
+Message-Id: <20251112214231.94CF6844C9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/asterisk: security bump version to
+ 22.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,68 +59,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Perale via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=02fd1d2b9347131ee2ceaae80d1cd5f6e962f09a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > For more information about the release, see:
- >  - https://github.com/tpm2-software/tpm2-tss/releases/tag/3.2.3
+Fixes the following security issues:
 
- > Fixes the following vulnerability:
+- CVE-2025-1131: Uncontrolled Search-Path Element in safe_asterisk script
+  may allow local privilege escalation
+  https://github.com/asterisk/asterisk/security/advisories/GHSA-v9q8-9j8m-5xwp
 
- > - CVE-2024-29040
+- CVE-2025-57767: A specifically malformed Authorization header in an
+  incoming SIP request can cause Asterisk to crash
+  https://github.com/asterisk/asterisk/security/advisories/GHSA-64qc-9x89-rx5j
 
- > The JSON Quote Info returned by Fapi_Quote has to be deserialized by
- > Fapi_VerifyQuote to the TPM Structure `TPMS_ATTEST`. For the field
- > `TPM2_GENERATED magic` of this structure any number can be used in the
- > JSON structure. The verifier can receive a state which does not
- > represent the actual, possibly malicious state of the device under test.
- > The malicious device might get access to data it shouldn't, or can use
- > services it shouldn't be able to.
+- CVE-2025-49832: Remote DoS and possible RCE in
+  asterisk/res/res_stir_shaken/verification.c
+  https://github.com/asterisk/asterisk/security/advisories/GHSA-mrq5-74j5-f5cr
 
- > For more information, see:
- >   - https://nvd.nist.gov/vuln/detail/cve-2024-29040
- >   - https://github.com/tpm2-software/tpm2-tss/security/advisories/GHSA-837m-jw3m-h9p6
+- CVE-2025-47780: cli_permissions.conf: deny option does not work for
+  disallowing shell commands
+  https://github.com/asterisk/asterisk/security/advisories/GHSA-c7p6-7mvq-8jq2
 
- > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
- > ---
- >  package/tpm2-tss/tpm2-tss.hash | 2 +-
- >  package/tpm2-tss/tpm2-tss.mk   | 2 +-
- >  2 files changed, 2 insertions(+), 2 deletions(-)
+- CVE-2025-47779: Using malformed From header can forge identity with ";" or
+  NULL in name portion
+  https://github.com/asterisk/asterisk/security/advisories/GHSA-2grh-7mhv-fcfw
 
- > diff --git a/package/tpm2-tss/tpm2-tss.hash b/package/tpm2-tss/tpm2-tss.hash
- > index c9fa4e6ae0..d8730ba0e1 100644
- > --- a/package/tpm2-tss/tpm2-tss.hash
- > +++ b/package/tpm2-tss/tpm2-tss.hash
- > @@ -1,3 +1,3 @@
- >  # Locally computed:
- > -sha256  ba9e52117f254f357ff502e7d60fce652b3bfb26327d236bbf5ab634235e40f1  tpm2-tss-3.2.2.tar.gz
- > +sha256  6279a9a1983ea6ffe41925067b7f0de3a6ed95020a30e7c97d80fa2754259534  tpm2-tss-3.2.3.tar.gz
- >  sha256  18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
- > diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
- > index 81a1a0e59b..095b57baea 100644
- > --- a/package/tpm2-tss/tpm2-tss.mk
- > +++ b/package/tpm2-tss/tpm2-tss.mk
- > @@ -4,7 +4,7 @@
- >  #
- >  ################################################################################
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Acked-by: Titouan Christophe <titouan.christophe@mind.be>
+[Peter: add additional CVEs]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/asterisk/asterisk.hash | 2 +-
+ package/asterisk/asterisk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index 7b28624921..c09a5bc183 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  4cc403c8885d4aed3956dfb75d315d3e5bcc129eb9cd47c156d3b12ecceed1ba  asterisk-22.3.0.tar.gz
++sha256  8a94650b6f348af1f1c9cce7ed3585d280f3a31b0d3820084a42b03712df95d5  asterisk-22.5.2.tar.gz
  
- > -TPM2_TSS_VERSION = 3.2.2
- > +TPM2_TSS_VERSION = 3.2.3
-
-I guess your tree is not uptodate, master is using 4.1.3 since:
-
-commit 04533b70e6dd908dcaaa275b47de55fed0b9908d
-Author: Abelino Romo <abelino.romo@gmail.com>
-Date:   Wed Nov 5 12:32:08 2025 +0100
-
-    package/tpm2-tss: security bump version to 4.1.3
-
--- 
-Bye, Peter Korsgaard
+ # Locally computed
+ sha256  58bb83cec4d431f48d006e455d821668450f8cf6b6c95f090def47062fa3a60c  pjproject-2.15.1.tar.bz2
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index 18af217129..0d40ebf2b4 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ASTERISK_VERSION = 22.3.0
++ASTERISK_VERSION = 22.5.2
+ # Use the github mirror: it's an official mirror maintained by Digium, and
+ # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
