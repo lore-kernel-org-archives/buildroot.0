@@ -1,52 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A78BCD4843
-	for <buildroot@archiver.kernel.org>; Wed, 12 Nov 2025 20:29:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97F2CCD4842
+	for <buildroot@archiver.kernel.org>; Wed, 12 Nov 2025 20:32:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2120D60034;
-	Wed, 12 Nov 2025 20:29:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 54DB340B9C;
+	Wed, 12 Nov 2025 20:32:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hRF80n-TV7tR; Wed, 12 Nov 2025 20:29:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Lvjp3Sa1J7zz; Wed, 12 Nov 2025 20:32:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AB0E6058D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7AC6F40B70
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3AB0E6058D;
-	Wed, 12 Nov 2025 20:29:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DDA5158
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 20:29:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7AC6F40B70;
+	Wed, 12 Nov 2025 20:32:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 83A8C158
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 20:32:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0037A40092
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 20:29:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6A73C8233E
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 20:32:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WtDKLpU6va3B for <buildroot@buildroot.org>;
- Wed, 12 Nov 2025 20:29:24 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RuV_gAETS3hE for <buildroot@buildroot.org>;
+ Wed, 12 Nov 2025 20:32:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B67040090
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3B67040090
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 20:29:24 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2B0F483B08; Wed, 12 Nov 2025 20:29:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5CD728233A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CD728233A
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5CD728233A
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 20:32:42 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1686824405; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Wed, 12 Nov 2025 20:32:40 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1vJHWB-0007Cz-1D;
+ Wed, 12 Nov 2025 21:32:39 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 12 Nov 2025 21:24:01 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 766f6ddb7ef164524f829a35cba0fcfa7d4612e2
-X-Git-Newrev: 5d8c1af6a562cf1d0b28f03240ce098f59151464
-X-Patchwork-Hint: ignore
-Message-Id: <20251112202924.2B0F483B08@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/broot: new package
+To: buildroot@buildroot.org,
+	"Yann E . MORIN" <yann.morin.1998@free.fr>
+Date: Wed, 12 Nov 2025 21:32:26 +0100
+Message-Id: <20251112203227.27573-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.5
+MIME-Version: 1.0
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=Rymmet6Pf0WCmvk9yFJC9YUf5SZio/7x+wDqaSftZ26BdT8fvIze52R5CayHXD/4QKWBJkpLwhXJboVyLb6mqA3X/OYOZ0M+EnXMnpk8FowUvVOomxKyIpkvr1BsPODJYiAgntGEL2beKlJQjmZ4g2pASs5RQxuXLQGPDYGDRMiSRAIZplluk0lmdgGiROuQrDISXR2jk/Ei5vQamkYSNpXFX4XulSmVJMOWGd0Yvenoyi61YM3qYbM+TzQOfCUK9We2UGbO7zBfZIydi2O8Z1VhpFe76NIT1FDZhninbx3lroX+os9y9s7nNM13T3S3FTHqlQ0z8A1mPDq9MnWK5Q==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=Er3u+t73lKl1kvseT5dWEOup9j3hqGbqDHls1Pc+FlA=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=Rymmet6P
+X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
+Subject: [Buildroot] [PATCH] docs/manual: fix typo in merged-bin details
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,99 +79,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d8c1af6a562cf1d0b28f03240ce098f59151464
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Commit 6b53649bfa ("docs/manual: add merged-bin details to customize
+rootfs") added a small typo, fix that.
 
-This commit adds broot, a fast and powerful file manager written
-in Rust and licensed under MIT license. It supports filters, regular
-expressions, and real-time "show-as-you-type" search for quick and easy
-navigation, even in complex directory structures.
-
-Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
-[Peter: use select rather than depends on for rustc]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS               |  1 +
- package/Config.in        |  1 +
- package/broot/Config.in  | 11 +++++++++++
- package/broot/broot.hash |  3 +++
- package/broot/broot.mk   | 12 ++++++++++++
- 5 files changed, 28 insertions(+)
+ docs/manual/customize-rootfs.adoc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b14c6e3875..dbd3b1517c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -87,6 +87,7 @@ N:	Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
- F:	package/cpp-httplib/
- 
- N:	Alexander Shirokov <shirokovalexs@gmail.com>
-+F:	package/broot/
- F:	package/nnn/
- 
- N:	Alessandro Partesotti <a.partesotti@gmail.com>
-diff --git a/package/Config.in b/package/Config.in
-index 930f368058..1152748d8e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2950,6 +2950,7 @@ endmenu
- 
- menu "Text editors and viewers"
- 	source "package/bat/Config.in"
-+	source "package/broot/Config.in"
- 	source "package/bvi/Config.in"
- 	source "package/ed/Config.in"
- 	source "package/joe/Config.in"
-diff --git a/package/broot/Config.in b/package/broot/Config.in
-new file mode 100644
-index 0000000000..247240925f
---- /dev/null
-+++ b/package/broot/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_BROOT
-+	bool "broot"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_RUSTC
-+	help
-+	  Broot is a fast and powerful file manager written in Rust and
-+	  licensed under MIT license. It supports filters, regular
-+	  expressions, and real-time "show-as-you-type" search for quick
-+	  and easy navigation, even in complex directory structures.
-+
-+	  https://github.com/Canop/broot
-diff --git a/package/broot/broot.hash b/package/broot/broot.hash
-new file mode 100644
-index 0000000000..09dd907bf5
---- /dev/null
-+++ b/package/broot/broot.hash
-@@ -0,0 +1,3 @@
-+# Locally generated
-+sha256  2f9fc93d3e3b547108d66ac0baafb8f60a9506fc189b509821ab301d9ea75a19  broot-1.52.0-cargo4.tar.gz
-+sha256  89461664ce2aee7d80ea8fba7118fe7abd490d76ba435cf1d81d3128e060711f  LICENSE
-diff --git a/package/broot/broot.mk b/package/broot/broot.mk
-new file mode 100644
-index 0000000000..9b60d35857
---- /dev/null
-+++ b/package/broot/broot.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# broot
-+#
-+################################################################################
-+
-+BROOT_VERSION = 1.52.0
-+BROOT_SITE = $(call github,Canop,broot,v$(BROOT_VERSION))
-+BROOT_LICENSE = MIT
-+BROOT_LICENSE_FILES = LICENSE
-+
-+$(eval $(cargo-package))
+diff --git a/docs/manual/customize-rootfs.adoc b/docs/manual/customize-rootfs.adoc
+index 5d8bcba778..4d03d04617 100644
+--- a/docs/manual/customize-rootfs.adoc
++++ b/docs/manual/customize-rootfs.adoc
+@@ -31,7 +31,7 @@ When +BR2_ROOTFS_MERGED_USR+ is enabled, then the overlay must not
+ Additionally, when +BR2_ROOTFS_MERGED_BIN+ is enabled, then the overlay
+   must not contain the '/usr/sbin' directory, as Buildroot will create
+   it as a symbolic link to '/usr/bin'. In such a situation, should the
+-  overlay have any program, they should be placed in '/usr/bin'.
++  overlay have any programs, they should be placed in '/usr/bin'.
+ +
+ As shown in xref:customize-dir-structure[], the recommended path for
+   this overlay is +board/<company>/<boardname>/rootfs-overlay+.
+-- 
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
