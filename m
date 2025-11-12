@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABBE9CD3446
-	for <buildroot@archiver.kernel.org>; Wed, 12 Nov 2025 19:28:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7162CD3445
+	for <buildroot@archiver.kernel.org>; Wed, 12 Nov 2025 19:33:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 83ABF82FA5;
-	Wed, 12 Nov 2025 19:28:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 66D6B82F99;
+	Wed, 12 Nov 2025 19:33:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rYd8a-yZsu4U; Wed, 12 Nov 2025 19:28:52 +0000 (UTC)
+ id nRQKUirdTVzA; Wed, 12 Nov 2025 19:33:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B049F82FAE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F23082F4F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B049F82FAE;
-	Wed, 12 Nov 2025 19:28:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id BBC1A230
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 19:28:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F23082F4F;
+	Wed, 12 Nov 2025 19:33:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D4F52230
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 19:33:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A24E74006D
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 19:28:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D248240070
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 19:33:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W7C_NAtPSkLC for <buildroot@buildroot.org>;
- Wed, 12 Nov 2025 19:28:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id EJTxO_MzBfwT for <buildroot@buildroot.org>;
+ Wed, 12 Nov 2025 19:33:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7B2C40055
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E7B2C40055
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 19:28:47 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C5FF68460A; Wed, 12 Nov 2025 19:28:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BEABB40055
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BEABB40055
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BEABB40055
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 19:33:16 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -390313123; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Wed, 12 Nov 2025 19:33:12 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1vJGac-00HYF8-2o;
+ Wed, 12 Nov 2025 20:33:10 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 12 Nov 2025 20:25:42 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 930660890bf8b40d9bd55cd9e202e574b53d5d49
-X-Git-Newrev: 631259099845212c6f0d1f4699fc4782f55a102f
-X-Patchwork-Hint: ignore
-Message-Id: <20251112192847.C5FF68460A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tslib: bump version to 1.24
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+References: <20251112191257.3727401-1-bernd@kuhls.net>
+Date: Wed, 12 Nov 2025 20:33:10 +0100
+In-Reply-To: <20251112191257.3727401-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Wed, 12 Nov 2025 20:12:57 +0100")
+Message-ID: <87pl9nrqq1.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=LdNGheRwCLuSgbExiEt8XouIsShuAYR6f1NseHGfejEMXvuEwfZUbQ8s0Wurlm/+uLmUW7rLE5qGJn30k67PqiIpKqef4OEUcFl8CR4Q6JZleFkzEDqi8qknmPErSCP+3kjCduSuog+gzNvFYo0D/Wt9lZ41wGuv8RvFUVsZlmVnuRlTmimQ4kQ6HSIickEEHD8myszFcb35BqDH9quysMlVLkqX12OxXSPRf3Id4jqKwXhVfKYXLvaIsnm16kQP+k+eKTW+aG+Agl+tb+w1yMfMaZHyP0E5BR7ig4Cgq2/MLbZlsWKtihv8aXETB4h3wAmgQCm2NN3WepPwQ0871g==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=IEHD6bhhvfYDPLzPc4CX+ToojHz9qydlzbUmJsDORGc=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=LdNGheRw
+Subject: Re: [Buildroot] [PATCH 1/1] package/sqlite: bump version to 3.51.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,69 +80,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3379700464904691516=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3379700464904691516==
-Content-Type: text/plain
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=631259099845212c6f0d1f4699fc4782f55a102f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Release notes: https://sqlite.org/releaselog/3_51_0.html
+ > Removed patch which is included in this release.
 
-Release notes from https://github.com/libts/tslib/releases :
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-This release includes libts version 0.10.5 and the following changes:
+Committed, thanks.
 
-  * improved release procedure
-  * debug fixes for 32bit systems
-  * CMake and autoconf updates for newer versions
-  * fixes for minor cppcheck errors
-  * ts_conf test program fixes
-
-Signed-off-by: Martin Kepplinger-Novaković <martink@posteo.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/tslib/tslib.hash | 4 ++--
- package/tslib/tslib.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-index 6fe35633aa..79c6962d7c 100644
---- a/package/tslib/tslib.hash
-+++ b/package/tslib/tslib.hash
-@@ -1,5 +1,5 @@
--# https://github.com/libts/tslib/releases/download/1.23/tslib-1.23.tar.xz.sha256
--sha256  9b489a54d48006201f2fe955a88c3f857535ac93b6cf8e5a16c7b166c8991dac  tslib-1.23.tar.xz
-+# https://github.com/libts/tslib/releases/download/1.24/tslib-1.24.tar.xz.sha256
-+sha256  58d9941ffaa269c399f00d0d308184c96087f7acf69aa8e3c6645e852f993ba2  tslib-1.24.tar.xz
- 
- # Locally computed
- sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  COPYING
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index e8eb3beeaf..6138503f40 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TSLIB_VERSION = 1.23
-+TSLIB_VERSION = 1.24
- TSLIB_SITE = https://github.com/libts/tslib/releases/download/$(TSLIB_VERSION)
- TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
- TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
-
---===============3379700464904691516==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3379700464904691516==--
