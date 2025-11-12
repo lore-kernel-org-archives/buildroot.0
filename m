@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48AF0CD3438
-	for <buildroot@archiver.kernel.org>; Wed, 12 Nov 2025 18:44:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77B82CD3443
+	for <buildroot@archiver.kernel.org>; Wed, 12 Nov 2025 19:13:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3BB1482324;
-	Wed, 12 Nov 2025 18:44:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 617EF82EE1;
+	Wed, 12 Nov 2025 19:13:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pdaa7USYBsFF; Wed, 12 Nov 2025 18:44:05 +0000 (UTC)
+ id t1YsOFxmjWVT; Wed, 12 Nov 2025 19:13:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8F4A8231C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1D5C82E9C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B8F4A8231C;
-	Wed, 12 Nov 2025 18:44:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 230891C3
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 18:44:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E1D5C82E9C;
+	Wed, 12 Nov 2025 19:13:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A0825230
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 19:13:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1528840B0C
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 18:44:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 86B8740072
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 19:13:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BbZWx05LWsi5 for <buildroot@buildroot.org>;
- Wed, 12 Nov 2025 18:44:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k4lWaw9YA3fl for <buildroot@buildroot.org>;
+ Wed, 12 Nov 2025 19:13:00 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1193540B0B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1193540B0B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7A5F64002C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A5F64002C
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1193540B0B
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 18:44:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7A5F64002C
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 19:13:00 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bd38.dip0.t-ipconnect.de [84.161.189.56])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id D858AA4C4E18
- for <buildroot@buildroot.org>; Wed, 12 Nov 2025 19:43:57 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:43568)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 3B5F6A4C5A96
+ for <buildroot@buildroot.org>; Wed, 12 Nov 2025 20:12:58 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:52600)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vJFoz-000000003d0-25Kg
- for buildroot@buildroot.org; Wed, 12 Nov 2025 18:43:57 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vJGH3-000000000PU-3Ug4
+ for buildroot@buildroot.org; Wed, 12 Nov 2025 19:12:57 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed, 12 Nov 2025 19:43:57 +0100
-Message-ID: <20251112184357.3358550-1-bernd@kuhls.net>
+Date: Wed, 12 Nov 2025 20:12:57 +0100
+Message-ID: <20251112191257.3727401-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: +++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202506031021; t=1762973037;
- bh=f4dKy/ku2PjGHnadezIyYUy6iTL6+bOfS6Ia+SVnzoE=;
+ s=kas202506031021; t=1762974778;
+ bh=BA/590pUd/QQeDJOgJK5CPgOi1DvZLCE1516qiKTQV0=;
  h=From:To:Subject:Date:From;
- b=YFOw7k+PF2tBcTbRydyuiynVOhtEiWxn+qg72pKie7lmAOvjbz8TY82+y0T3TKxfn
- xVpD8/JkKD3IktmyjzKHJ+VwPsauX2OD3P5TEMmSG5RWRctWdCnZPw6FnWKuTtt8V9
- AwkrUcoJfG7V2jg74rYlPl2rWjvCtktpwOaIpi2QsxDZOsKL4kYl6FdVm/IkjrxvXb
- qA/3E5lgo6dlh0ubqcDJBp4gSE8p7GCq6x4mh2Zf7WFxlNcK45mj/DHUWodHR2DEgN
- YKkv3QgIHCIMhMZ57hFww1HcHjQZ84ttXPHj8hr/otYx5p3l6hMD9Xo8DVIJuUe1Tf
- m7uBDXTPOkM6Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=zbHyYrIvPb+4vDr+G1C9hGy1dbGtWGIdwHgeqNXuGpJWxz8Yd6bmkmdOqjK/OWraP
+ 4ad5VcfymebPLVMWFn88ZQQkKhJKSV3tDITR8lPn7LrWYSEY4cP3yyCaI1Hd4igLOd
+ /P8/HtIWFHG2L5z1zl95iSly94P43G4Sm/J3BoKTmwBX+TbmhIMAFFqWo2emXrsqaM
+ +CdR6lirKFsDjn+Z+XLfWJg/CDJ957/74NaVk7muiOytzAGYdGbp6Glitysb6SemOC
+ 3JEJSATBTd0nfR8v5GHBNhXif/zNbB8/TEnH7GDLMcsLcC6mC4rxQ7UfD2ICwUga5h
+ wvdGDU0SFIAXw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=YFOw7k+P
-Subject: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.4.8.20
+ header.s=kas202506031021 header.b=zbHyYrIv
+Subject: [Buildroot] [PATCH 1/1] package/sqlite: bump version to 3.51.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,40 +85,107 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://gitlab.torproject.org/tpo/core/tor/-/raw/release-0.4.8/ReleaseNotes
-https://forum.torproject.org/t/stable-release-0-4-8-20/20781
+Release notes: https://sqlite.org/releaselog/3_51_0.html
+
+Removed patch which is included in this release.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/tor/tor.hash | 4 ++--
- package/tor/tor.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/sqlite/0001-disable-rpath.patch | 59 -------------------------
+ package/sqlite/sqlite.hash              |  2 +-
+ package/sqlite/sqlite.mk                |  4 +-
+ 3 files changed, 3 insertions(+), 62 deletions(-)
+ delete mode 100644 package/sqlite/0001-disable-rpath.patch
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index ca2d49fb19..bf88d14578 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,4 +1,4 @@
--# From https://dist.torproject.org/tor-0.4.8.19.tar.gz.sha256sum
--sha256  3cb649a1d33ba6a65f109d224534e93aaf0a6de84a5b1cb4b054bfa06bb74f5a  tor-0.4.8.19.tar.gz
-+# From https://dist.torproject.org/tor-0.4.8.20.tar.gz.sha256sum
-+sha256  1bb22328cdd1ee948647bfced571efa78c12fc5064187b41d5254085b5282fa7  tor-0.4.8.20.tar.gz
+diff --git a/package/sqlite/0001-disable-rpath.patch b/package/sqlite/0001-disable-rpath.patch
+deleted file mode 100644
+index 6eb20488b0..0000000000
+--- a/package/sqlite/0001-disable-rpath.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-Add the --disable-rpath configure script flag to address
+-
+-Upstream: https://sqlite.org/src/info/a59d9bb25e
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+-
+-Index: autosetup/sqlite-config.tcl
+-==================================================================
+---- a/autosetup/sqlite-config.tcl
+-+++ b/autosetup/sqlite-config.tcl
+-@@ -334,12 +334,12 @@
+-         # canonical build!
+-         static-shell=1
+-           => {Link the sqlite3 shell app against the DLL instead of embedding sqlite3.c}
+-       }
+-       {canonical autoconf} {
+--        # A potential TODO without a current use case:
+--        #rpath=1 => {Disable use of the rpath linker flag}
+-+        rpath=1 => {Disable use of the rpath linker flag}
+-+
+-         # soname: https://sqlite.org/src/forumpost/5a3b44f510df8ded
+-         soname:=legacy
+-           => {SONAME for libsqlite3.so. "none", or not using this flag, sets no
+-               soname. "legacy" sets it to its historical value of
+-               libsqlite3.so.0.  A value matching the glob "libsqlite3.*" sets
+-@@ -2138,25 +2138,25 @@
+- }
+- 
+- ########################################################################
+- # Handle the --enable/disable-rpath flag.
+- proc sqlite-handle-rpath {} {
+--  proj-check-rpath
+-   # autosetup/cc-shared.tcl sets the rpath flag definition in
+-   # [get-define SH_LINKRPATH], but it does so on a per-platform basis
+-   # rather than as a compiler check. Though we should do a proper
+-   # compiler check (as proj-check-rpath does), we may want to consider
+-   # adopting its approach of clearing the rpath flags for environments
+-   # for which sqlite-env-is-unix-on-windows returns a non-empty
+-   # string.
+- 
+--#  if {[proj-opt-truthy rpath]} {
+--#    proj-check-rpath
+--#  } else {
+--#    msg-result "Disabling use of rpath."
+--#    define LDFLAGS_RPATH ""
+--#  }
+-+  # https://sqlite.org/forum/forumpost/13cac3b56516f849
+-+  if {[proj-opt-truthy rpath]} {
+-+    proj-check-rpath
+-+  } else {
+-+    msg-result "Disabling use of rpath."
+-+    define LDFLAGS_RPATH ""
+-+  }
+- }
+- 
+- ########################################################################
+- # If the --dump-defines configure flag is provided then emit a list of
+- # all [define] values to config.defines.txt, else do nothing.
+-
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 2ade5afe03..e33c87f34e 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,3 +1,3 @@
  # Locally computed
- sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 208e71ae51..513cac9f0f 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -4,7 +4,7 @@
+-sha256  a3db587a1b92ee5ddac2f66b3edb41b26f9c867275782d46c3a088977d6a5b18  sqlite-autoconf-3500400.tar.gz
++sha256  42e26dfdd96aa2e6b1b1be5c88b0887f9959093f650d693cb02eb9c36d146ca5  sqlite-autoconf-3510000.tar.gz
+ sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 667ee8d70e..13ae9d9281 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--TOR_VERSION = 0.4.8.19
-+TOR_VERSION = 0.4.8.20
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+-SQLITE_VERSION = 3.50.4
+-SQLITE_TAR_VERSION = 3500400
++SQLITE_VERSION = 3.51.0
++SQLITE_TAR_VERSION = 3510000
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
+ SQLITE_SITE = https://www.sqlite.org/2025
+ SQLITE_LICENSE = blessing
 -- 
 2.47.3
 
