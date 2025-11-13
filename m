@@ -4,71 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34E48CD5BBB
-	for <buildroot@archiver.kernel.org>; Thu, 13 Nov 2025 10:58:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2F44CD8CA8
+	for <buildroot@archiver.kernel.org>; Thu, 13 Nov 2025 16:41:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E22B8606F0;
-	Thu, 13 Nov 2025 10:58:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E20D60FE1;
+	Thu, 13 Nov 2025 16:41:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jsLJZ4hbzEqK; Thu, 13 Nov 2025 10:58:31 +0000 (UTC)
+ id RRsBopSmt1sS; Thu, 13 Nov 2025 16:41:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08B2C60F89
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99AF360797
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 08B2C60F89;
-	Thu, 13 Nov 2025 10:58:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 99AF360797;
+	Thu, 13 Nov 2025 16:41:49 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 87365158
- for <buildroot@buildroot.org>; Thu, 13 Nov 2025 10:58:29 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id D48C0158
+ for <buildroot@buildroot.org>; Thu, 13 Nov 2025 16:41:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 70AE482A72
- for <buildroot@buildroot.org>; Thu, 13 Nov 2025 10:58:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BA98B83B99;
+ Thu, 13 Nov 2025 16:41:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8x1wYJ1i1lcq for <buildroot@buildroot.org>;
- Thu, 13 Nov 2025 10:58:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.101;
- helo=smtpcmd02101.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A266C80398
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A266C80398
-Received: from smtpcmd02101.aruba.it (smtpcmd02101.aruba.it [62.149.158.101])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A266C80398
- for <buildroot@buildroot.org>; Thu, 13 Nov 2025 10:58:26 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id JV1zvnZh7lZ8PJV1zvySD2; Thu, 13 Nov 2025 11:58:23 +0100
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Maxime Chevallier <maxime.chevallier@bootlin.com>
-Date: Thu, 13 Nov 2025 11:58:22 +0100
-Message-ID: <20251113105822.3985902-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.47.3
+ id a5AKZTWy-WHF; Thu, 13 Nov 2025 16:41:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 46CF983B98
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46CF983B98
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 46CF983B98
+ for <buildroot@buildroot.org>; Thu, 13 Nov 2025 16:41:46 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-47789cd2083so7900785e9.2
+ for <buildroot@buildroot.org>; Thu, 13 Nov 2025 08:41:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1763052104; x=1763656904;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+ :cc:subject:date:message-id:reply-to;
+ bh=rOlssgzWqXGV+ZB3UmHn2i0C4nqsq0rB2dtyeyhjufg=;
+ b=SK2gotFKkky3bbe3URWzRXJ7zeX3QvSvCn7mFKmi18aEUC3srOF4t1QxcqV8j6kUQK
+ ngOq9P201pq1SG95FcVUdRlCq/8vDh6JWqGF67A1bZ+2Bt6nxb9vAZgSFCgVb15elUpY
+ C1aCrId4j7poSZpqp59rAEkVlAKK3CJ8Gb/kDfHWsto0OHjj6L/91Hbx/XhgyIXPycUh
+ y1Ewn9YEGDAQlKjrDyYdh72GJrTwj+VmhHSUAG+yBf8MlSzqWgG0+qNnjcmxdndAn5+u
+ JPuuw14dLv0A65ceTd2dHvUwyD0R+/EuFK1sO4jOqWz4FAUHzCzH/zDVOxOAURPohtA3
+ 5Y1Q==
+X-Gm-Message-State: AOJu0YwHWwEgu416WUV4cU1IADtYjglpt+KmyfBbPhqaEHOEhtjYxsOV
+ QdZBAvICIhjuoJMNm5t0gmwOUv8d9Iv8eudjlBPUf7+EGCtNnu71ZGI4
+X-Gm-Gg: ASbGncub9ksmrvXKccXoc1K8pil83XsJEGsCMnazOVbRVKbvG537mz26uKQNJU6WVy5
+ ahipQfyGgKtPChACnJPrHGUnu+0Xbfo3FhoAGCGcOWm9BvHUQj6TEe10mZhI4lrBKSmyUGvwVb0
+ XrTsjjvF/srtPQ935nXccwpGtcozMG65sYbR+euQYGW56RaFzRFfP4CHUveLM66pxHjUpevqSSN
+ xWQNN05mBjk2bslkQHzrGepeCdhia9SGkyBOC6sH7aRLPk06M1uZu6JQztiYrXjIroIC2HpKVMq
+ G+v1wizF6cTYpiFkeZXLtOepP+V65XuJCuJawhfYQWPW+AX+zrjvYuk1M/YRdckLLmM8L6DBfR2
+ rQNOOOlN2RQM0DKpsAk9XzYfyOMKdD8qsLN6Ele96P8N4o6cnv/LNc9A+4ybv7w7V4C/vbX4wCw
+ UEQjyncIY66flcnWqyoNBEJA==
+X-Google-Smtp-Source: AGHT+IG2eks8bLxbngWbFiMo2jFvAbhv/4BXuqYoTCxREZhRhayPU41vb1R6qE/KFwaYp+VC2KkCHA==
+X-Received: by 2002:a05:600c:4f4c:b0:477:e66:4077 with SMTP id
+ 5b1f17b1804b1-4778fea8848mr1306755e9.29.1763052104124; 
+ Thu, 13 Nov 2025 08:41:44 -0800 (PST)
+Received: from ymorin.is-a-geek.org ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-47787e95327sm95922295e9.12.2025.11.13.08.41.42
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 13 Nov 2025 08:41:43 -0800 (PST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Thu, 13 Nov 2025 17:41:42 +0100
+Date: Thu, 13 Nov 2025 17:41:42 +0100
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: buildroot@buildroot.org
+Message-ID: <aRYKRrNl6nALDwmo@landeda>
+References: <20251112203227.27573-1-peter@korsgaard.com>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfOBuDNDXFWfvugLR15/Ed0sT3m1fCVrQB5Y5Iq6SZ7jl9h2WG6gMokzElnmdVF9Odto1dpekicwBTBMLc7j7xLeJbUK5nPzC2lVVdhevZ2T9HbyksFLN
- xaJ6d1Jg+r6qnupWIA9oNfRkAp6AFnORBmzgJhrsZErHQuLQ1GKXu4AYzYZi1UFB4BB349heO4Dd2+ztSXx4JaPiqdebyx75PWKF/vQVvMTcuqizZyPm2jsF
- cTsHxO3kRpL97ZEUSrFFP/kNpjXBmkFZXakB9W6v4+A/HExrhBxS50snXlCajUhHTGdfEYsoJYlzbCAyxmGo8Ewax+mZ3iypq5uF3zofQlA=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1763031503; bh=LfTSjRDm+oBOJYDJyN68jkivLy+tU5za1QoY4aABIFE=;
- h=From:To:Subject:Date:MIME-Version;
- b=gL8hAbgfoXd6td0gR1K+3tTgbTq/yDaJWFoBZ9Pl/78YH0VlscDAZn1ERb7cJWuBq
- Ykv1iQ4a52LfXnd7bdp1VXGJNEyF8EX/l9lsDViGX7P0S9el8rpoS9124sKtxRWQNV
- yXYZH+/OZUKIZsTfBPiYwvkbCVDzcLlnut1ZpiVaKM+cf7IHrjp/DteBDX56RnN/kp
- puB/8yKHMLVmy/nW2OIH6MluhcNzMs6UhExgGV028YDopLplRYp0QaZ6v8ukkIEPcL
- 4QCTLD0uzo90yqBmvGT63pTp+6suyhhZt5o/6keczOBQ3F/90dMabIzM3WE0ghYsWt
- oWO1CQvyMiedw==
+Content-Disposition: inline
+In-Reply-To: <20251112203227.27573-1-peter@korsgaard.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1763052104; x=1763656904; darn=buildroot.org;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=rOlssgzWqXGV+ZB3UmHn2i0C4nqsq0rB2dtyeyhjufg=;
+ b=kfUNQUGrSjkfCVBWV9NFCgan+24UA9o5MlDX2xufndzG/FFCsLkC8SSebLxM1zv9fj
+ rpkVgdPGdroPDxcucHOFWqCzSxB7XAORzJKmdi5NvJETff79AkFaQyXfd4mpjzHMQnjD
+ tI/zx7Penoo0S7dEUKx+YzvXgPQ0yIw5b267aCOiZxOzVFR5ziTTi69UyXKvEUDvC7JE
+ h4itd0T/qYJBlj3OhbLOZRg2jvNnfL4f+nZIOCiJHhn56iS8XkD7Q5soh1fqwfW9lTMv
+ mPta7/rquqb5oY1P+sUTO67PHV7tJOZJLDhfFHEvp98moIpmBpq/EJIRGawHxo1zXbCi
+ Ebcw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
+ dmarc=fail (p=quarantine dis=none)
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=gL8hAbgf
-Subject: [Buildroot] [PATCH] package/libtraceevent: bump to version 1.8.5
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=kfUNQUGr
+Subject: Re: [Buildroot] [PATCH] docs/manual: fix typo in merged-bin details
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,43 +111,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: "Yann E. MORIN via buildroot" <buildroot@buildroot.org>
+Reply-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/libtraceevent/libtraceevent.hash | 2 +-
- package/libtraceevent/libtraceevent.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Peter, All,
 
-diff --git a/package/libtraceevent/libtraceevent.hash b/package/libtraceevent/libtraceevent.hash
-index c0738de4e7..8830a5e998 100644
---- a/package/libtraceevent/libtraceevent.hash
-+++ b/package/libtraceevent/libtraceevent.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  dc456d4d2bf4b4cd4d0c737d3374a8093f9e5ca18c1d7fc2279a4bf41e613121  libtraceevent-1.8.4.tar.gz
-+sha256  1f2f5b8981818638ed51cdafc9b5e95316b5602255aa8ae19a3a5c8abede0e9a  libtraceevent-1.8.5.tar.gz
- sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
- sha256  0b9a4febcdee6de55872501d5c1a8f5d8b0d1650cd4d5351995ceb22e889f8ca  LICENSES/LGPL-2.1
-diff --git a/package/libtraceevent/libtraceevent.mk b/package/libtraceevent/libtraceevent.mk
-index 8c3514f265..d25f6b520e 100644
---- a/package/libtraceevent/libtraceevent.mk
-+++ b/package/libtraceevent/libtraceevent.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBTRACEEVENT_VERSION = 1.8.4
-+LIBTRACEEVENT_VERSION = 1.8.5
- LIBTRACEEVENT_SITE = https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/snapshot
- LIBTRACEEVENT_LICENSE = GPL-2.0, LGPL-2.1
- LIBTRACEEVENT_LICENSE_FILES = LICENSES/GPL-2.0 LICENSES/LGPL-2.1
+On 2025-11-12 21:32 +0100, Peter Korsgaard spake thusly:
+> Commit 6b53649bfa ("docs/manual: add merged-bin details to customize
+> rootfs") added a small typo, fix that.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  docs/manual/customize-rootfs.adoc | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/docs/manual/customize-rootfs.adoc b/docs/manual/customize-rootfs.adoc
+> index 5d8bcba778..4d03d04617 100644
+> --- a/docs/manual/customize-rootfs.adoc
+> +++ b/docs/manual/customize-rootfs.adoc
+> @@ -31,7 +31,7 @@ When +BR2_ROOTFS_MERGED_USR+ is enabled, then the overlay must not
+>  Additionally, when +BR2_ROOTFS_MERGED_BIN+ is enabled, then the overlay
+>    must not contain the '/usr/sbin' directory, as Buildroot will create
+>    it as a symbolic link to '/usr/bin'. In such a situation, should the
+> -  overlay have any program, they should be placed in '/usr/bin'.
+> +  overlay have any programs, they should be placed in '/usr/bin'.
+>  +
+>  As shown in xref:customize-dir-structure[], the recommended path for
+>    this overlay is +board/<company>/<boardname>/rootfs-overlay+.
+> -- 
+> 2.39.5
+> 
+
 -- 
-2.47.3
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
