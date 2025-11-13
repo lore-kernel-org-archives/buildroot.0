@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10829CD5BAF
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47899CD5BB1
 	for <buildroot@archiver.kernel.org>; Thu, 13 Nov 2025 09:53:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D791640D4E;
-	Thu, 13 Nov 2025 09:53:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1CF8760F84;
+	Thu, 13 Nov 2025 09:53:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tJP9AN50xtdk; Thu, 13 Nov 2025 09:53:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nwTsgFhje7uF; Thu, 13 Nov 2025 09:53:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2982C40D16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4201760F96
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2982C40D16;
-	Thu, 13 Nov 2025 09:53:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4201760F96;
+	Thu, 13 Nov 2025 09:53:50 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 762DE230
- for <buildroot@buildroot.org>; Thu, 13 Nov 2025 09:53:44 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 3D632230
+ for <buildroot@buildroot.org>; Thu, 13 Nov 2025 09:53:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 62E05409EC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 81B9040A03
  for <buildroot@buildroot.org>; Thu, 13 Nov 2025 09:53:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cq_G3kKYEaNQ for <buildroot@buildroot.org>;
+ id PPyAT1mNTkAx for <buildroot@buildroot.org>;
  Thu, 13 Nov 2025 09:53:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6EAF740A03
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A958940A11
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6EAF740A03
+ by smtp2.osuosl.org (Postfix) with ESMTP id A958940A11
  for <buildroot@buildroot.org>; Thu, 13 Nov 2025 09:53:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6895D845F7; Thu, 13 Nov 2025 09:53:42 +0000 (UTC)
+ id A6634845F5; Thu, 13 Nov 2025 09:53:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 13 Nov 2025 10:39:51 +0100
+Date: Thu, 13 Nov 2025 10:50:07 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b02a4ca7d76c895b842ef4010ede6a1e1e693b5d
-X-Git-Newrev: 8a40f079ac5e6fc784aa7cfc3e86669cb348fd6c
+X-Git-Oldrev: c41af1dcc09427e9a4a71e98cccc3aca7b5e0554
+X-Git-Newrev: 0343a58a70baccc72843b18490344b37ccb04ceb
 X-Patchwork-Hint: ignore
-Message-Id: <20251113095342.6895D845F7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ortp: remove package
+Message-Id: <20251113095342.A6634845F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/procrank_linux: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,117 +64,112 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a40f079ac5e6fc784aa7cfc3e86669cb348fd6c
+commit: https://git.buildroot.net/buildroot/commit/?id=0343a58a70baccc72843b18490344b37ccb04ceb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ortp was only needed as a dependency of linphone, as is anyway bundled
-in more recent versions of linphone, making a separate package
-unnecessary.
+The package is causing build errors with newer gcc versions:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+procrank.c:381:9: error: implicit declaration of function 'asprintf';
+ did you mean 'vsprintf'? [-Wimplicit-function-declaration]
+
+The latest upstream commit dates back to 2018 and no open issues/
+bug reports are present so the projects seems unmaintained.
+
+Instead of fixing build errors for such a project which is not used by
+any other package we remove it from buildroot.
+
+Fixes:
+https://autobuild.buildroot.net/results/f2b/f2b41d27cf32808783b582e8ad714fb653c05713/
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy       |  8 ++++++++
- package/Config.in      |  1 -
- package/ortp/Config.in | 16 ----------------
- package/ortp/ortp.hash |  3 ---
- package/ortp/ortp.mk   | 25 -------------------------
- 5 files changed, 8 insertions(+), 45 deletions(-)
+ Config.in.legacy                           |  6 ++++++
+ package/Config.in                          |  1 -
+ package/procrank_linux/Config.in           |  7 -------
+ package/procrank_linux/procrank_linux.hash |  3 ---
+ package/procrank_linux/procrank_linux.mk   | 22 ----------------------
+ 5 files changed, 6 insertions(+), 33 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index c749f1366b..e97378734e 100644
+index 87db0a14b7..856ae58c67 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -146,6 +146,14 @@ endif
+@@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2025.11"
  
-+config BR2_PACKAGE_ORTP
-+	bool "ortp has been removed"
++config BR2_PACKAGE_PROCRANK_LINUX
++	bool "procrank_linux has been removed"
 +	select BR2_LEGACY
 +	help
-+	  This package has been removed as part of the linphone
-+	  removal. In addition, newer version of linphone directly
-+	  bundle ortp making a separate package unnecessary.
++	  procrank_linux is unmaintained and has been removed
 +
- config BR2_PACKAGE_MEDIASTREAMER
- 	bool "mediastreamer has been removed"
+ config BR2_PACKAGE_MONGREL2
+ 	bool "mongrel2 has been removed"
  	select BR2_LEGACY
 diff --git a/package/Config.in b/package/Config.in
-index 5d5b9ed722..54abbacbb8 100644
+index 25dd308644..f42e7cc96c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2129,7 +2129,6 @@ menu "Networking"
- 	source "package/openmpi/Config.in"
- 	source "package/openpgm/Config.in"
- 	source "package/openzwave/Config.in"
--	source "package/ortp/Config.in"
- 	source "package/paho-mqtt-c/Config.in"
- 	source "package/paho-mqtt-cpp/Config.in"
- 	source "package/pistache/Config.in"
-diff --git a/package/ortp/Config.in b/package/ortp/Config.in
+@@ -2889,7 +2889,6 @@ menu "System tools"
+ 	source "package/polkit/Config.in"
+ 	source "package/powerpc-utils/Config.in"
+ 	source "package/procps-ng/Config.in"
+-	source "package/procrank_linux/Config.in"
+ 	source "package/procs/Config.in"
+ 	source "package/psmisc/Config.in"
+ 	source "package/pwgen/Config.in"
+diff --git a/package/procrank_linux/Config.in b/package/procrank_linux/Config.in
 deleted file mode 100644
-index e296e82f7a..0000000000
---- a/package/ortp/Config.in
+index 59d462b6d4..0000000000
+--- a/package/procrank_linux/Config.in
 +++ /dev/null
-@@ -1,16 +0,0 @@
--config BR2_PACKAGE_ORTP
--	bool "oRTP"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # bctoolbox
--	select BR2_PACKAGE_BCTOOLBOX
+@@ -1,7 +0,0 @@
+-config BR2_PACKAGE_PROCRANK_LINUX
+-	bool "procrank_linux"
 -	help
--	  oRTP, a Real-time Transport Protocol (RTP,RFC3550) library
+-	  procrank is a tool commonly used by Android platform
+-	  developers to find out how much memory is really being used.
 -
--	  https://www.linphone.org/technical-corner/ortp
--
--comment "ortp needs a toolchain w/ C++, threads"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
--
--comment "ortp needs a toolchain not affected by GCC bug 64735"
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/ortp/ortp.hash b/package/ortp/ortp.hash
+-	  https://github.com/csimmonds/procrank_linux
+diff --git a/package/procrank_linux/procrank_linux.hash b/package/procrank_linux/procrank_linux.hash
 deleted file mode 100644
-index 7853c63143..0000000000
---- a/package/ortp/ortp.hash
+index cc9c403a0e..0000000000
+--- a/package/procrank_linux/procrank_linux.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
 -# Locally calculated
--sha256  9b1d43f676a35920e2837abc0eb4d600d4d3e47d2621fa3b0897777cf587ee8d  ortp-4.4.8.tar.gz
--sha256  1b3782ccad7b8614100cda30d3faf42fc39f2e97932908c543005053b654ca68  LICENSE.txt
-diff --git a/package/ortp/ortp.mk b/package/ortp/ortp.mk
+-sha256  1c3592b549b6793b29ab561568f493d0edbfe288ea2aed59afa689eaa26b5d9e  procrank_linux-21c30ab4514a5b15ac6e813e21bee0d3d714cb08.tar.gz
+-sha256  38751245389e1e23f73e6f5384b5cbe7fa972cc4410c5adc9c04b082a0b9561a  NOTICE
+diff --git a/package/procrank_linux/procrank_linux.mk b/package/procrank_linux/procrank_linux.mk
 deleted file mode 100644
-index 67bef9aebb..0000000000
---- a/package/ortp/ortp.mk
+index 415a4e41b7..0000000000
+--- a/package/procrank_linux/procrank_linux.mk
 +++ /dev/null
-@@ -1,25 +0,0 @@
+@@ -1,22 +0,0 @@
 -################################################################################
 -#
--# ortp
+-# procrank_linux
 -#
 -################################################################################
 -
--ORTP_VERSION = 4.4.8
--ORTP_SITE = https://gitlab.linphone.org/BC/public/ortp/-/archive/$(ORTP_VERSION)
--ORTP_LICENSE = GPL-3.0+
--ORTP_LICENSE_FILES = LICENSE.txt
--ORTP_INSTALL_STAGING = YES
--ORTP_DEPENDENCIES = bctoolbox
--ORTP_CONF_OPTS = \
--	-DENABLE_DOC=OFF \
--	-DENABLE_STRICT=OFF
+-PROCRANK_LINUX_VERSION = 21c30ab4514a5b15ac6e813e21bee0d3d714cb08
+-PROCRANK_LINUX_SITE = $(call github,csimmonds,procrank_linux,$(PROCRANK_LINUX_VERSION))
+-PROCRANK_LINUX_LICENSE = Apache-2.0
+-PROCRANK_LINUX_LICENSE_FILES = NOTICE
 -
--ifeq ($(BR2_STATIC_LIBS),y)
--ORTP_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=OFF
--else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
--ORTP_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=ON
--else ifeq ($(BR2_SHARED_LIBS),y)
--ORTP_CONF_OPTS += -DENABLE_STATIC=OFF -DENABLE_SHARED=ON
--endif
+-define PROCRANK_LINUX_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CROSS_COMPILE="$(TARGET_CROSS)" \
+-		LOCAL_CFLAGS="$(TARGET_CFLAGS)"
+-endef
 -
--$(eval $(cmake-package))
+-define PROCRANK_LINUX_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0755 -D $(@D)/procrank \
+-		$(TARGET_DIR)/usr/bin/procrank
+-endef
+-
+-$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
