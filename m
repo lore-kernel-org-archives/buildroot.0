@@ -1,191 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EA25CD4F28
-	for <buildroot@archiver.kernel.org>; Thu, 13 Nov 2025 05:54:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 043C3CD5BA3
+	for <buildroot@archiver.kernel.org>; Thu, 13 Nov 2025 09:21:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ECEBE40730;
-	Thu, 13 Nov 2025 05:54:38 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rOiqi9A6lvha; Thu, 13 Nov 2025 05:54:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3442E40C85
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3442E40C85;
-	Thu, 13 Nov 2025 05:54:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 61084230
- for <buildroot@buildroot.org>; Thu, 13 Nov 2025 05:54:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5E342606F1
- for <buildroot@buildroot.org>; Thu, 13 Nov 2025 05:54:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B380B60F28;
+	Thu, 13 Nov 2025 09:21:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CpSDDleOhsr3 for <buildroot@buildroot.org>;
- Thu, 13 Nov 2025 05:54:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:c100::f;
- helo=bl2pr02cu003.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 63553606F0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63553606F0
-Received: from BL2PR02CU003.outbound.protection.outlook.com
- (mail-eastusazlp17011000f.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c100::f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 63553606F0
- for <buildroot@buildroot.org>; Thu, 13 Nov 2025 05:54:36 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jCRMXbKiUAjnJspfZXQYRmA/XsYaYRnBHhlprG7U+jI5IyKgMFmtIFhmH/iziNXVlJUakxz4c0tTEvqHdVWzEh4+ZTKqpoOXqwPSKz8WL6CWMwmGijayu2+mHJnUnydTVqHXlcpGcXTlodtMqSd23bqzmw6gS8tj3VjQ0WHKOneCo/m6GwWB8qJEuAdI2DH9s/h5BrvZc06Rr38J2Tk8scQ5BWQ8cMp9TagS4uLl3X3UxAGkVvyV75uMCd+DftqtMITwDlJOO7Ff3XkcS++MKqmxfOqf6ac7Ri1LEAy9149vTca2yJy9/n/v9rvX1DwOcuaYHgsZJM3hOAxgbsYnSQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4yHg0zkiaY25RW1NLe6NWLe9r18Z6uiorhiyCbFUg3E=;
- b=p3ABhJXe1/ApFcr4ZdjkylfV5eg2h500PQClKEuz9QClQ5fB4ino8Mdg6PfyYbFrWTWwyni7NbG2fiZIU06PLFKrwiO2H24OQJT45zB5jC8waOQkbYGu64gAbzBxfsNcstAjP7D8IQQDxEYtXKtDrHM97ebmbivwJxxuP2T8KNcUMX7GxkOPF+gpQi1WfHIyYOv0qFZR9tacrfO7I47p19EOUbxwbYh2/cD/8WLd6xb9j3gKUOp+6ZGJADrS6HZ4Iy24WS1qy/AuHVFD4EuDmZzNzuvUpjPdYXvbuMImBuD/tBBtbrd211FS8/ZYVZxdUyGd7yXWYKZ+pAGGhx4omA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from SA1PR12MB5615.namprd12.prod.outlook.com (2603:10b6:806:229::17)
- by CH2PR12MB4086.namprd12.prod.outlook.com (2603:10b6:610:7c::19)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.17; Thu, 13 Nov
- 2025 05:54:30 +0000
-Received: from SA1PR12MB5615.namprd12.prod.outlook.com
- ([fe80::7557:587c:4ec:1913]) by SA1PR12MB5615.namprd12.prod.outlook.com
- ([fe80::7557:587c:4ec:1913%6]) with mapi id 15.20.9320.013; Thu, 13 Nov 2025
- 05:54:30 +0000
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>, "buildroot@buildroot.org"
- <buildroot@buildroot.org>
-Thread-Topic: [PATCH v1 1/1] boot/xilinx-prebuilt: add support for kria-common
-Thread-Index: AQHcU7/gYOcDN50DW0CmFE35M1DS1bTvPvwAgADcRFA=
-Date: Thu, 13 Nov 2025 05:54:30 +0000
-Message-ID: <SA1PR12MB56156FD41429B65E64D6E1A7F0CDA@SA1PR12MB5615.namprd12.prod.outlook.com>
-References: <20251112103353.2021040-1-neal.frager@amd.com>
- <DE6V6QTL9BNK.1MWWL0RKSB8BU@bootlin.com>
-In-Reply-To: <DE6V6QTL9BNK.1MWWL0RKSB8BU@bootlin.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Enabled=True;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SetDate=2025-11-13T05:50:11.0000000Z;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Name=AMD
- Internal Distribution
- Only; MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_ContentBits=3;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Method=Standard
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR12MB5615:EE_|CH2PR12MB4086:EE_
-x-ms-office365-filtering-correlation-id: 8a9caf8b-24e3-47bf-5b7d-08de22791d26
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
- ARA:13230040|376014|7416014|1800799024|366016|38070700021|41080700001; 
-x-microsoft-antispam-message-info: =?utf-8?B?NUJqMytEa1MzNEI0R2laZjR0b1BMQ0djV0ttYlZ3S3V0SVkycVpReGZ2OUEx?=
- =?utf-8?B?Z2V2NFRURU1sNk1Ob3JzSWxlQkJ5dUF1cXVyclNwT1Y3TDRYRzIwa3dRSTJy?=
- =?utf-8?B?VUxxY3hMU01LeEYxTTY3NkhvbmNBU1hKdHR3NTRBa1lzaysrOCtBM0hEVU5s?=
- =?utf-8?B?Z2crem5nNklXZ0lmS2JMMThXWUVnYmpSbGd4VWtYQXBGcGhYY1dON1k5SEVV?=
- =?utf-8?B?VmgxaVljanUxRCtMU01ZYWRCU2NYTkhWUmdvM1QvRlY1OGZTU2NKZXFPeXhH?=
- =?utf-8?B?TVVPVDRNaHE4aDIxR2QyKzlBNWl6ajRheGZkM1EvNU5qdUZMd001bXN1M2J5?=
- =?utf-8?B?aHVFNURnMmJpNHlHSzNNbGVQbllRNC91bExmQmN4aUVEUzVtOWdvVEFqaHlx?=
- =?utf-8?B?M2l3YVhHYnoram13ZzdtSC9FQ05yNk5zb3JYZVRPUENKblBGWDlZN0hZc3lh?=
- =?utf-8?B?L05kOHRmeHpjSjEzNmo1U01WS1ZQR05Vd1E2ZnhEWi9wK25TZ29zRm90ZGxv?=
- =?utf-8?B?Y3B3Y0p1bytiZVhWaFA1TVZNU2ZmemU2ak5NcElIdWRQeUkzSUFpOVJEd2JC?=
- =?utf-8?B?aHlFYVZjS1BzR0VLbnkzMitVcW5saHpNVmdkcVJVMEtDL09XOE5HRnZkRUxL?=
- =?utf-8?B?U3lDTGdsUkZRUVhRL2NlVGVUbU56Qm5QZDBSeW1XdHkrL1V3NXorVjBRS1lH?=
- =?utf-8?B?QzBFWXRBUXJ4dDAyTWF2VjUvMFNieWFha2VhWHQ0WTV1WmFweGpyeWx4bnRM?=
- =?utf-8?B?SjcwVEJIMmIydzEySHVZUEpBNzNxemdqTVdGYXJBbnA3SzlDaUdUMUlnSzIz?=
- =?utf-8?B?K2lMcmVZcU1HWmdPSVkzSUxDeHQraWwyOHZXakR1dFZab2wwUUcrWDVMN1hr?=
- =?utf-8?B?NGhjVVRnRDJzaWQySGJ3U25oaW9JWWZmTWFXcTM1WUZDOExSOW9UajFTRnAv?=
- =?utf-8?B?d1J0K2d6VnYwcXNxRkVCc1NVRUl5UHVEdnRpcytEZkRwNFB4NjdldmFiRUxP?=
- =?utf-8?B?eEtNTmNGVjh6KzAzYkJBM0VJaGZSd3hrSTZVV05SYXgxVkhBYXBrK2hQR0E0?=
- =?utf-8?B?VEl3RjFkN3NrR3dGUE9nQy9Mc21ZaGgzNVJXa1YxWnBDK1NWd0NmSkp4NmtQ?=
- =?utf-8?B?eVArL1hpQ1drNEovNEIydEtkd2NTOGtKa1lmL1FON05IM3czd2FBSFRhellp?=
- =?utf-8?B?VmxjQTROWFVjRXF2b0Rzc0ZLYlV5ODZ0TktGUmduUGhmV0l0WHI1c2JUWXpY?=
- =?utf-8?B?aXhYNDEyNFBObG1TNVB2UG5zcGZHYk5Sdy9MblJ2cVV5ZFQvZW90N3Izb3M4?=
- =?utf-8?B?MEpjYTRINTYzUjZxYkFKcGx1eVFza0ZDWFRTSlkrdXJRak9QVmtlSUJnS29p?=
- =?utf-8?B?MUVXK05Eb0tBdnNaSVcxNytRN0d6bVA2MW1SQjh2d3ZqTHgxckpTODYrRksv?=
- =?utf-8?B?aUpGT0pjdGYvZjBvRUNROWpaeVJxdHkvT25KN2UzcFZ2STRSaWF4aldXWXlN?=
- =?utf-8?B?WGQyRTNXb2o3MzgwV0lITitpS1ExbTJDU0tTR2lmbVRLVXd5VE5VeHNlTkVM?=
- =?utf-8?B?WmtBcGJZYUduc0tIbUNKcUZoZVhnTWFXckZMb3gzajJLcGI2eDNrMjZRcm5q?=
- =?utf-8?B?LytsRXd4TnA3RlpNcFNsMXlZTHNlTm5Qb3RUN0R2T2FIbStpMGI2R25rS0ls?=
- =?utf-8?B?a3dQbW1SRWZsSC9tMjVRWkdHd04yWUtUNGxyTXRNSmwyUk1EUkl3TjJIbi90?=
- =?utf-8?B?SFJPV3dmU05BT2VVMFM0MG5zc0NGS1pSN1N2cXRhZGpQamhnS1cxOWFLVjlP?=
- =?utf-8?B?OFFXcmlWTzJIdnVOV1U0ZE9hbWxiUXpsQnZ1SXIrSGdWcWQzYUQzcGMrUmhU?=
- =?utf-8?B?Ty90MVlYS3IxNTlZYXR0TW00SmxQM3NmWUxYRm5JdCt5eWc9PQ==?=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:SA1PR12MB5615.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(376014)(7416014)(1800799024)(366016)(38070700021)(41080700001);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YzBNQlVvam9lL2ZuL1dZUHRrTzRKSUloNTRQSnh5eG1vZkU1TjlDSENVZ3VP?=
- =?utf-8?B?M29USHMxUGhzV3lCREI2VGxPU01ySnpvVVdWeUp3d0pzTVlqNTdqMVZIek4w?=
- =?utf-8?B?NTVTb0w3djhTOGZDTmF5VS9xSWx1ckN4R2dWR0l6SGZHWHIvMURhT3NMaVhW?=
- =?utf-8?B?NW04Q0RlSTBQRXFDR3lTdUhlVnBkQ0M2LzZzcVdZMWVWT0Y4Y0hIR2NacEI0?=
- =?utf-8?B?a3RoazM4SlFrVVlNNUMwU1kwL09XYVg1TUlqeDBJYm94RDBRelcwMElUMnN3?=
- =?utf-8?B?eVdCRmVudXk4QlR2VHJnaUFML0dkNlcxM2pLWDZhaEdtUy83OEJuNFlacDN4?=
- =?utf-8?B?OXZkK0J1amgxZmRKTmQzdjBPRm9NVUlaZXdFM3BlMGVOWHBOd0R6OS9lOU9C?=
- =?utf-8?B?RWN2QjJTbGdlL0NlZnNhdUVTWlJZSXQrSnZpYkFLSzhQbDdwbmtLR3N2THRF?=
- =?utf-8?B?S3R0YzRvQUNYaHd3SzVsWmg4dXp5R1VJMSthMklMT243WlE1UzZmSnZZeFFY?=
- =?utf-8?B?eUZEdHdKWXJoV2pzOFpQZDY4b1puNnZFaVZ5c2dSZk1ua2E5Q3ZDRmt3UHBt?=
- =?utf-8?B?ZDJlNTRQK2NBVDFhZHhjVHRFanNnR0cva1ltcndVam5uMWZIYWJoeGxBSXNR?=
- =?utf-8?B?ZXROc3JhRU5wdGczS3BmUlJWVnFraUtqM2tZaTRFbVArQ1NId0ZsTDQ3VXNE?=
- =?utf-8?B?ajZpNjkwVm1xdVZ5M0FNdGVkdktBUUxBSUNJUUlMVEZCTWhqcnEzSmdxRzNx?=
- =?utf-8?B?aTgwMG0zeTRaL0JyeDY0RTYweGRrQnpoTHpQNTg4dHNKblVreGxkWUl5bXRC?=
- =?utf-8?B?K25admVZMkhiQkpzSE9Ld2plV292L3dsSC9GeHQvMmgxMWI5N3c5TUFqaEk4?=
- =?utf-8?B?eFpIUUwwak83ZCtaU0VIOFdPM3hXM2pCYTFYL3JpQ24ySm5hOXFrSFhsYlZx?=
- =?utf-8?B?Z1VoaGNZeFRLdWNEeGZCL1NXYmJlL1hORmM2M1gwc2JxR3Jwd0sySmVUN29J?=
- =?utf-8?B?UEhRNFBWL1BVdnB4T2dJV0UreEU4WGNTSHhrQVZYUTB4T3FEZWlIM1Evekxp?=
- =?utf-8?B?QmNhMHBLbG1namtBV2puNkN6QnVWRTJxMUtYNGNvVmV1U3ZQazdvTEx3Yjho?=
- =?utf-8?B?aXFmMzA3cDRhTURQc2tjRlFqVjlkWng0U0N0U0RUdkFiVXVTb3lkQUZ3ZElH?=
- =?utf-8?B?Zy92b0tncnZ1WXBJTWpKVG95QkRDQmxFSGhUeE1ZUWg5RkJhRTk2MjhiMWtK?=
- =?utf-8?B?TUR6REZJdjJnVlZrbGFvSjVDVnMxMXRxMmcvM0x3Z3M3T1F4Q1dzdkhoNnVR?=
- =?utf-8?B?TW5kY3YxRjdndGI3SlU4QlAyc1ZjbnI4cGRFYmYvUWFoM0FFOWdiOGhsWFBx?=
- =?utf-8?B?TnNJVzBFOVlQd2RWeDdwNGUrejJlTUs3NmlPOGZQc0FtNFl3a2VNYUQ1ZUlX?=
- =?utf-8?B?RER0cUJaR2tZN3NycUl6TWI5ZXArZ2JTSXh3cmp2UXIrN0h5SW1tN3R0MGVS?=
- =?utf-8?B?SmJ6TkFiSDJGcVFWRHgzQUNVZ0tFSis5TnVGVDhJMWwwV3JGa1RXMk9iU01j?=
- =?utf-8?B?aS8vM1h1QUMrTXJ0dDJkaE5nNWwyZVBHSmlMN255OGxLZnJiMmpkRW94VUs1?=
- =?utf-8?B?dUhrU2JiTGpoUlVpK1dxaXNRR1dxM3FhUTBVbWtHRFdGTVRpVk5YUVNWbW1t?=
- =?utf-8?B?V3F2bmlXaTh1YU52QzNtN0N0U2FueXBJZFlFTUNCQ01uUFczalZrV3J5Ykth?=
- =?utf-8?B?SEc3OWtPektOMUNtdmxWdnpsdzFKcjNQUmtxaXpoZUxoS2dldE5jWVZTV2JX?=
- =?utf-8?B?R3Nsa2krN2xqWHlrbDVwWHBIS3Fra3BjTVg1Z281T1RtcXlvTnJlaWtvOUdF?=
- =?utf-8?B?UnNjbDMwRCtyK051RXN1Rmk0K3ZRVStxY0VHNXlhQjhacW9GQldDdGFMK0F0?=
- =?utf-8?B?eWk5M3piZ1ViSEhVRkJrTmh1L01YV0piVlE3eCtEWmllRys3dnMvWDc5b21H?=
- =?utf-8?B?RUt6VzdVUDhsZ29vb001UFN2N2hBdE1CTmlieFZ3MU15S0NaMkd5NmdGZUdN?=
- =?utf-8?B?UENBb3BnQ25uNlNiV2ZjcTkwdHpPampzMXdkeVRZMDYycVV3bkk0Y1ZPQmlU?=
- =?utf-8?Q?qVHw=3D?=
+ id tLlBf4BFNMZn; Thu, 13 Nov 2025 09:21:02 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3BE46064A
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id B3BE46064A;
+	Thu, 13 Nov 2025 09:21:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 71D70230
+ for <buildroot@buildroot.org>; Thu, 13 Nov 2025 09:21:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6C1098116F
+ for <buildroot@buildroot.org>; Thu, 13 Nov 2025 09:21:00 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yMYczWKBBfa2 for <buildroot@buildroot.org>;
+ Thu, 13 Nov 2025 09:20:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8C4E28114A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C4E28114A
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8C4E28114A
+ for <buildroot@buildroot.org>; Thu, 13 Nov 2025 09:20:58 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1599594782; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Thu, 13 Nov 2025 09:20:53 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1vJTVb-0029He-2A;
+ Thu, 13 Nov 2025 10:20:51 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Bernd Kuhls <bernd@kuhls.net>
+References: <20251106204522.3273683-1-bernd@kuhls.net>
+ <20251106204522.3273683-3-bernd@kuhls.net>
+Date: Thu, 13 Nov 2025 10:20:51 +0100
+In-Reply-To: <20251106204522.3273683-3-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Thu, 6 Nov 2025 21:45:09 +0100")
+Message-ID: <875xbeqoek.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR12MB5615.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8a9caf8b-24e3-47bf-5b7d-08de22791d26
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Nov 2025 05:54:30.8472 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OSR3yWGAVF0aO7GYZXiiSOXYkz2YuxymKcuPXr2SAQacUG3j5ptHLsI7sPlc2f6C
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4086
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4yHg0zkiaY25RW1NLe6NWLe9r18Z6uiorhiyCbFUg3E=;
- b=I6SyY+/tAbk0LIKIqIRYV2mxx86p9IfGdHymQVqli5tQhLy3ATJTKS+dFxWkHCopG30PS4ivsLyrsUD6fOR5i+0TW5+ljfvxx2rmJCFXW2ayEFK/G7+q8M6km50p/2bhgPi2mey3VQZ4lYgySj46Z7otPM69W26JsWw2ArT6l7E=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=I6SyY+/t
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH v1 1/1] boot/xilinx-prebuilt: add support
- for kria-common
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=skiDu3wZDkbWIkJvGYmDSwAADGmJsDYI7IbSow7vtJPyA+N29DKgIryb5GT5gw5+8vTTUl1z+DvJQ6AjHHSkRivCbofoM7uZoO/eZDdQR6wwivIcYon1l2kuiFPqcSasqEH3ZtPOHapBQEx/XEE3Pin7IYjYtS4+ig2h95zLs9KIeoKJvshYbgvldRJgU6KjpQi8EvPbxV/y4SNl0FuzfhSMNCGk/D7cS5tZFP9CyLCu0skojBgwWYk12bRKIzuC/MtYHpArRm9S86sDU1uCXI974aaSt3G1F/nMYmdZ6azVujE9FFm5my2NTrAxOyLtQw/eEpSl102svg7i8wAdEA==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=TikN9b5t7gAW/2I3kiSgaKNYyWNfoGHrGzQL0AQtZRc=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=skiDu3wZ
+Subject: Re: [Buildroot] [PATCH v3 02/14] package/libjwt: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -197,51 +80,150 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Cc: "Erkiaga Elorza, Ibai" <ibai.erkiaga-elorza@amd.com>,
- "yann.morin@orange.com" <yann.morin@orange.com>,
- "brandon.maier@collins.com" <brandon.maier@collins.com>, "Sreeram,
- Manikanta" <manikanta.sreeram@amd.com>, "ju.o@free.fr" <ju.o@free.fr>,
- "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
- "romain.naour@smile.fr" <romain.naour@smile.fr>, "Simek,
- Michal" <michal.simek@amd.com>,
- "romain.naour@gmail.com" <romain.naour@gmail.com>
+Cc: Simon Dawson <spdawson@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Carsten Schoenert <c.schoenert@gmail.com>, Lionel Orry <lionel.orry@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-[AMD Official Use Only - AMD Internal Distribution Only]
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
-Hello Luca,
+ > In commit 770f9154978c40ce5b7718174108b37c5310869d, libjwt was bumped
+ > from 1.17.2 to 3.2.0, which is a big bump. And the libjwt website
+ > states "Version 3 of LibJWT is a complete overhaul of the code. Please
+ > see documentation for usage."
 
-> With the next release tag of xilinx-prebuilt version xilinx_v2025.2, the kria
-> pmufw.elf images will be merged into a single directory called 'kria-common'.
->
-> To keep backwards compatibility, this update checks to see if the old
-> <board-name>-kria path exists, and will copy the pmufw.elf from either the old
-> path or the new path accordingly.  This way, users can still use any version
-> of xilinx-prebuilt, and the package will still install the correct pmufw.elf.
->
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
+ > And indeed, this version bump breaks the build of Asterisk. Therefore
+ > asterisk uses its bundled version of libjwt now and this package can be
+ > removed as no other package depends on it.
 
-> Is it just me, or conventions in these files are changing frequently? :-(
-You are not the only one who thinks that...
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-This is also not the last patch coming for this package. I already have a
-solution for adding versal2 and the vek385, but I am waiting for the
-xilinx_v2025.2 release tag before submitting, so that you and others will be
-able to test and verify.
+Adding Waldemar, who is listed in DEVELOPERS for this package. Waldemar,
+what do you say? Is there any sense in keeping the libjwt package around
+if not used by asterisk?
 
-> Anyway, the patch looks good:
-> Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
-Thanks for the review as always!
+ > ---
+ >  Config.in.legacy           |  8 ++++++++
+ >  DEVELOPERS                 |  1 -
+ >  package/Config.in          |  1 -
+ >  package/libjwt/Config.in   | 10 ----------
+ >  package/libjwt/libjwt.hash |  3 ---
+ >  package/libjwt/libjwt.mk   | 19 -------------------
+ >  6 files changed, 8 insertions(+), 34 deletions(-)
+ >  delete mode 100644 package/libjwt/Config.in
+ >  delete mode 100644 package/libjwt/libjwt.hash
+ >  delete mode 100644 package/libjwt/libjwt.mk
 
-Best regards,
-Neal Frager
-AMD
+ > diff --git a/Config.in.legacy b/Config.in.legacy
+ > index 26391bec23..5aa271183e 100644
+ > --- a/Config.in.legacy
+ > +++ b/Config.in.legacy
+ > @@ -146,6 +146,14 @@ endif
+ 
+ >  comment "Legacy options removed in 2025.11"
+ 
+ > +config BR2_PACKAGE_LIBJWT
+ > +	bool "libjwt has been removed"
+ > +	select BR2_LEGACY
+ > +	help
+ > +	  The only dependee of libjwt, asterisk, is incompatible with
+ > +	  version 3 so the version bundled with asterisk is used and
+ > +	  this package can be removed.
+ > +
+ >  config BR2_PACKAGE_RAMSPEED
+ >  	bool "ramspeed has been removed"
+ >  	select BR2_LEGACY
+ > diff --git a/DEVELOPERS b/DEVELOPERS
+ > index b14c6e3875..f9cf31f7e2 100644
+ > --- a/DEVELOPERS
+ > +++ b/DEVELOPERS
+ > @@ -3420,7 +3420,6 @@ F:	configs/stm32f746_disco_sd_defconfig
+ >  F:	package/asterisk/
+ >  F:	package/evilwm/
+ >  F:	package/fbv/
+ > -F:	package/libjwt/
+ >  F:	package/libpam-pkcs11/
+ >  F:	package/mksh/
+ >  F:	package/ruby/
+ > diff --git a/package/Config.in b/package/Config.in
+ > index 930f368058..07244a86e2 100644
+ > --- a/package/Config.in
+ > +++ b/package/Config.in
+ > @@ -1927,7 +1927,6 @@ menu "JSON/XML"
+ >  	source "package/jsoncpp/Config.in"
+ >  	source "package/libfastjson/Config.in"
+ >  	source "package/libjson/Config.in"
+ > -	source "package/libjwt/Config.in"
+ >  	source "package/libroxml/Config.in"
+ >  	source "package/libucl/Config.in"
+ >  	source "package/libxml2/Config.in"
+ > diff --git a/package/libjwt/Config.in b/package/libjwt/Config.in
+ > deleted file mode 100644
+ > index 47eb0882a3..0000000000
+ > --- a/package/libjwt/Config.in
+ > +++ /dev/null
+ > @@ -1,10 +0,0 @@
+ > -config BR2_PACKAGE_LIBJWT
+ > -	bool "libjwt"
+ > -	select BR2_PACKAGE_OPENSSL
+ > -	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+ > -	select BR2_PACKAGE_JANSSON
+ > -	help
+ > -	  JSON Web Tokens are an open, industry standard RFC 7519
+ > -	  method for representing claims securely between two parties.
+ > -
+ > -	  https://github.com/benmcollins/libjwt
+ > diff --git a/package/libjwt/libjwt.hash b/package/libjwt/libjwt.hash
+ > deleted file mode 100644
+ > index 8e59d2284b..0000000000
+ > --- a/package/libjwt/libjwt.hash
+ > +++ /dev/null
+ > @@ -1,3 +0,0 @@
+ > -# Locally computed
+ > -sha256  17ee4e25adfbb91003946af967ff04068a5c93d6b51ad7ad892f1441736b71b9  libjwt-3.2.0.tar.xz
+ > -sha256  3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04  LICENSE
+ > diff --git a/package/libjwt/libjwt.mk b/package/libjwt/libjwt.mk
+ > deleted file mode 100644
+ > index d20067de24..0000000000
+ > --- a/package/libjwt/libjwt.mk
+ > +++ /dev/null
+ > @@ -1,19 +0,0 @@
+ > -################################################################################
+ > -#
+ > -# libjwt
+ > -#
+ > -################################################################################
+ > -
+ > -LIBJWT_VERSION = 3.2.0
+ > -LIBJWT_SITE = https://github.com/benmcollins/libjwt/releases/download/v$(LIBJWT_VERSION)
+ > -LIBJWT_SOURCE = libjwt-$(LIBJWT_VERSION).tar.xz
+ > -LIBJWT_DEPENDENCIES = host-pkgconf jansson openssl
+ > -LIBJWT_INSTALL_STAGING = YES
+ > -LIBJWT_LICENSE = MPL-2.0
+ > -LIBJWT_LICENSE_FILES = LICENSE
+ > -LIBJWT_CPE_ID_VENDOR = bencollins
+ > -LIBJWT_CPE_ID_PRODUCT = jwt_c_library
+ > -
+ > -LIBJWT_CONF_OPTS += -DWITH_TESTS=OFF -DWITH_GNUTLS=OFF
+ > -
+ > -$(eval $(cmake-package))
+ > -- 
+
+ > 2.47.3
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot@buildroot.org
+ > https://lists.buildroot.org/mailman/listinfo/buildroot
+
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
