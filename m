@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACE1ECD5BB2
-	for <buildroot@archiver.kernel.org>; Thu, 13 Nov 2025 09:53:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDB1DCD5BB1
+	for <buildroot@archiver.kernel.org>; Thu, 13 Nov 2025 09:53:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 840F040D51;
+	by smtp3.osuosl.org (Postfix) with ESMTP id B35A360FA6;
+	Thu, 13 Nov 2025 09:53:54 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id i9eUg1KirT_V; Thu, 13 Nov 2025 09:53:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CFF460FA7
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9CFF460FA7;
 	Thu, 13 Nov 2025 09:53:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 72D9E36E
+ for <buildroot@buildroot.org>; Thu, 13 Nov 2025 09:53:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E382D40D14
+ for <buildroot@buildroot.org>; Thu, 13 Nov 2025 09:53:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2cWJyC92W8AH; Thu, 13 Nov 2025 09:53:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 896C940D52
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 896C940D52;
-	Thu, 13 Nov 2025 09:53:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 62E22158
- for <buildroot@buildroot.org>; Thu, 13 Nov 2025 09:53:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 64D0F40A11
- for <buildroot@buildroot.org>; Thu, 13 Nov 2025 09:53:44 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e5RtznfHg6DL for <buildroot@buildroot.org>;
+ id Y7GIpo5XBbqn for <buildroot@buildroot.org>;
  Thu, 13 Nov 2025 09:53:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 589FB40A02
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7B2240D19
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 589FB40A02
+ by smtp4.osuosl.org (Postfix) with ESMTP id B7B2240D19
  for <buildroot@buildroot.org>; Thu, 13 Nov 2025 09:53:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4A2F1845F5; Thu, 13 Nov 2025 09:53:42 +0000 (UTC)
+ id B5184845F4; Thu, 13 Nov 2025 09:53:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 13 Nov 2025 10:38:21 +0100
+Date: Thu, 13 Nov 2025 10:51:25 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ffa68244171fb16207f61953cfebdff9bb411d5d
-X-Git-Newrev: f88cb527da8ca251d2c495fb6f27f2a0aa1023bb
+X-Git-Oldrev: 0343a58a70baccc72843b18490344b37ccb04ceb
+X-Git-Newrev: 411d5fa06aa5d70bcb2553796cf894f00ad32c45
 X-Patchwork-Hint: ignore
-Message-Id: <20251113095342.4A2F1845F5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/belr: remove package
+Message-Id: <20251113095342.B5184845F4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dvbsnoop: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,133 +64,179 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f88cb527da8ca251d2c495fb6f27f2a0aa1023bb
+commit: https://git.buildroot.net/buildroot/commit/?id=411d5fa06aa5d70bcb2553796cf894f00ad32c45
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-belr was only needed as a dependency of linphone, as is anyway bundled
-in more recent versions of linphone, making a separate package
-unnecessary.
+The package is causing build errors with newer gcc versions:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+sectables.c:331:22: error: initialization of 'void (*)(void)' from
+ incompatible pointer type 'void (*)(unsigned char *, int)'
+ [-Wincompatible-pointer-types]
+  331 |      {  0x00, 0x00,  section_PAT        },
+
+and many more.
+
+The latest release dates back to 2007, the latest change in the CVS-
+based source repository[1] (downloaded as dvbsnoop.zip) is also from
+2007. No newer or maintained forks were found.
+
+State of upstream ticket system[2]:
+
+  Bugs: last update 2012
+  Support Requests: No open tickets found.
+  Patches: last update 2010
+  Feature Requests: 1 from 2021, the rest 2012 and older
+
+Instead of fixing build errors for an unmaintained project which is not
+used by any other package we remove it from buildroot.
+
+Fixes:
+https://autobuild.buildroot.net/results/ea6/ea6786248b9ecf0eb1c1c1f7cdd0202462b75e00/
+
+[1] https://sourceforge.net/p/dvbsnoop/cvs/
+[2] https://sourceforge.net/p/dvbsnoop/_list/tickets
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy       |  8 ++++++++
- DEVELOPERS             |  1 -
- package/Config.in      |  1 -
- package/belr/Config.in | 19 -------------------
- package/belr/belr.hash |  3 ---
- package/belr/belr.mk   | 25 -------------------------
- 6 files changed, 8 insertions(+), 49 deletions(-)
+ .checkpackageignore                      |  1 -
+ Config.in.legacy                         |  6 ++++++
+ DEVELOPERS                               |  1 -
+ package/Config.in                        |  1 -
+ package/dvbsnoop/0001-musl-types-h.patch | 15 ---------------
+ package/dvbsnoop/Config.in               | 21 ---------------------
+ package/dvbsnoop/dvbsnoop.hash           |  3 ---
+ package/dvbsnoop/dvbsnoop.mk             | 12 ------------
+ 8 files changed, 6 insertions(+), 54 deletions(-)
 
+diff --git a/.checkpackageignore b/.checkpackageignore
+index a6a6da598d..68882f3061 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -333,7 +333,6 @@ package/dt/0002-dt-default-source-define.patch lib_patch.Upstream
+ package/dtc/0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch lib_patch.Upstream
+ package/dvblast/0001-missing-lm.patch lib_patch.Upstream
+ package/dvblast/0002-fix-int-types.patch lib_patch.Upstream
+-package/dvbsnoop/0001-musl-types-h.patch lib_patch.Upstream
+ package/dvdrw-tools/0001-limits.h.patch lib_patch.Upstream
+ package/dvdrw-tools/0002-Include-sysmacros.h-to-compile-with-newer-gcc.patch lib_patch.Upstream
+ package/earlyoom/0001-main.c-fix-build-with-kernel-4.3.patch lib_patch.Upstream
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 10433ccb88..c669c79782 100644
+index 856ae58c67..24e627a28b 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -146,6 +146,14 @@ endif
+@@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2025.11"
  
-+config BR2_PACKAGE_BELR
-+	bool "belr has been removed"
++config BR2_PACKAGE_DVBSNOOP
++	bool "dvbsnoop has been removed"
 +	select BR2_LEGACY
 +	help
-+	  This package has been removed as part of the linphone
-+	  removal. In addition, newer version of linphone directly
-+	  bundle belr making a separate package unnecessary.
++	  dvbsnoop is unmaintained and has been removed
 +
- config BR2_PACKAGE_BELLE_SIP
- 	bool "belle-sip has been removed"
+ config BR2_PACKAGE_PROCRANK_LINUX
+ 	bool "procrank_linux has been removed"
  	select BR2_LEGACY
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 358c952d91..91783a74e5 100644
+index 50bdc3b2b1..f1da3c231a 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1020,7 +1020,6 @@ F:	package/openzwave/
+@@ -583,7 +583,6 @@ F:	package/jailhouse/
+ F:	package/sunxi-boards/
  
- N:	Fabrice Fontaine <fontaine.fabrice@gmail.com>
- F:	package/bearssl/
--F:	package/belr/
- F:	package/boinc/
- F:	package/cairo/
- F:	package/daq3/
+ N:	Carsten Schoenert <c.schoenert@gmail.com>
+-F:	package/dvbsnoop/
+ F:	package/libdvbsi/
+ F:	package/libsvg/
+ F:	package/libsvg-cairo/
 diff --git a/package/Config.in b/package/Config.in
-index b21ba89b31..20e03e7389 100644
+index f42e7cc96c..f256b9356f 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2167,7 +2167,6 @@ menu "Other"
- 	source "package/basu/Config.in"
- 	source "package/bctoolbox/Config.in"
- 	source "package/bdwgc/Config.in"
--	source "package/belr/Config.in"
- 	source "package/boost/Config.in"
- 	source "package/c-capnproto/Config.in"
- 	source "package/capnproto/Config.in"
-diff --git a/package/belr/Config.in b/package/belr/Config.in
+@@ -495,7 +495,6 @@ endmenu
+ 	source "package/dtbocfg/Config.in"
+ 	source "package/dtv-scan-tables/Config.in"
+ 	source "package/dump1090/Config.in"
+-	source "package/dvbsnoop/Config.in"
+ 	source "package/edid-decode/Config.in"
+ 	source "package/edk2-non-osi/Config.in"
+ 	source "package/edk2-platforms/Config.in"
+diff --git a/package/dvbsnoop/0001-musl-types-h.patch b/package/dvbsnoop/0001-musl-types-h.patch
 deleted file mode 100644
-index f3f742ad28..0000000000
---- a/package/belr/Config.in
+index 1149df0d07..0000000000
+--- a/package/dvbsnoop/0001-musl-types-h.patch
 +++ /dev/null
-@@ -1,19 +0,0 @@
--config BR2_PACKAGE_BELR
--	bool "belr"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS # bctoolbox
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # bctoolbox
--	select BR2_PACKAGE_BCTOOLBOX
--	help
--	  Belr is Belledonne Communications' language recognition
--	  library, written in C++11. It parses text inputs formatted
--	  according to a language defined by an ABNF grammar, such as
--	  the protocols standardized at IETF.
+@@ -1,15 +0,0 @@
+-Fix musl build
 -
--	  https://gitlab.linphone.org/BC/public/belr
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 -
--comment "belr needs a toolchain w/ threads, C++"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
--
--comment "belr needs a toolchain not affected by GCC bug 64735"
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/belr/belr.hash b/package/belr/belr.hash
+-diff -uNr dvbsnoop-1.4.50.org/src/misc/helper.h dvbsnoop-1.4.50/src/misc/helper.h
+---- dvbsnoop-1.4.50.org/src/misc/helper.h	2006-01-02 20:04:56.000000000 +0100
+-+++ dvbsnoop-1.4.50/src/misc/helper.h	2016-01-24 14:35:02.000000000 +0100
+-@@ -16,6 +16,7 @@
+- #ifndef __HELPER_H
+- #define __HELPER_H
+- 
+-+#include <sys/types.h>
+- 
+- u_long outBit_Sx (int verbosity, const char *text, u_char *buf, int startbit, int bitlen);
+- u_long outBit_Sx_NL (int verbosity, const char *text, u_char *buf, int startbit, int bitlen);
+diff --git a/package/dvbsnoop/Config.in b/package/dvbsnoop/Config.in
 deleted file mode 100644
-index 00c733c7df..0000000000
---- a/package/belr/belr.hash
+index fb63fa4e8b..0000000000
+--- a/package/dvbsnoop/Config.in
++++ /dev/null
+@@ -1,21 +0,0 @@
+-config BR2_PACKAGE_DVBSNOOP
+-	bool "dvbsnoop"
+-	help
+-	  Dvbsnoop is just a simple tool to analyze, view or debug a
+-	  transport stream (TS), program elementary stream (PES) or even
+-	  a program stream (PS). Dvbsnoop is trying to get input mostly
+-	  direct from a frontend (satellite or cable tuner inside a
+-	  set-top box for example) via DVB APIv3 to view into a TS, or a
+-	  demux to view PES or PS (also mostly inside the set-top box or
+-	  even PCI Card or USB Plug) but also from a file (recorded TS).
+-	  Dvbsnoop is working well on SD transport streams but may have
+-	  some limited functionality on HD transport streams
+-	  (DVB-{C,S,T}2 because of missing knowledge how to handle it.
+-
+-	  Dvbsnoop itself doesn't do the tuning on the frontend, this
+-	  has to be done by external helpers or manually driver call.
+-	  The dvbsnoop tool was written while developing the software
+-	  Neutrino on the set-top box DBox2.
+-
+-	  http://dvbsnoop.sourceforge.net
+-	  http://en.wikipedia.org/wiki/DBox2
+diff --git a/package/dvbsnoop/dvbsnoop.hash b/package/dvbsnoop/dvbsnoop.hash
+deleted file mode 100644
+index 0d88afe154..0000000000
+--- a/package/dvbsnoop/dvbsnoop.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
--# Locally calculated
--sha256  6358aa680193d972c831d677da1652c7f57d7e00649b971d4d9fbdebf4331b48  belr-4.4.8.tar.gz
--sha256  1b3782ccad7b8614100cda30d3faf42fc39f2e97932908c543005053b654ca68  LICENSE.txt
-diff --git a/package/belr/belr.mk b/package/belr/belr.mk
+-# Locally computed:
+-sha256  7658498b26a5d2a0242e81f0cfafa0e43a2bec56f8674e7ac197dfc310866ec6  dvbsnoop-1.4.50.tar.gz
+-sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/dvbsnoop/dvbsnoop.mk b/package/dvbsnoop/dvbsnoop.mk
 deleted file mode 100644
-index 26b949734f..0000000000
---- a/package/belr/belr.mk
+index fdc483d22c..0000000000
+--- a/package/dvbsnoop/dvbsnoop.mk
 +++ /dev/null
-@@ -1,25 +0,0 @@
+@@ -1,12 +0,0 @@
 -################################################################################
 -#
--# belr
+-# dvbsnoop
 -#
 -################################################################################
 -
--BELR_VERSION = 4.4.8
--BELR_SITE = https://gitlab.linphone.org/BC/public/belr/-/archive/$(BELR_VERSION)
--BELR_LICENSE = GPL-3.0+
--BELR_LICENSE_FILES = LICENSE.txt
--BELR_INSTALL_STAGING = YES
--BELR_DEPENDENCIES = bctoolbox
--BELR_CONF_OPTS = \
--	-DENABLE_STRICT=OFF \
--	-DENABLE_TESTS=OFF \
--	-DENABLE_TOOLS=OFF
+-DVBSNOOP_VERSION = 1.4.50
+-DVBSNOOP_SITE = http://downloads.sourceforge.net/project/dvbsnoop/dvbsnoop/dvbsnoop-$(DVBSNOOP_VERSION)
+-DVBSNOOP_LICENSE = GPL-2.0
+-DVBSNOOP_LICENSE_FILES = COPYING
 -
--ifeq ($(BR2_STATIC_LIBS),y)
--BELR_CONF_OPTS += -DENABLE_SHARED=OFF -DENABLE_STATIC=ON
--else
--# cannot build static and shared together
--BELR_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_STATIC=OFF
--endif
--
--$(eval $(cmake-package))
+-$(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
