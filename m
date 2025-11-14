@@ -1,89 +1,109 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC964CE7B0E
-	for <buildroot@archiver.kernel.org>; Fri, 14 Nov 2025 14:05:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 216CACE8D56
+	for <buildroot@archiver.kernel.org>; Fri, 14 Nov 2025 16:52:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BD55D83DBA;
-	Fri, 14 Nov 2025 14:05:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D2879607C4;
+	Fri, 14 Nov 2025 16:52:45 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8cwzAJDQBX-Q; Fri, 14 Nov 2025 16:52:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F34CA607DE
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id F34CA607DE;
+	Fri, 14 Nov 2025 16:52:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5120E230
+ for <buildroot@buildroot.org>; Fri, 14 Nov 2025 16:52:43 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3A6C5840A1
+ for <buildroot@buildroot.org>; Fri, 14 Nov 2025 16:52:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s2tNfB0QBVsb; Fri, 14 Nov 2025 14:05:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E3DC183CE5
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E3DC183CE5;
-	Fri, 14 Nov 2025 14:05:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 34974D5
- for <buildroot@buildroot.org>; Fri, 14 Nov 2025 14:05:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1B86140C99
- for <buildroot@buildroot.org>; Fri, 14 Nov 2025 14:05:26 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bkLUfYq9zoMh for <buildroot@buildroot.org>;
- Fri, 14 Nov 2025 14:05:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.53;
- helo=mail-wm1-f53.google.com; envelope-from=thomas.devoogdt@gmail.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 186F54030E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 186F54030E
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com
- [209.85.128.53])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 186F54030E
- for <buildroot@buildroot.org>; Fri, 14 Nov 2025 14:05:24 +0000 (UTC)
-Received: by mail-wm1-f53.google.com with SMTP id
- 5b1f17b1804b1-477775d3728so20709865e9.2
- for <buildroot@buildroot.org>; Fri, 14 Nov 2025 06:05:24 -0800 (PST)
+ id gjxEJIAdAG9X for <buildroot@buildroot.org>;
+ Fri, 14 Nov 2025 16:52:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::531; helo=mail-ed1-x531.google.com;
+ envelope-from=shirokovalexs@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 78AF584055
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78AF584055
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 78AF584055
+ for <buildroot@buildroot.org>; Fri, 14 Nov 2025 16:52:42 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id
+ 4fb4d7f45d1cf-64162c04f90so3714890a12.0
+ for <buildroot@buildroot.org>; Fri, 14 Nov 2025 08:52:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1763129123; x=1763733923;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=Ka9lsdNDPaJrjY18wQr+t0eh9WxSYNfTEzsZD9+Syj0=;
- b=DtdUoSkZUUHN5Qru6CdY/Mi2gliMNs9wy6FtODjv8mYOugffHACVpe3lee3c8JBqC/
- plJVjwDZLIRsJvesA9tmenHbirbiqvpmVERhFdkCpCI6ypQObq9jLsAczT+H06Hvp4xr
- UOWhcgOe8xTnsSmKYe5hg7daE7HdklwsdY98X3BzX6hySy26ZO6uHO8dqhdzos9bN6nD
- u46yRn5X0QReIy6ZZc4OAI1OpmT8n7PTBXs2ursluBt8AF58qPdEQ5lFID4jCsvrW4EX
- lb0lcHDPNnDOcl9qoSUjiOgKrsSJnbR6vEWYEX59RfjBEQj4X3aWFhWpnrmX3p8Of5Py
- ZxJg==
-X-Gm-Message-State: AOJu0Yxj0LQ4JitouLrK/O/JfDDYg+LqLlHUu3rYwh3afzt/o1+OfRgL
- X1njLvOfuxpCtphX+OCmLG338H3DXt8hM9vgy1T7urBIG83LLpAuNT+6Ry6n7Vah
-X-Gm-Gg: ASbGnctyYysjdFhR6JIPsdie3KSvDbAH2f4SHJ8T6TwkQryvM/U5ycxeaRTYw7N3dMW
- eMO2M06qSexAm23dPaN+4ZyfofAks6HMWAanxa9F1pvozjsKS6o8wvPD0EGm6mEwvk3Rs4Vpe6E
- z+H6YAvFPuxWzkPO122CkwRyIkTlMPyjFRzoDGvCvGrK9ohsAoiTWxLRI3SgR96BLNcteCsw4Qh
- r4azj6hU+1rkKAIhGTuax3jamhA6BFJHgnU6of/TI7qg6fjuZR5X0WEnpEM7vHlRZhim1nlHqE8
- SmYn9uoSDyRYGpdXEgxNozXQRJeZQVJJ2nsCWBglsWjRJHPUk7XK26MPjm9iHyKRrIreE2ReWB7
- Jb/AC9Si65sWXKHIzWjzLQR1O5rTXEq3XH/eDA/vXHlJUUWlRKH/NaK4c1z07rjWBdUAxPigrz7
- RnuSe0xqI+UX9O5nudTe9PdKtiKrXXI3yz9qGU
-X-Google-Smtp-Source: AGHT+IGU5+HwiQxOiz+9oxqzWx5GFTbhJo2f4Hl3DiLiGc/P8lyCrTv+MdqsQd1yNBmgLRDZ0v2pWQ==
-X-Received: by 2002:a05:600c:3587:b0:477:5aaa:57a3 with SMTP id
- 5b1f17b1804b1-4778fe55589mr33289225e9.2.1763129122549; 
- Fri, 14 Nov 2025 06:05:22 -0800 (PST)
-Received: from localhost.localdomain ([2a02:a03f:eb6f:7900:185:e02b:1e5b:739e])
- by smtp.googlemail.com with ESMTPSA id
- 5b1f17b1804b1-4778bd1bf5asm44462245e9.14.2025.11.14.06.05.21
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 14 Nov 2025 06:05:22 -0800 (PST)
-From: Thomas Devoogdt <thomas@devoogdt.com>
-To: buildroot@buildroot.org
-Cc: Tudor Holton <buildroot@tudorholton.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>
-Date: Fri, 14 Nov 2025 15:05:19 +0100
-Message-ID: <20251114140519.541039-1-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.43.0
+ d=1e100.net; s=20230601; t=1763139160; x=1763743960;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=N4rVnZODdgs7W4iWTEWIAy3JkFltdu7kfFEFskfnn/c=;
+ b=pCjgk2geS7QxLB6jafOWg5hRalhmVwB6+kcM/rycXP/h9lczSnuV6RAMCNiUyEDbN5
+ v77WOez2CgS40eIRDND1mPzIFXIV2CP+l6kTEMK9Ay6rESFg2Vgo1qcQ1bPxAsTxkQNO
+ w1kvCEk3osgcXWXUgrLkRG85YRa9mjaICHU3lKwYYplUnhll+kiQ10fFTh41Km+aCkyC
+ eQm7ol1rkSHKfu+Yhuri42vWbg6niT9Kuo2WUXMxfcQK2RH4uHHWFx9syIQ27CCapMKt
+ arc1EouxQYKKpUxnlfq8JK0jlZhh0VA8htCcgL5e+OI7HGG7ZXt8BPm60iQaujHD8wof
+ sUWw==
+X-Gm-Message-State: AOJu0YzOhZYjTVR8kc7Gz9YAs7mimz7bWMKyqbtf/lk764Yj68FXFWz8
+ XzlIGGrI1XeNWYgzT8b1kK9kLc79n58lAJvRcY6T58UxLu0epxo7PF9VvRFo
+X-Gm-Gg: ASbGncuSgejFfyG5sk7i2DJv12DN79c7XhTSSR2r3Vod0JxYKOKtxsHbT9ALwhXeAZn
+ uPzvyM9SP9yB79RZzI7blMp6jUTMESWTpQaHjKh0tBiMFZEXySslxNZFbzWdvBw5ubrKJFzJyhf
+ 4T5Omlfv6pbYyGBa7TkrutPJtOTLvSFeCG6cwVR5b12hsMck/H7dQz1rNX/C6rk+NpYk6DV7f7X
+ YFRB89zYySYou4y2zClCc1WDqycF1vW2cMyh4FBRo4HiEr7s8mZ/WGu84TPVq0nlaqYJISZJA6r
+ PLNgqZH0z6Cp6M2mqRKmByswnSn7PO3PO1wfxT08qSSmhNuZe5FAOm19Sn6Bb/1bt0WNrVJT7Gg
+ 77g6FbmVsGwF6uer70oNQ8eQ/G15RseHPukVJlgj76Gm+enuiDZOo8r0LsJreuFKZUGLZHNFD7n
+ +er3NMr0adLYBmQpAZQV33vnnJJ6phqKWH33vttb8TbSsNv49NevoojrA=
+X-Google-Smtp-Source: AGHT+IGGembUQjaS4G0tqD3TlGcbdvOjrGe9rhPabLfeITgW4nAqB+6KQqINXwk3vEwTj1yGS9L43Q==
+X-Received: by 2002:a05:6402:2711:b0:640:ae02:d7cc with SMTP id
+ 4fb4d7f45d1cf-64350def135mr3442134a12.3.1763139160116; 
+ Fri, 14 Nov 2025 08:52:40 -0800 (PST)
+Received: from ?IPV6:2a02:a319:a1e0:eb00:92eb:221f:6fb6:f3ab?
+ ([2a02:a319:a1e0:eb00:92eb:221f:6fb6:f3ab])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-6433a3f8eb0sm4246177a12.12.2025.11.14.08.52.38
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 14 Nov 2025 08:52:39 -0800 (PST)
+Message-ID: <53647f31-6b2a-4bb0-b2f2-2e32b1212803@gmail.com>
+Date: Fri, 14 Nov 2025 17:52:37 +0100
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=devoogdt.com
-Subject: [Buildroot] [PATCH] package/openjdk{,
- -bin}: fix wrong version reporting
+User-Agent: Mozilla Thunderbird
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: buildroot@buildroot.org
+References: <20251107151112.1105070-1-shirokovalexs@gmail.com>
+ <87y0obq9kt.fsf@dell.be.48ers.dk>
+Content-Language: en-US, ru-RU
+From: Alexander <shirokovalexs@gmail.com>
+In-Reply-To: <87y0obq9kt.fsf@dell.be.48ers.dk>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1763139160; x=1763743960; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=N4rVnZODdgs7W4iWTEWIAy3JkFltdu7kfFEFskfnn/c=;
+ b=IvZpB3qfM8++lULjRGxaWqYLP7plyEzFeBfN2h7AsEzD7MuXd3tF+ExgNq0T7HizVe
+ Pfmqf5y2wLCzCo2B21DaxmXQNWQBaobaWpB+u1blW0myJn7yXd2p0EwxirnHAbcn4ko/
+ T+8xKQmjdC0ro3JDVaHiy9DASFFjMaQA8t9/mwxD6mAG6x5CWjI36NAEHuv/f+7Jw9Ba
+ mro7ISg9E75fa+k2apYVaNiDjjLiYNWZjVaK24AWIV/gtgyvGJQcD8U5s9SsKVmdjtvg
+ bGFGlfdpn+JjU54/hT/bQpa//XeNoLPFKWbjgYTSR76mmPIq12PYyp9/ln2hGkmWtb3D
+ 6KEA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=IvZpB3qf
+Subject: Re: [Buildroot] [v1, 1/1] package/broot:new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,98 +115,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Thanks a lot Peter, All
 
-Before:
-
-$ java --version
-openjdk 17 2024-07-16
-OpenJDK Runtime Environment (build 17+17)
-OpenJDK 64-Bit Server VM (build 17+17, mixed mode)
-
-After:
-
-$ java --version
-openjdk 17.0.12 2024-07-16
-OpenJDK Runtime Environment (build 17.0.12+7)
-OpenJDK 64-Bit Server VM (build 17.0.12+7, mixed mode)
-
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
----
- package/openjdk-bin/openjdk-bin.mk |  8 +++++---
- package/openjdk/openjdk.mk         | 13 ++++++++-----
- 2 files changed, 13 insertions(+), 8 deletions(-)
-
-diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-index 17056e80b7..e6c74cf6d8 100644
---- a/package/openjdk-bin/openjdk-bin.mk
-+++ b/package/openjdk-bin/openjdk-bin.mk
-@@ -6,10 +6,12 @@
- 
- ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_21),y)
- HOST_OPENJDK_BIN_VERSION_MAJOR = 21
--HOST_OPENJDK_BIN_VERSION_MINOR = 0.4_7
-+HOST_OPENJDK_BIN_VERSION_MINOR = 0.4
-+HOST_OPENJDK_BIN_VERSION_BUILD = 7
- else
- HOST_OPENJDK_BIN_VERSION_MAJOR = 17
--HOST_OPENJDK_BIN_VERSION_MINOR = 0.12_7
-+HOST_OPENJDK_BIN_VERSION_MINOR = 0.12
-+HOST_OPENJDK_BIN_VERSION_BUILD = 7
- endif
- 
- ifeq ($(HOSTARCH),x86_64)
-@@ -19,7 +21,7 @@ ifeq ($(HOSTARCH),aarch64)
- HOST_OPENJDK_BIN_DOWNLOAD_ARCH_NAME = aarch64
- endif
- 
--HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR).$(HOST_OPENJDK_BIN_VERSION_MINOR)
-+HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR).$(HOST_OPENJDK_BIN_VERSION_MINOR)_$(HOST_OPENJDK_BIN_VERSION_BUILD)
- HOST_OPENJDK_BIN_SOURCE = OpenJDK$(HOST_OPENJDK_BIN_VERSION_MAJOR)U-jdk_$(HOST_OPENJDK_BIN_DOWNLOAD_ARCH_NAME)_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
- HOST_OPENJDK_BIN_SITE = https://github.com/adoptium/temurin$(HOST_OPENJDK_BIN_VERSION_MAJOR)-binaries/releases/download/jdk-$(subst _,%2B,$(HOST_OPENJDK_BIN_VERSION))
- 
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index f59eb69782..1ec9863e98 100644
---- a/package/openjdk/openjdk.mk
-+++ b/package/openjdk/openjdk.mk
-@@ -6,12 +6,15 @@
- 
- ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_21),y)
- OPENJDK_VERSION_MAJOR = 21
--OPENJDK_VERSION_MINOR = 0.4+7
-+OPENJDK_VERSION_MINOR = 0.4
-+OPENJDK_VERSION_BUILD = 7
-+
- else
- OPENJDK_VERSION_MAJOR = 17
--OPENJDK_VERSION_MINOR = 0.12+7
-+OPENJDK_VERSION_MINOR = 0.12
-+OPENJDK_VERSION_BUILD = 7
- endif
--OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)
-+OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)+$(OPENJDK_VERSION_BUILD)
- OPENJDK_SITE = $(call github,openjdk,jdk$(OPENJDK_VERSION_MAJOR)u,jdk-$(OPENJDK_VERSION))
- 
- OPENJDK_LICENSE = GPL-2.0+ with exception
-@@ -102,8 +105,8 @@ OPENJDK_CONF_OPTS = \
- 	--with-native-debug-symbols=none \
- 	--without-version-pre \
- 	--with-sysroot=$(STAGING_DIR) \
--	--with-version-build="$(OPENJDK_VERSION_MAJOR)" \
--	--with-version-string="$(OPENJDK_VERSION_MAJOR)"
-+	--with-version-build="$(OPENJDK_VERSION_BUILD)" \
-+	--with-version-string="$(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)"
- 
- # If building for AArch64, use the provided CPU port.
- ifeq ($(BR2_aarch64),y)
--- 
-2.43.0
-
+On 11/12/25 9:28 PM, Peter Korsgaard wrote:
+>>>>>> "Alexander" == Alexander Shirokov <shirokovalexs@gmail.com> writes:
+>   > This commit adds `broot` a fast and powerful file manager written
+>   > in Rust and licensed under MIT license. It supports filters, regular
+>   > expressions, and real-time "show-as-you-type" search for quick and easy
+>   > navigation, even in complex directory structures.
+>
+>   > Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
+>   > ---
+>   >  DEVELOPERS               |  1 +
+>   >  package/Config.in        |  1 +
+>   >  package/broot/Config.in  | 11 +++++++++++
+>   >  package/broot/broot.hash |  3 +++
+>   >  package/broot/broot.mk   | 12 ++++++++++++
+>   >  5 files changed, 28 insertions(+)
+>   >  create mode 100644 package/broot/Config.in
+>   >  create mode 100644 package/broot/broot.hash
+>   >  create mode 100644 package/broot/broot.mk
+>
+>   > diff --git a/DEVELOPERS b/DEVELOPERS
+>   > index b14c6e3875..dbd3b1517c 100644
+>   > --- a/DEVELOPERS
+>   > +++ b/DEVELOPERS
+>   > @@ -87,6 +87,7 @@ N:	Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
+>   >  F:	package/cpp-httplib/
+>   
+>   >  N:	Alexander Shirokov <shirokovalexs@gmail.com>
+>   > +F:	package/broot/
+>   >  F:	package/nnn/
+>   
+>   >  N:	Alessandro Partesotti <a.partesotti@gmail.com>
+>   > diff --git a/package/Config.in b/package/Config.in
+>   > index 930f368058..1152748d8e 100644
+>   > --- a/package/Config.in
+>   > +++ b/package/Config.in
+>   > @@ -2950,6 +2950,7 @@ endmenu
+>   
+>   >  menu "Text editors and viewers"
+>   >  	source "package/bat/Config.in"
+>   > +	source "package/broot/Config.in"
+>   >  	source "package/bvi/Config.in"
+>   >  	source "package/ed/Config.in"
+>   >  	source "package/joe/Config.in"
+>   > diff --git a/package/broot/Config.in b/package/broot/Config.in
+>   > new file mode 100644
+>   > index 0000000000..bffdf7aaad
+>   > --- /dev/null
+>   > +++ b/package/broot/Config.in
+>   > @@ -0,0 +1,11 @@
+>   > +config BR2_PACKAGE_BROOT
+>   > +	bool "broot"
+>   > +	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+>   > +	depends on BR2_PACKAGE_HOST_RUSTC
+>
+> It makes more sense to select rustc instead of depending on it, similar
+> to E.G. kmon.
+>
+> Committed with that fixed, thanks.
+>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
