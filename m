@@ -1,75 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E9BECEBF87
-	for <buildroot@archiver.kernel.org>; Sat, 15 Nov 2025 23:08:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4EDFCEB2D2
+	for <buildroot@archiver.kernel.org>; Sat, 15 Nov 2025 23:15:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 04358608B8;
-	Sat, 15 Nov 2025 23:08:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 89E94810AF;
+	Sat, 15 Nov 2025 23:15:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P1ZvPQR2aGhD; Sat, 15 Nov 2025 23:08:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AizPQervjNaK; Sat, 15 Nov 2025 23:15:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07E5A608A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCED080FBC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 07E5A608A5;
-	Sat, 15 Nov 2025 23:08:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id C7859158
- for <buildroot@buildroot.org>; Sat, 15 Nov 2025 23:08:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BCED080FBC;
+	Sat, 15 Nov 2025 23:15:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 929C31A9
+ for <buildroot@buildroot.org>; Sat, 15 Nov 2025 23:15:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BD427405B8
- for <buildroot@buildroot.org>; Sat, 15 Nov 2025 23:08:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 870A580FBC
+ for <buildroot@buildroot.org>; Sat, 15 Nov 2025 23:15:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m4cCmxDsrKFO for <buildroot@buildroot.org>;
- Sat, 15 Nov 2025 23:08:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 502C440597
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 502C440597
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 502C440597
- for <buildroot@buildroot.org>; Sat, 15 Nov 2025 23:08:50 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b06c.dip0.t-ipconnect.de [84.161.176.108])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 04F04A4C6AA1;
- Sun, 16 Nov 2025 00:08:48 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:60364)
- by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vKPNv-000000002zv-2ouD;
- Sat, 15 Nov 2025 23:08:47 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9D-pzhgbQB3j for <buildroot@buildroot.org>;
+ Sat, 15 Nov 2025 23:15:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ envelope-from=mr.zoltan.gyarmati@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B649680FB5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B649680FB5
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B649680FB5
+ for <buildroot@buildroot.org>; Sat, 15 Nov 2025 23:15:16 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-47758595eecso16847095e9.0
+ for <buildroot@buildroot.org>; Sat, 15 Nov 2025 15:15:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1763248515; x=1763853315;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=edqdzhpOPk4qFSrCEucbFNZBXSEZ5kZgw//WUM6lflQ=;
+ b=TfX9hgT8MeT2yNv1Q1sHECC1VtY4/M64AfDM+SINFoDvCv6TqrCXkevxHNJO+kAAw7
+ gsudGps948u50aCh5suSlmjIdvJeaxm11UTDpShKMLJOV0Ua5iUXTzoBiMGymyyTh/DE
+ bAYg1HbcUTzyftfhGAXOj16gW18mNQx5viqxv6fq2GIzS5X24XUDp1AujwPoSrnq24XY
+ YOrXERNjOkl4+I5N9gWBCPNhos47tY+djcl3B8bGn1lEA222ysEOZLx8B1C2H4MN7VGn
+ U8zuBbnRn0l6Wwq9+taYPF2obBZk2PqxLXXim3HihxrHep54PkaCb+U3sGQhVxBCYhYL
+ Qd3A==
+X-Gm-Message-State: AOJu0YwdjEi6jChoueaOPAXMaWmJGEuWsK/FdWez29yQi8KKUhc1s/ru
+ ITKh+yLrVg2L9NkC7N1IsEOU7WELp4gza4xLp5eRgorFxYf94lpj8m8Z9TB4QA==
+X-Gm-Gg: ASbGncsb/j8pdDo6b+QzQY/xZs5SCHbIyz2u0t3sKmWb4hH4JkYzZTqL1adVKrlnam9
+ smiRXBsvRQk5KJrDF7llLo/F0kXEWOaVtyZs5RS/MQ5wKdzlGPcpQLTVXKduUuqieY7cYrUZJyK
+ qRqvxP4kXc03jXzmDnbDag9L2Z25FjtgenIOkvVw7wDMpwmAhmkRMNNIg/CRs6W03E1yrrnY5iH
+ Zu6mxSsBr2eCiiCGphpkwMGn8XDvu3Z64nGhzvrgZuzWrJ/lOB0Cm67zhf3HvvyBDC9m+2c/u3+
+ wSRq2MuFRobciaWR9mu7g2VpVAmjbOIoJ7msJukITtBlC4i7Ync+gCnGTmqElRvAYuLGGrdnDAk
+ LXNT5w6icnjSG/MCpGSltrWEz1Keiw4Y6MXb4mN7SAk4Tkp8Q15t0mejzSNogLz/Rk0FLDDMBm/
+ QC32UUjP0GgTAwdKZtVqN+zvjLTU6iNuVVLQ==
+X-Google-Smtp-Source: AGHT+IGuBAvIP4Tp90+p8osudmOet5jIeyc5tqx7Zdq/TFwYo/pjOljwMSScrINfbfi0UnymK9x4zw==
+X-Received: by 2002:a05:600c:1c9b:b0:477:9fa0:74ed with SMTP id
+ 5b1f17b1804b1-4779fa07915mr1777675e9.26.1763248514540; 
+ Sat, 15 Nov 2025 15:15:14 -0800 (PST)
+Received: from zgyarmati-t580.. (netacc-gpn-5-84-233.pool.yettel.hu.
+ [84.225.84.233]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-477980cb1aasm27123495e9.8.2025.11.15.15.15.12
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 15 Nov 2025 15:15:12 -0800 (PST)
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 To: buildroot@buildroot.org
-Cc: Petr Vorel <petr.vorel@gmail.com>
-Date: Sun, 16 Nov 2025 00:08:47 +0100
-Message-ID: <20251115230847.2727702-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Cc: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Sun, 16 Nov 2025 00:15:07 +0100
+Message-ID: <20251115231507.4299-1-mr.zoltan.gyarmati@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1763248128;
- bh=gGqU3Sb9+DM0g+d85v7RJI5tLW6lsYPMXLxDclRI00o=;
- h=From:To:Cc:Subject:Date:From;
- b=MjobXFXUhDqU7P1No86ecmUfFMqnzNuazT8vtAL/aCF5JdiGs5tPLX1JJi8j/+vjw
- AeUflSclVPDvdDJmxm3XLqWBe3OQI5qKVCH7aFEYrY+Jk663sQOB4XN/LdAV3AOoDH
- wDGvI41ZkoIBxkHs34g1x3IoEh8wGYrCZ791z+EQWQ9m5bHyKjHnahLWVWeIsAwovr
- OmKsLm65SE0D3kI9SBMAvZ7DP/NBmu8pXgvoesGG2HIl5jXBr+Rie2ulG985rj1Cj8
- Gh7vWM9qXxyyD26nGb13KBJ8meie1iLEmFold+jDIiAHSUGoiq8hW47gUP7rZFdfyn
- ebQiPX8SXhTtw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1763248515; x=1763853315; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=edqdzhpOPk4qFSrCEucbFNZBXSEZ5kZgw//WUM6lflQ=;
+ b=IDMUqIgUuVuvU2kCpiz7+hJsOXBBO3DU7eEptVaBu+B3yPKYmmqgSJrusGN6bQXhcI
+ TVrz9qEpR17VqwB7KalwflM9ItVP3/GT3YbLn5LTG4CHmgb/5T5Onx4E1ywzEpZKw6tc
+ XRkVvb1pq5UPRCAzAKHLlMQ1L8bvWkwCGD+dep8Ll9PNaeE9atC9nyNcwoPjiqiF920W
+ yBuya8nY+G1t3/Fj9r2dZzYmwIXRgIt6zxuJ301TB1JnHyrKdePdplQIfCKZY0xPPibH
+ Kd0vtzT+yMXcNP+O7Om7Ta3GkOe+7+8K5VrjXjQ9d0gkyhlXgAyXP954AoCPwmw+EeUj
+ 8kRw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=MjobXFXU
-Subject: [Buildroot] [PATCH 1/1] package/iputils: fix merged-bin
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=IDMUqIgU
+Subject: [Buildroot] [PATCH] Update my e-mail address in DEVELOPERS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,37 +113,26 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-mv: '/home/autobuild/autobuild/instance-2/output-1/per-package/iputils/target/usr/bin/arping'
- and '/home/autobuild/autobuild/instance-2/output-1/per-package/iputils/target/usr/sbin/arping'
- are the same file
-
-Fixes:
-https://autobuild.buildroot.net/results/dae/daeebb090f6d11d77840dd61add9bc422c6bc2fa/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 ---
- package/iputils/iputils.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 8e00513229..1a5d3e3678 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -32,10 +32,12 @@ IPUTILS_CONF_OPTS += -DBUILD_ARPING=true
- # move some binaries to the same location as where Busybox installs
- # the corresponding applets, so that we have a single version of the
- # tools (from iputils)
-+ifeq ($(BR2_ROOTFS_MERGED_BIN),)
- define IPUTILS_MOVE_ARPING_BINARY
- 	mv $(TARGET_DIR)/usr/bin/arping $(TARGET_DIR)/usr/sbin/arping
- endef
- IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_ARPING_BINARY
-+endif
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7174afbdf9..048bc14a8c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3535,7 +3535,7 @@ F:	utils/scanpypi
+ N:	Yunhao Tian <t123yh.xyz@gmail.com>
+ F:	package/libopenaptx/
  
- else
- IPUTILS_CONF_OPTS += -DBUILD_ARPING=false
+-N:	Zoltan Gyarmati <zgyarmati@zgyarmati.de>
++N:	Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+ F:	package/crudini/
+ F:	package/grantlee/
+ F:	package/libusb/
 -- 
-2.47.3
+2.43.0
 
 _______________________________________________
 buildroot mailing list
