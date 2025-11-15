@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F089CEACEF
-	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 19:52:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A06CDCEBF8D
+	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 19:52:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1EBAB413FF;
-	Mon, 17 Nov 2025 19:52:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 74C9160F17;
+	Mon, 17 Nov 2025 19:52:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TMqjIJGXvFpI; Mon, 17 Nov 2025 19:52:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V1QuBGo7yFCL; Mon, 17 Nov 2025 19:52:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 197FC41412
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CADE61374
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 197FC41412;
-	Mon, 17 Nov 2025 19:52:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9CADE61374;
+	Mon, 17 Nov 2025 19:52:09 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7EF18158
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:38 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 8EB3A1BA
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E25A0408BA
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 862FF408CA
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yefZbuyccg0K for <buildroot@buildroot.org>;
+ id 0yPDRdVmjZOU for <buildroot@buildroot.org>;
  Mon, 17 Nov 2025 19:51:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0ACFF408CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 220A24089C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0ACFF408CA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 220A24089C
  for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 079F4848E6; Mon, 17 Nov 2025 19:51:27 +0000 (UTC)
+ id 1F74F848E6; Mon, 17 Nov 2025 19:51:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 15 Nov 2025 17:37:53 +0100
+Date: Sat, 15 Nov 2025 17:38:52 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 49f668e31fcd80c1f3ee8823c24eeea1ed0ea057
-X-Git-Newrev: f68016e5de86d4530def5eae3cc6809bb2e156c4
+X-Git-Oldrev: b781bebcab60276165a6fc97d1d2d9e25e4d7a24
+X-Git-Newrev: 6ed83c91aaa2e7d540d0fc3ba4be6e5348a2b38b
 X-Patchwork-Hint: ignore
-Message-Id: <20251117195127.079F4848E6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] support/scripts/cve.py:
- remove print from cve.py library
+Message-Id: <20251117195127.1F74F848E6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/pkg-generic.mk:
+ use more sensible default value for <pkg>_CPE_ID_UPDATE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,57 +66,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f68016e5de86d4530def5eae3cc6809bb2e156c4
+commit: https://git.buildroot.net/buildroot/commit/?id=6ed83c91aaa2e7d540d0fc3ba4be6e5348a2b38b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-The `support/script/cve.py` file is used as a library. Depending on how
-you use this library you might not want to write content to stdout when
-calling its function.
+Setting the "update" field in the CPE ID to * doesn't actually make
+much sense, as * is a wildcard. Instead, this field should really
+reflect the "subrelease" / "update" of the package, which unless
+specified explicitly by the package .mk file, is empty.
 
-This patch move the 'updating' log to the 'pkg-stats' script and write
-the alert when LooseVersion doesn't have a version to stderr.
+Using a wildcard causes a few CVEs to be incorrectly identified as
+affecting some of our packages.
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4b318dea1712d212270d0a19f206a50d37852130)
+For example https://nvd.nist.gov/vuln/detail/CVE-2013-1428 has a
+CPE configuration that goes like this:
+
+cpe:2.3:a:tinc-vpn:tinc:*:pre6:*:*:*:*:*:* up to including 1.1
+
+and this CPE configuration is currently identified as affecting our
+package. This isn't correct as our package is using 1.0.36, not a
+"pre6" version. But because the CPE ID generated by Buildroot uses *
+as the "update" field, and * is the wildcard, it does match with this
+CPE configuration.
+
+After this change, two CVEs are no longer identified as affecting
+Buildroot packages:
+
+  https://nvd.nist.gov/vuln/detail/CVE-2013-1428
+  https://nvd.nist.gov/vuln/detail/CVE-2017-9454
+
+and in both cases they are indeed CVEs not affecting our package.
+
+Reported-by: Titouan Christophe <titouan.christophe@mind.be>
+Cc: Titouan Christophe <titouan.christophe@mind.be>
+Cc: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit 53a8616460e5730abe703ca5a46bae0039d548aa)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/scripts/cve.py    | 3 +--
- support/scripts/pkg-stats | 1 +
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-generic.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/support/scripts/cve.py b/support/scripts/cve.py
-index ba41762fa0..5ff67585e2 100755
---- a/support/scripts/cve.py
-+++ b/support/scripts/cve.py
-@@ -69,7 +69,6 @@ class CVE:
- 
-     @staticmethod
-     def download_nvd(nvd_git_dir):
--        print(f"Updating from {NVD_BASE_URL}")
-         if os.path.exists(nvd_git_dir):
-             subprocess.check_call(
-                 ["git", "pull"],
-@@ -192,7 +191,7 @@ class CVE:
- 
-         pkg_version = distutils.version.LooseVersion(version)
-         if not hasattr(pkg_version, "version"):
--            print("Cannot parse package '%s' version '%s'" % (name, version))
-+            print("Cannot parse package '%s' version '%s'" % (name, version), file=sys.stderr)
-             pkg_version = None
- 
-         # if we don't have a cpeid, build one based on name and version
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index a0a46aa8cb..8710dda795 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -675,6 +675,7 @@ def check_package_cves(nvd_path, packages):
-         else:
-             cpe_product_pkgs[pkg.name].append(pkg)
- 
-+    print(f"Updating NVD database in '{nvd_path}'")
-     for cve in cvecheck.CVE.read_nvd_dir(nvd_path):
-         check_package_cve_affects(cve, cpe_product_pkgs)
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 95ff9135bd..cf55101265 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -727,8 +727,6 @@ ifeq ($$($(2)_CPE_ID_VALID),YES)
+  ifndef $(2)_CPE_ID_UPDATE
+   ifdef $(3)_CPE_ID_UPDATE
+    $(2)_CPE_ID_UPDATE = $$($(3)_CPE_ID_UPDATE)
+-  else
+-   $(2)_CPE_ID_UPDATE = *
+   endif
+  endif
  
 _______________________________________________
 buildroot mailing list
