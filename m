@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F04C6CEBF91
-	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 20:08:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 492CBCEACEF
+	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 20:08:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA8366149C;
+	by smtp4.osuosl.org (Postfix) with ESMTP id E2F3841531;
+	Mon, 17 Nov 2025 20:08:19 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dqxlnhCCEZZN; Mon, 17 Nov 2025 20:08:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3613414DE
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id F3613414DE;
 	Mon, 17 Nov 2025 20:08:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1042E158
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:08:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6EEE561438
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:07:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kOebdGgiJ7oQ; Mon, 17 Nov 2025 20:08:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0897C61374
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0897C61374;
-	Mon, 17 Nov 2025 20:08:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id C31B9158
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:08:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1129783D13
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:07:55 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7dr1YtYRWdvl for <buildroot@buildroot.org>;
- Mon, 17 Nov 2025 20:07:53 +0000 (UTC)
+ id B2bWqs8XRp4U for <buildroot@buildroot.org>;
+ Mon, 17 Nov 2025 20:07:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05D8683D7C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8ED7D6143E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 05D8683D7C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8ED7D6143E
  for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:07:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0451F84000; Mon, 17 Nov 2025 20:07:53 +0000 (UTC)
+ id 8D3518405F; Mon, 17 Nov 2025 20:07:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 5 Nov 2025 16:52:17 +0100
+Date: Sat, 15 Nov 2025 17:39:05 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: cc82809a433a63ca9f987ed602b340bd78aef0b7
-X-Git-Newrev: 879435164488a2ac492087af109bef08ca60d4ad
+X-Git-Oldrev: f44bc9776ea46c959a82d8161a1504cd18470955
+X-Git-Newrev: 14929eed311c01f1b797f2916e804a6070448df9
 X-Patchwork-Hint: ignore
-Message-Id: <20251117200753.0451F84000@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/bind: security
- bump version to 9.18.41
+Message-Id: <20251117200753.8D3518405F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/pkg-generic.mk:
+ Set <pkg>_CPE_ID_UPDATE to NA by default
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,50 +66,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=879435164488a2ac492087af109bef08ca60d4ad
+commit: https://git.buildroot.net/buildroot/commit/?id=14929eed311c01f1b797f2916e804a6070448df9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-Release notes:
-https://ftp.isc.org/isc/bind9/9.18.41/doc/arm/html/notes.html
+The commit [1] set the default value of '<pkg>_CPE_ID_UPDATE' to not use
+a wildcard by default. But instead of setting the value to '-' it set it
+to an empty value instead.
 
-Changelog:
-https://ftp.isc.org/isc/bind9/9.18.41/doc/arm/html/changelog.html
+According to document [2] section 6.1.2.1.1 the 'Not Attributed' value
+bind to an hyphen ('-') and the blank statement bind to the 'Any' ('*').
 
-Fixes CVE-2025-8677, CVE-2025-40778 & CVE-2025-40780.
+Because the CPE matching function was incorrect using a blank statement
+worked to remove the false positives but this is not correct according
+to the CPE documentation.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit f27a99010f66d1012fbf6f4402113ecc08761436)
+[1] 53a8616460 package/pkg-generic.mk: use more sensible default value for <pkg>_CPE_ID_UPDATE
+[2] https://nvlpubs.nist.gov/nistpubs/Legacy/IR/nistir7695.pdf
+
+Fixes: 53a8616460e5730abe703ca5a46bae0039d548aa.
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 8430ca7c28456fd94d855270c61d2511eec28c38)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pkg-generic.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 50247bcf37..d601e87b75 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.18.33/bind-9.18.33.tar.xz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.18.41/bind-9.18.41.tar.xz.asc
- # with key D99CCEAF879747014F038D63182E23579462EFAA
--sha256  fb373fac5ebbc41c645160afd5a9fb451918f6c0e69ab1d9474154e2b515de40  bind-9.18.33.tar.xz
-+sha256  6ddc1d981511c4da0b203b0513af131e5d15e5f1c261145736fe1f35dd1fe79d  bind-9.18.41.tar.xz
- sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index c4d9047c4e..8b336ab781 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index cf55101265..0a1e29a04e 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -727,6 +727,8 @@ ifeq ($$($(2)_CPE_ID_VALID),YES)
+  ifndef $(2)_CPE_ID_UPDATE
+   ifdef $(3)_CPE_ID_UPDATE
+    $(2)_CPE_ID_UPDATE = $$($(3)_CPE_ID_UPDATE)
++  else
++   $(2)_CPE_ID_UPDATE = -
+   endif
+  endif
  
--BIND_VERSION = 9.18.33
-+BIND_VERSION = 9.18.41
- BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
