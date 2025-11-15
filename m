@@ -1,75 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5F3CCEBF86
-	for <buildroot@archiver.kernel.org>; Sat, 15 Nov 2025 22:53:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E9BECEBF87
+	for <buildroot@archiver.kernel.org>; Sat, 15 Nov 2025 23:08:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2C29A828C5;
-	Sat, 15 Nov 2025 22:53:38 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s3ntsfPr4_a0; Sat, 15 Nov 2025 22:53:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58EC2807C7
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 58EC2807C7;
-	Sat, 15 Nov 2025 22:53:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 90F481A9
- for <buildroot@buildroot.org>; Sat, 15 Nov 2025 22:53:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8219760A90
- for <buildroot@buildroot.org>; Sat, 15 Nov 2025 22:53:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 04358608B8;
+	Sat, 15 Nov 2025 23:08:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id imUcI-VVJ9oq for <buildroot@buildroot.org>;
- Sat, 15 Nov 2025 22:53:35 +0000 (UTC)
+ id P1ZvPQR2aGhD; Sat, 15 Nov 2025 23:08:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07E5A608A5
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 07E5A608A5;
+	Sat, 15 Nov 2025 23:08:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C7859158
+ for <buildroot@buildroot.org>; Sat, 15 Nov 2025 23:08:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BD427405B8
+ for <buildroot@buildroot.org>; Sat, 15 Nov 2025 23:08:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m4cCmxDsrKFO for <buildroot@buildroot.org>;
+ Sat, 15 Nov 2025 23:08:51 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6426460A8D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6426460A8D
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 502C440597
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 502C440597
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6426460A8D
- for <buildroot@buildroot.org>; Sat, 15 Nov 2025 22:53:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 502C440597
+ for <buildroot@buildroot.org>; Sat, 15 Nov 2025 23:08:50 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b06c.dip0.t-ipconnect.de [84.161.176.108])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 3200FA4C6AA3;
- Sat, 15 Nov 2025 23:53:33 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:34068)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 04F04A4C6AA1;
+ Sun, 16 Nov 2025 00:08:48 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:60364)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vKP9A-000000008U0-3atu;
- Sat, 15 Nov 2025 22:53:32 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vKPNv-000000002zv-2ouD;
+ Sat, 15 Nov 2025 23:08:47 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 15 Nov 2025 23:53:32 +0100
-Message-ID: <20251115225332.1826848-1-bernd@kuhls.net>
+Cc: Petr Vorel <petr.vorel@gmail.com>
+Date: Sun, 16 Nov 2025 00:08:47 +0100
+Message-ID: <20251115230847.2727702-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202506031021; t=1763247213;
- bh=yKCnxATO5kPiSQXXhs6WesyAhbYefriqN91TpZ3gOtc=;
+ s=kas202506031021; t=1763248128;
+ bh=gGqU3Sb9+DM0g+d85v7RJI5tLW6lsYPMXLxDclRI00o=;
  h=From:To:Cc:Subject:Date:From;
- b=ODERJpBBHt87rqXQmi4UTi2Zy0NIPNyPzmMCL2ER8EAd0w1wBjkJgj0uVzICpZX4C
- Khh+A8fsa9rr35L1emRaGGNLYYoLSib4GXZkuBVwPDXNhCN4+VQCpbLa3MTEhd1xJc
- GaTk0XLTclB0nJ5M1SPE2F34SXUWtHb2U4aQn70VExZ6NX+BXndRl6rQ7cFsgKZIxD
- SvBVEgfdmUvIkqszx3Px9+mIFuwvM/noPMYHfox+BAJaFJQUrYV/Cjwk/WozFZEeSc
- lOXlRPsNeSMO514qgsa+8MqQdJLDzIK4o1sPtzq1pCaH85spUxbq4+vgnNMLsmeA4t
- EG3nvapPodtAA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=MjobXFXUhDqU7P1No86ecmUfFMqnzNuazT8vtAL/aCF5JdiGs5tPLX1JJi8j/+vjw
+ AeUflSclVPDvdDJmxm3XLqWBe3OQI5qKVCH7aFEYrY+Jk663sQOB4XN/LdAV3AOoDH
+ wDGvI41ZkoIBxkHs34g1x3IoEh8wGYrCZ791z+EQWQ9m5bHyKjHnahLWVWeIsAwovr
+ OmKsLm65SE0D3kI9SBMAvZ7DP/NBmu8pXgvoesGG2HIl5jXBr+Rie2ulG985rj1Cj8
+ Gh7vWM9qXxyyD26nGb13KBJ8meie1iLEmFold+jDIiAHSUGoiq8hW47gUP7rZFdfyn
+ ebQiPX8SXhTtw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=ODERJpBB
-Subject: [Buildroot] [PATCH 1/1] package/perl-net-ssleay: requires DES
- support in openssl
+ header.s=kas202506031021 header.b=MjobXFXU
+Subject: [Buildroot] [PATCH 1/1] package/iputils: fix merged-bin
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,30 +86,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-https://autobuild.buildroot.net/results/953/953210ed672559e63a96da729182af00ca02c011/
+mv: '/home/autobuild/autobuild/instance-2/output-1/per-package/iputils/target/usr/bin/arping'
+ and '/home/autobuild/autobuild/instance-2/output-1/per-package/iputils/target/usr/sbin/arping'
+ are the same file
 
-The build error occured already in 2024:
-https://autobuild.buildroot.net/results/f93/f930c7b3219a57421c1b0a0ef3a4445c19b43e97/
-so backporting this fix seems needed.
+Fixes:
+https://autobuild.buildroot.net/results/dae/daeebb090f6d11d77840dd61add9bc422c6bc2fa/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/perl-net-ssleay/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/iputils/iputils.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/perl-net-ssleay/Config.in b/package/perl-net-ssleay/Config.in
-index d699e6671d..41c4669370 100644
---- a/package/perl-net-ssleay/Config.in
-+++ b/package/perl-net-ssleay/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_PERL_NET_SSLEAY
- 	bool "perl-net-ssleay"
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
- 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
- 	help
- 	  Perl extension for using OpenSSL.
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index 8e00513229..1a5d3e3678 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -32,10 +32,12 @@ IPUTILS_CONF_OPTS += -DBUILD_ARPING=true
+ # move some binaries to the same location as where Busybox installs
+ # the corresponding applets, so that we have a single version of the
+ # tools (from iputils)
++ifeq ($(BR2_ROOTFS_MERGED_BIN),)
+ define IPUTILS_MOVE_ARPING_BINARY
+ 	mv $(TARGET_DIR)/usr/bin/arping $(TARGET_DIR)/usr/sbin/arping
+ endef
+ IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_ARPING_BINARY
++endif
+ 
+ else
+ IPUTILS_CONF_OPTS += -DBUILD_ARPING=false
 -- 
 2.47.3
 
