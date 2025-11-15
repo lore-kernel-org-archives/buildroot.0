@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D58D0CEBF92
-	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 19:52:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F089CEACEF
+	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 19:52:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA5E841411;
-	Mon, 17 Nov 2025 19:52:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1EBAB413FF;
+	Mon, 17 Nov 2025 19:52:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xQaFgkcnmhUB; Mon, 17 Nov 2025 19:52:06 +0000 (UTC)
+ id TMqjIJGXvFpI; Mon, 17 Nov 2025 19:52:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD4874140D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 197FC41412
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD4874140D;
-	Mon, 17 Nov 2025 19:52:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id AB20A1BA
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 197FC41412;
+	Mon, 17 Nov 2025 19:52:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7EF18158
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1C68C83CFC
+ by smtp2.osuosl.org (Postfix) with ESMTP id E25A0408BA
  for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 11tpWJ6fmwDK for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yefZbuyccg0K for <buildroot@buildroot.org>;
  Mon, 17 Nov 2025 19:51:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1CE283D13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0ACFF408CA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F1CE283D13
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0ACFF408CA
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EEDF984905; Mon, 17 Nov 2025 19:51:26 +0000 (UTC)
+ id 079F4848E6; Mon, 17 Nov 2025 19:51:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 15 Nov 2025 17:36:47 +0100
+Date: Sat, 15 Nov 2025 17:37:53 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 467ef7001323d8893048d32e6af9d89a12e59295
-X-Git-Newrev: 49f668e31fcd80c1f3ee8823c24eeea1ed0ea057
+X-Git-Oldrev: 49f668e31fcd80c1f3ee8823c24eeea1ed0ea057
+X-Git-Newrev: f68016e5de86d4530def5eae3cc6809bb2e156c4
 X-Patchwork-Hint: ignore
-Message-Id: <20251117195126.EEDF984905@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libheif: needs
- threads since v1.20.1
+Message-Id: <20251117195127.079F4848E6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] support/scripts/cve.py:
+ remove print from cve.py library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,88 +66,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49f668e31fcd80c1f3ee8823c24eeea1ed0ea057
+commit: https://git.buildroot.net/buildroot/commit/?id=f68016e5de86d4530def5eae3cc6809bb2e156c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Buildroot commit accb006d9b62079b56bc1f1388b558a60dde277a bumped libheif
-to version 1.20.1 which includes several commits unconditionally depen-
-ding on std::mutex which requires a toolchain with threads:
+The `support/script/cve.py` file is used as a library. Depending on how
+you use this library you might not want to write content to stdout when
+calling its function.
 
-https://github.com/strukturag/libheif/commit/14f956726c79747fc1fb8c041ed767c1632704eb
-https://github.com/strukturag/libheif/commit/6bb8cdaa8a7ba78066c899c3791546b80051c70a
+This patch move the 'updating' log to the 'pkg-stats' script and write
+the alert when LooseVersion doesn't have a version to stderr.
 
-Add dependency to BR2_TOOLCHAIN_HAS_THREADS to Config.in, remove configure
-options handling non-threaded toolchains and adjust a Config.in comment of
-the only dependee kodi-imagedecoder-heif.
-
-Fixes:
-https://autobuild.buildroot.net/results/28b/28bf68147382dada33cbf9b299396dfdee3fbbe6/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 02f5061eb01c32427ec953f5cd5b367244f2a360)
+(cherry picked from commit 4b318dea1712d212270d0a19f206a50d37852130)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/kodi-imagedecoder-heif/Config.in | 2 +-
- package/libheif/Config.in                | 6 ++++--
- package/libheif/libheif.mk               | 7 -------
- 3 files changed, 5 insertions(+), 10 deletions(-)
+ support/scripts/cve.py    | 3 +--
+ support/scripts/pkg-stats | 1 +
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-imagedecoder-heif/Config.in b/package/kodi-imagedecoder-heif/Config.in
-index d0950385a0..f41b164ff4 100644
---- a/package/kodi-imagedecoder-heif/Config.in
-+++ b/package/kodi-imagedecoder-heif/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_KODI_IMAGEDECODER_HEIF
- 	bool "kodi-imagedecoder-heif"
- 	depends on BR2_INSTALL_LIBSTDCPP # libde265, libheif, tinyxml2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libde265
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libde265, libheif
- 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730 # libheif
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libheif
- 	select BR2_PACKAGE_LIBDE265
-diff --git a/package/libheif/Config.in b/package/libheif/Config.in
-index 1452cf2718..0ae86a07f4 100644
---- a/package/libheif/Config.in
-+++ b/package/libheif/Config.in
-@@ -3,11 +3,13 @@ config BR2_PACKAGE_LIBHEIF
- 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  libheif is an HEIF and AVIF file format decoder and encoder.
+diff --git a/support/scripts/cve.py b/support/scripts/cve.py
+index ba41762fa0..5ff67585e2 100755
+--- a/support/scripts/cve.py
++++ b/support/scripts/cve.py
+@@ -69,7 +69,6 @@ class CVE:
  
- 	  https://github.com/strukturag/libheif
+     @staticmethod
+     def download_nvd(nvd_git_dir):
+-        print(f"Updating from {NVD_BASE_URL}")
+         if os.path.exists(nvd_git_dir):
+             subprocess.check_call(
+                 ["git", "pull"],
+@@ -192,7 +191,7 @@ class CVE:
  
--comment "libheif needs a toolchain w/ C++, gcc >= 4.8"
-+comment "libheif needs a toolchain w/ C++, threads, gcc >= 4.8"
- 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
-index f6e14888eb..8d91a109db 100644
---- a/package/libheif/libheif.mk
-+++ b/package/libheif/libheif.mk
-@@ -72,17 +72,10 @@ else
- LIBHEIF_CONF_OPTS += -DWITH_X265=OFF
- endif
+         pkg_version = distutils.version.LooseVersion(version)
+         if not hasattr(pkg_version, "version"):
+-            print("Cannot parse package '%s' version '%s'" % (name, version))
++            print("Cannot parse package '%s' version '%s'" % (name, version), file=sys.stderr)
+             pkg_version = None
  
--ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
--LIBHEIF_CONF_OPTS += -DENABLE_MULTITHREADING_SUPPORT=ON
- ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_64735),y)
- LIBHEIF_CONF_OPTS += -DENABLE_PARALLEL_TILE_DECODING=OFF
- else
- LIBHEIF_CONF_OPTS += -DENABLE_PARALLEL_TILE_DECODING=ON
- endif
--else
--LIBHEIF_CONF_OPTS += \
--	-DENABLE_MULTITHREADING_SUPPORT=OFF \
--	-DENABLE_PARALLEL_TILE_DECODING=OFF
--endif
+         # if we don't have a cpeid, build one based on name and version
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index a0a46aa8cb..8710dda795 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -675,6 +675,7 @@ def check_package_cves(nvd_path, packages):
+         else:
+             cpe_product_pkgs[pkg.name].append(pkg)
  
- $(eval $(cmake-package))
++    print(f"Updating NVD database in '{nvd_path}'")
+     for cve in cvecheck.CVE.read_nvd_dir(nvd_path):
+         check_package_cve_affects(cve, cpe_product_pkgs)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
