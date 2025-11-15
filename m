@@ -1,104 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60753CEB2CC
-	for <buildroot@archiver.kernel.org>; Sat, 15 Nov 2025 11:27:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3535CEB2CC
+	for <buildroot@archiver.kernel.org>; Sat, 15 Nov 2025 11:33:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A1036089A;
-	Sat, 15 Nov 2025 11:27:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3965F842EC;
+	Sat, 15 Nov 2025 11:33:54 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iBo2RJfFqkEP; Sat, 15 Nov 2025 11:33:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 428B4842ED
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 428B4842ED;
+	Sat, 15 Nov 2025 11:33:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 28F50158
+ for <buildroot@buildroot.org>; Sat, 15 Nov 2025 11:33:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 17FDE60627
+ for <buildroot@buildroot.org>; Sat, 15 Nov 2025 11:33:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6hqM1kZpyy7R; Sat, 15 Nov 2025 11:27:04 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03C2560895
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 03C2560895;
-	Sat, 15 Nov 2025 11:27:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E28B7158
- for <buildroot@buildroot.org>; Sat, 15 Nov 2025 11:27:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C101040DDC
- for <buildroot@buildroot.org>; Sat, 15 Nov 2025 11:27:02 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NREVqKtyA4XZ for <buildroot@buildroot.org>;
- Sat, 15 Nov 2025 11:27:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62c; helo=mail-ej1-x62c.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BB5D640DC1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB5D640DC1
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
- [IPv6:2a00:1450:4864:20::62c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BB5D640DC1
- for <buildroot@buildroot.org>; Sat, 15 Nov 2025 11:27:01 +0000 (UTC)
-Received: by mail-ej1-x62c.google.com with SMTP id
- a640c23a62f3a-b73875aa527so20240566b.3
- for <buildroot@buildroot.org>; Sat, 15 Nov 2025 03:27:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1763206019; x=1763810819;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=xGf81OtQe8cd3kIlXr0jb4hjS/o6YilIpNQf/GLqc0s=;
- b=XJFyVSuAKcHPFBdUpDHbBWpm4QCR+vs3ZGqr2Pd5b3maKn3T7uims0LbhiALCO271x
- ZjWeIUHerXIUewmAlsotHhWcKHWpiWL1/p2N/w48vAjFHDgZR6nrRJ9al0R6nturzgFI
- prQ3dEGTxoU9FQxf15AS3kmSu4MvQlAvOInGDUmiv1M4c08stpw67jKvBgnrRKEiDeZp
- FnxB/imsiYTkUKtFb3C5YGkrvM5M7hj/wGbahQ/A3GXUyi1Agi3JFxVPgn5pzftjV4vg
- w0FK7errmx1FS6rzMR9S/pQmPClxQ7FUk59DGwkvEQpxTdZuWqMlNDxGZ0wRzf3GkKH8
- +UCg==
-X-Gm-Message-State: AOJu0YycGX7b7vmjKm7gDE0vxfm10OcpPLuYqMoz6GYBC33REGVEA53b
- xPto+zED8r1nwhWlr9kblApp3IK0SfrqPDyV9f5Zsm9fmRbvxYR9O/9vFP5b3CFm2/UOzFc71Y0
- PEM7p
-X-Gm-Gg: ASbGnctgfz5/CXgf60ZA7GK3faNJqtM6zfH1Ip72qhlK1zq5HRrvIwQ/pg9iGoVPhpL
- fE7znNhH/fpSUcr/dhISKwtSOBfn4B7t4DSpFTnfeEY//bIPEqR3ESQNMvATtn0zKnE0l5q5HrD
- vTanham/VzmtuxGI6AszymckW28vFEO7zoets7vgGfMKN+PXZlnNahKd2GhYlhvUFp0XN4FoLeQ
- ExWQ+4DkG2iGUXg3SqyTUHroHedqx3dsJ+WY+hdBYRMRqUrHPC5OgUi2kgGjnc6G5NRHSdE9Eq0
- /tFFgq8Hmf0CZlb5/1deXPcr4lcsAkVoS/XPXShlnAQxsMUvMWWfxsEVLp3CjkvQF3zDnXdx9Ns
- ZT4rYkMVQ1++e8xfshtX4sVOrtSKJR67nvIO9BAegwRUpdbdiDirHnIj+Wfeo8mCQF1rkU4QCwY
- Hy5vVfLMS4CR4u96KJfp1JqwpS+MjylxGJm+w9+7JZFGK//kZSPnpW7wNk4H/cezvTsJGNMmYnN
- wlehJ19EawSALms62aAAe7hBqTMdKC6bPCUZvvr5BcHo9+vWCVfv3npbIqR5K1NBg==
-X-Google-Smtp-Source: AGHT+IHtKBn7T57zmtVL5WBI17jLliM42mNJbLEpCntMihmF9lkF7UkBS0+Q2RwmTnUCp++R7L6C/A==
-X-Received: by 2002:a17:907:e849:b0:b33:b8bc:d1da with SMTP id
- a640c23a62f3a-b73677eda54mr550736066b.1.1763206018428; 
- Sat, 15 Nov 2025 03:26:58 -0800 (PST)
-Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
- (host-79-54-71-163.retail.telecomitalia.it. [79.54.71.163])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-b734fdac667sm583655766b.58.2025.11.15.03.26.56
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 15 Nov 2025 03:26:57 -0800 (PST)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ id xlQux6GyBd7M for <buildroot@buildroot.org>;
+ Sat, 15 Nov 2025 11:33:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 10E75605FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10E75605FC
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 10E75605FC
+ for <buildroot@buildroot.org>; Sat, 15 Nov 2025 11:33:50 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1b06c.dip0.t-ipconnect.de [84.161.176.108])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 2841BA4C65D6;
+ Sat, 15 Nov 2025 12:33:48 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:54136)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99)
+ (envelope-from <bernd@kuhls.net>) id 1vKEXL-000000001wB-36C1;
+ Sat, 15 Nov 2025 11:33:47 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Sat, 15 Nov 2025 12:26:54 +0100
-Message-ID: <20251115112654.392564-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 15 Nov 2025 12:33:47 +0100
+Message-ID: <20251115113347.183802-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1763206019; x=1763810819;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=xGf81OtQe8cd3kIlXr0jb4hjS/o6YilIpNQf/GLqc0s=;
- b=iadoUxI+jC+VDdSY4SQACixLXQKA6fyvAjWI/z/BfS+xuaZmyZht7Byhl+oDEis3PA
- 8/s+BbGPSvhleAWagUPW4qaWVeg9iblR1wgs2bReu6c7zWi7onBgiwUxEcDTtdf+fWjF
- iTCpvLmja+zEMVbRZRxWj6eRcDudn8nyOUHE4=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=kuhls.net; 
+ s=kas202506031021; t=1763206428;
+ bh=oYqrABRz8oXbb3/fNQuRbUfO4HzWarQ/AxV8X7XA7uo=;
+ h=From:To:Cc:Subject:Date:From;
+ b=G89pwInDN2yULozRMfy5wWeBfMblr4H+8maIfLfita/qkBe/nlxMeFV+YV2lduiO4
+ iKThToJKW9X0Qi1W7hq3BfufOQooAioEDJ7BV8n3aByq3J675Z6fgahPH/F93mGSOf
+ lM/aKSbcilD0iJoMtLq7ldZe783+oWsQPYsJHtkLhHWdpAOLCH9dgDUw+Y3G65Q1QD
+ GGjlLhuuiZIMoG0F4y0w776xTP4jd7Bl9Qi5SOZeJWoccLMrSSjSMmEpfZ8SbIyEOO
+ CCMh6Fkh4So999RnO149UjrdRrEgk6YwyZ6v9HiTWG92p0CogpQlP2YpmMwI/oKdo6
+ OVBwaCC1pEwnw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=iadoUxI+
-Subject: [Buildroot] [PATCH 1/1] package/{aardvark-dns,
- netavark}: bump to versions 1.17.0
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=G89pwInD
+Subject: [Buildroot] [PATCH 1/1] package/libroxml: fix musl build errors
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,67 +85,123 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bump the versions of those two packages, that must be updated in
-lock-step to minor-level compatible versions.
+Fixes:
+https://autobuild.buildroot.net/results/0ff/0ff4394319d2014884328c347ef495da327a562e/
 
-For release notes, see:
-https://github.com/containers/aardvark-dns/releases
-https://github.com/containers/netavark/releases
+Added Upstream tag to patch 0001.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/aardvark-dns/aardvark-dns.hash | 2 +-
- package/aardvark-dns/aardvark-dns.mk   | 2 +-
- package/netavark/netavark.hash         | 2 +-
- package/netavark/netavark.mk           | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ .checkpackageignore                           |  1 -
+ ...1-src-roxml_mem.h-add-missing-extern.patch |  3 +-
+ .../libroxml/0002-Fix-musl-build-errors.patch | 69 +++++++++++++++++++
+ 3 files changed, 71 insertions(+), 2 deletions(-)
+ create mode 100644 package/libroxml/0002-Fix-musl-build-errors.patch
 
-diff --git a/package/aardvark-dns/aardvark-dns.hash b/package/aardvark-dns/aardvark-dns.hash
-index 9c502775a4ee..134dd34a1b03 100644
---- a/package/aardvark-dns/aardvark-dns.hash
-+++ b/package/aardvark-dns/aardvark-dns.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  629df64d5d713b5b78cf8d9387de12d84b88103a8581457e60c7697cf64ad83c  aardvark-dns-v1.16.0-git4-cargo4.tar.gz
-+sha256  aeb5fc77455b01916b28f7c306834446f3f6e184c02d38b177c578bb4f01939e  aardvark-dns-v1.17.0-git4-cargo4.tar.gz
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/aardvark-dns/aardvark-dns.mk b/package/aardvark-dns/aardvark-dns.mk
-index 368e52ab393d..09a3a421f2c1 100644
---- a/package/aardvark-dns/aardvark-dns.mk
-+++ b/package/aardvark-dns/aardvark-dns.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 42a04d2a6b..4821f41cce 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -596,7 +596,6 @@ package/liboping/0005-src-oping.c-always-use-s-style-format-for-printf-sty.patch
+ package/libp11/0001-src-p11_attr.c-fix-build-with-gcc-4.8.patch lib_patch.Upstream
+ package/libpthsem/0001-fix-build-on-linux-3.x-host.patch lib_patch.Upstream
+ package/libressl/0001-always-expose-SSL_OP_NO_TLSv1_3.patch lib_patch.Upstream
+-package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch lib_patch.Upstream
+ package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch lib_patch.Upstream
+ package/librtlsdr/0001-Makefile.am-respect-DESTDIR-with-install-udev-rules.patch lib_patch.Upstream
+ package/libselinux/0001-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch lib_patch.Upstream
+diff --git a/package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch b/package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch
+index 6f63d7b546..12e67f9c91 100644
+--- a/package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch
++++ b/package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch
+@@ -13,8 +13,9 @@ libtool: link: /home/peko/autobuild/instance-0/output-1/host/bin/arm-buildroot-l
+ Fixes:
+  - http://autobuild.buildroot.org/results/b6ac3664d61ad826515b57c4d057b6f001b5167d
  
- # When updating the version here, also update netavark in lockstep
--AARDVARK_DNS_VERSION = v1.16.0
-+AARDVARK_DNS_VERSION = v1.17.0
- AARDVARK_DNS_SITE = https://github.com/containers/aardvark-dns
- AARDVARK_DNS_SITE_METHOD = git
- 
-diff --git a/package/netavark/netavark.hash b/package/netavark/netavark.hash
-index 8e8adc4ad3b8..79fcb2eab101 100644
---- a/package/netavark/netavark.hash
-+++ b/package/netavark/netavark.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  1eb17a5ed223928bdd433e0eb8518682ae71dd02981019fb726a9330d7166b2d  netavark-v1.16.1-git4-cargo4.tar.gz
-+sha256  4c696e3e61b425270762f8d9d97705358de15de80e06fac7142cf65011d1dc0c  netavark-v1.17.0-git4-cargo4.tar.gz
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/netavark/netavark.mk b/package/netavark/netavark.mk
-index 1754759bc686..d47cee0fe14b 100644
---- a/package/netavark/netavark.mk
-+++ b/package/netavark/netavark.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version here, also update aardvark-dns in lockstep
--NETAVARK_VERSION = v1.16.1
-+NETAVARK_VERSION = v1.17.0
- NETAVARK_SITE = https://github.com/containers/netavark
- NETAVARK_SITE_METHOD = git
- 
++Upstream: https://github.com/blunderer/libroxml/commit/34257124eefe0ca095ed54681c818381070ed549
++
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/blunderer/libroxml/pull/79]
+ ---
+  src/roxml_mem.h | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+diff --git a/package/libroxml/0002-Fix-musl-build-errors.patch b/package/libroxml/0002-Fix-musl-build-errors.patch
+new file mode 100644
+index 0000000000..4931f12d5b
+--- /dev/null
++++ b/package/libroxml/0002-Fix-musl-build-errors.patch
+@@ -0,0 +1,69 @@
++From abf4404c6c0213666f3fce73cff6e51435eac923 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Sat, 15 Nov 2025 12:29:33 +0100
++Subject: [PATCH] Fix musl build errors
++
++src/roxml_cat.c: In function 'display_usage':
++src/roxml_cat.c:21:22: error: implicit declaration of function 'basename'; did you mean 'rename'? [-Wimplicit-function-declaration]
++   21 |         char *name = basename(prgname);
++      |                      ^~~~~~~~
++      |                      rename
++src/roxml_cat.c:21:22: error: initialization of 'char *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
++
++src/roxml_mem.c: In function 'roxml_malloc':
++src/roxml_mem.c:138:18: error: assignment to 'long unsigned int' from 'pthread_t' {aka 'struct __pthread *'} makes integer from pointer without a cast [-Wint-conversion]
++  138 |         cell->id = pthread_self();
++
++src/roxml_utils.h:51:16: error: returning 'pthread_t' {aka 'struct __pthread *'} from a function with return type 'long unsigned int' makes integer from pointer without a cast [-Wint-conversion]
++   51 |         return pthread_self();
++
++Upstream: https://github.com/blunderer/libroxml/pull/86
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/roxml_cat.c   | 1 +
++ src/roxml_mem.c   | 2 +-
++ src/roxml_utils.h | 2 +-
++ 3 files changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/src/roxml_cat.c b/src/roxml_cat.c
++index 11e42d9..4320efd 100644
++--- a/src/roxml_cat.c
+++++ b/src/roxml_cat.c
++@@ -5,6 +5,7 @@
++ #include <getopt.h>
++ #include <string.h>
++ #include <errno.h>
+++#include <libgen.h>
++ #include "roxml.h"
++ 
++ static struct option long_options[] =
++diff --git a/src/roxml_mem.c b/src/roxml_mem.c
++index 91b5db2..bf757bb 100644
++--- a/src/roxml_mem.c
+++++ b/src/roxml_mem.c
++@@ -135,7 +135,7 @@ ROXML_INT void *roxml_malloc(int size, int num, int type)
++ 	cell->next->prev = cell;
++ 	cell = cell->next;
++ 	cell->type = type;
++-	cell->id = pthread_self();
+++	cell->id = (unsigned long)pthread_self();
++ 	cell->occ = size;
++ 	cell->ptr = calloc(num, size);
++ 	head_cell.prev = cell;
++diff --git a/src/roxml_utils.h b/src/roxml_utils.h
++index 3f50976..f5fc582 100644
++--- a/src/roxml_utils.h
+++++ b/src/roxml_utils.h
++@@ -48,7 +48,7 @@ ROXML_STATIC_INLINE ROXML_INT int roxml_unlock(node_t *n)
++ #else /* CONFIG_XML_THREAD_SAFE==1 */
++ ROXML_STATIC_INLINE ROXML_INT unsigned long int roxml_thread_id(node_t *n)
++ {
++-	return pthread_self();
+++	return (unsigned long)pthread_self();
++ }
++ 
++ ROXML_STATIC_INLINE ROXML_INT int roxml_lock_init(node_t *n)
++-- 
++2.47.3
++
 -- 
-2.43.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
