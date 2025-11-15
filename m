@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B062ECEACEF
-	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 19:52:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D58D0CEBF92
+	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 19:52:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 87EC541409;
-	Mon, 17 Nov 2025 19:52:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA5E841411;
+	Mon, 17 Nov 2025 19:52:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cSeiIc0-GWK4; Mon, 17 Nov 2025 19:52:04 +0000 (UTC)
+ id xQaFgkcnmhUB; Mon, 17 Nov 2025 19:52:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 168CB413FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD4874140D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 168CB413FC;
-	Mon, 17 Nov 2025 19:52:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AD4874140D;
+	Mon, 17 Nov 2025 19:52:06 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9C6931BA
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:36 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id AB20A1BA
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3B9B5837D3
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1C68C83CFC
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bZqLydfJenw5 for <buildroot@buildroot.org>;
+ id 11tpWJ6fmwDK for <buildroot@buildroot.org>;
  Mon, 17 Nov 2025 19:51:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 162CA83D27
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1CE283D13
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 162CA83D27
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F1CE283D13
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 13B2784905; Mon, 17 Nov 2025 19:51:27 +0000 (UTC)
+ id EEDF984905; Mon, 17 Nov 2025 19:51:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 15 Nov 2025 17:38:01 +0100
+Date: Sat, 15 Nov 2025 17:36:47 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: f68016e5de86d4530def5eae3cc6809bb2e156c4
-X-Git-Newrev: b781bebcab60276165a6fc97d1d2d9e25e4d7a24
+X-Git-Oldrev: 467ef7001323d8893048d32e6af9d89a12e59295
+X-Git-Newrev: 49f668e31fcd80c1f3ee8823c24eeea1ed0ea057
 X-Patchwork-Hint: ignore
-Message-Id: <20251117195127.13B2784905@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] support/scripts/cve.py:
- fix CPE matching
+Message-Id: <20251117195126.EEDF984905@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libheif: needs
+ threads since v1.20.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,222 +66,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b781bebcab60276165a6fc97d1d2d9e25e4d7a24
+commit: https://git.buildroot.net/buildroot/commit/?id=49f668e31fcd80c1f3ee8823c24eeea1ed0ea057
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Given the following criteria: `cpe:2.3:a:oneidentitty:syslog-ng:*:*:*:*:-:*:*:*`.
-The former `cpe_matches` implementation would match with the following
-CPE: `cpe:2.3:a:oneidentitty:syslog-ng:4.71:*:*:*:premium:*:*:*`.
+Buildroot commit accb006d9b62079b56bc1f1388b558a60dde277a bumped libheif
+to version 1.20.1 which includes several commits unconditionally depen-
+ding on std::mutex which requires a toolchain with threads:
 
-The 'hyphen' ('-') meaning is "Not Attributed" (NA) a criteria with no
-attributed software edition shouldn't match with a CPE with an attributed
-software edition:
+https://github.com/strukturag/libheif/commit/14f956726c79747fc1fb8c041ed767c1632704eb
+https://github.com/strukturag/libheif/commit/6bb8cdaa8a7ba78066c899c3791546b80051c70a
 
-https://csrc.nist.gov/pubs/ir/7695/final
+Add dependency to BR2_TOOLCHAIN_HAS_THREADS to Config.in, remove configure
+options handling non-threaded toolchains and adjust a Config.in comment of
+the only dependee kodi-imagedecoder-heif.
 
-This patch also create a distinct 'CPE' object that aggregate the
-function specifics to CPEs like it's done for 'CVE'.
+Fixes:
+https://autobuild.buildroot.net/results/28b/28bf68147382dada33cbf9b299396dfdee3fbbe6/
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 35f376d88e302cdf6acb0c11a70011760135a7fd)
+(cherry picked from commit 02f5061eb01c32427ec953f5cd5b367244f2a360)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/scripts/cve.py    | 130 ++++++++++++++++++++++++++++++++++++----------
- support/scripts/pkg-stats |   2 +-
- 2 files changed, 104 insertions(+), 28 deletions(-)
+ package/kodi-imagedecoder-heif/Config.in | 2 +-
+ package/libheif/Config.in                | 6 ++++--
+ package/libheif/libheif.mk               | 7 -------
+ 3 files changed, 5 insertions(+), 10 deletions(-)
 
-diff --git a/support/scripts/cve.py b/support/scripts/cve.py
-index 5ff67585e2..25481a6367 100755
---- a/support/scripts/cve.py
-+++ b/support/scripts/cve.py
-@@ -39,22 +39,98 @@ ops = {
- }
+diff --git a/package/kodi-imagedecoder-heif/Config.in b/package/kodi-imagedecoder-heif/Config.in
+index d0950385a0..f41b164ff4 100644
+--- a/package/kodi-imagedecoder-heif/Config.in
++++ b/package/kodi-imagedecoder-heif/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_KODI_IMAGEDECODER_HEIF
+ 	bool "kodi-imagedecoder-heif"
+ 	depends on BR2_INSTALL_LIBSTDCPP # libde265, libheif, tinyxml2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libde265
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libde265, libheif
+ 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730 # libheif
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libheif
+ 	select BR2_PACKAGE_LIBDE265
+diff --git a/package/libheif/Config.in b/package/libheif/Config.in
+index 1452cf2718..0ae86a07f4 100644
+--- a/package/libheif/Config.in
++++ b/package/libheif/Config.in
+@@ -3,11 +3,13 @@ config BR2_PACKAGE_LIBHEIF
+ 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  libheif is an HEIF and AVIF file format decoder and encoder.
  
+ 	  https://github.com/strukturag/libheif
  
--# Check if two CPE IDs match each other
--def cpe_matches(cpe1, cpe2):
--    cpe1_elems = cpe1.split(":")
--    cpe2_elems = cpe2.split(":")
-+class CPE:
-+    DISJOINT = 0
-+    SUBSET = 1
-+    SUPERSET = 2
-+    EQUAL = 3
+-comment "libheif needs a toolchain w/ C++, gcc >= 4.8"
++comment "libheif needs a toolchain w/ C++, threads, gcc >= 4.8"
+ 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
+index f6e14888eb..8d91a109db 100644
+--- a/package/libheif/libheif.mk
++++ b/package/libheif/libheif.mk
+@@ -72,17 +72,10 @@ else
+ LIBHEIF_CONF_OPTS += -DWITH_X265=OFF
+ endif
  
--    remains = filter(lambda x: x[0] not in ["*", "-"] and x[1] not in ["*", "-"] and x[0] != x[1],
--                     zip(cpe1_elems, cpe2_elems))
--    return len(list(remains)) == 0
-+    ANY = '*'
-+    NA = '-'
+-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+-LIBHEIF_CONF_OPTS += -DENABLE_MULTITHREADING_SUPPORT=ON
+ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_64735),y)
+ LIBHEIF_CONF_OPTS += -DENABLE_PARALLEL_TILE_DECODING=OFF
+ else
+ LIBHEIF_CONF_OPTS += -DENABLE_PARALLEL_TILE_DECODING=ON
+ endif
+-else
+-LIBHEIF_CONF_OPTS += \
+-	-DENABLE_MULTITHREADING_SUPPORT=OFF \
+-	-DENABLE_PARALLEL_TILE_DECODING=OFF
+-endif
  
-+    @staticmethod
-+    def compareAttribute(left, right):
-+        """
-+        This static method compare two single attributes part of two CPE.
-+
-+        This is an implementation of table 6-2 of [1].
-+
-+        Attribute that are empty will be matched to the '*' (ANY) attribute.
-+        According to [2] section 6.1.2.1.1 the empty attribute is inherited
-+        from CPE22 and now bind to ANY.
- 
--def cpe_product(cpe):
--    return cpe.split(':')[4]
-+        The hyphen '-' bind to the NA attribute (see [2]).
- 
-+        [1] https://nvlpubs.nist.gov/nistpubs/Legacy/IR/nistir7696.pdf
-+        [2] https://nvlpubs.nist.gov/nistpubs/Legacy/IR/nistir7695.pdf
-+        """
-+        if left == '':
-+            left = CPE.ANY
-+
-+        if right == '':
-+            right = CPE.ANY
-+
-+        if left == right:
-+            # 1 6 9 - equals
-+            return CPE.EQUAL
-+        elif left == CPE.ANY:
-+            # 2 3 4 - superset
-+            return CPE.SUPERSET
-+        elif left == CPE.NA and right == CPE.ANY:
-+            # 5 - subset
-+            return CPE.SUBSET
-+        elif left == CPE.NA:
-+            # 12 16 - disjoint
-+            return CPE.DISJOINT
-+        elif right == CPE.ANY:
-+            # 13 15 - subset
-+            return CPE.SUBSET
-+        return CPE.DISJOINT
-+
-+    def matches(self, target) -> bool:
-+        """
-+        As an example let's take the example of CVE-2023-... for syslog-ng.
-+        One of the node as the following CPE criteria matched with the Buildroot CPE:
-+
-+        cpe:2.3:a:oneidentitty:syslog-ng:*:*:*:*:-:*:*:*
-+        cpe:2.3:a:oneidentitty:syslog-ng:4.71:*:*:*:*:*:*:*
-+
-+        vendor: EQUAL (3)
-+        product: EQUAL (3)
-+        version: SUPERSET (2)
-+        update: EQUAL (3)
-+        edition: EQUAL (3)
-+        language: EQUAL (3)
-+        sw_edition: SUBSET (1)
-+        ...
-+
-+        This operation results in the two CPE matching.
-+        """
-+        if not isinstance(target, CPE):
-+            target = CPE(target)
- 
--def cpe_version(cpe):
--    return cpe.split(':')[5]
-+        for selfAttribute, targetAttribute in zip(self.parts, target.parts):
-+            if CPE.compareAttribute(selfAttribute, targetAttribute) == CPE.DISJOINT:
-+                return False
-+
-+        return True
-+
-+    def __str__(self):
-+        return self.cpe
-+
-+    def __init__(self, cpe):
-+        self.cpe = cpe
-+        self.parts = cpe.split(':')
-+        self.vendor = self.parts[3]
-+        self.product = self.parts[4]
-+        self.version = self.parts[5]
-+        self.update = self.parts[6]
-+        self.edition = self.parts[7]
-+        self.language = self.parts[8]
-+        self.sw_edition = self.parts[9]
-+        self.target_sw = self.parts[10]
-+        self.target_hw = self.parts[11]
-+        self.other = self.parts[12]
- 
- 
- class CVE:
-@@ -127,8 +203,9 @@ class CVE:
-         for cpe in node.get('cpeMatch', ()):
-             if not cpe['vulnerable']:
-                 return
--            product = cpe_product(cpe['criteria'])
--            version = cpe_version(cpe['criteria'])
-+            cpeId = CPE(cpe['criteria'])
-+            product = cpeId.product
-+            version = cpeId.version
-             # ignore when product is '-', which means N/A
-             if product == '-':
-                 return
-@@ -160,7 +237,7 @@ class CVE:
-                     v_end = cpe['versionEndExcluding']
- 
-             yield {
--                'id': cpe['criteria'],
-+                'id': cpeId,
-                 'v_start': v_start,
-                 'op_start': op_start,
-                 'v_end': v_end,
-@@ -181,30 +258,29 @@ class CVE:
-     @property
-     def affected_products(self):
-         """The set of CPE products referred by this CVE definition"""
--        return set(cpe_product(p['id']) for p in self.each_cpe())
-+        return set(p['id'].product for p in self.each_cpe())
- 
-     def affects(self, name, version, cpeid=None):
-         """
-         True if the Buildroot Package object passed as argument is affected
-         by this CVE.
-         """
--
--        pkg_version = distutils.version.LooseVersion(version)
-+        if cpeid is None:
-+            # if we don't have a cpeid, build one based on name and version
-+            cpeid = CPE("cpe:2.3:*:*:%s:%s:*:*:*:*:*:*:*" % (name, version))
-+        elif not isinstance(cpeid, CPE):
-+            cpeid = CPE(cpeid)
-+
-+        # Always prefer the package version of the CPE ID.
-+        pkg_version = distutils.version.LooseVersion(cpeid.version)
-         if not hasattr(pkg_version, "version"):
-             print("Cannot parse package '%s' version '%s'" % (name, version), file=sys.stderr)
-             pkg_version = None
- 
--        # if we don't have a cpeid, build one based on name and version
--        if not cpeid:
--            cpeid = "cpe:2.3:*:*:%s:%s:*:*:*:*:*:*:*" % (name, version)
--        # if we have a cpeid, use its version instead of the package
--        # version, as they might be different due to
--        # <pkg>_CPE_ID_VERSION
--        else:
--            pkg_version = distutils.version.LooseVersion(cpe_version(cpeid))
--
-         for cpe in self.each_cpe():
--            if not cpe_matches(cpe['id'], cpeid):
-+            if not cpe['id'].matches(cpeid):
-+                # If the node CPE id is not a subset of the target package we
-+                # don't check for affect
-                 continue
-             if not cpe['v_start'] and not cpe['v_end']:
-                 return self.CVE_AFFECTS
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 8710dda795..ec46d373d5 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -670,7 +670,7 @@ def check_package_cves(nvd_path, packages):
-             pkg.status['cve'] = ("na", "no version information available")
-             continue
-         if pkg.cpeid:
--            cpe_product = cvecheck.cpe_product(pkg.cpeid)
-+            cpe_product = cvecheck.CPE(pkg.cpeid).product
-             cpe_product_pkgs[cpe_product].append(pkg)
-         else:
-             cpe_product_pkgs[pkg.name].append(pkg)
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
