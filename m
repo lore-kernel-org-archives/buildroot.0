@@ -1,75 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60FFBCEB2E6
-	for <buildroot@archiver.kernel.org>; Sat, 15 Nov 2025 17:36:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A3F7CEB2E4
+	for <buildroot@archiver.kernel.org>; Sat, 15 Nov 2025 17:51:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3559783FC8;
-	Sat, 15 Nov 2025 17:36:04 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bnA1ONckRKc7; Sat, 15 Nov 2025 17:36:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7931B83F7A
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7931B83F7A;
-	Sat, 15 Nov 2025 17:36:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id B5951158
- for <buildroot@buildroot.org>; Sat, 15 Nov 2025 17:36:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B331140DE9
- for <buildroot@buildroot.org>; Sat, 15 Nov 2025 17:36:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 363444040D;
+	Sat, 15 Nov 2025 17:51:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UraI4QCXgWO7 for <buildroot@buildroot.org>;
- Sat, 15 Nov 2025 17:36:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D005C4035D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D005C4035D
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D005C4035D
- for <buildroot@buildroot.org>; Sat, 15 Nov 2025 17:36:00 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 481242003CA;
- Sat, 15 Nov 2025 18:35:57 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 15 Nov 2025 18:35:57 +0100
+ id A1YEs3FJhcUL; Sat, 15 Nov 2025 17:51:10 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BA02403BB
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4BA02403BB;
+	Sat, 15 Nov 2025 17:51:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7CD05158
+ for <buildroot@buildroot.org>; Sat, 15 Nov 2025 17:51:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7A47C83EFF
+ for <buildroot@buildroot.org>; Sat, 15 Nov 2025 17:51:08 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PG0l2aTB3q4U for <buildroot@buildroot.org>;
+ Sat, 15 Nov 2025 17:51:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::631; helo=mail-ej1-x631.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AFB7A83EF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFB7A83EF4
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AFB7A83EF4
+ for <buildroot@buildroot.org>; Sat, 15 Nov 2025 17:51:06 +0000 (UTC)
+Received: by mail-ej1-x631.google.com with SMTP id
+ a640c23a62f3a-b72cbc24637so524049066b.0
+ for <buildroot@buildroot.org>; Sat, 15 Nov 2025 09:51:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1763229064; x=1763833864;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=n1KUnv5O9sxAKRYM1C/oj9+4CVvaLjhItjhMKLMGhDM=;
+ b=sd5fcy+j/x72MMyWmoLPTQ7nYBNc5olIL3hZtGB+H0iIxJx0B5YHa+WhT1a8nw2YYK
+ 90zU+1DLjtW3trhH9ZGRM05Fu/TP8VSQVpGPf5t9as1zaURMs2A8QBmrJSXoJK7bEFVU
+ oEk6CDHp2QA8N2646ou/SHQv0BGDXTAAEeOsV3suGijDN5WKubyjdfCRTiAtBl3DUp/c
+ +2aENWSK1mbxTR4Q6xGSFw/z2yf1KrgcvYBdEl1SyP1EBeV3PUJM9dDpoRWY5jY3y2R6
+ C1skynna5jJcijXi68EKTISDBgrLUoytDIsXS/DyruRaC2FBzqjjfhD4rF5kAuWqqWTa
+ 74bg==
+X-Gm-Message-State: AOJu0Yy5lVfagB2d3Na4BVQUc1Mj7aUXiUxPw9ni9ukcudDK/XPUFSlo
+ LQvcpxEx786bKEtKIQqXlJ2ziys450cVZvXJADKDLZU+Qbxr77anDlEwr8jj/QLJXvbkbiQ7Pq9
+ hek5U
+X-Gm-Gg: ASbGncvYhlPGuAJsSsOgxvwUEPwC+tdWg4u84ebQLxdoLXPdx0IgehSuW9GTLwF2ulM
+ mUp1gQSi5yUeP0iOEVWBIYAi55OBaFrwNpb1nXXeJcgUJ4HC6nV0w4I0epzWfgItn2d79njclB7
+ cWNnIwTa4UVLRzp4Wwq/G75v4w6uSaAD5LjDMOsdlisE3s2gtCviGMgemXoR44UplHI5pH8Z4Hd
+ KumD0sq5e92Yu0AoSMJBXRbxqiUaepDGBC2QbEkqucuxoUJyQp1TCIJ4X19LDqACS7C5fbnJbBs
+ WFxALFI9/S1sk8fwfMT9A54fng2sS4RN3SkR8OdaD40Bm8UB/wWl6OOWNlxS9o9eHC/Q+7u1gUK
+ ysICDX3jhUeKceCtebJTqnDzuKFnLfcdZW/8Yc6uaX5IWZaKRlKRk1O/oTX4lR6ImIvDclBWg+h
+ SkTIx+NLZOjCVxUCMf46gP5F2bWM1eqiSyWE8IsSn2ka2V6ld0JvY/lQlJz5Z2EykC6w8Nr7usr
+ vOcDpQH93XazaLUV/HhWTrezJFgPltSKv+axFc8jbVF2LzdWtAOk/zG5M5nUH9s/g==
+X-Google-Smtp-Source: AGHT+IFn+Tftn6wGkwnZDuA9QJ1dow8TLDe56r4/DEpPqbwisahuAawq+gTrtpHVDKVFz6W8EkwUEg==
+X-Received: by 2002:a17:906:ee87:b0:b6d:7e01:cbc5 with SMTP id
+ a640c23a62f3a-b7367b9ccfcmr692336366b.53.1763229064358; 
+ Sat, 15 Nov 2025 09:51:04 -0800 (PST)
+Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
+ (host-79-54-71-163.retail.telecomitalia.it. [79.54.71.163])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-b734fd8084csm648886266b.34.2025.11.15.09.51.03
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 15 Nov 2025 09:51:03 -0800 (PST)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: buildroot@buildroot.org
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date: Sat, 15 Nov 2025 18:50:53 +0100
+Message-ID: <20251115175053.398944-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Date: Sat, 15 Nov 2025 18:35:57 +0100
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251115112654.392564-1-dario.binacchi@amarulasolutions.com>
-References: <20251115112654.392564-1-dario.binacchi@amarulasolutions.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <061b2c35706886519685ab458f31c4b7@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1763228158;
- bh=H0ewSTfgooFahvMukcFo2ziy6oPZpZhoMrJowRAGvlU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=BAQYw4/mLq7oHPFSyWXdeOTdVK471WEZxbooNOah66VO19hU/vbkzzApWqEd/CDIJ
- OCcaX/zuAGQ2Ty3myl+XXppmregC7hiS/22p2zZMW0uxy7qTekgs+ae3Wgdnr89r3S
- BE6X8jZJ+UTp523npVZoebtvG2g2OWt+5srZu+t5Kse64EO3UcG14xT1mcCwmN5J9u
- AaKbBDgK3YOMFb+tcd2fw6C/SrNLmepBIMlXHvKbqG6T973X1czszQe1QmTv2OvNms
- qqIM+fiMV7FwFw+Ffj3SYTiKHlmKNmwPmWPiIT5a7mAkeVui8o2N+X1ThVPzID66Ep
- LE/DDoy5+bAgA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=BAQYw4/m
-Subject: Re: [Buildroot] [PATCH 1/1] package/{aardvark-dns,
- netavark}: bump to versions 1.17.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1763229064; x=1763833864;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=n1KUnv5O9sxAKRYM1C/oj9+4CVvaLjhItjhMKLMGhDM=;
+ b=peIH0wtCoiLbwcfldkXWORooxzfjFGiZ1qhfoYK5Wr26GljPxREEmRxPSEUDOiu7K+
+ 6G/tHzI9h129Fv93dTmWfYknJW/zgRkRk0Qt1kVQRiKl0wZFyt4sT9xIAuEhnAlwplRM
+ 5pI8QWeCNp0Yber+DPIkfR8KA77r5LNCD7SH8=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=peIH0wtC
+Subject: [Buildroot] [PATCH 1/1] package/netcat-openbsd: bump to version
+ 1.234
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,24 +110,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 15/11/2025 12:26, Dario Binacchi wrote:
-> Bump the versions of those two packages, that must be updated in
-> lock-step to minor-level compatible versions.
-> 
-> For release notes, see:
-> https://github.com/containers/aardvark-dns/releases
-> https://github.com/containers/netavark/releases
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+The hash file for license (netcat.c) has changed due to copyright year
+updates and changes not related to the license topic.
 
-Applied to master, thanks.
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+ package/netcat-openbsd/netcat-openbsd.hash | 8 ++++----
+ package/netcat-openbsd/netcat-openbsd.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/netcat-openbsd/netcat-openbsd.hash b/package/netcat-openbsd/netcat-openbsd.hash
+index 267e02f84486..14f51d5174b8 100644
+--- a/package/netcat-openbsd/netcat-openbsd.hash
++++ b/package/netcat-openbsd/netcat-openbsd.hash
+@@ -1,6 +1,6 @@
+-# From https://snapshot.debian.org/archive/debian/20250429T083749Z/pool/main/n/netcat-openbsd/netcat-openbsd_1.229-1.dsc
+-sha256  493e3973ffca7fedf0435e498bf18ebc934b1c3aa76db2b29cf80f98d9175a86  netcat-openbsd_1.229.orig.tar.gz
+-sha256  c3bff4330a2fe1fbe384861eacbf4f6ad2c59912aa772efad07462644ed9d936  netcat-openbsd_1.229-1.debian.tar.xz
++# From https://snapshot.debian.org/archive/debian/20251023T202923Z/pool/main/n/netcat-openbsd/netcat-openbsd_1.234-1.dsc
++sha256  121c18d9441ec42b92a9b566468a596bbcf673894db8b12d892947552a8e3bbe  netcat-openbsd_1.234.orig.tar.gz
++sha256  008892553774e23a62f4088cdcbd4428f7b764a6cdadfcb35d1793224a697996  netcat-openbsd_1.234-1.debian.tar.xz
+ 
+ # Hash for license file
+-sha256  fe62c02c86f4cad7c5c031a1a5601fd2e37e7f2773def39bede8652fe51716bb  netcat.c
++sha256  2b1ce9166023bbd71dec13fdbfc677a42a2d5efbb6b43fc5728e455d9fda339c  netcat.c
+diff --git a/package/netcat-openbsd/netcat-openbsd.mk b/package/netcat-openbsd/netcat-openbsd.mk
+index a5ea4727af57..a8fff935ceac 100644
+--- a/package/netcat-openbsd/netcat-openbsd.mk
++++ b/package/netcat-openbsd/netcat-openbsd.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-NETCAT_OPENBSD_VERSION = 1.229
++NETCAT_OPENBSD_VERSION = 1.234
+ NETCAT_OPENBSD_SOURCE = netcat-openbsd_$(NETCAT_OPENBSD_VERSION).orig.tar.gz
+ NETCAT_OPENBSD_PATCH = netcat-openbsd_$(NETCAT_OPENBSD_VERSION)-1.debian.tar.xz
+-NETCAT_OPENBSD_SITE = https://snapshot.debian.org/archive/debian/20250429T083749Z/pool/main/n/netcat-openbsd
++NETCAT_OPENBSD_SITE = https://snapshot.debian.org/archive/debian/20251023T202923Z/pool/main/n/netcat-openbsd
+ NETCAT_OPENBSD_LICENSE = BSD-3-Clause
+ NETCAT_OPENBSD_LICENSE_FILES = netcat.c
+ NETCAT_OPENBSD_DEPENDENCIES = host-pkgconf libbsd
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
