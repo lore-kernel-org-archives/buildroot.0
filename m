@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4596FCEB2DD
-	for <buildroot@archiver.kernel.org>; Sat, 15 Nov 2025 15:25:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1994ECEB2DA
+	for <buildroot@archiver.kernel.org>; Sat, 15 Nov 2025 15:26:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D469F83E74;
-	Sat, 15 Nov 2025 15:25:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E062A83F14;
+	Sat, 15 Nov 2025 15:26:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id owSlEctUZhAc; Sat, 15 Nov 2025 15:25:38 +0000 (UTC)
+ id 0_7FRaDc2xjZ; Sat, 15 Nov 2025 15:26:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0A8283E6A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1026883E97
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F0A8283E6A;
-	Sat, 15 Nov 2025 15:25:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id F2345D5
- for <buildroot@buildroot.org>; Sat, 15 Nov 2025 15:25:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1026883E97;
+	Sat, 15 Nov 2025 15:26:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 27D411A9
+ for <buildroot@buildroot.org>; Sat, 15 Nov 2025 15:26:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CDD146080E
- for <buildroot@buildroot.org>; Sat, 15 Nov 2025 15:25:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0EB4883E97
+ for <buildroot@buildroot.org>; Sat, 15 Nov 2025 15:26:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nVCkTFMAxNYB for <buildroot@buildroot.org>;
- Sat, 15 Nov 2025 15:25:36 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 061FA6064B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 061FA6064B
- for <buildroot@buildroot.org>; Sat, 15 Nov 2025 15:25:35 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E3AE684601; Sat, 15 Nov 2025 15:25:35 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 15 Nov 2025 15:18:48 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 273f6f3e4b95631f1c6c38ff1a30b68a5b8117c0
-X-Git-Newrev: 925dc2606af15dbf370efa59f333bff3e9e476e8
-X-Patchwork-Hint: ignore
-Message-Id: <20251115152535.E3AE684601@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{mesa3d,
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id o6uvPR7CmTOw for <buildroot@buildroot.org>;
+ Sat, 15 Nov 2025 15:26:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3DC8183E7A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DC8183E7A
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3DC8183E7A
+ for <buildroot@buildroot.org>; Sat, 15 Nov 2025 15:26:43 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 0193C13F880;
+ Sat, 15 Nov 2025 16:26:38 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 15 Nov 2025 16:26:38 +0100
+MIME-Version: 1.0
+Date: Sat, 15 Nov 2025 16:26:38 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Romain Naour <romain.naour@gmail.com>
+In-Reply-To: <20251112220213.3737716-1-bernd@kuhls.net>
+References: <20251112220213.3737716-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <c60e53568620b4d9343912df297f4fd8@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1763220401;
+ bh=hka0s2atV8ZTbk38pL2Yb0YO+lknpA1T6fzO21Gw3Aw=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=V3cGOhlW9OUmynhHdZtS5CYq9AM+61edCoZhw7nlX3ZOJvWlL1gpxMS51jDWZrAxz
+ CBwj6Z1gaQ5bsHSdggQhnTMO3FnDuVPr/D3GSFmP2mhg2GA0ezNoBY6tdLHsABVWAE
+ OKtuAOZJCwTN/V0xPo5VTjLjwwKDXr0laR6iUMn/MeEe+ircFInTj+u6aq/xcxFIXG
+ mEvANWeWpEnI7/c4SmbcT2GZC/XipOvh0xrBPiRB5/XUmzoJJENJqGTtpUnAyXz5CD
+ FqYn+gKt0hXVK3uEUbwWvo9B0gQw6MtGbgybobelW4oq4G/IMWDPXi2HcC+q6Do+9Z
+ tOTlV1zjIJSQg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=V3cGOhlW
+Subject: Re: [Buildroot] [PATCH 1/1] package/{mesa3d,
  mesa3d-headers}: bump version to 25.2.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -60,66 +84,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=925dc2606af15dbf370efa59f333bff3e9e476e8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 12/11/2025 23:02, Bernd Kuhls wrote:
+> Release notes:
+> https://lists.freedesktop.org/archives/mesa-announce/2025-November/000828.html
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2025-November/000828.html
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 6156a1f398..75d7405504 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 25.2.6
-+MESA3D_HEADERS_VERSION = 25.2.7
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index f8de60f491..e2b3d9ca79 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2025-October/000826.html
--sha256  361c97e8afa5fe20141c5362c5b489040751e12861c186a16c621a2fb182fc42  mesa-25.2.6.tar.xz
--sha512  c34f55132ee9097a7c4961745bf07a08fc612bf0f7c570c023fedb16c8eafbefdc1cc022f722c345780bb14ec4ce25d9a206a9196d9d51c97b389db5160de9cc  mesa-25.2.6.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2025-November/000828.html
-+sha256  b40232a642011820211aab5a9cdf754e106b0bce15044bc4496b0ac9615892ad  mesa-25.2.7.tar.xz
-+sha512  87dd815e0d11d6ec0eb969ee93d3f376103bb899d90599e0b7902394e41c58139384df79f89633e132ca969348d3320f55308a74651d409b454d51f1bcda27bc  mesa-25.2.7.tar.xz
- # License
- sha256  0d1a0472ecc81830e75c20d59b0ea02841e3db21255e0ebad97ab682c54d6615  docs/license.rst
- sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  licenses/MIT
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index db48a378fc..5305ea2de1 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 25.2.6
-+MESA3D_VERSION = 25.2.7
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
