@@ -1,76 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C469ECEB2CC
-	for <buildroot@archiver.kernel.org>; Sat, 15 Nov 2025 10:58:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60753CEB2CC
+	for <buildroot@archiver.kernel.org>; Sat, 15 Nov 2025 11:27:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4B53183F20;
-	Sat, 15 Nov 2025 10:58:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A1036089A;
+	Sat, 15 Nov 2025 11:27:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id isf3C9kO9_f1; Sat, 15 Nov 2025 10:58:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6hqM1kZpyy7R; Sat, 15 Nov 2025 11:27:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6292D8403E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03C2560895
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6292D8403E;
-	Sat, 15 Nov 2025 10:58:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3EA081A9
- for <buildroot@buildroot.org>; Sat, 15 Nov 2025 10:58:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 03C2560895;
+	Sat, 15 Nov 2025 11:27:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E28B7158
+ for <buildroot@buildroot.org>; Sat, 15 Nov 2025 11:27:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 304784048A
- for <buildroot@buildroot.org>; Sat, 15 Nov 2025 10:58:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C101040DDC
+ for <buildroot@buildroot.org>; Sat, 15 Nov 2025 11:27:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hTcSwN1KocIT for <buildroot@buildroot.org>;
- Sat, 15 Nov 2025 10:58:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C852840451
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C852840451
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C852840451
- for <buildroot@buildroot.org>; Sat, 15 Nov 2025 10:58:39 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b06c.dip0.t-ipconnect.de [84.161.176.108])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 973F4A4C6958;
- Sat, 15 Nov 2025 11:58:37 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:42054)
- by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vKDzJ-0000000047B-0pvi;
- Sat, 15 Nov 2025 10:58:37 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NREVqKtyA4XZ for <buildroot@buildroot.org>;
+ Sat, 15 Nov 2025 11:27:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::62c; helo=mail-ej1-x62c.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BB5D640DC1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB5D640DC1
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
+ [IPv6:2a00:1450:4864:20::62c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BB5D640DC1
+ for <buildroot@buildroot.org>; Sat, 15 Nov 2025 11:27:01 +0000 (UTC)
+Received: by mail-ej1-x62c.google.com with SMTP id
+ a640c23a62f3a-b73875aa527so20240566b.3
+ for <buildroot@buildroot.org>; Sat, 15 Nov 2025 03:27:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1763206019; x=1763810819;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=xGf81OtQe8cd3kIlXr0jb4hjS/o6YilIpNQf/GLqc0s=;
+ b=XJFyVSuAKcHPFBdUpDHbBWpm4QCR+vs3ZGqr2Pd5b3maKn3T7uims0LbhiALCO271x
+ ZjWeIUHerXIUewmAlsotHhWcKHWpiWL1/p2N/w48vAjFHDgZR6nrRJ9al0R6nturzgFI
+ prQ3dEGTxoU9FQxf15AS3kmSu4MvQlAvOInGDUmiv1M4c08stpw67jKvBgnrRKEiDeZp
+ FnxB/imsiYTkUKtFb3C5YGkrvM5M7hj/wGbahQ/A3GXUyi1Agi3JFxVPgn5pzftjV4vg
+ w0FK7errmx1FS6rzMR9S/pQmPClxQ7FUk59DGwkvEQpxTdZuWqMlNDxGZ0wRzf3GkKH8
+ +UCg==
+X-Gm-Message-State: AOJu0YycGX7b7vmjKm7gDE0vxfm10OcpPLuYqMoz6GYBC33REGVEA53b
+ xPto+zED8r1nwhWlr9kblApp3IK0SfrqPDyV9f5Zsm9fmRbvxYR9O/9vFP5b3CFm2/UOzFc71Y0
+ PEM7p
+X-Gm-Gg: ASbGnctgfz5/CXgf60ZA7GK3faNJqtM6zfH1Ip72qhlK1zq5HRrvIwQ/pg9iGoVPhpL
+ fE7znNhH/fpSUcr/dhISKwtSOBfn4B7t4DSpFTnfeEY//bIPEqR3ESQNMvATtn0zKnE0l5q5HrD
+ vTanham/VzmtuxGI6AszymckW28vFEO7zoets7vgGfMKN+PXZlnNahKd2GhYlhvUFp0XN4FoLeQ
+ ExWQ+4DkG2iGUXg3SqyTUHroHedqx3dsJ+WY+hdBYRMRqUrHPC5OgUi2kgGjnc6G5NRHSdE9Eq0
+ /tFFgq8Hmf0CZlb5/1deXPcr4lcsAkVoS/XPXShlnAQxsMUvMWWfxsEVLp3CjkvQF3zDnXdx9Ns
+ ZT4rYkMVQ1++e8xfshtX4sVOrtSKJR67nvIO9BAegwRUpdbdiDirHnIj+Wfeo8mCQF1rkU4QCwY
+ Hy5vVfLMS4CR4u96KJfp1JqwpS+MjylxGJm+w9+7JZFGK//kZSPnpW7wNk4H/cezvTsJGNMmYnN
+ wlehJ19EawSALms62aAAe7hBqTMdKC6bPCUZvvr5BcHo9+vWCVfv3npbIqR5K1NBg==
+X-Google-Smtp-Source: AGHT+IHtKBn7T57zmtVL5WBI17jLliM42mNJbLEpCntMihmF9lkF7UkBS0+Q2RwmTnUCp++R7L6C/A==
+X-Received: by 2002:a17:907:e849:b0:b33:b8bc:d1da with SMTP id
+ a640c23a62f3a-b73677eda54mr550736066b.1.1763206018428; 
+ Sat, 15 Nov 2025 03:26:58 -0800 (PST)
+Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
+ (host-79-54-71-163.retail.telecomitalia.it. [79.54.71.163])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-b734fdac667sm583655766b.58.2025.11.15.03.26.56
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 15 Nov 2025 03:26:57 -0800 (PST)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
 Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Sat, 15 Nov 2025 11:58:37 +0100
-Message-ID: <20251115105837.3847502-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Date: Sat, 15 Nov 2025 12:26:54 +0100
+Message-ID: <20251115112654.392564-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1763204317;
- bh=UDhz0rJ34nFQpX3hnQw3OGcj8KnxJXSzvpI8cxJHVWM=;
- h=From:To:Cc:Subject:Date:From;
- b=C4GTxEyEJYEhPikMyjwV60owb9g0xvzjQKnYNU/s5NUIDTzdOOHfGPpD3pCweW0Or
- 2rgiBpECz7oRAvI69zzgjcCZfkK1tMqYlNbDV+gxga+hI+/T57lsHY5pQUDVY72aty
- LcqyGy8lQtL11t7XKBuF1M1rnpCj8Y7csGnv8hI+h249GiV1TFT7s6nPRLwzyzN64H
- XsgC+jISq3C4vYDfKH+Rg6bHAyMQJQKgXjDALzfkpjwLORIJ5f8kJKzI3uexWd//40
- MwGLGCuJsZuLpJzdYe60sorBYmcVi6y+TM6K8KcIjUpfJ4Yb5Ah3Wdv+sCNPUAdUqu
- T9ZNNJHEEBIiw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=amarulasolutions.com; s=google; t=1763206019; x=1763810819;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=xGf81OtQe8cd3kIlXr0jb4hjS/o6YilIpNQf/GLqc0s=;
+ b=iadoUxI+jC+VDdSY4SQACixLXQKA6fyvAjWI/z/BfS+xuaZmyZht7Byhl+oDEis3PA
+ 8/s+BbGPSvhleAWagUPW4qaWVeg9iblR1wgs2bReu6c7zWi7onBgiwUxEcDTtdf+fWjF
+ iTCpvLmja+zEMVbRZRxWj6eRcDudn8nyOUHE4=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=C4GTxEyE
-Subject: [Buildroot] [PATCH 1/1] package/libgphoto2: Fix compile errors with
- gcc 14
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=iadoUxI+
+Subject: [Buildroot] [PATCH 1/1] package/{aardvark-dns,
+ netavark}: bump to versions 1.17.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,114 +115,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-https://autobuild.buildroot.net/results/57b/57bb5f02209d8216f0c472d39b15603e0f5db3c5/
+Bump the versions of those two packages, that must be updated in
+lock-step to minor-level compatible versions.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+For release notes, see:
+https://github.com/containers/aardvark-dns/releases
+https://github.com/containers/netavark/releases
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- ...atible-pointer-types-compiler-error-.patch | 41 ++++++++++++++++++
- ...ompatible-pointer-types-compiler-err.patch | 42 +++++++++++++++++++
- 2 files changed, 83 insertions(+)
- create mode 100644 package/libgphoto2/0001-ptp2-fix-Wincompatible-pointer-types-compiler-error-.patch
- create mode 100644 package/libgphoto2/0002-jl2005c-fix-Wincompatible-pointer-types-compiler-err.patch
+ package/aardvark-dns/aardvark-dns.hash | 2 +-
+ package/aardvark-dns/aardvark-dns.mk   | 2 +-
+ package/netavark/netavark.hash         | 2 +-
+ package/netavark/netavark.mk           | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libgphoto2/0001-ptp2-fix-Wincompatible-pointer-types-compiler-error-.patch b/package/libgphoto2/0001-ptp2-fix-Wincompatible-pointer-types-compiler-error-.patch
-new file mode 100644
-index 0000000000..dd67891bd4
---- /dev/null
-+++ b/package/libgphoto2/0001-ptp2-fix-Wincompatible-pointer-types-compiler-error-.patch
-@@ -0,0 +1,41 @@
-+From c0479bd5aa532a052461179bc64480d4a0ed26ac Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Sat, 15 Nov 2025 11:53:20 +0100
-+Subject: [PATCH] ptp2: fix -Wincompatible-pointer-types compiler error in
-+ chdk.c
-+
-+Fixes build error seen with gcc 14.3.0:
-+
-+ptp2/chdk.c: In function 'yuv_live_to_jpeg':
-+ptp2/chdk.c:1182:41: error: passing argument 3 of 'jpeg_mem_dest' from incompatible pointer type [-Wincompatible-pointer-types]
-+ 1182 |         jpeg_mem_dest (&cinfo, &outbuf, &outlen);
-+      |                                         ^~~~~~~
-+      |                                         |
-+      |                                         long unsigned int *
-+In file included from ptp2/chdk.c:32:
-+/home/autobuild/autobuild/instance-4/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/jpeglib.h:979:28: note: expected 'size_t *' {aka 'unsigned int *'} but argument is of type 'long unsigned int *'
-+  979 | EXTERN(void) jpeg_mem_dest JPP((j_compress_ptr cinfo,
-+
-+Upstream: https://github.com/gphoto/libgphoto2/pull/1176
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ camlibs/ptp2/chdk.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/camlibs/ptp2/chdk.c b/camlibs/ptp2/chdk.c
-+index 2787a7261..3b0dd4eb5 100644
-+--- a/camlibs/ptp2/chdk.c
-++++ b/camlibs/ptp2/chdk.c
-+@@ -1145,7 +1145,7 @@ static void yuv_live_to_jpeg(unsigned char *p_yuv,
-+ 	struct		jpeg_error_mgr jerr;
-+ 	JSAMPROW	row_ptr[1];
-+ 	uint8_t		*outbuf = NULL, *tmprowbuf = NULL;
-+-	unsigned long	outlen = 0;
-++	unsigned int	outlen = 0;
-+ 	unsigned int	row_inc;
-+ 	int		sshift, dshift, xshift, skip;
-+ 
-+-- 
-+2.47.3
-+
-diff --git a/package/libgphoto2/0002-jl2005c-fix-Wincompatible-pointer-types-compiler-err.patch b/package/libgphoto2/0002-jl2005c-fix-Wincompatible-pointer-types-compiler-err.patch
-new file mode 100644
-index 0000000000..5207f3eda2
---- /dev/null
-+++ b/package/libgphoto2/0002-jl2005c-fix-Wincompatible-pointer-types-compiler-err.patch
-@@ -0,0 +1,42 @@
-+From 48f2ae8bba151166f6f1ffbea359fdcbad0b0133 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Sat, 15 Nov 2025 11:54:24 +0100
-+Subject: [PATCH] jl2005c: fix -Wincompatible-pointer-types compiler error
-+ in jl2005bcd_decompress.c
-+
-+Seen with gcc 14.3.0:
-+
-+jl2005c/jl2005bcd_decompress.c: In function 'jl2005bcd_decompress':
-+jl2005c/jl2005bcd_decompress.c:161:46: error: passing argument 3 of 'jpeg_mem_dest' from incompatible pointer type [-Wincompatible-pointer-types]
-+  161 |         jpeg_mem_dest (&cinfo, &jpeg_header, &jpeg_header_size);
-+      |                                              ^~~~~~~~~~~~~~~~~
-+      |                                              |
-+      |                                              long unsigned int *
-+In file included from jl2005c/jpeg_memsrcdest.h:4,
-+                 from jl2005c/jl2005bcd_decompress.c:39:
-+/home/autobuild/autobuild/instance-4/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/jpeglib.h:979:28: note: expected 'size_t *' {aka 'unsigned int *'} but argument is of type 'long unsigned int *'
-+  979 | EXTERN(void) jpeg_mem_dest JPP((j_compress_ptr cinfo,
-+
-+Upstream: https://github.com/gphoto/libgphoto2/pull/1176
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ camlibs/jl2005c/jl2005bcd_decompress.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/camlibs/jl2005c/jl2005bcd_decompress.c b/camlibs/jl2005c/jl2005bcd_decompress.c
-+index dff2d6264..6e1631c92 100644
-+--- a/camlibs/jl2005c/jl2005bcd_decompress.c
-++++ b/camlibs/jl2005c/jl2005bcd_decompress.c
-+@@ -85,7 +85,7 @@ jl2005bcd_decompress (unsigned char *output, unsigned char *input,
-+ 	struct jpeg_error_mgr jcerr, jderr;
-+ 	JOCTET *jpeg_header = NULL;
-+ 	int outputsize = 0;
-+-	unsigned long jpeg_header_size = 0;
-++	unsigned int jpeg_header_size = 0;
-+ 	int i, x, y, x1, y1, jpeg_data_size, jpeg_data_idx, eoi, size, ret;
-+ 	JSAMPLE green[8 * 16];
-+ 	JSAMPLE red[8 * 8];
-+-- 
-+2.47.3
-+
+diff --git a/package/aardvark-dns/aardvark-dns.hash b/package/aardvark-dns/aardvark-dns.hash
+index 9c502775a4ee..134dd34a1b03 100644
+--- a/package/aardvark-dns/aardvark-dns.hash
++++ b/package/aardvark-dns/aardvark-dns.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  629df64d5d713b5b78cf8d9387de12d84b88103a8581457e60c7697cf64ad83c  aardvark-dns-v1.16.0-git4-cargo4.tar.gz
++sha256  aeb5fc77455b01916b28f7c306834446f3f6e184c02d38b177c578bb4f01939e  aardvark-dns-v1.17.0-git4-cargo4.tar.gz
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/aardvark-dns/aardvark-dns.mk b/package/aardvark-dns/aardvark-dns.mk
+index 368e52ab393d..09a3a421f2c1 100644
+--- a/package/aardvark-dns/aardvark-dns.mk
++++ b/package/aardvark-dns/aardvark-dns.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version here, also update netavark in lockstep
+-AARDVARK_DNS_VERSION = v1.16.0
++AARDVARK_DNS_VERSION = v1.17.0
+ AARDVARK_DNS_SITE = https://github.com/containers/aardvark-dns
+ AARDVARK_DNS_SITE_METHOD = git
+ 
+diff --git a/package/netavark/netavark.hash b/package/netavark/netavark.hash
+index 8e8adc4ad3b8..79fcb2eab101 100644
+--- a/package/netavark/netavark.hash
++++ b/package/netavark/netavark.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  1eb17a5ed223928bdd433e0eb8518682ae71dd02981019fb726a9330d7166b2d  netavark-v1.16.1-git4-cargo4.tar.gz
++sha256  4c696e3e61b425270762f8d9d97705358de15de80e06fac7142cf65011d1dc0c  netavark-v1.17.0-git4-cargo4.tar.gz
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/netavark/netavark.mk b/package/netavark/netavark.mk
+index 1754759bc686..d47cee0fe14b 100644
+--- a/package/netavark/netavark.mk
++++ b/package/netavark/netavark.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version here, also update aardvark-dns in lockstep
+-NETAVARK_VERSION = v1.16.1
++NETAVARK_VERSION = v1.17.0
+ NETAVARK_SITE = https://github.com/containers/netavark
+ NETAVARK_SITE_METHOD = git
+ 
 -- 
-2.47.3
+2.43.0
 
 _______________________________________________
 buildroot mailing list
