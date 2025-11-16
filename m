@@ -1,75 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9AE4CCD19A
-	for <buildroot@archiver.kernel.org>; Sun, 16 Nov 2025 17:50:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58A7ACCD19A
+	for <buildroot@archiver.kernel.org>; Sun, 16 Nov 2025 17:54:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9C4DE821BD;
-	Sun, 16 Nov 2025 17:50:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 15AD160B5B;
+	Sun, 16 Nov 2025 17:54:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pYcqSqtSdSXM; Sun, 16 Nov 2025 17:50:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LiG7jSgBOX3G; Sun, 16 Nov 2025 17:54:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDEAA8216F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4175960AF1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CDEAA8216F;
-	Sun, 16 Nov 2025 17:50:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1AC4DD5
- for <buildroot@buildroot.org>; Sun, 16 Nov 2025 17:50:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4175960AF1;
+	Sun, 16 Nov 2025 17:54:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C5955158
+ for <buildroot@buildroot.org>; Sun, 16 Nov 2025 17:54:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0BEFD40974
- for <buildroot@buildroot.org>; Sun, 16 Nov 2025 17:50:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B867F40909
+ for <buildroot@buildroot.org>; Sun, 16 Nov 2025 17:54:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YO0vQRq2wwE4 for <buildroot@buildroot.org>;
- Sun, 16 Nov 2025 17:50:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E3B154093E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3B154093E
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E3B154093E
- for <buildroot@buildroot.org>; Sun, 16 Nov 2025 17:50:48 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id D32EC19F734;
- Sun, 16 Nov 2025 18:50:42 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 16 Nov 2025 18:50:42 +0100
-MIME-Version: 1.0
-Date: Sun, 16 Nov 2025 18:50:42 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Christian Stewart <christian@aperture.us>
-In-Reply-To: <20251115222824.1304870-1-bernd@kuhls.net>
-References: <20251115222824.1304870-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <1d5b472522f2972e7a64af270fe94524@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1763315445;
- bh=KV8lNKeNTCB1fPTqTxz41eYu2mnELoi5hgNywrF6ucU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=nQhk+ZYDs9BMcqc98hYXV1NiIQ1NE3CqcZBhTdJfnbvZNBBZcBMyA/xmF/I2Fp+nu
- bghlDsMBrHWql7FtcY18uhjI/UiatXBb8Fq+LYudiNUP5BblRMoGU/cRFOmv7Wat55
- EaF1PJ9UNGNiLd/2yPCa77mV0AD18c3wS6b1CCk1R4qFBvgR7H2ZhpUeoIbz94JPt9
- uo/tTBzk/NoBNPOnUOfJLg1PGOlG9+doYuYSDrZNzBz8Xfa6NfOhQl0UAFNxNLt5SL
- hOhsldbjKSfG3qNV4ky0oBkAcmAtlXiblBli4I611sQH5Im04b/jCnNvccZlpV2/cH
- aC2eOCXu9+nHw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=nQhk+ZYD
-Subject: Re: [Buildroot] [PATCH 1/1] package/batman-adv: bump version to
- 2025.4
+ id Wb4RDoekqHIj for <buildroot@buildroot.org>;
+ Sun, 16 Nov 2025 17:54:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7041F408BA
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7041F408BA
+ for <buildroot@buildroot.org>; Sun, 16 Nov 2025 17:54:11 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5BD45846CB; Sun, 16 Nov 2025 17:54:11 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 16 Nov 2025 18:53:08 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 06016a5750ea7c9c15c7e6e2a9cdbae969dd0f4a
+X-Git-Newrev: 75dc8e1842143f347bd7395ecedad4308bc14953
+X-Patchwork-Hint: ignore
+Message-Id: <20251116175411.5BD45846CB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] DEVELOPERS: update Zoltan Gyarmati e-mail
+ address
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,35 +60,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=75dc8e1842143f347bd7395ecedad4308bc14953
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for the patch.
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+[Julien: reword commit log title]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 15/11/2025 23:28, Bernd Kuhls wrote:
-> Changelog:
-> https://git.open-mesh.org/batman-adv.git/tree/CHANGELOG.rst?h=v2025.4
-
-The changelog mention the "network coding" feature was removed. See 
-also:
-https://git.open-mesh.org/batman-adv.git/commit/?id=2cefbadba8b2c547058b7d2e5da96692ef3580d7
-
-So this bump should also remove the Buildroot config
-BR2_PACKAGE_BATMAN_ADV_NC (and create the corresponding legacy entry).
-
-Could you send an updated patch doing so, please?
-
-> Removed patch which is included in this release.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-
-Best regards,
-
-Julien.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 47fe1f467e..9774727489 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3536,7 +3536,7 @@ F:	utils/scanpypi
+ N:	Yunhao Tian <t123yh.xyz@gmail.com>
+ F:	package/libopenaptx/
+ 
+-N:	Zoltan Gyarmati <zgyarmati@zgyarmati.de>
++N:	Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+ F:	package/crudini/
+ F:	package/grantlee/
+ F:	package/libusb/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
