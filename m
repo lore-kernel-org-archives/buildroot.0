@@ -1,75 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06D5ACCD19A
-	for <buildroot@archiver.kernel.org>; Sun, 16 Nov 2025 22:08:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA95BCEACEF
+	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 07:43:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B6C7160BC2;
-	Sun, 16 Nov 2025 22:08:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6843B8175B;
+	Mon, 17 Nov 2025 07:43:31 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xkyRFdlVjMtm; Mon, 17 Nov 2025 07:43:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F46781761
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6F46781761;
+	Mon, 17 Nov 2025 07:43:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3CD611A9
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 07:43:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 25BBC6066C
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 07:43:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kmHZGxrhBH5j; Sun, 16 Nov 2025 22:08:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80C9D60BA7
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80C9D60BA7;
-	Sun, 16 Nov 2025 22:08:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id E8452D5
- for <buildroot@buildroot.org>; Sun, 16 Nov 2025 22:08:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CD656408B2
- for <buildroot@buildroot.org>; Sun, 16 Nov 2025 22:08:31 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eNWSr-XFL-1Z for <buildroot@buildroot.org>;
- Sun, 16 Nov 2025 22:08:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ id IcYEf4537JEZ for <buildroot@buildroot.org>;
+ Mon, 17 Nov 2025 07:43:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7D41240659
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D41240659
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7D41240659
- for <buildroot@buildroot.org>; Sun, 16 Nov 2025 22:08:30 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 445207283; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sun, 16 Nov 2025 22:08:20 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vKkux-000000015cz-1GbX;
- Sun, 16 Nov 2025 23:08:19 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C74F60661
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0C74F60661
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 07:43:27 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EF85684894; Mon, 17 Nov 2025 07:43:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Devoogdt <thomas@devoogdt.com>
-Cc: buildroot@buildroot.org,  Tudor Holton <buildroot@tudorholton.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>
-In-Reply-To: <20251114140519.541039-1-thomas@devoogdt.com> (Thomas Devoogdt's
- message of "Fri, 14 Nov 2025 15:05:19 +0100")
-References: <20251114140519.541039-1-thomas@devoogdt.com>
-Date: Sun, 16 Nov 2025 23:08:19 +0100
-Message-ID: <87346dd418.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=K8QMBltMNoQY1cLYGAKWCAV24edTRB6wmpX6H0fH3bGMfWHFv06rj6U8ynAeMKaS0WDF4FvoLnDF4iMZmBMGA5J3LBoPKJZePEX5JOSZxozW2c3VOEQ6QkX1T9mD5OCIB9jizJOPdd7lHGHZJ+6KAMZH+VfHdI0rYqmmybU6YFWSQdtLDd/jkEyn16G4nXv/t6I/7ZS3krTqrXMz571S+0abwTkpRf8VFcJfFY6K/RsmDGhw6fAUD7JqfuGIdLgFjS2JPwDJ7OP7zpCCkHQ8XnG9HwMvlSqn0gWU+p4L8iZFdPpn4Ne9wycmSJw5x4x896s0/ALEeH++e8oNTq2Kwg==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=GP7Hn/wxd4N+TW6/RmXxfjwHdhOuWy653P1Hdudl3Pc=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=K8QMBltM
-Subject: Re: [Buildroot] [PATCH] package/openjdk{,
+To: buildroot@buildroot.org
+Date: Sun, 16 Nov 2025 23:07:13 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7727f96648c6938b5ef3978811f7c83ec1c41e81
+X-Git-Newrev: 8ccee2be221772f6d456fd852b237adb7f5bbe51
+X-Patchwork-Hint: ignore
+Message-Id: <20251117074326.EF85684894@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openjdk{,
  -bin}: fix wrong version reporting
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -82,34 +59,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Devoogdt <thomas@devoogdt.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8ccee2be221772f6d456fd852b237adb7f5bbe51
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Thomas Devoogdt <thomas.devoogdt@barco.com>
- > Before:
+Before:
 
- > $ java --version
- > openjdk 17 2024-07-16
- > OpenJDK Runtime Environment (build 17+17)
- > OpenJDK 64-Bit Server VM (build 17+17, mixed mode)
+$ java --version
+openjdk 17 2024-07-16
+OpenJDK Runtime Environment (build 17+17)
+OpenJDK 64-Bit Server VM (build 17+17, mixed mode)
 
- > After:
+After:
 
- > $ java --version
- > openjdk 17.0.12 2024-07-16
- > OpenJDK Runtime Environment (build 17.0.12+7)
- > OpenJDK 64-Bit Server VM (build 17.0.12+7, mixed mode)
+$ java --version
+openjdk 17.0.12 2024-07-16
+OpenJDK Runtime Environment (build 17.0.12+7)
+OpenJDK 64-Bit Server VM (build 17.0.12+7, mixed mode)
 
- > Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/openjdk-bin/openjdk-bin.mk |  8 +++++---
+ package/openjdk/openjdk.mk         | 13 ++++++++-----
+ 2 files changed, 13 insertions(+), 8 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+index 17056e80b7..e6c74cf6d8 100644
+--- a/package/openjdk-bin/openjdk-bin.mk
++++ b/package/openjdk-bin/openjdk-bin.mk
+@@ -6,10 +6,12 @@
+ 
+ ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_21),y)
+ HOST_OPENJDK_BIN_VERSION_MAJOR = 21
+-HOST_OPENJDK_BIN_VERSION_MINOR = 0.4_7
++HOST_OPENJDK_BIN_VERSION_MINOR = 0.4
++HOST_OPENJDK_BIN_VERSION_BUILD = 7
+ else
+ HOST_OPENJDK_BIN_VERSION_MAJOR = 17
+-HOST_OPENJDK_BIN_VERSION_MINOR = 0.12_7
++HOST_OPENJDK_BIN_VERSION_MINOR = 0.12
++HOST_OPENJDK_BIN_VERSION_BUILD = 7
+ endif
+ 
+ ifeq ($(HOSTARCH),x86_64)
+@@ -19,7 +21,7 @@ ifeq ($(HOSTARCH),aarch64)
+ HOST_OPENJDK_BIN_DOWNLOAD_ARCH_NAME = aarch64
+ endif
+ 
+-HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR).$(HOST_OPENJDK_BIN_VERSION_MINOR)
++HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR).$(HOST_OPENJDK_BIN_VERSION_MINOR)_$(HOST_OPENJDK_BIN_VERSION_BUILD)
+ HOST_OPENJDK_BIN_SOURCE = OpenJDK$(HOST_OPENJDK_BIN_VERSION_MAJOR)U-jdk_$(HOST_OPENJDK_BIN_DOWNLOAD_ARCH_NAME)_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
+ HOST_OPENJDK_BIN_SITE = https://github.com/adoptium/temurin$(HOST_OPENJDK_BIN_VERSION_MAJOR)-binaries/releases/download/jdk-$(subst _,%2B,$(HOST_OPENJDK_BIN_VERSION))
+ 
+diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+index 446e4aa3c2..6868ca191d 100644
+--- a/package/openjdk/openjdk.mk
++++ b/package/openjdk/openjdk.mk
+@@ -6,12 +6,15 @@
+ 
+ ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_21),y)
+ OPENJDK_VERSION_MAJOR = 21
+-OPENJDK_VERSION_MINOR = 0.4+7
++OPENJDK_VERSION_MINOR = 0.4
++OPENJDK_VERSION_BUILD = 7
++
+ else
+ OPENJDK_VERSION_MAJOR = 17
+-OPENJDK_VERSION_MINOR = 0.12+7
++OPENJDK_VERSION_MINOR = 0.12
++OPENJDK_VERSION_BUILD = 7
+ endif
+-OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)
++OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)+$(OPENJDK_VERSION_BUILD)
+ OPENJDK_SITE = $(call github,openjdk,jdk$(OPENJDK_VERSION_MAJOR)u,jdk-$(OPENJDK_VERSION))
+ 
+ OPENJDK_LICENSE = GPL-2.0+ with exception
+@@ -106,8 +109,8 @@ OPENJDK_CONF_OPTS = \
+ 	--with-native-debug-symbols=none \
+ 	--without-version-pre \
+ 	--with-sysroot=$(STAGING_DIR) \
+-	--with-version-build="$(OPENJDK_VERSION_MAJOR)" \
+-	--with-version-string="$(OPENJDK_VERSION_MAJOR)"
++	--with-version-build="$(OPENJDK_VERSION_BUILD)" \
++	--with-version-string="$(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)"
+ 
+ # If building for AArch64, use the provided CPU port.
+ ifeq ($(BR2_aarch64),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
