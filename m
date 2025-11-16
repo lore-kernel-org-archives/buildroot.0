@@ -1,155 +1,155 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FF71CCD19A
-	for <buildroot@archiver.kernel.org>; Sun, 16 Nov 2025 20:21:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56052CCD19A
+	for <buildroot@archiver.kernel.org>; Sun, 16 Nov 2025 20:21:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 53D388228E;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6394360BAF;
+	Sun, 16 Nov 2025 20:21:28 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7VWI9-5Fry-M; Sun, 16 Nov 2025 20:21:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A24D960BB2
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A24D960BB2;
 	Sun, 16 Nov 2025 20:21:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 904A1D5
+ for <buildroot@buildroot.org>; Sun, 16 Nov 2025 20:21:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7700582243
+ for <buildroot@buildroot.org>; Sun, 16 Nov 2025 20:21:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1kxAjB7kNdP3; Sun, 16 Nov 2025 20:21:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88B6A822E5
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 88B6A822E5;
-	Sun, 16 Nov 2025 20:21:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2CBDB223
- for <buildroot@buildroot.org>; Sun, 16 Nov 2025 20:21:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1F556401DF
- for <buildroot@buildroot.org>; Sun, 16 Nov 2025 20:21:23 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pWyw2Jl3Z7z5 for <buildroot@buildroot.org>;
+ id cSq0SHAXzVWQ for <buildroot@buildroot.org>;
  Sun, 16 Nov 2025 20:21:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 37807400F8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37807400F8
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 37807400F8
- for <buildroot@buildroot.org>; Sun, 16 Nov 2025 20:21:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1BA40821D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1BA40821D2
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1BA40821D2
+ for <buildroot@buildroot.org>; Sun, 16 Nov 2025 20:21:21 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.home.arpa ([85.22.18.38]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MhlKy-1vpeDF3fCS-00nTp6; Sun, 16
- Nov 2025 21:21:18 +0100
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MK3Vu-1val1d2wUo-00U1Uw; Sun, 16
+ Nov 2025 21:21:19 +0100
 To: buildroot@buildroot.org
 Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
  Julien Olivain <ju.o@free.fr>, Fiona Klute <fiona.klute@gmx.de>
-Date: Sun, 16 Nov 2025 21:20:52 +0100
-Message-ID: <20251116202053.3276072-2-fiona.klute@gmx.de>
+Date: Sun, 16 Nov 2025 21:20:53 +0100
+Message-ID: <20251116202053.3276072-3-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251116202053.3276072-1-fiona.klute@gmx.de>
 References: <20251116202053.3276072-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:i+xcqfJtbCW6J7e2tXQzSaph56WiIrN2EBObBb5B+WeX5J3IazV
- AHELJ0IzCRoCSZmygddheva6Ulw1RR2KB3sl1PCOgB6wCULpBjTOvwZtomoP7JgQ+P8Td2j
- tF9aCg6oqoi/h8cYRC2Q+UK78+kYLaEj+WlsEiKGPJcRNhNyVrlm6utEO/3na7CgTB1qETX
- YTLerBfL1yz3XQAYScNyQ==
-UI-OutboundReport: notjunk:1;M01:P0:MSI5s3nbyOk=;M9j/GgCc4B3PJ7xT0BCOUwihWUs
- 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
+X-Provags-ID: V03:K1:T+ePYDEE8PV3OFayaT/DgIkfhrYrzKUxmZHgyEFn/CTTosJ80KW
+ 0ZIZ0yp07kTlBn5dNIny5ngONvUSDHdRxaXnTUcni7BjxvmaHJUJRiDzaWjT+hJBOYOLafz
+ xL3P827q2f/C04f8p+Y/vozdcDrCHkV+alfYMAEJtEaQx4bcSxt9IvSbQL8uFmLp8AZCO3x
+ YfLe9En59zGHxYuVJy5iQ==
+UI-OutboundReport: notjunk:1;M01:P0:qoylasEdLRg=;p2sSHQza86cA7pXVW06t7uwLMxx
+ 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
+ iefwiy3zpQXQ1L4X4/GRfQL/Rt6FV
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1763324478; x=1763929278; i=fiona.klute@gmx.de;
- bh=V8RlV/yZrXOYXLPinkMqP129oNZufta8N/Z7SQ2omik=;
+ s=s31663417; t=1763324480; x=1763929280; i=fiona.klute@gmx.de;
+ bh=VQ/knfaNw8H8LO12SLu4l1hVx2pJ9Zo52pBCgvna0nE=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
  References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=KcRhqK73tbK4Be2TFp53Y5bdct/Tp7uuR9dapbUXQcEpCmG5p9ieEfc8YXa8eMqb
- Orlz4L8TmB6I+4KKfQ7OOEtg+obreX2bMndR/L+UQSximuaQXRDxoIQmeKy0Uq/AJ
- lD5crFPlLiV2xpVAsBJFye0C2o6u5IIzO1JStfQ8PQ80lgnrsr1lk0KfrQ/2nw+4F
- SRKQwoeXbCT5pb0B3qGkIa/ipptkIDh34p774fn1bw6PaOOXlgJ/h7A01TbFJkRsr
- blHJ18yr84oi3nVyMs9wvrm9Agej50+Ysby6s4BkZt6bwHf0JKGFeLmS/xjNdt303
- 1+5TtWAIWExDe1CLuw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=BjBpdM658RAd4/us1mwPMpG0Xh9uxZTzCyRJQ/8uuHwpAOd0iDN3rVutk/BgezJ0
+ 92Hj+CJOfY8aSc4oyO+BjwahL/wacZS1Nw3jcNWBVTHMihk8STlovugvz23Hv4zg3
+ eN8aiiAk34VrqjjnXyYgaovl4c4ZxJWbsvE3gJn0i9b3K1PH7FX2w0QzurXLfO3EM
+ 8vs5B52KhDdG+f6I/RQYiIQ+Y1yeTHEb11VePCoN7xr4VQUe14Z4h4Qg7MpGdEwrz
+ Rj5GTDR1Bh3nBtXjw4KPK7xfa2CTUhrNcGTfUme93d8DduQZfBw3+ATfd3CC3UO8g
+ 8aKCW5RhPJTYwh37gw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=KcRhqK73
-Subject: [Buildroot] [PATCH 2/3] support/testing: infra: add host bin dir to
- PATH when running host command
+ header.s=s31663417 header.b=BjBpdM65
+Subject: [Buildroot] [PATCH 3/3] support/testing: add tests for FIT hash
+ support in package/uboot-tools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -168,35 +168,177 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Some host commands need to call other host commands: For example,
-"mkimage" from host-uboot-tools needs to run "dtc". This would fail or
-call system commands without adding the host bin dir to PATH.
+The tests check if all supported hash algorithms are usable in
+mkimage, for both host and target packages. Additionally, as a
+necessary tool, it verifies the previous fix for FIT output from
+dumpimage.
 
 Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 ---
-I guess this could be configurable, but I don't see why you wouldn't
-want PATH to include the host bin dir when running a host command.
+ .../testing/tests/package/test_uboot_tools.py | 98 +++++++++++++++++++
+ .../package/test_uboot_tools/example.its      | 48 +++++++++
+ 2 files changed, 146 insertions(+)
+ create mode 100644 support/testing/tests/package/test_uboot_tools.py
+ create mode 100644 support/testing/tests/package/test_uboot_tools/example.its
 
- support/testing/infra/__init__.py | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/support/testing/infra/__init__.py b/support/testing/infra/__init__.py
-index 52308395a3..9edbc8ff2b 100644
---- a/support/testing/infra/__init__.py
-+++ b/support/testing/infra/__init__.py
-@@ -62,7 +62,11 @@ def run_cmd_on_host(builddir, cmd):
-     try:
-         out = subprocess.check_output(cmd,
-                                       cwd=builddir,
--                                      env={"LANG": "C"},
-+                                      env={
-+                                          "LANG": "C",
-+                                          "PATH": "{}/host/bin:{}".format(
-+                                              builddir, os.environ["PATH"]),
-+                                      },
-                                       stderr=subprocess.STDOUT,
-                                       text=True,
-                                       universal_newlines=True)
+diff --git a/support/testing/tests/package/test_uboot_tools.py b/support/testing/tests/package/test_uboot_tools.py
+new file mode 100644
+index 0000000000..01b86e5d1e
+--- /dev/null
++++ b/support/testing/tests/package/test_uboot_tools.py
+@@ -0,0 +1,98 @@
++import hashlib
++import re
++import zlib
++from pathlib import Path
++
++import infra.basetest
++
++EXAMPLE_ITS = Path(__file__).parent / "test_uboot_tools/example.its"
++
++
++def get_hashes(output: str) -> dict[str, str]:
++    """Get hashes from dumpimage output (assumes exactly one image in FIT)"""
++    pat = re.compile(
++        r"Hash algo:\s+(\S+)$\s+Hash value:\s+(\w+)$", flags=re.MULTILINE)
++    return dict(pat.findall(output))
++
++
++def calc_hashes(data: bytes) -> dict[str, str]:
++    """Calculate the hashes dumpimage should report for a given blob"""
++    return {
++        "crc32": f"{zlib.crc32(data):08x}",
++        "md5": hashlib.md5(data).hexdigest(),
++        "sha1": hashlib.sha1(data).hexdigest(),
++        "sha256": hashlib.sha256(data).hexdigest(),
++        "sha384": hashlib.sha384(data).hexdigest(),
++        "sha512": hashlib.sha512(data).hexdigest(),
++    }
++
++
++class TestUbootTools(infra.basetest.BRTest):
++    rootfs_overlay = \
++        infra.filepath("tests/package/test_uboot_tools")
++    config = f"""\
++        BR2_aarch64=y
++        BR2_cortex_a72=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_PER_PACKAGE_DIRECTORIES=y
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.17.8"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_PACKAGE_UBOOT_TOOLS=y
++        BR2_PACKAGE_UBOOT_TOOLS_DUMPIMAGE=y
++        BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT=y
++        BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE=y
++        BR2_ROOTFS_OVERLAY="{rootfs_overlay}"
++        """
++
++    def test_run(self):
++        ramdisk = Path(self.builddir) / "images/rootfs.cpio"
++        kernel = Path(self.builddir) / "images/Image"
++        self.emulator.boot(
++            arch="aarch64",
++            kernel=str(kernel),
++            options=["-M", "virt", "-cpu", "cortex-a72", "-initrd", str(ramdisk)])
++        self.emulator.login()
++
++        self.assertRunOk(f"mkimage -f /{EXAMPLE_ITS.name} /tmp/test.fit")
++
++        cmd = "dumpimage -l /tmp/test.fit"
++        out, exit_code = self.emulator.run(cmd, -1)
++        self.assertEqual(
++            exit_code,
++            0,
++            "\nFailed to run: {}\noutput was:\n{}".format(cmd, '  '+'\n  '.join(out))
++        )
++        reported = get_hashes("\n".join(out))
++        expected = calc_hashes(EXAMPLE_ITS.read_bytes())
++        for h in expected:
++            with self.subTest(hash=h):
++                self.assertEqual(expected[h], reported[h])
++        # Python does not have built-in CRC16 support, just check it is present
++        self.assertIn("crc16-ccitt", reported)
++
++
++class TestHostUbootTools(infra.basetest.BRHostPkgTest):
++    hostpkgs = ["host-uboot-tools"]
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++        BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
++        """
++
++    def test_run(self):
++        cmd = ["host/bin/mkimage", "-f", str(EXAMPLE_ITS), "test.fit"]
++        infra.run_cmd_on_host(self.builddir, cmd)
++
++        cmd = ["host/bin/dumpimage", "-l", "test.fit"]
++        reported = get_hashes(infra.run_cmd_on_host(self.builddir, cmd))
++        expected = calc_hashes(EXAMPLE_ITS.read_bytes())
++        for h in expected:
++            with self.subTest(hash=h):
++                self.assertEqual(expected[h], reported[h])
++        # Python does not have built-in CRC16 support, just check it is present
++        self.assertIn("crc16-ccitt", reported)
+diff --git a/support/testing/tests/package/test_uboot_tools/example.its b/support/testing/tests/package/test_uboot_tools/example.its
+new file mode 100644
+index 0000000000..24291b4e56
+--- /dev/null
++++ b/support/testing/tests/package/test_uboot_tools/example.its
+@@ -0,0 +1,48 @@
++/dts-v1/;
++
++/ {
++    description = "Test FIT (build only)";
++    #address-cells = <1>;
++
++    images {
++        kernel {
++            description = "This file, pretending to be kernel";
++            data = /incbin/("example.its");
++            type = "kernel";
++            arch = "arm64";
++            os = "linux";
++            compression = "none";
++            load = <0x40400000>;
++            entry = <0x40400000>;
++            hash-1 {
++                algo = "crc16-ccitt";
++            };
++            hash-2 {
++                algo = "crc32";
++            };
++            hash-3 {
++                algo = "md5";
++            };
++            hash-4 {
++                algo = "sha1";
++            };
++            hash-5 {
++                algo = "sha256";
++            };
++            hash-6 {
++                algo = "sha384";
++            };
++            hash-7 {
++                algo = "sha512";
++            };
++        };
++    };
++
++    configurations {
++        default = "config-1";
++        config-1 {
++            description = "Test entry";
++            kernel = "kernel";
++        };
++    };
++};
 -- 
 2.51.0
 
