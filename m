@@ -4,73 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A61DCCD19A
-	for <buildroot@archiver.kernel.org>; Sun, 16 Nov 2025 21:50:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DC27CEBF61
+	for <buildroot@archiver.kernel.org>; Sun, 16 Nov 2025 21:52:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2593440983;
-	Sun, 16 Nov 2025 21:50:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4FE23406C6;
+	Sun, 16 Nov 2025 21:52:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jYXWZbezPU2p; Sun, 16 Nov 2025 21:50:22 +0000 (UTC)
+ id lEbGVxurj09y; Sun, 16 Nov 2025 21:52:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB43E40945
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54437406E6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DB43E40945;
-	Sun, 16 Nov 2025 21:50:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2B954158
- for <buildroot@buildroot.org>; Sun, 16 Nov 2025 21:50:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 54437406E6;
+	Sun, 16 Nov 2025 21:52:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9EFA5158
+ for <buildroot@buildroot.org>; Sun, 16 Nov 2025 21:52:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 19E5860BA5
- for <buildroot@buildroot.org>; Sun, 16 Nov 2025 21:50:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 85805406BA
+ for <buildroot@buildroot.org>; Sun, 16 Nov 2025 21:52:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pflQbT1b55OZ for <buildroot@buildroot.org>;
- Sun, 16 Nov 2025 21:50:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u2aVR1MXahOk for <buildroot@buildroot.org>;
+ Sun, 16 Nov 2025 21:51:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DDBAC60832
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DDBAC60832
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DDBAC60832
- for <buildroot@buildroot.org>; Sun, 16 Nov 2025 21:50:16 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1823882004; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sun, 16 Nov 2025 21:50:10 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vKkdN-000000015CC-46dJ;
- Sun, 16 Nov 2025 22:50:09 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3D38406A5
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A3D38406A5
+ for <buildroot@buildroot.org>; Sun, 16 Nov 2025 21:51:59 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 83330847F4; Sun, 16 Nov 2025 21:51:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Julien Olivain <ju.o@free.fr>
-Cc: Bernd Kuhls <bernd@kuhls.net>,  buildroot@buildroot.org
-In-Reply-To: <4f593e5a5246154f4a6334dc57483aef@free.fr> (Julien Olivain's
- message of "Sun, 16 Nov 2025 22:10:02 +0100")
-References: <20251115220705.572223-1-bernd@kuhls.net>
- <87h5utwvhp.fsf@dell.be.48ers.dk>
- <4f593e5a5246154f4a6334dc57483aef@free.fr>
-Date: Sun, 16 Nov 2025 22:50:09 +0100
-Message-ID: <87v7j9ve9a.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=JB7uTVbzRTlnPbBY3Yzcd1Kt8gvcxnMFI1GiuOU6Gg4j5p6ImldBMqGgmzM814KBZ6Ds/4nlZWdTcRxHgJ90Rh6chs5sPAzIHvVqhfQo6/9/CzBZtaxhSSAMa07iwKF0njqx4B2EobrMBVZKDMBpYBNww/2gO2a68oKCKhHmc4RujIIvUb9iPz4grZfBWWdz9WJhtKHF3gnxQ0JnkmWwPdWJASMXXGFR8L6y38bjD5eA5RXzQub+O5pcZXk6Va5vJmtaUj0fE5IP3rerLaKz/YVmk7SBrOixRCsUu2TCnFSSN9Zenkn1BAAVsCcfEuBlkJwR6LuqpgflH0xn4nxr8w==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=1izCCELqnldYiP+dNAFCAsLSbb6Y4ko+rLVJgsP7D1o=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=JB7uTVbz
-Subject: Re: [Buildroot] [PATCH 1/1] package/ola: remove package
+To: buildroot@buildroot.org
+Date: Sun, 16 Nov 2025 22:26:37 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2193b55bac7ee6e2f09d3316d75a157142462a25
+X-Git-Newrev: 1f973844d10d0d840409a964227aa0777f3b3f4c
+X-Patchwork-Hint: ignore
+Message-Id: <20251116215159.83330847F4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libroxml: fix musl build errors
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,44 +58,130 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1f973844d10d0d840409a964227aa0777f3b3f4c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hi Peter, Bernd,
- > On 16/11/2025 21:52, Peter Korsgaard wrote:
- >>>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
- >> Hi,
- >> > The package is incompatible with newer versions of protobuf:
- >> >
- >> https://github.com/OpenLightingProject/ola/issues/1879#issuecomment-2567133849
- >> >
- >> https://github.com/OpenLightingProject/ola/pull/1975#issuecomment-2346854820
- >> > with no upstream fixes in sight and fails to build with protobuf
- >> 29.3
- >> > currently used by buildroot:
- >> >
- >> https://lists.buildroot.org/pipermail/buildroot/2025-February/772533.html
- >> > Fixes:
- >> >
- >> https://autobuild.buildroot.net/results/fbb/fbbfef6e3715c0ac195537ab88ebb2e0e6c90c2f/
- >> > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- >> Julien, what do you say?
- >> It sounds like there also may be some unfixed security issues in
- >> ola:
- >> https://github.com/OpenLightingProject/ola/issues/2006
+Fixes:
+https://autobuild.buildroot.net/results/0ff/0ff4394319d2014884328c347ef495da327a562e/
 
- > I am OK to remove this package for the time being.
+Added Upstream tag to patch 0001.
 
- > Acked-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .checkpackageignore                                |  1 -
+ .../0001-src-roxml_mem.h-add-missing-extern.patch  |  3 +-
+ package/libroxml/0002-Fix-musl-build-errors.patch  | 69 ++++++++++++++++++++++
+ 3 files changed, 71 insertions(+), 2 deletions(-)
 
-OK, good - Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 42a04d2a6b..4821f41cce 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -596,7 +596,6 @@ package/liboping/0005-src-oping.c-always-use-s-style-format-for-printf-sty.patch
+ package/libp11/0001-src-p11_attr.c-fix-build-with-gcc-4.8.patch lib_patch.Upstream
+ package/libpthsem/0001-fix-build-on-linux-3.x-host.patch lib_patch.Upstream
+ package/libressl/0001-always-expose-SSL_OP_NO_TLSv1_3.patch lib_patch.Upstream
+-package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch lib_patch.Upstream
+ package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch lib_patch.Upstream
+ package/librtlsdr/0001-Makefile.am-respect-DESTDIR-with-install-udev-rules.patch lib_patch.Upstream
+ package/libselinux/0001-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch lib_patch.Upstream
+diff --git a/package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch b/package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch
+index 6f63d7b546..12e67f9c91 100644
+--- a/package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch
++++ b/package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch
+@@ -13,8 +13,9 @@ libtool: link: /home/peko/autobuild/instance-0/output-1/host/bin/arm-buildroot-l
+ Fixes:
+  - http://autobuild.buildroot.org/results/b6ac3664d61ad826515b57c4d057b6f001b5167d
+ 
++Upstream: https://github.com/blunderer/libroxml/commit/34257124eefe0ca095ed54681c818381070ed549
++
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/blunderer/libroxml/pull/79]
+ ---
+  src/roxml_mem.h | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+diff --git a/package/libroxml/0002-Fix-musl-build-errors.patch b/package/libroxml/0002-Fix-musl-build-errors.patch
+new file mode 100644
+index 0000000000..4931f12d5b
+--- /dev/null
++++ b/package/libroxml/0002-Fix-musl-build-errors.patch
+@@ -0,0 +1,69 @@
++From abf4404c6c0213666f3fce73cff6e51435eac923 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Sat, 15 Nov 2025 12:29:33 +0100
++Subject: [PATCH] Fix musl build errors
++
++src/roxml_cat.c: In function 'display_usage':
++src/roxml_cat.c:21:22: error: implicit declaration of function 'basename'; did you mean 'rename'? [-Wimplicit-function-declaration]
++   21 |         char *name = basename(prgname);
++      |                      ^~~~~~~~
++      |                      rename
++src/roxml_cat.c:21:22: error: initialization of 'char *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
++
++src/roxml_mem.c: In function 'roxml_malloc':
++src/roxml_mem.c:138:18: error: assignment to 'long unsigned int' from 'pthread_t' {aka 'struct __pthread *'} makes integer from pointer without a cast [-Wint-conversion]
++  138 |         cell->id = pthread_self();
++
++src/roxml_utils.h:51:16: error: returning 'pthread_t' {aka 'struct __pthread *'} from a function with return type 'long unsigned int' makes integer from pointer without a cast [-Wint-conversion]
++   51 |         return pthread_self();
++
++Upstream: https://github.com/blunderer/libroxml/pull/86
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/roxml_cat.c   | 1 +
++ src/roxml_mem.c   | 2 +-
++ src/roxml_utils.h | 2 +-
++ 3 files changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/src/roxml_cat.c b/src/roxml_cat.c
++index 11e42d9..4320efd 100644
++--- a/src/roxml_cat.c
+++++ b/src/roxml_cat.c
++@@ -5,6 +5,7 @@
++ #include <getopt.h>
++ #include <string.h>
++ #include <errno.h>
+++#include <libgen.h>
++ #include "roxml.h"
++ 
++ static struct option long_options[] =
++diff --git a/src/roxml_mem.c b/src/roxml_mem.c
++index 91b5db2..bf757bb 100644
++--- a/src/roxml_mem.c
+++++ b/src/roxml_mem.c
++@@ -135,7 +135,7 @@ ROXML_INT void *roxml_malloc(int size, int num, int type)
++ 	cell->next->prev = cell;
++ 	cell = cell->next;
++ 	cell->type = type;
++-	cell->id = pthread_self();
+++	cell->id = (unsigned long)pthread_self();
++ 	cell->occ = size;
++ 	cell->ptr = calloc(num, size);
++ 	head_cell.prev = cell;
++diff --git a/src/roxml_utils.h b/src/roxml_utils.h
++index 3f50976..f5fc582 100644
++--- a/src/roxml_utils.h
+++++ b/src/roxml_utils.h
++@@ -48,7 +48,7 @@ ROXML_STATIC_INLINE ROXML_INT int roxml_unlock(node_t *n)
++ #else /* CONFIG_XML_THREAD_SAFE==1 */
++ ROXML_STATIC_INLINE ROXML_INT unsigned long int roxml_thread_id(node_t *n)
++ {
++-	return pthread_self();
+++	return (unsigned long)pthread_self();
++ }
++ 
++ ROXML_STATIC_INLINE ROXML_INT int roxml_lock_init(node_t *n)
++-- 
++2.47.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
