@@ -1,105 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2763DCE8D6B
-	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 19:19:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71884CE8D6B
+	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 19:51:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D54BD40BFD;
-	Mon, 17 Nov 2025 19:19:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7FCEC60F18;
+	Mon, 17 Nov 2025 19:51:25 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VkJK9bKvdJvy; Mon, 17 Nov 2025 19:51:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2099160EB2
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2099160EB2;
+	Mon, 17 Nov 2025 19:51:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E3CB61BA
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C205B401EA
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3H2CG_SFiAes; Mon, 17 Nov 2025 19:19:41 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB27340E31
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DB27340E31;
-	Mon, 17 Nov 2025 19:19:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 465B2158
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:19:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 43995406DD;
- Mon, 17 Nov 2025 19:19:39 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hGeuaAf9qjkf; Mon, 17 Nov 2025 19:19:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
- envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1914C406A8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1914C406A8
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1914C406A8
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:19:37 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-47774d3536dso38788505e9.0
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 11:19:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1763407176; x=1764011976;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=ft6fGkW4uGymK9JzmDxkL50JR5kIoh0YbeJ3kn+xrXk=;
- b=bXX5+CHswXLzyDsQe66H1MMZtPKfuib+sjmAFEaRXehIsiZWghxTdrWjmA4f94wgR+
- F+Fzk5EZj38SBA1+JZx7Sf5TW1xlrcb3O52ou0pmBnfrzK62NWl987oyU9/wlSIpoeox
- y+tcfXxFRQ9mJ9o/bi5FdWOqvl8RRiI6oMsm6ZXuShjsPqEMhhX0hZA8GM9Wfoh4VJr5
- OahnPxy29/OQJzvKx8g/KkmdNfV9RkwxTW+9HqymslTgh6KCz0a7rbVGrSPRAs2OeBlF
- C/Hjhi+QjEXzfeqdjbE3zIfcIUoRN0OrY2qcQ5etTPPBrpjm01RjJTTlcHiDbmNQXHDn
- +xcQ==
-X-Gm-Message-State: AOJu0YwmGRthy6EW2B5hejazdhzM9ZF+3v7eOA1sPj1xskBq6283LAzy
- ddUOqnzb0DPBW2y5Yy3lzekjrRb1Rwz12OxjxF/zoGCjlWMGyChDYHLW0KYdyQ==
-X-Gm-Gg: ASbGnctdo+snpAPNxy2K7zHnm5oJdd0OsMl9gcuFJWQ5DMl4WZYzLCugRtt+vvlkrn5
- KKha2MTEs62vRRMEJwq8+hY+mKmqSWfQoOzO54pH0dhpZjIQu/dfJgH83MAdrY4U08YDDR+3DeS
- VXs0M/+y4RvtuD3fX1xn+QKv/4Hq3Kf+6IdwtFutWvDu3dDtz8N+VJu5sixq0HpnPM3/fJBDb6J
- FM0hcXvOKF08/qMhiyTGpP7hEjL6AKzXu3dYVGEVOhvOHIQArSNiCR0peKQaSDMkgLs6/IaJpfF
- fJ93HVOzHiznZPa8bO4RhOFctxu1wxoB9i7eRnHeReg5Rb+98wmhmAZvhoGhm9o1FzY0mTydgVf
- Qymt46ZQCI5dKZZscDheUU6TWMhXyHQVy6dV9lnHt/IAIvOV56llJmfedwTBbwY1b93OEykV3Gi
- f5W8KEjY9CpBMsu+IHPvjDTYxlmusPUhz0
-X-Google-Smtp-Source: AGHT+IFLD+aWaS3pqwxVvJQRML5E8dQyzO0PhfbT8PeiRiQq3qgF5vtv9iTbxVm9D/kTFGuE7CS1iw==
-X-Received: by 2002:a05:600c:524e:b0:475:dadd:c474 with SMTP id
- 5b1f17b1804b1-477a94e88bcmr5423605e9.10.1763407175769; 
- Mon, 17 Nov 2025 11:19:35 -0800 (PST)
-Received: from ymorin.is-a-geek.org ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4779f44a0e4sm106079125e9.15.2025.11.17.11.19.34
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 17 Nov 2025 11:19:35 -0800 (PST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 17 Nov 2025 20:19:34 +0100
-Date: Mon, 17 Nov 2025 20:19:34 +0100
-To: buildroot@buildroot.org
-Message-ID: <aRt1RqKmwVREhyar@landeda>
-References: <20251117191814.2160335-1-yann.morin.1998@free.fr>
+ id 0x1QpoG_gUBr for <buildroot@buildroot.org>;
+ Mon, 17 Nov 2025 19:51:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8B94D4049B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B94D4049B
+Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8B94D4049B
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:20 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 823EBB979430; Mon, 17 Nov 2025 20:51:17 +0100 (CET)
+Message-ID: <a9cf16a5-5b04-4674-bcb2-5159942335fe@rnout.be>
+Date: Mon, 17 Nov 2025 20:51:15 +0100
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20251117191814.2160335-1-yann.morin.1998@free.fr>
+User-Agent: Mozilla Thunderbird
+To: Thomas Perale <thomas.perale@mind.be>, Romain Naour <romain.naour@smile.fr>
+Cc: buildroot@buildroot.org
+References: <20250906162551.3715975-2-romain.naour@smile.fr>
+ <20250911192608.2672637-1-thomas.perale@mind.be>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20250911192608.2672637-1-thomas.perale@mind.be>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1763407176; x=1764011976; darn=buildroot.org;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:to:from:date:sender:from:to:cc:subject:date:message-id
- :reply-to;
- bh=ft6fGkW4uGymK9JzmDxkL50JR5kIoh0YbeJ3kn+xrXk=;
- b=gSFP/pX/FT90+vqwmYEuq9NySrXT2MMvrHYoKqvD/HzyWGTmqu1WY6AqZ2K47cHF+N
- Kq8BMat2gu31J/CFIlpUA9xDa8WXLN7GIgCIGIHrWxUdwsaXmfr+kp4IAbOLeJ1ZqWCx
- hXUM0i8kWr7pdNfkD1LotXEq28d41/2Q8hrEac2KxlvJtxoKL6n4K+AdexEB8x/pVbUd
- iXm1YSMhwxOlPCgmWIVpYidnbBIWm3tZilAnbv6U1NvJqBVKsezBtfqdHFjgS2/2JvOo
- ziEEx8qqUEhBhpemjcrUNU/EUddgzaOdW+XMVs/WofwWUEcIfjamLj1FpdnTG49jj9tO
- miwg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=fail (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=gSFP/pX/
-Subject: Re: [Buildroot] [PATCH] package/distribution-registry: fix build on
- i386
+ d=rnout.be; s=dkim; 
+ t=1763409078; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=wGWyYz9JNIUvuSLcNw0LUZtEfW9zcc7nioyy4DI+R4Q=;
+ b=hMacyB/Q+c/hhP4rpgZaO4S4/d4jmnrJ3gzO2PHHz5s4p1SvaRTqGjtd0r2HKclpLqwkUG
+ XnPszd3LNfQzz45vKWiwlMRciNFKkd+RZykcra5ZklUoabte1rWhFBQGYCIFNyQKBPSNZy
+ JqjbAQL4ly4hmnT+aUiYrYU8aHQ9vaFySUA5DuPMMUC9oJkuW7qiq9sw4Jq6x5xBeqbhNi
+ N1Qu6yJd8d2oG9Lzux/7m/clGpgO/MEIMikx13QF/VSGeDIqYvKrc6eIzoVYpkd6AV/SFK
+ Kh1xg/RZjHGyTw9kCwr2R0zNmwH9rGYpNcYXbzyhyvl3Dlf3W2bkwh9d2nD3uQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=hMacyB/Q
+Subject: Re: [Buildroot] [PATCH 2/2] package/iozone: Fix parallel build
+ problem
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,106 +79,171 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Yann E. MORIN via buildroot" <buildroot@buildroot.org>
-Reply-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-All,
 
-On 2025-11-17 20:18 +0100, Yann E. MORIN spake thusly:
-> The S3 storage drivers defines the maximum size of a chunk to a value
-> thqt does not fit in the native integer on 32-bit architectures. This
-> causes build failures:
+
+On 11/09/2025 21:26, Thomas Perale via buildroot wrote:
+> In reply of:
+>> Apply a patch from meta-openembedded fixing a cross-build issue [1].
+>>
+>> [1] https://github.com/openembedded/meta-openembedded/blob/walnascar/meta-oe/recipes-benchmark/iozone3/iozone3/parallelism.patch
+>>
+>> Fixes:
+>> https://gitlab.com/buildroot.org/buildroot/-/jobs/11176774405 (TestIozone)
+>>
+>> Signed-off-by: Romain Naour <romain.naour@smile.fr>
 > 
->     registry/storage/driver/s3-aws/s3.go:312:99: cannot use maxChunkSize
->     (untyped int constant 5368709120) as int value in argument to
->     getParameterAsInteger (overflows)
+> Applied to 2025.02.x & 2025.05.x. Thanks
+
+  This time for real.
+
+  Regards,
+  Arnout
+
 > 
-> Ideally, we'd like to use a build tag that refers to whether the
-> architecture is 32- or 64-bit, but there is no such flag. Sigh...
-> 
-> Instead, backport a patch from upstream that papers over the issue, by
-> usig the i386 build tag (of course, that still misses other 32-bit
-> archs, but are they really relevant in this case?).
+>> ---
+>>   ...ve-libasync.o-and-libbif.o-from-deps.patch | 114 ++++++++++++++++++
+>>   1 file changed, 114 insertions(+)
+>>   create mode 100644 package/iozone/0003-remove-libasync.o-and-libbif.o-from-deps.patch
+>>
+>> diff --git a/package/iozone/0003-remove-libasync.o-and-libbif.o-from-deps.patch b/package/iozone/0003-remove-libasync.o-and-libbif.o-from-deps.patch
+>> new file mode 100644
+>> index 0000000000..ea4c9c97b3
+>> --- /dev/null
+>> +++ b/package/iozone/0003-remove-libasync.o-and-libbif.o-from-deps.patch
+>> @@ -0,0 +1,114 @@
+>> +From 34c25d67c33050f42f0f243c0fb6674c28ff44b5 Mon Sep 17 00:00:00 2001
+>> +From: Romain Naour <romain.naour@smile.fr>
+>> +Date: Sat, 6 Sep 2025 00:31:48 +0200
+>> +Subject: [PATCH] remove libasync.o and libbif.o from deps
+>> +
+>> +there are no implicit rules to build them and they get wrong CFLAGS
+>> +when compiled with implicit rule.
+>> +
+>> +They are built as part of iozone_linux.o target anyway
+>> +
+>> +Only fixed linux targets for now
+>> +
+>> +Signed-off-by: Khem Raj <raj.khem@gmail.com>
+>> +Upstream: Pending
+>> +[Romain:
+>> +  rebase on 3.508
+>> +  convert to git format
+>> +]
+>> +Signed-off-by: Romain Naour <romain.naour@smile.fr>
+>> +---
+>> +Patch from Yocto:
+>> +https://github.com/openembedded/meta-openembedded/blob/walnascar/meta-oe/recipes-benchmark/iozone3/iozone3/parallelism.patch
+>> +---
+>> + src/current/makefile | 18 +++++++++---------
+>> + 1 file changed, 9 insertions(+), 9 deletions(-)
+>> +
+>> +diff --git a/src/current/makefile b/src/current/makefile
+>> +index bd66a4e..ba5759f 100755
+>> +--- a/src/current/makefile
+>> ++++ b/src/current/makefile
+>> +@@ -171,7 +171,7 @@ hpux_no_ansi:	iozone_hpux_no.o  libbif.o
+>> + #
+>> + # GNU 'C' compiler Linux build with threads, largefiles, async I/O
+>> + #
+>> +-linux:	iozone_linux.o libasync.o libbif.o fileop_linux.o pit_server.o
+>> ++linux:	iozone_linux.o fileop_linux.o pit_server.o
+>> + 	$(CC)  $(CFLAGS) $(LDFLAGS) iozone_linux.o libasync.o libbif.o \
+>> + 		-lpthread -lrt -o iozone
+>> + 	$(CC)  $(CFLAGS) -Dlinux fileop_linux.o -o fileop
+>> +@@ -198,7 +198,7 @@ linux-noth: iozone_linux-noth.o libbif.o fileop_linux.o pit_server.o
+>> + #
+>> + # GNU 'C' compiler Linux build for powerpc chip with threads, largefiles, async I/O
+>> + #
+>> +-linux-powerpc: iozone_linux-powerpc.o  libbif.o libasync.o fileop_linux-ppc.o pit_server.o
+>> ++linux-powerpc: iozone_linux-powerpc.o fileop_linux-ppc.o pit_server.o
+>> + 	$(CC) -O3 $(LDFLAGS) iozone_linux-powerpc.o libasync.o \
+>> + 		libbif.o -lpthread  -lrt -o iozone
+>> + 	$(CC)  -O3 -Dlinux fileop_linux-ppc.o -o fileop
+>> +@@ -206,7 +206,7 @@ linux-powerpc: iozone_linux-powerpc.o  libbif.o libasync.o fileop_linux-ppc.o pi
+>> + #
+>> + # GNU 'C' compiler Linux build for sparc chip with threads, largefiles, async I/O
+>> + #
+>> +-linux-sparc: iozone_linux-sparc.o  libbif.o libasync.o fileop_linux.o pit_server.o
+>> ++linux-sparc: iozone_linux-sparc.o fileop_linux.o pit_server.o
+>> + 	$(CC) -O3 $(LDFLAGS) iozone_linux-sparc.o libasync.o libbif.o \
+>> + 		-lpthread -lrt -o iozone
+>> + 	$(CC) -O3 -Dlinux fileop_linux.o -o fileop
+>> +@@ -215,7 +215,7 @@ linux-sparc: iozone_linux-sparc.o  libbif.o libasync.o fileop_linux.o pit_server
+>> + #
+>> + # GNU 'C' compiler Linux build with threads, largefiles, async I/O
+>> + #
+>> +-linux-ia64:	iozone_linux-ia64.o  libbif.o libasync.o fileop_linux-ia64.o pit_server.o
+>> ++linux-ia64:	iozone_linux-ia64.o fileop_linux-ia64.o pit_server.o
+>> + 	$(CC) -O3 $(LDFLAGS) iozone_linux-ia64.o libbif.o libasync.o \
+>> + 		-lrt -lpthread -o iozone
+>> + 	$(CC)  -O3 -Dlinux fileop_linux-ia64.o -o fileop
+>> +@@ -224,7 +224,7 @@ linux-ia64:	iozone_linux-ia64.o  libbif.o libasync.o fileop_linux-ia64.o pit_ser
+>> + #
+>> + # GNU 'C' compiler Linux build for powerpc chip with threads, largefiles, async I/O
+>> + #
+>> +-linux-powerpc64: iozone_linux-powerpc64.o  libbif.o libasync.o fileop_linux-ppc64.o pit_server-linux-powerpc64.o
+>> ++linux-powerpc64: iozone_linux-powerpc64.o fileop_linux-ppc64.o pit_server-linux-powerpc64.o
+>> + 	$(CC) -O3 -Dunix -DHAVE_ANSIC_C -DSHARED_MEM -DASYNC_IO \
+>> + 		-D_LARGEFILE64_SOURCE -Dlinux \
+>> + 		iozone_linux-powerpc64.o libasync.o libbif.o -lpthread \
+>> +@@ -235,7 +235,7 @@ linux-powerpc64: iozone_linux-powerpc64.o  libbif.o libasync.o fileop_linux-ppc6
+>> + #
+>> + # GNU 'C' compiler Linux build with threads, largefiles, async I/O
+>> + #
+>> +-linux-arm:	iozone_linux-arm.o  libbif.o libasync.o fileop_linux-arm.o pit_server.o
+>> ++linux-arm:	iozone_linux-arm.o fileop_linux-arm.o pit_server.o
+>> + 	$(CC) -O3 $(LDFLAGS) iozone_linux-arm.o libbif.o libasync.o \
+>> + 		-lrt -lpthread -o iozone
+>> + 	$(CC) -O3 -Dlinux fileop_linux-arm.o -o fileop
+>> +@@ -267,7 +267,7 @@ endif
+>> + #
+>> + # GNU 'C' compiler Linux build with threads, largefiles, async I/O
+>> + #
+>> +-linux-AMD64:	iozone_linux-AMD64.o  libbif.o libasync.o fileop_linux-AMD64.o pit_server.o
+>> ++linux-AMD64:	iozone_linux-AMD64.o fileop_linux-AMD64.o pit_server.o
+>> + 	$(CC)  -O3 $(LDFLAGS) iozone_linux-AMD64.o libbif.o libasync.o \
+>> + 		-lrt -lpthread -o iozone
+>> + 	$(CC)  -O3 -Dlinux fileop_linux-AMD64.o -o fileop
+>> +@@ -276,7 +276,7 @@ linux-AMD64:	iozone_linux-AMD64.o  libbif.o libasync.o fileop_linux-AMD64.o pit_
+>> + #
+>> + # GNU 'C' compiler Linux build with S/390, threads, largfiles, async I/O
+>> + #
+>> +-linux-S390:	iozone_linux-s390.o libbif.o libasync.o fileop_linux-s390.o pit_server.o
+>> ++linux-S390:	iozone_linux-s390.o fileop_linux-s390.o pit_server.o
+>> + 	$(CC)  -O2 $(LDFLAGS) -lpthread -lrt iozone_linux-s390.o \
+>> + 		libbif.o libasync.o -o iozone
+>> + 	$(CC)  -O3 -Dlinux fileop_linux-s390.o -o fileop
+>> +@@ -285,7 +285,7 @@ linux-S390:	iozone_linux-s390.o libbif.o libasync.o fileop_linux-s390.o pit_serv
+>> + #
+>> + # GNU 'C' compiler Linux build with S/390, threads, largfiles, async I/O
+>> + #
+>> +-linux-S390X:	iozone_linux-s390x.o libbif.o libasync.o fileop_linux-s390x.o pit_server.o
+>> ++linux-S390X:	iozone_linux-s390x.o fileop_linux-s390x.o pit_server.o
+>> + 	$(CC)  -O2 $(LDFLAGS) -lpthread -lrt iozone_linux-s390x.o \
+>> + 		libbif.o libasync.o -o iozone
+>> + 	$(CC)  -O3 -Dlinux fileop_linux-s390x.o -o fileop
+>> +--
+>> +2.51.0
+>> +
+>> -- 
+>> 2.51.0
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot@buildroot.org
+>> https://lists.buildroot.org/mailman/listinfo/buildroot
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-Damned, I forgot to mention:
-
-Fixes: https://autobuild.buildroot.org/results/8fa9c5f63f690b27336051be5178f0516e0c54d4/
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
->  .../0001-s3-aws-fix-build-for-386.patch       | 45 +++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 package/distribution-registry/0001-s3-aws-fix-build-for-386.patch
-> 
-> diff --git a/package/distribution-registry/0001-s3-aws-fix-build-for-386.patch b/package/distribution-registry/0001-s3-aws-fix-build-for-386.patch
-> new file mode 100644
-> index 0000000000..a725ab8e92
-> --- /dev/null
-> +++ b/package/distribution-registry/0001-s3-aws-fix-build-for-386.patch
-> @@ -0,0 +1,45 @@
-> +From 6970080b10a53d858dd444a643a2bd911de12940 Mon Sep 17 00:00:00 2001
-> +From: Chen Qi <Qi.Chen@windriver.com>
-> +Date: Thu, 29 May 2025 11:28:38 +0800
-> +Subject: [PATCH] s3-aws: fix build for 386
-> +
-> +When building for 386, we got the following build error:
-> +
-> +  registry/storage/driver/s3-aws/s3.go:312:99: cannot use
-> +  maxChunkSize (untyped int constant 5368709120) as int value
-> +  in argument to getParameterAsInteger (overflows)
-> +
-> +This is because the s3_64bit.go is used. Adjust the build tag matching
-> +in s3_32bit.go and s3_64bit.go to fix this issue.
-> +
-> +Signed-off-by: Chen Qi <Qi.Chen@windriver.com>
-> +Upstream: https://github.com/distribution/distribution/commit/6970080b10a53d858dd444a643a2bd911de12940
-> +Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> +---
-> + registry/storage/driver/s3-aws/s3_32bit.go | 2 +-
-> + registry/storage/driver/s3-aws/s3_64bit.go | 2 +-
-> + 2 files changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/registry/storage/driver/s3-aws/s3_32bit.go b/registry/storage/driver/s3-aws/s3_32bit.go
-> +index 218e3eab..84161fcb 100644
-> +--- a/registry/storage/driver/s3-aws/s3_32bit.go
-> ++++ b/registry/storage/driver/s3-aws/s3_32bit.go
-> +@@ -1,4 +1,4 @@
-> +-//go:build arm
-> ++//go:build arm || 386
-> + 
-> + package s3
-> + 
-> +diff --git a/registry/storage/driver/s3-aws/s3_64bit.go b/registry/storage/driver/s3-aws/s3_64bit.go
-> +index 55254e49..2ed1f92f 100644
-> +--- a/registry/storage/driver/s3-aws/s3_64bit.go
-> ++++ b/registry/storage/driver/s3-aws/s3_64bit.go
-> +@@ -1,4 +1,4 @@
-> +-//go:build !arm
-> ++//go:build !arm && !386
-> + 
-> + package s3
-> + 
-> +-- 
-> +2.51.1
-> +
-> -- 
-> 2.51.1
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
