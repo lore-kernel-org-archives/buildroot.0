@@ -4,72 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5375BCEACEF
-	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 18:59:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5776CEACEF
+	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 19:18:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B1FE782349;
-	Mon, 17 Nov 2025 18:59:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9BB65837A4;
+	Mon, 17 Nov 2025 19:18:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aBT6JsRV61re; Mon, 17 Nov 2025 18:59:09 +0000 (UTC)
+ id qoblJ-U2wIXy; Mon, 17 Nov 2025 19:18:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E96C81CE7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6A25837B6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E96C81CE7;
-	Mon, 17 Nov 2025 18:59:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2C2C5D5
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 18:59:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B6A25837B6;
+	Mon, 17 Nov 2025 19:18:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 51E4D1BA
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:18:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1D6C160E89
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 18:59:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 381A5406DD;
+ Mon, 17 Nov 2025 19:18:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bskSjC_cK67W for <buildroot@buildroot.org>;
- Mon, 17 Nov 2025 18:59:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1876F60C17
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1876F60C17
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1876F60C17
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 18:59:06 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b06c.dip0.t-ipconnect.de [84.161.176.108])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id ABDCCA4C6DE0
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:58:38 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:57236)
- by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vL4Qw-000000006Zh-1JkD
- for buildroot@buildroot.org; Mon, 17 Nov 2025 18:58:38 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Uf73jAfCueFd; Mon, 17 Nov 2025 19:18:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0991D406A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0991D406A8
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0991D406A8
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:18:17 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-429c8632fcbso3318923f8f.1
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 11:18:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1763407096; x=1764011896;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=0PDGUbmUdigLISdjeDSLedgYS6nt5Cq/uHD729L8PZY=;
+ b=nqRNBcJVJUzm/vSSbQnwm05KzHbh8XoA1PVi6f6DnamaKTVXF0HNkiCHXqEPXd6UEB
+ aSVIFNHrqwT0a5UDSJNVi2rAixhmA3DqrVqfv8Nn1CgNjEuHqhSzS2zU1reajiGY4fmP
+ GKozxpnpQGOUqH0rOqFo7mTkXCcc5W+AydcoKVj+FWOLVFhqJj1RDkUjpswiT2+fKN2D
+ qfKmH7nV087NmSPB6f2tdUWbNe/n4epzNmRie/c/JmNtvJszSJdBeudr1hkKAje2iVMv
+ I7tdNnHH0Ybwlrogun/48Z5cOcYQezxOpReoMKUulw6OqSIcYriTG5UsomQrVsBTmYKa
+ ek1A==
+X-Gm-Message-State: AOJu0Yz9Py3/fYuDsnRTXhN49afavwFlgS0byRRU12yKe7+Nziq3bJ7S
+ r4VYqbwc64ZJfoje+46zaW2ZW1T3PIl+MZosUSou3mf+KqDSnqRMpBs11b+ExQ==
+X-Gm-Gg: ASbGnctCgDj5QwDshguONM2URt7A1mTCuICA4fjsae1mJUnhDOk9BQ4bJUP7E9bnjNi
+ ZGMe3IWlzUw5NYOlpnXEpg/Mf+GazgKWTRQjz4hBZ6QyXHgnB3Nin/4URWmpWjdPI2h0RpguElT
+ 94ZuOpkjeuqU76ukEVcftpXEz+CKrVz062rFTbEKq1bzWEViUPD+x1coEcWbBLGGEseQelpux0R
+ ZFpbclzKpfc71mIQziUQeu4w2AIyDklpNMLLl02KRSOLYvwxsbrArXoob7cpfI3ARL0an9X9cGK
+ i85k14JXdD0yRyqFIF1uMDQKWngI+FSQnXFE51sdThDcQaRacLxExZGDPIapGJIt7MUqndFf499
+ Z7EuLt/Z+IFW+x6M8BhivhRbaUjEgcCb66t6MgIwRjtWEq7tRUfZPzOsiIPbOGbEzgBfE570X6U
+ cyOTFGc1CCrHEJ0/LeYRLloA==
+X-Google-Smtp-Source: AGHT+IEoDO0Of3AToX/bli4Th2VsbcfJPnocaCuEYbETV01XYpi04CvCvlG26nCqbdLaTObTh4106w==
+X-Received: by 2002:a5d:5850:0:b0:42b:2a09:2e59 with SMTP id
+ ffacd0b85a97d-42b592c6797mr13058412f8f.0.1763407095773; 
+ Mon, 17 Nov 2025 11:18:15 -0800 (PST)
+Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-42b53f0b617sm27397652f8f.31.2025.11.17.11.18.15
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 17 Nov 2025 11:18:15 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Mon, 17 Nov 2025 19:58:36 +0100
-Message-ID: <20251117185838.4083475-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Date: Mon, 17 Nov 2025 20:18:14 +0100
+Message-ID: <20251117191814.2160335-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.51.1
 MIME-Version: 1.0
-X-Spamd-Bar: +++++++
-X-Spam: Yes
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1763405918;
- bh=pbcRkGNbnr0LK6TvQBKJEfJ63MYxap0JOPDMcZOphS8=;
- h=From:To:Subject:Date:From;
- b=nbYjyTel4jTRe9L7BzEgC58fjHzC6QeiTcUSsKPkvaFefRm9/NOba8fDeeAS7FCzk
- 2aPDRHYa3J2R0O0kbUBYxXQWqsN9MwoEva/CTG+1yXYYzog1nrp2y+f/SzEBkmFxkV
- 3AN/UxzvFJKYTgoIS8xabxS/Zxif59HrRdP9iiWUK7VbnvC9qDJ0cz2/n2ig0n/izY
- E4Qd2N7BX9QCh0WQWSSwWe0PpbjjReNp0WPRg1wajRfr3Q3S+xasPdQO8A5oSEggJp
- +IFCeOQmlcdjzaNPHG1ErkQ0yW5kME0V9wdxGeQr8OVao5Uig2pjoFNJcNlf8P2tQw
- 23rdkoTzD214w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=nbYjyTel
-Subject: [Buildroot] [PATCH 1/3] package/libfreeglut: bump version to 3.8.0
+ d=gmail.com; s=20230601; t=1763407096; x=1764011896; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=0PDGUbmUdigLISdjeDSLedgYS6nt5Cq/uHD729L8PZY=;
+ b=dQswUKPH1HfOQpz/1wKxCkQlXvgU+AXq52TUrNGqpzKKQA4zNaVdjzkN6gSwtKVN8V
+ Yg4BsTOvaGMcy3RKRq6ar6lL1qSIovZcS+ASXTZNKSca/W6vNFze3VijJ2oKAErdGkh4
+ HmDH/Q5vU2IKiWwAu5fTFnDfLXi2xvHs91wOCorACWlXs/iBkgYeSrcKf0LDn5iejG6s
+ p4Sn+pwWJEt4dWlMwiQ+cVnY84bXYGmcT6PpfcAQInd+lL7rUmfxl70oegarY5ZwMSP0
+ t6ERW21PTr9VCQLuUbqk48hxvYQIe0irCgE0C8CnQ8LvM9G1bsZuXWoUWs+bw2mdeTWk
+ iSpg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=fail (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=dQswUKPH
+Subject: [Buildroot] [PATCH] package/distribution-registry: fix build on i386
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,118 +105,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: "Yann E. MORIN via buildroot" <buildroot@buildroot.org>
+Reply-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog: https://github.com/freeglut/freeglut/blob/v3.8.0/ChangeLog
+The S3 storage drivers defines the maximum size of a chunk to a value
+thqt does not fit in the native integer on 32-bit architectures. This
+causes build failures:
 
-Removed all patches, they are included in this release.
+    registry/storage/driver/s3-aws/s3.go:312:99: cannot use maxChunkSize
+    (untyped int constant 5368709120) as int value in argument to
+    getParameterAsInteger (overflows)
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Ideally, we'd like to use a build tag that refers to whether the
+architecture is 32- or 64-bit, but there is no such flag. Sigh...
+
+Instead, backport a patch from upstream that papers over the issue, by
+usig the i386 build tag (of course, that still misses other 32-bit
+archs, but are they really relevant in this case?).
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...formDestroyContext-prototype-for-C23.patch | 31 -------------------
- ...e-are-aware-there-are-newer-versions.patch | 26 ----------------
- package/libfreeglut/libfreeglut.hash          |  2 +-
- package/libfreeglut/libfreeglut.mk            |  2 +-
- 4 files changed, 2 insertions(+), 59 deletions(-)
- delete mode 100644 package/libfreeglut/0001-egl-fix-fgPlatformDestroyContext-prototype-for-C23.patch
- delete mode 100644 package/libfreeglut/0002-Let-cmake-know-we-are-aware-there-are-newer-versions.patch
+ .../0001-s3-aws-fix-build-for-386.patch       | 45 +++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/distribution-registry/0001-s3-aws-fix-build-for-386.patch
 
-diff --git a/package/libfreeglut/0001-egl-fix-fgPlatformDestroyContext-prototype-for-C23.patch b/package/libfreeglut/0001-egl-fix-fgPlatformDestroyContext-prototype-for-C23.patch
-deleted file mode 100644
-index c3aadb87de..0000000000
---- a/package/libfreeglut/0001-egl-fix-fgPlatformDestroyContext-prototype-for-C23.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 6d0178a1c43f94b046e4d5f3dfa7185a398706ae Mon Sep 17 00:00:00 2001
--From: Sam James <sam@gentoo.org>
--Date: Sun, 17 Nov 2024 01:14:26 +0000
--Subject: [PATCH] egl: fix fgPlatformDestroyContext prototype for C23
--
--C23 removes unprototyped functions, so this conflicted with the definition
--in fg_init_x11.c.
--
--Bug: https://github.com/freeglut/freeglut/issues/186
--
--Upstream: 800772e993a3ceffa01ccf3fca449d3279cde338
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- src/egl/fg_init_egl.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/egl/fg_init_egl.h b/src/egl/fg_init_egl.h
--index 592c5221..8753dc0b 100644
----- a/src/egl/fg_init_egl.h
--+++ b/src/egl/fg_init_egl.h
--@@ -28,6 +28,6 @@
-- 
-- extern void fghPlatformInitializeEGL();
-- extern void fghPlatformCloseDisplayEGL();
---extern void fgPlatformDestroyContext();
--+extern void fgPlatformDestroyContext ( SFG_PlatformDisplay pDisplay, SFG_WindowContextType MContext );
-- 
-- #endif
---- 
--2.50.1
--
-diff --git a/package/libfreeglut/0002-Let-cmake-know-we-are-aware-there-are-newer-versions.patch b/package/libfreeglut/0002-Let-cmake-know-we-are-aware-there-are-newer-versions.patch
-deleted file mode 100644
-index 45f2fcf541..0000000000
---- a/package/libfreeglut/0002-Let-cmake-know-we-are-aware-there-are-newer-versions.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From 2294389397912c9a6505a88221abb7dca0a4fb79 Mon Sep 17 00:00:00 2001
--From: John Tsiombikas <nuclear@member.fsf.org>
--Date: Thu, 20 Mar 2025 09:28:29 +0200
--Subject: [PATCH] Let cmake know we are aware there are newer versions and we
-- don't care
--
--Closes issue #207
--
--Upstream: https://github.com/freeglut/freeglut/commit/2294389397912c9a6505a88221abb7dca0a4fb79
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
--[Bernd: rebased for version 3.6.0]
-----
-- CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 791771e7..e5903ef4 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -1,4 +1,4 @@
---CMAKE_MINIMUM_REQUIRED(VERSION 3.1 FATAL_ERROR)
--+CMAKE_MINIMUM_REQUIRED(VERSION 3.1...3.5 FATAL_ERROR)
-- PROJECT(freeglut LANGUAGES C)
-- 
-- if (POLICY CMP0072)
-diff --git a/package/libfreeglut/libfreeglut.hash b/package/libfreeglut/libfreeglut.hash
-index 233fa55457..1697fb1bdc 100644
---- a/package/libfreeglut/libfreeglut.hash
-+++ b/package/libfreeglut/libfreeglut.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  9c3d4d6516fbfa0280edc93c77698fb7303e443c1aaaf37d269e3288a6c3ea52  freeglut-3.6.0.tar.gz
-+sha256  674dcaff25010e09e450aec458b8870d9e98c46f99538db457ab659b321d9989  freeglut-3.8.0.tar.gz
- sha256  b6593d5ec4c113a274abb85b10e8615895cb0ddb89f7912af5fe5aa8df38a275  COPYING
-diff --git a/package/libfreeglut/libfreeglut.mk b/package/libfreeglut/libfreeglut.mk
-index bcca8b4abe..cf8af6f0f8 100644
---- a/package/libfreeglut/libfreeglut.mk
-+++ b/package/libfreeglut/libfreeglut.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBFREEGLUT_VERSION = 3.6.0
-+LIBFREEGLUT_VERSION = 3.8.0
- LIBFREEGLUT_SOURCE = freeglut-$(LIBFREEGLUT_VERSION).tar.gz
- LIBFREEGLUT_SITE = https://github.com/FreeGLUTProject/freeglut/releases/download/v$(LIBFREEGLUT_VERSION)
- LIBFREEGLUT_LICENSE = MIT
+diff --git a/package/distribution-registry/0001-s3-aws-fix-build-for-386.patch b/package/distribution-registry/0001-s3-aws-fix-build-for-386.patch
+new file mode 100644
+index 0000000000..a725ab8e92
+--- /dev/null
++++ b/package/distribution-registry/0001-s3-aws-fix-build-for-386.patch
+@@ -0,0 +1,45 @@
++From 6970080b10a53d858dd444a643a2bd911de12940 Mon Sep 17 00:00:00 2001
++From: Chen Qi <Qi.Chen@windriver.com>
++Date: Thu, 29 May 2025 11:28:38 +0800
++Subject: [PATCH] s3-aws: fix build for 386
++
++When building for 386, we got the following build error:
++
++  registry/storage/driver/s3-aws/s3.go:312:99: cannot use
++  maxChunkSize (untyped int constant 5368709120) as int value
++  in argument to getParameterAsInteger (overflows)
++
++This is because the s3_64bit.go is used. Adjust the build tag matching
++in s3_32bit.go and s3_64bit.go to fix this issue.
++
++Signed-off-by: Chen Qi <Qi.Chen@windriver.com>
++Upstream: https://github.com/distribution/distribution/commit/6970080b10a53d858dd444a643a2bd911de12940
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++---
++ registry/storage/driver/s3-aws/s3_32bit.go | 2 +-
++ registry/storage/driver/s3-aws/s3_64bit.go | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/registry/storage/driver/s3-aws/s3_32bit.go b/registry/storage/driver/s3-aws/s3_32bit.go
++index 218e3eab..84161fcb 100644
++--- a/registry/storage/driver/s3-aws/s3_32bit.go
+++++ b/registry/storage/driver/s3-aws/s3_32bit.go
++@@ -1,4 +1,4 @@
++-//go:build arm
+++//go:build arm || 386
++ 
++ package s3
++ 
++diff --git a/registry/storage/driver/s3-aws/s3_64bit.go b/registry/storage/driver/s3-aws/s3_64bit.go
++index 55254e49..2ed1f92f 100644
++--- a/registry/storage/driver/s3-aws/s3_64bit.go
+++++ b/registry/storage/driver/s3-aws/s3_64bit.go
++@@ -1,4 +1,4 @@
++-//go:build !arm
+++//go:build !arm && !386
++ 
++ package s3
++ 
++-- 
++2.51.1
++
 -- 
-2.47.3
+2.51.1
 
 _______________________________________________
 buildroot mailing list
