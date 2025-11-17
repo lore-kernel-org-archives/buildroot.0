@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2DBDCE8D6B
-	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 20:23:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E87DBCE8D6B
+	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 20:23:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 807E960A9D;
-	Mon, 17 Nov 2025 20:23:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B0A9381EAE;
+	Mon, 17 Nov 2025 20:23:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V0FMuyRlFkt2; Mon, 17 Nov 2025 20:22:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kN6Hg1FnSSq5; Mon, 17 Nov 2025 20:23:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A194260D79
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE2848349A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A194260D79;
-	Mon, 17 Nov 2025 20:22:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B34A3D5
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:22:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE2848349A;
+	Mon, 17 Nov 2025 20:23:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6055DD5
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:23:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A4A1260D79
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:22:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 461F4413E4
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:23:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m_8YQi6LFzlX for <buildroot@buildroot.org>;
- Mon, 17 Nov 2025 20:22:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fedopTVu2ZQK for <buildroot@buildroot.org>;
+ Mon, 17 Nov 2025 20:23:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDC7660A9D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64C05413B5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EDC7660A9D
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:22:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 64C05413B5
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:23:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E5DD783CC9; Mon, 17 Nov 2025 20:22:57 +0000 (UTC)
+ id 618DD849F4; Mon, 17 Nov 2025 20:23:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 17 Nov 2025 21:01:38 +0100
+Date: Mon, 17 Nov 2025 21:09:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cf807faf2f2dea85c2070718fed476238c7a4c24
-X-Git-Newrev: 699614e7fd158f6c03efb468a214d0723eaff0d8
+X-Git-Oldrev: 699614e7fd158f6c03efb468a214d0723eaff0d8
+X-Git-Newrev: 896e19a5c64a12bf39f0f03aea94c77b684111f8
 X-Patchwork-Hint: ignore
-Message-Id: <20251117202257.E5DD783CC9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libtraceevent: bump to version
- 1.8.6
+Message-Id: <20251117202355.618DD849F4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/redis: security bump to v8.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,39 +65,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=699614e7fd158f6c03efb468a214d0723eaff0d8
+commit: https://git.buildroot.net/buildroot/commit/?id=896e19a5c64a12bf39f0f03aea94c77b684111f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+See the release notes: https://github.com/redis/redis/releases/tag/8.2.3
+
+This fixes the following vulnerability:
+- CVE-2025-62507:
+    Redis is an open source, in-memory database that persists on disk. In
+    versions 8.2.0 and above, a user can run the XACKDEL command with
+    multiple ID's and trigger a stack buffer overflow, which may
+    potentially lead to remote code execution. This issue is fixed in
+    version 8.2.3. To workaround this issue without patching the redis-
+    server executable is to prevent users from executing XACKDEL
+    operation. This can be done using ACL to restrict XACKDEL command.
+    https://www.cve.org/CVERecord?id=CVE-2025-62507
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libtraceevent/libtraceevent.hash | 2 +-
- package/libtraceevent/libtraceevent.mk   | 2 +-
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libtraceevent/libtraceevent.hash b/package/libtraceevent/libtraceevent.hash
-index 8830a5e998..a974f326e0 100644
---- a/package/libtraceevent/libtraceevent.hash
-+++ b/package/libtraceevent/libtraceevent.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  1f2f5b8981818638ed51cdafc9b5e95316b5602255aa8ae19a3a5c8abede0e9a  libtraceevent-1.8.5.tar.gz
-+sha256  812547d2f7b248485c183be2799b7041038ee44183000705609754b128c84c6f  libtraceevent-1.8.6.tar.gz
- sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
- sha256  0b9a4febcdee6de55872501d5c1a8f5d8b0d1650cd4d5351995ceb22e889f8ca  LICENSES/LGPL-2.1
-diff --git a/package/libtraceevent/libtraceevent.mk b/package/libtraceevent/libtraceevent.mk
-index d25f6b520e..cc0190f84a 100644
---- a/package/libtraceevent/libtraceevent.mk
-+++ b/package/libtraceevent/libtraceevent.mk
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index beda6bc48c..f9c70c469f 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  4e340e8e822a82114b6fb0f7ca581b749fa876e31e36e9fbcb75416bec9d0608  redis-8.2.2.tar.gz
++sha256  d88f2361fdf3a3a8668fe5753e29915566109dca07b4cb036427ea6dc7783671  redis-8.2.3.tar.gz
+ 
+ # Locally calculated
+ sha256  4a0e416b9537688f30dfe69ddaceb2ca64d96b7df02a0a6760d376890ddc4e40  LICENSE.txt
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index fbad637aff..c8073407b9 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBTRACEEVENT_VERSION = 1.8.5
-+LIBTRACEEVENT_VERSION = 1.8.6
- LIBTRACEEVENT_SITE = https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/snapshot
- LIBTRACEEVENT_LICENSE = GPL-2.0, LGPL-2.1
- LIBTRACEEVENT_LICENSE_FILES = LICENSES/GPL-2.0 LICENSES/LGPL-2.1
+-REDIS_VERSION = 8.2.2
++REDIS_VERSION = 8.2.3
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = \
+ 	AGPL-3.0 or SSPL-1.0 or RSAL-2.0 (core); \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
