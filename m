@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D53A5CE8D6B
-	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 19:51:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79235CEACEF
+	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 19:52:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ABB3B413E0;
-	Mon, 17 Nov 2025 19:51:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 31E9F413EB;
+	Mon, 17 Nov 2025 19:52:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w6Fh9BHHzfwi; Mon, 17 Nov 2025 19:51:57 +0000 (UTC)
+ id JGnb0uRJYCJt; Mon, 17 Nov 2025 19:52:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C718E413DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC2FA413DE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C718E413DE;
-	Mon, 17 Nov 2025 19:51:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id BE3BB158
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC2FA413DE;
+	Mon, 17 Nov 2025 19:51:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8C7281BA
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7B93F4002C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2F36283D39
  for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mXxexYQvLmGu for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0J_X40iWE3Uk for <buildroot@buildroot.org>;
  Mon, 17 Nov 2025 19:51:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4056A408B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AF5983CFC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4056A408B0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6AF5983CFC
  for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:51:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3DEFF848E6; Mon, 17 Nov 2025 19:51:27 +0000 (UTC)
+ id 6943F848E6; Mon, 17 Nov 2025 19:51:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 15 Nov 2025 17:41:06 +0100
+Date: Mon, 17 Nov 2025 13:35:06 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 053c52a094f4bbc2eee5a569ebee7b5a40beb49b
-X-Git-Newrev: e5d7805ea7b1952052e4bec3b47a13fb738110e6
+X-Git-Oldrev: 6a398e42ecb19f9ac21ad6ae77b36f1f7908cebd
+X-Git-Newrev: ecf02834093688c094dac6bcd74c56727208fb2b
 X-Patchwork-Hint: ignore
-Message-Id: <20251117195127.3DEFF848E6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/tpm2-tss:
- security bump to v3.2.3
+Message-Id: <20251117195127.6943F848E6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] {linux,
+ linux-headers}: bump 6.12.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,65 +58,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5d7805ea7b1952052e4bec3b47a13fb738110e6
+commit: https://git.buildroot.net/buildroot/commit/?id=ecf02834093688c094dac6bcd74c56727208fb2b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-For more information about the release, see:
- - https://github.com/tpm2-software/tpm2-tss/releases/tag/3.2.3
+Update the latest kernel releases to:
+ - 6.12.57 -> 6.12.58
 
-Fixes the following vulnerability:
-
-- CVE-2024-29040
-
-The JSON Quote Info returned by Fapi_Quote has to be deserialized by
-Fapi_VerifyQuote to the TPM Structure `TPMS_ATTEST`. For the field
-`TPM2_GENERATED magic` of this structure any number can be used in the
-JSON structure. The verifier can receive a state which does not
-represent the actual, possibly malicious state of the device under test.
-The malicious device might get access to data it shouldn't, or can use
-services it shouldn't be able to.
-
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/cve-2024-29040
-  - https://github.com/tpm2-software/tpm2-tss/security/advisories/GHSA-837m-jw3m-h9p6
-
-(cherry picked from commit 04533b70e6dd908dcaaa275b47de55fed0b9908d)
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/tpm2-tss/tpm2-tss.hash | 2 +-
- package/tpm2-tss/tpm2-tss.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 2 +-
+ package/linux-headers/Config.in.host | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tpm2-tss/tpm2-tss.hash b/package/tpm2-tss/tpm2-tss.hash
-index c9fa4e6ae0..d8730ba0e1 100644
---- a/package/tpm2-tss/tpm2-tss.hash
-+++ b/package/tpm2-tss/tpm2-tss.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  ba9e52117f254f357ff502e7d60fce652b3bfb26327d236bbf5ab634235e40f1  tpm2-tss-3.2.2.tar.gz
-+sha256  6279a9a1983ea6ffe41925067b7f0de3a6ed95020a30e7c97d80fa2754259534  tpm2-tss-3.2.3.tar.gz
- sha256  18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
-diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-index 81a1a0e59b..095b57baea 100644
---- a/package/tpm2-tss/tpm2-tss.mk
-+++ b/package/tpm2-tss/tpm2-tss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 3e679ba8a8..c5460c42b3 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -137,7 +137,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
  
--TPM2_TSS_VERSION = 3.2.2
-+TPM2_TSS_VERSION = 3.2.3
- TPM2_TSS_SITE = https://github.com/tpm2-software/tpm2-tss/releases/download/$(TPM2_TSS_VERSION)
- TPM2_TSS_LICENSE = BSD-2-Clause
- TPM2_TSS_LICENSE_FILES = LICENSE
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.12.57" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.12.58" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index ae44069a3c..fb33cd5a0e 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  165ca1c37c4607b90e731996b7c1e3311285167d13deeedf08f3f1f0b9d2541a  linux-6.12.57.tar.xz
++sha256  5f1c4c546660a6a81046fdfa6195306bad2c8d17c0d69876dc100a85ad4613ac  linux-6.12.58.tar.xz
+ sha256  a9a59742c29be284c205dc87cbe9b065f9688488132c8f5a6057a5539230a51d  linux-6.6.116.tar.xz
+ sha256  ad068bfdb604ec0f4f7de385c8e7ab944008aa78a4aeeca94f53206e6726bfda  linux-6.1.158.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index a0e3340d52..390f9d4852 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -433,7 +433,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "5.15.196"	if BR2_KERNEL_HEADERS_5_15
+ 	default "6.1.158"	if BR2_KERNEL_HEADERS_6_1
+ 	default "6.6.116"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.12.57"	if BR2_KERNEL_HEADERS_6_12
++	default "6.12.58"	if BR2_KERNEL_HEADERS_6_12
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
