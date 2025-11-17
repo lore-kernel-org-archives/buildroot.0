@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 714AFCEACEF
-	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 22:19:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 787F3CE8D6B
+	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 22:19:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 22AD183DC3;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 871BA60EFB;
 	Mon, 17 Nov 2025 22:19:12 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fOzXAOs6vxYW; Mon, 17 Nov 2025 22:19:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6749983D6F
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6749983D6F;
-	Mon, 17 Nov 2025 22:19:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 76EC5D5
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 22:19:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 66DB660DCF
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 22:19:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9vYG-1qJLFIe for <buildroot@buildroot.org>;
+ id UeqfxWNOe2rk; Mon, 17 Nov 2025 22:19:10 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 337C260DCF
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 337C260DCF;
+	Mon, 17 Nov 2025 22:19:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 639092D3
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 22:19:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5229D400BB
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 22:19:07 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xHFdT3IKWR2w for <buildroot@buildroot.org>;
  Mon, 17 Nov 2025 22:19:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91D826065C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92CF640055
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 91D826065C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 92CF640055
  for <buildroot@buildroot.org>; Mon, 17 Nov 2025 22:19:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8A70D84D67; Mon, 17 Nov 2025 22:19:06 +0000 (UTC)
+ id 818B481034; Mon, 17 Nov 2025 22:19:06 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Mon, 17 Nov 2025 23:18:15 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 75a566edb4997ee603293bbb42d561b4ed10028e
-X-Git-Newrev: a1f5023bd9f87731287ca92cd9cea5558a7a043b
+X-Git-Oldrev: 855cd605732331c5231e10b11ab2d246154c7e9f
+X-Git-Newrev: 75a566edb4997ee603293bbb42d561b4ed10028e
 X-Patchwork-Hint: ignore
-Message-Id: <20251117221906.8A70D84D67@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libdecor: bump version to 0.2.4
+Message-Id: <20251117221906.818B481034@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libfreeglut: bump version to 3.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,47 +65,113 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a1f5023bd9f87731287ca92cd9cea5558a7a043b
+commit: https://git.buildroot.net/buildroot/commit/?id=75a566edb4997ee603293bbb42d561b4ed10028e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit log:
-https://gitlab.freedesktop.org/libdecor/libdecor/-/commits/0.2.4
+Changelog: https://github.com/freeglut/freeglut/blob/v3.8.0/ChangeLog
 
-Switched to xz tarball and hash provided by upstream.
+Removed all patches, they are included in this release.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libdecor/libdecor.hash | 3 ++-
- package/libdecor/libdecor.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ ...gPlatformDestroyContext-prototype-for-C23.patch | 31 ----------------------
+ ...now-we-are-aware-there-are-newer-versions.patch | 26 ------------------
+ package/libfreeglut/libfreeglut.hash               |  2 +-
+ package/libfreeglut/libfreeglut.mk                 |  2 +-
+ 4 files changed, 2 insertions(+), 59 deletions(-)
 
-diff --git a/package/libdecor/libdecor.hash b/package/libdecor/libdecor.hash
-index 7572663466..69163f3227 100644
---- a/package/libdecor/libdecor.hash
-+++ b/package/libdecor/libdecor.hash
-@@ -1,3 +1,4 @@
-+# From https://gitlab.freedesktop.org/libdecor/libdecor/-/releases/0.2.4/downloads/libdecor-0.2.4.tar.xz.sha256sum
-+sha256  b17cf420e8dcb526bf82da5d36f8443a91fad0777083fa4ec5c1df8ee877416f  libdecor-0.2.4.tar.xz
- # Locally calculated
--sha256  21a471e3f48088d3fd8ecc5999c45258a32198782c0157482f7ebe82de42f79c  libdecor-0.2.3.tar.gz
- sha256  508a77d2e7b51d98adeed32648ad124b7b30241a8e70b2e72c99f92d8e5874d1  LICENSE
-diff --git a/package/libdecor/libdecor.mk b/package/libdecor/libdecor.mk
-index d064c9e9ef..26f4be40a6 100644
---- a/package/libdecor/libdecor.mk
-+++ b/package/libdecor/libdecor.mk
-@@ -4,8 +4,9 @@
+diff --git a/package/libfreeglut/0001-egl-fix-fgPlatformDestroyContext-prototype-for-C23.patch b/package/libfreeglut/0001-egl-fix-fgPlatformDestroyContext-prototype-for-C23.patch
+deleted file mode 100644
+index c3aadb87de..0000000000
+--- a/package/libfreeglut/0001-egl-fix-fgPlatformDestroyContext-prototype-for-C23.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From 6d0178a1c43f94b046e4d5f3dfa7185a398706ae Mon Sep 17 00:00:00 2001
+-From: Sam James <sam@gentoo.org>
+-Date: Sun, 17 Nov 2024 01:14:26 +0000
+-Subject: [PATCH] egl: fix fgPlatformDestroyContext prototype for C23
+-
+-C23 removes unprototyped functions, so this conflicted with the definition
+-in fg_init_x11.c.
+-
+-Bug: https://github.com/freeglut/freeglut/issues/186
+-
+-Upstream: 800772e993a3ceffa01ccf3fca449d3279cde338
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- src/egl/fg_init_egl.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/egl/fg_init_egl.h b/src/egl/fg_init_egl.h
+-index 592c5221..8753dc0b 100644
+---- a/src/egl/fg_init_egl.h
+-+++ b/src/egl/fg_init_egl.h
+-@@ -28,6 +28,6 @@
+- 
+- extern void fghPlatformInitializeEGL();
+- extern void fghPlatformCloseDisplayEGL();
+--extern void fgPlatformDestroyContext();
+-+extern void fgPlatformDestroyContext ( SFG_PlatformDisplay pDisplay, SFG_WindowContextType MContext );
+- 
+- #endif
+--- 
+-2.50.1
+-
+diff --git a/package/libfreeglut/0002-Let-cmake-know-we-are-aware-there-are-newer-versions.patch b/package/libfreeglut/0002-Let-cmake-know-we-are-aware-there-are-newer-versions.patch
+deleted file mode 100644
+index 45f2fcf541..0000000000
+--- a/package/libfreeglut/0002-Let-cmake-know-we-are-aware-there-are-newer-versions.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From 2294389397912c9a6505a88221abb7dca0a4fb79 Mon Sep 17 00:00:00 2001
+-From: John Tsiombikas <nuclear@member.fsf.org>
+-Date: Thu, 20 Mar 2025 09:28:29 +0200
+-Subject: [PATCH] Let cmake know we are aware there are newer versions and we
+- don't care
+-
+-Closes issue #207
+-
+-Upstream: https://github.com/freeglut/freeglut/commit/2294389397912c9a6505a88221abb7dca0a4fb79
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+-[Bernd: rebased for version 3.6.0]
+----
+- CMakeLists.txt | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 791771e7..e5903ef4 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--CMAKE_MINIMUM_REQUIRED(VERSION 3.1 FATAL_ERROR)
+-+CMAKE_MINIMUM_REQUIRED(VERSION 3.1...3.5 FATAL_ERROR)
+- PROJECT(freeglut LANGUAGES C)
+- 
+- if (POLICY CMP0072)
+diff --git a/package/libfreeglut/libfreeglut.hash b/package/libfreeglut/libfreeglut.hash
+index 233fa55457..1697fb1bdc 100644
+--- a/package/libfreeglut/libfreeglut.hash
++++ b/package/libfreeglut/libfreeglut.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  9c3d4d6516fbfa0280edc93c77698fb7303e443c1aaaf37d269e3288a6c3ea52  freeglut-3.6.0.tar.gz
++sha256  674dcaff25010e09e450aec458b8870d9e98c46f99538db457ab659b321d9989  freeglut-3.8.0.tar.gz
+ sha256  b6593d5ec4c113a274abb85b10e8615895cb0ddb89f7912af5fe5aa8df38a275  COPYING
+diff --git a/package/libfreeglut/libfreeglut.mk b/package/libfreeglut/libfreeglut.mk
+index bcca8b4abe..cf8af6f0f8 100644
+--- a/package/libfreeglut/libfreeglut.mk
++++ b/package/libfreeglut/libfreeglut.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBDECOR_VERSION = 0.2.3
--LIBDECOR_SITE = https://gitlab.freedesktop.org/libdecor/libdecor/-/archive/$(LIBDECOR_VERSION)
-+LIBDECOR_VERSION = 0.2.4
-+LIBDECOR_SOURCE = libdecor-$(LIBDECOR_VERSION).tar.xz
-+LIBDECOR_SITE = https://gitlab.freedesktop.org/libdecor/libdecor/-/releases/$(LIBDECOR_VERSION)/downloads
- LIBDECOR_LICENSE = MIT
- LIBDECOR_LICENSE_FILES = LICENSE
- LIBDECOR_INSTALL_STAGING = YES
+-LIBFREEGLUT_VERSION = 3.6.0
++LIBFREEGLUT_VERSION = 3.8.0
+ LIBFREEGLUT_SOURCE = freeglut-$(LIBFREEGLUT_VERSION).tar.gz
+ LIBFREEGLUT_SITE = https://github.com/FreeGLUTProject/freeglut/releases/download/v$(LIBFREEGLUT_VERSION)
+ LIBFREEGLUT_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
