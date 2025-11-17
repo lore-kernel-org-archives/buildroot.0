@@ -1,69 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0A47CEACEF
-	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 19:56:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E677ECE8D6B
+	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 19:57:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5D5D6118B;
-	Mon, 17 Nov 2025 19:56:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BB22640E12;
+	Mon, 17 Nov 2025 19:57:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wBNlefqUCwnO; Mon, 17 Nov 2025 19:56:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LemgcVz1A82W; Mon, 17 Nov 2025 19:57:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DED8C60FBE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5CF640E1D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DED8C60FBE;
-	Mon, 17 Nov 2025 19:56:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id C02011BA
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:56:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E5CF640E1D;
+	Mon, 17 Nov 2025 19:57:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 08B7C158
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:57:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A662A81761
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:56:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EE55D40E12
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:57:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Yn2S3sZV3QKx for <buildroot@buildroot.org>;
- Mon, 17 Nov 2025 19:56:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A72DE81701
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A72DE81701
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A72DE81701
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:56:55 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id AF518B979430; Mon, 17 Nov 2025 20:56:53 +0100 (CET)
-Message-ID: <784a8733-7e61-4805-9497-14bb47f97e2e@rnout.be>
-Date: Mon, 17 Nov 2025 20:56:51 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xGR3QZ2qdvIh for <buildroot@buildroot.org>;
+ Mon, 17 Nov 2025 19:57:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 274BC40E1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 274BC40E1D
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 274BC40E1D
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:57:05 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 79AAE2003DA;
+ Mon, 17 Nov 2025 20:57:01 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 17 Nov 2025 20:57:01 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
-References: <20251030214156.1307743-1-bernd@kuhls.net>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <20251030214156.1307743-1-bernd@kuhls.net>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1763409413; h=from:subject:date:message-id:to:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=1o2IesaArTa6t9zVaKH1mBgxBVnDC7m95TWOLyJ2cOM=;
- b=RspNomDju3ofG/bhIpY1kSfVblLMuItkFNd57on2CKO4O8Z7y31zI49xjFiBNP9iqAOxUl
- VikOHevdPfOTbCNdE8oLVt8Bx7+OMv4RtS9ZP47Eu+d4uevUSMdGeRd9ikeYoX2zKUEN1N
- XUjvBwTeWR0f/LLfLcOZsMe/ZbS+jHeoUW7V+XoCuSM7/zCowOTG3+TuOGC1IKIBMZcFnh
- JXd0nkwucN3rpUXQt8Jc+XJK4BoLMsMk/JsdlotYxvHR+BM0VuwaqXNjqaCub6OBxg9lC0
- xAWoNTnhefPRoWz8/8RZkb7NsU7JCL9n8po3ZPkZd2AljwENt0bZmPHyB+FD2g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=RspNomDj
-Subject: Re: [Buildroot] [PATCH 1/5] package/bind: drop unrecognized option
+Date: Mon, 17 Nov 2025 20:57:01 +0100
+To: Pierre-Yves Kerbrat <pkerbrat@free.fr>
+Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In-Reply-To: <20251117175304.121081-1-pkerbrat@free.fr>
+References: <20251117175304.121081-1-pkerbrat@free.fr>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <2c0a13bc77c5f3795abf2ad90adc0a48@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1763409423;
+ bh=hkBm7b64FDvy1OiKblEFpk0Tlu9EkZLCo0xvmBgU13c=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=e3aGgh5alcHPqi93wC4CTu8y8nWwZ/EZwqeJ9B9SeG4Dmis5A3J6ydcY51ovQmwPs
+ gMEHNZhRTtJuc7ks5WuzAe6mwY6SwysVSWilWkIGhbLoETWQEDO5/uROIXiPk15/E4
+ 7Pou6LwoSBVaZQKyvHDApebtUlyxcAlsPi5AyvpKEvPfPn9+Ofi8LaK1/TXZuu35aL
+ Tfgvge+mKcdHqnAXCc5v5QPsmm6kCTD/KCM6P/xaMEjtNBaWQQPxytcGGwkbFnueAC
+ RDhV917FmE39mDNopeerQXWRdcd2lAd/mo1qZ2XTZWUfaNtV3/o+0iK2rbKk1jv0Jk
+ 4/upNlGPcM26A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=e3aGgh5a
+Subject: Re: [Buildroot] [PATCH 1/1] package/whois: bump to version 5.6.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,53 +81,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hi Pierre-Yves,
 
-
-On 30/10/2025 22:41, Bernd Kuhls wrote:
-> Buildroot commits 7b43e248180ad3b3dd1804687bc4457f29a88137 and
-> 8adeaec8afacbc680edebae91524f6144926ac92 removed the possibility for
-> static builds but forgot to remove some related _CONF_OPTS.
+On 17/11/2025 18:53, Pierre-Yves Kerbrat via buildroot wrote:
+> Changelog:
+> https://github.com/rfc1036/whois/blob/v5.6.5/debian/changelog
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Pierre-Yves Kerbrat <pkerbrat@free.fr>
 
-  Applied all 5 to 2025.02.x and 2025.08.x, thanks.
+Thanks a lot for this first contribution. I hope there will be more!
 
-  Regards,
-  Arnout
+I applied to master.
 
-> ---
->   package/bind/bind.mk | 10 ----------
->   1 file changed, 10 deletions(-)
-> 
-> diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-> index 350f6c6fbe..11730b6e7e 100644
-> --- a/package/bind/bind.mk
-> +++ b/package/bind/bind.mk
-> @@ -109,16 +109,6 @@ else
->   BIND_CONF_OPTS += --with-readline=no
->   endif
->   
-> -ifeq ($(BR2_STATIC_LIBS),y)
-> -BIND_CONF_OPTS += \
-> -	--without-dlopen \
-> -	--without-libtool
-> -else
-> -BIND_CONF_OPTS += \
-> -	--with-dlopen \
-> -	--with-libtool
-> -endif
-> -
->   define BIND_TARGET_REMOVE_SERVER
->   	rm -rf $(addprefix $(TARGET_DIR)/usr/sbin/, $(BIND_TARGET_SERVER_SBIN))
->   endef
+Best regards,
 
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
