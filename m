@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E87DBCE8D6B
-	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 20:23:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4900ECEACEF
+	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 20:43:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B0A9381EAE;
-	Mon, 17 Nov 2025 20:23:59 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kN6Hg1FnSSq5; Mon, 17 Nov 2025 20:23:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE2848349A
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BE2848349A;
-	Mon, 17 Nov 2025 20:23:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6055DD5
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:23:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 461F4413E4
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:23:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E8D8D40B42;
+	Mon, 17 Nov 2025 20:43:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fedopTVu2ZQK for <buildroot@buildroot.org>;
- Mon, 17 Nov 2025 20:23:55 +0000 (UTC)
+ id ShlZId0FyIb2; Mon, 17 Nov 2025 20:43:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E30340B5F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0E30340B5F;
+	Mon, 17 Nov 2025 20:43:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 536EE1BA
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:43:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 493E640B5F
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:43:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7PRZa1MripBw for <buildroot@buildroot.org>;
+ Mon, 17 Nov 2025 20:43:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64C05413B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A40440B42
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 64C05413B5
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:23:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4A40440B42
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 20:43:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 618DD849F4; Mon, 17 Nov 2025 20:23:55 +0000 (UTC)
+ id 38CE57FB29; Mon, 17 Nov 2025 20:43:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 17 Nov 2025 21:09:58 +0100
+Date: Mon, 17 Nov 2025 21:34:16 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 699614e7fd158f6c03efb468a214d0723eaff0d8
-X-Git-Newrev: 896e19a5c64a12bf39f0f03aea94c77b684111f8
+X-Git-Oldrev: 896e19a5c64a12bf39f0f03aea94c77b684111f8
+X-Git-Newrev: 6fb10dcf2192d484bb78d350aa4b9ddf8659d96d
 X-Patchwork-Hint: ignore
-Message-Id: <20251117202355.618DD849F4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/redis: security bump to v8.2.3
+Message-Id: <20251117204351.38CE57FB29@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/broot: bump version to 1.53.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,53 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=896e19a5c64a12bf39f0f03aea94c77b684111f8
+commit: https://git.buildroot.net/buildroot/commit/?id=6fb10dcf2192d484bb78d350aa4b9ddf8659d96d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See the release notes: https://github.com/redis/redis/releases/tag/8.2.3
+Changelog:
+https://github.com/Canop/broot/blob/v1.53.0/CHANGELOG.md
 
-This fixes the following vulnerability:
-- CVE-2025-62507:
-    Redis is an open source, in-memory database that persists on disk. In
-    versions 8.2.0 and above, a user can run the XACKDEL command with
-    multiple ID's and trigger a stack buffer overflow, which may
-    potentially lead to remote code execution. This issue is fixed in
-    version 8.2.3. To workaround this issue without patching the redis-
-    server executable is to prevent users from executing XACKDEL
-    operation. This can be done using ACL to restrict XACKDEL command.
-    https://www.cve.org/CVERecord?id=CVE-2025-62507
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
+[Julien: update changelog URL to use tag]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
+ package/broot/broot.hash | 2 +-
+ package/broot/broot.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index beda6bc48c..f9c70c469f 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/redis/redis-hashes/blob/master/README
--sha256  4e340e8e822a82114b6fb0f7ca581b749fa876e31e36e9fbcb75416bec9d0608  redis-8.2.2.tar.gz
-+sha256  d88f2361fdf3a3a8668fe5753e29915566109dca07b4cb036427ea6dc7783671  redis-8.2.3.tar.gz
- 
- # Locally calculated
- sha256  4a0e416b9537688f30dfe69ddaceb2ca64d96b7df02a0a6760d376890ddc4e40  LICENSE.txt
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index fbad637aff..c8073407b9 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
+diff --git a/package/broot/broot.hash b/package/broot/broot.hash
+index 09dd907bf5..e01762f275 100644
+--- a/package/broot/broot.hash
++++ b/package/broot/broot.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256  2f9fc93d3e3b547108d66ac0baafb8f60a9506fc189b509821ab301d9ea75a19  broot-1.52.0-cargo4.tar.gz
++sha256  a006e15ec340d05451459f6e95a52789b6f55c93617129ca9178d00d43437cef  broot-1.53.0-cargo4.tar.gz
+ sha256  89461664ce2aee7d80ea8fba7118fe7abd490d76ba435cf1d81d3128e060711f  LICENSE
+diff --git a/package/broot/broot.mk b/package/broot/broot.mk
+index 9b60d35857..a5c5ba2271 100644
+--- a/package/broot/broot.mk
++++ b/package/broot/broot.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--REDIS_VERSION = 8.2.2
-+REDIS_VERSION = 8.2.3
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = \
- 	AGPL-3.0 or SSPL-1.0 or RSAL-2.0 (core); \
+-BROOT_VERSION = 1.52.0
++BROOT_VERSION = 1.53.0
+ BROOT_SITE = $(call github,Canop,broot,v$(BROOT_VERSION))
+ BROOT_LICENSE = MIT
+ BROOT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
