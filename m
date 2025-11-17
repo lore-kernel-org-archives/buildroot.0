@@ -4,70 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F5ECCE8D6B
-	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 19:52:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE899CE8D6B
+	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 19:53:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 632514142D;
-	Mon, 17 Nov 2025 19:52:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B6C2A40022;
+	Mon, 17 Nov 2025 19:53:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kFmZxBVfwqnF; Mon, 17 Nov 2025 19:52:20 +0000 (UTC)
+ id 5LJ6y5hXbv5D; Mon, 17 Nov 2025 19:53:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56C0741430
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98EED40074
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 56C0741430;
-	Mon, 17 Nov 2025 19:52:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 181061BA
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:52:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 98EED40074;
+	Mon, 17 Nov 2025 19:53:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D8B121BA
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:53:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DF06441431
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:52:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D6C3E4089C
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:53:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gt7PgsqeRlTe for <buildroot@buildroot.org>;
- Mon, 17 Nov 2025 19:52:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nhTe_gtvjl1a for <buildroot@buildroot.org>;
+ Mon, 17 Nov 2025 19:53:23 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org ADEDC413F6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADEDC413F6
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9ABB040027
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9ABB040027
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id ADEDC413F6
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:52:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9ABB040027
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:53:22 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 4B770B9798FE; Mon, 17 Nov 2025 20:52:15 +0100 (CET)
-Message-ID: <02dfb9d9-dc7b-48b6-a7d6-e228e7990715@rnout.be>
-Date: Mon, 17 Nov 2025 20:52:13 +0100
+ with ESMTPSA id 4B58AB9798F4; Mon, 17 Nov 2025 20:53:20 +0100 (CET)
+Message-ID: <bc9e77e3-996c-40ee-ba7d-e1ad9d0dcfca@rnout.be>
+Date: Mon, 17 Nov 2025 20:53:18 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Pierre-Jean Texier <texier.pj2@gmail.com>
-References: <20251013210940.511743-1-bernd@kuhls.net>
- <20251013210940.511743-3-bernd@kuhls.net>
+To: Titouan Christophe <titouan.christophe@mind.be>, buildroot@buildroot.org
+Cc: Sergey Matyukevich <geomatsi@gmail.com>
+References: <20251027131539.11774-1-titouan.christophe@mind.be>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20251013210940.511743-3-bernd@kuhls.net>
+In-Reply-To: <20251027131539.11774-1-titouan.christophe@mind.be>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1763409135; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1763409200; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:content-language:in-reply-to:references;
- bh=ZaK+UfWYwMCyJfhzwmixqeKGjrL1ZrgbmsGzvgNa/K0=;
- b=VMzcqayKMWQ+ylVXwC6tRtrNqnsPrrkv4UGKRzniGmkVZgj0KFtPZfLcsbf4WSAKiGYVdp
- tXIuCETw1hyrxGNJISpeU7LJcYx+KEppGmdt53CeK8agOJ2pt46by2LaVSQ8t1toZ7Nlwt
- 7PVdGrQlNWYd6nmi3d31Vuq9wz0kg+ZXnpiisqHN2ftO1dByC4uAzpuP1x7cdXjUvcM6aW
- DQTdJfHidipA8nDdiGIv/gx7tNPR8MbnUkYUXTZamunvKISvTxS975Ru7w4kW0qvAuCRFf
- bu+XN8GFIBuWsfq6i7to3+JiF85oMj74Z+XD82EAuC2LueYA7gJAwbk8ebVCcw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=oFJW/F8fHZVLRuyrPhAI5mBQnXQZeBGxbQ2VGyltYGc=;
+ b=J0Gp8OEjFa7jgxcaG4ffq2llVpgbhp2pC2X6iO4fFT1+yfUAGghxKfR/tyVJunOkoi9TiN
+ WkQTap/8Nb54LYL5RxSonExqp9WTwKpPZdZZ3f0UKmgakjVtnnXHB4KCCrr0iU9X5PCA+f
+ d+CxwoKxeHoVAIl6JFlOKo/WFOLsZ82k8VKcvezzgE5nwvAStXjojZe9fEpemSeRho9Gnl
+ BYcVoQ0/d8+HIXpCAVFjckzY1Gp+DqX4YaClUlFmvkYt3q19DeH9+CyCD2RR6CTKZlabMQ
+ 9F1wRJtwuPk68yml7wZwMfZIGKKB0fevnKwp2yRfrmuao6r7Xrmtb30FLez+7Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=VMzcqayK
-Subject: Re: [Buildroot] [PATCH 3/3] package/libxslt: security bump version
- to 1.1.43
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=J0Gp8OEj
+Subject: Re: [Buildroot] [PATCH] package/hostapd: add patches for
+ CVE-2025-24912
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,18 +87,18 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 13/10/2025 23:09, Bernd Kuhls wrote:
-> Release notes:
-> https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.43.news
+On 27/10/2025 14:15, Titouan Christophe via buildroot wrote:
+> See https://jvn.jp/en/jp/JVN19358384/
 > 
-> Fixes CVE-2025-24855 & CVE-2024-55549.
+> This fixes the following vulnerability:
+> - CVE-2025-24912:
+>      hostapd fails to process crafted RADIUS packets properly. When hostapd
+>      authenticates wi-fi devices with RADIUS authentication, an attacker in
+>      the position between the hostapd and the RADIUS server may inject
+>      crafted RADIUS packets and force RADIUS authentications to fail.
+>      https://www.cve.org/CVERecord?id=CVE-2025-24912
 > 
-> Switched _LICENSE_FILES to Copyright due to upstream commit
-> https://gitlab.gnome.org/GNOME/libxslt/-/commit/29938a64f6449aceb3e97a9e8da10abe2e27a314
-> in version 1.1.36 and the removal of COPYING in the 1.1.43 tarball,
-> although COPYING did still exist in the 1.1.42 tarball.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 
   Applied to 2025.02.x and 2025.08.x, thanks.
 
@@ -107,42 +106,196 @@ On 13/10/2025 23:09, Bernd Kuhls wrote:
   Arnout
 
 > ---
->   package/libxslt/libxslt.hash | 6 +++---
->   package/libxslt/libxslt.mk   | 4 ++--
->   2 files changed, 5 insertions(+), 5 deletions(-)
+>   ...est-only-when-accepting-the-response.patch | 82 +++++++++++++++++++
+>   ...-RADIUS-Fix-pending-request-dropping.patch | 74 +++++++++++++++++
+>   package/hostapd/hostapd.mk                    |  4 +
+>   3 files changed, 160 insertions(+)
+>   create mode 100644 package/hostapd/0001-RADIUS-Drop-pending-request-only-when-accepting-the-response.patch
+>   create mode 100644 package/hostapd/0002-RADIUS-Fix-pending-request-dropping.patch
 > 
-> diff --git a/package/libxslt/libxslt.hash b/package/libxslt/libxslt.hash
-> index dd67940c8a..98c68eded1 100644
-> --- a/package/libxslt/libxslt.hash
-> +++ b/package/libxslt/libxslt.hash
-> @@ -1,5 +1,5 @@
-> -# From https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.42.sha256sum
-> -sha256  85ca62cac0d41fc77d3f6033da9df6fd73d20ea2fc18b0a3609ffb4110e1baeb  libxslt-1.1.42.tar.xz
-> +# From https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.43.sha256sum
-> +sha256  5a3d6b383ca5afc235b171118e90f5ff6aa27e9fea3303065231a6d403f0183a  libxslt-1.1.43.tar.xz
+> diff --git a/package/hostapd/0001-RADIUS-Drop-pending-request-only-when-accepting-the-response.patch b/package/hostapd/0001-RADIUS-Drop-pending-request-only-when-accepting-the-response.patch
+> new file mode 100644
+> index 0000000000..fb86d1303d
+> --- /dev/null
+> +++ b/package/hostapd/0001-RADIUS-Drop-pending-request-only-when-accepting-the-response.patch
+> @@ -0,0 +1,82 @@
+> +From 726432d7622cc0088ac353d073b59628b590ea44 Mon Sep 17 00:00:00 2001
+> +From: Jouni Malinen <j@w1.fi>
+> +Date: Sat, 25 Jan 2025 11:21:16 +0200
+> +Subject: RADIUS: Drop pending request only when accepting the response
+> +
+> +The case of an invalid authenticator in a RADIUS response could imply
+> +that the response is not from the correct RADIUS server and as such,
+> +such a response should be discarded without changing internal state for
+> +the pending request. The case of an unknown response (RADIUS_RX_UNKNOWN)
+> +is somewhat more complex since it could have been indicated before
+> +validating the authenticator. In any case, it seems better to change the
+> +state for the pending request only when we have fully accepted the
+> +response.
+> +
+> +Allowing the internal state of pending RADIUS request to change based on
+> +responses that are not fully validation could have allow at least a
+> +theoretical DoS attack if an attacker were to have means for injecting
+> +RADIUS messages to the network using the IP address of the real RADIUS
+> +server and being able to do so more quickly than the real server and
+> +with the matching identifier from the request header (i.e., either by
+> +flooding 256 responses quickly or by having means to capture the RADIUS
+> +request). These should not really be realistic options in a properly
+> +protected deployment, but nevertheless it is good to be more careful in
+> +processing RADIUS responses.
+> +
+> +Remove a pending RADIUS request from the internal list only when having
+> +fully accepted a matching RADIUS response, i.e., after one of the
+> +registered handlers has confirmed that the authenticator is valid and
+> +processing of the response has succeeded.
+> +
+> +Upstream: https://git.w1.fi/cgit/hostap/commit/?id=726432d7622cc0088ac353d073b59628b590ea44
+> +CVE: CVE-2025-24912
+> +
+> +Signed-off-by: Jouni Malinen <j@w1.fi>
+> +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+> +---
+> + src/radius/radius_client.c | 15 +++++++--------
+> + 1 file changed, 7 insertions(+), 8 deletions(-)
+> +
+> +diff --git a/src/radius/radius_client.c b/src/radius/radius_client.c
+> +index 2a7f36170..7909b29a7 100644
+> +--- a/src/radius/radius_client.c
+> ++++ b/src/radius/radius_client.c
+> +@@ -1259,13 +1259,6 @@ static void radius_client_receive(int sock, void *eloop_ctx, void *sock_ctx)
+> + 		       roundtrip / 100, roundtrip % 100);
+> + 	rconf->round_trip_time = roundtrip;
+> +
+> +-	/* Remove ACKed RADIUS packet from retransmit list */
+> +-	if (prev_req)
+> +-		prev_req->next = req->next;
+> +-	else
+> +-		radius->msgs = req->next;
+> +-	radius->num_msgs--;
+> +-
+> + 	for (i = 0; i < num_handlers; i++) {
+> + 		RadiusRxResult res;
+> + 		res = handlers[i].handler(msg, req->msg, req->shared_secret,
+> +@@ -1276,6 +1269,13 @@ static void radius_client_receive(int sock, void *eloop_ctx, void *sock_ctx)
+> + 			radius_msg_free(msg);
+> + 			/* fall through */
+> + 		case RADIUS_RX_QUEUED:
+> ++			/* Remove ACKed RADIUS packet from retransmit list */
+> ++			if (prev_req)
+> ++				prev_req->next = req->next;
+> ++			else
+> ++				radius->msgs = req->next;
+> ++			radius->num_msgs--;
+> ++
+> + 			radius_client_msg_free(req);
+> + 			return;
+> + 		case RADIUS_RX_INVALID_AUTHENTICATOR:
+> +@@ -1297,7 +1297,6 @@ static void radius_client_receive(int sock, void *eloop_ctx, void *sock_ctx)
+> + 		       msg_type, hdr->code, hdr->identifier,
+> + 		       invalid_authenticator ? " [INVALID AUTHENTICATOR]" :
+> + 		       "");
+> +-	radius_client_msg_free(req);
+> +
+> +  fail:
+> + 	radius_msg_free(msg);
+> +--
+> +cgit v1.2.3
+> +
+> diff --git a/package/hostapd/0002-RADIUS-Fix-pending-request-dropping.patch b/package/hostapd/0002-RADIUS-Fix-pending-request-dropping.patch
+> new file mode 100644
+> index 0000000000..474f40da0c
+> --- /dev/null
+> +++ b/package/hostapd/0002-RADIUS-Fix-pending-request-dropping.patch
+> @@ -0,0 +1,74 @@
+> +From 339a334551ca911187cc870f4f97ef08e11db109 Mon Sep 17 00:00:00 2001
+> +From: Jouni Malinen <quic_jouni@quicinc.com>
+> +Date: Wed, 5 Feb 2025 19:23:39 +0200
+> +Subject: RADIUS: Fix pending request dropping
+> +
+> +A recent change to this moved the place where the processed RADIUS
+> +request was removed from the pending list to happen after the message
+> +handler had been called. This did not take into account possibility of
+> +the handler adding a new pending request in the list and the prev_req
+> +pointer not necessarily pointing to the correct entry anymore. As such,
+> +some of the pending requests could have been lost and that would result
+> +in not being able to process responses to those requests and also, to a
+> +memory leak.
+> +
+> +Fix this by determining prev_req at the point when the pending request
+> +is being removed, i.e., after the handler function has already added a
+> +new entry.
+> +
+> +Fixes: 726432d7622c ("RADIUS: Drop pending request only when accepting the response")
+> +
+> +Upstream: https://git.w1.fi/cgit/hostap/commit/?id=339a334551ca911187cc870f4f97ef08e11db109
+> +CVE: CVE-2025-24912
+> +
+> +Signed-off-by: Jouni Malinen <quic_jouni@quicinc.com>
+> +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+> +---
+> + src/radius/radius_client.c | 10 +++++++---
+> + 1 file changed, 7 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/src/radius/radius_client.c b/src/radius/radius_client.c
+> +index 7909b29a7..d4faa7936 100644
+> +--- a/src/radius/radius_client.c
+> ++++ b/src/radius/radius_client.c
+> +@@ -1099,7 +1099,7 @@ static void radius_client_receive(int sock, void *eloop_ctx, void *sock_ctx)
+> + 	struct radius_hdr *hdr;
+> + 	struct radius_rx_handler *handlers;
+> + 	size_t num_handlers, i;
+> +-	struct radius_msg_list *req, *prev_req;
+> ++	struct radius_msg_list *req, *prev_req, *r;
+> + 	struct os_reltime now;
+> + 	struct hostapd_radius_server *rconf;
+> + 	int invalid_authenticator = 0;
+> +@@ -1224,7 +1224,6 @@ static void radius_client_receive(int sock, void *eloop_ctx, void *sock_ctx)
+> + 		break;
+> + 	}
+> +
+> +-	prev_req = NULL;
+> + 	req = radius->msgs;
+> + 	while (req) {
+> + 		/* TODO: also match by src addr:port of the packet when using
+> +@@ -1236,7 +1235,6 @@ static void radius_client_receive(int sock, void *eloop_ctx, void *sock_ctx)
+> + 		    hdr->identifier)
+> + 			break;
+> +
+> +-		prev_req = req;
+> + 		req = req->next;
+> + 	}
+> +
+> +@@ -1270,6 +1268,12 @@ static void radius_client_receive(int sock, void *eloop_ctx, void *sock_ctx)
+> + 			/* fall through */
+> + 		case RADIUS_RX_QUEUED:
+> + 			/* Remove ACKed RADIUS packet from retransmit list */
+> ++			prev_req = NULL;
+> ++			for (r = radius->msgs; r; r = r->next) {
+> ++				if (r == req)
+> ++					break;
+> ++				prev_req = r;
+> ++			}
+> + 			if (prev_req)
+> + 				prev_req->next = req->next;
+> + 			else
+> +--
+> +cgit v1.2.3
+> +
+> diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+> index 3eda1c7e83..d83b574fad 100644
+> --- a/package/hostapd/hostapd.mk
+> +++ b/package/hostapd/hostapd.mk
+> @@ -16,6 +16,10 @@ HOSTAPD_LICENSE_FILES = README
+>   HOSTAPD_CPE_ID_VENDOR = w1.fi
+>   HOSTAPD_SELINUX_MODULES = hostapd
 >   
->   # Hash for license file:
-> -sha256  7e48e290b6bfccc2ec1b297023a1d77f2fd87417f71fbb9f50aabef40a851819  COPYING
-> +sha256  7e48e290b6bfccc2ec1b297023a1d77f2fd87417f71fbb9f50aabef40a851819  Copyright
-> diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-> index b5bb22f9ae..e92b383b89 100644
-> --- a/package/libxslt/libxslt.mk
-> +++ b/package/libxslt/libxslt.mk
-> @@ -4,12 +4,12 @@
->   #
->   ################################################################################
->   
-> -LIBXSLT_VERSION = 1.1.42
-> +LIBXSLT_VERSION = 1.1.43
->   LIBXSLT_SOURCE = libxslt-$(LIBXSLT_VERSION).tar.xz
->   LIBXSLT_SITE = https://download.gnome.org/sources/libxslt/1.1
->   LIBXSLT_INSTALL_STAGING = YES
->   LIBXSLT_LICENSE = MIT
-> -LIBXSLT_LICENSE_FILES = COPYING
-> +LIBXSLT_LICENSE_FILES = Copyright
->   LIBXSLT_CPE_ID_VENDOR = xmlsoft
->   
->   LIBXSLT_CONF_OPTS = \
+> +# 0001-RADIUS-Drop-pending-request-only-when-accepting-the-response.patch
+> +# 0002-RADIUS-Fix-pending-request-dropping.patch
+> +HOSTAPD_IGNORE_CVES += CVE-2025-24912
+> +
+>   HOSTAPD_CONFIG_ENABLE = \
+>   	CONFIG_INTERNAL_LIBTOMMATH \
+>   	CONFIG_DEBUG_FILE \
 
 _______________________________________________
 buildroot mailing list
