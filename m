@@ -1,70 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BCDACEACEF
-	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 19:54:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FE32CE8D6B
+	for <buildroot@archiver.kernel.org>; Mon, 17 Nov 2025 19:55:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 403E960EB2;
-	Mon, 17 Nov 2025 19:54:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 677E54129D;
+	Mon, 17 Nov 2025 19:55:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XWJoVXabhCjN; Mon, 17 Nov 2025 19:54:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2KNLgZ7Y9pU9; Mon, 17 Nov 2025 19:55:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 697EE60F13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90EEC41301
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 697EE60F13;
-	Mon, 17 Nov 2025 19:54:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5768A1BA
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:54:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 90EEC41301;
+	Mon, 17 Nov 2025 19:55:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E61071BA
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:55:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 49B7D60ECB
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:54:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D8275813CC
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:55:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I3tyLh6uD1xg for <buildroot@buildroot.org>;
- Mon, 17 Nov 2025 19:54:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id D1eotro0cHln for <buildroot@buildroot.org>;
+ Mon, 17 Nov 2025 19:55:49 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 385B160EB2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 385B160EB2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CBD8D81165
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBD8D81165
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 385B160EB2
- for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:54:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CBD8D81165
+ for <buildroot@buildroot.org>; Mon, 17 Nov 2025 19:55:48 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 59E53B9798F4; Mon, 17 Nov 2025 20:54:40 +0100 (CET)
-Message-ID: <be8a50ad-5097-46c4-977e-e04b2cdc4bff@rnout.be>
-Date: Mon, 17 Nov 2025 20:54:38 +0100
+ with ESMTPSA id BBECCB9796C0; Mon, 17 Nov 2025 20:55:46 +0100 (CET)
+Message-ID: <53826b92-f543-456a-8ec2-fd2c4d67bd46@rnout.be>
+Date: Mon, 17 Nov 2025 20:55:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
-References: <20251027212015.47362-1-thomas.perale@mind.be>
+To: Jarkko Sakkinen <jarkko@kernel.org>, buildroot@buildroot.org
+References: <20251027014158.865598-1-jarkko@kernel.org>
+ <20251027014158.865598-2-jarkko@kernel.org>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20251027212015.47362-1-thomas.perale@mind.be>
+In-Reply-To: <20251027014158.865598-2-jarkko@kernel.org>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1763409280; h=from:subject:date:message-id:to:mime-version:content-type:
+ t=1763409346; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:content-language:in-reply-to:references;
- bh=YPflxD6ozPdOOoF2jIfzFVkjxWxgKE+Cx8HLGXKnZhc=;
- b=Fxim7vQdxPMOVKlY/TsgB6ppAF+LF4KaWG1IRpLnqt2QgwRqSC6XyS2KoyOUOJT3+LQLph
- oMSeplO0UJCKiqhlwcXsE8qFOBbG8QkpQ6uc8psfk0Rr4+eMwbEP0sUO16o+DaOn1TjX3N
- aVsS4+JDeBNdZ5aD3F5A31k8QVTiAFBLmz9ciCb64bWWYr0rP92nkw2QioQmVR3rS29zfY
- Vg/VxWc3lcO/u36tLHkLkmpoL8QOzq5uTgFZHwS38cqfU5fdAk3TNVgQcRUhZ7yjbhEbXo
- hL3DGNwHd+4c+XgajvxIREqKjT7epybX+aSgi0IYhKVBUKj9k7trrbFYLwvUiA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=JVLNYA4f2eaIanqgfRrzeqRKl9RSNhk4DSY96UKukoQ=;
+ b=cai6ymz8xA5YWatEOUxBkuqBIbUpQAe9nc0fL87uQXVSBjK1k9VQuc+TjAP4RYe+SRui1O
+ rvYjMeMxxgL7xzKeXc/Tp5xAmJIEX1PLizuyDhf4lE+RDyxt9MfkF+8wDWgL0R7L2H3q1L
+ dafczS9u10XZicqejqo66rCzGa6rKQJRTOqRcCh7qTZMVy0C5p6uGPhz9BbqTJWtfJ8O7V
+ HeyWxGPbhjKFPxhFP8J7A+SsAkL7jOya5RCmV36quR5pVGyLWItb4sC7RWzZQo7Svq1Iyn
+ Y4B6g0Kv+L0W9MQBcyP8+ovrZ1PBQwfOdjCCFYSKqbI/9UskfmC17G5GWmpf5A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=Fxim7vQd
-Subject: Re: [Buildroot] [PATCH] package/imagemagick: security bump to
- v7.1.2-8
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=cai6ymz8
+Subject: Re: [Buildroot] [PATCH 1/2] package/libtpms: bump version to 0.10.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,72 +86,43 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 27/10/2025 22:20, Thomas Perale via buildroot wrote:
-> For more details on the version bump, see:
->    - https://github.com/ImageMagick/ImageMagick/compare/7.1.2-3...7.1.2-8
+On 27/10/2025 02:41, Jarkko Sakkinen via buildroot wrote:
+> Release notes:
+> https://github.com/stefanberger/swtpm/releases/tag/v0.10.1
 > 
-> Fixes the following vulnerability:
-> 
-> - CVE-2025-62171
-> 
->      ImageMagick is an open source software suite for displaying,
->      converting, and editing raster image files. In ImageMagick versions
->      prior to 7.1.2-7 and 6.9.13-32, an integer overflow vulnerability
->      exists in the BMP decoder on 32-bit systems. The vulnerability
->      occurs in coders/bmp.c when calculating the extent value by
->      multiplying image columns by bits per pixel. On 32-bit systems with
->      size_t of 4 bytes, a malicious BMP file with specific dimensions can
->      cause this multiplication to overflow and wrap to zero. The overflow
->      check added to address CVE-2025-57803 is placed after the overflow
->      occurs, making it ineffective. A specially crafted 58-byte BMP file
->      with width set to 536,870,912 and 32 bits per pixel can trigger this
->      overflow, causing the bytes_per_line calculation to become zero.
->      This vulnerability only affects 32-bit builds of ImageMagick where
->      default resource limits for width, height, and area have been
->      manually increased beyond their defaults. 64-bit systems with size_t
->      of 8 bytes are not vulnerable, and systems using default ImageMagick
->      resource limits are not vulnerable. The vulnerability is fixed in
->      versions 7.1.2-7 and 6.9.13-32.
-> 
-> For more information, see:
->    - https://nvd.nist.gov/vuln/detail/CVE-2025-62171
->    - https://github.com/ImageMagick/ImageMagick/security/advisories/GHSA-9pp9-cfwx-54rm
->    - https://github.com/ImageMagick/ImageMagick/commit/cea1693e2ded51b4cc91c70c54096cbed1691c00
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-  Applied to 2025.02.x and 2025.08.x, thanks.
+  Applied to 2025.02.x and 2025.08.x, thanks. It contains a CVE fix.
 
   Regards,
   Arnout
 
 > ---
->   package/imagemagick/imagemagick.hash | 2 +-
->   package/imagemagick/imagemagick.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
+>   package/libtpms/libtpms.hash | 1 +
+>   package/libtpms/libtpms.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-> index f260a0e0fb..3dbea6d8bc 100644
-> --- a/package/imagemagick/imagemagick.hash
-> +++ b/package/imagemagick/imagemagick.hash
-> @@ -1,3 +1,3 @@
->   # Locally computed
-> -sha256  b16415e8694a2e15e5282d64fc7b358f309ff3a514a90eb5da268676c772de3d  imagemagick-7.1.2-3.tar.gz
-> +sha256  acf76a9dafbd18f4dd7b24c45ca10c77e31289fc28e4da0ce5cc3929fd0aef16  imagemagick-7.1.2-8.tar.gz
->   sha256  a556c5292c87c9a6ac795c80669b0c3660f9f729de8c476bf2b10f83ab1b34ec  LICENSE
-> diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-> index 30cacc7f1a..4e6a810631 100644
-> --- a/package/imagemagick/imagemagick.mk
-> +++ b/package/imagemagick/imagemagick.mk
+> diff --git a/package/libtpms/libtpms.hash b/package/libtpms/libtpms.hash
+> index 1026aaa4f4..66f3131e47 100644
+> --- a/package/libtpms/libtpms.hash
+> +++ b/package/libtpms/libtpms.hash
+> @@ -1,2 +1,3 @@
+>   sha256  2807466f1563ebe45fdd12dd26e501e8a0c4fbb99c7c428fbb508789efd221c0  libtpms-0.9.6.tar.gz
+> +sha256  ebc24f3191d90f6cf0b4d4200cd876db4bd224b3c565708bbea0a82ee275e0fb  libtpms-0.10.1.tar.gz
+>   sha256  82f1e6bae374bb6a9d4f4596767fd33e499718d560de140fd9f3d402cc5e41fb  LICENSE
+> diff --git a/package/libtpms/libtpms.mk b/package/libtpms/libtpms.mk
+> index 19d7cef89f..6e5708202e 100644
+> --- a/package/libtpms/libtpms.mk
+> +++ b/package/libtpms/libtpms.mk
 > @@ -4,7 +4,7 @@
 >   #
 >   ################################################################################
 >   
-> -IMAGEMAGICK_VERSION = 7.1.2-3
-> +IMAGEMAGICK_VERSION = 7.1.2-8
->   IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
->   IMAGEMAGICK_LICENSE = Apache-2.0
->   IMAGEMAGICK_LICENSE_FILES = LICENSE
+> -LIBTPMS_VERSION = 0.9.6
+> +LIBTPMS_VERSION = 0.10.1
+>   LIBTPMS_SITE = $(call github,stefanberger,libtpms,v$(LIBTPMS_VERSION))
+>   LIBTPMS_LICENSE = BSD-4-Clause
+>   LIBTPMS_LICENSE_FILES = LICENSE
 
 _______________________________________________
 buildroot mailing list
