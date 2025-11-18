@@ -1,74 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCE3ACEE34B
-	for <buildroot@archiver.kernel.org>; Tue, 18 Nov 2025 19:03:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C88FCED63D
+	for <buildroot@archiver.kernel.org>; Tue, 18 Nov 2025 19:05:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 98FB361AF0;
-	Tue, 18 Nov 2025 19:03:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D75BB84542;
+	Tue, 18 Nov 2025 19:05:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MqApX1OYiWfq; Tue, 18 Nov 2025 19:03:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wADHj-IDfTy9; Tue, 18 Nov 2025 19:05:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F07361AE4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B54584543
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4F07361AE4;
-	Tue, 18 Nov 2025 19:03:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 468D4158
- for <buildroot@buildroot.org>; Tue, 18 Nov 2025 19:03:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0B54584543;
+	Tue, 18 Nov 2025 19:05:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id DEB6E1BA
+ for <buildroot@buildroot.org>; Tue, 18 Nov 2025 19:05:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2D70B40E12
- for <buildroot@buildroot.org>; Tue, 18 Nov 2025 19:03:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C457A409F7
+ for <buildroot@buildroot.org>; Tue, 18 Nov 2025 19:05:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RTn5EA2iA3Jl for <buildroot@buildroot.org>;
- Tue, 18 Nov 2025 19:03:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4778F40DDD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4778F40DDD
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4778F40DDD
- for <buildroot@buildroot.org>; Tue, 18 Nov 2025 19:03:05 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b06c.dip0.t-ipconnect.de [84.161.176.108])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 8226EA4C7214
- for <buildroot@buildroot.org>; Tue, 18 Nov 2025 20:03:02 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:55884)
- by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vLQyk-000000001B7-0RkX
- for buildroot@buildroot.org; Tue, 18 Nov 2025 19:03:02 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bSbttJe7Aw3g for <buildroot@buildroot.org>;
+ Tue, 18 Nov 2025 19:05:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ envelope-from=mr.zoltan.gyarmati@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DA39740177
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA39740177
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DA39740177
+ for <buildroot@buildroot.org>; Tue, 18 Nov 2025 19:05:27 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-477619f8ae5so39533305e9.3
+ for <buildroot@buildroot.org>; Tue, 18 Nov 2025 11:05:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1763492726; x=1764097526;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=WglOvAkSMrA8S2fCxRh3/u263wRkpPaUdn4F3v9pmjo=;
+ b=kJte/uXDTvebw2M3G+LDmAfIOQhncx5C9S7gnMYgQmREQWXDMHWgCsVycbjsvWn7JC
+ 1wd7kpDaxzEJ7pLgpOkjYOvASGhlS6ijT3sxXdiN63kB7P/DdrNieJYfmk4JIsWX2qOS
+ 8p5ZP1PkeLE1FEwGPwAJPPhZvDppLuAeYmeolB28H7e51v8brnxqBzDW8glnFB6YYad7
+ KWnAYCAwOKh8FbdGhvjnkpUIP15+zpm90s6dnq7EurdiQFDsiKKYQm5e5DfNxE7g1xnA
+ PEGzX+oFvXuRzr5O5tujd9VvUoZxRns3kqlswGR5lWP41h4ASxeVN+j/2gvzFIDhFdSe
+ YqqA==
+X-Gm-Message-State: AOJu0YwFMo7NwmxhrCEOOWEp70WZJcmB+LPweHZW43C4n0h9jxo/kVdg
+ KVPLzUPaKBZig2Rq00StKrHDNTvSKque+c+61/AmExTMmL6Mk2dak5ZddHKOxA==
+X-Gm-Gg: ASbGncsteRUkUG68sxIBjAXeYf9GvGuL1kUHBiXv5BVX53wb+f9kCDqaoRXKk4koRF7
+ ry1T3Y3N8imxoGJ/+4ibx96v/8VRtH8fDF7AbbKRQgHmCjjq5ctS21xqEiaCk5WmzfgAY5rvZfy
+ 2D8LSuhT2XpLdS2aFUV9UZ+8RInOhAtX/O7fqY5btvwLE8vmjmwa49Ix7rZz8aW9uy8bbKOsgeu
+ 5Pu5hJf8OzQI3OQuw8DfJenbqjCnq+FtRO7qOgIWnA0PGjnzm98hJDeAWUM/YDjfiDztMGu50R1
+ 3shkEsGu82H4PlCACBnPZQjP7sUilFxO5Pfo6A0ryUwNe9vfxactU84RwR3DgdaMnMPs08qm63E
+ BMiDgBJFUlETyfNR6heLTcEflDWLWueDNfra4Qx7HC3aUPAJkZlsnN2sPYlmgZLv2n+UQip2KOp
+ 7U6hAPqho6befw5XexKpScjbe+u/ME2s1WX59nZadk76xfn0Zdo4EFk6c=
+X-Google-Smtp-Source: AGHT+IEXoiPKXlW2rTvpkNJ/syxfu8yFT3vQvGKW62fWrVJkvVVvarNgSNY8ZYqnd7fLXvWNpf0fmg==
+X-Received: by 2002:a05:600c:b86:b0:46e:506b:20c5 with SMTP id
+ 5b1f17b1804b1-4778feaa63bmr154597285e9.26.1763492725565; 
+ Tue, 18 Nov 2025 11:05:25 -0800 (PST)
+Received: from zgyarmati-t580.. (netacc-gpn-5-84-233.pool.yettel.hu.
+ [84.225.84.233]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-477b0ffd37bsm5696445e9.3.2025.11.18.11.05.24
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 18 Nov 2025 11:05:24 -0800 (PST)
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 18 Nov 2025 20:03:02 +0100
-Message-ID: <20251118190302.1504901-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Cc: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Tue, 18 Nov 2025 20:05:20 +0100
+Message-ID: <20251118190520.1267064-1-mr.zoltan.gyarmati@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1763492582;
- bh=FbOMkopDVwvvHMQkta4039Gh+pajoJeHLOOFF48vS44=;
- h=From:To:Subject:Date:From;
- b=O2y7XeT/1/v1D4jJthJ/d3yALko7AfI3jmqikDlorWI8mBnBNca0+qzS162D4EKy6
- +ZpEnCbc2AsGtZgl/Dff0azBg46vPe2vwtbM943DHlckRzphztIeRtpblfqNs2h8EQ
- p8n8TYluiMosDnSDqQbMk6u6gmUc9mle0tqbobNDSoc+nPD5DqfqWIb0CXDdSb21kv
- XKWdZ/DW6j1++X70nrsOqVCsBWdD1NxmomKRyek5XPhw4m4O+TXLE/f8VTsBxa63ED
- GXC9E7shFWM5yfPSELGedXUCZaubKeOz/u1xr+xw0yJt3kuCuetZFi76aDdIV5HbTm
- xQc2HRAleVOsQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1763492726; x=1764097526; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=WglOvAkSMrA8S2fCxRh3/u263wRkpPaUdn4F3v9pmjo=;
+ b=nAT/9FXa06mc4n2rwgc8/N+h7You8fkpcHw02M1SRiCWbjyrSL4zawW57IpovnOGNO
+ rjCvXcy3aiYLXLBa5cgynOCDWSp1QLGAhidHB4KjDKIQlqRAGoReHkfhU/Dy6s2bkIoG
+ Kj9hL9nryPf8RfzPyErJapRn+0HNvhrBcbQ/FvEDKFKOTa5chtEbGppKrQfftZWaVp++
+ rWdcmQUZVfs4Ao3m4HJUqf8zlqLj/g5QrUCW+lHNeSi4KWsuGnpwlf8I38h2kDKkV0B7
+ A3Jsx2NqTv+wuwrliKKqBbs7KrpkJETjNczf8CwSXj13z9K8EBL80iPyQm4ZY7KiQBVE
+ jnIg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=O2y7XeT/
-Subject: [Buildroot] [PATCH 1/1] package/openocd: fix build with jimtcl 0.83
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=nAT/9FXa
+Subject: [Buildroot] [PATCH 1/1] package/quazip: bump version to 1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,217 +112,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit 283821fc31c4890f141111cbc5994e36703c91eb bumped jimtcl
-to version 0.83 causing build errors with openocd.
-
-Add two upstream commits to fix the problem.
-
-Fixes:
-https://autobuild.buildroot.net/results/f20/f20667f8fe159de6601a81a827f26d4f0382d673/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 ---
- ...t-workarounds-for-expr-syntax-change.patch | 131 ++++++++++++++++++
- ...3-openocd-fix-build-with-jimtcl-0.83.patch |  50 +++++++
- 2 files changed, 181 insertions(+)
- create mode 100644 package/openocd/0002-openocd-revert-workarounds-for-expr-syntax-change.patch
- create mode 100644 package/openocd/0003-openocd-fix-build-with-jimtcl-0.83.patch
+ package/quazip/quazip.hash | 2 +-
+ package/quazip/quazip.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openocd/0002-openocd-revert-workarounds-for-expr-syntax-change.patch b/package/openocd/0002-openocd-revert-workarounds-for-expr-syntax-change.patch
-new file mode 100644
-index 0000000000..a80f5d57cf
---- /dev/null
-+++ b/package/openocd/0002-openocd-revert-workarounds-for-expr-syntax-change.patch
-@@ -0,0 +1,131 @@
-+From 95603fae18f81eebdafc5b318e70f9e2cdefab9e Mon Sep 17 00:00:00 2001
-+From: Antonio Borneo <borneo.antonio@gmail.com>
-+Date: Sun, 18 Dec 2022 19:15:57 +0100
-+Subject: [PATCH] openocd: revert workarounds for 'expr' syntax change
-+
-+With OpenOCD v0.12.0 released, drop the workarounds for 'expr'
-+syntax change by reverting:
-+- commit 320043c054dc ("openocd: fix for polling during "expr"
-+  computation");
-+- commit c7eaaf620488 ("openocd: prepare for jimtcl 0.81 'expr'
-+  syntax change").
-+
-+Replace the call to target_call_timer_callbacks_now() with call
-+to target_call_timer_callbacks().
-+
-+Change-Id: Iae5afc50e3f688e11176a52648efc9a6577a9a11
-+Signed-off-by: Antonio Borneo <borneo.antonio@gmail.com>
-+Reviewed-on: https://review.openocd.org/c/openocd/+/7405
-+Tested-by: jenkins
-+
-+Upstream: https://github.com/openocd-org/openocd/commit/95603fae18f81eebdafc5b318e70f9e2cdefab9e
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/helper/command.c | 14 +----------
-+ src/openocd.c        | 60 --------------------------------------------
-+ 2 files changed, 1 insertion(+), 73 deletions(-)
-+
-+diff --git a/src/helper/command.c b/src/helper/command.c
-+index 6898e2d7c6..ca66cf7dd1 100644
-+--- a/src/helper/command.c
-++++ b/src/helper/command.c
-+@@ -936,19 +936,7 @@ static int jim_command_dispatch(Jim_Interp *interp, int argc, Jim_Obj * const *a
-+ 	if (!command_can_run(cmd_ctx, c, Jim_GetString(argv[0], NULL)))
-+ 		return JIM_ERR;
-+ 
-+-	/*
-+-	 * TODO: to be removed after v0.12.0
-+-	 * workaround for https://sourceforge.net/p/openocd/tickets/362/
-+-	 * After syntax change of "expr" in jimtcl 0.81
-+-	 * the replacement of jimtcl "expr" with openocd version in
-+-	 * https://review.openocd.org/6510/
-+-	 * introduces too many target polling during math expressions with
-+-	 * "expr" commands.
-+-	 * After v0.12.0 replace the following two lines with
-+-	 * target_call_timer_callbacks();
-+-	 */
-+-	if (strcmp(c->name, "expr"))
-+-		target_call_timer_callbacks_now();
-++	target_call_timer_callbacks();
-+ 
-+ 	/*
-+ 	 * Black magic of overridden current target:
-+diff --git a/src/openocd.c b/src/openocd.c
-+index bef084f980..875da5a62c 100644
-+--- a/src/openocd.c
-++++ b/src/openocd.c
-+@@ -230,65 +230,6 @@ static int openocd_register_commands(struct command_context *cmd_ctx)
-+ 	return register_commands(cmd_ctx, NULL, openocd_command_handlers);
-+ }
-+ 
-+-/*
-+- * TODO: to be removed after v0.12.0
-+- * workaround for syntax change of "expr" in jimtcl 0.81
-+- * replace "expr" with openocd version that prints the deprecated msg
-+- */
-+-struct jim_scriptobj {
-+-	void *token;
-+-	Jim_Obj *filename_obj;
-+-	int len;
-+-	int subst_flags;
-+-	int in_use;
-+-	int firstline;
-+-	int linenr;
-+-	int missing;
-+-};
-+-
-+-static int jim_expr_command(Jim_Interp *interp, int argc, Jim_Obj * const *argv)
-+-{
-+-	if (argc == 2)
-+-		return Jim_EvalExpression(interp, argv[1]);
-+-
-+-	if (argc > 2) {
-+-		Jim_Obj *obj = Jim_ConcatObj(interp, argc - 1, argv + 1);
-+-		Jim_IncrRefCount(obj);
-+-		const char *s = Jim_String(obj);
-+-		struct jim_scriptobj *script = Jim_GetIntRepPtr(interp->currentScriptObj);
-+-		if (interp->currentScriptObj == interp->emptyObj ||
-+-				strcmp(interp->currentScriptObj->typePtr->name, "script") ||
-+-				script->subst_flags ||
-+-				script->filename_obj == interp->emptyObj)
-+-			LOG_WARNING("DEPRECATED! use 'expr { %s }' not 'expr %s'", s, s);
-+-		else
-+-			LOG_WARNING("DEPRECATED! (%s:%d) use 'expr { %s }' not 'expr %s'",
-+-						Jim_String(script->filename_obj), script->linenr, s, s);
-+-		int retcode = Jim_EvalExpression(interp, obj);
-+-		Jim_DecrRefCount(interp, obj);
-+-		return retcode;
-+-	}
-+-
-+-	Jim_WrongNumArgs(interp, 1, argv, "expression ?...?");
-+-	return JIM_ERR;
-+-}
-+-
-+-static const struct command_registration expr_handler[] = {
-+-	{
-+-		.name = "expr",
-+-		.jim_handler = jim_expr_command,
-+-		.mode = COMMAND_ANY,
-+-		.help = "",
-+-		.usage = "",
-+-	},
-+-	COMMAND_REGISTRATION_DONE
-+-};
-+-
-+-static int workaround_for_jimtcl_expr(struct command_context *cmd_ctx)
-+-{
-+-	return register_commands(cmd_ctx, NULL, expr_handler);
-+-}
-+-
-+ struct command_context *global_cmd_ctx;
-+ 
-+ static struct command_context *setup_command_handler(Jim_Interp *interp)
-+@@ -301,7 +242,6 @@ static struct command_context *setup_command_handler(Jim_Interp *interp)
-+ 	/* register subsystem commands */
-+ 	typedef int (*command_registrant_t)(struct command_context *cmd_ctx_value);
-+ 	static const command_registrant_t command_registrants[] = {
-+-		&workaround_for_jimtcl_expr,
-+ 		&openocd_register_commands,
-+ 		&server_register_commands,
-+ 		&gdb_register_commands,
-diff --git a/package/openocd/0003-openocd-fix-build-with-jimtcl-0.83.patch b/package/openocd/0003-openocd-fix-build-with-jimtcl-0.83.patch
-new file mode 100644
-index 0000000000..f7d2ffe065
---- /dev/null
-+++ b/package/openocd/0003-openocd-fix-build-with-jimtcl-0.83.patch
-@@ -0,0 +1,50 @@
-+From 73390332d203f02aa5b9798a7550191d55650d97 Mon Sep 17 00:00:00 2001
-+From: Antonio Borneo <borneo.antonio@gmail.com>
-+Date: Fri, 27 Sep 2024 22:36:52 +0200
-+Subject: [PATCH] openocd: fix build with jimtcl 0.83
-+
-+In jimtcl 0.82, the include file jim.h included in turn stdio.h
-+This made redundant to include the former in openocd source files.
-+Since jimtcl 0.83, jim.h drops the include of stdio.h, causing
-+openocd build to fail.
-+
-+Include stdio.h in the files that need it.
-+
-+Change-Id: Ic81c9b273d7520f4d2d8c32bc3e0a6bcfffb67ed
-+Signed-off-by: Antonio Borneo <borneo.antonio@gmail.com>
-+Reviewed-on: https://review.openocd.org/c/openocd/+/8512
-+Reviewed-by: Jonathan McDowell <noodles-openocd@earth.li>
-+Tested-by: jenkins
-+
-+Upstream: https://github.com/openocd-org/openocd/commit/73390332d203f02aa5b9798a7550191d55650d97
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/helper/configuration.h | 1 +
-+ src/helper/jim-nvp.c       | 1 +
-+ 2 files changed, 2 insertions(+)
-+
-+diff --git a/src/helper/configuration.h b/src/helper/configuration.h
-+index 295ea591d6..d646670eb3 100644
-+--- a/src/helper/configuration.h
-++++ b/src/helper/configuration.h
-+@@ -11,6 +11,7 @@
-+ #ifndef OPENOCD_HELPER_CONFIGURATION_H
-+ #define OPENOCD_HELPER_CONFIGURATION_H
-+ 
-++#include <stdio.h>
-+ #include <helper/command.h>
-+ 
-+ int parse_cmdline_args(struct command_context *cmd_ctx,
-+diff --git a/src/helper/jim-nvp.c b/src/helper/jim-nvp.c
-+index e1ab64ae5b..cdd4d34291 100644
-+--- a/src/helper/jim-nvp.c
-++++ b/src/helper/jim-nvp.c
-+@@ -21,6 +21,7 @@
-+ #endif
-+ 
-+ #include "jim-nvp.h"
-++#include <stdio.h>
-+ #include <string.h>
-+ 
-+ int jim_get_nvp(Jim_Interp *interp,
+diff --git a/package/quazip/quazip.hash b/package/quazip/quazip.hash
+index 1c5c614caf..46346d0124 100644
+--- a/package/quazip/quazip.hash
++++ b/package/quazip/quazip.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  79633fd3a18e2d11a7d5c40c4c79c1786ba0c74b59ad752e8429746fe1781dd6  quazip-1.4.tar.gz
++sha256  405b72b6e76c8987ff41a762523b8f64876ba406d8a831d268ee0b63f1369582  quazip-1.5.tar.gz
+ sha256  b455b21b0d31d6e51993f1fb7e0694c75fa0eb0519a9ea62e4815fcf48b140b0  COPYING
+diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
+index ac28792f20..06b702e732 100644
+--- a/package/quazip/quazip.mk
++++ b/package/quazip/quazip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QUAZIP_VERSION = 1.4
++QUAZIP_VERSION = 1.5
+ QUAZIP_SITE = $(call github,stachenov,quazip,v$(QUAZIP_VERSION))
+ QUAZIP_INSTALL_STAGING = YES
+ QUAZIP_DEPENDENCIES = zlib
 -- 
-2.47.3
+2.43.0
 
 _______________________________________________
 buildroot mailing list
