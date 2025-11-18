@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E0C4CEE35A
-	for <buildroot@archiver.kernel.org>; Tue, 18 Nov 2025 21:12:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E67A9CEE35A
+	for <buildroot@archiver.kernel.org>; Tue, 18 Nov 2025 21:12:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 59D3260E7C;
-	Tue, 18 Nov 2025 21:12:20 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LD_0FvKAqBxY; Tue, 18 Nov 2025 21:12:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C962A60787
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C962A60787;
-	Tue, 18 Nov 2025 21:12:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 32386160
- for <buildroot@buildroot.org>; Tue, 18 Nov 2025 21:12:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 183394083F
- for <buildroot@buildroot.org>; Tue, 18 Nov 2025 21:12:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9BDAE40894;
+	Tue, 18 Nov 2025 21:12:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id REzvP-f1HFuO for <buildroot@buildroot.org>;
- Tue, 18 Nov 2025 21:12:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2446440836
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2446440836
- for <buildroot@buildroot.org>; Tue, 18 Nov 2025 21:12:16 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 058FF84F7B; Tue, 18 Nov 2025 21:12:15 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 18 Nov 2025 22:03:58 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2ce329692ab60da7fe7ccd52bf64a8c4802fb317
-X-Git-Newrev: 2549e2b4feb2555d8e9e4c011c296f6fa87d9a89
-X-Patchwork-Hint: ignore
-Message-Id: <20251118211216.058FF84F7B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/quazip: bump version to 1.5
+ id tPIJDeYkiwhs; Tue, 18 Nov 2025 21:12:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BB3140886
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0BB3140886;
+	Tue, 18 Nov 2025 21:12:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C2EA037D
+ for <buildroot@buildroot.org>; Tue, 18 Nov 2025 21:12:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A9F7A83BC6
+ for <buildroot@buildroot.org>; Tue, 18 Nov 2025 21:12:32 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id te4pBIphf6w4 for <buildroot@buildroot.org>;
+ Tue, 18 Nov 2025 21:12:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 386E683BA7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 386E683BA7
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 386E683BA7
+ for <buildroot@buildroot.org>; Tue, 18 Nov 2025 21:12:30 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 064CF19F57B;
+ Tue, 18 Nov 2025 22:12:26 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 18 Nov 2025 22:12:26 +0100
+MIME-Version: 1.0
+Date: Tue, 18 Nov 2025 22:12:26 +0100
+To: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251118190520.1267064-1-mr.zoltan.gyarmati@gmail.com>
+References: <20251118190520.1267064-1-mr.zoltan.gyarmati@gmail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <67f64f0f45bc883b9eca9e6a2da5358f@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1763500348;
+ bh=SGdL/b+xA8LMGm9dKzmcisXy7ZmForVegarz32LHh/Q=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=dC6PGbwkRBPMRaa4KuUjbKO/gE5b00/ZIXCOwarOM7eN/QouyX0WGqFq0ZWw5O2By
+ b/GsUVFHdD4fYasNv1ot4uWSs/EvkOf0MG2O+SZ32pfjaiBoe5FitrzXx3gMHoTnjb
+ Uy3+SgJJJNO9OxV/eKluY7yqZzXZ8roP3IWrE0TAvx5BfvL2rjs0I6GTzVrp4/fQAW
+ X4J98Xia8JIN44BLlDkGi4pyB7wUFFpi9pKgqbJbZS+aSIZbLBOLkZ0XfaLDqeP74U
+ J7UuJQ7lmgIJDyG//JBT1dcRluiFg5TnzcY/zlAm7qQOCjlTPWNtLTaVGXj20xKePN
+ 30IvO+ND9D8Aw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=dC6PGbwk
+Subject: Re: [Buildroot] [PATCH 1/1] package/quazip: bump version to 1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,48 +83,15 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2549e2b4feb2555d8e9e4c011c296f6fa87d9a89
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 18/11/2025 20:05, Zoltan Gyarmati wrote:
+> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 
-For release notes, see:
-https://github.com/stachenov/quazip/releases/tag/v1.5
-
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-[Julien: add link to release notes]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/quazip/quazip.hash | 2 +-
- package/quazip/quazip.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/quazip/quazip.hash b/package/quazip/quazip.hash
-index 1c5c614caf..46346d0124 100644
---- a/package/quazip/quazip.hash
-+++ b/package/quazip/quazip.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  79633fd3a18e2d11a7d5c40c4c79c1786ba0c74b59ad752e8429746fe1781dd6  quazip-1.4.tar.gz
-+sha256  405b72b6e76c8987ff41a762523b8f64876ba406d8a831d268ee0b63f1369582  quazip-1.5.tar.gz
- sha256  b455b21b0d31d6e51993f1fb7e0694c75fa0eb0519a9ea62e4815fcf48b140b0  COPYING
-diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
-index ac28792f20..06b702e732 100644
---- a/package/quazip/quazip.mk
-+++ b/package/quazip/quazip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--QUAZIP_VERSION = 1.4
-+QUAZIP_VERSION = 1.5
- QUAZIP_SITE = $(call github,stachenov,quazip,v$(QUAZIP_VERSION))
- QUAZIP_INSTALL_STAGING = YES
- QUAZIP_DEPENDENCIES = zlib
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
