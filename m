@@ -4,69 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DBDFCEE35A
-	for <buildroot@archiver.kernel.org>; Tue, 18 Nov 2025 22:10:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3876CEE35A
+	for <buildroot@archiver.kernel.org>; Tue, 18 Nov 2025 22:14:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF19441C0F;
-	Tue, 18 Nov 2025 22:10:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 98B7C41C41;
+	Tue, 18 Nov 2025 22:14:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WNZ_DKrFpavy; Tue, 18 Nov 2025 22:10:01 +0000 (UTC)
+ id 3zremUvZA8DG; Tue, 18 Nov 2025 22:14:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 896DC41BE7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB46841C4A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 896DC41BE7;
-	Tue, 18 Nov 2025 22:10:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AB46841C4A;
+	Tue, 18 Nov 2025 22:14:50 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id E2E8C158
- for <buildroot@buildroot.org>; Tue, 18 Nov 2025 22:09:59 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 70197158
+ for <buildroot@buildroot.org>; Tue, 18 Nov 2025 22:14:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D4CA640B29
- for <buildroot@buildroot.org>; Tue, 18 Nov 2025 22:09:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 55D404130C
+ for <buildroot@buildroot.org>; Tue, 18 Nov 2025 22:14:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ES-PxOVTa4q9 for <buildroot@buildroot.org>;
- Tue, 18 Nov 2025 22:09:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BCDA04009E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BCDA04009E
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BCDA04009E
- for <buildroot@buildroot.org>; Tue, 18 Nov 2025 22:09:57 +0000 (UTC)
-Received: from framework-OT.fritz.box (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 9F8512C80164;
- Tue, 18 Nov 2025 23:09:54 +0100 (CET)
+ id Sb-yJXF6Li6j for <buildroot@buildroot.org>;
+ Tue, 18 Nov 2025 22:14:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4B61F4009E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B61F4009E
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4B61F4009E
+ for <buildroot@buildroot.org>; Tue, 18 Nov 2025 22:14:48 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1b06c.dip0.t-ipconnect.de [84.161.176.108])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 86FBAA4C6488;
+ Tue, 18 Nov 2025 23:14:45 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:35458)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99)
+ (envelope-from <bernd@kuhls.net>) id 1vLTyH-000000000tx-0OIo;
+ Tue, 18 Nov 2025 22:14:45 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Norbert Lange <nolange79@gmail.com>,
-	Sen Hastings <sen@hastings.org>
-Date: Tue, 18 Nov 2025 23:09:53 +0100
-Message-ID: <20251118220954.3080964-1-buildroot@bubu1.eu>
-X-Mailer: git-send-email 2.52.0
+Cc: Daniel Lang <dalang@gmx.at>, Joseph Kogut <joseph.kogut@gmail.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Valentin Korenblit <valentinkorenblit@gmail.com>
+Date: Tue, 18 Nov 2025 23:14:45 +0100
+Message-ID: <20251118221445.2750168-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1763503794; bh=8q/K9bd7CIQ78gYNq2VrAKxBFhdDMmptM9JMBpUBcz0=;
- h=From:To:Cc:Subject:Date;
- b=RwRHhXRfHlgbzHotyqWFBf5fpqZC42zYtzsBrKaInKpiP4ffc0rSz1fLe+UA4QAz1
- wyWUmUQr6JzqFEHCzXRNfFLV/OL9onEMD/euxh67LfrkWwYBISr10aYJIqaOcY3NBA
- 7zMf7ZJRp+xzseqPZkLZ79+3/YGDUqOWf2HtTf+c07VF1iW2Wc8X16FbpPUwWgv11o
- d4NRSYnjBmfO666e5P/bW63nbQ6d5kWrZ7/c5Ff3JAMJ6jYIQP+0rhLu96qtHvU9ri
- aiNUcVIwC2WMrE7g9iPNLzyITpz6i4lgk7JH4Pfkkga0E8eVwK3Brc1Mez/qtf9e2t
- GKrKDW/W182Sw==
+X-Spamd-Bar: ++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202506031021; t=1763504085;
+ bh=jJzP8XRqbu3rrUe7jnavkiVFo1LuV2wkvYGwVIqbous=;
+ h=From:To:Cc:Subject:Date:From;
+ b=IUFAcZSmL/rGNqnb7i5DkV2tAZ2o8HI1jmLZ7z0MuiUoadG11BYxgFnA9WdaX3T/g
+ S7w8lLdHMbgQaC+TUh8xC2CgtEPGwbOrraYk25PxUQQ4NTOm5J37pilppCQHQoTEe6
+ dpfe4TWpErGQe1dSxWnfJj0TUT4FggOd+GGqiYKDo+nnsM3sKNyZvmsBt7O6eAjQxX
+ kybhJH1KfgFYcsWlbtLfR7uVLHfbLDSErqD3Qzo7bOju1XsoO2HkpWw8Kx6yB1/pXI
+ G42DlBNPtJjSkLRdf+bKKnNv1LVkq+6O2ajb6JndOiMDSYaTiuaGWhNVT4JkDY6TnE
+ J6nBD2EXTk29A==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=RwRHhXRf
-Subject: [Buildroot] [PATCH] package/systemd: bump to 258.2
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=IUFAcZSm
+Subject: [Buildroot] [PATCH 1/1] package/llvm-project: bump to version 21.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,328 +83,115 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Noteable changes:
-  - Add -Dlibmount=enabled to host and target build. Disabling this
-    option disables building most of systemd's tools apart from
-    libsystemd.
+Release notes: https://discourse.llvm.org/t/llvm-21-1-5-released/88776
 
-  - remove gcrypt and gnutls from dependencies and build options.
-    openssl is the only supported crypto library now.
-
-  - Disable nspawn build for host variant and add a Config.in option
-    for the target variant.
-
-  - systemd now requires kernel >= 5.4 while the recommended kernel
-    version moved to >=5.7. This make systemd depend on
-    BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4, removing various dependencies
-    on older kernel header versions from sub options.
-
-  - The sha256sum of LICENSES/README.md changed due to various
-    license clarification, removal of some vendored files as well as
-    changing some file paths. Licensing did not actually change.
-
-For changelog, see:
-https://github.com/systemd/systemd/blob/v258.2/NEWS
-
-test-pkg currently fails for the following toolchains:
-
-  - br-mips64r6-el-hf-glibc [33/35]: FAILED, complaining that STATX_MNT_ID
-    is not defined even though it should be available from the kernel
-    headers.
-
-  - br-powerpc64-power7-glibc [35/35]: FAILED, with an internal compiler
-    error.
-
-Tested with `./support/testing/run-tests tests.init.test_systemd`
-All tests passed
-
-One of the tests now needs a bigger rootfs size.
-
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/systemd/Config.in                  | 38 ++++++++++------------
- package/systemd/systemd.hash               |  4 +--
- package/systemd/systemd.mk                 | 33 +++++++------------
- support/testing/tests/init/test_systemd.py |  1 +
- system/Config.in                           | 10 +++---
- 5 files changed, 38 insertions(+), 48 deletions(-)
+ package/llvm-project/clang/clang.hash                   | 2 +-
+ package/llvm-project/compiler-rt/compiler-rt.hash       | 4 ++--
+ package/llvm-project/libclc/libclc.hash                 | 2 +-
+ package/llvm-project/lld/lld.hash                       | 2 +-
+ package/llvm-project/llvm-cmake/llvm-cmake.hash         | 2 +-
+ package/llvm-project/llvm-libunwind/llvm-libunwind.hash | 2 +-
+ package/llvm-project/llvm-project.mk                    | 2 +-
+ package/llvm-project/llvm-runtimes/llvm-runtimes.hash   | 2 +-
+ package/llvm-project/llvm/llvm.hash                     | 4 ++--
+ 9 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 931134911a..84bf554fee 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -21,7 +21,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	depends on !BR2_STATIC_LIBS # kmod
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_TOOLCHAIN_HAS_SSP
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on BR2_HOST_GCC_AT_LEAST_8 # host-systemd
- 	select BR2_ROOTFS_MERGED_USR
-@@ -54,13 +54,11 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	  an elaborate transactional dependency-based service control
- 	  logic.  It can work as a drop-in replacement for sysvinit.
+diff --git a/package/llvm-project/clang/clang.hash b/package/llvm-project/clang/clang.hash
+index 3abedbab85..74fc755e25 100644
+--- a/package/llvm-project/clang/clang.hash
++++ b/package/llvm-project/clang/clang.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256  3e8e25a7478bfb0ef510fff35d1a43bdfb62c7727bf98bb43ad33deef2f9f1a2  clang-21.1.4.src.tar.xz
++sha256  eee4de3b3f01ea6dd6b0936ac8be319eef0a65d0022def258c70110e3743807c  clang-21.1.5.src.tar.xz
+ sha256  ebcd9bbf783a73d05c53ba4d586b8d5813dcdf3bbec50265860ccc885e606f47  LICENSE.TXT
+diff --git a/package/llvm-project/compiler-rt/compiler-rt.hash b/package/llvm-project/compiler-rt/compiler-rt.hash
+index 9e10f6cd92..01e7d05169 100644
+--- a/package/llvm-project/compiler-rt/compiler-rt.hash
++++ b/package/llvm-project/compiler-rt/compiler-rt.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  84fed7aa95bfac348642a753d332afd303a0847b1fe1e76acf13fe98f8760d5f  compiler-rt-21.1.4.src.tar.xz
+-sha256  ae8658390504e08e464f65ecea838a0584df4734c27cecedfe7eb32780e81564  third-party-21.1.4.src.tar.xz
++sha256  967c2afba250b325ba4482b12a819ef8cbee178eed45d7b5e14f0368b05adedf  compiler-rt-21.1.5.src.tar.xz
++sha256  4ccc00ec2e7bd0cc121eaa34fa25a0480bfb8a5722faf1694720e0be99b753e6  third-party-21.1.5.src.tar.xz
+ sha256  1a8f1058753f1ba890de984e48f0242a3a5c29a6a8f2ed9fd813f36985387e8d  LICENSE.TXT
+diff --git a/package/llvm-project/libclc/libclc.hash b/package/llvm-project/libclc/libclc.hash
+index 8e9663ff8d..bd603a0c21 100644
+--- a/package/llvm-project/libclc/libclc.hash
++++ b/package/llvm-project/libclc/libclc.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256  2311128b86ae95b4319341671a8ec93950928d0bc4fa13d0e6a97d7a65507aaa  libclc-21.1.4.src.tar.xz
++sha256  1fc88ddae5965b66e94de74fb294b7dfdf5827f3abb22a8657e8e03c6c9b381f  libclc-21.1.5.src.tar.xz
+ sha256  3c536c052db9afd997809e38785c9f2a9e54e2892330fa7c5b438e18a7413479  LICENSE.TXT
+diff --git a/package/llvm-project/lld/lld.hash b/package/llvm-project/lld/lld.hash
+index 707e2ba56f..9b8d60e487 100644
+--- a/package/llvm-project/lld/lld.hash
++++ b/package/llvm-project/lld/lld.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256  5d62eb36eb76ac9cc9179f31a355d28fc3a1c4096880da2a12090cfe1ccd3dcf  lld-21.1.4.src.tar.xz
++sha256  2bcbb2b12af99fc3292d2a415e5678de0bee7182712d7deb89a7e0a52704a210  lld-21.1.5.src.tar.xz
+ sha256  f7891568956e34643eb6a0db1462db30820d40d7266e2a78063f2fe233ece5a0  LICENSE.TXT
+diff --git a/package/llvm-project/llvm-cmake/llvm-cmake.hash b/package/llvm-project/llvm-cmake/llvm-cmake.hash
+index 7b4df505c4..3dfa67a294 100644
+--- a/package/llvm-project/llvm-cmake/llvm-cmake.hash
++++ b/package/llvm-project/llvm-cmake/llvm-cmake.hash
+@@ -1,2 +1,2 @@
+ # locally calculated
+-sha256  f4316d84a862ba3023ca1d26bd9c6a995516b4fa028b6fb329d22e24cc6d235e  cmake-21.1.4.src.tar.xz
++sha256  48013d5714a96419bf993a2e5e4c5827377e8cf9c565070731fb2305d50d9511  cmake-21.1.5.src.tar.xz
+diff --git a/package/llvm-project/llvm-libunwind/llvm-libunwind.hash b/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
+index 36ef3167d4..0a7a966498 100644
+--- a/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
++++ b/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  fc3ca27e1094b5fd4b7c1879e83705d89e9a2632b9a43426eb96c0536ace5345  libunwind-21.1.4.src.tar.xz
++sha256  8a2cd813ea15dbd879ebeefa2eceedce8937715ac78b6df44da140e40768725f  libunwind-21.1.5.src.tar.xz
+ sha256  b5efebcaca80879234098e52d1725e6d9eb8fb96a19fce625d39184b705f7b6d  LICENSE.TXT
+diff --git a/package/llvm-project/llvm-project.mk b/package/llvm-project/llvm-project.mk
+index 6d324ede51..2e9d9d0513 100644
+--- a/package/llvm-project/llvm-project.mk
++++ b/package/llvm-project/llvm-project.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
--	  Kernel versions below 5.4 ("recommended baseline") have
-+	  Kernel versions below 5.7 ("recommended baseline") have
- 	  significant gaps in functionality and are not recommended
--	  for use with this version of systemd. (e.g. lack race-free
--	  process tracking by pidfd, systemd-networkd, and new mount
--	  API support).
-+	  for use with this version of systemd.
+ LLVM_PROJECT_VERSION_MAJOR = 21
+-LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.4
++LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.5
+ LLVM_PROJECT_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_PROJECT_VERSION)
  
--	  Systemd requires a Linux kernel >= 3.15 with the following
-+	  Systemd requires a Linux kernel >= 5.4 with the following
- 	  options enabled:
- 
- 	  - CONFIG_DEVTMPFS
-@@ -94,10 +92,10 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	  The selection of other packages will enable some features:
- 
- 	  - acl package will add support for multi-seat.
--	  - xz and/or l4 packages will add compression support in
-+	  - bzip, lz4, xz,and/or zstd packages will add compression support in
- 	    journal and coredump.
- 	  - libcurl package will add support for systemd-journal-upload.
--	  - libgcrypt package will add support for journal sealing and
-+	  - openssl package will add support for journal sealing and
- 	    DNSSEC verification in resolved.
- 
- 	  Notice that systemd selects the fsck wrapper from util-linux
-@@ -246,7 +244,6 @@ config BR2_PACKAGE_SYSTEMD_HOMED
- 	depends on BR2_USE_MMU # cryptsetup -> lvm2
- 	depends on !BR2_STATIC_LIBS # cryptsetup -> lvm2
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # cryptsetup -> json-c
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # fscrypt_key
- 	select BR2_PACKAGE_CRYPTSETUP
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-@@ -257,11 +254,11 @@ config BR2_PACKAGE_SYSTEMD_HOMED
- 
- 	  https://www.freedesktop.org/software/systemd/man/systemd-homed.service.html
- 
--comment "homed support needs a toolchain w/ threads, dynamic library, kernel headers >= 4.12"
-+comment "homed support needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
--		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
-+		BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_SYSTEMD_HOSTNAMED
- 	bool "enable hostname daemon"
-@@ -285,9 +282,8 @@ config BR2_PACKAGE_SYSTEMD_HWDB
- 
- config BR2_PACKAGE_SYSTEMD_IMPORTD
- 	bool "enable import daemon"
--	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
- 	select BR2_PACKAGE_LIBCURL
--	select BR2_PACKAGE_LIBGCRYPT
-+	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_XZ
- 	select BR2_PACKAGE_ZLIB
- 	help
-@@ -336,6 +332,14 @@ config BR2_PACKAGE_SYSTEMD_MACHINED
- 
- 	  https://www.freedesktop.org/software/systemd/man/systemd-machined.service.html
- 
-+config BR2_PACKAGE_SYSTEMD_NSPAWN
-+	bool "enable nspawn"
-+	help
-+	  systemd-nspawn is a tool to spawn a command or OS in
-+	  a lightweight container.
-+
-+	  https://www.freedesktop.org/software/systemd/man/latest/systemd-nspawn.html
-+
- config BR2_PACKAGE_SYSTEMD_NSRESOURCED
- 	bool "enable nsresourced"
- 	help
-@@ -358,8 +362,7 @@ config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
- 
- config BR2_PACKAGE_SYSTEMD_NETWORKD
- 	bool "enable network manager"
--	default y if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-+	default y
- 	help
- 	  systemd-networkd is a system service that manages networks.
- 	  It detects and configures network devices as they appear, as
-@@ -370,9 +373,6 @@ config BR2_PACKAGE_SYSTEMD_NETWORKD
- 
- 	  https://www.freedesktop.org/software/systemd/man/systemd-networkd.html
- 
--comment "systemd-networkd needs a toolchain with kernel headers >= 5.4"
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
--
- config BR2_PACKAGE_SYSTEMD_OOMD
- 	bool "enable out-of-memory killer"
- 	help
-@@ -481,8 +481,6 @@ config BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT
- 	  Control Kernel, a minimal approach to Access Control
- 	  implemented as a kernel LSM.
- 
--	  This feature requires a kernel >= 3.8.
--
- 	  When this feature is enabled, Systemd mounts smackfs and
- 	  manages security labels for sockets.
- 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index d68950f934..47c723679c 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,5 +1,5 @@
- # sha256 locally computed
--sha256  5a2f477e6268630f6e2829c7bb3e442017549798a4122635817934eaa0c6ac10  systemd-257.10.tar.gz
-+sha256  05208e76bf1f9b369b1a8159e6631ef67c82f2d27c21e931962026a79bf4ba64  systemd-258.2.tar.gz
- sha256  ac4985facb553559981f507982444d779115e3e3a4c8b7847ae956198490c1b3  LICENSE.GPL2
- sha256  6d9bb3b7fc818a8facc4cc296060a0883fef8710d6498f86165335846e82ee9d  LICENSE.LGPL2.1
- sha256  c9e7bf5b7c243c719b8b43c36158effb9b54c5e80abc9d82e4b2d4b2a4aa64ad  LICENSES/alg-sha1-public-domain.txt
-@@ -13,4 +13,4 @@ sha256  8a6fc0879cecc0b96bf4c08159b9d733bf0f15fcf32879aec98c4ffd05424554  LICENS
- sha256  b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0  LICENSES/MIT.txt
- sha256  2a98749f6bec00dfaed86fa9c1edea871aaae4f11ee4d100b671aaf4ce353a73  LICENSES/murmurhash2-public-domain.txt
- sha256  1a7adaa2c86cedfd6c7f5c0c7c72fd6d3e02cd0c9593f21fdb53c89bb2b130ec  LICENSES/OFL-1.1.txt
--sha256  768ecb25cb1e6e41672fc655571f45ba46a3f03fcbc6ab56c7a09ac5928eb37b  LICENSES/README.md
-+sha256  bce1d2e9bad517b493168b37604c5d02a7fb638b4d1b9fc730adafa06c603456  LICENSES/README.md
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 6d04ee2581..031a970f17 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -19,7 +19,7 @@
- # - Diff sysusers.d with the previous version
- # - Diff factory/etc/nsswitch.conf with the previous version
- #   (details are often sprinkled around in README and manpages)
--SYSTEMD_VERSION = 257.10
-+SYSTEMD_VERSION = 258.2
- SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = \
- 	LGPL-2.1+, \
-@@ -107,7 +107,8 @@ SYSTEMD_CONF_OPTS += \
- 	-Dbpf-framework=disabled \
- 	-Dvmlinux-h=disabled \
- 	-Dumount-path=/usr/bin/umount \
--	-Dxenctrl=disabled
-+	-Dxenctrl=disabled \
-+	-Dlibmount=enabled
- 
- SYSTEMD_CFLAGS = $(TARGET_CFLAGS)
- ifeq ($(BR2_OPTIMIZE_FAST),y)
-@@ -267,13 +268,6 @@ else
- SYSTEMD_CONF_OPTS += -Dlibcurl=disabled
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
--SYSTEMD_DEPENDENCIES += libgcrypt
--SYSTEMD_CONF_OPTS += -Dgcrypt=enabled
--else
--SYSTEMD_CONF_OPTS += -Dgcrypt=disabled
--endif
--
- ifeq ($(BR2_PACKAGE_P11_KIT),y)
- SYSTEMD_DEPENDENCIES += p11-kit
- SYSTEMD_CONF_OPTS += -Dp11kit=enabled
-@@ -567,6 +561,12 @@ else
- SYSTEMD_CONF_OPTS += -Dsysupdate=disabled
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD_NSPAWN),y)
-+SYSTEMD_CONF_OPTS += -Dnspawn=enabled
-+else
-+SYSTEMD_CONF_OPTS += -Dnspawn=disabled
-+endif
-+
- ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
- SYSTEMD_CONF_OPTS += -Dnetworkd=true
- SYSTEMD_NETWORKD_USER = systemd-network -1 systemd-network -1 * - - - systemd Network Management
-@@ -595,22 +595,11 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
- SYSTEMD_CONF_OPTS += \
--	-Dgnutls=disabled \
--	-Dopenssl=enabled \
- 	-Ddns-over-tls=openssl \
- 	-Ddefault-dns-over-tls=opportunistic
- SYSTEMD_DEPENDENCIES += openssl
--else ifeq ($(BR2_PACKAGE_GNUTLS),y)
--SYSTEMD_CONF_OPTS += \
--	-Dgnutls=enabled \
--	-Dopenssl=disabled \
--	-Ddns-over-tls=gnutls \
--	-Ddefault-dns-over-tls=opportunistic
--SYSTEMD_DEPENDENCIES += gnutls
- else
- SYSTEMD_CONF_OPTS += \
--	-Dgnutls=disabled \
--	-Dopenssl=disabled \
- 	-Ddns-over-tls=false \
- 	-Ddefault-dns-over-tls=no
- endif
-@@ -1015,7 +1004,9 @@ HOST_SYSTEMD_CONF_OPTS = \
- 	-Dp11kit=disabled \
- 	-Dlibfido2=disabled \
- 	-Dpcre2=disabled \
--	-Dsysupdated=disabled
-+	-Dsysupdated=disabled \
-+	-Dnspawn=disabled \
-+	-Dlibmount=enabled
- 
- HOST_SYSTEMD_DEPENDENCIES = \
- 	$(BR2_COREUTILS_HOST_DEPENDENCY) \
-diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
-index 7fdd5d1798..41545cbeed 100644
---- a/support/testing/tests/init/test_systemd.py
-+++ b/support/testing/tests/init/test_systemd.py
-@@ -210,6 +210,7 @@ class TestInitSystemSystemdRwFull(InitSystemSystemdBase):
-         BR2_PACKAGE_SYSTEMD_SYSUSERS=y
-         BR2_PACKAGE_SYSTEMD_VCONSOLE=y
-         BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-         """
- 
-     def test_run(self):
-diff --git a/system/Config.in b/system/Config.in
-index 0652b94a3b..878259a2e0 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -123,24 +123,24 @@ config BR2_INIT_SYSTEMD
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_TOOLCHAIN_HAS_SSP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on BR2_HOST_GCC_AT_LEAST_8
- 	select BR2_PACKAGE_SYSTEMD
- 	select BR2_PACKAGE_SKELETON_INIT_SYSTEMD if BR2_ROOTFS_SKELETON_DEFAULT
- 
--comment "systemd needs a glibc toolchain w/ SSP, headers >= 3.15, host and target gcc >= 8"
-+comment "systemd needs a glibc toolchain w/ SSP, headers >= 5.4, host and target gcc >= 8"
- 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
- 		!BR2_TOOLCHAIN_HAS_SSP || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15 || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4 || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || \
- 		!BR2_HOST_GCC_AT_LEAST_8
- 
--comment "systemd highly recommends Linux >= 4.15"
-+comment "systemd highly recommends Linux >= 5.7"
- 	depends on BR2_INIT_SYSTEMD
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
- 
- comment "Special purpose (read help)"
- 
+ include $(sort $(wildcard package/llvm-project/*/*.mk))
+diff --git a/package/llvm-project/llvm-runtimes/llvm-runtimes.hash b/package/llvm-project/llvm-runtimes/llvm-runtimes.hash
+index 3564e2341a..58b764dd99 100644
+--- a/package/llvm-project/llvm-runtimes/llvm-runtimes.hash
++++ b/package/llvm-project/llvm-runtimes/llvm-runtimes.hash
+@@ -1,2 +1,2 @@
+ # locally calculated
+-sha256  d84e6d3a28f0c877e4ab6884e8bedb3a1d2094352bba2f0d74073abb817b996a  runtimes-21.1.4.src.tar.xz
++sha256  2454cfbfc16266e1858df4ddbe1bc9dc16e0679f8058b6c618e3f6e7e05623a7  runtimes-21.1.5.src.tar.xz
+diff --git a/package/llvm-project/llvm/llvm.hash b/package/llvm-project/llvm/llvm.hash
+index 78f830ec48..ab9995d14a 100644
+--- a/package/llvm-project/llvm/llvm.hash
++++ b/package/llvm-project/llvm/llvm.hash
+@@ -1,4 +1,4 @@
+ # locally calculated
+-sha256  f311681255deb37f74bbf950a653e9434e7d8383a7b46a603a323c46cd4bf50e  llvm-21.1.4.src.tar.xz
+-sha256  ae8658390504e08e464f65ecea838a0584df4734c27cecedfe7eb32780e81564  third-party-21.1.4.src.tar.xz
++sha256  c9d6ca5073255192850471a276b3a00a6555c6dd09df6cb3eab77801f0a1cae0  llvm-21.1.5.src.tar.xz
++sha256  4ccc00ec2e7bd0cc121eaa34fa25a0480bfb8a5722faf1694720e0be99b753e6  third-party-21.1.5.src.tar.xz
+ sha256  8d85c1057d742e597985c7d4e6320b015a9139385cff4cbae06ffc0ebe89afee  LICENSE.TXT
 -- 
-2.52.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
