@@ -4,74 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A7E4CF58E5
-	for <buildroot@archiver.kernel.org>; Wed, 19 Nov 2025 20:26:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93420CF58E8
+	for <buildroot@archiver.kernel.org>; Wed, 19 Nov 2025 20:35:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DBECC80CD8;
-	Wed, 19 Nov 2025 20:26:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 932F381211;
+	Wed, 19 Nov 2025 20:35:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id re97tBCqnpGX; Wed, 19 Nov 2025 20:26:43 +0000 (UTC)
+ id CLPXxUtL9wMr; Wed, 19 Nov 2025 20:35:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1868580CD5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2DC48120B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1868580CD5;
-	Wed, 19 Nov 2025 20:26:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 249A737D
- for <buildroot@buildroot.org>; Wed, 19 Nov 2025 20:26:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D2DC48120B;
+	Wed, 19 Nov 2025 20:35:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0A91E37D
+ for <buildroot@buildroot.org>; Wed, 19 Nov 2025 20:35:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0B1654038A
- for <buildroot@buildroot.org>; Wed, 19 Nov 2025 20:26:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DF4CC4018C
+ for <buildroot@buildroot.org>; Wed, 19 Nov 2025 20:35:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iIGWfI3AY3lH for <buildroot@buildroot.org>;
- Wed, 19 Nov 2025 20:26:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4AAFC40382
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AAFC40382
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4AAFC40382
- for <buildroot@buildroot.org>; Wed, 19 Nov 2025 20:26:40 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 46D6019F72F;
- Wed, 19 Nov 2025 21:26:34 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 19 Nov 2025 21:26:34 +0100
-MIME-Version: 1.0
-Date: Wed, 19 Nov 2025 21:26:34 +0100
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>,
- Marcus Hoffmann <bubu@bubu1.eu>, Oli Vogt <oli.vogt.pub01@gmail.com>
-In-Reply-To: <20251119183903.629518-1-peter@korsgaard.com>
-References: <20251119183903.629518-1-peter@korsgaard.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <bf642d2f501aab9ce3d46c26f9e3395f@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1763583998;
- bh=3pNIcj0sTGmaWZr+wqAFIRry4nyWQW7/2ByHBMWbz7g=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=UMZ5IbyaYsMxkdhU444kpQHTYyJolZWe6hILMgx5BroOfjbfnEj9QwOpmCfgpni9W
- Pw+nMEs2wrk4uSv+UEjo3ZbVngbbR8SIThnfbKIbSvhCN9lbff7JMUq90/BC59T+g7
- Rd36xId7w9cGmC2hD+Raq5rg2mpwWG1wFZHnKVFG15rk4YL/oc7k2evrAb2IBNDn3L
- K1RCWPwmxHUjlZE+CjGnqw3CL/UUjRkcW+7yZQ+bUiffV9efiCDG5eSUypDEDpy7CQ
- 2hYHCb5iKatY8jicknM2vpT5ZclgSMfKyzDYm/x0sXbvZNvA8Yur+w/0oWHlE4BxkF
- JyiSZZ9QgQEYg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=UMZ5Ibya
-Subject: Re: [Buildroot] [PATCH] package/python-django: security bump to
- version 5.2.8
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OzEMYuc_rBIH for <buildroot@buildroot.org>;
+ Wed, 19 Nov 2025 20:35:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41A0340086
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 41A0340086
+ for <buildroot@buildroot.org>; Wed, 19 Nov 2025 20:35:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3C5B184659; Wed, 19 Nov 2025 20:35:37 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 19 Nov 2025 21:30:41 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 779827f765ebc721d8edbeb6579b7692129942ab
+X-Git-Newrev: 55d1f2825b2dfe73c954b998d980feed846f89c9
+X-Patchwork-Hint: ignore
+Message-Id: <20251119203537.3C5B184659@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openvpn: security bump version to
+ 2.6.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,24 +60,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 19/11/2025 19:39, Peter Korsgaard wrote:
-> Fixed the following security issues:
-> 
-> CVE-2025-64458: Potential denial-of-service vulnerability in
-> HttpResponseRedirect and HttpResponsePermanentRedirect on Windows
-> 
-> CVE-2025-64459: Potential SQL injection via _connector keyword argument
-> 
-> https://docs.djangoproject.com/en/5.2/releases/5.2.8/
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=55d1f2825b2dfe73c954b998d980feed846f89c9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Fixes CVE-2025-13086.
+
+Release notes:
+https://sourceforge.net/p/openvpn/mailman/message/59261309/
+
+Changelog:
+https://github.com/OpenVPN/openvpn/blob/release/2.6/ChangeLog
+https://github.com/OpenVPN/openvpn/blob/release/2.6/Changes.rst
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/openvpn/openvpn.hash | 2 +-
+ package/openvpn/openvpn.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index 353e8a8051..0123babe4b 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking signature
+-sha256  e35513ee15995e3c71adfd8891b9f33522896c70b3baa2ed9a23c7a42c4d7bde  openvpn-2.6.15.tar.gz
++sha256  05cb5fdf1ea33fcba719580b31a97feaa019c4a3050563e88bc3b34675e6fed4  openvpn-2.6.16.tar.gz
+ sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYRIGHT.GPL
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 26558c3d16..0175c51d63 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENVPN_VERSION = 2.6.15
++OPENVPN_VERSION = 2.6.16
+ OPENVPN_SITE = https://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf libcap-ng
+ OPENVPN_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
