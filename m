@@ -1,77 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACC5ECF58DE
-	for <buildroot@archiver.kernel.org>; Wed, 19 Nov 2025 20:09:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A69CCF58E2
+	for <buildroot@archiver.kernel.org>; Wed, 19 Nov 2025 20:19:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7DB2881DF4;
-	Wed, 19 Nov 2025 20:09:31 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Flon3sBEjFcz; Wed, 19 Nov 2025 20:09:30 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 098DB81A50
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 098DB81A50;
-	Wed, 19 Nov 2025 20:09:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6B3962A9
- for <buildroot@buildroot.org>; Wed, 19 Nov 2025 20:09:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5148B61173
- for <buildroot@buildroot.org>; Wed, 19 Nov 2025 20:09:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 37E6C61181;
+	Wed, 19 Nov 2025 20:19:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NYJTyAdfBPXs for <buildroot@buildroot.org>;
- Wed, 19 Nov 2025 20:09:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4F11E607B5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F11E607B5
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4F11E607B5
- for <buildroot@buildroot.org>; Wed, 19 Nov 2025 20:09:26 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 319C52003CC;
- Wed, 19 Nov 2025 21:09:19 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 19 Nov 2025 21:09:19 +0100
+ id jlxq2RQPPPAl; Wed, 19 Nov 2025 20:19:06 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1060D61176
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1060D61176;
+	Wed, 19 Nov 2025 20:19:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6016E2A9
+ for <buildroot@buildroot.org>; Wed, 19 Nov 2025 20:19:04 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 51903607E9
+ for <buildroot@buildroot.org>; Wed, 19 Nov 2025 20:19:04 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id idGX-xdi-cd7 for <buildroot@buildroot.org>;
+ Wed, 19 Nov 2025 20:19:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 71F7360B0B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71F7360B0B
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 71F7360B0B
+ for <buildroot@buildroot.org>; Wed, 19 Nov 2025 20:19:01 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1b06c.dip0.t-ipconnect.de [84.161.176.108])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 69668A4C72B4;
+ Wed, 19 Nov 2025 21:18:58 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:40984)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99)
+ (envelope-from <bernd@kuhls.net>) id 1vLodl-0000000050H-1TNj;
+ Wed, 19 Nov 2025 20:18:57 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Cc: Daniel Lang <dalang@gmx.at>, Joseph Kogut <joseph.kogut@gmail.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Valentin Korenblit <valentinkorenblit@gmail.com>
+Date: Wed, 19 Nov 2025 21:18:57 +0100
+Message-ID: <20251119201857.414683-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Wed, 19 Nov 2025 21:09:19 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Daniel Lang <dalang@gmx.at>, Joseph Kogut
- <joseph.kogut@gmail.com>, Romain Naour <romain.naour@gmail.com>, Valentin
- Korenblit <valentinkorenblit@gmail.com>
-In-Reply-To: <20251118221445.2750168-1-bernd@kuhls.net>
-References: <20251118221445.2750168-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <54db5680604be00c18544947556d8e25@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1763582964;
- bh=yoEwPI5cOoOZ6VbE8jTi3dV47Ot+O0qq0c/Ytpjx180=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=tAagqFU9NrWKTbQdccuXFUjn5Gk8tnpzlRY3pE00lVFSNtemAKlrW4X52ShZP43Rq
- 0R7XU+DnW4YeFeWkd96WVu1rfIfzvIFk/3ClP14aLikOpGrUlWa6mRoGtKoCziRcnP
- aD3Y60TibIyB2T3ByyFXX3whKuERJ85+4+qyLVQ5WEVKspsGvKyG9xfStFaxyjJecd
- y9946Mz+szUCTuO1gYlOuXNh4o8cmaMLJ42mKKimBhQHPxgusT56sTSwZwpvoKvh8A
- K0kzIgWXpX279bEZiFOu4Jt0lLa1z8L9ao0veiMlxAwo79cmB0zuwoiukzYSuPMGfx
- TehAiDfV9HP2Q==
+X-Spamd-Bar: ++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202506031021; t=1763583538;
+ bh=mRSAzn9koGUMgqkYOlEYfJ1WfWBktJgYNHdJWt9ZZvw=;
+ h=From:To:Cc:Subject:Date:From;
+ b=0V4Se+a5wnq+UM5JhayQ+bVlUumUmcnMnKXi7SzbGxKJ4A4OTAddseBUhXUyB7Kcr
+ hirMHwxyVJncgA30JrqH/VagRVG/WbKMfuOpkvZQmY4IhVO1O+MHzwklCpobnMTezL
+ L/EhUC3gzGRGBnX29qNb8p7bSjzTQjbyProWANXADYInRZgoOYBDoYMO5EO6ipsXvd
+ +rFrrgBGjA4qM/m3FiRgXX9LHTSUrhdz/50ALdA3+pZb8KrrYTodvlP/LUmOzgOXR5
+ 73GtLKUSC9f1CPJ6cYQHotVdyzuJunVopvagxQfcUz7qxIMpEX2pHbMPdDL6b+nfgq
+ NLLixI2G58rwg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=tAagqFU9
-Subject: Re: [Buildroot] [PATCH 1/1] package/llvm-project: bump to version
- 21.1.5
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=0V4Se+a5
+Subject: [Buildroot] [PATCH 1/1] package/llvm-project: bump to version 21.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,19 +83,117 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 18/11/2025 23:14, Bernd Kuhls wrote:
-> Release notes: https://discourse.llvm.org/t/llvm-21-1-5-released/88776
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Release notes:
+https://discourse.llvm.org/t/llvm-21-1-6-released/88895
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/llvm-project/clang/clang.hash                   | 2 +-
+ package/llvm-project/compiler-rt/compiler-rt.hash       | 4 ++--
+ package/llvm-project/libclc/libclc.hash                 | 2 +-
+ package/llvm-project/lld/lld.hash                       | 2 +-
+ package/llvm-project/llvm-cmake/llvm-cmake.hash         | 2 +-
+ package/llvm-project/llvm-libunwind/llvm-libunwind.hash | 2 +-
+ package/llvm-project/llvm-project.mk                    | 2 +-
+ package/llvm-project/llvm-runtimes/llvm-runtimes.hash   | 2 +-
+ package/llvm-project/llvm/llvm.hash                     | 4 ++--
+ 9 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/package/llvm-project/clang/clang.hash b/package/llvm-project/clang/clang.hash
+index 74fc755e25..5ac73a252c 100644
+--- a/package/llvm-project/clang/clang.hash
++++ b/package/llvm-project/clang/clang.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256  eee4de3b3f01ea6dd6b0936ac8be319eef0a65d0022def258c70110e3743807c  clang-21.1.5.src.tar.xz
++sha256  348ace5d715c4caa6fb89b4c6fe07c21650e10b2fac37d8b0db75c0b11be9011  clang-21.1.6.src.tar.xz
+ sha256  ebcd9bbf783a73d05c53ba4d586b8d5813dcdf3bbec50265860ccc885e606f47  LICENSE.TXT
+diff --git a/package/llvm-project/compiler-rt/compiler-rt.hash b/package/llvm-project/compiler-rt/compiler-rt.hash
+index 01e7d05169..b9ec906595 100644
+--- a/package/llvm-project/compiler-rt/compiler-rt.hash
++++ b/package/llvm-project/compiler-rt/compiler-rt.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  967c2afba250b325ba4482b12a819ef8cbee178eed45d7b5e14f0368b05adedf  compiler-rt-21.1.5.src.tar.xz
+-sha256  4ccc00ec2e7bd0cc121eaa34fa25a0480bfb8a5722faf1694720e0be99b753e6  third-party-21.1.5.src.tar.xz
++sha256  bdd904f3aac9f4c4424f3440aff498cc04d66f243e37156b6d167ffb7b599f89  compiler-rt-21.1.6.src.tar.xz
++sha256  8d09dc219cdb3da7dafd2161836aacdd6e02c1a113498ab5f37688599406dc8a  third-party-21.1.6.src.tar.xz
+ sha256  1a8f1058753f1ba890de984e48f0242a3a5c29a6a8f2ed9fd813f36985387e8d  LICENSE.TXT
+diff --git a/package/llvm-project/libclc/libclc.hash b/package/llvm-project/libclc/libclc.hash
+index bd603a0c21..92b51fc1fa 100644
+--- a/package/llvm-project/libclc/libclc.hash
++++ b/package/llvm-project/libclc/libclc.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256  1fc88ddae5965b66e94de74fb294b7dfdf5827f3abb22a8657e8e03c6c9b381f  libclc-21.1.5.src.tar.xz
++sha256  a1a09ccfa17f2d5fbe5e54271a4a9fbe396950f29f80f52b67a7083fee73120c  libclc-21.1.6.src.tar.xz
+ sha256  3c536c052db9afd997809e38785c9f2a9e54e2892330fa7c5b438e18a7413479  LICENSE.TXT
+diff --git a/package/llvm-project/lld/lld.hash b/package/llvm-project/lld/lld.hash
+index 9b8d60e487..b05f1e30f9 100644
+--- a/package/llvm-project/lld/lld.hash
++++ b/package/llvm-project/lld/lld.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256  2bcbb2b12af99fc3292d2a415e5678de0bee7182712d7deb89a7e0a52704a210  lld-21.1.5.src.tar.xz
++sha256  5b297faecdddc9581c260a1570b4c0ec8810d1213e23d7aa84732c0e2feea85f  lld-21.1.6.src.tar.xz
+ sha256  f7891568956e34643eb6a0db1462db30820d40d7266e2a78063f2fe233ece5a0  LICENSE.TXT
+diff --git a/package/llvm-project/llvm-cmake/llvm-cmake.hash b/package/llvm-project/llvm-cmake/llvm-cmake.hash
+index 3dfa67a294..402a5f4ef7 100644
+--- a/package/llvm-project/llvm-cmake/llvm-cmake.hash
++++ b/package/llvm-project/llvm-cmake/llvm-cmake.hash
+@@ -1,2 +1,2 @@
+ # locally calculated
+-sha256  48013d5714a96419bf993a2e5e4c5827377e8cf9c565070731fb2305d50d9511  cmake-21.1.5.src.tar.xz
++sha256  e364f135fa14c343d70cac96f577f44e8e20bf026682f647f8c3c5687a0bebd1  cmake-21.1.6.src.tar.xz
+diff --git a/package/llvm-project/llvm-libunwind/llvm-libunwind.hash b/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
+index 0a7a966498..7326a0d863 100644
+--- a/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
++++ b/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  8a2cd813ea15dbd879ebeefa2eceedce8937715ac78b6df44da140e40768725f  libunwind-21.1.5.src.tar.xz
++sha256  25d8bf5bd0d95641c738ea690b18564f5fc9fb7e7bbab17329b391988e71ae8c  libunwind-21.1.6.src.tar.xz
+ sha256  b5efebcaca80879234098e52d1725e6d9eb8fb96a19fce625d39184b705f7b6d  LICENSE.TXT
+diff --git a/package/llvm-project/llvm-project.mk b/package/llvm-project/llvm-project.mk
+index 2e9d9d0513..268367d6bd 100644
+--- a/package/llvm-project/llvm-project.mk
++++ b/package/llvm-project/llvm-project.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LLVM_PROJECT_VERSION_MAJOR = 21
+-LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.5
++LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.6
+ LLVM_PROJECT_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_PROJECT_VERSION)
+ 
+ include $(sort $(wildcard package/llvm-project/*/*.mk))
+diff --git a/package/llvm-project/llvm-runtimes/llvm-runtimes.hash b/package/llvm-project/llvm-runtimes/llvm-runtimes.hash
+index 58b764dd99..c68f1c13ff 100644
+--- a/package/llvm-project/llvm-runtimes/llvm-runtimes.hash
++++ b/package/llvm-project/llvm-runtimes/llvm-runtimes.hash
+@@ -1,2 +1,2 @@
+ # locally calculated
+-sha256  2454cfbfc16266e1858df4ddbe1bc9dc16e0679f8058b6c618e3f6e7e05623a7  runtimes-21.1.5.src.tar.xz
++sha256  3b2dcaec1163caf067988228c1d21a75334c47d22610956dd9699ea0631bce45  runtimes-21.1.6.src.tar.xz
+diff --git a/package/llvm-project/llvm/llvm.hash b/package/llvm-project/llvm/llvm.hash
+index ab9995d14a..1738c94d29 100644
+--- a/package/llvm-project/llvm/llvm.hash
++++ b/package/llvm-project/llvm/llvm.hash
+@@ -1,4 +1,4 @@
+ # locally calculated
+-sha256  c9d6ca5073255192850471a276b3a00a6555c6dd09df6cb3eab77801f0a1cae0  llvm-21.1.5.src.tar.xz
+-sha256  4ccc00ec2e7bd0cc121eaa34fa25a0480bfb8a5722faf1694720e0be99b753e6  third-party-21.1.5.src.tar.xz
++sha256  908bce97be0275943414b45af2e2b20e8f6d5d9266fdc120bd59f096ebc547ad  llvm-21.1.6.src.tar.xz
++sha256  8d09dc219cdb3da7dafd2161836aacdd6e02c1a113498ab5f37688599406dc8a  third-party-21.1.6.src.tar.xz
+ sha256  8d85c1057d742e597985c7d4e6320b015a9139385cff4cbae06ffc0ebe89afee  LICENSE.TXT
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
