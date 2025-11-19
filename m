@@ -4,72 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4148ACF258C
-	for <buildroot@archiver.kernel.org>; Wed, 19 Nov 2025 09:02:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1536DCF58FE
+	for <buildroot@archiver.kernel.org>; Wed, 19 Nov 2025 21:32:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D224B82AC8;
-	Wed, 19 Nov 2025 09:02:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1D13083F7C;
+	Wed, 19 Nov 2025 21:32:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OTG0qH7PiWbs; Wed, 19 Nov 2025 09:02:06 +0000 (UTC)
+ id LdsZFLP3CA_W; Wed, 19 Nov 2025 21:32:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24CBF829FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2E3D83F71
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 24CBF829FE;
-	Wed, 19 Nov 2025 09:02:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id BD027160
- for <buildroot@buildroot.org>; Wed, 19 Nov 2025 09:02:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F2E3D83F71;
+	Wed, 19 Nov 2025 21:32:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9E440158
+ for <buildroot@buildroot.org>; Wed, 19 Nov 2025 21:32:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A375140200
- for <buildroot@buildroot.org>; Wed, 19 Nov 2025 09:02:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9BC4D40C93
+ for <buildroot@buildroot.org>; Wed, 19 Nov 2025 21:32:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4MvjFadNcb96 for <buildroot@buildroot.org>;
- Wed, 19 Nov 2025 09:02:02 +0000 (UTC)
-X-Greylist: delayed 549 seconds by postgrey-1.37 at util1.osuosl.org;
- Wed, 19 Nov 2025 09:02:01 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6B27C40074
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B27C40074
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
- helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
-Received: from mail.tkos.co.il (mail.tkos.co.il [84.110.109.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6B27C40074
- for <buildroot@uclibc.org>; Wed, 19 Nov 2025 09:02:01 +0000 (UTC)
-Received: from localhost (unknown [10.0.8.2])
- by mail.tkos.co.il (Postfix) with ESMTP id 677DE44075B;
- Wed, 19 Nov 2025 10:50:57 +0200 (IST)
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@uclibc.org
-In-Reply-To: <pan$ad6d3$5135641b$d770d362$88a45f61@ID-313208.user.individual.net>
- (Bernd Kuhls's message of "Wed, 19 Nov 2025 08:42:29 +0100")
-References: <20251118211149.2013582-1-bernd@kuhls.net>
- <87ikf6wriq.fsf__24259.6589656145$1763528538$gmane$org@tarshish>
- <pan$ad6d3$5135641b$d770d362$88a45f61@ID-313208.user.individual.net>
-User-Agent: mu4e 1.12.13; emacs 30.2
-Date: Wed, 19 Nov 2025 10:52:49 +0200
-Message-ID: <87cy5ewgim.fsf@tarshish>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1763542257;
- bh=WVNrqOni57Hi9cMLf1YhPJS0ECcn8eTnAbdwpHxQE8I=;
- h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
- b=QtKcFMhMc65LRIu+Vp9qLqln+miwgENUIXgYPlqqeIsmg+q/6lJFQ9pC0AfnO81he
- 5+BG+PJFMQjmG9w6xqKTDdjEOXfSe+um4Uxu1yDNB1LP9bp6OLTOFIEjLe34U4iyvP
- M1L7nPNeqfdDGQuZCEHBdn5tMXYXmaWvGIkYnLQ//3d6Sfw9wdumGVU5+OhEc0M4QI
- vq9k11CRN9VroqZVyGKSEXlM3P3d4P89GOW9sTcWDmYAP7TuiUnwN43JRZmF7JudOi
- m/j+ZxlGpa6b+2Dju0bBN5SuPRpKAzbJ5mwMFIUjJ5BD5RvdYcKAfCvARLcjiX4ELf
- seYCCLuGZIqog==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=tkos.co.il
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
- header.s=default header.b=QtKcFMhM
-Subject: Re: [Buildroot] [PATCH 1/1] package/xinetd: bump version to 2.3.15.4
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g_xuT_tf3GUV for <buildroot@buildroot.org>;
+ Wed, 19 Nov 2025 21:32:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
+ helo=ciao.gmane.io; envelope-from=gclub-buildroot@m.gmane-mx.org;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B183C40C8D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B183C40C8D
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B183C40C8D
+ for <buildroot@uclibc.org>; Wed, 19 Nov 2025 21:32:12 +0000 (UTC)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1vLpmY-0009GN-W2
+ for buildroot@uclibc.org; Wed, 19 Nov 2025 22:32:06 +0100
+X-Injected-Via-Gmane: http://gmane.org/
+To: buildroot@uclibc.org
+From: Bernd Kuhls <bernd@kuhls.net>
+Date: Wed, 19 Nov 2025 22:31:56 +0100
+Message-ID: <pan$dbcdc$789265db$cef47ba1$8be22fa6@ID-313208.user.individual.net>
+References: <20251102122959.1716666-1-bernd__38908.2921946951$1762086620$gmane$org@kuhls.net>
+Mime-Version: 1.0
+User-Agent: Pan/0.162 (Pokrosvk)
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=fail (p=none dis=none)
+ header.from=kuhls.net
+Subject: Re: [Buildroot] [PATCH 1/1] package/util-linux: Remove -lpthread
+ from uuid.pc for non-threaded builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,44 +64,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Bernd,
+Am Sun,  2 Nov 2025 13:29:59 +0100 schrieb Bernd Kuhls:
 
-On Wed, Nov 19 2025, Bernd Kuhls wrote:
-> Am Wed, 19 Nov 2025 06:55:09 +0200 schrieb Baruch Siach via buildroot:
->>> -# 0005-CVE-2013-4342-xinetd-ignores-user-and-group-directiv.patch +#
->>> https://github.com/openSUSE/xinetd/commit/
-> 91e2401a219121eae15244a6b25d2e79c1af5864
->>>  XINETD_IGNORE_CVES += CVE-2013-4342
->> 
->> If this CVE is fixed in 2.3.15.4, why do we need to keep IGNORE it?
->
-> being by no means an expert on NVD entries afaics the CVE record does not 
-> contain a version number:
-> https://nvd.nist.gov/vuln/detail/CVE-2013-4342
-> so we still need to ignore the CVE.
+> Buildroot commit 31af509b4f4fe52f67bd9109b8732a55b8f9cd2d bumped
+> util-linux from version 2.40.2 to 2.41.1.
+> 
+> Upstream release 2.40.3 contains
+> https://github.com/util-linux/util-linux/commit/
+e143539d30fd18afb3ba6d3c6e50a260d4219895
+> which unconditionally adds -lpthread to uuid.pc causing build errors for
+> other packages using non-threaded toolchains like erofs-utils.
 
-Thanks for the clarification.
+Hi,
 
-I think the comment should mention that NVD data is incomplete to avoid
-confusion.
+this patch also fixes e2fsprogs build errors:
+https://autobuild.buildroot.org/results/
+36c4be5e55a0957b3014a7be3bfb7f8f4ccd4a75/
 
-baruch
+Regards, Bernd
 
-> OpenEmbedded does something similar:
-> https://git.openembedded.org/openembedded-core/tree/meta/recipes-extended/
-> xinetd/xinetd_2.3.15.4.bb?h=master#n20
-
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
