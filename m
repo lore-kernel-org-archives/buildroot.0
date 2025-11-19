@@ -4,100 +4,104 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78E73CF58FE
-	for <buildroot@archiver.kernel.org>; Wed, 19 Nov 2025 21:34:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 105D3CF58FE
+	for <buildroot@archiver.kernel.org>; Wed, 19 Nov 2025 21:34:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4F60080641;
-	Wed, 19 Nov 2025 21:34:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B4E4080654;
+	Wed, 19 Nov 2025 21:34:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9B-Myte1TRUT; Wed, 19 Nov 2025 21:34:27 +0000 (UTC)
+ id gqkln_Wd-ctW; Wed, 19 Nov 2025 21:34:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A19E8063C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6784380643
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6A19E8063C;
-	Wed, 19 Nov 2025 21:34:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 16DFA2A9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6784380643;
+	Wed, 19 Nov 2025 21:34:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2D3A12A9
  for <buildroot@buildroot.org>; Wed, 19 Nov 2025 21:34:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1486B412B5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 13F2C611B5
  for <buildroot@buildroot.org>; Wed, 19 Nov 2025 21:34:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BOqlG8mSfaIO for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DpXNu4Lh4fk7 for <buildroot@buildroot.org>;
  Wed, 19 Nov 2025 21:34:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A7F4D411A5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7F4D411A5
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A7F4D411A5
- for <buildroot@buildroot.org>; Wed, 19 Nov 2025 21:34:23 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-4779a637712so1449215e9.1
- for <buildroot@buildroot.org>; Wed, 19 Nov 2025 13:34:23 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F321761108
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F321761108
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F321761108
+ for <buildroot@buildroot.org>; Wed, 19 Nov 2025 21:34:24 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-47789cd2083so1400125e9.2
+ for <buildroot@buildroot.org>; Wed, 19 Nov 2025 13:34:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1763588062; x=1764192862;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=uaTjw3Rk7EevRjCXZnqLG05Vji9HyKY1wcqGCpOptls=;
- b=XAtwlKXyBl2omHcsD+R0vgb0Tqrd6nwLwaTiiNFBsx4+d4WPcN9nUfQHU92oBxH8Gv
- 74wLGx9iuEX8y1wkENWj9mY/OQDVs+OpxJdiMTFnsXNiWtL+K/h9YahSGHRZujOs1x/g
- I4Gx5lnfZFBd0FSDNPSLtSn+DBKshaaGbBeIVjrC1Cf8xFLiji2En60GER6JM0tT836R
- G2WdLFb5asKcKY5z2L4qZswp7Fs+HaALsKpHzszs/gkzg2T5CRICGNXjEVb/ctDq3Q8D
- l1Iloo/Pc3teJx5Wq+8xoKnLLpi5C53Wh2lRCKa8SgmvnOqItKFgc4K5ETN1VsnBmRND
- zwIA==
-X-Gm-Message-State: AOJu0YyrOjGMasFJsx1IW8wl068+rzsUa76Dqb+H7irpbx/N0JgCxqfY
- p+eS3VsdhNOjvEjgvybpR08mdaot3wDzQs4NpWOx+F5Fe/UVEsM1uncEBIbqjR+SP21yscAu1LG
- dwgZ6lJM=
-X-Gm-Gg: ASbGncutcnMfPv8seCykSjxH4QDl0cj31XiPEDuvz9D8JcGifRhB0VA+UffMxkTiCxh
- y+iNxDF8UUaaJ/T+OcIR1/S494SUvVWP4IS1sKRfPR7ay3jcz/weSEzi2wuXZ2CLJjnIwPGbe+O
- zcjZ4ZutLfYQ9dpKpa0Ixm4Zbk9+IYUZKVlWN7gvaC0DFsrl4ftWiO2C60pj5qw654Tjby5dl2r
- OEyyMU4AvfC/UhIGRktZ+DCXu1qft0tF4LCFlmazJM5Lfa9pWD6ERBovHfxxCwBCOeH/zwdkhxl
- R+rnVQLXnFpdHjqoPPP2DGY1MRcBZrhVZqcbsEAe6Xgb0fA7osej+miJjHtiUGbWS/uaKlrrtCa
- t3SUxkVODOX6Cs/2nqjX30bk3sqcrjY5rNJcSUDJFxEqMThyJ3E0gP2wdsFO//L0KIFwbU5HR1G
- 63DxmkUlLvQDnabjM47STOYIQ/W4ZtRyLP2hq+
-X-Google-Smtp-Source: AGHT+IHpdqknxnLRi5UpyzXX8fH2iCmkrauJkXUMXDNE+3M7JU9cFlI7NgSjTJGAXYafWqCmR1kEVA==
-X-Received: by 2002:a7b:c844:0:b0:477:55c9:c3ea with SMTP id
- 5b1f17b1804b1-477b9e53668mr518595e9.35.1763588061896; 
- Wed, 19 Nov 2025 13:34:21 -0800 (PST)
+ d=1e100.net; s=20230601; t=1763588063; x=1764192863;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=hnRSz8Xdlsj1JLn3W7tb2vFh2dzeHkvrQ03TJYs+S2A=;
+ b=BFlnx/kLGMx4I7HSbMDIzNsoNuxNAFbjFyJsPrDY2XDrPa8Gnt2tAqzVuB0XEx/mzm
+ jik9x+dR2a/N1OMXF7K/tqKuZT5uSTZIcc0kHFMRp+58TxS88JPPTopjhUk8LlBulBCg
+ c68FRq9GaCJabtTmhXXqFBoRosO6TEYv31G0e8tzgMVJp9Gi0nRBKmvbBV/DVQxBuVKo
+ 4MlL8bh2RCRnl1ZY/RXQ09eSkXyW09a757uRsYJMYoCbVOpQW+jiGeK1vMw+aKt3k3Rz
+ x0dWJEfWf6my8nEETSDeDnjKhIDfLwjKPGutHcR2wAMJ7dLPToBsXJHrBqu2FtAwTkAt
+ Jing==
+X-Gm-Message-State: AOJu0YxzVjcHV8lsMlrgy2bIwMKklkK+HcESDgy11sxvmHIw8wZ7t26I
+ qmUP7sZ2rCXU5uCFpmpTHcPBrGVBMMgQpfvPSyqT8O+zDC8KZ5Gpa2uUgqtDzhyPDl2uQIFhrp2
+ hWe/QkRQ=
+X-Gm-Gg: ASbGncvOBEy0tqpWuiNPzt2o/uklQZqpQdjRoPBfwSqTSykvBshf/CA0zHxccmw4LKN
+ 7moZ++QAgYucXeroqTerEXRGdVxyS4iae1pQ22JXuVb85ILLTLqz6+rG52c+AMIGYW527gzYx26
+ 6QCDmm6t/5Mta/ByvF7BQqYs2NgcE25ERg7J+mP1Z6JuZgBn/ZgY4ipQ32oWSo6ku9cWjZE4caD
+ 4ynxwFfIXKF36TTfHKQxNjScqi+YoXHT8/FyTZGSHy3n9UoG+loTBbXfrXRdwtHaXaXfODOjHSH
+ hJLVx49ijFEwSgm62zlBO99II3dQow4JGDtao9sXbpiXptcN5XSCHPJAbHzIwDGnspcemSW0J2f
+ FqBOt5jPvKX2ILn4dslMc/ipmJ4DearbqCBhqPFiMaM1d3tqKZGQfSdYaFJQcyxuMl2mk15YYdX
+ fs8sO1s5Q28LZGZ/37bt763B2+a2y7UT/Ih3Ut8tJzcjLJCD6aBXaTFpU6gQ==
+X-Google-Smtp-Source: AGHT+IFQI8N9eqkG5PXF1lkkdkQHA1gpBp6ISh7tE88YhH4bUpgbKqjyLBGh5simUX03A+rBPLyesQ==
+X-Received: by 2002:a05:600c:c492:b0:477:9e10:3e63 with SMTP id
+ 5b1f17b1804b1-477b8d8f05bmr6456425e9.35.1763588062721; 
+ Wed, 19 Nov 2025 13:34:22 -0800 (PST)
 Received: from arch (77.109.92.201.static.edpnet.net. [77.109.92.201])
  by smtp.gmail.com with ESMTPSA id
  5b1f17b1804b1-477b106a9b0sm71362905e9.11.2025.11.19.13.34.21
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 19 Nov 2025 13:34:21 -0800 (PST)
+ Wed, 19 Nov 2025 13:34:22 -0800 (PST)
 To: buildroot@buildroot.org
 Cc: Sen Hastings <sen@hastings.org>,
 	Thomas Perale <thomas.perale@mind.be>
-Date: Wed, 19 Nov 2025 22:34:16 +0100
-Message-ID: <20251119213420.7480-1-thomas.perale@mind.be>
+Date: Wed, 19 Nov 2025 22:34:17 +0100
+Message-ID: <20251119213420.7480-2-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251119213420.7480-1-thomas.perale@mind.be>
+References: <20251119213420.7480-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1763588062; x=1764192862; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=uaTjw3Rk7EevRjCXZnqLG05Vji9HyKY1wcqGCpOptls=;
- b=C3bYb5hggPEjjDT8ts9muj891MRlvU+wYlNG3TyvyxPgJXfY3NwYoarBHcI6cSk6ht
- 9PGbbVN4WAAknfjRHjOfwLwK5V9oLuX/NV08za2xbOYVAmxQ+ODftjd/rj7zlM/NW2Xe
- XpDRBsKmsEt1p9nTWcfsLGyL9UHHjgeHpY9o9eliPhz2uojwL+0F0OHINWIhovuYBMsk
- 42HC0kwkqQXj1OPI/rnNVp/rZSRGqhrAYC8/WGKQIJRtwJYHrjLxPjP1wdR1SiHhilXS
- YhvJHVH99U13ngvYllgvFlPuNZgznpzCzolFAqNRMIXeuMf/1w6MpAJySiqEern1XI8b
- be1w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=mind.be; s=google; t=1763588063; x=1764192863; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=hnRSz8Xdlsj1JLn3W7tb2vFh2dzeHkvrQ03TJYs+S2A=;
+ b=AOrHIAWVKl3sZtrrwew6efXJJNI6rry3qm8DyxStpJyKnRRJd43/5kzUP2hEmtroHC
+ R7O1k3FRDmAk0VvE7mEmitDBS9sFsVvaS2gxvbH50OtftaouO2JBW/M8c2Vofer1JV39
+ 8L4nY7MUQ34AzFaDChY7V07z4Sh5ZJkGz/eUMINeGjwjb3yFjiO5QEsVf75B4LtdhsBb
+ UhVGlOdaTs8777vKiiKCSuOMuXuon5sHxZgYRyvQvLPe+G7dObK2nTpHFNlSrtvXUD3v
+ iN0lzK6TlGockZapo8RTO5a0vV1wFV5+pGB4Musuuw58DULb3o3MTQ+rj1nVc7whLR3m
+ 5QoQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=C3bYb5hg
-Subject: [Buildroot] [PATCH v2 0/4] add cve-check script
+ header.s=google header.b=AOrHIAWV
+Subject: [Buildroot] [PATCH v2 1/4] support/scripts/cve.py: don't call
+ download_nvd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,45 +120,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Enriches the input CycloneDX SBOM with vulnerability information and
-analysis from the NVD database.
+This patch move the 'download_nvd' call to the 'pkg-stats' script
+instead of automatically calling 'read_nvd_dir'.
 
-The NVD database is cloned using a mirror of it and the content is compared
-locally. By default the path 'dl/buildroot-nvd' is used.
+Since the cve.py file can be used as a library it's up to the caller to
+decide wether or not to update the NVD database.
 
-Example usage to analyse vulnerabilities of an input CycloneDX SBOM:
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ support/scripts/cve.py    | 6 ++++--
+ support/scripts/pkg-stats | 2 ++
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-$ make show-info | utils/generate-cyclonedx | support/script/cve-check
-
-The 'cve-check' can also be used to only enrich the vulnerabilities
-present on the input SBOM with a set metadata (description, cvss,
-references, ...) without applying an analysis.
-
-With the following command the vulnerabilities ignored by Buildroot
-present in the CycloneDX SBOM are enriched with description, cvss, etc
-...
-
-$ make show-info | utils/generate-cyclonedx | support/script/cve-check --enrich-only
-
-v1 --> v2:
-    - Add support for only enriching the current content of the SBOM
-      without analysis.
-    - Improve the CVE to CycloneDX matching of metadata.
-
-Thomas Perale (4):
-  support/scripts/cve.py: don't call download_nvd
-  support/scripts/cve-check: add cve-check script
-  DEVELOPERS: add Thomas Perale to cve-check & cve.py
-  docs/manual: add information on CycloneDX
-
- DEVELOPERS                    |   2 +
- docs/manual/common-usage.adoc |  27 +++
- support/scripts/cve-check     | 323 ++++++++++++++++++++++++++++++++++
- support/scripts/cve.py        |  29 ++-
- support/scripts/pkg-stats     |   2 +
- 5 files changed, 381 insertions(+), 2 deletions(-)
- create mode 100755 support/scripts/cve-check
-
+diff --git a/support/scripts/cve.py b/support/scripts/cve.py
+index 25481a6367..27a5f2f362 100755
+--- a/support/scripts/cve.py
++++ b/support/scripts/cve.py
+@@ -144,7 +144,9 @@ class CVE:
+         self.nvd_cve = nvd_cve
+ 
+     @staticmethod
+-    def download_nvd(nvd_git_dir):
++    def download_nvd(nvd_dir):
++        nvd_git_dir = os.path.join(nvd_dir, "git")
++
+         if os.path.exists(nvd_git_dir):
+             subprocess.check_call(
+                 ["git", "pull"],
+@@ -177,7 +179,7 @@ class CVE:
+         nvd_dir, a fresh copy will be downloaded, and kept in .json.gz
+         """
+         nvd_git_dir = os.path.join(nvd_dir, "git")
+-        CVE.download_nvd(nvd_git_dir)
++
+         for year in range(NVD_START_YEAR, datetime.datetime.now().year + 1):
+             for dirpath, _, filenames in os.walk(os.path.join(nvd_git_dir, f"CVE-{year}")):
+                 for filename in filenames:
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index ec46d373d5..cfea179458 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -676,6 +676,8 @@ def check_package_cves(nvd_path, packages):
+             cpe_product_pkgs[pkg.name].append(pkg)
+ 
+     print(f"Updating NVD database in '{nvd_path}'")
++    cvecheck.CVE.download_nvd(nvd_path)
++
+     for cve in cvecheck.CVE.read_nvd_dir(nvd_path):
+         check_package_cve_affects(cve, cpe_product_pkgs)
+ 
 -- 
 2.51.0
 
