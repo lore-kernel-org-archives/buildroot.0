@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32940CF58C6
-	for <buildroot@archiver.kernel.org>; Wed, 19 Nov 2025 18:25:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C0EACF58C8
+	for <buildroot@archiver.kernel.org>; Wed, 19 Nov 2025 18:25:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 23E5F61163;
-	Wed, 19 Nov 2025 18:25:31 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8K4qFgJxLEiL; Wed, 19 Nov 2025 18:25:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14C6261161
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14C6261161;
-	Wed, 19 Nov 2025 18:25:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id AA5812A9
- for <buildroot@buildroot.org>; Wed, 19 Nov 2025 18:25:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 90F6E81B14
- for <buildroot@buildroot.org>; Wed, 19 Nov 2025 18:25:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6B9E281CE7;
+	Wed, 19 Nov 2025 18:25:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O1hCL8UaMTLs for <buildroot@buildroot.org>;
- Wed, 19 Nov 2025 18:25:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9606C81AF6
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9606C81AF6
- for <buildroot@buildroot.org>; Wed, 19 Nov 2025 18:25:26 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6DF16851A6; Wed, 19 Nov 2025 18:25:26 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 19 Nov 2025 19:16:49 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6ff1bd328a0c835ee802567d3e30af882ea8bc58
-X-Git-Newrev: 8e5e8ea2cf3158feb03525802d03ea0940811cc0
-X-Patchwork-Hint: ignore
-Message-Id: <20251119182526.6DF16851A6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rauc: bump to 1.15
+ id plTcAn1kI5Ii; Wed, 19 Nov 2025 18:25:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9CF1A81CA7
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9CF1A81CA7;
+	Wed, 19 Nov 2025 18:25:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 29CB62A9
+ for <buildroot@buildroot.org>; Wed, 19 Nov 2025 18:25:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 110BC81CA7
+ for <buildroot@buildroot.org>; Wed, 19 Nov 2025 18:25:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P4US4WNximdY for <buildroot@buildroot.org>;
+ Wed, 19 Nov 2025 18:25:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D5A6C81C6E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5A6C81C6E
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D5A6C81C6E
+ for <buildroot@buildroot.org>; Wed, 19 Nov 2025 18:25:50 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id D634EB0056A;
+ Wed, 19 Nov 2025 19:25:44 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 19 Nov 2025 19:25:44 +0100
+MIME-Version: 1.0
+Date: Wed, 19 Nov 2025 19:25:44 +0100
+To: Pierre-Yves Kerbrat <pkerbrat@free.fr>
+Cc: buildroot@buildroot.org, Andrey Yurovsky <yurovsky@gmail.com>, Heiko
+ Thiery <heiko.thiery@gmail.com>
+In-Reply-To: <20251119082846.2193337-1-pkerbrat@free.fr>
+References: <20251119082846.2193337-1-pkerbrat@free.fr>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <19e194bf7b41eb6e2f09b93ea5f2c5d1@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1763576748;
+ bh=JqEbINdEqK2cjCG4/Dr6jdCd/6SLw3KAPMdSDdrKyE4=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=REwVrj4GPkJdAmHta5nYvhh/j89RMLUvuAkkelSCQynyQ+SVqGnwQ0LjBzBJ80/nQ
+ JB7kQ83B07+hHP/+WfV8BqHMYoCcv09wkL9uhdc/Kx3uRSOsB9nwqeMoWDZyB2ir37
+ CwCIlHKh1w5ZTIeokvjQxJfVfHAKT+uNURFaadd2UGfNB1zuqsV06fCoi7+qsT3AXh
+ azYZ4PKF8HMhI+l4Gz6nPBDHOB3uiW8ZP0Tk6uzkzKw1ZT22kNNxIjkWjaYYQGBMZA
+ DosOh10LxrIL7SSyfAp9Vo4WWihyFyeTZQMtNj/hAkl6VkcdQRyK5pLXn7MoI24v6h
+ VziWkdz1Co+JA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=REwVrj4G
+Subject: Re: [Buildroot] [PATCH 1/1] package/rauc: bump to 1.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,53 +83,17 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e5e8ea2cf3158feb03525802d03ea0940811cc0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 19/11/2025 09:28, Pierre-Yves Kerbrat via buildroot wrote:
+> Changelog: https://github.com/rauc/rauc/releases/tag/v1.15
+> 
+> Signed-off-by: Pierre-Yves Kerbrat <pkerbrat@free.fr>
 
-Changelog: https://github.com/rauc/rauc/releases/tag/v1.15
-
-The COPYING license hash file is updated, due to upstream update:
-https://github.com/rauc/rauc/commit/fe86f277258dfe96d0f9ac9bfa930733598d7160
-
-Signed-off-by: Pierre-Yves Kerbrat <pkerbrat@free.fr>
-Reviewed-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Tested-by: Marcus Hoffmann <buildroot@bubu1.eu>
-[Julien: add link to upstream commit updating the license]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/rauc/rauc.hash | 4 ++--
- package/rauc/rauc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
-index 6795bc9485..c0eee0d8d8 100644
---- a/package/rauc/rauc.hash
-+++ b/package/rauc/rauc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  f48c85573d82bf9378e907f6eba0cbe4f2021839a1e9fe3f8431f61dd54ef42c  rauc-1.14.tar.xz
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-+sha256  4ae0b5246c668acb544ce0230a3bada81c78e8afd4755e5afa2218cbd686fd70  rauc-1.15.tar.xz
-+sha256  20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95  COPYING
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index d20b0121df..10d4a2db95 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RAUC_VERSION = 1.14
-+RAUC_VERSION = 1.15
- RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
- RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
- RAUC_LICENSE = LGPL-2.1
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
