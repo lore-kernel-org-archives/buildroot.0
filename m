@@ -1,51 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70481CF58E0
-	for <buildroot@archiver.kernel.org>; Wed, 19 Nov 2025 20:38:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B514CF58E0
+	for <buildroot@archiver.kernel.org>; Wed, 19 Nov 2025 20:39:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 45FDA8121A;
-	Wed, 19 Nov 2025 20:38:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C056661114;
+	Wed, 19 Nov 2025 20:39:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 79oR8cKBFIYy; Wed, 19 Nov 2025 20:38:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zUTGjnN-ImKY; Wed, 19 Nov 2025 20:39:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A31E813F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CB2B610A7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5A31E813F9;
-	Wed, 19 Nov 2025 20:38:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id F2CA72A9
- for <buildroot@buildroot.org>; Wed, 19 Nov 2025 20:38:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6CB2B610A7;
+	Wed, 19 Nov 2025 20:39:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5D5B137D
+ for <buildroot@buildroot.org>; Wed, 19 Nov 2025 20:39:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F0276813F9
- for <buildroot@buildroot.org>; Wed, 19 Nov 2025 20:38:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4F4B880F47
+ for <buildroot@buildroot.org>; Wed, 19 Nov 2025 20:39:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NAHrdAOKFchm for <buildroot@buildroot.org>;
- Wed, 19 Nov 2025 20:38:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 213038121A
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 213038121A
- for <buildroot@buildroot.org>; Wed, 19 Nov 2025 20:38:50 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0F902855CF; Wed, 19 Nov 2025 20:38:50 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 19 Nov 2025 21:37:24 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 55d1f2825b2dfe73c954b998d980feed846f89c9
-X-Git-Newrev: cc5a1d3daa8f270520dae454d2704f2b21b5c94a
-X-Patchwork-Hint: ignore
-Message-Id: <20251119203850.0F902855CF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/shapelib: bump to 1.6.2
+ id hQsjKugRIqFw for <buildroot@buildroot.org>;
+ Wed, 19 Nov 2025 20:39:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D975280ED4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D975280ED4
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D975280ED4
+ for <buildroot@buildroot.org>; Wed, 19 Nov 2025 20:39:27 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id C017613F86E;
+ Wed, 19 Nov 2025 21:39:24 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 19 Nov 2025 21:39:24 +0100
+MIME-Version: 1.0
+Date: Wed, 19 Nov 2025 21:39:24 +0100
+To: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251119195714.1304811-1-mr.zoltan.gyarmati@gmail.com>
+References: <20251119195714.1304811-1-mr.zoltan.gyarmati@gmail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <cc9e50809a4e58f48e6163b83ca77e66@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1763584765;
+ bh=GuaRegi2Wa4cDPzyeU7JK7dex75PRmnMZ3NAlWQr3CE=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Yqj9QtQFNVZEjwr9KL1AT8VbkdHANeHOlCmO5ZN0iIFoxxy2MbuMUhJk3vosGRdtg
+ i0Y8pgewgF/M7lxnJiQuWBHhmePAHth6NwL4MI70mzu2iJ0qcA3DzyL7FvQ+JXmE1D
+ e7rNSut1OmMfLykaP47q4scRhvIXEVgNbowe57mPc2tCxeI4mgOUD0Esz4kfUKJNSZ
+ 47PCt+0GMaLpTRo0LTwfRG6lsu6RtQsJ2u0n7c+LaQ1Rqby3zacFM+yEp5/xqLSiRu
+ jgzz7vscpDf8yf6y0ysiRoFoh3LOk9E+v37qj+DyMZrj8T6mPaKKUzcBIdtV86Yasd
+ yVl9aTazXNBog==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Yqj9QtQF
+Subject: Re: [Buildroot] [PATCH 1/1] package/shapelib: bump to 1.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,49 +82,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc5a1d3daa8f270520dae454d2704f2b21b5c94a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 19/11/2025 20:57, Zoltan Gyarmati wrote:
+> For release notes, see:
+> http://shapelib.maptools.org/release.html
+> 
+> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 
-For release notes, see:
-http://shapelib.maptools.org/release.html
-
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/shapelib/shapelib.hash | 2 +-
- package/shapelib/shapelib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/shapelib/shapelib.hash b/package/shapelib/shapelib.hash
-index dfa7ef3a34..3759917148 100644
---- a/package/shapelib/shapelib.hash
-+++ b/package/shapelib/shapelib.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  5da90a60e25440f108f4e8e95732bfa83ede13c8e0c2bcf80ae41006cc8ebc20  shapelib-1.6.1.tar.gz
-+sha256  4b74a36ced94e9a7bea401157e664addcc5be251e7df7f88d4674361da012c21  shapelib-1.6.2.tar.gz
- sha256  681e386e44a19d7d0674b4320272c90e66b6610b741e7e6305f8219c42e85366  LICENSE-LGPL
- sha256  3f46082162242563bf4f43b091871cb19064bc5a398c6d2b024f6b64c6710516  LICENSE-MIT
- sha256  15e1205bb007d4d7821f7b1cc461ba8d051647e86dbc9baf1bb6f68b10588eeb  web/license.html
-diff --git a/package/shapelib/shapelib.mk b/package/shapelib/shapelib.mk
-index f7c3056844..08bf3c9f94 100644
---- a/package/shapelib/shapelib.mk
-+++ b/package/shapelib/shapelib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SHAPELIB_VERSION = 1.6.1
-+SHAPELIB_VERSION = 1.6.2
- SHAPELIB_SITE = http://download.osgeo.org/shapelib
- SHAPELIB_LICENSE = MIT or LGPL-2.0
- SHAPELIB_LICENSE_FILES = LICENSE-LGPL LICENSE-MIT web/license.html
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
