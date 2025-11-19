@@ -4,72 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C0EACF58C8
-	for <buildroot@archiver.kernel.org>; Wed, 19 Nov 2025 18:25:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44E89CF58C6
+	for <buildroot@archiver.kernel.org>; Wed, 19 Nov 2025 18:27:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B9E281CE7;
-	Wed, 19 Nov 2025 18:25:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1135283E2C;
+	Wed, 19 Nov 2025 18:27:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id plTcAn1kI5Ii; Wed, 19 Nov 2025 18:25:53 +0000 (UTC)
+ id qXy6B1BuDDOg; Wed, 19 Nov 2025 18:27:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9CF1A81CA7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16ACE83E08
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9CF1A81CA7;
-	Wed, 19 Nov 2025 18:25:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 29CB62A9
- for <buildroot@buildroot.org>; Wed, 19 Nov 2025 18:25:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 16ACE83E08;
+	Wed, 19 Nov 2025 18:27:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5E0EE2A9
+ for <buildroot@buildroot.org>; Wed, 19 Nov 2025 18:27:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 110BC81CA7
- for <buildroot@buildroot.org>; Wed, 19 Nov 2025 18:25:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5A941610FF
+ for <buildroot@buildroot.org>; Wed, 19 Nov 2025 18:27:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P4US4WNximdY for <buildroot@buildroot.org>;
- Wed, 19 Nov 2025 18:25:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D5A6C81C6E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5A6C81C6E
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D5A6C81C6E
- for <buildroot@buildroot.org>; Wed, 19 Nov 2025 18:25:50 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id D634EB0056A;
- Wed, 19 Nov 2025 19:25:44 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 19 Nov 2025 19:25:44 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oWRAVdtV_nbG for <buildroot@buildroot.org>;
+ Wed, 19 Nov 2025 18:27:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::e2d; helo=mail-vs1-xe2d.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7BC5861115
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BC5861115
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com
+ [IPv6:2607:f8b0:4864:20::e2d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7BC5861115
+ for <buildroot@buildroot.org>; Wed, 19 Nov 2025 18:27:25 +0000 (UTC)
+Received: by mail-vs1-xe2d.google.com with SMTP id
+ ada2fe7eead31-5de0c1fa660so28555137.1
+ for <buildroot@buildroot.org>; Wed, 19 Nov 2025 10:27:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1763576844; x=1764181644;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=Ov326AnMbk5dWeNC4KvJPEYlhjCSfVI30SdpF5KK7R0=;
+ b=awWb+ligJcAzpczlvLnimfVP3ts+3fZbYJFFHgUBYbwDKUzjkv3jFb9rCJ9+bE7xGv
+ SmyJejeLvBmkzJLECIUzPGyuyV4spOOoNPQzMF91hASMf8e8v2IxaPD9tL+qh0nuGUbQ
+ gdDiRGDtn4xoVEIe0GPR+pV9JQTjLLE3wVqulfCBxJ3r6t/CzP1k605XNZ1s64P7/7/g
+ pOmPnn1i+jH04Tj2EN9XWuQ48O/fXX98IJbRflZrwIW6gvWvXCPo+kO22rHUSDlH8igj
+ 1CZp3fUe/x9ej76YPo76CWsXxdMh4G04O3/CSa/UMTVl8sX7Fis7qz/f3ogfg0oxrrLT
+ IdRg==
+X-Gm-Message-State: AOJu0YyKdWHa/tbGv84Ttn/VXJmptBWZLDtY6iKaOIiNBUW+Uyr7p1Bz
+ rXBTg6MwnNQ5yY/NdF0KtV/pY0f0CZ2YZz5KNuZo8YghyqeJaRtlC0G+tqez1DHf0UgePGwN2ri
+ 3ilwOgezK43lTTEMEajg04juyjFE+SzrG55PACo4=
+X-Gm-Gg: ASbGncsPqdf+X3fteVt1cUTztA5MNWavyeUdMruUBrG5WMluT5X5Q9C9uclpWpAg8Df
+ IcHKUsFgyA4KLB+rgtCeHkQJJzx2sEkXFIIWMXFbXuMS0h/cv2vagw3XU/5hOeZlGA/rKxkAcql
+ Gh6dJXKM9fbJrlaDDWlJ0uZwbQ2PxQcv1+a2e6NJg5PjRqELdcjxEQGFBuYjvaSZ4Iq+NMXBFv/
+ QR60tfUwQmny2kGIaIvdruMtfHWoClzAKNeIV8x4KybClqA6VB3Pf6Zig6QQXrP5NzudJX7BjOH
+ 2sKKZg==
+X-Google-Smtp-Source: AGHT+IF+XBFPW2rmp28aKjbCKdp6DYy0T16FGZNZo23jjgwYq4C2/qmk2q1amZZcabr3dtAC3mX1N2JcJu8Gi+tHVF0=
+X-Received: by 2002:a05:6102:e0b:b0:5d7:bd67:eaf with SMTP id
+ ada2fe7eead31-5e1bbc95756mr236709137.18.1763576844029; Wed, 19 Nov 2025
+ 10:27:24 -0800 (PST)
 MIME-Version: 1.0
-Date: Wed, 19 Nov 2025 19:25:44 +0100
-To: Pierre-Yves Kerbrat <pkerbrat@free.fr>
-Cc: buildroot@buildroot.org, Andrey Yurovsky <yurovsky@gmail.com>, Heiko
- Thiery <heiko.thiery@gmail.com>
-In-Reply-To: <20251119082846.2193337-1-pkerbrat@free.fr>
-References: <20251119082846.2193337-1-pkerbrat@free.fr>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <19e194bf7b41eb6e2f09b93ea5f2c5d1@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1763576748;
- bh=JqEbINdEqK2cjCG4/Dr6jdCd/6SLw3KAPMdSDdrKyE4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=REwVrj4GPkJdAmHta5nYvhh/j89RMLUvuAkkelSCQynyQ+SVqGnwQ0LjBzBJ80/nQ
- JB7kQ83B07+hHP/+WfV8BqHMYoCcv09wkL9uhdc/Kx3uRSOsB9nwqeMoWDZyB2ir37
- CwCIlHKh1w5ZTIeokvjQxJfVfHAKT+uNURFaadd2UGfNB1zuqsV06fCoi7+qsT3AXh
- azYZ4PKF8HMhI+l4Gz6nPBDHOB3uiW8ZP0Tk6uzkzKw1ZT22kNNxIjkWjaYYQGBMZA
- DosOh10LxrIL7SSyfAp9Vo4WWihyFyeTZQMtNj/hAkl6VkcdQRyK5pLXn7MoI24v6h
- VziWkdz1Co+JA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=REwVrj4G
-Subject: Re: [Buildroot] [PATCH 1/1] package/rauc: bump to 1.15
+References: <20251119154819.3416176-1-nolange79@gmail.com>
+ <CADvTj4qKBNEobk78FM1Zxj8n1irVV+LaApwWR=rDcbwf8+2mmg@mail.gmail.com>
+ <CADYdroNVCmUqTZB6cZ6r3=pnvARiGrnd6V+FeY3cO4tLFFUCEQ@mail.gmail.com>
+ <CADvTj4oCZzy=O+j5Y_xOeQAXUcNe9EzZ96oHG-MQwEuZavXLmw@mail.gmail.com>
+ <CADYdroOdjA_Qr87SyZExhpM1WqT4O-ff0MdNvNZfsttxmvNwVg@mail.gmail.com>
+ <CADYdroNV1m5yjDbyPqvU6hZAOSSoXgRK9tFZk0ovFwWokOt4fw@mail.gmail.com>
+In-Reply-To: <CADYdroNV1m5yjDbyPqvU6hZAOSSoXgRK9tFZk0ovFwWokOt4fw@mail.gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 19 Nov 2025 11:27:13 -0700
+X-Gm-Features: AWmQ_bnRapzzEFsUEq3H-2nWyMoucWqLMLgHnezzFstZYtp0vmqrjY3BOf5qs7s
+Message-ID: <CADvTj4raPttoFi1nfz1MdHWdurkRCtjpvOq1To9Q2rdkL4fOCg@mail.gmail.com>
+To: Norbert Lange <nolange79@gmail.com>
+Cc: buildroot@buildroot.org, Sen Hastings <sen@hastings.org>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1763576844; x=1764181644; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Ov326AnMbk5dWeNC4KvJPEYlhjCSfVI30SdpF5KK7R0=;
+ b=DAf7R/jpHqYmRkrpW2LKhqtFKLl14GOooTJ7ZTsuHfOT6arKXS4ZbWQyTkWUdK9uwB
+ k/RHtwwGudp4hzZ9UcPiztQcSUHdOZ1KFmdRnWRuLx//GxYQ6aCFj0vi0WLY52qQ1qBb
+ Afic2qws2eVnD8F7zZ/TfVtvJKZgrss7/MNL5iUlj5O3FK2pPuNLgiVFQCHGtDMA5oa7
+ tObv/GRC2CkrpjkOKdTcidBQJWg/TGsHk6jmLWDAHfwWyfLMF758+xmZyg+Ercj08NEG
+ LofDh4i2oDp06hfO3EJecgSmIjdUze6C+RRCKd+QglttfVde6zSyxZ9kYo+UeivnlEE5
+ EX9w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=DAf7R/jp
+Subject: Re: [Buildroot] [PATCH] package/systemd: remove several Kernel
+ config options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,20 +110,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 19/11/2025 09:28, Pierre-Yves Kerbrat via buildroot wrote:
-> Changelog: https://github.com/rauc/rauc/releases/tag/v1.15
-> 
-> Signed-off-by: Pierre-Yves Kerbrat <pkerbrat@free.fr>
-
-Applied to master, thanks.
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gV2VkLCBOb3YgMTksIDIwMjUgYXQgMTA6NDTigK9BTSBOb3JiZXJ0IExhbmdlIDxub2xhbmdl
+NzlAZ21haWwuY29tPiB3cm90ZToKPgo+IFBTLiBjb3VsZCBLQ09ORklHX0VOQUJMRV9PUFQgZG8g
+bm90aGluZyBpZiBpdCBmaW5kcyAiIyBDT05GSUdfJChPUFQpCj4gaXMgbm90IHNldCI/CgpJJ20g
+Z3Vlc3NpbmcgdGhpcyBtaWdodCBiZSBhIGJpdCB0cmlja3ksIGVzcGVjaWFsbHkgc2luY2Uga2Nv
+bmZpZ3MKY2FuIGJlIHNvbWV3aGF0IGxheWVyZWQsIGZvciBleGFtcGxlIEkgdXNlIGFuIGluIGtl
+cm5lbCBkZWZhdWx0Cmtjb25maWcgdGhlbiB1c2UgYSBsaW51eC1leHRyYXMuY29uZmlnIHRvIGFk
+ZCBhIGZldyBtb3JlIG9wdGlvbnMsCkkgdGhpbmsgS0NPTkZJR19FTkFCTEVfT1BUIGZ1bmN0aW9u
+cyBzaW1pbGFyIHRvIGtjb25maWcgZXh0cmFzLgoKSSB0aGluayBLQ09ORklHX0VOQUJMRV9PUFQg
+b3BlcmF0ZXMgdHlwaWNhbGx5IG9uIHRoZSBrZXJuZWwKY29uZmlnIGFmdGVyIGV4dHJhcyBhcmUg
+YXBwbGllZCBhbmQgYWxsIHRoZSBkZWZhdWx0cyBhcmUgZ2VuZXJhdGVkCnNvIGdhdGluZyBLQ09O
+RklHX0VOQUJMRV9PUFQgdG8gZG8gbm90aGluZyBsaWtlIHlvdSBzdWdnZXN0CndvdWxkIGxpa2Vs
+eSByZXN1bHQgaW4gaXQganVzdCBuZXZlciBkb2luZyBhbnl0aGluZyBhdCBhbGwuCgo+Cj4gVGhl
+IGJpZ2dlc3QgaXNzdWUgaXMgdGhhdCB5b3UgY2FudCBvcHQtb3V0IG9mIHRoZSBhdXRvbWF0aWMg
+b3B0LWluLgo+Cj4gTm9yYmVydApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
+Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
