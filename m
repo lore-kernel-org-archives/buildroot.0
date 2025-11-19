@@ -4,99 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 448CACF58D7
-	for <buildroot@archiver.kernel.org>; Wed, 19 Nov 2025 19:57:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D396CF58DF
+	for <buildroot@archiver.kernel.org>; Wed, 19 Nov 2025 20:09:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F162683C70;
-	Wed, 19 Nov 2025 19:57:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2038183E08;
+	Wed, 19 Nov 2025 20:09:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h-L7SeXFLZJv; Wed, 19 Nov 2025 19:57:22 +0000 (UTC)
+ id RE8JFuPwLpa7; Wed, 19 Nov 2025 20:09:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFA8283C76
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B01D183D4B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AFA8283C76;
-	Wed, 19 Nov 2025 19:57:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7730E2A9
- for <buildroot@buildroot.org>; Wed, 19 Nov 2025 19:57:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B01D183D4B;
+	Wed, 19 Nov 2025 20:09:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0A4802A9
+ for <buildroot@buildroot.org>; Wed, 19 Nov 2025 20:08:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 68F8240F04
- for <buildroot@buildroot.org>; Wed, 19 Nov 2025 19:57:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 079334103D
+ for <buildroot@buildroot.org>; Wed, 19 Nov 2025 20:08:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ATX8RPB75I4r for <buildroot@buildroot.org>;
- Wed, 19 Nov 2025 19:57:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
- envelope-from=mr.zoltan.gyarmati@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 66A4E40F01
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66A4E40F01
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 66A4E40F01
- for <buildroot@buildroot.org>; Wed, 19 Nov 2025 19:57:20 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-477a1c28778so1665045e9.3
- for <buildroot@buildroot.org>; Wed, 19 Nov 2025 11:57:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1763582238; x=1764187038;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=Lg/4X1OtHxmIUxQs6GuP1Dd5KGYGo+WunWXCSijtNtA=;
- b=p2Q9FM/gaItsRcZjbpjQNBFTANM5rIKbPxmlzyCawMN8hBtkBeJInJGjGVoumLeK/n
- sS8APRlWpF2pEGDBD4aZOuejfYZCejYlX+NSVIuNPSE5n1e127Qbxvm5vR7DJ0FgEEEa
- 6SREN8sUG5XRL8UovCilWfdFfMLf0piB8QzBsoPDaNJ9BBm4Jq1rxkolE6ESBwTKFPjb
- DkyJySrlljlIGE9Wtzj225ICCwU1uHk4LPrzKHBnZSmeabwAIW9PKh4EQCvB51Ow5GIY
- Uk5E7QRYYuTKSNgY3iRAFa77lfg6O2GTlR0lViNBSgzUmd0PRct8Fo6YeSiqJLL/Hs5A
- oe/A==
-X-Gm-Message-State: AOJu0YweFH2qPw8QViaukf9lzycwGlCjwuLMI2GZyzOwisdpPgQOWvwg
- KmhMrcix6xG3LrSIEGyqlpEyQMBG4FadCyoxMSAR6Uv5nNUuPuFbq1R6xOlhcA==
-X-Gm-Gg: ASbGncuE7u836tnJQh6fGEL48itNQb7B2slgezDSre47TizU3tgXmUeVNTBNVoMJFJ1
- hEsCLF7v73yNmhdad7fju0CaRL4h9l10pjIyZyrk9nszNi/o8YDvulyCG+CSm/wpbmhP/+R+A7P
- rxsQ+xxKU+pZu0ghFGqe6fcQnd9xXdLh6I/o/YrGkKo8U0RSBXNS9RPZnwQp9y1EiLIbx6IM0xm
- eqxasvTpAu9xLQFtMDBA5ME/HL11cN2fvVEaldzB/f2YSCSMKgmDeNpNZNOEpXu+Ib/a8JMT/Ph
- nfIkfNxrJXXMLGzjIjAxW0NwZs8wRx++Hw8qryzTvGH15NjbAJ9EUAaxdkUaUNpYiKNuURMJ4En
- g2BR49A/9IOs0U1lvNujTg4vlkU1buyRTXeT/tfwytQSzCV/cPnmyfHHLjodtYVkLeTU0uenkuI
- ZwTA/Z8D7MTMz1yh6pQWJRMiSskhPuEGMhPw24K7mgh58x
-X-Google-Smtp-Source: AGHT+IF1Dk8PpvG3QGJwmcHSJdf9M1GLK3WUGatysxQnzY1yT/ATFPSXtBR392bNCoVieW27jWI8dA==
-X-Received: by 2002:a05:6000:4210:b0:42b:3e0a:64b7 with SMTP id
- ffacd0b85a97d-42b5939e08fmr20524168f8f.53.1763582238118; 
- Wed, 19 Nov 2025 11:57:18 -0800 (PST)
-Received: from zgyarmati-t580.. (netacc-gpn-5-84-233.pool.yettel.hu.
- [84.225.84.233]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-42cb7fa35b7sm939410f8f.20.2025.11.19.11.57.16
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 19 Nov 2025 11:57:17 -0800 (PST)
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+ id ioWqrrStOmZo for <buildroot@buildroot.org>;
+ Wed, 19 Nov 2025 20:08:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34C5B4103C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 34C5B4103C
+ for <buildroot@buildroot.org>; Wed, 19 Nov 2025 20:08:58 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 202B785518; Wed, 19 Nov 2025 20:08:58 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Wed, 19 Nov 2025 20:57:14 +0100
-Message-ID: <20251119195714.1304811-1-mr.zoltan.gyarmati@gmail.com>
-X-Mailer: git-send-email 2.43.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1763582238; x=1764187038; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Lg/4X1OtHxmIUxQs6GuP1Dd5KGYGo+WunWXCSijtNtA=;
- b=gVIIPgNwcsrhlKBlT8mydwm0+ivHZyu42LlWcIsBUzEoAMAtD9lT2LkjI5exA6Qs5E
- 3c14vX35vXmXm9LOBUCTij16/6KzeHtd3Bf3LZifUiwmIMnXBUZbJ1Sk6skUaECZTktV
- QZPcbecLTLCA536Gw5nW6usPPk+CJiqO921ltbeAn41HrVyHQye+9XPTsI0rwxNCXosO
- /UoFPvCaikThfdNT2/cAHVFerj/C6EG9KqmvS+a6pk2vNz6XGzaOkAXKkZCcOq9Jc7/U
- MHt/575APK2WX/Kw85Jpv0Z7VhdyLYv1mans8PRqpg9S+k3gw6AgKhNg3MhubkL9uT1Y
- F+ZQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=gVIIPgNw
-Subject: [Buildroot] [PATCH 1/1] package/shapelib: bump to 1.6.2
+Date: Wed, 19 Nov 2025 21:08:03 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4298e21e0ab90f43a022d47214665e651ff025b7
+X-Git-Newrev: 45a9ca057f77e376ab06d7da7817cdc89081666d
+X-Patchwork-Hint: ignore
+Message-Id: <20251119200858.202B785518@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/llvm-project: bump to version
+ 21.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,47 +58,120 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For release notes, see:
-http://shapelib.maptools.org/release.html
+commit: https://git.buildroot.net/buildroot/commit/?id=45a9ca057f77e376ab06d7da7817cdc89081666d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Release notes: https://discourse.llvm.org/t/llvm-21-1-5-released/88776
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/shapelib/shapelib.hash | 2 +-
- package/shapelib/shapelib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/llvm-project/clang/clang.hash                   | 2 +-
+ package/llvm-project/compiler-rt/compiler-rt.hash       | 4 ++--
+ package/llvm-project/libclc/libclc.hash                 | 2 +-
+ package/llvm-project/lld/lld.hash                       | 2 +-
+ package/llvm-project/llvm-cmake/llvm-cmake.hash         | 2 +-
+ package/llvm-project/llvm-libunwind/llvm-libunwind.hash | 2 +-
+ package/llvm-project/llvm-project.mk                    | 2 +-
+ package/llvm-project/llvm-runtimes/llvm-runtimes.hash   | 2 +-
+ package/llvm-project/llvm/llvm.hash                     | 4 ++--
+ 9 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/shapelib/shapelib.hash b/package/shapelib/shapelib.hash
-index dfa7ef3a34..3759917148 100644
---- a/package/shapelib/shapelib.hash
-+++ b/package/shapelib/shapelib.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  5da90a60e25440f108f4e8e95732bfa83ede13c8e0c2bcf80ae41006cc8ebc20  shapelib-1.6.1.tar.gz
-+sha256  4b74a36ced94e9a7bea401157e664addcc5be251e7df7f88d4674361da012c21  shapelib-1.6.2.tar.gz
- sha256  681e386e44a19d7d0674b4320272c90e66b6610b741e7e6305f8219c42e85366  LICENSE-LGPL
- sha256  3f46082162242563bf4f43b091871cb19064bc5a398c6d2b024f6b64c6710516  LICENSE-MIT
- sha256  15e1205bb007d4d7821f7b1cc461ba8d051647e86dbc9baf1bb6f68b10588eeb  web/license.html
-diff --git a/package/shapelib/shapelib.mk b/package/shapelib/shapelib.mk
-index f7c3056844..08bf3c9f94 100644
---- a/package/shapelib/shapelib.mk
-+++ b/package/shapelib/shapelib.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/llvm-project/clang/clang.hash b/package/llvm-project/clang/clang.hash
+index 3abedbab85..74fc755e25 100644
+--- a/package/llvm-project/clang/clang.hash
++++ b/package/llvm-project/clang/clang.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256  3e8e25a7478bfb0ef510fff35d1a43bdfb62c7727bf98bb43ad33deef2f9f1a2  clang-21.1.4.src.tar.xz
++sha256  eee4de3b3f01ea6dd6b0936ac8be319eef0a65d0022def258c70110e3743807c  clang-21.1.5.src.tar.xz
+ sha256  ebcd9bbf783a73d05c53ba4d586b8d5813dcdf3bbec50265860ccc885e606f47  LICENSE.TXT
+diff --git a/package/llvm-project/compiler-rt/compiler-rt.hash b/package/llvm-project/compiler-rt/compiler-rt.hash
+index 9e10f6cd92..01e7d05169 100644
+--- a/package/llvm-project/compiler-rt/compiler-rt.hash
++++ b/package/llvm-project/compiler-rt/compiler-rt.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  84fed7aa95bfac348642a753d332afd303a0847b1fe1e76acf13fe98f8760d5f  compiler-rt-21.1.4.src.tar.xz
+-sha256  ae8658390504e08e464f65ecea838a0584df4734c27cecedfe7eb32780e81564  third-party-21.1.4.src.tar.xz
++sha256  967c2afba250b325ba4482b12a819ef8cbee178eed45d7b5e14f0368b05adedf  compiler-rt-21.1.5.src.tar.xz
++sha256  4ccc00ec2e7bd0cc121eaa34fa25a0480bfb8a5722faf1694720e0be99b753e6  third-party-21.1.5.src.tar.xz
+ sha256  1a8f1058753f1ba890de984e48f0242a3a5c29a6a8f2ed9fd813f36985387e8d  LICENSE.TXT
+diff --git a/package/llvm-project/libclc/libclc.hash b/package/llvm-project/libclc/libclc.hash
+index 8e9663ff8d..bd603a0c21 100644
+--- a/package/llvm-project/libclc/libclc.hash
++++ b/package/llvm-project/libclc/libclc.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256  2311128b86ae95b4319341671a8ec93950928d0bc4fa13d0e6a97d7a65507aaa  libclc-21.1.4.src.tar.xz
++sha256  1fc88ddae5965b66e94de74fb294b7dfdf5827f3abb22a8657e8e03c6c9b381f  libclc-21.1.5.src.tar.xz
+ sha256  3c536c052db9afd997809e38785c9f2a9e54e2892330fa7c5b438e18a7413479  LICENSE.TXT
+diff --git a/package/llvm-project/lld/lld.hash b/package/llvm-project/lld/lld.hash
+index 707e2ba56f..9b8d60e487 100644
+--- a/package/llvm-project/lld/lld.hash
++++ b/package/llvm-project/lld/lld.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256  5d62eb36eb76ac9cc9179f31a355d28fc3a1c4096880da2a12090cfe1ccd3dcf  lld-21.1.4.src.tar.xz
++sha256  2bcbb2b12af99fc3292d2a415e5678de0bee7182712d7deb89a7e0a52704a210  lld-21.1.5.src.tar.xz
+ sha256  f7891568956e34643eb6a0db1462db30820d40d7266e2a78063f2fe233ece5a0  LICENSE.TXT
+diff --git a/package/llvm-project/llvm-cmake/llvm-cmake.hash b/package/llvm-project/llvm-cmake/llvm-cmake.hash
+index 7b4df505c4..3dfa67a294 100644
+--- a/package/llvm-project/llvm-cmake/llvm-cmake.hash
++++ b/package/llvm-project/llvm-cmake/llvm-cmake.hash
+@@ -1,2 +1,2 @@
+ # locally calculated
+-sha256  f4316d84a862ba3023ca1d26bd9c6a995516b4fa028b6fb329d22e24cc6d235e  cmake-21.1.4.src.tar.xz
++sha256  48013d5714a96419bf993a2e5e4c5827377e8cf9c565070731fb2305d50d9511  cmake-21.1.5.src.tar.xz
+diff --git a/package/llvm-project/llvm-libunwind/llvm-libunwind.hash b/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
+index 36ef3167d4..0a7a966498 100644
+--- a/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
++++ b/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  fc3ca27e1094b5fd4b7c1879e83705d89e9a2632b9a43426eb96c0536ace5345  libunwind-21.1.4.src.tar.xz
++sha256  8a2cd813ea15dbd879ebeefa2eceedce8937715ac78b6df44da140e40768725f  libunwind-21.1.5.src.tar.xz
+ sha256  b5efebcaca80879234098e52d1725e6d9eb8fb96a19fce625d39184b705f7b6d  LICENSE.TXT
+diff --git a/package/llvm-project/llvm-project.mk b/package/llvm-project/llvm-project.mk
+index 6d324ede51..2e9d9d0513 100644
+--- a/package/llvm-project/llvm-project.mk
++++ b/package/llvm-project/llvm-project.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--SHAPELIB_VERSION = 1.6.1
-+SHAPELIB_VERSION = 1.6.2
- SHAPELIB_SITE = http://download.osgeo.org/shapelib
- SHAPELIB_LICENSE = MIT or LGPL-2.0
- SHAPELIB_LICENSE_FILES = LICENSE-LGPL LICENSE-MIT web/license.html
--- 
-2.43.0
-
+ LLVM_PROJECT_VERSION_MAJOR = 21
+-LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.4
++LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.5
+ LLVM_PROJECT_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_PROJECT_VERSION)
+ 
+ include $(sort $(wildcard package/llvm-project/*/*.mk))
+diff --git a/package/llvm-project/llvm-runtimes/llvm-runtimes.hash b/package/llvm-project/llvm-runtimes/llvm-runtimes.hash
+index 3564e2341a..58b764dd99 100644
+--- a/package/llvm-project/llvm-runtimes/llvm-runtimes.hash
++++ b/package/llvm-project/llvm-runtimes/llvm-runtimes.hash
+@@ -1,2 +1,2 @@
+ # locally calculated
+-sha256  d84e6d3a28f0c877e4ab6884e8bedb3a1d2094352bba2f0d74073abb817b996a  runtimes-21.1.4.src.tar.xz
++sha256  2454cfbfc16266e1858df4ddbe1bc9dc16e0679f8058b6c618e3f6e7e05623a7  runtimes-21.1.5.src.tar.xz
+diff --git a/package/llvm-project/llvm/llvm.hash b/package/llvm-project/llvm/llvm.hash
+index 78f830ec48..ab9995d14a 100644
+--- a/package/llvm-project/llvm/llvm.hash
++++ b/package/llvm-project/llvm/llvm.hash
+@@ -1,4 +1,4 @@
+ # locally calculated
+-sha256  f311681255deb37f74bbf950a653e9434e7d8383a7b46a603a323c46cd4bf50e  llvm-21.1.4.src.tar.xz
+-sha256  ae8658390504e08e464f65ecea838a0584df4734c27cecedfe7eb32780e81564  third-party-21.1.4.src.tar.xz
++sha256  c9d6ca5073255192850471a276b3a00a6555c6dd09df6cb3eab77801f0a1cae0  llvm-21.1.5.src.tar.xz
++sha256  4ccc00ec2e7bd0cc121eaa34fa25a0480bfb8a5722faf1694720e0be99b753e6  third-party-21.1.5.src.tar.xz
+ sha256  8d85c1057d742e597985c7d4e6320b015a9139385cff4cbae06ffc0ebe89afee  LICENSE.TXT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
