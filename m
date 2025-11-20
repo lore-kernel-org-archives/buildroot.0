@@ -4,100 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9906CFA441
-	for <buildroot@archiver.kernel.org>; Thu, 20 Nov 2025 22:08:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21716CF887F
+	for <buildroot@archiver.kernel.org>; Thu, 20 Nov 2025 22:08:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5B0BF80D47;
-	Thu, 20 Nov 2025 22:08:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EC0EC80EE5;
+	Thu, 20 Nov 2025 22:08:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AYUulqyNIBsy; Thu, 20 Nov 2025 22:08:12 +0000 (UTC)
+ id a_ylRODlf172; Thu, 20 Nov 2025 22:08:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E181F80D16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D8EC80EAC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E181F80D16;
-	Thu, 20 Nov 2025 22:08:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 31BD2158
- for <buildroot@buildroot.org>; Thu, 20 Nov 2025 22:08:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D8EC80EAC;
+	Thu, 20 Nov 2025 22:08:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 74C68122
+ for <buildroot@buildroot.org>; Thu, 20 Nov 2025 22:08:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 23E9541159
- for <buildroot@buildroot.org>; Thu, 20 Nov 2025 22:08:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 66C6180EA6
+ for <buildroot@buildroot.org>; Thu, 20 Nov 2025 22:08:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zL32795CRmDQ for <buildroot@buildroot.org>;
- Thu, 20 Nov 2025 22:08:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fOqMmuOP6ZQ3 for <buildroot@buildroot.org>;
+ Thu, 20 Nov 2025 22:08:40 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
  envelope-from=mr.zoltan.gyarmati@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0096141DBC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0096141DBC
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0096141DBC
- for <buildroot@buildroot.org>; Thu, 20 Nov 2025 22:08:08 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-47118259fd8so12084675e9.3
- for <buildroot@buildroot.org>; Thu, 20 Nov 2025 14:08:08 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A506880EA2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A506880EA2
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A506880EA2
+ for <buildroot@buildroot.org>; Thu, 20 Nov 2025 22:08:40 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-4775ae77516so15106725e9.1
+ for <buildroot@buildroot.org>; Thu, 20 Nov 2025 14:08:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1763676487; x=1764281287;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=lrLl6V/3dd8XVuz5rpn5JD0Bw9w6IyTt0d+s6MX5II4=;
- b=S0TM05Rp9ZdmsNq516Z5sB36McXwgVmNSzL4zpNhXGkgILZgUyOo+YfVZ6Qo/wpPiB
- XTyvDObKghNiMmnfAyTlk1Oqz3hKa+D0BFYDFLqiieLOs+p7J3cgJOWoBQLRseWOScH8
- QBknx9XYRquE7jb3YANpDPhJCiOL58YNs3juSDWZS2RLMVH8MZuE9VfKTUIQBtN/XahH
- DRiTuL9bFVrBmIuoiLhnT1DYKNJ49AyxSOvd9HWpuPZdSA7HJCNjT9h31/PxYOox16Nu
- fzvBO2/zDOXRxtHO6OhDGnHAwzecnmtUIPdSE7HHhnSerQ1AFcgm1qnNF5tmaxF3CeDJ
- 9pVA==
-X-Gm-Message-State: AOJu0Yx3Sw11zZK5UCvWx3FMg2cHw3Hn655dtYo1FGDq2IX8CvynULce
- IEUhOWocTouUe4hjimHf7+0/eQrqh3bOM3J86nwQqGj6vqACIeQV0MmayMJoKQ==
-X-Gm-Gg: ASbGncuuaEOj4D7ld67f1QtuwLPkvbNuWRaY9E3tx9tjF+I3sHKeko30n7aZ9bIvIRI
- A8mtGj6zlWFS9zvMiRmiefnSfUA3vnSRKD2yUSktxS/GTN+wubBHS+FE1yw0yw7c6ZPPDkWytDS
- nhZw5GWEHyc/NdqGPQiMH6epjyBFoWKoD2JGSW2bPkVnXGuhhrKAB6m0JwxDT4/deT7yu/heD1f
- dhFvW3Hq4X8oalF/boKphCi5YJ9o7i4N0zqzTy9YH5d181UdoMSReJLhWE45ddgGStUF/C3T65o
- GBu3bdfNp028wN0BtDzX0LirXzoPYBJTdmdM5v3iF0uODhYshty4QLeHwac21lG0IFhrAaRJK7o
- DLrkF31M1FAZ7v5j8P27f9EyS93xVBtbxitIBQesnVplf2uAfgcl9f8QRR0gEDH8Fvpegxwz68D
- B+JLGMSHQbRYgHbGgyhxPS4HvFmTJizXcFM2TzR178mccsj68a9mUIWMY=
-X-Google-Smtp-Source: AGHT+IEhqY14LkU/srG1SjCLo8Qlo53cnsJUveGi4TurTOnJKUW8tBy2oXpvlN6iLfzN0d8lPGZw0A==
-X-Received: by 2002:a05:600c:474b:b0:46e:5100:326e with SMTP id
- 5b1f17b1804b1-477c01ea24amr1967405e9.23.1763676486570; 
- Thu, 20 Nov 2025 14:08:06 -0800 (PST)
+ d=1e100.net; s=20230601; t=1763676519; x=1764281319;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=BMpEXKtEw+fUpyQxDpSskYyEukmEdz4A77pli6wm5PE=;
+ b=GD+9LlZAegu4ckXgu2SrszPIc8ncgesdDlAPjW7Zwne3DbHMVYCRITsK34h/L3+3ed
+ nL58WNSaGCWunaS+l63dkp0J0eU20FsiACtHncrNXVYqjNThj3BbogobuXGMNeKmf+uG
+ t/dE2KIlTNyM4z4tY0o8yiLNu4PB0Q/6cqIEGmXYlqwYqIz1NjKp3KdABcmoi2leMryO
+ 5sIHDOaV/R1izUDC86as9RL1HpvFP//trOpmVmT3e0gtx9vw5I0zCbGflAlXydcuOVw+
+ dmh4ZbK36oX2CtJSOHPRbE9wzrGax5V8AicpEr9mCh9HubY4qCgnj6ZysbaYBr+jXuiM
+ djBA==
+X-Gm-Message-State: AOJu0YwbLyeP/y9YItuGfLjFrTvELAaGwVKCtteKkzmAp3qYmFTQFcuw
+ YFh3mV0SXQmmJaep4GvAl7XPROnFpaESppoDCeEBycFNRxdAv++NCB3Jp7bMxg==
+X-Gm-Gg: ASbGncsEuDzXkFsogMDSVao2kBSjH3IylxHXKiPlXQo3kiJwwgjZm8pTNu8wyxEtv5i
+ o7C+mj3eK7jocd2RhmxJJk6D1z4jOIDG3Hq150zRO6ymbXbYEdPhyRSjvr/5JafRnwnt/JDFLaB
+ Se2FbLalTkQ/fYn0PPhNZNlzaMKvspjbC7KvaDrjx7+lZPBLD1/YxDR30C67g+6yrm6XySyXdsE
+ zdRH+OCh7lp1mE8umcJ2qhuA9ZIy0ELmMa9iig9ita7gjmPPtzoY1FSO4bSccNs6l5XYXz3c+ZK
+ 7PscX8na777RBbIhsFuTFl1ZuR54sKl3yCHLE2Wq5PM472kaIDro8VTuJCnyrCFRU5amL3HqNtQ
+ K0nxKRE3DogPxGy8VxdbN/D4BlQS/cg43Pe1yX5bK86nFElgtWLDYIE00qUTceSop6z98tmE975
+ feXF8fqXla4T+unGlCBAowBa5X7RkGlv+JDZ5F/JYAoD6O
+X-Google-Smtp-Source: AGHT+IEn/sCdtfjHhGIvcmAGTEj/DA2Z7lPUwoYKRB1d0NgTdC4ZhhISfCAP3B4T9bPoUog0xWp71A==
+X-Received: by 2002:a05:600c:a08:b0:46e:1abc:1811 with SMTP id
+ 5b1f17b1804b1-477c01bdea2mr1947295e9.27.1763676518577; 
+ Thu, 20 Nov 2025 14:08:38 -0800 (PST)
 Received: from zgyarmati-t580.. (netacc-gpn-5-84-233.pool.yettel.hu.
  [84.225.84.233]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-477a972141bsm71641275e9.2.2025.11.20.14.08.05
+ 5b1f17b1804b1-477a972141bsm71641275e9.2.2025.11.20.14.08.37
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 20 Nov 2025 14:08:05 -0800 (PST)
+ Thu, 20 Nov 2025 14:08:38 -0800 (PST)
 From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 To: buildroot@buildroot.org
 Cc: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Thu, 20 Nov 2025 23:08:00 +0100
-Message-ID: <20251120220801.1877397-1-mr.zoltan.gyarmati@gmail.com>
+Date: Thu, 20 Nov 2025 23:08:01 +0100
+Message-ID: <20251120220801.1877397-2-mr.zoltan.gyarmati@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20251120220801.1877397-1-mr.zoltan.gyarmati@gmail.com>
+References: <20251120220801.1877397-1-mr.zoltan.gyarmati@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1763676487; x=1764281287; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=lrLl6V/3dd8XVuz5rpn5JD0Bw9w6IyTt0d+s6MX5II4=;
- b=NYnUpVjWF6iEaoUyfcQHsbnYWLjpr43NSErLrSYt/BbsVFCcw33HcIbzPFu0TXd/PI
- e89+JIyDapQXUXvKwtMN2TyHWcEa/dG+mXCBD5q+Kl92Llwvaxbguil6aE+WHDm/LtRu
- QE0JiM0/MbQY6GKmLmSx6tJvk1Em7R3FCxLifKMBB7CkUEhDRI+GQg4W8L6v7v77OkjP
- tevNaIBtXVOVPV6TYYJ/JTrFFQsWqPK2dHUbajzYnbzIcswJUFB92qjYph4XNKDuWDK3
- KFNYvXwUvfet5lqvIqF8yRRrHbbhbgVMzYZKw2Tx37CBbERTQmN7oK/HRMZsphuZeQly
- XVdg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1763676519; x=1764281319; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=BMpEXKtEw+fUpyQxDpSskYyEukmEdz4A77pli6wm5PE=;
+ b=X7FvMNE++vWKp6Vf/ejTUZHMdhNc2mIKn0t7uvL+lvZct4IDvlA0GJTsdF+s00eovn
+ X5tvMA3xyvbZPlsl4LZ5g7QxtLjICuSInilQr2KZSUi8wcRtU5hLVctA5V26+P9C1wVo
+ DplMn5YCkZUKGavotS/LYaEvk3AeTp9uZX0auzNKon+2kS2PHpmzcuJDTD9BmTSDIrGS
+ jWeoVzk5IxlR5F016HYAgjRkjr4ezlHjRDytq2DAfupbZ5uGUkmAfADRZpNjfE2UpeSw
+ N550/uP/BwpSeQpYppQHsbpjGpCYM7qMQKr8JGXm0OTb1Kd9ZPANp1SFG6jJnXgAf/Xa
+ r8eA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=NYnUpVjW
-Subject: [Buildroot] [PATCH 1/2] package/quazip: add config option to enable
- building and installing unit tests
+ header.s=20230601 header.b=X7FvMNE+
+Subject: [Buildroot] [PATCH 2/2] package/quazip: add runtime tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,50 +118,69 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 ---
- package/quazip/Config.in | 11 +++++++++++
- package/quazip/quazip.mk | 10 ++++++++++
- 2 files changed, 21 insertions(+)
+ DEVELOPERS                                   |  1 +
+ support/testing/tests/package/test_quazip.py | 43 ++++++++++++++++++++
+ 2 files changed, 44 insertions(+)
+ create mode 100644 support/testing/tests/package/test_quazip.py
 
-diff --git a/package/quazip/Config.in b/package/quazip/Config.in
-index 4c7a187571..c6099719e5 100644
---- a/package/quazip/Config.in
-+++ b/package/quazip/Config.in
-@@ -10,3 +10,14 @@ config BR2_PACKAGE_QUAZIP
- 	  archives. It uses the Qt toolkit.
- 
- 	  http://quazip.sourceforge.net
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0272b4ba33..86a91332d5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3541,3 +3541,4 @@ F:	package/quazip/
+ F:	package/shapelib/
+ F:	package/simple-mail/
+ F:	package/tinc/
++F:      support/testing/tests/package/test_quazip.py
+diff --git a/support/testing/tests/package/test_quazip.py b/support/testing/tests/package/test_quazip.py
+new file mode 100644
+index 0000000000..ae17546898
+--- /dev/null
++++ b/support/testing/tests/package/test_quazip.py
+@@ -0,0 +1,43 @@
++import os
 +
-+if BR2_PACKAGE_QUAZIP
++import infra.basetest
 +
-+config BR2_PACKAGE_QUAZIP_INSTALL_TESTS
-+	bool "Build tests"
-+	select BR2_PACKAGE_QT6BASE_TEST if BR2_PACKAGE_QT6
-+	select BR2_PACKAGE_QT6BASE_NETWORK if BR2_PACKAGE_QT6
-+	help
-+	  Build and install unit test binaries
 +
-+endif
-diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
-index 06b702e732..830eb92065 100644
---- a/package/quazip/quazip.mk
-+++ b/package/quazip/quazip.mk
-@@ -16,6 +16,16 @@ ifeq ($(BR2_PACKAGE_QT6BASE),y)
- QUAZIP_DEPENDENCIES +=  qt6base qt6core5compat
- endif
- 
-+ifeq ($(BR2_PACKAGE_QUAZIP_INSTALL_TESTS),y)
-+QUAZIP_CONF_OPTS += -DQUAZIP_ENABLE_TESTS=ON
++class TestQuazipQt6(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++          BR2_PACKAGE_QT6=y
++          BR2_PACKAGE_QUAZIP=y
++          BR2_PACKAGE_QUAZIP_INSTALL_TESTS=y
++          BR2_TARGET_ROOTFS_CPIO=y
++        """
 +
-+define QUAZIP_INSTALL_TESTS
-+	$(INSTALL) -D -m 0755 $(@D)/qztest/qztest $(TARGET_DIR)/usr/bin
-+endef
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
 +
-+QUAZIP_POST_INSTALL_TARGET_HOOKS += QUAZIP_INSTALL_TESTS
-+endif
++        # qztest returns non-zero if any of the tests failed
++        self.assertRunOk("/usr/bin/qztest", 120)
 +
- QUAZIP_LICENSE = LGPL-2.1
- QUAZIP_LICENSE_FILES = COPYING
- QUAZIP_CPE_ID_VALID = YES
++
++class TestQuazipQt5(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++          BR2_PACKAGE_QT5=y
++          BR2_PACKAGE_QUAZIP=y
++          BR2_PACKAGE_QUAZIP_INSTALL_TESTS=y
++          BR2_TARGET_ROOTFS_CPIO=y
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # qztest returns non-zero if any of the tests failed
++        self.assertRunOk("/usr/bin/qztest", 120)
 -- 
 2.43.0
 
