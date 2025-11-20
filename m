@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA236CFA443
-	for <buildroot@archiver.kernel.org>; Thu, 20 Nov 2025 20:43:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92CF2CFA441
+	for <buildroot@archiver.kernel.org>; Thu, 20 Nov 2025 20:50:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE52361496;
-	Thu, 20 Nov 2025 20:43:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5FA8A605AE;
+	Thu, 20 Nov 2025 20:50:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dy0sE2EPaUci; Thu, 20 Nov 2025 20:43:29 +0000 (UTC)
+ id kCvfE2Jfddlu; Thu, 20 Nov 2025 20:50:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A997A616E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6043460644
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A997A616E6;
-	Thu, 20 Nov 2025 20:43:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8AFF3117
- for <buildroot@buildroot.org>; Thu, 20 Nov 2025 20:43:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6043460644;
+	Thu, 20 Nov 2025 20:50:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DA0BB117
+ for <buildroot@buildroot.org>; Thu, 20 Nov 2025 20:50:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7CE1240622
- for <buildroot@buildroot.org>; Thu, 20 Nov 2025 20:43:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C0CD0410A2
+ for <buildroot@buildroot.org>; Thu, 20 Nov 2025 20:50:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BLcBAayeyxsC for <buildroot@buildroot.org>;
- Thu, 20 Nov 2025 20:43:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OS22-q1Wr2yX for <buildroot@buildroot.org>;
+ Thu, 20 Nov 2025 20:50:33 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 69AE24052C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69AE24052C
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 69AE24052C
- for <buildroot@buildroot.org>; Thu, 20 Nov 2025 20:43:26 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 18B0F4E417CF
- for <buildroot@buildroot.org>; Thu, 20 Nov 2025 20:43:24 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id D29EF606F6;
- Thu, 20 Nov 2025 20:43:23 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id C008C10371BC1; Thu, 20 Nov 2025 21:43:22 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC77540E81
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id DC77540E81
+ for <buildroot@buildroot.org>; Thu, 20 Nov 2025 20:50:33 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CF87685C78; Thu, 20 Nov 2025 20:50:33 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Bernd Kuhls <bernd@kuhls.net>
-Date: Thu, 20 Nov 2025 21:43:17 +0100
-Message-ID: <20251120204318.814701-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.51.1
-MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1763671403; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=gT92UN3WuACC4n/ty7M3fgW9tm4zydJ+NE0zTDQ+JGM=;
- b=YkMOMgN18dzZtIRlokko3giEQNYahtCtNMUG6JkUwNt60w5tzdY9qBMoDIqd17oKQ+B5Ey
- Gfk5RFmVXhtqTDIqTAmKVQr76ICxBsOemEkRkzmdRDOrhbr+wasEa8e7qHw4sG9evo6NXj
- WpqPCQtfJaGHNsokkbHFH7jZBa3TO4nLlnB51wOQNOIJFl09gvFsh7l+v6Q+CRRtOFtDpP
- /aH11kHPd3kdyMqouasnZ7cPtpgjR3SwPuNcFXp6Ohun6CHSunP24L3apJm5V2u6uSdXFc
- Zl6yhCPcAuP1XnVGhprEAIcILyKUDeXqz4EoU7CN7ucVw3stHhC1Pp7ywp+Muw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=YkMOMgN1
-Subject: [Buildroot] [PATCH] package/libcap: fix static builds
+Date: Thu, 20 Nov 2025 21:49:56 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e09bf9e9511c28f5d35e3a5ae7a09f1aec57874d
+X-Git-Newrev: 36a2dc7f5e3d049e8f43435e1d1959b00fadf76c
+X-Patchwork-Hint: ignore
+Message-Id: <20251120205033.CF87685C78@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2025.11-rc1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,90 +58,161 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since libcap has been updated to version 2.77 in Buildroot commit
-42f2b480a5a81c7443f177bf541632b0fe501720, the build fails for
-statically-linked configurations when the host system doesn't have a
-static version of libc installed:
+commit: https://git.buildroot.net/buildroot/commit/?id=36a2dc7f5e3d049e8f43435e1d1959b00fadf76c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-/usr/bin/ld: cannot find -lc: No such file or directory
-/usr/bin/ld: have you installed the static version of the c library ?
-
-This is because the -static flag that is supposed to be used when
-building target code also gets passed to the host compiler... which is
-obviously incorrect and leads to the build failure.
-
-This issue was introduced by upstream commit
-c3ddf45d9afaab85d3b7db0dc7bfd1aafb8fde50, which was reverted right
-after the 2.77 release in commit
-542d7d86ecd2129dd5fe7e5b31ba307304f5b319, which we are simply
-backporting here.
-
-Fixes:
-
-  https://autobuild.buildroot.net/results/f6d/f6dc61a9d57e282691b87a3a8fadcb5d5ea8fd8b/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-This is IMO an improved version of Bernd's proposal at
-https://lore.kernel.org/buildroot/20251109080011.481333-1-bernd@kuhls.net/
-for two reasons:
-- A clearer/more correct explanation (the issue is not Fedora related)
-- Backport an upstream commit
----
- ...Add-build-ldflags-to-_makenames-rule.patch | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/libcap/0001-Revert-libcap-Add-build-ldflags-to-_makenames-rule.patch
+ CHANGES                    | 34 ++++++++++++++++++++++++++++++++++
+ Makefile                   |  4 ++--
+ docs/website/download.html | 20 +++++++++-----------
+ docs/website/news.html     | 21 +++++++++++++++++++++
+ 4 files changed, 66 insertions(+), 13 deletions(-)
 
-diff --git a/package/libcap/0001-Revert-libcap-Add-build-ldflags-to-_makenames-rule.patch b/package/libcap/0001-Revert-libcap-Add-build-ldflags-to-_makenames-rule.patch
-new file mode 100644
-index 0000000000..ae9655fd57
---- /dev/null
-+++ b/package/libcap/0001-Revert-libcap-Add-build-ldflags-to-_makenames-rule.patch
-@@ -0,0 +1,34 @@
-+From 542d7d86ecd2129dd5fe7e5b31ba307304f5b319 Mon Sep 17 00:00:00 2001
-+From: "Andrew G. Morgan" <morgan@kernel.org>
-+Date: Mon, 10 Nov 2025 18:26:34 -0800
-+Subject: [PATCH] Revert "libcap: Add build ldflags to _makenames rule"
+diff --git a/CHANGES b/CHANGES
+index ce58f96059..0a1869c8ec 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,37 @@
++2025.11-rc1, released November 20th, 2025
 +
-+This reverts commit c3ddf45d9afaab85d3b7db0dc7bfd1aafb8fde50.
++	Fixes all over the tree and new features.
 +
-+The details of what this broke are here:
++	Infrastructure:
 +
-+  https://bugzilla.kernel.org/show_bug.cgi?id=220691#c2
++	- Support merged /usr/sbin/ (E.G. sbin a symlink to bin rather
++	  than separate directories), which is required by systemd
++	  256+
 +
-+Signed-off-by: Andrew G. Morgan <morgan@kernel.org>
-+Upstream: 542d7d86ecd2129dd5fe7e5b31ba307304f5b319
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ libcap/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++	- support/scripts/cve-check can now be used to enrich a SBOM
++	  in CycloneDX format (as generated by
++	  utils/generate-cyclonedx) with vulnerability analysis from
++	  the NVD database.
 +
-+diff --git a/libcap/Makefile b/libcap/Makefile
-+index f0eb87e..e90a950 100644
-+--- a/libcap/Makefile
-++++ b/libcap/Makefile
-+@@ -80,7 +80,7 @@ $(PSXTITLE).pc: $(PSXTITLE).pc.in
-+ 		$< >$@
-+ 
-+ _makenames: _makenames.c cap_names.list.h
-+-	$(BUILD_CC) $(BUILD_CFLAGS) $(BUILD_CPPFLAGS) $< -o $@ $(BUILD_LDFLAGS)
-++	$(BUILD_CC) $(BUILD_CFLAGS) $(BUILD_CPPFLAGS) $< -o $@
-+ 
-+ cap_names.h: _makenames
-+ 	./_makenames > cap_names.h
-+-- 
-+2.51.1
++	Dropped a number of old and unmaintained packages and external
++	toolchains.
 +
--- 
-2.51.1
-
++	New defconfigs: Compulab IOT-GATE-iMX8 EBBR, QEMU x86-64 EFI
++
++	Removed defconfigs: at91sam9260eknf, atmel_sama5d3xek,
++	roseapplepi
++
++	New packages: broot, bvi, go-bootstrap-stage4, libpam-pkcs11,
++	llama-cpp, nnn, python-crccheck, python-fs, python-patch-ng,
++	python-pyfatfs, python-scp, python-whitenoise, snapboot, wmenu
++
++	Removed packages: aufs, aufs-util, axfsutils, bctoolbox,
++	belle-sip, belr, dmenu-wayland, dvbsnoop,
++	ev3dev-linux-drivers, expect, fbtft, gtk2-engines, gtkperf,
++	leafpad, lesstif, libbson, libglade, libgtk2, libjwt, libsexy,
++	linphone, logsurfer, mediastreamer, metacity, mongrel2, ola,
++	ortp, procrank_linux, ramspeed, sylpheed
++
+ 2025.08.1, released October 11, 2025
+ 
+     Important / security related fixes:
+diff --git a/Makefile b/Makefile
+index 87dbe0e2d0..ff25027c13 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2025.11-git
++export BR2_VERSION := 2025.11-rc1
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1757278000
++BR2_VERSION_EPOCH = 1763670000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index d5b849ca9a..5c915e64f4 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -16,34 +16,32 @@
+           <th>Latest release date</th>
+           <th colspan="2">Downloads</td>
+         </tr>
+-<!--
+         <tr>
+           <th>Candidate</th>
+-          <th>2025.08.x</th>
+-          <td>December 2025</td>
++          <th>2025.11.x</th>
++          <td>March 2026</td>
+           <td>
+-            2025.08-rc3<br/>
+-            <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.08-rc3/CHANGES">
++            2025.11-rc1<br/>
++            <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.11-rc1/CHANGES">
+               Changelog
+             </a>
+           </td>
+-          <td>2025-08-28</td>
++          <td>2025-11-20</td>
+           <td>
+-            <a href="/downloads/buildroot-2025.08-rc3.tar.gz">
++            <a href="/downloads/buildroot-2025.11-rc1.tar.gz">
+               <img src="images/zip.png" width="24" alt="">
+               .tar.gz
+             </a><br/>
+-            <a href="/downloads/buildroot-2025.08-rc3.tar.gz.sign">[PGP sig]</a>
++            <a href="/downloads/buildroot-2025.11-rc1.tar.gz.sign">[PGP sig]</a>
+           </td>
+           <td>
+-            <a href="/downloads/buildroot-2025.08-rc3.tar.xz">
++            <a href="/downloads/buildroot-2025.11-rc1.tar.xz">
+               <img src="images/package.png" width="24" alt="">
+               .tar.xz
+             </a><br/>
+-            <a href="/downloads/buildroot-2025.08-rc3.tar.xz.sign">[PGP sig]</a>
++            <a href="/downloads/buildroot-2025.11-rc1.tar.xz.sign">[PGP sig]</a>
+           </td>
+         </tr>
+--->
+         <tr>
+           <th>Stable</th>
+           <th>2025.08.x</th>
+diff --git a/docs/website/news.html b/docs/website/news.html
+index dd290c33fc..c23b868e51 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,27 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2025.11-rc1 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>20 November 2025</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>We have a new release candidate! Lots of changes all over the tree, see the
++          <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.11-rc1/CHANGES">CHANGES</a>
++          file for more details.</p>
++
++	<p>Go to the <a href="/downloads/">downloads page</a> to pick up the
++          <a href="/downloads/buildroot-2025.11-rc1.tar.xz">2025.11-rc1
++            release</a>, and report any problems found to the
++          <a href="support.html">mailing list</a> or
++          <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
