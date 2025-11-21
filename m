@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B6DECFC281
-	for <buildroot@archiver.kernel.org>; Fri, 21 Nov 2025 22:09:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51D94CFC281
+	for <buildroot@archiver.kernel.org>; Fri, 21 Nov 2025 22:10:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E6B7584ADE;
-	Fri, 21 Nov 2025 22:09:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1583B84E87;
+	Fri, 21 Nov 2025 22:10:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zt5jK_KHlAVl; Fri, 21 Nov 2025 22:09:02 +0000 (UTC)
+ id q4CKH0HXjcf5; Fri, 21 Nov 2025 22:10:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5622C84A6A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C0E584E7E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5622C84A6A;
-	Fri, 21 Nov 2025 22:09:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8C0E584E7E;
+	Fri, 21 Nov 2025 22:10:08 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4DD601CD
- for <buildroot@buildroot.org>; Fri, 21 Nov 2025 22:09:01 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 193F8158
+ for <buildroot@buildroot.org>; Fri, 21 Nov 2025 22:10:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3409A40428
- for <buildroot@buildroot.org>; Fri, 21 Nov 2025 22:09:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0B6FF40FA9
+ for <buildroot@buildroot.org>; Fri, 21 Nov 2025 22:10:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hz9XXHxMA2uD for <buildroot@buildroot.org>;
- Fri, 21 Nov 2025 22:09:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 889F340398
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 889F340398
- for <buildroot@buildroot.org>; Fri, 21 Nov 2025 22:09:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 81A2A85D65; Fri, 21 Nov 2025 22:09:00 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 21 Nov 2025 23:00:20 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 016993bd9ab334f4419cbb9b2e9c383e7554d4df
-X-Git-Newrev: 7c06826342448c113c569a5bc4cbd8850f2388e9
-X-Patchwork-Hint: ignore
-Message-Id: <20251121220900.81A2A85D65@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nss-pam-ldapd: fix build with gcc
- >= 15.x
+ id J85oemI1cylX for <buildroot@buildroot.org>;
+ Fri, 21 Nov 2025 22:10:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 27F1440FA6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27F1440FA6
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 27F1440FA6
+ for <buildroot@buildroot.org>; Fri, 21 Nov 2025 22:10:06 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 433D778035B;
+ Fri, 21 Nov 2025 23:10:01 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 21 Nov 2025 23:10:01 +0100
+MIME-Version: 1.0
+Date: Fri, 21 Nov 2025 23:10:01 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Doug Kehn <rdkehn@gmail.com>
+In-Reply-To: <20251101103530.124285-1-bernd@kuhls.net>
+References: <20251101103530.124285-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <04db78efd50cedf9d137050cffef3a38@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1763763003;
+ bh=rxsJTkgQUsU2zVl/lcuk3cnq+7C7Q05PK/+udfZLpeM=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=o4odCVO87mYnnINmHL/SgB0zbON0Bpoumzde2y6/h2Sv5rRZS5XGHVaE+5ETDjD69
+ Ob1iXdLVahHuOuwhNkIBlAgK0DhhikTuleBpOBupjBqiGcduWE+6AvJjD5cV2Dhdzh
+ idUZjkCqhLI/6STTnmOAPogm0bGexi6Q8svF/se5X52ViPdH3RGpooIN+2w9Z/lFg1
+ +HayzNpAM1i9GntwqxOM9s//1E48S9RqJlrERf82ZEzcErzCLsEP1eCU0KzR4Q37P8
+ 3WOc6cnWriuCl3qgJ8QOGra7loMuoRUsh+QFgwyVG60dRHtvRNozPK3FOVzOz0GewF
+ +oxoncR/EER8w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=o4odCVO8
+Subject: Re: [Buildroot] [PATCH 1/1] package/nss-pam-ldapd: fix build with
+ gcc >= 15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,65 +83,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c06826342448c113c569a5bc4cbd8850f2388e9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 01/11/2025 11:35, Bernd Kuhls wrote:
+> Fixes:
+> https://autobuild.buildroot.net/results/c30/c30b29723a2f3db6fed5ad0bf0e06c126a857953/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Fixes:
-https://autobuild.buildroot.net/results/c30/c30b29723a2f3db6fed5ad0bf0e06c126a857953/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...iable-name-bool-which-is-a-keyword-in-C23.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
-
-diff --git a/package/nss-pam-ldapd/0001-Fix-variable-name-bool-which-is-a-keyword-in-C23.patch b/package/nss-pam-ldapd/0001-Fix-variable-name-bool-which-is-a-keyword-in-C23.patch
-new file mode 100644
-index 0000000000..a3812fcaff
---- /dev/null
-+++ b/package/nss-pam-ldapd/0001-Fix-variable-name-bool-which-is-a-keyword-in-C23.patch
-@@ -0,0 +1,35 @@
-+From 8ddb983a546f632986a84a784c4625110f7782a2 Mon Sep 17 00:00:00 2001
-+From: Arthur de Jong <arthur@arthurdejong.org>
-+Date: Sun, 23 Feb 2025 15:22:38 +0100
-+Subject: Fix variable name (bool) which is a keyword in C23
-+
-+Closes https://bugs.debian.org/1097481
-+
-+Upstream: https://arthurdejong.org/git/nss-pam-ldapd/commit/?id=8ddb983a546f632986a84a784c4625110f7782a2
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ nslcd/cfg.c | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/nslcd/cfg.c b/nslcd/cfg.c
-+index ded797a..b984b0e 100644
-+--- a/nslcd/cfg.c
-++++ b/nslcd/cfg.c
-+@@ -207,10 +207,10 @@ static int get_boolean(const char *filename, int lnr,
-+   return parse_boolean(filename, lnr, token);
-+ }
-+ 
-+-static const char *print_boolean(int bool)
-++static const char *print_boolean(int value)
-+ {
-+-  if (bool) return "yes";
-+-  else      return "no";
-++  if (value) return "yes";
-++  else       return "no";
-+ }
-+ 
-+ #define TIME_MINUTES 60
-+-- 
-+cgit v1.2.3
-+
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
