@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B6C9CFC51F
-	for <buildroot@archiver.kernel.org>; Sat, 22 Nov 2025 16:13:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A48FFCFC51F
+	for <buildroot@archiver.kernel.org>; Sat, 22 Nov 2025 16:16:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 424B381762;
-	Sat, 22 Nov 2025 16:13:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7189C81E3D;
+	Sat, 22 Nov 2025 16:16:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vtXMEhm0qr4G; Sat, 22 Nov 2025 16:13:50 +0000 (UTC)
+ id 7m17YyfXkVoE; Sat, 22 Nov 2025 16:16:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08181816EF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DD5881E3E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 08181816EF;
-	Sat, 22 Nov 2025 16:13:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 93F11158
- for <buildroot@buildroot.org>; Sat, 22 Nov 2025 16:13:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8DD5881E3E;
+	Sat, 22 Nov 2025 16:16:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 779DE34E
+ for <buildroot@buildroot.org>; Sat, 22 Nov 2025 16:16:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7AC5A408A9
- for <buildroot@buildroot.org>; Sat, 22 Nov 2025 16:13:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 695F460873
+ for <buildroot@buildroot.org>; Sat, 22 Nov 2025 16:16:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3jdM4n2DnwoP for <buildroot@buildroot.org>;
- Sat, 22 Nov 2025 16:13:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A4E1C408A6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4E1C408A6
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A4E1C408A6
- for <buildroot@buildroot.org>; Sat, 22 Nov 2025 16:13:47 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 0FD5AB0055E;
- Sat, 22 Nov 2025 17:13:43 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 22 Nov 2025 17:13:43 +0100
-MIME-Version: 1.0
-Date: Sat, 22 Nov 2025 17:13:43 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251120211940.1692904-1-bernd@kuhls.net>
-References: <20251120211940.1692904-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <3976985ba3aa3dd91699e2d9091b85a2@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1763828025;
- bh=KoiVmsZVYqqywVLghLi+e90faOB9OVrSgxY5nKWuxnA=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=u/wjd8GV+QO1Owpak+5NI/tXuLrJ88+e1NfQc7E4UWLWWuTE0Axah0GbbJdeG1jZ+
- cD2LWgewjonlKZBMhu1QkRZzb0e2LGY2k95rQTNeYfI/sLfuS0XnbUcorzUQewfXUv
- fNb8sNbMOF8crKe0WRe7V265zbRRcP7dl3IicaGlVnobAM4DEJUpcIjQZFC7ekY0wu
- JxKlcNaU8ToTSHlXFOgJgcZ0u2VAsJ1ox2VdkDAXRqfQdesVzFwu17ZFxy+sY0KMxc
- IMzbuo6uCp0TZY+7VqbUsjC4/mVkivQi4KuHk/i1uzGLs7qpYps4ECunrbJyDhA29C
- BBOieI0WDZTvQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=u/wjd8GV
-Subject: Re: [Buildroot] [PATCH 1/1] package/php-yaml: bump version to 2.3.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jXDw0eTCnZtm for <buildroot@buildroot.org>;
+ Sat, 22 Nov 2025 16:16:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4023607B9
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B4023607B9
+ for <buildroot@buildroot.org>; Sat, 22 Nov 2025 16:16:07 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AFEDD85E06; Sat, 22 Nov 2025 16:16:07 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 22 Nov 2025 17:14:47 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 00bc19058eaf6fff7bb07328d69b7709abfbe9e2
+X-Git-Newrev: 3f71ae1c8c7be7472b262fabf4fde10fe0d515e9
+X-Patchwork-Hint: ignore
+Message-Id: <20251122161607.AFEDD85E06@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/php-memcached: bump
+ version to 3.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,22 +60,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 20/11/2025 22:19, Bernd Kuhls wrote:
-> Changelog: https://pecl.php.net/package-changelog.php?package=yaml
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=3f71ae1c8c7be7472b262fabf4fde10fe0d515e9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since this bump is fixing a build failure with php 8.4,
-I applied this patch on master.
+Changelog: https://pecl.php.net/package-changelog.php?package=memcached
 
-Best regards,
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/php-memcached/php-memcached.hash | 2 +-
+ package/php-memcached/php-memcached.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Julien.
+diff --git a/package/php-memcached/php-memcached.hash b/package/php-memcached/php-memcached.hash
+index 162d25f795..08a90f13b4 100644
+--- a/package/php-memcached/php-memcached.hash
++++ b/package/php-memcached/php-memcached.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  2a41143a7b29f4a962a3805b77aa207a99e4566e2d314ce98a051cd24d6e9636  memcached-3.2.0.tgz
++sha256  c163434eb0da97c8f45c7ad41d979d381f8b81c49402b1b90b063987fb37972e  memcached-3.4.0.tgz
+ sha256  24e8e3a9529204ead9422fa17cf3ddd75d292a8763b87fdb20591964f2e6ebe0  LICENSE
+ sha256  a453a7a272fbd24105b39959f76996d50dad80b22d1c310f6c67f74f62ae4054  fastlz/LICENSE
+ sha256  bba8cb50c660842c5ca459c5004395bdef8f01c1b64f97a9978f1053f173cb82  g_fmt.h
+diff --git a/package/php-memcached/php-memcached.mk b/package/php-memcached/php-memcached.mk
+index f92a8ddf4c..e45390e5a2 100644
+--- a/package/php-memcached/php-memcached.mk
++++ b/package/php-memcached/php-memcached.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_MEMCACHED_VERSION = 3.2.0
++PHP_MEMCACHED_VERSION = 3.4.0
+ PHP_MEMCACHED_SOURCE = memcached-$(PHP_MEMCACHED_VERSION).tgz
+ PHP_MEMCACHED_SITE = https://pecl.php.net/get
+ PHP_MEMCACHED_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
