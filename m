@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CC2FCFC533
-	for <buildroot@archiver.kernel.org>; Sat, 22 Nov 2025 12:49:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BBDCCFC533
+	for <buildroot@archiver.kernel.org>; Sat, 22 Nov 2025 12:54:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E69EF40836;
-	Sat, 22 Nov 2025 12:49:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3AE9240C15;
+	Sat, 22 Nov 2025 12:54:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PkxfG2gc8nxS; Sat, 22 Nov 2025 12:49:15 +0000 (UTC)
+ id FwjJPp9gs6iv; Sat, 22 Nov 2025 12:54:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16E0D4084B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CD7140BC8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 16E0D4084B;
-	Sat, 22 Nov 2025 12:49:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id ACBF634E
- for <buildroot@buildroot.org>; Sat, 22 Nov 2025 12:49:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0CD7140BC8;
+	Sat, 22 Nov 2025 12:54:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9942F158
+ for <buildroot@buildroot.org>; Sat, 22 Nov 2025 12:54:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A9CC560BE2
- for <buildroot@buildroot.org>; Sat, 22 Nov 2025 12:49:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7F8D44031C
+ for <buildroot@buildroot.org>; Sat, 22 Nov 2025 12:54:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S-hXCgZuQc54 for <buildroot@buildroot.org>;
- Sat, 22 Nov 2025 12:49:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UWsU0dB8mfHn for <buildroot@buildroot.org>;
+ Sat, 22 Nov 2025 12:54:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C82AA60593
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C82AA60593
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8BFC34024E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8BFC34024E
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C82AA60593
- for <buildroot@buildroot.org>; Sat, 22 Nov 2025 12:49:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8BFC34024E
+ for <buildroot@buildroot.org>; Sat, 22 Nov 2025 12:54:44 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b63c.dip0.t-ipconnect.de [84.161.182.60])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 11CCEA4C7413
- for <buildroot@buildroot.org>; Sat, 22 Nov 2025 13:49:10 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:55310)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id AF9B8A4C748D;
+ Sat, 22 Nov 2025 13:54:42 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:43340)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vMn37-000000007Vf-2ECL
- for buildroot@buildroot.org; Sat, 22 Nov 2025 12:49:09 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vMn8U-000000008Sg-0olm;
+ Sat, 22 Nov 2025 12:54:42 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 22 Nov 2025 13:49:09 +0100
-Message-ID: <20251122124909.2229139-1-bernd@kuhls.net>
+Cc: Will Newton <will.newton@gmail.com>
+Date: Sat, 22 Nov 2025 13:54:42 +0100
+Message-ID: <20251122125442.2235928-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: --
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202506031021; t=1763815750;
- bh=iFvNq702Mn3PVplZO/x/Z+hgPAAsA1ACCOtr/7Dnzwk=;
- h=From:To:Subject:Date:From;
- b=HkqatQteLUtRtz0Hk7rmg3XN6dAg8wXNVjrioisGIZPBsiBS3jo3lDLLhtxDjRKIF
- v5N16Gw3hmlKE9mTexxSh3/gC63PS+L0yP/tViAmLGv8eQvNLZkhkbIwb9S0XwFG+1
- NONSQGNIy8BMLZ5y/MFfMi8lyqtcQCsVFpG8mgjZ4UY0p029d41N5RKEDlwg5UrjSW
- AgCq/qhIusXoHzVP9C4fYtYU2WLQwR8Qjg/KYqdJbhYBzGzqIgH8a7nIH9Cd67O8J5
- YSKJC7K7ZCuCuWQboTGyIsHaOws04OfgIP/pXsHhNlDygo0xdRf99zwsDnWRiDkDYG
- W4ocE7uZn2LWw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ s=kas202506031021; t=1763816082;
+ bh=Wy1ZjiVX9R4jXAC5wz1iXdnJOJbDr4MuwIxDI6I5LlY=;
+ h=From:To:Cc:Subject:Date:From;
+ b=kCiyjrWKAnO54hJizJ5EVzjRHQBKQewEp4TrjfOVkJnt1XJfno+HKwmrWh9FaPEtq
+ 83V4WHc9m7vwhBpl7QGAHYOz/HXcL8/hPgUSf+lVjzLp4kpVcHavydkJSn04vs8BRf
+ GglhGPFf6YwHgTRcMVyRwuHHkfVuho9rb6wREX4Iz1DbVSJojwtM1jt1HdIuqiDwM7
+ HgAUsKu5n9DpXn5accMHEtQDwtQQlZ2A/p5souKzaO0KzUdDOMbzVvEbaPIKcSXm5K
+ MGZN6oGsORHr/DqGeKesIRHjzWZBrnxnMoKIDiD50jauJT22xcDjXQVjhPzLHAwCyI
+ fno+iryN1/W5g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=HkqatQte
-Subject: [Buildroot] [PATCH 1/1] package/open-plc-utils: bump version
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=kCiyjrWK
+Subject: [Buildroot] [PATCH 1/1] package/time: fix build with newer gcc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,47 +85,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
-https://github.com/qca/open-plc-utils/compare/1ba7d5a042e4e8ff6858b08e113eec5dc4e89cf2...46c3506453c15b873fd6ed3e76c9872cea5e143a
-
-Upstream commit
-https://github.com/qca/open-plc-utils/commit/cbf52f68b5e2ab0c4071600ab34126120e54f5cd
-fixes build errors with newer gcc versions.
-
-Instead of adding this patch to buildroot we bump to HEAD which also
-includes other bug fixes and documentation updates.
-
 Fixes:
-https://autobuild.buildroot.net/results/c74/c74730bbadc9ba20cdccf448dbc508d0afbabf41/
+https://autobuild.buildroot.net/results/2d4/2d440a31fc49366d77289f1d21080e1861c6ee21/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/open-plc-utils/open-plc-utils.hash | 2 +-
- package/open-plc-utils/open-plc-utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...ime-fix-sighandler-prototype-for-C23.patch | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/time/0001-time-fix-sighandler-prototype-for-C23.patch
 
-diff --git a/package/open-plc-utils/open-plc-utils.hash b/package/open-plc-utils/open-plc-utils.hash
-index 0ab661231a..bcb5253bb9 100644
---- a/package/open-plc-utils/open-plc-utils.hash
-+++ b/package/open-plc-utils/open-plc-utils.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  4b1b55896939f178321ffe1ec2dc6937ea688d577b3671a5f0edb5c3326dfa3d  open-plc-utils-1ba7d5a042e4e8ff6858b08e113eec5dc4e89cf2.tar.gz
-+sha256  e02ffc2d2abde6f31c183b0717742c243b5746d0dbe9ffaa38f6154f14a1bd4d  open-plc-utils-46c3506453c15b873fd6ed3e76c9872cea5e143a.tar.gz
- sha256  3137c632bbcec5e88b72dc13f4fe06ee184eea364fec8f7494bdfa57672ef921  LICENSE
-diff --git a/package/open-plc-utils/open-plc-utils.mk b/package/open-plc-utils/open-plc-utils.mk
-index 086552e09b..1c0d213278 100644
---- a/package/open-plc-utils/open-plc-utils.mk
-+++ b/package/open-plc-utils/open-plc-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPEN_PLC_UTILS_VERSION = 1ba7d5a042e4e8ff6858b08e113eec5dc4e89cf2
-+OPEN_PLC_UTILS_VERSION = 46c3506453c15b873fd6ed3e76c9872cea5e143a
- OPEN_PLC_UTILS_SITE = $(call github,qca,open-plc-utils,$(OPEN_PLC_UTILS_VERSION))
- OPEN_PLC_UTILS_LICENSE = BSD-3-Clause
- OPEN_PLC_UTILS_LICENSE_FILES = LICENSE
+diff --git a/package/time/0001-time-fix-sighandler-prototype-for-C23.patch b/package/time/0001-time-fix-sighandler-prototype-for-C23.patch
+new file mode 100644
+index 0000000000..8d4e1d7033
+--- /dev/null
++++ b/package/time/0001-time-fix-sighandler-prototype-for-C23.patch
+@@ -0,0 +1,35 @@
++From 218cd7ce34b6dbc86c80f1c781639ea7661d1252 Mon Sep 17 00:00:00 2001
++From: Marcin Serwin <marcin@serwin.dev>
++Date: Thu, 2 Oct 2025 19:30:12 +0200
++Subject: [PATCH] time: fix sighandler prototype for C23
++
++In C23 functions with empty argument list in the prototype are treated
++as taking no arguments. This means that the `int` argument of the
++sighandler must be specified explicitly or the code will fail to
++compile due to mismatched function type.
++
++Signed-off-by: Marcin Serwin <marcin@serwin.dev>
++
++Upstream: https://lists.gnu.org/archive/html/bug-time/2025-10/msg00000.html
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/time.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/time.c b/src/time.c
++index 7b401bc..88287dd 100644
++--- a/src/time.c
+++++ b/src/time.c
++@@ -77,7 +77,7 @@ enum
++ 
++ 
++ /* A Pointer to a signal handler.  */
++-typedef RETSIGTYPE (*sighandler) ();
+++typedef RETSIGTYPE (*sighandler) (int);
++ 
++ /* msec = milliseconds = 1/1,000 (1*10e-3) second.
++    usec = microseconds = 1/1,000,000 (1*10e-6) second.  */
++-- 
++2.47.3
++
 -- 
 2.47.3
 
