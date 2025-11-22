@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB33ACFC52D
-	for <buildroot@archiver.kernel.org>; Sat, 22 Nov 2025 10:54:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C442CFC526
+	for <buildroot@archiver.kernel.org>; Sat, 22 Nov 2025 11:47:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 69E59408C2;
-	Sat, 22 Nov 2025 10:54:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 09E5040F69;
+	Sat, 22 Nov 2025 11:47:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gQa-trLyZnt4; Sat, 22 Nov 2025 10:54:00 +0000 (UTC)
+ id OHGo9Inn9KIB; Sat, 22 Nov 2025 11:47:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F6AC4063C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 042FD40F5A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8F6AC4063C;
-	Sat, 22 Nov 2025 10:54:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 042FD40F5A;
+	Sat, 22 Nov 2025 11:47:21 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2AF56122
- for <buildroot@buildroot.org>; Sat, 22 Nov 2025 10:53:59 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id AC2AC122
+ for <buildroot@buildroot.org>; Sat, 22 Nov 2025 11:47:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 11B0B84B66
- for <buildroot@buildroot.org>; Sat, 22 Nov 2025 10:53:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A1E2A83ECF
+ for <buildroot@buildroot.org>; Sat, 22 Nov 2025 11:47:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hKKkUEf3WL2s for <buildroot@buildroot.org>;
- Sat, 22 Nov 2025 10:53:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DD83984B65
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD83984B65
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DD83984B65
- for <buildroot@buildroot.org>; Sat, 22 Nov 2025 10:53:57 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 8374319F732;
- Sat, 22 Nov 2025 11:53:53 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 22 Nov 2025 11:53:53 +0100
+ id vw4ZlNwULQAj for <buildroot@buildroot.org>;
+ Sat, 22 Nov 2025 11:47:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DE6A483EC3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE6A483EC3
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DE6A483EC3
+ for <buildroot@buildroot.org>; Sat, 22 Nov 2025 11:47:17 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1b63c.dip0.t-ipconnect.de [84.161.182.60])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 37916A4C758E
+ for <buildroot@buildroot.org>; Sat, 22 Nov 2025 12:47:14 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:47366)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99)
+ (envelope-from <bernd@kuhls.net>) id 1vMm5B-0000000057t-1Y9g
+ for buildroot@buildroot.org; Sat, 22 Nov 2025 11:47:13 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sat, 22 Nov 2025 12:47:13 +0100
+Message-ID: <20251122114713.3778269-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Sat, 22 Nov 2025 11:53:53 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251026154840.85480-1-bernd@kuhls.net>
-References: <20251026154840.85480-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <7c8f015943525068596c7189bc8f6170@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1763808834;
- bh=NCFM4bdmJFwpjt6H/apN+iXfTl0wmBiHvW1+50zv9dM=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Ezqjo/dAnl97vtPcNz9nZsoVj1EyFbd59P10ZRUFYoNDbJLRQYi98R6OISnqoxXkr
- cKrj5J2XNYPpFnXK0qmVEUSrNdHFO18y86OT5JjJhu2oXhrKxtC+LY193TusQjDios
- y/d0ANxjyzyNvQwb8W6wsQp3/9dsb+kcDORl3FneEtWxrHFm0wtWvFxeJjRVKxqdP7
- w0WKIqLveAwZI41hd/wK3IGSf53OCCUZZWQ4f8Bnc5Qkm+EApyK66cUw70Y3rbfy44
- mwgbDv7bF5AXVZRHdnnRpE8WBtmuD82epwhaLnLlAs1Sm7lYWszAaTVUjFbZIuLQ0w
- nUI88auk+wsNA==
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202506031021; t=1763812034;
+ bh=CYZcfnv0krUkX7LVciyVIcvyMmIaCslmNy8JPrgX9fo=;
+ h=From:To:Subject:Date:From;
+ b=X//zh5yFm5b8FQvb2SdFMbB0UPTx6Rzu6sCG6WS+Fb66/eumBOxdOdJL6nfZkD37w
+ leTfAExJrC7CKe5pkbiE/XSUTQS7M5DTHD8FyTK/fbLZdA4GRms6dNLKWj6IulmOfK
+ tQuQyheg1++CxYNX4spOv5epJ1ergHGgT4dfviK18Bzphxpt3tfFg1IllGL9FfeZmq
+ 5KovY08tLvGG+PqMcgRfcaVPJRZ4fV8oL2R/MHBU4tx7++rGDE+l1k13v03dqgDU7H
+ 3kgU6htfEA68o8jL/MSs9jUUX8xICSQ1ocJs3TRvzpqExleKScKwc5rKaPMZd6oAVg
+ tZzNDPDUxnctg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Ezqjo/dA
-Subject: Re: [Buildroot] [PATCH 1/1] package/netsnmp: add upstream patches
- to fix musl build
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=X//zh5yF
+Subject: [Buildroot] [PATCH 1/1] package/uboot-tools: mkeficapsule needs
+ gnutls
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,32 +81,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 26/10/2025 16:48, Bernd Kuhls wrote:
-> The bump of netsnmp to version 5.9.4 with buildroot commit
-> 1799cfebfd5ea1312cce74b3807d4aad044bce67 broke musl builds:
-> 
-> ../include/net-snmp/net-snmp-config.h:1614:30: error: unknown type name 
-> 'unknown'; did you mean 'union'?
-> 
-> due to broken detection of __fd_mask introduced in 5.9.4 by upstream
-> commit 
-> https://github.com/net-snmp/net-snmp/commit/97df191ff8b16bdc53ba95d2a1c064d2a4666ae6
-> 
-> Added two upstream patches for __fd_mask detection to fix musl builds.
-> 
-> Fixes:
-> https://autobuild.buildroot.net/results/9d7/9d75061ca917689381c3b32f3e01640701d833a7/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+While buildroot commit 14a0169714cd5c35be40faadc066412f144bc1a6 forgot
+to add the reverse dependencies of gnutls the buildroot commit
+f94ba69770e5c5dc1342bf52657b3565b1a56e6d to fix that forgot to select
+gnutls.
 
-Applied to master, thanks.
+Fixes:
+https://autobuild.buildroot.org/results/595e9af38fef4729ff3d6f32ad320d46c8c88594/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/uboot-tools/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
+index 4ccef30973..da6cd65252 100644
+--- a/package/uboot-tools/Config.in
++++ b/package/uboot-tools/Config.in
+@@ -70,6 +70,7 @@ config BR2_PACKAGE_UBOOT_TOOLS_MKEFICAPSULE
+ 	bool "mkeficapsule"
+ 	depends on !BR2_STATIC_LIBS # gnutls
+ 	depends on BR2_USE_WCHAR # gnutls
++	select BR2_PACKAGE_GNUTLS
+ 	help
+ 	  Install the mkeficapsule tool on the target system
+ 
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
