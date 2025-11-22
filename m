@@ -1,51 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5828CFC522
-	for <buildroot@archiver.kernel.org>; Sat, 22 Nov 2025 16:53:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAE74CFC51F
+	for <buildroot@archiver.kernel.org>; Sat, 22 Nov 2025 16:53:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E4CB941303;
-	Sat, 22 Nov 2025 16:53:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8BEB581766;
+	Sat, 22 Nov 2025 16:53:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U0E6by0SmGJ9; Sat, 22 Nov 2025 16:53:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zNYxp0rVHVk7; Sat, 22 Nov 2025 16:53:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFEBC412EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD7B1843E4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CFEBC412EC;
-	Sat, 22 Nov 2025 16:53:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CD7B1843E4;
+	Sat, 22 Nov 2025 16:53:42 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1BD6034E
- for <buildroot@buildroot.org>; Sat, 22 Nov 2025 16:53:23 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0437D34E
+ for <buildroot@buildroot.org>; Sat, 22 Nov 2025 16:53:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0D58C4026E
- for <buildroot@buildroot.org>; Sat, 22 Nov 2025 16:53:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E90BB4026E
+ for <buildroot@buildroot.org>; Sat, 22 Nov 2025 16:53:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ME4sXCTd1X13 for <buildroot@buildroot.org>;
- Sat, 22 Nov 2025 16:53:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4460D4018D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4460D4018D
- for <buildroot@buildroot.org>; Sat, 22 Nov 2025 16:53:22 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3F40C85E15; Sat, 22 Nov 2025 16:53:22 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 22 Nov 2025 17:51:00 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 08a638d49ffb956e759f1b3950dd2b11f6fea483
-X-Git-Newrev: 32490ae99f9cfd2ded0b150071b28908419c7244
-X-Patchwork-Hint: ignore
-Message-Id: <20251122165322.3F40C85E15@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/woff2: fix build with newer gcc
+ id QGxiELsfvnEu for <buildroot@buildroot.org>;
+ Sat, 22 Nov 2025 16:53:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 78D5F400F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78D5F400F8
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 78D5F400F8
+ for <buildroot@buildroot.org>; Sat, 22 Nov 2025 16:53:39 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 3FF4AB0053D;
+ Sat, 22 Nov 2025 17:53:35 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 22 Nov 2025 17:53:35 +0100
+MIME-Version: 1.0
+Date: Sat, 22 Nov 2025 17:53:35 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Adrian Perez de Castro <aperez@igalia.com>
+In-Reply-To: <20251122130505.2240518-1-bernd@kuhls.net>
+References: <20251122130505.2240518-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <9add63620c79516a33a8460c4c5d421c@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1763830417;
+ bh=etxZg0H4+++mFJM3EUzqQgvu2U178Cj80dRABjzn4fs=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=azW4laZPZX052nhhtdAkdyIPK0RVbzyE33vIWirQDMWYSfOzplgTSv/F3aOhiOkpE
+ qaRPATnGhjtlIkq3fYvy82XS0GoeYJyU/J7AU3bMQmOLxnYYZrz6OOub8xGubHNHFC
+ AGIWqQpbYuSW59Jm/pUBFkY6RCj8INb9gfsFOBmdDtcpAxwsIUJ8MWkYjH4vHEUsLd
+ 6P7vh0hBeZrFuarSqwy7DPlhGotzfjhIrGw3gTALLjJumvNv7VGBAbSZINY+vzivbZ
+ w2U8pXDYYFpO+1mIu/kx7/B9Uu6v68XhDavUf7F/KE9f+JiBmQpoBQiH4b8r5Np++d
+ Wj38UN/Ze9DHw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=azW4laZP
+Subject: Re: [Buildroot] [PATCH 1/1] package/woff2: fix build with newer gcc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,72 +82,19 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32490ae99f9cfd2ded0b150071b28908419c7244
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 22/11/2025 14:05, Bernd Kuhls wrote:
+> Fixes a build error not yet seen by the autobuilders due to other
+> packages failing before. Seen with defconfig:
+> https://autobuild.buildroot.net/results/ebf/ebf9a81f7e225ecdab20bbad8ad8daa136fddb46/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Fixes a build error not yet seen by the autobuilders due to other
-packages failing before. Seen with defconfig:
-https://autobuild.buildroot.net/results/ebf/ebf9a81f7e225ecdab20bbad8ad8daa136fddb46/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...ff2-output.h-add-missing-stdint.h-include.patch | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
-
-diff --git a/package/woff2/0002-include-woff2-output.h-add-missing-stdint.h-include.patch b/package/woff2/0002-include-woff2-output.h-add-missing-stdint.h-include.patch
-new file mode 100644
-index 0000000000..a79b414a4c
---- /dev/null
-+++ b/package/woff2/0002-include-woff2-output.h-add-missing-stdint.h-include.patch
-@@ -0,0 +1,41 @@
-+From 08ece7871775c0d7bf4fdff64b961cdc256adf6c Mon Sep 17 00:00:00 2001
-+From: Sergei Trofimovich <slyich@gmail.com>
-+Date: Fri, 2 Aug 2024 22:12:03 +0100
-+Subject: [PATCH] include/woff2/output.h: add missing <stdint.h> include
-+
-+Without the change `woff2` build fails on upcoming `gcc-15` as:
-+
-+    In file included from src/woff2_out.cc:9:
-+    include/woff2/output.h:73:25: error: expected ')' before '*' token
-+       73 |   WOFF2MemoryOut(uint8_t* buf, size_t buf_size);
-+          |                 ~       ^
-+          |                         )
-+    include/woff2/output.h:79:3: error: 'uint8_t' does not name a type
-+       79 |   uint8_t* buf_;
-+          |   ^~~~~~~
-+    include/woff2/output.h:16:1: note: 'uint8_t' is defined in header '<cstdint>';
-+      this is probably fixable by adding '#include <cstdint>'
-+       15 | #include <string>
-+      +++ |+#include <cstdint>
-+       16 |
-+
-+Upstream: https://github.com/google/woff2/pull/176
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ include/woff2/output.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/include/woff2/output.h b/include/woff2/output.h
-+index dc78ccf..b12d538 100644
-+--- a/include/woff2/output.h
-++++ b/include/woff2/output.h
-+@@ -9,6 +9,8 @@
-+ #ifndef WOFF2_WOFF2_OUT_H_
-+ #define WOFF2_WOFF2_OUT_H_
-+ 
-++#include <stdint.h>
-++
-+ #include <algorithm>
-+ #include <cstring>
-+ #include <memory>
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
