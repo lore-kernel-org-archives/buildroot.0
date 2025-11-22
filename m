@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BBDCCFC533
-	for <buildroot@archiver.kernel.org>; Sat, 22 Nov 2025 12:54:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87FEECFC533
+	for <buildroot@archiver.kernel.org>; Sat, 22 Nov 2025 12:56:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3AE9240C15;
-	Sat, 22 Nov 2025 12:54:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5EAED40EC7;
+	Sat, 22 Nov 2025 12:56:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FwjJPp9gs6iv; Sat, 22 Nov 2025 12:54:47 +0000 (UTC)
+ id Evrvb74dGeZK; Sat, 22 Nov 2025 12:56:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CD7140BC8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D3ED40E7F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0CD7140BC8;
-	Sat, 22 Nov 2025 12:54:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9942F158
- for <buildroot@buildroot.org>; Sat, 22 Nov 2025 12:54:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D3ED40E7F;
+	Sat, 22 Nov 2025 12:56:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9C48634E
+ for <buildroot@buildroot.org>; Sat, 22 Nov 2025 12:56:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7F8D44031C
- for <buildroot@buildroot.org>; Sat, 22 Nov 2025 12:54:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 82BC2608B6
+ for <buildroot@buildroot.org>; Sat, 22 Nov 2025 12:56:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UWsU0dB8mfHn for <buildroot@buildroot.org>;
- Sat, 22 Nov 2025 12:54:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8BFC34024E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8BFC34024E
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8BFC34024E
- for <buildroot@buildroot.org>; Sat, 22 Nov 2025 12:54:44 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b63c.dip0.t-ipconnect.de [84.161.182.60])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id AF9B8A4C748D;
- Sat, 22 Nov 2025 13:54:42 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:43340)
- by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vMn8U-000000008Sg-0olm;
- Sat, 22 Nov 2025 12:54:42 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UXpfoU3MWvf6 for <buildroot@buildroot.org>;
+ Sat, 22 Nov 2025 12:56:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC679608AA
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id AC679608AA
+ for <buildroot@buildroot.org>; Sat, 22 Nov 2025 12:56:22 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 889ED814DA; Sat, 22 Nov 2025 12:56:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Will Newton <will.newton@gmail.com>
-Date: Sat, 22 Nov 2025 13:54:42 +0100
-Message-ID: <20251122125442.2235928-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: ++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1763816082;
- bh=Wy1ZjiVX9R4jXAC5wz1iXdnJOJbDr4MuwIxDI6I5LlY=;
- h=From:To:Cc:Subject:Date:From;
- b=kCiyjrWKAnO54hJizJ5EVzjRHQBKQewEp4TrjfOVkJnt1XJfno+HKwmrWh9FaPEtq
- 83V4WHc9m7vwhBpl7QGAHYOz/HXcL8/hPgUSf+lVjzLp4kpVcHavydkJSn04vs8BRf
- GglhGPFf6YwHgTRcMVyRwuHHkfVuho9rb6wREX4Iz1DbVSJojwtM1jt1HdIuqiDwM7
- HgAUsKu5n9DpXn5accMHEtQDwtQQlZ2A/p5souKzaO0KzUdDOMbzVvEbaPIKcSXm5K
- MGZN6oGsORHr/DqGeKesIRHjzWZBrnxnMoKIDiD50jauJT22xcDjXQVjhPzLHAwCyI
- fno+iryN1/W5g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=kCiyjrWK
-Subject: [Buildroot] [PATCH 1/1] package/time: fix build with newer gcc
+Date: Sat, 22 Nov 2025 13:37:57 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 3e296a151195f9d32dbfd62d6c75d08b822be6dd
+X-Git-Newrev: b243b77ebe5eedf8fbc683d5539d9bf386da4420
+X-Patchwork-Hint: ignore
+Message-Id: <20251122125622.889ED814DA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-gpiod: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,64 +58,121 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-https://autobuild.buildroot.net/results/2d4/2d440a31fc49366d77289f1d21080e1861c6ee21/
+commit: https://git.buildroot.net/buildroot/commit/?id=b243b77ebe5eedf8fbc683d5539d9bf386da4420
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+This adds the python bindings of libgpiod for version 2+.
+While the python bindings for v1 were optionally built and
+installed as part of the main libgpiod build, for v2 they have now been
+published to pypi.org for easier consumption in the general python
+ecosystem.
+
+We need to set LINK_SYSTEM_LIBGPIOD=1 to actually build against the
+system version of libgpiod which we install and not use a separate
+bundled copy.
+
+The package is licensed as libgpiod, but as published to pypi doesn't
+include the LICENSE file that's part of upstream repository.
+Reference pyproject.toml as that has the license identifier as a
+workaround.
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...ime-fix-sighandler-prototype-for-C23.patch | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/time/0001-time-fix-sighandler-prototype-for-C23.patch
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/python-gpiod/Config.in         | 15 +++++++++++++++
+ package/python-gpiod/python-gpiod.hash |  5 +++++
+ package/python-gpiod/python-gpiod.mk   | 17 +++++++++++++++++
+ 5 files changed, 39 insertions(+)
 
-diff --git a/package/time/0001-time-fix-sighandler-prototype-for-C23.patch b/package/time/0001-time-fix-sighandler-prototype-for-C23.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index db001d6bb0..62d1e7f914 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2263,6 +2263,7 @@ F:	package/picotool/
+ F:	package/python-apscheduler/
+ F:	package/python-crc/
+ F:	package/python-django/
++F:	package/python-gpiod/
+ F:	package/python-immutabledict/
+ F:	package/python-jc/
+ F:	package/python-log-rate-limit/
+diff --git a/package/Config.in b/package/Config.in
+index 12f327cb27..53fda7e086 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1136,6 +1136,7 @@ menu "External python modules"
+ 	source "package/python-google-api-core/Config.in"
+ 	source "package/python-google-auth/Config.in"
+ 	source "package/python-googleapis-common-protos/Config.in"
++	source "package/python-gpiod/Config.in"
+ 	source "package/python-gpiozero/Config.in"
+ 	source "package/python-greenlet/Config.in"
+ 	source "package/python-grpc-requests/Config.in"
+diff --git a/package/python-gpiod/Config.in b/package/python-gpiod/Config.in
 new file mode 100644
-index 0000000000..8d4e1d7033
+index 0000000000..8f67178ae7
 --- /dev/null
-+++ b/package/time/0001-time-fix-sighandler-prototype-for-C23.patch
-@@ -0,0 +1,35 @@
-+From 218cd7ce34b6dbc86c80f1c781639ea7661d1252 Mon Sep 17 00:00:00 2001
-+From: Marcin Serwin <marcin@serwin.dev>
-+Date: Thu, 2 Oct 2025 19:30:12 +0200
-+Subject: [PATCH] time: fix sighandler prototype for C23
++++ b/package/python-gpiod/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_PYTHON_GPIOD
++	bool "python-gpiod"
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10 # libgpiod2
++	depends on !BR2_PACKAGE_LIBGPIOD # libgpiod2
++	select BR2_PACKAGE_LIBGPIOD2
++	help
++	  Python bindings for libgpiod (v2+).
 +
-+In C23 functions with empty argument list in the prototype are treated
-+as taking no arguments. This means that the `int` argument of the
-+sighandler must be specified explicitly or the code will fail to
-+compile due to mismatched function type.
++	  https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/tree/bindings/python/
 +
-+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
++comment "python-gpiod needs kernel headers >= 5.10"
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
 +
-+Upstream: https://lists.gnu.org/archive/html/bug-time/2025-10/msg00000.html
++comment "python-gpiod is incompatible with libgpiod"
++	depends on BR2_PACKAGE_LIBGPIOD
+diff --git a/package/python-gpiod/python-gpiod.hash b/package/python-gpiod/python-gpiod.hash
+new file mode 100644
+index 0000000000..bbcc7181ff
+--- /dev/null
++++ b/package/python-gpiod/python-gpiod.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/gpiod/json
++md5  62cf044aa3214d0ebee6aef78db2aa52  gpiod-2.4.0.tar.g
++sha256  9243a1a59d084ec749d1df4a1e2f238ffb9d94515b0d9f5335460175143c3aa1  gpiod-2.4.0.tar.gz
++# Locally computed
++sha256  a2b24e2158144b22a77a6a404fc5a05911612c5b99d7ab6d0e2addcaeb7514a3  pyproject.toml
+diff --git a/package/python-gpiod/python-gpiod.mk b/package/python-gpiod/python-gpiod.mk
+new file mode 100644
+index 0000000000..8ab901972e
+--- /dev/null
++++ b/package/python-gpiod/python-gpiod.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# python-gpiod
++#
++################################################################################
 +
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/time.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++PYTHON_GPIOD_VERSION = 2.4.0
++PYTHON_GPIOD_SOURCE = gpiod-$(PYTHON_GPIOD_VERSION).tar.gz
++PYTHON_GPIOD_SITE = https://files.pythonhosted.org/packages/0c/dc/5a6bd309345bd9cfa7e098174ab7e65367e408539b6c1998e4f267c673cd
++PYTHON_GPIOD_SETUP_TYPE = setuptools
++PYTHON_GPIOD_LICENSE = LGPL-2.1+
++# The package license follows libgpiod's license but doesn't include the LICENSE text in the pypi distrobuted package again
++PYTHON_GPIOD_LICENSE_FILES = pyproject.toml
++PYTHON_GPIOD_DEPENDENCIES = libgpiod2
++PYTHON_GPIOD_ENV = LINK_SYSTEM_LIBGPIOD=1
 +
-+diff --git a/src/time.c b/src/time.c
-+index 7b401bc..88287dd 100644
-+--- a/src/time.c
-++++ b/src/time.c
-+@@ -77,7 +77,7 @@ enum
-+ 
-+ 
-+ /* A Pointer to a signal handler.  */
-+-typedef RETSIGTYPE (*sighandler) ();
-++typedef RETSIGTYPE (*sighandler) (int);
-+ 
-+ /* msec = milliseconds = 1/1,000 (1*10e-3) second.
-+    usec = microseconds = 1/1,000,000 (1*10e-6) second.  */
-+-- 
-+2.47.3
-+
--- 
-2.47.3
-
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
