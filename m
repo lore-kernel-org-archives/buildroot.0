@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82E95CFC539
-	for <buildroot@archiver.kernel.org>; Sat, 22 Nov 2025 16:30:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1537CFC51F
+	for <buildroot@archiver.kernel.org>; Sat, 22 Nov 2025 16:44:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B91CD40B98;
-	Sat, 22 Nov 2025 16:30:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B9DB4075A;
+	Sat, 22 Nov 2025 16:44:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6EnttElzz5K4; Sat, 22 Nov 2025 16:30:05 +0000 (UTC)
+ id zNnm94Tb6gbm; Sat, 22 Nov 2025 16:44:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 697B240B5B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7454404CA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 697B240B5B;
-	Sat, 22 Nov 2025 16:30:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2CFD1350
- for <buildroot@buildroot.org>; Sat, 22 Nov 2025 16:30:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A7454404CA;
+	Sat, 22 Nov 2025 16:44:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id DEA2E34E
+ for <buildroot@buildroot.org>; Sat, 22 Nov 2025 16:43:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1447383C7A
- for <buildroot@buildroot.org>; Sat, 22 Nov 2025 16:30:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BEE6B4018D
+ for <buildroot@buildroot.org>; Sat, 22 Nov 2025 16:43:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HRB9t4v4HPiB for <buildroot@buildroot.org>;
- Sat, 22 Nov 2025 16:30:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 486AE83CF5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 486AE83CF5
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 486AE83CF5
- for <buildroot@buildroot.org>; Sat, 22 Nov 2025 16:30:03 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id A55CE2003C3;
- Sat, 22 Nov 2025 17:29:59 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 22 Nov 2025 17:29:59 +0100
-MIME-Version: 1.0
-Date: Sat, 22 Nov 2025 17:29:59 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251122124909.2229139-1-bernd@kuhls.net>
-References: <20251122124909.2229139-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <1b28f59255f52a34783c3ab3e20fe5cb@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1763829000;
- bh=XU1E0ZsDBMqfe2eOobMaTiFA1NfU+xM18Y5iNIMhKCs=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=nWRX7jboUovN4BWZPpelfTRzrll6Ij+OpGJoB9PjuAqCx6uBygLL2yVZtawHfB/Hd
- jaqdbc+E5EDen1IMvgdJwufoj5R2MblofSKSuZDsgovjLT6aIU61HFJPpRYmP6GKy6
- /hYzrahN4xxz/UlX7KUZqH5IxuGPbfmupGuNf+3lOQF98Fo5aKcktQ6Q4izgwizAv+
- olmECdPW04QJxq7fUZxR482BjWZUI1btGNSPT5GGBTg9QLtFAVc9USvxBUhSCxfxYs
- susj541iaz44HGLFQmk3hf1ENpd6kWM0V+LoXex2OKV9sEQRyBdA6FYIGn3Y+v36WZ
- 6hI8n0tvhySEA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=nWRX7jbo
-Subject: Re: [Buildroot] [PATCH 1/1] package/open-plc-utils: bump version
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XH9r1nom4ZhE for <buildroot@buildroot.org>;
+ Sat, 22 Nov 2025 16:43:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11300400F8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 11300400F8
+ for <buildroot@buildroot.org>; Sat, 22 Nov 2025 16:43:59 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id F1B437FDFE; Sat, 22 Nov 2025 16:43:58 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 22 Nov 2025 17:37:44 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: bf5f1b546b408883a721dcaa1a5e660b3d72ad95
+X-Git-Newrev: 08a638d49ffb956e759f1b3950dd2b11f6fea483
+X-Patchwork-Hint: ignore
+Message-Id: <20251122164358.F1B437FDFE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/time: fix build with newer gcc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,28 +59,65 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 22/11/2025 13:49, Bernd Kuhls wrote:
-> Changelog:
-> https://github.com/qca/open-plc-utils/compare/1ba7d5a042e4e8ff6858b08e113eec5dc4e89cf2...46c3506453c15b873fd6ed3e76c9872cea5e143a
-> 
-> Upstream commit
-> https://github.com/qca/open-plc-utils/commit/cbf52f68b5e2ab0c4071600ab34126120e54f5cd
-> fixes build errors with newer gcc versions.
-> 
-> Instead of adding this patch to buildroot we bump to HEAD which also
-> includes other bug fixes and documentation updates.
-> 
-> Fixes:
-> https://autobuild.buildroot.net/results/c74/c74730bbadc9ba20cdccf448dbc508d0afbabf41/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=08a638d49ffb956e759f1b3950dd2b11f6fea483
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Fixes:
+https://autobuild.buildroot.net/results/2d4/2d440a31fc49366d77289f1d21080e1861c6ee21/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...001-time-fix-sighandler-prototype-for-C23.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+
+diff --git a/package/time/0001-time-fix-sighandler-prototype-for-C23.patch b/package/time/0001-time-fix-sighandler-prototype-for-C23.patch
+new file mode 100644
+index 0000000000..8d4e1d7033
+--- /dev/null
++++ b/package/time/0001-time-fix-sighandler-prototype-for-C23.patch
+@@ -0,0 +1,35 @@
++From 218cd7ce34b6dbc86c80f1c781639ea7661d1252 Mon Sep 17 00:00:00 2001
++From: Marcin Serwin <marcin@serwin.dev>
++Date: Thu, 2 Oct 2025 19:30:12 +0200
++Subject: [PATCH] time: fix sighandler prototype for C23
++
++In C23 functions with empty argument list in the prototype are treated
++as taking no arguments. This means that the `int` argument of the
++sighandler must be specified explicitly or the code will fail to
++compile due to mismatched function type.
++
++Signed-off-by: Marcin Serwin <marcin@serwin.dev>
++
++Upstream: https://lists.gnu.org/archive/html/bug-time/2025-10/msg00000.html
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/time.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/time.c b/src/time.c
++index 7b401bc..88287dd 100644
++--- a/src/time.c
+++++ b/src/time.c
++@@ -77,7 +77,7 @@ enum
++ 
++ 
++ /* A Pointer to a signal handler.  */
++-typedef RETSIGTYPE (*sighandler) ();
+++typedef RETSIGTYPE (*sighandler) (int);
++ 
++ /* msec = milliseconds = 1/1,000 (1*10e-3) second.
++    usec = microseconds = 1/1,000,000 (1*10e-6) second.  */
++-- 
++2.47.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
