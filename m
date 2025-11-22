@@ -1,74 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A59BCFC533
-	for <buildroot@archiver.kernel.org>; Sat, 22 Nov 2025 13:05:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C57CCF64B1
+	for <buildroot@archiver.kernel.org>; Sat, 22 Nov 2025 13:08:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B237842F3;
-	Sat, 22 Nov 2025 13:05:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 28B1660AB4;
+	Sat, 22 Nov 2025 13:08:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q73yOpazs3OT; Sat, 22 Nov 2025 13:05:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0gy9VVmws4mv; Sat, 22 Nov 2025 13:08:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48AFA842DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED2C960AB1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 48AFA842DF;
-	Sat, 22 Nov 2025 13:05:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id EB6B834E
- for <buildroot@buildroot.org>; Sat, 22 Nov 2025 13:05:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED2C960AB1;
+	Sat, 22 Nov 2025 13:08:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AF48834E
+ for <buildroot@buildroot.org>; Sat, 22 Nov 2025 13:08:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C8EE3842D0
- for <buildroot@buildroot.org>; Sat, 22 Nov 2025 13:05:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A187B841F4
+ for <buildroot@buildroot.org>; Sat, 22 Nov 2025 13:08:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 84YWvOxqMb28 for <buildroot@buildroot.org>;
- Sat, 22 Nov 2025 13:05:08 +0000 (UTC)
+ id hPEJqxRzzbqR for <buildroot@buildroot.org>;
+ Sat, 22 Nov 2025 13:08:49 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DA51F842BF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA51F842BF
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 973E3841D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 973E3841D2
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DA51F842BF
- for <buildroot@buildroot.org>; Sat, 22 Nov 2025 13:05:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 973E3841D2
+ for <buildroot@buildroot.org>; Sat, 22 Nov 2025 13:08:49 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b63c.dip0.t-ipconnect.de [84.161.182.60])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id E4DF4A4C7503;
- Sat, 22 Nov 2025 14:05:05 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:57024)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 6F6ADA4C7503
+ for <buildroot@buildroot.org>; Sat, 22 Nov 2025 14:08:47 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:39860)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vMnIX-000000001oo-1g2l;
- Sat, 22 Nov 2025 13:05:05 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vMnM6-000000002Rw-3rG4
+ for buildroot@buildroot.org; Sat, 22 Nov 2025 13:08:47 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Adrian Perez de Castro <aperez@igalia.com>
-Date: Sat, 22 Nov 2025 14:05:05 +0100
-Message-ID: <20251122130505.2240518-1-bernd@kuhls.net>
+Date: Sat, 22 Nov 2025 14:08:47 +0100
+Message-ID: <20251122130847.2242703-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202506031021; t=1763816705;
- bh=I7PjkvIwiX+NGStyeeykLtHFlW/0o+rK+kt7JkodeMk=;
- h=From:To:Cc:Subject:Date:From;
- b=rZ0POwckOFuSakWVvWm39ol5N9gWwwrlygij+H48P+KQAKtWCgEHBOYxKL8xG5YwE
- ozX+IpKBH9HJPZKBIUg4EEECx0C+Wsc5coHc29KYVDTqwJz5z2bRleYBZ1oalPDKm+
- Tj6ubMrYxnxHlG1YiZ2vA48DRCbdEh71jbSjihHe3LtBilNLhWalbD3YEbQpy88IIC
- wGuvs8io7papq5mNhbNCFpTAi0w1rTL8laGm7okXJsrM6ApekwOAor+7Aom0+elDAO
- hHnTCS5f4xqsvrGuMuUFOnNF3u9hrEV4Mrl2XYnZjsu2D5hcwWzEEMc50a1qsJmhko
- yvlIBbtkHQPHw==
+ s=kas202506031021; t=1763816927;
+ bh=KmEh49a/d17xNYrfiE+ms9FexB13rckJ8ktl77RPaGc=;
+ h=From:To:Subject:Date:From;
+ b=0IKpM8MFyvmXQRI2PvziI7ld6tWmFyOJCnc+KM4XPskcEgbn/XSKmrrvPFk+zCjzd
+ FlscjoBH/ZqNhdPWGQgv9wvehzi3MkxrCGooamfxHeWLZsE7GTxSBNxciXB0rBmk/7
+ 7o/5oRc+Indq2efqphTP7ZNpwlejODvdDTCuo98qZlbEn8IUSFrtEMxfHUKAaICLZL
+ q8ouNjrQZzHl1htEsJ2enaWscpyMRR/tKkl8zAWfgkWljPKkW5HWjRwkagNAKwTQAK
+ WrjH3VJ4qccqHDYdTricfLIZVQ6NY/hEikfmfHzaIy0FJ0PCPgWwqs3cwIIb7Rp4GV
+ e5BBQ06+S8scg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=rZ0POwck
-Subject: [Buildroot] [PATCH 1/1] package/woff2: fix build with newer gcc
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=0IKpM8MF
+Subject: [Buildroot] [PATCH 1/1] package/yaml-cpp: fix build with newer gcc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,57 +90,58 @@ https://autobuild.buildroot.net/results/ebf/ebf9a81f7e225ecdab20bbad8ad8daa136fd
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...utput.h-add-missing-stdint.h-include.patch | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 package/woff2/0002-include-woff2-output.h-add-missing-stdint.h-include.patch
+ ...tterutils-Explicitly-include-cstdint.patch | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/yaml-cpp/0001-emitterutils-Explicitly-include-cstdint.patch
 
-diff --git a/package/woff2/0002-include-woff2-output.h-add-missing-stdint.h-include.patch b/package/woff2/0002-include-woff2-output.h-add-missing-stdint.h-include.patch
+diff --git a/package/yaml-cpp/0001-emitterutils-Explicitly-include-cstdint.patch b/package/yaml-cpp/0001-emitterutils-Explicitly-include-cstdint.patch
 new file mode 100644
-index 0000000000..a79b414a4c
+index 0000000000..e3dc308a2f
 --- /dev/null
-+++ b/package/woff2/0002-include-woff2-output.h-add-missing-stdint.h-include.patch
-@@ -0,0 +1,41 @@
-+From 08ece7871775c0d7bf4fdff64b961cdc256adf6c Mon Sep 17 00:00:00 2001
-+From: Sergei Trofimovich <slyich@gmail.com>
-+Date: Fri, 2 Aug 2024 22:12:03 +0100
-+Subject: [PATCH] include/woff2/output.h: add missing <stdint.h> include
++++ b/package/yaml-cpp/0001-emitterutils-Explicitly-include-cstdint.patch
+@@ -0,0 +1,42 @@
++From 7b469b4220f96fb3d036cf68cd7bd30bd39e61d2 Mon Sep 17 00:00:00 2001
++From: Christopher Fore <csfore@posteo.net>
++Date: Wed, 14 Aug 2024 21:02:32 -0400
++Subject: [PATCH] emitterutils: Explicitly include <cstdint>
 +
-+Without the change `woff2` build fails on upcoming `gcc-15` as:
++GCC 15 will no longer include it by default, resulting in build
++failures in projects that do not explicitly include it.
 +
-+    In file included from src/woff2_out.cc:9:
-+    include/woff2/output.h:73:25: error: expected ')' before '*' token
-+       73 |   WOFF2MemoryOut(uint8_t* buf, size_t buf_size);
-+          |                 ~       ^
-+          |                         )
-+    include/woff2/output.h:79:3: error: 'uint8_t' does not name a type
-+       79 |   uint8_t* buf_;
-+          |   ^~~~~~~
-+    include/woff2/output.h:16:1: note: 'uint8_t' is defined in header '<cstdint>';
-+      this is probably fixable by adding '#include <cstdint>'
-+       15 | #include <string>
-+      +++ |+#include <cstdint>
-+       16 |
++Error:
++src/emitterutils.cpp:221:11: error: 'uint16_t' was not declared in this scope
++  221 | std::pair<uint16_t, uint16_t> EncodeUTF16SurrogatePair(int codePoint) {
++      |           ^~~~~~~~
++src/emitterutils.cpp:13:1: note: 'uint16_t' is defined in header '<cstdint>';
++this is probably fixable by adding '#include <cstdint>'
++   12 | #include "yaml-cpp/null.h"
++  +++ |+#include <cstdint>
++   13 | #include "yaml-cpp/ostream_wrapper.h"
 +
-+Upstream: https://github.com/google/woff2/pull/176
++Tests pass.
++
++Closes: #1307
++See-also: https://gcc.gnu.org/pipermail/gcc-cvs/2024-August/407124.html
++See-also: https://bugs.gentoo.org/937412
++Signed-off-by: Christopher Fore <csfore@posteo.net>
++
++Upstream: https://github.com/jbeder/yaml-cpp/commit/7b469b4220f96fb3d036cf68cd7bd30bd39e61d2
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ include/woff2/output.h | 2 ++
-+ 1 file changed, 2 insertions(+)
++ src/emitterutils.cpp | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/include/woff2/output.h b/include/woff2/output.h
-+index dc78ccf..b12d538 100644
-+--- a/include/woff2/output.h
-++++ b/include/woff2/output.h
-+@@ -9,6 +9,8 @@
-+ #ifndef WOFF2_WOFF2_OUT_H_
-+ #define WOFF2_WOFF2_OUT_H_
-+ 
-++#include <stdint.h>
-++
++diff --git a/src/emitterutils.cpp b/src/emitterutils.cpp
++index fc41011a5..f801b1d0c 100644
++--- a/src/emitterutils.cpp
+++++ b/src/emitterutils.cpp
++@@ -1,4 +1,5 @@
 + #include <algorithm>
-+ #include <cstring>
-+ #include <memory>
+++#include <cstdint>
++ #include <iomanip>
++ #include <sstream>
++ 
 -- 
 2.47.3
 
