@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2F55CFC518
-	for <buildroot@archiver.kernel.org>; Sun, 23 Nov 2025 17:14:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35B47CFA46B
+	for <buildroot@archiver.kernel.org>; Sun, 23 Nov 2025 17:14:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5F9058223F;
-	Sun, 23 Nov 2025 17:14:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B826760BFD;
+	Sun, 23 Nov 2025 17:14:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WU0fDCl4Yox2; Sun, 23 Nov 2025 17:14:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oSPO7pDgPOtV; Sun, 23 Nov 2025 17:14:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86B2182254
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93003608C7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 86B2182254;
-	Sun, 23 Nov 2025 17:14:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 11CB6E4
- for <buildroot@buildroot.org>; Sun, 23 Nov 2025 17:14:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93003608C7;
+	Sun, 23 Nov 2025 17:14:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id F2DFA34E
+ for <buildroot@buildroot.org>; Sun, 23 Nov 2025 17:14:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 03E4782254
- for <buildroot@buildroot.org>; Sun, 23 Nov 2025 17:14:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E5040608C7
+ for <buildroot@buildroot.org>; Sun, 23 Nov 2025 17:14:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ghtb4LlXmAnk for <buildroot@buildroot.org>;
- Sun, 23 Nov 2025 17:14:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cdsX1gywZuBd for <buildroot@buildroot.org>;
+ Sun, 23 Nov 2025 17:14:28 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E76978223F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E76978223F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D9068607C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9068607C3
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E76978223F
- for <buildroot@buildroot.org>; Sun, 23 Nov 2025 17:14:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D9068607C3
+ for <buildroot@buildroot.org>; Sun, 23 Nov 2025 17:14:27 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bcad.dip0.t-ipconnect.de [84.161.188.173])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 2352AA4C7594;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 38B61A4C75BD;
  Sun, 23 Nov 2025 18:14:02 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:40652)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vNDez-000000002gW-3IQF;
+ (envelope-from <bernd@kuhls.net>) id 1vNDez-000000002gW-3cTf;
  Sun, 23 Nov 2025 17:14:01 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 23 Nov 2025 18:14:00 +0100
-Message-ID: <20251123171401.933757-2-bernd@kuhls.net>
+Date: Sun, 23 Nov 2025 18:14:01 +0100
+Message-ID: <20251123171401.933757-3-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251123171401.933757-1-bernd@kuhls.net>
 References: <20251123171401.933757-1-bernd@kuhls.net>
@@ -55,22 +55,21 @@ X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202506031021; t=1763918042;
- bh=u0j8m8qjGeCa03R9OLXlOjrRW1gn5Yu6drfG+Z91WGc=;
+ bh=atAdZhxCN6+n4tgyRQP3lWntJ/tbzkf0amMR1WCD55U=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=ju/w49TaF9xganqEztyAY1pwEYv7uxRBHNQ1EMI0c/f6Q2UESvuLvolfaOTL4GgMF
- zee18oQPNWwkDr+9akJXe6EuQ/uLKkW5R+Nwqk0Q8+32MlwbH3HyIvmEzykl8y/LG8
- 2sZOscsWtdqHAynZicWXU3rAcs+UqysaIwJh/3WoWeLaBDRw7bBQnF/0KHh87E0r0U
- l4dwuMPWiqX9LK9HtT1jVx9IxhvJMPF9yHnA54v5ZNiLaH7mOo6HsHD/E2ipA8XlTO
- GMwyAXL11IOSjJWyrdOPoyxaswkML/4jYf0Xgeeevf2QfOBOM9n+cTcTDKz4iduV6h
- /aSLKpnQ1u1Sg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=YU4T9oMoUtnDtsU94pRHjHpUw5nptc6wgLaej3pMYmTEYhN27vzI+bKi6FET/nqUk
+ WM6HbvyDnrPFBAHV8Zfavfg+W+wJ5tPehUr7ES3xJqBsaSFLXS84aUfgmE0T+ZiSzo
+ jQaRaMqr4jxUsdKk4TXt6fNriG8S77EHytt75GwpxDnDTSMFOFK96HAfJA8lZQvY6f
+ CFOP8YZjUGRqeNZ1telvJIbSUCQiZA8+mZVx6artPhbonTelYuppa4Ho00IEAgUFa7
+ qlq3YvInbzGpYX3lUbUEfKZZw/Gid71g2b/bT64rUFwuN85iixi1CEWBK6CqWPsn17
+ uELOx3riu5NZA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=ju/w49Ta
-Subject: [Buildroot] [PATCH/next 2/3] package/xfsprogs: bump version to
- 6.17.0
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=YU4T9oMo
+Subject: [Buildroot] [PATCH/next 3/3] package/icu: bump version to 78.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,46 +87,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
-https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/tree/doc/CHANGES?h=v6.17.0
+Release notes:
+https://github.com/unicode-org/icu/releases/tag/release-78.1
 
-Upstream commit
-https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/commit/?id=0b3e7284c7fa20dd27f8a584f8db417d1d6fa27b
-which is included in version 6.14.0 fixes a build error with icu >= 76.
-
-Fixes:
-https://autobuild.buildroot.net/results/a30/a30bf79be2102f3a77e4a78a488fb3b6a5b63bbb/
+Updated license hash due to upstream commit:
+https://github.com/unicode-org/icu/commit/4b444321f255076d6576e6d435ffe2589bde6f18
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/xfsprogs/xfsprogs.hash | 2 +-
- package/xfsprogs/xfsprogs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/icu/icu.hash | 4 ++--
+ package/icu/icu.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/xfsprogs/xfsprogs.hash b/package/xfsprogs/xfsprogs.hash
-index a86693419d..4cded62de1 100644
---- a/package/xfsprogs/xfsprogs.hash
-+++ b/package/xfsprogs/xfsprogs.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/sha256sums.asc
--sha256  dae3bb432196f7b183b2e6bd5dc44bf33edbd7d0e85bd37d25c235df81b8100a  xfsprogs-6.11.0.tar.xz
-+sha256  5b0f56a81f641326266f762ae8a563b29d95cdbcda83bc7938f68ce122f1edd9  xfsprogs-6.17.0.tar.xz
- 
- # Hash for license files
- sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
-diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
-index 0234b91d09..05fc053ffc 100644
---- a/package/xfsprogs/xfsprogs.mk
-+++ b/package/xfsprogs/xfsprogs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XFSPROGS_VERSION = 6.11.0
-+XFSPROGS_VERSION = 6.17.0
- XFSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/fs/xfs/xfsprogs
- XFSPROGS_SOURCE = xfsprogs-$(XFSPROGS_VERSION).tar.xz
- XFSPROGS_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1 (libhandle, few headers)
+diff --git a/package/icu/icu.hash b/package/icu/icu.hash
+index bf9451db8e..4f60681c54 100644
+--- a/package/icu/icu.hash
++++ b/package/icu/icu.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  588e431f77327c39031ffbb8843c0e3bc122c211374485fa87dc5f3faff24061  icu4c-77_1-src.tgz
+-sha256  451167c55c0fa447cc2d5632714f5e3c567fe4f1e1badefab2c1333852198aca  LICENSE
++sha256  6217f58ca39b23127605cfc6c7e0d3475fe4b0d63157011383d716cb41617886  icu4c-78.1-sources.tgz
++sha256  e55522d81edc687a341a4411e0776e54ca654e90147f354a90458aaced4116af  LICENSE
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index 4789edf0e2..a0b4388355 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -7,8 +7,8 @@
+ # Git tags (and therefore versions on release-monitoring.org) use the
+ # XX-Y format, but the tarballs are named XX_Y and the containing
+ # directories XX.Y.
+-ICU_VERSION = 77-1
+-ICU_SOURCE = icu4c-$(subst -,_,$(ICU_VERSION))-src.tgz
++ICU_VERSION = 78.1
++ICU_SOURCE = icu4c-$(ICU_VERSION)-sources.tgz
+ ICU_SITE = \
+ 	https://github.com/unicode-org/icu/releases/download/release-$(ICU_VERSION)
+ ICU_LICENSE = ICU License
 -- 
 2.47.3
 
