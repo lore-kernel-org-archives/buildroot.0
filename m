@@ -1,75 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E1DCCFA46B
-	for <buildroot@archiver.kernel.org>; Sun, 23 Nov 2025 17:14:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2F55CFC518
+	for <buildroot@archiver.kernel.org>; Sun, 23 Nov 2025 17:14:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 172F660DCD;
-	Sun, 23 Nov 2025 17:14:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5F9058223F;
+	Sun, 23 Nov 2025 17:14:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id InkFY7Oh8O0T; Sun, 23 Nov 2025 17:14:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WU0fDCl4Yox2; Sun, 23 Nov 2025 17:14:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B841608B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86B2182254
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6B841608B8;
-	Sun, 23 Nov 2025 17:14:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id EC34434E
- for <buildroot@buildroot.org>; Sun, 23 Nov 2025 17:14:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 86B2182254;
+	Sun, 23 Nov 2025 17:14:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 11CB6E4
+ for <buildroot@buildroot.org>; Sun, 23 Nov 2025 17:14:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D649C40699
- for <buildroot@buildroot.org>; Sun, 23 Nov 2025 17:14:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 03E4782254
+ for <buildroot@buildroot.org>; Sun, 23 Nov 2025 17:14:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Aq331ZzZCEwx for <buildroot@buildroot.org>;
- Sun, 23 Nov 2025 17:14:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ghtb4LlXmAnk for <buildroot@buildroot.org>;
+ Sun, 23 Nov 2025 17:14:16 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E192A40635
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E192A40635
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E76978223F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E76978223F
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E192A40635
- for <buildroot@buildroot.org>; Sun, 23 Nov 2025 17:14:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E76978223F
+ for <buildroot@buildroot.org>; Sun, 23 Nov 2025 17:14:15 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bcad.dip0.t-ipconnect.de [84.161.188.173])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 169A7A4C7544;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 2352AA4C7594;
  Sun, 23 Nov 2025 18:14:02 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:40652)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vNDez-000000002gW-2yU5;
+ (envelope-from <bernd@kuhls.net>) id 1vNDez-000000002gW-3IQF;
  Sun, 23 Nov 2025 17:14:01 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 23 Nov 2025 18:13:59 +0100
-Message-ID: <20251123171401.933757-1-bernd@kuhls.net>
+Date: Sun, 23 Nov 2025 18:14:00 +0100
+Message-ID: <20251123171401.933757-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20251123171401.933757-1-bernd@kuhls.net>
+References: <20251123171401.933757-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202506031021; t=1763918042;
- bh=7kOX51nfwzfmhsuRNtdlFz9PXPVD7NBe2L7kHUEN+LE=;
- h=From:To:Cc:Subject:Date:From;
- b=Ch1yQgiiwmpvR4bqjd3cThZk5VYUHjbLh9zSXviKZrJFKNMJM1HRavdUTMTC2Ta7c
- gB0RfBrxfTyolkvHDd4Os9zVnez6WUDuSSSR2gE4+wY0H2czu8j87v2lj6fMaSvNKG
- xBwgxJSvzJIwLXjbm/W9PU1SzPo3PP4hL8vTIQn7TqOf+/CI08pFp9qdXNn+icn6G6
- BaFTponEUMVAiYPHihXavSFu7ab0yY6CDQxXOEu27ZhoS56WRSl1rwb4leQXREW5OH
- LogNJAOCVogL0ckvhk+SkJ2Azt0lsgeTKL7n26Kmkd3pERYpNWcjh/q1zyMspoNq5N
- DCPzZD+2fpWLQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=u0j8m8qjGeCa03R9OLXlOjrRW1gn5Yu6drfG+Z91WGc=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=ju/w49TaF9xganqEztyAY1pwEYv7uxRBHNQ1EMI0c/f6Q2UESvuLvolfaOTL4GgMF
+ zee18oQPNWwkDr+9akJXe6EuQ/uLKkW5R+Nwqk0Q8+32MlwbH3HyIvmEzykl8y/LG8
+ 2sZOscsWtdqHAynZicWXU3rAcs+UqysaIwJh/3WoWeLaBDRw7bBQnF/0KHh87E0r0U
+ l4dwuMPWiqX9LK9HtT1jVx9IxhvJMPF9yHnA54v5ZNiLaH7mOo6HsHD/E2ipA8XlTO
+ GMwyAXL11IOSjJWyrdOPoyxaswkML/4jYf0Xgeeevf2QfOBOM9n+cTcTDKz4iduV6h
+ /aSLKpnQ1u1Sg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=Ch1yQgii
-Subject: [Buildroot] [PATCH/next 1/3] package/python-pyicu: bump version to
- 2.16
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=ju/w49Ta
+Subject: [Buildroot] [PATCH/next 2/3] package/xfsprogs: bump version to
+ 6.17.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,44 +89,45 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Changelog:
-https://gitlab.pyicu.org/main/pyicu/-/blob/v2.16/CHANGES?ref_type=tags
+https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/tree/doc/CHANGES?h=v6.17.0
 
-Needed for compatibility with ICU 78.1.
+Upstream commit
+https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/commit/?id=0b3e7284c7fa20dd27f8a584f8db417d1d6fa27b
+which is included in version 6.14.0 fixes a build error with icu >= 76.
+
+Fixes:
+https://autobuild.buildroot.net/results/a30/a30bf79be2102f3a77e4a78a488fb3b6a5b63bbb/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-pyicu/python-pyicu.hash | 4 ++--
- package/python-pyicu/python-pyicu.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/xfsprogs/xfsprogs.hash | 2 +-
+ package/xfsprogs/xfsprogs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-pyicu/python-pyicu.hash b/package/python-pyicu/python-pyicu.hash
-index afd14437ce..81cdd4f459 100644
---- a/package/python-pyicu/python-pyicu.hash
-+++ b/package/python-pyicu/python-pyicu.hash
+diff --git a/package/xfsprogs/xfsprogs.hash b/package/xfsprogs/xfsprogs.hash
+index a86693419d..4cded62de1 100644
+--- a/package/xfsprogs/xfsprogs.hash
++++ b/package/xfsprogs/xfsprogs.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyicu/json
--md5  6ae2145f2a98433f461b128c3ebef233  pyicu-2.15.3.tar.gz
--sha256  f32e78e1cb64d0aeb14f027e037a8944861d3114548818a6adf0081ef51aefc3  pyicu-2.15.3.tar.gz
-+md5  00715b86c27c150f48554a863688e878  pyicu-2.16.tar.gz
-+sha256  42b3a8062e3b23e927ca727e6b5e1730d86c70279834e4887152895d2eb012d9  pyicu-2.16.tar.gz
- # Locally computed sha256 checksums
- sha256  00da5bf22f2386c4f6f07c734490e9b818c4dcf70e6ca49f594e9cec636b9c40  LICENSE
-diff --git a/package/python-pyicu/python-pyicu.mk b/package/python-pyicu/python-pyicu.mk
-index 5025bd649b..9d3f5f6004 100644
---- a/package/python-pyicu/python-pyicu.mk
-+++ b/package/python-pyicu/python-pyicu.mk
-@@ -4,9 +4,9 @@
+ # From https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/sha256sums.asc
+-sha256  dae3bb432196f7b183b2e6bd5dc44bf33edbd7d0e85bd37d25c235df81b8100a  xfsprogs-6.11.0.tar.xz
++sha256  5b0f56a81f641326266f762ae8a563b29d95cdbcda83bc7938f68ce122f1edd9  xfsprogs-6.17.0.tar.xz
+ 
+ # Hash for license files
+ sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
+diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
+index 0234b91d09..05fc053ffc 100644
+--- a/package/xfsprogs/xfsprogs.mk
++++ b/package/xfsprogs/xfsprogs.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYICU_VERSION = 2.15.3
-+PYTHON_PYICU_VERSION = 2.16
- PYTHON_PYICU_SOURCE = pyicu-$(PYTHON_PYICU_VERSION).tar.gz
--PYTHON_PYICU_SITE = https://files.pythonhosted.org/packages/88/b0/c8b61bac55424e2ff80e20d7251c3f002baff3c07c34cee3849e3505d8f5
-+PYTHON_PYICU_SITE = https://files.pythonhosted.org/packages/11/c3/8d558b30deb33eb583c0bcae3e64d6db8316b69461a04bb9db5ff63d3f6e
- PYTHON_PYICU_LICENSE = MIT
- PYTHON_PYICU_LICENSE_FILES = LICENSE
- PYTHON_PYICU_DEPENDENCIES = icu
+-XFSPROGS_VERSION = 6.11.0
++XFSPROGS_VERSION = 6.17.0
+ XFSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/fs/xfs/xfsprogs
+ XFSPROGS_SOURCE = xfsprogs-$(XFSPROGS_VERSION).tar.xz
+ XFSPROGS_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1 (libhandle, few headers)
 -- 
 2.47.3
 
