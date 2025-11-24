@@ -4,72 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 228B0CFD352
-	for <buildroot@archiver.kernel.org>; Mon, 24 Nov 2025 19:51:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40BBFCFD352
+	for <buildroot@archiver.kernel.org>; Mon, 24 Nov 2025 19:51:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C487983CEC;
-	Mon, 24 Nov 2025 19:51:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17E36824CB;
+	Mon, 24 Nov 2025 19:51:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5G64uTD4AHST; Mon, 24 Nov 2025 19:51:26 +0000 (UTC)
+ id drjgWHePaesU; Mon, 24 Nov 2025 19:51:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 587BF8249B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7431982337
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 587BF8249B;
-	Mon, 24 Nov 2025 19:51:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id CD894E4
- for <buildroot@buildroot.org>; Mon, 24 Nov 2025 19:51:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7431982337;
+	Mon, 24 Nov 2025 19:51:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 02746359
+ for <buildroot@buildroot.org>; Mon, 24 Nov 2025 19:51:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B417960854
- for <buildroot@buildroot.org>; Mon, 24 Nov 2025 19:51:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E87FD403B7
+ for <buildroot@buildroot.org>; Mon, 24 Nov 2025 19:51:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FWH6s67BeSsM for <buildroot@buildroot.org>;
- Mon, 24 Nov 2025 19:51:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 43C34607BD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43C34607BD
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 43C34607BD
- for <buildroot@buildroot.org>; Mon, 24 Nov 2025 19:51:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RvlOyGZQXvb8 for <buildroot@buildroot.org>;
+ Mon, 24 Nov 2025 19:51:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2A908400B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A908400B1
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2A908400B1
+ for <buildroot@buildroot.org>; Mon, 24 Nov 2025 19:51:47 +0000 (UTC)
 Received: from webmail.free.fr (unknown [172.20.246.1])
  (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 9266978050C;
- Mon, 24 Nov 2025 20:51:20 +0100 (CET)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id CC814B0053E;
+ Mon, 24 Nov 2025 20:51:44 +0100 (CET)
 Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
  via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 24 Nov 2025 20:51:20 +0100
+ with HTTP (HTTP/1.0 POST); Mon, 24 Nov 2025 20:51:44 +0100
 MIME-Version: 1.0
-Date: Mon, 24 Nov 2025 20:51:20 +0100
+Date: Mon, 24 Nov 2025 20:51:44 +0100
 To: Adam Duskett <adam.duskett@amarulasolutions.com>
 Cc: buildroot@buildroot.org
-In-Reply-To: <20251104113032.674980-1-adam.duskett@amarulasolutions.com>
+In-Reply-To: <20251104113032.674980-2-adam.duskett@amarulasolutions.com>
 References: <20251104113032.674980-1-adam.duskett@amarulasolutions.com>
+ <20251104113032.674980-2-adam.duskett@amarulasolutions.com>
 User-Agent: Webmail Free/1.6.11
-Message-ID: <fea4ff6c5fbcd31153c0c41ed5eebc94@free.fr>
+Message-ID: <53a99ce5583af9de35c39bb2654f0191@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1764013881;
- bh=4jz8sjyGa2wYWWTR9cDkI+/uDQd/MTl3Ks+6zVmqJ7s=;
+ d=free.fr; s=smtp-20201208; t=1764013905;
+ bh=MQr4mXDBdfApjj8jo5+4fnMn9rN2XZfZKf/vzg7l79U=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=WNGnHvRyy9rkIy2hZP/At+iaBdpkxS1jqIM2j46Y1QChrcgQr7jcSpoOAqbLwS1p3
- zdkiCF4K6lO1HKhurXghWNKWRVmly6AHyK7IclGwqvYMasV4r4byyEQuenYBhEVf5L
- d5bAbqLjHQcQaYS/hgk0dzps4X5EQ+u23pTzdJ0EBC5xG2V02Ibv2+aKR3Oc3istEh
- I4lLjpr+wnEerfw7/eJRY3WAyGCZbaarvT9fg6AISObvX6FTukXIuRbVg1HIh3rRfR
- QdnwRKniEEZZSnXWCDxFv9NbTl3ymH029uEcjH1xSeaHnKdhbo4ufz7pi4bto96U0s
- Oh+NyFOrN722w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=A3YIIjBveRhVmofk/ZDRw1LkxH0VDMM+lwcF1bLJYCFvY+1qb7dEGqYJH2hsu8XZb
+ CQT9e+9TpPB8vXPYA8DREvz4V5k+PbOAIbtyJzy0RkmnKsltk1dIrBHuwN6fIhLYv9
+ TYi7xkS1HsItkLxH3jhWxU/8Vd9pQjRjy2F2jR7bMzvBAAHz0EriHR563XETV5YVXu
+ P8LUCnrnOONsIsswtTJNiSBVwBBM1/PmeuEDjrZpU+TBeRSGHVzI99z1vQQym2ADpk
+ xsx2zAIvv2hF4755QWEIsAgh60tPiUzkPJ2WdughMKE1vlXidV90vyeWqo9PhUI8hg
+ Kc52e8JmeIZOw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=WNGnHvRy
-Subject: Re: [Buildroot] [PATCH v2] package/python-pysocks: add host variant
+ header.s=smtp-20201208 header.b=A3YIIjBv
+Subject: Re: [Buildroot] [PATCH v2] package/depot-tools: fix running
+ gclient.py
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,12 +91,17 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 On 04/11/2025 12:30, Adam Duskett wrote:
-> The host-depot-tools package now requires a host variant of the
-> python-pysocks package due to the python-httplib2 update on commit
-> 55a80f89d7321000591de349c7083a94c0349187.
+> As of commit 55a80f89d7321000591de349c7083a94c0349187 which updated
+> the python-httplib2 package from 0.22.0 to 0.31.0, gclient.py has
+> been broken due to the internal socks.py file being removed from
+> the httplib directory.
 > 
-> Httplib2 removed the internal socks.py file on commit
-> 1a6ff781792099e9e14d7beb610bd99112b17b07.
+> As the depot-tools package doesn't have a build step, and is only
+> used when generating a flutter-engine tarball, no autobuild failures
+> have occured.
+> 
+> Add a simple patch that changes `import httplib2.socks` to
+> `import socks` and depend on the host-python-pysocks package.
 > 
 > Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 
