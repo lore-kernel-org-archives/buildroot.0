@@ -4,74 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38E12CFD352
-	for <buildroot@archiver.kernel.org>; Mon, 24 Nov 2025 19:58:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62FB5CFD352
+	for <buildroot@archiver.kernel.org>; Mon, 24 Nov 2025 20:22:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ECB5283CE7;
-	Mon, 24 Nov 2025 19:58:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9344F83C4A;
+	Mon, 24 Nov 2025 20:22:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nTPwmU4Hjo7d; Mon, 24 Nov 2025 19:58:52 +0000 (UTC)
+ id 7n4-wgCdmb0V; Mon, 24 Nov 2025 20:22:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F337681919
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4713B83C42
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F337681919;
-	Mon, 24 Nov 2025 19:58:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6F524E4
- for <buildroot@buildroot.org>; Mon, 24 Nov 2025 19:58:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4713B83C42;
+	Mon, 24 Nov 2025 20:22:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8EFA9E4
+ for <buildroot@buildroot.org>; Mon, 24 Nov 2025 20:22:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 615B340CE9
- for <buildroot@buildroot.org>; Mon, 24 Nov 2025 19:58:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8099460EEE
+ for <buildroot@buildroot.org>; Mon, 24 Nov 2025 20:22:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wNirsKAfk12K for <buildroot@buildroot.org>;
- Mon, 24 Nov 2025 19:58:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6583A404E7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6583A404E7
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6583A404E7
- for <buildroot@buildroot.org>; Mon, 24 Nov 2025 19:58:49 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id B9E3B780383;
- Mon, 24 Nov 2025 20:58:45 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 24 Nov 2025 20:58:45 +0100
-MIME-Version: 1.0
-Date: Mon, 24 Nov 2025 20:58:45 +0100
-To: "Frager, Neal" <neal.frager@amd.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <SA1PR12MB5615A7D122E482ED698D115AF0D0A@SA1PR12MB5615.namprd12.prod.outlook.com>
-References: <20251123173952.837145-1-ju.o@free.fr>
- <SA1PR12MB5615A7D122E482ED698D115AF0D0A@SA1PR12MB5615.namprd12.prod.outlook.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <7b94dde865d40b768b815c81c75d9871@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1764014326;
- bh=Mng/bWpYFi9dc5kaYzz1nLpljuQsfcKleoscT3iK014=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=TKaTl1QWQ/jwLcTTq1LybX2odxKWhNCI+zIkygF+JSxB5XnOTRg2PdX+2zcGmeHeq
- zvy/+710f6IDOxOcP0MB+hn+vuO19czBH1V23Dr1yzGkC/ImZ76pnxFe0As9tndRNO
- iMlz/xemrcpGO0l6DbTuvxyccvCBLI5zY3v2gPtNskrv/5wNNG+wxA8SjviftIwUBG
- zs/uTClSney+eI4ED9JsxUif4d8S2MWhATOKGFYrowG69qjvdBgvyo1WMNxy6yXsdS
- A48I+kSQJB/nHnGYfukP0m3ol7fMDylllz1avVtJNOWpkxCAUQTZNUQDlCmA6LWq6z
- FaWS0SODCKw7g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=TKaTl1QW
-Subject: Re: [Buildroot] [PATCH 1/1] package/gnutls: add patch to fix build
- with gcc < 11
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bn_efrZCwegz for <buildroot@buildroot.org>;
+ Mon, 24 Nov 2025 20:22:05 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4CB960EC7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C4CB960EC7
+ for <buildroot@buildroot.org>; Mon, 24 Nov 2025 20:22:05 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C01BF85D67; Mon, 24 Nov 2025 20:22:05 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 24 Nov 2025 21:02:58 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5cd1fe636cd9a420241da5fe79995d149d467f59
+X-Git-Newrev: 35d8a3a0ca6bbaef1c9e2ee9f7f16f1a5b056b17
+X-Patchwork-Hint: ignore
+Message-Id: <20251124202205.C01BF85D67@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-starlette: security bump to
+ 0.50.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,50 +60,60 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 24/11/2025 08:49, Frager, Neal via buildroot wrote:
-> [AMD Official Use Only - AMD Internal Distribution Only]
-> 
-> Hi Julien,
-> 
->> Since Buildroot commit [1] (package/gnutls: security bump to
->> version 3.8.11), gnutls fails to build with gcc or host-gcc
->> version < 11, with error:
-> 
->>    In file included from audit.h:22,
->>                     from audit.c:26:
->>    crau/crau.h:255:23: error: missing binary operator before token "("
->>         __has_c_attribute (__maybe_unused__)
-> 
->> This commit adds a patch fixing the issue.
-> 
->> [1] 
->> https://gitlab.com/buildroot.org/buildroot/-/commit/81dbfe1c2ae848b4eb1f896198d13455df50e548
-> 
->> Reported-by: Neal Frager <neal.frager@amd.com>
->> Signed-off-by: Julien Olivain <ju.o@free.fr>
->> ---
->> Neal,
-> 
->> Could you test on your side if this patch fixes your issue?
-> 
-> Yes, I confirm this fixes the build issue.  Thank you for handling this 
-> so
-> quickly!
-> 
-> Reviewed-by: Neal Frager <neal.frager@amd.com>
-> Tested-by: Neal Frager <neal.frager@amd.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=35d8a3a0ca6bbaef1c9e2ee9f7f16f1a5b056b17
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for testing.
-Applied to master.
+Starlette 0.49.1 fixes the following security issue:
+https://github.com/Kludex/starlette/security/advisories/GHSA-7f5h-v6xp-fcq8
 
-> Best regards,
-> Neal Frager
-> AMD
+Other changes:
+* https://github.com/Kludex/starlette/releases/tag/0.49.0
+* https://github.com/Kludex/starlette/releases/tag/0.49.1 (the security fix)
+* https://github.com/Kludex/starlette/releases/tag/0.49.2
+* https://github.com/Kludex/starlette/releases/tag/0.49.3
+* https://github.com/Kludex/starlette/releases/tag/0.50.0
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/python-starlette/python-starlette.hash | 4 ++--
+ package/python-starlette/python-starlette.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-starlette/python-starlette.hash b/package/python-starlette/python-starlette.hash
+index bcc71c09c5..9b84774c86 100644
+--- a/package/python-starlette/python-starlette.hash
++++ b/package/python-starlette/python-starlette.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/starlette/json
+-md5  9e56e4be3ee2a746ee6375fd9e81f61c  starlette-0.48.0.tar.gz
+-sha256  7e8cee469a8ab2352911528110ce9088fdc6a37d9876926e73da7ce4aa4c7a46  starlette-0.48.0.tar.gz
++md5  f3479ed026aeaffb43af371d3b7db527  starlette-0.50.0.tar.gz
++sha256  a2a17b22203254bcbc2e1f926d2d55f3f9497f769416b3190768befe598fa3ca  starlette-0.50.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf  LICENSE.md
+diff --git a/package/python-starlette/python-starlette.mk b/package/python-starlette/python-starlette.mk
+index a643623e03..af8a49e0fd 100644
+--- a/package/python-starlette/python-starlette.mk
++++ b/package/python-starlette/python-starlette.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_STARLETTE_VERSION = 0.48.0
++PYTHON_STARLETTE_VERSION = 0.50.0
+ PYTHON_STARLETTE_SOURCE = starlette-$(PYTHON_STARLETTE_VERSION).tar.gz
+-PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/a7/a5/d6f429d43394057b67a6b5bbe6eae2f77a6bf7459d961fdb224bf206eee6
++PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/ba/b8/73a0e6a6e079a9d9cfa64113d771e421640b6f679a52eeb9b32f72d871a1
+ PYTHON_STARLETTE_SETUP_TYPE = hatch
+ PYTHON_STARLETTE_LICENSE = BSD-3-Clause
+ PYTHON_STARLETTE_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
