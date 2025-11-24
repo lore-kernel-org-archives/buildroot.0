@@ -4,61 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37D95D43370
-	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:56:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BCC3D43370
+	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:56:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D3F883A52;
-	Fri, 12 Dec 2025 07:56:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 12AC883B5C;
+	Fri, 12 Dec 2025 07:56:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d_f5JRt_61Ie; Fri, 12 Dec 2025 07:56:28 +0000 (UTC)
+ id 4p90eJLs0tGw; Fri, 12 Dec 2025 07:56:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2189C837DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B9C08340C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765526182;
-	bh=H9cWWyrxSAM7aKJnUO5nrm6azS+JPt28dUvNKl4U3cs=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=oGGZVhwtTBA7fNlGL3VNc2ffARQK5NkdgF3E+8FCivm23K50yOTMlRAx5Mr9cLmQ7
-	 037qKTn+9o9t0n1HBCDkmlJhpkVqbfqpaQsdDKq3Igx23nz+4usCtb8APuS8fmDX50
-	 eh7ZTSH3t3dko1pi7yOAyo8UgWrNZBE2avS3XMDVo8DR/XoiEkqKJ0qAAo9/yNRse+
-	 ngzzVYn6n7eCX+BQHMgdtV0y1c2hNPUolqyqU4+0LS5J7DAlNyOSutlzRwo2/k2zEa
-	 /wNmQ+RMHj2XkIVf2BvYegAlAljpMvz7vXwv0+dSUVu0SUqZm44P8SC6L3+szaYipe
-	 E03lEZeQdSF5A==
+	s=default; t=1765526183;
+	bh=RnuZoYp/hlBnnBV3Sr2XKShdntK810e31webKiYgHRE=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=EHU93IFwgZKkIjmF1ZZA8eLtfTWrqWzENoJE3oQQDH4A0OLmHogOWS0SEeTPtF03H
+	 hjUDEnRo8Ax+grmchZMhilBH0+xCMRdZGmDHUrqxUT8wXQC557FKoiPTjIzXoZ8oMA
+	 wEbpZOHc2lZMccfq8GDMPsvuXYtTgihCdF3QIwJuytbEnvyUvELw/KcyUgo1y08oct
+	 9XLa8eHA6coczYN/zq+eH3m+a1n9Gk0nDFMV/lOu4jBmiM9hqIad/tAy84znc7jj82
+	 vSoxd7mSL38zgHX0/9x193Jo6qLUOmDB4DqD7Gik8UbdbWiYl5MzUJWoc9+5BCfz8c
+	 TCDukOuWxrf3g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2189C837DA;
-	Fri, 12 Dec 2025 07:56:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2B9C08340C;
+	Fri, 12 Dec 2025 07:56:23 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 14F742C1
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1397EE7
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ECBDD41175
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1002841177
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fTpWFxIBMryw for <buildroot@buildroot.org>;
- Fri, 12 Dec 2025 07:55:37 +0000 (UTC)
+ id 9qOl_6Tf89wC for <buildroot@buildroot.org>;
+ Fri, 12 Dec 2025 07:55:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01C4741124
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4BB341116
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 01C4741124
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B4BB341116
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 00D028076A; Fri, 12 Dec 2025 07:55:35 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id B3C4386C94; Fri, 12 Dec 2025 07:55:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 26 Nov 2025 11:39:09 +0100
+Date: Mon, 24 Nov 2025 22:06:26 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9dc28b62a799f1f010daf9e4c59c8d2ec91edb52
-X-Git-Newrev: 9cdef247404757fdbebdbb26813024ebfd191d67
+X-Git-Oldrev: e46695bbe4ab583f39f9448f3ef3e044efa28808
+X-Git-Newrev: 3837c92d7160d2af4e7c44810b69ce76fb5eb8c6
 X-Patchwork-Hint: ignore
-Message-Id: <20251212075535.00D028076A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/zynqmp_kria*: bump to
- xilinx_v2025.2
+Message-Id: <20251212075534.B3C4386C94@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ninja: bump version to 1.13.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,148 +68,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9cdef247404757fdbebdbb26813024ebfd191d67
+commit: https://git.buildroot.net/buildroot/commit/?id=3837c92d7160d2af4e7c44810b69ce76fb5eb8c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump zynqmp_kria defconfigs to xilinx_v2025.2.
+Release notes: https://github.com/ninja-build/ninja/releases
 
-xilinx_v2025.2 includes the following software versions:
-arm-trusted-firmware v2.12
-linux v6.12.40
-pmufw xilinx_v2025.2
-uboot v2025.01
-with all Xilinx downstream commits included with xilinx_v2025.2.
+Version 1.13.0 added GNU Make jobserver support[1] so we switch back to
+the official repo by partly reverting buildroot commit
+227d7e0cbaaf093f509f5728f06fad5f53caed7b.
 
-xilinx_v2025.2 was run tested on a kv260 starter kit.
+Comparing build times of mesa3d/iris between 1.13.2 and Kitware's latest
+tag v1.13.0.gd74ef.kitware.jobserver-pipe-1 showed no difference on a
+16c/32t machine with BR2_JLEVEL=0. The Kitware version adds pipe support
+whose future is uncertain[2].
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[1] https://github.com/ninja-build/ninja/releases/tag/v1.13.0
+    https://github.com/ninja-build/ninja/pull/2506
+[2] https://github.com/ninja-build/ninja/pull/2506#issuecomment-2659944455
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- configs/zynqmp_kria_kd240_defconfig | 7 ++++---
- configs/zynqmp_kria_kr260_defconfig | 7 ++++---
- configs/zynqmp_kria_kv260_defconfig | 7 ++++---
- 3 files changed, 12 insertions(+), 9 deletions(-)
+ package/ninja/ninja.hash | 2 +-
+ package/ninja/ninja.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/configs/zynqmp_kria_kd240_defconfig b/configs/zynqmp_kria_kd240_defconfig
-index 71b2547e69..dd23e0b8be 100644
---- a/configs/zynqmp_kria_kd240_defconfig
-+++ b/configs/zynqmp_kria_kd240_defconfig
-@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 sda2"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.40)/xlnx_rebase_v6.12_LTS_merge_6.12.40.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_2025.2)/xlnx_rebase_v6.12_LTS_2025.2.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k24-revA-sck-kd-g-revA"
-@@ -22,14 +22,14 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.12_2025.1)/xlnx_rebase_v2.12_2025.1.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.12_2025.2)/xlnx_rebase_v2.12_2025.2.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="ZYNQMP_CONSOLE=cadence1"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.1)/xlnx_rebase_v2025.01_2025.1.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.2)/xlnx_rebase_v2025.01_2025.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_kria"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-@@ -46,6 +46,7 @@ BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW=y
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kd240/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-smk-k24-revA"
- BR2_TARGET_XILINX_EMBEDDEDSW=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.2"
- BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW=y
- BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS="-DK24_SOM"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
-diff --git a/configs/zynqmp_kria_kr260_defconfig b/configs/zynqmp_kria_kr260_defconfig
-index e0c002ea7a..ab7c9548e7 100644
---- a/configs/zynqmp_kria_kr260_defconfig
-+++ b/configs/zynqmp_kria_kr260_defconfig
-@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 sda2"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.40)/xlnx_rebase_v6.12_LTS_merge_6.12.40.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_2025.2)/xlnx_rebase_v6.12_LTS_2025.2.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k26-revA-sck-kr-g-revB"
-@@ -22,14 +22,14 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.12_2025.1)/xlnx_rebase_v2.12_2025.1.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.12_2025.2)/xlnx_rebase_v2.12_2025.2.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="ZYNQMP_CONSOLE=cadence1"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.1)/xlnx_rebase_v2025.01_2025.1.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.2)/xlnx_rebase_v2025.01_2025.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_kria"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-@@ -46,6 +46,7 @@ BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW=y
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kr260/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-smk-k26-revA"
- BR2_TARGET_XILINX_EMBEDDEDSW=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.2"
- BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW=y
- BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS="-DK26_SOM"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
-diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
-index d80c47b4bc..3a3c8a62c5 100644
---- a/configs/zynqmp_kria_kv260_defconfig
-+++ b/configs/zynqmp_kria_kv260_defconfig
-@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 mmcblk1p2"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.40)/xlnx_rebase_v6.12_LTS_merge_6.12.40.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_2025.2)/xlnx_rebase_v6.12_LTS_2025.2.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k26-revA-sck-kv-g-revB"
-@@ -22,14 +22,14 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.12_2025.1)/xlnx_rebase_v2.12_2025.1.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.12_2025.2)/xlnx_rebase_v2.12_2025.2.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="ZYNQMP_CONSOLE=cadence1"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.1)/xlnx_rebase_v2025.01_2025.1.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.2)/xlnx_rebase_v2025.01_2025.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_kria"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-@@ -46,6 +46,7 @@ BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW=y
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kv260/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-smk-k26-revA"
- BR2_TARGET_XILINX_EMBEDDEDSW=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.2"
- BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW=y
- BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS="-DK26_SOM"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/package/ninja/ninja.hash b/package/ninja/ninja.hash
+index 57c10bb287..5e099de591 100644
+--- a/package/ninja/ninja.hash
++++ b/package/ninja/ninja.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256  7ba84551f5b315b4270dc7c51adef5dff83a2154a3665a6c9744245c122dd0db  ninja-1.11.1.g95dee.kitware.jobserver-1.tar.gz
++sha256  974d6b2f4eeefa25625d34da3cb36bdcebe7fbce40f4c16ac0835fd1c0cbae17  ninja-1.13.2.tar.gz
+ sha256  eb7e9ab9690124c5c9f42bdc81383d886a3dede26345b6ed15bbad7caf81f7ea  COPYING
+diff --git a/package/ninja/ninja.mk b/package/ninja/ninja.mk
+index 805fef4541..c59984b6bd 100644
+--- a/package/ninja/ninja.mk
++++ b/package/ninja/ninja.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-NINJA_VERSION_MAJOR = 1.11.1
+-NINJA_VERSION = $(NINJA_VERSION_MAJOR).g95dee.kitware.jobserver-1
+-NINJA_SITE = $(call github,Kitware,ninja,v$(NINJA_VERSION))
++NINJA_VERSION = 1.13.2
++NINJA_SITE = $(call github,ninja-build,ninja,v$(NINJA_VERSION))
+ NINJA_LICENSE = Apache-2.0
+ NINJA_LICENSE_FILES = COPYING
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
