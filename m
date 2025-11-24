@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86D11CFD362
-	for <buildroot@archiver.kernel.org>; Mon, 24 Nov 2025 22:33:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C408CFD362
+	for <buildroot@archiver.kernel.org>; Mon, 24 Nov 2025 22:36:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5F80B838E0;
-	Mon, 24 Nov 2025 22:33:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 00D7640B94;
+	Mon, 24 Nov 2025 22:36:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R7ChUhX5dAlP; Mon, 24 Nov 2025 22:33:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0mxSnL_ys4Ls; Mon, 24 Nov 2025 22:36:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B2DE83935
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B22540B0B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7B2DE83935;
-	Mon, 24 Nov 2025 22:33:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id CA05535C
- for <buildroot@buildroot.org>; Mon, 24 Nov 2025 22:33:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9B22540B0B;
+	Mon, 24 Nov 2025 22:36:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 376B635C
+ for <buildroot@buildroot.org>; Mon, 24 Nov 2025 22:36:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BC8A88308D
- for <buildroot@buildroot.org>; Mon, 24 Nov 2025 22:33:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1D8426082E
+ for <buildroot@buildroot.org>; Mon, 24 Nov 2025 22:36:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iE8fbmCA0j1q for <buildroot@buildroot.org>;
- Mon, 24 Nov 2025 22:33:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9CE0D83022
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9CE0D83022
- for <buildroot@buildroot.org>; Mon, 24 Nov 2025 22:33:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8C42E85E4E; Mon, 24 Nov 2025 22:33:00 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 24 Nov 2025 22:06:00 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 84d9c08dbeb68dcca8a33e62f399a2740d90a1ff
-X-Git-Newrev: e46695bbe4ab583f39f9448f3ef3e044efa28808
-X-Patchwork-Hint: ignore
-Message-Id: <20251124223300.8C42E85E4E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/cmake: bump version to
- 4.2.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id onjuhw9fHDmR for <buildroot@buildroot.org>;
+ Mon, 24 Nov 2025 22:36:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D72AD608E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D72AD608E0
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D72AD608E0
+ for <buildroot@buildroot.org>; Mon, 24 Nov 2025 22:36:07 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 25858780333;
+ Mon, 24 Nov 2025 23:36:02 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 24 Nov 2025 23:36:02 +0100
+MIME-Version: 1.0
+Date: Mon, 24 Nov 2025 23:36:02 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20251123170721.909469-1-bernd@kuhls.net>
+References: <20251123170721.909469-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <d0df5b89a1d383b646500530f83b6e2b@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1764023765;
+ bh=04FY2O67AcairUIZ+ytJDMCX4qTnHAC03MBmVfjhbG4=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Mno/awkcVf3BZGA1UCodnlC56yMWB6YOwp30ulXZG+etU3+xZ8xlqsRjU0lVbjCXN
+ sO3mLaOCtxrMlWlH/r7e4xhyeudXbtma0Ms9ZbD9d7SxzG8u1YS8oVnuM5e07nxPYX
+ AuEUdFZAIMuhzjMI+bNJed9t+xQJb8AJ/Cx1V7cGk9gu09dzLaZSG6vroE8NB3XGJZ
+ RY7JA5xeStqpU/TY3SLYSrDNHFiGPpzTc6l1zRB25TvxAAkRm+lHNFrVDg+Lm089wp
+ i1FbIw8z4BcdMJOA8pi8kUr+MvMXchc9S9TOC2Kz8DqLi6a4HRc8SCdEqnfRdqwjvS
+ oAgjD8zUrt40w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Mno/awkc
+Subject: Re: [Buildroot] [PATCH/next 1/3] package/meson: bump version to
+ 1.9.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,94 +84,26 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e46695bbe4ab583f39f9448f3ef3e044efa28808
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 23/11/2025 18:07, Bernd Kuhls wrote:
+> Release notes: https://mesonbuild.com/Release-notes-for-1-9-0.html
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Release notes:
-https://cmake.org/cmake/help/latest/release/4.2.html
-https://cmake.org/cmake/help/latest/release/4.1.html
+Series applied to next, thanks.
 
-License file was renamed upstream
-https://gitlab.kitware.com/cmake/cmake/-/commit/2d42a5444f859891b6598c76ea5d51510013565e
-and updated:
-https://gitlab.kitware.com/cmake/cmake/-/commits/v4.0.3/LICENSE.rst?ref_type=tags
+I expect the cmake 4.2.0 bump to break few old packages still using the 
+old
+cmake 3.5 minimum version. We will fix that during the next release 
+cycle...
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/cmake/Config.in.host | 15 +++++++++++++++
- package/cmake/cmake.hash     |  6 +++---
- package/cmake/cmake.mk       |  6 +++---
- 3 files changed, 21 insertions(+), 6 deletions(-)
+Best regards,
 
-diff --git a/package/cmake/Config.in.host b/package/cmake/Config.in.host
-index b30ce03a1c..86f93b0ac8 100644
---- a/package/cmake/Config.in.host
-+++ b/package/cmake/Config.in.host
-@@ -63,10 +63,25 @@ config BR2_HOST_CMAKE_AT_LEAST_3_31
- 	bool
- 	select BR2_HOST_CMAKE_AT_LEAST_3_30
- 
-+config BR2_HOST_CMAKE_AT_LEAST_4_0
-+	bool
-+	select BR2_HOST_CMAKE_AT_LEAST_3_31
-+
-+config BR2_HOST_CMAKE_AT_LEAST_4_1
-+	bool
-+	select BR2_HOST_CMAKE_AT_LEAST_4_0
-+
-+config BR2_HOST_CMAKE_AT_LEAST_4_2
-+	bool
-+	select BR2_HOST_CMAKE_AT_LEAST_4_1
-+
- # This order guarantees that the highest version is set, as kconfig
- # stops affecting a value on the first matching default.
- config BR2_HOST_CMAKE_AT_LEAST
- 	string
-+	default "4.2"	if BR2_HOST_CMAKE_AT_LEAST_4_2
-+	default "4.1"	if BR2_HOST_CMAKE_AT_LEAST_4_1
-+	default "4.0"	if BR2_HOST_CMAKE_AT_LEAST_4_0
- 	default "3.31"	if BR2_HOST_CMAKE_AT_LEAST_3_31
- 	default "3.30"	if BR2_HOST_CMAKE_AT_LEAST_3_30
- 	default "3.29"	if BR2_HOST_CMAKE_AT_LEAST_3_29
-diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-index cbca2fc355..2bc7b740d2 100644
---- a/package/cmake/cmake.hash
-+++ b/package/cmake/cmake.hash
-@@ -1,5 +1,5 @@
--# From https://cmake.org/files/v3.31/cmake-3.31.9-SHA-256.txt
--sha256  5d4fdec04247ca8a8e8f63692f0d0f1e9d6d082a2bdd008dff8ab3ba7215aa83  cmake-3.31.9.tar.gz
-+# From https://cmake.org/files/v4.2/cmake-4.2.0-SHA-256.txt
-+sha256  4104e94657d247c811cb29985405a360b78130b5d51e7f6daceb2447830bd579  cmake-4.2.0.tar.gz
- 
- # Locally calculated
--sha256  0676e30827684487aa0ea8f72f01e9460a6320fa34a2888df0ad1dd3e8a06eb8  Copyright.txt
-+sha256  1e0d48f16c60f400838a96989684ae12cec35cb96688db11e8cb0204058cf4b8  LICENSE.rst
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 8f3a54be5a..66b169440c 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -5,11 +5,11 @@
- ################################################################################
- 
- # When updating the version, please also update BR2_HOST_CMAKE_AT_LEAST_X_Y
--CMAKE_VERSION_MAJOR = 3.31
--CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).9
-+CMAKE_VERSION_MAJOR = 4.2
-+CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).0
- CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
- CMAKE_LICENSE = BSD-3-Clause
--CMAKE_LICENSE_FILES = Copyright.txt
-+CMAKE_LICENSE_FILES = LICENSE.rst
- CMAKE_CPE_ID_VALID = YES
- # Tool download MITM attack warning if using npm package to install cmake
- CMAKE_IGNORE_CVES = CVE-2016-10642
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
