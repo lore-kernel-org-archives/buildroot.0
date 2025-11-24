@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AD50CFD352
-	for <buildroot@archiver.kernel.org>; Mon, 24 Nov 2025 19:50:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 228B0CFD352
+	for <buildroot@archiver.kernel.org>; Mon, 24 Nov 2025 19:51:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 76C97607BD;
-	Mon, 24 Nov 2025 19:50:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C487983CEC;
+	Mon, 24 Nov 2025 19:51:27 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5G64uTD4AHST; Mon, 24 Nov 2025 19:51:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 587BF8249B
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 587BF8249B;
+	Mon, 24 Nov 2025 19:51:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id CD894E4
+ for <buildroot@buildroot.org>; Mon, 24 Nov 2025 19:51:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B417960854
+ for <buildroot@buildroot.org>; Mon, 24 Nov 2025 19:51:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W4mckanFflr5; Mon, 24 Nov 2025 19:50:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60943607CD
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 60943607CD;
-	Mon, 24 Nov 2025 19:50:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id EFFEF359
- for <buildroot@buildroot.org>; Mon, 24 Nov 2025 19:50:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D71A140A55
- for <buildroot@buildroot.org>; Mon, 24 Nov 2025 19:50:42 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t6sw0equgr3m for <buildroot@buildroot.org>;
- Mon, 24 Nov 2025 19:50:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E30C40A28
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1E30C40A28
- for <buildroot@buildroot.org>; Mon, 24 Nov 2025 19:50:42 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E98EB85518; Mon, 24 Nov 2025 19:50:41 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 24 Nov 2025 20:42:13 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 85de5639c1354027ef107f1a83270d3c17c8af2c
-X-Git-Newrev: d1380f5863e4927936d12ea98417de9ddbc9903f
-X-Patchwork-Hint: ignore
-Message-Id: <20251124195041.E98EB85518@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/depot-tools: fix running gclient.py
+ id FWH6s67BeSsM for <buildroot@buildroot.org>;
+ Mon, 24 Nov 2025 19:51:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 43C34607BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43C34607BD
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 43C34607BD
+ for <buildroot@buildroot.org>; Mon, 24 Nov 2025 19:51:23 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 9266978050C;
+ Mon, 24 Nov 2025 20:51:20 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 24 Nov 2025 20:51:20 +0100
+MIME-Version: 1.0
+Date: Mon, 24 Nov 2025 20:51:20 +0100
+To: Adam Duskett <adam.duskett@amarulasolutions.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251104113032.674980-1-adam.duskett@amarulasolutions.com>
+References: <20251104113032.674980-1-adam.duskett@amarulasolutions.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <fea4ff6c5fbcd31153c0c41ed5eebc94@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1764013881;
+ bh=4jz8sjyGa2wYWWTR9cDkI+/uDQd/MTl3Ks+6zVmqJ7s=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=WNGnHvRyy9rkIy2hZP/At+iaBdpkxS1jqIM2j46Y1QChrcgQr7jcSpoOAqbLwS1p3
+ zdkiCF4K6lO1HKhurXghWNKWRVmly6AHyK7IclGwqvYMasV4r4byyEQuenYBhEVf5L
+ d5bAbqLjHQcQaYS/hgk0dzps4X5EQ+u23pTzdJ0EBC5xG2V02Ibv2+aKR3Oc3istEh
+ I4lLjpr+wnEerfw7/eJRY3WAyGCZbaarvT9fg6AISObvX6FTukXIuRbVg1HIh3rRfR
+ QdnwRKniEEZZSnXWCDxFv9NbTl3ymH029uEcjH1xSeaHnKdhbo4ufz7pi4bto96U0s
+ Oh+NyFOrN722w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=WNGnHvRy
+Subject: Re: [Buildroot] [PATCH v2] package/python-pysocks: add host variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,94 +83,22 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1380f5863e4927936d12ea98417de9ddbc9903f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 04/11/2025 12:30, Adam Duskett wrote:
+> The host-depot-tools package now requires a host variant of the
+> python-pysocks package due to the python-httplib2 update on commit
+> 55a80f89d7321000591de349c7083a94c0349187.
+> 
+> Httplib2 removed the internal socks.py file on commit
+> 1a6ff781792099e9e14d7beb610bd99112b17b07.
+> 
+> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 
-As of Buildroot commit [1] which updated
-the python-httplib2 package from 0.22.0 to 0.31.0, gclient.py has
-been broken due to the internal socks.py file being removed from
-the httplib directory (in upstream commit [2]).
-
-As the depot-tools package doesn't have a build step, and is only
-used when generating a flutter-engine tarball, no autobuild failures
-have occured.
-
-Add a simple patch that changes `import httplib2.socks` to
-`import socks` and depend on the host-python-pysocks package.
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/55a80f89d7321000591de349c7083a94c0349187
-[2] https://github.com/httplib2/httplib2/commit/1a6ff781792099e9e14d7beb610bd99112b17b07
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/12188741354
-
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-[Julien:
- - change commit id to urls
- - add "Fixes:" link
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .../0001-gerrit_util.py-fix-importing-socks.patch  | 32 ++++++++++++++++++++++
- package/depot-tools/depot-tools.mk                 |  1 +
- 2 files changed, 33 insertions(+)
-
-diff --git a/package/depot-tools/0001-gerrit_util.py-fix-importing-socks.patch b/package/depot-tools/0001-gerrit_util.py-fix-importing-socks.patch
-new file mode 100644
-index 0000000000..46a1fe78d0
---- /dev/null
-+++ b/package/depot-tools/0001-gerrit_util.py-fix-importing-socks.patch
-@@ -0,0 +1,32 @@
-+From e52f67026d7ce5b30887e1cfe486ed994169119d Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <adam.duskett@amarulasolutions.com>
-+Date: Tue, 4 Nov 2025 11:58:37 +0100
-+Subject: [PATCH] gerrit_util.py: fix importing socks
-+
-+As of commit 1a6ff781792099e9e14d7beb610bd99112b17b07,
-+httplib2 removed the internal copy of socksipy module.
-+
-+The commit message specifically states to install pysocks.
-+
-+Upstream: unsubmitted
-+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-+---
-+ gerrit_util.py | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/gerrit_util.py b/gerrit_util.py
-+index eef2f5749..d866bc47a 100644
-+--- a/gerrit_util.py
-++++ b/gerrit_util.py
-+@@ -35,7 +35,7 @@ from typing import NamedTuple, List, Optional
-+ from typing import Tuple, TypedDict, cast
-+ 
-+ import httplib2
-+-import httplib2.socks
-++import socks
-+ 
-+ import auth
-+ import gclient_utils
-+-- 
-+2.51.1
-+
-diff --git a/package/depot-tools/depot-tools.mk b/package/depot-tools/depot-tools.mk
-index b62f844b90..a6d57a6e3b 100644
---- a/package/depot-tools/depot-tools.mk
-+++ b/package/depot-tools/depot-tools.mk
-@@ -14,6 +14,7 @@ HOST_DEPOT_TOOLS_DEPENDENCIES = \
- 	host-python3 \
- 	host-python-httplib2 \
- 	host-python-pyparsing \
-+	host-python-pysocks \
- 	host-python-six
- 
- define HOST_DEPOT_TOOLS_INSTALL_CMDS
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
