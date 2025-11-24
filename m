@@ -4,67 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86743CFD35A
-	for <buildroot@archiver.kernel.org>; Mon, 24 Nov 2025 20:58:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39C16CFD355
+	for <buildroot@archiver.kernel.org>; Mon, 24 Nov 2025 21:09:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 56FB683CDC;
-	Mon, 24 Nov 2025 20:58:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D13B383CD8;
+	Mon, 24 Nov 2025 21:09:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pCkBvHsyZXOq; Mon, 24 Nov 2025 20:58:24 +0000 (UTC)
+ id 9EZmFWUrriJP; Mon, 24 Nov 2025 21:09:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B5E281C21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 216E982416
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B5E281C21;
-	Mon, 24 Nov 2025 20:58:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id ADF8C359
- for <buildroot@buildroot.org>; Mon, 24 Nov 2025 20:58:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 216E982416;
+	Mon, 24 Nov 2025 21:09:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B1A1E35C
+ for <buildroot@buildroot.org>; Mon, 24 Nov 2025 21:09:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AB34E408F7
- for <buildroot@buildroot.org>; Mon, 24 Nov 2025 20:58:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 993F682416
+ for <buildroot@buildroot.org>; Mon, 24 Nov 2025 21:09:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uQG4VS6Yiglg for <buildroot@buildroot.org>;
- Mon, 24 Nov 2025 20:58:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2lKLQ20OqhrP for <buildroot@buildroot.org>;
+ Mon, 24 Nov 2025 21:09:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8A98940835
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A98940835
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DF1A982391
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF1A982391
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8A98940835
- for <buildroot@buildroot.org>; Mon, 24 Nov 2025 20:58:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DF1A982391
+ for <buildroot@buildroot.org>; Mon, 24 Nov 2025 21:09:17 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id BF971B979AE6; Mon, 24 Nov 2025 21:58:18 +0100 (CET)
-Message-ID: <4dc92971-6469-49dd-8848-923f6efe41a8@rnout.be>
-Date: Mon, 24 Nov 2025 21:58:14 +0100
+ with ESMTPSA id 28DC7B979AE6; Mon, 24 Nov 2025 22:09:15 +0100 (CET)
+Message-ID: <47cd1e1f-98da-4758-ab64-1223642582a2@rnout.be>
+Date: Mon, 24 Nov 2025 22:09:12 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Rustam <rustamabd@gmail.com>, buildroot@buildroot.org
-References: <CAPzS6u_Lu2jE3PzbmOc1gRzA0uLjxmiR60fwy5eEwRDK92ya2A@mail.gmail.com>
+To: Peter Korsgaard <peter@korsgaard.com>, Ayoub Zaki <ayoub.zaki@embetrix.com>
+Cc: Lance Fredrickson <lancethepants@gmail.com>, buildroot@buildroot.org
+References: <1c677011-9c6e-483c-ab4f-93480d7fdd69@embetrix.com>
+ <CABwKrPDNVLCLJHg7Nvxne+03RtZXXpO_H-iKquAe7hchiMf3pg@mail.gmail.com>
+ <076df85a-3775-4854-875a-f76662318e35@embetrix.com>
+ <87bjl7rpct.fsf@dell.be.48ers.dk>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <CAPzS6u_Lu2jE3PzbmOc1gRzA0uLjxmiR60fwy5eEwRDK92ya2A@mail.gmail.com>
+In-Reply-To: <87bjl7rpct.fsf@dell.be.48ers.dk>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1764017899; h=from:subject:date:message-id:to:mime-version:content-type:
+ t=1764018555; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:content-language:in-reply-to:references;
- bh=2CUkFVObc1/7MNDdurgoZcPH62hnbHetS3zkIttcpbE=;
- b=cI0I4456KuvDgNJH4G2+wMtaAfVun/lwmi57botqssMxD0+eJb5JhPYip9uiGRqA6UzOtd
- +ZHHCw9x9glWX9rtpsHgEoYPOYwjlFqmUSI7SruWJe/NsKZ2uUuHjtbr1FcEBlE5MvOE2W
- UpXWnrK4TZiCo9UtgV80NcY0uFitWFpq+/mk4/+Fo0gciqpCtwMOq/HIX8VPOkEzZfw2eO
- gxHfa6P6jX3LQ4j765EEI1KYogZ6c/33qwSlJ2uEH+RrwO1OvK1ym+0vIF+qT+uv05sGEj
- 52wwtWfC+Q2vZTCs239dl/t1NKwk5KnzEAEMPem4WMkX5YCQsrV28bNp1RlxDw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=2A00gPhs/Kp4L9bsSrwWBjCXamb+wKn7d04HZH8F5MM=;
+ b=Ge3chgtVAT3JMoiYpjeZmbtW4KjVYVSubrZCs4J3eFYjtB3Yyb1VjyK4CgPg6qMEGMWzUv
+ zxyEZuOhiE06nFng49FexA53OUhfMJ7H2bN/bYDniiqg3n+pKZEjmCoRxSi9Cyrg8jlJY0
+ X0MuVz0E8yWXBJkwmjfGLd7/1NZpnFSCgvZfDVzDtUmQt2hRwpZPdxgBJ8HZgYXy0L+IOr
+ BroAUy170tVaug84zv9dL6soGEYhv61RjputBOeXY0EtnEo2nsFQyy2ANyAz9MfUUUgX6p
+ 64HiEhiMQF/vIS3X06NS+DgViFoVTGioQiECC6HAtpyHU6W30ij5YGOi4Fc5IA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=cI0I4456
-Subject: Re: [Buildroot] Kernel headers with an external toolchain
+ header.s=dkim header.b=Ge3chgtV
+Subject: Re: [Buildroot] override a core package from BR2_EXTERNAL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,62 +82,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 06/11/2025 13:41, Rustam wrote:
-> When using an external toolchain, I get linux kernel headers from the toolchain 
-> in the SDK.
-> 
-> In case of the official ARM toolchain (from https://developer.arm.com/ 
-> downloads/-/arm-gnu-toolchain-downloads <https://developer.arm.com/downloads/-/ 
-> arm-gnu-toolchain-downloads>), we get 4.20 headers, which causes issues when the 
-> actual kernel is 6.12.
-
-  How does this cause issues? The Linux kernel is supposed to be 
-backward-compatible, so a userspace built for the 4.20 kernel should still run 
-with a 6.12 kernel.
-
-  The inverse does not work: a userspace built for kernel headers 6.12 will 
-probably fail to boot on a 4.20 kernel. For this reason, the kernel headers of a 
-toolchain are often kept at a somewhat older version.
-
-
-> BR2_arm=y
-> BR2_cortex_a9=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_LINUX_KERNEL=y
-> BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.47"
-> 
-> Question: how to get the actual kernel headers in combination with an external 
-> toolchain?
-
-  You don't - the kernel headers are an integral part of the toolchain 
-(concretely, of the libc implementation). If you want to use newer kernel 
-headers, you have to rebuild the toolchain.
-
-
-  Regards,
-  Arnout
-
-> 
-> I tried BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y, that had no effect.
-> 
-> I could live with just copying the current headers onto the toolchain, 
-> overwriting existing files, but the toolchain is built before the kernel. So how 
-> to do it properly?
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAxMi8xMS8yMDI1IDIxOjAyLCBQZXRlciBLb3JzZ2FhcmQgd3JvdGU6Cj4+Pj4+PiAiQXlv
+dWIiID09IEF5b3ViIFpha2kgPGF5b3ViLnpha2lAZW1iZXRyaXguY29tPiB3cml0ZXM6Cj4gCj4g
+ICA+IHRoYW5rcywgYnV0IHRoaXMgaXMgTk9UIHdoYXQgSSdtIGxvb2tpbmcgZm9yLCBJIGhhdmUg
+cmVxdWlyZW1lbnQgdG8KPiAgID4gaGF2ZSBhIGNvbXBsZXRlIG9sZGVyIHZlcnNpb24gb2YgYSBj
+b3JlIHBhY2thZ2UuCj4gCj4gICA+IEkgZGlkIGHCoCByZXZlcnNlIHBhdGNoIGZvciB0aGUgcGFj
+a2FnZSBidXQgdGhpcyBpcyB1Z2x5IGFuZCBsb29rIGZvciBhCj4gICA+IGNsZWFuZXIgd2F5IHRv
+IGRvIGl0Lgo+IAo+IFRoZXJlIGlzbid0IHJlYWxseSBhbnkgc3VwcG9ydGVkIHdheSB0byBkbyBz
+by4gKFNpZ25pZmljYW50bHkpIGNoYW5naW5nCj4gdGhlIHZlcnNpb24gb2YgYSBwYWNrYWdlIGNv
+dWxkIGFsc28gbWVhbiBhIGNoYW5nZSBpbiAodG9vbGNoYWluKQo+IGRlcGVuZGVuY2llcywgc28g
+dGhlIGVhc2llc3QgaXMgcHJvYmFibHkgdG8gZm9yayBidWlsZHJvb3QgYW5kIGRvIHlvdXIKPiB0
+d2Vha3MgaW4gYSBjdXN0b20gdHJlZS4KCiAgSWYgaXQncyAoYWxtb3N0KSBhIGxlYWYgcGFja2Fn
+ZSwgeW91IGNhbiBhbHNvIGNyZWF0ZSBhIG5ldyBwYWNrYWdlIHdpdGggYSAKZGlmZmVyZW50IG5h
+bWUsIGUuZy4gdmxjMjI0IGlmIHlvdSBuZWVkIGFuIG9sZGVyIHZlcnNpb24gb2YgdmxjLCBvciBs
+aWJvcGVuc3NsMSAKaWYgeW91IG5lZWQgYW4gb2xkZXIgdmVyc2lvbiBvZiBsaWJvcGVuc3NsLiBC
+dXQgZm9yIG9wZW5zc2wgdGhpcyBpcyBnb2luZyB0byBiZSAKYSBwcm9ibGVtLCBzaW5jZSB5b3Ug
+Y2FuJ3QgaW5zdGFsbCBsaWJvcGVuc3NsMSBhbmQgbGlib3BlbnNzbDMgc2lkZS1ieS1zaWRlLCBz
+byAKeW91J3JlIGFsc28gZ29pbmcgdG8gaGF2ZSB0byBtYWtlIGNvcGllcyBvZiBhbGwgcGFja2Fn
+ZXMgdGhhdCBkZXBlbmQgb24gCmxpYm9wZW5zc2wuLi4gQnV0IG9mIGNvdXJzZSwgc29tZSBvZiB0
+aG9zZSBwYWNrYWdlcyBwcm9iYWJseSBkb24ndCBidWlsZCB3aXRoIApvcGVuc3NsMSBhbnkgbW9y
+ZS4uLgoKICBUaGVyZSdzIGEgcmVhc29uIHdlIGRvbid0IHN1cHBvcnQgdGhpcy4gSXQncyBhIGhh
+cmQgcHJvYmxlbS4gVG8gc29sdmUgdGhpcyAKd2VsbCB5b3UgbmVlZCBzb21ldGhpbmcgbGlrZSBO
+aXggb3IgR3VpeC4KCgogIFJlZ2FyZHMsCiAgQXJub3V0CgpfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
+dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
+bmZvL2J1aWxkcm9vdAo=
