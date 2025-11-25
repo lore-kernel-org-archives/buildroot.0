@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55F62D0EE24
-	for <buildroot@archiver.kernel.org>; Tue, 25 Nov 2025 20:33:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 694ECD0EE24
+	for <buildroot@archiver.kernel.org>; Tue, 25 Nov 2025 20:34:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E91C40E66;
-	Tue, 25 Nov 2025 20:33:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C690411AA;
+	Tue, 25 Nov 2025 20:34:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a4sFazDYEBDG; Tue, 25 Nov 2025 20:33:45 +0000 (UTC)
+ id XJOAUG1-N3LZ; Tue, 25 Nov 2025 20:34:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A004B40BEF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79F584119A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A004B40BEF;
-	Tue, 25 Nov 2025 20:33:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2C3C02D2
- for <buildroot@buildroot.org>; Tue, 25 Nov 2025 20:33:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 79F584119A;
+	Tue, 25 Nov 2025 20:34:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E666F1A6
+ for <buildroot@buildroot.org>; Tue, 25 Nov 2025 20:34:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1E68E60A7C
- for <buildroot@buildroot.org>; Tue, 25 Nov 2025 20:33:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CC967404DF
+ for <buildroot@buildroot.org>; Tue, 25 Nov 2025 20:34:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eV6Y6634ZNss for <buildroot@buildroot.org>;
- Tue, 25 Nov 2025 20:33:41 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09DD5607C7
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 09DD5607C7
- for <buildroot@buildroot.org>; Tue, 25 Nov 2025 20:33:41 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EA96585EDC; Tue, 25 Nov 2025 20:33:40 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 25 Nov 2025 21:22:02 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3837c92d7160d2af4e7c44810b69ce76fb5eb8c6
-X-Git-Newrev: 742d83eea90eb88fc2dbf2751f9ab3907434a56b
-X-Patchwork-Hint: ignore
-Message-Id: <20251125203340.EA96585EDC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/yajl: fix cmake 4
- compatibility
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CXEu2r8mOoNr for <buildroot@buildroot.org>;
+ Tue, 25 Nov 2025 20:34:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4B8134003D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B8134003D
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4B8134003D
+ for <buildroot@buildroot.org>; Tue, 25 Nov 2025 20:34:08 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 2559C19F5A5;
+ Tue, 25 Nov 2025 21:34:04 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 25 Nov 2025 21:34:04 +0100
+MIME-Version: 1.0
+Date: Tue, 25 Nov 2025 21:34:04 +0100
+To: =?UTF-8?Q?Andreas_K=C3=A4ssens?= <kaessens@sra.uni-hannover.de>
+Cc: buildroot@buildroot.org, Rudi Heitbaum <rudi@heitbaum.com>
+In-Reply-To: <20251028150616.338995-1-kaessens@sra.uni-hannover.de>
+References: <51b5e540-d659-43a7-b45e-4d5b972cfc64@smile.fr>
+ <20251028150616.338995-1-kaessens@sra.uni-hannover.de>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <b9ec3243863d80fbc1c23f3b7d1da611@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1764102846;
+ bh=Z/Zaqp/Uzlo2S9VQW7Hf4HR9PX3H+rXhVDcZbIz3QR8=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=lUzplNhfbBXVqvMLlOgBU4TvUrPXIlO8ixn9lgBHLEb35Wr48gFSEWkC1pH1++Uns
+ PzVNdsOjkkks9oSfXCPzSnLWzKSS07vC5b6iHY1tRpD/cNW6RKegVzQkytuZQSQ1fj
+ 76NARCOgg3b2HzvBI5plDAXJQopum45q0SK9nP0kCnO/KCindluAwKrwt3jwwH73Fe
+ zXWDbzUBlUwsYeuppYISxHEVJqp4JfQpBHmfebbz5uIdPWjOlgjzigrxI2uUT2Yrvs
+ UMp12MQc07Ir8PEJHG5o54IEthxyi2fILeQecILeOJfZCJ6hukWNqhLpSGmJ4YsoJ+
+ Czc8K8ZOlaSmQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=lUzplNhf
+Subject: Re: [Buildroot] [PATCH v2] package/yajl: fix cmake 4 compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,112 +84,16 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1157565080112442267=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1157565080112442267==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=742d83eea90eb88fc2dbf2751f9ab3907434a56b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Fixes deprecated CMake options.
-
-Original patch by Rudi Heitbaum, rebased and applies with fuzz 0.
-
-CC: Rudi Heitbaum <rudi@heitbaum.com>
-Signed-off-by: Andreas Kässens <kaessens@sra.uni-hannover.de>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .../yajl/0005-Allow-build-with-CMake-4.0.0.patch   | 68 ++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
-
-diff --git a/package/yajl/0005-Allow-build-with-CMake-4.0.0.patch b/package/yajl/0005-Allow-build-with-CMake-4.0.0.patch
-new file mode 100644
-index 0000000000..8f162b2249
---- /dev/null
-+++ b/package/yajl/0005-Allow-build-with-CMake-4.0.0.patch
-@@ -0,0 +1,68 @@
-+From dd88e2ea2fc3f045722f6fee362af2643b5394f5 Mon Sep 17 00:00:00 2001
-+From: Rudi Heitbaum <rudi@heitbaum.com>
-+Date: Fri, 28 Mar 2025 09:31:40 +0000
-+Subject: [PATCH] Allow build with CMake 4.0.0
-+
-+fixes deprecated cmake option and uses cmake 2.8.0 TARGET_FILE
-+update cmake supported minimum versions to 2.8.0...3.10
-+
-+ref:
-+- https://cmake.org/cmake/help/latest/policy/CMP0026.html
-+
-+CMake Error at .../CMakeLists.txt: (GET_TARGET_PROPERTY):
-+  The LOCATION property may not be read from target "json_...".  Use the
-+  target name directly with add_custom_command, or use the generator
-+  expression $<TARGET_FILE>, as appropriate.
-+
-+Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
-+Fixes: https://autobuild.buildroot.org/results/0b6/0b6ada93f45c16cc8c558ec23a0eb56da2aa86e9
-+Upstream: https://github.com/lloyd/yajl/pull/256
-+---
-+ CMakeLists.txt             | 2 +-
-+ reformatter/CMakeLists.txt | 4 +---
-+ verify/CMakeLists.txt      | 4 +---
-+ 3 files changed, 3 insertions(+), 7 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 471eee13..deba3a40 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -12,7 +12,7 @@
-+ # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-+ # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-+ 
-+-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
-++CMAKE_MINIMUM_REQUIRED(VERSION 2.8.0...3.10)
-+ 
-+ PROJECT(YetAnotherJSONParser C)
-+ 
-+diff --git a/reformatter/CMakeLists.txt b/reformatter/CMakeLists.txt
-+index 52a9bee8..267d02e2 100644
-+--- a/reformatter/CMakeLists.txt
-++++ b/reformatter/CMakeLists.txt
-+@@ -39,9 +39,7 @@ IF (NOT WIN32)
-+ ENDIF (NOT WIN32)
-+ 
-+ # copy the binary into the output directory
-+-GET_TARGET_PROPERTY(binPath json_reformat LOCATION)
-+-
-+ ADD_CUSTOM_COMMAND(TARGET json_reformat POST_BUILD
-+-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${binPath} ${binDir})
-++    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:json_reformat> ${binDir})
-+ 
-+ INSTALL(TARGETS json_reformat RUNTIME DESTINATION bin)
-+diff --git a/verify/CMakeLists.txt b/verify/CMakeLists.txt
-+index 967fca16..2f390082 100644
-+--- a/verify/CMakeLists.txt
-++++ b/verify/CMakeLists.txt
-+@@ -33,9 +33,7 @@ ELSE()
-+ ENDIF()
-+ 
-+ # copy in the binary
-+-GET_TARGET_PROPERTY(binPath json_verify LOCATION)
-+-
-+ ADD_CUSTOM_COMMAND(TARGET json_verify POST_BUILD
-+-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${binPath} ${binDir})
-++    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:json_verify> ${binDir})
-+ 
-+ INSTALL(TARGETS json_verify RUNTIME DESTINATION bin)
-
---===============1157565080112442267==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1157565080112442267==--
+T24gMjgvMTAvMjAyNSAxNjowNiwgQW5kcmVhcyBLw6Rzc2VucyB3cm90ZToKPiBGaXhlcyBkZXBy
+ZWNhdGVkIENNYWtlIG9wdGlvbnMuCj4gCj4gT3JpZ2luYWwgcGF0Y2ggYnkgUnVkaSBIZWl0YmF1
+bSwgcmViYXNlZCBhbmQgYXBwbGllcyB3aXRoIGZ1enogMC4KPiAKPiBDQzogUnVkaSBIZWl0YmF1
+bSA8cnVkaUBoZWl0YmF1bS5jb20+Cj4gU2lnbmVkLW9mZi1ieTogQW5kcmVhcyBLw6Rzc2VucyA8
+a2Flc3NlbnNAc3JhLnVuaS1oYW5ub3Zlci5kZT4KCkFwcGxpZWQgdG8gbmV4dCwgdGhhbmtzLgpf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
+bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
+b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
