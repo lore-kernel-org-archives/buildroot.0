@@ -4,71 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 871BED10366
-	for <buildroot@archiver.kernel.org>; Tue, 25 Nov 2025 22:12:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79CE1D0EE18
+	for <buildroot@archiver.kernel.org>; Tue, 25 Nov 2025 22:17:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1DBF641100;
-	Tue, 25 Nov 2025 22:12:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A715F4110F;
+	Tue, 25 Nov 2025 22:17:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cz2zeAZ4FSHF; Tue, 25 Nov 2025 22:12:52 +0000 (UTC)
+ id ywTBM_crW-2M; Tue, 25 Nov 2025 22:17:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5770A41101
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F36941100
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5770A41101;
-	Tue, 25 Nov 2025 22:12:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 02F771A6
- for <buildroot@buildroot.org>; Tue, 25 Nov 2025 22:12:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1F36941100;
+	Tue, 25 Nov 2025 22:17:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 132532A9
+ for <buildroot@buildroot.org>; Tue, 25 Nov 2025 22:17:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E882D83E3F
- for <buildroot@buildroot.org>; Tue, 25 Nov 2025 22:12:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EE1CD41100
+ for <buildroot@buildroot.org>; Tue, 25 Nov 2025 22:17:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id imsfJk8rUMR4 for <buildroot@buildroot.org>;
- Tue, 25 Nov 2025 22:12:50 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BE46883E3E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE46883E3E
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BE46883E3E
- for <buildroot@buildroot.org>; Tue, 25 Nov 2025 22:12:49 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0558.dip0.t-ipconnect.de [91.58.5.88])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id DD2AEA4C74B2
- for <buildroot@buildroot.org>; Tue, 25 Nov 2025 23:12:46 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:46996)
- by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vO1HC-0000000054v-2IdD
- for buildroot@buildroot.org; Tue, 25 Nov 2025 22:12:46 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Tue, 25 Nov 2025 23:12:46 +0100
-Message-ID: <20251125221246.857929-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: +++++++
-X-Spam: Yes
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p49wZntd6FMp for <buildroot@buildroot.org>;
+ Tue, 25 Nov 2025 22:17:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=thomas.bonnefille@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B79AA40B91
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B79AA40B91
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B79AA40B91
+ for <buildroot@buildroot.org>; Tue, 25 Nov 2025 22:17:50 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-04.galae.net (Postfix) with ESMTPS id E6180C15D63
+ for <buildroot@buildroot.org>; Tue, 25 Nov 2025 22:17:25 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 92C41606A1;
+ Tue, 25 Nov 2025 22:17:48 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 02291102F088D; Tue, 25 Nov 2025 23:17:46 +0100 (CET)
+Date: Tue, 25 Nov 2025 23:17:45 +0100
+Message-Id: <DEI4H0M1QWOY.36P256HMM50FO@bootlin.com>
+Cc: "Jagan Teki" <jagan@amarulasolutions.com>, "Thomas Bonnefille"
+ <thomas.bonnefille@bootlin.com>
+To: "Julien Olivain" <ju.o@free.fr>, <buildroot@buildroot.org>
+Mime-Version: 1.0
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20251104200833.4095436-1-ju.o@free.fr>
+In-Reply-To: <20251104200833.4095436-1-ju.o@free.fr>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1764108766;
- bh=zVn8VVs2tBJXv8KwxazPI6uoaOxrBlznOWZOh2BHkms=;
- h=From:To:Subject:Date:From;
- b=VZCATgec9ikXp5WZuEC+O/aPLWDygQR4HfclR+D93caGz0ODyKYss/srYhlvu0rdD
- w9De3lw2PDeoL2ZIMCRxoPdDqP8VQttq3qjuMrCPL01gpW6tpiCqQ4XyzDkzzH8ocA
- M0VL4ygfMS3MhrE3qp6vaLZsgNSMQCWTYddHgsnroawHqNvBen+CLs5nl80OzhBINU
- pQ9w5tBGU42KV2StHb7ieBdnep7W+5aq3ediTUz3Etjoh+A3OUK18x1mSVoOec/L0P
- xtJtubIE5jdrEiSXmU6zbfHmWra50bcGRpwShZL7hX3VL2FWxjsbgKikOKQloEDR78
- FbJX+JeoQKZUQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=VZCATgec
-Subject: [Buildroot] [PATCH 1/1] package/udpcast: bump version to 20250223
+ d=bootlin.com; s=dkim; 
+ t=1764109068; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=wKYifrDUYanDdjksJSi7oq03L5G5oZb2EYnTOdZe+DA=;
+ b=tSxaAKReG2RQWQPRx+0P5VfTMoWOqsOSMHmMVQCOtGs5oR1sjxL0lr+wIxPiqOBs822PH6
+ LDTagAnV/0pIM0nMSC1rgFU/XDcGAyi+wGescjcmOAi1y+PJNN7cYspHzPcBCQsFgmoVVo
+ Ka2xNfd9bHBsgUzwotuwWOJp9akPpkyd7YQf8I2KXswRcYSbT6uw0FfEl4mL79O8zTWNlE
+ WFmCG7WzzjU7vbxocgNEafD3gw+OEPewswALZMWwIR7FGzXd3KxTQz59d824gxxSlVu6jQ
+ C2c1r7JS4E0mdN3+V+4yru5KbQz3eeiKdpxcQqjf0VTkkIKlqB+QtnKCEH7weQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=tSxaAKRe
+Subject: Re: [Buildroot] [PATCH 1/1] configs/pine64_star64: update to latest
+ upstream uboot and LTS kernel
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,55 +85,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Bonnefille via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes of this bugfix release:
-https://udpcast.linux.lu/mailman3/hyperkitty/list/udpcast@udpcast.linux.lu/thread/JTGZCUMSXYLVT73TIRJJICBX7AWIE4CA/
+Hello Julien,
 
-Switched _SITE to https.
+> Since Buildroot commit [1] "package/gcc: switch to GCC 14.x as the
+> default", pine64_star64_defconfig compilation is failing in
+> u-boot with error:
+>
+>     drivers/video/dw_hdmi.c: In function 'dw_hdmi_write':
+>     drivers/video/dw_hdmi.c:81:42: error: passing argument 2 of 'writeb' makes pointer from integer without a cast [-Wint-conversion]
+>
+> See build failure [2].
+>
+> Upstream U-Boot includes a support for this board since commit [3],
+> first included in v2024.07.
+> Upstream Kernel includes a support for this board since commit [4],
+> first included in v6.11.
+>
+> This commit switches uboot and linux from the repository
+> https://github.com/Fishwaldo
+> to their respective upstream sources.
+>
+> U-Boot is updated from the fork from a v2021.10 base to v2025.10.
+> The Linux Kernel is updated from the fork from a v5.15.131 base
+> to v6.12.56.
+>
+> While at it, this commit updates the defconfig to the new convention:
+> - It adds custom hashes and enables BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+> - It switches to a glibc stable bootlin external toolchain
+>
+> Note that the upstream uboot defconfig name for the pine64 star64
+> board is starfive_visionfive2 (which is in fact another, but very
+> similar board). The detection of the board is made inside the SPL.
+> See [5].
+>
+> Finally, switching to upstream uboot and kernel required few
+> adjustments:
+> - The genimage.cfg is updated to use the "u-boot.itb" file produced by
+>   U-Boot,
+> - In genimage.cfg, the uboot partition-type-uuid is changed to
+>   xbootldr (the genimage human readable name), to follow the
+>   recommendation of the UUID to use from [5],
+> - In extlinux.conf, rootwait is added in kernel arguments,
+> - The post-build.sh script and the star64-uboot-fit-image.its file
+>   are removed: they are no longer needed, since U-Boot and Binman
+>   are managing everything,
+> - BR2_TARGET_UBOOT_SPL_NAME is updated in the defconfig, to reflect
+>   the file name generated by U-Boot,
+> - BR2_PACKAGE_HOST_STARFIVE_SPLTOOL is removed from the defconfig,
+>   it is no longer needed, since upstream U-Boot produces the file
+>   at the correct format,
+> - BR2_PACKAGE_HOST_UBOOT_TOOLS is also removed from the defconfig,
+>   it is no longer needed since U-Boot uses Binman,
+> - the defconfig is updated to include the new uboot requirements
+>   (BR2_TARGET_UBOOT_{NEEDS,USE}_*),
+> - the pine64_star64_defconfig entry is removed from .checkpackageignore
+>   it is no longer needed.
+>
+> This patch was tested on a Pine64 Star64 board V1.1,
+> PCB revision: 0xc1, BOM revision: A.
+>
+> Fixes:
+> - [2]
+>
+> [1] https://gitlab.com/buildroot.org/buildroot/-/commit/1e1fafa1f0f5069418e92f702c2a66db6408a634
+> [2] https://gitlab.com/buildroot.org/buildroot/-/jobs/11916952973
+> [3] https://source.denx.de/u-boot/u-boot/-/commit/7ebf7e77c0616ef0d2f58cc1684c230f656bd3d6
+> [4] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=2606bf583b9623694b864c220fd6b3d2ed13ba13
+> [5] https://source.denx.de/u-boot/u-boot/-/blob/v2025.10/doc/board/starfive/pine64_star64.rst
+>
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-Fixes:
-https://autobuild.buildroot.net/results/acf/acf208588c2ca7e658a9a7bee49b947309d6b8be
+I had a look at your patch, it looks good to me (and is cleaner than what I
+sent !) :
 
-Upstream removed the tarball of the previous version causing autobuilder
-errors, first recorded March, 2nd 2025.
+Reviewed-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/udpcast/udpcast.hash | 2 +-
- package/udpcast/udpcast.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+However my second patch [1] still apply as the only board which was using
+the starfive spl tool in Buildroot was the Star64.
 
-diff --git a/package/udpcast/udpcast.hash b/package/udpcast/udpcast.hash
-index aca098d982..5b0426efe6 100644
---- a/package/udpcast/udpcast.hash
-+++ b/package/udpcast/udpcast.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256  17b5cd8b1e54f7e2e53357ac02ee86e4198bf704096987a03a3b5c402a0ecea1  udpcast-20230924.tar.gz
-+sha256  cefd7554c877e1bc76987d2b96b23f7699a2e5340c254454f61b6e0dae370aa7  udpcast-20250223.tar.gz
- sha256  422befd3503b1f39a6027017f639874c1f274e37ec60ba3174894646b584ccbc  COPYING
-diff --git a/package/udpcast/udpcast.mk b/package/udpcast/udpcast.mk
-index 64a0bfbd37..e087f2dbb2 100644
---- a/package/udpcast/udpcast.mk
-+++ b/package/udpcast/udpcast.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--UDPCAST_VERSION = 20230924
--UDPCAST_SITE = http://www.udpcast.linux.lu/download
-+UDPCAST_VERSION = 20250223
-+UDPCAST_SITE = https://www.udpcast.linux.lu/download
- UDPCAST_DEPENDENCIES = host-m4
- UDPCAST_LICENSE = BSD-2-Clause, GPL-2.0+
- UDPCAST_LICENSE_FILES = COPYING
--- 
-2.47.3
+1: https://lore.kernel.org/buildroot/20250822-update_star64-v1-2-83fe87fbe8ea@bootlin.com/
 
+Thank you very much,
+Thomas Bonnefille
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
