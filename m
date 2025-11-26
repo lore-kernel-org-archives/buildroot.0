@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3695D111A8
-	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:08:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 556A5D111A8
+	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:08:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BA89161B3A;
-	Thu, 27 Nov 2025 20:08:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2912D6175C;
+	Thu, 27 Nov 2025 20:08:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WGQVoD39_eBP; Thu, 27 Nov 2025 20:08:36 +0000 (UTC)
+ id z05CUuk1u8kt; Thu, 27 Nov 2025 20:08:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1662D61718
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D41261B50
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1662D61718;
-	Thu, 27 Nov 2025 20:08:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D41261B50;
+	Thu, 27 Nov 2025 20:08:37 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7682D2A9
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:08:13 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 7AC082A9
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:08:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 498368440C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9016A8442D
  for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:07:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GAQ4ZxuqpvE9 for <buildroot@buildroot.org>;
- Thu, 27 Nov 2025 20:07:58 +0000 (UTC)
+ id 9S6nBkjyQZQa for <buildroot@buildroot.org>;
+ Thu, 27 Nov 2025 20:07:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16A6F8442D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E45584417
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 16A6F8442D
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:07:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8E45584417
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:07:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 14EA185FC4; Thu, 27 Nov 2025 20:07:57 +0000 (UTC)
+ id 8C79B848DA; Thu, 27 Nov 2025 20:07:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 26 Nov 2025 09:41:33 +0100
+Date: Wed, 26 Nov 2025 09:19:46 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: eb2990afddfcf63197765628dfbf89d7128aa0fb
-X-Git-Newrev: a43153651cac60c2d0d27b795dc628935a997c9e
+X-Git-Oldrev: 94dae0d30eed499957b3d0c5ad27b3da4ffdc7f7
+X-Git-Newrev: 35d3f91669f119638a2a91f47b6b1cd829832db5
 X-Patchwork-Hint: ignore
-Message-Id: <20251127200757.14EA185FC4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- support/scripts/cve-check: add cve-check script
+Message-Id: <20251127200756.8C79B848DA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/mongrel2: remove
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,404 +66,384 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a43153651cac60c2d0d27b795dc628935a997c9e
+commit: https://git.buildroot.net/buildroot/commit/?id=35d3f91669f119638a2a91f47b6b1cd829832db5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Enriches the input CycloneDX SBOM with vulnerability information and
-analysis from the NVD database.
+mongrel2 is incompatible with MbedTLS 3.6 and was removed from Debian
+stable/testing:
+https://tracker.debian.org/pkg/mongrel2
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1075866
 
-The NVD database is cloned using a mirror of it and the content is compared
-locally. By default the path 'dl/buildroot-nvd' is used.
+Upstream report from 2023 exists:
+https://github.com/mongrel2/mongrel2/issues/359
+but went unanswered, the last upstream commit was in Dec 2021:
+https://github.com/mongrel2/mongrel2/commits/master/
 
-Example usage to analyse vulnerabilities of an input CycloneDX SBOM:
+Since no other package uses mongrel2 we can safely remove this
+unmaintained package.
 
-$ make show-info | utils/generate-cyclonedx | support/script/cve-check
+Fixes:
+https://autobuild.buildroot.net/results/6c1/6c17827d21135886b1f4822174a4a963ca6325bf/
 
-The 'cve-check' can also be used to only enrich the vulnerabilities
-present on the input SBOM with a set metadata (description, cvss,
-references, ...) without applying an analysis.
-
-With the following command the vulnerabilities ignored by Buildroot
-present in the CycloneDX SBOM are enriched with description, cvss, etc
-...
-
-$ make show-info | utils/generate-cyclonedx | support/script/cve-check --enrich-only
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-[Peter: fix minor flake8 issues]
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6762c42e74e3694fe626a4457028d53ed9288bbc)
+(cherry picked from commit c41af1dcc09427e9a4a71e98cccc3aca7b5e0554)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/scripts/cve-check | 325 ++++++++++++++++++++++++++++++++++++++++++++++
- support/scripts/cve.py    |  23 ++++
- 2 files changed, 348 insertions(+)
+ .checkpackageignore                                |  2 -
+ Config.in.legacy                                   |  6 ++
+ DEVELOPERS                                         |  3 -
+ package/Config.in                                  |  1 -
+ package/mongrel2/0001-Do-not-run-tests.patch       | 45 -------------
+ .../0002-Fix-Makefiles-for-cross-compilation.patch | 78 ----------------------
+ package/mongrel2/0003-fix-build-with-gcc-4.8.patch | 62 -----------------
+ package/mongrel2/Config.in                         | 33 ---------
+ package/mongrel2/mongrel2.hash                     |  6 --
+ package/mongrel2/mongrel2.mk                       | 26 --------
+ 10 files changed, 6 insertions(+), 256 deletions(-)
 
-diff --git a/support/scripts/cve-check b/support/scripts/cve-check
-new file mode 100755
-index 0000000000..6442b2e72c
---- /dev/null
-+++ b/support/scripts/cve-check
-@@ -0,0 +1,325 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+#
-+# Enriches the input CycloneDX SBOM with vulnerability information from the NVD
-+# database.
-+#
-+# The nvd database is cloned using a mirror of it and the content is compared
-+# locally.
-+#
-+# Example usage:
-+# $ make show-info | utils/generate-cyclonedx | support/script/cve-check --nvd-path dl/buildroot-nvd/
-+from collections import defaultdict
-+from pathlib import Path
-+from typing import TypedDict
-+import argparse
-+import sys
-+import json
-+
-+import cve as cvecheck
-+
-+
-+class Options(TypedDict, total=True):
-+    include_resolved: bool
-+
-+
-+DESCRIPTION = """
-+Enriches the input CycloneDX SBOM with vulnerability information from the NVD
-+database.
-+
-+The NVD database is cloned using a mirror of it and the content is compared
-+locally.
-+"""
-+
-+
-+brpath = Path(__file__).parent.parent.parent
-+
-+
-+def cve_api_get_lang_from_list(values, lang="en") -> (str | None):
-+    for x in values:
-+        if x.get("lang") == lang:
-+            return x.get("value")
-+    return None
-+
-+
-+def nvd_cve_weaknesses_to_cdx(weaknesses) -> list[int]:
-+    """
-+    See the CycloneDX specification for 'cwes' [1]
-+
-+    [1] https://cyclonedx.org/docs/1.6/json/#vulnerabilities_items_cwes
-+    """
-+    res = []
-+
-+    for node in weaknesses:
-+        value = cve_api_get_lang_from_list(node.get("description", []))
-+        if value is None:
-+            continue
-+
-+        cwe = value.replace("CWE-", "")
-+
-+        if not cwe.isnumeric():
-+            continue
-+        res.append(int(cwe))
-+
-+    return res
-+
-+
-+def nvd_cve_cvss_to_cdx(metrics):
-+    """
-+    See the CycloneDX specification for 'ratings' [1]
-+
-+    [1] https://cyclonedx.org/docs/1.6/json/#vulnerabilities_items_ratings
-+    """
-+
-+    KEY_METHOD_DICT = {
-+        "cvssMetricV40": "CVSSv4",
-+        "cvssMetricV31": "CVSSv31",
-+        "cvssMetricV3": "CVSSv3",
-+        "cvssMetricV2": "CVSSv2"
-+    }
-+
-+    res = []
-+
-+    for key, values in metrics.items():
-+        for value in values:
-+            data = value.get("cvssData", {})
-+            res.append({
-+                "method": KEY_METHOD_DICT.get(key, "other"),
-+                **({
-+                    "score": data["baseScore"],
-+                } if "baseScore" in data else {}),
-+                **({
-+                    "severity": data["baseSeverity"].lower(),
-+                } if "baseSeverity" in data else {}),
-+                **({
-+                    "vector": data["vectorString"],
-+                } if "vectorString" in data else {}),
-+            })
-+
-+    return res
-+
-+
-+def nvd_cve_references_to_cdx(references):
-+    advisories = []
-+
-+    for ref in references:
-+        if not {"url", "tags"}.issubset(ref):
-+            continue
-+
-+        tags = ref["tags"]
-+        if not isinstance(tags, list) or len(tags) == 0:
-+            continue
-+
-+        advisories.append({
-+            "title": next((t for t in tags if "Advisory" not in t), tags[0]),
-+            "url": ref["url"]
-+        })
-+
-+    return advisories
-+
-+
-+def nvd_cve_to_cdx_vulnerability(nvd_cve):
-+    """
-+    Turns the CVE object fetched from the NVD API into a CycloneDX
-+    vulnerability that fit the spec (see [1]).
-+
-+    [1] https://cyclonedx.org/docs/1.6/json/#vulnerabilities
-+    """
-+    vulnerability = {
-+        "bom-ref": nvd_cve["id"],
-+        "id": nvd_cve["id"],
-+        "description": cve_api_get_lang_from_list(nvd_cve.get("descriptions", [])) or "",
-+        "source": {
-+            "name": "NVD",
-+            "url": "https://nvd.nist.gov/"
-+        },
-+        **({
-+            "published": nvd_cve["published"],
-+        } if "published" in nvd_cve else {}),
-+        **({
-+            "updated": nvd_cve["lastModified"],
-+        } if "lastModified" in nvd_cve else {}),
-+        **({
-+            "cwes": nvd_cve_weaknesses_to_cdx(nvd_cve["weaknesses"]),
-+        } if "weaknesses" in nvd_cve else {}),
-+        **({
-+            "ratings": nvd_cve_cvss_to_cdx(nvd_cve["metrics"]),
-+        } if "metrics" in nvd_cve else {}),
-+        **({
-+            "advisories": nvd_cve_references_to_cdx(nvd_cve["references"]),
-+        } if "references" in nvd_cve else {}),
-+    }
-+
-+    return vulnerability
-+
-+
-+def vuln_append_or_update_affects_if_exist(vulnerabilities, vulnerability):
-+    """
-+    Append 'vulnerability' passed as argument to the 'vulnerabilities' argument
-+    if an entry with the same 'id' don't exist yet.
-+    If an entry already exist the input reference is added to the 'affects'
-+    list of the existing vulnerability.
-+
-+    Args:
-+        vulnerabilities (list): The vulnerabilities array reference retrieved
-+            from the input CycloneDX SBOM
-+        vulnerability (dict): Vulnerability to add to the 'vulnerabilities' list.
-+    """
-+    # Search if a vulnerability with the same identifier already exist in the
-+    # SBOM vulnerability list.
-+    matching_vuln = next(
-+        (vuln for vuln in vulnerabilities if vuln.get("id") == vulnerability["id"]),
-+        None
-+    )
-+
-+    # bom-ref to the component is passed to the affects of the vulnerability
-+    bom_ref = next((a["ref"] for a in vulnerability.get("affects", [])), None)
-+
-+    if matching_vuln is not None:
-+        # Remove the affect to not use it while updating matching vuln.
-+        if "affects" in vulnerability:
-+            del vulnerability["affects"]
-+
-+        if matching_vuln.get("analysis") is not None and "analysis" in vulnerability:
-+            # We don't update vulnerability that already have an
-+            # 'analysis'.
-+            # Buildroot ignored vulnerabilities will already have
-+            # an analysis and need to remain as such.
-+            del vulnerability["analysis"]
-+
-+        affects = matching_vuln.setdefault("affects", [])
-+
-+        if bom_ref is not None:
-+            ref = next((a["ref"] for a in affects if a["ref"] == bom_ref), None)
-+            if ref is None:
-+                # Add a 'ref' (bom reference) to the component if not
-+                # already present in the 'affects' list.
-+                affects.append({
-+                    "ref": bom_ref
-+                })
-+
-+        # Update the metadata of the vulnerability with the one
-+        # downloaded from the database.
-+        matching_vuln.update(vulnerability)
-+    else:
-+        vulnerabilities.append(vulnerability)
-+
-+
-+def check_package_cve_affects(cve: cvecheck.CVE, cpe_product_pkgs, sbom, opt: Options):
-+    vulnerabilities = sbom.setdefault("vulnerabilities", [])
-+
-+    for product in cve.affected_products:
-+        for comp in cpe_product_pkgs.get(product, []):
-+            cve_status = cve.affects(comp["name"], comp["version"], comp["cpe"])
-+
-+            if cve_status == cve.CVE_UNKNOWN:
-+                continue
-+
-+            if cve_status == cve.CVE_DOESNT_AFFECT and not opt["include_resolved"]:
-+                continue
-+
-+            vulnerability = nvd_cve_to_cdx_vulnerability(cve.nvd_cve)
-+
-+            vulnerability["analysis"] = {
-+                "state": "exploitable" if cve_status == cve.CVE_AFFECTS else "resolved"
-+            }
-+
-+            vulnerability["affects"] = [{
-+                "ref": comp["bom-ref"]
-+            }]
-+
-+            vuln_append_or_update_affects_if_exist(vulnerabilities, vulnerability)
-+
-+
-+def check_package_cves(nvd_path: Path, sbom, opt: Options):
-+    """
-+    Iterate over every entries of the NDV API mirror. Each vulnerability is
-+    compared to the set of component passed as argument in the 'sbom'.
-+    The vulnerabilities set of that 'sbom' argument is enriched with analysis
-+    of vulnerabilities that match that set of components.
-+
-+    Args:
-+        nvd_path (Path): Path of the mirror of the NVD API.
-+        sbom (dict): Input SBOM containing a set of vulnerabilities that will be enriched.
-+        opt (Options): Options for the analysis.
-+    """
-+    cpe_product_pkgs = defaultdict(list)
-+
-+    for comp in sbom.get("components", []):
-+        if comp.get("cpe") and comp.get("version"):
-+            cpe_product = cvecheck.CPE(comp["cpe"]).product
-+            cpe_product_pkgs[cpe_product].append(comp)
-+
-+    for cve in cvecheck.CVE.read_nvd_dir(nvd_path):
-+        check_package_cve_affects(cve, cpe_product_pkgs, sbom, opt)
-+
-+
-+def enrich_vulnerabilities(nvd_path: Path, sbom):
-+    """
-+    Iterate over the vulnerabilities present in the 'sbom' passed as arguments
-+    and enrich the vulnerability with content from the NDV API mirror.
-+
-+    Args:
-+        nvd_path (Path): Path of the mirror of the NVD API.
-+        sbom (dict): Input SBOM containing a set of vulnerabilities that will be enriched.
-+    """
-+    vulnerabilities = sbom.setdefault("vulnerabilities", [])
-+
-+    for vuln in vulnerabilities:
-+        vuln_id = vuln.get("id")
-+        if vuln_id is None or not vuln_id.upper().startswith("CVE-"):
-+            continue
-+
-+        cve = cvecheck.CVE.read_nvd_entry(nvd_path, vuln["id"])
-+
-+        vulnerability = nvd_cve_to_cdx_vulnerability(cve.nvd_cve)
-+
-+        vuln_append_or_update_affects_if_exist(vulnerabilities, vulnerability)
-+
-+
-+def main():
-+    parser = argparse.ArgumentParser(description=DESCRIPTION)
-+    parser.add_argument("-i", "--in-file", nargs="?", type=argparse.FileType("r"),
-+                        default=(None if sys.stdin.isatty() else sys.stdin))
-+    parser.add_argument("-o", "--out-file", nargs="?", type=argparse.FileType("w"),
-+                        default=sys.stdout)
-+    parser.add_argument('--nvd-path', dest='nvd_path',
-+                        default=brpath / 'dl' / 'buildroot-nvd',
-+                        help='Path to the local NVD database',
-+                        type=lambda p: Path(p).expanduser().resolve())
-+    parser.add_argument("--enrich-only", default=False, action='store_true',
-+                        help="Only update metadata to the vulnerability currently present " +
-+                        "on the input CycloneDX SBOM. Don't do an analysis.")
-+    parser.add_argument("--include-resolved", default=False, action='store_true',
-+                        help="Add vulnerabilities already 'resolved' that don't affect a " +
-+                        "component to the output CycloneDX vulnerabilities analysis.")
-+    parser.add_argument("--no-nvd-update", default=False, action='store_true',
-+                        help="Doesn't update the NVD database.")
-+
-+    args = parser.parse_args()
-+
-+    if args.in_file is None or args.nvd_path is None:
-+        parser.print_help()
-+        sys.exit(1)
-+
-+    sbom = json.load(args.in_file)
-+
-+    opt = Options(
-+        include_resolved=args.include_resolved,
-+    )
-+
-+    args.nvd_path.mkdir(parents=True, exist_ok=True)
-+    if not args.no_nvd_update:
-+        cvecheck.CVE.download_nvd(args.nvd_path)
-+
-+    if args.enrich_only:
-+        enrich_vulnerabilities(args.nvd_path, sbom)
-+    else:
-+        check_package_cves(args.nvd_path, sbom, opt)
-+
-+    args.out_file.write(json.dumps(sbom, indent=2))
-+    args.out_file.write('\n')
-+
-+
-+if __name__ == "__main__":
-+    main()
-diff --git a/support/scripts/cve.py b/support/scripts/cve.py
-index 27a5f2f362..3875c4258c 100755
---- a/support/scripts/cve.py
-+++ b/support/scripts/cve.py
-@@ -188,6 +188,29 @@ class CVE:
-                     with open(os.path.join(dirpath, filename), "rb") as f:
-                         yield cls(json.load(f))
+diff --git a/.checkpackageignore b/.checkpackageignore
+index b986e6fce8..5e5b11883b 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -754,8 +754,6 @@ package/mini-snmpd/0001-linux.c-fix-musl-build.patch lib_patch.Upstream
+ package/minidlna/S60minidlnad Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/minissdpd/S50minissdpd Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/modem-manager/S44modem-manager Shellcheck lib_sysv.Variables
+-package/mongrel2/0001-Do-not-run-tests.patch lib_patch.Upstream
+-package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch lib_patch.Upstream
+ package/monit/0001-Do-not-force-building-a-statically-linked-binary.patch lib_patch.Upstream
+ package/mono-gtksharp3/0001-Fixes-MONO_PROFILE_ENTER_LEAVE-undeclared.patch lib_patch.Upstream
+ package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch lib_patch.Upstream
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 81006945a7..18e5fed951 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
  
-+    @classmethod
-+    def read_nvd_entry(cls, nvd_dir, cve_id):
-+        """
-+        Retrieve a single CVE entry contained in NIST Vulnerability Database
-+        feeds.
+ comment "Legacy options removed in 2025.02.9"
+ 
++config BR2_PACKAGE_MONGREL2
++	bool "mongrel2 has been removed"
++	select BR2_LEGACY
++	help
++	  mongrel2 is incompatible with MbedTLS 3.6 and has been removed
 +
-+        If the CVE entry doesn't exist 'None' is returned.
-+        """
-+        nvd_git_dir = os.path.join(nvd_dir, "git")
-+
-+        _, year, minor = cve_id.split("-")
-+
-+        cve_subpath = f"CVE-{year}/CVE-{year}-{minor[:-2] + 'xx'}/{cve_id.upper()}.json"
-+        path = os.path.join(nvd_git_dir, cve_subpath)
-+
-+        ret = None
-+
-+        if os.path.exists(path):
-+            with open(path, "rb") as f:
-+                ret = cls(json.load(f))
-+
-+        return ret
-+
-     def parse_node(self, node):
-         """
-         Parse the node inside the configurations section to extract the
+ config BR2_PACKAGE_BCTOOLBOX
+ 	bool "bctoolbox has been removed"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a8d4392b10..e972d165d2 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2091,9 +2091,6 @@ F:	package/python-gunicorn/
+ F:	support/testing/tests/package/sample_python_flask.py
+ F:	support/testing/tests/package/test_python_flask.py
+ 
+-N:	Lionel Orry <lionel.orry@gmail.com>
+-F:	package/mongrel2/
+-
+ N:	Lothar Felten <lothar.felten@gmail.com>
+ F:	board/bananapi/bananapi-m2-ultra/
+ F:	board/beagleboard/beaglebone/
+diff --git a/package/Config.in b/package/Config.in
+index ec08acebf8..4ebfab7a82 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2536,7 +2536,6 @@ endif
+ 	source "package/minissdpd/Config.in"
+ 	source "package/mjpg-streamer/Config.in"
+ 	source "package/modem-manager/Config.in"
+-	source "package/mongrel2/Config.in"
+ 	source "package/mosh/Config.in"
+ 	source "package/mosquitto/Config.in"
+ 	source "package/mrouted/Config.in"
+diff --git a/package/mongrel2/0001-Do-not-run-tests.patch b/package/mongrel2/0001-Do-not-run-tests.patch
+deleted file mode 100644
+index 3b72aef3c5..0000000000
+--- a/package/mongrel2/0001-Do-not-run-tests.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-From 3cbef2195533f357c8a80c2840108662461273b7 Mon Sep 17 00:00:00 2001
+-From: Lionel Orry <lionel.orry@gmail.com>
+-Date: Wed, 27 Mar 2013 14:48:19 +0100
+-Subject: [PATCH] Do not run tests.
+-
+-This patch is specific to cross-compiled environments and avoids running
+-the tests on the host. It is not meant to be applied upstream.
+-
+-Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
+-[Dario: make the patch to be applied with fuzz factor 0]
+-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+----
+- Makefile            | 2 +-
+- tools/m2sh/Makefile | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 7dc4089..ca72630 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -18,7 +18,7 @@
+- TESTS=$(patsubst %.c,%,${TEST_SRC})
+- MAKEOPTS=OPTFLAGS="${CFLAGS} ${NOEXTCFLAGS} ${OPTFLAGS}" LDFLAGS="${LDFLAGS}" LIBS="${LIBS}" DESTDIR="${DESTDIR}" PREFIX="${PREFIX}"
+- 
+--all: bin/mongrel2 tests m2sh procer
+-+all: bin/mongrel2 m2sh procer filters config_modules
+- 
+- ${OBJECTS_NOEXT}: CFLAGS += ${NOEXTCFLAGS}
+- ${OBJECTS}: | builddirs
+-diff --git a/tools/m2sh/Makefile b/tools/m2sh/Makefile
+-index b50d8a0..334e4da 100644
+---- a/tools/m2sh/Makefile
+-+++ b/tools/m2sh/Makefile
+-@@ -12,7 +12,7 @@
+- 
+- $(RAGEL_OBJECTS): CFLAGS += -Wno-unused-const-variable -Wimplicit-fallthrough=0 -Wno-unused-parameter
+- 
+--all: ../lemon/lemon tests build/m2sh
+-+all: ../lemon/lemon build/m2sh
+- 
+- dev: CFLAGS=-g -Wall -Wextra -Isrc -I../../src $(OPTFLAGS)
+- dev: all
+--- 
+-1.8.1.4
+-
+diff --git a/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch b/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch
+deleted file mode 100644
+index 1961f128ed..0000000000
+--- a/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch
++++ /dev/null
+@@ -1,78 +0,0 @@
+-From 298356c44a7df2b34c4e307c531d2010e2cb4b79 Mon Sep 17 00:00:00 2001
+-From: Lionel Orry <lionel.orry@gmail.com>
+-Date: Wed, 27 Mar 2013 15:56:56 +0100
+-Subject: [PATCH] Fix Makefiles for cross-compilation
+-
+-The CFLAGS handling in mongrel2 is really messy and it is hard to make
+-it behave correctly with cross-compiling environments. This patch
+-restricts the Makefiles syntax to GNU Make, but help cross-compiling.
+-
+-This is not meant to be applied upstream.
+-
+-Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
+-[Fabrice: refresh for 1.12.2]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- Makefile                      | 2 +-
+- tools/config_modules/Makefile | 2 +-
+- tools/filters/Makefile        | 2 +-
+- tools/m2sh/Makefile           | 2 +-
+- tools/procer/Makefile         | 2 +-
+- 5 files changed, 5 insertions(+), 5 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 4e89c33..2f549a8 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -1,5 +1,5 @@
+- CFLAGS?=-g -O2
+--CFLAGS += -Wall -Wextra -Wno-implicit-fallthrough -Wno-unused-const-variable -I./src -DNDEBUG -D_FILE_OFFSET_BITS=64 -pthread
+-+override CFLAGS += -Wall -Wextra -Wno-implicit-fallthrough -Wno-unused-const-variable -I./src -DNDEBUG -D_FILE_OFFSET_BITS=64 -pthread
+- CFLAGS += ${OPTFLAGS}
+- LIBS+=-lzmq -ldl -lsqlite3 -lmbedtls -lmbedx509 -lmbedcrypto
+- PREFIX?=/usr/local
+-diff --git a/tools/config_modules/Makefile b/tools/config_modules/Makefile
+-index c2680d1..ada3169 100644
+---- a/tools/config_modules/Makefile
+-+++ b/tools/config_modules/Makefile
+-@@ -1,5 +1,5 @@
+- PREFIX?=/usr/local
+--CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
+-+override CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
+- LDFLAGS=$(OPTLIBS)
+- 
+- MONGO_SRC = mongo-c-driver/src/bson.c \
+-diff --git a/tools/filters/Makefile b/tools/filters/Makefile
+-index 6505ad5..a968ef6 100644
+---- a/tools/filters/Makefile
+-+++ b/tools/filters/Makefile
+-@@ -1,5 +1,5 @@
+- PREFIX?=/usr/local
+--CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -g -fPIC -shared -nostartfiles -L../../build
+-+override CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -g -fPIC -shared -nostartfiles -L../../build
+- LDFLAGS=$(OPTLIBS)
+- 
+- all: null.so rewrite.so sendfile.so
+-diff --git a/tools/m2sh/Makefile b/tools/m2sh/Makefile
+-index b50d8a0..cc00062 100644
+---- a/tools/m2sh/Makefile
+-+++ b/tools/m2sh/Makefile
+-@@ -1,4 +1,4 @@
+--CFLAGS=-DNDEBUG -DNO_LINENOS -pthread -g -I../../src -Isrc -Wall $(OPTFLAGS)
+-+override CFLAGS=-DNDEBUG -DNO_LINENOS -pthread -g -I../../src -Isrc -Wall $(OPTFLAGS)
+- LIBS=-lzmq -lsqlite3 ../../build/libm2.a $(OPTLIBS)
+- 
+- PREFIX?=/usr/local
+-diff --git a/tools/procer/Makefile b/tools/procer/Makefile
+-index bb9aa31..d377f7f 100644
+---- a/tools/procer/Makefile
+-+++ b/tools/procer/Makefile
+-@@ -1,4 +1,4 @@
+--CFLAGS=-DNDEBUG -pthread -g -I../../src -Wall $(OPTFLAGS)
+-+override CFLAGS=-DNDEBUG -pthread -g -I../../src -Wall $(OPTFLAGS)
+- PREFIX?=/usr/local
+- LIBS?=-lzmq 
+- SOURCES=$(wildcard *.c)
+--- 
+-2.27.0
+-
+diff --git a/package/mongrel2/0003-fix-build-with-gcc-4.8.patch b/package/mongrel2/0003-fix-build-with-gcc-4.8.patch
+deleted file mode 100644
+index 996cd3246b..0000000000
+--- a/package/mongrel2/0003-fix-build-with-gcc-4.8.patch
++++ /dev/null
+@@ -1,62 +0,0 @@
+-From cc2dd3995dc9a9e6f0e705e11e791f3f3c7d7326 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 18 Jan 2022 22:41:36 +0100
+-Subject: [PATCH] fix build with gcc 4.8
+-
+-Drop "-Wno-unused-const-variable -Wimplicit-fallthrough=0" as
+-"-Wno-implicit-fallthrough -Wno-unused-const-variable" is already set in
+-CFLAGS. This will avoid the following build failure with gcc 4.8 raised
+-since version 1.13.0 and
+-https://github.com/mongrel2/mongrel2/commit/725209578599bd7784753d86aee34f6441ff78a5:
+-
+-arm-none-linux-gnueabi-gcc: error: unrecognized command line option '-Wimplicit-fallthrough=0'
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/de324b733e09057c87352220069fe65f6e535eb8
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Upstream: https://github.com/mongrel2/mongrel2/pull/354
+-[Dario: make the patch to be applied with fuzz factor 0]
+-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+----
+- Makefile            | 1 -
+- tools/m2sh/Makefile | 4 ++--
+- 2 files changed, 2 insertions(+), 3 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index f6627ed..fb8d028 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -22,7 +22,6 @@ all: bin/mongrel2 tests m2sh procer
+- 
+- ${OBJECTS_NOEXT}: CFLAGS += ${NOEXTCFLAGS}
+- ${OBJECTS}: | builddirs
+--$(RAGEL_OBJECTS): CFLAGS += -Wno-unused-const-variable -Wimplicit-fallthrough=0
+- 
+- .PHONY: builddirs
+- builddirs:
+-diff --git a/tools/m2sh/Makefile b/tools/m2sh/Makefile
+-index 83e7ae4..86364af 100644
+---- a/tools/m2sh/Makefile
+-+++ b/tools/m2sh/Makefile
+-@@ -10,7 +10,7 @@
+- LIB_OBJ=$(filter-out src/m2sh.o,${OBJECTS})
+- RAGEL_OBJECTS=src/lexer.o src/cli.o
+- 
+--$(RAGEL_OBJECTS): CFLAGS += -Wno-unused-const-variable -Wimplicit-fallthrough=0 -Wno-unused-parameter
+-+$(RAGEL_OBJECTS): CFLAGS += -Wno-unused-parameter
+- 
+- all: ../lemon/lemon build/m2sh
+- 
+-@@ -20,7 +20,7 @@
+- install: build/m2sh
+- 	install build/m2sh ${DESTDIR}${PREFIX}/bin
+- 
+--src/parser.o: CFLAGS += -Wno-unused-const-variable -Wno-unused-parameter
+-+src/parser.o: CFLAGS += -Wno-unused-parameter
+- 
+- build/libm2sh.a: ${LIB_OBJ}
+- 	mkdir -p build
+--- 
+-2.34.1
+-
+diff --git a/package/mongrel2/Config.in b/package/mongrel2/Config.in
+deleted file mode 100644
+index 60fee6f96d..0000000000
+--- a/package/mongrel2/Config.in
++++ /dev/null
+@@ -1,33 +0,0 @@
+-# mongrel2 uses {get,make,swap}context() functions, which are
+-# available in glibc for all architectures and in uClibc only for a
+-# subset of the architectures
+-config BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
+-	bool
+-	default y if BR2_TOOLCHAIN_USES_GLIBC
+-	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
+-		(BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || BR2_sparc || BR2_x86_64)
+-
+-comment "mongrel2 needs a uClibc or glibc toolchain w/ C++, threads, dynamic library"
+-	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
+-		!BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
+-
+-config BR2_PACKAGE_MONGREL2
+-	bool "mongrel2"
+-	depends on BR2_INSTALL_LIBSTDCPP # zeromq
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
+-	depends on !BR2_STATIC_LIBS # uses dlopen()
+-	depends on BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
+-	select BR2_PACKAGE_MBEDTLS
+-	select BR2_PACKAGE_SQLITE
+-	select BR2_PACKAGE_ZEROMQ
+-	help
+-	  Mongrel2 is an application, language, and network architecture
+-	  agnostic web server that focuses on web applications using
+-	  modern browser technologies.
+-
+-	  Mongrel2 supports 17 languages and platforms, HTTP, Flash
+-	  sockets, WebSockets, Long Polling, and many ways to deploy
+-	  and hack on it.
+-
+-	  http://www.mongrel2.org
+diff --git a/package/mongrel2/mongrel2.hash b/package/mongrel2/mongrel2.hash
+deleted file mode 100644
+index f4f094ea03..0000000000
+--- a/package/mongrel2/mongrel2.hash
++++ /dev/null
+@@ -1,6 +0,0 @@
+-# From https://mongrel2.org
+-sha1  6057f9cbfae41e2cdef1e0f715df3c1a4d3a1884  mongrel2-v1.13.0.tar.bz2
+-
+-# Locally computed
+-sha256  b6f1f50c9f65b605342d8792b1cc8a1c151105339030313b9825b6a68d400c10  mongrel2-v1.13.0.tar.bz2
+-sha256  eb6e2a2baa637d06f6aa762886fbc8939934eb5fdb0b3a5b3882f2a61e9a4357  LICENSE
+diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
+deleted file mode 100644
+index 07914ad0fe..0000000000
+--- a/package/mongrel2/mongrel2.mk
++++ /dev/null
+@@ -1,26 +0,0 @@
+-################################################################################
+-#
+-# mongrel2
+-#
+-################################################################################
+-
+-MONGREL2_VERSION = 1.13.0
+-MONGREL2_SOURCE = mongrel2-v$(MONGREL2_VERSION).tar.bz2
+-# Do not use the github helper here, the generated tarball is *NOT* the same
+-# as the one uploaded by upstream for the release.
+-MONGREL2_SITE = https://github.com/mongrel2/mongrel2/releases/download/v$(MONGREL2_VERSION)
+-MONGREL2_LICENSE = BSD-3-Clause
+-MONGREL2_LICENSE_FILES = LICENSE
+-MONGREL2_DEPENDENCIES = mbedtls sqlite zeromq
+-
+-define MONGREL2_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+-		PREFIX=/usr all
+-endef
+-
+-define MONGREL2_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+-		PREFIX=/usr DESTDIR=$(TARGET_DIR) install
+-endef
+-
+-$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
