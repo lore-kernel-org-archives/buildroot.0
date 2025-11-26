@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B1D8D43370
-	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:56:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D23C5D4337C
+	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:56:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2528B83C3D;
-	Fri, 12 Dec 2025 07:56:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A915283C48;
+	Fri, 12 Dec 2025 07:56:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rB8PKteizJJM; Fri, 12 Dec 2025 07:56:44 +0000 (UTC)
+ id T3R-T7I-EizW; Fri, 12 Dec 2025 07:56:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5F0B83B70
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C4C383B83
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765526192;
-	bh=J6pmVqZkcsCgD1Tgc99yFTakA8++LSBqrCfz8VblZYI=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=T/LYvjBJz/w2xjo7EskzChIelO+5tNZ3CBS1qXB7is+l20wx55lZTxwxEuJTzgJ2V
-	 bwYJenvfG3kFtVAUxv4HfSJdRmbsFgvu3h4B3WjgxnVMOqdTIhr+qYVvx2/7P6MXVS
-	 ju6xfHOtVJBTkFKrcEwz1b5lH7wwuNsgwMi/L/8jLVjVF6qX7tTE8vTo109n/Ir1im
-	 iid0TU+eBSWwf6mljTRjW26Rd6DFLH3KIGNPZ+aOgFFSDa6+EnydvZU4WcW0+VvNI8
-	 wV2QcROzKnkwvdxLqAlXhAtksyEjFDkwqvSlyLR305ERYwptgbURQSTjYETsV6Lj3U
-	 zdwAPKJmobYtg==
+	s=default; t=1765526195;
+	bh=ywYfxg6+S6ivyYNIkqGEpgdFN5zuPt2KgN1sbFzhnfM=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=Vxvs6NgbdU5/BIxBzJa+j/nJl1zwgAopOLwVCWLpaqD5GewOg9dFv4Uc2cd3KU3x8
+	 CsJrDXehMiCLkemXGav7UJbvWth47q25PHCwKTj0RFKHcpSC3ozrcFGCGZQhWwGq4O
+	 wfhw7APpNvaHOoEUICGJbF8RSu8sfbXbTVFZloe+jRUqiWGtQuga4Khu9eMFJ+6uVm
+	 DuX0cCl6tv599BZxDJ+osNzxZqPqyinfccbT9SX7mgIRP7su/3CNsN1Mm0A9DuQxS+
+	 5oO7UPyUPf+H9XacVWdmRLiOyxd4YdxG1Y4Up37iOMLFfxdtCRhneURQQfSdybtlYm
+	 6H13NnCw6CnXw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C5F0B83B70;
-	Fri, 12 Dec 2025 07:56:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1C4C383B83;
+	Fri, 12 Dec 2025 07:56:35 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3D13BE7
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:55 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4C260E7
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DD41F41193
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 11B7D41197
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rba9hHIaWdAh for <buildroot@buildroot.org>;
+ id KBkOYGGKCWcU for <buildroot@buildroot.org>;
  Fri, 12 Dec 2025 07:55:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E14C4112F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1296441126
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3E14C4112F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1296441126
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3CF3D86C94; Fri, 12 Dec 2025 07:55:35 +0000 (UTC)
+ id 1146386C9A; Fri, 12 Dec 2025 07:55:35 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Nov 2025 19:31:39 +0100
+Date: Wed, 26 Nov 2025 11:43:53 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 19f6300ccaef9d419b3dc19690a26ea8be06969e
-X-Git-Newrev: b86191f5be04ccadf6dfb1a5974874f3e9a57e60
+X-Git-Oldrev: 8d278b8f308c54432bdfcd163580bf4ad583eb6e
+X-Git-Newrev: 4ee9ac9d557b851a2c3291816e68a20e590da3af
 X-Patchwork-Hint: ignore
-Message-Id: <20251212075535.3CF3D86C94@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-apscheduler: bump to 3.11.1
+Message-Id: <20251212075535.1146386C9A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/versal*: bump to xilinx_v2025.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,54 +69,158 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b86191f5be04ccadf6dfb1a5974874f3e9a57e60
+commit: https://git.buildroot.net/buildroot/commit/?id=4ee9ac9d557b851a2c3291816e68a20e590da3af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://github.com/agronholm/apscheduler/releases/tag/3.11.1
+Bump versal defconfigs to xilinx_v2025.2.
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+xilinx_v2025.2 includes the following software versions:
+arm-trusted-firmware v2.12
+linux v6.12.40
+plm xilinx_v2025.2
+psmfw xilinx_v2025.2
+uboot v2025.01
+with all Xilinx downstream commits included with xilinx_v2025.2.
+
+xilinx_v2025.2 was run tested on a vek280 evaluation board.
+
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-apscheduler/python-apscheduler.hash | 4 ++--
- package/python-apscheduler/python-apscheduler.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ configs/versal_vck190_defconfig | 8 +++++---
+ configs/versal_vek280_defconfig | 8 +++++---
+ configs/versal_vpk180_defconfig | 8 +++++---
+ 3 files changed, 15 insertions(+), 9 deletions(-)
 
-diff --git a/package/python-apscheduler/python-apscheduler.hash b/package/python-apscheduler/python-apscheduler.hash
-index 1f2ba1f82e..55026aec7b 100644
---- a/package/python-apscheduler/python-apscheduler.hash
-+++ b/package/python-apscheduler/python-apscheduler.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/apscheduler/json
--md5  1705663d09aeb1b174f964780c57520a  apscheduler-3.11.0.tar.gz
--sha256  4c622d250b0955a65d5d0eb91c33e6d43fd879834bf541e0a18661ae60460133  apscheduler-3.11.0.tar.gz
-+md5  ff8d1731e31d88e2e1fd0794099c920f  apscheduler-3.11.1.tar.gz
-+sha256  0db77af6400c84d1747fe98a04b8b58f0080c77d11d338c4f507a9752880f221  apscheduler-3.11.1.tar.gz
- # Locally computed sha256 checksums
- sha256  6163f7987dfb38d6bc320ce2b70b2f02b862bc41126516d552ef1cd43247e758  LICENSE.txt
-diff --git a/package/python-apscheduler/python-apscheduler.mk b/package/python-apscheduler/python-apscheduler.mk
-index c5d89c5c2d..b03022149f 100644
---- a/package/python-apscheduler/python-apscheduler.mk
-+++ b/package/python-apscheduler/python-apscheduler.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_APSCHEDULER_VERSION = 3.11.0
-+PYTHON_APSCHEDULER_VERSION = 3.11.1
- PYTHON_APSCHEDULER_SOURCE = apscheduler-$(PYTHON_APSCHEDULER_VERSION).tar.gz
--PYTHON_APSCHEDULER_SITE = https://files.pythonhosted.org/packages/4e/00/6d6814ddc19be2df62c8c898c4df6b5b1914f3bd024b780028caa392d186
-+PYTHON_APSCHEDULER_SITE = https://files.pythonhosted.org/packages/d0/81/192db4f8471de5bc1f0d098783decffb1e6e69c4f8b4bc6711094691950b
- PYTHON_APSCHEDULER_SETUP_TYPE = setuptools
- PYTHON_APSCHEDULER_DEPENDENCIES = host-python-setuptools-scm
- PYTHON_APSCHEDULER_LICENSE = MIT
+diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
+index 33d06ef963..ee7377ba96 100644
+--- a/configs/versal_vck190_defconfig
++++ b/configs/versal_vck190_defconfig
+@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/versal/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyAMA0,115200 mmcblk0p2"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.40)/xlnx_rebase_v6.12_LTS_merge_6.12.40.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_2025.2)/xlnx_rebase_v6.12_LTS_2025.2.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vck190-rev1.1"
+@@ -23,13 +23,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.12_2025.1)/xlnx_rebase_v2.12_2025.1.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.12_2025.2)/xlnx_rebase_v2.12_2025.2.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="versal"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.1)/xlnx_rebase_v2025.01_2025.1.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.2)/xlnx_rebase_v2025.01_2025.2.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_versal_virt"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+@@ -40,9 +40,11 @@ BR2_TARGET_UBOOT_FORMAT_DTB=y
+ BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vck190-rev1.1"
+ BR2_TARGET_XILINX_EMBEDDEDSW=y
++BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.2"
+ BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
+ BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
+ BR2_TARGET_XILINX_PREBUILT=y
++BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2025.2"
+ BR2_PACKAGE_HOST_BOOTGEN=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+diff --git a/configs/versal_vek280_defconfig b/configs/versal_vek280_defconfig
+index 07ab2f18af..fc0918da75 100644
+--- a/configs/versal_vek280_defconfig
++++ b/configs/versal_vek280_defconfig
+@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/versal/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyAMA0,115200 mmcblk0p2"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.40)/xlnx_rebase_v6.12_LTS_merge_6.12.40.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_2025.2)/xlnx_rebase_v6.12_LTS_2025.2.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vek280-revB"
+@@ -23,13 +23,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.12_2025.1)/xlnx_rebase_v2.12_2025.1.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.12_2025.2)/xlnx_rebase_v2.12_2025.2.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="versal"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.1)/xlnx_rebase_v2025.01_2025.1.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.2)/xlnx_rebase_v2025.01_2025.2.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_versal_virt"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+@@ -40,9 +40,11 @@ BR2_TARGET_UBOOT_FORMAT_DTB=y
+ BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vek280-revB"
+ BR2_TARGET_XILINX_EMBEDDEDSW=y
++BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.2"
+ BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
+ BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
+ BR2_TARGET_XILINX_PREBUILT=y
++BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2025.2"
+ BR2_TARGET_XILINX_PREBUILT_BOARD="vek280"
+ BR2_PACKAGE_HOST_BOOTGEN=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/configs/versal_vpk180_defconfig b/configs/versal_vpk180_defconfig
+index 970823e571..461b97f3e9 100644
+--- a/configs/versal_vpk180_defconfig
++++ b/configs/versal_vpk180_defconfig
+@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/versal/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyAMA0,115200 mmcblk0p2"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.40)/xlnx_rebase_v6.12_LTS_merge_6.12.40.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_2025.2)/xlnx_rebase_v6.12_LTS_2025.2.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vpk180-revA"
+@@ -23,13 +23,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.12_2025.1)/xlnx_rebase_v2.12_2025.1.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.12_2025.2)/xlnx_rebase_v2.12_2025.2.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="versal"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.1)/xlnx_rebase_v2025.01_2025.1.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.2)/xlnx_rebase_v2025.01_2025.2.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_versal_virt"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+@@ -40,9 +40,11 @@ BR2_TARGET_UBOOT_FORMAT_DTB=y
+ BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vpk180-revA"
+ BR2_TARGET_XILINX_EMBEDDEDSW=y
++BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.2"
+ BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
+ BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
+ BR2_TARGET_XILINX_PREBUILT=y
++BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2025.2"
+ BR2_TARGET_XILINX_PREBUILT_BOARD="vpk180"
+ BR2_PACKAGE_HOST_BOOTGEN=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
