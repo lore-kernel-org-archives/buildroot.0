@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F422D111A8
-	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:36:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60A31D116EA
+	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:36:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 65F214057B;
-	Thu, 27 Nov 2025 20:36:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3336B60B3C;
+	Thu, 27 Nov 2025 20:36:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 88vw0SKB5nWw; Thu, 27 Nov 2025 20:36:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0fQDLNlwLKbj; Thu, 27 Nov 2025 20:36:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9E5C40514
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3765E61B29
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D9E5C40514;
-	Thu, 27 Nov 2025 20:36:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id ABD442A9
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:36:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3765E61B29;
+	Thu, 27 Nov 2025 20:36:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1029B2A9
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:36:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2586340018
+ by smtp3.osuosl.org (Postfix) with ESMTP id 98E606083C
  for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:36:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KTed3_zgRZVG for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bGZE-aHfIhC0 for <buildroot@buildroot.org>;
  Thu, 27 Nov 2025 20:36:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 588A0404CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A71860ABB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 588A0404CD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4A71860ABB
  for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:36:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4AD4680768; Thu, 27 Nov 2025 20:36:02 +0000 (UTC)
+ id 3D1FE82386; Thu, 27 Nov 2025 20:36:02 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 26 Nov 2025 09:02:55 +0100
+Date: Wed, 26 Nov 2025 09:02:53 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: 3f24a6d116b65b68765fce68c6e63c6a95252543
-X-Git-Newrev: a415fce3e207ac164aca4b5bc7d31d07be888439
+X-Git-Oldrev: c6f3caa55ac450ae48f60383a60bff9b09d5ab07
+X-Git-Newrev: 3f24a6d116b65b68765fce68c6e63c6a95252543
 X-Patchwork-Hint: ignore
-Message-Id: <20251127203602.4AD4680768@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/linphone: remove
- package
+Message-Id: <20251127203602.3D1FE82386@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/asterisk: fix
+ build caused by libjwt bump
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,224 +66,117 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a415fce3e207ac164aca4b5bc7d31d07be888439
+commit: https://git.buildroot.net/buildroot/commit/?id=3f24a6d116b65b68765fce68c6e63c6a95252543
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-This package is no longer maintained in Buildroot: no maintainer in
-DEVELOPERS file, and doesn't build since we bumped mbedtls to version
-3.x in commit 3481a9643fc7223e400ed877f08ade34d44e6b78, which first
-appeared in 2025.05.
+In commit 770f9154978c40ce5b7718174108b37c5310869d, libjwt was bumped
+from 1.17.2 to 3.2.0, which is a big bump. And the libjwt website
+states "Version 3 of LibJWT is a complete overhaul of the code. Please
+see documentation for usage."
 
-Also, upstream linphone has changed their strategy, and now their
-specific dependencies (bctoolbox, belle-sip, etc.) are bundled in
-linphone, so anyway the packaging needs to be adapted significantly.
+And indeed, this version bump breaks the build of Asterisk:
 
+res_stir_shaken/attestation.c: In function 'pack_payload':
+res_stir_shaken/attestation.c:357:9: error: implicit declaration of function 'jwt_add_grants_json' [-Wimplicit-function-declaration]
+  357 |         jwt_add_grants_json(jwt, payload_str);
+      |         ^~~~~~~~~~~~~~~~~~~
+In file included from /home/autobuild/autobuild/instance-11/output-1/build/asterisk-22.3.0/include/asterisk/module.h:39,
+                 from res_stir_shaken/attestation.c:24:
+res_stir_shaken/attestation.c: In function '_dtor_jwt':
+res_stir_shaken/attestation.c:367:38: error: implicit declaration of function 'jwt_free'; did you mean 'jwks_free'? [-Wimplicit-function-declaration]
+  367 |         RAII_VAR(jwt_t *, jwt, NULL, jwt_free);
+      |                                      ^~~~~~~~
+
+To fix this, let's use the bundled version of libjwt in Asterisk,
+since even Asterisk master hasn't been fixed to be compatible with
+libjwt 3.x.
+
+Of course, this raises the question of whether the separate libjwt
+package should be removed, as it is anyway only used by Asterisk.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/2d39791c65c5b71b0533d4b2bce5f073f5919552/
+
+Cc: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Bernd: Added libopenssl dependency needed by bundled libjwt]
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 90e4e80fc38550feb66743a93dce56cded756a1a)
+(cherry picked from commit 61271a6c5589baffb0df9c245e4026c281afdf7e)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .checkpackageignore                                |  1 -
- Config.in.legacy                                   | 10 ++++++
- package/Config.in                                  |  1 -
- ...rc-core-paths-paths.cpp-fix-powerpc-build.patch | 35 ------------------
- package/linphone/Config.in                         | 41 ---------------------
- package/linphone/linphone.hash                     |  4 ---
- package/linphone/linphone.mk                       | 42 ----------------------
- 7 files changed, 10 insertions(+), 124 deletions(-)
+ package/asterisk/Config.in     | 3 ++-
+ package/asterisk/asterisk.hash | 2 ++
+ package/asterisk/asterisk.mk   | 7 ++++---
+ 3 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 160d21eb59..7e09a55b78 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -659,7 +659,6 @@ package/lighttpd/0001-Modify-the-default-lighttpd-configuration-file-to-ha.patch
- package/lighttpd/S50lighttpd Shellcheck lib_sysv.EmptyLastLine lib_sysv.Indent lib_sysv.Variables
- package/linknx/0001-configure-ac-tweak-CPPUNIT-conditional.patch lib_patch.Upstream
- package/linknx/0002-src-Makefile.am-fix-linking-with-log4cpp.patch lib_patch.Upstream
--package/linphone/0001-src-core-paths-paths.cpp-fix-powerpc-build.patch lib_patch.Upstream
- package/linux-zigbee/0001-test-serial-Remove-test-serial.patch lib_patch.Upstream
- package/linux-zigbee/0002-addrdb-coord-config-parse.y-add-missing-time.h-inclu.patch lib_patch.Upstream
- package/linuxptp/S65ptp4l Shellcheck lib_sysv.Indent
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 0ee79950c3..5c7010270e 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -144,6 +144,16 @@ endif
+diff --git a/package/asterisk/Config.in b/package/asterisk/Config.in
+index 71c741acfd..3db6e5375a 100644
+--- a/package/asterisk/Config.in
++++ b/package/asterisk/Config.in
+@@ -10,10 +10,11 @@ config BR2_PACKAGE_ASTERISK
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_LIBEDIT
+ 	select BR2_PACKAGE_LIBILBC
+-	select BR2_PACKAGE_LIBJWT
+ 	select BR2_PACKAGE_LIBPJSIP
+ 	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_OPENSSL # bundled libjwt
++	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL # bundled libjwt
+ 	select BR2_PACKAGE_SQLITE
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index c09a5bc183..26175667c3 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
+@@ -3,6 +3,8 @@ sha256  8a94650b6f348af1f1c9cce7ed3585d280f3a31b0d3820084a42b03712df95d5  asteri
  
- ###############################################################################
- 
-+comment "Legacy options removed in 2025.08.3"
+ # Locally computed
+ sha256  58bb83cec4d431f48d006e455d821668450f8cf6b6c95f090def47062fa3a60c  pjproject-2.15.1.tar.bz2
++sha256  6775095bcd417d375faddc1f17cdd7706ad8aa9b9b02404990c4b0ee218ee379  libjwt-1.15.3.tar.gz
 +
-+config BR2_PACKAGE_LINPHONE
-+	bool "linphone has been removed"
-+	select BR2_LEGACY
-+	help
-+	  This package was no longer maintained in Buildroot and was
-+	  no longer building. It can be re-added if someone volunteers
-+	  to fix the issues, update the package and maintain it.
-+
- comment "Legacy options removed in 2025.08.2"
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+ # sha256 locally computed
+ sha1  721c512feaea102700d5bdce952fdc0bb29dc640  asterisk-core-sounds-en-gsm-1.6.1.tar.gz
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index 0d40ebf2b4..9a071fb8e0 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -13,11 +13,13 @@ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+ # segfaults. The reason behind this is unclear.
+ # https://github.com/asterisk/asterisk/issues/671
+ ASTERISK_PJSIP_URL = https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.15.1/
++ASTERISK_LIBJWT_URL = https://raw.githubusercontent.com/asterisk/third-party/master/libjwt/1.15.3/
+ ASTERISK_SOUNDS_BASE_URL = http://downloads.asterisk.org/pub/telephony/sounds/releases
+ ASTERISK_EXTRA_DOWNLOADS = \
+ 	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-core-sounds-en-gsm-1.6.1.tar.gz \
+ 	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-moh-opsound-wav-2.03.tar.gz \
+-	$(ASTERISK_PJSIP_URL)/pjproject-2.15.1.tar.bz2
++	$(ASTERISK_PJSIP_URL)/pjproject-2.15.1.tar.bz2 \
++	$(ASTERISK_LIBJWT_URL)/libjwt-1.15.3.tar.gz
  
- config BR2_PACKAGE_RAMSPEED
-diff --git a/package/Config.in b/package/Config.in
-index 69428680c5..341fba52ce 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2561,7 +2561,6 @@ endif
- 	source "package/lighttpd/Config.in"
- 	source "package/linknx/Config.in"
- 	source "package/links/Config.in"
--	source "package/linphone/Config.in"
- 	source "package/linux-zigbee/Config.in"
- 	source "package/linuxptp/Config.in"
- 	source "package/lldpd/Config.in"
-diff --git a/package/linphone/0001-src-core-paths-paths.cpp-fix-powerpc-build.patch b/package/linphone/0001-src-core-paths-paths.cpp-fix-powerpc-build.patch
-deleted file mode 100644
-index 1655fa59a1..0000000000
---- a/package/linphone/0001-src-core-paths-paths.cpp-fix-powerpc-build.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From d5d528e7562f358b9564e64cea0678020c51479a Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 15 Mar 2020 18:56:19 +0100
--Subject: [PATCH] src/core/paths/paths.cpp: fix powerpc build
--
--Fix the following build failure on powerpc:
--
--/home/test/autobuild/run/instance-2/output-1/build/linphone-4.3.1/src/core/paths/paths.cpp:32:3: error: #error "Unsupported system."
--  #error "Unsupported system."
--   ^~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/d90bca02c2771df8dfbf39892d529fb5f9069656
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/core/paths/paths.cpp | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/core/paths/paths.cpp b/src/core/paths/paths.cpp
--index 0442282fe..2c6508a51 100644
----- a/src/core/paths/paths.cpp
--+++ b/src/core/paths/paths.cpp
--@@ -26,7 +26,7 @@
-- 	#include "paths-android.h"
-- #elif defined(_WIN32)
-- 	#include "paths-windows.h"
---#elif defined(__linux)
--+#elif defined(__linux) || defined(__linux__)
-- 	#include "paths-linux.h"
-- #else
-- 	#error "Unsupported system."
---- 
--2.25.1
--
-diff --git a/package/linphone/Config.in b/package/linphone/Config.in
-deleted file mode 100644
-index 3fe25c1659..0000000000
---- a/package/linphone/Config.in
-+++ /dev/null
-@@ -1,41 +0,0 @@
--config BR2_PACKAGE_LINPHONE
--	bool "linphone"
--	depends on BR2_USE_MMU
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_STATIC_LIBS # belle-sip, mediastreamer
--	depends on BR2_TOOLCHAIN_HAS_THREADS # belr, belle-sip, mediastreamer
--	# belr, belle-sip, mediastreamer
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
--	depends on BR2_USE_WCHAR # belle-sip
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # mediastreamer
--	select BR2_PACKAGE_BELLE_SIP
--	select BR2_PACKAGE_BELR
--	select BR2_PACKAGE_LIBXML2
--	select BR2_PACKAGE_MEDIASTREAMER
--	select BR2_PACKAGE_SQLITE
--	help
--	  Linphone is an internet phone or Voice Over IP phone (VoIP).
--
--	  With linphone you can communicate freely with people over
--	  the internet, with voice, video, and text instant messaging.
--	  Linphone makes use of the SIP protocol, an open standard
--	  for internet telephony. You can use Linphone with any SIP
--	  VoIP operator, including our free SIP audio/video service.
--	  linphone is free-software (or open-source), you can download
--	  and redistribute it freely.
--	  Linphone is available for desktop computers: Linux, Windows,
--	  MacOSX, and for mobile phones: Android, iPhone, Blackberry.
--
--	  Linphone support in Buildroot is limited to the commandline
--	  client, linphonec, and video support is not enabled.
--
--	  http://www.linphone.org/
--
--comment "linphone needs a toolchain w/ threads, C++, dynamic library, wchar, gcc >= 5"
--	depends on BR2_USE_MMU
--	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
--		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
--
--comment "linphone needs a toolchain not affected by GCC bug 64735"
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/linphone/linphone.hash b/package/linphone/linphone.hash
-deleted file mode 100644
-index 6d456ac9c9..0000000000
---- a/package/linphone/linphone.hash
-+++ /dev/null
-@@ -1,4 +0,0 @@
--# Locally calculated after checking pgp signature
--sha256  9956f6785a787041328da000cee5fcc1e41d6f17956ffe5e0402fac0f9a9676b  linphone-4.4.8.tar.gz
--# Locally computed
--sha256  1b3782ccad7b8614100cda30d3faf42fc39f2e97932908c543005053b654ca68  LICENSE.txt
-diff --git a/package/linphone/linphone.mk b/package/linphone/linphone.mk
-deleted file mode 100644
-index bb79e2f782..0000000000
---- a/package/linphone/linphone.mk
-+++ /dev/null
-@@ -1,42 +0,0 @@
--################################################################################
--#
--# linphone
--#
--################################################################################
--
--LINPHONE_VERSION = 4.4.8
--LINPHONE_SITE = \
--	https://gitlab.linphone.org/BC/public/liblinphone/-/archive/$(LINPHONE_VERSION)
--LINPHONE_CONF_OPTS = \
--	-DENABLE_ADVANCED_IM=OFF \
--	-DENABLE_CXX_WRAPPER=OFF \
--	-DENABLE_DB_STORAGE=OFF \
--	-DENABLE_LIME=OFF \
--	-DENABLE_LIME_X3DH=OFF \
--	-DENABLE_STRICT=OFF \
--	-DENABLE_TOOLS=OFF \
--	-DENABLE_TUTORIALS=OFF \
--	-DENABLE_UNIT_TESTS=OFF \
--	-DENABLE_VCARD=OFF \
--	-DENABLE_VIDEO=OFF \
--	-DGIT_EXECUTABLE=OFF
--LINPHONE_INSTALL_STAGING = YES
--LINPHONE_DEPENDENCIES = \
--	belle-sip \
--	belr \
--	libxml2 \
--	mediastreamer \
--	sqlite \
--	$(if $(BR2_PACKAGE_ZLIB),zlib)
--LINPHONE_LICENSE = GPL-3.0+
--LINPHONE_LICENSE_FILES = LICENSE.txt
--
--ifeq ($(BR2_STATIC_LIBS),y)
--LINPHONE_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=OFF
--else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
--LINPHONE_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=ON
--else ifeq ($(BR2_SHARED_LIBS),y)
--LINPHONE_CONF_OPTS += -DENABLE_STATIC=OFF -DENABLE_SHARED=ON
--endif
--
--$(eval $(cmake-package))
+ ASTERISK_LICENSE = GPL-2.0, BSD-3-Clause (SHA1, resample), BSD-4-Clause (db1-ast)
+ ASTERISK_LICENSE_FILES = \
+@@ -39,7 +41,6 @@ ASTERISK_DEPENDENCIES = \
+ 	jansson \
+ 	libcurl \
+ 	libedit \
+-	libjwt \
+ 	libpjsip \
+ 	libxml2 \
+ 	sqlite \
+@@ -94,7 +95,7 @@ ASTERISK_CONF_OPTS = \
+ 	--with-jansson \
+ 	--with-libcurl \
+ 	--with-ilbc \
+-	--with-libjwt="$(STAGING_DIR)/usr" \
++	--with-libjwt-bundled \
+ 	--with-libxml2 \
+ 	--with-libedit="$(STAGING_DIR)/usr" \
+ 	--with-pjproject-bundled \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
