@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2EBDCFD2F6
-	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:08:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61556D111A8
+	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:08:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7778561B65;
-	Thu, 27 Nov 2025 20:08:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 363EA61B6A;
+	Thu, 27 Nov 2025 20:08:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TXeFq4lkcfy1; Thu, 27 Nov 2025 20:08:46 +0000 (UTC)
+ id eAZLcTEzydPT; Thu, 27 Nov 2025 20:08:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02DF3617A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B045F61B56
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 02DF3617A8;
-	Thu, 27 Nov 2025 20:08:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B045F61B56;
+	Thu, 27 Nov 2025 20:08:40 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9B1CF708
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:08:16 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 9E8BB2A9
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:08:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 043A684421
+ by smtp1.osuosl.org (Postfix) with ESMTP id D1A0084410
  for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:08:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yBw0Pi1zqSy9 for <buildroot@buildroot.org>;
- Thu, 27 Nov 2025 20:07:58 +0000 (UTC)
+ id 1a34bP8iZceZ for <buildroot@buildroot.org>;
+ Thu, 27 Nov 2025 20:07:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 003298442A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C98B8440E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 003298442A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3C98B8440E
  for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:07:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F29F185FCB; Thu, 27 Nov 2025 20:07:56 +0000 (UTC)
+ id 3921985FC4; Thu, 27 Nov 2025 20:07:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 26 Nov 2025 09:40:41 +0100
+Date: Wed, 26 Nov 2025 09:02:24 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 372e3779106e3b7437766208b2a3286b0363bf94
-X-Git-Newrev: 09c7b764547581b5fb9e281e1dcc85f2a05d7cef
+X-Git-Oldrev: cf0813a931c36984b7d8cbedd4a7725902d34796
+X-Git-Newrev: db493966bff278a7d927a3ae13fa4d894d70932c
 X-Patchwork-Hint: ignore
-Message-Id: <20251127200756.F29F185FCB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/openvpn: bump
- version to 2.6.15
+Message-Id: <20251127200756.3921985FC4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/asterisk: bump to
+ 22.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,67 +61,161 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7373113369026527129=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7373113369026527129==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=09c7b764547581b5fb9e281e1dcc85f2a05d7cef
+commit: https://git.buildroot.net/buildroot/commit/?id=db493966bff278a7d927a3ae13fa4d894d70932c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Release notes:
-https://sourceforge.net/p/openvpn/mailman/message/59238233/
+For a changelog see here:
+https://downloads.asterisk.org/pub/telephony/asterisk/ChangeLog-22.3.0.md
 
-Changelog:
-https://github.com/OpenVPN/openvpn/blob/release/2.6/ChangeLog
-https://github.com/OpenVPN/openvpn/blob/release/2.6/Changes.rst
+Changes made by the package maintainer:
+- add systemd service file
+- run asterisk as non-root user asterisk
+- build pjsip as bundled source code, but download it like
+  sound files
+- remove unused configure options
+- chan_alsa was removed upstream in commit
+  de3ce178ab0282445cf25161b49f3737ac2d20ff
 
-The ‎COPYRIGHT.GPL was updated to latest version from FSF.
+See here for the reason behind using the bundled pjsip:
+https://github.com/asterisk/asterisk/issues/671
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit c368b33378c365c30a847b40634071d26ac02f0d)
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit f11b9db0b5f150d73e10a0c25989e2ec6300588e)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/openvpn/openvpn.hash | 4 ++--
- package/openvpn/openvpn.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/asterisk/asterisk.hash    |  4 +++-
+ package/asterisk/asterisk.mk      | 31 ++++++++++++++++++-------------
+ package/asterisk/asterisk.service | 23 +++++++++++++++++++++++
+ 3 files changed, 44 insertions(+), 14 deletions(-)
 
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index 432b1c2afb..353e8a8051 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking signature
--sha256  9eb6a6618352f9e7b771a9d38ae1631b5edfeed6d40233e243e602ddf2195e7a  openvpn-2.6.14.tar.gz
--sha256  1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
-+sha256  e35513ee15995e3c71adfd8891b9f33522896c70b3baa2ed9a23c7a42c4d7bde  openvpn-2.6.15.tar.gz
-+sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYRIGHT.GPL
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index ce916dba04..26558c3d16 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index 8c8ebddc47..7b28624921 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
+@@ -1,6 +1,8 @@
+ # Locally computed
+-sha256  94647b3f887f7dc91df51a4f88dfc3a07cc279bef86b8d05aa72f0c49d187571  asterisk-20.11.1.tar.gz
++sha256  4cc403c8885d4aed3956dfb75d315d3e5bcc129eb9cd47c156d3b12ecceed1ba  asterisk-22.3.0.tar.gz
+ 
++# Locally computed
++sha256  58bb83cec4d431f48d006e455d821668450f8cf6b6c95f090def47062fa3a60c  pjproject-2.15.1.tar.bz2
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+ # sha256 locally computed
+ sha1  721c512feaea102700d5bdce952fdc0bb29dc640  asterisk-core-sounds-en-gsm-1.6.1.tar.gz
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index 568a5bc150..18af217129 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -4,15 +4,20 @@
  #
  ################################################################################
  
--OPENVPN_VERSION = 2.6.14
-+OPENVPN_VERSION = 2.6.15
- OPENVPN_SITE = https://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf libcap-ng
- OPENVPN_LICENSE = GPL-2.0
-
---===============7373113369026527129==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-ASTERISK_VERSION = 20.11.1
++ASTERISK_VERSION = 22.3.0
+ # Use the github mirror: it's an official mirror maintained by Digium, and
+ # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+ 
++# compilation with the external pjsip produces a non-working asterisk, which
++# segfaults. The reason behind this is unclear.
++# https://github.com/asterisk/asterisk/issues/671
++ASTERISK_PJSIP_URL = https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.15.1/
+ ASTERISK_SOUNDS_BASE_URL = http://downloads.asterisk.org/pub/telephony/sounds/releases
+ ASTERISK_EXTRA_DOWNLOADS = \
+ 	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-core-sounds-en-gsm-1.6.1.tar.gz \
+-	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-moh-opsound-wav-2.03.tar.gz
++	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-moh-opsound-wav-2.03.tar.gz \
++	$(ASTERISK_PJSIP_URL)/pjproject-2.15.1.tar.bz2
+ 
+ ASTERISK_LICENSE = GPL-2.0, BSD-3-Clause (SHA1, resample), BSD-4-Clause (db1-ast)
+ ASTERISK_LICENSE_FILES = \
+@@ -75,7 +80,6 @@ ASTERISK_CONF_OPTS = \
+ 	--without-neon29 \
+ 	--without-newt \
+ 	--without-openr2 \
+-	--without-osptk \
+ 	--without-postgres \
+ 	--without-popt \
+ 	--without-resample \
+@@ -93,10 +97,9 @@ ASTERISK_CONF_OPTS = \
+ 	--with-libjwt="$(STAGING_DIR)/usr" \
+ 	--with-libxml2 \
+ 	--with-libedit="$(STAGING_DIR)/usr" \
+-	--without-pjproject-bundled \
+-	--with-pjproject="$(STAGING_DIR)/usr" \
++	--with-pjproject-bundled \
+ 	--with-sqlite3="$(STAGING_DIR)/usr" \
+-	--with-sounds-cache=$(ASTERISK_DL_DIR)
++	--with-download-cache=$(ASTERISK_DL_DIR)
+ 
+ # avcodec are from ffmpeg. There is virtually zero chance this could
+ # even work; asterisk is looking for ffmpeg/avcodec.h which has not
+@@ -134,13 +137,6 @@ else
+ ASTERISK_CONF_OPTS += --without-gsm
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
+-ASTERISK_DEPENDENCIES += alsa-lib
+-ASTERISK_CONF_OPTS += --with-asound
+-else
+-ASTERISK_CONF_OPTS += --without-asound
+-endif
+-
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS),y)
+ ASTERISK_DEPENDENCIES += bluez5_utils
+ ASTERISK_CONF_OPTS += --with-bluetooth
+@@ -298,6 +294,15 @@ ASTERISK_INSTALL_TARGET_OPTS = \
+ 	LDCONFIG=true \
+ 	install samples
+ 
++define ASTERISK_USERS
++	asterisk -1 asterisk -1 * /usr/lib/asterisk - - asterisk user
++endef
++
++define ASTERISK_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/asterisk/asterisk.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/asterisk.service
++endef
++
+ $(eval $(autotools-package))
+ 
+ #-------------------------------------------------------------------------------
+diff --git a/package/asterisk/asterisk.service b/package/asterisk/asterisk.service
+new file mode 100644
+index 0000000000..802789defb
+--- /dev/null
++++ b/package/asterisk/asterisk.service
+@@ -0,0 +1,23 @@
++# based on included asterisk.service, but changed
++# Type to simple, comments removed
++[Unit]
++Description=Asterisk PBX and telephony daemon.
++After=network.target
++
++[Service]
++Type=simple
++Environment=HOME=/usr/lib/asterisk
++WorkingDirectory=/usr/lib/asterisk
++User=asterisk
++Group=asterisk
++ExecStart=/usr/sbin/asterisk -mqf -C /etc/asterisk/asterisk.conf
++ExecReload=/usr/sbin/asterisk -rx 'core reload'
++RuntimeDirectory=asterisk
++LimitCORE=infinity
++Restart=always
++RestartSec=4
++StandardOutput=null
++PrivateTmp=true
++
++[Install]
++WantedBy=multi-user.target
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7373113369026527129==--
