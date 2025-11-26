@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E58C2CFD2F6
-	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:36:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AE87D116EA
+	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:36:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BC434414BE;
-	Thu, 27 Nov 2025 20:36:38 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L12o3SreQ310; Thu, 27 Nov 2025 20:36:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E005A414BF
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E005A414BF;
-	Thu, 27 Nov 2025 20:36:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1425FDE
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:36:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DAC3D6178C
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:36:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6492C61BC6;
+	Thu, 27 Nov 2025 20:36:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CLkO7-al8jkD for <buildroot@buildroot.org>;
- Thu, 27 Nov 2025 20:36:05 +0000 (UTC)
+ id 67Rbq_T6eNEc; Thu, 27 Nov 2025 20:36:36 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 945E161BAA
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 945E161BAA;
+	Thu, 27 Nov 2025 20:36:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C5DE0DE
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:36:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5369980699
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:36:06 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tYJZskYYzsWY for <buildroot@buildroot.org>;
+ Thu, 27 Nov 2025 20:36:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 429D461AB5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18CDE843CC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 429D461AB5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 18CDE843CC
  for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:36:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4154883CC9; Thu, 27 Nov 2025 20:36:03 +0000 (UTC)
+ id 16D4185FC3; Thu, 27 Nov 2025 20:36:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 26 Nov 2025 09:41:42 +0100
+Date: Wed, 26 Nov 2025 09:33:40 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: 5c18a56ffb8d25b7a4753a5d5daf69d36b2ba273
-X-Git-Newrev: e3b869530152f09be9a054dc0f21906eec449844
+X-Git-Oldrev: 5efbcec58e7a10a05a4a129e677cda3b67743b6a
+X-Git-Newrev: 5592874523690399fa41101a2b720e50e4db10c5
 X-Patchwork-Hint: ignore
-Message-Id: <20251127203603.4154883CC9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] DEVELOPERS: add Thomas
- Perale to cve-check & cve.py
+Message-Id: <20251127203603.16D4185FC3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/python-django:
+ security bump to version 5.2.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,30 +66,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3b869530152f09be9a054dc0f21906eec449844
+commit: https://git.buildroot.net/buildroot/commit/?id=5592874523690399fa41101a2b720e50e4db10c5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Fixed the following security issues:
+
+CVE-2025-64458: Potential denial-of-service vulnerability in
+HttpResponseRedirect and HttpResponsePermanentRedirect on Windows
+
+CVE-2025-64459: Potential SQL injection via _connector keyword argument
+
+https://docs.djangoproject.com/en/5.2/releases/5.2.8/
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 51558fa3ea8e0ad445a192536375bf930f103a92)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 779827f765ebc721d8edbeb6579b7692129942ab)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- DEVELOPERS | 2 ++
- 1 file changed, 2 insertions(+)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c7aab803be..bb23d93de4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3186,6 +3186,8 @@ F:	package/xorcurses/
- N:	Thomas Perale <thomas.perale@mind.be>
- F:	package/go/
- F:	utils/generate-cyclonedx
-+F:	support/scripts/cve-check
-+F:	support/scripts/cve.py
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 1ec80dc1c2..448e98613b 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  699a77ac347ca3484939762483dc4b08  django-5.2.7.tar.gz
+-sha256  e0f6f12e2551b1716a95a63a1366ca91bbcd7be059862c1b18f989b1da356cdd  django-5.2.7.tar.gz
++md5  0268c52cb99bb764490fdd90502def32  django-5.2.8.tar.gz
++sha256  23254866a5bb9a2cfa6004e8b809ec6246eba4b58a7589bc2772f1bcc8456c7f  django-5.2.8.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+ sha256  dcac1c86cb7ab491702bdb4c41be680fafde51536748cc8aaee3840eec53ed17  django/contrib/gis/measure.py
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 139a15b13a..920fd8a577 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
- N:	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- F:	arch/Config.in.arm
+-PYTHON_DJANGO_VERSION = 5.2.7
++PYTHON_DJANGO_VERSION = 5.2.8
+ PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/b1/96/bd84e2bb997994de8bcda47ae4560991084e86536541d7214393880f01a8
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/05/a2/933dbbb3dd9990494960f6e64aca2af4c0745b63b7113f59a822df92329e
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause, MIT (jquery, utils/archive.py), BSD-2-Clause (inlines.js)
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE \
+ 	django/contrib/gis/measure.py \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
