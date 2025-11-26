@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E85AD116F7
-	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:36:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64CACCFD2F6
+	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:36:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 63A2F61BF7;
-	Thu, 27 Nov 2025 20:36:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 18CEE61C05;
+	Thu, 27 Nov 2025 20:36:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LvguCZKT9vxH; Thu, 27 Nov 2025 20:36:48 +0000 (UTC)
+ id 8SQjGt0922Zg; Thu, 27 Nov 2025 20:36:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED81A61BD7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11F2661BE7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED81A61BD7;
-	Thu, 27 Nov 2025 20:36:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 11F2661BE7;
+	Thu, 27 Nov 2025 20:36:47 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0EFEA2A9
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:36:21 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0FBB9DE
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:36:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C5F0861792
+ by smtp3.osuosl.org (Postfix) with ESMTP id D3A53617B0
  for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:36:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x3fAu9Wn6E1D for <buildroot@buildroot.org>;
+ id SDhiHjyAj-Bt for <buildroot@buildroot.org>;
  Thu, 27 Nov 2025 20:36:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20480617B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B529C6177D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 20480617B0
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:36:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B529C6177D
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:36:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1F1808355B; Thu, 27 Nov 2025 20:36:03 +0000 (UTC)
+ id B3F3182386; Thu, 27 Nov 2025 20:36:02 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 26 Nov 2025 09:40:43 +0100
+Date: Wed, 26 Nov 2025 09:25:32 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: 5592874523690399fa41101a2b720e50e4db10c5
-X-Git-Newrev: 66f8a5bb3bea662747595c87cb17ac6de8c1ec73
+X-Git-Oldrev: 6ea56ca6e10938a4632516dda788db58be1626a7
+X-Git-Newrev: 787510d99f6a1468ac02c0e552d080808590e1de
 X-Patchwork-Hint: ignore
-Message-Id: <20251127203603.1F1808355B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/openvpn: bump
- version to 2.6.15
+Message-Id: <20251127203602.B3F3182386@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] utils/check-package: add
+ a check for 'default n' in Config.in files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,67 +61,93 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6887819131494753182=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6887819131494753182==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=66f8a5bb3bea662747595c87cb17ac6de8c1ec73
+commit: https://git.buildroot.net/buildroot/commit/?id=787510d99f6a1468ac02c0e552d080808590e1de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-Release notes:
-https://sourceforge.net/p/openvpn/mailman/message/59238233/
+Boolean Config.in symbols default to 'n', so we typically do not add such
+redundant lines.
 
-Changelog:
-https://github.com/OpenVPN/openvpn/blob/release/2.6/ChangeLog
-https://github.com/OpenVPN/openvpn/blob/release/2.6/Changes.rst
-
-The ‎COPYRIGHT.GPL was updated to latest version from FSF.
-
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit c368b33378c365c30a847b40634071d26ac02f0d)
+(cherry picked from commit 279cbbdb646e7136c4d8b3b5b44d9b4e31ed31dd)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/openvpn/openvpn.hash | 4 ++--
- package/openvpn/openvpn.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ utils/checkpackagelib/lib_config.py      | 11 +++++++++++
+ utils/checkpackagelib/test_lib_config.py | 33 ++++++++++++++++++++++++++++++++
+ 2 files changed, 44 insertions(+)
 
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index 432b1c2afb..353e8a8051 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking signature
--sha256  9eb6a6618352f9e7b771a9d38ae1631b5edfeed6d40233e243e602ddf2195e7a  openvpn-2.6.14.tar.gz
--sha256  1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
-+sha256  e35513ee15995e3c71adfd8891b9f33522896c70b3baa2ed9a23c7a42c4d7bde  openvpn-2.6.15.tar.gz
-+sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYRIGHT.GPL
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index ce916dba04..26558c3d16 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
+index bf975d7a3b..202baa7f1b 100644
+--- a/utils/checkpackagelib/lib_config.py
++++ b/utils/checkpackagelib/lib_config.py
+@@ -242,6 +242,17 @@ class Indent(_CheckFunction):
+                         text]
  
--OPENVPN_VERSION = 2.6.14
-+OPENVPN_VERSION = 2.6.15
- OPENVPN_SITE = https://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf libcap-ng
- OPENVPN_LICENSE = GPL-2.0
-
---===============6887819131494753182==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ 
++class NoDefaultN(_CheckFunction):
++    DEFAULTN = re.compile(r"^\tdefault n$")
++
++    def check_line(self, lineno, text):
++        text_nocomments = text.split("#")[0].rstrip()
++        if self.DEFAULTN.match(text_nocomments):
++            return ["{}:{}: boolean symbols default to 'n', so 'default n' is redundant"
++                    .format(self.filename, lineno),
++                    text]
++
++
+ class RedefinedConfig(_CheckFunction):
+     CONFIG = re.compile(r"^\s*(menu|)config\s+(BR2_\w+)\b")
+     IF = re.compile(r"^\s*if\s+([^#]*)\b")
+diff --git a/utils/checkpackagelib/test_lib_config.py b/utils/checkpackagelib/test_lib_config.py
+index 474d17105e..35614ef152 100644
+--- a/utils/checkpackagelib/test_lib_config.py
++++ b/utils/checkpackagelib/test_lib_config.py
+@@ -387,6 +387,39 @@ def test_Indent(testname, filename, string, expected):
+     assert warnings == expected
+ 
+ 
++NoDefaultN = [
++    ('good example',
++     'any',
++     'config BR2_PACKAGE_FOO\n'
++     '\tdefault y\n',
++     []),
++    ('default n',
++     'any',
++     'config BR2_PACKAGE_FOO\n'
++     '\tdefault n\n',
++     [['any:2: boolean symbols default to \'n\', so \'default n\' is redundant',
++       '\tdefault n\n']]),
++    ('default n with comment',
++     'any',
++     'config BR2_PACKAGE_FOO\n'
++     '\tdefault n # this is a comment\n',
++     [['any:2: boolean symbols default to \'n\', so \'default n\' is redundant',
++       '\tdefault n # this is a comment\n']]),
++    ('default n with trailing whitespace',
++     'any',
++     'config BR2_PACKAGE_FOO\n'
++     '\tdefault n  \t\n',
++     [['any:2: boolean symbols default to \'n\', so \'default n\' is redundant',
++       '\tdefault n  \t\n']])
++    ]
++
++
++@pytest.mark.parametrize('testname,filename,string,expected', NoDefaultN)
++def test_NoDefaultN(testname, filename, string, expected):
++    warnings = util.check_file(m.NoDefaultN, filename, string)
++    assert warnings == expected
++
++
+ RedefinedConfig = [
+     ('no redefinition',
+      'any',
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6887819131494753182==--
