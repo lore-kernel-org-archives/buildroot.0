@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0BE5D111A8
-	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:08:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92050CFD2F6
+	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:08:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7B98414B8;
-	Thu, 27 Nov 2025 20:08:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4EEBC414D4;
+	Thu, 27 Nov 2025 20:08:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7qKiIZu30SbL; Thu, 27 Nov 2025 20:08:35 +0000 (UTC)
+ id 3hEKFEyONM5m; Thu, 27 Nov 2025 20:08:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE498414A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B449414A2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE498414A0;
-	Thu, 27 Nov 2025 20:08:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1B449414A2;
+	Thu, 27 Nov 2025 20:08:38 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5C335708
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:08:12 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 8A4E7708
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:08:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 226FC84430
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9A0F684417
  for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:07:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2lLDKx8sIVJb for <buildroot@buildroot.org>;
+ id 6hrdfda2rXxq for <buildroot@buildroot.org>;
  Thu, 27 Nov 2025 20:07:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 320A684433
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EE858442B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 320A684433
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0EE858442B
  for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:07:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3030C85FC4; Thu, 27 Nov 2025 20:07:57 +0000 (UTC)
+ id 0D33F85FCC; Thu, 27 Nov 2025 20:07:57 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 27 Nov 2025 13:26:53 +0100
+Date: Wed, 26 Nov 2025 09:41:24 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 001fe444001c748a163691083f9141b0711f09d4
-X-Git-Newrev: 8215c5dea90880128b0335cf915ecced538e6f24
+X-Git-Oldrev: 3dba17294d3a29d90777f5ef45c63b0722cbf0f2
+X-Git-Newrev: eb2990afddfcf63197765628dfbf89d7128aa0fb
 X-Patchwork-Hint: ignore
-Message-Id: <20251127200757.3030C85FC4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/gnutls: security
- bump to version 3.8.11
+Message-Id: <20251127200757.0D33F85FCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] support/scripts/cve.py:
+ don't call download_nvd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,49 +66,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8215c5dea90880128b0335cf915ecced538e6f24
+commit: https://git.buildroot.net/buildroot/commit/?id=eb2990afddfcf63197765628dfbf89d7128aa0fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Release notes:
-https://lists.gnupg.org/pipermail/gnutls-help/2025-November/004906.html
+This patch move the 'download_nvd' call to the 'pkg-stats' script
+instead of automatically calling 'read_nvd_dir'.
 
-Fixes CVE-2025-9820.
+Since the cve.py file can be used as a library it's up to the caller to
+decide whether or not to update the NVD database.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 81dbfe1c2ae848b4eb1f896198d13455df50e548)
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 867017e736ac53857685d424f043d16c97ffebfe)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/gnutls/gnutls.hash | 4 ++--
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ support/scripts/cve.py    | 6 ++++--
+ support/scripts/pkg-stats | 2 ++
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 1b2a7ba9b5..03297c3321 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.10.tar.xz.sig
--sha256  db7fab7cce791e7727ebbef2334301c821d79a550ec55c9ef096b610b03eb6b7  gnutls-3.8.10.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.11.tar.xz.sig
-+sha256  91bd23c4a86ebc6152e81303d20cf6ceaeb97bc8f84266d0faec6e29f17baa20  gnutls-3.8.11.tar.xz
- # Locally calculated
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
- sha256  20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95  COPYING.LESSERv2
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 7536189429..9eef594cc9 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -6,7 +6,7 @@
+diff --git a/support/scripts/cve.py b/support/scripts/cve.py
+index 25481a6367..27a5f2f362 100755
+--- a/support/scripts/cve.py
++++ b/support/scripts/cve.py
+@@ -144,7 +144,9 @@ class CVE:
+         self.nvd_cve = nvd_cve
  
- # When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
- GNUTLS_VERSION_MAJOR = 3.8
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).10
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).11
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library)
+     @staticmethod
+-    def download_nvd(nvd_git_dir):
++    def download_nvd(nvd_dir):
++        nvd_git_dir = os.path.join(nvd_dir, "git")
++
+         if os.path.exists(nvd_git_dir):
+             subprocess.check_call(
+                 ["git", "pull"],
+@@ -177,7 +179,7 @@ class CVE:
+         nvd_dir, a fresh copy will be downloaded, and kept in .json.gz
+         """
+         nvd_git_dir = os.path.join(nvd_dir, "git")
+-        CVE.download_nvd(nvd_git_dir)
++
+         for year in range(NVD_START_YEAR, datetime.datetime.now().year + 1):
+             for dirpath, _, filenames in os.walk(os.path.join(nvd_git_dir, f"CVE-{year}")):
+                 for filename in filenames:
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index ec46d373d5..cfea179458 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -676,6 +676,8 @@ def check_package_cves(nvd_path, packages):
+             cpe_product_pkgs[pkg.name].append(pkg)
+ 
+     print(f"Updating NVD database in '{nvd_path}'")
++    cvecheck.CVE.download_nvd(nvd_path)
++
+     for cve in cvecheck.CVE.read_nvd_dir(nvd_path):
+         check_package_cve_affects(cve, cpe_product_pkgs)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
