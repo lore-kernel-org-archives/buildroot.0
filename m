@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53127D111A8
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E26E7CFD2F6
 	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:08:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2CC4440D54;
+	by smtp3.osuosl.org (Postfix) with ESMTP id B9C5461AB3;
 	Thu, 27 Nov 2025 20:08:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SJbfEFhKOfWn; Thu, 27 Nov 2025 20:08:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OWEg5AyE_tGB; Thu, 27 Nov 2025 20:08:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD5714144C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8FDE61ACE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD5714144C;
-	Thu, 27 Nov 2025 20:08:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B8FDE61ACE;
+	Thu, 27 Nov 2025 20:08:14 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 17E4D9BA
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:08:00 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 258FE708
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:08:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 926D640A42
+ by smtp4.osuosl.org (Postfix) with ESMTP id A9DC9409DA
  for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:07:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C4rGnPLdDILP for <buildroot@buildroot.org>;
+ id Kol0Wd6z0QCS for <buildroot@buildroot.org>;
  Thu, 27 Nov 2025 20:07:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E404409DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8CE140B0F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6E404409DA
+ by smtp4.osuosl.org (Postfix) with ESMTP id C8CE140B0F
  for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:07:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6C90781E78; Thu, 27 Nov 2025 20:07:56 +0000 (UTC)
+ id C748E848DA; Thu, 27 Nov 2025 20:07:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 26 Nov 2025 09:13:51 +0100
+Date: Wed, 26 Nov 2025 09:29:50 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 3b71b8e5982cc0edd0059f9cb2c5ca0c18118abc
-X-Git-Newrev: c0efe9491aea4b2a67d056766730a8a3cc4e3989
+X-Git-Oldrev: ee3fb3669ba7753d8cc5ba0b0975787134648f58
+X-Git-Newrev: 63b413c2b2946ca0a6641dbd56052c9eb50b8014
 X-Patchwork-Hint: ignore
-Message-Id: <20251127200756.6C90781E78@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/mediastreamer:
- remove package
+Message-Id: <20251127200756.C748E848DA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/redis: bump to
+ v7.2.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,414 +66,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0efe9491aea4b2a67d056766730a8a3cc4e3989
+commit: https://git.buildroot.net/buildroot/commit/?id=63b413c2b2946ca0a6641dbd56052c9eb50b8014
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-mediastreamer was only needed as a dependency of linphone, as is
-anyway bundled in more recent versions of linphone, making a separate
-package unnecessary.
+See the release notes: https://github.com/redis/redis/releases/tag/7.2.12
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b02a4ca7d76c895b842ef4010ede6a1e1e693b5d)
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+(cherry picked from commit 896e19a5c64a12bf39f0f03aea94c77b684111f8)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .checkpackageignore                                |   2 -
- Config.in.legacy                                   |   8 +
- package/Config.in                                  |   1 -
- ...lters-nowebcam.c-fix-build-without-ffmpeg.patch |  55 -------
- ...T_BUFFER_PADDING_SIZE-to-determine-paddin.patch |  46 ------
- package/mediastreamer/Config.in                    |  28 ----
- package/mediastreamer/mediastreamer.hash           |   3 -
- package/mediastreamer/mediastreamer.mk             | 179 ---------------------
- 8 files changed, 8 insertions(+), 314 deletions(-)
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index b7f86243e2..93d58e131d 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -738,8 +738,6 @@ package/matchbox-panel/0003-mb-applet-battery.patch lib_patch.Upstream
- package/matchbox-startup-monitor/0001-true-false.patch lib_patch.Upstream
- package/matchbox/0001-defaulttheme.patch lib_patch.Upstream
- package/matchbox/0002-src-Fix-build-with-gcc-10.patch lib_patch.Upstream
--package/mediastreamer/0001-src-videofilters-nowebcam.c-fix-build-without-ffmpeg.patch lib_patch.Upstream
--package/mediastreamer/0002-Use-AV_INPUT_BUFFER_PADDING_SIZE-to-determine-paddin.patch lib_patch.Upstream
- package/memstat/0001-PATH_MAX.patch lib_patch.Upstream
- package/mender-connect/S43mender-connect Shellcheck
- package/menu-cache/0001-Support-gcc10-compilation.patch lib_patch.Upstream
-diff --git a/Config.in.legacy b/Config.in.legacy
-index cf6ff71358..95423155aa 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,14 @@ endif
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index aa3253335e..7677642ed1 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  2f9886eca68d30114ad6a01da65631f8007d802fd3e6c9fac711251e6390323d  redis-7.2.11.tar.gz
++sha256  97c60478a7c777ac914ca9d87a7e88ba265926456107e758c62d8f971d0196bc  redis-7.2.12.tar.gz
  
- comment "Legacy options removed in 2025.02.9"
+ # Locally calculated
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index cd9736663b..e6175b69b5 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_MEDIASTREAMER
-+	bool "mediastreamer has been removed"
-+	select BR2_LEGACY
-+	help
-+	  This package has been removed as part of the linphone
-+	  removal. In addition, newer version of linphone directly
-+	  bundle mediastreamer making a separate package unnecessary.
-+
- config BR2_PACKAGE_BELR
- 	bool "belr has been removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 66a9e9b3c9..43446a65db 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1983,7 +1983,6 @@ menu "Multimedia"
- 	source "package/libvpx/Config.in"
- 	source "package/libyuv/Config.in"
- 	source "package/live555/Config.in"
--	source "package/mediastreamer/Config.in"
- 	source "package/x264/Config.in"
- 	source "package/x265/Config.in"
- endmenu
-diff --git a/package/mediastreamer/0001-src-videofilters-nowebcam.c-fix-build-without-ffmpeg.patch b/package/mediastreamer/0001-src-videofilters-nowebcam.c-fix-build-without-ffmpeg.patch
-deleted file mode 100644
-index 8e7812c389..0000000000
---- a/package/mediastreamer/0001-src-videofilters-nowebcam.c-fix-build-without-ffmpeg.patch
-+++ /dev/null
-@@ -1,55 +0,0 @@
--From 342f59f1603f759b6dd90754f8dba14d08947f55 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 27 Feb 2020 16:18:35 +0100
--Subject: [PATCH] src/videofilters/nowebcam.c: fix build without ffmpeg or jpeg
--
--jpeg2yuv is only defined if ffmpeg or turbojpeg is available
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- CMakeLists.txt              | 3 +++
-- src/videofilters/nowebcam.c | 4 ++++
-- 2 files changed, 7 insertions(+)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 0efc1a5f..6668db2b 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -336,7 +336,10 @@ if(ENABLE_JPEG)
-- 	if(NOT TURBOJPEG_FOUND)
-- 		message(WARNING "Could not find libturbo-jpeg, mediastreamer2 will be compiled without LibJpeg-Turbo")
-- 		set(ENABLE_JPEG OFF CACHE BOOL "Enable JPEG support" FORCE)
--+		add_definitions(-DNO_JPEG)
-- 	endif()
--+else()
--+	add_definitions(-DNO_JPEG)
-- endif()
-- if(ENABLE_QRCODE)
-- 	find_package(Zxing)
--diff --git a/src/videofilters/nowebcam.c b/src/videofilters/nowebcam.c
--index a2344dcd..afb0d7b1 100644
----- a/src/videofilters/nowebcam.c
--+++ b/src/videofilters/nowebcam.c
--@@ -107,7 +107,9 @@ static mblk_t *_ms_load_jpeg_as_yuv(const char *jpgpath, MSVideoSize *reqsize) {
-- 	if (err != st_sizel) {
-- 		  ms_error("Could not read as much as wanted !");
-- 	}
--+#if !(defined(NO_FFMPEG) && defined(NO_JPEG))
-- 	m = jpeg2yuv(jpgbuf, st_sizel, reqsize);
--+#endif
-- 	ms_free(jpgbuf);
-- 	if (m == NULL) {
-- 		CloseHandle(fd);
--@@ -140,7 +142,9 @@ static mblk_t *_ms_load_jpeg_as_yuv(const char *jpgpath, MSVideoSize *reqsize) {
-- 		if (err != statbuf.st_size) {
-- 			ms_error("Could not read as much as wanted: %i<>%li !", err, (long)statbuf.st_size);
-- 		}
--+#if !(defined(NO_FFMPEG) && defined(NO_JPEG))
-- 		m = jpeg2yuv(jpgbuf,statbuf.st_size,reqsize);
--+#endif
-- 		ms_free(jpgbuf);
-- 		if (m == NULL) {
-- 			close(fd);
---- 
--2.25.0
--
-diff --git a/package/mediastreamer/0002-Use-AV_INPUT_BUFFER_PADDING_SIZE-to-determine-paddin.patch b/package/mediastreamer/0002-Use-AV_INPUT_BUFFER_PADDING_SIZE-to-determine-paddin.patch
-deleted file mode 100644
-index 9fd3fda2ec..0000000000
---- a/package/mediastreamer/0002-Use-AV_INPUT_BUFFER_PADDING_SIZE-to-determine-paddin.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 84b1919124884232e0fa30b30458470db27c73fc Mon Sep 17 00:00:00 2001
--From: James Cowgill <jcowgill@debian.org>
--Date: Sat, 18 Aug 2018 12:56:38 +0200
--Subject: [PATCH] Use AV_INPUT_BUFFER_PADDING_SIZE to determine padding
-- size
--
--Hardcoding the value for FF_INPUT_BUFFER_PADDING_SIZE is not safe
--because  upstream FFmpeg might change it (as they did in FFmpeg 4.0).
--
--Instead, use FFmpeg's AV_INPUT_BUFFER_PADDING_SIZE if available and
--only hardcode a value if FFmpeg is disabled (in which case the value
--doesn't particularly matter anyway). For compatibility with older
--FFmpeg versions, define AV_INPUT_BUFFER_PADDING_SIZE if hasn't been
--defined yet.
--
--Downloaded from
--https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=901735
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[Fabrice: updated for 4.3.1]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Dario: make the patch to be applied with fuzz factor 0]
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-----
-- src/utils/ffmpeg-priv.h     | 4 ++++
-- src/videofilters/nowebcam.c | 4 ++--
-- 2 files changed, 6 insertions(+), 2 deletions(-)
--
--diff --git a/src/utils/ffmpeg-priv.h b/src/utils/ffmpeg-priv.h
--index c0745a9a..d59ea0e1 100644
----- a/src/utils/ffmpeg-priv.h
--+++ b/src/utils/ffmpeg-priv.h
--@@ -115,6 +115,10 @@
-- extern "C" {
-- #endif
-- 
--+#ifndef AV_INPUT_BUFFER_PADDING_SIZE
--+#define AV_INPUT_BUFFER_PADDING_SIZE FF_INPUT_BUFFER_PADDING_SIZE
--+#endif
--+
-- #ifndef HAVE_FUN_avcodec_encode_video2
-- int avcodec_encode_video2 (AVCodecContext *avctx, AVPacket *avpkt, const AVFrame *frame, int *got_packet_ptr);
-- #endif
---- 
--2.18.0
--
-diff --git a/package/mediastreamer/Config.in b/package/mediastreamer/Config.in
-deleted file mode 100644
-index e776b60df3..0000000000
---- a/package/mediastreamer/Config.in
-+++ /dev/null
-@@ -1,28 +0,0 @@
--config BR2_PACKAGE_MEDIASTREAMER
--	bool "mediastreamer"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_STATIC_LIBS
--	depends on BR2_TOOLCHAIN_HAS_THREADS # ortp
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # ortp
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
--	select BR2_PACKAGE_ALSA_LIB_MIXER if BR2_PACKAGE_ALSA_LIB
--	select BR2_PACKAGE_ALSA_LIB_PCM if BR2_PACKAGE_ALSA_LIB
--	select BR2_PACKAGE_MBEDTLS
--	select BR2_PACKAGE_ORTP
--	help
--	  Mediastreamer is a powerful and lightweighted streaming
--	  engine specialized for voice/video telephony applications.
--
--	  It is the library that is responsible for all the receiving
--	  and sending of multimedia streams in linphone, including
--	  voice/video capture, encoding and decoding, and rendering.
--
--	  http://www.linphone.org/technical-corner/mediastreamer2
--
--comment "mediastreamer needs a toolchain w/ threads, C++, dynamic library, gcc >= 5"
--	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
--
--comment "mediastreamer needs a toolchain not affected by GCC bug 64735"
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/mediastreamer/mediastreamer.hash b/package/mediastreamer/mediastreamer.hash
-deleted file mode 100644
-index dfa469d8dd..0000000000
---- a/package/mediastreamer/mediastreamer.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256  64bdfe9dd6bfa64b492b21a45ad4bb36d67626a7f3b3ab2084a708864f129e84  mediastreamer-4.4.8.tar.gz
--sha256  1b3782ccad7b8614100cda30d3faf42fc39f2e97932908c543005053b654ca68  LICENSE.txt
-diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
-deleted file mode 100644
-index febbb7b343..0000000000
---- a/package/mediastreamer/mediastreamer.mk
-+++ /dev/null
-@@ -1,179 +0,0 @@
--################################################################################
--#
--# mediastreamer
--#
--################################################################################
--
--MEDIASTREAMER_VERSION = 4.4.8
--MEDIASTREAMER_SITE = \
--	https://gitlab.linphone.org/BC/public/mediastreamer2/-/archive/$(MEDIASTREAMER_VERSION)
--MEDIASTREAMER_LICENSE = GPL-3.0+
--MEDIASTREAMER_LICENSE_FILES = LICENSE.txt
--MEDIASTREAMER_INSTALL_STAGING = YES
--MEDIASTREAMER_DEPENDENCIES = ortp
--MEDIASTREAMER_CONF_OPTS = \
--	-DENABLE_DOC=OFF \
--	-DENABLE_GL=OFF \
--	-DENABLE_GLX=OFF \
--	-DENABLE_MKV=OFF \
--	-DENABLE_SOUND=OFF \
--	-DENABLE_STRICT=OFF \
--	-DENABLE_TOOLS=OFF \
--	-DENABLE_UNIT_TESTS=OFF \
--	-DENABLE_ZRTP=OFF
--
--ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
--MEDIASTREAMER_CONF_OPTS += \
--	-DENABLE_ALSA=ON \
--	-DENABLE_SOUND=ON
--MEDIASTREAMER_DEPENDENCIES += alsa-lib
--else
--MEDIASTREAMER_CONF_OPTS += -DENABLE_ALSA=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_BCG729),y)
--MEDIASTREAMER_CONF_OPTS += -DENABLE_G729=ON
--MEDIASTREAMER_DEPENDENCIES += bcg729
--else
--MEDIASTREAMER_CONF_OPTS += -DENABLE_G729=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_JPEG_TURBO),y)
--MEDIASTREAMER_CONF_OPTS += -DENABLE_JPEG=ON
--MEDIASTREAMER_DEPENDENCIES += jpeg
--else
--MEDIASTREAMER_CONF_OPTS += -DENABLE_JPEG=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_LIBGSM),y)
--MEDIASTREAMER_CONF_OPTS += -DENABLE_GSM=ON
--MEDIASTREAMER_DEPENDENCIES += libgsm
--else
--MEDIASTREAMER_CONF_OPTS += -DENABLE_GSM=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_LIBPCAP),y)
--MEDIASTREAMER_CONF_OPTS += -DENABLE_PCAP=ON
--MEDIASTREAMER_DEPENDENCIES += libpcap
--else
--MEDIASTREAMER_CONF_OPTS += -DENABLE_PCAP=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_LIBSRTP),y)
--MEDIASTREAMER_CONF_OPTS += -DENABLE_SRTP=ON
--MEDIASTREAMER_DEPENDENCIES += libsrtp
--else
--MEDIASTREAMER_CONF_OPTS += -DENABLE_SRTP=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_LIBVPX),y)
--MEDIASTREAMER_CONF_OPTS += -DENABLE_VPX=ON
--MEDIASTREAMER_DEPENDENCIES += libvpx
--else
--MEDIASTREAMER_CONF_OPTS += -DENABLE_VPX=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_OPUS),y)
--MEDIASTREAMER_CONF_OPTS += -DENABLE_OPUS=ON
--MEDIASTREAMER_DEPENDENCIES += opus
--else
--MEDIASTREAMER_CONF_OPTS += -DENABLE_OPUS=OFF
--endif
--
--# portaudio backend needs speexdsp as well
--ifeq ($(BR2_PACKAGE_PORTAUDIO)$(BR2_PACKAGE_SPEEXDSP),yy)
--MEDIASTREAMER_CONF_OPTS += \
--	-DENABLE_PORTAUDIO=ON \
--	-DENABLE_SOUND=ON
--MEDIASTREAMER_DEPENDENCIES += portaudio
--else
--MEDIASTREAMER_CONF_OPTS += -DENABLE_PORTAUDIO=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
--MEDIASTREAMER_CONF_OPTS += \
--	-DENABLE_PULSEAUDIO=ON \
--	-DENABLE_SOUND=ON
--MEDIASTREAMER_DEPENDENCIES += pulseaudio
--else
--MEDIASTREAMER_CONF_OPTS += -DENABLE_PULSEAUDIO=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_SPEEX),y)
--MEDIASTREAMER_CONF_OPTS += -DENABLE_SPEEX_CODEC=ON
--MEDIASTREAMER_DEPENDENCIES += speex
--else
--MEDIASTREAMER_CONF_OPTS += -DENABLE_SPEEX_CODEC=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_SPEEXDSP),y)
--MEDIASTREAMER_CONF_OPTS += -DENABLE_SPEEX_DSP=ON
--MEDIASTREAMER_DEPENDENCIES += speexdsp
--else
--MEDIASTREAMER_CONF_OPTS += -DENABLE_SPEEX_DSP=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yy)
--MEDIASTREAMER_CONF_OPTS += -DENABLE_RESAMPLE=ON
--else
--MEDIASTREAMER_CONF_OPTS += -DENABLE_RESAMPLE=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_FFMPEG_SWSCALE),y)
--MEDIASTREAMER_CONF_OPTS += -DENABLE_FFMPEG=ON
--MEDIASTREAMER_DEPENDENCIES += ffmpeg
--else
--MEDIASTREAMER_CONF_OPTS += -DENABLE_FFMPEG=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_SDL),y)
--MEDIASTREAMER_CONF_OPTS += -DENABLE_SDL=ON
--MEDIASTREAMER_DEPENDENCIES += sdl
--else
--MEDIASTREAMER_CONF_OPTS += -DENABLE_SDL=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
--MEDIASTREAMER_CONF_OPTS += -DENABLE_X11=ON
--MEDIASTREAMER_DEPENDENCIES += xlib_libX11
--else
--MEDIASTREAMER_CONF_OPTS += -DENABLE_X11=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_XLIB_LIBXV),y)
--MEDIASTREAMER_CONF_OPTS += -DENABLE_XV=ON
--MEDIASTREAMER_DEPENDENCIES += xlib_libXv
--else
--MEDIASTREAMER_CONF_OPTS += -DENABLE_XV=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_LIBTHEORA),y)
--MEDIASTREAMER_CONF_OPTS += -DENABLE_THEORA=ON
--MEDIASTREAMER_DEPENDENCIES += libtheora
--else
--MEDIASTREAMER_CONF_OPTS += -DENABLE_THEORA=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_LIBV4L),y)
--MEDIASTREAMER_CONF_OPTS += -DENABLE_V4L=ON
--MEDIASTREAMER_DEPENDENCIES += libv4l
--else
--MEDIASTREAMER_CONF_OPTS += -DENABLE_V4L=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_ZXING_CPP),y)
--MEDIASTREAMER_CONF_OPTS += -DENABLE_QRCODE=ON
--MEDIASTREAMER_DEPENDENCIES += zxing-cpp
--else
--MEDIASTREAMER_CONF_OPTS += -DENABLE_QRCODE=OFF
--endif
--
--ifeq ($(BR2_STATIC_LIBS),y)
--MEDIASTREAMER_CONF_OPTS += -DENABLE_SHARED=OFF -DENABLE_STATIC=ON
--else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
--MEDIASTREAMER_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_STATIC=ON
--else ifeq ($(BR2_SHARED_LIBS),y)
--MEDIASTREAMER_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_STATIC=OFF
--endif
--
--$(eval $(cmake-package))
+-REDIS_VERSION = 7.2.11
++REDIS_VERSION = 7.2.12
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
