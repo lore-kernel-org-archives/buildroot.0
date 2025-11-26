@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C20FDD111A8
-	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:36:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55C38D116EA
+	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:36:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9B8C361AE9;
-	Thu, 27 Nov 2025 20:36:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2170861AE0;
+	Thu, 27 Nov 2025 20:36:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0GyOC3bb_eMz; Thu, 27 Nov 2025 20:36:21 +0000 (UTC)
+ id uElAooaQTxE3; Thu, 27 Nov 2025 20:36:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3AB061B73
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5BBC61B74
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A3AB061B73;
-	Thu, 27 Nov 2025 20:36:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 045362A9
+	by smtp3.osuosl.org (Postfix) with ESMTP id C5BBC61B74;
+	Thu, 27 Nov 2025 20:36:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 403242A9
  for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:36:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D562661718
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:36:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5C1E1843BF
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:36:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QDIs0LYgpghc for <buildroot@buildroot.org>;
- Thu, 27 Nov 2025 20:36:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h3p_JWZQlF2l for <buildroot@buildroot.org>;
+ Thu, 27 Nov 2025 20:36:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57BD060B3C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31414843CE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 57BD060B3C
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:36:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 31414843CE
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:36:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 567A885C08; Thu, 27 Nov 2025 20:36:02 +0000 (UTC)
+ id 2F489835FB; Thu, 27 Nov 2025 20:36:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 26 Nov 2025 09:12:29 +0100
+Date: Wed, 26 Nov 2025 09:41:27 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: a415fce3e207ac164aca4b5bc7d31d07be888439
-X-Git-Newrev: e1f43bf090e56d5f6c001bf3ce0d5a8b2c13403d
+X-Git-Oldrev: 5fded1117a2595b0d297dd8b3cb000887f9ce2ff
+X-Git-Newrev: 3acf2f71d49328aa67c5717589de409e814f26d8
 X-Patchwork-Hint: ignore
-Message-Id: <20251127203602.567A885C08@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/belle-sip: remove
- package
+Message-Id: <20251127203603.2F489835FB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] support/scripts/cve.py:
+ don't call download_nvd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,153 +66,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1f43bf090e56d5f6c001bf3ce0d5a8b2c13403d
+commit: https://git.buildroot.net/buildroot/commit/?id=3acf2f71d49328aa67c5717589de409e814f26d8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-belle-sip was only needed as a dependency of linphone, as is anyway
-bundled in more recent versions of linphone, making a separate package
-unnecessary.
+This patch move the 'download_nvd' call to the 'pkg-stats' script
+instead of automatically calling 'read_nvd_dir'.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Since the cve.py file can be used as a library it's up to the caller to
+decide whether or not to update the NVD database.
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ffa68244171fb16207f61953cfebdff9bb411d5d)
+(cherry picked from commit 867017e736ac53857685d424f043d16c97ffebfe)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- Config.in.legacy                 |  8 ++++++++
- DEVELOPERS                       |  1 -
- package/Config.in                |  1 -
- package/belle-sip/Config.in      | 22 ----------------------
- package/belle-sip/belle-sip.hash |  3 ---
- package/belle-sip/belle-sip.mk   | 40 ----------------------------------------
- 6 files changed, 8 insertions(+), 67 deletions(-)
+ support/scripts/cve.py    | 6 ++++--
+ support/scripts/pkg-stats | 2 ++
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 5c7010270e..4b081d844c 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,14 @@ endif
+diff --git a/support/scripts/cve.py b/support/scripts/cve.py
+index 25481a6367..27a5f2f362 100755
+--- a/support/scripts/cve.py
++++ b/support/scripts/cve.py
+@@ -144,7 +144,9 @@ class CVE:
+         self.nvd_cve = nvd_cve
  
- comment "Legacy options removed in 2025.08.3"
- 
-+config BR2_PACKAGE_BELLE_SIP
-+	bool "belle-sip has been removed"
-+	select BR2_LEGACY
-+	help
-+	  This package has been removed as part of the linphone
-+	  removal. In addition, newer version of linphone directly
-+	  bundle belle-sip making a separate package unnecessary.
+     @staticmethod
+-    def download_nvd(nvd_git_dir):
++    def download_nvd(nvd_dir):
++        nvd_git_dir = os.path.join(nvd_dir, "git")
 +
- config BR2_PACKAGE_LINPHONE
- 	bool "linphone has been removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 79a4fd96f9..157951c2e0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1014,7 +1014,6 @@ F:	package/openzwave/
+         if os.path.exists(nvd_git_dir):
+             subprocess.check_call(
+                 ["git", "pull"],
+@@ -177,7 +179,7 @@ class CVE:
+         nvd_dir, a fresh copy will be downloaded, and kept in .json.gz
+         """
+         nvd_git_dir = os.path.join(nvd_dir, "git")
+-        CVE.download_nvd(nvd_git_dir)
++
+         for year in range(NVD_START_YEAR, datetime.datetime.now().year + 1):
+             for dirpath, _, filenames in os.walk(os.path.join(nvd_git_dir, f"CVE-{year}")):
+                 for filename in filenames:
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index ec46d373d5..cfea179458 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -676,6 +676,8 @@ def check_package_cves(nvd_path, packages):
+             cpe_product_pkgs[pkg.name].append(pkg)
  
- N:	Fabrice Fontaine <fontaine.fabrice@gmail.com>
- F:	package/bearssl/
--F:	package/belle-sip/
- F:	package/belr/
- F:	package/boinc/
- F:	package/cairo/
-diff --git a/package/Config.in b/package/Config.in
-index 341fba52ce..7d2fca15a4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2022,7 +2022,6 @@ menu "Networking"
- 	source "package/azmq/Config.in"
- 	source "package/azure-iot-sdk-c/Config.in"
- 	source "package/batman-adv/Config.in"
--	source "package/belle-sip/Config.in"
- 	source "package/bluez5_utils-headers/Config.in"
- 	source "package/c-ares/Config.in"
- 	source "package/cni-plugins/Config.in"
-diff --git a/package/belle-sip/Config.in b/package/belle-sip/Config.in
-deleted file mode 100644
-index 8e4de366e4..0000000000
---- a/package/belle-sip/Config.in
-+++ /dev/null
-@@ -1,22 +0,0 @@
--config BR2_PACKAGE_BELLE_SIP
--	bool "belle-sip"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_STATIC_LIBS # dlfcn.h
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # bctoolbox
--	depends on BR2_USE_WCHAR
--	select BR2_PACKAGE_BCTOOLBOX
--	# needs crypto support in bctoolbox
--	select BR2_PACKAGE_MBEDTLS
--	help
--	  Belle-sip is a modern library implementing SIP (RFC 3261)
--	  transport, transaction and dialog layers.
--
--	  http://www.linphone.org/technical-corner/belle-sip
--
--comment "belle-sip needs a toolchain w/ threads, C++, dynamic library, wchar"
--	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
--		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
--
--comment "belle-sip needs a toolchain not affected by GCC bug 64735"
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/belle-sip/belle-sip.hash b/package/belle-sip/belle-sip.hash
-deleted file mode 100644
-index 670ce0062e..0000000000
---- a/package/belle-sip/belle-sip.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256  eabba615c97080572c1b9d3c76f8f9cf6a7432eedf37482672e5fa178a688f72  belle-sip-4.4.8.tar.gz
--sha256  1b3782ccad7b8614100cda30d3faf42fc39f2e97932908c543005053b654ca68  LICENSE.txt
-diff --git a/package/belle-sip/belle-sip.mk b/package/belle-sip/belle-sip.mk
-deleted file mode 100644
-index b4de3612ce..0000000000
---- a/package/belle-sip/belle-sip.mk
-+++ /dev/null
-@@ -1,40 +0,0 @@
--################################################################################
--#
--# belle-sip
--#
--################################################################################
--
--BELLE_SIP_VERSION = 4.4.8
--BELLE_SIP_SITE = \
--	https://gitlab.linphone.org/BC/public/belle-sip/-/archive/$(BELLE_SIP_VERSION)
--BELLE_SIP_LICENSE = GPL-3.0+
--BELLE_SIP_LICENSE_FILES = LICENSE.txt
--BELLE_SIP_CPE_ID_VENDOR = linphone
--BELLE_SIP_INSTALL_STAGING = YES
--BELLE_SIP_DEPENDENCIES = \
--	bctoolbox \
--	$(if $(BR2_PACKAGE_ZLIB),zlib)
--BELLE_SIP_CONF_OPTS = \
--	-DENABLE_STRICT=OFF \
--	-DENABLE_TESTS=OFF
--
--ifeq ($(BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY),y)
--BELLE_SIP_CONF_OPTS += -DENABLE_MDNS=ON
--BELLE_SIP_DEPENDENCIES += avahi
--else
--BELLE_SIP_CONF_OPTS += -DENABLE_MDNS=OFF
--endif
--
--ifeq ($(BR2_STATIC_LIBS),y)
--BELLE_SIP_CONF_OPTS += -DENABLE_SHARED=OFF -DENABLE_STATIC=ON
--else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
--BELLE_SIP_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_STATIC=ON
--else ifeq ($(BR2_SHARED_LIBS),y)
--BELLE_SIP_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_STATIC=OFF
--endif
--
--BELLE_SIP_CFLAGS = $(TARGET_CFLAGS)
--
--BELLE_SIP_CONF_OPTS += -DCMAKE_C_FLAGS="$(BELLE_SIP_CFLAGS)"
--
--$(eval $(cmake-package))
+     print(f"Updating NVD database in '{nvd_path}'")
++    cvecheck.CVE.download_nvd(nvd_path)
++
+     for cve in cvecheck.CVE.read_nvd_dir(nvd_path):
+         check_package_cve_affects(cve, cpe_product_pkgs)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
