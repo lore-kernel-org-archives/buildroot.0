@@ -4,59 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 606AFD4337D
-	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:56:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CBA3D43370
+	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:56:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2303882A56;
-	Fri, 12 Dec 2025 07:56:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3DDB983C2E;
+	Fri, 12 Dec 2025 07:56:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8DSi8bcYqQTp; Fri, 12 Dec 2025 07:56:49 +0000 (UTC)
+ id oSwYVKJlsZNy; Fri, 12 Dec 2025 07:56:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A44D8148E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7C7283BA1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765526198;
-	bh=MWHsbYc7h2E1FTo7fylnpueF5tWrHM09nzMoDvWy6rA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=b1PrFFUPfwnSyfHD8SL9kcSf2oSpNx+CIJCsYTI3xMOdZxydfk/lJsgXXpjWhoayE
-	 D5GpO+L6ErfAwFYYWlGOdlvqsfSDyzhVukI1wWM777z5Fhw6nslA5tOVWMZ21OHd0O
-	 v+3Be+cprdFU2EBTlfjMNwyW7rDv/XMYcUT1KZTmJWhVOcO4/lOvg89ma/hZ8Lzkiv
-	 Ufwk3GERN5Iacl4gb3TDjA3qzrxQUqs8bG1AhR5CbPSngTXxspCIeuAAnXt0GlL0hg
-	 MRs2O5AayG+iP3qLYjFjqUDGr4BM/4MWgNtNKlLAURSgjcWv2CvUxmKDWm/FyJ3FBU
-	 X36Mmr+RspmVA==
+	s=default; t=1765526197;
+	bh=xDAVLcW080d13gBA+MNQgmoWEuyb/PXd5wjZTXxQEho=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=AGBED0sxeg9wxaQkhNwJTeRkBAtBJusAmAS1hR5Mly6iFELV1t3U0WC79mLKaI0B0
+	 HU88HpaCMquNKv0i9UNnACiCkbaezmXfVDtSXZSaWIqKdoNU0lIXh6ftnvKfKKjyzl
+	 9QF/AgozhWBrLBga9Hp/uqBFw44b8NGQEvp02s1bAypUH1joU+W1DsIqJog+NsLJLc
+	 ysWOAE6Q3gTTQsu3Ogev0UmxesaRbprficuILZzl5WhCe+OC3jhXgYLeiAceo/q5Sa
+	 qrhRX5JA36QLGGVDtQC1FSIp9mJJ84ivqrg2ln9XOuN73FggmJMNaWYu6g7Lh1DCvG
+	 b2tMQGKBgVRwQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9A44D8148E;
-	Fri, 12 Dec 2025 07:56:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E7C7283BA1;
+	Fri, 12 Dec 2025 07:56:36 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 943332C1
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:58 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5B9022C1
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 743A9411A0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2DD654119B
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oolaZFfCZV0D for <buildroot@buildroot.org>;
- Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
+ id eFQFYBobQAPQ for <buildroot@buildroot.org>;
+ Fri, 12 Dec 2025 07:55:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A03D74113A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 246FC4112A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A03D74113A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 246FC4112A
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9F47B81674; Fri, 12 Dec 2025 07:55:35 +0000 (UTC)
+ id 2361686C94; Fri, 12 Dec 2025 07:55:35 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Nov 2025 22:27:05 +0100
+Date: Wed, 26 Nov 2025 22:52:03 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a62b589c19ddf27384b8851669d152b51e644696
-X-Git-Newrev: a2775607681fc490e5cd9e0577c3e187b0ededae
+X-Git-Oldrev: f6ef6e933b1aa52e55780334a42f65c35c3283f4
+X-Git-Newrev: b922c47134a5ba5dcd5f120db2556b8b9f70929e
 X-Patchwork-Hint: ignore
-Message-Id: <20251212075535.9F47B81674@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyicu: bump version to 2.16
+Message-Id: <20251212075535.2361686C94@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/xilinx-embeddedsw: bump default to
+ xilinx_v2025.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,57 +70,166 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2775607681fc490e5cd9e0577c3e187b0ededae
+commit: https://git.buildroot.net/buildroot/commit/?id=b922c47134a5ba5dcd5f120db2556b8b9f70929e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://gitlab.pyicu.org/main/pyicu/-/blob/v2.16/CHANGES?ref_type=tags
+Now that all Xilinx board configs have been bumped to xilinx_v2025.2, bump the
+default version of xilinx-embeddedsw to xilinx_v2025.2.
 
-Needed for compatibility with ICU 78.1.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pyicu/python-pyicu.hash | 4 ++--
- package/python-pyicu/python-pyicu.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ boot/xilinx-embeddedsw/Config.in                             | 2 +-
+ boot/xilinx-embeddedsw/xilinx_v2025.1/xilinx-embeddedsw.hash | 5 -----
+ configs/versal_vck190_defconfig                              | 1 -
+ configs/versal_vek280_defconfig                              | 1 -
+ configs/versal_vpk180_defconfig                              | 1 -
+ configs/zynqmp_kria_kd240_defconfig                          | 1 -
+ configs/zynqmp_kria_kr260_defconfig                          | 1 -
+ configs/zynqmp_kria_kv260_defconfig                          | 1 -
+ configs/zynqmp_zcu102_defconfig                              | 1 -
+ configs/zynqmp_zcu104_defconfig                              | 1 -
+ configs/zynqmp_zcu106_defconfig                              | 1 -
+ 11 files changed, 1 insertion(+), 15 deletions(-)
 
-diff --git a/package/python-pyicu/python-pyicu.hash b/package/python-pyicu/python-pyicu.hash
-index afd14437ce..81cdd4f459 100644
---- a/package/python-pyicu/python-pyicu.hash
-+++ b/package/python-pyicu/python-pyicu.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyicu/json
--md5  6ae2145f2a98433f461b128c3ebef233  pyicu-2.15.3.tar.gz
--sha256  f32e78e1cb64d0aeb14f027e037a8944861d3114548818a6adf0081ef51aefc3  pyicu-2.15.3.tar.gz
-+md5  00715b86c27c150f48554a863688e878  pyicu-2.16.tar.gz
-+sha256  42b3a8062e3b23e927ca727e6b5e1730d86c70279834e4887152895d2eb012d9  pyicu-2.16.tar.gz
- # Locally computed sha256 checksums
- sha256  00da5bf22f2386c4f6f07c734490e9b818c4dcf70e6ca49f594e9cec636b9c40  LICENSE
-diff --git a/package/python-pyicu/python-pyicu.mk b/package/python-pyicu/python-pyicu.mk
-index 5025bd649b..9d3f5f6004 100644
---- a/package/python-pyicu/python-pyicu.mk
-+++ b/package/python-pyicu/python-pyicu.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/boot/xilinx-embeddedsw/Config.in b/boot/xilinx-embeddedsw/Config.in
+index 3826f2e18e..526c7adf07 100644
+--- a/boot/xilinx-embeddedsw/Config.in
++++ b/boot/xilinx-embeddedsw/Config.in
+@@ -21,7 +21,7 @@ if BR2_TARGET_XILINX_EMBEDDEDSW
  
--PYTHON_PYICU_VERSION = 2.15.3
-+PYTHON_PYICU_VERSION = 2.16
- PYTHON_PYICU_SOURCE = pyicu-$(PYTHON_PYICU_VERSION).tar.gz
--PYTHON_PYICU_SITE = https://files.pythonhosted.org/packages/88/b0/c8b61bac55424e2ff80e20d7251c3f002baff3c07c34cee3849e3505d8f5
-+PYTHON_PYICU_SITE = https://files.pythonhosted.org/packages/11/c3/8d558b30deb33eb583c0bcae3e64d6db8316b69461a04bb9db5ff63d3f6e
- PYTHON_PYICU_LICENSE = MIT
- PYTHON_PYICU_LICENSE_FILES = LICENSE
- PYTHON_PYICU_DEPENDENCIES = icu
+ config BR2_TARGET_XILINX_EMBEDDEDSW_VERSION
+ 	string "xilinx-embeddedsw version"
+-	default "xilinx_v2025.1"
++	default "xilinx_v2025.2"
+ 	help
+ 	  Release version of Xilinx/embeddedsw.
+ 	  Must be xilinx_v2023.1 or newer.
+diff --git a/boot/xilinx-embeddedsw/xilinx_v2025.1/xilinx-embeddedsw.hash b/boot/xilinx-embeddedsw/xilinx_v2025.1/xilinx-embeddedsw.hash
+deleted file mode 100644
+index 0a42bab314..0000000000
+--- a/boot/xilinx-embeddedsw/xilinx_v2025.1/xilinx-embeddedsw.hash
++++ /dev/null
+@@ -1,5 +0,0 @@
+-# Locally calculated
+-sha256  867b7c7652f754d1a3d6edfe76e53223670e2b4c7e4144d4db1604403d68f616  xilinx-embeddedsw-xilinx_v2025.1.tar.gz
+-
+-# Locally calculated
+-sha256  fbee87edd32cf203fdd7925f0bab15c98e2dc1e0d61e70867f1190dc4a605b12  license.txt
+diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
+index ee7377ba96..f0b9f1298c 100644
+--- a/configs/versal_vck190_defconfig
++++ b/configs/versal_vck190_defconfig
+@@ -40,7 +40,6 @@ BR2_TARGET_UBOOT_FORMAT_DTB=y
+ BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vck190-rev1.1"
+ BR2_TARGET_XILINX_EMBEDDEDSW=y
+-BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.2"
+ BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
+ BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
+ BR2_TARGET_XILINX_PREBUILT=y
+diff --git a/configs/versal_vek280_defconfig b/configs/versal_vek280_defconfig
+index fc0918da75..474fd1e8cb 100644
+--- a/configs/versal_vek280_defconfig
++++ b/configs/versal_vek280_defconfig
+@@ -40,7 +40,6 @@ BR2_TARGET_UBOOT_FORMAT_DTB=y
+ BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vek280-revB"
+ BR2_TARGET_XILINX_EMBEDDEDSW=y
+-BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.2"
+ BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
+ BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
+ BR2_TARGET_XILINX_PREBUILT=y
+diff --git a/configs/versal_vpk180_defconfig b/configs/versal_vpk180_defconfig
+index 461b97f3e9..2e4a6db51d 100644
+--- a/configs/versal_vpk180_defconfig
++++ b/configs/versal_vpk180_defconfig
+@@ -40,7 +40,6 @@ BR2_TARGET_UBOOT_FORMAT_DTB=y
+ BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vpk180-revA"
+ BR2_TARGET_XILINX_EMBEDDEDSW=y
+-BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.2"
+ BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
+ BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
+ BR2_TARGET_XILINX_PREBUILT=y
+diff --git a/configs/zynqmp_kria_kd240_defconfig b/configs/zynqmp_kria_kd240_defconfig
+index dd23e0b8be..95cb7ea50a 100644
+--- a/configs/zynqmp_kria_kd240_defconfig
++++ b/configs/zynqmp_kria_kd240_defconfig
+@@ -46,7 +46,6 @@ BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW=y
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kd240/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-smk-k24-revA"
+ BR2_TARGET_XILINX_EMBEDDEDSW=y
+-BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.2"
+ BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW=y
+ BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS="-DK24_SOM"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/configs/zynqmp_kria_kr260_defconfig b/configs/zynqmp_kria_kr260_defconfig
+index ab7c9548e7..00862b07b8 100644
+--- a/configs/zynqmp_kria_kr260_defconfig
++++ b/configs/zynqmp_kria_kr260_defconfig
+@@ -46,7 +46,6 @@ BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW=y
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kr260/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-smk-k26-revA"
+ BR2_TARGET_XILINX_EMBEDDEDSW=y
+-BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.2"
+ BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW=y
+ BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS="-DK26_SOM"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
+index 3a3c8a62c5..bd7c43e2fa 100644
+--- a/configs/zynqmp_kria_kv260_defconfig
++++ b/configs/zynqmp_kria_kv260_defconfig
+@@ -46,7 +46,6 @@ BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW=y
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kv260/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-smk-k26-revA"
+ BR2_TARGET_XILINX_EMBEDDEDSW=y
+-BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.2"
+ BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW=y
+ BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS="-DK26_SOM"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
+index 5485b3d568..8e9cc3be36 100644
+--- a/configs/zynqmp_zcu102_defconfig
++++ b/configs/zynqmp_zcu102_defconfig
+@@ -45,7 +45,6 @@ BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW=y
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu102/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-zcu102-rev1.0"
+ BR2_TARGET_XILINX_EMBEDDEDSW=y
+-BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.2"
+ BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+diff --git a/configs/zynqmp_zcu104_defconfig b/configs/zynqmp_zcu104_defconfig
+index 9365166191..d425ee13c7 100644
+--- a/configs/zynqmp_zcu104_defconfig
++++ b/configs/zynqmp_zcu104_defconfig
+@@ -45,7 +45,6 @@ BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW=y
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu104/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-zcu104-revC"
+ BR2_TARGET_XILINX_EMBEDDEDSW=y
+-BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.2"
+ BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
+index 7310e9a740..c8652d5502 100644
+--- a/configs/zynqmp_zcu106_defconfig
++++ b/configs/zynqmp_zcu106_defconfig
+@@ -45,7 +45,6 @@ BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW=y
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu106/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-zcu106-rev1.0"
+ BR2_TARGET_XILINX_EMBEDDEDSW=y
+-BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.2"
+ BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
