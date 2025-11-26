@@ -4,72 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 669AFD11183
-	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 07:32:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 538D9D11183
+	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 07:33:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3017660BFB;
-	Thu, 27 Nov 2025 07:32:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2754660B30;
+	Thu, 27 Nov 2025 07:33:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lj8RW3mcRbq7; Thu, 27 Nov 2025 07:32:05 +0000 (UTC)
+ id 04Q8UoKHD-X1; Thu, 27 Nov 2025 07:33:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 767CB60B21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4ABDF60B31
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 767CB60B21;
-	Thu, 27 Nov 2025 07:32:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id E6159708
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 07:32:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4ABDF60B31;
+	Thu, 27 Nov 2025 07:33:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6DED8DE
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 07:33:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D89AB81E7F
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 07:32:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 54A6B40210
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 07:33:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DtfuApPnB-Mn for <buildroot@buildroot.org>;
- Thu, 27 Nov 2025 07:32:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id G8D6yq25APcT for <buildroot@buildroot.org>;
+ Thu, 27 Nov 2025 07:33:44 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D07AD81E77
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D07AD81E77
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D07AD81E77
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 07:32:03 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1640174336; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Thu, 27 Nov 2025 07:32:01 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vOWTt-0000000C9ZH-2KiC;
- Thu, 27 Nov 2025 08:31:57 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FE7D40065
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9FE7D40065
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 07:33:44 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9914F85FC0; Thu, 27 Nov 2025 07:33:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Neal Frager <neal.frager@amd.com>
-In-Reply-To: <20251126202307.1269790-3-neal.frager@amd.com> (Neal Frager's
- message of "Wed, 26 Nov 2025 20:23:07 +0000")
-References: <20251126202307.1269790-1-neal.frager@amd.com>
- <20251126202307.1269790-3-neal.frager@amd.com>
-Date: Thu, 27 Nov 2025 08:31:57 +0100
-Message-ID: <87see0exsi.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=RmjfBmivMLcFjagRVHaEoj4RjrA7bybBg544LZUpbBw/yvyK4HpGX8F18AhQi6TxTMCOpbW7j6AKmZokgRJuCN6YoqCrwHzIr5hOaCBXE2P4GnQXXXJVSZU6/RpTInsLKUeydvIzet+8kwKjeT3c93uTts/wyStCNql73oSkZxEOVInQCIQF+EDrEWlzvRCsugoks/hJQRuN4xYpI4a1AdaiJvV5cLobyqSBnQnmSCoHMtqcl634NkoIUJLKpG8QXu1q5sWv7b7n30I/FKTMUwV9BGemNMAb1/GXbG2pndwhVpXcBIkqJMAy253BdHM69Z/Y8OJ0pyq+f99c2OYE6g==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=aqBeNZmYPgqCWgYBqDqMXKDdWoE9ZwB+jIT3ZpO+0I8=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=RmjfBmiv
-Subject: Re: [Buildroot] [PATCH v1 3/3] boot/xilinx-prebuilt: bump default
- to xilinx_v2025.2
+To: buildroot@buildroot.org
+Date: Wed, 26 Nov 2025 22:51:52 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 4ee9ac9d557b851a2c3291816e68a20e590da3af
+X-Git-Newrev: f6ef6e933b1aa52e55780334a42f65c35c3283f4
+X-Patchwork-Hint: ignore
+Message-Id: <20251127073344.9914F85FC0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] board/xilinx: remove
+ xilinx_v2025.1 hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,28 +59,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: yann.morin@orange.com, ibai.erkiaga-elorza@amd.com,
- luca.ceresoli@bootlin.com, buildroot@buildroot.org, brandon.maier@collins.com,
- ju.o@free.fr, thomas.petazzoni@bootlin.com, romain.naour@smile.fr,
- michal.simek@amd.com, romain.naour@gmail.com
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Neal" == Neal Frager <neal.frager@amd.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f6ef6e933b1aa52e55780334a42f65c35c3283f4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Now that all Xilinx board configs have been bumped to xilinx_v2025.2, bump the
- > default version of xilinx-prebuilt to xilinx_v2025.2.
+Now that all Xilinx board configs have been bumped to xilinx_v2025.2, remove
+the xilinx_v2025.1 hashes which are no longer needed.
 
- > Signed-off-by: Neal Frager <neal.frager@amd.com>
- > ---
- > To be applied to next branch
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash | 1 -
+ board/xilinx/patches/linux/linux.hash                               | 1 -
+ board/xilinx/patches/uboot/uboot.hash                               | 1 -
+ 3 files changed, 3 deletions(-)
 
-Committed to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+index ef387496b1..429f610a56 100644
+--- a/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,3 +1,2 @@
+ # Locally calculated
+-sha256  4d16661f367adb8713113acb420a1ad5f611ce6a309e98005a8ea3273511f03d  xlnx_rebase_v2.12_2025.1.tar.gz
+ sha256  ea59fbfb702857a24f96ee8e9cf04f997942db1de98f8406b7daf9dcc8f4e9ea  xlnx_rebase_v2.12_2025.2.tar.gz
+diff --git a/board/xilinx/patches/linux/linux.hash b/board/xilinx/patches/linux/linux.hash
+index 3ecbd03a27..90feba3d62 100644
+--- a/board/xilinx/patches/linux/linux.hash
++++ b/board/xilinx/patches/linux/linux.hash
+@@ -1,3 +1,2 @@
+ # Locally calculated
+-sha256  ea55acf69bead3d4cf121de414cccfbe75a3c36465c93d9500cc00688d9b8d9d  xlnx_rebase_v6.12_LTS_merge_6.12.40.tar.gz
+ sha256  38aec9ce252ed6a0b64d294d4d58bf51e25b249eefb31b800a5ce62cb084298a  xlnx_rebase_v6.12_LTS_2025.2.tar.gz
+diff --git a/board/xilinx/patches/uboot/uboot.hash b/board/xilinx/patches/uboot/uboot.hash
+index d46063b7b1..6ef11ef02c 100644
+--- a/board/xilinx/patches/uboot/uboot.hash
++++ b/board/xilinx/patches/uboot/uboot.hash
+@@ -1,3 +1,2 @@
+ # Locally calculated
+-sha256  b86d6f07d16a83ed0bdbd9b9439e099afc87ba7dfb77246e2472183848e2ea93  xlnx_rebase_v2025.01_2025.1.tar.gz
+ sha256  8819cbebda739436d5d2fbdef578ec3c9b902f7edbe0ce4ed6f0ddf254fcf2a7  xlnx_rebase_v2025.01_2025.2.tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
