@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7F6AD111A8
-	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:08:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95CFACFD2F6
+	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:08:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8DC1761B0F;
-	Thu, 27 Nov 2025 20:08:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6E1754148B;
+	Thu, 27 Nov 2025 20:08:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0qdDWTtM9anL; Thu, 27 Nov 2025 20:08:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mImw9wZfbt8u; Thu, 27 Nov 2025 20:08:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88A1E61B22
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A81F94148D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 88A1E61B22;
-	Thu, 27 Nov 2025 20:08:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A81F94148D;
+	Thu, 27 Nov 2025 20:08:28 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 204F92A9
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:08:06 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4034E708
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:08:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 78E1684416
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9A58E8441D
  for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:07:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TBo8PpkaCrrJ for <buildroot@buildroot.org>;
+ id Rav1Ybec2Hdv for <buildroot@buildroot.org>;
  Thu, 27 Nov 2025 20:07:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA89C84421
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFFC484427
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BA89C84421
+ by smtp1.osuosl.org (Postfix) with ESMTP id CFFC484427
  for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:07:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B8EEE85FCB; Thu, 27 Nov 2025 20:07:56 +0000 (UTC)
+ id CE49985FC4; Thu, 27 Nov 2025 20:07:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 26 Nov 2025 09:26:11 +0100
+Date: Wed, 26 Nov 2025 09:30:43 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 0c2f8b1cab8b63c2852c374ab97b1556e13c0443
-X-Git-Newrev: 7fa84318c8de23b74769ae50b148c5af8f5c5fa9
+X-Git-Oldrev: 63b413c2b2946ca0a6641dbd56052c9eb50b8014
+X-Git-Newrev: 8619092a26e6afa854d1be30ac733030745b4992
 X-Patchwork-Hint: ignore
-Message-Id: <20251127200756.B8EEE85FCB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libroxml: fix
- musl build errors
+Message-Id: <20251127200756.CE49985FC4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/luksmeta:
+ security bump to version 10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,126 +66,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7fa84318c8de23b74769ae50b148c5af8f5c5fa9
+commit: https://git.buildroot.net/buildroot/commit/?id=8619092a26e6afa854d1be30ac733030745b4992
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fixes:
-https://autobuild.buildroot.net/results/0ff/0ff4394319d2014884328c347ef495da327a562e/
+Fixes the following security issue:
 
-Added Upstream tag to patch 0001.
+CVE-2025-11568: A  data corruption vulnerability has been identified in the
+luksmeta utility when used with the LUKS1 disk encryption format.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+https://github.com/advisories/GHSA-pvmm-7c2r-wmp4
+https://github.com/latchset/luksmeta/releases/tag/v10
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1f973844d10d0d840409a964227aa0777f3b3f4c)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 80764d7208efe860bb35f146ea4962f15e21936f)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .checkpackageignore                                |  1 -
- .../0001-src-roxml_mem.h-add-missing-extern.patch  |  3 +-
- package/libroxml/0002-Fix-musl-build-errors.patch  | 69 ++++++++++++++++++++++
- 3 files changed, 71 insertions(+), 2 deletions(-)
+ package/luksmeta/luksmeta.hash | 2 +-
+ package/luksmeta/luksmeta.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 5e5b11883b..575fd415dc 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -637,7 +637,6 @@ package/libp11/0001-src-p11_attr.c-fix-build-with-gcc-4.8.patch lib_patch.Upstre
- package/libplatform/0001-cmake-require-c-11-as-the-minimum-standard.patch lib_patch.Upstream
- package/libpthsem/0001-fix-build-on-linux-3.x-host.patch lib_patch.Upstream
- package/libressl/0001-always-expose-SSL_OP_NO_TLSv1_3.patch lib_patch.Upstream
--package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch lib_patch.Upstream
- package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch lib_patch.Upstream
- package/librtlsdr/0001-Makefile.am-respect-DESTDIR-with-install-udev-rules.patch lib_patch.Upstream
- package/libselinux/0001-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch lib_patch.Upstream
-diff --git a/package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch b/package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch
-index 6f63d7b546..12e67f9c91 100644
---- a/package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch
-+++ b/package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch
-@@ -13,8 +13,9 @@ libtool: link: /home/peko/autobuild/instance-0/output-1/host/bin/arm-buildroot-l
- Fixes:
-  - http://autobuild.buildroot.org/results/b6ac3664d61ad826515b57c4d057b6f001b5167d
+diff --git a/package/luksmeta/luksmeta.hash b/package/luksmeta/luksmeta.hash
+index b367f29a5c..5936fb56f3 100644
+--- a/package/luksmeta/luksmeta.hash
++++ b/package/luksmeta/luksmeta.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  2ca0c35b551b331ba1444fc9d36e8c48ff8cae53dd4e6155b028e8904edc202a  luksmeta-9.tar.bz2
++sha256  a842538ba39680c8319c41dac0bcc082fe40fb43342561761925c0daa1a48f28  luksmeta-10.tar.bz2
+ sha256  4b72eb6b5a336cd3ec837cc2d6347c23bf7574168db6b4802267700b93021abf  COPYING
+diff --git a/package/luksmeta/luksmeta.mk b/package/luksmeta/luksmeta.mk
+index 129713aec8..bfbda9fb36 100644
+--- a/package/luksmeta/luksmeta.mk
++++ b/package/luksmeta/luksmeta.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+Upstream: https://github.com/blunderer/libroxml/commit/34257124eefe0ca095ed54681c818381070ed549
-+
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/blunderer/libroxml/pull/79]
- ---
-  src/roxml_mem.h | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
-diff --git a/package/libroxml/0002-Fix-musl-build-errors.patch b/package/libroxml/0002-Fix-musl-build-errors.patch
-new file mode 100644
-index 0000000000..4931f12d5b
---- /dev/null
-+++ b/package/libroxml/0002-Fix-musl-build-errors.patch
-@@ -0,0 +1,69 @@
-+From abf4404c6c0213666f3fce73cff6e51435eac923 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Sat, 15 Nov 2025 12:29:33 +0100
-+Subject: [PATCH] Fix musl build errors
-+
-+src/roxml_cat.c: In function 'display_usage':
-+src/roxml_cat.c:21:22: error: implicit declaration of function 'basename'; did you mean 'rename'? [-Wimplicit-function-declaration]
-+   21 |         char *name = basename(prgname);
-+      |                      ^~~~~~~~
-+      |                      rename
-+src/roxml_cat.c:21:22: error: initialization of 'char *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-+
-+src/roxml_mem.c: In function 'roxml_malloc':
-+src/roxml_mem.c:138:18: error: assignment to 'long unsigned int' from 'pthread_t' {aka 'struct __pthread *'} makes integer from pointer without a cast [-Wint-conversion]
-+  138 |         cell->id = pthread_self();
-+
-+src/roxml_utils.h:51:16: error: returning 'pthread_t' {aka 'struct __pthread *'} from a function with return type 'long unsigned int' makes integer from pointer without a cast [-Wint-conversion]
-+   51 |         return pthread_self();
-+
-+Upstream: https://github.com/blunderer/libroxml/pull/86
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/roxml_cat.c   | 1 +
-+ src/roxml_mem.c   | 2 +-
-+ src/roxml_utils.h | 2 +-
-+ 3 files changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/roxml_cat.c b/src/roxml_cat.c
-+index 11e42d9..4320efd 100644
-+--- a/src/roxml_cat.c
-++++ b/src/roxml_cat.c
-+@@ -5,6 +5,7 @@
-+ #include <getopt.h>
-+ #include <string.h>
-+ #include <errno.h>
-++#include <libgen.h>
-+ #include "roxml.h"
-+ 
-+ static struct option long_options[] =
-+diff --git a/src/roxml_mem.c b/src/roxml_mem.c
-+index 91b5db2..bf757bb 100644
-+--- a/src/roxml_mem.c
-++++ b/src/roxml_mem.c
-+@@ -135,7 +135,7 @@ ROXML_INT void *roxml_malloc(int size, int num, int type)
-+ 	cell->next->prev = cell;
-+ 	cell = cell->next;
-+ 	cell->type = type;
-+-	cell->id = pthread_self();
-++	cell->id = (unsigned long)pthread_self();
-+ 	cell->occ = size;
-+ 	cell->ptr = calloc(num, size);
-+ 	head_cell.prev = cell;
-+diff --git a/src/roxml_utils.h b/src/roxml_utils.h
-+index 3f50976..f5fc582 100644
-+--- a/src/roxml_utils.h
-++++ b/src/roxml_utils.h
-+@@ -48,7 +48,7 @@ ROXML_STATIC_INLINE ROXML_INT int roxml_unlock(node_t *n)
-+ #else /* CONFIG_XML_THREAD_SAFE==1 */
-+ ROXML_STATIC_INLINE ROXML_INT unsigned long int roxml_thread_id(node_t *n)
-+ {
-+-	return pthread_self();
-++	return (unsigned long)pthread_self();
-+ }
-+ 
-+ ROXML_STATIC_INLINE ROXML_INT int roxml_lock_init(node_t *n)
-+-- 
-+2.47.3
-+
+-LUKSMETA_VERSION = 9
++LUKSMETA_VERSION = 10
+ LUKSMETA_SOURCE = luksmeta-$(LUKSMETA_VERSION).tar.bz2
+ LUKSMETA_SITE = https://github.com/latchset/luksmeta/releases/download/v$(LUKSMETA_VERSION)
+ LUKSMETA_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
