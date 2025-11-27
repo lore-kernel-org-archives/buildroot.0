@@ -1,71 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A198DD111A8
-	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:06:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACCD7D111A8
+	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:06:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AC7C61753;
-	Thu, 27 Nov 2025 20:06:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 80FF94068D;
+	Thu, 27 Nov 2025 20:06:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HEtS5d9nCgeQ; Thu, 27 Nov 2025 20:06:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bT0MhiNiZT67; Thu, 27 Nov 2025 20:06:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D5E8616E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEA474061D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9D5E8616E8;
-	Thu, 27 Nov 2025 20:06:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3AEBE2A9
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:06:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AEA474061D;
+	Thu, 27 Nov 2025 20:06:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3CD09708
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:06:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2119A404CD
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:06:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2312C405C0
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:06:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y9o2AamvtRdK for <buildroot@buildroot.org>;
- Thu, 27 Nov 2025 20:06:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EwNR_v_Nt6ZE for <buildroot@buildroot.org>;
+ Thu, 27 Nov 2025 20:06:53 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 16A2540438
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16A2540438
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1DF3A4059A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DF3A4059A
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 16A2540438
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:06:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1DF3A4059A
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:06:53 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 1E098B979CEF; Thu, 27 Nov 2025 21:06:33 +0100 (CET)
-Message-ID: <7f0a106f-81f1-414b-ba41-acbdc13dbf85@rnout.be>
-Date: Thu, 27 Nov 2025 21:06:31 +0100
+ with ESMTPSA id 1337AB979CEF; Thu, 27 Nov 2025 21:06:51 +0100 (CET)
+Message-ID: <55f732c2-a8ca-4de8-aed5-89340f0b3324@rnout.be>
+Date: Thu, 27 Nov 2025 21:06:49 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
-References: <20251101083000.2088619-1-bernd@kuhls.net>
+References: <20251122124909.2229139-1-bernd@kuhls.net>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20251101083000.2088619-1-bernd@kuhls.net>
+In-Reply-To: <20251122124909.2229139-1-bernd@kuhls.net>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1764273993; h=from:subject:date:message-id:to:mime-version:content-type:
+ t=1764274011; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:content-language:in-reply-to:references;
- bh=HNxgrsg8TUu77NJF10diCnAhPpYxe/CW6OH6QzRDoAA=;
- b=BWigi4mBNyeHL6mEfMrphEtxQu7QzfrwVi9Mat7WCa98UOxRF2DdWwBlzx46JQdIvM5HUT
- hDmosrkXwBnNcO+CWvl6Na7yrHGtO4RQB09tBlFnA0JkH5vYbz4PjiS4fRQ+S5NUjrtmPE
- AzSIyOWyImpQ/usa/yW7/klhvr+7e8i/nn9yIb4M4r+BZ4THa7EnlI4Yy6uu9vfjDzeSdn
- z2QUeK6KQLG1WJ13yI2IQh5Ncw6A8T3WiD8nFklLcze59WuG0C7WxXquukiR1eO24W3Y2V
- wUHiys7Le0d4q2TfIf+mcHEMDyjGF6QA2TrBdhK08N5uiAUEx3F3uOqDxJd3kw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=S8JWsp7is1mi0wVAz8NfkFkJRmCV4VS25nZkgGcgAZI=;
+ b=g8EAj4f/eFmDjbJ0uHBPH1DvIJ2yBTHUrxkUuXdSQyvmdQvP16O8IdRNghBEJFVfgTCjH0
+ V288AFzHNE/YybwKVqMzfPgH+JbDWfJqa/zRuRKH4bGxfjv2QANNHS/f4YeRPIzesh9zKO
+ Q36T6x1aP2TIlq1cMVAgCQntf5sS+gtVbcXhnDzrjmlNiHR44AbWG1+EYVAwSPiHEqmJR2
+ GMH5+fRIIyNwc+0HeRzXCefgVvm/4Mg3IyB5joB0eozwY5taiK7VJWFyOfsQUTPom8HOr7
+ 4LLF7i48I7Snl+MCVM6iYinsuaJQzHG0yEOXG+egPAZ1/sbG5K9+Na2gnwIeag==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=fail reason="signature verification failed" (2048-bit key)
- header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256 header.s=dkim
- header.b=BWigi4mB
-Subject: Re: [Buildroot] [PATCH 1/1] package/enscript: Fix build with gcc
- 15.x
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
+ header.a=rsa-sha256 header.s=dkim header.b=g8EAj4f/
+Subject: Re: [Buildroot] [PATCH 1/1] package/open-plc-utils: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,9 +84,19 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 01/11/2025 09:30, Bernd Kuhls wrote:
+On 22/11/2025 13:49, Bernd Kuhls wrote:
+> Changelog:
+> https://github.com/qca/open-plc-utils/compare/1ba7d5a042e4e8ff6858b08e113eec5dc4e89cf2...46c3506453c15b873fd6ed3e76c9872cea5e143a
+> 
+> Upstream commit
+> https://github.com/qca/open-plc-utils/commit/cbf52f68b5e2ab0c4071600ab34126120e54f5cd
+> fixes build errors with newer gcc versions.
+> 
+> Instead of adding this patch to buildroot we bump to HEAD which also
+> includes other bug fixes and documentation updates.
+> 
 > Fixes:
-> https://autobuild.buildroot.net/results/7fd/7fdda216e2ec57b9bcc1d2613b6546db35a29749/
+> https://autobuild.buildroot.net/results/c74/c74730bbadc9ba20cdccf448dbc508d0afbabf41/
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
@@ -98,35 +106,32 @@ On 01/11/2025 09:30, Bernd Kuhls wrote:
   Arnout
 
 > ---
->   package/enscript/0002-enscript-c23.patch | 19 +++++++++++++++++++
->   1 file changed, 19 insertions(+)
->   create mode 100644 package/enscript/0002-enscript-c23.patch
+>   package/open-plc-utils/open-plc-utils.hash | 2 +-
+>   package/open-plc-utils/open-plc-utils.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/enscript/0002-enscript-c23.patch b/package/enscript/0002-enscript-c23.patch
-> new file mode 100644
-> index 0000000000..707674935d
-> --- /dev/null
-> +++ b/package/enscript/0002-enscript-c23.patch
-> @@ -0,0 +1,19 @@
-> +Fix build with gcc 15.x
-> +
-> +Upstream: https://savannah.gnu.org/bugs/?66845
-> +
-> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> +
-> +diff --git a/compat/regex.c b/compat/regex.c
-> +index c6907f3..87f2840 100644
-> +--- a/compat/regex.c
-> ++++ b/compat/regex.c
-> +@@ -336,7 +336,7 @@ typedef char boolean;
-> + #define false 0
-> + #define true 1
-> +
-> +-static int re_match_2_internal ();
-> ++static int re_match_2_internal (struct re_pattern_buffer*, const char*, int, const char*, int, int, struct re_registers*, int);
-> + 
-> + /* These are the command codes that appear in compiled regular
-> +    expressions.  Some opcodes are followed by argument bytes.  A
+> diff --git a/package/open-plc-utils/open-plc-utils.hash b/package/open-plc-utils/open-plc-utils.hash
+> index 0ab661231a..bcb5253bb9 100644
+> --- a/package/open-plc-utils/open-plc-utils.hash
+> +++ b/package/open-plc-utils/open-plc-utils.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed
+> -sha256  4b1b55896939f178321ffe1ec2dc6937ea688d577b3671a5f0edb5c3326dfa3d  open-plc-utils-1ba7d5a042e4e8ff6858b08e113eec5dc4e89cf2.tar.gz
+> +sha256  e02ffc2d2abde6f31c183b0717742c243b5746d0dbe9ffaa38f6154f14a1bd4d  open-plc-utils-46c3506453c15b873fd6ed3e76c9872cea5e143a.tar.gz
+>   sha256  3137c632bbcec5e88b72dc13f4fe06ee184eea364fec8f7494bdfa57672ef921  LICENSE
+> diff --git a/package/open-plc-utils/open-plc-utils.mk b/package/open-plc-utils/open-plc-utils.mk
+> index 086552e09b..1c0d213278 100644
+> --- a/package/open-plc-utils/open-plc-utils.mk
+> +++ b/package/open-plc-utils/open-plc-utils.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -OPEN_PLC_UTILS_VERSION = 1ba7d5a042e4e8ff6858b08e113eec5dc4e89cf2
+> +OPEN_PLC_UTILS_VERSION = 46c3506453c15b873fd6ed3e76c9872cea5e143a
+>   OPEN_PLC_UTILS_SITE = $(call github,qca,open-plc-utils,$(OPEN_PLC_UTILS_VERSION))
+>   OPEN_PLC_UTILS_LICENSE = BSD-3-Clause
+>   OPEN_PLC_UTILS_LICENSE_FILES = LICENSE
 
 _______________________________________________
 buildroot mailing list
