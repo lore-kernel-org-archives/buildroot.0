@@ -4,60 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A493DD43370
-	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:56:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B916D4337C
+	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:56:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7145083B97;
-	Fri, 12 Dec 2025 07:56:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D0AC483BBE;
+	Fri, 12 Dec 2025 07:56:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B8zdEaB5pQlT; Fri, 12 Dec 2025 07:56:35 +0000 (UTC)
+ id AKYERHnXGvQH; Fri, 12 Dec 2025 07:56:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90CE883868
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA43F83883
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765526185;
-	bh=qvjIliwdnI2GmTOD6dLpLB4085wtMUBrSxJux3I4ZEM=;
+	s=default; t=1765526186;
+	bh=KlikDZmUmtYrXF8YHNypjXKMX+6NKjidXaFFYbDB6jA=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=HjGBcdSdBASBum44h8FGnSBhYcf9+hIOotPl0PFtOgjS/cc0PpyeOv7GUmHsLWCIz
-	 Oxn/yzMA5d2OARAkkCxAcrXBa8FK9r1EDPNmCxpBJwuS6wTcTTB1aOveHUs1FvWsrR
-	 PeuL6vMwLn7xBRu7/jYqEgtQ9YrWnM/Ui99tcboCBRgqKb1+a+AL5zFHIclbuOliUf
-	 JKQRnnxc9ILdX4FqzgXFmjxnx951XENG7/bjqHfI+wp6LYdusgdXmxo1kHtYSNdxYD
-	 LaEtvbdZoJhWEipVHbU5wTKkAWR7OBJMTxPpl7pHprwRxhBw51+dgHAgSUy2HsNIMy
-	 fzZImf/YLAMLQ==
+	b=UDaZgCA9ll/unlQQ6tGqItd4isawj6+7+iBUDLGEBC/cj9f79YB1BUvaPdCxm7uZv
+	 9sLjHrs0jLKRVqlnvpTGuudw1ulSKReWgCnqErfxdkF32RH7Ux/m88/WhR8WaP2Cfs
+	 7tJaQf8OvLUCjCdowPaKICzomcmOC+c5SlW8zbB2s8IFMySyIe3n1L9xo0p00kLCpp
+	 4rNrI+kTCM+bSCXeaBkUbLgzC1yS1pKjGouVjZE+sqMor970Rr5omFq0/f1992K3Kh
+	 3dUrukKuz+o2RCR+GjH5KCiU132VpBd5L5tR3UEPfm22J09Qq84qsUm8Qav9guwFfY
+	 FOWu10eizjjoQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 90CE883868;
-	Fri, 12 Dec 2025 07:56:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DA43F83883;
+	Fri, 12 Dec 2025 07:56:26 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 34210E7
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:50 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 26151E7
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 320DE4117D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4D35E41181
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QS_KVp7BERxl for <buildroot@buildroot.org>;
+ id IrYQFkByDOyI for <buildroot@buildroot.org>;
  Fri, 12 Dec 2025 07:55:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1ACE941129
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D1654112D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1ACE941129
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2D1654112D
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 19B878076A; Fri, 12 Dec 2025 07:55:35 +0000 (UTC)
+ id 2C03F86C9A; Fri, 12 Dec 2025 07:55:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 26 Nov 2025 22:51:52 +0100
+Date: Thu, 27 Nov 2025 08:31:04 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4ee9ac9d557b851a2c3291816e68a20e590da3af
-X-Git-Newrev: f6ef6e933b1aa52e55780334a42f65c35c3283f4
+X-Git-Oldrev: b922c47134a5ba5dcd5f120db2556b8b9f70929e
+X-Git-Newrev: 7f09843acb53aa185a830e0388558fd9b8fbc807
 X-Patchwork-Hint: ignore
-Message-Id: <20251212075535.19B878076A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/xilinx: remove xilinx_v2025.1 hashes
+Message-Id: <20251212075535.2C03F86C9A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/xilinx-prebuilt: bump default to
+ xilinx_v2025.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,44 +76,82 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f6ef6e933b1aa52e55780334a42f65c35c3283f4
+commit: https://git.buildroot.net/buildroot/commit/?id=7f09843acb53aa185a830e0388558fd9b8fbc807
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that all Xilinx board configs have been bumped to xilinx_v2025.2, remove
-the xilinx_v2025.1 hashes which are no longer needed.
+Now that all Xilinx board configs have been bumped to xilinx_v2025.2, bump the
+default version of xilinx-prebuilt to xilinx_v2025.2.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash | 1 -
- board/xilinx/patches/linux/linux.hash                               | 1 -
- board/xilinx/patches/uboot/uboot.hash                               | 1 -
- 3 files changed, 3 deletions(-)
+ boot/xilinx-prebuilt/Config.in                                   | 2 +-
+ boot/xilinx-prebuilt/xilinx_v2025.1_update1/xilinx-prebuilt.hash | 5 -----
+ configs/versal_vck190_defconfig                                  | 1 -
+ configs/versal_vek280_defconfig                                  | 1 -
+ configs/versal_vpk180_defconfig                                  | 1 -
+ 5 files changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-index ef387496b1..429f610a56 100644
---- a/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-+++ b/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -1,3 +1,2 @@
- # Locally calculated
--sha256  4d16661f367adb8713113acb420a1ad5f611ce6a309e98005a8ea3273511f03d  xlnx_rebase_v2.12_2025.1.tar.gz
- sha256  ea59fbfb702857a24f96ee8e9cf04f997942db1de98f8406b7daf9dcc8f4e9ea  xlnx_rebase_v2.12_2025.2.tar.gz
-diff --git a/board/xilinx/patches/linux/linux.hash b/board/xilinx/patches/linux/linux.hash
-index 3ecbd03a27..90feba3d62 100644
---- a/board/xilinx/patches/linux/linux.hash
-+++ b/board/xilinx/patches/linux/linux.hash
-@@ -1,3 +1,2 @@
- # Locally calculated
--sha256  ea55acf69bead3d4cf121de414cccfbe75a3c36465c93d9500cc00688d9b8d9d  xlnx_rebase_v6.12_LTS_merge_6.12.40.tar.gz
- sha256  38aec9ce252ed6a0b64d294d4d58bf51e25b249eefb31b800a5ce62cb084298a  xlnx_rebase_v6.12_LTS_2025.2.tar.gz
-diff --git a/board/xilinx/patches/uboot/uboot.hash b/board/xilinx/patches/uboot/uboot.hash
-index d46063b7b1..6ef11ef02c 100644
---- a/board/xilinx/patches/uboot/uboot.hash
-+++ b/board/xilinx/patches/uboot/uboot.hash
-@@ -1,3 +1,2 @@
- # Locally calculated
--sha256  b86d6f07d16a83ed0bdbd9b9439e099afc87ba7dfb77246e2472183848e2ea93  xlnx_rebase_v2025.01_2025.1.tar.gz
- sha256  8819cbebda739436d5d2fbdef578ec3c9b902f7edbe0ce4ed6f0ddf254fcf2a7  xlnx_rebase_v2025.01_2025.2.tar.gz
+diff --git a/boot/xilinx-prebuilt/Config.in b/boot/xilinx-prebuilt/Config.in
+index b218458ba5..e742a66ca7 100644
+--- a/boot/xilinx-prebuilt/Config.in
++++ b/boot/xilinx-prebuilt/Config.in
+@@ -17,7 +17,7 @@ if BR2_TARGET_XILINX_PREBUILT
+ 
+ config BR2_TARGET_XILINX_PREBUILT_VERSION
+ 	string "prebuilt version"
+-	default "xilinx_v2025.1_update1"
++	default "xilinx_v2025.2"
+ 	help
+ 	  Release version of Xilinx firmware.
+ 	  Must be xilinx_v2023.1 or newer.
+diff --git a/boot/xilinx-prebuilt/xilinx_v2025.1_update1/xilinx-prebuilt.hash b/boot/xilinx-prebuilt/xilinx_v2025.1_update1/xilinx-prebuilt.hash
+deleted file mode 100644
+index 6879b88d83..0000000000
+--- a/boot/xilinx-prebuilt/xilinx_v2025.1_update1/xilinx-prebuilt.hash
++++ /dev/null
+@@ -1,5 +0,0 @@
+-# Locally calculated
+-sha256  48fd698a16f79b9a828c35ca5b2b50fe832149d1a2938c94c0bb6a2e249b0bed  xilinx-prebuilt-xilinx_v2025.1_update1.tar.gz
+-
+-# Locally calculated
+-sha256  7b2074b607264a07347e1a7ef0323229585942793469f34b2cf9628f7623e05f  LICENSE
+diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
+index f0b9f1298c..f9256254f0 100644
+--- a/configs/versal_vck190_defconfig
++++ b/configs/versal_vck190_defconfig
+@@ -43,7 +43,6 @@ BR2_TARGET_XILINX_EMBEDDEDSW=y
+ BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
+ BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
+ BR2_TARGET_XILINX_PREBUILT=y
+-BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2025.2"
+ BR2_PACKAGE_HOST_BOOTGEN=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+diff --git a/configs/versal_vek280_defconfig b/configs/versal_vek280_defconfig
+index 474fd1e8cb..222297b768 100644
+--- a/configs/versal_vek280_defconfig
++++ b/configs/versal_vek280_defconfig
+@@ -43,7 +43,6 @@ BR2_TARGET_XILINX_EMBEDDEDSW=y
+ BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
+ BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
+ BR2_TARGET_XILINX_PREBUILT=y
+-BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2025.2"
+ BR2_TARGET_XILINX_PREBUILT_BOARD="vek280"
+ BR2_PACKAGE_HOST_BOOTGEN=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/configs/versal_vpk180_defconfig b/configs/versal_vpk180_defconfig
+index 2e4a6db51d..020279c3b5 100644
+--- a/configs/versal_vpk180_defconfig
++++ b/configs/versal_vpk180_defconfig
+@@ -43,7 +43,6 @@ BR2_TARGET_XILINX_EMBEDDEDSW=y
+ BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
+ BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
+ BR2_TARGET_XILINX_PREBUILT=y
+-BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2025.2"
+ BR2_TARGET_XILINX_PREBUILT_BOARD="vpk180"
+ BR2_PACKAGE_HOST_BOOTGEN=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
