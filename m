@@ -1,70 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74E6BD116EA
-	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:02:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41C06CFD2F6
+	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:02:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4AE4A616EA;
-	Thu, 27 Nov 2025 20:02:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 145C8413F6;
+	Thu, 27 Nov 2025 20:02:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KStELmGT88av; Thu, 27 Nov 2025 20:02:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yYYupMVgkKCZ; Thu, 27 Nov 2025 20:02:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A09960D97
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACFAE413ED
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A09960D97;
-	Thu, 27 Nov 2025 20:02:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3F160708
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:02:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ACFAE413ED;
+	Thu, 27 Nov 2025 20:02:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 800B3708
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:02:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 316F28440C
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:02:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 71B6E40420
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:02:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jw5MsDPBhVoG for <buildroot@buildroot.org>;
- Thu, 27 Nov 2025 20:02:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Cpzl8ZPPeyxa for <buildroot@buildroot.org>;
+ Thu, 27 Nov 2025 20:02:32 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2D43384404
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D43384404
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5AFEA4023A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AFEA4023A
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2D43384404
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:02:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5AFEA4023A
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:02:32 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 462DDB979CA9; Thu, 27 Nov 2025 21:02:02 +0100 (CET)
-Message-ID: <9a2e059a-11ba-4cf5-9fd9-8de1d8f769a4@rnout.be>
-Date: Thu, 27 Nov 2025 21:02:00 +0100
+ with ESMTPSA id 78D4DB979CE5; Thu, 27 Nov 2025 21:02:30 +0100 (CET)
+Message-ID: <ba7fe043-c1b5-4245-a142-9e6fd562e720@rnout.be>
+Date: Thu, 27 Nov 2025 21:02:28 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org
-References: <20251117074452.331157-1-peter@korsgaard.com>
+To: Yi Zheng <goodmenzy@gmail.com>, buildroot <buildroot@buildroot.org>
+References: <CAJPHfYOf7dNbKiJ4W_MpOUF3h4s-2_LuSph_LrbRC3VHW5JFFw@mail.gmail.com>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20251117074452.331157-1-peter@korsgaard.com>
+In-Reply-To: <CAJPHfYOf7dNbKiJ4W_MpOUF3h4s-2_LuSph_LrbRC3VHW5JFFw@mail.gmail.com>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1764273722; h=from:subject:date:message-id:to:mime-version:content-type:
+ t=1764273750; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:content-language:in-reply-to:references;
- bh=vNcL2rEM7iwCz9gmCGz2YHohA34iMfr/dvfBCh4qTKA=;
- b=FMZAfNyIrIolmi8Cb4w22HFiwcSrbJierQOacZPUp2Qn8l2LtDii96fY0hws3KK9D4at8i
- pnzY6nezMgLLQ1grOWBL80shtTyCQDJ4soSkKW60AE+lN/uGZRzMno57FTYZGLi/nSHbvc
- 2ng3XLlJkCTfXl8MSRIDzgFyYEOVT5QVWXtR5OpR72K5Tfd6LRS0RtPZdkHWJ+zkrU8BNS
- puLt69chQjSXx13NWEP7H8C4gBnbq+1kcOlEogW7K9lR2TNTGZcT2ENbBqxxAJXQVP+FV3
- G/GRcqXsM2f+neZ6TtVUF/1S/vXQ82gdtUNjG51lj8ZQ9P6oIj6hfuHLHXx4qA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=tyrjuRVoI4cDuWYnM/MHkXKYEaIdPDreEszGneWTNks=;
+ b=VGDvrOzWjLdtXpEX9rtXZq7ntnWyxycJHz6jgNBaiYzRHwE+vnzOi6OqBQlpoIjMgMxp8d
+ udVv4eRgMd41dRzrK/10SWkukid94Nvpb0weoBQXau/3hIxaT4w2Q7d4trejKftXnYQaNr
+ g8PnneaThQckHSnZx7kL24/Q11mD+/p9J+T7YiZNMmnfV62k+H2CD4+Ka+4xQrOGzF6SRn
+ ZuEDNuaC5TFWpdFXfp6v/Iqd20M1PMq3F87RTuZQ6xl0v3eXQXv7/NDOocaTzAzqoFlGUr
+ pJuG+EFS/+xXyu6cwEXdaDmRf3mrXXl8iggVJvbFTMVNd3bJi5MfgP3rKKx50A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=FMZAfNyI
-Subject: Re: [Buildroot] [PATCH] package/luksmeta: security bump to version
- 10
+ header.a=rsa-sha256 header.s=dkim header.b=VGDvrOzW
+Subject: Re: [Buildroot] fs/squashfs/Config.in typo, arm arch-name
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,16 +84,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 17/11/2025 08:44, Peter Korsgaard wrote:
-> Fixes the following security issue:
+On 18/11/2025 06:24, Yi Zheng wrote:
+> BR_aarch64 is not defined. it seems should be BR2_aarch64
 > 
-> CVE-2025-11568: A  data corruption vulnerability has been identified in the
-> luksmeta utility when used with the LUKS1 disk encryption format.
+> i can not access gitlab freely, so the only way to report bug is a mail.
+> Sorry.
 > 
-> https://github.com/advisories/GHSA-pvmm-7c2r-wmp4
-> https://github.com/latchset/luksmeta/releases/tag/v10
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
   Applied to 2025.02.x and 2025.08.x, thanks.
 
@@ -102,32 +97,33 @@ On 17/11/2025 08:44, Peter Korsgaard wrote:
   Arnout
 
 > ---
->   package/luksmeta/luksmeta.hash | 2 +-
->   package/luksmeta/luksmeta.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
+> fs/squashfs/Config.in | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/luksmeta/luksmeta.hash b/package/luksmeta/luksmeta.hash
-> index b367f29a5c..5936fb56f3 100644
-> --- a/package/luksmeta/luksmeta.hash
-> +++ b/package/luksmeta/luksmeta.hash
-> @@ -1,3 +1,3 @@
->   # Locally calculated
-> -sha256  2ca0c35b551b331ba1444fc9d36e8c48ff8cae53dd4e6155b028e8904edc202a  luksmeta-9.tar.bz2
-> +sha256  a842538ba39680c8319c41dac0bcc082fe40fb43342561761925c0daa1a48f28  luksmeta-10.tar.bz2
->   sha256  4b72eb6b5a336cd3ec837cc2d6347c23bf7574168db6b4802267700b93021abf  COPYING
-> diff --git a/package/luksmeta/luksmeta.mk b/package/luksmeta/luksmeta.mk
-> index 129713aec8..bfbda9fb36 100644
-> --- a/package/luksmeta/luksmeta.mk
-> +++ b/package/luksmeta/luksmeta.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -LUKSMETA_VERSION = 9
-> +LUKSMETA_VERSION = 10
->   LUKSMETA_SOURCE = luksmeta-$(LUKSMETA_VERSION).tar.bz2
->   LUKSMETA_SITE = https://github.com/latchset/luksmeta/releases/download/v$(LUKSMETA_VERSION)
->   LUKSMETA_LICENSE = LGPL-2.1+
+> diff --git a/fs/squashfs/Config.in b/fs/squashfs/Config.in
+> index 4f898bfdd4..cb2f5ec969 100644
+> --- a/fs/squashfs/Config.in
+> +++ b/fs/squashfs/Config.in
+> @@ -114,7 +114,7 @@ config BR2_TARGET_ROOTFS_SQUASHFS_COMP_OPTS
+>         default "-Xcompression-level 9" if BR2_TARGET_ROOTFS_SQUASHFS4_GZIP
+>         default "-Xcompression-level 9" if BR2_TARGET_ROOTFS_SQUASHFS4_LZO
+>         default "-Xhc" if BR2_TARGET_ROOTFS_SQUASHFS4_LZ4
+> -       default "-Xbcj arm,armthumb" if BR2_TARGET_ROOTFS_SQUASHFS4_XZ
+> && (BR2_arm || BR_aarch64)
+> +       default "-Xbcj arm,armthumb" if BR2_TARGET_ROOTFS_SQUASHFS4_XZ
+> && (BR2_arm || BR2_aarch64)
+>         default "-Xbcj powerpc" if BR2_TARGET_ROOTFS_SQUASHFS4_XZ &&
+> (BR2_powerpc || BR2_powerpc64)
+>         default "-Xbcj sparc" if BR2_TARGET_ROOTFS_SQUASHFS4_XZ &&
+> (BR2_sparc || BR2_sparc64)
+>         default "-Xbcj x86" if BR2_TARGET_ROOTFS_SQUASHFS4_XZ &&
+> (BR2_i386 || BR2_x86_64)
+> --
+> 2.51.2
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 _______________________________________________
 buildroot mailing list
