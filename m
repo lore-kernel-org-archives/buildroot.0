@@ -1,79 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89F6DCFD2F6
-	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 14:14:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F201D111A8
+	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 19:42:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 706F24132F;
-	Thu, 27 Nov 2025 14:14:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D70D60FB2;
+	Thu, 27 Nov 2025 19:42:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OjWf4X-W2Msj; Thu, 27 Nov 2025 14:14:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aZqj4u8e2rdn; Thu, 27 Nov 2025 19:42:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55CEC41281
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C094060B46
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 55CEC41281;
-	Thu, 27 Nov 2025 14:14:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 277ACDE
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 14:14:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C094060B46;
+	Thu, 27 Nov 2025 19:42:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F5A4708
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 19:42:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 19E3841272
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 14:14:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0172E843ED
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 19:42:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1FuaVEw8-Unm for <buildroot@buildroot.org>;
- Thu, 27 Nov 2025 14:14:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=bastien.curutchet@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E487A411E9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E487A411E9
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E487A411E9
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 14:14:16 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id 8F8CCC16A19
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 14:13:51 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 6847E6068C;
- Thu, 27 Nov 2025 14:14:14 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id A6818102F2763; Thu, 27 Nov 2025 15:14:13 +0100 (CET)
-Date: Thu, 27 Nov 2025 15:14:05 +0100
-MIME-Version: 1.0
-Message-Id: <20251127-rasdaemon-v2-1-c57284751172@bootlin.com>
-References: <20251127-rasdaemon-v2-0-c57284751172@bootlin.com>
-In-Reply-To: <20251127-rasdaemon-v2-0-c57284751172@bootlin.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id stDASxXt0xG5 for <buildroot@buildroot.org>;
+ Thu, 27 Nov 2025 19:42:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E557E843E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E557E843E1
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E557E843E1
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 19:42:31 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0558.dip0.t-ipconnect.de [91.58.5.88])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id EFAA3A4C7526;
+ Thu, 27 Nov 2025 20:42:27 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:47544)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99)
+ (envelope-from <bernd@kuhls.net>) id 1vOhsp-0000000030U-2Kvh;
+ Thu, 27 Nov 2025 19:42:27 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Fiona Klute <fiona.klute@gmx.de>, 
- Bastien Curutchet <bastien.curutchet@bootlin.com>
-X-Mailer: b4 0.14.2
-X-Last-TLS-Session-Version: TLSv1.3
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Christian Stewart <christian@aperture.us>
+Date: Thu, 27 Nov 2025 20:42:25 +0100
+Message-ID: <20251127194225.2405068-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+MIME-Version: 1.0
+X-Spamd-Bar: ++++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1764252853; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=3GH2WWHKraXjv7/v7f+pqdBC1VkMEwAtkg42vKQgGNo=;
- b=fnZ5jOCrWGoIAlnGX4EKEjP3vDa4SiB/VsszCuHr5G0I+DrsDXEJhIFdy+T+2rfcIomRH4
- jo4JkSazkyyH9vs34/UQu9cYSNnpfCEuIiF2hWjFFsS/w5wbcWC8b0FqFA3bsuWHVMKqvj
- sUzYZD3kyD1opy9zVI5EmRtM9jtmZUyELjMSuV0Q50IhJfiRo6bRtaP8ZCXtSUJ9EWdYfC
- 9pv6wbj1WNuXeZLfgG1vPLTOMk9R7S1pH0Z1OZf8KZ19WPvQ8iZ78piZqnXILIdurTErNc
- eDRv8ySyh+FcBQXLLQxLEZ79KMLtHK4YPOY9uPrk4m2kuqeNIIQ7zzenabIBmA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=kuhls.net; 
+ s=kas202506031021; t=1764272548;
+ bh=JQ62SpLnmg/sstYGX9rgqeo4d2H/mx+6JDdPBxq7pwo=;
+ h=From:To:Cc:Subject:Date:From;
+ b=BSocYSgsbAexSuw1WMlTpUE6AgnqNtKfrJLwDtno9yP85xNlN+cwlJ0E/rEIDMnLt
+ IEP3ufhkAXXVfsnlhdgDWP7FsUpdeHYL/EYlci4ajsJJGhc3Ii5X87Pbj6rH87dz0Q
+ tAzhXqO92hzJvuqI050Xs5ZuwEc7cDZFPFCUeCXz7De7JQU9YEbKrxntf6nuskuY1f
+ qrJiqRB3qGMtnewhtZETWZnO6xmU4oW2rBzHdLSEkxPFgFWojun8q6oSh76iUWAAt2
+ aW0BXxzCpGdNOfEe8Zfz8Iu4fFkRisncr+/xHId34LIGobjddiZm8C6/SQAUZy/oAG
+ 3wRBoOveP/PPA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=fnZ5jOCr
-Subject: [Buildroot] [PATCH v2 1/2] package/rasdaemon: Add rasdaemon package
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=BSocYSgs
+Subject: [Buildroot] [PATCH v3 1/1] package/unzip: bump to Debian patch
+ level -29 to fix GCC 15.x issues
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,221 +84,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Bastien Curutchet via buildroot <buildroot@buildroot.org>
-Reply-To: Bastien Curutchet <bastien.curutchet@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Rasdaemon is a tool that aims to replace the edac-tool and provide a way
-to collect all hardware error events reported by the Linux kernel in a
-common framework.
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Add a new package to support rasdaemon in the 'Hardware handling'
-section. It depends on libtraceevents to detect the ftrace events
-generated by the kernel and on sqlite to store these events.
+unzip currently fails to build with GCC 15.x. We're already fetching
+from Debian, using patchlevel -27, and it turns out that Debian
+patchlevel -29 has the GCC 15.x fix, and very few other fixes:
 
-Support for the PCIe AER events is optionnal and implies a dependency on
-pciutils so also add a dedicated 'sub-option' to enable it.
+unzip (6.0-29) unstable; urgency=medium
 
-Add a SYSV init script to start / stop the daemon
+  * Ignore invalid "Total number of disks" field on Microsoft ZIP64 files.
+    Closes: #661956, #1064000.
+  * Drop conflicting declarations of gmtime() and localtime().
+    Should fix build with gcc-15. Closes: #1098043.
+  * Fix zipgrep handling of escapes. Closes: #1054628.
+  * Stop using update-mime. Closes: #1072396.
+  * Add debian/source/lintian-overrides for *.a files.
+  * Do not trim Debian changelog.
+  * Add debian/salsa-ci.yml.
+  * Add Vcs-Git and Vcs-Browser fields.
+  * Update Standards-Version.
 
-Add myself to the DEVELOPERS file.
+unzip (6.0-28) unstable; urgency=medium
 
-Signed-off-by: Bastien Curutchet <bastien.curutchet@bootlin.com>
+  * Drop debian/source/lintian-overrides, obsolete since version 6.0-18.
+  * Update URI for Info-ZIP license in copyright file.
+  * Update standards version to 4.6.2.
+  * Run wrap-and-sort.
+  * Update Homepage.
+
+So let's just bump to this patchlevel version.
+
+Note that the .dsc file link in the .hash file was wrong, it was still
+referring to patchlevel -26.
+
+Fixes:
+
+  https://autobuild.buildroot.net/results/d81cb9d7c9e87dd233dde350d15cb03427ba2036/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Tested-by: Christian Stewart <christian@aperture.us>
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Bernd:
+ Updated _SITE from /debian-debug/ to /debian/ (Baruch)
+ Updated comment of UNZIP_IGNORE_CVES to reflect bump.]
 ---
- DEVELOPERS                       |  3 ++
- package/Config.in                |  1 +
- package/rasdaemon/Config.in      | 25 +++++++++++++++
- package/rasdaemon/S95rasdaemon   | 69 ++++++++++++++++++++++++++++++++++++++++
- package/rasdaemon/rasdaemon.hash |  3 ++
- package/rasdaemon/rasdaemon.mk   | 33 +++++++++++++++++++
- 6 files changed, 134 insertions(+)
+v3:
+- updated _SITE from /debian-debug/ to /debian/ (Baruch)
+- updated comment of UNZIP_IGNORE_CVES to reflect bump.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index db001d6bb0707a5877c0849fa85fa736377e60dd..b1ead6d26c4e8ff160bcc7ed85b0945ac5e551dc 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -341,6 +341,9 @@ F:	package/tcpdump/
- F:	package/ti-uim/
- F:	package/uhubctl/
- 
-+N:	Bastien Curutchet <bastien.curutchet@bootlin.com>
-+F:	package/rasdaemon/
-+
- N:	Baxiche Su <baxiche@gmail.com>
- F:	package/qt6/qt6multimedia/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 12f327cb273526781d931b834e24d0df5024e80e..1a93cec2fa22e3a6e70acbf799b32b00d5e8b5de 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -584,6 +584,7 @@ endmenu
- 	source "package/pru-software-support/Config.in"
- 	source "package/pulseview/Config.in"
- 	source "package/qoriq-cadence-dp-firmware/Config.in"
-+	source "package/rasdaemon/Config.in"
- 	source "package/raspi-gpio/Config.in"
- 	source "package/rdma-core/Config.in"
- 	source "package/read-edid/Config.in"
-diff --git a/package/rasdaemon/Config.in b/package/rasdaemon/Config.in
-new file mode 100644
-index 0000000000000000000000000000000000000000..68cef3a313bf2b82a8306ed5e0ec581cd618531d
---- /dev/null
-+++ b/package/rasdaemon/Config.in
-@@ -0,0 +1,25 @@
-+config BR2_PACKAGE_RASDAEMON
-+	bool "rasdaemon"
-+	depends on !BR2_STATIC_LIBS # libtraceevent
-+	select BR2_PACKAGE_LIBTRACEEVENT
-+	select BR2_PACKAGE_SQLITE
-+	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
-+	help
-+	  rasdaemon is a tool that collects all hardware error events
-+	  reported by the Linux Kernel from several sources (EDAC, MCE
-+	  PCI, ...) into one common framework.
-+	  See https://github.com/mchehab/rasdaemon for details.
-+
-+if BR2_PACKAGE_RASDAEMON
-+
-+config BR2_PACKAGE_RASDAEMON_AER
-+	bool "Enable AER support"
-+	select BR2_PACKAGE_PCIUTILS
-+	help
-+	  Enable handling of AER (Advanced Error Reporting) events on
-+	  PCIe
-+
-+endif
-+
-+comment "rasdaemon needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/rasdaemon/S95rasdaemon b/package/rasdaemon/S95rasdaemon
-new file mode 100644
-index 0000000000000000000000000000000000000000..23c084ac8508cf4f45614e7cc44db94c61aa42e3
---- /dev/null
-+++ b/package/rasdaemon/S95rasdaemon
-@@ -0,0 +1,69 @@
-+#!/bin/sh
-+#
-+# S95rasdaemon	Starts Rasdaemon.
-+#
-+# shellcheck disable=SC2317 # functions are called via variable
-+
-+DAEMON="rasdaemon"
-+PIDFILE="/var/run/$DAEMON.pid"
-+
-+start() {
-+	printf "Starting %s: " "$DAEMON"
-+
-+	if ! grep -q debugfs /proc/mounts ; then
-+		echo "FAIL : debugfs is missing"
-+		return 1
-+	fi
-+
-+	start-stop-daemon --start --pidfile "$PIDFILE" --make-pidfile \
-+		--exec "/usr/sbin/$DAEMON"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+		# rasdaemon automatically forks itself into background
-+		# so the $PIDFILE created by start-stop-daemon doesn't match
-+		# the final's rasdaemon PID.
-+		pidof "/usr/sbin/$DAEMON" > "$PIDFILE"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+stop() {
-+	printf "Stopping %s: " "$DAEMON"
-+	start-stop-daemon --stop --pidfile "$PIDFILE" --exec "/usr/sbin/$DAEMON"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+		return "$status"
-+	fi
-+	while start-stop-daemon --stop --test --quiet --pidfile "$PIDFILE" \
-+		--exec "/sbin/$DAEMON"; do
-+		sleep 0.1
-+	done
-+	rm -f "$PIDFILE"
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	start
-+}
-+
-+reload() {
-+	restart
-+}
-+
-+case "$1" in
-+	start|stop|reload|restart)
-+		"$1"
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|reload|restart}"
-+		exit 1
-+esac
-+
-+exit $?
-diff --git a/package/rasdaemon/rasdaemon.hash b/package/rasdaemon/rasdaemon.hash
-new file mode 100644
-index 0000000000000000000000000000000000000000..e1b600a4893bef2f58c86f6d742fb7cbcb480fc8
---- /dev/null
-+++ b/package/rasdaemon/rasdaemon.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  7e12459f9477036491ac2b1e4c07cc3e8efea6dcd30525a263ab1f83910b773a  rasdaemon-0.8.4.tar.gz
-+sha256  39bc367cd7cd291d217447632b28a74be414a52b142b1875ac8789184aeca7b2  COPYING
-diff --git a/package/rasdaemon/rasdaemon.mk b/package/rasdaemon/rasdaemon.mk
-new file mode 100644
-index 0000000000000000000000000000000000000000..50ac97a37dcbe63443bddca505ebc7c929116e53
---- /dev/null
-+++ b/package/rasdaemon/rasdaemon.mk
-@@ -0,0 +1,33 @@
-+################################################################################
-+#
-+# rasdaemon
-+#
-+################################################################################
-+
-+RASDAEMON_VERSION = 0.8.4
-+RASDAEMON_SITE = $(call github,mchehab,rasdaemon,v$(RASDAEMON_VERSION))
-+RASDAEMON_LICENSE = GPL-2.0+
-+RASDAEMON_LICENSE_FILES = COPYING
-+RASDAEMON_AUTORECONF = YES
-+
-+RASDAEMON_DEPENDENCIES = libtraceevent sqlite
-+# rasdaemon uses argp.h which is not provided by uclibc or musl by default.
-+# Use the argp-standalone package to provide this.
-+ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
-+RASDAEMON_DEPENDENCIES += argp-standalone
-+RASDAEMON_CONF_ENV += LIBS="-largp"
-+endif
-+
-+ifeq ($(BR2_PACKAGE_RASDAEMON_AER),y)
-+RASDAEMON_DEPENDENCIES += pciutils
-+RASDAEMON_CONF_OPTS += --enable-aer
-+else
-+RASDAEMON_CONF_OPTS += --disable-aer
-+endif
-+
-+define RASDAEMON_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/rasdaemon/S95rasdaemon \
-+		$(TARGET_DIR)/etc/init.d/S95rasdaemon
-+endef
-+
-+$(eval $(autotools-package))
+ package/unzip/unzip.hash | 4 ++--
+ package/unzip/unzip.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
+diff --git a/package/unzip/unzip.hash b/package/unzip/unzip.hash
+index bbf4f7d71f..0b371e5454 100644
+--- a/package/unzip/unzip.hash
++++ b/package/unzip/unzip.hash
+@@ -1,6 +1,6 @@
+-# From https://snapshot.debian.org/archive/debian/20210110T204103Z/pool/main/u/unzip/unzip_6.0-26.dsc
++# From https://snapshot.debian.org/archive/debian/20250311T215724Z/pool/main/u/unzip/unzip_6.0-29.dsc
+ sha256  036d96991646d0449ed0aa952e4fbe21b476ce994abc276e49d30e686708bd37  unzip_6.0.orig.tar.gz
+-sha256  67bde7c71d52afd61aa936d4415c8d12fd90ca26e9637a3cd67cae9b71298c12  unzip_6.0-27.debian.tar.xz
++sha256  14043e5ea351c02b3bc8676e1e6d20d79b9a690b6d7520e8138ac629cc048417  unzip_6.0-29.debian.tar.xz
+ 
+ # Locally computed:
+ sha256  7469b81d5d29ac4fd670f7c86ba0cb9fa34f137a2d4d5198437d92ddf918984b  LICENSE
+diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
+index 5effebee4a..8dccaf6ce3 100644
+--- a/package/unzip/unzip.mk
++++ b/package/unzip/unzip.mk
+@@ -6,13 +6,13 @@
+ 
+ UNZIP_VERSION = 6.0
+ UNZIP_SOURCE = unzip_$(UNZIP_VERSION).orig.tar.gz
+-UNZIP_PATCH = unzip_$(UNZIP_VERSION)-27.debian.tar.xz
+-UNZIP_SITE = https://snapshot.debian.org/archive/debian/20220916T090657Z/pool/main/u/unzip
++UNZIP_PATCH = unzip_$(UNZIP_VERSION)-29.debian.tar.xz
++UNZIP_SITE = https://snapshot.debian.org/archive/debian/20250311T215724Z/pool/main/u/unzip
+ UNZIP_LICENSE = Info-ZIP
+ UNZIP_LICENSE_FILES = LICENSE
+ UNZIP_CPE_ID_VALID = YES
+ 
+-# unzip_$(UNZIP_VERSION)-27.debian.tar.xz has patches to fix:
++# unzip_$(UNZIP_VERSION)-29.debian.tar.xz has patches to fix:
+ UNZIP_IGNORE_CVES = \
+ 	CVE-2014-8139 \
+ 	CVE-2014-8140 \
 -- 
-2.51.1
+2.47.3
 
 _______________________________________________
 buildroot mailing list
