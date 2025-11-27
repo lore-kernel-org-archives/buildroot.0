@@ -1,75 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50995D10375
-	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 06:31:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EB57D11183
+	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 07:31:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F309482572;
-	Thu, 27 Nov 2025 06:31:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8450D60B4E;
+	Thu, 27 Nov 2025 07:31:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VZnwArQLqohf; Thu, 27 Nov 2025 06:31:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CA7_oKM5wwJu; Thu, 27 Nov 2025 07:31:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA3FC82591
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E0EF60B30
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EA3FC82591;
-	Thu, 27 Nov 2025 06:31:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id C61F3DE
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 06:31:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1E0EF60B30;
+	Thu, 27 Nov 2025 07:31:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DB2E8708
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 07:31:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B828D402E6
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 06:31:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C186160B25
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 07:31:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K9LtNUCHV8_c for <buildroot@buildroot.org>;
- Thu, 27 Nov 2025 06:31:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F132240065
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F132240065
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F132240065
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 06:31:02 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0558.dip0.t-ipconnect.de [91.58.5.88])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 0F7D3A4C76FA
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 07:31:00 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:47086)
- by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vOVWt-000000002HE-2VVQ
- for buildroot@buildroot.org; Thu, 27 Nov 2025 06:30:59 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Thu, 27 Nov 2025 07:30:59 +0100
-Message-ID: <20251127063059.5166-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AfY2nvXMtPC7 for <buildroot@buildroot.org>;
+ Thu, 27 Nov 2025 07:31:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4553260B21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4553260B21
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4553260B21
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 07:31:52 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -112422360; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Thu, 27 Nov 2025 07:31:50 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1vOWTi-0000000C9YU-2vxj;
+ Thu, 27 Nov 2025 08:31:46 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Neal Frager <neal.frager@amd.com>
+In-Reply-To: <20251126202307.1269790-1-neal.frager@amd.com> (Neal Frager's
+ message of "Wed, 26 Nov 2025 20:23:05 +0000")
+References: <20251126202307.1269790-1-neal.frager@amd.com>
+Date: Thu, 27 Nov 2025 08:31:46 +0100
+Message-ID: <871plkgcd9.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1764225060;
- bh=q7pPMB/mPL1ljr5xHANUJxWbk1P2O/1z8tSoMwUeEn4=;
- h=From:To:Subject:Date:From;
- b=RjJk0qYIiVB9fHANspbYAYkPzTdFflygSsa8m95NkvHHR2m/2XCmsRei1iRap/1zB
- 4Ds8SJXh0QtT6KAoGlt2fiVw+q+c7GmWI3a7BABwpHzhCMs7SGIWmgtqf9cusmJYwU
- 8l56II20yfeiT+UpPZEmXhVqUZbO4ehuHwjYskcXSFO2DtKVMr6W9LF39jNQM/ryrc
- 8Xw8lo1lMaSBgTZ+8WAj0ACHwi8m0q+etgwdT817TYh6ZlB0O0gCulI5h7aanlL6JI
- DSImmMSbQ0aEPciMTl/Ne5WFwWuuKyMn3e3g1J9EI1pq9Qldu5raWd4NpvwsjQBeI2
- v5MVb39KuC7rA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=w6dzWws1OmSqm6DbakZ6Ppmf4C36iOxEwrV4LholPb8pzPJjFxTlPQHX2h+0bFz2CqRUzW9kXtuo876tc1DjEMB6orMC1WQLXN19TZBHZEtlR3wLVfJz175HDkePaDWwet0IHi7mrB2L8lHGKpU/Ykr5b/0IC9OyNGjrk7aXpsJ9pPyEbzGhNo16Rj2hYGElgafCFXQrCehufDV/5YhoIspOHlbxCX+cGHqRiFEWCtQ0ofcl9IitCkBZo50ssPgPewgi5F/hgWtH4Q7kuDLpCe96MLPIvkKLMU6tVrZJz0nLCOLbfRGvqHuAh6dVCe7MvDI6wC2Jh1587VHKH1kL0w==;
+ s=purelymail2; d=purelymail.com; v=1;
+ bh=w6QZi0/7jal8o8Gx5WGfbg3oMEhja+q7tRNRk6/t4gE=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=RjJk0qYI
-Subject: [Buildroot] [PATCH 1/1] {linux,
- linux-headers}: fix hash for kernel 6.6.117
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail2 header.b=w6dzWws1
+Subject: Re: [Buildroot] [PATCH v1 1/3] board/xilinx: remove xilinx_v2025.1
+ hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,38 +80,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: yann.morin@orange.com, ibai.erkiaga-elorza@amd.com,
+ luca.ceresoli@bootlin.com, buildroot@buildroot.org, brandon.maier@collins.com,
+ ju.o@free.fr, thomas.petazzoni@bootlin.com, romain.naour@smile.fr,
+ michal.simek@amd.com, romain.naour@gmail.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit 59479ae646767f22914335301dcec6fbeb313755 added a wrong
-hash for kernel 6.6.117.
+>>>>> "Neal" == Neal Frager <neal.frager@amd.com> writes:
 
-Fixes:
-https://autobuild.buildroot.org/results/5aa65e053b827e4d5c21d4cc06f439f1dd093053/
+ > Now that all Xilinx board configs have been bumped to xilinx_v2025.2, remove
+ > the xilinx_v2025.1 hashes which are no longer needed.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- linux/linux.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: Neal Frager <neal.frager@amd.com>
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 943b3dc9f4..a01162c3b5 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,7 +1,7 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
- sha256  6d08803b953c509df48d44d3281ed392524321d8bb353eb21c0555790c8f8e06  linux-6.17.9.tar.xz
- sha256  a1d2cd7327f10eec022615c1bb12c06439bd110d2020164be97f698f43ca58be  linux-6.12.59.tar.xz
--sha256  a8fbffe691974a3bf6a21d34eefad71a64c2a1fcc4513218356f1a87e390788b  linux-6.1.117.tar.xz
-+sha256  643b31079222fdbda70cfdd0b68c514f05a3926104be4762a4685f62818b43d1  linux-6.6.117.tar.xz
- sha256  ad068bfdb604ec0f4f7de385c8e7ab944008aa78a4aeeca94f53206e6726bfda  linux-6.1.158.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  83157953598b026fb721c906c60dfdfd8e986f25ecb9910f3504f690e2770e05  linux-5.15.196.tar.xz
+Committed to next, thanks.
+
 -- 
-2.47.3
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
