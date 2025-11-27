@@ -4,42 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DD79CFD2F6
-	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 19:55:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 745CBCFD2F6
+	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 19:55:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 01EDF608C2;
-	Thu, 27 Nov 2025 19:55:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4AD346083E;
+	Thu, 27 Nov 2025 19:55:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G3U6m6otnvBH; Thu, 27 Nov 2025 19:55:17 +0000 (UTC)
+ id rq7PW4dFPyJY; Thu, 27 Nov 2025 19:55:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2012616DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4501608C2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E2012616DD;
-	Thu, 27 Nov 2025 19:55:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8E07B708
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 19:55:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E4501608C2;
+	Thu, 27 Nov 2025 19:55:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9749E2A9
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 19:55:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7418680D8B
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 19:55:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 88BB7608C2
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 19:55:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fp8ONrwawl-C for <buildroot@buildroot.org>;
- Thu, 27 Nov 2025 19:55:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YvTJ2ve-2s3X for <buildroot@buildroot.org>;
+ Thu, 27 Nov 2025 19:55:33 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 42DA780D40
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42DA780D40
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2B6E46083E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B6E46083E
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 42DA780D40
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 19:55:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2B6E46083E
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 19:55:32 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 1B0B3B979CA9; Thu, 27 Nov 2025 20:55:11 +0100 (CET)
-Message-ID: <4c91d94c-3dbb-427c-94f2-0f120a4ba7b4@rnout.be>
-Date: Thu, 27 Nov 2025 20:55:09 +0100
+ with ESMTPSA id 43AFCB979CE7; Thu, 27 Nov 2025 20:55:30 +0100 (CET)
+Message-ID: <2954c0a6-6ae4-404f-9af8-acb47768d37b@rnout.be>
+Date: Thu, 27 Nov 2025 20:55:28 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
@@ -49,27 +49,27 @@ Cc: Simon Dawson <spdawson@gmail.com>,
  Lionel Orry <lionel.orry@gmail.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 References: <20251106204522.3273683-1-bernd@kuhls.net>
- <20251106204522.3273683-9-bernd@kuhls.net>
+ <20251106204522.3273683-11-bernd@kuhls.net>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20251106204522.3273683-9-bernd@kuhls.net>
+In-Reply-To: <20251106204522.3273683-11-bernd@kuhls.net>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1764273311; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1764273330; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:content-language:in-reply-to:references;
- bh=5xIDRfumPkip9Y0t8r6TqMwPx7x2R/EEnrqtnQG5X/0=;
- b=Q4w0VJmiOoDTaFs69hA/pBvXPgvlL0R0i7ErF+t8fy2/qj+z8i8HqHy6Skrqa14M1iSCjC
- LMbdI77WC+oE14t/zTIXq4wQD8LnddSNMwauZqLKBu4ckxiJTxdF0cqWFxYzqUIbhSUI1y
- ZMS2c5oOra3ZAUiLdeEBXTfMMbdEIM6l92veIP0F5X4wzna6g7UnP5pgMDWBMprPk9vMq9
- JWevP7OILs6LF6Hu6HhHn2ONyXz4YsVxfXFPbNPrKPikdzqHM8Zlht6aZf6AyNB4pKIwBc
- 8XXNon/KnlAu8MKc8VSSNSOOPHEqN3u7S3FqwKa6dIuRBWf4e+yNLo4W1NbONw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=U7yvS2XLEiDqf92NEMXz6/9NlbrfNqY9pxLQepCYl8k=;
+ b=IXdjXvG/yTwIikFep+iT9QoiW6lOJOoVpmDb8p1rCoVpsDZqnEgL6dPnYpKsPvF7xrZz7e
+ meHY3dKZd3G31kCcYgfr5lBXuxFXU5ZEf2EbY88+5Z6rOusMracxqfmbBuEdowQcx8JJ74
+ 5im90cWYqUk16yrc4YFjuANvkaO3f1ecIRnUP7nQ2RN4vJ1NACYjdKslFiO+VbBCjOFkla
+ I775aJ1G3s9WgGVQ1AYuNlZ+MsGCJS4W11mI9YhIcCN2ixbvxtzTioAcI5cjia/pjS8bZ5
+ hOHBG6WXOX0OtZatMAZ96ofBcYo5wTsyYzk0ZNlSZCFvF9OXJ7TXi2kyCd6tGw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=Q4w0VJmi
-Subject: Re: [Buildroot] [PATCH v3 08/14] package/bctoolbox: remove package
+ header.a=rsa-sha256 header.s=dkim header.b=IXdjXvG/
+Subject: Re: [Buildroot] [PATCH v3 10/14] package/mongrel2: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,151 +83,400 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAwNi8xMS8yMDI1IDIxOjQ1LCBCZXJuZCBLdWhscyB3cm90ZToKPiBGcm9tOiBUaG9tYXMg
-UGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPgo+IAo+IGJjdG9vbGJveCB3
-YXMgb25seSBuZWVkZWQgYXMgYSBkZXBlbmRlbmN5IG9mIGxpbnBob25lLCBhcyBpcyBhbnl3YXkK
-PiBidW5kbGVkIGluIG1vcmUgcmVjZW50IHZlcnNpb25zIG9mIGxpbnBob25lLCBtYWtpbmcgYSBz
-ZXBhcmF0ZSBwYWNrYWdlCj4gdW5ubmVjZXNzYXJ5Lgo+IAo+IFNpZ25lZC1vZmYtYnk6IFRob21h
-cyBQZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+Cj4gU2lnbmVkLW9mZi1i
-eTogQmVybmQgS3VobHMgPGJlcm5kQGt1aGxzLm5ldD4KCiAgQXBwbGllZCB0byAyMDI1LjAyLngg
-YW5kIDIwMjUuMDgueCwgdGhhbmtzLgoKICBSZWdhcmRzLAogIEFybm91dAoKPiAtLS0KPiAgIC5j
-aGVja3BhY2thZ2VpZ25vcmUgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxIC0KPiAgIENv
-bmZpZy5pbi5sZWdhY3kgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA4ICsrKysKPiAg
-IHBhY2thZ2UvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxIC0KPiAg
-IC4uLjEtRml4LUxpYnMucHJpdmF0ZS1mbGFncy1mb3ItbWJlZHRscy5wYXRjaCB8IDM3IC0tLS0t
-LS0tLS0tLS0tLS0KPiAgIHBhY2thZ2UvYmN0b29sYm94L0NvbmZpZy5pbiAgICAgICAgICAgICAg
-ICAgICB8IDE5IC0tLS0tLS0tLQo+ICAgcGFja2FnZS9iY3Rvb2xib3gvYmN0b29sYm94Lmhhc2gg
-ICAgICAgICAgICAgIHwgIDMgLS0KPiAgIHBhY2thZ2UvYmN0b29sYm94L2JjdG9vbGJveC5tayAg
-ICAgICAgICAgICAgICB8IDQyIC0tLS0tLS0tLS0tLS0tLS0tLS0KPiAgIDcgZmlsZXMgY2hhbmdl
-ZCwgOCBpbnNlcnRpb25zKCspLCAxMDMgZGVsZXRpb25zKC0pCj4gICBkZWxldGUgbW9kZSAxMDA2
-NDQgcGFja2FnZS9iY3Rvb2xib3gvMDAwMS1GaXgtTGlicy5wcml2YXRlLWZsYWdzLWZvci1tYmVk
-dGxzLnBhdGNoCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9iY3Rvb2xib3gvQ29uZmln
-LmluCj4gICBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9iY3Rvb2xib3gvYmN0b29sYm94Lmhh
-c2gKPiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2JjdG9vbGJveC9iY3Rvb2xib3gubWsK
-PiAKPiBkaWZmIC0tZ2l0IGEvLmNoZWNrcGFja2FnZWlnbm9yZSBiLy5jaGVja3BhY2thZ2VpZ25v
-cmUKPiBpbmRleCBhZmM5ZDQxMmVjLi43MTNiOWQ5YTA3IDEwMDY0NAo+IC0tLSBhLy5jaGVja3Bh
-Y2thZ2VpZ25vcmUKPiArKysgYi8uY2hlY2twYWNrYWdlaWdub3JlCj4gQEAgLTIyOSw3ICsyMjks
-NiBAQCBwYWNrYWdlL2Jhc2gvMDAwMi1wYXJzZS55LWZpeC1jb21waWxhdGlvbi1mb3Itbm9uLW11
-bHRpYnl0ZS1idWlsZHMucGF0Y2ggbGliX3BhdAo+ICAgcGFja2FnZS9iYy8wMDAxLWJjLXVzZS1N
-QUtFSU5GTy12YXJpYWJsZS1mb3ItZG9jcy5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0KPiAgIHBh
-Y2thZ2UvYmMvMDAwMi1ub3RpY2UtcmVhZC1hbmQtd3JpdGUtZXJyb3JzLW9uLWlucHV0LWFuZC1v
-dXRwdXQucGF0Y2ggbGliX3BhdGNoLlVwc3RyZWFtCj4gICBwYWNrYWdlL2JjYWNoZS10b29scy8w
-MDAxLURvbi10LWlubGluZS1jcmM2NC1mb3ItZ2NjLTUtY29tcGF0YWJpbGl0eS5wYXRjaCBsaWJf
-cGF0Y2guVXBzdHJlYW0KPiAtcGFja2FnZS9iY3Rvb2xib3gvMDAwMS1GaXgtTGlicy5wcml2YXRl
-LWZsYWdzLWZvci1tYmVkdGxzLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQo+ICAgcGFja2FnZS9i
-Y3VzZGsvMDAwMi1laWJkLWZpeC1lbmRsZXNzLXJlY3Vyc2lvbi13aGVuLXVzaW5nLVVTQi1iYWNr
-ZW5kcy5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0KPiAgIHBhY2thZ2UvYmVhcnNzbC8wMDAxLUZp
-eC1taXNzaW5nLW9iamRpci1kZXBlbmRlbmN5LnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQo+ICAg
-cGFja2FnZS9iZW5lanNvbi8wMDAxLWMtc3RkLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQo+IGRp
-ZmYgLS1naXQgYS9Db25maWcuaW4ubGVnYWN5IGIvQ29uZmlnLmluLmxlZ2FjeQo+IGluZGV4IDE1
-ODExY2VhMTYuLmNlMTM1YTBjMjYgMTAwNjQ0Cj4gLS0tIGEvQ29uZmlnLmluLmxlZ2FjeQo+ICsr
-KyBiL0NvbmZpZy5pbi5sZWdhY3kKPiBAQCAtMTQ2LDYgKzE0NiwxNCBAQCBlbmRpZgo+ICAgCj4g
-ICBjb21tZW50ICJMZWdhY3kgb3B0aW9ucyByZW1vdmVkIGluIDIwMjUuMTEiCj4gICAKPiArY29u
-ZmlnIEJSMl9QQUNLQUdFX0JDVE9PTEJPWAo+ICsJYm9vbCAiYmN0b29sYm94IGhhcyBiZWVuIHJl
-bW92ZWQiCj4gKwlzZWxlY3QgQlIyX0xFR0FDWQo+ICsJaGVscAo+ICsJICBUaGlzIHBhY2thZ2Ug
-aGFzIGJlZW4gcmVtb3ZlZCBhcyBwYXJ0IG9mIHRoZSBsaW5waG9uZQo+ICsJICByZW1vdmFsLiBJ
-biBhZGRpdGlvbiwgbmV3ZXIgdmVyc2lvbiBvZiBsaW5waG9uZSBkaXJlY3RseQo+ICsJICBidW5k
-bGUgYmN0b29sYm94IG1ha2luZyBhIHNlcGFyYXRlIHBhY2thZ2UgdW5uZWNlc3NhcnkuCj4gKwo+
-ICAgY29uZmlnIEJSMl9QQUNLQUdFX09SVFAKPiAgIAlib29sICJvcnRwIGhhcyBiZWVuIHJlbW92
-ZWQiCj4gICAJc2VsZWN0IEJSMl9MRUdBQ1kKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9Db25maWcu
-aW4gYi9wYWNrYWdlL0NvbmZpZy5pbgo+IGluZGV4IDJmNjAzODhiOWIuLjZmZjhkOTNiYzUgMTAw
-NjQ0Cj4gLS0tIGEvcGFja2FnZS9Db25maWcuaW4KPiArKysgYi9wYWNrYWdlL0NvbmZpZy5pbgo+
-IEBAIC0yMTYzLDcgKzIxNjMsNiBAQCBtZW51ICJPdGhlciIKPiAgIAlzb3VyY2UgInBhY2thZ2Uv
-YXRmL0NvbmZpZy5pbiIKPiAgIAlzb3VyY2UgInBhY2thZ2UvYXZyby1jL0NvbmZpZy5pbiIKPiAg
-IAlzb3VyY2UgInBhY2thZ2UvYmFzdS9Db25maWcuaW4iCj4gLQlzb3VyY2UgInBhY2thZ2UvYmN0
-b29sYm94L0NvbmZpZy5pbiIKPiAgIAlzb3VyY2UgInBhY2thZ2UvYmR3Z2MvQ29uZmlnLmluIgo+
-ICAgCXNvdXJjZSAicGFja2FnZS9ib29zdC9Db25maWcuaW4iCj4gICAJc291cmNlICJwYWNrYWdl
-L2MtY2FwbnByb3RvL0NvbmZpZy5pbiIKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9iY3Rvb2xib3gv
-MDAwMS1GaXgtTGlicy5wcml2YXRlLWZsYWdzLWZvci1tYmVkdGxzLnBhdGNoIGIvcGFja2FnZS9i
-Y3Rvb2xib3gvMDAwMS1GaXgtTGlicy5wcml2YXRlLWZsYWdzLWZvci1tYmVkdGxzLnBhdGNoCj4g
-ZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMzQyMDQyZDU5Yy4uMDAwMDAwMDAwMAo+
-IC0tLSBhL3BhY2thZ2UvYmN0b29sYm94LzAwMDEtRml4LUxpYnMucHJpdmF0ZS1mbGFncy1mb3It
-bWJlZHRscy5wYXRjaAo+ICsrKyAvZGV2L251bGwKPiBAQCAtMSwzNyArMCwwIEBACj4gLUZyb20g
-YjdmMTRhODAwYmJkYWQxOTNmNDU2OTViYzViOGM1MTczZjM4ODJiYSBNb24gU2VwIDE3IDAwOjAw
-OjAwIDIwMDEKPiAtRnJvbTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFp
-bC5jb20+Cj4gLURhdGU6IFN1biwgMTAgRmViIDIwMTkgMTc6NTE6MDUgKzAxMDAKPiAtU3ViamVj
-dDogW1BBVENIXSBDTWFrZUxpc3RzLnR4dDogZml4IG1iZWR0bHMgbGlicmFyaWVzIGluIGJjdG9v
-bGJveC5wYwo+IC1NSU1FLVZlcnNpb246IDEuMAo+IC1Db250ZW50LVR5cGU6IHRleHQvcGxhaW47
-IGNoYXJzZXQ9VVRGLTgKPiAtQ29udGVudC1UcmFuc2Zlci1FbmNvZGluZzogOGJpdAo+IC0KPiAt
-YmN0b29sYm94LnBjIHNob3VsZCBub3QgY29udGFpbiB0aGUgZnVsbCBsaWJyYXJpZXMgcGF0aCwg
-cGF0aCBzaG91bGQgYmUKPiAtZ2l2ZW4gYnkgLUwgYW5kIGxpYnJhcnkgbmFtZXMgYnkgLWwKPiAt
-U28gc2VudCBiYWNrIHRoZSBmaXggYWxyZWFkeSBzdWdnZXN0ZWQgYnkgSsO2cmcgS3JhdXNlIGlu
-Cj4gLWh0dHBzOi8vZ2l0aHViLmNvbS9CZWxsZWRvbm5lQ29tbXVuaWNhdGlvbnMvYmN0b29sYm94
-L3B1bGwvNAo+IC0KPiAtU2lnbmVkLW9mZi1ieTogSsO2cmcgS3JhdXNlIDxqb2VyZy5rcmF1c2VA
-ZW1iZWRkZWQucm9ja3M+Cj4gLVNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRh
-aW5lLmZhYnJpY2VAZ21haWwuY29tPgo+IC1bVXBzdHJlYW0gc3RhdHVzOgo+IC1odHRwczovL2dp
-dGh1Yi5jb20vQmVsbGVkb25uZUNvbW11bmljYXRpb25zL2JjdG9vbGJveC9wdWxsLzddCj4gLS0t
-LQo+IC0gQ01ha2VMaXN0cy50eHQgfCA1ICsrLS0tCj4gLSAxIGZpbGUgY2hhbmdlZCwgMiBpbnNl
-cnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQo+IC0KPiAtZGlmZiAtLWdpdCBhL0NNYWtlTGlzdHMu
-dHh0IGIvQ01ha2VMaXN0cy50eHQKPiAtaW5kZXggMjlmM2ViNi4uYjJmMjZjMiAxMDA2NDQKPiAt
-LS0tIGEvQ01ha2VMaXN0cy50eHQKPiAtKysrIGIvQ01ha2VMaXN0cy50eHQKPiAtQEAgLTEwMSw5
-ICsxMDEsOCBAQCBlbHNlKCkKPiAtIGVuZGlmKCkKPiAtCj4gLSBpZihNQkVEVExTX0ZPVU5EKQo+
-IC0tCWdldF9maWxlbmFtZV9jb21wb25lbnQobWJlZHRsc19saWJyYXJ5X3BhdGggIiR7TUJFRFRM
-U19MSUJSQVJJRVN9IiBQQVRIKQo+IC0tCXN0cmluZyhSRVBMQUNFICI7IiAiICIgTUJFRFRMU19M
-SUJSQVJJRVNfU1RSICIke01CRURUTFNfTElCUkFSSUVTfSIpCj4gLS0Jc2V0KExJQlNfUFJJVkFU
-RSAiJHtMSUJTX1BSSVZBVEV9ICR7TUJFRFRMU19MSUJSQVJJRVNfU1RSfSIpCj4gLSsJZ2V0X2Zp
-bGVuYW1lX2NvbXBvbmVudChtYmVkdGxzX2xpYnJhcnlfcGF0aCAiJHtNQkVEVExTX0xJQlJBUll9
-IiBQQVRIKQo+IC0rCXNldChMSUJTX1BSSVZBVEUgIiR7TElCU19QUklWQVRFfSAtTCR7bWJlZHRs
-c19saWJyYXJ5X3BhdGh9IC1sbWJlZHRscyAtbG1iZWRjcnlwdG8gLWxtYmVkeDUwOSIpCj4gLSBl
-bmRpZigpCj4gLSBpZihQT0xBUlNTTF9GT1VORCkKPiAtIAlnZXRfZmlsZW5hbWVfY29tcG9uZW50
-KHBvbGFyc3NsX2xpYnJhcnlfcGF0aCAiJHtQT0xBUlNTTF9MSUJSQVJJRVN9IiBQQVRIKQo+IGRp
-ZmYgLS1naXQgYS9wYWNrYWdlL2JjdG9vbGJveC9Db25maWcuaW4gYi9wYWNrYWdlL2JjdG9vbGJv
-eC9Db25maWcuaW4KPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAxY2YyYjdlMjM2
-Li4wMDAwMDAwMDAwCj4gLS0tIGEvcGFja2FnZS9iY3Rvb2xib3gvQ29uZmlnLmluCj4gKysrIC9k
-ZXYvbnVsbAo+IEBAIC0xLDE5ICswLDAgQEAKPiAtY29uZmlnIEJSMl9QQUNLQUdFX0JDVE9PTEJP
-WAo+IC0JYm9vbCAiYmN0b29sYm94Igo+IC0JZGVwZW5kcyBvbiBCUjJfSU5TVEFMTF9MSUJTVERD
-UFAKPiAtCWRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUwo+IC0JZGVwZW5kcyBv
-biAhQlIyX1RPT0xDSEFJTl9IQVNfR0NDX0JVR182NDczNSAjIGV4Y2VwdGlvbl9wdHIKPiAtCXNl
-bGVjdCBCUjJfUEFDS0FHRV9MSUJJQ09OViBpZiAhQlIyX0VOQUJMRV9MT0NBTEUKPiAtCWhlbHAK
-PiAtCSAgVXRpbGl0aWVzIGxpYnJhcnkgdXNlZCBieSBCZWxsZWRvbm5lIENvbW11bmljYXRpb25z
-Cj4gLQkgIHNvZnR3YXJlcyBsaWtlIGJlbGxlLXNpcCwgbWVkaWFzdHJlYW1lcjIgYW5kIGxpbnBo
-b25lLgo+IC0KPiAtCSAgU2VsZWN0IEJSMl9QQUNLQUdFX01CRURUTFMgZm9yIGNyeXB0byBzdXBw
-b3J0Lgo+IC0KPiAtCSAgaHR0cHM6Ly9naXRodWIuY29tL0JlbGxlZG9ubmVDb21tdW5pY2F0aW9u
-cy9iY3Rvb2xib3gKPiAtCj4gLWNvbW1lbnQgImJjdG9vbGJveCBuZWVkcyBhIHRvb2xjaGFpbiB3
-LyBDKyssIHRocmVhZHMiCj4gLQlkZXBlbmRzIG9uICFCUjJfSU5TVEFMTF9MSUJTVERDUFAgfHwg
-IUJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMKPiAtCj4gLWNvbW1lbnQgImJjdG9vbGJveCBuZWVk
-cyBhIHRvb2xjaGFpbiBub3QgYWZmZWN0ZWQgYnkgR0NDIGJ1ZyA2NDczNSIKPiAtCWRlcGVuZHMg
-b24gQlIyX1RPT0xDSEFJTl9IQVNfR0NDX0JVR182NDczNQo+IGRpZmYgLS1naXQgYS9wYWNrYWdl
-L2JjdG9vbGJveC9iY3Rvb2xib3guaGFzaCBiL3BhY2thZ2UvYmN0b29sYm94L2JjdG9vbGJveC5o
-YXNoCj4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggOWIxZjllODIxZC4uMDAwMDAw
-MDAwMAo+IC0tLSBhL3BhY2thZ2UvYmN0b29sYm94L2JjdG9vbGJveC5oYXNoCj4gKysrIC9kZXYv
-bnVsbAo+IEBAIC0xLDMgKzAsMCBAQAo+IC0jIExvY2FsbHkgY2FsY3VsYXRlZAo+IC1zaGEyNTYg
-IDQ0NmI2MGU4MWE3OWIxMWU4MjEyYzQ0ZTMxMmFlYjBjZTQ2ZTllY2YwMjY5YTM1YzQ5MmVjZGNh
-M2U3NDI4YzMgIGJjdG9vbGJveC00LjQuOC50YXIuZ3oKPiAtc2hhMjU2ICAxYjM3ODJjY2FkN2I4
-NjE0MTAwY2RhMzBkM2ZhZjQyZmMzOWYyZTk3OTMyOTA4YzU0MzAwNTA1M2I2NTRjYTY4ICBMSUNF
-TlNFLnR4dAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2JjdG9vbGJveC9iY3Rvb2xib3gubWsgYi9w
-YWNrYWdlL2JjdG9vbGJveC9iY3Rvb2xib3gubWsKPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQK
-PiBpbmRleCBhYzkzNjEwMjZmLi4wMDAwMDAwMDAwCj4gLS0tIGEvcGFja2FnZS9iY3Rvb2xib3gv
-YmN0b29sYm94Lm1rCj4gKysrIC9kZXYvbnVsbAo+IEBAIC0xLDQyICswLDAgQEAKPiAtIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMKPiAtIwo+IC0jIGJjdG9vbGJveAo+IC0jCj4gLSMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjCj4gLQo+IC1CQ1RPT0xCT1hfVkVSU0lPTiA9IDQuNC44Cj4gLUJDVE9PTEJP
-WF9TSVRFID0gJChjYWxsIGdpdGh1YixCZWxsZWRvbm5lQ29tbXVuaWNhdGlvbnMsYmN0b29sYm94
-LCQoQkNUT09MQk9YX1ZFUlNJT04pKQo+IC1CQ1RPT0xCT1hfTElDRU5TRSA9IEdQTC0zLjArCj4g
-LUJDVE9PTEJPWF9MSUNFTlNFX0ZJTEVTID0gTElDRU5TRS50eHQKPiAtQkNUT09MQk9YX0lOU1RB
-TExfU1RBR0lORyA9IFlFUwo+IC0KPiAtIyBTZXQgQ01BS0VfU0tJUF9SUEFUSCB0byBwcmV2ZW50
-IGJjdG9vbGJveCBmcm9tIGFkZGluZyB0aGUgcnBhdGggdG8KPiAtIyBzaGFyZWQgbGlicmFyeS4K
-PiAtQkNUT09MQk9YX0NPTkZfT1BUUyA9IFwKPiAtCS1ERU5BQkxFX1BPTEFSU1NMPU9GRiBcCj4g
-LQktREVOQUJMRV9TVFJJQ1Q9T0ZGIFwKPiAtCS1ERU5BQkxFX1RFU1RTX0NPTVBPTkVOVD1PRkYg
-XAo+IC0JLURFTkFCTEVfVEVTVFM9T0ZGIFwKPiAtCS1EQ01BS0VfU0tJUF9SUEFUSD1PTgo+IC0K
-PiAtaWZlcSAoJChCUjJfUEFDS0FHRV9MSUJJQ09OVikseSkKPiAtQkNUT09MQk9YX0RFUEVOREVO
-Q0lFUyArPSBsaWJpY29udgo+IC1CQ1RPT0xCT1hfQ09ORl9PUFRTICs9IC1EQ01BS0VfQ1hYX0ZM
-QUdTPSIkKFRBUkdFVF9DWFhGTEFHUykgLWxpY29udiIKPiAtZW5kaWYKPiAtCj4gLWlmZXEgKCQo
-QlIyX1BBQ0tBR0VfTUJFRFRMUykseSkKPiAtQkNUT09MQk9YX0RFUEVOREVOQ0lFUyArPSBtYmVk
-dGxzCj4gLUJDVE9PTEJPWF9DT05GX09QVFMgKz0gLURFTkFCTEVfTUJFRFRMUz1PTgo+IC1lbHNl
-Cj4gLUJDVE9PTEJPWF9DT05GX09QVFMgKz0gLURFTkFCTEVfTUJFRFRMUz1PRkYKPiAtZW5kaWYK
-PiAtCj4gLWlmZXEgKCQoQlIyX1NUQVRJQ19MSUJTKSx5KQo+IC1CQ1RPT0xCT1hfQ09ORl9PUFRT
-ICs9IC1ERU5BQkxFX1NIQVJFRD1PRkYgLURFTkFCTEVfU1RBVElDPU9OCj4gLWVsc2UgaWZlcSAo
-JChCUjJfU0hBUkVEX1NUQVRJQ19MSUJTKSx5KQo+IC1CQ1RPT0xCT1hfQ09ORl9PUFRTICs9IC1E
-RU5BQkxFX1NIQVJFRD1PTiAtREVOQUJMRV9TVEFUSUM9T04KPiAtZWxzZSBpZmVxICgkKEJSMl9T
-SEFSRURfTElCUykseSkKPiAtQkNUT09MQk9YX0NPTkZfT1BUUyArPSAtREVOQUJMRV9TSEFSRUQ9
-T04gLURFTkFCTEVfU1RBVElDPU9GRgo+IC1lbmRpZgo+IC0KPiAtJChldmFsICQoY21ha2UtcGFj
-a2FnZSkpCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
-dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
-dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+
+
+On 06/11/2025 21:45, Bernd Kuhls wrote:
+> mongrel2 is incompatible with MbedTLS 3.6 and was removed from Debian
+> stable/testing:
+> https://tracker.debian.org/pkg/mongrel2
+> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1075866
+> 
+> Upstream report from 2023 exists:
+> https://github.com/mongrel2/mongrel2/issues/359
+> but went unanswered, the last upstream commit was in Dec 2021:
+> https://github.com/mongrel2/mongrel2/commits/master/
+> 
+> Since no other package uses mongrel2 we can safely remove this
+> unmaintained package.
+> 
+> Fixes:
+> https://autobuild.buildroot.net/results/6c1/6c17827d21135886b1f4822174a4a963ca6325bf/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+
+  Applied to 2025.02.x and 2025.08.x, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   .checkpackageignore                           |  2 -
+>   Config.in.legacy                              |  6 ++
+>   DEVELOPERS                                    |  3 -
+>   package/Config.in                             |  1 -
+>   package/mongrel2/0001-Do-not-run-tests.patch  | 45 -----------
+>   ...-Fix-Makefiles-for-cross-compilation.patch | 78 -------------------
+>   .../0003-fix-build-with-gcc-4.8.patch         | 62 ---------------
+>   package/mongrel2/Config.in                    | 33 --------
+>   package/mongrel2/mongrel2.hash                |  6 --
+>   package/mongrel2/mongrel2.mk                  | 26 -------
+>   10 files changed, 6 insertions(+), 256 deletions(-)
+>   delete mode 100644 package/mongrel2/0001-Do-not-run-tests.patch
+>   delete mode 100644 package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch
+>   delete mode 100644 package/mongrel2/0003-fix-build-with-gcc-4.8.patch
+>   delete mode 100644 package/mongrel2/Config.in
+>   delete mode 100644 package/mongrel2/mongrel2.hash
+>   delete mode 100644 package/mongrel2/mongrel2.mk
+> 
+> diff --git a/.checkpackageignore b/.checkpackageignore
+> index f1a089aac5..a6a6da598d 100644
+> --- a/.checkpackageignore
+> +++ b/.checkpackageignore
+> @@ -700,8 +700,6 @@ package/mini-snmpd/0001-linux.c-fix-musl-build.patch lib_patch.Upstream
+>   package/minidlna/S60minidlnad Shellcheck lib_sysv.Indent lib_sysv.Variables
+>   package/minissdpd/S50minissdpd Shellcheck lib_sysv.Indent lib_sysv.Variables
+>   package/modem-manager/S44modem-manager Shellcheck lib_sysv.Variables
+> -package/mongrel2/0001-Do-not-run-tests.patch lib_patch.Upstream
+> -package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch lib_patch.Upstream
+>   package/monit/0001-Do-not-force-building-a-statically-linked-binary.patch lib_patch.Upstream
+>   package/mono-gtksharp3/0001-Fixes-MONO_PROFILE_ENTER_LEAVE-undeclared.patch lib_patch.Upstream
+>   package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch lib_patch.Upstream
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 8961bf6fab..df57ff95a3 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -146,6 +146,12 @@ endif
+>   
+>   comment "Legacy options removed in 2025.11"
+>   
+> +config BR2_PACKAGE_MONGREL2
+> +	bool "mongrel2 has been removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  mongrel2 is incompatible with MbedTLS 3.6 and has been removed
+> +
+>   config BR2_PACKAGE_EXPECT
+>   	bool "expect has been removed"
+>   	select BR2_LEGACY
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index b9e7a32ea5..a1576de92d 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2136,9 +2136,6 @@ F:	package/python-gunicorn/
+>   F:	support/testing/tests/package/sample_python_flask.py
+>   F:	support/testing/tests/package/test_python_flask.py
+>   
+> -N:	Lionel Orry <lionel.orry@gmail.com>
+> -F:	package/mongrel2/
+> -
+>   N:	Lothar Felten <lothar.felten@gmail.com>
+>   F:	board/bananapi/bananapi-m2-ultra/
+>   F:	board/beagleboard/beaglebone/
+> diff --git a/package/Config.in b/package/Config.in
+> index f07265f731..b74b577f8a 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -2558,7 +2558,6 @@ endif
+>   	source "package/minissdpd/Config.in"
+>   	source "package/mjpg-streamer/Config.in"
+>   	source "package/modem-manager/Config.in"
+> -	source "package/mongrel2/Config.in"
+>   	source "package/mosh/Config.in"
+>   	source "package/mosquitto/Config.in"
+>   	source "package/mrouted/Config.in"
+> diff --git a/package/mongrel2/0001-Do-not-run-tests.patch b/package/mongrel2/0001-Do-not-run-tests.patch
+> deleted file mode 100644
+> index 3b72aef3c5..0000000000
+> --- a/package/mongrel2/0001-Do-not-run-tests.patch
+> +++ /dev/null
+> @@ -1,45 +0,0 @@
+> -From 3cbef2195533f357c8a80c2840108662461273b7 Mon Sep 17 00:00:00 2001
+> -From: Lionel Orry <lionel.orry@gmail.com>
+> -Date: Wed, 27 Mar 2013 14:48:19 +0100
+> -Subject: [PATCH] Do not run tests.
+> -
+> -This patch is specific to cross-compiled environments and avoids running
+> -the tests on the host. It is not meant to be applied upstream.
+> -
+> -Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
+> -[Dario: make the patch to be applied with fuzz factor 0]
+> -Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> ----
+> - Makefile            | 2 +-
+> - tools/m2sh/Makefile | 2 +-
+> - 2 files changed, 2 insertions(+), 2 deletions(-)
+> -
+> -diff --git a/Makefile b/Makefile
+> -index 7dc4089..ca72630 100644
+> ---- a/Makefile
+> -+++ b/Makefile
+> -@@ -18,7 +18,7 @@
+> - TESTS=$(patsubst %.c,%,${TEST_SRC})
+> - MAKEOPTS=OPTFLAGS="${CFLAGS} ${NOEXTCFLAGS} ${OPTFLAGS}" LDFLAGS="${LDFLAGS}" LIBS="${LIBS}" DESTDIR="${DESTDIR}" PREFIX="${PREFIX}"
+> -
+> --all: bin/mongrel2 tests m2sh procer
+> -+all: bin/mongrel2 m2sh procer filters config_modules
+> -
+> - ${OBJECTS_NOEXT}: CFLAGS += ${NOEXTCFLAGS}
+> - ${OBJECTS}: | builddirs
+> -diff --git a/tools/m2sh/Makefile b/tools/m2sh/Makefile
+> -index b50d8a0..334e4da 100644
+> ---- a/tools/m2sh/Makefile
+> -+++ b/tools/m2sh/Makefile
+> -@@ -12,7 +12,7 @@
+> -
+> - $(RAGEL_OBJECTS): CFLAGS += -Wno-unused-const-variable -Wimplicit-fallthrough=0 -Wno-unused-parameter
+> -
+> --all: ../lemon/lemon tests build/m2sh
+> -+all: ../lemon/lemon build/m2sh
+> -
+> - dev: CFLAGS=-g -Wall -Wextra -Isrc -I../../src $(OPTFLAGS)
+> - dev: all
+> ---
+> -1.8.1.4
+> -
+> diff --git a/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch b/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch
+> deleted file mode 100644
+> index 1961f128ed..0000000000
+> --- a/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch
+> +++ /dev/null
+> @@ -1,78 +0,0 @@
+> -From 298356c44a7df2b34c4e307c531d2010e2cb4b79 Mon Sep 17 00:00:00 2001
+> -From: Lionel Orry <lionel.orry@gmail.com>
+> -Date: Wed, 27 Mar 2013 15:56:56 +0100
+> -Subject: [PATCH] Fix Makefiles for cross-compilation
+> -
+> -The CFLAGS handling in mongrel2 is really messy and it is hard to make
+> -it behave correctly with cross-compiling environments. This patch
+> -restricts the Makefiles syntax to GNU Make, but help cross-compiling.
+> -
+> -This is not meant to be applied upstream.
+> -
+> -Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
+> -[Fabrice: refresh for 1.12.2]
+> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ----
+> - Makefile                      | 2 +-
+> - tools/config_modules/Makefile | 2 +-
+> - tools/filters/Makefile        | 2 +-
+> - tools/m2sh/Makefile           | 2 +-
+> - tools/procer/Makefile         | 2 +-
+> - 5 files changed, 5 insertions(+), 5 deletions(-)
+> -
+> -diff --git a/Makefile b/Makefile
+> -index 4e89c33..2f549a8 100644
+> ---- a/Makefile
+> -+++ b/Makefile
+> -@@ -1,5 +1,5 @@
+> - CFLAGS?=-g -O2
+> --CFLAGS += -Wall -Wextra -Wno-implicit-fallthrough -Wno-unused-const-variable -I./src -DNDEBUG -D_FILE_OFFSET_BITS=64 -pthread
+> -+override CFLAGS += -Wall -Wextra -Wno-implicit-fallthrough -Wno-unused-const-variable -I./src -DNDEBUG -D_FILE_OFFSET_BITS=64 -pthread
+> - CFLAGS += ${OPTFLAGS}
+> - LIBS+=-lzmq -ldl -lsqlite3 -lmbedtls -lmbedx509 -lmbedcrypto
+> - PREFIX?=/usr/local
+> -diff --git a/tools/config_modules/Makefile b/tools/config_modules/Makefile
+> -index c2680d1..ada3169 100644
+> ---- a/tools/config_modules/Makefile
+> -+++ b/tools/config_modules/Makefile
+> -@@ -1,5 +1,5 @@
+> - PREFIX?=/usr/local
+> --CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
+> -+override CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
+> - LDFLAGS=$(OPTLIBS)
+> -
+> - MONGO_SRC = mongo-c-driver/src/bson.c \
+> -diff --git a/tools/filters/Makefile b/tools/filters/Makefile
+> -index 6505ad5..a968ef6 100644
+> ---- a/tools/filters/Makefile
+> -+++ b/tools/filters/Makefile
+> -@@ -1,5 +1,5 @@
+> - PREFIX?=/usr/local
+> --CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -g -fPIC -shared -nostartfiles -L../../build
+> -+override CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -g -fPIC -shared -nostartfiles -L../../build
+> - LDFLAGS=$(OPTLIBS)
+> -
+> - all: null.so rewrite.so sendfile.so
+> -diff --git a/tools/m2sh/Makefile b/tools/m2sh/Makefile
+> -index b50d8a0..cc00062 100644
+> ---- a/tools/m2sh/Makefile
+> -+++ b/tools/m2sh/Makefile
+> -@@ -1,4 +1,4 @@
+> --CFLAGS=-DNDEBUG -DNO_LINENOS -pthread -g -I../../src -Isrc -Wall $(OPTFLAGS)
+> -+override CFLAGS=-DNDEBUG -DNO_LINENOS -pthread -g -I../../src -Isrc -Wall $(OPTFLAGS)
+> - LIBS=-lzmq -lsqlite3 ../../build/libm2.a $(OPTLIBS)
+> -
+> - PREFIX?=/usr/local
+> -diff --git a/tools/procer/Makefile b/tools/procer/Makefile
+> -index bb9aa31..d377f7f 100644
+> ---- a/tools/procer/Makefile
+> -+++ b/tools/procer/Makefile
+> -@@ -1,4 +1,4 @@
+> --CFLAGS=-DNDEBUG -pthread -g -I../../src -Wall $(OPTFLAGS)
+> -+override CFLAGS=-DNDEBUG -pthread -g -I../../src -Wall $(OPTFLAGS)
+> - PREFIX?=/usr/local
+> - LIBS?=-lzmq
+> - SOURCES=$(wildcard *.c)
+> ---
+> -2.27.0
+> -
+> diff --git a/package/mongrel2/0003-fix-build-with-gcc-4.8.patch b/package/mongrel2/0003-fix-build-with-gcc-4.8.patch
+> deleted file mode 100644
+> index 996cd3246b..0000000000
+> --- a/package/mongrel2/0003-fix-build-with-gcc-4.8.patch
+> +++ /dev/null
+> @@ -1,62 +0,0 @@
+> -From cc2dd3995dc9a9e6f0e705e11e791f3f3c7d7326 Mon Sep 17 00:00:00 2001
+> -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> -Date: Tue, 18 Jan 2022 22:41:36 +0100
+> -Subject: [PATCH] fix build with gcc 4.8
+> -
+> -Drop "-Wno-unused-const-variable -Wimplicit-fallthrough=0" as
+> -"-Wno-implicit-fallthrough -Wno-unused-const-variable" is already set in
+> -CFLAGS. This will avoid the following build failure with gcc 4.8 raised
+> -since version 1.13.0 and
+> -https://github.com/mongrel2/mongrel2/commit/725209578599bd7784753d86aee34f6441ff78a5:
+> -
+> -arm-none-linux-gnueabi-gcc: error: unrecognized command line option '-Wimplicit-fallthrough=0'
+> -
+> -Fixes:
+> - - http://autobuild.buildroot.org/results/de324b733e09057c87352220069fe65f6e535eb8
+> -
+> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> -Upstream: https://github.com/mongrel2/mongrel2/pull/354
+> -[Dario: make the patch to be applied with fuzz factor 0]
+> -Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> ----
+> - Makefile            | 1 -
+> - tools/m2sh/Makefile | 4 ++--
+> - 2 files changed, 2 insertions(+), 3 deletions(-)
+> -
+> -diff --git a/Makefile b/Makefile
+> -index f6627ed..fb8d028 100644
+> ---- a/Makefile
+> -+++ b/Makefile
+> -@@ -22,7 +22,6 @@ all: bin/mongrel2 tests m2sh procer
+> -
+> - ${OBJECTS_NOEXT}: CFLAGS += ${NOEXTCFLAGS}
+> - ${OBJECTS}: | builddirs
+> --$(RAGEL_OBJECTS): CFLAGS += -Wno-unused-const-variable -Wimplicit-fallthrough=0
+> -
+> - .PHONY: builddirs
+> - builddirs:
+> -diff --git a/tools/m2sh/Makefile b/tools/m2sh/Makefile
+> -index 83e7ae4..86364af 100644
+> ---- a/tools/m2sh/Makefile
+> -+++ b/tools/m2sh/Makefile
+> -@@ -10,7 +10,7 @@
+> - LIB_OBJ=$(filter-out src/m2sh.o,${OBJECTS})
+> - RAGEL_OBJECTS=src/lexer.o src/cli.o
+> -
+> --$(RAGEL_OBJECTS): CFLAGS += -Wno-unused-const-variable -Wimplicit-fallthrough=0 -Wno-unused-parameter
+> -+$(RAGEL_OBJECTS): CFLAGS += -Wno-unused-parameter
+> -
+> - all: ../lemon/lemon build/m2sh
+> -
+> -@@ -20,7 +20,7 @@
+> - install: build/m2sh
+> - 	install build/m2sh ${DESTDIR}${PREFIX}/bin
+> -
+> --src/parser.o: CFLAGS += -Wno-unused-const-variable -Wno-unused-parameter
+> -+src/parser.o: CFLAGS += -Wno-unused-parameter
+> -
+> - build/libm2sh.a: ${LIB_OBJ}
+> - 	mkdir -p build
+> ---
+> -2.34.1
+> -
+> diff --git a/package/mongrel2/Config.in b/package/mongrel2/Config.in
+> deleted file mode 100644
+> index 60fee6f96d..0000000000
+> --- a/package/mongrel2/Config.in
+> +++ /dev/null
+> @@ -1,33 +0,0 @@
+> -# mongrel2 uses {get,make,swap}context() functions, which are
+> -# available in glibc for all architectures and in uClibc only for a
+> -# subset of the architectures
+> -config BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
+> -	bool
+> -	default y if BR2_TOOLCHAIN_USES_GLIBC
+> -	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
+> -		(BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || BR2_sparc || BR2_x86_64)
+> -
+> -comment "mongrel2 needs a uClibc or glibc toolchain w/ C++, threads, dynamic library"
+> -	depends on !BR2_INSTALL_LIBSTDCPP || \
+> -		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
+> -		!BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
+> -
+> -config BR2_PACKAGE_MONGREL2
+> -	bool "mongrel2"
+> -	depends on BR2_INSTALL_LIBSTDCPP # zeromq
+> -	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
+> -	depends on !BR2_STATIC_LIBS # uses dlopen()
+> -	depends on BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
+> -	select BR2_PACKAGE_MBEDTLS
+> -	select BR2_PACKAGE_SQLITE
+> -	select BR2_PACKAGE_ZEROMQ
+> -	help
+> -	  Mongrel2 is an application, language, and network architecture
+> -	  agnostic web server that focuses on web applications using
+> -	  modern browser technologies.
+> -
+> -	  Mongrel2 supports 17 languages and platforms, HTTP, Flash
+> -	  sockets, WebSockets, Long Polling, and many ways to deploy
+> -	  and hack on it.
+> -
+> -	  http://www.mongrel2.org
+> diff --git a/package/mongrel2/mongrel2.hash b/package/mongrel2/mongrel2.hash
+> deleted file mode 100644
+> index f4f094ea03..0000000000
+> --- a/package/mongrel2/mongrel2.hash
+> +++ /dev/null
+> @@ -1,6 +0,0 @@
+> -# From https://mongrel2.org
+> -sha1  6057f9cbfae41e2cdef1e0f715df3c1a4d3a1884  mongrel2-v1.13.0.tar.bz2
+> -
+> -# Locally computed
+> -sha256  b6f1f50c9f65b605342d8792b1cc8a1c151105339030313b9825b6a68d400c10  mongrel2-v1.13.0.tar.bz2
+> -sha256  eb6e2a2baa637d06f6aa762886fbc8939934eb5fdb0b3a5b3882f2a61e9a4357  LICENSE
+> diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
+> deleted file mode 100644
+> index 07914ad0fe..0000000000
+> --- a/package/mongrel2/mongrel2.mk
+> +++ /dev/null
+> @@ -1,26 +0,0 @@
+> -################################################################################
+> -#
+> -# mongrel2
+> -#
+> -################################################################################
+> -
+> -MONGREL2_VERSION = 1.13.0
+> -MONGREL2_SOURCE = mongrel2-v$(MONGREL2_VERSION).tar.bz2
+> -# Do not use the github helper here, the generated tarball is *NOT* the same
+> -# as the one uploaded by upstream for the release.
+> -MONGREL2_SITE = https://github.com/mongrel2/mongrel2/releases/download/v$(MONGREL2_VERSION)
+> -MONGREL2_LICENSE = BSD-3-Clause
+> -MONGREL2_LICENSE_FILES = LICENSE
+> -MONGREL2_DEPENDENCIES = mbedtls sqlite zeromq
+> -
+> -define MONGREL2_BUILD_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+> -		PREFIX=/usr all
+> -endef
+> -
+> -define MONGREL2_INSTALL_TARGET_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+> -		PREFIX=/usr DESTDIR=$(TARGET_DIR) install
+> -endef
+> -
+> -$(eval $(generic-package))
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
