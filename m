@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2E05D116F7
-	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:36:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B73EED111A8
+	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:40:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 81A926178A;
-	Thu, 27 Nov 2025 20:36:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2554A61AD3;
+	Thu, 27 Nov 2025 20:40:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MsstO6thau8d; Thu, 27 Nov 2025 20:36:55 +0000 (UTC)
+ id 9NaNRCK9oMXT; Thu, 27 Nov 2025 20:40:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 927B961C08
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70E8A60B10
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 927B961C08;
-	Thu, 27 Nov 2025 20:36:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 70E8A60B10;
+	Thu, 27 Nov 2025 20:40:42 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 10E332A9
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:36:28 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id CCD6BDE
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:40:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 33D5361B09
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:36:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AF0B960B10
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:40:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zNT5T5rIbQEm for <buildroot@buildroot.org>;
- Thu, 27 Nov 2025 20:36:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69B9361ACA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 69B9361ACA
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:36:03 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6892F8355B; Thu, 27 Nov 2025 20:36:03 +0000 (UTC)
+ id t3R27kWZUxpa for <buildroot@buildroot.org>;
+ Thu, 27 Nov 2025 20:40:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 52F3C60B07
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52F3C60B07
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 52F3C60B07
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:40:39 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0558.dip0.t-ipconnect.de [91.58.5.88])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id A5F58A4C7713;
+ Thu, 27 Nov 2025 21:40:36 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:38942)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99)
+ (envelope-from <bernd@kuhls.net>) id 1vOin6-000000004sH-1MiC;
+ Thu, 27 Nov 2025 20:40:36 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed, 26 Nov 2025 09:45:54 +0100
-X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: fe97314c2f117f8ccf4d9c96dbacca97aa2557d8
-X-Git-Newrev: f5e9c1f379725d815786aba6f244011f28b40935
-X-Patchwork-Hint: ignore
-Message-Id: <20251127203603.6892F8355B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/open-plc-utils:
- bump version to git 46c3506453
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Thu, 27 Nov 2025 21:40:36 +0100
+Message-ID: <20251127204036.3135656-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+MIME-Version: 1.0
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202506031021; t=1764276036;
+ bh=B7MyWtdEStJ7IDelVGfVKKed+lDY9Rt140kEkwm79xA=;
+ h=From:To:Cc:Subject:Date:From;
+ b=bAcdanoUQnj+EWJwK+2sbrIsfzd9gSU04r+G2IYcyKilTuN1P1rKBQIiYE++gab3L
+ u7brJpS2raFKjCmGCj0WtJ5+NVSOwRciN2xq8LujNjzcVMPunYa8t5t3dIGc3qCvdt
+ X8i8raoZ8cS4bTx9FcZwT6qOQ8bm0tCSAZ2f9Fed+Q8fKa3deRW2lgys8p+st8Roda
+ 2X4OXOZl4e5x3TEhJzHWWUDQ3vzdDv5oeUZ52VqI8xR4Jbqswv6uzoZhJi4YXAxIxW
+ 4Sk7Lu3w3bJxcSnwoF/t90viVHFhmp3llG/PgqA3RpK7DlkhJPV25dEqPjqjQmCWlP
+ LqM9ndJybBY9Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=bAcdanoU
+Subject: [Buildroot] [PATCH 1/1] package/swipl: bump version to 9.2.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,62 +81,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5e9c1f379725d815786aba6f244011f28b40935
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
-
-Changelog:
-https://github.com/qca/open-plc-utils/compare/1ba7d5a042e4e8ff6858b08e113eec5dc4e89cf2...46c3506453c15b873fd6ed3e76c9872cea5e143a
-
-Upstream commit
-https://github.com/qca/open-plc-utils/commit/cbf52f68b5e2ab0c4071600ab34126120e54f5cd
-fixes build errors with newer gcc versions.
-
-Instead of adding this patch to buildroot we bump to HEAD which also
-includes other bug fixes and documentation updates.
-
 Fixes:
-https://autobuild.buildroot.net/results/c74/c74730bbadc9ba20cdccf448dbc508d0afbabf41/
+https://autobuild.buildroot.net/results/158/1586997a84236b678249ac45b83b4e330e727f39/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien: add git commit version in commit title]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit bf5f1b546b408883a721dcaa1a5e660b3d72ad95)
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/open-plc-utils/open-plc-utils.hash | 2 +-
- package/open-plc-utils/open-plc-utils.mk   | 2 +-
+ package/swipl/swipl.hash | 2 +-
+ package/swipl/swipl.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/open-plc-utils/open-plc-utils.hash b/package/open-plc-utils/open-plc-utils.hash
-index 0ab661231a..bcb5253bb9 100644
---- a/package/open-plc-utils/open-plc-utils.hash
-+++ b/package/open-plc-utils/open-plc-utils.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  4b1b55896939f178321ffe1ec2dc6937ea688d577b3671a5f0edb5c3326dfa3d  open-plc-utils-1ba7d5a042e4e8ff6858b08e113eec5dc4e89cf2.tar.gz
-+sha256  e02ffc2d2abde6f31c183b0717742c243b5746d0dbe9ffaa38f6154f14a1bd4d  open-plc-utils-46c3506453c15b873fd6ed3e76c9872cea5e143a.tar.gz
- sha256  3137c632bbcec5e88b72dc13f4fe06ee184eea364fec8f7494bdfa57672ef921  LICENSE
-diff --git a/package/open-plc-utils/open-plc-utils.mk b/package/open-plc-utils/open-plc-utils.mk
-index 086552e09b..1c0d213278 100644
---- a/package/open-plc-utils/open-plc-utils.mk
-+++ b/package/open-plc-utils/open-plc-utils.mk
+diff --git a/package/swipl/swipl.hash b/package/swipl/swipl.hash
+index 20278cfb8d..efc3aa963f 100644
+--- a/package/swipl/swipl.hash
++++ b/package/swipl/swipl.hash
+@@ -1,4 +1,4 @@
+ # From https://www.swi-prolog.org/download/stable
+-sha256  b331637a57c913c49edcfcb10ddcf6c031278ce93d2411d54542778531abb5c7  swipl-9.2.8.tar.gz
++sha256  53f428e2d9bbdf30e53b06c9c42def9a13ff82fc36a111d410fc8b0bc889ee2d  swipl-9.2.9.tar.gz
+ # Locally calculated
+ sha256  770594d0f4463b71f1485f00e4bc5cf4b6f667d62ef6bc9bde2fee236541992a  LICENSE
+diff --git a/package/swipl/swipl.mk b/package/swipl/swipl.mk
+index e29b8d8f46..20faaefe7c 100644
+--- a/package/swipl/swipl.mk
++++ b/package/swipl/swipl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPEN_PLC_UTILS_VERSION = 1ba7d5a042e4e8ff6858b08e113eec5dc4e89cf2
-+OPEN_PLC_UTILS_VERSION = 46c3506453c15b873fd6ed3e76c9872cea5e143a
- OPEN_PLC_UTILS_SITE = $(call github,qca,open-plc-utils,$(OPEN_PLC_UTILS_VERSION))
- OPEN_PLC_UTILS_LICENSE = BSD-3-Clause
- OPEN_PLC_UTILS_LICENSE_FILES = LICENSE
+-SWIPL_VERSION = 9.2.8
++SWIPL_VERSION = 9.2.9
+ SWIPL_SITE = https://www.swi-prolog.org/download/stable/src
+ SWIPL_LICENSE = BSD-2-Clause
+ SWIPL_LICENSE_FILES = LICENSE
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
