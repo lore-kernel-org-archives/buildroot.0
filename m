@@ -4,72 +4,121 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C30C5D116EA
-	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 19:54:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41255D111A8
+	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 19:54:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C911E616EA;
-	Thu, 27 Nov 2025 19:54:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B59E61725;
+	Thu, 27 Nov 2025 19:54:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zjke8-AXLtqW; Thu, 27 Nov 2025 19:54:42 +0000 (UTC)
+ id 6uWwongJ83sL; Thu, 27 Nov 2025 19:54:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2777D616FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 227B86170A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2777D616FD;
-	Thu, 27 Nov 2025 19:54:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D85A0708
+	by smtp3.osuosl.org (Postfix) with ESMTP id 227B86170A;
+	Thu, 27 Nov 2025 19:54:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id EBFD9967
  for <buildroot@buildroot.org>; Thu, 27 Nov 2025 19:54:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D5753616E5
+ by smtp1.osuosl.org (Postfix) with ESMTP id DDEBB80884
  for <buildroot@buildroot.org>; Thu, 27 Nov 2025 19:54:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fuU5BtZ1nVbT for <buildroot@buildroot.org>;
- Thu, 27 Nov 2025 19:54:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6757560F83
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6757560F83
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6757560F83
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 19:54:13 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 13A58B979CA9; Thu, 27 Nov 2025 20:54:08 +0100 (CET)
-Message-ID: <4ebc6324-abc0-4a7a-be5f-49e620151a21@rnout.be>
-Date: Thu, 27 Nov 2025 20:54:06 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id G2mW7LG9hzIz for <buildroot@buildroot.org>;
+ Thu, 27 Nov 2025 19:54:37 +0000 (UTC)
+Received-SPF: Temperror (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::a64; helo=mail-vk1-xa64.google.com;
+ envelope-from=markus.mayer@broadcom.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 33E8D80849
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33E8D80849
+Received: from mail-vk1-xa64.google.com (mail-vk1-xa64.google.com
+ [IPv6:2607:f8b0:4864:20::a64])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 33E8D80849
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 19:53:54 +0000 (UTC)
+Received: by mail-vk1-xa64.google.com with SMTP id
+ 71dfb90a1353d-559966a86caso297011e0c.2
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 11:53:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1764273230; x=1764878030;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=z8xTLVZXDQbES3bYmEKnjvwwgY8b3tx8n38FVvVAMCQ=;
+ b=TGFtmxbPYKp4lq+BFQEc1sCXZ+C8MZ66OHdtXDPMMoCZAw3ocXYcCra2RjsBIY1M13
+ rRM51pjIRNAIf9+X3TLuZTda1LizvPTbRFYMSL8M3Mov4vMYHUsozVplKushq8FLxNiX
+ qYy8j618cQTmF9hbRFUvc0ldhHHz68YoOkHhJYcajxxxzR2yvwi7NNtFu19kWQU3Oeq3
+ sSHyo48EgPKDREqfyrpPNsgHUB6mdIquwxNt4sfWNon/UhGmWo1P13NQ0IgnqQULyqdD
+ zuTAb3SHyz61rpw12iIKK0CJiQT3l47pywHJyOC2ydqXZ6p0fW/tozEvtLnn7a4EnxYN
+ EE1A==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVQa2R4LyN9B5Rm4mmNKP30k/mF/qAoltb8CHGWdQbaSUeO3XGwxwFhex1QebPEmDIhgg2ohVedanw=@buildroot.org
+X-Gm-Message-State: AOJu0YxIonZUvGuAFxGBLmJe8PU4fqHGvIfxoIkM8hC733WTV6tkBvc3
+ KdQy+VTgc035ZCxmyNxyVU8BU58PgQbqguJg6SSkbe5ZmGFpk6NeeNZcUXZuMfyOV4ytpB//UZy
+ eir7NTCMTkYc+6cCn/aiDLbnTj1/ildzHmd0DXqtSxUmY2BHbs/7lxhIZDJ4gXP+ViqqqImeugd
+ TPPqD3fP8GTbCPx5eNJfe/L9t4tphAaxjSN+c5TOxbt2avzeaT68FVGsqfXDKdCsNcBn9w1enRD
+ T9SRYEh8sOlKG8=
+X-Gm-Gg: ASbGncvxztdzGL91n+FBjEuKsjuqKqElMEh1D8kCD/1DIzeaxplTey17Ie01vMgdUFS
+ quoTQp9MvBKP6vTO1PtK+78GmboO+RjP/K0hytugVCEY3lxDnkvA5Cf2DRGpk6HaI+I2aBo3C/h
+ 53czSi7h24j3BJNsMsVoBYBMffc3y44ktGYA4p6E1LdOy6d9F3ZEtfmXne+W90IJ4gRtJ40HjsY
+ 1BuVxBLvmWwwdrKXsn4FvcaGy9BL7IjaMKR6kLn5+d+/1bm3mmD9rZQzkLmgq7UPP8lWnauJP6D
+ Lwy5o2TeiKtSWWy6D2uKIGVe0xcsagf/8O3LExM5WHORO23utPmdTRLfg50HBmnGl+IkSQFvPM9
+ 8RZ2j3cZTumIl2m9CYiNYQC2RkuK0sOF1jkmhdRKVoX2mclZMpStmX0nLZTe/GAjZLZ9orpVM4D
+ dN1hhnRT+XXu9jvif2EvN0Yu3O0hzCMvWJVsqGb1l2W6p2
+X-Google-Smtp-Source: AGHT+IG/OXmjIC0q8YnZ5RB05zhjlYyCQGXSaRIB/KAL0Vv/ulXnqa0wwt+yXzYG7VO1rogGpXAzqBGlgaD1
+X-Received: by 2002:a05:6122:2382:b0:55b:305b:4e2e with SMTP id
+ 71dfb90a1353d-55cd78354bdmr3973104e0c.21.1764273230362; 
+ Thu, 27 Nov 2025 11:53:50 -0800 (PST)
+Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com
+ (address-144-49-247-77.dlp.protect.broadcom.com. [144.49.247.77])
+ by smtp-relay.gmail.com with ESMTPS id
+ 71dfb90a1353d-55cf515389fsm241224e0c.6.2025.11.27.11.53.49
+ for <buildroot@buildroot.org>
+ (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+ Thu, 27 Nov 2025 11:53:50 -0800 (PST)
+X-Relaying-Domain: broadcom.com
+X-CFilter-Loop: Reflected
+Received: by mail-ed1-f71.google.com with SMTP id
+ 4fb4d7f45d1cf-64161017e34so1438746a12.1
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 11:53:49 -0800 (PST)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVOvDhOmrzCqRyRdBT8fANqBW4IQ7sit2fM/NkCJmLz5qPaH3neMIEvQ6ke+q0TcxvnQ770V39Ewi4=@buildroot.org
+X-Received: by 2002:a17:906:c14a:b0:b72:7dbd:3bf with SMTP id
+ a640c23a62f3a-b7671709b7cmr2853544866b.43.1764273228802; 
+ Thu, 27 Nov 2025 11:53:48 -0800 (PST)
+X-Received: by 2002:a17:906:c14a:b0:b72:7dbd:3bf with SMTP id
+ a640c23a62f3a-b7671709b7cmr2853541666b.43.1764273228228; Thu, 27 Nov 2025
+ 11:53:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
-Cc: Simon Dawson <spdawson@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Carsten Schoenert <c.schoenert@gmail.com>,
- Lionel Orry <lionel.orry@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20251106204522.3273683-1-bernd@kuhls.net>
- <20251106204522.3273683-5-bernd@kuhls.net>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <20251106204522.3273683-5-bernd@kuhls.net>
-X-Last-TLS-Session-Version: TLSv1.3
+References: <20251123133431.1499202-1-thomas.petazzoni@bootlin.com>
+ <fe64d9aca519af339d5d30054c162d0e@free.fr>
+In-Reply-To: <fe64d9aca519af339d5d30054c162d0e@free.fr>
+Date: Thu, 27 Nov 2025 11:53:36 -0800
+X-Gm-Features: AWmQ_bnyIl1HYMF_nQWccZ1EhyYiiBzpwcXEKrQ_6P1Wv__-GxMjJCA2FOpC9YU
+Message-ID: <CAGt4E5vMkqsHt2sUUqLWERZyRvQXyp1Z90E4wx8yPRP6CEiWgg@mail.gmail.com>
+To: Julien Olivain <ju.o@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Buildroot List <buildroot@buildroot.org>, Bernd Kuhls <bernd@kuhls.net>
+X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1764273249; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=szfw660MfzT4eRYaTgK2t6NXdBX5lvZV2HUAnAgkCq0=;
- b=G5MhUaIjbKi5W3p3Jm/mL56LaCUyjLhu9J0WDc1mGimbrRJTyzOuHG4/Qs+vniez+nI2PD
- 3lsPKZiyWM+qvZna2XdlesAGAQAWrsd2tnXJcUKlLh+VgUtiL0WA7A63AViVIMGm7zL6MO
- fBMAi2pLxhwBXTNJpAWDyleYUUmTCyl7W3timVPgKTM8FbDylXl1uENWnM+oQZic8BEYVe
- PYMT4nxxlrlpWrYEU++8/jYOxiCUpUtrcyfqePGCVhBOu8466YldfPoVhOTpgvHS+nlHrM
- HZ7BmSqot+jhBYXMiM3exjyB8IQTwGNfqhfKq4WmeTcO1R0lvRsgsbPGxW90Bw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=broadcom.com; s=google; t=1764273229; x=1764878029; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=z8xTLVZXDQbES3bYmEKnjvwwgY8b3tx8n38FVvVAMCQ=;
+ b=HOLbtCG5u71h67pDt0M2eBQKQxva40tApbdDi+RUwzh2vsrZ5ZIlZ5FuHihF2IV4t8
+ CgI5U0fOSLWwgia0/SozC8yastBO5/T2mKVzeOIdgLkD4zMQ5YCKJnuYVG3IFvYOMO11
+ GBY96JgFQwJ8puC0QNXGprEBfnlMnT1PnEczQ=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=G5MhUaIj
-Subject: Re: [Buildroot] [PATCH v3 04/14] package/belle-sip: remove package
+ header.from=broadcom.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256
+ header.s=google header.b=HOLbtCG5
+Subject: Re: [Buildroot] [PATCH] package/e2fsprogs: fix build with headers
+ >= 5.10 and < 5.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,169 +130,118 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+From: Markus Mayer via buildroot <buildroot@buildroot.org>
+Reply-To: Markus Mayer <mmayer@broadcom.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hi all,
+
+I submitted a different patch for this to Ted T'so a week ago, on
+November 21, to be exact. Unfortunately, there doesn't seem to be a
+mailing list for e2fsprogs, so there is no way of quoting said email.
+Unfortunately, I haven't heard back from Ted as of yet.
+
+I think the easiest way of showing my patch set here at this point in
+time is by providing a Github link.
+
+https://github.com/tytso/e2fsprogs/compare/master...mmayer:e2fsprogs:kern-compat-master
+
+This page should show the entirety of the diff, combining the two
+commits in that tree (manual changes and derived autoconf changes).
+The important changes are in the first commit (configure.ac and
+kern_compat.h)[1].
+
+The big difference between your patch and my patch is that my patch
+doesn't disable functionality when the build environment is too old.
+Instead, it provides the missing definitions of the data structures,
+so the binaries can still be built with full functionality compiled
+in. So, while your patch strips functionality out of e2fsprogs based
+on the build environment, mine does not.
+
+This makes a big difference, because "old" kernel headers at build
+time don't necessarily equate to an "old" kernel at runtime. Here is
+why. Our toolchain ships with a sys-root that contains the C runtime,
+glibc and kernel headers. The toolchain is an external, pre-built
+toolchain. For compatibility reasons, kernel headers in the toolchain
+are from Linux 5.4. However, that toolchain is then used to build
+entire root file systems (including the kernel) for 5.4, 5.15, 6.1 and
+6.12. Just to stress this one more time, this means an entire
+Buildroot build, including the kernel, is conducted with this
+toolchain, but while using different kernel versions. We aren't doing
+any funky business like copying binary files around and sharing them
+between releases. It all gets built together as one would expect, and
+users generally won't even notice the kernel headers in the sys-root
+are from Linux 5.4, and they shouldn't have to care.
+
+It is easy to see how stripping out functionality based on build time
+headers will become an issue in this setting. Sure, with the 5.4-based
+rootfs, the added functionality will not actually work at runtime
+(ioctl not supported by the kernel), but in the other three
+environments, it'll work perfectly (due to the data structure
+definitions provided), despite having been built against 5.4 kernel
+headers.
+
+I held off submitting this to buildroot right away, because I was
+hoping this would be accepted upstream quickly enough to not have to
+clutter buildroot with patch commits. However, it being a week later,
+I was about to submit my patches for inclusion into Buildroot, since
+Ted hasn't responded and it is Thanksgiving in the US, which means
+more delays.
+
+However, then I noticed there was already a patch present in
+Buildroot. So, I am reaching out first before submitting the series
+for inclusion as it would conflict with the solution that is currently
+present.
+
+Please let me know what you think.
+
+Regards,
+-Markus
+
+[1] https://github.com/tytso/e2fsprogs/commit/bbe1c7fb5abf7c41894616e5885ad78446dd5f3b
 
 
-On 06/11/2025 21:45, Bernd Kuhls wrote:
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> belle-sip was only needed as a dependency of linphone, as is anyway
-> bundled in more recent versions of linphone, making a separate package
-> unnnecessary.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-  Applied to 2025.02.x and 2025.08.x, thanks.
 
-  Regards,
-  Arnout
 
-> ---
->   Config.in.legacy                 |  8 +++++++
->   DEVELOPERS                       |  1 -
->   package/Config.in                |  1 -
->   package/belle-sip/Config.in      | 22 ------------------
->   package/belle-sip/belle-sip.hash |  3 ---
->   package/belle-sip/belle-sip.mk   | 40 --------------------------------
->   6 files changed, 8 insertions(+), 67 deletions(-)
->   delete mode 100644 package/belle-sip/Config.in
->   delete mode 100644 package/belle-sip/belle-sip.hash
->   delete mode 100644 package/belle-sip/belle-sip.mk
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index b33798e7ed..db63ed2aab 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,14 @@ endif
->   
->   comment "Legacy options removed in 2025.11"
->   
-> +config BR2_PACKAGE_BELLE_SIP
-> +	bool "belle-sip has been removed"
-> +	select BR2_LEGACY
-> +	help
-> +	  This package has been removed as part of the linphone
-> +	  removal. In addition, newer version of linphone directly
-> +	  bundle belle-sip making a separate package unnecessary.
-> +
->   config BR2_PACKAGE_LINPHONE
->   	bool "linphone has been removed"
->   	select BR2_LEGACY
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index f9cf31f7e2..cb48886d08 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1019,7 +1019,6 @@ F:	package/openzwave/
->   
->   N:	Fabrice Fontaine <fontaine.fabrice@gmail.com>
->   F:	package/bearssl/
-> -F:	package/belle-sip/
->   F:	package/belr/
->   F:	package/boinc/
->   F:	package/cairo/
-> diff --git a/package/Config.in b/package/Config.in
-> index f7f5755315..9d80df3797 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -2010,7 +2010,6 @@ menu "Networking"
->   	source "package/azmq/Config.in"
->   	source "package/azure-iot-sdk-c/Config.in"
->   	source "package/batman-adv/Config.in"
-> -	source "package/belle-sip/Config.in"
->   	source "package/bluez5_utils-headers/Config.in"
->   	source "package/c-ares/Config.in"
->   	source "package/cni-plugins/Config.in"
-> diff --git a/package/belle-sip/Config.in b/package/belle-sip/Config.in
-> deleted file mode 100644
-> index 8e4de366e4..0000000000
-> --- a/package/belle-sip/Config.in
-> +++ /dev/null
-> @@ -1,22 +0,0 @@
-> -config BR2_PACKAGE_BELLE_SIP
-> -	bool "belle-sip"
-> -	depends on BR2_INSTALL_LIBSTDCPP
-> -	depends on !BR2_STATIC_LIBS # dlfcn.h
-> -	depends on BR2_TOOLCHAIN_HAS_THREADS
-> -	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # bctoolbox
-> -	depends on BR2_USE_WCHAR
-> -	select BR2_PACKAGE_BCTOOLBOX
-> -	# needs crypto support in bctoolbox
-> -	select BR2_PACKAGE_MBEDTLS
-> -	help
-> -	  Belle-sip is a modern library implementing SIP (RFC 3261)
-> -	  transport, transaction and dialog layers.
-> -
-> -	  http://www.linphone.org/technical-corner/belle-sip
-> -
-> -comment "belle-sip needs a toolchain w/ threads, C++, dynamic library, wchar"
-> -	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
-> -		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-> -
-> -comment "belle-sip needs a toolchain not affected by GCC bug 64735"
-> -	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-> diff --git a/package/belle-sip/belle-sip.hash b/package/belle-sip/belle-sip.hash
-> deleted file mode 100644
-> index 670ce0062e..0000000000
-> --- a/package/belle-sip/belle-sip.hash
-> +++ /dev/null
-> @@ -1,3 +0,0 @@
-> -# Locally calculated
-> -sha256  eabba615c97080572c1b9d3c76f8f9cf6a7432eedf37482672e5fa178a688f72  belle-sip-4.4.8.tar.gz
-> -sha256  1b3782ccad7b8614100cda30d3faf42fc39f2e97932908c543005053b654ca68  LICENSE.txt
-> diff --git a/package/belle-sip/belle-sip.mk b/package/belle-sip/belle-sip.mk
-> deleted file mode 100644
-> index b4de3612ce..0000000000
-> --- a/package/belle-sip/belle-sip.mk
-> +++ /dev/null
-> @@ -1,40 +0,0 @@
-> -################################################################################
-> -#
-> -# belle-sip
-> -#
-> -################################################################################
-> -
-> -BELLE_SIP_VERSION = 4.4.8
-> -BELLE_SIP_SITE = \
-> -	https://gitlab.linphone.org/BC/public/belle-sip/-/archive/$(BELLE_SIP_VERSION)
-> -BELLE_SIP_LICENSE = GPL-3.0+
-> -BELLE_SIP_LICENSE_FILES = LICENSE.txt
-> -BELLE_SIP_CPE_ID_VENDOR = linphone
-> -BELLE_SIP_INSTALL_STAGING = YES
-> -BELLE_SIP_DEPENDENCIES = \
-> -	bctoolbox \
-> -	$(if $(BR2_PACKAGE_ZLIB),zlib)
-> -BELLE_SIP_CONF_OPTS = \
-> -	-DENABLE_STRICT=OFF \
-> -	-DENABLE_TESTS=OFF
-> -
-> -ifeq ($(BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY),y)
-> -BELLE_SIP_CONF_OPTS += -DENABLE_MDNS=ON
-> -BELLE_SIP_DEPENDENCIES += avahi
-> -else
-> -BELLE_SIP_CONF_OPTS += -DENABLE_MDNS=OFF
-> -endif
-> -
-> -ifeq ($(BR2_STATIC_LIBS),y)
-> -BELLE_SIP_CONF_OPTS += -DENABLE_SHARED=OFF -DENABLE_STATIC=ON
-> -else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-> -BELLE_SIP_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_STATIC=ON
-> -else ifeq ($(BR2_SHARED_LIBS),y)
-> -BELLE_SIP_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_STATIC=OFF
-> -endif
-> -
-> -BELLE_SIP_CFLAGS = $(TARGET_CFLAGS)
-> -
-> -BELLE_SIP_CONF_OPTS += -DCMAKE_C_FLAGS="$(BELLE_SIP_CFLAGS)"
-> -
-> -$(eval $(cmake-package))
 
+On Sun, 23 Nov 2025 at 06:16, Julien Olivain via buildroot
+<buildroot@buildroot.org> wrote:
+>
+> On 23/11/2025 14:34, Thomas Petazzoni via buildroot wrote:
+> > The bump of e2fsprogs to 1.47.3 in Buildroot commit
+> > bb004ddba26ea86687d917fa16d313ea92aff41c causes the package to fail
+> > building when the kernel headers are >= 5.10 but < 5.12.
+> >
+> > Indeed the new version of e2fsprogs detects the presence of
+> > <linux/fsverity.h> (which occurred in 5.10), and when it's available,
+> > enables some fsverity functionality, which uses an ioctl() that was
+> > only introduced in 5.12. This causes some build breakage if the
+> > headers used are 5.10 or 5.11.
+> >
+> > We fix this by introducing a patch, submitted upstream, that not only
+> > verifies the availability of the header file, but also the
+> > availability of the ioctl().
+> >
+> > Fixes:
+> >
+> >
+> > https://autobuild.buildroot.net/results/c573233b1f871c61f916eda9c402c84070902432/
+> > (host-e2fsprogs)
+> >
+> > https://autobuild.buildroot.net/results/0ed16cad1d1f500d0e577d03166c06381be73ffc/
+> > (e2fsprogs)
+> >
+> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>
+> Applied to master, thanks.
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
