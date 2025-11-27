@@ -4,69 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFEBED111A8
-	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:00:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BF03D111A8
+	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:01:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A5B0B616F3;
-	Thu, 27 Nov 2025 20:00:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E4E446083E;
+	Thu, 27 Nov 2025 20:01:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OXIOy8zHB4OG; Thu, 27 Nov 2025 20:00:46 +0000 (UTC)
+ id 7_mKfFaXMJRs; Thu, 27 Nov 2025 20:01:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCF2F615A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 188766151B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DCF2F615A8;
-	Thu, 27 Nov 2025 20:00:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 63F48708
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:00:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 188766151B;
+	Thu, 27 Nov 2025 20:01:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 477072A9
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:01:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 55A5D615A8
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:00:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2E15440315
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:01:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7MtMoC0jginS for <buildroot@buildroot.org>;
- Thu, 27 Nov 2025 20:00:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Enp2sCJt3W1B for <buildroot@buildroot.org>;
+ Thu, 27 Nov 2025 20:01:16 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4DB6D60A5D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DB6D60A5D
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2BE6F402A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BE6F402A3
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4DB6D60A5D
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:00:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2BE6F402A3
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:01:16 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 884C1B979CA9; Thu, 27 Nov 2025 21:00:40 +0100 (CET)
-Message-ID: <a5eabc60-ead7-4ea8-b92a-fa3470014c39@rnout.be>
-Date: Thu, 27 Nov 2025 21:00:39 +0100
+ with ESMTPSA id 2A29AB979CEF; Thu, 27 Nov 2025 21:01:14 +0100 (CET)
+Message-ID: <e4159c5e-6db8-497c-b84e-02687fa45159@rnout.be>
+Date: Thu, 27 Nov 2025 21:01:12 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org
-Cc: Tudor Holton <buildroot@tudorholton.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>
-References: <20251114140519.541039-1-thomas@devoogdt.com>
+To: Titouan Christophe <titouan.christophe@mind.be>, buildroot@buildroot.org
+References: <20251117171656.260404-1-titouan.christophe@mind.be>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20251114140519.541039-1-thomas@devoogdt.com>
+In-Reply-To: <20251117171656.260404-1-titouan.christophe@mind.be>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1764273641; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1764273674; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:content-language:in-reply-to:references;
- bh=PuwB5X1JCyzVprpl9ujB0plbuy5ffy5puHyF2gJb53s=;
- b=ocKfMAUVG1knlbIQ4ZZovo6L+i+ECW43DR9zEAa2kZBk6GjL8jyhVuB2gZG6vpN3w1U/Xz
- ISh6RNniV28iSGNfEFB9DPKwrrrX4Icx4U7qj7JAu9NAY4JwjemHDn6bgPXTaxeZzwqo3l
- leh+tWbR4bDnL7BcOwzJLsoZmN9bQm2AQdV970zTj66dmUh5nr19KhbFPsdKnYr0nT4cmh
- 5ycke1SSnhELw8CudA9wjH7u+L8uo3O8a1pr/rzQ4DtxgG46qVNzWBNyygyitKNyIo1bN9
- YJZhKG6gOW+95dP/jfMmw6gmXC5iUYHySXu1RJoBp/Sr7qihsZgSu8RVHgYmkw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=+Oo93cjImeO0guicxJloVw1mxgxpaHn/0Vntpv03J8U=;
+ b=D3yVg4sXU94UFvWblpzD+9nB1Meoycpz81bbtQFzbd5WHIjVumrhC0sEiXGQ4lfMijqlLa
+ 2uH48BUKrAZTUU6PfAlacUouP9qRw0NCi+63HWKcdBlcIObGt1wKloo4mpjzAxRc/5Dozt
+ hRyS39KuPrsFHtaNf0F0TwagC/b0KoljMm5IPCXJHpIZmIcl1wvFW0G0TJotwfyNZvrUB6
+ GXzA5CsT3M3NrOmmmo2YhKR5Fz8CD9T0L7ypOLjwxNzQytIVIaGM4e9VWYvLH0Qzj/pPC0
+ SoQaO9TAvBGiiJctr0tdiFahHa69OOCepnY7Z14pJEY+19hUdufT2siVKwQ0pw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=ocKfMAUV
-Subject: Re: [Buildroot] [PATCH] package/openjdk{,
- -bin}: fix wrong version reporting
+ header.a=rsa-sha256 header.s=dkim header.b=D3yVg4sX
+Subject: Re: [Buildroot] [PATCH for 2025.02.x] package/redis: bump to v7.2.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,97 +84,45 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 14/11/2025 15:05, Thomas Devoogdt wrote:
-> From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+On 17/11/2025 18:16, Titouan Christophe via buildroot wrote:
+> See the release notes: https://github.com/redis/redis/releases/tag/7.2.12
 > 
-> Before:
-> 
-> $ java --version
-> openjdk 17 2024-07-16
-> OpenJDK Runtime Environment (build 17+17)
-> OpenJDK 64-Bit Server VM (build 17+17, mixed mode)
-> 
-> After:
-> 
-> $ java --version
-> openjdk 17.0.12 2024-07-16
-> OpenJDK Runtime Environment (build 17.0.12+7)
-> OpenJDK 64-Bit Server VM (build 17.0.12+7, mixed mode)
-> 
-> Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 
-  Applied to 2025.02.x and 2025.08.x, thanks.
+  Applied to 2025.02.x, thanks.
 
   Regards,
   Arnout
 
 > ---
->   package/openjdk-bin/openjdk-bin.mk |  8 +++++---
->   package/openjdk/openjdk.mk         | 13 ++++++++-----
->   2 files changed, 13 insertions(+), 8 deletions(-)
+>   package/redis/redis.hash | 2 +-
+>   package/redis/redis.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-> index 17056e80b7..e6c74cf6d8 100644
-> --- a/package/openjdk-bin/openjdk-bin.mk
-> +++ b/package/openjdk-bin/openjdk-bin.mk
-> @@ -6,10 +6,12 @@
+> diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+> index aa3253335e..7677642ed1 100644
+> --- a/package/redis/redis.hash
+> +++ b/package/redis/redis.hash
+> @@ -1,5 +1,5 @@
+>   # From https://github.com/redis/redis-hashes/blob/master/README
+> -sha256  2f9886eca68d30114ad6a01da65631f8007d802fd3e6c9fac711251e6390323d  redis-7.2.11.tar.gz
+> +sha256  97c60478a7c777ac914ca9d87a7e88ba265926456107e758c62d8f971d0196bc  redis-7.2.12.tar.gz
 >   
->   ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_21),y)
->   HOST_OPENJDK_BIN_VERSION_MAJOR = 21
-> -HOST_OPENJDK_BIN_VERSION_MINOR = 0.4_7
-> +HOST_OPENJDK_BIN_VERSION_MINOR = 0.4
-> +HOST_OPENJDK_BIN_VERSION_BUILD = 7
->   else
->   HOST_OPENJDK_BIN_VERSION_MAJOR = 17
-> -HOST_OPENJDK_BIN_VERSION_MINOR = 0.12_7
-> +HOST_OPENJDK_BIN_VERSION_MINOR = 0.12
-> +HOST_OPENJDK_BIN_VERSION_BUILD = 7
->   endif
+>   # Locally calculated
+>   sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+> diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+> index cd9736663b..e6175b69b5 100644
+> --- a/package/redis/redis.mk
+> +++ b/package/redis/redis.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
 >   
->   ifeq ($(HOSTARCH),x86_64)
-> @@ -19,7 +21,7 @@ ifeq ($(HOSTARCH),aarch64)
->   HOST_OPENJDK_BIN_DOWNLOAD_ARCH_NAME = aarch64
->   endif
->   
-> -HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR).$(HOST_OPENJDK_BIN_VERSION_MINOR)
-> +HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR).$(HOST_OPENJDK_BIN_VERSION_MINOR)_$(HOST_OPENJDK_BIN_VERSION_BUILD)
->   HOST_OPENJDK_BIN_SOURCE = OpenJDK$(HOST_OPENJDK_BIN_VERSION_MAJOR)U-jdk_$(HOST_OPENJDK_BIN_DOWNLOAD_ARCH_NAME)_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
->   HOST_OPENJDK_BIN_SITE = https://github.com/adoptium/temurin$(HOST_OPENJDK_BIN_VERSION_MAJOR)-binaries/releases/download/jdk-$(subst _,%2B,$(HOST_OPENJDK_BIN_VERSION))
->   
-> diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-> index f59eb69782..1ec9863e98 100644
-> --- a/package/openjdk/openjdk.mk
-> +++ b/package/openjdk/openjdk.mk
-> @@ -6,12 +6,15 @@
->   
->   ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_21),y)
->   OPENJDK_VERSION_MAJOR = 21
-> -OPENJDK_VERSION_MINOR = 0.4+7
-> +OPENJDK_VERSION_MINOR = 0.4
-> +OPENJDK_VERSION_BUILD = 7
-> +
->   else
->   OPENJDK_VERSION_MAJOR = 17
-> -OPENJDK_VERSION_MINOR = 0.12+7
-> +OPENJDK_VERSION_MINOR = 0.12
-> +OPENJDK_VERSION_BUILD = 7
->   endif
-> -OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)
-> +OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)+$(OPENJDK_VERSION_BUILD)
->   OPENJDK_SITE = $(call github,openjdk,jdk$(OPENJDK_VERSION_MAJOR)u,jdk-$(OPENJDK_VERSION))
->   
->   OPENJDK_LICENSE = GPL-2.0+ with exception
-> @@ -102,8 +105,8 @@ OPENJDK_CONF_OPTS = \
->   	--with-native-debug-symbols=none \
->   	--without-version-pre \
->   	--with-sysroot=$(STAGING_DIR) \
-> -	--with-version-build="$(OPENJDK_VERSION_MAJOR)" \
-> -	--with-version-string="$(OPENJDK_VERSION_MAJOR)"
-> +	--with-version-build="$(OPENJDK_VERSION_BUILD)" \
-> +	--with-version-string="$(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)"
->   
->   # If building for AArch64, use the provided CPU port.
->   ifeq ($(BR2_aarch64),y)
+> -REDIS_VERSION = 7.2.11
+> +REDIS_VERSION = 7.2.12
+>   REDIS_SITE = http://download.redis.io/releases
+>   REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+>   REDIS_LICENSE_FILES = COPYING
 
 _______________________________________________
 buildroot mailing list
