@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38CEACFD2F6
-	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:06:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A198DD111A8
+	for <buildroot@archiver.kernel.org>; Thu, 27 Nov 2025 20:06:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 051056172F;
-	Thu, 27 Nov 2025 20:06:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7AC7C61753;
+	Thu, 27 Nov 2025 20:06:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id koJe-vMVzPwH; Thu, 27 Nov 2025 20:06:16 +0000 (UTC)
+ id HEtS5d9nCgeQ; Thu, 27 Nov 2025 20:06:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FDDE61024
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D5E8616E8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2FDDE61024;
-	Thu, 27 Nov 2025 20:06:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8A4C02A9
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:06:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D5E8616E8;
+	Thu, 27 Nov 2025 20:06:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3AEBE2A9
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:06:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7A8778266C
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:06:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2119A404CD
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:06:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KJBHFKZdLV6Q for <buildroot@buildroot.org>;
- Thu, 27 Nov 2025 20:06:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y9o2AamvtRdK for <buildroot@buildroot.org>;
+ Thu, 27 Nov 2025 20:06:35 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 77DBD82438
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77DBD82438
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 16A2540438
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16A2540438
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 77DBD82438
- for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:06:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 16A2540438
+ for <buildroot@buildroot.org>; Thu, 27 Nov 2025 20:06:34 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 7C5DEB979CA9; Thu, 27 Nov 2025 21:06:12 +0100 (CET)
-Message-ID: <223e4d0d-a0bc-4831-b9cd-5e3d9d2f6d6f@rnout.be>
-Date: Thu, 27 Nov 2025 21:06:10 +0100
+ with ESMTPSA id 1E098B979CEF; Thu, 27 Nov 2025 21:06:33 +0100 (CET)
+Message-ID: <7f0a106f-81f1-414b-ba41-acbdc13dbf85@rnout.be>
+Date: Thu, 27 Nov 2025 21:06:31 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
-Cc: Doug Kehn <rdkehn@gmail.com>
-References: <20251101103530.124285-1-bernd@kuhls.net>
+References: <20251101083000.2088619-1-bernd@kuhls.net>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20251101103530.124285-1-bernd@kuhls.net>
+In-Reply-To: <20251101083000.2088619-1-bernd@kuhls.net>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1764273972; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1764273993; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:content-language:in-reply-to:references;
- bh=ThibXw6NjrHCpOAdnEyfwDbluM4ED89eS6MhomQXVZU=;
- b=cBA9ypy+sdWhd4h7LbKacAsf+1pD36fGQqLxRjnM/3K8yR20mY6TXsjx8tKau/XPYenwvX
- OAuTSZNf4gKJVjLaqXR0SAJGnaa6MTGOTHdO47JnbvoD/0D71J1yvGud7N8jn0dQyExLoe
- MFJ1kVjI5FROki/1xpEGmxxbziuTz4bouw4QqNeP12MfZBfXG/pwfZWxmCHMLiW5NB5WZK
- MFnwZXmOYGeC4mT80nHHapuzLSBkQOhwpUZZozpkfGNStvaYMG1s60f7Xoj0zK/u5odOgY
- GP2WEUfHPaw/lroeNSl8aTmXHPxpszj+uWUtHqLhGQsfbfgjIJjPgNz8htWRow==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=HNxgrsg8TUu77NJF10diCnAhPpYxe/CW6OH6QzRDoAA=;
+ b=BWigi4mBNyeHL6mEfMrphEtxQu7QzfrwVi9Mat7WCa98UOxRF2DdWwBlzx46JQdIvM5HUT
+ hDmosrkXwBnNcO+CWvl6Na7yrHGtO4RQB09tBlFnA0JkH5vYbz4PjiS4fRQ+S5NUjrtmPE
+ AzSIyOWyImpQ/usa/yW7/klhvr+7e8i/nn9yIb4M4r+BZ4THa7EnlI4Yy6uu9vfjDzeSdn
+ z2QUeK6KQLG1WJ13yI2IQh5Ncw6A8T3WiD8nFklLcze59WuG0C7WxXquukiR1eO24W3Y2V
+ wUHiys7Le0d4q2TfIf+mcHEMDyjGF6QA2TrBdhK08N5uiAUEx3F3uOqDxJd3kw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=cBA9ypy+
-Subject: Re: [Buildroot] [PATCH 1/1] package/nss-pam-ldapd: fix build with
- gcc >= 15.x
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=fail reason="signature verification failed" (2048-bit key)
+ header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256 header.s=dkim
+ header.b=BWigi4mB
+Subject: Re: [Buildroot] [PATCH 1/1] package/enscript: Fix build with gcc
+ 15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,9 +86,9 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 01/11/2025 11:35, Bernd Kuhls wrote:
+On 01/11/2025 09:30, Bernd Kuhls wrote:
 > Fixes:
-> https://autobuild.buildroot.net/results/c30/c30b29723a2f3db6fed5ad0bf0e06c126a857953/
+> https://autobuild.buildroot.net/results/7fd/7fdda216e2ec57b9bcc1d2613b6546db35a29749/
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
@@ -98,51 +98,35 @@ On 01/11/2025 11:35, Bernd Kuhls wrote:
   Arnout
 
 > ---
->   ...-name-bool-which-is-a-keyword-in-C23.patch | 35 +++++++++++++++++++
->   1 file changed, 35 insertions(+)
->   create mode 100644 package/nss-pam-ldapd/0001-Fix-variable-name-bool-which-is-a-keyword-in-C23.patch
+>   package/enscript/0002-enscript-c23.patch | 19 +++++++++++++++++++
+>   1 file changed, 19 insertions(+)
+>   create mode 100644 package/enscript/0002-enscript-c23.patch
 > 
-> diff --git a/package/nss-pam-ldapd/0001-Fix-variable-name-bool-which-is-a-keyword-in-C23.patch b/package/nss-pam-ldapd/0001-Fix-variable-name-bool-which-is-a-keyword-in-C23.patch
+> diff --git a/package/enscript/0002-enscript-c23.patch b/package/enscript/0002-enscript-c23.patch
 > new file mode 100644
-> index 0000000000..a3812fcaff
+> index 0000000000..707674935d
 > --- /dev/null
-> +++ b/package/nss-pam-ldapd/0001-Fix-variable-name-bool-which-is-a-keyword-in-C23.patch
-> @@ -0,0 +1,35 @@
-> +From 8ddb983a546f632986a84a784c4625110f7782a2 Mon Sep 17 00:00:00 2001
-> +From: Arthur de Jong <arthur@arthurdejong.org>
-> +Date: Sun, 23 Feb 2025 15:22:38 +0100
-> +Subject: Fix variable name (bool) which is a keyword in C23
+> +++ b/package/enscript/0002-enscript-c23.patch
+> @@ -0,0 +1,19 @@
+> +Fix build with gcc 15.x
 > +
-> +Closes https://bugs.debian.org/1097481
-> +
-> +Upstream: https://arthurdejong.org/git/nss-pam-ldapd/commit/?id=8ddb983a546f632986a84a784c4625110f7782a2
+> +Upstream: https://savannah.gnu.org/bugs/?66845
 > +
 > +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> +---
-> + nslcd/cfg.c | 6 +++---
-> + 1 file changed, 3 insertions(+), 3 deletions(-)
 > +
-> +diff --git a/nslcd/cfg.c b/nslcd/cfg.c
-> +index ded797a..b984b0e 100644
-> +--- a/nslcd/cfg.c
-> ++++ b/nslcd/cfg.c
-> +@@ -207,10 +207,10 @@ static int get_boolean(const char *filename, int lnr,
-> +   return parse_boolean(filename, lnr, token);
-> + }
+> +diff --git a/compat/regex.c b/compat/regex.c
+> +index c6907f3..87f2840 100644
+> +--- a/compat/regex.c
+> ++++ b/compat/regex.c
+> +@@ -336,7 +336,7 @@ typedef char boolean;
+> + #define false 0
+> + #define true 1
 > +
-> +-static const char *print_boolean(int bool)
-> ++static const char *print_boolean(int value)
-> + {
-> +-  if (bool) return "yes";
-> +-  else      return "no";
-> ++  if (value) return "yes";
-> ++  else       return "no";
-> + }
-> +
-> + #define TIME_MINUTES 60
-> +--
-> +cgit v1.2.3
-> +
+> +-static int re_match_2_internal ();
+> ++static int re_match_2_internal (struct re_pattern_buffer*, const char*, int, const char*, int, int, struct re_registers*, int);
+> + 
+> + /* These are the command codes that appear in compiled regular
+> +    expressions.  Some opcodes are followed by argument bytes.  A
 
 _______________________________________________
 buildroot mailing list
