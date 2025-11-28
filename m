@@ -1,82 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B6E6CFD376
-	for <buildroot@archiver.kernel.org>; Fri, 28 Nov 2025 09:21:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4120CFD376
+	for <buildroot@archiver.kernel.org>; Fri, 28 Nov 2025 10:03:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D99C184535;
-	Fri, 28 Nov 2025 09:21:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8619140DE6;
+	Fri, 28 Nov 2025 10:03:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BuiIFJkv_dEV; Fri, 28 Nov 2025 09:21:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BFQUjXLdszVA; Fri, 28 Nov 2025 10:03:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E901384537
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC81540E14
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E901384537;
-	Fri, 28 Nov 2025 09:21:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id AA7F41A9
- for <buildroot@buildroot.org>; Fri, 28 Nov 2025 09:21:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC81540E14;
+	Fri, 28 Nov 2025 10:03:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BEBD71A9
+ for <buildroot@buildroot.org>; Fri, 28 Nov 2025 10:03:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8924084537
- for <buildroot@buildroot.org>; Fri, 28 Nov 2025 09:21:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A8A7140145
+ for <buildroot@buildroot.org>; Fri, 28 Nov 2025 10:03:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lIIPqH9YvukX for <buildroot@buildroot.org>;
- Fri, 28 Nov 2025 09:21:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id THkjsCjUQyRe for <buildroot@buildroot.org>;
+ Fri, 28 Nov 2025 10:03:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.117;
+ helo=smtpdh17-2.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5A9BC84535
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A9BC84535
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5A9BC84535
- for <buildroot@buildroot.org>; Fri, 28 Nov 2025 09:21:52 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id 7F77BC16A37;
- Fri, 28 Nov 2025 09:21:27 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 65F6960706;
- Fri, 28 Nov 2025 09:21:50 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 51281103C8F61; Fri, 28 Nov 2025 10:21:46 +0100 (CET)
-Date: Fri, 28 Nov 2025 10:21:46 +0100
-To: Markus Mayer <mmayer@broadcom.com>
-Cc: Julien Olivain <ju.o@free.fr>, Buildroot List <buildroot@buildroot.org>,
- Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20251128102146.2afd777b@windsurf>
-In-Reply-To: <CAGt4E5vMkqsHt2sUUqLWERZyRvQXyp1Z90E4wx8yPRP6CEiWgg@mail.gmail.com>
-References: <20251123133431.1499202-1-thomas.petazzoni@bootlin.com>
- <fe64d9aca519af339d5d30054c162d0e@free.fr>
- <CAGt4E5vMkqsHt2sUUqLWERZyRvQXyp1Z90E4wx8yPRP6CEiWgg@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7E78240063
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E78240063
+Received: from smtpdh17-2.aruba.it (smtpdh17-2.aruba.it [62.149.155.117])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7E78240063
+ for <buildroot@buildroot.org>; Fri, 28 Nov 2025 10:03:10 +0000 (UTC)
+Received: from localhost.localdomain ([212.103.203.10])
+ by Aruba SMTP with ESMTPSA
+ id OvJivv8kBBhI9OvJjvGyby; Fri, 28 Nov 2025 11:03:07 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Fri, 28 Nov 2025 11:03:05 +0100
+Message-ID: <20251128100305.952494-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1764321709; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=Ban0lwO+Gail1rkLfdCzN1wMj41n4MU+GtJ+7YTZkfk=;
- b=m2LdJ70TSubSLbwr+OOdUBDFmbeqoa6grqa+keuB/D99mudmNTXyU0cXmbr9fWFyHBspcb
- NRgcN/Z6pNJEU98C8b6kk+Gq2SvyAvGCfMTHjOFC81spOM+woAQz7gPvBKU3uTnmR/ZUid
- q+gNjI9u08vr5z2Xzf57Pfsjj+6rp8DlJxS4EYmSDkEDsFxmX0V70RpXi5iuNXc3rZmG2Q
- RpD2BDao8q5R4ZA6ecWGWuNKPMECQ5k+tNoEMUb2QZQoE95KREEKncMPTZ9mTf+FaehWlb
- RLFeRy2IWJ2ojGJm/KBGpN6mrDly509EaoPbpqcLyH+pi2ngMO4n96zG7ccm/A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-CMAE-Envelope: MS4xfGvsNgnmyKUhPqiBh8StMplwMdrIqvcAByeYWVQM+MzafwXa/jtyudrkb5KcJh41Vp6f3eHCyUVN2mQ6S8oOW/MwfpfaiaJA18qHJb3hs1a0a0foj4JM
+ 4Aoio3axzz3X8Ji7vZvdJtQH+rJWyEF5eddXmfJV9A2iBkYjTXRfK890WB5H7uuNGMchiVEkIYPcLdYizc0gZAq9DExF7Cd0wnbUkKZomQixKohbeBEweaK4
+ 1/9guINqXfYTYNG86tjaJk2YjNbJsugMukWQQIa70uYqiH+uejLDY0IwUqzV0MvA
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1764324187; bh=E8+vqsSnWvwoScBj3YCs2yavMwEPgL6b+doCHaPkeZI=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=DUziqTiZ92vNnaMSXJIxdmRY+1L9HVWaVCBhBYg5UG9G9RzGWJ5lk9Z2tMd7fiznQ
+ Stl1OK4Ah+DBoKuyRm+XoKPHz4BFrVXSGjyYRq1eCnJi7wBGm4znsHHDhmRmEfhBk5
+ VRvz56lY8lV4S/6U/SlIN9HBugF7GpGloErVdi3AzlcolheKkfTM9OjW0LDxK9qgK9
+ bQtI5pJQX3DvObI4DN8HRem1wpEbH8t7vau4Swbr0SPHhem7of4diBoNhFUuoOycbR
+ L1qvtxrz+yx95QDX/OF2bcOGQ5pFDfhNPkJIiaCku2Xn0lvsV1nKdVngERIbHyKwTz
+ DGzxqGG7JHPcQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=m2LdJ70T
-Subject: Re: [Buildroot] [PATCH] package/e2fsprogs: fix build with headers
- >= 5.10 and < 5.12
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=DUziqTiZ
+Subject: [Buildroot] [PATCH] package/sdl: fix build failure due to type
+ mismatch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,56 +80,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Markus,
+Add local patch to fix:
+./src/stdlib/SDL_iconv.c: In function 'SDL_iconv':
+./src/stdlib/SDL_iconv.c:50:29: error: passing argument 2 of 'iconv' from incompatible pointer type [-Wincompatible-pointer-types]
+   50 |         retCode = iconv(cd, inbuf, inbytesleft, outbuf, outbytesleft);
+      |                             ^~~~~
+      |                             |
+      |                             const char **
 
-On Thu, 27 Nov 2025 11:53:36 -0800
-Markus Mayer <mmayer@broadcom.com> wrote:
+Fixes:
+https://autobuild.buildroot.net/results/cfb/cfb1f9a0137332cf080ce862722e4fe8ad275031/
 
-> I submitted a different patch for this to Ted T'so a week ago, on
-> November 21, to be exact. Unfortunately, there doesn't seem to be a
-> mailing list for e2fsprogs, so there is no way of quoting said email.
-> Unfortunately, I haven't heard back from Ted as of yet.
-> 
-> I think the easiest way of showing my patch set here at this point in
-> time is by providing a Github link.
-> 
-> https://github.com/tytso/e2fsprogs/compare/master...mmayer:e2fsprogs:kern-compat-master
-> 
-> This page should show the entirety of the diff, combining the two
-> commits in that tree (manual changes and derived autoconf changes).
-> The important changes are in the first commit (configure.ac and
-> kern_compat.h)[1].
-> 
-> The big difference between your patch and my patch is that my patch
-> doesn't disable functionality when the build environment is too old.
-> Instead, it provides the missing definitions of the data structures,
-> so the binaries can still be built with full functionality compiled
-> in. So, while your patch strips functionality out of e2fsprogs based
-> on the build environment, mine does not.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ ...tdlib-SDL_iconv.c-fix-types-mismatch.patch | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 package/sdl/0004-src-stdlib-SDL_iconv.c-fix-types-mismatch.patch
 
-I don't really have a strong preference between the two solutions.
-
-In your solution, what happens if the kernel is actually too old to
-support the fsverity ioctl() ? Does e2fsprogs gracefully handles the
-situation? That's a bit the problem with building code with "newer"
-kernel headers than the running kernel: how is user-space going to be
-have when the kernel features exposed in the kernel headers are
-actually not implemented by the kernel.
-
-Best regards,
-
-Thomas
+diff --git a/package/sdl/0004-src-stdlib-SDL_iconv.c-fix-types-mismatch.patch b/package/sdl/0004-src-stdlib-SDL_iconv.c-fix-types-mismatch.patch
+new file mode 100644
+index 0000000000..da666d5996
+--- /dev/null
++++ b/package/sdl/0004-src-stdlib-SDL_iconv.c-fix-types-mismatch.patch
+@@ -0,0 +1,48 @@
++From 390974b8a9d5e513d48d794818dbe180e0f80b16 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Fri, 28 Nov 2025 10:57:41 +0100
++Subject: [PATCH] src/stdlib/SDL_iconv.c: fix types mismatch
++
++When building sdl this error shows up:
++./src/stdlib/SDL_iconv.c: In function 'SDL_iconv':
++./src/stdlib/SDL_iconv.c:50:29: error: passing argument 2 of 'iconv' from incompatible pointer type [-Wincompatible-pointer-types]
++   50 |         retCode = iconv(cd, inbuf, inbytesleft, outbuf, outbytesleft);
++      |                             ^~~~~
++      |                             |
++      |                             const char **
++
++Let's pick only this code from upstream commit[1] and left the rest
++untouched.
++
++[1]:
++https://github.com/libsdl-org/SDL-1.2/commit/8a8135d91f9361448521765c9da00401fab866a1
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ src/stdlib/SDL_iconv.c | 10 ++++------
++ 1 file changed, 4 insertions(+), 6 deletions(-)
++
++diff --git a/src/stdlib/SDL_iconv.c b/src/stdlib/SDL_iconv.c
++index fa56a99e..369f6881 100644
++--- a/src/stdlib/SDL_iconv.c
+++++ b/src/stdlib/SDL_iconv.c
++@@ -43,12 +43,10 @@ size_t SDL_iconv(SDL_iconv_t cd,
++                  const char **inbuf, size_t *inbytesleft,
++                  char **outbuf, size_t *outbytesleft)
++ {
++-	size_t retCode;
++-#ifdef ICONV_INBUF_NONCONST
++-	retCode = iconv(cd, (char **)inbuf, inbytesleft, outbuf, outbytesleft);
++-#else
++-	retCode = iconv(cd, inbuf, inbytesleft, outbuf, outbytesleft);
++-#endif
+++	/* iconv's second parameter may or may not be `const char const *` depending on the
+++	   C runtime's whims. Casting to void * seems to make everyone happy, though. */
+++	const size_t retCode = iconv((iconv_t) ((uintptr_t) cd), (void *)inbuf, inbytesleft, outbuf, outbytesleft);
+++
++ 	if ( retCode == (size_t)-1 ) {
++ 		switch(errno) {
++ 		    case E2BIG:
++-- 
++2.47.3
++
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
