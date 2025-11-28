@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 400C5D116E2
-	for <buildroot@archiver.kernel.org>; Fri, 28 Nov 2025 21:38:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D152D116EA
+	for <buildroot@archiver.kernel.org>; Fri, 28 Nov 2025 21:38:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E3587847E6;
-	Fri, 28 Nov 2025 21:37:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D00FE6063F;
+	Fri, 28 Nov 2025 21:38:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uStooWlWzSrg; Fri, 28 Nov 2025 21:37:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XO2JS9BYNLjL; Fri, 28 Nov 2025 21:38:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F753847E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0048D606AE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0F753847E7;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0048D606AE;
 	Fri, 28 Nov 2025 21:37:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 841CE273
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9212E9BA
  for <buildroot@buildroot.org>; Fri, 28 Nov 2025 21:37:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6AD5A40E82
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7805B608A2
  for <buildroot@buildroot.org>; Fri, 28 Nov 2025 21:37:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sQ82h7EA7HZ8 for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id i5YW9UzF_qf5 for <buildroot@buildroot.org>;
  Fri, 28 Nov 2025 21:37:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B67AA40D74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C1D1606AE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B67AA40D74
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9C1D1606AE
  for <buildroot@buildroot.org>; Fri, 28 Nov 2025 21:37:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A2D5586166; Fri, 28 Nov 2025 21:37:56 +0000 (UTC)
+ id 921BF86165; Fri, 28 Nov 2025 21:37:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 28 Nov 2025 22:27:09 +0100
+Date: Fri, 28 Nov 2025 22:27:05 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a2775607681fc490e5cd9e0577c3e187b0ededae
-X-Git-Newrev: 5bf0db998b4bd125500668953d5e4649ff37cb19
+X-Git-Oldrev: a62b589c19ddf27384b8851669d152b51e644696
+X-Git-Newrev: a2775607681fc490e5cd9e0577c3e187b0ededae
 X-Patchwork-Hint: ignore
-Message-Id: <20251128213756.A2D5586166@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/icu: bump version to
- 78.1
+Message-Id: <20251128213756.921BF86165@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pyicu: bump
+ version to 2.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,47 +66,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5bf0db998b4bd125500668953d5e4649ff37cb19
+commit: https://git.buildroot.net/buildroot/commit/?id=a2775607681fc490e5cd9e0577c3e187b0ededae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://github.com/unicode-org/icu/releases/tag/release-78.1
+Changelog:
+https://gitlab.pyicu.org/main/pyicu/-/blob/v2.16/CHANGES?ref_type=tags
 
-Updated license hash due to upstream commit:
-https://github.com/unicode-org/icu/commit/4b444321f255076d6576e6d435ffe2589bde6f18
+Needed for compatibility with ICU 78.1.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/icu/icu.hash | 4 ++--
- package/icu/icu.mk   | 4 ++--
+ package/python-pyicu/python-pyicu.hash | 4 ++--
+ package/python-pyicu/python-pyicu.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/icu/icu.hash b/package/icu/icu.hash
-index bf9451db8e..4f60681c54 100644
---- a/package/icu/icu.hash
-+++ b/package/icu/icu.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  588e431f77327c39031ffbb8843c0e3bc122c211374485fa87dc5f3faff24061  icu4c-77_1-src.tgz
--sha256  451167c55c0fa447cc2d5632714f5e3c567fe4f1e1badefab2c1333852198aca  LICENSE
-+sha256  6217f58ca39b23127605cfc6c7e0d3475fe4b0d63157011383d716cb41617886  icu4c-78.1-sources.tgz
-+sha256  e55522d81edc687a341a4411e0776e54ca654e90147f354a90458aaced4116af  LICENSE
-diff --git a/package/icu/icu.mk b/package/icu/icu.mk
-index 4789edf0e2..a0b4388355 100644
---- a/package/icu/icu.mk
-+++ b/package/icu/icu.mk
-@@ -7,8 +7,8 @@
- # Git tags (and therefore versions on release-monitoring.org) use the
- # XX-Y format, but the tarballs are named XX_Y and the containing
- # directories XX.Y.
--ICU_VERSION = 77-1
--ICU_SOURCE = icu4c-$(subst -,_,$(ICU_VERSION))-src.tgz
-+ICU_VERSION = 78.1
-+ICU_SOURCE = icu4c-$(ICU_VERSION)-sources.tgz
- ICU_SITE = \
- 	https://github.com/unicode-org/icu/releases/download/release-$(ICU_VERSION)
- ICU_LICENSE = ICU License
+diff --git a/package/python-pyicu/python-pyicu.hash b/package/python-pyicu/python-pyicu.hash
+index afd14437ce..81cdd4f459 100644
+--- a/package/python-pyicu/python-pyicu.hash
++++ b/package/python-pyicu/python-pyicu.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pyicu/json
+-md5  6ae2145f2a98433f461b128c3ebef233  pyicu-2.15.3.tar.gz
+-sha256  f32e78e1cb64d0aeb14f027e037a8944861d3114548818a6adf0081ef51aefc3  pyicu-2.15.3.tar.gz
++md5  00715b86c27c150f48554a863688e878  pyicu-2.16.tar.gz
++sha256  42b3a8062e3b23e927ca727e6b5e1730d86c70279834e4887152895d2eb012d9  pyicu-2.16.tar.gz
+ # Locally computed sha256 checksums
+ sha256  00da5bf22f2386c4f6f07c734490e9b818c4dcf70e6ca49f594e9cec636b9c40  LICENSE
+diff --git a/package/python-pyicu/python-pyicu.mk b/package/python-pyicu/python-pyicu.mk
+index 5025bd649b..9d3f5f6004 100644
+--- a/package/python-pyicu/python-pyicu.mk
++++ b/package/python-pyicu/python-pyicu.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYICU_VERSION = 2.15.3
++PYTHON_PYICU_VERSION = 2.16
+ PYTHON_PYICU_SOURCE = pyicu-$(PYTHON_PYICU_VERSION).tar.gz
+-PYTHON_PYICU_SITE = https://files.pythonhosted.org/packages/88/b0/c8b61bac55424e2ff80e20d7251c3f002baff3c07c34cee3849e3505d8f5
++PYTHON_PYICU_SITE = https://files.pythonhosted.org/packages/11/c3/8d558b30deb33eb583c0bcae3e64d6db8316b69461a04bb9db5ff63d3f6e
+ PYTHON_PYICU_LICENSE = MIT
+ PYTHON_PYICU_LICENSE_FILES = LICENSE
+ PYTHON_PYICU_DEPENDENCIES = icu
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
