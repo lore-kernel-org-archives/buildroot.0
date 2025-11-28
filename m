@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 154C6D4337C
-	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:57:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D340FD4337D
+	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:57:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DD1D183CE2;
-	Fri, 12 Dec 2025 07:57:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A817383CE9;
+	Fri, 12 Dec 2025 07:57:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jowy77qq9Toc; Fri, 12 Dec 2025 07:57:00 +0000 (UTC)
+ id SD1oUk_wpac1; Fri, 12 Dec 2025 07:57:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5BB1828AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 815FE83C73
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765526209;
-	bh=IZCDHlmjQHeH+cWoTM4d52/nwKOIxZfJ3m9YSvJ/o/o=;
+	s=default; t=1765526210;
+	bh=X6tlN3zxovqG0r/6fzWK+mfk620Zc5BKLfTiLNUymoQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=V9PGZJvjtCidAm69aRaL5mrQeP2IH9U+4YfLXkfzIgQmNAT4K4hJz5jrWn3pHoGr9
-	 0WTQVyx0vFGCM2cr5SeiEwee9t/MSqpjgTj1IVsaCpwf8b3sLxrR1j5BOLyzeP0D36
-	 Jmio54OxDkXPQ8wNptb1XsF/4PMmR5qu5TWuDcGhrTbzKaRmts7K3IXIFBOutLMrzz
-	 yStEnM3mCLIrifBAYeizHs1Zn2k7SM/3Qi16opdAEF3c/krR8hBtLzLHR7LqXyByvv
-	 YtA+flWslf8oUXvgslWzNauQEW7/QDm0y1I22J8hSBHjSDZxGF5a+0XQ0ifsPAeDhh
-	 ZrDz4vWjtz9TA==
+	b=O2jDg4dtQAqv2LUIvQJVclPwqKurISh7JJaq4wa3FDaqfHk/IjmAkoQuWHUx5JxKI
+	 i201nZUGCt1f0der9aVThWeUgVqtSDIku38swZd4zvnC9cAdwoTwX8fzU/C+RlP2GI
+	 dRYjVsmG5LdVIyMmHJrdBdX662MPn5NBOPGI1jZXWsObsq7JqBO/U2n5FA70FmKoMl
+	 IZtEIk4qRqbAZeJTqOiI4D/hc2iaPcCpWOn+pg6rmMUym6UAeQZISPLMQsBNoJ0qj3
+	 dJ+MV4QbCQ8UP/23dD+8pW5b+t5HfZ6Tnidyq4AivAFxE1taWFl/czZg/+tge7mRvp
+	 yaX/aekzPljDw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E5BB1828AA;
-	Fri, 12 Dec 2025 07:56:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 815FE83C73;
+	Fri, 12 Dec 2025 07:56:50 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 195C8E7
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:56:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id E399EE7
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:56:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1925E41123
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3DBFB41119
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mEA8LS6CRBc5 for <buildroot@buildroot.org>;
- Fri, 12 Dec 2025 07:55:36 +0000 (UTC)
+ id Hw6tHHxlTp6K for <buildroot@buildroot.org>;
+ Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD3D041119
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A84941134
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BD3D041119
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6A84941134
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BC3FC86C9A; Fri, 12 Dec 2025 07:55:34 +0000 (UTC)
+ id 692C286C93; Fri, 12 Dec 2025 07:55:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 25 Nov 2025 21:22:02 +0100
+Date: Fri, 28 Nov 2025 19:38:53 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3837c92d7160d2af4e7c44810b69ce76fb5eb8c6
-X-Git-Newrev: 742d83eea90eb88fc2dbf2751f9ab3907434a56b
+X-Git-Oldrev: 8bd91d9034596b5632dabf381a3c6612f1fb6da1
+X-Git-Newrev: bcd5ecff8abb01593225bcb4dc24fc01f810aa17
 X-Patchwork-Hint: ignore
-Message-Id: <20251212075534.BC3FC86C9A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/yajl: fix cmake 4 compatibility
+Message-Id: <20251212075535.692C286C93@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-asgiref: bump to 3.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,111 +71,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3595529400959883604=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3595529400959883604==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=742d83eea90eb88fc2dbf2751f9ab3907434a56b
+commit: https://git.buildroot.net/buildroot/commit/?id=bcd5ecff8abb01593225bcb4dc24fc01f810aa17
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes deprecated CMake options.
+Changelog: https://github.com/django/asgiref/blob/3.11.0/CHANGELOG.txt
 
-Original patch by Rudi Heitbaum, rebased and applies with fuzz 0.
-
-CC: Rudi Heitbaum <rudi@heitbaum.com>
-Signed-off-by: Andreas Kässens <kaessens@sra.uni-hannover.de>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../yajl/0005-Allow-build-with-CMake-4.0.0.patch   | 68 ++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+ package/python-asgiref/python-asgiref.hash | 4 ++--
+ package/python-asgiref/python-asgiref.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/yajl/0005-Allow-build-with-CMake-4.0.0.patch b/package/yajl/0005-Allow-build-with-CMake-4.0.0.patch
-new file mode 100644
-index 0000000000..8f162b2249
---- /dev/null
-+++ b/package/yajl/0005-Allow-build-with-CMake-4.0.0.patch
-@@ -0,0 +1,68 @@
-+From dd88e2ea2fc3f045722f6fee362af2643b5394f5 Mon Sep 17 00:00:00 2001
-+From: Rudi Heitbaum <rudi@heitbaum.com>
-+Date: Fri, 28 Mar 2025 09:31:40 +0000
-+Subject: [PATCH] Allow build with CMake 4.0.0
-+
-+fixes deprecated cmake option and uses cmake 2.8.0 TARGET_FILE
-+update cmake supported minimum versions to 2.8.0...3.10
-+
-+ref:
-+- https://cmake.org/cmake/help/latest/policy/CMP0026.html
-+
-+CMake Error at .../CMakeLists.txt: (GET_TARGET_PROPERTY):
-+  The LOCATION property may not be read from target "json_...".  Use the
-+  target name directly with add_custom_command, or use the generator
-+  expression $<TARGET_FILE>, as appropriate.
-+
-+Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
-+Fixes: https://autobuild.buildroot.org/results/0b6/0b6ada93f45c16cc8c558ec23a0eb56da2aa86e9
-+Upstream: https://github.com/lloyd/yajl/pull/256
-+---
-+ CMakeLists.txt             | 2 +-
-+ reformatter/CMakeLists.txt | 4 +---
-+ verify/CMakeLists.txt      | 4 +---
-+ 3 files changed, 3 insertions(+), 7 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 471eee13..deba3a40 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -12,7 +12,7 @@
-+ # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-+ # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-+ 
-+-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
-++CMAKE_MINIMUM_REQUIRED(VERSION 2.8.0...3.10)
-+ 
-+ PROJECT(YetAnotherJSONParser C)
-+ 
-+diff --git a/reformatter/CMakeLists.txt b/reformatter/CMakeLists.txt
-+index 52a9bee8..267d02e2 100644
-+--- a/reformatter/CMakeLists.txt
-++++ b/reformatter/CMakeLists.txt
-+@@ -39,9 +39,7 @@ IF (NOT WIN32)
-+ ENDIF (NOT WIN32)
-+ 
-+ # copy the binary into the output directory
-+-GET_TARGET_PROPERTY(binPath json_reformat LOCATION)
-+-
-+ ADD_CUSTOM_COMMAND(TARGET json_reformat POST_BUILD
-+-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${binPath} ${binDir})
-++    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:json_reformat> ${binDir})
-+ 
-+ INSTALL(TARGETS json_reformat RUNTIME DESTINATION bin)
-+diff --git a/verify/CMakeLists.txt b/verify/CMakeLists.txt
-+index 967fca16..2f390082 100644
-+--- a/verify/CMakeLists.txt
-++++ b/verify/CMakeLists.txt
-+@@ -33,9 +33,7 @@ ELSE()
-+ ENDIF()
-+ 
-+ # copy in the binary
-+-GET_TARGET_PROPERTY(binPath json_verify LOCATION)
-+-
-+ ADD_CUSTOM_COMMAND(TARGET json_verify POST_BUILD
-+-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${binPath} ${binDir})
-++    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:json_verify> ${binDir})
-+ 
-+ INSTALL(TARGETS json_verify RUNTIME DESTINATION bin)
-
---===============3595529400959883604==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/python-asgiref/python-asgiref.hash b/package/python-asgiref/python-asgiref.hash
+index 4605835abb..89495e0257 100644
+--- a/package/python-asgiref/python-asgiref.hash
++++ b/package/python-asgiref/python-asgiref.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/asgiref/json
+-md5  6799fce19314e0aaeb789a6d0f6d45fa  asgiref-3.10.0.tar.gz
+-sha256  d89f2d8cd8b56dada7d52fa7dc8075baa08fb836560710d38c292a7a3f78c04e  asgiref-3.10.0.tar.gz
++md5  554794453502d266a90d2254fcb1f7c3  asgiref-3.11.0.tar.gz
++sha256  13acff32519542a1736223fb79a715acdebe24286d98e8b164a73085f40da2c4  asgiref-3.11.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-asgiref/python-asgiref.mk b/package/python-asgiref/python-asgiref.mk
+index 3bd9c8f937..e5885a66c6 100644
+--- a/package/python-asgiref/python-asgiref.mk
++++ b/package/python-asgiref/python-asgiref.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_ASGIREF_VERSION = 3.10.0
++PYTHON_ASGIREF_VERSION = 3.11.0
+ PYTHON_ASGIREF_SOURCE = asgiref-$(PYTHON_ASGIREF_VERSION).tar.gz
+-PYTHON_ASGIREF_SITE = https://files.pythonhosted.org/packages/46/08/4dfec9b90758a59acc6be32ac82e98d1fbfc321cb5cfa410436dbacf821c
++PYTHON_ASGIREF_SITE = https://files.pythonhosted.org/packages/76/b9/4db2509eabd14b4a8c71d1b24c8d5734c52b8560a7b1e1a8b56c8d25568b
+ PYTHON_ASGIREF_SETUP_TYPE = setuptools
+ PYTHON_ASGIREF_LICENSE = BSD-3-Clause
+ PYTHON_ASGIREF_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3595529400959883604==--
