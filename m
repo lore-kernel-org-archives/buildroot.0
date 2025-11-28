@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A610D43370
-	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:57:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3306DD4337C
+	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:57:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C5AEC83D01;
-	Fri, 12 Dec 2025 07:57:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 47B0183D42;
+	Fri, 12 Dec 2025 07:57:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 14S69aue8v-V; Fri, 12 Dec 2025 07:57:04 +0000 (UTC)
+ id zXnQ8-U5PHbw; Fri, 12 Dec 2025 07:57:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47BD883C84
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38179833CA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765526212;
-	bh=ifqHzWOrTLQDV5ri2Vw6FlXbg5kF054r1h77AzJQxMw=;
+	s=default; t=1765526214;
+	bh=sHhja03ttebHHYH5edecUUIk9c/xd47veMbLR7n7j+A=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=BRTDX1/uEahVb3ce8BcOsFpQPkvgxFPjPVkobn8530C4+8TWHHGGIIPw2AlDBYkEV
-	 5qVb/4sz/MWBUv3bHuRmyB1iDFqjkmPRVinKsDwQ4f1rvHyDFFBC/XBF9J1x9uI2yO
-	 JBh/C8L5J+IGS2lSfdJ1CccrPGhyFU/WhzLBnFW043b8XqYXH/UmCwxTz/PwtFQYhk
-	 Qgqqy4BppLldsnCQVoMDM0fU/b1Z9IQhag46ZkWUiLDjN6zergOyK5SElM5YW8cCwY
-	 8+9S1/XJE8y0xCpc/xUiUdAHKc2BgGhZpUHO5NlSrBPM8nL3/6ky1TL6eOVGLlSkeo
-	 FfGJX6AM+HDTA==
+	b=qna19Xxwm1geFEveWzwTRIKPXyrj/q8myZsI8SQOXLlMhp0QNxaD80ztheYai+Ps7
+	 BX8rLdsW3qV9ydhaX3lnj+KhSbrCozx/57w9wexuR/vFzeUMNB756V2cXOtpODID+k
+	 fXL8myE/fkjhoJ5h7C6wHAAs6GhK7jgu2xeTBISA8mGv9aJ1dPGakmvGSRGfVToGh6
+	 zX6LOFUZPYEy5ZJxHFu6WPjGHgXhJ2jb1UggHwE2yrrmA6IqxESnLcBUIDLjbh9kzg
+	 Tv91XTdQRvaL8rh/VUAvXWgrFv0eKOz4IQMjqtCAWSDNa4dZ8zW8WpA0jRMxvlewMM
+	 3KytT0CSt2wnA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 47BD883C84;
-	Fri, 12 Dec 2025 07:56:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 38179833CA;
+	Fri, 12 Dec 2025 07:56:54 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 28785E7
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:56:06 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 82C32E7
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:56:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7A52741134
+ by smtp4.osuosl.org (Postfix) with ESMTP id AC3BD41140
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xkp2JfUbhLMy for <buildroot@buildroot.org>;
- Fri, 12 Dec 2025 07:55:39 +0000 (UTC)
+ id rU1T6yde5b_F for <buildroot@buildroot.org>;
+ Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D482741140
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B09324113C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D482741140
+ by smtp4.osuosl.org (Postfix) with ESMTP id B09324113C
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D374786C93; Fri, 12 Dec 2025 07:55:35 +0000 (UTC)
+ id AFA1C86C9A; Fri, 12 Dec 2025 07:55:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 29 Nov 2025 17:14:28 +0100
+Date: Fri, 28 Nov 2025 22:47:33 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d06976eeb02c2fa4f28141ef3b6e92f9f499f69d
-X-Git-Newrev: a9e7472d6c8a6220bff9ce51f3188158ba930e7e
+X-Git-Oldrev: 5bf0db998b4bd125500668953d5e4649ff37cb19
+X-Git-Newrev: d2ed4565321c74772014681ca5ddcb433162e468
 X-Patchwork-Hint: ignore
-Message-Id: <20251212075535.D374786C93@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sbc: bump version to 2.1
+Message-Id: <20251212075535.AFA1C86C9A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/liburing: bump to version 2.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,42 +76,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9e7472d6c8a6220bff9ce51f3188158ba930e7e
+commit: https://git.buildroot.net/buildroot/commit/?id=d2ed4565321c74772014681ca5ddcb433162e468
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://git.kernel.org/pub/scm/bluetooth/sbc.git/tree/ChangeLog?h=2.1
+Switch to github since git.kernel.dk is not always reachable and actual
+tarball sha256 has changed. Also note that local patch is required because
+it's been reverted wit this commit [1].
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Release Notes:
+https://github.com/axboe/liburing/releases/tag/liburing-2.12
+
+[1]:
+https://github.com/axboe/liburing/commit/6f8b3481cf511ade803fe7a2ea8fe3b99fce3658
+
+Fixes:
+https://autobuild.buildroot.net/results/ddf/ddfd0bb8f5623a1ce7aa4168c5759b2c54a933da/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/sbc/sbc.hash | 2 +-
- package/sbc/sbc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/liburing/Config.in     | 2 +-
+ package/liburing/liburing.hash | 4 ++--
+ package/liburing/liburing.mk   | 6 +++---
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/sbc/sbc.hash b/package/sbc/sbc.hash
-index b080c06205..313551101a 100644
---- a/package/sbc/sbc.hash
-+++ b/package/sbc/sbc.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc
--sha256  8f12368e1dbbf55e14536520473cfb338c84b392939cc9b64298360fd4a07992  sbc-2.0.tar.xz
-+sha256  426633cabd7c798236443516dfa8335b47e004b0ef37ff107e0c7ead3299fcc2  sbc-2.1.tar.xz
+diff --git a/package/liburing/Config.in b/package/liburing/Config.in
+index fc13f1c17c..29df944ce1 100644
+--- a/package/liburing/Config.in
++++ b/package/liburing/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_LIBURING
+ 	  simplified interface for applications that don't need (or
+ 	  want) to deal with the full kernel side implementation.
  
- # sha256 locally computed
- sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
-diff --git a/package/sbc/sbc.mk b/package/sbc/sbc.mk
-index 7a37a99643..62f481be3a 100644
---- a/package/sbc/sbc.mk
-+++ b/package/sbc/sbc.mk
-@@ -4,7 +4,7 @@
+-	  https://git.kernel.dk/cgit/liburing
++	  https://github.com/axboe/liburing
+ 
+ comment "liburing needs a toolchain w/ gcc >= 4.9, headers >= 5.1"
+ 	depends on BR2_USE_MMU
+diff --git a/package/liburing/liburing.hash b/package/liburing/liburing.hash
+index f06dd187a7..d37b69497f 100644
+--- a/package/liburing/liburing.hash
++++ b/package/liburing/liburing.hash
+@@ -1,8 +1,8 @@
+ # Locally calculated
+-sha256  78bcc0dc0d004a238d8b5f597adbb4ec74926352a3983b872db7f0efdb72565d  liburing-2.6.tar.bz2
++sha256  f1d10cb058c97c953b4c0c446b11e9177e8c8b32a5a88b309f23fdd389e26370  liburing-2.12.tar.gz
+ 
+ # Hash for license files
+ sha256  592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  COPYING
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL
+ sha256  2ec12f7934cdfce25ff72b0557738989d79fc7a496d1cf9b2d3f9464fd61edbe  LICENSE
+-sha256  b0731ca09e6f4718d456a989d32b6c61bf27e5d4bab6ca31e409d75c5120d19e  README
++sha256  d98e81bb7a8fcfb5506f02c3190b5bc2e286970591072edc4575c26624d827dd  README
+diff --git a/package/liburing/liburing.mk b/package/liburing/liburing.mk
+index fc3993b38c..24ceb281b5 100644
+--- a/package/liburing/liburing.mk
++++ b/package/liburing/liburing.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--SBC_VERSION = 2.0
-+SBC_VERSION = 2.1
- SBC_SOURCE = sbc-$(SBC_VERSION).tar.xz
- SBC_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- SBC_INSTALL_STAGING = YES
+-LIBURING_VERSION = 2.6
+-LIBURING_SOURCE = liburing-$(LIBURING_VERSION).tar.bz2
+-LIBURING_SITE = https://git.kernel.dk/cgit/liburing/snapshot
++LIBURING_VERSION = liburing-2.12
++LIBURING_SOURCE = $(LIBURING_VERSION).tar.gz
++LIBURING_SITE = $(call github,axboe,liburing,$(LIBURING_VERSION))
+ LIBURING_LICENSE = (GPL-2.0 with exceptions and LGPL-2.1+) or MIT
+ LIBURING_LICENSE_FILES = COPYING COPYING.GPL LICENSE README
+ LIBURING_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
