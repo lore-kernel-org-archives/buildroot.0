@@ -4,70 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4120CFD376
-	for <buildroot@archiver.kernel.org>; Fri, 28 Nov 2025 10:03:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60269D116E2
+	for <buildroot@archiver.kernel.org>; Fri, 28 Nov 2025 10:55:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8619140DE6;
-	Fri, 28 Nov 2025 10:03:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC9F4411DF;
+	Fri, 28 Nov 2025 10:55:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BFQUjXLdszVA; Fri, 28 Nov 2025 10:03:15 +0000 (UTC)
+ id 2c_VGBwKFzyd; Fri, 28 Nov 2025 10:55:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC81540E14
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 051CB4121D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BC81540E14;
-	Fri, 28 Nov 2025 10:03:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id BEBD71A9
- for <buildroot@buildroot.org>; Fri, 28 Nov 2025 10:03:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 051CB4121D;
+	Fri, 28 Nov 2025 10:55:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id F2A40967
+ for <buildroot@buildroot.org>; Fri, 28 Nov 2025 10:55:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A8A7140145
- for <buildroot@buildroot.org>; Fri, 28 Nov 2025 10:03:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D90334121D
+ for <buildroot@buildroot.org>; Fri, 28 Nov 2025 10:55:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id THkjsCjUQyRe for <buildroot@buildroot.org>;
- Fri, 28 Nov 2025 10:03:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.117;
- helo=smtpdh17-2.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5rAF0yrbsBoK for <buildroot@buildroot.org>;
+ Fri, 28 Nov 2025 10:55:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.56;
+ helo=smtpcmd0756.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7E78240063
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E78240063
-Received: from smtpdh17-2.aruba.it (smtpdh17-2.aruba.it [62.149.155.117])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7E78240063
- for <buildroot@buildroot.org>; Fri, 28 Nov 2025 10:03:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1DAFF411DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DAFF411DF
+Received: from smtpcmd0756.aruba.it (smtpcmd0756.aruba.it [62.149.156.56])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1DAFF411DF
+ for <buildroot@buildroot.org>; Fri, 28 Nov 2025 10:55:29 +0000 (UTC)
 Received: from localhost.localdomain ([212.103.203.10])
  by Aruba SMTP with ESMTPSA
- id OvJivv8kBBhI9OvJjvGyby; Fri, 28 Nov 2025 11:03:07 +0100
+ id Ow8MvKeWslGpsOw8MvSM6w; Fri, 28 Nov 2025 11:55:26 +0100
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri, 28 Nov 2025 11:03:05 +0100
-Message-ID: <20251128100305.952494-1-giulio.benetti@benettiengineering.com>
+Date: Fri, 28 Nov 2025 11:55:24 +0100
+Message-ID: <20251128105524.1743108-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfGvsNgnmyKUhPqiBh8StMplwMdrIqvcAByeYWVQM+MzafwXa/jtyudrkb5KcJh41Vp6f3eHCyUVN2mQ6S8oOW/MwfpfaiaJA18qHJb3hs1a0a0foj4JM
- 4Aoio3axzz3X8Ji7vZvdJtQH+rJWyEF5eddXmfJV9A2iBkYjTXRfK890WB5H7uuNGMchiVEkIYPcLdYizc0gZAq9DExF7Cd0wnbUkKZomQixKohbeBEweaK4
- 1/9guINqXfYTYNG86tjaJk2YjNbJsugMukWQQIa70uYqiH+uejLDY0IwUqzV0MvA
+X-CMAE-Envelope: MS4xfMx0PukmOtEhgs/SVUJvL/nEd9Z6izzTCSgJ06LkjdmCTvmKbmUTHn76vtndlTydQJ3jfum4AVxtA71zw/PrnENzh9eGZeezOkV91zK+qRpGe3RysgeV
+ Q/auS1LS2KBG0TDkJR4fLCJAtcuhF2egErPGUPgyfIfjXrcIDXCtG2AR5IT1psEuKIGbEZO3hAn7jdMhac/w4BOV4pBNR1SVyiikQqqFINLc2jqcVjtezN3R
+ 6zw3IpdFX2A/WYCbIvcetdJpA9VmC1MDaX2UzANo5sS1/MIL2eW0g0TuTa03k4Gs
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1764324187; bh=E8+vqsSnWvwoScBj3YCs2yavMwEPgL6b+doCHaPkeZI=;
+ t=1764327326; bh=NISPbyfp1vAibT17DibjiXjSvZFmjOJy8nePeIDQx60=;
  h=From:To:Subject:Date:MIME-Version;
- b=DUziqTiZ92vNnaMSXJIxdmRY+1L9HVWaVCBhBYg5UG9G9RzGWJ5lk9Z2tMd7fiznQ
- Stl1OK4Ah+DBoKuyRm+XoKPHz4BFrVXSGjyYRq1eCnJi7wBGm4znsHHDhmRmEfhBk5
- VRvz56lY8lV4S/6U/SlIN9HBugF7GpGloErVdi3AzlcolheKkfTM9OjW0LDxK9qgK9
- bQtI5pJQX3DvObI4DN8HRem1wpEbH8t7vau4Swbr0SPHhem7of4diBoNhFUuoOycbR
- L1qvtxrz+yx95QDX/OF2bcOGQ5pFDfhNPkJIiaCku2Xn0lvsV1nKdVngERIbHyKwTz
- DGzxqGG7JHPcQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=K3apMXnp/VoNy3ZtheRyVCUxlKbyEt9vnVChz1n5/1s6foScx2NYYk03jhchj3gev
+ ITSXYl2VZBMRIx948IVL7FTRuWR6jupXm/Q6YWKit0BOzNxSaIK6ek9SR8SZiWF4KM
+ E4CEgcqm41PJ+7fOOJ9iFIkyitrPlFReDCArM3zxMIIGuqPgkKegCuYuxo2z/JozNY
+ U0zEMunChJVJYpbGy5DV3cALuVVIJQm+YCv81oONkapxHcCxVkKac2mquC7Nib0zSq
+ be4NZjp0w3NugoXIZOoaTfjW/Majnzvinu+exafOFnhJFRgSZi8c1+Zvq1w/r1HOic
+ pWdiaY/uDTttg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=DUziqTiZ
-Subject: [Buildroot] [PATCH] package/sdl: fix build failure due to type
+ header.s=a1 header.b=K3apMXnp
+Subject: [Buildroot] [PATCH] package/tmux: fix build failure due to type
  mismatch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -85,74 +85,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add local patch to fix:
-./src/stdlib/SDL_iconv.c: In function 'SDL_iconv':
-./src/stdlib/SDL_iconv.c:50:29: error: passing argument 2 of 'iconv' from incompatible pointer type [-Wincompatible-pointer-types]
-   50 |         retCode = iconv(cd, inbuf, inbytesleft, outbuf, outbytesleft);
-      |                             ^~~~~
-      |                             |
-      |                             const char **
+Package tmux fails to build with:
+compat/utf8proc.c: In function 'utf8proc_mbtowc':
+compat/utf8proc.c:51:39: error: passing argument 3 of 'utf8proc_iterate' from incompatible pointer type [-Wincompatible-pointer-types]
+   51 |         slen = utf8proc_iterate(s, n, pwc);
+      |                                       ^~~
+      |                                       |
+      |                                       wchar_t * {aka long int *}
+
+Add local patch already committed upstream to fix it.
 
 Fixes:
-https://autobuild.buildroot.net/results/cfb/cfb1f9a0137332cf080ce862722e4fe8ad275031/
+https://autobuild.buildroot.net/results/651/6510cfb16d0c3f3772918cd3bde0542d0b59a230/
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- ...tdlib-SDL_iconv.c-fix-types-mismatch.patch | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 package/sdl/0004-src-stdlib-SDL_iconv.c-fix-types-mismatch.patch
+ ...rnings-on-32-bit-architectures.-GitH.patch | 28 +++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/tmux/0001-Cast-to-avoid-warnings-on-32-bit-architectures.-GitH.patch
 
-diff --git a/package/sdl/0004-src-stdlib-SDL_iconv.c-fix-types-mismatch.patch b/package/sdl/0004-src-stdlib-SDL_iconv.c-fix-types-mismatch.patch
+diff --git a/package/tmux/0001-Cast-to-avoid-warnings-on-32-bit-architectures.-GitH.patch b/package/tmux/0001-Cast-to-avoid-warnings-on-32-bit-architectures.-GitH.patch
 new file mode 100644
-index 0000000000..da666d5996
+index 0000000000..e9cd9d5acc
 --- /dev/null
-+++ b/package/sdl/0004-src-stdlib-SDL_iconv.c-fix-types-mismatch.patch
-@@ -0,0 +1,48 @@
-+From 390974b8a9d5e513d48d794818dbe180e0f80b16 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Fri, 28 Nov 2025 10:57:41 +0100
-+Subject: [PATCH] src/stdlib/SDL_iconv.c: fix types mismatch
++++ b/package/tmux/0001-Cast-to-avoid-warnings-on-32-bit-architectures.-GitH.patch
+@@ -0,0 +1,28 @@
++From f812b8d30456c071ee23e9a02d6ce16036fd3f68 Mon Sep 17 00:00:00 2001
++From: Nicholas Marriott <nicholas.marriott@gmail.com>
++Date: Wed, 29 Oct 2025 08:47:45 +0000
++Subject: [PATCH] Cast to avoid warnings on 32-bit architectures. GitHub issue
++ 4597.
 +
-+When building sdl this error shows up:
-+./src/stdlib/SDL_iconv.c: In function 'SDL_iconv':
-+./src/stdlib/SDL_iconv.c:50:29: error: passing argument 2 of 'iconv' from incompatible pointer type [-Wincompatible-pointer-types]
-+   50 |         retCode = iconv(cd, inbuf, inbytesleft, outbuf, outbytesleft);
-+      |                             ^~~~~
-+      |                             |
-+      |                             const char **
-+
-+Let's pick only this code from upstream commit[1] and left the rest
-+untouched.
-+
-+[1]:
-+https://github.com/libsdl-org/SDL-1.2/commit/8a8135d91f9361448521765c9da00401fab866a1
-+
++Upstream: https://github.com/tmux/tmux/commit/f812b8d30456c071ee23e9a02d6ce16036fd3f68
 +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 +---
-+ src/stdlib/SDL_iconv.c | 10 ++++------
-+ 1 file changed, 4 insertions(+), 6 deletions(-)
++ compat/utf8proc.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/src/stdlib/SDL_iconv.c b/src/stdlib/SDL_iconv.c
-+index fa56a99e..369f6881 100644
-+--- a/src/stdlib/SDL_iconv.c
-++++ b/src/stdlib/SDL_iconv.c
-+@@ -43,12 +43,10 @@ size_t SDL_iconv(SDL_iconv_t cd,
-+                  const char **inbuf, size_t *inbytesleft,
-+                  char **outbuf, size_t *outbytesleft)
-+ {
-+-	size_t retCode;
-+-#ifdef ICONV_INBUF_NONCONST
-+-	retCode = iconv(cd, (char **)inbuf, inbytesleft, outbuf, outbytesleft);
-+-#else
-+-	retCode = iconv(cd, inbuf, inbytesleft, outbuf, outbytesleft);
-+-#endif
-++	/* iconv's second parameter may or may not be `const char const *` depending on the
-++	   C runtime's whims. Casting to void * seems to make everyone happy, though. */
-++	const size_t retCode = iconv((iconv_t) ((uintptr_t) cd), (void *)inbuf, inbytesleft, outbuf, outbytesleft);
-++
-+ 	if ( retCode == (size_t)-1 ) {
-+ 		switch(errno) {
-+ 		    case E2BIG:
++diff --git a/compat/utf8proc.c b/compat/utf8proc.c
++index dd4ab27f..147da696 100644
++--- a/compat/utf8proc.c
+++++ b/compat/utf8proc.c
++@@ -48,7 +48,7 @@ utf8proc_mbtowc(wchar_t *pwc, const char *s, size_t n)
++ 	 * *pwc == -1 indicates invalid codepoint
++ 	 * slen < 0 indicates an error
++ 	 */
++-	slen = utf8proc_iterate(s, n, pwc);
+++	slen = utf8proc_iterate(s, n, (utf8proc_int32_t*)pwc);
++ 	if (*pwc == (wchar_t)-1 || slen < 0)
++ 		return (-1);
++ 	return (slen);
 +-- 
 +2.47.3
 +
