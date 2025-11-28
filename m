@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F21C1D116E2
-	for <buildroot@archiver.kernel.org>; Fri, 28 Nov 2025 20:19:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DBA9D116EA
+	for <buildroot@archiver.kernel.org>; Fri, 28 Nov 2025 20:19:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 575F580BEE;
-	Fri, 28 Nov 2025 20:19:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B42EA80CB4;
+	Fri, 28 Nov 2025 20:19:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eBff-KH-E0OJ; Fri, 28 Nov 2025 20:19:38 +0000 (UTC)
+ id CwZUnKY4A-09; Fri, 28 Nov 2025 20:19:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D886E80AD6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5D1480C8F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D886E80AD6;
-	Fri, 28 Nov 2025 20:19:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B5D1480C8F;
+	Fri, 28 Nov 2025 20:19:40 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id C1F199E4
- for <buildroot@buildroot.org>; Fri, 28 Nov 2025 20:19:34 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 131DA708
+ for <buildroot@buildroot.org>; Fri, 28 Nov 2025 20:19:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AD90C80A93
+ by smtp1.osuosl.org (Postfix) with ESMTP id B2C5D808C2
  for <buildroot@buildroot.org>; Fri, 28 Nov 2025 20:19:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hgLtDtSPnoqY for <buildroot@buildroot.org>;
+ id t9qwhQE6ha8w for <buildroot@buildroot.org>;
  Fri, 28 Nov 2025 20:19:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E575E809AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 067D3809BF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E575E809AB
- for <buildroot@buildroot.org>; Fri, 28 Nov 2025 20:19:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 067D3809BF
+ for <buildroot@buildroot.org>; Fri, 28 Nov 2025 20:19:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D75F48612F; Fri, 28 Nov 2025 20:19:33 +0000 (UTC)
+ id 04BEA86135; Fri, 28 Nov 2025 20:19:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 28 Nov 2025 19:33:00 +0100
+Date: Fri, 28 Nov 2025 19:38:53 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f0292e77d89a0faa60b1e1efc17934b38da876ec
-X-Git-Newrev: 8bd91d9034596b5632dabf381a3c6612f1fb6da1
+X-Git-Oldrev: e4ddb6a8923e7e8e3ccf699ce6d842c1e5cfa609
+X-Git-Newrev: f0a632df16b1515c003d12f009495ca8f3d1c12f
 X-Patchwork-Hint: ignore
-Message-Id: <20251128201933.D75F48612F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pydantic{,
- -core}: bump to 2.12.4 and 2.41.5
+Message-Id: <20251128201934.04BEA86135@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-idna: bump to
+ 3.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,77 +66,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8bd91d9034596b5632dabf381a3c6612f1fb6da1
+commit: https://git.buildroot.net/buildroot/commit/?id=f0a632df16b1515c003d12f009495ca8f3d1c12f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changes:
-* https://github.com/pydantic/pydantic/releases/tag/v2.12.4
-* https://github.com/pydantic/pydantic-core/releases/tag/v2.41.5
+Changes: https://github.com/kjd/idna/blob/v3.11/HISTORY.rst
+
+LICENSE.md hash changes due to copyright year update in:
+https://github.com/kjd/idna/commit/17f30a644563860262436a552d99e3ab0c505da4
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-pydantic-core/python-pydantic-core.hash | 2 +-
- package/python-pydantic-core/python-pydantic-core.mk   | 4 ++--
- package/python-pydantic/python-pydantic.hash           | 4 ++--
- package/python-pydantic/python-pydantic.mk             | 4 ++--
- 4 files changed, 7 insertions(+), 7 deletions(-)
+ package/python-idna/python-idna.hash | 6 +++---
+ package/python-idna/python-idna.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pydantic-core/python-pydantic-core.hash b/package/python-pydantic-core/python-pydantic-core.hash
-index f61ab7a8e4..6ab537ad67 100644
---- a/package/python-pydantic-core/python-pydantic-core.hash
-+++ b/package/python-pydantic-core/python-pydantic-core.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after vendoring
--sha256  8c31786f387bc0ce4a0fdfb500dbee7b102358616633b37159b389d5c53efa64  python-pydantic-core-2.41.4-cargo4.tar.gz
-+sha256  8919dc76250449ed22d47e94f53929cb44eb982cd4ad80dc0607f8018868e549  python-pydantic-core-2.41.5-cargo4.tar.gz
- # Locally computed sha256 checksums
- sha256  2afdd30d54b4d62b6f488a6bcc1546e84ec5061f13f4209c03d012348783795a  LICENSE
-diff --git a/package/python-pydantic-core/python-pydantic-core.mk b/package/python-pydantic-core/python-pydantic-core.mk
-index 9eb0510278..7394e947ec 100644
---- a/package/python-pydantic-core/python-pydantic-core.mk
-+++ b/package/python-pydantic-core/python-pydantic-core.mk
-@@ -6,10 +6,10 @@
- 
- # python-pydantic pins an exact version of pydantic-core in pyproject.toml,
- # make sure to sync pydantic-core to this version when updating pydantic
--PYTHON_PYDANTIC_CORE_VERSION = 2.41.4
-+PYTHON_PYDANTIC_CORE_VERSION = 2.41.5
- PYTHON_PYDANTIC_CORE_SOURCE_PYPI = pydantic_core-$(PYTHON_PYDANTIC_CORE_VERSION).tar.gz
- PYTHON_PYDANTIC_CORE_SITE = $(PYTHON_PYDANTIC_CORE_SITE_PYPI)/$(PYTHON_PYDANTIC_CORE_SOURCE_PYPI)?buildroot-path=filename
--PYTHON_PYDANTIC_CORE_SITE_PYPI = https://files.pythonhosted.org/packages/df/18/d0944e8eaaa3efd0a91b0f1fc537d3be55ad35091b6a87638211ba691964
-+PYTHON_PYDANTIC_CORE_SITE_PYPI = https://files.pythonhosted.org/packages/71/70/23b021c950c2addd24ec408e9ab05d59b035b39d97cdc1130e1bce647bb6
- PYTHON_PYDANTIC_CORE_SETUP_TYPE = maturin
- PYTHON_PYDANTIC_CORE_LICENSE = MIT
- PYTHON_PYDANTIC_CORE_LICENSE_FILES = LICENSE
-diff --git a/package/python-pydantic/python-pydantic.hash b/package/python-pydantic/python-pydantic.hash
-index 12604059d6..587007361b 100644
---- a/package/python-pydantic/python-pydantic.hash
-+++ b/package/python-pydantic/python-pydantic.hash
+diff --git a/package/python-idna/python-idna.hash b/package/python-idna/python-idna.hash
+index fbf571f806..188f290f41 100644
+--- a/package/python-idna/python-idna.hash
++++ b/package/python-idna/python-idna.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pydantic/json
--md5  d01464f3a5256144116a8de55e2974b8  pydantic-2.12.3.tar.g
--sha256  1da1c82b0fc140bb0103bc1441ffe062154c8d38491189751ee00fd8ca65ce74  pydantic-2.12.3.tar.gz
-+md5  ae668857700cf7db44db2d3492aadf56  pydantic-2.12.4.tar.gz
-+sha256  0f8cb9555000a4b5b617f66bfd2566264c4984b27589d3b845685983e8ea85ac  pydantic-2.12.4.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/idna/json
+-md5  28448b00665099117b6daa9887812cc4  idna-3.10.tar.gz
+-sha256  12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9  idna-3.10.tar.gz
++md5  9a9c33db960e0d35cc5b257c37dabeff  idna-3.11.tar.gz
++sha256  795dafcc9c04ed0c1fb032c2aa73654d8e8c5023a7df64a53f39190ada629902  idna-3.11.tar.gz
  # Locally computed sha256 checksums
- sha256  a9e186f3ca16b5eef84318e7a701721351a00cb7b8ae3a4394b67b49e3529ef3  LICENSE
-diff --git a/package/python-pydantic/python-pydantic.mk b/package/python-pydantic/python-pydantic.mk
-index b0cb1f1ce0..99845f8bce 100644
---- a/package/python-pydantic/python-pydantic.mk
-+++ b/package/python-pydantic/python-pydantic.mk
+-sha256  a59f0b0ef3635874109a4461ca44ff7a70d50696e814767bfaf721d4c9b0db0f  LICENSE.md
++sha256  b7a336abf3b04e180ec065cdd16e705d079e1cc7a14f910aa6e9187f36b9cd87  LICENSE.md
+diff --git a/package/python-idna/python-idna.mk b/package/python-idna/python-idna.mk
+index c7b7f6ad00..2b654a480c 100644
+--- a/package/python-idna/python-idna.mk
++++ b/package/python-idna/python-idna.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYDANTIC_VERSION = 2.12.3
-+PYTHON_PYDANTIC_VERSION = 2.12.4
- PYTHON_PYDANTIC_SOURCE = pydantic-$(PYTHON_PYDANTIC_VERSION).tar.gz
--PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/f3/1e/4f0a3233767010308f2fd6bd0814597e3f63f1dc98304a9112b8759df4ff
-+PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/96/ad/a17bc283d7d81837c061c49e3eaa27a45991759a1b7eae1031921c6bd924
- PYTHON_PYDANTIC_SETUP_TYPE = hatch
- PYTHON_PYDANTIC_LICENSE = MIT
- PYTHON_PYDANTIC_LICENSE_FILES = LICENSE
+-PYTHON_IDNA_VERSION = 3.10
++PYTHON_IDNA_VERSION = 3.11
+ PYTHON_IDNA_SOURCE = idna-$(PYTHON_IDNA_VERSION).tar.gz
+-PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/f1/70/7703c29685631f5a7590aa73f1f1d3fa9a380e654b86af429e0934a32f7d
++PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/6f/6d/0703ccc57f3a7233505399edb88de3cbd678da106337b9fcde432b65ed60
+ PYTHON_IDNA_LICENSE = BSD-3-Clause
+ PYTHON_IDNA_LICENSE_FILES = LICENSE.md
+ PYTHON_IDNA_SETUP_TYPE = flit
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
