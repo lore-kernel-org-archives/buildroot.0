@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D8AED4337C
-	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:56:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9106CD43370
+	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:56:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F3F8883935;
-	Fri, 12 Dec 2025 07:56:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0970A83BFA;
+	Fri, 12 Dec 2025 07:56:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qvbOuQFKUMi1; Fri, 12 Dec 2025 07:56:37 +0000 (UTC)
+ id tSDIEXHahDcN; Fri, 12 Dec 2025 07:56:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D0BE83925
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA50A83A50
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765526188;
-	bh=UouKEepdBfsiHSNVt62VlI0k7CTxKIaueQ3Cw91LyEM=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=dJKTxEqLs/4iPpfxYRDiwUqeWOuXN95GvpJjm3x2p7yngqeVQDWYVN3lHu4qTdU0f
-	 u5aRr6Kclnkg+9EOCGfr96gBHGjw0t2/C1M7nMlj7ENRctDoIl1z60LjFWoqkJ26BM
-	 JiipJYiIZlGeh94XcYZa49XeR+jsehQJD/cpon0uB3f0heEyOxHNqcyZRP+o8X1N9X
-	 Gwuppngjj8Bf1VfhLbrhJ/t4QGYwg3pzNKJ8eTHJ9jtelGQ55Z2+QH69BlfCwpZdB5
-	 J2/K785YXRH129Yj+QKo252YysftwBmkSmJdjzP3Tq/sfK3a4juxHzmec1StAPE7uW
-	 Hahuv7jEIvQ+g==
+	s=default; t=1765526189;
+	bh=Sg4YGfZc9uC5fhrOB8jbgSUo4152BMGrItX4IsWrsx8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=R6joJnwQaGwqBkDMQ91oWe6sWuJtufMk+o8AGOswlA/2WkCvfAcYWJk61r5VjM1AU
+	 uRtomHFMVLgsGGlRzCecfcVUaFwLYfVZCvZfOjgSob3vKNPCASjfONeH4PjLYvf1Bs
+	 dLqmPV8u0Npy+i2D4WMcW107qJZL7JjOSA5+Jg/Pk9D+2FNST+lu/DilBRoJ/LZtGN
+	 keXnEuuqZ5+wydApyEHE9/CgYsWN5Owh+gqUxqy/1WPyYCef8N9jd5QW5WqJD7CJM9
+	 cR5gQnkAHZO6OaU0ZB60w2YvXIlh4/H3gVo45HXXeNNcsg1w1ODlj/tQuhDnkXXQEI
+	 P48oJksREqwRw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D0BE83925;
-	Fri, 12 Dec 2025 07:56:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CA50A83A50;
+	Fri, 12 Dec 2025 07:56:29 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0CB262C1
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:52 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id D04892C1
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 59EBF41182
+ by smtp4.osuosl.org (Postfix) with ESMTP id AE43D4118D
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LUZHuq98whV8 for <buildroot@buildroot.org>;
- Fri, 12 Dec 2025 07:55:36 +0000 (UTC)
+ id oQ40E1JQetF4 for <buildroot@buildroot.org>;
+ Fri, 12 Dec 2025 07:55:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E63EA41122
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5855B4110A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E63EA41122
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5855B4110A
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E545086C94; Fri, 12 Dec 2025 07:55:34 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 574D486C94; Fri, 12 Dec 2025 07:55:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 26 Nov 2025 11:38:09 +0100
+Date: Fri, 28 Nov 2025 19:32:47 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9c1dfb619994a05a620649c42a5ac39d7848c1e7
-X-Git-Newrev: 534a5acdddc4849f5dd6e81951c56db7f402c5d7
+X-Git-Oldrev: f3e0c424c59e37478de47fe4b98f2f8fe373003d
+X-Git-Newrev: f0292e77d89a0faa60b1e1efc17934b38da876ec
 X-Patchwork-Hint: ignore
-Message-Id: <20251212075534.E545086C94@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/zynq_*: bump to xilinx_v2025.2
+Message-Id: <20251212075535.574D486C94@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-immutabledict: bump to 4.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,121 +68,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=534a5acdddc4849f5dd6e81951c56db7f402c5d7
+commit: https://git.buildroot.net/buildroot/commit/?id=f0292e77d89a0faa60b1e1efc17934b38da876ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump zynq defconfigs to xilinx_v2025.2.
+Changes:
+https://github.com/corenting/immutabledict/blob/master/CHANGELOG.md#version-422
 
-xilinx_v2025.2 includes the following software versions:
-linux v6.12.40
-uboot v2025.01
-with all Xilinx downstream commits included with xilinx_v2025.2.
-
-xilinx_v2025.2 was run tested on a zc702 evaluation board.
-
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- configs/zynq_microzed_defconfig | 4 ++--
- configs/zynq_zc702_defconfig    | 4 ++--
- configs/zynq_zc706_defconfig    | 4 ++--
- configs/zynq_zed_defconfig      | 4 ++--
- 4 files changed, 8 insertions(+), 8 deletions(-)
+ package/python-immutabledict/python-immutabledict.hash | 4 ++--
+ package/python-immutabledict/python-immutabledict.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
-index b7bf70efcd..d50e1ab818 100644
---- a/configs/zynq_microzed_defconfig
-+++ b/configs/zynq_microzed_defconfig
-@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.40)/xlnx_rebase_v6.12_LTS_merge_6.12.40.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_2025.2)/xlnx_rebase_v6.12_LTS_2025.2.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
-@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.1)/xlnx_rebase_v2025.01_2025.1.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.2)/xlnx_rebase_v2025.01_2025.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynq_virt"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-diff --git a/configs/zynq_zc702_defconfig b/configs/zynq_zc702_defconfig
-index f968ae1a08..a4afb61faa 100644
---- a/configs/zynq_zc702_defconfig
-+++ b/configs/zynq_zc702_defconfig
-@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.40)/xlnx_rebase_v6.12_LTS_merge_6.12.40.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_2025.2)/xlnx_rebase_v6.12_LTS_2025.2.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
-@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.1)/xlnx_rebase_v2025.01_2025.1.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.2)/xlnx_rebase_v2025.01_2025.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynq_virt"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
-index fe40dc99aa..4f15fef813 100644
---- a/configs/zynq_zc706_defconfig
-+++ b/configs/zynq_zc706_defconfig
-@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.40)/xlnx_rebase_v6.12_LTS_merge_6.12.40.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_2025.2)/xlnx_rebase_v6.12_LTS_2025.2.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
-@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.1)/xlnx_rebase_v2025.01_2025.1.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.2)/xlnx_rebase_v2025.01_2025.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynq_virt"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
-index 53653036ba..c08dabadd4 100644
---- a/configs/zynq_zed_defconfig
-+++ b/configs/zynq_zed_defconfig
-@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_merge_6.12.40)/xlnx_rebase_v6.12_LTS_merge_6.12.40.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_2025.2)/xlnx_rebase_v6.12_LTS_2025.2.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
-@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.1)/xlnx_rebase_v2025.01_2025.1.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.2)/xlnx_rebase_v2025.01_2025.2.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynq_virt"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+diff --git a/package/python-immutabledict/python-immutabledict.hash b/package/python-immutabledict/python-immutabledict.hash
+index 1dd4a79597..f917e43702 100644
+--- a/package/python-immutabledict/python-immutabledict.hash
++++ b/package/python-immutabledict/python-immutabledict.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/immutabledict/json
+-md5  ac3ce87a7507d3e7d44a24a6b6bdb4a7  immutabledict-4.2.1.tar.gz
+-sha256  d91017248981c72eb66c8ff9834e99c2f53562346f23e7f51e7a5ebcf66a3bcc  immutabledict-4.2.1.tar.gz
++md5  2ddeb671f200618365b11b997d50368f  immutabledict-4.2.2.tar.gz
++sha256  cb6ed3090df593148f94cb407d218ca526fd2639694afdb553dc4f50ce6feeca  immutabledict-4.2.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  347f918d37d4e0556a0695d34b9fb87fa9bbe808d54949851789c6c1fc91c61f  LICENSE
+diff --git a/package/python-immutabledict/python-immutabledict.mk b/package/python-immutabledict/python-immutabledict.mk
+index 902352a5d0..4a886b1607 100644
+--- a/package/python-immutabledict/python-immutabledict.mk
++++ b/package/python-immutabledict/python-immutabledict.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_IMMUTABLEDICT_VERSION = 4.2.1
++PYTHON_IMMUTABLEDICT_VERSION = 4.2.2
+ PYTHON_IMMUTABLEDICT_SOURCE = immutabledict-$(PYTHON_IMMUTABLEDICT_VERSION).tar.gz
+-PYTHON_IMMUTABLEDICT_SITE = https://files.pythonhosted.org/packages/e0/c5/4240186fbabc58fba41bbe17c5f0cd37ffd4c0b85a5029ab104f946df175
++PYTHON_IMMUTABLEDICT_SITE = https://files.pythonhosted.org/packages/ce/12/1da8e1a9050d0603ba65fb1796ed8860a705b906701c96e77f85cc7490be
+ PYTHON_IMMUTABLEDICT_SETUP_TYPE = poetry
+ PYTHON_IMMUTABLEDICT_LICENSE = MIT
+ PYTHON_IMMUTABLEDICT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
