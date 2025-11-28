@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38DAED4337C
-	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:56:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6593DD43370
+	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:56:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EE9B48391F;
-	Fri, 12 Dec 2025 07:56:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 34A6E83CA2;
+	Fri, 12 Dec 2025 07:56:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id snaCRfZzNX65; Fri, 12 Dec 2025 07:56:51 +0000 (UTC)
+ id dDaOj3E-xWY3; Fri, 12 Dec 2025 07:56:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 932AE83BE5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B66B081B6D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765526200;
-	bh=FI1cXrTi87CuXrmAYmdb/NUvnX3fa/iUBbQdQJZbUmk=;
+	s=default; t=1765526202;
+	bh=KNGVIegmlRP/yORP8Ns7uKoC4MAsQ36fK2Tt/2tvVu8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ckHv6XJImq1oC4DJeH7bplGOACMUv3NLDXl6GWeiYYq+bZ0QWlCEoVSTuLTElNCQf
-	 xi+w5OlhXWVyh2SaPQfa3DxPnLcQuOaKs0hNk4TL2xJI8jwvVqxECe2+yeQGdk2L1g
-	 cHsfDmErEZOtj+SgeqqY+1LcF7xhmehw3YsB3bgkbA238KKXlIpmARe57yFjngNcTF
-	 cGMZiumZ/huvPcPQ8QoaAyIL8ztMPTb0s6hiZjyzWW+P9u/B1tpC1Vff2rS1USESUA
-	 sYM2/Lc60sieeEcWFie9+DdLUxQVc3wM0cos8a4LPqoFQr0Mu5gLa2JRDslqDBehiY
-	 PcFHN5F71xjGg==
+	b=KRLlCsFnoBZekMiQexiXEKSZoWWQvo8cKDRqyDfFh7WgxfkSLPXZzVXGPmEsbTZdF
+	 sgfS9h69zyFoZDIjzvM9lj5N3RNQpwIRL9UHfNJcX2NJTS6Th/n41wc38CfPiU+LcG
+	 G4/BxJ8scr9+I5DpclI1j6shsYclGjCpJPXW+MIDHnEfuwY1X990E8KGO7zCKy4cbW
+	 /mVY9NYpVM/O9iPZeS84UatvXOg4OTfNMSJnrmfrPqHHEQg7BBOGYnIv6ct4TFHvY0
+	 9+s/r334m2NdfFAbPWqRhzzuy3zU1po4FJ24LhyYCNINARKQtM9Jc19oeeT84UuKTT
+	 wfgw6iP1+BaJg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 932AE83BE5;
-	Fri, 12 Dec 2025 07:56:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B66B081B6D;
+	Fri, 12 Dec 2025 07:56:42 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A1A0DE7
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:59 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id AF9A72C1
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:56:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B63084113A
+ by smtp4.osuosl.org (Postfix) with ESMTP id C197B4113D
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z-twTCQvHqGK for <buildroot@buildroot.org>;
- Fri, 12 Dec 2025 07:55:39 +0000 (UTC)
+ id QP6TO6AGw7ka for <buildroot@buildroot.org>;
+ Fri, 12 Dec 2025 07:55:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B95AE4113D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6199941133
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B95AE4113D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6199941133
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B851B81674; Fri, 12 Dec 2025 07:55:35 +0000 (UTC)
+ id 6079B86C9A; Fri, 12 Dec 2025 07:55:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 29 Nov 2025 12:50:44 +0100
+Date: Fri, 28 Nov 2025 19:33:00 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d2ed4565321c74772014681ca5ddcb433162e468
-X-Git-Newrev: 382faf08aa595a7b42d96d97fc6d5b6577d84652
+X-Git-Oldrev: f0292e77d89a0faa60b1e1efc17934b38da876ec
+X-Git-Newrev: 8bd91d9034596b5632dabf381a3c6612f1fb6da1
 X-Patchwork-Hint: ignore
-Message-Id: <20251212075535.B851B81674@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libnspr: bump to version 4.38.2
+Message-Id: <20251212075535.6079B86C9A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pydantic{,
+ -core}: bump to 2.12.4 and 2.41.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,40 +77,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=382faf08aa595a7b42d96d97fc6d5b6577d84652
+commit: https://git.buildroot.net/buildroot/commit/?id=8bd91d9034596b5632dabf381a3c6612f1fb6da1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Changes:
+* https://github.com/pydantic/pydantic/releases/tag/v2.12.4
+* https://github.com/pydantic/pydantic-core/releases/tag/v2.41.5
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libnspr/libnspr.hash | 4 ++--
- package/libnspr/libnspr.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-pydantic-core/python-pydantic-core.hash | 2 +-
+ package/python-pydantic-core/python-pydantic-core.mk   | 4 ++--
+ package/python-pydantic/python-pydantic.hash           | 4 ++--
+ package/python-pydantic/python-pydantic.mk             | 4 ++--
+ 4 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
-index 172778540e..9148cf393e 100644
---- a/package/libnspr/libnspr.hash
-+++ b/package/libnspr/libnspr.hash
+diff --git a/package/python-pydantic-core/python-pydantic-core.hash b/package/python-pydantic-core/python-pydantic-core.hash
+index f61ab7a8e4..6ab537ad67 100644
+--- a/package/python-pydantic-core/python-pydantic-core.hash
++++ b/package/python-pydantic-core/python-pydantic-core.hash
 @@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/nspr/releases/v4.37/src/SHA256SUMS
--sha256  5f9344ed0e31855bd38f88b33c9d9ab94f70ce547ef3213e488d1520f61840fa  nspr-4.37.tar.gz
-+# From https://ftp.mozilla.org/pub/nspr/releases/v4.38.2/src/SHA256SUMS
-+sha256  e4092faeab77bdc9b32db1113e4215948ee768e26c4666db3b5a60b35f2c9105  nspr-4.38.2.tar.gz
- # Locally calculated
- sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  nspr/LICENSE
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index a045140743..3c7351c2d7 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated after vendoring
+-sha256  8c31786f387bc0ce4a0fdfb500dbee7b102358616633b37159b389d5c53efa64  python-pydantic-core-2.41.4-cargo4.tar.gz
++sha256  8919dc76250449ed22d47e94f53929cb44eb982cd4ad80dc0607f8018868e549  python-pydantic-core-2.41.5-cargo4.tar.gz
+ # Locally computed sha256 checksums
+ sha256  2afdd30d54b4d62b6f488a6bcc1546e84ec5061f13f4209c03d012348783795a  LICENSE
+diff --git a/package/python-pydantic-core/python-pydantic-core.mk b/package/python-pydantic-core/python-pydantic-core.mk
+index 9eb0510278..7394e947ec 100644
+--- a/package/python-pydantic-core/python-pydantic-core.mk
++++ b/package/python-pydantic-core/python-pydantic-core.mk
+@@ -6,10 +6,10 @@
+ 
+ # python-pydantic pins an exact version of pydantic-core in pyproject.toml,
+ # make sure to sync pydantic-core to this version when updating pydantic
+-PYTHON_PYDANTIC_CORE_VERSION = 2.41.4
++PYTHON_PYDANTIC_CORE_VERSION = 2.41.5
+ PYTHON_PYDANTIC_CORE_SOURCE_PYPI = pydantic_core-$(PYTHON_PYDANTIC_CORE_VERSION).tar.gz
+ PYTHON_PYDANTIC_CORE_SITE = $(PYTHON_PYDANTIC_CORE_SITE_PYPI)/$(PYTHON_PYDANTIC_CORE_SOURCE_PYPI)?buildroot-path=filename
+-PYTHON_PYDANTIC_CORE_SITE_PYPI = https://files.pythonhosted.org/packages/df/18/d0944e8eaaa3efd0a91b0f1fc537d3be55ad35091b6a87638211ba691964
++PYTHON_PYDANTIC_CORE_SITE_PYPI = https://files.pythonhosted.org/packages/71/70/23b021c950c2addd24ec408e9ab05d59b035b39d97cdc1130e1bce647bb6
+ PYTHON_PYDANTIC_CORE_SETUP_TYPE = maturin
+ PYTHON_PYDANTIC_CORE_LICENSE = MIT
+ PYTHON_PYDANTIC_CORE_LICENSE_FILES = LICENSE
+diff --git a/package/python-pydantic/python-pydantic.hash b/package/python-pydantic/python-pydantic.hash
+index 12604059d6..587007361b 100644
+--- a/package/python-pydantic/python-pydantic.hash
++++ b/package/python-pydantic/python-pydantic.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pydantic/json
+-md5  d01464f3a5256144116a8de55e2974b8  pydantic-2.12.3.tar.g
+-sha256  1da1c82b0fc140bb0103bc1441ffe062154c8d38491189751ee00fd8ca65ce74  pydantic-2.12.3.tar.gz
++md5  ae668857700cf7db44db2d3492aadf56  pydantic-2.12.4.tar.gz
++sha256  0f8cb9555000a4b5b617f66bfd2566264c4984b27589d3b845685983e8ea85ac  pydantic-2.12.4.tar.gz
+ # Locally computed sha256 checksums
+ sha256  a9e186f3ca16b5eef84318e7a701721351a00cb7b8ae3a4394b67b49e3529ef3  LICENSE
+diff --git a/package/python-pydantic/python-pydantic.mk b/package/python-pydantic/python-pydantic.mk
+index b0cb1f1ce0..99845f8bce 100644
+--- a/package/python-pydantic/python-pydantic.mk
++++ b/package/python-pydantic/python-pydantic.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBNSPR_VERSION = 4.37
-+LIBNSPR_VERSION = 4.38.2
- LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
- LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
- LIBNSPR_SUBDIR = nspr
+-PYTHON_PYDANTIC_VERSION = 2.12.3
++PYTHON_PYDANTIC_VERSION = 2.12.4
+ PYTHON_PYDANTIC_SOURCE = pydantic-$(PYTHON_PYDANTIC_VERSION).tar.gz
+-PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/f3/1e/4f0a3233767010308f2fd6bd0814597e3f63f1dc98304a9112b8759df4ff
++PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/96/ad/a17bc283d7d81837c061c49e3eaa27a45991759a1b7eae1031921c6bd924
+ PYTHON_PYDANTIC_SETUP_TYPE = hatch
+ PYTHON_PYDANTIC_LICENSE = MIT
+ PYTHON_PYDANTIC_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
