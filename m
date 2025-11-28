@@ -1,94 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5737CFD376
-	for <buildroot@archiver.kernel.org>; Fri, 28 Nov 2025 12:28:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89DF2D116EA
+	for <buildroot@archiver.kernel.org>; Fri, 28 Nov 2025 17:28:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6AE3861B04;
-	Fri, 28 Nov 2025 12:28:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 060A641A2B;
+	Fri, 28 Nov 2025 17:28:43 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eaAOI6bdmmRL; Fri, 28 Nov 2025 17:28:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 303AB41A2E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 303AB41A2E;
+	Fri, 28 Nov 2025 17:28:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 88362708
+ for <buildroot@buildroot.org>; Fri, 28 Nov 2025 17:28:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6955F60B08
+ for <buildroot@buildroot.org>; Fri, 28 Nov 2025 17:28:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TByL-oBDZ4WO; Fri, 28 Nov 2025 12:28:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C9D561AE8
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C9D561AE8;
-	Fri, 28 Nov 2025 12:28:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7F948967
- for <buildroot@buildroot.org>; Fri, 28 Nov 2025 12:28:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5E82684730
- for <buildroot@buildroot.org>; Fri, 28 Nov 2025 12:28:35 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Hbv9k1pWXvbk for <buildroot@buildroot.org>;
- Fri, 28 Nov 2025 12:28:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.121;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ id z-1GXofMHmny for <buildroot@buildroot.org>;
+ Fri, 28 Nov 2025 17:28:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DC1568472F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC1568472F
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.121])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DC1568472F
- for <buildroot@buildroot.org>; Fri, 28 Nov 2025 12:28:33 +0000 (UTC)
-X-CSE-ConnectionGUID: 7+K81eQEQu6axKud9pyMYw==
-X-CSE-MsgGUID: Fj914bLDT0ulXy+H0BsA8Q==
-Received: from unknown (HELO opfedv1rlp0f.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
- 28 Nov 2025 13:28:31 +0100
-Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0f.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Nov 2025 13:28:31 +0100
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.61;
- Fri, 28 Nov 2025 13:28:29 +0100
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Fri, 28 Nov 2025 13:28:29 +0100
-From: yann.morin@orange.com
-X-CSE-ConnectionGUID: /QkIdQFtSKGA0gWpJH4alw==
-X-CSE-MsgGUID: 1sVhCr9wSTeXdOosOxBWMg==
-X-IronPort-AV: E=Sophos;i="6.20,232,1758578400"; d="scan'208";a="362881909"
-Date: Fri, 28 Nov 2025 13:28:29 +0100
-To: <buildroot@buildroot.org>
-Message-ID: <aSmVbUtMCleLKNbs@yd-6wlzhs3>
-References: <87faaefbd593a016f9c7c8489f3c8e41ba5fc315.1764331632.git.yann.morin@orange.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <87faaefbd593a016f9c7c8489f3c8e41ba5fc315.1764331632.git.yann.morin@orange.com>
-X-Originating-IP: [10.115.26.51]
-X-ClientProxiedBy: OPE16NORMBX301.corporate.adroot.infra.ftgroup
- (10.115.26.10) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1764332914; x=1795868914;
- h=date:to:subject:message-id:references:mime-version:
- in-reply-to:content-transfer-encoding:from;
- bh=vQmgkF2YfwsOVfw1mdiBE2SZUui6lLR5L3OQa+3gfYc=;
- b=dV8ktXYbHjE5SoOTR9S8DhUYWBjhm8efh+yqJ+PUHQWiEnET90hMQlBy
- bATGtqF6ze1d2SkxPMoeuCNMG72KAwwGBaPLpckEGNDOx8HeFrh9qrbYw
- 4NAYFmvn2bPjDZN7EJuedicu9swFLafwdlXdwJLi+XjcoVKwB6p9DQKh2
- uE+eNLDQbreRmGUaV7JLx0BVGRZTsHOivvWIfdlL7slcP03X2NXGCKQUW
- DdFz2LVabNnAW5cBL5DX+XZFtT1m02ZoOfj1GDWS5YAC0gK0AypdumWlo
- g1xqPHryO/vN6+BlJ7SdQIta05N4Dxn7LQZKGOHDD/mOsfp19SDUDqInn
- g==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=dV8ktXYb
-Subject: Re: [Buildroot] [PATCH] fs/rootfs-common: depend on host-mkpasswd
- if enabled
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D1BC60B07
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5D1BC60B07
+ for <buildroot@buildroot.org>; Fri, 28 Nov 2025 17:28:39 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4C1E78601C; Fri, 28 Nov 2025 17:28:39 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 28 Nov 2025 18:26:19 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6ed4181759b23450ccc803ad228ab2ca291147e0
+X-Git-Newrev: 743bc22135cc47e91f7bbfcdea4aa74a66c5e034
+X-Patchwork-Hint: ignore
+Message-Id: <20251128172839.4C1E78601C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/swipl: bump version to 9.2.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,54 +57,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-All,
+commit: https://git.buildroot.net/buildroot/commit/?id=743bc22135cc47e91f7bbfcdea4aa74a66c5e034
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2025-11-28 13:07 +0100, yann.morin@orange.com spake thusly:
-> From: "Yann E. MORIN" <yann.morin@orange.com>
-[--SNIP--]
-> So, rather than trying to be too smart, just add the dependency also
-> when the host package is enabled. That way, people using br2-external
-> trees can either select host-mkpasswd from packages therein, or they can
-> add it to their defconfig files.
-[--SNIP--]
-> -	$(if $(PACKAGES_USERS)$(ROOTFS_USERS_TABLES),host-mkpasswd)
-> +	$(if $(BR2_PACKAGE_HOST_MKPASSWD)$(PACKAGES_USERS)$(ROOTFS_USERS_TABLES),host-mkpasswd)
+For change log since version 9.2.8, see:
+https://www.swi-prolog.org/ChangeLog?branch=stable&from=9.2.8&to=9.2.9
 
-Not sure what hapenned during my testing, but this is in fact not needed
-at all: host packages that do have a Kconfig symbol, do get built before
-the rootfs, when that symbol is enabled, even without an explicit
-dependency...
+Fixes:
+https://autobuild.buildroot.net/results/158/1586997a84236b678249ac45b83b4e330e727f39/
 
-I'm withdrawing this patch. sorry for the noise...
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien: add link to change log]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/swipl/swipl.hash | 2 +-
+ package/swipl/swipl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
--- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
-
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+diff --git a/package/swipl/swipl.hash b/package/swipl/swipl.hash
+index 20278cfb8d..efc3aa963f 100644
+--- a/package/swipl/swipl.hash
++++ b/package/swipl/swipl.hash
+@@ -1,4 +1,4 @@
+ # From https://www.swi-prolog.org/download/stable
+-sha256  b331637a57c913c49edcfcb10ddcf6c031278ce93d2411d54542778531abb5c7  swipl-9.2.8.tar.gz
++sha256  53f428e2d9bbdf30e53b06c9c42def9a13ff82fc36a111d410fc8b0bc889ee2d  swipl-9.2.9.tar.gz
+ # Locally calculated
+ sha256  770594d0f4463b71f1485f00e4bc5cf4b6f667d62ef6bc9bde2fee236541992a  LICENSE
+diff --git a/package/swipl/swipl.mk b/package/swipl/swipl.mk
+index e29b8d8f46..20faaefe7c 100644
+--- a/package/swipl/swipl.mk
++++ b/package/swipl/swipl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SWIPL_VERSION = 9.2.8
++SWIPL_VERSION = 9.2.9
+ SWIPL_SITE = https://www.swi-prolog.org/download/stable/src
+ SWIPL_LICENSE = BSD-2-Clause
+ SWIPL_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
