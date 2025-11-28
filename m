@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B902BD116F6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Nov 2025 20:19:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6BE3D116F5
+	for <buildroot@archiver.kernel.org>; Fri, 28 Nov 2025 20:19:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 81C3C60E03;
-	Fri, 28 Nov 2025 20:19:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AB6F580E67;
+	Fri, 28 Nov 2025 20:19:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vVMnlsl1D2I4; Fri, 28 Nov 2025 20:19:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6aZ-bqMe3Uil; Fri, 28 Nov 2025 20:19:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B90B460E19
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC65C80E7E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B90B460E19;
-	Fri, 28 Nov 2025 20:19:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9491B708
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC65C80E7E;
+	Fri, 28 Nov 2025 20:19:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E2B7E1A9
  for <buildroot@buildroot.org>; Fri, 28 Nov 2025 20:19:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7B75A41ABA
- for <buildroot@buildroot.org>; Fri, 28 Nov 2025 20:19:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C78FA4003A
+ for <buildroot@buildroot.org>; Fri, 28 Nov 2025 20:19:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6Pt4AVs6m1hI for <buildroot@buildroot.org>;
- Fri, 28 Nov 2025 20:19:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id F1rVlyVPizol for <buildroot@buildroot.org>;
+ Fri, 28 Nov 2025 20:19:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D35C941AFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09C8040052
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D35C941AFD
- for <buildroot@buildroot.org>; Fri, 28 Nov 2025 20:19:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 09C8040052
+ for <buildroot@buildroot.org>; Fri, 28 Nov 2025 20:19:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C3D5E86133; Fri, 28 Nov 2025 20:19:33 +0000 (UTC)
+ id F023486133; Fri, 28 Nov 2025 20:19:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 28 Nov 2025 19:32:40 +0100
+Date: Fri, 28 Nov 2025 19:38:53 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e37bde990acb7622f807222958bce1652694a0c4
-X-Git-Newrev: f3e0c424c59e37478de47fe4b98f2f8fe373003d
+X-Git-Oldrev: f05cadc2e12028909081af09c0ed8d673a47d8f4
+X-Git-Newrev: e4ddb6a8923e7e8e3ccf699ce6d842c1e5cfa609
 X-Patchwork-Hint: ignore
-Message-Id: <20251128201933.C3D5E86133@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-dotenv: bump to
- 1.2.1
+Message-Id: <20251128201933.F023486133@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-msgpack: bump
+ to 1.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,48 +66,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3e0c424c59e37478de47fe4b98f2f8fe373003d
+commit: https://git.buildroot.net/buildroot/commit/?id=e4ddb6a8923e7e8e3ccf699ce6d842c1e5cfa609
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changes:
-* https://github.com/theskumar/python-dotenv/releases/tag/v1.2.0
-* https://github.com/theskumar/python-dotenv/releases/tag/v1.2.1
+Changelog:
+https://wrapt.readthedocs.io/en/latest/changes.html#version-2-0-1
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-dotenv/python-dotenv.hash | 4 ++--
- package/python-dotenv/python-dotenv.mk   | 4 ++--
+ package/python-msgpack/python-msgpack.hash | 4 ++--
+ package/python-msgpack/python-msgpack.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-dotenv/python-dotenv.hash b/package/python-dotenv/python-dotenv.hash
-index 5b4be41206..53ab12e11c 100644
---- a/package/python-dotenv/python-dotenv.hash
-+++ b/package/python-dotenv/python-dotenv.hash
+diff --git a/package/python-msgpack/python-msgpack.hash b/package/python-msgpack/python-msgpack.hash
+index 6cc5bb14c6..d17cd026b1 100644
+--- a/package/python-msgpack/python-msgpack.hash
++++ b/package/python-msgpack/python-msgpack.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-dotenv/json
--md5  b3e9652d1974f8c7574c43f719799f3a  python_dotenv-1.1.1.tar.gz
--sha256  a8a6399716257f45be6a007360200409fce5cda2661e3dec71d23dc15f6189ab  python_dotenv-1.1.1.tar.gz
-+md5  72b43685c14b492ced7ed6fb1e3f1d63  python_dotenv-1.2.1.tar.gz
-+sha256  42667e897e16ab0d66954af0e60a9caa94f0fd4ecf3aaf6d2d260eec1aa36ad6  python_dotenv-1.2.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/msgpack/json
+-md5  abcd18fded80a89c486c0446f112eb06  msgpack-1.1.1.tar.gz
+-sha256  77b79ce34a2bdab2594f490c8e80dd62a02d650b91a75159a63ec413b8d104cd  msgpack-1.1.1.tar.gz
++md5  b69973fa3325abdced4051f5ef3847d3  msgpack-1.1.2.tar.gz
++sha256  3b60763c1373dd60f398488069bcdc703cd08a711477b5d480eecc9f9626f47e  msgpack-1.1.2.tar.gz
  # Locally computed sha256 checksums
- sha256  80619b7049f08c81683ad0e01f08f257a840652dd71ee83146d36658c7d2c2b9  LICENSE
-diff --git a/package/python-dotenv/python-dotenv.mk b/package/python-dotenv/python-dotenv.mk
-index 8f11c5de8d..6ebc4f6c8c 100644
---- a/package/python-dotenv/python-dotenv.mk
-+++ b/package/python-dotenv/python-dotenv.mk
+ sha256  492dedba85da5872f78e6091bcd1fea474d660d35acb4dee964b8aab3f007427  COPYING
+diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
+index d61e0963a1..76606268ae 100644
+--- a/package/python-msgpack/python-msgpack.mk
++++ b/package/python-msgpack/python-msgpack.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DOTENV_VERSION = 1.1.1
-+PYTHON_DOTENV_VERSION = 1.2.1
- PYTHON_DOTENV_SOURCE = python_dotenv-$(PYTHON_DOTENV_VERSION).tar.gz
--PYTHON_DOTENV_SITE = https://files.pythonhosted.org/packages/f6/b0/4bc07ccd3572a2f9df7e6782f52b0c6c90dcbb803ac4a167702d7d0dfe1e
-+PYTHON_DOTENV_SITE = https://files.pythonhosted.org/packages/f0/26/19cadc79a718c5edbec86fd4919a6b6d3f681039a2f6d66d14be94e75fb9
- PYTHON_DOTENV_SETUP_TYPE = setuptools
- PYTHON_DOTENV_LICENSE = BSD-3-Clause
- PYTHON_DOTENV_LICENSE_FILES = LICENSE
+-PYTHON_MSGPACK_VERSION = 1.1.1
++PYTHON_MSGPACK_VERSION = 1.1.2
+ PYTHON_MSGPACK_SOURCE = msgpack-$(PYTHON_MSGPACK_VERSION).tar.gz
+-PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/45/b1/ea4f68038a18c77c9467400d166d74c4ffa536f34761f7983a104357e614
++PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/4d/f2/bfb55a6236ed8725a96b0aa3acbd0ec17588e6a2c3b62a93eb513ed8783f
+ PYTHON_MSGPACK_LICENSE = Apache-2.0
+ PYTHON_MSGPACK_LICENSE_FILES = COPYING
+ PYTHON_MSGPACK_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
