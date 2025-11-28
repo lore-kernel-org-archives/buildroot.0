@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3763D116EA
-	for <buildroot@archiver.kernel.org>; Fri, 28 Nov 2025 20:19:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE636D116F5
+	for <buildroot@archiver.kernel.org>; Fri, 28 Nov 2025 20:19:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B891F61AE1;
-	Fri, 28 Nov 2025 20:19:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7512580F45;
+	Fri, 28 Nov 2025 20:19:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d5BAU2n0STy6; Fri, 28 Nov 2025 20:19:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V1yVjQSAGDbM; Fri, 28 Nov 2025 20:19:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66AFB61AF8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83D8481291
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 66AFB61AF8;
-	Fri, 28 Nov 2025 20:19:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 83D8481291;
+	Fri, 28 Nov 2025 20:19:48 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 25DE3708
- for <buildroot@buildroot.org>; Fri, 28 Nov 2025 20:19:36 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 11482708
+ for <buildroot@buildroot.org>; Fri, 28 Nov 2025 20:19:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6F1DF808C2
+ by smtp1.osuosl.org (Postfix) with ESMTP id DE9B6809BF
  for <buildroot@buildroot.org>; Fri, 28 Nov 2025 20:19:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KbO4RbZmSrwT for <buildroot@buildroot.org>;
- Fri, 28 Nov 2025 20:19:34 +0000 (UTC)
+ id DdZUg7Gd5MnF for <buildroot@buildroot.org>;
+ Fri, 28 Nov 2025 20:19:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EDF74809B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA4B88098D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EDF74809B8
+ by smtp1.osuosl.org (Postfix) with ESMTP id CA4B88098D
  for <buildroot@buildroot.org>; Fri, 28 Nov 2025 20:19:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DFE5286131; Fri, 28 Nov 2025 20:19:33 +0000 (UTC)
+ id BAA5486132; Fri, 28 Nov 2025 20:19:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 28 Nov 2025 19:38:53 +0100
+Date: Fri, 28 Nov 2025 19:32:13 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8bd91d9034596b5632dabf381a3c6612f1fb6da1
-X-Git-Newrev: bcd5ecff8abb01593225bcb4dc24fc01f810aa17
+X-Git-Oldrev: b86191f5be04ccadf6dfb1a5974874f3e9a57e60
+X-Git-Newrev: e37bde990acb7622f807222958bce1652694a0c4
 X-Patchwork-Hint: ignore
-Message-Id: <20251128201933.DFE5286131@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-asgiref: bump
- to 3.11.0
+Message-Id: <20251128201933.BAA5486132@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/python-pydantic-settings: bump to 2.12.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,46 +66,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bcd5ecff8abb01593225bcb4dc24fc01f810aa17
+commit: https://git.buildroot.net/buildroot/commit/?id=e37bde990acb7622f807222958bce1652694a0c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changelog: https://github.com/django/asgiref/blob/3.11.0/CHANGELOG.txt
+Changes: https://github.com/pydantic/pydantic-settings/releases/tag/v2.12.0
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-asgiref/python-asgiref.hash | 4 ++--
- package/python-asgiref/python-asgiref.mk   | 4 ++--
+ package/python-pydantic-settings/python-pydantic-settings.hash | 4 ++--
+ package/python-pydantic-settings/python-pydantic-settings.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-asgiref/python-asgiref.hash b/package/python-asgiref/python-asgiref.hash
-index 4605835abb..89495e0257 100644
---- a/package/python-asgiref/python-asgiref.hash
-+++ b/package/python-asgiref/python-asgiref.hash
+diff --git a/package/python-pydantic-settings/python-pydantic-settings.hash b/package/python-pydantic-settings/python-pydantic-settings.hash
+index 3d0f053968..90a1260219 100644
+--- a/package/python-pydantic-settings/python-pydantic-settings.hash
++++ b/package/python-pydantic-settings/python-pydantic-settings.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/asgiref/json
--md5  6799fce19314e0aaeb789a6d0f6d45fa  asgiref-3.10.0.tar.gz
--sha256  d89f2d8cd8b56dada7d52fa7dc8075baa08fb836560710d38c292a7a3f78c04e  asgiref-3.10.0.tar.gz
-+md5  554794453502d266a90d2254fcb1f7c3  asgiref-3.11.0.tar.gz
-+sha256  13acff32519542a1736223fb79a715acdebe24286d98e8b164a73085f40da2c4  asgiref-3.11.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pydantic-settings/json
+-md5  bfd7d2cc366483b19181428756e6a58a  pydantic_settings-2.11.0.tar.gz
+-sha256  d0e87a1c7d33593beb7194adb8470fc426e95ba02af83a0f23474a04c9a08180  pydantic_settings-2.11.0.tar.gz
++md5  597adf8b487b9297eda123b211666e98  pydantic_settings-2.12.0.tar.gz
++sha256  005538ef951e3c2a68e1c08b292b5f2e71490def8589d4221b95dab00dafcfd0  pydantic_settings-2.12.0.tar.gz
  # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-asgiref/python-asgiref.mk b/package/python-asgiref/python-asgiref.mk
-index 3bd9c8f937..e5885a66c6 100644
---- a/package/python-asgiref/python-asgiref.mk
-+++ b/package/python-asgiref/python-asgiref.mk
+ sha256  eb355a753e020346d33d83bf9769135b89fc610568ac531a01c295bcee7fd998  LICENSE
+diff --git a/package/python-pydantic-settings/python-pydantic-settings.mk b/package/python-pydantic-settings/python-pydantic-settings.mk
+index ab5205b7e1..a7c50b8027 100644
+--- a/package/python-pydantic-settings/python-pydantic-settings.mk
++++ b/package/python-pydantic-settings/python-pydantic-settings.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ASGIREF_VERSION = 3.10.0
-+PYTHON_ASGIREF_VERSION = 3.11.0
- PYTHON_ASGIREF_SOURCE = asgiref-$(PYTHON_ASGIREF_VERSION).tar.gz
--PYTHON_ASGIREF_SITE = https://files.pythonhosted.org/packages/46/08/4dfec9b90758a59acc6be32ac82e98d1fbfc321cb5cfa410436dbacf821c
-+PYTHON_ASGIREF_SITE = https://files.pythonhosted.org/packages/76/b9/4db2509eabd14b4a8c71d1b24c8d5734c52b8560a7b1e1a8b56c8d25568b
- PYTHON_ASGIREF_SETUP_TYPE = setuptools
- PYTHON_ASGIREF_LICENSE = BSD-3-Clause
- PYTHON_ASGIREF_LICENSE_FILES = LICENSE
+-PYTHON_PYDANTIC_SETTINGS_VERSION = 2.11.0
++PYTHON_PYDANTIC_SETTINGS_VERSION = 2.12.0
+ PYTHON_PYDANTIC_SETTINGS_SOURCE = pydantic_settings-$(PYTHON_PYDANTIC_SETTINGS_VERSION).tar.gz
+-PYTHON_PYDANTIC_SETTINGS_SITE = https://files.pythonhosted.org/packages/20/c5/dbbc27b814c71676593d1c3f718e6cd7d4f00652cefa24b75f7aa3efb25e
++PYTHON_PYDANTIC_SETTINGS_SITE = https://files.pythonhosted.org/packages/43/4b/ac7e0aae12027748076d72a8764ff1c9d82ca75a7a52622e67ed3f765c54
+ PYTHON_PYDANTIC_SETTINGS_SETUP_TYPE = hatch
+ PYTHON_PYDANTIC_SETTINGS_LICENSE = MIT
+ PYTHON_PYDANTIC_SETTINGS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
