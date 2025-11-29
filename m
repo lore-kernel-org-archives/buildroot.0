@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEA4ED43370
-	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:57:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D4A6D4337D
+	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:57:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 93A5983EFE;
-	Fri, 12 Dec 2025 07:57:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5F1A983DF3;
+	Fri, 12 Dec 2025 07:57:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MCp7tiCo1qk3; Fri, 12 Dec 2025 07:57:41 +0000 (UTC)
+ id AblX-Afaysvf; Fri, 12 Dec 2025 07:57:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B56983DF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A2BB83E07
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765526238;
-	bh=4RxTeKrmrFGNBGRUIvYS2+s0tc4kVoomMYel0wxxcyM=;
+	s=default; t=1765526240;
+	bh=1/H/cc9ZX3Ah/T5MtJwHkSnfbH6LiLkmgvFgJY72ANc=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Kppa2Ty5EtB0CdC9eMfGO1e9FnApr++L4SNCkbJ63lNE/ME3EcpByTjnd7RXLzDu2
-	 VPAsS27eJQg3ZiFSx8krz7Bb/cdvAFIV/6DZSMoyvI4dWsx3gvMS/iV/8Ku+H08YrL
-	 ark+14MEhbidIZFERWSNomsJXl/Ql54JkxnfylSs1WbfBWo54O6FaQGasAop0hDlP9
-	 9cOnpMoi3BWBiLZSmcwYQ3J4M9OiHCUpdtukC1b3AoFQbBIv65oGM6md75jcGp/AwR
-	 U/2wFFgx9ypb6hVrTIHfaRng453Yam+x+cRVgDlqcFWNdms0HggpSF/URYvThTTfNw
-	 RPg7o0xG/p0Yw==
+	b=VlyA0pkSOAaB4gbQw4KJJ5xTuPNCUG2UXvJBImFBnEnSL0Wizx/lNgRm8ksaxUi/H
+	 zoROHBlVMIevb/8icMbngy/Ah3+FDi56m/uK6Y6LOZT/A+KwXS8ljfJxzcLCNqxwqi
+	 muHNGAInV/aQzg6Shyds0WJjs/GwEGKK0dBwsj1Iw9SHN82h/ypJzLO10PjL87dqzm
+	 qr32OUEoE8l1OfKq/h6GPfl8NsICQTdznRxnAeWufk7F4tiDSvuJmHJ0vi9RmpAFgg
+	 5vKdDnsmFUrg/Lh0pQ1ignULFdpJL6G6XuweD2ymUnbnoqOAoR2gpWz9TF2KVSQPXd
+	 BKXDW3sg8wYkA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9B56983DF4;
-	Fri, 12 Dec 2025 07:57:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7A2BB83E07;
+	Fri, 12 Dec 2025 07:57:20 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 84F75E7
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:56:21 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 92E30E7
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:56:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1F4BC4114E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 339D541152
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S8yBau2EX6aU for <buildroot@buildroot.org>;
- Fri, 12 Dec 2025 07:55:41 +0000 (UTC)
+ id Cxrd_c3jOJFl for <buildroot@buildroot.org>;
+ Fri, 12 Dec 2025 07:55:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D81A141152
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1290941145
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D81A141152
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1290941145
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D741886C93; Fri, 12 Dec 2025 07:55:36 +0000 (UTC)
+ id 1196086C9A; Fri, 12 Dec 2025 07:55:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Dec 2025 21:34:57 +0100
+Date: Sat, 29 Nov 2025 19:30:37 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 95c385e2d6b92e7afa2d1fac84ecf2dabfb81d25
-X-Git-Newrev: da8f89a6a4027c0875b38de7256dd617ea68fe13
+X-Git-Oldrev: 9e7172ceac1e93a7167031a50edbff813c4b4774
+X-Git-Newrev: 2feaeed29e0ed0f522898a5943d977e18bfa6b53
 X-Patchwork-Hint: ignore
-Message-Id: <20251212075536.D741886C93@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/iperf3: bump to version 3.20
+Message-Id: <20251212075536.1196086C9A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/at-spi2-core: bump to version
+ 2.58.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,120 +72,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8873807225128202453=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8873807225128202453==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=da8f89a6a4027c0875b38de7256dd617ea68fe13
+commit: https://git.buildroot.net/buildroot/commit/?id=2feaeed29e0ed0f522898a5943d977e18bfa6b53
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://github.com/esnet/iperf/releases/tag/3.20
+https://gitlab.gnome.org/GNOME/at-spi2-core/-/blob/2.58.2/NEWS
 
-Drop the upstreamed 001-Fix-a-compilation-issue-with-uClibc-due-to-a-missing.patch
-
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...lation-issue-with-uClibc-due-to-a-missing.patch | 51 ----------------------
- package/iperf3/iperf3.hash                         |  4 +-
- package/iperf3/iperf3.mk                           |  2 +-
- 3 files changed, 3 insertions(+), 54 deletions(-)
+ package/at-spi2-core/at-spi2-core.hash | 4 ++--
+ package/at-spi2-core/at-spi2-core.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/iperf3/0001-Fix-a-compilation-issue-with-uClibc-due-to-a-missing.patch b/package/iperf3/0001-Fix-a-compilation-issue-with-uClibc-due-to-a-missing.patch
-deleted file mode 100644
-index cc2f4bd595..0000000000
---- a/package/iperf3/0001-Fix-a-compilation-issue-with-uClibc-due-to-a-missing.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From e5c4263c6b2c5b84a6edeb1cf3c95bddd73d4d7c Mon Sep 17 00:00:00 2001
--From: Kadambini Nema <kadambini.nema@gmail.com>
--Date: Sat, 17 May 2025 16:20:07 -0700
--Subject: [PATCH] Fix a compilation issue with uClibc due to a missing include
-- file.
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--------
--In file included from t_auth.c:35:
--iperf_api.h:395:77: error: unknown type name ‘va_list’
--  395 | void iperf_exit(struct iperf_test *test, int exit_code, const char *format, va_list argp) __attribute__ ((noreturn));
--	  |                                                                             ^~~~~~~
--iperf_api.h:33:1: note: ‘va_list’ is defined in header ‘<stdarg.h>’; did you forget to ‘#include <stdarg.h>’?
--   32 | #include <setjmp.h>
--  +++ |+#include <stdarg.h>
--   33 | #include <stdio.h>
-------
--
--Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
--Upstream: https://github.com/esnet/iperf/pull/1888
-----
-- src/iperf_api.c | 1 -
-- src/iperf_api.h | 1 +
-- 2 files changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/iperf_api.c b/src/iperf_api.c
--index aeec91dd3..d4a06bec9 100644
----- a/src/iperf_api.c
--+++ b/src/iperf_api.c
--@@ -53,7 +53,6 @@
-- #include <sys/stat.h>
-- #include <sched.h>
-- #include <setjmp.h>
---#include <stdarg.h>
-- #include <math.h>
-- 
-- #if defined(HAVE_CPUSET_SETAFFINITY)
--diff --git a/src/iperf_api.h b/src/iperf_api.h
--index 03d273e8c..cd82e6f9b 100644
----- a/src/iperf_api.h
--+++ b/src/iperf_api.h
--@@ -30,6 +30,7 @@
-- #include <sys/socket.h>
-- #include <sys/time.h>
-- #include <setjmp.h>
--+#include <stdarg.h>
-- #include <stdio.h>
-- #include <stdint.h>
-- #ifdef __cplusplus
-diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
-index 3d9ff0cf5d..ee60d717e6 100644
---- a/package/iperf3/iperf3.hash
-+++ b/package/iperf3/iperf3.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.es.net/pub/iperf/iperf-3.19.1.tar.gz.sha256
--sha256  dc63f89ec581ea99f8b558d8eb35109de06383010db5a1906c208a562ba0c270  iperf-3.19.1.tar.gz
-+# From https://downloads.es.net/pub/iperf/iperf-3.20.tar.gz.sha256
-+sha256  3acc572d1ecca4e0b20359c7bf0132ddc80d982efeee20c86f6726a9a6094388  iperf-3.20.tar.gz
- # Locally computed
- sha256  7c9ba0385fcf35c4c9e08ad0c0cba72d4315f36f0f742fef4de826a28cc33a97  LICENSE
-diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
-index df6b32abc1..bb8eece6b2 100644
---- a/package/iperf3/iperf3.mk
-+++ b/package/iperf3/iperf3.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/at-spi2-core/at-spi2-core.hash b/package/at-spi2-core/at-spi2-core.hash
+index 780456dcaf..bcf3de9a44 100644
+--- a/package/at-spi2-core/at-spi2-core.hash
++++ b/package/at-spi2-core/at-spi2-core.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/at-spi2-core/2.58/at-spi2-core-2.58.1.sha256sum
+-sha256  7f374a6a38cd70ff4b32c9d3a0310bfa804d946fed4c9e69a7d49facdcb95e9c  at-spi2-core-2.58.1.tar.xz
++# From https://download.gnome.org/sources/at-spi2-core/2.58/at-spi2-core-2.58.2.sha256sum
++sha256  a2823b962ed16cdd5cb1fc5365029fd218394d852acd4098b321854bd6692f6e  at-spi2-core-2.58.2.tar.xz
+ 
+ # locally calculated
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/at-spi2-core/at-spi2-core.mk b/package/at-spi2-core/at-spi2-core.mk
+index f6d2b5264f..72703e923c 100644
+--- a/package/at-spi2-core/at-spi2-core.mk
++++ b/package/at-spi2-core/at-spi2-core.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--IPERF3_VERSION = 3.19.1
-+IPERF3_VERSION = 3.20
- IPERF3_SITE = https://downloads.es.net/pub/iperf
- IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
- IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
-
---===============8873807225128202453==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ AT_SPI2_CORE_VERSION_MAJOR = 2.58
+-AT_SPI2_CORE_VERSION = $(AT_SPI2_CORE_VERSION_MAJOR).1
++AT_SPI2_CORE_VERSION = $(AT_SPI2_CORE_VERSION_MAJOR).2
+ AT_SPI2_CORE_SOURCE = at-spi2-core-$(AT_SPI2_CORE_VERSION).tar.xz
+ AT_SPI2_CORE_SITE = https://download.gnome.org/sources/at-spi2-core/$(AT_SPI2_CORE_VERSION_MAJOR)
+ AT_SPI2_CORE_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8873807225128202453==--
