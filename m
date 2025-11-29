@@ -4,49 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C47D7CFD2F6
-	for <buildroot@archiver.kernel.org>; Sat, 29 Nov 2025 17:54:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BC22CFD2F6
+	for <buildroot@archiver.kernel.org>; Sat, 29 Nov 2025 17:55:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 91BF560766;
-	Sat, 29 Nov 2025 17:54:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2020460794;
+	Sat, 29 Nov 2025 17:55:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ueiUmnAKZ5V1; Sat, 29 Nov 2025 17:54:23 +0000 (UTC)
+ id 2d18sZQvb-UW; Sat, 29 Nov 2025 17:55:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B7B96078A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9805A60766
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4B7B96078A;
-	Sat, 29 Nov 2025 17:54:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 058B31A9
- for <buildroot@buildroot.org>; Sat, 29 Nov 2025 17:54:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9805A60766;
+	Sat, 29 Nov 2025 17:55:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 04634273
+ for <buildroot@buildroot.org>; Sat, 29 Nov 2025 17:55:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9983F60754
- for <buildroot@buildroot.org>; Sat, 29 Nov 2025 17:54:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DEE224046B
+ for <buildroot@buildroot.org>; Sat, 29 Nov 2025 17:55:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jjAMVYirs7ip for <buildroot@buildroot.org>;
- Sat, 29 Nov 2025 17:54:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D43760760
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9D43760760
- for <buildroot@buildroot.org>; Sat, 29 Nov 2025 17:54:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8E60181E98; Sat, 29 Nov 2025 17:54:20 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 29 Nov 2025 18:31:17 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c72c50254b37cb3e7a169133f9449a1fdab26141
-X-Git-Newrev: 9e7172ceac1e93a7167031a50edbff813c4b4774
-X-Patchwork-Hint: ignore
-Message-Id: <20251129175420.8E60181E98@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/postgresql: bump
- version to 18.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gj1Aq03-jXgz for <buildroot@buildroot.org>;
+ Sat, 29 Nov 2025 17:55:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D6BF3403ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6BF3403ED
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D6BF3403ED
+ for <buildroot@buildroot.org>; Sat, 29 Nov 2025 17:55:47 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 3908420039C;
+ Sat, 29 Nov 2025 18:55:33 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 29 Nov 2025 18:55:33 +0100
+MIME-Version: 1.0
+Date: Sat, 29 Nov 2025 18:55:33 +0100
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org, Alexey
+ Lukyanchuk <skif@skif-web.ru>, Roy Kollen Svendsen
+ <roykollensvendsen@gmail.com>, Maxim Kochetkov <fido_max@inbox.ru>, James
+ Hilliard <james.hilliard1@gmail.com>, Julien Corjon <corjon.j@ecagroup.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Giulio Benetti
+ <giulio.benetti@benettiengineering.com>, Jesse Van Gavere
+ <jesseevg@gmail.com>, Nathaniel Roach <nroach44@gmail.com>
+In-Reply-To: <878qg37r2n.fsf@dell.be.48ers.dk>
+References: <20251117214234.1115937-1-bernd@kuhls.net>
+ <87ikf77r5i.fsf@dell.be.48ers.dk> <878qg37r2n.fsf@dell.be.48ers.dk>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <ed69c50bb5489caed26711c1bc3edb3e@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1764438945;
+ bh=G+zUsW3zLIPuLF7l94meSZG4XesyoRD6SL9iL94/eEE=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=iT+PUbLvZ0tCzw9A5U7aJNNg5laLeAcgxH/teoTMhP3iC2lQ0h9O/NNkUw1GvzXCy
+ NWT6Sis5uFM3mLDkCHDLAR8zHCxt5Uj1SM/28kTeaqznhuuV3xDpjk9Pl5gyxrf9Nr
+ IsOSKcqrtOD9flxjva6/eM7wIehir4ELrbxJ7agJ6v5e5W6TGJIxT9w5Tf2BTE55i+
+ ukjLE9GfNcZmZH1IaS2ctCqSTXXRd5RA2UFK3Tt0Vn28IMWuHCuFECbo7UXIxoMXfi
+ oq62wsPDge94tjFq/DGUbkzqZ6RBuCU5MB5jyKPi1DxZWPpZPn64ssDqdpStE6EShG
+ 1KaRk1KRLMyow==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=iT+PUbLv
+Subject: Re: [Buildroot] [PATCH 1/2] package/timescaledb: bump version to
+ 2.23.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,277 +91,38 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e7172ceac1e93a7167031a50edbff813c4b4774
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 18/11/2025 08:11, Peter Korsgaard wrote:
+>>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+> 
+>>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+>  >> Changelog:
+>  >> https://github.com/timescale/timescaledb/blob/2.23.1/CHANGELOG.md
+> 
+>  >> This bump adds support for PostgreSQL 18.
+> 
+>  >> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> 
+>  > Committed, thanks.
+> 
+> Sorry, I changed my mind. I think it makes more sense to get -rc1 
+> tagged
+> and then add this and the postgresql bump to the next branch.
 
-Release notes:
-https://www.postgresql.org/docs/release/18.0/
-https://www.postgresql.org/docs/release/18.1/
+I applied this series on next, now we have the -rc1 tag.
 
-Please note that upgrading a PostgreSQL server to a newer major version
-requires a manual upgrade not provided by buildroot:
-https://www.postgresql.org/docs/18/upgrading.html
+> I'll get -rc1 tagged very soon.
+> 
+> --
+> Bye, Peter Korsgaard
 
-Removed configure options for spinlocks:
-https://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=e25626677f8076eb3ce94586136c5464ee154381
+Best regards,
 
-Upstream removed support for toolchains not providing atomics support:
-https://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=81385261362962deb9861b39b509aeffe213721d
-
-Added dependency to !BR2_sparc to disable build with defconfig
-bootlin-sparc-uclibc to fix a build error:
-
-../src/include/port/atomics.h:99:2: error:
- #error "could not find an implementation of pg_atomic_uint32"
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/bandwidthd/Config.in       | 3 +++
- package/collectd/Config.in         | 2 ++
- package/lighttpd/Config.in         | 2 ++
- package/php/Config.ext             | 2 ++
- package/poco/Config.in             | 1 +
- package/postgresql/Config.in       | 2 ++
- package/postgresql/postgresql.hash | 4 ++--
- package/postgresql/postgresql.mk   | 8 +-------
- package/python-psycopg2/Config.in  | 2 ++
- package/qt5/qt5base/Config.in      | 2 ++
- package/qt6/qt6base/Config.in      | 2 ++
- package/zabbix/Config.in           | 1 +
- 12 files changed, 22 insertions(+), 9 deletions(-)
-
-diff --git a/package/bandwidthd/Config.in b/package/bandwidthd/Config.in
-index b0485ef957..5c2e507737 100644
---- a/package/bandwidthd/Config.in
-+++ b/package/bandwidthd/Config.in
-@@ -35,6 +35,7 @@ if BR2_PACKAGE_BANDWIDTHD
- config BR2_PACKAGE_BANDWIDTHD_POSTGRESQL
- 	bool "enable postgresql log target support"
- 	depends on BR2_USE_MMU # postgresql
-+	depends on !BR2_sparc # postgresql
- 	depends on BR2_USE_WCHAR # postgresql
- 	depends on BR2_ENABLE_LOCALE # postgresql
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
-@@ -48,9 +49,11 @@ config BR2_PACKAGE_BANDWIDTHD_POSTGRESQL
- 	  (github.com/nroach44/bandwidthd) for more information.
- 
- comment "postgresql support needs a toolchain w/ dynamic library, wchar"
-+	depends on !BR2_sparc
- 	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
- 
- comment "postgresql support can't be built with Optimize for fast"
-+	depends on !BR2_sparc
- 	depends on BR2_OPTIMIZE_FAST
- 
- config BR2_PACKAGE_BANDWIDTHD_SQLITE3
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 6568aa1d7b..127bcace6d 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -476,6 +476,7 @@ config BR2_PACKAGE_COLLECTD_PING
- config BR2_PACKAGE_COLLECTD_POSTGRESQL
- 	bool "postgresql"
- 	depends on BR2_USE_MMU # postgresql
-+	depends on !BR2_sparc # postgresql
- 	depends on BR2_USE_WCHAR # postgresql
- 	depends on BR2_ENABLE_LOCALE # postgresql
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
-@@ -489,6 +490,7 @@ config BR2_PACKAGE_COLLECTD_POSTGRESQL
- 	  collectd 'value lists'.
- 
- comment "postgresql support needs a toolchain w/ wchar"
-+	depends on !BR2_sparc
- 	depends on !BR2_USE_WCHAR
- 
- comment "postgresql support can't be built with Optimize for fast"
-diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
-index fe2c7a2815..0168f1d83c 100644
---- a/package/lighttpd/Config.in
-+++ b/package/lighttpd/Config.in
-@@ -122,6 +122,7 @@ config BR2_PACKAGE_LIGHTTPD_PCRE
- config BR2_PACKAGE_LIGHTTPD_PGSQL
- 	bool "pgsql support"
- 	depends on BR2_USE_MMU # postgresql
-+	depends on !BR2_sparc # postgresql
- 	depends on BR2_USE_WCHAR # postgresql
- 	depends on BR2_ENABLE_LOCALE # postgresql
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
-@@ -133,6 +134,7 @@ config BR2_PACKAGE_LIGHTTPD_PGSQL
- 
- comment "pgsql support needs a toolchain w/ wchar"
- 	depends on BR2_USE_MMU
-+	depends on !BR2_sparc
- 	depends on !BR2_USE_WCHAR
- 
- comment "pgsql support can't be built with Optimize for fast"
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index 609cf17016..8cf4a7d160 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -139,6 +139,7 @@ config BR2_PACKAGE_PHP_EXT_MYSQLI
- config BR2_PACKAGE_PHP_EXT_PGSQL
- 	bool "PostgreSQL"
- 	depends on BR2_USE_MMU # postgresql
-+	depends on !BR2_sparc # postgresql
- 	depends on BR2_USE_WCHAR # postgresql
- 	depends on BR2_ENABLE_LOCALE # postgresql
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
-@@ -150,6 +151,7 @@ config BR2_PACKAGE_PHP_EXT_PGSQL
- 
- comment "PostgreSQL extension needs a toolchain w/ dynamic library, wchar"
- 	depends on BR2_USE_MMU
-+	depends on !BR2_sparc
- 	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
- 
- comment "PostgreSQL extension can't be built with Optimize for fast"
-diff --git a/package/poco/Config.in b/package/poco/Config.in
-index fa23e6aa59..4801b36a24 100644
---- a/package/poco/Config.in
-+++ b/package/poco/Config.in
-@@ -53,6 +53,7 @@ config BR2_PACKAGE_POCO_DATA_MYSQL
- config BR2_PACKAGE_POCO_DATA_PGSQL
- 	bool "Data/PostgreSQL"
- 	depends on BR2_USE_MMU # postgresql
-+	depends on !BR2_sparc
- 	depends on BR2_USE_WCHAR # postgresql
- 	depends on BR2_ENABLE_LOCALE # postgresql
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
-diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
-index 06e8646119..ebf310a6a1 100644
---- a/package/postgresql/Config.in
-+++ b/package/postgresql/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_POSTGRESQL
- 	bool "postgresql"
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_sparc # atomic.h
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_ENABLE_LOCALE # locale_t
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-@@ -36,6 +37,7 @@ endif
- 
- comment "postgresql needs a toolchain w/ dynamic library, wchar, locale"
- 	depends on BR2_USE_MMU
-+	depends on !BR2_sparc
- 	depends on !BR2_USE_WCHAR
- 	depends on !BR2_ENABLE_LOCALE
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index efa1b5e751..524066c61e 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.postgresql.org/pub/source/v17.7/postgresql-17.7.tar.bz2.sha256
--sha256  ef9e343302eccd33112f1b2f0247be493cb5768313adeb558b02de8797a2e9b5  postgresql-17.7.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v18.1/postgresql-18.1.tar.bz2.sha256
-+sha256  ff86675c336c46e98ac991ebb306d1b67621ece1d06787beaade312c2c915d54  postgresql-18.1.tar.bz2
- # License file, Locally calculated
- sha256  5ed3ce5c9373dff7f98b1fae7a6c7ccd98df7d734d46d24c1bcebf1240be8307  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 86761bf939..78d7cef4f6 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 17.7
-+POSTGRESQL_VERSION = 18.1
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
-@@ -38,12 +38,6 @@ POSTGRESQL_INSTALL_TARGET_OPTS += DESTDIR=$(TARGET_DIR) install-world
- POSTGRESQL_INSTALL_STAGING_OPTS += DESTDIR=$(STAGING_DIR) install-world
- endif
- 
--ifeq ($(BR2_arcle)$(BR2_arceb)$(BR2_microblazeel)$(BR2_microblazebe)$(BR2_or1k)$(BR2_riscv)$(BR2_xtensa),y)
--POSTGRESQL_CONF_OPTS += -Dspinlocks=false
--else
--POSTGRESQL_CONF_OPTS += -Dspinlocks=true
--endif
--
- ifeq ($(BR2_PACKAGE_READLINE),y)
- POSTGRESQL_DEPENDENCIES += readline
- POSTGRESQL_CONF_OPTS += -Dreadline=enabled
-diff --git a/package/python-psycopg2/Config.in b/package/python-psycopg2/Config.in
-index 8eeeb42692..24eaea6d9c 100644
---- a/package/python-psycopg2/Config.in
-+++ b/package/python-psycopg2/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PYTHON_PSYCOPG2
- 	bool "python-psycopg2"
- 	depends on BR2_USE_MMU # postgresql
-+	depends on !BR2_sparc # postgresql
- 	depends on BR2_USE_WCHAR # postgresql
- 	depends on BR2_ENABLE_LOCALE # postgresql
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
-@@ -29,6 +30,7 @@ config BR2_PACKAGE_PYTHON_PSYCOPG2
- 
- comment "python-psycopg2 needs a toolchain w/ dynamic library, wchar"
- 	depends on BR2_USE_MMU
-+	depends on !BR2_sparc
- 	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
- 
- comment "python-psycopg2 can't be built with Optimize for fast"
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index c45b8c1591..8f14540eb4 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -72,6 +72,7 @@ config BR2_PACKAGE_QT5BASE_MYSQL
- config BR2_PACKAGE_QT5BASE_PSQL
- 	bool "PostgreSQL Plugin"
- 	depends on BR2_USE_MMU # postgresql
-+	depends on !BR2_sparc # postgresql
- 	depends on BR2_USE_WCHAR # postgresql
- 	depends on BR2_ENABLE_LOCALE # postgresql
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
-@@ -84,6 +85,7 @@ config BR2_PACKAGE_QT5BASE_PSQL
- 
- comment "PostgreSQL plugin needs a toolchain w/ wchar, dynamic library"
- 	depends on BR2_USE_MMU
-+	depends on !BR2_sparc
- 	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
- 
- comment "PostgreSQL plugin can't be built with Optimize for fast"
-diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
-index 7f3948ec27..e6bb99de28 100644
---- a/package/qt6/qt6base/Config.in
-+++ b/package/qt6/qt6base/Config.in
-@@ -202,6 +202,7 @@ comment "MySQL plugin needs a toolchain w/ C++, threads"
- config BR2_PACKAGE_QT6BASE_PSQL
- 	bool "PostgreSQL Plugin"
- 	depends on BR2_USE_MMU # postgresql
-+	depends on !BR2_sparc # postgresql
- 	depends on BR2_USE_WCHAR # postgresql
- 	depends on BR2_ENABLE_LOCALE # postgresql
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
-@@ -213,6 +214,7 @@ config BR2_PACKAGE_QT6BASE_PSQL
- 
- comment "PostgreSQL plugin needs a toolchain w/ wchar, dynamic library"
- 	depends on BR2_USE_MMU
-+	depends on !BR2_sparc
- 	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
- 
- comment "PostgreSQL plugin can't be built with optimize for fast"
-diff --git a/package/zabbix/Config.in b/package/zabbix/Config.in
-index 226bce51ba..c1e8ad62f3 100644
---- a/package/zabbix/Config.in
-+++ b/package/zabbix/Config.in
-@@ -41,6 +41,7 @@ config BR2_PACKAGE_ZABBIX_SERVER_MYSQL
- config BR2_PACKAGE_ZABBIX_SERVER_POSTGRESQL
- 	bool "postgresql"
- 	depends on BR2_USE_MMU # postgresql
-+	depends on !BR2_sparc # postgresql
- 	depends on BR2_USE_WCHAR # postgresql
- 	depends on BR2_ENABLE_LOCALE # postgresql
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # postgresql
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
