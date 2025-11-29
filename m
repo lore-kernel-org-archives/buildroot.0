@@ -1,74 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65B4ED116F3
-	for <buildroot@archiver.kernel.org>; Sat, 29 Nov 2025 07:56:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78B66D116F3
+	for <buildroot@archiver.kernel.org>; Sat, 29 Nov 2025 08:07:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF78240B7C;
-	Sat, 29 Nov 2025 07:56:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1A2C8606AF;
+	Sat, 29 Nov 2025 08:07:24 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tQxz-TiWf1AQ; Sat, 29 Nov 2025 08:07:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D2BD606FF
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3D2BD606FF;
+	Sat, 29 Nov 2025 08:07:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C54811A9
+ for <buildroot@buildroot.org>; Sat, 29 Nov 2025 08:07:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B3A9040AED
+ for <buildroot@buildroot.org>; Sat, 29 Nov 2025 08:07:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GFQD_sXd4Qty; Sat, 29 Nov 2025 07:56:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C6D240A30
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9C6D240A30;
-	Sat, 29 Nov 2025 07:56:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9DFFC1A9
- for <buildroot@buildroot.org>; Sat, 29 Nov 2025 07:56:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8436C40232
- for <buildroot@buildroot.org>; Sat, 29 Nov 2025 07:56:15 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oKC2HTAIhycf for <buildroot@buildroot.org>;
- Sat, 29 Nov 2025 07:56:14 +0000 (UTC)
+ id 2N78dWc48bqI for <buildroot@buildroot.org>;
+ Sat, 29 Nov 2025 08:07:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4456C40215
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4456C40215
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D1EDB40ABE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1EDB40ABE
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4456C40215
- for <buildroot@buildroot.org>; Sat, 29 Nov 2025 07:56:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D1EDB40ABE
+ for <buildroot@buildroot.org>; Sat, 29 Nov 2025 08:07:20 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0558.dip0.t-ipconnect.de [91.58.5.88])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 33F09A4C76D9
- for <buildroot@buildroot.org>; Sat, 29 Nov 2025 08:56:11 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:45108)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id DA37FA4C7761;
+ Sat, 29 Nov 2025 09:07:18 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:49808)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vPFoQ-000000001hR-3gvE
- for buildroot@buildroot.org; Sat, 29 Nov 2025 07:56:10 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vPFzC-000000003cH-2BKq;
+ Sat, 29 Nov 2025 08:07:18 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 29 Nov 2025 08:56:10 +0100
-Message-ID: <20251129075610.1319512-1-bernd@kuhls.net>
+Cc: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+Date: Sat, 29 Nov 2025 09:07:18 +0100
+Message-ID: <20251129080718.1667632-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Spamd-Bar: ++++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202506031021; t=1764402971;
- bh=kBXn9JQ5737IkOhvYL8LLmIobQWnewwh1rT2cLHga2c=;
- h=From:To:Subject:Date:From;
- b=xg5Zm/GMjiBOM8zFHcHSLhf0VuC6cMPXl8/U0zXnUhNEZyDqYOaQDxRd0Wn41bI6F
- goh4Xuf4VjcoGHY3mwE5ZwRsRRj1P63jHgWmSWgfTb+/LZbPtuK+bitzd8JRIcV+US
- CXOtfS8NxbPFmwKchjR/4PRK3AkCLz3RoBdfSPTj1Y1FuIXgFTh98z8tEW4GR5DpVu
- ujFFYGyDQYu2UoLSgzVOHn1sCoPj5Iw9+BSj5pVXdKXFC838b9ZkXL+ElJ9tOzg0HR
- TxMbWPPHrq9Bgw1yx4h24zXu9AhqY9VLUhNazBPcZb1cIDNHJ9iK0NkTy8/ecaLHmK
- T/7C9AGy1nX+w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ s=kas202506031021; t=1764403638;
+ bh=1nGaRRNwCCp4IVKhZfdgcyEjHawnBSWr4JAtX7lbWpY=;
+ h=From:To:Cc:Subject:Date:From;
+ b=eYn3oYxKNfBLGRYhDHCggjKDPDrf1pCOInL3UmiubGk+ANEya2SQDChCJxgs9x6BU
+ kMsZLOVjh3QF5JIm255BJKcoaWygCq+/fW9voYZlNnpwgFlxoDOiGKwJcyWF4LXMcg
+ 8KOP7JyjgTSKkOLePIlsMNEVtpF8sG7nFJWXVSHNgLok7ZZV6VKFjedF4ksROEyYkd
+ yVALTvS7f75I2nR8EIkitarAvUM/2h27Ypk+/8uTQ5mdir5q08cqAyesLsXAozobcV
+ /cHG25vRXnDa1YJ/e9BNpKqxsP6Kdv5hsw6oAbfJj2AcZZu+8zFU5Yj+5dSjezI5Rn
+ 6UcDoW2dh6NfA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=xg5Zm/GM
-Subject: [Buildroot] [PATCH 1/1] package/nushell: bump version to 0.108.0
+ header.s=kas202506031021 header.b=eYn3oYxK
+Subject: [Buildroot] [PATCH 1/1] package/drbd-utils: bump version to 9.33.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,43 +86,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://www.nushell.sh/blog/
-
-Updated license hash due to copyright year bump:
-https://github.com/nushell/nushell/commit/192ee59c754ec5c9b66e28cca94a75d643501be7
+Changelog: https://github.com/LINBIT/drbd-utils/blob/v9.33.0/ChangeLog
 
 Fixes:
-https://autobuild.buildroot.net/results/d27/d27004dd62cd0c87fbfbe0eca8057b17d84c799d/
+https://autobuild.buildroot.net/results/abd/abd9fe3f8b8051b8fac278bcd56e1c11aa056737/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/nushell/nushell.hash | 4 ++--
- package/nushell/nushell.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/drbd-utils/drbd-utils.hash | 2 +-
+ package/drbd-utils/drbd-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nushell/nushell.hash b/package/nushell/nushell.hash
-index 074bb694a6..45047a82ed 100644
---- a/package/nushell/nushell.hash
-+++ b/package/nushell/nushell.hash
+diff --git a/package/drbd-utils/drbd-utils.hash b/package/drbd-utils/drbd-utils.hash
+index 9bdfd69538..c9db5b6587 100644
+--- a/package/drbd-utils/drbd-utils.hash
++++ b/package/drbd-utils/drbd-utils.hash
 @@ -1,3 +1,3 @@
- # Locally generated
--sha256  3f4f31e1c4832c34dc4c6058a78e9a893595e165334bb9be6a241618ce2861ad  nushell-0.96.1-cargo4.tar.gz
--sha256  2dc1f03f729c21902d869b4d8f8dc528fc730f4c6ad83fc128672bda0ad69196  LICENSE
-+sha256  59b3af5d873d0ce21ddd10358bc4d54753c01c7245caae7a3d8a72782d3f626e  nushell-0.108.0-cargo4.tar.gz
-+sha256  ff5dcaaba6140ec57cafdd4f707cd0d329e727477cf7d5b9ba7a244ec2678b79  LICENSE
-diff --git a/package/nushell/nushell.mk b/package/nushell/nushell.mk
-index a05eaa9829..c982a1ab14 100644
---- a/package/nushell/nushell.mk
-+++ b/package/nushell/nushell.mk
+ # Locally calculated
+-sha256  730d68b9ee48df7b2e3ddff38bf54a5bc405651bac0ece180b4f22a468e543b3  drbd-utils-9.21.4.tar.gz
++sha256  223fe07d0b646e991b33ba9ea41468f9a66f903562e7da766dd0fc6b4ea33db9  drbd-utils-9.33.0.tar.gz
+ sha256  1ca3e8f71b7de618968e7ea9fe47822d9e704dc476aef8544033abedec355225  COPYING
+diff --git a/package/drbd-utils/drbd-utils.mk b/package/drbd-utils/drbd-utils.mk
+index c1035191f1..657f9fafd8 100644
+--- a/package/drbd-utils/drbd-utils.mk
++++ b/package/drbd-utils/drbd-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NUSHELL_VERSION = 0.96.1
-+NUSHELL_VERSION = 0.108.0
- NUSHELL_SITE = $(call github,nushell,nushell,$(NUSHELL_VERSION))
- NUSHELL_LICENSE = MIT
- NUSHELL_LICENSE_FILES = LICENSE
+-DRBD_UTILS_VERSION = 9.21.4
++DRBD_UTILS_VERSION = 9.33.0
+ DRBD_UTILS_SITE = http://pkg.linbit.com/downloads/drbd/utils
+ DRBD_UTILS_LICENSE = GPL-2.0+
+ DRBD_UTILS_LICENSE_FILES = COPYING
 -- 
 2.47.3
 
