@@ -4,72 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A85F6CFD2F6
-	for <buildroot@archiver.kernel.org>; Sat, 29 Nov 2025 12:02:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8ACAD116F1
+	for <buildroot@archiver.kernel.org>; Sat, 29 Nov 2025 12:15:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7429E84520;
-	Sat, 29 Nov 2025 12:02:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 88BDF80E76;
+	Sat, 29 Nov 2025 12:15:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UYU40zD1x6Dt; Sat, 29 Nov 2025 12:02:02 +0000 (UTC)
+ id zWroknh0dV0p; Sat, 29 Nov 2025 12:15:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CBA581276
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A5D980DDD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7CBA581276;
-	Sat, 29 Nov 2025 12:02:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 59BC2708
- for <buildroot@buildroot.org>; Sat, 29 Nov 2025 12:02:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7A5D980DDD;
+	Sat, 29 Nov 2025 12:15:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6B12E273
+ for <buildroot@buildroot.org>; Sat, 29 Nov 2025 12:15:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3F08460702
- for <buildroot@buildroot.org>; Sat, 29 Nov 2025 12:02:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5752380D8F
+ for <buildroot@buildroot.org>; Sat, 29 Nov 2025 12:15:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J4N5D1HqXLt3 for <buildroot@buildroot.org>;
- Sat, 29 Nov 2025 12:01:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3406960701
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3406960701
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3406960701
- for <buildroot@buildroot.org>; Sat, 29 Nov 2025 12:01:58 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 4FF0319F57B;
- Sat, 29 Nov 2025 13:01:55 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 29 Nov 2025 13:01:55 +0100
-MIME-Version: 1.0
-Date: Sat, 29 Nov 2025 13:01:55 +0100
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: buildroot@buildroot.org, Joseph Kogut <joseph.kogut@gmail.com>
-In-Reply-To: <20251121112214.640511-2-giulio.benetti@benettiengineering.com>
-References: <20251121112214.640511-1-giulio.benetti@benettiengineering.com>
- <20251121112214.640511-2-giulio.benetti@benettiengineering.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <733df77174f2e8ae3b9166ba44958497@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1764417717;
- bh=Ljmbn8K7nw3piA3YChsEEa9iz96q1QcPXhTmZ620PTE=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=jSXafXHtKc8CYf+wfCqEWcNSIWbeDrRaM0IsbAvkDNzEGVzDv6X5KRNSp2p3j3ROU
- I224hXpD52uWsUD7E6bh2jkZdKLy9KWGlExM0jfamc+TXhpY1RG7dhFU90oot+8gPM
- eeEmsEd3mL0uhdXwONZjow9Bpq40vUs3xHF+t9TCWyEUZWy/2MNk60snt7F2RZszex
- CVBqKE+0P/JHP4H9yFvde91VKrisqnkDIWkqZIAWhfmBHVaINhmkJyhTsrpZ/a4wMo
- HQWLL2nNivaHj4sXoYnXIUdFfA8wnZRHQbx3P/kIuFloguXBSbFxgAmhBuL8ZznRCh
- othsF1ctD4f2g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=jSXafXHt
-Subject: Re: [Buildroot] [PATCH] package/libnss: bump version to 3.118.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hc4oLP4YcdHa for <buildroot@buildroot.org>;
+ Sat, 29 Nov 2025 12:15:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96DBF80D27
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 96DBF80D27
+ for <buildroot@buildroot.org>; Sat, 29 Nov 2025 12:15:03 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 86C0F8612E; Sat, 29 Nov 2025 12:15:03 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 29 Nov 2025 13:03:49 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: baaad289ab94e5317df900cc4a369650735e9f06
+X-Git-Newrev: cb1f3579a2ad9d6e317b7a2527b1fabb4229af5d
+X-Patchwork-Hint: ignore
+Message-Id: <20251129121503.86C0F8612E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tor: bump version to 0.4.8.21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,18 +59,55 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 21/11/2025 12:22, Giulio Benetti wrote:
-> For release note, see:
-> https://hg-edge.mozilla.org/projects/nss/file/tip/doc/rst/releases/nss_3_118_1.rst
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=cb1f3579a2ad9d6e317b7a2527b1fabb4229af5d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to next, thanks.
+Release notes:
+https://forum.torproject.org/t/stable-release-0-4-8-21/20817
+
+https://gitlab.torproject.org/tpo/core/tor/-/raw/release-0.4.8/ReleaseNotes
+"This release is a continuation of the previous one and addresses
+ additional Conflux-related issues identified through further testing
+ and feedback from relay operators.
+ We strongly recommend upgrading as soon as possible."
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/tor/tor.hash | 4 ++--
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index bf88d14578..ea15ddefe6 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,4 +1,4 @@
+-# From https://dist.torproject.org/tor-0.4.8.20.tar.gz.sha256sum
+-sha256  1bb22328cdd1ee948647bfced571efa78c12fc5064187b41d5254085b5282fa7  tor-0.4.8.20.tar.gz
++# From https://dist.torproject.org/tor-0.4.8.21.tar.gz.sha256sum
++sha256  eaf6f5b73091b95576945eade98816ddff7cd005befe4d94718a6f766b840903  tor-0.4.8.21.tar.gz
+ # Locally computed
+ sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 513cac9f0f..746eacd581 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TOR_VERSION = 0.4.8.20
++TOR_VERSION = 0.4.8.21
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
