@@ -1,74 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A463ED116F1
-	for <buildroot@archiver.kernel.org>; Sat, 29 Nov 2025 12:15:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FF43D116EA
+	for <buildroot@archiver.kernel.org>; Sat, 29 Nov 2025 15:01:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C41A40DAE;
-	Sat, 29 Nov 2025 12:15:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0734284041;
+	Sat, 29 Nov 2025 15:01:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p7jIQ33Tu7MA; Sat, 29 Nov 2025 12:15:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cmLNy1euGDOC; Sat, 29 Nov 2025 15:01:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B122D40D7D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1017783FF0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B122D40D7D;
-	Sat, 29 Nov 2025 12:15:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 446BF708
- for <buildroot@buildroot.org>; Sat, 29 Nov 2025 12:15:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1017783FF0;
+	Sat, 29 Nov 2025 15:01:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id F34DC1A9
+ for <buildroot@buildroot.org>; Sat, 29 Nov 2025 15:01:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3555C40D7D
- for <buildroot@buildroot.org>; Sat, 29 Nov 2025 12:15:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DA24283FB8
+ for <buildroot@buildroot.org>; Sat, 29 Nov 2025 15:01:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ABDE9JwuRB1L for <buildroot@buildroot.org>;
- Sat, 29 Nov 2025 12:15:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6150240D75
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6150240D75
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6150240D75
- for <buildroot@buildroot.org>; Sat, 29 Nov 2025 12:15:54 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 42BD45FFAF;
- Sat, 29 Nov 2025 13:15:51 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 29 Nov 2025 13:15:51 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id f3A6c94UJDcS for <buildroot@buildroot.org>;
+ Sat, 29 Nov 2025 15:01:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2FCD883F8E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FCD883F8E
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2FCD883F8E
+ for <buildroot@buildroot.org>; Sat, 29 Nov 2025 15:01:17 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0558.dip0.t-ipconnect.de [91.58.5.88])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 94811A4C733A;
+ Sat, 29 Nov 2025 16:01:14 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:58352)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99)
+ (envelope-from <bernd@kuhls.net>) id 1vPMRm-0000000066n-16Tq;
+ Sat, 29 Nov 2025 15:01:14 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>
+Date: Sat, 29 Nov 2025 16:01:14 +0100
+Message-ID: <20251129150114.2732552-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Sat, 29 Nov 2025 13:15:51 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251122171526.2260242-1-bernd@kuhls.net>
-References: <20251122171526.2260242-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <ab8aa2ae72fcbbab5b780ef70970215a@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1764418552;
- bh=ZQE0wr9yAogTOqEOcrtHPUFmygOt9caujKCu6BVKm8A=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=blShsbGghgfsMILUGQxm+ykTVLFTnmxipBBEbtvXYZiwy2EfUr7Z8u4JmqrVA6Gw/
- OfoRo93TiT2/abaZLEAhX6IPEjfoCyuZEuHVcyP4bcSFYQg6nSAgmRAVNSuosDWqW2
- VcU2C44a7UXaelmonQsfxbOe3pS237n5/6QedwmMwinDVGXbXEoVgwYjLd3HR7finI
- LejuqdRshT8N4w6WOilROJhezPqK7lEiv8h3qCKIZia71MZ92VH60amXd0WTCNx6A5
- Hx1ZyDl6fq71L2/+Rdrh00T1fNXLP/+0VI0mYx/eF29kck+SlVdia5WCEdDHeazIHx
- Nq44xxEv8bVyw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=blShsbGg
-Subject: Re: [Buildroot] [PATCH] package/tor: bump version to 0.4.8.21
+X-Spamd-Bar: ++++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202506031021; t=1764428474;
+ bh=z6PVVZv0+suPwOs44ZocoxIOs7iC0ea9uh4z2irZwI8=;
+ h=From:To:Cc:Subject:Date:From;
+ b=Q0emc6Bgu9qnPm/LXeCzyWCyIIuHGkE6+TPNtu3j8FgdhavXEcZFcszB6GH+iIqL9
+ isOfI8npEMF3AIzSOaG6dGSwt5pUqhjeruLxRBeDqLwqCpio5x38GZIdnTMKcmAerB
+ Oc66pFTuToIYSPJ17eugJ0DCHDz/AHaBhtddi1orYCub5i1vbHeDtb7jLOl1CRRQJI
+ 8vlY5nHKPWr5QrmktZHvKGixqbrEe34H5XRMhqE5BTjyszndZb94cRt41I05tVkaoo
+ QOO46k72LvVJwTaNa5/j/OrLakHFMZrEUGGn0dKeYUY7KhtJBktIqdO3JggCpGaBmi
+ uRnSiTR0pK4Gw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=Q0emc6Bg
+Subject: [Buildroot] [PATCH 1/1] package/sbc: fix build with gcc-15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,30 +81,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 22/11/2025 18:15, Bernd Kuhls wrote:
-> Release notes:
-> https://forum.torproject.org/t/stable-release-0-4-8-21/20817
-> 
-> https://gitlab.torproject.org/tpo/core/tor/-/raw/release-0.4.8/ReleaseNotes
-> "This release is a continuation of the previous one and addresses
->  additional Conflux-related issues identified through further testing
->  and feedback from relay operators.
->  We strongly recommend upgrading as soon as possible."
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Fixes:
+https://autobuild.buildroot.net/results/2d1/2d16eb4bb0c7f095d0d52af8553c498f6f9a295c/
 
-Since it is a bugfix-only release, I applied it on master.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/sbc/sbc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Best regards,
+diff --git a/package/sbc/sbc.mk b/package/sbc/sbc.mk
+index 7a37a99643..115867fa0a 100644
+--- a/package/sbc/sbc.mk
++++ b/package/sbc/sbc.mk
+@@ -12,6 +12,13 @@ SBC_DEPENDENCIES = host-pkgconf
+ SBC_LICENSE := LGPL-2.1+ (library)
+ SBC_LICENSE_FILES = COPYING COPYING.LIB
+ 
++# gcc-15 defaults to -std=gnu23 which introduces build failures.
++# We force "-std=gnu17" for gcc version supporting it. Earlier gcc
++# versions will work, since they are using the older standard.
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_8),y)
++SBC_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=gnu17"
++endif
++
+ ifeq ($(BR2_PACKAGE_SBC_TOOLS),y)
+ SBC_DEPENDENCIES += libsndfile
+ SBC_CONF_OPTS += --enable-tools --enable-tester
+-- 
+2.47.3
 
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
