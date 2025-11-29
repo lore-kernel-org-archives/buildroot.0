@@ -1,75 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 063F6CFD2F6
-	for <buildroot@archiver.kernel.org>; Sat, 29 Nov 2025 10:25:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED0B0D116F3
+	for <buildroot@archiver.kernel.org>; Sat, 29 Nov 2025 10:35:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B29F0810BE;
-	Sat, 29 Nov 2025 10:25:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 70E6F40E83;
+	Sat, 29 Nov 2025 10:35:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wPYi5SWxMfoB; Sat, 29 Nov 2025 10:25:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hA2h-ooP4BWe; Sat, 29 Nov 2025 10:35:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D85518108C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33AAA40E48
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D85518108C;
-	Sat, 29 Nov 2025 10:25:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id CA53D1A9
- for <buildroot@buildroot.org>; Sat, 29 Nov 2025 10:25:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 33AAA40E48;
+	Sat, 29 Nov 2025 10:35:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id CABBD273
+ for <buildroot@buildroot.org>; Sat, 29 Nov 2025 10:35:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BC48380FF9
- for <buildroot@buildroot.org>; Sat, 29 Nov 2025 10:25:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B1C3440E48
+ for <buildroot@buildroot.org>; Sat, 29 Nov 2025 10:35:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JmCx_UtL_tN1 for <buildroot@buildroot.org>;
- Sat, 29 Nov 2025 10:25:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C9A8380F84
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9A8380F84
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C9A8380F84
- for <buildroot@buildroot.org>; Sat, 29 Nov 2025 10:25:07 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 68D0A19F59C;
- Sat, 29 Nov 2025 11:25:03 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 29 Nov 2025 11:25:03 +0100
-MIME-Version: 1.0
-Date: Sat, 29 Nov 2025 11:25:03 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>
-In-Reply-To: <20251129072819.395958-1-bernd@kuhls.net>
-References: <20251129072819.395958-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <e101907a477b27805df213a8d9629303@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1764411905;
- bh=evD1qZW5LaH3/rOhGiY55Y4cbB1tS1cCnycJUYxrDxE=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=lE0pcr9VeU1AC1wT5IsItaOmY+oCZb/Hl9G+cub5oEUony7wQryWrz4sKlFL5hb9d
- LK0pPkO/MpWqaY/70VJlfe5ub5VbOC/iWitnsuxsraesrGsA6xL+F03KrTlYZNX9e0
- Xq+dF15pgN3kETH7XAj2yx8evoTZ7HFbaRv7fJA9XQ/CIaBw5NzBvG3LSRMoF6OYr8
- P96x3s5BVeAeBwR9iilIRgVitKK9iL6HOc+ubbYLj5qcQj59cRMBeVFZOUe2QoGEJI
- 5ybDPAqJm9W4aWVZ3517eoY0t1LGeS381kgLYa9lFusQzszrWfMU8AFfrT6XhImm2n
- b/SEqkdq+dNig==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=lE0pcr9V
-Subject: Re: [Buildroot] [PATCH 1/1] package/oprofile: add upstream patch to
- fix build with newer gcc
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iXFwCIS2j9YQ for <buildroot@buildroot.org>;
+ Sat, 29 Nov 2025 10:35:17 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14B2B40DF8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 14B2B40DF8
+ for <buildroot@buildroot.org>; Sat, 29 Nov 2025 10:35:17 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id F15FA86021; Sat, 29 Nov 2025 10:35:16 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 29 Nov 2025 11:33:27 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: cffb057b900ab8f3a9dab92f3284ad9f74eddd4f
+X-Git-Newrev: baaad289ab94e5317df900cc4a369650735e9f06
+X-Patchwork-Hint: ignore
+Message-Id: <20251129103516.F15FA86021@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pdmenu: fix build with gcc-15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,18 +59,40 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 29/11/2025 08:28, Bernd Kuhls wrote:
-> Fixes:
-> https://autobuild.buildroot.net/results/e12/e12de278cb7bb0ecc0d44dd9c69d3832ede946de/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=baaad289ab94e5317df900cc4a369650735e9f06
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Fixes:
+https://autobuild.buildroot.net/results/554/5545162ca0206cacfca1617280f074237e72aec1/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/pdmenu/pdmenu.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/pdmenu/pdmenu.mk b/package/pdmenu/pdmenu.mk
+index 2691a67ef6..72eb95bddc 100644
+--- a/package/pdmenu/pdmenu.mk
++++ b/package/pdmenu/pdmenu.mk
+@@ -11,4 +11,11 @@ PDMENU_LICENSE_FILES = doc/COPYING
+ PDMENU_DEPENDENCIES = slang $(TARGET_NLS_DEPENDENCIES)
+ PDMENU_INSTALL_TARGET_OPTS = INSTALL_PREFIX=$(TARGET_DIR) install
+ 
++# gcc-15 defaults to -std=gnu23 which introduces build failures.
++# We force "-std=gnu17" for gcc version supporting it. Earlier gcc
++# versions will work, since they are using the older standard.
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_8),y)
++PDMENU_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=gnu17"
++endif
++
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
