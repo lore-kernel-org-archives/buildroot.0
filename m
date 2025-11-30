@@ -4,73 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01A4ACFD376
-	for <buildroot@archiver.kernel.org>; Sun, 30 Nov 2025 14:41:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69C92D116F3
+	for <buildroot@archiver.kernel.org>; Sun, 30 Nov 2025 14:49:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C32F281B6D;
-	Sun, 30 Nov 2025 14:41:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1617280BF3;
+	Sun, 30 Nov 2025 14:49:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nMNbFrLOy8UX; Sun, 30 Nov 2025 14:41:55 +0000 (UTC)
+ id 0M4LD-sVyFgt; Sun, 30 Nov 2025 14:49:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA28981BB2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3819D80B75
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DA28981BB2;
-	Sun, 30 Nov 2025 14:41:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 36501351
- for <buildroot@buildroot.org>; Sun, 30 Nov 2025 14:41:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3819D80B75;
+	Sun, 30 Nov 2025 14:49:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 31183351
+ for <buildroot@buildroot.org>; Sun, 30 Nov 2025 14:49:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 27A0D60737
- for <buildroot@buildroot.org>; Sun, 30 Nov 2025 14:41:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 231004097A
+ for <buildroot@buildroot.org>; Sun, 30 Nov 2025 14:49:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rPoYTwjhhIRH for <buildroot@buildroot.org>;
- Sun, 30 Nov 2025 14:41:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5GVUG-D3Q4El for <buildroot@buildroot.org>;
+ Sun, 30 Nov 2025 14:49:40 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
  helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DCB3F606EE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCB3F606EE
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 07D6F4096D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07D6F4096D
 Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DCB3F606EE
- for <buildroot@buildroot.org>; Sun, 30 Nov 2025 14:41:51 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 07D6F4096D
+ for <buildroot@buildroot.org>; Sun, 30 Nov 2025 14:49:39 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
  (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 9D0A8780505;
- Sun, 30 Nov 2025 15:41:47 +0100 (CET)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 8334978034E;
+ Sun, 30 Nov 2025 15:49:35 +0100 (CET)
 Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
  via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 30 Nov 2025 15:41:47 +0100
+ with HTTP (HTTP/1.0 POST); Sun, 30 Nov 2025 15:49:35 +0100
 MIME-Version: 1.0
-Date: Sun, 30 Nov 2025 15:41:47 +0100
+Date: Sun, 30 Nov 2025 15:49:35 +0100
 To: Maxime Leroy <maxime@leroys.fr>
 Cc: buildroot@buildroot.org, Vincent Jardin <vjardin@free.fr>
-In-Reply-To: <20251021120342.483933-5-maxime@leroys.fr>
+In-Reply-To: <20251021120342.483933-6-maxime@leroys.fr>
 References: <20251021120342.483933-1-maxime@leroys.fr>
- <20251021120342.483933-5-maxime@leroys.fr>
+ <20251021120342.483933-6-maxime@leroys.fr>
 User-Agent: Webmail Free/1.6.11
-Message-ID: <bb3fe35a7bb2ef59404c26bc63b4a178@free.fr>
+Message-ID: <2c2a8463ebf4ea26102692057d9c05ad@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1764513709;
- bh=9cj/JDRXuLTrxEMPR08qf5h6hPEHp7ZmvZEt+UIxlE0=;
+ d=free.fr; s=smtp-20201208; t=1764514177;
+ bh=0YM3YQ+6BvdLAoPn54gFygixQDj9vWLDqr6U7y2DxfE=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=tpyYdY0EiESLm7/7Z7hEfSJrk6qdOzeuQrcGOCZPaHlpA2gTAzAJ2/t1yb4YfV7eK
- s4ASDfRTSaNPM7Hew58jx4a+ljFTeoaz4Ar9IAM+Iu2LRW/6Wh9RlwKz8C/gIZys97
- gof1kM6LdWLMXWcT5BP8CildWNCUA7cHRlRLy9m3cGCZ70GMaGlnADDrUOgruxp2Oo
- tNJRXyKBzPvCtVYGWAWuVfytBJiaqKHAHzBPXurfTV4WeJz067LrzeaLhERW5gLnMP
- E+mRmrPIlTr7a3AAxcOsW6/+mtsLUe5eBoctLVGSNvgVQX9URq5vZS8PG1DEXctdjr
- x2dYCIF5ZVHTg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=pL9wRhNSSKNw3wx/qu5DoZ73HNq5RyFSyD4lhzao0+SWiVGSfnjuI/0LQX7U5eyNx
+ 7KPwlJGIzjQ/VKGe+rWj6sw7QnNSiUhDLuukcsfUjwoQO90VguVk7Lyv3LOsZGTzUW
+ AMKeyfpaAL7R1N/kl57KFVgQti/hB7nESMdcnZeJJ39Hz3+cGwemNfyD3Z2sSRnhTe
+ c1SwjkZbc6GIAUuurIDcxclneNGaHjsjL4Qfr1n5ZjdAPYIA1rUykPqgGgCtAxSAsb
+ BqVMkX0itt/jV36Gy4ZdACE2WAJ66YsswmICgi831vBvcD5Rm4stu2McVr0JnTo+O8
+ 6GNBe9SmCzGig==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=tpyYdY0E
-Subject: Re: [Buildroot] [PATCH 4/5] package/dpdk: make libraries selectable
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=pL9wRhNS
+Subject: Re: [Buildroot] [PATCH 5/5] package/dpdk: make apps selectable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,11 +94,11 @@ I have mostly the same comments as for the dpdk driver
 list patch [1].
 
 On 21/10/2025 14:03, Maxime Leroy wrote:
-> Add BR2_PACKAGE_DPDK_LIBS_LIST to control which DPDK libraries are
+> Add BR2_PACKAGE_DPDK_APPS_LIST to control which DPDK applications are
 > built:
 >   - empty : use DPDK defaults
->   - none  : disable all libs (-Ddisable_libs='*')
->   - list  : pass to -Denable_libs= (comma-separated)
+>   - none  : disable all apps (-Ddisable_apps='*')
+>   - list  : pass to -Denable_apps= (comma-separated)
 > 
 > Signed-off-by: Maxime Leroy <maxime@leroys.fr>
 > ---
@@ -108,50 +107,30 @@ On 21/10/2025 14:03, Maxime Leroy wrote:
 >  2 files changed, 23 insertions(+)
 > 
 > diff --git a/package/dpdk/Config.in b/package/dpdk/Config.in
-> index 5de1c63937..e311611548 100644
+> index e311611548..feea71a4c3 100644
 > --- a/package/dpdk/Config.in
 > +++ b/package/dpdk/Config.in
-> @@ -64,6 +64,20 @@ config BR2_PACKAGE_DPDK_DRIVERS_LIST
->  	    find drivers -mindepth 2 -maxdepth 2 -type d \
->  	    ! -printf '%P\n' | sort
+> @@ -78,6 +78,20 @@ config BR2_PACKAGE_DPDK_LIBS_LIST
+>  	    find lib -mindepth 2 -maxdepth 2 -type f -name meson.build \
+>  	      -printf '%h\n' | xargs -n1 basename | sort -u
 > 
-> +config BR2_PACKAGE_DPDK_LIBS_LIST
-> +	string "Comma-separated libraries (e.g. graph,hash,fib)"
+> +config BR2_PACKAGE_DPDK_APPS_LIST
+> +	string "Comma-separated applications (e.g. pdump,dumpcap)"
 
 Could you make the prompt a bit shorter by moving the example
 in the help section. For example:
-	string "List of enabled libraries"
+	string "List of enabled applications"
 
 > +	help
-> +	  Controls which DPDK libraries are built.
+> +	  Controls which DPDK applications are built.
 > +
 > +	  Values:
 > +	    (empty): use DPDK defaults
-> +	    none   : build no libraries
-> +	    list   : e.g. "graph,hash,fib"
-
-Could you provide a simple working example, please?
-
-Testing the provided example with the commands:
-
-cat >.config <<EOF
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_PACKAGE_DPDK=y
-BR2_PACKAGE_DPDK_LIBS_LIST="graph,hash,fib"
-EOF
-make olddefconfig
-make dpdk
-
-Fails with error:
-
-ERROR: Problem encountered: Cannot build explicitly requested lib "fib".
-	Please add missing dependency "rib" to "enable_libs" option
-
+> +	    none   : build no apps
+> +	    list   : e.g. "pdump,dumpcap"
 > +
-> +	  To list all libraries found in the DPDK source tree:
-> +	    find lib -mindepth 2 -maxdepth 2 -type f -name meson.build \
+> +	  To list all applications found in the DPDK source tree:
+> +	    find app -mindepth 2 -maxdepth 2 -type f -name meson.build \
 > +	      -printf '%h\n' | xargs -n1 basename | sort -u
 
 Could you add a comment in the help section about the
@@ -163,19 +142,19 @@ dependencies?
 >  comment "dpdk needs a glibc toolchain w/ threads, gcc >= 4.9, headers 
 > >= 4.19"
 > diff --git a/package/dpdk/dpdk.mk b/package/dpdk/dpdk.mk
-> index 9333a67c31..e54668ca2d 100644
+> index e54668ca2d..8bef616cb3 100644
 > --- a/package/dpdk/dpdk.mk
 > +++ b/package/dpdk/dpdk.mk
-> @@ -56,6 +56,15 @@ ifneq ($(DPDK_DRIVERS),)
+> @@ -65,6 +65,15 @@ ifneq ($(DPDK_LIBS),)
 >    endif
 >  endif
 > 
-> +DPDK_LIBS := $(call qstrip,$(BR2_PACKAGE_DPDK_LIBS_LIST))
-> +ifneq ($(DPDK_LIBS),)
-> +  ifeq ($(DPDK_LIBS),none)
-> +    DPDK_CONF_OPTS += -Ddisable_libs='*'
+> +DPDK_APPS := $(call qstrip,$(BR2_PACKAGE_DPDK_APPS_LIST))
+> +ifneq ($(DPDK_APPS),)
+> +  ifeq ($(DPDK_APPS),none)
+> +    DPDK_CONF_OPTS += -Ddisable_apps='*'
 > +  else
-> +    DPDK_CONF_OPTS += -Denable_libs='$(DPDK_LIBS)'
+> +    DPDK_CONF_OPTS += -Denable_apps='$(DPDK_APPS)'
 > +  endif
 > +endif
 > +
@@ -185,8 +164,7 @@ dependencies?
 > --
 > 2.43.0
 
-Could you send an updated patch to address those issues,
-please?
+Could you send an updated patch to address those issues, please?
 
 Best regards,
 
