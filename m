@@ -4,69 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C21AD111A8
-	for <buildroot@archiver.kernel.org>; Sun, 30 Nov 2025 12:02:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD15ACFD376
+	for <buildroot@archiver.kernel.org>; Sun, 30 Nov 2025 12:05:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE66640A41;
-	Sun, 30 Nov 2025 12:02:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6DB7140A4B;
+	Sun, 30 Nov 2025 12:05:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rBlIFLFMYaZs; Sun, 30 Nov 2025 12:02:25 +0000 (UTC)
+ id TNXn_TzvH-NP; Sun, 30 Nov 2025 12:05:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A1AF40A4B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D40C40A89
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A1AF40A4B;
-	Sun, 30 Nov 2025 12:02:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 266B7219
- for <buildroot@buildroot.org>; Sun, 30 Nov 2025 12:02:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D40C40A89;
+	Sun, 30 Nov 2025 12:05:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 95E21219
+ for <buildroot@buildroot.org>; Sun, 30 Nov 2025 12:05:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0D59A40A41
- for <buildroot@buildroot.org>; Sun, 30 Nov 2025 12:02:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7BF9E80C8A
+ for <buildroot@buildroot.org>; Sun, 30 Nov 2025 12:05:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wH-M01KdLA87 for <buildroot@buildroot.org>;
- Sun, 30 Nov 2025 12:02:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
- helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8160240A2C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8160240A2C
-Received: from mail.tkos.co.il (mail.tkos.co.il [84.110.109.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8160240A2C
- for <buildroot@buildroot.org>; Sun, 30 Nov 2025 12:02:20 +0000 (UTC)
-Received: from localhost (unknown [10.0.8.3])
- by mail.tkos.co.il (Postfix) with ESMTP id 89F364407ED;
- Sun, 30 Nov 2025 14:00:09 +0200 (IST)
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251130115052.3005204-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Sun, 30 Nov 2025 12:50:52 +0100")
-References: <20251130115052.3005204-1-bernd@kuhls.net>
-User-Agent: mu4e 1.12.13; emacs 30.2
-Date: Sun, 30 Nov 2025 14:02:15 +0200
-Message-ID: <87h5ubvid4.fsf@tarshish>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HsHgF0pZ7Gbq for <buildroot@buildroot.org>;
+ Sun, 30 Nov 2025 12:04:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AD52D80C50
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD52D80C50
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AD52D80C50
+ for <buildroot@buildroot.org>; Sun, 30 Nov 2025 12:04:59 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1b593.dip0.t-ipconnect.de [84.161.181.147])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 7B3B0A4C773A;
+ Sun, 30 Nov 2025 13:04:57 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:37678)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99)
+ (envelope-from <bernd@kuhls.net>) id 1vPgAj-000000005VW-0ZdL;
+ Sun, 30 Nov 2025 12:04:57 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Cc: Stefan Hager <stefan.hager@ginzinger.com>
+Date: Sun, 30 Nov 2025 13:04:57 +0100
+Message-ID: <20251130120457.3021844-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1764504009;
- bh=rYJr69frjfas8Boq3V3HrmGfmRoPnctHJg7Uo7ifAgM=;
- h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
- b=Diq2O80hfQLDh53/B3lYWNJyyN3tih8Ob2lvdDtrXhO5nnIxJRPHpcrD3pSHw3KQ6
- /oK87fgY/X7ezhf3IogoATNHOND7pZabQwVr8rcwvyjB6uMj9ifUBwRznpNdHcE+Ox
- 5o1ANdYMFCVy0z8XlFaw5q8adFeMcChFEu360ydKToInfQmWCa9zGugW24akj0hFe1
- aObgj/jE+LiL9np37HpMZzadOFhHs8sJbAEoXuiLqCn+PfpxqM/tMSf6aKistNL1Oh
- dUzrDkr0N0vJ8YdoJR65WIWd1/Cf78qjOqE/ouLjrfJyBVaGLX5TDZNmKJlOBx1adu
- s5YTx5Hz/QycQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=tkos.co.il
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
- header.s=default header.b=Diq2O80h
-Subject: Re: [Buildroot] [PATCH 1/1] package/18xx-ti-utils: switch to git
- repo
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202506031021; t=1764504297;
+ bh=Vx2y7MI5lOfmE8t02dVcqLj5boF9/fsoOpw7Ihnna6I=;
+ h=From:To:Cc:Subject:Date:From;
+ b=j3r36n0OhVyf2oeoysKZlnE4j0hyzkiQFzXzlDHaJcDEedeuV6gIS+S4riVRs5mMD
+ eRRk/cueRr2fHkEw435UE6McF63Y4Za51ba6d25lhsCRKc7XaQFfhJ79snct4+s8M7
+ XSOsGbLq9W1GXus6ug634gXMa0DNk1Ptey9nPgu8OZG3bOcEPVbhVyxfbyzsdN1xYN
+ BFCvnad8fGk7fFjAn3VlJv0PEG+H1gGW9mj67MXhk2W/7MYgdbEJP6z0Zvb2zPhLiw
+ QKpO97HX3PVeNJxgta4Rb6zFM2fxgdMGvMfKcT9DzjTBW/tFwRw38pJYh+80dcSp26
+ 3ccYW9YxXX5rw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=j3r36n0O
+Subject: [Buildroot] [PATCH 1/1] package/psimd: fix cmake 4 compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,78 +80,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Bernd,
+The current upstream repo shows this note:
+"This repository was archived by the owner on May 27, 2024. It is now
+ read-only."
 
-On Sun, Nov 30 2025, Bernd Kuhls wrote:
-> Downloading the snapshot tarball has been unstable in the past so we
-> switch to git for fetching the source code.
->
-> Fixes:
-> https://autobuild.buildroot.net/results/8b9/8b9b15e578ee13c47bdfe77f8bd79cd34c49de91/
-> https://autobuild.buildroot.net/results/bfc/bfcfb6e5014e017334604ba8fdcfac2acc65d161/
-> https://autobuild.buildroot.net/results/6c6/6c69077ea076c3c28d0e8599913cde31ee27b0c5/
-> https://autobuild.buildroot.net/results/b43/b431fabedd709f660f556a7a6539a0b1e28aeb49/
+Switched to fork whose only difference is a commit fixing build errors
+with cmake 4:
+https://github.com/snest/psimd/commit/4674816f56757dbd99b297cb5647f2520df08db1
 
-The download error message is this:
+Fixes:
+https://autobuild.buildroot.net/results/130/13084ca4df5ae91d72f46ef51873676b05398ec9/
 
-wget -nd -t 3 --no-check-certificate -O '/home/thomas/autobuild/instance-0/output-1/build/.18xx-ti-utils-R8.8.tar.xz.50OaB7/output' 'https://git.ti.com/cgit/wilink8-wlan/18xx-ti-utils/snapshot/18xx-ti-utils-R8.8.tar.xz' 
---2025-11-21 19:35:47--  https://git.ti.com/cgit/wilink8-wlan/18xx-ti-utils/snapshot/18xx-ti-utils-R8.8.tar.xz
-Resolving git.ti.com (git.ti.com)... 198.47.28.208
-Connecting to git.ti.com (git.ti.com)|198.47.28.208|:443... failed: Connection timed out.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/psimd/psimd.hash | 2 +-
+ package/psimd/psimd.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-That is, HTTPS connection request fails. I can't see how git access over
-the same HTTPS service would improve download stability.
-
-The autobuilder reported a few download failures of that sort in
-November 20-21. There is no download failure since then. So I guess that
-was a transient network issue.
-
-baruch
-
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/18xx-ti-utils/18xx-ti-utils.hash | 2 +-
->  package/18xx-ti-utils/18xx-ti-utils.mk   | 6 +++---
->  2 files changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/package/18xx-ti-utils/18xx-ti-utils.hash b/package/18xx-ti-utils/18xx-ti-utils.hash
-> index 7ecca54b9b..116d05e8e9 100644
-> --- a/package/18xx-ti-utils/18xx-ti-utils.hash
-> +++ b/package/18xx-ti-utils/18xx-ti-utils.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  ce0185ba8a9bf456cc94a798bf66903775065e337e53ff812f18a6d88f5bac13  18xx-ti-utils-R8.8.tar.xz
-> +sha256  33be3c90719bf36d5da76c6faaefb07bf3697635f81b86e28b92307d7825483e  18xx-ti-utils-R8.8-git4.tar.gz
->  sha256  363cef40b276a7a91ebcff3f78626d9cfe5e5a51927c725236007259403d5fc4  COPYING
-> diff --git a/package/18xx-ti-utils/18xx-ti-utils.mk b/package/18xx-ti-utils/18xx-ti-utils.mk
-> index 5d45191cde..3e6f715730 100644
-> --- a/package/18xx-ti-utils/18xx-ti-utils.mk
-> +++ b/package/18xx-ti-utils/18xx-ti-utils.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->  
-> -18XX_TI_UTILS_VERSION = 8.8
-> -18XX_TI_UTILS_SITE = https://git.ti.com/cgit/wilink8-wlan/18xx-ti-utils/snapshot
-> -18XX_TI_UTILS_SOURCE = 18xx-ti-utils-R$(18XX_TI_UTILS_VERSION).tar.xz
-> +18XX_TI_UTILS_VERSION = R8.8
-> +18XX_TI_UTILS_SITE = https://git.ti.com/cgit/wilink8-wlan/18xx-ti-utils
-> +18XX_TI_UTILS_SITE_METHOD = git
->  18XX_TI_UTILS_DEPENDENCIES = libnl
->  18XX_TI_UTILS_LICENSE = BSD-3-Clause
->  18XX_TI_UTILS_LICENSE_FILES = COPYING
-
+diff --git a/package/psimd/psimd.hash b/package/psimd/psimd.hash
+index 5692e79bd6..69481438e4 100644
+--- a/package/psimd/psimd.hash
++++ b/package/psimd/psimd.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  f6c4dab91ae9a03b3019e7cab0572743afd0e1b6e75b97fcca50259c737c924e  psimd-072586a71b55b7f8c584153d223e95687148a900.tar.gz
++sha256  8934a8dff062663331a17588dfb771940be9d22887596c8ca77e25026c2adc6f  psimd-4674816f56757dbd99b297cb5647f2520df08db1.tar.gz
+ # License files, locally calculated
+ sha256  984ce1e0b8ee89d234e28b960381f240e03a07a8031f35012f9c3256f56964e2  LICENSE
+diff --git a/package/psimd/psimd.mk b/package/psimd/psimd.mk
+index be0090a32f..cf6562a3f4 100644
+--- a/package/psimd/psimd.mk
++++ b/package/psimd/psimd.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PSIMD_VERSION = 072586a71b55b7f8c584153d223e95687148a900
+-PSIMD_SITE = $(call github,Maratyszcza,psimd,$(PSIMD_VERSION))
++PSIMD_VERSION = 4674816f56757dbd99b297cb5647f2520df08db1
++PSIMD_SITE = $(call github,snest,psimd,$(PSIMD_VERSION))
+ PSIMD_LICENSE = MIT
+ PSIMD_LICENSE_FILES = LICENSE
+ PSIMD_INSTALL_STAGING = YES
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
