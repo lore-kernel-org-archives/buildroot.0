@@ -4,72 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5479BCFD376
-	for <buildroot@archiver.kernel.org>; Sun, 30 Nov 2025 14:33:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01A4ACFD376
+	for <buildroot@archiver.kernel.org>; Sun, 30 Nov 2025 14:41:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BE2248231E;
-	Sun, 30 Nov 2025 14:33:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C32F281B6D;
+	Sun, 30 Nov 2025 14:41:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gObJgjZtCHHU; Sun, 30 Nov 2025 14:33:23 +0000 (UTC)
+ id nMNbFrLOy8UX; Sun, 30 Nov 2025 14:41:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D27F88231F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA28981BB2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D27F88231F;
-	Sun, 30 Nov 2025 14:33:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 22FB1351
- for <buildroot@buildroot.org>; Sun, 30 Nov 2025 14:33:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DA28981BB2;
+	Sun, 30 Nov 2025 14:41:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 36501351
+ for <buildroot@buildroot.org>; Sun, 30 Nov 2025 14:41:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 09F7E8231E
- for <buildroot@buildroot.org>; Sun, 30 Nov 2025 14:33:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 27A0D60737
+ for <buildroot@buildroot.org>; Sun, 30 Nov 2025 14:41:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cxzUsISPnCu0 for <buildroot@buildroot.org>;
- Sun, 30 Nov 2025 14:33:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D80E88231F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D80E88231F
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D80E88231F
- for <buildroot@buildroot.org>; Sun, 30 Nov 2025 14:33:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rPoYTwjhhIRH for <buildroot@buildroot.org>;
+ Sun, 30 Nov 2025 14:41:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DCB3F606EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCB3F606EE
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DCB3F606EE
+ for <buildroot@buildroot.org>; Sun, 30 Nov 2025 14:41:51 +0000 (UTC)
 Received: from webmail.free.fr (unknown [172.20.246.1])
  (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 6BFA120039E;
- Sun, 30 Nov 2025 15:33:14 +0100 (CET)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 9D0A8780505;
+ Sun, 30 Nov 2025 15:41:47 +0100 (CET)
 Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
  via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 30 Nov 2025 15:33:14 +0100
+ with HTTP (HTTP/1.0 POST); Sun, 30 Nov 2025 15:41:47 +0100
 MIME-Version: 1.0
-Date: Sun, 30 Nov 2025 15:33:14 +0100
+Date: Sun, 30 Nov 2025 15:41:47 +0100
 To: Maxime Leroy <maxime@leroys.fr>
 Cc: buildroot@buildroot.org, Vincent Jardin <vjardin@free.fr>
-In-Reply-To: <20251021120342.483933-4-maxime@leroys.fr>
+In-Reply-To: <20251021120342.483933-5-maxime@leroys.fr>
 References: <20251021120342.483933-1-maxime@leroys.fr>
- <20251021120342.483933-4-maxime@leroys.fr>
+ <20251021120342.483933-5-maxime@leroys.fr>
 User-Agent: Webmail Free/1.6.11
-Message-ID: <019c90d7929f98d2f7da75410b941388@free.fr>
+Message-ID: <bb3fe35a7bb2ef59404c26bc63b4a178@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1764513196;
- bh=iNGLQ60XgY3KkFJdItsWji4fYpi9wu6j53WbeCp9cx8=;
+ d=free.fr; s=smtp-20201208; t=1764513709;
+ bh=9cj/JDRXuLTrxEMPR08qf5h6hPEHp7ZmvZEt+UIxlE0=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=TBRrXYolrE8hO9ArrchBbURKdaje81xJ3StUpkN/rzJn/cP4NlcQuNd3ezpt7y7kL
- AkKVmAXFZY8suRcBhLGsaSvSwOWb46N6zZmRyv84h1VGP7FFEhhkLc0jm4cJOrxAq2
- N11PMkk73XDrEy7PgTkkNlPmK02LsK8yw4OckAEftDQKonqZUw+MRIFS8ieRnqyQQq
- SVmeTs5rFj2sL+vyJlncMpEj+dmKTjuzVk38DByD7zH+Rf183KkPBE+hoh9G2m44s2
- 7JZkrJIfL8puDHwNV8tEFcpF83ExxDDwTUvlfKLDVOvVQieKiRj7SS6zBDZRcUnucZ
- 052dADrXkeQ+A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=tpyYdY0EiESLm7/7Z7hEfSJrk6qdOzeuQrcGOCZPaHlpA2gTAzAJ2/t1yb4YfV7eK
+ s4ASDfRTSaNPM7Hew58jx4a+ljFTeoaz4Ar9IAM+Iu2LRW/6Wh9RlwKz8C/gIZys97
+ gof1kM6LdWLMXWcT5BP8CildWNCUA7cHRlRLy9m3cGCZ70GMaGlnADDrUOgruxp2Oo
+ tNJRXyKBzPvCtVYGWAWuVfytBJiaqKHAHzBPXurfTV4WeJz067LrzeaLhERW5gLnMP
+ E+mRmrPIlTr7a3AAxcOsW6/+mtsLUe5eBoctLVGSNvgVQX9URq5vZS8PG1DEXctdjr
+ x2dYCIF5ZVHTg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=TBRrXYol
-Subject: Re: [Buildroot] [PATCH 3/5] package/dpdk: make drivers selectable
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=tpyYdY0E
+Subject: Re: [Buildroot] [PATCH 4/5] package/dpdk: make libraries selectable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,15 +91,15 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hi Maxime,
 
-I finally had some time to test those patches. I have few comments.
+I have mostly the same comments as for the dpdk driver
+list patch [1].
 
 On 21/10/2025 14:03, Maxime Leroy wrote:
-> Add BR2_PACKAGE_DPDK_DRIVERS_LIST to control which DPDK applications 
-> are
+> Add BR2_PACKAGE_DPDK_LIBS_LIST to control which DPDK libraries are
 > built:
 >   - empty : use DPDK defaults
->   - none  : disable all drivers (-Ddisable_drivers='*/*')
->   - list  : pass to -Denable_drivers= (comma-separated)
+>   - none  : disable all libs (-Ddisable_libs='*')
+>   - list  : pass to -Denable_libs= (comma-separated)
 > 
 > Signed-off-by: Maxime Leroy <maxime@leroys.fr>
 > ---
@@ -107,26 +108,29 @@ On 21/10/2025 14:03, Maxime Leroy wrote:
 >  2 files changed, 23 insertions(+)
 > 
 > diff --git a/package/dpdk/Config.in b/package/dpdk/Config.in
-> index 5e8f2e001b..5de1c63937 100644
+> index 5de1c63937..e311611548 100644
 > --- a/package/dpdk/Config.in
 > +++ b/package/dpdk/Config.in
-> @@ -50,6 +50,20 @@ config BR2_PACKAGE_DPDK_ENABLE_KMODS
->  	  legacy uio/kni). Upstream marks this option as deprecated
->  	  and it will be removed in a future release.
+> @@ -64,6 +64,20 @@ config BR2_PACKAGE_DPDK_DRIVERS_LIST
+>  	    find drivers -mindepth 2 -maxdepth 2 -type d \
+>  	    ! -printf '%P\n' | sort
 > 
-> +config BR2_PACKAGE_DPDK_DRIVERS_LIST
-> +	string "Comma-separated drivers (e.g. net/virtio,net/ixgbe)"
+> +config BR2_PACKAGE_DPDK_LIBS_LIST
+> +	string "Comma-separated libraries (e.g. graph,hash,fib)"
 
-Could you make this string prompt shorter and move the example in
-help section? See my suggestion below.
+Could you make the prompt a bit shorter by moving the example
+in the help section. For example:
+	string "List of enabled libraries"
 
 > +	help
-> +	  Controls which DPDK drivers are built.
+> +	  Controls which DPDK libraries are built.
 > +
 > +	  Values:
-> +	   (empty): use DPDK defaults
-> +	   none   : build no drivers
-> +	   list   : e.g. "net/virtio,net/ixgbe"
+> +	    (empty): use DPDK defaults
+> +	    none   : build no libraries
+> +	    list   : e.g. "graph,hash,fib"
+
+Could you provide a simple working example, please?
 
 Testing the provided example with the commands:
 
@@ -135,58 +139,23 @@ BR2_aarch64=y
 BR2_TOOLCHAIN_EXTERNAL=y
 BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
 BR2_PACKAGE_DPDK=y
-BR2_PACKAGE_DPDK_DRIVERS_LIST="net/virtio,net/ixgbe"
+BR2_PACKAGE_DPDK_LIBS_LIST="graph,hash,fib"
 EOF
 make olddefconfig
 make dpdk
 
 Fails with error:
 
-ERROR: Unknown variable "c_args".
-
-Could you provide an example working at least with with the
-current version of dpdk in Buildroot (or the upcoming 25.11),
-please?
+ERROR: Problem encountered: Cannot build explicitly requested lib "fib".
+	Please add missing dependency "rib" to "enable_libs" option
 
 > +
-> +	  To list all drivers found in the DPDK source tree:
-> +	    find drivers -mindepth 2 -maxdepth 2 -type d \
-> +	    ! -printf '%P\n' | sort
+> +	  To list all libraries found in the DPDK source tree:
+> +	    find lib -mindepth 2 -maxdepth 2 -type f -name meson.build \
+> +	      -printf '%h\n' | xargs -n1 basename | sort -u
 
-Upstream commit [1] for example,
-to be included in upcoming 25.11 release reorganized the
-structure of the driver directory. So this command to list the
-possible drivers might need to be updated after the bump to 25.11.
-
-Also playing a bit with those new options, I noticed enabling
-a dpdk component does not enable its internal dpdk dependencies.
-So I would suggest to add a comment about that in the help.
-
-With those comments, I suggest the following:
-
-	string "List of enabled drivers"
-	help
-	  Controls which DPDK drivers are built.
-
-	  Accepted values:
-	   (empty): use DPDK defaults
-	   none   : build no drivers
-	   list   : comma-separated list of drivers to enable
-	            e.g. "net/virtio,net/ixgbe"
-
-	  To list all drivers found in the DPDK source tree:
-	    find drivers -mindepth 2 -maxdepth 2 -type d \
-	    ! -printf '%P\n' | sort
-
-	  Note: providing manually a list of dpdk component to enable
-	  does not automatically enable its dependencies (internal or
-	  external). It is the user responsiblity to add internal dpdk
-	  dependencies in this list, and/or select the relevant
-	  Buildroot packages for external dependencies. DPDK
-	  configuration will fail in case of missing dependencies.
-
-Please adjust as needed.
-
+Could you add a comment in the help section about the
+dependencies?
 
 > +
 >  endif
@@ -194,23 +163,19 @@ Please adjust as needed.
 >  comment "dpdk needs a glibc toolchain w/ threads, gcc >= 4.9, headers 
 > >= 4.19"
 > diff --git a/package/dpdk/dpdk.mk b/package/dpdk/dpdk.mk
-> index 30d5bcc9ca..9333a67c31 100644
+> index 9333a67c31..e54668ca2d 100644
 > --- a/package/dpdk/dpdk.mk
 > +++ b/package/dpdk/dpdk.mk
-> @@ -47,6 +47,15 @@ else
->  DPDK_CONF_OPTS += -Dexamples=
+> @@ -56,6 +56,15 @@ ifneq ($(DPDK_DRIVERS),)
+>    endif
 >  endif
 > 
-> +DPDK_DRIVERS := $(call qstrip,$(BR2_PACKAGE_DPDK_DRIVERS_LIST))
-> +ifneq ($(DPDK_DRIVERS),)
-> +  ifeq ($(DPDK_DRIVERS),none)
-> +    DPDK_CONF_OPTS += -Ddisable_drivers='*/*'
-
-With the upstream commit [1], will this '*/*' still work with
-a dpdk version 25.11?
-
+> +DPDK_LIBS := $(call qstrip,$(BR2_PACKAGE_DPDK_LIBS_LIST))
+> +ifneq ($(DPDK_LIBS),)
+> +  ifeq ($(DPDK_LIBS),none)
+> +    DPDK_CONF_OPTS += -Ddisable_libs='*'
 > +  else
-> +    DPDK_CONF_OPTS += -Denable_drivers='$(DPDK_DRIVERS)'
+> +    DPDK_CONF_OPTS += -Denable_libs='$(DPDK_LIBS)'
 > +  endif
 > +endif
 > +
@@ -220,16 +185,15 @@ a dpdk version 25.11?
 > --
 > 2.43.0
 
-Since the new dpdk version is expected soon, I suggest you
-should test those updated patches with it. And possibly
-send all those in the same series including the bump.
+Could you send an updated patch to address those issues,
+please?
 
 Best regards,
 
 Julien.
 
 [1] 
-https://github.com/DPDK/dpdk/commit/c1d145834f287aa8cf53de914618a7312f2c360e
+https://lore.kernel.org/buildroot/019c90d7929f98d2f7da75410b941388@free.fr/T/#u
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
