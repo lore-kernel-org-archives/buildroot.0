@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E804D4337C
-	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:57:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7666CD43370
+	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:57:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 55E8783E3C;
-	Fri, 12 Dec 2025 07:57:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 48DB383CB8;
+	Fri, 12 Dec 2025 07:57:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6vs8QS32basf; Fri, 12 Dec 2025 07:57:26 +0000 (UTC)
+ id SoUAVq2bt3bs; Fri, 12 Dec 2025 07:57:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4FEE83D62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A14D8144D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765526230;
-	bh=yunA+2/O6vhBj+IL3ukK6mWgeKvfzfWWGZzvfXouMdo=;
+	s=default; t=1765526232;
+	bh=n7WjL5ei3KLB6NJouwwZnNSlgcC2oAJobakNHQEGPjk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=M5NKtI+uHntCaXmQEIBFzDApazEhHFKb9ki902z10Vlgk4qcLu7yXd7h8gfE9MXWB
-	 DeQkyfkRx9kj8hEY3NBf1xHkbsI8dTgHahJF9pZ2sfzMLIzB5l+I2siyOeqlP9xGxO
-	 /rl6uYzT4v7Krqak+16nuUZT6J760TdHNj++oRds/jJzD4OeqvtAjGqaswNr0VqwXL
-	 i2fFSHsnb+f+nIrD/8lO5aDAUlweo8kGZEvPWcrctYE9ekyqlfwSKgxsM8jRTo4UnX
-	 r+TDhBUz/Bh2COFKUIiQOoSJ6lzibezrSaOuyzetsCi3FtPC0b0Jcqa2zCYuZ6AToS
-	 3Qrd2kzCx9Ebw==
+	b=F9JXXJG2ckvyqrHXPTlWhECbGBrQGHgyRexX8Sb3EqL90ikixX7rwhtho9Y/8noBZ
+	 b+wUWCvJtTOqTqHm0rIVEJZuERVZYRFFnr4ym8pMWV2UOgIUjEQ/EESrzq/o8I9wwT
+	 VPv7JxCjTgkrad7eg7e8cpQKigOClf6vypGMoCb/CLaEU5jW5mJUHRkq/g4HfUGL9k
+	 djyPdWfKaA0+FVCu9LUTqiLqvmjMJeDDJrL31VONbeVtHglb7Qy5srLmASf9CMtVYG
+	 DH8BAk4a3dONUN6S/gIvf5EAb2NszG2YD2ZvSziUjB18O8jQDK4Ko0ygIfXhc4ZU5I
+	 ffPT2ss2iJ3eA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B4FEE83D62;
-	Fri, 12 Dec 2025 07:57:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0A14D8144D;
+	Fri, 12 Dec 2025 07:57:12 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 37EA82E9
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:56:16 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 46946E7
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:56:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 85A5241141
+ by smtp4.osuosl.org (Postfix) with ESMTP id B7CE74114A
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ilaPRX8SJDEW for <buildroot@buildroot.org>;
+ id z1eRINJ9MSqu for <buildroot@buildroot.org>;
  Fri, 12 Dec 2025 07:55:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E5CF4114A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F13F4114B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4E5CF4114A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5F13F4114B
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4D83686C93; Fri, 12 Dec 2025 07:55:36 +0000 (UTC)
+ id 5C9CD86C9A; Fri, 12 Dec 2025 07:55:36 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Mon, 1 Dec 2025 21:20:33 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5f6eb0855a7de7e27929fd52a74bb6d4a9897e1d
-X-Git-Newrev: beb0a33d3587118dee3ca3adaefde4f56a6dbd6e
+X-Git-Oldrev: 4b4e2f86732dad97300a0d73b46622d586b9cc9d
+X-Git-Newrev: c5b87c063c29f0ba3749e45e1fc17ce798aab02f
 X-Patchwork-Hint: ignore
-Message-Id: <20251212075536.4D83686C93@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/ls1046a-rdb: bump BSP tag to
+Message-Id: <20251212075536.5C9CD86C9A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/ls1043a-rdb: bump BSP tag to
  lf-6.12.34-2.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -77,7 +77,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=beb0a33d3587118dee3ca3adaefde4f56a6dbd6e
+commit: https://git.buildroot.net/buildroot/commit/?id=c5b87c063c29f0ba3749e45e1fc17ce798aab02f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Update the kernel, U-Boot, ATF tags and readme.txt.
@@ -86,40 +86,40 @@ Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
  .../arm-trusted-firmware/arm-trusted-firmware.hash       |  2 +-
- board/freescale/ls1046a-rdb/patches/linux/linux.hash     |  2 +-
- board/freescale/ls1046a-rdb/patches/uboot/uboot.hash     |  2 +-
- board/freescale/ls1046a-rdb/readme.txt                   | 16 ++++++++--------
- configs/ls1046a-rdb_defconfig                            |  6 +++---
+ board/freescale/ls1043a-rdb/patches/linux/linux.hash     |  2 +-
+ board/freescale/ls1043a-rdb/patches/uboot/uboot.hash     |  2 +-
+ board/freescale/ls1043a-rdb/readme.txt                   | 16 ++++++++--------
+ configs/ls1043a-rdb_defconfig                            |  6 +++---
  5 files changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/board/freescale/ls1046a-rdb/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/freescale/ls1046a-rdb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+diff --git a/board/freescale/ls1043a-rdb/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/freescale/ls1043a-rdb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
 index c05084df76..7981c74137 100644
---- a/board/freescale/ls1046a-rdb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-+++ b/board/freescale/ls1046a-rdb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+--- a/board/freescale/ls1043a-rdb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/freescale/ls1043a-rdb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
 -sha256  738f029c6bfcdac5649e2c252970b1f44c1ce7fee9fe4657a25edc666375ffa8  atf-lf-6.12.20-2.0.0.tar.gz
 +sha256  2d3f9c52e16766c290bdc0bc130d634e4c326a5b236dfb2f2ca3f0fa457e82d4  atf-lf-6.12.34-2.1.0.tar.gz
-diff --git a/board/freescale/ls1046a-rdb/patches/linux/linux.hash b/board/freescale/ls1046a-rdb/patches/linux/linux.hash
+diff --git a/board/freescale/ls1043a-rdb/patches/linux/linux.hash b/board/freescale/ls1043a-rdb/patches/linux/linux.hash
 index 3aea05469c..f30030c86a 100644
---- a/board/freescale/ls1046a-rdb/patches/linux/linux.hash
-+++ b/board/freescale/ls1046a-rdb/patches/linux/linux.hash
+--- a/board/freescale/ls1043a-rdb/patches/linux/linux.hash
++++ b/board/freescale/ls1043a-rdb/patches/linux/linux.hash
 @@ -1,2 +1,2 @@
  # Locally computed
 -sha256  c98177e85ace6400b06301101af3065e90463920c3e166da4ed22deffe960fb8  linux-lf-6.12.20-2.0.0.tar.gz
 +sha256  27a1987ca0a5802d3ebb296b8134ec66d813ad86cf2a60779b45092735bbb23b  linux-lf-6.12.34-2.1.0.tar.gz
-diff --git a/board/freescale/ls1046a-rdb/patches/uboot/uboot.hash b/board/freescale/ls1046a-rdb/patches/uboot/uboot.hash
+diff --git a/board/freescale/ls1043a-rdb/patches/uboot/uboot.hash b/board/freescale/ls1043a-rdb/patches/uboot/uboot.hash
 index 1072686160..38d54d9922 100644
---- a/board/freescale/ls1046a-rdb/patches/uboot/uboot.hash
-+++ b/board/freescale/ls1046a-rdb/patches/uboot/uboot.hash
+--- a/board/freescale/ls1043a-rdb/patches/uboot/uboot.hash
++++ b/board/freescale/ls1043a-rdb/patches/uboot/uboot.hash
 @@ -1,2 +1,2 @@
  # Locally computed
 -sha256  a39f7db3ffd2b7263ea5d02b0631decac1c89f7c1b96b77ba8e302f3641a3eb3  u-boot-lf-6.12.20-2.0.0.tar.gz
 +sha256  2f25cde388b2f83ff7a8e3afe25aafb1db48dafb0fa3bf1e4f9fef603f3b4785  u-boot-lf-6.12.34-2.1.0.tar.gz
-diff --git a/board/freescale/ls1046a-rdb/readme.txt b/board/freescale/ls1046a-rdb/readme.txt
-index ede7a607a8..e2f344dce9 100644
---- a/board/freescale/ls1046a-rdb/readme.txt
-+++ b/board/freescale/ls1046a-rdb/readme.txt
+diff --git a/board/freescale/ls1043a-rdb/readme.txt b/board/freescale/ls1043a-rdb/readme.txt
+index b106c96471..4461b18e73 100644
+--- a/board/freescale/ls1043a-rdb/readme.txt
++++ b/board/freescale/ls1043a-rdb/readme.txt
 @@ -11,7 +11,7 @@ for more details about the board and the QorIQ Layerscape SoC, see the following
  Layerscape platforms are officially supported by NXP under the Layerscape
  Debian Linux SDK (LDLSDK). This uses components from Linux Factory (project
@@ -150,12 +150,12 @@ index ede7a607a8..e2f344dce9 100644
  
  Build
  =====
-diff --git a/configs/ls1046a-rdb_defconfig b/configs/ls1046a-rdb_defconfig
-index 21c63e43b4..f9be2d42b2 100644
---- a/configs/ls1046a-rdb_defconfig
-+++ b/configs/ls1046a-rdb_defconfig
-@@ -13,7 +13,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/ls1046a-rdb/genimage.cfg"
+diff --git a/configs/ls1043a-rdb_defconfig b/configs/ls1043a-rdb_defconfig
+index 57c9dbf5b1..94b8a91416 100644
+--- a/configs/ls1043a-rdb_defconfig
++++ b/configs/ls1043a-rdb_defconfig
+@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/ls1043a-rdb/genimage.cfg"
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
 -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,linux,lf-6.12.20-2.0.0)/linux-lf-6.12.20-2.0.0.tar.gz"
@@ -169,7 +169,7 @@ index 21c63e43b4..f9be2d42b2 100644
  BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
 -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,atf,lf-6.12.20-2.0.0)/atf-lf-6.12.20-2.0.0.tar.gz"
 +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,atf,lf-6.12.34-2.1.0)/atf-lf-6.12.34-2.1.0.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="ls1046ardb"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="ls1043ardb"
  BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
  BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
 @@ -38,7 +38,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin bl2_sd.pbl"
@@ -178,7 +178,7 @@ index 21c63e43b4..f9be2d42b2 100644
  BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
 -BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,u-boot,lf-6.12.20-2.0.0)/u-boot-lf-6.12.20-2.0.0.tar.gz"
 +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,u-boot,lf-6.12.34-2.1.0)/u-boot-lf-6.12.34-2.1.0.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="ls1046ardb_tfa"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="ls1043ardb_tfa"
  BR2_TARGET_UBOOT_NEEDS_DTC=y
  BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
 _______________________________________________
