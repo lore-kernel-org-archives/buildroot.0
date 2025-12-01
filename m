@@ -1,92 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1858DD111A8
-	for <buildroot@archiver.kernel.org>; Mon,  1 Dec 2025 06:57:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B526D116F1
+	for <buildroot@archiver.kernel.org>; Mon,  1 Dec 2025 11:26:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 75E0940801;
-	Mon,  1 Dec 2025 06:57:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7098081300;
+	Mon,  1 Dec 2025 11:26:32 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5uCU7SmOwWfj; Mon,  1 Dec 2025 11:26:31 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 091BA812C4
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 091BA812C4;
+	Mon,  1 Dec 2025 11:26:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D8F40D3
+ for <buildroot@buildroot.org>; Mon,  1 Dec 2025 11:26:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D6A8A404A6
+ for <buildroot@buildroot.org>; Mon,  1 Dec 2025 11:26:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ojQIp08acrvT; Mon,  1 Dec 2025 06:57:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81073407E1
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 81073407E1;
-	Mon,  1 Dec 2025 06:57:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 829EDD3
- for <buildroot@buildroot.org>; Mon,  1 Dec 2025 06:57:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 68E0240337
- for <buildroot@buildroot.org>; Mon,  1 Dec 2025 06:57:34 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cWQhD7HVddKG for <buildroot@buildroot.org>;
- Mon,  1 Dec 2025 06:57:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.237;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ id qjyLhkfXi1vB for <buildroot@buildroot.org>;
+ Mon,  1 Dec 2025 11:26:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.221.43;
+ helo=mail-wr1-f43.google.com; envelope-from=thomas.devoogdt@gmail.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 02486400A7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02486400A7
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.237])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 02486400A7
- for <buildroot@buildroot.org>; Mon,  1 Dec 2025 06:57:32 +0000 (UTC)
-X-CSE-ConnectionGUID: nd/1zzXwTseL/5KcU2Qo5A==
-X-CSE-MsgGUID: s5EKuIYqQX2YpoJ3dm5QOw==
-Received: from unknown (HELO opfedv1rlp0f.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
- 01 Dec 2025 07:57:29 +0100
-Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0f.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Dec 2025 07:57:30 +0100
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.61;
- Mon, 1 Dec 2025 07:57:28 +0100
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Mon, 01 Dec 2025 07:57:27 +0100
-X-CSE-ConnectionGUID: JV4zJj+JTM6udF3xzMU+8Q==
-X-CSE-MsgGUID: c0UBhr97Rka9Hg+DyUR0TQ==
-X-IronPort-AV: E=Sophos;i="6.20,240,1758578400"; d="scan'208";a="363528536"
-From: <yann.morin@orange.com>
-To: <buildroot@buildroot.org>
-CC: <yann.morin@orange.com>
-Date: Mon, 1 Dec 2025 07:57:27 +0100
-Message-ID: <91327a6c3076c7ac166f5b097c08e0e90e7cb438.1764572247.git.yann.morin@orange.com>
-X-Mailer: git-send-email 2.34.1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CD041404A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD041404A0
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com
+ [209.85.221.43])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CD041404A0
+ for <buildroot@buildroot.org>; Mon,  1 Dec 2025 11:26:28 +0000 (UTC)
+Received: by mail-wr1-f43.google.com with SMTP id
+ ffacd0b85a97d-42e2e2eccd2so904240f8f.1
+ for <buildroot@buildroot.org>; Mon, 01 Dec 2025 03:26:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1764588387; x=1765193187;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=VtHVZOked9touycw3HaHBpOWYnBhs4NdtFIRGZygu5M=;
+ b=kHfmWDEPkzJzPYGEYYYL2Ep5GNPuvMMQPHh/Xa87RiiaQ7s0Nxd3lVDXQPXlq82G/m
+ DHJpOEeOW5Xsz9I2eZ1eADiLr+eTsX5A3toBkCkssjh9Vu/0CvNn6/mahaH9uJpGaXT1
+ WME/l83OhpNW/Srqz7qrZ76Wac77jaZk7S5UbwCR2dK73Rl8YHzCTP+qqqvUm6N/T9JM
+ sBu9a2CY+cJJEWYkGIDE92KoCbW06NgOBjFW63oCzCLgiEd/QgIHKdxdor34HTocLEsx
+ S2tyRYSLS9OlNSadlGws4M74XTEe5Y/Ne/wzkCFGsGMeP1FN7JvJ+F8tTaHq+brVN8TS
+ EP8w==
+X-Gm-Message-State: AOJu0Yzcj1TfnzBiOFehwN1LVjIYvsJFxHrq0OHrRYLTFwF5DuyuCKCB
+ 3zpR9xXxek/14c56meba/ibWcOjnWbh4yGwhuJW6MVTKg3qrIYClqn5/
+X-Gm-Gg: ASbGncsWi53kTpaFXxNxWtyE5PY8qjFuqfpeeQ+ENagV1O8XxSm1Pk/E715SqIytGh1
+ MnI4zCG3LVzT9tfII8lmBtvNgfr0pNJgjbdtt9j96reLUduNj351rpvmFhnKFbZVqfairrb6j4s
+ lSNKkMqmgQCY+kpjgVAHqO52/EJhWnw6Xqx9hxKwiZsAEabuy64Axvz5gQEJw3wxYm6AwhiY+iU
+ wy5rohpdbSCo2eJk42evpGnQSxWh2F0XjfedgAYxF04ur5KpwMr3BpfRaSRnZi/NLaeMLawuSX/
+ MQH3dnlT70Ufoa/0zJQ7Slhx2px3puk3YWygYKk+tnyoRsPfiIgCa+mnuOWDiXyjBxHUrUM5Tb/
+ uD6D0EPHeVgDBlN7WzVpnnnMVXQcCWol3al0eNLAVBuiUQp6OPYQuI1vqM8obq7ICkPzeUl2/9j
+ rdXC29WKIKKt+GBbuYtto2I+sGA1CWBp2KasYJCxxRACMyqUA4Gw==
+X-Google-Smtp-Source: AGHT+IFl/q96YnkWuuA/+dYGpVuPYNbl8YkOdve2GTDDf/CHc42aXX6p3mDZuKUJ8nlD1g2Kq8+pZQ==
+X-Received: by 2002:a5d:5f54:0:b0:42b:4267:83e3 with SMTP id
+ ffacd0b85a97d-42cc1cd9050mr40000131f8f.5.1764588386440; 
+ Mon, 01 Dec 2025 03:26:26 -0800 (PST)
+Received: from KORLIN44614.barco.com (d528f5fde.static.telenet.be.
+ [82.143.95.222]) by smtp.googlemail.com with ESMTPSA id
+ ffacd0b85a97d-42e1c5c30b8sm25887967f8f.7.2025.12.01.03.26.25
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 01 Dec 2025 03:26:26 -0800 (PST)
+From: Thomas Devoogdt <thomas@devoogdt.com>
+To: peter@korsgaard.com
+Cc: buildroot@buildroot.org, christian@aperture.us, thomas.devoogdt@barco.com,
+ thomas@devoogdt.com
+Date: Mon,  1 Dec 2025 12:26:20 +0100
+Message-ID: <20251201112621.242137-1-thomas@devoogdt.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <877bv7ii70.fsf@dell.be.48ers.dk>
+References: <877bv7ii70.fsf@dell.be.48ers.dk>
 MIME-Version: 1.0
-X-Originating-IP: [10.115.27.51]
-X-ClientProxiedBy: OPE16NORMBX105.corporate.adroot.infra.ftgroup (10.115.27.2)
- To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1764572253; x=1796108253;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=2585XP308Nc+6prGhyR+6PJ4XS/+EN6LBhI+nUyiSMU=;
- b=DRa4KKPyolGDqdkkbVByaICnrVQqMryHe36TjAuLkdBNH9bJaQolIQjU
- UVsXEz3J2OH1Q5ryibL9NXFjt27W1O42jj9/2liQBV1JTZrvYZuPl6F3q
- 7tv/dKrCywL1A6/uczI1sd3mLA380k/OTDlEvBjivnDKWw8ib2A7RvCUb
- hnO5kNMP95d1wwvVu/lthwaGxqLnqNFnA5bEXLh24An12rgbd0yxNPs7o
- ysFCGV/zlM2n8p36Lm+lh1/wq5UXeeLVWh8x+T/tRszn+mjdMF68YX6zO
- /aB/E4X9Dd4R9IxT7B0Ew1r39M7DDXTw35D8EQofetzKjCud/MolBL2yS
- Q==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=DRa4KKPy
-Subject: [Buildroot] [PATCH] package/skopeo: needs NPTL
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=devoogdt.com
+Subject: [Buildroot] [PATCH v2 1/2] package/yq: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,60 +101,99 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
+From: Thomas Devoogdt <thomas.devoogdt@barco.com>
 
-So far, skopeo inherited the thread dependency from its runtime
-dependencies. However, skopeo uses pthread_getattr_np(3), which
-is only available with NPTL on uClibc. glibc and musl have had
-it for ages (and only implement NPTL anyway).
+Version 4.45.2 was selected as newer versions require Go 1.24 [1],
+which is not yet available in Buildroot 2025.02.x.
 
-Fixes: https://autobuild.buildroot.org/results/b9d123986c2a65427bfca32ee3ea792a988e6890/
+[1] https://github.com/mikefarah/yq/commit/5bc2cd03da9139160db70901ffb8002bf6e242d5
 
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 ---
- package/skopeo/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+v2:
+ - Added DEVELOPERS entry
+ - Fixed Go version mention to 2025.02.x
+---
+ DEVELOPERS           |  1 +
+ package/Config.in    |  1 +
+ package/yq/Config.in | 10 ++++++++++
+ package/yq/yq.hash   |  3 +++
+ package/yq/yq.mk     | 13 +++++++++++++
+ 5 files changed, 28 insertions(+)
+ create mode 100644 package/yq/Config.in
+ create mode 100644 package/yq/yq.hash
+ create mode 100644 package/yq/yq.mk
 
-diff --git a/package/skopeo/Config.in b/package/skopeo/Config.in
-index 0de9b16047..b0229873d4 100644
---- a/package/skopeo/Config.in
-+++ b/package/skopeo/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_SKOPEO
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_USE_MMU  # btrfs-progs, libgpgme, lvm2
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS  # libgpgme
--	depends on BR2_TOOLCHAIN_HAS_THREADS  # btrfs-progs, lvm2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on !BR2_STATIC_LIBS  # lvm2
- 	select BR2_PACKAGE_HOST_GO
- 	select BR2_PACKAGE_BTRFS_PROGS
-@@ -17,10 +17,10 @@ config BR2_PACKAGE_SKOPEO
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d4e6335f25..5083db7889 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3183,6 +3183,7 @@ F:	package/vuejs-router/
+ N:	Thomas Devoogdt <thomas@devoogdt.com>
+ F:	package/fluent-bit/
+ F:	package/libsoup3/
++F:	package/yq/
  
- 	  https://github.com/containers/skopeo
+ N:	Thomas Huth <th.huth+br@posteo.eu>
+ F:	package/ascii-invaders/
+diff --git a/package/Config.in b/package/Config.in
+index 83414b3e0b..e809491575 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -203,6 +203,7 @@ menu "Development tools"
+ 	source "package/tree/Config.in"
+ 	source "package/unifdef/Config.in"
+ 	source "package/yasm/Config.in"
++	source "package/yq/Config.in"
+ endmenu
  
--comment "skopeo needs a toolchain w/ threads, sahred libs"
-+comment "skopeo needs a toolchain w/ NPTL, sahred libs"
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS \
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
- 		|| BR2_STATIC_LIBS
+ menu "Filesystem and flash utilities"
+diff --git a/package/yq/Config.in b/package/yq/Config.in
+new file mode 100644
+index 0000000000..d85b3e5601
+--- /dev/null
++++ b/package/yq/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_YQ
++	bool "yq"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	select BR2_PACKAGE_HOST_GO
++	help
++	  A lightweight and portable command-line YAML, JSON, INI
++	  and XML processor, yq uses jq (a popular JSON processor)
++	  like syntax.
++
++	  https://mikefarah.gitbook.io/yq/
+diff --git a/package/yq/yq.hash b/package/yq/yq.hash
+new file mode 100644
+index 0000000000..bc9dccad81
+--- /dev/null
++++ b/package/yq/yq.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  39296b55e33962ef838cd8a1bc0e9850e775de4cc3843bf15f099324069d2632  yq-4.45.2-go2.tar.gz
++sha256  697db34dabb21562fe84487a2ccd031fbd45382b89c2cbdec8ef31682c486040  LICENSE
+diff --git a/package/yq/yq.mk b/package/yq/yq.mk
+new file mode 100644
+index 0000000000..b42b8e652c
+--- /dev/null
++++ b/package/yq/yq.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# yq
++#
++################################################################################
++
++YQ_VERSION = 4.45.2
++YQ_SITE = $(call github,mikefarah,yq,v$(YQ_VERSION))
++YQ_LICENSE = MIT
++YQ_LICENSE_FILES = LICENSE
++YQ_GOMOD = github.com/mikefarah/yq/v4
++
++$(eval $(golang-package))
 -- 
-2.34.1
-
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+2.43.0
 
 _______________________________________________
 buildroot mailing list
