@@ -4,88 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30920D116F5
-	for <buildroot@archiver.kernel.org>; Mon,  1 Dec 2025 11:26:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91CBAD116F3
+	for <buildroot@archiver.kernel.org>; Mon,  1 Dec 2025 14:09:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5CD7140592;
-	Mon,  1 Dec 2025 11:26:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B88A4058B;
+	Mon,  1 Dec 2025 14:09:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ka8TbhMTe0tV; Mon,  1 Dec 2025 11:26:33 +0000 (UTC)
+ id SMidDWBSIcWe; Mon,  1 Dec 2025 14:09:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17E344057D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5FF3E40287
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17E344057D;
-	Mon,  1 Dec 2025 11:26:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 994891A9
- for <buildroot@buildroot.org>; Mon,  1 Dec 2025 11:26:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5FF3E40287;
+	Mon,  1 Dec 2025 14:09:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E0FEF1BD
+ for <buildroot@buildroot.org>; Mon,  1 Dec 2025 14:09:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8B957812ED
- for <buildroot@buildroot.org>; Mon,  1 Dec 2025 11:26:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CF1B5405A9
+ for <buildroot@buildroot.org>; Mon,  1 Dec 2025 14:09:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q_-Ig-Z3Xyi7 for <buildroot@buildroot.org>;
- Mon,  1 Dec 2025 11:26:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.221.45;
- helo=mail-wr1-f45.google.com; envelope-from=thomas.devoogdt@gmail.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fWgq0ZiMzvyq for <buildroot@buildroot.org>;
+ Mon,  1 Dec 2025 14:09:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=bastien.curutchet@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8C6548128D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C6548128D
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com
- [209.85.221.45])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8C6548128D
- for <buildroot@buildroot.org>; Mon,  1 Dec 2025 11:26:30 +0000 (UTC)
-Received: by mail-wr1-f45.google.com with SMTP id
- ffacd0b85a97d-42e2d5e119fso738978f8f.2
- for <buildroot@buildroot.org>; Mon, 01 Dec 2025 03:26:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1764588388; x=1765193188;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=m7kdqr4Wt9VBMD/gmZOYkRsydo9fTG26Fa09uURAxPw=;
- b=MJQxomi3y6W/BVL2IkZMW4Nf6VoNfEh/FCHKUJP1pn+OzoNVWNv9CauOjGGLPJb413
- Zk3kckXKrL1Oi49ZbqdgdwQBdwzxOhP3zdoHIOfgauL4jdE7Hc/EqOdeJqMUxnBEgpxJ
- J6BUuQz1owKuc5RwLwzV5WuGikUE3ITdz90cL9VRhoYQcbdRqsA2onCf/Xp9KDLOnTCN
- XgRIHGuI/Ftdxp7SXFdCR9TvSsTnWfPZzGFO3i/dFeSyk1RpojT2YXD7zSkhZk/EoSgS
- IfFLUKBiRlMbmt+PE6WUCne346UwlEykKJRBo8zvTCxzfpmBDGjEfCtGaHafTF5kknrL
- cdjw==
-X-Gm-Message-State: AOJu0YzjDLfPmzRnzFu0jQVtzFY7XQUve0z9uCDs5CP2DnIEsP5KJ2gR
- 83cFf+/LQomTkDuxXN+ZSTTglI1ZAOIXFxgP67oy6osVap0Dv9BoYTN6rImjRQ==
-X-Gm-Gg: ASbGnctWGeWNTXRC+gu/5swz7PJtfYb3OZM4/2FXdRpWOYNkiXk9NfFz2YXKD0Zb9pU
- siCYOCaa6nUHeC0Dc43L4vjTy/jm/3NDTni/34dhVEoEERggji9LTpYUyTr4JuMHF0Lmg9jnfjF
- ZiL1lpbWDoHqZ+Csr96Td7veC0D3Kp5zYzIpa0OLrwsd6k2mcF0r/a8/AoTsmb/yYmrX+d3+gpP
- UDu+hBbS4J5m/baaAM3ZSUTaLZTUJWqae/h/LY6kEiAwaSzmFBFwUtiQB0mjnRg1q3rqFfNpHtg
- scJdzbAtD+x1ancoIRAXKlRokfNQmuNz0p/smXIPNzU08QfipTZoFvidvmMbr90VIAIYZ1OWuW0
- 6lT7aJYnQVvq8n1xoA1e3OTWH60PQ3rLxrUzzQlmopIftkyPRQeexAayeyxsrZKSDH0cm5/IgGn
- Hc92wTEkVcqVaT5nycRlCiLJNpY/HCYooLR3vV9r+VZ7TnI9PWfA==
-X-Google-Smtp-Source: AGHT+IF5JkIhwmLIzn96L2P5TWtKQ5cZp0rivONqi2crQh5OigovCChQor0LYxqt1lnfUQEbV6bNUg==
-X-Received: by 2002:a05:6000:4383:b0:42b:2eb3:c909 with SMTP id
- ffacd0b85a97d-42cc1ac98a9mr38731399f8f.20.1764588388333; 
- Mon, 01 Dec 2025 03:26:28 -0800 (PST)
-Received: from KORLIN44614.barco.com (d528f5fde.static.telenet.be.
- [82.143.95.222]) by smtp.googlemail.com with ESMTPSA id
- ffacd0b85a97d-42e1c5c30b8sm25887967f8f.7.2025.12.01.03.26.27
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 01 Dec 2025 03:26:28 -0800 (PST)
-From: Thomas Devoogdt <thomas@devoogdt.com>
-To: peter@korsgaard.com
-Cc: buildroot@buildroot.org, christian@aperture.us, thomas.devoogdt@barco.com,
- thomas@devoogdt.com
-Date: Mon,  1 Dec 2025 12:26:21 +0100
-Message-ID: <20251201112621.242137-2-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251201112621.242137-1-thomas@devoogdt.com>
-References: <877bv7ii70.fsf@dell.be.48ers.dk>
- <20251201112621.242137-1-thomas@devoogdt.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C466640510
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C466640510
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C466640510
+ for <buildroot@buildroot.org>; Mon,  1 Dec 2025 14:08:58 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-04.galae.net (Postfix) with ESMTPS id 67437C17B4E
+ for <buildroot@buildroot.org>; Mon,  1 Dec 2025 14:08:33 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 8F1ED606BB;
+ Mon,  1 Dec 2025 14:08:56 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 01A5A11918235; Mon,  1 Dec 2025 15:08:53 +0100 (CET)
+Date: Mon, 01 Dec 2025 15:08:52 +0100
+Message-Id: <20251201-rasdaemon-v3-0-8ad394bdc372@bootlin.com>
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=devoogdt.com
-Subject: [Buildroot] [PATCH v2 2/2] package/yq: bump to 4.49.2
+X-B4-Tracking: v=1; b=H4sIAHShLWkC/1WMQQ7CIBBFr9LMWgxMi7SuvIdxUWGwJBYMNETT9
+ O7SJiZ1+Wb+ezMkio4SnKsZImWXXPAF6kMFeuj9g5gzhQE5SiFQstgn09MYPBPGNh1vjLGGoOx
+ fkax7b63rrfDg0hTiZ0tnsV5/ldOukgXjrG617LitSXbicg9hejp/1GGEtZNx76q9i8XVUmHbq
+ PJT+O8uy/IFv/7qWuAAAAA=
+X-Change-ID: 20251125-rasdaemon-1df4904ddfde
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Fiona Klute <fiona.klute@gmx.de>, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>
+X-Mailer: b4 0.14.2
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1764598136; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding; bh=12CvuiN6P9DLIO9wHjxPfVNcNuhd6HG/PzfTRkLY8PA=;
+ b=IM43TggthPai+i3/ekgF2/PbUkh/pG+dEzXNUAP8hcrZK3IKxywRaG3HGlbetG6hEU/Vwa
+ UiLgbYFXQTQmYnwOZsF5WT0x6GUd0/W7aCvAM02+cPwjAY7OPAod+8NnVak3+N7c7aWg/G
+ k0WxCqJi5pKP0tGmxk4DmpdTEgyrQjOK0d/zQcvt/KBisnfqY0cN/X2SfPzZtUijLFUqUO
+ 7o6I1ukVLj3CCzkNl99Efwkhfur4QwIxm1f1zmR3eOKLdUTVOckQpR2Ns5zZSJ9UdVzhql
+ oV9V5DAt2e1/RkIlmSPpCbuXt2p//i053UXlpcPG2NNvb8gPmhxyHdd0i1Aijw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=IM43Tggt
+Subject: [Buildroot] [PATCH v3 0/2] package: add rasdaemon support.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,59 +87,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Bastien Curutchet via buildroot <buildroot@buildroot.org>
+Reply-To: Bastien Curutchet <bastien.curutchet@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Notes:
- - https://github.com/mikefarah/yq/releases/tag/v4.45.3
- - https://github.com/mikefarah/yq/releases/tag/v4.45.4
- - https://github.com/mikefarah/yq/releases/tag/v4.46.1
- - https://github.com/mikefarah/yq/releases/tag/v4.47.1
- - https://github.com/mikefarah/yq/releases/tag/v4.47.2
- - https://github.com/mikefarah/yq/releases/tag/v4.48.1
- - https://github.com/mikefarah/yq/releases/tag/v4.48.2
- - https://github.com/mikefarah/yq/releases/tag/v4.49.1
- - https://github.com/mikefarah/yq/releases/tag/v4.49.2
+Hi all,
 
-Various regression fixes, as noticed in
-https://lore.kernel.org/buildroot/877bv7ii70.fsf@dell.be.48ers.dk/
+Rasdaemon is a tool that provides a way to collect all hardware error
+events reported by the Linux kernel in a common framework.
 
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+My use case is on a PowerPC P2020. I use to it to monitor and react to
+the PCIe AER events caught by the SoC's EDAC.
+
+The first patch adds the package. The second one adds a small test for
+it in support/testing. Adding fake error injections in the selftest
+isn't trivial so it only ensures the daemon does run.
+
+Signed-off-by: Bastien Curutchet <bastien.curutchet@bootlin.com>
 ---
-v2:
- - New patch to fix some regression as noticed in
-   https://lore.kernel.org/buildroot/877bv7ii70.fsf@dell.be.48ers.dk/
----
- package/yq/yq.hash | 2 +-
- package/yq/yq.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Changes in v3:
+- PATCH 1: Init script: Run the daemon in foreground and use
+  --background to leave the PID file creation to start-stop-daemon
+- Link to v2: https://lore.kernel.org/r/20251127-rasdaemon-v2-0-c57284751172@bootlin.com
 
-diff --git a/package/yq/yq.hash b/package/yq/yq.hash
-index bc9dccad81..519d1c9a3e 100644
---- a/package/yq/yq.hash
-+++ b/package/yq/yq.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  39296b55e33962ef838cd8a1bc0e9850e775de4cc3843bf15f099324069d2632  yq-4.45.2-go2.tar.gz
-+sha256  291334bc00863c144098b5b0a723a5c769df115c46938e17920917aa24776591  yq-4.49.2-go2.tar.gz
- sha256  697db34dabb21562fe84487a2ccd031fbd45382b89c2cbdec8ef31682c486040  LICENSE
-diff --git a/package/yq/yq.mk b/package/yq/yq.mk
-index b42b8e652c..10d0959791 100644
---- a/package/yq/yq.mk
-+++ b/package/yq/yq.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--YQ_VERSION = 4.45.2
-+YQ_VERSION = 4.49.2
- YQ_SITE = $(call github,mikefarah,yq,v$(YQ_VERSION))
- YQ_LICENSE = MIT
- YQ_LICENSE_FILES = LICENSE
+Changes in v2:
+- PATCH 1:
+    Init script: Use a PID file
+    Config.in: Add comment for the BR2_SHARED_LIBS dependency, fix the AER feature description
+    rasdaemon.mk: Add License's hash
+- PATCH 2:
+    Add a check to ensure the daemon does run once started by the init
+    script.
+- Link to v1: https://lore.kernel.org/r/20251126-rasdaemon-v1-0-38c590f3e591@bootlin.com
+
+---
+Bastien Curutchet (2):
+      package/rasdaemon: Add rasdaemon package
+      support/testing: add rasdaemon tests
+
+ DEVELOPERS                                         |  4 ++
+ package/Config.in                                  |  1 +
+ package/rasdaemon/Config.in                        | 25 +++++++++
+ package/rasdaemon/S95rasdaemon                     | 63 ++++++++++++++++++++++
+ package/rasdaemon/rasdaemon.hash                   |  3 ++
+ package/rasdaemon/rasdaemon.mk                     | 33 ++++++++++++
+ support/testing/tests/package/test_rasdaemon.py    | 46 ++++++++++++++++
+ .../package/test_rasdaemon/linux-debugfs.fragment  |  8 +++
+ 8 files changed, 183 insertions(+)
+---
+base-commit: c8cb1a238de5a803228f12ad32b36cae2acfc778
+change-id: 20251125-rasdaemon-1df4904ddfde
+
+Best regards,
 -- 
-2.43.0
+Bastien Curutchet <bastien.curutchet@bootlin.com>
 
 _______________________________________________
 buildroot mailing list
