@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93092D116F1
-	for <buildroot@archiver.kernel.org>; Mon,  1 Dec 2025 14:09:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D9A6D116F3
+	for <buildroot@archiver.kernel.org>; Mon,  1 Dec 2025 14:09:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C58D402EA;
+	by smtp4.osuosl.org (Postfix) with ESMTP id B8F3A403F7;
 	Mon,  1 Dec 2025 14:09:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0rHw88S7ifgr; Mon,  1 Dec 2025 14:09:05 +0000 (UTC)
+ id x6_aDzaiqAz1; Mon,  1 Dec 2025 14:09:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CD8D403F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A0AC4023E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5CD8D403F7;
-	Mon,  1 Dec 2025 14:09:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 98D4B1BD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3A0AC4023E;
+	Mon,  1 Dec 2025 14:09:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F4701BD
  for <buildroot@buildroot.org>; Mon,  1 Dec 2025 14:09:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7FE4E822DA
- for <buildroot@buildroot.org>; Mon,  1 Dec 2025 14:09:01 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uUGCT3AZ3Gqn for <buildroot@buildroot.org>;
- Mon,  1 Dec 2025 14:09:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=bastien.curutchet@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 935BF8225E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 935BF8225E
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 935BF8225E
+ by smtp3.osuosl.org (Postfix) with ESMTP id EA2DF60DDD
  for <buildroot@buildroot.org>; Mon,  1 Dec 2025 14:09:00 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m34Y1zGsfNOU for <buildroot@buildroot.org>;
+ Mon,  1 Dec 2025 14:09:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=bastien.curutchet@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C420B60DA2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C420B60DA2
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C420B60DA2
+ for <buildroot@buildroot.org>; Mon,  1 Dec 2025 14:08:59 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 0220C1A1E86
- for <buildroot@buildroot.org>; Mon,  1 Dec 2025 14:08:58 +0000 (UTC)
+ by smtpout-04.galae.net (Postfix) with ESMTPS id F3956C17B4F
+ for <buildroot@buildroot.org>; Mon,  1 Dec 2025 14:08:33 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id CE393606BB;
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 25434606BB;
  Mon,  1 Dec 2025 14:08:57 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 1D7BF11918193; Mon,  1 Dec 2025 15:08:57 +0100 (CET)
-Date: Mon, 01 Dec 2025 15:08:54 +0100
+ with ESMTPSA id 6F5FF1191823C; Mon,  1 Dec 2025 15:08:56 +0100 (CET)
+Date: Mon, 01 Dec 2025 15:08:53 +0100
 MIME-Version: 1.0
-Message-Id: <20251201-rasdaemon-v3-2-8ad394bdc372@bootlin.com>
+Message-Id: <20251201-rasdaemon-v3-1-8ad394bdc372@bootlin.com>
 References: <20251201-rasdaemon-v3-0-8ad394bdc372@bootlin.com>
 In-Reply-To: <20251201-rasdaemon-v3-0-8ad394bdc372@bootlin.com>
 To: buildroot@buildroot.org
@@ -58,22 +58,22 @@ X-Mailer: b4 0.14.2
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1764598137; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1764598136; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=esNZHSL4KmimKlnsuLCxnjLDKrCGAhPGOUfVvEQOvEo=;
- b=eeneou25A/TkL4PR4otmCtpmMjTVbRMLrMyswaz3fLGtUw8K5P9zX7Q3rPdXGWG+ccT9V3
- vMQVgUL0dA9KXv8aj/z5ovxELeitJx/LlFLLMlYZ+P6J6M4h4m8mjMEpKtb4n72C90TnAl
- ENcYya8dhtighKInV32qVErDgXRk6LdOs94E3OWiirTpzP2uRd9eAhFXJPHlkQ11p+Rpks
- ikD00BY0qlzW/4QVj+TQ0Bi0nZfO7FLtt80dD9IEq7kDiP6PogyVZXxGXdXeCo0sYKRNIQ
- YOKRKzyCYcNSo/vAcNHce5Jl9FRd4U3oZlUmBIlBEF/RBJDKcM7DtSn0qx/Zjg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=PkVqFtPtgftWJZoss9hxmYgcM58ACZODoPK8PzOrF7c=;
+ b=GGCaQm8EX1WWQ/ldrdKlSPoR5UkLdLBQT0vcn3E87Z7jmrxMzUe4xq9GPHRQni2JzW5ftO
+ YgD3HHXRX0tOby7+03IcQNxOhovdq+X3xo7wQfcMGypZHryfmaKNUKlfvfu/hnEJhZHmi4
+ TcO3d3A/OeQxfRT/a8LAvtEDn6Yhr3SF5w7+Em+sb+vvovIgr45a2AJbSUA7dNUJmBOVxw
+ /bX0zzfHRbc+Lq57SJDe2L77FOMEY71Xs+LHDO+d+HOIwmp7XQEDVYCyfy5dWi74sbO2HH
+ kuBl8F5srEaBNIM+asvQtfZq8UAMJsXJ2ryqtHJDRgjTqZe6RAzAjkGjd2Z1Zg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=eeneou25
-Subject: [Buildroot] [PATCH v3 2/2] support/testing: add rasdaemon tests
+ header.s=dkim header.b=GGCaQm8E
+Subject: [Buildroot] [PATCH v3 1/2] package/rasdaemon: Add rasdaemon package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,98 +92,205 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Rasdaemon was added in previous patch.
+Rasdaemon is a tool that aims to replace the edac-tool and provide a way
+to collect all hardware error events reported by the Linux kernel in a
+common framework.
 
-Add a test_rasdaemon that allows to test it.
-Test is done on x86. It first checks the daemon's version, then mounts
-debugfs and finally ensures that the init script allows to
-start/restart/stop the daemon.
+Add a new package to support rasdaemon in the 'Hardware handling'
+section. It depends on libtraceevents to detect the ftrace events
+generated by the kernel and on sqlite to store these events.
+
+Support for the PCIe AER events is optionnal and implies a dependency on
+pciutils so also add a dedicated 'sub-option' to enable it.
+
+Add a SYSV init script to start / stop the daemon
+
+Add myself to the DEVELOPERS file.
 
 Signed-off-by: Bastien Curutchet <bastien.curutchet@bootlin.com>
 ---
- DEVELOPERS                                         |  1 +
- support/testing/tests/package/test_rasdaemon.py    | 46 ++++++++++++++++++++++
- .../package/test_rasdaemon/linux-debugfs.fragment  |  8 ++++
- 3 files changed, 55 insertions(+)
+ DEVELOPERS                       |  3 ++
+ package/Config.in                |  1 +
+ package/rasdaemon/Config.in      | 25 ++++++++++++++++
+ package/rasdaemon/S95rasdaemon   | 63 ++++++++++++++++++++++++++++++++++++++++
+ package/rasdaemon/rasdaemon.hash |  3 ++
+ package/rasdaemon/rasdaemon.mk   | 33 +++++++++++++++++++++
+ 6 files changed, 128 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index b1ead6d26c4e8ff160bcc7ed85b0945ac5e551dc..c9aaa8c9c8aa3d54c930476d9d450e7f990d9aac 100644
+index db001d6bb0707a5877c0849fa85fa736377e60dd..b1ead6d26c4e8ff160bcc7ed85b0945ac5e551dc 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -343,6 +343,7 @@ F:	package/uhubctl/
+@@ -341,6 +341,9 @@ F:	package/tcpdump/
+ F:	package/ti-uim/
+ F:	package/uhubctl/
  
- N:	Bastien Curutchet <bastien.curutchet@bootlin.com>
- F:	package/rasdaemon/
-+F:	support/testing/tests/package/test_rasdaemon.py
- 
++N:	Bastien Curutchet <bastien.curutchet@bootlin.com>
++F:	package/rasdaemon/
++
  N:	Baxiche Su <baxiche@gmail.com>
  F:	package/qt6/qt6multimedia/
-diff --git a/support/testing/tests/package/test_rasdaemon.py b/support/testing/tests/package/test_rasdaemon.py
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 12f327cb273526781d931b834e24d0df5024e80e..1a93cec2fa22e3a6e70acbf799b32b00d5e8b5de 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -584,6 +584,7 @@ endmenu
+ 	source "package/pru-software-support/Config.in"
+ 	source "package/pulseview/Config.in"
+ 	source "package/qoriq-cadence-dp-firmware/Config.in"
++	source "package/rasdaemon/Config.in"
+ 	source "package/raspi-gpio/Config.in"
+ 	source "package/rdma-core/Config.in"
+ 	source "package/read-edid/Config.in"
+diff --git a/package/rasdaemon/Config.in b/package/rasdaemon/Config.in
 new file mode 100644
-index 0000000000000000000000000000000000000000..bc800b6ccbea1c18f4c970d87bea0395c64ad952
+index 0000000000000000000000000000000000000000..68cef3a313bf2b82a8306ed5e0ec581cd618531d
 --- /dev/null
-+++ b/support/testing/tests/package/test_rasdaemon.py
-@@ -0,0 +1,46 @@
-+import os
++++ b/package/rasdaemon/Config.in
+@@ -0,0 +1,25 @@
++config BR2_PACKAGE_RASDAEMON
++	bool "rasdaemon"
++	depends on !BR2_STATIC_LIBS # libtraceevent
++	select BR2_PACKAGE_LIBTRACEEVENT
++	select BR2_PACKAGE_SQLITE
++	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
++	help
++	  rasdaemon is a tool that collects all hardware error events
++	  reported by the Linux Kernel from several sources (EDAC, MCE
++	  PCI, ...) into one common framework.
++	  See https://github.com/mchehab/rasdaemon for details.
 +
-+import infra.basetest
++if BR2_PACKAGE_RASDAEMON
 +
++config BR2_PACKAGE_RASDAEMON_AER
++	bool "Enable AER support"
++	select BR2_PACKAGE_PCIUTILS
++	help
++	  Enable handling of AER (Advanced Error Reporting) events on
++	  PCIe
 +
-+class TestRasdaemon(infra.basetest.BRTest):
-+    config = f"""
-+        BR2_x86_64=y
-+        BR2_x86_corei7=y
-+        BR2_INIT_SYSV=y
-+        BR2_LINUX_KERNEL=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.59"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux.config"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{infra.filepath("tests/package/test_rasdaemon/linux-debugfs.fragment")}"
-+        BR2_PACKAGE_RASDAEMON=y
-+        BR2_PACKAGE_RASDAEMON_AER=y
-+        BR2_PACKAGE_LIBTRACEEVENT=y
-+        BR2_PACKAGE_SQLITE=y
-+        BR2_PACKAGE_PCIUTILS=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
++endif
 +
-+    def test_run(self):
-+        kernel = os.path.join(self.builddir, "images", "bzImage")
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(
-+                arch="x86_64",
-+                kernel=kernel,
-+                kernel_cmdline=["console=ttyS0"],
-+                options=["-cpu", "Nehalem",  "-initrd", cpio_file],
-+        )
-+        self.emulator.login()
-+
-+        self.assertRunOk("/usr/sbin/rasdaemon --version")
-+        self.assertRunOk("mount -t debugfs nodev /sys/kernel/debug")
-+        self.assertRunOk("/etc/init.d/S95rasdaemon start")
-+        self.assertRunOk("pidof /usr/sbin/rasdaemon")
-+        self.assertRunOk("/etc/init.d/S95rasdaemon restart")
-+        self.assertRunOk("pidof /usr/sbin/rasdaemon")
-+        self.assertRunOk("/etc/init.d/S95rasdaemon stop")
-+        _, ret = self.emulator.run("pidof /usr/sbin/rasdaemon")
-+        self.assertNotEqual(ret, 0)
-diff --git a/support/testing/tests/package/test_rasdaemon/linux-debugfs.fragment b/support/testing/tests/package/test_rasdaemon/linux-debugfs.fragment
++comment "rasdaemon needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/rasdaemon/S95rasdaemon b/package/rasdaemon/S95rasdaemon
 new file mode 100644
-index 0000000000000000000000000000000000000000..a334bc373179623f3c5b2c3727ee7738a0c2542e
+index 0000000000000000000000000000000000000000..390ff9c9029ba9122217f13eb88bac7715c1c05f
 --- /dev/null
-+++ b/support/testing/tests/package/test_rasdaemon/linux-debugfs.fragment
-@@ -0,0 +1,8 @@
-+CONFIG_DEBUG_FS=y
-+CONFIG_FTRACE=y
-+CONFIG_USER_EVENTS=y
-+CONFIG_TRACE_EVENT_INJECT=y
-+CONFIG_PCI=y
-+CONFIG_PCIEPORTBUS=y
-+CONFIG_PCIEAER=y
-+CONFIG_MEMORY_FAILURE=y
++++ b/package/rasdaemon/S95rasdaemon
+@@ -0,0 +1,63 @@
++#!/bin/sh
++#
++# S95rasdaemon	Starts Rasdaemon.
++#
++# shellcheck disable=SC2317 # functions are called via variable
++
++DAEMON="rasdaemon"
++PIDFILE="/var/run/$DAEMON.pid"
++
++start() {
++	printf "Starting %s: " "$DAEMON"
++
++	if ! grep -q debugfs /proc/mounts ; then
++		echo "FAIL : debugfs is missing"
++		return 1
++	fi
++
++	start-stop-daemon --start --pidfile "$PIDFILE" --make-pidfile \
++		--background --exec "/usr/sbin/$DAEMON" -- -f
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf "Stopping %s: " "$DAEMON"
++	start-stop-daemon --stop --pidfile "$PIDFILE" --exec "/usr/sbin/$DAEMON"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++		return "$status"
++	fi
++	while start-stop-daemon --stop --test --quiet --pidfile "$PIDFILE" \
++		--exec "/sbin/$DAEMON"; do
++		sleep 0.1
++	done
++	rm -f "$PIDFILE"
++	return "$status"
++}
++
++restart() {
++	stop
++	start
++}
++
++reload() {
++	restart
++}
++
++case "$1" in
++	start|stop|reload|restart)
++		"$1"
++		;;
++	*)
++		echo "Usage: $0 {start|stop|reload|restart}"
++		exit 1
++esac
+diff --git a/package/rasdaemon/rasdaemon.hash b/package/rasdaemon/rasdaemon.hash
+new file mode 100644
+index 0000000000000000000000000000000000000000..e1b600a4893bef2f58c86f6d742fb7cbcb480fc8
+--- /dev/null
++++ b/package/rasdaemon/rasdaemon.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  7e12459f9477036491ac2b1e4c07cc3e8efea6dcd30525a263ab1f83910b773a  rasdaemon-0.8.4.tar.gz
++sha256  39bc367cd7cd291d217447632b28a74be414a52b142b1875ac8789184aeca7b2  COPYING
+diff --git a/package/rasdaemon/rasdaemon.mk b/package/rasdaemon/rasdaemon.mk
+new file mode 100644
+index 0000000000000000000000000000000000000000..50ac97a37dcbe63443bddca505ebc7c929116e53
+--- /dev/null
++++ b/package/rasdaemon/rasdaemon.mk
+@@ -0,0 +1,33 @@
++################################################################################
++#
++# rasdaemon
++#
++################################################################################
++
++RASDAEMON_VERSION = 0.8.4
++RASDAEMON_SITE = $(call github,mchehab,rasdaemon,v$(RASDAEMON_VERSION))
++RASDAEMON_LICENSE = GPL-2.0+
++RASDAEMON_LICENSE_FILES = COPYING
++RASDAEMON_AUTORECONF = YES
++
++RASDAEMON_DEPENDENCIES = libtraceevent sqlite
++# rasdaemon uses argp.h which is not provided by uclibc or musl by default.
++# Use the argp-standalone package to provide this.
++ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
++RASDAEMON_DEPENDENCIES += argp-standalone
++RASDAEMON_CONF_ENV += LIBS="-largp"
++endif
++
++ifeq ($(BR2_PACKAGE_RASDAEMON_AER),y)
++RASDAEMON_DEPENDENCIES += pciutils
++RASDAEMON_CONF_OPTS += --enable-aer
++else
++RASDAEMON_CONF_OPTS += --disable-aer
++endif
++
++define RASDAEMON_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/rasdaemon/S95rasdaemon \
++		$(TARGET_DIR)/etc/init.d/S95rasdaemon
++endef
++
++$(eval $(autotools-package))
 
 -- 
 2.51.1
