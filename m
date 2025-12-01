@@ -1,103 +1,106 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62378D116F3
-	for <buildroot@archiver.kernel.org>; Mon,  1 Dec 2025 14:48:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4717AD116F5
+	for <buildroot@archiver.kernel.org>; Mon,  1 Dec 2025 14:48:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2231940B1F;
-	Mon,  1 Dec 2025 14:48:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0A75582C04;
+	Mon,  1 Dec 2025 14:48:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eZFaHPZXV_9a; Mon,  1 Dec 2025 14:48:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UhbFJXTZabNp; Mon,  1 Dec 2025 14:48:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3CF1640B29
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2857F82CF1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3CF1640B29;
-	Mon,  1 Dec 2025 14:48:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 060CA1A9
- for <buildroot@buildroot.org>; Mon,  1 Dec 2025 14:48:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2857F82CF1;
+	Mon,  1 Dec 2025 14:48:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E4D23D3
+ for <buildroot@buildroot.org>; Mon,  1 Dec 2025 14:48:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EC6E440B1F
- for <buildroot@buildroot.org>; Mon,  1 Dec 2025 14:48:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D666782CF1
+ for <buildroot@buildroot.org>; Mon,  1 Dec 2025 14:48:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bX0TzqYHIPUu for <buildroot@buildroot.org>;
- Mon,  1 Dec 2025 14:48:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xgFAxFjcp0bm for <buildroot@buildroot.org>;
+ Mon,  1 Dec 2025 14:48:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::22b; helo=mail-lj1-x22b.google.com;
+ client-ip=2a00:1450:4864:20::234; helo=mail-lj1-x234.google.com;
  envelope-from=maxime.leroys@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F09C640B1B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F09C640B1B
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com
- [IPv6:2a00:1450:4864:20::22b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F09C640B1B
- for <buildroot@buildroot.org>; Mon,  1 Dec 2025 14:48:26 +0000 (UTC)
-Received: by mail-lj1-x22b.google.com with SMTP id
- 38308e7fff4ca-37a2dced861so43281071fa.1
- for <buildroot@buildroot.org>; Mon, 01 Dec 2025 06:48:26 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D190C82C04
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D190C82C04
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com
+ [IPv6:2a00:1450:4864:20::234])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D190C82C04
+ for <buildroot@buildroot.org>; Mon,  1 Dec 2025 14:48:28 +0000 (UTC)
+Received: by mail-lj1-x234.google.com with SMTP id
+ 38308e7fff4ca-37b95f87d64so37714261fa.2
+ for <buildroot@buildroot.org>; Mon, 01 Dec 2025 06:48:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1764600504; x=1765205304;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=E6xS68IEIDDpzIqq5xujwNBdbKK5SGaLl2nkWhWZ9zI=;
- b=vuBIU4EdW12q0U5IICcnEhUYSigakW6vOGcNAZj5rc4QrS+tgqG/komxHNVlWkswgW
- 4yzAwHYXvILIeg1BqGsy9JH5qC2N5pHY9c5PnSgeWie5DQf8xf1HnygiYReLIauOqXSQ
- IQWRooOXkBEoGUxK+mussOCHitE3V9T5kMdMNSTPAD9SlVF2D8MV8Nydofw2LecgicVW
- uHveuVElFp+artTfZeDp+vYTLlChRmVCLub4g/cKpZs5j7DTYFn/6YqBtyo2U3H1KBPx
- hqxFSDmzldBdAnzltzJ9ZIzT4w43Jn9zzkAmmKIkodirGqXdAhv5lFjobqkE8N4thYr0
- AFvg==
-X-Gm-Message-State: AOJu0YwAPRqvU1BbTXX1qWn/JdaF3Lrb4KOBt49pjo1PhVDUgZZ7MYpj
- Jb+DtfXywoAF2J7BgbItu/7Rht2u4GD+xZxZGbvVxWi6AxViZxlLva2h7kzOPQ==
-X-Gm-Gg: ASbGncvzxiFObeXsyMo0fMKv/KmzvofKlmMXT9YvTGcY+G7iOhi1F0n6bcnPywCJih4
- 9itdY/Zgs12PD54+PcPT7ZR5stRvE213o0/BdUaGXI8yFR3p3BKo+CUDtWBbmcoU88zvBQWwK9h
- jAH1Zu0urke44iMbjffdkvLlZmBqG82JGU1vIVzSwyZk0YOlp0iDupqG/TbyXkuPDKdSgwyUGP+
- 65ZVD5YofVwk0xvHt/PrL2u67mlJlFUXyVheb3xU0WCq7w0+X25hahRb65FNJS5jU5NE6beFwSQ
- T55lB7PkF5XOsJvkjYnLjC16yb8ZTt8FY/T0pypEh2ZxOrYux6xPQpVs/GFX7mnM+nOk8JwLMon
- co9/MD0q9LRfi2Z+t8S4lt7Dl++OiOkAia/DR5MJUug7vUTG+1ionqMtR6ZggVHcltP59Wr0bqb
- uEwzk=
-X-Google-Smtp-Source: AGHT+IHZyoqlZZLhZEmhjhCo/YXyoIomFduzEfxrsnpFQYXKNDqsiPaKSA0sUtnTjUeQCr4pFTxeAg==
-X-Received: by 2002:a2e:8593:0:b0:378:d020:b6b3 with SMTP id
- 38308e7fff4ca-37cc82c05fcmr128229501fa.7.1764600504180; 
- Mon, 01 Dec 2025 06:48:24 -0800 (PST)
+ d=1e100.net; s=20230601; t=1764600506; x=1765205306;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:x-gm-gg
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=Mk1snyfiiVCO7lKr3L7TpKzRWDI2Efa1xYEfcwPUKzo=;
+ b=Pr3N+HxitVksmKwPOiFb5snA4KYKJytyeZmIbzPzgQ8USLq2ZUj9P2hn7ML9YVZLTR
+ FOK6WgY1ihzJY6xck47DfvJJoRYy1tv7iNvA0shTqsYLxuCzMn0lRMjnbpSLYBVS8l9U
+ iPUZ9HfOcfHUdAA5ZVYnRuTmJbPEnagqPREIpzzMGV+Sy6NFMQFVVuakWWZchZ1riQ8i
+ zjlPs+C928tQ/P61roUV88mCe0UnS90RvGckdb7wtXkZvIllprOAzTseGkp941e8ruZM
+ atTk4XRYr9f1/3+YP5H2RABFbZIcxPk387JLHU/S+/DQncM18rJGYvCU9mz/+YFx4aJ8
+ YYPQ==
+X-Gm-Message-State: AOJu0Yw2PUJ5TaNTqIdNMsZOPj0SmvqZmXHp3a/bcLa6emKZ/UgqPIKX
+ kINZ1tqXOvNgCl3NH+RYyeZek18w28WkMvQHqfCNXlkgHJQ+0GeqoEd5GEiSnA==
+X-Gm-Gg: ASbGncsnnViYVJgHB6ozwyEO/PeA8kQllOn82M86SEAb42y4wCvvs4wUVkaURtXrfq5
+ gFAxavraPxh+Kikvt2pjiBf9o/hrgQ2SpvMLSGcQcFoTIWf3YYrTL0ZhSuMmHryKDTqwppEYB++
+ YpC8/75k/I2YVxRGVdYpCoPn1bsobUjL0xQKuV855qiUZdlXQ0Rs+LON25YKLdPCYI/0zlCJGRM
+ ujmFWhl058+EcZ87+YhZ2nlQDlJClG1iDM056n5MRA6bMajSIgO+NtXElM/iPnZdzgWzpV/Un/l
+ 3Bt1tHP3H61kU6aCAHydaOwCCm1uwH2W+SLM2p3afTGCbtU4QlPu2ADJQnPhixk/zlS9UkDOzmf
+ XVsueSOI60h5mAAVUYZqdTtekAbpNfZ6jGxwixvbdObQwsjgK4ilK3AWHL5/0Nof57+puYz7I74
+ W/4sc=
+X-Google-Smtp-Source: AGHT+IHlcF6bDrLi3mojszuoQ5bF48g3Ho4VNgYMLgmvHcMXSKxQ8Gt2Bg3B7gKMpQ50pjxmr9IGeA==
+X-Received: by 2002:a2e:8a98:0:b0:37c:dc91:6287 with SMTP id
+ 38308e7fff4ca-37d078bc289mr63591791fa.36.1764600506241; 
+ Mon, 01 Dec 2025 06:48:26 -0800 (PST)
 Received: from freepad.. ([2a01:e0a:6f:bdf0:3ef2:5482:bc9d:e21b])
  by smtp.gmail.com with ESMTPSA id
- 38308e7fff4ca-37d2368e543sm28487831fa.7.2025.12.01.06.48.23
+ 38308e7fff4ca-37d2368e543sm28487831fa.7.2025.12.01.06.48.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 01 Dec 2025 06:48:23 -0800 (PST)
+ Mon, 01 Dec 2025 06:48:25 -0800 (PST)
 From: Maxime Leroy <maxime@leroys.fr>
 To: buildroot@buildroot.org
 Cc: ju.o@free.fr,
 	Maxime Leroy <maxime@leroys.fr>
-Date: Mon,  1 Dec 2025 15:48:17 +0100
-Message-ID: <20251201144819.193967-1-maxime@leroys.fr>
+Date: Mon,  1 Dec 2025 15:48:18 +0100
+Message-ID: <20251201144819.193967-2-maxime@leroys.fr>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20251201144819.193967-1-maxime@leroys.fr>
+References: <20251201144819.193967-1-maxime@leroys.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1764600504; x=1765205304; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=E6xS68IEIDDpzIqq5xujwNBdbKK5SGaLl2nkWhWZ9zI=;
- b=E/qTvdXdwiW8EQ+E9+ekqRm2eGUCft5oyLGcsREGvM2WeZqMEi6VNa6Fymu7DJfLqH
- c5EBEG6Of52xHzTTlSPE8UzvRFaqa5HoVKVs6Ld3N/CkiY5Hkxj6f4ni4S/pssWuSrNr
- Dywe9MOLpXMNWc7DL7ZoBT8hdUMXIIEl06d0LZNMfGa9ZDHtCpIgee7Jvvgg9FVEOkC8
- EQapxhvg9h1r6Mu0j4CAF5ARHi1twEiHMC3l0h/8N5jTpNt/lqN840lTgbreQNnRSAhn
- qZ9zheRPaY2fHbj+gdYUG4C6XVGuIORag6r7NBj1I3+1lwbAj8puYRKUREk5xvyx5Egt
- z5tg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1764600506; x=1765205306; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Mk1snyfiiVCO7lKr3L7TpKzRWDI2Efa1xYEfcwPUKzo=;
+ b=WtKkUoGBGSGbMD4H34yqZI+PVJBhKwG9HdfM37U2fYyspvSXa4csLKHYAgDkILybdR
+ TjyLT3bJr6IKrAfy4zn9Z0yps20kVR/0xAmV62ySgWbQ2y9Mvdq385akGx/3DzHzTh/5
+ UwmYClIODiPNaI3oR/wwUOOrHzZGKL2EjHoYjBH+od/R6GP1fiNgyERVEF7PBcRqUc5A
+ XgjnDHxt1p2NmBMfR5CbLs8csEx9DxhR40LynikbZA/k2oTikJ1iaXO+O0RlIAUEgHxv
+ Th5wj5Zx4VGmz4b0iViPmTwgggPQKhS+tQ40t1akCJLj46ONQCzrYpWuq0/PVUq0VMoR
+ 2EVg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=leroys.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=E/qTvdXd
-Subject: [Buildroot] [PATCH 0/2] package/frr: bump to 10.5.0
+ header.s=20230601 header.b=WtKkUoGB
+Subject: [Buildroot] [PATCH 1/2] package/frr: bump to version 10.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,35 +112,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBzZXJpZXMgdXBkYXRlcyBGUlJvdXRpbmcgdG8gdmVyc2lvbiAxMC41LjAgYW5kIGluc3Rh
-bGxzIGl0cyBoZWFkZXJzIGludG8gc3RhZ2luZy4KUmVsZWFzZSBub3RlczogaHR0cHM6Ly9naXRo
-dWIuY29tL0ZSUm91dGluZy9mcnIvcmVsZWFzZXMvdGFnL2Zyci0xMC41LjAKCkJ1aWxkIHRlc3Rz
-OgrigKIgRlJSIDEwLjUuMDogaHR0cHM6Ly9naXRsYWIuY29tL21heGltZS1sZXJveS9idWlsZHJv
-b3QvLS9waXBlbGluZXMvMjE4ODY3MjI2NQooMiBmYWlsdXJlcykK4oCiIEZSUiAxMC40LjE6IGh0
-dHBzOi8vZ2l0bGFiLmNvbS9tYXhpbWUtbGVyb3kvYnVpbGRyb290Ly0vcGlwZWxpbmVzLzIxODg2
-NzIyNjUKClRoZSB0d28gZmFpbHVyZXMgY29ycmVzcG9uZCB0byB0aGUgYm9vdGxpbi1hcmNsZS1o
-czM4LXVjbGliYyBhbmQgYm9vdGxpbi14dGVuc2EtdWNsaWJjIGRlZmNvbmZpZ3MsIHdoaWNoIGFs
-cmVhZHkgZmFpbGVkIHdpdGggRlJSIDEwLjQuMSwgc28gdGhpcyBidW1wIGludHJvZHVjZXMgbm8g
-bmV3IGJyZWFrYWdlLgoKUGF0Y2ggMSBidW1wcyB0aGUgdmVyc2lvbiBhbmQgcmVtb3ZlcyBhbiBv
-YnNvbGV0ZSBwYXRjaC4KUGF0Y2ggMiBpbnN0YWxscyBGUlIgaGVhZGVycyBpbnRvIHN0YWdpbmcu
-IFRoaXMgaXMgbm93IHN1cHBvcnRlZCB1cHN0cmVhbSBpbiBGUlIgMTAuNSBhbmQgYWxsb3dzIEdy
-b3V0IHRvIGNvbXBpbGUgaXRzIEZSUiBkcGxhbmUgcGx1Z2luIGluIEJ1aWxkcm9vdC4gVGhlIHBs
-dWdpbiBpcyB1c2VkIHRvIGNvbmZpZ3VyZSBHcm91dCBpbnN0ZWFkIG9mIHRoZSBrZXJuZWwgZm9y
-IG5ldHdvcmsgcGFja2V0IHByb2Nlc3NpbmcuIFN1Y2Nlc3NmdWwgdGVzdHMgaGVyZToKaHR0cHM6
-Ly9naXRsYWIuY29tL21heGltZS1sZXJveS9idWlsZHJvb3QvLS9waXBlbGluZXMvMjE4OTA4MzM3
-OQoKTWF4aW1lIExlcm95ICgyKToKICBwYWNrYWdlL2ZycjogYnVtcCB0byB2ZXJzaW9uIDEwLjUu
-MAogIGZycjogaW5zdGFsbCBoZWFkZXJzIG9uIHN0YWdpbmcKCiAuLi5kYXZnLW9wdGlvbmFsLWlu
-LWxhdGUtdGltZXItd2FybmluZ3MucGF0Y2ggfCA0OSAtLS0tLS0tLS0tLS0tLS0tLS0tCiBwYWNr
-YWdlL2Zyci9mcnIuaGFzaCAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMiArLQogcGFja2Fn
-ZS9mcnIvZnJyLm1rICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDQgKy0KIDMgZmlsZXMg
-Y2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCA1MSBkZWxldGlvbnMoLSkKIGRlbGV0ZSBtb2RlIDEw
-MDY0NCBwYWNrYWdlL2Zyci8wMDAxLWxpYi1tYWtlLWdldGxvYWRhdmctb3B0aW9uYWwtaW4tbGF0
-ZS10aW1lci13YXJuaW5ncy5wYXRjaAoKLS0gCjIuNDMuMAoKX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
-b3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0
-aW5mby9idWlsZHJvb3QK
+Update FRR to the latest stable version (10.5.0; see [1]).
+
+The 'lib-make-getloadavg-optional-in-late-timer-warnings' patch can be
+dropped, as it has been merged upstream in FRR 10.5.
+
+[1] https://github.com/FRRouting/frr/releases/tag/frr-10.5.0
+Signed-off-by: Maxime Leroy <maxime@leroys.fr>
+---
+ ...davg-optional-in-late-timer-warnings.patch | 49 -------------------
+ package/frr/frr.hash                          |  2 +-
+ package/frr/frr.mk                            |  2 +-
+ 3 files changed, 2 insertions(+), 51 deletions(-)
+ delete mode 100644 package/frr/0001-lib-make-getloadavg-optional-in-late-timer-warnings.patch
+
+diff --git a/package/frr/0001-lib-make-getloadavg-optional-in-late-timer-warnings.patch b/package/frr/0001-lib-make-getloadavg-optional-in-late-timer-warnings.patch
+deleted file mode 100644
+index d03f64882e..0000000000
+--- a/package/frr/0001-lib-make-getloadavg-optional-in-late-timer-warnings.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-From d76100a2b9a2ec814ad0a1fb844a395a6dc2f6bd Mon Sep 17 00:00:00 2001
+-From: Maxime Leroy <maxime@leroys.fr>
+-Date: Mon, 11 Aug 2025 13:44:02 +0200
+-Subject: [PATCH] lib: make getloadavg() optional in late timer warnings
+-
+-Commit ff76fb21d7b3 ("lib: improve late timer warnings") added an
+-unconditional getloadavg() call. Older libcs (e.g. uClibc, dietlibc)
+-lack this function, breaking the build. Before, no system load was
+-shown, so skipping it restores prior behavior.
+-
+-Fixes: ff76fb21d7b3 ("lib: improve late timer warnings")
+-Signed-off-by: Maxime Leroy <maxime@leroys.fr>
+-Upstream: https://github.com/FRRouting/frr/pull/19366
+----
+- configure.ac | 1 +
+- lib/event.c  | 4 ++++
+- 2 files changed, 5 insertions(+)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 87eba6784a..b8ef7bb777 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -1369,6 +1369,7 @@ dnl ---------------
+- AC_CHECK_FUNCS([ \
+- 	strlcat strlcpy \
+- 	getgrouplist \
+-+	getloadavg \
+- 	openat \
+- 	unlinkat \
+- 	posix_fallocate \
+-diff --git a/lib/event.c b/lib/event.c
+-index 1eb41d07ce..22876574fb 100644
+---- a/lib/event.c
+-+++ b/lib/event.c
+-@@ -1924,7 +1924,11 @@ static void event_tardy_warn(struct event *thread, unsigned long since_us)
+- 	double loadavg[3];
+- 	int rv;
+- 
+-+#ifdef HAVE_GETLOADAVG
+- 	rv = getloadavg(loadavg, array_size(loadavg));
+-+#else
+-+	rv = -1;
+-+#endif
+- 	if (rv < 0)
+- 		bprintfrr(&fb, "not available");
+- 	else {
+--- 
+-2.43.0
+-
+diff --git a/package/frr/frr.hash b/package/frr/frr.hash
+index 12030a0df8..3ba034606d 100644
+--- a/package/frr/frr.hash
++++ b/package/frr/frr.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  8e4003eaba168626c5ea7a6735f2c85c87b04214e6f8c8f2715b21f8ae40970b  frr-10.4.1.tar.gz
++sha256  a84b973e713349dca09e2009f33dc499564f2e9faba01c0d3cba9204802b0cd5  frr-10.5.0.tar.gz
+ sha256  7bf053957d6c38e39a06a112c60ff35b228d3bd03edbe8c9a03508b051128d16  COPYING
+ sha256  f9e0c21faf738da586281c0beaad3cd56204c19085a10fe05e4d3d7f8b5863d2  doc/licenses/BSD-2-Clause
+ sha256  aca297b8fd3a43e3bb200f1e2e043c0db6c897325f5ff7f23f7530302a6bf713  doc/licenses/BSD-3-Clause
+diff --git a/package/frr/frr.mk b/package/frr/frr.mk
+index e41ee33caa..9282e13fbd 100644
+--- a/package/frr/frr.mk
++++ b/package/frr/frr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FRR_VERSION = 10.4.1
++FRR_VERSION = 10.5.0
+ FRR_SITE = $(call github,FRRouting,frr,frr-$(FRR_VERSION))
+ FRR_LICENSE = GPL-2.0+
+ FRR_LICENSE_FILES = \
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
