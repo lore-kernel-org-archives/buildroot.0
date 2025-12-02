@@ -4,59 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48AB1D12676
-	for <buildroot@archiver.kernel.org>; Tue,  2 Dec 2025 21:45:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 310B7D12676
+	for <buildroot@archiver.kernel.org>; Tue,  2 Dec 2025 21:45:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 185A16132F;
-	Tue,  2 Dec 2025 21:45:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 02E3260D74;
+	Tue,  2 Dec 2025 21:45:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c0h5Y5IV_eA5; Tue,  2 Dec 2025 21:45:06 +0000 (UTC)
+ id QjVTT8KSaq4V; Tue,  2 Dec 2025 21:45:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5B5560D92
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20B7A6132F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764711905;
-	bh=yjQ0kDhxfPHIfRL8d9PyaKzzgM2tN6QzPTWaotLT7Pw=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=cDpBs9A1iPmrt8aj4XbJJXIjSndcwvF9l1LFpjP7NXwei3zl3kibhycXbYEByoQIJ
-	 SuzC2aUW8HTrgguFMU+vjA/JWepA6MtxwEMew2jInkDq+1qP0dM83FduI6HsRNIiBm
-	 o3Yz7p+dBG0l21QaS0wHWyGIuhrWMNxlRVNRvr0+cZ1xKVeArCHw2Z7k0s3FoG2VQI
-	 W7DayU0YJoFZhXy/P5e1gb0LwwaRZMscUKY+HxcjKwTkB2Vgn+gz1ssGu121+YZsly
-	 kZTbXLe0jpJyPUu5+7rpd2VASFx9m2Mj7167o3/pFIUbJZgZ5Z4JXfZyybF1wuE+x6
-	 VDZKSYcebPlzg==
+	s=default; t=1764711934;
+	bh=g345rjnqhZAf/Fl/iXlFDbYKZNTBlJesLuICh61QyBc=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=P3IsXAbF4MpqjYNPRcrZjqSKwMdkvWPc1uooOwOgb4rmZYMLrqRLmLhFFAgUnGWjn
+	 C+igpvnQojAYEN23hZtkeLiwyKbRXFJUtKuRCV7XQ+k0eaO3b8SjeX5YynCwl7VqXF
+	 4I9rGKxLn5/QnuvW+Uz/qi8TzDbOb0qtyNgCefG8OhnRGlvZagGxKgDy4vzF5QVpul
+	 v8cUC4zbYpmxmMCdkG56b3RVdgsC6CKO3EDmwoj/osAlqobURROXtqPFeVm/lxFtEz
+	 /+nOt1kPScLllHHBkVnv5tYe+0gKf+Nc+O7MpqF/bAM4E8w4xE/5W3P/l+UmE5mUuI
+	 xRpjGwoXo/9ug==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D5B5560D92;
-	Tue,  2 Dec 2025 21:45:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 45FA7D3
- for <buildroot@buildroot.org>; Tue,  2 Dec 2025 21:45:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 20B7A6132F;
+	Tue,  2 Dec 2025 21:45:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C6439D3
+ for <buildroot@buildroot.org>; Tue,  2 Dec 2025 21:45:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2C94860D92
- for <buildroot@buildroot.org>; Tue,  2 Dec 2025 21:45:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AD1A140FD6
+ for <buildroot@buildroot.org>; Tue,  2 Dec 2025 21:45:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1tnl_2YJFWcO for <buildroot@buildroot.org>;
- Tue,  2 Dec 2025 21:45:03 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75B9B60D74
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 75B9B60D74
- for <buildroot@buildroot.org>; Tue,  2 Dec 2025 21:45:03 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 521EE86402; Tue,  2 Dec 2025 21:45:03 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 2 Dec 2025 22:34:43 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6846a992fe8a87bdcf699405f410e32bb0fbef6f
-X-Git-Newrev: cf7b7470da07ef154836833c25de52795bd4e389
-X-Patchwork-Hint: ignore
-Message-Id: <20251202214503.521EE86402@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/unionfs: bump version
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gC_xHNwkmWpk for <buildroot@buildroot.org>;
+ Tue,  2 Dec 2025 21:45:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9B5C740F4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B5C740F4F
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9B5C740F4F
+ for <buildroot@buildroot.org>; Tue,  2 Dec 2025 21:45:31 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id C3CDAB00539;
+ Tue,  2 Dec 2025 22:45:27 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 02 Dec 2025 22:45:27 +0100
+MIME-Version: 1.0
+Date: Tue, 02 Dec 2025 22:45:27 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251202063859.497258-1-bernd@kuhls.net>
+References: <20251202063859.497258-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <586ef563877fae1b95097b397bc16894@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1764711928;
+ bh=kdEeib9KfG6Dy2sFWi7qv9hBGHYXyC2OjfuQchXYYio=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=nELJQMPoJU+Gbg/qazCebTs5KDomlpR5ZXU+YV4oKHqdM76bRImubDuyVKg9goRfL
+ J/urHoUHQUCg4I+YyfrpYR8t7De20/HsMtpolXJUrZDvtJicwk488gskww21QeS/ek
+ 9pCVSiS2C/NCGV9X02ZxDojYQ2A7RWtoZKwUNTfqq18EQouYKtwy2lilTeTE9AU57V
+ 14pRRGJ1WjkMXmSZExnpZh0mBmZhBP9Zhs38WhP1AFrsmjwDd6pCwDHBHxXOWjOYWm
+ RPPOZgvU52fJYBXSdl4GG/DRTLwjm0j8ctas7GfROBOqT2xj7ov2f6VF4s5iZiuCqT
+ azZScRPE17nHQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=nELJQMPo
+Subject: Re: [Buildroot] [PATCH/next v2 1/1] package/unionfs: bump version
  to 3.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,84 +96,23 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf7b7470da07ef154836833c25de52795bd4e389
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 02/12/2025 07:38, Bernd Kuhls wrote:
+> Release notes:
+> https://github.com/rpodgorny/unionfs-fuse/blob/master/NEWS
+> 
+> Version 3.0 added support for libfuse3.
+> 
+> Updated license hash due to copyright year bump:
+> https://github.com/rpodgorny/unionfs-fuse/commit/3fcbd11f78b9a9e02ea0e861d741840fe45dc9c8
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Release notes:
-https://github.com/rpodgorny/unionfs-fuse/blob/master/NEWS
-
-Version 3.0 added support for libfuse3.
-
-Updated license hash due to copyright year bump:
-https://github.com/rpodgorny/unionfs-fuse/commit/3fcbd11f78b9a9e02ea0e861d741840fe45dc9c8
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/unionfs/Config.in    |  8 ++++----
- package/unionfs/unionfs.hash |  4 ++--
- package/unionfs/unionfs.mk   | 12 ++++++++++--
- 3 files changed, 16 insertions(+), 8 deletions(-)
-
-diff --git a/package/unionfs/Config.in b/package/unionfs/Config.in
-index fe03b95f20..41210c2039 100644
---- a/package/unionfs/Config.in
-+++ b/package/unionfs/Config.in
-@@ -1,9 +1,9 @@
- config BR2_PACKAGE_UNIONFS
- 	bool "unionfs (FUSE)"
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse
--	depends on BR2_USE_MMU # libfuse
--	depends on !BR2_STATIC_LIBS # libfuse
--	select BR2_PACKAGE_LIBFUSE
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse, libfuse3
-+	depends on BR2_USE_MMU # libfuse, libfuse3
-+	depends on !BR2_STATIC_LIBS # libfuse, libfuse3
-+	select BR2_PACKAGE_LIBFUSE3 if !BR2_PACKAGE_LIBFUSE
- 	help
- 	  A userspace unionfs implementation.
- 
-diff --git a/package/unionfs/unionfs.hash b/package/unionfs/unionfs.hash
-index 7c4a9f4ffb..7ec654591d 100644
---- a/package/unionfs/unionfs.hash
-+++ b/package/unionfs/unionfs.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  f56a5579d670e18e0667700bc599acbc0b8217ca1f76b2adb3dad7d2953c4049  LICENSE
--sha256  c705072a33a18cbc73ffe799331d43410b6deef5d6f2042038f8fd3ab17b6e2e  unionfs-2.1.tar.gz
-+sha256  026f5302279110ceb7465e5c9e863cd0319ea0dc32ad253d162cf9db0f5e9a81  unionfs-3.7.tar.gz
-+sha256  b03db54bff4b5ff9d1b4c7ef54513e52afaa32830f36a6da6db8c0fcd35a4431  LICENSE
-diff --git a/package/unionfs/unionfs.mk b/package/unionfs/unionfs.mk
-index 12cd368fe3..4909d80a70 100644
---- a/package/unionfs/unionfs.mk
-+++ b/package/unionfs/unionfs.mk
-@@ -4,10 +4,18 @@
- #
- ################################################################################
- 
--UNIONFS_VERSION = 2.1
-+UNIONFS_VERSION = 3.7
- UNIONFS_SITE = $(call github,rpodgorny,unionfs-fuse,v$(UNIONFS_VERSION))
--UNIONFS_DEPENDENCIES = libfuse host-pkgconf
-+UNIONFS_DEPENDENCIES = host-pkgconf
- UNIONFS_LICENSE = BSD-3-Clause
- UNIONFS_LICENSE_FILES = LICENSE
- 
-+ifeq ($(BR2_PACKAGE_LIBFUSE3),y)
-+UNIONFS_CONF_OPTS += -DWITH_LIBFUSE3=TRUE
-+UNIONFS_DEPENDENCIES += libfuse3
-+else
-+UNIONFS_CONF_OPTS += -DWITH_LIBFUSE3=FALSE
-+UNIONFS_DEPENDENCIES += libfuse
-+endif
-+
- $(eval $(cmake-package))
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
