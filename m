@@ -1,84 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE696D116FE
-	for <buildroot@archiver.kernel.org>; Tue,  2 Dec 2025 20:22:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BFBCD1266A
+	for <buildroot@archiver.kernel.org>; Tue,  2 Dec 2025 20:39:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C2FA261389;
-	Tue,  2 Dec 2025 20:22:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 930B441298;
+	Tue,  2 Dec 2025 20:39:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lbE1goZaPEwj; Tue,  2 Dec 2025 20:22:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bQqbdKxAv-K8; Tue,  2 Dec 2025 20:39:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E15F26134C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A595D4129D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764706933;
-	bh=BcPTOnxIkG8+Dv8yDu4CITbz7vmd0jKnNZyJOz6etzk=;
+	s=default; t=1764707948;
+	bh=/7f4zkjsH6Zm5A+vu8nTAHTdvoFmDTCAIfhAdCrUAqE=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=V+e/+QCUu5N1qFcOvHBoVwlICB33B69zK+P5ntcbK23on66P/NfDD7w6vk0A399tj
-	 dVYrGTlKggH7ozJ8udJaaR/k83Y9PmUWKy5VAyPldiUvBd6AyzBkHkqn2dM1TTcc8u
-	 tCsJEeskMamef7y9gS0BqSRqdBwywoqefnOrPPDYNUdx/R0POrnnjiumQdDFZfMcUa
-	 2bIIemWqWL8Gil05ayTysuiHB5lG1w8HiyP95rp/V5tYducBkmrSc4XSR/rSQzECur
-	 ApyOGJp4Il0EX2Zpa2J50gLmUDqDWQiVtPODXwKDdehZqkjK098UE9aUja3+Xw8Dj0
-	 8aWnz+amAi4ug==
+	 List-Post:List-Help:List-Subscribe:From;
+	b=RvXrJNi121BeZdCFxMeZOUAvoawZ5MfOkGS4xRX1FCtRCNh5GniNaRHkyZVwLcIpa
+	 2uyxTOn+yWFK2gugUPC6Osm4b3/XZQWnSOGT40oAk/Q04pNjtPYti8BOGHifEDxuY5
+	 k4RdvLaH1zKp0kmLkxq67sLfj4irIEPp/kEMLa7eSENHyc/pU1TIknQnU4leIMpuP/
+	 ZOAYUbG6WguKNcp9p282wHJnOGyZI7PEZHNbFfo4IXN+04V/8e4JgolHqyHoU6rg8N
+	 5n4gHv52k0MJ24T32zjojC4wnQU3TPUqaAOoc1DcUsPX9mhu6V+lkOnM4HHTCSJlEs
+	 lWRwAtQMKlPUg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E15F26134C;
-	Tue,  2 Dec 2025 20:22:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A5B27E4
- for <buildroot@buildroot.org>; Tue,  2 Dec 2025 20:22:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A595D4129D;
+	Tue,  2 Dec 2025 20:39:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9453DE4
+ for <buildroot@buildroot.org>; Tue,  2 Dec 2025 20:39:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8C24B83FB6
- for <buildroot@buildroot.org>; Tue,  2 Dec 2025 20:22:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7AEF483EF2
+ for <buildroot@buildroot.org>; Tue,  2 Dec 2025 20:39:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X9n74ywtoaC7 for <buildroot@buildroot.org>;
- Tue,  2 Dec 2025 20:22:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3356883FB3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3356883FB3
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3356883FB3
- for <buildroot@buildroot.org>; Tue,  2 Dec 2025 20:22:09 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 56729592;
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Tue, 02 Dec 2025 20:22:07 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1vQWsv-0000000GI2h-3FIU;
- Tue, 02 Dec 2025 21:22:05 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+ id C1r3Bo05rgHn for <buildroot@buildroot.org>;
+ Tue,  2 Dec 2025 20:39:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 87611816E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87611816E5
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 87611816E5
+ for <buildroot@buildroot.org>; Tue,  2 Dec 2025 20:39:06 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0b1d.dip0.t-ipconnect.de [91.58.11.29])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id A76E1A4C2E91
+ for <buildroot@buildroot.org>; Tue,  2 Dec 2025 21:39:04 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:45558)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99)
+ (envelope-from <bernd@kuhls.net>) id 1vQX9L-000000005wn-3uWZ
+ for buildroot@buildroot.org; Tue, 02 Dec 2025 20:39:04 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue,  2 Dec 2025 21:21:58 +0100
-Message-ID: <20251202202159.3882548-1-peter@korsgaard.com>
+Date: Tue,  2 Dec 2025 21:39:04 +0100
+Message-ID: <20251202203904.2207366-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=Z8HKKRgFQHXqcuRRkhFIFAqVYN0fdZmuQmCgUZMq1H9QMcrbInynlt9OZ+GlKtkCw2SYuL6R+KzQLS8M1eIYVhA3BtjMYuOA2k5W3k3LV+QUAkxKfKo8pYXSCkeJHCdCyf+3B6ycihrbmAoYslLOL/EWVZFR4QtVO7HFc41Moe9VfDpwgPfiVbrt7zXuig8cgVFN4dJ9o71W34kUg3rAPU30A3McJ8u4oM0UKUT1gDC4XV/NZlFMzc8ZordShKp9GNjZnrbOXTufU+Z5Si6j+7y6PmxM+kNPf1EtfTwsRMWLEJh7j1lSe8nvyn1u7uzPPvzzRlfQsBqSXX2F6fRVYg==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=mKLdzpZHWjOBXB4Fk8wc8StLXAyrHPo0IplByhxvXPg=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1764707944;
+ bh=Fg4WVDTQ5LRiWIbwE+JpDUnqzhv/GfeWFHDhiqw1udo=;
+ h=From:To:Subject:Date:From;
+ b=kKUyucN1yu+3bFRVY75qFY/splEg5SplZDwTEgUudYSDGEcnjTLklAcdsExrNO1rp
+ +IWcOX6tJylsAkkrcm7Voi3x+zxXp1UeM5mWF/dJkemi0lDWvEPOevn1WiyAa/+MmK
+ Xerqlo8tkf201REwF4pf3srZyLbI21xVqa1rK/wQL3/WE7inLkDwZFkaaBu1SI0z/Z
+ g1nUB5Tl9azeU+L5DIYa+KSaubS1k3YYj65+PRZBeiMnn0KyUWkfGUCYtcEt6RATko
+ ll+4SIXRb7ptPCTOFTIKcWUmjH/Vah3e6piZsWWJSynZP2oE0610GLnYO0HCeu7c69
+ e4v1jp6srqQ8Q==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=Z8HKKRgF
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH] support/scripts/pkg-stats: check_url_status():
- use HEAD requests to limit server load
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=kKUyucN1
+Subject: [Buildroot] [PATCH 1/1] package/libyuv: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,37 +90,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sen Hastings <sen@hastings.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The gnu.org admins have been blocking the IP address of machines running
-pkg-stats as the GET requests for the (many) packages with gnu.org URLs are
-seen as abusive.
+This bump includes a patch which adds cmake4 compatibility.
 
-The resource body is not used, so use a HTTP HEAD request instead of a GET
-to limit server load and bandwidth use.
+Rebased patch 0001.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- support/scripts/pkg-stats | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libyuv/0001-i386-sse2.patch | 14 +++++++-------
+ package/libyuv/libyuv.hash          |  2 +-
+ package/libyuv/libyuv.mk            |  2 +-
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index cfea179458..c659acb80e 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -469,7 +469,7 @@ async def check_url_status(session, pkg, npkgs, retry=True, verbose=False):
-     global check_url_count
+diff --git a/package/libyuv/0001-i386-sse2.patch b/package/libyuv/0001-i386-sse2.patch
+index 2380bbc973..7d61fb0609 100644
+--- a/package/libyuv/0001-i386-sse2.patch
++++ b/package/libyuv/0001-i386-sse2.patch
+@@ -1,16 +1,16 @@
+ Fix compilation on non-sse2 platforms
  
-     try:
--        async with session.get(pkg.url) as resp:
-+        async with session.head(pkg.url) as resp:
-             if resp.status >= 400:
-                 pkg.status['url'] = ("error", "invalid {}".format(resp.status))
-                 check_url_count += 1
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ 
+ diff -uNr libyuv-1411.org/include/libyuv/scale_row.h libyuv-1411/include/libyuv/scale_row.h
+ --- libyuv-1411.org/include/libyuv/scale_row.h	2015-05-22 23:39:21.000000000 +0200
+ +++ libyuv-1411/include/libyuv/scale_row.h	2015-05-25 12:35:17.000000000 +0200
+-@@ -55,7 +55,7 @@
+- 
+- // The following are available on all x86 platforms:
+- #if !defined(LIBYUV_DISABLE_X86) && \
+--    (defined(_M_IX86) || defined(__x86_64__) || defined(__i386__))
+-+    (defined(_M_IX86) || defined(__x86_64__) || (defined(__i386__) && defined(__SSE2__)))
++@@ -24,7 +24,7 @@
++ #if !defined(LIBYUV_DISABLE_X86) &&                             \
++     (defined(_M_IX86) ||                                        \
++      (defined(__x86_64__) && !defined(LIBYUV_ENABLE_ROWWIN)) || \
++-     defined(__i386__))
+++     (defined(__i386__) && defined(__SSE2__)))
+  #define HAS_FIXEDDIV1_X86
+  #define HAS_FIXEDDIV_X86
+  #define HAS_SCALEADDROW_SSE2
+diff --git a/package/libyuv/libyuv.hash b/package/libyuv/libyuv.hash
+index 095da4e606..cad7427721 100644
+--- a/package/libyuv/libyuv.hash
++++ b/package/libyuv/libyuv.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  e27c9d73ca502361d0e532065e790e41a958ae0369f1edfa4d296d33317653b1  libyuv-413a8d8041f1cc5a350a47c0d81cc721e64f9fd0-git4.tar.gz
++sha256  324b6bb4a158f2a231427562a01becafc7cb8ad4e105b9f9b21b85ccc406b649  libyuv-4825d9b29eea4dac24607245db7ec7d4c41c1964-git4.tar.gz
+ sha256  2b2cc1180c7e6988328ad2033b04b80117419db9c4c584918bbb3cfec7e9364f  LICENSE
+diff --git a/package/libyuv/libyuv.mk b/package/libyuv/libyuv.mk
+index b3843cec8f..676a95c3d7 100644
+--- a/package/libyuv/libyuv.mk
++++ b/package/libyuv/libyuv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBYUV_VERSION = 413a8d8041f1cc5a350a47c0d81cc721e64f9fd0
++LIBYUV_VERSION = 4825d9b29eea4dac24607245db7ec7d4c41c1964
+ LIBYUV_SITE = https://chromium.googlesource.com/libyuv/libyuv
+ LIBYUV_SITE_METHOD = git
+ LIBYUV_LICENSE = BSD-3-Clause
 -- 
 2.47.3
 
