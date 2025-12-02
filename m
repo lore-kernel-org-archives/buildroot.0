@@ -4,59 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31DF0D116F5
-	for <buildroot@archiver.kernel.org>; Tue,  2 Dec 2025 21:34:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B572ED12674
+	for <buildroot@archiver.kernel.org>; Tue,  2 Dec 2025 21:34:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1AB406132F;
-	Tue,  2 Dec 2025 21:34:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7ABFA613A3;
+	Tue,  2 Dec 2025 21:34:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2AluJXNem5I4; Tue,  2 Dec 2025 21:34:03 +0000 (UTC)
+ id 4-_otaP7JZEc; Tue,  2 Dec 2025 21:34:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7791D60880
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF4A260A62
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764711243;
-	bh=c49oxBUp4zS+AcJHUaKtASmWcH2f+zvl1hT7/g49aWA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=U39gZeGIL3E8xo9j1lT8xXcOF9vkMAEeU7KF+zOYTJ934+XETU4bTC3zuBenULrzz
-	 qhTLgRYCx4ugTclKcJdWmrAfWIPec5cnXkx+mdy5LGFtAxA+0NgohOO6IegTPAraAk
-	 ZYEti44tH8ct8XqmF6JxdTcNOA6caOW8/WRD6B3f1hzIqlp42JTRp8du2kxAurrwo4
-	 +gtqwDI4tMGBzht1Zq251WCNmnxwHY4IQW5MslAkc1uksboZBQA24dB59tA+/kmHEH
-	 mY/M11bzv0OKIugvvngHO2NqvTQqt+x0L2piCjL4g4rNnnkAAvLISBlC2QdZNGvroJ
-	 svRmWeZ4Modyg==
+	s=default; t=1764711265;
+	bh=bbIG3DHXBeSbkoZXge0xnk7xHJtb3cnbpPf2n77pwa4=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=OcjQJx92zRKQWVNk7SadWl9UDKXYtLrPxznTHT5aVoS8AqAzDr5tgUnmfl7SivA4L
+	 6XnTHpynXcCQgydMMnhIPGYQVQcfX5ZrLv8bq64LGHs6LxnBM26Qnq3QiaeiXpJGB6
+	 +Dd6alZhaX1x/mroP9vP8qu3jN+8SNqKKfpeKshA+5iLGIXbLS5PwSDNgdKKjqfzFH
+	 lGKV0k2XDJm6qLPvwOWqSdoLOEiED4mG+gBlM7fspeS1986S4Ok91PS40Fmp06evYr
+	 Zk/F8CygMZi/hyJAfevn+/gELkC44lR7uRIOwwe5InTNbyydGV1IQUvHhFtnKIUeFt
+	 bTiEbT5SAEHmA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7791D60880;
-	Tue,  2 Dec 2025 21:34:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF4A260A62;
+	Tue,  2 Dec 2025 21:34:24 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9024CE4
- for <buildroot@buildroot.org>; Tue,  2 Dec 2025 21:34:01 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id CF210D3
+ for <buildroot@buildroot.org>; Tue,  2 Dec 2025 21:34:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8CE8A60880
- for <buildroot@buildroot.org>; Tue,  2 Dec 2025 21:34:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C0E8860A62
+ for <buildroot@buildroot.org>; Tue,  2 Dec 2025 21:34:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mLPG5WKQl0mb for <buildroot@buildroot.org>;
- Tue,  2 Dec 2025 21:34:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD8D76083B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AD8D76083B
- for <buildroot@buildroot.org>; Tue,  2 Dec 2025 21:34:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9A2FE863E2; Tue,  2 Dec 2025 21:34:00 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 2 Dec 2025 22:18:19 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2b4ee4e72f9f0bdd8b1382bf5a2b02e3df89ea0e
-X-Git-Newrev: f9f3e6ccc66cd4f2becfc29e6b2b74beaddf14e6
-X-Patchwork-Hint: ignore
-Message-Id: <20251202213400.9A2FE863E2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/scripts/pkg-stats:
+ id cAsOt7uOCWxE for <buildroot@buildroot.org>;
+ Tue,  2 Dec 2025 21:34:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0F3A1608EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F3A1608EE
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0F3A1608EE
+ for <buildroot@buildroot.org>; Tue,  2 Dec 2025 21:34:22 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id C593860128;
+ Tue,  2 Dec 2025 22:34:18 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 02 Dec 2025 22:34:18 +0100
+MIME-Version: 1.0
+Date: Tue, 02 Dec 2025 22:34:18 +0100
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: buildroot@buildroot.org, Sen Hastings <sen@hastings.org>
+In-Reply-To: <20251202202159.3882548-1-peter@korsgaard.com>
+References: <20251202202159.3882548-1-peter@korsgaard.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <72e68b5405247f6237f657175586e1fa@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1764711261;
+ bh=CwixK2Lh2h5DLKbiqtOJS3irAzqdNx1QtlFHQNfYzYw=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Qdy5lDIkislNjscjK8dDV0zVauX5+uT0GGnWf9PaOBUhRFJFyd6loBMQrztWZdGV4
+ WkfscX6s95T4YUHjewZmQ47F8RxYvKvIm2kwFnyQDE32I9wPuIXTCIDpn/fZrMHCJQ
+ C30qyTNgng29tFEU3Emukt7JK09R03NCkTivEA9LW6noBToChDhU14BwV+K39XgMkp
+ TK64y0E0OhrCqKGbLctMkLR+5uBSZpcv6EK6s3nmRE/L2D3NLSN7Gf+pYHoNott7cM
+ cXoLawK3k0+UkZ8wv3QhnLs069ehTyoLpptQ8iDqQhd8xoGugZixaA4EBMii47hG5h
+ hZps9fjmaOW8w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=Qdy5lDIk
+Subject: Re: [Buildroot] [PATCH] support/scripts/pkg-stats:
  check_url_status(): use HEAD requests to limit server load
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,41 +96,25 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9f3e6ccc66cd4f2becfc29e6b2b74beaddf14e6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 02/12/2025 21:21, Peter Korsgaard wrote:
+> The gnu.org admins have been blocking the IP address of machines 
+> running
+> pkg-stats as the GET requests for the (many) packages with gnu.org URLs 
+> are
+> seen as abusive.
+> 
+> The resource body is not used, so use a HTTP HEAD request instead of a 
+> GET
+> to limit server load and bandwidth use.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-The gnu.org admins have been blocking the IP address of machines running
-pkg-stats as the GET requests for the (many) packages with gnu.org URLs are
-seen as abusive.
-
-The resource body is not used, so use a HTTP HEAD request instead of a GET
-to limit server load and bandwidth use.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- support/scripts/pkg-stats | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index cfea179458..c659acb80e 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -469,7 +469,7 @@ async def check_url_status(session, pkg, npkgs, retry=True, verbose=False):
-     global check_url_count
- 
-     try:
--        async with session.get(pkg.url) as resp:
-+        async with session.head(pkg.url) as resp:
-             if resp.status >= 400:
-                 pkg.status['url'] = ("error", "invalid {}".format(resp.status))
-                 check_url_count += 1
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
