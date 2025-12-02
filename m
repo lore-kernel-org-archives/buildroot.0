@@ -1,86 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C0B5D12663
-	for <buildroot@archiver.kernel.org>; Tue,  2 Dec 2025 17:59:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56132D1266C
+	for <buildroot@archiver.kernel.org>; Tue,  2 Dec 2025 19:58:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC6F4405F0;
-	Tue,  2 Dec 2025 17:59:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 29C306136F;
+	Tue,  2 Dec 2025 19:58:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2SScNt21GHkx; Tue,  2 Dec 2025 17:59:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vpqV_ZlhrWJb; Tue,  2 Dec 2025 19:58:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 223D141186
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 792D360FE2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764698364;
-	bh=lhO4DYcJnEBMoVg6Gh9XmUgVC5WqLJHjBf+3CHMqiQo=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1764705532;
+	bh=oqxxKIy6xASRwu3/0+wtuq32A7/iLivmcOPRpM7plb8=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=T6x2qOWzHn1wLN7UrMLST8h2h4UDq04xEUF2lDY6Fc2d+udWOyZMV3vUBQI79d9P4
-	 ZqP8l4qWnJ57U5zOW0p3V29C7R6Osszbe2oAGg0taIX0JA6GbUC5StxFIoAuXdYlXV
-	 KzjOvkZ7MvrkzzpFa9nNxTmQU4IBcAqwT9Iz57jTCr4aIRrKSwg3g+YtU1F1/AcWN3
-	 aNMBLcFq92kO5QQeXdMuaFV7ObPtfNdla7etQv07Bq84zWuW2uo8pA1icrddl8zxnu
-	 dtPXgRL+4ynthXRejgbkHjpJV6Jtbd0Uz5sta8/UmWC5KlAzT1VP8h9b8v9CaMF5In
-	 lHsk5Wwboi/zg==
+	b=BgmMlvgo89jhaRuo6O+wFCwA4zZ3o/l3cvwThBJBx6tj+zgu3ef7YROX6ueUxE6q5
+	 ShE1cwos+Ilnwri3KMTnPI3DTREC2X6SnH9RXRUiGbCR5Is5A7x0lJ6GxsWlW3MhF2
+	 LZBuz6/iGrXstpzEG4vxSdk+lcftSNx6Nfet6xsFd6SD5T8JfWnFUVRUTzuA3ok4yM
+	 ldnisb87vCpsCE61ZnqK7zYntRCxgPA3Cty568Ige27E8dhFGL87oJHAiSOl6xs6zt
+	 tpaleeCMGjq6R/jcG79b8TM5ZgmR0SAAqEzfc/Z9m8py8ke9waohBm8xcI1wx/7uUA
+	 LBN9oWbcaeH7A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 223D141186;
-	Tue,  2 Dec 2025 17:59:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 792D360FE2;
+	Tue,  2 Dec 2025 19:58:52 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7C651E4
- for <buildroot@buildroot.org>; Tue,  2 Dec 2025 17:59:22 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 85810E7
+ for <buildroot@buildroot.org>; Tue,  2 Dec 2025 19:58:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6DC8340556
- for <buildroot@buildroot.org>; Tue,  2 Dec 2025 17:59:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 63D2440503
+ for <buildroot@buildroot.org>; Tue,  2 Dec 2025 19:58:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mwD-qRC83qLb for <buildroot@buildroot.org>;
- Tue,  2 Dec 2025 17:59:21 +0000 (UTC)
+ id mJ_JlzXz76KD for <buildroot@buildroot.org>;
+ Tue,  2 Dec 2025 19:58:49 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 77054404D4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77054404D4
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1ED45400E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1ED45400E0
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 77054404D4
- for <buildroot@buildroot.org>; Tue,  2 Dec 2025 17:59:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1ED45400E0
+ for <buildroot@buildroot.org>; Tue,  2 Dec 2025 19:58:48 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0b1d.dip0.t-ipconnect.de [91.58.11.29])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 8F0E9A4C78C9;
- Tue,  2 Dec 2025 18:59:16 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:51072)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id B9159A4C2C81
+ for <buildroot@buildroot.org>; Tue,  2 Dec 2025 20:58:45 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:35078)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vQUeh-000000003JO-1tzK;
- Tue, 02 Dec 2025 17:59:16 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vQWWK-000000007LQ-3ndO
+ for buildroot@buildroot.org; Tue, 02 Dec 2025 19:58:45 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Michael Vetter <jubalh@iodoru.org>
-Date: Tue,  2 Dec 2025 18:59:15 +0100
-Message-ID: <20251202175915.1616935-1-bernd@kuhls.net>
+Date: Tue,  2 Dec 2025 20:58:45 +0100
+Message-ID: <20251202195845.1666460-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1764698356;
- bh=w96Zkjn5+AcG82DGqs+W41hPzrtjasxGA1HJOZNYgDk=;
- h=From:To:Cc:Subject:Date:From;
- b=dUiTvyXfc92H82jbmxgJ1Xxk+ZbQDhCDU6DmwHsEwIdthuEniHey6ihQ7gmfZeMJh
- 8yo8GHO6/bQlM5iQo4P0kB9I+I+leYxbbuhQ5Oj133lQ55mCdEhdKZcFYrndsHuCYD
- Mu1iK2WxDUNJMR8md/o79SO2HQMPvfL8DHEx9yBqxJR9OTNGB8X4QH3sBmJXxTJjkM
- /SHnKFO8YCW6o6MwfWI9VvEw5jlsfuYsxDt59Zekpmez700UkHU7+bFHrorXr+2n5+
- YXuYnFlXsKgdDjyVi/sFlK5U605/53lQCQPDxe5yI+2m0LJYwRsVTAiM9yv8FR/qg4
- CqU1FAE1bOeUw==
+ s=kas202511301023; t=1764705525;
+ bh=/fbkznaJ5EIFmWwfzFq1NEOkCKEuz/ZPFH72bFvHkaA=;
+ h=From:To:Subject:Date:From;
+ b=jDGcmurGhGME86HaJ2EVellimE2DYvy0hpx1gbh8obV0HRbK3K5+4ZvQ53lcL5JEZ
+ EvzgL9XYqYMBe/NYS1mNcNwsZXxqNzL0fo4/lHuFh1sBl/YSAAP5pkKdhU9/3OCBbm
+ 6vU0Hy+rEcOdFGXmBmtD3zpYTFw6a8TSEnz4Arga7Ov2g7BwlJ+Ts1DWwK3C90kTYu
+ 5LJBkVKrL9HtJUvdUBrYCo44juDfexPwAAwg8i1L9LWJ/ku0oavrPGiPleB2sppEev
+ UErVlmR8R5n/pStx9u0IqYFwAu0QFeyFtZ+iHEMmXhLykKiGcThYA+ILIA/wWGJhmS
+ 63PBGjNBTlaXw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=dUiTvyXf
-Subject: [Buildroot] [PATCH/next 1/1] package/jasper: bump version to 4.2.8
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=jDGcmurG
+Subject: [Buildroot] [PATCH/next 1/1] package/cegui: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,302 +95,222 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Added patch to fix build with cmake 4.
+
 Removed patches which are included in this release.
 
-License file was renamed upstream:
-https://github.com/jasper-software/jasper/commit/688601c736165d424b95413ea40d5571a5ccfe02
-
-Added configure option to force builddir:
-https://github.com/jasper-software/jasper/blob/version-4.2.8/build/cmake/modules/InSourceBuild.cmake
-
-Added configure option for JAS_STDC_VERSION:
-https://github.com/jasper-software/jasper/commit/b8ecbfbf293ee6086e4d40108ad730229388cd8d
+Updated dependencies and configure options due to upstream commits:
+https://github.com/cegui/cegui/commit/36c0eaf629b46bdaa3448d20d46294cb0dbc6db5
+https://github.com/cegui/cegui/commit/c9adaa03d67e2ba650e063dc7b60c63113ba6cf0
+https://github.com/cegui/cegui/commit/20f5ac6658ce151e73772906cdb9be93603c5064
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/jasper/0001-Fixes-367.patch |  46 --------
- package/jasper/0002-Fixes-400.patch | 169 ----------------------------
- package/jasper/jasper.hash          |   4 +-
- package/jasper/jasper.mk            |  17 ++-
- 4 files changed, 13 insertions(+), 223 deletions(-)
- delete mode 100644 package/jasper/0001-Fixes-367.patch
- delete mode 100644 package/jasper/0002-Fixes-400.patch
+ package/cegui/0001-Fix-cmake-4-build.patch    | 28 ++++++++++++++
+ .../0001-XMLParser.cpp-include-string.h.patch | 37 -------------------
+ ...-of-xmlGetLastError-for-libxml2-2-12.patch | 29 ---------------
+ package/cegui/cegui.hash                      |  2 +-
+ package/cegui/cegui.mk                        | 29 +++++++--------
+ 5 files changed, 43 insertions(+), 82 deletions(-)
+ create mode 100644 package/cegui/0001-Fix-cmake-4-build.patch
+ delete mode 100644 package/cegui/0001-XMLParser.cpp-include-string.h.patch
+ delete mode 100644 package/cegui/0002-Fix-return-type-of-xmlGetLastError-for-libxml2-2-12.patch
 
-diff --git a/package/jasper/0001-Fixes-367.patch b/package/jasper/0001-Fixes-367.patch
+diff --git a/package/cegui/0001-Fix-cmake-4-build.patch b/package/cegui/0001-Fix-cmake-4-build.patch
+new file mode 100644
+index 0000000000..952b17e494
+--- /dev/null
++++ b/package/cegui/0001-Fix-cmake-4-build.patch
+@@ -0,0 +1,28 @@
++From 6c0e6d8ffb3c13cd7fb08c8ef217daf45eabdf99 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Tue, 2 Dec 2025 20:38:29 +0100
++Subject: [PATCH] Fix cmake 4 build
++
++Upstream: https://github.com/cegui/cegui/pull/1334
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 418931822..645ff6cf7 100755
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,7 +1,7 @@
++ ################################################################################
++ # Top-level CMakeLists.txt file for Crazy Eddie's GUI System
++ ################################################################################
++-cmake_minimum_required(VERSION 3.1)
+++cmake_minimum_required(VERSION 3.5)
++ 
++ if (APPLE AND NOT CMAKE_OSX_ARCHITECTURES)
++     set( CMAKE_OSX_ARCHITECTURES ${CMAKE_HOST_SYSTEM_PROCESSOR} CACHE STRING "Build architectures for Mac OS X")
++-- 
++2.47.3
++
+diff --git a/package/cegui/0001-XMLParser.cpp-include-string.h.patch b/package/cegui/0001-XMLParser.cpp-include-string.h.patch
 deleted file mode 100644
-index 11dfb5672f..0000000000
---- a/package/jasper/0001-Fixes-367.patch
+index e117d6220d..0000000000
+--- a/package/cegui/0001-XMLParser.cpp-include-string.h.patch
 +++ /dev/null
-@@ -1,46 +0,0 @@
--From aeef5293c978158255ad4f127089644745602f2a Mon Sep 17 00:00:00 2001
--From: Michael Adams <mdadams@ece.uvic.ca>
--Date: Thu, 14 Dec 2023 19:04:19 -0800
--Subject: [PATCH] Fixes #367.
+@@ -1,37 +0,0 @@
+-From b98ed87225fa3c0f156b0798ca5c285d8fa8fac1 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 15 Jun 2021 07:27:41 +0200
+-Subject: [PATCH] XMLParser.cpp: include string.h
 -
--Fixed an integer-overflow bug in the ICC profile parsing code.
--Added another invalid image to the test set.
+-Include string.h to avoid the following build failure:
 -
--CVE: CVE-2023-51257
--Upstream: https://github.com/jasper-software/jasper/commit/aeef5293c978158255ad4f127089644745602f2a
--Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+-/home/buildroot/autobuild/run/instance-3/output-1/build/cegui-00b4e1fe174da53b7ed726ab5970ba51bd5b5ee0/cegui/src/XMLParserModules/RapidXML/XMLParser.cpp:73:5: error: 'memcpy' was not declared in this scope
+-   73 |     memcpy(buf, source.getDataPtr(), size);
+-      |     ^~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/1cb09e5f52435efc505c61707b2d5d2ee871524b
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Upstream: 628f7edf4b420f752f1965ea11e5e747e3ff93b0
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ----
-- src/libjasper/base/jas_icc.c | 16 ++++++++++++++--
-- 1 file changed, 14 insertions(+), 2 deletions(-)
+- cegui/src/XMLParserModules/RapidXML/XMLParser.cpp | 2 ++
+- 1 file changed, 2 insertions(+)
 -
--diff --git a/src/libjasper/base/jas_icc.c b/src/libjasper/base/jas_icc.c
--index 905b823..2d1e91e 100644
----- a/src/libjasper/base/jas_icc.c
--+++ b/src/libjasper/base/jas_icc.c
--@@ -1295,10 +1295,22 @@ static int jas_icctxt_input(jas_iccattrval_t *attrval, jas_stream_t *in,
+-diff --git a/cegui/src/XMLParserModules/RapidXML/XMLParser.cpp b/cegui/src/XMLParserModules/RapidXML/XMLParser.cpp
+-index 810ea6bbf..59822fc80 100644
+---- a/cegui/src/XMLParserModules/RapidXML/XMLParser.cpp
+-+++ b/cegui/src/XMLParserModules/RapidXML/XMLParser.cpp
+-@@ -38,6 +38,8 @@
+- #include "CEGUI/Logger.h"
+- #include "CEGUI/Exceptions.h"
+- 
+-+#include <string.h>
+-+
+- // Start of CEGUI namespace section
+- namespace CEGUI
 - {
-- 	jas_icctxt_t *txt = &attrval->data.txt;
-- 	txt->string = 0;
---	if (!(txt->string = jas_malloc(cnt)))
--+	/* The string must at least contain a single null character. */
--+	if (cnt < 1) {
-- 		goto error;
---	if (jas_stream_read(in, txt->string, cnt) != cnt)
--+	}
--+	if (!(txt->string = jas_malloc(cnt))) {
--+		goto error;
--+	}
--+	if (jas_stream_read(in, txt->string, cnt) != cnt) {
-- 		goto error;
--+	}
--+	/* Ensure that the string is null terminated. */
--+	if (txt->string[cnt - 1] != '\0') {
--+		goto error;
--+	}
--+	/* The following line is redundant, unless we do not enforce that
--+	  the last character must be null. */
-- 	txt->string[cnt - 1] = '\0';
-- 	if (strlen(txt->string) + 1 != cnt)
-- 		goto error;
 --- 
--2.39.5
-diff --git a/package/jasper/0002-Fixes-400.patch b/package/jasper/0002-Fixes-400.patch
+-2.31.1
+-
+diff --git a/package/cegui/0002-Fix-return-type-of-xmlGetLastError-for-libxml2-2-12.patch b/package/cegui/0002-Fix-return-type-of-xmlGetLastError-for-libxml2-2-12.patch
 deleted file mode 100644
-index b663f1e72e..0000000000
---- a/package/jasper/0002-Fixes-400.patch
+index 9091062e28..0000000000
+--- a/package/cegui/0002-Fix-return-type-of-xmlGetLastError-for-libxml2-2-12.patch
 +++ /dev/null
-@@ -1,169 +0,0 @@
--From bb7d62bd0a2a8e0e1fdb4d603f3305f955158c52 Mon Sep 17 00:00:00 2001
--From: Michael Adams <mdadams@ece.uvic.ca>
--Date: Tue, 29 Jul 2025 20:16:35 -0700
--Subject: [PATCH] Fixes #400.
+@@ -1,29 +0,0 @@
+-From 285ba5a2c0c435ed865c6e86afe314a822fd1e3f Mon Sep 17 00:00:00 2001
+-From: oreo639 <oreo6391@gmail.com>
+-Date: Sun, 18 Feb 2024 14:16:21 -0800
+-Subject: [PATCH] Fix return type of xmlGetLastError for libxml2 2.12
 -
--Added a check for a missing color component in the jas_image_chclrspc
--function.
+-https://gitlab.gnome.org/GNOME/libxml2/-/commit/45470611b047db78106dcb2fdbd4164163c15ab7
 -
--CVE: CVE-2025-8835
--Upstream: https://github.com/jasper-software/jasper/commit/bb7d62bd0a2a8e0e1fdb4d603f3305f955158c52
--[thomas: backport to v2.0.33]
--Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+-Upstream: https://github.com/cegui/cegui/commit/285ba5a2c0c435ed865c6e86afe314a822fd1e3f
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ----
-- src/libjasper/base/jas_image.c | 71 ++++++++++++++++++++++++++++------
-- 1 file changed, 59 insertions(+), 12 deletions(-)
+- cegui/src/XMLParserModules/Libxml2/XMLParser.cpp | 4 ++++
+- 1 file changed, 4 insertions(+)
 -
--diff --git a/src/libjasper/base/jas_image.c b/src/libjasper/base/jas_image.c
--index 68a94e1..cd99ba2 100644
----- a/src/libjasper/base/jas_image.c
--+++ b/src/libjasper/base/jas_image.c
--@@ -112,6 +112,8 @@ static long convert(long val, bool oldsgnd, unsigned oldprec, bool newsgnd,
--   unsigned newprec);
-- static void jas_image_calcbbox2(const jas_image_t *image, jas_image_coord_t *tlx,
--   jas_image_coord_t *tly, jas_image_coord_t *brx, jas_image_coord_t *bry);
--+static jas_cmcmptfmt_t* jas_cmcmptfmt_array_create(int n);
--+static void jas_cmcmptfmt_array_destroy(jas_cmcmptfmt_t* cmptfmts, int n);
+-diff --git a/cegui/src/XMLParserModules/Libxml2/XMLParser.cpp b/cegui/src/XMLParserModules/Libxml2/XMLParser.cpp
+-index 74a3dbddd..a408f9305 100644
+---- a/cegui/src/XMLParserModules/Libxml2/XMLParser.cpp
+-+++ b/cegui/src/XMLParserModules/Libxml2/XMLParser.cpp
+-@@ -109,7 +109,11 @@ void LibxmlParser::parseXML(XMLHandler& handler,
 - 
-- /******************************************************************************\
-- * Global data.
--@@ -409,6 +411,31 @@ static void jas_image_cmpt_destroy(jas_image_cmpt_t *cmpt)
-- 	jas_free(cmpt);
-- }
+-     if (!doc)
+-     {
+-+#if LIBXML_VERSION >= 21200
+-+        const xmlError* err = xmlGetLastError();
+-+#else
+-         xmlError* err = xmlGetLastError();
+-+#endif
 - 
--+static jas_cmcmptfmt_t* jas_cmcmptfmt_array_create(int n)
--+{
--+	jas_cmcmptfmt_t* cmptfmts;
--+	if (!(cmptfmts = jas_alloc2(n, sizeof(jas_cmcmptfmt_t)))) {
--+		return 0;
--+	}
--+	for (int i = 0; i < n; ++i) {
--+		cmptfmts[i].buf = 0;
--+	}
--+	return cmptfmts;
--+}
--+
--+static void jas_cmcmptfmt_array_destroy(jas_cmcmptfmt_t* cmptfmts, int n)
--+{
--+	assert(cmptfmts);
--+	assert(n > 0);
--+	for (int i = 0; i < n; ++i) {
--+		if (cmptfmts[i].buf) {
--+			jas_free(cmptfmts[i].buf);
--+		}
--+		cmptfmts[i].buf = 0;
--+	}
--+	jas_free(cmptfmts);
--+}
--+
-- /******************************************************************************\
-- * Load and save operations.
-- \******************************************************************************/
--@@ -1470,19 +1497,25 @@ jas_image_t *jas_image_chclrspc(jas_image_t *image, const jas_cmprof_t *outprof,
-- 	jas_cmcmptfmt_t *incmptfmts;
-- 	jas_cmcmptfmt_t *outcmptfmts;
-- 
--+	assert(image);
--+	assert(outprof);
--+
-- #if 0
-- jas_eprintf("IMAGE\n");
-- jas_image_dump(image, stderr);
-- #endif
-- 
---	if (image->numcmpts_ == 0)
--+	if (!jas_image_numcmpts(image)) {
-- 		/* can't work with a file with no components;
-- 		   continuing would crash because we'd attempt to
-- 		   obtain information about the first component */
-- 		return NULL;
--+	}
-- 
-- 	outimage = 0;
-- 	xform = 0;
--+	incmptfmts = 0;
--+	outcmptfmts = 0;
-- 	if (!(inimage = jas_image_copy(image)))
-- 		goto error;
-- 	image = 0;
--@@ -1565,15 +1598,21 @@ jas_image_dump(image, stderr);
-- 	}
-- 
-- 	inpixmap.numcmpts = numinclrchans;
---	if (!(incmptfmts = jas_alloc2(numinclrchans, sizeof(jas_cmcmptfmt_t)))) {
--+	assert(numinclrchans != 0);
--+	if (!(incmptfmts = jas_cmcmptfmt_array_create(numinclrchans))) {
-- 		abort();
-- 	}
-- 	inpixmap.cmptfmts = incmptfmts;
-- 	for (unsigned i = 0; i < numinclrchans; ++i) {
-- 		const int j = jas_image_getcmptbytype(inimage, JAS_IMAGE_CT_COLOR(i));
--+		if (j < 0) {
--+			jas_eprintf("missing color component %d\n", i);
--+			goto error;
--+		}
-- 		if (!(incmptfmts[i].buf = jas_alloc2(width, sizeof(long)))) {
-- 			goto error;
-- 		}
--+		assert(j >= 0 && j < jas_image_numcmpts(inimage));
-- 		incmptfmts[i].prec = jas_image_cmptprec(inimage, j);
-- 		incmptfmts[i].sgnd = jas_image_cmptsgnd(inimage, j);
-- 		incmptfmts[i].width = width;
--@@ -1581,15 +1620,21 @@ jas_image_dump(image, stderr);
-- 	}
-- 
-- 	outpixmap.numcmpts = numoutclrchans;
---	if (!(outcmptfmts = jas_alloc2(numoutclrchans, sizeof(jas_cmcmptfmt_t)))) {
--+	if (!(outcmptfmts = jas_cmcmptfmt_array_create(numoutclrchans))) {
-- 		abort();
-- 	}
-- 	outpixmap.cmptfmts = outcmptfmts;
-- 
-- 	for (unsigned i = 0; i < numoutclrchans; ++i) {
-- 		const int j = jas_image_getcmptbytype(outimage, JAS_IMAGE_CT_COLOR(i));
---		if (!(outcmptfmts[i].buf = jas_alloc2(width, sizeof(long))))
--+		if (j < 0) {
--+			jas_eprintf("missing color component %d\n", i);
-- 			goto error;
--+		}
--+		if (!(outcmptfmts[i].buf = jas_alloc2(width, sizeof(long)))) {
--+			goto error;
--+		}
--+		assert(j >= 0 && j < jas_image_numcmpts(outimage));
-- 		outcmptfmts[i].prec = jas_image_cmptprec(outimage, j);
-- 		outcmptfmts[i].sgnd = jas_image_cmptsgnd(outimage, j);
-- 		outcmptfmts[i].width = width;
--@@ -1612,14 +1657,8 @@ jas_image_dump(image, stderr);
-- 		}
-- 	}
-- 
---	for (unsigned i = 0; i < numoutclrchans; ++i) {
---		jas_free(outcmptfmts[i].buf);
---	}
---	jas_free(outcmptfmts);
---	for (unsigned i = 0; i < numinclrchans; ++i) {
---		jas_free(incmptfmts[i].buf);
---	}
---	jas_free(incmptfmts);
--+	jas_cmcmptfmt_array_destroy(outcmptfmts, numoutclrchans);
--+	jas_cmcmptfmt_array_destroy(incmptfmts, numinclrchans);
-- 	jas_cmxform_destroy(xform);
-- 	jas_image_destroy(inimage);
-- 
--@@ -1631,6 +1670,14 @@ jas_image_dump(outimage, stderr);
-- #endif
-- 	return outimage;
-- error:
--+	if (incmptfmts) {
--+		assert(numinclrchans);
--+		jas_cmcmptfmt_array_destroy(incmptfmts, numinclrchans);
--+	}
--+	if (outcmptfmts) {
--+		assert(numoutclrchans);
--+		jas_cmcmptfmt_array_destroy(outcmptfmts, numoutclrchans);
--+	}
-- 	if (xform)
-- 		jas_cmxform_destroy(xform);
-- 	if (inimage)
---- 
--2.39.5
-diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
-index 410bcfc683..3bda474dfa 100644
---- a/package/jasper/jasper.hash
-+++ b/package/jasper/jasper.hash
+-         throw GenericException(
+-             String("xmlParseMemory failed in file: '") +
+diff --git a/package/cegui/cegui.hash b/package/cegui/cegui.hash
+index 131b248619..be0939148c 100644
+--- a/package/cegui/cegui.hash
++++ b/package/cegui/cegui.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  28d28290cc2eaf70c8756d391ed8bcc8ab809a895b9a67ea6e89da23a611801a  jasper-2.0.33.tar.gz
--sha256  4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
-+sha256  98058a94fbff57ec6e31dcaec37290589de0ba6f47c966f92654681a56c71fae  jasper-4.2.8.tar.gz
-+sha256  4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE.txt
-diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
-index 527ad6fa8c..a41f7cb6d8 100644
---- a/package/jasper/jasper.mk
-+++ b/package/jasper/jasper.mk
-@@ -4,22 +4,27 @@
+ # Locally computed:
+-sha256  5b6f9e209e8a29b2f30d6aef92efd125c8bedaab5be04b562208be51e5e7f04e  cegui-00b4e1fe174da53b7ed726ab5970ba51bd5b5ee0.tar.gz
++sha256  9460cbbe7fc3bb3cf6abfd7f5a9c5f135b20e9898400bd698a5fa0d0fe879865  cegui-e7a03afc70c6182a091ff31accb9d77c6bdf6f60.tar.gz
+ sha256  cc869e2ece8ad039f6d7fd17259db4ea0ae0a502d02a1bb506c0168deb12e40d  COPYING
+diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
+index 2e56322374..6f3edf5826 100644
+--- a/package/cegui/cegui.mk
++++ b/package/cegui/cegui.mk
+@@ -4,19 +4,18 @@
  #
  ################################################################################
  
--JASPER_VERSION = 2.0.33
-+JASPER_VERSION = 4.2.8
- JASPER_SITE = https://github.com/jasper-software/jasper/releases/download/version-$(JASPER_VERSION)
- JASPER_INSTALL_STAGING = YES
- JASPER_LICENSE = JasPer-2.0
--JASPER_LICENSE_FILES = LICENSE
-+JASPER_LICENSE_FILES = LICENSE.txt
- JASPER_CPE_ID_VALID = YES
- JASPER_SUPPORTS_IN_SOURCE_BUILD = NO
- JASPER_CONF_OPTS = \
- 	-DJAS_ENABLE_DOC=OFF \
- 	-DJAS_ENABLE_PROGRAMS=OFF
+-CEGUI_VERSION = 00b4e1fe174da53b7ed726ab5970ba51bd5b5ee0
++CEGUI_VERSION = e7a03afc70c6182a091ff31accb9d77c6bdf6f60
+ CEGUI_SITE = $(call github,cegui,cegui,$(CEGUI_VERSION))
+ CEGUI_LICENSE = MIT
+ CEGUI_LICENSE_FILES = COPYING
+ CEGUI_INSTALL_STAGING = YES
+ CEGUI_CONF_OPTS = \
+-	-DCEGUI_HAS_MINIZIP_RESOURCE_PROVIDER=OFF \
++	-DCEGUI_BUILD_RESOURCE_PROVIDER_MINIZIP=OFF \
+ 	-DCEGUI_BUILD_RENDERER_IRRLICHT=OFF \
+ 	-DCEGUI_BUILD_RENDERER_OGRE=OFF \
+ 	-DCEGUI_BUILD_RENDERER_OPENGLES=OFF \
+ 	-DCEGUI_BUILD_XMLPARSER_XERCES=OFF \
+ 	-DCEGUI_USE_FRIBIDI=OFF \
+-	-DCEGUI_SAMPLES_ENABLED=OFF \
+ 	-DCEGUI_BUILD_APPLICATION_TEMPLATES=OFF \
+ 	-DCEGUI_BUILD_PYTHON_MODULES_SWIG=OFF
+ CEGUI_DEPENDENCIES = glm \
+@@ -59,16 +58,16 @@ endif
  
--# 0001-Fixes-367.patch
--JASPER_IGNORE_CVES += CVE-2023-51257
-+# Despite using JASPER_SUPPORTS_IN_SOURCE_BUILD = NO jasper detects an
-+# in-source-build because a subdirectory inside the source directory
-+# is used so we need to force the build.
-+JASPER_CONF_OPTS += \
-+	-DALLOW_IN_SOURCE_BUILD=ON
+ ifeq ($(BR2_PACKAGE_PCRE),y)
+ CEGUI_DEPENDENCIES += pcre
+-CEGUI_CONF_OPTS += -DCEGUI_HAS_PCRE_REGEX=ON
++CEGUI_CONF_OPTS += -DCEGUI_REGEX_MATCHER=PCRE
+ else
+-CEGUI_CONF_OPTS += -DCEGUI_HAS_PCRE_REGEX=OFF
++CEGUI_CONF_OPTS += -DCEGUI_REGEX_MATCHER=std
+ endif
  
--# 0002-Fixes-400.patch
--JASPER_IGNORE_CVES += CVE-2025-8835
-+# needed for cross-compile
-+JASPER_STDC_VERSION="`echo __STDC_VERSION__ | $(TARGET_CROSS)cpp -E -P -`"
-+JASPER_CONF_OPTS += \
-+	-DJAS_STDC_VERSION=$(JASPER_STDC_VERSION)
+ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+ CEGUI_DEPENDENCIES += freetype
+-CEGUI_CONF_OPTS += -DCEGUI_HAS_FREETYPE=ON
++CEGUI_CONF_OPTS += -DCEGUI_USE_FREETYPE=ON
+ else
+-CEGUI_CONF_OPTS += -DCEGUI_HAS_FREETYPE=OFF
++CEGUI_CONF_OPTS += -DCEGUI_USE_FREETYPE=OFF
+ endif
  
- ifeq ($(BR2_STATIC_LIBS),y)
- JASPER_CONF_OPTS += -DJAS_ENABLE_SHARED=OFF
+ ifeq ($(BR2_PACKAGE_LIBXML2),y)
+@@ -78,18 +77,18 @@ else
+ CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_LIBXML2=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_RAPIDXML),y)
+-CEGUI_DEPENDENCIES += rapidxml
+-CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_RAPIDXML=ON
++ifeq ($(BR2_PACKAGE_PUGIXML),y)
++CEGUI_DEPENDENCIES += pugixml
++CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_PUGIXML=ON
+ else
+-CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_RAPIDXML=OFF
++CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_PUGIXML=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_TINYXML),y)
+-CEGUI_DEPENDENCIES += tinyxml
+-CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_TINYXML=ON
++ifeq ($(BR2_PACKAGE_TINYXML2),y)
++CEGUI_DEPENDENCIES += tinyxml2
++CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_TINYXML2=ON
+ else
+-CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_TINYXML=OFF
++CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_TINYXML2=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBFREEIMAGE),y)
 -- 
 2.47.3
 
