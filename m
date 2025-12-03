@@ -4,60 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76979D1BDCC
-	for <buildroot@archiver.kernel.org>; Wed,  3 Dec 2025 18:33:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B3A7D1BDC9
+	for <buildroot@archiver.kernel.org>; Wed,  3 Dec 2025 18:33:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DCBAE8421B;
-	Wed,  3 Dec 2025 18:33:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5CE498421C;
+	Wed,  3 Dec 2025 18:33:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ewTYrF9Hnnpd; Wed,  3 Dec 2025 18:33:07 +0000 (UTC)
+ id mBOwVaxxkor1; Wed,  3 Dec 2025 18:33:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E72B84213
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E8098408E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764786786;
-	bh=mlA+yDkSnfG7EJLQjhJejcv1iM+PHfrqBaSRrwx9abg=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=O/IEm1Iw2GOAErBJEt97YCXNuUjEg2RDaq1aRzlFEEl6f2TYBthWw96geoU7z/2Uz
-	 OuexaeWMBiniDssSviYEZx7vOSiokRX1EXb9hijFYNJmm1NJNsZLkE0lEsetXxZ20U
-	 IL5Taq/TOUfphUO6YFYIl/8Uoua7r/l9PtzCcIBjuidAtnXz+tbaNDCN1Y0DuDZlQf
-	 JYHckGqPOYA7TKmfA8mft6a/wNifdYOFdHapOn1h9JTv3YZMyQ22ktKUtWHe6ZT54m
-	 rGs2+uuMhbiiooCFb2X3JuecQ72R/NmMzIp49OUP/u62Skg3C0CbhsiHvh7usSy+P2
-	 Dcsy7noE8vG7g==
+	s=default; t=1764786826;
+	bh=lk0yYQk4V04EiAEpWHGfP2kt61mM63SWUchugDB+N5U=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=WXmt8HQAJxnp0HAes9re3t+OvesLQpQVZcnJZHXpWdsvTd0H/vagIjfrWgB+bZgCB
+	 RlSOzMqDXPcZIZ5ofZpe58E8BBLMNUcZGmRDvaiO6bvEt7GCEPoUkXl3GwF2Qnhg4i
+	 zw9GzO4nJZjkj2KV3NJoKz6pVRjdRwJxtpcUQw6fn1Q0h394SDM33zmxSLoHggx4ON
+	 Ar4hJ3mVKn5jtCR/i/ZZtT6ByzzQ/15SiyS1ZdpI4yOf+Ek5qehOZFH4Uc0prmotnP
+	 Uonbpx2AuLfWOGenT4zk8V0UkyVpjEJnsJSszR409QIKMQCQwllizkidkfMWkTeqg9
+	 /uZlo6iWlcWtw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E72B84213;
-	Wed,  3 Dec 2025 18:33:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id F09111BD
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 18:33:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8E8098408E;
+	Wed,  3 Dec 2025 18:33:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id AB050E4
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 18:33:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D3FE983EDD
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 18:33:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9D4D340E41
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 18:33:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4Ue8zQq_marK for <buildroot@buildroot.org>;
- Wed,  3 Dec 2025 18:33:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 930B283EC9
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 930B283EC9
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 18:33:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 80D8A86450; Wed,  3 Dec 2025 18:33:00 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 3 Dec 2025 19:27:56 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c7d703b2025b5731e5d0b9334dfd9410070c5865
-X-Git-Newrev: 1609e853229553243b4feda455a403a2158e66a2
-X-Patchwork-Hint: ignore
-Message-Id: <20251203183300.80D8A86450@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] boot/xilinx-prebuilt: add
- versal2 support
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FgsAD0vOhdVb for <buildroot@buildroot.org>;
+ Wed,  3 Dec 2025 18:33:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9A0F440E0C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A0F440E0C
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9A0F440E0C
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 18:33:44 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id EDB1CB005B5;
+ Wed,  3 Dec 2025 19:33:31 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 03 Dec 2025 19:33:31 +0100
+MIME-Version: 1.0
+Date: Wed, 03 Dec 2025 19:33:31 +0100
+To: Neal Frager <neal.frager@amd.com>
+Cc: buildroot@buildroot.org, ibai.erkiaga-elorza@amd.com,
+ luca.ceresoli@bootlin.com, yann.morin@orange.com, brandon.maier@collins.com,
+ thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com,
+ romain.naour@gmail.com
+In-Reply-To: <20251202100516.1097984-1-neal.frager@amd.com>
+References: <20251202100516.1097984-1-neal.frager@amd.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <e0cea6e4b5ac6df05f59ca25b3d12a12@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1764786821;
+ bh=wwze97xtoY8mEvnArJ1C0we+uxmoY673hcTzbZV0EVA=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=ph6vzhKqJtIqQ9kyy3kETbqR5H1/kfX/Q9YARLlgheLaV1lt8/3sQNGn3fbA735gw
+ io3Z3QzHFNE+DKYLw8bMbySr6UiQsweNTQH2xwSa0dH/PjPbVacoJsZdEXKMTfks4J
+ LzI5cteNR6StlFgAl89dSVH+7fIXLMLt9qlTBkjvG2FIoJ/aP1zzc31v/7gfjmIxnQ
+ iF9sjTJsevc2d8O2VI9B/mrwrAhyZqsI0nG5FYitO89ES8EfYogyUuOBRxVIO1ciw+
+ 8OsUPAiquI6ECrXeutpZr8mZc5rR6Re8IDrLA/db4HqMcGgp9sGBkg7t7x3qYtDKFb
+ 5h+FIhwH4uz1w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ph6vzhKq
+Subject: Re: [Buildroot] [PATCH v1 1/3] boot/xilinx-embeddedsw: add versal2
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,162 +98,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1609e853229553243b4feda455a403a2158e66a2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 02/12/2025 11:05, Neal Frager via buildroot wrote:
+> Add support for Xilinx versal2 devices which include two new 
+> applications
+> for the xilinx-embeddedsw package.
+> 
+> BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL2_PLM
+> There is a new PLM (platform loader and manager) application for 
+> versal2
+> devices. The purpose of the PLM is to act as the bootloader for loading 
+> the
+> boot.pdi to configure the DDR memory and then loading 
+> arm-trusted-firmware and
+> u-boot on the Cortex-A78 core 0.
+> 
+> BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL2_ASUFW
+> Included with versal2 devices is a risc-v based security accelerator 
+> called
+> the ASU (application security unit). The ASUFW is the open-source 
+> application
+> which runs on the ASU.
+> 
+> Versal2 devices simplified the boot process by getting rid of the 
+> second
+> microblaze core called the PSM (processor system manager). There is 
+> thus no
+> longer a need for a separate psmfw application like with the original 
+> versal
+> devices, as this functionality is now fully included in the new PLM for
+> versal2.
+> 
+> For more information about the Xilinx Versal Gen2 series:
+> https://www.amd.com/en/products/adaptive-socs-and-fpgas/versal/gen2/ai-edge-series.html
+> https://www.amd.com/en/products/adaptive-socs-and-fpgas/versal/gen2/prime-series.html
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
 
-Add support for Xilinx versal2 devices to download the boot.pdi, pld.pdi and
-plm.elf files from the Xilinx/soc-prebuilt-firmware repo.
-
-Since the psmfw.elf does not exist for versal2 devices, the installation of
-this image has been split out for original versal devices only, whereas the
-other images are all common between versal and versal2 device families.
-
-For more information about the Xilinx Versal Gen2 series:
-https://www.amd.com/en/products/adaptive-socs-and-fpgas/versal/gen2/ai-edge-series.html
-https://www.amd.com/en/products/adaptive-socs-and-fpgas/versal/gen2/prime-series.html
-
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- boot/xilinx-prebuilt/Config.in          | 17 +++++++++++++++--
- boot/xilinx-prebuilt/xilinx-prebuilt.mk | 26 ++++++++++++++++++--------
- 2 files changed, 33 insertions(+), 10 deletions(-)
-
-diff --git a/boot/xilinx-prebuilt/Config.in b/boot/xilinx-prebuilt/Config.in
-index e742a66ca7..a1e711e6cf 100644
---- a/boot/xilinx-prebuilt/Config.in
-+++ b/boot/xilinx-prebuilt/Config.in
-@@ -26,6 +26,7 @@ choice
- 	bool "family variant"
- 	default BR2_TARGET_XILINX_PREBUILT_VERSAL if BR2_PACKAGE_VERSAL_FIRMWARE  # legacy
- 	default BR2_TARGET_XILINX_PREBUILT_VERSAL if BR2_cortex_a72
-+	default BR2_TARGET_XILINX_PREBUILT_VERSAL2 if BR2_cortex_a78
- 	default BR2_TARGET_XILINX_PREBUILT_ZYNQMP
- 
- config BR2_TARGET_XILINX_PREBUILT_ZYNQMP
-@@ -40,14 +41,21 @@ config BR2_TARGET_XILINX_PREBUILT_VERSAL
- 	bool "versal"
- 	depends on BR2_cortex_a72
- 
-+config BR2_TARGET_XILINX_PREBUILT_VERSAL2
-+	bool "versal2"
-+	depends on BR2_cortex_a78
-+	help
-+	  Version must be xilinx_v2025.2 or newer.
-+
- endchoice
- 
- config BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA
- 	bool "download a prebuilt Versal XSA"
--	depends on BR2_TARGET_XILINX_PREBUILT_VERSAL
-+	depends on BR2_TARGET_XILINX_PREBUILT_VERSAL || BR2_TARGET_XILINX_PREBUILT_VERSAL2
- 	help
- 	  The Xilinx Support Archive (XSA) provides custom Xilinx
- 	  firmware files generated by the AMD Vivado Design Suite.
-+	  This option applies to either versal or versal2.
- 
- 	  https://docs.amd.com/r/en-US/ug1400-vitis-embedded/Creating-a-Hardware-Design-XSA-File
- 
-@@ -64,28 +72,33 @@ config BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA_LOCATION
- 	  use a make variable like $(TOPDIR) to reference the root of
- 	  the Buildroot tree.
- 
-+	  This option applies to either versal or versal2.
-+
- endif # BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA
- 
- config BR2_TARGET_XILINX_PREBUILT_VERSAL_PLD_PDI
- 	bool "install versal pld.pdi"
--	depends on BR2_TARGET_XILINX_PREBUILT_VERSAL
-+	depends on BR2_TARGET_XILINX_PREBUILT_VERSAL || BR2_TARGET_XILINX_PREBUILT_VERSAL2
- 	help
- 	  When using the Versal Segmented Configuration, there is a
- 	  pld.pdi file containing the FPGA bitstream which can be
- 	  loaded at run-time.  By enabling this option, the pld.pdi
- 	  will be installed to the target /lib/firmware/xilinx dir.
-+	  This option applies to either versal or versal2.
- 
- config BR2_TARGET_XILINX_PREBUILT_FAMILY
- 	string
- 	default "zynqmp" if BR2_TARGET_XILINX_PREBUILT_ZYNQMP
- 	default "kria" if BR2_TARGET_XILINX_PREBUILT_KRIA
- 	default "versal" if BR2_TARGET_XILINX_PREBUILT_VERSAL
-+	default "versal_2ve_2vm" if BR2_TARGET_XILINX_PREBUILT_VERSAL2
- 
- config BR2_TARGET_XILINX_PREBUILT_BOARD
- 	string "board name"
- 	default "zcu102" if BR2_TARGET_XILINX_PREBUILT_ZYNQMP
- 	default "kr260" if BR2_TARGET_XILINX_PREBUILT_KRIA
- 	default "vck190" if BR2_TARGET_XILINX_PREBUILT_VERSAL
-+	default "vek385" if BR2_TARGET_XILINX_PREBUILT_VERSAL2
- 	help
- 	  Name of Xilinx target board.
- 	  Used for installing the appropriate firmware.
-diff --git a/boot/xilinx-prebuilt/xilinx-prebuilt.mk b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-index 95b656cdde..6bd16d663a 100644
---- a/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-+++ b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-@@ -26,16 +26,11 @@ XILINX_PREBUILT_BOARD = $(call qstrip,$(BR2_TARGET_XILINX_PREBUILT_BOARD))
- 
- XILINX_PREBUILT_BOARD_DIR = $(@D)/$(XILINX_PREBUILT_BOARD)-$(XILINX_PREBUILT_FAMILY)
- 
--ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL),y)
-+# Common Files for All Versal Families
-+ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL)$(BR2_TARGET_XILINX_PREBUILT_VERSAL2),y)
- ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA),y)
- # Supports either plm.elf or plmfw.elf filenames
- XILINX_PREBUILT_PLM = $(@D)/pdi_files/gen_files/plm*.elf
--# Unlike the psmfw.elf file for Xilinx development boards,
--# AMD Vivado Design Suite currently generates a file named psm_fw.elf.
--# Future versions of AMD Vivado will generate a file named psmfw.elf,
--# so to support current and future AMD Vivado versions, the filename
--# psm*fw.elf is used.
--XILINX_PREBUILT_PSMFW = $(@D)/pdi_files/static_files/psm*fw.elf
- # We need the *.pdi glob, because the file has different names for the
- # different boards, and it has to be named boot.pdi when installed.
- # If Segmented Configuration is used, there will be two pdi files and we need
-@@ -63,7 +58,6 @@ endif # BR2_TARGET_XILINX_PREBUILT_VERSAL_PLD_PDI
- else # BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA
- # Supports either plm.elf or plmfw.elf filenames
- XILINX_PREBUILT_PLM = $(XILINX_PREBUILT_BOARD_DIR)/plm*.elf
--XILINX_PREBUILT_PSMFW = $(XILINX_PREBUILT_BOARD_DIR)/psmfw.elf
- # We need the *.pdi glob, because the file has different names for the
- # different boards, and it has to be named boot.pdi when installed.
- # If Segmented Configuration is used, there will be two pdi files and we need
-@@ -91,11 +85,27 @@ endif # BR2_TARGET_XILINX_PREBUILT_VERSAL_PLD_PDI
- endif # BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA
- 
- ifneq ($(BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM),y)
-+ifneq ($(BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL2_PLM),y)
- define XILINX_PREBUILT_INSTALL_VERSAL_PLM
- 	$(INSTALL) -D -m 0755 $(XILINX_PREBUILT_PLM) \
- 		$(BINARIES_DIR)/plm.elf
- endef
-+endif # !BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL2_PLM
- endif # !BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM
-+endif # BR2_TARGET_XILINX_PREBUILT_VERSAL | BR2_TARGET_XILINX_PREBUILT_VERSAL2
-+
-+# Files specific to Versal Gen1
-+ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL),y)
-+ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA),y)
-+# Unlike the psmfw.elf file for Xilinx development boards,
-+# AMD Vivado Design Suite currently generates a file named psm_fw.elf.
-+# Future versions of AMD Vivado will generate a file named psmfw.elf,
-+# so to support current and future AMD Vivado versions, the filename
-+# psm*fw.elf is used.
-+XILINX_PREBUILT_PSMFW = $(@D)/pdi_files/static_files/psm*fw.elf
-+else # BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA
-+XILINX_PREBUILT_PSMFW = $(XILINX_PREBUILT_BOARD_DIR)/psmfw.elf
-+endif # BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA
- 
- ifneq ($(BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW),y)
- define XILINX_PREBUILT_INSTALL_VERSAL_PSMFW
+Series applied to next, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
