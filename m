@@ -1,90 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B3A7D1BDC9
-	for <buildroot@archiver.kernel.org>; Wed,  3 Dec 2025 18:33:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B414DD1BDD3
+	for <buildroot@archiver.kernel.org>; Wed,  3 Dec 2025 19:14:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5CE498421C;
-	Wed,  3 Dec 2025 18:33:48 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mBOwVaxxkor1; Wed,  3 Dec 2025 18:33:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E8098408E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764786826;
-	bh=lk0yYQk4V04EiAEpWHGfP2kt61mM63SWUchugDB+N5U=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=WXmt8HQAJxnp0HAes9re3t+OvesLQpQVZcnJZHXpWdsvTd0H/vagIjfrWgB+bZgCB
-	 RlSOzMqDXPcZIZ5ofZpe58E8BBLMNUcZGmRDvaiO6bvEt7GCEPoUkXl3GwF2Qnhg4i
-	 zw9GzO4nJZjkj2KV3NJoKz6pVRjdRwJxtpcUQw6fn1Q0h394SDM33zmxSLoHggx4ON
-	 Ar4hJ3mVKn5jtCR/i/ZZtT6ByzzQ/15SiyS1ZdpI4yOf+Ek5qehOZFH4Uc0prmotnP
-	 Uonbpx2AuLfWOGenT4zk8V0UkyVpjEJnsJSszR409QIKMQCQwllizkidkfMWkTeqg9
-	 /uZlo6iWlcWtw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E8098408E;
-	Wed,  3 Dec 2025 18:33:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id AB050E4
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 18:33:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9D4D340E41
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 18:33:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D76E41B68;
+	Wed,  3 Dec 2025 19:14:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FgsAD0vOhdVb for <buildroot@buildroot.org>;
- Wed,  3 Dec 2025 18:33:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9A0F440E0C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A0F440E0C
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9A0F440E0C
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 18:33:44 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id EDB1CB005B5;
- Wed,  3 Dec 2025 19:33:31 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 03 Dec 2025 19:33:31 +0100
+ id NEq0dY1hkK3v; Wed,  3 Dec 2025 19:14:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DC9341A2B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1764789261;
+	bh=7CtvHrdbgk9B8ALHf1ygvCsmqhBgHJuDLceWEUwdkQc=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=UmpIu7CKxqsfZz8dQ8VPMPGQrQvNC0J9btDpZ9lqdG6neaufzZyxQwaDiOJDpleGo
+	 gYlFGGYzgAmYrRl0JmeMWRXIOClww13gEOVGdIqUukfXYZ5c7rNfkQyNoFSLGdklHc
+	 SqBfKoc5+IzCrD7WfB9zpFvqvu3RRQHTQ0v+HuFytP82oAG1CyWYANcoaPpM0HOi7v
+	 xQxLqSTWm1QnWECbIk9lmgdCLgZHiR/QgaOdXU2UKEYR1t9oP3Xoyukv0mrSDqhSji
+	 AxRbZ8Nq7neGues+prk4D919ZzFkXBe7XTObml+cRS2WhXrymPTZVIEStME+y0QZeS
+	 4XmE41skJsA1A==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1DC9341A2B;
+	Wed,  3 Dec 2025 19:14:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 60A53E4
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 19:14:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4A8038118F
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 19:14:20 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id whLFCy1-Ivl9 for <buildroot@buildroot.org>;
+ Wed,  3 Dec 2025 19:14:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C355480C81
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C355480C81
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C355480C81
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 19:14:18 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1310546689; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Wed, 03 Dec 2025 19:14:11 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1vQsIk-0000000HBnU-2NjW;
+ Wed, 03 Dec 2025 20:14:10 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Wed,  3 Dec 2025 20:14:08 +0100
+Message-ID: <20251203191409.4096911-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Wed, 03 Dec 2025 19:33:31 +0100
-To: Neal Frager <neal.frager@amd.com>
-Cc: buildroot@buildroot.org, ibai.erkiaga-elorza@amd.com,
- luca.ceresoli@bootlin.com, yann.morin@orange.com, brandon.maier@collins.com,
- thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com,
- romain.naour@gmail.com
-In-Reply-To: <20251202100516.1097984-1-neal.frager@amd.com>
-References: <20251202100516.1097984-1-neal.frager@amd.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <e0cea6e4b5ac6df05f59ca25b3d12a12@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1764786821;
- bh=wwze97xtoY8mEvnArJ1C0we+uxmoY673hcTzbZV0EVA=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=ph6vzhKqJtIqQ9kyy3kETbqR5H1/kfX/Q9YARLlgheLaV1lt8/3sQNGn3fbA735gw
- io3Z3QzHFNE+DKYLw8bMbySr6UiQsweNTQH2xwSa0dH/PjPbVacoJsZdEXKMTfks4J
- LzI5cteNR6StlFgAl89dSVH+7fIXLMLt9qlTBkjvG2FIoJ/aP1zzc31v/7gfjmIxnQ
- iF9sjTJsevc2d8O2VI9B/mrwrAhyZqsI0nG5FYitO89ES8EfYogyUuOBRxVIO1ciw+
- 8OsUPAiquI6ECrXeutpZr8mZc5rR6Re8IDrLA/db4HqMcGgp9sGBkg7t7x3qYtDKFb
- 5h+FIhwH4uz1w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ph6vzhKq
-Subject: Re: [Buildroot] [PATCH v1 1/3] boot/xilinx-embeddedsw: add versal2
- support
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=eFjXB8qoEdYkivnF81BYQYusoTVZingEA7OytihS7szLwOW9ZVqikGZ6oQH8iC7MRDqTlhjrcbBama88xg4lA7ksozjEd7f10uzfSF5Fyyoi15hZ8sl+1EmCG59bfNKjyLKeymxjF/8PbapMDRciK8k1t7J9c8r2MnKWVvE5aJoRwmr3vYhi9Eetu90QZ7oBvsBKgDQ2CbP67wdQE1CmX8w3h4xPQO51zvLa5iOkEyBB40QLnmYsOphDyBj4ifhOfGQdBECSp5/FP6lqhMz/9jwJs82FXXH+O7840DAZk8Zk/+GwD+v4B24ttGf4isDCx1a2Bh+tYTPxLiEnXXR7sw==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=maKKYG0G0qiEvjsSoMlssPmFy0rgh/P1bB09wDOV0mo=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=eFjXB8qo
+X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
+Subject: [Buildroot] [PATCH] support/scripts/pkg-stats: use an unique HTTP
+ user-agent
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,50 +90,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Cc: Sen Hastings <sen@hastings.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 02/12/2025 11:05, Neal Frager via buildroot wrote:
-> Add support for Xilinx versal2 devices which include two new 
-> applications
-> for the xilinx-embeddedsw package.
-> 
-> BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL2_PLM
-> There is a new PLM (platform loader and manager) application for 
-> versal2
-> devices. The purpose of the PLM is to act as the bootloader for loading 
-> the
-> boot.pdi to configure the DDR memory and then loading 
-> arm-trusted-firmware and
-> u-boot on the Cortex-A78 core 0.
-> 
-> BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL2_ASUFW
-> Included with versal2 devices is a risc-v based security accelerator 
-> called
-> the ASU (application security unit). The ASUFW is the open-source 
-> application
-> which runs on the ASU.
-> 
-> Versal2 devices simplified the boot process by getting rid of the 
-> second
-> microblaze core called the PSM (processor system manager). There is 
-> thus no
-> longer a need for a separate psmfw application like with the original 
-> versal
-> devices, as this functionality is now fully included in the new PLM for
-> versal2.
-> 
-> For more information about the Xilinx Versal Gen2 series:
-> https://www.amd.com/en/products/adaptive-socs-and-fpgas/versal/gen2/ai-edge-series.html
-> https://www.amd.com/en/products/adaptive-socs-and-fpgas/versal/gen2/prime-series.html
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
+As requested by the gnu.org admins:
 
-Series applied to next, thanks.
+"
+Since August 2024, we've been under DDoS attacks from common command line
+tools.
+
+To fix this, we would need to change the user-agent from "Python/3.11
+aiohttp/3.8.4" to "buildroot.org pkg-stats" instead.
+"
+
+It indeed probably makes sense to use an unique user-agent string, so rework
+the script to do that.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/scripts/pkg-stats | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index c659acb80e..7d9170e30f 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -42,6 +42,8 @@ RM_API_STATUS_FOUND_BY_DISTRO = 2
+ RM_API_STATUS_FOUND_BY_PATTERN = 3
+ RM_API_STATUS_NOT_FOUND = 4
+ 
++HTTP_HEADERS = {'User-Agent': 'buildroot.org pkg-stats'}
++
+ 
+ class Defconfig:
+     def __init__(self, name, path):
+@@ -469,7 +471,7 @@ async def check_url_status(session, pkg, npkgs, retry=True, verbose=False):
+     global check_url_count
+ 
+     try:
+-        async with session.head(pkg.url) as resp:
++        async with session.head(pkg.url, headers=HTTP_HEADERS) as resp:
+             if resp.status >= 400:
+                 pkg.status['url'] = ("error", "invalid {}".format(resp.status))
+                 check_url_count += 1
+@@ -526,7 +528,7 @@ def check_package_latest_version_set_status(pkg, status, version, identifier):
+ async def check_package_get_latest_version_by_distro(session, pkg, retry=True):
+     url = "https://release-monitoring.org/api/project/Buildroot/%s" % pkg.name
+     try:
+-        async with session.get(url) as resp:
++        async with session.get(url, headers=HTTP_HEADERS) as resp:
+             if resp.status != 200:
+                 return False
+ 
+@@ -553,7 +555,7 @@ async def check_package_get_latest_version_by_distro(session, pkg, retry=True):
+ async def check_package_get_latest_version_by_guess(session, pkg, retry=True):
+     url = "https://release-monitoring.org/api/projects/?pattern=%s" % pkg.name
+     try:
+-        async with session.get(url) as resp:
++        async with session.get(url, headers=HTTP_HEADERS) as resp:
+             if resp.status != 200:
+                 return False
+ 
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
