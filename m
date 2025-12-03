@@ -1,89 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 161FAD1BDD8
-	for <buildroot@archiver.kernel.org>; Wed,  3 Dec 2025 20:26:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01F89D15D85
+	for <buildroot@archiver.kernel.org>; Wed,  3 Dec 2025 21:38:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6597040A8A;
-	Wed,  3 Dec 2025 20:26:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 853E18415D;
+	Wed,  3 Dec 2025 21:38:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7WFJysU4UA51; Wed,  3 Dec 2025 20:26:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zuoCXpV9Hazd; Wed,  3 Dec 2025 21:38:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F23E40955
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B3BD83ED2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764793594;
-	bh=VF/+rU+8VTx1CT8U9OylsDuC/ZbA6QXztG85vKXkOD8=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=kHOdJC0+KTzxZwNnlCRGsBM4qojjyV5b6QwaA8CbVe41M5brH7FIcrzlsd7jkUqxQ
-	 XS7yD6Xr+k2Pr8ZsbwxQjHc3vWlYTWAvt1Z+jn6Br2QmsDfcEFyKmzpnc4/zyOQLKf
-	 1FFb/Ha9Sm10Ny/nxlZCVCHfmaMrkPzXuKerpgTg7qoSxHBqVdq32DKCD+ciZiakdK
-	 ATbSCHL3WCVafiquby+2eBIWnicLa6qLgXth+agNKS7wrJPKMR+T8nXX1eIF38yVJW
-	 l45Be4/hcNZqXiwp7Eag4f3ldadyVCsCfu2fD8vA7k7v+k2zWdCj0pDkboWJxHXTKR
-	 wD+sE5TaJ+14A==
+	s=default; t=1764797933;
+	bh=YISNuf9NLPbN++rjQpfTrK08Zng5PYtsFfVF0GNzEcI=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=kw9bDI5nerZX7MXmDlAZZuUfDGifn/xr3eK8J5DxnLw3Ir8qwegDh1OUH0SN0uhLF
+	 UAqmolCkCB4jjUmc+dS+dtM+0Go5lmOVV51lxruTM0liiy9PVpRn5XPLaFZBc0V3jO
+	 u5Aim0sQwU4OqsTfoyQBoiZiDSyq0lXPS4bBMwrjzkdCECIhdOqZkP+ZbvVukHxkvu
+	 vDCWkoAmCeXIoBiFNAbQ+h/DIINc6Rhl3GK5/tJx9JJgzJZofvEMGGjwKoHu6z7eIe
+	 s/3fAS3ois8jwOUkLnYXMogvY/oekNtxDHtoH2cLuAhn+xVVwhBOsvZEGZfxmiP3/h
+	 yrUI3DCFxiZOQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F23E40955;
-	Wed,  3 Dec 2025 20:26:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id DD3A2D3
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 20:26:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5B3BD83ED2;
+	Wed,  3 Dec 2025 21:38:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 30F3BE7
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 21:38:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DA66340058
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 20:26:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 225C583ED2
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 21:38:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Di5uCM4vD2OV for <buildroot@buildroot.org>;
- Wed,  3 Dec 2025 20:26:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D6BB140028
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6BB140028
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D6BB140028
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 20:26:31 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0b1d.dip0.t-ipconnect.de [91.58.11.29])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 84A99A4C7965;
- Wed,  3 Dec 2025 21:26:29 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:36768)
- by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vQsxt-0000000056X-3bCX;
- Wed, 03 Dec 2025 19:56:42 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id A0rOxyvTcrSS for <buildroot@buildroot.org>;
+ Wed,  3 Dec 2025 21:38:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB7CF83E45
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DB7CF83E45
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 21:38:50 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D3B718645D; Wed,  3 Dec 2025 21:38:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Christian Hitz <christian.hitz@bbv.ch>
-Date: Wed,  3 Dec 2025 20:56:40 +0100
-Message-ID: <20251203195640.2297610-4-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251203195640.2297610-1-bernd@kuhls.net>
-References: <20251203195640.2297610-1-bernd@kuhls.net>
-MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1764793589;
- bh=G7SBLgMb0I6G7JVH2u/0sqT7+/ION1eZZsyhsSBVWtk=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=vd/q/jyWQPvWsLMkwPCDi+ln6HEMyGlLZO9yv5FNRFhwlDR7J5q++qe4pYnSCfA5G
- i+kHOZFeDVABqjEzIEYYy2OYWtzBTrPsznz7Cx1DPTeYxNrzwlHBvuRpI/YeJyN53m
- T6GFrVdiKc2BPNZR1Pch44pVlU84EuRaPKvg1V1Nw3XVY9lOpJ7XHCg9gTUPJ0K6O4
- c9Z4r0sOSJclgpN5aJOD0kFoHDET2R1Ey1luybCoIukhB0qnyaLr9ET9El06SC3Tkm
- cQb1ddYxZPGUbSFAPhY1bupHvgKfRFEH+g6YjpCCFcvtLR6/Z5z19DmGSmanWbx77U
- aNPgwo8p3xmhw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=vd/q/jyW
-Subject: [Buildroot] [PATCH/next 4/4] package/libvncserver: fix cmake 4
- compatibility
+Date: Wed, 3 Dec 2025 22:32:30 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6e88765aa1eb36035a88f67c7de88e0ec8ececcc
+X-Git-Newrev: 0981b4117dcbf323b7d90c6debf0f89685e21a95
+X-Patchwork-Hint: ignore
+Message-Id: <20251203213850.D3B718645D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: use an unique
+ HTTP user-agent
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,54 +69,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=0981b4117dcbf323b7d90c6debf0f89685e21a95
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+As requested by the gnu.org admins:
+
+"
+Since August 2024, we've been under DDoS attacks from common command line
+tools.
+
+To fix this, we would need to change the user-agent from "Python/3.11
+aiohttp/3.8.4" to "buildroot.org pkg-stats" instead.
+"
+
+It indeed probably makes sense to use an unique user-agent string, so rework
+the script to do that.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
-New patch in the series to bump libvncserver.
+ support/scripts/pkg-stats | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
- ...001-CMake-require-at-least-CMake-3.5.patch | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 package/libvncserver/0001-CMake-require-at-least-CMake-3.5.patch
-
-diff --git a/package/libvncserver/0001-CMake-require-at-least-CMake-3.5.patch b/package/libvncserver/0001-CMake-require-at-least-CMake-3.5.patch
-new file mode 100644
-index 0000000000..e7b30e3db6
---- /dev/null
-+++ b/package/libvncserver/0001-CMake-require-at-least-CMake-3.5.patch
-@@ -0,0 +1,26 @@
-+From e64fa928170f22a2e21b5bbd6d46c8f8e7dd7a96 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@jolla.com>
-+Date: Tue, 13 May 2025 08:37:07 +0300
-+Subject: [PATCH] CMake: require at least CMake 3.5
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index c659acb80e..7d9170e30f 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -42,6 +42,8 @@ RM_API_STATUS_FOUND_BY_DISTRO = 2
+ RM_API_STATUS_FOUND_BY_PATTERN = 3
+ RM_API_STATUS_NOT_FOUND = 4
+ 
++HTTP_HEADERS = {'User-Agent': 'buildroot.org pkg-stats'}
 +
-+CMake 4 dropped support for version requirements < 3.5.
-+
-+Fixes building with CMake >= 4.
-+
-+Upstream: https://github.com/LibVNC/libvncserver/commit/e64fa928170f22a2e21b5bbd6d46c8f8e7dd7a96
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 205f3928..9b8118c8 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,4 +1,4 @@
-+-cmake_minimum_required(VERSION 3.4)
-++cmake_minimum_required(VERSION 3.5)
-+ 
-+ set(PROJECT_LANGUAGES C)
-+ 
--- 
-2.47.3
-
+ 
+ class Defconfig:
+     def __init__(self, name, path):
+@@ -469,7 +471,7 @@ async def check_url_status(session, pkg, npkgs, retry=True, verbose=False):
+     global check_url_count
+ 
+     try:
+-        async with session.head(pkg.url) as resp:
++        async with session.head(pkg.url, headers=HTTP_HEADERS) as resp:
+             if resp.status >= 400:
+                 pkg.status['url'] = ("error", "invalid {}".format(resp.status))
+                 check_url_count += 1
+@@ -526,7 +528,7 @@ def check_package_latest_version_set_status(pkg, status, version, identifier):
+ async def check_package_get_latest_version_by_distro(session, pkg, retry=True):
+     url = "https://release-monitoring.org/api/project/Buildroot/%s" % pkg.name
+     try:
+-        async with session.get(url) as resp:
++        async with session.get(url, headers=HTTP_HEADERS) as resp:
+             if resp.status != 200:
+                 return False
+ 
+@@ -553,7 +555,7 @@ async def check_package_get_latest_version_by_distro(session, pkg, retry=True):
+ async def check_package_get_latest_version_by_guess(session, pkg, retry=True):
+     url = "https://release-monitoring.org/api/projects/?pattern=%s" % pkg.name
+     try:
+-        async with session.get(url) as resp:
++        async with session.get(url, headers=HTTP_HEADERS) as resp:
+             if resp.status != 200:
+                 return False
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
