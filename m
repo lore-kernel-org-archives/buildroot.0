@@ -1,59 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D761ED1BDE7
-	for <buildroot@archiver.kernel.org>; Wed,  3 Dec 2025 22:00:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCAACD1BDE7
+	for <buildroot@archiver.kernel.org>; Wed,  3 Dec 2025 22:01:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B1F37406FB;
-	Wed,  3 Dec 2025 22:00:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93F2C60A5D;
+	Wed,  3 Dec 2025 22:01:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cSj4XX9Cqdfa; Wed,  3 Dec 2025 22:00:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RRRF8sKsXrHZ; Wed,  3 Dec 2025 22:01:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CCE7E407D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA77A60DC3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764799256;
-	bh=WV6kWDR/nfKtNLeGuBR8HwI/B1jb/7Q8Y/OcPhazW5g=;
+	s=default; t=1764799269;
+	bh=D4lycW34rUeL/r8LmgM+GgxgmBKR2vnbgU2oKtNg/s0=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=lg3e/KxcwEj0g45RmnYwkGwcVciXlHG+3+abAn0fgVGrJmsoVqxAg3/TmaVPlUW+o
-	 xuIZbR2Y9URcW+Chc5tU1Pmipmep8swzUmBnEagdimSvNfH6G7q8mjaBOPwuhl1i4h
-	 tB6eAqlfM6K7tw3kckD4CG1t5H4qIwPjDd62n5eB75lvakHM+Zd081K3iJQYJ8gj04
-	 VVojSlqZNYu9WyqpezPEyqVjIHxlme8s6mP4y4IyY2UubJJIpyMzOpAQ1PGUCPICHw
-	 TWb2eLKcVxlLRefqcQDVuPUvyTcnIMVUlB7FWzb+BvvHzaZCxBCvwYzZ0DwIoWxlO3
-	 s9nJLZeoGK4Tg==
+	b=WaOuc+iU2HmPBk2jgsnLCy5YhKxeBhbtpDBKiCk3aei/lW2BW27vUcD90oHKL6b4f
+	 fA5XmLpWLO9q0DGiiVhroXhvUWIQRbw0BDArYJYVnGlzOL4K+zjRwoeyTrCwDqPS3g
+	 48IKMWTGTk954Gh+8aHaoajaH4DGmYwwHThLNlxgpyKjUgBcRA9JLDfoIYzj+3Hbrz
+	 Bu/voH7zWjsE0w/u0lNbSC9QuLOgSjgPgAE+MfISZkhPrxVE58Q+SQ4vDQKNPk///U
+	 6UXLgi/8xQURaB5FQprKFyysfnpxTv4tDO5/fvO4ydvGlFy1GqQsEcGdbyp25lOebU
+	 8YUDS0kXOoxiw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CCE7E407D9;
-	Wed,  3 Dec 2025 22:00:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id EB8F8D3
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:00:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BA77A60DC3;
+	Wed,  3 Dec 2025 22:01:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 75788D3
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:01:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DDBA1407D9
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:00:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 677A340420
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:01:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YCgbWMIVNohe for <buildroot@buildroot.org>;
- Wed,  3 Dec 2025 22:00:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KgV3a0dIrWQ8 for <buildroot@buildroot.org>;
+ Wed,  3 Dec 2025 22:01:07 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CC9A0406FB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC9A0406FB
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 65151405C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65151405C2
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CC9A0406FB
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:00:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 65151405C2
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:01:07 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0b1d.dip0.t-ipconnect.de [91.58.11.29])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id C8113A4C798C;
- Wed,  3 Dec 2025 22:59:02 +0100 (CET)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 04751A4C798D;
+ Wed,  3 Dec 2025 22:59:03 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:55700)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vQugo-000000000Lw-1JNi;
+ (envelope-from <bernd@kuhls.net>) id 1vQugo-000000000Lw-1d79;
  Wed, 03 Dec 2025 21:47:10 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
@@ -65,8 +65,8 @@ Cc: Alexander Dahl <post@lespocky.de>, Davide Viti <zinosat@gmail.com>,
  Sergio Prado <sergio.prado@e-labworks.com>,
  Stefan Hager <stefan.hager@ginzinger.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed,  3 Dec 2025 22:47:00 +0100
-Message-ID: <20251203214709.2321976-12-bernd@kuhls.net>
+Date: Wed,  3 Dec 2025 22:47:01 +0100
+Message-ID: <20251203214709.2321976-13-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251203214709.2321976-1-bernd@kuhls.net>
 References: <20251203214709.2321976-1-bernd@kuhls.net>
@@ -74,22 +74,22 @@ MIME-Version: 1.0
 X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1764799142;
- bh=kdGyB3vsNUQCgfSOjcBglfufPkmEwPFcvV/xmsAbbAI=;
+ s=kas202511301023; t=1764799143;
+ bh=EiWDoSqTeam+sRya4kMUeV4wE36Qls0PWNoYpot7wws=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=IVm30EwupDiV2ot+zkR7gjszZEq19yIhOvSc0Yw9MFPcut3NRvzlJz0iOjSEfNwnT
- zcSZhoYLCXjeoFhyNcR1AkK0T7yYAdxTUYEovyQ0BL21qOUpEs+YvNNwFoBnANVlYa
- JK2qfLYCcHcDB7pRw79M5klSLqv2RijKcuBK3dQFKaRr10kMwkeKCBCJReLlDcBUo2
- zh+csj6F6vAFS9Z6b2Kfp9q8IAY2pGCBsY3Z5eSxqSmw5AQpXCRxetJKk0przVAZYj
- Uu9NjIsbg778/FIRC4N19vbCdTv5AP55v8oyKiYE0jK69+8DaUeo7QnZUh+7tLwJuj
- AtNgt7826uz7A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=HCSp0tBIGmcJj6MWQrY6BAAEZejaB8lY8Ro1Hhi7Q00ZVmryEV+E1y8C1TeP3odYB
+ 0VPN5XBMzb/8XcqyRjp0m8JFvUTwjDHCeXyZmyhvMG0UNpWfOwg8UVazM83ZHUTRqF
+ d5rN8w8Kiuf8z9n5QWB0zbPPN+UeU3ns1nYI9TNUZa16GqUn1brov4i01Amj63l/iP
+ JuCr3BNLTFlYLXMlkXjGR2fWzCvQVzkRzXRVVeJculc1LKOgVl7iuT7hKGExIa7nRk
+ zFpaLxzU3As8tTJKGOguVhd8TRlHJlibc9P8jg8gG5LKRZ1a7ASObNWUv/WOACyCIZ
+ AWZ0x17TJDEPg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=IVm30Ewu
-Subject: [Buildroot] [PATCH/next 12/21] package/libmatroska: fix cmake 4
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=HCSp0tBI
+Subject: [Buildroot] [PATCH/next 13/21] package/libmodplug: fix cmake 4
  compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -109,45 +109,52 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .../0001-drop-CMake-older-than-3.5.patch      | 29 +++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/libmatroska/0001-drop-CMake-older-than-3.5.patch
+ .../0002-Fix-build-with-cmake-4.patch         | 36 +++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/libmodplug/0002-Fix-build-with-cmake-4.patch
 
-diff --git a/package/libmatroska/0001-drop-CMake-older-than-3.5.patch b/package/libmatroska/0001-drop-CMake-older-than-3.5.patch
+diff --git a/package/libmodplug/0002-Fix-build-with-cmake-4.patch b/package/libmodplug/0002-Fix-build-with-cmake-4.patch
 new file mode 100644
-index 0000000000..25e09ed7bc
+index 0000000000..7c75d510c2
 --- /dev/null
-+++ b/package/libmatroska/0001-drop-CMake-older-than-3.5.patch
-@@ -0,0 +1,29 @@
-+From dc80e194e93e6f0e25c8ad3e015d83aca2a99e10 Mon Sep 17 00:00:00 2001
-+From: Steve Lhomme <slhomme@matroska.org>
-+Date: Sat, 24 Feb 2024 08:38:00 +0100
-+Subject: [PATCH] drop CMake older than 3.5
++++ b/package/libmodplug/0002-Fix-build-with-cmake-4.patch
+@@ -0,0 +1,36 @@
++From a133c89548383f88fe0d0da618ef3c06c7f08f22 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Tue, 2 Dec 2025 18:00:15 +0100
++Subject: [PATCH] Fix build with cmake 4
 +
-+It generates a warning with newer versions of CMake.
-+3.4 was released in 2015. We require C++17 with compilers only available in 2017/2018.
-+If your CMake is older than your toolchain, you have a problem.
++Fixes build error with cmake 4.20:
 +
-+There's no need to support legacy CMake going forward in libebml 2/libmatroska 2.
++CMake Error at CMakeLists.txt:1 (cmake_minimum_required):
++  Compatibility with CMake < 3.5 has been removed from CMake.
 +
-+Upstream: https://github.com/Matroska-Org/libmatroska/commit/dc80e194e93e6f0e25c8ad3e015d83aca2a99e10
++  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
++  to tell CMake that the project requires at least <min> but has been updated
++  to work with policies introduced by <max> or earlier.
++
++  Or, add -DCMAKE_POLICY_VERSION_MINIMUM=3.5 to try configuring anyway.
++
++Upstream: https://github.com/Konstanty/libmodplug/pull/101
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+[backported to version 1.7.1]
 +---
 + CMakeLists.txt | 2 +-
 + 1 file changed, 1 insertion(+), 1 deletion(-)
 +
 +diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 221c8ac6..97b392e0 100644
++index d9fd20d..9f9c94f 100644
 +--- a/CMakeLists.txt
 ++++ b/CMakeLists.txt
 +@@ -1,4 +1,4 @@
-+-cmake_minimum_required(VERSION 3.1.2)
-++cmake_minimum_required(VERSION 3.5)
++-cmake_minimum_required(VERSION 2.8.12)
+++cmake_minimum_required(VERSION 3.12)
 + 
-+ project(matroska VERSION 1.7.1)
++ project(libmodplug)
 + 
++-- 
++2.47.3
++
 -- 
 2.47.3
 
