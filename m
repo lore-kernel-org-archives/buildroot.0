@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5D44D1BDCC
-	for <buildroot@archiver.kernel.org>; Wed,  3 Dec 2025 18:33:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BDE3D1BDC9
+	for <buildroot@archiver.kernel.org>; Wed,  3 Dec 2025 18:33:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9D96584057;
-	Wed,  3 Dec 2025 18:33:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CFC368421F;
+	Wed,  3 Dec 2025 18:33:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id adt-u4JD5wFA; Wed,  3 Dec 2025 18:33:02 +0000 (UTC)
+ id ZZF6xx9zfjrr; Wed,  3 Dec 2025 18:33:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 955AD83EDD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B074283EDD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764786782;
-	bh=X5mbUsl11EqltJA29u7TmkRCWdJptSrwnvRJvif9HAs=;
+	s=default; t=1764786783;
+	bh=S7T/zMXzh5SAJJXsJasvRcJhdx6qNEt44NDk++z8lVE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=H0HrR8kn0zYNDaCqSlA71hOcu0yx2743dci0jQ7psPxr15RephGsginGJmRkeMKKy
-	 3koVDECsVramutdZSsnY43VK7CYxob4t4wVgNROZ2i/3B5xun7Vujz/bEqWfNVVZCN
-	 Fh/AGs1pXakijrYeGism5YnzR6NiRvpfloDCHlkMmwairNRAo26qGuSNPOrWx1bRZw
-	 UpQwZvD96D9KJnVuxyj8TLUOCaCnVE9oo/WSuxC+QGveocEl9BFn3aT9w54sJ1levk
-	 sumNUSffyszFohMDfTWj3FmfpBeFT5kBo3TCY9CVgAymNUJOqOeIlZseAqsnjIVm4P
-	 8plNX9GFSpkcg==
+	b=gy+9NB/a+AzG/jY54Z8OSlYMVaKF3zCSNyKu8GvmJr4hQ9y6EtqzgK/wN/lyIfQNY
+	 iyPuTqlJmGbW8QQL3UbbdRt5tQaSIetDUlvamdxXPhvdHf35cQ3zMf3qhbrI7JhLy8
+	 CpPX4c/hoaix84xDEVHKZU/1ezQHkUsXekYpqCVxtfru6Tch/SGQ5IsnilpL9TFKlu
+	 lh+hqLH2qTMOBgUf6dhc3pr56nyZHNLJkw+qNYeeqAELbXzgtDDo188qwHdViuPQXC
+	 skuIzxV4DXK88kZy0LDPBcMbCbYY4tRexAqbq2q1hVqlxV/UKOxY3sw5dT8o8ByJw/
+	 2Z2mCo2jViCDg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 955AD83EDD;
-	Wed,  3 Dec 2025 18:33:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id C6A9BE4
+	by smtp1.osuosl.org (Postfix) with ESMTP id B074283EDD;
+	Wed,  3 Dec 2025 18:33:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E3D57E4
  for <buildroot@buildroot.org>; Wed,  3 Dec 2025 18:33:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BBB82401E0
+ by smtp4.osuosl.org (Postfix) with ESMTP id D668340E0C
  for <buildroot@buildroot.org>; Wed,  3 Dec 2025 18:33:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RY55f19_yVAM for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lNcudGjBBFgG for <buildroot@buildroot.org>;
  Wed,  3 Dec 2025 18:33:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9631540130
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F31F40DB5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9631540130
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9F31F40DB5
  for <buildroot@buildroot.org>; Wed,  3 Dec 2025 18:33:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 749628644D; Wed,  3 Dec 2025 18:33:00 +0000 (UTC)
+ id 8E32086451; Wed,  3 Dec 2025 18:33:00 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Wed, 3 Dec 2025 19:27:56 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f42fc940e9df62fdd47f9adb8ccb374886e812ce
-X-Git-Newrev: c7d703b2025b5731e5d0b9334dfd9410070c5865
+X-Git-Oldrev: 1609e853229553243b4feda455a403a2158e66a2
+X-Git-Newrev: f2222ca745a42990a28eff437d36c7a333c88730
 X-Patchwork-Hint: ignore
-Message-Id: <20251203183300.749628644D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] boot/xilinx-embeddedsw: add
- versal2 support
+Message-Id: <20251203183300.8E32086451@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] board/versal2: add versal2
+ vek385 support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,154 +77,342 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7d703b2025b5731e5d0b9334dfd9410070c5865
+commit: https://git.buildroot.net/buildroot/commit/?id=f2222ca745a42990a28eff437d36c7a333c88730
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add support for Xilinx versal2 devices which include two new applications
-for the xilinx-embeddedsw package.
+Add an example config for the Versal2 VEK385 evaluation board. This board has
+the superset 2VE3858 device of the Versal AI Edge Gen 2 family with
+8 Cortex-A78AE cores, 10 Cortex-R52 cores, 144 AIE-ML tiles and over 500k LUTs.
 
-BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL2_PLM
-There is a new PLM (platform loader and manager) application for versal2
-devices. The purpose of the PLM is to act as the bootloader for loading the
-boot.pdi to configure the DDR memory and then loading arm-trusted-firmware and
-u-boot on the Cortex-A78 core 0.
+With this patch, Buildroot is capable to build a full image for the VEK385
+evaluation board along with all the necessary firmware components.
 
-BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL2_ASUFW
-Included with versal2 devices is a risc-v based security accelerator called
-the ASU (application security unit). The ASUFW is the open-source application
-which runs on the ASU.
-
-Versal2 devices simplified the boot process by getting rid of the second
-microblaze core called the PSM (processor system manager). There is thus no
-longer a need for a separate psmfw application like with the original versal
-devices, as this functionality is now fully included in the new PLM for
-versal2.
-
-For more information about the Xilinx Versal Gen2 series:
-https://www.amd.com/en/products/adaptive-socs-and-fpgas/versal/gen2/ai-edge-series.html
-https://www.amd.com/en/products/adaptive-socs-and-fpgas/versal/gen2/prime-series.html
+More information about the VEK385 evaluation board can be found here:
+https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/vek385.html
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- boot/Config.in                              |  2 +-
- boot/xilinx-embeddedsw/Config.in            | 23 ++++++++++++++++++
- boot/xilinx-embeddedsw/xilinx-embeddedsw.mk | 36 +++++++++++++++++++++++++++++
- 3 files changed, 60 insertions(+), 1 deletion(-)
+ DEVELOPERS                       |   2 +
+ board/versal2/genimage.cfg       |   1 +
+ board/versal2/post-build.sh      |   1 +
+ board/versal2/post-image.sh      |  28 ++++++
+ board/versal2/readme.txt         | 181 +++++++++++++++++++++++++++++++++++++++
+ configs/versal2_vek385_defconfig |  49 +++++++++++
+ 6 files changed, 262 insertions(+)
 
-diff --git a/boot/Config.in b/boot/Config.in
-index 08a6c8353d..d3e1b9c055 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -4,7 +4,7 @@ config BR2_TARGET_XILINX_FIRMWARE_ARCH_SUPPORTS
- 	# All Xilinx SoCs using this package are aarch64 only
- 	depends on BR2_aarch64
- 	# only CPUs with corresponding firmwares:
--	depends on BR2_cortex_a53 || BR2_cortex_a72
-+	depends on BR2_cortex_a53 || BR2_cortex_a72 || BR2_cortex_a78
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 62d1e7f914..45229ecf41 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2482,6 +2482,7 @@ F:	package/libgudev/
  
- menu "Bootloaders"
- 
-diff --git a/boot/xilinx-embeddedsw/Config.in b/boot/xilinx-embeddedsw/Config.in
-index 526c7adf07..674238fd0a 100644
---- a/boot/xilinx-embeddedsw/Config.in
-+++ b/boot/xilinx-embeddedsw/Config.in
-@@ -1,5 +1,6 @@
- comment "xilinx-embeddedsw needs a bare metal toolchain for tuple microblazeel-buildroot-elf"
- 	depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH != "microblazeel-buildroot-elf"
-+	depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH != "microblazeel-buildroot-elf riscv32-buildroot-elf"
- 	depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT
- 
- menuconfig BR2_TARGET_XILINX_EMBEDDEDSW
-@@ -26,6 +27,28 @@ config BR2_TARGET_XILINX_EMBEDDEDSW_VERSION
- 	  Release version of Xilinx/embeddedsw.
- 	  Must be xilinx_v2023.1 or newer.
- 
-+config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL2_ASUFW
-+	bool "versal2 asufw"
-+	depends on BR2_cortex_a78
-+	help
-+	  Build versal2 asufw application from Xilinx/embeddedsw
-+	  repo.
+ N:	Neal Frager <neal.frager@amd.com>
+ F:	board/versal/
++F:	board/versal2/
+ F:	board/xilinx/
+ F:	board/zynq/
+ F:	board/zynqmp/
+@@ -2490,6 +2491,7 @@ F:	boot/xilinx-prebuilt/
+ F:	configs/versal_vck190_defconfig
+ F:	configs/versal_vek280_defconfig
+ F:	configs/versal_vpk180_defconfig
++F:	configs/versal2_vek385_defconfig
+ F:	configs/zynq_zc702_defconfig
+ F:	configs/zynq_zc706_defconfig
+ F:	configs/zynqmp_kria_kd240_defconfig
+diff --git a/board/versal2/genimage.cfg b/board/versal2/genimage.cfg
+new file mode 120000
+index 0000000000..3aa5543165
+--- /dev/null
++++ b/board/versal2/genimage.cfg
+@@ -0,0 +1 @@
++../versal/genimage.cfg
+\ No newline at end of file
+diff --git a/board/versal2/post-build.sh b/board/versal2/post-build.sh
+new file mode 120000
+index 0000000000..0130ff23d2
+--- /dev/null
++++ b/board/versal2/post-build.sh
+@@ -0,0 +1 @@
++../zynqmp/post-build.sh
+\ No newline at end of file
+diff --git a/board/versal2/post-image.sh b/board/versal2/post-image.sh
+new file mode 100755
+index 0000000000..36cd2eda19
+--- /dev/null
++++ b/board/versal2/post-image.sh
+@@ -0,0 +1,28 @@
++#!/bin/sh
 +
-+	  https://github.com/Xilinx/embeddedsw/tree/master/lib/sw_apps/asufw
-+	  Version must be xilinx_v2025.2 or newer.
++# By default U-Boot loads DTB from a file named "system.dtb", and
++# with versal2, the Linux DTB is the same as the U-Boot DTB, so
++# let's use a symlink since the DTB is the same.
++ln -fs "${BINARIES_DIR}/u-boot.dtb" "${BINARIES_DIR}/system.dtb"
 +
-+config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL2_PLM
-+	bool "versal2 plm"
-+	depends on BR2_cortex_a78
-+	help
-+	  Build versal2 plm application from Xilinx/embeddedsw repo.
-+	  If selected, the xilinx-prebuilt package will not install
-+	  the plm.elf since it will come from the xilinx-embeddedsw
-+	  package.
++BOARD_DIR="$(dirname "$0")"
 +
-+	  https://github.com/Xilinx/embeddedsw/tree/master/lib/sw_apps/versal_plm
-+	  Version must be xilinx_v2025.2 or newer.
++cat <<-__HEADER_EOF > "${BINARIES_DIR}/bootgen.bif"
++	the_ROM_image:
++	{
++	  image {
++	    { type=bootimage, file=${BINARIES_DIR}/boot.pdi }
++	    { type=bootloader, file=${BINARIES_DIR}/plm.elf }
++	    { core=asu, file=${BINARIES_DIR}/asufw.elf }
++	  }
++	  image {
++	    id = 0x1c000000, name=apu_subsystem
++	    { type=raw, load=0x01000000, file=${BINARIES_DIR}/u-boot.dtb }
++	    { core=a78-0, cluster=0, exception_level=el-3, trustzone, file=${BINARIES_DIR}/bl31.elf }
++	    { core=a78-0, cluster=0, exception_level=el-2, file=${BINARIES_DIR}/u-boot.elf }
++	  }
++	}
++	__HEADER_EOF
 +
- config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM
- 	bool "versal plm"
- 	depends on BR2_cortex_a72
-diff --git a/boot/xilinx-embeddedsw/xilinx-embeddedsw.mk b/boot/xilinx-embeddedsw/xilinx-embeddedsw.mk
-index abcfee255d..5fb442ee2a 100644
---- a/boot/xilinx-embeddedsw/xilinx-embeddedsw.mk
-+++ b/boot/xilinx-embeddedsw/xilinx-embeddedsw.mk
-@@ -30,6 +30,38 @@ XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_CFLAGS = \
- 	"-Os -flto -ffat-lto-objects $(XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS)"
- 
- XILINX_EMBEDDEDSW_CFLAGS = "-Os -flto -ffat-lto-objects"
-+XILINX_EMBEDDEDSW_ASUFW_CFLAGS = "-O2 -ffat-lto-objects -fno-lto"
++"${HOST_DIR}/bin/bootgen" -arch versal_2ve_2vm -image "${BINARIES_DIR}/bootgen.bif" -o "${BINARIES_DIR}/boot.bin" -w on
++support/scripts/genimage.sh -c "${BOARD_DIR}/genimage.cfg"
+diff --git a/board/versal2/readme.txt b/board/versal2/readme.txt
+new file mode 100644
+index 0000000000..fd7d092cc4
+--- /dev/null
++++ b/board/versal2/readme.txt
+@@ -0,0 +1,181 @@
++This document describes the Buildroot support for the following
++Xilinx Versal Gen2 boards:
 +
-+ifeq ($(BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL2_ASUFW),y)
-+define XILINX_EMBEDDEDSW_BUILD_VERSAL2_ASUFW
-+	$(MAKE) -C $(@D)/lib/sw_apps/asufw/src \
-+		COMPILER=$(HOST_DIR)/bin/riscv32-buildroot-elf-gcc \
-+		ARCHIVER=$(HOST_DIR)/bin/riscv32-buildroot-elf-gcc-ar \
-+		CC=$(HOST_DIR)/bin/riscv32-buildroot-elf-gcc \
-+		CFLAGS=$(XILINX_EMBEDDEDSW_ASUFW_CFLAGS)
-+endef
++******************************************
++Supported Versal Gen2 Boards:
++Xilinx VEK385 board
++******************************************
 +
-+define XILINX_EMBEDDEDSW_INSTALL_VERSAL2_ASUFW
-+	$(INSTALL) -D -m 0755 $(@D)/lib/sw_apps/asufw/src/asufw.elf \
-+		$(BINARIES_DIR)/asufw.elf
-+endef
-+endif # BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL2_ASUFW
++Evaluation board features can be found here with the links below.
 +
-+ifeq ($(BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL2_PLM),y)
-+define XILINX_EMBEDDEDSW_BUILD_VERSAL2_PLM
-+	$(MAKE) -C $(@D)/lib/sw_apps/versal_plm/src/versal_2ve_2vm \
-+		COMPILER=$(XILINX_EMBEDDEDSW_MICROBLAZE_CC) \
-+		ARCHIVER=$(XILINX_EMBEDDEDSW_MICROBLAZE_AR) \
-+		CC=$(XILINX_EMBEDDEDSW_MICROBLAZE_CC) \
-+		CFLAGS=$(XILINX_EMBEDDEDSW_CFLAGS)
-+endef
++VEK385:
++https://www.amd.com/en/products/adaptive-socs-and-fpgas/evaluation-boards/vek385.html
 +
-+define XILINX_EMBEDDEDSW_INSTALL_VERSAL2_PLM
-+	$(INSTALL) -D -m 0755 \
-+		$(@D)/lib/sw_apps/versal_plm/src/versal_2ve_2vm/plm.elf \
-+		$(BINARIES_DIR)/plm.elf
-+endef
-+endif # BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL2_PLM
- 
- ifeq ($(BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM),y)
- define XILINX_EMBEDDEDSW_BUILD_VERSAL_PLM
-@@ -77,12 +109,16 @@ endef
- endif # BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW
- 
- define XILINX_EMBEDDEDSW_BUILD_CMDS
-+	$(XILINX_EMBEDDEDSW_BUILD_VERSAL2_ASUFW)
-+	$(XILINX_EMBEDDEDSW_BUILD_VERSAL2_PLM)
- 	$(XILINX_EMBEDDEDSW_BUILD_VERSAL_PLM)
- 	$(XILINX_EMBEDDEDSW_BUILD_VERSAL_PSMFW)
- 	$(XILINX_EMBEDDEDSW_BUILD_ZYNQMP_PMUFW)
- endef
- 
- define XILINX_EMBEDDEDSW_INSTALL_IMAGES_CMDS
-+	$(XILINX_EMBEDDEDSW_INSTALL_VERSAL2_ASUFW)
-+	$(XILINX_EMBEDDEDSW_INSTALL_VERSAL2_PLM)
- 	$(XILINX_EMBEDDEDSW_INSTALL_VERSAL_PLM)
- 	$(XILINX_EMBEDDEDSW_INSTALL_VERSAL_PSMFW)
- 	$(XILINX_EMBEDDEDSW_INSTALL_ZYNQMP_PMUFW)
++How to build it
++===============
++
++Configure Buildroot:
++
++    $ make versal2_vek385_defconfig
++
++Compile everything and build the rootfs image:
++
++    $ make
++
++Result of the build
++-------------------
++
++After building, you should get a tree like this:
++
++    output/images/
++    +-- asufw.elf
++    +-- bl31.elf
++    +-- boot.bin
++    +-- bootgen.bif
++    +-- boot.pdi
++    +-- boot.vfat
++    +-- extlinux.conf
++    +-- Image
++    +-- plm.elf
++    +-- rootfs.ext2
++    +-- rootfs.ext4 -> rootfs.ext2
++    +-- sdcard.img
++    +-- system.dtb -> u-boot.dtb
++    +-- u-boot.dtb
++    `-- u-boot.elf
++
++How to write the SD card
++========================
++
++WARNING! This will destroy all the card content. Use with care!
++
++The sdcard.img file is a complete bootable image ready to be written
++on the boot medium. To install it, simply copy the image to an SD
++card:
++
++    # dd if=output/images/sdcard.img of=/dev/sdX
++
++Where 'sdX' is the device node of the SD.
++
++Eject the SD card, insert it in the board, and power it up.
++
++Support for other boards:
++=========================
++
++If you want to build a system for other boards based on the same SoC, and the
++board is already supported by the upstream kernel, U-Boot, and
++xilinx-prebuilt, you simply need to change the following Buildroot options:
++
++ - U-Boot (BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=<dts file name>")
++ - xilinx-prebuilt (BR2_TARGET_XILINX_PREBUILT_BOARD)
++
++Custom versal2 board support:
++
++To generate a boot.bin image, Versal2 boards require a PDI (Programmable Device
++Image) generated by Xilinx Vivado which contains all the hardware specific
++boot information, such as clock, MIO and DDR initializations as well as any
++customizations in the programmable logic. Since this PDI can only be generated
++by Xilinx Vivado, Buildroot needs access to the prebuilt image. The Buildroot
++xilinx-prebuilt package has support for Versal2 XSA files exported from Xilinx
++Vivado.
++
++Using the option BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA, Buildroot can obtain
++the prebuilt PDI from the XSA file.
++
++1) Start with a defconfig supported by Buildroot (e.g. VEK385)
++    make versal2_vek385_defconfig
++
++2) make menuconfig
++    Visit the following menu and enable BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA
++
++    Bootloaders  --->
++        xilinx-prebuilt  --->
++            [*] download a prebuilt Versal XSA
++
++3) Within the same menuconfig, configure location of XSA. It can be in the
++   local file system or downloadable from an https:// location.
++
++    Bootloaders  --->
++        xilinx-prebuilt  --->
++            (<path to XSA>) URL of custom XSA
++
++4) make
++
++The resulting output/images will contain a boot.bin that includes the custom
++PDI file extracted from the Xilinx Vivado exported XSA file.
++
++How to write boot.bin to VEK385 OSPI boot flash
++=======================================================
++
++The VEK385 cannot be configured to boot from the SD card directly because it
++is connected to the 2VE3858 by a USB to SD card bridge and not connected
++directly. For this reason, the boot.bin needs to be in the OSPI flash for
++booting the first boot stage, and u-boot can then boot Linux and the file
++system from the SD card.
++
++For writing the boot.bin file to the OSPI flash the first time, it is
++recommended to use the board system controller with the instructions on the
++wiki page below:
++https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/2273738753/Versal+Evaluation+Board+-+System+Controller+-+Update+7
++
++Once the first boot.bin has been flashed and the VEK385 is able to boot into
++u-boot, u-boot can then be used for subsequent updates to the OSPI flash using
++the instructions below.
++
++VEK385 U-Boot Flashing Instructions:
++    $ usb start
++    $ sf probe
++    $ fatload usb 0 0x40000000 boot.bin
++    $ sf erase 0x0 +$filesize
++    $ sf write 0x40000000 0x0 $filesize
++
++If a valid boot.bin is already in the OSPI flash, it is possible to boot the
++Buildroot generated SD card image without updating the OSPI boot.bin image, so
++this is an optional step when just updating Linux and the file system.
++
++IMPORTANT NOTES for the VEK385
++=======================================================
++
++1) The base-design.pdi on the https://github.com/Xilinx/soc-prebuilt-firmware
++repo is designed for revB of the VEK385 and will not work properly on revA.
++Users should either create their own Vivado XSA file if they have a revA
++board, or make sure to get a VEK385 revB or newer board.
++
++2) The default u-boot bootcmd is not the distro_bootcmd that buildroot
++expects. When booting for the first time, please stop the boot in u-boot
++and run the following commands:
++    $ setenv bootcmd 'run distro_bootcmd'
++    $ saveenv
++    $ boot
++
++3) When using the 2025.2 release, the default u-boot env value for fdt_addr_r
++is 0x21000000 which overlaps with the OS image causing the following boot
++failure:
++
++Found /extlinux/extlinux.conf
++Retrieving file: /extlinux/extlinux.conf
++1:      linux
++Retrieving file: /Image
++append: console="ttyAMA1,115200" root="/dev/sdd2" rw rootwait
++Retrieving file: /system.dtb
++## Flattened Device Tree blob at 21000000
++   Booting using the fdt blob at 0x21000000
++ERROR: FDT image overlaps OS image (OS=20200000..21cf0000)
++EXTLINUX FAILED: continuing...
++
++This will be fixed with 2026.1 and future releases, but for 2025.2, users
++must run the following u-boot commands to change the default value.
++    $ setenv fdt_addr_r 0x31000000
++    $ saveenv
++
++4) Depending on the device tree used, the USB->SD card interface may not be
++probed as /dev/sdd as the probing order can vary based on the device tree
++configuration. To deal with this, users will need to change the last
++parameter of BR2_ROOTFS_POST_SCRIPT_ARGS to sda2, sdb2 or sdc2 depending on
++which corresponds to their configuration's USB->SD card.
++
++For example, the default value in the versal2_vek385_defconfig:
++BR2_ROOTFS_POST_SCRIPT_ARGS="ttyAMA1,115200 sdd2"
++
++If the USB->SD card interface probed first, this would need to be changed to:
++BR2_ROOTFS_POST_SCRIPT_ARGS="ttyAMA1,115200 sda2"
+diff --git a/configs/versal2_vek385_defconfig b/configs/versal2_vek385_defconfig
+new file mode 100644
+index 0000000000..a2d57a0976
+--- /dev/null
++++ b/configs/versal2_vek385_defconfig
+@@ -0,0 +1,49 @@
++BR2_aarch64=y
++BR2_cortex_a78=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
++BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
++BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf riscv32-buildroot-elf"
++BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_MULTILIB=y
++BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/versal2/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/versal2/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="ttyAMA1,115200 sdd2"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_2025.2)/xlnx_rebase_v6.12_LTS_2025.2.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_PACKAGE_XILINX_FPGAUTIL=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.12_2025.2)/xlnx_rebase_v2.12_2025.2.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="versal2"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="VERSAL2_CONSOLE=cadence1"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.2)/xlnx_rebase_v2025.01_2025.2.tar.gz"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="amd_versal2_virt"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
++BR2_TARGET_UBOOT_FORMAT_DTB=y
++BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
++BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal2-vek385-revB"
++BR2_TARGET_XILINX_EMBEDDEDSW=y
++BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL2_ASUFW=y
++BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL2_PLM=y
++BR2_TARGET_XILINX_PREBUILT=y
++BR2_PACKAGE_HOST_BOOTGEN=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
