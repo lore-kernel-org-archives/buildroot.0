@@ -1,87 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98BD8D15D85
-	for <buildroot@archiver.kernel.org>; Wed,  3 Dec 2025 21:39:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20809D1BDFF
+	for <buildroot@archiver.kernel.org>; Wed,  3 Dec 2025 21:43:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 08DC841A56;
-	Wed,  3 Dec 2025 21:39:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F11CA608BA;
+	Wed,  3 Dec 2025 21:43:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uD1IrlUl051p; Wed,  3 Dec 2025 21:39:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FsvoYt9iZg9h; Wed,  3 Dec 2025 21:43:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 737D141A2F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF448606A9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764797953;
-	bh=KkyEKd6rLX87KAk634nHoLpRUE9GNKEUzD4z7XcgIUA=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=f4JjwLXOWc/zauSEtDv/4N9NElqnW1Mg2b7uBd4b/iz5/igo3Vy+WBTErOAK1MVKE
-	 LKND2Lq5U48/gtcsQjh0bvCYQ6SBvgpxcPR1sLiLKItsenDTRWPttORcGz4B0uAg0x
-	 Y5yFVyRdAt8IrYP3f1zGsVuoTxyOQob76+0DvTkY+/k0l4jR/aL84IhWzA5efhIB5t
-	 oR2P30088DufdkS/Ou2M9GnHUv/bgBjrAde66quZ/GOBnFqYE4u0+k24xFg2w+MiBY
-	 H9rcHsFv9t3tRakwBQ81+ZzTavTiUsqO+nrGHsqrGSAh81AXOwVyXgHAN43FatOv8x
-	 s+pflCyoCvzVA==
+	s=default; t=1764798210;
+	bh=igNjJuCIhQZ3LagG3jp6IIibJTXadCfBvV6z9n9dpb8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=MGmMY2+prvmKv4WoavDz5GLIr4FsQc6F/ol892dMwzC4mm366Os5XISXuJSJyasCF
+	 /i79VfAs5alNOvQWZ9T41Zotlxtg4hsX3ufDNOiF0EKTIeC9jQJvqRr62IsoYGblC9
+	 1ysGWkjuQN8L17ZvdFMc5XKiFsp+va4vKx+J9FNAQS3BGiU3eTdNz7lhfMXQv0KD9c
+	 I91GSeyW6cFwiv4LjaGnZBjt8yaVdyulTo3JsSrwte8c72lKx5qhsKLehnbXXTmQRS
+	 P4xrzYogphH7JCbc6UrDbo3F1Zntub9LFo7Am5zo+IvZHQrofblZCokGEwrxsR/13h
+	 bYF+DoBZQ0I7w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 737D141A2F;
-	Wed,  3 Dec 2025 21:39:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 07D4CE4
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 21:39:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF448606A9;
+	Wed,  3 Dec 2025 21:43:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2A726E7
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 21:43:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E2D3240175
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 21:39:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1CA1E84241
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 21:43:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cmuXvS4L3rzB for <buildroot@buildroot.org>;
- Wed,  3 Dec 2025 21:39:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E724940156
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E724940156
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E724940156
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 21:39:10 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 384D8780368;
- Wed,  3 Dec 2025 22:39:05 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 03 Dec 2025 22:39:05 +0100
-MIME-Version: 1.0
-Date: Wed, 03 Dec 2025 22:39:05 +0100
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org, Sen Hastings <sen@hastings.org>
-In-Reply-To: <20251203191409.4096911-1-peter@korsgaard.com>
-References: <20251203191409.4096911-1-peter@korsgaard.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <bb6b6b4903244ae58018dd8d200764c3@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1764797948;
- bh=1lAS4oUj8JgQboFYi+QD147eUDE0ZN9g8UOhOMSmKBQ=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=PI34Y+Xdb2xGlgkJymveS7OlMVmGL++246l/Uq+EJfCD6LSoL55Y+IgAxW2QXcrFb
- yqxJSGfaG/yIJH7aD7L3my2/4hHM2KcyGcS6H4jwkhr7JJa6WUb47vidEry0gvdU81
- p0e6qvR8o0H67aSm8Gl8glqnb2Gus9puo1a9i3LDzlO47JB6YInAhJGjp/bKAFoiLN
- rsIbOWLOKGSHvgLPr2ILRcEUNe4Fc/B7WQ6CNYsHZ8H6yu4AmhTswzwt46sq8cTQ6i
- W1WP6YfxD8tok8D61ZE+y+QJK2wo0Qpt+jXL8ccfmJxZBmuYIY83slWjil56KQm/Ba
- vWBAbudDIXujA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=PI34Y+Xd
-Subject: Re: [Buildroot] [PATCH] support/scripts/pkg-stats: use an unique
- HTTP user-agent
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FeK99mP2HkeE for <buildroot@buildroot.org>;
+ Wed,  3 Dec 2025 21:43:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 382968423F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 382968423F
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 21:43:29 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2741386466; Wed,  3 Dec 2025 21:43:29 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 3 Dec 2025 22:40:40 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0981b4117dcbf323b7d90c6debf0f89685e21a95
+X-Git-Newrev: bd1831d161586947141542fdd5a47f10de3e83f2
+X-Patchwork-Hint: ignore
+Message-Id: <20251203214329.2741386466@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 5.4.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,30 +70,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 03/12/2025 20:14, Peter Korsgaard wrote:
-> As requested by the gnu.org admins:
-> 
-> "
-> Since August 2024, we've been under DDoS attacks from common command 
-> line
-> tools.
-> 
-> To fix this, we would need to change the user-agent from "Python/3.11
-> aiohttp/3.8.4" to "buildroot.org pkg-stats" instead.
-> "
-> 
-> It indeed probably makes sense to use an unique user-agent string, so 
-> rework
-> the script to do that.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=bd1831d161586947141542fdd5a47f10de3e83f2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+https://lwn.net/Articles/1049060/
+"This is the LAST 5.4.y release.  It is now end-of-life and should not be
+ used by anyone, anymore.  As of this point in time, there are 1539
+ documented unfixed CVEs for this kernel branch, and that number will
+ only increase over time as more CVEs get assigned for kernel bugs."
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ linux/linux.hash                     | 2 +-
+ package/linux-headers/Config.in.host | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 4df1c5696a..bca5756926 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -6,7 +6,7 @@ sha256  ad068bfdb604ec0f4f7de385c8e7ab944008aa78a4aeeca94f53206e6726bfda  linux-
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  83157953598b026fb721c906c60dfdfd8e986f25ecb9910f3504f690e2770e05  linux-5.15.196.tar.xz
+ sha256  eb6b76c269d2dc09791638b10b9dcb9d79fd2abd45113a31fc03f68731caa875  linux-5.10.246.tar.xz
+-sha256  b7718766d060e6714bbe47004c71c360e844758f42fbf62cbaa5571119527962  linux-5.4.301.tar.xz
++sha256  ae6a3207f12aa4d6cfb0fa793ec9da4a6fcdfdcb57d869d63d6b77e3a8c1423d  linux-5.4.302.tar.xz
+ # Locally computed
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+ sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 4ab3516d61..79e73dab3f 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -458,7 +458,7 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "5.4.301"	if BR2_KERNEL_HEADERS_5_4
++	default "5.4.302"	if BR2_KERNEL_HEADERS_5_4
+ 	default "5.10.246"	if BR2_KERNEL_HEADERS_5_10
+ 	default "5.15.196"	if BR2_KERNEL_HEADERS_5_15
+ 	default "6.1.158"	if BR2_KERNEL_HEADERS_6_1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
