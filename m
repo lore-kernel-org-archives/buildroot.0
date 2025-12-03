@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12DAAD1BDE7
-	for <buildroot@archiver.kernel.org>; Wed,  3 Dec 2025 22:03:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22BF5D1BDE7
+	for <buildroot@archiver.kernel.org>; Wed,  3 Dec 2025 22:04:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D94E860B33;
-	Wed,  3 Dec 2025 22:03:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ECD6C407E7;
+	Wed,  3 Dec 2025 22:04:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6zVEfHkSu01k; Wed,  3 Dec 2025 22:03:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IAqoseNlCGiC; Wed,  3 Dec 2025 22:03:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E788460E92
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9759405B5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764799427;
-	bh=/3ZQwZQi2/+BzKU12fQKk7A7jNlfwq1DxJ7dbasPjnw=;
+	s=default; t=1764799439;
+	bh=qYwbvd8UKb1nhXEk7tPZh58GpkROB/ISTrq0sB0OT4M=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=ZQJG4rUCVe+vDlnjf5IVRFQW58pDaoQ1TQTLPDvbSslg8tF/XU/0YZXoxWftNb5Z6
-	 xWJS+N7eRrAgiggBZjzTxFLidwPIUgt6O+rPb/6aXfyIXgYRQybGN+zZciG68233Wf
-	 kKeu8u7TxiO17m+E1e9nRFNsxtW2qhq/z4rYtTsRUEcJbGBOBSBOMibexPrV9Hu7Qu
-	 JTMQFcvsNBp54V4UBp+aQEajZQKOU1TmBlTlnBjJrR/jSJdw3VUwE5218BQ5LFlwGe
-	 iEiOxCnd4RBYV2UXlcyOq/H82oz/9yoy4vddfispSKcHBruFiZul0cTicI7qlVISyX
-	 gl4qnagAa4xfA==
+	b=qG5lN+h+mLSWlZTxWkNYmuoJIRMAJsTWo5BhSsNSQINanqJGo/+niuyuMkfoZEoEA
+	 4eGm5HlDyfNQMdCpVzQZ5Duf2a4WABD1FRVgxwfVjfR1PUZO3GVkD8QBD4bB5rPxOF
+	 LgG6+TZw45qY9l5njniIVmdS0PpwXtQlC8JYxhm7Cu7vK2JddUkeVvdW2IFbuIcQfH
+	 8OPOEUCRgSLDmExHrGx++o4GA4gGJZWe4jPe9viYa9JwDfdmLKRzTsn/sGwTZfJT7x
+	 7I9WlWCrJI3lqx8wexZpUMZEN2VRj9HtTMg2y6g8nMiBfARkW+gghmdYM3JdKV8M7j
+	 FMSAAPRsTClpg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E788460E92;
-	Wed,  3 Dec 2025 22:03:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id E2EFBD3
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:03:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E9759405B5;
+	Wed,  3 Dec 2025 22:03:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 37D90D3
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:03:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C9DA540335
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:03:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1EA31401D4
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:03:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ojvdBOtHqs-z for <buildroot@buildroot.org>;
- Wed,  3 Dec 2025 22:03:44 +0000 (UTC)
+ id PFRNRXFlGmCc for <buildroot@buildroot.org>;
+ Wed,  3 Dec 2025 22:03:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 84305401D4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84305401D4
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0787B4004E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0787B4004E
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 84305401D4
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:03:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0787B4004E
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:03:56 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0b1d.dip0.t-ipconnect.de [91.58.11.29])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id B74A8A4C79CF;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id F39AFA4C79D0;
  Wed,  3 Dec 2025 22:59:05 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:56204)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vQuqh-000000002OS-1bUX;
- Wed, 03 Dec 2025 21:57:23 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vQuqh-000000002OS-2DZL;
+ Wed, 03 Dec 2025 21:57:24 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed,  3 Dec 2025 22:57:13 +0100
-Message-ID: <20251203215723.2323032-6-bernd@kuhls.net>
+Date: Wed,  3 Dec 2025 22:57:14 +0100
+Message-ID: <20251203215723.2323032-7-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251203215723.2323032-1-bernd@kuhls.net>
 References: <20251203215723.2323032-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: +++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1764799145;
- bh=uqrAx2b2HMANb2hgVbNypBvKVIZLdHDfslaBiCJWKD4=;
+ s=kas202511301023; t=1764799146;
+ bh=+CMxDPfkTyoGEwYIKAAridDI7YbaH3UbeVVVvv9jULw=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=j7h+pXNgnAKe8ACeepc4n6JUgdZ9P3wq/O1fAu5yLv3Q3wB3hawxGXB7ccnejO0I6
- rJnZD+RJkZXiYIQTBsZA2I7mH+UgihRMO1XSxTKMsg2Z1kBZw3SmSWrG0+ZesOpvsW
- 4k5U2L+SFZcY0/K8WS+E9wl2QGV3PMRyStlS6hP7mhf+/+uKZrxJ3XNGjGIPm6WrRO
- OufQXPgVYn8OXlVJ0PzvAFBPsvPTgf7+A+98eXgzeOWdaewau01RwQMdbjhk1mUL7E
- Y+ytGgKJUbvDjvXkxt3zc+z1fopW4tGWSUiCvOICeamsDPcQuHREXWtb85CP9/Jkl+
- rWSk5nIIuDsoA==
+ b=t1OdcjKi+OwhsSpJwoNTq2zG5UtM0biNt0YpDDr7BTpYoBLBoMgF4jv6MGN63iDjN
+ gXm6gKTi9SgTY0BZWJ/WKTf6FWdIqq0YS8ZGKwg1O2drE11jyz1d+DTZPFeLXfJ97J
+ sveAHsOnhVn6DqrKDHbBLpf9VRegOU9jgxBZULXaSy7hub+U8YOL9yADMjdGaQns3w
+ NTfLAj0vLF016gntBhlSxSckyBfjSydMltiyCzFhoHxGAQ4b7VfzAngfitAh85DYW2
+ TFMX4Khys6SpttnkPGB8mUJHK2zqtCFZtCKae6CA43ABdAH4CqfwNmjbbSBsBFOQke
+ 2lxYcNZ9/10Zw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=j7h+pXNg
-Subject: [Buildroot] [PATCH/next 06/16] package/graphite2: bump version
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=t1OdcjKi
+Subject: [Buildroot] [PATCH/next 07/16] package/gtksourceview: bump version
+ to 5.18.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,137 +106,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Last release dates back to 2020 with > 120 commits since then, including
-fixes for cmake 4 compatibility.
+Release notes of the major releases:
+https://download.gnome.org/sources/gtksourceview/4.0/gtksourceview-4.0.0.news
 
-Instead of backporting several patches we bump the package to the latest
-commit which allows to remove patch 0001.
+https://download.gnome.org/sources/gtksourceview/4.3/gtksourceview-4.3.1.news
+"Ported to meson build system, autotools will be phased out by next release."
 
-Updated license hash due to upstream commit
-https://github.com/silnrsi/graphite/commit/f9dad5a35edb0c3f1031f5627623fb9e7f9bc24c
+https://download.gnome.org/sources/gtksourceview/5.0/gtksourceview-5.0.0.news
+"GtkSourceView 5.0 is the first stable release of GtkSourceView targeting the
+ GTK 4 toolkit. It is the culmination of about a year of development."
+
+https://download.gnome.org/sources/gtksourceview/5.18/gtksourceview-5.18.0.news
+
+Switched to gtk4 and meson build system.
+Disabled the build of the testsuite.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .checkpackageignore                           |  1 -
- ...l-a-libtool-file-with-static-library.patch | 67 -------------------
- package/graphite2/graphite2.hash              |  5 +-
- package/graphite2/graphite2.mk                |  6 +-
- 4 files changed, 4 insertions(+), 75 deletions(-)
- delete mode 100644 package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch
+ package/gtksourceview/Config.in          | 2 +-
+ package/gtksourceview/gtksourceview.hash | 4 ++--
+ package/gtksourceview/gtksourceview.mk   | 9 +++++----
+ 3 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 394c0523c3..1721d8f4d8 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -441,7 +441,6 @@ package/gob2/0001-dont-include-from-prefix.patch lib_patch.Upstream
- package/gobject-introspection/0001-Add-rpath-links-to-ccompiler.patch lib_patch.Upstream
- package/gpsd/S50gpsd Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/gptfdisk/0001-gptcurses-partially-revert-Tweaks-for-building-on-th.patch lib_patch.Upstream
--package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch lib_patch.Upstream
- package/grpc/0003-disable-unconditionally-downloading-api-repos.patch lib_patch.Upstream
- package/gstreamer1/gstd/0001-Don-t-require-gstd-check-user-xenv.sh-for-systemd-se.patch lib_patch.Upstream
- package/guile/0001-calculate-csqrt_manually.patch lib_patch.Upstream
-diff --git a/package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch b/package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch
-deleted file mode 100644
-index ac150622d5..0000000000
---- a/package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch
-+++ /dev/null
-@@ -1,67 +0,0 @@
--From 3edb88b55c0870989778c670d555aa159a2c3abc Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 31 Aug 2020 20:56:43 +0200
--Subject: [PATCH] don't install a libtool file with static library
--
--Static library is supported since version 1.3.11 and
--https://github.com/silnrsi/graphite/commit/2f143c04da5caa43ddf4dba437b2f2bc26bf4238
--
--However, graphite2 is still installing libgraphite2.la which contains
--incorrect information (i.e. dlname set to libgraphite2.so and
--old_library set to ''):
--
--dlname='libgraphite2.so'
--
--library_names='libgraphite2.so.3.2.1 libgraphite2.so.3 libgraphite2.so'
--
--old_library=''
--
--dependency_libs=''
--
--This will result in the following build failure with any applications
--using this file such as harfbuzz:
--
--arm-linux-g++.br_real: error: /home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgraphite2.so: No such file or directory
--make[5]: *** [main] Error 1
--
--Instead of trying to fix this libtool file, just disable it when
--building a static library as it is not needed
--
--Fixes:
-- - http://autobuild.buildroot.org/results/9ebe1d11e80755d59190ef2aae82bbba5cc45e44
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/silnrsi/graphite/pull/65]
-----
-- src/CMakeLists.txt | 8 ++++++--
-- 1 file changed, 6 insertions(+), 2 deletions(-)
--
--diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
--index b6ac26bf..a7ace040 100644
----- a/src/CMakeLists.txt
--+++ b/src/CMakeLists.txt
--@@ -131,7 +131,9 @@ if  (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
--         nolib_test(stdc++ $<TARGET_SONAME_FILE:graphite2>)
--     endif ()
--     set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "")
---    CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
--+    if (BUILD_SHARED_LIBS)
--+        CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
--+    endif()
-- endif()
-- 
-- if  (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
--@@ -146,7 +148,9 @@ if  (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
--     include(Graphite)
--     nolib_test(stdc++ $<TARGET_SONAME_FILE:graphite2>)
--     set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "")
---    CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
--+    if (BUILD_SHARED_LIBS)
--+        CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
--+    endif()
-- endif()
-- 
-- if  (${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
---- 
--2.28.0
--
-diff --git a/package/graphite2/graphite2.hash b/package/graphite2/graphite2.hash
-index e005375f8a..0880fc7208 100644
---- a/package/graphite2/graphite2.hash
-+++ b/package/graphite2/graphite2.hash
-@@ -1,4 +1,3 @@
--# From https://github.com/silnrsi/graphite/releases/download/1.3.14/graphite2-1.3.14.sha256sum
--sha256  f99d1c13aa5fa296898a181dff9b82fb25f6cc0933dbaa7a475d8109bd54209d  graphite2-1.3.14.tgz
- # Locally computed
--sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  LICENSE
-+sha256  b5e919f4b5788f8ed5a2d9d0ce17a23d1c0f625979e53c5e7336fc2ba0b7a7d6  graphite2-142e1bda3439d2bd376bcac9c2b247c9532bacde.tar.gz
-+sha256  cab46cd45adbfea4b1d0f14b033c70062c73074fa0b56532c2f351576ddf455e  LICENSE
-diff --git a/package/graphite2/graphite2.mk b/package/graphite2/graphite2.mk
-index 7f9e3c516e..0f630e8bdf 100644
---- a/package/graphite2/graphite2.mk
-+++ b/package/graphite2/graphite2.mk
-@@ -4,10 +4,8 @@
+diff --git a/package/gtksourceview/Config.in b/package/gtksourceview/Config.in
+index e87969b15d..8f1f35c018 100644
+--- a/package/gtksourceview/Config.in
++++ b/package/gtksourceview/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_GTKSOURCEVIEW
+ 	bool "gtksourceview"
+-	depends on BR2_PACKAGE_LIBGTK3
++	depends on BR2_PACKAGE_LIBGTK4
+ 	select BR2_PACKAGE_LIBXML2
+ 	help
+ 	  GtkSourceView is a portable C library that extends the
+diff --git a/package/gtksourceview/gtksourceview.hash b/package/gtksourceview/gtksourceview.hash
+index 7a9cf00655..9d74d2810b 100644
+--- a/package/gtksourceview/gtksourceview.hash
++++ b/package/gtksourceview/gtksourceview.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.gnome.org/sources/gtksourceview/3.24/gtksourceview-3.24.7.sha256sum:
+-sha256  a5c20d3a6347533689358f3ea52486409f6dd41d5a69c65eab7570cfaffee8e6  gtksourceview-3.24.7.tar.xz
++# Hash from: https://download.gnome.org/sources/gtksourceview/5.18/gtksourceview-5.18.0.sha256sum
++sha256  051a78fe38f793328047e5bcd6d855c6425c0b480c20d9432179e356742c6ac0  gtksourceview-5.18.0.tar.xz
+ 
+ # Locally computed:
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
+diff --git a/package/gtksourceview/gtksourceview.mk b/package/gtksourceview/gtksourceview.mk
+index 3f5aaea4ae..052904cca0 100644
+--- a/package/gtksourceview/gtksourceview.mk
++++ b/package/gtksourceview/gtksourceview.mk
+@@ -4,14 +4,15 @@
  #
  ################################################################################
  
--GRAPHITE2_VERSION = 1.3.14
--GRAPHITE2_SOURCE = graphite2-$(GRAPHITE2_VERSION).tgz
--GRAPHITE2_SITE = \
--	https://github.com/silnrsi/graphite/releases/download/$(GRAPHITE2_VERSION)
-+GRAPHITE2_VERSION = 142e1bda3439d2bd376bcac9c2b247c9532bacde
-+GRAPHITE2_SITE = $(call github,silnrsi,graphite,$(GRAPHITE2_VERSION))
- GRAPHITE2_INSTALL_STAGING = YES
- GRAPHITE2_LICENSE = LGPL-2.1+
- GRAPHITE2_LICENSE_FILES = LICENSE
+-GTKSOURCEVIEW_VERSION_MAJOR = 3.24
+-GTKSOURCEVIEW_VERSION = $(GTKSOURCEVIEW_VERSION_MAJOR).7
++GTKSOURCEVIEW_VERSION_MAJOR = 5.18
++GTKSOURCEVIEW_VERSION = $(GTKSOURCEVIEW_VERSION_MAJOR).0
+ GTKSOURCEVIEW_SOURCE = gtksourceview-$(GTKSOURCEVIEW_VERSION).tar.xz
+ GTKSOURCEVIEW_SITE = \
+ 	https://download.gnome.org/sources/gtksourceview/$(GTKSOURCEVIEW_VERSION_MAJOR)
+ GTKSOURCEVIEW_LICENSE = LGPL-2.1+
+ GTKSOURCEVIEW_LICENSE_FILES = COPYING
+ GTKSOURCEVIEW_INSTALL_STAGING = YES
+-GTKSOURCEVIEW_DEPENDENCIES = host-pkgconf libglib2 libxml2 libgtk3
++GTKSOURCEVIEW_DEPENDENCIES = host-pkgconf libglib2 libxml2 libgtk4
++GTKSOURCEVIEW_CONF_OPTS = -Dbuild-testsuite=false
+ 
+-$(eval $(autotools-package))
++$(eval $(meson-package))
 -- 
 2.47.3
 
