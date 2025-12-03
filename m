@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4111DD1BDFF
-	for <buildroot@archiver.kernel.org>; Wed,  3 Dec 2025 22:00:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 235F0D1BDE7
+	for <buildroot@archiver.kernel.org>; Wed,  3 Dec 2025 22:00:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 180D060A5D;
-	Wed,  3 Dec 2025 22:00:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EBDA661292;
+	Wed,  3 Dec 2025 22:00:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wNhCWyU_OwdK; Wed,  3 Dec 2025 22:00:33 +0000 (UTC)
+ id 5QZN5UGTTFPY; Wed,  3 Dec 2025 22:00:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A6EC60DC3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AD7361408
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764799233;
-	bh=89FXigMVAVPKkQWZdTrHaw14olH51dBPV80EjQHhPd8=;
+	s=default; t=1764799245;
+	bh=cxdp2NZcZMQgVICy6ptmZ0aQnuHj/2BZWPYPieurhJU=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=k0dMdY0Diw+b10o9ElwyXLVbyKeunlv0MY4O0PXCGeGd9bGJYfQcRmxmj5Aa6woDa
-	 5ysuZQ/T5IZftqONEiSqiGFbHwEXawQaWje+qUPz33XMVXKq1c+VWRtAShVjZO97Yw
-	 i6+6eagEaQT0vSkNLbmbpN+jMcWRDUjzLpfWWTP8rsLuSBBxJjlv1WBU1iZmMDER4Z
-	 TLfannqna/eFmAMTq5OTauvBaDt30XMq80gibADxFCBAI6Q+ihi0/4Awyc3YQE1ORF
-	 c4mWx8fsMB9JY/1bT8pgo18Iwrsk1Ejp/oq9h+1oGSV/jXEnmfjX0lHphEhozPZ/iZ
-	 +9foeT+bKrtXA==
+	b=sk+TYXzlnon87iSdEyydPcGf56H6W9k0KxnWvTQlRFUy+JeQahpM5nTcHiASgxqqE
+	 R5umvQuCve8CSg5Qp8K3XKwnndvkHTw8OnVuf0vSV06jpo7cuZlpGZw3L+OxYZBeWp
+	 qnkCmaGAlGG8QcunJPfkCWo+Cz+GGAqche+acQEPcModAqSAgBXtJes6FLqK9iw50L
+	 M3lH3wK3tFue0XiM9NX/cwu8ckYDJSd+OsLO7NtOaOf49Xu0uhqCcHQpo8gHd3/uxg
+	 k2y/aduf0Fcz2wUN6LvvI9+AXKoJHVXX9RogIWNZ+gEojA3UYJaeWSwmlG1zJ9+CXj
+	 /O9LDaWGvnajw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A6EC60DC3;
-	Wed,  3 Dec 2025 22:00:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2A64DD3
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:00:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4AD7361408;
+	Wed,  3 Dec 2025 22:00:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 07BDBE7
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:00:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 10E55401D4
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:00:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EE00B616D4
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:00:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ftvhSUZt9Sje for <buildroot@buildroot.org>;
- Wed,  3 Dec 2025 22:00:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id prqCTkmY0RgF for <buildroot@buildroot.org>;
+ Wed,  3 Dec 2025 22:00:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 00C084004E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00C084004E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DE34E61292
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE34E61292
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 00C084004E
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:00:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DE34E61292
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:00:42 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0b1d.dip0.t-ipconnect.de [91.58.11.29])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 63F98A4C798A;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 968F2A4C798B;
  Wed,  3 Dec 2025 22:59:02 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:55700)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vQugo-000000000Lw-0eku;
+ (envelope-from <bernd@kuhls.net>) id 1vQugo-000000000Lw-0zYI;
  Wed, 03 Dec 2025 21:47:10 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
@@ -65,31 +65,31 @@ Cc: Alexander Dahl <post@lespocky.de>, Davide Viti <zinosat@gmail.com>,
  Sergio Prado <sergio.prado@e-labworks.com>,
  Stefan Hager <stefan.hager@ginzinger.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed,  3 Dec 2025 22:46:58 +0100
-Message-ID: <20251203214709.2321976-10-bernd@kuhls.net>
+Date: Wed,  3 Dec 2025 22:46:59 +0100
+Message-ID: <20251203214709.2321976-11-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251203214709.2321976-1-bernd@kuhls.net>
 References: <20251203214709.2321976-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +++
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1764799142;
- bh=D83Z1tZFMlCGmJc9EO/ASp0lsPp5tH2xrQEucGKfWy0=;
+ bh=6XKFqrTX81OW69vwT/DyNjY3R5onitT4tMY6HA7fLxw=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=rjoQQhuGLNrGuQfmnv/YmnuvXGMDRjShCMfr+DAv1Kr3eFGSVsKg6supU8rSraxmD
- 6EbUsBdZ5IlQ5L65dsr5ExDYYj83mynycgs5Y6O26I4UZmoDf2V8/3rK7xFrlTZ8Jj
- u5USO2k/HiJfIGuxsTyFMAGT25nyx3ij15z6kwxicrzPEbqJ79/unzQ81PEVyidBpN
- 5sZYKVxtmg0hB8PxTCxERnUcBGbqq9ivsHeieFazUzWAiU0QIk2y7oMGd0hCfOH0TW
- HQ8frREfhXz/SyA21MNrWawI9ZcPn8c9LbIIclMuOk+P9E2xryq531sfGs+NJuV9Kg
- ShP7TkY2iLWSw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=LTO20G1YYQ75ewbcPF1dK1J1ZTyNTppJM5bT3Of6B1rj30bL0UzBB/vh5pIxevHVr
+ iN+RVqYlFukJ4uKezpOCOqq0cSMa/ZMpTDwsAV5//8Wui/lhcdWZrRWXN+yjRCWJ/K
+ O52/4J4iQ530BZYikp6jef11lys+xDMRKmSfmLa0f2KDaI1QfqPvxYjmUqvVHOaIuR
+ eyLalfc5yx7HMVRxffSgOwwe4bmB+BzRigDs682Gu7d+TZXFA5oZvdKBzOx/Y8evyX
+ tym2KthrAISG5jNzRUfCf4dVSSpT8uvB4IYwPlqTNrTqh+Ftz5fu9n+hzEusr6bH5J
+ A7/jG6oIVzRUA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=rjoQQhuG
-Subject: [Buildroot] [PATCH/next 10/21] package/libcue: fix cmake 4
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=LTO20G1Y
+Subject: [Buildroot] [PATCH/next 11/21] package/libebml: fix cmake 4
  compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -107,62 +107,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Not yet found by buildroot autobuilders.
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...-Raise-CMake-minimum-version-to-3.10.patch | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/libcue/0001-Raise-CMake-minimum-version-to-3.10.patch
+ .../0001-drop-CMake-older-than-3.5.patch      | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/libebml/0001-drop-CMake-older-than-3.5.patch
 
-diff --git a/package/libcue/0001-Raise-CMake-minimum-version-to-3.10.patch b/package/libcue/0001-Raise-CMake-minimum-version-to-3.10.patch
+diff --git a/package/libebml/0001-drop-CMake-older-than-3.5.patch b/package/libebml/0001-drop-CMake-older-than-3.5.patch
 new file mode 100644
-index 0000000000..f61b752004
+index 0000000000..3a9098f6b3
 --- /dev/null
-+++ b/package/libcue/0001-Raise-CMake-minimum-version-to-3.10.patch
-@@ -0,0 +1,42 @@
-+From d62e39506f4f9b12d58efbd2f1e2667c06b13a19 Mon Sep 17 00:00:00 2001
-+From: Andreas Sturmlechner <asturm@gentoo.org>
-+Date: Sun, 28 Sep 2025 22:12:39 +0200
-+Subject: [PATCH] Raise CMake minimum version to 3.10
++++ b/package/libebml/0001-drop-CMake-older-than-3.5.patch
+@@ -0,0 +1,29 @@
++From 6725c5f0169981cb0bd2ee124fbf0d8ca30b762d Mon Sep 17 00:00:00 2001
++From: Steve Lhomme <slhomme@matroska.org>
++Date: Sat, 24 Feb 2024 08:33:56 +0100
++Subject: [PATCH] drop CMake older than 3.5
 +
-+Signed-off-by: Andreas Sturmlechner <asturm@gentoo.org>
++It generates a warning with newer versions of CMake.
++3.4 was released in 2015. We require C++17 with compilers only available in 2017/2018.
++If your CMake is older than your toolchain, you have a problem.
 +
-+Downloaded from Gentoo commit
-+https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=67d125dc0333e62fccb360f5918b044aa4bdf978
++There's no need to support legacy CMake going forward in libebml 2.
 +
-+Upstream: https://github.com/lipnitsk/libcue/pull/73
++Upstream: https://github.com/Matroska-Org/libebml/commit/6725c5f0169981cb0bd2ee124fbf0d8ca30b762d
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+[backported to 2.3.0]
++[backported to version 1.4.5]
 +---
-+ CMakeLists.txt | 8 ++++++--
-+ 1 file changed, 6 insertions(+), 2 deletions(-)
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
 +diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index c4f9d8e..0d3cb04 100644
++index 11ee059a..c7b969a8 100644
 +--- a/CMakeLists.txt
 ++++ b/CMakeLists.txt
-+@@ -1,10 +1,14 @@
-++CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)
-++
-++if (POLICY CMP0145)
-++	cmake_policy(SET CMP0145 OLD) # since 3.27
-++endif()
-++
-+ SET(PACKAGE libcue)
-+ SET(PACKAGE_NAME libcue)
-+ SET(PACKAGE_VERSION 2.3.0)
-+ SET(PACKAGE_SOVERSION 2)
++@@ -1,4 +1,4 @@
++-cmake_minimum_required(VERSION 3.1.2)
+++cmake_minimum_required(VERSION 3.5)
 + 
-+-CMAKE_MINIMUM_REQUIRED(VERSION 2.8 FATAL_ERROR)
-+-
-+ PROJECT(libcue C)
++ project(ebml VERSION 1.4.5)
 + 
-+ include(GNUInstallDirs)
-+-- 
-+2.47.3
-+
 -- 
 2.47.3
 
