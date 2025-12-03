@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9ABBD1BDE7
-	for <buildroot@archiver.kernel.org>; Wed,  3 Dec 2025 22:03:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAB99D1BDE7
+	for <buildroot@archiver.kernel.org>; Wed,  3 Dec 2025 22:03:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AEA2360A80;
-	Wed,  3 Dec 2025 22:03:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8EAF74075C;
+	Wed,  3 Dec 2025 22:03:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YOOMQFaymVCR; Wed,  3 Dec 2025 22:03:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6WrYmo1t5bvZ; Wed,  3 Dec 2025 22:03:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D354E60AD9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF26F403A9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764799390;
-	bh=PwcOplQg7XDDKEzkPfqSf+6mebxUFUBKfifW0mc5j14=;
+	s=default; t=1764799403;
+	bh=swKwwSWjQebDCHR11LGO1olXmwEu4QQW4gOIcep/ehM=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=RqAjQYBZYjf8cSetGCdJQR2PToNItK0QiLnOEQTBUqjmYeXKWTxSrhpRKJJsZhN9t
-	 D4USKZTDfT4TWzG1umEN8hb/73xemj3mKYqQeY9UDwoH6avRCoH6WXHw0MbXwu5na+
-	 iQ6JXTZsqDjl8C+L2m9f1Oaio4j8gMrcoEDH8LOKd2wOpxBR6pDfg0XZIRE46UEILd
-	 4EfwWNIZyZDjEhp3c8J0fjfF0MEAfVMCdhCFBthBu6mSHaTZNe821KXRmiuyWsyqQT
-	 3CuTKybCDg5C3eww96Zs3V9IQi9Pm0OLqs8rByW5CKyvsJ5fQ7tyy9eM0IXg93xh1t
-	 mSlWS+xB6Kk1w==
+	b=MrCqGDQnzH5TxvSqCLDvFVcL3UmZg0TYTkEzTUODWTIAxxb2Ne6lTNXpJWKcYsVdP
+	 oErxGxuqUYc3W22ZK09S8g1jooVX3Y52w6qjJiNyIi2kmQQXf7s0Zxrzeu3+EPeocx
+	 BU7CqjmEh7SWJ6MJLhuFSGd/CjeNwTkoqL7214N3xoGTAsFSGda4+8oLjU9abljaRn
+	 PaNr96tkCwx0iH3UZDciZIu5ncbDTd5YymiwDYPG5dDH+bD//yVMYfrNwt7DBIJrKN
+	 DcsIDfuvK0OJnZXArrMnSFlGu/0nXISfmKB3+6vwLMfj57sU1PCl2fSzuXzlpY+gRF
+	 OM1DFX2gahR6Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D354E60AD9;
-	Wed,  3 Dec 2025 22:03:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C1C7ED3
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:03:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF26F403A9;
+	Wed,  3 Dec 2025 22:03:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A249AD3
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:03:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A8D2C401D4
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:03:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 893DF84239
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:03:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ull41doYOt93 for <buildroot@buildroot.org>;
- Wed,  3 Dec 2025 22:03:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tYxFfQwUjbp5 for <buildroot@buildroot.org>;
+ Wed,  3 Dec 2025 22:03:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9682B4004E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9682B4004E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 77CA28221B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77CA28221B
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9682B4004E
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:03:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 77CA28221B
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 22:03:20 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0b1d.dip0.t-ipconnect.de [91.58.11.29])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 23CA5A4C79CD;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 586A8A4C3D04;
  Wed,  3 Dec 2025 22:59:05 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:56204)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vQuqh-000000002OS-0Mwc;
+ (envelope-from <bernd@kuhls.net>) id 1vQuqh-000000002OS-0fQ7;
  Wed, 03 Dec 2025 21:57:23 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed,  3 Dec 2025 22:57:10 +0100
-Message-ID: <20251203215723.2323032-3-bernd@kuhls.net>
+Date: Wed,  3 Dec 2025 22:57:11 +0100
+Message-ID: <20251203215723.2323032-4-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251203215723.2323032-1-bernd@kuhls.net>
 References: <20251203215723.2323032-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++++
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1764799145;
- bh=FJPAHWXu5rZn/xY6TNARIOoeuJyp0YfkIgSlerQiuo8=;
+ bh=PINfr/hpHKUSOJoxsTuGORzwHsPDhosHReXPXIxmU7w=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=KOEFOfJxi9CB1hSaNOm7Zp15xdN07aN0gMVRltgv0e/L6kwjvLsFc9+3JsOEpdU8z
- X0wa4x05qT7tJ+VAMQKR/yv05BpxyYpRDKl7F2cSt2DnI33Jof/CiVKhSOGwm8pp+h
- 1fWn5k17IoTIFPuJSZcFvgxEu+fZcpzPYj/OirDu3TudOp6WVZ98CmHrwlWdbTCkBV
- UkdwIs3xMQCX4h5cjK/L8TCFhMZKT45I6qxNB8dnPcTkku/c9T7fdcpDusHO0A9r7X
- wCDdWRHTwMkHtlcVlrSD3dccMQgII/mMeHxr1iUWqh+mkfc5TJzvI+WaYudPPSwsy4
- JRlAYoaNxAnLA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=BGDxYnfdvydAkESlurVbNMJ0Qs71fUDRFeRTNrYqIrnPgu0Ob2INm3tqmXhqIkG9K
+ +86trTUNSSCDuHIPAghEk4aX3y0hvVi8UyEooMbOhUjCKq2jp/PXgjcgJbMI2963l4
+ 0UnzKuRZZs1uaZWrAw+9m/EMCxE1q8qMpE40v0u/352tOrqyB0FSQ9T6GdkF1tdP96
+ ry9b33K2AhPrhyrcELbTIfvnOScZgxHmC5XQEVIhCtfGFrP8ORUfQiSew5BtvgA5Bt
+ DyD1PzmwLpBpwoS6nnRHCpL2POiA7BFQRkRFO6VZ0Lpznbj6FW96Oe5KBojbjIXCSm
+ zisQg+98TOSoQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=KOEFOfJx
-Subject: [Buildroot] [PATCH/next 03/16] package/doxygen: bump version to
- 1.15.0
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=BGDxYnfd
+Subject: [Buildroot] [PATCH/next 04/16] package/firmware-utils: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,37 +105,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog of this host-only package:
-https://www.doxygen.nl/manual/changelog.html
+This bump includes a patch which adds cmake4 compatibility.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/doxygen/doxygen.hash | 2 +-
- package/doxygen/doxygen.mk   | 2 +-
+ package/firmware-utils/firmware-utils.hash | 2 +-
+ package/firmware-utils/firmware-utils.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/doxygen/doxygen.hash b/package/doxygen/doxygen.hash
-index ff2fac7b9c..ec46705d29 100644
---- a/package/doxygen/doxygen.hash
-+++ b/package/doxygen/doxygen.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256  18173d9edc46d2d116c1f92a95d683ec76b6b4b45b817ac4f245bb1073d00656  doxygen-1.8.18.src.tar.gz
-+sha256  a8cafe605867ad475aaf288a3852783076e1df83aabf16488bbfa958062e7440  doxygen-1.15.0.src.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/doxygen/doxygen.mk b/package/doxygen/doxygen.mk
-index b3bcb34097..c31271197d 100644
---- a/package/doxygen/doxygen.mk
-+++ b/package/doxygen/doxygen.mk
+diff --git a/package/firmware-utils/firmware-utils.hash b/package/firmware-utils/firmware-utils.hash
+index 8e09c06733..e258516aec 100644
+--- a/package/firmware-utils/firmware-utils.hash
++++ b/package/firmware-utils/firmware-utils.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  5d6fdc6ba3cb3976df68625cbc59a1e0acbd5ecaf9daa41c3a2aaad1ff368f51  firmware-utils-86739f2b3ae9502368b89ef37fa6f31c42aad6f4-git4.tar.gz
++sha256  8a12240dfdca5e26a4b2443724276a0a25f61797e133757605ed1b9941145fc3  firmware-utils-c42a3bc53da869d02c8ae4d62b3b08a95ff5833f-git4.tar.gz
+diff --git a/package/firmware-utils/firmware-utils.mk b/package/firmware-utils/firmware-utils.mk
+index d5b079e4f5..77be4a9224 100644
+--- a/package/firmware-utils/firmware-utils.mk
++++ b/package/firmware-utils/firmware-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOXYGEN_VERSION = 1.8.18
-+DOXYGEN_VERSION = 1.15.0
- DOXYGEN_SOURCE = doxygen-$(DOXYGEN_VERSION).src.tar.gz
- DOXYGEN_SITE = https://sourceforge.net/projects/doxygen/files/rel-$(DOXYGEN_VERSION)
- DOXYGEN_LICENSE = GPL-2.0
+-FIRMWARE_UTILS_VERSION = 86739f2b3ae9502368b89ef37fa6f31c42aad6f4
++FIRMWARE_UTILS_VERSION = c42a3bc53da869d02c8ae4d62b3b08a95ff5833f
+ FIRMWARE_UTILS_SITE = https://git.openwrt.org/project/firmware-utils.git
+ FIRMWARE_UTILS_SITE_METHOD = git
+ FIRMWARE_UTILS_LICENSE = \
 -- 
 2.47.3
 
