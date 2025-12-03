@@ -1,86 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6795BD15DB6
-	for <buildroot@archiver.kernel.org>; Wed,  3 Dec 2025 17:00:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11C0FD15DB6
+	for <buildroot@archiver.kernel.org>; Wed,  3 Dec 2025 17:03:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2E59461717;
-	Wed,  3 Dec 2025 17:00:27 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HXoxa2uJK-fk; Wed,  3 Dec 2025 17:00:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80C4A616E6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764781223;
-	bh=DwS99kjb/P3djaO3Fw/sy0nzmsC72mVKUpH93My3GQ4=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=q1MOvBbB4NiIYoLfmFYPxRdAh8uN2eXVAO6MYm26eUeaV/0tOAE+HneNbPS78jOMT
-	 PPKDV1z0+mHqyRe4ZBFdAuU5F1RIzLuZReBi2WtjBSfdjDs3UDHSIflePA4n2SrQD8
-	 ZE40eHev/gus8QEgkzURxhIVJdSi+zM1byQ7FHFvEuA7F3mQ/L94MM53WezYUz2YXz
-	 8ssz5jn4paD5RFOOkutQAZh0g3Mz7TEhP3ahVkhVGZvYBZxcwehK8hzurZGoQRiZG6
-	 RmmgTnhq6+p489sAOKrRUuQbJaWK1eNCtBGDlnwgySpn3t4LK5upNlmjT4LQVlP4/k
-	 tYtlvqarswHgA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80C4A616E6;
-	Wed,  3 Dec 2025 17:00:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0303CE7
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 17:00:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DFB4483D20
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 17:00:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 67D8D841F0;
+	Wed,  3 Dec 2025 17:03:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SvOjvCeOIhwn for <buildroot@buildroot.org>;
- Wed,  3 Dec 2025 17:00:18 +0000 (UTC)
+ id s-9Hy22i06Cj; Wed,  3 Dec 2025 17:03:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52447821C1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1764781427;
+	bh=9nmWpzuD1aKX5FXyna5TzarcSjwH2bLLRQ6/N+/rldU=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=LmJqyQXrJW+eGPNEeQ7C8ElI7mPHa/L8uey7q5Vu5fWZiUQJAwQfAX65kheyElJXJ
+	 chiCnZzGWEMaKLP2pBI8PukeCkOMoMmcfIpsoDVwoB/CQiTR9HfjgcrpRcafpSMWHa
+	 5YOLQvabMGL1IOKEZ8/Dtc2XfHTY8j5iFZ7jYlc9KtzcITF3GSqKBqIZQ8RswDZKr1
+	 safj/CsmIta3S3xP7kr1YEgLM7esqdWbkfQTavPcKIaGQgYFmhjK0xwpeEvXATr/L3
+	 +UKG1hgSNVm2Juq5nksSgV5yGtmrZTsBS0D1xmD2Aok9PNdEWVK0xWox8eMGMvt1IJ
+	 i0dc8u+/sPVOA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 52447821C1;
+	Wed,  3 Dec 2025 17:03:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E0019D3
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 17:03:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D8EAC616E6
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 17:03:45 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HfKKXu5vlo_s for <buildroot@buildroot.org>;
+ Wed,  3 Dec 2025 17:03:45 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8184C83CF7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8184C83CF7
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4E8F160DC4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E8F160DC4
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8184C83CF7
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 17:00:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4E8F160DC4
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 17:03:44 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0b1d.dip0.t-ipconnect.de [91.58.11.29])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 8C42CA4C77FE
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 18:00:03 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:37270)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 94D1BA4C7956
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 18:03:33 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:43552)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vQqCw-0000000084Q-1r1m
- for buildroot@buildroot.org; Wed, 03 Dec 2025 17:00:02 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vQqGK-000000000Ea-3Kbc
+ for buildroot@buildroot.org; Wed, 03 Dec 2025 17:03:33 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed,  3 Dec 2025 18:00:02 +0100
-Message-ID: <20251203170002.1768608-1-bernd@kuhls.net>
+Date: Wed,  3 Dec 2025 18:03:33 +0100
+Message-ID: <20251203170333.1769022-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1764781203;
- bh=D34oLPvsT5Yzh8WEiiesKYZqhmq0U9O7/aVfj4Q2TB4=;
+ s=kas202511301023; t=1764781413;
+ bh=s/BzDPeaHMIEKMEeD2r3iKDXoIpKo+kuliOpsMx5koY=;
  h=From:To:Subject:Date:From;
- b=aeo0upN9fttVln1bNDJmXsW2wTMsCxJEQlxSqMztY8jPFwWKcskGuvw/o4OKl/GcW
- 2hlaKQ0YBsqWciIqXnWzdolWc0cU5p2oW2QONYnwQE3zAU5P8tAEY67DqZYGbH7qFg
- T/F7cRhAUOfaOwZEjeQW6CFsgfT/K0sqE2NyaWKVXTtJQ43HqCEAYVqlbGsjjbSHJU
- bl2p+3z0msw+mi0Gi93POaUMwA5GLZ8IqsaXDQoFsh9jkCsgxZMqL6Fk8E9AR2owzK
- JBLa1tEMtDlh5zlfXSS30Z+eGbhYwyEWkK9t7aY1e8iZHYxM9WFcU9QbzBwioY07Rv
- WfQsPxovp4Vwg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=Btcu8OD4S4iSocp41i2anKBB87Oz3/vqtUiGcn0mvDiNtTIrjkSHe84MIKO3JGSTy
+ dPzY/317UOjK1NBw9ITBSdptUTiU3hJZ5Qri/EXvjZoixldDLRSROkMSD8OokkdHQg
+ 5Ue8ioIULLhfqwN4qG9pQUmZpwRIYJjZ++RIefEnIkid95AGa2c05EKKOQFrcZ+6xR
+ 8m88R6RNJINkL9RpfSkI7eV13EPwKBXZKUPmT7BVV8It/QaeRDSM3B8vPzmUOYxDQe
+ N18lE8lEx7iuIk+PfRn51+iZRq5ETJwlEjUu9XAVZ1j/I+Yz9eMmATBXmDjZidjc+W
+ 3qrM75u+uAPcg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=aeo0upN9
-Subject: [Buildroot] [PATCH 1/1] package/kodi-inputstream-adaptive: bump
- version to 21.5.18-Omega
+ header.s=kas202511301023 header.b=Btcu8OD4
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 5.4.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,81 +96,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes of this bugfix release:
-https://github.com/xbmc/inputstream.adaptive/releases/tag/21.5.18-Omega
-
-Removed patch 0001 which is included in this release:
-https://github.com/xbmc/inputstream.adaptive/commit/a224dc66e93aa0d79152ef283cc7dd2207f7cf7d
+https://lwn.net/Articles/1049060/
+"This is the LAST 5.4.y release.  It is now end-of-life and should not be
+ used by anyone, anymore.  As of this point in time, there are 1539
+ documented unfixed CVEs for this kernel branch, and that number will
+ only increase over time as more CVEs get assigned for kernel bugs."
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .../0001-Fix-build-with-gcc-15.patch          | 31 -------------------
- .../kodi-inputstream-adaptive.hash            |  2 +-
- .../kodi-inputstream-adaptive.mk              |  2 +-
- 3 files changed, 2 insertions(+), 33 deletions(-)
- delete mode 100644 package/kodi-inputstream-adaptive/0001-Fix-build-with-gcc-15.patch
+ linux/linux.hash                     | 2 +-
+ package/linux-headers/Config.in.host | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-inputstream-adaptive/0001-Fix-build-with-gcc-15.patch b/package/kodi-inputstream-adaptive/0001-Fix-build-with-gcc-15.patch
-deleted file mode 100644
-index 79daea00bc..0000000000
---- a/package/kodi-inputstream-adaptive/0001-Fix-build-with-gcc-15.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 8ee42c56f1f5f959ce1c66ad4b33235a0b69c774 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd@kuhls.net>
--Date: Sat, 17 May 2025 12:19:09 +0200
--Subject: [PATCH] Fix build with gcc-15
--
--Upstream: not applicable
--
--The code which included uint16_t was removed in the to-be-released
--Piers branch:
--https://github.com/xbmc/inputstream.adaptive/commit/2afe7b8801d2da3059bfb2df0e5a6981fb9e46e9#diff-3dcaf13e4dbb2a79fa703382b7469e3c4ab1f0994928a5c0fca2627b8a9c8eac
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- src/common/AdaptiveUtils.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/common/AdaptiveUtils.h b/src/common/AdaptiveUtils.h
--index 7563cb86..89812532 100644
----- a/src/common/AdaptiveUtils.h
--+++ b/src/common/AdaptiveUtils.h
--@@ -13,6 +13,7 @@
-- #include <memory>
-- #include <string_view>
-- #include <vector>
--+#include <cstdint>
-- 
-- // forwards
-- class AP4_Movie;
---- 
--2.39.5
--
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index b3bbd1b06c..c2339a3d33 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,5 +1,5 @@
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 4df1c5696a..bca5756926 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -6,7 +6,7 @@ sha256  ad068bfdb604ec0f4f7de385c8e7ab944008aa78a4aeeca94f53206e6726bfda  linux-
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  83157953598b026fb721c906c60dfdfd8e986f25ecb9910f3504f690e2770e05  linux-5.15.196.tar.xz
+ sha256  eb6b76c269d2dc09791638b10b9dcb9d79fd2abd45113a31fc03f68731caa875  linux-5.10.246.tar.xz
+-sha256  b7718766d060e6714bbe47004c71c360e844758f42fbf62cbaa5571119527962  linux-5.4.301.tar.xz
++sha256  ae6a3207f12aa4d6cfb0fa793ec9da4a6fcdfdcb57d869d63d6b77e3a8c1423d  linux-5.4.302.tar.xz
  # Locally computed
--sha256  f07c72cc0aa4b379a41c991adae7ccbb31ba5f94da13e986d84e53b67e332bdc  kodi-inputstream-adaptive-21.5.17-Omega.tar.gz
-+sha256  a62ef86fc616c37ff7fa53ff7dfe2a73ee21f48af306a9f82c5bb5fe05245dad  kodi-inputstream-adaptive-21.5.18-Omega.tar.gz
- sha256  48632d57fbb6ab8f50cbf4deced5c91e733fa7ff292687c4816b77f28e483df9  LICENSE.md
- sha256  02f864f3e07456785625968022ce811c5640301bfd2ae70963efea89d306790a  LICENSES/README.md
- sha256  0b7f5dcb3d2c28ff78d999786028930e762df0baa2f52955782e378ec5b636a8  LICENSES/BSD-2-Clause-Views
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index a886960721..3e0ead12c9 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+ sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 4ab3516d61..79e73dab3f 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -458,7 +458,7 @@ endchoice
  
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.5.17-Omega
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.5.18-Omega
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = \
- 	BSD-2-Clause-Views \
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "5.4.301"	if BR2_KERNEL_HEADERS_5_4
++	default "5.4.302"	if BR2_KERNEL_HEADERS_5_4
+ 	default "5.10.246"	if BR2_KERNEL_HEADERS_5_10
+ 	default "5.15.196"	if BR2_KERNEL_HEADERS_5_15
+ 	default "6.1.158"	if BR2_KERNEL_HEADERS_6_1
 -- 
 2.47.3
 
