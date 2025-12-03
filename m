@@ -4,81 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B414DD1BDD3
-	for <buildroot@archiver.kernel.org>; Wed,  3 Dec 2025 19:14:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 611FCD1BDD8
+	for <buildroot@archiver.kernel.org>; Wed,  3 Dec 2025 19:42:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D76E41B68;
-	Wed,  3 Dec 2025 19:14:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC28A40835;
+	Wed,  3 Dec 2025 19:42:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NEq0dY1hkK3v; Wed,  3 Dec 2025 19:14:21 +0000 (UTC)
+ id ySBImyn6Bl7y; Wed,  3 Dec 2025 19:42:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DC9341A2B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A41F640795
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764789261;
-	bh=7CtvHrdbgk9B8ALHf1ygvCsmqhBgHJuDLceWEUwdkQc=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=UmpIu7CKxqsfZz8dQ8VPMPGQrQvNC0J9btDpZ9lqdG6neaufzZyxQwaDiOJDpleGo
-	 gYlFGGYzgAmYrRl0JmeMWRXIOClww13gEOVGdIqUukfXYZ5c7rNfkQyNoFSLGdklHc
-	 SqBfKoc5+IzCrD7WfB9zpFvqvu3RRQHTQ0v+HuFytP82oAG1CyWYANcoaPpM0HOi7v
-	 xQxLqSTWm1QnWECbIk9lmgdCLgZHiR/QgaOdXU2UKEYR1t9oP3Xoyukv0mrSDqhSji
-	 AxRbZ8Nq7neGues+prk4D919ZzFkXBe7XTObml+cRS2WhXrymPTZVIEStME+y0QZeS
-	 4XmE41skJsA1A==
+	s=default; t=1764790927;
+	bh=sf8TgInrfSzhh9CybARpgn5BSnICir4s3LeJ5ClYbXk=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=kj0adnTvbqv4Nv/fmyQM/jgwbJ5qBDZl3EMXD/nWTu0G+xVUoKCBlQyuIJpY/1rvT
+	 ab76Zl4FJPNDxeWo+6N1i9bWboEijMAs7JLnrxTedh/jJkYD8L5i4N16aLBQ+WW5qX
+	 23DBvYGA+Ps2tx1RtghU/+bEbpv6rp9HBeuQqCwX+wPNPWgYI+gmke/x34/hdd1cja
+	 UUKYPgEFrvgryK4krGC1WmJyJB31fGRqxdBn8remcKnqF4MXXX5ZqSZ3KchEM/4PgD
+	 JeUZABoew34fstPrZNXl4wogMNEo4B9aJztp9TjvNXV04nwrPFrAvdZN74CnnvBZu/
+	 TdhlYtIE71lpA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1DC9341A2B;
-	Wed,  3 Dec 2025 19:14:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 60A53E4
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 19:14:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A41F640795;
+	Wed,  3 Dec 2025 19:42:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BB186D3
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 19:42:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4A8038118F
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 19:14:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 99573405AD
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 19:42:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id whLFCy1-Ivl9 for <buildroot@buildroot.org>;
- Wed,  3 Dec 2025 19:14:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C355480C81
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C355480C81
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C355480C81
- for <buildroot@buildroot.org>; Wed,  3 Dec 2025 19:14:18 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1310546689; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 03 Dec 2025 19:14:11 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1vQsIk-0000000HBnU-2NjW;
- Wed, 03 Dec 2025 20:14:10 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ERHTGmhL2Xe4 for <buildroot@buildroot.org>;
+ Wed,  3 Dec 2025 19:42:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F3FD2402C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3FD2402C5
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F3FD2402C5
+ for <buildroot@buildroot.org>; Wed,  3 Dec 2025 19:42:04 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0b1d.dip0.t-ipconnect.de [91.58.11.29])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id B94ECA4C7884;
+ Wed,  3 Dec 2025 20:42:01 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:40462)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99)
+ (envelope-from <bernd@kuhls.net>) id 1vQsjg-000000002XW-3TeC;
+ Wed, 03 Dec 2025 19:42:01 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed,  3 Dec 2025 20:14:08 +0100
-Message-ID: <20251203191409.4096911-1-peter@korsgaard.com>
+Cc: Karoly Kasza <kaszak@gmail.com>
+Date: Wed,  3 Dec 2025 20:42:01 +0100
+Message-ID: <20251203194201.2283684-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=eFjXB8qoEdYkivnF81BYQYusoTVZingEA7OytihS7szLwOW9ZVqikGZ6oQH8iC7MRDqTlhjrcbBama88xg4lA7ksozjEd7f10uzfSF5Fyyoi15hZ8sl+1EmCG59bfNKjyLKeymxjF/8PbapMDRciK8k1t7J9c8r2MnKWVvE5aJoRwmr3vYhi9Eetu90QZ7oBvsBKgDQ2CbP67wdQE1CmX8w3h4xPQO51zvLa5iOkEyBB40QLnmYsOphDyBj4ifhOfGQdBECSp5/FP6lqhMz/9jwJs82FXXH+O7840DAZk8Zk/+GwD+v4B24ttGf4isDCx1a2Bh+tYTPxLiEnXXR7sw==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=maKKYG0G0qiEvjsSoMlssPmFy0rgh/P1bB09wDOV0mo=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Spamd-Bar: +++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1764790921;
+ bh=M/oIWNML7MRFkZvdG/UW+VY7h5+trWSrQ88dbNQgxuw=;
+ h=From:To:Cc:Subject:Date:From;
+ b=XeeJwxP00bcYYmsa9cZx4/gyD6SECaERP61nR1sCBRGEE8bVpIWUiQhC9pwxQmEXv
+ KUULR1VkqAnb6GfmD9t/tROw1H31KkhdM8m8P62G6ZW8Zm2wTHvC/sYd04ECivIkSF
+ ttrYsqtQoseXQDRzhTLgllCJMMYVx/FPYK2JjCVXqcqw4mY8/PxYH30XeuuesBDUxs
+ Bicd6L/NVLkd/D2Ae0vqKGhAWNTRfycxJk0+HGNyIJ5GXQITLrc4+jOuZwzEVereUO
+ s3o6owLWyLygfTTw3cdpbAwrSyakEYiHN3HqnleMywW3sxKTMzUWa5QV/l3FQQi3FC
+ MN/3qUaul96Dw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=eFjXB8qo
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH] support/scripts/pkg-stats: use an unique HTTP
- user-agent
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=XeeJwxP0
+Subject: [Buildroot] [PATCH 1/1] package/irqbalance: fix build with newer gcc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,70 +92,425 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sen Hastings <sen@hastings.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As requested by the gnu.org admins:
+Fixes:
+https://autobuild.buildroot.net/results/3b6/3b609fe191e03330480f647b09dd06916da13317/
 
-"
-Since August 2024, we've been under DDoS attacks from common command line
-tools.
-
-To fix this, we would need to change the user-agent from "Python/3.11
-aiohttp/3.8.4" to "buildroot.org pkg-stats" instead.
-"
-
-It indeed probably makes sense to use an unique user-agent string, so rework
-the script to do that.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- support/scripts/pkg-stats | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ .../irqbalance/0001-fix-32-bit-formats.patch  |  70 ++++
+ ...02-add-void-to-fix-strict-prototypes.patch | 321 ++++++++++++++++++
+ 2 files changed, 391 insertions(+)
+ create mode 100644 package/irqbalance/0001-fix-32-bit-formats.patch
+ create mode 100644 package/irqbalance/0002-add-void-to-fix-strict-prototypes.patch
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index c659acb80e..7d9170e30f 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -42,6 +42,8 @@ RM_API_STATUS_FOUND_BY_DISTRO = 2
- RM_API_STATUS_FOUND_BY_PATTERN = 3
- RM_API_STATUS_NOT_FOUND = 4
- 
-+HTTP_HEADERS = {'User-Agent': 'buildroot.org pkg-stats'}
+diff --git a/package/irqbalance/0001-fix-32-bit-formats.patch b/package/irqbalance/0001-fix-32-bit-formats.patch
+new file mode 100644
+index 0000000000..eac8b083d6
+--- /dev/null
++++ b/package/irqbalance/0001-fix-32-bit-formats.patch
+@@ -0,0 +1,70 @@
++From 1277ea524354fa628b4189e699af8d62f8be7021 Mon Sep 17 00:00:00 2001
++From: Rosen Penev <rosenp@gmail.com>
++Date: Sun, 31 Mar 2024 14:18:24 -0700
++Subject: [PATCH] fix 32-bit formats
 +
- 
- class Defconfig:
-     def __init__(self, name, path):
-@@ -469,7 +471,7 @@ async def check_url_status(session, pkg, npkgs, retry=True, verbose=False):
-     global check_url_count
- 
-     try:
--        async with session.head(pkg.url) as resp:
-+        async with session.head(pkg.url, headers=HTTP_HEADERS) as resp:
-             if resp.status >= 400:
-                 pkg.status['url'] = ("error", "invalid {}".format(resp.status))
-                 check_url_count += 1
-@@ -526,7 +528,7 @@ def check_package_latest_version_set_status(pkg, status, version, identifier):
- async def check_package_get_latest_version_by_distro(session, pkg, retry=True):
-     url = "https://release-monitoring.org/api/project/Buildroot/%s" % pkg.name
-     try:
--        async with session.get(url) as resp:
-+        async with session.get(url, headers=HTTP_HEADERS) as resp:
-             if resp.status != 200:
-                 return False
- 
-@@ -553,7 +555,7 @@ async def check_package_get_latest_version_by_distro(session, pkg, retry=True):
- async def check_package_get_latest_version_by_guess(session, pkg, retry=True):
-     url = "https://release-monitoring.org/api/projects/?pattern=%s" % pkg.name
-     try:
--        async with session.get(url) as resp:
-+        async with session.get(url, headers=HTTP_HEADERS) as resp:
-             if resp.status != 200:
-                 return False
- 
++exposed with -Wformat when building on 32-bit systems
++
++Signed-off-by: Rosen Penev <rosenp@gmail.com>
++
++Upstream: https://github.com/Irqbalance/irqbalance/commit/1277ea524354fa628b4189e699af8d62f8be7021
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ placement.c | 2 +-
++ ui/ui.c     | 8 ++++----
++ 2 files changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/placement.c b/placement.c
++index 9fde8cb..dea7c23 100644
++--- a/placement.c
+++++ b/placement.c
++@@ -172,7 +172,7 @@ static void validate_irq(struct irq_info *info, void *data)
++ {
++ 	if (info->assigned_obj != data)
++ 		log(TO_CONSOLE, LOG_INFO, "object validation error: irq %d is wrong, points to %p, should be %p\n",
++-			info->irq, info->assigned_obj, data);
+++			info->irq, (void*)info->assigned_obj, data);
++ }
++ 
++ static void validate_object(struct topo_obj *d, void *data __attribute__((unused)))
++diff --git a/ui/ui.c b/ui/ui.c
++index bee6868..8354fc6 100644
++--- a/ui/ui.c
+++++ b/ui/ui.c
++@@ -101,7 +101,7 @@ int get_valid_sleep_input(int column_offest)
++ 		if(input == NULL) {
++ 			curs_set(0);
++ 			attrset(COLOR_PAIR(1));
++-			mvprintw(2, column_offest, "%lu			", new_sleep);
+++			mvprintw(2, column_offest, "%" PRIu64 "			", new_sleep);
++ 			move(LINES, COLS);
++ 			break;
++ 		}
++@@ -125,7 +125,7 @@ int get_valid_sleep_input(int column_offest)
++ 	}
++ 
++ 	attrset(COLOR_PAIR(1));
++-	mvprintw(2, column_offest, "%lu				", new_sleep);
+++	mvprintw(2, column_offest, "%" PRIu64 "				", new_sleep);
++ 
++ 	return new_sleep;
++ }
++@@ -296,7 +296,7 @@ void handle_cpu_banning()
++ 		case '\r': {
++ 			attrset(COLOR_PAIR(3));
++ 			int banned = toggle_cpu(tmp, position + offset - 6);
++-			mvprintw(position, 3, "CPU %d     ", position + offset - 6);
+++			mvprintw(position, 3, "CPU %zu     ", position + offset - 6);
++ 			if(banned) {
++ 				mvprintw(position, 19, "YES");
++ 			} else {
++@@ -770,7 +770,7 @@ void display_tree_node_irqs(irq_t *irq, void *data)
++ 	if (max_offset >= offset && max_offset - offset < LINES - 5) {
++ 		snprintf(indent + strlen(indent), 32 - strlen(indent), "%s", (char *)data);
++ 		attrset(COLOR_PAIR(3));
++-		printw("%sIRQ %u, IRQs since last rebalance %lu\n",
+++		printw("%sIRQ %u, IRQs since last rebalance %" PRIu64 "\n",
++ 			indent, irq->vector, irq->diff);
++ 	}
++ 	max_offset++;
+diff --git a/package/irqbalance/0002-add-void-to-fix-strict-prototypes.patch b/package/irqbalance/0002-add-void-to-fix-strict-prototypes.patch
+new file mode 100644
+index 0000000000..ea0495d895
+--- /dev/null
++++ b/package/irqbalance/0002-add-void-to-fix-strict-prototypes.patch
+@@ -0,0 +1,321 @@
++From b6a831d692ed7e12db7748db49b3b39516d151d2 Mon Sep 17 00:00:00 2001
++From: Rosen Penev <rosenp@gmail.com>
++Date: Sun, 31 Mar 2024 14:31:22 -0700
++Subject: [PATCH] add void to fix strict-prototypes
++
++This becomes a hard error with C23
++
++Signed-off-by: Rosen Penev <rosenp@gmail.com>
++
++Upstream: https://github.com/Irqbalance/irqbalance/commit/b6a831d692ed7e12db7748db49b3b39516d151d2
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ irqbalance.c       |  2 +-
++ irqbalance.h       |  2 +-
++ procinterrupts.c   |  2 +-
++ ui/helpers.c       |  2 +-
++ ui/helpers.h       |  2 +-
++ ui/irqbalance-ui.c |  6 +++---
++ ui/irqbalance-ui.h |  5 ++---
++ ui/ui.c            | 26 +++++++++++++-------------
++ ui/ui.h            | 28 ++++++++++++++--------------
++ 9 files changed, 37 insertions(+), 38 deletions(-)
++
++diff --git a/irqbalance.c b/irqbalance.c
++index 12302d7..373161f 100644
++--- a/irqbalance.c
+++++ b/irqbalance.c
++@@ -544,7 +544,7 @@ gboolean sock_handle(gint fd, GIOCondition condition, gpointer user_data __attri
++ 	return TRUE;
++ }
++ 
++-int init_socket()
+++int init_socket(void)
++ {
++ 	struct sockaddr_un addr;
++ 	memset(&addr, 0, sizeof(struct sockaddr_un));
++diff --git a/irqbalance.h b/irqbalance.h
++index 7b47cd1..09daa3d 100644
++--- a/irqbalance.h
+++++ b/irqbalance.h
++@@ -36,7 +36,7 @@ extern char *classes[];
++ extern void parse_cpu_tree(void);
++ extern void clear_work_stats(void);
++ extern void parse_proc_interrupts(void);
++-extern GList* collect_full_irq_list();
+++extern GList* collect_full_irq_list(void);
++ extern void parse_proc_stat(void);
++ extern void set_interrupt_count(int number, uint64_t count);
++ extern void set_msi_interrupt_numa(int number);
++diff --git a/procinterrupts.c b/procinterrupts.c
++index dfa95c6..e7ba653 100644
++--- a/procinterrupts.c
+++++ b/procinterrupts.c
++@@ -206,7 +206,7 @@ void init_irq_class_and_type(char *savedline, struct irq_info *info, int irq)
++ 	info->name = strdup(irq_fullname);
++ }
++ 
++-GList* collect_full_irq_list()
+++GList* collect_full_irq_list(void)
++ {
++ 	GList *tmp_list = NULL;
++ 	FILE *file;
++diff --git a/ui/helpers.c b/ui/helpers.c
++index 0e9f76c..247f826 100644
++--- a/ui/helpers.c
+++++ b/ui/helpers.c
++@@ -165,7 +165,7 @@ void dump_node(cpu_node_t *node, void *data __attribute__((unused)))
++ 	}
++ }
++ 
++-void dump_tree()
+++void dump_tree(void)
++ {
++ 	for_each_node(tree, dump_node, NULL);
++ }
++diff --git a/ui/helpers.h b/ui/helpers.h
++index b8d9fcc..922914b 100644
++--- a/ui/helpers.h
+++++ b/ui/helpers.h
++@@ -25,7 +25,7 @@ void for_each_node(GList *list, void (*fp)(cpu_node_t *node, void *data), void *
++ 
++ void dump_irq(irq_t *irq, void *data __attribute__((unused)));
++ void dump_node(cpu_node_t *node, void *data __attribute__((unused)));
++-void dump_tree();
+++void dump_tree(void);
++ 
++ 
++ #endif /* HELPERS_H */
++diff --git a/ui/irqbalance-ui.c b/ui/irqbalance-ui.c
++index c26eff6..f5122ee 100644
++--- a/ui/irqbalance-ui.c
+++++ b/ui/irqbalance-ui.c
++@@ -28,7 +28,7 @@ setup_t setup;
++ GMainLoop *main_loop;
++ static int default_bufsz = 8192;
++ 
++-struct msghdr * create_credentials_msg()
+++struct msghdr * create_credentials_msg(void)
++ {
++ 	struct ucred *credentials = malloc(sizeof(struct ucred));
++ 	credentials->pid = getpid();
++@@ -51,7 +51,7 @@ struct msghdr * create_credentials_msg()
++ 	return msg;
++ }
++ 
++-int init_connection()
+++int init_connection(void)
++ {
++ 	struct sockaddr_un addr;
++ 	memset(&addr, 0, sizeof(struct sockaddr_un));
++@@ -378,7 +378,7 @@ gboolean rescan_tree(gpointer data __attribute__((unused)))
++ 	free(irqbalance_data);
++ 	return TRUE;
++ }
++-void scroll_window() {
+++void scroll_window(void) {
++ 	switch(state) {
++ 	case STATE_TREE:
++ 		display_tree();
++diff --git a/ui/irqbalance-ui.h b/ui/irqbalance-ui.h
++index dc24083..178be4b 100644
++--- a/ui/irqbalance-ui.h
+++++ b/ui/irqbalance-ui.h
++@@ -72,8 +72,8 @@ typedef struct setup {
++ 
++ /* Function prototypes */
++ 
++-struct msghdr * create_credentials_msg();
++-int init_connection();
+++struct msghdr * create_credentials_msg(void);
+++int init_connection(void);
++ void send_settings(char *data);
++ char * get_data(char *string);
++ void parse_setup(char *setup_data);
++@@ -83,7 +83,6 @@ void assign_cpu_lists(cpu_node_t *node, void *data);
++ void assign_cpu_mask(cpu_node_t *node, void *data);
++ void parse_into_tree(char *data);
++ gboolean rescan_tree(gpointer data);
++-int main();
++ 
++ 
++ #endif /* IRQBALANCE_UI_H */
++diff --git a/ui/ui.c b/ui/ui.c
++index 8354fc6..9fa990a 100644
++--- a/ui/ui.c
+++++ b/ui/ui.c
++@@ -21,7 +21,7 @@ char *IRQ_CLASS_TO_STR[] = {
++ 			"10-Gigabit Ethernet",
++ 			"Virt Event"};
++ 
++-void show_frame()
+++void show_frame(void)
++ {
++ 	int i;
++ 	attrset(COLOR_PAIR(4));
++@@ -37,7 +37,7 @@ void show_frame()
++ 	}
++ }
++ 
++-void show_footer()
+++void show_footer(void)
++ {
++ 	char footer[COLS];
++ 	snprintf(footer, COLS - 1,
++@@ -172,7 +172,7 @@ void print_cpu_line(cpu_ban_t *cpu, void *data __attribute__((unused)))
++ 	max_offset++;
++ }
++ 
++-void print_all_cpus()
+++void print_all_cpus(void)
++ {
++ 	max_offset = 0;
++ 	if(all_cpus == NULL) {
++@@ -193,7 +193,7 @@ void add_banned_cpu(int *banned_cpu, void *data)
++ 	snprintf(data + strlen(data), 1024 - strlen(data), "%d, ", *banned_cpu);
++ }
++ 
++-void display_banned_cpus()
+++void display_banned_cpus(void)
++ {
++ 	char banned_cpus[1024] = "Banned CPU numbers: \0";
++ 	if(g_list_length(setup.banned_cpus) > 0) {
++@@ -247,7 +247,7 @@ void get_cpu(cpu_node_t *node, void *data __attribute__((unused)))
++ 	}
++ }
++ 
++-void handle_cpu_banning()
+++void handle_cpu_banning(void)
++ {
++ 	GList *tmp = g_list_copy_deep(all_cpus, copy_cpu_ban, NULL);
++ 	attrset(COLOR_PAIR(5));
++@@ -504,7 +504,7 @@ void print_irq_line(irq_t *irq, void *data __attribute__((unused)))
++ 	mvprintw(line, 120, "%s", irq_name[line]);
++ }
++ 
++-void print_all_irqs()
+++void print_all_irqs(void)
++ {
++ 	max_offset = 0;
++ 	attrset(COLOR_PAIR(0));
++@@ -555,13 +555,13 @@ void copy_irqs_from_nodes(cpu_node_t *node, void *data __attribute__((unused)))
++ 	}
++ }
++ 
++-void get_all_irqs()
+++void get_all_irqs(void)
++ {
++ 	all_irqs = g_list_copy_deep(setup.banned_irqs, copy_irq, NULL);
++ 	for_each_node(tree, copy_irqs_from_nodes, NULL);
++ }
++ 
++-void handle_irq_banning()
+++void handle_irq_banning(void)
++ {
++ 	GList *tmp = g_list_copy_deep(all_irqs, copy_irq, NULL);
++ 	attrset(COLOR_PAIR(5));
++@@ -670,7 +670,7 @@ void handle_irq_banning()
++ 	}
++ }
++ 
++-void handle_sleep_setting()
+++void handle_sleep_setting(void)
++ {
++ 	char info[128] = "Current sleep interval between rebalancing: \0";
++ 	uint8_t sleep_input_offset = strlen(info) + 3;
++@@ -693,7 +693,7 @@ void handle_sleep_setting()
++ 	refresh();
++ }
++ 
++-void init()
+++void init(void)
++ {
++ 	signal(SIGINT, close_window);
++ 	initscr();
++@@ -732,7 +732,7 @@ void close_window(int sig __attribute__((unused)))
++ 	exit(EXIT_SUCCESS);
++ }
++ 
++-void settings()
+++void settings(void)
++ {
++ 	clear();
++ 	char *setup_data = get_data(SETUP);
++@@ -751,7 +751,7 @@ void settings()
++ 	free(setup_data);
++ }
++ 
++-void setup_irqs()
+++void setup_irqs(void)
++ {
++ 	clear();
++ 	get_all_irqs();
++@@ -830,7 +830,7 @@ void display_tree_node(cpu_node_t *node, void *data)
++ 	}
++ }
++ 
++-void display_tree()
+++void display_tree(void)
++ {
++ 	clear();
++ 	char *setup_data = get_data(SETUP);
++diff --git a/ui/ui.h b/ui/ui.h
++index da5b4b9..f3485d4 100644
++--- a/ui/ui.h
+++++ b/ui/ui.h
++@@ -17,40 +17,40 @@ extern setup_t setup;
++ extern int offset;
++ extern int max_offset;
++ 
++-void show_frame();
++-void show_footer();
+++void show_frame(void);
+++void show_footer(void);
++ 
++ char * check_control_in_sleep_input(int max_len, int column_offest, int line_offset);
++ int get_valid_sleep_input(int column_offest);
++ 
++ void get_banned_cpu(int *cpu, void *data);
++ void print_cpu_line(cpu_ban_t *cpu, void *data);
++-void print_all_cpus();
+++void print_all_cpus(void);
++ void add_banned_cpu(int *banned_cpu, void *data);
++-void display_banned_cpus();
+++void display_banned_cpus(void);
++ int toggle_cpu(GList *cpu_list, int cpu_number);
++ void get_new_cpu_ban_values(cpu_ban_t *cpu, void *data);
++-void get_cpu();
++-void handle_sleep_setting();
++-void handle_cpu_banning();
+++void get_cpu(cpu_node_t *node, void *data);
+++void handle_sleep_setting(void);
+++void handle_cpu_banning(void);
++ 
++ void copy_assigned_obj(int *number, void *data);
++ void print_assigned_objects_string(irq_t *irq, int *line_offset);
++ void print_irq_line(irq_t *irq, void *data);
++-void print_all_irqs();
+++void print_all_irqs(void);
++ int toggle_irq(GList *irq_list, int position);
++ void get_new_irq_ban_values(irq_t *irq, void *data);
++ void copy_irqs_from_nodes(cpu_node_t *node, void *data);
++-void get_all_irqs();
++-void handle_irq_banning();
+++void get_all_irqs(void);
+++void handle_irq_banning(void);
++ 
++-void init();
+++void init(void);
++ void close_window(int sig);
++-void settings();
++-void setup_irqs();
+++void settings(void);
+++void setup_irqs(void);
++ void display_tree_node_irqs(irq_t *irq, void *data);
++ void display_tree_node(cpu_node_t *node, void *data);
++-void display_tree();
+++void display_tree(void);
++ 
++ 
++ #endif /* UI_H */
 -- 
 2.47.3
 
