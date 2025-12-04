@@ -1,63 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21498D216BC
-	for <buildroot@archiver.kernel.org>; Thu,  4 Dec 2025 16:58:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A222FD24441
+	for <buildroot@archiver.kernel.org>; Thu,  4 Dec 2025 16:59:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D1D7261B72;
-	Thu,  4 Dec 2025 16:58:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3879240982;
+	Thu,  4 Dec 2025 16:59:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OyMw7eXHXF0i; Thu,  4 Dec 2025 16:58:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id x4m0Nm3AZakt; Thu,  4 Dec 2025 16:59:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3C7161BC5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CF3140975
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764867507;
-	bh=WDUNgtIc+2yc1vWmDZsu289x879sgn9xbqhtUYNfJJQ=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=H795nz1w7WkH5yG+NGPZHruILcTy5KPOxZdx5Fkx/W4Ska6Qtxpe3vCSV0lBpUuQC
-	 ccuf4VgFLDXR13/iR9DX9c2+hDK5c7ORrN69fe4bQFh21t5xN2pk5BbXOgmf5hbjLd
-	 fJXwxk41Q7aSfYIbLbANbYWt1r7U9MVjYt5PdnRB5ATHnTG78LpmdrBviq1fnVSMB4
-	 rKxBEjqLcV4dUxOZKofX5N+oKHABSSAgVHHXV6e+H9eoICNDHGseIH0bzPMWkCGnB0
-	 /QYXYQ/WKXjgLQfYnXxlSv9r9Yud4K7VmhXwGrLYSszlA7QgeZ2ODBlbQUWYCi6+8F
-	 WQwmjEOnMdHmA==
+	s=default; t=1764867551;
+	bh=dWIYUdLx3svMVx8iAPxmDpYERckMnCV3fyd2I8C2LZo=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=i8Fn6/gbfAkrLVs6xizWZIJuthVnqcksET3cmmUpBU5ttV8xCndsSszoYvSawu8/B
+	 p82P9CB1Kd/WdXyrDOLSJQsuZsFaRXBXMhmaI/fLTJJwi4Bkd36hnLoHaMDIPP/yRY
+	 UyEfO0RXPitmYRihxJbr72gNF+JDhT3Qwdtpap51grv5l5jwivaWi2SVGgMPRtZ9JK
+	 9RM1TNflFF2kHjanqGp06x+fT8lZe1YHktI90DJjX0bRTJGLG2v1WlqzPQ8GgsWKSw
+	 V5RRLOvrpzSy29PqaCoA6lnl16m3knPfsZS+OdNgF5hsguFIm1JWsEz5PCL/w7Xss8
+	 rkjoWzEdG1ESA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3C7161BC5;
-	Thu,  4 Dec 2025 16:58:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 03CF8D3
- for <buildroot@buildroot.org>; Thu,  4 Dec 2025 16:58:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6CF3140975;
+	Thu,  4 Dec 2025 16:59:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 424BD1A9
+ for <buildroot@buildroot.org>; Thu,  4 Dec 2025 16:59:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EA03784552
- for <buildroot@buildroot.org>; Thu,  4 Dec 2025 16:58:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 347B840D86
+ for <buildroot@buildroot.org>; Thu,  4 Dec 2025 16:59:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id voS9tnh6zr1w for <buildroot@buildroot.org>;
- Thu,  4 Dec 2025 16:58:24 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE4728420A
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CE4728420A
- for <buildroot@buildroot.org>; Thu,  4 Dec 2025 16:58:24 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BC11286467; Thu,  4 Dec 2025 16:58:24 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 4 Dec 2025 17:58:04 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bd1831d161586947141542fdd5a47f10de3e83f2
-X-Git-Newrev: 9ae99d19b92aa922ab38cfc083944602d54e4eeb
-X-Patchwork-Hint: ignore
-Message-Id: <20251204165824.BC11286467@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python3: security bump version to
- 3.13.10
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0tV0uin0UAYx for <buildroot@buildroot.org>;
+ Thu,  4 Dec 2025 16:59:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2EE6F4105D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2EE6F4105D
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2EE6F4105D
+ for <buildroot@buildroot.org>; Thu,  4 Dec 2025 16:59:08 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 120382003E8;
+ Thu,  4 Dec 2025 17:59:01 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 04 Dec 2025 17:59:01 +0100
+MIME-Version: 1.0
+Date: Thu, 04 Dec 2025 17:59:01 +0100
+To: Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org, James Hilliard
+ <james.hilliard1@gmail.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <136a6904-8955-4bb9-a657-beb5f515817e@bubu1.eu>
+References: <20251203180334.2117343-1-bernd@kuhls.net>
+ <136a6904-8955-4bb9-a657-beb5f515817e@bubu1.eu>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <1852db1ce1a83c9c828deab9b7d60da3@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1764867546;
+ bh=5a91LxnP0WD9ABiryrYqCLipAIp7pLMY7pGcPVHlwGw=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=H3+HkUvBc98wiegSta+KAbon2ccIvCR6RxbhTuLgLjTaLCQZoFNFvWWy1PGzfruHK
+ 0w+qCX5/buzj40UHI7HfDQ/eIX3r1LJfRfFXiQ/xz29p4ojYepLtDjQ8zVhWBdcQaS
+ ECnjFkZ+GxrNu8PTtKcLxut55MuePSC7R7rxZDSUfA8RYT5gMBF//66ajnqKoXX7Gf
+ Sw0TpVl8/l/NglFp5qpESUfoDmoDMLs8owWvzYNEsKqIsfPYfwEVxDKORNgblE2bFg
+ 3+lKlFjg/PzaHlz4EmR8Rl/kdOuDRCmNpoXBTOIKhuv+bEFRa76BXl81x+Hf5dGq4P
+ 5SnAg6aAqpKpA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=H3+HkUvB
+Subject: Re: [Buildroot] [PATCH 1/1] package/python3: bump version to 3.13.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,69 +97,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ae99d19b92aa922ab38cfc083944602d54e4eeb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 03/12/2025 19:09, Marcus Hoffmann via buildroot wrote:
+> Hi Bernd,
+> 
+> On 12/3/25 19:03, Bernd Kuhls wrote:
+>> Release notes of this bugfix release:
+>> https://www.python.org/downloads/release/python-31310/
+> 
+> This should probably be marked as a security bump, it fixes multiple 
+> security issues: 
+> https://docs.python.org/release/3.13.10/whatsnew/changelog.html#security
 
-For release notes of this bugfix release, see [1].
-While the release notes [1] does not mention any security fixes,
-the more detailed change log at [2] has a security section:
+Thanks for the info. I added the link in the commit log,
+and applied this patch to master.
 
-- gh-139700: "Check consistency of the zip64 end of central directory
-  record." refers to CVE-2025-8291 [3],
-- gh-136065: "Fix quadratic complexity in os.path.expandvars()."
-  refers to CVE-2025-6075 [4],
-- gh-119342: "Fix a potential memory denial of service in the
-  plistlib module." refers to CVE-2025-13837 [5].
+>> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+>> ---
+>>   package/python3/python3.hash | 6 +++---
+>>   package/python3/python3.mk   | 2 +-
+>>   2 files changed, 4 insertions(+), 4 deletions(-)
+>> 
+> [...]
+> 
+> Best,
+> Marcus
 
-Fixes:
-- [3], [4] and [5].
+Best regards,
 
-[1] https://www.python.org/downloads/release/python-31310/
-[2] https://docs.python.org/release/3.13.10/whatsnew/changelog.html#security
-[3] https://www.cve.org/CVERecord?id=CVE-2025-8291
-[4] https://www.cve.org/CVERecord?id=CVE-2025-6075
-[5] https://www.cve.org/CVERecord?id=CVE-2025-13837
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien: add info in commit log about CVEs]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python3/python3.hash | 6 +++---
- package/python3/python3.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index d1a8f3780f..778dca3b69 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,5 +1,5 @@
--# From https://www.python.org/downloads/release/python-3139/
--md5  516aabdf3de01eeefb6de1aacf9df810  Python-3.13.9.tar.xz
-+# From https://www.python.org/downloads/release/python-31310/
-+md5  5ada33c7f08d5d2df881657bdb8e848d  Python-3.13.10.tar.xz
- # Locally computed
--sha256  ed5ef34cda36cfa2f3a340f07cac7e7814f91c7f3c411f6d3562323a866c5c66  Python-3.13.9.tar.xz
-+sha256  bc673c04375a1a3f0808c27ba8f0411ab811ad390a8740318ccb9c60fad8fd77  Python-3.13.10.tar.xz
- sha256  78b12c3a81360b357002334f0e70ea0e92eebf7a9b358805c03c48484945f3bb  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 7aad14a8ca..6200b8af4e 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PYTHON3_VERSION_MAJOR = 3.13
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).9
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).10
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
