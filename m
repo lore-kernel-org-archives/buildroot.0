@@ -4,79 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22B1AD2A537
-	for <buildroot@archiver.kernel.org>; Thu,  4 Dec 2025 20:44:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A63D2D2A537
+	for <buildroot@archiver.kernel.org>; Thu,  4 Dec 2025 20:54:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE45F6E6AD;
-	Thu,  4 Dec 2025 20:44:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5E5D0608D7;
+	Thu,  4 Dec 2025 20:54:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NL4PkrPuvx_p; Thu,  4 Dec 2025 20:44:00 +0000 (UTC)
+ id 6ew4pZZxs94T; Thu,  4 Dec 2025 20:54:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB21A6E43F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E560608DF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764881040;
-	bh=ondQaQxoOk8g0PelFRnucptRsIKjFpGa68h+KaXeKpQ=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1764881657;
+	bh=ivZDz6Xi1949KystgESdkjwFgCr+bD9BAZOvJf1WTsQ=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=F65QlSRdaEjFUqj019KIQptSxQsnAPKjoA0xQDisQxUk5yN8d8DBndy0ejwCb1Llp
-	 A+rPgk0KIDTu/jRHt7Ihzm0MlyNt7kLnY7G2r7tuzyDEqpCb3xAobiDYIa7JZD/UHQ
-	 XlCN5KhvYF2nVnkxEIC+aA9eNMeM++cpTGcsUULSzQxLHu6pHwBv+Er4kgIe56rTg0
-	 IsFagGbIX+NckyuFfTWZXQRwNErxHI+NAy9uR/u2I5wUaDT7CoAQARLvRdI5rkee5a
-	 k7o5mGqO2Ib/w3wUOVVDlM8NWi6mD37tG8XgFVwMhniE3CoJTJ7CIP8tt/pyJ3NCQB
-	 h/YjQ0SAXtorQ==
+	 From;
+	b=PGucFeyi96aWGxJrI3SJ/SnCub1dki7pFLOGWg/s7bpGgCdP1hY1Sm8P33T3vECWq
+	 4qKQE9n5aJTuDNefdcExQxkKeLHaP6Wp9stpuTy2y27EinyIxpoS13C9qS7PImwDBt
+	 1F+HqNbGv3QTBU7qssoyLbJRGsCMrbXtJpEopeviv56/q88RtD7YvSyVAFw6VlFNJY
+	 EYSQeumg7UQSpgmEbPW0apVIJpPBQnqJT+KNp2OnDsk5Dj761mupytEAPGjaZpC3WX
+	 lgUsmyjmz566SMsUn1/Vv9aRk66BR6QM9G8EyVfdpKDuIEMvEJMBWu0UhR224Ci+aq
+	 CWDE+LyoTQYpw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EB21A6E43F;
-	Thu,  4 Dec 2025 20:43:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5DBB11A9
- for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:43:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7E560608DF;
+	Thu,  4 Dec 2025 20:54:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id CE0A4199
+ for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:54:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 442BF4049F
- for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:43:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B3D7740805
+ for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:54:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F_kB_VPCNYuG for <buildroot@buildroot.org>;
- Thu,  4 Dec 2025 20:43:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 66AFA40428
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66AFA40428
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 66AFA40428
- for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:43:56 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 8D0EDB979ECE; Thu,  4 Dec 2025 21:43:54 +0100 (CET)
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: Arnout Vandecappelle <arnout@rnout.be>,
-	buildroot@buildroot.org
-Date: Thu,  4 Dec 2025 21:43:53 +0100
-Message-ID: <20251204204353.13472-1-arnout@rnout.be>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251129150114.2732552-1-bernd@kuhls.net>
-References: <20251129150114.2732552-1-bernd@kuhls.net>
+ id JUV0_SXPuBih for <buildroot@buildroot.org>;
+ Thu,  4 Dec 2025 20:54:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AEAE4407D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEAE4407D7
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AEAE4407D7
+ for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:54:14 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0b1d.dip0.t-ipconnect.de [91.58.11.29])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id CAFFEA4C797E;
+ Thu,  4 Dec 2025 21:54:12 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:56170)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99)
+ (envelope-from <bernd@kuhls.net>) id 1vRGL6-000000003xU-0Oin;
+ Thu, 04 Dec 2025 20:54:12 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Cc: Christian Stewart <christian@aperture.us>,
+ Thomas Perale <thomas.perale@mind.be>
+Date: Thu,  4 Dec 2025 21:54:12 +0100
+Message-ID: <20251204205412.2158168-2-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20251204205412.2158168-1-bernd@kuhls.net>
+References: <20251204205412.2158168-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1764881034; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding:in-reply-to:references;
- bh=Xk0+TDHz4qc26Puhq4MjKzLKddV62pU6fbwajsRHQ1s=;
- b=WgXC1ls6ibkBgCZh/Qk4YF1EsMxOEjQRNhQN/nO1Ta8v0j/z6P7OzXdvLogrSk56YHM0TL
- TV8/o86xOwMgah1QCjlAja9OWsUxtYqzCMojWzPnV/4+pCn3of0JZIzDtVDIAHQFVaNSdw
- VjIuxVVGFn5VxCvy6Bp5wcfgoUmEdkkamNZ6OZqlKwK0U1WPTdLs4ghKg7EMA1iuXustzS
- FKWUVG/2SwPb0t0YtgRpflZbqxA3oJrS8F5Xqg+crqdIfXV/mcNmbkJ0gp0oFpc4Lw9ju+
- WshYwwQu8AqDCvOpjcNhpoAU/1fGo5s69O6nRpCHLQVtdGWeuWTrvDmtM/IFFQ==
+ d=kuhls.net; 
+ s=kas202511301023; t=1764881652;
+ bh=/Hk4xLKmrl6+rovWYQjNxCxxChtjH+NHwzQrBDwJOKQ=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=VXvGISWstgEi4jJxwD/EuGeOT46DHCLnAB7w6GU+6MHtt1gKtWlA3rh4k9lYTZnUT
+ 2tQNDT2xV8XpKswHx5ZLkhNQZMnYMHFak/rifsGubMODIQBiXkDKgVlmPHCH2WeHa7
+ EhUejJfXjDu7Aje1Ej6vCfLGnpKvB6Y0XoZnYPwtBnvarRvNOTFLTFJpEBXCJiZeZI
+ +nHTg3NfxmtEOJ1Z4bSY8PPlhCuH7Zwx7F2MSqhg3ZxaI040LPdrYFzHMbvfvOgKwC
+ xURUktLXvvu4MtYjGVBJ6d1pXgTv1DLSesuPeKJjltgbsKVgBItt7hHzq6u3EWxKwV
+ YFzCNgG8Lsp0w==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=WgXC1ls6
-Subject: Re: [Buildroot] [PATCH 1/1] package/sbc: fix build with gcc-15.x
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=VXvGISWs
+Subject: [Buildroot] [PATCH/next 2/2] package/wtfutil: bump version to 0.47.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,50 +96,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In reply of:
-> Fixes:
-> https://autobuild.buildroot.net/results/2d1/2d16eb4bb0c7f095d0d52af8553c498f6f9a295c/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Release notes: https://github.com/wtfutil/wtf/releases
 
-Applied to 2025.08.x. Thanks
+Needs bump of go to >= 1.25.4.
 
-> ---
->  package/sbc/sbc.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/sbc/sbc.mk b/package/sbc/sbc.mk
-> index 7a37a99643..115867fa0a 100644
-> --- a/package/sbc/sbc.mk
-> +++ b/package/sbc/sbc.mk
-> @@ -12,6 +12,13 @@ SBC_DEPENDENCIES = host-pkgconf
->  SBC_LICENSE := LGPL-2.1+ (library)
->  SBC_LICENSE_FILES = COPYING COPYING.LIB
->  
-> +# gcc-15 defaults to -std=gnu23 which introduces build failures.
-> +# We force "-std=gnu17" for gcc version supporting it. Earlier gcc
-> +# versions will work, since they are using the older standard.
-> +ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_8),y)
-> +SBC_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=gnu17"
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_SBC_TOOLS),y)
->  SBC_DEPENDENCIES += libsndfile
->  SBC_CONF_OPTS += --enable-tools --enable-tester
-> -- 
-> 2.47.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/wtfutil/wtfutil.hash | 2 +-
+ package/wtfutil/wtfutil.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/wtfutil/wtfutil.hash b/package/wtfutil/wtfutil.hash
+index d4afbdc050..9e90731ac3 100644
+--- a/package/wtfutil/wtfutil.hash
++++ b/package/wtfutil/wtfutil.hash
+@@ -1,2 +1,2 @@
+-sha256  1f2a3a037b0e4967039d2241cbe2ba3693a60bd92bd0047cc3361b0faad2a7b6  wtfutil-0.41.0-go2.tar.gz
++sha256  1283e2338e5ca35a7c65596192f151859ab14ea3299321dcf1bb17de30904ceb  wtfutil-0.47.1-go2.tar.gz
+ sha256  b59f3dbd83c6aa4e003b6eafa80bc53f0629e4d164e8b125c56869c2603dbc8f  LICENSE.md
+diff --git a/package/wtfutil/wtfutil.mk b/package/wtfutil/wtfutil.mk
+index 54fea09574..3b92a5797d 100644
+--- a/package/wtfutil/wtfutil.mk
++++ b/package/wtfutil/wtfutil.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WTFUTIL_VERSION = 0.41.0
++WTFUTIL_VERSION = 0.47.1
+ WTFUTIL_SITE = $(call github,wtfutil,wtf,v$(WTFUTIL_VERSION))
+ WTFUTIL_LICENSE = MPL-2.0
+ WTFUTIL_LICENSE_FILES = LICENSE.md
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
