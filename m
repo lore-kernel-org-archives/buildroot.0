@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70F54D2A538
-	for <buildroot@archiver.kernel.org>; Thu,  4 Dec 2025 20:39:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F48ED2A532
+	for <buildroot@archiver.kernel.org>; Thu,  4 Dec 2025 20:40:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1A7EE61C5B;
-	Thu,  4 Dec 2025 20:39:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 57F02608C7;
+	Thu,  4 Dec 2025 20:40:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xh5oH_J6Wm-O; Thu,  4 Dec 2025 20:39:33 +0000 (UTC)
+ id EhN19AeeK4q7; Thu,  4 Dec 2025 20:40:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB0E161C79
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D5E561331
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764880773;
-	bh=evXQYKTlkcx+jmj+7Rlpnlfhe2EP3Be9KhGwsk++ick=;
+	s=default; t=1764880840;
+	bh=SO/nDbFe4MCsY0rYKkHaJn2EY/xRY0EB6MnkLHvjyjA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=QIgLFfcP7hnyHZYy6Mr+rQVQoiZDJ/Oig1MVhZ8l11JdmDFRiAhemxuiLahVDQUUy
-	 ooDxx6hXK9uFT7iMz7Wku9+gz0pZl/7g9DDYxqSrvZnggbP24w8fJpM9cpy2fbY2SN
-	 ll9TAb13WmFlCVfLS4wJpyU4wak4ED9B3YT0mykdHcQIPbPspLnSvyLi/ioB5/WGzv
-	 5r5tkNthsUWhVk3XHH9LfXQheYQNCs9/SBtoyE5dSwfaLTBekWXFwZntKeF0OJ1qGJ
-	 LAc2Ray/m4rdQkoCDnFMvDq8lw7MeKLenr6DolW1BgC7J/IgK9pjNZsVnN8TINpu1p
-	 0q8fEmqLn7oMw==
+	b=GZQz8unTesG7BPhmspnyvq0qWt5mV/kUwy6J9cokYoGoUXVRvJ42Cb2IWgMO/jmi9
+	 5H8vAQb5ahWj7w8TLNJtg632IsdpZpMpAQNk0LD5OenY4ihGd4Wqc6RnA80ISC7EWk
+	 nO/PORvIuVDEsyBv3d45ZFdG+Du/etcBYgI8YFvYS3DN3p95lnNyQ3kNVNvnHHwa/w
+	 Mf6a5PF8GsOk04d7vav7bdW0w8o+G3zk81XXQkZW7SHJ/vovIy1ISTmVSnbjn6rx6R
+	 R0d8pS8wMe/isU8v4fs49DnKHWs/DBEawvWaDmDpQSlShnj4sgwGNyCEyS2Dmh86S6
+	 ffyuCGH/KROcg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BB0E161C79;
-	Thu,  4 Dec 2025 20:39:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 21BDB345
- for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:39:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D5E561331;
+	Thu,  4 Dec 2025 20:40:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2187DD3
+ for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:40:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3A4088448F
- for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:39:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 137FF61410
+ for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:40:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O9yK-kvzdUqD for <buildroot@buildroot.org>;
- Thu,  4 Dec 2025 20:39:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id z9QmBX8IvODl for <buildroot@buildroot.org>;
+ Thu,  4 Dec 2025 20:40:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB27D84391
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A27E608C7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BB27D84391
- for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:39:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3A27E608C7
+ for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:40:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AB76B864DA; Thu,  4 Dec 2025 20:39:17 +0000 (UTC)
+ id 37ED58651A; Thu,  4 Dec 2025 20:40:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Dec 2025 13:12:28 +0100
-X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 9639e6c246a86f98b6e6509bc2a0579b2d87622d
-X-Git-Newrev: 11e5e88ad14c027728ebfe33ea44f37a325967aa
+Date: Thu, 4 Dec 2025 13:11:34 +0100
+X-Git-Refname: refs/heads/2025.08.x
+X-Git-Oldrev: 481da6df64193a49ccd07a740bc99963ad54b491
+X-Git-Newrev: db2fee1bb1985d6b6e46a2495da438f9d8b6fc87
 X-Patchwork-Hint: ignore
-Message-Id: <20251204203917.AB76B864DA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/{neard, sdbusplus,
- thermald}: typo fixes
+Message-Id: <20251204204038.37ED58651A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/python-starlette:
+ bump to version 0.47.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,58 +77,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11e5e88ad14c027728ebfe33ea44f37a325967aa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=db2fee1bb1985d6b6e46a2495da438f9d8b6fc87
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 559bb4dd7b9533344e7aca8cb6c8311c87d36d5c)
+(cherry picked from commit bb825488db157ee4f4c18bedcb30ff38e23886e2)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/neard/neard.mk         | 2 +-
- package/sdbusplus/sdbusplus.mk | 2 +-
- package/thermald/thermald.mk   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-starlette/python-starlette.hash | 4 ++--
+ package/python-starlette/python-starlette.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/neard/neard.mk b/package/neard/neard.mk
-index c1804c48a2..e79ed278b4 100644
---- a/package/neard/neard.mk
-+++ b/package/neard/neard.mk
-@@ -16,7 +16,7 @@ NEARD_AUTORECONF_OPTS = --include=$(HOST_DIR)/share/autoconf-archive
- NEARD_CONF_OPTS = --disable-traces
+diff --git a/package/python-starlette/python-starlette.hash b/package/python-starlette/python-starlette.hash
+index 5939eb198f..4937d93ad0 100644
+--- a/package/python-starlette/python-starlette.hash
++++ b/package/python-starlette/python-starlette.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/starlette/json
+-md5  b58c9f8d38df9946689cb3e9f94555da  starlette-0.47.2.tar.gz
+-sha256  6ae9aa5db235e4846decc1e7b79c4f346adf41e9777aebeb49dfd09bbd7023d8  starlette-0.47.2.tar.gz
++md5  5ae93b12a6b5527fc97c5ba3921bc552  starlette-0.47.3.tar.gz
++sha256  6bc94f839cc176c4858894f1f8908f0ab79dfec1a6b8402f6da9be26ebea52e9  starlette-0.47.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf  LICENSE.md
+diff --git a/package/python-starlette/python-starlette.mk b/package/python-starlette/python-starlette.mk
+index 4037903cc5..04f40460b7 100644
+--- a/package/python-starlette/python-starlette.mk
++++ b/package/python-starlette/python-starlette.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- # Autoreconf is missing the m4/ directory, which might actually be missing
--# iff it was the first argument, but unfortunately we are overriding the
-+# if it was the first argument, but unfortunately we are overriding the
- # first include directory above. Thus we need that hook here.
- define NEARD_CREATE_M4
- 	mkdir -p $(@D)/m4
-diff --git a/package/sdbusplus/sdbusplus.mk b/package/sdbusplus/sdbusplus.mk
-index 498b835052..207243b14d 100644
---- a/package/sdbusplus/sdbusplus.mk
-+++ b/package/sdbusplus/sdbusplus.mk
-@@ -23,7 +23,7 @@ SDBUSPLUS_LICENSE = Apache-2.0
- SDBUSPLUS_LICENSE_FILES = LICENSE
- 
- # Autoreconf is missing the m4/ directory, which might actually be missing
--# iff it was the first argument, but unfortunately we are overriding the
-+# if it was the first argument, but unfortunately we are overriding the
- # first include directory above. Thus we need that hook here.
- define SDBUSPLUS_CREATE_M4
- 	mkdir -p $(@D)/m4
-diff --git a/package/thermald/thermald.mk b/package/thermald/thermald.mk
-index 9faa47683b..4e3d897bf3 100644
---- a/package/thermald/thermald.mk
-+++ b/package/thermald/thermald.mk
-@@ -32,7 +32,7 @@ endef
- THERMALD_PRE_CONFIGURE_HOOKS += THERMALD_GTK_DOC_HOOK
- 
- # Autoreconf is missing the m4/ directory, which might actually be missing
--# iff it was the first argument, but unfortunately we are overriding the
-+# if it was the first argument, but unfortunately we are overriding the
- # first include directory above. Thus we need that hook here.
- define THERMALD_CREATE_M4
- 	mkdir -p $(@D)/m4
+-PYTHON_STARLETTE_VERSION = 0.47.2
++PYTHON_STARLETTE_VERSION = 0.47.3
+ PYTHON_STARLETTE_SOURCE = starlette-$(PYTHON_STARLETTE_VERSION).tar.gz
+-PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/04/57/d062573f391d062710d4088fa1369428c38d51460ab6fedff920efef932e
++PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/15/b9/cc3017f9a9c9b6e27c5106cc10cc7904653c3eec0729793aec10479dd669
+ PYTHON_STARLETTE_SETUP_TYPE = hatch
+ PYTHON_STARLETTE_LICENSE = BSD-3-Clause
+ PYTHON_STARLETTE_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
