@@ -4,165 +4,197 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAFD0D1F9C5
-	for <buildroot@archiver.kernel.org>; Thu,  4 Dec 2025 11:44:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09CEDD1F9DC
+	for <buildroot@archiver.kernel.org>; Thu,  4 Dec 2025 12:50:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 388C58070D;
-	Thu,  4 Dec 2025 11:44:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9E15D83F68;
+	Thu,  4 Dec 2025 12:50:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3POrOc47zEOl; Thu,  4 Dec 2025 11:44:23 +0000 (UTC)
+ id ferMdQWvtW1m; Thu,  4 Dec 2025 12:50:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6770780714
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 399DA83F15
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764848663;
-	bh=GEU5AxRlZx+O5i2Ea6LHFATpRE7MQt4QDtPH4Tm5Fmc=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=UcPV3ssMz73oq710+/IYV9LirwrihBtDmhrxGuKW27pkef7LUoFeszJNOip6kJgIo
-	 CAcs4KlPYjqAmk1eCnYx4mmG+PqUrHsjP4RZN5EvTrcqmZOHAUzhbe/dj9NtfU6OAL
-	 GIqZksaVxgAFEX3vrJQtKzE0xR5aDO/+lLuGWZ5TCI+W+m73ANEXLPK6fyivHbUki5
-	 wVzQZUvSh8Vm/JbBS4GP0d4oHUKMjkBRC64xewuAfdpePMlHZeetubyDUHpGOaL5Jx
-	 KavgQIR4PAXEtGvBNu270crUOFrLeKmsi0ABmrFMM+1WJ/AimqNOaxpxphtwSKgmXV
-	 Wu/JZxOEa+3BQ==
+	s=default; t=1764852650;
+	bh=a6Q6loKEFS2KDhbo+/a9h27RGiBQ1p1GfVG+WpQoZm4=;
+	h=Date:To:CC:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=MZjy9U0iRU4DcXELtwOOzHTuL2jxBuIqdO9v3LDjCcN1G8r6UmCxgqlJuVBLdGuXm
+	 WU0p7VAhff32S8HbmD6e+jsN2+5NIh9m81iw7BsaYcsSTBXMsMxaSFgtZolIHBWtyU
+	 i4q9yMnh2VNWx+RM3EPMSRvtrwqsmGas7gOKebKzOQL9cdlr9MprvPo9d3ipLjnR1A
+	 /j5tQnseNz+29O2tPTZLVegvnIiZIBJ7xZ2JAfkgKHLfNf9iDLHH8hts0takVx1AHw
+	 DwvOQ3sXmSFOANi/bp2vQvEwZRsP4OgpMMGKkbS7XL7ZEUzYbEmXjWhmSnmvL67GI0
+	 8S8hhVH2b6T9g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6770780714;
-	Thu,  4 Dec 2025 11:44:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id C2A0FD3
- for <buildroot@buildroot.org>; Thu,  4 Dec 2025 11:44:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 399DA83F15;
+	Thu,  4 Dec 2025 12:50:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 93F74E4
+ for <buildroot@buildroot.org>; Thu,  4 Dec 2025 12:50:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A081B80537
- for <buildroot@buildroot.org>; Thu,  4 Dec 2025 11:44:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 919A040FD3
+ for <buildroot@buildroot.org>; Thu,  4 Dec 2025 12:50:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wOWp6jZFpVbt for <buildroot@buildroot.org>;
- Thu,  4 Dec 2025 11:44:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:c105::7;
- helo=ch4pr04cu002.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AED6284375
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AED6284375
-Received: from CH4PR04CU002.outbound.protection.outlook.com
- (mail-northcentralusazlp170130007.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c105::7])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AED6284375
- for <buildroot@buildroot.org>; Thu,  4 Dec 2025 11:44:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GT1i55k86ONH for <buildroot@buildroot.org>;
+ Thu,  4 Dec 2025 12:50:48 +0000 (UTC)
+Received-SPF: Permerror (mailfrom) identity=mailfrom;
+ client-ip=2a01:111:f403:c107::3;
+ helo=ph0pr06cu001.outbound.protection.outlook.com; envelope-from=bb@ti.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8F12040FCD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F12040FCD
+Received: from PH0PR06CU001.outbound.protection.outlook.com
+ (mail-westus3azlp170110003.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c107::3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8F12040FCD
+ for <buildroot@buildroot.org>; Thu,  4 Dec 2025 12:50:46 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=S1v+Yjj4g97MukVD1g4icEUYMoKGNEdvGIEM/YBGlFqCrs4X7TCgQkTqjruewbrj9NxCqUm6GHKPUy2Ai01htYDCBhRssr54GWtNus8Tdt/L+sgg2LDr8+weNGecoLp2LyPEuGjyMXbSDmO6zW4OvB7yHiXKyMYSOGCZ/3Ub2rM2vVfqGsmndMhLsgrKDMffmfrWccOI41Dx/srKsOaLfrT8YysBlrYySgSGJj8pTq/QBb1WQItCb4OEiXJ+Vi4dVqWUqIkuK4J/x3h44bW47HAzJ1kgnd0NMS1upd52QrpZyDwDP9Ym8qYo/ucAmBgEPOzbdmHvnN2c1U1ddGC04Q==
+ b=VVBZsqjLECdxdYM7z5jN68rW1Pdmy6duQNnGClelA/pS00gW2eZm7Aaalu9S7YFs5yxqL1Q6ZU76BLfDl9whrUFEsLs9jU47VRIWKLrQNZiS3KOrP+gDK/bYZ/ZdeRN4uYN4EJp9tCgD1xu8sq1AEJOYVkSkhGlCMgfGXTZSa15u1nqnLiowJ1WVK4UNX460mguX0aqiRoZTPPwC9lS+d8zouwMQKGBT5XFYr8qszZ9TV6ehpOh2/kK7Ls4DlSuNVJGAb/iGATj/bECH9EtQBfJ+DwvJVspLmN8UBaI8XsFlwCMKN280Wn0FLS9kzL8MJ0bdE3oa2iKQMNvFOkxE5A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5cTpDk62S4+bxe0Tuh8Qei2YDmhyeHlFhYkcBcWaAn0=;
- b=rTi2fLUideYZbgx3UuT2HDCwsrdQSeAzOuCXsShBW+okFrkQH1NXaKWwMy/nX6iGKfLoFg2WzO2JA8ZarAh/9H3XOVUoDxvH9WT2vUoTN/Xp9VHenPSDF+TCkTm6wjJ6DrQIpVh+ToAgbu0N5Xdg383rt41QIl0Y7r9aJnIAXieZrwmCBCRrMVp3JLVjoWrIZHPguYXQoLYWchSs0AFi11le6r9A1NlzsZpPqZMNTZ/904jKMqkwPmI1vlBSXmWasZDLPfrgMVQ5p3Xly28zogu8LLEdzBJOS8FNOrDLhfcohnAraOdhYVjT7YZj5qg118Wc2J7BFnHKWQTvzJZMtg==
+ bh=VCWWOIrOjca0sEh8MmYpzS7FYbei9Xk9jqlEWjmavms=;
+ b=dDnv68Z0t/XfYUMOVGioqAcqj1P8mxvcuYcw/6IUQU02wgNmGQiFJF1M9WqPCQjd25WCNx5lW0GCGkWIjNWCT470PKq7YBqFmfpFHk1LdJvVu43+z81dzUJN2+ngCrhBgmMyMLeyELvnsbUJ8yx/ZMKVvH0PyJrzcKbNmz/kWptr5mbh503JUQy/LR5QO0xb6vjElU4UDtlgN7SEbduBe3v+urHeNLvujANYUYPdHuT+s88Zv4fpFeY8phWGegV7tm3lxACH7qbIsYXlQpDbQ6BbC/I0Eb1T0geScVaMutW5db+U+Rz0Z19sOqaBH83jobOItb9ghgNmqz12X8bn4Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from MN2PR12CA0025.namprd12.prod.outlook.com (2603:10b6:208:a8::38)
- by IA0PR12MB8303.namprd12.prod.outlook.com (2603:10b6:208:3de::10)
+ 198.47.21.195) smtp.rcpttodomain=buildroot.org smtp.mailfrom=ti.com;
+ dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
+ dkim=none (message not signed); arc=none (0)
+Received: from SJ0PR05CA0110.namprd05.prod.outlook.com (2603:10b6:a03:334::25)
+ by BLAPR10MB5121.namprd10.prod.outlook.com (2603:10b6:208:334::15)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.17; Thu, 4 Dec
- 2025 11:44:14 +0000
-Received: from MN1PEPF0000ECD7.namprd02.prod.outlook.com
- (2603:10b6:208:a8:cafe::79) by MN2PR12CA0025.outlook.office365.com
- (2603:10b6:208:a8::38) with Microsoft SMTP Server (version=TLS1_3,
+ 2025 12:50:42 +0000
+Received: from BY1PEPF0001AE1C.namprd04.prod.outlook.com
+ (2603:10b6:a03:334:cafe::d) by SJ0PR05CA0110.outlook.office365.com
+ (2603:10b6:a03:334::25) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.9388.9 via Frontend Transport; Thu, 4
- Dec 2025 11:44:14 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
-Received: from satlexmb07.amd.com (165.204.84.17) by
- MN1PEPF0000ECD7.mail.protection.outlook.com (10.167.242.136) with Microsoft
+ Dec 2025 12:50:42 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.195)
+ smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none; dmarc=pass
+ action=none header.from=ti.com;
+Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
+ 198.47.21.195 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.21.195; helo=flwvzet201.ext.ti.com; pr=C
+Received: from flwvzet201.ext.ti.com (198.47.21.195) by
+ BY1PEPF0001AE1C.mail.protection.outlook.com (10.167.242.105) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9388.8 via Frontend Transport; Thu, 4 Dec 2025 11:44:13 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by satlexmb07.amd.com
- (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.17; Thu, 4 Dec
- 2025 05:44:13 -0600
-Received: from satlexmb07.amd.com (10.181.42.216) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 4 Dec
- 2025 05:44:13 -0600
-Received: from xirengwts09.xilinx.com (10.180.168.240) by satlexmb07.amd.com
- (10.181.42.216) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
- Transport; Thu, 4 Dec 2025 03:44:11 -0800
-To: <buildroot@buildroot.org>
-Date: Thu, 4 Dec 2025 11:44:09 +0000
-Message-ID: <20251204114409.3355954-1-neal.frager@amd.com>
-X-Mailer: git-send-email 2.25.1
+ 15.20.9388.8 via Frontend Transport; Thu, 4 Dec 2025 12:50:40 +0000
+Received: from DFLE210.ent.ti.com (10.64.6.68) by flwvzet201.ext.ti.com
+ (10.248.192.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 4 Dec
+ 2025 06:50:40 -0600
+Received: from DFLE203.ent.ti.com (10.64.6.61) by DFLE210.ent.ti.com
+ (10.64.6.68) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 4 Dec
+ 2025 06:50:40 -0600
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE203.ent.ti.com
+ (10.64.6.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Thu, 4 Dec 2025 06:50:39 -0600
+Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
+ by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5B4CodbH1564661;
+ Thu, 4 Dec 2025 06:50:39 -0600
+Date: Thu, 4 Dec 2025 06:50:38 -0600
 MIME-Version: 1.0
-Received-SPF: None (SATLEXMB04.amd.com: neal.frager@amd.com does not designate
- permitted sender hosts)
+Message-ID: <20251204-k3-r5-loader-fragments-v1-1-08755f22c4f2@ti.com>
+X-B4-Tracking: v=1; b=H4sIAJ2DMWkC/x3MQQqEMAxA0atI1gZsWoXxKoOLaqMGxzqkIoJ4d
+ 4vLt/j/gsQqnKAtLlA+JMkWM0xZwDD7ODFKyAaqqDZUOVwsao2/zQdWHNVPK8c9oW0MOQq9Gz4
+ EOf4rj3K+42933w8zbXLMaAAAAA==
+X-Change-ID: 20251204-k3-r5-loader-fragments-361242db4c92
+To: <buildroot@buildroot.org>
+CC: Anand Gadiyar <gadiyar@ti.com>, Xuanhao Shi <X15000177@gmail.com>, "Bryan
+ Brattlof" <bb@ti.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1996; i=bb@ti.com;
+ h=from:subject:message-id; bh=DKxSPcDdy/U41SVGTOpw1hcE4HhRcrxk1xDhE98YICE=;
+ b=owNCWmg5MUFZJlNZIjdVxgAAYv////bddz87/+3//uLl3j5y/fm+f77Z+3frfp19tPrX/f0wA
+ RsYyHqZDQAAGgNBoABoA0ZAADQAaAADQ0AAAGmjQADQB6gD1PUNH6SbNFDoANA9QaABoAAGg0eo
+ NAAGhoAGj1ABoBkBpp6mQNB6j1NqaGh6h6jTQ8oaA09ICHqGjQ0MI0yAaA00aGTTRhNBkANMCZM
+ gBkaGjIA0A0aaDQAAADIaBphNA0wECWBDb83vOkM/vcGkEfU31SIPE15oR1whGIhnqmHd4GKoXW
+ SySu/MDDItKXYDh064g4G7h3VifVoiBiV9xoDsVVzlGPVE9lZwDOhBiku0ZT/w+2WkPurcwN6qw
+ IVeZgS98Ai+VdJ1gen03Jg6ykYEmXEHrzYntB+G5lhE41JempXAqCZwMtdmQh7IGkw8NAhCWoOU
+ VKKoYKOxGdh0YiD7NAFLVJgrmOcQ4McD5K02KsY2STNyAG+sayBTVjcE4pFcu416pXU1/ILxNAH
+ OVnO2/x1BSJuRmExz6UgNdmYqBOKsHG2Tt6iLVbctF+OojyvBUbuEZ4v8BGLFr4OtlCWJomsTgv
+ 1qIlWG7EGC9lDiEgKtlPEKXn8dUIAg+ooi/IxIDOIXKE+Se1iyiY8wLC4DqwmLhTMahjQF7urNv
+ kaUeC7kinChIERuq4w=
+X-Developer-Key: i=bb@ti.com; a=openpgp;
+ fpr=D3D177E40A38DF4D1853FEEF41B90D5D71D56CE0
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN1PEPF0000ECD7:EE_|IA0PR12MB8303:EE_
-X-MS-Office365-Filtering-Correlation-Id: 30f97410-234b-4f35-6dae-08de332a72b9
+X-MS-TrafficTypeDiagnostic: BY1PEPF0001AE1C:EE_|BLAPR10MB5121:EE_
+X-MS-Office365-Filtering-Correlation-Id: 58f5d2a8-7380-49b3-1cdc-08de3333bb17
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
- ARA:13230040|36860700013|376014|82310400026|7416014|1800799024|41080700001; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?mYfjFLUK+F1tfMQB//XxIihYsbDx0JtgAqI912wi7epG5nZ6hnvQPpQvL2+D?=
- =?us-ascii?Q?4sN+mvy6bqo1ofgMYUOt+9N+u8LfMfouut5SQk9xRcw/bbTa0ox8h1nUxpPx?=
- =?us-ascii?Q?wGSqdb5xQhvVw58w+hnymgz/BOTkYxjqxGDBhijab+B8GSIkmdcxZJY7tlRN?=
- =?us-ascii?Q?MIUgTKyKoupOefYZCrDDgY5A788x+5Lc0bsgUc9nJsLwO8KLtT7huQE8GD4T?=
- =?us-ascii?Q?5PgPGn1yj68OmExFBHzwqztfc/N+xpSiAThNFk4F+5iDGQWSt3KnqBSprK+a?=
- =?us-ascii?Q?DW89YHMvd77mJXpgOp7WbLJ86Y63jF1NFGaJ+QKw1c60+fMwDPlrNahxrDhu?=
- =?us-ascii?Q?LS91eHBf60qRUOkcVuadBmL0id5ZR7jPG+99r267LbFaDqXHR7SaIwj7nOmh?=
- =?us-ascii?Q?UcC1JD49LeB92goOeCg7fKZ5zCt1pYzogZU8+pxEKqEKq6WFkGtb/OrMyZrW?=
- =?us-ascii?Q?lgoJ795tJ8SnlbEGiKJpO/lhtV3nal03ixuR9ARTETkPyeS5r4uKH/AM80si?=
- =?us-ascii?Q?nRS0+p/yGpyPjHzweF4NRnViuWRBj7heuBLht0KHIGB61rgCvWl4gb3/Bnty?=
- =?us-ascii?Q?2BzW4oyogpprRfOrqxfccYX8gIyGk2BRVzlqboEBVcul/d3wlBIm6wQJH8Dn?=
- =?us-ascii?Q?s+D0/doeuXMoFHAqBlzg2krWjUC7R02cKfX1EfZwbazFmDcdxOd/PiO4XpiU?=
- =?us-ascii?Q?/lo/meplS1Ai+rkeU1T7+/N0LecLQMWrxuM1ulnLhYuML3GNZLVUZhUol47w?=
- =?us-ascii?Q?sUvjddyKJAacDQR7efMhQnvI+hcHNEqQUFKez76cG1boYHkmqnPTInQEhSxP?=
- =?us-ascii?Q?mn1M+miKsHncF3uK6OAJuuzox6eqNyhpwE849f02pkoTUWsH0FLVQM2DoPT1?=
- =?us-ascii?Q?/vQpJKuDh7zS4QDkk9X6n2ZKlk6DB1+W++rVp4V37cWb8bBNYQxrOxrjqf55?=
- =?us-ascii?Q?whDvR99Ye6ayIdBm6kSXE0DhAGt4kSXjZfWw/xRZm4miFHuzTdEqZylpyQEt?=
- =?us-ascii?Q?xrFtA0+6AdUwpYcpyE03JcXkH/Y5lPqS5hlJVBDDpLYmBZ7VvghJAqnQAvDU?=
- =?us-ascii?Q?vppWZzE8/RYALc8WwaRlgINGy/dGc2jY5LpiehGpaPwmyIXwNkN1uc14XNmK?=
- =?us-ascii?Q?lOmuQLgi2mXjldFWXly1gpn4Y8Hi8qUfoFfVhMH5KMsS+53IlOlk+afUkjcL?=
- =?us-ascii?Q?Q75MAzj2kce5VqUcxPXzWxTSGeHcFPZY/YhJB7UaapmzDnKWfeNSzZ0gELAX?=
- =?us-ascii?Q?0LJe5g7kzHfCGx8lMZXFAQE0hCe3r5+fb+4RiRN+JXD2InlTto0vCTvs8/wJ?=
- =?us-ascii?Q?tBygww0nYo0GMkM7NR75kFV9sKeb7YBxYvD/KqP/Wx0sy2NFFVJO6X4ZbMxg?=
- =?us-ascii?Q?EaD2lH/cF/TafR+N4Zx8Zfg2Rw5cx0t4pfQo0XR5FoMi3ZZY2TfnvOgnlTM2?=
- =?us-ascii?Q?YV+11Hi0bI/CCQMaIKyNsRz4BPJvyp8e0ivJ4xp413vkP8iWKMtn2DowFs5D?=
- =?us-ascii?Q?J//2+O15Y8yjHVOvJczJ4yhEKfKzf2WYnoTAJWvYb9uUOJ9fMYTdD7OEuIFt?=
- =?us-ascii?Q?LZxyyenaUaeWzSSmIz4zr+EZF69eqgqNR1SKVhEt?=
-X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:satlexmb07.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(36860700013)(376014)(82310400026)(7416014)(1800799024)(41080700001);
- DIR:OUT; SFP:1101; 
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Dec 2025 11:44:13.9142 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 30f97410-234b-4f35-6dae-08de332a72b9
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[satlexmb07.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: MN1PEPF0000ECD7.namprd02.prod.outlook.com
+ ARA:13230040|376014|82310400026|1800799024|36860700013; 
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?T1M1ZW1rblZsc1Q1RUVvdDlMUkFnN0tUSUNmOHB4WnRIbGJZYnpKUkVVRXF0?=
+ =?utf-8?B?ZFoyYzVENW5FbUZOM1BZWjF3dGQxa3ZoMEEybkgraTR5cy9DNXpxMHhQYU04?=
+ =?utf-8?B?RGdwajJHNWxUZWdEQ3NrVWpxWXpEWUhFblIzVFBQUHBJaTlvdkcxTlI0OTVT?=
+ =?utf-8?B?TnE3bjBOME5XU1NHRCtzQVBlaWhjQWNUaEgvWnl0Q3RwSlpSYldub2MzekdL?=
+ =?utf-8?B?R2hYZUQ1ZTk4R2V4U0RsbU9laXFmdFBRaG42SnJzOWtUcnBtdTgwdmVTeWFr?=
+ =?utf-8?B?djhUR0NWQW9jNmJ5S25qZ0hqbWVFR2xDanBqbW1EdGNpL3JJZlVDNXk1ZGU3?=
+ =?utf-8?B?dkk4dzZ5V0ZDRkdUNWJHc2dReCtPdjFzYm9KNGhYL09KOFdFVkJVdEp6aVYv?=
+ =?utf-8?B?TzNSYWJjNm8xSHkwbm9aY0RzZTZ5eTAzT2xhSUtvTy9qMWJKTmdId2FmN09v?=
+ =?utf-8?B?bFpvMm0xTEpPa2ZXOVJLS1VZNEdzSFpLOFhidFhJajRVRFp0aGFnVTZkSDJW?=
+ =?utf-8?B?eU90cG5NbXlDVzN6SmFIU0NxV3ZDNkxKT01MMFZZeDhGRHI0S1pJWXc5NlJR?=
+ =?utf-8?B?dGdpSXFTTVdOUGtZNG9pSHgyZzltWEhjemF4THhucW5tekZZK2xncWU1ek1z?=
+ =?utf-8?B?THJ1cUZWVjh2V05IUzZmbDBKWlJSbmt0ODB3SUVNbzFMQjhoWkJmQlNVM0dn?=
+ =?utf-8?B?cU5LODIxZjRqcDVkbXFmazl1Y0o3Ty9PaDVGdHluN091b0ZOelozWE0wdTFF?=
+ =?utf-8?B?eEZZV0oxZHVxMVVHbkNzSHN4S2pQcXJOTjQ0QWFIMU9rcVRYMzRYZWt3eGx2?=
+ =?utf-8?B?d1MwMzF0YXNSazNKcktSeFNkTXE5MW9BeVppL0t5S0x1cVRqcTkvS0lLWllx?=
+ =?utf-8?B?TWw1MlJaOVh4M01ObmpLNFlDSm9UTjdhcWkxWDhEQ2VENU55VFVuL3R1dmRQ?=
+ =?utf-8?B?dEJEQUpQWVVzUTRsc0NPbVBtanZKSG9lQ3V6Q1NWUXhjcmZSMXNvMTZXRmN1?=
+ =?utf-8?B?MUtBRTNkL2tBOGZleWlVQlpNZHNBWDFraHFiaDFwMHoyM05mWlZ0cmVrWkJw?=
+ =?utf-8?B?K1kwVjNZRFd4d3VpV0k2OFBoM01JSVlGTHVHeUVDN3dRcU55K3dwNCtDUGNB?=
+ =?utf-8?B?SjhYMGhrTDg4TXN4YWx2a2kwVVJxR1loNTVhb2xQRHd1NmdNTmV5UWFWL0Jn?=
+ =?utf-8?B?UCtRM0h1TEhUczhCZlZpdjk5OXhQcTdVRThzZnBDSmt2VVhyZE9JR08za0t1?=
+ =?utf-8?B?b0ZMd2FhQ21ZS1B6MkM1emRRcm9MTEp6blRrU3NTYkhzNFBlRFEvQzhaenJH?=
+ =?utf-8?B?YXZTbnFScXhjZGxXRVZUYkNpRmhhS3VlN1grM29HVnNTNndzRnhlSVdhZ2tQ?=
+ =?utf-8?B?K3NSb1FZY2NzVUpMOGNsdnpmNEVIUEYyczdqczFjUTh1akE0S0djSjJ3VDZH?=
+ =?utf-8?B?eHo3NWVQRFVDVTJzWHZVRVVKRDlDaktKdDdzQXB6THRoK1M5dzN2MkM0SWxI?=
+ =?utf-8?B?MDVIWjFwZVdQNUtLVWE4Vlk0R0o0OGNuRjk4YkNFWmJmS1E5bjF4Qnp1QStF?=
+ =?utf-8?B?Y1NHTGlPUUdZaG9vVWdla1VZMFdBRzBVUG9ISjNsY3BTR1JIOVZ3a0ZzMFBT?=
+ =?utf-8?B?VUlqaldwNXZ5czZLQXpmV2owbkUxNHV1bmtjcm9SMXZSaVZqaHhTamZuak9j?=
+ =?utf-8?B?SFU0aWppRW9VY1BkZ25EQWRvWDNPN04rQTg2UmlSWjQxWU1rRGZVbUFnSHRo?=
+ =?utf-8?B?Y3M4dkhac2k0YUFOQjM3NXJid0x4WlNHd2c5aTdSWW82dUxWd0F5ZlVTb1k1?=
+ =?utf-8?B?QXNNMmsranJlZlkwZEY5QkVoQ0NNV2FNejVtWUI1M3RKeTN4cFlVNzA2T0xG?=
+ =?utf-8?B?eXgrNzFVdE9Lakw0aERwNElUR3pOWHptSnhrbDJ5bnR5STlLMExTZEx0WUd3?=
+ =?utf-8?B?cXhIMUx1ZG5Nelc3RXVNM2dmVXJ2RnlrVTRqRzRpR0R1cFdWZWgrb0ZFY3Zs?=
+ =?utf-8?B?ZGZRYVR3U1hOMDlvTUN0WFF6ZGZ3OUJib29NMUwwUEtIVzRBV3k2UFFaTS9m?=
+ =?utf-8?B?QVVCdlozaE5OY2Z0Skthd1MwV0h3MURmNlBldXpucUliWU0xVlFNSWJtVnhn?=
+ =?utf-8?Q?XQ9Q=3D?=
+X-Forefront-Antispam-Report: CIP:198.47.21.195; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:flwvzet201.ext.ti.com; PTR:ErrorRetry; CAT:NONE;
+ SFS:(13230040)(376014)(82310400026)(1800799024)(36860700013); DIR:OUT;
+ SFP:1101; 
+X-OriginatorOrg: ti.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Dec 2025 12:50:40.7054 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 58f5d2a8-7380-49b3-1cdc-08de3333bb17
+X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7; Ip=[198.47.21.195];
+ Helo=[flwvzet201.ext.ti.com]
+X-MS-Exchange-CrossTenant-AuthSource: BY1PEPF0001AE1C.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8303
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5121
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
+ d=ti.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5cTpDk62S4+bxe0Tuh8Qei2YDmhyeHlFhYkcBcWaAn0=;
- b=lafmcuhbdZyUpKLzd3nJjzhcFxrP+9C8/pkVApdCQtUX/qyfFEi5PS1mpW77hWcDAlu+YNT+ZJIRHiFsWG6f/+zQYW6D2s+aTzz3GKWsNRLGtd1zQGuv55/JuPlVRHaluEmbGvV1aByTFlf7Dc9kGPgvxibpSGYDX1R545W8zqM=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=VCWWOIrOjca0sEh8MmYpzS7FYbei9Xk9jqlEWjmavms=;
+ b=l7srqLyinMsAGwdHNaaeGENZhrJVDGvtTrxgdE5FYBTAUDVa1qEdJdgKXuj0qWjB0yeOMu66DT6/+RKPZDu+TERPsmBLbxABIs0zJkMt7j13wO6Ej+9OGc3ag89NB7i22dcosXvm0FgQY0P8KN9PpHZgo7iJpnFQCT38Fx+mtQ8=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=ti.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=lafmcuhb
-Subject: [Buildroot] [PATCH v3 1/1] boot/xilinx-prebuilt: add local versal
- xsa support
+ unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=selector1 header.b=l7srqLyi
+Subject: [Buildroot] [PATCH] boot/ti-k3-r5-loader: add defconfig fragment
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -174,74 +206,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
- yann.morin@orange.com, brandon.maier@collins.com, ju.o@free.fr,
- Neal Frager <neal.frager@amd.com>, thomas.petazzoni@bootlin.com,
- romain.naour@smile.fr, michal.simek@amd.com, romain.naour@gmail.com
+From: Bryan Brattlof via buildroot <buildroot@buildroot.org>
+Reply-To: Bryan Brattlof <bb@ti.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Most of the time, users will be running Vivado on their local host machine,
-and will generate a XSA (Xilinx Shell Archive) locally.
+There are multiple defconfig fragments we can select to modify the final
+tiboot3.bin image to support different boot methods or enable features
+supported by a board. Allow the ti-k3-r5-loader package to select
+defconfig gragments during a build
 
-Instead of requiring users to create a URL location for their XSA file,
-this patch improves ease of use by allowing users to work directly with
-just a path on the local host machine.
-
-BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA_LOCATION can thus be defined as either
-a simple local location or a URL location for the XSA file.
-
-In either case, a hash for the XSA file needs to be added to the
-boot/xilinx-prebuilt/xilinx-prebuilt.hash when using this option.
-
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Bryan Brattlof <bb@ti.com>
 ---
-V1->V2:
-- updated help text for using a simple local path
-V2->V3:
-- rebased patch due to changes in Config.in file
----
- boot/xilinx-prebuilt/Config.in          | 6 +++---
- boot/xilinx-prebuilt/xilinx-prebuilt.mk | 3 +++
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ boot/ti-k3-r5-loader/Config.in          | 6 ++++++
+ boot/ti-k3-r5-loader/ti-k3-r5-loader.mk | 1 +
+ 2 files changed, 7 insertions(+)
 
-diff --git a/boot/xilinx-prebuilt/Config.in b/boot/xilinx-prebuilt/Config.in
-index a1e711e6cf..7926b6cb9e 100644
---- a/boot/xilinx-prebuilt/Config.in
-+++ b/boot/xilinx-prebuilt/Config.in
-@@ -68,9 +68,9 @@ config BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA_LOCATION
- 	  file. This URL can use any protocol recognized by Buildroot,
- 	  like http://, ftp://, file:// or scp://.
+diff --git a/boot/ti-k3-r5-loader/Config.in b/boot/ti-k3-r5-loader/Config.in
+index b4fb46e55b83b47f72971168ab1acd964ff390e3..7eb471e6d504f8d6c72ea0577eb45eb7c366286d 100644
+--- a/boot/ti-k3-r5-loader/Config.in
++++ b/boot/ti-k3-r5-loader/Config.in
+@@ -95,6 +95,12 @@ config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_CONFIG_FILE
+ 	help
+ 	  Path to the TI K3 R5 Loader configuration file.
  
--	  When pointing to a local XSA using file://, you may want to
--	  use a make variable like $(TOPDIR) to reference the root of
--	  the Buildroot tree.
-+	  When pointing to a local XSA using file:// or simply the
-+	  local path, you may want to use a make variable like
-+	  $(TOPDIR) to reference the root of the Buildroot tree.
++config BR2_TARGET_TI_K3_R5_LOADER_CONFIG_FRAGMENT_FILES
++	string "Additional configuration fragment files"
++	help
++	  A space-separated list of configuration fragment files,
++	  that will be merged to the tiboot3.bin configuration file.
++
+ config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_DTS_PATH
+ 	string "Device Tree Source file paths"
+ 	help
+diff --git a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
+index db5c3cdaf8b658028c696eb3720327bfb5d6e0da..178db5c0f35adc5140e4e41a54cc23cd4971b6d9 100644
+--- a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
++++ b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
+@@ -77,6 +77,7 @@ TI_K3_R5_LOADER_MAKE_OPTS = \
+ 	HOSTLDFLAGS="$(HOST_LDFLAGS)" \
+ 	BINMAN_INDIRS=$(BINARIES_DIR)
  
- 	  This option applies to either versal or versal2.
++TI_K3_R5_LOADER_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_TARGET_TI_K3_R5_LOADER_CONFIG_FRAGMENT_FILES))
+ TI_K3_R5_LOADER_TIBOOT3_BIN = $(call qstrip,$(BR2_TARGET_TI_K3_R5_LOADER_TIBOOT3_BIN))
  
-diff --git a/boot/xilinx-prebuilt/xilinx-prebuilt.mk b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-index 6bd16d663a..7433444924 100644
---- a/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-+++ b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-@@ -10,6 +10,9 @@ ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA),y)
- XILINX_PREBUILT_FILE = $(call qstrip,$(BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA_LOCATION))
- XILINX_PREBUILT_SITE = $(patsubst %/,%,$(dir $(XILINX_PREBUILT_FILE)))
- XILINX_PREBUILT_SOURCE = $(notdir $(XILINX_PREBUILT_FILE))
-+ifeq ($(findstring ://,$(XILINX_PREBUILT_FILE)),)
-+XILINX_PREBUILT_SITE_METHOD = file
-+endif
- define XILINX_PREBUILT_EXTRACT_CMDS
- 	$(UNZIP) $(XILINX_PREBUILT_DL_DIR)/$(XILINX_PREBUILT_SOURCE) -d $(@D)
- endef
+ define TI_K3_R5_LOADER_INSTALL_TIBOOT3_BIN
+
+---
+base-commit: bd1831d161586947141542fdd5a47f10de3e83f2
+change-id: 20251204-k3-r5-loader-fragments-361242db4c92
+
+Best regards,
 -- 
-2.25.1
+Bryan Brattlof <bb@ti.com>
 
 _______________________________________________
 buildroot mailing list
