@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B6F4D2A532
-	for <buildroot@archiver.kernel.org>; Thu,  4 Dec 2025 20:40:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05DB7D2A537
+	for <buildroot@archiver.kernel.org>; Thu,  4 Dec 2025 20:40:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DEC15407CA;
-	Thu,  4 Dec 2025 20:40:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D0D00409F0;
+	Thu,  4 Dec 2025 20:40:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lbh8t5k5MhBd; Thu,  4 Dec 2025 20:40:48 +0000 (UTC)
+ id yhb0D6mplqMc; Thu,  4 Dec 2025 20:40:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0835A407C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 043D840A0A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764880848;
-	bh=5ABQ0tWh0HzBU1NdFb0lQzhaM0B/UIw8wCv1m7V3+8Q=;
+	s=default; t=1764880851;
+	bh=SJHLTC/f4h1zaVytiTVZU+znNo3j04WiBuAlDS8x5ms=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=P3gSuZKVeseLGNdYQzOux6T/GChtGQsBlNa2ncRj3S12WGG55CPdm9R5YuI+Epe8J
-	 lLxnvm3xySwGMsRECIebT2nRz0QRNast5s1s2oECUM9vs68m5p4FakWYuzdBIQM9ZR
-	 yjox4mRZvcWuH1of7aHNSnOOOYdZckB01W/wSY07HBmGpdTa43oj6NblqrWUTL/A5I
-	 pIxp/RQIj2muF1F4qgaU6HBXMs6gepek49cqmKIv7e7Bv5JKjBdfKz8slZMR/Y+QYd
-	 3arGCzHrXYArOfydedaXFZGa1ODcR8J0JQjrW6lPjNB0gU3HLHZmFRjrd68Ed2crIh
-	 nHWgcmbGZR0dA==
+	b=P0mAT7hWiJa2V3fDsPGvoyVd6RSlPdb9I9AXE3PzcrSm9TKzbb0dzkk2w986nlZ6W
+	 R4wqb3RI7mD+kpOKQTN7UKc4C8zQ9qsomSSMwfX5ikdMqrwFOzpb9mxDu7dWeCzH62
+	 /MHSllztZ08Y4NQHrXGWt+Su8IGsqxO8Ngz3xFlVv7pUnoGaCe0Qi8OhcpjkDBRR9H
+	 9gN5rWgT/Xnb57lMt9TMfRKTrgaOoeAl9aFBXi7OiVggh1O8wTHtKIvydy9az0HsxT
+	 NGXgp2ib6HxwpCbQqFD4J9MohHkP5eJCJwdosi9Kbhfm2kOhWNb3qQMdxq2G4kQz+J
+	 98xpWS05ekrWg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0835A407C8;
-	Thu,  4 Dec 2025 20:40:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 043D840A0A;
+	Thu,  4 Dec 2025 20:40:51 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6175E1A9
- for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:40:42 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F78D1A9
+ for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:40:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B803540A02
- for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:40:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 16E6A40A0A
+ for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:40:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nREKmYHMisoF for <buildroot@buildroot.org>;
- Thu,  4 Dec 2025 20:40:39 +0000 (UTC)
+ id D7b20TbGlcHB for <buildroot@buildroot.org>;
+ Thu,  4 Dec 2025 20:40:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 781F8409FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 659DE408CB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 781F8409FF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 659DE408CB
  for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:40:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7408D86511; Thu,  4 Dec 2025 20:40:38 +0000 (UTC)
+ id 62B5A86521; Thu,  4 Dec 2025 20:40:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Dec 2025 13:20:59 +0100
+Date: Thu, 4 Dec 2025 13:13:09 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: 15ac852c823fe8f17a1e95f17d55995d23cc14df
-X-Git-Newrev: c5e54e26ddcb33b6432942d6d1062da26363ad42
+X-Git-Oldrev: fd1c2db4ded105d55be657066309334ca8036d2c
+X-Git-Newrev: e90d5d866e32a075ff917d8e61f0f405a9b8e99a
 X-Patchwork-Hint: ignore
-Message-Id: <20251204204038.7408D86511@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/oprofile: add
- upstream patch to fix build with newer gcc
+Message-Id: <20251204204038.62B5A86521@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/sdl: fix build
+ failure due to type mismatch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,79 +77,85 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5e54e26ddcb33b6432942d6d1062da26363ad42
+commit: https://git.buildroot.net/buildroot/commit/?id=e90d5d866e32a075ff917d8e61f0f405a9b8e99a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-Fixes:
-https://autobuild.buildroot.net/results/e12/e12de278cb7bb0ecc0d44dd9c69d3832ede946de/
+Add local patch to fix:
+./src/stdlib/SDL_iconv.c: In function 'SDL_iconv':
+./src/stdlib/SDL_iconv.c:50:29: error: passing argument 2 of 'iconv' from incompatible pointer type [-Wincompatible-pointer-types]
+   50 |         retCode = iconv(cd, inbuf, inbytesleft, outbuf, outbytesleft);
+      |                             ^~~~~
+      |                             |
+      |                             const char **
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Fixes:
+https://autobuild.buildroot.net/results/cfb/cfb1f9a0137332cf080ce862722e4fe8ad275031/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[Julien: add "Upstream:" tag in patch]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit cffb057b900ab8f3a9dab92f3284ad9f74eddd4f)
+(cherry picked from commit 03394b4989b1722b2946c31fd32c5e4690088ddd)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...003-Fix-autoconf-detection-of-perf_events.patch | 40 ++++++++++++++++++++++
- package/oprofile/oprofile.mk                       |  1 +
- 2 files changed, 41 insertions(+)
+ ...src-stdlib-SDL_iconv.c-fix-types-mismatch.patch | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-diff --git a/package/oprofile/0003-Fix-autoconf-detection-of-perf_events.patch b/package/oprofile/0003-Fix-autoconf-detection-of-perf_events.patch
+diff --git a/package/sdl/0004-src-stdlib-SDL_iconv.c-fix-types-mismatch.patch b/package/sdl/0004-src-stdlib-SDL_iconv.c-fix-types-mismatch.patch
 new file mode 100644
-index 0000000000..759aba5c4b
+index 0000000000..4915c6cadc
 --- /dev/null
-+++ b/package/oprofile/0003-Fix-autoconf-detection-of-perf_events.patch
-@@ -0,0 +1,40 @@
-+From b0acf9f0c0aac93bf6f3e196d7a52c9632ff4475 Mon Sep 17 00:00:00 2001
-+From: Tony Jones <tonyj@suse.de>
-+Date: Fri, 8 Nov 2024 13:13:30 -0800
-+Subject: [PATCH] Fix autoconf detection of perf_events
++++ b/package/sdl/0004-src-stdlib-SDL_iconv.c-fix-types-mismatch.patch
+@@ -0,0 +1,50 @@
++From 390974b8a9d5e513d48d794818dbe180e0f80b16 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Fri, 28 Nov 2025 10:57:41 +0100
++Subject: [PATCH] src/stdlib/SDL_iconv.c: fix types mismatch
 +
-+The autoconf check for the presence of perf_events api began failing
-+on recent openSUSE builds.
++When building sdl this error shows up:
++./src/stdlib/SDL_iconv.c: In function 'SDL_iconv':
++./src/stdlib/SDL_iconv.c:50:29: error: passing argument 2 of 'iconv' from incompatible pointer type [-Wincompatible-pointer-types]
++   50 |         retCode = iconv(cd, inbuf, inbytesleft, outbuf, outbytesleft);
++      |                             ^~~~~
++      |                             |
++      |                             const char **
 +
-+checking kernel supports perf_events... conftest.c: In function 'main':
-+conftest.c:37:39: error: implicit declaration of function 'getpid' [-Wimplicit-function-declaration]
-+   37 |                                 pid = getpid();
-+      |                                       ^~~~~~
-+conftest.c:38:33: error: implicit declaration of function 'syscall' [-Wimplicit-function-declaration]
-+   38 |                                 syscall(__NR_perf_event_open, &attr, pid, 0, -1, 0);
-+      |                                 ^~~~~~~
-+no
-+Error: Your kernel does not appear to have the necessary support to run oprofile.
++Let's pick only this code from upstream commit[1] and left the rest
++untouched.
 +
-+Upstream: https://sourceforge.net/p/oprofile/oprofile/ci/b0acf9f0c0aac93bf6f3e196d7a52c9632ff4475/
++Upstream: [1]
 +
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++[1]:
++https://github.com/libsdl-org/SDL-1.2/commit/8a8135d91f9361448521765c9da00401fab866a1
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 +---
-+ configure.ac | 1 +
-+ 1 file changed, 1 insertion(+)
++ src/stdlib/SDL_iconv.c | 10 ++++------
++ 1 file changed, 4 insertions(+), 6 deletions(-)
 +
-+diff --git a/configure.ac b/configure.ac
-+index dc447f89..363bd440 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -116,6 +116,7 @@ if test "$kernel_may_have_perf_events_support" = "yes"; then
-+ 		rm -f test-for-PERF_EVENT_OPEN
-+ 		AC_LANG_CONFTEST(
-+ 			[AC_LANG_PROGRAM([[#include <linux/perf_event.h>
-++				#include <unistd.h>
-+ 				#include <asm/unistd.h>
-+ 				#include <sys/types.h>
-+ 				#include <string.h>
++diff --git a/src/stdlib/SDL_iconv.c b/src/stdlib/SDL_iconv.c
++index fa56a99e..369f6881 100644
++--- a/src/stdlib/SDL_iconv.c
+++++ b/src/stdlib/SDL_iconv.c
++@@ -43,12 +43,10 @@ size_t SDL_iconv(SDL_iconv_t cd,
++                  const char **inbuf, size_t *inbytesleft,
++                  char **outbuf, size_t *outbytesleft)
++ {
++-	size_t retCode;
++-#ifdef ICONV_INBUF_NONCONST
++-	retCode = iconv(cd, (char **)inbuf, inbytesleft, outbuf, outbytesleft);
++-#else
++-	retCode = iconv(cd, inbuf, inbytesleft, outbuf, outbytesleft);
++-#endif
+++	/* iconv's second parameter may or may not be `const char const *` depending on the
+++	   C runtime's whims. Casting to void * seems to make everyone happy, though. */
+++	const size_t retCode = iconv((iconv_t) ((uintptr_t) cd), (void *)inbuf, inbytesleft, outbuf, outbytesleft);
+++
++ 	if ( retCode == (size_t)-1 ) {
++ 		switch(errno) {
++ 		    case E2BIG:
 +-- 
 +2.47.3
 +
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index 590e63b4ac..72cdc856c3 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -13,6 +13,7 @@ OPROFILE_CONF_OPTS = \
- 	--disable-account-check \
- 	--with-kernel=$(STAGING_DIR)/usr
- # 0002-fix-static-build-with-binutils-2.40.patch
-+# 0003-Fix-autoconf-detection-of-perf_events.patch
- OPROFILE_AUTORECONF = YES
- 
- define OPROFILE_CREATE_MISSING_FILES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
