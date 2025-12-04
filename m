@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3A39D43370
-	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:57:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEA4ED43370
+	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:57:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AC38A83EF4;
-	Fri, 12 Dec 2025 07:57:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 93A5983EFE;
+	Fri, 12 Dec 2025 07:57:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YAdGCDixKZMl; Fri, 12 Dec 2025 07:57:39 +0000 (UTC)
+ id MCp7tiCo1qk3; Fri, 12 Dec 2025 07:57:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 324F183C42
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B56983DF4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765526237;
-	bh=KRnmDdclGhgNWEfgmp+gs0XExHs74lh81qsl8jT7pF8=;
+	s=default; t=1765526238;
+	bh=4RxTeKrmrFGNBGRUIvYS2+s0tc4kVoomMYel0wxxcyM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=X17ZheTjhV6cwBXZQf3Fv6F3tNjrOQKv1bE1STTs91Zddrr76/sk8ykA4SliZCGtc
-	 fhOpg3lYrMi6yrvhbQv9kEu/vMxWKkVMvgOGd1QE2ZnyEI6kMtAL1x2zfWHLfsMSJp
-	 nSBcw8vEpjzHB5ZIoBxdp89F4mGk04gdIqZJKevtv3fXtA7IRyFOVxv1NfT0OnW7rs
-	 KcoNY2AGdzANambYkscXkJW+7NiYmglGeEvT2tEUaJzPxiJXfhLSEhWCKqYH0SkyO2
-	 FREXctynBNwS42u0SCAMSlMVzOp7m8hflpR6p2ZObhC4c0eRlWukygjw5/ImcGmwLG
-	 ZUOcfHmLlMjsQ==
+	b=Kppa2Ty5EtB0CdC9eMfGO1e9FnApr++L4SNCkbJ63lNE/ME3EcpByTjnd7RXLzDu2
+	 VPAsS27eJQg3ZiFSx8krz7Bb/cdvAFIV/6DZSMoyvI4dWsx3gvMS/iV/8Ku+H08YrL
+	 ark+14MEhbidIZFERWSNomsJXl/Ql54JkxnfylSs1WbfBWo54O6FaQGasAop0hDlP9
+	 9cOnpMoi3BWBiLZSmcwYQ3J4M9OiHCUpdtukC1b3AoFQbBIv65oGM6md75jcGp/AwR
+	 U/2wFFgx9ypb6hVrTIHfaRng453Yam+x+cRVgDlqcFWNdms0HggpSF/URYvThTTfNw
+	 RPg7o0xG/p0Yw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 324F183C42;
-	Fri, 12 Dec 2025 07:57:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9B56983DF4;
+	Fri, 12 Dec 2025 07:57:18 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 819F32C1
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:56:20 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 84F75E7
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:56:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1089E41143
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1F4BC4114E
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zBYfyZtVuwxO for <buildroot@buildroot.org>;
+ id S8yBau2EX6aU for <buildroot@buildroot.org>;
  Fri, 12 Dec 2025 07:55:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCFE24114E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D81A141152
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BCFE24114E
+ by smtp4.osuosl.org (Postfix) with ESMTP id D81A141152
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BBF3086C94; Fri, 12 Dec 2025 07:55:36 +0000 (UTC)
+ id D741886C93; Fri, 12 Dec 2025 07:55:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 3 Dec 2025 19:27:56 +0100
+Date: Thu, 4 Dec 2025 21:34:57 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c7d703b2025b5731e5d0b9334dfd9410070c5865
-X-Git-Newrev: 1609e853229553243b4feda455a403a2158e66a2
+X-Git-Oldrev: 95c385e2d6b92e7afa2d1fac84ecf2dabfb81d25
+X-Git-Newrev: da8f89a6a4027c0875b38de7256dd617ea68fe13
 X-Patchwork-Hint: ignore
-Message-Id: <20251212075536.BBF3086C94@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/xilinx-prebuilt: add versal2 support
+Message-Id: <20251212075536.D741886C93@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iperf3: bump to version 3.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,162 +71,120 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8873807225128202453=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1609e853229553243b4feda455a403a2158e66a2
+--===============8873807225128202453==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=da8f89a6a4027c0875b38de7256dd617ea68fe13
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add support for Xilinx versal2 devices to download the boot.pdi, pld.pdi and
-plm.elf files from the Xilinx/soc-prebuilt-firmware repo.
+Release notes:
+https://github.com/esnet/iperf/releases/tag/3.20
 
-Since the psmfw.elf does not exist for versal2 devices, the installation of
-this image has been split out for original versal devices only, whereas the
-other images are all common between versal and versal2 device families.
+Drop the upstreamed 001-Fix-a-compilation-issue-with-uClibc-due-to-a-missing.patch
 
-For more information about the Xilinx Versal Gen2 series:
-https://www.amd.com/en/products/adaptive-socs-and-fpgas/versal/gen2/ai-edge-series.html
-https://www.amd.com/en/products/adaptive-socs-and-fpgas/versal/gen2/prime-series.html
-
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- boot/xilinx-prebuilt/Config.in          | 17 +++++++++++++++--
- boot/xilinx-prebuilt/xilinx-prebuilt.mk | 26 ++++++++++++++++++--------
- 2 files changed, 33 insertions(+), 10 deletions(-)
+ ...lation-issue-with-uClibc-due-to-a-missing.patch | 51 ----------------------
+ package/iperf3/iperf3.hash                         |  4 +-
+ package/iperf3/iperf3.mk                           |  2 +-
+ 3 files changed, 3 insertions(+), 54 deletions(-)
 
-diff --git a/boot/xilinx-prebuilt/Config.in b/boot/xilinx-prebuilt/Config.in
-index e742a66ca7..a1e711e6cf 100644
---- a/boot/xilinx-prebuilt/Config.in
-+++ b/boot/xilinx-prebuilt/Config.in
-@@ -26,6 +26,7 @@ choice
- 	bool "family variant"
- 	default BR2_TARGET_XILINX_PREBUILT_VERSAL if BR2_PACKAGE_VERSAL_FIRMWARE  # legacy
- 	default BR2_TARGET_XILINX_PREBUILT_VERSAL if BR2_cortex_a72
-+	default BR2_TARGET_XILINX_PREBUILT_VERSAL2 if BR2_cortex_a78
- 	default BR2_TARGET_XILINX_PREBUILT_ZYNQMP
+diff --git a/package/iperf3/0001-Fix-a-compilation-issue-with-uClibc-due-to-a-missing.patch b/package/iperf3/0001-Fix-a-compilation-issue-with-uClibc-due-to-a-missing.patch
+deleted file mode 100644
+index cc2f4bd595..0000000000
+--- a/package/iperf3/0001-Fix-a-compilation-issue-with-uClibc-due-to-a-missing.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From e5c4263c6b2c5b84a6edeb1cf3c95bddd73d4d7c Mon Sep 17 00:00:00 2001
+-From: Kadambini Nema <kadambini.nema@gmail.com>
+-Date: Sat, 17 May 2025 16:20:07 -0700
+-Subject: [PATCH] Fix a compilation issue with uClibc due to a missing include
+- file.
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-------
+-In file included from t_auth.c:35:
+-iperf_api.h:395:77: error: unknown type name ‘va_list’
+-  395 | void iperf_exit(struct iperf_test *test, int exit_code, const char *format, va_list argp) __attribute__ ((noreturn));
+-	  |                                                                             ^~~~~~~
+-iperf_api.h:33:1: note: ‘va_list’ is defined in header ‘<stdarg.h>’; did you forget to ‘#include <stdarg.h>’?
+-   32 | #include <setjmp.h>
+-  +++ |+#include <stdarg.h>
+-   33 | #include <stdio.h>
+------
+-
+-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+-Upstream: https://github.com/esnet/iperf/pull/1888
+----
+- src/iperf_api.c | 1 -
+- src/iperf_api.h | 1 +
+- 2 files changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/iperf_api.c b/src/iperf_api.c
+-index aeec91dd3..d4a06bec9 100644
+---- a/src/iperf_api.c
+-+++ b/src/iperf_api.c
+-@@ -53,7 +53,6 @@
+- #include <sys/stat.h>
+- #include <sched.h>
+- #include <setjmp.h>
+--#include <stdarg.h>
+- #include <math.h>
+- 
+- #if defined(HAVE_CPUSET_SETAFFINITY)
+-diff --git a/src/iperf_api.h b/src/iperf_api.h
+-index 03d273e8c..cd82e6f9b 100644
+---- a/src/iperf_api.h
+-+++ b/src/iperf_api.h
+-@@ -30,6 +30,7 @@
+- #include <sys/socket.h>
+- #include <sys/time.h>
+- #include <setjmp.h>
+-+#include <stdarg.h>
+- #include <stdio.h>
+- #include <stdint.h>
+- #ifdef __cplusplus
+diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
+index 3d9ff0cf5d..ee60d717e6 100644
+--- a/package/iperf3/iperf3.hash
++++ b/package/iperf3/iperf3.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.es.net/pub/iperf/iperf-3.19.1.tar.gz.sha256
+-sha256  dc63f89ec581ea99f8b558d8eb35109de06383010db5a1906c208a562ba0c270  iperf-3.19.1.tar.gz
++# From https://downloads.es.net/pub/iperf/iperf-3.20.tar.gz.sha256
++sha256  3acc572d1ecca4e0b20359c7bf0132ddc80d982efeee20c86f6726a9a6094388  iperf-3.20.tar.gz
+ # Locally computed
+ sha256  7c9ba0385fcf35c4c9e08ad0c0cba72d4315f36f0f742fef4de826a28cc33a97  LICENSE
+diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+index df6b32abc1..bb8eece6b2 100644
+--- a/package/iperf3/iperf3.mk
++++ b/package/iperf3/iperf3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_XILINX_PREBUILT_ZYNQMP
-@@ -40,14 +41,21 @@ config BR2_TARGET_XILINX_PREBUILT_VERSAL
- 	bool "versal"
- 	depends on BR2_cortex_a72
- 
-+config BR2_TARGET_XILINX_PREBUILT_VERSAL2
-+	bool "versal2"
-+	depends on BR2_cortex_a78
-+	help
-+	  Version must be xilinx_v2025.2 or newer.
-+
- endchoice
- 
- config BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA
- 	bool "download a prebuilt Versal XSA"
--	depends on BR2_TARGET_XILINX_PREBUILT_VERSAL
-+	depends on BR2_TARGET_XILINX_PREBUILT_VERSAL || BR2_TARGET_XILINX_PREBUILT_VERSAL2
- 	help
- 	  The Xilinx Support Archive (XSA) provides custom Xilinx
- 	  firmware files generated by the AMD Vivado Design Suite.
-+	  This option applies to either versal or versal2.
- 
- 	  https://docs.amd.com/r/en-US/ug1400-vitis-embedded/Creating-a-Hardware-Design-XSA-File
- 
-@@ -64,28 +72,33 @@ config BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA_LOCATION
- 	  use a make variable like $(TOPDIR) to reference the root of
- 	  the Buildroot tree.
- 
-+	  This option applies to either versal or versal2.
-+
- endif # BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA
- 
- config BR2_TARGET_XILINX_PREBUILT_VERSAL_PLD_PDI
- 	bool "install versal pld.pdi"
--	depends on BR2_TARGET_XILINX_PREBUILT_VERSAL
-+	depends on BR2_TARGET_XILINX_PREBUILT_VERSAL || BR2_TARGET_XILINX_PREBUILT_VERSAL2
- 	help
- 	  When using the Versal Segmented Configuration, there is a
- 	  pld.pdi file containing the FPGA bitstream which can be
- 	  loaded at run-time.  By enabling this option, the pld.pdi
- 	  will be installed to the target /lib/firmware/xilinx dir.
-+	  This option applies to either versal or versal2.
- 
- config BR2_TARGET_XILINX_PREBUILT_FAMILY
- 	string
- 	default "zynqmp" if BR2_TARGET_XILINX_PREBUILT_ZYNQMP
- 	default "kria" if BR2_TARGET_XILINX_PREBUILT_KRIA
- 	default "versal" if BR2_TARGET_XILINX_PREBUILT_VERSAL
-+	default "versal_2ve_2vm" if BR2_TARGET_XILINX_PREBUILT_VERSAL2
- 
- config BR2_TARGET_XILINX_PREBUILT_BOARD
- 	string "board name"
- 	default "zcu102" if BR2_TARGET_XILINX_PREBUILT_ZYNQMP
- 	default "kr260" if BR2_TARGET_XILINX_PREBUILT_KRIA
- 	default "vck190" if BR2_TARGET_XILINX_PREBUILT_VERSAL
-+	default "vek385" if BR2_TARGET_XILINX_PREBUILT_VERSAL2
- 	help
- 	  Name of Xilinx target board.
- 	  Used for installing the appropriate firmware.
-diff --git a/boot/xilinx-prebuilt/xilinx-prebuilt.mk b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-index 95b656cdde..6bd16d663a 100644
---- a/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-+++ b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-@@ -26,16 +26,11 @@ XILINX_PREBUILT_BOARD = $(call qstrip,$(BR2_TARGET_XILINX_PREBUILT_BOARD))
- 
- XILINX_PREBUILT_BOARD_DIR = $(@D)/$(XILINX_PREBUILT_BOARD)-$(XILINX_PREBUILT_FAMILY)
- 
--ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL),y)
-+# Common Files for All Versal Families
-+ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL)$(BR2_TARGET_XILINX_PREBUILT_VERSAL2),y)
- ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA),y)
- # Supports either plm.elf or plmfw.elf filenames
- XILINX_PREBUILT_PLM = $(@D)/pdi_files/gen_files/plm*.elf
--# Unlike the psmfw.elf file for Xilinx development boards,
--# AMD Vivado Design Suite currently generates a file named psm_fw.elf.
--# Future versions of AMD Vivado will generate a file named psmfw.elf,
--# so to support current and future AMD Vivado versions, the filename
--# psm*fw.elf is used.
--XILINX_PREBUILT_PSMFW = $(@D)/pdi_files/static_files/psm*fw.elf
- # We need the *.pdi glob, because the file has different names for the
- # different boards, and it has to be named boot.pdi when installed.
- # If Segmented Configuration is used, there will be two pdi files and we need
-@@ -63,7 +58,6 @@ endif # BR2_TARGET_XILINX_PREBUILT_VERSAL_PLD_PDI
- else # BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA
- # Supports either plm.elf or plmfw.elf filenames
- XILINX_PREBUILT_PLM = $(XILINX_PREBUILT_BOARD_DIR)/plm*.elf
--XILINX_PREBUILT_PSMFW = $(XILINX_PREBUILT_BOARD_DIR)/psmfw.elf
- # We need the *.pdi glob, because the file has different names for the
- # different boards, and it has to be named boot.pdi when installed.
- # If Segmented Configuration is used, there will be two pdi files and we need
-@@ -91,11 +85,27 @@ endif # BR2_TARGET_XILINX_PREBUILT_VERSAL_PLD_PDI
- endif # BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA
- 
- ifneq ($(BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM),y)
-+ifneq ($(BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL2_PLM),y)
- define XILINX_PREBUILT_INSTALL_VERSAL_PLM
- 	$(INSTALL) -D -m 0755 $(XILINX_PREBUILT_PLM) \
- 		$(BINARIES_DIR)/plm.elf
- endef
-+endif # !BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL2_PLM
- endif # !BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM
-+endif # BR2_TARGET_XILINX_PREBUILT_VERSAL | BR2_TARGET_XILINX_PREBUILT_VERSAL2
-+
-+# Files specific to Versal Gen1
-+ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL),y)
-+ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA),y)
-+# Unlike the psmfw.elf file for Xilinx development boards,
-+# AMD Vivado Design Suite currently generates a file named psm_fw.elf.
-+# Future versions of AMD Vivado will generate a file named psmfw.elf,
-+# so to support current and future AMD Vivado versions, the filename
-+# psm*fw.elf is used.
-+XILINX_PREBUILT_PSMFW = $(@D)/pdi_files/static_files/psm*fw.elf
-+else # BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA
-+XILINX_PREBUILT_PSMFW = $(XILINX_PREBUILT_BOARD_DIR)/psmfw.elf
-+endif # BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA
- 
- ifneq ($(BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW),y)
- define XILINX_PREBUILT_INSTALL_VERSAL_PSMFW
+-IPERF3_VERSION = 3.19.1
++IPERF3_VERSION = 3.20
+ IPERF3_SITE = https://downloads.es.net/pub/iperf
+ IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
+ IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
+
+--===============8873807225128202453==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8873807225128202453==--
