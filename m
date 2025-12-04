@@ -4,78 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47D74D2F7CC
-	for <buildroot@archiver.kernel.org>; Fri,  5 Dec 2025 12:28:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56C35D2F7E7
+	for <buildroot@archiver.kernel.org>; Fri,  5 Dec 2025 12:34:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15203607D1;
-	Fri,  5 Dec 2025 12:28:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1BFEF61155;
+	Fri,  5 Dec 2025 12:34:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O6wA3wX_r84L; Fri,  5 Dec 2025 12:28:37 +0000 (UTC)
+ id 0SGCnfF4gtqD; Fri,  5 Dec 2025 12:34:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AE0961C7F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A4CB611A0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764937717;
-	bh=98cPBH3EZgPl4mnjibLf3O/fz0GBh2iHDHqcnKKRoaY=;
+	s=default; t=1764938069;
+	bh=LVgssqsWZguLpnjTetdhKAEinX8QpFM6yID6gi9bFvo=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=T08gcAOvE7tuPCvS8hfSICl4tfMfhZNGlWF18bBFZHfPGfpJFCxJAsNc5rPIeex3T
-	 Qbnb+skPrcS50JHK7DYaTs4uJJ12ovff+kwlkisQ/m35iERnszp4HhNXgfahfWywxv
-	 Y2/Psrlp4HgWUnYUv2RAR6rluLRmujfLbtzIGyA+CjCyGvIQSpj955p6CC3j4OmWCW
-	 z+QdKw6+9ulyT0HlNz0q8Ig0G9T96NI6g9zIs2dQaX320XQyFzWmszJgrzU3wwPBFv
-	 ECPwTCJdkQZIMIjc7QXVY++rWEmxLkDEpM5aJ6pCl6aOogazRD7EjzalgMZpTXjOgY
-	 kBg3hOZrUiPcA==
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=PIIa/kq4DxWVy8IGIauQs1gYHX3TZWLPL+nN335hSZB7/EKPUSh9jDN96mRZErxB5
+	 lSiL6x590hpJLKBbkREXGDYZ573K4whOXB9plnSyRpieRjuy63ZyrvB1GyRl1rCdjO
+	 O4BHEyE92FTvl635JWzCEQ6S9lkNh2d2vg7vFIOK3wrzaCj6BfYjEPWYkPfyhMzJXO
+	 elichcwdPf6nAsn6oD+eb9x7Btii4u9FmhfW58O4qTeUIytaQtbPpCyyw0wNaofF4I
+	 M5QcyybDupCPenN/yvnDDCwmU546pjqB6i9rMYMygbNaf7jzPfwG71j1YzCwLtY083
+	 4iQuCeu4xb6OQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3AE0961C7F;
-	Fri,  5 Dec 2025 12:28:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E9C931A9
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 12:28:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A4CB611A0;
+	Fri,  5 Dec 2025 12:34:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 96281E7
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 12:34:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E22B7412B1
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 12:28:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 940F9407B1
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 12:34:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Swnrpsc8ywA9 for <buildroot@buildroot.org>;
- Fri,  5 Dec 2025 12:28:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C0EDD4020C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0EDD4020C
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C0EDD4020C
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 12:28:32 +0000 (UTC)
-Received: from framework-OT.fritz.box (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 7D9992C89475;
- Fri, 05 Dec 2025 13:28:30 +0100 (CET)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Yy7gzyKVP_qS for <buildroot@buildroot.org>;
+ Fri,  5 Dec 2025 12:34:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 588D94069C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 588D94069C
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 12:34:26 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 536AD8659C; Fri,  5 Dec 2025 12:34:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri,  5 Dec 2025 13:28:32 +0100
-Message-ID: <20251205122832.601160-1-buildroot@bubu1.eu>
-X-Mailer: git-send-email 2.52.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1764937710; bh=Of9s6mZcf61YlT7Vb1IBjXGnm3SM3uLmyPRCb4SMlss=;
- h=From:To:Cc:Subject:Date;
- b=RFGnBpMVFjn0b9kLFMk8H2FeNc1HTt32fnSHpEI02PucsUjtHXwQEje4j22qqLcD8
- +0wHSb0HTnqS4W0M4JRZ7c3UqC6zOlNzHspNSvOtLGpaalULyNclHQKZw34lqQdro8
- 6MdyXox+rhrGXVYB90QYAvvS972mS9hD/wpRT0lInV63x0ZgNVe0aAC+DxQWXThUNM
- QqvGpIwPdctblSDa6bTDC/blQPDDlubtk5c54W051LBRDH+I6XbFQJzz+092FT44UY
- mIqYAS1KR4dYG2gqWkQ/0wF2FAO6U4M6jUC6MdDUbjP8rY5RDULm+wRzGx3Gxx4aBR
- poJdsSfI1qJNg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=RFGnBpMV
-Subject: [Buildroot] [PATCH] package/python-sqlparse: bump to 0.5.4
+Date: Thu, 4 Dec 2025 22:45:43 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 251063eca0a74a9bb57217748e13f7bab7badecb
+X-Git-Newrev: a805d5b9056597fa4c1f69c01d4e7d76c76cd414
+X-Patchwork-Hint: ignore
+Message-Id: <20251205123426.536AD8659C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/{mesa3d,
+ mesa3d-headers}: bump version to 25.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,53 +69,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changes: https://sqlparse.readthedocs.io/en/latest/changes.html#release-0-5-4-nov-28-2025
+commit: https://git.buildroot.net/buildroot/commit/?id=a805d5b9056597fa4c1f69c01d4e7d76c76cd414
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2025-December/000829.html
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-sqlparse/python-sqlparse.hash | 4 ++--
- package/python-sqlparse/python-sqlparse.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-sqlparse/python-sqlparse.hash b/package/python-sqlparse/python-sqlparse.hash
-index 3e54d227f4..8d9c27afb7 100644
---- a/package/python-sqlparse/python-sqlparse.hash
-+++ b/package/python-sqlparse/python-sqlparse.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/sqlparse/json
--md5  9764a42264c9a3102526c87260e73d11  sqlparse-0.5.3.tar.gz
--sha256  09f67787f56a0b16ecdbde1bfc7f5d9c3371ca683cfeaa8e6ff60b4807ec9272  sqlparse-0.5.3.tar.gz
-+md5  b5bf6082e38fb99bf8217f429b73346a  sqlparse-0.5.4.tar.gz
-+sha256  4396a7d3cf1cd679c1be976cf3dc6e0a51d0111e87787e7a8d780e7d5a998f9e  sqlparse-0.5.4.tar.gz
- # Locally computed sha256 checksums
- sha256  c1938235b80d39e93138eae89edc3af67e18ecbc40d266529fa57b2dce426310  LICENSE
-diff --git a/package/python-sqlparse/python-sqlparse.mk b/package/python-sqlparse/python-sqlparse.mk
-index 0140961393..6d952b215a 100644
---- a/package/python-sqlparse/python-sqlparse.mk
-+++ b/package/python-sqlparse/python-sqlparse.mk
-@@ -4,9 +4,9 @@
- #
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 662683f944..39564b6af3 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 25.3.0
++MESA3D_HEADERS_VERSION = 25.3.1
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index e642273d67..4bfc1d4584 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://gitlab.freedesktop.org/mesa/mesa/-/blob/25.3/docs/relnotes/25.3.0.rst?ref_type=heads
+-sha256  0fd54fea7dbbddb154df05ac752b18621f26d97e27863db3be951417c6abe8ae  mesa-25.3.0.tar.xz
+-sha512  46df9e5e27f9a36cf893a68ad4a465fcc6efe1bcb46ad8d4b015699ad1a11e582b8d41f4157326556af603fe454b2ff34ecc17a0c742b5fd9ce5f0097106fec5  mesa-25.3.0.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2025-December/000829.html
++sha256  059d0d985622f49588f01aa29152804f4da8ffe6add046e00a52923379c2d8da  mesa-25.3.1.tar.xz
++sha512  7e2f7295f1f4df129935b60d75c890f6ae585ecc511f69f55a61826df5f2434ffdb4109c632af9842a986bf9beed430a0404d377e8335b71fa36682bd10533ba  mesa-25.3.1.tar.xz
+ # License
+ sha256  0d1a0472ecc81830e75c20d59b0ea02841e3db21255e0ebad97ab682c54d6615  docs/license.rst
+ sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  licenses/MIT
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 3d2f85240b..6fcbf96c80 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PYTHON_SQLPARSE_VERSION = 0.5.3
-+PYTHON_SQLPARSE_VERSION = 0.5.4
- PYTHON_SQLPARSE_SOURCE = sqlparse-$(PYTHON_SQLPARSE_VERSION).tar.gz
--PYTHON_SQLPARSE_SITE = https://files.pythonhosted.org/packages/e5/40/edede8dd6977b0d3da179a342c198ed100dd2aba4be081861ee5911e4da4
-+PYTHON_SQLPARSE_SITE = https://files.pythonhosted.org/packages/18/67/701f86b28d63b2086de47c942eccf8ca2208b3be69715a1119a4e384415a
- PYTHON_SQLPARSE_SETUP_TYPE = hatch
- PYTHON_SQLPARSE_LICENSE = BSD-3-Clause
- PYTHON_SQLPARSE_LICENSE_FILES = LICENSE
--- 
-2.52.0
-
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 25.3.0
++MESA3D_VERSION = 25.3.1
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
