@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24716D2A538
-	for <buildroot@archiver.kernel.org>; Thu,  4 Dec 2025 20:39:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E3DED2A537
+	for <buildroot@archiver.kernel.org>; Thu,  4 Dec 2025 20:39:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BDE09607E0;
-	Thu,  4 Dec 2025 20:39:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 630E140780;
+	Thu,  4 Dec 2025 20:39:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pJ9qCfD4nkM4; Thu,  4 Dec 2025 20:39:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mEhxsgRN59xF; Thu,  4 Dec 2025 20:39:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9C9560885
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 910CC40797
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764880760;
-	bh=ieRAmzJnDdi0UR9BECjiIMuuFwGG6oK/v1uSmzvoLyU=;
+	s=default; t=1764880763;
+	bh=f9LCJKXBUN4pizBhrHjHjZ/n1PeqPtTjStDI98Q1Egc=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=XIljjum8vMhOvvGSFTyVSmonLvG4EH1ZlDpO+SaCUBFpiEI3hzJNJp4kT2LYS+LWr
-	 gCkg+qvnk769aKZbT/jlDxsQCJYeKTvy6frWBJwRb7z98httIyN+f020MWd1dVAVIb
-	 MsFey1Z5u81RQheBguaaHG+XPKDKVu1/5WWugKYWQ11sPEuBH6kPRsrygyzIMOjbX4
-	 WrL/y2gsA9A1ApNM4VZW1Wvi+Oibe4GYCDGaIg/gPwuFlWlQnAZegW3yMMPNUfpqrf
-	 x675wgZnt7QYn2OfPrlgLFUTh3oP9nAmyUjHocEkOpqmt2goJQrAKBXfeF+VYeVarc
-	 ZR0FAx6+FTqOA==
+	b=fcJv9d84kBwijEISzBIojlxeSFLep8xKIOLt6W8kNdCwptSpK1fClqdEXk9kjDU4f
+	 w5OzMprFoColQKBP11i7wyew1ZB/lJzGQtD6yiIdJDRugmX276O/Va/l9ts7AU9uCv
+	 2xHuElLXX0/+udFbLLbIbsPY86Pio9GwjIHwUOmhK+LvMRrWXvzKbyi2R9yqnNRknG
+	 sL9F24hEj8146WtFQ82bcDo1XiEJD0W0Dn408mx3simuWwnXW88rJNAeqYYQJY3tRj
+	 RJZRSZyOtpWFPJy2Dhxw8tvm7SzD0UmI+0GTIOW4si2UG74ygfgMctplY6rVIxQSez
+	 WaTvILJjnhWRg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D9C9560885;
-	Thu,  4 Dec 2025 20:39:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E8C031BD
- for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:39:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 910CC40797;
+	Thu,  4 Dec 2025 20:39:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0452C345
+ for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:39:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DA64A844AC
+ by smtp2.osuosl.org (Postfix) with ESMTP id DD7A041089
  for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:39:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AIKZ8bZOMxSw for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XPGqQfZ9yUt9 for <buildroot@buildroot.org>;
  Thu,  4 Dec 2025 20:39:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9521D8435F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2DF94035B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9521D8435F
+ by smtp2.osuosl.org (Postfix) with ESMTP id C2DF94035B
  for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:39:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8F3A2864DA; Thu,  4 Dec 2025 20:39:17 +0000 (UTC)
+ id B4A7585FFC; Thu,  4 Dec 2025 20:39:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Dec 2025 13:11:28 +0100
+Date: Thu, 4 Dec 2025 13:12:52 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 5588bdec022dbc0d3eded0f7ad29d67f9d0c8466
-X-Git-Newrev: e8828d1b7820c1952c06648c803669889f25dff0
+X-Git-Oldrev: 11e5e88ad14c027728ebfe33ea44f37a325967aa
+X-Git-Newrev: 784ac62c9495238ef2829496c1042a0c14c8ca26
 X-Patchwork-Hint: ignore
-Message-Id: <20251204203917.8F3A2864DA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-starlette:
- bump to version 0.47.3
+Message-Id: <20251204203917.B4A7585FFC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/swipl: bump
+ version to 9.2.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,46 +77,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8828d1b7820c1952c06648c803669889f25dff0
+commit: https://git.buildroot.net/buildroot/commit/?id=784ac62c9495238ef2829496c1042a0c14c8ca26
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+For change log since version 9.2.8, see:
+https://www.swi-prolog.org/ChangeLog?branch=stable&from=9.2.8&to=9.2.9
+
+Fixes:
+https://autobuild.buildroot.net/results/158/1586997a84236b678249ac45b83b4e330e727f39/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien: add link to change log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit bb825488db157ee4f4c18bedcb30ff38e23886e2)
+(cherry picked from commit 743bc22135cc47e91f7bbfcdea4aa74a66c5e034)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-starlette/python-starlette.hash | 4 ++--
- package/python-starlette/python-starlette.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/swipl/swipl.hash | 2 +-
+ package/swipl/swipl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-starlette/python-starlette.hash b/package/python-starlette/python-starlette.hash
-index 5939eb198f..4937d93ad0 100644
---- a/package/python-starlette/python-starlette.hash
-+++ b/package/python-starlette/python-starlette.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/starlette/json
--md5  b58c9f8d38df9946689cb3e9f94555da  starlette-0.47.2.tar.gz
--sha256  6ae9aa5db235e4846decc1e7b79c4f346adf41e9777aebeb49dfd09bbd7023d8  starlette-0.47.2.tar.gz
-+md5  5ae93b12a6b5527fc97c5ba3921bc552  starlette-0.47.3.tar.gz
-+sha256  6bc94f839cc176c4858894f1f8908f0ab79dfec1a6b8402f6da9be26ebea52e9  starlette-0.47.3.tar.gz
- # Locally computed sha256 checksums
- sha256  dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf  LICENSE.md
-diff --git a/package/python-starlette/python-starlette.mk b/package/python-starlette/python-starlette.mk
-index 4037903cc5..04f40460b7 100644
---- a/package/python-starlette/python-starlette.mk
-+++ b/package/python-starlette/python-starlette.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/swipl/swipl.hash b/package/swipl/swipl.hash
+index 20278cfb8d..efc3aa963f 100644
+--- a/package/swipl/swipl.hash
++++ b/package/swipl/swipl.hash
+@@ -1,4 +1,4 @@
+ # From https://www.swi-prolog.org/download/stable
+-sha256  b331637a57c913c49edcfcb10ddcf6c031278ce93d2411d54542778531abb5c7  swipl-9.2.8.tar.gz
++sha256  53f428e2d9bbdf30e53b06c9c42def9a13ff82fc36a111d410fc8b0bc889ee2d  swipl-9.2.9.tar.gz
+ # Locally calculated
+ sha256  770594d0f4463b71f1485f00e4bc5cf4b6f667d62ef6bc9bde2fee236541992a  LICENSE
+diff --git a/package/swipl/swipl.mk b/package/swipl/swipl.mk
+index e29b8d8f46..20faaefe7c 100644
+--- a/package/swipl/swipl.mk
++++ b/package/swipl/swipl.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_STARLETTE_VERSION = 0.47.2
-+PYTHON_STARLETTE_VERSION = 0.47.3
- PYTHON_STARLETTE_SOURCE = starlette-$(PYTHON_STARLETTE_VERSION).tar.gz
--PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/04/57/d062573f391d062710d4088fa1369428c38d51460ab6fedff920efef932e
-+PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/15/b9/cc3017f9a9c9b6e27c5106cc10cc7904653c3eec0729793aec10479dd669
- PYTHON_STARLETTE_SETUP_TYPE = hatch
- PYTHON_STARLETTE_LICENSE = BSD-3-Clause
- PYTHON_STARLETTE_LICENSE_FILES = LICENSE.md
+-SWIPL_VERSION = 9.2.8
++SWIPL_VERSION = 9.2.9
+ SWIPL_SITE = https://www.swi-prolog.org/download/stable/src
+ SWIPL_LICENSE = BSD-2-Clause
+ SWIPL_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
