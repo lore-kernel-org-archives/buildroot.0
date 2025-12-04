@@ -4,87 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A63D2D2A537
-	for <buildroot@archiver.kernel.org>; Thu,  4 Dec 2025 20:54:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACEAFD2A532
+	for <buildroot@archiver.kernel.org>; Thu,  4 Dec 2025 20:54:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5E5D0608D7;
-	Thu,  4 Dec 2025 20:54:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8263260A44;
+	Thu,  4 Dec 2025 20:54:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6ew4pZZxs94T; Thu,  4 Dec 2025 20:54:17 +0000 (UTC)
+ id WoxSDR4h9NNr; Thu,  4 Dec 2025 20:54:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E560608DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 792F160A9E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764881657;
-	bh=ivZDz6Xi1949KystgESdkjwFgCr+bD9BAZOvJf1WTsQ=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=PGucFeyi96aWGxJrI3SJ/SnCub1dki7pFLOGWg/s7bpGgCdP1hY1Sm8P33T3vECWq
-	 4qKQE9n5aJTuDNefdcExQxkKeLHaP6Wp9stpuTy2y27EinyIxpoS13C9qS7PImwDBt
-	 1F+HqNbGv3QTBU7qssoyLbJRGsCMrbXtJpEopeviv56/q88RtD7YvSyVAFw6VlFNJY
-	 EYSQeumg7UQSpgmEbPW0apVIJpPBQnqJT+KNp2OnDsk5Dj761mupytEAPGjaZpC3WX
-	 lgUsmyjmz566SMsUn1/Vv9aRk66BR6QM9G8EyVfdpKDuIEMvEJMBWu0UhR224Ci+aq
-	 CWDE+LyoTQYpw==
+	s=default; t=1764881670;
+	bh=2nJlnge8XlPA58aK6DTYS/Q6S9Ub4Fm1T27fWCCFY34=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=Kk2KS9rFa8VTplsh1uJ0EhL4RscKVaWEE9VjLLB48a97FiXkfoOp5slzYht3ok5Ru
+	 Hnu8xfF8B1rEUk3oykiXao9cPEttidWVp1fzSIwO4p86CSfMtNWGOKIJyTKZd05kyL
+	 XVKaqpn+TBvfls+4LEML2OON2ra1sfmo0ToBc70eEQ2qAvdVwx1rWHAro4HP0sg3P1
+	 D45HbDABelG3lkgLOv/Gh7sB7BAh3zftRApNnvqiaufWvkWCRzv7rhbsLWULMLyyfs
+	 IHrhbKC91ZtYewO53ob/Yn4SyOf8kGNxYOPuDGEXegM3c6dTSg8st3rofPoL9D9InD
+	 ww6TEh963mJCA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7E560608DF;
-	Thu,  4 Dec 2025 20:54:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id CE0A4199
- for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:54:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 792F160A9E;
+	Thu,  4 Dec 2025 20:54:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4816A1A9
+ for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:54:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B3D7740805
- for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:54:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2EC9960A9E
+ for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:54:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JUV0_SXPuBih for <buildroot@buildroot.org>;
- Thu,  4 Dec 2025 20:54:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 13J2Gf2q12yf for <buildroot@buildroot.org>;
+ Thu,  4 Dec 2025 20:54:28 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AEAE4407D7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEAE4407D7
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0F15960A44
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F15960A44
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AEAE4407D7
- for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:54:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0F15960A44
+ for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:54:27 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0b1d.dip0.t-ipconnect.de [91.58.11.29])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id CAFFEA4C797E;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id C57ABA4C78CA;
  Thu,  4 Dec 2025 21:54:12 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:56170)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vRGL6-000000003xU-0Oin;
+ (envelope-from <bernd@kuhls.net>) id 1vRGL5-000000003xU-43hR;
  Thu, 04 Dec 2025 20:54:12 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
 Cc: Christian Stewart <christian@aperture.us>,
  Thomas Perale <thomas.perale@mind.be>
-Date: Thu,  4 Dec 2025 21:54:12 +0100
-Message-ID: <20251204205412.2158168-2-bernd@kuhls.net>
+Date: Thu,  4 Dec 2025 21:54:11 +0100
+Message-ID: <20251204205412.2158168-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251204205412.2158168-1-bernd@kuhls.net>
-References: <20251204205412.2158168-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: +++++
+X-Spam: Yes
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1764881652;
- bh=/Hk4xLKmrl6+rovWYQjNxCxxChtjH+NHwzQrBDwJOKQ=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=VXvGISWstgEi4jJxwD/EuGeOT46DHCLnAB7w6GU+6MHtt1gKtWlA3rh4k9lYTZnUT
- 2tQNDT2xV8XpKswHx5ZLkhNQZMnYMHFak/rifsGubMODIQBiXkDKgVlmPHCH2WeHa7
- EhUejJfXjDu7Aje1Ej6vCfLGnpKvB6Y0XoZnYPwtBnvarRvNOTFLTFJpEBXCJiZeZI
- +nHTg3NfxmtEOJ1Z4bSY8PPlhCuH7Zwx7F2MSqhg3ZxaI040LPdrYFzHMbvfvOgKwC
- xURUktLXvvu4MtYjGVBJ6d1pXgTv1DLSesuPeKJjltgbsKVgBItt7hHzq6u3EWxKwV
- YFzCNgG8Lsp0w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=1IOWQlDX2s8OyAsKub43SFyyG43OYkBx6JDNNcZnU6A=;
+ h=From:To:Cc:Subject:Date:From;
+ b=msFzulzjsUaRB6F1kQS7wdDhjSXk4MDj7LVGDVy1uylmqJOPpDBXon2gKWPcMAapV
+ hPdXztD68qcyrLCExex6A+3vsF00lLIpGnxN1Q6tT65B4DFacQ6ZD1+vRlKdsRKKrJ
+ e5FcwSonJ9XfngWMwBFYIorZbaBhmBpj67aMHmAFwpTX7aflzYdXObHzDo/zxfDAn6
+ r+b71Xql2vlepEQKfQkQdltpZpsa6QPfKcQQjmljYF04lpyxVQINXis/n3Eh1x6gad
+ RLkN1LQUfgqGrZ+S2I2BfP2hfN2kBC55WUS5DC8anR3t1sZ81anqcTnmSdhDLqZhdY
+ 56vjxv0ddeqnQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=VXvGISWs
-Subject: [Buildroot] [PATCH/next 2/2] package/wtfutil: bump version to 0.47.1
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=msFzulzj
+Subject: [Buildroot] [PATCH 1/2] package/go: security bump to version 1.25.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,37 +98,112 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://github.com/wtfutil/wtf/releases
+Release notes:
+https://go.dev/doc/devel/release#go1.25.5
+https://groups.google.com/g/golang-announce/c/8FJoBkPddm4
+Fixes CVE-2025-61727 & CVE-2025-61729.
 
-Needs bump of go to >= 1.25.4.
+https://go.dev/doc/devel/release#go1.25.4
+https://groups.google.com/g/golang-announce/c/tVVHm9gnwl8
+
+Updated _SITE because previous URL returns 403.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/wtfutil/wtfutil.hash | 2 +-
- package/wtfutil/wtfutil.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../go/go-bootstrap-stage2/go-bootstrap-stage2.mk  |  2 +-
+ .../go/go-bootstrap-stage3/go-bootstrap-stage3.mk  |  2 +-
+ .../go/go-bootstrap-stage4/go-bootstrap-stage4.mk  |  2 +-
+ package/go/go-src/go-src.mk                        |  2 +-
+ package/go/go.hash                                 | 14 +++++++-------
+ package/go/go.mk                                   |  2 +-
+ 6 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/package/wtfutil/wtfutil.hash b/package/wtfutil/wtfutil.hash
-index d4afbdc050..9e90731ac3 100644
---- a/package/wtfutil/wtfutil.hash
-+++ b/package/wtfutil/wtfutil.hash
-@@ -1,2 +1,2 @@
--sha256  1f2a3a037b0e4967039d2241cbe2ba3693a60bd92bd0047cc3361b0faad2a7b6  wtfutil-0.41.0-go2.tar.gz
-+sha256  1283e2338e5ca35a7c65596192f151859ab14ea3299321dcf1bb17de30904ceb  wtfutil-0.47.1-go2.tar.gz
- sha256  b59f3dbd83c6aa4e003b6eafa80bc53f0629e4d164e8b125c56869c2603dbc8f  LICENSE.md
-diff --git a/package/wtfutil/wtfutil.mk b/package/wtfutil/wtfutil.mk
-index 54fea09574..3b92a5797d 100644
---- a/package/wtfutil/wtfutil.mk
-+++ b/package/wtfutil/wtfutil.mk
+diff --git a/package/go/go-bootstrap-stage2/go-bootstrap-stage2.mk b/package/go/go-bootstrap-stage2/go-bootstrap-stage2.mk
+index 98bf624b57..47e4d157eb 100644
+--- a/package/go/go-bootstrap-stage2/go-bootstrap-stage2.mk
++++ b/package/go/go-bootstrap-stage2/go-bootstrap-stage2.mk
+@@ -7,7 +7,7 @@
+ # Use last Go version that go-bootstrap-stage1 can build: v1.19.x
+ # See https://golang.org/doc/install/source#bootstrapFromSource
+ GO_BOOTSTRAP_STAGE2_VERSION = 1.19.13
+-GO_BOOTSTRAP_STAGE2_SITE = https://storage.googleapis.com/golang
++GO_BOOTSTRAP_STAGE2_SITE = https://go.dev/dl
+ GO_BOOTSTRAP_STAGE2_SOURCE = go$(GO_BOOTSTRAP_STAGE2_VERSION).src.tar.gz
+ 
+ GO_BOOTSTRAP_STAGE2_LICENSE = BSD-3-Clause
+diff --git a/package/go/go-bootstrap-stage3/go-bootstrap-stage3.mk b/package/go/go-bootstrap-stage3/go-bootstrap-stage3.mk
+index bdc8459595..732888d305 100644
+--- a/package/go/go-bootstrap-stage3/go-bootstrap-stage3.mk
++++ b/package/go/go-bootstrap-stage3/go-bootstrap-stage3.mk
+@@ -7,7 +7,7 @@
+ # Use last Go version that go-bootstrap-stage2 can build: v1.21.x
+ # See https://go.dev/doc/go1.22#bootstrap
+ GO_BOOTSTRAP_STAGE3_VERSION = 1.21.8
+-GO_BOOTSTRAP_STAGE3_SITE = https://storage.googleapis.com/golang
++GO_BOOTSTRAP_STAGE3_SITE = https://go.dev/dl
+ GO_BOOTSTRAP_STAGE3_SOURCE = go$(GO_BOOTSTRAP_STAGE3_VERSION).src.tar.gz
+ 
+ GO_BOOTSTRAP_STAGE3_LICENSE = BSD-3-Clause
+diff --git a/package/go/go-bootstrap-stage4/go-bootstrap-stage4.mk b/package/go/go-bootstrap-stage4/go-bootstrap-stage4.mk
+index db0c85e3d0..7c5beb1c9d 100644
+--- a/package/go/go-bootstrap-stage4/go-bootstrap-stage4.mk
++++ b/package/go/go-bootstrap-stage4/go-bootstrap-stage4.mk
+@@ -7,7 +7,7 @@
+ # Use last Go version that go-bootstrap-stage3 can build: v1.23.x
+ # See https://go.dev/doc/go1.24#bootstrap
+ GO_BOOTSTRAP_STAGE4_VERSION = 1.23.12
+-GO_BOOTSTRAP_STAGE4_SITE = https://storage.googleapis.com/golang
++GO_BOOTSTRAP_STAGE4_SITE = https://go.dev/dl
+ GO_BOOTSTRAP_STAGE4_SOURCE = go$(GO_BOOTSTRAP_STAGE4_VERSION).src.tar.gz
+ 
+ GO_BOOTSTRAP_STAGE4_LICENSE = BSD-3-Clause
+diff --git a/package/go/go-src/go-src.mk b/package/go/go-src/go-src.mk
+index 9a18b6afe8..ead535f4e0 100644
+--- a/package/go/go-src/go-src.mk
++++ b/package/go/go-src/go-src.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GO_SRC_VERSION = $(GO_VERSION)
+-GO_SRC_SITE = https://storage.googleapis.com/golang
++GO_SRC_SITE = https://go.dev/dl
+ GO_SRC_SOURCE = go$(GO_VERSION).src.tar.gz
+ GO_SRC_DL_SUBDIR = go
+ 
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 1dc1b99756..7c689f9144 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,9 +1,9 @@
+ # sha256 checksum from https://go.dev/dl/
+-sha256  a81a4ba593d0015e10c51e267de3ff07c7ac914dfca037d9517d029517097795  go1.25.3.src.tar.gz
+-sha256  acb585c13e7acb10e3b53743c39a7996640c745dffd7d828758786bde92f44ca  go1.25.3.linux-386.tar.gz
+-sha256  0335f314b6e7bfe08c3d0cfaa7c19db961b7b99fb20be62b0a826c992ad14e0f  go1.25.3.linux-amd64.tar.gz
+-sha256  1d42ebc84999b5e2069f5e31b67d6fc5d67308adad3e178d5a2ee2c9ff2001f5  go1.25.3.linux-arm64.tar.gz
+-sha256  3992bd28316484be0af36494124588581aa27e0659a436d607b11d534045bc1f  go1.25.3.linux-armv6l.tar.gz
+-sha256  68d1a08bf3567f330717d821b266a0be1c5080bd05dc238b5a43a24ca0c47d7c  go1.25.3.linux-ppc64le.tar.gz
+-sha256  a0b5ccd631743f01230030412fdc9252b18d96b4e63d44ba1c4e9469e79cfcb1  go1.25.3.linux-s390x.tar.gz
++sha256  22a5fd0a91efcd28a1b0537106b9959b2804b61f59c3758b51e8e5429c1a954f  go1.25.5.src.tar.gz
++sha256  db908a86e888574ed3432355ba5372ad3ef2c0821ba9b91ceaa0f6634620c40c  go1.25.5.linux-386.tar.gz
++sha256  9e9b755d63b36acf30c12a9a3fc379243714c1c6d3dd72861da637f336ebb35b  go1.25.5.linux-amd64.tar.gz
++sha256  b00b694903d126c588c378e72d3545549935d3982635ba3f7a964c9fa23fe3b9  go1.25.5.linux-arm64.tar.gz
++sha256  0b27e3dec8d04899d6941586d2aa2721c3dee67c739c1fc1b528188f3f6e8ab5  go1.25.5.linux-armv6l.tar.gz
++sha256  f0904b647b5b8561efc5d48bb59a34f2b7996afab83ccd41c93b1aeb2c0067e4  go1.25.5.linux-ppc64le.tar.gz
++sha256  a5d0a72b0dfd57f9c2c0cdd8b7e0f401e0afb9e8c304d3410f9b0982ce0953da  go1.25.5.linux-s390x.tar.gz
+ sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 85a40d4d36..c932baf018 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WTFUTIL_VERSION = 0.41.0
-+WTFUTIL_VERSION = 0.47.1
- WTFUTIL_SITE = $(call github,wtfutil,wtf,v$(WTFUTIL_VERSION))
- WTFUTIL_LICENSE = MPL-2.0
- WTFUTIL_LICENSE_FILES = LICENSE.md
+-GO_VERSION = 1.25.3
++GO_VERSION = 1.25.5
+ 
+ HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
+ HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
 -- 
 2.47.3
 
