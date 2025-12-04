@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56C35D2F7E7
-	for <buildroot@archiver.kernel.org>; Fri,  5 Dec 2025 12:34:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CB98D2F7E7
+	for <buildroot@archiver.kernel.org>; Fri,  5 Dec 2025 12:34:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1BFEF61155;
-	Fri,  5 Dec 2025 12:34:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3BC8D80B2B;
+	Fri,  5 Dec 2025 12:34:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0SGCnfF4gtqD; Fri,  5 Dec 2025 12:34:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0wtTW3EWVRtO; Fri,  5 Dec 2025 12:34:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A4CB611A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B0E480B2F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764938069;
-	bh=LVgssqsWZguLpnjTetdhKAEinX8QpFM6yID6gi9bFvo=;
+	s=default; t=1764938070;
+	bh=yOJ+3qUioE7nkxgjYkfJ8P+CN8zlIrRVTz8Mg2tDky4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=PIIa/kq4DxWVy8IGIauQs1gYHX3TZWLPL+nN335hSZB7/EKPUSh9jDN96mRZErxB5
-	 lSiL6x590hpJLKBbkREXGDYZ573K4whOXB9plnSyRpieRjuy63ZyrvB1GyRl1rCdjO
-	 O4BHEyE92FTvl635JWzCEQ6S9lkNh2d2vg7vFIOK3wrzaCj6BfYjEPWYkPfyhMzJXO
-	 elichcwdPf6nAsn6oD+eb9x7Btii4u9FmhfW58O4qTeUIytaQtbPpCyyw0wNaofF4I
-	 M5QcyybDupCPenN/yvnDDCwmU546pjqB6i9rMYMygbNaf7jzPfwG71j1YzCwLtY083
-	 4iQuCeu4xb6OQ==
+	b=Eur4DLkqQV2p5NRUd1HVDnI5SSiPyW8/VDJzuYfLg9kgYxKXkJ0aicqOmEs2eMqlZ
+	 HNhjxJRQAhyRQT4oAV1/3zZxJ2B2IJRL6Ay5fLNyT9VyMCxYL6B5JiQpjgD73eP6fh
+	 GcBTyz5kzFLFz7W4AMiQ20bXNqcSqIZOX93mM0r5lz9lG53Av2h+nN+jX2Z631Xz7g
+	 lUGEpUlnC7FlelB285nQI+DNtV+WZSm/Y6/ILXIS5ToVefj0J2BMhIAn61hn71fiJj
+	 CPmiV2ukTtCw2t2vuHjfpMfLyz9FprilSQ3KC8CVYAU04L7a032RXBM9wFc40JtMV0
+	 cDXcY3THK8I6Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A4CB611A0;
-	Fri,  5 Dec 2025 12:34:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 96281E7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5B0E480B2F;
+	Fri,  5 Dec 2025 12:34:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C0412E7
  for <buildroot@buildroot.org>; Fri,  5 Dec 2025 12:34:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 940F9407B1
+ by smtp2.osuosl.org (Postfix) with ESMTP id A6990412AC
  for <buildroot@buildroot.org>; Fri,  5 Dec 2025 12:34:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Yy7gzyKVP_qS for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yScye12MXows for <buildroot@buildroot.org>;
  Fri,  5 Dec 2025 12:34:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 588D94069C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 57FF54020C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 588D94069C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 57FF54020C
  for <buildroot@buildroot.org>; Fri,  5 Dec 2025 12:34:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 536AD8659C; Fri,  5 Dec 2025 12:34:26 +0000 (UTC)
+ id 454A486554; Fri,  5 Dec 2025 12:34:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Dec 2025 22:45:43 +0100
+Date: Thu, 4 Dec 2025 22:44:18 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 251063eca0a74a9bb57217748e13f7bab7badecb
-X-Git-Newrev: a805d5b9056597fa4c1f69c01d4e7d76c76cd414
+X-Git-Oldrev: 150bb46a0483736aebf44b6026ffa621049c01ad
+X-Git-Newrev: 251063eca0a74a9bb57217748e13f7bab7badecb
 X-Patchwork-Hint: ignore
-Message-Id: <20251205123426.536AD8659C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/{mesa3d,
- mesa3d-headers}: bump version to 25.3.1
+Message-Id: <20251205123426.454A486554@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/llvm-project: bump to
+ version 21.1.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,60 +77,113 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a805d5b9056597fa4c1f69c01d4e7d76c76cd414
+commit: https://git.buildroot.net/buildroot/commit/?id=251063eca0a74a9bb57217748e13f7bab7badecb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2025-December/000829.html
+https://discourse.llvm.org/t/llvm-21-1-7-released/89029
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/llvm-project/clang/clang.hash                   | 2 +-
+ package/llvm-project/compiler-rt/compiler-rt.hash       | 4 ++--
+ package/llvm-project/libclc/libclc.hash                 | 2 +-
+ package/llvm-project/lld/lld.hash                       | 2 +-
+ package/llvm-project/llvm-cmake/llvm-cmake.hash         | 2 +-
+ package/llvm-project/llvm-libunwind/llvm-libunwind.hash | 2 +-
+ package/llvm-project/llvm-project.mk                    | 2 +-
+ package/llvm-project/llvm-runtimes/llvm-runtimes.hash   | 2 +-
+ package/llvm-project/llvm/llvm.hash                     | 4 ++--
+ 9 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 662683f944..39564b6af3 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 25.3.0
-+MESA3D_HEADERS_VERSION = 25.3.1
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index e642273d67..4bfc1d4584 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://gitlab.freedesktop.org/mesa/mesa/-/blob/25.3/docs/relnotes/25.3.0.rst?ref_type=heads
--sha256  0fd54fea7dbbddb154df05ac752b18621f26d97e27863db3be951417c6abe8ae  mesa-25.3.0.tar.xz
--sha512  46df9e5e27f9a36cf893a68ad4a465fcc6efe1bcb46ad8d4b015699ad1a11e582b8d41f4157326556af603fe454b2ff34ecc17a0c742b5fd9ce5f0097106fec5  mesa-25.3.0.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2025-December/000829.html
-+sha256  059d0d985622f49588f01aa29152804f4da8ffe6add046e00a52923379c2d8da  mesa-25.3.1.tar.xz
-+sha512  7e2f7295f1f4df129935b60d75c890f6ae585ecc511f69f55a61826df5f2434ffdb4109c632af9842a986bf9beed430a0404d377e8335b71fa36682bd10533ba  mesa-25.3.1.tar.xz
- # License
- sha256  0d1a0472ecc81830e75c20d59b0ea02841e3db21255e0ebad97ab682c54d6615  docs/license.rst
- sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  licenses/MIT
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 3d2f85240b..6fcbf96c80 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
+diff --git a/package/llvm-project/clang/clang.hash b/package/llvm-project/clang/clang.hash
+index 5ac73a252c..72efe1e09d 100644
+--- a/package/llvm-project/clang/clang.hash
++++ b/package/llvm-project/clang/clang.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256  348ace5d715c4caa6fb89b4c6fe07c21650e10b2fac37d8b0db75c0b11be9011  clang-21.1.6.src.tar.xz
++sha256  eeb5296f46eacc0a1fe6c47a1af9e8d4eb2a5da7254fd8dbc4fc1f1be74315a1  clang-21.1.7.src.tar.xz
+ sha256  ebcd9bbf783a73d05c53ba4d586b8d5813dcdf3bbec50265860ccc885e606f47  LICENSE.TXT
+diff --git a/package/llvm-project/compiler-rt/compiler-rt.hash b/package/llvm-project/compiler-rt/compiler-rt.hash
+index b9ec906595..47a90af9be 100644
+--- a/package/llvm-project/compiler-rt/compiler-rt.hash
++++ b/package/llvm-project/compiler-rt/compiler-rt.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  bdd904f3aac9f4c4424f3440aff498cc04d66f243e37156b6d167ffb7b599f89  compiler-rt-21.1.6.src.tar.xz
+-sha256  8d09dc219cdb3da7dafd2161836aacdd6e02c1a113498ab5f37688599406dc8a  third-party-21.1.6.src.tar.xz
++sha256  4358e4476ab89b6ca9e4174f05f4a2c2c10e4a41c3c7febd25afe96bc27b5758  compiler-rt-21.1.7.src.tar.xz
++sha256  5fe212feb27f325fa29530eb38e746a73d18205bf6a36d9800778a94108d2ee5  third-party-21.1.7.src.tar.xz
+ sha256  1a8f1058753f1ba890de984e48f0242a3a5c29a6a8f2ed9fd813f36985387e8d  LICENSE.TXT
+diff --git a/package/llvm-project/libclc/libclc.hash b/package/llvm-project/libclc/libclc.hash
+index 92b51fc1fa..41c440cebc 100644
+--- a/package/llvm-project/libclc/libclc.hash
++++ b/package/llvm-project/libclc/libclc.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256  a1a09ccfa17f2d5fbe5e54271a4a9fbe396950f29f80f52b67a7083fee73120c  libclc-21.1.6.src.tar.xz
++sha256  de1c8dbffdce898a4c5e70fb7f5aa6dea1e429f63471773da8cb3cdf9e945403  libclc-21.1.7.src.tar.xz
+ sha256  3c536c052db9afd997809e38785c9f2a9e54e2892330fa7c5b438e18a7413479  LICENSE.TXT
+diff --git a/package/llvm-project/lld/lld.hash b/package/llvm-project/lld/lld.hash
+index b05f1e30f9..d3a2d22b68 100644
+--- a/package/llvm-project/lld/lld.hash
++++ b/package/llvm-project/lld/lld.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256  5b297faecdddc9581c260a1570b4c0ec8810d1213e23d7aa84732c0e2feea85f  lld-21.1.6.src.tar.xz
++sha256  607395fc8a5f4d14eb27b219a279558a172d1e3a34ddd2a3509c12b560f1930a  lld-21.1.7.src.tar.xz
+ sha256  f7891568956e34643eb6a0db1462db30820d40d7266e2a78063f2fe233ece5a0  LICENSE.TXT
+diff --git a/package/llvm-project/llvm-cmake/llvm-cmake.hash b/package/llvm-project/llvm-cmake/llvm-cmake.hash
+index 402a5f4ef7..ae2d1737d1 100644
+--- a/package/llvm-project/llvm-cmake/llvm-cmake.hash
++++ b/package/llvm-project/llvm-cmake/llvm-cmake.hash
+@@ -1,2 +1,2 @@
+ # locally calculated
+-sha256  e364f135fa14c343d70cac96f577f44e8e20bf026682f647f8c3c5687a0bebd1  cmake-21.1.6.src.tar.xz
++sha256  f25ca011e4453ac035e940aa729d482d08eb83a91b4aaf1f230dc9ea28cadfa4  cmake-21.1.7.src.tar.xz
+diff --git a/package/llvm-project/llvm-libunwind/llvm-libunwind.hash b/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
+index 7326a0d863..e34c79b728 100644
+--- a/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
++++ b/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  25d8bf5bd0d95641c738ea690b18564f5fc9fb7e7bbab17329b391988e71ae8c  libunwind-21.1.6.src.tar.xz
++sha256  ac6ac43b6d54c6f6725a286ce36acff7a94123a8f2a54c161f866b94fcaa3a9b  libunwind-21.1.7.src.tar.xz
+ sha256  b5efebcaca80879234098e52d1725e6d9eb8fb96a19fce625d39184b705f7b6d  LICENSE.TXT
+diff --git a/package/llvm-project/llvm-project.mk b/package/llvm-project/llvm-project.mk
+index 268367d6bd..15b1076d82 100644
+--- a/package/llvm-project/llvm-project.mk
++++ b/package/llvm-project/llvm-project.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 25.3.0
-+MESA3D_VERSION = 25.3.1
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+ LLVM_PROJECT_VERSION_MAJOR = 21
+-LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.6
++LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.7
+ LLVM_PROJECT_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_PROJECT_VERSION)
+ 
+ include $(sort $(wildcard package/llvm-project/*/*.mk))
+diff --git a/package/llvm-project/llvm-runtimes/llvm-runtimes.hash b/package/llvm-project/llvm-runtimes/llvm-runtimes.hash
+index c68f1c13ff..9f2784b731 100644
+--- a/package/llvm-project/llvm-runtimes/llvm-runtimes.hash
++++ b/package/llvm-project/llvm-runtimes/llvm-runtimes.hash
+@@ -1,2 +1,2 @@
+ # locally calculated
+-sha256  3b2dcaec1163caf067988228c1d21a75334c47d22610956dd9699ea0631bce45  runtimes-21.1.6.src.tar.xz
++sha256  7f87971685100bc2bd0fe54042c5140da100b0e37fa12fca888cf1d8d06a8e25  runtimes-21.1.7.src.tar.xz
+diff --git a/package/llvm-project/llvm/llvm.hash b/package/llvm-project/llvm/llvm.hash
+index 1738c94d29..afa270b83e 100644
+--- a/package/llvm-project/llvm/llvm.hash
++++ b/package/llvm-project/llvm/llvm.hash
+@@ -1,4 +1,4 @@
+ # locally calculated
+-sha256  908bce97be0275943414b45af2e2b20e8f6d5d9266fdc120bd59f096ebc547ad  llvm-21.1.6.src.tar.xz
+-sha256  8d09dc219cdb3da7dafd2161836aacdd6e02c1a113498ab5f37688599406dc8a  third-party-21.1.6.src.tar.xz
++sha256  8657ee188b673a3285b991131abe905b4129a18d52d334f9d122463164ecd000  llvm-21.1.7.src.tar.xz
++sha256  5fe212feb27f325fa29530eb38e746a73d18205bf6a36d9800778a94108d2ee5  third-party-21.1.7.src.tar.xz
+ sha256  8d85c1057d742e597985c7d4e6320b015a9139385cff4cbae06ffc0ebe89afee  LICENSE.TXT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
