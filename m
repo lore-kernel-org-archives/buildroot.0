@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 523C9D2A538
-	for <buildroot@archiver.kernel.org>; Thu,  4 Dec 2025 20:41:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8153BD2A537
+	for <buildroot@archiver.kernel.org>; Thu,  4 Dec 2025 20:41:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EC26261C77;
-	Thu,  4 Dec 2025 20:40:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5647961CCD;
+	Thu,  4 Dec 2025 20:41:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WsNwaX6cCXx3; Thu,  4 Dec 2025 20:40:58 +0000 (UTC)
+ id QAjEv_FEzA9w; Thu,  4 Dec 2025 20:40:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75F2961CBB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5479E61CA3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764880853;
-	bh=crpGEoLzwqX/HqLU1I66SRy+OWluafIZKI0UZ/AeajM=;
+	s=default; t=1764880856;
+	bh=uz1JziXtCqpUXV45rdUDDCUWGsSXVY5cNOI2uZYt+X0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=GZiCGcGrdwaayc7+dXbjWfhACMrle9SXIGk3WxFNSc40eiK4zUNGwWh+ygo/6J7Tr
-	 J+PRJLZCnnKxnfKh3nsvb+aa3cNyWwm9+oyw0XmURZfuzx8BdEvVLZpxkCh7kLYl8W
-	 Yf7RCON4SCE/XPH1S9RpM/aAxMIyfoZjkIAQBQYcPbnhH2WrM1YCjLqEGm+/qHK0SP
-	 lghIWJnVyjs8EHlOhppGCAWtD0qzfd+FzMAAvnllsYAVKHKKqvX1DtZjzrdvN1sxM5
-	 HpyzPDH+vHaedUmoB2Vzc+o5Mo+rWr38MKRwTI4/79FKI2rKHB8G8mXbJpG1JRSiAL
-	 1mg2C/Epw3/GA==
+	b=i/U5ngPVoNPNumHrePC4alYRsvD3xuMNDh5SuYFovFb042KDmHMVuDqMeO7Ux/caj
+	 KfI4zT3YoHbPz/YfbtQrJLAoTz1j5FmIDNvw1sB2Yd/aMErr3gAiGNbUsBqLw3G/Aa
+	 q5p/K/zP7/OUWapDuQzr77D3VN2Gn/ieqcRFmOT2dd2RiPNLxchS4yiAbNWMqNi889
+	 pXTWiBkdZ+j7CkP4KvQSJrZElAS4qEozzXtIbslVYcfFN/o+46sxwiiOl5znmXQc9W
+	 AorUiEeSlSpYm32vCzBSwiPM63EAKPOpXY+mUzU0R9jFzgVDU3lShyZaUZSO2zCwsm
+	 ERyvSmtjvj5Ng==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 75F2961CBB;
-	Thu,  4 Dec 2025 20:40:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5479E61CA3;
+	Thu,  4 Dec 2025 20:40:56 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 013E7D3
- for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:40:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D6B01A9
+ for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:40:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 33EAE407CA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 50629408CB
  for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:40:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N2eX3nQG0VUp for <buildroot@buildroot.org>;
- Thu,  4 Dec 2025 20:40:38 +0000 (UTC)
+ id 3cSFCi8-EeV7 for <buildroot@buildroot.org>;
+ Thu,  4 Dec 2025 20:40:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58EC4407C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2BC940A16
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 58EC4407C8
+ by smtp4.osuosl.org (Postfix) with ESMTP id A2BC940A16
  for <buildroot@buildroot.org>; Thu,  4 Dec 2025 20:40:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4A0DF86511; Thu,  4 Dec 2025 20:40:38 +0000 (UTC)
+ id A0BF086009; Thu,  4 Dec 2025 20:40:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 4 Dec 2025 13:11:49 +0100
+Date: Thu, 4 Dec 2025 13:23:58 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: 60732a6a51f42d50365b55b8255ab67757894f40
-X-Git-Newrev: b85474755beee348eaa8c64414b4cb61705ed1e8
+X-Git-Oldrev: bbcb39d46d9248d17130657b4545e913d9264cbe
+X-Git-Newrev: d61a96788738274f07b2bccbfdc4aa4b6bfeb743
 X-Patchwork-Hint: ignore
-Message-Id: <20251204204038.4A0DF86511@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/python-starlette:
- security bump to 0.50.0
+Message-Id: <20251204204038.A0BF086009@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/18xx-ti-utils:
+ switch to git repo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,56 +77,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b85474755beee348eaa8c64414b4cb61705ed1e8
+commit: https://git.buildroot.net/buildroot/commit/?id=d61a96788738274f07b2bccbfdc4aa4b6bfeb743
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-Starlette 0.49.1 fixes the following security issue:
-https://github.com/Kludex/starlette/security/advisories/GHSA-7f5h-v6xp-fcq8
+Downloading the snapshot tarball has been unstable in the past so we
+switch to git for fetching the source code.
 
-Other changes:
-* https://github.com/Kludex/starlette/releases/tag/0.49.0
-* https://github.com/Kludex/starlette/releases/tag/0.49.1 (the security fix)
-* https://github.com/Kludex/starlette/releases/tag/0.49.2
-* https://github.com/Kludex/starlette/releases/tag/0.49.3
-* https://github.com/Kludex/starlette/releases/tag/0.50.0
+Fixes:
+https://autobuild.buildroot.net/results/8b9/8b9b15e578ee13c47bdfe77f8bd79cd34c49de91/
+https://autobuild.buildroot.net/results/bfc/bfcfb6e5014e017334604ba8fdcfac2acc65d161/
+https://autobuild.buildroot.net/results/6c6/6c69077ea076c3c28d0e8599913cde31ee27b0c5/
+https://autobuild.buildroot.net/results/b43/b431fabedd709f660f556a7a6539a0b1e28aeb49/
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 35d8a3a0ca6bbaef1c9e2ee9f7f16f1a5b056b17)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d8b15b078aeb9b9f3b42b9bdea91f2adff02fd09)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-starlette/python-starlette.hash | 4 ++--
- package/python-starlette/python-starlette.mk   | 4 ++--
+ package/18xx-ti-utils/18xx-ti-utils.hash | 2 +-
+ package/18xx-ti-utils/18xx-ti-utils.mk   | 6 +++---
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-starlette/python-starlette.hash b/package/python-starlette/python-starlette.hash
-index bcc71c09c5..9b84774c86 100644
---- a/package/python-starlette/python-starlette.hash
-+++ b/package/python-starlette/python-starlette.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/starlette/json
--md5  9e56e4be3ee2a746ee6375fd9e81f61c  starlette-0.48.0.tar.gz
--sha256  7e8cee469a8ab2352911528110ce9088fdc6a37d9876926e73da7ce4aa4c7a46  starlette-0.48.0.tar.gz
-+md5  f3479ed026aeaffb43af371d3b7db527  starlette-0.50.0.tar.gz
-+sha256  a2a17b22203254bcbc2e1f926d2d55f3f9497f769416b3190768befe598fa3ca  starlette-0.50.0.tar.gz
- # Locally computed sha256 checksums
- sha256  dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf  LICENSE.md
-diff --git a/package/python-starlette/python-starlette.mk b/package/python-starlette/python-starlette.mk
-index a643623e03..af8a49e0fd 100644
---- a/package/python-starlette/python-starlette.mk
-+++ b/package/python-starlette/python-starlette.mk
+diff --git a/package/18xx-ti-utils/18xx-ti-utils.hash b/package/18xx-ti-utils/18xx-ti-utils.hash
+index 7ecca54b9b..116d05e8e9 100644
+--- a/package/18xx-ti-utils/18xx-ti-utils.hash
++++ b/package/18xx-ti-utils/18xx-ti-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  ce0185ba8a9bf456cc94a798bf66903775065e337e53ff812f18a6d88f5bac13  18xx-ti-utils-R8.8.tar.xz
++sha256  33be3c90719bf36d5da76c6faaefb07bf3697635f81b86e28b92307d7825483e  18xx-ti-utils-R8.8-git4.tar.gz
+ sha256  363cef40b276a7a91ebcff3f78626d9cfe5e5a51927c725236007259403d5fc4  COPYING
+diff --git a/package/18xx-ti-utils/18xx-ti-utils.mk b/package/18xx-ti-utils/18xx-ti-utils.mk
+index 5d45191cde..3e6f715730 100644
+--- a/package/18xx-ti-utils/18xx-ti-utils.mk
++++ b/package/18xx-ti-utils/18xx-ti-utils.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_STARLETTE_VERSION = 0.48.0
-+PYTHON_STARLETTE_VERSION = 0.50.0
- PYTHON_STARLETTE_SOURCE = starlette-$(PYTHON_STARLETTE_VERSION).tar.gz
--PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/a7/a5/d6f429d43394057b67a6b5bbe6eae2f77a6bf7459d961fdb224bf206eee6
-+PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/ba/b8/73a0e6a6e079a9d9cfa64113d771e421640b6f679a52eeb9b32f72d871a1
- PYTHON_STARLETTE_SETUP_TYPE = hatch
- PYTHON_STARLETTE_LICENSE = BSD-3-Clause
- PYTHON_STARLETTE_LICENSE_FILES = LICENSE.md
+-18XX_TI_UTILS_VERSION = 8.8
+-18XX_TI_UTILS_SITE = https://git.ti.com/cgit/wilink8-wlan/18xx-ti-utils/snapshot
+-18XX_TI_UTILS_SOURCE = 18xx-ti-utils-R$(18XX_TI_UTILS_VERSION).tar.xz
++18XX_TI_UTILS_VERSION = R8.8
++18XX_TI_UTILS_SITE = https://git.ti.com/cgit/wilink8-wlan/18xx-ti-utils
++18XX_TI_UTILS_SITE_METHOD = git
+ 18XX_TI_UTILS_DEPENDENCIES = libnl
+ 18XX_TI_UTILS_LICENSE = BSD-3-Clause
+ 18XX_TI_UTILS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
