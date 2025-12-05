@@ -1,69 +1,111 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D24ED2CDFE
-	for <buildroot@archiver.kernel.org>; Fri,  5 Dec 2025 02:07:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D200D116F1
+	for <buildroot@archiver.kernel.org>; Fri,  5 Dec 2025 04:25:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D202F846FC;
-	Fri,  5 Dec 2025 02:07:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 105EB60A54;
+	Fri,  5 Dec 2025 04:25:21 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wANsUICvV6OI; Fri,  5 Dec 2025 04:25:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB7C860A57
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1764908719;
+	bh=BERC0DzZyiByuu1BFjIg4662G3w73qeT/CZQ1hNq610=;
+	h=To:From:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=lEmRfowlXNAXmYZLVwAQV0Mq1a7MwSByzgbnebdeDXBHcuPG/MaCV65wm6AaMp3JQ
+	 N5eRXMwygZ4679b+6fh5U+fwssp7+LkEJ6IWmJ1ltfOn3BFZ6xfopVo5AU/UTiC9G+
+	 wYu5CMBqr3R54uag8P4c5LUfl/ejME/9Oy9LmKRyBiLvOboEzaM8C4FmGIVyDsl8nP
+	 Zd2YWvF4xsrYC31HunkQgkd0FObYmFVMlax6XkxDADQqWQdC5dlbLgUchEfvFOxW1S
+	 6AkaEdP7Dnkb6j9Xzdhzgixsajf+sp6nHnvGMjcD9zNBBM1o+1/633fQvRw2Lice6U
+	 g5KAONK1L26TQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id CB7C860A57;
+	Fri,  5 Dec 2025 04:25:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 71022199
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 04:25:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 51E59821FB
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 04:25:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KeJwO1cXt_wk; Fri,  5 Dec 2025 02:07:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22E5E84723
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764900434;
-	bh=sOl565sG05IpQXR5NkjWlCFbp2gNXaMwmpaRZ/59rQI=;
-	h=To:CC:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=fD5BU7Rm8oxRBp7nkLgrh7wtOOZkZ6VTTd4z7lZRJV6po7WUA2eIW67n65nv5YLFZ
-	 L6OksJTitMs/fpt+UG3V/OKyNNybVTJX+MNR/3OTbwzAphNbicm6ATq7s+TISEZysn
-	 2HUdTYoMkE+tV5l7VaHYn21HCnPlnp8Eryneh8ikC0cMzHmBM1HihIsLSgtIrxFiwy
-	 EQNphghDTKCaQcj7oYEXrc1n91wROADhx1N1lLG68hz/6JNk1yKCqibiNvSqp/xsr/
-	 z26DxFylvLzETttx7y8trEUbYLVoBE7adolo/XH18c75tPuVn/NKj/pJBJYTv5/DGS
-	 toF93tEGY30Fg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 22E5E84723;
-	Fri,  5 Dec 2025 02:07:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 71F99199
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 02:07:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 51200408DF
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 02:07:12 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5_Uj4GCQaaCY for <buildroot@buildroot.org>;
- Fri,  5 Dec 2025 02:07:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=114.94.151.114;
- helo=mail-sh.amlogic.com; envelope-from=yang.li@amlogic.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7FD5C40865
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FD5C40865
-Received: from mail-sh.amlogic.com (unknown [114.94.151.114])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7FD5C40865
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 02:07:09 +0000 (UTC)
-Received: from droid02-cd.amlogic.com (10.98.11.201) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server id 15.1.2507.61; Fri, 5 Dec 2025
- 10:07:04 +0800
-To: <buildroot@buildroot.org>
-CC: Yang Li <yang.li@amlogic.com>, Grzegorz Blach <grzegorz@blach.pl>, "Marcin
- Bis" <marcin@bis.org.pl>
-Date: Fri, 5 Dec 2025 10:06:57 +0800
-Message-ID: <20251205020659.193849-1-yang.li@amlogic.com>
-X-Mailer: git-send-email 2.42.0
+ id PJomLMlWB1O2 for <buildroot@buildroot.org>;
+ Fri,  5 Dec 2025 04:25:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D9BF981E00
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9BF981E00
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D9BF981E00
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 04:25:16 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-477b1cc8fb4so11221125e9.1
+ for <buildroot@buildroot.org>; Thu, 04 Dec 2025 20:25:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1764908715; x=1765513515;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=FYavF2gYEUYpV7rkxj5TXBjOKQlTWpLs7dwumqd6OUw=;
+ b=E1gnjt6hItdYmTSX6MlzlCuSCzUV6H4JlPizL0f+08mtx8VLTrCBdQCpgrO48dZlW8
+ YsZGNVARuUMsd2ltNuMtPxM1NfM5FJsYd7pyzQ0HERYMJS8FU3Y8BBjIdKdlz0fPJ1ym
+ bjTP/gNrxStIaFGarijQocVBseZ064SzCXH02lhy4f828FR9zKT7g/QHqznUGIfTIvTP
+ 3cYiWwmC9jNX05AD9H/qisqFO7DtBQKPFUvZkpA0AOtIpMh9s3/kLVJ6AzEH/NLuC2QQ
+ mH7ca/CsskQkaFVYJjYK8UI1oknQrj6YsgV6x2v1RCsGkdrGKWincXcxPwlqLKxdBFFg
+ L3Hg==
+X-Gm-Message-State: AOJu0Yynw6dNcVmaFUOIPiIlL5LQ6JuhWlbaDFH1DFfnfSFmOM0sp2FX
+ teodQwsFactaieVAgPxbJMBLDVXJ4bn3q9OHmsBVdmcEM5X1TXRoFgDxeGTeNQ==
+X-Gm-Gg: ASbGncuQqo4GmeSAzyklOlSIoo4J5oRlz2R9NYjJq5a9CeELBXdw5PdJPn0VU/NyqVh
+ HTRgbtfbOPqXJKDEqMLsebOfT3M3XKvZyVOSyA7jES3Cgzt4nMpvtsARlzqfHOLAcSDmLr5aywY
+ x02+M/rzIdhafBXOWzCJObXrk5+4et3/dBH9ESqEw++3NKODaRIn4+DxYw6qDA2XfOmsKT3OkIC
+ fJR8qNf0GLCQeUD8BqNtxUhMPAVLuAVkGca+3SlfsOdSPtQIDVyl8sYPRCcSxj2bD9nnjNnQYD0
+ jXiwJ7TklYAr1yKV93i+TUSQ374i2DhB750v8/qR+pyWbYpHrOtPAcpqIlz+BkMOjMB+S8bsRYd
+ awOPcfzVtHQRLpbkI7mq084GOfzbCsdVgc6548iRgBLPaD3MucFi9+jm2u4A874VdD12BZluIQN
+ ICeEs8363udddh5IWB0Q==
+X-Google-Smtp-Source: AGHT+IH3cCQwnflBzbJycCyBHEzoevpnOFSIjCSA88RjTQN6kLaw4x1C1HewbXh9lVCAxAVuUL5zqQ==
+X-Received: by 2002:a05:600c:1d0c:b0:477:9c73:268b with SMTP id
+ 5b1f17b1804b1-4792f39cc97mr46213115e9.33.1764908714682; 
+ Thu, 04 Dec 2025 20:25:14 -0800 (PST)
+Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-42f7d331af5sm6285994f8f.31.2025.12.04.20.25.14
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 04 Dec 2025 20:25:14 -0800 (PST)
+Message-ID: <69325eaa.df0a0220.7cf0a.40b8@mx.google.com>
 MIME-Version: 1.0
-X-Originating-IP: [10.98.11.201]
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=amlogic.com
-Subject: [Buildroot] [PATCH] package/{bluez5_utils,
- bluez5_utils-headers}: bump to version 5.85
+To: buildroot@buildroot.org
+From: Buildroot Notifications <buildroot.notifications@gmail.com>
+Date: Fri, 05 Dec 2025 04:25:14 -0000
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1764908715; x=1765513515; darn=buildroot.org;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:from:to:cc:subject:date:message-id:reply-to;
+ bh=FYavF2gYEUYpV7rkxj5TXBjOKQlTWpLs7dwumqd6OUw=;
+ b=GRC9da1ahziQ5+Nwk4HKWuZ+zcRsAALwsTRRrLR0/CJ84+C5Krd18Mt0brNNknoCHy
+ gEvk1nicDJM44TTxJ2BCwODRP2rg2KTC63zucl7+FsLoIt0BcHUq7voUb4yhhCKU9Kk2
+ YfGNS2iXoRGpChdHuXXYhYEZa5pWhGkeCr1NBKr5I6LdhlUQ4reZAvJOFVd33bmG0R62
+ YF3a0CosriZ5mXG4NOqtpClOcxL0i7WU81x0sU5NyJbzvaH0thEov6RTpWcjySLq7OjH
+ 2imNKKYtUg9303Ha/7XChqpz9cHu2ZYTewBhmwVh6BO5ptDMRIK2gPjYllm2YcjBSTy+
+ 7X2Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=GRC9da1a
+Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2025-12-04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,637 +117,220 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yang Li via buildroot <buildroot@buildroot.org>
-Reply-To: Yang Li <yang.li@amlogic.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Removed patch which are included in this release.
+Hello,
 
-Changelog:
-https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/ChangeLog
+Autobuild statistics for 2025-12-04
+===================================
 
-Signed-off-by: Yang Li <yang.li@amlogic.com>
----
- .../bluez5_utils-headers.mk                   |   2 +-
- ...0001-gdbus-define-MAX_INPUT-for-musl.patch |  33 ---
- ...fix-build-with-a2dp-support-disabled.patch | 204 ++++++++++++++++++
- ...eave-config-files-writable-for-owner.patch |  35 ---
- ...03-input-fix-HID-compilation-w-o-HoG.patch | 140 ------------
- ...04-input-fix-HoG-compilation-w-o-HID.patch | 120 -----------
- package/bluez5_utils/bluez5_utils.hash        |   2 +-
- package/bluez5_utils/bluez5_utils.mk          |   2 +-
- 8 files changed, 207 insertions(+), 331 deletions(-)
- delete mode 100644 package/bluez5_utils/0001-gdbus-define-MAX_INPUT-for-musl.patch
- create mode 100644 package/bluez5_utils/0001-transport-audio-fix-build-with-a2dp-support-disabled.patch
- delete mode 100644 package/bluez5_utils/0002-Leave-config-files-writable-for-owner.patch
- delete mode 100644 package/bluez5_utils/0003-input-fix-HID-compilation-w-o-HoG.patch
- delete mode 100644 package/bluez5_utils/0004-input-fix-HoG-compilation-w-o-HID.patch
+      branch |  OK | NOK | TIM | TOT |
+  2025.02.x  |  4  |  5  |  0  |  9  |
+  2025.05.x  |  2  |  3  |  0  |  5  |
+  2025.08.x  |  1  |  4  |  0  |  5  |
+    master   | 42  | 69  |  1  | 112 |
 
-diff --git a/package/bluez5_utils-headers/bluez5_utils-headers.mk b/package/bluez5_utils-headers/bluez5_utils-headers.mk
-index 7acf62b226..a140aeca01 100644
---- a/package/bluez5_utils-headers/bluez5_utils-headers.mk
-+++ b/package/bluez5_utils-headers/bluez5_utils-headers.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Keep the version and patches in sync with bluez5_utils
--BLUEZ5_UTILS_HEADERS_VERSION = 5.79
-+BLUEZ5_UTILS_HEADERS_VERSION = 5.85
- BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
-diff --git a/package/bluez5_utils/0001-gdbus-define-MAX_INPUT-for-musl.patch b/package/bluez5_utils/0001-gdbus-define-MAX_INPUT-for-musl.patch
-deleted file mode 100644
-index dc823e9277..0000000000
---- a/package/bluez5_utils/0001-gdbus-define-MAX_INPUT-for-musl.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 9d69dba21f1e46b34cdd8ae27fec11d0803907ee Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Gu=C3=B0ni=20M=C3=A1r=20Gilbert?= <gudni.m.g@gmail.com>
--Date: Sat, 2 Nov 2024 16:10:18 +0000
--Subject: [PATCH] gdbus: define MAX_INPUT for musl
--
--This is the same solution as was done in src/shared/util.c
--
--Upstream: https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=9d69dba21f1e46b34cdd8ae27fec11d0803907ee
--Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-----
-- gdbus/object.c | 6 ++++++
-- 1 file changed, 6 insertions(+)
--
--diff --git a/gdbus/object.c b/gdbus/object.c
--index 84f116bf1..7b0476f1a 100644
----- a/gdbus/object.c
--+++ b/gdbus/object.c
--@@ -20,6 +20,12 @@
-- #include <dbus/dbus.h>
-- 
-- #include "gdbus.h"
--+
--+/* define MAX_INPUT for musl */
--+#ifndef MAX_INPUT
--+#define MAX_INPUT _POSIX_MAX_INPUT
--+#endif
--+
-- #include "src/shared/util.h"
-- 
-- #define info(fmt...)
---- 
--2.45.2
--
-diff --git a/package/bluez5_utils/0001-transport-audio-fix-build-with-a2dp-support-disabled.patch b/package/bluez5_utils/0001-transport-audio-fix-build-with-a2dp-support-disabled.patch
-new file mode 100644
-index 0000000000..2fa6796a94
---- /dev/null
-+++ b/package/bluez5_utils/0001-transport-audio-fix-build-with-a2dp-support-disabled.patch
-@@ -0,0 +1,204 @@
-+From 0b7395a3479686f46afe508a345bfa50fc20767e Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sat, 22 Nov 2025 17:10:46 +0100
-+Subject: [PATCH BlueZ] transport/audio: fix build with a2dp support disabled
-+
-+Fixes:
-+    CCLD     src/bluetoothd
-+  /usr/lib64/gcc/x86_64-suse-linux/bin/ld: profiles/audio/bluetoothd-media.o: in function `endpoint_init_a2dp_sink':
-+  .../bluez-5.85/profiles/audio/media.c:728:(.text.endpoint_init_a2dp_sink+0x2b): undefined reference to `a2dp_add_sep'
-+  /usr/lib64/gcc/x86_64-suse-linux/bin/ld: profiles/audio/bluetoothd-media.o: in function `endpoint_init_a2dp_source':
-+  .../bluez-5.85/profiles/audio/media.c:715:(.text.endpoint_init_a2dp_source+0x28): undefined reference to `a2dp_add_sep'
-+  /usr/lib64/gcc/x86_64-suse-linux/bin/ld: profiles/audio/bluetoothd-media.o: in function `set_configuration':
-+  .../bluez-5.85/profiles/audio/media.c:512:(.text.set_config+0x35): undefined reference to `a2dp_setup_get_device'
-+  /usr/lib64/gcc/x86_64-suse-linux/bin/ld: .../bluez-5.85/profiles/audio/media.c:525:(.text.set_config+0x8c): undefined reference to `a2dp_setup_remote_path'
-+  /usr/lib64/gcc/x86_64-suse-linux/bin/ld: profiles/audio/bluetoothd-media.o: in function `media_endpoint_remove':
-+  .../bluez-5.85/profiles/audio/media.c:250:(.text.media_endpoint_remove+0xc): undefined reference to `a2dp_remove_sep'
-+  /usr/lib64/gcc/x86_64-suse-linux/bin/ld: profiles/audio/bluetoothd-media.o: in function `endpoint_reply':
-+  .../bluez-5.85/profiles/audio/media.c:361:(.text.endpoint_reply+0x267): undefined reference to `a2dp_parse_config_error'
-+  collect2: error: ld returned 1 exit status
-+  make[1]: *** [Makefile:5491: src/bluetoothd] Error 1
-+  make: *** [Makefile:4096: all] Error 2
-+
-+Fixes: https://github.com/bluez/bluez/issues/1675
-+---
-+ profiles/audio/media.c     | 19 ++++++++++++++++++-
-+ profiles/audio/transport.c |  6 ++++++
-+ 2 files changed, 24 insertions(+), 1 deletion(-)
-+
-+diff --git a/profiles/audio/media.c b/profiles/audio/media.c
-+index a7a8575f9..418a9d06b 100644
-+--- a/profiles/audio/media.c
-++++ b/profiles/audio/media.c
-+@@ -56,14 +56,18 @@
-+ #include "src/shared/bap.h"
-+ #include "src/shared/bap-debug.h"
-+ 
-++#ifdef HAVE_A2DP
-+ #include "avdtp.h"
-++#endif
-+ #include "media.h"
-+ #include "transport.h"
-++#ifdef HAVE_A2DP
-+ #include "a2dp.h"
-+ 
-+ #ifdef HAVE_AVRCP
-+ #include "avrcp.h"
-+ #endif
-++#endif
-+ 
-+ #define MEDIA_INTERFACE "org.bluez.Media1"
-+ #define MEDIA_ENDPOINT_INTERFACE "org.bluez.MediaEndpoint1"
-+@@ -106,7 +110,9 @@ struct endpoint_request {
-+ };
-+ 
-+ struct media_endpoint {
-++#ifdef HAVE_A2DP
-+ 	struct a2dp_sep		*sep;
-++#endif
-+ 	struct bt_bap_pac	*pac;
-+ 	struct bt_asha_device	*asha;
-+ 	char			*sender;	/* Endpoint DBus bus id */
-+@@ -246,10 +252,12 @@ static void media_endpoint_remove(void *data)
-+ 	struct media_endpoint *endpoint = data;
-+ 	struct media_adapter *adapter = endpoint->adapter;
-+ 
-++#ifdef HAVE_A2DP
-+ 	if (endpoint->sep) {
-+ 		a2dp_remove_sep(endpoint->sep);
-+ 		return;
-+ 	}
-++#endif
-+ 
-+ 	info("Endpoint unregistered: sender=%s path=%s", endpoint->sender,
-+ 			endpoint->path);
-+@@ -354,6 +362,7 @@ static void endpoint_reply(DBusPendingCall *call, void *user_data)
-+ 			return;
-+ 		}
-+ 
-++#ifdef HAVE_A2DP
-+ 		if (dbus_message_is_method_call(request->msg,
-+ 					MEDIA_ENDPOINT_INTERFACE,
-+ 					"SetConfiguration")) {
-+@@ -362,7 +371,7 @@ static void endpoint_reply(DBusPendingCall *call, void *user_data)
-+ 			ret = &error_code;
-+ 			size = 1;
-+ 		}
-+-
-++#endif
-+ 		dbus_error_free(&err);
-+ 		goto done;
-+ 	}
-+@@ -497,6 +506,7 @@ static struct media_transport *find_device_transport(
-+ 	return match->data;
-+ }
-+ 
-++#ifdef HAVE_A2DP
-+ struct a2dp_config_data {
-+ 	struct a2dp_setup *setup;
-+ 	a2dp_endpoint_config_t cb;
-+@@ -552,6 +562,7 @@ static gboolean set_configuration(struct media_endpoint *endpoint,
-+ 	return media_endpoint_async_call(msg, endpoint, transport,
-+ 						cb, user_data, destroy);
-+ }
-++#endif
-+ 
-+ static void release_endpoint(struct media_endpoint *endpoint)
-+ {
-+@@ -602,6 +613,7 @@ static size_t get_capabilities(struct a2dp_sep *sep, uint8_t **capabilities,
-+ 	return endpoint->size;
-+ }
-+ 
-++#ifdef HAVE_A2DP
-+ struct a2dp_select_data {
-+ 	struct a2dp_setup *setup;
-+ 	a2dp_endpoint_select_t cb;
-+@@ -735,6 +747,7 @@ static bool endpoint_init_a2dp_sink(struct media_endpoint *endpoint, int *err)
-+ 
-+ 	return true;
-+ }
-++#endif
-+ 
-+ struct pac_select_data {
-+ 	struct bt_bap_pac *pac;
-+@@ -1486,10 +1499,12 @@ static const struct media_endpoint_init {
-+ 	bool (*func)(struct media_endpoint *endpoint, int *err);
-+ 	bool (*supported)(struct btd_adapter *adapter);
-+ } init_table[] = {
-++#ifdef HAVE_A2DP
-+ 	{ A2DP_SOURCE_UUID, endpoint_init_a2dp_source,
-+ 				a2dp_endpoint_supported },
-+ 	{ A2DP_SINK_UUID, endpoint_init_a2dp_sink,
-+ 				a2dp_endpoint_supported },
-++#endif
-+ 	{ PAC_SINK_UUID, endpoint_init_pac_sink,
-+ 				experimental_endpoint_supported },
-+ 	{ PAC_SOURCE_UUID, endpoint_init_pac_source,
-+@@ -3478,10 +3493,12 @@ void media_unregister(struct btd_adapter *btd_adapter)
-+ 	}
-+ }
-+ 
-++#ifdef HAVE_A2DP
-+ struct a2dp_sep *media_endpoint_get_sep(struct media_endpoint *endpoint)
-+ {
-+ 	return endpoint->sep;
-+ }
-++#endif
-+ 
-+ const char *media_endpoint_get_uuid(struct media_endpoint *endpoint)
-+ {
-+diff --git a/profiles/audio/transport.c b/profiles/audio/transport.c
-+index 08ca360f4..fc23cf33d 100644
-+--- a/profiles/audio/transport.c
-++++ b/profiles/audio/transport.c
-+@@ -2745,6 +2745,7 @@ void media_transport_update_volume(struct media_transport *transport,
-+ 	if (volume < 0)
-+ 		return;
-+ 
-++#ifdef HAVE_A2DP
-+ 	if (media_endpoint_get_sep(transport->endpoint)) {
-+ 		struct a2dp_transport *a2dp = transport->data;
-+ 
-+@@ -2757,6 +2758,7 @@ void media_transport_update_volume(struct media_transport *transport,
-+ 
-+ 		a2dp->volume = volume;
-+ 	}
-++#endif
-+ 	g_dbus_emit_property_changed(btd_get_dbus_connection(),
-+ 					transport->path,
-+ 					MEDIA_TRANSPORT_INTERFACE, "Volume");
-+@@ -2769,6 +2771,7 @@ int media_transport_get_device_volume(struct btd_device *dev)
-+ 	if (dev == NULL)
-+ 		return -1;
-+ 
-++#ifdef HAVE_A2DP
-+ 	/* Attempt to locate the transport to get its volume */
-+ 	for (l = transports; l; l = l->next) {
-+ 		struct media_transport *transport = l->data;
-+@@ -2785,6 +2788,7 @@ int media_transport_get_device_volume(struct btd_device *dev)
-+ 			return -1;
-+ 		}
-+ 	}
-++#endif
-+ 
-+ 	/* If transport volume doesn't exists use device_volume */
-+ 	return btd_device_get_volume(dev);
-+@@ -2798,6 +2802,7 @@ void media_transport_update_device_volume(struct btd_device *dev,
-+ 	if (dev == NULL || volume < 0)
-+ 		return;
-+ 
-++#ifdef HAVE_A2DP
-+ 	/* Attempt to locate the transport to set its volume */
-+ 	for (l = transports; l; l = l->next) {
-+ 		struct media_transport *transport = l->data;
-+@@ -2814,6 +2819,7 @@ void media_transport_update_device_volume(struct btd_device *dev,
-+ 			break;
-+ 		}
-+ 	}
-++#endif
-+ 
-+ 	btd_device_set_volume(dev, volume);
-+ }
-+-- 
-+2.42.0
-+
-diff --git a/package/bluez5_utils/0002-Leave-config-files-writable-for-owner.patch b/package/bluez5_utils/0002-Leave-config-files-writable-for-owner.patch
-deleted file mode 100644
-index 09ebe5edf1..0000000000
---- a/package/bluez5_utils/0002-Leave-config-files-writable-for-owner.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From b1fd409960001a77cda2a09ecc00147ebd9c3667 Mon Sep 17 00:00:00 2001
--From: Fiona Klute <fiona.klute@gmx.de>
--Date: Mon, 9 Dec 2024 16:40:43 +0100
--Subject: [PATCH BlueZ] build: Leave config files writable for owner
--
--This is needed for builds running as non-root users, so the build
--process and any distribution tools can create/move/delete files in the
--config directory without adjusting permissions separately. Limiting
--writes from the running service needs to be done in the systemd unit
--(already the case) or init script.
--
--See also: https://lore.kernel.org/linux-bluetooth/4d1206df-598b-4a68-8655-74981b62ecca@gmx.de/T/
--Reviewed-by: Bastien Nocera <hadess@hadess.net>
--Upstream: https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=b1fd409960001a77cda2a09ecc00147ebd9c3667
--Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-----
-- Makefile.am | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index 297d0774c..29018a91c 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -32,7 +32,7 @@ confdir = $(sysconfdir)/bluetooth
-- statedir = $(localstatedir)/lib/bluetooth
-- 
-- bluetoothd-fix-permissions:
---	install -dm555 $(DESTDIR)$(confdir)
--+	install -dm755 $(DESTDIR)$(confdir)
-- 	install -dm700 $(DESTDIR)$(statedir)
-- 
-- if DATAFILES
---- 
--2.45.2
--
-diff --git a/package/bluez5_utils/0003-input-fix-HID-compilation-w-o-HoG.patch b/package/bluez5_utils/0003-input-fix-HID-compilation-w-o-HoG.patch
-deleted file mode 100644
-index 941e9fb68f..0000000000
---- a/package/bluez5_utils/0003-input-fix-HID-compilation-w-o-HoG.patch
-+++ /dev/null
-@@ -1,140 +0,0 @@
--From b111b5e15eb74e08b74cb3c7e91bcb21f54be4c7 Mon Sep 17 00:00:00 2001
--From: Thomas Perale <thomas.perale@mind.be>
--Date: Thu, 1 May 2025 18:35:35 +0200
--Subject: input: fix HID compilation w/o HoG
--
--Commit [1] introduced a dependency with the HID plugin in the HoG code
--As a result, building with --enable-hid --disable-hog caused linker
--errors due to undefined references to HoG-related functions:
--
--```
--> ./configure --enable-hid --disable-hog
--...
--> make
--...
--  CCLD     src/bluetoothd
--/usr/bin/ld: profiles/input/bluetoothd-manager.o: in function `input_init':
--/home/../bluez/profiles/input/manager.c:122:(.text.input_init+0x1c8): undefined reference to `input_set_auto_sec'
--collect2: error: ld returned 1 exit status
--make[1]: *** [Makefile:6376: src/bluetoothd] Error 1
--```
--
--This patch moves the reading of the HOG specific configuration of the
--'input.conf' file: LEAutoSecurity, to the HoG plugin file.
--
--[1] f2778f587 input: Add LEAutoSecurity setting to input.conf
--
--Upstream: https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=b111b5e15eb74e08b74cb3c7e91bcb21f54be4c7
--Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-----
-- profiles/input/device.h  |  1 -
-- profiles/input/hog.c     | 40 +++++++++++++++++++++++++++++++++++-----
-- profiles/input/manager.c | 11 +----------
-- 3 files changed, 36 insertions(+), 16 deletions(-)
--
--diff --git a/profiles/input/device.h b/profiles/input/device.h
--index 7b87ce5903..036a88980e 100644
----- a/profiles/input/device.h
--+++ b/profiles/input/device.h
--@@ -25,7 +25,6 @@ void input_set_userspace_hid(char *state);
-- uint8_t input_get_userspace_hid(void);
-- void input_set_classic_bonded_only(bool state);
-- bool input_get_classic_bonded_only(void);
---void input_set_auto_sec(bool state);
-- 
-- int input_device_register(struct btd_service *service);
-- void input_device_unregister(struct btd_service *service);
--diff --git a/profiles/input/hog.c b/profiles/input/hog.c
--index 017e320f07..f82648fec8 100644
----- a/profiles/input/hog.c
--+++ b/profiles/input/hog.c
--@@ -57,11 +57,6 @@ static gboolean suspend_supported = FALSE;
-- static bool auto_sec = true;
-- static struct queue *devices = NULL;
-- 
---void input_set_auto_sec(bool state)
---{
---	auto_sec = state;
---}
---
-- static void hog_device_accept(struct hog_device *dev, struct gatt_db *db)
-- {
-- 	char name[248];
--@@ -228,10 +223,45 @@ static struct btd_profile hog_profile = {
-- 	.auto_connect	= true,
-- };
-- 
--+static void hog_read_config(void)
--+{
--+	const char filename[] = CONFIGDIR "/input.conf";
--+	GKeyFile *config;
--+	GError *err = NULL;
--+	bool config_auto_sec;
--+
--+	config = g_key_file_new();
--+	if (!config) {
--+		error("Failed to allocate memory for config");
--+		return;
--+	}
--+
--+	if (!g_key_file_load_from_file(config, filename, 0, &err)) {
--+		if (!g_error_matches(err, G_FILE_ERROR, G_FILE_ERROR_NOENT))
--+			error("Parsing %s failed: %s", filename, err->message);
--+		g_error_free(err);
--+		g_key_file_free(config);
--+		return;
--+	}
--+
--+	config_auto_sec = g_key_file_get_boolean(config, "General",
--+					"LEAutoSecurity", &err);
--+	if (!err) {
--+		DBG("input.conf: LEAutoSecurity=%s",
--+				config_auto_sec ? "true" : "false");
--+		auto_sec = config_auto_sec;
--+	} else
--+		g_clear_error(&err);
--+
--+	g_key_file_free(config);
--+}
--+
-- static int hog_init(void)
-- {
-- 	int err;
-- 
--+	hog_read_config();
--+
-- 	err = suspend_init(suspend_callback, resume_callback);
-- 	if (err < 0)
-- 		error("Loading suspend plugin failed: %s (%d)", strerror(-err),
--diff --git a/profiles/input/manager.c b/profiles/input/manager.c
--index 95ca0a7ee5..1c0b6122a1 100644
----- a/profiles/input/manager.c
--+++ b/profiles/input/manager.c
--@@ -85,7 +85,7 @@ static int input_init(void)
-- 	config = load_config_file(CONFIGDIR "/input.conf");
-- 	if (config) {
-- 		int idle_timeout;
---		gboolean classic_bonded_only, auto_sec;
--+		gboolean classic_bonded_only;
-- 		char *uhid_enabled;
-- 
-- 		idle_timeout = g_key_file_get_integer(config, "General",
--@@ -115,15 +115,6 @@ static int input_init(void)
-- 		} else
-- 			g_clear_error(&err);
-- 
---		auto_sec = g_key_file_get_boolean(config, "General",
---						"LEAutoSecurity", &err);
---		if (!err) {
---			DBG("input.conf: LEAutoSecurity=%s",
---					auto_sec ? "true" : "false");
---			input_set_auto_sec(auto_sec);
---		} else
---			g_clear_error(&err);
---
-- 	}
-- 
-- 	btd_profile_register(&input_profile);
---- 
--cgit 1.2.3-korg
--
-diff --git a/package/bluez5_utils/0004-input-fix-HoG-compilation-w-o-HID.patch b/package/bluez5_utils/0004-input-fix-HoG-compilation-w-o-HID.patch
-deleted file mode 100644
-index b2824e5e18..0000000000
---- a/package/bluez5_utils/0004-input-fix-HoG-compilation-w-o-HID.patch
-+++ /dev/null
-@@ -1,120 +0,0 @@
--From 9c52188d753002a6afd6ae145f921a2ff52c1c81 Mon Sep 17 00:00:00 2001
--From: Thomas Perale <thomas.perale@mind.be>
--Date: Thu, 1 May 2025 18:35:36 +0200
--Subject: input: fix HoG compilation w/o HID
--
--Commit [1] introduced a dependency with the HID plugin in the HoG code
--As a result, building with --disable-hid --enable-hog caused linker
--errors due to undefined references to HID-related functions:
--
--```
--> ./configure --disable-hid --enable-hog
--> make
--/usr/bin/ld: profiles/input/bluetoothd-hog.o: in function `hog_accept':
--/home/../bluez/profiles/input/hog.c:184:(.text.hog_accept+0xbb): undefined reference to `input_get_auto_sec'
--/usr/bin/ld: profiles/input/bluetoothd-hog.o: in function `hog_disconnect':
--/home/../bluez/profiles/input/hog.c:205:(.text.hog_disconnect+0x12): undefined reference to `input_get_userspace_hid'
--collect2: error: ld returned 1 exit status
--make[1]: *** [Makefile:6344: src/bluetoothd] Error 1
--make: *** [Makefile:4695: all] Error 2
--```
--
--This patch duplicate the read of the 'UserspaceHID=persist' config entry
--in the HoG plugin file to remove the dependency on the HID plugin files.
--
--[1] 1782bfd79 input: Add support for UserspaceHID=persist
--
--Fixes: https://github.com/bluez/bluez/issues/1228
--
--Upstream: https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=9c52188d753002a6afd6ae145f921a2ff52c1c81
--Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-----
-- profiles/input/device.c |  5 -----
-- profiles/input/device.h |  1 -
-- profiles/input/hog.c    | 14 ++++++++++++--
-- 3 files changed, 12 insertions(+), 8 deletions(-)
--
--diff --git a/profiles/input/device.c b/profiles/input/device.c
--index a7bc4d44fa..3642cc3267 100644
----- a/profiles/input/device.c
--+++ b/profiles/input/device.c
--@@ -112,11 +112,6 @@ void input_set_userspace_hid(char *state)
-- 		error("Unknown value '%s'", state);
-- }
-- 
---uint8_t input_get_userspace_hid(void)
---{
---	return uhid_state;
---}
---
-- void input_set_classic_bonded_only(bool state)
-- {
-- 	classic_bonded_only = state;
--diff --git a/profiles/input/device.h b/profiles/input/device.h
--index 036a88980e..9056695026 100644
----- a/profiles/input/device.h
--+++ b/profiles/input/device.h
--@@ -22,7 +22,6 @@ struct input_conn;
-- 
-- void input_set_idle_timeout(int timeout);
-- void input_set_userspace_hid(char *state);
---uint8_t input_get_userspace_hid(void);
-- void input_set_classic_bonded_only(bool state);
-- bool input_get_classic_bonded_only(void);
-- 
--diff --git a/profiles/input/hog.c b/profiles/input/hog.c
--index f82648fec8..a3c876cf9f 100644
----- a/profiles/input/hog.c
--+++ b/profiles/input/hog.c
--@@ -40,7 +40,6 @@
-- #include "src/shared/gatt-client.h"
-- #include "src/plugin.h"
-- 
---#include "device.h"
-- #include "suspend.h"
-- #include "attrib/att.h"
-- #include "attrib/gattrib.h"
--@@ -55,6 +54,7 @@ struct hog_device {
-- 
-- static gboolean suspend_supported = FALSE;
-- static bool auto_sec = true;
--+static bool uhid_state_persist = false;
-- static struct queue *devices = NULL;
-- 
-- static void hog_device_accept(struct hog_device *dev, struct gatt_db *db)
--@@ -203,7 +203,7 @@ static int hog_disconnect(struct btd_service *service)
-- {
-- 	struct hog_device *dev = btd_service_get_user_data(service);
-- 
---	if (input_get_userspace_hid() == UHID_PERSIST)
--+	if (uhid_state_persist)
-- 		bt_hog_detach(dev->hog, false);
-- 	else
-- 		bt_hog_detach(dev->hog, true);
--@@ -229,6 +229,7 @@ static void hog_read_config(void)
-- 	GKeyFile *config;
-- 	GError *err = NULL;
-- 	bool config_auto_sec;
--+	char *uhid_enabled;
-- 
-- 	config = g_key_file_new();
-- 	if (!config) {
--@@ -253,6 +254,15 @@ static void hog_read_config(void)
-- 	} else
-- 		g_clear_error(&err);
-- 
--+	uhid_enabled = g_key_file_get_string(config, "General",
--+					"UserspaceHID", &err);
--+	if (!err) {
--+		DBG("input.conf: UserspaceHID=%s", uhid_enabled);
--+		uhid_state_persist = strcasecmp(uhid_enabled, "persist") == 0;
--+		free(uhid_enabled);
--+	} else
--+		g_clear_error(&err);
--+
-- 	g_key_file_free(config);
-- }
-- 
---- 
--cgit 1.2.3-korg
--
-diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
-index 9b39b19c08..f8cb573b18 100644
---- a/package/bluez5_utils/bluez5_utils.hash
-+++ b/package/bluez5_utils/bluez5_utils.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
--sha256  4164a5303a9f71c70f48c03ff60be34231b568d93a9ad5e79928d34e6aa0ea8a  bluez-5.79.tar.xz
-+sha256  ad028e49254bc4551a13f08fe7904c63d02ba650d77be8ae15bb3b0a0ad94a6f  bluez-5.85.tar.xz
- # Locally computed
- sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index e3b47e1e80..724c0fd122 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Keep the version and patches in sync with bluez5_utils-headers
--BLUEZ5_UTILS_VERSION = 5.79
-+BLUEZ5_UTILS_VERSION = 5.85
- BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_INSTALL_STAGING = YES
+Classification of failures by reason for master
+-----------------------------------------------
+
+             dahdi-linux-3.3.0 | 4 
+                 dc3dd-7.2.641 | 4 
+                    mpir-3.0.0 | 4 
+                    brltty-6.8 | 2 
+            gdk-pixbuf-2.42.12 | 2 
+                     kbd-2.9.0 | 2 
+              libopenssl-3.6.0 | 2 
+                  libsvg-0.1.4 | 2 
+      passt-2025_06_11.0293c6f | 2 
+      spandsp-3.0.0-6ec23e5a7e | 2 
+                       unknown | 2 
+             bubblewrap-0.11.0 | 1 
+                 c-icap-0.5.10 | 1 
+          cloudflared-2025.8.1 | 1 
+                   cvs-1.12.13 | 1 
+                   dante-1.4.4 | 1 
+           dmraid-1.0.0.rc16-3 | 1 
+             drbd-utils-9.21.4 | 1 
+            erofs-utils-1.8.10 | 1 
+              fftw-quad-3.3.10 | 1 
+                      fio-3.41 | 1 
+                        gnutls | 1 
+            gstreamer1-1.24.13 | 1 
+       host-gcc-initial-13.4.0 | 1 
+              host-guile-3.0.9 | 1 
+              host-rust-1.88.0 | 1 
+            igd2-for-linux-2.2 | 1 
+                  iozone-3.508 | 1 
+               libconfig-1.8.1 | 1 
+libdill-32d0e8b733416208e04... | 1 
+libesmtp-v1.1.0-14-g335ee8d... | 1 
+                libglvnd-1.7.0 | 1 
+                  libnss-3.117 | 1 
+     libphidget-2.1.9.20190409 | 1 
+          linux-5.10.162-cip24 | 1 
+                 linux-6.17.10 | 1 
+               llama-cpp-b6865 | 1 
+        ltp-testsuite-20250530 | 1 
+                memtest86-7.20 | 1 
+                nushell-0.96.1 | 1 
+               openblas-0.3.30 | 1 
+                opencv3-3.4.20 | 1 
+               pcsc-lite-2.1.0 | 1 
+                 pixman-0.44.2 | 1 
+               pulseaudio-17.0 | 1 
+                python3-3.13.9 | 1 
+        s6-linux-utils-2.6.2.1 | 1 
+                 s6-rc-0.5.5.0 | 1 
+                 samba4-4.23.3 | 1 
+           sane-backends-1.1.1 | 1 
+                  sdl2-2.32.10 | 1 
+uclibc-ng-test-132c6134d691... | 1 
+                  vsftpd-3.0.5 | 1 
+
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+powerpc64le  |           brltty-6.8           | NOK | https://autobuild.buildroot.org/results/1f412a6486f78ca2e62655870f1abd3ebc9061cd |     
+  powerpc    |           brltty-6.8           | NOK | https://autobuild.buildroot.org/results/633f6431c2718bbf27ebdc7334d2b4407c0077d0 |     
+    arc      |       bubblewrap-0.11.0        | NOK | https://autobuild.buildroot.org/results/6898e2c2d53e35799ed485b2faa107d4fea22744 |     
+powerpc64le  |         c-icap-0.5.10          | NOK | https://autobuild.buildroot.org/results/b14f6d8fbaf927029417304631e8f17a8d60d1f0 | ORPH
+    i686     |      cloudflared-2025.8.1      | NOK | https://autobuild.buildroot.org/results/ba2ebca2651026edce4c2f0945fe4f2b46bd8c87 |     
+loongarch64  |          cvs-1.12.13           | NOK | https://autobuild.buildroot.org/results/0c3e59561d8fa4668a02dd892e5d567af0d69649 | ORPH
+ powerpc64   |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/e062500f9c7dcf6f8400be8bf22c732cd5a013cd | ORPH
+   sparc     |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/567361a516095474d76c94595c03961c9927ab0a | ORPH
+  mips64el   |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/0383158cfb8bc503ee64fba4e1263e51912b0f01 | ORPH
+   mipsel    |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/81c9c258407249d5d1a401c81b9899c6734f6c81 | ORPH
+   x86_64    |          dante-1.4.4           | NOK | https://autobuild.buildroot.org/results/a7e0614662c9fb0457b3c103dab02b12b9495d47 | ORPH
+   x86_64    |         dc3dd-7.2.641          | NOK | https://autobuild.buildroot.org/results/12abbda92e95bb691f20415e6565980c9ca023b6 | ORPH
+  aarch64    |         dc3dd-7.2.641          | NOK | https://autobuild.buildroot.org/results/ede102fd8dd81ca676492c5b66ad5f7029579921 | ORPH
+   sparc     |         dc3dd-7.2.641          | NOK | https://autobuild.buildroot.org/results/1c9966408158b09399c2e637da789a80be1529a3 | ORPH
+    m68k     |         dc3dd-7.2.641          | NOK | https://autobuild.buildroot.org/results/d9b44133780bf03be3317356e528dd5bafd40c16 | ORPH
+  aarch64    |      dmraid-1.0.0.rc16-3       | NOK | https://autobuild.buildroot.org/results/f74d42da964054d24b66fa61444bfca629b8d236 | ORPH
+ powerpc64   |       drbd-utils-9.21.4        | NOK | https://autobuild.buildroot.org/results/cebb40008a8e718c8e1c27ff03936e9ba6c257c0 |     
+  aarch64    |       erofs-utils-1.8.10       | NOK | https://autobuild.buildroot.org/results/251be18a87d2656115e19449207a80f0c766bb8c |     
+powerpc64le  |        fftw-quad-3.3.10        | NOK | https://autobuild.buildroot.org/results/84e3b876af6bb1f24de80c587a6c492e9f270861 | ORPH
+   mipsel    |            fio-3.41            | NOK | https://autobuild.buildroot.org/results/f7f2d13b0b6e2a4ceff5b96d051c63e361f792c1 |     
+   s390x     |       gdk-pixbuf-2.42.12       | NOK | https://autobuild.buildroot.org/results/5ec7783c9aac57d09f4e895e625fa8cd321a891e | ORPH
+   mipsel    |       gdk-pixbuf-2.42.12       | NOK | https://autobuild.buildroot.org/results/6d3e7b33d86ac8f8742a585d8115b0d7fb2eb1dc | ORPH
+powerpc64le  |             gnutls             | TIM | https://autobuild.buildroot.org/results/c43c3cda604639b7896cf598a2ec88a31cd29d32 |     
+    or1k     |       gstreamer1-1.24.13       | NOK | https://autobuild.buildroot.org/results/97b516b99a4f2fcd26abab15aee27098b4f4eb21 | ORPH
+    arm      |    host-gcc-initial-13.4.0     | NOK | https://autobuild.buildroot.org/results/103f915f43bf585c7333ff96a8b86f7d3ee20a0c |     
+ powerpc64   |        host-guile-3.0.9        | NOK | https://autobuild.buildroot.org/results/5faebf6397c89ba9bfd27386d7202fe37ea1ee66 |     
+   armeb     |        host-rust-1.88.0        | NOK | https://autobuild.buildroot.org/results/0d2d3b1c40bcd324eda12f307ff69bdd5dff7776 |     
+    m68k     |       igd2-for-linux-2.2       | NOK | https://autobuild.buildroot.org/results/4323de3a21e600acad2fad5a209e93c0204f244a |     
+   x86_64    |          iozone-3.508          | NOK | https://autobuild.buildroot.org/results/ece4e8a0d69453ea3d3fed0a085320e4d7020839 |     
+   x86_64    |           kbd-2.9.0            | NOK | https://autobuild.buildroot.org/results/e31dc59525d3d36fc3fa07f60d6e7cf92e5fc34e | ORPH
+    arm      |           kbd-2.9.0            | NOK | https://autobuild.buildroot.org/results/ca6eda6e58a151ca0bfdf2baf583a766ad9b4224 | ORPH
+    arc      |        libconfig-1.8.1         | NOK | https://autobuild.buildroot.org/results/63866ea7bf5bf8f6d15f7435718e3057e811fb92 |     
+    or1k     | libdill-32d0e8b733416208e04... | NOK | https://autobuild.buildroot.org/results/b477c53a65f624b439173496bfe1dfd422c3a0c4 |     
+microblazeel | libesmtp-v1.1.0-14-g335ee8d... | NOK | https://autobuild.buildroot.org/results/42e0bef98f40bb67ec4e97fbba30f5642c883889 | ORPH
+ microblaze  |         libglvnd-1.7.0         | NOK | https://autobuild.buildroot.org/results/d3ce9630fe681519a47c1e7842be51821a2303a9 | ORPH
+    sh4      |          libnss-3.117          | NOK | https://autobuild.buildroot.org/results/104c3ae04d4bd5f2f8ddc474517db6aaee154a5e |     
+  riscv64    |        libopenssl-3.6.0        | NOK | https://autobuild.buildroot.org/results/b61bbea9c82a1d4e2320229dfe8a99c3974a8826 | ORPH
+  riscv64    |        libopenssl-3.6.0        | NOK | https://autobuild.buildroot.org/results/c5f9fb41f45e89aa104ac5fb0a22f3c17b859df4 | ORPH
+  aarch64    |   libphidget-2.1.9.20190409    | NOK | https://autobuild.buildroot.org/results/6c20c7e45e7430f514bfa4daf84350932948df5e |     
+   s390x     |          libsvg-0.1.4          | NOK | https://autobuild.buildroot.org/results/a04ad5be6f4954666a1537e46cf593b36721b5e9 |     
+    arc      |          libsvg-0.1.4          | NOK | https://autobuild.buildroot.org/results/135c3a9df693059af299c4cf14e20af436968b6f |     
+    mips     |      linux-5.10.162-cip24      | NOK | https://autobuild.buildroot.org/results/f0d52f08d5985319ce4bfc6732d9a4549e013671 | ORPH
+   sh4aeb    |         linux-6.17.10          | NOK | https://autobuild.buildroot.org/results/caf3be48f3c5b281571de6a8f17116bbfb241311 | ORPH
+ aarch64_be  |        llama-cpp-b6865         | NOK | https://autobuild.buildroot.org/results/7b43f05a41602b261cb4ffa3bd31ead5f0b57740 |     
+ powerpc64   |     ltp-testsuite-20250530     | NOK | https://autobuild.buildroot.org/results/9e490cc0cc6bb0019db725bce306e20d46f064ef |     
+    i686     |         memtest86-7.20         | NOK | https://autobuild.buildroot.org/results/c9b2e63bb68e8e97009d040f4da9714c4ed4e95e |     
+   mips64    |           mpir-3.0.0           | NOK | https://autobuild.buildroot.org/results/0dea1a0a8477dc8e4999e3580dd8421af46c4804 |     
+   armeb     |           mpir-3.0.0           | NOK | https://autobuild.buildroot.org/results/8b75c643daee5a160e25386a4d1d360945d0716e |     
+  sparc64    |           mpir-3.0.0           | NOK | https://autobuild.buildroot.org/results/27e649b1cbf8db5b8631b0f0da9f3d107b67c5c0 |     
+   armeb     |           mpir-3.0.0           | NOK | https://autobuild.buildroot.org/results/d0e0f3468585ec71025caa8e5fb54837fe084726 |     
+  powerpc    |         nushell-0.96.1         | NOK | https://autobuild.buildroot.org/results/d6f6b0b98b20a795a02b0370e1f8c3bc58a5dd5a | ORPH
+   mips64    |        openblas-0.3.30         | NOK | https://autobuild.buildroot.org/results/060c673adb5da5a122d61e4778cc6d1c99e037ab |     
+ aarch64_be  |         opencv3-3.4.20         | NOK | https://autobuild.buildroot.org/results/8254bd8e0a094b3f662edc3515c9bcf90ef915a8 | ORPH
+   mips64    |    passt-2025_06_11.0293c6f    | NOK | https://autobuild.buildroot.org/results/4fc054046a86cae99c37e7ebc78d72c4eae38059 | ORPH
+   arceb     |    passt-2025_06_11.0293c6f    | NOK | https://autobuild.buildroot.org/results/539fdd06fa34a77c0bc97b007c18f8f8d12ad7d2 | ORPH
+   arceb     |        pcsc-lite-2.1.0         | NOK | https://autobuild.buildroot.org/results/44ef20f38ca0d81a4391de399a7840bcee86d61c | ORPH
+  riscv64    |         pixman-0.44.2          | NOK | https://autobuild.buildroot.org/results/a303f809d93e5c8d8cbc876d6f8acf4a01bd69e5 | ORPH
+   sparc     |        pulseaudio-17.0         | NOK | https://autobuild.buildroot.org/results/bb31bcdee9d00646712d55b248e72a6487deedf1 | ORPH
+  sparc64    |         python3-3.13.9         | NOK | https://autobuild.buildroot.org/results/28fee0f8368ae3dc1d607ebad4881b736e360f07 |     
+   sparc     |     s6-linux-utils-2.6.2.1     | NOK | https://autobuild.buildroot.org/results/fd4fae0bb22e70eb76a689558543cd0952e30ab1 |     
+microblazeel |         s6-rc-0.5.5.0          | NOK | https://autobuild.buildroot.org/results/bedb1a6c397e9b014e6f1456e05d9bf305b6d4b1 |     
+    m68k     |         samba4-4.23.3          | NOK | https://autobuild.buildroot.org/results/cdc63172c1a71288738895d1bb6e3b7d17465507 |     
+   s390x     |      sane-backends-1.1.1       | NOK | https://autobuild.buildroot.org/results/fd9622b1f02cdb4133391184a3303b8dbff7a965 |     
+  powerpc    |          sdl2-2.32.10          | NOK | https://autobuild.buildroot.org/results/3bdcb9af8aaa2fcb4b1ab2d168f3af1901c96962 |     
+    arm      |    spandsp-3.0.0-6ec23e5a7e    | NOK | https://autobuild.buildroot.org/results/11c61df74255ec22e181c027c38c8581c934bf77 |     
+    mips     |    spandsp-3.0.0-6ec23e5a7e    | NOK | https://autobuild.buildroot.org/results/470a6e7cae6c322e684db5016f48677347169c3e |     
+loongarch64  | uclibc-ng-test-132c6134d691... | NOK | https://autobuild.buildroot.org/results/affe60dc7d1cd6fc7f42f8252ca34f4f7d11135d |     
+    arm      |            unknown             | NOK | https://autobuild.buildroot.org/results/af454f34efd2ccd53376db1f6d8f0a865bff6ef0 |     
+   x86_64    |            unknown             | NOK | https://autobuild.buildroot.org/results/5f2b87de27873ec93a51b2dd16055c8225e116db |     
+   mipsel    |          vsftpd-3.0.5          | NOK | https://autobuild.buildroot.org/results/661edeafc949390df397fd40a8035330238cbe8a | ORPH
+
+
+Classification of failures by reason for 2025.08.x
+--------------------------------------------------
+
+                   atop-2.11.1 | 1 
+                   cvs-1.12.13 | 1 
+                enscript-1.6.6 | 1 
+                   libks-2.0.5 | 1 
+
+
+Detail of failures for 2025.08.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    i686     |          atop-2.11.1           | NOK | https://autobuild.buildroot.org/results/039bf5b0a3753ba2dd461cf0d37d3e75e47f88ce |     
+    m68k     |          cvs-1.12.13           | NOK | https://autobuild.buildroot.org/results/d3bdf762667084e797eb7f8dc2d1d33080d8e057 | ORPH
+powerpc64le  |         enscript-1.6.6         | NOK | https://autobuild.buildroot.org/results/174d965ba6201294e2e3f8ed06376c318fc8305c | ORPH
+   mipsel    |          libks-2.0.5           | NOK | https://autobuild.buildroot.org/results/11a2b89a23a07ab751ebe5dc679096719bb2d626 | ORPH
+
+
+Classification of failures by reason for 2025.02.x
+--------------------------------------------------
+
+cegui-00b4e1fe174da53b7ed72... | 1 
+  gobject-introspection-1.82.0 | 1 
+                  libnss-3.108 | 1 
+                 linux-6.12.58 | 1 
+                     shim-16.0 | 1 
+
+
+Detail of failures for 2025.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+powerpc64le  | cegui-00b4e1fe174da53b7ed72... | NOK | https://autobuild.buildroot.org/results/2bfd9100ed19e459c7a0cd10fcbd373b81e4f73d | ORPH
+  sparc64    |  gobject-introspection-1.82.0  | NOK | https://autobuild.buildroot.org/results/464dbfc2e25db4bfe91b258de3079b1586810df3 | ORPH
+    mips     |          libnss-3.108          | NOK | https://autobuild.buildroot.org/results/c2660445dd095d27f87242b660377b06aae4a413 |     
+   s390x     |         linux-6.12.58          | NOK | https://autobuild.buildroot.org/results/16a73a9bf1726e678d1656d1e4cb9492c1a37617 | ORPH
+  aarch64    |           shim-16.0            | NOK | https://autobuild.buildroot.org/results/8b0dfc8b2dfa297c38b5f87ac13a793a3c8da5cd |     
+
+
+Classification of failures by reason for 2025.05.x
+--------------------------------------------------
+
+                  cmake-3.31.5 | 1 
+libftdi1-v1.5-62-g5e67403c4... | 1 
+          sane-airscan-0.99.33 | 1 
+
+
+Detail of failures for 2025.05.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    m68k     |          cmake-3.31.5          | NOK | https://autobuild.buildroot.org/results/a1fa6b8bb04d66f94e2ea164f46bf446eb0c2f52 |     
+    m68k     | libftdi1-v1.5-62-g5e67403c4... | NOK | https://autobuild.buildroot.org/results/2320e20362ccf9d04abce4489b8ba51f633a63b4 |     
+ aarch64_be  |      sane-airscan-0.99.33      | NOK | https://autobuild.buildroot.org/results/38af855ffcc9343291502b84b98042358b600aff |     
+
+
+
 -- 
-2.42.0
-
+https://autobuild.buildroot.org
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
