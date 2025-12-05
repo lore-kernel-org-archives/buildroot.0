@@ -4,140 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D127D2CDF1
-	for <buildroot@archiver.kernel.org>; Fri,  5 Dec 2025 00:30:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D24ED2CDFE
+	for <buildroot@archiver.kernel.org>; Fri,  5 Dec 2025 02:07:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CCC3183D42;
-	Fri,  5 Dec 2025 00:30:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D202F846FC;
+	Fri,  5 Dec 2025 02:07:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z0koTdGFoN_1; Fri,  5 Dec 2025 00:30:30 +0000 (UTC)
+ id KeJwO1cXt_wk; Fri,  5 Dec 2025 02:07:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75C5F83D8D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22E5E84723
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764894630;
-	bh=cRgW4HWCNZ48o3D1D7C9h1JqI3sl/5NuQFxXWXGaXTE=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=l2JUfLB1mQ+Bw1T2pY5odESDxcYtV6qp6h3xEVF0dwo/qOQx4/bJ3ktTfPzp/V33b
-	 l0/TvcUIyCsB7CgCbQabb8zA0iuh+pxcHysAvL9nlt5pI3a38mm68tTcLSCybpG90x
-	 oCT6hGqUQ8sDPs2HqgImaTI+tOxPWyiQBT1zHjOq5I2PE513RiQDcv6U+DnYaQJOit
-	 1bfI5EjuKwWF30+8o4ka4kkGfRBoR0VqP0cLiOtpt46dNVz9vsUEmLNrg+/sZNvujr
-	 UdDGrMYHrbQIGtJpdiVDVowupyTDSenrSm/bcvMEWIGdIb6e067QrNHB1Wq/2Eo6eB
-	 N6Vio92HJythw==
+	s=default; t=1764900434;
+	bh=sOl565sG05IpQXR5NkjWlCFbp2gNXaMwmpaRZ/59rQI=;
+	h=To:CC:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=fD5BU7Rm8oxRBp7nkLgrh7wtOOZkZ6VTTd4z7lZRJV6po7WUA2eIW67n65nv5YLFZ
+	 L6OksJTitMs/fpt+UG3V/OKyNNybVTJX+MNR/3OTbwzAphNbicm6ATq7s+TISEZysn
+	 2HUdTYoMkE+tV5l7VaHYn21HCnPlnp8Eryneh8ikC0cMzHmBM1HihIsLSgtIrxFiwy
+	 EQNphghDTKCaQcj7oYEXrc1n91wROADhx1N1lLG68hz/6JNk1yKCqibiNvSqp/xsr/
+	 z26DxFylvLzETttx7y8trEUbYLVoBE7adolo/XH18c75tPuVn/NKj/pJBJYTv5/DGS
+	 toF93tEGY30Fg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 75C5F83D8D;
-	Fri,  5 Dec 2025 00:30:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C883FE7
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 00:30:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 22E5E84723;
+	Fri,  5 Dec 2025 02:07:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 71F99199
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 02:07:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AF164401F6
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 00:30:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 51200408DF
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 02:07:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hZGRg_Oa2MR3 for <buildroot@buildroot.org>;
- Fri,  5 Dec 2025 00:30:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::262; helo=mail-oi1-x262.google.com;
- envelope-from=markus.mayer@broadcom.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4751A40012
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4751A40012
-Received: from mail-oi1-x262.google.com (mail-oi1-x262.google.com
- [IPv6:2607:f8b0:4864:20::262])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4751A40012
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 00:30:27 +0000 (UTC)
-Received: by mail-oi1-x262.google.com with SMTP id
- 5614622812f47-45066bee74aso506906b6e.2
- for <buildroot@buildroot.org>; Thu, 04 Dec 2025 16:30:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1764894626; x=1765499426;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:dkim-signature:x-gm-gg
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=ZEls/dqj8t0/qm7GeKh9gsCRZ1SS2yuj6+Sm58++lZs=;
- b=DVCKtjakouuGFvakyB0G3rGlcZ/gBd9qoVuonw3nU2sBPEuIqvkAjboLtTdIN5EP0d
- bIJoaVBs8VN4I2q16V5hfDvvOo3yXYtUowJubwz27ek2a2HEXEkL8qwA0E5H1s9ShjY9
- BqgLzB8sMG5GW23JZAwas8K3posta80St04SQWAfNleF+k4bvIxYa20bddYSWMfVieeB
- kKKq9knsj1LcnvH6VkGOESZJaDvA3jbA42MHrUtXJer29OOe2lzY9hfjWWYftyyAyIwY
- gWiSVbElqI5DQLEvJhKbn+44VqghF0uMk7+SI5JxT2/qyHQvF4VkG7MluUGRsbpY0rHu
- iFSQ==
-X-Forwarded-Encrypted: i=1;
- AJvYcCV+y/UhAGZ+DN1WOnNrdw8XEdpAVQUoVo7xUzBk1zjw5YeKF01GVLJfYPEDhXixYIdqTy5WDu2FN9Y=@buildroot.org
-X-Gm-Message-State: AOJu0YyR5PO+Yw5cNQkuOU+pBVeinBvwq8VeyNfpulfIdc//Ao/WC4ow
- 0rdb4Ac8ZgKNYpV+Q0Q0Z815KT6kyibuCSZ0Ob/c8+8pj1q1R+aSohU0JxSexXhRXA5NLz1+ijW
- +CuK+KfIToGcgAY9wxaCX/XO9IqAQV77t/ZvbGSC9wXx0D+7gCP7BmHIjtBKsNcAOqR2cBPzpSd
- Prr90IyXKO7QRRo9ANOelRvBk5vWj1pnfUC2SWXfjYq53G2VPW/825ocHtPRUdf7Ah8xiq2RzfL
- TBNr85dI1EYR3Q=
-X-Gm-Gg: ASbGnctvI3Not0qg43HB51rBtU3F6R5AZ2MdDaPqWAAE0vU3LMvJCYgJoy2t38Owkgo
- O4VYSRR1ntrjNfAXLKZtWeqoDABwn90iwa/05cbkr9O53HGTsdSmGeyVlvUt/AUiLv5Q6PU4mCf
- wyzY3oc0vZbNCTkk3Cw66u+XJ/iUCVkb7D1CoCB9WfHH9R85oeGwLdUQQbg3vFYiRNsv7W5liKm
- AIVNHnjLaxWlJcDKr3t9ZQPlYfu5bEw4GoN4Qfe8s+PQU7H9msNSvbeUVVch0rivRZicyjDw+gD
- eHUC9P23T5U9vW8i8BMqgra3Wuwinmrai2GJd0T4AStVG33FlwIcJ0SzaCn24ugbJBc7xtsz5W9
- QJBnZ3Xc3bjyS5S0d8HZaOkFEUcY8euq3FLqc3PeVEqDVJIlo+Pjh4qsw1BVrAad3clcio3rDWo
- wii35+GmoMI2kiHO7eWSrPB3dGPo2W9+UEu+yBknz4wgG3aVE=
-X-Google-Smtp-Source: AGHT+IFdZoZy+6iYntRnjw+aaic4DZ2qBNEiKZj/oxml8HdJumVzY9UtGR+m8s4719fXzY9/iqeb5+66qpku
-X-Received: by 2002:a05:6808:c2b3:b0:442:82:3efe with SMTP id
- 5614622812f47-4536e39e3ccmr4007999b6e.14.1764894626091; 
- Thu, 04 Dec 2025 16:30:26 -0800 (PST)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com
- (address-144-49-247-122.dlp.protect.broadcom.com. [144.49.247.122])
- by smtp-relay.gmail.com with ESMTPS id
- 006d021491bc7-6597ea5d92fsm244873eaf.0.2025.12.04.16.30.25
- for <buildroot@buildroot.org>
- (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Thu, 04 Dec 2025 16:30:26 -0800 (PST)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-qt1-f199.google.com with SMTP id
- d75a77b69052e-4ee1b7293e7so48557591cf.0
- for <buildroot@buildroot.org>; Thu, 04 Dec 2025 16:30:25 -0800 (PST)
-X-Forwarded-Encrypted: i=1;
- AJvYcCUpj+jXUk2BxZQhn7XT0UDNSH115QnmgJpF75oLB6rJIM29nZf6dN4bj45j4P0VcVrdW7JnlaCZHck=@buildroot.org
-X-Received: by 2002:ac8:5947:0:b0:4ed:1dc7:e3de with SMTP id
- d75a77b69052e-4f0176db3bbmr119887431cf.67.1764894624693; 
- Thu, 04 Dec 2025 16:30:24 -0800 (PST)
-X-Received: by 2002:ac8:5947:0:b0:4ed:1dc7:e3de with SMTP id
- d75a77b69052e-4f0176db3bbmr119886871cf.67.1764894624175; 
- Thu, 04 Dec 2025 16:30:24 -0800 (PST)
-Received: from lbrmn-mmayer.ric.broadcom.net ([192.19.161.248])
- by smtp.gmail.com with ESMTPSA id
- d75a77b69052e-4f027669f3bsm18573811cf.6.2025.12.04.16.30.22
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 04 Dec 2025 16:30:23 -0800 (PST)
-Received: by lbrmn-mmayer.ric.broadcom.net (Postfix, from userid 1000)
- id 920052E; Thu,  4 Dec 2025 16:30:21 -0800 (PST)
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Markus Mayer <mmayer@broadcom.com>, Julien Olivain <ju.o@free.fr>,
- Bernd Kuhls <bernd@kuhls.net>, Buildroot List <buildroot@buildroot.org>
-Date: Thu,  4 Dec 2025 16:30:04 -0800
-Message-ID: <20251205003008.153577-2-mmayer@broadcom.com>
-X-Mailer: git-send-email 2.51.2
-In-Reply-To: <20251205003008.153577-1-mmayer@broadcom.com>
-References: <20251205003008.153577-1-mmayer@broadcom.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5_Uj4GCQaaCY for <buildroot@buildroot.org>;
+ Fri,  5 Dec 2025 02:07:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=114.94.151.114;
+ helo=mail-sh.amlogic.com; envelope-from=yang.li@amlogic.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7FD5C40865
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FD5C40865
+Received: from mail-sh.amlogic.com (unknown [114.94.151.114])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7FD5C40865
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 02:07:09 +0000 (UTC)
+Received: from droid02-cd.amlogic.com (10.98.11.201) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server id 15.1.2507.61; Fri, 5 Dec 2025
+ 10:07:04 +0800
+To: <buildroot@buildroot.org>
+CC: Yang Li <yang.li@amlogic.com>, Grzegorz Blach <grzegorz@blach.pl>, "Marcin
+ Bis" <marcin@bis.org.pl>
+Date: Fri, 5 Dec 2025 10:06:57 +0800
+Message-ID: <20251205020659.193849-1-yang.li@amlogic.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=broadcom.com; s=google; t=1764894625; x=1765499425; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=ZEls/dqj8t0/qm7GeKh9gsCRZ1SS2yuj6+Sm58++lZs=;
- b=S4hv0X7gcZyn5wNyppvxdJrVZKPX3eUR47vdQWgwpKID2Uj4rdfY0wK/bQe2y0acQW
- pvH/33rGqov6uTeXduOBgrSDILOMayjCKN+InKWevEwVWAhgHJnS4wNN31H8CnGMY9BM
- Hlc7pSIk01IBWczXHrTOUrl1+pRaeot4i+4s8=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=broadcom.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256
- header.s=google header.b=S4hv0X7g
-Subject: [Buildroot] [PATCH 1/1] package/e2fsprogs: fix fsverity build error
- slightly differently
+X-Originating-IP: [10.98.11.201]
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=amlogic.com
+Subject: [Buildroot] [PATCH] package/{bluez5_utils,
+ bluez5_utils-headers}: bump to version 5.85
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -149,254 +75,638 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Markus Mayer via buildroot <buildroot@buildroot.org>
-Reply-To: Markus Mayer <mmayer@broadcom.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Yang Li via buildroot <buildroot@buildroot.org>
+Reply-To: Yang Li <yang.li@amlogic.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VHVybnMgb3V0IFRob21hcyBhbmQgSSB3ZXJlIHdvcmtpbmcgY29uY3VycmVudGx5IG9uIHR3byBk
-aWZmZXJlbnQgd2F5cwp0byBmaXggdGhlIGUyZnNwcm9ncyAxLjQ3LjMgYnVpbGQgZXJyb3Igd2l0
-aCByZWdhcmRzIHRvIGZzdmVyaXR5IG5vdApiZWluZyBwcmVzZW50IGluIG9sZGVyIGtlcm5lbHMu
-CgpUaG9tYXMnIHBhdGNoIGRpc2FibGVzIHRoZSBmc3Zlcml0eSBmdW5jdGlvbmFsaXR5IGluIGUy
-ZnNwcm9ncyBiYXNlZCBvbgp0aGUga2VybmVsIGhlYWRlcnMgdXNlZCBmb3IgY29tcGlsYXRpb24g
-d2hpbGUgbXkgcGF0Y2ggYWltcyB0byBwcm92aWRlCnRoZSBtaXNzaW5nIGRlZmluaXRpb25zIGlm
-IHRoZSBrZXJuZWwgZG9lc24ndC4KCkJ5IHByb3ZpZGluZyB0aGUgbWlzc2luZyBkZWZpbml0aW9u
-cyB3aGVuZXZlciB0aGUga2VybmVsIGhlYWRlcnMgZG9uJ3QsCmZzdmVyaXR5IHJlbGF0ZWQgZmVh
-dHVyZXMgY2FuIGJlIGNvbXBpbGVkIGluIGV2ZW4gaWYgdGhlIGtlcm5lbCBoZWFkZXJzCmFyZSB0
-b28gb2xkLiBUaGlzIGFsbG93cyBiaW5hcmllcyB0byBydW4gb24gbmV3ZXIga2VybmVscyB3aXRo
-IGZ1bGwKZnVuY3Rpb25hbGl0eSwgYnV0IGl0IHJlbGllcyBvbiBlMmZzcHJvZ3MgdG8gcHJvcGVy
-bHkgaGFuZGxlIC1FTk9UU1VQUAplcnJvcnMgYXQgcnVudGltZSBpZiB0aGUga2VybmVsIGRvZXNu
-J3Qgc3VwcG9ydCB0aGUgaW9jdGwuWzFdCgpXZSBib3RoIHN1Ym1pdHRlZCBvdXIgcmVzcGVjdGl2
-ZSBwYXRjaGVzIHRvIFRlZCBUJ3NvIGJ1dCBoYXZlbid0IGhlYXJkCmJhY2sgYXMgb2YgeWV0LiBB
-ZnRlciBhIGJyaWVmIGRpc2N1c3Npb24gb24gdGhlIEJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QsCndl
-IGFyZSB0cnlpbmcgbXkgYXBwcm9hY2ggZm9yIG5vdy4KClsxXTogQ29tcGlsaW5nIGJpbmFyaWVz
-IGFnYWluc3Qgb2xkZXIga2VybmVsIGhlYWRlcnMsIGJ1dCBleGNsdXNpdmVseQpydW5uaW5nIHRo
-ZW0gb24gbmV3ZXIga2VybmVscywgY2FuIGhhcHBlbiBpZiBvbmUncyB0b29sY2hhaW4gY29tZXMg
-d2l0aApvbGRlciBrZXJuZWwgaGVhZGVycyBpbiB0aGUgc3lzcm9vdCBmb3IgaW5jcmVhc2VkIGNv
-bXBhdGliaWxpdHkgYWNyb3NzCm11bHRpcGxlIGtlcm5lbCB2ZXJzaW9ucyAoZS5nLiB0aGUgc2Ft
-ZSB0b29sY2hhaW4gJiBzeXNyb290IGFyZSB1c2VkIHRvCmJ1aWxkIHJvb3QgZmlsZSBzeXN0ZW1z
-IHdpdGggTGludXggNS40IGFuZCA2LjEyKS4KClNpZ25lZC1vZmYtYnk6IE1hcmt1cyBNYXllciA8
-bW1heWVyQGJyb2FkY29tLmNvbT4KLS0tCiAuLi5jay1mb3ItRlNfSU9DX1JFQURfVkVSSVRZX01F
-VEFEQVRBLWEucGF0Y2ggfCAxMDMgLS0tLS0tLS0tLS0tLS0KIC4uLi8wMDAxLWxpYi1hZGQta2Vy
-bl9jb21wYXQuaC5wYXRjaCAgICAgICAgICB8IDEzNCArKysrKysrKysrKysrKysrKysKIHBhY2th
-Z2UvZTJmc3Byb2dzLzAwMDItR2VuZXJhdGVkLWZpbGVzLnBhdGNoICB8ICA2MyArKysrKysrKwog
-cGFja2FnZS9lMmZzcHJvZ3MvZTJmc3Byb2dzLm1rICAgICAgICAgICAgICAgIHwgICA0ICstCiA0
-IGZpbGVzIGNoYW5nZWQsIDE5OSBpbnNlcnRpb25zKCspLCAxMDUgZGVsZXRpb25zKC0pCiBkZWxl
-dGUgbW9kZSAxMDA2NDQgcGFja2FnZS9lMmZzcHJvZ3MvMDAwMS1jb25maWd1cmUuYWMtY2hlY2st
-Zm9yLUZTX0lPQ19SRUFEX1ZFUklUWV9NRVRBREFUQS1hLnBhdGNoCiBjcmVhdGUgbW9kZSAxMDA2
-NDQgcGFja2FnZS9lMmZzcHJvZ3MvMDAwMS1saWItYWRkLWtlcm5fY29tcGF0LmgucGF0Y2gKIGNy
-ZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2UyZnNwcm9ncy8wMDAyLUdlbmVyYXRlZC1maWxlcy5w
-YXRjaAoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvZTJmc3Byb2dzLzAwMDEtY29uZmlndXJlLmFjLWNo
-ZWNrLWZvci1GU19JT0NfUkVBRF9WRVJJVFlfTUVUQURBVEEtYS5wYXRjaCBiL3BhY2thZ2UvZTJm
-c3Byb2dzLzAwMDEtY29uZmlndXJlLmFjLWNoZWNrLWZvci1GU19JT0NfUkVBRF9WRVJJVFlfTUVU
-QURBVEEtYS5wYXRjaApkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMzY0NDJhNTNiODFl
-Li4wMDAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9lMmZzcHJvZ3MvMDAwMS1jb25maWd1cmUuYWMt
-Y2hlY2stZm9yLUZTX0lPQ19SRUFEX1ZFUklUWV9NRVRBREFUQS1hLnBhdGNoCisrKyAvZGV2L251
-bGwKQEAgLTEsMTAzICswLDAgQEAKLUZyb20gMWEyY2U4Y2Q5NTYwNjUxMDZhZTI3YTM2YTUwMDBm
-MDBlYmM0NTkxZiBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKLUZyb206IFRob21hcyBQZXRhenpv
-bmkgPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+Ci1EYXRlOiBTYXQsIDIyIE5vdiAyMDI1
-IDIxOjEyOjIzICswMTAwCi1TdWJqZWN0OiBbUEFUQ0hdIGNvbmZpZ3VyZS5hYzogY2hlY2sgZm9y
-IEZTX0lPQ19SRUFEX1ZFUklUWV9NRVRBREFUQQotIGF2YWlsYWJpbGl0eQotTUlNRS1WZXJzaW9u
-OiAxLjAKLUNvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOAotQ29udGVudC1U
-cmFuc2Zlci1FbmNvZGluZzogOGJpdAotCi1Db21taXQgNmJmYTg0M2I0NDM1MzM0YWMwNzNlNDI5
-NTBiNDhkOGJhY2I1NDk3NyAoIm1rZTJmczogZW5hYmxlCi1jb3B5aW5nIG9mIGZzLXZlcml0eSBt
-ZXRhZGF0YSIpIGludHJvZHVjZWQgc3VwcG9ydCBmb3IgcmVhZGluZwotZnMtdmVyaXR5IG1ldGFk
-YXRhLCB3aGljaCByZXF1aXJlcyB1c2luZyB0aGUKLUZTX0lPQ19SRUFEX1ZFUklUWV9NRVRBREFU
-QS4KLQotVGhlIGNvZGUgaXMgY29uZGl0aW9uYWxseSBjb21waWxlZCB3aGVuIHRoZSBrZXJuZWwg
-aGVhZGVycyBoYXZlCi08bGludXgvZnN2ZXJpdHkuaD4gYXZhaWxhYmxlLiBVbmZvcnR1bmF0ZWx5
-LCB0aGlzIGNoZWNrIGlzIG5vdAotc3VmZmljaWVudDogPGxpbnV4L2ZzdmVyaXR5Lmg+IHdhcyBp
-bnRyb2R1Y2VkIGluIExpbnV4IDUuMTAsIGJ1dCB0aGUKLUZTX0lPQ19SRUFEX1ZFUklUWV9NRVRB
-REFUQSB3YXMgbm90IGludHJvZHVjZWQgYmVmb3JlIDUuMTIsIHNvIGlmIG9uZQotaXMgdXNpbmcg
-NS4xMCBvciA1LjExIGtlcm5lbCBoZWFkZXJzLCB0aGUgYnVpbGQgZmFpbHMgd2l0aDoKLQotLi8u
-Li9taXNjL2NyZWF0ZV9pbm9kZS5jOiBJbiBmdW5jdGlvbiDigJhjb3B5X2ZzX3Zlcml0eV9kYXRh
-4oCZOgotLi8uLi9taXNjL2NyZWF0ZV9pbm9kZS5jOjU4OToxMDogZXJyb3I6IHZhcmlhYmxlIOKA
-mGFyZ+KAmSBoYXMgaW5pdGlhbGl6ZXIgYnV0IGluY29tcGxldGUgdHlwZQotICA1ODkgfCAgIHN0
-cnVjdCBmc3Zlcml0eV9yZWFkX21ldGFkYXRhX2FyZyBhcmcgPSB7Ci0gICAgICB8ICAgICAgICAg
-IF5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+Ci1bLi4uXQotLi8uLi9taXNjL2NyZWF0ZV9pbm9k
-ZS5jOjYwMDoyMDogZXJyb3I6IOKAmEZTX0lPQ19SRUFEX1ZFUklUWV9NRVRBREFUQeKAmSB1bmRl
-Y2xhcmVkIChmaXJzdCB1c2UgaW4gdGhpcyBmdW5jdGlvbikKLSAgNjAwIHwgICBzaXplID0gaW9j
-dGwoZmQsIEZTX0lPQ19SRUFEX1ZFUklUWV9NRVRBREFUQSwgJmFyZyk7Ci0gICAgICB8ICAgICAg
-ICAgICAgICAgICAgICBefn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn4KLQotVGhpcyBjb21taXQg
-dGhlcmVmb3JlIGV4dGVuZHMgdGhlIGNvbmZpZ3VyZS5hYyBjaGVjayB0byBlbnN1cmUgdGhhdAot
-bm90IG9ubHkgPGxpbnV4L2ZzdmVyaXR5Lmg+IGV4aXN0cyBidXQgYWxzbyB0aGF0IGl0IGRlZmlu
-ZXMgdGhlCi1GU19JT0NfUkVBRF9WRVJJVFlfTUVUQURBVEEgaW9jdGwuCi0KLVVwc3RyZWFtOiBo
-dHRwczovL2dpdGh1Yi5jb20vdHl0c28vZTJmc3Byb2dzL3B1bGwvMjU2Ci1TaWduZWQtb2ZmLWJ5
-OiBUaG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPgotLS0tCi0g
-Y29uZmlndXJlLmFjICAgICAgICB8IDE4ICsrKysrKysrKysrKysrKysrKwotIG1pc2MvY3JlYXRl
-X2lub2RlLmMgfCAgNiArKystLS0KLSAyIGZpbGVzIGNoYW5nZWQsIDIxIGluc2VydGlvbnMoKyks
-IDMgZGVsZXRpb25zKC0pCi0KLWRpZmYgLS1naXQgYS9jb25maWd1cmUuYWMgYi9jb25maWd1cmUu
-YWMKLWluZGV4IGEwMTcxMTYzLi4zZTU1ODZhMyAxMDA2NDQKLS0tLSBhL2NvbmZpZ3VyZS5hYwot
-KysrIGIvY29uZmlndXJlLmFjCi1AQCAtMTk5Nyw2ICsxOTk3LDI0IEBAIE9TX0lPX0ZJTEU9IiIK
-LSBlc2FjXQotIEFDX1NVQlNUKE9TX0lPX0ZJTEUpCi0gCi0rZG5sIENoZWNrIGZvciBmc3Zlcml0
-eSBpb2N0bAotK2lmIHRlc3QgIiR7YWNfY3ZfaGVhZGVyX2xpbnV4X2ZzdmVyaXR5X2h9IiA9ICJ5
-ZXMiOyB0aGVuCi0rICAgQUNfTVNHX0NIRUNLSU5HKFtmb3IgRlNfSU9DX1JFQURfVkVSSVRZX01F
-VEFEQVRBIGlvY3RsXSkKLSsgICBBQ19QUkVQUk9DX0lGRUxTRSgKLSsgICBbQUNfTEFOR19QUk9H
-UkFNKFtbCi0rI2luY2x1ZGUgPGxpbnV4L2ZzdmVyaXR5Lmg+Ci0rI2lmbmRlZiBGU19JT0NfUkVB
-RF9WRVJJVFlfTUVUQURBVEEKLSsjIGVycm9yICJGU19JT0NfUkVBRF9WRVJJVFlfTUVUQURBVEEg
-bm90IGF2YWlsYWJsZSIKLSsjZW5kaWYKLStdXSwgW10pXSwgWwotKyAgIEFDX0RFRklORShbSEFW
-RV9GU19JT0NfUkVBRF9WRVJJVFlfTUVUQURBVEFdLCBbMV0sIFtEZWZpbmUgdG8gMSBpZiBGU19J
-T0NfUkVBRF9WRVJJVFlfTUVUQURBVEEgaW9jdGwgaXMgYXZhaWxhYmxlXSkKLSsgICBBQ19NU0df
-UkVTVUxUKFt5ZXNdKQotKyAgIF0sCi0rICAgWwotKyAgIEFDX01TR19SRVNVTFQoW25vXSkKLSsg
-ICBdKQotK2ZpCi0rCi0gZG5sCi0gZG5sIE1ha2Ugb3VyIG91dHB1dCBmaWxlcywgYmVpbmcgc3Vy
-ZSB0aGF0IHdlIGNyZWF0ZSB0aGUgc29tZSBtaXNjZWxsYW5lb3VzIAotIGRubCBkaXJlY3Rvcmll
-cwotZGlmZiAtLWdpdCBhL21pc2MvY3JlYXRlX2lub2RlLmMgYi9taXNjL2NyZWF0ZV9pbm9kZS5j
-Ci1pbmRleCA2MjRlZmMwMy4uYTc5MTg4NzMgMTAwNjQ0Ci0tLS0gYS9taXNjL2NyZWF0ZV9pbm9k
-ZS5jCi0rKysgYi9taXNjL2NyZWF0ZV9pbm9kZS5jCi1AQCAtMzAsNyArMzAsNyBAQAotICNpZmRl
-ZiBIQVZFX1NZU19TWVNNQUNST1NfSAotICNpbmNsdWRlIDxzeXMvc3lzbWFjcm9zLmg+Ci0gI2Vu
-ZGlmCi0tI2lmZGVmIEhBVkVfTElOVVhfRlNWRVJJVFlfSAotKyNpZiBkZWZpbmVkKEhBVkVfTElO
-VVhfRlNWRVJJVFlfSCkgJiYgZGVmaW5lZChIQVZFX0ZTX0lPQ19SRUFEX1ZFUklUWV9NRVRBREFU
-QSkKLSAjaW5jbHVkZSA8bGludXgvZnN2ZXJpdHkuaD4KLSAjaW5jbHVkZSA8bGludXgvZnMuaD4K
-LSAjZW5kaWYKLUBAIC01NjksNyArNTY5LDcgQEAgb3V0OgotIH0KLSAjZW5kaWYgLyogRlNfSU9D
-X0ZJRU1BUCAqLwotIAotLSNpZmRlZiBIQVZFX0xJTlVYX0ZTVkVSSVRZX0gKLSsjaWYgZGVmaW5l
-ZChIQVZFX0xJTlVYX0ZTVkVSSVRZX0gpICYmIGRlZmluZWQoSEFWRV9GU19JT0NfUkVBRF9WRVJJ
-VFlfTUVUQURBVEEpCi0gc3RhdGljIGlubGluZSBvZmZfdCByb3VuZF91cChvZmZfdCBuLCBvZmZf
-dCBibGtzeiwgb2ZmX3QgYmlhcykKLSB7Ci0gICByZXR1cm4gKChuIC0gYmlhcyArIChibGtzeiAt
-IDEpKSAmIH4oYmxrc3ogLSAxKSkgKyBiaWFzOwotQEAgLTczOCw3ICs3MzgsNyBAQCBzdGF0aWMg
-ZXJyY29kZV90IGNvcHlfZmlsZShleHQyX2ZpbHN5cyBmcywgaW50IGZkLCBzdHJ1Y3Qgc3RhdCAq
-c3RhdGJ1ZiwKLSAJCWVyciA9IGNvcHlfZmlsZV9jaHVuayhmcywgZmQsIGUyX2ZpbGUsIDAsIHN0
-YXRidWYtPnN0X3NpemUsIGJ1ZiwKLSAJCQkJICAgICAgemVyb2J1Zik7Ci0gCi0tI2lmZGVmIEhB
-VkVfTElOVVhfRlNWRVJJVFlfSAotKyNpZiBkZWZpbmVkKEhBVkVfTElOVVhfRlNWRVJJVFlfSCkg
-JiYgZGVmaW5lZChIQVZFX0ZTX0lPQ19SRUFEX1ZFUklUWV9NRVRBREFUQSkKLSAJaWYgKCFlcnIg
-JiYgKGZsYWdzICYgRVhUNF9WRVJJVFlfRkwpKQotIAkJZXJyID0gY29weV9mc192ZXJpdHkoZnMs
-IGZkLCBlMl9maWxlLCBzdGF0YnVmLT5zdF9zaXplKTsKLSAjZW5kaWYKLS0tIAotMi41MS4xCi0K
-ZGlmZiAtLWdpdCBhL3BhY2thZ2UvZTJmc3Byb2dzLzAwMDEtbGliLWFkZC1rZXJuX2NvbXBhdC5o
-LnBhdGNoIGIvcGFja2FnZS9lMmZzcHJvZ3MvMDAwMS1saWItYWRkLWtlcm5fY29tcGF0LmgucGF0
-Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMDAwLi41MGQwMTliY2JlYWQK
-LS0tIC9kZXYvbnVsbAorKysgYi9wYWNrYWdlL2UyZnNwcm9ncy8wMDAxLWxpYi1hZGQta2Vybl9j
-b21wYXQuaC5wYXRjaApAQCAtMCwwICsxLDEzNCBAQAorRnJvbSAwYjM2OWJjZTIzMTg5MjFjZjk5
-NDU1ZGY1MTZmMDk4MWQ3ZDRmOWYzIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQorRnJvbTogTWFy
-a3VzIE1heWVyIDxtbWF5ZXJAYnJvYWRjb20uY29tPgorRGF0ZTogRnJpLCAyMSBOb3YgMjAyNSAx
-MjoxNzowOCAtMDgwMAorU3ViamVjdDogW1BBVENIIDEvMl0gbGliOiBhZGQga2Vybl9jb21wYXQu
-aAorVG86IFRlZCBUcydvIDx0eXRzb0BtaXQuZWR1PgorCitBZGQgYSBuZXcgaGVhZGVyIGZpbGUg
-KGxpYi9rZXJuX2NvbXBhdC5oKSB0byBkZWNsYXJlIGRhdGEgc3RydWN0dXJlcyBhbmQKK2NvbnN0
-YW50cyBmcm9tIHRoZSBMaW51eCBrZXJuZWwgdGhhdCBtYXkgbm90IGJlIHByZXNlbnQgaW4gb2xk
-ZXIga2VybmVscworYnV0IGFyZSBuZWVkZWQgYnkgZTJmc3Byb2dzLgorCitQcm92aWRpbmcgYSBm
-YWxsYmFjayBtZWNoYW5pc20gdG8gZGVjbGFyZSB0aGVzZSBkYXRhIHN0cnVjdHVyZXMgYW5kCitj
-b25zdGFudHMgYWxsb3dzIHVzZXJzIHRvIGNvbXBpbGUgZTJmc3Byb2dzIGFnYWluc3Qgb2xkZXIg
-a2VybmVsIGhlYWRlcnMKK2ZvciBpbmNyZWFzZWQgY29tcGF0aWJpbGl0eS4gSW4gYWRkaXRpb24s
-IGUyZnNwcm9ncyBidWlsdCBhZ2FpbnN0IG9sZGVyCitrZXJuZWxzIHdpbGwgc3RpbGwgaGF2ZSBh
-bGwgb2YgaXRzIGZ1bmN0aW9uYWxpdHkgd2hlbiBydW5uaW5nIG9uIGEgbmV3ZXIKK3N5c3RlbS4K
-KworU29tZSBlMmZzcHJvZ3MgdG9vbHMgbWF5IGV4cGVyaWVuY2UgcnVudGltZSBmYWlsdXJlcyBv
-biBvbGRlciBrZXJuZWxzCisocmF0aGVyIHRoYW4gY29tcGlsZSB0aW1lIGZhaWx1cmVzKSwgaWYg
-YW4gaW9jdGwgaXMgbm90IHN1cHBvcnRlZCwgZm9yCitpbnN0YW5jZS4KKworU2lnbmVkLW9mZi1i
-eTogTWFya3VzIE1heWVyIDxtbWF5ZXJAYnJvYWRjb20uY29tPgorLS0tCisgY29uZmlndXJlLmFj
-ICAgICAgICB8IDEwICsrKysrKysKKyBsaWIva2Vybl9jb21wYXQuaCAgIHwgNjMgKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrCisgbWlzYy9jcmVhdGVfaW5vZGUu
-YyB8ICAyICsrCisgMyBmaWxlcyBjaGFuZ2VkLCA3NSBpbnNlcnRpb25zKCspCisgY3JlYXRlIG1v
-ZGUgMTAwNjQ0IGxpYi9rZXJuX2NvbXBhdC5oCisKK2RpZmYgLS1naXQgYS9jb25maWd1cmUuYWMg
-Yi9jb25maWd1cmUuYWMKK2luZGV4IGJkZDVmMWY2OWQyNi4uZjJlMDI5MWIwODg3IDEwMDY0NAor
-LS0tIGEvY29uZmlndXJlLmFjCisrKysgYi9jb25maWd1cmUuYWMKK0BAIC0xMTc3LDYgKzExNzcs
-MTYgQEAgZG5sCisgQUNfQ0hFQ0tfSEVBREVSUyhbaW50dHlwZXMuaF0pCisgQUNfQ0hFQ0tfVFlQ
-RVMoaW50cHRyX3QpCisgZG5sCisrZG5sIENoZWNrIGlmIHdlIG5lZWQgdG8gZGVjbGFyZSBzb21l
-IG5ld2VyIGtlcm5lbCBzdHJ1Y3RzIG91cnNlbHZlcworK2RubAorK0FDX0NIRUNLX1RZUEUoc3Ry
-dWN0IGZzdmVyaXR5X2Rlc2NyaXB0b3IsW0FDX0RFRklORShIQVZFX0ZTVkVSSVRZX0RFU0NSSVBU
-T1IsIDEsCisrCQlbRGVmaW5lIHRvIDEgaWYgc3RydWN0IGZzdmVyaXR5X2Rlc2NyaXB0b3IgaXMg
-ZGVjbGFyZWRdKV0sLAorKwkJWyNpbmNsdWRlIDxsaW51eC9mc3Zlcml0eS5oPl0pCisrQUNfQ0hF
-Q0tfVFlQRShzdHJ1Y3QgZnN2ZXJpdHlfcmVhZF9tZXRhZGF0YV9hcmcsCisrCQlbQUNfREVGSU5F
-KEhBVkVfRlNWRVJJVFlfUkVBRF9NRVRBREFUQV9BUkcsIDEsCisrCQlbRGVmaW5lIHRvIDEgaWYg
-c3RydWN0IGZzdmVyaXR5X3JlYWRfbWV0YWRhdGFfYXJnIGlzIGRlY2xhcmVkXSldLCwKKysJCVsj
-aW5jbHVkZSA8bGludXgvZnN2ZXJpdHkuaD5dKQorK2RubAorIGRubCBTZWUgaWYgc3RydWN0IHN0
-YXQgaGFzIGEgc3RfZmxhZ3MgZmllbGQsIGluIHdoaWNoIGNhc2Ugd2UgY2FuIGdldCBmaWxlCisg
-ZG5sIGZsYWdzIHNvbWV3aGF0IHBvcnRhYmx5LiAgQWxzbyBjaGVjayBmb3IgdGhlIGFuYWxvZ291
-cyBzZXR0ZXIsIGNoZmxhZ3MoKS4KKyBkbmwKK2RpZmYgLS1naXQgYS9saWIva2Vybl9jb21wYXQu
-aCBiL2xpYi9rZXJuX2NvbXBhdC5oCituZXcgZmlsZSBtb2RlIDEwMDY0NAoraW5kZXggMDAwMDAw
-MDAwMDAwLi5jMjYzMTg1ZDU2MTQKKy0tLSAvZGV2L251bGwKKysrKyBiL2xpYi9rZXJuX2NvbXBh
-dC5oCitAQCAtMCwwICsxLDYzIEBACisrLyoKKysgKiBrZXJuX2NvbXBhdC5oIC0gZGVjbGFyZSBz
-dHJ1Y3RzIGFuZCBjb25zdGFudHMgdW5hdmFpbGFibGUgaW4gb2xkZXIga2VybmVscworKyAqCisr
-ICogVGhlIGRlZmluaXRpb25zIGluIHRoaXMgZmlsZSB3ZXJlIHRha2VuIHN0cmFpZ2h0IGZyb20g
-bGludXgvZnN2ZXJpdHkuaC4gVGhlCisrICogIiNpZmRlZiBfX0tFUk5FTCIgZGlyZWN0aXZlcyBo
-YXZlIGJlZW4gcmVtb3ZlZC4KKysgKi8KKysKKysvKgorKyAqIEludHJvZHVjZWQgaW50byB0aGUg
-a2VybmVsIGJ5CisrICogICAgIGNvbW1pdCBiZGU0OTMzNDkwMjVjYTA1NTllMmZmZjg4NTkyOTM1
-YWYzYjhkZjE5CisrICogICAgIEF1dGhvcjogRXJpYyBCaWdnZXJzIDxlYmlnZ2Vyc0Bnb29nbGUu
-Y29tPgorKyAqICAgICBEYXRlOiAgIEZyaSBOb3YgMTMgMTM6MTk6MTggMjAyMCAtMDgwMAorKyAq
-CisrICogICAgIGZzLXZlcml0eTogbW92ZSBzdHJ1Y3RzIG5lZWRlZCBmb3IgZmlsZSBzaWduaW5n
-IHRvIFVBUEkgaGVhZGVyCisrICogZm9yIExpbnV4IDUuMTEuCisrICovCisrI2lmbmRlZiBIQVZF
-X0ZTVkVSSVRZX0RFU0NSSVBUT1IKKytzdHJ1Y3QgZnN2ZXJpdHlfZGVzY3JpcHRvciB7CisrCV9f
-dTggdmVyc2lvbjsJCS8qIG11c3QgYmUgMSAqLworKwlfX3U4IGhhc2hfYWxnb3JpdGhtOwkvKiBN
-ZXJrbGUgdHJlZSBoYXNoIGFsZ29yaXRobSAqLworKwlfX3U4IGxvZ19ibG9ja3NpemU7CS8qIGxv
-ZzIgb2Ygc2l6ZSBvZiBkYXRhIGFuZCB0cmVlIGJsb2NrcyAqLworKwlfX3U4IHNhbHRfc2l6ZTsJ
-CS8qIHNpemUgb2Ygc2FsdCBpbiBieXRlczsgMCBpZiBub25lICovCisrCV9fbGUzMiBfX3Jlc2Vy
-dmVkXzB4MDQ7CS8qIG11c3QgYmUgMCAqLworKwlfX2xlNjQgZGF0YV9zaXplOwkvKiBzaXplIG9m
-IGZpbGUgdGhlIE1lcmtsZSB0cmVlIGlzIGJ1aWx0IG92ZXIgKi8KKysJX191OCByb290X2hhc2hb
-NjRdOwkvKiBNZXJrbGUgdHJlZSByb290IGhhc2ggKi8KKysJX191OCBzYWx0WzMyXTsJCS8qIHNh
-bHQgcHJlcGVuZGVkIHRvIGVhY2ggaGFzaGVkIGJsb2NrICovCisrCV9fdTggX19yZXNlcnZlZFsx
-NDRdOwkvKiBtdXN0IGJlIDAncyAqLworK307CisrI2VuZGlmCisrCisrLyoKKysgKiBJbnRyb2R1
-Y2VkIGludG8gdGhlIGtlcm5lbCBieQorKyAqICAgICBjb21taXQgZTE3ZmU2NTc5ZGUwMjM3MjVl
-YzIyYTE2OTY1ZTkwOTllNGEwNWFjOQorKyAqICAgICBBdXRob3I6IEVyaWMgQmlnZ2VycyA8ZWJp
-Z2dlcnNAZ29vZ2xlLmNvbT4KKysgKiAgICAgRGF0ZTogICBGcmkgSmFuIDE1IDEwOjE4OjE2IDIw
-MjEgLTA4MDAKKysgKgorKyAqICAgICBmcy12ZXJpdHk6IGFkZCBGU19JT0NfUkVBRF9WRVJJVFlf
-TUVUQURBVEEgaW9jdGwKKysgKiBmb3IgTGludXggNS4xMi4KKysgKi8KKysjaWZuZGVmIEhBVkVf
-RlNWRVJJVFlfUkVBRF9NRVRBREFUQV9BUkcKKytzdHJ1Y3QgZnN2ZXJpdHlfcmVhZF9tZXRhZGF0
-YV9hcmcgeworKwlfX3U2NCBtZXRhZGF0YV90eXBlOworKwlfX3U2NCBvZmZzZXQ7CisrCV9fdTY0
-IGxlbmd0aDsKKysJX191NjQgYnVmX3B0cjsKKysJX191NjQgX19yZXNlcnZlZDsKKyt9OworKyNl
-bmRpZgorKworKyNpZm5kZWYgRlNfVkVSSVRZX01FVEFEQVRBX1RZUEVfTUVSS0xFX1RSRUUKKysj
-ZGVmaW5lIEZTX1ZFUklUWV9NRVRBREFUQV9UWVBFX01FUktMRV9UUkVFCTEKKysjZW5kaWYKKysj
-aWZuZGVmIEZTX1ZFUklUWV9NRVRBREFUQV9UWVBFX0RFU0NSSVBUT1IKKysjZGVmaW5lIEZTX1ZF
-UklUWV9NRVRBREFUQV9UWVBFX0RFU0NSSVBUT1IJMgorKyNlbmRpZgorKyNpZm5kZWYgRlNfVkVS
-SVRZX01FVEFEQVRBX1RZUEVfU0lHTkFUVVJFCisrI2RlZmluZSBGU19WRVJJVFlfTUVUQURBVEFf
-VFlQRV9TSUdOQVRVUkUJMworKyNlbmRpZgorKworKyNpZm5kZWYgRlNfSU9DX1JFQURfVkVSSVRZ
-X01FVEFEQVRBCisrI2RlZmluZSBGU19JT0NfUkVBRF9WRVJJVFlfTUVUQURBVEEgXAorKwlfSU9X
-UignZicsIDEzNSwgc3RydWN0IGZzdmVyaXR5X3JlYWRfbWV0YWRhdGFfYXJnKQorKyNlbmRpZgor
-ZGlmZiAtLWdpdCBhL21pc2MvY3JlYXRlX2lub2RlLmMgYi9taXNjL2NyZWF0ZV9pbm9kZS5jCitp
-bmRleCA2MjRlZmMwMzgwYTQuLjc3ZmRjY2VjY2NhMSAxMDA2NDQKKy0tLSBhL21pc2MvY3JlYXRl
-X2lub2RlLmMKKysrKyBiL21pc2MvY3JlYXRlX2lub2RlLmMKK0BAIC00NSw2ICs0NSw4IEBACisg
-CisgI2luY2x1ZGUgImNyZWF0ZV9pbm9kZV9saWJhcmNoaXZlLmgiCisgCisrI2luY2x1ZGUgImtl
-cm5fY29tcGF0LmgiCisrCisgLyogNjRLaUIgaXMgdGhlIG1pbmltdW0gYmxrc2l6ZSB0byBiZXN0
-IG1pbmltaXplIHN5c3RlbSBjYWxsIG92ZXJoZWFkLiAqLworICNkZWZpbmUgQ09QWV9GSUxFX0JV
-RkxFTgk2NTUzNgorIAorLS0gCisyLjUxLjIKKwpkaWZmIC0tZ2l0IGEvcGFja2FnZS9lMmZzcHJv
-Z3MvMDAwMi1HZW5lcmF0ZWQtZmlsZXMucGF0Y2ggYi9wYWNrYWdlL2UyZnNwcm9ncy8wMDAyLUdl
-bmVyYXRlZC1maWxlcy5wYXRjaApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAw
-MDAuLjE0NWI5ZmJhZDlmOQotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2UvZTJmc3Byb2dzLzAw
-MDItR2VuZXJhdGVkLWZpbGVzLnBhdGNoCkBAIC0wLDAgKzEsNjMgQEAKK0Zyb20gOWUxNTIyOTBh
-ZjhmODFmNGJlYmFmOGMyZDFjMmFlNjQ4ZDFmMWRjYyBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEK
-K0Zyb206IE1hcmt1cyBNYXllciA8bW1heWVyQGJyb2FkY29tLmNvbT4KK0RhdGU6IEZyaSwgMjEg
-Tm92IDIwMjUgMTM6MTc6MjggLTA4MDAKK1N1YmplY3Q6IFtQQVRDSCAyLzJdIEdlbmVyYXRlZCBm
-aWxlcworVG86IFRlZCBUcydvIDx0eXRzb0BtaXQuZWR1PgorCitGaWxlcyBhdXRvbWF0aWNhbGx5
-IGdlbmVyYXRlZCBieSB0aGUgY2hhbmdlcyBmcm9tIHRoZSBwcmV2aW91cyBjb21taXQuCisKK1Np
-Z25lZC1vZmYtYnk6IE1hcmt1cyBNYXllciA8bW1heWVyQGJyb2FkY29tLmNvbT4KKy0tLQorIGNv
-bmZpZ3VyZSAgICAgICB8IDE4ICsrKysrKysrKysrKysrKysrKworIGxpYi9jb25maWcuaC5pbiB8
-ICA2ICsrKysrKworIDIgZmlsZXMgY2hhbmdlZCwgMjQgaW5zZXJ0aW9ucygrKQorCitkaWZmIC0t
-Z2l0IGEvY29uZmlndXJlIGIvY29uZmlndXJlCitpbmRleCAyZWQ2MWRiMzYwMmQuLjYzZWNlMWY2
-OGIxMSAxMDA3NTUKKy0tLSBhL2NvbmZpZ3VyZQorKysrIGIvY29uZmlndXJlCitAQCAtMTMwOTEs
-NiArMTMwOTEsMjQgQEAgdGhlbiA6CisgcHJpbnRmICIlc1xuIiAiI2RlZmluZSBIQVZFX0lOVFBU
-Ul9UIDEiID4+Y29uZmRlZnMuaAorIAorIAorK2ZpCisrCisrYWNfZm5fY19jaGVja190eXBlICIk
-TElORU5PIiAic3RydWN0IGZzdmVyaXR5X3JlYWRfbWV0YWRhdGFfYXJnIiAiYWNfY3ZfdHlwZV9z
-dHJ1Y3RfZnN2ZXJpdHlfcmVhZF9tZXRhZGF0YV9hcmciICIjaW5jbHVkZSA8bGludXgvZnN2ZXJp
-dHkuaD4KKysiCisraWYgdGVzdCAieCRhY19jdl90eXBlX3N0cnVjdF9mc3Zlcml0eV9yZWFkX21l
-dGFkYXRhX2FyZyIgPSB4eWVzCisrdGhlbiA6CisrCisrcHJpbnRmICIlc1xuIiAiI2RlZmluZSBI
-QVZFX0ZTVkVSSVRZX1JFQURfTUVUQURBVEFfQVJHIDEiID4+Y29uZmRlZnMuaAorKworK2ZpCisr
-CisrYWNfZm5fY19jaGVja190eXBlICIkTElORU5PIiAic3RydWN0IGZzdmVyaXR5X2Rlc2NyaXB0
-b3IiICJhY19jdl90eXBlX3N0cnVjdF9mc3Zlcml0eV9kZXNjcmlwdG9yIiAiI2luY2x1ZGUgPGxp
-bnV4L2ZzdmVyaXR5Lmg+CisrIgorK2lmIHRlc3QgIngkYWNfY3ZfdHlwZV9zdHJ1Y3RfZnN2ZXJp
-dHlfZGVzY3JpcHRvciIgPSB4eWVzCisrdGhlbiA6CisrCisrcHJpbnRmICIlc1xuIiAiI2RlZmlu
-ZSBIQVZFX0ZTVkVSSVRZX0RFU0NSSVBUT1IgMSIgPj5jb25mZGVmcy5oCisrCisgZmkKKyAKKyB7
-IHByaW50ZiAiJXNcbiIgIiRhc19tZToke2FzX2xpbmVuby0kTElORU5PfTogY2hlY2tpbmcgd2hl
-dGhlciBzdHJ1Y3Qgc3RhdCBoYXMgYSBzdF9mbGFncyBmaWVsZCIgPiY1CitkaWZmIC0tZ2l0IGEv
-bGliL2NvbmZpZy5oLmluIGIvbGliL2NvbmZpZy5oLmluCitpbmRleCA0ODA3MTdhYmQ5YjQuLjQ5
-NGMyYTRiNWE0MyAxMDA2NDQKKy0tLSBhL2xpYi9jb25maWcuaC5pbgorKysrIGIvbGliL2NvbmZp
-Zy5oLmluCitAQCAtMTI3LDYgKzEyNywxMiBAQAorIC8qIERlZmluZSB0byAxIGlmIHlvdSBoYXZl
-IHRoZSBgZnN0YXQ2NCcgZnVuY3Rpb24uICovCisgI3VuZGVmIEhBVkVfRlNUQVQ2NAorIAorKy8q
-IERlZmluZSB0byAxIGlmIHN0cnVjdCBmc3Zlcml0eV9kZXNjcmlwdG9yIGlzIGRlY2xhcmVkICov
-CisrI3VuZGVmIEhBVkVfRlNWRVJJVFlfREVTQ1JJUFRPUgorKworKy8qIERlZmluZSB0byAxIGlm
-IHN0cnVjdCBmc3Zlcml0eV9yZWFkX21ldGFkYXRhX2FyZyBpcyBkZWNsYXJlZCAqLworKyN1bmRl
-ZiBIQVZFX0ZTVkVSSVRZX1JFQURfTUVUQURBVEFfQVJHCisrCisgLyogRGVmaW5lIHRvIDEgaWYg
-eW91IGhhdmUgdGhlIGBmc3luYycgZnVuY3Rpb24uICovCisgI3VuZGVmIEhBVkVfRlNZTkMKKyAK
-Ky0tIAorMi41MS4yCisKZGlmZiAtLWdpdCBhL3BhY2thZ2UvZTJmc3Byb2dzL2UyZnNwcm9ncy5t
-ayBiL3BhY2thZ2UvZTJmc3Byb2dzL2UyZnNwcm9ncy5tawppbmRleCBhZDNkMWRiZTc1YjMuLjI3
-NmI4NGM3NWEwMCAxMDA2NDQKLS0tIGEvcGFja2FnZS9lMmZzcHJvZ3MvZTJmc3Byb2dzLm1rCisr
-KyBiL3BhY2thZ2UvZTJmc3Byb2dzL2UyZnNwcm9ncy5tawpAQCAtMTgsOCArMTgsOCBAQCBFMkZT
-UFJPR1NfSU5TVEFMTF9TVEFHSU5HID0gWUVTCiBFMkZTUFJPR1NfREVQRU5ERU5DSUVTID0gaG9z
-dC1wa2djb25mIHV0aWwtbGludXgKIEhPU1RfRTJGU1BST0dTX0RFUEVOREVOQ0lFUyA9IGhvc3Qt
-cGtnY29uZiBob3N0LXV0aWwtbGludXgKIAotIyAwMDAxLWNvbmZpZ3VyZS5hYy1jaGVjay1mb3It
-RlNfSU9DX1JFQURfVkVSSVRZX01FVEFEQVRBLWEucGF0Y2gKLSMgdGhlIGFkZGl0aW9uYWwgZGVw
-ZW5kZW5jaWVzIGFyZSBvbmx5IG5lZWRlZCBmb3IgYXV0b3JlY29uZgorIyBXZSBoYXZlIHBhdGNo
-ZXMgdGhhdCByZXF1aXJlIHVzIHRvIHJ1biBhdXRvcmVjb25mLiBUaGUgYWRkaXRpb25hbCBkZXBl
-bmRlbmNpZXMKKyMgYXJlIG9ubHkgbmVlZGVkIGZvciB0aGF0LgogRTJGU1BST0dTX0FVVE9SRUNP
-TkYgPSBZRVMKIEUyRlNQUk9HU19BVVRPUkVDT05GX09QVFMgPSAtLWluY2x1ZGU9JChIT1NUX0RJ
-Uikvc2hhcmUvYXV0b2NvbmYtYXJjaGl2ZQogRTJGU1BST0dTX0RFUEVOREVOQ0lFUyArPSBob3N0
-LWdldHRleHQgaG9zdC1hdXRvY29uZi1hcmNoaXZlCi0tIAoyLjUxLjIKCl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
-YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
-YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Removed patch which are included in this release.
+
+Changelog:
+https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/ChangeLog
+
+Signed-off-by: Yang Li <yang.li@amlogic.com>
+---
+ .../bluez5_utils-headers.mk                   |   2 +-
+ ...0001-gdbus-define-MAX_INPUT-for-musl.patch |  33 ---
+ ...fix-build-with-a2dp-support-disabled.patch | 204 ++++++++++++++++++
+ ...eave-config-files-writable-for-owner.patch |  35 ---
+ ...03-input-fix-HID-compilation-w-o-HoG.patch | 140 ------------
+ ...04-input-fix-HoG-compilation-w-o-HID.patch | 120 -----------
+ package/bluez5_utils/bluez5_utils.hash        |   2 +-
+ package/bluez5_utils/bluez5_utils.mk          |   2 +-
+ 8 files changed, 207 insertions(+), 331 deletions(-)
+ delete mode 100644 package/bluez5_utils/0001-gdbus-define-MAX_INPUT-for-musl.patch
+ create mode 100644 package/bluez5_utils/0001-transport-audio-fix-build-with-a2dp-support-disabled.patch
+ delete mode 100644 package/bluez5_utils/0002-Leave-config-files-writable-for-owner.patch
+ delete mode 100644 package/bluez5_utils/0003-input-fix-HID-compilation-w-o-HoG.patch
+ delete mode 100644 package/bluez5_utils/0004-input-fix-HoG-compilation-w-o-HID.patch
+
+diff --git a/package/bluez5_utils-headers/bluez5_utils-headers.mk b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+index 7acf62b226..a140aeca01 100644
+--- a/package/bluez5_utils-headers/bluez5_utils-headers.mk
++++ b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Keep the version and patches in sync with bluez5_utils
+-BLUEZ5_UTILS_HEADERS_VERSION = 5.79
++BLUEZ5_UTILS_HEADERS_VERSION = 5.85
+ BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
+diff --git a/package/bluez5_utils/0001-gdbus-define-MAX_INPUT-for-musl.patch b/package/bluez5_utils/0001-gdbus-define-MAX_INPUT-for-musl.patch
+deleted file mode 100644
+index dc823e9277..0000000000
+--- a/package/bluez5_utils/0001-gdbus-define-MAX_INPUT-for-musl.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 9d69dba21f1e46b34cdd8ae27fec11d0803907ee Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Gu=C3=B0ni=20M=C3=A1r=20Gilbert?= <gudni.m.g@gmail.com>
+-Date: Sat, 2 Nov 2024 16:10:18 +0000
+-Subject: [PATCH] gdbus: define MAX_INPUT for musl
+-
+-This is the same solution as was done in src/shared/util.c
+-
+-Upstream: https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=9d69dba21f1e46b34cdd8ae27fec11d0803907ee
+-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+----
+- gdbus/object.c | 6 ++++++
+- 1 file changed, 6 insertions(+)
+-
+-diff --git a/gdbus/object.c b/gdbus/object.c
+-index 84f116bf1..7b0476f1a 100644
+---- a/gdbus/object.c
+-+++ b/gdbus/object.c
+-@@ -20,6 +20,12 @@
+- #include <dbus/dbus.h>
+- 
+- #include "gdbus.h"
+-+
+-+/* define MAX_INPUT for musl */
+-+#ifndef MAX_INPUT
+-+#define MAX_INPUT _POSIX_MAX_INPUT
+-+#endif
+-+
+- #include "src/shared/util.h"
+- 
+- #define info(fmt...)
+--- 
+-2.45.2
+-
+diff --git a/package/bluez5_utils/0001-transport-audio-fix-build-with-a2dp-support-disabled.patch b/package/bluez5_utils/0001-transport-audio-fix-build-with-a2dp-support-disabled.patch
+new file mode 100644
+index 0000000000..2fa6796a94
+--- /dev/null
++++ b/package/bluez5_utils/0001-transport-audio-fix-build-with-a2dp-support-disabled.patch
+@@ -0,0 +1,204 @@
++From 0b7395a3479686f46afe508a345bfa50fc20767e Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Sat, 22 Nov 2025 17:10:46 +0100
++Subject: [PATCH BlueZ] transport/audio: fix build with a2dp support disabled
++
++Fixes:
++    CCLD     src/bluetoothd
++  /usr/lib64/gcc/x86_64-suse-linux/bin/ld: profiles/audio/bluetoothd-media.o: in function `endpoint_init_a2dp_sink':
++  .../bluez-5.85/profiles/audio/media.c:728:(.text.endpoint_init_a2dp_sink+0x2b): undefined reference to `a2dp_add_sep'
++  /usr/lib64/gcc/x86_64-suse-linux/bin/ld: profiles/audio/bluetoothd-media.o: in function `endpoint_init_a2dp_source':
++  .../bluez-5.85/profiles/audio/media.c:715:(.text.endpoint_init_a2dp_source+0x28): undefined reference to `a2dp_add_sep'
++  /usr/lib64/gcc/x86_64-suse-linux/bin/ld: profiles/audio/bluetoothd-media.o: in function `set_configuration':
++  .../bluez-5.85/profiles/audio/media.c:512:(.text.set_config+0x35): undefined reference to `a2dp_setup_get_device'
++  /usr/lib64/gcc/x86_64-suse-linux/bin/ld: .../bluez-5.85/profiles/audio/media.c:525:(.text.set_config+0x8c): undefined reference to `a2dp_setup_remote_path'
++  /usr/lib64/gcc/x86_64-suse-linux/bin/ld: profiles/audio/bluetoothd-media.o: in function `media_endpoint_remove':
++  .../bluez-5.85/profiles/audio/media.c:250:(.text.media_endpoint_remove+0xc): undefined reference to `a2dp_remove_sep'
++  /usr/lib64/gcc/x86_64-suse-linux/bin/ld: profiles/audio/bluetoothd-media.o: in function `endpoint_reply':
++  .../bluez-5.85/profiles/audio/media.c:361:(.text.endpoint_reply+0x267): undefined reference to `a2dp_parse_config_error'
++  collect2: error: ld returned 1 exit status
++  make[1]: *** [Makefile:5491: src/bluetoothd] Error 1
++  make: *** [Makefile:4096: all] Error 2
++
++Fixes: https://github.com/bluez/bluez/issues/1675
++---
++ profiles/audio/media.c     | 19 ++++++++++++++++++-
++ profiles/audio/transport.c |  6 ++++++
++ 2 files changed, 24 insertions(+), 1 deletion(-)
++
++diff --git a/profiles/audio/media.c b/profiles/audio/media.c
++index a7a8575f9..418a9d06b 100644
++--- a/profiles/audio/media.c
+++++ b/profiles/audio/media.c
++@@ -56,14 +56,18 @@
++ #include "src/shared/bap.h"
++ #include "src/shared/bap-debug.h"
++ 
+++#ifdef HAVE_A2DP
++ #include "avdtp.h"
+++#endif
++ #include "media.h"
++ #include "transport.h"
+++#ifdef HAVE_A2DP
++ #include "a2dp.h"
++ 
++ #ifdef HAVE_AVRCP
++ #include "avrcp.h"
++ #endif
+++#endif
++ 
++ #define MEDIA_INTERFACE "org.bluez.Media1"
++ #define MEDIA_ENDPOINT_INTERFACE "org.bluez.MediaEndpoint1"
++@@ -106,7 +110,9 @@ struct endpoint_request {
++ };
++ 
++ struct media_endpoint {
+++#ifdef HAVE_A2DP
++ 	struct a2dp_sep		*sep;
+++#endif
++ 	struct bt_bap_pac	*pac;
++ 	struct bt_asha_device	*asha;
++ 	char			*sender;	/* Endpoint DBus bus id */
++@@ -246,10 +252,12 @@ static void media_endpoint_remove(void *data)
++ 	struct media_endpoint *endpoint = data;
++ 	struct media_adapter *adapter = endpoint->adapter;
++ 
+++#ifdef HAVE_A2DP
++ 	if (endpoint->sep) {
++ 		a2dp_remove_sep(endpoint->sep);
++ 		return;
++ 	}
+++#endif
++ 
++ 	info("Endpoint unregistered: sender=%s path=%s", endpoint->sender,
++ 			endpoint->path);
++@@ -354,6 +362,7 @@ static void endpoint_reply(DBusPendingCall *call, void *user_data)
++ 			return;
++ 		}
++ 
+++#ifdef HAVE_A2DP
++ 		if (dbus_message_is_method_call(request->msg,
++ 					MEDIA_ENDPOINT_INTERFACE,
++ 					"SetConfiguration")) {
++@@ -362,7 +371,7 @@ static void endpoint_reply(DBusPendingCall *call, void *user_data)
++ 			ret = &error_code;
++ 			size = 1;
++ 		}
++-
+++#endif
++ 		dbus_error_free(&err);
++ 		goto done;
++ 	}
++@@ -497,6 +506,7 @@ static struct media_transport *find_device_transport(
++ 	return match->data;
++ }
++ 
+++#ifdef HAVE_A2DP
++ struct a2dp_config_data {
++ 	struct a2dp_setup *setup;
++ 	a2dp_endpoint_config_t cb;
++@@ -552,6 +562,7 @@ static gboolean set_configuration(struct media_endpoint *endpoint,
++ 	return media_endpoint_async_call(msg, endpoint, transport,
++ 						cb, user_data, destroy);
++ }
+++#endif
++ 
++ static void release_endpoint(struct media_endpoint *endpoint)
++ {
++@@ -602,6 +613,7 @@ static size_t get_capabilities(struct a2dp_sep *sep, uint8_t **capabilities,
++ 	return endpoint->size;
++ }
++ 
+++#ifdef HAVE_A2DP
++ struct a2dp_select_data {
++ 	struct a2dp_setup *setup;
++ 	a2dp_endpoint_select_t cb;
++@@ -735,6 +747,7 @@ static bool endpoint_init_a2dp_sink(struct media_endpoint *endpoint, int *err)
++ 
++ 	return true;
++ }
+++#endif
++ 
++ struct pac_select_data {
++ 	struct bt_bap_pac *pac;
++@@ -1486,10 +1499,12 @@ static const struct media_endpoint_init {
++ 	bool (*func)(struct media_endpoint *endpoint, int *err);
++ 	bool (*supported)(struct btd_adapter *adapter);
++ } init_table[] = {
+++#ifdef HAVE_A2DP
++ 	{ A2DP_SOURCE_UUID, endpoint_init_a2dp_source,
++ 				a2dp_endpoint_supported },
++ 	{ A2DP_SINK_UUID, endpoint_init_a2dp_sink,
++ 				a2dp_endpoint_supported },
+++#endif
++ 	{ PAC_SINK_UUID, endpoint_init_pac_sink,
++ 				experimental_endpoint_supported },
++ 	{ PAC_SOURCE_UUID, endpoint_init_pac_source,
++@@ -3478,10 +3493,12 @@ void media_unregister(struct btd_adapter *btd_adapter)
++ 	}
++ }
++ 
+++#ifdef HAVE_A2DP
++ struct a2dp_sep *media_endpoint_get_sep(struct media_endpoint *endpoint)
++ {
++ 	return endpoint->sep;
++ }
+++#endif
++ 
++ const char *media_endpoint_get_uuid(struct media_endpoint *endpoint)
++ {
++diff --git a/profiles/audio/transport.c b/profiles/audio/transport.c
++index 08ca360f4..fc23cf33d 100644
++--- a/profiles/audio/transport.c
+++++ b/profiles/audio/transport.c
++@@ -2745,6 +2745,7 @@ void media_transport_update_volume(struct media_transport *transport,
++ 	if (volume < 0)
++ 		return;
++ 
+++#ifdef HAVE_A2DP
++ 	if (media_endpoint_get_sep(transport->endpoint)) {
++ 		struct a2dp_transport *a2dp = transport->data;
++ 
++@@ -2757,6 +2758,7 @@ void media_transport_update_volume(struct media_transport *transport,
++ 
++ 		a2dp->volume = volume;
++ 	}
+++#endif
++ 	g_dbus_emit_property_changed(btd_get_dbus_connection(),
++ 					transport->path,
++ 					MEDIA_TRANSPORT_INTERFACE, "Volume");
++@@ -2769,6 +2771,7 @@ int media_transport_get_device_volume(struct btd_device *dev)
++ 	if (dev == NULL)
++ 		return -1;
++ 
+++#ifdef HAVE_A2DP
++ 	/* Attempt to locate the transport to get its volume */
++ 	for (l = transports; l; l = l->next) {
++ 		struct media_transport *transport = l->data;
++@@ -2785,6 +2788,7 @@ int media_transport_get_device_volume(struct btd_device *dev)
++ 			return -1;
++ 		}
++ 	}
+++#endif
++ 
++ 	/* If transport volume doesn't exists use device_volume */
++ 	return btd_device_get_volume(dev);
++@@ -2798,6 +2802,7 @@ void media_transport_update_device_volume(struct btd_device *dev,
++ 	if (dev == NULL || volume < 0)
++ 		return;
++ 
+++#ifdef HAVE_A2DP
++ 	/* Attempt to locate the transport to set its volume */
++ 	for (l = transports; l; l = l->next) {
++ 		struct media_transport *transport = l->data;
++@@ -2814,6 +2819,7 @@ void media_transport_update_device_volume(struct btd_device *dev,
++ 			break;
++ 		}
++ 	}
+++#endif
++ 
++ 	btd_device_set_volume(dev, volume);
++ }
++-- 
++2.42.0
++
+diff --git a/package/bluez5_utils/0002-Leave-config-files-writable-for-owner.patch b/package/bluez5_utils/0002-Leave-config-files-writable-for-owner.patch
+deleted file mode 100644
+index 09ebe5edf1..0000000000
+--- a/package/bluez5_utils/0002-Leave-config-files-writable-for-owner.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From b1fd409960001a77cda2a09ecc00147ebd9c3667 Mon Sep 17 00:00:00 2001
+-From: Fiona Klute <fiona.klute@gmx.de>
+-Date: Mon, 9 Dec 2024 16:40:43 +0100
+-Subject: [PATCH BlueZ] build: Leave config files writable for owner
+-
+-This is needed for builds running as non-root users, so the build
+-process and any distribution tools can create/move/delete files in the
+-config directory without adjusting permissions separately. Limiting
+-writes from the running service needs to be done in the systemd unit
+-(already the case) or init script.
+-
+-See also: https://lore.kernel.org/linux-bluetooth/4d1206df-598b-4a68-8655-74981b62ecca@gmx.de/T/
+-Reviewed-by: Bastien Nocera <hadess@hadess.net>
+-Upstream: https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=b1fd409960001a77cda2a09ecc00147ebd9c3667
+-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+----
+- Makefile.am | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index 297d0774c..29018a91c 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -32,7 +32,7 @@ confdir = $(sysconfdir)/bluetooth
+- statedir = $(localstatedir)/lib/bluetooth
+- 
+- bluetoothd-fix-permissions:
+--	install -dm555 $(DESTDIR)$(confdir)
+-+	install -dm755 $(DESTDIR)$(confdir)
+- 	install -dm700 $(DESTDIR)$(statedir)
+- 
+- if DATAFILES
+--- 
+-2.45.2
+-
+diff --git a/package/bluez5_utils/0003-input-fix-HID-compilation-w-o-HoG.patch b/package/bluez5_utils/0003-input-fix-HID-compilation-w-o-HoG.patch
+deleted file mode 100644
+index 941e9fb68f..0000000000
+--- a/package/bluez5_utils/0003-input-fix-HID-compilation-w-o-HoG.patch
++++ /dev/null
+@@ -1,140 +0,0 @@
+-From b111b5e15eb74e08b74cb3c7e91bcb21f54be4c7 Mon Sep 17 00:00:00 2001
+-From: Thomas Perale <thomas.perale@mind.be>
+-Date: Thu, 1 May 2025 18:35:35 +0200
+-Subject: input: fix HID compilation w/o HoG
+-
+-Commit [1] introduced a dependency with the HID plugin in the HoG code
+-As a result, building with --enable-hid --disable-hog caused linker
+-errors due to undefined references to HoG-related functions:
+-
+-```
+-> ./configure --enable-hid --disable-hog
+-...
+-> make
+-...
+-  CCLD     src/bluetoothd
+-/usr/bin/ld: profiles/input/bluetoothd-manager.o: in function `input_init':
+-/home/../bluez/profiles/input/manager.c:122:(.text.input_init+0x1c8): undefined reference to `input_set_auto_sec'
+-collect2: error: ld returned 1 exit status
+-make[1]: *** [Makefile:6376: src/bluetoothd] Error 1
+-```
+-
+-This patch moves the reading of the HOG specific configuration of the
+-'input.conf' file: LEAutoSecurity, to the HoG plugin file.
+-
+-[1] f2778f587 input: Add LEAutoSecurity setting to input.conf
+-
+-Upstream: https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=b111b5e15eb74e08b74cb3c7e91bcb21f54be4c7
+-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+----
+- profiles/input/device.h  |  1 -
+- profiles/input/hog.c     | 40 +++++++++++++++++++++++++++++++++++-----
+- profiles/input/manager.c | 11 +----------
+- 3 files changed, 36 insertions(+), 16 deletions(-)
+-
+-diff --git a/profiles/input/device.h b/profiles/input/device.h
+-index 7b87ce5903..036a88980e 100644
+---- a/profiles/input/device.h
+-+++ b/profiles/input/device.h
+-@@ -25,7 +25,6 @@ void input_set_userspace_hid(char *state);
+- uint8_t input_get_userspace_hid(void);
+- void input_set_classic_bonded_only(bool state);
+- bool input_get_classic_bonded_only(void);
+--void input_set_auto_sec(bool state);
+- 
+- int input_device_register(struct btd_service *service);
+- void input_device_unregister(struct btd_service *service);
+-diff --git a/profiles/input/hog.c b/profiles/input/hog.c
+-index 017e320f07..f82648fec8 100644
+---- a/profiles/input/hog.c
+-+++ b/profiles/input/hog.c
+-@@ -57,11 +57,6 @@ static gboolean suspend_supported = FALSE;
+- static bool auto_sec = true;
+- static struct queue *devices = NULL;
+- 
+--void input_set_auto_sec(bool state)
+--{
+--	auto_sec = state;
+--}
+--
+- static void hog_device_accept(struct hog_device *dev, struct gatt_db *db)
+- {
+- 	char name[248];
+-@@ -228,10 +223,45 @@ static struct btd_profile hog_profile = {
+- 	.auto_connect	= true,
+- };
+- 
+-+static void hog_read_config(void)
+-+{
+-+	const char filename[] = CONFIGDIR "/input.conf";
+-+	GKeyFile *config;
+-+	GError *err = NULL;
+-+	bool config_auto_sec;
+-+
+-+	config = g_key_file_new();
+-+	if (!config) {
+-+		error("Failed to allocate memory for config");
+-+		return;
+-+	}
+-+
+-+	if (!g_key_file_load_from_file(config, filename, 0, &err)) {
+-+		if (!g_error_matches(err, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+-+			error("Parsing %s failed: %s", filename, err->message);
+-+		g_error_free(err);
+-+		g_key_file_free(config);
+-+		return;
+-+	}
+-+
+-+	config_auto_sec = g_key_file_get_boolean(config, "General",
+-+					"LEAutoSecurity", &err);
+-+	if (!err) {
+-+		DBG("input.conf: LEAutoSecurity=%s",
+-+				config_auto_sec ? "true" : "false");
+-+		auto_sec = config_auto_sec;
+-+	} else
+-+		g_clear_error(&err);
+-+
+-+	g_key_file_free(config);
+-+}
+-+
+- static int hog_init(void)
+- {
+- 	int err;
+- 
+-+	hog_read_config();
+-+
+- 	err = suspend_init(suspend_callback, resume_callback);
+- 	if (err < 0)
+- 		error("Loading suspend plugin failed: %s (%d)", strerror(-err),
+-diff --git a/profiles/input/manager.c b/profiles/input/manager.c
+-index 95ca0a7ee5..1c0b6122a1 100644
+---- a/profiles/input/manager.c
+-+++ b/profiles/input/manager.c
+-@@ -85,7 +85,7 @@ static int input_init(void)
+- 	config = load_config_file(CONFIGDIR "/input.conf");
+- 	if (config) {
+- 		int idle_timeout;
+--		gboolean classic_bonded_only, auto_sec;
+-+		gboolean classic_bonded_only;
+- 		char *uhid_enabled;
+- 
+- 		idle_timeout = g_key_file_get_integer(config, "General",
+-@@ -115,15 +115,6 @@ static int input_init(void)
+- 		} else
+- 			g_clear_error(&err);
+- 
+--		auto_sec = g_key_file_get_boolean(config, "General",
+--						"LEAutoSecurity", &err);
+--		if (!err) {
+--			DBG("input.conf: LEAutoSecurity=%s",
+--					auto_sec ? "true" : "false");
+--			input_set_auto_sec(auto_sec);
+--		} else
+--			g_clear_error(&err);
+--
+- 	}
+- 
+- 	btd_profile_register(&input_profile);
+--- 
+-cgit 1.2.3-korg
+-
+diff --git a/package/bluez5_utils/0004-input-fix-HoG-compilation-w-o-HID.patch b/package/bluez5_utils/0004-input-fix-HoG-compilation-w-o-HID.patch
+deleted file mode 100644
+index b2824e5e18..0000000000
+--- a/package/bluez5_utils/0004-input-fix-HoG-compilation-w-o-HID.patch
++++ /dev/null
+@@ -1,120 +0,0 @@
+-From 9c52188d753002a6afd6ae145f921a2ff52c1c81 Mon Sep 17 00:00:00 2001
+-From: Thomas Perale <thomas.perale@mind.be>
+-Date: Thu, 1 May 2025 18:35:36 +0200
+-Subject: input: fix HoG compilation w/o HID
+-
+-Commit [1] introduced a dependency with the HID plugin in the HoG code
+-As a result, building with --disable-hid --enable-hog caused linker
+-errors due to undefined references to HID-related functions:
+-
+-```
+-> ./configure --disable-hid --enable-hog
+-> make
+-/usr/bin/ld: profiles/input/bluetoothd-hog.o: in function `hog_accept':
+-/home/../bluez/profiles/input/hog.c:184:(.text.hog_accept+0xbb): undefined reference to `input_get_auto_sec'
+-/usr/bin/ld: profiles/input/bluetoothd-hog.o: in function `hog_disconnect':
+-/home/../bluez/profiles/input/hog.c:205:(.text.hog_disconnect+0x12): undefined reference to `input_get_userspace_hid'
+-collect2: error: ld returned 1 exit status
+-make[1]: *** [Makefile:6344: src/bluetoothd] Error 1
+-make: *** [Makefile:4695: all] Error 2
+-```
+-
+-This patch duplicate the read of the 'UserspaceHID=persist' config entry
+-in the HoG plugin file to remove the dependency on the HID plugin files.
+-
+-[1] 1782bfd79 input: Add support for UserspaceHID=persist
+-
+-Fixes: https://github.com/bluez/bluez/issues/1228
+-
+-Upstream: https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=9c52188d753002a6afd6ae145f921a2ff52c1c81
+-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+----
+- profiles/input/device.c |  5 -----
+- profiles/input/device.h |  1 -
+- profiles/input/hog.c    | 14 ++++++++++++--
+- 3 files changed, 12 insertions(+), 8 deletions(-)
+-
+-diff --git a/profiles/input/device.c b/profiles/input/device.c
+-index a7bc4d44fa..3642cc3267 100644
+---- a/profiles/input/device.c
+-+++ b/profiles/input/device.c
+-@@ -112,11 +112,6 @@ void input_set_userspace_hid(char *state)
+- 		error("Unknown value '%s'", state);
+- }
+- 
+--uint8_t input_get_userspace_hid(void)
+--{
+--	return uhid_state;
+--}
+--
+- void input_set_classic_bonded_only(bool state)
+- {
+- 	classic_bonded_only = state;
+-diff --git a/profiles/input/device.h b/profiles/input/device.h
+-index 036a88980e..9056695026 100644
+---- a/profiles/input/device.h
+-+++ b/profiles/input/device.h
+-@@ -22,7 +22,6 @@ struct input_conn;
+- 
+- void input_set_idle_timeout(int timeout);
+- void input_set_userspace_hid(char *state);
+--uint8_t input_get_userspace_hid(void);
+- void input_set_classic_bonded_only(bool state);
+- bool input_get_classic_bonded_only(void);
+- 
+-diff --git a/profiles/input/hog.c b/profiles/input/hog.c
+-index f82648fec8..a3c876cf9f 100644
+---- a/profiles/input/hog.c
+-+++ b/profiles/input/hog.c
+-@@ -40,7 +40,6 @@
+- #include "src/shared/gatt-client.h"
+- #include "src/plugin.h"
+- 
+--#include "device.h"
+- #include "suspend.h"
+- #include "attrib/att.h"
+- #include "attrib/gattrib.h"
+-@@ -55,6 +54,7 @@ struct hog_device {
+- 
+- static gboolean suspend_supported = FALSE;
+- static bool auto_sec = true;
+-+static bool uhid_state_persist = false;
+- static struct queue *devices = NULL;
+- 
+- static void hog_device_accept(struct hog_device *dev, struct gatt_db *db)
+-@@ -203,7 +203,7 @@ static int hog_disconnect(struct btd_service *service)
+- {
+- 	struct hog_device *dev = btd_service_get_user_data(service);
+- 
+--	if (input_get_userspace_hid() == UHID_PERSIST)
+-+	if (uhid_state_persist)
+- 		bt_hog_detach(dev->hog, false);
+- 	else
+- 		bt_hog_detach(dev->hog, true);
+-@@ -229,6 +229,7 @@ static void hog_read_config(void)
+- 	GKeyFile *config;
+- 	GError *err = NULL;
+- 	bool config_auto_sec;
+-+	char *uhid_enabled;
+- 
+- 	config = g_key_file_new();
+- 	if (!config) {
+-@@ -253,6 +254,15 @@ static void hog_read_config(void)
+- 	} else
+- 		g_clear_error(&err);
+- 
+-+	uhid_enabled = g_key_file_get_string(config, "General",
+-+					"UserspaceHID", &err);
+-+	if (!err) {
+-+		DBG("input.conf: UserspaceHID=%s", uhid_enabled);
+-+		uhid_state_persist = strcasecmp(uhid_enabled, "persist") == 0;
+-+		free(uhid_enabled);
+-+	} else
+-+		g_clear_error(&err);
+-+
+- 	g_key_file_free(config);
+- }
+- 
+--- 
+-cgit 1.2.3-korg
+-
+diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
+index 9b39b19c08..f8cb573b18 100644
+--- a/package/bluez5_utils/bluez5_utils.hash
++++ b/package/bluez5_utils/bluez5_utils.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
+-sha256  4164a5303a9f71c70f48c03ff60be34231b568d93a9ad5e79928d34e6aa0ea8a  bluez-5.79.tar.xz
++sha256  ad028e49254bc4551a13f08fe7904c63d02ba650d77be8ae15bb3b0a0ad94a6f  bluez-5.85.tar.xz
+ # Locally computed
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index e3b47e1e80..724c0fd122 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Keep the version and patches in sync with bluez5_utils-headers
+-BLUEZ5_UTILS_VERSION = 5.79
++BLUEZ5_UTILS_VERSION = 5.85
+ BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_INSTALL_STAGING = YES
+-- 
+2.42.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
