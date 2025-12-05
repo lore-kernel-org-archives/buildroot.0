@@ -1,85 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43DD7D339AE
-	for <buildroot@archiver.kernel.org>; Fri,  5 Dec 2025 18:45:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F838D339B9
+	for <buildroot@archiver.kernel.org>; Fri,  5 Dec 2025 19:00:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 29F4E6EE12;
-	Fri,  5 Dec 2025 18:45:16 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dDeepewOSMaJ; Fri,  5 Dec 2025 18:45:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5A6161C9F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764960314;
-	bh=WBXBPxAe4wAh43nFtsWKJ/VFv4R895qr1RdS2Nowxvs=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=WBAZVEX3hcEUCrQFudm/BcRcJRWPczgDgrAOFnAGZsNnMHzQkNxRcMqbAJbwLNkjU
-	 fopua+tncblHYybdtbnBHKlQ1Y2VpVHKGnZLJiKE5mGrzIsOQBpykM1HJGM/ry0q9A
-	 O6zv4FDSqgnC/3N5d5xi1eW9MuTlA5yi/uGJEnnmnEKcwuJgne45L5OsTOJ3GE/pcg
-	 9Nr+XY2OCdpG3HELEUtcBRJjMU2mOgU7mmbTfuwcRHYPs5wSs0uB3LQntELQKRNz0F
-	 K705BGUsSwWEKhJXKaDu7lfG0LAIpkBDuuuo6EDLz7FX3+TxM6Yt+YzW8a6iv2GrMA
-	 u4Grx+m8VKylA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5A6161C9F;
-	Fri,  5 Dec 2025 18:45:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id D3AFF199
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 18:45:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BA0108420A
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 18:45:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5109684983;
+	Fri,  5 Dec 2025 19:00:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nljFKxABonQ1 for <buildroot@buildroot.org>;
- Fri,  5 Dec 2025 18:45:10 +0000 (UTC)
+ id 80bT3_GOBQ6J; Fri,  5 Dec 2025 19:00:38 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B39E184943
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1764961238;
+	bh=WBXBPxAe4wAh43nFtsWKJ/VFv4R895qr1RdS2Nowxvs=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=kESr/PbEtTVAt+vrQmkpNZCBXI/OYCa3N4zMwRSYrm9msYf3k+dCpzQyJrwdyL7NM
+	 pCYUffKHBzaFooDUcvfVfc7lXwj8/qRzRMhvn8MD4rV5Uv1cRd/f8r171oeg28KD7M
+	 U3M9hZy8wNCVr0Zjcg3kg5gv58Vy8hf56wa2nn9MaLST+HM825A3//m1v07QFC27yI
+	 M3yL9jAGtGsBAVQ4Y8YgbLLUHnq+s+LAsPJTWa/2Ig+ifgI5qwWQKFnjPF6LN8Na0R
+	 f/gvSfotEk0Kk3tYf27yJtFOfM15NOROE+XjqZAcjtBOrU4B29whlE7ecgJaO4r1wj
+	 0z9t3jvgKj7cQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B39E184943;
+	Fri,  5 Dec 2025 19:00:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9ECEC1A9
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 19:00:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 850956E3BE
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 19:00:37 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PfuZo8pZCTPo for <buildroot@buildroot.org>;
+ Fri,  5 Dec 2025 19:00:36 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4888383E2A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4888383E2A
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 59EB861CF5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59EB861CF5
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4888383E2A
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 18:45:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 59EB861CF5
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 19:00:36 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0b1d.dip0.t-ipconnect.de [91.58.11.29])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id B8D87A4C21AD
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 19:45:07 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:40902)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 6AF32A4C21AD
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 20:00:34 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:33664)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vRanj-000000007Ih-037k
- for buildroot@buildroot.org; Fri, 05 Dec 2025 18:45:07 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vRb2f-000000001Wf-2uE0
+ for buildroot@buildroot.org; Fri, 05 Dec 2025 19:00:34 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri,  5 Dec 2025 19:45:07 +0100
-Message-ID: <20251205184507.1792309-1-bernd@kuhls.net>
+Date: Fri,  5 Dec 2025 20:00:31 +0100
+Message-ID: <20251205190034.1839192-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1764960307;
+ s=kas202511301023; t=1764961234;
  bh=2X7J/eCmGvx8Wa5tl5g5e9d1pP/oHrhtwoGkytPfU2w=;
  h=From:To:Subject:Date:From;
- b=hKR4hTI3Lw3fdP7R7CwAUivU+XF0XoSKkHzbXVacdmcOIoxRxkC3oxNZYZtYOCFTS
- Up56rXMhLYqRQqvSFjGOjIYZG4bxcPGd/ApkWDDjnY3PUNNSFIWwNX769Td6HjdXUe
- BFESpKRUM6kn48lBCW2g4xQO3z9y2dqXQOi2YiAuC1hapqPpq/l4pWj+MW4o9M6wci
- zUErOD/7/pG0Nd9FZ2bAwF2EcR2JXUyr7EMEp9cb10ClX/8bGfB9IMwmDAMVnnRrLD
- SxuB0z9oF5FOT0+Qxw/ByopjYCHFuczz7mvxN79cp2AC4WT21lMbh3H7QG9zDJhZQ1
- 1pDv9F123Lg7Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=r+22d6C9MD5vvJFT+1Fi/6yRl9hWkBGQ3iV/rwtqZKIVPgiUd+vSUyNEqMvJEDACl
+ ibhaiLKnwbkoVYxCls5TJkB5Z5NQiMkllqSEXhbSoRuv7s1S2l7JbLQjz0HZoYrZED
+ UTgHhH9QdU5Zk52GvJZoe43YyZQRRQc5xU0mdqDtKIS/WHSzMrUYqm2ANcL4y98ze4
+ DBNsuLVEACR3Wriyj9D2Q5wosvULjkPrxWRD3ZsIeqWbl7c2W0UMZXsUVxrsQ5vL27
+ PXukxGXPFzVNgGqRLoP+de9K/uOQzit9VEl4qG81r8uAEVvVlLYCI47CC3/4La4SY7
+ 7qJOMWO5kjMmg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=hKR4hTI3
-Subject: [Buildroot] [PATCH/next 1/1] package/matchbox-lib: bump version to
+ header.s=kas202511301023 header.b=r+22d6C9
+Subject: [Buildroot] [PATCH/next 1/4] package/matchbox-lib: bump version to
  1.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
