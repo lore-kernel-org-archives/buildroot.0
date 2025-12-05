@@ -4,59 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2ED1D374A1
-	for <buildroot@archiver.kernel.org>; Fri,  5 Dec 2025 20:53:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE993D374A3
+	for <buildroot@archiver.kernel.org>; Fri,  5 Dec 2025 20:53:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C1304605DD;
-	Fri,  5 Dec 2025 20:53:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C47596F47D;
+	Fri,  5 Dec 2025 20:53:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D-YynW2dM_Sr; Fri,  5 Dec 2025 20:53:02 +0000 (UTC)
+ id R9pugUH8fmA1; Fri,  5 Dec 2025 20:53:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2884605EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E80366075B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764967981;
-	bh=Czaxe3cedWk/LvRpECPPmvuL8/USbFGC2SVZU2i7x5U=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=QM3Z6pGobzKAKdHR5N47I1UEj7GE9kDA9jhlvlPKrF45Yxw5yoypgKNP/wT4TOHIX
-	 tJwdMjV2uw+v1+Z9eZApOHOurEU8fDBuoVfRcyrrjI2wy/APk7D/8JUBFJiUhfEcWl
-	 0Sx8dTedzt7B2xa6lKYq2VgBZxGSGEO5jPFUcLu+8BkxuHQ9K0RCJ7NOBGxacFX0J3
-	 t6y2vuoVnAsD79yzDMOX1NFZLACmE2X23YqRJCmUbBSHnRaxX9FVe+AHNwotGHtZLl
-	 pjytBSR7q+INx0sqWf0js1aDiNPXnxWgTAoXJ6bSdx6Uchik4hiz4X7kbVHJ8AnRD3
-	 TDlhsKSz7qJDw==
+	s=default; t=1764968035;
+	bh=qrO8HGmUq9y5B+siDy3Cv4iAQkgxD5+kuX4kl2BGGpc=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=GGvuGTto9YC5UW6RM0VxUO5/Day+UdhR5PfcT/GqEgCZ4eNCug/L+BDukP7j7rrxK
+	 DQxsX6LOffHg6qhZpOu6ARDyLHPnbgKDoiVVBWLyuQbIbrwSdqKjTjZWTCZYi6cLa1
+	 sVIE1zOfS6xjxpdIpTRQWi6Fuubu9evue6HDKvMZ1w31eSgxkh2o+X9a6A/3M/aLOL
+	 Z9mdrAvBkArwQ6IQyqqMWFy88M/wwmIqZ9a4igI+sZ0Ug7K3ggvbf7s0iAGJDDZtou
+	 pHaWxB9NtsawWcLc7JkMpYoaQ7cI0edGOVpLoCgfk6IVc9VMSOe2zFkhMRhDHbbsKk
+	 Yp2FUCDb6QEBA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D2884605EE;
-	Fri,  5 Dec 2025 20:53:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A9BEFE7
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 20:52:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E80366075B;
+	Fri,  5 Dec 2025 20:53:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1BA6EE7
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 20:53:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 98AF240417
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 20:52:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0DFAD40BED
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 20:53:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0SFc9HvU4AtC for <buildroot@buildroot.org>;
- Fri,  5 Dec 2025 20:52:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B808240010
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B808240010
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 20:52:58 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A3E59865CD; Fri,  5 Dec 2025 20:52:58 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 5 Dec 2025 21:50:50 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 77e4a8858c05c6829aac154a07566926dd3e4e00
-X-Git-Newrev: 78513ff979f457a7e817ea27fa600fbe3835aff0
-X-Patchwork-Hint: ignore
-Message-Id: <20251205205258.A3E59865CD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server:
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PbzSOE2cLAT0 for <buildroot@buildroot.org>;
+ Fri,  5 Dec 2025 20:53:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0047F40BDD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0047F40BDD
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0047F40BDD
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 20:53:51 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 2FF62B00548;
+ Fri,  5 Dec 2025 21:53:49 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 05 Dec 2025 21:53:49 +0100
+MIME-Version: 1.0
+Date: Fri, 05 Dec 2025 21:53:49 +0100
+To: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20251205171705.21591-1-raphael.pavlidis@gmail.com>
+References: <20251205171705.21591-1-raphael.pavlidis@gmail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <607ebe9b99e5e81b8c58fb5f7cc964d2@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1764968030;
+ bh=xmQS28L/wTjnktQ5iN0kdBFWcfPFj1/Y5y2yVP3i4bg=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=AGIkA67emHGZZRYB46ICK+dz9Mbj/GZR4qvcHKFjWAxhS1slE1W+i96aM5uM70Rqx
+ 9W4ndogRGJ3ix4ChoWZNDKwz6p2XWLqx8fGD7hVGxAKLgrL4X72eR9IcFnq2Df9gMa
+ VrSsq/SbdV5MSOzxVqrbJ0yXJV5y4lPahajhfBwjPk22vGHGJDXwTzAmwrmXh6goIU
+ wGsOIDKeT9OE1icbSRW1FKNypbaoSKFNh/0S/HXuo6FwL03DsQEnfJ40J8cEaD8WXw
+ gaT1mhSCOtZthsC7mKzpGuDcImNi0kseS1CaGZ/ZEpRg/refhYpK+Wc/SEupMgqFFl
+ eTwjwWU5fyrew==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=AGIkA67e
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/x11r7/xserver_xorg-server:
  security bump to version 21.1.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -71,63 +96,25 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78513ff979f457a7e817ea27fa600fbe3835aff0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 05/12/2025 18:17, Raphael Pavlidis wrote:
+> Changelog:
+> https://lists.x.org/archives/xorg/2025-October/062147.html
+> https://lists.x.org/archives/xorg/2025-October/062150.html
+> Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 
-Changelog:
-https://lists.x.org/archives/xorg/2025-October/062147.html
-https://lists.x.org/archives/xorg/2025-October/062150.html
+Applied to master, thanks.
 
-This commit also updates the COPYING license file hash, after year
-update in upstream commit:
-https://gitlab.freedesktop.org/xorg/xserver/-/commit/7cd443c610e5186ff09f0038d0d615600bd9a1e5
+For info, I fixed the license file hash. See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/78513ff979f457a7e817ea27fa600fbe3835aff0
 
-Fixes:
-https://www.cve.org/CVERecord?id=CVE-2025-62229
-https://www.cve.org/CVERecord?id=CVE-2025-62230
-https://www.cve.org/CVERecord?id=CVE-2025-62231
+Best regards,
 
-Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-[Julien: fix COPYING license file hash]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 8 ++++----
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index 7d373850d0..92030d4307 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg/2025-June/062065.html
--sha256  c8591ceb70b177440062406542fe52ba60212f217f27f8f802dd20373ca9e74b  xorg-server-21.1.18.tar.gz
--sha512  d0cd176e4c7273b6870999a3d008ed282fd5609acb2e0919c16447af3a5b2228d8592424388a8ace67acf216cdfae3a2d52f7a7ba81f6071467c61d57f32f314  xorg-server-21.1.16.tar.gz
-+# From https://lists.x.org/archives/xorg/2025-October/thread.html
-+sha256  a51aea1cbb29cb8122e39c1c8728469d4fd8db71a538565fbf017df11841bf04  xorg-server-21.1.20.tar.gz
-+sha512  dabe7e637df4b964a1ff04a15587157b9596851a722a753447c257253ad0422007078b74053e1a51bdfd2178e3140a52f94dff0f205242a8589b6fe02d27e8a8  xorg-server-21.1.20.tar.gz
- # Locally calculated
--sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-+sha256  abbb7969df55e399e91104ded4d0a20a1b67de7c01138e63d61b7ed4f81fec0d  COPYING
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 2ce02ade36..c9456c66b5 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XSERVER_XORG_SERVER_VERSION = 21.1.18
-+XSERVER_XORG_SERVER_VERSION = 21.1.20
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.gz
- XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
