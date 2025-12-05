@@ -1,80 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E224AD2F7EB
-	for <buildroot@archiver.kernel.org>; Fri,  5 Dec 2025 12:27:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47D74D2F7CC
+	for <buildroot@archiver.kernel.org>; Fri,  5 Dec 2025 12:28:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A579784A0F;
-	Fri,  5 Dec 2025 12:27:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 15203607D1;
+	Fri,  5 Dec 2025 12:28:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JlihRfg_i9z2; Fri,  5 Dec 2025 12:27:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id O6wA3wX_r84L; Fri,  5 Dec 2025 12:28:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EDFA184A06
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AE0961C7F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764937637;
-	bh=D3Nm0M3Gx3ojOHxnnnpk8C084FR+Ah2DGk5h7zPb54I=;
+	s=default; t=1764937717;
+	bh=98cPBH3EZgPl4mnjibLf3O/fz0GBh2iHDHqcnKKRoaY=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=EZkNT6/LEQPGrP8d2EZRytnlLp6KlzTceidMS8b8jwJ1/Z82HnxZayPddy9bc3KJV
-	 /kOQMTqV7dn27iMQDO/gj4OSe8UkagMAFmWePeQHDaoy5tOqlOap9HYXImJGKgIXI4
-	 eN65qoHgefo4StRs+yxvSFCPY/nxZvzWSipXBu52beQYMWW2vuBpZMHbeHfZm0ZcoE
-	 OitCLYjYrMRf6LwiL6rj7ZOOhdmrsY2ShMXOcp2s7bO44tSpLU1rzZ0o/ghjUPSSnD
-	 FoOrU37Slcw5l9iBZXc2QbLOCA42J23xsJ+34qy7I0WOZyQS9wv7ovB2KPEnhQ9e/n
-	 B9qGjTQQXtihQ==
+	b=T08gcAOvE7tuPCvS8hfSICl4tfMfhZNGlWF18bBFZHfPGfpJFCxJAsNc5rPIeex3T
+	 Qbnb+skPrcS50JHK7DYaTs4uJJ12ovff+kwlkisQ/m35iERnszp4HhNXgfahfWywxv
+	 Y2/Psrlp4HgWUnYUv2RAR6rluLRmujfLbtzIGyA+CjCyGvIQSpj955p6CC3j4OmWCW
+	 z+QdKw6+9ulyT0HlNz0q8Ig0G9T96NI6g9zIs2dQaX320XQyFzWmszJgrzU3wwPBFv
+	 ECPwTCJdkQZIMIjc7QXVY++rWEmxLkDEpM5aJ6pCl6aOogazRD7EjzalgMZpTXjOgY
+	 kBg3hOZrUiPcA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EDFA184A06;
-	Fri,  5 Dec 2025 12:27:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id D96231A9
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 12:27:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3AE0961C7F;
+	Fri,  5 Dec 2025 12:28:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E9C931A9
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 12:28:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C390284948
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 12:27:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E22B7412B1
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 12:28:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mhKy-1BO_uzb for <buildroot@buildroot.org>;
- Fri,  5 Dec 2025 12:27:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Swnrpsc8ywA9 for <buildroot@buildroot.org>;
+ Fri,  5 Dec 2025 12:28:33 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
  helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CCD8384940
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCD8384940
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C0EDD4020C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0EDD4020C
 Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CCD8384940
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 12:27:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C0EDD4020C
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 12:28:32 +0000 (UTC)
 Received: from framework-OT.fritz.box (unknown [212.37.174.96])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
  (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 39CF72C89475;
- Fri, 05 Dec 2025 13:27:12 +0100 (CET)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 7D9992C89475;
+ Fri, 05 Dec 2025 13:28:30 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Fri,  5 Dec 2025 13:27:12 +0100
-Message-ID: <20251205122713.600576-1-buildroot@bubu1.eu>
+Date: Fri,  5 Dec 2025 13:28:32 +0100
+Message-ID: <20251205122832.601160-1-buildroot@bubu1.eu>
 X-Mailer: git-send-email 2.52.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=bubu1.eu; s=bubu; 
- t=1764937632; bh=BtXXpq4TngaSZJQluw0p8qcZkDdSlfB7EZhIwVDhpcE=;
+ t=1764937710; bh=Of9s6mZcf61YlT7Vb1IBjXGnm3SM3uLmyPRCb4SMlss=;
  h=From:To:Cc:Subject:Date;
- b=TKahxanelfVrHTAcayCp4Go8I3NqhlNES+P9RZmQrtQyW6U5mUWNt5Ib7o14DYg6z
- 1/UOcRanvvUluYnS6wCSANHXEWZrxyb9Xd7IIZPGNSWv5WJNDvJ2FrF2IS14Y4ykvi
- Zld015tpyUEJAkqLjVwqtpEFcUISBQuD6Cpjaw5er2MMRhve3lJ7WA1lB5rsOjqxOs
- D56hnwgLylpKrLUpDC0fyZi/siGiYaJ+9mxMrAT0RXg7ecdyh/mGpsVfmIJ6H1nAE9
- 6B7HG2zkPfynbV151lhB27yW8lQodT9R+SvFQB1WAYn5OCkhQsWBv9QRt9h4K0aSgE
- 1FO9dQYgfyIyw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=RFGnBpMVFjn0b9kLFMk8H2FeNc1HTt32fnSHpEI02PucsUjtHXwQEje4j22qqLcD8
+ +0wHSb0HTnqS4W0M4JRZ7c3UqC6zOlNzHspNSvOtLGpaalULyNclHQKZw34lqQdro8
+ 6MdyXox+rhrGXVYB90QYAvvS972mS9hD/wpRT0lInV63x0ZgNVe0aAC+DxQWXThUNM
+ QqvGpIwPdctblSDa6bTDC/blQPDDlubtk5c54W051LBRDH+I6XbFQJzz+092FT44UY
+ mIqYAS1KR4dYG2gqWkQ/0wF2FAO6U4M6jUC6MdDUbjP8rY5RDULm+wRzGx3Gxx4aBR
+ poJdsSfI1qJNg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
- header.a=rsa-sha256 header.s=bubu header.b=TKahxane
-Subject: [Buildroot] [PATCH] package/python-anyio: bump to 4.12.0
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
+ header.s=bubu header.b=RFGnBpMV
+Subject: [Buildroot] [PATCH] package/python-sqlparse: bump to 0.5.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,57 +95,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop dependency on python-sniffio, that's no longer required.
-
-Release Notes https://github.com/agronholm/anyio/releases/tag/4.12.0
+Changes: https://sqlparse.readthedocs.io/en/latest/changes.html#release-0-5-4-nov-28-2025
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 ---
- package/python-anyio/Config.in         | 1 -
- package/python-anyio/python-anyio.hash | 4 ++--
- package/python-anyio/python-anyio.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ package/python-sqlparse/python-sqlparse.hash | 4 ++--
+ package/python-sqlparse/python-sqlparse.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-anyio/Config.in b/package/python-anyio/Config.in
-index d843f37af0..e06dc8fc4f 100644
---- a/package/python-anyio/Config.in
-+++ b/package/python-anyio/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_PYTHON_ANYIO
- 	bool "python-anyio"
- 	select BR2_PACKAGE_PYTHON_IDNA # runtime
--	select BR2_PACKAGE_PYTHON_SNIFFIO # runtime
- 	help
- 	  High level compatibility layer for multiple asynchronous
- 	  event loop implementations.
-diff --git a/package/python-anyio/python-anyio.hash b/package/python-anyio/python-anyio.hash
-index f93986fb9d..2a02bc9d37 100644
---- a/package/python-anyio/python-anyio.hash
-+++ b/package/python-anyio/python-anyio.hash
+diff --git a/package/python-sqlparse/python-sqlparse.hash b/package/python-sqlparse/python-sqlparse.hash
+index 3e54d227f4..8d9c27afb7 100644
+--- a/package/python-sqlparse/python-sqlparse.hash
++++ b/package/python-sqlparse/python-sqlparse.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/anyio/json
--md5  9bbd9262979f576a9023389e48204037  anyio-4.11.0.tar.gz
--sha256  82a8d0b81e318cc5ce71a5f1f8b5c4e63619620b63141ef8c995fa0db95a57c4  anyio-4.11.0.tar.gz
-+md5  a026af4a3b485699718761b1b44ad1df  anyio-4.12.0.tar.gz
-+sha256  73c693b567b0c55130c104d0b43a9baf3aa6a31fc6110116509f27bf75e21ec0  anyio-4.12.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/sqlparse/json
+-md5  9764a42264c9a3102526c87260e73d11  sqlparse-0.5.3.tar.gz
+-sha256  09f67787f56a0b16ecdbde1bfc7f5d9c3371ca683cfeaa8e6ff60b4807ec9272  sqlparse-0.5.3.tar.gz
++md5  b5bf6082e38fb99bf8217f429b73346a  sqlparse-0.5.4.tar.gz
++sha256  4396a7d3cf1cd679c1be976cf3dc6e0a51d0111e87787e7a8d780e7d5a998f9e  sqlparse-0.5.4.tar.gz
  # Locally computed sha256 checksums
- sha256  5361ac9dc58f2ef5fd2e9b09c68297c17f04950909bbc8023bdb82eacf22c2b0  LICENSE
-diff --git a/package/python-anyio/python-anyio.mk b/package/python-anyio/python-anyio.mk
-index 431eb5f286..035e2298e8 100644
---- a/package/python-anyio/python-anyio.mk
-+++ b/package/python-anyio/python-anyio.mk
+ sha256  c1938235b80d39e93138eae89edc3af67e18ecbc40d266529fa57b2dce426310  LICENSE
+diff --git a/package/python-sqlparse/python-sqlparse.mk b/package/python-sqlparse/python-sqlparse.mk
+index 0140961393..6d952b215a 100644
+--- a/package/python-sqlparse/python-sqlparse.mk
++++ b/package/python-sqlparse/python-sqlparse.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ANYIO_VERSION = 4.11.0
-+PYTHON_ANYIO_VERSION = 4.12.0
- PYTHON_ANYIO_SOURCE = anyio-$(PYTHON_ANYIO_VERSION).tar.gz
--PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/c6/78/7d432127c41b50bccba979505f272c16cbcadcc33645d5fa3a738110ae75
-+PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/16/ce/8a777047513153587e5434fd752e89334ac33e379aa3497db860eeb60377
- PYTHON_ANYIO_SETUP_TYPE = setuptools
- PYTHON_ANYIO_LICENSE = MIT
- PYTHON_ANYIO_LICENSE_FILES = LICENSE
+-PYTHON_SQLPARSE_VERSION = 0.5.3
++PYTHON_SQLPARSE_VERSION = 0.5.4
+ PYTHON_SQLPARSE_SOURCE = sqlparse-$(PYTHON_SQLPARSE_VERSION).tar.gz
+-PYTHON_SQLPARSE_SITE = https://files.pythonhosted.org/packages/e5/40/edede8dd6977b0d3da179a342c198ed100dd2aba4be081861ee5911e4da4
++PYTHON_SQLPARSE_SITE = https://files.pythonhosted.org/packages/18/67/701f86b28d63b2086de47c942eccf8ca2208b3be69715a1119a4e384415a
+ PYTHON_SQLPARSE_SETUP_TYPE = hatch
+ PYTHON_SQLPARSE_LICENSE = BSD-3-Clause
+ PYTHON_SQLPARSE_LICENSE_FILES = LICENSE
 -- 
 2.52.0
 
