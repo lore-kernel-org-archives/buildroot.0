@@ -4,74 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6ACAFD374A3
-	for <buildroot@archiver.kernel.org>; Fri,  5 Dec 2025 20:57:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DBEBD374A1
+	for <buildroot@archiver.kernel.org>; Fri,  5 Dec 2025 21:02:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1F6E86F4B1;
-	Fri,  5 Dec 2025 20:57:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2DC926EAA1;
+	Fri,  5 Dec 2025 21:02:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sxKIHZQOvviY; Fri,  5 Dec 2025 20:57:42 +0000 (UTC)
+ id oyJXGUmKTv0O; Fri,  5 Dec 2025 21:01:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E73B3606EF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD048606BD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764968262;
-	bh=3HU3PkA0r1XeATlyXlu4aQ/krK6cmLWRl60FoGx/L8U=;
+	s=default; t=1764968519;
+	bh=dJ7v5FibeaMyFOKBEkiEwX1OitfqBg4XqlcGzcJaB7I=;
 	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=ng499HJnkyqxg3WI12zCRcd+CzeW68e1AQgtAIGFBfBoC97xl3I/cuGjNST0Kp4Ey
-	 cMkhofCDU+tkcLpCL+4AJ4gBhNks6d+BssbxlFXxyEPAE74MGbizEJVyTyc+qsjhOU
-	 ek+Om+DW0OC/Fhxloy4DSGdehO8gzhoDLlj2b/ti/EPXbXYVpQ8OiSc4VJHHhQqSH3
-	 lO9N5W41PgPavkgtsR9KsmLxmkUpEgAZkS8hiAcpEJAtxx6quVApLc3TpJ91h2nmM8
-	 LPWM9HF2oVkzMbL4ATfhf92D8DCqKHvyDode46M5/MnTmPsGPp8jEDwkIDqV8kFvKm
-	 mQUy6c2u7pdmg==
+	b=YeJCfYqP+ZouVLsDoyS71A8JfXX325VTwo1GAKbKpfkJABHPifc7ga4OF4AqBxgO8
+	 6JLla28EQfpszIv5IJ6wOlomfFQq0racCxmGGCyINGMKi2lDNndwfQt4tBs340uYai
+	 FU9UdYJ5BLpnVO/qmIIgg5jw5Y8Lv5YQQWIeZAzDjQn7jgGR83qGNbnJFgMoHVtSnB
+	 RcvalTtbu4qsXF7YquE2DfFQK2n6FMpWJNLw9rUNGMVAbZfd8a+9xviKCPN3D3IfVw
+	 3S7L015JK3NLa4Ekvv2BPjTSLSDSxwbDqyaloLwfm2pz++ASpbEIEUH1ZUVJJPtbKU
+	 uIMdQHy35JC3w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E73B3606EF;
-	Fri,  5 Dec 2025 20:57:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D31DFE7
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 20:57:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AD048606BD;
+	Fri,  5 Dec 2025 21:01:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A4674E7
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 21:01:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C43B840417
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 20:57:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A1CD540417
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 21:01:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kf-TdUSEfZ0O for <buildroot@buildroot.org>;
- Fri,  5 Dec 2025 20:57:39 +0000 (UTC)
+ id Hd3AOwPbXDYU for <buildroot@buildroot.org>;
+ Fri,  5 Dec 2025 21:01:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
  helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A138F40010
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A138F40010
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8F3C640010
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F3C640010
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A138F40010
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 20:57:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8F3C640010
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 21:01:57 +0000 (UTC)
 Feedback-ID: 21632:4007:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 162349616; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -442944317; 
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Fri, 05 Dec 2025 20:57:36 +0000 (UTC)
+ Fri, 05 Dec 2025 21:01:54 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vRcrt-00000002AzF-19ju;
- Fri, 05 Dec 2025 21:57:33 +0100
+ (envelope-from <peter@korsgaard.com>) id 1vRcw4-00000002BZH-2tS5;
+ Fri, 05 Dec 2025 22:01:52 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 Cc: buildroot@buildroot.org
-In-Reply-To: <20251205171705.21591-1-raphael.pavlidis@gmail.com> (Raphael
- Pavlidis's message of "Fri, 5 Dec 2025 17:17:05 +0000")
-References: <20251205171705.21591-1-raphael.pavlidis@gmail.com>
-Date: Fri, 05 Dec 2025 21:57:33 +0100
-Message-ID: <871pl8ejeq.fsf@dell.be.48ers.dk>
+In-Reply-To: <20251205171837.22075-2-raphael.pavlidis@gmail.com> (Raphael
+ Pavlidis's message of "Fri, 5 Dec 2025 17:18:37 +0000")
+References: <20251205171837.22075-1-raphael.pavlidis@gmail.com>
+ <20251205171837.22075-2-raphael.pavlidis@gmail.com>
+Date: Fri, 05 Dec 2025 22:01:52 +0100
+Message-ID: <87wm30d4n3.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=nliaa2be6n6Xa4C12bQ4M9q2byKquXxMmO0lMkGiOZ0iwfQ+9LmC3ut4RkAAO89BsMENnKELfFAGcPYcc4SplitrZH8zthhVCAXRb33eBgRFbgu8fm/yu81cWShPtk5Za1j6CNz0q7Pg1fJQ4sL5iHnVdQTmWGNQ0GS8+nWKTjRFBR5L2P7TS88K/LBaRtoep14fZIwiLqT1T/IM654fuO9W2YvHSTICo8ovcK8IxlxItHbg7/nF3hTyQpEuPLytkFM0/HbikTP/HgTJRwVRNRbrGTkoNUOlPM9325ZQxgNpseZb2Ps0wYGer4Wx/p1LiLlYUUJ4mT0d41r1xpAS2A==;
+ b=iYvDOxBPXjCB8B6T33m6nNgVHzmyZG5j0ejv+JLwCPaZe37CxPB0pXrOIiK1lMtiQXoNqTK2yKLgYFamx6GzvUYG608Fey62MWRA1exSrdeg36CsPjntagRt7WPv/EbYJ0id/LKY1Xe/rAaGZ7aGlM7OwFDVAsxRVA6lxS8Z1smkbeT6fOunpYmHQgp711bPzyNAtYcug3i/B5tb1UqJYOPYZmntN2ai/8sM+HkykmjFiZJjTGuaCazw8Zwh7tSETB+0vftdxCjo3GOvJ00s5JVbNfrB/SeMM4utUwAVXwWOKX35wvButhAt3cX86qiPL7MRhmFPRGYtFBOnujhIwg==;
  s=purelymail3; d=purelymail.com; v=1;
- bh=fxwAZs25/BJyYYRu5tWADvS/n8VcrpWZxfmp7rpr+Z0=;
+ bh=ZEE4Bf3FZDX/ahOjyW4XxTlJF5jonuBWTeU2Wi9CvOM=;
  h=Feedback-ID:Received:Received:From:To:Subject:Date; 
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
@@ -79,9 +80,9 @@ X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=nliaa2be
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/x11r7/xserver_xorg-server:
- security bump to version 21.1.20
+ header.a=rsa-sha256 header.s=purelymail3 header.b=iYvDOxBP
+Subject: Re: [Buildroot] [PATCH v1 2/2] package/xwayland: bump to version
+ 24.1.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,20 +102,11 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 >>>>> "Raphael" == Raphael Pavlidis <raphael.pavlidis@gmail.com> writes:
 
  > Changelog:
- > https://lists.x.org/archives/xorg/2025-October/062147.html
- > https://lists.x.org/archives/xorg/2025-October/062150.html
+ > https://lists.x.org/archives/xorg/2025-October/062148.html
  > Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 
-It would be good to add some more details, E.G. the CVE information (and
-link) from the advisory:
-
-https://lists.x.org/archives/xorg-announce/2025-October/003635.html
-
-And also explain what happened to the 21.1.19 release. Finally you
-forgot to run 'xserver_xorg-server-legal-info' and update the sha256sum
-of the COPYING file after the change of copyright year.
-
-Committed after fixing those issues, thanks.
+This fixes the same security issues as the xserver bump and needs the
+same COPYING hash update - So committed after fixing that, thanks.
 
 -- 
 Bye, Peter Korsgaard
