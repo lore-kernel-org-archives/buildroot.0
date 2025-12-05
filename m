@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E737DD374B4
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2BC3D374A6
 	for <buildroot@archiver.kernel.org>; Fri,  5 Dec 2025 22:22:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8095A84C66;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 59F76607C5;
 	Fri,  5 Dec 2025 22:22:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P36WCbgTtK7c; Fri,  5 Dec 2025 22:22:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1L1LX4zj0egW; Fri,  5 Dec 2025 22:22:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E19A84C4D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 676D7607C6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764973342;
-	bh=ZDPWrZ3w40cszfMEi7ykYwn2qHbWMB7MmWoKkDeZwyw=;
+	s=default; t=1764973343;
+	bh=+/m+LzEWZOKF6v3ZUnGLxyEceplCn3h3dk9w7HYsdIA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=XDuQB9xhIhCcyvZfKu27izFSgtTgd0lzyrzRHBGHl+7MYjsXeSpcNd70cicw6Jxp9
-	 3K4Cp2PnM81KTyEvXWHoMU+RQ0PJ4LesZpZHmGOlkS/wJJPmBUMcZgiEQd1m7mjQy+
-	 xCavwFPwoPJW7Yyf9ITCVoWwUCqBBJvlOW8PWxu3oTc594OVU2DYTeEH37I3iUFAwl
-	 ixUMQs73GBxs+tGNipawQknr+wPQ9zhFCuATYtUzcfv/fhftxzY60huQST8AArqlKm
-	 KP9VLn2o+uQMHZhko/s7Z6BZ5qV+rvta41vC8bgbaueKQtDmA/YNi0rT54FzRSiDm3
-	 /UxfXbGIWTGKw==
+	b=dLEt1QVXwZRu9cgX81GjuFHlAWOxSBtn2Cn29v6D9k3tie+Dao7x76MKf3DZ6hPkq
+	 oPdXbC7bwcrUaCQLTc0gZQhpeV+3yG4n1dn0VFYgL1sP+w7wk+Nm9yP4N4C6bBjCoM
+	 wXh/mM2AR4BOE1iNGI/V0qmXzfaqS7ZUrhhC19vt+8ABoe97OccFiHDZA/CvSbtVJW
+	 q2/El0G55h8+rfrY6NlA/4ZPRlNnT6h+RcM/QaQUjVtrAFvyUtI+v7bov8MaRuMVfi
+	 yc/SKOjacG2SFf/pECzuzLCTQjbEJTOjyv8ken5U8x1TSQC1rohJd/aOE5+uN+l9QF
+	 fdsIUJvpTG7lA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5E19A84C4D;
-	Fri,  5 Dec 2025 22:22:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 676D7607C6;
+	Fri,  5 Dec 2025 22:22:23 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 78FAAE7
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 22:22:20 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 95A74258
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 22:22:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 62B8E40B82
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7B24340B76
  for <buildroot@buildroot.org>; Fri,  5 Dec 2025 22:22:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z6zf4xPQoB7Y for <buildroot@buildroot.org>;
+ id omWFywPNj5YV for <buildroot@buildroot.org>;
  Fri,  5 Dec 2025 22:22:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FA1240B76
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A282540B7A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9FA1240B76
+ by smtp4.osuosl.org (Postfix) with ESMTP id A282540B7A
  for <buildroot@buildroot.org>; Fri,  5 Dec 2025 22:22:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 882E986659; Fri,  5 Dec 2025 22:22:19 +0000 (UTC)
+ id 912D28665B; Fri,  5 Dec 2025 22:22:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 5 Dec 2025 23:00:07 +0100
+Date: Fri, 5 Dec 2025 23:00:09 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 00cce8c05216e86a4ada4b01a0d5dacfca533649
-X-Git-Newrev: d1c31dc5e6746be104345eaae93a12017a6447be
+X-Git-Oldrev: d1c31dc5e6746be104345eaae93a12017a6447be
+X-Git-Newrev: 6ed35083dc9611e5f93a3ece5c322e966015f5dc
 X-Patchwork-Hint: ignore
-Message-Id: <20251205222219.882E986659@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-annotated-doc:
- new package
+Message-Id: <20251205222219.912D28665B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-fastapi: bump
+ to 0.123.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,92 +77,83 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1c31dc5e6746be104345eaae93a12017a6447be
+commit: https://git.buildroot.net/buildroot/commit/?id=6ed35083dc9611e5f93a3ece5c322e966015f5dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Required for fastapi since 0.120.0 [1]
+This introduces a new trivial runtime dependency (annotated-doc) since
+0.120.0.
 
-https://github.com/fastapi/fastapi/releases/tag/0.120.0
+Changes:
+* https://github.com/fastapi/fastapi/releases/tag/0.120.0
+* https://github.com/fastapi/fastapi/releases/tag/0.120.1
+* https://github.com/fastapi/fastapi/releases/tag/0.120.2
+* https://github.com/fastapi/fastapi/releases/tag/0.120.3
+* https://github.com/fastapi/fastapi/releases/tag/0.120.4
+* https://github.com/fastapi/fastapi/releases/tag/0.121.0
+* https://github.com/fastapi/fastapi/releases/tag/0.121.1
+* https://github.com/fastapi/fastapi/releases/tag/0.121.2
+* https://github.com/fastapi/fastapi/releases/tag/0.121.3
+* https://github.com/fastapi/fastapi/releases/tag/0.122.0
+* https://github.com/fastapi/fastapi/releases/tag/0.122.1
+* https://github.com/fastapi/fastapi/releases/tag/0.123.0
+* https://github.com/fastapi/fastapi/releases/tag/0.123.1
+* https://github.com/fastapi/fastapi/releases/tag/0.123.2
+* https://github.com/fastapi/fastapi/releases/tag/0.123.3
+* https://github.com/fastapi/fastapi/releases/tag/0.123.4
+* https://github.com/fastapi/fastapi/releases/tag/0.123.5
+* https://github.com/fastapi/fastapi/releases/tag/0.123.6
+* https://github.com/fastapi/fastapi/releases/tag/0.123.7
+* https://github.com/fastapi/fastapi/releases/tag/0.123.8
+* https://github.com/fastapi/fastapi/releases/tag/0.123.9
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                                             |  1 +
- package/Config.in                                      |  1 +
- package/python-annotated-doc/Config.in                 |  7 +++++++
- package/python-annotated-doc/python-annotated-doc.hash |  5 +++++
- package/python-annotated-doc/python-annotated-doc.mk   | 15 +++++++++++++++
- 5 files changed, 29 insertions(+)
+ package/python-fastapi/Config.in           | 1 +
+ package/python-fastapi/python-fastapi.hash | 4 ++--
+ package/python-fastapi/python-fastapi.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 45229ecf41..7434f41838 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2260,6 +2260,7 @@ N:	Marcus Hoffmann <bubu@bubu1.eu>
- F:	package/nethogs/
- F:	package/pico-sdk/
- F:	package/picotool/
-+F:	package/python-annotated-doc/
- F:	package/python-apscheduler/
- F:	package/python-crc/
- F:	package/python-django/
-diff --git a/package/Config.in b/package/Config.in
-index 53fda7e086..a083f43a64 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -992,6 +992,7 @@ menu "External python modules"
- 	source "package/python-alembic/Config.in"
- 	source "package/python-alsaaudio/Config.in"
- 	source "package/python-aniso8601/Config.in"
-+	source "package/python-annotated-doc/Config.in"
- 	source "package/python-annotated-types/Config.in"
- 	source "package/python-ansicolors/Config.in"
- 	source "package/python-anyio/Config.in"
-diff --git a/package/python-annotated-doc/Config.in b/package/python-annotated-doc/Config.in
-new file mode 100644
-index 0000000000..3bd240f211
---- /dev/null
-+++ b/package/python-annotated-doc/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_ANNOTATED_DOC
-+	bool "python-annotated-doc"
-+	help
-+	  Document parameters, class attributes, return types, and
-+	  variables inline, with Annotated.
-+
-+	  https://github.com/fastapi/annotated-doc
-diff --git a/package/python-annotated-doc/python-annotated-doc.hash b/package/python-annotated-doc/python-annotated-doc.hash
-new file mode 100644
-index 0000000000..8ffdae9b5d
---- /dev/null
-+++ b/package/python-annotated-doc/python-annotated-doc.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/annotated-doc/json
-+md5  825f2ecff1f182cd942ea09907ebafdb  annotated_doc-0.0.4.tar.gz
-+sha256  fbcda96e87e9c92ad167c2e53839e57503ecfda18804ea28102353485033faa4  annotated_doc-0.0.4.tar.gz
-+# Locally computed sha256 checksums
-+sha256  fff170779a6acbf65abdb405c087f1cee1786691e4a96a4034517e4a504a0cdf  LICENSE
-diff --git a/package/python-annotated-doc/python-annotated-doc.mk b/package/python-annotated-doc/python-annotated-doc.mk
-new file mode 100644
-index 0000000000..2186601a8c
---- /dev/null
-+++ b/package/python-annotated-doc/python-annotated-doc.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-annotated-doc
-+#
-+################################################################################
-+
-+PYTHON_ANNOTATED_DOC_VERSION = 0.0.4
-+PYTHON_ANNOTATED_DOC_SOURCE = annotated_doc-$(PYTHON_ANNOTATED_DOC_VERSION).tar.gz
-+PYTHON_ANNOTATED_DOC_SITE = https://files.pythonhosted.org/packages/57/ba/046ceea27344560984e26a590f90bc7f4a75b06701f653222458922b558c
-+PYTHON_ANNOTATED_DOC_SETUP_TYPE = pep517
-+PYTHON_ANNOTATED_DOC_LICENSE = MIT
-+PYTHON_ANNOTATED_DOC_LICENSE_FILES = LICENSE
-+PYTHON_ANNOTATED_DOC_DEPENDENCIES = host-python-pdm-backend
-+
-+$(eval $(python-package))
+diff --git a/package/python-fastapi/Config.in b/package/python-fastapi/Config.in
+index 21997daf9a..0dd4499a3f 100644
+--- a/package/python-fastapi/Config.in
++++ b/package/python-fastapi/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PYTHON_FASTAPI
+ 	bool "python-fastapi"
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-pydantic -> python-pydantic-core
++	select BR2_PACKAGE_PYTHON_ANNOTATED_DOC # runtime
+ 	select BR2_PACKAGE_PYTHON_PYDANTIC # runtime
+ 	select BR2_PACKAGE_PYTHON_STARLETTE # runtime
+ 	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
+diff --git a/package/python-fastapi/python-fastapi.hash b/package/python-fastapi/python-fastapi.hash
+index 34bfe22c87..7ef8628579 100644
+--- a/package/python-fastapi/python-fastapi.hash
++++ b/package/python-fastapi/python-fastapi.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/fastapi/json
+-md5  5d539db8065d3579430ed00577e8a86b  fastapi-0.119.1.tar.gz
+-sha256  a5e3426edce3fe221af4e1992c6d79011b247e3b03cc57999d697fe76cbf8ae0  fastapi-0.119.1.tar.gz
++md5  b72bd92dd17ba585f8fc3cf37f95c6f2  fastapi-0.123.9.tar.gz
++sha256  ab33d672d8e1cc6e0b49777eb73c32ccf20761011f5ca16755889ab406fd1de0  fastapi-0.123.9.tar.gz
+ # Locally computed sha256 checksums
+ sha256  4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e  LICENSE
+diff --git a/package/python-fastapi/python-fastapi.mk b/package/python-fastapi/python-fastapi.mk
+index 4a067494a7..207dc88d8f 100644
+--- a/package/python-fastapi/python-fastapi.mk
++++ b/package/python-fastapi/python-fastapi.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_FASTAPI_VERSION = 0.119.1
++PYTHON_FASTAPI_VERSION = 0.123.9
+ PYTHON_FASTAPI_SOURCE = fastapi-$(PYTHON_FASTAPI_VERSION).tar.gz
+-PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/a6/f4/152127681182e6413e7a89684c434e19e7414ed7ac0c632999c3c6980640
++PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/2c/01/c3fb48c0135d89586a03c3e2c5bc04540dda52079a1af5cac4a63598efb9
+ PYTHON_FASTAPI_SETUP_TYPE = pep517
+ PYTHON_FASTAPI_LICENSE = MIT
+ PYTHON_FASTAPI_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
