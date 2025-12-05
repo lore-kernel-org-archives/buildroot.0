@@ -4,60 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80989D374AF
-	for <buildroot@archiver.kernel.org>; Fri,  5 Dec 2025 21:43:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFBC6D374AD
+	for <buildroot@archiver.kernel.org>; Fri,  5 Dec 2025 21:44:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9246660717;
-	Fri,  5 Dec 2025 21:43:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B45436F49E;
+	Fri,  5 Dec 2025 21:44:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hsQbjq-CJ9z9; Fri,  5 Dec 2025 21:43:22 +0000 (UTC)
+ id BG0izToqQnPv; Fri,  5 Dec 2025 21:44:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABA9B605AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40DE960717
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1764971001;
-	bh=qckzVd5YnF1Cd1+9s8s6bgsopzczg8b5N/iYKJj5lWo=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ieV5W6IFYpQb/3i1lHqy292e6pLD5wkWQjlWFW+ZRkoA/MJlbGGPq4esdZpdq/vLY
-	 C/T8SaLgQ3rJNMwp9nJEJikghPV3mf8AAgUC/AsiJ3/NkJdxqbnFPSAabDaeRs/+BE
-	 I8P70ju+jypQFelUig0UrywF5BT8fOAYSgMyoYhwx9x7qR0kO6kbEhkHGaVdagdOo8
-	 ObAUe8rMk7FLsNL1cfSQ6ZBwP2lc+N0iHGNowctpU2irQEiTFZY2Zs4mfbhtFeBE0N
-	 Pk6WQyunHoZicmBz3u78QeEoaDD+2cHDbavYkUoSpqQo1qYaIJHx28jn3tdWIPfyM0
-	 YxeeGIzzEWiYg==
+	s=default; t=1764971040;
+	bh=52VZpO8pyMyUiWAp0rZyXt18J9hHOtcVZb33DFvzVXY=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=YGi4ma0StSzR+aLEdoKu4iD528hncg0yOG9RN4Qi0zvQfSEnXyrk4oBbHFfvT/Bc6
+	 zAe9v+AfEpMObK9IuYBMnBnEXeElwJnMx5ozB9bB8PfB2E1SPw0TeJfnHQIPoSkv7O
+	 xNPxnFoeIHZwTY7wQMjwkKZrVPQaCUzFqE2Kh432i3JzkhJoRCyJ6kRP7ObHT0i1YZ
+	 I9++pE30lP2tLigcxuOTWx1ty/GeoPN0xIW6fxK88jLJVhG186uaS2gS2/mxm3M4Xd
+	 l1rU/gYsXpM0+lPjc93MBLCdJ7TRewifket2xsQRsjkUz9UM8AN0bNkwLRVRRKIFcL
+	 2d7LnX286IMnw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABA9B605AD;
-	Fri,  5 Dec 2025 21:43:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 40DE960717;
+	Fri,  5 Dec 2025 21:44:00 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9F76E258
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 21:43:19 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id CDEC5E7
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 21:43:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 863954003D
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 21:43:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BFCFD4003D
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 21:43:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UOwgjB63Np4s for <buildroot@buildroot.org>;
- Fri,  5 Dec 2025 21:43:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C71D940010
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C71D940010
- for <buildroot@buildroot.org>; Fri,  5 Dec 2025 21:43:18 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AE37586626; Fri,  5 Dec 2025 21:43:18 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 5 Dec 2025 21:56:55 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 959a94c2ded2b8ec605fa135ede8b8f5fcec84b0
-X-Git-Newrev: 00886048b27d7b86d38282a8dbd5ec3c2bcb48f0
-X-Patchwork-Hint: ignore
-Message-Id: <20251205214318.AE37586626@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- configs/versal2_vek385_defconfig: add optee_os support
+ id TuFrUME5xEJO for <buildroot@buildroot.org>;
+ Fri,  5 Dec 2025 21:43:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B9E7240010
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9E7240010
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B9E7240010
+ for <buildroot@buildroot.org>; Fri,  5 Dec 2025 21:43:57 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 38E5219F57E;
+ Fri,  5 Dec 2025 22:43:46 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 05 Dec 2025 22:43:46 +0100
+MIME-Version: 1.0
+Date: Fri, 05 Dec 2025 22:43:46 +0100
+To: Neal Frager <neal.frager@amd.com>
+Cc: buildroot@buildroot.org, ibai.erkiaga-elorza@amd.com,
+ luca.ceresoli@bootlin.com, yann.morin@orange.com, brandon.maier@collins.com,
+ thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com,
+ romain.naour@gmail.com
+In-Reply-To: <20251204114409.3355954-1-neal.frager@amd.com>
+References: <20251204114409.3355954-1-neal.frager@amd.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <20ba2cc9e57d8a5b9bfcd9d5c41c9054@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1764971036;
+ bh=nfYCq2al6hlWTAvcOLe2+bngtk1vZIBRynQ2wbxJ9Wc=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=mVlYk3EW5KB/cgT0zto1Xxp1K4ov4iHeeSTOGIVC1fr2MFHrfwpkf0vQQ3rKxuxge
+ dNYnDKMPk9EkxwAGFhcNAQADWh0/oZZ5oYsTlcs7IRO6Obt8KtufO5ylXMuFCa+bdF
+ PgV6/eb99dsi0KGs0zAKP5Ju6pd3GY6FByE2H3j74R4wQNHz97dyzsUxJruXIzk2qJ
+ BVn8c9DYO6qk8Mqx6s0FVFv2wnFtwyAa6lUflh0NBYF1/kMRvBgYDzKeErWiewYK0C
+ LTYneD7vVitB0cjl81XV4nD6w86UmCxfV2sUWh5kCigr7j7IZOpxV96/jr8DC8y2UP
+ LRnRttUvJN0hg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=mVlYk3EW
+Subject: Re: [Buildroot] [PATCH v3 1/1] boot/xilinx-prebuilt: add local
+ versal xsa support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,71 +99,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00886048b27d7b86d38282a8dbd5ec3c2bcb48f0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 04/12/2025 12:44, Neal Frager via buildroot wrote:
+> Most of the time, users will be running Vivado on their local host 
+> machine,
+> and will generate a XSA (Xilinx Shell Archive) locally.
+> 
+> Instead of requiring users to create a URL location for their XSA file,
+> this patch improves ease of use by allowing users to work directly with
+> just a path on the local host machine.
+> 
+> BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA_LOCATION can thus be defined as 
+> either
+> a simple local location or a URL location for the XSA file.
+> 
+> In either case, a hash for the XSA file needs to be added to the
+> boot/xilinx-prebuilt/xilinx-prebuilt.hash when using this option.
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
 
-Add optee_os to the default configuration for versal2 devices including an
-example with the versal2_vek385_defconfig.
-
-Since not all versal2 optee_os features are upstream, use the downstream
-Xilinx release tag xlnx_rebase_v4.5.0_2025.2 for version xilinx_v2025.2
-which is based on optee_os v4.5.0.
-
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- board/versal2/post-image.sh      | 1 +
- board/versal2/readme.txt         | 1 +
- configs/versal2_vek385_defconfig | 6 ++++++
- 3 files changed, 8 insertions(+)
-
-diff --git a/board/versal2/post-image.sh b/board/versal2/post-image.sh
-index 36cd2eda19..17746271e1 100755
---- a/board/versal2/post-image.sh
-+++ b/board/versal2/post-image.sh
-@@ -19,6 +19,7 @@ cat <<-__HEADER_EOF > "${BINARIES_DIR}/bootgen.bif"
- 	    id = 0x1c000000, name=apu_subsystem
- 	    { type=raw, load=0x01000000, file=${BINARIES_DIR}/u-boot.dtb }
- 	    { core=a78-0, cluster=0, exception_level=el-3, trustzone, file=${BINARIES_DIR}/bl31.elf }
-+	    { core=a78-0, cluster=0, exception_level=el-1, trustzone, load=0x1800000, file=${BINARIES_DIR}/tee-raw.bin }
- 	    { core=a78-0, cluster=0, exception_level=el-2, file=${BINARIES_DIR}/u-boot.elf }
- 	  }
- 	}
-diff --git a/board/versal2/readme.txt b/board/versal2/readme.txt
-index fd7d092cc4..4498392bcb 100644
---- a/board/versal2/readme.txt
-+++ b/board/versal2/readme.txt
-@@ -41,6 +41,7 @@ After building, you should get a tree like this:
-     +-- rootfs.ext4 -> rootfs.ext2
-     +-- sdcard.img
-     +-- system.dtb -> u-boot.dtb
-+    +-- tee-raw.bin
-     +-- u-boot.dtb
-     `-- u-boot.elf
- 
-diff --git a/configs/versal2_vek385_defconfig b/configs/versal2_vek385_defconfig
-index a2d57a0976..9a70a6bcb2 100644
---- a/configs/versal2_vek385_defconfig
-+++ b/configs/versal2_vek385_defconfig
-@@ -26,6 +26,12 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,ar
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="versal2"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="VERSAL2_CONSOLE=cadence1"
-+BR2_TARGET_OPTEE_OS=y
-+BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL=y
-+BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,optee_os,xlnx_rebase_v4.5.0_2025.2)/xlnx_rebase_v4.5.0_2025.2.tar.gz"
-+BR2_TARGET_OPTEE_OS_NEEDS_DTC=y
-+BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_CRYPTOGRAPHY=y
-+BR2_TARGET_OPTEE_OS_PLATFORM="versal2"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+Applied to next, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
