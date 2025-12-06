@@ -1,88 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C575D3B7DB
-	for <buildroot@archiver.kernel.org>; Sat,  6 Dec 2025 17:59:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCBE2D3B7D5
+	for <buildroot@archiver.kernel.org>; Sat,  6 Dec 2025 21:38:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 689CA40927;
-	Sat,  6 Dec 2025 17:59:40 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id koDu-eL4MGE0; Sat,  6 Dec 2025 17:59:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D43F3408E1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765043978;
-	bh=zhyV71oFEQ0jYFHy6t9gtdzK14g4nBrGAyJHESF3tgM=;
-	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=SX/CVk1rwC4qS48vTpGBYnwmTezvo8YAV9uOOfjgAAEe6LT3ePwB5lwYDT7LJK3s1
-	 zpVLhPEUzCx3h9eXdRl29aMefAfXBWymovCKMYAjKYLvhO+IxgVacmMNCBtvfFzbyD
-	 hH1V0iP56ApxdVub7FgbjAjdpEVZiC8NjwLsKPvYwH9hP+imHXpRqVyCDAGyg5EoEZ
-	 yKLwACX0X1WkcVfbakTFrwEftnvjG8fXXOXo/yzNTkY/5XNJqbqciNhp0EC0keiLjC
-	 AzqvoNBe4/nE9iRmDFgtkiT/8Wkc1QAXFvzWuAZx5YmCMrby1CXao2rAGZW5Gq8KWp
-	 eZ6bXmrOPymJA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D43F3408E1;
-	Sat,  6 Dec 2025 17:59:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 656571A9
- for <buildroot@buildroot.org>; Sat,  6 Dec 2025 17:59:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 474C160653
- for <buildroot@buildroot.org>; Sat,  6 Dec 2025 17:59:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 76BCB60782;
+	Sat,  6 Dec 2025 21:38:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c3pbnTASyGY1 for <buildroot@buildroot.org>;
- Sat,  6 Dec 2025 17:59:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=alexis.lothore@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 47A51605A5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47A51605A5
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 47A51605A5
- for <buildroot@buildroot.org>; Sat,  6 Dec 2025 17:59:35 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 20F181A1FBF
- for <buildroot@buildroot.org>; Sat,  6 Dec 2025 17:59:33 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id EA5BF606AC;
- Sat,  6 Dec 2025 17:59:32 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 7E21D102F1956; Sat,  6 Dec 2025 18:59:28 +0100 (CET)
-Date: Sat, 06 Dec 2025 18:59:22 +0100
-MIME-Version: 1.0
-Message-Id: <20251206-libdbi_typo-v1-1-07d8e40b2242@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAPluNGkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1NDIwMz3ZzMpJSkzPiSyoJ83SSTpJRUY7M0SwsjYyWgjoKi1LTMCrBp0bG
- 1tQDbzvZGXQAAAA==
-X-Change-ID: 20251206-libdbi_typo-b4bde36f9823
+ id noSKpgsqZkqV; Sat,  6 Dec 2025 21:38:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E2EC6078D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1765057105;
+	bh=RUuQ/wCxMrCVFerqjYNXiutsB41JMUVUwVKHxgzxt6w=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=kEd+9ktDoVx42iVo0I6Kyxzhx3CjIkLTBBP9dOoOBkAs4T/PlkIVdD8bY8b5zD4nW
+	 cVC8iWJxgyDd6fWGr1O7h3+iOOkrtfO8utk4OLbxxndEW8zs+peYPUrqvAKxI9+eH/
+	 XQlOat/lgeY313/KEMpYAnLaUyONmv632mWBkUZrL6SWtLHD6Nl6uZrFG0H/k2/3yP
+	 t/gmuf9l1i+fY38HT617MZkjDlAYgNW4FfbYI/6aYz4ozc+T+edg+jXsXytE0mqrO0
+	 4hEo7Quf2+d8gfzHN2Q/ErrMVIlOp4vmU29uYbPxH3CGpQ/iKeoCAnJ1qk/MywdkNe
+	 2JKM7uMQIHEbg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1E2EC6078D;
+	Sat,  6 Dec 2025 21:38:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4C290E7
+ for <buildroot@buildroot.org>; Sat,  6 Dec 2025 21:38:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3E7DF4025D
+ for <buildroot@buildroot.org>; Sat,  6 Dec 2025 21:38:23 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WpMqtMbGK-eV for <buildroot@buildroot.org>;
+ Sat,  6 Dec 2025 21:38:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DC62440107
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC62440107
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DC62440107
+ for <buildroot@buildroot.org>; Sat,  6 Dec 2025 21:38:21 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0b1d.dip0.t-ipconnect.de [91.58.11.29])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 7B588A4C02C4;
+ Sat,  6 Dec 2025 22:38:18 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:49910)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99)
+ (envelope-from <bernd@kuhls.net>) id 1vRzyr-000000006E4-367S;
+ Sat, 06 Dec 2025 21:38:18 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-X-Mailer: b4 0.14.3
-X-Last-TLS-Session-Version: TLSv1.3
+Date: Sat,  6 Dec 2025 22:38:18 +0100
+Message-ID: <20251206213818.2301716-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
+MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1765043972; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding; bh=+19CGSHweurOdqJvCfdJ9j0h84+XJdSMAZ1nKwQBR7U=;
- b=TJnsx5hknkFKwiSxTBTS9J7tVet13YNm5iFv+xEkONJrzc0O27eWXTmqudQWQTXIJmKR3R
- F6HqGEoru9hdq8gPKvtkdnAkh5ZSPu/dVNTZWT6RPKeOe7jJ4ydOG+ttREIMIQpmJnOqc8
- WCWZr/rAshCz4ywNm5gbCNyzyc2GMhoBOvTRCCNae/ZnvEOM0D5JUqNa208fuyHJa4+H3w
- vh7guvZKoJ4Hm4MvE9+JVRBtICqRlOe6r/2asQc2jYZD2/N/PGrfcWv/rGFUwa/lDVzX/9
- +LP9/zIdI/BpUNJN3vaARFZoDQe/QmXKatgBY7eMo+TroKgpwPjsAOwGpha6LQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=kuhls.net; 
+ s=kas202511301023; t=1765057098;
+ bh=08rSonr3Hooc8XdNuzcK6+cjFwd05WpbfreNbxgUbKU=;
+ h=From:To:Cc:Subject:Date:From;
+ b=WY+NOeTnpe7bxyO4acpUFfQQEIc8PdSRYH+eGDQQKo7w2LbnkKm5wACeNGpebATZr
+ LFSCWKyNlo9MyQ7w81+VLaYDdrfPVWIgzgYC1s2DW8Xsboxt5cUoNxWgNSWVNWGDtm
+ LuctecX34kkv2GO38pYOxzUWa6thcZfHS7dLI49Qpe+3OCnFjbeg/sQyNrtQB4K/w7
+ JX3k0mUnF/YSLKAnKcPeNmOS/p1vbtf/wUCcXgkw4HhEXmfN6AYgiIWOtTB/1O5EKP
+ BWkW81qnkhmmIm70pO9T7IpdI2MuRoT6sQRCvwel3dagF+oGPVFHQ7YbRJDnPjQAK2
+ p0OyaQlV9XKNQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=TJnsx5hk
-Subject: [Buildroot] [PATCH] package/libdbi: fix small typo in Config.in
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=WY+NOeTn
+Subject: [Buildroot] [PATCH 1/1] package/ficl: update SITE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,31 +91,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Alexis_Lothor=C3=A9_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Cc: =?utf-8?q?Herv=C3=A9_Codina?= <herve.codina@bootlin.com>,
- =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-V2hlbiBicm93c2luZyB0aGUgYXZhaWxhYmxlIERhdGFiYXNlIHBhY2thZ2VzLCBsaWJkYmkgYXBw
-ZWFycyBpbiB0aGUKbWVudWNvbmZpZyBhcyAibGlkYmkiLgoKRml4IHRoZSBtZW51Y29uZmlnIGVu
-dHJ5IGJ5IHVwZGF0aW5nIHRoZSByZWxldmFudCBib29sZWFuIG5hbWUuCgpTaWduZWQtb2ZmLWJ5
-OiBBbGV4aXMgTG90aG9yw6kgPGFsZXhpcy5sb3Rob3JlQGJvb3RsaW4uY29tPgotLS0KIHBhY2th
-Z2UvbGliZGJpL0NvbmZpZy5pbiB8IDIgKy0KIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigr
-KSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGliZGJpL0NvbmZpZy5pbiBi
-L3BhY2thZ2UvbGliZGJpL0NvbmZpZy5pbgppbmRleCAxM2FjMzQ0ZjgyODQuLmQ5YTEzMTYzMTFj
-MSAxMDA2NDQKLS0tIGEvcGFja2FnZS9saWJkYmkvQ29uZmlnLmluCisrKyBiL3BhY2thZ2UvbGli
-ZGJpL0NvbmZpZy5pbgpAQCAtMSw1ICsxLDUgQEAKIGNvbmZpZyBCUjJfUEFDS0FHRV9MSUJEQkkK
-LQlib29sICJsaWRiaSIKKwlib29sICJsaWJkYmkiCiAJZGVwZW5kcyBvbiAhQlIyX1NUQVRJQ19M
-SUJTCiAJaGVscAogCSAgbGliZGJpIGltcGxlbWVudHMgYSBkYXRhYmFzZS1pbmRlcGVuZGVudCBh
-YnN0cmFjdGlvbiBsYXllcgoKLS0tCmJhc2UtY29tbWl0OiBkNGE5OThmMGZhMWZhNDJkODlkYmQx
-OWQxMGM2YzJlZTc5ZDNlMWFiCmNoYW5nZS1pZDogMjAyNTEyMDYtbGliZGJpX3R5cG8tYjRiZGUz
-NmY5ODIzCgpCZXN0IHJlZ2FyZHMsCi0tIApBbGV4aXMgTG90aG9yw6ksIEJvb3RsaW4KRW1iZWRk
-ZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZwpodHRwczovL2Jvb3RsaW4uY29tCgpfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFp
-bGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290
-Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Upstream moved the tarball to another folder:
+https://sourceforge.net/p/ficl/news/2025/07/ficl4-is-retiring/
+and also retired the package.
+
+This patch just fixes the download problem.
+CC'ing Francois to ask whether the package should be removed until a new
+version 3.x is released.
+
+Fixes:
+https://autobuild.buildroot.net/results/125/125fa1c0a3b37b4d09389a49640b90121838c665/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/ficl/ficl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/ficl/ficl.mk b/package/ficl/ficl.mk
+index af900fa2cf..c0698a3433 100644
+--- a/package/ficl/ficl.mk
++++ b/package/ficl/ficl.mk
+@@ -6,7 +6,7 @@
+ 
+ FICL_VERSION_MAJOR = 4.1
+ FICL_VERSION = $(FICL_VERSION_MAJOR).0
+-FICL_SITE = http://downloads.sourceforge.net/project/ficl/ficl-all/ficl$(FICL_VERSION_MAJOR)
++FICL_SITE = https://sourceforge.net/projects/ficl/files/OldFiles/Ficl4%20%28retired%29
+ FICL_LICENSE = BSD-2-Clause
+ FICL_LICENSE_FILES = ReadMe.txt
+ FICL_INSTALL_STAGING = YES
+-- 
+2.47.3
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
