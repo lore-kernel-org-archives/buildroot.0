@@ -4,85 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F506D2CE17
-	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 14:48:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3868CD2CE17
+	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 14:49:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1778D60AC8;
-	Sun,  7 Dec 2025 14:48:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0F63960D5E;
+	Sun,  7 Dec 2025 14:49:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nCk3ZamaiGqI; Sun,  7 Dec 2025 14:48:50 +0000 (UTC)
+ id HHy4hJhW8p25; Sun,  7 Dec 2025 14:49:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3827160B8E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B441605EB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765118930;
-	bh=w+q2V6zc8LcxCGqPPLkcJ9KZduoWPea0bOsmnhDT48Q=;
+	s=default; t=1765118943;
+	bh=uzoHvk+dV2fMIttS0s6vaAwLulS8b1ctlDkHRgcHpJU=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=R5rzC7cVNgWN1rGtqTkMm4qEeAQMUCz0UVMrcPVooAm5B+zP8v3J5n7Z6t8Hmpehi
-	 /Lb+R7rcmc3RGcG1pUdUzCYRsbCDQmwkCt2s4aQB7N4BPtx21jHtb8EJ8KK7JtwN6E
-	 r8EoA3IOc9ZZ5ywnrICFxiXj0peNVQx7D6J4pBGoAiC1Fo9UCULnQxLVyucUZkAllJ
-	 uSTtfirFn7R7JTM5835xCShSnRgVoCJlsK1C971diyZmVr3a4tvZSYNjHMduNiCkCW
-	 y7LKv1VldjjaN84q+jdiwu9FYkBuiVBSwW1haB2khrBj186wUJB2UD3GQ3Hmnudn3y
-	 XzVLGOWCQzvpw==
+	b=NJ9OrXtxbIneiDn0nPOJ3hjLepxoY4d79ZVeUdFx39qFTjj+8WYfeOA8Zqx13OoXp
+	 7eI2oOwSgh1kmn6PgIEtVZahehno6dnXWtiKkXYsNeOCTvp4q2C6Fd6vXiT6SgI8N6
+	 v67UD+VpI1wgqO6ECCV2sbX7He+YBUqpjPfA8ddPye9IgjhXa2baxE+TfdZ5ey+LYO
+	 e/JKWODOwRFJgsx9jAvKtjmAwY//ILZovJX3TyTKLiKsR1UNpYfsRKEWXDf75T77hm
+	 MDP1CxwAmtXd8jo7ZkJYNeh9SXO22Al/jv5s1P9s5fc3QEvjI8KtkFXenCg9/yM/7y
+	 lNkeu8w2TbJiA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3827160B8E;
-	Sun,  7 Dec 2025 14:48:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id EB7B82CF
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:48:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B441605EB;
+	Sun,  7 Dec 2025 14:49:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A5C4A151
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:49:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DD95A60701
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:48:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 986D84070B
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:49:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IXv0Nvpbc69m for <buildroot@buildroot.org>;
- Sun,  7 Dec 2025 14:48:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PqLZ_kqu6qXe for <buildroot@buildroot.org>;
+ Sun,  7 Dec 2025 14:49:00 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D1C15605A2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1C15605A2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7EDBF40708
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EDBF40708
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D1C15605A2
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:48:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7EDBF40708
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:49:00 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c020.dip0.t-ipconnect.de [79.214.192.32])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id D214BA4C1069;
- Sun,  7 Dec 2025 15:43:00 +0100 (CET)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 249F1A4C1072;
+ Sun,  7 Dec 2025 15:43:02 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:56734)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vSFyJ-00000000416-02rQ;
+ (envelope-from <bernd@kuhls.net>) id 1vSFyJ-00000000416-0PBl;
  Sun, 07 Dec 2025 14:42:47 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun,  7 Dec 2025 15:42:40 +0100
-Message-ID: <20251207144243.3696572-31-bernd@kuhls.net>
+Date: Sun,  7 Dec 2025 15:42:41 +0100
+Message-ID: <20251207144243.3696572-32-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251207144243.3696572-1-bernd@kuhls.net>
 References: <20251207144243.3696572-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++++
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1765118580;
- bh=NiLdLpBrdhXlwWMucXAAOIYB346cOwGegxoNlrnC7VY=;
+ s=kas202511301023; t=1765118582;
+ bh=ApI3wT5yyCdRKrS7j6+zwsbkaT+AfrzY5E4Lrf03FM4=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=ToL89DUcXASl7C5YGMaMy2tRfCXPq+KiBokEG2J7JJl2nY7VMzyeU3ED68NfO6W6O
- cHqXV5BxutHym+CozPZuyAlhrgJBcIMyWAuRGoj1N3NBMfW9y5TOGTFMiF8iG3QoRa
- 42Ku97osYcDZpyzPGWoGrjMue46hByjxf+YfuUyYfhsV1H6a7IqXzuBgSksqpZToH3
- Ql+8vNjlHaUcv67DRvJKoM5OQCgBdU7KjciZvMjXhITyjSVi88olQlP/38/WXUG6sT
- souBybrDWNy7PHYQG1NGdYWuezI2PpyKFDlG1ntt7YX4CllNV5ySK+bJbyh0By1/NF
- nXzNVLQ6KuMjw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=NPHY96t2YlCyHvg+UdLPqYGuA+/wD0sTkg+Xm7Fh6CRcFnH+hZbTK/YcXeaSuaWpZ
+ 6fOd5vzxXsC5oBZxUCPskF3auypHC7OmBkY6wM4n29mQtZcJ6li9e+Pg8fImu+hSCE
+ vWoek+33KpIhR9TbmxThtWTibpAbAIxgaVrVLF1QJx3cFkVJtVgyTYw2lz37yjaiun
+ AHmWst0OwMEiILWtViJqUzWwa0On5gcV6/AXx6cyTsN3S3gGD60YRwr5M61V/m7HEp
+ qKuEcbmueZKhLXLd/W3FENACDGkVdalsoxz3JjmZJ7+ZEGReF+Rux/bNrkFVcgJEtv
+ KXZjaSkb4yhRw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=ToL89DUc
-Subject: [Buildroot] [PATCH/next 31/33]
- package/x11r7/xdriver_xf86-video-savage: bump version to 2.4.1
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=NPHY96t2
+Subject: [Buildroot] [PATCH/next 32/33] package/xl2tp: bump version to 1.3.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,41 +108,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2024-March/003490.html
+Release notes: https://github.com/xelerance/xl2tpd/releases/tag/v1.3.19
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .../xdriver_xf86-video-savage.hash                          | 6 +++---
- .../xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk  | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/xl2tp/xl2tp.hash | 2 +-
+ package/xl2tp/xl2tp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.hash b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.hash
-index 4482ff5991..c7a3aadfc5 100644
---- a/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.hash
-+++ b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2023-April/003381.html
--sha256  b36cf02cfdd08a39423bb977c45397fbca5813267c727f0fd3c963ac38b601fd  xf86-video-savage-2.4.0.tar.xz
--sha512  a4db097c200f1430887e4c52bbe14aeaaa2c73dfc392beeed104c682114bd067f89b69994d649829cdc5d188cdbe7a41b22c82b0b49e3a02cdf366013ebbc161  xf86-video-savage-2.4.0.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2024-March/003490.html
-+sha256  674191160c61982199c582233c5f1df5163a09f3ecbcb3d5bb5079b31a7d10af  xf86-video-savage-2.4.1.tar.xz
-+sha512  7928dafa148340e4a6c0ecd2324a69a67aa8fec55d316468c7e68fd79d1a388fd0e1f593d39b6dab0c8a5876b23e7c65c037a3285d340fa82b27ec7c2d5c8713  xf86-video-savage-2.4.1.tar.xz
- # Locally calculated
- sha256  611f4020815e3d5011a39a58f0958262715cd3becd9cb1ef14cc166fd84ec5a6  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
-index 03983d5cdc..ceca5a38a1 100644
---- a/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
-+++ b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
+diff --git a/package/xl2tp/xl2tp.hash b/package/xl2tp/xl2tp.hash
+index 64db273a71..d12a66da5d 100644
+--- a/package/xl2tp/xl2tp.hash
++++ b/package/xl2tp/xl2tp.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  47f52b9c56cabe77766533bca3736a8198581ff38443eb4b4c8971c885ac9329  xl2tp-1.3.18.tar.gz
++sha256  a4270e00c65f8ef356cab350a0375fbd26a63870eedf0a7d07b2ff1f71b18995  xl2tp-1.3.19.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/xl2tp/xl2tp.mk b/package/xl2tp/xl2tp.mk
+index e0205d4ecc..55047e6557 100644
+--- a/package/xl2tp/xl2tp.mk
++++ b/package/xl2tp/xl2tp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_SAVAGE_VERSION = 2.4.0
-+XDRIVER_XF86_VIDEO_SAVAGE_VERSION = 2.4.1
- XDRIVER_XF86_VIDEO_SAVAGE_SOURCE = xf86-video-savage-$(XDRIVER_XF86_VIDEO_SAVAGE_VERSION).tar.xz
- XDRIVER_XF86_VIDEO_SAVAGE_SITE = https://xorg.freedesktop.org/archive/individual/driver
- XDRIVER_XF86_VIDEO_SAVAGE_LICENSE = MIT
+-XL2TP_VERSION = 1.3.18
++XL2TP_VERSION = 1.3.19
+ XL2TP_SITE = $(call github,xelerance,xl2tpd,v$(XL2TP_VERSION))
+ XL2TP_DEPENDENCIES = libpcap
+ XL2TP_LICENSE = GPL-2.0
 -- 
 2.47.3
 
