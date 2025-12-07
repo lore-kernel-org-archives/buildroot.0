@@ -4,88 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D06DED1CDC6
-	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 14:32:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 890BDD2CE17
+	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 14:35:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD67160A39;
-	Sun,  7 Dec 2025 14:32:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BBA1E608F6;
+	Sun,  7 Dec 2025 14:35:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IEEjRGCvYI1i; Sun,  7 Dec 2025 14:32:41 +0000 (UTC)
+ id ooejaEmSMkOQ; Sun,  7 Dec 2025 14:35:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01879606D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B958606D9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765117961;
-	bh=J9ATx8/RhdtYsfU18d7hq0lR4/hH73yUXBQthG44HlE=;
+	s=default; t=1765118124;
+	bh=b/lvIlpoIKlywNVLdLCmQKC/p5QdGh+UGNWt9nuTWGY=;
 	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=BleXn7gUvHuJMNu9aB+SexmvBOUp/dwRVpMfJXwUza9ZzrRYdweDTGh84AaHezQaI
-	 nhKZAz015t4wb6gKgBUR5oIBJlKy1KVT8QkGqUC7xuHRabSxE4tdnwhyIysXa0AhuO
-	 C/wdubtmYrvIqHXBOtInM7CK3YQ40BdduddoBBCBGRuwGrzokJa/91L0Hh8oi3LEEs
-	 rVn5/vbbXGlFNb6Z92IVdx5sOMmUfBDl0mqKBs2j9jfszv9wrZAroNr/GuSm4gpmeT
-	 tbPoFLy/vYUi8A2Zuxtdqu9hkdohtVfBu/qWgAYt8ratIWkdJBacvJLWaQJvGsnogu
-	 ZfVZoeIE1fMZg==
+	b=rpcfQtV2O6Mbmj+dB1QTel2zYWOvs4Qj6JERnxiP9uSbfBkHUotGPLpWsXrNPQ7K7
+	 BVzUZf2DrN9+Mc+PRDW4M4hmoT3cvW379KLX5DqC4/ioEMcOr5MDtNcKknwiBoSy8o
+	 iYa4PF28X8WuxzOtdNKKlEow3r9XtYEi2lr/Bs2nEcvJTdQd4tMBk+fkEPgvaTsGtC
+	 xQlXExm9apZ1h63QU+OTL5TLuH6StoMJiV5NsBE1BYQue5p1WKc27QmIvV5GJ9oh/V
+	 jHX/4Trhj07MJy/62CxxC5XkoByb3vbarNU9Aro0kCg2NiCzxXLN5qc2oPlBIILDV7
+	 Tl6WI7IyfliMw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 01879606D9;
-	Sun,  7 Dec 2025 14:32:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 264C62CF
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:32:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B958606D9;
+	Sun,  7 Dec 2025 14:35:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 35CDEE7
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:35:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 181D140259
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:32:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 193944061A
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:35:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XphLfvdIXrfR for <buildroot@buildroot.org>;
- Sun,  7 Dec 2025 14:32:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Nht6LorXzTiu for <buildroot@buildroot.org>;
+ Sun,  7 Dec 2025 14:35:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
  helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 32A7A40166
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32A7A40166
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1024540186
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1024540186
 Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 32A7A40166
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:32:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1024540186
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:35:20 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 736F24E41AC4
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:32:35 +0000 (UTC)
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 3D1A94E41AC4
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:35:19 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 3EA49606D3;
- Sun,  7 Dec 2025 14:32:35 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 07913606D3;
+ Sun,  7 Dec 2025 14:35:19 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 5CA11102F2368; Sun,  7 Dec 2025 15:32:34 +0100 (CET)
-Date: Sun, 7 Dec 2025 15:32:33 +0100
+ with ESMTPSA id 39C56102F2368; Sun,  7 Dec 2025 15:35:18 +0100 (CET)
+Date: Sun, 7 Dec 2025 15:35:17 +0100
 To: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 Cc: buildroot@buildroot.org
-Message-ID: <20251207153233.166a575b@windsurf>
-In-Reply-To: <20251205171837.22075-1-raphael.pavlidis@gmail.com>
-References: <20251205171837.22075-1-raphael.pavlidis@gmail.com>
+Message-ID: <20251207153517.1a3388bf@windsurf>
+In-Reply-To: <20251003135120.1221002-1-raphael.pavlidis@gmail.com>
+References: <20251003135120.1221002-1-raphael.pavlidis@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1765117954; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1765118118; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=aW+Cu2ZfdSsW4JWSy2WeyCIbGl/isr+Z5rxLkK2NxDA=;
- b=X+F6QpFM3J0KwXozOgOoNjRUwOV1tkzcAANWbz2R2EqV5FmUjixAIFkOvUC3t0U497jLN5
- Vpa1T1Y2CQqmeYJeV0efkz/6TbbpfpRZWpoiJnJTiKpgJJKeec12WYyXdlKXovqygxF9P6
- hk9o4mxvofITGt9+X2kc3o19fOg8WKvodf6sQZeU1YJL4Uhekau8Yh1mzjNJwVw0l9MYUH
- HYz5fx9wHMTh+VPouv52feMwfZAP5swHkeARb4M/0o6hhKWYd0ML33EsZj1gxe8Axp1hkg
- SIccGZcztoUAqLRDyBGegg3CvCQGCRpr9dwN8Ya0nV6L90tVXTqAHZOiKl1SKw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=gsWJWn6+9If1DbEOrba19pvr1uMErJl4o1spKmbqo2U=;
+ b=ya0V94+3oGfJYOWexR3H7+PfA+z1J+qNMAkvAA9nN5WBft43iB0+fymfQZ1O2DFwKJg2Oy
+ +pNvZuKQ0UZsR2bbYpmQBWkXFBX0TilI+RvvaDZ7jPnX9P+xWuyVr422G4sHf8Dqxn322K
+ wGb/9sQmLDPHKYAzGvdtmTyeCIoN7xkrTv/UAjaWksD+tzLAoWghPbTyXwODzwIXk+ppze
+ XMrnoyDiersrC2KZDVJBl5svVeXhgnxRxet3hzh1NY2NfX594pjbcygN7vwGi52nHMJvVg
+ M+1xUhjsG8BpYJ+iniyr4j31EUXkfAXmh3D4GlTGSvKkFZPj+/OPSyopwNW2Fw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=X+F6QpFM
-Subject: Re: [Buildroot] [PATCH v1 1/2] package/xwayland: add nettle and
- libmd as sha1 libraries
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=ya0V94+3
+Subject: Re: [Buildroot] [PATCH v1 1/2] package/wayland: make libdrm and
+ xlib_libxshemfence optional
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,30 +105,27 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hello Raphael,
 
-Thanks for this patch!
-
-On Fri,  5 Dec 2025 17:18:36 +0000
+On Fri,  3 Oct 2025 13:51:19 +0000
 Raphael Pavlidis <raphael.pavlidis@gmail.com> wrote:
 
-> diff --git a/package/x11r7/xwayland/Config.in b/package/x11r7/xwayland/Config.in
-> index 311dae25ec..3df8677545 100644
-> --- a/package/x11r7/xwayland/Config.in
-> +++ b/package/x11r7/xwayland/Config.in
-> @@ -3,12 +3,12 @@ config BR2_PACKAGE_XWAYLAND
->  	depends on BR2_USE_MMU # fork()
->  	depends on !BR2_STATIC_LIBS # wayland
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
-> -	# We need a SHA1 implementation. If either openssl or
-> -	# libgcrypt are already part of the build, we'll use one of
-> -	# them, otherwise, use the small libsha1 library.
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # xlib_libxshmfence
->  	select BR2_PACKAGE_LIBDRM
-> -	select BR2_PACKAGE_LIBSHA1 if (!BR2_PACKAGE_OPENSSL && !BR2_PACKAGE_LIBGCRYPT)
-> +	# We need a SHA1 implementation. If either openssl, libgcrypt, nettle or
-> +	# libsha1 are already part of the build, we'll use one of them,
-> +	# otherwise, use the small libmd library.
+> To build XWayland with the DRI3 extension requires libdrm,
+> xlib_libxshmfence and libepoxy. This is the same as with the glamour
+> extension. Therefore, make the libdrm and xlib_libxshemfence optional
+> and merge the checks together.
+> 
+> Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 
-Could you clarify why libmd is becoming the default instead of libsha1 ?
+You sent a new iteration of PATCH 2/2 in this series "package/xwayland:
+add nettle and libmd as sha1 libraries", but you did not resent this
+PATCH 1/2, which is rather confusing.
+
+Also, this PATCH 1/2 basically undoes what commit
+797de283c7ae9b99e4d2366cf142b2bc8b2f2a84 that made libdrm a mandatory
+dependency to fix a build issue. Can you provide some explanation on
+what happened? Was 797de283c7ae9b99e4d2366cf142b2bc8b2f2a84 incorrect?
+Has something changed upstream? Did you double check that the config
+causing the build failure of 797de283c7ae9b99e4d2366cf142b2bc8b2f2a84
+still builds properly after your proposed change?
 
 Thanks a lot!
 
