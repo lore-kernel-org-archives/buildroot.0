@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3868CD2CE17
-	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 14:49:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96D99D2CE17
+	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 14:49:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0F63960D5E;
-	Sun,  7 Dec 2025 14:49:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7096F812E6;
+	Sun,  7 Dec 2025 14:49:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HHy4hJhW8p25; Sun,  7 Dec 2025 14:49:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NJDNF0tcsgn6; Sun,  7 Dec 2025 14:49:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B441605EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 85DF3821FB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765118943;
-	bh=uzoHvk+dV2fMIttS0s6vaAwLulS8b1ctlDkHRgcHpJU=;
+	s=default; t=1765118955;
+	bh=UuUZ4om/Bdspp+7lT2z1/rEi7AZ0oG9xFYU4C5hAeRI=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=NJ9OrXtxbIneiDn0nPOJ3hjLepxoY4d79ZVeUdFx39qFTjj+8WYfeOA8Zqx13OoXp
-	 7eI2oOwSgh1kmn6PgIEtVZahehno6dnXWtiKkXYsNeOCTvp4q2C6Fd6vXiT6SgI8N6
-	 v67UD+VpI1wgqO6ECCV2sbX7He+YBUqpjPfA8ddPye9IgjhXa2baxE+TfdZ5ey+LYO
-	 e/JKWODOwRFJgsx9jAvKtjmAwY//ILZovJX3TyTKLiKsR1UNpYfsRKEWXDf75T77hm
-	 MDP1CxwAmtXd8jo7ZkJYNeh9SXO22Al/jv5s1P9s5fc3QEvjI8KtkFXenCg9/yM/7y
-	 lNkeu8w2TbJiA==
+	b=Y6VJeX6LfaLFXG6T0XdF1eVUfBPQAGMJfayclkXQQmaD+tii3xTMtwk6nPZkM+uDM
+	 YI5e3ALN0p2KWv1zpw1wYyMyAAaYkoWXe6CpKVPCnn2K/BlGFU0GwEYYNmnnpkxCWt
+	 MmKD3tAUhp9+J+0BMMIx6DlrfnUjUks1K/7wdZkAfEK9H/pnilE5K7stPIwdQ/nkiR
+	 bf+dytNWFyxUazIpofAMv0ygxHJPcLgv9Kj7Rk6564cM5b5as4U5Z0u0nmp5fjHsrq
+	 AVyyItbtPrL5AXoecx+Pdo2hLQh8am9fUzsu+T7o/xgV+ficA/ErrT22Dc8QjHEonG
+	 ZWkpQPBtdvn+A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B441605EB;
-	Sun,  7 Dec 2025 14:49:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id A5C4A151
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:49:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 85DF3821FB;
+	Sun,  7 Dec 2025 14:49:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id BC54C2CF
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:49:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 986D84070B
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:49:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ADA36605EB
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:49:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PqLZ_kqu6qXe for <buildroot@buildroot.org>;
- Sun,  7 Dec 2025 14:49:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zikmvQ5w_UwY for <buildroot@buildroot.org>;
+ Sun,  7 Dec 2025 14:49:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7EDBF40708
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EDBF40708
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A0545605A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0545605A2
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7EDBF40708
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:49:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A0545605A2
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:49:12 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c020.dip0.t-ipconnect.de [79.214.192.32])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 249F1A4C1072;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 62E8DA4C109B;
  Sun,  7 Dec 2025 15:43:02 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:56734)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vSFyJ-00000000416-0PBl;
+ (envelope-from <bernd@kuhls.net>) id 1vSFyJ-00000000416-0hrj;
  Sun, 07 Dec 2025 14:42:47 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun,  7 Dec 2025 15:42:41 +0100
-Message-ID: <20251207144243.3696572-32-bernd@kuhls.net>
+Date: Sun,  7 Dec 2025 15:42:42 +0100
+Message-ID: <20251207144243.3696572-33-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251207144243.3696572-1-bernd@kuhls.net>
 References: <20251207144243.3696572-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1765118582;
- bh=ApI3wT5yyCdRKrS7j6+zwsbkaT+AfrzY5E4Lrf03FM4=;
+ bh=au9dqVE+sY/Qh4Cz/98g9J7s07MLHFwWJC3KEDi63lw=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=NPHY96t2YlCyHvg+UdLPqYGuA+/wD0sTkg+Xm7Fh6CRcFnH+hZbTK/YcXeaSuaWpZ
- 6fOd5vzxXsC5oBZxUCPskF3auypHC7OmBkY6wM4n29mQtZcJ6li9e+Pg8fImu+hSCE
- vWoek+33KpIhR9TbmxThtWTibpAbAIxgaVrVLF1QJx3cFkVJtVgyTYw2lz37yjaiun
- AHmWst0OwMEiILWtViJqUzWwa0On5gcV6/AXx6cyTsN3S3gGD60YRwr5M61V/m7HEp
- qKuEcbmueZKhLXLd/W3FENACDGkVdalsoxz3JjmZJ7+ZEGReF+Rux/bNrkFVcgJEtv
- KXZjaSkb4yhRw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=Mn7cH5JW3nFmMSlpOYPAcF7JQs1pBkkQ9MT5pd/JL5TcmzZKyAzj6DedGTuUKbm9x
+ lcDDgb5pDRwl2wTUJ6zIahgdInqakcXX8PJg9dDfutcg6KBJa/UuHXO6GbRF/ho2GO
+ 4cA9hXmbLyFOQGsm5n7zleGuPUmU961HXIsa9Zc3WHuxzbCkeb3cDk3Zs2aaaN36yK
+ hprb4dCKxqYWug3pZIBr7mXR4gqVYdqN8XPGn+qQrEUyfwqIj7Lb1hzz3FqlIB0E48
+ EcLPozEIIstC3nto5DcKXfMQPzDFtggU0m+hNlMom+fA+PPg5UVUHWFpBd/en0mDuL
+ ckRLvHTSYt5Wg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=NPHY96t2
-Subject: [Buildroot] [PATCH/next 32/33] package/xl2tp: bump version to 1.3.19
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=Mn7cH5JW
+Subject: [Buildroot] [PATCH/next 33/33] package/yad: bump version to 14.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,36 +108,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://github.com/xelerance/xl2tpd/releases/tag/v1.3.19
+Switched SITE to github according to
+https://sourceforge.net/p/yad-dialog/tickets/337/#8b94
+
+Release notes: https://github.com/v1cont/yad/blob/v14.2/NEWS
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/xl2tp/xl2tp.hash | 2 +-
- package/xl2tp/xl2tp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/yad/yad.hash | 5 +----
+ package/yad/yad.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/package/xl2tp/xl2tp.hash b/package/xl2tp/xl2tp.hash
-index 64db273a71..d12a66da5d 100644
---- a/package/xl2tp/xl2tp.hash
-+++ b/package/xl2tp/xl2tp.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  47f52b9c56cabe77766533bca3736a8198581ff38443eb4b4c8971c885ac9329  xl2tp-1.3.18.tar.gz
-+sha256  a4270e00c65f8ef356cab350a0375fbd26a63870eedf0a7d07b2ff1f71b18995  xl2tp-1.3.19.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/xl2tp/xl2tp.mk b/package/xl2tp/xl2tp.mk
-index e0205d4ecc..55047e6557 100644
---- a/package/xl2tp/xl2tp.mk
-+++ b/package/xl2tp/xl2tp.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/yad/yad.hash b/package/yad/yad.hash
+index ec0edc522d..0bb54d24a1 100644
+--- a/package/yad/yad.hash
++++ b/package/yad/yad.hash
+@@ -1,6 +1,3 @@
+-# From http://sourceforge.net/projects/yad-dialog/files/
+-md5  82d458a2e1695dd0709f71ad26109812  yad-0.40.0.tar.xz
+-sha1  4376eb42f8e38972124dc81e534cbdc9088109fb  yad-0.40.0.tar.xz
+-
+ # Hash for license file
++sha256  5cab399af8d9a10b76d477f848180d00addba38f4f1272a05b153a393bba3038  yad-14.2.tar.xz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/yad/yad.mk b/package/yad/yad.mk
+index b40220f9ad..06adf6f20e 100644
+--- a/package/yad/yad.mk
++++ b/package/yad/yad.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XL2TP_VERSION = 1.3.18
-+XL2TP_VERSION = 1.3.19
- XL2TP_SITE = $(call github,xelerance,xl2tpd,v$(XL2TP_VERSION))
- XL2TP_DEPENDENCIES = libpcap
- XL2TP_LICENSE = GPL-2.0
+-YAD_VERSION = 0.40.0
++YAD_VERSION = 14.2
+ YAD_SOURCE = yad-$(YAD_VERSION).tar.xz
+-YAD_SITE = http://sourceforge.net/projects/yad-dialog/files
++YAD_SITE = https://github.com/v1cont/yad/releases/download/v$(YAD_VERSION)
+ YAD_LICENSE = GPL-3.0
+ YAD_LICENSE_FILES = COPYING
+ YAD_DEPENDENCIES = host-intltool host-pkgconf libgtk3 $(TARGET_NLS_DEPENDENCIES)
 -- 
 2.47.3
 
