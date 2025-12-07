@@ -4,85 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 686A2D2CE17
-	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 14:44:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 736DCD1CDC6
+	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 14:44:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F5D460B62;
-	Sun,  7 Dec 2025 14:44:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4CBAE605FF;
+	Sun,  7 Dec 2025 14:44:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ddkuaguFZTHE; Sun,  7 Dec 2025 14:44:13 +0000 (UTC)
+ id ZZCR9yPCrKvV; Sun,  7 Dec 2025 14:44:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65B8E60B00
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C87460750
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765118653;
-	bh=luUTzjbMpn+ze2l2fFxxjE8LG2AcUY1PJiZUn4jIb/I=;
+	s=default; t=1765118665;
+	bh=ocrulk2FADP4EQYDgtY9rG3x7YkLzDK6943YUu/350A=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=iVcwaIz2BZGLCXYxyE31aTlPX3t76eM22+0B0zQiIhV/uXuF0T9u549V/RoU2bKBv
-	 Leni8I3JhNAAfrXAvVK3WtICFfUbilVSD+Rl9Eq9PUc2Xjax2v+6GpPmDMUCVbyHzz
-	 C6uZHsqxmqIcvQhROgC3AybbFy5MdXqnQRMca5bVm9EsXubEgERnLzTwaFU67rgXG5
-	 a8QwhsVrFUdDh7vyTXTWW7jMSeY342Tc5x1kC6TQuP9kiwFsbbEZmhpKRNSp0/jWA8
-	 Tdv03cBB1q2EOPo6dBN2bxvVwxX573p4Wz+YI87URg127l5SHj4027yW5wn20Rvzap
-	 pyFg5T9Mp7Qog==
+	b=knYMLOEQNDU4ySQ10PUHRBYiuJWZo5PfjYAT0HWMlnnZ1l7rdR3Oe0EoYEa4MhMYe
+	 AKNQuXq55geCHw36KuBEvUXbJHztnQPK6tZZoK9CxXPN0lv5WK6/g3OPfevy0DWeHt
+	 dksrIVQUqyXgMx480CgzaxAkACRkDHWZBn/ZnPHpqPca0PpJ9eu5Wk/uDD2VfcL2iR
+	 zwzIIGmyQzC9P+IbYwwTQsWIWNrgfPPKXF3i/WtHWbwaAZJ+RetA78arepdxzTdVVS
+	 hQpxE+hSJ/8D+GGySfC2dkqmqkohVRDtbnIXwwNlfXLQKXWeXm70jJuCt/zZb3oTp+
+	 hz3Mu1v9976Yg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 65B8E60B00;
-	Sun,  7 Dec 2025 14:44:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 74C852CF
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:44:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6C87460750;
+	Sun,  7 Dec 2025 14:44:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C7F932CF
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:44:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7171940208
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:44:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B9CF040208
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:44:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r9wRm0GbqjOj for <buildroot@buildroot.org>;
- Sun,  7 Dec 2025 14:44:11 +0000 (UTC)
+ id 6F3kBGlL3Si9 for <buildroot@buildroot.org>;
+ Sun,  7 Dec 2025 14:44:23 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DD6AA40166
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD6AA40166
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5097A40166
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5097A40166
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DD6AA40166
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:44:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5097A40166
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:44:23 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c020.dip0.t-ipconnect.de [79.214.192.32])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 2F0EBA4C0982;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 742B0A4C0984;
  Sun,  7 Dec 2025 15:42:54 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:56734)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vSFyF-00000000416-3LB0;
+ (envelope-from <bernd@kuhls.net>) id 1vSFyG-00000000416-0hSM;
  Sun, 07 Dec 2025 14:42:44 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun,  7 Dec 2025 15:42:13 +0100
-Message-ID: <20251207144243.3696572-4-bernd@kuhls.net>
+Date: Sun,  7 Dec 2025 15:42:17 +0100
+Message-ID: <20251207144243.3696572-8-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251207144243.3696572-1-bernd@kuhls.net>
 References: <20251207144243.3696572-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: /
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1765118574;
- bh=EOwsVtpa55WqyVkfUyOcnHXyTnPz6qlW6zLeEktqoII=;
+ bh=mkEuE7aCos+T9sH3S+X81QmEmN2+jh/3mqezwkRJzOU=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=pev7jdjWrijQQBBm8IOyhtN2mYz4WOjGE4QBvNSSwrRBiQdtlAYMEqmZ/L+CvH8VO
- o6mXFTyxk0m4vH36JqqAiigiqZwZsE1xS5sRG8LmAkvBFIllrPMnOtT3y95DskQTVK
- SUsBIAxEUlIOe7925BmxGtefgp10LBfJrJFUEm8fK1YWJKNPGZfZGuayHOgl7Fbu8O
- LJZ6Kc7dw18CbJF2VYNbtQfYixRYJxAhCwEE6fCPrJE0srguTUwbmq+u+Dcyk7wXCH
- mKFq5Zd2i3G7jDn1cuAyXfawD0fXH4QVKgRDDU5ORa8zEREokoDpPyTxbBoZHxWwHt
- GyIHHkXD1K+gg==
+ b=Ca0CJmpwpYYl5GKeW4mXorsa37GybsXnFnL+KbkCp3UJHYvXzrfZGBHQI5nMn5LMa
+ iXJTovFWiSfKK/SaqY7ZoaTqTjIgXmGvMUOfKCxat4RuqcvB5X+nmPDz7x1qCdnRaN
+ xTr9M+u1zzN3CaOAEyxkbQxFuAbr3uoqFl7VQqEtBN1tYHHioR3lFNu7K0bfDHJyha
+ 4ioDZABxD1xKiIhk7EyX6MyNK2WCNu1IW9UWlt2cF8N2xrXHFDO1JyjBKCg04imrC3
+ XqejE7QVKnHJH/b1Ps48i6hK2mk0giLne2imd3WO6D+aI/cIw91H+8hh3MqCkA3hbh
+ sxOL6CKZmOnfQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=pev7jdjW
-Subject: [Buildroot] [PATCH/next 04/33] package/msgpack: bump version to
- 7.0.0
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=Ca0CJmpw
+Subject: [Buildroot] [PATCH/next 08/33] package/physfs: bump version to 3.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,54 +108,83 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
-https://github.com/msgpack/msgpack-c/blob/cpp-7.0.0/CHANGELOG.md
+Release notes:
+https://github.com/icculus/physfs/releases/tag/release-3.2.0
 
-Added optional dependency to boost.
+Added upstream patch to fix cmake 4 compatibility.
+
+Updated license hash due to coypright year bumps:
+https://github.com/icculus/physfs/commits/release-3.2.0/LICENSE.txt
+
+Switched _SITE to github.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/msgpack/msgpack.hash |  2 +-
- package/msgpack/msgpack.mk   | 10 +++++++++-
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ ...ke-bump-minimum-CMake-version-to-3.5.patch | 27 +++++++++++++++++++
+ package/physfs/physfs.hash                    |  4 +--
+ package/physfs/physfs.mk                      |  5 ++--
+ 3 files changed, 31 insertions(+), 5 deletions(-)
+ create mode 100644 package/physfs/0001-cmake-bump-minimum-CMake-version-to-3.5.patch
 
-diff --git a/package/msgpack/msgpack.hash b/package/msgpack/msgpack.hash
-index 5d432ba0ec..5d12914e61 100644
---- a/package/msgpack/msgpack.hash
-+++ b/package/msgpack/msgpack.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  6e114d12a5ddb8cb11f669f83f32246e484a8addd0ce93f274996f1941c1f07b  msgpack-3.3.0.tar.gz
-+sha256  7504b7af7e7b9002ce529d4f941e1b7fb1fb435768780ce7da4abaac79bb156f  msgpack-cxx-7.0.0.tar.gz
- sha256  664550b43996452a5a2c7471bb0ff77185a58c69ccafa60f983dc4c162e1ee22  COPYING
- sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
-diff --git a/package/msgpack/msgpack.mk b/package/msgpack/msgpack.mk
-index 996b5a2f7c..11b17ee87c 100644
---- a/package/msgpack/msgpack.mk
-+++ b/package/msgpack/msgpack.mk
-@@ -4,8 +4,9 @@
+diff --git a/package/physfs/0001-cmake-bump-minimum-CMake-version-to-3.5.patch b/package/physfs/0001-cmake-bump-minimum-CMake-version-to-3.5.patch
+new file mode 100644
+index 0000000000..49db2061c5
+--- /dev/null
++++ b/package/physfs/0001-cmake-bump-minimum-CMake-version-to-3.5.patch
+@@ -0,0 +1,27 @@
++From f7d24ce8486d9229207cca1ff98858fe60ffe583 Mon Sep 17 00:00:00 2001
++From: Anonymous Maarten <anonymous.maarten@gmail.com>
++Date: Thu, 27 Apr 2023 22:39:41 +0200
++Subject: [PATCH] cmake: bump minimum CMake version to 3.5 in anticipation of
++ CMake 3.27
++
++Upstream: https://github.com/icculus/physfs/commit/f7d24ce8486d9229207cca1ff98858fe60ffe583
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++[rebased for 3.2.0]
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index dfe127a7..1194449e 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -11,7 +11,7 @@
++ 
++ set(PHYSFS_VERSION 3.2.0)
++ 
++-cmake_minimum_required(VERSION 3.0)
+++cmake_minimum_required(VERSION 3.5)
++ 
++ project(PhysicsFS VERSION ${PHYSFS_VERSION} LANGUAGES C )
++ 
+diff --git a/package/physfs/physfs.hash b/package/physfs/physfs.hash
+index a56e7dccef..f2eea58453 100644
+--- a/package/physfs/physfs.hash
++++ b/package/physfs/physfs.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  304df76206d633df5360e738b138c94e82ccf086e50ba84f456d3f8432f9f863  physfs-3.0.2.tar.bz2
+-sha256  d80c0b09a1c98c61667ea044eefa2fd98fb70bd5fe12c49ff52b1fc2289a6583  LICENSE.txt
++sha256  1991500eaeb8d5325e3a8361847ff3bf8e03ec89252b7915e1f25b3f8ab5d560  physfs-3.2.0.tar.gz
++sha256  111b286674ab4720fd1b693ef8628a94bca8f06484d5fe3d75bd6db22fdc1cb2  LICENSE.txt
+diff --git a/package/physfs/physfs.mk b/package/physfs/physfs.mk
+index 9a3bd441a9..bfcb578521 100644
+--- a/package/physfs/physfs.mk
++++ b/package/physfs/physfs.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--MSGPACK_VERSION = 3.3.0
-+MSGPACK_VERSION = 7.0.0
- MSGPACK_SITE = https://github.com/msgpack/msgpack-c/releases/download/cpp-$(MSGPACK_VERSION)
-+MSGPACK_SOURCE = msgpack-cxx-$(MSGPACK_VERSION).tar.gz
- MSGPACK_LICENSE = BSL-1.0
- MSGPACK_LICENSE_FILES = COPYING LICENSE_1_0.txt
- MSGPACK_INSTALL_STAGING = YES
-@@ -15,4 +16,11 @@ ifeq ($(BR2_STATIC_LIBS),y)
- MSGPACK_CONF_OPTS += -DMSGPACK_ENABLE_SHARED=OFF
- endif
+-PHYSFS_VERSION = 3.0.2
+-PHYSFS_SOURCE = physfs-$(PHYSFS_VERSION).tar.bz2
+-PHYSFS_SITE = https://icculus.org/physfs/downloads
++PHYSFS_VERSION = 3.2.0
++PHYSFS_SITE = $(call github,icculus,physfs,release-$(PHYSFS_VERSION))
  
-+ifeq ($(BR2_PACKAGE_BOOST),y)
-+MSGPACK_CONF_OPTS += -DMSGPACK_USE_BOOST=ON
-+MSGPACK_DEPENDENCIES += boost
-+else
-+MSGPACK_CONF_OPTS += -DMSGPACK_USE_BOOST=OFF
-+endif
-+
- $(eval $(cmake-package))
+ PHYSFS_LICENSE = Zlib
+ PHYSFS_LICENSE_FILES = LICENSE.txt
 -- 
 2.47.3
 
