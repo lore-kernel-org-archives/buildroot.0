@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90722D4337D
-	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:58:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A44BD4337C
+	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:58:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5EC6C83DDA;
-	Fri, 12 Dec 2025 07:58:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DEC6C8408B;
+	Fri, 12 Dec 2025 07:58:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k0GaX86HWbmd; Fri, 12 Dec 2025 07:58:08 +0000 (UTC)
+ id lEnWC3Nh7ZSD; Fri, 12 Dec 2025 07:58:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81F84838E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C48B483EF1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765526260;
-	bh=9bx6khr/ClHYATy2riZy8QHDgYNvml9QHI/GuBD1JcQ=;
+	s=default; t=1765526262;
+	bh=16I7HWb9HFYbytJk3IrG3aRMehkRqrAZng8Nwnn+df0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=BltUrz/7GEa1lAND2f8Zy/BWxFsx2iWnPvwkklqCkqpZFjbOmzM85SXQjLFbTWmjX
-	 ZlW+1nhfLDXk34jq6JO/M/vW9T7Fx3Ruxwsg/EAvpYNV/XzVCH98kV03Xfj4j9fcDR
-	 V2AInJJn8KmYFuaDHaWkeA/Suhjkm5GA0jciiOcwoJDbPlOGwl2FJpdr35tC9sPQZg
-	 sRoC+TTH19z5UWJfkL8B1Gpst+tmuON/DHFyICsL+DtSOzi/kLc4E0ixdfzCHBdqSf
-	 d9RGoXegVIo9jU4BgxibCDWQbIsVg1GD2b0/GJKv6ITJEOMF6Afwe/1E6YTD9N9kUb
-	 srJYiX7EbGtmw==
+	b=Ei1uMDOs1Xg4++09oz7V2QbWt6se5hkxniiTEA7NB2mJfu9icStuZ8w581sWUIBgL
+	 JKJjVCb9Z2lI460hu7S9+1V+qqLNXITs0wwjNrQlXZianTvSc1uDHt1353tBID/oS0
+	 t/wPlCVP+hHUFZWHwC+ca5NyF+iRK/JtVtUsdQ8Ry7WuCQZLmo9XrM3zbJePUv+eGh
+	 lh7R4Tgs8G0OZkbAvY0ypK++ARr2ctJUHJsp78BiwAOrkz55SHkkLetHqRhDkWv7dK
+	 WMaEh9RQQ7QLmXczN4xO7AA6HljmUr6scQlhsdb6948iIppi3pu8Ovoz1ouPSiH/Ls
+	 Iy0bevijjjkAA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 81F84838E0;
-	Fri, 12 Dec 2025 07:57:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C48B483EF1;
+	Fri, 12 Dec 2025 07:57:42 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6D9BD2C1
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:56:38 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 6DA3CE7
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:56:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AF43241163
+ by smtp4.osuosl.org (Postfix) with ESMTP id C646941161
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GrvYq9Olaltz for <buildroot@buildroot.org>;
- Fri, 12 Dec 2025 07:55:42 +0000 (UTC)
+ id gUTRpTMZG4cM for <buildroot@buildroot.org>;
+ Fri, 12 Dec 2025 07:55:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E64841161
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E7CE41121
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5E64841161
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6E7CE41121
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5DA6286C93; Fri, 12 Dec 2025 07:55:37 +0000 (UTC)
+ id 6DB9D81674; Fri, 12 Dec 2025 07:55:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 7 Dec 2025 14:17:47 +0100
+Date: Sun, 7 Dec 2025 14:20:29 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cb2e7531df00a4307841794df75489102f04d654
-X-Git-Newrev: 50580a046f30bfd5256b13afd5825cb1d076185c
+X-Git-Oldrev: ababaabb05b26a800622789f87408a038f956045
+X-Git-Newrev: fa5f4abdc34e8749babbf82847dcbaf4ec5650ba
 X-Patchwork-Hint: ignore
-Message-Id: <20251212075537.5DA6286C93@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/docopt-cpp: fix cmake 4
- compatibility
+Message-Id: <20251212075537.6DB9D81674@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/flann: fix cmake 4 compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,61 +76,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50580a046f30bfd5256b13afd5825cb1d076185c
+commit: https://git.buildroot.net/buildroot/commit/?id=fa5f4abdc34e8749babbf82847dcbaf4ec5650ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...02-Increase-cmake_minimum_required-to-3.5.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ ...cy_max-to-3.10-in-cmake_minimum_required-.patch | 24 ++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/package/docopt-cpp/0002-Increase-cmake_minimum_required-to-3.5.patch b/package/docopt-cpp/0002-Increase-cmake_minimum_required-to-3.5.patch
+diff --git a/package/flann/0001-Set-policy_max-to-3.10-in-cmake_minimum_required-.patch b/package/flann/0001-Set-policy_max-to-3.10-in-cmake_minimum_required-.patch
 new file mode 100644
-index 0000000000..2bc7d33593
+index 0000000000..d11b35a805
 --- /dev/null
-+++ b/package/docopt-cpp/0002-Increase-cmake_minimum_required-to-3.5.patch
-@@ -0,0 +1,40 @@
-+From 05d507da0d153faff381f44968833ebffdc03447 Mon Sep 17 00:00:00 2001
-+From: Eero Aaltonen <eero.aaltonen@vaisala.com>
-+Date: Wed, 1 Nov 2023 13:39:42 +0200
-+Subject: [PATCH] Increase cmake_minimum_required to 3.5
++++ b/package/flann/0001-Set-policy_max-to-3.10-in-cmake_minimum_required-.patch
+@@ -0,0 +1,24 @@
++From a6803c235c0107f3690010c2fc429e3875c4b7c6 Mon Sep 17 00:00:00 2001
++From: Silvio Traversaro <silvio@traversaro.it>
++Date: Thu, 22 May 2025 19:26:16 +0200
++Subject: [PATCH] Set policy_max to 3.10 in cmake_minimum_required to support
++ CMake 4.0
 +
-+CMake version 3.27 deprecates compatibility with versions older than
-+3.5. Increase the minimum required so that the project can be built
-+without warnings.
-+
-+Upstream: https://github.com/docopt/docopt.cpp/commit/05d507da0d153faff381f44968833ebffdc03447
++Upstream: https://github.com/flann-lib/flann/pull/526
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++[backported to 1.9.2]
 +---
 + CMakeLists.txt | 2 +-
-+ README.rst     | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
 +diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 28da614..246e90e 100644
++index f79d173a..85d5a560 100644
 +--- a/CMakeLists.txt
 ++++ b/CMakeLists.txt
 +@@ -1,4 +1,4 @@
-+-cmake_minimum_required(VERSION 3.1)
-++cmake_minimum_required(VERSION 3.5)
-+ project(docopt.cpp VERSION 0.6.2)
++-cmake_minimum_required(VERSION 2.6)
+++cmake_minimum_required(VERSION 2.8.12...3.10)
 + 
-+ include(GNUInstallDirs)
-+diff --git a/README.rst b/README.rst
-+index 5fe8b4f..6d7012d 100644
-+--- a/README.rst
-++++ b/README.rst
-+@@ -87,7 +87,7 @@ Alternatively manual installation is done using (unix)::
-+ To link *docopt.cpp*, the simplest is to use CMake. The general structure of your
-+ ``CMakeLists.txt`` would be as follows::
-+ 
-+-    cmake_minimum_required(VERSION 3.1)
-++    cmake_minimum_required(VERSION 3.5)
-+ 
-+     project(example)
-+ 
++ if(COMMAND cmake_policy)
++     cmake_policy(SET CMP0003 NEW)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
