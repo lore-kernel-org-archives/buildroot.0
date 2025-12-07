@@ -4,77 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80CB1D2CE17
-	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 18:45:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41A4ED2CE17
+	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 18:57:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 61948821CD;
-	Sun,  7 Dec 2025 18:45:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0B7C1814BD;
+	Sun,  7 Dec 2025 18:57:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xN9T4-gZJZjk; Sun,  7 Dec 2025 18:45:22 +0000 (UTC)
+ id uXi6BY16d6Sy; Sun,  7 Dec 2025 18:57:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A956181F06
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2EC6D814C1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765133122;
-	bh=lpm1Xba6CHxNIS2givW5u0yytcMdC4fb7vuX0NqTd1U=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=NjjqoKnAk6OYFnhh6LEXobeyWmBdsTkJaEtIzt+caFzrdSe61atwddQfqAAGA9or4
-	 SUSKrdutnD2ARdwZOYIQoNaAKg32qBUDfm76bJ4nRBSQ2L8mHSOf32yiartyZbT7m0
-	 on7frHS6SeSBoChAWuAij4mvfsjFlHHqav7flCme90VCJJLiWEKOpgejGbuY2pCamA
-	 Z3pXipSll0RLoe8qNLEborEqhxoCyeGcSC85NUAGPON5cAPBpooHaz4WhKWZ0RIbYq
-	 e4J/e53lE3FbGn9sMCZkm+ALD3DxoRurNCaC0x4P3+p/Oq/XUDf8EeM4xrK4liC4QD
-	 aCj9JUNIrxZ6Q==
+	s=default; t=1765133820;
+	bh=eM5iFqB2ltefQn6SDvaww1PWuqtcfjhoyJWeMCwTMaM=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=aKvyOHxQXlybmKib2U9w/SSAsefNZtoucn+/Tn85P+dyDQk4iWRcscYUiSQ/aRKKq
+	 6+VqeByKQEBk4/GBko1PvxcvgjdInVsmI87kwgq5dBXShG3t/mNwbZVpLuzgaBg0yG
+	 ELdHTSbdr/fI7RXyUaWmYyfPBCCQbmWY+SB3R5rogpKW+opwgtV7OVyV08Dl9gNV8b
+	 vucMaAECSfSLoywz6pSOZgzHe19jHtl25SwI/EvJS+tbsgYXGVkpmx6O0s5x6qkLD/
+	 B2v5c0gs6fq/a30NvM//+J64hwIfR+skZKbCT/PuONPEbHaBzVx+sfN10fRjDfGpNE
+	 oQBfvRH9+EE3w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A956181F06;
-	Sun,  7 Dec 2025 18:45:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2EC6D814C1;
+	Sun,  7 Dec 2025 18:57:00 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 13A2BE7
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 18:45:21 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 61D82E7
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 18:56:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EE977406A0
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 18:45:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 40A17406BA
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 18:56:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a9FJ8LS49yjS for <buildroot@buildroot.org>;
- Sun,  7 Dec 2025 18:45:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=pkerbrat@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F01E04069B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F01E04069B
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F01E04069B
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 18:45:19 +0000 (UTC)
-Received: from sejong (unknown [82.64.130.240])
- (Authenticated sender: pkerbrat@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 46767B0054E;
- Sun,  7 Dec 2025 19:45:16 +0100 (CET)
+ id O0GxaP2wiLy9 for <buildroot@buildroot.org>;
+ Sun,  7 Dec 2025 18:56:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5287F40345
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5287F40345
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5287F40345
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 18:56:57 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c020.dip0.t-ipconnect.de [79.214.192.32])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 74FAAA4C07A5
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 19:56:55 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:57648)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99)
+ (envelope-from <bernd@kuhls.net>) id 1vSJwE-000000006g9-3Htr
+ for buildroot@buildroot.org; Sun, 07 Dec 2025 18:56:55 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Pierre-Yves Kerbrat <pkerbrat@free.fr>
-Date: Sun,  7 Dec 2025 19:45:12 +0100
-Message-ID: <20251207184512.4000426-1-pkerbrat@free.fr>
-X-Mailer: git-send-email 2.51.0
+Date: Sun,  7 Dec 2025 19:56:55 +0100
+Message-ID: <20251207185655.351235-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1765133117;
- bh=rfxXj1e9rthN01q+Bnk212WmQl9lVjWY7hw8LvYzW5U=;
- h=From:To:Cc:Subject:Date:From;
- b=S1RjR1NX1nBv/myfELnBHgSHVTSZmn7puXOm6e1lLIXgPHpyR+Iolnq0cwpdOVMVx
- 6GcoWpOY0x8QUdv2wqyWe1186PhUJuPXUmVtfUW9XICyrWgrm09srrzkGJeannbXLz
- wGXScJJkpxTugqCgPlB4zqVUkvNibCqPCb412b43SXA839pKESFh0Vbo3XZZShhngw
- q21ox0qI2PYWLdEulBANOpeC3nOen3KH92jjVNG4EYIxFxTGXMtjnW/F3hERpEMlzf
- PTyQwX2Qnw/Q0KWSU3DYK89FqNUugwLYOOO4ZQ17Kj07yvLAlltCAoMiLMrPJ0nV8H
- wOpsqaOa8Tt5w==
+X-Spamd-Bar: +++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1765133815;
+ bh=p94ZpckdL68kPaIXm6YyswxN2mxsvezbDza6XjfjwBA=;
+ h=From:To:Subject:Date:From;
+ b=FgKRzyYW8ViNZDIDpOQiOAJL3dB8X8ys1TPhV7VruSldRQtMUYJFekV67lssnHJPD
+ WsPJHKWfRlLkZHNpO4kasq0QMMf0JlQYG/BeWn7dnjmXI7m3CWHpf37/7PKJoZ49HW
+ T0KJJVXKxsc+nDXzQoakMBqLvyLoR2aRRD8NORrmS3t4NeNwupFf4nkhrKKyvIzT29
+ IFswthsC8Q12WRZAqOi+oyrVpB/G/hGIiHZvPo7+EmaONsMG1+jVKcvIso9Mtz0rHc
+ 2/LFg2FabsS5JZYOSA9worVN3FNVdGwoHqrij98/Qt9VrW2Vf0MPTXYbF4eo3Onk0v
+ y6ioTu56pzd8Q==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=S1RjR1NX
-Subject: [Buildroot] [PATCH 1/1] package/nano: bump to version 8.7
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=FgKRzyYW
+Subject: [Buildroot] [PATCH/next 1/1] package/openvpn: bump version to 2.6.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,49 +90,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Pierre-Yves Kerbrat via buildroot <buildroot@buildroot.org>
-Reply-To: Pierre-Yves Kerbrat <pkerbrat@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Release notes:
+https://sourceforge.net/p/openvpn/mailman/message/59266231/
+
+CVE-2025-13751 which is fixed by this bump does only affect Windows.
+
 Changelog:
-https://www.nano-editor.org/dist/v8/ChangeLog
+https://github.com/OpenVPN/openvpn/blob/release/2.6/ChangeLog
+https://github.com/OpenVPN/openvpn/blob/release/2.6/Changes.rst
 
-Signed-off-by: Pierre-Yves Kerbrat <pkerbrat@free.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/nano/nano.hash | 4 ++--
- package/nano/nano.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/openvpn/openvpn.hash | 2 +-
+ package/openvpn/openvpn.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index 714046414ac7..c8bdb0913f94 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.nano-editor.org/dist/v8/nano-8.6.tar.xz.asc
-+# https://www.nano-editor.org/dist/v8/nano-8.7.tar.xz.asc
- # using key 168E6F4297BFD7A79AFD4496514BBE2EB8E1961F
--sha256  f7abfbf0eed5f573ab51bd77a458f32d82f9859c55e9689f819d96fe1437a619  nano-8.6.tar.xz
-+sha256  afd287aa672c48b8e1a93fdb6c6588453d527510d966822b687f2835f0d986e9  nano-8.7.tar.xz
- sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 183dc07e7e7a..ee82225a7235 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index 0123babe4b..1fad2163c8 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking signature
+-sha256  05cb5fdf1ea33fcba719580b31a97feaa019c4a3050563e88bc3b34675e6fed4  openvpn-2.6.16.tar.gz
++sha256  4cc8e63f710d3001493b13d8a32cf22a214d5e4f71dd37d93831e2fd3208b370  openvpn-2.6.17.tar.gz
+ sha256  edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6  COPYRIGHT.GPL
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 0175c51d63..9740374bee 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- NANO_VERSION_MAJOR = 8
--NANO_VERSION = $(NANO_VERSION_MAJOR).6
-+NANO_VERSION = $(NANO_VERSION_MAJOR).7
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPL-3.0+
+-OPENVPN_VERSION = 2.6.16
++OPENVPN_VERSION = 2.6.17
+ OPENVPN_SITE = https://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf libcap-ng
+ OPENVPN_LICENSE = GPL-2.0
 -- 
-2.51.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
