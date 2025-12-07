@@ -4,86 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37729D1CDC6
-	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 18:09:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A88E2D2CE17
+	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 18:33:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7E981607AA;
-	Sun,  7 Dec 2025 18:09:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7136D6065F;
+	Sun,  7 Dec 2025 18:33:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tRUYre4kxDln; Sun,  7 Dec 2025 18:09:40 +0000 (UTC)
+ id fi01h-gVtW2F; Sun,  7 Dec 2025 18:33:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 668C1606EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9030A60684
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765130980;
-	bh=KamEe3S+bKqxPiiVXW8TqqEaCzn5tzaMWmbb88y8vOE=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=UM8ON/nuFlIFDzxY1utQuSAA/a/VmpP5AM9qCc91s1GCtpRQAWEBPGQboZtk9fv8m
-	 NyDbvier3TilX+diPTrPalhWowbVlvavDzLIXH1akh5lVNvEH6MBmy1PUvhpr60xaz
-	 iyqNfUCsvRp8b4ob8r76T1Fh5vhT7706jwac/sq/jYpGRkEZZaGie6QcG5dMWdwDuD
-	 mxLsyO+OQw2TL7jKfuwDrK+/mukPO3tjRmV9uN5zwIVR/y/uiJ8HYdxUA4iGhSVtV0
-	 Id+VpiHSQWdsndNEN3n8C838YY+inYdBV6Q7ilh2wULngtGNh3lkQF1euVgeaFeP4F
-	 HbcGI44eAMHvg==
+	s=default; t=1765132432;
+	bh=orITBuuBIAx1Whesz/xBDRLUbm88RGODyiMz8CO1uA0=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=WQzaJfL+wNOEB0mGKR1OEyL0bc0XoS2FLWr8bHt3/jG84iX8zlboVGJXLCn9Yr+MI
+	 sVm67/9fRen9eSP99rVPnRiVq+7nRs52VxCL6IhhcXTHPztP2F00ZgBJYi/RzjhSSA
+	 1KjHp3Qr3/pktTu/KZuxTFm7Q7BtiuKPJ5IybAGPn3+6Q5GZsDZKdFnbn7bSWdzfyG
+	 MUdwyu/FYXLXnxk5WEkBGNa5wWdV/FB1EVenBbSBM2XLjP1IAJtUazDvBFWkKdYxJA
+	 Za7qYlO6o+5jg1R8wNr49lZLUT/y2WB3eWZbW8UjCpzrFYIp3v4jB33eCRHxk2i4g3
+	 ZtJ22kfrWPDIQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 668C1606EA;
-	Sun,  7 Dec 2025 18:09:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id EC067E7
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 18:09:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9030A60684;
+	Sun,  7 Dec 2025 18:33:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B5B57151
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 18:33:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DDE03404B8
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 18:09:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9ECD460684
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 18:33:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SdtVWjMV_eo5 for <buildroot@buildroot.org>;
- Sun,  7 Dec 2025 18:09:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id q8Gz9E8EhWcc for <buildroot@buildroot.org>;
+ Sun,  7 Dec 2025 18:33:51 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0B95C404A0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B95C404A0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BBA5E6065F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBA5E6065F
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0B95C404A0
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 18:09:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BBA5E6065F
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 18:33:50 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c020.dip0.t-ipconnect.de [79.214.192.32])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 08AC4A4C00E1;
- Sun,  7 Dec 2025 19:09:36 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:48326)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id E1A9EA4C00C6
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 19:33:47 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:46164)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vSJ6U-000000005mO-3jl3;
- Sun, 07 Dec 2025 18:03:27 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vSJZr-000000002bf-0uSU
+ for buildroot@buildroot.org; Sun, 07 Dec 2025 18:33:47 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Christian Hitz <christian.hitz@bbv.ch>
-Date: Sun,  7 Dec 2025 19:03:25 +0100
-Message-ID: <20251207180325.25243-4-bernd@kuhls.net>
+Date: Sun,  7 Dec 2025 19:33:47 +0100
+Message-ID: <20251207183347.346971-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251207180325.25243-1-bernd@kuhls.net>
-References: <20251207180325.25243-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1765130976;
- bh=IXydTKnrkvmirJpVfaR2nKtE14MiWqbwQlQMVctKtiw=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=pk23PumHAkRbzOC0jBP/tZNsPaDi2AS5ES8UzHL88QNMxjoZz5M6q+pQmwaDQqgZG
- eCZHNyZX2l4I+2U9cs/Iv9ecIVzdMUZsVCLu/19jddE5CqxUVFg5Nw6nMPBNI7N9gF
- 1P1Jqr0LoVjvFzDRCyRzYvPl7LVMrO72O6rvlQzB9gjN5dzxhZ1MO22z54r7GANYpM
- OQLwKuEpJbCbXUR9DjmkFx4oz1YNKdKsV1SK+7XcJ65ggdsZd/qfBYFlfAH3g9UJHJ
- hyBF1PiLle4Vmq2luazpJtyU63VJmp4RamSFkhZ9RItMb+AQgQhIRPrstgpLsE8lWl
- gJ+YYa7jnd/uA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ s=kas202511301023; t=1765132427;
+ bh=bKRTo2Wp3aXkUWcrUXY7EuBHm5XnGxFoCPHVNv4xodI=;
+ h=From:To:Subject:Date:From;
+ b=irn2TgDBORg5lh0Luq5ZSEgM9UFvA05qapy2UTbPLCiafjvJSkB4XjUpLULWNL06h
+ XMQrr7XtIcwGoNI87JL3ffuHMSZS8avH9qS+wpq0p8ent72VNN4Gr3WFkUnULLgGT/
+ QikiLIIg7kHnotV/fJj21Qh73YBNmgDaeE696SDUFxfSrtQ8nFfZYkk2QmbsCz96wa
+ a0Zjldmsw6FODLdYidCIamCYZ4vY06SNN9vkuPQ0kJd+gsHtH0sA0ViBW+EbPdYusa
+ nVlMVebQY+/Z1wX2uqJC3BrEl0bg+JMtGWU9UV6Ly0rmbNj+f+8jwyuOh0z9m+++m+
+ 0o9s1OXPiXaUQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=pk23PumH
-Subject: [Buildroot] [PATCH/next v3 4/4] package/libvncserver: fix cmake 4
- compatibility
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=irn2TgDB
+Subject: [Buildroot] [PATCH v2 1/1] package/kbd: fix zlib build,
+ add optional dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,47 +97,104 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Buildroot commit 930660890bf8b40d9bd55cd9e202e574b53d5d49 bumped kbd to
+version 2.9.0 which includes optional support for various compression
+libraries. This commit adds the corresponding configure options and a
+fix for build errors caused by zlib.
+
+Fixes:
+https://autobuild.buildroot.net/results/8ff/8ff6c3d940b68069f748f12646f7516ec86172c1/
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
-v3: no changes
-v2: no changes
+v2: updated patch after upstream feedback
 
- ...001-CMake-require-at-least-CMake-3.5.patch | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 package/libvncserver/0001-CMake-require-at-least-CMake-3.5.patch
+ .../kbd/0001-libkbdfile-fix-zlib-build.patch  | 35 +++++++++++++++++++
+ package/kbd/kbd.mk                            | 29 +++++++++++++++
+ 2 files changed, 64 insertions(+)
+ create mode 100644 package/kbd/0001-libkbdfile-fix-zlib-build.patch
 
-diff --git a/package/libvncserver/0001-CMake-require-at-least-CMake-3.5.patch b/package/libvncserver/0001-CMake-require-at-least-CMake-3.5.patch
+diff --git a/package/kbd/0001-libkbdfile-fix-zlib-build.patch b/package/kbd/0001-libkbdfile-fix-zlib-build.patch
 new file mode 100644
-index 0000000000..e7b30e3db6
+index 0000000000..5e15c2f047
 --- /dev/null
-+++ b/package/libvncserver/0001-CMake-require-at-least-CMake-3.5.patch
-@@ -0,0 +1,26 @@
-+From e64fa928170f22a2e21b5bbd6d46c8f8e7dd7a96 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@jolla.com>
-+Date: Tue, 13 May 2025 08:37:07 +0300
-+Subject: [PATCH] CMake: require at least CMake 3.5
++++ b/package/kbd/0001-libkbdfile-fix-zlib-build.patch
+@@ -0,0 +1,35 @@
++From 488872421ef38215d2797f78497eb559d8eec32a Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Jan=20=C4=8Cerm=C3=A1k?= <sairon@users.noreply.github.com>
++Date: Fri, 5 Dec 2025 16:45:36 +0100
++Subject: [PATCH] libkbdfile: fix zlib build
 +
-+CMake 4 dropped support for version requirements < 3.5.
-+
-+Fixes building with CMake >= 4.
-+
-+Upstream: https://github.com/LibVNC/libvncserver/commit/e64fa928170f22a2e21b5bbd6d46c8f8e7dd7a96
++Upstream: https://github.com/legionus/kbd/pull/150#issuecomment-3616333154
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ src/libkbdfile/elf-note.h | 5 +----
++ 1 file changed, 1 insertion(+), 4 deletions(-)
 +
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 205f3928..9b8118c8 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,4 +1,4 @@
-+-cmake_minimum_required(VERSION 3.4)
-++cmake_minimum_required(VERSION 3.5)
++diff --git a/src/libkbdfile/elf-note.h b/src/libkbdfile/elf-note.h
++index a0fd9e2..d3b8d5c 100644
++--- a/src/libkbdfile/elf-note.h
+++++ b/src/libkbdfile/elf-note.h
++@@ -26,14 +26,11 @@ int dlsym_many(void **dlp, const char *filename, ...);
++  */
++ #define DLSYM_ARG(symbol__) &sym_##symbol__, STRINGIFY(symbol__),
 + 
-+ set(PROJECT_LANGUAGES C)
++-/* For symbols being dynamically loaded */
++-#define DECLARE_DLSYM(symbol) static typeof(symbol) *sym_##symbol
++-
++ /*
++  * Helper defines, to be done locally before including this header to switch between
++  * implementations
++  */
++-#define DECLARE_SYM(sym__) DECLARE_DLSYM(sym__);
+++#define DECLARE_SYM(sym__) static typeof(sym__) *sym_##sym__;
 + 
++ /*
++  * Originally from systemd codebase.
++-- 
++2.47.3
++
+diff --git a/package/kbd/kbd.mk b/package/kbd/kbd.mk
+index 8008a9b3be..34401075ce 100644
+--- a/package/kbd/kbd.mk
++++ b/package/kbd/kbd.mk
+@@ -13,6 +13,35 @@ KBD_CONF_OPTS = \
+ KBD_DEPENDENCIES = \
+ 	$(TARGET_NLS_DEPENDENCIES) \
+ 	host-pkgconf
++
++ifeq ($(BR2_PACKAGE_BZIP2),y)
++KBD_CONF_OPTS += --with-bzip2
++KBD_DEPENDENCIES += bzip2
++else
++KBD_CONF_OPTS += --without-bzip2
++endif
++
++ifeq ($(BR2_PACKAGE_XZ),y)
++KBD_CONF_OPTS += --with-lzma
++KBD_DEPENDENCIES += xz
++else
++KBD_CONF_OPTS += --without-lzma
++endif
++
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++KBD_CONF_OPTS += --with-zlib
++KBD_DEPENDENCIES += zlib
++else
++KBD_CONF_OPTS += --without-zlib
++endif
++
++ifeq ($(BR2_PACKAGE_ZSTD),y)
++KBD_CONF_OPTS += --with-zstd
++KBD_DEPENDENCIES += zstd
++else
++KBD_CONF_OPTS += --without-zstd
++endif
++
+ KBD_LICENSE = GPL-2.0+
+ KBD_LICENSE_FILES = COPYING CREDITS
+ 
 -- 
 2.47.3
 
