@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 136B0D2CE17
-	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 17:01:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A608D1CDC6
+	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 17:01:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DEF8F402AB;
-	Sun,  7 Dec 2025 17:01:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D4B9F60B25;
+	Sun,  7 Dec 2025 17:01:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cPSXWMsu0ZCn; Sun,  7 Dec 2025 17:01:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8LnXYBrmL_-O; Sun,  7 Dec 2025 17:01:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14602402E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B13460BB9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765126882;
-	bh=Sr3/b1gXS/7py0W7SmVT2utBSxHxjjs4aL90HjVOCW4=;
+	s=default; t=1765126883;
+	bh=gSeGnpWD9hCvRjWqNtSQ1s4CaJDMpQqkBiRWh2q6d2s=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=r6t2nbBxQ4qceZn5pr6IC+jrqjioHZCqhKddVcnlH8Jzx5HVCFe3SuT/P2K/uRnYe
-	 yna2nMovFCSNBL+IxpgpM5S//GzQ0J+6xJvxnYG+n28XRBSPXIlQVXKrxUmgKDAUJe
-	 2GKOlDm3w0cMZWM+Org2c985GtBLLZhzg3QUxR1QS7XPYSXMbL/UVkP06b4PkcVytu
-	 Cw2F+bEUt5FUGUfmChb2Nr3hnuxxAVlqSnwUWYEC4s4+jkE6/sV8jGXQyP86SCvoZu
-	 xe8tzWzAxYupCDtc2EILQ42GZFWc3v5Vu4Vznfs5rccW0C5nEEHuUreumEC5TfN1RX
-	 2W4XhAS06sEVA==
+	b=RZPPB9I1nlJpl7JasSSI43uLSCYt8jYO7KqmdPCmb8np0b+eecXQdDBWhc3MQ5Uky
+	 j+HvBUZMoOthu0s1Kl8+hfw5yKvVcBPzSuUkA0IVqQy6D1kJf3yI8mzVasl6WeLTGd
+	 EJFRMMVSn1oWQZ7pxHjkztCFPASe0l40SyUpZ8CMbT9FPZ2qwqRGbwpvS0zISLXZGH
+	 V0WmC8OcCG4eyA7L6DPhzdr4As4R2VHuefKkpezrj3L6L/V0Ghr6R4DGRhKhGV93M3
+	 U/ibydK1Wvv1ZQdyDJwqNSr6htBB9v6yPANlneSC8ZKbjtN5RzTG3FOU5bxNdFJ43E
+	 61EDrhAjKSjmw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 14602402E7;
-	Sun,  7 Dec 2025 17:01:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5E55DE7
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 17:01:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0B13460BB9;
+	Sun,  7 Dec 2025 17:01:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D1FBE7
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 17:01:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6DCE140416
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 17:01:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EF5F860B62
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 17:01:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s1xTibd8DDZz for <buildroot@buildroot.org>;
- Sun,  7 Dec 2025 17:01:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Pcr5hfDr5Vki for <buildroot@buildroot.org>;
+ Sun,  7 Dec 2025 17:01:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A50C40168
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B74DA60B70
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8A50C40168
+ by smtp3.osuosl.org (Postfix) with ESMTP id B74DA60B70
  for <buildroot@buildroot.org>; Sun,  7 Dec 2025 17:01:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 87987867B3; Sun,  7 Dec 2025 17:01:12 +0000 (UTC)
+ id B31BB867B4; Sun,  7 Dec 2025 17:01:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 7 Dec 2025 17:10:27 +0100
+Date: Sun, 7 Dec 2025 17:10:32 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d29711322c98c6ed535208deffb82d8e23d433df
-X-Git-Newrev: f3192e35e2437241b4385157c91d8cc16163f97a
+X-Git-Oldrev: 92fb5e03ce13dc5bd659c1ea099db7a991c5b98b
+X-Git-Newrev: 3d26ce283bb6ce3f991344444eea11fac687afc0
 X-Patchwork-Hint: ignore
-Message-Id: <20251207170112.87987867B3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mbpoll: fix cmake 4
+Message-Id: <20251207170112.B31BB867B4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ympd: fix cmake 4
  compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -77,44 +77,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3192e35e2437241b4385157c91d8cc16163f97a
+commit: https://git.buildroot.net/buildroot/commit/?id=3d26ce283bb6ce3f991344444eea11fac687afc0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...cmake-Set-minimum-required-version-to-3.5.patch | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ .../0003-bump-required-cmake-version-to-3.10.patch | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/package/mbpoll/0002-cmake-Set-minimum-required-version-to-3.5.patch b/package/mbpoll/0002-cmake-Set-minimum-required-version-to-3.5.patch
+diff --git a/package/ympd/0003-bump-required-cmake-version-to-3.10.patch b/package/ympd/0003-bump-required-cmake-version-to-3.10.patch
 new file mode 100644
-index 0000000000..0df22ddedd
+index 0000000000..72a1966d77
 --- /dev/null
-+++ b/package/mbpoll/0002-cmake-Set-minimum-required-version-to-3.5.patch
-@@ -0,0 +1,41 @@
-+From baad0efca89f0d8fe370591283d87a6e8e7dee4c Mon Sep 17 00:00:00 2001
-+From: Alper Ak <alperyasinak1@gmail.com>
-+Date: Mon, 7 Jul 2025 20:05:36 +0300
-+Subject: [PATCH] cmake: Set minimum required version to 3.5 for CMake 4+
-+ compatibility
++++ b/package/ympd/0003-bump-required-cmake-version-to-3.10.patch
+@@ -0,0 +1,22 @@
++From 5c5862071e7ae982de6f39c9d1679dc496f38a20 Mon Sep 17 00:00:00 2001
++From: "Felix J. Ogris" <fjo@core7.intra.ogris.net>
++Date: Fri, 20 Jun 2025 15:10:38 +0200
++Subject: [PATCH] bump required cmake version to 3.10
 +
-+Fix:
-+
-+| CMake Error at CMakeLists.txt:3 (cmake_minimum_required):
-+|   Compatibility with CMake < 3.5 has been removed from CMake.
-+|
-+|   Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
-+|   to tell CMake that the project requires at least <min> but has been updated
-+|   to work with policies introduced by <max> or earlier.
-+|
-+|   Or, add -DCMAKE_POLICY_VERSION_MINIMUM=3.5 to try configuring anyway.
-+|
-+|
-+| -- Configuring incomplete, errors occurred!
-+
-+Signed-off-by: Alper Ak <alperyasinak1@gmail.com>
-+
-+Upstream: https://github.com/epsilonrt/mbpoll/commit/baad0efca89f0d8fe370591283d87a6e8e7dee4c
++Upstream: https://github.com/notandy/ympd/pull/199
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
@@ -122,17 +105,15 @@ index 0000000000..0df22ddedd
 + 1 file changed, 1 insertion(+), 1 deletion(-)
 +
 +diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 11dcd05..d72c5ea 100644
++index 02ee5141d..a8ee3730d 100644
 +--- a/CMakeLists.txt
 ++++ b/CMakeLists.txt
-+@@ -1,6 +1,6 @@
-+ # -*- CMakeLists.txt generated by CodeLite IDE. Do not edit by hand -*-
++@@ -1,4 +1,4 @@
++-cmake_minimum_required(VERSION 2.6)
+++cmake_minimum_required(VERSION 3.10)
 + 
-+-cmake_minimum_required(VERSION 2.9)
-++cmake_minimum_required(VERSION 3.5)
-+ 
-+ # Workspace name
-+ project(mbpoll LANGUAGES C)
++ project (ympd C)
++ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
