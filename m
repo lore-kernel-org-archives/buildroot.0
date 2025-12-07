@@ -4,82 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1DB3D1CDC6
-	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 11:54:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C3E5D2CE17
+	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 12:14:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AABC4407C6;
-	Sun,  7 Dec 2025 11:54:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 451DC4082F;
+	Sun,  7 Dec 2025 12:14:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5TLCYuBNPvmy; Sun,  7 Dec 2025 11:54:14 +0000 (UTC)
+ id kilNiYPi3ooE; Sun,  7 Dec 2025 12:14:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7241407CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD4E0403A8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765108454;
-	bh=Hyn0BQ9h4CXk9+WXFmy7MLe26R7S+yDRYNoRGqXBooo=;
+	s=default; t=1765109651;
+	bh=mN3/Shn82BSm2xcKOtzKHQWH4mVIHhV05Np/x7yRp2I=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=eaKmlQCAKZa6qm6eG/tQPXBKKQi5ScoReM9y+hrZIgqIsYuPt5TkgE+jsvfTfRaBZ
-	 YYvjW4LzMf5qfAmAxDLWrRoxEI5beMy/dqvJfnBRZb0y4dR/bQdYpweyBOjVOl8LwI
-	 zdWih6YQ/EpXg+rp8mOYYZnq3BmS9uZK87lIgjS2N0IVCSf2G7QdCbZ0bNRJ2TiV5Q
-	 W44EgqfBX5avlwZxhIlAHHDyzpuBkNr7R//qQuSVT0F/D/VqEdPxW3tN0aJyLl6XxQ
-	 xWuaBCYUW1rvANLjl8Nk2JK4zQ94Ej/cgHqWOUPy/G5qaJYfi+e/NRb47WRRVgESpG
-	 qB3NVptSzZiEA==
+	b=csGxLG7JmLEogIjyBUnkadZi6TRM6Mb2kTE0mtnvnRng46N2vhW7eqFUQbCJoajS8
+	 JTByjde6oAtLCNDXlAHgRpE+eJjimFIO+AA+a9aPkO6roNmHvl7oOSFsQi3H/s9fYe
+	 F1YysUfpwdY5102KjJpPwbFqXIYWbaTNEmRIp8gxC9fQNAMieFu7Y6fXZuRiXSD7Hc
+	 q6eNmAz5PRlWu2Fig8iQ1BJ0p00wwa2ZqwjdgzcFZSbpirW3Hf0+tcvC5FD2zpGhuu
+	 YEETGEzhexhz5Vqg88FX8h9qlihA4aOsjHzct3gxqCaQGXqcYRqMR0G6RzrNYJRdYU
+	 KVlnPMqkwsIMQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A7241407CC;
-	Sun,  7 Dec 2025 11:54:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2C0EAE7
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 11:54:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AD4E0403A8;
+	Sun,  7 Dec 2025 12:14:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 102452CF
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 12:14:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1E3FE607EE
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 11:54:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0E482403A8
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 12:14:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7zDdsIwVFOGM for <buildroot@buildroot.org>;
- Sun,  7 Dec 2025 11:54:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iEUpfCycdY6l for <buildroot@buildroot.org>;
+ Sun,  7 Dec 2025 12:14:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1B85860702
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B85860702
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 15C734025C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15C734025C
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1B85860702
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 11:54:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 15C734025C
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 12:14:08 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c020.dip0.t-ipconnect.de [79.214.192.32])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 6C4EBA4C0778
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 12:54:06 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:47238)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 32551A4C0629
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 13:14:07 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:40598)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vSDL3-000000008Iq-1Q1M
- for buildroot@buildroot.org; Sun, 07 Dec 2025 11:54:05 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vSDeQ-000000003KK-2ArZ
+ for buildroot@buildroot.org; Sun, 07 Dec 2025 12:14:06 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun,  7 Dec 2025 12:54:05 +0100
-Message-ID: <20251207115405.3489553-1-bernd@kuhls.net>
+Date: Sun,  7 Dec 2025 13:14:06 +0100
+Message-ID: <20251207121406.3506520-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1765108446;
- bh=SxvNDEjRwECi0Un63MN6RbUT5kMTM/o1+M68Uzv7UpA=;
+ s=kas202511301023; t=1765109647;
+ bh=oZPaqswNY1eI3rvxWIF+dXlnpVlLjcgjd2I7/EBeU74=;
  h=From:To:Subject:Date:From;
- b=oFhOKpjcSFmy0SsJq6wNqrwFoIYDhrHxyR8qKIXB9b54QJw+dbYgaLyIOg+lLgqmZ
- 9YrvBsRIJVyN7f2gg9D1SewVRH28Y+2/Dkb/T52U/4bIX5qCJZ2xs42SGzkiAIXaGo
- H+Nr3NqTXfo0fc/vNs9OCYQA/kh0QQn79E8dXIwZL5g1x9JfIZRgxIt6aMs3YROfTi
- tsL1sPUdADjy7d0gthz46fjxTuXGa/DTNcpIK2rIYbCgjJD1lOLlQw1BdG8scxxx13
- o84vv9E20GSUglFlGv1hoZIk52fquO4O9L1jEhjqIj3nc/K6mA5larBdghhQfCXBRO
- AYQcEHIM1UBIg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=vlOh5qb6wh8g81dQB2FUus/VQX8ZO29m/mO4Jo8Ik4Xsl/bVnhUU5Ea/0xVxnyTQd
+ 1GXgEwsPh3Bbs/W1dO1jxeSN/+47WhkuAm6lAzEGGl+AWsX5i+V0HUxX6l5yt0fK2A
+ fHsHNWD9vAViSowATSAJHZwfsFArJjYX6jef/Sengp/rKqO3TlBMboEQAr4QkpmhNr
+ QT8pokY/6opo93vFksxVgV9PrA5GSxd7WTBQ8W5LQvKzr5Ze4dzns/y9SXKcN9SRIL
+ afV1/phL0yx4p3AOOxJo8N++mpwFV5lnXPkTxCdlJw9YRRleISR5Yx9GA+sgJELTRm
+ c/F9Gz89OPG5A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=oFhOKpjc
-Subject: [Buildroot] [PATCH 1/1] package/softhsm2: update SITE
+ header.s=kas202511301023 header.b=vlOh5qb6
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_xkbutils: bump version
+ to 1.0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,26 +97,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Original site is down, unchanged tarball can be downloaded from github.
+Release notes:
+https://lists.x.org/archives/xorg-announce/2024-February/003448.html
+
+Updated license hash due to upstream commit:
+https://gitlab.freedesktop.org/xorg/app/xkbutils/-/commit/6dbcbb55951efb25af2e38034bdd86fa095aa9e5
+
+Fixes:
+https://autobuild.buildroot.net/results/eb7/eb7d32e65eece403538032a9006ea2f573ea10f8/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/softhsm2/softhsm2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/x11r7/xapp_xkbutils/xapp_xkbutils.hash | 8 ++++----
+ package/x11r7/xapp_xkbutils/xapp_xkbutils.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/softhsm2/softhsm2.mk b/package/softhsm2/softhsm2.mk
-index 5e37e42dde..ae44b93bc4 100644
---- a/package/softhsm2/softhsm2.mk
-+++ b/package/softhsm2/softhsm2.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/x11r7/xapp_xkbutils/xapp_xkbutils.hash b/package/x11r7/xapp_xkbutils/xapp_xkbutils.hash
+index 95287956a8..8174781e01 100644
+--- a/package/x11r7/xapp_xkbutils/xapp_xkbutils.hash
++++ b/package/x11r7/xapp_xkbutils/xapp_xkbutils.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2022-July/003186.html
+-sha256  f6a4a8e9c54582beb3787b1faa8168caab125c1fee0ca9cfa5b6c9c1df25eea4  xkbutils-1.0.5.tar.xz
+-sha512  0d8d460f5e015e9034292688437511068dab61216c2493f2981cfb63aaa012976ac9435c1586a22c0940fbfcb779b48dce9b85832303fe2b854aa945b814ac77  xkbutils-1.0.5.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2024-February/003448.html
++sha256  31a2bbee1e09ccba01de92897b8f540b545de812f318d31de07bd3a5a75ee25e  xkbutils-1.0.6.tar.xz
++sha512  78fb7ab4ef6642040992529444944080aca7a2ec4118f9a64c45dacc37e4041181df7bcd1f4270e11b9fbc8bd60a131b4702d2aa95741d89c54582ff8a8f896e  xkbutils-1.0.6.tar.xz
+ # Locally computed
+-sha256  3d67b53c085de6d475705b60855b9277afac5d4c4ec531d0ffd1ef0d00571594  COPYING
++sha256  4e86cc10a286bd6ce91c37143c399b1426058f5a13252a3d4677d58c990cd6df  COPYING
+diff --git a/package/x11r7/xapp_xkbutils/xapp_xkbutils.mk b/package/x11r7/xapp_xkbutils/xapp_xkbutils.mk
+index 90501908e6..cf63d4bb71 100644
+--- a/package/x11r7/xapp_xkbutils/xapp_xkbutils.mk
++++ b/package/x11r7/xapp_xkbutils/xapp_xkbutils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- SOFTHSM2_VERSION = 2.6.1
- SOFTHSM2_SOURCE = softhsm-$(SOFTHSM2_VERSION).tar.gz
--SOFTHSM2_SITE = https://dist.opendnssec.org/source
-+SOFTHSM2_SITE = https://github.com/opendnssec/opendnssec/releases/download/2.1.14
- SOFTHSM2_LICENSE = BSD-2-Clause
- SOFTHSM2_LICENSE_FILES = LICENSE
- SOFTHSM2_DEPENDENCIES = openssl
+-XAPP_XKBUTILS_VERSION = 1.0.5
++XAPP_XKBUTILS_VERSION = 1.0.6
+ XAPP_XKBUTILS_SOURCE = xkbutils-$(XAPP_XKBUTILS_VERSION).tar.xz
+ XAPP_XKBUTILS_SITE = https://xorg.freedesktop.org/releases/individual/app
+ XAPP_XKBUTILS_LICENSE = MIT
 -- 
 2.47.3
 
