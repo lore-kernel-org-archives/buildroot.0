@@ -4,83 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D0D6D2CE17
-	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 15:06:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05B72D1CDC6
+	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 15:47:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F8A260680;
-	Sun,  7 Dec 2025 15:06:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EBD75607AA;
+	Sun,  7 Dec 2025 15:47:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TIfqngDiupfN; Sun,  7 Dec 2025 15:06:19 +0000 (UTC)
+ id eEbrlMgClX84; Sun,  7 Dec 2025 15:47:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25D04605E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F5C560710
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765119979;
-	bh=WdRe/JDBEyiYvQYGIaJu59gwMZsUwoUr2qESE35q8DU=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=HLBbCfhc59k+6rQqLl7ZvRdFwDcar94ZGolKXOmC/mZWeOGWMr0us7Istw2RvaRt4
-	 UyIuKybf/qFo3A0CAuSj54nKxs3WHxpSyMsAue2HKDJ0FXNASFz5bkwzP0D1MgudfD
-	 cacSp2Kyv8ROTlYWT3YM6ogjrviBCQikZog7lgZtpv4ibhtzjoHb2Pghz5ALYIEYWY
-	 FW0OjJYH+bczy9GCZ3gmrq/FoHP8ccLRPUN6cCMqxJfWhil9m9BUlDCRgsAIVi3z0d
-	 tOXoVVw7iFNdAJ9Z8B78agEeFEnR9fdHpv4d4GO71wIBL1LuBfXfGLPsD2JTRUxtc8
-	 QEDuHtUqOqHEQ==
+	s=default; t=1765122433;
+	bh=oMRbtSPBUt0QSD0Lg3fwkd+8EncMlg57e4RdvnFB4l4=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=clTJ75eMeafo+JpCnwEYo7uoq2dBG5KzFT0YHdofZYX24meEI2TooTUAYOehWGtc5
+	 QULXOEuXuFVuRENk2rZCYjV7M0x32whqyy0sQRdStkyFQiGKWwhynK4It2UukGKZGK
+	 mEzAEw6M1j38Urf8xLz2dlreCjYDlrnKfGGNorf2q3z2mfBlO9ZDhBW6pPpjcbKWt8
+	 tc1DTovc83kUDJ8f/0ONwfw9+HP+S/v56uotGGty8V5BZAv0OJuyonEwAAe4Y4j6et
+	 YR5eR2sA7aSrlESbBAx+tw6eZtex66IIxC3AyREq2pCsILyEOgjRmTEn88d9vVMtoT
+	 jait1egvnEHew==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 25D04605E7;
-	Sun,  7 Dec 2025 15:06:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 14E802CF
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 15:06:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0F5C560710;
+	Sun,  7 Dec 2025 15:47:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 321F22CF
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 15:47:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F07DA4050A
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 15:06:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 23E1940296
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 15:47:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CCtRwYIWfe8D for <buildroot@buildroot.org>;
- Sun,  7 Dec 2025 15:06:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 229BC40486
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 229BC40486
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 229BC40486
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 15:06:16 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 1CBB41A1FF0
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 15:06:14 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id E02A1606D3;
- Sun,  7 Dec 2025 15:06:13 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id CFCB6102F2368; Sun,  7 Dec 2025 16:06:12 +0100 (CET)
-To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Romain Naour <romain.naour@gmail.com>
-Date: Sun,  7 Dec 2025 16:06:10 +0100
-Message-ID: <20251207150611.2882304-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.51.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LAj2TqR7tgha for <buildroot@buildroot.org>;
+ Sun,  7 Dec 2025 15:47:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 057AF4031C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 057AF4031C
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 057AF4031C
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 15:47:09 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id D34092003CC;
+ Sun,  7 Dec 2025 16:46:53 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 07 Dec 2025 16:46:53 +0100
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1765119973; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=4LCiePrkEIpUk/2p6Wb3MYlC7zzPR6P9epuw/QC+YFU=;
- b=HPTuBM8MG9uWmtlG+4OwSlTnBFkcjMJdXhHBebbKOHuhvsS/RES2y2oOIkQ6cUqDwv2b9e
- Hr1v456vXNLwOKwqgoE0vhvjgaOBOPw8yjkJlTCUyXE4Klz+QLpjvu7oSoantEACqTmFZA
- cAbUBP2gJFcQ0jc2OGID0jSlMkdv2kWet9QCrS1zr0CQKGGeSnGPFukti9S3rFkxxbGXb5
- P1C4KtcYNeBZhlaCTOmefy3sOaEKnIKFjQCHBaczpMo647Ks9iGQftdo01sHlkoxeEWdXq
- VPbMDfHKUKrfcM1rmzMd+evXKESLu5L13s5rl1Uhk5S7+pcbM2XFZY+mDQ15Lw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=HPTuBM8M
-Subject: [Buildroot] [PATCH] package/glibc: use DESTDIR instead of
- install_root to fix build issue
+Date: Sun, 07 Dec 2025 16:46:53 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Alexander Dahl <post@lespocky.de>, Davide Viti
+ <zinosat@gmail.com>, Eero Aaltonen <eero.aaltonen@vaisala.com>, Fabrice
+ Fontaine <fontaine.fabrice@gmail.com>, Rahul Bedarkar
+ <rahulbedarkar89@gmail.com>, Romain Naour <romain.naour@gmail.com>, Sergio
+ Prado <sergio.prado@e-labworks.com>, Stefan Hager
+ <stefan.hager@ginzinger.com>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20251203214709.2321976-20-bernd@kuhls.net>
+References: <20251203214709.2321976-1-bernd@kuhls.net>
+ <20251203214709.2321976-20-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <3a12e04586be258444c2d5be26e8bab1@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1765122426;
+ bh=o7A4c850jZoLWtKUiS3AofijejqPxFIztQv+L+QoTws=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=RydhO0TzS19A9+Osf4CIDGxRO16MWwdv8yJKHN5bh6ER+GSTHmmXZWP9mhcDvVOmy
+ H1pOR8TIZ3kS5EoAFVSudMwOLEXMuo4kcL2L3rjxBjAPFobxbLjI3WIHODI6LAk/ZK
+ CamxLurSu37sWCsu0pzNWUMaCZQH1oyRiShI0NJr/brxjv3aPCK6g5ApAyDPRabH7T
+ GDNMKLqXCwetWTRIEjhpGnrakrGb3Mx0xr9TUeqMSbsc2/s/o8lsFTLQou1rcTHXLf
+ MTBS2AzroBswnChR2yyMwNgHfINFioWQDkNcG3MJsQEUsDOVvQ2jJxEavmu3LcHogO
+ MKI8x4G5T49Vg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=RydhO0Tz
+Subject: Re: [Buildroot] [PATCH/next 20/21] package/read-edid: fix cmake 4
+ compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,73 +101,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Building a simple configuration such as:
+Hi Bernd,
 
-BR2_aarch64=y
-BR2_FORCE_HOST_BUILD=y
+Thanks for the patch.
 
-Under our reference Docker container, as an out-of-tree build:
+On 03/12/2025 22:47, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/read-edid/0004-cmake4.patch | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>  create mode 100644 package/read-edid/0004-cmake4.patch
+> 
+> diff --git a/package/read-edid/0004-cmake4.patch 
+> b/package/read-edid/0004-cmake4.patch
+> new file mode 100644
+> index 0000000000..4adf1ce300
+> --- /dev/null
+> +++ b/package/read-edid/0004-cmake4.patch
+> @@ -0,0 +1,10 @@
+> +Fix build with cmake 4
 
-./utils/docker-run make O=output-test
+This package patch generates check-package errors:
 
-will fail during the glibc staging installation step with:
+package/read-edid/0004-cmake4.patch:0: missing Signed-off-by in the 
+header 
+(https://nightly.buildroot.org/#_format_and_licensing_of_the_package_patches)
+package/read-edid/0004-cmake4.patch:0: missing Upstream in the header 
+(https://nightly.buildroot.org/#_additional_patch_documentation)
 
-/usr/bin/install -c -m 644 /home/thomas/buildroot/br/output-glibc/build/glibc-2.42-3-gbc13db73937730401d592b33092db6df806d193e/build/libc.a /usr/lib64/libc.a
-/usr/bin/install: cannot create regular file '/usr/lib64/libc.a': Permission denied
+Could you send an updated patch addressing this issue please?
 
-The problem being that the install_root variable is for some reason
-lost along the way. We definitely pass it during the staging
-installation step, but then glibc calls a sub-make and in that
-submake, install_root is empty.
+> +
+> +--- read-edid-3.0.2/CMakeLists.txt.orig	2025-12-02 08:53:55.032171422 
+> +0100
+> ++++ read-edid-3.0.2/CMakeLists.txt	2025-12-02 08:54:25.324940568 +0100
+> +@@ -1,4 +1,4 @@
+> +-cmake_minimum_required (VERSION 2.6)
+> ++cmake_minimum_required (VERSION 3.12)
+> + project (read-edid C)
+> +
+> + option(I2CBUILD "Build I2C get-edid implementation" ON)
+> --
+> 2.47.3
 
-Observations:
+Best regards,
 
-- Building the same configuration inside the Docker container, but
-  in-tree, doesn't exhibit the problem.
-
-- Building outside of the Docker container, but with the same make
-  version as the one we build due to BR2_FORCE_HOST_BUILD=y doesn't
-  exhibit the problem.
-
-However, it turns out that glibc sets install_root to $(DESTDIR). And
-passing DESTDIR just works. So we drop our custom
-GLIBC_INSTALL_STAGING_OPTS to rely on the default one, and this fixes
-the problem. It's not extremely satisfying to not fully understand
-what's going on, but after spending quite some time on this, and
-having a trivial and actually pretty nice workaround, we simply
-propose to use this solution.
-
-There is no autobuilder issue as we're not using our Docker container
-to do autobuild builds.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/glibc/glibc.mk | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index b0fa66218a..a7727cbad8 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -60,8 +60,6 @@ GLIBC_SUBDIR = build
- 
- GLIBC_INSTALL_STAGING = YES
- 
--GLIBC_INSTALL_STAGING_OPTS = install_root=$(STAGING_DIR) install
--
- # Thumb build is broken, build in ARM mode
- ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
- GLIBC_EXTRA_CFLAGS += -marm
--- 
-2.51.1
-
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
