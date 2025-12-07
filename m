@@ -1,64 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2760D2CE17
-	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 17:13:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2ADF4D3B7E2
+	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 17:13:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C88A360617;
-	Sun,  7 Dec 2025 17:13:39 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hYmBjS9bF-rU; Sun,  7 Dec 2025 17:13:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EE9E60730
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765127618;
-	bh=nWNVwXw66Xs89k5T+YrF4S/TXTuxkWo6VI2XTQiuoJc=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=VrTf1NA9IhwQ9NQIQlP62iQYFlfqKNM/FHmCJBtdHMw0gV1szBzYUaHK9tZla0sBQ
-	 1rq2dtftdKnuSdNHVnpBmUtClUb6CWFnly+GSaJg/KLyI5lTXpCDqWPo6qiqTiixzr
-	 5w5jAP7WxwaIMQF6ajQEnftzoxOn5BmFOBhSOurqA0OtpU/98m9yxoVRrz26D2eJUE
-	 +8xEwQ7PK4oXG7lEw7B8KATXGpw8v/CbhO3WUk5T/b7f7K9RZ+x3hVlArKxZk3IQvT
-	 fLam4ryseEFQgUBvcYZ2Yt3SCuTs9KPsR9N/Lq8aOQbJswaQak4eg7VQjc/N83iv7E
-	 l/6DyuhOWCkJw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3EE9E60730;
-	Sun,  7 Dec 2025 17:13:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 76CCE2CF
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 17:13:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6379240537
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 17:13:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 02CF44021D;
+	Sun,  7 Dec 2025 17:13:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zwLO0Xft2cKV for <buildroot@buildroot.org>;
- Sun,  7 Dec 2025 17:13:36 +0000 (UTC)
+ id HzN-hReRsaR7; Sun,  7 Dec 2025 17:13:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B4C940437
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1765127620;
+	bh=bhMLrjG+8fc49DJtFI9+1gHPijx3xyJBcio0kl6ts0s=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=MzSYxlPE8dZsWGUTLyXAtl7KEeaFMmGK/V+X0kjLhLurf6KIgWwqkxhJxJdmtLEK3
+	 h5d40i/EGIjoI7Xy0fJBszH6wulNduBL1ws3pcAi27HCE3p+3QYFbKsCTWitA+hQMU
+	 Hh73Oc7ZjQV8uDnfU05L4t72JXXytbDaP/rB633/1IhLrsUwnMgxT0a4aQ4A3vaSAJ
+	 WCiV1AAlzwF403kdirN6MqGw9rhJKCuaErB8Av6ixENnW/bdsRt9qIoa9FxB7FCmB8
+	 +pE8+JfYekWsV7LmySLZO9sceRDSVeX+MC4oF4E85N/Ix2jbeTlx+xxFrqNbOwqVGQ
+	 cW56HxoTdPneA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B4C940437;
+	Sun,  7 Dec 2025 17:13:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AF18D2CF
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 17:13:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 95DB6821F2
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 17:13:37 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4M872bZUrEya for <buildroot@buildroot.org>;
+ Sun,  7 Dec 2025 17:13:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB4324019A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E49AD821EE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AB4324019A
+ by smtp1.osuosl.org (Postfix) with ESMTP id E49AD821EE
  for <buildroot@buildroot.org>; Sun,  7 Dec 2025 17:13:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A341B867F9; Sun,  7 Dec 2025 17:13:36 +0000 (UTC)
+ id E1B8B867F9; Sun,  7 Dec 2025 17:13:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 7 Dec 2025 18:09:31 +0100
+Date: Sun, 7 Dec 2025 18:10:14 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 15bb41a461d798484387ecd824225a3577d29a55
-X-Git-Newrev: 4d61edf6b1b5b23f285f30f67a2d67695b153909
+X-Git-Oldrev: 80f8be48b65cd445b9a30b69235581fc5f437052
+X-Git-Newrev: 3b04688e7f7283d0f8c88987ff0819c1a0bb1650
 X-Patchwork-Hint: ignore
-Message-Id: <20251207171336.A341B867F9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] DEVELOPERS: remove Prabhu Sannachi,
- bouncing e-mail
+Message-Id: <20251207171336.E1B8B867F9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dmraid: switch SITE to https
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,36 +75,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d61edf6b1b5b23f285f30f67a2d67695b153909
+commit: https://git.buildroot.net/buildroot/commit/?id=3b04688e7f7283d0f8c88987ff0819c1a0bb1650
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Prabhu's e-mail address at Collins is bouncing, so let's drop this stale
-entry:
+The http link is broken:
 
-<prabhu.sannachi@collins.com>: host
-    mxb-00105402.gslb.gpphosted.com[67.231.147.145] said: 550 5.1.1 User
-    Unknown (in reply to RCPT TO command)
+Connecting to people.redhat.com (people.redhat.com)|209.132.178.26|:80...
+ failed: No route to host.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+No autobuilder error recorded.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 3 ---
- 1 file changed, 3 deletions(-)
+ package/dmraid/Config.in   | 2 +-
+ package/dmraid/dmraid.hash | 2 +-
+ package/dmraid/dmraid.mk   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5e1fa6401f..5c9eb94f56 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2769,9 +2769,6 @@ F:	package/libdvbpsi/
- F:	package/mraa/
- F:	package/synergy/
+diff --git a/package/dmraid/Config.in b/package/dmraid/Config.in
+index 3c375f4c67..ad86334f1e 100644
+--- a/package/dmraid/Config.in
++++ b/package/dmraid/Config.in
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_DMRAID
+ 	  dmraid uses the Linux device-mapper to create devices with
+ 	  respective mappings for the ATARAID sets discovered.
  
--N:	Prabhu Sannachi <prabhu.sannachi@collins.com>
--F:	package/redis-plus-plus/
--
- N:	Qais Yousef <qais.yousef@arm.com>
- F:	package/bpftrace/
+-	  http://people.redhat.com/~heinzm/sw/dmraid/
++	  https://people.redhat.com/~heinzm/sw/dmraid/
  
+ comment "dmraid needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+diff --git a/package/dmraid/dmraid.hash b/package/dmraid/dmraid.hash
+index 7c1bb9a56b..0f30864254 100644
+--- a/package/dmraid/dmraid.hash
++++ b/package/dmraid/dmraid.hash
+@@ -1,4 +1,4 @@
+-# From http://people.redhat.com/~heinzm/sw/dmraid/src/dmraid-1.0.0.rc16-3.tar.bz2.md5.sum
++# From https://people.redhat.com/~heinzm/sw/dmraid/src/dmraid-1.0.0.rc16-3.tar.bz2.md5.sum
+ md5  819338fcef98e8e25819f0516722beeb  dmraid-1.0.0.rc16-3.tar.bz2
+ # locally computed
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  1.0.0.rc16-3/dmraid/LICENSE_GPL
+diff --git a/package/dmraid/dmraid.mk b/package/dmraid/dmraid.mk
+index 97c729aa70..dca9195ef6 100644
+--- a/package/dmraid/dmraid.mk
++++ b/package/dmraid/dmraid.mk
+@@ -6,7 +6,7 @@
+ 
+ DMRAID_VERSION = 1.0.0.rc16-3
+ DMRAID_SOURCE = dmraid-$(DMRAID_VERSION).tar.bz2
+-DMRAID_SITE = http://people.redhat.com/~heinzm/sw/dmraid/src
++DMRAID_SITE = https://people.redhat.com/~heinzm/sw/dmraid/src
+ DMRAID_SUBDIR = $(DMRAID_VERSION)/dmraid
+ # lib and tools race with parallel make
+ DMRAID_MAKE = $(MAKE1)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
