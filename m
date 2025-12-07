@@ -1,60 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2914CD2CE17
-	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 14:27:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B235D2CE17
+	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 14:27:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD99360AD4;
-	Sun,  7 Dec 2025 14:27:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0421840660;
+	Sun,  7 Dec 2025 14:27:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id toWS2nj1gwat; Sun,  7 Dec 2025 14:27:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mq6C06C7T-NV; Sun,  7 Dec 2025 14:27:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33D8F605A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B4234066D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765117656;
-	bh=acWwSemrmOFjM8L1kk5XCvDYO9/3UFjE/MJAPLqUihY=;
+	s=default; t=1765117669;
+	bh=7gExWxUA0vw9QV0ljIJbt9sXMSSWZUYcRjBDfc3VXPQ=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=eJmFcnONxBdjaegTPyvPfBffAKhqEfvn42PpE3tZdMjoGdnvLVplLgQNqc/rXg4a5
-	 YtvCocAWNPRIFPXa4o5fZZBhCmSCB28stdGsBGXNjsmm7EUDoyZrnE4CiWtWQX6r+r
-	 WEGFfaB/stPFCG6OAe8YDhYN8ARrNwZcIHKSr9bdbH+ms3k5utnN/hAunUezazMOj8
-	 MBMKkjSeP2s/71TpuXoHesNXwEkbNTOAokVEoGD0FtWkgQG/g0rVqe284y3xHZToHk
-	 lBingvB7ZPL5mih+8Tpj6M9AmNBx3q+NtckVDhsGQfVg7QxKOn0OMp4zCGi0YDMunk
-	 potAuNgJSeeRQ==
+	b=SWhp2Y0mZuP9XP4CjKdhYUmYnMG/O1RyCP6c6MmrWelvI6murWKPaCDfCUk0tzetn
+	 2FYlh711TvAm21JoMCIp2vT4fp8i7FSx4aqdyLCWi4JQQQ6+dONrMaecv2GcGrEz+G
+	 EH9Vnn0V8SckTFi2YPNOR/+k9ZWaO4nvj1rZ05FobQBKmRWNH0q4hvmRvLQKr4Iibe
+	 SynN5IswV/vWWzQdjS8tknBF/KgmIqkqucKEm2ysbDt1Z/oOopbBTeFBDefJ+0bUJR
+	 Q8FLdWwRq2WvT8gnEF86V1bfrFhFz0p9lfwt4b3D89AM4nsvaiSAteDQMbcypG2vOw
+	 soJoK+fNfuX6w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 33D8F605A4;
-	Sun,  7 Dec 2025 14:27:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id DDA572CF
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:27:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B4234066D;
+	Sun,  7 Dec 2025 14:27:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DDD282CF
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:27:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C3981605A4
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:27:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CFDF181178
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:27:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id deaY4tm0c1XT for <buildroot@buildroot.org>;
- Sun,  7 Dec 2025 14:27:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CIFmTnap7LXi for <buildroot@buildroot.org>;
+ Sun,  7 Dec 2025 14:27:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A658E60594
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A658E60594
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9D3C981119
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D3C981119
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A658E60594
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:27:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9D3C981119
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:27:46 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c020.dip0.t-ipconnect.de [79.214.192.32])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 02C32A4C0965;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 3950FA4C0967;
  Sun,  7 Dec 2025 15:26:59 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:60616)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vSFiu-000000001Fk-0PP2;
- Sun, 07 Dec 2025 14:26:52 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vSFit-000000001Fk-1ZiF;
+ Sun, 07 Dec 2025 14:26:51 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
 Cc: Bartosz Bilas <b.bilas@grinn-global.com>, Eric Limpens <limpens@gmail.com>,
@@ -63,32 +63,32 @@ Cc: Bartosz Bilas <b.bilas@grinn-global.com>, Eric Limpens <limpens@gmail.com>,
  Julien Olivain <ju.o@free.fr>, Maxim Kochetkov <fido_max@inbox.ru>,
  Pieterjan Camerlynck <pieterjanca@gmail.com>,
  Romain Naour <romain.naour@gmail.com>, TIAN Yuanhao <tianyuanhao3@163.com>
-Date: Sun,  7 Dec 2025 15:26:50 +0100
-Message-ID: <20251207142651.3695074-13-bernd@kuhls.net>
+Date: Sun,  7 Dec 2025 15:26:42 +0100
+Message-ID: <20251207142651.3695074-5-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251207142651.3695074-1-bernd@kuhls.net>
 References: <20251207142651.3695074-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: +++++
+X-Spam: Yes
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1765117619;
- bh=tofl3JZoku7yHQj+1MkrDd4tS64W5ysflokZlAanzrI=;
+ bh=uXPmvecoZUI4OxbC/xohbDUGKgT3vUE47+UQGQxedw4=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=aO2CTKHy2ScmZb/9yvFB3uaj1C6Rp4N32kjIeuaOiC0qEw+bpKtjh/tjSjvs7WevU
- t4MIEyNOEK5sfBLOi8L3T2Vu0OHC8UFLtaQ6mvLk4ZgMGqnAeWTT/aX7/unEJsqaWK
- cwLrMgcZLm3ThQ74hC02s6fcq1QrEpFTFSFs01ZOggZIPaiaIHkfXzhAakio5OPQAx
- a/NNggy/HIJs9xgmZp+dIhL+HCLcLw0OR5rvsMKc/31SFwMbV85QmKmoNoo/oCohb/
- uxVOWWwcLekdvvHpgYZUsvq34wU7I3ymseBj2z26TZg2212qwud3qSNUlUoDxX6K+D
- OLLWHsPpsQHTg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=lrrNbDr+w9LcBXhvqr4Z/Cqd8LCjajeflDXMteKB/uELUy9KHS4rVznefpRTVqYX1
+ F7VltiTDPXqgzhHDDr4PbI+8BS2wER7YP+StZLHt87eJszbNIinTFb5O81b2blA5hz
+ jvo5yovGyPvicMozM0MKDZAuVQEIj/9hHRFVidvDZquK7kpCZYNMwujAJrgycg3+XP
+ RXvEQlpg17/hd7PLFf/3G4JzfKyKSZGr/rOuF5I2XfUGrO8zSRzvNqPYuROq7W2m3J
+ V2xvWcZm3579i3CkDtOHvAidIrZCJlMCEOxHE6NWjwlI70xe2/yuvHi6a3lvd/Xskw
+ kpqKp2TDePj9g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=aO2CTKHy
-Subject: [Buildroot] [PATCH/next 13/14] package/ympd: fix cmake 4
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=lrrNbDr+
+Subject: [Buildroot] [PATCH/next 05/14] package/libosmium: fix cmake 4
  compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -108,38 +108,61 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...-bump-required-cmake-version-to-3.10.patch | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
- create mode 100644 package/ympd/0003-bump-required-cmake-version-to-3.10.patch
+ .../0001-Require-a-more-modern-CMake.patch    | 45 +++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/libosmium/0001-Require-a-more-modern-CMake.patch
 
-diff --git a/package/ympd/0003-bump-required-cmake-version-to-3.10.patch b/package/ympd/0003-bump-required-cmake-version-to-3.10.patch
+diff --git a/package/libosmium/0001-Require-a-more-modern-CMake.patch b/package/libosmium/0001-Require-a-more-modern-CMake.patch
 new file mode 100644
-index 0000000000..72a1966d77
+index 0000000000..6c39e751fb
 --- /dev/null
-+++ b/package/ympd/0003-bump-required-cmake-version-to-3.10.patch
-@@ -0,0 +1,22 @@
-+From 5c5862071e7ae982de6f39c9d1679dc496f38a20 Mon Sep 17 00:00:00 2001
-+From: "Felix J. Ogris" <fjo@core7.intra.ogris.net>
-+Date: Fri, 20 Jun 2025 15:10:38 +0200
-+Subject: [PATCH] bump required cmake version to 3.10
++++ b/package/libosmium/0001-Require-a-more-modern-CMake.patch
+@@ -0,0 +1,45 @@
++From 7ab87418a0697ac9b7b5f005fbd64dcd99a01124 Mon Sep 17 00:00:00 2001
++From: Jochen Topf <jochen@topf.org>
++Date: Tue, 15 Jul 2025 17:19:57 +0200
++Subject: [PATCH] Require a more modern CMake
 +
-+Upstream: https://github.com/notandy/ympd/pull/199
++So it works with CMake 4
++
++See #391
++
++Upstream: https://github.com/osmcode/libosmium/commit/7ab87418a0697ac9b7b5f005fbd64dcd99a01124
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ CMakeLists.txt | 11 ++---------
++ 1 file changed, 2 insertions(+), 9 deletions(-)
 +
 +diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 02ee5141d..a8ee3730d 100644
++index cfeffa8e..80f6bfe1 100644
 +--- a/CMakeLists.txt
 ++++ b/CMakeLists.txt
-+@@ -1,4 +1,4 @@
-+-cmake_minimum_required(VERSION 2.6)
-++cmake_minimum_required(VERSION 3.10)
++@@ -6,7 +6,7 @@
++ #
++ #-----------------------------------------------------------------------------
 + 
-+ project (ympd C)
-+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/")
++-cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
+++cmake_minimum_required(VERSION 3.10.0 FATAL_ERROR)
++ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
++ 
++ 
++@@ -36,14 +36,7 @@ set(CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo;MinSizeRel;Dev;Cover
++ #
++ #-----------------------------------------------------------------------------
++ 
++-project(libosmium)
++-
++-set(LIBOSMIUM_VERSION_MAJOR 2)
++-set(LIBOSMIUM_VERSION_MINOR 22)
++-set(LIBOSMIUM_VERSION_PATCH 0)
++-
++-set(LIBOSMIUM_VERSION
++-    "${LIBOSMIUM_VERSION_MAJOR}.${LIBOSMIUM_VERSION_MINOR}.${LIBOSMIUM_VERSION_PATCH}")
+++project(libosmium VERSION 2.22.0 LANGUAGES CXX C)
++ 
++ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
++ 
 -- 
 2.47.3
 
