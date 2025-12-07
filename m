@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBC0ED43370
-	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:59:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 011D7D4337C
+	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:59:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9624082923;
-	Fri, 12 Dec 2025 07:59:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C6F8B84372;
+	Fri, 12 Dec 2025 07:59:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZzvD72Gsv3P9; Fri, 12 Dec 2025 07:58:59 +0000 (UTC)
+ id KT3gIQkokODG; Fri, 12 Dec 2025 07:59:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 352BB83EBA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 454C384241
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765526314;
-	bh=Qtcor8m0cbHkU2PqVDs7tP44++SFnHjngKC+kZM1QUY=;
+	s=default; t=1765526316;
+	bh=TqJH2iwJPqqaFUXOySRHyS5Ild4W8EE4z36ECg11zpw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=pQz1VhBELkrhXedU0fGQ6/WGgSGkIxMaz3SJpIUPlgOLGNRocoDHqG8qax51vOCeG
-	 HRY+mvKCJtiFe8vERmMxiGIDgxMue9DpNGKPYAlwLNqJPxP9f/IL62ZCYTYrgrn1px
-	 vAk2swNU5wRicACBnmznUZuiHdaw1i+W6EscMLVg0KUzB6DEpU0Z80xXAplDnL3dYJ
-	 C2c7G19lQsW/RFB8uI9AsUsE/PQocWpvBxF+sVD6EPND4CwnY3PEl7rjgYuj5494iA
-	 0/Z/f0xCm4McScc8059EzIefL6Idx+CFlohTrRHOUDGk4f47yCytf4za+4pT3+dvB9
-	 f6hkg6V56bKVg==
+	b=JNWUPH+N5AX0J3vurvCjaS2CriWW07gtv83YOkf4kj9WBzqgGnn3pgxTS/o3I5cxI
+	 acu8PR21UHMShf3Ctk4eRyGAGkkrMQNW0tm7M39Qb+DX+RXireAADlztzpGyHXxwNw
+	 7OpzA/uoNKREHZu/uPM6zK5c2TNlVGm3QYtXwG/w/vMxFq71ydquzrop29Vm8m5ibi
+	 YGJ7I0JY/CMmgIE0/RL8GIZT/60dfnHe1gmEqdd//xbFWQ3FPU3KogsQnd+bMJ6S23
+	 vQ7YSF7tMqMUAlib/3qOd4NIwe+ChGBYpjNanL66pmUjbdgRGPafEqfwwiyTkrOHZB
+	 irLkoWP0tb7jw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 352BB83EBA;
-	Fri, 12 Dec 2025 07:58:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 454C384241;
+	Fri, 12 Dec 2025 07:58:36 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id C9BAB2C1
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:57:08 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id DDD43E7
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:57:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 358EC41175
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3C5B841179
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dpVzdSztOME7 for <buildroot@buildroot.org>;
- Fri, 12 Dec 2025 07:55:44 +0000 (UTC)
+ id tj3IARU-VKTM for <buildroot@buildroot.org>;
+ Fri, 12 Dec 2025 07:55:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1073B41179
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DD9A41184
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1073B41179
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6DD9A41184
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0F949807F9; Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
+ id 6CFC985C4C; Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 7 Dec 2025 17:10:16 +0100
+Date: Sun, 7 Dec 2025 20:14:02 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b6d5717f1b9a9a5c419610425ffa1542f4693e16
-X-Git-Newrev: 71c6b157db233ec803f0a33f52e4d1a12058ba15
+X-Git-Oldrev: ae7b3344d422154095cfd7efd9d106f0c74fc6b9
+X-Git-Newrev: 51fe7dad2cde7491b23a9a120db9f58f498e98d4
 X-Patchwork-Hint: ignore
-Message-Id: <20251212075538.0F949807F9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libosmium: fix cmake 4
- compatibility
+Message-Id: <20251212075538.6CFC985C4C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nano: bump to version 8.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,66 +76,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71c6b157db233ec803f0a33f52e4d1a12058ba15
+commit: https://git.buildroot.net/buildroot/commit/?id=51fe7dad2cde7491b23a9a120db9f58f498e98d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Changelog:
+https://www.nano-editor.org/dist/v8/ChangeLog
+
+Signed-off-by: Pierre-Yves Kerbrat <pkerbrat@free.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../0001-Require-a-more-modern-CMake.patch         | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ package/nano/nano.hash | 4 ++--
+ package/nano/nano.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libosmium/0001-Require-a-more-modern-CMake.patch b/package/libosmium/0001-Require-a-more-modern-CMake.patch
-new file mode 100644
-index 0000000000..6c39e751fb
---- /dev/null
-+++ b/package/libosmium/0001-Require-a-more-modern-CMake.patch
-@@ -0,0 +1,45 @@
-+From 7ab87418a0697ac9b7b5f005fbd64dcd99a01124 Mon Sep 17 00:00:00 2001
-+From: Jochen Topf <jochen@topf.org>
-+Date: Tue, 15 Jul 2025 17:19:57 +0200
-+Subject: [PATCH] Require a more modern CMake
-+
-+So it works with CMake 4
-+
-+See #391
-+
-+Upstream: https://github.com/osmcode/libosmium/commit/7ab87418a0697ac9b7b5f005fbd64dcd99a01124
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ CMakeLists.txt | 11 ++---------
-+ 1 file changed, 2 insertions(+), 9 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index cfeffa8e..80f6bfe1 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -6,7 +6,7 @@
-+ #
-+ #-----------------------------------------------------------------------------
-+ 
-+-cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
-++cmake_minimum_required(VERSION 3.10.0 FATAL_ERROR)
-+ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
-+ 
-+ 
-+@@ -36,14 +36,7 @@ set(CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo;MinSizeRel;Dev;Cover
-+ #
-+ #-----------------------------------------------------------------------------
-+ 
-+-project(libosmium)
-+-
-+-set(LIBOSMIUM_VERSION_MAJOR 2)
-+-set(LIBOSMIUM_VERSION_MINOR 22)
-+-set(LIBOSMIUM_VERSION_PATCH 0)
-+-
-+-set(LIBOSMIUM_VERSION
-+-    "${LIBOSMIUM_VERSION_MAJOR}.${LIBOSMIUM_VERSION_MINOR}.${LIBOSMIUM_VERSION_PATCH}")
-++project(libosmium VERSION 2.22.0 LANGUAGES CXX C)
-+ 
-+ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-+ 
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index 714046414a..c8bdb0913f 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://www.nano-editor.org/dist/v8/nano-8.6.tar.xz.asc
++# https://www.nano-editor.org/dist/v8/nano-8.7.tar.xz.asc
+ # using key 168E6F4297BFD7A79AFD4496514BBE2EB8E1961F
+-sha256  f7abfbf0eed5f573ab51bd77a458f32d82f9859c55e9689f819d96fe1437a619  nano-8.6.tar.xz
++sha256  afd287aa672c48b8e1a93fdb6c6588453d527510d966822b687f2835f0d986e9  nano-8.7.tar.xz
+ sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 183dc07e7e..ee82225a72 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NANO_VERSION_MAJOR = 8
+-NANO_VERSION = $(NANO_VERSION_MAJOR).6
++NANO_VERSION = $(NANO_VERSION_MAJOR).7
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
