@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6805DD43370
-	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:58:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 936D3D4337D
+	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:58:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2D457840A0;
-	Fri, 12 Dec 2025 07:58:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4A29D840CD;
+	Fri, 12 Dec 2025 07:58:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z4gLRXkrqsHs; Fri, 12 Dec 2025 07:58:10 +0000 (UTC)
+ id olRJF8vVDyPs; Fri, 12 Dec 2025 07:58:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E970683F15
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C81783F27
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765526264;
-	bh=O8tmduTkZvi86i4NmxXx1m61NdsM+HIqkr1603ZN/58=;
+	s=default; t=1765526265;
+	bh=XW00B8XvnWaixP/IFI8cL8j7/hKgYGin2Or9LgiJ4A0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=EkFwOb4Ez9BxtSnyId8M2+kG9C7JtyZO64xfD+EHx1rmiVpmtUsipULvmFUKnwMxP
-	 h5eF8RCkRpoRguyPa7XHTjOwCFiNNViKl8Lu0eOZflrqSSAyyQikTFl0oGX1DUsRe9
-	 rZqN4/SZJYsas+zs5WeSfkKeMukiD2sVq+g9saljFt4LKFWNB+x+6NAqb9D3AC7zGq
-	 TSCcYK9ndxhBN6B3cMf0g3QDlGQ+CZ98D/EKICNpsTEg9cimVI82ZsyEWlssoJXqST
-	 hkonEkXzNzShSkpKSkyptCMN8io5dFl/f6hBY1UPOswgn/sBBaxqKJcJJBfHCeIqMQ
-	 p6xmZOvB0TkNw==
+	b=ruq6jNyjbLzyQ9l6ekpJIxVmbnxJTh3Yn4KCuvsaktzRZ7PD80bRnxyrAEYMeWKft
+	 g39KoRT/LLl5VacDIk4BGQHEy/G/kIsOgsEUrZItBXv0g9jUrAVCZx/CwDv3REBFbk
+	 Z2CQ0OtUZ+ElG1i6QlyJuSllEGVedtYZNLL7yDK4Jo6mC59aaq8kk6jmM5OJ6ftlvf
+	 fRX6r/OHxT0MeNcH+/DNChA3eX1O6RUq6nW2+DHSaXEX0IQN7fPJRgoCS60c1j7h+K
+	 7V2+lFtuxQ6bdlV7HS3VK4ZNcD/i5WRHZ7c5d4hq12eVyji5wgcKrwfS09gzCAXdqn
+	 x58GAO24ZTF4w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E970683F15;
-	Fri, 12 Dec 2025 07:57:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9C81783F27;
+	Fri, 12 Dec 2025 07:57:45 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3C0DFE7
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:56:40 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 12ECC2C1
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:56:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D799F41121
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 040EA41157
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ADDEm8elwac2 for <buildroot@buildroot.org>;
- Fri, 12 Dec 2025 07:55:42 +0000 (UTC)
+ id y7hdf9DERDcC for <buildroot@buildroot.org>;
+ Fri, 12 Dec 2025 07:55:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 198EA41157
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80AFA41165
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 198EA41157
+ by smtp4.osuosl.org (Postfix) with ESMTP id 80AFA41165
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 18CB586C93; Fri, 12 Dec 2025 07:55:37 +0000 (UTC)
+ id 7FC0A85C4C; Fri, 12 Dec 2025 07:55:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 5 Dec 2025 21:56:55 +0100
+Date: Sun, 7 Dec 2025 14:23:18 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a805d5b9056597fa4c1f69c01d4e7d76c76cd414
-X-Git-Newrev: df4a87e6e6b733536df0ae15aaa83ba00e0a364a
+X-Git-Oldrev: c7770112edc91a8cafb8a96e65ff4db01c402686
+X-Git-Newrev: e3dce54d9cea599ca9d43868f9d19902e6caacb1
 X-Patchwork-Hint: ignore
-Message-Id: <20251212075537.18CB586C93@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/xilinx-prebuilt: add local versal xsa
- support
+Message-Id: <20251212075537.7FC0A85C4C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/flare-game: fix cmake 4
+ compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,60 +77,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df4a87e6e6b733536df0ae15aaa83ba00e0a364a
+commit: https://git.buildroot.net/buildroot/commit/?id=e3dce54d9cea599ca9d43868f9d19902e6caacb1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Most of the time, users will be running Vivado on their local host machine,
-and will generate a XSA (Xilinx Shell Archive) locally.
-
-Instead of requiring users to create a URL location for their XSA file,
-this patch improves ease of use by allowing users to work directly with
-just a path on the local host machine.
-
-BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA_LOCATION can thus be defined as either
-a simple local location or a URL location for the XSA file.
-
-In either case, a hash for the XSA file needs to be added to the
-boot/xilinx-prebuilt/xilinx-prebuilt.hash when using this option.
-
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- boot/xilinx-prebuilt/Config.in          | 6 +++---
- boot/xilinx-prebuilt/xilinx-prebuilt.mk | 3 +++
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ .../0001-Minimum-CMake-version-3.5.patch           | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/boot/xilinx-prebuilt/Config.in b/boot/xilinx-prebuilt/Config.in
-index a1e711e6cf..7926b6cb9e 100644
---- a/boot/xilinx-prebuilt/Config.in
-+++ b/boot/xilinx-prebuilt/Config.in
-@@ -68,9 +68,9 @@ config BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA_LOCATION
- 	  file. This URL can use any protocol recognized by Buildroot,
- 	  like http://, ftp://, file:// or scp://.
- 
--	  When pointing to a local XSA using file://, you may want to
--	  use a make variable like $(TOPDIR) to reference the root of
--	  the Buildroot tree.
-+	  When pointing to a local XSA using file:// or simply the
-+	  local path, you may want to use a make variable like
-+	  $(TOPDIR) to reference the root of the Buildroot tree.
- 
- 	  This option applies to either versal or versal2.
- 
-diff --git a/boot/xilinx-prebuilt/xilinx-prebuilt.mk b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-index 6bd16d663a..7433444924 100644
---- a/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-+++ b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-@@ -10,6 +10,9 @@ ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA),y)
- XILINX_PREBUILT_FILE = $(call qstrip,$(BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA_LOCATION))
- XILINX_PREBUILT_SITE = $(patsubst %/,%,$(dir $(XILINX_PREBUILT_FILE)))
- XILINX_PREBUILT_SOURCE = $(notdir $(XILINX_PREBUILT_FILE))
-+ifeq ($(findstring ://,$(XILINX_PREBUILT_FILE)),)
-+XILINX_PREBUILT_SITE_METHOD = file
-+endif
- define XILINX_PREBUILT_EXTRACT_CMDS
- 	$(UNZIP) $(XILINX_PREBUILT_DL_DIR)/$(XILINX_PREBUILT_SOURCE) -d $(@D)
- endef
+diff --git a/package/flare-game/0001-Minimum-CMake-version-3.5.patch b/package/flare-game/0001-Minimum-CMake-version-3.5.patch
+new file mode 100644
+index 0000000000..934dcddc74
+--- /dev/null
++++ b/package/flare-game/0001-Minimum-CMake-version-3.5.patch
+@@ -0,0 +1,26 @@
++From 5b61dfd69f4ecbaca6439caa9ae41b3168e4d21a Mon Sep 17 00:00:00 2001
++From: Justin Jacobs <jajdorkster@gmail.com>
++Date: Sat, 5 Apr 2025 18:31:03 -0400
++Subject: [PATCH] Minimum CMake version = 3.5
++
++From the CMake 4.0 release notes:
++> Compatibility with versions of CMake older than 3.5 has been removed.
++
++Upstream: https://github.com/flareteam/flare-game/commit/5b61dfd69f4ecbaca6439caa9ae41b3168e4d21a
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index d98c2ae5f..9c1750552 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,5 +1,5 @@
++ Project (Flare-Game LANGUAGES NONE)
++-cmake_minimum_required (VERSION 2.8.12)
+++cmake_minimum_required (VERSION 3.5)
++ 
++ Set (PACKAGE "FLARE-GAME")
++ Set (VERSION "1.14")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
