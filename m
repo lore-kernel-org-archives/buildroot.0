@@ -4,61 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB8B7D2CE17
-	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 21:27:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E464D1CDC6
+	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 21:27:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 74ABD407D0;
-	Sun,  7 Dec 2025 21:27:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 602CB407E1;
+	Sun,  7 Dec 2025 21:27:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q819oSvYL1Wy; Sun,  7 Dec 2025 21:27:54 +0000 (UTC)
+ id boD8GWyx5vgD; Sun,  7 Dec 2025 21:27:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9847C4056D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5D08407BC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765142874;
-	bh=5HO/4n6iSDfQ6yC/7ElXiXppX85XwwGcewfEzuK/n1I=;
+	s=default; t=1765142875;
+	bh=Xd1HKouFCZzUQ40LL+jsf7OJV87Z3Vm+hHCnSuShjzw=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=FCM/aB/fhWBNOWaUkQxxDfg1CtG3epF6tOoFTb1f5pNn+muS/48Otn+ma4SmDI2K9
-	 9JLzfs2AcPpxz2zBsmJksWAArCp0WmnZH1cAXNOAPYe4F66vMYZYe7uzEKbec7ts6/
-	 T2m8Nh3TCfFRe0nIBWk27UdeXqZl7JkCXRvryG8hYrkxs7Arae05Q+YpYhZxafBtZf
-	 HaHMPY5ZVbSqLyOsQsR44iJcC8mjH9tiOtKwRK2o4qov0nb6WzagiBMbif6tpTA+7P
-	 /1HTrYOU5E9zpyCW1jm9S4BvLFg1MKu3eVhGJMKFDUfe4r8QP24bhFupNFd8pSV9em
-	 pxzlDMX/0Zeww==
+	b=sbXcqnioHOYqrTM9m0bm3N76okwCtnb/gLtwC8zbqZMpk4xa9wvWfkAvX2+XyZtbr
+	 YR+PiPOpuaSqWrKgxw1GNAqCdJ7kQyioHI8FzX5HNKXZ69pIp+OlIoXagQ/BJ1MxGp
+	 E0qpWXWHbVRfD9injy0yWzcHQtahnHngzoAs/GFoKnfrVFVQJrFjMoMSb8VSmm+GeT
+	 Tceil5hZTIprVzoyGeBTT3Nu7aE+BYGKc8bfePWjk9rZ454aQ0YkBzQX2/Sq6aqskU
+	 PhWXYwq0WBgBoN0nrUn7YxKvT4v1378W8DalnfkX/LNzN5EL/UvNLqKJz299zBjxVv
+	 OWFVAhJvqW84A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9847C4056D;
-	Sun,  7 Dec 2025 21:27:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 93CFC2CF
+	by smtp4.osuosl.org (Postfix) with ESMTP id A5D08407BC;
+	Sun,  7 Dec 2025 21:27:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A737F2F0
  for <buildroot@buildroot.org>; Sun,  7 Dec 2025 21:27:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 86C6540516
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8DD3B821A3
  for <buildroot@buildroot.org>; Sun,  7 Dec 2025 21:27:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mefYccQZDi_I for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pBB7D4DvXUuC for <buildroot@buildroot.org>;
  Sun,  7 Dec 2025 21:27:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1B1A4056D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2D5B8219F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B1B1A4056D
+ by smtp1.osuosl.org (Postfix) with ESMTP id D2D5B8219F
  for <buildroot@buildroot.org>; Sun,  7 Dec 2025 21:27:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 96E7C86890; Sun,  7 Dec 2025 21:27:51 +0000 (UTC)
+ id C144C8689F; Sun,  7 Dec 2025 21:27:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 7 Dec 2025 21:29:19 +0100
+Date: Sun, 7 Dec 2025 21:52:48 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4d016a1d98f7cf850ee83d5c2003a2b66c72675b
-X-Git-Newrev: 3ce3e04d02aa6b8f1841b6faafa14260085fc350
+X-Git-Oldrev: 655accbfeaeaf61816ff504cb01f795c4c37ceb0
+X-Git-Newrev: 7bd818a06726b3bde02282bb9ae382a8e3af93be
 X-Patchwork-Hint: ignore
-Message-Id: <20251207212751.96E7C86890@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/glibc: use DESTDIR instead of
- install_root to fix build issue
+Message-Id: <20251207212751.C144C8689F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rdesktop: fix build error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,67 +75,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ce3e04d02aa6b8f1841b6faafa14260085fc350
+commit: https://git.buildroot.net/buildroot/commit/?id=7bd818a06726b3bde02282bb9ae382a8e3af93be
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Building a simple configuration such as:
+Fixes:
+https://autobuild.buildroot.net/results/8ad/8ad5d33f726fe57910a70df7c8f40a9568c2dfa7/
 
-BR2_aarch64=y
-BR2_FORCE_HOST_BUILD=y
-
-Under our reference Docker container, as an out-of-tree build:
-
-./utils/docker-run make O=output-test
-
-will fail during the glibc staging installation step with:
-
-/usr/bin/install -c -m 644 /home/thomas/buildroot/br/output-glibc/build/glibc-2.42-3-gbc13db73937730401d592b33092db6df806d193e/build/libc.a /usr/lib64/libc.a
-/usr/bin/install: cannot create regular file '/usr/lib64/libc.a': Permission denied
-
-The problem being that the install_root variable is for some reason
-lost along the way. We definitely pass it during the staging
-installation step, but then glibc calls a sub-make and in that
-submake, install_root is empty.
-
-Observations:
-
-- Building the same configuration inside the Docker container, but
-  in-tree, doesn't exhibit the problem.
-
-- Building outside of the Docker container, but with the same make
-  version as the one we build due to BR2_FORCE_HOST_BUILD=y doesn't
-  exhibit the problem.
-
-However, it turns out that glibc sets install_root to $(DESTDIR). And
-passing DESTDIR just works. So we drop our custom
-GLIBC_INSTALL_STAGING_OPTS to rely on the default one, and this fixes
-the problem. It's not extremely satisfying to not fully understand
-what's going on, but after spending quite some time on this, and
-having a trivial and actually pretty nice workaround, we simply
-propose to use this solution.
-
-There is no autobuilder issue as we're not using our Docker container
-to do autobuild builds.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glibc/glibc.mk | 2 --
- 1 file changed, 2 deletions(-)
+ .../0002-use-correct-modulus-and-exponent.patch    | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index b0fa66218a..a7727cbad8 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -60,8 +60,6 @@ GLIBC_SUBDIR = build
- 
- GLIBC_INSTALL_STAGING = YES
- 
--GLIBC_INSTALL_STAGING_OPTS = install_root=$(STAGING_DIR) install
--
- # Thumb build is broken, build in ARM mode
- ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
- GLIBC_EXTRA_CFLAGS += -marm
+diff --git a/package/rdesktop/0002-use-correct-modulus-and-exponent.patch b/package/rdesktop/0002-use-correct-modulus-and-exponent.patch
+new file mode 100644
+index 0000000000..f6989d5777
+--- /dev/null
++++ b/package/rdesktop/0002-use-correct-modulus-and-exponent.patch
+@@ -0,0 +1,29 @@
++From 53ba87dc174175e98332e22355ad8662c02880d6 Mon Sep 17 00:00:00 2001
++From: Markus Beth <markus.beth@zkrd.de>
++Date: Mon, 2 Dec 2019 11:22:13 +0100
++Subject: [PATCH] use correct modulus and exponent in rdssl_rkey_get_exp_mod
++
++Upstream: https://github.com/rdesktop/rdesktop/commit/53ba87dc174175e98332e22355ad8662c02880d6
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ ssl.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/ssl.c b/ssl.c
++index 930c7f94..0681a890 100644
++--- a/ssl.c
+++++ b/ssl.c
++@@ -307,10 +307,10 @@ rdssl_rkey_get_exp_mod(RDSSL_RKEY * rkey, uint8 * exponent, uint32 max_exp_len,
++ {
++ 	size_t outlen;
++ 
++-	outlen = (mpz_sizeinbase(modulus, 2) + 7) / 8;
+++	outlen = (mpz_sizeinbase(rkey->n, 2) + 7) / 8;
++ 	if (outlen > max_mod_len)
++ 		return 1;
++-	outlen = (mpz_sizeinbase(exponent, 2) + 7) / 8;
+++	outlen = (mpz_sizeinbase(rkey->e, 2) + 7) / 8;
++ 	if (outlen > max_exp_len)
++ 		return 1;
++ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
