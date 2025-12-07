@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DA81D1CDC6
-	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 14:47:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB473D1CDC6
+	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 14:47:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 270FA605EB;
-	Sun,  7 Dec 2025 14:47:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C4CEB605FF;
+	Sun,  7 Dec 2025 14:47:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yUkaHAftbYyC; Sun,  7 Dec 2025 14:47:26 +0000 (UTC)
+ id lNMTb2gCeMQH; Sun,  7 Dec 2025 14:47:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D42660AC8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 704C460B95
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765118846;
-	bh=ZgyZUM1SM3ZQF58QokfJ02LaY1scv3KGgaslJjUV/iU=;
+	s=default; t=1765118858;
+	bh=2BSc0Uj9kV5jswSlYOrhsTQiExSdQSdEcNV6IVPNeaU=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=VBFprS9WiCgesacypPH6XGCBYgBM4tWZZYRM3CC+tGCvVkjZ2Om19h6rgXLIox6X0
-	 /Bf8EMIMqS3dFPGUXdDs68eVOZ2DPuaqh7Iyvgjbz4+/P728PR4TmR/81bn9S7y+Hb
-	 6LhHTImkRcfryS5nTajmfCrdgIeMNhhtE161NpeVv1yGFNjekiehcMwVoQg04SLjMg
-	 Lvg/0QxGTukU4+DNO2MOGnjxX/fVtcrkPQrwGAZYyz83ju35S4KT9jYLyceTMhEnia
-	 YTmR0KoYdD3nAPdp2RLhld1LFm6Q5KOCmESS4FYTteiKHz6QSvOmHyqsWAJjvgWJoT
-	 GHkzquvwtSalw==
+	b=WkQTspYfWuQX0QYiFSjgOpay8rDNmOYrvqGTyFO9Dbju4lgafbAuDhfTIyetvcWGt
+	 Z9yTUO9wcoDct4Zw/ri/RbrAHgUSgPbQDxht+bzHUNXsGcs365/4ZPFHRGDWvulL47
+	 eyG3+PxuaA0IIWM/ppzEMmwrzL7OcpRa4V8PPWZuB6egFkkehAH4r0ictf5N6mfis1
+	 WIqxE2ICB1ANY6aiUZKdHtGOW82BQnpGv9OIt2Zljbg8HDLwYTVRaKS8e61o1Tqkss
+	 bKqnLu39HO4JN0tEAMXTduE1OnnhLZl0lDmKJntZROR68oaF2r5eGSqW75qHhq5Y/u
+	 +HrC2ZIwr2ogg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1D42660AC8;
-	Sun,  7 Dec 2025 14:47:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id D2948151
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:47:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 704C460B95;
+	Sun,  7 Dec 2025 14:47:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9F1C02CF
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:47:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CF690821FB
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:47:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 869E440692
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:47:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s6XsAQw1S7Uz for <buildroot@buildroot.org>;
- Sun,  7 Dec 2025 14:47:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KvBMMw_WCya6 for <buildroot@buildroot.org>;
+ Sun,  7 Dec 2025 14:47:36 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B06DA80D5F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B06DA80D5F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 13E2A4068F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13E2A4068F
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B06DA80D5F
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:47:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 13E2A4068F
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:47:35 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c020.dip0.t-ipconnect.de [79.214.192.32])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id E2C74A4C0CC2;
- Sun,  7 Dec 2025 15:42:58 +0100 (CET)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 37DF8A4C0CCD;
+ Sun,  7 Dec 2025 15:42:59 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:56734)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vSFyI-00000000416-0CKg;
+ (envelope-from <bernd@kuhls.net>) id 1vSFyI-00000000416-0xN8;
  Sun, 07 Dec 2025 14:42:46 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun,  7 Dec 2025 15:42:33 +0100
-Message-ID: <20251207144243.3696572-24-bernd@kuhls.net>
+Date: Sun,  7 Dec 2025 15:42:34 +0100
+Message-ID: <20251207144243.3696572-25-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251207144243.3696572-1-bernd@kuhls.net>
 References: <20251207144243.3696572-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++++
+X-Spamd-Bar: -
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1765118578;
- bh=RbOtKux1aDXZmFd6HUHdluEPfx6wF/RMT60uFsB7vmQ=;
+ s=kas202511301023; t=1765118579;
+ bh=1WpYaOVcN+rvEOkshuFxTh9RStbLNjptspe7CX3sYsU=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=hkOAbU904HkQzfk1pVjf/4NNHmOe3Jl+8/jMXHCRz3DngNrYhDCbdFv8l+78EfwPL
- 2FBncTjCS5Q8X60AAEbOO0GV1n3/TUAfN5xUehdj6eD6DATbMqHuPQhRKGnkxAzHXc
- hHOwHRawvqFv4jGmYhuwnBB+UDMzrLqTYNJvzlOWAI+mFOvHj/xYkhOWxuU6/HjJWU
- 5sMrZL9DTCM33GhIQ2AiG/yDO5fY1H10XYUwOPVYLTyq6/fL8tMnHUUvcFTO2Mm8kP
- DEfpbcHcE1WN4CfAYKcL/vxZH4Z9J1z+0Ay8xKiCZWSac7rLn/CUklezwOdaFdkbyy
- ScGZ7Cj4GdZOw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=QrY+Zl759wpRPJ0Hv5aE/IXc5A9+mU0nKZz/MVhp/MkwsuqMkRWu1cg5lHAPIbJ1Q
+ FyIDa0/h3DnTD17fZUjaBHkHIuMKtwsJimb4iLxvIefH2gRaFAsqbruzvxUqLflQk8
+ pU1I0pmzTnsfL6ClVW6iAqwCqwdrFos+cq51LD5ANj9rmNxn78TUHKn7Aj6HK/RmyF
+ Bn8EdO6NusA8KHGrIoAEt7FKYdL/aakKkWSHtGZ6OZ04oZzY+o4nBgw1Iw7B0yyFep
+ /jNZHOQQO+e+yDTv+fO8mxp7QC1Fab40MHtktyb8jiuETwwJXsGI5SNBIznfTAZ9ID
+ 8CKYHzejrD2CA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=hkOAbU90
-Subject: [Buildroot] [PATCH/next 24/33] package/{libtorrent,
- rtorrent}: bump version to 0.15.3
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=QrY+Zl75
+Subject: [Buildroot] [PATCH/next 25/33] package/resiprocate: bump version to
+ 1.13.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,181 +109,386 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Release notes:
+https://github.com/resiprocate/resiprocate/blob/resiprocate-1.13.2/CHANGELOG.md
+
+Switched _SITE to github, the previous URL redirects to github.com.
+
 Removed patches which are included in this release.
 
-Switched SITE to github according to http://rtorrent.net/
+License file was renamed and updated:
+https://github.com/resiprocate/resiprocate/commits/resiprocate-1.13.2/LICENSE.md
 
-Both packages need to be bumped together due to version check for
-libtorrent by rtorrent:
-https://github.com/rakshasa/rtorrent/commit/6f8c1246dc013d1d5c39ecd66373346ac42fe746
-
-Fixes:
-https://autobuild.buildroot.net/results/a2e/a2e609caecc26f67134d0fed1c239e8d148e07fd/
+Switch build system to cmake, removed apps-specific option:
+- sipdial is built if OpenSSL is enabled:
+  https://github.com/resiprocate/resiprocate/blob/resiprocate-1.13.2/apps/CMakeLists.txt#L6
+- clicktocall build is broken
+  AddressTranslator.cxx: In member function 'void clicktocall::AddressTranslator::
+    addTranslation(const resip::Data&, const resip::Data&)':
+  AddressTranslator.cxx:55:16: error: assignment of read-only variable 'flags'
+     55 |          flags |= std::regex_constants::nosubs;
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .checkpackageignore                           |  2 --
- ...01-libtorrent.pc.in-add-Libs.Private.patch | 30 ----------------
- package/libtorrent/libtorrent.hash            |  2 +-
- package/libtorrent/libtorrent.mk              |  5 +--
- ...disable-execinfo-option-to-configure.patch | 34 -------------------
- package/rtorrent/rtorrent.hash                |  2 +-
- package/rtorrent/rtorrent.mk                  |  7 ++--
- 7 files changed, 8 insertions(+), 74 deletions(-)
- delete mode 100644 package/libtorrent/0001-libtorrent.pc.in-add-Libs.Private.patch
- delete mode 100644 package/rtorrent/0001-Added--disable-execinfo-option-to-configure.patch
+ Config.in.legacy                              |  7 ++
+ ...e-issue-compiling-with-Visual-Studio.patch | 95 -------------------
+ ...t-disable-use-of-legacy-OpenSSL-memo.patch | 38 --------
+ ...l-fix-typo-in-preprocessor-condition.patch | 25 -----
+ ...Security-cxx-remove-deprecated-OpenS.patch | 26 -----
+ package/resiprocate/Config.in                 |  9 +-
+ package/resiprocate/resiprocate.hash          |  5 +-
+ package/resiprocate/resiprocate.mk            | 54 +++++++----
+ 8 files changed, 43 insertions(+), 216 deletions(-)
+ delete mode 100644 package/resiprocate/0001-Fix-some-issue-compiling-with-Visual-Studio.patch
+ delete mode 100644 package/resiprocate/0002-rutil-OpenSSLInit-disable-use-of-legacy-OpenSSL-memo.patch
+ delete mode 100644 package/resiprocate/0003-rutil-fix-typo-in-preprocessor-condition.patch
+ delete mode 100644 package/resiprocate/0004-resip-stack-ssl-Security-cxx-remove-deprecated-OpenS.patch
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 3b3726bf04..dc70113fd1 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -607,7 +607,6 @@ package/libtalloc/0001-buildtools-wafsamba-add-disable-stack-protector-opti.patc
- package/libtelnet/0001-fix-compilation-without-zlib.patch lib_patch.Upstream
- package/libtomcrypt/0001-fix-CVE-2019-17362.patch lib_patch.Upstream
- package/libtommath/0001-Build-test-bn_mp_set_double-c-on-more-platforms.patch lib_patch.Upstream
--package/libtorrent/0001-libtorrent.pc.in-add-Libs.Private.patch lib_patch.Upstream
- package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch lib_patch.Upstream
- package/libuio/0001-configure.ac-set-automake-strictness-to-foreign.patch lib_patch.Upstream
- package/liburcu/0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch lib_patch.Upstream
-@@ -909,7 +908,6 @@ package/rpi-userland/0005-dtmerge-add-missing-include-for-va_list.patch lib_patc
- package/rpi-userland/0006-interface-vcos-pthreads-CMakeLists.txt-fix-build-wit.patch lib_patch.Upstream
- package/rpi-userland/0007-GLES2-gl2ext.h-add-GLint64-GLuint64-and-GLsync-typed.patch lib_patch.Upstream
- package/rt-tests/0001-Fix-a-build-issue-with-uClibc-ng.patch lib_patch.Upstream
--package/rtorrent/0001-Added--disable-execinfo-option-to-configure.patch lib_patch.Upstream
- package/rubix/0001-dont-use-legacy-functions.patch lib_patch.Upstream
- package/rubix/0002-misc-fixes.patch lib_patch.Sob lib_patch.Upstream
- package/rygel/S99rygel Shellcheck lib_sysv.Indent lib_sysv.Variables
-diff --git a/package/libtorrent/0001-libtorrent.pc.in-add-Libs.Private.patch b/package/libtorrent/0001-libtorrent.pc.in-add-Libs.Private.patch
+diff --git a/Config.in.legacy b/Config.in.legacy
+index b2adbc2277..6a7e149709 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2026.02"
+ 
++config BR2_PACKAGE_RESIPROCATE_APPS
++	bool "resiprocate apps support option removed"
++	select BR2_LEGACY
++	help
++	  The build system does not contain an apps-specific option
++	  anymore.
++
+ config BR2_PACKAGE_MESA3D_VDPAU
+ 	bool "mesa3d Gallium VDPAU state tracker support removed"
+ 	select BR2_LEGACY
+diff --git a/package/resiprocate/0001-Fix-some-issue-compiling-with-Visual-Studio.patch b/package/resiprocate/0001-Fix-some-issue-compiling-with-Visual-Studio.patch
 deleted file mode 100644
-index 7d363d2939..0000000000
---- a/package/libtorrent/0001-libtorrent.pc.in-add-Libs.Private.patch
+index 2157ea0450..0000000000
+--- a/package/resiprocate/0001-Fix-some-issue-compiling-with-Visual-Studio.patch
 +++ /dev/null
-@@ -1,30 +0,0 @@
--From a86219e725441eb87321fa3e24531dafa54ee674 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 20 Oct 2019 20:23:19 +0200
--Subject: [PATCH] libtorrent.pc.in: add Libs.Private
+@@ -1,95 +0,0 @@
+-From be76b10a50749e2e11dce8dcc38b414a7f9d8747 Mon Sep 17 00:00:00 2001
+-From: Ben Walden <bwalden@redboxvoice.com>
+-Date: Sat, 22 Aug 2020 23:14:11 +0100
+-Subject: [PATCH] Fix some issue compiling with Visual Studio 16.7.0 and tidy
+- up Visual Studio 16 project files
 -
--Add Libs.Private: -lz so applications that want to link statically with
--libtorrent (such as rtorrent) will know that they must link with -lz
--
--Fixes:
-- - http://autobuild.buildroot.org/results/075598e1699c2ac20a4dfbcb5695bbb7343f9a86
--
+-Upstream: https://github.com/resiprocate/resiprocate/commit/be76b10a50749e2e11dce8dcc38b414a7f9d8747
+-[Retrieved (and updated to keep only RendKa.cxx update)]
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/rakshasa/libtorrent/pull/202]
 ----
-- libtorrent.pc.in | 1 +
-- 1 file changed, 1 insertion(+)
+- VisualStudioReadme.htm                        |   65 +
+- contrib/GeoIP/GeoIP_12_0.vcxproj              |  550 -------
+- contrib/GeoIP/GeoIP_16_0.vcxproj              |   93 +-
+- .../db/build_windows/db_static_12_0.vcxproj   | 1260 -----------------
+- .../db/build_windows/db_static_16_0.vcxproj   |  696 +--------
+- contrib/db/dbinc/atomic.h                     |    4 +-
+- contrib/db/mp/mp_fget.c                       |    4 +-
+- contrib/db/mp/mp_mvcc.c                       |    4 +-
+- contrib/db/mp/mp_region.c                     |    4 +-
+- contrib/db/mutex/mut_method.c                 |    2 +-
+- contrib/pcre/pcre_12_0.vcxproj                |  466 ------
+- contrib/pcre/pcre_16_0.vcxproj                |  159 +--
+- contrib/popt/popt_12_0.vcxproj                |  394 ------
+- contrib/popt/popt_16_0.vcxproj                |  120 +-
+- reSIProcate_16_0.sln                          |   58 +-
+- .../queuetostream_12_0.vcxproj                |  582 --------
+- .../queuetostream_16_0.vcxproj                |  207 ++-
+- repro/repro_12_0.vcxproj                      |  825 -----------
+- repro/repro_12_0.vcxproj.filters              |   47 -
+- repro/repro_16_0.vcxproj                      |  159 ++-
+- repro/reprocmd/reprocmd_12_0.vcxproj          |  597 --------
+- repro/reprocmd/reprocmd_16_0.vcxproj          |  139 +-
+- repro/reprolib_12_0.vcxproj                   |  596 --------
+- repro/reprolib_12_0.vcxproj.filters           |  136 --
+- repro/reprolib_16_0.vcxproj                   |  132 +-
+- resip/dum/dum_12_0.vcxproj                    |  615 --------
+- resip/dum/dum_16_0.vcxproj                    |  124 +-
+- resip/dum/test/basicCall_12_0.vcxproj         |  621 --------
+- resip/dum/test/basicCall_16_0.vcxproj         |  145 +-
+- resip/dum/test/basicClient_12_0.vcxproj       |  653 ---------
+- resip/dum/test/basicClient_16_0.vcxproj       |  158 +--
+- resip/dum/test/basicMessage_12_0.vcxproj      |  615 --------
+- resip/dum/test/basicMessage_16_0.vcxproj      |  141 +-
+- resip/dum/test/basicRegister_12_0.vcxproj     |  615 --------
+- resip/dum/test/basicRegister_16_0.vcxproj     |  137 +-
+- resip/rend/RendKa.cxx                         |    2 +-
+- resip/rend/rend_12_0.vcxproj                  |  352 -----
+- resip/rend/rend_16_0.vcxproj                  |   89 +-
+- resip/stack/resiprocate_12_0.vcxproj          |  873 ------------
+- resip/stack/resiprocate_12_0.vcxproj.filters  |  351 -----
+- resip/stack/resiprocate_16_0.vcxproj          |  165 ++-
+- resip/stack/test/test_12_0.vcxproj            |  627 --------
+- resip/stack/test/test_16_0.vcxproj            |  171 ++-
+- rutil/dns/ares/ares_12_0.vcxproj              |  488 -------
+- rutil/dns/ares/ares_12_0.vcxproj.filters      |   34 -
+- rutil/dns/ares/ares_16_0.vcxproj              |  159 +--
+- rutil/rutil_12_0.vcxproj                      |  604 --------
+- rutil/rutil_16_0.vcxproj                      |  153 +-
+- 48 files changed, 1409 insertions(+), 13782 deletions(-)
+- delete mode 100644 contrib/GeoIP/GeoIP_12_0.vcxproj
+- delete mode 100644 contrib/db/build_windows/db_static_12_0.vcxproj
+- delete mode 100644 contrib/pcre/pcre_12_0.vcxproj
+- delete mode 100644 contrib/popt/popt_12_0.vcxproj
+- delete mode 100644 repro/accountingconsumers/queuetostream_12_0.vcxproj
+- delete mode 100644 repro/repro_12_0.vcxproj
+- delete mode 100644 repro/repro_12_0.vcxproj.filters
+- delete mode 100644 repro/reprocmd/reprocmd_12_0.vcxproj
+- delete mode 100644 repro/reprolib_12_0.vcxproj
+- delete mode 100644 repro/reprolib_12_0.vcxproj.filters
+- delete mode 100644 resip/dum/dum_12_0.vcxproj
+- delete mode 100644 resip/dum/test/basicCall_12_0.vcxproj
+- delete mode 100644 resip/dum/test/basicClient_12_0.vcxproj
+- delete mode 100644 resip/dum/test/basicMessage_12_0.vcxproj
+- delete mode 100644 resip/dum/test/basicRegister_12_0.vcxproj
+- delete mode 100644 resip/rend/rend_12_0.vcxproj
+- delete mode 100644 resip/stack/resiprocate_12_0.vcxproj
+- delete mode 100644 resip/stack/resiprocate_12_0.vcxproj.filters
+- delete mode 100644 resip/stack/test/test_12_0.vcxproj
+- delete mode 100644 rutil/dns/ares/ares_12_0.vcxproj
+- delete mode 100644 rutil/dns/ares/ares_12_0.vcxproj.filters
+- delete mode 100644 rutil/rutil_12_0.vcxproj
 -
--diff --git a/libtorrent.pc.in b/libtorrent.pc.in
--index cf6612bc..6108f7e9 100644
----- a/libtorrent.pc.in
--+++ b/libtorrent.pc.in
--@@ -7,4 +7,5 @@ Name: libtorrent
-- Description: A BitTorrent library
-- Version: @VERSION@
-- Libs: -L${libdir} -ltorrent
--+Libs.Private: -lz
-- Cflags: -I${includedir}
---- 
--2.23.0
--
-diff --git a/package/libtorrent/libtorrent.hash b/package/libtorrent/libtorrent.hash
-index 5c755c8bef..0895fcd87e 100644
---- a/package/libtorrent/libtorrent.hash
-+++ b/package/libtorrent/libtorrent.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  ed115a28f4ae8cfcd33b94a597c076ca74fd549867a26e4fac9505c27288e983  libtorrent-0.13.8.tar.gz
-+sha256  6a0b01e4c0da817fc06fa0cd0ca539d79a19eaed617e16da9e2d8ba066ea95dd  libtorrent-0.15.3.tar.gz
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
-diff --git a/package/libtorrent/libtorrent.mk b/package/libtorrent/libtorrent.mk
-index b966a72788..e4189ba957 100644
---- a/package/libtorrent/libtorrent.mk
-+++ b/package/libtorrent/libtorrent.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
- 
--LIBTORRENT_VERSION = 0.13.8
--LIBTORRENT_SITE = http://rtorrent.net/downloads
-+# When updating the version, please also update rtorrent
-+LIBTORRENT_VERSION = 0.15.3
-+LIBTORRENT_SITE = https://github.com/rakshasa/rtorrent/releases/download/v$(LIBTORRENT_VERSION)
- LIBTORRENT_DEPENDENCIES = host-pkgconf zlib
- LIBTORRENT_CONF_OPTS = --enable-aligned \
- 	--disable-instrumentation \
-diff --git a/package/rtorrent/0001-Added--disable-execinfo-option-to-configure.patch b/package/rtorrent/0001-Added--disable-execinfo-option-to-configure.patch
+-diff --git a/resip/rend/RendKa.cxx b/resip/rend/RendKa.cxx
+-index 8645f17636..8321ada1ee 100644
+---- a/resip/rend/RendKa.cxx
+-+++ b/resip/rend/RendKa.cxx
+-@@ -66,7 +66,7 @@ bool operator<(const RendKaAssoc& a, const RendKaAssoc& b)
+- 
+- struct RendKaConn 
+- {
+--   bool operator() (const RendKaAssocPtr& a, const RendKaAssocPtr& b) 
+-+   bool operator()(const RendKaAssocPtr& a, const RendKaAssocPtr& b) const
+-    {
+-       return *a < *b;
+-    }
+diff --git a/package/resiprocate/0002-rutil-OpenSSLInit-disable-use-of-legacy-OpenSSL-memo.patch b/package/resiprocate/0002-rutil-OpenSSLInit-disable-use-of-legacy-OpenSSL-memo.patch
 deleted file mode 100644
-index 4ff4182b61..0000000000
---- a/package/rtorrent/0001-Added--disable-execinfo-option-to-configure.patch
+index c333df849d..0000000000
+--- a/package/resiprocate/0002-rutil-OpenSSLInit-disable-use-of-legacy-OpenSSL-memo.patch
 +++ /dev/null
-@@ -1,34 +0,0 @@
--From 582e4e40256b43d3e5322168f1e1ed71ca70ab64 Mon Sep 17 00:00:00 2001
--From: rakshasa <sundell.software@gmail.com>
--Date: Wed, 16 Jun 2021 23:29:01 +0900
--Subject: [PATCH] Added '--disable-execinfo' option to configure.
+@@ -1,38 +0,0 @@
+-From e7c33f4e078e6e5dfa7dea796fa4ffb88f48a37a Mon Sep 17 00:00:00 2001
+-From: Daniel Pocock <daniel@pocock.pro>
+-Date: Thu, 4 Aug 2022 10:55:30 +0200
+-Subject: [PATCH] rutil: OpenSSLInit: disable use of legacy OpenSSL memory leak
+- checking with OpenSSL 3.0 and later
 -
--[Retrieved (and backported) from:
--https://github.com/rakshasa/rtorrent/commit/582e4e40256b43d3e5322168f1e1ed71ca70ab64]
--Signed-off-by: Fabrice Fontaine <Fontaine.fabrice@gmail.com>
+-Upstream: https://github.com/resiprocate/resiprocate/commit/e7c33f4e078e6e5dfa7dea796fa4ffb88f48a37a
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ----
-- configure.ac | 11 ++++++++++-
-- 1 file changed, 10 insertions(+), 1 deletion(-)
+- rutil/ssl/OpenSSLInit.cxx | 7 ++++++-
+- 1 file changed, 6 insertions(+), 1 deletion(-)
 -
--diff --git a/configure.ac b/configure.ac
--index e3e7d3f1..0f45bc6a 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -27,7 +27,15 @@ TORRENT_WITHOUT_VARIABLE_FDSET
+-diff --git a/rutil/ssl/OpenSSLInit.cxx b/rutil/ssl/OpenSSLInit.cxx
+-index d42486f96b..65afed09fe 100644
+---- a/rutil/ssl/OpenSSLInit.cxx
+-+++ b/rutil/ssl/OpenSSLInit.cxx
+-@@ -69,14 +69,19 @@ OpenSSLInit::OpenSSLInit()
+- 	CRYPTO_set_dynlock_lock_callback(::resip_OpenSSLInit_dynLockFunction);
+- #endif
 - 
-- AC_SYS_LARGEFILE
+-+/* The OpenSSL memory leak checking has been deprecated since
+-+   OpenSSL v3.0.  OpenSSL developers recommend that we rely
+-+   on modern compilers to provide the same functionality. */
+- #if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined(LIBRESSL_VERSION_NUMBER)
+- 	CRYPTO_malloc_debug_init();
+- 	CRYPTO_set_mem_debug_options(V_CRYPTO_MDEBUG_ALL);
+--#else
+-+#elsif (OPENSSL_VERSION_NUMBER < 0x30000000L)
+- 	CRYPTO_set_mem_debug(1);
+- #endif
 - 
---TORRENT_CHECK_EXECINFO
--+AC_ARG_ENABLE(execinfo,
--+  AC_HELP_STRING([--disable-execinfo], [disable libexecinfo [[default=enable]]]),
--+  [
--+    if test "$enableval" = "yes"; then
--+      TORRENT_CHECK_EXECINFO
--+    fi
--+  ],[
--+    TORRENT_CHECK_EXECINFO
--+  ])
+-+#if (OPENSSL_VERSION_NUMBER < 0x30000000L) || defined(LIBRESSL_VERSION_NUMBER)
+- 	CRYPTO_mem_ctrl(CRYPTO_MEM_CHECK_ON);
+-+#endif
 - 
-- TORRENT_ENABLE_ARCH
-- TORRENT_WITH_SYSROOT
+- 	SSL_library_init();
+- 	SSL_load_error_strings();
+diff --git a/package/resiprocate/0003-rutil-fix-typo-in-preprocessor-condition.patch b/package/resiprocate/0003-rutil-fix-typo-in-preprocessor-condition.patch
+deleted file mode 100644
+index 5cbe5871d0..0000000000
+--- a/package/resiprocate/0003-rutil-fix-typo-in-preprocessor-condition.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-From 53302195c339dfaa104788a50aa900a48dbff777 Mon Sep 17 00:00:00 2001
+-From: Andrey Semashev <andrey.semashev@gmail.com>
+-Date: Sat, 10 Sep 2022 12:15:06 +0200
+-Subject: [PATCH] rutil: fix typo in preprocessor condition
+-
+-Upstream: https://github.com/resiprocate/resiprocate/commit/53302195c339dfaa104788a50aa900a48dbff777
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- rutil/ssl/OpenSSLInit.cxx | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/rutil/ssl/OpenSSLInit.cxx b/rutil/ssl/OpenSSLInit.cxx
+-index 65afed09fe..0d87a9f9d8 100644
+---- a/rutil/ssl/OpenSSLInit.cxx
+-+++ b/rutil/ssl/OpenSSLInit.cxx
+-@@ -75,7 +75,7 @@ OpenSSLInit::OpenSSLInit()
+- #if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined(LIBRESSL_VERSION_NUMBER)
+- 	CRYPTO_malloc_debug_init();
+- 	CRYPTO_set_mem_debug_options(V_CRYPTO_MDEBUG_ALL);
+--#elsif (OPENSSL_VERSION_NUMBER < 0x30000000L)
+-+#elif (OPENSSL_VERSION_NUMBER < 0x30000000L)
+- 	CRYPTO_set_mem_debug(1);
+- #endif
 - 
-diff --git a/package/rtorrent/rtorrent.hash b/package/rtorrent/rtorrent.hash
-index 0403664639..fa3d8da0d1 100644
---- a/package/rtorrent/rtorrent.hash
-+++ b/package/rtorrent/rtorrent.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  9edf0304bf142215d3bc85a0771446b6a72d0ad8218efbe184b41e4c9c7542af  rtorrent-0.9.8.tar.gz
-+sha256  6dfd42c19e6ff2f5ee8b99855314cef4f10bd669663c2670cc85fd6a4e2c4e40  rtorrent-0.15.3.tar.gz
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/rtorrent/rtorrent.mk b/package/rtorrent/rtorrent.mk
-index 210b1d34dc..815bf0044b 100644
---- a/package/rtorrent/rtorrent.mk
-+++ b/package/rtorrent/rtorrent.mk
-@@ -4,13 +4,12 @@
+diff --git a/package/resiprocate/0004-resip-stack-ssl-Security-cxx-remove-deprecated-OpenS.patch b/package/resiprocate/0004-resip-stack-ssl-Security-cxx-remove-deprecated-OpenS.patch
+deleted file mode 100644
+index 2b595d64c1..0000000000
+--- a/package/resiprocate/0004-resip-stack-ssl-Security-cxx-remove-deprecated-OpenS.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From 88f98702d908549d888aa7f0ee1b0763e09662b1 Mon Sep 17 00:00:00 2001
+-From: Daniel Pocock <daniel@pocock.pro>
+-Date: Thu, 4 Aug 2022 11:09:43 +0200
+-Subject: [PATCH] resip/stack: ssl/Security.cxx: remove deprecated OpenSSL
+- ERR_GET_FUNC, not required
+-
+-Upstream: https://github.com/resiprocate/resiprocate/commit/88f98702d908549d888aa7f0ee1b0763e09662b1
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- resip/stack/ssl/Security.cxx | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/resip/stack/ssl/Security.cxx b/resip/stack/ssl/Security.cxx
+-index 75dc6d838a..23c2ebbf09 100644
+---- a/resip/stack/ssl/Security.cxx
+-+++ b/resip/stack/ssl/Security.cxx
+-@@ -967,7 +967,7 @@ BaseSecurity::addPrivateKeyPEM( PEMType type,
+-          char buffer[120];
+-          unsigned long err = ERR_get_error();
+-          ERR_error_string(err, buffer);
+--         if(ERR_GET_LIB(err) == ERR_LIB_EVP && ERR_GET_FUNC(err) == EVP_F_EVP_DECRYPTFINAL_EX && ERR_GET_REASON(err) == EVP_R_BAD_DECRYPT)
+-+         if(ERR_GET_LIB(err) == ERR_LIB_EVP && ERR_GET_REASON(err) == EVP_R_BAD_DECRYPT)
+-          {
+-             ErrLog(<< "Could not read private key (error=" << buffer << ") - likely incorrect password provided, may load correctly when transports are added with appropriate password");
+-          }
+diff --git a/package/resiprocate/Config.in b/package/resiprocate/Config.in
+index 7561b7c86c..ba68ad8e59 100644
+--- a/package/resiprocate/Config.in
++++ b/package/resiprocate/Config.in
+@@ -20,7 +20,7 @@ config BR2_PACKAGE_RESIPROCATE
+ 	  parsing) and libdum (SIP Dialog Usage Manager, a state
+ 	  machine for SIP dialogs).
+ 
+-	  https://www.resiprocate.org/
++	  https://github.com/resiprocate/resiprocate
+ 
+ if BR2_PACKAGE_RESIPROCATE
+ 
+@@ -40,11 +40,4 @@ config BR2_PACKAGE_RESIPROCATE_REND
+ 	  Rend is tool that is was created specifically to load test
+ 	  gtSIP based presence servers.
+ 
+-config BR2_PACKAGE_RESIPROCATE_APPS
+-	bool "resiprocate-apps"
+-	select BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_PCRE
+-	help
+-	  Build apps clicktocall and sipdial
+-
+ endif # BR2_PACKAGE_RESIPROCATE
+diff --git a/package/resiprocate/resiprocate.hash b/package/resiprocate/resiprocate.hash
+index 03336c64a2..93a7131141 100644
+--- a/package/resiprocate/resiprocate.hash
++++ b/package/resiprocate/resiprocate.hash
+@@ -1,4 +1,3 @@
+-# http://list.resiprocate.org/pipermail/resiprocate-announce/2020-May/000000.html
+-sha256  046826503d3c8682ae0e42101b28f903c5f988235f1ff4a98dbfb9066d0d3d49  resiprocate-1.12.0.tar.gz
+ # Locally Computed
+-sha256  16b0fd1938a10fcd145904cc2dad74500fef9d27fc15b44cf8e8f92011f94d35  COPYING
++sha256  059fda8f63c456fd61130d468a67655cfeafb5ba8ff5c1d0a55dc383f83e4fba  resiprocate-1.13.2.tar.gz
++sha256  8c93f7d6085486e9d24b7c6f9c662d92e0b65571003ad15d0827bb99fd924261  LICENSE.md
+diff --git a/package/resiprocate/resiprocate.mk b/package/resiprocate/resiprocate.mk
+index 58b942465c..ab8299302a 100644
+--- a/package/resiprocate/resiprocate.mk
++++ b/package/resiprocate/resiprocate.mk
+@@ -4,45 +4,57 @@
  #
  ################################################################################
  
--RTORRENT_VERSION = 0.9.8
--RTORRENT_SITE = http://rtorrent.net/downloads
-+# When updating the version, please also update libtorrent
-+RTORRENT_VERSION = 0.15.3
-+RTORRENT_SITE = https://github.com/rakshasa/rtorrent/releases/download/v$(RTORRENT_VERSION)
- RTORRENT_DEPENDENCIES = host-pkgconf libcurl libtorrent ncurses
- RTORRENT_LICENSE = GPL-2.0
- RTORRENT_LICENSE_FILES = COPYING
--# We're patching configure.ac
--RTORRENT_AUTORECONF = YES
- RTORRENT_CONF_OPTS = --disable-execinfo
+-RESIPROCATE_VERSION = 1.12.0
+-RESIPROCATE_SITE = https://www.resiprocate.org/files/pub/reSIProcate/releases
+-# For complete details see https://www.resiprocate.org/License
++RESIPROCATE_VERSION = 1.13.2
++RESIPROCATE_SITE = $(call github,resiprocate,resiprocate,resiprocate-$(RESIPROCATE_VERSION))
+ RESIPROCATE_LICENSE = VSL-1.0, BSD-3-Clause
+-RESIPROCATE_LICENSE_FILES = COPYING
++RESIPROCATE_LICENSE_FILES = LICENSE.md
+ RESIPROCATE_CPE_ID_VENDOR = resiprocate
+ RESIPROCATE_INSTALL_STAGING = YES
  
- $(eval $(autotools-package))
+-# Utilize c-ares from buildroot instead built in ARES library
+-# NOTE: resiprocate doesn't support --without-<feature> syntax as it will try
+-#       to build with package if specified
++RESIPROCATE_CONF_OPTS = -DWITH_C_ARES=ON
+ RESIPROCATE_DEPENDENCIES = c-ares
+-RESIPROCATE_CONF_OPTS = -with-c-ares \
+-	--with-sysroot="$(STAGING_DIR)"
++
++RESIPROCATE_CONF_OPTS += \
++	-DBUILD_QPID_PROTON=OFF \
++	-DBUILD_RECON=OFF \
++	-DBUILD_REFLOW=OFF \
++	-DBUILD_REPRO=OFF \
++	-DBUILD_RETURN=OFF \
++	-DBUILD_TFM=OFF \
++	-DHAVE_CLOCK_GETTIME_MONOTONIC_EXITCODE=0
++
++ifeq ($(BR2_PACKAGE_GEOIP),y)
++RESIPROCATE_CONF_OPTS += -DUSE_MAXMIND_GEOIP=ON
++RESIPROCATE_DEPENDENCIES += geoip
++else
++RESIPROCATE_CONF_OPTS += -DUSE_MAXMIND_GEOIP=OFF
++endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
++RESIPROCATE_CONF_OPTS += -DWITH_SSL=ON
+ RESIPROCATE_DEPENDENCIES += openssl host-pkgconf
+-RESIPROCATE_CONF_OPTS += --with-ssl
+-# Configure.ac does not include '-lz' when statically linking against openssl
+-RESIPROCATE_CONF_ENV += LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
++else
++RESIPROCATE_CONF_OPTS += -DWITH_SSL=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_POPT),y)
+-RESIPROCATE_CONF_OPTS += --with-popt
++RESIPROCATE_CONF_OPTS += -DUSE_POPT=ON
+ RESIPROCATE_DEPENDENCIES += popt
++else
++RESIPROCATE_CONF_OPTS += -DUSE_POPT=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_RESIPROCATE_DTLS_SUPPORT),y)
+-RESIPROCATE_CONF_OPTS += --with-dtls
++RESIPROCATE_CONF_OPTS += -DUSE_DTLS=ON
++else
++RESIPROCATE_CONF_OPTS += -DUSE_DTLS=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_RESIPROCATE_REND),y)
+-RESIPROCATE_CONF_OPTS += --with-rend
++RESIPROCATE_CONF_OPTS += -DBUILD_REND=ON
+ RESIPROCATE_DEPENDENCIES += boost
++else
++RESIPROCATE_CONF_OPTS += -DBUILD_REND=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_RESIPROCATE_APPS),y)
+-RESIPROCATE_CONF_OPTS += --with-apps
+-RESIPROCATE_DEPENDENCIES += pcre
+-endif
+-
+-$(eval $(autotools-package))
++$(eval $(cmake-package))
 -- 
 2.47.3
 
