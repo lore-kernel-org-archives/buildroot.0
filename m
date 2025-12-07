@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51C1AD3B7E8
-	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 16:02:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89ABCD1CDC6
+	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 16:02:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B20D60C18;
-	Sun,  7 Dec 2025 16:02:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 634E260C24;
+	Sun,  7 Dec 2025 16:02:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gc_FlvE6AjY9; Sun,  7 Dec 2025 16:02:42 +0000 (UTC)
+ id nvT81XGZdMeq; Sun,  7 Dec 2025 16:02:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6FE460C13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2718160C14
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765123362;
-	bh=9rFgdF7xXxZgK/YGlQma2oOtxN+R4DKj+cUH/Fya0UI=;
+	s=default; t=1765123363;
+	bh=Gn1XcGoofNQ76uNqdubSsIs5y32NwTk6420rT8AfUio=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ZOMegekN1fUw5C/iubTdi4PdD69Xtvgi3J+CHhI/DILsIBKLb/0IVOPvqP3Kmx233
-	 8vCuGnOK2qtiVxQIq0HAtycBnnQrjEhlvx267zbNQyAHYKDZKMRHjTZ4bjGj+aGZrd
-	 5fYtwFDObL9r7Bxs4Yun0Wd6Wb3QJujqA/LlfCT7++5rvdftv6MvHyJDIPxehkIfet
-	 LiiN6SBnSCfMbM5Hjt6HSKNKAbDWN8fMdGH0zCibf9Mj//skpCI7XmGBDsoQAnsie/
-	 BAAY5BfM5EqaSyfiowR9RM6KIN1QjvfKgibb9u+e4UUBqsSPhTLfbXCfkhbt9tXBZe
-	 +8iXK3olRu0NQ==
+	b=m+AXUbsAfgIhMjJtwTHXJpyhCByIvl5/dTBI2HP98AwUUFKsSMJlAVxtNlOz9sOfH
+	 DIVi/iZHjcWb935Uz9Y33wo9vUjRk0esR6r+5mCNarAZnm55KhhU26y6RXUP1QksU6
+	 setxDKYx+AGCwZgm1/icZk+bsD/fbaz+ltwjXZgf+IsW28bC9q4NqQJeqw8kdi7QEa
+	 bqvtKEsoQRkXiw6ZVWe9ID/VnX3emlI901CP6LDA95L4xVL/Dv9rNi3zDtQrIRmXjm
+	 xmteJY9EIRQaSwEBiBllRVWWC5zjVY6K7Q45DaDN66N27u4qRIfMiTWvf7Ifp/VUCd
+	 7qWjN6SPlu4YA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6FE460C13;
-	Sun,  7 Dec 2025 16:02:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1A64E151
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2718160C14;
+	Sun,  7 Dec 2025 16:02:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2B9512F0
  for <buildroot@buildroot.org>; Sun,  7 Dec 2025 16:02:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 90A144067B
+ by smtp1.osuosl.org (Postfix) with ESMTP id BF926822BF
  for <buildroot@buildroot.org>; Sun,  7 Dec 2025 16:02:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5q1e9sIQ3uXC for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id S6hNEy1wDETg for <buildroot@buildroot.org>;
  Sun,  7 Dec 2025 16:02:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9314140678
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B221822C6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9314140678
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9B221822C6
  for <buildroot@buildroot.org>; Sun,  7 Dec 2025 16:02:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9011C86717; Sun,  7 Dec 2025 16:02:25 +0000 (UTC)
+ id 98E6985DB7; Sun,  7 Dec 2025 16:02:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 7 Dec 2025 16:05:55 +0100
+Date: Sun, 7 Dec 2025 16:17:37 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: cac00e41b7e802fb4c9163bc50aa8036b85c16cf
-X-Git-Newrev: 4f41172f0d04710f165be3ef383b020919fc5c86
+X-Git-Oldrev: 4f41172f0d04710f165be3ef383b020919fc5c86
+X-Git-Newrev: cdb731f2cf64decbc24081c033df883c109ee9e9
 X-Patchwork-Hint: ignore
-Message-Id: <20251207160225.9011C86717@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libuecc: fix cmake 4
+Message-Id: <20251207160225.98E6985DB7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mariadb: fix cmake 4
  compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -77,178 +77,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f41172f0d04710f165be3ef383b020919fc5c86
+commit: https://git.buildroot.net/buildroot/commit/?id=cdb731f2cf64decbc24081c033df883c109ee9e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libuecc/0001-Fix-build-with-CMake-4.patch | 158 ++++++++++++++++++++++
- 1 file changed, 158 insertions(+)
+ package/mariadb/0002-cmake-version-REQUIRES.patch | 25 +++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/package/libuecc/0001-Fix-build-with-CMake-4.patch b/package/libuecc/0001-Fix-build-with-CMake-4.patch
+diff --git a/package/mariadb/0002-cmake-version-REQUIRES.patch b/package/mariadb/0002-cmake-version-REQUIRES.patch
 new file mode 100644
-index 0000000000..ecd54b4836
+index 0000000000..6c776f5d63
 --- /dev/null
-+++ b/package/libuecc/0001-Fix-build-with-CMake-4.patch
-@@ -0,0 +1,158 @@
-+From b3812bf5ab1777193c4b85863311c33997d141f9 Mon Sep 17 00:00:00 2001
-+From: Sven Eckelmann <sven@narfation.org>
-+Date: Mon, 1 Sep 2025 10:21:38 +0200
-+Subject: [PATCH] Fix build with CMake 4
++++ b/package/mariadb/0002-cmake-version-REQUIRES.patch
+@@ -0,0 +1,25 @@
++From 726cc3684b4de08934c2b14f347799fd8c3aac9a Mon Sep 17 00:00:00 2001
++From: Leonid Fedorov <leonid.fedorov@mariadb.com>
++Date: Tue, 30 Aug 2022 22:41:44 +0000
++Subject: [PATCH] Proper external_boost for storage manager, cmake version
++ REQUIRES
 +
-+CMake 4 dropped support for policies which were introduced before version
-+3.5. Trying to build uisng cmake 4 results in:
-+
-+    Compatibility with CMake < 3.5 has been removed from CMake.
-+
-+    Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
-+    to tell CMake that the project requires at least <min> but has been updated
-+    to work with policies introduced by <max> or earlier.
-+
-+    Or, add -DCMAKE_POLICY_VERSION_MINIMUM=3.5 to try configuring anyway.
-+
-+Just increasing minimum version to 3.18 (from 2020-07-15) fixes this
-+problem. This version is low enough to still support Debian bullseye or
-+Ubuntu 22.04.
-+
-+With this version increase, following policies are enabled
-+
-+* 3.18
-+  - CMP0108: A target cannot link to itself through an alias.
-+  - CMP0107: An ALIAS target cannot overwrite another target.
-+  - CMP0106: The Documentation module is removed.
-+  - CMP0105: Device link step uses the link options.
-+  - CMP0104: CMAKE_CUDA_ARCHITECTURES now detected for NVCC, empty CUDA_ARCHITECTURES not allowed.
-+  - CMP0103: Multiple export() with same FILE without APPEND is not allowed.
-+* 3.17
-+  - CMP0102: mark_as_advanced() does nothing if a cache entry does not exist.
-+  - CMP0101: target_compile_options honors BEFORE keyword in all scopes.
-+  - CMP0100: Let AUTOMOC and AUTOUIC process .hh header files.
-+  - CMP0099: Link properties are transitive over private dependencies of static libraries.
-+  - CMP0098: FindFLEX runs flex in CMAKE_CURRENT_BINARY_DIR when executing.
-+* 3.16
-+  - CMP0097: ExternalProject_Add with GIT_SUBMODULES "" initializes no submodules.
-+  - CMP0096: project() preserves leading zeros in version components.
-+  - CMP0095: RPATH entries are properly escaped in the intermediary CMake install script.
-+* 3.15
-+  - CMP0094: FindPython3, FindPython2 and FindPython use LOCATION for lookup strategy.
-+  - CMP0093: FindBoost reports Boost_VERSION in x.y.z format.
-+  - CMP0092: MSVC warning flags are not in CMAKE_{C,CXX}_FLAGS by default.
-+  - CMP0091: MSVC runtime library flags are selected by an abstraction.
-+  - CMP0090: export(PACKAGE) does not populate package registry by default.
-+  - CMP0089: Compiler id for IBM Clang-based XL compilers is now XLClang.
-+* 3.14
-+  - CMP0088: FindBISON runs bison in CMAKE_CURRENT_BINARY_DIR when executing.
-+  - CMP0087: install(SCRIPT | CODE) supports generator expressions.
-+  - CMP0086: UseSWIG honors SWIG_MODULE_NAME via -module flag.
-+  - CMP0085: IN_LIST generator expression handles empty list items.
-+  - CMP0084: The FindQt module does not exist for find_package().
-+  - CMP0083: Add PIE options when linking executable.
-+  - CMP0082: Install rules from add_subdirectory() are interleaved with those in caller.
-+* 3.13
-+  - CMP0081: Relative paths not allowed in LINK_DIRECTORIES target property.
-+  - CMP0080: BundleUtilities cannot be included at configure time.
-+  - CMP0079: target_link_libraries allows use with targets in other directories.
-+  - CMP0078: UseSWIG generates standard target names.
-+  - CMP0077: option() honors normal variables.
-+  - CMP0076: target_sources() command converts relative paths to absolute.
-+* 3.12
-+  - CMP0075: Include file check macros honor CMAKE_REQUIRED_LIBRARIES.
-+  - CMP0074: find_package uses PackageName_ROOT variables.
-+  - CMP0073: Do not produce legacy _LIB_DEPENDS cache entries.
-+* 3.11
-+  - CMP0072: FindOpenGL prefers GLVND by default when available.
-+* 3.10
-+  - CMP0071: Let AUTOMOC and AUTOUIC process GENERATED files.
-+  - CMP0070: Define file(GENERATE) behavior for relative paths.
-+* 3.9
-+  - CMP0069: INTERPROCEDURAL_OPTIMIZATION is enforced when enabled.
-+  - CMP0068: RPATH settings on macOS do not affect install_name.
-+* 3.8
-+  - CMP0067: Honor language standard in try_compile() source-file signature.
-+* 3.7
-+  - CMP0066: Honor per-config flags in try_compile() source-file signature.
-+* 3.4
-+  - CMP0065: Do not add flags to export symbols from executables without the ENABLE_EXPORTS target property.
-+  - CMP0064: Support new TEST if() operator.
-+* 3.3
-+  - CMP0063: Honor visibility properties for all target types.
-+  - CMP0062: Disallow install() of export() result.
-+  - CMP0061: CTest does not by default tell make to ignore errors (-i).
-+  - CMP0060: Link libraries by full path even in implicit directories.
-+  - CMP0059: Do not treat DEFINITIONS as a built-in directory property.
-+  - CMP0058: Ninja requires custom command byproducts to be explicit.
-+  - CMP0057: Support new IN_LIST if() operator.
-+* 3.2
-+  - CMP0056: Honor link flags in try_compile() source-file signature.
-+  - CMP0055: Strict checking for break() command.
-+* 3.1
-+  - CMP0054: Only interpret if() arguments as variables or keywords when unquoted.
-+  - CMP0053: Simplify variable reference and escape sequence evaluation.
-+  - CMP0052: Reject source and build dirs in installed INTERFACE_INCLUDE_DIRECTORIES.
-+  - CMP0051: List TARGET_OBJECTS in SOURCES target property.
-+* 3.0
-+  - CMP0050: Disallow add_custom_command SOURCE signatures.
-+  - CMP0049: Do not expand variables in target source entries.
-+  - CMP0048: project() command manages VERSION variables.
-+  - CMP0047: Use QCC compiler id for the qcc drivers on QNX.
-+  - CMP0046: Error on non-existent dependency in add_dependencies.
-+  - CMP0045: Error on non-existent target in get_target_property.
-+  - CMP0044: Case sensitive Lang_COMPILER_ID generator expressions.
-+  - CMP0043: Ignore COMPILE_DEFINITIONS_Config properties.
-+  - CMP0042: MACOSX_RPATH is enabled by default.
-+  - CMP0041: Error on relative include with generator expression.
-+  - CMP0040: The target in the TARGET signature of add_custom_command() must exist.
-+  - CMP0039: Utility targets may not have link dependencies.
-+  - CMP0038: Targets may not link directly to themselves.
-+  - CMP0037: Target names should not be reserved and should match a validity pattern.
-+  - CMP0036: The build_name command should not be called.
-+  - CMP0035: The variable_requires command should not be called.
-+  - CMP0034: The utility_source command should not be called.
-+  - CMP0033: The export_library_dependencies command should not be called.
-+  - CMP0032: The output_required_files command should not be called.
-+  - CMP0031: The load_command command should not be called.
-+  - CMP0030: The use_mangled_mesa command should not be called.
-+  - CMP0029: The subdir_depends command should not be called.
-+  - CMP0028: Double colon in target name means ALIAS or IMPORTED target.
-+  - CMP0027: Conditionally linked imported targets with missing include directories.
-+  - CMP0026: Disallow use of the LOCATION target property.
-+  - CMP0025: Compiler id for Apple Clang is now AppleClang.
-+  - CMP0024: Disallow include export result.
-+* 2.8
-+  - CMP0023: Plain and keyword target_link_libraries signatures cannot be mixed.
-+  - CMP0022: INTERFACE_LINK_LIBRARIES defines the link interface.
-+  - CMP0021: Fatal error on relative paths in INCLUDE_DIRECTORIES target property.
-+  - CMP0020: Automatically link Qt executables to qtmain target on Windows.
-+  - CMP0019: Do not re-expand variables in include and link information.
-+  - CMP0018: Ignore CMAKE_SHARED_LIBRARY_Lang_FLAGS variable.
-+  - CMP0017: Prefer files from the CMake module directory when including from there.
-+  - CMP0016: target_link_libraries() reports error if its only argument is not a target.
-+  - CMP0015: link_directories() treats paths relative to the source dir.
-+  - CMP0014: Input directories must have CMakeLists.txt.
-+  - CMP0013: Duplicate binary directories are not allowed.
-+  - CMP0012: if() recognizes numbers and boolean constants.
-+
-+Fixes: #1
-+Signed-off-by: Sven Eckelmann <sven@narfation.org>
-+
-+Upstream: https://github.com/neocturne/libuecc/commit/b3812bf5ab1777193c4b85863311c33997d141f9
++Upstream: https://github.com/mariadb-corporation/mariadb-columnstore-engine/commit/726cc3684b4de08934c2b14f347799fd8c3aac9a
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++[partial backport for 10.11.15]
 +---
-+ CMakeLists.txt | 2 +-
++ storage/columnstore/columnstore/CMakeLists.txt |  2 +-
 + 1 file changed, 1 insertion(+), 1 deletion(-)
 +
 +diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 779ac41..24bded3 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,4 +1,4 @@
-+-cmake_minimum_required(VERSION 2.6)
-++cmake_minimum_required(VERSION 3.18)
-+ project(LIBUECC C)
-+ set(PROJECT_VERSION 7)
++index 0be025103b..15f0eb0f48 100644
++--- a/storage/columnstore/columnstore/CMakeLists.txt
+++++ b/storage/columnstore/columnstore/CMakeLists.txt
++@@ -1,5 +1,5 @@
++ 
++-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
+++CMAKE_MINIMUM_REQUIRED(VERSION 3.12)
++ 
++ PROJECT(Columnstore)
 + 
 _______________________________________________
 buildroot mailing list
