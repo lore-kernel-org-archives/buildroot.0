@@ -1,89 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6B0BD2CE17
-	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 17:33:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D0F2D1CDC6
+	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 17:35:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D196E40738;
-	Sun,  7 Dec 2025 17:33:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 62F2560D80;
+	Sun,  7 Dec 2025 17:35:50 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id b87fU8iCErFW; Sun,  7 Dec 2025 17:35:48 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A3E2607A2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1765128948;
+	bh=VlkjcTTNf/tvPf4G5JDsYDdFhk8CJ+un4FRcT2SCisE=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=Tq8+4QnDM1omObKGBpvkNCpU9Tr3xFUfBlodptrnNfJv6tZnsxL+I+g45jKhQ37cZ
+	 xqDpc0sF4NcLw0xpWgU8Tv7D3LMP2J63z/22rSCxJgdZhz6FMZe1W/EWotqvRc0lLB
+	 xsBB7Y3+cjn81KSd9UTq5UJmlixHEeBgwS+wvrvkQrLGNChD1azhwxn7xetfMnjYS2
+	 1BIjFv67TIaJ+QgHa+/PrLotMBb3q0mBDaIh90Sm2pg/0bGi1lpV2KeDWn8EBseXHc
+	 CJjLwpQg/uFFejhe/14yCHQNUNhJLNjbpr7IcpZ4IMwuQEavxVqTBjv8Fg0MxDx5M0
+	 JiQUCx++Eh+oQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A3E2607A2;
+	Sun,  7 Dec 2025 17:35:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 57395E7
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 17:35:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3E342406F9
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 17:35:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id njwdSlWQqJXZ; Sun,  7 Dec 2025 17:33:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54A26406CD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765128802;
-	bh=DxZ3sPSr2cphIhhyvyku/vmPO3sitqiMv9Gos/nD2H8=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=b/KH04x0qSB+EVNLDXkKbDwc+SKXvLsjGyAxPODkzUYcBNgXBjPPtuhEgArHAag7B
-	 E0ozd5IdA1AHJ8CclKK7bpzxajnYtC6LwNHCHsgH1NDz1DFUq/r51M63rG5wwXtR0e
-	 sugvD2TK9HEb1SMKi+5kY+ervwivw/80V1NGKKvSD9cEeHzp/ofdClzla1W1mEUY1v
-	 S9++Y1ew+jeEkKu2O2xseL2SGsHDla68pyyFpbhtFD+5cqRLwyGcDzXNcprX+Dmf/v
-	 zX/QSaafxOCuFhbgINq72VY8PqtpP2Jc6AfyXflflNcjSeRLGJqBXjPhMC83Ct3eFM
-	 Fx0NGrvgJEnvg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 54A26406CD;
-	Sun,  7 Dec 2025 17:33:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0A0902CF
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 17:33:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DAFA5818C4
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 17:33:20 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fm4oIUh4yWUD for <buildroot@buildroot.org>;
- Sun,  7 Dec 2025 17:33:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ id 4ViQ4R62nI6D for <buildroot@buildroot.org>;
+ Sun,  7 Dec 2025 17:35:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7FE2E818AC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FE2E818AC
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7FE2E818AC
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 17:33:19 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1432903205; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sun, 07 Dec 2025 17:33:03 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vSId4-00000004bTg-3HL0;
- Sun, 07 Dec 2025 18:33:02 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A37F406CD
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9A37F406CD
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 17:35:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 835508680A; Sun,  7 Dec 2025 17:35:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Alexis =?utf-8?Q?Lothor=C3=A9?= via buildroot <buildroot@buildroot.org>
-Cc: Alexis =?utf-8?Q?Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
- =?utf-8?Q?Herv=C3=A9?= Codina <herve.codina@bootlin.com>,  Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20251206-libdbi_typo-v1-1-07d8e40b2242@bootlin.com> ("Alexis
- =?utf-8?Q?Lothor=C3=A9?= via buildroot"'s message of "Sat, 06 Dec 2025
- 18:59:22 +0100")
-References: <20251206-libdbi_typo-v1-1-07d8e40b2242@bootlin.com>
-Date: Sun, 07 Dec 2025 18:33:02 +0100
-Message-ID: <877buy9oz5.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=iZV/77jAgC3kVgaeDsB3b8zB48LbhuUPmju7i/d4O6m4RD+a5Fx3oiIx6TCGLwAHfq0IT2OERObYSgsYxBouysnR8wo/03RsKF34U4qyKkt89CDd6S/t12W+2K9w7LkZTUtcbcpKOWOBCGZ+VrvLM3BfcCHEEyn+mKIr3ZOaNne1ebsU5dQXQu9n6kuxRK1r39SPhYH+RYURmMdm4dVX7ou8Dn0s9XK7/+xpmvDEi+bNxLd/cF48GMjK2BKto+v540yDWZnsTxSD3kzpMYPNYlU0NOaxkxataCdnUK+VWKvQcsjHUj5ydNGd3+kfO88hvbtsDPrrm8PwkqqxdCzl2g==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=yGStkHQO1cGNIPD8eT/dNVkBBpiRK6b2andTmeDRkaQ=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=iZV/77jA
-Subject: Re: [Buildroot] [PATCH] package/libdbi: fix small typo in Config.in
+To: buildroot@buildroot.org
+Date: Sun, 7 Dec 2025 18:32:43 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3b04688e7f7283d0f8c88987ff0819c1a0bb1650
+X-Git-Newrev: 4d016a1d98f7cf850ee83d5c2003a2b66c72675b
+X-Patchwork-Hint: ignore
+Message-Id: <20251207173546.835508680A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libdbi: fix small typo in Config.in
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,26 +69,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============0901790675680106628=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIkFsZXhpcyIgPT0gQWxleGlzIExvdGhvcsOpIHZpYSBidWlsZHJvb3QgPGJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnPiB3cml0ZXM6CgogPiBXaGVuIGJyb3dzaW5nIHRoZSBhdmFpbGFibGUg
-RGF0YWJhc2UgcGFja2FnZXMsIGxpYmRiaSBhcHBlYXJzIGluIHRoZQogPiBtZW51Y29uZmlnIGFz
-ICJsaWRiaSIuCgogPiBGaXggdGhlIG1lbnVjb25maWcgZW50cnkgYnkgdXBkYXRpbmcgdGhlIHJl
-bGV2YW50IGJvb2xlYW4gbmFtZS4KCiA+IFNpZ25lZC1vZmYtYnk6IEFsZXhpcyBMb3Rob3LDqSA8
-YWxleGlzLmxvdGhvcmVAYm9vdGxpbi5jb20+CiA+IC0tLQogPiAgcGFja2FnZS9saWJkYmkvQ29u
-ZmlnLmluIHwgMiArLQogPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0
-aW9uKC0pCgogPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJkYmkvQ29uZmlnLmluIGIvcGFja2Fn
-ZS9saWJkYmkvQ29uZmlnLmluCiA+IGluZGV4IDEzYWMzNDRmODI4NC4uZDlhMTMxNjMxMWMxIDEw
-MDY0NAogPiAtLS0gYS9wYWNrYWdlL2xpYmRiaS9Db25maWcuaW4KID4gKysrIGIvcGFja2FnZS9s
-aWJkYmkvQ29uZmlnLmluCiA+IEBAIC0xLDUgKzEsNSBAQAogPiAgY29uZmlnIEJSMl9QQUNLQUdF
-X0xJQkRCSQogPiAtCWJvb2wgImxpZGJpIgogPiArCWJvb2wgImxpYmRiaSIKID4gIAlkZXBlbmRz
-IG9uICFCUjJfU1RBVElDX0xJQlMKID4gIAloZWxwCiA+ICAJICBsaWJkYmkgaW1wbGVtZW50cyBh
-IGRhdGFiYXNlLWluZGVwZW5kZW50IGFic3RyYWN0aW9uIGxheWVyCgpDb21taXR0ZWQsIHRoYW5r
-cy4KCi0tIApCeWUsIFBldGVyIEtvcnNnYWFyZApfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWls
-ZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
-aWxkcm9vdAo=
+--===============0901790675680106628==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=4d016a1d98f7cf850ee83d5c2003a2b66c72675b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+When browsing the available Database packages, libdbi appears in the
+menuconfig as "lidbi".
+
+Fix the menuconfig entry by updating the relevant boolean name.
+
+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libdbi/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/libdbi/Config.in b/package/libdbi/Config.in
+index 13ac344f82..d9a1316311 100644
+--- a/package/libdbi/Config.in
++++ b/package/libdbi/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_PACKAGE_LIBDBI
+-	bool "lidbi"
++	bool "libdbi"
+ 	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  libdbi implements a database-independent abstraction layer
+
+--===============0901790675680106628==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0901790675680106628==--
