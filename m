@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5A2AD1CDC6
-	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 14:45:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 798BDD2CE17
+	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 14:46:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A939D60BC8;
-	Sun,  7 Dec 2025 14:45:50 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N3fCaTryHt2Q; Sun,  7 Dec 2025 14:45:49 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19ABA60AC8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765118749;
-	bh=ymIfxvmAsij0Ad0dRm9SdjNZBV+VMPlwvEgF3PUYaJA=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=iybN8jZyJjP7/EpeuwuYrXYpHapOnLB0VKCkAs+b+0hS8kiGCrhc9uknhFmvrzjMm
-	 Mi1n98VmwF+88gjN1lUvBTkVjGMyfZES+7j75go4Z2PtxF62quVQdtbzh0bnH+nQij
-	 DNInvdov5pYz3kF+ymhqckZTqot3nLIUavD+IAEsM3xPnPLV8d6S/qFjmND+vnfMeL
-	 yFltWCL9rJ6Lt86Vu7xtQgAtKhgK7D6b7Stv7h7Wf5MUp7FzbSKNjXvvu8uu+2R8zX
-	 EP61u259U7SSNZxB4dM6jK6uTi5TdCLU/2pqQNfx9UTTMjj6Fx1qnpQuOnhqYOgUe5
-	 XKxQ0PzmTYmpQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 19ABA60AC8;
-	Sun,  7 Dec 2025 14:45:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7004F151
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:45:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 560FF82234
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:45:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 48D7A8226D;
+	Sun,  7 Dec 2025 14:46:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fwKHGEPW8_mv for <buildroot@buildroot.org>;
- Sun,  7 Dec 2025 14:45:47 +0000 (UTC)
+ id qHerLT_9O-jg; Sun,  7 Dec 2025 14:46:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 383FB82239
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1765118761;
+	bh=CMSSyz1xKkTcekXqBMnrcWGjl3sEesZ97BzZn6V6jOo=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Cc:From;
+	b=QzK9DoqK0RQ/GUNzxcyGn3vl85dLiKLd1cqFuDNO3vq+nRYr2MDKv9kM3/o6Wa9cx
+	 SrzvyFsqvhhEvKoINmGcoFRdhB7i3I+7/I00zvhPhcc1uwQLs9WHimlMREynG7eVsR
+	 pl2fMLvh+iQCajmi4rMRp9fE8E+OvofM07QSX/IO7mtEhiTQ7tAdEHJrHA3kZNOQvP
+	 kv6iRasCY52dL/srgXceibUGgVZTMFmKOGIS3pCsxUdo9vQKzohuyl5fY7h8keAirn
+	 LA32gKksHORywOr9g/DjOVrl9fyd1feDAtKQBajq5+vZrgmqPa9iAaW5ZGxXkoVm3m
+	 8Ne0odkoiE0ag==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 383FB82239;
+	Sun,  7 Dec 2025 14:46:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7BB1C151
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:46:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6D41D605FF
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:46:00 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j71d73dk-yke for <buildroot@buildroot.org>;
+ Sun,  7 Dec 2025 14:45:59 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 41D148221C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41D148221C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4FB09605EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FB09605EB
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 41D148221C
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:45:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4FB09605EB
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:45:59 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c020.dip0.t-ipconnect.de [79.214.192.32])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 57378A4C09C6;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id CD2F8A4C09E0;
  Sun,  7 Dec 2025 15:42:56 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:56734)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vSFyG-00000000416-3c6X;
+ (envelope-from <bernd@kuhls.net>) id 1vSFyG-00000000416-3wTI;
  Sun, 07 Dec 2025 14:42:45 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun,  7 Dec 2025 15:42:25 +0100
-Message-ID: <20251207144243.3696572-16-bernd@kuhls.net>
+Date: Sun,  7 Dec 2025 15:42:26 +0100
+Message-ID: <20251207144243.3696572-17-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251207144243.3696572-1-bernd@kuhls.net>
 References: <20251207144243.3696572-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1765118576;
- bh=ym0oMFzTszCB412t8q4Oepw307HfklXRgwsd+DrbZ6A=;
+ bh=y815Ek27WpEiOB3cwOvaKobfX5LolZd63FJ5oplwaKo=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=cunkpJbWAIgi+V5kS5Ry5jWU9I3Bzr7VR/FfFl9bW/RzE/7V1PWD6/cnSjq5a0qZ1
- tw6YGn2LTAyaKwsQDH/UqS3BnI/h+VWLJcF3dZKrn/tjdQno93R42qCbXQtY6AJj3a
- 8jNypTfZDTFmWYHedecY3mXnar/PvNTkzJdJrv5MBcVxUGUP5SP8AJQFldPjP2Ac/c
- PS5EmKJTHnkTZQrOVxjlCg9TKR8uVEXXh3I7nmkpTmhlINVJr/ADwXpNU5bcr+RMwm
- Vhewfx3a+CCtvsqlfVdcztTIPBE9s5AJ7HM5TPQQF13Zp2xaTvX1E0EkxSmqP9f2Vg
- 6qxuOpZHd1Fvg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=l2JxfqRv6zwjLJBJtfP2gri0JR7RHIYn6in1UZqClQl94hFGeZgtVV3lqIORi+Nz8
+ aP6PL7nZoiyYOVstj7PUAb+8CRkkmpK2k4vJ1jC4MXhMBdhevUVaN8DUh0g6WmSzLQ
+ 1PHDna9kB8+BKOTjeRuokCu9W7G1sOwaUgg6Z2NsIF8BRGFYmtI/5b8pma+JpHFKQF
+ TWad6HgdmpNTh2rvcQCAvqURLJd50OwDlXQsBh6vpnLDmr4v+1o/zW8f9roSgO9qA7
+ q5/2csgFY7BLDOe4MfAeRZqKJY3I4MdhOAUPleBBXpiGFd20rP4VWXDXS0ZxvJRJP5
+ dAmjLyp+OliBA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=cunkpJbW
-Subject: [Buildroot] [PATCH/next 16/33] package/rtty: bump version to 9.0.4
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=l2JxfqRv
+Subject: [Buildroot] [PATCH/next 17/33] package/supertuxkart: bump version
+ to 1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,39 +109,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://github.com/zhaojh329/rtty/releases
-
 Added sha256 hash provided by upstream.
+
+Added configure option to disable vulkan support:
+https://github.com/supertuxkart/stk-code/blob/1.5/CMakeLists.txt#L274
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/rtty/rtty.hash | 4 +++-
- package/rtty/rtty.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/supertuxkart/supertuxkart.hash | 3 ++-
+ package/supertuxkart/supertuxkart.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/rtty/rtty.hash b/package/rtty/rtty.hash
-index 004314eea1..95b7a6bcfa 100644
---- a/package/rtty/rtty.hash
-+++ b/package/rtty/rtty.hash
-@@ -1,2 +1,4 @@
--sha256  522b0fc5e032c3b84ac707abce8ac4ff5609900011f8f300ce4f4246abac0acc  rtty-8.1.2.tar.gz
-+# From https://github.com/zhaojh329/rtty/releases/tag/v9.0.4
-+sha256  3bfc5db341c40e451544a218b7ef2cc59329ce04c50824b8ce6e5b805504c9bd  rtty-9.0.4.tar.gz
-+# Locally computed
- sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-diff --git a/package/rtty/rtty.mk b/package/rtty/rtty.mk
-index 618971c9a3..4dbebdf12d 100644
---- a/package/rtty/rtty.mk
-+++ b/package/rtty/rtty.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/supertuxkart/supertuxkart.hash b/package/supertuxkart/supertuxkart.hash
+index 446a9de8ec..38b45f81a7 100644
+--- a/package/supertuxkart/supertuxkart.hash
++++ b/package/supertuxkart/supertuxkart.hash
+@@ -1,3 +1,4 @@
++# From https://github.com/supertuxkart/stk-code/releases/tag/1.5
++sha256  33cf8841e4ff4082d80b9248014295bbbea61d14683e86dff100e3ab8f7b27cb  SuperTuxKart-1.5-src.tar.gz
+ # Locally computed
+-sha256  9890392419baf4715313f14d5ad60746f276eed36eb580636caf44e2532c0f03  SuperTuxKart-1.4-src.tar.xz
+ sha256  d27207a5213f746aac53893e9ecc18456e9595d3ffa662bd1ec9eb10787c214a  COPYING
+diff --git a/package/supertuxkart/supertuxkart.mk b/package/supertuxkart/supertuxkart.mk
+index 6bdd512eac..377b9668a1 100644
+--- a/package/supertuxkart/supertuxkart.mk
++++ b/package/supertuxkart/supertuxkart.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--RTTY_VERSION = 8.1.2
-+RTTY_VERSION = 9.0.4
- RTTY_SITE = https://github.com/zhaojh329/rtty/releases/download/v$(RTTY_VERSION)
- RTTY_LICENSE = MIT
- RTTY_LICENSE_FILES = LICENSE
+-SUPERTUXKART_VERSION = 1.4
+-SUPERTUXKART_SOURCE = SuperTuxKart-$(SUPERTUXKART_VERSION)-src.tar.xz
++SUPERTUXKART_VERSION = 1.5
++SUPERTUXKART_SOURCE = SuperTuxKart-$(SUPERTUXKART_VERSION)-src.tar.gz
+ # Do not use the github helper here, the generated tarball is *NOT*
+ # the same as the one uploaded by upstream for the release.
+ SUPERTUXKART_SITE = https://github.com/supertuxkart/stk-code/releases/download/$(SUPERTUXKART_VERSION)
+@@ -38,6 +38,7 @@ SUPERTUXKART_DEPENDENCIES = \
+ # Disable In-game recorder (there is no libopenglrecorder package)
+ SUPERTUXKART_CONF_OPTS = -DBUILD_SHARED_LIBS=OFF \
+ 	-DBUILD_RECORDER=OFF \
++	-DNO_SHADERC=on \
+ 	-DUSE_SYSTEM_ENET=ON \
+ 	-DUSE_SYSTEM_SQUISH=ON
+ 
 -- 
 2.47.3
 
