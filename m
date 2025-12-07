@@ -1,90 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C954CD2CE17
-	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 12:50:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A06A0D1CDC6
+	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 13:00:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 89FD66073A;
-	Sun,  7 Dec 2025 12:50:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4F3A040808;
+	Sun,  7 Dec 2025 13:00:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G-c78GM5P_kP; Sun,  7 Dec 2025 12:50:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id U4EsyYT8hhOK; Sun,  7 Dec 2025 13:00:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5966260723
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84A0D405A3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765111827;
-	bh=2TCcdxvxJ5LIoBGBPEUti77qOsAVL8U5rvDTN7hiCtU=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=CEXzxM8BA2H3O2yg5CP1ee54Gbaqd2e0dkIJcjmKc+p9FyfX7VxkblPkKSbKDVhn7
-	 YkJOpl2l0IhMbvaYkkWs0ieNQKe1X9QdbOVk+DunXUUHNbW2WAROYKDptJgf88HJZD
-	 l5tgHLv021cMPyCWbvxdDeOdT93pEvmATH3MHWVGHSjgXbsb9+Adi91ItUYhbN9RR2
-	 GZpGNe56Q94iJGQaA/h+QMCukFf/d/y6/MXCC0M0Yv1A0KZJPnPH7TX/YBdivHWaHi
-	 MMpH0hcEqDFrVe4PQCbjdau9IaFCvZezST5ndYY6T7uYvMbCrTolK1G+Te0ogLnz5/
-	 NwwBqn4OiPeCQ==
+	s=default; t=1765112437;
+	bh=h90ZYoLX3Hy2ntKfm+DKAUGQzxxRwpG64jc9e8Q6D0s=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=Ngr1YtRTIF4VkkFzPDC6RW25Fw9ekNIi3rQZmhwYLZoWPZHYAgyZlStfxqwtsrNwA
+	 y4DYmFxrznIQ3cm8iB/nQyqHoQELC+0buRghMSpdQ3H0O7FYB690zVWoJBKLqj3AbV
+	 wm3olWbujUZkJuyfPQurRzxHvOHr9heQuyoFYRNUG22gKiSNOIRCHo6pU+CL09/oCG
+	 YC1QSok9ZikaekKCPHqJhJPtoEZ4mViK+vw1Asb1fBV9M2Okxug+a5KGOUst2uVsiB
+	 OBEDjyueprca5VlfWOBHp0aitVO8hcnVW9wq+0HRWRJt41my/4w/PRWuA4pR2tJAj+
+	 b/OIL2hEbKCNw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5966260723;
-	Sun,  7 Dec 2025 12:50:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5C7DFE7
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 12:50:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 84A0D405A3;
+	Sun,  7 Dec 2025 13:00:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6A889E7
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 13:00:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 42B2060723
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 12:50:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5C6578177A
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 13:00:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G3WvgcPxCixe for <buildroot@buildroot.org>;
- Sun,  7 Dec 2025 12:50:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 58FDB606F0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58FDB606F0
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 58FDB606F0
- for <buildroot@buildroot.org>; Sun,  7 Dec 2025 12:50:23 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id CC5A613F88F;
- Sun,  7 Dec 2025 13:50:15 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 07 Dec 2025 13:50:15 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tsT6qd2EpM97 for <buildroot@buildroot.org>;
+ Sun,  7 Dec 2025 13:00:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 65B348154E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65B348154E
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 65B348154E
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 13:00:34 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c020.dip0.t-ipconnect.de [79.214.192.32])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 5F5E7A4C043A
+ for <buildroot@buildroot.org>; Sun,  7 Dec 2025 14:00:30 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:54270)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99)
+ (envelope-from <bernd@kuhls.net>) id 1vSENJ-000000002xU-2zYx
+ for buildroot@buildroot.org; Sun, 07 Dec 2025 13:00:30 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sun,  7 Dec 2025 14:00:29 +0100
+Message-ID: <20251207130030.3668435-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Sun, 07 Dec 2025 13:50:15 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Giulio Benetti
- <giulio.benetti@benettiengineering.com>, =?UTF-8?Q?Jos=C3=A9_Luis_Salv?=
- =?UTF-8?Q?ador_Rufo?= <salvador.joseluis@gmail.com>, Romain Naour
- <romain.naour@gmail.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20251207091410.28979-1-bernd@kuhls.net>
-References: <20251207091410.28979-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <cdab949290c3c9d91c3cbcedc593d190@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1765111821;
- bh=c7CQWgOSc3KCP4IViiC1G4n3fesz8oSFGKdTxasfqcw=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Px2fFQIqgRDhBVzuYexiS/iabO0rZ8UAKGKGXPKLm7SVn5crYBI9xAqUA8GoyEPbx
- 5jG84ndmGE3LV32+0W7/34AOrFmN+5MQukuZvFiIolfWqHo3X/9oRTxNmVCyGtMyQI
- alTcN3ALyWLZdnqQS9np/n6yRNXlRIoRHwu+/3SbTsynIlmzKRg/m0zUFUYMLdsnk4
- tfZyqkcWG0nrG+Hnz68OF81ZyQeMj0+NQEwYfb26n2lL8jSgUl+rcOvgyw7khDFE9W
- aK0x/Qk/awE+HslaHJXJ2J/sNbY6VaVt8/aNw9N0587mQXiK/TY+HVahfqGvl/35OO
- N2L/b1LU82+tA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Px2fFQIq
-Subject: Re: [Buildroot] [PATCH 1/4] {linux, linux-headers}: bump 5.{10,
- 15}.x / 6.{1, 6, 12, 17}.x series
+X-Spamd-Bar: /
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1765112430;
+ bh=V5tCAzy3HfiJvAMbrjJlGfv4JSlhr/s3V5WsihVrH1w=;
+ h=From:To:Subject:Date:From;
+ b=SwBByP/ZggwjufQxwioK+d9k0KC96hBzeZHf9uqMQP2Ji24N1GYZavuYLqa4VJBv9
+ oHYgz4DyNTDIuoYroqzVP/YGR91D/Y2c622Zwf6aPzh6pjDo/iSZWmWZIDgJjqF16Q
+ TWVfoItYNU+PabZz2GaVkPnveXFJBESmoqlGea0zWFKzLwEdJMJv8HeKRofw5L2t8x
+ xJKKJ3HqNd/Rq+UVF4Q73Q9NeUJjTwHDb2MbnPl7EiZHee5XX1rGWgCmEdJv+40E7V
+ FJk4pOfHIolEa6E08VGw3HQeiq75UhD5yBfpEKY4u1rVD4dEsmZRMOXzSCmhuSJV7U
+ 9GzsCZ4ZVam8A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=SwBByP/Z
+Subject: [Buildroot] [PATCH 1/1] package/xvkbd: Fix build with gcc-14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,17 +91,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 07/12/2025 10:14, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Fixes:
+https://autobuild.buildroot.net/results/86f/86f2ba051e864375bda620dd92e01cb7b8532ac3/
 
-Series applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/xvkbd/0001-gcc-14.patch | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+ create mode 100644 package/xvkbd/0001-gcc-14.patch
+
+diff --git a/package/xvkbd/0001-gcc-14.patch b/package/xvkbd/0001-gcc-14.patch
+new file mode 100644
+index 0000000000..6ecce1327e
+--- /dev/null
++++ b/package/xvkbd/0001-gcc-14.patch
+@@ -0,0 +1,19 @@
++Fix build with gcc-14
++
++Upstream: https://sources.debian.org/src/xvkbd/4.1-3/debian/patches/gcc-14
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ xvkbd.c |    1 +
++ 1 file changed, 1 insertion(+)
++
++--- a/xvkbd.c
+++++ b/xvkbd.c
++@@ -15,6 +15,7 @@
++  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
++  * See the GNU General Public License for more details.
++  */
+++#define _CONST_X_STRING
++ #include <stdio.h>
++ #include <stdlib.h>
++ #include <unistd.h>
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
