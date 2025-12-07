@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A03CBD3ABEF
-	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 21:27:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BCF6D3B7E7
+	for <buildroot@archiver.kernel.org>; Sun,  7 Dec 2025 21:28:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 28ACF407D8;
-	Sun,  7 Dec 2025 21:27:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D6F5540572;
+	Sun,  7 Dec 2025 21:27:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y6BCeCHFFoE8; Sun,  7 Dec 2025 21:27:57 +0000 (UTC)
+ id JoI36eI9K7CX; Sun,  7 Dec 2025 21:27:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DAD2540572
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79A0F407C6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765142877;
-	bh=7WCmCHr0NM/GgZDwS4ztajsbaHRFnIPujnEDNtXnIwc=;
+	s=default; t=1765142878;
+	bh=wRXzgG6bV+2pJ6oXr3ZHOQM/eJz/mJxxxxQIir18NK4=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=pXAjjdYqdLRjLhtr3eta4B6mWu5BNTyhqYeviC+wOH/3IUcJyEBVfWW/4f82oVdYK
-	 64IO9pWQphsiAMFWKMiGuNnTTYgwVizkQFFo4VCbwostWOhySb9JpW6fO+lOFmMORB
-	 eVQN15fXkNGgBD7W3cl77PMAlfkKmMSYcQDzQhYXYMJdMwlKER73ow3cOVHNMgPTXU
-	 9VJs1ugutlpLkIgDwBSXg62wj0Qq3iuJHFAH2BLoi/LohiZoZB+v1lxfjhM8osYm4O
-	 SY5DELGSs6EdL/21qklLNdjff7AFXIxcmbwMkMRjvRq8Buf6S1LnO2L0uR0tZuItdT
-	 JycAKLJSrhCoQ==
+	b=Y+V3iXya+bMNld4p0wWa07F1BLRXVqiI2auAu+vsjTQFCitCCBXZ1jv9Sia6KNE61
+	 LwMYjuIggZn/JJ4TQ9t5DCs9xBPeVfsWXZnSf//5BnQwLwn/XrYxBR0H/rJV1KsbGi
+	 bP/QYPMu2GGJN5kat8ChevDF7EbydMvb9pJDoA7MnonRdPCceYBqYKy9M2O7MCHx8H
+	 fK/FBykcBQnt7NMDDYI0ms0zUR+kqwKRP/Rdq752sKZ6TiHKbnvqbcVbGT0WzXXQ5w
+	 8vhXWjryD6LyTfaXZxzcDTC8trVVSSpLn441BS0xJHCdmgFfzotucMXL3id30xYTUR
+	 oKE6hQCPYQnwA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DAD2540572;
-	Sun,  7 Dec 2025 21:27:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 19BA02CF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 79A0F407C6;
+	Sun,  7 Dec 2025 21:27:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2B2682F0
  for <buildroot@buildroot.org>; Sun,  7 Dec 2025 21:27:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 17FAD40516
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1DB5440514
  for <buildroot@buildroot.org>; Sun,  7 Dec 2025 21:27:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ygcAnBjC2QxZ for <buildroot@buildroot.org>;
- Sun,  7 Dec 2025 21:27:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ua_cTF1Lo0mU for <buildroot@buildroot.org>;
+ Sun,  7 Dec 2025 21:27:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B331040572
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4A0C4040D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B331040572
+ by smtp2.osuosl.org (Postfix) with ESMTP id A4A0C4040D
  for <buildroot@buildroot.org>; Sun,  7 Dec 2025 21:27:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AE64086896; Sun,  7 Dec 2025 21:27:51 +0000 (UTC)
+ id 9F12A86894; Sun,  7 Dec 2025 21:27:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 7 Dec 2025 21:45:18 +0100
+Date: Sun, 7 Dec 2025 21:31:13 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fa7fac09854b753cbce26298dd07622e65b1c4f0
-X-Git-Newrev: 899703cb37a5e844118a83bff41a43b9c86de1f8
+X-Git-Oldrev: 3ce3e04d02aa6b8f1841b6faafa14260085fc350
+X-Git-Newrev: 8b740cee42c8dd41db735021c02abc91874fc9eb
 X-Patchwork-Hint: ignore
-Message-Id: <20251207212751.AE64086896@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python3: fix build on Sparc64 due
- to glibc 2.42 bump
+Message-Id: <20251207212751.9F12A86894@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts/cve-check: fix typos and
+ grammar
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,131 +76,125 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=899703cb37a5e844118a83bff41a43b9c86de1f8
+commit: https://git.buildroot.net/buildroot/commit/?id=8b740cee42c8dd41db735021c02abc91874fc9eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since we bumped to glibc 2.42, the build of Python 3 is failing on
-Sparc64 due to the removal of the "struct termio" definition from
-glibc. Since this only affects a small number of termio operations, we
-simply drop support for them, since they basically can't be used
-anymore (and we don't really care that much about those specific
-operations that only exist on Sparc64).
-
-Fixes:
-
-  https://autobuild.buildroot.net/results/28fee0f8368ae3dc1d607ebad4881b736e360f07/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...gure.ac-detect-unusable-termio-operations.patch | 99 ++++++++++++++++++++++
- 1 file changed, 99 insertions(+)
+ support/scripts/cve-check | 31 ++++++++++++++++---------------
+ 1 file changed, 16 insertions(+), 15 deletions(-)
 
-diff --git a/package/python3/0009-configure.ac-detect-unusable-termio-operations.patch b/package/python3/0009-configure.ac-detect-unusable-termio-operations.patch
-new file mode 100644
-index 0000000000..1a11caeb49
---- /dev/null
-+++ b/package/python3/0009-configure.ac-detect-unusable-termio-operations.patch
-@@ -0,0 +1,99 @@
-+From 2d336d1fedb692350a1e4f131246f60a1195cd93 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 7 Dec 2025 13:57:06 +0100
-+Subject: [PATCH] configure.ac: detect unusable termio operations
-+
-+Some termio operations are not actually usable on some
-+architectures. For example, the TCGETA, TCSETA, TCSETAF and TCSETAW
-+are defined with a reference to "struct termio" on alpha, hppa and
-+sparc64, but "struct termio" is no longer defined since glibc 2.42,
-+causing a build failure.
-+
-+Instead of using those operations as soon as they are defined, this
-+commit checks more carefully that they are actually usable. This is
-+done using a new m4 macro PY_CHECK_IOCTL.
-+
-+Upstream: https://github.com/python/cpython/pull/142380
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ Modules/termios.c |  8 ++++----
-+ configure.ac      | 26 ++++++++++++++++++++++++++
-+ 2 files changed, 30 insertions(+), 4 deletions(-)
-+
-+diff --git a/Modules/termios.c b/Modules/termios.c
-+index f2c5a4bafa7..dbfe922d1e8 100644
-+--- a/Modules/termios.c
-++++ b/Modules/termios.c
-+@@ -1115,7 +1115,7 @@ static struct constant {
-+ #ifdef TCFLSH
-+     {"TCFLSH", TCFLSH},
-+ #endif
-+-#ifdef TCGETA
-++#if defined(HAVE_TCGETA)
-+     {"TCGETA", TCGETA},
-+ #endif
-+ #ifdef TCGETS
-+@@ -1127,13 +1127,13 @@ static struct constant {
-+ #ifdef TCSBRKP
-+     {"TCSBRKP", TCSBRKP},
-+ #endif
-+-#ifdef TCSETA
-++#if defined(HAVE_TCSETA)
-+     {"TCSETA", TCSETA},
-+ #endif
-+-#ifdef TCSETAF
-++#if defined(HAVE_TCSETAF)
-+     {"TCSETAF", TCSETAF},
-+ #endif
-+-#ifdef TCSETAW
-++#if defined(HAVE_TCSETAW)
-+     {"TCSETAW", TCSETAW},
-+ #endif
-+ #ifdef TCSETS
-+diff --git a/configure.ac b/configure.ac
-+index 34e4d5dd244..646aa24ecf3 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -101,6 +101,26 @@ AC_DEFUN([PY_STDLIB_MOD_SET_NA], [
-+     AS_VAR_SET([py_cv_module_]mod, [n/a])])
-+ ])
-+ 
-++dnl PY_CHECK_IOCTL(IOCTL_SYMBOL)
-++AC_DEFUN([PY_CHECK_IOCTL],
-++[
-++  AC_MSG_CHECKING([for $1])
-++  AC_COMPILE_IFELSE(
-++    [AC_LANG_PROGRAM(
-++       [[#include <sys/ioctl.h>]],
-++       [[
-++         /* Test whether $1 is declared */
-++         long val = $1;
-++         return 0;
-++       ]]
-++     )],
-++    [AC_MSG_RESULT([yes])
-++     AC_DEFINE([HAVE_$1], [1],
-++               [Define this if $1 termio operation is usable])],
-++    [AC_MSG_RESULT([no])]
-++  )
-++])
-++
-+ AC_SUBST([BASECPPFLAGS])
-+ if test "$srcdir" != . -a "$srcdir" != "$(pwd)"; then
-+     # If we're building out-of-tree, we need to make sure the following
-+@@ -7955,6 +7975,12 @@ AC_ARG_ENABLE(idle3,
-+ 	AS_HELP_STRING([--disable-idle3], [disable idle3 IDE]),
-+ 	[ IDLE="${enableval}" ], [ IDLE=yes ])
-+ 
-++# ioctls used by Modules/termios.c but not usable on all platforms
-++PY_CHECK_IOCTL([TCGETA])
-++PY_CHECK_IOCTL([TCSETA])
-++PY_CHECK_IOCTL([TCSETAF])
-++PY_CHECK_IOCTL([TCSETAW])
-++
-+ # generate output files
-+ AC_CONFIG_FILES(m4_normalize([
-+   Makefile.pre
-+-- 
-+2.51.1
-+
+diff --git a/support/scripts/cve-check b/support/scripts/cve-check
+index 6442b2e72c..a72547ab38 100755
+--- a/support/scripts/cve-check
++++ b/support/scripts/cve-check
+@@ -4,7 +4,7 @@
+ # Enriches the input CycloneDX SBOM with vulnerability information from the NVD
+ # database.
+ #
+-# The nvd database is cloned using a mirror of it and the content is compared
++# The NVD database is cloned using a mirror of it and the content is compared
+ # locally.
+ #
+ # Example usage:
+@@ -121,7 +121,7 @@ def nvd_cve_references_to_cdx(references):
+ def nvd_cve_to_cdx_vulnerability(nvd_cve):
+     """
+     Turns the CVE object fetched from the NVD API into a CycloneDX
+-    vulnerability that fit the spec (see [1]).
++    vulnerability that fits the spec (see [1]).
+ 
+     [1] https://cyclonedx.org/docs/1.6/json/#vulnerabilities
+     """
+@@ -153,19 +153,19 @@ def nvd_cve_to_cdx_vulnerability(nvd_cve):
+     return vulnerability
+ 
+ 
+-def vuln_append_or_update_affects_if_exist(vulnerabilities, vulnerability):
++def vuln_append_or_update_affects_if_exists(vulnerabilities, vulnerability):
+     """
+     Append 'vulnerability' passed as argument to the 'vulnerabilities' argument
+-    if an entry with the same 'id' don't exist yet.
+-    If an entry already exist the input reference is added to the 'affects'
+-    list of the existing vulnerability.
++    if an entry with the same 'id' doesn't exist yet.
++    If the vulnerability already exists, the input reference is added to the
++    'affects' list of the existing entry.
+ 
+     Args:
+         vulnerabilities (list): The vulnerabilities array reference retrieved
+             from the input CycloneDX SBOM
+         vulnerability (dict): Vulnerability to add to the 'vulnerabilities' list.
+     """
+-    # Search if a vulnerability with the same identifier already exist in the
++    # Search if a vulnerability with the same identifier already exists in the
+     # SBOM vulnerability list.
+     matching_vuln = next(
+         (vuln for vuln in vulnerabilities if vuln.get("id") == vulnerability["id"]),
+@@ -173,6 +173,7 @@ def vuln_append_or_update_affects_if_exist(vulnerabilities, vulnerability):
+     )
+ 
+     # bom-ref to the component is passed to the affects of the vulnerability
++    # passed as argument
+     bom_ref = next((a["ref"] for a in vulnerability.get("affects", [])), None)
+ 
+     if matching_vuln is not None:
+@@ -181,7 +182,7 @@ def vuln_append_or_update_affects_if_exist(vulnerabilities, vulnerability):
+             del vulnerability["affects"]
+ 
+         if matching_vuln.get("analysis") is not None and "analysis" in vulnerability:
+-            # We don't update vulnerability that already have an
++            # We don't update vulnerabilities that already have an
+             # 'analysis'.
+             # Buildroot ignored vulnerabilities will already have
+             # an analysis and need to remain as such.
+@@ -228,13 +229,13 @@ def check_package_cve_affects(cve: cvecheck.CVE, cpe_product_pkgs, sbom, opt: Op
+                 "ref": comp["bom-ref"]
+             }]
+ 
+-            vuln_append_or_update_affects_if_exist(vulnerabilities, vulnerability)
++            vuln_append_or_update_affects_if_exists(vulnerabilities, vulnerability)
+ 
+ 
+ def check_package_cves(nvd_path: Path, sbom, opt: Options):
+     """
+-    Iterate over every entries of the NDV API mirror. Each vulnerability is
+-    compared to the set of component passed as argument in the 'sbom'.
++    Iterate over every entry of the NVD API mirror. Each vulnerability is
++    compared to the set of components passed as argument in the 'sbom'.
+     The vulnerabilities set of that 'sbom' argument is enriched with analysis
+     of vulnerabilities that match that set of components.
+ 
+@@ -257,7 +258,7 @@ def check_package_cves(nvd_path: Path, sbom, opt: Options):
+ def enrich_vulnerabilities(nvd_path: Path, sbom):
+     """
+     Iterate over the vulnerabilities present in the 'sbom' passed as arguments
+-    and enrich the vulnerability with content from the NDV API mirror.
++    and enrich the vulnerability with content from the NVD API mirror.
+ 
+     Args:
+         nvd_path (Path): Path of the mirror of the NVD API.
+@@ -274,7 +275,7 @@ def enrich_vulnerabilities(nvd_path: Path, sbom):
+ 
+         vulnerability = nvd_cve_to_cdx_vulnerability(cve.nvd_cve)
+ 
+-        vuln_append_or_update_affects_if_exist(vulnerabilities, vulnerability)
++        vuln_append_or_update_affects_if_exists(vulnerabilities, vulnerability)
+ 
+ 
+ def main():
+@@ -288,8 +289,8 @@ def main():
+                         help='Path to the local NVD database',
+                         type=lambda p: Path(p).expanduser().resolve())
+     parser.add_argument("--enrich-only", default=False, action='store_true',
+-                        help="Only update metadata to the vulnerability currently present " +
+-                        "on the input CycloneDX SBOM. Don't do an analysis.")
++                        help="Only update metadata for the vulnerabilities currently present " +
++                        "in the input CycloneDX SBOM. Don't do an analysis.")
+     parser.add_argument("--include-resolved", default=False, action='store_true',
+                         help="Add vulnerabilities already 'resolved' that don't affect a " +
+                         "component to the output CycloneDX vulnerabilities analysis.")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
