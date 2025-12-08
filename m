@@ -4,84 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A283BD3B7EA
-	for <buildroot@archiver.kernel.org>; Mon,  8 Dec 2025 20:35:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 467E0D3B7EA
+	for <buildroot@archiver.kernel.org>; Mon,  8 Dec 2025 20:46:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0766C610AD;
-	Mon,  8 Dec 2025 20:35:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DDBB160BEA;
+	Mon,  8 Dec 2025 20:46:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dMrlnQRKw6CY; Mon,  8 Dec 2025 20:35:01 +0000 (UTC)
+ id JnZKaCnDaBKz; Mon,  8 Dec 2025 20:46:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCEF060BEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE5D260F2B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765226101;
-	bh=KzmEXT4FUDzc5xoNCTO4r/QodmYfrWOObX6RYPRgFyo=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=JXcLsGDf2uJ7eGnNzcDZa69QR8kCfSeWetCgAuP0NzRigHo0gkVUFcTChUTC+9oif
-	 GTrxJS8V9gMB2O8g+9uGK+5FnPDM3sGJdfrSqDvTJKc2mhiu/ltPQTLx25zM+IMDVx
-	 H4dQxwjngreoNHxCKJi5lDCw54h8hDQbFt4v8FX89aY7TRPaYc440j5rD7MuDShUrb
-	 5VfLzGc2pKj+gQJnevsLVPIOTJrSHyOJffrB0bh9PbPh85+ZhbgLzcEMKo5e5+Ceie
-	 2ACioxHRXb6muXJutAfA6mz2GgGW/RDIFe/Sfw+gMcU/kofB5HSJtD/sHq6k46YzPV
-	 5wnqSQj0GLtxQ==
+	s=default; t=1765226816;
+	bh=AQ6WINzixhjpGNTUYM798SGWacNaV3lVhPsb8w7AgJY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=mw21kyqb4vnpvERHp2eEOZ4XkyHPzYSndW2I6H6CkTzKEvv/bSjBmtUuahe+6f9RK
+	 2yU89mfxOpd0f8A0EbAA9TyTkqj8li4ygEFWPWutijFFzpKafdDBRXLo2l8r/xKdFf
+	 9Bp15ePtHqQJ88qStomvb+w78sLibtbPTTLaOuFq7O+LQ0jnMyDBFDqWASK/Q+QDOX
+	 ccI05lmz7vs0+VZWmWBHLsiacyBXZqhTn8sPA3ozZ3T33Ng8xzrCSvGsYCB/b6s+qu
+	 jIBoeFaZ5rESNwq3pwJs0ayIKVo2d5oeJ1SnXyXe9ZjlGpUyEz0nQtogJLeyNkHqi6
+	 te17ZVJIwbuPA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CCEF060BEA;
-	Mon,  8 Dec 2025 20:35:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 85552E7
- for <buildroot@buildroot.org>; Mon,  8 Dec 2025 20:35:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EE5D260F2B;
+	Mon,  8 Dec 2025 20:46:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 382BB151
+ for <buildroot@buildroot.org>; Mon,  8 Dec 2025 20:46:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 77D42810E9
- for <buildroot@buildroot.org>; Mon,  8 Dec 2025 20:35:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 19F4383C6A
+ for <buildroot@buildroot.org>; Mon,  8 Dec 2025 20:46:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jl1regZOlFkD for <buildroot@buildroot.org>;
- Mon,  8 Dec 2025 20:34:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 59E29810DA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59E29810DA
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 59E29810DA
- for <buildroot@buildroot.org>; Mon,  8 Dec 2025 20:34:59 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6c020.dip0.t-ipconnect.de [79.214.192.32])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 26DFCA4C120A;
- Mon,  8 Dec 2025 21:34:57 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:36038)
- by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vShwe-000000000YN-20tM;
- Mon, 08 Dec 2025 20:34:56 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id 5clUTSGSKtWl for <buildroot@buildroot.org>;
+ Mon,  8 Dec 2025 20:46:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 519E983A4D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 519E983A4D
+ for <buildroot@buildroot.org>; Mon,  8 Dec 2025 20:46:53 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3C677867B1; Mon,  8 Dec 2025 20:46:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  8 Dec 2025 21:34:56 +0100
-Message-ID: <20251208203456.3656837-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1765226097;
- bh=1rBse3YR1zJ+Ahzw+UeVc83/T+7QHIgOwZhyIFz/ahY=;
- h=From:To:Cc:Subject:Date:From;
- b=OHQIE7wbqYPCmeJMmWu3FWIMLkSZ5x8T2FwGj3+ycd4C0YR+Jgp+wvzeZMRa1n3uW
- TNYKRzMo8NQyDENh/xf7SvSxM333CHi019y4jpqOlM7oOLyVoSCnqdxV06dMfeQjnO
- mEMS+0lpf2fP3U9KOZy063El063mhkoTNxtQOmHKat+lwjUrk7D2EO+tTQMAsD2OLC
- 0Pkjg+ie5gkZB/TbJvVZ1GfikbiHomiaSNLJMAuhHglpfoK9pcJ3cI6cUA0lEr+f53
- w64IPKRy/VCRJf8JGvHauF2NxyqWi6PTm02lmLy6NmBj7AiKWM8TsiDcBgH3Ii29I/
- wMNk9twz9u1/A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=OHQIE7wb
-Subject: [Buildroot] [PATCH 1/1] package/libxslt: security bump version to
- 1.1.45
+Date: Mon, 8 Dec 2025 21:32:58 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8344efd7646d3eed0e2313b1f692bb662d6e2d8f
+X-Git-Newrev: d98d9ba28ffa5b468fa243ae1a359aadef3ed0a0
+X-Patchwork-Hint: ignore
+Message-Id: <20251208204653.3C677867B1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kbd: fix zlib build,
+ add optional dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,51 +69,138 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.45.news
+commit: https://git.buildroot.net/buildroot/commit/?id=d98d9ba28ffa5b468fa243ae1a359aadef3ed0a0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-CVE-2025-7424, CVE-2025-9714 & CVE-2025-11731.
+Buildroot commit 930660890bf8b40d9bd55cd9e202e574b53d5d49 bumped kbd to
+version 2.9.0 which includes optional support for various compression
+libraries. This commit adds the corresponding configure options and a
+fix for build errors caused by zlib.
+
+The build error was happening when a zlib was compiled before kbd.
+The issue can be reproduced with the commands:
+
+    cat >.config <<EOF
+    BR2_aarch64=y
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+    BR2_PACKAGE_KBD=y
+    BR2_PACKAGE_ZLIB=y
+    EOF
+    make olddefconfig
+    make zlib
+    make kbd
+
+The compilation fails with the erro:
+
+    kbdfile-zlib.c: In function 'dlopen_note':
+    elf-note.h:27:30: error: 'sym_gzopen' undeclared (first use in this function); did you mean 'sym_gzopen64'?
+       27 | #define DLSYM_ARG(symbol__) &sym_##symbol__, STRINGIFY(symbol__),
+          |                              ^~~~
+
+Fixes:
+https://autobuild.buildroot.net/results/8ff/8ff6c3d940b68069f748f12646f7516ec86172c1/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien:
+ - add commands to reproduce the issue
+ - update patch "Upstream:" link to upstream commit
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libxslt/libxslt.hash | 4 ++--
- package/libxslt/libxslt.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/kbd/0001-libkbdfile-fix-zlib-build.patch | 35 ++++++++++++++++++++++++
+ package/kbd/kbd.mk                               | 29 ++++++++++++++++++++
+ 2 files changed, 64 insertions(+)
 
-diff --git a/package/libxslt/libxslt.hash b/package/libxslt/libxslt.hash
-index 98c68eded1..0523c51362 100644
---- a/package/libxslt/libxslt.hash
-+++ b/package/libxslt/libxslt.hash
-@@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.43.sha256sum
--sha256  5a3d6b383ca5afc235b171118e90f5ff6aa27e9fea3303065231a6d403f0183a  libxslt-1.1.43.tar.xz
-+# From https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.45.sha256sum
-+sha256  9acfe68419c4d06a45c550321b3212762d92f41465062ca4ea19e632ee5d216e  libxslt-1.1.45.tar.xz
+diff --git a/package/kbd/0001-libkbdfile-fix-zlib-build.patch b/package/kbd/0001-libkbdfile-fix-zlib-build.patch
+new file mode 100644
+index 0000000000..1324d0b53e
+--- /dev/null
++++ b/package/kbd/0001-libkbdfile-fix-zlib-build.patch
+@@ -0,0 +1,35 @@
++From 488872421ef38215d2797f78497eb559d8eec32a Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Jan=20=C4=8Cerm=C3=A1k?= <sairon@users.noreply.github.com>
++Date: Fri, 5 Dec 2025 16:45:36 +0100
++Subject: [PATCH] libkbdfile: fix zlib build
++
++Upstream: https://github.com/legionus/kbd/commit/2f9a4e56c2ef245fbe840677aad9d5932e17f50d
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/libkbdfile/elf-note.h | 5 +----
++ 1 file changed, 1 insertion(+), 4 deletions(-)
++
++diff --git a/src/libkbdfile/elf-note.h b/src/libkbdfile/elf-note.h
++index a0fd9e2..d3b8d5c 100644
++--- a/src/libkbdfile/elf-note.h
+++++ b/src/libkbdfile/elf-note.h
++@@ -26,14 +26,11 @@ int dlsym_many(void **dlp, const char *filename, ...);
++  */
++ #define DLSYM_ARG(symbol__) &sym_##symbol__, STRINGIFY(symbol__),
++ 
++-/* For symbols being dynamically loaded */
++-#define DECLARE_DLSYM(symbol) static typeof(symbol) *sym_##symbol
++-
++ /*
++  * Helper defines, to be done locally before including this header to switch between
++  * implementations
++  */
++-#define DECLARE_SYM(sym__) DECLARE_DLSYM(sym__);
+++#define DECLARE_SYM(sym__) static typeof(sym__) *sym_##sym__;
++ 
++ /*
++  * Originally from systemd codebase.
++-- 
++2.47.3
++
+diff --git a/package/kbd/kbd.mk b/package/kbd/kbd.mk
+index 8008a9b3be..34401075ce 100644
+--- a/package/kbd/kbd.mk
++++ b/package/kbd/kbd.mk
+@@ -13,6 +13,35 @@ KBD_CONF_OPTS = \
+ KBD_DEPENDENCIES = \
+ 	$(TARGET_NLS_DEPENDENCIES) \
+ 	host-pkgconf
++
++ifeq ($(BR2_PACKAGE_BZIP2),y)
++KBD_CONF_OPTS += --with-bzip2
++KBD_DEPENDENCIES += bzip2
++else
++KBD_CONF_OPTS += --without-bzip2
++endif
++
++ifeq ($(BR2_PACKAGE_XZ),y)
++KBD_CONF_OPTS += --with-lzma
++KBD_DEPENDENCIES += xz
++else
++KBD_CONF_OPTS += --without-lzma
++endif
++
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++KBD_CONF_OPTS += --with-zlib
++KBD_DEPENDENCIES += zlib
++else
++KBD_CONF_OPTS += --without-zlib
++endif
++
++ifeq ($(BR2_PACKAGE_ZSTD),y)
++KBD_CONF_OPTS += --with-zstd
++KBD_DEPENDENCIES += zstd
++else
++KBD_CONF_OPTS += --without-zstd
++endif
++
+ KBD_LICENSE = GPL-2.0+
+ KBD_LICENSE_FILES = COPYING CREDITS
  
- # Hash for license file:
- sha256  7e48e290b6bfccc2ec1b297023a1d77f2fd87417f71fbb9f50aabef40a851819  Copyright
-diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-index e92b383b89..229f3de2f6 100644
---- a/package/libxslt/libxslt.mk
-+++ b/package/libxslt/libxslt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBXSLT_VERSION = 1.1.43
-+LIBXSLT_VERSION = 1.1.45
- LIBXSLT_SOURCE = libxslt-$(LIBXSLT_VERSION).tar.xz
- LIBXSLT_SITE = https://download.gnome.org/sources/libxslt/1.1
- LIBXSLT_INSTALL_STAGING = YES
--- 
-2.47.3
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
