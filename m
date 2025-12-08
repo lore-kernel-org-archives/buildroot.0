@@ -1,64 +1,114 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CAF2D3B7DD
-	for <buildroot@archiver.kernel.org>; Mon,  8 Dec 2025 09:33:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81D0FD3B7DE
+	for <buildroot@archiver.kernel.org>; Mon,  8 Dec 2025 10:41:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 356DD409D3;
-	Mon,  8 Dec 2025 09:33:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 08EAB60B9D;
+	Mon,  8 Dec 2025 10:41:49 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EA7gqqTjZpDt; Mon,  8 Dec 2025 10:41:48 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FF8F60BB5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1765190508;
+	bh=nmjzai1rqs1A32752k0Q0yL3q3zet83TYm5fS7sw5lU=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=UYTNQKMep5+5LUNFgns7eSROIWBDLH2DclgCUJzEkTm1WqPm73BmA9X0Jh6I+o3wW
+	 oXzVwdGf8Rae++/XHIVQi9H6n1Ktwym2EcbN2E70s8WpcLwSzxAF0MPL9UeC3ecPUI
+	 Ob5ZQAMXhkwx2HxUdjDz1DcD4YuT6LAv3xlF0b/My9nowb5kleS4nbXKV1UcaW2+Aw
+	 bVKFDKw1MBgRxZdtboxPLfXB6aGZadi1/PDulHxLpXRgfPSyfr8E0rUek8Hc+49ffF
+	 eC9rT+g7KahyoaquDdsorfgwtoo0boeE8JVhhVDZVa/HbHggagzNjpLSavE8HgRI2e
+	 qNjqNoWBez8eA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2FF8F60BB5;
+	Mon,  8 Dec 2025 10:41:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B8967197
+ for <buildroot@buildroot.org>; Mon,  8 Dec 2025 10:41:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9E928403ED
+ for <buildroot@buildroot.org>; Mon,  8 Dec 2025 10:41:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AAsSE3CKeW2b; Mon,  8 Dec 2025 09:33:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BD824099F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765186412;
-	bh=0PPl4oa2fj9pLXJF4rFwy+lmYCWreD0f7t0rQOVfMWE=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=HbKv5uzZMyzFI15XHBw0vnGrG++evJybHRTtiyrkr+da54at7zpL/eddwmJ+jMU9n
-	 Fm2q8UB5+3gzlbCUhBmLLVc93suduXbixR+U0/lAWjTh8Fl1MfLDeyCDfm/i/0StPU
-	 ka/11xVh0cp7mXA97zBkh8ISqh9cXsav4k3ir8hqu1Wt+vXs502GUim8CyTShDnZAM
-	 EvNjAUgaZ0XjmkK1clNY75UqdjKdilcklTf3FmOWhukIoOtOC94T1r34qYn99FXoYV
-	 W3OSAFh8J94KDPyQ4a9FB7XZ05Fm25mtW7NHzNO8i1HErdSOS9UIGCzDYCtVEKjbk7
-	 n8i97NvyNr0Mg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6BD824099F;
-	Mon,  8 Dec 2025 09:33:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id BA263E7
- for <buildroot@buildroot.org>; Mon,  8 Dec 2025 09:33:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B7983400C7
- for <buildroot@buildroot.org>; Mon,  8 Dec 2025 09:33:31 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oSZB10c1DAqe for <buildroot@buildroot.org>;
- Mon,  8 Dec 2025 09:33:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DDCF74005C
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DDCF74005C
- for <buildroot@buildroot.org>; Mon,  8 Dec 2025 09:33:30 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CBBFD86414; Mon,  8 Dec 2025 09:33:30 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id MCdI5fOW6P3x for <buildroot@buildroot.org>;
+ Mon,  8 Dec 2025 10:41:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::636; helo=mail-ej1-x636.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 95EA540405
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95EA540405
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
+ [IPv6:2a00:1450:4864:20::636])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 95EA540405
+ for <buildroot@buildroot.org>; Mon,  8 Dec 2025 10:41:44 +0000 (UTC)
+Received: by mail-ej1-x636.google.com with SMTP id
+ a640c23a62f3a-b79af62d36bso23589566b.3
+ for <buildroot@buildroot.org>; Mon, 08 Dec 2025 02:41:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1765190502; x=1765795302;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=g2Hn11FLz68MlTdcViM0oqK4cmdKAYr9ErGvq4Z2oaw=;
+ b=R1kctBMHZliKlQ0+d6X56fmQebSXYtXBThCSRZJBkCTwKt9l5xMwWdTU8huwpSdeNf
+ k43sVhsh03UtAMcr+Qke6pRmURcKthVAV3PtTJDzNlKMl008t52MlOLf1jSYk8d1S7dz
+ zQH7Q55sfA1OlxZ1Ca1bmDSlZfS5JoKq0pdfzohl3gFfPvoYP6Z8lKv5uSWPNQ/SM2ng
+ g/Gx0iCQOFcBfgvyvFlyl8iv7XeWoCWAzUOT4v5R0WWYEVUxTDWKQRYEvcxFUCXKMIcI
+ 3/EJCjom4eG5HrgNKhPB+p1vboMZRK2RC+Drlsy2u9h8YwlXsb/RtIPQPObKyHH731bZ
+ HmSA==
+X-Gm-Message-State: AOJu0YxUP7wyVdgZxkfyiZ0LxcwctR6qLj+Q3wrUzdYPnwYKiNLqVYUV
+ lGs6pKNgcTdFgc358p9OwUUY82vnuuNAIl2bnoUWOIn9c2gP5YAH7FlBfZEBq0B5HHP6dZIHeEi
+ PUrO+
+X-Gm-Gg: ASbGncuK+O+k2/NPq5i2wL9M9bi2ZyFKYEmQaVly/kAVhnKWLb3TM5WEhrlGDfPqRpY
+ OMQkcNOKRSw/+m6Ph63yw183i8RUbtJIxod33dx+XM346Zse8NWFGXHrOcR9KMF1gU2LLPOTpvh
+ FEl81FGv4CL1kvDYzMfmItok/JuWx0Oy+R6ZkAqd79dN/yBlHeEzlj0WVHg7NA2PX1WxGimbSO7
+ gNwY2jMnY/NJYUXz6zIqvWmRk3gXX1fluvUw7sg2JT9PK8NnU2gC/+yBsYkFqVDr4/U70efxib7
+ /IByQzviDFYRKNCz0gIvu3b4+BdAZ/qgySesim6Mqay6coZMN+64wb5rig6/wXrl7rOHWn8j3Cn
+ tMn+zR1nYyn49y/o0EQxQjN9AZGPgHaZFku0jeJXNEHR0w1XsvO2JjjqAALmJZMdcTM6pjelDvF
+ Acw6Vafz0jrIH7yccPPv+I61O5bfs6XFiJ7OqJbg6UPwNm+zLdaVTULAFRLz1sZAEbHcLQJnMOA
+ e6BbVKsh9T2g3b7bYDgWsq5LEwSpeUIszUQQns7dW6q6p9MhUNBnxOkX1WCS9k=
+X-Google-Smtp-Source: AGHT+IGUVo7GzvAc+RUzeMr/MW/xGaRZG7WQojh5S39apC7nwNHPLsXEhBGPpDLKnBA9DZLJkcFgmw==
+X-Received: by 2002:a17:907:72c9:b0:b79:cb08:30e with SMTP id
+ a640c23a62f3a-b7a24824bafmr648172766b.58.1765190502161; 
+ Mon, 08 Dec 2025 02:41:42 -0800 (PST)
+Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
+ (host-79-30-99-31.retail.telecomitalia.it. [79.30.99.31])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-647b2ef7798sm10464018a12.15.2025.12.08.02.41.41
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 08 Dec 2025 02:41:41 -0800 (PST)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Mon, 8 Dec 2025 10:32:42 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8745e0d5ca39abbbb664619e1512420c40bcd732
-X-Git-Newrev: 6086429850d20ce7fbcaf88ca83504c674992c10
-X-Patchwork-Hint: ignore
-Message-Id: <20251208093330.CBBFD86414@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cryptodev-linux: Fix build for
- Linux 6.18
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date: Mon,  8 Dec 2025 11:41:39 +0100
+Message-ID: <20251208104139.298567-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1765190502; x=1765795302;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=g2Hn11FLz68MlTdcViM0oqK4cmdKAYr9ErGvq4Z2oaw=;
+ b=ZMesNHAy0Eu7aP8oioFitoaF7i1elne2pQ+0ie+Z8dNZ+mIsNtV7/IDDSE/nLOh9yt
+ Gf2wMiG1v6BjPuOismYD4Cr+JP2Hm+pSMLr/JXKQ7T8ATtgS6dsq5z7N4nOGwfiKvL8a
+ cUYbg6v5WDJlsvrQPpky1rUBnmnc08KBmTWGA=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=ZMesNHAy
+Subject: [Buildroot] [PATCH 1/1] package/pocketpy: bump to version 2.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,99 +120,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5053361880661476200=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5053361880661476200==
-Content-Type: text/plain
+Release notes:
+https://github.com/pocketpy/pocketpy/releases/tag/v2.1.5
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6086429850d20ce7fbcaf88ca83504c674992c10
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Buildroot commit a06d79862a60d3c8d5ddd6a9ab12b5ccdd91984c bumped the
-linux kernel to version 6.18 which broke the build of cryptodev-linux.
-
-Added upstream patch to fix the problem.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- .../0001-Fix-build-for-Linux-6.18-rc1.patch        | 55 ++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+ package/pocketpy/pocketpy.hash | 2 +-
+ package/pocketpy/pocketpy.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cryptodev-linux/0001-Fix-build-for-Linux-6.18-rc1.patch b/package/cryptodev-linux/0001-Fix-build-for-Linux-6.18-rc1.patch
-new file mode 100644
-index 0000000000..fef5af4099
---- /dev/null
-+++ b/package/cryptodev-linux/0001-Fix-build-for-Linux-6.18-rc1.patch
-@@ -0,0 +1,55 @@
-+From 08644db02d43478f802755903212f5ee506af73b Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Joan=20Bruguera=20Mic=C3=B3?= <joanbrugueram@gmail.com>
-+Date: Sat, 6 Sep 2025 20:36:38 +0000
-+Subject: [PATCH] Fix build for Linux 6.18-rc1
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+It's no longer required to use nth_page() when iterating pages within a
-+single scatterlist entry.
-+
-+Note I believe this code path in `sg_advance` is currently unreachable:
-+It is only called from `get_userbuf_srtp`, passing in a scatterlist
-+copied from one created by `__get_userbuf`, which only generates
-+entries such that `sg->offset + sg->length <= PAGE_SIZE`.
-+On the other hand, this code path in `sg_advance` requires that
-+`sg->offset + sg->length > sg->offset + consumed >= PAGE_SIZE`.
-+
-+See also: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f8f03eb5f0f91fddc9bb8563c7e82bd7d3ba1dd0
-+          https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ce00897b94bc5c62fab962625efcf1ab824d3688
-+
-+Signed-off-by: Joan Bruguera Micó <joanbrugueram@gmail.com>
-+
-+Upstream: https://github.com/cryptodev-linux/cryptodev-linux/commit/08644db02d43478f802755903212f5ee506af73b
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ util.c | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/util.c b/util.c
-+index 9eba4836..d4267816 100644
-+--- a/util.c
-++++ b/util.c
-+@@ -21,6 +21,7 @@
-+ 
-+ #include <crypto/scatterwalk.h>
-+ #include <linux/scatterlist.h>
-++#include <linux/version.h>
-+ #include "util.h"
-+ 
-+ /* These were taken from Maxim Levitsky's patch to lkml.
-+@@ -44,8 +45,12 @@ struct scatterlist *sg_advance(struct scatterlist *sg, int consumed)
-+ 	sg->length -= consumed;
-+ 
-+ 	if (sg->offset >= PAGE_SIZE) {
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 0))
-++		struct page *page = sg_page(sg) + (sg->offset / PAGE_SIZE);
-++#else
-+ 		struct page *page =
-+ 			nth_page(sg_page(sg), sg->offset / PAGE_SIZE);
-++#endif
-+ 		sg_set_page(sg, page, sg->length, sg->offset % PAGE_SIZE);
-+ 	}
-+ 
-
---===============5053361880661476200==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/pocketpy/pocketpy.hash b/package/pocketpy/pocketpy.hash
+index 51d7f9c0b8e9..2541e845a970 100644
+--- a/package/pocketpy/pocketpy.hash
++++ b/package/pocketpy/pocketpy.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  3edf11645867fd41cf2e3cff24e3131a9ed9f6ccf8ada806dc2429f817e01f71  pocketpy-2.1.4.tar.gz
++sha256  eb7e8d9285d3848c2bc108b41fed4c49ea47df6b0018362319d2736a6f5821e1  pocketpy-2.1.5.tar.gz
+ sha256  9dab6fe9086f93847540387be578edc94b6b280004db5ed7c850ccf8f086fd66  LICENSE
+diff --git a/package/pocketpy/pocketpy.mk b/package/pocketpy/pocketpy.mk
+index c4a9aea8d2eb..b17184089032 100644
+--- a/package/pocketpy/pocketpy.mk
++++ b/package/pocketpy/pocketpy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POCKETPY_VERSION = 2.1.4
++POCKETPY_VERSION = 2.1.5
+ POCKETPY_SITE = $(call github,pocketpy,pocketpy,v$(POCKETPY_VERSION))
+ POCKETPY_LICENSE = MIT
+ POCKETPY_LICENSE_FILES = LICENSE
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5053361880661476200==--
