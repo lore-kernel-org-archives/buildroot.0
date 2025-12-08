@@ -1,86 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8030BD3ABEF
-	for <buildroot@archiver.kernel.org>; Mon,  8 Dec 2025 09:33:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CAF2D3B7DD
+	for <buildroot@archiver.kernel.org>; Mon,  8 Dec 2025 09:33:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2E832807A9;
-	Mon,  8 Dec 2025 09:33:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 356DD409D3;
+	Mon,  8 Dec 2025 09:33:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0M1_c6fyTaZd; Mon,  8 Dec 2025 09:33:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AAsSE3CKeW2b; Mon,  8 Dec 2025 09:33:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 523F2811C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BD824099F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765186402;
-	bh=Zivza18U+m4lCQ5UsKExCXYybTBzwWgO9FBsHdnbmjw=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=C098ukscOjM2alGbtg4IRVcMlDPkv3wyIl9U9sNFovyttThM2AQ5o/bPgGCvuc5ID
-	 d2QulrS1OZOT8P3R4uUGjEZ0lH6iGI4jWmlC1DSvTU/acMEQs7DQ/uBUyjVymCMe7/
-	 vBjCySHxdQ56v1Nt9L+YqjwC/oeZbBDv/qejZfZAvflQLxnlfzHXFFQUwUXbFyQx1G
-	 ay6AhhMqH6HYruO1ZQ/GQs24ZEW9SLVn/3xQW9l74Lw6G3kxTnzNrlwXuGszdVznu/
-	 iKdvV2Sh8HE+wfH/UooWyBmuU5K4MKo43PvGKLs1FlAIqqAuh2IkQFVAwnjQY6BCiD
-	 Vvfqg9n1cQpng==
+	s=default; t=1765186412;
+	bh=0PPl4oa2fj9pLXJF4rFwy+lmYCWreD0f7t0rQOVfMWE=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=HbKv5uzZMyzFI15XHBw0vnGrG++evJybHRTtiyrkr+da54at7zpL/eddwmJ+jMU9n
+	 Fm2q8UB5+3gzlbCUhBmLLVc93suduXbixR+U0/lAWjTh8Fl1MfLDeyCDfm/i/0StPU
+	 ka/11xVh0cp7mXA97zBkh8ISqh9cXsav4k3ir8hqu1Wt+vXs502GUim8CyTShDnZAM
+	 EvNjAUgaZ0XjmkK1clNY75UqdjKdilcklTf3FmOWhukIoOtOC94T1r34qYn99FXoYV
+	 W3OSAFh8J94KDPyQ4a9FB7XZ05Fm25mtW7NHzNO8i1HErdSOS9UIGCzDYCtVEKjbk7
+	 n8i97NvyNr0Mg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 523F2811C1;
-	Mon,  8 Dec 2025 09:33:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E070E151
- for <buildroot@buildroot.org>; Mon,  8 Dec 2025 09:33:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6BD824099F;
+	Mon,  8 Dec 2025 09:33:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BA263E7
+ for <buildroot@buildroot.org>; Mon,  8 Dec 2025 09:33:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D23E3400C7
- for <buildroot@buildroot.org>; Mon,  8 Dec 2025 09:33:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B7983400C7
+ for <buildroot@buildroot.org>; Mon,  8 Dec 2025 09:33:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LwPHkBUd9T6Y for <buildroot@buildroot.org>;
- Mon,  8 Dec 2025 09:33:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ id oSZB10c1DAqe for <buildroot@buildroot.org>;
+ Mon,  8 Dec 2025 09:33:31 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7EB084005C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7EB084005C
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7EB084005C
- for <buildroot@buildroot.org>; Mon,  8 Dec 2025 09:33:19 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1915806372; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 08 Dec 2025 09:33:10 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vSXcD-00000006MJD-22hI;
- Mon, 08 Dec 2025 10:33:09 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DDCF74005C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id DDCF74005C
+ for <buildroot@buildroot.org>; Mon,  8 Dec 2025 09:33:30 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CBBFD86414; Mon,  8 Dec 2025 09:33:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251207192343.1089336-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Sun, 7 Dec 2025 20:23:42 +0100")
-References: <20251207192343.1089336-1-bernd@kuhls.net>
-Date: Mon, 08 Dec 2025 10:33:09 +0100
-Message-ID: <877buxuxm2.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=U+NiIXUAy1D3cb0e7P7oR2ghSL/f1rqJX48E6hCa5GucVGzx/nQnOttS52iAv7iP77SNub5t2/qmDrROJOMgmPgKXTCRh69Wg6ri7WIDiPoKELqClaJmZdz3tW2INIanxgJpRZD4T83nQFNcw97Kv5cthbKMMS6gXLhCIEberYJRMusr1uvigy4ImBESxnBx8KU9XX9Y7auPvRCYyTF63fCnl5qqKXCcLY1Hnd27vfa1M1C2yR7fQpa7X6G0b3wdgITYh5hXhYpO0F7CY0tVSUSUjoVAhGIkDnl+MWm6cQoS1qLZv8SOl+trs+e2DrkoJDxWOu5irT9f+JNTrp1DMw==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=T3/g/I9WjrAMjIWFWLhWE7qlMF6jznG68jcvWdnlj70=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=U+NiIXUA
-Subject: Re: [Buildroot] [PATCH 1/1] package/cryptodev-linux: Fix build for
+To: buildroot@buildroot.org
+Date: Mon, 8 Dec 2025 10:32:42 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8745e0d5ca39abbbb664619e1512420c40bcd732
+X-Git-Newrev: 6086429850d20ce7fbcaf88ca83504c674992c10
+X-Patchwork-Hint: ignore
+Message-Id: <20251208093330.CBBFD86414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cryptodev-linux: Fix build for
  Linux 6.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -93,25 +70,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============5053361880661476200=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+--===============5053361880661476200==
+Content-Type: text/plain
 
- > Buildroot commit a06d79862a60d3c8d5ddd6a9ab12b5ccdd91984c bumped the
- > linux kernel to version 6.18 which broke the build of cryptodev-linux.
+commit: https://git.buildroot.net/buildroot/commit/?id=6086429850d20ce7fbcaf88ca83504c674992c10
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Added upstream patch to fix the problem.
+Buildroot commit a06d79862a60d3c8d5ddd6a9ab12b5ccdd91984c bumped the
+linux kernel to version 6.18 which broke the build of cryptodev-linux.
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Added upstream patch to fix the problem.
 
-Committed, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0001-Fix-build-for-Linux-6.18-rc1.patch        | 55 ++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/cryptodev-linux/0001-Fix-build-for-Linux-6.18-rc1.patch b/package/cryptodev-linux/0001-Fix-build-for-Linux-6.18-rc1.patch
+new file mode 100644
+index 0000000000..fef5af4099
+--- /dev/null
++++ b/package/cryptodev-linux/0001-Fix-build-for-Linux-6.18-rc1.patch
+@@ -0,0 +1,55 @@
++From 08644db02d43478f802755903212f5ee506af73b Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Joan=20Bruguera=20Mic=C3=B3?= <joanbrugueram@gmail.com>
++Date: Sat, 6 Sep 2025 20:36:38 +0000
++Subject: [PATCH] Fix build for Linux 6.18-rc1
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++It's no longer required to use nth_page() when iterating pages within a
++single scatterlist entry.
++
++Note I believe this code path in `sg_advance` is currently unreachable:
++It is only called from `get_userbuf_srtp`, passing in a scatterlist
++copied from one created by `__get_userbuf`, which only generates
++entries such that `sg->offset + sg->length <= PAGE_SIZE`.
++On the other hand, this code path in `sg_advance` requires that
++`sg->offset + sg->length > sg->offset + consumed >= PAGE_SIZE`.
++
++See also: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f8f03eb5f0f91fddc9bb8563c7e82bd7d3ba1dd0
++          https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ce00897b94bc5c62fab962625efcf1ab824d3688
++
++Signed-off-by: Joan Bruguera Micó <joanbrugueram@gmail.com>
++
++Upstream: https://github.com/cryptodev-linux/cryptodev-linux/commit/08644db02d43478f802755903212f5ee506af73b
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ util.c | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/util.c b/util.c
++index 9eba4836..d4267816 100644
++--- a/util.c
+++++ b/util.c
++@@ -21,6 +21,7 @@
++ 
++ #include <crypto/scatterwalk.h>
++ #include <linux/scatterlist.h>
+++#include <linux/version.h>
++ #include "util.h"
++ 
++ /* These were taken from Maxim Levitsky's patch to lkml.
++@@ -44,8 +45,12 @@ struct scatterlist *sg_advance(struct scatterlist *sg, int consumed)
++ 	sg->length -= consumed;
++ 
++ 	if (sg->offset >= PAGE_SIZE) {
+++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 18, 0))
+++		struct page *page = sg_page(sg) + (sg->offset / PAGE_SIZE);
+++#else
++ 		struct page *page =
++ 			nth_page(sg_page(sg), sg->offset / PAGE_SIZE);
+++#endif
++ 		sg_set_page(sg, page, sg->length, sg->offset % PAGE_SIZE);
++ 	}
++ 
+
+--===============5053361880661476200==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5053361880661476200==--
