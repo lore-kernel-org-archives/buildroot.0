@@ -1,85 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBEE9D3B7EA
-	for <buildroot@archiver.kernel.org>; Mon,  8 Dec 2025 18:54:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F69AD3B7E2
+	for <buildroot@archiver.kernel.org>; Mon,  8 Dec 2025 19:36:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7928C80EFB;
-	Mon,  8 Dec 2025 18:54:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A6C761095;
+	Mon,  8 Dec 2025 19:36:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KS3B3QhXZ3cr; Mon,  8 Dec 2025 18:54:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 93jJDF3C8nu6; Mon,  8 Dec 2025 19:36:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B82880EB1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27B346102A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765220090;
-	bh=Nx75hvOBzCYIUWx0dzZ7P04wXY7vwyaJ9NsvxUTmKms=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=SBEgUcRu6odYfp+M+Z1aGgU08Z/yYvcoda1kj4Lkw+QWh0+DDGY80wLbeEXOVPJAU
-	 IcRF/q6V8X4P88I40vwM9imsPd01l6W009l/oNJUwalguSAO3/h3NGxmi1zbJ5xbL9
-	 2XOX3eTyRPvKadHngs6nd6tveFJZbngFtZZjx/99BzIgXywqSRHWHCQTOgxgOVo384
-	 BriPrlnNxlOY/ZwP5Y3y3X5zMQ3nC6rdcdFlVckMuXN7GbLDHIMKPKFoESSgf0wspX
-	 4fz11++ogOLX0Yl1oYiaeE+ow9KLx1Ae4dMZEJJvHMcIy1/oQ8zM6XWq0K9ii0A+mD
-	 RNi1DDejXi0CA==
+	s=default; t=1765222585;
+	bh=wriTm4Tvui2reQFYpDgCIHcKjdCv36s33hh9d2CXbmk=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=gWBeQ6TnZYUFw+H4mkb2Cyp4mrg83ebLtp4PXXvr3W6ResWGExjORHBVkkuZMfdgK
+	 bwPqWSjU+KQ2xwpeu9XLjb8CT6gOo3pOv4iTWpDucNw6nxmF1YCE8Yjlwhg2K9xUk5
+	 r3roEV0XR8ju3Ld0pGEBpLX6VyR2uX9xIazAY9xI1g95DfFx45ngJuankWgSASsz1i
+	 vfZLc+H69IhrooBR1Tben1uET+gjm3caZVd4JrlizmWPe0XlktGLbrLDH7M4YOO8CG
+	 nqYzrQvItmUz6+srYSnUrgeHOP9IYHe09dvfvlaio5WM0iYbMKtH9zJugCNyXONFFh
+	 RL9SLDhS1EfHA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B82880EB1;
-	Mon,  8 Dec 2025 18:54:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D9988197
- for <buildroot@buildroot.org>; Mon,  8 Dec 2025 18:54:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 27B346102A;
+	Mon,  8 Dec 2025 19:36:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3901A151
+ for <buildroot@buildroot.org>; Mon,  8 Dec 2025 19:36:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CB89D40257
- for <buildroot@buildroot.org>; Mon,  8 Dec 2025 18:54:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2982D404DA
+ for <buildroot@buildroot.org>; Mon,  8 Dec 2025 19:36:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id es3k-sRH46sS for <buildroot@buildroot.org>;
- Mon,  8 Dec 2025 18:54:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=172.234.252.31;
- helo=sea.source.kernel.org; envelope-from=jarkko@kernel.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ov2shHMGDNFZ for <buildroot@buildroot.org>;
+ Mon,  8 Dec 2025 19:36:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0E35F401E0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E35F401E0
-Received: from sea.source.kernel.org (sea.source.kernel.org [172.234.252.31])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0E35F401E0
- for <buildroot@buildroot.org>; Mon,  8 Dec 2025 18:54:48 +0000 (UTC)
-Received: from smtp.kernel.org (transwarp.subspace.kernel.org [100.75.92.58])
- by sea.source.kernel.org (Postfix) with ESMTP id 54D6B418FA;
- Mon,  8 Dec 2025 18:54:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF9BFC4CEF1;
- Mon,  8 Dec 2025 18:54:47 +0000 (UTC)
-Date: Mon, 8 Dec 2025 20:54:44 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-Message-ID: <aTce9PuTTZ4YWali@kernel.org>
-References: <20251208174427.3459324-1-bernd@kuhls.net>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20251208174427.3459324-1-bernd@kuhls.net>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=kernel.org; s=k20201202; t=1765220088;
- bh=+jqDK+ypeomM4rdIY+CZHj5fipaOCOIHl7bKsM/6ASw=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=qMET2C3jYWTLh5ys0C3xI1f4i5KGneuxmXO6BuGDRoqJNk3Q7tzDnZaWmc8zYV3al
- /385UWilR6C1zpdO+9PjvPE6mEUuNlagIHse3N2ehjJ2d4GTV2KXIu8BEj7/z3rGRO
- +OqfnN+3x+tJX0wTL1aD6iURXCbwoW4pzbhQg8DfmREE9lwGNpec9YgBVuVYwx071w
- 0Y4/MiJtOKif0Uz4Ix7fvjoM/leinvAchipXZAF3EK0twk4Ax+LOBi1ht71k9ZITyl
- ty8FgjL3TqBtlxeOoLoKZpMgTq+lN8QjO6OCjZ3TOsP83QOCFwmeZ3b2bbCqH0/tCb
- zahBRHby0J8tQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=kernel.org
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256
- header.s=k20201202 header.b=qMET2C3j
-Subject: Re: [Buildroot] [PATCH 1/1] package/swtpm: needs gmp
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1DA1740473
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1DA1740473
+ for <buildroot@buildroot.org>; Mon,  8 Dec 2025 19:36:23 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1837586492; Mon,  8 Dec 2025 19:36:23 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 8 Dec 2025 20:33:50 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6086429850d20ce7fbcaf88ca83504c674992c10
+X-Git-Newrev: 8344efd7646d3eed0e2313b1f692bb662d6e2d8f
+X-Patchwork-Hint: ignore
+Message-Id: <20251208193623.1837586492@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/strace: bump version to 6.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,53 +68,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Jarkko Sakkinen via buildroot <buildroot@buildroot.org>
-Reply-To: Jarkko Sakkinen <jarkko@kernel.org>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, Dec 08, 2025 at 06:44:27PM +0100, Bernd Kuhls wrote:
-> Buildroot commit 2b449935c2e8e19a03a8962f49493a76ccca11f9 bumped swtpm
-> from version 0.8.2 to 0.10.1.
-> 
-> Upstream added gmp as dependency in version 0.9.0:
-> https://github.com/stefanberger/swtpm/commit/605e0ce8800201fca2a9a37dea5e99be7bdb2233
-> 
-> This causes build errors which are fixed by adding host-gmp as
-> dependency.
-> 
-> Fixes:
-> https://autobuild.buildroot.net/results/d14/d14b2953e04b488b2f357386870d557d50190d34/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/swtpm/swtpm.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/swtpm/swtpm.mk b/package/swtpm/swtpm.mk
-> index 25377f5771..de7f2fa05e 100644
-> --- a/package/swtpm/swtpm.mk
-> +++ b/package/swtpm/swtpm.mk
-> @@ -10,6 +10,7 @@ SWTPM_LICENSE = BSD-4-Clause
->  SWTPM_LICENSE_FILES = LICENSE
->  
->  HOST_SWTPM_DEPENDENCIES = \
-> +	host-gmp \
->  	host-json-glib \
->  	host-libopenssl \
->  	host-libtasn1 \
-> -- 
-> 2.47.3
-> 
+commit: https://git.buildroot.net/buildroot/commit/?id=8344efd7646d3eed0e2313b1f692bb662d6e2d8f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks! I missed that sorry.
+Release notes: https://github.com/strace/strace/blob/v6.18/NEWS
 
+Buildroot commit a06d79862a60d3c8d5ddd6a9ab12b5ccdd91984c bumped the
+linux kernel to version 6.18 which broke the build of strace.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+The issue can be reproduced with commands:
 
-BR, Jarkko
+    cat >.config <<EOF
+    BR2_aarch64=y
+    BR2_PACKAGE_STRACE=y
+    EOF
+    make olddefconfig
+    make strace
+
+The build is failing with error:
+
+    listmount.c: In function 'print_mnt_id_req':
+    listmount.c:39:16: error: 'struct mnt_id_req' has no member named 'spare'
+       39 |         if (req.spare) {
+          |                ^
+
+Fixes:
+https://autobuild.buildroot.org/results/8e3de892a1c4aa176a8b3a5defba48aa9830bc89/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien:
+ - update pgp key comment in hash file
+ - add commands to reproduce the issue and error log
+ - add autobuilder failure log
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/strace/strace.hash | 7 ++++---
+ package/strace/strace.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index f6833d08f0..268045ef1d 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,5 +1,6 @@
+-# Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
+-# https://strace.io/files/6.17/strace-6.17.tar.xz.asc
+-sha256  0a7c7bedc7efc076f3242a0310af2ae63c292a36dd4236f079e88a93e98cb9c0  strace-6.17.tar.xz
++# Locally calculated after checking signature with RSA key from
++# https://raw.githubusercontent.com/strace/strace/refs/tags/v6.18/GPG-KEY
++# https://strace.io/files/6.18/strace-6.18.tar.xz.asc
++sha256  0ad5dcba973a69e779650ef1cb335b12ee60716fc7326609895bd33e6d2a7325  strace-6.18.tar.xz
+ sha256  ca2a0994c57e48b16828008c80cdb626e471b6b59116a8443b2ce4e3c77ddc3b  COPYING
+ sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index c693d15bf9..5230b4d60c 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STRACE_VERSION = 6.17
++STRACE_VERSION = 6.18
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
+ STRACE_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
