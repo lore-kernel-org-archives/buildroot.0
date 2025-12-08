@@ -4,60 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBD75D3B7EA
-	for <buildroot@archiver.kernel.org>; Mon,  8 Dec 2025 21:34:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 648CDD3B7EA
+	for <buildroot@archiver.kernel.org>; Mon,  8 Dec 2025 21:40:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C46240C58;
-	Mon,  8 Dec 2025 21:34:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F3DB340BE6;
+	Mon,  8 Dec 2025 21:40:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JUi2byCnrRL0; Mon,  8 Dec 2025 21:34:02 +0000 (UTC)
+ id eL4pgl2_rQMO; Mon,  8 Dec 2025 21:40:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4683340282
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E68B440BDD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765229642;
-	bh=QRhRouXx4412JdptBppL5iKgjR+mCStP0vSGejI3lq0=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=aNiM8EmCo0h+PXT35UaUFrORTyEcsxf8ob8jcXTCpfFiS9v1EpbNX7IqMB53UCXGX
-	 cZjW8QEqczkAtW2oF7O8CSluo/0dMLBWXAzqZZ4UHzUYXXnqa9Vs/udPfeeo7lFZ07
-	 sPkZatE2LpPlI5e0P+jrAKNmSw7n2wHE98k2+lI6OtFXba/aPNPRPCHJofSdvzYkAl
-	 TWXSzZeYYF5NFbfaih1l8ipU5tuQ9Xj9rHiHVmShEvVfAuaVe+MOTM55vcGWQXbRhh
-	 SFdJOIAzcgZNaTd+OIpj+l2ZMqpBJZna2F4Vtgxrq5lppm3HaFVToc3ema7Pp9va0Q
-	 l5OsaUam7wABQ==
+	s=default; t=1765230034;
+	bh=9Up4/W5G+uwVEX1+T3JsKCzyLv8BBhaMxVj4cVOiU3Y=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=HdnpIylVilE6RdYpSHamWxUKIKxiia5q6RrWdZlHKGdGSQZq85mjoETnR0AnNXxqi
+	 oGI3J+HkItx2iwVCCFdbNf/G5qi0wcsRNvNiehsBOWz/YBBnlEWLbePZGxVekT2hh2
+	 Yz4UEFdBIxgFMRB7AWP/YqtrhRrFK7yoMXIGlXddr8DUEsPzkwODE/gvZ/pUzRdB4d
+	 I/N1k3npxSJPFqDJt6zUh8VaFurp26X+Bt/W45NXrBYgTyPuz1Y+27oS9XbfNhjH6F
+	 +oWEMnp/ojQOkFzFeZZHzBMW6seo4kjT5ykjyH4j6JIH48rMD3HJmoaFbV3yWoaBhN
+	 XDEZ5zkmAsvTg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4683340282;
-	Mon,  8 Dec 2025 21:34:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 62924197
- for <buildroot@buildroot.org>; Mon,  8 Dec 2025 21:34:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E68B440BDD;
+	Mon,  8 Dec 2025 21:40:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id EA156197
+ for <buildroot@buildroot.org>; Mon,  8 Dec 2025 21:40:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0ACD183CE7
- for <buildroot@buildroot.org>; Mon,  8 Dec 2025 21:33:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DB659835F2
+ for <buildroot@buildroot.org>; Mon,  8 Dec 2025 21:40:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pCT3i1OrfUyW for <buildroot@buildroot.org>;
- Mon,  8 Dec 2025 21:33:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52D5E83CCE
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 52D5E83CCE
- for <buildroot@buildroot.org>; Mon,  8 Dec 2025 21:33:51 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 410E186817; Mon,  8 Dec 2025 21:33:51 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 8 Dec 2025 22:23:21 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 52f83ccfbca8497d58eb624ac7b59d5195565f3d
-X-Git-Newrev: bd57bf71295d2bf860b341fbda19f430388324ee
-X-Patchwork-Hint: ignore
-Message-Id: <20251208213351.410E186817@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libxslt: security bump version to
- 1.1.45
+ id bySyuiXpq5vl for <buildroot@buildroot.org>;
+ Mon,  8 Dec 2025 21:40:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DD93883376
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD93883376
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DD93883376
+ for <buildroot@buildroot.org>; Mon,  8 Dec 2025 21:40:30 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 89BD278035B;
+ Mon,  8 Dec 2025 22:40:26 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 08 Dec 2025 22:40:26 +0100
+MIME-Version: 1.0
+Date: Mon, 08 Dec 2025 22:40:26 +0100
+To: Bagas Sanjaya <bagasdotme@gmail.com>
+Cc: Buildroot Development <buildroot@buildroot.org>
+In-Reply-To: <20251207233306.10587-2-bagasdotme@gmail.com>
+References: <20251207233306.10587-2-bagasdotme@gmail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <83b7a620beee287f753217484c561d9a@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1765230028;
+ bh=byGt0K0O6c8te8If667kplha81f1vA0o753C3u9WTAI=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=vZm9BsffwM0ay35gq6MLWn76l5HtPURfIuShSfTyyNX4r9wIPZKmts/BajZ4UWP1X
+ czOmVENaU+5IHRKeSgQtnuKyRYnefO+3/L7GR+JrS01XCUvWJ3FkPADdG6gOp9/cgU
+ qlVPD6crJ0ZSiSHBISP7TwSmSrHPrnrISh+rysLT/ostJjWFudpKtDm6WcxRxgzmqQ
+ C1U1ZiULFQaoXvD4jZvwIJ4yk6rwh8aNNh3diifIqWEUDcxl36gdlJTaiDqsdyFWVo
+ mDLKa6uKI4U5maWSmjuFMwJka2dpLlkkNVFkfo9CpWIP9e94unKISLYpHMktiuIO8M
+ ae59WRClCQN2Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=vZm9Bsff
+Subject: Re: [Buildroot] [PATCH] package/git: bump to version 2.52.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,55 +95,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd57bf71295d2bf860b341fbda19f430388324ee
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Bagas,
 
-Release notes:
-https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.45.news
+Thanks for the patch.
 
-Fixes:
-https://www.cve.org/CVERecord?id=CVE-2025-7424
-https://www.cve.org/CVERecord?id=CVE-2025-9714
-https://www.cve.org/CVERecord?id=CVE-2025-11731
+On 08/12/2025 00:33, Bagas Sanjaya wrote:
+> Bump the package version to v2.52.0.
+> 
+> Release notes:
+> https://lore.kernel.org/git/xmqqh5usmvsd.fsf@gitster.g/
+> 
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libxslt/libxslt.hash | 4 ++--
- package/libxslt/libxslt.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+A patch was already committed in branch next doing this bump:
+https://gitlab.com/buildroot.org/buildroot/-/commit/a62b589c19ddf27384b8851669d152b51e644696
 
-diff --git a/package/libxslt/libxslt.hash b/package/libxslt/libxslt.hash
-index 98c68eded1..0523c51362 100644
---- a/package/libxslt/libxslt.hash
-+++ b/package/libxslt/libxslt.hash
-@@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.43.sha256sum
--sha256  5a3d6b383ca5afc235b171118e90f5ff6aa27e9fea3303065231a6d403f0183a  libxslt-1.1.43.tar.xz
-+# From https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.45.sha256sum
-+sha256  9acfe68419c4d06a45c550321b3212762d92f41465062ca4ea19e632ee5d216e  libxslt-1.1.45.tar.xz
- 
- # Hash for license file:
- sha256  7e48e290b6bfccc2ec1b297023a1d77f2fd87417f71fbb9f50aabef40a851819  Copyright
-diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-index e92b383b89..229f3de2f6 100644
---- a/package/libxslt/libxslt.mk
-+++ b/package/libxslt/libxslt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBXSLT_VERSION = 1.1.43
-+LIBXSLT_VERSION = 1.1.45
- LIBXSLT_SOURCE = libxslt-$(LIBXSLT_VERSION).tar.xz
- LIBXSLT_SITE = https://download.gnome.org/sources/libxslt/1.1
- LIBXSLT_INSTALL_STAGING = YES
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
