@@ -4,88 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A317DD3B7EA
-	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 08:40:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE667D3B7EA
+	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 08:54:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 56EDF40CE8;
-	Tue,  9 Dec 2025 08:40:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 857B44051D;
+	Tue,  9 Dec 2025 08:54:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TNRyZ5DTle1Z; Tue,  9 Dec 2025 08:40:05 +0000 (UTC)
+ id 1MYGxvErWXbC; Tue,  9 Dec 2025 08:54:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FC6F40CC1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B523340D08
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765269605;
-	bh=QbUYXiuhQypKeM5+YAwxV/HEt/ZBNrl7Dz0/tAQT5d0=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=G47SexPgAm//IYK1yhIRCT8CP/cDrMqS7b+ZhL5Y4FCHXNXIGCevj+Mos4ocb3ORv
-	 qcIsUapQtnBlb250UbWLwXsrH4ZJCoXkGU9tksBXrrVSPww7LLAlXFXBwoF2irub4l
-	 aA9mWDOFSyrCbMXJtiCUAi0QKImklbhpVG/hr9csQawUjybQgafOiVGxmyxzF43t4t
-	 KNoUVo1xJ+zxz1qv3h6gBgXSYZxBmEo7DpTjgmADJpiDoa0H1l9wqhMJtMWMhwH5PJ
-	 RE8EdQze5MOFLrvDisghxhxQ3PmLv5Yz6699nB3rKv0SLC02rNxAa6yM0LLgppxD5p
-	 Eg43IZvMITP9Q==
+	s=default; t=1765270464;
+	bh=EyLxbEqsySLDk7WZn0T+MURCQYHhe0plkLGh89IF2fE=;
+	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=mvAMuOplm4JmQPIeX6kZaFwXCRmvLd4ml5K7z5lNcM8Yj6e9lTZ7rLgrPxRHsxvbF
+	 DmTAgt3nJ7KMWabuOl08DzWcS4kZC+H1N070h/YpLEdOQLcJE+s3Kw+Pjxi1w6cuBC
+	 6m5AMbcmifcY8DgIFts0AIlfQ3JGqrZ3jvEcI4giTzSb2fuNgu2UTSpHTQVtM2nJRS
+	 ZNccPGOXtE45N8EACymY7VuuSQZBTMqpl1Dfb8Vb0ZFiLDM8cAgJcRENOPNur6PlnZ
+	 fGB0cdoM+N5IfkTo9Am2my9KM9vvDseyCHFJiNlslB3PbXHtScfIEsgu0cXwwQQcOj
+	 CzwCwTZHY7svg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9FC6F40CC1;
-	Tue,  9 Dec 2025 08:40:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7BBE2197
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 08:40:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B523340D08;
+	Tue,  9 Dec 2025 08:54:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id ABCF3197
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 08:54:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 665E640CC1
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 08:40:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A5C284010C
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 08:54:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sy4UHxXHchGl for <buildroot@buildroot.org>;
- Tue,  9 Dec 2025 08:40:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TTltOsuE0g_Q for <buildroot@buildroot.org>;
+ Tue,  9 Dec 2025 08:54:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=alexis.lothore@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6D0B040CAA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D0B040CAA
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6D0B040CAA
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 08:40:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D989840029
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D989840029
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D989840029
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 08:54:21 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id 96BE6C180DF
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 08:39:35 +0000 (UTC)
+ by smtpout-03.galae.net (Postfix) with ESMTPS id E164B4E41B19;
+ Tue,  9 Dec 2025 08:54:18 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 6A04A606E2;
- Tue,  9 Dec 2025 08:39:59 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id AB979606E2;
+ Tue,  9 Dec 2025 08:54:18 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 1234A102F0BF6; Tue,  9 Dec 2025 09:39:56 +0100 (CET)
-Date: Tue, 9 Dec 2025 09:39:55 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Titouan Christophe <titouan.christophe@mind.be>
-Message-ID: <20251209093955.75fc0716@windsurf>
-In-Reply-To: <20251106204737.3273902-1-bernd@kuhls.net>
-References: <20251106204737.3273902-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+ with ESMTPSA id 58D9D11930301; Tue,  9 Dec 2025 09:54:17 +0100 (CET)
+Date: Tue, 09 Dec 2025 09:54:10 +0100
+Message-Id: <20251209-libldns_drill-v3-0-cce588a002f4@bootlin.com>
 MIME-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIALLjN2kC/2XM0QrCIBiG4VsZHmf8ujmto+4jInLT9oNp6JBi7
+ N5zg4Lq8PvgfSaSTESTyL6aSDQZEwZfRr2pSDdc/NVQ7MsmHLgABS11qF3v07mP6BwFxSwTtmm
+ N0KQ092gsPlbveCp7wDSG+Fz5zJb3LckfKTMKVPRKstpqUC0cdAijQ7/two0sVuafngH763npr
+ WjkTkqlGmW/+3meX3oXrs7sAAAA
+X-Change-ID: 20250806-libldns_drill-081f15f46e5b
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Bernd Kuhls <bernd@kuhls.net>, nicolas.carrier@nav-timing.safrangroup.com, 
+ =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1765269599; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=I2g0hUwHF5zIPHGLm5AuRZ477sYtcr88U8nNwXX/hwA=;
- b=DfSDBDffQJiI/m7YQAuRq6y8uZt8zwESVKPduasFA+FMxWPc+WpkFU+2osdQLQ8QaDxhUq
- JDiSCt/qIY/17LUMji2xk9wD1IPsUEYZs1X+EAghE4xWBAPUNSis6QDPJRWwdsLxr1/SOC
- 0eCeR48xU7rwckgUFQWbFSXkKnL8xwfruC2eJB51nN5iIAb+r7gZ40pDJe9VB0PfcvhfV+
- dbH6plcv4YqFIBV7hc2eZ8y2s9Xt6c0ZCTsHOKB4EzAZVuZSBqZ/duGGYvIIoUMdbTteHo
- V8l7H7LOrJ4nu6mMNws0UF1gKaNWNePzduTlSwgDuQQ+sdcfDG92raUE4HmKtQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ t=1765270458; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding; bh=zKITK/UITFRT1BQi0Qz3u/TgAJLZBiBfbRkT8Uur58M=;
+ b=EmV82k3s+z/PAmBxeICrl/vF3jVbYXKu9axU0VBCUfx5+i9OM0VPjQmr/p5mB31iSVFT7r
+ Yw3HqRnBPcmDC1SLlWjMh/sAnzmGGHztjbaco67rMgOP2I+zUcYWjkbq78xQ70E/P/ngRi
+ 3yDVAVnBLU4OLHzpUGpTwAmCEpOihO9CI42My/iICvfr0zg47o5WSgJcjYQUfDXDzYzSEW
+ WXCQ6v5FWqOqY5nQvD0zUHPngpgDWcuzZ/nDMkXt0PZNllrn4ZACFVH9WRHSwJkHWwQfVs
+ mnrgeNQzpJct/KoLsUX3fHfzVAJly1LGu79bAZl3e6WywCxVVVTREOeo/LNQvA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=DfSDBDff
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/asterisk: security bump
- version to 22.5.2
+ header.s=dkim header.b=EmV82k3s
+Subject: [Buildroot] [PATCH v3 0/2] package/libldns: allow to build drill
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,59 +98,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Alexis_Lothor=C3=A9_via_buildroot?= <buildroot@buildroot.org>
+Reply-To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Bernd,
-
-On Thu,  6 Nov 2025 21:47:37 +0100
-Bernd Kuhls <bernd@kuhls.net> wrote:
-
-> Fixes CVE-2025-1131:
-> https://github.com/asterisk/asterisk/security/advisories/GHSA-v9q8-9j8m-5xwp
-> 
-> Acked-by: Titouan Christophe <titouan.christophe@mind.be>
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-
-I'm not sure it's been introduced by this version bump, but Asterisk is
-still causing quite a few build failures in the autobuilders.
-
-I briefly looked into two of them:
-
-- https://autobuild.buildroot.net/results/426/426336052c50768b06dd047ce4b8283e6da377d4/build-end.log
-
-  menuselect/menuselect: error while loading shared libraries: libxml2.so.16: cannot open shared object file: No such file or directory
-
-  The target asterisk package builds "menuselect" as a host tool, but
-  our $(HOST_LDFLAGS) are not passed when building menuselect, so it
-  doesn't have the right -Wl,-rpath flag passed, and therefore when it
-  tries to *run* menuselect, it doesn't find libxml2 in $(HOST_DIR)/lib
-
-  Not sure how to pass our HOST_LDFLAGS.
-
-  Also, since it builds menuselect for the host, is it still needed for
-  the target asterisk to depend on host-asterisk ?
-
-- https://autobuild.buildroot.net/results/af9/af9c127965260044095f1fa98db88e1d1d762646/build-end.log
-
-  Invalid configuration `or1k-buildroot-linux-gnu': machine `or1k-buildroot' not recognized
-
-  The config.sub part of the pjsip code (downloaded as EXTRA_DOWNLOADS)
-  is very old, and doesn't know about or1k. It would have to be
-  overridden by our copy in support/gnuconfig/ (also config.guess).
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8sCnRoaXMgaXMgdGhlIHYzIG9mIGEgc21hbGwgc2VyaWVzIGFpbWluZyB0byBhbGxvdyBi
+dWlsZGluZyB0aGUgZHJpbGwKY29tbWFuZGxpbmUgdG9vbCwgc3VwcG9ydGVkIGJ5IGxpYmxkbnMg
+cGFja2FnZS4gSSByZWFsaXplIHRoYXQgSSBoYXZlCm1lc3NlZC11cCB0aGUgdmVyc2lvbmluZyBv
+biB0aGUgcHJldmlvdXMgcmV2aXNpb24sIHdoaWNoIF9zaG91bGRfIGhhdmUKYmVlbiB2Mywgc28g
+aGVyZSBpcyB0aGUgYWN0dWFsIHYzLiBJdCBkb2VzIG5vdCBicmluZyBhbnkgY2hhbmdlLCBhc2lk
+ZQpmcm9tIHByb3Blcmx5IGNvbGxlY3Rpbmcgc29tZSBSQiBmcm9tIFRob21hcy4KCmRyaWxsIGlz
+IGEgc21hbGwgQ0xJIHRvb2wgYWxsb3dpbmcgdG8gcGVyZm9ybSBhbmQgZGVidWcgRE5TIHJlcXVl
+c3RzLgpXaGlsZSBhdCBpdCwgdGhlIHNlcmllcyBicmluZ3MgaW4gYSBzbWFsbCBydW50aW1lIHRl
+c3QgdmFsaWRhdGluZyB0aGF0CnRoZSBiaW5hcnkgKGFuZCBzbywgdGhlIGxpYnJhcnkgaXQgZGVw
+ZW5kcyBvbikgaXMgY29ycmVjdGx5IGJ1aWx0LAppbnN0YWxsZWQsIGFuZCB0aGF0IGl0IGlzIGFi
+bGUgdG8gcnVuIG9uIHRoZSB0YXJnZXQgYXJjaGl0ZWN0dXJlLgoKWzFdIGh0dHBzOi8vbG9yZS5r
+ZXJuZWwub3JnL2J1aWxkcm9vdC8yMDI1MDgwNy1saWJsZG5zX2RyaWxsLXYxLTAtNWQ4NzEzZmIw
+ODYwQGJvb3RsaW4uY29tLwoKU2lnbmVkLW9mZi1ieTogQWxleGlzIExvdGhvcsOpIDxhbGV4aXMu
+bG90aG9yZUBib290bGluLmNvbT4KLS0tCkNoYW5nZXMgaW4gdjM6Ci0gY29sbGVjdCBUaG9tYXMn
+IFJCCi0gTGluayB0byB2MjogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvci8yMDI1MTAxNy1saWJs
+ZG5zX2RyaWxsLXYyLTAtZjU0Nzk3Nzg4NDhmQGJvb3RsaW4uY29tCgpDaGFuZ2VzIGluIHYyOgot
+IEFkZGVkIG1pc3NpbmcgU29CIGluIGZpcnN0IHBhdGNoCi0gcmVtb3ZlIHVuZWNlc3NhcnkgImRl
+ZmF1bHQgbiIgaW4gQ29uZmlnLmluCi0gZml4ZWQgY29tbWVudCBhYm91dCB0b29sY2hhaW4gZmVh
+dHVyZXMgcmVxdWlyZW1lbnQKLSBMaW5rIHRvIHYxOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9y
+LzIwMjUwODA3LWxpYmxkbnNfZHJpbGwtdjEtMC01ZDg3MTNmYjA4NjBAYm9vdGxpbi5jb20KCi0t
+LQpBbGV4aXMgTG90aG9yw6kgKDIpOgogICAgICBwYWNrYWdlL2xpYmxkbnM6IGFkZCBhbiBvcHRp
+b24gdG8gYnVpbGQgYW5kIGluc3RhbGwgZHJpbGwKICAgICAgc3VwcG9ydC90ZXN0aW5nOiBhZGQg
+YmFzaWMgcnVudGltZSB0ZXN0IGZvciBsaWJsZG5zL2RyaWxsCgogcGFja2FnZS9saWJsZG5zL0Nv
+bmZpZy5pbiAgICAgICAgICAgICAgICAgICAgIHwgMTMgKysrKysrKysrKysrKwogcGFja2FnZS9s
+aWJsZG5zL2xpYmxkbnMubWsgICAgICAgICAgICAgICAgICAgIHwgIDcgKysrKysrKwogc3VwcG9y
+dC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9saWJsZG5zLnB5IHwgMjEgKysrKysrKysrKysr
+KysrKysrKysrCiAzIGZpbGVzIGNoYW5nZWQsIDQxIGluc2VydGlvbnMoKykKLS0tCmJhc2UtY29t
+bWl0OiAzZjNkNmU0M2RlOWI0YWFjN2RmODU0NWZkODExMTcxMjU2Zjg3OGQzCmNoYW5nZS1pZDog
+MjAyNTA4MDYtbGlibGRuc19kcmlsbC0wODFmMTVmNDZlNWIKCkJlc3QgcmVnYXJkcywKLS0gCkFs
+ZXhpcyBMb3Rob3LDqSwgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVy
+aW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
+dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
+b290Cg==
