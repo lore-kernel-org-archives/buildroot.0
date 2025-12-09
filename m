@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CCBDD3B990
-	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 18:28:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7551D3B98E
+	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 18:28:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 70DE44081F;
-	Tue,  9 Dec 2025 18:28:26 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MKfQXm0I3B0o; Tue,  9 Dec 2025 18:28:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 791E34087C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765304905;
-	bh=2rixUA9sxOVMlx1Nq3E2/7DaUTBUjtkurRscOV5SbPE=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=qJtjw+d1wzO9qCw8J61BPLWGKrSwgAn0x4hz6Aut0B6ZJzPufowj2hnwh+HOOFelt
-	 /ZRRkzeL6Fms1hORhp1maXWL7j7GsgrVPOSqd5apTget+WJsn0XHietLPw4axW0iGr
-	 CReEBxBxfAJovVTVsEXGbb4yvCkrUgk/synTXyL8UD8X935Lzw/IGj9OfWSodJSzPv
-	 aUoTy9r/qgDNCKxLXwPmKEV7B0ay4za1oNRoXa158TBDg3BbWPA7kliIgi2tQ3DnOe
-	 oKiCcY9rKoWPIJpyyp8BKT8Nx8lSOOBP4NnFXXr0VQG2HFh8hGoOqt7shU88U2BT0j
-	 U7060YdNNwUdA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 791E34087C;
-	Tue,  9 Dec 2025 18:28:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A47FE2C0
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:28:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8B7A4608EE
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:28:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9A8EB60E1C;
+	Tue,  9 Dec 2025 18:28:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g2JU-k3YX_1U for <buildroot@buildroot.org>;
+ id MPlzEhXauTTg; Tue,  9 Dec 2025 18:28:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CCC36100A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1765304906;
+	bh=gMbaIyfwzj17zeIrkg4OgeG12Zf94dedJrCVeIvZXKk=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=UyEmqceOT/fQdBHVe2gJkR5JdRytbDpAOj438/6tC3cOJAIdyE0CkzJKUHnGJQpN2
+	 +QV/YUxdjC1kw3VIRJ7ACaBVlKNcv55PmNjEy7qyzAyzCGAad9zdwAZMA0vgpk+QDW
+	 s7ynIn5lYme2zGbcFJsiWStOnePVdipZVYmjWNfQ+ptnFSnrXQUb24rHsWMDjPZQC1
+	 iAPffM9KBBi+DwyEVIo30uUCNUoSvsSg/6BpTDQ3Rvdqp9SBFLgwIdJH1y3aSywjoM
+	 ZDbZU7pdeSquSx2Imxqn4oozLPZg5+kHqStCAXXYS+Ug4snE0t+xJ6TX0Fa7WkKeOo
+	 X5x8PReTJmiGg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8CCC36100A;
+	Tue,  9 Dec 2025 18:28:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D69A82C0
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:28:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A8ABA407E6
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:28:18 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ke_p5a00QgdN for <buildroot@buildroot.org>;
  Tue,  9 Dec 2025 18:28:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B58CB608B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC61F407FC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B58CB608B8
+ by smtp4.osuosl.org (Postfix) with ESMTP id CC61F407FC
  for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:28:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A72D986963; Tue,  9 Dec 2025 18:28:17 +0000 (UTC)
+ id C9CA286963; Tue,  9 Dec 2025 18:28:17 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 9 Dec 2025 19:24:58 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ca21d87300ea54217b262e06f295b816fb38eecb
-X-Git-Newrev: b822976c6069d5d6296ac61bb848fc3de0900a99
+X-Git-Oldrev: c6e914819774212e79be19f62706f653b9646f11
+X-Git-Newrev: 1a9e812d24c4e609c65e3dc39813e0c61b20966f
 X-Patchwork-Hint: ignore
-Message-Id: <20251209182817.A72D986963@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gtksourceview: bump
- version to 5.18.0
+Message-Id: <20251209182817.C9CA286963@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libcorrect: bump
+ version, fix cmake 4 compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,80 +77,124 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b822976c6069d5d6296ac61bb848fc3de0900a99
+commit: https://git.buildroot.net/buildroot/commit/?id=1a9e812d24c4e609c65e3dc39813e0c61b20966f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes of the major releases:
-https://download.gnome.org/sources/gtksourceview/4.0/gtksourceview-4.0.0.news
+For changes, see:
+https://git.openwrt.org/?p=project/libubox.git;a=shortlog;h=ecddb31dc34d89be5c9dc4595a4c58070eb090e4
 
-https://download.gnome.org/sources/gtksourceview/4.3/gtksourceview-4.3.1.news
-"Ported to meson build system, autotools will be phased out by next release."
+Removed patch 0001 which is included in this release.
 
-https://download.gnome.org/sources/gtksourceview/5.0/gtksourceview-5.0.0.news
-"GtkSourceView 5.0 is the first stable release of GtkSourceView targeting the
- GTK 4 toolkit. It is the culmination of about a year of development."
+Added new patch 0001 which fixes build with cmake 4.
 
-https://download.gnome.org/sources/gtksourceview/5.18/gtksourceview-5.18.0.news
-
-Switched to gtk4 and meson build system.
-Disabled the build of the testsuite.
+Added Upstream: tag to patch 0002.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien: add link to upstream commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/gtksourceview/Config.in          | 2 +-
- package/gtksourceview/gtksourceview.hash | 4 ++--
- package/gtksourceview/gtksourceview.mk   | 9 +++++----
- 3 files changed, 8 insertions(+), 7 deletions(-)
+ .checkpackageignore                                |  1 -
+ ...MakeLists.txt-conditionally-use-Wpedantic.patch | 42 ----------------------
+ ...s.txt-conditionally-use-fsanitize-address.patch |  2 ++
+ package/libcorrect/libcorrect.hash                 |  2 +-
+ package/libcorrect/libcorrect.mk                   |  2 +-
+ 5 files changed, 4 insertions(+), 45 deletions(-)
 
-diff --git a/package/gtksourceview/Config.in b/package/gtksourceview/Config.in
-index e87969b15d..8f1f35c018 100644
---- a/package/gtksourceview/Config.in
-+++ b/package/gtksourceview/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_GTKSOURCEVIEW
- 	bool "gtksourceview"
--	depends on BR2_PACKAGE_LIBGTK3
-+	depends on BR2_PACKAGE_LIBGTK4
- 	select BR2_PACKAGE_LIBXML2
- 	help
- 	  GtkSourceView is a portable C library that extends the
-diff --git a/package/gtksourceview/gtksourceview.hash b/package/gtksourceview/gtksourceview.hash
-index 7a9cf00655..9d74d2810b 100644
---- a/package/gtksourceview/gtksourceview.hash
-+++ b/package/gtksourceview/gtksourceview.hash
-@@ -1,5 +1,5 @@
--# Hash from: https://download.gnome.org/sources/gtksourceview/3.24/gtksourceview-3.24.7.sha256sum:
--sha256  a5c20d3a6347533689358f3ea52486409f6dd41d5a69c65eab7570cfaffee8e6  gtksourceview-3.24.7.tar.xz
-+# Hash from: https://download.gnome.org/sources/gtksourceview/5.18/gtksourceview-5.18.0.sha256sum
-+sha256  051a78fe38f793328047e5bcd6d855c6425c0b480c20d9432179e356742c6ac0  gtksourceview-5.18.0.tar.xz
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 5d3d63d71f..704680c911 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -532,7 +532,6 @@ package/libcdaudio/0001-libcdaudio-enable-autoreconf.patch lib_patch.Upstream
+ package/libcgi/0001-CMakeLists.txt-honour-BUILD_TESTING.patch lib_patch.Upstream
+ package/libcgicc/0001-disable-documentation-option.patch lib_patch.Sob lib_patch.Upstream
+ package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch lib_patch.Upstream
+-package/libcorrect/0002-CMakeLists.txt-conditionally-use-fsanitize-address.patch lib_patch.Upstream
+ package/libcuefile/0001-fix-static-link.patch lib_patch.Upstream
+ package/libdaemon/0001-testd-use-unistd-h-instead-of-sys-unistd-h.patch lib_patch.Upstream
+ package/libdnet/0001-python-makefile.patch lib_patch.Upstream
+diff --git a/package/libcorrect/0001-CMakeLists.txt-conditionally-use-Wpedantic.patch b/package/libcorrect/0001-CMakeLists.txt-conditionally-use-Wpedantic.patch
+deleted file mode 100644
+index 77e29ad833..0000000000
+--- a/package/libcorrect/0001-CMakeLists.txt-conditionally-use-Wpedantic.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From 8fc28b4c4c01581b25220fdbc1eeda196e399256 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Wed, 10 Oct 2018 09:28:00 +0200
+-Subject: [PATCH] CMakeLists.txt: conditionally use -Wpedantic
+-
+--Wpedantic is only provided by gcc >= 4.8. Since showing pedantic
+-warnings is not really mandatory, let's only use this option when the
+-compiler supports it.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Upstream: https://github.com/quiet/libcorrect/pull/25
+----
+- CMakeLists.txt | 7 ++++++-
+- 1 file changed, 6 insertions(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 193f311..e570198 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -3,13 +3,18 @@ project(Correct C)
+- include(CheckLibraryExists)
+- include(CheckIncludeFiles)
+- include(CheckCSourceCompiles)
+-+include(CheckCCompilerFlag)
+- 
+- if(MSVC)
+- set(LIBM "")
+- set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /W4")
+- else(MSVC)
+- set(LIBM "m")
+--set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -std=c99 -Wpedantic -Wall")
+-+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -std=c99 -Wall")
+-+check_c_compiler_flag(-Wpedantic COMPILER_SUPPORTS_WPEDANTIC)
+-+if(COMPILER_SUPPORTS_WPEDANTIC)
+-+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wpedantic")
+-+endif()
+- if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+-     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g3 -O0 -fsanitize=address")
+-     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-no_pie,")
+--- 
+-2.14.4
+-
+diff --git a/package/libcorrect/0002-CMakeLists.txt-conditionally-use-fsanitize-address.patch b/package/libcorrect/0002-CMakeLists.txt-conditionally-use-fsanitize-address.patch
+index 82e4f13e66..dc0c18e063 100644
+--- a/package/libcorrect/0002-CMakeLists.txt-conditionally-use-fsanitize-address.patch
++++ b/package/libcorrect/0002-CMakeLists.txt-conditionally-use-fsanitize-address.patch
+@@ -8,6 +8,8 @@ Check that compiler supports -fsanitize=address before using it
+ Fixes:
+  - http://autobuild.buildroot.net/results/221d6a418e75b39fe645c3a56cee676518d2cff6
  
- # Locally computed:
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
-diff --git a/package/gtksourceview/gtksourceview.mk b/package/gtksourceview/gtksourceview.mk
-index 3f5aaea4ae..052904cca0 100644
---- a/package/gtksourceview/gtksourceview.mk
-+++ b/package/gtksourceview/gtksourceview.mk
-@@ -4,14 +4,15 @@
++Upstream: https://github.com/quiet/libcorrect/pull/26
++
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+  CMakeLists.txt | 6 +++++-
+diff --git a/package/libcorrect/libcorrect.hash b/package/libcorrect/libcorrect.hash
+index 4c6289fb82..0385abeb8c 100644
+--- a/package/libcorrect/libcorrect.hash
++++ b/package/libcorrect/libcorrect.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  79861750540fb3a1cc501ee217cb4d1febc4855f3fb82e5eb60906eec5379890  libcorrect-ce6c17f1f988765ae3695315d7cce1f2a2e6cf0d.tar.gz
++sha256  5a4305aabe6c7d5b58f6677c41c54ad5e8d9003f7a5998f7344d93534e4c5760  libcorrect-f5a28c74fba7a99736fe49d3a5243eca29517ae9.tar.gz
+ sha256  135138cd4304aa637836758dc5edfb5f21b7d09ecc637d25288d206b151a5768  LICENSE
+diff --git a/package/libcorrect/libcorrect.mk b/package/libcorrect/libcorrect.mk
+index 0a84aa5c26..9f2beb1d4a 100644
+--- a/package/libcorrect/libcorrect.mk
++++ b/package/libcorrect/libcorrect.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GTKSOURCEVIEW_VERSION_MAJOR = 3.24
--GTKSOURCEVIEW_VERSION = $(GTKSOURCEVIEW_VERSION_MAJOR).7
-+GTKSOURCEVIEW_VERSION_MAJOR = 5.18
-+GTKSOURCEVIEW_VERSION = $(GTKSOURCEVIEW_VERSION_MAJOR).0
- GTKSOURCEVIEW_SOURCE = gtksourceview-$(GTKSOURCEVIEW_VERSION).tar.xz
- GTKSOURCEVIEW_SITE = \
- 	https://download.gnome.org/sources/gtksourceview/$(GTKSOURCEVIEW_VERSION_MAJOR)
- GTKSOURCEVIEW_LICENSE = LGPL-2.1+
- GTKSOURCEVIEW_LICENSE_FILES = COPYING
- GTKSOURCEVIEW_INSTALL_STAGING = YES
--GTKSOURCEVIEW_DEPENDENCIES = host-pkgconf libglib2 libxml2 libgtk3
-+GTKSOURCEVIEW_DEPENDENCIES = host-pkgconf libglib2 libxml2 libgtk4
-+GTKSOURCEVIEW_CONF_OPTS = -Dbuild-testsuite=false
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+-LIBCORRECT_VERSION = ce6c17f1f988765ae3695315d7cce1f2a2e6cf0d
++LIBCORRECT_VERSION = f5a28c74fba7a99736fe49d3a5243eca29517ae9
+ LIBCORRECT_SITE = $(call github,quiet,libcorrect,$(LIBCORRECT_VERSION))
+ LIBCORRECT_LICENSE = BSD-3-Clause
+ LIBCORRECT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
