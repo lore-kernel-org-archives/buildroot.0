@@ -1,62 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D654D3B9A4
-	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 21:59:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5773DD3B9A1
+	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 22:04:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4513E811A7;
-	Tue,  9 Dec 2025 21:59:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F340861292;
+	Tue,  9 Dec 2025 22:04:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rr4FC88GQ_Il; Tue,  9 Dec 2025 21:59:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id i6dOQGJ3Dh4e; Tue,  9 Dec 2025 22:04:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56449812E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1693461374
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765317591;
-	bh=rD/m6wpjEsNYlUHplN0x57560sGqaDsO3nrMP7elZ2s=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=nR6HIig4TJDDwBTkyLKQNidoooqcLtwcMwKO1zQjYtTR3jANNePSLMG5YgdZlbxX+
-	 esONSYR+BV+TUNFJlYhdsKHDpKyEUJHTyKGzdpKxFkqDYa8rCyyjo/dgNuBQ/uIsx6
-	 Gi3l+P9JMirmNDAQYGqFSR3oXsVy8va6iGNuz97eeYSHIdYIwoQAHR0gR07xnyyiFp
-	 e1ESWsJVvmJvFjUPTc35Rg5cqbgzBZVwcFQXsopoLONAe7+TkzCicyv546VJD1G5ft
-	 9w5hLRoLia4ycpM8vzMIW2iP1Nm7Ph9xvAsvqTLHZQ/a/V4cGeyLt3AKBnZQX92WpD
-	 +bIUXe2VOdhHw==
+	s=default; t=1765317875;
+	bh=3xKHAQ6BUTzre1UHKvwM20tAZZV9lI4mG7vWj6cX+uI=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=IMesuXcGREzKSo+PEgzBsxC1lpFic1cha/659+fp/HBrdmIinhjsvbA16QQAkJKsV
+	 ex3bzpM848ZYnnr3hnIJgln3m8Ndvt+V/tPiY1Hfzta1bZECdNhOFdeaqag+kBwlji
+	 OWuXtK70LOyQbs8xIROUIRf3ILTmOeO3tW+efdXifDbu3rnhDSUONgoI0EuYPuNPmf
+	 +kr9/RA0yaywZrQyGlKe6lhx7ZQ+H/BMs3SbgkGjoiovkK63fDrJQ5BSk+zIf2Y0P0
+	 S2czia3d4JZ1F/WNZiYqqw3exGYirqPWFu0F3edNkQQ5SO1CRiM2kpej6D4gM4aBw4
+	 zVDbiJxBbv4sQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 56449812E2;
-	Tue,  9 Dec 2025 21:59:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D6232C0
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 21:59:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1693461374;
+	Tue,  9 Dec 2025 22:04:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6589D237
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 22:04:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F12E7810FE
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 21:59:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5745361374
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 22:04:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tAOgdmmME-M2 for <buildroot@buildroot.org>;
- Tue,  9 Dec 2025 21:59:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8E08810CA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C8E08810CA
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 21:59:48 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C28CA869C0; Tue,  9 Dec 2025 21:59:48 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 9 Dec 2025 22:58:33 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4f9600c2f97039b4ad6eb66087a7654805536a76
-X-Git-Newrev: c621515d839b94f2013286683aaf6329e855b08b
-X-Patchwork-Hint: ignore
-Message-Id: <20251209215948.C28CA869C0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/sigsum-go: new package
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EgWSdP1UYP3o for <buildroot@buildroot.org>;
+ Tue,  9 Dec 2025 22:04:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 742E361292
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 742E361292
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 742E361292
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 22:04:33 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 543392003B4;
+ Tue,  9 Dec 2025 23:04:28 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 09 Dec 2025 23:04:28 +0100
+MIME-Version: 1.0
+Date: Tue, 09 Dec 2025 23:04:28 +0100
+To: Florian Larysch <fl@n621.de>
+Cc: buildroot@buildroot.org, Christian Stewart <christian@aperture.us>
+In-Reply-To: <20251208201137.13839-1-fl@n621.de>
+References: <20251208201137.13839-1-fl@n621.de>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <b2eb04686447d441dac6e15776842d52@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1765317870;
+ bh=PIkhWWtLvvtyZI2EzO1EaCjxTsde7NWXUfaKUuKD3Qs=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=XcQPetlcS3HIaXOhWzcHkrTVhhBR+loM4aV9JESfLtM5CyJy2cL38YvZOu040FLK8
+ N3bbHwof+DjUBFePVx4UEt35RvXIduGI7WC5vthnccukLwr8YAM24A8Gs1T+8AVNcv
+ UL5fPf2xVI+jCDUqsRs9u58DhuPSoyW0lrITTs5JGK+BasZ+095Ykx9BXJcFdra/zT
+ O62LITDIsJBh3FyjsXa98g+MJuEbjWgnhNClQ/DDxsjm73FGi2YZ1sXw0hXBfZbAUV
+ DLEkpSWOBLV1FoZaBCdE4PT0V7Tt019dgsxV1oZLmsxhb33G+ug09Q5VwuHsDkXCfW
+ +c+GzRgv/LSkw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=XcQPetlc
+Subject: Re: [Buildroot] [PATCH v3 1/1] package/sigsum-go: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,180 +94,73 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c621515d839b94f2013286683aaf6329e855b08b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hi Florian,
 
-Add the reference command line tools for interacting with Sigsum
-signature transparency logs.
+On 08/12/2025 21:11, Florian Larysch wrote:
+> Add the reference command line tools for interacting with Sigsum
+> signature transparency logs.
+> 
+> Signed-off-by: Florian Larysch <fl@n621.de>
 
-Signed-off-by: Florian Larysch <fl@n621.de>
-[Julien:
- - select sigsum-verify if all other tools are deselected
- - split and sort HOST_SIGSUM_GO_BUILD_TARGETS
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/Config.in.host           |  1 +
- package/sigsum-go/Config.in      | 32 ++++++++++++++++++++++++++++++
- package/sigsum-go/Config.in.host |  8 ++++++++
- package/sigsum-go/sigsum-go.hash |  3 +++
- package/sigsum-go/sigsum-go.mk   | 43 ++++++++++++++++++++++++++++++++++++++++
- 7 files changed, 89 insertions(+)
+I applied this patch to branch next, with a minor change in Config.in. 
+See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/c621515d839b94f2013286683aaf6329e855b08b
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7434f41838..749cfa6e42 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1132,6 +1132,7 @@ F:	package/cpulimit/
- 
- N:	Florian Larysch <fl@n621.de>
- F:	package/casync-nano/
-+F:	package/sigsum-go/
- 
- N:	Floris Bos <bos@je-eigen-domein.nl>
- F:	package/ipmitool/
-diff --git a/package/Config.in b/package/Config.in
-index a083f43a64..433bd4f6e3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2793,6 +2793,7 @@ comment "Utilities"
- 	source "package/screen/Config.in"
- 	source "package/screenfetch/Config.in"
- 	source "package/sexpect/Config.in"
-+	source "package/sigsum-go/Config.in"
- 	source "package/sudo/Config.in"
- 	source "package/terminology/Config.in"
- 	source "package/time/Config.in"
-diff --git a/package/Config.in.host b/package/Config.in.host
-index d0088364d0..606a825d44 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -110,6 +110,7 @@ menu "Host utilities"
- 	source "package/sdbus-cpp/Config.in.host"
- 	source "package/sdbusplus/Config.in.host"
- 	source "package/sentry-cli/Config.in.host"
-+	source "package/sigsum-go/Config.in.host"
- 	source "package/skopeo/Config.in.host"
- 	source "package/sloci-image/Config.in.host"
- 	source "package/snagboot/Config.in.host"
-diff --git a/package/sigsum-go/Config.in b/package/sigsum-go/Config.in
-new file mode 100644
-index 0000000000..15a0c27223
---- /dev/null
-+++ b/package/sigsum-go/Config.in
-@@ -0,0 +1,32 @@
-+config BR2_PACKAGE_SIGSUM_GO
-+	bool "sigsum-go"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_GO
-+	select BR2_PACKAGE_SIGSUM_GO_VERIFY if \
-+		!BR2_PACKAGE_SIGSUM_GO_KEY && \
-+		!BR2_PACKAGE_SIGSUM_GO_POLICY && \
-+		!BR2_PACKAGE_SIGSUM_GO_SUBMIT && \
-+		!BR2_PACKAGE_SIGSUM_GO_TOKEN
-+	help
-+	  Command-line utilities for interacting with Sigsum logs.
-+
-+	  https://git.glasklar.is/sigsum/core/sigsum-go/
-+
-+if BR2_PACKAGE_SIGSUM_GO
-+
-+config BR2_PACKAGE_SIGSUM_GO_KEY
-+	bool "sigsum-key"
-+
-+config BR2_PACKAGE_SIGSUM_GO_POLICY
-+	bool "sigsum-policy"
-+
-+config BR2_PACKAGE_SIGSUM_GO_SUBMIT
-+	bool "sigsum-submit"
-+
-+config BR2_PACKAGE_SIGSUM_GO_TOKEN
-+	bool "sigsum-token"
-+
-+config BR2_PACKAGE_SIGSUM_GO_VERIFY
-+	bool "sigsum-verify"
-+
-+endif
-diff --git a/package/sigsum-go/Config.in.host b/package/sigsum-go/Config.in.host
-new file mode 100644
-index 0000000000..5bc876603f
---- /dev/null
-+++ b/package/sigsum-go/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_SIGSUM_GO
-+	bool "host sigsum-go"
-+	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_GO
-+	help
-+	  Command-line utilities for interacting with Sigsum logs.
-+
-+	  https://git.glasklar.is/sigsum/core/sigsum-go/
-diff --git a/package/sigsum-go/sigsum-go.hash b/package/sigsum-go/sigsum-go.hash
-new file mode 100644
-index 0000000000..b032e1839d
---- /dev/null
-+++ b/package/sigsum-go/sigsum-go.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  9056406413868fe68a3fcc6415dff5a0045b35baa2242a17fea7a697b1c68e3d  sigsum-go-v0.13.1-git4-go2.tar.gz
-+sha256  6a1e3378dcd18baade08ac30ec4ba33b72d1b1697c00226ef85b9c9cefdb4e65  LICENSE
-diff --git a/package/sigsum-go/sigsum-go.mk b/package/sigsum-go/sigsum-go.mk
-new file mode 100644
-index 0000000000..4f01be56a5
---- /dev/null
-+++ b/package/sigsum-go/sigsum-go.mk
-@@ -0,0 +1,43 @@
-+################################################################################
-+#
-+# sigsum-go
-+#
-+################################################################################
-+
-+SIGSUM_GO_VERSION = v0.13.1
-+SIGSUM_GO_SITE = https://git.glasklar.is/sigsum/core/sigsum-go
-+SIGSUM_GO_SITE_METHOD = git
-+SIGSUM_GO_LICENSE = BSD-2-Clause
-+SIGSUM_GO_LICENSE_FILES = LICENSE
-+
-+SIGSUM_GO_GOMOD = sigsum.org/sigsum-go
-+
-+ifeq ($(BR2_PACKAGE_SIGSUM_GO_KEY),y)
-+SIGSUM_GO_BUILD_TARGETS += cmd/sigsum-key
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SIGSUM_GO_POLICY),y)
-+SIGSUM_GO_BUILD_TARGETS += cmd/sigsum-policy
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SIGSUM_GO_SUBMIT),y)
-+SIGSUM_GO_BUILD_TARGETS += cmd/sigsum-submit
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SIGSUM_GO_TOKEN),y)
-+SIGSUM_GO_BUILD_TARGETS += cmd/sigsum-token
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SIGSUM_GO_VERIFY),y)
-+SIGSUM_GO_BUILD_TARGETS += cmd/sigsum-verify
-+endif
-+
-+HOST_SIGSUM_GO_GOMOD = sigsum.org/sigsum-go
-+HOST_SIGSUM_GO_BUILD_TARGETS = \
-+	cmd/sigsum-key \
-+	cmd/sigsum-submit \
-+	cmd/sigsum-token \
-+	cmd/sigsum-verify
-+
-+$(eval $(golang-package))
-+$(eval $(host-golang-package))
+[...]
+> diff --git a/package/sigsum-go/Config.in b/package/sigsum-go/Config.in
+> new file mode 100644
+> index 0000000000..f96f18b30a
+> --- /dev/null
+> +++ b/package/sigsum-go/Config.in
+> @@ -0,0 +1,28 @@
+> +config BR2_PACKAGE_SIGSUM_GO
+> +	bool "sigsum-go"
+> +	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+> +	select BR2_PACKAGE_HOST_GO
+> +	help
+> +	  Command-line utilities for interacting with Sigsum logs.
+> +
+> +	  https://git.glasklar.is/sigsum/core/sigsum-go/
+> +
+> +if BR2_PACKAGE_SIGSUM_GO
+> +
+> +config BR2_PACKAGE_SIGSUM_GO_KEY
+> +	bool "sigsum-key"
+> +
+> +config BR2_PACKAGE_SIGSUM_GO_POLICY
+> +	bool "sigsum-policy"
+> +
+> +config BR2_PACKAGE_SIGSUM_GO_SUBMIT
+> +	bool "sigsum-submit"
+> +
+> +config BR2_PACKAGE_SIGSUM_GO_TOKEN
+> +	bool "sigsum-token"
+> +
+> +config BR2_PACKAGE_SIGSUM_GO_VERIFY
+> +	bool "sigsum-verify"
+> +	default y
+
+Doing a "default y" still allow the user to deselect the option.
+If all the options are deselected, the package build is failing
+with the error:
+
+package sigsum.org/sigsum-go: build constraints exclude all Go files in 
+/buildroot/output/build/sigsum-go-v0.13.1
+
+So I changed it to select  BR2_PACKAGE_SIGSUM_GO_VERIFY is all
+other options are deselected.
+
+> +
+> +endif
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
