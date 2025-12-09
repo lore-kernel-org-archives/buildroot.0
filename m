@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FA0FD4337C
-	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:59:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FA63D43370
+	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:59:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F2E8683A73;
-	Fri, 12 Dec 2025 07:59:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4A0378443C;
+	Fri, 12 Dec 2025 07:59:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wmMntjyRm2n3; Fri, 12 Dec 2025 07:59:13 +0000 (UTC)
+ id 1Ne2LxXUuU32; Fri, 12 Dec 2025 07:59:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB06F8420E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2350B842D0
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765526330;
-	bh=W0xUmpv75WLaJnMCz/zmYbbTLBh5FHjRsMcEIIB2KVo=;
+	s=default; t=1765526332;
+	bh=oaggadN3F0GRXeW7iQQmNqQpuggUe447X9NtT0AfD1g=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=cHJ3K/LavAGdcqgU90hFF4XRa/dZB7Whi5Hwe7hQ4QeUSQlpyQg9pb4C7hwJc16q5
-	 7XELMOm6RfU1Floc5lh50nXQ/1xu3vG0rllFWxk6tHb1K9auPjM2zZiqtFGcyN4ybS
-	 W+3b9wC94JcqZ5H1TWtidbe8ADWoukKeOi2L30DgcuCGG1Rz+XsnJyRyn4CpK5AhlR
-	 cpw1FBW44bXbicW6RFqG9xSEeRA842bvl3NFk4XAY5CFsSJ6BBnwAjL7gOU1u4FoXr
-	 1+wI5kltbKtZ/Nzqh5n+CfVR3gMor+fIzMrxEA+S/ctbn6xW7whpVQwVcM4m6mVmiU
-	 vuT3e1cmP7dSg==
+	b=XMmRgMfJlAM2nBYrEY6VFGRijZULu+WjpRBcFQpHZPsf5RmioTkLGLiXBlUDFOWmi
+	 O2LeQMWwjwAaMItL5XIHh+9NngNDVhb4XzUqw3E3bH31MX/9jzIbqmDewM071xj8jC
+	 VRhh85KjoOLgPl4Sqx+SBbdRXw9vVRE6j5DVHHVw5P2DfVvahrPti5LGKe73j1MVJH
+	 WfS9kOSMT2GI77lyd6Nuf2w1UzPtjzy3Z9BY9p0p5qnOEPXRIr67zEjvO3cJdspwZY
+	 Y5HyfUxCSaimdU0f0wcUXM7LKmDqqx9QtMHt5adVKkdfSQiPIcUPVpDfo7I2sboUM7
+	 ulYxAlSlEoryA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EB06F8420E;
-	Fri, 12 Dec 2025 07:58:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id E66662C1
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:57:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2350B842D0;
+	Fri, 12 Dec 2025 07:58:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 10AF42C1
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:57:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 24D9B41177
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6784C41189
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qUC3Lme8y-fh for <buildroot@buildroot.org>;
- Fri, 12 Dec 2025 07:55:46 +0000 (UTC)
+ id AMyW0xzeeoMq for <buildroot@buildroot.org>;
+ Fri, 12 Dec 2025 07:55:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 763C041185
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA94041132
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 763C041185
+ by smtp4.osuosl.org (Postfix) with ESMTP id CA94041132
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7560C807F9; Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
+ id C9B69869E8; Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 7 Dec 2025 22:18:00 +0100
+Date: Tue, 9 Dec 2025 19:24:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 51fe7dad2cde7491b23a9a120db9f58f498e98d4
-X-Git-Newrev: def104dd90952e9f80fb0f3c161d5641a0d168eb
+X-Git-Oldrev: 3ef8d613d7412c54375bdb5c5a683ffbe8a3f85b
+X-Git-Newrev: ca21d87300ea54217b262e06f295b816fb38eecb
 X-Patchwork-Hint: ignore
-Message-Id: <20251212075538.7560C807F9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/swugenerator: bump to version 0.6
+Message-Id: <20251212075538.C9B69869E8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/graphite2: bump version to git
+ 1.3.14-121-g142e1bda3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,42 +77,147 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=def104dd90952e9f80fb0f3c161d5641a0d168eb
+commit: https://git.buildroot.net/buildroot/commit/?id=ca21d87300ea54217b262e06f295b816fb38eecb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For release note, see:
-https://github.com/sbabic/swugenerator/releases/tag/0.6
+Last release dates back to 2020 with > 120 commits since then, including
+fixes for cmake 4 compatibility.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Instead of backporting several patches we bump the package to the latest
+commit which allows to remove patch 0001.
+
+Updated license hash due to upstream commit
+https://github.com/silnrsi/graphite/commit/f9dad5a35edb0c3f1031f5627623fb9e7f9bc24c
+
+For list of changes, see:
+https://github.com/silnrsi/graphite/commits/142e1bda3439d2bd376bcac9c2b247c9532bacde
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien:
+ - add link to change list
+ - change _VERSION to use "git describe --abbrev=40" format
+]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/swugenerator/swugenerator.hash | 2 +-
- package/swugenerator/swugenerator.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .checkpackageignore                                |  1 -
+ ...nstall-a-libtool-file-with-static-library.patch | 67 ----------------------
+ package/graphite2/graphite2.hash                   |  5 +-
+ package/graphite2/graphite2.mk                     |  6 +-
+ 4 files changed, 4 insertions(+), 75 deletions(-)
 
-diff --git a/package/swugenerator/swugenerator.hash b/package/swugenerator/swugenerator.hash
-index 184fd86e27..75a902f2c4 100644
---- a/package/swugenerator/swugenerator.hash
-+++ b/package/swugenerator/swugenerator.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  bb816a77278a2d320e36cdd6fd1bb9b8318b4ef4ccd05e79bb1d5ee631a1d5c1  swugenerator-0.5.tar.gz
-+sha256  06098c4b3a6c3e5946a11929f95f280baacb512fc4154e16af2262c60a36cbc6  swugenerator-0.6.tar.gz
- # Locally computed sha256 checksums
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSE
-diff --git a/package/swugenerator/swugenerator.mk b/package/swugenerator/swugenerator.mk
-index 5acabc2036..a892002369 100644
---- a/package/swugenerator/swugenerator.mk
-+++ b/package/swugenerator/swugenerator.mk
-@@ -4,7 +4,7 @@
+diff --git a/.checkpackageignore b/.checkpackageignore
+index df1a9258f3..5d3d63d71f 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -445,7 +445,6 @@ package/gob2/0001-dont-include-from-prefix.patch lib_patch.Upstream
+ package/gobject-introspection/0001-Add-rpath-links-to-ccompiler.patch lib_patch.Upstream
+ package/gpsd/S50gpsd Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/gptfdisk/0001-gptcurses-partially-revert-Tweaks-for-building-on-th.patch lib_patch.Upstream
+-package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch lib_patch.Upstream
+ package/grpc/0003-disable-unconditionally-downloading-api-repos.patch lib_patch.Upstream
+ package/gstreamer1/gstd/0001-Don-t-require-gstd-check-user-xenv.sh-for-systemd-se.patch lib_patch.Upstream
+ package/guile/0001-calculate-csqrt_manually.patch lib_patch.Upstream
+diff --git a/package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch b/package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch
+deleted file mode 100644
+index ac150622d5..0000000000
+--- a/package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch
++++ /dev/null
+@@ -1,67 +0,0 @@
+-From 3edb88b55c0870989778c670d555aa159a2c3abc Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 31 Aug 2020 20:56:43 +0200
+-Subject: [PATCH] don't install a libtool file with static library
+-
+-Static library is supported since version 1.3.11 and
+-https://github.com/silnrsi/graphite/commit/2f143c04da5caa43ddf4dba437b2f2bc26bf4238
+-
+-However, graphite2 is still installing libgraphite2.la which contains
+-incorrect information (i.e. dlname set to libgraphite2.so and
+-old_library set to ''):
+-
+-dlname='libgraphite2.so'
+-
+-library_names='libgraphite2.so.3.2.1 libgraphite2.so.3 libgraphite2.so'
+-
+-old_library=''
+-
+-dependency_libs=''
+-
+-This will result in the following build failure with any applications
+-using this file such as harfbuzz:
+-
+-arm-linux-g++.br_real: error: /home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgraphite2.so: No such file or directory
+-make[5]: *** [main] Error 1
+-
+-Instead of trying to fix this libtool file, just disable it when
+-building a static library as it is not needed
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/9ebe1d11e80755d59190ef2aae82bbba5cc45e44
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/silnrsi/graphite/pull/65]
+----
+- src/CMakeLists.txt | 8 ++++++--
+- 1 file changed, 6 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+-index b6ac26bf..a7ace040 100644
+---- a/src/CMakeLists.txt
+-+++ b/src/CMakeLists.txt
+-@@ -131,7 +131,9 @@ if  (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+-         nolib_test(stdc++ $<TARGET_SONAME_FILE:graphite2>)
+-     endif ()
+-     set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "")
+--    CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
+-+    if (BUILD_SHARED_LIBS)
+-+        CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
+-+    endif()
+- endif()
+- 
+- if  (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+-@@ -146,7 +148,9 @@ if  (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+-     include(Graphite)
+-     nolib_test(stdc++ $<TARGET_SONAME_FILE:graphite2>)
+-     set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "")
+--    CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
+-+    if (BUILD_SHARED_LIBS)
+-+        CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
+-+    endif()
+- endif()
+- 
+- if  (${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
+--- 
+-2.28.0
+-
+diff --git a/package/graphite2/graphite2.hash b/package/graphite2/graphite2.hash
+index e005375f8a..b788112b5d 100644
+--- a/package/graphite2/graphite2.hash
++++ b/package/graphite2/graphite2.hash
+@@ -1,4 +1,3 @@
+-# From https://github.com/silnrsi/graphite/releases/download/1.3.14/graphite2-1.3.14.sha256sum
+-sha256  f99d1c13aa5fa296898a181dff9b82fb25f6cc0933dbaa7a475d8109bd54209d  graphite2-1.3.14.tgz
+ # Locally computed
+-sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  LICENSE
++sha256  b5e919f4b5788f8ed5a2d9d0ce17a23d1c0f625979e53c5e7336fc2ba0b7a7d6  graphite2-1.3.14-121-g142e1bda3439d2bd376bcac9c2b247c9532bacde.tar.gz
++sha256  cab46cd45adbfea4b1d0f14b033c70062c73074fa0b56532c2f351576ddf455e  LICENSE
+diff --git a/package/graphite2/graphite2.mk b/package/graphite2/graphite2.mk
+index 7f9e3c516e..9686492c20 100644
+--- a/package/graphite2/graphite2.mk
++++ b/package/graphite2/graphite2.mk
+@@ -4,10 +4,8 @@
  #
  ################################################################################
  
--SWUGENERATOR_VERSION = 0.5
-+SWUGENERATOR_VERSION = 0.6
- SWUGENERATOR_SITE = $(call github,sbabic,swugenerator,$(SWUGENERATOR_VERSION))
- SWUGENERATOR_LICENSE = GPL-3.0
- SWUGENERATOR_LICENSE_FILES = LICENSE
+-GRAPHITE2_VERSION = 1.3.14
+-GRAPHITE2_SOURCE = graphite2-$(GRAPHITE2_VERSION).tgz
+-GRAPHITE2_SITE = \
+-	https://github.com/silnrsi/graphite/releases/download/$(GRAPHITE2_VERSION)
++GRAPHITE2_VERSION = 1.3.14-121-g142e1bda3439d2bd376bcac9c2b247c9532bacde
++GRAPHITE2_SITE = $(call github,silnrsi,graphite,$(GRAPHITE2_VERSION))
+ GRAPHITE2_INSTALL_STAGING = YES
+ GRAPHITE2_LICENSE = LGPL-2.1+
+ GRAPHITE2_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
