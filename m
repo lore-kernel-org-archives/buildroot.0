@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D87B0D3B98A
-	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 19:40:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1222D3B992
+	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 19:40:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7199A409E4;
-	Tue,  9 Dec 2025 19:40:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 657608438A;
+	Tue,  9 Dec 2025 19:40:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LgTl-5PUL_LY; Tue,  9 Dec 2025 19:40:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Jjr2L8XxOTLE; Tue,  9 Dec 2025 19:40:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96F64409E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 851AE8438B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765309220;
-	bh=hlAksiIXWjXCCT/PkQ+m/VP4EcK2Nk+eWkz4R69F9yY=;
+	s=default; t=1765309232;
+	bh=7dYhY99W/jXzDxxbS2/1QYN0RhUGvMAoi8iBSfGgios=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=ZKS1wgg861jez/mXxVK8SIXamngWYOpDRHGcwAaR/sbx0cK1yWjmQvgGwr2KDYLxW
-	 YW7/67mqlkRiYCKXzxHldyMdmheCFG4SEkhmOyLi3wytiPA/UFmDi7rHuK6AnlfVTt
-	 tfvs7KTIRfjdm9AXhqJ1MX4EuMh2GnU3iyaihnRRWMcGKEEE1OC5w6gE3Ov0Cg5SZX
-	 Z6FZ+dXA7JBopvMIt+VlH5C0HVg3zTCaHBihSFCFfjomjw8qv+S5cI1Ote+vkIqzA4
-	 JpEjp1uXPeNhU/5aNOEEjPLKivijlkHhOP8DlQrQKnjOou4f3pUa8ZXVIGf46LuqX+
-	 g8iSVvGTcuHbw==
+	b=eWVaH96RBkh/SaCIqop9TiCMD58ExlCBdqeCSB/lwMM3AEWZ0s6lKftyFgjW7Z28T
+	 vbOTfKGDt+a2e5lDQkjVlQv8bYH5WjZdPTQ7EbUarSSE6/ddu+skV+oW6LOh0UOygO
+	 xYXrps1FpwGarpTXuA7MFZI+ld9hHbw/vE1WvteKa3wAqIBO0v3X0gJkdAYMXGot/w
+	 ej77M1HfbXE83CYdWH6m0+kir8ENY3/sM3b6MwQnmpdOGBIbZRSmA0v/DCtthoCgEt
+	 QrUOt251VgS/Pwkql4CiorSfjEgTKx2Imq+dV+pZg2UOdzGit0pZoORilq9L+TxUHz
+	 5zMkcPyhmUWgQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 96F64409E5;
-	Tue,  9 Dec 2025 19:40:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A6F2D2C0
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:40:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 851AE8438B;
+	Tue,  9 Dec 2025 19:40:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 99642E7
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:40:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8D7F2409BB
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:40:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7EF7B6136A
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:40:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ASofdCysktk5 for <buildroot@buildroot.org>;
- Tue,  9 Dec 2025 19:40:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2KR61F190y9V for <buildroot@buildroot.org>;
+ Tue,  9 Dec 2025 19:40:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7ABC740967
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7ABC740967
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 61100612BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61100612BC
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7ABC740967
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:40:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 61100612BC
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:40:30 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b151.dip0.t-ipconnect.de [84.161.177.81])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 55D8DA4C2C0B;
- Tue,  9 Dec 2025 20:39:52 +0100 (CET)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 312EBA4C1F53;
+ Tue,  9 Dec 2025 20:40:13 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:45534)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vT3Yu-000000006DN-0tfM;
- Tue, 09 Dec 2025 19:39:51 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vT3Yv-000000006DN-0CxH;
+ Tue, 09 Dec 2025 19:39:52 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue,  9 Dec 2025 20:39:23 +0100
-Message-ID: <20251209193951.1000100-3-bernd@kuhls.net>
+Date: Tue,  9 Dec 2025 20:39:35 +0100
+Message-ID: <20251209193951.1000100-15-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251209193951.1000100-1-bernd@kuhls.net>
 References: <20251209193951.1000100-1-bernd@kuhls.net>
@@ -66,23 +66,23 @@ MIME-Version: 1.0
 X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1765309192;
- bh=I1WoadZt8np4Cy3Dn0n0bo5XCLf8e1Ww1XvNTQub2lc=;
+ s=kas202511301023; t=1765309213;
+ bh=w2qNgP5FLR8Q5FtbxxgjbOa75JrB0bs6TVjKne2URvE=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=ZPHsgjJ6zIgZ2e5bCC9dHmGW9nT6BxKnWMHK18pDxDUAUXRgrE6LgydvIQyN8pYe3
- ALCSFV59JbbM2LKJn/ktcFtyfxHdl4Hf9phcay183w7aUHho0UVP0UA5SggN7ZtRYf
- aPYS3fNfk4S1zQnAEso3NMpdjAc4YMi2tGxw1C7XZJbWat/EjjQUZ2nf1dXme9sAt2
- VJ5NEIKNKA6QQWyxn9oM+v6v9Ldhcv/InmPu8jmkW/M6ZBTrcS4bXLLAVW0PWHtAlx
- OxdtipzZUJ0x7WDET4l6SHmIP9I5g/Ehre99WnpxjNbSY2oFIAsCKjT6ys6V0CRVRy
- BHZV17SVCleVA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=BTDP/sHeIk//YiOZzVSkOMO+66DuFjN0ywaM7L15Vq1gWJEFGJ5h3JMuhGZkPe4WA
+ RqlXOKIft25zfqB8hSklm6JQev9fq7Yjp86mK0SvnEXBkNYLM7wxt5SCc8FbWzyirr
+ S7a3HROrwOaSL5gkILAj/ej1aYQ9/bP+DdvgCH3bpCss7pS36QWjUc6qUG3IEsw3Nz
+ QyVugZVb/fJs3755zkTx3Ao7oXu+KxCLgJvkbcyFdPyZX32Q4FWmy56zVp+2fjGr9w
+ vSx4p8aKOrNfYql/Wi3iA474V1N07H6egA8H3YH1sbCC6vxjIAIrGHNM/AdugwgPBG
+ CXCHlCtPyIP6g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=ZPHsgjJ6
-Subject: [Buildroot] [PATCH/next 03/31] package/python-aiodns: bump version
- to 3.6.0
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=BTDP/sHe
+Subject: [Buildroot] [PATCH/next 15/31] package/python-autobahn: bump
+ version to 25.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,55 +107,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/aio-libs/aiodns/releases/tag/v3.6.0
-
-Updated URL in help text.
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-aiodns/Config.in          | 2 +-
- package/python-aiodns/python-aiodns.hash | 4 ++--
- package/python-aiodns/python-aiodns.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-autobahn/python-autobahn.hash | 4 ++--
+ package/python-autobahn/python-autobahn.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-aiodns/Config.in b/package/python-aiodns/Config.in
-index 63c2429390..dd6ec84640 100644
---- a/package/python-aiodns/Config.in
-+++ b/package/python-aiodns/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_PYTHON_AIODNS
- 	help
- 	  Simple DNS resolver for asyncio.
- 
--	  http://github.com/saghul/aiodns
-+	  https://github.com/saghul/aiodns
-diff --git a/package/python-aiodns/python-aiodns.hash b/package/python-aiodns/python-aiodns.hash
-index e0c73c2039..8e3e66d0f1 100644
---- a/package/python-aiodns/python-aiodns.hash
-+++ b/package/python-aiodns/python-aiodns.hash
+diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+index 4b9e7c1be5..ef26ba346f 100644
+--- a/package/python-autobahn/python-autobahn.hash
++++ b/package/python-autobahn/python-autobahn.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiodns/json
--md5  30623b233a06bd318478e39828a771d2  aiodns-3.5.0.tar.gz
--sha256  11264edbab51896ecf546c18eb0dd56dff0428c6aa6d2cd87e643e07300eb310  aiodns-3.5.0.tar.gz
-+md5  dd1c76c0b2897589ae9787530cc0e468  aiodns-3.6.0.tar.gz
-+sha256  9b0ef54339e6687cdbd39a7d73d7de2467cb5c115281da28f2598f058633dac8  aiodns-3.6.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/autobahn/json
+-md5  cedc5252be771288b19c237cd54a63e9  autobahn-24.4.2.tar.gz
+-sha256  a2d71ef1b0cf780b6d11f8b205fd2c7749765e65795f2ea7d823796642ee92c9  autobahn-24.4.2.tar.gz
++md5  d3cb29a6d5e8cc4c9671aa46ba1f2d0c  autobahn-25.11.1.tar.gz
++sha256  52e62b9cc80c3e989b182952a60fd25c9a69afb00854a925a2b185f7b1f73cf1  autobahn-25.11.1.tar.gz
  # Locally computed sha256 checksums
- sha256  3e91cfa76821ab70d22998136d674d20ae888463a7e8a7f377166cfe1ee64feb  LICENSE
-diff --git a/package/python-aiodns/python-aiodns.mk b/package/python-aiodns/python-aiodns.mk
-index 87aa8830aa..d0a1ed6e1e 100644
---- a/package/python-aiodns/python-aiodns.mk
-+++ b/package/python-aiodns/python-aiodns.mk
+ sha256  49c90822821c78934079a4bfed0a880790a868bc6dba90ea8fe8274e0f985ada  LICENSE
+diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
+index 458739f7f4..0ba2b3fb4f 100644
+--- a/package/python-autobahn/python-autobahn.mk
++++ b/package/python-autobahn/python-autobahn.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIODNS_VERSION = 3.5.0
-+PYTHON_AIODNS_VERSION = 3.6.0
- PYTHON_AIODNS_SOURCE = aiodns-$(PYTHON_AIODNS_VERSION).tar.gz
--PYTHON_AIODNS_SITE = https://files.pythonhosted.org/packages/17/0a/163e5260cecc12de6abc259d158d9da3b8ec062ab863107dcdb1166cdcef
-+PYTHON_AIODNS_SITE = https://files.pythonhosted.org/packages/e6/11/238e97cbf5c1c0f725d590a092e0618dcdc50f44dbd1e2a926fae27e6f06
- PYTHON_AIODNS_SETUP_TYPE = setuptools
- PYTHON_AIODNS_LICENSE = MIT
- PYTHON_AIODNS_LICENSE_FILES = LICENSE
+-PYTHON_AUTOBAHN_VERSION = 24.4.2
++PYTHON_AUTOBAHN_VERSION = 25.11.1
+ PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
+-PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/38/f2/8dffb3b709383ba5b47628b0cc4e43e8d12d59eecbddb62cfccac2e7cf6a
++PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/0e/3a/aab5632fbd88ed26d330ab156af80c9a90419dfa2841296fd556a65e5fac
+ PYTHON_AUTOBAHN_LICENSE = MIT
+ PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
+ PYTHON_AUTOBAHN_CPE_ID_VENDOR = crossbar
 -- 
 2.47.3
 
