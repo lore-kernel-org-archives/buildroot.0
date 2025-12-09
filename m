@@ -1,89 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6809FD3B7ED
-	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 15:49:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D9D9D3B7F8
+	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 15:49:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B84A608FB;
-	Tue,  9 Dec 2025 15:49:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 94EE840CA8;
+	Tue,  9 Dec 2025 15:49:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Yk0Wk_4M1U7Z; Tue,  9 Dec 2025 15:49:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id F8LBbK2TWH0p; Tue,  9 Dec 2025 15:49:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 49BE660801
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50FD940C93
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765295373;
-	bh=XpgbOg6eBbnWbYy2i1SJbAfWatCmvzYjVCJDW7aXt9Y=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=nhWyuB/VBxMircFkBOZTXGySYVoxLA/O7dCcIjxP4LmN/YhmxZd2v3UXDzEyMcYcZ
-	 5C692F0qmQ8JJsSAjgizjipeZa1csr1MPyeNuAO2fd9wn27iebe3sDK1IhCsKpgNG3
-	 5/08Vbo8BPov7nPuuLommBkTHl3CueVzip6FCFVfB8nTwNjtaEcE0dlwjMZw74s1RM
-	 JyemVNdDAEXGbiXA6+yMJFGcUCQGjv+PUQOljEm/IRLJ1JBmMX2X8OuiJdEnC0q3/a
-	 50ckzS62PMHvqn8imPQGjbjtD2kt1dd2pMBztcr9SD3WpGiclvZTYkmVU0cCflPzLT
-	 dfn485tEFnzhQ==
+	s=default; t=1765295374;
+	bh=G/WMWId/2nxQOnmHVMJPt6rE1bOdR2KTA5IQq2ZAvDQ=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=K5Fz3OCgIXs+d0Nf8aZz6cq6UO0maL2UTP3649kseP35b0/he/tyiWykvwmI/7orF
+	 kPEUYS7naNoOOT4v1ReV490Qrf3w/9t17myG90KH164e+W2a61ATZ6qB9Y2+wbDTaH
+	 +EoplkVMxRzhoIWxoXhYZ7T7wFYxmDcY6VxInl8dFlODdh5oUs0EU53olwoafitE+V
+	 elJLp4hsYMg3ogxGvX6MSDz+VpdzNTUerOX328HICs/jWUwQQCu8Ulp1co37Rn8h2i
+	 xdJSccXOCLXALraVE29OkKVKmvu0w2mW3Z4LVEtNTyPZH6XzymQLYCn4MM96H8dO5p
+	 kPo8RzcDFO4uQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 49BE660801;
-	Tue,  9 Dec 2025 15:49:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id C6D21197
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 15:49:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 50FD940C93;
+	Tue,  9 Dec 2025 15:49:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 16C5C151
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 15:49:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B848F80C95
+ by smtp2.osuosl.org (Postfix) with ESMTP id F1F2E400D1
  for <buildroot@buildroot.org>; Tue,  9 Dec 2025 15:49:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eb7C8SO9scpg for <buildroot@buildroot.org>;
- Tue,  9 Dec 2025 15:49:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eIdQGUitDV-Q for <buildroot@buildroot.org>;
+ Tue,  9 Dec 2025 15:49:31 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=103.117.158.92;
  helo=sender-pp-o92.zoho.in; envelope-from=preyas17@zohomail.in;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 48DAC80C6C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48DAC80C6C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4905940082
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4905940082
 Received: from sender-pp-o92.zoho.in (sender-pp-o92.zoho.in [103.117.158.92])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 48DAC80C6C
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4905940082
  for <buildroot@buildroot.org>; Tue,  9 Dec 2025 15:49:29 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; t=1765295363; cv=none; d=zohomail.in; s=zohoarc; 
- b=Ap/KjBp2iqtMqsfaiHz/jjqm1xaaW1e5xsZ89zSKRJO9y/pKuWbTzKcP8WA3xaem0lVQCmwc5ONOJvSOfxfeGmlVBktC6pCC6G+K3CC6adHqvs2WAc+WlddSX0XaLVwcrdfaMBRYWOJFbjwcNAR0Kh0k32ZKTu71KEPTp5T2g1Q=
+ARC-Seal: i=1; a=rsa-sha256; t=1765295364; cv=none; d=zohomail.in; s=zohoarc; 
+ b=Ji/ihDBR3zNW+CPZAY1yZtecko7KwPsDH3X/wLmktIJVh5DSlgTr5kQEbzrZ4ONG5UfvUcBwnzEqGwT+46AdlF1glOkvoUf/t8DopbuBk9ZOR+TKRb34QzRO/yp2yTtEobv1C9Gi6glZdtzW7zac1PPQRYKu1a1jBTaYjmNLsvw=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in;
- s=zohoarc; t=1765295363;
- h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To;
- bh=g4YhK2nFzD7fhhOHC23Py4phT6v63NolSMsBV1Q1whk=; 
- b=GQyHHhoAm7F097dFr8Bm2bLTqGNpV5ozJDYnJe945GmU/FfXdtQ85z+2pDP0r3kRKsitoo/yST2TLUtP+ogvm6x2yAp7lFHRpmwVE0Xvp1mXlFcKbtqksBT2k6rVvvl1FgjU6PTrEw9hOVjIjf26WNNGFiHJMtUP0Y7LjCa0O3w=
+ s=zohoarc; t=1765295364;
+ h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To;
+ bh=q1mD+QbWjDbQt+qGaQZB0MnRaBNilmUfLuHvbU9JTHI=; 
+ b=Yjyvyoaz+sxzfVOLFosrHhHzR+LURhY32Ur/LQsqjUliOA47wdNNASxIkShW61G7bavXda9OKZiBDN7rryiSu0az0/FIqriGuy+00Lx0dX7zFdsaWbTyh1kC2q1wy2thsajLaZi3DdHQpiVdWYN3bTuEO6p2omg5Vyt2bshg78k=
 ARC-Authentication-Results: i=1; mx.zohomail.in;
  dkim=pass  header.i=zohomail.in;
  spf=pass  smtp.mailfrom=preyas17@zohomail.in;
  dmarc=pass header.from=<preyas17@zohomail.in>
-Received: by mx.zoho.in with SMTPS id 1765295362060795.7199665338337;
+Received: by mx.zoho.in with SMTPS id 1765295362764140.23475727204243;
  Tue, 9 Dec 2025 21:19:22 +0530 (IST)
 To: buildroot@buildroot.org
 Cc: Preyas <preyas17@zohomail.in>
-Date: Tue,  9 Dec 2025 15:48:33 +0000
-Message-ID: <20251209154834.5946-1-preyas17@zohomail.in>
+Date: Tue,  9 Dec 2025 15:48:34 +0000
+Message-ID: <20251209154834.5946-2-preyas17@zohomail.in>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20251209154834.5946-1-preyas17@zohomail.in>
+References: <20251209154834.5946-1-preyas17@zohomail.in>
 MIME-Version: 1.0
 X-ZohoMailClient: External
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; t=1765295363; 
+ c=relaxed/relaxed; t=1765295364; 
  s=zoho; d=zohomail.in; i=preyas17@zohomail.in;
- h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
- bh=g4YhK2nFzD7fhhOHC23Py4phT6v63NolSMsBV1Q1whk=;
- b=CtvDAR6Ebt/1O3g01DX2MPd0IlwS0gXfS6jg9pU1zDO50BTFjBBvq323xKGXy+EN
- wodSgyPNm35KvekhNdl6eZN8SI9sZuLF3Bh0dFa8+esRf99sETevfmIF5Ll1H31jcmb
- jEcQHNaYP6i+vKhUoeXLE0X0uel2miJn4ifW9U+8=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+ bh=q1mD+QbWjDbQt+qGaQZB0MnRaBNilmUfLuHvbU9JTHI=;
+ b=M+bGScE/TWZ63EvbUdfYrgDumcDEBL/dTlah1XZOTAAqbGZlC3tJ93qY8c1DtJgd
+ SC137w2+QKgRufh+NxaXwAsPWRgmi+PSA0REBXyyES1vJrl/aDAdtM3XF5V4NNpTJrE
+ 20IeQcE06KrbQ6NKq3zK+05M8B69vNnTTL6vjUOI=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=zohomail.in
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=zohomail.in header.i=preyas17@zohomail.in
- header.a=rsa-sha256 header.s=zoho header.b=CtvDAR6E
-Subject: [Buildroot] [PATCH 1/2] libseccomp: bump to 2.6.0
+ header.a=rsa-sha256 header.s=zoho header.b=M+bGScE/
+Subject: [Buildroot] [PATCH 2/2] pigz: switch site to HTTPS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -102,38 +105,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update to latest stable release. Refresh sha256 from upstream PGP-signed checksums. No packaging changes required.
+Prefer HTTPS for source downloads. No functional change; hashes unchanged. Align comment in .hash.
 
 Signed-off-by: Preyas <preyas17@zohomail.in>
 ---
- package/libseccomp/libseccomp.hash | 4 ++--
- package/libseccomp/libseccomp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pigz/pigz.hash | 2 +-
+ package/pigz/pigz.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libseccomp/libseccomp.hash b/package/libseccomp/libseccomp.hash
-index b80efd68f5..aaadc8424e 100644
---- a/package/libseccomp/libseccomp.hash
-+++ b/package/libseccomp/libseccomp.hash
+diff --git a/package/pigz/pigz.hash b/package/pigz/pigz.hash
+index d09930b62b..d63c5a5717 100644
+--- a/package/pigz/pigz.hash
++++ b/package/pigz/pigz.hash
 @@ -1,4 +1,4 @@
--# From https://github.com/seccomp/libseccomp/releases/tag/v2.5.5
--sha256  248a2c8a4d9b9858aa6baf52712c34afefcf9c9e94b76dce02c1c9aa25fb3375  libseccomp-2.5.5.tar.gz
-+# From https://github.com/seccomp/libseccomp/releases/tag/v2.6.0 (PGP-signed checksum)
-+sha256  83b6085232d1588c379dc9b9cae47bb37407cf262e6e74993c61ba72d2a784dc  libseccomp-2.6.0.tar.gz
+-# From http://zlib.net/pigz
++# From https://zlib.net/pigz
+ sha256  eb872b4f0e1f0ebe59c9f7bd8c506c4204893ba6a8492de31df416f0d5170fd0  pigz-2.8.tar.gz
+ 
  # Locally calculated
- sha256  102900208eef27b766380135906d431dba87edaa7ec6aa72e6ebd3dd67f3a97b  LICENSE
-diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
-index 10d57bb78c..26585b1887 100644
---- a/package/libseccomp/libseccomp.mk
-+++ b/package/libseccomp/libseccomp.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/pigz/pigz.mk b/package/pigz/pigz.mk
+index e3273c71c1..0708882a15 100644
+--- a/package/pigz/pigz.mk
++++ b/package/pigz/pigz.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBSECCOMP_VERSION = 2.5.5
-+LIBSECCOMP_VERSION = 2.6.0
- LIBSECCOMP_SITE = https://github.com/seccomp/libseccomp/releases/download/v$(LIBSECCOMP_VERSION)
- LIBSECCOMP_LICENSE = LGPL-2.1
- LIBSECCOMP_LICENSE_FILES = LICENSE
+ PIGZ_VERSION = 2.8
+-PIGZ_SITE = http://zlib.net/pigz
++PIGZ_SITE = https://zlib.net/pigz
+ PIGZ_DEPENDENCIES = zlib
+ HOST_PIGZ_DEPENDENCIES = host-zlib
+ PIGZ_LICENSE = Zlib
 -- 
 2.43.0
 
