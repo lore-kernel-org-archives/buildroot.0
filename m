@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD574D3B992
-	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 19:45:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B722FD3B993
+	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 19:45:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 843F0843E7;
-	Tue,  9 Dec 2025 19:45:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F21B8446A;
+	Tue,  9 Dec 2025 19:45:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ILphuLz8rSaE; Tue,  9 Dec 2025 19:45:36 +0000 (UTC)
+ id 45gBZEUo-XPe; Tue,  9 Dec 2025 19:45:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA22D84395
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B55AC844C1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765309536;
-	bh=gmyZaeynJmmlKWfMxBsVzzD3zEoHRZ5XRsEb9oLMKg8=;
+	s=default; t=1765309548;
+	bh=nPch/zKoA3mJIgC8zOuFe0LfOL83oygwic9fU1LnrMc=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=EYDbItd/+KfWslqXn8klWXt0fJZq+lsxtLPGJ7g8UXJN1+a+iCkW/jA7WVirRnsLA
-	 IbyVCw6835MqCVUW08eP/b5SSsXD3q9jMPVaiOW/DG80l5+Gg/h3lZMGdRw1leSWW4
-	 CdoHqkTnRr57DglhN4z0ivfvB11scaSj53+YDZ4bElvZUxc/V+6SdGsRVI5TM5of0i
-	 PkBR3oPhiT65ISbFd8swE+6NESFmrxNxoQQglFV6rP2mjFpkgysVmwT/dB1cwyq1/X
-	 gbGbFPdQVzJ5vtQX8PpIJKq4+dFk0k65iyKRK1dSdJfEyqCMfFuQxblwcaMhphxc0O
-	 NRj660pXNNpQQ==
+	b=Bn6cEyaGZu9PeifAHhuE/VhbeMDWVtpZdU9FNHUsvdKV8RKsUNmo777e7FmJ+qP5b
+	 8xFTgvT7hG2vDmF4Q/c7swSvqxQCxk57Dm2VCwnzFULFEIDaMX6vwBeWZzueiNC9Cz
+	 1yJtxZ4ifjyIiok/xaojDpM4UA+cuNmRUf4oN2M0TLhcg1ZP1p699oeHJFCj4qMzyY
+	 9XNcz7uOW46cBH8PtGqaKN7JF/5wDp0SxpeKRG5k7g88uoGWVUtJYpx2i/6wW2AMW/
+	 vWvcfGiaDOY7qAv6rbr7Jadty9xvgfdALjR8xWmVIk3Jo8oy8uSfFR5O7eVod6rjlk
+	 NilKav0Ovke9w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AA22D84395;
-	Tue,  9 Dec 2025 19:45:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8DEA72C0
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:45:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B55AC844C1;
+	Tue,  9 Dec 2025 19:45:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A3680E7
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:45:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8B9C184395
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:45:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 955C261386
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:45:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z9Og-OUTvcmM for <buildroot@buildroot.org>;
- Tue,  9 Dec 2025 19:45:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id J7FkjOzq1Qgy for <buildroot@buildroot.org>;
+ Tue,  9 Dec 2025 19:45:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8231E84388
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8231E84388
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 85C3960A35
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85C3960A35
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8231E84388
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:45:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 85C3960A35
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:45:46 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b151.dip0.t-ipconnect.de [84.161.177.81])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id ACC88A4C2D3B;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id DDEA0A4C2D44;
  Tue,  9 Dec 2025 20:40:18 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:45534)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vT3Yw-000000006DN-05vw;
+ (envelope-from <bernd@kuhls.net>) id 1vT3Yw-000000006DN-0Nly;
  Tue, 09 Dec 2025 19:39:53 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue,  9 Dec 2025 20:39:49 +0100
-Message-ID: <20251209193951.1000100-29-bernd@kuhls.net>
+Date: Tue,  9 Dec 2025 20:39:50 +0100
+Message-ID: <20251209193951.1000100-30-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251209193951.1000100-1-bernd@kuhls.net>
 References: <20251209193951.1000100-1-bernd@kuhls.net>
@@ -67,22 +67,22 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1765309218;
- bh=lBFN/VEireEL3idZvUbvE8mNKMDQjQdf72LV6o3P4+o=;
+ bh=P7HdPz1a5wOHMKqgp4QCr7gQ9wTiKtuqtHuUTE55uPY=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=RYzRCB8SzIEuh3BLMfrGWjZrQQ4jk4/ML5p80Kcnn4hwWqEKkoTQvzZQLxpfM6d08
- qpLbJifioUG0rHJeqSM9fFeVTSdUwnbdKKF5fVMW92VH/X12tFE2sPnqLI6Pwnzu3V
- DqduuzNV0tLhf2F9z6M81hpBQFfzXlYMmPEamenyl1qbKz8k6wHiAUh32geG1ZWVZd
- Hx1c/lCKhBMrAakfhs6baY6x6+vkG1MNC04dzRPDPatmPDcmXp3CkHcEqLGpN58rER
- 5q9DoVyIN+FxX9nvX/ITeahsKp8cd0sH4EOuheZS77cNCUDAMNHGQk+LLWYRUeTquD
- 5LH87nb81bGlQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=CXDCmEhjr0Q5V9DskZFL/ssdzn9NdVgFqRTrBs2iXDHqryiG7EGIePGiLYsMXSx0O
+ T1w/GcXvVw0DApfLx/ESwSui67YVBSAuN9uEzZISFVom4gZU3stggryVgeNdUm11/c
+ CcYiZRfwrez/67ByXd/8SbZvl6sCuhNhZ0m0Y5sdd4FhXGGyyEJXuwzak0y/whXh7+
+ sYj1hZ9BrhBYBwYFroEGrQuhSwJ5AoZc6tvSofvy6JYuO2NOGHci5FfIMZjroWxCTu
+ QLz6P/aIRGD38M1NqgdmwZFuYApZL9F+dQiAsxXnkg97tmJnOIq/n4mb/QKGOCfscC
+ xkOg4hebdjYwQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=RYzRCB8S
-Subject: [Buildroot] [PATCH/next 29/31] package/python-maturin: bump version
- to 1.10.2
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=CXDCmEhj
+Subject: [Buildroot] [PATCH/next 30/31] package/python-orjson: bump version
+ to 3.11.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,43 +107,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog: https://github.com/PyO3/maturin/blob/v1.10.2/Changelog.md
+Changelog: https://github.com/ijl/orjson/blob/3.11.5/CHANGELOG.md
 
 Fixes build with python 3.14.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-maturin/python-maturin.hash | 2 +-
- package/python-maturin/python-maturin.mk   | 4 ++--
+ package/python-orjson/python-orjson.hash | 2 +-
+ package/python-orjson/python-orjson.mk   | 4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-maturin/python-maturin.hash b/package/python-maturin/python-maturin.hash
-index f439f5d9b9..b530d93b49 100644
---- a/package/python-maturin/python-maturin.hash
-+++ b/package/python-maturin/python-maturin.hash
+diff --git a/package/python-orjson/python-orjson.hash b/package/python-orjson/python-orjson.hash
+index 54594749fe..f55aab62ef 100644
+--- a/package/python-orjson/python-orjson.hash
++++ b/package/python-orjson/python-orjson.hash
 @@ -1,5 +1,5 @@
  # Locally calculated after vendoring
--sha256  32ed28b14691d95daf862ec78cc26fcf01ce55eafd4b22b0c27c02f8d4530806  python-maturin-1.9.4-cargo4.tar.gz
-+sha256  d50215b4a1ed4261f6de56413a954c14dfbc7f3481f176fe64ee078dd6a9a052  python-maturin-1.10.2-cargo4.tar.gz
+-sha256  b4a77b2489f8ffe81f9b1037f1c17fd6bf89291b82888f176dbeac00e9cdc0f9  python-orjson-3.10.15-cargo4.tar.gz
++sha256  ab71a5f3d6efb4a3dd0cacad24e62d774907be42ba2e01be8a3ddeecf46d078b  python-orjson-3.11.5-cargo4.tar.gz
  # Locally computed sha256 checksums
- sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  license-apache
- sha256  ea7882c559733766ad08343bde1d1ec80a4967c03a738fb8e0058ef6289f7b7c  license-mit
-diff --git a/package/python-maturin/python-maturin.mk b/package/python-maturin/python-maturin.mk
-index aab4ccef6f..e4d91a6545 100644
---- a/package/python-maturin/python-maturin.mk
-+++ b/package/python-maturin/python-maturin.mk
+ sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
+ sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
+diff --git a/package/python-orjson/python-orjson.mk b/package/python-orjson/python-orjson.mk
+index 29325e2f67..9b5016c9e4 100644
+--- a/package/python-orjson/python-orjson.mk
++++ b/package/python-orjson/python-orjson.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MATURIN_VERSION = 1.9.4
-+PYTHON_MATURIN_VERSION = 1.10.2
- PYTHON_MATURIN_SOURCE_PYPI = maturin-$(PYTHON_MATURIN_VERSION).tar.gz
--PYTHON_MATURIN_SITE_PYPI = https://files.pythonhosted.org/packages/13/7c/b11b870fc4fd84de2099906314ce45488ae17be32ff5493519a6cddc518a
-+PYTHON_MATURIN_SITE_PYPI = https://files.pythonhosted.org/packages/02/44/c593afce7d418ae6016b955c978055232359ad28c707a9ac6643fc60512d
- PYTHON_MATURIN_SITE = $(PYTHON_MATURIN_SITE_PYPI)/$(PYTHON_MATURIN_SOURCE_PYPI)?buildroot-path=filename
- PYTHON_MATURIN_SETUP_TYPE = setuptools-rust
- PYTHON_MATURIN_LICENSE = Apache-2.0 or MIT
+-PYTHON_ORJSON_VERSION = 3.10.15
++PYTHON_ORJSON_VERSION = 3.11.5
+ PYTHON_ORJSON_SOURCE_PYPI = orjson-$(PYTHON_ORJSON_VERSION).tar.gz
+-PYTHON_ORJSON_SITE_PYPI = https://files.pythonhosted.org/packages/ae/f9/5dea21763eeff8c1590076918a446ea3d6140743e0e36f58f369928ed0f4
++PYTHON_ORJSON_SITE_PYPI = https://files.pythonhosted.org/packages/04/b8/333fdb27840f3bf04022d21b654a35f58e15407183aeb16f3b41aa053446
+ PYTHON_ORJSON_SITE = $(PYTHON_ORJSON_SITE_PYPI)/$(PYTHON_ORJSON_SOURCE_PYPI)?buildroot-path=filename
+ PYTHON_ORJSON_SETUP_TYPE = maturin
+ PYTHON_ORJSON_LICENSE = Apache-2.0 or MIT
 -- 
 2.47.3
 
