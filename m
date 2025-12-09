@@ -1,86 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 527F7D3B98F
-	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 18:45:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D23C6D3B98A
+	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 19:02:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C79FC83DA7;
-	Tue,  9 Dec 2025 18:45:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 862F04048F;
+	Tue,  9 Dec 2025 19:02:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XRn3Q_zkEaRy; Tue,  9 Dec 2025 18:45:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ytsNUxqD4Tbe; Tue,  9 Dec 2025 19:02:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FD7783B80
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70C03404DB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765305955;
-	bh=KfKGJ8CDFyA1XNFQ245XkQ0sP5UWDKyHHhjtfmZyulc=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=IASLo2g46sS0yquH/Tkz8lqpJgYDEzXcAmCjPrtUwNl46Xws23zSC4Fh6JvKSV/Po
-	 cRvgFF1oHxK/nIfhEu9hjX4Nu1wqBJymQonSRAR5b9Y1ywjJeEy54Yaqc2PYzd5QS8
-	 fnFTM8grKh7MAmGLz6PMPd7xH/a2n0q1PGY10dlkXlIZSbvxIoE/PQuPR9EBuoM2Iq
-	 xcE/MM7RzInsPcUcLWDEf6OikF3RIjEIWYGHAwX4JG8gnrUZjc6pBDxy9Sa3ONXw7g
-	 PUq6BPB6a7YectBTKVHjiiowHrx7OurCQrJHADD9AUvtdgdlIkq/HUvxPggoqE9bXK
-	 BmbcD9WMjv6GQ==
+	s=default; t=1765306938;
+	bh=MxbhLnUAn1Ig4jFBBf5RW0CzfaFf/sYWatrnHRFQSnU=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=emxU+SBpIAKBQcV3prVLjaVVs3xgObwKnBvYZbVh6GGGVg0LnnbnwQj2CyT73Yd47
+	 4VHK1n4vYIZfkrN1w9diD4pRKH2zg10U9Lt8xtcaTxNk6vTYyAcoWbc16YfYXx9K1R
+	 VJf2H2kPaZQ7gx4CQ+xKa81oes/Boqb6F5f11JuA+XOfgU/+AqAMl3Y6fK/4UzKOI+
+	 lCyvM6JqekBkXBCRaNQKxCaL069WgBU5uSgm38nf4llDIOTnyWWWYBxJKtxhD2tOxT
+	 gp0iRwJYnWopF8JtmBFuzwzb0bj3SNjYA4hCNK8Sdxjx3PofHDVnlDNvTVezsK8olo
+	 ew6zosvAHHC4g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2FD7783B80;
-	Tue,  9 Dec 2025 18:45:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id D44B2237
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:45:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 70C03404DB;
+	Tue,  9 Dec 2025 19:02:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A4625E7
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:02:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D1FF483AEE
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:45:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 81996842CB
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:02:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2OaD9ER0kw4Y for <buildroot@buildroot.org>;
- Tue,  9 Dec 2025 18:45:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EE54B838AC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE54B838AC
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EE54B838AC
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:45:52 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 3695478032A;
- Tue,  9 Dec 2025 19:45:50 +0100 (CET)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 09 Dec 2025 19:45:50 +0100
+ id FvKnoDRE1o9j for <buildroot@buildroot.org>;
+ Tue,  9 Dec 2025 19:02:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 06B4C842B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06B4C842B4
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 06B4C842B4
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:02:15 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1b151.dip0.t-ipconnect.de [84.161.177.81])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 65CB5A4C0156;
+ Tue,  9 Dec 2025 20:02:12 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:35538)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99)
+ (envelope-from <bernd@kuhls.net>) id 1vT2yS-0000000084O-0Ojf;
+ Tue, 09 Dec 2025 19:02:11 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Tue,  9 Dec 2025 20:02:10 +0100
+Message-ID: <20251209190211.186523-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Tue, 09 Dec 2025 19:45:50 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20251203180740.2121090-1-bernd@kuhls.net>
-References: <20251203180740.2121090-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <077a2a4b6dae5b7cf32fc10f52b80bff@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1765305951;
- bh=g5ncLTASpSE3v3pF29xIGtmFJ1C+5Vd2NdMbYGyzzrU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=FuvNejaaWTHy6AI/JTnUuYj8FjzWVmcAk0XKmP7KDwmU/1LC2XHLmA4o9DJv12YQk
- qaEoxBsg0QuK39ykDff0Wx9INKRAd8Cx45rRIk6PrOGiRKC7aLw/mfzgiMI2Vmg3O9
- DYKMp4xeqvhB0PHgnVJEtRTx9SdZvuOxD+105TM1Up+yWGeTGJV66CEccyQ5mQzo6F
- lQ7BnO4PFAEQEqcxcRI1PBO07c0h2SQ0EkK2aD6fe7cyzKJftBvEW6TNELeBc91kJq
- 74eRNOVr5Jy4rmEKYcIoFiXGEkBLUcGQ7zwaLg1v5e4KsLws3JUg0PkX6ju278OdTu
- Irh+ddxIEWoHA==
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1765306932;
+ bh=O3yIJM8ac47/Rfpj8ECEU7q3wuPzhnKc6Xfg4u118/Y=;
+ h=From:To:Cc:Subject:Date:From;
+ b=JkOF9Sz4GtP35l6dvraiW9gKqpYyFWBNjtedgHsKVJVZkKELFwsXV3Uuzr+IiEKcM
+ JygNlZtgJE3ePHD0xFu2Od0kWgUPthLqVUbChJzvFxJj3gut/NBqe9UhVx72DJBtJW
+ L+c/yvcTsyeJXL0WATBzo6BZjnPQzOR/DlnOs8CogMYPZfYwHp9nbNlAfguqJJ68fM
+ Tuhes5G9I7tGaptF+stVMRF/psgZNDc8NjD6GqqwVbNKq6PElN+Etpt0XVgILyRxzD
+ hsfZGbePyK0aUs32iqM4SFsqQUij+FpAjxTrePsfRDdhxnNELbh1rGIiUzIC5Bein6
+ ZKUxkJq1khF3Q==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=FuvNejaa
-Subject: Re: [Buildroot] [PATCH 1/1] package/sqlite: bump version to 3.51.1
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=JkOF9Sz4
+Subject: [Buildroot] [PATCH/next 1/1] package/meson: bump version to 1.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,27 +92,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 03/12/2025 19:07, Bernd Kuhls wrote:
-> Release notes of this bugfix release:
-> https://sqlite.org/releaselog/3_51_1.html
-> 
-> "Changes in this specific patch release, version 3.51.1 (2025-11-28):
-> 
->     Fix incorrect results from nested EXISTS queries caused by the
->     optimization in item 6b in the 3.51.0 release.
->     Fix a latent bug in fts5vocab virtual table, exposed by new
->     optimizations in the 3.51.0 release"
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Release notes: https://mesonbuild.com/Release-notes-for-1-10-0.html
 
-Applied to master, thanks.
+Rebased and updated patch 0001 to fix build error:
+
+    NameError: name 'env' is not defined
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ ...xt-static-libs-when-default-library-static.patch | 13 ++++++-------
+ package/meson/meson.hash                            |  4 ++--
+ package/meson/meson.mk                              |  2 +-
+ 3 files changed, 9 insertions(+), 10 deletions(-)
+
+diff --git a/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch b/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch
+index c7f8557ec1..92d5e517a4 100644
+--- a/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch
++++ b/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch
+@@ -24,8 +24,7 @@ http://autobuild.buildroot.net/results/c17/c17bbb12d9deadd64a441b36e324cfbbe8aba
+ Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+ [Updated for 0.57.1 - get_builtin_option() vs. get_option(OptionKey())]
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+-[Bernd: rebased for 1.6.0 & 1.7.0
+- for 1.82.0 - get_option -> optstore.get_value_for]
++[Bernd: rebased for 1.10.0]
+ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+  mesonbuild/compilers/mixins/clike.py | 3 +++
+@@ -43,16 +42,16 @@ index 09ad837b1..b7f6b9f22 100644
+  from .. import compilers
+  from ..compilers import CompileCheckMode
+  from .visualstudio import VisualStudioLikeCompiler
+-@@ -1053,6 +1054,9 @@ class CLikeCompiler(Compiler):
++@@ -1045,6 +1046,9 @@ class CLikeCompiler(Compiler):
+              # TI C28x compilers can use both extensions for static or dynamic libs.
+              stlibext = ['a', 'lib']
+              shlibext = ['dll', 'so']
+-+        elif env.coredata.optstore.get_value_for(OptionKey('default_library')) == 'static':
+++        elif self.environment.coredata.optstore.get_value_for(OptionKey('default_library')) == 'static':
+ +            # Linux/BSDs
+ +            shlibext = ['a']
+-         else:
+-             # Linux/BSDs
+-             shlibext = ['so']
++         elif self.info.is_os2():
++             stlibext = ['_s.lib', '_s.a', 'lib', 'a']
++             shlibext = ['_dll.lib', '_dll.a', 'lib', 'a', 'dll']
+ -- 
+ 2.25.1
+ 
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index 581cfe62a7..d07ea4d1dd 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/1.9.1/meson-1.9.1.tar.gz.asc
+-sha256  4e076606f2afff7881d195574bddcd8d89286f35a17b4977a216f535dc0c74ac  meson-1.9.1.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/1.10.0/meson-1.10.0.tar.gz.asc
++sha256  8071860c1f46a75ea34801490fd1c445c9d75147a65508cd3a10366a7006cc1c  meson-1.10.0.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 29082dcbb5..ca42edf63b 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MESON_VERSION = 1.9.1
++MESON_VERSION = 1.10.0
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
