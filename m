@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAC32D3B98F
-	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 18:28:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6424DD3B98E
+	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 18:28:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7633260E44;
-	Tue,  9 Dec 2025 18:28:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1B29B84360;
+	Tue,  9 Dec 2025 18:28:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WHhf7MgJFuLg; Tue,  9 Dec 2025 18:28:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DzJKEIN816Go; Tue,  9 Dec 2025 18:28:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13CC860DB8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3421884523
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765304903;
-	bh=In96NJyD1SCqu7RYBy+QkKKNjyhAcT1BCTbkTc+rblM=;
+	s=default; t=1765304904;
+	bh=keYEL71pAObLtuwi8gNHI8GKR6Gggcauy+LbPArLmGw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=QyiKzVNF+ywJJpf68b7Msu0ploxjE1irNAjGMbHHTFaQDp+p/7RJzRYPw6SbYKnfE
-	 ISiVe6g7lbrn91fXSQVSpx6bucsXmO9LmYx9rlWrHqtKJYt6BDGhCS/U6YB52lgYBB
-	 yZMXZqXf073fxF1U5PLdw14NkxjPJLDAP89XrxAfR0QLIxUd3eHxrE9a2U+6RCkPZI
-	 IqRVKOuCOfSJtL2nNIKfC1mOitckfhvbmWj9CsHzlmHDPb6XgBhutNJfBjuF5Gzw+O
-	 O5+vq9SKO2H6ZakaqbXQ01oKbVZQQK6vLNjEvmdBgWYhm4rTyO3AzdolB/5brlvEHU
-	 bJQYF/K3KtlcQ==
+	b=dAyEeafRQivU5mg1Tfhk0/BU/gY4onD8BbaIVF1IOHzORFp/TF2GS/rwSTtZCHFX6
+	 1D5qCkJ/ROOBqIVTO+V2ppVHa8lmirvm8K2p6i8LVk2jtK98Cwezgs3JocLtr9PghO
+	 UdUNMCGgIa9qElRYoIa2+hCxeh/6qiMDdNxfafzjuZ4G8Y7fdWSyBt3zLo5X8xHchR
+	 VoY/PMD9FKKn+H/QAzDoX/jmJeITR8t4rPd4HCL6VJtk/EbCID8hNKQPQh89xooA36
+	 fYfg/RHOtIQEFMqsCORddSdCRp7dVTpOH7mU8BHLI+1sHJFXqLKi7tyC/WSOjJvCus
+	 fKWw6oYJLxgeA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 13CC860DB8;
-	Tue,  9 Dec 2025 18:28:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B51B02C8
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:28:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3421884523;
+	Tue,  9 Dec 2025 18:28:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8D6F82C0
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:28:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 98F0B4033B
+ by smtp1.osuosl.org (Postfix) with ESMTP id CB88684360
  for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:28:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id apA7mvf3sTuM for <buildroot@buildroot.org>;
- Tue,  9 Dec 2025 18:28:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yfR2H8Wns8Mv for <buildroot@buildroot.org>;
+ Tue,  9 Dec 2025 18:28:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8BFE940169
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF5DD84373
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8BFE940169
+ by smtp1.osuosl.org (Postfix) with ESMTP id EF5DD84373
  for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:28:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 79A9786963; Tue,  9 Dec 2025 18:28:17 +0000 (UTC)
+ id ED2B586964; Tue,  9 Dec 2025 18:28:17 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 9 Dec 2025 19:24:58 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 478408964e7b478aa396fdcbbd1e1e5196ae20a8
-X-Git-Newrev: 7d5bd5ecc08841b8dc3866af0fd69229fa08215a
+X-Git-Oldrev: 7dd31d302133dd8fc5d6f44a42209fdb3573c51f
+X-Git-Newrev: 1983c12bd3c50a2a2b180b6562425746d4f90cdc
 X-Patchwork-Hint: ignore
-Message-Id: <20251209182817.79A9786963@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/azmq: bump version to
- git v1.0.3-54-g819b2403
+Message-Id: <20251209182817.ED2B586964@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/waylandpp: bump
+ version to 1.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,47 +77,112 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d5bd5ecc08841b8dc3866af0fd69229fa08215a
+commit: https://git.buildroot.net/buildroot/commit/?id=1983c12bd3c50a2a2b180b6562425746d4f90cdc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Last release dates back to 2021 with > 50 commits since then, including
-fixes for cmake 4 compatibility.
+Release notes:
+https://github.com/NilsBrause/waylandpp/releases/tag/1.0.1
 
-Instead of backporting several patches we bump the package to the latest
-commit.
+Removed patch which is included in this release.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien: change _VERSION to use "git describe --abbrev=40" format]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/azmq/azmq.hash | 2 +-
- package/azmq/azmq.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0001-add-missing-cstdint-include.patch         | 61 ----------------------
+ package/waylandpp/waylandpp.hash                   |  2 +-
+ package/waylandpp/waylandpp.mk                     |  2 +-
+ 3 files changed, 2 insertions(+), 63 deletions(-)
 
-diff --git a/package/azmq/azmq.hash b/package/azmq/azmq.hash
-index 6caf53582a..8b6c2c1f6b 100644
---- a/package/azmq/azmq.hash
-+++ b/package/azmq/azmq.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  80cfb951c5614b8c2e55a59ea2e5723a18ebed08da80e5420e525d6bf273771a  azmq-1.0.3.tar.gz
-+sha256  6acd312b1358be23d65e0695f0c6ec176efef944af353961e99dfb777169a6b6  azmq-v1.0.3-54-g819b24035cfa5b73081e21f5867445f2344f680d.tar.gz
- sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE-BOOST_1_0
-diff --git a/package/azmq/azmq.mk b/package/azmq/azmq.mk
-index a72b155664..99fb3212df 100644
---- a/package/azmq/azmq.mk
-+++ b/package/azmq/azmq.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/waylandpp/0001-add-missing-cstdint-include.patch b/package/waylandpp/0001-add-missing-cstdint-include.patch
+deleted file mode 100644
+index 13b0ce49ad..0000000000
+--- a/package/waylandpp/0001-add-missing-cstdint-include.patch
++++ /dev/null
+@@ -1,61 +0,0 @@
+-From 3c441910aa25f57df2a4db55f75f5d99cea86620 Mon Sep 17 00:00:00 2001
+-From: Sergei Trofimovich <slyich@gmail.com>
+-Date: Sun, 8 Jan 2023 18:24:53 +0000
+-Subject: [PATCH] add missing <cstdint> include
+-
+-Upcoming `gcc-13` made `<string>` leaner and does not include `<cstdint>`
+-implicitly anymore. As a result build fails without the change as:
+-
+-    [  2%] Building CXX object CMakeFiles/wayland-scanner++.dir/scanner/scanner.cpp.o
+-    scanner/scanner.cpp:378:3: error: 'uint32_t' does not name a type
+-      378 |   uint32_t width = 0;
+-          |   ^~~~~~~~
+-
+-Upstream: https://github.com/NilsBrause/waylandpp/pull/71
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- include/wayland-client.hpp | 1 +
+- scanner/scanner.cpp        | 3 +++
+- 2 files changed, 4 insertions(+)
+-
+-diff --git a/include/wayland-client.hpp b/include/wayland-client.hpp
+-index a3f782b..4598a0e 100644
+---- a/include/wayland-client.hpp
+-+++ b/include/wayland-client.hpp
+-@@ -29,6 +29,7 @@
+- /** \file */
+- 
+- #include <atomic>
+-+#include <cstdint>
+- #include <functional>
+- #include <memory>
+- #include <string>
+-diff --git a/scanner/scanner.cpp b/scanner/scanner.cpp
+-index bebd71e..37cf7ff 100644
+---- a/scanner/scanner.cpp
+-+++ b/scanner/scanner.cpp
+-@@ -23,6 +23,7 @@
+- #include <vector>
+- #include <cctype>
+- #include <cmath>
+-+#include <cstdint>
+- #include <stdexcept>
+- 
+- #include "pugixml.hpp"
+-@@ -1106,6 +1107,7 @@ int main(int argc, char *argv[])
+-   wayland_hpp << "#pragma once" << std::endl
+-               << std::endl
+-               << "#include <array>" << std::endl
+-+              << "#include <cstdint>" << std::endl
+-               << "#include <functional>" << std::endl
+-               << "#include <memory>" << std::endl
+-               << "#include <string>" << std::endl
+-@@ -1125,6 +1127,7 @@ int main(int argc, char *argv[])
+-     wayland_server_hpp << "#pragma once" << std::endl
+-                        << std::endl
+-                        << "#include <array>" << std::endl
+-+                       << "#include <cstdint>" << std::endl
+-                        << "#include <functional>" << std::endl
+-                        << "#include <memory>" << std::endl
+-                        << "#include <string>" << std::endl
+diff --git a/package/waylandpp/waylandpp.hash b/package/waylandpp/waylandpp.hash
+index a3eb5379af..8513060f91 100644
+--- a/package/waylandpp/waylandpp.hash
++++ b/package/waylandpp/waylandpp.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  b20b45917382c6b87e9380130c9a1a1c563da2f498de5830df12fbce326dd9f5  waylandpp-1.0.0.tar.gz
++sha256  49c362fa5db28ab5472968215b88f1fbe3a7b7f57818dde722fd7d38997d940a  waylandpp-1.0.1.tar.gz
+ sha256  3eee5022ce84ead344e1c51b9d00c7f450f53003fe096fe460d66c616fe56782  LICENSE
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  scanner/gpl-3.0.txt
+diff --git a/package/waylandpp/waylandpp.mk b/package/waylandpp/waylandpp.mk
+index 4a0d58ba50..f177c6e5be 100644
+--- a/package/waylandpp/waylandpp.mk
++++ b/package/waylandpp/waylandpp.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--AZMQ_VERSION = 1.0.3
--AZMQ_SITE = $(call github,zeromq,azmq,v$(AZMQ_VERSION))
-+AZMQ_VERSION = v1.0.3-54-g819b24035cfa5b73081e21f5867445f2344f680d
-+AZMQ_SITE = $(call github,zeromq,azmq,$(AZMQ_VERSION))
- AZMQ_DEPENDENCIES = boost zeromq
- AZMQ_LICENSE = BSL-1.0
- AZMQ_LICENSE_FILES = LICENSE-BOOST_1_0
+-WAYLANDPP_VERSION = 1.0.0
++WAYLANDPP_VERSION = 1.0.1
+ WAYLANDPP_SITE = $(call github,NilsBrause,waylandpp,$(WAYLANDPP_VERSION))
+ WAYLANDPP_LICENSE = MIT, GPL-3.0+ (wayland_scanner)
+ WAYLANDPP_LICENSE_FILES = LICENSE scanner/gpl-3.0.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
