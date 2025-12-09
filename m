@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 580E2D3B993
-	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 19:42:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 771BED3B992
+	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 19:42:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2A2258476B;
-	Tue,  9 Dec 2025 19:42:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4CA4E84779;
+	Tue,  9 Dec 2025 19:42:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JgGJOpXAieZV; Tue,  9 Dec 2025 19:42:34 +0000 (UTC)
+ id kAYAerlnA3Gc; Tue,  9 Dec 2025 19:42:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2FC28439D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 588F38440F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765309354;
-	bh=rfCFk9F5vijARzVICeKSdBIkUnU2vTqwygqK4u94WZ0=;
+	s=default; t=1765309365;
+	bh=uveDtSpje4JECDwLJGuAztBp3MVyHlN7N/WhsNvZUS0=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=JZFK39FiKPaazZMdtHfz7Q/c4gOpVXBcYz2PeiLMMc+HaqFFjO/WgmiPlRAw7AY0y
-	 9maKVBywFLeNToNSftsQxX2nGuyfsyRg7JPIKrQUaF2dPnbk28tGkc4gS7NBOPouR2
-	 xsoK3SEWp91ONM8r9kYA/g5cSuCx+Yb1bTZ7Or7M40Er154iMc2kRgDDuxozRpJOue
-	 irXRI7w/qDUHuSPnFtPkyIDQocHDwf67qK0RoeGg3s+fU2mVlAbtE9f9t2aJdwdas0
-	 WohZKlTXdv7aWAAug157oQCtW1SHRtQVcc0CSdqUtrnoPRB2rSDI19WfW8uLvchDg/
-	 8NTp5M+bdXAAw==
+	b=oKXB2jLp12qEacXjAMrxCknkOp467iKhGHbXq80Knj/QDQ5qEbVl2Z/fcu2s8gM9s
+	 rPWXNQmwJXvGghEvgqIrgF1yDDlRWc3JVQqKAQShgH+Ust0HfFm8qL5rhH9+SGBUa7
+	 xT5RLS3DysTTdsHEA1t/7CqkUOmOhhz7xizAHUF7VeQY0WYgI6q2gN7lfxVywqAw+e
+	 U/iWVVsRc3y+U4VKeEP/W0i/6VRV4sjc1ESHRGU7P84Jic87W1cqQdQSeFgQFEfhaj
+	 0Ye94Fh/0MrArPC3fVwY7WCLnsnFFZ4UcLg9bP03xfkS+XM+1X1mTMzQa+l/fhPL6R
+	 +S7gUwGJ49iXw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F2FC28439D;
-	Tue,  9 Dec 2025 19:42:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 538342C0
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:42:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 588F38440F;
+	Tue,  9 Dec 2025 19:42:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 964BB2C0
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:42:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3A74C40967
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:42:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 88A0A4059E
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:42:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cnmprHNhvfzX for <buildroot@buildroot.org>;
- Tue,  9 Dec 2025 19:42:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kZIuPI-k_cBG for <buildroot@buildroot.org>;
+ Tue,  9 Dec 2025 19:42:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 27A5C40377
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27A5C40377
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 798F24026A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 798F24026A
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 27A5C40377
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:42:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 798F24026A
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:42:43 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b151.dip0.t-ipconnect.de [84.161.177.81])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 4C182A4C2C83;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 80F1FA4C2C9C;
  Tue,  9 Dec 2025 20:40:15 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:45534)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vT3Yu-000000006DN-3qIs;
+ (envelope-from <bernd@kuhls.net>) id 1vT3Yu-000000006DN-482e;
  Tue, 09 Dec 2025 19:39:52 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue,  9 Dec 2025 20:39:33 +0100
-Message-ID: <20251209193951.1000100-13-bernd@kuhls.net>
+Date: Tue,  9 Dec 2025 20:39:34 +0100
+Message-ID: <20251209193951.1000100-14-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251209193951.1000100-1-bernd@kuhls.net>
 References: <20251209193951.1000100-1-bernd@kuhls.net>
@@ -67,22 +67,22 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1765309215;
- bh=m0gLA+OCEVvjNpk6MCtaeeELsP/umOzWCIEpAwlxmgo=;
+ bh=ij2ibN6t1Ps8VhLG8H0RdLR3fVl40jeOChGQ28ltAjQ=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=mBpuYyGR5IOd6UZgavUw3X1Rq542t31S4eVZnw5TZwYUmFFVd8QE2sLEk4BpjECKc
- j504JTBfr9jnjdWF7485k77eQCQ9DMXOxsaUjY6Li4GJL2jiJnqjnXIg3qZ2CxFtaP
- 3pmhLTmAzUL6pLXx0gBaX2JBt+i8ySqfDEgiw1NmoLYCbqOaXX5auJ1Vb+WH5O3z4f
- uemchlZryXl475vWThtiP2ZhUMg4egYqdraT/8E4RZyciN09fwo/veHbTZwrlqJkOI
- Zar3c1IOHG1S7yPqrmXDhx9YOOcSP2ECfY3IMfR6GfGRIv+0wXn0VimtfTy03t/eA3
- KqRqKM0Gu2c5g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=nuPlenycrC7aze2cjm268l1ZFvwZKC3EQ9gBUio7EsXs4d72LrSmQwIPSFRKHVnqk
+ +rECpQ1OzBhJHpKV9kUGYa2/tI5t9fxjmHySVGzbWQxcg9QhqMfaXMiUxC+9nBVlpu
+ wHTOemspd6KlqGQYZ/is4NjiHWHmVwHdpP/1iHUfK4oHhi/FQ3uwL8lxS1pOJnsxI3
+ TULLQ0qMygMD6q2DAVC6K3bgfdSTNamOewv9vu716HVjNQhgZcOaP3ZyBc+kCKIzEu
+ k5/op0MHIviU8rRUkZnHbyNeAi3dskfhgrge1lX2qR2XVSll27nXY7qvXmXl9LhCis
+ uHQSqxRyknGvw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=mBpuYyGR
-Subject: [Buildroot] [PATCH/next 13/31] package/python-asyncclick: bump
- version to 8.3.0.7
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=nuPlenyc
+Subject: [Buildroot] [PATCH/next 14/31] package/python-attrs: bump version
+ to 25.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,42 +107,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/python-trio/asyncclick/blob/main/CHANGES.rst
+https://www.attrs.org/en/stable/changelog.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-asyncclick/python-asyncclick.hash | 4 ++--
- package/python-asyncclick/python-asyncclick.mk   | 4 ++--
+ package/python-attrs/python-attrs.hash | 4 ++--
+ package/python-attrs/python-attrs.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-asyncclick/python-asyncclick.hash b/package/python-asyncclick/python-asyncclick.hash
-index 1a2603d2aa..15e8b1fb02 100644
---- a/package/python-asyncclick/python-asyncclick.hash
-+++ b/package/python-asyncclick/python-asyncclick.hash
+diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
+index 95b0a63bca..bf2aae1ed8 100644
+--- a/package/python-attrs/python-attrs.hash
++++ b/package/python-attrs/python-attrs.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/asyncclick/json
--md5  3c8af1a8b6151c24a102e5ed891d19d1  asyncclick-8.2.2.2.tar.gz
--sha256  014f6b7bfb1ef34a2215bc36aebd5150d5d2e50668b12eceb749961e32c24660  asyncclick-8.2.2.2.tar.gz
-+md5  9087d387a981ed313cbea4a4b54a13f3  asyncclick-8.3.0.7.tar.gz
-+sha256  8a80d8ac613098ee6a9a8f0248f60c66c273e22402cf3f115ed7f071acfc71d3  asyncclick-8.3.0.7.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/attrs/json
+-md5  338069d6f69126086d589b2cb44f4c73  attrs-25.1.0.tar.gz
+-sha256  1c97078a80c814273a76b2a298a932eb681c87415c11dee0a6921de7f1b02c3e  attrs-25.1.0.tar.gz
++md5  6197561dfec99660529830edcfeee0ba  attrs-25.4.0.tar.gz
++sha256  16d5969b87f0859ef33a48b35d55ac1be6e42ae49d5e853b597db70c35c57e11  attrs-25.4.0.tar.gz
  # Locally computed sha256 checksums
- sha256  9a8ad106a394e853bfe21f42f4e72d592819a22805d991b5f3275029292b658d  LICENSE.txt
-diff --git a/package/python-asyncclick/python-asyncclick.mk b/package/python-asyncclick/python-asyncclick.mk
-index d413242def..32d1eedfa2 100644
---- a/package/python-asyncclick/python-asyncclick.mk
-+++ b/package/python-asyncclick/python-asyncclick.mk
+ sha256  882115c95dfc2af1eeb6714f8ec6d5cbcabf667caff8729f42420da63f714e9f  LICENSE
+diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
+index 74d0c2f8d1..fd900c5046 100644
+--- a/package/python-attrs/python-attrs.mk
++++ b/package/python-attrs/python-attrs.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ASYNCCLICK_VERSION = 8.2.2.2
-+PYTHON_ASYNCCLICK_VERSION = 8.3.0.7
- PYTHON_ASYNCCLICK_SOURCE = asyncclick-$(PYTHON_ASYNCCLICK_VERSION).tar.gz
--PYTHON_ASYNCCLICK_SITE = https://files.pythonhosted.org/packages/35/51/b01dd77c9a14fb0b312d799fd8c10b145b882535dbaa9ac055a52515b390
-+PYTHON_ASYNCCLICK_SITE = https://files.pythonhosted.org/packages/f9/ca/25e426d16bd0e91c1c9259112cecd17b2c2c239bdd8e5dba430f3bd5e3ef
- PYTHON_ASYNCCLICK_SETUP_TYPE = flit
- PYTHON_ASYNCCLICK_LICENSE = BSD-3-Clause
- PYTHON_ASYNCCLICK_LICENSE_FILES = LICENSE.txt
+-PYTHON_ATTRS_VERSION = 25.1.0
++PYTHON_ATTRS_VERSION = 25.4.0
+ PYTHON_ATTRS_SOURCE = attrs-$(PYTHON_ATTRS_VERSION).tar.gz
+-PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/49/7c/fdf464bcc51d23881d110abd74b512a42b3d5d376a55a831b44c603ae17f
++PYTHON_ATTRS_SITE = https://files.pythonhosted.org/packages/6b/5c/685e6633917e101e5dcb62b9dd76946cbb57c26e133bae9e0cd36033c0a9
+ PYTHON_ATTRS_SETUP_TYPE = hatch
+ PYTHON_ATTRS_LICENSE = MIT
+ PYTHON_ATTRS_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
