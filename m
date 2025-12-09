@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9B95D4337D
-	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:59:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE768D43370
+	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:59:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A6ADC80B0B;
-	Fri, 12 Dec 2025 07:59:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F3FED80C88;
+	Fri, 12 Dec 2025 07:59:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4Ku-RRlH_vYt; Fri, 12 Dec 2025 07:59:22 +0000 (UTC)
+ id 1azarb5Che0E; Fri, 12 Dec 2025 07:59:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFFEC8423A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B494484336
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765526337;
-	bh=ynUW9j57HnXI4Ut8vwRNN5OrTcI3RvveXXsphJKNE8g=;
+	s=default; t=1765526339;
+	bh=BUOHJ/ihHbfwxPBReEkW20i2NeaJMrcUpo9IsbvnBa8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=D7BHfQqJ//1lbYwJVh0C+pwswiAdKumf22XdrraphcE+Y1uYntbZARjvmJ6cTM9Yq
-	 n6eJ7cPmUqkxknt8aFtLDzzwHrAWjQupPQA76cQNxBgCtsM8K8Q4lfNvvqWYOtIagv
-	 +41K4EXVias/ESkbfQnCvW4+cyKbNLu0dfl66aCn9WgJTNNJDz5IEk3zOOueyzuZUT
-	 72EBiynqx5HZHiB/Y02AQaY2ERbXk0So0eDCL/prZhWzG1/dFhkJsDo6Pf8hfrMq8C
-	 mwAB4jozdj69Fvx1mUm+iNqIGHm4UAwz6JjEPzP/O3CNKQjCAoBG8hJMpKcvKPWoML
-	 Rb2sIQVHIFa9Q==
+	b=Hga+oll8mF+gkOhqyfTsGxpCRYMBQKBFW+c4meiJCqHeqfW4thEWTvWx3oFbTCiUZ
+	 mE+BQUaogz6bW9OQmYXmNf0RPiHHmJ6r0/4GPxbhwLSLRMaDFQQRhBUO9nwt4msYPX
+	 at12qgYBVj689rjT77XHbndxe8Hj47M5zrUd0qtV+6Hd44h8kMsZDwf5d/JZ2+gT0b
+	 FiCwElEFvZMcfoBS6MRwypfk6/O2Pe9qqnknuhrVgOi+8zbgoKBpUdl0tQTqw1aLB0
+	 OfQYbBoS6mCn3Mr79lM7OtW6aVw9CfEhuPuH/bFWMEf4GtP4i6YgLY30ZWsVodWo/E
+	 Gp9aI0JsCPlIQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CFFEC8423A;
-	Fri, 12 Dec 2025 07:58:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B494484336;
+	Fri, 12 Dec 2025 07:58:59 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0EB7DE7
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:57:24 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1D061E7
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:57:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8B1D341162
+ by smtp4.osuosl.org (Postfix) with ESMTP id A8A3C41116
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rXwEMLH-Kszo for <buildroot@buildroot.org>;
- Fri, 12 Dec 2025 07:55:45 +0000 (UTC)
+ id jgy_pDcZxFsq for <buildroot@buildroot.org>;
+ Fri, 12 Dec 2025 07:55:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 183F641116
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E32854112F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 183F641116
+ by smtp4.osuosl.org (Postfix) with ESMTP id E32854112F
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 17789869E8; Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
+ id E260E869E8; Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 7 Dec 2025 17:10:20 +0100
+Date: Tue, 9 Dec 2025 19:24:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 71c6b157db233ec803f0a33f52e4d1a12058ba15
-X-Git-Newrev: d50b1bdd58d81c83dac401f927d95dd1601aabc8
+X-Git-Oldrev: a644ea1e2d8c48e84cf9bb770abe71765949c1da
+X-Git-Newrev: b464afb37920beb8fdd84c87eacec16b8a825d2d
 X-Patchwork-Hint: ignore
-Message-Id: <20251212075538.17789869E8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libuhttpd: fix cmake 4
- compatibility
+Message-Id: <20251212075538.E260E869E8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/hackrf: bump version to
+ v2024.02.1-118-g390837715b
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,55 +77,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d50b1bdd58d81c83dac401f927d95dd1601aabc8
+commit: https://git.buildroot.net/buildroot/commit/?id=b464afb37920beb8fdd84c87eacec16b8a825d2d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This bump includes patches which add cmake4 compatibility.
+
+Instead of adding patches for
+https://github.com/greatscottgadgets/hackrf/commits/main/host/CMakeLists.txt
+to the latest release from Februar 2024 we bump the package to the latest
+commit from November 2025.
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien: change _VERSION to use "git describe --abbrev=40" format]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../0001-fix-cmake-required-minimum-version.patch  | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ package/hackrf/hackrf.hash | 2 +-
+ package/hackrf/hackrf.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/libuhttpd/0001-fix-cmake-required-minimum-version.patch b/package/libuhttpd/0001-fix-cmake-required-minimum-version.patch
-new file mode 100644
-index 0000000000..097a44cf85
---- /dev/null
-+++ b/package/libuhttpd/0001-fix-cmake-required-minimum-version.patch
-@@ -0,0 +1,34 @@
-+From b9bf3936b3778912444eff7f7866db1d66f4c50b Mon Sep 17 00:00:00 2001
-+From: Thomas Perale <perale.thomas@gmail.com>
-+Date: Sun, 6 Jul 2025 20:14:31 +0200
-+Subject: [PATCH] fix: cmake required minimum version
-+
-+When trying to compile the project with CMake 4 the following error
-+shows up:
-+
-+CMake Error at CMakeLists.txt:1 (cmake_minimum_required):
-+  Compatibility with CMake < 3.5 has been removed from CMake.
-+
-+This commit bump the minimum required cmake version to meet the needs of
-+CMake v4.
-+
-+For more information see:
-+  - https://cmake.org/cmake/help/latest/release/4.0.html#deprecated-and-removed-features
-+
-+Upstream: https://github.com/zhaojh329/libuhttpd/commit/b9bf3936b3778912444eff7f7866db1d66f4c50b
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 6719e5f..0392f25 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,4 +1,4 @@
-+-cmake_minimum_required(VERSION 3.0)
-++cmake_minimum_required(VERSION 3.5)
-+ 
-+ project(libuhttpd C)
-+ 
+diff --git a/package/hackrf/hackrf.hash b/package/hackrf/hackrf.hash
+index 0426009dd3..f2424d44d2 100644
+--- a/package/hackrf/hackrf.hash
++++ b/package/hackrf/hackrf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  32a03f943a30be4ba478e94bf69f14a5b7d55be6761007f4a4f5453418206a11  hackrf-2023.01.1.tar.xz
++sha256  5aed35668876b661662c56575af982af8d5c7cb8e30b6ba220eacc7e00f0894f  hackrf-v2024.02.1-118-g390837715b3741902b1b13c899bfd04a0bb6b0da.tar.gz
+ sha256  49b60a6288f90f49074228cc1fae0fb16871ba36b756013abdf7c2fc92f01fad  COPYING
+diff --git a/package/hackrf/hackrf.mk b/package/hackrf/hackrf.mk
+index 0d7533815d..c1be8ea9e6 100644
+--- a/package/hackrf/hackrf.mk
++++ b/package/hackrf/hackrf.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-HACKRF_VERSION = 2023.01.1
+-HACKRF_SITE = https://github.com/greatscottgadgets/hackrf/releases/download/v$(HACKRF_VERSION)
+-HACKRF_SOURCE = hackrf-$(HACKRF_VERSION).tar.xz
++HACKRF_VERSION = v2024.02.1-118-g390837715b3741902b1b13c899bfd04a0bb6b0da
++HACKRF_SITE = $(call github,greatscottgadgets,hackrf,$(HACKRF_VERSION))
+ HACKRF_LICENSE = GPL-2.0+, BSD-3-Clause
+ HACKRF_LICENSE_FILES = COPYING
+ HACKRF_DEPENDENCIES = fftw-single libusb
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
