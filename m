@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D10D3D3B993
-	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 19:41:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE18ED3B993
+	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 19:42:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A6F4683FA2;
-	Tue,  9 Dec 2025 19:41:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B82FA4024E;
+	Tue,  9 Dec 2025 19:42:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tYCn1bBVvF7H; Tue,  9 Dec 2025 19:41:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V-mPAYaAfsFi; Tue,  9 Dec 2025 19:42:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C367D84746
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4F404026A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765309317;
-	bh=9qdW+VvtC3ibwzbZ8UFYDy6xZXI3zmd65u9aLvv159Y=;
+	s=default; t=1765309330;
+	bh=Uw8JWcvn39Zjyinr83uOR+DQcON4O7347y3i3NP1vf4=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=YkUEZF2eUta1Ol9ELARQRFGatCfxs3ot01vR39V2P+bKl1jkdt6+CwqqtDm3Yemzj
-	 TjXUetTWCdQJtZkpCL8z88xL7zoIpv29SIMkM69Aba9adfOCZpoYkam+XgEEalqrBQ
-	 xtS6L16Z29KJUstMekybeztJWJjkI+Bm9gmeAKIGjaweGtD6KxP5htEzm4aJkuDVPc
-	 yMw34GV8BJJBdjchijFdpA29e8AzfKLJOzgLAxVv8MGc7urlo50svcgqZI9kFuwXGp
-	 GSyPz70c3B4Va6/Pxlslbe24BkmEbrNKpV7a5sDZYuZ8FW4ATIrrlYa6zPkKvlJIOX
-	 r/H+O/yvz1DeQ==
+	b=T7hTcTrhxo5IqAc7eUX6FaO2+Xe5dNqiGRPZA6yNMd3JOQTCLmlxl6Q10139EotFF
+	 8Rduyzlw1supv64BHzTFNcu28YmIfU3xiKbfxSHgOJullqllFGIf28OnOfmmXFNS37
+	 ryoHch2V+D/LaZ0cd2TlCk0EgXFAbYYc4K6n/xqhwuhIk1kk/1teiNJpFRWilXx1XS
+	 mFb7LRwlQOOtMNNzkCxdOzKMCGSfd026Ic7dj73iGCuYC330vw4pWwmormU5t+Xhvt
+	 mjNon93Fi0fAIGzKkDc/bWTkyRkZI+KwjKu4hxSu4tfbLFAP8JPXZarxQpWJQGfzyD
+	 BU0buup2HCsbw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C367D84746;
-	Tue,  9 Dec 2025 19:41:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 624012C0
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:41:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E4F404026A;
+	Tue,  9 Dec 2025 19:42:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 655C42C0
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:42:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 48FE66136A
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:41:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 47F118475C
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:42:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ROmi6NAs8UYq for <buildroot@buildroot.org>;
- Tue,  9 Dec 2025 19:41:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XCq6RkD7rCSq for <buildroot@buildroot.org>;
+ Tue,  9 Dec 2025 19:42:07 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2E441612BC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E441612BC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 372768439D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 372768439D
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2E441612BC
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:41:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 372768439D
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 19:42:07 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b151.dip0.t-ipconnect.de [84.161.177.81])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id AB47AA4C2C73;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id DBF3EA4C2C78;
  Tue,  9 Dec 2025 20:40:14 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:45534)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vT3Yu-000000006DN-1n4n;
+ (envelope-from <bernd@kuhls.net>) id 1vT3Yu-000000006DN-3G87;
  Tue, 09 Dec 2025 19:39:52 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue,  9 Dec 2025 20:39:26 +0100
-Message-ID: <20251209193951.1000100-6-bernd@kuhls.net>
+Date: Tue,  9 Dec 2025 20:39:31 +0100
+Message-ID: <20251209193951.1000100-11-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251209193951.1000100-1-bernd@kuhls.net>
 References: <20251209193951.1000100-1-bernd@kuhls.net>
@@ -67,22 +67,22 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1765309214;
- bh=cAa5hQ0qELFdLongGshwjUz1Uv8fuw+/TnNSOxF/AUA=;
+ bh=kjj7z7q9CLvxjdomF7WnQg5pOOJ2mos8bW7+fm+ZjIQ=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=vM5FCBdyA5++8RPlsWlxyV14Vg+17AFE9ntunZlobXB2FLKbBJE4j55CSEUNQNpDy
- nZgfWI+X/7aPMPpywzA2+BYDD1bKnEbe9ODOYIjMb0cAaA1Z+0XP1aTO1QrenIUZjY
- 46cEISmm29qraRC8ju50O9BAsYfJ3oG7RtZiGO3/U7+QQ3VaxNpEcBg6SFoR9M+dzf
- Ev4Qz9cI6MMH79iXbCVwhgqPPiMs6r/59HGUsHy99WXvfsGp2JHbz6XIjqNIeoj2dl
- eyG/quq99FgIVs8e5Zpr923cxBdiBLzf/LDqXXANHh2ANoB3ct1bLw/xHsjzqi1Izp
- UT61gPlyzTwKA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=G/1568RycUB4gBNTAwql76uXt61e3YOffWHGcMZppMBFGayu3ETB1PPDqTKONnP/N
+ YAYOp0RPQdQoG/tRaBG32vv6F1GWx7B1NcZkfhvOO0gsTEYGzIklDqmjWw0KlEHaRK
+ 1lPCNO7znMXB3F6JBw2NaUujQYTgg4ZJ+Kiri4odP2EsZfvyetEtxrqaNmb46c+BQN
+ NiBJXG1ageyM/5gRSMg8RjrZRN39j6/cCdLzZg1kzhTO7tH/QUJiMSbwFeXZQpnDZo
+ MCrKofRDdB/SaXJSfVkLbMgIzUy+vXsuSYlqy+FIpGP0qkVerHQzpkMf6Z2ZTX1APs
+ UHBBQxA+wV2nw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=vM5FCBdy
-Subject: [Buildroot] [PATCH/next 06/31] package/python-alembic: bump version
- to 1.17.2
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=G/1568Ry
+Subject: [Buildroot] [PATCH/next 11/31] package/python-arrow: bump version
+ to 1.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,42 +107,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://alembic.sqlalchemy.org/en/latest/changelog.html#change-1.17.2
+https://github.com/arrow-py/arrow/blob/1.4.0/CHANGELOG.rst
+
+Switched _SETUP_TYPE to flit.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-alembic/python-alembic.hash | 4 ++--
- package/python-alembic/python-alembic.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-arrow/python-arrow.hash | 4 ++--
+ package/python-arrow/python-arrow.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-alembic/python-alembic.hash b/package/python-alembic/python-alembic.hash
-index a8ed0dc92e..7729f97a64 100644
---- a/package/python-alembic/python-alembic.hash
-+++ b/package/python-alembic/python-alembic.hash
+diff --git a/package/python-arrow/python-arrow.hash b/package/python-arrow/python-arrow.hash
+index 6120069abf..a28ab03863 100644
+--- a/package/python-arrow/python-arrow.hash
++++ b/package/python-arrow/python-arrow.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/alembic/json
--md5  5499d3918aec406a1903aed530f7e2a4  alembic-1.16.4.tar.gz
--sha256  efab6ada0dd0fae2c92060800e0bf5c1dc26af15a10e02fb4babff164b4725e2  alembic-1.16.4.tar.gz
-+md5  747400a534b73635c91d3b4bb71445c8  alembic-1.17.2.tar.gz
-+sha256  bbe9751705c5e0f14877f02d46c53d10885e377e3d90eda810a016f9baa19e8e  alembic-1.17.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/arrow/json
+-md5  f03ecc3edbe2db99f366142f6e0f6d0b  arrow-1.3.0.tar.gz
+-sha256  d4540617648cb5f895730f1ad8c82a65f2dad0166f57b75f3ca54759c4d67a85  arrow-1.3.0.tar.gz
++md5  abbbe6bc2414c64ee56f0b59aa6ea25d  arrow-1.4.0.tar.gz
++sha256  ed0cc050e98001b8779e84d461b0098c4ac597e88704a655582b21d116e526d7  arrow-1.4.0.tar.gz
  # Locally computed sha256 checksums
- sha256  35ea9c3419b261faf1be448c4f47d9255281bf6b36b5ffea55052227d4ba54de  LICENSE
-diff --git a/package/python-alembic/python-alembic.mk b/package/python-alembic/python-alembic.mk
-index 8dbbd0c7d8..530b31246f 100644
---- a/package/python-alembic/python-alembic.mk
-+++ b/package/python-alembic/python-alembic.mk
-@@ -4,9 +4,9 @@
+ sha256  b481f87296cb0abdb13fd8cbb94b14c328be880ec9e68547a61b84dacffd067a  LICENSE
+diff --git a/package/python-arrow/python-arrow.mk b/package/python-arrow/python-arrow.mk
+index 793cc2640f..c12867bf29 100644
+--- a/package/python-arrow/python-arrow.mk
++++ b/package/python-arrow/python-arrow.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PYTHON_ALEMBIC_VERSION = 1.16.4
-+PYTHON_ALEMBIC_VERSION = 1.17.2
- PYTHON_ALEMBIC_SOURCE = alembic-$(PYTHON_ALEMBIC_VERSION).tar.gz
--PYTHON_ALEMBIC_SITE = https://files.pythonhosted.org/packages/83/52/72e791b75c6b1efa803e491f7cbab78e963695e76d4ada05385252927e76
-+PYTHON_ALEMBIC_SITE = https://files.pythonhosted.org/packages/02/a6/74c8cadc2882977d80ad756a13857857dbcf9bd405bc80b662eb10651282
- PYTHON_ALEMBIC_SETUP_TYPE = setuptools
- PYTHON_ALEMBIC_LICENSE = MIT
- PYTHON_ALEMBIC_LICENSE_FILES = LICENSE
+-PYTHON_ARROW_VERSION = 1.3.0
++PYTHON_ARROW_VERSION = 1.4.0
+ PYTHON_ARROW_SOURCE = arrow-$(PYTHON_ARROW_VERSION).tar.gz
+-PYTHON_ARROW_SITE = https://files.pythonhosted.org/packages/2e/00/0f6e8fcdb23ea632c866620cc872729ff43ed91d284c866b515c6342b173
+-PYTHON_ARROW_SETUP_TYPE = setuptools
++PYTHON_ARROW_SITE = https://files.pythonhosted.org/packages/b9/33/032cdc44182491aa708d06a68b62434140d8c50820a087fac7af37703357
++PYTHON_ARROW_SETUP_TYPE = flit
+ PYTHON_ARROW_LICENSE = Apache-2.0
+ PYTHON_ARROW_LICENSE_FILES = LICENSE
+ 
 -- 
 2.47.3
 
