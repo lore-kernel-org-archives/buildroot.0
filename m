@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F085CD3B990
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 341E0D3B98C
 	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 18:28:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB02C8463F;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0797C608A2;
 	Tue,  9 Dec 2025 18:28:34 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oV80g3fWSriN; Tue,  9 Dec 2025 18:28:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2D4D612B2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1765304912;
+	bh=FJ/slfuUr+rjV0H/vVPJZX5jPDf94ExjB6oP/1LUEJk=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=svY/8i7WqLYEmiyDTBfYQkqhWFrOVp/1kZEVUcdRNV1XAbCIcujHienHTI81CTs08
+	 7hlnOKeiR1B1N8l0askYd5hTWtDvbzsF50oVdvOCNUZXQZPB9EeB7NRIe5wdCT/AV5
+	 17TrLSFlXE2is/6p0Wffpl9OU5rSK4OAqZlYbUScNZT8fdz6oNPtQUPfroAkmo51h1
+	 agTLLloaNcXTNYr6y4ACSsZr4DPfwZvdxxSyo5n2xBdcSg+/WvayxH6IPm4sQ8cFXX
+	 p5MHtJwyKxW4NGqdI8eCyR7pNuzxlvmPD1ycp9VH48Hz+6YZ3a82PsI0J8m2gfDVYg
+	 sX/c4+GY0Vj0w==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id B2D4D612B2;
+	Tue,  9 Dec 2025 18:28:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3DFE4237
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:28:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9345484360
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:28:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MLx7IbJfpaep; Tue,  9 Dec 2025 18:28:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDC4B845C6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765304913;
-	bh=SoH5a8/zYr5cm4vQAJJB7rv2JNogz4VPZPbH94mEdCM=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=g5tXJcjgJ5KX13km4SNQ7jC4uwzAonLVVhu5gOO6Ia2Z5o9uab0xr7LVvg0Li8Lr7
-	 7hmCUE+ReI5pWGDVWEExcaV7pU25SOPiPmB2cRBxtjhPj9aNA/kZT99eLDBldVt16A
-	 c+PBoi0vqjxbtEmbhymvhOc6jMb4NKui9gnjRPsMrX04nKXv4HgTvpkpJXoPo1JdqA
-	 SXxjs5Elf5CgSICh1YF/ip3dLXlxjqWvKPzInWYlXOs0hTxwg5yu7CWRQq7HHWWpWB
-	 uX18HsDcNQCzdwUNp7Bvh4c+lFgfRFawR95fh9nTdroWI8vocfI+5S8PbyKSv+lXUb
-	 FX5d0qQrmyhtA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CDC4B845C6;
-	Tue,  9 Dec 2025 18:28:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id E686E2C0
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:28:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BC76B4081F
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:28:18 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wSzueZcPL1gG for <buildroot@buildroot.org>;
+ id DYOuepzm6y8d for <buildroot@buildroot.org>;
  Tue,  9 Dec 2025 18:28:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B029C407F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5C9D84372
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B029C407F9
+ by smtp1.osuosl.org (Postfix) with ESMTP id D5C9D84372
  for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:28:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9E39986969; Tue,  9 Dec 2025 18:28:17 +0000 (UTC)
+ id D384E86964; Tue,  9 Dec 2025 18:28:17 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 9 Dec 2025 19:24:58 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3ef8d613d7412c54375bdb5c5a683ffbe8a3f85b
-X-Git-Newrev: ca21d87300ea54217b262e06f295b816fb38eecb
+X-Git-Oldrev: 1a9e812d24c4e609c65e3dc39813e0c61b20966f
+X-Git-Newrev: db72d16ca1d781f7237dfb0fe6cacd52aeeda6b4
 X-Patchwork-Hint: ignore
-Message-Id: <20251209182817.9E39986969@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/graphite2: bump
- version to git 1.3.14-121-g142e1bda3
+Message-Id: <20251209182817.D384E86964@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pistache: bump version
+ to 0.4.26
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,147 +77,227 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca21d87300ea54217b262e06f295b816fb38eecb
+commit: https://git.buildroot.net/buildroot/commit/?id=db72d16ca1d781f7237dfb0fe6cacd52aeeda6b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Last release dates back to 2020 with > 120 commits since then, including
-fixes for cmake 4 compatibility.
+For release notes, see:
+https://github.com/pistacheio/pistache/releases
 
-Instead of backporting several patches we bump the package to the latest
-commit which allows to remove patch 0001.
+Removed patches which are included in this release.
 
-Updated license hash due to upstream commit
-https://github.com/silnrsi/graphite/commit/f9dad5a35edb0c3f1031f5627623fb9e7f9bc24c
+Rapidjson was converted into an optional dependency:
+https://github.com/pistacheio/pistache/commit/52abf5a86b21d574df471fa1a05f2e6d22c7fbff
 
-For list of changes, see:
-https://github.com/silnrsi/graphite/commits/142e1bda3439d2bd376bcac9c2b247c9532bacde
+Removed configure option PISTACHE_ENABLE_NETWORK_TESTS:
+https://github.com/pistacheio/pistache/commit/7d71e3b99fbe515f1854aeb039d2964507f03125
+
+This commit also updates the _SITE and package homepage URL.
+The old URL:
+https://github.com/oktal/pistache
+now redirects to:
+https://github.com/pistacheio/pistache
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 [Julien:
- - add link to change list
- - change _VERSION to use "git describe --abbrev=40" format
+ - update _SITE and homepage
+ - add link to release notes
 ]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .checkpackageignore                                |  1 -
- ...nstall-a-libtool-file-with-static-library.patch | 67 ----------------------
- package/graphite2/graphite2.hash                   |  5 +-
- package/graphite2/graphite2.mk                     |  6 +-
- 4 files changed, 4 insertions(+), 75 deletions(-)
+ .checkpackageignore                                |  2 --
+ ...transport.cc-fallback-value-for-RUSAGE_TH.patch | 33 -------------------
+ ...src-server-listener.cc-fix-libressl-build.patch | 38 ----------------------
+ ...3-Add-missing-cstdint-header-include-1142.patch | 23 -------------
+ package/pistache/Config.in                         |  3 +-
+ package/pistache/pistache.hash                     |  2 +-
+ package/pistache/pistache.mk                       | 13 +++++---
+ 7 files changed, 11 insertions(+), 103 deletions(-)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index df1a9258f3..5d3d63d71f 100644
+index 704680c911..b902157fae 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -445,7 +445,6 @@ package/gob2/0001-dont-include-from-prefix.patch lib_patch.Upstream
- package/gobject-introspection/0001-Add-rpath-links-to-ccompiler.patch lib_patch.Upstream
- package/gpsd/S50gpsd Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/gptfdisk/0001-gptcurses-partially-revert-Tweaks-for-building-on-th.patch lib_patch.Upstream
--package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch lib_patch.Upstream
- package/grpc/0003-disable-unconditionally-downloading-api-repos.patch lib_patch.Upstream
- package/gstreamer1/gstd/0001-Don-t-require-gstd-check-user-xenv.sh-for-systemd-se.patch lib_patch.Upstream
- package/guile/0001-calculate-csqrt_manually.patch lib_patch.Upstream
-diff --git a/package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch b/package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch
+@@ -838,8 +838,6 @@ package/pifmrds/0001-Makefile-cross-compile-friendly.patch lib_patch.Upstream
+ package/pifmrds/0002-Makefile-use-LDFLAGS.patch lib_patch.Upstream
+ package/pifmrds/0003-Makefile-fix-static-link.patch lib_patch.Upstream
+ package/pigpio/S50pigpio Shellcheck lib_sysv.Variables
+-package/pistache/0001-src-common-transport.cc-fallback-value-for-RUSAGE_TH.patch lib_patch.Upstream
+-package/pistache/0002-src-server-listener.cc-fix-libressl-build.patch lib_patch.Upstream
+ package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch lib_patch.Upstream
+ package/pkgconf/pkg-config.in Shellcheck
+ package/poke/0001-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch lib_patch.Upstream
+diff --git a/package/pistache/0001-src-common-transport.cc-fallback-value-for-RUSAGE_TH.patch b/package/pistache/0001-src-common-transport.cc-fallback-value-for-RUSAGE_TH.patch
 deleted file mode 100644
-index ac150622d5..0000000000
---- a/package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch
+index 327933e26d..0000000000
+--- a/package/pistache/0001-src-common-transport.cc-fallback-value-for-RUSAGE_TH.patch
 +++ /dev/null
-@@ -1,67 +0,0 @@
--From 3edb88b55c0870989778c670d555aa159a2c3abc Mon Sep 17 00:00:00 2001
+@@ -1,33 +0,0 @@
+-From 5feed6d2f86750bfe1e7c26d6fd4e8d2195ea81f Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Thu, 4 Aug 2022 19:54:23 +0200
+-Subject: [PATCH] src/common/transport.cc: fallback value for RUSAGE_THREAD
+-
+-uClibc-ng currently does not define RUSAGE_THREAD, so let's add a
+-fallback value until it gets fixed in uClibc-ng. The value is the same
+-on all Linux systems, regardless of the CPU architecture.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Upstream bug: https://mailman.openadk.org/mailman3/hyperkitty/list/devel@uclibc-ng.org/thread/MEXOUSFSH46UFS3AEMEIEPTL5U4HVEFL/
+----
+- src/common/transport.cc | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/src/common/transport.cc b/src/common/transport.cc
+-index 62efb8c..0f3abb0 100644
+---- a/src/common/transport.cc
+-+++ b/src/common/transport.cc
+-@@ -515,6 +515,10 @@ namespace Pistache::Tcp
+- 
+-         rusage now;
+- 
+-+#if !defined(RUSAGE_THREAD)
+-+#define RUSAGE_THREAD 1
+-+#endif
+-+
+-         auto res = getrusage(RUSAGE_THREAD, &now);
+-         if (res == -1)
+-             loadRequest_.reject(std::runtime_error("Could not compute usage"));
+--- 
+-2.37.1
+-
+diff --git a/package/pistache/0002-src-server-listener.cc-fix-libressl-build.patch b/package/pistache/0002-src-server-listener.cc-fix-libressl-build.patch
+deleted file mode 100644
+index f2fe2183ae..0000000000
+--- a/package/pistache/0002-src-server-listener.cc-fix-libressl-build.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 656bff21c1d20b25058da9dbc27d28ad2ac7ae6e Mon Sep 17 00:00:00 2001
 -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 31 Aug 2020 20:56:43 +0200
--Subject: [PATCH] don't install a libtool file with static library
+-Date: Sat, 25 Feb 2023 18:09:39 +0100
+-Subject: [PATCH] src/server/listener.cc: fix libressl build
 -
--Static library is supported since version 1.3.11 and
--https://github.com/silnrsi/graphite/commit/2f143c04da5caa43ddf4dba437b2f2bc26bf4238
+-Fix the following libressl build failure:
 -
--However, graphite2 is still installing libgraphite2.la which contains
--incorrect information (i.e. dlname set to libgraphite2.so and
--old_library set to ''):
--
--dlname='libgraphite2.so'
--
--library_names='libgraphite2.so.3.2.1 libgraphite2.so.3 libgraphite2.so'
--
--old_library=''
--
--dependency_libs=''
--
--This will result in the following build failure with any applications
--using this file such as harfbuzz:
--
--arm-linux-g++.br_real: error: /home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgraphite2.so: No such file or directory
--make[5]: *** [main] Error 1
--
--Instead of trying to fix this libtool file, just disable it when
--building a static library as it is not needed
+-../src/server/listener.cc: In member function 'void Pistache::Tcp::Listener::setupSSLAuth(const std::string&, const std::string&, int (*)(int, void*))':
+-../src/server/listener.cc:582:29: error: 'SSL_verify_cb' was not declared in this scope; did you mean 'RSA_verify'?
+-  582 |                            (SSL_verify_cb)cb
+-      |                             ^~~~~~~~~~~~~
+-      |                             RSA_verify
 -
 -Fixes:
-- - http://autobuild.buildroot.org/results/9ebe1d11e80755d59190ef2aae82bbba5cc45e44
+- - http://autobuild.buildroot.org/results/066fc078980e5216f38411eee455088e15fa1101
 -
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/silnrsi/graphite/pull/65]
+-[Upstream status: https://github.com/pistacheio/pistache/pull/1124]
 ----
-- src/CMakeLists.txt | 8 ++++++--
-- 1 file changed, 6 insertions(+), 2 deletions(-)
+- src/server/listener.cc | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
--index b6ac26bf..a7ace040 100644
----- a/src/CMakeLists.txt
--+++ b/src/CMakeLists.txt
--@@ -131,7 +131,9 @@ if  (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
--         nolib_test(stdc++ $<TARGET_SONAME_FILE:graphite2>)
--     endif ()
--     set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "")
---    CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
--+    if (BUILD_SHARED_LIBS)
--+        CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
--+    endif()
-- endif()
-- 
-- if  (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
--@@ -146,7 +148,9 @@ if  (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
--     include(Graphite)
--     nolib_test(stdc++ $<TARGET_SONAME_FILE:graphite2>)
--     set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "")
---    CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
--+    if (BUILD_SHARED_LIBS)
--+        CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
--+    endif()
-- endif()
-- 
-- if  (${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
+-diff --git a/src/server/listener.cc b/src/server/listener.cc
+-index 38d2661..c09cb36 100644
+---- a/src/server/listener.cc
+-+++ b/src/server/listener.cc
+-@@ -609,7 +609,7 @@ namespace Pistache::Tcp
+-         SSL_CTX_set_verify(GetSSLContext(ssl_ctx_),
+-                            SSL_VERIFY_PEER | SSL_VERIFY_FAIL_IF_NO_PEER_CERT | SSL_VERIFY_CLIENT_ONCE,
+- /* Callback type did change in 1.0.1 */
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+-                            (int (*)(int, X509_STORE_CTX*))cb
+- #else
+-                            (SSL_verify_cb)cb
 --- 
--2.28.0
+-2.39.1
 -
-diff --git a/package/graphite2/graphite2.hash b/package/graphite2/graphite2.hash
-index e005375f8a..b788112b5d 100644
---- a/package/graphite2/graphite2.hash
-+++ b/package/graphite2/graphite2.hash
-@@ -1,4 +1,3 @@
--# From https://github.com/silnrsi/graphite/releases/download/1.3.14/graphite2-1.3.14.sha256sum
--sha256  f99d1c13aa5fa296898a181dff9b82fb25f6cc0933dbaa7a475d8109bd54209d  graphite2-1.3.14.tgz
- # Locally computed
--sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  LICENSE
-+sha256  b5e919f4b5788f8ed5a2d9d0ce17a23d1c0f625979e53c5e7336fc2ba0b7a7d6  graphite2-1.3.14-121-g142e1bda3439d2bd376bcac9c2b247c9532bacde.tar.gz
-+sha256  cab46cd45adbfea4b1d0f14b033c70062c73074fa0b56532c2f351576ddf455e  LICENSE
-diff --git a/package/graphite2/graphite2.mk b/package/graphite2/graphite2.mk
-index 7f9e3c516e..9686492c20 100644
---- a/package/graphite2/graphite2.mk
-+++ b/package/graphite2/graphite2.mk
-@@ -4,10 +4,8 @@
+diff --git a/package/pistache/0003-Add-missing-cstdint-header-include-1142.patch b/package/pistache/0003-Add-missing-cstdint-header-include-1142.patch
+deleted file mode 100644
+index 3451e4aa4c..0000000000
+--- a/package/pistache/0003-Add-missing-cstdint-header-include-1142.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-From dabe9fcd3eaaa6b0b8723369b2565778341630c0 Mon Sep 17 00:00:00 2001
+-From: a-andre <13609565+a-andre@users.noreply.github.com>
+-Date: Thu, 29 Jun 2023 16:34:11 +0200
+-Subject: [PATCH] Add missing cstdint header include (#1142)
+-
+-Upstream: https://github.com/pistacheio/pistache/commit/dabe9fcd3eaaa6b0b8723369b2565778341630c0
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- include/pistache/flags.h | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/include/pistache/flags.h b/include/pistache/flags.h
+-index 9be2b32bb..6adcc74bc 100644
+---- a/include/pistache/flags.h
+-+++ b/include/pistache/flags.h
+-@@ -13,6 +13,7 @@
+- #pragma once
+- 
+- #include <climits>
+-+#include <cstdint>
+- #include <iostream>
+- #include <type_traits>
+- 
+diff --git a/package/pistache/Config.in b/package/pistache/Config.in
+index e66c24d86d..a026275f92 100644
+--- a/package/pistache/Config.in
++++ b/package/pistache/Config.in
+@@ -4,13 +4,12 @@ config BR2_PACKAGE_PISTACHE
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	select BR2_PACKAGE_RAPIDJSON
+ 	help
+ 	  Pistache is a modern and elegant HTTP and REST framework
+ 	  for C++. It is entirely written in pure C++17 and provides
+ 	  a clear and pleasant API.
+ 
+-	  https://github.com/oktal/pistache
++	  https://github.com/pistacheio/pistache
+ 
+ comment "pistache needs a toolchain w/ C++, gcc >= 7, NPTL, wchar"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+diff --git a/package/pistache/pistache.hash b/package/pistache/pistache.hash
+index 9a2cd1d1f9..545a556a24 100644
+--- a/package/pistache/pistache.hash
++++ b/package/pistache/pistache.hash
+@@ -1,3 +1,3 @@
+ #locally computed
+-sha256  f2b3e8b2581cfed5e036d1b97a9b97dc7022b3ddaab69c4691238faff3199bc1  pistache-3ec9d7c4f8b828fdd391550fff81b01e72dd6269.tar.gz
++sha256  29af6562547497acf6f49170661786fe8cf1ed3712ad80e69c53da4661c59544  pistache-0.4.26.tar.gz
+ sha256  c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08  LICENSE
+diff --git a/package/pistache/pistache.mk b/package/pistache/pistache.mk
+index f4de5e3b2a..5afbcabaf3 100644
+--- a/package/pistache/pistache.mk
++++ b/package/pistache/pistache.mk
+@@ -4,18 +4,23 @@
  #
  ################################################################################
  
--GRAPHITE2_VERSION = 1.3.14
--GRAPHITE2_SOURCE = graphite2-$(GRAPHITE2_VERSION).tgz
--GRAPHITE2_SITE = \
--	https://github.com/silnrsi/graphite/releases/download/$(GRAPHITE2_VERSION)
-+GRAPHITE2_VERSION = 1.3.14-121-g142e1bda3439d2bd376bcac9c2b247c9532bacde
-+GRAPHITE2_SITE = $(call github,silnrsi,graphite,$(GRAPHITE2_VERSION))
- GRAPHITE2_INSTALL_STAGING = YES
- GRAPHITE2_LICENSE = LGPL-2.1+
- GRAPHITE2_LICENSE_FILES = LICENSE
+-PISTACHE_VERSION = 3ec9d7c4f8b828fdd391550fff81b01e72dd6269
+-PISTACHE_SITE = $(call github,oktal,pistache,$(PISTACHE_VERSION))
++PISTACHE_VERSION = 0.4.26
++PISTACHE_SITE = $(call github,pistacheio,pistache,v$(PISTACHE_VERSION))
+ PISTACHE_LICENSE = Apache-2.0
+ PISTACHE_LICENSE_FILES = LICENSE
+ 
+ PISTACHE_INSTALL_STAGING = YES
+-PISTACHE_DEPENDENCIES = rapidjson
++
++ifeq ($(BR2_PACKAGE_RAPIDJSON),y)
++PISTACHE_DEPENDENCIES += rapidjson
++PISTACHE_CONF_OPTS += -DPISTACHE_USE_RAPIDJSON=true
++else
++PISTACHE_CONF_OPTS += -DPISTACHE_USE_RAPIDJSON=false
++endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ PISTACHE_DEPENDENCIES += openssl
+ PISTACHE_CONF_OPTS += -DPISTACHE_USE_SSL=true
+-PISTACHE_CONF_OPTS += -DPISTACHE_ENABLE_NETWORK_TESTS=false
+ else
+ PISTACHE_CONF_OPTS += -DPISTACHE_USE_SSL=false
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
