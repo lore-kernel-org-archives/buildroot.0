@@ -4,82 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C56F4D3B996
-	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 21:21:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D654D3B9A4
+	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 21:59:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 985D78474F;
-	Tue,  9 Dec 2025 21:21:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4513E811A7;
+	Tue,  9 Dec 2025 21:59:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id flNKDzbo77wN; Tue,  9 Dec 2025 21:21:35 +0000 (UTC)
+ id rr4FC88GQ_Il; Tue,  9 Dec 2025 21:59:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8EDDB84766
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56449812E2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765315295;
-	bh=MTXY2duyeBOBr7AeMmBt4Ezm2kwPwd04aUc/ndMvboY=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=IvNcRmYqoc9eIowDYaQCHj9gWwG68Q6SaWDPWq7uyxcWxCczJruXpiDYOotDrCDWr
-	 O1FZUnDqMC8VF7LZz+oR70PKc4bMrabwrr+do2Tz0jbeem/LEPgjvzsMi1e/swR8SQ
-	 qCiM+tJd/PhM4Une15jqO+kaLYZcgE802bnaotjAr0j8gYKalaaE2JviPxHUS5plA/
-	 O7Dpgtv697URnSM0pOLu41JlHsfGhEQi22gh6WhvY971t+En4svce/4tL616p8tUwe
-	 D0/idf04/79hHSEopHjUoAjNqcfoJvwLH7NffWP4qAlH9oF5QBj6X+c2wM5GNN/OVc
-	 x+9TxyqrOtC2w==
+	s=default; t=1765317591;
+	bh=rD/m6wpjEsNYlUHplN0x57560sGqaDsO3nrMP7elZ2s=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=nR6HIig4TJDDwBTkyLKQNidoooqcLtwcMwKO1zQjYtTR3jANNePSLMG5YgdZlbxX+
+	 esONSYR+BV+TUNFJlYhdsKHDpKyEUJHTyKGzdpKxFkqDYa8rCyyjo/dgNuBQ/uIsx6
+	 Gi3l+P9JMirmNDAQYGqFSR3oXsVy8va6iGNuz97eeYSHIdYIwoQAHR0gR07xnyyiFp
+	 e1ESWsJVvmJvFjUPTc35Rg5cqbgzBZVwcFQXsopoLONAe7+TkzCicyv546VJD1G5ft
+	 9w5hLRoLia4ycpM8vzMIW2iP1Nm7Ph9xvAsvqTLHZQ/a/V4cGeyLt3AKBnZQX92WpD
+	 +bIUXe2VOdhHw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8EDDB84766;
-	Tue,  9 Dec 2025 21:21:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id EE6FE2C0
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 21:21:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 56449812E2;
+	Tue,  9 Dec 2025 21:59:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D6232C0
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 21:59:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D37026142C
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 21:21:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F12E7810FE
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 21:59:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p-Pj_NA4apd1 for <buildroot@buildroot.org>;
- Tue,  9 Dec 2025 21:21:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A137C6141F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A137C6141F
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A137C6141F
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 21:21:32 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b151.dip0.t-ipconnect.de [84.161.177.81])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id B936CA4C0319
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 22:21:30 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:46218)
- by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vT59G-000000007Ox-2Tvd
- for buildroot@buildroot.org; Tue, 09 Dec 2025 21:21:30 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tAOgdmmME-M2 for <buildroot@buildroot.org>;
+ Tue,  9 Dec 2025 21:59:48 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8E08810CA
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C8E08810CA
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 21:59:48 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C28CA869C0; Tue,  9 Dec 2025 21:59:48 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue,  9 Dec 2025 22:21:30 +0100
-Message-ID: <20251209212130.1019185-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-MIME-Version: 1.0
-X-Spamd-Bar: ++++++
-X-Spam: Yes
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1765315290;
- bh=hFtYxQ8Fsux53CTrhWsu1xp6XsgCYe9qBpXqGKJKbjw=;
- h=From:To:Subject:Date:From;
- b=tYgyUZuHk4bAqScnA2VDLsUFO83BhGcu8eI6Utga0GPYIU6Vhypb9uuX6ZcOTyght
- p5DOSoyKfcfw/4VnJ+oT/xDPZ+t07VNDUKw0jCvNFpVSW+6IDXVDHoZbez7N/LdI1s
- o9em4TrkBE3ggbSookaMaIsJJZaNfT+hno41XgfElg+DLcNzCp5FaJvU9hKFIvpcfV
- ZyYFUSSvDKcfyvMbdd9Ue1/tnAVQoASR73HTZZxwe56n0wYHsUCSe19o7yZXFhC+G2
- NLS92xaht8n6lqlhywiKE7UweS0OA6UbCW6eAGk9PJnhmb/3kQyO5XZ486GS7CKVI8
- PTkOJiDhT4CmQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=tYgyUZuH
-Subject: [Buildroot] [PATCH/next v2 1/1] package/gcr: bump version to 4.4.0.1
+Date: Tue, 9 Dec 2025 22:58:33 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 4f9600c2f97039b4ad6eb66087a7654805536a76
+X-Git-Newrev: c621515d839b94f2013286683aaf6329e855b08b
+X-Patchwork-Hint: ignore
+Message-Id: <20251209215948.C28CA869C0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sigsum-go: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,192 +68,182 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://gitlab.gnome.org/GNOME/gcr/-/blob/4.4.0.1/NEWS
+commit: https://git.buildroot.net/buildroot/commit/?id=c621515d839b94f2013286683aaf6329e855b08b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Removed patch which is included in this release.
+Add the reference command line tools for interacting with Sigsum
+signature transparency logs.
 
-Added dependency to libsecret and switched to gtk4.
-
-Added configure options for vapi support which depends on
-gobject-introspection:
-https://gitlab.gnome.org/GNOME/gcr/-/commit/5970a456465b6b6a6a3f4c215e1926c3c3c3f5cb
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Florian Larysch <fl@n621.de>
+[Julien:
+ - select sigsum-verify if all other tools are deselected
+ - split and sort HOST_SIGSUM_GO_BUILD_TARGETS
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
-v2: added release notes, fixed vapi support (Julien)
+ DEVELOPERS                       |  1 +
+ package/Config.in                |  1 +
+ package/Config.in.host           |  1 +
+ package/sigsum-go/Config.in      | 32 ++++++++++++++++++++++++++++++
+ package/sigsum-go/Config.in.host |  8 ++++++++
+ package/sigsum-go/sigsum-go.hash |  3 +++
+ package/sigsum-go/sigsum-go.mk   | 43 ++++++++++++++++++++++++++++++++++++++++
+ 7 files changed, 89 insertions(+)
 
- .checkpackageignore                           |  1 -
- ...wn-kw-argument-in-gnome.generate_gir.patch | 64 -------------------
- package/gcr/Config.in                         |  1 +
- package/gcr/gcr.hash                          |  5 +-
- package/gcr/gcr.mk                            | 23 +++----
- 5 files changed, 16 insertions(+), 78 deletions(-)
- delete mode 100644 package/gcr/0001-meson-Fix-unknown-kw-argument-in-gnome.generate_gir.patch
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index b71730d918..d77a3366d7 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -400,7 +400,6 @@ package/gcc/8.4.0/0001-xtensa-fix-PR-target-91880.patch lib_patch.Upstream
- package/gcc/8.4.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch lib_patch.Upstream
- package/gcc/8.4.0/0003-libsanitizer-Remove-cyclades-from-libsanitizer.patch lib_patch.Upstream
- package/gcc/8.4.0/0004-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
--package/gcr/0001-meson-Fix-unknown-kw-argument-in-gnome.generate_gir.patch lib_patch.Upstream
- package/gdb/14.2/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch lib_patch.Upstream
- package/gdb/14.2/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch lib_patch.Upstream
- package/gdb/14.2/0003-use-asm-sgidefs.h.patch lib_patch.Upstream
-diff --git a/package/gcr/0001-meson-Fix-unknown-kw-argument-in-gnome.generate_gir.patch b/package/gcr/0001-meson-Fix-unknown-kw-argument-in-gnome.generate_gir.patch
-deleted file mode 100644
-index a1d4e1b46f..0000000000
---- a/package/gcr/0001-meson-Fix-unknown-kw-argument-in-gnome.generate_gir.patch
-+++ /dev/null
-@@ -1,64 +0,0 @@
--From b3ca1d02bb0148ca787ac4aead164d7c8ce2c4d8 Mon Sep 17 00:00:00 2001
--From: Jakub Jirutka <jakub@jirutka.cz>
--Date: Wed, 12 Jan 2022 00:24:20 +0100
--Subject: [PATCH] meson: Fix unknown kw argument in gnome.generate_gir
--
--This argument has been removed in Meson 0.61.0:
--
--    gck/meson.build:130:2: ERROR: gnome.generate_gir got unknown keyword arguments "packages"
--
--https://github.com/mesonbuild/meson/commit/f8fc5cb860465718fe7c79a1bf1fe00659f138de:
--
--> The packages argument to gnome.generate_gir was allowed, but never did anything, so stop passing it.
--
--Fixes #89
--
--[aperez@igalia.com: backport from upstream]
--Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
--[yann.morin.1998@free.fr: make it an actual backport]
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-----
-- gck/meson.build | 1 -
-- gcr/meson.build | 1 -
-- ui/meson.build  | 1 -
-- 3 files changed, 3 deletions(-)
--
--diff --git a/gck/meson.build b/gck/meson.build
--index 756b486..a21a1e9 100644
----- a/gck/meson.build
--+++ b/gck/meson.build
--@@ -131,7 +131,6 @@ if get_option('introspection')
--     sources: gck_gir_sources,
--     namespace: 'Gck',
--     nsversion: '@0@'.format(gck_major_version),
---    packages: gck_deps,
--     export_packages: 'gck-@0@'.format(gck_major_version),
--     includes: [ 'GObject-2.0', 'Gio-2.0' ],
--     header: 'gck/gck.h',
--diff --git a/gcr/meson.build b/gcr/meson.build
--index 2233a44..c83641b 100644
----- a/gcr/meson.build
--+++ b/gcr/meson.build
--@@ -190,7 +190,6 @@ if get_option('introspection')
--     sources: [ gcr_base_public_sources, gcr_base_headers ],
--     namespace: 'Gcr',
--     nsversion: '@0@'.format(gcr_major_version),
---    packages: gcr_base_deps,
--     export_packages: 'gcr-base-@0@'.format(gcr_major_version),
--     includes: [
--       'GObject-2.0',
--diff --git a/ui/meson.build b/ui/meson.build
--index e656ea2..32ee057 100644
----- a/ui/meson.build
--+++ b/ui/meson.build
--@@ -152,7 +152,6 @@ if get_option('introspection')
--     export_packages: 'gcr-ui-@0@'.format(gcr_major_version),
--     identifier_prefix: 'Gcr',
--     symbol_prefix: 'gcr',
---    packages: gcr_ui_deps,
--     includes: [
--       'GObject-2.0',
--       'Gio-2.0',
---- 
--2.25.1
--
-diff --git a/package/gcr/Config.in b/package/gcr/Config.in
-index dbc22cf478..751accb723 100644
---- a/package/gcr/Config.in
-+++ b/package/gcr/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_GCR
- 	select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2_DEPENDS # runtime
- 	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_LIBSECRET
- 	select BR2_PACKAGE_P11_KIT
- 	help
- 	  Library for cryptographic UIs and accessing PKCS#11 modules.
-diff --git a/package/gcr/gcr.hash b/package/gcr/gcr.hash
-index f6cc44e97d..1a67849f86 100644
---- a/package/gcr/gcr.hash
-+++ b/package/gcr/gcr.hash
-@@ -1,3 +1,4 @@
--# From https://download.gnome.org/sources/gcr/3.40/gcr-3.40.0.sha256sum
--sha256  b9d3645a5fd953a54285cc64d4fc046736463dbd4dcc25caf5c7b59bed3027f5  gcr-3.40.0.tar.xz
-+# From https://download.gnome.org/sources/gcr/4.4/gcr-4.4.0.1.sha256sum
-+sha256  0c3c341e49f9f4f2532a4884509804190a0c2663e6120360bb298c5d174a8098  gcr-4.4.0.1.tar.xz
-+# Locally computed
- sha256  94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23  COPYING
-diff --git a/package/gcr/gcr.mk b/package/gcr/gcr.mk
-index 3a8c01729f..a3be8ecdf2 100644
---- a/package/gcr/gcr.mk
-+++ b/package/gcr/gcr.mk
-@@ -4,14 +4,15 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7434f41838..749cfa6e42 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1132,6 +1132,7 @@ F:	package/cpulimit/
  
--GCR_VERSION_MAJOR = 3.40
--GCR_VERSION = $(GCR_VERSION_MAJOR).0
-+GCR_VERSION_MAJOR = 4.4
-+GCR_VERSION = $(GCR_VERSION_MAJOR).0.1
- GCR_SITE = https://download.gnome.org/sources/gcr/$(GCR_VERSION_MAJOR)
- GCR_SOURCE = gcr-$(GCR_VERSION).tar.xz
- GCR_DEPENDENCIES = \
- 	host-pkgconf \
- 	libgcrypt \
- 	libglib2 \
-+	libsecret \
- 	p11-kit \
- 	$(TARGET_NLS_DEPENDENCIES)
- GCR_INSTALL_STAGING = YES
-@@ -29,19 +30,19 @@ endif
+ N:	Florian Larysch <fl@n621.de>
+ F:	package/casync-nano/
++F:	package/sigsum-go/
  
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
- GCR_DEPENDENCIES += gobject-introspection host-libxslt host-vala
--GCR_CONF_OPTS += -Dintrospection=true
-+GCR_CONF_OPTS += -Dintrospection=true -Dvapi=true
- else
--GCR_CONF_OPTS += -Dintrospection=false
-+GCR_CONF_OPTS += -Dintrospection=false -Dvapi=false
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
--GCR_DEPENDENCIES += libgtk3
--GCR_CONF_OPTS += -Dgtk=true
--else ifeq ($(BR2_PACKAGE_LIBGTK3_WAYLAND),y)
--GCR_DEPENDENCIES += libgtk3
--GCR_CONF_OPTS += -Dgtk=true
-+ifeq ($(BR2_PACKAGE_LIBGTK4_X11),y)
-+GCR_DEPENDENCIES += libgtk4
-+GCR_CONF_OPTS += -Dgtk4=true
-+else ifeq ($(BR2_PACKAGE_LIBGTK4_WAYLAND),y)
-+GCR_DEPENDENCIES += libgtk4
-+GCR_CONF_OPTS += -Dgtk4=true
- else
--GCR_CONF_OPTS += -Dgtk=false
-+GCR_CONF_OPTS += -Dgtk4=false
- endif
- 
- $(eval $(meson-package))
--- 
-2.47.3
-
+ N:	Floris Bos <bos@je-eigen-domein.nl>
+ F:	package/ipmitool/
+diff --git a/package/Config.in b/package/Config.in
+index a083f43a64..433bd4f6e3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2793,6 +2793,7 @@ comment "Utilities"
+ 	source "package/screen/Config.in"
+ 	source "package/screenfetch/Config.in"
+ 	source "package/sexpect/Config.in"
++	source "package/sigsum-go/Config.in"
+ 	source "package/sudo/Config.in"
+ 	source "package/terminology/Config.in"
+ 	source "package/time/Config.in"
+diff --git a/package/Config.in.host b/package/Config.in.host
+index d0088364d0..606a825d44 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -110,6 +110,7 @@ menu "Host utilities"
+ 	source "package/sdbus-cpp/Config.in.host"
+ 	source "package/sdbusplus/Config.in.host"
+ 	source "package/sentry-cli/Config.in.host"
++	source "package/sigsum-go/Config.in.host"
+ 	source "package/skopeo/Config.in.host"
+ 	source "package/sloci-image/Config.in.host"
+ 	source "package/snagboot/Config.in.host"
+diff --git a/package/sigsum-go/Config.in b/package/sigsum-go/Config.in
+new file mode 100644
+index 0000000000..15a0c27223
+--- /dev/null
++++ b/package/sigsum-go/Config.in
+@@ -0,0 +1,32 @@
++config BR2_PACKAGE_SIGSUM_GO
++	bool "sigsum-go"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	select BR2_PACKAGE_HOST_GO
++	select BR2_PACKAGE_SIGSUM_GO_VERIFY if \
++		!BR2_PACKAGE_SIGSUM_GO_KEY && \
++		!BR2_PACKAGE_SIGSUM_GO_POLICY && \
++		!BR2_PACKAGE_SIGSUM_GO_SUBMIT && \
++		!BR2_PACKAGE_SIGSUM_GO_TOKEN
++	help
++	  Command-line utilities for interacting with Sigsum logs.
++
++	  https://git.glasklar.is/sigsum/core/sigsum-go/
++
++if BR2_PACKAGE_SIGSUM_GO
++
++config BR2_PACKAGE_SIGSUM_GO_KEY
++	bool "sigsum-key"
++
++config BR2_PACKAGE_SIGSUM_GO_POLICY
++	bool "sigsum-policy"
++
++config BR2_PACKAGE_SIGSUM_GO_SUBMIT
++	bool "sigsum-submit"
++
++config BR2_PACKAGE_SIGSUM_GO_TOKEN
++	bool "sigsum-token"
++
++config BR2_PACKAGE_SIGSUM_GO_VERIFY
++	bool "sigsum-verify"
++
++endif
+diff --git a/package/sigsum-go/Config.in.host b/package/sigsum-go/Config.in.host
+new file mode 100644
+index 0000000000..5bc876603f
+--- /dev/null
++++ b/package/sigsum-go/Config.in.host
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HOST_SIGSUM_GO
++	bool "host sigsum-go"
++	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
++	select BR2_PACKAGE_HOST_GO
++	help
++	  Command-line utilities for interacting with Sigsum logs.
++
++	  https://git.glasklar.is/sigsum/core/sigsum-go/
+diff --git a/package/sigsum-go/sigsum-go.hash b/package/sigsum-go/sigsum-go.hash
+new file mode 100644
+index 0000000000..b032e1839d
+--- /dev/null
++++ b/package/sigsum-go/sigsum-go.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  9056406413868fe68a3fcc6415dff5a0045b35baa2242a17fea7a697b1c68e3d  sigsum-go-v0.13.1-git4-go2.tar.gz
++sha256  6a1e3378dcd18baade08ac30ec4ba33b72d1b1697c00226ef85b9c9cefdb4e65  LICENSE
+diff --git a/package/sigsum-go/sigsum-go.mk b/package/sigsum-go/sigsum-go.mk
+new file mode 100644
+index 0000000000..4f01be56a5
+--- /dev/null
++++ b/package/sigsum-go/sigsum-go.mk
+@@ -0,0 +1,43 @@
++################################################################################
++#
++# sigsum-go
++#
++################################################################################
++
++SIGSUM_GO_VERSION = v0.13.1
++SIGSUM_GO_SITE = https://git.glasklar.is/sigsum/core/sigsum-go
++SIGSUM_GO_SITE_METHOD = git
++SIGSUM_GO_LICENSE = BSD-2-Clause
++SIGSUM_GO_LICENSE_FILES = LICENSE
++
++SIGSUM_GO_GOMOD = sigsum.org/sigsum-go
++
++ifeq ($(BR2_PACKAGE_SIGSUM_GO_KEY),y)
++SIGSUM_GO_BUILD_TARGETS += cmd/sigsum-key
++endif
++
++ifeq ($(BR2_PACKAGE_SIGSUM_GO_POLICY),y)
++SIGSUM_GO_BUILD_TARGETS += cmd/sigsum-policy
++endif
++
++ifeq ($(BR2_PACKAGE_SIGSUM_GO_SUBMIT),y)
++SIGSUM_GO_BUILD_TARGETS += cmd/sigsum-submit
++endif
++
++ifeq ($(BR2_PACKAGE_SIGSUM_GO_TOKEN),y)
++SIGSUM_GO_BUILD_TARGETS += cmd/sigsum-token
++endif
++
++ifeq ($(BR2_PACKAGE_SIGSUM_GO_VERIFY),y)
++SIGSUM_GO_BUILD_TARGETS += cmd/sigsum-verify
++endif
++
++HOST_SIGSUM_GO_GOMOD = sigsum.org/sigsum-go
++HOST_SIGSUM_GO_BUILD_TARGETS = \
++	cmd/sigsum-key \
++	cmd/sigsum-submit \
++	cmd/sigsum-token \
++	cmd/sigsum-verify
++
++$(eval $(golang-package))
++$(eval $(host-golang-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
