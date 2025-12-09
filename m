@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0326D4337F
-	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:59:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA4FAD4337C
+	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:59:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A282844C7;
-	Fri, 12 Dec 2025 07:59:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A1531844F4;
+	Fri, 12 Dec 2025 07:59:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2F8lByW4YCOP; Fri, 12 Dec 2025 07:59:39 +0000 (UTC)
+ id CohGeyvjDZkw; Fri, 12 Dec 2025 07:59:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55E9884459
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70FC580AEC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765526359;
-	bh=D7bbjnwCvvAiFSOxIOLfnxypfJNQvL8xpdQKL/+7n0Q=;
+	s=default; t=1765526363;
+	bh=LQ3d/P1Sd9UZfrcpZl2TuMj+sjImfkwnBRqkoL8XHl0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=X/JyJMUcxBB1uvsdQEhJyAGZHHovFrbCmkLq3njsEfPj526LDoaNohONjhs5LUsjD
-	 Om9vCb7+7kHZvpi6OUMuimjXCeUwS3Q3Rp+4i3xF2qJr3b3A37ndvDzoFu154d56fL
-	 5GVffn0o6NEZ+M0YPRM5GD/BSF95SYz4sqElfmIF5CSO/V/SuhJPAfiVTgbkUzyfaS
-	 KwBemh9/cBeL+AoiJRhhQA9wH1eIK9Ug5/+iAgoYnw6ACjUZkdgZj5b6Uy+NrYrR0X
-	 5CEorc55oZqjJCd7k8xMTu0p3SU+EAR6XuXQ7TSTfmU/x38j9weWjPa0gz6q8aTZAx
-	 UHrXD9Dd3olYw==
+	b=U2R0/Heeqa3WtzCq1z3+FsIKNDRAQwMSuQFjyYbCl+jV4mta/obeFHEg1WhpAOSw9
+	 zYEX+vfVg73452b6kFxYvltPnGOoLlp6nS4q+JrPrV2pLNFIoVkCusYl87dU0PJiGa
+	 /mFAXAYyKyiKc35h/vsHX3sjpLyf7w/8YBP1SMe7z0+rlBAB2UoOYylkBXLxKRmUmG
+	 HACLeD7jHCoZnlBleiNZkd6x07uxD+wa1aZkOtBALIkuNn2DoerbA4GkO7e3dUFZNk
+	 3iCKqulAR5Cn3zKH8CV+5wutgpyLIqxAdZG/KjzXIimfRi6J9A3EejUHEZyZmTxRxS
+	 1l0TiTf5ihUjg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 55E9884459;
-	Fri, 12 Dec 2025 07:59:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 70FC580AEC;
+	Fri, 12 Dec 2025 07:59:23 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 730E5E7
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:57:38 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 81333E7
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:57:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 544064113C
+ by smtp4.osuosl.org (Postfix) with ESMTP id E7D6F41153
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mXkU53w2FSyq for <buildroot@buildroot.org>;
- Fri, 12 Dec 2025 07:55:47 +0000 (UTC)
+ id 6fJ-bnmA5MYf for <buildroot@buildroot.org>;
+ Fri, 12 Dec 2025 07:55:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8EA04118E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2AEFC4119A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B8EA04118E
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2AEFC4119A
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B7EF985C4C; Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
+ id 2A21585C4C; Fri, 12 Dec 2025 07:55:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 9 Dec 2025 19:24:58 +0100
+Date: Tue, 9 Dec 2025 20:42:50 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b7134215e31c1507d0635e29c6a872d60c11b61e
-X-Git-Newrev: 9b96ce2c80cb970fe282ddf84b1af597fb6e3e84
+X-Git-Oldrev: 1983c12bd3c50a2a2b180b6562425746d4f90cdc
+X-Git-Newrev: eb1f160b7a08537fdfeb0800b9240a497f4237ac
 X-Patchwork-Hint: ignore
-Message-Id: <20251212075538.B7EF985C4C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/doxygen: bump version to 1.15.0
+Message-Id: <20251212075539.2A21585C4C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/meson: bump version to 1.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,41 +76,83 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b96ce2c80cb970fe282ddf84b1af597fb6e3e84
+commit: https://git.buildroot.net/buildroot/commit/?id=eb1f160b7a08537fdfeb0800b9240a497f4237ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog of this host-only package:
-https://www.doxygen.nl/manual/changelog.html
+Release notes: https://mesonbuild.com/Release-notes-for-1-10-0.html
+
+Rebased and updated patch 0001 to fix build error:
+
+    NameError: name 'env' is not defined
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/doxygen/doxygen.hash | 2 +-
- package/doxygen/doxygen.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...Prefer-ext-static-libs-when-default-library-static.patch | 13 ++++++-------
+ package/meson/meson.hash                                    |  4 ++--
+ package/meson/meson.mk                                      |  2 +-
+ 3 files changed, 9 insertions(+), 10 deletions(-)
 
-diff --git a/package/doxygen/doxygen.hash b/package/doxygen/doxygen.hash
-index ff2fac7b9c..ec46705d29 100644
---- a/package/doxygen/doxygen.hash
-+++ b/package/doxygen/doxygen.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256  18173d9edc46d2d116c1f92a95d683ec76b6b4b45b817ac4f245bb1073d00656  doxygen-1.8.18.src.tar.gz
-+sha256  a8cafe605867ad475aaf288a3852783076e1df83aabf16488bbfa958062e7440  doxygen-1.15.0.src.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/doxygen/doxygen.mk b/package/doxygen/doxygen.mk
-index b3bcb34097..c31271197d 100644
---- a/package/doxygen/doxygen.mk
-+++ b/package/doxygen/doxygen.mk
+diff --git a/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch b/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch
+index c7f8557ec1..92d5e517a4 100644
+--- a/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch
++++ b/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch
+@@ -24,8 +24,7 @@ http://autobuild.buildroot.net/results/c17/c17bbb12d9deadd64a441b36e324cfbbe8aba
+ Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+ [Updated for 0.57.1 - get_builtin_option() vs. get_option(OptionKey())]
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+-[Bernd: rebased for 1.6.0 & 1.7.0
+- for 1.82.0 - get_option -> optstore.get_value_for]
++[Bernd: rebased for 1.10.0]
+ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+  mesonbuild/compilers/mixins/clike.py | 3 +++
+@@ -43,16 +42,16 @@ index 09ad837b1..b7f6b9f22 100644
+  from .. import compilers
+  from ..compilers import CompileCheckMode
+  from .visualstudio import VisualStudioLikeCompiler
+-@@ -1053,6 +1054,9 @@ class CLikeCompiler(Compiler):
++@@ -1045,6 +1046,9 @@ class CLikeCompiler(Compiler):
+              # TI C28x compilers can use both extensions for static or dynamic libs.
+              stlibext = ['a', 'lib']
+              shlibext = ['dll', 'so']
+-+        elif env.coredata.optstore.get_value_for(OptionKey('default_library')) == 'static':
+++        elif self.environment.coredata.optstore.get_value_for(OptionKey('default_library')) == 'static':
+ +            # Linux/BSDs
+ +            shlibext = ['a']
+-         else:
+-             # Linux/BSDs
+-             shlibext = ['so']
++         elif self.info.is_os2():
++             stlibext = ['_s.lib', '_s.a', 'lib', 'a']
++             shlibext = ['_dll.lib', '_dll.a', 'lib', 'a', 'dll']
+ -- 
+ 2.25.1
+ 
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index 581cfe62a7..d07ea4d1dd 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/1.9.1/meson-1.9.1.tar.gz.asc
+-sha256  4e076606f2afff7881d195574bddcd8d89286f35a17b4977a216f535dc0c74ac  meson-1.9.1.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/1.10.0/meson-1.10.0.tar.gz.asc
++sha256  8071860c1f46a75ea34801490fd1c445c9d75147a65508cd3a10366a7006cc1c  meson-1.10.0.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 29082dcbb5..ca42edf63b 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOXYGEN_VERSION = 1.8.18
-+DOXYGEN_VERSION = 1.15.0
- DOXYGEN_SOURCE = doxygen-$(DOXYGEN_VERSION).src.tar.gz
- DOXYGEN_SITE = https://sourceforge.net/projects/doxygen/files/rel-$(DOXYGEN_VERSION)
- DOXYGEN_LICENSE = GPL-2.0
+-MESON_VERSION = 1.9.1
++MESON_VERSION = 1.10.0
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
