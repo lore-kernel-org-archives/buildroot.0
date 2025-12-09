@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52ACED3B98F
-	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 18:28:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25B11D3B98C
+	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 18:28:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F286484365;
-	Tue,  9 Dec 2025 18:28:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E73EB407E6;
+	Tue,  9 Dec 2025 18:28:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DFMNxyO5UQQ3; Tue,  9 Dec 2025 18:28:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LNX8tsAEVyFO; Tue,  9 Dec 2025 18:28:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 320D884372
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2007D407F9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765304901;
-	bh=RXwGvpiXKu8ecxgSwW/tt0OPwaCc6JOwnn8U3y6m6QM=;
+	s=default; t=1765304902;
+	bh=fvjIPyTiG5qTa+DSUpKPlpxUR1Fku37GxTSASnjqquQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=mz2AOlGudBL9jq8QwS8tG9g4KdOKZOq2TnkQ5eoabRAgtUrLUHuQ4Z98pQAzdONJ/
-	 TbgQnXeQhjeIsAkmx5ZvOWtp8UBruAhTvHvF2x48MooXVce6a5zpynSuUbFTnxjaFv
-	 sZB6vdvvGrE9nemrJbCfqOqGL4rW2lLjR/nv9Ipxsu3sGGPzzQdEYejuhSWVmn0Rzs
-	 f5ovGLmIGTerUwzMMG5hj2HxkTDVZPfhwsuKAtb9U65wYmYhiRW5Z0O2brM/nMmWTf
-	 bts/3wG1rsaTUVYThiQoNBGfpkzRVpocjbenPBJBTYF4SdWutwhd7gedWJXScu66dW
-	 C9Z42XlNY0mag==
+	b=bK5IoLoXuDf7la82VJ1tlTCcT2ZZYROv9ZgZY8qYxCJifoQvng0hmqQE6GzSrxJwQ
+	 7/K4wDO0P/SQ2TpsjwxqAWM6GjB8ozQIIpf+7i05USlXqjm4bCb6vZM+a3bDpW4Scp
+	 mQQiIqRaFCikcfr5AcLSLInOM3qzcxuzYgrX+os3zq6Wg/4RLP9Hw6wNZYlKX/pCAn
+	 brUjFckkifTUlK5ECxq+6h8Of8g1BNZZixbyE1E+5KdS1y7vpbJBUE3e32PN6zw/FA
+	 sSjPhILJ2QpKiOvN4aU1sKFUnHitgCTPcFZQTZetESgVU5gKgdP9Jfs+FdBw3CJkqk
+	 LUsi7hcbPumJg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 320D884372;
-	Tue,  9 Dec 2025 18:28:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id A91C02C1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2007D407F9;
+	Tue,  9 Dec 2025 18:28:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B3A3C2C6
  for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:28:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8F21760A35
+ by smtp4.osuosl.org (Postfix) with ESMTP id 989D940820
  for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:28:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dqTlvIeLeGuc for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ah2EB5gpNMyH for <buildroot@buildroot.org>;
  Tue,  9 Dec 2025 18:28:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE3CE608EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A9A4407E6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DE3CE608EE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9A9A4407E6
  for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:28:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DC44186967; Tue,  9 Dec 2025 18:28:17 +0000 (UTC)
+ id 948D786968; Tue,  9 Dec 2025 18:28:17 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 9 Dec 2025 19:24:58 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: db72d16ca1d781f7237dfb0fe6cacd52aeeda6b4
-X-Git-Newrev: b6565f494eda8edcf6dd9d38b857fafd35de2384
+X-Git-Oldrev: 9b96ce2c80cb970fe282ddf84b1af597fb6e3e84
+X-Git-Newrev: 3ef8d613d7412c54375bdb5c5a683ffbe8a3f85b
 X-Patchwork-Hint: ignore
-Message-Id: <20251209182817.DC44186967@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ubus: bump version to
- git 3cc98db1a
+Message-Id: <20251209182817.948D786968@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/firmware-utils: bump
+ version to git commit c42a3bc53d
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,43 +77,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6565f494eda8edcf6dd9d38b857fafd35de2384
+commit: https://git.buildroot.net/buildroot/commit/?id=3ef8d613d7412c54375bdb5c5a683ffbe8a3f85b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-For change log, see:
-https://git.openwrt.org/?p=project/ubus.git;a=shortlog;h=3cc98db1a422dcf560f2d6347fd410f17565a89d
 
 This bump includes a patch which adds cmake4 compatibility.
 
+For changes, see:
+https://git.openwrt.org/?p=project/firmware-utils.git;a=log;h=c42a3bc53da869d02c8ae4d62b3b08a95ff5833f
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien: add link to upstream repo commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/ubus/ubus.hash | 2 +-
- package/ubus/ubus.mk   | 2 +-
+ package/firmware-utils/firmware-utils.hash | 2 +-
+ package/firmware-utils/firmware-utils.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ubus/ubus.hash b/package/ubus/ubus.hash
-index e35f37b03d..3d8206b974 100644
---- a/package/ubus/ubus.hash
-+++ b/package/ubus/ubus.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/firmware-utils/firmware-utils.hash b/package/firmware-utils/firmware-utils.hash
+index 8e09c06733..e258516aec 100644
+--- a/package/firmware-utils/firmware-utils.hash
++++ b/package/firmware-utils/firmware-utils.hash
+@@ -1,2 +1,2 @@
  # Locally calculated
--sha256  ba7602c660cb2c15c0e04942414e4cf3d96622622406c5fc3b88895694aebb9f  ubus-afa57cce0aff82f4a7a0e509d4387ebc23dd3be7-git4.tar.gz
-+sha256  f625bda868133e28749b9eed64f9c3a838c75594e46a6a536e7e3582fe4da8e3  ubus-3cc98db1a422dcf560f2d6347fd410f17565a89d-git4.tar.gz
- sha256  a3caa6c0e90c87b7c97c2ac3d0c0d416082ef777215faec2e9b24ea6e68f6988  ubusd_acl.h
-diff --git a/package/ubus/ubus.mk b/package/ubus/ubus.mk
-index 913c0e3e39..c0f0264065 100644
---- a/package/ubus/ubus.mk
-+++ b/package/ubus/ubus.mk
+-sha256  5d6fdc6ba3cb3976df68625cbc59a1e0acbd5ecaf9daa41c3a2aaad1ff368f51  firmware-utils-86739f2b3ae9502368b89ef37fa6f31c42aad6f4-git4.tar.gz
++sha256  8a12240dfdca5e26a4b2443724276a0a25f61797e133757605ed1b9941145fc3  firmware-utils-c42a3bc53da869d02c8ae4d62b3b08a95ff5833f-git4.tar.gz
+diff --git a/package/firmware-utils/firmware-utils.mk b/package/firmware-utils/firmware-utils.mk
+index d5b079e4f5..77be4a9224 100644
+--- a/package/firmware-utils/firmware-utils.mk
++++ b/package/firmware-utils/firmware-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UBUS_VERSION = afa57cce0aff82f4a7a0e509d4387ebc23dd3be7
-+UBUS_VERSION = 3cc98db1a422dcf560f2d6347fd410f17565a89d
- UBUS_SITE = https://git.openwrt.org/project/ubus.git
- UBUS_SITE_METHOD = git
- 
+-FIRMWARE_UTILS_VERSION = 86739f2b3ae9502368b89ef37fa6f31c42aad6f4
++FIRMWARE_UTILS_VERSION = c42a3bc53da869d02c8ae4d62b3b08a95ff5833f
+ FIRMWARE_UTILS_SITE = https://git.openwrt.org/project/firmware-utils.git
+ FIRMWARE_UTILS_SITE_METHOD = git
+ FIRMWARE_UTILS_LICENSE = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
