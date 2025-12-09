@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55C0BD4337E
-	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:59:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0540FD43370
+	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 08:00:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 236EC845E0;
-	Fri, 12 Dec 2025 07:59:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 93F9882BF5;
+	Fri, 12 Dec 2025 08:00:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A3IUvF95Ex5k; Fri, 12 Dec 2025 07:59:50 +0000 (UTC)
+ id dbtU_ERVnADT; Fri, 12 Dec 2025 07:59:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 366A384336
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBC4B843ED
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765526374;
-	bh=UAHZXd3DHqF6dsP4KRtIVbsOdXqheZh51buYhB3Z5Vg=;
+	s=default; t=1765526376;
+	bh=cz8kD6gJKuYBWEPi9WZMy4XpWyuftwOS1aB5F/r8GwQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=nSPpezTAs3vZRkEomgsViLgWHh0NTsO2VasxFKLc+fqThhM80H50XRcAnBW1sCDy9
-	 7Vkt77oAp5NoKYRfsTnci6Czsyc9N39WXZr1n/LUCsmmQxNw/LGQ7DQtx6MkDoUIzr
-	 X3pmYydR5sBfJzgdJj8JMWApGtdIIYGUL6eIP5ET9+o/uaOJcz0nmzE6808SWm0QmO
-	 ggcDWROrsid3J84SX8wRoqKY61juu87z/WeA+Kwz0crqmPByZEr5IRx8qxD1FWuHVl
-	 OgtFPTxHs/TH8kVK6mTAcE3rjI1XLbJZPa3q4pUz76GJ71wASbKRNBpa0iItN10zMb
-	 xqhbQ0UPzRjag==
+	b=TEhO8TwC/8cDxtL0LVbu3BQZxmyYp+yL4TzQcZI/6z++jzqVkXKTPABy9AGjwpDBH
+	 lcfdBmoZseh1DkvnRFKBkWZXkDOUuf5AksPVPiJdRS2boRW5JqDCZbOk8WXB6/7qU/
+	 GDRjN/kH0gcRlnAAMbFNIIymOpuv2pfWeH1zYKgVEmwtmjjOBZOa0CwC7kAQwVY6O7
+	 vHf2y/iFJS/8z/5jeUF8p7qtMBiOMC8Phmrx8ap0UXjieMkkWORkAzst++/1eN0jQA
+	 /5B6WEoTrEDXW2X0wvt4UAZigFmMV3TvKyjHo4AGI/r0WlJbCQnSlb3ZaywU/7xTpJ
+	 rW0yGtD6amy7A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 366A384336;
-	Fri, 12 Dec 2025 07:59:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EBC4B843ED;
+	Fri, 12 Dec 2025 07:59:35 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 31F842C1
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:57:48 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 40C692C1
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:57:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F2B994119A
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37D6841182
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wEe9M74S0Yvy for <buildroot@buildroot.org>;
- Fri, 12 Dec 2025 07:55:47 +0000 (UTC)
+ id MDP97KjWSN3y for <buildroot@buildroot.org>;
+ Fri, 12 Dec 2025 07:55:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB42941192
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33C7B4112A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DB42941192
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 33C7B4112A
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DA61B807F9; Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
+ id 32CC7807F9; Fri, 12 Dec 2025 07:55:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 9 Dec 2025 19:24:58 +0100
+Date: Tue, 9 Dec 2025 22:05:09 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b822976c6069d5d6296ac61bb848fc3de0900a99
-X-Git-Newrev: a644ea1e2d8c48e84cf9bb770abe71765949c1da
+X-Git-Oldrev: eb1f160b7a08537fdfeb0800b9240a497f4237ac
+X-Git-Newrev: 4f9600c2f97039b4ad6eb66087a7654805536a76
 X-Patchwork-Hint: ignore
-Message-Id: <20251212075538.DA61B807F9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gupnp-tools: bump version to 0.12.2
+Message-Id: <20251212075539.32CC7807F9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libseccomp: bump to version 2.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,156 +76,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a644ea1e2d8c48e84cf9bb770abe71765949c1da
+commit: https://git.buildroot.net/buildroot/commit/?id=4f9600c2f97039b4ad6eb66087a7654805536a76
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed two patches which are included in this release and added one
-patch to fix build with libxml 2.15.1.
+For change log, see:
+https://github.com/seccomp/libseccomp/blob/v2.6.0/CHANGELOG
 
-For release notes, see:
-https://gitlab.gnome.org/GNOME/gupnp-tools/-/blob/gupnp-tools-0.12.2/NEWS
+This commit also enables LoongArch64 support,
+added in upstream commit:
+https://github.com/seccomp/libseccomp/commit/6966ec77b195ac289ae168c7c5646d59a307f33f
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Preyas <preyas17@zohomail.in>
+[Julien:
+ - add link to change log
+ - enable loongarch64 support
+]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...001-Remove-Werror-deprecated-declarations.patch | 27 ++++++++++++++++++
- ...1-common-Drop-deprecated-xmlRecoverMemory.patch | 33 ----------------------
- ...ommon-Fix-compatibility-with-libxml2-2-12.patch | 28 ------------------
- package/gupnp-tools/gupnp-tools.hash               |  4 +--
- package/gupnp-tools/gupnp-tools.mk                 |  2 +-
- 5 files changed, 30 insertions(+), 64 deletions(-)
+ package/libseccomp/Config.in       | 1 +
+ package/libseccomp/libseccomp.hash | 4 ++--
+ package/libseccomp/libseccomp.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/gupnp-tools/0001-Remove-Werror-deprecated-declarations.patch b/package/gupnp-tools/0001-Remove-Werror-deprecated-declarations.patch
-new file mode 100644
-index 0000000000..ef76f01f66
---- /dev/null
-+++ b/package/gupnp-tools/0001-Remove-Werror-deprecated-declarations.patch
-@@ -0,0 +1,27 @@
-+From cb4ddac12977fd1abd88a1feacbab090d9ad5ecb Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Wed, 3 Dec 2025 20:06:22 +0100
-+Subject: [PATCH] Remove -Werror=deprecated-declarations
-+
-+Upstream: https://gitlab.gnome.org/GNOME/gupnp-tools/-/issues/29
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ meson.build | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/meson.build b/meson.build
-+index c92a833..64a0513 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -44,7 +44,6 @@ conf.set('HAVE_GTK_SOURCEVIEW', gtksourceview.found())
-+ conf.set('GETTEXT_PACKAGE', '"@0@"'.format(meson.project_name()))
-+ conf.set('LOCALEDIR', '"@0@"'.format(localedir))
-+ cc = meson.get_compiler('c')
-+-add_project_arguments(cc.get_supported_arguments('-Werror=deprecated-declarations'), language: 'c')
-+ conf.set('GLIB_VERSION_MIN_REQUIRED', 'GLIB_VERSION_@0@'.format(glib_version.underscorify()))
-+ conf.set('GLIB_VERSION_MAX_ALLOWED', 'GLIB_VERSION_@0@'.format(glib_version.underscorify()))
-+ 
-+-- 
-+2.47.3
-+
-diff --git a/package/gupnp-tools/0001-common-Drop-deprecated-xmlRecoverMemory.patch b/package/gupnp-tools/0001-common-Drop-deprecated-xmlRecoverMemory.patch
-deleted file mode 100644
-index c81d1b01fe..0000000000
---- a/package/gupnp-tools/0001-common-Drop-deprecated-xmlRecoverMemory.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From f675ac7e0afe67a86f3f1191d3274d6ffbd4e5d7 Mon Sep 17 00:00:00 2001
--From: Jens Georg <mail@jensge.org>
--Date: Thu, 3 Aug 2023 23:44:15 +0200
--Subject: [PATCH] common: Drop deprecated xmlRecoverMemory
--
--Fixes #27
--
--Upstream: https://gitlab.gnome.org/GNOME/gupnp-tools/-/commit/f675ac7e0afe67a86f3f1191d3274d6ffbd4e5d7
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/common/pretty-print.c | 6 +++++-
-- 1 file changed, 5 insertions(+), 1 deletion(-)
--
--diff --git a/src/common/pretty-print.c b/src/common/pretty-print.c
--index c692664..c8ebc9a 100644
----- a/src/common/pretty-print.c
--+++ b/src/common/pretty-print.c
--@@ -34,7 +34,11 @@ pretty_print_xml (const char *xml)
--         char *text;
--         int length;
-- 
---        doc = xmlRecoverMemory (xml, strlen (xml));
--+        doc = xmlReadMemory (xml,
--+                             strlen (xml),
--+                             NULL,
--+                             NULL,
--+                             XML_PARSE_NONET | XML_PARSE_RECOVER);
-- 
--         if (!doc)
--                 return NULL;
---- 
--GitLab
--
-diff --git a/package/gupnp-tools/0002-common-Fix-compatibility-with-libxml2-2-12.patch b/package/gupnp-tools/0002-common-Fix-compatibility-with-libxml2-2-12.patch
-deleted file mode 100644
-index c76d440b5d..0000000000
---- a/package/gupnp-tools/0002-common-Fix-compatibility-with-libxml2-2-12.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 4e06104df81fba2cda06d4747b33e75f4cade458 Mon Sep 17 00:00:00 2001
--From: Jens Georg <mail@jensge.org>
--Date: Fri, 24 Nov 2023 18:12:50 +0100
--Subject: [PATCH] common: Fix compatibility with libxml2 2.12
--
--Fixes #28
--
--Upstream: https://gitlab.gnome.org/GNOME/gupnp-tools/-/commit/4e06104df81fba2cda06d4747b33e75f4cade458
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/common/pretty-print.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/common/pretty-print.c b/src/common/pretty-print.c
--index c8ebc9a..1519cb0 100644
----- a/src/common/pretty-print.c
--+++ b/src/common/pretty-print.c
--@@ -22,6 +22,7 @@
-- 
-- #include "pretty-print.h"
-- 
--+#include <libxml/globals.h>
-- #include <libxml/xmlreader.h>
-- 
-- #include <string.h>
---- 
--GitLab
--
-diff --git a/package/gupnp-tools/gupnp-tools.hash b/package/gupnp-tools/gupnp-tools.hash
-index 28e2661360..6dc8bd74f2 100644
---- a/package/gupnp-tools/gupnp-tools.hash
-+++ b/package/gupnp-tools/gupnp-tools.hash
-@@ -1,5 +1,5 @@
--# Hash from: https://download.gnome.org/sources/gupnp-tools/0.12/gupnp-tools-0.12.1.sha256sum:
--sha256  53cf93123f397e8f8f0b8e9e4364c86a7502a5334f4c0be2e054a824478bd5ba  gupnp-tools-0.12.1.tar.xz
-+# Hash from: https://download.gnome.org/sources/gupnp-tools/0.12/gupnp-tools-0.12.2.sha256sum
-+sha256  4c92f2d1a3d454ec1f5fb05ef08ca34df9c743af64c8b5965c35884d46cb005c  gupnp-tools-0.12.2.tar.xz
- 
- # Locally computed:
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/gupnp-tools/gupnp-tools.mk b/package/gupnp-tools/gupnp-tools.mk
-index 99fdf54f13..910a157816 100644
---- a/package/gupnp-tools/gupnp-tools.mk
-+++ b/package/gupnp-tools/gupnp-tools.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libseccomp/Config.in b/package/libseccomp/Config.in
+index 7de91c07c5..18d4a76cb3 100644
+--- a/package/libseccomp/Config.in
++++ b/package/libseccomp/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_aarch64
+ 	default y if BR2_arm || BR2_armeb
++	default y if BR2_loongarch64
+ 	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 	default y if BR2_i386 || BR2_x86_64
+ 	default y if BR2_powerpc64 || BR2_powerpc
+diff --git a/package/libseccomp/libseccomp.hash b/package/libseccomp/libseccomp.hash
+index b80efd68f5..aaadc8424e 100644
+--- a/package/libseccomp/libseccomp.hash
++++ b/package/libseccomp/libseccomp.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/seccomp/libseccomp/releases/tag/v2.5.5
+-sha256  248a2c8a4d9b9858aa6baf52712c34afefcf9c9e94b76dce02c1c9aa25fb3375  libseccomp-2.5.5.tar.gz
++# From https://github.com/seccomp/libseccomp/releases/tag/v2.6.0 (PGP-signed checksum)
++sha256  83b6085232d1588c379dc9b9cae47bb37407cf262e6e74993c61ba72d2a784dc  libseccomp-2.6.0.tar.gz
+ # Locally calculated
+ sha256  102900208eef27b766380135906d431dba87edaa7ec6aa72e6ebd3dd67f3a97b  LICENSE
+diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
+index 10d57bb78c..26585b1887 100644
+--- a/package/libseccomp/libseccomp.mk
++++ b/package/libseccomp/libseccomp.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- GUPNP_TOOLS_VERSION_MAJOR = 0.12
--GUPNP_TOOLS_VERSION = $(GUPNP_TOOLS_VERSION_MAJOR).1
-+GUPNP_TOOLS_VERSION = $(GUPNP_TOOLS_VERSION_MAJOR).2
- GUPNP_TOOLS_SOURCE = gupnp-tools-$(GUPNP_TOOLS_VERSION).tar.xz
- GUPNP_TOOLS_SITE = \
- 	https://download.gnome.org/sources/gupnp-tools/$(GUPNP_TOOLS_VERSION_MAJOR)
+-LIBSECCOMP_VERSION = 2.5.5
++LIBSECCOMP_VERSION = 2.6.0
+ LIBSECCOMP_SITE = https://github.com/seccomp/libseccomp/releases/download/v$(LIBSECCOMP_VERSION)
+ LIBSECCOMP_LICENSE = LGPL-2.1
+ LIBSECCOMP_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
