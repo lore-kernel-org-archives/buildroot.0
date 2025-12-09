@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 338AED4337E
-	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:59:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AAEED4337C
+	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:59:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2030D80AD9;
-	Fri, 12 Dec 2025 07:59:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 794A88451F;
+	Fri, 12 Dec 2025 07:59:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zlMSRKfn4jdC; Fri, 12 Dec 2025 07:59:44 +0000 (UTC)
+ id oCUjC9XFG7TG; Fri, 12 Dec 2025 07:59:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 285F480DC0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2B6081185
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765526366;
-	bh=nNOTlzly7rjTiTTE0v3Zyj8thWqOc8dIzGGNIN0bq+w=;
+	s=default; t=1765526369;
+	bh=L1Rm7X0lZX/KN1oiMIOORFR5tlc0WR1DbM9BNKNDKC8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=gGTw/xP3KRQ8pp3dbhCDB3INSjzzeqdXSRUnoTq6qaZfuTGDeLFVRAIEIoh6oS9pP
-	 pvkyW2RJ74XGijdxR3hR260cRDSIrvWdPdxNrhYwQm5aMJY0zO0RCRdX+lqKZjDu8K
-	 +pVO3aOkQtCJq8RyMdffEUlRNdFrTnScpDYKh4+R7nvGCJyeWEgegalkc217L64K1i
-	 ZQaXHhlSWr5qaBxQPTb97ifNYixChJrpGIO1lYdKpujAHiie4o1Qe08Xvs0lzVC/39
-	 trK/0r5gXWKdWVIjeH1T3R7q4ohnFlzUxtPPgXTXBq7fpiP0cY4F+SpznXF70yQFrw
-	 OxNo+TNov4GCw==
+	b=PWshANfFyO6JvtHIqW0bz4lhUmpdbH+uNhnkyqmA3Cot1qZ03ObOqAHHMxzU5JH5J
+	 sH1vw7e1Nox1f6CNdph9G/N3mTorwVoMhkSQ+gFYUwmEiE19BInsAnZZNbiqiJhGr4
+	 fYgwRYF9XukdOPND505P0rCQDBe+oaGW50x9DrxRdzwpHnGgmBDDoZJCmX+3rESp2b
+	 xg4cGVf5K6dWkXqlAjYheSbczlA3hYiNAO82Nselu5EO6pyQOcQRou4vPg51eijNar
+	 rVk0wyB9by46MEvc9QiGIRvuTJOmpvn7FIeDEK1s4KFpkuL3xztrj9fayi+Ok7RpSS
+	 zjEYOW3GzovVw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 285F480DC0;
-	Fri, 12 Dec 2025 07:59:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F2B6081185;
+	Fri, 12 Dec 2025 07:59:28 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id EDBBBE7
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:57:44 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 09AB2E7
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:57:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7ACB641181
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9267941122
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x7E16JI3fXo5 for <buildroot@buildroot.org>;
- Fri, 12 Dec 2025 07:55:46 +0000 (UTC)
+ id XfUQ3-pEin2l for <buildroot@buildroot.org>;
+ Fri, 12 Dec 2025 07:55:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 656B041122
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22C9A4114C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 656B041122
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 22C9A4114C
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 649AF869E8; Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
+ id 21E42869E8; Fri, 12 Dec 2025 07:55:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 7 Dec 2025 18:10:55 +0100
+Date: Tue, 9 Dec 2025 19:24:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ae303fbef47860092a7d300f4a4e01b9386f2ac3
-X-Git-Newrev: ae7b3344d422154095cfd7efd9d106f0c74fc6b9
+X-Git-Oldrev: 7dd31d302133dd8fc5d6f44a42209fdb3573c51f
+X-Git-Newrev: 1983c12bd3c50a2a2b180b6562425746d4f90cdc
 X-Patchwork-Hint: ignore
-Message-Id: <20251212075538.649AF869E8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/armadillo: bump to version 15.2.2
+Message-Id: <20251212075539.21E42869E8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/waylandpp: bump version to 1.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,42 +76,112 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae7b3344d422154095cfd7efd9d106f0c74fc6b9
+commit: https://git.buildroot.net/buildroot/commit/?id=1983c12bd3c50a2a2b180b6562425746d4f90cdc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://arma.sourceforge.net/docs.html#changelog
+https://github.com/NilsBrause/waylandpp/releases/tag/1.0.1
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Removed patch which is included in this release.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/armadillo/armadillo.hash | 2 +-
- package/armadillo/armadillo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-add-missing-cstdint-include.patch         | 61 ----------------------
+ package/waylandpp/waylandpp.hash                   |  2 +-
+ package/waylandpp/waylandpp.mk                     |  2 +-
+ 3 files changed, 2 insertions(+), 63 deletions(-)
 
-diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
-index 0a71218a30..adb21b66c7 100644
---- a/package/armadillo/armadillo.hash
-+++ b/package/armadillo/armadillo.hash
+diff --git a/package/waylandpp/0001-add-missing-cstdint-include.patch b/package/waylandpp/0001-add-missing-cstdint-include.patch
+deleted file mode 100644
+index 13b0ce49ad..0000000000
+--- a/package/waylandpp/0001-add-missing-cstdint-include.patch
++++ /dev/null
+@@ -1,61 +0,0 @@
+-From 3c441910aa25f57df2a4db55f75f5d99cea86620 Mon Sep 17 00:00:00 2001
+-From: Sergei Trofimovich <slyich@gmail.com>
+-Date: Sun, 8 Jan 2023 18:24:53 +0000
+-Subject: [PATCH] add missing <cstdint> include
+-
+-Upcoming `gcc-13` made `<string>` leaner and does not include `<cstdint>`
+-implicitly anymore. As a result build fails without the change as:
+-
+-    [  2%] Building CXX object CMakeFiles/wayland-scanner++.dir/scanner/scanner.cpp.o
+-    scanner/scanner.cpp:378:3: error: 'uint32_t' does not name a type
+-      378 |   uint32_t width = 0;
+-          |   ^~~~~~~~
+-
+-Upstream: https://github.com/NilsBrause/waylandpp/pull/71
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- include/wayland-client.hpp | 1 +
+- scanner/scanner.cpp        | 3 +++
+- 2 files changed, 4 insertions(+)
+-
+-diff --git a/include/wayland-client.hpp b/include/wayland-client.hpp
+-index a3f782b..4598a0e 100644
+---- a/include/wayland-client.hpp
+-+++ b/include/wayland-client.hpp
+-@@ -29,6 +29,7 @@
+- /** \file */
+- 
+- #include <atomic>
+-+#include <cstdint>
+- #include <functional>
+- #include <memory>
+- #include <string>
+-diff --git a/scanner/scanner.cpp b/scanner/scanner.cpp
+-index bebd71e..37cf7ff 100644
+---- a/scanner/scanner.cpp
+-+++ b/scanner/scanner.cpp
+-@@ -23,6 +23,7 @@
+- #include <vector>
+- #include <cctype>
+- #include <cmath>
+-+#include <cstdint>
+- #include <stdexcept>
+- 
+- #include "pugixml.hpp"
+-@@ -1106,6 +1107,7 @@ int main(int argc, char *argv[])
+-   wayland_hpp << "#pragma once" << std::endl
+-               << std::endl
+-               << "#include <array>" << std::endl
+-+              << "#include <cstdint>" << std::endl
+-               << "#include <functional>" << std::endl
+-               << "#include <memory>" << std::endl
+-               << "#include <string>" << std::endl
+-@@ -1125,6 +1127,7 @@ int main(int argc, char *argv[])
+-     wayland_server_hpp << "#pragma once" << std::endl
+-                        << std::endl
+-                        << "#include <array>" << std::endl
+-+                       << "#include <cstdint>" << std::endl
+-                        << "#include <functional>" << std::endl
+-                        << "#include <memory>" << std::endl
+-                        << "#include <string>" << std::endl
+diff --git a/package/waylandpp/waylandpp.hash b/package/waylandpp/waylandpp.hash
+index a3eb5379af..8513060f91 100644
+--- a/package/waylandpp/waylandpp.hash
++++ b/package/waylandpp/waylandpp.hash
 @@ -1,4 +1,4 @@
- # Locally computed:
--sha256  a5b8109da3c169802f51a14d3bd1246395c24bbca55601760b0c96a3c0b2f8fa  armadillo-15.2.1.tar.xz
-+sha256  8ee01cd4da55bc07b7bc7d3cba702ac6e8137d384d7e7185f3f4ae1f0c79704f  armadillo-15.2.2.tar.xz
- # License files, locally calculated
- sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
-diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
-index ee218dda34..cb83ee9e17 100644
---- a/package/armadillo/armadillo.mk
-+++ b/package/armadillo/armadillo.mk
+ # Locally computed
+-sha256  b20b45917382c6b87e9380130c9a1a1c563da2f498de5830df12fbce326dd9f5  waylandpp-1.0.0.tar.gz
++sha256  49c362fa5db28ab5472968215b88f1fbe3a7b7f57818dde722fd7d38997d940a  waylandpp-1.0.1.tar.gz
+ sha256  3eee5022ce84ead344e1c51b9d00c7f450f53003fe096fe460d66c616fe56782  LICENSE
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  scanner/gpl-3.0.txt
+diff --git a/package/waylandpp/waylandpp.mk b/package/waylandpp/waylandpp.mk
+index 4a0d58ba50..f177c6e5be 100644
+--- a/package/waylandpp/waylandpp.mk
++++ b/package/waylandpp/waylandpp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ARMADILLO_VERSION = 15.2.1
-+ARMADILLO_VERSION = 15.2.2
- ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
- ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
- ARMADILLO_INSTALL_STAGING = YES
+-WAYLANDPP_VERSION = 1.0.0
++WAYLANDPP_VERSION = 1.0.1
+ WAYLANDPP_SITE = $(call github,NilsBrause,waylandpp,$(WAYLANDPP_VERSION))
+ WAYLANDPP_LICENSE = MIT, GPL-3.0+ (wayland_scanner)
+ WAYLANDPP_LICENSE_FILES = LICENSE scanner/gpl-3.0.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
