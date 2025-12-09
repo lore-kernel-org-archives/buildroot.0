@@ -1,92 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D9D9D3B7F8
-	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 15:49:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F5CFD3B98C
+	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 18:19:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 94EE840CA8;
-	Tue,  9 Dec 2025 15:49:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B0356065F;
+	Tue,  9 Dec 2025 18:19:49 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CghgTe9RuP-Y; Tue,  9 Dec 2025 18:19:48 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C7BC60740
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1765304388;
+	bh=bhmDeN2ZFJB60aSlfUXDReDL4cw16zCSnlKKtOrrtpw=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=NhVmkIa+NG40N2eWIs1HYGHy/lWO/hgnjMqXCbyDtMeK6ZO9lZjq1V1KZ2u8bmGM+
+	 yBc5u3gMXIzxI3IgtqjQQ/v/ISSKWWN8GmOd8dXUAzwkBsWXnKSjFQ0wALNlJ/6plz
+	 qpxfZQJ+YSHLdZ3BFqBb41u3o6caQTcrpk+0El7usnlKrhWFXckzFpoT2J7vgVvGpd
+	 1/aa907WNusuCVqWPvJr9ShdL/Zy/SMMqaVBCThGzbOX8DGQ/vCNf0mPpcuIQ6xM43
+	 qsw283KQQ2jxfaZE2BdfBZe3ptqSYI7sSasvnpJtpwcUCX31QE1y/w0+kX6hPOut5D
+	 SourwY15EjqdA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3C7BC60740;
+	Tue,  9 Dec 2025 18:19:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BD9E22C0
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:19:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B2CE140672
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:19:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F8LBbK2TWH0p; Tue,  9 Dec 2025 15:49:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50FD940C93
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765295374;
-	bh=G/WMWId/2nxQOnmHVMJPt6rE1bOdR2KTA5IQq2ZAvDQ=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=K5Fz3OCgIXs+d0Nf8aZz6cq6UO0maL2UTP3649kseP35b0/he/tyiWykvwmI/7orF
-	 kPEUYS7naNoOOT4v1ReV490Qrf3w/9t17myG90KH164e+W2a61ATZ6qB9Y2+wbDTaH
-	 +EoplkVMxRzhoIWxoXhYZ7T7wFYxmDcY6VxInl8dFlODdh5oUs0EU53olwoafitE+V
-	 elJLp4hsYMg3ogxGvX6MSDz+VpdzNTUerOX328HICs/jWUwQQCu8Ulp1co37Rn8h2i
-	 xdJSccXOCLXALraVE29OkKVKmvu0w2mW3Z4LVEtNTyPZH6XzymQLYCn4MM96H8dO5p
-	 kPo8RzcDFO4uQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 50FD940C93;
-	Tue,  9 Dec 2025 15:49:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 16C5C151
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 15:49:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F1F2E400D1
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 15:49:31 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eIdQGUitDV-Q for <buildroot@buildroot.org>;
- Tue,  9 Dec 2025 15:49:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=103.117.158.92;
- helo=sender-pp-o92.zoho.in; envelope-from=preyas17@zohomail.in;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4905940082
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4905940082
-Received: from sender-pp-o92.zoho.in (sender-pp-o92.zoho.in [103.117.158.92])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4905940082
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 15:49:29 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; t=1765295364; cv=none; d=zohomail.in; s=zohoarc; 
- b=Ji/ihDBR3zNW+CPZAY1yZtecko7KwPsDH3X/wLmktIJVh5DSlgTr5kQEbzrZ4ONG5UfvUcBwnzEqGwT+46AdlF1glOkvoUf/t8DopbuBk9ZOR+TKRb34QzRO/yp2yTtEobv1C9Gi6glZdtzW7zac1PPQRYKu1a1jBTaYjmNLsvw=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in;
- s=zohoarc; t=1765295364;
- h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To;
- bh=q1mD+QbWjDbQt+qGaQZB0MnRaBNilmUfLuHvbU9JTHI=; 
- b=Yjyvyoaz+sxzfVOLFosrHhHzR+LURhY32Ur/LQsqjUliOA47wdNNASxIkShW61G7bavXda9OKZiBDN7rryiSu0az0/FIqriGuy+00Lx0dX7zFdsaWbTyh1kC2q1wy2thsajLaZi3DdHQpiVdWYN3bTuEO6p2omg5Vyt2bshg78k=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
- dkim=pass  header.i=zohomail.in;
- spf=pass  smtp.mailfrom=preyas17@zohomail.in;
- dmarc=pass header.from=<preyas17@zohomail.in>
-Received: by mx.zoho.in with SMTPS id 1765295362764140.23475727204243;
- Tue, 9 Dec 2025 21:19:22 +0530 (IST)
-To: buildroot@buildroot.org
-Cc: Preyas <preyas17@zohomail.in>
-Date: Tue,  9 Dec 2025 15:48:34 +0000
-Message-ID: <20251209154834.5946-2-preyas17@zohomail.in>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251209154834.5946-1-preyas17@zohomail.in>
-References: <20251209154834.5946-1-preyas17@zohomail.in>
+ id UrWn2Xs3jlzq for <buildroot@buildroot.org>;
+ Tue,  9 Dec 2025 18:19:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B2DE84066A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2DE84066A
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B2DE84066A
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:19:45 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 95550780372;
+ Tue,  9 Dec 2025 19:19:33 +0100 (CET)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 09 Dec 2025 19:19:33 +0100
 MIME-Version: 1.0
-X-ZohoMailClient: External
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; t=1765295364; 
- s=zoho; d=zohomail.in; i=preyas17@zohomail.in;
- h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
- bh=q1mD+QbWjDbQt+qGaQZB0MnRaBNilmUfLuHvbU9JTHI=;
- b=M+bGScE/TWZ63EvbUdfYrgDumcDEBL/dTlah1XZOTAAqbGZlC3tJ93qY8c1DtJgd
- SC137w2+QKgRufh+NxaXwAsPWRgmi+PSA0REBXyyES1vJrl/aDAdtM3XF5V4NNpTJrE
- 20IeQcE06KrbQ6NKq3zK+05M8B69vNnTTL6vjUOI=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=zohomail.in
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=zohomail.in header.i=preyas17@zohomail.in
- header.a=rsa-sha256 header.s=zoho header.b=M+bGScE/
-Subject: [Buildroot] [PATCH 2/2] pigz: switch site to HTTPS
+Date: Tue, 09 Dec 2025 19:19:33 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>, RJ
+ Ascani <rj.ascani@gmail.com>, Daniel Nicoletti <dantti12@gmail.com>, Sergio
+ Prado <sergio.prado@e-labworks.com>, Gwenhael Goavec-Merou
+ <gwenhael.goavec-merou@trabucayre.com>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?=
+ <rafal@milecki.pl>, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In-Reply-To: <20251203215723.2323032-12-bernd@kuhls.net>
+References: <20251203215723.2323032-1-bernd@kuhls.net>
+ <20251203215723.2323032-12-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <5278a6d1d49bb82cc5128da5e78e0f55@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1765304383;
+ bh=1PbXaKIYbrJs7OFhchNxx1EauRbg6nBqEkqn1T0E4NQ=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=sXXYciChzaGI8x6/D1a4Veq5rTpPnFrNaLXGUHaH8dxvLSRKTdoUpvc3i5r+eT5nr
+ qag9BiMMa6SsvV3CjelYJCpwlQQfEaH7Y63Pxhscjyon03g2YLf1cNsMhYERAteJVY
+ WfT9KUgSt/ERirQVxboEUKVgtsCqJ5LYFYFugAPanSai8Y4zDsEykDeIWAdE4GDmAk
+ ieZvPucjqJq5CxpxOGqnvFKsFm+JmbSmHqtVRC/h5KejHSpi5qPkFNXocz+ECfqJBs
+ UtCK0OECd6IN50GnLW7AlgmAnQ1pQbTB0n3R7KPUgxgnJdpF9NzTkxxBymQyyCDcr6
+ Jd2/fEFmO019w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=sXXYciCh
+Subject: Re: [Buildroot] [PATCH/next 12/16] package/libubox: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,47 +98,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Preyas via buildroot <buildroot@buildroot.org>
-Reply-To: Preyas <preyas17@zohomail.in>
-Content-Type: text/plain; charset="us-ascii"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Prefer HTTPS for source downloads. No functional change; hashes unchanged. Align comment in .hash.
+Hi Bernd,
 
-Signed-off-by: Preyas <preyas17@zohomail.in>
----
- package/pigz/pigz.hash | 2 +-
- package/pigz/pigz.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 03/12/2025 22:57, Bernd Kuhls wrote:
+> This bump includes patches which add cmake4 compatibility.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/libubox/libubox.hash | 2 +-
+>  package/libubox/libubox.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/libubox/libubox.hash 
+> b/package/libubox/libubox.hash
+> index eb37d33230..127abf432c 100644
+> --- a/package/libubox/libubox.hash
+> +++ b/package/libubox/libubox.hash
+> @@ -1,2 +1,2 @@
+>  # Locally calculated
+> -sha256  
+> df6e1350fd11016ef30242a279cec195d91e6748c11c40e0991593718c46fa52  
+> libubox-3868f47c8f6c6570e62a3cdf8a7f26ffb1a67e6a-git4.tar.gz
+> +sha256  
+> c4432d4f902bd0a2974d3fe76620bbb5e04b9d52e55701829aa12507651bc4d9  
+> libubox-ecddb31dc34d89be5c9dc4595a4c58070eb090e4-git4.tar.gz
+> diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
+> index 00ae2b0595..486f2f5c0a 100644
+> --- a/package/libubox/libubox.mk
+> +++ b/package/libubox/libubox.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  
+> ################################################################################
+> 
+> -LIBUBOX_VERSION = 3868f47c8f6c6570e62a3cdf8a7f26ffb1a67e6a
+> +LIBUBOX_VERSION = ecddb31dc34d89be5c9dc4595a4c58070eb090e4
 
-diff --git a/package/pigz/pigz.hash b/package/pigz/pigz.hash
-index d09930b62b..d63c5a5717 100644
---- a/package/pigz/pigz.hash
-+++ b/package/pigz/pigz.hash
-@@ -1,4 +1,4 @@
--# From http://zlib.net/pigz
-+# From https://zlib.net/pigz
- sha256  eb872b4f0e1f0ebe59c9f7bd8c506c4204893ba6a8492de31df416f0d5170fd0  pigz-2.8.tar.gz
- 
- # Locally calculated
-diff --git a/package/pigz/pigz.mk b/package/pigz/pigz.mk
-index e3273c71c1..0708882a15 100644
---- a/package/pigz/pigz.mk
-+++ b/package/pigz/pigz.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PIGZ_VERSION = 2.8
--PIGZ_SITE = http://zlib.net/pigz
-+PIGZ_SITE = https://zlib.net/pigz
- PIGZ_DEPENDENCIES = zlib
- HOST_PIGZ_DEPENDENCIES = host-zlib
- PIGZ_LICENSE = Zlib
--- 
-2.43.0
+When I try to compile this new libubox version with the commands:
 
+cat >.config <<EOF
+BR2_aarch64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_PACKAGE_LIBUBOX=y
+EOF
+make olddefconfig
+make libubox
+
+The compilation fails with error:
+
+CMake Error at /usr/share/cmake/Modules/FindPkgConfig.cmake:938 
+(message):
+   None of the required 'json-c' found
+Call Stack (most recent call first):
+   CMakeLists.txt:18 (PKG_SEARCH_MODULE)
+
+The old version compiles correctly.
+
+Maybe the failure is related to:
+https://git.openwrt.org/?p=project/libubox.git;a=commitdiff;h=b7acc8e6fd5e13611ad90a593e98f9589af4009a
+
+>  LIBUBOX_SITE = https://git.openwrt.org/project/libubox.git
+>  LIBUBOX_SITE_METHOD = git
+>  LIBUBOX_LICENSE = ISC, BSD-3-Clause
+> --
+> 2.47.3
+
+Could you have a look, please?
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
