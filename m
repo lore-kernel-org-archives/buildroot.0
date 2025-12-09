@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0F0BD44141
-	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:59:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55C0BD4337E
+	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:59:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 84BF88143B;
-	Fri, 12 Dec 2025 07:59:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 236EC845E0;
+	Fri, 12 Dec 2025 07:59:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GnnbXzH1K0sy; Fri, 12 Dec 2025 07:59:47 +0000 (UTC)
+ id A3IUvF95Ex5k; Fri, 12 Dec 2025 07:59:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 437FD81149
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 366A384336
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765526370;
-	bh=pEBOIpYmzhUe4aI9q0v/Vp+JXONbV1ClFmL3rLY1IPc=;
+	s=default; t=1765526374;
+	bh=UAHZXd3DHqF6dsP4KRtIVbsOdXqheZh51buYhB3Z5Vg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=lyplUgHwMVqPSiJndmo6rI+I8MnnMGjZ0VTb7mcIZbTynm6dj9fuqAiZTFczgWDhu
-	 2hBElis6NFTXHpyrNDJwYyFmX5SYqFCsu/mR9efPgrFcCxttfcrAZo5Hj9uiMYUuhk
-	 vdFkv6GF9miUJW/UcAqhNdh79d4sZ32tGZ7wIxwl5u3Gp6tXKBjbrKBeaHxQeXwAU7
-	 D5NzwpeCPkjn6L75eXoYO6BLqG0LRo97gx9hJnuVWaSw3h97XtSOSHZ4mpMET9vIA3
-	 aHctVUIQpzqXW8OVhjhFplUHBkRjRqn9XHo+f37qz4rUCax1BqYZV+oqaFb5dbxUnM
-	 pBqfM8tzWP0og==
+	b=nSPpezTAs3vZRkEomgsViLgWHh0NTsO2VasxFKLc+fqThhM80H50XRcAnBW1sCDy9
+	 7Vkt77oAp5NoKYRfsTnci6Czsyc9N39WXZr1n/LUCsmmQxNw/LGQ7DQtx6MkDoUIzr
+	 X3pmYydR5sBfJzgdJj8JMWApGtdIIYGUL6eIP5ET9+o/uaOJcz0nmzE6808SWm0QmO
+	 ggcDWROrsid3J84SX8wRoqKY61juu87z/WeA+Kwz0crqmPByZEr5IRx8qxD1FWuHVl
+	 OgtFPTxHs/TH8kVK6mTAcE3rjI1XLbJZPa3q4pUz76GJ71wASbKRNBpa0iItN10zMb
+	 xqhbQ0UPzRjag==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 437FD81149;
-	Fri, 12 Dec 2025 07:59:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 366A384336;
+	Fri, 12 Dec 2025 07:59:34 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DAC7E7
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:57:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 31F842C1
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:57:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CADA64114C
+ by smtp4.osuosl.org (Postfix) with ESMTP id F2B994119A
  for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZjhW2Iil29HN for <buildroot@buildroot.org>;
- Fri, 12 Dec 2025 07:55:48 +0000 (UTC)
+ id wEe9M74S0Yvy for <buildroot@buildroot.org>;
+ Fri, 12 Dec 2025 07:55:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48C1A4119D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB42941192
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 48C1A4119D
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DB42941192
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4685985C4C; Fri, 12 Dec 2025 07:55:39 +0000 (UTC)
+ id DA61B807F9; Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 10 Dec 2025 22:48:23 +0100
+Date: Tue, 9 Dec 2025 19:24:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c621515d839b94f2013286683aaf6329e855b08b
-X-Git-Newrev: 9e9fb093804738434f5f429d2ce59546e4eb8147
+X-Git-Oldrev: b822976c6069d5d6296ac61bb848fc3de0900a99
+X-Git-Newrev: a644ea1e2d8c48e84cf9bb770abe71765949c1da
 X-Patchwork-Hint: ignore
-Message-Id: <20251212075539.4685985C4C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libubox: bump version to git
- ecddb31dc3
+Message-Id: <20251212075538.DA61B807F9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gupnp-tools: bump version to 0.12.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,145 +76,156 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e9fb093804738434f5f429d2ce59546e4eb8147
+commit: https://git.buildroot.net/buildroot/commit/?id=a644ea1e2d8c48e84cf9bb770abe71765949c1da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This bump includes patches which add cmake4 compatibility.
+Removed two patches which are included in this release and added one
+patch to fix build with libxml 2.15.1.
 
-json-c is now a mandatory dependency due to upstream commit:
-https://git.openwrt.org/?p=project/libubox.git;a=commitdiff;h=b7acc8e6fd5e13611ad90a593e98f9589af4009a
+For release notes, see:
+https://gitlab.gnome.org/GNOME/gupnp-tools/-/blob/gupnp-tools-0.12.2/NEWS
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libubox/Config.in     | 3 +++
- package/libubox/libubox.hash  | 2 +-
- package/libubox/libubox.mk    | 4 ++--
- package/libuci/Config.in      | 2 ++
- package/ubus/Config.in        | 2 +-
- package/uhttpd/Config.in      | 2 +-
- package/uqmi/Config.in        | 2 +-
- package/ustream-ssl/Config.in | 4 +++-
- 8 files changed, 14 insertions(+), 7 deletions(-)
+ ...001-Remove-Werror-deprecated-declarations.patch | 27 ++++++++++++++++++
+ ...1-common-Drop-deprecated-xmlRecoverMemory.patch | 33 ----------------------
+ ...ommon-Fix-compatibility-with-libxml2-2-12.patch | 28 ------------------
+ package/gupnp-tools/gupnp-tools.hash               |  4 +--
+ package/gupnp-tools/gupnp-tools.mk                 |  2 +-
+ 5 files changed, 30 insertions(+), 64 deletions(-)
 
-diff --git a/package/libubox/Config.in b/package/libubox/Config.in
-index 1f0b691e13..09d6336706 100644
---- a/package/libubox/Config.in
-+++ b/package/libubox/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_LIBUBOX
- 	bool "libubox"
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
-+	select BR2_PACKAGE_JSON_C
- 	help
- 	  This library originates from the OpenWrt project to
- 	  handle the configuration file infrastructure, but can
-@@ -11,3 +13,4 @@ config BR2_PACKAGE_LIBUBOX
+diff --git a/package/gupnp-tools/0001-Remove-Werror-deprecated-declarations.patch b/package/gupnp-tools/0001-Remove-Werror-deprecated-declarations.patch
+new file mode 100644
+index 0000000000..ef76f01f66
+--- /dev/null
++++ b/package/gupnp-tools/0001-Remove-Werror-deprecated-declarations.patch
+@@ -0,0 +1,27 @@
++From cb4ddac12977fd1abd88a1feacbab090d9ad5ecb Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Wed, 3 Dec 2025 20:06:22 +0100
++Subject: [PATCH] Remove -Werror=deprecated-declarations
++
++Upstream: https://gitlab.gnome.org/GNOME/gupnp-tools/-/issues/29
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ meson.build | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index c92a833..64a0513 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -44,7 +44,6 @@ conf.set('HAVE_GTK_SOURCEVIEW', gtksourceview.found())
++ conf.set('GETTEXT_PACKAGE', '"@0@"'.format(meson.project_name()))
++ conf.set('LOCALEDIR', '"@0@"'.format(localedir))
++ cc = meson.get_compiler('c')
++-add_project_arguments(cc.get_supported_arguments('-Werror=deprecated-declarations'), language: 'c')
++ conf.set('GLIB_VERSION_MIN_REQUIRED', 'GLIB_VERSION_@0@'.format(glib_version.underscorify()))
++ conf.set('GLIB_VERSION_MAX_ALLOWED', 'GLIB_VERSION_@0@'.format(glib_version.underscorify()))
++ 
++-- 
++2.47.3
++
+diff --git a/package/gupnp-tools/0001-common-Drop-deprecated-xmlRecoverMemory.patch b/package/gupnp-tools/0001-common-Drop-deprecated-xmlRecoverMemory.patch
+deleted file mode 100644
+index c81d1b01fe..0000000000
+--- a/package/gupnp-tools/0001-common-Drop-deprecated-xmlRecoverMemory.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From f675ac7e0afe67a86f3f1191d3274d6ffbd4e5d7 Mon Sep 17 00:00:00 2001
+-From: Jens Georg <mail@jensge.org>
+-Date: Thu, 3 Aug 2023 23:44:15 +0200
+-Subject: [PATCH] common: Drop deprecated xmlRecoverMemory
+-
+-Fixes #27
+-
+-Upstream: https://gitlab.gnome.org/GNOME/gupnp-tools/-/commit/f675ac7e0afe67a86f3f1191d3274d6ffbd4e5d7
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/common/pretty-print.c | 6 +++++-
+- 1 file changed, 5 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/common/pretty-print.c b/src/common/pretty-print.c
+-index c692664..c8ebc9a 100644
+---- a/src/common/pretty-print.c
+-+++ b/src/common/pretty-print.c
+-@@ -34,7 +34,11 @@ pretty_print_xml (const char *xml)
+-         char *text;
+-         int length;
+- 
+--        doc = xmlRecoverMemory (xml, strlen (xml));
+-+        doc = xmlReadMemory (xml,
+-+                             strlen (xml),
+-+                             NULL,
+-+                             NULL,
+-+                             XML_PARSE_NONET | XML_PARSE_RECOVER);
+- 
+-         if (!doc)
+-                 return NULL;
+--- 
+-GitLab
+-
+diff --git a/package/gupnp-tools/0002-common-Fix-compatibility-with-libxml2-2-12.patch b/package/gupnp-tools/0002-common-Fix-compatibility-with-libxml2-2-12.patch
+deleted file mode 100644
+index c76d440b5d..0000000000
+--- a/package/gupnp-tools/0002-common-Fix-compatibility-with-libxml2-2-12.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From 4e06104df81fba2cda06d4747b33e75f4cade458 Mon Sep 17 00:00:00 2001
+-From: Jens Georg <mail@jensge.org>
+-Date: Fri, 24 Nov 2023 18:12:50 +0100
+-Subject: [PATCH] common: Fix compatibility with libxml2 2.12
+-
+-Fixes #28
+-
+-Upstream: https://gitlab.gnome.org/GNOME/gupnp-tools/-/commit/4e06104df81fba2cda06d4747b33e75f4cade458
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/common/pretty-print.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/common/pretty-print.c b/src/common/pretty-print.c
+-index c8ebc9a..1519cb0 100644
+---- a/src/common/pretty-print.c
+-+++ b/src/common/pretty-print.c
+-@@ -22,6 +22,7 @@
+- 
+- #include "pretty-print.h"
+- 
+-+#include <libxml/globals.h>
+- #include <libxml/xmlreader.h>
+- 
+- #include <string.h>
+--- 
+-GitLab
+-
+diff --git a/package/gupnp-tools/gupnp-tools.hash b/package/gupnp-tools/gupnp-tools.hash
+index 28e2661360..6dc8bd74f2 100644
+--- a/package/gupnp-tools/gupnp-tools.hash
++++ b/package/gupnp-tools/gupnp-tools.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.gnome.org/sources/gupnp-tools/0.12/gupnp-tools-0.12.1.sha256sum:
+-sha256  53cf93123f397e8f8f0b8e9e4364c86a7502a5334f4c0be2e054a824478bd5ba  gupnp-tools-0.12.1.tar.xz
++# Hash from: https://download.gnome.org/sources/gupnp-tools/0.12/gupnp-tools-0.12.2.sha256sum
++sha256  4c92f2d1a3d454ec1f5fb05ef08ca34df9c743af64c8b5965c35884d46cb005c  gupnp-tools-0.12.2.tar.xz
  
- comment "libubox needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-diff --git a/package/libubox/libubox.hash b/package/libubox/libubox.hash
-index eb37d33230..127abf432c 100644
---- a/package/libubox/libubox.hash
-+++ b/package/libubox/libubox.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  df6e1350fd11016ef30242a279cec195d91e6748c11c40e0991593718c46fa52  libubox-3868f47c8f6c6570e62a3cdf8a7f26ffb1a67e6a-git4.tar.gz
-+sha256  c4432d4f902bd0a2974d3fe76620bbb5e04b9d52e55701829aa12507651bc4d9  libubox-ecddb31dc34d89be5c9dc4595a4c58070eb090e4-git4.tar.gz
-diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
-index 00ae2b0595..8710720287 100644
---- a/package/libubox/libubox.mk
-+++ b/package/libubox/libubox.mk
-@@ -4,12 +4,12 @@
- #
+ # Locally computed:
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/gupnp-tools/gupnp-tools.mk b/package/gupnp-tools/gupnp-tools.mk
+index 99fdf54f13..910a157816 100644
+--- a/package/gupnp-tools/gupnp-tools.mk
++++ b/package/gupnp-tools/gupnp-tools.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBUBOX_VERSION = 3868f47c8f6c6570e62a3cdf8a7f26ffb1a67e6a
-+LIBUBOX_VERSION = ecddb31dc34d89be5c9dc4595a4c58070eb090e4
- LIBUBOX_SITE = https://git.openwrt.org/project/libubox.git
- LIBUBOX_SITE_METHOD = git
- LIBUBOX_LICENSE = ISC, BSD-3-Clause
- LIBUBOX_INSTALL_STAGING = YES
--LIBUBOX_DEPENDENCIES = $(if $(BR2_PACKAGE_JSON_C),json-c)
-+LIBUBOX_DEPENDENCIES = json-c
- 
- ifeq ($(BR2_USE_MMU)$(BR2_PACKAGE_LUA_5_1),yy)
- LIBUBOX_DEPENDENCIES += lua
-diff --git a/package/libuci/Config.in b/package/libuci/Config.in
-index f94d7dc391..25c248751c 100644
---- a/package/libuci/Config.in
-+++ b/package/libuci/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBUCI
- 	bool "libuci"
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libubox -> json-c
- 	select BR2_PACKAGE_LIBUBOX
- 	help
- 	  This library originates from the OpenWrt project to
-@@ -14,3 +15,4 @@ config BR2_PACKAGE_LIBUCI
- 
- comment "libuci needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-diff --git a/package/ubus/Config.in b/package/ubus/Config.in
-index 391893e808..21b20abaf3 100644
---- a/package/ubus/Config.in
-+++ b/package/ubus/Config.in
-@@ -4,7 +4,7 @@ comment "ubus needs a toolchain w/ dynamic library"
- 
- config BR2_PACKAGE_UBUS
- 	bool "ubus"
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c, libubox -> json-c
- 	depends on !BR2_STATIC_LIBS # libubox
- 	select BR2_PACKAGE_LIBUBOX
- 	select BR2_PACKAGE_JSON_C
-diff --git a/package/uhttpd/Config.in b/package/uhttpd/Config.in
-index eeb169a96d..30101f983d 100644
---- a/package/uhttpd/Config.in
-+++ b/package/uhttpd/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_UHTTPD
- 	bool "uhttpd"
- 	depends on !BR2_STATIC_LIBS # dlopen()
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c, libubox -> json-c
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_LIBUBOX
- 	select BR2_PACKAGE_JSON_C
-diff --git a/package/uqmi/Config.in b/package/uqmi/Config.in
-index 21f0bd9077..5029a06800 100644
---- a/package/uqmi/Config.in
-+++ b/package/uqmi/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_UQMI
- 	bool "uqmi"
--	depends on !BR2_STATIC_LIBS # libubox
-+	depends on !BR2_STATIC_LIBS # libubox, libubox -> json-c
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
- 	select BR2_PACKAGE_JSON_C
- 	select BR2_PACKAGE_LIBUBOX
-diff --git a/package/ustream-ssl/Config.in b/package/ustream-ssl/Config.in
-index 540e43689f..c328a6ea12 100644
---- a/package/ustream-ssl/Config.in
-+++ b/package/ustream-ssl/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_USTREAM_SSL
- 	bool "ustream-ssl"
--	depends on !BR2_STATIC_LIBS #libubox
-+	depends on !BR2_STATIC_LIBS # libubox
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libubox -> json-c
- 	select BR2_PACKAGE_LIBUBOX
- 	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
- 	help
-@@ -10,3 +11,4 @@ config BR2_PACKAGE_USTREAM_SSL
- 
- comment "ustream-ssl needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ GUPNP_TOOLS_VERSION_MAJOR = 0.12
+-GUPNP_TOOLS_VERSION = $(GUPNP_TOOLS_VERSION_MAJOR).1
++GUPNP_TOOLS_VERSION = $(GUPNP_TOOLS_VERSION_MAJOR).2
+ GUPNP_TOOLS_SOURCE = gupnp-tools-$(GUPNP_TOOLS_VERSION).tar.xz
+ GUPNP_TOOLS_SITE = \
+ 	https://download.gnome.org/sources/gupnp-tools/$(GUPNP_TOOLS_VERSION_MAJOR)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
