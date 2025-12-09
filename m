@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8C54D3B98F
-	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 18:28:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D931FD3B98E
+	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 18:28:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A0D5D40820;
-	Tue,  9 Dec 2025 18:28:29 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DzLtsT30JRvU; Tue,  9 Dec 2025 18:28:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1F8940968
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765304908;
-	bh=3iWOqbyqk0mNAiH/7suTAdgqypW8mWfvkDcSWGyo3JQ=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=bQI2/Jk8mwZeYBgYBBIwYhzbrcASGFnDqPTnS1t7pVGV9cG7Z7x/YNHqBuY/5ZAuf
-	 aHYwfySIJgO+NfuUUNxTW6irvfuFHuxaJXvzggd9/jSM+OFzbhvG90s9Zapl85MioT
-	 aMWHDT75SessQamQOhcYPNV7oWKwsK8GjXV6lz9+ggZfT6s7BHIb6BjvsbH9QuxVXE
-	 25R02o8hatSZFJiotOVz2JvQDftVNrvQ40YAGWi7vuObMpHJDJwrYemCgxbdi0nbaZ
-	 5lRJ2bwolhw3ydOSs/SLz/rn4N7fqcG1vftbUsX17xRIApOBHjwc/UQ4xWoeLeLmsj
-	 EChzHyp3DSYaw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A1F8940968;
-	Tue,  9 Dec 2025 18:28:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3D7822C0
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:28:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DD630608B8
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:28:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AEE94612A4;
+	Tue,  9 Dec 2025 18:28:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o2m0GdXyD5m6 for <buildroot@buildroot.org>;
+ id dRkwddKBHubG; Tue,  9 Dec 2025 18:28:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC41D612B2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1765304909;
+	bh=TaNofCvcdUeQVdRJzTZ7XSYPPRCvUv2FURmSwuW/IcA=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=HQZpeOceU6X7mqEHU9oaxzADU4WyBg10BjYR8TsbIvhLlCk6e49/fYjQhodQm2G2R
+	 m9m4uGWCx8KvYBM5WPKfwOKeGbbZ42n/j9rTrdkCdejlG444w5KW+61hbPNw3Ex3Nu
+	 IeXCECYPBfKPNPxH+QPYhg98TOJWLAINxnjaxio6hPUgpijOoxOo0mTpOeOYBUvICq
+	 LlflQfKY65fs5Hsnh39wC4CWGopwCJ2QR8SJkVRhL9+WPJwgiOaIA63ZrBcdyfA+MC
+	 n6czUMz3zJpU73tC1Grp//T6ioTsmsOo6/8xJZcuE6+eIHGrGZNTAnob0c08I1iWyu
+	 BIL9QEB3axdgQ==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id AC41D612B2;
+	Tue,  9 Dec 2025 18:28:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A1E742C0
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:28:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 73BEC84373
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:28:19 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qIfrFzGGJyYi for <buildroot@buildroot.org>;
  Tue,  9 Dec 2025 18:28:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 938BC608A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B346A84365
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 938BC608A2
+ by smtp1.osuosl.org (Postfix) with ESMTP id B346A84365
  for <buildroot@buildroot.org>; Tue,  9 Dec 2025 18:28:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 83C4C86964; Tue,  9 Dec 2025 18:28:17 +0000 (UTC)
+ id AFBAD86964; Tue,  9 Dec 2025 18:28:17 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 9 Dec 2025 19:24:58 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7d5bd5ecc08841b8dc3866af0fd69229fa08215a
-X-Git-Newrev: b7134215e31c1507d0635e29c6a872d60c11b61e
+X-Git-Oldrev: b822976c6069d5d6296ac61bb848fc3de0900a99
+X-Git-Newrev: a644ea1e2d8c48e84cf9bb770abe71765949c1da
 X-Patchwork-Hint: ignore
-Message-Id: <20251209182817.83C4C86964@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/cutelyst: bump version
- to 3.5.0
+Message-Id: <20251209182817.AFBAD86964@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gupnp-tools: bump
+ version to 0.12.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,107 +77,156 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7134215e31c1507d0635e29c6a872d60c11b61e
+commit: https://git.buildroot.net/buildroot/commit/?id=a644ea1e2d8c48e84cf9bb770abe71765949c1da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes: https://github.com/cutelyst/cutelyst/releases/tag/v3.5.0
-"Last release supporting Qt 5.12"
+Removed two patches which are included in this release and added one
+patch to fix build with libxml 2.15.1.
 
-Bump package to the latest version compatible with Qt5, fixes build with
-cmake 4.
-
-Removed patch which is included in this release:
-https://github.com/cutelyst/cutelyst/commit/da9792f33c553031e639a194117ba70167d62eae
-
-Updated license hash due to relicense as BSD-3-Clause:
-https://github.com/cutelyst/cutelyst/commit/47c28edbbc8d0788db329bf87bf975844bef9b36
+For release notes, see:
+https://gitlab.gnome.org/GNOME/gupnp-tools/-/blob/gupnp-tools-0.12.2/NEWS
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .checkpackageignore                                |  1 -
- ...eLists.txt-don-t-override-CMAKE_EXE_LINKE.patch | 31 ----------------------
- package/cutelyst/cutelyst.hash                     |  4 +--
- package/cutelyst/cutelyst.mk                       |  4 +--
- 4 files changed, 4 insertions(+), 36 deletions(-)
+ ...001-Remove-Werror-deprecated-declarations.patch | 27 ++++++++++++++++++
+ ...1-common-Drop-deprecated-xmlRecoverMemory.patch | 33 ----------------------
+ ...ommon-Fix-compatibility-with-libxml2-2-12.patch | 28 ------------------
+ package/gupnp-tools/gupnp-tools.hash               |  4 +--
+ package/gupnp-tools/gupnp-tools.mk                 |  2 +-
+ 5 files changed, 30 insertions(+), 64 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 2554347bd7..df1a9258f3 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -291,7 +291,6 @@ package/curlftpfs/0001-fix-CURLOPT_INFILESIZE.patch lib_patch.Sob lib_patch.Upst
- package/curlftpfs/0002-free_ftpfs_file-memleak-fix.patch lib_patch.Sob lib_patch.Upstream
- package/curlftpfs/0003-nocache-memleak-fix.patch lib_patch.Sob lib_patch.Upstream
- package/curlftpfs/0004-fix-musl-build-off-t.patch lib_patch.Upstream
--package/cutelyst/0001-server-CMakeLists.txt-don-t-override-CMAKE_EXE_LINKE.patch lib_patch.Upstream
- package/cwiid/0001-wmdemo-fix-linking-by-adding-the-missing-lbluetooth-.patch lib_patch.Upstream
- package/cwiid/0002-configure-make-wmgui-build-optional.patch lib_patch.Upstream
- package/dahdi-tools/0001-no-build-docs.patch lib_patch.Upstream
-diff --git a/package/cutelyst/0001-server-CMakeLists.txt-don-t-override-CMAKE_EXE_LINKE.patch b/package/cutelyst/0001-server-CMakeLists.txt-don-t-override-CMAKE_EXE_LINKE.patch
+diff --git a/package/gupnp-tools/0001-Remove-Werror-deprecated-declarations.patch b/package/gupnp-tools/0001-Remove-Werror-deprecated-declarations.patch
+new file mode 100644
+index 0000000000..ef76f01f66
+--- /dev/null
++++ b/package/gupnp-tools/0001-Remove-Werror-deprecated-declarations.patch
+@@ -0,0 +1,27 @@
++From cb4ddac12977fd1abd88a1feacbab090d9ad5ecb Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Wed, 3 Dec 2025 20:06:22 +0100
++Subject: [PATCH] Remove -Werror=deprecated-declarations
++
++Upstream: https://gitlab.gnome.org/GNOME/gupnp-tools/-/issues/29
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ meson.build | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index c92a833..64a0513 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -44,7 +44,6 @@ conf.set('HAVE_GTK_SOURCEVIEW', gtksourceview.found())
++ conf.set('GETTEXT_PACKAGE', '"@0@"'.format(meson.project_name()))
++ conf.set('LOCALEDIR', '"@0@"'.format(localedir))
++ cc = meson.get_compiler('c')
++-add_project_arguments(cc.get_supported_arguments('-Werror=deprecated-declarations'), language: 'c')
++ conf.set('GLIB_VERSION_MIN_REQUIRED', 'GLIB_VERSION_@0@'.format(glib_version.underscorify()))
++ conf.set('GLIB_VERSION_MAX_ALLOWED', 'GLIB_VERSION_@0@'.format(glib_version.underscorify()))
++ 
++-- 
++2.47.3
++
+diff --git a/package/gupnp-tools/0001-common-Drop-deprecated-xmlRecoverMemory.patch b/package/gupnp-tools/0001-common-Drop-deprecated-xmlRecoverMemory.patch
 deleted file mode 100644
-index 45b1fcd146..0000000000
---- a/package/cutelyst/0001-server-CMakeLists.txt-don-t-override-CMAKE_EXE_LINKE.patch
+index c81d1b01fe..0000000000
+--- a/package/gupnp-tools/0001-common-Drop-deprecated-xmlRecoverMemory.patch
 +++ /dev/null
-@@ -1,31 +0,0 @@
--From c347aeb43775109cbc2824b99cb10b1b3440c191 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 17 May 2021 21:27:11 +0200
--Subject: [PATCH] server/CMakeLists.txt: don't override CMAKE_EXE_LINKER_FLAGS
+@@ -1,33 +0,0 @@
+-From f675ac7e0afe67a86f3f1191d3274d6ffbd4e5d7 Mon Sep 17 00:00:00 2001
+-From: Jens Georg <mail@jensge.org>
+-Date: Thu, 3 Aug 2023 23:44:15 +0200
+-Subject: [PATCH] common: Drop deprecated xmlRecoverMemory
 -
--Don't override CMAKE_EXE_LINKER_FLAGS as this could break the build if
--CMAKE_EXE_LINKER_FLAGS is already set by the user (for example to pass
---latomic)
+-Fixes #27
 -
+-Upstream: https://gitlab.gnome.org/GNOME/gupnp-tools/-/commit/f675ac7e0afe67a86f3f1191d3274d6ffbd4e5d7
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/cutelyst/cutelyst/pull/312]
 ----
-- wsgi/CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
+- src/common/pretty-print.c | 6 +++++-
+- 1 file changed, 5 insertions(+), 1 deletion(-)
 -
--diff --git a/server/CMakeLists.txt b/server/CMakeLists.txt
--index ec5689f7..1ed56859 100644
----- a/wsgi/CMakeLists.txt
--+++ b/wsgi/CMakeLists.txt
--@@ -95,7 +95,7 @@ install(TARGETS Cutelyst${PROJECT_VERSION_MAJOR}Qt${QT_VERSION_MAJOR}Server
--     cxx_generalized_initializers
-- )
-- if (JEMALLOC_FOUND)
---    set(CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS} " -Wl,--no-as-needed")
--+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-as-needed")
--     target_link_libraries(cutelyst-wsgi2 PRIVATE ${JEMALLOC_LIBRARIES})
-- endif()
+-diff --git a/src/common/pretty-print.c b/src/common/pretty-print.c
+-index c692664..c8ebc9a 100644
+---- a/src/common/pretty-print.c
+-+++ b/src/common/pretty-print.c
+-@@ -34,7 +34,11 @@ pretty_print_xml (const char *xml)
+-         char *text;
+-         int length;
 - 
+--        doc = xmlRecoverMemory (xml, strlen (xml));
+-+        doc = xmlReadMemory (xml,
+-+                             strlen (xml),
+-+                             NULL,
+-+                             NULL,
+-+                             XML_PARSE_NONET | XML_PARSE_RECOVER);
+- 
+-         if (!doc)
+-                 return NULL;
 --- 
--2.30.2
+-GitLab
 -
-diff --git a/package/cutelyst/cutelyst.hash b/package/cutelyst/cutelyst.hash
-index d35fdcc890..5103f58138 100644
---- a/package/cutelyst/cutelyst.hash
-+++ b/package/cutelyst/cutelyst.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  b0e3d658a60d68906f7255b78bad64af1aa07cb3b785fbf61629b7355f089baa  cutelyst-2.11.0.tar.gz
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-+sha256  351578d495213c438365f988a70bb8f8c14b1d7dcef79ce0f723dd584388aa77  cutelyst-3.5.0.tar.gz
-+sha256  ca0c629be86a1691ec413a3f9137a1aa62663d5ec30c5867cf4b283f18eb0bd7  COPYING
-diff --git a/package/cutelyst/cutelyst.mk b/package/cutelyst/cutelyst.mk
-index 5313b003ad..9b9e3d4d8a 100644
---- a/package/cutelyst/cutelyst.mk
-+++ b/package/cutelyst/cutelyst.mk
-@@ -4,11 +4,11 @@
- #
+diff --git a/package/gupnp-tools/0002-common-Fix-compatibility-with-libxml2-2-12.patch b/package/gupnp-tools/0002-common-Fix-compatibility-with-libxml2-2-12.patch
+deleted file mode 100644
+index c76d440b5d..0000000000
+--- a/package/gupnp-tools/0002-common-Fix-compatibility-with-libxml2-2-12.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From 4e06104df81fba2cda06d4747b33e75f4cade458 Mon Sep 17 00:00:00 2001
+-From: Jens Georg <mail@jensge.org>
+-Date: Fri, 24 Nov 2023 18:12:50 +0100
+-Subject: [PATCH] common: Fix compatibility with libxml2 2.12
+-
+-Fixes #28
+-
+-Upstream: https://gitlab.gnome.org/GNOME/gupnp-tools/-/commit/4e06104df81fba2cda06d4747b33e75f4cade458
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/common/pretty-print.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/common/pretty-print.c b/src/common/pretty-print.c
+-index c8ebc9a..1519cb0 100644
+---- a/src/common/pretty-print.c
+-+++ b/src/common/pretty-print.c
+-@@ -22,6 +22,7 @@
+- 
+- #include "pretty-print.h"
+- 
+-+#include <libxml/globals.h>
+- #include <libxml/xmlreader.h>
+- 
+- #include <string.h>
+--- 
+-GitLab
+-
+diff --git a/package/gupnp-tools/gupnp-tools.hash b/package/gupnp-tools/gupnp-tools.hash
+index 28e2661360..6dc8bd74f2 100644
+--- a/package/gupnp-tools/gupnp-tools.hash
++++ b/package/gupnp-tools/gupnp-tools.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.gnome.org/sources/gupnp-tools/0.12/gupnp-tools-0.12.1.sha256sum:
+-sha256  53cf93123f397e8f8f0b8e9e4364c86a7502a5334f4c0be2e054a824478bd5ba  gupnp-tools-0.12.1.tar.xz
++# Hash from: https://download.gnome.org/sources/gupnp-tools/0.12/gupnp-tools-0.12.2.sha256sum
++sha256  4c92f2d1a3d454ec1f5fb05ef08ca34df9c743af64c8b5965c35884d46cb005c  gupnp-tools-0.12.2.tar.xz
+ 
+ # Locally computed:
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/gupnp-tools/gupnp-tools.mk b/package/gupnp-tools/gupnp-tools.mk
+index 99fdf54f13..910a157816 100644
+--- a/package/gupnp-tools/gupnp-tools.mk
++++ b/package/gupnp-tools/gupnp-tools.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--CUTELYST_VERSION = 2.11.0
-+CUTELYST_VERSION = 3.5.0
- CUTELYST_SITE = https://github.com/cutelyst/cutelyst/archive/v$(CUTELYST_VERSION)
- CUTELYST_INSTALL_STAGING = YES
- CUTELYST_SUPPORTS_IN_SOURCE_BUILD = NO
--CUTELYST_LICENSE = LGPL-2.1+
-+CUTELYST_LICENSE = BSD-3-Clause
- CUTELYST_LICENSE_FILES = COPYING
- CUTELYST_DEPENDENCIES = qt5base
- 
+ GUPNP_TOOLS_VERSION_MAJOR = 0.12
+-GUPNP_TOOLS_VERSION = $(GUPNP_TOOLS_VERSION_MAJOR).1
++GUPNP_TOOLS_VERSION = $(GUPNP_TOOLS_VERSION_MAJOR).2
+ GUPNP_TOOLS_SOURCE = gupnp-tools-$(GUPNP_TOOLS_VERSION).tar.xz
+ GUPNP_TOOLS_SITE = \
+ 	https://download.gnome.org/sources/gupnp-tools/$(GUPNP_TOOLS_VERSION_MAJOR)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
