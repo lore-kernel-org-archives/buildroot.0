@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA024D4337C
-	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:59:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0326D4337F
+	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 07:59:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A0AE9844A2;
-	Fri, 12 Dec 2025 07:59:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8A282844C7;
+	Fri, 12 Dec 2025 07:59:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oOappwujshVs; Fri, 12 Dec 2025 07:59:38 +0000 (UTC)
+ id 2F8lByW4YCOP; Fri, 12 Dec 2025 07:59:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA56284354
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55E9884459
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765526357;
-	bh=QwLdIh+AcL0t1nIizD4kPEXudRUeV4YO66pJwzDC6iQ=;
+	s=default; t=1765526359;
+	bh=D7bbjnwCvvAiFSOxIOLfnxypfJNQvL8xpdQKL/+7n0Q=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=oX7DPyrJJILHoRbASFJ0dskszwUFSRjPNRHoEGsmXzPlQZqacJZP36gGnwW2J1aR4
-	 9C584LqYiG6SOX4ViGcs0c9oFrhj37RBcB/ZOoOiV9RmErnJNzw0ZIyyngu2aTKVwH
-	 2p3KGzWCmN2i++7X7h/Y4H81rsJTbsn2NLx/nV2lmx1TWIwb9fAufzXNqqa+/wr0lm
-	 jTkltz72pjaySytex1S3cDEoXbPR8E6keMr7C3m9D3ymWkN0LEy4HaYcbu7Da20T0m
-	 PsChKdy9YNPecdddmLyFcGcp2k/PzMwfxLAsjnDRTthQT09Pg+24Cr3Ra/SgOvJPc7
-	 /q2UrOK6d64Eg==
+	b=X/JyJMUcxBB1uvsdQEhJyAGZHHovFrbCmkLq3njsEfPj526LDoaNohONjhs5LUsjD
+	 Om9vCb7+7kHZvpi6OUMuimjXCeUwS3Q3Rp+4i3xF2qJr3b3A37ndvDzoFu154d56fL
+	 5GVffn0o6NEZ+M0YPRM5GD/BSF95SYz4sqElfmIF5CSO/V/SuhJPAfiVTgbkUzyfaS
+	 KwBemh9/cBeL+AoiJRhhQA9wH1eIK9Ug5/+iAgoYnw6ACjUZkdgZj5b6Uy+NrYrR0X
+	 5CEorc55oZqjJCd7k8xMTu0p3SU+EAR6XuXQ7TSTfmU/x38j9weWjPa0gz6q8aTZAx
+	 UHrXD9Dd3olYw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA56284354;
-	Fri, 12 Dec 2025 07:59:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5CB452C1
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:57:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 55E9884459;
+	Fri, 12 Dec 2025 07:59:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 730E5E7
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:57:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ED9DC41195
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 544064113C
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 42hpEy46DrXJ for <buildroot@buildroot.org>;
- Fri, 12 Dec 2025 07:55:48 +0000 (UTC)
+ id mXkU53w2FSyq for <buildroot@buildroot.org>;
+ Fri, 12 Dec 2025 07:55:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 512A14119E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8EA04118E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 512A14119E
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B8EA04118E
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4F901807F9; Fri, 12 Dec 2025 07:55:39 +0000 (UTC)
+ id B7EF985C4C; Fri, 12 Dec 2025 07:55:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 10 Dec 2025 22:52:35 +0100
+Date: Tue, 9 Dec 2025 19:24:58 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9e9fb093804738434f5f429d2ce59546e4eb8147
-X-Git-Newrev: dc69440be9573e3b009a70544bb564746875ced7
+X-Git-Oldrev: b7134215e31c1507d0635e29c6a872d60c11b61e
+X-Git-Newrev: 9b96ce2c80cb970fe282ddf84b1af597fb6e3e84
 X-Patchwork-Hint: ignore
-Message-Id: <20251212075539.4F901807F9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gcr: bump version to 4.4.0.1
+Message-Id: <20251212075538.B7EF985C4C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/doxygen: bump version to 1.15.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,185 +76,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc69440be9573e3b009a70544bb564746875ced7
+commit: https://git.buildroot.net/buildroot/commit/?id=9b96ce2c80cb970fe282ddf84b1af597fb6e3e84
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://gitlab.gnome.org/GNOME/gcr/-/blob/4.4.0.1/NEWS
-
-Removed patch which is included in this release.
-
-Added dependency to libsecret and switched to gtk4.
-
-Added configure options for vapi support which depends on
-gobject-introspection:
-https://gitlab.gnome.org/GNOME/gcr/-/commit/5970a456465b6b6a6a3f4c215e1926c3c3c3f5cb
+Changelog of this host-only package:
+https://www.doxygen.nl/manual/changelog.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .checkpackageignore                                |  1 -
- ...unknown-kw-argument-in-gnome.generate_gir.patch | 64 ----------------------
- package/gcr/Config.in                              |  1 +
- package/gcr/gcr.hash                               |  5 +-
- package/gcr/gcr.mk                                 | 23 ++++----
- 5 files changed, 16 insertions(+), 78 deletions(-)
+ package/doxygen/doxygen.hash | 2 +-
+ package/doxygen/doxygen.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index b902157fae..4d1dcc81a7 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -403,7 +403,6 @@ package/gcc/8.4.0/0001-xtensa-fix-PR-target-91880.patch lib_patch.Upstream
- package/gcc/8.4.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch lib_patch.Upstream
- package/gcc/8.4.0/0003-libsanitizer-Remove-cyclades-from-libsanitizer.patch lib_patch.Upstream
- package/gcc/8.4.0/0004-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
--package/gcr/0001-meson-Fix-unknown-kw-argument-in-gnome.generate_gir.patch lib_patch.Upstream
- package/gdb/14.2/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch lib_patch.Upstream
- package/gdb/14.2/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch lib_patch.Upstream
- package/gdb/14.2/0003-use-asm-sgidefs.h.patch lib_patch.Upstream
-diff --git a/package/gcr/0001-meson-Fix-unknown-kw-argument-in-gnome.generate_gir.patch b/package/gcr/0001-meson-Fix-unknown-kw-argument-in-gnome.generate_gir.patch
-deleted file mode 100644
-index a1d4e1b46f..0000000000
---- a/package/gcr/0001-meson-Fix-unknown-kw-argument-in-gnome.generate_gir.patch
-+++ /dev/null
-@@ -1,64 +0,0 @@
--From b3ca1d02bb0148ca787ac4aead164d7c8ce2c4d8 Mon Sep 17 00:00:00 2001
--From: Jakub Jirutka <jakub@jirutka.cz>
--Date: Wed, 12 Jan 2022 00:24:20 +0100
--Subject: [PATCH] meson: Fix unknown kw argument in gnome.generate_gir
--
--This argument has been removed in Meson 0.61.0:
--
--    gck/meson.build:130:2: ERROR: gnome.generate_gir got unknown keyword arguments "packages"
--
--https://github.com/mesonbuild/meson/commit/f8fc5cb860465718fe7c79a1bf1fe00659f138de:
--
--> The packages argument to gnome.generate_gir was allowed, but never did anything, so stop passing it.
--
--Fixes #89
--
--[aperez@igalia.com: backport from upstream]
--Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
--[yann.morin.1998@free.fr: make it an actual backport]
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-----
-- gck/meson.build | 1 -
-- gcr/meson.build | 1 -
-- ui/meson.build  | 1 -
-- 3 files changed, 3 deletions(-)
--
--diff --git a/gck/meson.build b/gck/meson.build
--index 756b486..a21a1e9 100644
----- a/gck/meson.build
--+++ b/gck/meson.build
--@@ -131,7 +131,6 @@ if get_option('introspection')
--     sources: gck_gir_sources,
--     namespace: 'Gck',
--     nsversion: '@0@'.format(gck_major_version),
---    packages: gck_deps,
--     export_packages: 'gck-@0@'.format(gck_major_version),
--     includes: [ 'GObject-2.0', 'Gio-2.0' ],
--     header: 'gck/gck.h',
--diff --git a/gcr/meson.build b/gcr/meson.build
--index 2233a44..c83641b 100644
----- a/gcr/meson.build
--+++ b/gcr/meson.build
--@@ -190,7 +190,6 @@ if get_option('introspection')
--     sources: [ gcr_base_public_sources, gcr_base_headers ],
--     namespace: 'Gcr',
--     nsversion: '@0@'.format(gcr_major_version),
---    packages: gcr_base_deps,
--     export_packages: 'gcr-base-@0@'.format(gcr_major_version),
--     includes: [
--       'GObject-2.0',
--diff --git a/ui/meson.build b/ui/meson.build
--index e656ea2..32ee057 100644
----- a/ui/meson.build
--+++ b/ui/meson.build
--@@ -152,7 +152,6 @@ if get_option('introspection')
--     export_packages: 'gcr-ui-@0@'.format(gcr_major_version),
--     identifier_prefix: 'Gcr',
--     symbol_prefix: 'gcr',
---    packages: gcr_ui_deps,
--     includes: [
--       'GObject-2.0',
--       'Gio-2.0',
---- 
--2.25.1
--
-diff --git a/package/gcr/Config.in b/package/gcr/Config.in
-index dbc22cf478..751accb723 100644
---- a/package/gcr/Config.in
-+++ b/package/gcr/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_GCR
- 	select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2_DEPENDS # runtime
- 	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_LIBSECRET
- 	select BR2_PACKAGE_P11_KIT
- 	help
- 	  Library for cryptographic UIs and accessing PKCS#11 modules.
-diff --git a/package/gcr/gcr.hash b/package/gcr/gcr.hash
-index f6cc44e97d..1a67849f86 100644
---- a/package/gcr/gcr.hash
-+++ b/package/gcr/gcr.hash
-@@ -1,3 +1,4 @@
--# From https://download.gnome.org/sources/gcr/3.40/gcr-3.40.0.sha256sum
--sha256  b9d3645a5fd953a54285cc64d4fc046736463dbd4dcc25caf5c7b59bed3027f5  gcr-3.40.0.tar.xz
-+# From https://download.gnome.org/sources/gcr/4.4/gcr-4.4.0.1.sha256sum
-+sha256  0c3c341e49f9f4f2532a4884509804190a0c2663e6120360bb298c5d174a8098  gcr-4.4.0.1.tar.xz
-+# Locally computed
- sha256  94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23  COPYING
-diff --git a/package/gcr/gcr.mk b/package/gcr/gcr.mk
-index 3a8c01729f..a3be8ecdf2 100644
---- a/package/gcr/gcr.mk
-+++ b/package/gcr/gcr.mk
-@@ -4,14 +4,15 @@
+diff --git a/package/doxygen/doxygen.hash b/package/doxygen/doxygen.hash
+index ff2fac7b9c..ec46705d29 100644
+--- a/package/doxygen/doxygen.hash
++++ b/package/doxygen/doxygen.hash
+@@ -1,3 +1,3 @@
+ # Computed locally
+-sha256  18173d9edc46d2d116c1f92a95d683ec76b6b4b45b817ac4f245bb1073d00656  doxygen-1.8.18.src.tar.gz
++sha256  a8cafe605867ad475aaf288a3852783076e1df83aabf16488bbfa958062e7440  doxygen-1.15.0.src.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/doxygen/doxygen.mk b/package/doxygen/doxygen.mk
+index b3bcb34097..c31271197d 100644
+--- a/package/doxygen/doxygen.mk
++++ b/package/doxygen/doxygen.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GCR_VERSION_MAJOR = 3.40
--GCR_VERSION = $(GCR_VERSION_MAJOR).0
-+GCR_VERSION_MAJOR = 4.4
-+GCR_VERSION = $(GCR_VERSION_MAJOR).0.1
- GCR_SITE = https://download.gnome.org/sources/gcr/$(GCR_VERSION_MAJOR)
- GCR_SOURCE = gcr-$(GCR_VERSION).tar.xz
- GCR_DEPENDENCIES = \
- 	host-pkgconf \
- 	libgcrypt \
- 	libglib2 \
-+	libsecret \
- 	p11-kit \
- 	$(TARGET_NLS_DEPENDENCIES)
- GCR_INSTALL_STAGING = YES
-@@ -29,19 +30,19 @@ endif
- 
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
- GCR_DEPENDENCIES += gobject-introspection host-libxslt host-vala
--GCR_CONF_OPTS += -Dintrospection=true
-+GCR_CONF_OPTS += -Dintrospection=true -Dvapi=true
- else
--GCR_CONF_OPTS += -Dintrospection=false
-+GCR_CONF_OPTS += -Dintrospection=false -Dvapi=false
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
--GCR_DEPENDENCIES += libgtk3
--GCR_CONF_OPTS += -Dgtk=true
--else ifeq ($(BR2_PACKAGE_LIBGTK3_WAYLAND),y)
--GCR_DEPENDENCIES += libgtk3
--GCR_CONF_OPTS += -Dgtk=true
-+ifeq ($(BR2_PACKAGE_LIBGTK4_X11),y)
-+GCR_DEPENDENCIES += libgtk4
-+GCR_CONF_OPTS += -Dgtk4=true
-+else ifeq ($(BR2_PACKAGE_LIBGTK4_WAYLAND),y)
-+GCR_DEPENDENCIES += libgtk4
-+GCR_CONF_OPTS += -Dgtk4=true
- else
--GCR_CONF_OPTS += -Dgtk=false
-+GCR_CONF_OPTS += -Dgtk4=false
- endif
- 
- $(eval $(meson-package))
+-DOXYGEN_VERSION = 1.8.18
++DOXYGEN_VERSION = 1.15.0
+ DOXYGEN_SOURCE = doxygen-$(DOXYGEN_VERSION).src.tar.gz
+ DOXYGEN_SITE = https://sourceforge.net/projects/doxygen/files/rel-$(DOXYGEN_VERSION)
+ DOXYGEN_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
