@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79C22D3B7F3
-	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 20:48:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48A93D3B7F6
+	for <buildroot@archiver.kernel.org>; Tue,  9 Dec 2025 21:11:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA6F160E5A;
-	Tue,  9 Dec 2025 20:48:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0386140240;
+	Tue,  9 Dec 2025 21:11:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A8lR2Ai0mdD1; Tue,  9 Dec 2025 20:48:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VkAdNazDfJ1H; Tue,  9 Dec 2025 21:11:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C510060C0D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27D0F40250
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765313305;
-	bh=pyuei8th125MAWqON84SGmApXOGZ0EjTCPurWaKN8Zg=;
+	s=default; t=1765314671;
+	bh=RPG1ZkAZel71lbIz1nY6m5sgFvfw3Z7y7I7GV6NXO6Y=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=gh+J8ud2s4qTgHhAkaxXRP/W51fYjwk96cahDJvPwbEUtM+VRaFB+Xl9SQsQYdWxT
-	 B2o6yrt2HTtL8Jsalt0IZwKepXxNIwmbC4gSD/eFxLCb1Kj5GKNd0yjHXGqFQ5NQPt
-	 1fzBmK9nBHzDM/VHi5vin8lVrg/vFW/JsJMN7p93gUJO16zRJdDoKI0xJ/KLqYtxNe
-	 w/LGX6EI6iYBNnG8ZbNdIiA0Kjd/5c/gOJaq8OmThC9Yv3FUmbDRlRY+iqf9xSiqFi
-	 jUpC2cxbrJ+jKXXi4A76dQ0AFy9bgFodtcXEzZp0onatz8VBHvVI15i+YZP5YiHHoK
-	 EcQQlAnWxkNSA==
+	b=JjEQtu+C7z9JocsC349CrFfNJ8j7lZM1VLTlNPTxT26GfDY7jVB/5C+sbRBJKtZns
+	 Ppw0HFgyXaPPDUoqpYr7528s30RKwOTeppkYJnt6BJ2Bf3H/w4raNfew5gaOxSQGVI
+	 /pAl0ixF3kA1gtnKF2u7dOJw9XvxdmkCGxJQbKY3j0MH24fvd7EatK0sthN4Yh2vSJ
+	 9QjQAo8HCmzfQrLgH1c8jcMl1bRDrhgO1Jx0P+jMQYByylnNT80Q3KiuUtrdVWKipu
+	 oCVslyKuSQh6W4k3cFG/ifD2HD7pC4vBWbFppHYOtWVCZsSmMjtz4VsZcMxkzx+ctr
+	 qCjVUq1PNcOlA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C510060C0D;
-	Tue,  9 Dec 2025 20:48:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A400E237
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 20:48:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 27D0F40250;
+	Tue,  9 Dec 2025 21:11:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B7E2E2C0
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 21:11:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 89E6384357
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 20:48:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B5500406DE
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 21:11:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mGjng-r6AKqY for <buildroot@buildroot.org>;
- Tue,  9 Dec 2025 20:48:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id C7AgsTFc5LZe for <buildroot@buildroot.org>;
+ Tue,  9 Dec 2025 21:11:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACA618434C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F00274020A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id ACA618434C
- for <buildroot@buildroot.org>; Tue,  9 Dec 2025 20:48:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F00274020A
+ for <buildroot@buildroot.org>; Tue,  9 Dec 2025 21:11:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9BC388699A; Tue,  9 Dec 2025 20:48:23 +0000 (UTC)
+ id DE6E0869A2; Tue,  9 Dec 2025 21:11:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 8 Dec 2025 19:25:02 +0100
-X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: d61a96788738274f07b2bccbfdc4aa4b6bfeb743
-X-Git-Newrev: 3e19283d9bb285c780d512c08610a1dbdb978a99
+Date: Tue, 9 Dec 2025 22:05:09 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: eb1f160b7a08537fdfeb0800b9240a497f4237ac
+X-Git-Newrev: 4f9600c2f97039b4ad6eb66087a7654805536a76
 X-Patchwork-Hint: ignore
-Message-Id: <20251209204823.9BC388699A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] {linux,
- linux-headers}: bump 6.12.x, 6.6.x, 6.1.x, 5.15.x, 5.10.x, 5.4.x series
+Message-Id: <20251209211108.DE6E0869A2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libseccomp: bump to
+ version 2.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,77 +69,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e19283d9bb285c780d512c08610a1dbdb978a99
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4f9600c2f97039b4ad6eb66087a7654805536a76
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Update the latest kernel releases to:
- - 6.12.58 -> 6.12.61
- - 6.6.116 -> 6.6.119
- - 6.1.158 -> 6.1.159
- - 5.15.196 -> 5.15.197
- - 5.10.246 -> 5.10.247
- - 5.4.301 -> 5.4.302
+For change log, see:
+https://github.com/seccomp/libseccomp/blob/v2.6.0/CHANGELOG
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+This commit also enables LoongArch64 support,
+added in upstream commit:
+https://github.com/seccomp/libseccomp/commit/6966ec77b195ac289ae168c7c5646d59a307f33f
+
+Signed-off-by: Preyas <preyas17@zohomail.in>
+[Julien:
+ - add link to change log
+ - enable loongarch64 support
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- linux/linux.hash                     | 12 ++++++------
- package/linux-headers/Config.in.host | 12 ++++++------
- 2 files changed, 12 insertions(+), 12 deletions(-)
+ package/libseccomp/Config.in       | 1 +
+ package/libseccomp/libseccomp.hash | 4 ++--
+ package/libseccomp/libseccomp.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 372f413a8f..f94e3b257d 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,12 +1,12 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
- sha256  7ca4debc5ca912ebb8a76944a5c118afd5d09e31ef43c494adb14273da29a26e  linux-6.16.12.tar.xz
--sha256  5f1c4c546660a6a81046fdfa6195306bad2c8d17c0d69876dc100a85ad4613ac  linux-6.12.58.tar.xz
--sha256  a9a59742c29be284c205dc87cbe9b065f9688488132c8f5a6057a5539230a51d  linux-6.6.116.tar.xz
--sha256  ad068bfdb604ec0f4f7de385c8e7ab944008aa78a4aeeca94f53206e6726bfda  linux-6.1.158.tar.xz
-+sha256  1a69745105528676f12f29dc2494945d96cb23666dcc5223794abc22415f1735  linux-6.12.61.tar.xz
-+sha256  3da09b980bb404cc28793479bb2d6c636522679215ffa65a04c893575253e5e8  linux-6.6.119.tar.xz
-+sha256  1f207ebe93980829ecc0a18b694816f22b715e9893767731651969a168342b9e  linux-6.1.159.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  83157953598b026fb721c906c60dfdfd8e986f25ecb9910f3504f690e2770e05  linux-5.15.196.tar.xz
--sha256  eb6b76c269d2dc09791638b10b9dcb9d79fd2abd45113a31fc03f68731caa875  linux-5.10.246.tar.xz
--sha256  b7718766d060e6714bbe47004c71c360e844758f42fbf62cbaa5571119527962  linux-5.4.301.tar.xz
-+sha256  fd218df8e2107a4443b6c29fef7f95aad167031e0fbdbc7a858ae8471360668a  linux-5.15.197.tar.xz
-+sha256  70c8b87ba1fcd8bfa663661934dc9bda92d0b5f3c0fc3197bb56399f69d9fe0c  linux-5.10.247.tar.xz
-+sha256  ae6a3207f12aa4d6cfb0fa793ec9da4a6fcdfdcb57d869d63d6b77e3a8c1423d  linux-5.4.302.tar.xz
- # Locally computed
- sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
- sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index effbb8f368..d3a1601503 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -454,12 +454,12 @@ endchoice
+diff --git a/package/libseccomp/Config.in b/package/libseccomp/Config.in
+index 7de91c07c5..18d4a76cb3 100644
+--- a/package/libseccomp/Config.in
++++ b/package/libseccomp/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_aarch64
+ 	default y if BR2_arm || BR2_armeb
++	default y if BR2_loongarch64
+ 	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 	default y if BR2_i386 || BR2_x86_64
+ 	default y if BR2_powerpc64 || BR2_powerpc
+diff --git a/package/libseccomp/libseccomp.hash b/package/libseccomp/libseccomp.hash
+index b80efd68f5..aaadc8424e 100644
+--- a/package/libseccomp/libseccomp.hash
++++ b/package/libseccomp/libseccomp.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/seccomp/libseccomp/releases/tag/v2.5.5
+-sha256  248a2c8a4d9b9858aa6baf52712c34afefcf9c9e94b76dce02c1c9aa25fb3375  libseccomp-2.5.5.tar.gz
++# From https://github.com/seccomp/libseccomp/releases/tag/v2.6.0 (PGP-signed checksum)
++sha256  83b6085232d1588c379dc9b9cae47bb37407cf262e6e74993c61ba72d2a784dc  libseccomp-2.6.0.tar.gz
+ # Locally calculated
+ sha256  102900208eef27b766380135906d431dba87edaa7ec6aa72e6ebd3dd67f3a97b  LICENSE
+diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
+index 10d57bb78c..26585b1887 100644
+--- a/package/libseccomp/libseccomp.mk
++++ b/package/libseccomp/libseccomp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "5.4.301"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.246"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.196"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.158"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.116"	if BR2_KERNEL_HEADERS_6_6
--	default "6.12.58"	if BR2_KERNEL_HEADERS_6_12
-+	default "5.4.302"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.247"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.197"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.159"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.119"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.12.61"	if BR2_KERNEL_HEADERS_6_12
- 	default "6.16.12"	if BR2_KERNEL_HEADERS_6_16
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+-LIBSECCOMP_VERSION = 2.5.5
++LIBSECCOMP_VERSION = 2.6.0
+ LIBSECCOMP_SITE = https://github.com/seccomp/libseccomp/releases/download/v$(LIBSECCOMP_VERSION)
+ LIBSECCOMP_LICENSE = LGPL-2.1
+ LIBSECCOMP_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
