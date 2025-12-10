@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24DF2D3B9AB
-	for <buildroot@archiver.kernel.org>; Wed, 10 Dec 2025 21:49:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48342D3E780
+	for <buildroot@archiver.kernel.org>; Wed, 10 Dec 2025 22:00:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7FB8340C8C;
-	Wed, 10 Dec 2025 21:49:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E52C440DAF;
+	Wed, 10 Dec 2025 22:00:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I1pJmKtw7geO; Wed, 10 Dec 2025 21:49:04 +0000 (UTC)
+ id nSQPsjt-RuWA; Wed, 10 Dec 2025 22:00:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 639F240C8E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E64FB40E02
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765403344;
-	bh=P/J40MgL9n9pzKefF3KgQ6SgiXbHCF0nkDex9qjv/5Y=;
+	s=default; t=1765404036;
+	bh=5O2NlRiLB4YZiHp8NdvbQ6Qxx6gVdqKxHlr9mgxlRLw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=hzKv7tmLaRSRNqL7+/P0sR2PxTgy1Qki8CXDrmHAu5XDdwcvXRy5nfjQgLxn1V7EC
-	 515bcHturEX9CrHczeBCwBtHOtAQHfyoLtaiUmqnlg7kkgrac7GanZrL+LZtDhdW6P
-	 JzBNI+EI7WOt14MpC7Pjo6OuYRij/1yH5/UqfLJELbeB1lhHWl3MxFIjQpK7R00Ycz
-	 1NTviWrUPvMJrJ75JvKZ3Ol84p1EKrDYSV3zb7SkJiXGjvSyJZk7/5bHudx6eNhPp4
-	 RSNOKzMVJU0ACvp92yN6ZF/Dvo9oNsQ3ckYyp2epjUb93EInDOnCSA8AssxJLzIpbR
-	 zKwrU7DKHh8tw==
+	b=E/zIGKjKDRl0o92zMi7cFNpjHfIn98pHm7rbY02pb14hfcYOvBKxSs/gZi4eCWEoA
+	 wsNqVs+7Sxiwjkjk/eaZe03G5+YSBO1w6NYcQ85kp+SQttKYOok9PVYbH2lGgnhtl+
+	 eZuZ6zoAhli7Mr+0m+7fReWTLvysDAziul82V4671Ej3R36IhiHf2ekk19EFdvqhE0
+	 O+/Og+2APlFx4asolCxVaaAkE4jkjfXx8G0dEaUFS1UPsW7ZtzAJNi7G3uybdqgk7z
+	 T59JAbL1eYLilgsEuf3il/kQCnieKL77wmtOiybfA7EW1SDtlNWTE9vz0F0+ZcVDwE
+	 P5pUVQ174klFg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 639F240C8E;
-	Wed, 10 Dec 2025 21:49:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4C84EE7
- for <buildroot@buildroot.org>; Wed, 10 Dec 2025 21:49:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E64FB40E02;
+	Wed, 10 Dec 2025 22:00:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 65950E7
+ for <buildroot@buildroot.org>; Wed, 10 Dec 2025 22:00:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3E94040BA8
- for <buildroot@buildroot.org>; Wed, 10 Dec 2025 21:49:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 57C4E6178C
+ for <buildroot@buildroot.org>; Wed, 10 Dec 2025 22:00:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4wqDLprgz2O8 for <buildroot@buildroot.org>;
- Wed, 10 Dec 2025 21:49:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4qVTC-fxXLBx for <buildroot@buildroot.org>;
+ Wed, 10 Dec 2025 22:00:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A6B0408C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CA016144B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5A6B0408C0
- for <buildroot@buildroot.org>; Wed, 10 Dec 2025 21:49:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6CA016144B
+ for <buildroot@buildroot.org>; Wed, 10 Dec 2025 22:00:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5487686A1D; Wed, 10 Dec 2025 21:49:01 +0000 (UTC)
+ id 5AC0186A2A; Wed, 10 Dec 2025 22:00:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 10 Dec 2025 22:48:23 +0100
+Date: Wed, 10 Dec 2025 22:52:35 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c621515d839b94f2013286683aaf6329e855b08b
-X-Git-Newrev: 9e9fb093804738434f5f429d2ce59546e4eb8147
+X-Git-Oldrev: 9e9fb093804738434f5f429d2ce59546e4eb8147
+X-Git-Newrev: dc69440be9573e3b009a70544bb564746875ced7
 X-Patchwork-Hint: ignore
-Message-Id: <20251210214901.5487686A1D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libubox: bump version
- to git ecddb31dc3
+Message-Id: <20251210220033.5AC0186A2A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gcr: bump version to
+ 4.4.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,145 +77,185 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e9fb093804738434f5f429d2ce59546e4eb8147
+commit: https://git.buildroot.net/buildroot/commit/?id=dc69440be9573e3b009a70544bb564746875ced7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This bump includes patches which add cmake4 compatibility.
+Release notes: https://gitlab.gnome.org/GNOME/gcr/-/blob/4.4.0.1/NEWS
 
-json-c is now a mandatory dependency due to upstream commit:
-https://git.openwrt.org/?p=project/libubox.git;a=commitdiff;h=b7acc8e6fd5e13611ad90a593e98f9589af4009a
+Removed patch which is included in this release.
+
+Added dependency to libsecret and switched to gtk4.
+
+Added configure options for vapi support which depends on
+gobject-introspection:
+https://gitlab.gnome.org/GNOME/gcr/-/commit/5970a456465b6b6a6a3f4c215e1926c3c3c3f5cb
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libubox/Config.in     | 3 +++
- package/libubox/libubox.hash  | 2 +-
- package/libubox/libubox.mk    | 4 ++--
- package/libuci/Config.in      | 2 ++
- package/ubus/Config.in        | 2 +-
- package/uhttpd/Config.in      | 2 +-
- package/uqmi/Config.in        | 2 +-
- package/ustream-ssl/Config.in | 4 +++-
- 8 files changed, 14 insertions(+), 7 deletions(-)
+ .checkpackageignore                                |  1 -
+ ...unknown-kw-argument-in-gnome.generate_gir.patch | 64 ----------------------
+ package/gcr/Config.in                              |  1 +
+ package/gcr/gcr.hash                               |  5 +-
+ package/gcr/gcr.mk                                 | 23 ++++----
+ 5 files changed, 16 insertions(+), 78 deletions(-)
 
-diff --git a/package/libubox/Config.in b/package/libubox/Config.in
-index 1f0b691e13..09d6336706 100644
---- a/package/libubox/Config.in
-+++ b/package/libubox/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_LIBUBOX
- 	bool "libubox"
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
-+	select BR2_PACKAGE_JSON_C
+diff --git a/.checkpackageignore b/.checkpackageignore
+index b902157fae..4d1dcc81a7 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -403,7 +403,6 @@ package/gcc/8.4.0/0001-xtensa-fix-PR-target-91880.patch lib_patch.Upstream
+ package/gcc/8.4.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch lib_patch.Upstream
+ package/gcc/8.4.0/0003-libsanitizer-Remove-cyclades-from-libsanitizer.patch lib_patch.Upstream
+ package/gcc/8.4.0/0004-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+-package/gcr/0001-meson-Fix-unknown-kw-argument-in-gnome.generate_gir.patch lib_patch.Upstream
+ package/gdb/14.2/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch lib_patch.Upstream
+ package/gdb/14.2/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch lib_patch.Upstream
+ package/gdb/14.2/0003-use-asm-sgidefs.h.patch lib_patch.Upstream
+diff --git a/package/gcr/0001-meson-Fix-unknown-kw-argument-in-gnome.generate_gir.patch b/package/gcr/0001-meson-Fix-unknown-kw-argument-in-gnome.generate_gir.patch
+deleted file mode 100644
+index a1d4e1b46f..0000000000
+--- a/package/gcr/0001-meson-Fix-unknown-kw-argument-in-gnome.generate_gir.patch
++++ /dev/null
+@@ -1,64 +0,0 @@
+-From b3ca1d02bb0148ca787ac4aead164d7c8ce2c4d8 Mon Sep 17 00:00:00 2001
+-From: Jakub Jirutka <jakub@jirutka.cz>
+-Date: Wed, 12 Jan 2022 00:24:20 +0100
+-Subject: [PATCH] meson: Fix unknown kw argument in gnome.generate_gir
+-
+-This argument has been removed in Meson 0.61.0:
+-
+-    gck/meson.build:130:2: ERROR: gnome.generate_gir got unknown keyword arguments "packages"
+-
+-https://github.com/mesonbuild/meson/commit/f8fc5cb860465718fe7c79a1bf1fe00659f138de:
+-
+-> The packages argument to gnome.generate_gir was allowed, but never did anything, so stop passing it.
+-
+-Fixes #89
+-
+-[aperez@igalia.com: backport from upstream]
+-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+-[yann.morin.1998@free.fr: make it an actual backport]
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+----
+- gck/meson.build | 1 -
+- gcr/meson.build | 1 -
+- ui/meson.build  | 1 -
+- 3 files changed, 3 deletions(-)
+-
+-diff --git a/gck/meson.build b/gck/meson.build
+-index 756b486..a21a1e9 100644
+---- a/gck/meson.build
+-+++ b/gck/meson.build
+-@@ -131,7 +131,6 @@ if get_option('introspection')
+-     sources: gck_gir_sources,
+-     namespace: 'Gck',
+-     nsversion: '@0@'.format(gck_major_version),
+--    packages: gck_deps,
+-     export_packages: 'gck-@0@'.format(gck_major_version),
+-     includes: [ 'GObject-2.0', 'Gio-2.0' ],
+-     header: 'gck/gck.h',
+-diff --git a/gcr/meson.build b/gcr/meson.build
+-index 2233a44..c83641b 100644
+---- a/gcr/meson.build
+-+++ b/gcr/meson.build
+-@@ -190,7 +190,6 @@ if get_option('introspection')
+-     sources: [ gcr_base_public_sources, gcr_base_headers ],
+-     namespace: 'Gcr',
+-     nsversion: '@0@'.format(gcr_major_version),
+--    packages: gcr_base_deps,
+-     export_packages: 'gcr-base-@0@'.format(gcr_major_version),
+-     includes: [
+-       'GObject-2.0',
+-diff --git a/ui/meson.build b/ui/meson.build
+-index e656ea2..32ee057 100644
+---- a/ui/meson.build
+-+++ b/ui/meson.build
+-@@ -152,7 +152,6 @@ if get_option('introspection')
+-     export_packages: 'gcr-ui-@0@'.format(gcr_major_version),
+-     identifier_prefix: 'Gcr',
+-     symbol_prefix: 'gcr',
+--    packages: gcr_ui_deps,
+-     includes: [
+-       'GObject-2.0',
+-       'Gio-2.0',
+--- 
+-2.25.1
+-
+diff --git a/package/gcr/Config.in b/package/gcr/Config.in
+index dbc22cf478..751accb723 100644
+--- a/package/gcr/Config.in
++++ b/package/gcr/Config.in
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_GCR
+ 	select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2_DEPENDS # runtime
+ 	select BR2_PACKAGE_LIBGCRYPT
+ 	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBSECRET
+ 	select BR2_PACKAGE_P11_KIT
  	help
- 	  This library originates from the OpenWrt project to
- 	  handle the configuration file infrastructure, but can
-@@ -11,3 +13,4 @@ config BR2_PACKAGE_LIBUBOX
- 
- comment "libubox needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-diff --git a/package/libubox/libubox.hash b/package/libubox/libubox.hash
-index eb37d33230..127abf432c 100644
---- a/package/libubox/libubox.hash
-+++ b/package/libubox/libubox.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  df6e1350fd11016ef30242a279cec195d91e6748c11c40e0991593718c46fa52  libubox-3868f47c8f6c6570e62a3cdf8a7f26ffb1a67e6a-git4.tar.gz
-+sha256  c4432d4f902bd0a2974d3fe76620bbb5e04b9d52e55701829aa12507651bc4d9  libubox-ecddb31dc34d89be5c9dc4595a4c58070eb090e4-git4.tar.gz
-diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
-index 00ae2b0595..8710720287 100644
---- a/package/libubox/libubox.mk
-+++ b/package/libubox/libubox.mk
-@@ -4,12 +4,12 @@
+ 	  Library for cryptographic UIs and accessing PKCS#11 modules.
+diff --git a/package/gcr/gcr.hash b/package/gcr/gcr.hash
+index f6cc44e97d..1a67849f86 100644
+--- a/package/gcr/gcr.hash
++++ b/package/gcr/gcr.hash
+@@ -1,3 +1,4 @@
+-# From https://download.gnome.org/sources/gcr/3.40/gcr-3.40.0.sha256sum
+-sha256  b9d3645a5fd953a54285cc64d4fc046736463dbd4dcc25caf5c7b59bed3027f5  gcr-3.40.0.tar.xz
++# From https://download.gnome.org/sources/gcr/4.4/gcr-4.4.0.1.sha256sum
++sha256  0c3c341e49f9f4f2532a4884509804190a0c2663e6120360bb298c5d174a8098  gcr-4.4.0.1.tar.xz
++# Locally computed
+ sha256  94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23  COPYING
+diff --git a/package/gcr/gcr.mk b/package/gcr/gcr.mk
+index 3a8c01729f..a3be8ecdf2 100644
+--- a/package/gcr/gcr.mk
++++ b/package/gcr/gcr.mk
+@@ -4,14 +4,15 @@
  #
  ################################################################################
  
--LIBUBOX_VERSION = 3868f47c8f6c6570e62a3cdf8a7f26ffb1a67e6a
-+LIBUBOX_VERSION = ecddb31dc34d89be5c9dc4595a4c58070eb090e4
- LIBUBOX_SITE = https://git.openwrt.org/project/libubox.git
- LIBUBOX_SITE_METHOD = git
- LIBUBOX_LICENSE = ISC, BSD-3-Clause
- LIBUBOX_INSTALL_STAGING = YES
--LIBUBOX_DEPENDENCIES = $(if $(BR2_PACKAGE_JSON_C),json-c)
-+LIBUBOX_DEPENDENCIES = json-c
+-GCR_VERSION_MAJOR = 3.40
+-GCR_VERSION = $(GCR_VERSION_MAJOR).0
++GCR_VERSION_MAJOR = 4.4
++GCR_VERSION = $(GCR_VERSION_MAJOR).0.1
+ GCR_SITE = https://download.gnome.org/sources/gcr/$(GCR_VERSION_MAJOR)
+ GCR_SOURCE = gcr-$(GCR_VERSION).tar.xz
+ GCR_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	libgcrypt \
+ 	libglib2 \
++	libsecret \
+ 	p11-kit \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ GCR_INSTALL_STAGING = YES
+@@ -29,19 +30,19 @@ endif
  
- ifeq ($(BR2_USE_MMU)$(BR2_PACKAGE_LUA_5_1),yy)
- LIBUBOX_DEPENDENCIES += lua
-diff --git a/package/libuci/Config.in b/package/libuci/Config.in
-index f94d7dc391..25c248751c 100644
---- a/package/libuci/Config.in
-+++ b/package/libuci/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBUCI
- 	bool "libuci"
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libubox -> json-c
- 	select BR2_PACKAGE_LIBUBOX
- 	help
- 	  This library originates from the OpenWrt project to
-@@ -14,3 +15,4 @@ config BR2_PACKAGE_LIBUCI
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+ GCR_DEPENDENCIES += gobject-introspection host-libxslt host-vala
+-GCR_CONF_OPTS += -Dintrospection=true
++GCR_CONF_OPTS += -Dintrospection=true -Dvapi=true
+ else
+-GCR_CONF_OPTS += -Dintrospection=false
++GCR_CONF_OPTS += -Dintrospection=false -Dvapi=false
+ endif
  
- comment "libuci needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-diff --git a/package/ubus/Config.in b/package/ubus/Config.in
-index 391893e808..21b20abaf3 100644
---- a/package/ubus/Config.in
-+++ b/package/ubus/Config.in
-@@ -4,7 +4,7 @@ comment "ubus needs a toolchain w/ dynamic library"
+-ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
+-GCR_DEPENDENCIES += libgtk3
+-GCR_CONF_OPTS += -Dgtk=true
+-else ifeq ($(BR2_PACKAGE_LIBGTK3_WAYLAND),y)
+-GCR_DEPENDENCIES += libgtk3
+-GCR_CONF_OPTS += -Dgtk=true
++ifeq ($(BR2_PACKAGE_LIBGTK4_X11),y)
++GCR_DEPENDENCIES += libgtk4
++GCR_CONF_OPTS += -Dgtk4=true
++else ifeq ($(BR2_PACKAGE_LIBGTK4_WAYLAND),y)
++GCR_DEPENDENCIES += libgtk4
++GCR_CONF_OPTS += -Dgtk4=true
+ else
+-GCR_CONF_OPTS += -Dgtk=false
++GCR_CONF_OPTS += -Dgtk4=false
+ endif
  
- config BR2_PACKAGE_UBUS
- 	bool "ubus"
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c, libubox -> json-c
- 	depends on !BR2_STATIC_LIBS # libubox
- 	select BR2_PACKAGE_LIBUBOX
- 	select BR2_PACKAGE_JSON_C
-diff --git a/package/uhttpd/Config.in b/package/uhttpd/Config.in
-index eeb169a96d..30101f983d 100644
---- a/package/uhttpd/Config.in
-+++ b/package/uhttpd/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_UHTTPD
- 	bool "uhttpd"
- 	depends on !BR2_STATIC_LIBS # dlopen()
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c, libubox -> json-c
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_LIBUBOX
- 	select BR2_PACKAGE_JSON_C
-diff --git a/package/uqmi/Config.in b/package/uqmi/Config.in
-index 21f0bd9077..5029a06800 100644
---- a/package/uqmi/Config.in
-+++ b/package/uqmi/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_UQMI
- 	bool "uqmi"
--	depends on !BR2_STATIC_LIBS # libubox
-+	depends on !BR2_STATIC_LIBS # libubox, libubox -> json-c
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
- 	select BR2_PACKAGE_JSON_C
- 	select BR2_PACKAGE_LIBUBOX
-diff --git a/package/ustream-ssl/Config.in b/package/ustream-ssl/Config.in
-index 540e43689f..c328a6ea12 100644
---- a/package/ustream-ssl/Config.in
-+++ b/package/ustream-ssl/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_USTREAM_SSL
- 	bool "ustream-ssl"
--	depends on !BR2_STATIC_LIBS #libubox
-+	depends on !BR2_STATIC_LIBS # libubox
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libubox -> json-c
- 	select BR2_PACKAGE_LIBUBOX
- 	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
- 	help
-@@ -10,3 +11,4 @@ config BR2_PACKAGE_USTREAM_SSL
- 
- comment "ustream-ssl needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ $(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
