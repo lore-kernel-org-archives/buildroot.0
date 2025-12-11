@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89502D43343
-	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:58:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A16B6D43341
+	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:59:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B42741129;
-	Thu, 11 Dec 2025 19:58:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 79B1F40690;
+	Thu, 11 Dec 2025 19:59:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mIio_UQ8dbsE; Thu, 11 Dec 2025 19:58:50 +0000 (UTC)
+ id 5YEtClv8y-tY; Thu, 11 Dec 2025 19:59:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A2B241128
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 989564110C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765483130;
-	bh=234q3kQCeyNZqBZrcGoQ6MsVdXgwZp2X0xn+VcMBJsw=;
+	s=default; t=1765483142;
+	bh=Li41rh4XTBp6o7rXzuPXL+M+pVhRZSsaxk2G0hkbgCg=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=OhK4sooDBtaDlF2rlr2sbbQ5vCZ7nWYRTY4QlXrIy2OIXPJ59CTOF7qIugZ4Um5IC
-	 2sLlra2FahhS1ARSEAh5Smml2Td0kFjRH2GuQcq/FeKB0I4vGLIaLAt81X7kPFbUqd
-	 ydSvSWMOOfHem+bJEhgG+3oI/lMO36y+l2LJkx5xhFKpvdJIKfWYzLQHyubUp6/6Fd
-	 ECTMeAE6VpDR0J0T7EtV0GmcBJOSDigXRw1JVhbF91azNriQyatc7sr6Bo1pDc8tOR
-	 +SobvGn5Z31Lw0z09Wx78MA/wtH8n4Q12qcjFI8XnmjO0L3dyFVHGTiISjuUCQPlj1
-	 n3Rr8jL5w2SGA==
+	b=KS2kG9jxij83eAcf4BIkMfB2rFCuBP8HEhWcJc4vePKSEHOLqom9H9zM6bEbe+xSD
+	 9yZmu+4szxqDwkSQRhplNEDisNpUAbvXatSwJG+tctJ496XWqcMQv6rFFzVz0OZC4a
+	 oSfbyvjh/OYIfgMg2vggk5I9m2mYnurTrkcQ2hoLcQtiFTdmuZkHo1JSsep+7DgD51
+	 STMJdnIU23kt6gG+KkIdmYfoIJCNFAHYhuuZAJQrbSlNnt+zQMF+zCA/S8Ih7Jh6Pp
+	 YY66cUsSwHeAsmaT3gM9Vv8lqyWbPeTpSP0gY5pRbPwu2CXB921l/LGffou/2vm59s
+	 LKsu/XQPn5TsA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A2B241128;
-	Thu, 11 Dec 2025 19:58:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id E22CB2C6
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:58:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 989564110C;
+	Thu, 11 Dec 2025 19:59:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 041D92C1
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:59:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C86FA40028
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:58:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DE7F381586
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:59:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U8CFoHuDeDVZ for <buildroot@buildroot.org>;
- Thu, 11 Dec 2025 19:58:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E_4DrV45lrna for <buildroot@buildroot.org>;
+ Thu, 11 Dec 2025 19:59:00 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AC4BB40012
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC4BB40012
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C2F6580A93
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2F6580A93
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AC4BB40012
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:58:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C2F6580A93
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:58:59 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b151.dip0.t-ipconnect.de [84.161.177.81])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 4670AA4C391B;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 7B050A4C3938;
  Thu, 11 Dec 2025 20:55:38 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:39350)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vTml7-000000008Hh-13NL;
+ (envelope-from <bernd@kuhls.net>) id 1vTml7-000000008Hh-1NUi;
  Thu, 11 Dec 2025 19:55:29 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 11 Dec 2025 20:55:22 +0100
-Message-ID: <20251211195527.3276900-16-bernd@kuhls.net>
+Date: Thu, 11 Dec 2025 20:55:23 +0100
+Message-ID: <20251211195527.3276900-17-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251211195527.3276900-1-bernd@kuhls.net>
 References: <20251211195527.3276900-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1765482938;
- bh=iCHKF+mv/jgMKXrCBUdfc5OZncoL3JRTrkU99I6RYjI=;
+ bh=sgl9tVQBLyW/bHpbXRkls3+DMk/bseKDeTu1BMCfO8U=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=jJ9Wr4NJ47M/qY0HQo6M4JYJ5TaGzF8QGKUtAKmRdQ9i5zKNwv7yH8DrrIgTHbCYJ
- piE37h+9U1/kiZKxfPJY8IZ0n3iw3PRxvvxOaHxEqbuLlZjZ1KraxzURnTlyFOBy1w
- i8on5mkSpiKBAdsfS4c5uVcfnCLUkTwRACkxzvYLl+zn+8ZBO7OyO9ZYMSxi0TSgqg
- PLjsWkIzyUuj1Gl1mSU8WCLZMquwvSfhGMra2aoq24VFhVvduCxtkKmzQe+V61q/pd
- e1JQAhltSeMYUiNN0K49bFBnhKeqZ+mM9OgpZK0OGiUJWTE8t46c+wC0S8eD/9lVEp
- t/yCj5QUnvL2g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=dVNy03S3txkLp9DtRtbpuB7MtT52M2RFGCER9XKHRTwNEvGjzi4tXeLrtKE16kBUq
+ aWjWVNqCdyv/VRTRSILbeFUNwBxlRzaCkAxElW+SLX/BJjUTfXUMUseQEbo5YeX5mn
+ QnOwfDtBkd1+Qjmvo7PY1Zbs83TFRKGM0ekX0gT8MdhodvR5PV5pzvozOCgdmyGZ9K
+ hJf76rxkh0hVsIVcVJKVIIxgizifYnUUTewJiVNZrWnbXXmEnEE+LcqUWuolovGiNh
+ qBVp6JVn3b49LogZGzV6UmNNhBIGGPipcreJHHv68MpDAlUGeHMuigb0pjVYRxkgTe
+ vahdoQuU3T9pg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=jJ9Wr4NJ
-Subject: [Buildroot] [PATCH/next 16/21] package/python-google-auth: bump
- version to 2.43.0
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=dVNy03S3
+Subject: [Buildroot] [PATCH/next 17/21]
+ package/python-googleapis-common-protos: bump version to 1.72.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,42 +106,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/googleapis/google-auth-library-python/blob/v2.43.0/CHANGELOG.md
+https://github.com/googleapis/google-cloud-python/blob/main/packages/googleapis-common-protos/CHANGELOG.md
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-google-auth/python-google-auth.hash | 4 ++--
- package/python-google-auth/python-google-auth.mk   | 4 ++--
+ .../python-googleapis-common-protos.hash                      | 4 ++--
+ .../python-googleapis-common-protos.mk                        | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-google-auth/python-google-auth.hash b/package/python-google-auth/python-google-auth.hash
-index 37641a7a90..17ca9ddd61 100644
---- a/package/python-google-auth/python-google-auth.hash
-+++ b/package/python-google-auth/python-google-auth.hash
+diff --git a/package/python-googleapis-common-protos/python-googleapis-common-protos.hash b/package/python-googleapis-common-protos/python-googleapis-common-protos.hash
+index a00b871bb8..682ea22690 100644
+--- a/package/python-googleapis-common-protos/python-googleapis-common-protos.hash
++++ b/package/python-googleapis-common-protos/python-googleapis-common-protos.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/google-auth/json
--md5  cf398efdf51cd3885eef521198a202a5  google_auth-2.41.1.tar.gz
--sha256  b76b7b1f9e61f0cb7e88870d14f6a94aeef248959ef6992670efee37709cbfd2  google_auth-2.41.1.tar.gz
-+md5  43aef15e30f2646226add26c54256302  google_auth-2.43.0.tar.gz
-+sha256  88228eee5fc21b62a1b5fe773ca15e67778cb07dc8363adcb4a8827b52d81483  google_auth-2.43.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/googleapis-common-protos/json
+-md5  fca59b82ad99d5dc1da6a94e5ec6e819  googleapis_common_protos-1.70.0.tar.gz
+-sha256  0e1b44e0ea153e6594f9f394fef15193a68aaaea2d843f83e2742717ca753257  googleapis_common_protos-1.70.0.tar.gz
++md5  58ddbf8920c529b542af9be18101fe61  googleapis_common_protos-1.72.0.tar.gz
++sha256  e55a601c1b32b52d7a3e65f43563e2aa61bcd737998ee672ac9b951cd49319f5  googleapis_common_protos-1.72.0.tar.gz
  # Locally computed sha256 checksums
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/python-google-auth/python-google-auth.mk b/package/python-google-auth/python-google-auth.mk
-index e649569b37..53e5900856 100644
---- a/package/python-google-auth/python-google-auth.mk
-+++ b/package/python-google-auth/python-google-auth.mk
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-googleapis-common-protos/python-googleapis-common-protos.mk b/package/python-googleapis-common-protos/python-googleapis-common-protos.mk
+index 6afd1ea740..e72a7b45de 100644
+--- a/package/python-googleapis-common-protos/python-googleapis-common-protos.mk
++++ b/package/python-googleapis-common-protos/python-googleapis-common-protos.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_GOOGLE_AUTH_VERSION = 2.41.1
-+PYTHON_GOOGLE_AUTH_VERSION = 2.43.0
- PYTHON_GOOGLE_AUTH_SOURCE = google_auth-$(PYTHON_GOOGLE_AUTH_VERSION).tar.gz
--PYTHON_GOOGLE_AUTH_SITE = https://files.pythonhosted.org/packages/a8/af/5129ce5b2f9688d2fa49b463e544972a7c82b0fdb50980dafee92e121d9f
-+PYTHON_GOOGLE_AUTH_SITE = https://files.pythonhosted.org/packages/ff/ef/66d14cf0e01b08d2d51ffc3c20410c4e134a1548fc246a6081eae585a4fe
- PYTHON_GOOGLE_AUTH_SETUP_TYPE = setuptools
- PYTHON_GOOGLE_AUTH_LICENSE = Apache-2.0
- PYTHON_GOOGLE_AUTH_LICENSE_FILES = LICENSE
+-PYTHON_GOOGLEAPIS_COMMON_PROTOS_VERSION = 1.70.0
++PYTHON_GOOGLEAPIS_COMMON_PROTOS_VERSION = 1.72.0
+ PYTHON_GOOGLEAPIS_COMMON_PROTOS_SOURCE = googleapis_common_protos-$(PYTHON_GOOGLEAPIS_COMMON_PROTOS_VERSION).tar.gz
+-PYTHON_GOOGLEAPIS_COMMON_PROTOS_SITE = https://files.pythonhosted.org/packages/39/24/33db22342cf4a2ea27c9955e6713140fedd51e8b141b5ce5260897020f1a
++PYTHON_GOOGLEAPIS_COMMON_PROTOS_SITE = https://files.pythonhosted.org/packages/e5/7b/adfd75544c415c487b33061fe7ae526165241c1ea133f9a9125a56b39fd8
+ PYTHON_GOOGLEAPIS_COMMON_PROTOS_SETUP_TYPE = setuptools
+ PYTHON_GOOGLEAPIS_COMMON_PROTOS_LICENSE = Apache-2.0
+ PYTHON_GOOGLEAPIS_COMMON_PROTOS_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
