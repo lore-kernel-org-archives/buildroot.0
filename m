@@ -4,61 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3633D4335B
-	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 22:30:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BD2CD4335D
+	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 22:47:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C224E8104C;
-	Thu, 11 Dec 2025 22:30:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3E07B80E6B;
+	Thu, 11 Dec 2025 22:47:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OmkcNLnxxqpj; Thu, 11 Dec 2025 22:30:07 +0000 (UTC)
+ id s8O_Hd2Bwhc1; Thu, 11 Dec 2025 22:47:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E18448104F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46FEE81EB5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765492207;
-	bh=IWOaJ2XsMvcVl510l9M0vK8iEXWjpMJV9lWQVJ5E8zE=;
+	s=default; t=1765493222;
+	bh=3R+0kzLjYV/tVCoYJIty+zciT76JnBo07fDxchiqhFQ=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=pTnzNqnYCGrq6n2cpE7gi6lE9YjVXkPAADM6AWnN8vx58t50YYXiWaVpVQDppm3PO
-	 s6xl/mT1YR4DbsK2bMi42xfKZQIpk/ZMoRJfn61iXIcB2yKavgl4btpht2l+sZEP2K
-	 IMoNUn3do7dsEEMR+sWnG0sa6XiNmfFrYUJTJca0eBXN/CLSaUj4PgdrBhiL08hqA5
-	 OXsdDZsxW+1mWshRbLjMuvadzaaU7D7f0RPKTrqd6p0rd4zpUZ3obHizg+LbHK5H+b
-	 +sAiI37kCtxAFRArNcASkzveuKZ8zgHmELpHeSQuGzyPzhI2qPAG3jEBFgxzquQIo8
-	 M73FVM0TKsUHA==
+	b=QP8J74u8BbKbbSf8gQ8Rh4mFAl2WS1n6YlJcGkXNPxpfHU9HWcRYctze8hrNXxXlX
+	 go/5znDj3KNIQ1BrcNCRKdRFFC6VRdRswlgA7ZpzqpAMwSMkvfK2N7mctxRtPbUtp7
+	 k7/l3qn3QUvpI6h8ssWR6yk7RipweDX5tuhSqIB0u35EJSKqWHbdkjf0XXU6NQM+8V
+	 sL8P0HJzHzVRASPi6sWmZCAYrKFgWeCqp1XDKXkHR0Z+ZrCf2Myi8w4+F7guBXsqA1
+	 1VOOI6Susds9fqhBjqRyOaxxbljPLidt99EY1Z2RjjhgcKacbWkf6zdfqvSsHnPrZv
+	 mYER/+JNAJygw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E18448104F;
-	Thu, 11 Dec 2025 22:30:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D47692C1
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 22:30:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 46FEE81EB5;
+	Thu, 11 Dec 2025 22:47:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D093A2C6
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 22:47:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C6C7260793
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 22:30:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B64F74070C
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 22:46:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ekELN6g6iKC5 for <buildroot@buildroot.org>;
- Thu, 11 Dec 2025 22:30:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5ZsJZNHygfXu for <buildroot@buildroot.org>;
+ Thu, 11 Dec 2025 22:46:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0249C60754
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01A2940799
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0249C60754
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 22:30:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 01A2940799
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 22:46:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E74A786C2F; Thu, 11 Dec 2025 22:30:02 +0000 (UTC)
+ id E4D0286C58; Thu, 11 Dec 2025 22:46:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 11 Dec 2025 23:14:14 +0100
+Date: Thu, 11 Dec 2025 23:46:12 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e73101a0c3de59bd81a6d57a9313df8ac5c7f8a0
-X-Git-Newrev: 974b5ce907e4b14571e528afccd00e55dc21ac3e
+X-Git-Oldrev: b0aa7e5a23895627e28cbcd33f0b998c59023148
+X-Git-Newrev: 08d71521d3da98939ce29dc0c673a21c8dc9277f
 X-Patchwork-Hint: ignore
-Message-Id: <20251211223002.E74A786C2F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-urllib3: bump to version
- 2.6.2
+Message-Id: <20251211224658.E4D0286C58@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2025.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,50 +75,151 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=974b5ce907e4b14571e528afccd00e55dc21ac3e
+commit: https://git.buildroot.net/buildroot/commit/?id=08d71521d3da98939ce29dc0c673a21c8dc9277f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes a regression in the 2.6.x series:
-
-- Fixed HTTPResponse.read_chunked() to properly handle leftover data in the
-  decoder's buffer when reading compressed chunked responses
-
-https://github.com/urllib3/urllib3/releases/tag/2.6.2
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-urllib3/python-urllib3.hash | 4 ++--
- package/python-urllib3/python-urllib3.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ CHANGES                    | 15 +++++++++++++++
+ Makefile                   |  4 ++--
+ docs/website/download.html | 18 ++++++++++--------
+ docs/website/news.html     | 18 ++++++++++++++++++
+ support/misc/Vagrantfile   |  2 +-
+ 5 files changed, 46 insertions(+), 11 deletions(-)
 
-diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
-index 9376221040..76fe4e5fc9 100644
---- a/package/python-urllib3/python-urllib3.hash
-+++ b/package/python-urllib3/python-urllib3.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/urllib3/json
--md5  52150787074f43057a0e691c7ebe00d8  urllib3-2.6.1.tar.gz
--sha256  5379eb6e1aba4088bae84f8242960017ec8d8e3decf30480b3a1abdaa9671a3f  urllib3-2.6.1.tar.gz
-+md5  838e0ffee00ec870a3ba6727a7832ab8  urllib3-2.6.2.tar.gz
-+sha256  016f9c98bb7e98085cb2b4b17b87d2c702975664e4f060c6532e64d1c1a5e797  urllib3-2.6.2.tar.gz
- # Locally computed sha256 checksums
- sha256  130e3a64d5fdd5d096a752694634a7d9df284469de86e5732100268041e3d686  LICENSE.txt
-diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
-index 5b68dea6bc..d57473566b 100644
---- a/package/python-urllib3/python-urllib3.mk
-+++ b/package/python-urllib3/python-urllib3.mk
-@@ -4,9 +4,9 @@
- #
+diff --git a/CHANGES b/CHANGES
+index 6b3dc3c21c..56267752c8 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,18 @@
++2025.11, released December 11th, 2025
++
++	Fixes all over the tree.
++
++	linux: Default to 6.18 for runtime kernel and kernel headers,
++	drop the now EOL 5.4.x series.
++
++	Updated/fixed packages: apache, audit, cryptodev-linux,
++	dmraid, ficl, glibc, go, intel-mediadriver, intel-vpl-gpu-rt,
++	kbd, libcap, libdbi, libgit2, libpng, libtirpc, libxslt,
++	lugaru, mosh, pigz, podman, python-fonttools, python-urllib3,
++	python3, racehound, rdesktop, rtl8188eu, softhsm, sqlite,
++	strace, unbound, unzip, xapp_xkbutils,
++	xdriver_xf86-video-intel, xl2tp, xserver_xorg-server, xwayland
++
+ 2025.11-rc2, released November 30th, 2025
+ 
+ 	Fixes all over the tree.
+diff --git a/Makefile b/Makefile
+index 499284c256..4145574db0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2025.11-rc2
++export BR2_VERSION := 2025.11
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1764530000
++BR2_VERSION_EPOCH = 1765493000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 1414631429..d1d92c8e6b 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -16,6 +16,7 @@
+           <th>Latest release date</th>
+           <th colspan="2">Downloads</td>
+         </tr>
++<!--
+         <tr>
+           <th>Candidate</th>
+           <th>2025.11.x</th>
+@@ -42,30 +43,31 @@
+             <a href="/downloads/buildroot-2025.11-rc2.tar.xz.sign">[PGP sig]</a>
+           </td>
+         </tr>
++-->
+         <tr>
+           <th>Stable</th>
+-          <th>2025.08.x</th>
+-          <td>December 2025</td>
++          <th>2025.11.x</th>
++          <td>March 2026</td>
+           <td>
+-            2025.08.3<br/>
+-            <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.08.3/CHANGES">
++            2025.11<br/>
++            <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.11/CHANGES">
+               Changelog
+             </a>
+           </td>
+           <td>2025-12-11</td>
+           <td>
+-            <a href="/downloads/buildroot-2025.08.3.tar.gz">
++            <a href="/downloads/buildroot-2025.11.tar.gz">
+               <img src="images/zip.png" width="24" alt="">
+               .tar.gz
+             </a><br/>
+-            <a href="/downloads/buildroot-2025.08.3.tar.gz.sign">[PGP sig]</a>
++            <a href="/downloads/buildroot-2025.11.tar.gz.sign">[PGP sig]</a>
+           </td>
+           <td>
+-            <a href="/downloads/buildroot-2025.08.3.tar.xz">
++            <a href="/downloads/buildroot-2025.11.tar.xz">
+               <img src="images/package.png" width="24" alt="">
+               .tar.xz
+             </a><br/>
+-            <a href="/downloads/buildroot-2025.08.3.tar.xz.sign">[PGP sig]</a>
++            <a href="/downloads/buildroot-2025.11.tar.xz.sign">[PGP sig]</a>
+           </td>
+         <tr>
+           <th>Long-term support</th>
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 71f9283daf..d8d83e92a8 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,24 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2025.11 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>11 December 2025</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The stable 2025.11 release is out - Thanks to everyone
++	  contributing and testing the release candidates. See the
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.11/CHANGES">CHANGES</a>
++	  file for more details
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2025.11.tar.xz">2025.11 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index 3ad813f700..fe2cf3b156 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PYTHON_URLLIB3_VERSION = 2.6.1
-+PYTHON_URLLIB3_VERSION = 2.6.2
- PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
--PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/5e/1d/0f3a93cca1ac5e8287842ed4eebbd0f7a991315089b1a0b01c7788aa7b63
-+PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/1e/24/a2a2ed9addd907787d7aa0355ba36a6cadf1768b934c652ea78acbd59dcd
- PYTHON_URLLIB3_LICENSE = MIT
- PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
- PYTHON_URLLIB3_CPE_ID_VENDOR = python
+ # Buildroot version to use
+-RELEASE='2025.08'
++RELEASE='2025.11'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
