@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7646D43341
-	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:28:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74035D43343
+	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:28:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9C1F6410C0;
-	Thu, 11 Dec 2025 19:28:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4A1338246F;
+	Thu, 11 Dec 2025 19:28:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q6HSd3lzKHWR; Thu, 11 Dec 2025 19:28:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M03y1jDL93wm; Thu, 11 Dec 2025 19:28:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3221D410B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64B768266A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765481285;
-	bh=dbVWJUWRFWOZ9tzyWAiVK+KGBPow5MahwBaw+ABCAwU=;
+	s=default; t=1765481286;
+	bh=BN6PLEDBxSpw40dSkcRdHKjzAqQOHLtuTwTMGDtkcyw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=DaU38Wi82mzqbRm8SnjQ0aESBLYbMC6H8TxWxrYguXIYfiVEtnXes5HLM9Pge54kc
-	 M8iurcP+ZVnWKhjM3UvtS3npf89spGD4FkOHdCNsNjHg5zgsyF0k6FGoQHLOLn/qSb
-	 uW9Hlfhq1VeJpiNkOuqWls/8BgQEZmcYDB6qW0SqeWh+iPfZPP/IMRMdekllwlQyC4
-	 2hW8F4YeHVOaBv/Mg1ku2WjlYhqZ7pPp43UT7yyQUSw7WIbdkMmdbBhKbfOUubEXxB
-	 0FxfKlPM4Y79oF3RNWyJMnP41T0SZIlnWPuxtE9MXRkOmPLXh0yeNYfGkT1mucZ4Ui
-	 y1MMoHG2ImJKQ==
+	b=hEJ/bdFD/lS9dSqHbg2fROA3edldsi1eJzLdGaRDuMxczvzRvIlBKX2lp7WZs0bYi
+	 EODrsrZAxFriS3udlPb3KyGJMunk1jZmiZCieLgl33zA8e694KV2B6elaEcbzmiTV6
+	 jysDj9yh7wyzLU7VmOWgqzQNGCMyp1vN8hYKjE+2ovM7j/jNt9BDEcajIRSxosDZcE
+	 vZcfObcM2VUGKekU/S18lexWYY842reU7A3Rzc22WNTaOpXQ1Bgj0OGGxSVvVX9vVg
+	 z8OebqyZau3Lc9ea8ycCfJrWhmt8Vf7bkp2tbvinhGorB2PPuXG4YXtC5duPD0wfg7
+	 FdeR2AprZOCXw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3221D410B8;
-	Thu, 11 Dec 2025 19:28:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 64B768266A;
+	Thu, 11 Dec 2025 19:28:06 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5D2B2E7
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:55 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 6CA2C2C1
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6BB144005C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 85E6B4008B
  for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B0dWPEQIx5yd for <buildroot@buildroot.org>;
+ id UAFFRk0KNYWY for <buildroot@buildroot.org>;
  Thu, 11 Dec 2025 19:27:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E3A4400E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D98240100
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2E3A4400E3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3D98240100
  for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2DD92838CC; Thu, 11 Dec 2025 19:27:47 +0000 (UTC)
+ id 3D34586B47; Thu, 11 Dec 2025 19:27:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Dec 2025 10:22:17 +0100
+Date: Thu, 11 Dec 2025 10:22:21 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 03bc288c6b7f59eb583be73f2df19da4886f8bc9
-X-Git-Newrev: 10fee753bb30d056143eb1856fc8a6db167cb7ef
+X-Git-Oldrev: 0161403b868aef1fd03ffb3924e66fa598c91b3e
+X-Git-Newrev: 6829a555b3b1265299e6489e7215ca02abcd84ab
 X-Patchwork-Hint: ignore
-Message-Id: <20251211192747.2DD92838CC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- support/scripts/cve-check: don't fail with unknown CVE
+Message-Id: <20251211192747.3D34586B47@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/rdesktop: fix
+ build error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,67 +77,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10fee753bb30d056143eb1856fc8a6db167cb7ef
+commit: https://git.buildroot.net/buildroot/commit/?id=6829a555b3b1265299e6489e7215ca02abcd84ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-The NVD database has CVE entries that are not present but may be
-referenced in other security trackers.
+Fixes:
+https://autobuild.buildroot.net/results/8ad/8ad5d33f726fe57910a70df7c8f40a9568c2dfa7/
 
-For instance the CVE-2024-12455 is documented in the Debian security
-tracker [1]. However, the NVD page is empty [2] and this entry is not
-present in the NVD database mirror.
-
-The following command would make the script fail:
-
-```
-echo '{
-  "vulnerabilities": [
-    {
-      "id": "CVE-2024-12455"
-    }
-  ]
-}' | support/scripts/cve-check --enrich-only
-```
-
-No CVEs present in Buildroot ignored CVEs are affected. But when
-enriching an SBOM with legitimate CVE not present on NVD, the script
-will fail.
-
-This patch change the behavior to just log to stderr unknown CVEs
-instead of making the script fail.
-
-[1] https://security-tracker.debian.org/tracker/CVE-2024-12455
-[2] https://nvd.nist.gov/vuln/detail/CVE-2024-12455
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-[Peter: Tweak warning message]
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit fa7fac09854b753cbce26298dd07622e65b1c4f0)
+(cherry picked from commit 7bd818a06726b3bde02282bb9ae382a8e3af93be)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/scripts/cve-check | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ .../0002-use-correct-modulus-and-exponent.patch    | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/support/scripts/cve-check b/support/scripts/cve-check
-index a72547ab38..ff14e4b238 100755
---- a/support/scripts/cve-check
-+++ b/support/scripts/cve-check
-@@ -271,10 +271,13 @@ def enrich_vulnerabilities(nvd_path: Path, sbom):
-         if vuln_id is None or not vuln_id.upper().startswith("CVE-"):
-             continue
- 
--        cve = cvecheck.CVE.read_nvd_entry(nvd_path, vuln["id"])
-+        cve = cvecheck.CVE.read_nvd_entry(nvd_path, vuln_id)
- 
--        vulnerability = nvd_cve_to_cdx_vulnerability(cve.nvd_cve)
-+        if cve is None:
-+            print(f"Warning: '{vuln_id}' doesn't exist in NVD database.", file=sys.stderr)
-+            continue
- 
-+        vulnerability = nvd_cve_to_cdx_vulnerability(cve.nvd_cve)
-         vuln_append_or_update_affects_if_exists(vulnerabilities, vulnerability)
- 
- 
+diff --git a/package/rdesktop/0002-use-correct-modulus-and-exponent.patch b/package/rdesktop/0002-use-correct-modulus-and-exponent.patch
+new file mode 100644
+index 0000000000..f6989d5777
+--- /dev/null
++++ b/package/rdesktop/0002-use-correct-modulus-and-exponent.patch
+@@ -0,0 +1,29 @@
++From 53ba87dc174175e98332e22355ad8662c02880d6 Mon Sep 17 00:00:00 2001
++From: Markus Beth <markus.beth@zkrd.de>
++Date: Mon, 2 Dec 2019 11:22:13 +0100
++Subject: [PATCH] use correct modulus and exponent in rdssl_rkey_get_exp_mod
++
++Upstream: https://github.com/rdesktop/rdesktop/commit/53ba87dc174175e98332e22355ad8662c02880d6
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ ssl.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/ssl.c b/ssl.c
++index 930c7f94..0681a890 100644
++--- a/ssl.c
+++++ b/ssl.c
++@@ -307,10 +307,10 @@ rdssl_rkey_get_exp_mod(RDSSL_RKEY * rkey, uint8 * exponent, uint32 max_exp_len,
++ {
++ 	size_t outlen;
++ 
++-	outlen = (mpz_sizeinbase(modulus, 2) + 7) / 8;
+++	outlen = (mpz_sizeinbase(rkey->n, 2) + 7) / 8;
++ 	if (outlen > max_mod_len)
++ 		return 1;
++-	outlen = (mpz_sizeinbase(exponent, 2) + 7) / 8;
+++	outlen = (mpz_sizeinbase(rkey->e, 2) + 7) / 8;
++ 	if (outlen > max_exp_len)
++ 		return 1;
++ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
