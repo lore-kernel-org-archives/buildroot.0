@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6A7AD43342
-	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:30:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB499D43343
+	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:30:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7CB3541121;
-	Thu, 11 Dec 2025 19:30:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9153F410C3;
+	Thu, 11 Dec 2025 19:30:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7BJAvp_OAeb8; Thu, 11 Dec 2025 19:30:01 +0000 (UTC)
+ id iNFUiBLxFVZv; Thu, 11 Dec 2025 19:30:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D54E54110E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 879934110B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765481400;
-	bh=AU4Z51D4HxcYKCWQUXHUutjzjqNU1JPcjOv5cIdJytQ=;
+	s=default; t=1765481404;
+	bh=okeuxtp+enGgP5/aAVJtZUi0ZQZ6wXx7R/jCCowMM/w=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=a/DVZxrKqE9CSnbr8vFX7BGLbp2nRX8Pn/VVVgxG/A7+Hs0VfY07ugLQ6qb4S1hmi
-	 W2fxqzJnsX3J57iDmb7HzLx57eAoZikFVU2WM5I47RdWE1K2RAPeBiKPnqpSLyJ/Sr
-	 X80pdl4nGQpQxKLoQuVJpqX28XIDS+DMaK7xTLmK2t3a4GZ3r0gOws55spwcYJX883
-	 RE81KPa9T/c2InYuQUhZZ+tfzxKxonJ9F8fwJCYU1tf2kWXBjzg5zP2MS7eZ2QuxaT
-	 dG9Gtc3HYiMmSES/EEi6PuzetGu20C6jzGrIL4YTLVb8ZE07oLCBvUlkEZh5/HQncE
-	 rZxyCCUz4y3KA==
+	b=AsQD5y2CYxVtqTHUizrX7YeLA6xqxTPeKjuhxiZHQi2cbSMCo+ou4n3u+ZrO9eAWq
+	 WhOyeupOLpqALd19nNSek3+U9rpiFC1C5rawTcVYpNL6FsyTjP6s54X4C/QOP44P0J
+	 59004GiXed6nlO0weS3lRZP67Eog/5gblPBN2TgohLst6m4wd9lBTURFpRmmI8dEf5
+	 rV+Rf5pbm8KiyvCVbH5Hr1aQC7IHzTbOlCKcurXwXPg+wKNjHNG/XIFEN1DHcg8PJN
+	 LfNxojIUcUJVmpeoMniNpB2SAz4kPcMmkXN/l79NsjMKnfQOd72MFwz/nPWPGI7I71
+	 f/x3ktGyoj4kg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D54E54110E;
-	Thu, 11 Dec 2025 19:30:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1CB052EC
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 879934110B;
+	Thu, 11 Dec 2025 19:30:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 47A872E9
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0C85260592
+ by smtp1.osuosl.org (Postfix) with ESMTP id 54BE880D2A
  for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dmPKtHW3xgG1 for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZiEAsahUynbi for <buildroot@buildroot.org>;
  Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3193460614
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 068AB80C56
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3193460614
+ by smtp1.osuosl.org (Postfix) with ESMTP id 068AB80C56
  for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 251CA86BE8; Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
+ id 03D2B86BF1; Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Dec 2025 10:56:26 +0100
+Date: Thu, 11 Dec 2025 10:56:17 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: 192719df0e4901114f30a9b097bb9bf69fc8b665
-X-Git-Newrev: 2e7569be2e82db039cb3e7e8d72d5ca43e1f4b36
+X-Git-Oldrev: 67cdf2495f21564c596a1c49f3698c0215fdd04b
+X-Git-Newrev: 83f3a7799ea0fce43b523627c0ec3c7ecfa08c98
 X-Patchwork-Hint: ignore
-Message-Id: <20251211192954.251CA86BE8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/xwayland:
- security bump to version 24.1.9
+Message-Id: <20251211192954.03D2B86BF1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/python3: security
+ bump version to 3.13.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,95 +77,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e7569be2e82db039cb3e7e8d72d5ca43e1f4b36
+commit: https://git.buildroot.net/buildroot/commit/?id=83f3a7799ea0fce43b523627c0ec3c7ecfa08c98
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-Fixes the following security issues:
+For release notes of this bugfix release, see [1].
+While the release notes [1] does not mention any security fixes,
+the more detailed change log at [2] has a security section:
 
-1) CVE-2025-62229: Use-after-free in XPresentNotify structures creation
+- gh-139700: "Check consistency of the zip64 end of central directory
+  record." refers to CVE-2025-8291 [3],
+- gh-136065: "Fix quadratic complexity in os.path.expandvars()."
+  refers to CVE-2025-6075 [4],
+- gh-119342: "Fix a potential memory denial of service in the
+  plistlib module." refers to CVE-2025-13837 [5].
 
-    Using the X11 Present extension, when processing and adding the
-    notifications after presenting a pixmap, if an error occurs, a dangling
-    pointer may be left in the error code path of the function causing a
-    use-after-free when eventually destroying the notification structures
-    later.
+Fixes:
+- [3], [4] and [5].
 
-    Introduced in: Xorg 1.15
-    Fixed in: xorg-server-21.1.19 and xwayland-24.1.9
-    Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/5a4286b1
-    Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative.
+[1] https://www.python.org/downloads/release/python-31310/
+[2] https://docs.python.org/release/3.13.10/whatsnew/changelog.html#security
+[3] https://www.cve.org/CVERecord?id=CVE-2025-8291
+[4] https://www.cve.org/CVERecord?id=CVE-2025-6075
+[5] https://www.cve.org/CVERecord?id=CVE-2025-13837
 
-2) CVE-2025-62230: Use-after-free in Xkb client resource removal
-
-    When removing the Xkb resources for a client, the function
-    XkbRemoveResourceClient() will free the XkbInterest data associated
-    with the device, but not the resource associated with it.
-
-    As a result, when the client terminates, the resource delete function
-    triggers a use-after-free.
-
-    Introduced in: X11R6
-    Fixed in: xorg-server-21.1.19 and xwayland-24.1.9
-    Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/99790a2c
-         https://gitlab.freedesktop.org/xorg/xserver/-/commit/10c94238
-    Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative.
-
-3) CVE-2025-62231: Value overflow in Xkb extension XkbSetCompatMap()
-
-    The XkbCompatMap structure stores some of its values using an unsigned
-    short, but fails to check whether the sum of the input data might
-    overflow the maximum unsigned short value.
-
-    Introduced in: X11R6
-    Fixed in: xorg-server-21.1.19 and xwayland-24.1.9
-    Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/475d9f49
-    Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative.
-
-https://lists.x.org/archives/xorg-announce/2025-October/003635.html
-
-Changelog:
-https://lists.x.org/archives/xorg/2025-October/062148.html
-
-Also update the COPYING hash for a change of copyright year.
-
-Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-[Peter: Mark as security bump, extend commit message, fix COPYING hash]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e11cac64a27d3be4a9cb7f1313276e6f386bb6e8)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien: add info in commit log about CVEs]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 9ae99d19b92aa922ab38cfc083944602d54e4eeb)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/x11r7/xwayland/xwayland.hash | 8 ++++----
- package/x11r7/xwayland/xwayland.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python3/python3.hash | 6 +++---
+ package/python3/python3.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
-index 6cbbea8af5..0d1df29b43 100644
---- a/package/x11r7/xwayland/xwayland.hash
-+++ b/package/x11r7/xwayland/xwayland.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg/2025-June/062066.html
--sha256  c8908d57c8ed9ceb8293c16ba7ad5af522efaf1ba7e51f9e4cf3c0774d199907  xwayland-24.1.8.tar.xz
--sha512  b6dcc87f5c4d880cb23216518171a704c2a501803ac2efd9d01760895d755a617cd82313c6516f27a888b0581c64d74e3f8db5c238e1ae0d13da6cc1a547c02f  xwayland-24.1.6.tar.xz
-+# From https://lists.x.org/archives/xorg/2025-October/062148.html
-+sha256  f297af27a84508db9b80d1cbbcc69c3801da38eb64c72f3b5b50f582459afdd0  xwayland-24.1.9.tar.xz
-+sha512  7438a572651dc77c1fd749879abccdc9a245c7b75143668d5561a8e99d41063f042a8eb3f9b931a2a12be1fc3cb9d197eee6794d0702a19e56c20f55acb35a26  xwayland-24.1.9.tar.xz
- 
- # Locally calculated
--sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-+sha256  abbb7969df55e399e91104ded4d0a20a1b67de7c01138e63d61b7ed4f81fec0d  COPYING
-diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
-index e3b6727c19..59d607fb5b 100644
---- a/package/x11r7/xwayland/xwayland.mk
-+++ b/package/x11r7/xwayland/xwayland.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index d1a8f3780f..778dca3b69 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
+@@ -1,5 +1,5 @@
+-# From https://www.python.org/downloads/release/python-3139/
+-md5  516aabdf3de01eeefb6de1aacf9df810  Python-3.13.9.tar.xz
++# From https://www.python.org/downloads/release/python-31310/
++md5  5ada33c7f08d5d2df881657bdb8e848d  Python-3.13.10.tar.xz
+ # Locally computed
+-sha256  ed5ef34cda36cfa2f3a340f07cac7e7814f91c7f3c411f6d3562323a866c5c66  Python-3.13.9.tar.xz
++sha256  bc673c04375a1a3f0808c27ba8f0411ab811ad390a8740318ccb9c60fad8fd77  Python-3.13.10.tar.xz
+ sha256  78b12c3a81360b357002334f0e70ea0e92eebf7a9b358805c03c48484945f3bb  LICENSE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 7aad14a8ca..6200b8af4e 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--XWAYLAND_VERSION = 24.1.8
-+XWAYLAND_VERSION = 24.1.9
- XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
- XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XWAYLAND_LICENSE = MIT
+ PYTHON3_VERSION_MAJOR = 3.13
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).9
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).10
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
