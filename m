@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9394FD43345
-	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:30:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB4A4D43341
+	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:30:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3D7F5411A8;
-	Thu, 11 Dec 2025 19:30:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BF21A408F0;
+	Thu, 11 Dec 2025 19:30:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o2ATlTWXsuvU; Thu, 11 Dec 2025 19:30:35 +0000 (UTC)
+ id tUXHtHQr-itH; Thu, 11 Dec 2025 19:30:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0DC2340592
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EB284111A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765481428;
-	bh=uoftKKbCKNEu0PU/xHwmOhx4510TUbFkjQqtVnP+7j8=;
+	s=default; t=1765481430;
+	bh=jXTC47spWoKkCk5Rn2hW2Y1bLo3FsySuPiV2WJ1x0Tk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=h9zvPZZCpfUuhi6IgF+82X/vUORZpEqXCzR/2lRf9ePXTv9/D+AA5HSfYA6bomo83
-	 Ia9K4Kn7gHjfB+smrBdiazazK3Nfb/5UyQAj8fajpj/5R09ylooPPj1gYjheSSfm+a
-	 CmaGcDAMji3fbO5hmW/trAKDFpkMoMWbO5gcRiBy9/bh0jlepff941uH5fGfr/oWt8
-	 hbvILHsrGgtFnfzfRqJR5bvxr3sCL7hNbakj/wFAa3oe4/8V4Ze/NvOP7YjyCTDMfS
-	 rQI4dANT7Vz2dbjIzCikshpYsVMKrxbhQ3UKhqyjyPKGzlLsMCFvu2sb+lrZ9IEBOn
-	 2RqNIyqnSV3Eg==
+	b=fqDBeHcZSgQNVtDteZMQKGVxkSdK0r7OMkh+M9N+EjagNuvreKwXsC4H98DCUsfFm
+	 k1cbwiNeX9YPewV9BIirWPGBg/cVgieufsuOR9kPbswZXX/0lx9U/DHwLUKcs1tQlX
+	 xBh2Kk4c+t3KcoO/N6gFugsra+0wROFpYz8YOZ5D5mSEKa4SDTpuK0KWIjquF3Q8z5
+	 zb7IFda3BxJWZNgO99uaMHNQ1DP293kN+kulXXOVmSOq9i02/TpkqyYWYFarJRzYv4
+	 n9a3s+6QumGUtoGu4wE683SytmN1W5Hz/VAF0AsO67mwNcn9XilFzfx2L19GXroWuO
+	 WntYOxAkKlX1Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0DC2340592;
-	Thu, 11 Dec 2025 19:30:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7EB284111A;
+	Thu, 11 Dec 2025 19:30:30 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 019FCE7
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:30:06 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 106742C1
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:30:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E7FDB80D67
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 82A6F80C56
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GUrjihjEH3oG for <buildroot@buildroot.org>;
- Thu, 11 Dec 2025 19:29:56 +0000 (UTC)
+ id f7b_rVvJNhl5 for <buildroot@buildroot.org>;
+ Thu, 11 Dec 2025 19:29:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2CE880E43
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C48880DF4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B2CE880E43
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6C48880DF4
  for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B234881898; Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
+ id 6B9E886BE2; Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Dec 2025 10:57:03 +0100
+Date: Thu, 11 Dec 2025 10:56:45 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: 8a405b4e2ed8e0e74b77ae1214c9ac4c870caacb
-X-Git-Newrev: 83a77ac5564c5a38f79bc1e41f07eac918aefbdc
+X-Git-Oldrev: 8162a09cfede8d76cb2587d6ba0301c1e3c9abce
+X-Git-Newrev: 05f367ee24ad1f6b4e4e1ff6311bc9e284fc2839
 X-Patchwork-Hint: ignore
-Message-Id: <20251211192954.B234881898@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/rdesktop: fix
- build error
+Message-Id: <20251211192954.6B9E886BE2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/ficl: update SITE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,55 +76,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83a77ac5564c5a38f79bc1e41f07eac918aefbdc
+commit: https://git.buildroot.net/buildroot/commit/?id=05f367ee24ad1f6b4e4e1ff6311bc9e284fc2839
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
+Upstream moved the tarball to another folder:
+https://sourceforge.net/p/ficl/news/2025/07/ficl4-is-retiring/
+and also retired the package.
+
+This patch just fixes the download problem.
+CC'ing Francois to ask whether the package should be removed until a new
+version 3.x is released.
+
 Fixes:
-https://autobuild.buildroot.net/results/8ad/8ad5d33f726fe57910a70df7c8f40a9568c2dfa7/
+https://autobuild.buildroot.net/results/125/125fa1c0a3b37b4d09389a49640b90121838c665/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7bd818a06726b3bde02282bb9ae382a8e3af93be)
+(cherry picked from commit f2b5cdf5a3b84612de3e51b210fd31c5152b057f)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../0002-use-correct-modulus-and-exponent.patch    | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ package/ficl/ficl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rdesktop/0002-use-correct-modulus-and-exponent.patch b/package/rdesktop/0002-use-correct-modulus-and-exponent.patch
-new file mode 100644
-index 0000000000..f6989d5777
---- /dev/null
-+++ b/package/rdesktop/0002-use-correct-modulus-and-exponent.patch
-@@ -0,0 +1,29 @@
-+From 53ba87dc174175e98332e22355ad8662c02880d6 Mon Sep 17 00:00:00 2001
-+From: Markus Beth <markus.beth@zkrd.de>
-+Date: Mon, 2 Dec 2019 11:22:13 +0100
-+Subject: [PATCH] use correct modulus and exponent in rdssl_rkey_get_exp_mod
-+
-+Upstream: https://github.com/rdesktop/rdesktop/commit/53ba87dc174175e98332e22355ad8662c02880d6
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ ssl.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/ssl.c b/ssl.c
-+index 930c7f94..0681a890 100644
-+--- a/ssl.c
-++++ b/ssl.c
-+@@ -307,10 +307,10 @@ rdssl_rkey_get_exp_mod(RDSSL_RKEY * rkey, uint8 * exponent, uint32 max_exp_len,
-+ {
-+ 	size_t outlen;
-+ 
-+-	outlen = (mpz_sizeinbase(modulus, 2) + 7) / 8;
-++	outlen = (mpz_sizeinbase(rkey->n, 2) + 7) / 8;
-+ 	if (outlen > max_mod_len)
-+ 		return 1;
-+-	outlen = (mpz_sizeinbase(exponent, 2) + 7) / 8;
-++	outlen = (mpz_sizeinbase(rkey->e, 2) + 7) / 8;
-+ 	if (outlen > max_exp_len)
-+ 		return 1;
-+ 
+diff --git a/package/ficl/ficl.mk b/package/ficl/ficl.mk
+index af900fa2cf..c0698a3433 100644
+--- a/package/ficl/ficl.mk
++++ b/package/ficl/ficl.mk
+@@ -6,7 +6,7 @@
+ 
+ FICL_VERSION_MAJOR = 4.1
+ FICL_VERSION = $(FICL_VERSION_MAJOR).0
+-FICL_SITE = http://downloads.sourceforge.net/project/ficl/ficl-all/ficl$(FICL_VERSION_MAJOR)
++FICL_SITE = https://sourceforge.net/projects/ficl/files/OldFiles/Ficl4%20%28retired%29
+ FICL_LICENSE = BSD-2-Clause
+ FICL_LICENSE_FILES = ReadMe.txt
+ FICL_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
