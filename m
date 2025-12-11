@@ -4,80 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E0A9D43341
-	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:31:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92E40D43343
+	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:31:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DAEAA41000;
-	Thu, 11 Dec 2025 19:31:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 65EE640E0B;
+	Thu, 11 Dec 2025 19:31:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T7GjdmN9MP1w; Thu, 11 Dec 2025 19:31:40 +0000 (UTC)
+ id jf7sY099uYMt; Thu, 11 Dec 2025 19:31:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96AB740E0B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BC8F40FD8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765481500;
-	bh=y+LaF8YCKewJWsO/phQi9GtHpg1odMm4veRAqJppIqA=;
+	s=default; t=1765481503;
+	bh=uDs+VqeC88YhX5m4lcBAVpT1VhyGW/2Q429vXWvl3J8=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=A5Q0DrDl7wYiER87Ukla29HURd6vdW8FcAGYA/HIzQUYxcMzsWZuUbB42mk/n0J8f
-	 Y8Cx0K1ZMjIKVQeIVx5py6ESAjOR4AqeyGzwsGu/F+q+ojCVsgmCqp81jyuBmRtYs/
-	 lO0cO9H7JIezxLaOrSqU1QMXxg/CTyVV1iU5DOn9YNzGocyVstLqP7lD5JfjudC05a
-	 U10j9ib37EWbLPqG4X/oijOpODUfDExtEcGbCDqVxeVz/Xvwp7pyr/d7+ou4Tm1QV2
-	 ADp6MUVysNXqKiw4sN5FaZ0RSNqXbzWp1K5I9AZtgHjOzlPEJKBJn8VGE0B/R8FfLC
-	 UpdfofxK2P/mQ==
+	b=NYsq6jp1fvRxp6shwkLKtpD9vtinLGA16kNKyICOeK0xOfx6+o7QHwQSNlVs4Krjs
+	 RMbjkcPdCJm3ULqtZQwGpZQV+I64pPBuwU737VG1kpaBZEEydEsTbvTbg+3b383W0c
+	 9dCUH5Ea/WXkK34a4moJfMBSRYtlj2tchP1jkOhXqABznmE9lxU/INpF+aefSYxunM
+	 gf+z5hGzaFI46Pnc3VwADmRROUPMQla/xnL58LqCy+87lvRb5Xb6rx27u5AeM5Lx1U
+	 1qQCH+9OCG+LGRYpjZ0iPXXYlOA8QWfSR98HWZeK3BasfpgxwSTWGaBUI6VxzpAlkg
+	 7OswYOT0J5OqA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 96AB740E0B;
-	Thu, 11 Dec 2025 19:31:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id BADB52C1
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:31:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8BC8F40FD8;
+	Thu, 11 Dec 2025 19:31:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D4DA0E7
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:31:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AD02640029
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:31:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C762D83C71
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:31:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lGngVBivIBcB for <buildroot@buildroot.org>;
- Thu, 11 Dec 2025 19:31:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cafENW6LfO6f for <buildroot@buildroot.org>;
+ Thu, 11 Dec 2025 19:31:41 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9FA1240012
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FA1240012
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BF14283C92
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF14283C92
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9FA1240012
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:31:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BF14283C92
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:31:40 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 8DA39B979EEF; Thu, 11 Dec 2025 20:31:35 +0100 (CET)
-To: Bernd Kuhls <bernd@kuhls.net>
+ with ESMTPSA id C491FB979EEF; Thu, 11 Dec 2025 20:31:38 +0100 (CET)
+To: Thomas Perale <thomas.perale@mind.be>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Thu, 11 Dec 2025 20:31:33 +0100
-Message-ID: <20251211193133.1100092-1-arnout@rnout.be>
+Date: Thu, 11 Dec 2025 20:31:36 +0100
+Message-ID: <20251211193136.1100152-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251207122324.3523992-1-bernd@kuhls.net>
-References: <20251207122324.3523992-1-bernd@kuhls.net>
+In-Reply-To: <20251207092820.109515-2-thomas.perale@mind.be>
+References: <20251207092820.109515-2-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1765481495; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1765481499; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=n8FjeRH7zRMwddCPD61t4VN660Q2ZMrdmeWxdxCfkpA=;
- b=IdlCO1QNHO1n3GWusc3l0l74/Tu5tqBVWj1MG3I4FCGv2KP4ugeWNSuRfhVz3+/xUf9guf
- izP3PL/GSh0I/dzRVk2zuB4CD7TDg3X5rr0zWUON8XlhZoKirb9jyg2Xi/jwLdvisOlv0m
- jyONHh4uSIOVzLy7AZ2QxuEK76Zch7HltHAftncjA8ZQ9sDGMGKkOTCcLCAgWgHhP+2tcI
- AbSVjUbGNokQzJeOIJ9NIk5sI1PgE5FyYp1sgPvzsxyUvco8e6Rk2R5UODosPmd47rvxrS
- OhSAnTQHwHBug0chZXEvqXTdbAgKQiFj59BaVmnmZhCWrnWcZt4WLgSiW0omqQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=XjFumT+2Z8+4/WdxxKCO7Mc00ZJCNKYvxNsaOhmQRxU=;
+ b=Wsu/agjd0QLrz+lENqVpVaReEg7zreX8Vb/6/JRuL3rb/PcmAIzizlMn031kK4kfODeuCj
+ 4bAL1BOYUTBC6D2dQPTAxwPkUneGNBHv9fkdFZMJSrEpciCXe8vBMgd6hnzClTq3Wj+H8i
+ 6CufWXuHo5T3WABvrcEOrVROQe5dvvUoZgQJyrBFqSsDCMjIG38sMx0/eD5mTIL4Ft1MAJ
+ pHWSWBWUAu/sjuTRix8yo2klQheYEOWNPTN3adne39w13E/qB2EnuzL6iR/ZrMF+2skGcg
+ YyGa9KkSM1SZdACe+dlsscs4Rj0mArjN63PD7d9HkH8ntkuSqLrIp9SH+qkBBA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=IdlCO1QN
-Subject: Re: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-intel:
- update SITE
+ header.a=rsa-sha256 header.s=dkim header.b=Wsu/agjd
+Subject: Re: [Buildroot] [PATCH 2/2] support/scripts/cve-check: don't fail
+ with unknown CVE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,32 +97,65 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Updated URL of git server, tarball hash is unchanged.
+> The NVD database has CVE entries that are not present but may be
+> referenced in other security trackers.
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> For instance the CVE-2024-12455 is documented in the Debian security
+> tracker [1]. However, the NVD page is empty [2] and this entry is not
+> present in the NVD database mirror.
+> 
+> The following command would make the script fail:
+> 
+> ```
+> echo '{
+>   "vulnerabilities": [
+>     {
+>       "id": "CVE-2024-12455"
+>     }
+>   ]
+> }' | support/scripts/cve-check --enrich-only
+> ```
+> 
+> No CVEs present in Buildroot ignored CVEs are affected. But when
+> enriching an SBOM with legitimate CVE not present on NVD, the script
+> will fail.
+> 
+> This patch change the behavior to just log to stderr unknown CVEs
+> instead of making the script fail.
+> 
+> [1] https://security-tracker.debian.org/tracker/CVE-2024-12455
+> [2] https://nvd.nist.gov/vuln/detail/CVE-2024-12455
+> 
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x and 2025.08.x. Thanks
 
 > ---
->  .../x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  support/scripts/cve-check | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-> index 879abdd74d..ddd66598a6 100644
-> --- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-> +++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-> @@ -5,7 +5,8 @@
->  ################################################################################
+> diff --git a/support/scripts/cve-check b/support/scripts/cve-check
+> index a72547ab38..71f93afe64 100755
+> --- a/support/scripts/cve-check
+> +++ b/support/scripts/cve-check
+> @@ -271,10 +271,13 @@ def enrich_vulnerabilities(nvd_path: Path, sbom):
+>          if vuln_id is None or not vuln_id.upper().startswith("CVE-"):
+>              continue
 >  
->  XDRIVER_XF86_VIDEO_INTEL_VERSION = 31486f40f8e8f8923ca0799aea84b58799754564
-> -XDRIVER_XF86_VIDEO_INTEL_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-intel
-> +XDRIVER_XF86_VIDEO_INTEL_SITE = https://gitlab.freedesktop.org/xorg/driver/xf86-video-intel.git
-> +XDRIVER_XF86_VIDEO_INTEL_SITE_METHOD = git
->  XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
->  XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
->  XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
+> -        cve = cvecheck.CVE.read_nvd_entry(nvd_path, vuln["id"])
+> +        cve = cvecheck.CVE.read_nvd_entry(nvd_path, vuln_id)
+>  
+> -        vulnerability = nvd_cve_to_cdx_vulnerability(cve.nvd_cve)
+> +        if cve is None:
+> +            print(f"The CVE: '{vuln_id}' doesn't exist on NVD database.", file=sys.stderr)
+> +            continue
+>  
+> +        vulnerability = nvd_cve_to_cdx_vulnerability(cve.nvd_cve)
+>          vuln_append_or_update_affects_if_exists(vulnerabilities, vulnerability)
+>  
+>  
 > -- 
-> 2.47.3
+> 2.52.0
 > 
 > _______________________________________________
 > buildroot mailing list
