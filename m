@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AB5AD43343
-	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:27:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67CB7D43342
+	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:27:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE78940876;
-	Thu, 11 Dec 2025 19:27:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 269814102A;
+	Thu, 11 Dec 2025 19:27:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2DGkPJIXZBag; Thu, 11 Dec 2025 19:27:57 +0000 (UTC)
+ id FR09sROqAJal; Thu, 11 Dec 2025 19:27:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3B4240FD5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A78240FDE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765481277;
-	bh=tET4RCDRyfCG7aD5sc6QiORMJdBwtbZkEI0cKE7rgss=;
+	s=default; t=1765481278;
+	bh=eTW120q2cLIv4OQTLlnp2j118qYikEOoIyzcvQYGkiw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=njqxDjX0aYf+aRx9PsDUGyhOI+j2aW9v1nqyo/r6Tu40Z1+gzs8aqb3ISDsxaJ8KY
-	 k7EnznD6N1tMRCZxdBnHs/tjH9k8kCNwKM+gSPKCTrVfOo84Mm9G4D1Ln5WvgI8avD
-	 ln0NjgRO4ZvbJvh0oJV1U4Dcjou2yLwFlZ9zfauVHnFpdurtLJeOd7amu0RzIU8SQT
-	 ypRRqSWQbyTLijcTcYkr1w5lly1SdJuj82SIt6uTegeX75XfAEG6No8dXM2P24i5QY
-	 4JJwfV0JdX4bC48uLWG6wsX+f4Gm8p3WtA6toV2VnBPmyhNU9NqyAoxQw75vs3Tp6r
-	 m8yPWE7HpBIjg==
+	b=W2Qmg+NCw54D+wrCoaPWbvh66kKomcqwV47GkzsDICuswXYIuch3s5xn5UzmJs/aZ
+	 kdVkgBmHEZULexecoUgPrZRDDYFismMrqChfNvNm+PveuTQ/nmx71zuhpGDLdR5dL8
+	 XNteKGfDBgUC9H7BxqPORsPSe4+nZqsWXVyLKbQGwlu3KX9pk9HyR4wMpy2gJx57sK
+	 2milRr6LJ2Vh0anGN8LAw7VvLnsPWkDxN0nKJXNYbQemEwWVJhibkyhTv1njeDKr48
+	 7jlnLN7QcWk/qxPgSfDrGNHuuubRb5pYxzl5j4DQYCT92VAEEZjyhtmlBbnTcYkm7q
+	 zx/ZqUd3XSlMQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E3B4240FD5;
-	Thu, 11 Dec 2025 19:27:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A78240FDE;
+	Thu, 11 Dec 2025 19:27:58 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B49FE7
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:49 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4CC3F2C1
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 44D7B4005C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5F7F340073
  for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id re4sd_OmDWeP for <buildroot@buildroot.org>;
+ id EPpDCpSTqDRc for <buildroot@buildroot.org>;
  Thu, 11 Dec 2025 19:27:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4B6B4007F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDAB74008B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E4B6B4007F
+ by smtp2.osuosl.org (Postfix) with ESMTP id EDAB74008B
  for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E431086B47; Thu, 11 Dec 2025 19:27:46 +0000 (UTC)
+ id ED397838CC; Thu, 11 Dec 2025 19:27:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Dec 2025 10:22:00 +0100
+Date: Thu, 11 Dec 2025 10:22:02 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 35cd5eb4abff18924da64caf20358b1b36c8435d
-X-Git-Newrev: 14d874c73d817eabc150098eaf76cfeffc37b5c3
+X-Git-Oldrev: 14d874c73d817eabc150098eaf76cfeffc37b5c3
+X-Git-Newrev: e79d30584b54954719e8d39c0cda353de9286bcc
 X-Patchwork-Hint: ignore
-Message-Id: <20251211192746.E431086B47@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- package/x11r7/xdriver_xf86-video-intel: update SITE
+Message-Id: <20251211192746.ED397838CC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/ficl: update SITE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,33 +76,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14d874c73d817eabc150098eaf76cfeffc37b5c3
+commit: https://git.buildroot.net/buildroot/commit/?id=e79d30584b54954719e8d39c0cda353de9286bcc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Updated URL of git server, tarball hash is unchanged.
+Upstream moved the tarball to another folder:
+https://sourceforge.net/p/ficl/news/2025/07/ficl4-is-retiring/
+and also retired the package.
+
+This patch just fixes the download problem.
+CC'ing Francois to ask whether the package should be removed until a new
+version 3.x is released.
+
+Fixes:
+https://autobuild.buildroot.net/results/125/125fa1c0a3b37b4d09389a49640b90121838c665/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8c2947eaa5e34c4407a3fa142fbaa051d0e141ec)
+(cherry picked from commit f2b5cdf5a3b84612de3e51b210fd31c5152b057f)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/ficl/ficl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index 879abdd74d..ddd66598a6 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-@@ -5,7 +5,8 @@
- ################################################################################
+diff --git a/package/ficl/ficl.mk b/package/ficl/ficl.mk
+index af900fa2cf..c0698a3433 100644
+--- a/package/ficl/ficl.mk
++++ b/package/ficl/ficl.mk
+@@ -6,7 +6,7 @@
  
- XDRIVER_XF86_VIDEO_INTEL_VERSION = 31486f40f8e8f8923ca0799aea84b58799754564
--XDRIVER_XF86_VIDEO_INTEL_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-intel
-+XDRIVER_XF86_VIDEO_INTEL_SITE = https://gitlab.freedesktop.org/xorg/driver/xf86-video-intel.git
-+XDRIVER_XF86_VIDEO_INTEL_SITE_METHOD = git
- XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
- XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
+ FICL_VERSION_MAJOR = 4.1
+ FICL_VERSION = $(FICL_VERSION_MAJOR).0
+-FICL_SITE = http://downloads.sourceforge.net/project/ficl/ficl-all/ficl$(FICL_VERSION_MAJOR)
++FICL_SITE = https://sourceforge.net/projects/ficl/files/OldFiles/Ficl4%20%28retired%29
+ FICL_LICENSE = BSD-2-Clause
+ FICL_LICENSE_FILES = ReadMe.txt
+ FICL_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
