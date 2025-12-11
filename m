@@ -1,83 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8286D41D7E
-	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:32:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6682D41D7E
+	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:32:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A37BE4120D;
-	Thu, 11 Dec 2025 19:32:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BB92383C92;
+	Thu, 11 Dec 2025 19:32:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Dk2IIjmuCIT4; Thu, 11 Dec 2025 19:32:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qlK6snC6n_zq; Thu, 11 Dec 2025 19:32:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0C7041213
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C00FD82977
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765481557;
-	bh=fDwoqrTiBbijhhgFlJda35GBmU5L3+Xw/d/ZV/GwNGM=;
+	s=default; t=1765481559;
+	bh=OZ2llq42Y/KvYX30m9FNR/Ra4ndEuo6So+e70Ku+5BE=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=lu6ScrcVW+EOh6MLqhinbtg2OqaIYdbyeHpQpwQ6Z68fFnRsJqcqBOI2e0s9C6H15
-	 92DQ73Q1vTP5/L62Qyhoa9XLvKK4OWGFikifDyY4WHaYPNISvrdIf3aXYMBJJ0Enih
-	 XwjdIVQanfdGc9kapsuohZvgsQfSr0ou0861Im9EeoryxleAlNWoKeliEh/eE04Oo2
-	 ps06ead5btWGXN49/41fy0DUja4A1n0N2CBIXtFdhL5vtOGGb7yIfYlJ9Ooo5cmRmi
-	 s4v9dTuQB87I3Sls/vK5NmAZgxsuv8DvZFNERAzrI4oqwNvVF9bM0lmZVxU8PT2uhm
-	 q+Qy2H7ZEsg7Q==
+	b=snMGdvST0ZvhBsvT51MZgxzajL7ZlG9FopSVpl9FkHjHPAZcIwTnk9G8e2KYHLjI+
+	 xNyY7Hub03UsB43EaTqpHRjayqPRihE3Hr0e6AL/bHxZ5KhhuJrHiSNPHMy6ktOTB/
+	 OoRtjcCBrwpXsMHNDOYTdw2kChb5KXdSXcboVsUoH+IbHACbEntLLrCPu+yO/lkcTz
+	 SNAhE6gNkWI5SbDs1q00aRH0Z1TH8jJKf1zz24d/PWrxnLkza14GjYbOLRmeqRIQEs
+	 TNjdZr7y7ARb5YGBJGBV5ks16Epapk7Eq0TSU8nIV8sTZiIu8jWbsipBIDxEzYWrhZ
+	 S9pacT6cYh/JA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C0C7041213;
-	Thu, 11 Dec 2025 19:32:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 78EA5E7
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:32:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C00FD82977;
+	Thu, 11 Dec 2025 19:32:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id CC73AE7
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:32:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6B99F4120A
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:32:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BE228605D2
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:32:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 451VkLUI3NNl for <buildroot@buildroot.org>;
- Thu, 11 Dec 2025 19:32:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id F0TdxbuyluZG for <buildroot@buildroot.org>;
+ Thu, 11 Dec 2025 19:32:37 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1A7F141078
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A7F141078
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B431760592
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B431760592
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1A7F141078
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:32:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B431760592
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:32:37 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 1AA51B979EEF; Thu, 11 Dec 2025 20:32:33 +0100 (CET)
+ with ESMTPSA id A641EB979EEF; Thu, 11 Dec 2025 20:32:35 +0100 (CET)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Thu, 11 Dec 2025 20:32:31 +0100
-Message-ID: <20251211193231.1100898-1-arnout@rnout.be>
+Date: Thu, 11 Dec 2025 20:32:34 +0100
+Message-ID: <20251211193234.1100956-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251207213735.3332670-1-bernd@kuhls.net>
-References: <20251207213735.3332670-1-bernd@kuhls.net>
+In-Reply-To: <20251207124910.3563028-1-bernd@kuhls.net>
+References: <20251207124910.3563028-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1765481553; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1765481555; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=/xgcShcHSkI3PrVp+5Duc3KYq0vvzgUNV3jtQbakpiw=;
- b=Vaayk0wrFepo2+9zfl4NuxJsQ0kIJPtJECkjuXDU8r01jURisF4/2ryjQ2RZD7nMyyb21g
- cY5BLvgYW2rkQpjMbfCi6rTuzrExbD9uG0C6zSjNSL8xqsV10ZxrzRzX/HBFu/idjLVhJs
- Tw6hGtb2tXq2OvAuSSd/08FDHV4SltjvdRGu3cirUlXj186GlcU4IgwTY/qN4zonZkMZ60
- rnolMyuVtCpFQHOaeJLnIH1/XZh4YJrx9gOCL2KNo7+H5rw+Uqk3uWg9YTli0lqFXIdrXl
- U521EI09cYyWN2ksvPhZL+atPSR3MN0lqSTSAlWw8RKUiAeuRF+97qh7VUKI8A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=VcUEJ7hSX9tVKPWlLmLWkr23LQcWX+Gu63pBPAcCaZw=;
+ b=PXk2egVASiUifrCYhbU85hLRMXqlhX1FHqMQEKz4CxGCj/XoDKr1GBBfz7dwhmChpkXv1y
+ w7sxGAYjuzNsgTFKkvOGLR49kJdXoSQehN3OJgIkJ8Npiccm/aj1llBdSTFq5YOJY9eu+p
+ micTbgr/yVNDctr9eAEXU6B0WiccsAVE0NYz0tR2DZXVW6COtnKmP1rW/NNWetgIwtUWw7
+ Xmad9GVEEBT4wxlAQnsJN8t89cWPDIzWoasGp6hRcrGlVvv/DtdAMKcWAiyoi84EU+IpmX
+ MzFO+kbz9L6N8bkXf9zSaLe2v+fS4Ab6YGbLERvysVbv1rOrtMgKBGOr8sFv8w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=Vaayk0wr
-Subject: Re: [Buildroot] [PATCH 1/1] package/python3: security bump version
- to 3.13.11
+ header.a=rsa-sha256 header.s=dkim header.b=PXk2egVA
+Subject: Re: [Buildroot] [PATCH 1/1] package/xl2tp: fix build with gcc-15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,45 +96,62 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Release notes: https://www.python.org/downloads/release/python-31311/
-> 
-> Fixes CVE-2025-12084.
+> Fixes:
+> https://autobuild.buildroot.net/results/bac/bac6a0cb3f38b0de5b0376e7eba5e0ede5fce589/
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.08.x. Thanks
 
 > ---
->  package/python3/python3.hash | 6 +++---
->  package/python3/python3.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  .../xl2tp/0001-Fix-compiling-with-C23.patch   | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 package/xl2tp/0001-Fix-compiling-with-C23.patch
 > 
-> diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-> index 778dca3b69..fddfcc1a4d 100644
-> --- a/package/python3/python3.hash
-> +++ b/package/python3/python3.hash
-> @@ -1,5 +1,5 @@
-> -# From https://www.python.org/downloads/release/python-31310/
-> -md5  5ada33c7f08d5d2df881657bdb8e848d  Python-3.13.10.tar.xz
-> +# From https://www.python.org/downloads/release/python-31311/
-> +md5  4c3517dd8b1fd76377dcb3e5e8f71ad6  Python-3.13.11.tar.xz
->  # Locally computed
-> -sha256  bc673c04375a1a3f0808c27ba8f0411ab811ad390a8740318ccb9c60fad8fd77  Python-3.13.10.tar.xz
-> +sha256  16ede7bb7cdbfa895d11b0642fa0e523f291e6487194d53cf6d3b338c3a17ea2  Python-3.13.11.tar.xz
->  sha256  78b12c3a81360b357002334f0e70ea0e92eebf7a9b358805c03c48484945f3bb  LICENSE
-> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-> index 6200b8af4e..0189a505b4 100644
-> --- a/package/python3/python3.mk
-> +++ b/package/python3/python3.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
->  
->  PYTHON3_VERSION_MAJOR = 3.13
-> -PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).10
-> +PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).11
->  PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
->  PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
->  PYTHON3_LICENSE = Python-2.0, others
+> diff --git a/package/xl2tp/0001-Fix-compiling-with-C23.patch b/package/xl2tp/0001-Fix-compiling-with-C23.patch
+> new file mode 100644
+> index 0000000000..6f32e7df35
+> --- /dev/null
+> +++ b/package/xl2tp/0001-Fix-compiling-with-C23.patch
+> @@ -0,0 +1,38 @@
+> +From cabd67927d8ed565c36cdd0cbf9b9dbd71606009 Mon Sep 17 00:00:00 2001
+> +From: Jaco Kroon <jaco@uls.co.za>
+> +Date: Thu, 21 Nov 2024 00:12:29 +0200
+> +Subject: [PATCH] Fix compiling with C23.
+> +
+> +https://bugs.gentoo.org/944070
+> +Signed-off-by: Jaco Kroon <jaco@uls.co.za>
+> +
+> +Upstream: https://github.com/xelerance/xl2tpd/commit/cabd67927d8ed565c36cdd0cbf9b9dbd71606009
+> +
+> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> +---
+> + xl2tpd.c | 5 +++--
+> + 1 file changed, 3 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/xl2tpd.c b/xl2tpd.c
+> +index 791d5a4..4bf15fd 100644
+> +--- a/xl2tpd.c
+> ++++ b/xl2tpd.c
+> +@@ -74,7 +74,7 @@ static int control_handle_lac_hangup(FILE* resf, char* bufp);
+> + static int control_handle_lac_disconnect(FILE* resf, char* bufp);
+> + static int control_handle_lac_add_modify(FILE* resf, char* bufp);
+> + static int control_handle_lac_remove(FILE* resf, char* bufp);
+> +-static int control_handle_lac_status();
+> ++static int control_handle_lac_status(FILE* resf, char* bufp);
+> + static int control_handle_lns_remove(FILE* resf, char* bufp);
+> + 
+> + static struct control_requests_handler control_handlers[] = {
+> +@@ -1549,7 +1549,8 @@ static int control_handle_lac_remove(FILE* resf, char* bufp){
+> +     return 1;
+> + }
+> + 
+> +-static int control_handle_lac_status(){
+> ++static int control_handle_lac_status(FILE*, char*)
+> ++{
+> +     show_status ();
+> +     return 1;
+> + }
 > -- 
 > 2.47.3
 > 
