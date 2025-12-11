@@ -1,63 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 794AAD43342
-	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:30:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 980ADD43343
+	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:30:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 52047811B4;
-	Thu, 11 Dec 2025 19:30:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F58C4117C;
+	Thu, 11 Dec 2025 19:30:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hpaSZZhTbg_r; Thu, 11 Dec 2025 19:30:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8Q8BKL6oW-ey; Thu, 11 Dec 2025 19:30:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87609811C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95A274117D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765481416;
-	bh=pivNM7miHB3z56hr8Siek8tbbPHLrM1jBbFYKU2Bozg=;
+	s=default; t=1765481417;
+	bh=UgU9+7Jo5sDdNOb7j0dUxw7W9m/mpCGXbxMIkCZ5c9I=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=JDKjR7OV6LxvpnScux1BbBNx9fykg0ZEqTVfhHxtOT10Nutzryd3UqPDu4cfthVKK
-	 uBPuDf7Zcw3awcnUQfRbiG+3hAI8c4MzCmZr424HLkeiq+selO1sW4nFhI1SyHVYt9
-	 lQz8obfsfvNQqJlYC1bbu9lnm+Kw0Ogf9EcjtKhrAri9pDHmavARhCAxT6BaKXLDoN
-	 2SwavfetOhaLlPuZZMi2j+hJIDVtl3eDK2yBxiSS2zERauSf4ZS4vMgudI9bhhp45C
-	 23xKQVG1W2W9ckRxMutJn+NO9iXO1I3zzOjUo0EzpvleeMXwVHhrTKRPOw1C6oAZoB
-	 e3vGz17JT0vdw==
+	b=K7l4YbhMjZR32I69dcdsnpgi9vtjermiaS1Ysh+2fNy4YSfTQej3YSA24gJ8Y03E0
+	 9xpXx8C11A2fIeMLsyXxo5GUcqt33EOoIlEdmVKOHUsOh1niyBBfb3jNm87UrXnvkG
+	 xX0AGYRmfA3y5sYNw7M8H4fd7Fly5zTq5H0ZZmKgOVpunNwxs8UAt1eARvcrx+1+eR
+	 xGCljrmSwEG8zyimQ9tjceDaa1VECzvpkWGh7LLKA5yRGvWWHUYNKHRUzAY/ERVWBS
+	 da4ygmqxc7+HTGkiWHasmJo3KPr/xjmLU0faxRFG3gk+738ZNjsBvUwkUkDlpU3QUB
+	 IvJtFplGPDF9g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 87609811C7;
-	Thu, 11 Dec 2025 19:30:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 16B8B2E9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 95A274117D;
+	Thu, 11 Dec 2025 19:30:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 341352C1
  for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2C02180DA6
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 69BE460679
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EJejLw4iMnpr for <buildroot@buildroot.org>;
- Thu, 11 Dec 2025 19:29:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7e_6nqfVZZaF for <buildroot@buildroot.org>;
+ Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64BB080DC8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C586605D2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 64BB080DC8
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0C586605D2
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6402086BE7; Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
+ id E8BB086BE8; Thu, 11 Dec 2025 19:29:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Dec 2025 10:56:42 +0100
+Date: Thu, 11 Dec 2025 10:56:12 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: e5722ae60666ddfd683ef13f956981f297786244
-X-Git-Newrev: 8162a09cfede8d76cb2587d6ba0301c1e3c9abce
+X-Git-Oldrev: 8f0bc04e8b5cf4f3cd2bb5ac589d8a52744d294a
+X-Git-Newrev: 68d8692cec51ca0aee5d16ad00677b81c54f577b
 X-Patchwork-Hint: ignore
-Message-Id: <20251211192954.6402086BE7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/xl2tp: fix build
- with gcc-15.x
+Message-Id: <20251211192953.E8BB086BE8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x]
+ support/scripts/pkg-stats: check_url_status(): use HEAD requests to limit
+ server load
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,64 +78,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8162a09cfede8d76cb2587d6ba0301c1e3c9abce
+commit: https://git.buildroot.net/buildroot/commit/?id=68d8692cec51ca0aee5d16ad00677b81c54f577b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-Fixes:
-https://autobuild.buildroot.net/results/bac/bac6a0cb3f38b0de5b0376e7eba5e0ede5fce589/
+The gnu.org admins have been blocking the IP address of machines running
+pkg-stats as the GET requests for the (many) packages with gnu.org URLs are
+seen as abusive.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+The resource body is not used, so use a HTTP HEAD request instead of a GET
+to limit server load and bandwidth use.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 699a4a629fea7ae76dcb06441f11d24feda02763)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit f9f3e6ccc66cd4f2becfc29e6b2b74beaddf14e6)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/xl2tp/0001-Fix-compiling-with-C23.patch | 38 +++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ support/scripts/pkg-stats | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/xl2tp/0001-Fix-compiling-with-C23.patch b/package/xl2tp/0001-Fix-compiling-with-C23.patch
-new file mode 100644
-index 0000000000..6f32e7df35
---- /dev/null
-+++ b/package/xl2tp/0001-Fix-compiling-with-C23.patch
-@@ -0,0 +1,38 @@
-+From cabd67927d8ed565c36cdd0cbf9b9dbd71606009 Mon Sep 17 00:00:00 2001
-+From: Jaco Kroon <jaco@uls.co.za>
-+Date: Thu, 21 Nov 2024 00:12:29 +0200
-+Subject: [PATCH] Fix compiling with C23.
-+
-+https://bugs.gentoo.org/944070
-+Signed-off-by: Jaco Kroon <jaco@uls.co.za>
-+
-+Upstream: https://github.com/xelerance/xl2tpd/commit/cabd67927d8ed565c36cdd0cbf9b9dbd71606009
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ xl2tpd.c | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/xl2tpd.c b/xl2tpd.c
-+index 791d5a4..4bf15fd 100644
-+--- a/xl2tpd.c
-++++ b/xl2tpd.c
-+@@ -74,7 +74,7 @@ static int control_handle_lac_hangup(FILE* resf, char* bufp);
-+ static int control_handle_lac_disconnect(FILE* resf, char* bufp);
-+ static int control_handle_lac_add_modify(FILE* resf, char* bufp);
-+ static int control_handle_lac_remove(FILE* resf, char* bufp);
-+-static int control_handle_lac_status();
-++static int control_handle_lac_status(FILE* resf, char* bufp);
-+ static int control_handle_lns_remove(FILE* resf, char* bufp);
-+ 
-+ static struct control_requests_handler control_handlers[] = {
-+@@ -1549,7 +1549,8 @@ static int control_handle_lac_remove(FILE* resf, char* bufp){
-+     return 1;
-+ }
-+ 
-+-static int control_handle_lac_status(){
-++static int control_handle_lac_status(FILE*, char*)
-++{
-+     show_status ();
-+     return 1;
-+ }
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index cfea179458..c659acb80e 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -469,7 +469,7 @@ async def check_url_status(session, pkg, npkgs, retry=True, verbose=False):
+     global check_url_count
+ 
+     try:
+-        async with session.get(pkg.url) as resp:
++        async with session.head(pkg.url) as resp:
+             if resp.status >= 400:
+                 pkg.status['url'] = ("error", "invalid {}".format(resp.status))
+                 check_url_count += 1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
