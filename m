@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6982CD43341
-	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:30:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72384D41D7E
+	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:30:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3FC4D80DF4;
-	Thu, 11 Dec 2025 19:30:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 345B74111D;
+	Thu, 11 Dec 2025 19:30:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0TptfVW7wk8x; Thu, 11 Dec 2025 19:30:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SsGQ1gObXhOL; Thu, 11 Dec 2025 19:30:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5751B80DFB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 539C24110B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765481402;
-	bh=o4gmobE2Am9IVuFAHDm33PKUKgJWnXqgIYVCrG48rcI=;
+	s=default; t=1765481403;
+	bh=BYJ98mLrS84+iIxr7GfjcSprq4QrntTLpulSKyRewmY=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=DR4NoWmIXC70/q5j2k/8cA+H9fVddz7CB2LBZ3PoKeO10+tOLAinDnKSLO6lmikVb
-	 xghbgrwx77ZcNmFyEZHGxKOvpNuckpesoWw6lv57mt9Kg2g6U32iJBjbeMFFwaua5Q
-	 BDS6ed8BMtRcsa1gbkAIps3dxvlQ1GLS8voVm6BTV/jYIvqJCIsUVH4D/Kv4cxUdlg
-	 rL2fG0D3mCHLIy/jtSfgx4tukKVvlw8Ftj531C8nlA0W3hoZHVlSrWJpx5i1oB51sZ
-	 qrRDBD4rSx9TiAljG4LJ1oW+TY2Sz6EN4QcQCnkna+XYX72WCt/c2BYwn72TfaPEjZ
-	 KJTgHm5vd0zLA==
+	b=od1yynFu1c3xkz5knjP2YJebDZIkQ9ivX071f8ZfXz/jWnSSZLLcrgSqc9x/xCY1w
+	 3uL8jviL7CAGIevsfZYJ9OS0NiKbsrwbwQrGwO1tpnYN2WviFxDNG4WgyYAAzZg+Ke
+	 wbt3i0f+t3JTxcucrdo7VHwbagMP2wVqaj5KmjESfUl6gQnu1eeFAIl+gXskma8A3s
+	 CuS4uzqde5U9vS6kNmM3Hphh2Bg2VTArCe+cggio3X73h2zDnaF+36I+2zy4rWdFSA
+	 IrROzx4lrjIcG/OrIskofg9ujqyGCsZj3VuWxNsiM5IbXQ2wY5WTCfoV/KsSEFuHPX
+	 UfRU5z2s3FyqQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5751B80DFB;
-	Thu, 11 Dec 2025 19:30:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 22DF02C1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 539C24110B;
+	Thu, 11 Dec 2025 19:30:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 42FBD2C1
  for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3FD8040012
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1985340F2B
  for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 51MSUXclYyVj for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3t75fZjWon8k for <buildroot@buildroot.org>;
  Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 833414005C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B696410C0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 833414005C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5B696410C0
  for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 82C3F86BEE; Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
+ id 5A94886BE5; Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Dec 2025 10:56:51 +0100
+Date: Thu, 11 Dec 2025 10:56:40 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: 263adc0ac713a91dd6288a73ea855edf7b5581fc
-X-Git-Newrev: f3df43e746ede5688c5bbd58cdd5ba17487ebc39
+X-Git-Oldrev: 1d13662a5fe393530abeb5896fc52168e1b5730b
+X-Git-Newrev: e5722ae60666ddfd683ef13f956981f297786244
 X-Patchwork-Hint: ignore
-Message-Id: <20251211192954.82C3F86BEE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/dmraid: switch
- SITE to https
+Message-Id: <20251211192954.5A94886BE5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x]
+ package/x11r7/xdriver_xf86-video-intel: update SITE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,61 +77,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3df43e746ede5688c5bbd58cdd5ba17487ebc39
+commit: https://git.buildroot.net/buildroot/commit/?id=e5722ae60666ddfd683ef13f956981f297786244
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-The http link is broken:
+Updated URL of git server, tarball hash is unchanged.
 
-Connecting to people.redhat.com (people.redhat.com)|209.132.178.26|:80...
- failed: No route to host.
-
-No autobuilder error recorded.
-
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3b04688e7f7283d0f8c88987ff0819c1a0bb1650)
+(cherry picked from commit 8c2947eaa5e34c4407a3fa142fbaa051d0e141ec)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/dmraid/Config.in   | 2 +-
- package/dmraid/dmraid.hash | 2 +-
- package/dmraid/dmraid.mk   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/dmraid/Config.in b/package/dmraid/Config.in
-index 3c375f4c67..ad86334f1e 100644
---- a/package/dmraid/Config.in
-+++ b/package/dmraid/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_DMRAID
- 	  dmraid uses the Linux device-mapper to create devices with
- 	  respective mappings for the ATARAID sets discovered.
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+index 879abdd74d..ddd66598a6 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
  
--	  http://people.redhat.com/~heinzm/sw/dmraid/
-+	  https://people.redhat.com/~heinzm/sw/dmraid/
- 
- comment "dmraid needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
-diff --git a/package/dmraid/dmraid.hash b/package/dmraid/dmraid.hash
-index 7c1bb9a56b..0f30864254 100644
---- a/package/dmraid/dmraid.hash
-+++ b/package/dmraid/dmraid.hash
-@@ -1,4 +1,4 @@
--# From http://people.redhat.com/~heinzm/sw/dmraid/src/dmraid-1.0.0.rc16-3.tar.bz2.md5.sum
-+# From https://people.redhat.com/~heinzm/sw/dmraid/src/dmraid-1.0.0.rc16-3.tar.bz2.md5.sum
- md5  819338fcef98e8e25819f0516722beeb  dmraid-1.0.0.rc16-3.tar.bz2
- # locally computed
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  1.0.0.rc16-3/dmraid/LICENSE_GPL
-diff --git a/package/dmraid/dmraid.mk b/package/dmraid/dmraid.mk
-index 97c729aa70..dca9195ef6 100644
---- a/package/dmraid/dmraid.mk
-+++ b/package/dmraid/dmraid.mk
-@@ -6,7 +6,7 @@
- 
- DMRAID_VERSION = 1.0.0.rc16-3
- DMRAID_SOURCE = dmraid-$(DMRAID_VERSION).tar.bz2
--DMRAID_SITE = http://people.redhat.com/~heinzm/sw/dmraid/src
-+DMRAID_SITE = https://people.redhat.com/~heinzm/sw/dmraid/src
- DMRAID_SUBDIR = $(DMRAID_VERSION)/dmraid
- # lib and tools race with parallel make
- DMRAID_MAKE = $(MAKE1)
+ XDRIVER_XF86_VIDEO_INTEL_VERSION = 31486f40f8e8f8923ca0799aea84b58799754564
+-XDRIVER_XF86_VIDEO_INTEL_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-intel
++XDRIVER_XF86_VIDEO_INTEL_SITE = https://gitlab.freedesktop.org/xorg/driver/xf86-video-intel.git
++XDRIVER_XF86_VIDEO_INTEL_SITE_METHOD = git
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
