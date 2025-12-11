@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80E8FD43341
-	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:28:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B092D43344
+	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:28:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5427D8239A;
-	Thu, 11 Dec 2025 19:28:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3030B41073;
+	Thu, 11 Dec 2025 19:28:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ir5A4IIFgqF4; Thu, 11 Dec 2025 19:27:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nUnmETjn4VZV; Thu, 11 Dec 2025 19:28:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C2CB82410
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0FE240F31
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765481279;
-	bh=r8rQ/p6/1tdVfRE3Bsb1KCnAyuulUNHiClGzrz3ihuY=;
+	s=default; t=1765481281;
+	bh=V2/m4IRUJmpOseEt3Dq7KIUQ/wxvCxNUEl6ST3rzFro=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ZkbhllPKmdQZhreV8xznI+KaUkmlAKPaVCMbrnVQV4DeARwXp2n1G4DeK9hMM3u1s
-	 ycKuLpJIm3C44JmVsAmmTDfnfWvDjIwgH+/bPSmebd+RvNkvSdeLRRTvEVurcC71sU
-	 snvY9VRBGkSdKV7EM/7QjEiRzyX/ICDAOQX7XFa7L6TzdhZG+b2IQh8zPU8LK225/G
-	 1FRLjWgYmmBtl4y6BNrNlPiHJspDrzQsgJulPtUOkq+hjA+ycx5Li5R94Ppsq1pAks
-	 bgww0+laE7IZM9Sz/MF7GWqPL+tLthpo7jOsdQi/qoPfGnj/+dYBXNDDub8AQCtvZF
-	 NPHIhJTwPJ2Qw==
+	b=nW9/KvN6LIHyyWJuf2wk8NhPQtYhT45Cv/DyPkD2lVskQGzdsAOImsW1slHNn0VeR
+	 H+Ynd8XPr+/r3XCN7bDwGT/D3ZH/XtTwExpT4JOgid59lECdkjpj4HXYGvJCMe0faf
+	 onVu4znbL/nh+tnkCfyl9eRRvXk3Msfi8QJzcAQGI1SuRzlIqTdjTi2kKqftxaYD3M
+	 L40E1xLufrpcXY7Ir6pE5m474xp1PiMePKyBXPhAXhNOP/+LZWdzYK1b0Z/cE83syH
+	 dKoRvgLIJu/AL3qqPboD2yo+BdnyUSY0wVuhSHulOwtZnyuACDdzyvHa8kgfo3sQom
+	 gEqLwBYal+aIw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C2CB82410;
-	Thu, 11 Dec 2025 19:27:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8019B2C1
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B0FE240F31;
+	Thu, 11 Dec 2025 19:28:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 31E992C1
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 71AA960087
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DEEE740029
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G0HZ6Zou5AYx for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uYa-CvRk46t5 for <buildroot@buildroot.org>;
  Thu, 11 Dec 2025 19:27:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C17516072C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD2534006E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C17516072C
+ by smtp2.osuosl.org (Postfix) with ESMTP id CD2534006E
  for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B36CC86B4C; Thu, 11 Dec 2025 19:27:46 +0000 (UTC)
+ id CB85786B47; Thu, 11 Dec 2025 19:27:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Dec 2025 10:21:47 +0100
+Date: Thu, 11 Dec 2025 10:21:54 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: cc1ddb77fe8ce50ce650363f4839c5994c0d81bf
-X-Git-Newrev: 64f6f2d06ef7e56c72438117de0e644b15cde1b8
+X-Git-Oldrev: 3afaa164ff2bef4477bced31b95feee0396b514c
+X-Git-Newrev: 5dd6a33d6796e0cda2498e476de7d1e5f82808a4
 X-Patchwork-Hint: ignore
-Message-Id: <20251211192746.B36CC86B4C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/xwayland:
- security bump to version 24.1.9
+Message-Id: <20251211192746.CB85786B47@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/unbound: security
+ bump version to 1.24.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,95 +77,72 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64f6f2d06ef7e56c72438117de0e644b15cde1b8
+commit: https://git.buildroot.net/buildroot/commit/?id=5dd6a33d6796e0cda2498e476de7d1e5f82808a4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fixes the following security issues:
+Changelog: https://nlnetlabs.nl/projects/unbound/download/
 
-1) CVE-2025-62229: Use-after-free in XPresentNotify structures creation
+Fixes CVE-2025-11411:
+https://nlnetlabs.nl/downloads/unbound/CVE-2025-11411.txt
 
-    Using the X11 Present extension, when processing and adding the
-    notifications after presenting a pixmap, if an error occurs, a dangling
-    pointer may be left in the error code path of the function causing a
-    use-after-free when eventually destroying the notification structures
-    later.
+Removed UNBOUND_IGNORE_CVES, the fix is included in this release.
 
-    Introduced in: Xorg 1.15
-    Fixed in: xorg-server-21.1.19 and xwayland-24.1.9
-    Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/5a4286b1
-    Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative.
+The unbound version 1.23.0 also includes a fix when compiling with
+gcc 15. See:
+https://github.com/NLnetLabs/unbound/pull/1262
 
-2) CVE-2025-62230: Use-after-free in Xkb client resource removal
+Fixes:
+https://autobuild.buildroot.net/results/d3d/d3d6b84ba667e3e2586b7cfdaddcd160232eddfd/
 
-    When removing the Xkb resources for a client, the function
-    XkbRemoveResourceClient() will free the XkbInterest data associated
-    with the device, but not the resource associated with it.
-
-    As a result, when the client terminates, the resource delete function
-    triggers a use-after-free.
-
-    Introduced in: X11R6
-    Fixed in: xorg-server-21.1.19 and xwayland-24.1.9
-    Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/99790a2c
-         https://gitlab.freedesktop.org/xorg/xserver/-/commit/10c94238
-    Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative.
-
-3) CVE-2025-62231: Value overflow in Xkb extension XkbSetCompatMap()
-
-    The XkbCompatMap structure stores some of its values using an unsigned
-    short, but fails to check whether the sum of the input data might
-    overflow the maximum unsigned short value.
-
-    Introduced in: X11R6
-    Fixed in: xorg-server-21.1.19 and xwayland-24.1.9
-    Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/475d9f49
-    Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative.
-
-https://lists.x.org/archives/xorg-announce/2025-October/003635.html
-
-Changelog:
-https://lists.x.org/archives/xorg/2025-October/062148.html
-
-Also update the COPYING hash for a change of copyright year.
-
-Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-[Peter: Mark as security bump, extend commit message, fix COPYING hash]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e11cac64a27d3be4a9cb7f1313276e6f386bb6e8)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien: add comment about gcc-15 fix]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit a1f691fb020067031dd020d6c844a4be43061e42)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/x11r7/xwayland/xwayland.hash | 8 ++++----
- package/x11r7/xwayland/xwayland.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/unbound/unbound.hash | 6 +++---
+ package/unbound/unbound.mk   | 5 +----
+ 2 files changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
-index 6cbbea8af5..0d1df29b43 100644
---- a/package/x11r7/xwayland/xwayland.hash
-+++ b/package/x11r7/xwayland/xwayland.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg/2025-June/062066.html
--sha256  c8908d57c8ed9ceb8293c16ba7ad5af522efaf1ba7e51f9e4cf3c0774d199907  xwayland-24.1.8.tar.xz
--sha512  b6dcc87f5c4d880cb23216518171a704c2a501803ac2efd9d01760895d755a617cd82313c6516f27a888b0581c64d74e3f8db5c238e1ae0d13da6cc1a547c02f  xwayland-24.1.6.tar.xz
-+# From https://lists.x.org/archives/xorg/2025-October/062148.html
-+sha256  f297af27a84508db9b80d1cbbcc69c3801da38eb64c72f3b5b50f582459afdd0  xwayland-24.1.9.tar.xz
-+sha512  7438a572651dc77c1fd749879abccdc9a245c7b75143668d5561a8e99d41063f042a8eb3f9b931a2a12be1fc3cb9d197eee6794d0702a19e56c20f55acb35a26  xwayland-24.1.9.tar.xz
+diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
+index d9397f698a..19966d889e 100644
+--- a/package/unbound/unbound.hash
++++ b/package/unbound/unbound.hash
+@@ -1,8 +1,8 @@
+-# From https://nlnetlabs.nl/downloads/unbound/unbound-1.21.1.tar.gz.sha256
++# From https://nlnetlabs.nl/downloads/unbound/unbound-1.24.2.tar.gz.sha256
+ # After checking pgp signature from:
+-# https://nlnetlabs.nl/downloads/unbound/unbound-1.21.1.tar.gz.asc
++# https://nlnetlabs.nl/downloads/unbound/unbound-1.24.2.tar.gz.asc
+ # with key: 948EB42322C5D00B79340F5DCFF3344D9087A490
+-sha256  3036d23c23622b36d3c87e943117bdec1ac8f819636eb978d806416b0fa9ea46  unbound-1.21.1.tar.gz
++sha256  44e7b53e008a6dcaec03032769a212b46ab5c23c105284aa05a4f3af78e59cdb  unbound-1.24.2.tar.gz
  
  # Locally calculated
--sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-+sha256  abbb7969df55e399e91104ded4d0a20a1b67de7c01138e63d61b7ed4f81fec0d  COPYING
-diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
-index e3b6727c19..59d607fb5b 100644
---- a/package/x11r7/xwayland/xwayland.mk
-+++ b/package/x11r7/xwayland/xwayland.mk
+ sha256  8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
+diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
+index e9a32e6129..b435839020 100644
+--- a/package/unbound/unbound.mk
++++ b/package/unbound/unbound.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XWAYLAND_VERSION = 24.1.8
-+XWAYLAND_VERSION = 24.1.9
- XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
- XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XWAYLAND_LICENSE = MIT
+-UNBOUND_VERSION = 1.21.1
++UNBOUND_VERSION = 1.24.2
+ UNBOUND_SITE = https://nlnetlabs.nl/downloads/unbound
+ UNBOUND_INSTALL_STAGING = YES
+ UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
+@@ -23,9 +23,6 @@ UNBOUND_CONF_OPTS = \
+ 	--with-libexpat=$(STAGING_DIR)/usr \
+ 	--with-ssl=$(STAGING_DIR)/usr
+ 
+-# Only vulnerable if built with --enable-subnet
+-UNBOUND_IGNORE_CVES += CVE-2025-5994
+-
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),y)
+ UNBOUND_CONF_OPTS += --with-pthreads
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
