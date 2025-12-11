@@ -4,80 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BECEAD41D7E
-	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:30:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00CE8D43342
+	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:30:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 964A24113E;
-	Thu, 11 Dec 2025 19:30:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C851940789;
+	Thu, 11 Dec 2025 19:30:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9uQW1iEfnBh3; Thu, 11 Dec 2025 19:30:49 +0000 (UTC)
+ id cxwsj-4aPBql; Thu, 11 Dec 2025 19:30:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C069241146
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D771140532
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765481449;
-	bh=59oPKTo0w1Vgm6WxOU75wqYdQTZJcgDIpHenTVk1NzY=;
+	s=default; t=1765481451;
+	bh=JaxyohUoY/kaqxek+tLE8Vmp0S7iwtjcpxAwed1X78g=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=YIdta8D+y377Wk+yF6CBAPNSZO/Lys3fNQ5CzaClrE/rKNoFIdSLz3FNYSR1o7nf3
-	 ism9Pqpr6rjL13zioCSZARuId1ukSq1v/G83kknE3dwKc5OEk9NMlh6bGleCQqasQn
-	 UIdBKt8lYBkvAoOXRUN579xyn3hRDR0z8KD55noaF3r+2QDCcUROAKTLbOWBDNjRqM
-	 OUUdaVI+GAphwu3N1gkNUIkXqMX1fVicvWnzyeAeCVld1FI37lTEHSVoivCTYnX0p5
-	 MVsA2qh9Ab+x0X5c2l+3Q1gXzjicMfXVRDvUzQA6XjRAbmgw4qXcdlhqso65HZssP3
-	 nWBCQthAb8o6g==
+	b=CcsYy8WM9oL/Bk0MgJqkClij1HPcx6ZxEDdK+epOlr/BbTd10MkhT3/AIyjeaPzoW
+	 CrgsVsEAxhbiJwNW9m/k2uzMJSYhGOEhpROS95qEgm8fpW6tawG6b/TetK7wAQ0e7I
+	 sgxUVxoN3YfNGNvrcYAwgsdL6emYODSp/7aMAxkRILWC9uhHwY/Ysf4qjwz4Kc1TUy
+	 RzWoKJkkVV2jwaQgtkOuz3/e4fghs9xwQMISA9WiF0DQVoXS62HaDp0cZmQ78B3qQT
+	 pd5R/fg1j4eFpaaujKKYnvBIsYb1g3VxPCag+NVJ9FEUFlt/KgF8JnEoXRRYkR06V8
+	 Wox4zJXYLt3OA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C069241146;
-	Thu, 11 Dec 2025 19:30:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1FFF92C1
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:30:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D771140532;
+	Thu, 11 Dec 2025 19:30:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id CC4FBE7
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:30:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 06B144005C
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:30:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BDBFF4113E
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:30:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 84G_88UeWOLB for <buildroot@buildroot.org>;
- Thu, 11 Dec 2025 19:30:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eoF9aXiJRhkL for <buildroot@buildroot.org>;
+ Thu, 11 Dec 2025 19:30:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BB64E40027
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB64E40027
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A470840789
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A470840789
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BB64E40027
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:30:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A470840789
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:30:48 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id C8F1CB97A082; Thu, 11 Dec 2025 20:30:44 +0100 (CET)
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ with ESMTPSA id 9F894B97A098; Thu, 11 Dec 2025 20:30:46 +0100 (CET)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Thu, 11 Dec 2025 20:30:43 +0100
-Message-ID: <20251211193043.1099141-1-arnout@rnout.be>
+Date: Thu, 11 Dec 2025 20:30:45 +0100
+Message-ID: <20251211193045.1099200-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251205212959.2082018-1-thomas.petazzoni@bootlin.com>
-References: <20251205212959.2082018-1-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20251205183502.1740567-1-bernd@kuhls.net>
+References: <20251205183502.1740567-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1765481444; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1765481446; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=+I6XoeNNp+RnpE4fEMqh3RuCVhg0m1CeSk/WBuebDRU=;
- b=eb8IQAYylTBQTtou+BeQQATjDZOBBXaV5I/F0Dsqf1FLtvJW2pWCAJ+0voSLPzs9D8eM+v
- d4W77NKfVfbH+zphkq+8yNXLAwvTtMss6JCElfIQ+E88oXXJMG+twS6Ti6p1WMV0Jv8lir
- NMXVORugx5I4GPV1G4iN/iXKjWhUKEEJYfu5RUpV5A+GLJwjN2nYagO/FmoGZ9+diy/nA+
- EBEEyxJS+/oII4SYD7qWhwfqsQH+aAeR19ZsapR2mOleaczqaL84OGYSPoGWFmErcyA6dV
- OK4i6lb/+j4NLyefOIsMsw0U0Pv5aRrbHFwAqMl5M8qEQFNLp1zwqD+EwYxy6A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=eZd6Tme4UtWsPeNoLFi0eRrGro8pZcjgipdP9yL2rD8=;
+ b=Sy4Xik3VqlZDlu66XlbmWe6u9p/q4ah3u1uC9BGA4aE/mT0QcgGoOvO08x7V9fCanZslA3
+ 0qY0bqDYXX1O7T3pqK/WQ65jgQUlfaXd+FkgcFcBTJL+UUbC1b3N4LJ/dzcf1A0eEsS5jW
+ METHpSv3IHSIc1Fz0VAG3H3gxw/NAT1b17czVYYevEBRC/jgYjGLq7pQFxGmk/Wlsj2ANl
+ neQK/jIyiRbE1N3Oj95bpW9PKas4hlTkn0P+yVBoomn2QthgfgKKdhp4Zrb77xz2pSZB11
+ 1qNVOmitW+gdCm6EOEBgMcCgfO2Yq5ff6YhHc5dfSRZqamBM6gXaXIoXTLqM/g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=eb8IQAYy
-Subject: Re: [Buildroot] [PATCH] package/glibc: only supports ARC
- little-endian since glibc 2.41
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=Sy4Xik3V
+Subject: Re: [Buildroot] [PATCH 1/1] package/lugaru: switch to github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,46 +97,36 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Since upstream commit
-> https://sourceware.org/git/?p=glibc.git;a=commit;h=4ff55d08df0e6f11cbd217f4dca4532bd7d9330d,
-> glibc no longer supports ARC big-endian, and the configure step fails
-> with:
+> Old site returns 404 for the tarball and does not contain any repos:
+> https://bitbucket.org/osslugaru/workspace/repositories/
 > 
-> checking for egrep -e... (cached) /bin/grep -E
-> checking for big endian... yes
-> configure: error: big-endian not supported
-> make: *** [package/pkg-generic.mk:263: /home/buildroot/instance-0/output-1/build/glibc-2.41-70-g1502c248d58cb99a203731707987a4342926e830/.stamp_configured] Error 1
+> Switch _SITE to URL shown at https://osslugaru.gitlab.io/
 > 
-> This commit was first merged in glibc 2.41, so this issue is
-> applicable to both master (glibc 2.42) and 2025.02.x (glibc 2.41).
+> The hash value of the tarball is unchanged.
 > 
-> Fixes:
-> 
->   https://autobuild.buildroot.net/results/87e4b84f3aee64d041c3b845cb003e6b90649ffb/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x and 2025.08.x. Thanks
 
 > ---
->  package/glibc/Config.in | 2 +-
+>  package/lugaru/lugaru.mk | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-> index 9a4fe6f3db..b066616a01 100644
-> --- a/package/glibc/Config.in
-> +++ b/package/glibc/Config.in
-> @@ -21,7 +21,7 @@ config BR2_PACKAGE_GLIBC_ARCH_SUPPORTS
->  	default y if BR2_sparc64
->  	default y if BR2_x86_64
->  	default y if BR2_microblaze
-> -	default y if BR2_arc && BR2_ARC_ATOMIC_EXT && !BR2_arc750d && !BR2_arc770d
-> +	default y if BR2_arcle && BR2_ARC_ATOMIC_EXT && !BR2_arc750d && !BR2_arc770d
->  	depends on !BR2_POWERPC_CPU_HAS_SPE
->  	# glibc needs atomic instructions, and does not support
->  	# single-precision floating point ABIs (ilp32f and lp64f)
+> diff --git a/package/lugaru/lugaru.mk b/package/lugaru/lugaru.mk
+> index 53797f405e..57ec9fef3a 100644
+> --- a/package/lugaru/lugaru.mk
+> +++ b/package/lugaru/lugaru.mk
+> @@ -5,7 +5,7 @@
+>  ################################################################################
+>  
+>  LUGARU_VERSION = 1.2
+> -LUGARU_SITE = https://bitbucket.org/osslugaru/lugaru/downloads
+> +LUGARU_SITE = https://github.com/osslugaru/lugaru/releases/download/$(LUGARU_VERSION)
+>  LUGARU_SOURCE = lugaru-$(LUGARU_VERSION).tar.xz
+>  
+>  LUGARU_LICENSE = GPL-2.0+, CC-BY-SA-3.0 (Wolfire and Slib assets), \
 > -- 
-> 2.51.1
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
