@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EF0DD43342
-	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:28:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50979D43342
+	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:29:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3DC99410F5;
-	Thu, 11 Dec 2025 19:28:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2BADC40E93;
+	Thu, 11 Dec 2025 19:29:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ssOloOW1DXuy; Thu, 11 Dec 2025 19:28:13 +0000 (UTC)
+ id Z9NZo-s-iHiC; Thu, 11 Dec 2025 19:29:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AE01410ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42A1A410D7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765481293;
-	bh=CPInXfIJVsZ8BzS7cGi3eu27Rw8wF8oF8Hj6I48O5n0=;
+	s=default; t=1765481396;
+	bh=Jqz6H10im5rvd7xom07d0EXntJhLpz0KxBqyqsUKJfw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=H5iRWEQUZUxSvGaCjzU5nTSq5CZxCshUr+kGRwoeN5IDSWlVaxxAf8935JzLPHeyE
-	 tbsgdKT9ORtHyD+OFTM0msvpY5OJQIYB7sxnuQAtHKg79XUbuYPsSyFB8k6PGuihmj
-	 KNikwmEZbW+HoaHjye+7o7GVKepVHga07Slg1L7pE2PCGSBH8Vi0UvrtfOu/DwJq8S
-	 7RcHz8q4SQPFXFhoOydYvcjfgzO2XHIADn6TEUFBR7O5/KKNGnI/OFUxtjrT+DeGuQ
-	 IoIeVEyteNBq5HAkEXb4VVkQ+VJNT7BntYyK+QeLL1bPuTUsp5ZGB7i/4nxD4xDp2l
-	 tFH9AWHo48Qzg==
+	b=Vq8mkobGhbQkC+mVJfBWM7ew6xn1jYpQrDTPPyV6aCJOVbj/mlI3sTn2oxFpn9fli
+	 aSved5cWarSjPxxKzDzhhhTq9xAApoLm+Mle8EAepa521uJ2CDxJKspo0IRWmy+MU3
+	 584SIUVvQCdzFwqWaj8Z2lPGYWGpBNSE7ioyFJJ1Nay32FD4hH17hQpAArJnV2E4dU
+	 ISQaR+6KqRcvnWPMSihlsO3s6RL99SK8PxleLBSjspZAO1ByJ0jcWC21B8FxRfsQIg
+	 3p5+Cq2NVwJ43VaeR/aq0oNaPFslhA38sclF7ds3bzFFVnM/2gNw6tStBX4OIVspAv
+	 Ze9vALmQTJaSA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9AE01410ED;
-	Thu, 11 Dec 2025 19:28:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C26E4E7
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:28:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 42A1A410D7;
+	Thu, 11 Dec 2025 19:29:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D3C17E7
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 15B9F400D3
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C5EA460717
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q1c0D_WtPyZO for <buildroot@buildroot.org>;
- Thu, 11 Dec 2025 19:27:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uL9t3pn818mJ for <buildroot@buildroot.org>;
+ Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1158C400AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFE8B60592
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1158C400AD
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EFE8B60592
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 10D51838CC; Thu, 11 Dec 2025 19:27:47 +0000 (UTC)
+ id E1C5186BE7; Thu, 11 Dec 2025 19:29:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Dec 2025 10:22:08 +0100
-X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 8aa28cd0e83effd129c8777b324eef8645207b8c
-X-Git-Newrev: 1c44a81679bfce4926b3e3f68bebc9eb0627f912
+Date: Thu, 11 Dec 2025 10:56:10 +0100
+X-Git-Refname: refs/heads/2025.08.x
+X-Git-Oldrev: c6cec9f84a5c552d092004131047a26f6e281f0e
+X-Git-Newrev: 8f0bc04e8b5cf4f3cd2bb5ac589d8a52744d294a
 X-Patchwork-Hint: ignore
-Message-Id: <20251211192747.10D51838CC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/dmraid: switch
- SITE to https
+Message-Id: <20251211192953.E1C5186BE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/yaml-cpp: fix
+ build with newer gcc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,61 +77,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c44a81679bfce4926b3e3f68bebc9eb0627f912
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8f0bc04e8b5cf4f3cd2bb5ac589d8a52744d294a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-The http link is broken:
+Fixes a build error not yet seen by the autobuilders due to other
+packages failing before. Seen with defconfig:
+https://autobuild.buildroot.net/results/ebf/ebf9a81f7e225ecdab20bbad8ad8daa136fddb46/
 
-Connecting to people.redhat.com (people.redhat.com)|209.132.178.26|:80...
- failed: No route to host.
-
-No autobuilder error recorded.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3b04688e7f7283d0f8c88987ff0819c1a0bb1650)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 0eab434cb00d615cc4e5999db6ff1f59104de48b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/dmraid/Config.in   | 2 +-
- package/dmraid/dmraid.hash | 2 +-
- package/dmraid/dmraid.mk   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ ...1-emitterutils-Explicitly-include-cstdint.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/package/dmraid/Config.in b/package/dmraid/Config.in
-index 3c375f4c67..ad86334f1e 100644
---- a/package/dmraid/Config.in
-+++ b/package/dmraid/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_DMRAID
- 	  dmraid uses the Linux device-mapper to create devices with
- 	  respective mappings for the ATARAID sets discovered.
- 
--	  http://people.redhat.com/~heinzm/sw/dmraid/
-+	  https://people.redhat.com/~heinzm/sw/dmraid/
- 
- comment "dmraid needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
-diff --git a/package/dmraid/dmraid.hash b/package/dmraid/dmraid.hash
-index 7c1bb9a56b..0f30864254 100644
---- a/package/dmraid/dmraid.hash
-+++ b/package/dmraid/dmraid.hash
-@@ -1,4 +1,4 @@
--# From http://people.redhat.com/~heinzm/sw/dmraid/src/dmraid-1.0.0.rc16-3.tar.bz2.md5.sum
-+# From https://people.redhat.com/~heinzm/sw/dmraid/src/dmraid-1.0.0.rc16-3.tar.bz2.md5.sum
- md5  819338fcef98e8e25819f0516722beeb  dmraid-1.0.0.rc16-3.tar.bz2
- # locally computed
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  1.0.0.rc16-3/dmraid/LICENSE_GPL
-diff --git a/package/dmraid/dmraid.mk b/package/dmraid/dmraid.mk
-index 97c729aa70..dca9195ef6 100644
---- a/package/dmraid/dmraid.mk
-+++ b/package/dmraid/dmraid.mk
-@@ -6,7 +6,7 @@
- 
- DMRAID_VERSION = 1.0.0.rc16-3
- DMRAID_SOURCE = dmraid-$(DMRAID_VERSION).tar.bz2
--DMRAID_SITE = http://people.redhat.com/~heinzm/sw/dmraid/src
-+DMRAID_SITE = https://people.redhat.com/~heinzm/sw/dmraid/src
- DMRAID_SUBDIR = $(DMRAID_VERSION)/dmraid
- # lib and tools race with parallel make
- DMRAID_MAKE = $(MAKE1)
+diff --git a/package/yaml-cpp/0001-emitterutils-Explicitly-include-cstdint.patch b/package/yaml-cpp/0001-emitterutils-Explicitly-include-cstdint.patch
+new file mode 100644
+index 0000000000..e3dc308a2f
+--- /dev/null
++++ b/package/yaml-cpp/0001-emitterutils-Explicitly-include-cstdint.patch
+@@ -0,0 +1,42 @@
++From 7b469b4220f96fb3d036cf68cd7bd30bd39e61d2 Mon Sep 17 00:00:00 2001
++From: Christopher Fore <csfore@posteo.net>
++Date: Wed, 14 Aug 2024 21:02:32 -0400
++Subject: [PATCH] emitterutils: Explicitly include <cstdint>
++
++GCC 15 will no longer include it by default, resulting in build
++failures in projects that do not explicitly include it.
++
++Error:
++src/emitterutils.cpp:221:11: error: 'uint16_t' was not declared in this scope
++  221 | std::pair<uint16_t, uint16_t> EncodeUTF16SurrogatePair(int codePoint) {
++      |           ^~~~~~~~
++src/emitterutils.cpp:13:1: note: 'uint16_t' is defined in header '<cstdint>';
++this is probably fixable by adding '#include <cstdint>'
++   12 | #include "yaml-cpp/null.h"
++  +++ |+#include <cstdint>
++   13 | #include "yaml-cpp/ostream_wrapper.h"
++
++Tests pass.
++
++Closes: #1307
++See-also: https://gcc.gnu.org/pipermail/gcc-cvs/2024-August/407124.html
++See-also: https://bugs.gentoo.org/937412
++Signed-off-by: Christopher Fore <csfore@posteo.net>
++
++Upstream: https://github.com/jbeder/yaml-cpp/commit/7b469b4220f96fb3d036cf68cd7bd30bd39e61d2
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/emitterutils.cpp | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/emitterutils.cpp b/src/emitterutils.cpp
++index fc41011a5..f801b1d0c 100644
++--- a/src/emitterutils.cpp
+++++ b/src/emitterutils.cpp
++@@ -1,4 +1,5 @@
++ #include <algorithm>
+++#include <cstdint>
++ #include <iomanip>
++ #include <sstream>
++ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
