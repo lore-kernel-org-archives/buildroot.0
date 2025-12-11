@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6AA9D43343
-	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:30:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6982CD43341
+	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:30:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A84F240F2B;
-	Thu, 11 Dec 2025 19:30:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3FC4D80DF4;
+	Thu, 11 Dec 2025 19:30:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hli3h81BJYjS; Thu, 11 Dec 2025 19:29:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0TptfVW7wk8x; Thu, 11 Dec 2025 19:30:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAE9A4110A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5751B80DFB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765481399;
-	bh=RJ9yV1NuHU4/qNCxISNEFu5VJboSW8uE5e4j7QSXkqY=;
+	s=default; t=1765481402;
+	bh=o4gmobE2Am9IVuFAHDm33PKUKgJWnXqgIYVCrG48rcI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=h6CD+4kflZk7yoCFT3RGxvLDaiVC5BT8mgchAcXiSs9W4GNfeijORFAh7cRnybxhX
-	 OY9aYGIcgJZjb/j2NOjA4XGaIw0Ksd01OI1esNibBTbZgubEwhtwRqBO2QoDQ2CAda
-	 1d76UBvmdapmkwaIYjOp8tkDDFxbb0vSIWd/uTF9HbKorJV4h5dyEZc/nG7WUo6oR6
-	 mLED+mYLuqAiqINkT2JQzxQKbKYxp3BVhjAhGr+gM41UMUphylS5v699Zg6vLMsrSE
-	 e0ChzL02dCOG/2uDdyuucuXAxSpdlH1hDUMaVoACi/tO4GAXFMNbFMkWQVKQSDS1QO
-	 X+jtkQ4d4E5GQ==
+	b=DR4NoWmIXC70/q5j2k/8cA+H9fVddz7CB2LBZ3PoKeO10+tOLAinDnKSLO6lmikVb
+	 xghbgrwx77ZcNmFyEZHGxKOvpNuckpesoWw6lv57mt9Kg2g6U32iJBjbeMFFwaua5Q
+	 BDS6ed8BMtRcsa1gbkAIps3dxvlQ1GLS8voVm6BTV/jYIvqJCIsUVH4D/Kv4cxUdlg
+	 rL2fG0D3mCHLIy/jtSfgx4tukKVvlw8Ftj531C8nlA0W3hoZHVlSrWJpx5i1oB51sZ
+	 qrRDBD4rSx9TiAljG4LJ1oW+TY2Sz6EN4QcQCnkna+XYX72WCt/c2BYwn72TfaPEjZ
+	 KJTgHm5vd0zLA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BAE9A4110A;
-	Thu, 11 Dec 2025 19:29:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5751B80DFB;
+	Thu, 11 Dec 2025 19:30:02 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1532D2EB
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:55 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 22DF02C1
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F00124006E
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3FD8040012
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a67DUFXuhUnC for <buildroot@buildroot.org>;
+ id 51MSUXclYyVj for <buildroot@buildroot.org>;
  Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3A2040012
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 833414005C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E3A2040012
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 833414005C
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D37CD86BE2; Thu, 11 Dec 2025 19:29:53 +0000 (UTC)
+ id 82C3F86BEE; Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Dec 2025 10:56:06 +0100
+Date: Thu, 11 Dec 2025 10:56:51 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: dd1b0c2aafefaf9a0459257f654cf2cd6487ad3b
-X-Git-Newrev: 105d8f9f2e91f3e49e7d0d0cbe6936ba2aedecc3
+X-Git-Oldrev: 263adc0ac713a91dd6288a73ea855edf7b5581fc
+X-Git-Newrev: f3df43e746ede5688c5bbd58cdd5ba17487ebc39
 X-Patchwork-Hint: ignore
-Message-Id: <20251211192953.D37CD86BE2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x] package/time: fix build
- with newer gcc
+Message-Id: <20251211192954.82C3F86BEE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/dmraid: switch
+ SITE to https
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,61 +77,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=105d8f9f2e91f3e49e7d0d0cbe6936ba2aedecc3
+commit: https://git.buildroot.net/buildroot/commit/?id=f3df43e746ede5688c5bbd58cdd5ba17487ebc39
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-Fixes:
-https://autobuild.buildroot.net/results/2d4/2d440a31fc49366d77289f1d21080e1861c6ee21/
+The http link is broken:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 08a638d49ffb956e759f1b3950dd2b11f6fea483)
+Connecting to people.redhat.com (people.redhat.com)|209.132.178.26|:80...
+ failed: No route to host.
+
+No autobuilder error recorded.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 3b04688e7f7283d0f8c88987ff0819c1a0bb1650)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...001-time-fix-sighandler-prototype-for-C23.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ package/dmraid/Config.in   | 2 +-
+ package/dmraid/dmraid.hash | 2 +-
+ package/dmraid/dmraid.mk   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/time/0001-time-fix-sighandler-prototype-for-C23.patch b/package/time/0001-time-fix-sighandler-prototype-for-C23.patch
-new file mode 100644
-index 0000000000..8d4e1d7033
---- /dev/null
-+++ b/package/time/0001-time-fix-sighandler-prototype-for-C23.patch
-@@ -0,0 +1,35 @@
-+From 218cd7ce34b6dbc86c80f1c781639ea7661d1252 Mon Sep 17 00:00:00 2001
-+From: Marcin Serwin <marcin@serwin.dev>
-+Date: Thu, 2 Oct 2025 19:30:12 +0200
-+Subject: [PATCH] time: fix sighandler prototype for C23
-+
-+In C23 functions with empty argument list in the prototype are treated
-+as taking no arguments. This means that the `int` argument of the
-+sighandler must be specified explicitly or the code will fail to
-+compile due to mismatched function type.
-+
-+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
-+
-+Upstream: https://lists.gnu.org/archive/html/bug-time/2025-10/msg00000.html
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/time.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/time.c b/src/time.c
-+index 7b401bc..88287dd 100644
-+--- a/src/time.c
-++++ b/src/time.c
-+@@ -77,7 +77,7 @@ enum
-+ 
-+ 
-+ /* A Pointer to a signal handler.  */
-+-typedef RETSIGTYPE (*sighandler) ();
-++typedef RETSIGTYPE (*sighandler) (int);
-+ 
-+ /* msec = milliseconds = 1/1,000 (1*10e-3) second.
-+    usec = microseconds = 1/1,000,000 (1*10e-6) second.  */
-+-- 
-+2.47.3
-+
+diff --git a/package/dmraid/Config.in b/package/dmraid/Config.in
+index 3c375f4c67..ad86334f1e 100644
+--- a/package/dmraid/Config.in
++++ b/package/dmraid/Config.in
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_DMRAID
+ 	  dmraid uses the Linux device-mapper to create devices with
+ 	  respective mappings for the ATARAID sets discovered.
+ 
+-	  http://people.redhat.com/~heinzm/sw/dmraid/
++	  https://people.redhat.com/~heinzm/sw/dmraid/
+ 
+ comment "dmraid needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+diff --git a/package/dmraid/dmraid.hash b/package/dmraid/dmraid.hash
+index 7c1bb9a56b..0f30864254 100644
+--- a/package/dmraid/dmraid.hash
++++ b/package/dmraid/dmraid.hash
+@@ -1,4 +1,4 @@
+-# From http://people.redhat.com/~heinzm/sw/dmraid/src/dmraid-1.0.0.rc16-3.tar.bz2.md5.sum
++# From https://people.redhat.com/~heinzm/sw/dmraid/src/dmraid-1.0.0.rc16-3.tar.bz2.md5.sum
+ md5  819338fcef98e8e25819f0516722beeb  dmraid-1.0.0.rc16-3.tar.bz2
+ # locally computed
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  1.0.0.rc16-3/dmraid/LICENSE_GPL
+diff --git a/package/dmraid/dmraid.mk b/package/dmraid/dmraid.mk
+index 97c729aa70..dca9195ef6 100644
+--- a/package/dmraid/dmraid.mk
++++ b/package/dmraid/dmraid.mk
+@@ -6,7 +6,7 @@
+ 
+ DMRAID_VERSION = 1.0.0.rc16-3
+ DMRAID_SOURCE = dmraid-$(DMRAID_VERSION).tar.bz2
+-DMRAID_SITE = http://people.redhat.com/~heinzm/sw/dmraid/src
++DMRAID_SITE = https://people.redhat.com/~heinzm/sw/dmraid/src
+ DMRAID_SUBDIR = $(DMRAID_VERSION)/dmraid
+ # lib and tools race with parallel make
+ DMRAID_MAKE = $(MAKE1)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
