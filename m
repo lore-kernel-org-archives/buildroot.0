@@ -4,80 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBB3DD43341
-	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:32:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8286D41D7E
+	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:32:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9356241200;
-	Thu, 11 Dec 2025 19:32:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A37BE4120D;
+	Thu, 11 Dec 2025 19:32:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c9rkqOPKWru6; Thu, 11 Dec 2025 19:32:34 +0000 (UTC)
+ id Dk2IIjmuCIT4; Thu, 11 Dec 2025 19:32:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9B5541209
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0C7041213
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765481554;
-	bh=bTRQzH+dM4COBw7ANwC7SXcTNnvILjcEG4ytQa0slzg=;
+	s=default; t=1765481557;
+	bh=fDwoqrTiBbijhhgFlJda35GBmU5L3+Xw/d/ZV/GwNGM=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=WNzKbE/ujfHuWQZl8bzr3/ZtMG9M5CD0OO51VcdVEu2EZx4bpSYjpi95kIRSjlxGJ
-	 PqhGkv6F0EPLqpRyNwDiFLsg/i1M1Yf+Bc3QV6AJwzCk/MqTZk3whiW3N/uXyWLSJl
-	 nvrOwHJoodYO5KL5WGqb+0rU6LJLiR021f085/yeq5fboOORNrSOxbazRes0LfpwiX
-	 jpb+e6ForHOYEPuft7b0Zmd5LE/Vby+Lut1jjse7Y7fcO2qznjjUy/Pi51niFuKh2A
-	 BGlsoCrmNQNtlO3uvF+jdiZxie4iPaxGlaC32pxUeC0md4VwCAaGj7OYZDvHjs8HKm
-	 Jkn+qZBySfjtw==
+	b=lu6ScrcVW+EOh6MLqhinbtg2OqaIYdbyeHpQpwQ6Z68fFnRsJqcqBOI2e0s9C6H15
+	 92DQ73Q1vTP5/L62Qyhoa9XLvKK4OWGFikifDyY4WHaYPNISvrdIf3aXYMBJJ0Enih
+	 XwjdIVQanfdGc9kapsuohZvgsQfSr0ou0861Im9EeoryxleAlNWoKeliEh/eE04Oo2
+	 ps06ead5btWGXN49/41fy0DUja4A1n0N2CBIXtFdhL5vtOGGb7yIfYlJ9Ooo5cmRmi
+	 s4v9dTuQB87I3Sls/vK5NmAZgxsuv8DvZFNERAzrI4oqwNvVF9bM0lmZVxU8PT2uhm
+	 q+Qy2H7ZEsg7Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B9B5541209;
-	Thu, 11 Dec 2025 19:32:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 576A92C1
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:32:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C0C7041213;
+	Thu, 11 Dec 2025 19:32:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 78EA5E7
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:32:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3E2BB60592
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:32:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6B99F4120A
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:32:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qchOjXVwvdoK for <buildroot@buildroot.org>;
- Thu, 11 Dec 2025 19:32:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 451VkLUI3NNl for <buildroot@buildroot.org>;
+ Thu, 11 Dec 2025 19:32:35 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 35826605D2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35826605D2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1A7F141078
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A7F141078
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 35826605D2
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:32:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1A7F141078
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:32:35 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 5DEA7B979EEF; Thu, 11 Dec 2025 20:32:30 +0100 (CET)
-To: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+ with ESMTPSA id 1AA51B979EEF; Thu, 11 Dec 2025 20:32:33 +0100 (CET)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Arnout Vandecappelle <arnout@rnout.be>,
 	buildroot@buildroot.org
-Date: Thu, 11 Dec 2025 20:32:28 +0100
-Message-ID: <20251211193228.1100794-1-arnout@rnout.be>
+Date: Thu, 11 Dec 2025 20:32:31 +0100
+Message-ID: <20251211193231.1100898-1-arnout@rnout.be>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251205180454.555029-1-raphael.pavlidis@gmail.com>
-References: <20251205180454.555029-1-raphael.pavlidis@gmail.com>
+In-Reply-To: <20251207213735.3332670-1-bernd@kuhls.net>
+References: <20251207213735.3332670-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1765481550; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1765481553; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=STlf8ZHyDlJ1w+S2AbuD/k16JHMIbTjaXK0NPhAQdRk=;
- b=ei3vz5IyHfx2FKvuyhEsaQP+X/OWF61pES+nVQpCdcTLt/ILFcQ5CYKfwqf8bKqU8Yw7te
- ED6+I2zAUufaHZg19OvhJwQw9bb5Ht2yjiiwRB881L3bYxZNhc9fn2aSPVzcElAG2n86uw
- cAeOtHNUDSZzO9WYOQ2taX43MM9CNT56HYBivpLu9kvhxmVPtvCCCfSu1UnKGBGbvHr9QA
- YeUd6VpeN7p/s3wTabC6blk2yLGrIfV3CIexZf/a1sgAkTlAG3PsetMS46fBHwBSCSshnj
- gwoLhBapnPFm6uwVNjIVY8SogJwzFTwmXF0iZRUDx/S6TqSLIBNPZlGCETq5dQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=/xgcShcHSkI3PrVp+5Duc3KYq0vvzgUNV3jtQbakpiw=;
+ b=Vaayk0wrFepo2+9zfl4NuxJsQ0kIJPtJECkjuXDU8r01jURisF4/2ryjQ2RZD7nMyyb21g
+ cY5BLvgYW2rkQpjMbfCi6rTuzrExbD9uG0C6zSjNSL8xqsV10ZxrzRzX/HBFu/idjLVhJs
+ Tw6hGtb2tXq2OvAuSSd/08FDHV4SltjvdRGu3cirUlXj186GlcU4IgwTY/qN4zonZkMZ60
+ rnolMyuVtCpFQHOaeJLnIH1/XZh4YJrx9gOCL2KNo7+H5rw+Uqk3uWg9YTli0lqFXIdrXl
+ U521EI09cYyWN2ksvPhZL+atPSR3MN0lqSTSAlWw8RKUiAeuRF+97qh7VUKI8A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=ei3vz5Iy
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/podman: security bump to
- version 5.7.0
+ header.a=rsa-sha256 header.s=dkim header.b=Vaayk0wr
+Subject: Re: [Buildroot] [PATCH 1/1] package/python3: security bump version
+ to 3.13.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,45 +97,47 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Changelog:
-> https://github.com/containers/podman/releases/tag/v5.7.0
+> Release notes: https://www.python.org/downloads/release/python-31311/
 > 
-> This commit fixes the CVE-2025-52881 security vulnerability. See:
-> https://github.com/advisories/GHSA-cgrx-mc8f-2prm
+> Fixes CVE-2025-12084.
 > 
-> Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.08.x. Thanks
 
 > ---
->  package/podman/podman.hash | 2 +-
->  package/podman/podman.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/python3/python3.hash | 6 +++---
+>  package/python3/python3.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/podman/podman.hash b/package/podman/podman.hash
-> index e52a353aa7..ff6600ac8f 100644
-> --- a/package/podman/podman.hash
-> +++ b/package/podman/podman.hash
-> @@ -1,3 +1,3 @@
+> diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+> index 778dca3b69..fddfcc1a4d 100644
+> --- a/package/python3/python3.hash
+> +++ b/package/python3/python3.hash
+> @@ -1,5 +1,5 @@
+> -# From https://www.python.org/downloads/release/python-31310/
+> -md5  5ada33c7f08d5d2df881657bdb8e848d  Python-3.13.10.tar.xz
+> +# From https://www.python.org/downloads/release/python-31311/
+> +md5  4c3517dd8b1fd76377dcb3e5e8f71ad6  Python-3.13.11.tar.xz
 >  # Locally computed
-> -sha256  1a35d0030bb8dff31cf45d16d98cddfbf9ceeb2835c82d95b4eacd5a26e482af  podman-v5.6.2-git4-go2.tar.gz
-> +sha256  60de04a48c0ecf5006fb8e26543e2275126833aeaf2b5ea02ba492965d96173f  podman-v5.7.0-git4-go2.tar.gz
->  sha256  62fb8a3a9621dc2388174caaabe9c2317b694bb9a1d46c98bcf5655b68f51be3  LICENSE
-> diff --git a/package/podman/podman.mk b/package/podman/podman.mk
-> index 71eb26b496..31cc9ba349 100644
-> --- a/package/podman/podman.mk
-> +++ b/package/podman/podman.mk
-> @@ -4,7 +4,7 @@
->  #
+> -sha256  bc673c04375a1a3f0808c27ba8f0411ab811ad390a8740318ccb9c60fad8fd77  Python-3.13.10.tar.xz
+> +sha256  16ede7bb7cdbfa895d11b0642fa0e523f291e6487194d53cf6d3b338c3a17ea2  Python-3.13.11.tar.xz
+>  sha256  78b12c3a81360b357002334f0e70ea0e92eebf7a9b358805c03c48484945f3bb  LICENSE
+> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+> index 6200b8af4e..0189a505b4 100644
+> --- a/package/python3/python3.mk
+> +++ b/package/python3/python3.mk
+> @@ -5,7 +5,7 @@
 >  ################################################################################
 >  
-> -PODMAN_VERSION = v5.6.2
-> +PODMAN_VERSION = v5.7.0
->  PODMAN_SITE = https://github.com/containers/podman
->  PODMAN_SITE_METHOD = git
->  
+>  PYTHON3_VERSION_MAJOR = 3.13
+> -PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).10
+> +PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).11
+>  PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+>  PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+>  PYTHON3_LICENSE = Python-2.0, others
 > -- 
-> 2.52.0
+> 2.47.3
 > 
 > _______________________________________________
 > buildroot mailing list
