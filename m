@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E48ED43342
-	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:28:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2EAFD43343
+	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:28:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 617F740B59;
-	Thu, 11 Dec 2025 19:28:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A5391410DB;
+	Thu, 11 Dec 2025 19:28:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fjyrfcQ0OxmZ; Thu, 11 Dec 2025 19:28:07 +0000 (UTC)
+ id V63zstSn8KJI; Thu, 11 Dec 2025 19:28:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85972410C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACF8A410CB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765481287;
-	bh=2nd+ESULsT3IIvnj9BeUVRfBk8B0MGOU8tMaU3sY2+Q=;
+	s=default; t=1765481288;
+	bh=YDvxjsmC17v3n++0yzuhgtkRsZoLXvG6Didxu5iYxfw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=WqkdgXhEn7dvTXmxCCicaHOKlcmLYCJr+UtDxP71/wlm9D0t3wvn97GMJI1qDY6jC
-	 3q488RYaQL0tZk+5w7U6SRZvSBQPg3kRoJcJR7Y4+Rzgix9lN9tDuLpf8FQNkSMusZ
-	 6dJ6aNbYIYSGtl3xFH4CdLXRgYtORovApTsBctoz5szzU5PhTvwWQVbL3z3GuB4yo4
-	 E9l7xeMTd9Q9BQxAtlnuYls97KI0EHXeRRkyMHtv0vRrUYMnOgXMBLS9N2a+mPTOxM
-	 Mr2PmhfcAyTYtNMl7yx50UejqVO9QgXnUv00U1LgCzmSD+q6reRhvLyQNSg/Hnn3fK
-	 uQ9OK0aPCZWzw==
+	b=Ep+8oFhekXDngO8UGtrqXxexmMV3SOrC0X7qyZfJyg3zp1Af3zdAeBHEsqGvyEZuF
+	 ZWQSmD/qCZuPzauL4CXN2XJdxhYCPAWG7wu9QDA7snvGnqLTpJYQwrYXFBg1n2+XE0
+	 q0XXZvn+Z27zFLP0YvBHia42bEWGkw2veyV/bkXKBiRt7D/OGftbuVvj67AjkGMQqU
+	 Z0JWlXcc144TFdSdqzK2WlPvxT31WabOBIIO4fkTEYxpbddF4PS0Eg75pVtkqCRGPH
+	 xIiF9wVTZEZJauY4sujw7uA/s5aYBxnUP7wfODs3QFJlGSo34ZvCrUcLSSpRwcdxEi
+	 G6mc8r4QmuGbQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 85972410C6;
-	Thu, 11 Dec 2025 19:28:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ACF8A410CB;
+	Thu, 11 Dec 2025 19:28:08 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6EFC12C1
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:57 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 7248EE7
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DC3854008E
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3EA924007B
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r_s8twGZ5yoR for <buildroot@buildroot.org>;
- Thu, 11 Dec 2025 19:27:47 +0000 (UTC)
+ id Uak3JMT6iwTY for <buildroot@buildroot.org>;
+ Thu, 11 Dec 2025 19:27:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0E924007B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 18908400B4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E0E924007B
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 18908400B4
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D3F1686B49; Thu, 11 Dec 2025 19:27:46 +0000 (UTC)
+ id 1811386B46; Thu, 11 Dec 2025 19:27:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Dec 2025 10:21:56 +0100
+Date: Thu, 11 Dec 2025 10:22:10 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 5dd6a33d6796e0cda2498e476de7d1e5f82808a4
-X-Git-Newrev: 46a80aa07a56e369d6a7fd7bc7666eae9aa70e88
+X-Git-Oldrev: 1c44a81679bfce4926b3e3f68bebc9eb0627f912
+X-Git-Newrev: afdebefb0bb144df34af1b19c66a2dfb19fdfb81
 X-Patchwork-Hint: ignore
-Message-Id: <20251211192746.D3F1686B49@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] DEVELOPERS: remove Prabhu
- Sannachi, bouncing e-mail
+Message-Id: <20251211192747.1811386B46@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libdbi: fix small
+ typo in Config.in
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,44 +72,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3615760164641988178=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46a80aa07a56e369d6a7fd7bc7666eae9aa70e88
+--===============3615760164641988178==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=afdebefb0bb144df34af1b19c66a2dfb19fdfb81
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Prabhu's e-mail address at Collins is bouncing, so let's drop this stale
-entry:
+When browsing the available Database packages, libdbi appears in the
+menuconfig as "lidbi".
 
-<prabhu.sannachi@collins.com>: host
-    mxb-00105402.gslb.gpphosted.com[67.231.147.145] said: 550 5.1.1 User
-    Unknown (in reply to RCPT TO command)
+Fix the menuconfig entry by updating the relevant boolean name.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4d61edf6b1b5b23f285f30f67a2d67695b153909)
+(cherry picked from commit 4d016a1d98f7cf850ee83d5c2003a2b66c72675b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- DEVELOPERS | 3 ---
- 1 file changed, 3 deletions(-)
+ package/libdbi/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f3c58a127d..303280ed69 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2705,9 +2705,6 @@ F:	package/libdvbpsi/
- F:	package/mraa/
- F:	package/synergy/
- 
--N:	Prabhu Sannachi <prabhu.sannachi@collins.com>
--F:	package/redis-plus-plus/
--
- N:	Qais Yousef <qais.yousef@arm.com>
- F:	package/bpftrace/
- 
+diff --git a/package/libdbi/Config.in b/package/libdbi/Config.in
+index 13ac344f82..d9a1316311 100644
+--- a/package/libdbi/Config.in
++++ b/package/libdbi/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_PACKAGE_LIBDBI
+-	bool "lidbi"
++	bool "libdbi"
+ 	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  libdbi implements a database-independent abstraction layer
+
+--===============3615760164641988178==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3615760164641988178==--
