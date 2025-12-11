@@ -1,64 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3A24D43343
-	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:58:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3B36D43341
+	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:58:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7653180A93;
-	Thu, 11 Dec 2025 19:58:13 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uhjt5Friy4t4; Thu, 11 Dec 2025 19:58:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93EAA8162F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765483092;
-	bh=XefMeLK1kcIEHuQwVQLExb/KNrr/lGMbij4mKyp3Gdw=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=a+FoTys3HQuuikuKW7QW6IfjBv+GfrchjhZl44P4DSCaksmKDcyYkdXS7p+/4bN+H
-	 R/twzeaWTarhY62OMduHLXEhaLvY39d1ZAMM+s6UiyrpqI3XWOcI6srWS5L1uxyNFU
-	 GKqvhkaBe2wxlJZuj6ZtsKHq4kB9b/pFuVt330uTmsOy29TlOjetgMV2lY2noUrOSF
-	 UayPbWVwQfb6nuVYrQ5CY45LcjeiWNb8PQceoeF2vvitodNB0AZZwdI+6hAT/tWFqy
-	 ZRWaw9q5omIlGCOcaw3pMmvW2C5FuPAR93XkyqS/w8JfqDAWhs+AGKgDeyQvB1evhO
-	 GfZ7ShuZY98Qg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 93EAA8162F;
-	Thu, 11 Dec 2025 19:58:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id BFFA02C6
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:58:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B26EA409EA
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:58:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B473541118;
+	Thu, 11 Dec 2025 19:58:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HqhOZHtssgti for <buildroot@buildroot.org>;
- Thu, 11 Dec 2025 19:58:09 +0000 (UTC)
+ id H2M6W_Ykee43; Thu, 11 Dec 2025 19:58:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D74041109
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1765483105;
+	bh=wZJO5bKG2/dejKz6Vl19gqmr3zAK0RAG9XLZT3RYXgA=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Cc:From;
+	b=p9HblcrYTklb9SgjC83THPQ65KOdxiYXhxvi+PfhhGxlHmnodQ/DKcJw6X990gZE6
+	 IW7RjkQXsJmgKIriXbmHvpKUGcj3FxDp+Jacy/chP3hPI95hoQ9b18jfg7vXqV9y4L
+	 UfV2sI0ceChGtgFSxmA6tluMNy6K+Y27D2je0+jOYsmz06ZtnDt8QGZTyd2bHygtYS
+	 +cLLC74jnyUIjJUHyDqp9/Ycm8dOuSVXeFNQjSZ3Fb1d2tMfb151I16IAkQiMy/Q+J
+	 LYMJ0wAw5IjcME4xSIlNcwvO7nRbTMW7M8pq6aKl79gNv/BU2JlTqsBGbV4BTuWHFp
+	 ZeidNuzx+ORcw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9D74041109;
+	Thu, 11 Dec 2025 19:58:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B48BF2C6
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:58:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9B35341109
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:58:23 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 864UzszDkdm6 for <buildroot@buildroot.org>;
+ Thu, 11 Dec 2025 19:58:22 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AA833403C6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA833403C6
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 92BE640A6E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92BE640A6E
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AA833403C6
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:58:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 92BE640A6E
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:58:22 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b151.dip0.t-ipconnect.de [84.161.177.81])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 8C3B4A4C38EA;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id BF1AFA4C38F3;
  Thu, 11 Dec 2025 20:55:37 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:39350)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vTml7-000000008Hh-04vB;
+ (envelope-from <bernd@kuhls.net>) id 1vTml7-000000008Hh-0OC7;
  Thu, 11 Dec 2025 19:55:28 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 11 Dec 2025 20:55:19 +0100
-Message-ID: <20251211195527.3276900-13-bernd@kuhls.net>
+Date: Thu, 11 Dec 2025 20:55:20 +0100
+Message-ID: <20251211195527.3276900-14-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251211195527.3276900-1-bernd@kuhls.net>
 References: <20251211195527.3276900-1-bernd@kuhls.net>
@@ -67,22 +67,22 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1765482937;
- bh=ltCd8h46PmHH150jJqL4cVf6Vt0PQqQv9kVNlvT3B+A=;
+ bh=Q35DhN2ksuqQVlvtFhGUCTNw20cHafRkGPDuTPTMjNE=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=knD3dDWKUGP2n3RdzJNxC0rfTs2j3TGzbbHN5X1cH9nUCPj/B2zHy53faE25vk46u
- rQ0JltA8NRtr/pXnhCD1CIsXawNWuUZPZ6dLDpc5n+tSyYLCXN4QRp6S/W9hc213Nw
- 5gwKKt+RUNnQUqwfBl8CY5vYzfc0EIYqn7PRFU1X06d3WL7k4uKFdFMXMCH6sGw01N
- l8zQTLTN2WjzI060Jhf1U5gkdej+M5bec/QCNMvyH+eXqxxTfMyqgoL7FDl67IEUVC
- UiizSI35YplJmr98g8ZX68pZglKMuSn1KNvOKs/Lcv38guscJ5VgPP+KA1y5saQU//
- xpzyGnEMLqwgA==
+ b=DNRybPjqtCLaCLwlp+PIbMKBzc13GR3vdY49WzZZqBZ8TyU+JR4VEh5Ch1pMd/6t4
+ ZHC8pNoD5DCSgRpnxwBuvgZY2FC7jsEn2buOHiwplDGT31OypBvl8biFNcj5nibb2J
+ DCbIdIfbndX/OR6kj1b+PV9D4Qfs969G65u7ESOcqx91N0KEFeqM66Y4uPmjp2Zhfg
+ vxOzsrNhY8Wf8gFvJK4o4AXqP51laGIQp0xxbBEToNzqr9Zv9N6HSUXeazN34Ni7af
+ 78r0yVK8sk5DKuDqpJeJbot/uPXtvz+f37de3vq7Cli2fMi7oLR3hVO+cbSocMr+in
+ 1rZNytcaKA8qQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=knD3dDWK
-Subject: [Buildroot] [PATCH/next 13/21] package/python-frozenlist: bump
- version to 1.8.0
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=DNRybPjq
+Subject: [Buildroot] [PATCH/next 14/21] package/python-gast: bump version to
+ 0.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,42 +106,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/aio-libs/frozenlist/blob/v1.8.0/CHANGES.rst
+https://github.com/serge-sans-paille/gast/compare/0.6.0...0.7.0
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-frozenlist/python-frozenlist.hash | 4 ++--
- package/python-frozenlist/python-frozenlist.mk   | 4 ++--
+ package/python-gast/python-gast.hash | 4 ++--
+ package/python-gast/python-gast.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-frozenlist/python-frozenlist.hash b/package/python-frozenlist/python-frozenlist.hash
-index b9e91cf4c3..784f4dbcb0 100644
---- a/package/python-frozenlist/python-frozenlist.hash
-+++ b/package/python-frozenlist/python-frozenlist.hash
+diff --git a/package/python-gast/python-gast.hash b/package/python-gast/python-gast.hash
+index 4071a07919..11f38c6824 100644
+--- a/package/python-gast/python-gast.hash
++++ b/package/python-gast/python-gast.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/frozenlist/json
--md5  0882f528872840df39091fb5085e258a  frozenlist-1.5.0.tar.gz
--sha256  81d5af29e61b9c8348e876d442253723928dce6433e0e76cd925cd83f1b4b817  frozenlist-1.5.0.tar.gz
-+md5  3d8350ebe62603b7be5f516292c7aa6c  frozenlist-1.8.0.tar.gz
-+sha256  3ede829ed8d842f6cd48fc7081d7a41001a56f1f38603f9d49bf3020d59a31ad  frozenlist-1.8.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/gast/json
+-md5  4a088eca6fd6bae16bc2fd2ff828de51  gast-0.6.0.tar.gz
+-sha256  88fc5300d32c7ac6ca7b515310862f71e6fdf2c029bbec7c66c0f5dd47b6b1fb  gast-0.6.0.tar.gz
++md5  786783d275172090375b8202c1fbf309  gast-0.7.0.tar.gz
++sha256  0bb14cd1b806722e91ddbab6fb86bba148c22b40e7ff11e248974e04c8adfdae  gast-0.7.0.tar.gz
  # Locally computed sha256 checksums
- sha256  6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE
-diff --git a/package/python-frozenlist/python-frozenlist.mk b/package/python-frozenlist/python-frozenlist.mk
-index d6ced4b176..b0d408d836 100644
---- a/package/python-frozenlist/python-frozenlist.mk
-+++ b/package/python-frozenlist/python-frozenlist.mk
+ sha256  6a04bbabd9b48bea6bf7c0bd3f3a062e1476b3c403a746448fd69b0d902e148f  LICENSE
+diff --git a/package/python-gast/python-gast.mk b/package/python-gast/python-gast.mk
+index 771d7a4be4..e40e5a7f05 100644
+--- a/package/python-gast/python-gast.mk
++++ b/package/python-gast/python-gast.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FROZENLIST_VERSION = 1.5.0
-+PYTHON_FROZENLIST_VERSION = 1.8.0
- PYTHON_FROZENLIST_SOURCE = frozenlist-$(PYTHON_FROZENLIST_VERSION).tar.gz
--PYTHON_FROZENLIST_SITE = https://files.pythonhosted.org/packages/8f/ed/0f4cec13a93c02c47ec32d81d11c0c1efbadf4a471e3f3ce7cad366cbbd3
-+PYTHON_FROZENLIST_SITE = https://files.pythonhosted.org/packages/2d/f5/c831fac6cc817d26fd54c7eaccd04ef7e0288806943f7cc5bbf69f3ac1f0
- PYTHON_FROZENLIST_SETUP_TYPE = pep517
- PYTHON_FROZENLIST_LICENSE = Apache-2.0
- PYTHON_FROZENLIST_LICENSE_FILES = LICENSE
+-PYTHON_GAST_VERSION = 0.6.0
++PYTHON_GAST_VERSION = 0.7.0
+ PYTHON_GAST_SOURCE = gast-$(PYTHON_GAST_VERSION).tar.gz
+-PYTHON_GAST_SITE = https://files.pythonhosted.org/packages/3c/14/c566f5ca00c115db7725263408ff952b8ae6d6a4e792ef9c84e77d9af7a1
++PYTHON_GAST_SITE = https://files.pythonhosted.org/packages/91/f6/e73969782a2ecec280f8a176f2476149dd9dba69d5f8779ec6108a7721e6
+ PYTHON_GAST_SETUP_TYPE = setuptools
+ PYTHON_GAST_LICENSE = BSD-3-Clause
+ PYTHON_GAST_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
