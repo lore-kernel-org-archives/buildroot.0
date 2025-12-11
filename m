@@ -1,64 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E344BD43343
-	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:28:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00365D43345
+	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:28:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BBC2382451;
-	Thu, 11 Dec 2025 19:28:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CDC43410B7;
+	Thu, 11 Dec 2025 19:28:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dFTvL9e3q-hG; Thu, 11 Dec 2025 19:28:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2bRFBgWJVD_O; Thu, 11 Dec 2025 19:28:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E63E382356
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E29514107A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765481283;
-	bh=WIiJO0I+HW5g3Nliwjo+80dr46RVGqWRWQNhedydr1U=;
+	s=default; t=1765481284;
+	bh=lNoS4ksGfZgoIxOV2hNF1paQugaMJUMtuA4M1DPS6mw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=IvB6gJkFSVn3eVVLV2TA4gpo0J7iH9N95ur0ANwcKolGmGjEEnHp1Cxg6lNg/hg7F
-	 qzgzX2pGQHtxmdbA7Ma5ZTlhcsnSwrBiJzZV+yTVzyJ9HIS0g1F68UVO8z+N1/WVOU
-	 JHKbbUReVAXCrRHsPO4jC9/hmjixWVKOJmA8jokI05PAwi6dShmwUfEbTH/jb4BUZF
-	 aIsKnnY8+aqL2RksBHPO1Ep4lNDcqheKAHoaaRyvysbYC+UTNtN093WvrwI8Kl/Xgg
-	 h8na9V+foLpwnu6Sv/lq68ngyoheD9nu4yDTuQzF0aU3Ulk6rDy09MEW8h44YGhef8
-	 C5FI/RwLsuVbg==
+	b=IeD+3WtMzOTET3ia36pIYgSjyg7AbuOmcA5gQ4IhKn82Jd0UZZZN8fWGYg0bRgjLU
+	 Iy7NuHB/O55JxM56uOqxSjKPwhDpjWQ/07nnVK1UonqAUJjKsOF5gernuXKo0kQT1V
+	 PwQOxqFunYdtdS7t0eDDuKTs3GcE4dPXOAd6xv05jIxspJUsQU09pOg0BNsukjzQb5
+	 yM9CwZDMHY/s82g/2+C/tTCmCOVDukJPrutseGrAzYmKOKaezum4jAVKZjU2CdqnHG
+	 A4Jxa1D2Q3vn4MYBUtoYl4HWC967QVrjT9HYeticvJgAh97PQjngPIrgeUQyExVomb
+	 CS3KZytlOnJlw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E63E382356;
-	Thu, 11 Dec 2025 19:28:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E29514107A;
+	Thu, 11 Dec 2025 19:28:03 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 40C852C1
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:53 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4E7A5E7
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0DF2F4006E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4691D40027
  for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JpCKI26AuP3c for <buildroot@buildroot.org>;
- Thu, 11 Dec 2025 19:27:46 +0000 (UTC)
+ id EqTFw8wJK855 for <buildroot@buildroot.org>;
+ Thu, 11 Dec 2025 19:27:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A269140027
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08D854008E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A269140027
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 08D854008E
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 917F986B3F; Thu, 11 Dec 2025 19:27:46 +0000 (UTC)
+ id 0874086B47; Thu, 11 Dec 2025 19:27:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Dec 2025 10:21:35 +0100
+Date: Thu, 11 Dec 2025 10:22:06 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: a6758069c24166b757580af1ea30d3304d9fd5d1
-X-Git-Newrev: a2c5393f242d39d8453ea8dbc7f4cd7adf1e0625
+X-Git-Oldrev: 081203958b871a677572a6e92fb8f2ab3ee2c6ae
+X-Git-Newrev: 8aa28cd0e83effd129c8777b324eef8645207b8c
 X-Patchwork-Hint: ignore
-Message-Id: <20251211192746.917F986B3F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- support/scripts/pkg-stats: check_url_status(): use HEAD requests to limit
- server load
+Message-Id: <20251211192747.0874086B47@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/audit: switch
+ SITE to https
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,37 +77,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2c5393f242d39d8453ea8dbc7f4cd7adf1e0625
+commit: https://git.buildroot.net/buildroot/commit/?id=8aa28cd0e83effd129c8777b324eef8645207b8c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-The gnu.org admins have been blocking the IP address of machines running
-pkg-stats as the GET requests for the (many) packages with gnu.org URLs are
-seen as abusive.
+The http link is broken:
 
-The resource body is not used, so use a HTTP HEAD request instead of a GET
-to limit server load and bandwidth use.
+Connecting to people.redhat.com (people.redhat.com)|209.132.178.26|:80...
+ failed: No route to host.
 
+No autobuilder error recorded.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit f9f3e6ccc66cd4f2becfc29e6b2b74beaddf14e6)
+(cherry picked from commit 80f8be48b65cd445b9a30b69235581fc5f437052)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/scripts/pkg-stats | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/audit/Config.in | 2 +-
+ package/audit/audit.mk  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index cfea179458..c659acb80e 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -469,7 +469,7 @@ async def check_url_status(session, pkg, npkgs, retry=True, verbose=False):
-     global check_url_count
+diff --git a/package/audit/Config.in b/package/audit/Config.in
+index 6e5761533f..e9bdf346da 100644
+--- a/package/audit/Config.in
++++ b/package/audit/Config.in
+@@ -17,7 +17,7 @@ config BR2_PACKAGE_AUDIT
  
-     try:
--        async with session.get(pkg.url) as resp:
-+        async with session.head(pkg.url) as resp:
-             if resp.status >= 400:
-                 pkg.status['url'] = ("error", "invalid {}".format(resp.status))
-                 check_url_count += 1
+ 	  Note: The z/OS remote plugin is disabled in this package
+ 
+-	  http://people.redhat.com/sgrubb/audit/
++	  https://people.redhat.com/sgrubb/audit/
+ 
+ comment "audit needs a toolchain w/ threads, dynamic library"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index eb0b74b098..499cf1cee9 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ AUDIT_VERSION = 3.1.5
+-AUDIT_SITE = http://people.redhat.com/sgrubb/audit
++AUDIT_SITE = https://people.redhat.com/sgrubb/audit
+ AUDIT_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+ AUDIT_LICENSE_FILES = COPYING COPYING.LIB
+ AUDIT_CPE_ID_VENDOR = linux_audit_project
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
