@@ -1,62 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0376D43341
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAD1BD43345
 	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:27:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C13C28221B;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 88CED40FCE;
 	Thu, 11 Dec 2025 19:27:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zS3G1cs1MgHq; Thu, 11 Dec 2025 19:27:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1pL6ekogmFDW; Thu, 11 Dec 2025 19:27:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCFA082391
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DF4940DEE
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765481275;
-	bh=2nRSbP2n+4OmQouUri6DqIG3r2P++mghQ6fcPDlEBVc=;
+	s=default; t=1765481274;
+	bh=mg4lRLOrKlM68+7CrWQHtO6eGLDJRE9BXGaxlIdbc/Q=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=iB30N+ONeexk0sGvsEivN1OsmYCz1/rxvEYsBP2uQzJYkcQvm98GOmprgbgReUGmb
-	 yYciCr38Z54aD8rCvGS8gR2PO0Gy/ZRTtFL/3ws/afI3NTB4f4vqrzwvxXipuL+FMy
-	 wsgLzFsvLUnbosQPfaBMVt2LtBJoocUIrQvGtKV8azrFx1kzwWxHUgVMFT6pAxAknb
-	 UXwgKc6B9UTTTEsuU6iU/6YwQZ+2RFram8EiFm09U1GhKSxC9DKBwB63SQXcylF6pU
-	 V9JfHhw0G9RZj3AdgxWCnSXO/fAsMzveUYKoWJ3gcwN0/RNTv6spDF+bBL/vuF+avp
-	 /qp4MJ/TTA+Gw==
+	b=EfU1FwM0d/WaEFNKskcTAHyxPjui+pCLVcWhySrocXtm9BjIEWVr8H/xCJ7ttTsEu
+	 DXHHr12Q0c/eY/baB9Hic4CMuex55p1QgBjT0xDsK3apeGtuCDEDHqnYB7L8iKTpaH
+	 JjMCWi6J1mZJUVA7Gi87yvgrtnG9ot8uppn5TEy5mZ7wDka/uikTTpStWjACPBBjRY
+	 +lpbExy+N3imO3ykDaLN6Q4MIhRzvS2yhvUapbXp8Y1Y77IZ7QlgmNlQKVW57T9gQy
+	 CSsQMv3gTI52yFYXz2TJ/dcln8jGJgTWhZVGo/9upcy5QijjUqRgWq4buIJscj6t47
+	 uUwsBcJTlTC2g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DCFA082391;
-	Thu, 11 Dec 2025 19:27:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id DE43DE7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4DF4940DEE;
+	Thu, 11 Dec 2025 19:27:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B2111E7
  for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C25AB80B81
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A319F6073C
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xQNrSH89vxl7 for <buildroot@buildroot.org>;
- Thu, 11 Dec 2025 19:27:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vrZAJ5qWbie2 for <buildroot@buildroot.org>;
+ Thu, 11 Dec 2025 19:27:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0137680EBF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B925F60087
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0137680EBF
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B925F60087
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:27:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 006BF86B46; Thu, 11 Dec 2025 19:27:46 +0000 (UTC)
+ id AB3F786B49; Thu, 11 Dec 2025 19:27:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Dec 2025 10:22:04 +0100
+Date: Thu, 11 Dec 2025 10:21:45 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: e79d30584b54954719e8d39c0cda353de9286bcc
-X-Git-Newrev: 081203958b871a677572a6e92fb8f2ab3ee2c6ae
+X-Git-Oldrev: 904c5049745882af48ae01714b03ee35534d8e68
+X-Git-Newrev: cc1ddb77fe8ce50ce650363f4839c5994c0d81bf
 X-Patchwork-Hint: ignore
-Message-Id: <20251211192747.006BF86B46@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/mosh: update SITE
+Message-Id: <20251211192746.AB3F786B49@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ package/x11r7/xserver_xorg-server: security bump to version 21.1.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,35 +77,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=081203958b871a677572a6e92fb8f2ab3ee2c6ae
+commit: https://git.buildroot.net/buildroot/commit/?id=cc1ddb77fe8ce50ce650363f4839c5994c0d81bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Old URL returns 404, update SITE according to https://mosh.org/
+Changelog:
+https://lists.x.org/archives/xorg/2025-October/062147.html
+https://lists.x.org/archives/xorg/2025-October/062150.html
+
+This commit also updates the COPYING license file hash, after year
+update in upstream commit:
+https://gitlab.freedesktop.org/xorg/xserver/-/commit/7cd443c610e5186ff09f0038d0d615600bd9a1e5
 
 Fixes:
-https://autobuild.buildroot.net/results/c1c/c1cf4568c82deb118aad0171bda356c7f59f17dd/
+https://www.cve.org/CVERecord?id=CVE-2025-62229
+https://www.cve.org/CVERecord?id=CVE-2025-62230
+https://www.cve.org/CVERecord?id=CVE-2025-62231
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9c12266739c52b0754ad1e185307273faa851b0d)
+Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+[Julien: fix COPYING license file hash]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 78513ff979f457a7e817ea27fa600fbe3835aff0)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/mosh/mosh.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 8 ++++----
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
-index 3c41a17401..bc1f382a9f 100644
---- a/package/mosh/mosh.mk
-+++ b/package/mosh/mosh.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index 7d373850d0..92030d4307 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg/2025-June/062065.html
+-sha256  c8591ceb70b177440062406542fe52ba60212f217f27f8f802dd20373ca9e74b  xorg-server-21.1.18.tar.gz
+-sha512  d0cd176e4c7273b6870999a3d008ed282fd5609acb2e0919c16447af3a5b2228d8592424388a8ace67acf216cdfae3a2d52f7a7ba81f6071467c61d57f32f314  xorg-server-21.1.16.tar.gz
++# From https://lists.x.org/archives/xorg/2025-October/thread.html
++sha256  a51aea1cbb29cb8122e39c1c8728469d4fd8db71a538565fbf017df11841bf04  xorg-server-21.1.20.tar.gz
++sha512  dabe7e637df4b964a1ff04a15587157b9596851a722a753447c257253ad0422007078b74053e1a51bdfd2178e3140a52f94dff0f205242a8589b6fe02d27e8a8  xorg-server-21.1.20.tar.gz
+ # Locally calculated
+-sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
++sha256  abbb7969df55e399e91104ded4d0a20a1b67de7c01138e63d61b7ed4f81fec0d  COPYING
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 2ce02ade36..c9456c66b5 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- MOSH_VERSION = 1.4.0
--MOSH_SITE = https://mosh.org
-+MOSH_SITE = https://github.com/mobile-shell/mosh/releases/download/mosh-$(MOSH_VERSION)
- MOSH_DEPENDENCIES = zlib ncurses protobuf host-pkgconf
- MOSH_LICENSE = GPL-3.0+ with exception
- MOSH_LICENSE_FILES = COPYING COPYING.iOS
+-XSERVER_XORG_SERVER_VERSION = 21.1.18
++XSERVER_XORG_SERVER_VERSION = 21.1.20
+ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.gz
+ XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XSERVER_XORG_SERVER_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
