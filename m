@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DB99D43342
-	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:30:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 795F7D43341
+	for <buildroot@archiver.kernel.org>; Thu, 11 Dec 2025 19:30:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 21F0A41199;
-	Thu, 11 Dec 2025 19:30:27 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3PMKUVGWf4as; Thu, 11 Dec 2025 19:30:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7261410C3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765481423;
-	bh=3XgR8F24Fbi+6Qn7M10ZFwbg7fsF0AYVJDIKcOAC8po=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=gEPlzfVopNIebY3/Q0qHbh+QmTKVT2WkADg4cqRXJt18VuCsq5wEprat/tXjgU5GP
-	 LzM796Fzac03gw6HU4aVip8oz42JeBNF5ArrqCdbe2U43L4eteIJqvcDDX7CApiw8h
-	 nTwfTPeMg0LRF/K0TVPniO7/lwpQy8akj9CKngNcCJnuLI442ma2iBtGe5U8IQpA3f
-	 rypCsUQjbpYeiqJKBd6eEeosfDxCAfulmx/GwzrC8BsqGdQk033PvoWbbMxpaAwVML
-	 GQ8TnWWUklySVbBBkZiv3JgXCKUnbIdtFazg9Qnz3+DdmdkkHJzzvkN1NEF4RLqVe4
-	 9hASK59JOikYw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7261410C3;
-	Thu, 11 Dec 2025 19:30:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F123E7
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:30:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 752C480DFB
- for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 506D4823C0;
+	Thu, 11 Dec 2025 19:30:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l9p-vrcz798Y for <buildroot@buildroot.org>;
+ id KTHqn8V27i1p; Thu, 11 Dec 2025 19:30:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AB828249E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1765481429;
+	bh=l76CcvZIl3TiW4zRDXCNRlRXiwUPcA30KsDRE6wNZ1A=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=TBClsI8Qq0UpjdPEI967sHua+shM1l7if9oBctmzS6beTehuZXlLQz+Z+t0wUltLH
+	 TJwdD7RzcMnf+KM/jiWOHiLBMrH/Srj3xGEJu/bavZZj0FEca64LP/QcAO6o/ndhDY
+	 mfClqTyHMAvOVRobGzwgcN5VEqZjn2cTuNoywNQu9XYkTkxUum1sbUaiywtvdiLU50
+	 XuHpcdzXoIosIksxt8U1ikoq3Y26lwRMZi08SimZPmmlGAzv6uXTtoSdUAmxbteLu3
+	 iVVWV2tpygkSTxbheFnNyfri98MhPr2YvpxlbHxoR2qZ4CSpVgpFgk/gwBnASxvkIV
+	 Za6AjNznnFMqA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7AB828249E;
+	Thu, 11 Dec 2025 19:30:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 117942C1
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:30:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5340480D8A
+ for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:57 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JW97N6o5TyOs for <buildroot@buildroot.org>;
  Thu, 11 Dec 2025 19:29:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1E0980E2F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52CD180DAC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A1E0980E2F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 52CD180DAC
  for <buildroot@buildroot.org>; Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A109F86BE7; Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
+ id 5237D86BE2; Thu, 11 Dec 2025 19:29:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Dec 2025 10:56:59 +0100
+Date: Thu, 11 Dec 2025 10:56:38 +0100
 X-Git-Refname: refs/heads/2025.08.x
-X-Git-Oldrev: 1d5f7045d645e56dc058c1c4528112e38c0ed39e
-X-Git-Newrev: 44beca14a269d0c90ac62771ed7806f8c23c74c7
+X-Git-Oldrev: c6f1bc8cb7ac5ecf242a1bc22ba023119d02b763
+X-Git-Newrev: 1d13662a5fe393530abeb5896fc52168e1b5730b
 X-Patchwork-Hint: ignore
-Message-Id: <20251211192954.A109F86BE7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.08.x]
- support/scripts/cve-check: don't fail with unknown CVE
+Message-Id: <20251211192954.5237D86BE2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.08.x] package/softhsm2: update
+ SITE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,67 +77,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44beca14a269d0c90ac62771ed7806f8c23c74c7
+commit: https://git.buildroot.net/buildroot/commit/?id=1d13662a5fe393530abeb5896fc52168e1b5730b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.08.x
 
-The NVD database has CVE entries that are not present but may be
-referenced in other security trackers.
+Original site is down, unchanged tarball can be downloaded from github.
 
-For instance the CVE-2024-12455 is documented in the Debian security
-tracker [1]. However, the NVD page is empty [2] and this entry is not
-present in the NVD database mirror.
-
-The following command would make the script fail:
-
-```
-echo '{
-  "vulnerabilities": [
-    {
-      "id": "CVE-2024-12455"
-    }
-  ]
-}' | support/scripts/cve-check --enrich-only
-```
-
-No CVEs present in Buildroot ignored CVEs are affected. But when
-enriching an SBOM with legitimate CVE not present on NVD, the script
-will fail.
-
-This patch change the behavior to just log to stderr unknown CVEs
-instead of making the script fail.
-
-[1] https://security-tracker.debian.org/tracker/CVE-2024-12455
-[2] https://nvd.nist.gov/vuln/detail/CVE-2024-12455
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-[Peter: Tweak warning message]
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit fa7fac09854b753cbce26298dd07622e65b1c4f0)
+(cherry picked from commit dd2b3607940123a3aa1ab870e55021f454d19fec)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/scripts/cve-check | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/softhsm2/softhsm2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/scripts/cve-check b/support/scripts/cve-check
-index a72547ab38..ff14e4b238 100755
---- a/support/scripts/cve-check
-+++ b/support/scripts/cve-check
-@@ -271,10 +271,13 @@ def enrich_vulnerabilities(nvd_path: Path, sbom):
-         if vuln_id is None or not vuln_id.upper().startswith("CVE-"):
-             continue
+diff --git a/package/softhsm2/softhsm2.mk b/package/softhsm2/softhsm2.mk
+index 5e37e42dde..ae44b93bc4 100644
+--- a/package/softhsm2/softhsm2.mk
++++ b/package/softhsm2/softhsm2.mk
+@@ -6,7 +6,7 @@
  
--        cve = cvecheck.CVE.read_nvd_entry(nvd_path, vuln["id"])
-+        cve = cvecheck.CVE.read_nvd_entry(nvd_path, vuln_id)
- 
--        vulnerability = nvd_cve_to_cdx_vulnerability(cve.nvd_cve)
-+        if cve is None:
-+            print(f"Warning: '{vuln_id}' doesn't exist in NVD database.", file=sys.stderr)
-+            continue
- 
-+        vulnerability = nvd_cve_to_cdx_vulnerability(cve.nvd_cve)
-         vuln_append_or_update_affects_if_exists(vulnerabilities, vulnerability)
- 
- 
+ SOFTHSM2_VERSION = 2.6.1
+ SOFTHSM2_SOURCE = softhsm-$(SOFTHSM2_VERSION).tar.gz
+-SOFTHSM2_SITE = https://dist.opendnssec.org/source
++SOFTHSM2_SITE = https://github.com/opendnssec/opendnssec/releases/download/2.1.14
+ SOFTHSM2_LICENSE = BSD-2-Clause
+ SOFTHSM2_LICENSE_FILES = LICENSE
+ SOFTHSM2_DEPENDENCIES = openssl
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
