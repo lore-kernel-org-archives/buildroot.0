@@ -4,84 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A227D4337F
-	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 08:04:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2AE6D4337F
+	for <buildroot@archiver.kernel.org>; Fri, 12 Dec 2025 08:04:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4073380B78;
-	Fri, 12 Dec 2025 08:04:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC5F3811C8;
+	Fri, 12 Dec 2025 08:04:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KKDjsTGSF4rc; Fri, 12 Dec 2025 08:04:21 +0000 (UTC)
+ id tSXfHy7O1rRM; Fri, 12 Dec 2025 08:04:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8113180652
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8938680F7E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765526661;
-	bh=7AXwcxZIyvoc2kzKIo6N/5dCO2/a/qu15/ddH/4xSl0=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=R5BRRxWo4jdzTc43uj2XdGS8QYGUVBK017naMzKY260bdQhXyLN/NfPTT1JRV2Owp
-	 r+qsIFSfmhAprGt/mYlrLtOSIfZB3tyjJFLHqSoQS47bon7z4cK6EGflIMfzVKRIv0
-	 Ke7dtV2VTXLL9xDM22SfSjWY0v7k+Wks5QOyauSaqt9VVUmKi73fefagl5TajpLkif
-	 dIoaSUdoCXy+p+6qu695GEoI2MwLDnr4ZTSRL7hq6a8P3JTIShGF+viVfUuCtsf2ya
-	 kiNB9IGb0GYMgLW1SXGI/6sF7h3v/ppyNMxr03CdPdUs3G5htggTpSv6QnAxqzPe1F
-	 WyFKCF7S7c5Yg==
+	s=default; t=1765526676;
+	bh=+c+YsWEjlWzwSiHuQRbR4cNvj9d+8MSg1ckTCVvT/Xs=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=fNIaYIc7EjOLnbgnl8bFZTaRQGB+FiWvTem+jggzTfMf0PwdTxnDfXdvik1XV7aBq
+	 YSnyskv+LV/UC2c5A5FuegFPbGb4R9Fm+fkSYqDgKtrGaVVPkwsFJjkDgvHuEd6F6f
+	 AzLFFEw/+MPvkF++5lztIr0Yg87zUlZ4Iqfik85xqvn+LdXrCUqc6+UDpiPq+YYtn7
+	 Btw+Kp6UTH1lYSYUt2Dp1nh2KKQnv69vQYKeFZ2VIJkXICp7kxRI+AlCBu31Ra2ULr
+	 EoipsXjrL4kso1CnQTzSIp7ddbrxFGCSqBKEsMw3Wx7rRv7DZNhpObOK/gA98qkXkh
+	 TuQaXe0ZufocQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8113180652;
-	Fri, 12 Dec 2025 08:04:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8938680F7E;
+	Fri, 12 Dec 2025 08:04:36 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id EED822C1
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 08:04:19 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 68B8F2C1
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 08:04:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D4D598466C
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 08:04:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4ED7F80F37
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 08:04:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9MV0XmhOOyzN for <buildroot@buildroot.org>;
- Fri, 12 Dec 2025 08:04:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ id JPWFt6dn5RwF for <buildroot@buildroot.org>;
+ Fri, 12 Dec 2025 08:04:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9B34F8466B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B34F8466B
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9B34F8466B
- for <buildroot@buildroot.org>; Fri, 12 Dec 2025 08:04:18 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1756741258; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Fri, 12 Dec 2025 08:04:12 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vTy8I-00000001Yb6-1nvH;
- Fri, 12 Dec 2025 09:04:10 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AAC7A80F11
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AAC7A80F11
+ for <buildroot@buildroot.org>; Fri, 12 Dec 2025 08:04:34 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A6B0C86C83; Fri, 12 Dec 2025 08:04:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20251211083052.432926-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni via buildroot's message of "Thu, 11 Dec 2025 09:30:51
- +0100")
-References: <20251211083052.432926-1-thomas.petazzoni@bootlin.com>
-Date: Fri, 12 Dec 2025 09:04:10 +0100
-Message-ID: <87v7ic15z9.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=QnE+YSMke/2nUXw2eppi5VMb6g8o8vAjaKTrCb6lC9LR5O+rXHvHGnzZvmyJrmmGjtm2z0+B0vHmAlqbn9ph2pObTHNmGf94/2f4cCC7+gQivCLvjymAQtZyEH+4gx3j9i76ADrglLOX4w55ILSYTfd3QhYnZLXkuukO5vXWK0pjn3MDlsV5po4L2h8JkqoiRuVhe6PtM0vzLbIaD4L2Hucy1yeylDoaV+TppO/RMitVWbn6C7GS++WLTpg5ebhZuxLIJda9LFaE4GTpaz6MtzJOj2OXzMb+lRSXZyTworeDQidOKGkVy8hhYpjBbimcUNGqGQ4AbVnhXhY9Cx7/+A==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=qR6gQXDaS0uyz2CnLZoyFO9TTcptVf3m94UbSeaJ6ZM=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=QnE+YSMk
-Subject: Re: [Buildroot] [PATCH] support/dependencies: improve error message
+To: buildroot@buildroot.org
+Date: Fri, 12 Dec 2025 09:01:52 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 148cd0c3c1901f4c071cd5b30e40b22162986c97
+X-Git-Newrev: f59bf34164de2bd3573f758844282a85ffb3cf3c
+X-Patchwork-Hint: ignore
+Message-Id: <20251212080434.A6B0C86C83@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/dependencies: improve error message
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,23 +69,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f59bf34164de2bd3573f758844282a85ffb3cf3c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > "Fix you PATH" not only has a typo, but isn't very clear. Turn it into
- > "Fix your PATH environment variable".
+"Fix you PATH" not only has a typo, but isn't very clear. Turn it into
+"Fix your PATH environment variable".
 
- > Fixes: https://gitlab.com/buildroot.org/buildroot/-/issues/151
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/issues/151
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/dependencies/dependencies.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 2843e3c5d5..9c2aeaf23f 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -41,7 +41,7 @@ case ":${PATH:-unset}:" in
+ (*" "*|*"${TAB}"*|*"${NL}"*)
+ 	printf "\n"
+ 	printf "Your PATH contains spaces, TABs, and/or newline (\\\n) characters.\n"
+-	printf "This doesn't work. Fix you PATH.\n"
++	printf "This doesn't work. Fix your PATH environment variable.\n"
+ 	exit 1
+ 	;;
+ esac
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
