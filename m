@@ -4,91 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8D0ED5B164
-	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 20:28:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0A3FD5B169
+	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 20:40:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BB49960645;
-	Sat, 13 Dec 2025 20:28:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 286E9608A5;
+	Sat, 13 Dec 2025 20:40:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RTVopy9w_iXw; Sat, 13 Dec 2025 20:28:09 +0000 (UTC)
+ id FzYySijqnCAi; Sat, 13 Dec 2025 20:40:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2D8C60652
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FF02607ED
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765657689;
-	bh=8XwHwyR8k/gLhsQd6iDNsOObetGXvEquRyCnaVUgVZE=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=sbqV1agiOENorkS7sTSOCCLj8o+5mtjKCVE0VDU1byhLRhKWDzou+6YLu64XvKIL4
-	 ZwKKHDOYqRfI+c4KmYnxW4rG7hZIa6Vb+lO/f6itX1bExQq++JMPmzDLUxEUdPVK3E
-	 ZF0c3v8Zftd+xrAqiMHgQGUzuiJV/VKSkXcXr7YRjNb3rfXcGmyjl7SAXIUqygiGy2
-	 zztJ9iM9x4NUVEkHb27IiStZxZ078Xsvkr6c8YCBHHgOo5IwBzyveg7X5GUCPIHLEW
-	 KiZofHKqmFn9IFDemOt94CV2l2EXhQrqcoIk2+0ngWVrtXp01yKJhRGPTf7ImvuCjv
-	 GR8TjFKIUkmyg==
+	s=default; t=1765658429;
+	bh=n8UjUUuDQcKyXByh+5jePBliOIIjhuWU7bPVLh2c+m4=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=X7pbfDeVocCJwBCAk3f3IAFmVl/ZKcbfLNd5WZZjgHU1DZ58/H6J5k+Py1WynAEJ4
+	 uCJmJaVOysTh3Y4sHfZqF+IZF6Fyqvn6hA87ZI5lgD9KQsV1OaVqSAOuXPw1/NJn8f
+	 YoZfo0h7ItksZO0rUqD9UiCjhnKDkB3lAxpz67ZX+izMhHl259rieTjyYMpRdBN75H
+	 hh/zognQv1dTvpQhpkqHmcJQtNFMyitqthEUcKmm/eQ2KbUjv21Y3wNSWDAihqRtIg
+	 mNEsyK1eu1VvDSIIyjlll+4AcrremhReg/j2MdYwb2NMXF536HxFSkMXQAZg7+u7tu
+	 jLU7mJ9a2ZC7A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B2D8C60652;
-	Sat, 13 Dec 2025 20:28:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3CE1413D
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:28:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4FF02607ED;
+	Sat, 13 Dec 2025 20:40:29 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 397702C1
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:40:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2F0EE4098D
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:28:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2B01E40208
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:40:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HbYmgaHdMfGa for <buildroot@buildroot.org>;
- Sat, 13 Dec 2025 20:28:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 204C140909
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 204C140909
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 204C140909
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:28:07 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6cc21.dip0.t-ipconnect.de [79.214.204.33])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id EC5F9A4C3DCE;
- Sat, 13 Dec 2025 21:25:15 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:41122)
- by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vUWAr-000000003Sm-48qx;
- Sat, 13 Dec 2025 20:25:06 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Tj5nBvpKSNZB for <buildroot@buildroot.org>;
+ Sat, 13 Dec 2025 20:40:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.147;
+ helo=smtpweb147.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3BFFF400A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3BFFF400A0
+Received: from smtpweb147.aruba.it (smtpweb147.aruba.it [62.149.158.147])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3BFFF400A0
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:40:24 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id UWPdvpoar3rWiUWPevHmb0; Sat, 13 Dec 2025 21:40:22 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Cc: Guillaume William Brs <guillaume.bressaix@gmail.com>,
- Julien Olivain <ju.o@free.fr>, Gilles Talis <gilles.talis@gmail.com>,
- Rahul Bedarkar <rahulbedarkar89@gmail.com>,
- Jianhui Zhao <zhaojh329@gmail.com>, Romain Naour <romain.naour@gmail.com>,
- Jan Heylen <jan.heylen@nokia.com>,
- Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>,
- Simon Dawson <spdawson@gmail.com>, Ben Boeckel <mathstuf@gmail.com>
-Date: Sat, 13 Dec 2025 21:25:02 +0100
-Message-ID: <20251213202503.1348845-16-bernd@kuhls.net>
+Cc: Christian Stewart <christian@aperture.us>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Sat, 13 Dec 2025 21:40:21 +0100
+Message-ID: <20251213204021.1811227-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251213202503.1348845-1-bernd@kuhls.net>
-References: <20251213202503.1348845-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202511301023; t=1765657515;
- bh=uZ49WSsUQVctC7caVd9eC24Yztfzj76Q+hhpVu20WGo=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=mSiY7TKIV1CN2Ec+G4Dclkfc8+QiJ9+CknUd0/Y+inb5ta34FPLbPy/IC48zdzrR1
- I4lv+y0VOTm8wzyv/DokszxzsBIBhOqEW5/bVjTQWX/Iag9xMIsV1FHAIZewFwlCDw
- n3yPqhR3r5Sd28ELJAM0mrFFG+VJx9GfsA9wAyZU3+PSWOrywK7iu/v9OEtw7KOrew
- n2RRUGdIgBy9YCyc40HD6Ku1Sq0ec2YnONjPyA7QLYDjq3+UY8r/NBaSbA2C3OKHKQ
- DMZjoeNzhB+z2rESTHrsje+/X+nvJ9j7WHFt68S3ubowtdcEyVGN3A+xVMoh8l99kT
- y3UKG7cC6845A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-CMAE-Envelope: MS4xfNwW7Rb3ShpmAWyotUN9ySOtb+sUSM8CBjZqpXGA1HjrwO/8fnPoloaDLkYqGw68cpWNXQEDruRLjrKM86hoYVPOXYuXWRTzr6RKnx5oMKeLuhMxuXfR
+ BR4ITCTKexYIdhNYZO7E3aSZSUyYyEoLXbRAnpehWoJBMnVkY35Jg3msP6EPfeE5rk8AQKA1v78Nf3xrGCkhqsdoaovt087JMNVa2jmux6JxSuH/bkf+Rx+W
+ aADfees0CrGQyEdtBRyU+SXyn1CUojttrGx1W96TkaMDaxz+ZXb30Kx1QiOS3UQai9UaY5jH74RBp6ZBBI2HAQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1765658422; bh=O8by0NDxKwOFbYlCZ+VQoWqBZ1QvT2TL3Pszc83XKAg=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=ebmLvAWPhL3V8Oa2brcjwLzU23gTw72oxCGWWJvRPS66oL2bKl5/g4lhydHtguvv2
+ 8UtqcmOcwn2QlxdGKT0+XZB4mdzc/m9akv70acqghA+vhIEB9kLNNZjdUEJdY/CAVR
+ iBr3s6YGlA158edKR4D9C0zNYWZa458g1PGAIV47pLNWLHeXjSgKX3L5HYstl/IXRW
+ KRiT5RGUNGiYmo5xwE+G0ycjNRqUsNz9rJHZ+/lbi1jsfnbheYXYEodH57dd575CyA
+ AtgVG54vdSQR1mFGgo2hsyf/hqLPZ/OTQlK/07hNe6llstt4onABUuZNv19Gj3wcSE
+ LqsVWt9yZBMEw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=mSiY7TKI
-Subject: [Buildroot] [PATCH v2 16/16] package/racehound: remove package
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=ebmLvAWP
+Subject: [Buildroot] [PATCH] package/rtl8821au: bump to version 2025-12-13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,176 +96,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Analysis of https://github.com/kmrov/racehound:
-last commit: Jul 2017
-last bug report: 0 open
-last pull request: 0 open
+This allows to build with Linux 6.18
 
-Analysis of https://github.com/euspectre/racehound (another fork)
-last commit: Jan 2022
-last bug report: Jul 2017
-last pull request: 0 open
+Fixes:
+https://autobuild.buildroot.org/results/bc0ec5fe3acb37740b54eb1af1fe5d9284c87cf2/
 
-The package is broken with cmake 4 and no other package depends on it.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- Config.in.legacy                              |  6 ++++
- package/Config.in                             |  1 -
- ...ll-path-lib-instead-of-usr-lib-prefi.patch | 26 --------------
- package/racehound/Config.in                   | 35 -------------------
- package/racehound/racehound.hash              |  3 --
- package/racehound/racehound.mk                | 27 --------------
- 6 files changed, 6 insertions(+), 92 deletions(-)
- delete mode 100644 package/racehound/0001-Fix-module-install-path-lib-instead-of-usr-lib-prefi.patch
- delete mode 100644 package/racehound/Config.in
- delete mode 100644 package/racehound/racehound.hash
- delete mode 100644 package/racehound/racehound.mk
+ package/rtl8821au/rtl8821au.hash | 2 +-
+ package/rtl8821au/rtl8821au.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 4822ec9847..4743813a92 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
+diff --git a/package/rtl8821au/rtl8821au.hash b/package/rtl8821au/rtl8821au.hash
+index 29b4d46f8e..ca5f9f15df 100644
+--- a/package/rtl8821au/rtl8821au.hash
++++ b/package/rtl8821au/rtl8821au.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  fe9840003e9481cf9fce3a5ed3f5b985615f862abc1b8d51fe6de7da9e4943c9  rtl8821au-dfe6801adb9b3a5572260ab308d3b69522992814.tar.gz
++sha256  1d9f87c7a30d54f67cb09e98a436565ba9c64a28feca95205f66212d8833836c  rtl8821au-bb26b6b06c47b79c17426ef186f44a608dbed7a0.tar.gz
+ sha256  640d90f6ee401241ff62834d0d1b33f83049e99b8bfdfa04ed1b0a1635dde3e7  LICENSE
+diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
+index 734b427019..4e7aee4204 100644
+--- a/package/rtl8821au/rtl8821au.mk
++++ b/package/rtl8821au/rtl8821au.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "Legacy options removed in 2026.02"
- 
-+config BR2_PACKAGE_RACEHOUND
-+	bool "racehound has been removed"
-+	select BR2_LEGACY
-+	help
-+	  racehound is unmaintained and has been removed
-+
- config BR2_PACKAGE_TASKD
- 	bool "taskd has been removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 61ee8db3f3..94be4fa24f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -141,7 +141,6 @@ menu "Debugging, profiling and benchmark"
- 	source "package/poke/Config.in"
- 	source "package/ptm2human/Config.in"
- 	source "package/pv/Config.in"
--	source "package/racehound/Config.in"
- 	source "package/rt-tests/Config.in"
- 	source "package/rwmem/Config.in"
- 	source "package/sentry-native/Config.in"
-diff --git a/package/racehound/0001-Fix-module-install-path-lib-instead-of-usr-lib-prefi.patch b/package/racehound/0001-Fix-module-install-path-lib-instead-of-usr-lib-prefi.patch
-deleted file mode 100644
-index 6cac55d3eb..0000000000
---- a/package/racehound/0001-Fix-module-install-path-lib-instead-of-usr-lib-prefi.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From 4f8ed39ddaf17c7dd4ddbdb88e67097f00c98173 Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Thu, 16 Jul 2015 23:11:25 +0200
--Subject: [PATCH] Fix module install path (/lib instead of /usr/lib prefix)
--
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- cmake/modules/path_prefixes.cmake | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/cmake/modules/path_prefixes.cmake b/cmake/modules/path_prefixes.cmake
--index 3cb1fe2..9dc50a4 100644
----- a/cmake/modules/path_prefixes.cmake
--+++ b/cmake/modules/path_prefixes.cmake
--@@ -113,7 +113,7 @@ set(RH_INSTALL_PREFIX_DOC
-- # Set derivative prefixes
-- 
-- # additional, 1
---set(RH_INSTALL_PREFIX_KMODULE "${RH_INSTALL_PREFIX_LIB}/modules/${KBUILD_VERSION_STRING}/misc")
--+set(RH_INSTALL_PREFIX_KMODULE "/lib/modules/${KBUILD_VERSION_STRING}/misc")
-- # Another variant
-- #"${RH_INSTALL_PREFIX_LIB}/modules/${KBUILD_VERSION_STRING}/extra")
-- # additional, 2
---- 
--2.1.4
--
-diff --git a/package/racehound/Config.in b/package/racehound/Config.in
-deleted file mode 100644
-index 757743f79b..0000000000
---- a/package/racehound/Config.in
-+++ /dev/null
-@@ -1,35 +0,0 @@
--config BR2_PACKAGE_RACEHOUND
--	bool "racehound"
--	depends on BR2_LINUX_KERNEL
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_USE_WCHAR # elfutils
--	depends on !BR2_STATIC_LIBS # elfutils
--	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils
--	# only x86/x86_64 supported
--	depends on BR2_i386 || BR2_x86_64
--	select BR2_PACKAGE_ELFUTILS
--	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
--	help
--	  RaceHound can be used to detect data races in the Linux
--	  kernel on x86.
--
--	  RaceHound needs the following kernel configurations enabled:
--	  - CONFIG_X86_32 or CONFIG_X86_64
--	  - CONFIG_MODULES
--	  - CONFIG_MODULE_UNLOAD
--	  - CONFIG_SYSFS
--	  - CONFIG_DEBUG_FS
--	  - CONFIG_KALLSYMS
--	  - CONFIG_KALLSYMS_ALL
--	  - CONFIG_KPROBES
--
--	  https://github.com/kmrov/racehound
--
--comment "racehound needs an Linux kernel >= 3.14 to be built"
--	depends on !BR2_LINUX_KERNEL
--	depends on BR2_i386 || BR2_x86_64
--
--comment "racehound needs a toolchain w/ C++, wchar, dynamic library, threads"
--	depends on BR2_i386 || BR2_x86_64
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || BR2_STATIC_LIBS \
--		|| !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/racehound/racehound.hash b/package/racehound/racehound.hash
-deleted file mode 100644
-index fc64243047..0000000000
---- a/package/racehound/racehound.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# locally computed
--sha256  935bc4a7c7b645dee5b905f6e97d0db3f0ac4f48e71d15f4e3982811017ac43c  racehound-f09f06fcc3c77c8c5541be3ba5be80aa8148ce0c.tar.gz
--sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/racehound/racehound.mk b/package/racehound/racehound.mk
-deleted file mode 100644
-index 93ce5c8e57..0000000000
---- a/package/racehound/racehound.mk
-+++ /dev/null
-@@ -1,27 +0,0 @@
--################################################################################
--#
--# racehound
--#
--################################################################################
--
--RACEHOUND_VERSION = f09f06fcc3c77c8c5541be3ba5be80aa8148ce0c
--RACEHOUND_SITE = $(call github,kmrov,racehound,$(RACEHOUND_VERSION))
--RACEHOUND_LICENSE = GPL-2.0
--RACEHOUND_LICENSE_FILES = LICENSE
--RACEHOUND_SUPPORTS_IN_SOURCE_BUILD = NO
--
--RACEHOUND_DEPENDENCIES = elfutils linux
--
--# override auto detection (uses host parameters, not cross compile
--# ready)
--RACEHOUND_CONF_OPTS += \
--	-DKERNEL_VERSION_OK=YES \
--	-DMODULE_BUILD_SUPPORTED=YES \
--	-DKERNEL_CONFIG_OK=YES \
--	-DKBUILD_BUILD_DIR=$(LINUX_DIR) \
--	-DKBUILD_VERSION_STRING=$(LINUX_VERSION_PROBED)
--
--# cross compile environment for linux kernel module
--RACEHOUND_MAKE_ENV = $(LINUX_MAKE_FLAGS)
--
--$(eval $(cmake-package))
+-RTL8821AU_VERSION = dfe6801adb9b3a5572260ab308d3b69522992814
++RTL8821AU_VERSION = bb26b6b06c47b79c17426ef186f44a608dbed7a0
+ RTL8821AU_SITE = $(call github,benetti-engineering,rtl8821au,$(RTL8821AU_VERSION))
+ RTL8821AU_LICENSE = GPL-2.0
+ RTL8821AU_LICENSE_FILES = LICENSE
 -- 
 2.47.3
 
