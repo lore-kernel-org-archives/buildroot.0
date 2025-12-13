@@ -4,60 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B359D5AE41
-	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 12:40:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22F68D5B15C
+	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 12:42:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 94FEF60D86;
-	Sat, 13 Dec 2025 12:40:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED39660D94;
+	Sat, 13 Dec 2025 12:42:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VGR4wqJcIrnW; Sat, 13 Dec 2025 12:40:32 +0000 (UTC)
+ id 56RHIqjFVPIk; Sat, 13 Dec 2025 12:42:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FDBE60D70
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8D3A60D70
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765629632;
-	bh=plLPioN2NifVnxH9kVDhJWql5hKVJrh7aAC1i3Gvy+s=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=f2YakSXmtPDBR6oSElvtDLKjkLw0USBWhR2FTxVJk1kYCDGwUtGuxyNUKZ+Mu/eGV
-	 rNZKGmj5sGW5iza7WOMwU8Vyz/2fsOfG3CXh5YL6dwZ1cuEAcLHMj2lYXnvGMT+QDE
-	 eQ5+HZdxWgvsQvqoz2xizCUanh46Lo1UUyWKsDb4R08m8swAwTqq1K7KxGUFA+gwVs
-	 2Lus0mN+aUksNm2FX2fdhoih9NMbJnQqF4f+Zo/jhcDkiwk5aYDxyoDtlsbmH29v02
-	 B3hsWoQMbddhI9GWt1PUtD/8sGZAp65FMT2ZT1XLl+4k/c9u+BiS2dUQJVWCtJMay5
-	 O9yxgmecvnB3A==
+	s=default; t=1765629732;
+	bh=4xbhb8xFshURDowLV866STBD6hEccjron6mkQzaX3Gg=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=ATaDYo0HAll16MENwRrNHMDohYBB3LA7UO1sqYSUYR1q3+FfLoIK/G7B49Bfj9EzQ
+	 +FSyj+JjU07s25efG1r2nNf0twTLG0vqgf9OIdcDO4K2mmkpjIa+T9iZpI5eoKV1Va
+	 sfuK+6rOdgdP9LXZfZpjpDzEjY36y1LE+zbfyPj9G0jYMnD+0R+mEqaasFwcaI85aR
+	 CToOBObBXUNqXfyJo6HRb6L3pt7ix7sIkmlqTYCnmz/LUKUr1WwUwrm37N5eRap66P
+	 R4lq2AZ/OqSSu6PPKGv3x+vq7JmyKFRPwQvFxX6uEv+Pa63pvcRoi6KF3pdLoZMY9l
+	 OqGqQ3rPyltrw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2FDBE60D70;
-	Sat, 13 Dec 2025 12:40:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 89B43E7
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 12:40:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D8D3A60D70;
+	Sat, 13 Dec 2025 12:42:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id CCF3A13D
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 12:42:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6ECD281311
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 12:40:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BE50783104
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 12:42:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fQdV6cYaDDjq for <buildroot@buildroot.org>;
- Sat, 13 Dec 2025 12:40:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0DC482289
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A0DC482289
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 12:40:28 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9C49586A8A; Sat, 13 Dec 2025 12:40:28 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 13 Dec 2025 13:31:38 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 68b83f9a805908e37fa6cf01e57752eb8ae2bc59
-X-Git-Newrev: 8f940235c07aac7d564863281563a22611149d5e
-X-Patchwork-Hint: ignore
-Message-Id: <20251213124028.9C49586A8A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dialog: bump to version
- 1.3-20251001
+ id uriTPJfN1RxV for <buildroot@buildroot.org>;
+ Sat, 13 Dec 2025 12:42:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B08A0830C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B08A0830C2
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B08A0830C2
+ for <buildroot@busybox.net>; Sat, 13 Dec 2025 12:42:10 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 4DB5B780375;
+ Sat, 13 Dec 2025 13:42:07 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 13 Dec 2025 13:42:07 +0100
+MIME-Version: 1.0
+Date: Sat, 13 Dec 2025 13:42:07 +0100
+To: Francois Perrad <francois.perrad@gadz.org>
+Cc: buildroot@busybox.net
+In-Reply-To: <20251212084937.76206-1-francois.perrad@gadz.org>
+References: <20251212084937.76206-1-francois.perrad@gadz.org>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <1895ab6871b41f2b7ac64ab793b71236@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1765629728;
+ bh=ywFy5r02QXijJ518H4Bf6G8ALobmUZEPMWO14YSYups=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=AR8DjIwW2lLMZSlptk45KgOJ7fMrXeFdhFGsrOthMucLr0r9IDoi/BhzTq/sf7TSo
+ 3CSmrjRAfFbEmkX3at4xY5e6Zyix6qbhvlxmrQjzuKEOvOGZZMsg/cS1hJtj7qOuv2
+ T8LD8uWThhWyrEulrjAr6smlNypgft0vWkMu0rnF4nOgQzDxbXy8EVQvI6fuu1hIaQ
+ QeC1xlxzEgf51UubnCbhSPlpz//kYvyK4QLATl6BYobLyuB5lhhfWhL7G91Kk3Tr4d
+ RtObZdlBR9dfcGMCdyRMS08miTZUg2qvLNNKdXQvnQD31o4PClFbT6occ8GVk1aUq+
+ jKl2rcRCPXmPw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=AR8DjIwW
+Subject: Re: [Buildroot] [PATCH] package/dialog: bump to version 1.3-20251001
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,68 +95,21 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f940235c07aac7d564863281563a22611149d5e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 12/12/2025 09:49, Francois Perrad via buildroot wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-For release notes, see:
-https://invisible-mirror.net/dialog/CHANGES.html#t20251001
+Applied to master, thanks.
+For info, I added links to the release notes and pgp signature. See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/8f940235c07aac7d564863281563a22611149d5e
 
-This commit also updates the Config.in package homepage URL
-to use https.
+Best regards,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[Julien:
- - add link to release notes
- - add link to pgp signature in hash file
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/dialog/Config.in   | 2 +-
- package/dialog/dialog.hash | 5 +++--
- package/dialog/dialog.mk   | 2 +-
- 3 files changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/package/dialog/Config.in b/package/dialog/Config.in
-index 830427e53d..169505a144 100644
---- a/package/dialog/Config.in
-+++ b/package/dialog/Config.in
-@@ -11,4 +11,4 @@ config BR2_PACKAGE_DIALOG
- 	  allows a developer of a script to interact with the user in a
- 	  much friendlier manner.
- 
--	  http://invisible-island.net/dialog/dialog.html
-+	  https://invisible-island.net/dialog/dialog.html
-diff --git a/package/dialog/dialog.hash b/package/dialog/dialog.hash
-index 3136d18b2b..44de2ec1a8 100644
---- a/package/dialog/dialog.hash
-+++ b/package/dialog/dialog.hash
-@@ -1,4 +1,5 @@
--# Locally calculated after checking pgp signature
--sha256  754cb6bf7dc6a9ac5c1f80c13caa4d976e30a5a6e8b46f17b3bb9b080c31041f  dialog-1.3-20220117.tgz
-+# Locally calculated after checking pgp signature from:
-+# https://invisible-mirror.net/archives/dialog/dialog-1.3-20251001.tgz.asc
-+sha256  bee47347a983312facc4dbcccd7fcc86608d684e1f119d9049c4692213db96c3  dialog-1.3-20251001.tgz
- # Locally computed
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
-diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
-index 681f8ec9fe..1039d593c5 100644
---- a/package/dialog/dialog.mk
-+++ b/package/dialog/dialog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DIALOG_VERSION = 1.3-20220117
-+DIALOG_VERSION = 1.3-20251001
- DIALOG_SOURCE = dialog-$(DIALOG_VERSION).tgz
- DIALOG_SITE = https://invisible-mirror.net/archives/dialog
- DIALOG_CONF_OPTS = --with-ncurses --with-curses-dir=$(STAGING_DIR)/usr \
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
