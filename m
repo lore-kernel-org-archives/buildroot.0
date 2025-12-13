@@ -4,84 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6ECE3D5B154
-	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 13:49:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02FC4D5AE41
+	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 14:02:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2C8BC60D71;
-	Sat, 13 Dec 2025 13:49:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE28A6059F;
+	Sat, 13 Dec 2025 14:02:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0uVLMZmKKCZI; Sat, 13 Dec 2025 13:49:35 +0000 (UTC)
+ id ngXrM5-qgQSb; Sat, 13 Dec 2025 14:02:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 583DD60D4D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4432605EB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765633775;
-	bh=+JPreNq6Q2amlVv0zGdZNaNsl2KuCJ1P++/jviDQ1F8=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=FdIdRGmoFvBBr+9mIJpwfE9tBF+Y+HlRQOf+/TyvmPsn5oMNMzuEAfmJ8YlEeGygL
-	 i0ulqDhKjIzUOQOCNX0aB5/k5oBqRF6LmXs2dGmy78B5XLYHlqY7XzjXxlQw1Odvi0
-	 CegdrlBF0I1VQfVcIsSoIaRoreL9fpY5Mn8XBKCx00ph903E1lZr4rFCRXyir9T/Tr
-	 8xyxO1bhI7NTmroprObLELSUshlg31rnSrccLUFLFWhQsOHp6B9TvePXv5Ny37fnnp
-	 psmTipXzmRgz45Og1BOezBlJftwM+0IuT5w050o+Kzg7lsxLPH+iGYeK3M+T6y/9Ih
-	 dgVTg9nTZ/QlA==
+	s=default; t=1765634544;
+	bh=YOXBP4TSYtrHT2+4lG7/emqAakIgLlVKSJTbvABXRIs=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=f6hHIz1MrWYanD6ToePluTw9RF4rzm9VwYr72HW6omGNOFZAPaIezCyAwZ+wmlcaU
+	 RNX3QuTVDBRgIdapo/v1W+Jk5rNvVik32myC20Dk4PkBmImIZRMaeqognTmLvqwuct
+	 677yR7fMv28M+SxDThZASEzF4FXAOONgs92+3Vn0bzPmeuqLG1LuDnk/uAAjCZ5Ivp
+	 PGteqaqTzZNNUFBJXiXbAK+pIXjvtDIxuB05R5oa4ak2MPwnAyM1581kUc1XZYHb2D
+	 15ie9KQDatf/6lSBVvENiEILXrDWANqP15+BNti1XF74vN8xgARD4xZ6VGFz1b3708
+	 p1A4OJm19vMUg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 583DD60D4D;
-	Sat, 13 Dec 2025 13:49:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 22C242C1
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 13:49:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C4432605EB;
+	Sat, 13 Dec 2025 14:02:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D814913D
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 14:02:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 148D240235
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 13:49:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CA457830C2
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 14:02:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jNC0kMdeYROV for <buildroot@buildroot.org>;
- Sat, 13 Dec 2025 13:49:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R460Fe2YFP2Q for <buildroot@buildroot.org>;
+ Sat, 13 Dec 2025 14:02:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EC7DE40018
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC7DE40018
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EC7DE40018
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 13:49:31 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1625766581; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sat, 13 Dec 2025 13:49:28 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vUPzz-00000002XDu-0YLh;
- Sat, 13 Dec 2025 14:49:27 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14136828DF
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 14136828DF
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 14:02:23 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E853F86C58; Sat, 13 Dec 2025 14:02:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Perale via buildroot <buildroot@buildroot.org>
-Cc: Thomas Perale <thomas.perale@mind.be>
-In-Reply-To: <20251030190936.262624-3-thomas.perale@mind.be> (Thomas Perale
- via buildroot's message of "Thu, 30 Oct 2025 20:09:36 +0100")
-References: <20251030190936.262624-1-thomas.perale@mind.be>
- <20251030190936.262624-3-thomas.perale@mind.be>
-Date: Sat, 13 Dec 2025 14:49:27 +0100
-Message-ID: <87o6o2ze3c.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=D4RNftE/JBIdAAvzM22crx+0VSF2iBdaw3Jzz1vTQsKbOa5lQYRiIcpue3wTIbMuXqtHVg+QZBo7lx61EjOvqcMbC7Wk3C9mfiXG78CupNsM36SA8MFu65tO+fZHXAPJPoHrBSGy4yBQe2WtGzOeHOZe837Sz87M5i0NiwAdponmDqgTfxNys/0lRndWC2eQXDFwlY+jjkrxKAdDjiZFcsSlcUPY0VW0p09w/1rYhQI51JRQIcSMuVrY8M0ogCUhpGZvCHNEH5crPpZ2JptJi3d63Po94SWbv/Ilp7NZ47DPLSmmmUoxrmS+yN9hNEnI25G54RuyWGmMQGyLIuyDaA==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=zr0vunIDbfRreZc2Q5SH0MjBKf+siNcEhwtCtGB5xUA=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=D4RNftE/
-Subject: Re: [Buildroot] [PATCH 2/2] docs/manual: mention CVE trailer
+To: buildroot@buildroot.org
+Date: Sat, 13 Dec 2025 14:50:07 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9415529923c9f7eaeec44c8fd3eecca79bf6b8d2
+X-Git-Newrev: 1167d0ff3d225ca9ce2b6299da28a9307d370142
+X-Patchwork-Hint: ignore
+Message-Id: <20251213140222.E853F86C58@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/manual: mention CVE trailer
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,36 +69,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Perale via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1167d0ff3d225ca9ce2b6299da28a9307d370142
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Adds documentation about adding a patch that address a vulnerability.
- > The patch-policy file now explain mention that patches that address a
- > vulnerability needs to include a `CVE:` trailer with the reference of
- > that vulnerability.
+Adds documentation about adding a patch that address a vulnerability.
 
- > Until now only adding the reference to the `_IGNORE_CVES` variable was
- > necessary, so the documentation of this entry is modified as well to
- > point to the patch policy.
+The patch-policy file now explain mention that patches that address a
+vulnerability needs to include a `CVE:` trailer with the reference of
+that vulnerability.
 
-Maybe we could extend ./utils/check-package to detect when it is
-forgotten?
+Until now only adding the reference to the `_IGNORE_CVES` variable was
+necessary, so the documentation of this entry is modified as well to
+point to the patch policy.
 
- > +----
- > +CVE: <vulnerability identifier>
- > +----
- > +
- > +If multiple patches address the same vulnerability, reference the vulnerability
- > +on every patches.
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/manual/adding-packages-generic.adoc |  6 +++---
+ docs/manual/patch-policy.adoc            | 13 ++++++++++++-
+ 2 files changed, 15 insertions(+), 4 deletions(-)
 
-I reworded this to "in every patch." and committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/manual/adding-packages-generic.adoc b/docs/manual/adding-packages-generic.adoc
+index 6827b9975e..e7547460fd 100644
+--- a/docs/manual/adding-packages-generic.adoc
++++ b/docs/manual/adding-packages-generic.adoc
+@@ -509,9 +509,9 @@ not and can not work as people would expect it should:
+ * +LIBFOO_IGNORE_CVES+ is a space-separated list of CVEs that tells
+   Buildroot CVE tracking tools which CVEs should be ignored for this
+   package. This is typically used when the CVE is fixed by a patch in
+-  the package, or when the CVE for some reason does not affect the
+-  Buildroot package. A Makefile comment must always precede the
+-  addition of a CVE to this variable. Example:
++  the package (see xref:additional-patch-documentation[]), or when the CVE for
++  some reason does not affect the Buildroot package. A Makefile comment must
++  always precede the addition of a CVE to this variable. Example:
+ +
+ ----
+ # 0001-fix-cve-2020-12345.patch
+diff --git a/docs/manual/patch-policy.adoc b/docs/manual/patch-policy.adoc
+index a4bc5f391a..02051f2f0e 100644
+--- a/docs/manual/patch-policy.adoc
++++ b/docs/manual/patch-policy.adoc
+@@ -144,6 +144,7 @@ AC_PROG_MAKE_SET
+ +AM_CONDITIONAL([CXX_WORKS], [test "x$rw_cv_prog_cxx_works" = "xyes"])
+ ----
+ 
++[[additional-patch-documentation]]
+ === Additional patch documentation
+ 
+ Ideally, all patches should document an upstream patch or patch submission, when
+@@ -177,4 +178,14 @@ Upstream: N/A <additional information about why patch is Buildroot specific>
+ ----
+ 
+ Adding this documentation helps streamline the patch review process during
+-package version updates.
+\ No newline at end of file
++package version updates.
++
++If the patch addresses one or multiple vulnerabilities, list each identifier on
++a separate line with a +CVE+ trailer.
++
++----
++CVE: <vulnerability identifier>
++----
++
++If multiple patches address the same vulnerability, reference the vulnerability
++in every patch.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
