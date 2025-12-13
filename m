@@ -4,85 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EDC7D5B156
-	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 11:58:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CAD6D5AE45
+	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 11:58:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6D5A540CDB;
-	Sat, 13 Dec 2025 11:58:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D97040CEB;
+	Sat, 13 Dec 2025 11:58:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BI6VYfsovF1A; Sat, 13 Dec 2025 11:58:39 +0000 (UTC)
+ id 290U5LbGadfP; Sat, 13 Dec 2025 11:58:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E48740C7D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28B9F40C7D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765627119;
-	bh=jNOWrYs2Ro/N/GnoBGYvbBdIGNsPSzH4eKgZwcybw5g=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=DsgiS5K6SyJyfYOtTTxV+CDmoa4IONK1PIyXr1NQuyb1ge5m0ApTnUq6sRw6s0YE6
-	 OCN00edswYeKGrZH67T9jD9y1JrsdLJDKxwe3lJI4hBsWJvWNy1w5ML5gcu/7LKrZy
-	 DTRHv8zZx7UuR4cRfQW2P/5hxcgQQPdPAVwZv2X2oW/1hmLxDRd1m+OFbqP6AptH/n
-	 cZ25UzYuO7qewswdJaUnpSM74P83phniUtwGUlJB/RDQQZyFC/6RENolifp3B8lud3
-	 652bCoh3stbHWu6has7HaZ6V5sdDpVVvRLmarFpKE/+OEeqX2vVQS9hEqyUT93gf58
-	 0w5bHk1vj6UjQ==
+	s=default; t=1765627130;
+	bh=C5kJLPhwXwAzB7XtCpOnnvxgHA2LyJaG2847sfSBndM=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=kQ9a3bsZOD8327t1A0hvGJYXVeE1P+TnSzgbpTByXqKE9Rn5Ldtlj32S21jY4ky9J
+	 B9DA5oknFcl8DTM+4HDnLhzhyK9FNvXzhV9LegOCXMdQmORHBc8HM46rGc5KbxnvO3
+	 GIdPACpdERlGRXL3Jn8MiirafKFCRwn46hIYRVy8W7cgKk9XC/ETheUkv4JecMZLpP
+	 ChuIidIo87Bhlquc81P31WRAA1MIoqR4WGmV58/6O6IeGJNTo1xMwVd9aWEFBxQUMQ
+	 hLtLUSKIEjZspBTclwrrj9H9VLDagXTlUi9maCzF77gHvMLgHQATyMK2VkMuhRMJPI
+	 5kqV7w0xIhyOw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E48740C7D;
-	Sat, 13 Dec 2025 11:58:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 458542C1
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 11:58:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 28B9F40C7D;
+	Sat, 13 Dec 2025 11:58:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E57072C1
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 11:58:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 377DB40186
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 11:58:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CC36C40186
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 11:58:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z_HFOFqqxYz1 for <buildroot@buildroot.org>;
- Sat, 13 Dec 2025 11:58:36 +0000 (UTC)
+ id 2KrcYo0LGfUt for <buildroot@buildroot.org>;
+ Sat, 13 Dec 2025 11:58:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 203A14009B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 203A14009B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C257B4009B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C257B4009B
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 203A14009B
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 11:58:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C257B4009B
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 11:58:47 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6cc21.dip0.t-ipconnect.de [79.214.204.33])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 77B08A4C4033;
- Sat, 13 Dec 2025 12:58:10 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:55170)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id C89B8A4C341C
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 12:58:27 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:52822)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vUOGI-0000000078u-0TYm;
- Sat, 13 Dec 2025 11:58:10 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vUOGZ-000000007Cp-20WR
+ for buildroot@buildroot.org; Sat, 13 Dec 2025 11:58:27 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 13 Dec 2025 12:58:09 +0100
-Message-ID: <20251213115809.1277255-3-bernd@kuhls.net>
+Date: Sat, 13 Dec 2025 12:58:27 +0100
+Message-ID: <20251213115827.1277293-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251213115809.1277255-1-bernd@kuhls.net>
-References: <20251213115809.1277255-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1765627090;
- bh=xFy4aU7LQCEa+iSH73HzNTOlbAfrx1f9q6i+2VnN51w=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=ocHPCYpqU8pJel4cKO6TbnugeswGoGoDIjNT6vyiaFcC4Jx1n10QsCKS9LmWoZLSq
- LPk/3T7xB0rLJct0F0x/F0YULuy4Iy8mYPom4IDwxbu9zs+lxVWdDQeN7otaLLUx1S
- bWa9lnepq0zl118iuecBWHTWS2Osp3+R/0YO+vQMl/5bWcjOeQyDK4Nm0DFb5FCIe3
- jU57F8TrCGmmnSzmJL97Tx6dWzSH74pNQBh2timEcw6r1yqnS5hyoZKw8+qzi+E1eY
- 0FaLr9+zwsp2GyzTPE6uE/eZfN9sOnisxGkHnbhdRlw9eqL4IR4hMY9DVVUIpv8XuG
- TU9/iI+8Bwitg==
+ s=kas202511301023; t=1765627107;
+ bh=fnS09tBzs8GyhpiwkxldyR8UJV3iuhiUoRLDAr70ROM=;
+ h=From:To:Subject:Date:From;
+ b=F7yxgVhkSF4cnMuU7o9BdyRXrZ6fKDo/exIMMDopP1RKLsK2/GS5PbwgaU6l1bMpr
+ G90njl47SElCxHKdbc64t+HNFDAI5tLk+nwEJCGmuO5syrXGxLtpUsVcNTJOltcP/Y
+ fOilomMgdapLbIT+sp3mg76Om/xP4wdwo5oipUVMacAIwxc21mF3LLFinMS1xlD82q
+ HBh2cMA56AcK8oYxAcSGQ+OLeatMcyJVEDxiZ2rxy92P32Forpf6HbA2kb+SKJF9Zn
+ nxUPBPYO/H0xFuuKgAshXfojnWSLys+Ie2+mGcrgVClkRBQicmaqodH1uf/n4yJVna
+ DiK/VhgtbVpyw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=ocHPCYpq
-Subject: [Buildroot] [PATCH 3/3] package/python-glslang: bump version to
- 16.1.0
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=F7yxgVhk
+Subject: [Buildroot] [PATCH 1/1] package/fetchmail: bump version to 6.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,45 +90,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/KhronosGroup/glslang/blob/16.1.0/CHANGES.md
-
-Supports spirv-{headers, tools} version 1.4.335.0:
-https://github.com/KhronosGroup/glslang/commit/209b675bf0c0d82c0e536bcb3cb7e1011957dd59
+https://sourceforge.net/p/fetchmail/mailman/message/59270832/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-glslang/python-glslang.hash | 2 +-
- package/python-glslang/python-glslang.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/fetchmail/fetchmail.hash | 4 ++--
+ package/fetchmail/fetchmail.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-glslang/python-glslang.hash b/package/python-glslang/python-glslang.hash
-index 16b399e542..5b53cd882a 100644
---- a/package/python-glslang/python-glslang.hash
-+++ b/package/python-glslang/python-glslang.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  172385478520335147d3b03a1587424af0935398184095f24beab128a254ecc7  python-glslang-16.0.0.tar.gz
-+sha256  32c605822ed63a0cdc2d24f318c3d912fa14e58573aff1d8eac0cf69f1a6b6d2  python-glslang-16.1.0.tar.gz
- sha256  17e70c676e1521ff3e4686f04a2053d93a7e28a33be8de7ec37ab0ff72feb677  LICENSE.txt
-diff --git a/package/python-glslang/python-glslang.mk b/package/python-glslang/python-glslang.mk
-index 48e5531600..92dc86bf6d 100644
---- a/package/python-glslang/python-glslang.mk
-+++ b/package/python-glslang/python-glslang.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
+index ddd71e6c86..3a762971f3 100644
+--- a/package/fetchmail/fetchmail.hash
++++ b/package/fetchmail/fetchmail.hash
+@@ -1,4 +1,4 @@
+-# From https://sourceforge.net/p/fetchmail/mailman/message/59258857/
+-sha256  38d01fe404e67514df394a6ed1a815bbb61aa90c0fa4402252593aced0e38a1d  fetchmail-6.6.1.tar.xz
++# From https://sourceforge.net/p/fetchmail/mailman/message/59270832/
++sha256  a5109295ec3319e0e45edd009d2d977042a8326ab52c6a817a82fa987103e4f3  fetchmail-6.6.2.tar.xz
+ # Locally computed:
+ sha256  a502ffd59034feee7e924b29500451b984992ae361bd8084736afc470f32135a  COPYING
+diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
+index 8906b6c8d2..6a63752d48 100644
+--- a/package/fetchmail/fetchmail.mk
++++ b/package/fetchmail/fetchmail.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PYTHON_GLSLANG_VERSION = 16.0.0
-+PYTHON_GLSLANG_VERSION = 16.1.0
- PYTHON_GLSLANG_SITE = $(call github,KhronosGroup,glslang,$(PYTHON_GLSLANG_VERSION))
- PYTHON_GLSLANG_LICENSE = BSD-3-Clause
- PYTHON_GLSLANG_LICENSE_FILES = LICENSE.txt
+ FETCHMAIL_VERSION_MAJOR = 6.6
+-FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).1
++FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).2
+ FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
+ FETCHMAIL_SITE = https://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
+ FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
 -- 
 2.47.3
 
