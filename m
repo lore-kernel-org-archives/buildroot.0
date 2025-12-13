@@ -1,59 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32868D5B165
-	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 20:26:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 457DDD5B164
+	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 20:26:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 092CD60752;
-	Sat, 13 Dec 2025 20:26:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SfbXEVo51ezY; Sat, 13 Dec 2025 20:26:10 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE848607ED
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765657570;
-	bh=AtYq7+3tlK8VK0emnrXtgBzgno7WL+BrYVTB7zPJeZo=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=hcXxiPb8BmWxcok7tz6SP8tv1CjSPBBtUW8Ej0PwSI7OdHIV1EBN5HnUj7IQP/gTb
-	 quxNr9HkMM2XqctNAq9Fy/AXP0MCVF3+qpIxK1Ji5Urh+IAxJxPk8UBvbkzURdjfif
-	 5gg3sROPs6NbOORhgHVQvh5Ytkx2jrugcCF8gq9ZgFKw7wOCENIUftITREULw3Q+lU
-	 pwF25c2LrhesB5oZ/wm0s2ozceyvx8F7G6gupZnbDujPQY88LncRTrPH+29mwyB5UJ
-	 yBc2dDH1IK+KqpmrAIQDhDs3VnMaiMjpGFp/EtCsWy7jLr+1IhUNLTlxC5DOREu/XP
-	 YilZvv/eUj47A==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE848607ED;
-	Sat, 13 Dec 2025 20:26:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3303C2C1
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:26:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 19568818BE
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:26:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 045CB82105;
+	Sat, 13 Dec 2025 20:26:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WWj2yDqbkWuY for <buildroot@buildroot.org>;
- Sat, 13 Dec 2025 20:26:07 +0000 (UTC)
+ id Vp04RQBkt5na; Sat, 13 Dec 2025 20:26:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFBD28212F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1765657582;
+	bh=BX2hN4G2DVZ18gBJ8W5goMGv5W5McwX3yDSRhjqbrto=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=JyuDVmlKhZKW+K0bmb21nYUOQCWrehp7K44BeNEhgv56GOExI/hV64Aqs2E0y8XBq
+	 8e2sm9NbcZEToxKD96+Bf0k4Z8vyBQ0p/oS8srdHa1GfAxv1ekE5BNAqxKOLtk/OAc
+	 p2+5X94dv6OFBn2lNe2SPziHf6VPJ/alYSotgHfd/7wiqAm6c/KPvTjl+G6xp14HP5
+	 eF7QHXht3ZQMcAWzou9v8PWAIQEmTUUr7/H2EsBfiEDc8z09gpxaoFhOeNYQNTB3EL
+	 BxN0ixAOLZHtHztDFhwzCRwqWw+zyNfZk2yWKV3OXn1DkEutWFVsg4yT/ii+vcUDnk
+	 YaXVGngsb8dDw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id EFBD28212F;
+	Sat, 13 Dec 2025 20:26:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6AC2A13D
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:26:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5CF3980EEA
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:26:20 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AzY4GnzQPE62 for <buildroot@buildroot.org>;
+ Sat, 13 Dec 2025 20:26:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C0D0A8141F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0D0A8141F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 301C88198A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 301C88198A
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C0D0A8141F
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:26:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 301C88198A
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:26:19 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6cc21.dip0.t-ipconnect.de [79.214.204.33])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 7994AA4C3D8A;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id BFD3AA4C3D8F;
  Sat, 13 Dec 2025 21:25:13 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:41122)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vUWAp-000000003Sm-45ka;
+ (envelope-from <bernd@kuhls.net>) id 1vUWAq-000000003Sm-0cnt;
  Sat, 13 Dec 2025 20:25:04 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
@@ -64,31 +64,31 @@ Cc: Guillaume William Brs <guillaume.bressaix@gmail.com>,
  Jan Heylen <jan.heylen@nokia.com>,
  Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>,
  Simon Dawson <spdawson@gmail.com>, Ben Boeckel <mathstuf@gmail.com>
-Date: Sat, 13 Dec 2025 21:24:52 +0100
-Message-ID: <20251213202503.1348845-6-bernd@kuhls.net>
+Date: Sat, 13 Dec 2025 21:24:53 +0100
+Message-ID: <20251213202503.1348845-7-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251213202503.1348845-1-bernd@kuhls.net>
 References: <20251213202503.1348845-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +++
+X-Spamd-Bar: ++++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1765657513;
- bh=985qGCcIDJRELvkEno0I0K5GGGsmtGNWtvCWqUEVlac=;
+ bh=A/3SoxHilG6J8dVNIgEn0kmay2Qo8cdmynbTQeKwNqs=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=IUu9DxnNBW9Br7o/SH0aHLdr1JitTc+6Y+6QK8iEOO4s2yhie8Wn8ZnQlrMAQYFAQ
- 7nSTux2heqxGkB5l4Ebs7Ll0eaojn/VPEJYl1RvC5BHDKtsA1WmSMaay4OSTX3EqXT
- AxKYO25GKHXsikYt1HKWP5MGN5RcrYqEP3BCx06sFo1bekLRkJP7EtI7sMFyTuafJN
- V/k/yxOZuvKFhcMUDz6VEPXaHiG8FfZRWTFmWKxKd/+5HSqN8dqVTbitPYjqY5rX22
- e7oSOahLP5wtjDuWn0/fjOyfVy8RRjEQwAAV7s+FjEb+sUEMspIe3BfJV0MJuRfner
- KTnbUHvIipzBw==
+ b=tE+wMqZwhh1lKhnzvD9S+QkHZJmgnPc+JR0PIvbzMwIT35Q5dYuvRSpRUwIFLH8lQ
+ kfA8GoTiSqgsOLSJRNFuae8MocpQCrayQ+1A38Vx0z9bhy5tQzf3DZR1cb5KL7QH4x
+ cIHnU/sBm69gRCegUQ0supUNsnkKgZD90dMocNviM/szHl1nM9TO33Xt6Mbj1XIMKq
+ PXgacOjztq3JuK4MtkvB30iojSlXZdfGeQGSDB1UKIhbKn5IjGI0qv2UFg44NjjxTp
+ kcKo0Ym/5qvdzTj+eb0x62VxhVeosm2LjP5stIEqGc9lvjoJ/ZEtKbwGb02k257BaY
+ MM6Wd+Ru5Up4Q==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=IUu9DxnN
-Subject: [Buildroot] [PATCH v2 06/16] package/let-me-create: remove package
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=tE+wMqZw
+Subject: [Buildroot] [PATCH v2 07/16] package/libcgi: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,198 +105,170 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Analysis of https://github.com/CreatorDev/LetMeCreate:
-last commit: Mar 2017
-last bug report: Apr 2017
-last pull request: no open PR
+Fails to build with cmake 4.
 
-The package is broken with cmake 4 and no other package depends on it.
+The package is a library without any reverse dependencies and no active
+development since 2021 (not counting a build fix provided by Fabrice in
+2022).
+
+Fixes:
+https://autobuild.buildroot.net/results/604/604e8e5752e9a11d25bb65b9913db57d3db85b6f/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
  .checkpackageignore                           |  1 -
  Config.in.legacy                              |  6 +++
- DEVELOPERS                                    |  1 -
  package/Config.in                             |  1 -
- .../0001-fix-build-with-musl-C-library.patch  | 38 -------------------
- package/let-me-create/Config.in               | 27 -------------
- package/let-me-create/let-me-create.hash      |  3 --
- package/let-me-create/let-me-create.mk        | 26 -------------
- 8 files changed, 6 insertions(+), 97 deletions(-)
- delete mode 100644 package/let-me-create/0001-fix-build-with-musl-C-library.patch
- delete mode 100644 package/let-me-create/Config.in
- delete mode 100644 package/let-me-create/let-me-create.hash
- delete mode 100644 package/let-me-create/let-me-create.mk
+ ...-CMakeLists.txt-honour-BUILD_TESTING.patch | 44 -------------------
+ package/libcgi/Config.in                      | 11 -----
+ package/libcgi/libcgi.hash                    |  8 ----
+ package/libcgi/libcgi.mk                      | 14 ------
+ 7 files changed, 6 insertions(+), 79 deletions(-)
+ delete mode 100644 package/libcgi/0001-CMakeLists.txt-honour-BUILD_TESTING.patch
+ delete mode 100644 package/libcgi/Config.in
+ delete mode 100644 package/libcgi/libcgi.hash
+ delete mode 100644 package/libcgi/libcgi.mk
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index b2bf4d0403..f47a805167 100644
+index f47a805167..660cf03b76 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -511,7 +511,6 @@ package/lcdproc/0001-LCDd.conf.patch lib_patch.Upstream
- package/lcdproc/0002-Add-missing-ioctl-header.patch lib_patch.Upstream
- package/lcdproc/0003-Fixcompilation-with-GCC-10-x.patch lib_patch.Upstream
- package/leafnode2/0001-cross_makefile.patch lib_patch.Upstream
--package/let-me-create/0001-fix-build-with-musl-C-library.patch lib_patch.Upstream
- package/leveldb/0001-Fix-compilation-with-g-4.8.2.patch lib_patch.Upstream
- package/leveldb/0002-CMake-install-libmemenv.a.patch lib_patch.Upstream
- package/leveldb/0003-CMakeLists.txt-check-for-atomic-library.patch lib_patch.Upstream
+@@ -524,7 +524,6 @@ package/libavl/0001-fix-makefile.patch lib_patch.Upstream
+ package/libb64/0001-Integer-overflows.patch lib_patch.Upstream
+ package/libb64/0002-Initialize-C++-objects.patch lib_patch.Upstream
+ package/libcdaudio/0001-libcdaudio-enable-autoreconf.patch lib_patch.Upstream
+-package/libcgi/0001-CMakeLists.txt-honour-BUILD_TESTING.patch lib_patch.Upstream
+ package/libcgicc/0001-disable-documentation-option.patch lib_patch.Sob lib_patch.Upstream
+ package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch lib_patch.Upstream
+ package/libcuefile/0001-fix-static-link.patch lib_patch.Upstream
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 0b7d456e20..643bcdcd95 100644
+index 643bcdcd95..1da3fc6665 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2026.02"
  
-+config BR2_PACKAGE_LET_ME_CREATE
-+	bool "let-me-create has been removed"
++config BR2_PACKAGE_LIBCGI
++	bool "libcgi has been removed"
 +	select BR2_LEGACY
 +	help
-+	  let-me-create is unmaintained and has been removed
++	  libcgi is unmaintained and has been removed
 +
- config BR2_PACKAGE_HAWKTRACER
- 	bool "hawktracer has been removed"
+ config BR2_PACKAGE_LET_ME_CREATE
+ 	bool "let-me-create has been removed"
  	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1de4c9467e..3f1e0e76fd 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2789,7 +2789,6 @@ F:	package/glog/
- F:	package/gssdp/
- F:	package/gupnp/
- F:	package/gupnp-av/
--F:	package/let-me-create/
- F:	package/nanomsg/
- 
- N:	Ralf Dragon <hypnotoad@lindra.de>
 diff --git a/package/Config.in b/package/Config.in
-index 85b7e02dcc..7547f4bb85 100644
+index 7547f4bb85..a059e7c372 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1819,7 +1819,6 @@ menu "Hardware handling"
- 	source "package/hidapi/Config.in"
- 	source "package/jitterentropy-library/Config.in"
- 	source "package/lcdapi/Config.in"
--	source "package/let-me-create/Config.in"
- 	source "package/libaio/Config.in"
- 	source "package/libatasmart/Config.in"
- 	source "package/libblockdev/Config.in"
-diff --git a/package/let-me-create/0001-fix-build-with-musl-C-library.patch b/package/let-me-create/0001-fix-build-with-musl-C-library.patch
+@@ -2029,7 +2029,6 @@ menu "Networking"
+ 	source "package/gupnp-dlna/Config.in"
+ 	source "package/ibrcommon/Config.in"
+ 	source "package/ibrdtn/Config.in"
+-	source "package/libcgi/Config.in"
+ 	source "package/libcgicc/Config.in"
+ 	source "package/libcoap/Config.in"
+ 	source "package/libcpprestsdk/Config.in"
+diff --git a/package/libcgi/0001-CMakeLists.txt-honour-BUILD_TESTING.patch b/package/libcgi/0001-CMakeLists.txt-honour-BUILD_TESTING.patch
 deleted file mode 100644
-index 90a7246405..0000000000
---- a/package/let-me-create/0001-fix-build-with-musl-C-library.patch
+index 3ec674ae70..0000000000
+--- a/package/libcgi/0001-CMakeLists.txt-honour-BUILD_TESTING.patch
 +++ /dev/null
-@@ -1,38 +0,0 @@
--From 93fbc53a727a49dd5061e44e3156ff2044e6e0b5 Mon Sep 17 00:00:00 2001
--From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
--Date: Tue, 1 Aug 2017 22:44:22 +0530
--Subject: [PATCH] fix build with musl C library
+@@ -1,44 +0,0 @@
+-From 15ec267520efbe45193eb1df5361a4ab56164294 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 8 May 2022 17:54:42 +0200
+-Subject: [PATCH] CMakeLists.txt: honour BUILD_TESTING
 -
--With musl C library, we get following build error:
+-Allow the user to disable tests through the standard BUILD_TESTING
+-option: https://cmake.org/cmake/help/latest/module/CTest.html
 -
--/home/buildroot/autobuild/run/instance-3/output/build/let-me-create-v1.5.2/src/core/spi.c: In function 'spi_transfer':
--/home/buildroot/autobuild/run/instance-3/output/build/let-me-create-v1.5.2/src/core/spi.c:170:19: error: '_IOC_SIZEBITS' undeclared (first use in this function)
--if (ioctl(fd, SPI_IOC_MESSAGE(1), &tr) < 0) {
--^
--/home/buildroot/autobuild/run/instance-3/output/build/let-me-create-v1.5.2/src/core/spi.c:170:19: note: each undeclared identifier is reported only once for each function it appears in
--
--Include <linux/ioctl.h> for musl C library compatibility.
--
--This build issue is detected by Buildroot autobuilder:
--http://autobuild.buildroot.net/results/af9/af946fa6fe05ee265e4ac97742b15afeb0cea1ab/
--
--Signed-off-by: Rahul Bedarkar rahulbedarkar89@gmail.com
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/rafaelsteil/libcgi/commit/15ec267520efbe45193eb1df5361a4ab56164294]
 ----
--Upstream status: https://github.com/CreatorDev/LetMeCreate/pull/29
+- CMakeLists.txt | 12 +++++++++---
+- 1 file changed, 9 insertions(+), 3 deletions(-)
 -
-- src/core/spi.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/core/spi.c b/src/core/spi.c
--index 4d55cee..9ec7ea9 100644
----- a/src/core/spi.c
--+++ b/src/core/spi.c
--@@ -1,4 +1,5 @@
-- #include <sys/ioctl.h>
--+#include <linux/ioctl.h>
-- #include <linux/spi/spidev.h>
-- #include <fcntl.h>
-- #include <errno.h>
---- 
--2.7.4
--
-diff --git a/package/let-me-create/Config.in b/package/let-me-create/Config.in
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index cbf0d97..e3329a1 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -29,15 +29,21 @@ option(BUILD_SHARED_LIBS
+- 	"Global flag to cause add_library to create shared libraries if on."
+- 	ON
+- )
+-+option(BUILD_TESTING
+-+	"Build tests."
+-+	ON
+-+)
+- 
+- # subdirectories
+- add_subdirectory("include/libcgi")
+- add_subdirectory("src")
+- 
+- # test
+--enable_testing()
+--include(CTest)
+--add_subdirectory("test")
+-+if(BUILD_TESTING)
+-+	enable_testing()
+-+	include(CTest)
+-+	add_subdirectory("test")
+-+endif(BUILD_TESTING)
+- 
+- # cmake package stuff
+- configure_package_config_file(${PROJECT_NAME_LC}-config.cmake.in
+diff --git a/package/libcgi/Config.in b/package/libcgi/Config.in
 deleted file mode 100644
-index b0fdc73d49..0000000000
---- a/package/let-me-create/Config.in
+index 33369079b3..0000000000
+--- a/package/libcgi/Config.in
 +++ /dev/null
-@@ -1,27 +0,0 @@
--comment "let-me-create needs a toolchain w/ C++, threads, dynamic library"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| BR2_STATIC_LIBS
--
--config BR2_PACKAGE_LET_ME_CREATE
--	bool "let-me-create"
--	# build issues in static libs configuration
--	# see https://github.com/CreatorDev/LetMeCreate/issues/28
--	depends on !BR2_STATIC_LIBS
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS
+@@ -1,11 +0,0 @@
+-config BR2_PACKAGE_LIBCGI
+-	bool "libcgi"
 -	help
--	  This library is collection of small wrappers for some
--	  interfaces on the Creator Ci40 board. It aims at making
--	  easier to develop on this platform. It also provides
--	  wrappers for a few clicks.
+-	  LibCGI is a library written from scratch to easily make
+-	  CGI applications in C.
 -
--	  https://github.com/CreatorDev/LetMeCreate
+-	  There are a lot of functions like string manipulation,
+-	  session and cookie support, GET and POST methods manipulation
+-	  etc..., to help you to quickly write powerful CGI programs.
 -
--if BR2_PACKAGE_LET_ME_CREATE
--
--config BR2_PACKAGE_LET_ME_CREATE_EXAMPLES
--	bool "Build and install examples"
--	help
--	  Build and install examples
--
--endif
-diff --git a/package/let-me-create/let-me-create.hash b/package/let-me-create/let-me-create.hash
+-	  https://github.com/rafaelsteil/libcgi/
+diff --git a/package/libcgi/libcgi.hash b/package/libcgi/libcgi.hash
 deleted file mode 100644
-index 899761786a..0000000000
---- a/package/let-me-create/let-me-create.hash
+index 5e8845ede2..0000000000
+--- a/package/libcgi/libcgi.hash
 +++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally computed
--sha256  5f42858a2062f34d2578e9cb1aed3ccb8d2409d908aa4c41a924418666d5f2bd  let-me-create-1.5.2.tar.gz
--sha256  8ffc162e1435e810845b09a4c0d534df057a030f4c107778677b6621dc203426  LICENSE
-diff --git a/package/let-me-create/let-me-create.mk b/package/let-me-create/let-me-create.mk
+@@ -1,8 +0,0 @@
+-# From https://github.com/rafaelsteil/libcgi/releases/download/v1.3.0/libcgi-1.3.0.tar.gz.md5
+-md5  6efdc968bdf986832b7e220d1b914e57  libcgi-1.3.0.tar.gz
+-# From https://github.com/rafaelsteil/libcgi/releases/download/v1.3.0/libcgi-1.3.0.tar.gz.sha256
+-sha256  d932f380b1a5dbfbddffaa76fac71bf505a9585d441c9ae86bfbf76033d9d8df  libcgi-1.3.0.tar.gz
+-
+-# Hash for license file:
+-sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1.txt
+-sha256  f32c31e26ec840753a8cd47cd2681e48be4cee853212d16a4b1d85ac4d677669  LICENSES/MIT.txt
+diff --git a/package/libcgi/libcgi.mk b/package/libcgi/libcgi.mk
 deleted file mode 100644
-index faa5e14d96..0000000000
---- a/package/let-me-create/let-me-create.mk
+index 22163310d3..0000000000
+--- a/package/libcgi/libcgi.mk
 +++ /dev/null
-@@ -1,26 +0,0 @@
+@@ -1,14 +0,0 @@
 -################################################################################
 -#
--# LetMeCreate
+-# libcgi
 -#
 -################################################################################
 -
--LET_ME_CREATE_VERSION = 1.5.2
--LET_ME_CREATE_SITE = $(call github,CreatorDev,LetMeCreate,v$(LET_ME_CREATE_VERSION))
--LET_ME_CREATE_INSTALL_STAGING = YES
--LET_ME_CREATE_LICENSE = BSD-3-Clause
--LET_ME_CREATE_LICENSE_FILES = LICENSE
+-LIBCGI_VERSION = 1.3.0
+-LIBCGI_SITE = https://github.com/rafaelsteil/libcgi/releases/download/v$(LIBCGI_VERSION)
 -
--# pure static build not supported
--ifeq ($(BR2_SHARED_LIBS),y)
--LET_ME_CREATE_CONF_OPTS += -DBUILD_STATIC=OFF -DBUILD_SHARED=ON
--else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
--LET_ME_CREATE_CONF_OPTS += -DBUILD_STATIC=ON -DBUILD_SHARED=ON
--endif
--
--ifeq ($(BR2_PACKAGE_LET_ME_CREATE_EXAMPLES),y)
--LET_ME_CREATE_CONF_OPTS += -DBUILD_EXAMPLES=ON
--else
--LET_ME_CREATE_CONF_OPTS += -DBUILD_EXAMPLES=OFF
--endif
+-LIBCGI_INSTALL_STAGING = YES
+-LIBCGI_LICENSE = LGPL-2.1+, MIT (base64.c)
+-LIBCGI_LICENSE_FILES = LICENSES/LGPL-2.1.txt LICENSES/MIT.txt
 -
 -$(eval $(cmake-package))
 -- 
