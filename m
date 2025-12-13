@@ -1,60 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA6F8D5B164
-	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 20:25:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6276ED5B164
+	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 20:25:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BCCC58141F;
-	Sat, 13 Dec 2025 20:25:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 291604082A;
+	Sat, 13 Dec 2025 20:25:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bfmx8DyA1Cxx; Sat, 13 Dec 2025 20:25:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qaii5w-wR6F2; Sat, 13 Dec 2025 20:25:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D741281445
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CD5A40961
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765657545;
-	bh=aNmLIi42yJEg95sVZwY4YuxcdRHGZ4Q9jVVB55yyKzQ=;
+	s=default; t=1765657558;
+	bh=Jk0plvl1NmnhTZZPCNrVFhye+xQWSx+LR2jxrzRPRuk=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=QvAHi06cSM317bnmXqZqEvrJJfwAS03B0xboxTIQu73jiw4EkQh/mZLfRJhuME3BL
-	 HmNBx4r6RXM9kz/QT6YwXFYDOiT1qaaZ8ZYAZiTL0M6ZeCTP5hN7Ka2pn3MSMspEeK
-	 LWOKoOTStEvYoIV1MPJ18BMZK8tFQf+K3FqDjrSS1pE0uKzdxeBjgPOJQWI1YxDgDC
-	 8Z/GD55IdXT6vwhqNvAMjwQnEN9jjof9h9yC65k7x4apj3nNT+zkjGgaMlWQDRRrt1
-	 bhEDSmRxQwMyRd528jT0lPBLAUZdKQtSVTJcF7+YX5C7s3RMRT3weDTupzgqxcWejx
-	 WrkL6jds03qzw==
+	b=ZaUd8p4vex0xbzTBEWVFBlESg69JEdytEbB5mlhGwjw3+SOUKrRhTLnIYFd3DI2jo
+	 cQPjdO3zswGCiMMkW4e0ugstbcw5+TZQkanuZZ6Wfr+vZ1hk4VuIFXKkS/ByfyoPIP
+	 OXyxdeVKfXurUekzRi5bKHZ0Npd5fwqgtz65YZ8mrO0EReanicykrqOYofZSg06sBZ
+	 L7sgD6+Rh1JNyGPw8gXtWwnreV/LC17Wxf5IJYwIUg2Wf4QPlfxwM7AYAJ9/PvVLwd
+	 Fvic96O5lZWpCJXTsuDcHn8N973A9HUQSanNZqVkRdOdHDt4HAjrQ2eP5l+P4wHlSQ
+	 4t9z5mvJdhl/w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D741281445;
-	Sat, 13 Dec 2025 20:25:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 33D8313D
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:25:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0CD5A40961;
+	Sat, 13 Dec 2025 20:25:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C18D92C1
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:25:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CE0A48141F
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:25:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B32C84018E
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:25:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NpgQPYIhXvxg for <buildroot@buildroot.org>;
- Sat, 13 Dec 2025 20:25:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9mgvMyokSdEf for <buildroot@buildroot.org>;
+ Sat, 13 Dec 2025 20:25:55 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9924C810F6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9924C810F6
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 93EB9400A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93EB9400A0
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9924C810F6
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:25:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 93EB9400A0
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:25:55 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6cc21.dip0.t-ipconnect.de [79.214.204.33])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 29639A4C3D87;
- Sat, 13 Dec 2025 21:25:04 +0100 (CET)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 3A7E9A4C268E;
+ Sat, 13 Dec 2025 21:25:13 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:41122)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vUWAp-000000003Sm-33Qu;
- Sat, 13 Dec 2025 20:25:03 +0000
+ (envelope-from <bernd@kuhls.net>) id 1vUWAq-000000003Sm-1yN0;
+ Sat, 13 Dec 2025 20:25:04 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
 Cc: Guillaume William Brs <guillaume.bressaix@gmail.com>,
@@ -64,32 +64,31 @@ Cc: Guillaume William Brs <guillaume.bressaix@gmail.com>,
  Jan Heylen <jan.heylen@nokia.com>,
  Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>,
  Simon Dawson <spdawson@gmail.com>, Ben Boeckel <mathstuf@gmail.com>
-Date: Sat, 13 Dec 2025 21:24:50 +0100
-Message-ID: <20251213202503.1348845-4-bernd@kuhls.net>
+Date: Sat, 13 Dec 2025 21:24:55 +0100
+Message-ID: <20251213202503.1348845-9-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251213202503.1348845-1-bernd@kuhls.net>
 References: <20251213202503.1348845-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: ++++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202511301023; t=1765657504;
- bh=JzThiFtYiiWcUu3Z05YXpnFFBw37I3e5AneJsksy03A=;
+ s=kas202511301023; t=1765657513;
+ bh=mXhCWSSmD3EhLs+60emVewAk8OZHG6CyBSonoG6QBMk=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=oqrkNjDDs7no/3RKVCXBqIyNrm0yP1sP1guGkxYCGc29dwAw7mmGU3M1sUTPzPVab
- Fva/wrUTmXWkXeSGYkbWNPDhHOhNCQlxrvaTzAYcDe4B5QtJkD08Y7QCDp72g6a6Rf
- QhIV/W8shvIlpIF7wLSJBNYjF2PHbDIMp9Ebg97Oc1HjAxNLw3TS/uywFrfGp5JIor
- cl84ZgG8Z7JLE+f9wg9mzH6oqSScxyi2oeNpIH1Fv0XGr9SmHWImxfml3A0YFg3tud
- Z8B+iYe8ByQWfu4CIqrWvEvG5M1CsNeUbDyCsF9vSVxpTBWphWyAmrJA34uZeYsML/
- DmN/N8a3nTA7Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=h2e+Sz8Q2hlY2gzTMxAwVX0pXeS7gBrKKr9QYmG0Dr7xx6ioBqk0Kf/3ofEoJ6dV4
+ b5QwRkiWbPyN7frdOnLHtOMy+wKmjUUXoHG2NpTP0wrF03yj4x2DgFIAD7aZNddVU+
+ t/BzKnN0RovDIZBie9DJUH8bKYSSgTUAhqCeNFIL1hgoI+0+wPCzFvcBqSgK7BdDMV
+ xh7kOLq77KCW3HCvUlxB7eJsgTc4lHo3sI7Khi9imerRWWmipTgTaOTgYAgiFE2WT5
+ TgwlxkH4/EzK5VC/1FGbJYufXgN5laM5LgjtaHGeUDFTSaokmlWhnxjk/KK98okXIO
+ RtpI3cgU+hncA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=oqrkNjDD
-Subject: [Buildroot] [PATCH v2 04/16] package/connman-gtk: remove package
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=h2e+Sz8Q
+Subject: [Buildroot] [PATCH v2 09/16] package/libuwsc: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,118 +105,271 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Analysis of https://github.com/jgke/connman-gtk:
-marked as read-only: Oct 2021
-last commit: Jun 2018
-last bug report: Oct 2021
-last pull request: Apr 2020
+Fails to build with cmake 4.
 
-The package is broken with gcc 15.x and no other package depends on it.
+The package is a library without any reverse dependencies and no active
+development since 2021.
 
 Fixes:
-https://autobuild.buildroot.net/results/54d/54d8cc10e4d017deabf8664898a2d09e3a115f66/
+https://autobuild.buildroot.net/results/f6b/f6b0c136703e0cf38c052e6a6a3ef91cdcb797a0/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- Config.in.legacy                     |  6 ++++++
- package/Config.in                    |  1 -
- package/connman-gtk/Config.in        | 22 ----------------------
- package/connman-gtk/connman-gtk.hash |  3 ---
- package/connman-gtk/connman-gtk.mk   | 17 -----------------
- 5 files changed, 6 insertions(+), 43 deletions(-)
- delete mode 100644 package/connman-gtk/Config.in
- delete mode 100644 package/connman-gtk/connman-gtk.hash
- delete mode 100644 package/connman-gtk/connman-gtk.mk
+ Config.in.legacy                              |  6 +++
+ DEVELOPERS                                    |  1 -
+ package/Config.in                             |  1 -
+ ...001-CMakeLists.txt-add-BUILD_EXAMPLE.patch | 34 ------------
+ .../libuwsc/0002-fix-bad-indentation.patch    | 26 ---------
+ .../0003-src-ssl.c-fix-wolfssl-build.patch    | 37 -------------
+ package/libuwsc/Config.in                     |  8 ---
+ package/libuwsc/libuwsc.hash                  |  3 --
+ package/libuwsc/libuwsc.mk                    | 53 -------------------
+ 9 files changed, 6 insertions(+), 163 deletions(-)
+ delete mode 100644 package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
+ delete mode 100644 package/libuwsc/0002-fix-bad-indentation.patch
+ delete mode 100644 package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch
+ delete mode 100644 package/libuwsc/Config.in
+ delete mode 100644 package/libuwsc/libuwsc.hash
+ delete mode 100644 package/libuwsc/libuwsc.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 6f004f8d02..8a4f26e72e 100644
+index 3ed1f09b8b..c8d037b5df 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2026.02"
  
-+config BR2_PACKAGE_CONNMAN_GTK
-+	bool "connman-gtk has been removed"
++config BR2_PACKAGE_LIBUWSC
++	bool "libuwsc has been removed"
 +	select BR2_LEGACY
 +	help
-+	  connman-gtk is unmaintained and has been removed
++	  libuwsc is unmaintained and has been removed
 +
- config BR2_PACKAGE_LIBMHASH
- 	bool "libmhash has been removed"
+ config BR2_PACKAGE_LIBIQRF
+ 	bool "libiqrf has been removed"
  	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3f1e0e76fd..60d6ff858f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1622,7 +1622,6 @@ F:	package/qt6/
+ 
+ N:	Jianhui Zhao <zhaojh329@gmail.com>
+ F:	package/libuhttpd/
+-F:	package/libuwsc/
+ F:	package/rtty/
+ 
+ N:	Jiaxun Yang <jiaxun.yang@flygoat.com>
 diff --git a/package/Config.in b/package/Config.in
-index 154d2dd22a..87c91e3439 100644
+index cf5c7860a5..0e11fe4bae 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2456,7 +2456,6 @@ endif
- 	source "package/civetweb/Config.in"
- 	source "package/cloudflared/Config.in"
- 	source "package/connman/Config.in"
--	source "package/connman-gtk/Config.in"
- 	source "package/conntrack-tools/Config.in"
- 	source "package/corkscrew/Config.in"
- 	source "package/crda/Config.in"
-diff --git a/package/connman-gtk/Config.in b/package/connman-gtk/Config.in
+@@ -2094,7 +2094,6 @@ menu "Networking"
+ 	source "package/libupnpp/Config.in"
+ 	source "package/liburiparser/Config.in"
+ 	source "package/libutp/Config.in"
+-	source "package/libuwsc/Config.in"
+ 	source "package/libvncserver/Config.in"
+ 	source "package/libwebsockets/Config.in"
+ 	source "package/libyang/Config.in"
+diff --git a/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch b/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
 deleted file mode 100644
-index 467bf7ec88..0000000000
---- a/package/connman-gtk/Config.in
+index 87f343a9d9..0000000000
+--- a/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
 +++ /dev/null
-@@ -1,22 +0,0 @@
--comment "connman-gtk needs libgtk3 and a glibc or uClibc toolchain w/ wchar, threads, resolver, dynamic library"
--	depends on BR2_USE_MMU
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		BR2_STATIC_LIBS || !BR2_PACKAGE_LIBGTK3 || \
--		BR2_TOOLCHAIN_USES_MUSL
+@@ -1,34 +0,0 @@
+-From bb71b21eb9407479ad729b3c858b0fc350fae335 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 21 Feb 2021 19:39:59 +0100
+-Subject: [PATCH] CMakeLists.txt: add BUILD_EXAMPLE
 -
--config BR2_PACKAGE_CONNMAN_GTK
--	bool "connman-gtk"
--	depends on BR2_USE_WCHAR # libglib2, connman
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, connman
--	depends on BR2_USE_MMU # libglib2
--	depends on !BR2_STATIC_LIBS # connman
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # connman
--	depends on !BR2_TOOLCHAIN_USES_MUSL # connman
--	depends on BR2_PACKAGE_LIBGTK3
--	select BR2_PACKAGE_CONNMAN
--	select BR2_PACKAGE_LIBGLIB2
--	help
--	  GTK GUI for ConnMan.
+-Allow the user to disable example
 -
--	  https://github.com/jgke/connman-gtk
-diff --git a/package/connman-gtk/connman-gtk.hash b/package/connman-gtk/connman-gtk.hash
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Upstream: https://github.com/zhaojh329/libuwsc/commit/bb71b21eb9407479ad729b3c858b0fc350fae335
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+----
+- CMakeLists.txt | 6 +++++-
+- 1 file changed, 5 insertions(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 110d933..c52ab79 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -2,7 +2,11 @@ cmake_minimum_required(VERSION 2.8)
+- 
+- project(libuwsc C)
+- 
+-+option(BUILD_EXAMPLE "Build example" ON)
+-+
+- list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+- 
+- add_subdirectory(src)
+--add_subdirectory(example)
+-+if(BUILD_EXAMPLE)
+-+    add_subdirectory(example)
+-+endif()
+--- 
+-2.25.1
+-
+diff --git a/package/libuwsc/0002-fix-bad-indentation.patch b/package/libuwsc/0002-fix-bad-indentation.patch
 deleted file mode 100644
-index 72e2fcaaa5..0000000000
---- a/package/connman-gtk/connman-gtk.hash
+index 77cae92cf2..0000000000
+--- a/package/libuwsc/0002-fix-bad-indentation.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From 8cb416140741a596235b8acc46b2b119b13ebfab Mon Sep 17 00:00:00 2001
+-From: Rosen Penev <rosenp@gmail.com>
+-Date: Tue, 6 Jul 2021 21:01:52 -0700
+-Subject: [PATCH] fix bad indentation
+-
+-Fixes error with GCC11.
+-
+-Upstream: https://github.com/zhaojh329/libuwsc/commit/8cb416140741a596235b8acc46b2b119b13ebfab
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/lua/uwsc_lua.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/lua/uwsc_lua.c b/src/lua/uwsc_lua.c
+-index de6932e..84689fe 100644
+---- a/src/lua/uwsc_lua.c
+-+++ b/src/lua/uwsc_lua.c
+-@@ -178,7 +178,7 @@ static int uwsc_lua_on(lua_State *L)
+-     else
+-         luaL_argcheck(L, false, 2, "available event name: open message error close");
+- 
+--	return 0;
+-+    return 0;
+- }
+- 
+- static int __uwsc_lua_send(lua_State *L, int op)
+diff --git a/package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch b/package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch
+deleted file mode 100644
+index 4c652a63c2..0000000000
+--- a/package/libuwsc/0003-src-ssl.c-fix-wolfssl-build.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 1c3579e99163a13d622c3ef44088c23d5eea306d Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 14 Jan 2024 16:44:13 +0100
+-Subject: [PATCH] src/ssl.c: fix wolfssl build
+-
+-wolfssl/options.h must also be included by clients to avoid the
+-following build failure because OPENSSL_ALL won't be defined:
+-
+-/home/autobuild/autobuild/instance-6/output-1/build/libuwsc-3.3.5/src/ssl.c:62:5: error: unknown type name 'SSL_CTX'
+-   62 |     SSL_CTX *ctx;
+-      |     ^~~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/edc49cce5b1f456d980841f4c315e7cd784b1561
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Upstream: N/A (already fixed by
+-https://github.com/zhaojh329/ssl/commit/c40ebcd7b4277321acbbd4b00b4b10fd363c7a97)
+----
+- src/ssl.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/ssl.c b/src/ssl.c
+-index 3640022..6a3d250 100644
+---- a/src/ssl.c
+-+++ b/src/ssl.c
+-@@ -54,6 +54,7 @@ struct uwsc_ssl_ctx {
+- #include <openssl/err.h>
+- #elif UWSC_HAVE_WOLFSSL
+- #define WC_NO_HARDEN
+-+#include <wolfssl/options.h>
+- #include <wolfssl/openssl/ssl.h>
+- #include <wolfssl/openssl/err.h>
+- #endif
+--- 
+-2.43.0
+-
+diff --git a/package/libuwsc/Config.in b/package/libuwsc/Config.in
+deleted file mode 100644
+index ae99b6d2dc..0000000000
+--- a/package/libuwsc/Config.in
++++ /dev/null
+@@ -1,8 +0,0 @@
+-config BR2_PACKAGE_LIBUWSC
+-	bool "libuwsc"
+-	select BR2_PACKAGE_LIBEV
+-	help
+-	  A Lightweight and fully asynchronous WebSocket client
+-	  library based on libev.
+-
+-	  https://github.com/zhaojh329/libuwsc
+diff --git a/package/libuwsc/libuwsc.hash b/package/libuwsc/libuwsc.hash
+deleted file mode 100644
+index f99dfb4c5d..0000000000
+--- a/package/libuwsc/libuwsc.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
 -# Locally calculated
--sha256  49bdc4769a7c508b0130e4705eef21aec9df1ea4f5c29fee48a0cae8db828fca  connman-gtk-1.1.1.tar.bz2
--sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/connman-gtk/connman-gtk.mk b/package/connman-gtk/connman-gtk.mk
+-sha256  a06b7324671e181ffe3165e93e6f94c7ac1380f69e32a52e80c8da7016acd60d  libuwsc-3.3.5.tar.gz
+-sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
+diff --git a/package/libuwsc/libuwsc.mk b/package/libuwsc/libuwsc.mk
 deleted file mode 100644
-index 0ea49198e6..0000000000
---- a/package/connman-gtk/connman-gtk.mk
+index 051ea411fa..0000000000
+--- a/package/libuwsc/libuwsc.mk
 +++ /dev/null
-@@ -1,17 +0,0 @@
+@@ -1,53 +0,0 @@
 -################################################################################
 -#
--# connman-gtk
+-# libuwsc
 -#
 -################################################################################
 -
--CONNMAN_GTK_VERSION = 1.1.1
--CONNMAN_GTK_SITE = https://github.com/jgke/connman-gtk/releases/download/v$(CONNMAN_GTK_VERSION)
--CONNMAN_GTK_SOURCE = connman-gtk-$(CONNMAN_GTK_VERSION).tar.bz2
--CONNMAN_GTK_INSTALL_STAGING = YES
--CONNMAN_GTK_DEPENDENCIES = host-intltool connman libglib2 libgtk3 \
--	$(TARGET_NLS_DEPENDENCIES)
--CONNMAN_GTK_LICENSE = GPL-2.0+
--CONNMAN_GTK_LICENSE_FILES = COPYING
--CONNMAN_GTK_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+-LIBUWSC_VERSION = 3.3.5
+-LIBUWSC_SITE = https://github.com/zhaojh329/libuwsc/releases/download/v$(LIBUWSC_VERSION)
+-LIBUWSC_LICENSE = MIT
+-LIBUWSC_LICENSE_FILES = LICENSE
+-LIBUWSC_INSTALL_STAGING = YES
+-LIBUWSC_DEPENDENCIES = libev
 -
--$(eval $(autotools-package))
+-ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-LIBUWSC_DEPENDENCIES += openssl
+-LIBUWSC_CONF_OPTS += \
+-	-DUWSC_SSL_SUPPORT=ON \
+-	-DUWSC_USE_MBEDTLS=OFF \
+-	-DUWSC_USE_OPENSSL=ON \
+-	-DUWSC_USE_WOLFSSL=OFF
+-else ifeq ($(BR2_PACKAGE_WOLFSSL_ALL),y)
+-LIBUWSC_DEPENDENCIES += wolfssl
+-LIBUWSC_CONF_OPTS += \
+-	-DUWSC_SSL_SUPPORT=ON \
+-	-DUWSC_USE_MBEDTLS=OFF \
+-	-DUWSC_USE_OPENSSL=OFF \
+-	-DUWSC_USE_WOLFSSL=ON
+-else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
+-LIBUWSC_DEPENDENCIES += mbedtls
+-LIBUWSC_CONF_OPTS += \
+-	-DUWSC_SSL_SUPPORT=ON \
+-	-DUWSC_USE_MBEDTLS=ON \
+-	-DUWSC_USE_OPENSSL=OFF \
+-	-DUWSC_USE_WOLFSSL=OFF
+-else
+-LIBUWSC_CONF_OPTS += -DUWSC_SSL_SUPPORT=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LUA):$(BR2_STATIC_LIBS),y:)
+-LIBUWSC_DEPENDENCIES += lua
+-LIBUWSC_CONF_OPTS += -DUWSC_LUA_SUPPORT=ON
+-else
+-LIBUWSC_CONF_OPTS += -DUWSC_LUA_SUPPORT=OFF
+-endif
+-
+-# BUILD_SHARED_LIBS is handled in pkg-cmake.mk as it is a generic cmake variable
+-ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+-LIBUWSC_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
+-else ifeq ($(BR2_SHARED_LIBS),y)
+-LIBUWSC_CONF_OPTS += -DBUILD_STATIC_LIBS=OFF
+-endif
+-
+-$(eval $(cmake-package))
 -- 
 2.47.3
 
