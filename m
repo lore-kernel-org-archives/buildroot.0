@@ -1,89 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 929EAD5B169
-	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 22:11:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A63BD5B161
+	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 22:45:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E6E4406BE;
-	Sat, 13 Dec 2025 22:11:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CB22081303;
+	Sat, 13 Dec 2025 22:45:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iNaEok0stRZG; Sat, 13 Dec 2025 22:11:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id srNkaQJWNC7C; Sat, 13 Dec 2025 22:45:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F51B404E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8329812F7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765663892;
-	bh=/nbthqrK4W80HknXSBe/JTunlHiEj8qeXlOpww0H6EU=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=YZdqJm1j0ZGjQjy5vNQO7cKP7ZKDSz8hPPFUnwSxZwn4U7JQFlu5IqiPAjxemzIpd
-	 2vLEsW7Uf7nMp1hhpwhg9p0A0rPMgFws0znmZ/92W89fV8S6DNyZhTeeg35EokUp7L
-	 fa4UXRKAk1uhkGos5wvDMOKDVhX53P3vPhpU8zUQLM2em+7jVTwyErPyRdUKg0mRdk
-	 XxnVLph/SiHW3QxsJtxUmVe6PJCJ1tWgC98MsoeZ0r/ZBPKzOv43CB3aoKeqIS8MuN
-	 Clt+9BjRUp0bcLvdNLXFmqg7panc+aPFyxqeqOBlN4iTelZtBM24eLCPKGM8ITAf9B
-	 tyxVYCj+eyeIg==
+	s=default; t=1765665948;
+	bh=hcc1YfInnFN3VSg3CVY0hLMFf+rRjnYEDOVvslef2Cg=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=e2H+bAXh0NU0+bYeSVCg0MploxIU2DlG5ACpK8+bRVvWED5ZwOZBiGs4W/eazUZ9P
+	 mxX+lx5x3LJhSv+StldISGxN2rJydiU/HOxjiK8cx+HU5hTgZoGJ1omAcJ9H/usBnB
+	 JB8XUxBEnzeSvyPGYUqFtrK5e/hKefwZNPFgcO6tqIfT9esS/TmFlIX4dwoaP2CZj+
+	 ftOS3ldcngKkheWOPol375jhozIPQTWIBFchTmVosXT2kKit882eOtiDPwPuq9rcjO
+	 YItF/n6bwbfZoXxPKOKISSPLGYGyMJ1rETytq8EUuzrlKMyhkYmenqcTiquxA+QOG3
+	 t/vE3wBm8UbRg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1F51B404E6;
-	Sat, 13 Dec 2025 22:11:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D8329812F7;
+	Sat, 13 Dec 2025 22:45:48 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B129013D
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 22:11:30 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id E547B13D
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 22:45:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9755A402ED
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 22:11:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CB1B6401E3
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 22:45:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v4OujUruMIkV for <buildroot@buildroot.org>;
- Sat, 13 Dec 2025 22:11:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8645C40130
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8645C40130
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8645C40130
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 22:11:29 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id C6B4719F5AF;
- Sat, 13 Dec 2025 23:11:23 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
- via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 13 Dec 2025 23:11:23 +0100
+ id fMzdkHG3b-90 for <buildroot@buildroot.org>;
+ Sat, 13 Dec 2025 22:45:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0B48540130
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B48540130
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0B48540130
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 22:45:45 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c513.dip0.t-ipconnect.de [79.214.197.19])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 1B4A0A4C37CA;
+ Sat, 13 Dec 2025 23:45:42 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:57626)
+ by fli4l.lan.fli4l with esmtp (Exim 4.99)
+ (envelope-from <bernd@kuhls.net>) id 1vUYMv-000000007lS-0U8s;
+ Sat, 13 Dec 2025 22:45:41 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Cc: Qais Yousef <qais.yousef@arm.com>, Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 13 Dec 2025 23:45:41 +0100
+Message-ID: <20251213224541.1760321-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Date: Sat, 13 Dec 2025 23:11:23 +0100
-To: Bastien Curutchet <bastien.curutchet@bootlin.com>
-Cc: buildroot@buildroot.org, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, Fiona Klute <fiona.klute@gmx.de>
-In-Reply-To: <20251201-rasdaemon-v3-1-8ad394bdc372@bootlin.com>
-References: <20251201-rasdaemon-v3-0-8ad394bdc372@bootlin.com>
- <20251201-rasdaemon-v3-1-8ad394bdc372@bootlin.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <c517b6068e9301eabb9d433d1689cccc@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1765663887;
- bh=BMY+PCMa9lUX5l1Ye/y+xibMpiWAZRaTEqVaov5eFTg=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Y5huR6rcJYkl2mRvgLAGN93hC3ACeEa9s3rDGVH/aBwmmTUnbCZpudU6usOyN1III
- s/PbXp1D2983f8U6p700A/lKt9NsWpONcfLaU8/Go3tDP05sk9DK8sVaYHI40PANLH
- WH87jm8IrkPLZT8HeD4sqMc9bbbmTBOHAOWIfqgPuM1fxU8evV/oTF54wbxJXe1vQI
- PzFRKpNAx5fyPcHogJEguB8ldVTrSgXaNjOqEkwDYOHL98YWkwe86KVEAHfI6BZoOL
- Ox6pIGKsrCInNqTg0jAwxItOy6+mWM8Tyt3Is7MjrSe7hgPk8TECNCQZkCRps6gKM0
- Y65jsm/pQRjkA==
+X-Spamd-Bar: ++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202511301023; t=1765665942;
+ bh=dCL3CimihelklqqB3Augrna787CuyxvPy720oSOVjhk=;
+ h=From:To:Cc:Subject:Date:From;
+ b=KX0rzXnaSCm7NHRrWUVejIls4/DzAds0ZBhcplhS748yc1xT5w5fRmvAHw+HAMIau
+ RjAWps2UmWvHsHY9mcuno1x9yAcVbFFtQhJoRYH8GdX7f16ULDqzaFs/rQJaECBFvp
+ A4y/IRI/gbEEeCM2MauqUeeKRQ+s9CYEFXTwNw5kv8w3p+VJTvcK+pVpiTWffcproE
+ Em0AQS5s6yx3sXhbZEpgKMiwAp8GCEx7jjcHFDoXOgZxx/621fBkIYbdcRXvIfTNZy
+ X80d9qufrDF806FjEi9h/3cRjlbRKx/lPw2t2EZrIOkFQCztfET232R+Nn440hz1pL
+ vLzpAsU0+3kSQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Y5huR6rc
-Subject: Re: [Buildroot] [PATCH v3 1/2] package/rasdaemon: Add rasdaemon
- package
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202511301023 header.b=KX0rzXna
+Subject: [Buildroot] [PATCH 1/1] package/bpftrace: bump version to 0.24.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,164 +93,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Bastien,
+https://github.com/bpftrace/bpftrace/blob/v0.24.2/CHANGELOG.md
 
-Thanks for the patch.  I have few comments. See below.
+Version 0.24.0 contains: "Add support for LLVM 21"
 
-On 01/12/2025 15:08, Bastien Curutchet via buildroot wrote:
-> Rasdaemon is a tool that aims to replace the edac-tool and provide a 
-> way
-> to collect all hardware error events reported by the Linux kernel in a
-> common framework.
-> 
-> Add a new package to support rasdaemon in the 'Hardware handling'
-> section. It depends on libtraceevents to detect the ftrace events
-> generated by the kernel and on sqlite to store these events.
-> 
-> Support for the PCIe AER events is optionnal and implies a dependency 
-> on
-> pciutils so also add a dedicated 'sub-option' to enable it.
-> 
-> Add a SYSV init script to start / stop the daemon
-> 
-> Add myself to the DEVELOPERS file.
-> 
-> Signed-off-by: Bastien Curutchet <bastien.curutchet@bootlin.com>
-> ---
-[...]
-> diff --git a/package/rasdaemon/Config.in b/package/rasdaemon/Config.in
-> new file mode 100644
-> index 
-> 0000000000000000000000000000000000000000..68cef3a313bf2b82a8306ed5e0ec581cd618531d
-> --- /dev/null
-> +++ b/package/rasdaemon/Config.in
-> @@ -0,0 +1,25 @@
-> +config BR2_PACKAGE_RASDAEMON
-> +	bool "rasdaemon"
-> +	depends on !BR2_STATIC_LIBS # libtraceevent
+Buildroot commit d6a7c0226333138721ae722b89e31a82cfb22ae0 bumped llvm to
+the 21 series causing a build error with bpftrace:
 
-rasdaemon seems to use unconditionally threads. See:
-https://github.com/mchehab/rasdaemon/blob/v0.8.4/ras-events.h#L10
+CMake Error at CMakeLists.txt:168 (message):
+  Unsupported LLVM version found via
+  /home/autobuild/autobuild/instance-14/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/include:
+  21
 
-So you probably miss here a "depends on BR2_TOOLCHAIN_HAS_THREADS".
-The Config.in comment also needs to be updated at the end of the file.
+CMake Error at CMakeLists.txt:169 (message):
+  Only versions between 16 and 20 are supported
 
-> +	select BR2_PACKAGE_LIBTRACEEVENT
-> +	select BR2_PACKAGE_SQLITE
+Fixes:
+https://autobuild.buildroot.net/results/2bf/2bf26b4848796ab031ab0767b97aba63a35f1184/
 
-SQLite is an optional dependency. See:
-https://github.com/mchehab/rasdaemon/blob/v0.8.4/configure.ac#L28
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/bpftrace/bpftrace.hash | 2 +-
+ package/bpftrace/bpftrace.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-So you don't need to select BR2_PACKAGE_SQLITE here, and you could
-preferably have in the .mk file something like:
+diff --git a/package/bpftrace/bpftrace.hash b/package/bpftrace/bpftrace.hash
+index a3d62e072f..4add96aee3 100644
+--- a/package/bpftrace/bpftrace.hash
++++ b/package/bpftrace/bpftrace.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256  3b374c3618ff055d279ddd2fcf4393feb88b4b03284b8b6f69f1e0dedd20662c  bpftrace-0.23.3.tar.gz
++sha256  e0514aa3e1a032b0b2de2cf3c281bfee9b9e80509498e70ed78786bbd64db373  bpftrace-0.24.2.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/bpftrace/bpftrace.mk b/package/bpftrace/bpftrace.mk
+index 7ff0508486..4d7033eb9a 100644
+--- a/package/bpftrace/bpftrace.mk
++++ b/package/bpftrace/bpftrace.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BPFTRACE_VERSION = 0.23.3
++BPFTRACE_VERSION = 0.24.2
+ BPFTRACE_SITE = $(call github,bpftrace,bpftrace,v$(BPFTRACE_VERSION))
+ BPFTRACE_LICENSE = Apache-2.0
+ BPFTRACE_LICENSE_FILES = LICENSE
+-- 
+2.47.3
 
-ifeq ($(BR2_PACKAGE_SQLITE),y)
-RASDAEMON_CONF_OPTS += --enable-sqlite3
-RASDAEMON_DEPENDENCIES += sqlite
-else
-RASDAEMON_CONF_OPTS += --disable-sqlite3
-endif
-
-> +	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || 
-> BR2_TOOLCHAIN_USES_MUSL
-> +	help
-> +	  rasdaemon is a tool that collects all hardware error events
-> +	  reported by the Linux Kernel from several sources (EDAC, MCE
-> +	  PCI, ...) into one common framework.
-
-Could format the help string like other Buildroot packages,
-please?
-
-You should have a blank line, followed by just the homepage url:
-
-https://github.com/mchehab/rasdaemon
-
-> +	  See https://github.com/mchehab/rasdaemon for details.
-> +
-> +if BR2_PACKAGE_RASDAEMON
-> +
-> +config BR2_PACKAGE_RASDAEMON_AER
-> +	bool "Enable AER support"
-> +	select BR2_PACKAGE_PCIUTILS
-> +	help
-> +	  Enable handling of AER (Advanced Error Reporting) events on
-> +	  PCIe
-> +
-> +endif
-> +
-> +comment "rasdaemon needs a toolchain w/ dynamic library"
-
-The comment should become:
-comment "rasdaemon needs a toolchain w/ threads, dynamic library"
-
-> +	depends on BR2_STATIC_LIBS
-
-Here the condition should become:
-depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-
-> diff --git a/package/rasdaemon/rasdaemon.mk 
-> b/package/rasdaemon/rasdaemon.mk
-> new file mode 100644
-> index 
-> 0000000000000000000000000000000000000000..50ac97a37dcbe63443bddca505ebc7c929116e53
-> --- /dev/null
-> +++ b/package/rasdaemon/rasdaemon.mk
-> @@ -0,0 +1,33 @@
-> +################################################################################
-> +#
-> +# rasdaemon
-> +#
-> +################################################################################
-> +
-> +RASDAEMON_VERSION = 0.8.4
-> +RASDAEMON_SITE = $(call 
-> github,mchehab,rasdaemon,v$(RASDAEMON_VERSION))
-> +RASDAEMON_LICENSE = GPL-2.0+
-> +RASDAEMON_LICENSE_FILES = COPYING
-> +RASDAEMON_AUTORECONF = YES
-> +
-> +RASDAEMON_DEPENDENCIES = libtraceevent sqlite
-
-The "sqlite" dependency could be removed and added in a conditional
-block, as I suggested.
-
-> +# rasdaemon uses argp.h which is not provided by uclibc or musl by 
-> default.
-> +# Use the argp-standalone package to provide this.
-> +ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
-> +RASDAEMON_DEPENDENCIES += argp-standalone
-> +RASDAEMON_CONF_ENV += LIBS="-largp"
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_RASDAEMON_AER),y)
-> +RASDAEMON_DEPENDENCIES += pciutils
-> +RASDAEMON_CONF_OPTS += --enable-aer
-> +else
-> +RASDAEMON_CONF_OPTS += --disable-aer
-> +endif
-> +
-> +define RASDAEMON_INSTALL_INIT_SYSV
-> +	$(INSTALL) -m 0755 -D package/rasdaemon/S95rasdaemon \
-> +		$(TARGET_DIR)/etc/init.d/S95rasdaemon
-> +endef
-> +
-> +$(eval $(autotools-package))
-> 
-> --
-> 2.51.1
-
-Could you send an updated patch, please?
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
