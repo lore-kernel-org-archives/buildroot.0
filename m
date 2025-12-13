@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E079D59F76
-	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 14:31:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A881D5B154
+	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 14:31:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1184440464;
-	Sat, 13 Dec 2025 14:31:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2D07660A4D;
+	Sat, 13 Dec 2025 14:31:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zHNcR5g3e3As; Sat, 13 Dec 2025 14:31:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FLGCgqxAx0_R; Sat, 13 Dec 2025 14:31:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F75E40469
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3108C60B3F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765636287;
-	bh=Yn12+0VDd33G1ZSG6QG/ewK26zCYb5cdOkVU8Zy+y2Q=;
+	s=default; t=1765636299;
+	bh=vhoB8PfBTlFIwApSitJ3x1dNjg4rhaZyeR/LUxYWDkM=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=Uh3lNtVjoRnL7gLthyWifuwPVDQWImgvhvi0aC5kb0XEIcsG1NRC+Mdq+CFsx680F
-	 EIf/LTI/UYcnrzlcIBph5yllhh966q6mCUYbxiIPfeIyGUdf6PD2ECN0lFfV1p9dCJ
-	 GhsMs7QzZ5i7dpUdn0ZqcXxI4fazC38B607Z/vanwvKSRfQYqYyBMLhQujqxCKhB/U
-	 apij/7h09Ag9CsSv5S5lJMGbvJXmPy4QmHJ8vHJcmOMmxBbMN1RkWZLQ3b6J5gqMjJ
-	 wSATb5StHISDBHa4EROWbuMkZ6JBMaosQdCLJ094kpgbFWG8sgKFYr3UmC/+19wDBZ
-	 Lm6YgzYKwfT+Q==
+	b=YHZT2tc0vw9vcVhHGEzivO9k74oddbD9Gjy1JSdjAGgysc2QCO+BjJESlHtI9PW0p
+	 JF6kNH/jzFYFAXC25YaFzlq2Ov6CEnnRp8iop0xUGMTwVlPY2nVk3S0HTNjPlI+aFM
+	 qBzFCrCePbgv6P2iOIAFA1uL/ZP9mujf6oOLdaVabAv8aH7h10hsQmXSBv256jc/0e
+	 26S4rgwz/Nf6g0a1cNttE0AWBzlQ+sYYkSVFpHtpPFtd3tOeSgklTmB4zcD6LrKiqA
+	 3kLRaMNKFVVs/AXQgEECIVkjVo6zl0ov2LgxmoTGUG80nM7eqiinSrj5sQYNeIvgmH
+	 Pjf814Ly8PWSw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F75E40469;
-	Sat, 13 Dec 2025 14:31:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id CB57B13D
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 14:31:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3108C60B3F;
+	Sat, 13 Dec 2025 14:31:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C9931E7
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 14:31:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B247B40447
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 14:31:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C7E0F4077F
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 14:31:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9v2Rgt9AGw9x for <buildroot@buildroot.org>;
- Sat, 13 Dec 2025 14:31:24 +0000 (UTC)
+ id cKE4jVw3zWig for <buildroot@buildroot.org>;
+ Sat, 13 Dec 2025 14:31:37 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9D39240442
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D39240442
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BB74740734
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB74740734
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9D39240442
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 14:31:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BB74740734
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 14:31:36 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6cc21.dip0.t-ipconnect.de [79.214.204.33])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id CF134A4C4068
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id EEC26A4C406F
  for <buildroot@buildroot.org>; Sat, 13 Dec 2025 15:30:15 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:56096)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vUQdN-000000000dj-1jUX
+ (envelope-from <bernd@kuhls.net>) id 1vUQdN-000000000dj-2qsV
  for buildroot@buildroot.org; Sat, 13 Dec 2025 14:30:09 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 13 Dec 2025 15:29:56 +0100
-Message-ID: <20251213143008.1329736-5-bernd@kuhls.net>
+Date: Sat, 13 Dec 2025 15:29:58 +0100
+Message-ID: <20251213143008.1329736-7-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251213143008.1329736-1-bernd@kuhls.net>
 References: <20251213143008.1329736-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1765636215;
- bh=oAJwGX0cAAjjADhcEWo/vHTC5nbM8Vf4Tj15VUtU+fo=;
+ bh=HK5kh3Z+sSpwvZMJg2HR2keJ/LjqpYgtw9scYPk8F+g=;
  h=From:To:Subject:Date:In-Reply-To:From;
- b=aTihMDHqsAq+VbVA7DPVPYf9VOaBV9150A59tAqAqz2rPklgRc0hjsA8FWFsFktqU
- PdXKw9m1YAU3gcoYVEtKlJlp2ipyhXwPIfV6pO5BEGNgKP3D6Om2oxp+OULeVKCJGa
- eHKUMD6ppU8AIghGuXIyBNQ8SngF5ihvKAg/ewUL5LRqJe8763cpwDbiGiAquEKKRP
- FGWO7FeRuFpbTPxTdesTJW9h2+1OCgpmkXGEylcoGiiJdvlroH4yKx/0EbPTzkpCk5
- RY6FsmGRxY9bez6IWgFm+khED3Vl+zKwSqVtlPLUBHlKhTuvb4Y7pkoYsAbV6inEp1
- 1Nzm716QgiZXQ==
+ b=F158vTtzYcIqToHtH1DAvY+cpYjV2+JCs1QmydyvbiTYMjv7H27FFzw6E+CqBeOGh
+ LsE6nG26p0gtRLFYQ8+/XTKq553jKfMFExbksL2S9y3Gsl2PuP7mwiloVVS9Euros1
+ FwkwjDnObEjggCWZ2Eq8Vy+W9Q4ExGokMowQCU8hGO+Dx2MBxqMff9GkWuFh7tx94d
+ g7jG0wcMkd3izAVtYHhXM1r/3ebZAhJRr3VrIq1+Gzb/R2ENhiiYOQchqF4JF027J1
+ HzCaEktMtUfa/yEq4+H7knAQW95UcNLVkfXNPZxKibQfoJ7s0hhXDFapyhBFWhGmMw
+ Q7ru67mWfDOVw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=aTihMDHq
-Subject: [Buildroot] [PATCH 05/16] package/hawktracer: remove package
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=F158vTtz
+Subject: [Buildroot] [PATCH 07/16] package/libcgi: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,159 +98,170 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Analysis of https://github.com/amzn/hawktracer:
-last commit: Aug 2023
-last bug report: Nov 2023
-last pull request: Nov 2020
+Fails to build with cmake 4.
 
-The package is broken with cmake 4 and no other package depends on it.
+The package is a library without any reverse dependencies and no active
+development since 2021 (not counting a build fix provided by Fabrice in
+2022).
+
+Fixes:
+https://autobuild.buildroot.net/results/604/604e8e5752e9a11d25bb65b9913db57d3db85b6f/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- Config.in.legacy                   |  6 ++++
- DEVELOPERS                         |  1 -
- package/Config.in                  |  1 -
- package/hawktracer/Config.in       | 25 ----------------
- package/hawktracer/hawktracer.hash |  3 --
- package/hawktracer/hawktracer.mk   | 48 ------------------------------
- 6 files changed, 6 insertions(+), 78 deletions(-)
- delete mode 100644 package/hawktracer/Config.in
- delete mode 100644 package/hawktracer/hawktracer.hash
- delete mode 100644 package/hawktracer/hawktracer.mk
+ .checkpackageignore                           |  1 -
+ Config.in.legacy                              |  6 +++
+ package/Config.in                             |  1 -
+ ...-CMakeLists.txt-honour-BUILD_TESTING.patch | 44 -------------------
+ package/libcgi/Config.in                      | 11 -----
+ package/libcgi/libcgi.hash                    |  8 ----
+ package/libcgi/libcgi.mk                      | 14 ------
+ 7 files changed, 6 insertions(+), 79 deletions(-)
+ delete mode 100644 package/libcgi/0001-CMakeLists.txt-honour-BUILD_TESTING.patch
+ delete mode 100644 package/libcgi/Config.in
+ delete mode 100644 package/libcgi/libcgi.hash
+ delete mode 100644 package/libcgi/libcgi.mk
 
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 1b81bf5d7e..09f3946e3d 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -524,7 +524,6 @@ package/libavl/0001-fix-makefile.patch lib_patch.Upstream
+ package/libb64/0001-Integer-overflows.patch lib_patch.Upstream
+ package/libb64/0002-Initialize-C++-objects.patch lib_patch.Upstream
+ package/libcdaudio/0001-libcdaudio-enable-autoreconf.patch lib_patch.Upstream
+-package/libcgi/0001-CMakeLists.txt-honour-BUILD_TESTING.patch lib_patch.Upstream
+ package/libcgicc/0001-disable-documentation-option.patch lib_patch.Sob lib_patch.Upstream
+ package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch lib_patch.Upstream
+ package/libcuefile/0001-fix-static-link.patch lib_patch.Upstream
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 18248713f8..7459c799f6 100644
+index 84b0a072d8..a205e999e1 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2026.02"
  
-+config BR2_PACKAGE_HAWKTRACER
-+	bool "hawktracer has been removed"
++config BR2_PACKAGE_LIBCGI
++	bool "libcgi has been removed"
 +	select BR2_LEGACY
 +	help
-+	  hawktracer is unmaintained and has been removed
++	  libcgi is unmaintained and has been removed
 +
- config BR2_PACKAGE_CONNMAN_GTK
- 	bool "connman-gtk has been removed"
+ config BR2_PACKAGE_LET_ME_CREATE
+ 	bool "let-me-create has been removed"
  	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3b83810777..e2358a3518 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1259,7 +1259,6 @@ F:	package/cctz/
- F:	package/clpeak/
- F:	package/faad2/
- F:	package/fdk-aac/
--F:	package/hawktracer/
- F:	package/httping/
- F:	package/iozone/
- F:	package/leptonica/
 diff --git a/package/Config.in b/package/Config.in
-index 4a2d9f14cb..4b7fadcc1f 100644
+index 270f5ecb02..2ad6bbbe2d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1950,7 +1950,6 @@ endmenu
- 
- menu "Logging"
- 	source "package/glog/Config.in"
--	source "package/hawktracer/Config.in"
- 	source "package/liblog4c-localtime/Config.in"
- 	source "package/liblogging/Config.in"
- 	source "package/log4cplus/Config.in"
-diff --git a/package/hawktracer/Config.in b/package/hawktracer/Config.in
+@@ -2030,7 +2030,6 @@ menu "Networking"
+ 	source "package/gupnp-dlna/Config.in"
+ 	source "package/ibrcommon/Config.in"
+ 	source "package/ibrdtn/Config.in"
+-	source "package/libcgi/Config.in"
+ 	source "package/libcgicc/Config.in"
+ 	source "package/libcoap/Config.in"
+ 	source "package/libcpprestsdk/Config.in"
+diff --git a/package/libcgi/0001-CMakeLists.txt-honour-BUILD_TESTING.patch b/package/libcgi/0001-CMakeLists.txt-honour-BUILD_TESTING.patch
 deleted file mode 100644
-index bee9c27b7d..0000000000
---- a/package/hawktracer/Config.in
+index 3ec674ae70..0000000000
+--- a/package/libcgi/0001-CMakeLists.txt-honour-BUILD_TESTING.patch
 +++ /dev/null
-@@ -1,25 +0,0 @@
--config BR2_PACKAGE_HAWKTRACER
--	bool "hawktracer"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+@@ -1,44 +0,0 @@
+-From 15ec267520efbe45193eb1df5361a4ab56164294 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 8 May 2022 17:54:42 +0200
+-Subject: [PATCH] CMakeLists.txt: honour BUILD_TESTING
+-
+-Allow the user to disable tests through the standard BUILD_TESTING
+-option: https://cmake.org/cmake/help/latest/module/CTest.html
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/rafaelsteil/libcgi/commit/15ec267520efbe45193eb1df5361a4ab56164294]
+----
+- CMakeLists.txt | 12 +++++++++---
+- 1 file changed, 9 insertions(+), 3 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index cbf0d97..e3329a1 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -29,15 +29,21 @@ option(BUILD_SHARED_LIBS
+- 	"Global flag to cause add_library to create shared libraries if on."
+- 	ON
+- )
+-+option(BUILD_TESTING
+-+	"Build tests."
+-+	ON
+-+)
+- 
+- # subdirectories
+- add_subdirectory("include/libcgi")
+- add_subdirectory("src")
+- 
+- # test
+--enable_testing()
+--include(CTest)
+--add_subdirectory("test")
+-+if(BUILD_TESTING)
+-+	enable_testing()
+-+	include(CTest)
+-+	add_subdirectory("test")
+-+endif(BUILD_TESTING)
+- 
+- # cmake package stuff
+- configure_package_config_file(${PROJECT_NAME_LC}-config.cmake.in
+diff --git a/package/libcgi/Config.in b/package/libcgi/Config.in
+deleted file mode 100644
+index 33369079b3..0000000000
+--- a/package/libcgi/Config.in
++++ /dev/null
+@@ -1,11 +0,0 @@
+-config BR2_PACKAGE_LIBCGI
+-	bool "libcgi"
 -	help
--	  HawkTracer is a highly portable, low-overhead, configurable
--	  profiling tool built in Amazon Video for getting performance
--	  metrics from low-end devices.
+-	  LibCGI is a library written from scratch to easily make
+-	  CGI applications in C.
 -
--	  https://hawktracer.github.io/
+-	  There are a lot of functions like string manipulation,
+-	  session and cookie support, GET and POST methods manipulation
+-	  etc..., to help you to quickly write powerful CGI programs.
 -
--if BR2_PACKAGE_HAWKTRACER
--
--config BR2_PACKAGE_HAWKTRACER_TCP_LISTENER
--	bool "TCP listener"
--	default y
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--
--comment "TCP listener needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
--
--endif
--
--comment "hawktracer needs a toolchain w/ C++, gcc >= 4.8"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/hawktracer/hawktracer.hash b/package/hawktracer/hawktracer.hash
+-	  https://github.com/rafaelsteil/libcgi/
+diff --git a/package/libcgi/libcgi.hash b/package/libcgi/libcgi.hash
 deleted file mode 100644
-index 585b612c49..0000000000
---- a/package/hawktracer/hawktracer.hash
+index 5e8845ede2..0000000000
+--- a/package/libcgi/libcgi.hash
 +++ /dev/null
-@@ -1,3 +0,0 @@
--# Computed locally
--sha256  12a689a1cfb2ae25ad777b1b2275dbba5cd64905627b0a20d17d6e26de003cef  hawktracer-0.11.0.tar.gz
--sha256  2f377333e64ad08ad3afec8ed6c2c96ced2a6d7d67443eb2784a931bb7b3fd59  LICENSE
-diff --git a/package/hawktracer/hawktracer.mk b/package/hawktracer/hawktracer.mk
+@@ -1,8 +0,0 @@
+-# From https://github.com/rafaelsteil/libcgi/releases/download/v1.3.0/libcgi-1.3.0.tar.gz.md5
+-md5  6efdc968bdf986832b7e220d1b914e57  libcgi-1.3.0.tar.gz
+-# From https://github.com/rafaelsteil/libcgi/releases/download/v1.3.0/libcgi-1.3.0.tar.gz.sha256
+-sha256  d932f380b1a5dbfbddffaa76fac71bf505a9585d441c9ae86bfbf76033d9d8df  libcgi-1.3.0.tar.gz
+-
+-# Hash for license file:
+-sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1.txt
+-sha256  f32c31e26ec840753a8cd47cd2681e48be4cee853212d16a4b1d85ac4d677669  LICENSES/MIT.txt
+diff --git a/package/libcgi/libcgi.mk b/package/libcgi/libcgi.mk
 deleted file mode 100644
-index 8e722080f5..0000000000
---- a/package/hawktracer/hawktracer.mk
+index 22163310d3..0000000000
+--- a/package/libcgi/libcgi.mk
 +++ /dev/null
-@@ -1,48 +0,0 @@
+@@ -1,14 +0,0 @@
 -################################################################################
 -#
--# hawktracer
+-# libcgi
 -#
 -################################################################################
 -
--HAWKTRACER_VERSION = 0.11.0
--HAWKTRACER_SITE = $(call github,amzn,hawktracer,v$(HAWKTRACER_VERSION))
--HAWKTRACER_LICENSE = MIT
--HAWKTRACER_LICENSE_FILES = LICENSE
--HAWKTRACER_INSTALL_STAGING = YES
+-LIBCGI_VERSION = 1.3.0
+-LIBCGI_SITE = https://github.com/rafaelsteil/libcgi/releases/download/v$(LIBCGI_VERSION)
 -
--HAWKTRACER_CONF_OPTS = \
--	-DENABLE_ASAN=OFF \
--	-DENABLE_TESTS=OFF \
--	-DENABLE_CODE_COVERAGE=OFF \
--	-DENABLE_BENCHMARKS=OFF \
--	-DENABLE_DOC=OFF \
--	-DENABLE_PYTHON_BINDINGS=OFF \
--	-DENABLE_MAINTAINER_MODE=OFF \
--	-DENABLE_RELEASE_MODE=OFF \
--	-DENABLE_CLIENT=OFF \
--	-DENABLE_EXAMPLES=OFF
--
--ifeq ($(BR2_STATIC_LIBS),y)
--HAWKTRACER_CONF_OPTS += -DBUILD_STATIC_LIB=ON
--else
--HAWKTRACER_CONF_OPTS += -DBUILD_STATIC_LIB=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_HAWKTRACER_TCP_LISTENER),y)
--HAWKTRACER_CONF_OPTS += -DENABLE_TCP_LISTENER=ON
--else
--HAWKTRACER_CONF_OPTS += -DENABLE_TCP_LISTENER=OFF
--endif
--
--# Enable threads support if supported by toolchain
--ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
--HAWKTRACER_CONF_OPTS += \
--	-DENABLE_CPU_USAGE_FEATURE=ON \
--	-DENABLE_THREADS=ON
--else
--HAWKTRACER_CONF_OPTS += \
--	-DENABLE_CPU_USAGE_FEATURE=OFF \
--	-DENABLE_THREADS=OFF
--endif
+-LIBCGI_INSTALL_STAGING = YES
+-LIBCGI_LICENSE = LGPL-2.1+, MIT (base64.c)
+-LIBCGI_LICENSE_FILES = LICENSES/LGPL-2.1.txt LICENSES/MIT.txt
 -
 -$(eval $(cmake-package))
 -- 
