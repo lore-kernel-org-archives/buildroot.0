@@ -1,58 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1258D5B164
-	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 20:25:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24FB0D5B165
+	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 20:25:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 90C5D60752;
-	Sat, 13 Dec 2025 20:25:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD92280FA8;
+	Sat, 13 Dec 2025 20:25:21 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id snecxkBgA5q4; Sat, 13 Dec 2025 20:25:20 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DCAE80F4B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1765657520;
+	bh=lHLB1+eWvyhLmI2dDWlzhW0S3zM2c+oJsKPUxOPncVg=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=g8FWKmHPl9yKP32uVFFNajY/l42R1s9v/+hT9a1Tm2LyK4OHIJNfbNU3QrUgVgNq1
+	 bGwY4sqGZfGqyNVCslBvKrcah1rr8ecfju3wlsy9w2Tu+9g7YnzpYjTUmwr+myVtYo
+	 FnaqDvCdYoi7UcAVHjs+ub0sufYiAPtrgUl4bTx6+CCnSzMw88xAICQ6d2vZjtcIDf
+	 LevmcQlI/le0yVwsXo+8gHww1HnpvbeQEzR1p6Wn/4nomthZSqnEPjhSA/9gWtmKQN
+	 oWw4BuKgbhJUpvF/O02kkZ2efWGZcVm3betjf2FJfzlMbkTe4HeAH0TMw3o4gCXAb5
+	 dG7jxidUfMVxw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8DCAE80F4B;
+	Sat, 13 Dec 2025 20:25:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E00C13D
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:25:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2F9A3608AA
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:25:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4vRsxofBbBGK; Sat, 13 Dec 2025 20:25:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7467E607ED
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765657508;
-	bh=J9R3tsZ3V3nHr2TwrTAry6yioxXfkoSIZ/cLLFP/Fkk=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=jaKey3U7h1ydJh0tOPknBbB2c269elriswIa7DmS+CodVSbu0SzOzibDXhWWeEu7p
-	 xtVaydPda1aQogvfmrA7ITMcvtRZ0wKxlJ/AlkMhB+ywJDD5zkjDr0hYjvEPyf1xzm
-	 0PsYZGFl60lS9m6u4SadWEZDINSiamA/9D7gSeRUQ8RrooWWFjbsq2omY2PPCruWv0
-	 gaOCAdYedDqWVshrcVJWajrwFV7sSriujyIv1oDVU04Z7SnU7Az/U7pkZhdvYnmEy+
-	 XzV8eF5/oWqWXMPDRJ9vYToDmXWOb4xXNWJBX2tSwaL+359yIe994OIqogCRnunuyY
-	 aP++qg6WdNx2w==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7467E607ED;
-	Sat, 13 Dec 2025 20:25:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 112A213D
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:25:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EC2A54082E
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:25:06 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0Fc9NlykFj4d for <buildroot@buildroot.org>;
- Sat, 13 Dec 2025 20:25:06 +0000 (UTC)
+ id YURmFtGxBV3N for <buildroot@buildroot.org>;
+ Sat, 13 Dec 2025 20:25:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D590E4082A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D590E4082A
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C92166089E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C92166089E
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D590E4082A
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:25:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C92166089E
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:25:17 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6cc21.dip0.t-ipconnect.de [79.214.204.33])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id AD2A1A4C268E;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id EA306A4C3BA3;
  Sat, 13 Dec 2025 21:25:03 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:41122)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vUWAp-000000003Sm-0s0g;
+ (envelope-from <bernd@kuhls.net>) id 1vUWAp-000000003Sm-1ZRT;
  Sat, 13 Dec 2025 20:25:03 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
@@ -63,30 +64,32 @@ Cc: Guillaume William Brs <guillaume.bressaix@gmail.com>,
  Jan Heylen <jan.heylen@nokia.com>,
  Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>,
  Simon Dawson <spdawson@gmail.com>, Ben Boeckel <mathstuf@gmail.com>
-Date: Sat, 13 Dec 2025 21:24:47 +0100
-Message-ID: <20251213202503.1348845-1-bernd@kuhls.net>
+Date: Sat, 13 Dec 2025 21:24:48 +0100
+Message-ID: <20251213202503.1348845-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20251213202503.1348845-1-bernd@kuhls.net>
+References: <20251213202503.1348845-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1765657503;
- bh=LSg5wn/9UxBOiiPjzPkbhAk9RwGV75ZJrGQ2Vda/aYk=;
- h=From:To:Cc:Subject:Date:From;
- b=LlH8KPtrYPYG2Fq6j1fhexzZaVtG3TWZCWXCPNMSkOUlheK69aAfBYUlNPHNBMRyD
- emnFgwCYRlCRwAuZYF4NW+MIdgWmhUME0l1f8o1wYenjwehZ0Xslc7zBRrNFlS2aeg
- dLgq9ppxFK79ZF4zuQXdjSDbo+QNM3euYrf8l1KIWUaEbBbu/0J/AgZU21Aou+DFVc
- MYZSyKTzRQMuW5Rk24Qm7NfFNXqO0WwHVLs6T+TaoWDoEuYbhyKRT4iQiKD0oY1aNf
- 9JbhLXw3IYDiSj67r0qlNV8clSwN5l5f8ev3C+i5sAiQFfDmN8GTK5UrB5PANPjdpa
- eE+Z5WFgt9wuA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=lIphA9YVfvhUSn+muFxDm+D1ACYy9K4oMkbuFhH77+s=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=kfMq7AJ21nE1DfSAh9EesyK6WTRYFcG47WVUctU64k+UKe6doUeWIVXNWWMeFBOox
+ XrZIJfs96ieote8NkTZb7bYZGCBDZeG0kuGqeqyzZiDev+UqAe13V834xhh4xlCGmk
+ tWB+7L45JW/TC+t4JXQs82CZwkweyICMKsULS/G1WKJo22sJKvhafV3D4HIxxS3WCi
+ KAZKoAza2cgUWPrXgjR/8Mkdn+CUifE3G2tbuMuzUTZggjL3y5BqGb4YQUVW0riMER
+ Fn7G+rrpw2Yjb67lPaoP+9x/52pnmJYoCh0nUFysgkml0VGsbDVrER+ytRNm3ZJwRF
+ 3Rp8hYxk5Gofw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202511301023 header.b=LlH8KPtr
-Subject: [Buildroot] [PATCH v2 01/16] package/libnids: remove package
+ header.s=kas202511301023 header.b=kfMq7AJ2
+Subject: [Buildroot] [PATCH v2 02/16] package/dmraid: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,218 +106,356 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Analysis of https://github.com/MITRECND/libnids:
-"This repository was archived by the owner on May 20, 2025."
-last commit: Dec 2020
-last bug report: Jul 2024
-last patch sent upstream: Jan 2024
+Package was abandoned by Fedora:
+https://src.fedoraproject.org/rpms/dmraid/c/2a27f40357e52d5497a0245b05624ce37b8474e6?branch=rawhide
 
-The package is broken with gcc 15.x and no other package depends on it.
+Build is broken with newer gcc.
 
 Fixes:
-https://autobuild.buildroot.net/results/f22/f22c8954894ab9ca57df07571726140c5bf3499a/
+https://autobuild.buildroot.net/results/c79/c79232526ded1d6f1f0f8925f006d7613e22be89/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .checkpackageignore                           |  1 -
- Config.in.legacy                              |  6 +++
- DEVELOPERS                                    |  1 -
+ .checkpackageignore                           |  2 -
+ Config.in.legacy                              |  6 ++
+ DEVELOPERS                                    |  2 -
  package/Config.in                             |  1 -
- .../libnids/0001-libpcap-use-pkg-config.patch | 48 -------------------
- package/libnids/Config.in                     | 14 ------
- package/libnids/libnids.hash                  |  3 --
- package/libnids/libnids.mk                    | 43 -----------------
- 8 files changed, 6 insertions(+), 111 deletions(-)
- delete mode 100644 package/libnids/0001-libpcap-use-pkg-config.patch
- delete mode 100644 package/libnids/Config.in
- delete mode 100644 package/libnids/libnids.hash
- delete mode 100644 package/libnids/libnids.mk
+ .../0001-fix-compilation-under-musl.patch     | 47 ----------
+ package/dmraid/Config.in                      | 19 ----
+ package/dmraid/S20dmraid                      | 29 ------
+ package/dmraid/dmraid.hash                    |  5 -
+ package/dmraid/dmraid.mk                      | 25 -----
+ .../testing/tests/package/test_ddrescue.py    | 94 -------------------
+ .../test_ddrescue/linux-ddrescue.fragment     |  4 -
+ 11 files changed, 6 insertions(+), 228 deletions(-)
+ delete mode 100644 package/dmraid/0001-fix-compilation-under-musl.patch
+ delete mode 100644 package/dmraid/Config.in
+ delete mode 100644 package/dmraid/S20dmraid
+ delete mode 100644 package/dmraid/dmraid.hash
+ delete mode 100644 package/dmraid/dmraid.mk
+ delete mode 100644 support/testing/tests/package/test_ddrescue.py
+ delete mode 100644 support/testing/tests/package/test_ddrescue/linux-ddrescue.fragment
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index efccc47a6c..7a03a5ca9b 100644
+index 7a03a5ca9b..b2bf4d0403 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -577,7 +577,6 @@ package/libmpeg2/0003-fix-arm-detection.patch lib_patch.Upstream
- package/libmpeg2/0004-fix-sparc.patch lib_patch.Upstream
- package/libnetfilter_conntrack/0001-conntrack-fix-build-with-kernel-5-15-and-musl.patch lib_patch.Upstream
- package/libnfc/0001-autotools-make-example-build-optional.patch lib_patch.Upstream
--package/libnids/0001-libpcap-use-pkg-config.patch lib_patch.Upstream
- package/libnss/0001-Bug-1801182-Allow-overriding-OS_ARCH-OS_TEST-and-OS_.patch lib_patch.Upstream
- package/libodb-mysql/0001-fix-syntax-issue-while-checking-ldflags.patch lib_patch.Upstream
- package/libodb-mysql/0002-mariadb-FTBFS-fix.patch lib_patch.Upstream
+@@ -318,8 +318,6 @@ package/dmalloc/0001-configure-fix-build-on-mips.patch lib_patch.Upstream
+ package/dmalloc/0003-configure-allow-overriding-some-tests.patch lib_patch.Upstream
+ package/dmalloc/0004-Makefile-use-the-configure-detected-or-user-supplied.patch lib_patch.Upstream
+ package/dmalloc/0005-configure-use-LD-instead-of-hard-coding-ld.patch lib_patch.Upstream
+-package/dmraid/0001-fix-compilation-under-musl.patch lib_patch.Upstream
+-package/dmraid/S20dmraid lib_sysv.Variables
+ package/docopt-cpp/0001-only-build-one-target-use-BUILD_SHARED_LIBS-where-appropriate.patch lib_patch.Upstream
+ package/domoticz/S99domoticz Shellcheck
+ package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch lib_patch.Upstream
 diff --git a/Config.in.legacy b/Config.in.legacy
-index da91b68087..29b3316a7a 100644
+index 29b3316a7a..c8b5b14f4c 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2026.02"
  
-+config BR2_PACKAGE_LIBNIDS
-+	bool "libnids has been removed"
++config BR2_PACKAGE_DMRAID
++	bool "dmraid has been removed"
 +	select BR2_LEGACY
 +	help
-+	  libnids is unmaintained and has been removed
++	  dmraid is unmaintained and has been removed
 +
- config BR2_PACKAGE_MESA3D_VDPAU
- 	bool "mesa3d Gallium VDPAU state tracker support removed"
+ config BR2_PACKAGE_LIBNIDS
+ 	bool "libnids has been removed"
  	select BR2_LEGACY
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 1b27df9beb..098370af6e 100644
+index 098370af6e..f2ff1a9c05 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1367,7 +1367,6 @@ N:	Guillaume Chaye <guillaume.chaye@zeetim.com>
- F:	package/sane-airscan/
- 
- N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
--F:	package/libnids/
- F:	package/libxcrypt/
- F:	package/liquid-dsp/
- F:	package/mbw/
+@@ -1873,8 +1873,6 @@ F:	support/testing/tests/package/test_compressor_base.py
+ F:	support/testing/tests/package/test_coremark.py
+ F:	support/testing/tests/package/test_cryptsetup.py
+ F:	support/testing/tests/package/test_cryptsetup/
+-F:	support/testing/tests/package/test_ddrescue.py
+-F:	support/testing/tests/package/test_ddrescue/
+ F:	support/testing/tests/package/test_dieharder.py
+ F:	support/testing/tests/package/test_dmidecode.py
+ F:	support/testing/tests/package/test_dos2unix.py
 diff --git a/package/Config.in b/package/Config.in
-index 22970b4d45..80cd4c0466 100644
+index 80cd4c0466..2df509047c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2072,7 +2072,6 @@ menu "Networking"
- 	source "package/libnfnetlink/Config.in"
- 	source "package/libnftnl/Config.in"
- 	source "package/libnice/Config.in"
--	source "package/libnids/Config.in"
- 	source "package/libnl/Config.in"
- 	source "package/libnpupnp/Config.in"
- 	source "package/liboping/Config.in"
-diff --git a/package/libnids/0001-libpcap-use-pkg-config.patch b/package/libnids/0001-libpcap-use-pkg-config.patch
+@@ -490,7 +490,6 @@ endmenu
+ 	source "package/dfu-programmer/Config.in"
+ 	source "package/dfu-util/Config.in"
+ 	source "package/dmidecode/Config.in"
+-	source "package/dmraid/Config.in"
+ 	source "package/dt-utils/Config.in"
+ 	source "package/dtbocfg/Config.in"
+ 	source "package/dtv-scan-tables/Config.in"
+diff --git a/package/dmraid/0001-fix-compilation-under-musl.patch b/package/dmraid/0001-fix-compilation-under-musl.patch
 deleted file mode 100644
-index 8f8df478d1..0000000000
---- a/package/libnids/0001-libpcap-use-pkg-config.patch
+index 3d45641b8d..0000000000
+--- a/package/dmraid/0001-fix-compilation-under-musl.patch
 +++ /dev/null
-@@ -1,48 +0,0 @@
--configure.in: use pkg-config for libpcap detection
+@@ -1,47 +0,0 @@
+-From 89c7fc15e064dd407e6d5ccefe78985b86b8a036 Mon Sep 17 00:00:00 2001
+-From: Brendan Heading <brendanheading@gmail.com>
+-Date: Tue, 1 Sep 2015 12:26:36 +0100
+-Subject: [PATCH] fix compilation under musl
 -
--The detection of libpcap was based in ${prefix}, which doesn't make
--sense in a cross-compilation context and can cause host leakage into
--the target build.
+-Patch borrowed from Void Linux :
 -
--So instead, let's use pkg-config to detect libpcap, since it is anyway
--already use in this configure.in to detect libglib.
+-https://github.com/voidlinux/void-packages/blob/master/srcpkgs/dmraid/patches/25_musl-libc.patch
 -
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Upstream package appears dormant, no mailing list and no
+-maintenance releases since Nov 2010.
 -
--Index: b/configure.in
--===================================================================
----- a/configure.in
--+++ b/configure.in
--@@ -75,25 +75,13 @@
--      fi
--      ;;
--   esac ],
---[ if test -f ${prefix}/include/pcap.h; then
---     PCAP_CFLAGS="-I${prefix}/include"
---     PCAPLIB="-L${exec_prefix}/lib -lpcap"
---  elif test -f /usr/include/pcap/pcap.h; then
---     PCAP_CFLAGS="-I/usr/include/pcap"
---     PCAPLIB="-lpcap"
---  else
---	TMP=$LIBS
---	LIBS="-lpcap $LIBS"
---	AC_TRY_LINK([#include <pcap.h>], pcap_open_offline("",""),
---	LIBPCAP_FOUND=1,LIBPCAP_FOUND=0)
---	LIBS=$TMP
---	if test $LIBPCAP_FOUND = 1 ; then
---		PCAPLIB="-lpcap"
---	else
---		AC_ERROR(libpcap not found)
---	fi
---  fi
---  AC_MSG_RESULT(yes) ]
--+[
--+    PKG_PROG_PKG_CONFIG
--+    PKG_CHECK_MODULES(LIBPCAP, libpcap)
--+    AC_MSG_RESULT(yes)
--+    PCAP_CFLAGS=${LIBPCAP_CFLAGS}
--+    PCAPLIB=${LIBPCAP_LIBS}
--+]
-- )
-- AC_SUBST(PCAP_CFLAGS)
-- AC_SUBST(PCAPLIB)
-diff --git a/package/libnids/Config.in b/package/libnids/Config.in
+-Upstream-Status: dormant
+-Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+-
+----
+- 1.0.0.rc16-3/dmraid/include/dmraid/misc.h | 1 +
+- 1.0.0.rc16-3/dmraid/lib/device/scan.c     | 1 +
+- 2 files changed, 2 insertions(+)
+-
+-diff --git a/1.0.0.rc16-3/dmraid/include/dmraid/misc.h b/1.0.0.rc16-3/dmraid/include/dmraid/misc.h
+-index 247a68e..1b1dfdf 100644
+---- a/1.0.0.rc16-3/dmraid/include/dmraid/misc.h
+-+++ b/1.0.0.rc16-3/dmraid/include/dmraid/misc.h
+-@@ -10,6 +10,7 @@
+- 
+- #ifndef _MISC_H_
+- #define _MISC_H_
+-+#include <fcntl.h>
+- 
+- #define DM_ASSERT(__cond) do { if (!(__cond)) { printf("ASSERT file:%s line:%d fuction:%s cond: %s\n", __FILE__, __LINE__, __FUNCTION__, #__cond); } } while(0);
+- 
+-diff --git a/1.0.0.rc16-3/dmraid/lib/device/scan.c b/1.0.0.rc16-3/dmraid/lib/device/scan.c
+-index a040d53..6897146 100644
+---- a/1.0.0.rc16-3/dmraid/lib/device/scan.c
+-+++ b/1.0.0.rc16-3/dmraid/lib/device/scan.c
+-@@ -10,6 +10,7 @@
+- # include <dirent.h>
+- # include <paths.h>
+- #else
+-+# include <paths.h>
+- # include <dirent.h>
+- # include <mntent.h>
+- #endif
+--- 
+-2.4.3
+-
+diff --git a/package/dmraid/Config.in b/package/dmraid/Config.in
 deleted file mode 100644
-index 30528f4d07..0000000000
---- a/package/libnids/Config.in
+index ad86334f1e..0000000000
+--- a/package/dmraid/Config.in
 +++ /dev/null
-@@ -1,14 +0,0 @@
--config BR2_PACKAGE_LIBNIDS
--	bool "libnids"
--	select BR2_PACKAGE_LIBPCAP
+@@ -1,19 +0,0 @@
+-config BR2_PACKAGE_DMRAID
+-	bool "dmraid"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
+-	depends on BR2_USE_MMU # lvm2
+-	depends on !BR2_STATIC_LIBS # lvm2
+-	select BR2_PACKAGE_LVM2
 -	help
--	  Libnids is an implementation of an E-component of Network
--	  Intrusion Detection System.
+-	  dmraid discovers, activates, deactivates and displays
+-	  properties of software RAID sets (eg, ATARAID) and contained
+-	  DOS partitions.
 -
--	  libnids watches all local network traffic, and provides
--	  convenient information on them to perform further analysis.
+-	  dmraid uses the Linux device-mapper to create devices with
+-	  respective mappings for the ATARAID sets discovered.
 -
--	  Libnids offers IP defragmentation, TCP stream assembly, TCP
--	  port scan detection.
+-	  https://people.redhat.com/~heinzm/sw/dmraid/
 -
--	  http://libnids.sourceforge.net/
-diff --git a/package/libnids/libnids.hash b/package/libnids/libnids.hash
+-comment "dmraid needs a toolchain w/ threads, dynamic library"
+-	depends on BR2_USE_MMU
+-	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/dmraid/S20dmraid b/package/dmraid/S20dmraid
 deleted file mode 100644
-index e51dbf151c..0000000000
---- a/package/libnids/libnids.hash
+index b3bfdcc84b..0000000000
+--- a/package/dmraid/S20dmraid
 +++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256  3f3e9f99a83cd37bc74af83d415c5e3a7505f5b190dfaf456b0849e0054f6733  libnids-1.26.tar.gz
--sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
-diff --git a/package/libnids/libnids.mk b/package/libnids/libnids.mk
+@@ -1,29 +0,0 @@
+-#!/bin/sh
+-
+-set -e
+-
+-# try to load module in case that hasn't been done yet
+-modprobe dm-mod >/dev/null 2>&1
+-
+-case "$1" in
+-	start|"")
+-		echo "Setting up DMRAID devices..."
+-		/usr/sbin/dmraid --activate yes --ignorelocking --verbose
+-		;;
+-
+-	stop)
+-		echo "Shutting down DMRAID devices... "
+-		/usr/sbin/dmraid --activate no --ignorelocking --verbose
+-		;;
+-
+-	restart|force-reload)
+-		$0 stop
+-		sleep 1
+-		$0 start
+-		;;
+-
+-	*)
+-		echo "Usage: dmraid {start|stop|restart|force-reload}"
+-		exit 1
+-		;;
+-esac
+diff --git a/package/dmraid/dmraid.hash b/package/dmraid/dmraid.hash
 deleted file mode 100644
-index 712630bac8..0000000000
---- a/package/libnids/libnids.mk
+index 0f30864254..0000000000
+--- a/package/dmraid/dmraid.hash
 +++ /dev/null
-@@ -1,43 +0,0 @@
+@@ -1,5 +0,0 @@
+-# From https://people.redhat.com/~heinzm/sw/dmraid/src/dmraid-1.0.0.rc16-3.tar.bz2.md5.sum
+-md5  819338fcef98e8e25819f0516722beeb  dmraid-1.0.0.rc16-3.tar.bz2
+-# locally computed
+-sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  1.0.0.rc16-3/dmraid/LICENSE_GPL
+-sha256  4bc391fcf852e03c3a7564cb146af6e47717562eed296b28bce123ee1b0396b8  1.0.0.rc16-3/dmraid/LICENSE
+diff --git a/package/dmraid/dmraid.mk b/package/dmraid/dmraid.mk
+deleted file mode 100644
+index dca9195ef6..0000000000
+--- a/package/dmraid/dmraid.mk
++++ /dev/null
+@@ -1,25 +0,0 @@
 -################################################################################
 -#
--# libnids
+-# dmraid
 -#
 -################################################################################
 -
--LIBNIDS_VERSION = 1.26
--LIBNIDS_SITE = $(call github,MITRECND,libnids,$(LIBNIDS_VERSION))
--LIBNIDS_LICENSE = GPL-2.0
--LIBNIDS_LICENSE_FILES = COPYING
--LIBNIDS_CPE_ID_VALID = YES
--LIBNIDS_INSTALL_STAGING = YES
--LIBNIDS_DEPENDENCIES = host-pkgconf libpcap
--LIBNIDS_AUTORECONF = YES
+-DMRAID_VERSION = 1.0.0.rc16-3
+-DMRAID_SOURCE = dmraid-$(DMRAID_VERSION).tar.bz2
+-DMRAID_SITE = https://people.redhat.com/~heinzm/sw/dmraid/src
+-DMRAID_SUBDIR = $(DMRAID_VERSION)/dmraid
+-# lib and tools race with parallel make
+-DMRAID_MAKE = $(MAKE1)
+-DMRAID_INSTALL_STAGING = YES
+-DMRAID_LICENSE = GPL-2.0
+-DMRAID_LICENSE_FILES = $(DMRAID_SUBDIR)/LICENSE_GPL $(DMRAID_SUBDIR)/LICENSE
+-DMRAID_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) -fPIC"
 -
--# disable libnet if not available
--# Tests in configure.in expect --with-libnet=$build_dir
--# not an installation patch like in our context.
--# We use with-libnet=yes to skip the unusual paths tests.
--# But 'LNETLIB' gets left out, so we need to define it ourselves.
--ifeq ($(BR2_PACKAGE_LIBNET),y)
--LIBNIDS_DEPENDENCIES += libnet
--LIBNIDS_CONF_OPTS += --enable-libnet --with-libnet=yes LNETLIB=-lnet
--else
--LIBNIDS_CONF_OPTS += --disable-libnet
--endif
+-DMRAID_DEPENDENCIES = lvm2
 -
--# disable libglib2 if not available
--# The test in configure.in is flawed: passing --enable-libglib would also
--# disable it. Only when neither is passed will the autodetection test be
--# executed.
--ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
--LIBNIDS_DEPENDENCIES += libglib2
--else
--LIBNIDS_CONF_OPTS += --disable-libglib
--endif
--
--# hand-written Makefile.in, not using automake, needs a custom
--# variable for the installation path.
--LIBNIDS_INSTALL_STAGING_OPTS = install_prefix=$(STAGING_DIR) install
--LIBNIDS_INSTALL_TARGET_OPTS = install_prefix=$(TARGET_DIR) install
+-define DMRAID_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 0755 package/dmraid/S20dmraid \
+-		$(TARGET_DIR)/etc/init.d/S20dmraid
+-endef
 -
 -$(eval $(autotools-package))
+diff --git a/support/testing/tests/package/test_ddrescue.py b/support/testing/tests/package/test_ddrescue.py
+deleted file mode 100644
+index 989abc8f01..0000000000
+--- a/support/testing/tests/package/test_ddrescue.py
++++ /dev/null
+@@ -1,94 +0,0 @@
+-import os
+-
+-import infra.basetest
+-
+-
+-class TestDdrescue(infra.basetest.BRTest):
+-
+-    # A specific configuration is needed for testing ddrescue:
+-    # - A kernel config fragment enables loop blk dev and device
+-    #   mapper dm-dust, which are used to simulate a failing storage
+-    #   block device.
+-    # - dmraid user space package is needed to configure dm-dust
+-    config = \
+-        """
+-        BR2_aarch64=y
+-        BR2_TOOLCHAIN_EXTERNAL=y
+-        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+-        BR2_LINUX_KERNEL=y
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.15"
+-        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+-        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
+-        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+-        BR2_PACKAGE_DDRESCUE=y
+-        BR2_PACKAGE_DMRAID=y
+-        BR2_TARGET_ROOTFS_CPIO=y
+-        BR2_TARGET_ROOTFS_CPIO_GZIP=y
+-        # BR2_TARGET_ROOTFS_TAR is not set
+-        """.format(
+-            infra.filepath("tests/package/test_ddrescue/linux-ddrescue.fragment")
+-        )
+-
+-    def test_run(self):
+-        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
+-        kern = os.path.join(self.builddir, "images", "Image")
+-        self.emulator.boot(arch="aarch64",
+-                           kernel=kern,
+-                           kernel_cmdline=["console=ttyAMA0"],
+-                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "256M", "-initrd", img])
+-        self.emulator.login()
+-
+-        # Test variables:
+-        dev_img = "/tmp/dev.img"
+-        lo_dev = "/dev/loop0"
+-        dm_dev_name = "dust0"
+-        dm_dev = f"/dev/mapper/{dm_dev_name}"
+-        ddrescue_img = "/tmp/ddrescue.img"
+-
+-        # Test the program can execute
+-        self.assertRunOk("ddrescue --version")
+-
+-        # Create a 1MB file of zeroes for initial loopback block device
+-        self.assertRunOk(f"dd if=/dev/zero of={dev_img} bs=1M count=1")
+-
+-        # Setup lookback block device
+-        self.assertRunOk(f"losetup {lo_dev} {dev_img}")
+-
+-        # Create and setup dm-dust to simulate a failing block device
+-        # The dev_img file is 1MB: 2048 blocks of 512 bytes each
+-        self.assertRunOk(f"dmsetup create {dm_dev_name} --table '0 2048 dust {lo_dev} 0 512'")
+-
+-        # Add few bad blocks and enable I/O error emulation
+-        for badblock in [30, 40, 50, 60]:
+-            self.assertRunOk(f"dmsetup message {dm_dev_name} 0 addbadblock {badblock}")
+-        self.assertRunOk(f"dmsetup message {dm_dev_name} 0 enable")
+-
+-        # Show device mapper status, to make debugging easier
+-        self.assertRunOk(f"dmsetup status {dm_dev_name}")
+-
+-        # A normal 'dd' is expected to fail with I/O error
+-        cmd = f"dd if={dm_dev} of=/dev/null bs=512"
+-        _, exit_code = self.emulator.run(cmd)
+-        self.assertNotEqual(exit_code, 0)
+-
+-        # Where a normal 'dd' fails, 'ddrescue' is expected to succeed
+-        self.assertRunOk(f"ddrescue {dm_dev} {ddrescue_img}")
+-
+-        # ddrescue does not normally write any output data when there
+-        # is I/O error on the input. The intent is to preserve any
+-        # data that could have been read in a previous pass. There is
+-        # one exception, when the output is a non-existing regular
+-        # file, ddrescue will initialize it with zeroes the first
+-        # time. Since the original image file was also including
+-        # zeroes, the recovered image is expected to be the same as
+-        # the original one. See ddrescue manual:
+-        # https://www.gnu.org/software/ddrescue/manual/ddrescue_manual.html#Introduction
+-        # "Ddrescue does not write zeros to the output when it finds
+-        # bad sectors in the input, and does not truncate the output
+-        # file if not asked to."
+-        # https://www.gnu.org/software/ddrescue/manual/ddrescue_manual.html#Algorithm
+-        # "If the output file is a regular file created by ddrescue,
+-        # the areas marked as bad-sector will contain zeros."
+-        self.assertRunOk(f"cmp {dev_img} {ddrescue_img}")
+diff --git a/support/testing/tests/package/test_ddrescue/linux-ddrescue.fragment b/support/testing/tests/package/test_ddrescue/linux-ddrescue.fragment
+deleted file mode 100644
+index 5cbe18a89f..0000000000
+--- a/support/testing/tests/package/test_ddrescue/linux-ddrescue.fragment
++++ /dev/null
+@@ -1,4 +0,0 @@
+-CONFIG_BLK_DEV_LOOP=y
+-CONFIG_MD=y
+-CONFIG_BLK_DEV_DM=y
+-CONFIG_DM_DUST=y
 -- 
 2.47.3
 
