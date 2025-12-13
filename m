@@ -1,59 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13361D5B164
-	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 20:26:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30942D5B164
+	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 20:26:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DCBFD60752;
-	Sat, 13 Dec 2025 20:26:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 046318109C;
+	Sat, 13 Dec 2025 20:26:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P-xq-WFA0NoT; Sat, 13 Dec 2025 20:26:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5EHLqsiot6vs; Sat, 13 Dec 2025 20:26:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04885607ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10BAC81109
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765657606;
-	bh=8rFkIVUG31sPbFkEIbGi8lEKtIynfsaHZbIXY9WZuW4=;
+	s=default; t=1765657618;
+	bh=yJQ5DKozrneaYP2hyyvnCgm4/gn+lVD2FaOl3KdGySQ=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=NAtyMs+YeT9m2zzY2GVzWHSf0sljYP2oBlDENCycB+OA/GGSkk3Uh87GdtV5InOBT
-	 eWWyGvjK01RrzbtBta4f6QiVomaUpTsjr04l/JcvxPXL4/Ho9yT81frq/kWDpTGEYx
-	 goXuerowo1zIg/chwK4xempaDkxh2xHPFzXIJX3+bXL9d3bzs8BFV7JlLoVOMFbPfT
-	 UoyW3e+SCevNhh4Yk7KCko+UbGHxhIW7UxPp8ht6cefVVgBgFmp/NQccOuS0B6oR/J
-	 r2PkTAJolq1Y4zzTpJX+6NpJaVwzbuXIT4l4w1DE4ur0lPXUrwQbLwpGKyQ3c3y74Y
-	 htnNpxzxoNeqw==
+	b=OJHAJ6e4wYCSzuT1v9bdAWT4J5UYlytD3ewYGQPcQ+786rZzcnGZ31TnXr0w57IG2
+	 5zc0dJSkeabZ+QxsReDj+FC6ly9xCtsnismUqY1/G0x+q0lsZdDRz14KkddhUfoZ8v
+	 pVXHJtBW/h1LGlce3GsdyZR2rHCgIxBKQQIo8R6ZKl4EjpmBikh2oExHKOM5wHCx/z
+	 69YQsbTE4Lt9tmwlvisHpVLaOOFyZKQ88T4uVxTED1l2/TbVzgTWdEAlMGc9A7tsOW
+	 zGej3+VakD77AYXJtY7YWevMlNz4VMMzqOlQVhunw0Ia9NwsvK9QWzK5FnTmHUFMrv
+	 KI1MLyk9QMhow==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 04885607ED;
-	Sat, 13 Dec 2025 20:26:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3A0512C1
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:26:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 10BAC81109;
+	Sat, 13 Dec 2025 20:26:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 804322C1
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:26:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2021A401D0
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:26:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 732CA405C0
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:26:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pa_lw_8EsxmL for <buildroot@buildroot.org>;
- Sat, 13 Dec 2025 20:26:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R10gL0Y9dz0e for <buildroot@buildroot.org>;
+ Sat, 13 Dec 2025 20:26:55 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 03C624018E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03C624018E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6507E4057E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6507E4057E
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 03C624018E
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:26:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6507E4057E
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 20:26:55 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6cc21.dip0.t-ipconnect.de [79.214.204.33])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 3AB3FA4C3D95;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 84CCEA4C3D9C;
  Sat, 13 Dec 2025 21:25:14 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:41122)
  by fli4l.lan.fli4l with esmtp (Exim 4.99)
- (envelope-from <bernd@kuhls.net>) id 1vUWAq-000000003Sm-1G5p;
+ (envelope-from <bernd@kuhls.net>) id 1vUWAq-000000003Sm-2nf8;
  Sat, 13 Dec 2025 20:25:04 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
@@ -64,8 +64,8 @@ Cc: Guillaume William Brs <guillaume.bressaix@gmail.com>,
  Jan Heylen <jan.heylen@nokia.com>,
  Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>,
  Simon Dawson <spdawson@gmail.com>, Ben Boeckel <mathstuf@gmail.com>
-Date: Sat, 13 Dec 2025 21:24:54 +0100
-Message-ID: <20251213202503.1348845-8-bernd@kuhls.net>
+Date: Sat, 13 Dec 2025 21:24:56 +0100
+Message-ID: <20251213202503.1348845-10-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251213202503.1348845-1-bernd@kuhls.net>
 References: <20251213202503.1348845-1-bernd@kuhls.net>
@@ -74,21 +74,21 @@ X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202511301023; t=1765657514;
- bh=qPSc701v8BR8GRMuhFHxsVS2f52XyRL8t/d8z2CZroA=;
+ bh=R+psmiwsUNfefm3L8o6ottcWaJW0EVwxCl90P7mmSyg=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=FHyceeNIJ6RPHWpd16XfbUgHfELIJHzDHA8JPNDSWInhlo9zIfolVYK+PZEJ+hxek
- EjJyimIWCiiESLf5TljTDtGn0D27985QJDfy6RMn4irpgcTvLD/QZ0CBKV1rQZaUqQ
- 6S3QrzN3XU9lALMI+VfkWrDbvwKibtfCQjmLbbfWSTN58kt5qTz2cOkV9c1luu6gF4
- aHXJdVbg5z/k+pMfg5uKSBP7O/9lT4PJYDpXmNMz4rD1PYvUqPqy4NUnDg31foFL0b
- /iJFsbIv+LFc9XYjU7UCtiB56Q3bmfnfjbjpwLr1A7+GarO9RZY8BldyUhdmXN0Uo7
- u0ug2f+ffO5pw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=MIqvQMDS+HRU1OgEoPNokQiQ6nUj9jt7am/djog5cJP+47QvfzbTlwVIA48Gn84EV
+ f+0sFO4nr8dLmOQl3Zvq9sFVAIeINw10u0RGwCxlNuM3OaUP1k/OLD3lehZxalMa3Q
+ sGgcvBXHTq7DQqDetSaVmGAYtGjWzlRuLs7v6A9X6dkf2L8W0AbLQ0NIasJqDEK7hn
+ ytMOfHqjYkXXTto+IYo/Om3ik13zfdtEHaWvLV0tqgj3Xjqjw1/nrJIl8YjC3YMqcH
+ PF+j3z/rvZygVQQgOGc3cJ6EBnQTZTEbw6knAOZd8N4xNXZUvjryaTxeHIE7RIg4Ne
+ N11lDJUM+YK7g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202511301023 header.b=FHyceeNI
-Subject: [Buildroot] [PATCH v2 08/16] package/libiqrf: remove package
+ header.a=rsa-sha256 header.s=kas202511301023 header.b=MIqvQMDS
+Subject: [Buildroot] [PATCH v2 10/16] package/alure: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,205 +105,216 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fails to build with cmake 4.
+Analysis of https://github.com/kcat/alure:
+last commit: Feb 2020
+last bug report: Oct 2020
+last pull request: 0 open
 
-The package is a library without any reverse dependencies and no active
-development since 2013.
+The package is broken with cmake 4 and no other package depends on it.
+
+The upstream site kcat.strangesoft.net has no DNS record anymore, the
+main site strangesoft.net serves content unrelated to alure.
+
+Although the cmake error is easy to fix we remove this unsupported
+package instead.
+
+Fixes:
+https://autobuild.buildroot.net/results/d5a/d5a275f2d282c9dd2e3053667c79be11d48e918d/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .checkpackageignore                           |  2 -
- Config.in.legacy                              |  6 +++
- package/Config.in                             |  1 -
- ...tic-library-and-find-required-thread.patch | 45 -------------------
- .../libiqrf/0002-use-only-c-language.patch    | 29 ------------
- package/libiqrf/Config.in                     | 16 -------
- package/libiqrf/libiqrf.hash                  |  3 --
- package/libiqrf/libiqrf.mk                    | 14 ------
- 8 files changed, 6 insertions(+), 110 deletions(-)
- delete mode 100644 package/libiqrf/0001-cmake-handle-static-library-and-find-required-thread.patch
- delete mode 100644 package/libiqrf/0002-use-only-c-language.patch
- delete mode 100644 package/libiqrf/Config.in
- delete mode 100644 package/libiqrf/libiqrf.hash
- delete mode 100644 package/libiqrf/libiqrf.mk
+ Config.in.legacy         |  6 ++++
+ DEVELOPERS               |  1 -
+ package/Config.in        |  1 -
+ package/alure/Config.in  | 56 ----------------------------------
+ package/alure/alure.hash |  3 --
+ package/alure/alure.mk   | 65 ----------------------------------------
+ 6 files changed, 6 insertions(+), 126 deletions(-)
+ delete mode 100644 package/alure/Config.in
+ delete mode 100644 package/alure/alure.hash
+ delete mode 100644 package/alure/alure.mk
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 660cf03b76..a264434311 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -550,8 +550,6 @@ package/libgsm/0001-Misc-fixes-from-Archlinux.patch lib_patch.Upstream
- package/libgtk3/0001-Remove-Gdk-dependency-from-gtk-encode-symbolic-svg.patch lib_patch.Upstream
- package/libhdhomerun/0001-dont-strip.patch lib_patch.Upstream
- package/libiio/S99iiod Shellcheck lib_sysv.Variables
--package/libiqrf/0001-cmake-handle-static-library-and-find-required-thread.patch lib_patch.Upstream
--package/libiqrf/0002-use-only-c-language.patch lib_patch.Upstream
- package/libjson/0001-fix-broken-makefile.patch lib_patch.Upstream
- package/libks/0001-CMakeLists.txt-honour-BUILD_TESTING.patch lib_patch.Upstream
- package/liblinear/0001-build-static-lib.patch lib_patch.Upstream
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 1da3fc6665..3ed1f09b8b 100644
+index c8d037b5df..ed32041377 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2026.02"
  
-+config BR2_PACKAGE_LIBIQRF
-+	bool "libiqrf has been removed"
++config BR2_PACKAGE_ALURE
++	bool "alure has been removed"
 +	select BR2_LEGACY
 +	help
-+	  libiqrf is unmaintained and has been removed
++	  alure is unmaintained and has been removed
 +
- config BR2_PACKAGE_LIBCGI
- 	bool "libcgi has been removed"
+ config BR2_PACKAGE_LIBUWSC
+ 	bool "libuwsc has been removed"
  	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 60d6ff858f..3b18c745bf 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2889,7 +2889,6 @@ F:	configs/qemu_*
+ F:	configs/am574x_idk_defconfig
+ F:	configs/beagleboneai64_defconfig
+ F:	configs/beagley_ai_defconfig
+-F:	package/alure/
+ F:	package/aubio/
+ F:	package/bcc/
+ F:	package/binutils/
 diff --git a/package/Config.in b/package/Config.in
-index a059e7c372..cf5c7860a5 100644
+index 0e11fe4bae..6d1b78cbfc 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1833,7 +1833,6 @@ menu "Hardware handling"
- 	source "package/libgudev/Config.in"
- 	source "package/libiio/Config.in"
- 	source "package/libinput/Config.in"
--	source "package/libiqrf/Config.in"
- 	source "package/libllcp/Config.in"
- 	source "package/libmbim/Config.in"
- 	source "package/libnfc/Config.in"
-diff --git a/package/libiqrf/0001-cmake-handle-static-library-and-find-required-thread.patch b/package/libiqrf/0001-cmake-handle-static-library-and-find-required-thread.patch
+@@ -1533,7 +1533,6 @@ menu "Libraries"
+ menu "Audio/Sound"
+ 	source "package/alsa-lib/Config.in"
+ 	source "package/alsa-plugins/Config.in"
+-	source "package/alure/Config.in"
+ 	source "package/aubio/Config.in"
+ 	source "package/bcg729/Config.in"
+ 	source "package/caps/Config.in"
+diff --git a/package/alure/Config.in b/package/alure/Config.in
 deleted file mode 100644
-index 7f460c131e..0000000000
---- a/package/libiqrf/0001-cmake-handle-static-library-and-find-required-thread.patch
+index c831bba913..0000000000
+--- a/package/alure/Config.in
 +++ /dev/null
-@@ -1,45 +0,0 @@
--From 46660112b76664473cc98b8ae6c863fd27c27d2d Mon Sep 17 00:00:00 2001
--From: Samuel Martin <s.martin49@gmail.com>
--Date: Fri, 29 Aug 2014 23:40:59 +0200
--Subject: [PATCH] cmake: handle static library and find required thread
-- module
--
--Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-----
-- CMakeLists.txt     | 2 ++
-- src/CMakeLists.txt | 4 +++-
-- 2 files changed, 5 insertions(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 79f644c..7779a2a 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -6,7 +6,9 @@ enable_testing()
-- # use local module (for Findlibusb-1.0.cmake)
-- set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-- 
--+find_package(Threads REQUIRED)
-- find_package(libusb-1.0 REQUIRED)
--+
-- if (NOT LIBUSB_1_FOUND)
-- 	message(FATAL_ERROR "libusb-1.0 not installed. (try apt-get install libusb-1.0-0-dev)")
-- endif (NOT LIBUSB_1_FOUND)
--diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
--index 149d198..0597ccd 100644
----- a/src/CMakeLists.txt
--+++ b/src/CMakeLists.txt
--@@ -18,8 +18,10 @@ set (iqrf_sources
-- 
-- include_directories ("${LIBUSB_1_INCLUDE_DIRS}")
-- 
---add_library(iqrf SHARED ${iqrf_sources} ${iqrf_headers})
--+add_library(iqrf ${iqrf_sources} ${iqrf_headers})
--+
-- target_link_libraries(iqrf ${LIBUSB_1_LIBRARIES})
--+target_link_libraries(iqrf ${CMAKE_THREAD_LIBS_INIT})
-- 
-- set_target_properties(iqrf PROPERTIES
-- 	VERSION "${iqrf_version_major}.${iqrf_version_minor}"
---- 
--2.1.0
--
-diff --git a/package/libiqrf/0002-use-only-c-language.patch b/package/libiqrf/0002-use-only-c-language.patch
-deleted file mode 100644
-index 2f1c23c28b..0000000000
---- a/package/libiqrf/0002-use-only-c-language.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--Use only the C language
--
--libirqf is written completely in C, but by default, CMake assumes that
--both C and C++ are used, and therefore verifies that a C++ compiler is
--installed. This may not necessarily be the case for a C-only package
--in Buildroot.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/src/CMakeLists.txt
--===================================================================
----- a/src/CMakeLists.txt
--+++ b/src/CMakeLists.txt
--@@ -1,5 +1,3 @@
---project(iqrf)
---
-- set (iqrf_version_major 0)
-- set (iqrf_version_minor 1)
-- set (iqrf_version_patch 2)
--Index: b/CMakeLists.txt
--===================================================================
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -1,3 +1,5 @@
--+project(iqrf C)
--+
-- cmake_minimum_required(VERSION 2.8.1)
-- enable_testing()
-- 
-diff --git a/package/libiqrf/Config.in b/package/libiqrf/Config.in
-deleted file mode 100644
-index d86a7fd0ec..0000000000
---- a/package/libiqrf/Config.in
-+++ /dev/null
-@@ -1,16 +0,0 @@
--config BR2_PACKAGE_LIBIQRF
--	bool "libiqrf"
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
--	select BR2_PACKAGE_LIBUSB
+@@ -1,56 +0,0 @@
+-config BR2_PACKAGE_ALURE
+-	bool "alure"
+-	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9 # openal
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
+-	depends on BR2_USE_WCHAR # use wchar_t
+-	select BR2_PACKAGE_OPENAL
 -	help
--	  This library implement specific protocol
--	  which is used for communicating with iqrf devices
--	  (http://iqrf.org) over usb. For usb access is used
--	  libusb library.
+-	  Alure is a C++ 3D audio API. It uses OpenAL for audio
+-	  rendering, and provides common higher-level features such as
+-	  file loading and decoding, buffer caching, background
+-	  streaming, and source management for virtually unlimited
+-	  sound source handles.
 -
--	  https://github.com/nandra/libiqrf
+-	  https://kcat.strangesoft.net/alure.html
 -
--comment "libiqrf needs a toolchain w/ threads, gcc >= 4.9"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/libiqrf/libiqrf.hash b/package/libiqrf/libiqrf.hash
+-if BR2_PACKAGE_ALURE
+-
+-config BR2_PACKAGE_ALURE_FLAC_DECODER
+-	bool "flac decoder"
+-	help
+-	  Enables the built-in FLAC decoder.
+-
+-config BR2_PACKAGE_ALURE_MINIMP3_DECODER
+-	bool "minimp3 decoder"
+-	help
+-	  Enables the built-in minimp3 decoder.
+-
+-config BR2_PACKAGE_ALURE_OPUS_DECODER
+-	bool "opus decoder"
+-	select BR2_PACKAGE_LIBOGG
+-	select BR2_PACKAGE_OPUS
+-	help
+-	  Enables the built-in libopusfile decoder.
+-
+-config BR2_PACKAGE_ALURE_SNDFILE_DECODER
+-	bool "sndfile decoder"
+-	select BR2_PACKAGE_LIBSNDFILE
+-	help
+-	  Enables the built-in libsndfile decoder.
+-
+-config BR2_PACKAGE_ALURE_VORBIS_DECODER
+-	bool "vorbis decoder"
+-	select BR2_PACKAGE_LIBOGG
+-	select BR2_PACKAGE_LIBVORBIS
+-	help
+-	  Enables the built-in libvorbis decoder.
+-
+-endif
+-
+-comment "alure needs a toolchain w/ C++, gcc >= 9, NPTL, wchar"
+-	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
+-	depends on !BR2_INSTALL_LIBSTDCPP \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_9 \
+-		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_USE_WCHAR
+diff --git a/package/alure/alure.hash b/package/alure/alure.hash
 deleted file mode 100644
-index df749def17..0000000000
---- a/package/libiqrf/libiqrf.hash
+index 0d4c36c4ae..0000000000
+--- a/package/alure/alure.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
--# Locally calculated
--sha256  8111031dd9dd6093a1927eb32dd7476fe22cfee9190043aa8e4c88003c104b16  libiqrf-0.1.2.tar.gz
--sha256  11e0700d7c23604d86fa1e7c54c7caa778d79eeb0035be8f80b5a552224ef015  src/iqrf.c
-diff --git a/package/libiqrf/libiqrf.mk b/package/libiqrf/libiqrf.mk
+-# Locally computed
+-sha256  9b808e5b5a54d156348221dc86704c7831115047d5238691e6088f8c4814b2ca  alure-14beed2a86d5a36030e907b21c46614d505f07cd.tar.gz
+-sha256  7331ddc67daaf1a283c81e8dc17bac8dc40f54ed3fab3d3964616f4bd502a0a3  LICENSE
+diff --git a/package/alure/alure.mk b/package/alure/alure.mk
 deleted file mode 100644
-index 3f4e3e8498..0000000000
---- a/package/libiqrf/libiqrf.mk
+index fe27bfd12b..0000000000
+--- a/package/alure/alure.mk
 +++ /dev/null
-@@ -1,14 +0,0 @@
+@@ -1,65 +0,0 @@
 -################################################################################
 -#
--# libiqrf
+-# alure
 -#
 -################################################################################
 -
--LIBIQRF_VERSION = 0.1.2
--LIBIQRF_SITE = $(call github,nandra,libiqrf,v$(LIBIQRF_VERSION))
--LIBIQRF_INSTALL_STAGING = YES
--LIBIQRF_DEPENDENCIES = libusb
--LIBIQRF_LICENSE = LGPL-2.1+
--LIBIQRF_LICENSE_FILES = src/iqrf.c
+-ALURE_VERSION = 14beed2a86d5a36030e907b21c46614d505f07cd
+-ALURE_SITE = $(call github,kcat,alure,$(ALURE_VERSION))
+-ALURE_LICENSE = Zlib, Public Domain (src/decoders/dr_flac.h)
+-ALURE_LICENSE_FILES = LICENSE
+-ALURE_INSTALL_STAGING = YES
+-
+-ALURE_DEPENDENCIES = openal
+-
+-# Disabling alure examples removes the dependencies on physfs and dump
+-# libraries. Enable at least one built-in decoder (wave).
+-ALURE_CONF_OPTS = -DALURE_INSTALL=ON \
+-	-DALURE_BUILD_EXAMPLES=OFF \
+-	-DALURE_ENABLE_WAVE=ON
+-
+-ifeq ($(BR2_PACKAGE_ALURE_FLAC_DECODER),y)
+-ALURE_CONF_OPTS += -DALURE_ENABLE_FLAC=ON
+-else
+-ALURE_CONF_OPTS += -DALURE_ENABLE_FLAC=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_ALURE_MINIMP3_DECODER),y)
+-ALURE_CONF_OPTS += -DALURE_ENABLE_MINIMP3=ON
+-else
+-ALURE_CONF_OPTS += -DALURE_ENABLE_MINIMP3=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_ALURE_OPUS_DECODER),y)
+-ALURE_CONF_OPTS += -DALURE_ENABLE_OPUS=ON
+-ALURE_DEPENDENCIES += libogg opus
+-else
+-ALURE_CONF_OPTS += -DALURE_ENABLE_OPUS=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_ALURE_SNDFILE_DECODER),y)
+-ALURE_CONF_OPTS += -DALURE_ENABLE_SNDFILE=ON
+-ALURE_DEPENDENCIES += libsndfile
+-else
+-ALURE_CONF_OPTS += -DALURE_ENABLE_SNDFILE=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_ALURE_VORBIS_DECODER),y)
+-ALURE_CONF_OPTS += -DALURE_ENABLE_VORBIS=ON
+-ALURE_DEPENDENCIES += libogg libvorbis
+-else
+-ALURE_CONF_OPTS += -DALURE_ENABLE_VORBIS=OFF
+-endif
+-
+-ifeq ($(BR2_STATIC_LIBS),y)
+-ALURE_CONF_OPTS += -DALURE_BUILD_SHARED=OFF \
+-	-DALURE_BUILD_STATIC=ON
+-else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+-ALURE_CONF_OPTS += -DALURE_BUILD_SHARED=ON \
+-	-DALURE_BUILD_STATIC=ON
+-else
+-ALURE_CONF_OPTS += -DALURE_BUILD_SHARED=ON \
+-	-DALURE_BUILD_STATIC=OFF
+-endif
 -
 -$(eval $(cmake-package))
 -- 
