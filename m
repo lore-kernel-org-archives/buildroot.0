@@ -1,96 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9A92D5AE45
-	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 11:06:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38291D5B152
+	for <buildroot@archiver.kernel.org>; Sat, 13 Dec 2025 11:06:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7E30A60BCF;
-	Sat, 13 Dec 2025 11:06:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F1F8F8231B;
+	Sat, 13 Dec 2025 11:06:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kTkjwdjhTcfr; Sat, 13 Dec 2025 11:06:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qIxKxx6pW2Gw; Sat, 13 Dec 2025 11:06:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E8E460D53
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24EAC8305C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1765623971;
-	bh=g3ItrnFRrPgsiIXHyzyaQUlQzHJbvcH9D2Gu7mPrtYM=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=qleTiwtvPnGgsas/0eZwQT52bh0HmW030LnxQGdVJssQ1R4CCpvTZOj1rCa33E5di
-	 5kp6TwlXIOsEaFFPbu8uv72Cu7LxPmlZJlIWErHG8Y5HmFhP8u0fXrWCy/EJO+PGDt
-	 qVZIouLOlOPTEqTaw8Ig9TfAKlISonLie0DqD8lo3xo34f6BzmWmwKHmtp+OXAt9Wq
-	 8tOIymCyjvjJtG60tK7lqr7U3A+8yVwpLVteGHJ+Uz3MFQh5MoIliPrAkTE7v2/y54
-	 8OLFA4JR1f3h5NKE0WCrnN7uZFnuKSxQdXaCRHPzGA8atddmCZ4cLr6URYBxySo0Sm
-	 J28w9nqZkdumw==
+	s=default; t=1765624007;
+	bh=PyOZgJcDvhaTArozNCQ/F0qQ+58heuO4Zta5wwhO/I4=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=jaK+VIp5p2yWf3e/ejXK8C75b/A1XLQi9Pt/B2xC+Fl7rHq6RUIsmYvzCynLn5kQX
+	 qcNgrXUg5aGuWC41tOWa8sD764hDfHzUq0R18mKpy2OOlJ03RA+ffP+XJdxHjg5Srb
+	 RTf31z5yj10ImnSnC2gY1U2xtgtIVl421oQR34zqYB3Tzr03FJUTz6Vwe6+hSa9nE+
+	 ZtKLgaA3bWnVbP7fqSYSr16WPdoPhH9rN5xbWy8sVTgduRFvspR2lZFCuGb2fX77gn
+	 7ReGq+b1tm1sn0+TiocUm8d3jMP6QgkzWATkvtQj5QzoKTdnOcYmFFlyKHcJEVZhhs
+	 Z0OtEGHsfLBMg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E8E460D53;
-	Sat, 13 Dec 2025 11:06:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 652FC13D
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 11:06:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 24EAC8305C;
+	Sat, 13 Dec 2025 11:06:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8D92613D
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 11:06:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4BD6340411
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 11:06:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 744AA8305C
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 11:06:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jt5Nyuceh6pw for <buildroot@buildroot.org>;
- Sat, 13 Dec 2025 11:06:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ATgFp8QaTA-L for <buildroot@buildroot.org>;
+ Sat, 13 Dec 2025 11:06:44 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C0430403C8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0430403C8
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C0430403C8
- for <buildroot@buildroot.org>; Sat, 13 Dec 2025 11:06:08 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1791762532; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sat, 13 Dec 2025 11:05:50 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1vUNRd-00000002ROQ-23kH;
- Sat, 13 Dec 2025 12:05:49 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A75208231B
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A75208231B
+ for <buildroot@buildroot.org>; Sat, 13 Dec 2025 11:06:44 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9597C8168A; Sat, 13 Dec 2025 11:06:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: Bernd Kuhls <bernd@kuhls.net>,  buildroot@buildroot.org,  =?utf-8?Q?Ra?=
- =?utf-8?Q?pha=C3=ABl_M=C3=A9lotte?= <raphael.melotte@mind.be>,  Martin
- =?utf-8?Q?Hundeb=C3=B8ll?= <martin@geanix.com>,
- Graeme Smecher <gsmecher@threespeedlogic.com>,  Guillaume William Brs
- <guillaume.bressaix@gmail.com>,  James Hilliard
- <james.hilliard1@gmail.com>,  Marcin Niestroj
- <m.niestroj@grinn-global.com>,  Mauro Condarelli <mc5686@mclink.it>,
- Titouan Christophe <titouan.christophe@mind.be>
-In-Reply-To: <5a35f447-eafd-40a5-9012-3448dac96845@bubu1.eu> (Marcus
- Hoffmann's message of "Fri, 12 Dec 2025 10:55:23 +0100")
-References: <20251209193951.1000100-1-bernd@kuhls.net>
- <20251209193951.1000100-24-bernd@kuhls.net>
- <5a35f447-eafd-40a5-9012-3448dac96845@bubu1.eu>
-Date: Sat, 13 Dec 2025 12:05:49 +0100
-Message-ID: <87345e1w1e.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=YOmAVuPtNnDa1YYoB6Q4B85t8HHChNAuIrXfgTc03Co9k+nl9nmX9h+tRHZ0tPxqhIjODyw4jd1fwqx7sfIGRr0Axw78ylyxuWbUjRdD03zlP7z+UCKL9Curx/PrIetDxMs/vnAgKdRgVk2G9KhBemXO7KREvsNYWNKkPs1wTRhF5KVlalZhtzN3OEepI0gwbR0AndtdPs1nOh5vgoeo4Bj/Wb0wbIMUQjScHbTQ49l0eKdQbauHaoNQseKL1Xm2g8gKxwnmYI1a9iliA9sVJUKxYuAsHJlAj372uWEtKYQv7nK/2H94jNXw90cAobnuZoAKW4RrXtu2UoUK1E9Fsg==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=p57vZr12y4VZBwrYX7WHR2LjI1iJwk0fBHURil89qjU=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=YOmAVuPt
-Subject: Re: [Buildroot] [PATCH/next 24/31] package/python-brotli: bump
- version to 1.2.0
+To: buildroot@buildroot.org
+Date: Sat, 13 Dec 2025 11:37:06 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f59bf34164de2bd3573f758844282a85ffb3cf3c
+X-Git-Newrev: fe5dcf402c0075b6ab86a92733ec75135f9dd760
+X-Patchwork-Hint: ignore
+Message-Id: <20251213110644.9597C8168A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-brotli: security bump to
+ version 1.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -102,37 +70,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Marcus" == Marcus Hoffmann <buildroot@bubu1.eu> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=fe5dcf402c0075b6ab86a92733ec75135f9dd760
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hi Bernd, Peter
- > On 12/9/25 20:39, Bernd Kuhls wrote:
- >> https://github.com/google/brotli/blob/v1.2.0/CHANGELOG.md
+https://github.com/google/brotli/blob/v1.2.0/CHANGELOG.md
 
- > This should be marked as security bump:
- > https://github.com/google/brotli/blob/v1.2.0/CHANGELOG.md#security
+Adds the following security hardening:
 
- > @Peter, there's your bump :)
+python: added Decompressor::can_accept_more_data method and optional
+output_buffer_limit argument Decompressor::process; that allows mitigation
+of unexpectedly large output
 
-Thanks. Committed after rewording the commit message to mark it as a
-security bump and to mention the relation with urllib3.
+Which is needed to complete the security fixes in python-urllib3 2.6.0.
 
- >> Added dependency to host-python-pkgconfig to fix build error which
- >> would
- >> be introduced by this bump.
+Added dependency to host-python-pkgconfig to fix build error which would
+be introduced by this bump.
 
-That is a bit silly as pkgconfig is only used when built with a system
-brotli, which we currently do not do - Maybe we should, we typically do
-not want bundled dependencies.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Peter: mark as security bump, describe the relation with urllib3]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-brotli/python-brotli.hash | 4 ++--
+ package/python-brotli/python-brotli.mk   | 7 ++++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-But OK, host-python-pkgconfig is tiny.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python-brotli/python-brotli.hash b/package/python-brotli/python-brotli.hash
+index e8036d3bb8..ed8eea72eb 100644
+--- a/package/python-brotli/python-brotli.hash
++++ b/package/python-brotli/python-brotli.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/brotli/json
+-md5  908d109a0309c33b626d01137eb4a060  Brotli-1.1.0.tar.gz
+-sha256  81de08ac11bcb85841e440c13611c00b67d3bf82698314928d0b676362546724  Brotli-1.1.0.tar.gz
++md5  af164f216cba527bf6f24d09c9d3576b  brotli-1.2.0.tar.gz
++sha256  e310f77e41941c13340a95976fe66a8a95b01e783d430eeaf7a2f87e0a57dd0a  brotli-1.2.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  3d180008e36922a4e8daec11c34c7af264fed5962d07924aea928c38e8663c94  LICENSE
+diff --git a/package/python-brotli/python-brotli.mk b/package/python-brotli/python-brotli.mk
+index 865c4e363f..e2343a24b2 100644
+--- a/package/python-brotli/python-brotli.mk
++++ b/package/python-brotli/python-brotli.mk
+@@ -4,12 +4,13 @@
+ #
+ ################################################################################
+ 
+-PYTHON_BROTLI_VERSION = 1.1.0
+-PYTHON_BROTLI_SOURCE = Brotli-$(PYTHON_BROTLI_VERSION).tar.gz
+-PYTHON_BROTLI_SITE = https://files.pythonhosted.org/packages/2f/c2/f9e977608bdf958650638c3f1e28f85a1b075f075ebbe77db8555463787b
++PYTHON_BROTLI_VERSION = 1.2.0
++PYTHON_BROTLI_SOURCE = brotli-$(PYTHON_BROTLI_VERSION).tar.gz
++PYTHON_BROTLI_SITE = https://files.pythonhosted.org/packages/f7/16/c92ca344d646e71a43b8bb353f0a6490d7f6e06210f8554c8f874e454285
+ PYTHON_BROTLI_SETUP_TYPE = setuptools
+ PYTHON_BROTLI_LICENSE = MIT
+ PYTHON_BROTLI_LICENSE_FILES = LICENSE
++PYTHON_BROTLI_DEPENDENCIES = host-python-pkgconfig
+ 
+ PYTHON_BROTLI_CFLAGS = $(TARGET_CFLAGS)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
